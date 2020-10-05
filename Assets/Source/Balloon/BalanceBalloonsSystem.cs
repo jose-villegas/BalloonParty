@@ -55,6 +55,9 @@ public class BalanceBalloonsSystem : ReactiveSystem<GameEntity>
                     _slots[nextSlot.Value.x, nextSlot.Value.y] = balloonEntity;
                     balloonEntity.ReplaceSlotIndex(nextSlot.Value);
 
+                    // is unstable until it reaches its position
+                    balloonEntity.isStableBalloon = false;
+
                     // save to movement path animation
                     if (paths.TryGetValue(balloonEntity, out var path))
                     {
@@ -83,6 +86,11 @@ public class BalanceBalloonsSystem : ReactiveSystem<GameEntity>
                 tween.onUpdate += () =>
                 {
                     entity.ReplacePosition(mono.transform.position);
+                };
+
+                tween.onComplete += () =>
+                {
+                    entity.isStableBalloon = true;
                 };
             }
         }

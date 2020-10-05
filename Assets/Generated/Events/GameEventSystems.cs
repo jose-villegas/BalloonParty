@@ -34,6 +34,8 @@ public sealed class GameEventSystems : Feature {
         Add(new ScaleEventSystem(contexts)); // priority: 0
         Add(new SlotIndexEventSystem(contexts)); // priority: 0
         Add(new SpeedEventSystem(contexts)); // priority: 0
+        Add(new StableBalloonEventSystem(contexts)); // priority: 0
+        Add(new StableBalloonRemovedEventSystem(contexts)); // priority: 0
         Add(new TagEventSystem(contexts)); // priority: 0
         Add(new ThrowerEventSystem(contexts)); // priority: 0
         Add(new TriggerEnter2DEventSystem(contexts)); // priority: 0

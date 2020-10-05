@@ -48,3 +48,9 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Balloons
+    uniqueID: 1928968643
+    locked: 0
+  - name: Sky
+    uniqueID: 4225986225
+    locked: 0

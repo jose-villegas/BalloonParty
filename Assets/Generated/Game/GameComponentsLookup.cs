@@ -67,19 +67,21 @@ public static class GameComponentsLookup {
     public const int Speed = 56;
     public const int SpeedListener = 57;
     public const int StableBalloon = 58;
-    public const int Tag = 59;
-    public const int TagListener = 60;
-    public const int Thrower = 61;
-    public const int ThrowerListener = 62;
-    public const int ThrowerLoadedProjectile = 63;
-    public const int TriggerEnter2D = 64;
-    public const int TriggerEnter2DListener = 65;
-    public const int TriggerExit2D = 66;
-    public const int TriggerExit2DListener = 67;
-    public const int Up = 68;
-    public const int UpListener = 69;
+    public const int StableBalloonListener = 59;
+    public const int StableBalloonRemovedListener = 60;
+    public const int Tag = 61;
+    public const int TagListener = 62;
+    public const int Thrower = 63;
+    public const int ThrowerListener = 64;
+    public const int ThrowerLoadedProjectile = 65;
+    public const int TriggerEnter2D = 66;
+    public const int TriggerEnter2DListener = 67;
+    public const int TriggerExit2D = 68;
+    public const int TriggerExit2DListener = 69;
+    public const int Up = 70;
+    public const int UpListener = 71;
 
-    public const int TotalComponents = 70;
+    public const int TotalComponents = 72;
 
     public static readonly string[] componentNames = {
         "AnyBalloonLineInstanceEventListener",
@@ -141,6 +143,8 @@ public static class GameComponentsLookup {
         "Speed",
         "SpeedListener",
         "StableBalloon",
+        "StableBalloonListener",
+        "StableBalloonRemovedListener",
         "Tag",
         "TagListener",
         "Thrower",
@@ -214,6 +218,8 @@ public static class GameComponentsLookup {
         typeof(SpeedComponent),
         typeof(SpeedListenerComponent),
         typeof(StableBalloonComponent),
+        typeof(StableBalloonListenerComponent),
+        typeof(StableBalloonRemovedListenerComponent),
         typeof(TagComponent),
         typeof(TagListenerComponent),
         typeof(ThrowerComponent),

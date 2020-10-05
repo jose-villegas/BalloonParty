@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 2407356912569984865}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.05, y: -0.05, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 0}
   m_Children: []
   m_Father: {fileID: 3869202998299313772}
   m_RootOrder: 0
@@ -95,6 +95,8 @@ GameObject:
   - component: {fileID: 621851426725808483}
   - component: {fileID: 7107001914441366632}
   - component: {fileID: 2400009165175286141}
+  - component: {fileID: 6159816189199019181}
+  - component: {fileID: 823641629598313563}
   m_Layer: 10
   m_Name: Balloon
   m_TagString: Balloons
@@ -199,6 +201,38 @@ MonoBehaviour:
   - {fileID: 4475536555041591237}
   - {fileID: 264100499786580991}
   - {fileID: 1676806347455389107}
+--- !u!95 &6159816189199019181
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2531284375457732990}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8b9a9d8c586ef3249a18d0f40caaba6d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &823641629598313563
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2531284375457732990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3a70092b49e190b4f9f98cc1339aec5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 6159816189199019181}
 --- !u!1 &4971000064207652389
 GameObject:
   m_ObjectHideFlags: 0
