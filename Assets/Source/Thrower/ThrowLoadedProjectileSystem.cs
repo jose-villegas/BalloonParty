@@ -34,6 +34,17 @@ public class ThrowLoadedProjectileSystem : IExecuteSystem
                 pEntity.isFreeProjectile = true;
                 pEntity.AddProjectileBounceShield(1);
 
+                // remove any previous collision
+                if (pEntity.hasTriggerEnter2D)
+                {
+                    pEntity.RemoveTriggerEnter2D();
+                }
+
+                if (pEntity.hasTriggerExit2D)
+                {
+                    pEntity.RemoveTriggerExit2D();
+                }
+
                 // remove loaded projectile
                 thrower.RemoveThrowerLoadedProjectile();
             }

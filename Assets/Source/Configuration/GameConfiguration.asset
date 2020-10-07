@@ -27,5 +27,5 @@ MonoBehaviour:
   - {r: 0.011764707, g: 0.6627451, b: 0.9568628, a: 1}
   - {r: 0.6117647, g: 0.15294118, b: 0.6901961, a: 1}
   _timeForBalloonsBalance: 1.75
-  _newProjectileBalloonLines: 1
+  _newProjectileBalloonLines: 2
   _newBalloonLinesTimeInterval: 0.35
