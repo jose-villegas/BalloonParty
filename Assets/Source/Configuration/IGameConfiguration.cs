@@ -12,9 +12,9 @@ public interface IGameConfiguration
     Vector2 SlotSeparation { get; }
     Vector2 SlotsOffset { get; }
     Vector2 BalloonSpawnAnimationDurationRange { get; }
-    float GameStartedBalloonLinesTimeInterval { get; }
     int GameStartedBalloonLines { get; }
-
     Color[] BalloonColors { get; }
     float TimeForBalloonsBalance { get;}
+    int NewProjectileBalloonLines { get; }
+    float NewBalloonLinesTimeInterval { get; }
 }

@@ -54,7 +54,7 @@ public static class GameContextExtensions
 
         var index = i + (j % 2 == 0 ? -1 : 1);
 
-        if (index > 0 && index < slots.GetLength(0))
+        if (index >= 0 && index < slots.GetLength(0))
         {
             return slots.IsEmpty(index, j - 1);
         }

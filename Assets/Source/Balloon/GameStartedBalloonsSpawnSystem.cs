@@ -37,7 +37,7 @@ public class GameStartedBalloonsSpawnSystem : ReactiveSystem<GameEntity>
         {
             var e = _contexts.game.CreateEntity();
             e.isBalloonLineInstanceEvent = true;
-            yield return new WaitForSeconds(_configuration.GameStartedBalloonLinesTimeInterval);
+            yield return new WaitForSeconds(_configuration.NewBalloonLinesTimeInterval);
         }
     }
 }

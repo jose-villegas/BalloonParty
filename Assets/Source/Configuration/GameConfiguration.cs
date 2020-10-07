@@ -16,10 +16,11 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
     [SerializeField] private Vector2 _slotsOffset;
 
     [Header("Balloons")] [SerializeField] private Vector2 _balloonSpawnAnimationSpeedRange;
-    [SerializeField] private float _gameStartedBalloonLinesTimeInterval;
     [SerializeField] private int _gameStartedBalloonLines;
     [SerializeField] private Color[] _balloonColors;
     [SerializeField] private float _timeForBalloonsBalance;
+    [SerializeField] private int _newProjectileBalloonLines;
+    [SerializeField] private float _newBalloonLinesTimeInterval;
 
     public Vector2 ThrowerSpawnPoint => _throwerSpawnPoint;
     public Vector2 ProjectileSpawnPoint => _projectileSpawnPoint;
@@ -29,12 +30,9 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
     public Vector2 SlotsOffset => _slotsOffset;
     public Vector2Int SlotsSize => _slotsSize;
     public Vector2 BalloonSpawnAnimationDurationRange => _balloonSpawnAnimationSpeedRange;
-
-    public float GameStartedBalloonLinesTimeInterval => _gameStartedBalloonLinesTimeInterval;
-
+    public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;
     public int GameStartedBalloonLines => _gameStartedBalloonLines;
-
     public Color[] BalloonColors => _balloonColors;
-
     public float TimeForBalloonsBalance => _timeForBalloonsBalance;
+    public int NewProjectileBalloonLines => _newProjectileBalloonLines;
 }
