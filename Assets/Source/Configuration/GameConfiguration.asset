@@ -18,7 +18,7 @@ MonoBehaviour:
   _limitsClockwise: {x: 4.5, y: 2.25, z: -4.5, w: -2.25}
   _slotsSize: {x: 6, y: 11}
   _slotSeparation: {x: 0.375, y: 0.65}
-  _slotsOffset: {x: 5, y: 3.45}
+  _slotsOffset: {x: 5, y: 3.25}
   _balloonSpawnAnimationSpeedRange: {x: 1.25, y: 2}
   _gameStartedBalloonLines: 6
   _balloonColors:
