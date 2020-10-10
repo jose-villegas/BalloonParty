@@ -10,6 +10,7 @@ public class ProjectileGlowColorController : MonoBehaviour, IBalloonColorListene
     [SerializeField] private float _colorDuration;
 
     private LinkedViewController _linkedView;
+    private IGameConfiguration _configuration;
 
     private void Awake()
     {
@@ -17,16 +18,22 @@ public class ProjectileGlowColorController : MonoBehaviour, IBalloonColorListene
         _linkedView.OnViewLinked += OnViewLinked;
     }
 
+    private void Start()
+    {
+        _configuration = Contexts.sharedInstance.configuration.gameConfiguration.value;
+    }
+
     private void OnViewLinked(GameEntity gameEntity)
     {
         gameEntity.AddBalloonColorListener(this);
     }
 
-    public void OnBalloonColor(GameEntity entity, Color value)
+    public void OnBalloonColor(GameEntity entity, string value)
     {
         if (_renderer != null)
         {
-            var targetColor = new Color(value.r, value.g, value.b, _alpha);
+            var color = _configuration.BalloonColor(value);
+            var targetColor = new Color(color.r, color.g, color.b, _alpha);
             _renderer.DOColor(targetColor, _colorDuration);
         }
     }

@@ -8,6 +8,7 @@ public class BalloonColorController : MonoBehaviour, IBalloonColorListener
     [SerializeField, Range(0f, 1f)] private float _shadowAlpha;
 
     private LinkedViewController _linkedView;
+    private IGameConfiguration _configuration;
 
     private void Awake()
     {
@@ -17,20 +18,24 @@ public class BalloonColorController : MonoBehaviour, IBalloonColorListener
 
     private void OnViewLinked(GameEntity gameEntity)
     {
+        _configuration = Contexts.sharedInstance.configuration.gameConfiguration.value;
+
         gameEntity.AddBalloonColorListener(this);
         OnBalloonColor(gameEntity, gameEntity.balloonColor.Value);
     }
 
-    public void OnBalloonColor(GameEntity entity, Color value)
+    public void OnBalloonColor(GameEntity entity, string value)
     {
+        var color = _configuration.BalloonColor(value);
+
         if (_renderer != null)
         {
-            _renderer.color = value;
+            _renderer.color = color;
         }
 
         if (_shadowRenderer != null)
         {
-            _shadowRenderer.color = new Color(value.r, value.g, value.b, _shadowAlpha);
+            _shadowRenderer.color = new Color(color.r, color.g, color.b, _shadowAlpha);
         }
     }
 }

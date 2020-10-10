@@ -15,6 +15,7 @@ public class ProjectileBounceShieldController : MonoBehaviour, IProjectileBounce
     [SerializeField] private Vector2 _increments;
 
     private LinkedViewController _linkedView;
+    private IGameConfiguration _configuration;
 
     private void Awake()
     {
@@ -30,6 +31,8 @@ public class ProjectileBounceShieldController : MonoBehaviour, IProjectileBounce
 
     private void OnViewLinked(GameEntity gameEntity)
     {
+        _configuration = Contexts.sharedInstance.configuration.gameConfiguration.value;
+
         gameEntity.AddProjectileBounceShieldListener(this);
         gameEntity.AddBalloonColorListener(this);
     }
@@ -45,9 +48,10 @@ public class ProjectileBounceShieldController : MonoBehaviour, IProjectileBounce
         }
     }
 
-    public void OnBalloonColor(GameEntity entity, Color value)
+    public void OnBalloonColor(GameEntity entity, string value)
     {
-        var targetColor = new Color(value.r, value.g, value.b, _alpha);
+        var color = _configuration.BalloonColor(value);
+        var targetColor = new Color(color.r, color.g, color.b, _alpha);
 
         foreach (var t in _shields)
         {

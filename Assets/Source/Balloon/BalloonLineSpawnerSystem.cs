@@ -40,7 +40,7 @@ public class BalloonLineSpawnerSystem : ReactiveSystem<GameEntity>, ILinkedViewL
 
                 // color
                 var colorIndex = Random.Range(0, _configuration.BalloonColors.Length);
-                e.AddBalloonColor(_configuration.BalloonColors[colorIndex]);
+                e.AddBalloonColor(_configuration.BalloonColors[colorIndex].Name);
 
                 // positioning for animation
                 var initialPos = (index + Vector2Int.up * 4).IndexToPosition(_configuration);

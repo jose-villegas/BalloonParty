@@ -11,14 +11,14 @@ public partial class GameEntity {
     public BalloonColorComponent balloonColor { get { return (BalloonColorComponent)GetComponent(GameComponentsLookup.BalloonColor); } }
     public bool hasBalloonColor { get { return HasComponent(GameComponentsLookup.BalloonColor); } }
 
-    public void AddBalloonColor(UnityEngine.Color newValue) {
+    public void AddBalloonColor(string newValue) {
         var index = GameComponentsLookup.BalloonColor;
         var component = (BalloonColorComponent)CreateComponent(index, typeof(BalloonColorComponent));
         component.Value = newValue;
         AddComponent(index, component);
     }
 
-    public void ReplaceBalloonColor(UnityEngine.Color newValue) {
+    public void ReplaceBalloonColor(string newValue) {
         var index = GameComponentsLookup.BalloonColor;
         var component = (BalloonColorComponent)CreateComponent(index, typeof(BalloonColorComponent));
         component.Value = newValue;

@@ -6,6 +6,6 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public interface IBalloonColorListener {
-    void OnBalloonColor(GameEntity entity, string value);
+public interface IAnyGameScoreListener {
+    void OnAnyGameScore(GameEntity entity, string name, int score);
 }

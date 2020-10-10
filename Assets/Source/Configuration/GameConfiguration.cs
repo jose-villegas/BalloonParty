@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Configuration/Game Configuration", fileName = "GameConfiguration")]
@@ -17,7 +18,7 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
 
     [Header("Balloons")] [SerializeField] private Vector2 _balloonSpawnAnimationSpeedRange;
     [SerializeField] private int _gameStartedBalloonLines;
-    [SerializeField] private Color[] _balloonColors;
+    [SerializeField] private BalloonColorConfiguration[] _balloonColors;
     [SerializeField] private float _timeForBalloonsBalance;
     [SerializeField] private int _newProjectileBalloonLines;
     [SerializeField] private float _newBalloonLinesTimeInterval;
@@ -31,8 +32,19 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
     public Vector2Int SlotsSize => _slotsSize;
     public Vector2 BalloonSpawnAnimationDurationRange => _balloonSpawnAnimationSpeedRange;
     public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;
+
     public int GameStartedBalloonLines => _gameStartedBalloonLines;
-    public Color[] BalloonColors => _balloonColors;
+    public BalloonColorConfiguration[] BalloonColors => _balloonColors;
     public float TimeForBalloonsBalance => _timeForBalloonsBalance;
     public int NewProjectileBalloonLines => _newProjectileBalloonLines;
+
+    public int PointsRequiredForLevel(int level)
+    {
+        return (int)(Mathf.Exp(1) * Mathf.Log(level) + 25f);
+    }
+
+    public Color BalloonColor(string name)
+    {
+        return _balloonColors.First(x => x.Name == name).Color;
+    }
 }

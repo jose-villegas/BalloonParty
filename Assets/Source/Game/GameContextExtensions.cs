@@ -129,4 +129,17 @@ public static class GameContextExtensions
 
         return null;
     }
+
+    public static void AddScore(this GameContext context, string name)
+    {
+        var scores = context.GetGroup(GameMatcher.GameScore);
+
+        foreach (var score in scores.GetEntities())
+        {
+            if (score.gameScore.Name == name)
+            {
+                score.ReplaceGameScore(name, score.gameScore.Score + 1);
+            }
+        }
+    }
 }

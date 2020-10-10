@@ -22,10 +22,14 @@ MonoBehaviour:
   _balloonSpawnAnimationSpeedRange: {x: 1.25, y: 2}
   _gameStartedBalloonLines: 6
   _balloonColors:
-  - {r: 1, g: 0.4117647, b: 0.38039216, a: 1}
-  - {r: 0.46666667, g: 0.8666667, b: 0.46666667, a: 1}
-  - {r: 0.011764707, g: 0.6627451, b: 0.9568628, a: 1}
-  - {r: 0.6117647, g: 0.15294118, b: 0.6901961, a: 1}
+  - _name: Green
+    _color: {r: 0.46666667, g: 0.8666667, b: 0.46666667, a: 1}
+  - _name: Red
+    _color: {r: 1, g: 0.4117647, b: 0.38039216, a: 1}
+  - _name: Blue
+    _color: {r: 0.011764707, g: 0.6627451, b: 0.9568628, a: 1}
+  - _name: Purple
+    _color: {r: 0.6117647, g: 0.15294118, b: 0.6901961, a: 1}
   _timeForBalloonsBalance: 1.75
   _newProjectileBalloonLines: 2
   _newBalloonLinesTimeInterval: 0.35

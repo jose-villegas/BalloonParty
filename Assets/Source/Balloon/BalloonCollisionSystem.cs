@@ -6,6 +6,7 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
 {
     private readonly Contexts _contexts;
     private readonly int _layer;
+    private readonly IGameConfiguration _configuration;
     private IEntity[,] _slots;
 
     public BalloonCollisionSystem(Contexts contexts) : base(contexts.game)
@@ -13,6 +14,7 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
         _contexts = contexts;
         _layer = LayerMask.NameToLayer("Balloons");
         _slots = _contexts.game.slotsIndexer.Value;
+        _configuration = contexts.configuration.gameConfiguration.value;
     }
 
     protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
@@ -27,9 +29,9 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
 
     protected override void Execute(List<GameEntity> entities)
     {
-        foreach (var gameEntity in entities)
+        foreach (var freeProjectile in entities)
         {
-            var collider = gameEntity.triggerEnter2D.Value;
+            var collider = freeProjectile.triggerEnter2D.Value;
 
             // we are colliding with balloons
             if ((collider.gameObject.layer & _layer) > 0)
@@ -40,51 +42,51 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
                 {
                     var color = balloonEntity.balloonColor.Value;
 
-                    if (!gameEntity.hasBalloonColor)
+                    if (!freeProjectile.hasBalloonColor)
                     {
-                        gameEntity.AddBalloonColor(color);
-                        gameEntity.AddBalloonLastColorPopCount(1);
+                        freeProjectile.AddBalloonColor(color);
+                        freeProjectile.AddBalloonLastColorPopCount(1);
                     }
                     else
                     {
-                        if (color == gameEntity.balloonColor.Value)
+                        if (color == freeProjectile.balloonColor.Value)
                         {
-                            var colorCount = gameEntity.balloonLastColorPopCount.Value;
-                            gameEntity.ReplaceBalloonLastColorPopCount(colorCount + 1);
+                            var colorCount = freeProjectile.balloonLastColorPopCount.Value;
+                            freeProjectile.ReplaceBalloonLastColorPopCount(colorCount + 1);
 
                             // when 3 of the same color are hit, add an extra bounce shield
                             if (colorCount >= 2)
                             {
-                                var shields = gameEntity.projectileBounceShield.Value;
-                                gameEntity.ReplaceProjectileBounceShield(shields + 1);
+                                var shields = freeProjectile.projectileBounceShield.Value;
+                                freeProjectile.ReplaceProjectileBounceShield(shields + 1);
 
                                 // play particle fx
                                 var gain = _contexts.game.CreateEntity();
-                                gain.AddParticleFXParent(gameEntity.linkedView.Value);
+                                gain.AddParticleFXParent(freeProjectile.linkedView.Value);
                                 gain.AddPlayParticleFX("PSVFX_ShieldGain");
-
-                                if (gameEntity.hasBalloonColor)
-                                {
-                                    gain.AddParticleFXStartColor(gameEntity.balloonColor.Value);
-                                }
-
+                                gain.AddParticleFXStartColor(
+                                    _configuration.BalloonColor(freeProjectile.balloonColor.Value));
                             }
                         }
                         else
                         {
-                            gameEntity.ReplaceBalloonColor(color);
+                            freeProjectile.ReplaceBalloonColor(color);
+                            freeProjectile.ReplaceBalloonLastColorPopCount(1);
                         }
                     }
 
                     // create balloon pop effect
                     var e = _contexts.game.CreateEntity();
                     e.AddPosition(balloonEntity.position.Value);
-                    e.AddParticleFXStartColor(balloonEntity.balloonColor.Value);
+                    e.AddParticleFXStartColor(_configuration.BalloonColor(balloonEntity.balloonColor.Value));
                     e.AddPlayParticleFX("PSVFX_BalloonPop");
 
                     // remove from indexer
                     var index = balloonEntity.slotIndex.Value;
                     _slots[index.x, index.y] = null;
+
+                    // add score
+                    _contexts.game.AddScore(balloonEntity.balloonColor.Value);
 
                     // destroy
                     balloonEntity.isDestroyed = true;

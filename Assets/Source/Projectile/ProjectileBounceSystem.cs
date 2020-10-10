@@ -63,7 +63,7 @@ public class ProjectileBounceSystem : IExecuteSystem
 
                 if (freeProjectile.hasBalloonColor)
                 {
-                    bounce.AddParticleFXStartColor(freeProjectile.balloonColor.Value);
+                    bounce.AddParticleFXStartColor(_configuration.BalloonColor(freeProjectile.balloonColor.Value));
                 }
 
                 if (shield > 0)
@@ -77,7 +77,7 @@ public class ProjectileBounceSystem : IExecuteSystem
 
                     if (freeProjectile.hasBalloonColor)
                     {
-                        e.AddParticleFXStartColor(freeProjectile.balloonColor.Value);
+                        e.AddParticleFXStartColor(_configuration.BalloonColor(freeProjectile.balloonColor.Value));
                     }
                 }
                 else

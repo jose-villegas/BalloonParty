@@ -5,11 +5,11 @@ public class ColorProgressBar : MonoBehaviour
 {
     [SerializeField] private Graphic[] _graphicsToSetColor;
 
-    public void Setup(Color color, IGameConfiguration configuration)
+    public void Setup(IBalloonColorConfiguration colorConfiguration, IGameConfiguration gameConfiguration)
     {
         foreach (var image in _graphicsToSetColor)
         {
-            image.color = color;
+            image.color = colorConfiguration.Color;
         }
     }
 }
