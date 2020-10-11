@@ -95,6 +95,7 @@ MonoBehaviour:
   _graphicsToSetColor:
   - {fileID: 7033398752927577603}
   - {fileID: 2350293857914796795}
+  _progressSlider: {fileID: 9159033291817326827}
 --- !u!1 &1434766194144159586
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,7 +536,7 @@ MonoBehaviour:
     m_PressedTrigger: Pressed
     m_SelectedTrigger: Selected
     m_DisabledTrigger: Disabled
-  m_Interactable: 1
+  m_Interactable: 0
   m_TargetGraphic: {fileID: 7033398752927577603}
   m_FillRect: {fileID: 5037625598045689250}
   m_HandleRect: {fileID: 0}

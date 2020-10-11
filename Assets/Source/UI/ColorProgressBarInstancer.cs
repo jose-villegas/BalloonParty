@@ -3,11 +3,14 @@
 public class ColorProgressBarInstancer : MonoBehaviour
 {
     [SerializeField] private ColorProgressBar _colorProgressBarPrefab;
+
     private IGameConfiguration _configuration;
+    private Contexts _contexts;
 
     private void Start()
     {
-        _configuration = Contexts.sharedInstance.configuration.gameConfiguration.value;
+        _contexts = Contexts.sharedInstance;
+        _configuration = _contexts.configuration.gameConfiguration.value;
         InstanceProgressBars();
     }
 

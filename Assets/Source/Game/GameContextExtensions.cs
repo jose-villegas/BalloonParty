@@ -144,7 +144,7 @@ public static class GameContextExtensions
         }
 
         var level = context.gameLevel.Value;
-        var required = GameConfiguration.PointsRequiredForLevel(level);
+        var required = GameConfiguration.PointsRequiredForLevel(level + 1);
         var allPass = true;
 
         foreach (var progress in progresses.GetEntities())

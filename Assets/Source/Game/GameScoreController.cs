@@ -74,4 +74,9 @@ public class GameScoreController : MonoBehaviour
         PlayerPrefs.SetInt(Constants.Level, _contexts.game.gameLevel.Value);
         PlayerPrefs.Save();
     }
+
+    private void OnApplicationQuit()
+    {
+        OnApplicationPause(false);
+    }
 }
