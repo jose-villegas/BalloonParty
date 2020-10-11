@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 [RequireComponent(typeof(Text))]
-public class ScoreCounterLabel : MonoBehaviour, IAnyGameScoreListener
+public class ScoreCounterLabel : MonoBehaviour, IAnyGamePersistentScoreListener
 {
     private Text _label;
     private Contexts _contexts;
@@ -20,21 +20,21 @@ public class ScoreCounterLabel : MonoBehaviour, IAnyGameScoreListener
     {
         _contexts = Contexts.sharedInstance;
         _configuration = _contexts.configuration.gameConfiguration.value;
-        _scores = _contexts.game.GetGroup(GameMatcher.GameScore);
+        _scores = _contexts.game.GetGroup(GameMatcher.GamePersistentScore);
         _label.text = "0";
 
         // listening entity
         var e = _contexts.game.CreateEntity();
-        e.AddAnyGameScoreListener(this);
+        e.AddAnyGamePersistentScoreListener(this);
     }
 
-    public void OnAnyGameScore(GameEntity entity, string name, int score)
+    public void OnAnyGamePersistentScore(GameEntity entity, string name, int score)
     {
         var sum = 0;
 
         foreach (var scoreHolder in _scores)
         {
-            sum += scoreHolder.gameScore.Score;
+            sum += scoreHolder.gamePersistentScore.Score;
         }
 
         _label.text = sum.ToString("N0");

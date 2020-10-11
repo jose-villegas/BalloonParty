@@ -18,7 +18,10 @@ public sealed class GameEventSystems : Feature {
         Add(new DirectionEventSystem(contexts)); // priority: 0
         Add(new ForwardEventSystem(contexts)); // priority: 0
         Add(new AnyGameEventEventSystem(contexts)); // priority: 0
-        Add(new AnyGameScoreEventSystem(contexts)); // priority: 0
+        Add(new AnyGameLevelEventSystem(contexts)); // priority: 0
+        Add(new AnyGameLevelProgressEventSystem(contexts)); // priority: 0
+        Add(new AnyGameLevelUpEventSystem(contexts)); // priority: 0
+        Add(new AnyGamePersistentScoreEventSystem(contexts)); // priority: 0
         Add(new AnyGameStartedEventSystem(contexts)); // priority: 0
         Add(new LayerEventSystem(contexts)); // priority: 0
         Add(new LinkedViewEventSystem(contexts)); // priority: 0

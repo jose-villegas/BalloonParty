@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -38,9 +39,14 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
     public float TimeForBalloonsBalance => _timeForBalloonsBalance;
     public int NewProjectileBalloonLines => _newProjectileBalloonLines;
 
-    public int PointsRequiredForLevel(int level)
+    public static int PointsRequiredForLevel(int level)
     {
-        return (int)(Mathf.Exp(1) * Mathf.Log(level) + 25f);
+        return (int)(Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI)) + 25f);
+    }
+
+    int IGameConfiguration.PointsRequiredForLevel(int level)
+    {
+        return PointsRequiredForLevel(level);
     }
 
     public Color BalloonColor(string name)

@@ -6,36 +6,36 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public sealed class AnyGameScoreEventSystem : Entitas.ReactiveSystem<GameEntity> {
+public sealed class AnyGameLevelEventSystem : Entitas.ReactiveSystem<GameEntity> {
 
     readonly Entitas.IGroup<GameEntity> _listeners;
     readonly System.Collections.Generic.List<GameEntity> _entityBuffer;
-    readonly System.Collections.Generic.List<IAnyGameScoreListener> _listenerBuffer;
+    readonly System.Collections.Generic.List<IAnyGameLevelListener> _listenerBuffer;
 
-    public AnyGameScoreEventSystem(Contexts contexts) : base(contexts.game) {
-        _listeners = contexts.game.GetGroup(GameMatcher.AnyGameScoreListener);
+    public AnyGameLevelEventSystem(Contexts contexts) : base(contexts.game) {
+        _listeners = contexts.game.GetGroup(GameMatcher.AnyGameLevelListener);
         _entityBuffer = new System.Collections.Generic.List<GameEntity>();
-        _listenerBuffer = new System.Collections.Generic.List<IAnyGameScoreListener>();
+        _listenerBuffer = new System.Collections.Generic.List<IAnyGameLevelListener>();
     }
 
     protected override Entitas.ICollector<GameEntity> GetTrigger(Entitas.IContext<GameEntity> context) {
         return Entitas.CollectorContextExtension.CreateCollector(
-            context, Entitas.TriggerOnEventMatcherExtension.Added(GameMatcher.GameScore)
+            context, Entitas.TriggerOnEventMatcherExtension.Added(GameMatcher.GameLevel)
         );
     }
 
     protected override bool Filter(GameEntity entity) {
-        return entity.hasGameScore;
+        return entity.hasGameLevel;
     }
 
     protected override void Execute(System.Collections.Generic.List<GameEntity> entities) {
         foreach (var e in entities) {
-            var component = e.gameScore;
+            var component = e.gameLevel;
             foreach (var listenerEntity in _listeners.GetEntities(_entityBuffer)) {
                 _listenerBuffer.Clear();
-                _listenerBuffer.AddRange(listenerEntity.anyGameScoreListener.value);
+                _listenerBuffer.AddRange(listenerEntity.anyGameLevelListener.value);
                 foreach (var listener in _listenerBuffer) {
-                    listener.OnAnyGameScore(e, component.Name, component.Score);
+                    listener.OnAnyGameLevel(e, component.Value);
                 }
             }
         }

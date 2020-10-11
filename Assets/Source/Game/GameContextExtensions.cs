@@ -132,14 +132,49 @@ public static class GameContextExtensions
 
     public static void AddScore(this GameContext context, string name)
     {
-        var scores = context.GetGroup(GameMatcher.GameScore);
+        var scores = context.GetGroup(GameMatcher.GamePersistentScore);
+        var progresses = context.GetGroup(GameMatcher.GameLevelProgress);
 
         foreach (var score in scores.GetEntities())
         {
-            if (score.gameScore.Name == name)
+            if (score.gamePersistentScore.Name == name)
             {
-                score.ReplaceGameScore(name, score.gameScore.Score + 1);
+                score.ReplaceGamePersistentScore(name, score.gamePersistentScore.Score + 1);
             }
+        }
+
+        var level = context.gameLevel.Value;
+        var required = GameConfiguration.PointsRequiredForLevel(level);
+        var allPass = true;
+
+        foreach (var progress in progresses.GetEntities())
+        {
+            if (progress.gameLevelProgress.Name == name)
+            {
+                progress.ReplaceGameLevelProgress(name, progress.gameLevelProgress.Current + 1);
+            }
+
+            // check if the current progress passes the level requirement
+            if (progress.gameLevelProgress.Current < required)
+            {
+                allPass = false;
+            }
+        }
+
+        // if all requirements are meet, level up
+        if (allPass)
+        {
+            context.ReplaceGameLevel(level + 1);
+
+            // reset progress
+            foreach (var progress in progresses.GetEntities())
+            {
+                progress.ReplaceGameLevelProgress(progress.gameLevelProgress.Name, 0);
+            }
+
+            var e = context.CreateEntity();
+            e.isGameEvent = true;
+            e.isGameLevelUp = true;
         }
     }
 }

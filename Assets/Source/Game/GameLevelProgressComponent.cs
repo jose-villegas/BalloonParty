@@ -2,8 +2,8 @@
 using Entitas.CodeGeneration.Attributes;
 
 [Event(EventTarget.Any)]
-public class GameScoreComponent : IComponent
+public class GameLevelProgressComponent : IComponent
 {
     public string Name;
-    public int Score;
+    public int Current;
 }

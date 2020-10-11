@@ -6,6 +6,6 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public interface IAnyGameScoreListener {
-    void OnAnyGameScore(GameEntity entity, string name, int score);
+public interface IAnyGameLevelUpListener {
+    void OnAnyGameLevelUp(GameEntity entity);
 }
