@@ -23,6 +23,9 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
     [SerializeField] private float _timeForBalloonsBalance;
     [SerializeField] private int _newProjectileBalloonLines;
     [SerializeField] private float _newBalloonLinesTimeInterval;
+    [SerializeField] private float _nudgeDistance;
+    [SerializeField] private float _nudgeDuration;
+    [SerializeField] private GameDisplayConfiguration _displayConfiguration;
 
     public Vector2 ThrowerSpawnPoint => _throwerSpawnPoint;
     public Vector2 ProjectileSpawnPoint => _projectileSpawnPoint;
@@ -33,11 +36,16 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
     public Vector2Int SlotsSize => _slotsSize;
     public Vector2 BalloonSpawnAnimationDurationRange => _balloonSpawnAnimationSpeedRange;
     public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;
-
     public int GameStartedBalloonLines => _gameStartedBalloonLines;
     public BalloonColorConfiguration[] BalloonColors => _balloonColors;
     public float TimeForBalloonsBalance => _timeForBalloonsBalance;
     public int NewProjectileBalloonLines => _newProjectileBalloonLines;
+
+    public float NudgeDistance => _nudgeDistance;
+
+    public float NudgeDuration => _nudgeDuration;
+
+    public GameDisplayConfiguration DisplayConfiguration => _displayConfiguration;
 
     public static int PointsRequiredForLevel(int level)
     {

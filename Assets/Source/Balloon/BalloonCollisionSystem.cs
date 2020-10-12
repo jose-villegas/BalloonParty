@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using DG.Tweening;
 using Entitas;
 using UnityEngine;
 
@@ -81,8 +82,13 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
                     e.AddParticleFXStartColor(_configuration.BalloonColor(balloonEntity.balloonColor.Value));
                     e.AddPlayParticleFX("PSVFX_BalloonPop");
 
-                    // remove from indexer
+                    // operate on indexing value
                     var index = balloonEntity.slotIndex.Value;
+
+                    // start nudge animation from explosion on neighboring slots
+                    NudgeNeighbors(index, balloonEntity);
+
+                    // remove from indexer
                     _slots[index.x, index.y] = null;
 
                     // add score
@@ -90,6 +96,38 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
 
                     // destroy
                     balloonEntity.isDestroyed = true;
+                }
+            }
+        }
+    }
+
+    private void NudgeNeighbors(Vector2Int index, GameEntity balloonEntity)
+    {
+        var neighbors = _slots.GetNeighbors(index.x, index.y);
+
+        foreach (var neighbor in neighbors)
+        {
+            if (neighbor is GameEntity neighborEntity)
+            {
+                var mono = neighborEntity.linkedView.Value as MonoBehaviour;
+
+                if (mono != null)
+                {
+                    var position = neighborEntity.position.Value;
+                    var direction = neighborEntity.position.Value - balloonEntity.position.Value;
+                    var slotIndex = neighborEntity.slotIndex.Value;
+                    var sequence = DOTween.Sequence();
+
+                    sequence.Append(mono.transform.DOMove(
+                        position + direction.normalized * _configuration.NudgeDistance,
+                        _configuration.NudgeDuration / 2f));
+                    sequence.Append(mono.transform.DOMove(slotIndex.IndexToPosition(_configuration),
+                        _configuration.NudgeDuration / 2f));
+                    neighborEntity.isStableBalloon = false;
+                    sequence.onComplete += () => { neighborEntity.isStableBalloon = true; };
+
+                    // add tweenSequence to entity to avoid colliding with another tween
+                    neighborEntity.ReplaceTweenSequence(sequence);
                 }
             }
         }

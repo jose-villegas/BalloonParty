@@ -44,6 +44,7 @@ public sealed class GameEventSystems : Feature {
         Add(new ThrowerEventSystem(contexts)); // priority: 0
         Add(new TriggerEnter2DEventSystem(contexts)); // priority: 0
         Add(new TriggerExit2DEventSystem(contexts)); // priority: 0
+        Add(new TweenSequenceEventSystem(contexts)); // priority: 0
         Add(new UpEventSystem(contexts)); // priority: 0
     }
 }

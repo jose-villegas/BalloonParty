@@ -28,7 +28,7 @@ public class BalloonSpriteLayerController : MonoBehaviour, ISlotIndexListener
 
     public void OnSlotIndex(GameEntity entity, Vector2Int value)
     {
-        var baseLayer = value.x + (value.y * _configuration.SlotsSize.x) + _renderers.Length;
+        var baseLayer = (value.x + (value.y * _configuration.SlotsSize.x)) * _renderers.Length;
 
         for (int i = 0; i < _renderers.Length; i++)
         {

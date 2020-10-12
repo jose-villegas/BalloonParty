@@ -17,6 +17,9 @@ public interface IGameConfiguration
     float TimeForBalloonsBalance { get;}
     int NewProjectileBalloonLines { get; }
     float NewBalloonLinesTimeInterval { get; }
+    float NudgeDistance { get;  }
+    float NudgeDuration { get; }
+    GameDisplayConfiguration DisplayConfiguration { get; }
 
     int PointsRequiredForLevel(int level);
 

@@ -33,3 +33,17 @@ MonoBehaviour:
   _timeForBalloonsBalance: 1.75
   _newProjectileBalloonLines: 2
   _newBalloonLinesTimeInterval: 0.35
+  _nudgeDistance: 0.1
+  _nudgeDuration: 0.4
+  _displayConfiguration:
+    _displayOptions:
+    - _aspectRatio: {x: 9, y: 16}
+      _orthogonalSize: 4.75
+    - _aspectRatio: {x: 10, y: 19}
+      _orthogonalSize: 4.75
+    - _aspectRatio: {x: 9, y: 19}
+      _orthogonalSize: 5.15
+    - _aspectRatio: {x: 207, y: 448}
+      _orthogonalSize: 5.15
+    - _aspectRatio: {x: 6, y: 13}
+      _orthogonalSize: 5.15

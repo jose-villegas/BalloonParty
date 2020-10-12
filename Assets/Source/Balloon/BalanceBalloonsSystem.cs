@@ -1,6 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using DG.Tweening;
+using DG.Tweening.Core;
+using DG.Tweening.Plugins.Core.PathCore;
+using DG.Tweening.Plugins.Options;
 using Entitas;
 using TMPro;
 using UnityEngine;
@@ -93,21 +96,50 @@ public class BalanceBalloonsSystem : ReactiveSystem<GameEntity>
             }
         }
 
+        HandlePathTween(paths);
+    }
+
+    private void HandlePathTween(Dictionary<GameEntity, List<Vector3>> paths)
+    {
         foreach (var path in paths)
         {
             var mono = path.Key.linkedView.Value as MonoBehaviour;
 
             if (mono != null)
             {
-                var tween = mono.transform.DOPath(path.Value.ToArray(), _configuration.TimeForBalloonsBalance,
-                    PathType.CatmullRom);
                 var entity = path.Key;
+                var pathList = path.Value;
 
-                tween.onUpdate += () => { entity.ReplacePosition(mono.transform.position); };
-
-                tween.onComplete += () => { entity.isStableBalloon = true; };
+                if (entity.hasTweenSequence)
+                {
+                    if (!entity.tweenSequence.Value.IsComplete())
+                    {
+                        entity.tweenSequence.Value.Append(DeclareTween(mono, pathList, entity));
+                    }
+                    else
+                    {
+                        entity.RemoveTweenSequence();
+                        DeclareTween(mono, pathList, entity);
+                    }
+                }
+                else
+                {
+                    DeclareTween(mono, pathList, entity);
+                }
             }
         }
+    }
+
+    private TweenerCore<Vector3, Path, PathOptions> DeclareTween(MonoBehaviour mono, List<Vector3> path, GameEntity entity)
+    {
+        TweenerCore<Vector3, Path, PathOptions> tween;
+        tween = mono.transform.DOPath(path.ToArray(), _configuration.TimeForBalloonsBalance,
+            PathType.CatmullRom);
+
+        tween.onUpdate += () => { entity.ReplacePosition(mono.transform.position); };
+        tween.onComplete += () => { entity.isStableBalloon = true; };
+
+        return tween;
     }
 
     private IEnumerator InstanceBalloonLines()

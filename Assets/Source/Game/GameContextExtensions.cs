@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Entitas;
 using UnityEngine;
 
@@ -44,6 +45,13 @@ public static class GameContextExtensions
                      || !((GameEntity) slots[i, j]).isBalloon;
     }
 
+    /// <summary>
+    /// A slot is unbalanced when it doesn't have two occupied slots above
+    /// </summary>
+    /// <param name="slots"></param>
+    /// <param name="i"></param>
+    /// <param name="j"></param>
+    /// <returns></returns>
     public static bool IsUnbalanced(this IEntity[,] slots, int i, int j)
     {
         if (j < 0 || i < 0) throw new System.ArgumentException("Invalid argument for index values");
@@ -90,7 +98,65 @@ public static class GameContextExtensions
         return 0;
     }
 
+    /// <summary>
+    /// Gets the occupied slots neighboring this position
+    /// </summary>
+    /// <param name="slots"></param>
+    /// <param name="i"></param>
+    /// <param name="j"></param>
+    /// <returns></returns>
+    public static List<IEntity> GetNeighbors(this IEntity[,] slots, int i, int j)
+    {
+        var neighbors = new List<IEntity>();
 
+        // add left neighbor
+        if (!slots.IsEmpty(i - 1, j))
+        {
+            neighbors.Add(slots[i - 1, j]);
+        }
+
+        // add right neighbor
+        if (!slots.IsEmpty(i + 1, j))
+        {
+            neighbors.Add(slots[i + 1, j]);
+        }
+
+        // add neighbors above
+        if (!slots.IsEmpty(i, j - 1))
+        {
+            neighbors.Add(slots[i, j - 1]);
+        }
+
+        var shift = i + (j % 2 == 0 ? -1 : 1);
+
+        if (!slots.IsEmpty(shift, j - 1))
+        {
+            neighbors.Add(slots[shift, j - 1]);
+        }
+
+        // add neighbors below
+        if (!slots.IsEmpty(i, j + 1))
+        {
+            neighbors.Add(slots[i, j + 1]);
+        }
+
+        shift = i + (j % 2 == 0 ? -1 : 1);
+
+        if (!slots.IsEmpty(shift, j + 1))
+        {
+            neighbors.Add(slots[shift, j + 1]);
+        }
+
+        return neighbors;
+    }
+
+    /// <summary>
+    /// This method finds the closest optimal slot for it to move up
+    /// </summary>
+    /// <param name="slots"></param>
+    /// <param name="i"></param>
+    /// <param name="j"></param>
+    /// <returns></returns>
     public static Vector2Int? OptimalNextEmptySlot(this IEntity[,] slots, int i, int j)
     {
         if (j <= 0) return null;
