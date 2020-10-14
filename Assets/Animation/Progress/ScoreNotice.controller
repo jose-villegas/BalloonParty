@@ -63,7 +63,7 @@ AnimatorController:
     m_DefaultFloat: 0
     m_DefaultInt: 0
     m_DefaultBool: 1
-    m_Controller: {fileID: 0}
+    m_Controller: {fileID: 9100000}
   m_AnimatorLayers:
   - serializedVersion: 5
     m_Name: Base Layer
@@ -98,7 +98,7 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 0}
-  m_Tag: 
+  m_Tag: Available
   m_SpeedParameter: 
   m_MirrorParameter: 
   m_CycleOffsetParameter: 
@@ -142,7 +142,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e58790f885a88ca458e45ecbbe14279c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _graphicsToSetColor: []
   _animator: {fileID: 0}
+  _label: {fileID: 0}
+  _shadow: {fileID: 0}
+  _maxScale: 0
+  _maxScaleScore: 0
 --- !u!1101 &5852766336681832687
 AnimatorStateTransition:
   m_ObjectHideFlags: 1
@@ -162,7 +167,7 @@ AnimatorStateTransition:
   serializedVersion: 3
   m_TransitionDuration: 0.25
   m_TransitionOffset: 0
-  m_ExitTime: 0.75
+  m_ExitTime: 0.25
   m_HasExitTime: 0
   m_HasFixedDuration: 1
   m_InterruptionSource: 0

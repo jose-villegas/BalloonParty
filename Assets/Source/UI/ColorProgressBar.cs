@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Entitas;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,11 +13,13 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
     private List<ScoreNotice> _notices;
     private IBalloonColorConfiguration _colorConfiguration;
     private Contexts _contexts;
+    private IGroup<GameEntity> _colorPopCount;
 
     public void Setup(IBalloonColorConfiguration colorConfiguration, IGameConfiguration gameConfiguration)
     {
         _contexts = Contexts.sharedInstance;
         _colorConfiguration = colorConfiguration;
+        _colorPopCount = _contexts.game.GetGroup(GameMatcher.BalloonLastColorPopCount);
 
         foreach (var image in _graphicsToSetColor)
         {
@@ -67,7 +70,9 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
             if (usable >= 0 && usable < _notices.Count)
             {
                 var instance = _notices[usable];
-                instance.Animator.SetTrigger("Score");
+
+                var colorPopCount = _colorPopCount.GetEntities()[0].balloonLastColorPopCount.Value;
+                instance.ScoreUp(colorPopCount);
             }
         }
     }
