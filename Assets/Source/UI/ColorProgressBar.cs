@@ -1,11 +1,15 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IAnyGameLevelListener
 {
     [SerializeField] private Graphic[] _graphicsToSetColor;
     [SerializeField] private Slider _progressSlider;
+    [SerializeField] private ScoreNotice _notice;
 
+    private List<ScoreNotice> _notices;
     private IBalloonColorConfiguration _colorConfiguration;
     private Contexts _contexts;
 
@@ -46,6 +50,25 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
         if (_colorConfiguration.Name == name)
         {
             _progressSlider.value = current;
+
+            if (_notices == null)
+            {
+                _notices = new List<ScoreNotice>();
+            }
+
+            var usable = _notices.FindIndex(x => x.IsUsable);
+
+            if (_notices.Count == 0 || usable < 0)
+            {
+                var newInstance = Instantiate(_notice, transform);
+                _notices.Add(newInstance);
+            }
+            
+            if (usable >= 0 && usable < _notices.Count)
+            {
+                var instance = _notices[usable];
+                instance.Animator.SetTrigger("Score");
+            }
         }
     }
 
