@@ -12,6 +12,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 470d5420d203a354388f0723fa8d4c9f, type: 3}
   m_Name: GameConfiguration
   m_EditorClassIdentifier: 
+  _displayConfiguration:
+    _displayOptions:
+    - _aspectRatio: {x: 9, y: 16}
+      _orthogonalSize: 4.75
+    - _aspectRatio: {x: 10, y: 19}
+      _orthogonalSize: 4.75
+    - _aspectRatio: {x: 9, y: 19}
+      _orthogonalSize: 5.15
+    - _aspectRatio: {x: 207, y: 448}
+      _orthogonalSize: 5.15
+    - _aspectRatio: {x: 6, y: 13}
+      _orthogonalSize: 5.15
   _throwerSpawnPoint: {x: 0, y: -4.5}
   _projectileSpawnPoint: {x: 0, y: -4.1}
   _projectileSpeed: 7
@@ -35,15 +47,4 @@ MonoBehaviour:
   _newBalloonLinesTimeInterval: 0.35
   _nudgeDistance: 0.1
   _nudgeDuration: 0.4
-  _displayConfiguration:
-    _displayOptions:
-    - _aspectRatio: {x: 9, y: 16}
-      _orthogonalSize: 4.75
-    - _aspectRatio: {x: 10, y: 19}
-      _orthogonalSize: 4.75
-    - _aspectRatio: {x: 9, y: 19}
-      _orthogonalSize: 5.15
-    - _aspectRatio: {x: 207, y: 448}
-      _orthogonalSize: 5.15
-    - _aspectRatio: {x: 6, y: 13}
-      _orthogonalSize: 5.15
+  _scorePointTraceDuration: 1

@@ -196,10 +196,11 @@ public static class GameContextExtensions
         return null;
     }
 
-    public static void AddScore(this GameContext context, string name)
+    public static void AddScore(this GameContext context, string name, out GameEntity gameLevelProgressEntity)
     {
         var scores = context.GetGroup(GameMatcher.GamePersistentScore);
         var progresses = context.GetGroup(GameMatcher.GameLevelProgress);
+        gameLevelProgressEntity = null;
 
         foreach (var score in scores.GetEntities())
         {
@@ -218,6 +219,7 @@ public static class GameContextExtensions
             if (progress.gameLevelProgress.Name == name)
             {
                 progress.ReplaceGameLevelProgress(name, progress.gameLevelProgress.Current + 1);
+                gameLevelProgressEntity = progress;
             }
 
             // check if the current progress passes the level requirement

@@ -5,6 +5,8 @@ using UnityEngine;
 [CreateAssetMenu(menuName = "Configuration/Game Configuration", fileName = "GameConfiguration")]
 public class GameConfiguration : ScriptableObject, IGameConfiguration
 {
+    [Header("Display")] [SerializeField] private GameDisplayConfiguration _displayConfiguration;
+
     [Header("Thrower")] [SerializeField] private Vector2 _throwerSpawnPoint;
 
     [Header("Projectile")] [SerializeField]
@@ -25,7 +27,7 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
     [SerializeField] private float _newBalloonLinesTimeInterval;
     [SerializeField] private float _nudgeDistance;
     [SerializeField] private float _nudgeDuration;
-    [SerializeField] private GameDisplayConfiguration _displayConfiguration;
+    [SerializeField] private float _scorePointTraceDuration;
 
     public Vector2 ThrowerSpawnPoint => _throwerSpawnPoint;
     public Vector2 ProjectileSpawnPoint => _projectileSpawnPoint;
@@ -47,9 +49,11 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
 
     public GameDisplayConfiguration DisplayConfiguration => _displayConfiguration;
 
+    public float ScorePointTraceDuration => _scorePointTraceDuration;
+
     public static int PointsRequiredForLevel(int level)
     {
-        return (int)(Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI)) + 25f);
+        return (int) (Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI)) + 25f);
     }
 
     int IGameConfiguration.PointsRequiredForLevel(int level)

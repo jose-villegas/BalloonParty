@@ -77,6 +77,8 @@ MonoBehaviour:
   _progressSlider: {fileID: 9159033291817326827}
   _notice: {fileID: -7890052004365423262, guid: 64b82457fb14be545a77f73d8f9d1eb9,
     type: 3}
+  _scoreTrail: {fileID: 5443423827500057660, guid: 27d91c0efb60a4e498122c3996eab93e,
+    type: 3}
 --- !u!1 &6277398799839937644
 GameObject:
   m_ObjectHideFlags: 0

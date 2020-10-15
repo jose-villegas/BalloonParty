@@ -92,7 +92,9 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
                     _slots[index.x, index.y] = null;
 
                     // add score
-                    _contexts.game.AddScore(balloonEntity.balloonColor.Value);
+                    _contexts.game.AddScore(balloonEntity.balloonColor.Value, out var progress);
+                    // save position to know where this point comes from
+                    progress.ReplacePosition(balloonEntity.position.Value); 
 
                     // destroy
                     balloonEntity.isDestroyed = true;

@@ -20,6 +20,7 @@ public interface IGameConfiguration
     float NudgeDistance { get;  }
     float NudgeDuration { get; }
     GameDisplayConfiguration DisplayConfiguration { get; }
+    float ScorePointTraceDuration { get; }
 
     int PointsRequiredForLevel(int level);
 

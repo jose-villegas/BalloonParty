@@ -9,15 +9,20 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
     [SerializeField] private Graphic[] _graphicsToSetColor;
     [SerializeField] private Slider _progressSlider;
     [SerializeField] private ScoreNotice _notice;
+    [SerializeField] private ScorePointTrail _scoreTrail;
 
     private List<ScoreNotice> _notices;
+    private static List<ScorePointTrail> _trails;
     private IBalloonColorConfiguration _colorConfiguration;
     private Contexts _contexts;
     private IGroup<GameEntity> _colorPopCount;
+    private IGameConfiguration _configuration;
+    private int _currentCount = 0;
 
     public void Setup(IBalloonColorConfiguration colorConfiguration, IGameConfiguration gameConfiguration)
     {
         _contexts = Contexts.sharedInstance;
+        _configuration = gameConfiguration;
         _colorConfiguration = colorConfiguration;
         _colorPopCount = _contexts.game.GetGroup(GameMatcher.BalloonLastColorPopCount);
 
@@ -54,26 +59,67 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
         {
             _progressSlider.value = current;
 
-            if (_notices == null)
+            if (entity.hasPosition)
             {
-                _notices = new List<ScoreNotice>();
+                _currentCount += 1;
+                PopScoreNotice();
+                ShowScorePointTrail(entity);
             }
+        }
+        else
+        {
+            _currentCount = 0;
+        }
+    }
 
-            var usable = _notices.FindIndex(x => x.IsUsable);
+    private void ShowScorePointTrail(GameEntity entity)
+    {
+        if (_trails == null)
+        {
+            _trails = new List<ScorePointTrail>();
+        }
 
-            if (_notices.Count == 0 || usable < 0)
-            {
-                var newInstance = Instantiate(_notice, transform);
-                _notices.Add(newInstance);
-            }
-            
-            if (usable >= 0 && usable < _notices.Count)
-            {
-                var instance = _notices[usable];
+        var usable = _trails.FindIndex(x => x.IsUsable);
+        ScorePointTrail trail = null;
 
-                var colorPopCount = _colorPopCount.GetEntities()[0].balloonLastColorPopCount.Value;
-                instance.ScoreUp(colorPopCount);
-            }
+        if (_trails.Count == 0 || usable < 0)
+        {
+            trail = Instantiate(_scoreTrail, entity.position.Value, Quaternion.identity);
+            _trails.Add(trail);
+        }
+
+        if (usable >= 0 && usable < _trails.Count)
+        {
+            trail = _trails[usable];
+            trail.transform.position = entity.position.Value;
+            trail.transform.localScale = Vector3.one;
+        }
+
+        if (trail != null)
+        {
+            trail.Setup(transform.position, _colorConfiguration.Color, _configuration, null);
+        }
+    }
+
+    private void PopScoreNotice()
+    {
+        if (_notices == null)
+        {
+            _notices = new List<ScoreNotice>();
+        }
+
+        var usable = _notices.FindIndex(x => x.IsUsable);
+
+        if (_notices.Count == 0 || usable < 0)
+        {
+            var newInstance = Instantiate(_notice, transform);
+            _notices.Add(newInstance);
+        }
+
+        if (usable >= 0 && usable < _notices.Count)
+        {
+            var instance = _notices[usable];
+            instance.ScoreUp(_currentCount);
         }
     }
 
