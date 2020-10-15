@@ -10,7 +10,9 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
     [SerializeField] private Slider _progressSlider;
     [SerializeField] private ScoreNotice _notice;
     [SerializeField] private ScorePointTrail _scoreTrail;
+
     [SerializeField] private Animator _animator;
+    [SerializeField] private ParticleSystem _completionPS;
 
     private List<ScoreNotice> _notices;
     private static List<ScorePointTrail> _trails;
@@ -19,6 +21,7 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
     private IGroup<GameEntity> _colorPopCount;
     private IGameConfiguration _configuration;
     private int _currentCount = 0;
+
 
     public void Setup(IBalloonColorConfiguration colorConfiguration, IGameConfiguration gameConfiguration)
     {
@@ -65,6 +68,12 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
                 _currentCount += 1;
                 PopScoreNotice();
                 ShowScorePointTrail(entity);
+            }
+
+            if (current >= _progressSlider.maxValue)
+            {
+                _completionPS.Play();
+                _animator.SetBool("Completed", true);
             }
         }
         else
@@ -133,5 +142,9 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
 
         _progressSlider.maxValue = requirement;
         _progressSlider.value = 0;
+
+        // reset vfx
+        _completionPS.Stop();
+        _animator.SetBool("Completed", false);
     }
 }
