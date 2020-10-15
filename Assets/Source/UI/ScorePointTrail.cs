@@ -7,6 +7,7 @@ public class ScorePointTrail : MonoBehaviour, IReusable
     [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private TrailRenderer _trailRenderer;
     [SerializeField] private AnimationCurve _scaleCurve;
+    [SerializeField] private AnimationCurve _moveCurve;
 
     public void Setup(Vector3 target, Color color, IGameConfiguration configuration, Action onCompleted)
     {
@@ -19,7 +20,7 @@ public class ScorePointTrail : MonoBehaviour, IReusable
         var moveTween = transform.DOMove(target, configuration.ScorePointTraceDuration);
         var scaleTween = transform.DOScale(Vector3.zero, configuration.ScorePointTraceDuration);
         scaleTween.SetEase(_scaleCurve);
-        moveTween.SetEase(Ease.OutSine);
+        moveTween.SetEase(_moveCurve);
 
         scaleTween.onComplete += () =>
         {
