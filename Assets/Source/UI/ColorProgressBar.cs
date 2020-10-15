@@ -10,6 +10,7 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
     [SerializeField] private Slider _progressSlider;
     [SerializeField] private ScoreNotice _notice;
     [SerializeField] private ScorePointTrail _scoreTrail;
+    [SerializeField] private Animator _animator;
 
     private List<ScoreNotice> _notices;
     private static List<ScorePointTrail> _trails;
@@ -59,7 +60,7 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
         {
             _progressSlider.value = current;
 
-            if (entity.hasPosition)
+            if (entity.hasPosition && current <= _progressSlider.maxValue)
             {
                 _currentCount += 1;
                 PopScoreNotice();
@@ -97,7 +98,10 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
 
         if (trail != null)
         {
-            trail.Setup(transform.position, _colorConfiguration.Color, _configuration, null);
+            trail.Setup(transform.position, _colorConfiguration.Color, _configuration, () =>
+            {
+                _animator.SetTrigger("TrailHit");
+            });
         }
     }
 
