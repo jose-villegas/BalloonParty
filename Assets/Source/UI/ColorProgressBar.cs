@@ -12,23 +12,20 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
     [SerializeField] private ScorePointTrail _scoreTrail;
 
     [SerializeField] private Animator _animator;
-    [SerializeField] private ParticleSystem _completionPS;
+    [SerializeField] private ParticleSystem _completionParticleSystem;
 
     private List<ScoreNotice> _notices;
     private static List<ScorePointTrail> _trails;
     private IBalloonColorConfiguration _colorConfiguration;
     private Contexts _contexts;
-    private IGroup<GameEntity> _colorPopCount;
     private IGameConfiguration _configuration;
     private int _currentCount = 0;
-
 
     public void Setup(IBalloonColorConfiguration colorConfiguration, IGameConfiguration gameConfiguration)
     {
         _contexts = Contexts.sharedInstance;
         _configuration = gameConfiguration;
         _colorConfiguration = colorConfiguration;
-        _colorPopCount = _contexts.game.GetGroup(GameMatcher.BalloonLastColorPopCount);
 
         foreach (var image in _graphicsToSetColor)
         {
@@ -72,7 +69,8 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
 
             if (current >= _progressSlider.maxValue)
             {
-                _completionPS.Play();
+                _completionParticleSystem.gameObject.SetActive(true);
+                _completionParticleSystem.Play();
                 _animator.SetBool("Completed", true);
             }
         }
@@ -144,7 +142,8 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
         _progressSlider.value = 0;
 
         // reset vfx
-        _completionPS.Stop();
+        _completionParticleSystem.Stop();
+        _completionParticleSystem.gameObject.SetActive(false);
         _animator.SetBool("Completed", false);
     }
 }

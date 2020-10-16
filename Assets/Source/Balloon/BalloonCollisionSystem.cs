@@ -54,20 +54,6 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
                         {
                             var colorCount = freeProjectile.balloonLastColorPopCount.Value;
                             freeProjectile.ReplaceBalloonLastColorPopCount(colorCount + 1);
-
-                            // when 3 of the same color are hit, add an extra bounce shield
-                            if (colorCount >= 2)
-                            {
-                                var shields = freeProjectile.projectileBounceShield.Value;
-                                freeProjectile.ReplaceProjectileBounceShield(shields + 1);
-
-                                // play particle fx
-                                var gain = _contexts.game.CreateEntity();
-                                gain.AddParticleFXParent(freeProjectile.linkedView.Value);
-                                gain.AddPlayParticleFX("PSVFX_ShieldGain");
-                                gain.AddParticleFXStartColor(
-                                    _configuration.BalloonColor(freeProjectile.balloonColor.Value));
-                            }
                         }
                         else
                         {
@@ -76,62 +62,11 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
                         }
                     }
 
-                    // create balloon pop effect
-                    var e = _contexts.game.CreateEntity();
-                    e.AddPosition(balloonEntity.position.Value);
-                    e.AddParticleFXStartColor(_configuration.BalloonColor(balloonEntity.balloonColor.Value));
-                    e.AddPlayParticleFX("PSVFX_BalloonPop");
-
-                    // operate on indexing value
-                    var index = balloonEntity.slotIndex.Value;
-
-                    // start nudge animation from explosion on neighboring slots
-                    NudgeNeighbors(index, balloonEntity);
-
-                    // remove from indexer
-                    _slots[index.x, index.y] = null;
-
-                    // add score
-                    _contexts.game.AddScore(balloonEntity.balloonColor.Value, out var progress);
-                    // save position to know where this point comes from
-                    progress.ReplacePosition(balloonEntity.position.Value); 
-
-                    // destroy
-                    balloonEntity.isDestroyed = true;
+                    balloonEntity.isBalloonHit = true;
                 }
             }
         }
     }
 
-    private void NudgeNeighbors(Vector2Int index, GameEntity balloonEntity)
-    {
-        var neighbors = _slots.GetNeighbors(index.x, index.y);
 
-        foreach (var neighbor in neighbors)
-        {
-            if (neighbor is GameEntity neighborEntity)
-            {
-                var mono = neighborEntity.linkedView.Value as MonoBehaviour;
-
-                if (mono != null)
-                {
-                    var position = neighborEntity.position.Value;
-                    var direction = neighborEntity.position.Value - balloonEntity.position.Value;
-                    var slotIndex = neighborEntity.slotIndex.Value;
-                    var sequence = DOTween.Sequence();
-
-                    sequence.Append(mono.transform.DOMove(
-                        position + direction.normalized * _configuration.NudgeDistance,
-                        _configuration.NudgeDuration / 2f));
-                    sequence.Append(mono.transform.DOMove(slotIndex.IndexToPosition(_configuration),
-                        _configuration.NudgeDuration / 2f));
-                    neighborEntity.isStableBalloon = false;
-                    sequence.onComplete += () => { neighborEntity.isStableBalloon = true; };
-
-                    // add tweenSequence to entity to avoid colliding with another tween
-                    neighborEntity.ReplaceTweenSequence(sequence);
-                }
-            }
-        }
-    }
 }

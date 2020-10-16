@@ -83,7 +83,7 @@ MonoBehaviour:
   _scoreTrail: {fileID: 5443423827500057660, guid: 27d91c0efb60a4e498122c3996eab93e,
     type: 3}
   _animator: {fileID: 3379769437596866724}
-  _completionPS: {fileID: 1749563476980793392}
+  _completionParticleSystem: {fileID: 1749563476980793392}
 --- !u!95 &3379769437596866724
 Animator:
   serializedVersion: 3
@@ -314,7 +314,7 @@ GameObject:
   - component: {fileID: 1749563476980793392}
   - component: {fileID: 1860707678786461105}
   m_Layer: 5
-  m_Name: CompletePS
+  m_Name: Completed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
