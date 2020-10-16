@@ -148,6 +148,7 @@ MonoBehaviour:
   _renderer: {fileID: 264100499786580991}
   _shadowRenderer: {fileID: 4475536555041591237}
   _shadowAlpha: 0.3
+  _shadowIntensity: 0.9
 --- !u!58 &621851426725808483
 CircleCollider2D:
   m_ObjectHideFlags: 0

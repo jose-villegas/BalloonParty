@@ -6,6 +6,7 @@ public class BalloonColorController : MonoBehaviour, IBalloonColorListener
     [SerializeField] private SpriteRenderer _renderer;
     [SerializeField] private SpriteRenderer _shadowRenderer;
     [SerializeField, Range(0f, 1f)] private float _shadowAlpha;
+    [SerializeField, Range(0f, 5f)] private float _shadowIntensity;
 
     private LinkedViewController _linkedView;
     private IGameConfiguration _configuration;
@@ -35,7 +36,7 @@ public class BalloonColorController : MonoBehaviour, IBalloonColorListener
 
         if (_shadowRenderer != null)
         {
-            _shadowRenderer.color = new Color(color.r, color.g, color.b, _shadowAlpha);
+            _shadowRenderer.color = new Color(color.r * _shadowIntensity, color.g * _shadowIntensity, color.b * _shadowIntensity, _shadowAlpha);
         }
     }
 }
