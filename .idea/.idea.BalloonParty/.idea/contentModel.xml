@@ -1,0 +1,413 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\ville\AppData\Local\JetBrains\Rider2020.2\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\ville\AppData\Local\JetBrains\Rider2020.2\resharper-host\Local\Transient\Rider\v202\SolutionCaches\_BalloonParty.1273628789.00" t="ExcludeRecursive" />
+    <e p="C:\Users\ville\Documents\Projects\BalloonParty" t="IncludeRecursive">
+      <e p="Assembly-CSharp-firstpass.csproj" t="IncludeRecursive" />
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="DesperateDevs" t="Include">
+          <e p="Compile.cs" t="Include" />
+        </e>
+        <e p="Entitas" t="Include">
+          <e p="Entitas.xml" t="Include" />
+          <e p="LICENSE.txt" t="Include" />
+        </e>
+        <e p="Generated" t="Include">
+          <e p="Components" t="Include">
+            <e p="GameConfigurationComponent.cs" t="Include" />
+          </e>
+          <e p="Configuration" t="Include">
+            <e p="Components" t="Include">
+              <e p="ConfigurationGameConfigurationComponent.cs" t="Include" />
+            </e>
+            <e p="ConfigurationAttribute.cs" t="Include" />
+            <e p="ConfigurationComponentsLookup.cs" t="Include" />
+            <e p="ConfigurationContext.cs" t="Include" />
+            <e p="ConfigurationEntity.cs" t="Include" />
+            <e p="ConfigurationMatcher.cs" t="Include" />
+          </e>
+          <e p="Contexts.cs" t="Include" />
+          <e p="Events" t="Include">
+            <e p="Components" t="Include">
+              <e p="AnyBalloonLineInstanceEventListenerComponent.cs" t="Include" />
+              <e p="AnyBalloonsBalanceEventListenerComponent.cs" t="Include" />
+              <e p="AnyGameEventListenerComponent.cs" t="Include" />
+              <e p="AnyGameLevelListenerComponent.cs" t="Include" />
+              <e p="AnyGameLevelProgressListenerComponent.cs" t="Include" />
+              <e p="AnyGameLevelUpListenerComponent.cs" t="Include" />
+              <e p="AnyGamePersistentScoreListenerComponent.cs" t="Include" />
+              <e p="AnyGameStartedListenerComponent.cs" t="Include" />
+              <e p="AnyPlayParticleFXListenerComponent.cs" t="Include" />
+              <e p="BalloonColorListenerComponent.cs" t="Include" />
+              <e p="BalloonLastColorPopCountListenerComponent.cs" t="Include" />
+              <e p="CameraListenerComponent.cs" t="Include" />
+              <e p="DestroyedListenerComponent.cs" t="Include" />
+              <e p="DirectionListenerComponent.cs" t="Include" />
+              <e p="ForwardListenerComponent.cs" t="Include" />
+              <e p="LayerListenerComponent.cs" t="Include" />
+              <e p="LinkedViewListenerComponent.cs" t="Include" />
+              <e p="MovableListenerComponent.cs" t="Include" />
+              <e p="MovableRemovedListenerComponent.cs" t="Include" />
+              <e p="PositionListenerComponent.cs" t="Include" />
+              <e p="ProjectileBounceShieldListenerComponent.cs" t="Include" />
+              <e p="ProjectileListenerComponent.cs" t="Include" />
+              <e p="ReadyToLoadListenerComponent.cs" t="Include" />
+              <e p="ReadyToThrowListenerComponent.cs" t="Include" />
+              <e p="RightListenerComponent.cs" t="Include" />
+              <e p="RotationListenerComponent.cs" t="Include" />
+              <e p="ScaleListenerComponent.cs" t="Include" />
+              <e p="SlotIndexListenerComponent.cs" t="Include" />
+              <e p="SpeedListenerComponent.cs" t="Include" />
+              <e p="StableBalloonListenerComponent.cs" t="Include" />
+              <e p="StableBalloonRemovedListenerComponent.cs" t="Include" />
+              <e p="TagListenerComponent.cs" t="Include" />
+              <e p="ThrowerListenerComponent.cs" t="Include" />
+              <e p="TriggerEnter2DListenerComponent.cs" t="Include" />
+              <e p="TriggerExit2DListenerComponent.cs" t="Include" />
+              <e p="TweenSequenceListenerComponent.cs" t="Include" />
+              <e p="UpListenerComponent.cs" t="Include" />
+            </e>
+            <e p="GameEventSystems.cs" t="Include" />
+            <e p="Interfaces" t="Include">
+              <e p="IAnyBalloonLineInstanceEventListener.cs" t="Include" />
+              <e p="IAnyBalloonsBalanceEventListener.cs" t="Include" />
+              <e p="IAnyGameEventListener.cs" t="Include" />
+              <e p="IAnyGameLevelListener.cs" t="Include" />
+              <e p="IAnyGameLevelProgressListener.cs" t="Include" />
+              <e p="IAnyGameLevelUpListener.cs" t="Include" />
+              <e p="IAnyGamePersistentScoreListener.cs" t="Include" />
+              <e p="IAnyGameStartedListener.cs" t="Include" />
+              <e p="IAnyPlayParticleFXListener.cs" t="Include" />
+              <e p="IBalloonColorListener.cs" t="Include" />
+              <e p="IBalloonLastColorPopCountListener.cs" t="Include" />
+              <e p="ICameraListener.cs" t="Include" />
+              <e p="IDestroyedListener.cs" t="Include" />
+              <e p="IDirectionListener.cs" t="Include" />
+              <e p="IForwardListener.cs" t="Include" />
+              <e p="ILayerListener.cs" t="Include" />
+              <e p="ILinkedViewListener.cs" t="Include" />
+              <e p="IMovableListener.cs" t="Include" />
+              <e p="IMovableRemovedListener.cs" t="Include" />
+              <e p="IPositionListener.cs" t="Include" />
+              <e p="IProjectileBounceShieldListener.cs" t="Include" />
+              <e p="IProjectileListener.cs" t="Include" />
+              <e p="IReadyToLoadListener.cs" t="Include" />
+              <e p="IReadyToThrowListener.cs" t="Include" />
+              <e p="IRightListener.cs" t="Include" />
+              <e p="IRotationListener.cs" t="Include" />
+              <e p="IScaleListener.cs" t="Include" />
+              <e p="ISlotIndexListener.cs" t="Include" />
+              <e p="ISpeedListener.cs" t="Include" />
+              <e p="IStableBalloonListener.cs" t="Include" />
+              <e p="IStableBalloonRemovedListener.cs" t="Include" />
+              <e p="ITagListener.cs" t="Include" />
+              <e p="IThrowerListener.cs" t="Include" />
+              <e p="ITriggerEnter2DListener.cs" t="Include" />
+              <e p="ITriggerExit2DListener.cs" t="Include" />
+              <e p="ITweenSequenceListener.cs" t="Include" />
+              <e p="IUpListener.cs" t="Include" />
+            </e>
+            <e p="Systems" t="Include">
+              <e p="AnyBalloonLineInstanceEventEventSystem.cs" t="Include" />
+              <e p="AnyBalloonsBalanceEventEventSystem.cs" t="Include" />
+              <e p="AnyGameEventEventSystem.cs" t="Include" />
+              <e p="AnyGameLevelEventSystem.cs" t="Include" />
+              <e p="AnyGameLevelProgressEventSystem.cs" t="Include" />
+              <e p="AnyGameLevelUpEventSystem.cs" t="Include" />
+              <e p="AnyGamePersistentScoreEventSystem.cs" t="Include" />
+              <e p="AnyGameStartedEventSystem.cs" t="Include" />
+              <e p="AnyPlayParticleFXEventSystem.cs" t="Include" />
+              <e p="BalloonColorEventSystem.cs" t="Include" />
+              <e p="BalloonLastColorPopCountEventSystem.cs" t="Include" />
+              <e p="CameraEventSystem.cs" t="Include" />
+              <e p="DestroyedEventSystem.cs" t="Include" />
+              <e p="DirectionEventSystem.cs" t="Include" />
+              <e p="ForwardEventSystem.cs" t="Include" />
+              <e p="LayerEventSystem.cs" t="Include" />
+              <e p="LinkedViewEventSystem.cs" t="Include" />
+              <e p="MovableEventSystem.cs" t="Include" />
+              <e p="MovableRemovedEventSystem.cs" t="Include" />
+              <e p="PositionEventSystem.cs" t="Include" />
+              <e p="ProjectileBounceShieldEventSystem.cs" t="Include" />
+              <e p="ProjectileEventSystem.cs" t="Include" />
+              <e p="ReadyToLoadEventSystem.cs" t="Include" />
+              <e p="ReadyToThrowEventSystem.cs" t="Include" />
+              <e p="RightEventSystem.cs" t="Include" />
+              <e p="RotationEventSystem.cs" t="Include" />
+              <e p="ScaleEventSystem.cs" t="Include" />
+              <e p="SlotIndexEventSystem.cs" t="Include" />
+              <e p="SpeedEventSystem.cs" t="Include" />
+              <e p="StableBalloonEventSystem.cs" t="Include" />
+              <e p="StableBalloonRemovedEventSystem.cs" t="Include" />
+              <e p="TagEventSystem.cs" t="Include" />
+              <e p="ThrowerEventSystem.cs" t="Include" />
+              <e p="TriggerEnter2DEventSystem.cs" t="Include" />
+              <e p="TriggerExit2DEventSystem.cs" t="Include" />
+              <e p="TweenSequenceEventSystem.cs" t="Include" />
+              <e p="UpEventSystem.cs" t="Include" />
+            </e>
+          </e>
+          <e p="Feature.cs" t="Include" />
+          <e p="Game" t="Include">
+            <e p="Components" t="Include">
+              <e p="GameAnyBalloonLineInstanceEventListenerComponent.cs" t="Include" />
+              <e p="GameAnyBalloonsBalanceEventListenerComponent.cs" t="Include" />
+              <e p="GameAnyGameEventListenerComponent.cs" t="Include" />
+              <e p="GameAnyGameLevelListenerComponent.cs" t="Include" />
+              <e p="GameAnyGameLevelProgressListenerComponent.cs" t="Include" />
+              <e p="GameAnyGameLevelUpListenerComponent.cs" t="Include" />
+              <e p="GameAnyGamePersistentScoreListenerComponent.cs" t="Include" />
+              <e p="GameAnyGameStartedListenerComponent.cs" t="Include" />
+              <e p="GameAnyPlayParticleFXListenerComponent.cs" t="Include" />
+              <e p="GameAssetComponent.cs" t="Include" />
+              <e p="GameBalloonColorComponent.cs" t="Include" />
+              <e p="GameBalloonColorListenerComponent.cs" t="Include" />
+              <e p="GameBalloonComponent.cs" t="Include" />
+              <e p="GameBalloonHitComponent.cs" t="Include" />
+              <e p="GameBalloonLastColorPopCountComponent.cs" t="Include" />
+              <e p="GameBalloonLastColorPopCountListenerComponent.cs" t="Include" />
+              <e p="GameBalloonLineInstanceEventComponent.cs" t="Include" />
+              <e p="GameBalloonsBalanceEventComponent.cs" t="Include" />
+              <e p="GameBalloonSlotWeightComponent.cs" t="Include" />
+              <e p="GameCameraComponent.cs" t="Include" />
+              <e p="GameCameraListenerComponent.cs" t="Include" />
+              <e p="GameCoroutineRunnerComponent.cs" t="Include" />
+              <e p="GameDestroyedComponent.cs" t="Include" />
+              <e p="GameDestroyedListenerComponent.cs" t="Include" />
+              <e p="GameDirectionComponent.cs" t="Include" />
+              <e p="GameDirectionListenerComponent.cs" t="Include" />
+              <e p="GameForwardComponent.cs" t="Include" />
+              <e p="GameForwardListenerComponent.cs" t="Include" />
+              <e p="GameFreeProjectileComponent.cs" t="Include" />
+              <e p="GameGameEventComponent.cs" t="Include" />
+              <e p="GameGameLevelComponent.cs" t="Include" />
+              <e p="GameGameLevelProgressComponent.cs" t="Include" />
+              <e p="GameGameLevelUpComponent.cs" t="Include" />
+              <e p="GameGamePersistentScoreComponent.cs" t="Include" />
+              <e p="GameGameStartedComponent.cs" t="Include" />
+              <e p="GameLayerComponent.cs" t="Include" />
+              <e p="GameLayerListenerComponent.cs" t="Include" />
+              <e p="GameLinkedViewComponent.cs" t="Include" />
+              <e p="GameLinkedViewListenerComponent.cs" t="Include" />
+              <e p="GameLoadedProjectileComponent.cs" t="Include" />
+              <e p="GameMovableComponent.cs" t="Include" />
+              <e p="GameMovableListenerComponent.cs" t="Include" />
+              <e p="GameMovableRemovedListenerComponent.cs" t="Include" />
+              <e p="GameParticleFXParentComponent.cs" t="Include" />
+              <e p="GameParticleFXStartColorComponent.cs" t="Include" />
+              <e p="GamePlayParticleFXComponent.cs" t="Include" />
+              <e p="GamePositionComponent.cs" t="Include" />
+              <e p="GamePositionListenerComponent.cs" t="Include" />
+              <e p="GameProjectileBounceShieldComponent.cs" t="Include" />
+              <e p="GameProjectileBounceShieldListenerComponent.cs" t="Include" />
+              <e p="GameProjectileComponent.cs" t="Include" />
+              <e p="GameProjectileListenerComponent.cs" t="Include" />
+              <e p="GameReadyToLoadComponent.cs" t="Include" />
+              <e p="GameReadyToLoadListenerComponent.cs" t="Include" />
+              <e p="GameReadyToThrowComponent.cs" t="Include" />
+              <e p="GameReadyToThrowListenerComponent.cs" t="Include" />
+              <e p="GameRightComponent.cs" t="Include" />
+              <e p="GameRightListenerComponent.cs" t="Include" />
+              <e p="GameRotationComponent.cs" t="Include" />
+              <e p="GameRotationListenerComponent.cs" t="Include" />
+              <e p="GameScaleComponent.cs" t="Include" />
+              <e p="GameScaleListenerComponent.cs" t="Include" />
+              <e p="GameSlotIndexComponent.cs" t="Include" />
+              <e p="GameSlotIndexListenerComponent.cs" t="Include" />
+              <e p="GameSlotsIndexerComponent.cs" t="Include" />
+              <e p="GameSpeedComponent.cs" t="Include" />
+              <e p="GameSpeedListenerComponent.cs" t="Include" />
+              <e p="GameStableBalloonComponent.cs" t="Include" />
+              <e p="GameStableBalloonListenerComponent.cs" t="Include" />
+              <e p="GameStableBalloonRemovedListenerComponent.cs" t="Include" />
+              <e p="GameTagComponent.cs" t="Include" />
+              <e p="GameTagListenerComponent.cs" t="Include" />
+              <e p="GameThrowerComponent.cs" t="Include" />
+              <e p="GameThrowerListenerComponent.cs" t="Include" />
+              <e p="GameThrowerLoadedProjectileComponent.cs" t="Include" />
+              <e p="GameTriggerEnter2DComponent.cs" t="Include" />
+              <e p="GameTriggerEnter2DListenerComponent.cs" t="Include" />
+              <e p="GameTriggerExit2DComponent.cs" t="Include" />
+              <e p="GameTriggerExit2DListenerComponent.cs" t="Include" />
+              <e p="GameTweenSequenceComponent.cs" t="Include" />
+              <e p="GameTweenSequenceListenerComponent.cs" t="Include" />
+              <e p="GameUpComponent.cs" t="Include" />
+              <e p="GameUpListenerComponent.cs" t="Include" />
+            </e>
+            <e p="GameAttribute.cs" t="Include" />
+            <e p="GameComponentsLookup.cs" t="Include" />
+            <e p="GameContext.cs" t="Include" />
+            <e p="GameEntity.cs" t="Include" />
+            <e p="GameMatcher.cs" t="Include" />
+          </e>
+          <e p="Input" t="Include">
+            <e p="InputAttribute.cs" t="Include" />
+            <e p="InputComponentsLookup.cs" t="Include" />
+            <e p="InputContext.cs" t="Include" />
+            <e p="InputEntity.cs" t="Include" />
+            <e p="InputMatcher.cs" t="Include" />
+          </e>
+        </e>
+        <e p="Plugins" t="Include">
+          <e p="Demigiant" t="Include">
+            <e p="DOTween" t="Include">
+              <e p="Modules" t="Include">
+                <e p="DOTweenModuleAudio.cs" t="Include" />
+                <e p="DOTweenModulePhysics.cs" t="Include" />
+                <e p="DOTweenModulePhysics2D.cs" t="Include" />
+                <e p="DOTweenModuleSprite.cs" t="Include" />
+                <e p="DOTweenModuleUI.cs" t="Include" />
+                <e p="DOTweenModuleUnityVersion.cs" t="Include" />
+                <e p="DOTweenModuleUtils.cs" t="Include" />
+              </e>
+              <e p="readme.txt" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="Source" t="Include">
+          <e p="Balloon" t="Include">
+            <e p="BalanceBalloonsSystem.cs" t="Include" />
+            <e p="BalloonAnimationController.cs" t="Include" />
+            <e p="BalloonCollisionSystem.cs" t="Include" />
+            <e p="BalloonColorComponent.cs" t="Include" />
+            <e p="BalloonColorController.cs" t="Include" />
+            <e p="BalloonComponent.cs" t="Include" />
+            <e p="BalloonHitComponent.cs" t="Include" />
+            <e p="BalloonHitDestructionSystem.cs" t="Include" />
+            <e p="BalloonHitNudgeAnimationSystem.cs" t="Include" />
+            <e p="BalloonHitScoreSystem.cs" t="Include" />
+            <e p="BalloonLastColorPopCountComponent.cs" t="Include" />
+            <e p="BalloonLineSpawnerSystem.cs" t="Include" />
+            <e p="BalloonSlotWeightComponent.cs" t="Include" />
+            <e p="BalloonSpriteLayerController.cs" t="Include" />
+            <e p="Events" t="Include">
+              <e p="BalloonLineInstanceEventComponent.cs" t="Include" />
+              <e p="BalloonsBalanceEventComponent.cs" t="Include" />
+            </e>
+            <e p="GameStartedBalloonsSpawnSystem.cs" t="Include" />
+            <e p="StableBalloonComponent.cs" t="Include" />
+          </e>
+          <e p="Camera" t="Include">
+            <e p="CameraComponent.cs" t="Include" />
+            <e p="CameraEntityLinker.cs" t="Include" />
+          </e>
+          <e p="Configuration" t="Include">
+            <e p="BalloonColorConfiguration.cs" t="Include" />
+            <e p="GameConfiguration.cs" t="Include" />
+            <e p="IBalloonColorConfiguration.cs" t="Include" />
+            <e p="IGameConfiguration.cs" t="Include" />
+          </e>
+          <e p="Constants.cs" t="Include" />
+          <e p="Coroutine" t="Include">
+            <e p="CoroutineRunnerComponent.cs" t="Include" />
+            <e p="CoroutineRunnerController.cs" t="Include" />
+          </e>
+          <e p="Display" t="Include">
+            <e p="AspectRatio.cs" t="Include" />
+            <e p="DisplayOption.cs" t="Include" />
+            <e p="GameDisplayConfiguration.cs" t="Include" />
+            <e p="OrthogonalSizeCameraController.cs" t="Include" />
+          </e>
+          <e p="Game" t="Include">
+            <e p="Events" t="Include">
+              <e p="GameEventComponent.cs" t="Include" />
+              <e p="GameLevelUpComponent.cs" t="Include" />
+              <e p="GameStartedComponent.cs" t="Include" />
+            </e>
+            <e p="GameContextExtensions.cs" t="Include" />
+            <e p="GameController.cs" t="Include" />
+            <e p="GameControllerBehaviour.cs" t="Include" />
+            <e p="GameFixedUpdateSystems.cs" t="Include" />
+            <e p="GameLevelComponent.cs" t="Include" />
+            <e p="GameLevelProgressComponent.cs" t="Include" />
+            <e p="GamePersistentScoreComponent.cs" t="Include" />
+            <e p="GameScoreController.cs" t="Include" />
+            <e p="GameUpdateSystems.cs" t="Include" />
+          </e>
+          <e p="Particles" t="Include">
+            <e p="ParticleFXController.cs" t="Include" />
+            <e p="ParticleFXParentComponent.cs" t="Include" />
+            <e p="ParticleFXStartColorComponent.cs" t="Include" />
+            <e p="PlayParticleFXComponent.cs" t="Include" />
+          </e>
+          <e p="Physics" t="Include">
+            <e p="Cleanup2DTriggersSystem.cs" t="Include" />
+            <e p="TriggerEnter2DComponent.cs" t="Include" />
+            <e p="TriggerExit2DComponent.cs" t="Include" />
+            <e p="TriggerReporterController.cs" t="Include" />
+          </e>
+          <e p="Projectile" t="Include">
+            <e p="FreeProjectileComponent.cs" t="Include" />
+            <e p="FreeProjectileMovementSystem.cs" t="Include" />
+            <e p="LoadedProjectileComponent.cs" t="Include" />
+            <e p="ProjectileBounceShieldComponent.cs" t="Include" />
+            <e p="ProjectileBounceShieldController.cs" t="Include" />
+            <e p="ProjectileBounceSystem.cs" t="Include" />
+            <e p="ProjectileComponent.cs" t="Include" />
+            <e p="ProjectileGlowColorController.cs" t="Include" />
+            <e p="ProjectileReloadSystem.cs" t="Include" />
+            <e p="ProjectileShieldSystem.cs" t="Include" />
+            <e p="ProjectileTransformSystem.cs" t="Include" />
+          </e>
+          <e p="Slots" t="Include">
+            <e p="SlotIndexComponent.cs" t="Include" />
+            <e p="SlotIndexingSystem.cs" t="Include" />
+            <e p="SlotsIndexerComponent.cs" t="Include" />
+          </e>
+          <e p="Thrower" t="Include">
+            <e p="GameStartedThrowerSpawnSystem.cs" t="Include" />
+            <e p="ReadyToLoadComponent.cs" t="Include" />
+            <e p="ReadyToThrowComponent.cs" t="Include" />
+            <e p="ThrowerComponent.cs" t="Include" />
+            <e p="ThrowerDirectionSystem.cs" t="Include" />
+            <e p="ThrowerLoadedProjectileComponent.cs" t="Include" />
+            <e p="ThrowerRotationSystem.cs" t="Include" />
+            <e p="ThrowLoadedProjectileSystem.cs" t="Include" />
+          </e>
+          <e p="Transform" t="Include">
+            <e p="ForwardComponent.cs" t="Include" />
+            <e p="PositionComponent.cs" t="Include" />
+            <e p="RightComponent.cs" t="Include" />
+            <e p="RotationComponent.cs" t="Include" />
+            <e p="ScaleComponent.cs" t="Include" />
+            <e p="TweenSequenceComponent.cs" t="Include" />
+            <e p="UpComponent.cs" t="Include" />
+          </e>
+          <e p="UI" t="Include">
+            <e p="ColorProgressBar.cs" t="Include" />
+            <e p="ColorProgressBarInstancer.cs" t="Include" />
+            <e p="GameStartButton.cs" t="Include" />
+            <e p="IReusable.cs" t="Include" />
+            <e p="LevelLabel.cs" t="Include" />
+            <e p="ScoreCounterLabel.cs" t="Include" />
+            <e p="ScoreNotice.cs" t="Include" />
+            <e p="ScorePointTrail.cs" t="Include" />
+          </e>
+          <e p="View" t="Include">
+            <e p="AssetComponent.cs" t="Include" />
+            <e p="AssetInstancingSystem.cs" t="Include" />
+            <e p="EntityLinkerController.cs" t="Include" />
+            <e p="ILinkedView.cs" t="Include" />
+            <e p="IUnityTransform.cs" t="Include" />
+            <e p="LinkedViewComponent.cs" t="Include" />
+            <e p="LinkedViewController.cs" t="Include" />
+          </e>
+          <e p="World" t="Include">
+            <e p="DestroyedComponent.cs" t="Include" />
+            <e p="DirectionComponent.cs" t="Include" />
+            <e p="LayerComponent.cs" t="Include" />
+            <e p="MovableComponent.cs" t="Include" />
+            <e p="SpeedComponent.cs" t="Include" />
+            <e p="TagComponent.cs" t="Include" />
+          </e>
+        </e>
+      </e>
+      <e p="BalloonParty.sln" t="IncludeFlat" />
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="Temp\bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>
