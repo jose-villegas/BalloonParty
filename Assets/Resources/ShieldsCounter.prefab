@@ -400,7 +400,7 @@ GameObject:
   - component: {fileID: 1991249860604888224}
   - component: {fileID: 1731960217438452082}
   m_Layer: 5
-  m_Name: Shields
+  m_Name: ShieldsCounter
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
