@@ -40,6 +40,8 @@
               <e p="AnyGamePersistentScoreListenerComponent.cs" t="Include" />
               <e p="AnyGameStartedListenerComponent.cs" t="Include" />
               <e p="AnyPlayParticleFXListenerComponent.cs" t="Include" />
+              <e p="AnyProjectileBounceShieldListenerComponent.cs" t="Include" />
+              <e p="AnyReadyToThrowListenerComponent.cs" t="Include" />
               <e p="BalloonColorListenerComponent.cs" t="Include" />
               <e p="BalloonLastColorPopCountListenerComponent.cs" t="Include" />
               <e p="CameraListenerComponent.cs" t="Include" />
@@ -54,7 +56,6 @@
               <e p="ProjectileBounceShieldListenerComponent.cs" t="Include" />
               <e p="ProjectileListenerComponent.cs" t="Include" />
               <e p="ReadyToLoadListenerComponent.cs" t="Include" />
-              <e p="ReadyToThrowListenerComponent.cs" t="Include" />
               <e p="RightListenerComponent.cs" t="Include" />
               <e p="RotationListenerComponent.cs" t="Include" />
               <e p="ScaleListenerComponent.cs" t="Include" />
@@ -80,6 +81,8 @@
               <e p="IAnyGamePersistentScoreListener.cs" t="Include" />
               <e p="IAnyGameStartedListener.cs" t="Include" />
               <e p="IAnyPlayParticleFXListener.cs" t="Include" />
+              <e p="IAnyProjectileBounceShieldListener.cs" t="Include" />
+              <e p="IAnyReadyToThrowListener.cs" t="Include" />
               <e p="IBalloonColorListener.cs" t="Include" />
               <e p="IBalloonLastColorPopCountListener.cs" t="Include" />
               <e p="ICameraListener.cs" t="Include" />
@@ -94,7 +97,6 @@
               <e p="IProjectileBounceShieldListener.cs" t="Include" />
               <e p="IProjectileListener.cs" t="Include" />
               <e p="IReadyToLoadListener.cs" t="Include" />
-              <e p="IReadyToThrowListener.cs" t="Include" />
               <e p="IRightListener.cs" t="Include" />
               <e p="IRotationListener.cs" t="Include" />
               <e p="IScaleListener.cs" t="Include" />
@@ -119,6 +121,8 @@
               <e p="AnyGamePersistentScoreEventSystem.cs" t="Include" />
               <e p="AnyGameStartedEventSystem.cs" t="Include" />
               <e p="AnyPlayParticleFXEventSystem.cs" t="Include" />
+              <e p="AnyProjectileBounceShieldEventSystem.cs" t="Include" />
+              <e p="AnyReadyToThrowEventSystem.cs" t="Include" />
               <e p="BalloonColorEventSystem.cs" t="Include" />
               <e p="BalloonLastColorPopCountEventSystem.cs" t="Include" />
               <e p="CameraEventSystem.cs" t="Include" />
@@ -133,7 +137,6 @@
               <e p="ProjectileBounceShieldEventSystem.cs" t="Include" />
               <e p="ProjectileEventSystem.cs" t="Include" />
               <e p="ReadyToLoadEventSystem.cs" t="Include" />
-              <e p="ReadyToThrowEventSystem.cs" t="Include" />
               <e p="RightEventSystem.cs" t="Include" />
               <e p="RotationEventSystem.cs" t="Include" />
               <e p="ScaleEventSystem.cs" t="Include" />
@@ -161,6 +164,8 @@
               <e p="GameAnyGamePersistentScoreListenerComponent.cs" t="Include" />
               <e p="GameAnyGameStartedListenerComponent.cs" t="Include" />
               <e p="GameAnyPlayParticleFXListenerComponent.cs" t="Include" />
+              <e p="GameAnyProjectileBounceShieldListenerComponent.cs" t="Include" />
+              <e p="GameAnyReadyToThrowListenerComponent.cs" t="Include" />
               <e p="GameAssetComponent.cs" t="Include" />
               <e p="GameBalloonColorComponent.cs" t="Include" />
               <e p="GameBalloonColorListenerComponent.cs" t="Include" />
@@ -207,7 +212,6 @@
               <e p="GameReadyToLoadComponent.cs" t="Include" />
               <e p="GameReadyToLoadListenerComponent.cs" t="Include" />
               <e p="GameReadyToThrowComponent.cs" t="Include" />
-              <e p="GameReadyToThrowListenerComponent.cs" t="Include" />
               <e p="GameRightComponent.cs" t="Include" />
               <e p="GameRightListenerComponent.cs" t="Include" />
               <e p="GameRotationComponent.cs" t="Include" />
@@ -384,6 +388,8 @@
             <e p="ScoreCounterLabel.cs" t="Include" />
             <e p="ScoreNotice.cs" t="Include" />
             <e p="ScorePointTrail.cs" t="Include" />
+            <e p="ShieldCounterAnimation.cs" t="Include" />
+            <e p="ShieldCounterLabel.cs" t="Include" />
           </e>
           <e p="View" t="Include">
             <e p="AssetComponent.cs" t="Include" />

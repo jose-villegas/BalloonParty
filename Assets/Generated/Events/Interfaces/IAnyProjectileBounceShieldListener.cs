@@ -6,6 +6,6 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
-public interface IReadyToThrowListener {
-    void OnReadyToThrow(GameEntity entity);
+public interface IAnyProjectileBounceShieldListener {
+    void OnAnyProjectileBounceShield(GameEntity entity, int value);
 }

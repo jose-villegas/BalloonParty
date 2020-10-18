@@ -47,6 +47,8 @@ public class ThrowLoadedProjectileSystem : IExecuteSystem
 
                 // remove loaded projectile
                 thrower.RemoveThrowerLoadedProjectile();
+                thrower.isReadyToLoad = false;
+                thrower.isReadyToThrow = false;
             }
         }
     }
