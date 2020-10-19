@@ -60,6 +60,9 @@ TagManager:
   - name: Projectile
     uniqueID: 147337309
     locked: 0
+  - name: PowerUps
+    uniqueID: 1618840163
+    locked: 0
   - name: UI
     uniqueID: 2848110693
     locked: 0
