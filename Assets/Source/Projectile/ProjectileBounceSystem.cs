@@ -87,7 +87,13 @@ public class ProjectileBounceSystem : IExecuteSystem
                     // check if balloons can be moved to re-balance
                     var e = _contexts.game.CreateEntity();
                     e.isBalloonsBalanceEvent = true;
-
+                    
+                    // increase the turn counter, a game turn ends at projectile dead
+                    if (_contexts.game.hasGameTurnCounter)
+                    {
+                        _contexts.game.ReplaceGameTurnCounter(_contexts.game.gameTurnCounter.Value + 1);
+                    }
+                    
                     continue;
                 }
             }

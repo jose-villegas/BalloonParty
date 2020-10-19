@@ -21,6 +21,7 @@ public interface IGameConfiguration
     float NudgeDuration { get; }
     GameDisplayConfiguration DisplayConfiguration { get; }
     float ScorePointTraceDuration { get; }
+    int ShieldPowerUpEvery { get; }
 
     int PointsRequiredForLevel(int level);
 

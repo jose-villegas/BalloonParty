@@ -3,6 +3,7 @@ public class GameUpdateSystems : Feature
     public GameUpdateSystems(Contexts contexts)
     {
         // initialization
+        Add(new GameStartedFirstTurnSystem(contexts));
         Add(new SloIndexerSystem(contexts));
         Add(new GameStartedThrowerSpawnSystem(contexts));
         Add(new GameStartedBalloonsSpawnSystem(contexts));
@@ -21,6 +22,7 @@ public class GameUpdateSystems : Feature
         Add(new ThrowLoadedProjectileSystem(contexts));
         Add(new FreeProjectileMovementSystem(contexts));
         Add(new BalanceBalloonsSystem(contexts));
+        Add(new NewBalloonLinesInstanceSystem(contexts));
         Add(new ProjectileBounceSystem(contexts));
 
         // events

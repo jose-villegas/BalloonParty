@@ -28,6 +28,7 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
     [SerializeField] private float _nudgeDistance;
     [SerializeField] private float _nudgeDuration;
     [SerializeField] private float _scorePointTraceDuration;
+    [SerializeField] private int _shieldPowerUpEvery;
 
     public Vector2 ThrowerSpawnPoint => _throwerSpawnPoint;
     public Vector2 ProjectileSpawnPoint => _projectileSpawnPoint;
@@ -50,6 +51,8 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
     public GameDisplayConfiguration DisplayConfiguration => _displayConfiguration;
 
     public float ScorePointTraceDuration => _scorePointTraceDuration;
+
+    public int ShieldPowerUpEvery => _shieldPowerUpEvery;
 
     public static int PointsRequiredForLevel(int level)
     {

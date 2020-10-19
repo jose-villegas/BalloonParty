@@ -27,29 +27,26 @@ public class BalloonLineSpawnerSystem : ReactiveSystem<GameEntity>, ILinkedViewL
 
     protected override void Execute(List<GameEntity> entities)
     {
-        foreach (var gameEntity in entities)
+        var bottomSlotsIndexes = _contexts.game.BottomSlotsIndexes();
+
+        foreach (Vector2Int index in bottomSlotsIndexes)
         {
-            var bottomSlotsIndexes = _contexts.game.BottomSlotsIndexes();
+            var e = _contexts.game.CreateEntity();
+            e.isBalloon = true;
+            e.AddSlotIndex(index);
+            e.AddScale(Vector3.zero);
 
-            foreach (Vector2Int index in bottomSlotsIndexes)
-            {
-                var e = _contexts.game.CreateEntity();
-                e.isBalloon = true;
-                e.AddSlotIndex(index);
-                e.AddScale(Vector3.zero);
+            // color
+            var colorIndex = Random.Range(0, _configuration.BalloonColors.Length);
+            e.AddBalloonColor(_configuration.BalloonColors[colorIndex].Name);
 
-                // color
-                var colorIndex = Random.Range(0, _configuration.BalloonColors.Length);
-                e.AddBalloonColor(_configuration.BalloonColors[colorIndex].Name);
+            // positioning for animation
+            var initialPos = (index + Vector2Int.up * 4).IndexToPosition(_configuration);
+            e.AddPosition(initialPos);
 
-                // positioning for animation
-                var initialPos = (index + Vector2Int.up * 4).IndexToPosition(_configuration);
-                e.AddPosition(initialPos);
-
-                // create balloon asset instance
-                e.AddAsset("Balloon");
-                e.AddLinkedViewListener(this);
-            }
+            // create balloon asset instance
+            e.AddAsset("Balloon");
+            e.AddLinkedViewListener(this);
         }
 
         foreach (var gameEntity in entities.ToList())

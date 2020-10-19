@@ -1014,10 +1014,25 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 7655411306401553810}
     m_Modifications:
+    - target: {fileID: 1731960217438452082, guid: 37efd7135ce79cb41840a855dac524f8,
+        type: 3}
+      propertyPath: m_Rotation
+      value: 45
+      objectReference: {fileID: 0}
+    - target: {fileID: 3067346383059864259, guid: 37efd7135ce79cb41840a855dac524f8,
+        type: 3}
+      propertyPath: m_Rotation
+      value: 45
+      objectReference: {fileID: 0}
     - target: {fileID: 4349961165590194991, guid: 37efd7135ce79cb41840a855dac524f8,
         type: 3}
       propertyPath: m_Name
       value: Shields
+      objectReference: {fileID: 0}
+    - target: {fileID: 4435056230902818693, guid: 37efd7135ce79cb41840a855dac524f8,
+        type: 3}
+      propertyPath: m_Rotation
+      value: 45
       objectReference: {fileID: 0}
     - target: {fileID: 5425669691414113702, guid: 37efd7135ce79cb41840a855dac524f8,
         type: 3}

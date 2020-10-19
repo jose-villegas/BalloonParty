@@ -1,11 +1,11 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using DG.Tweening;
 using DG.Tweening.Core;
 using DG.Tweening.Plugins.Core.PathCore;
 using DG.Tweening.Plugins.Options;
 using Entitas;
-using TMPro;
 using UnityEngine;
 
 public class BalanceBalloonsSystem : ReactiveSystem<GameEntity>
@@ -37,16 +37,7 @@ public class BalanceBalloonsSystem : ReactiveSystem<GameEntity>
 
     protected override void Execute(List<GameEntity> entities)
     {
-        if (_freeProjectiles.count > 0) return;
-
         BalanceBalloons();
-
-        var coroutineRunner = _contexts.game.coroutineRunner.Value;
-        coroutineRunner.StartCoroutine(InstanceBalloonLines());
-
-        // reload projectile
-        var thrower = _contexts.game.throwerEntity;
-        thrower.isReadyToLoad = true;
     }
 
     private void BalanceBalloons()
@@ -140,17 +131,5 @@ public class BalanceBalloonsSystem : ReactiveSystem<GameEntity>
         tween.onComplete += () => { entity.isStableBalloon = true; };
 
         return tween;
-    }
-
-    private IEnumerator InstanceBalloonLines()
-    {
-        for (int i = 0; i < _configuration.NewProjectileBalloonLines; i++)
-        {
-            var e = _contexts.game.CreateEntity();
-            e.isBalloonLineInstanceEvent = true;
-            yield return new WaitForSeconds(_configuration.NewBalloonLinesTimeInterval);
-        }
-
-        BalanceBalloons();
     }
 }

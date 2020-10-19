@@ -39,6 +39,7 @@
               <e p="AnyGameLevelUpListenerComponent.cs" t="Include" />
               <e p="AnyGamePersistentScoreListenerComponent.cs" t="Include" />
               <e p="AnyGameStartedListenerComponent.cs" t="Include" />
+              <e p="AnyGameTurnCounterListenerComponent.cs" t="Include" />
               <e p="AnyPlayParticleFXListenerComponent.cs" t="Include" />
               <e p="AnyProjectileBounceShieldListenerComponent.cs" t="Include" />
               <e p="AnyReadyToThrowListenerComponent.cs" t="Include" />
@@ -80,6 +81,7 @@
               <e p="IAnyGameLevelUpListener.cs" t="Include" />
               <e p="IAnyGamePersistentScoreListener.cs" t="Include" />
               <e p="IAnyGameStartedListener.cs" t="Include" />
+              <e p="IAnyGameTurnCounterListener.cs" t="Include" />
               <e p="IAnyPlayParticleFXListener.cs" t="Include" />
               <e p="IAnyProjectileBounceShieldListener.cs" t="Include" />
               <e p="IAnyReadyToThrowListener.cs" t="Include" />
@@ -120,6 +122,7 @@
               <e p="AnyGameLevelUpEventSystem.cs" t="Include" />
               <e p="AnyGamePersistentScoreEventSystem.cs" t="Include" />
               <e p="AnyGameStartedEventSystem.cs" t="Include" />
+              <e p="AnyGameTurnCounterEventSystem.cs" t="Include" />
               <e p="AnyPlayParticleFXEventSystem.cs" t="Include" />
               <e p="AnyProjectileBounceShieldEventSystem.cs" t="Include" />
               <e p="AnyReadyToThrowEventSystem.cs" t="Include" />
@@ -163,6 +166,7 @@
               <e p="GameAnyGameLevelUpListenerComponent.cs" t="Include" />
               <e p="GameAnyGamePersistentScoreListenerComponent.cs" t="Include" />
               <e p="GameAnyGameStartedListenerComponent.cs" t="Include" />
+              <e p="GameAnyGameTurnCounterListenerComponent.cs" t="Include" />
               <e p="GameAnyPlayParticleFXListenerComponent.cs" t="Include" />
               <e p="GameAnyProjectileBounceShieldListenerComponent.cs" t="Include" />
               <e p="GameAnyReadyToThrowListenerComponent.cs" t="Include" />
@@ -192,6 +196,7 @@
               <e p="GameGameLevelUpComponent.cs" t="Include" />
               <e p="GameGamePersistentScoreComponent.cs" t="Include" />
               <e p="GameGameStartedComponent.cs" t="Include" />
+              <e p="GameGameTurnCounterComponent.cs" t="Include" />
               <e p="GameLayerComponent.cs" t="Include" />
               <e p="GameLayerListenerComponent.cs" t="Include" />
               <e p="GameLinkedViewComponent.cs" t="Include" />
@@ -270,6 +275,9 @@
             </e>
           </e>
         </e>
+        <e p="Shaders" t="Include">
+          <e p="SpriteShine.shader" t="Include" />
+        </e>
         <e p="Source" t="Include">
           <e p="Balloon" t="Include">
             <e p="BalanceBalloonsSystem.cs" t="Include" />
@@ -291,6 +299,7 @@
               <e p="BalloonsBalanceEventComponent.cs" t="Include" />
             </e>
             <e p="GameStartedBalloonsSpawnSystem.cs" t="Include" />
+            <e p="NewBalloonLinesInstanceSystem.cs" t="Include" />
             <e p="StableBalloonComponent.cs" t="Include" />
           </e>
           <e p="Camera" t="Include">
@@ -328,6 +337,8 @@
             <e p="GameLevelProgressComponent.cs" t="Include" />
             <e p="GamePersistentScoreComponent.cs" t="Include" />
             <e p="GameScoreController.cs" t="Include" />
+            <e p="GameStartedFirstTurnSystem.cs" t="Include" />
+            <e p="GameTurnCounterComponent.cs" t="Include" />
             <e p="GameUpdateSystems.cs" t="Include" />
           </e>
           <e p="Particles" t="Include">
