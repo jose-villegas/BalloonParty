@@ -94,6 +94,10 @@ public class ProjectileBounceSystem : IExecuteSystem
                         _contexts.game.ReplaceGameTurnCounter(_contexts.game.gameTurnCounter.Value + 1);
                     }
                     
+                    // reload projectile
+                    var thrower = _contexts.game.throwerEntity;
+                    thrower.isReadyToLoad = true;
+                    
                     continue;
                 }
             }

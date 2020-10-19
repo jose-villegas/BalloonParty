@@ -38,9 +38,6 @@ public class NewBalloonLinesInstanceSystem : ReactiveSystem<GameEntity>
     {
         var coroutineRunner = _contexts.game.coroutineRunner.Value;
         coroutineRunner.StartCoroutine(InstanceBalloonLines());
-        // reload projectile
-        var thrower = _contexts.game.throwerEntity;
-        thrower.isReadyToLoad = true;
     }
     
     private IEnumerator InstanceBalloonLines()
