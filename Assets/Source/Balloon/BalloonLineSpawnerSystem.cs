@@ -33,6 +33,7 @@ public class BalloonLineSpawnerSystem : ReactiveSystem<GameEntity>, ILinkedViewL
         {
             var e = _contexts.game.CreateEntity();
             e.isBalloon = true;
+            e.isNewBalloon = true;
             e.AddSlotIndex(index);
             e.AddScale(Vector3.zero);
 

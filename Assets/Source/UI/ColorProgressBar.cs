@@ -21,10 +21,10 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
     private IGameConfiguration _configuration;
     private int _currentCount = 0;
 
-    public void Setup(IBalloonColorConfiguration colorConfiguration, IGameConfiguration gameConfiguration)
+    public void Setup(IBalloonColorConfiguration colorConfiguration)
     {
         _contexts = Contexts.sharedInstance;
-        _configuration = gameConfiguration;
+        _configuration = _contexts.configuration.gameConfiguration.value;
         _colorConfiguration = colorConfiguration;
 
         foreach (var image in _graphicsToSetColor)

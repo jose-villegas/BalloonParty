@@ -36,6 +36,15 @@ public class NewBalloonLinesInstanceSystem : ReactiveSystem<GameEntity>
 
     protected override void Execute(List<GameEntity> entities)
     {
+        // mark all previous balloons as old
+        var balloons = _contexts.game.GetGroup(GameMatcher.Balloon);
+
+        foreach (var balloon in balloons)
+        {
+            balloon.isNewBalloon = false;
+        }
+        
+        // create new lines
         var coroutineRunner = _contexts.game.coroutineRunner.Value;
         coroutineRunner.StartCoroutine(InstanceBalloonLines());
     }
@@ -54,5 +63,9 @@ public class NewBalloonLinesInstanceSystem : ReactiveSystem<GameEntity>
         // check if balloons can be moved to re-balance
         var b = _contexts.game.CreateEntity();
         b.isBalloonsBalanceEvent = true;
+        
+        // check if new balloons have a power up
+        var p = _contexts.game.CreateEntity();
+        p.isBalloonsPowerUpCheckEvent = true;
     }
 }

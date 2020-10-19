@@ -12,7 +12,9 @@ public sealed class GameEventSystems : Feature {
         Add(new BalloonColorEventSystem(contexts)); // priority: 0
         Add(new BalloonLastColorPopCountEventSystem(contexts)); // priority: 0
         Add(new AnyBalloonLineInstanceEventEventSystem(contexts)); // priority: 0
+        Add(new BalloonPowerUpEventSystem(contexts)); // priority: 0
         Add(new AnyBalloonsBalanceEventEventSystem(contexts)); // priority: 0
+        Add(new AnyBalloonsPowerUpCheckEventEventSystem(contexts)); // priority: 0
         Add(new CameraEventSystem(contexts)); // priority: 0
         Add(new DestroyedEventSystem(contexts)); // priority: 0
         Add(new DirectionEventSystem(contexts)); // priority: 0
@@ -28,6 +30,7 @@ public sealed class GameEventSystems : Feature {
         Add(new LinkedViewEventSystem(contexts)); // priority: 0
         Add(new MovableEventSystem(contexts)); // priority: 0
         Add(new MovableRemovedEventSystem(contexts)); // priority: 0
+        Add(new NewBalloonEventSystem(contexts)); // priority: 0
         Add(new AnyPlayParticleFXEventSystem(contexts)); // priority: 0
         Add(new PositionEventSystem(contexts)); // priority: 0
         Add(new ProjectileEventSystem(contexts)); // priority: 0

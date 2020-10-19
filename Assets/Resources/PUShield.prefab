@@ -529,6 +529,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7110501444263420208}
   - component: {fileID: 4744394847016961473}
+  - component: {fileID: 5540710114999216024}
   m_Layer: 10
   m_Name: PUShield
   m_TagString: Untagged
@@ -572,6 +573,21 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &5540710114999216024
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6575453126760586776}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fdbca5f9f3ea4482867a821f91ef945c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spritesToSetColor:
+  - {fileID: 5266502292407197657}
+  _spritesAlpha: 0.75
 --- !u!1 &7258850500306717557
 GameObject:
   m_ObjectHideFlags: 0

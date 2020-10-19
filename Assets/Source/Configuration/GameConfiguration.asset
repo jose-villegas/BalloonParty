@@ -48,3 +48,13 @@ MonoBehaviour:
   _nudgeDistance: 0.1
   _nudgeDuration: 0.4
   _scorePointTraceDuration: 1
+  _powerUpConfiguration:
+    _powerUps:
+    - Type: 0
+      TurnCheckEvery: 1
+      Probability: 80
+      MaximumAllowed: 999
+    - Type: 1
+      TurnCheckEvery: 3
+      Probability: 50
+      MaximumAllowed: 3

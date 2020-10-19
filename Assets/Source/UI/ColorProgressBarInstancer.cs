@@ -19,7 +19,7 @@ public class ColorProgressBarInstancer : MonoBehaviour
         for (int i = 0; i < _configuration.BalloonColors.Length; i++)
         {
             var progress = Instantiate(_colorProgressBarPrefab, transform);
-            progress.Setup(_configuration.BalloonColors[i], _configuration);
+            progress.Setup(_configuration.BalloonColors[i]);
         }
     }
 }

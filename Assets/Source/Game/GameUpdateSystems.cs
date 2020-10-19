@@ -23,6 +23,7 @@ public class GameUpdateSystems : Feature
         Add(new FreeProjectileMovementSystem(contexts));
         Add(new BalanceBalloonsSystem(contexts));
         Add(new NewBalloonLinesInstanceSystem(contexts));
+        Add(new BalloonsPowerUpCheckSystem(contexts));
         Add(new ProjectileBounceSystem(contexts));
 
         // events

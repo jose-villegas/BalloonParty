@@ -33,6 +33,7 @@
             <e p="Components" t="Include">
               <e p="AnyBalloonLineInstanceEventListenerComponent.cs" t="Include" />
               <e p="AnyBalloonsBalanceEventListenerComponent.cs" t="Include" />
+              <e p="AnyBalloonsPowerUpCheckEventListenerComponent.cs" t="Include" />
               <e p="AnyGameEventListenerComponent.cs" t="Include" />
               <e p="AnyGameLevelListenerComponent.cs" t="Include" />
               <e p="AnyGameLevelProgressListenerComponent.cs" t="Include" />
@@ -45,6 +46,7 @@
               <e p="AnyReadyToThrowListenerComponent.cs" t="Include" />
               <e p="BalloonColorListenerComponent.cs" t="Include" />
               <e p="BalloonLastColorPopCountListenerComponent.cs" t="Include" />
+              <e p="BalloonPowerUpListenerComponent.cs" t="Include" />
               <e p="CameraListenerComponent.cs" t="Include" />
               <e p="DestroyedListenerComponent.cs" t="Include" />
               <e p="DirectionListenerComponent.cs" t="Include" />
@@ -53,6 +55,7 @@
               <e p="LinkedViewListenerComponent.cs" t="Include" />
               <e p="MovableListenerComponent.cs" t="Include" />
               <e p="MovableRemovedListenerComponent.cs" t="Include" />
+              <e p="NewBalloonListenerComponent.cs" t="Include" />
               <e p="PositionListenerComponent.cs" t="Include" />
               <e p="ProjectileBounceShieldListenerComponent.cs" t="Include" />
               <e p="ProjectileListenerComponent.cs" t="Include" />
@@ -75,6 +78,7 @@
             <e p="Interfaces" t="Include">
               <e p="IAnyBalloonLineInstanceEventListener.cs" t="Include" />
               <e p="IAnyBalloonsBalanceEventListener.cs" t="Include" />
+              <e p="IAnyBalloonsPowerUpCheckEventListener.cs" t="Include" />
               <e p="IAnyGameEventListener.cs" t="Include" />
               <e p="IAnyGameLevelListener.cs" t="Include" />
               <e p="IAnyGameLevelProgressListener.cs" t="Include" />
@@ -87,6 +91,7 @@
               <e p="IAnyReadyToThrowListener.cs" t="Include" />
               <e p="IBalloonColorListener.cs" t="Include" />
               <e p="IBalloonLastColorPopCountListener.cs" t="Include" />
+              <e p="IBalloonPowerUpListener.cs" t="Include" />
               <e p="ICameraListener.cs" t="Include" />
               <e p="IDestroyedListener.cs" t="Include" />
               <e p="IDirectionListener.cs" t="Include" />
@@ -95,6 +100,7 @@
               <e p="ILinkedViewListener.cs" t="Include" />
               <e p="IMovableListener.cs" t="Include" />
               <e p="IMovableRemovedListener.cs" t="Include" />
+              <e p="INewBalloonListener.cs" t="Include" />
               <e p="IPositionListener.cs" t="Include" />
               <e p="IProjectileBounceShieldListener.cs" t="Include" />
               <e p="IProjectileListener.cs" t="Include" />
@@ -116,6 +122,7 @@
             <e p="Systems" t="Include">
               <e p="AnyBalloonLineInstanceEventEventSystem.cs" t="Include" />
               <e p="AnyBalloonsBalanceEventEventSystem.cs" t="Include" />
+              <e p="AnyBalloonsPowerUpCheckEventEventSystem.cs" t="Include" />
               <e p="AnyGameEventEventSystem.cs" t="Include" />
               <e p="AnyGameLevelEventSystem.cs" t="Include" />
               <e p="AnyGameLevelProgressEventSystem.cs" t="Include" />
@@ -128,6 +135,7 @@
               <e p="AnyReadyToThrowEventSystem.cs" t="Include" />
               <e p="BalloonColorEventSystem.cs" t="Include" />
               <e p="BalloonLastColorPopCountEventSystem.cs" t="Include" />
+              <e p="BalloonPowerUpEventSystem.cs" t="Include" />
               <e p="CameraEventSystem.cs" t="Include" />
               <e p="DestroyedEventSystem.cs" t="Include" />
               <e p="DirectionEventSystem.cs" t="Include" />
@@ -136,6 +144,7 @@
               <e p="LinkedViewEventSystem.cs" t="Include" />
               <e p="MovableEventSystem.cs" t="Include" />
               <e p="MovableRemovedEventSystem.cs" t="Include" />
+              <e p="NewBalloonEventSystem.cs" t="Include" />
               <e p="PositionEventSystem.cs" t="Include" />
               <e p="ProjectileBounceShieldEventSystem.cs" t="Include" />
               <e p="ProjectileEventSystem.cs" t="Include" />
@@ -160,6 +169,7 @@
             <e p="Components" t="Include">
               <e p="GameAnyBalloonLineInstanceEventListenerComponent.cs" t="Include" />
               <e p="GameAnyBalloonsBalanceEventListenerComponent.cs" t="Include" />
+              <e p="GameAnyBalloonsPowerUpCheckEventListenerComponent.cs" t="Include" />
               <e p="GameAnyGameEventListenerComponent.cs" t="Include" />
               <e p="GameAnyGameLevelListenerComponent.cs" t="Include" />
               <e p="GameAnyGameLevelProgressListenerComponent.cs" t="Include" />
@@ -178,8 +188,11 @@
               <e p="GameBalloonLastColorPopCountComponent.cs" t="Include" />
               <e p="GameBalloonLastColorPopCountListenerComponent.cs" t="Include" />
               <e p="GameBalloonLineInstanceEventComponent.cs" t="Include" />
+              <e p="GameBalloonPowerUpComponent.cs" t="Include" />
+              <e p="GameBalloonPowerUpListenerComponent.cs" t="Include" />
               <e p="GameBalloonsBalanceEventComponent.cs" t="Include" />
               <e p="GameBalloonSlotWeightComponent.cs" t="Include" />
+              <e p="GameBalloonsPowerUpCheckEventComponent.cs" t="Include" />
               <e p="GameCameraComponent.cs" t="Include" />
               <e p="GameCameraListenerComponent.cs" t="Include" />
               <e p="GameCoroutineRunnerComponent.cs" t="Include" />
@@ -205,6 +218,8 @@
               <e p="GameMovableComponent.cs" t="Include" />
               <e p="GameMovableListenerComponent.cs" t="Include" />
               <e p="GameMovableRemovedListenerComponent.cs" t="Include" />
+              <e p="GameNewBalloonComponent.cs" t="Include" />
+              <e p="GameNewBalloonListenerComponent.cs" t="Include" />
               <e p="GameParticleFXParentComponent.cs" t="Include" />
               <e p="GameParticleFXStartColorComponent.cs" t="Include" />
               <e p="GamePlayParticleFXComponent.cs" t="Include" />
@@ -292,13 +307,19 @@
             <e p="BalloonHitScoreSystem.cs" t="Include" />
             <e p="BalloonLastColorPopCountComponent.cs" t="Include" />
             <e p="BalloonLineSpawnerSystem.cs" t="Include" />
+            <e p="BalloonPowerUpComponent.cs" t="Include" />
+            <e p="BalloonPowerUpController.cs" t="Include" />
+            <e p="BalloonPowerUpDisplay.cs" t="Include" />
             <e p="BalloonSlotWeightComponent.cs" t="Include" />
+            <e p="BalloonsPowerUpCheckSystem.cs" t="Include" />
             <e p="BalloonSpriteLayerController.cs" t="Include" />
             <e p="Events" t="Include">
               <e p="BalloonLineInstanceEventComponent.cs" t="Include" />
               <e p="BalloonsBalanceEventComponent.cs" t="Include" />
+              <e p="BalloonsPowerUpCheckEventComponent.cs" t="Include" />
             </e>
             <e p="GameStartedBalloonsSpawnSystem.cs" t="Include" />
+            <e p="NewBalloonComponent.cs" t="Include" />
             <e p="NewBalloonLinesInstanceSystem.cs" t="Include" />
             <e p="StableBalloonComponent.cs" t="Include" />
           </e>
@@ -311,6 +332,8 @@
             <e p="GameConfiguration.cs" t="Include" />
             <e p="IBalloonColorConfiguration.cs" t="Include" />
             <e p="IGameConfiguration.cs" t="Include" />
+            <e p="PowerUpConfiguration.cs" t="Include" />
+            <e p="PowerUpSettings.cs" t="Include" />
           </e>
           <e p="Constants.cs" t="Include" />
           <e p="Coroutine" t="Include">
