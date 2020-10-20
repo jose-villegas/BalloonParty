@@ -181,6 +181,7 @@
               <e p="GameAnyProjectileBounceShieldListenerComponent.cs" t="Include" />
               <e p="GameAnyReadyToThrowListenerComponent.cs" t="Include" />
               <e p="GameAssetComponent.cs" t="Include" />
+              <e p="GameBalloonColliderComponent.cs" t="Include" />
               <e p="GameBalloonColorComponent.cs" t="Include" />
               <e p="GameBalloonColorListenerComponent.cs" t="Include" />
               <e p="GameBalloonComponent.cs" t="Include" />
@@ -297,6 +298,7 @@
           <e p="Balloon" t="Include">
             <e p="BalanceBalloonsSystem.cs" t="Include" />
             <e p="BalloonAnimationController.cs" t="Include" />
+            <e p="BalloonColliderComponent.cs" t="Include" />
             <e p="BalloonCollisionSystem.cs" t="Include" />
             <e p="BalloonColorComponent.cs" t="Include" />
             <e p="BalloonColorController.cs" t="Include" />

@@ -20,8 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonColliderComponent.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonColliderComponent.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Balloon.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Balloon.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Generated/Game/GameComponentsLookup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Game/GameComponentsLookup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonCollisionSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonCollisionSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/GraphicsSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/GraphicsSettings.asset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,7 +64,6 @@
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonLineSpawnerSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/Events/BalloonsBalanceEventComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/NewBalloonLinesInstanceSystem.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpConfiguration.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpSettings.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonAnimationController.cs" />
@@ -75,8 +80,10 @@
         <option value="$PROJECT_DIR$/Assets/Source/Game/GameUpdateSystems.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Configuration/IGameConfiguration.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileShieldFXSystem.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonCollisionSystem.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" />
       </list>
     </option>
   </component>
@@ -124,7 +131,7 @@
       <updated>1602883661300</updated>
       <workItem from="1602883670295" duration="546000" />
       <workItem from="1602885509754" duration="25000" />
-      <workItem from="1603061436445" duration="20108000" />
+      <workItem from="1603061436445" duration="20895000" />
     </task>
     <servers />
   </component>
@@ -224,10 +231,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="164" key="SettingsEditor/0.0.1920.1040@0.0.1920.1040" timestamp="1603061475737" />
-    <state x="621" y="76" width="678" height="888" key="find.popup" timestamp="1603146763604">
+    <state x="621" y="76" width="678" height="888" key="find.popup" timestamp="1603204809621">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="621" y="76" width="678" height="888" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603146763604" />
+    <state x="621" y="76" width="678" height="888" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603204809621" />
     <state x="616" y="240" key="run.anything.popup" timestamp="1603143666009">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
