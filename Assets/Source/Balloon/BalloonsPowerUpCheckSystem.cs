@@ -56,14 +56,14 @@ public class BalloonsPowerUpCheckSystem : ReactiveSystem<GameEntity>
 
         if (powerUpSettings.Any())
         {
-            var sumOfProbabilities = powerUpSettings.Sum(x => x.Probability);
+            var sumOfProbabilities = powerUpSettings.Sum(x => x.Weight);
             var probabilityCheck = Random.Range(0f, sumOfProbabilities);
             var shift = 0f;
             
             // check for which power up is going to be activated
             foreach (var powerUpSetting in powerUpSettings)
             {
-                if (probabilityCheck <= powerUpSetting.Probability + shift)
+                if (probabilityCheck <= powerUpSetting.Weight + shift)
                 {
                     // only different of none are added as power ups
                     if (powerUpSetting.Type != BalloonPowerUp.None)
@@ -77,7 +77,7 @@ public class BalloonsPowerUpCheckSystem : ReactiveSystem<GameEntity>
                     break;
                 }
 
-                shift += powerUpSetting.Probability;
+                shift += powerUpSetting.Weight;
             }
         }
     }

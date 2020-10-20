@@ -48,6 +48,8 @@ public class ThrowLoadedProjectileSystem : IExecuteSystem
 
                 // remove loaded projectile
                 thrower.RemoveThrowerLoadedProjectile();
+                
+                // reset thrower state
                 thrower.isReadyToLoad = false;
                 thrower.isReadyToThrow = false;
             }

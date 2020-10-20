@@ -43,11 +43,18 @@ public class BalloonHitPowerUpSystem : ReactiveSystem<GameEntity>
                         var shield = projectile.projectileBounceShield.Value;
                         projectile.ReplaceProjectileBounceShield(shield + 1);
                     }
+
+                    // play particle fx
+                    var gain = _contexts.game.CreateEntity();
+                    gain.AddPosition(gameEntity.position.Value);
+                    gain.AddParticleFXStartColor(_configuration.BalloonColor(gameEntity.balloonColor.Value));
+                    gain.AddPlayParticleFX("PSVFX_ShieldGainPU");
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            
+
             gameEntity.RemoveBalloonPowerUp();
         }
     }

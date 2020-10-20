@@ -10,5 +10,6 @@ public sealed class BalloonPowerUpComponent : IComponent
 public enum BalloonPowerUp
 {
     None,
-    Shield
+    Shield,
+    Bomb
 }

@@ -53,9 +53,9 @@ MonoBehaviour:
     _powerUps:
     - Type: 0
       TurnCheckEvery: 1
-      Probability: 80
+      Weight: 80
       MaximumAllowed: 999
     - Type: 1
       TurnCheckEvery: 3
-      Probability: 50
+      Weight: 80
       MaximumAllowed: 3
