@@ -21,13 +21,12 @@
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/PSVFX_ShieldLose.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PSVFX_ShieldLose.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitPowerUpSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitPowerUpSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpComponent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonsPowerUpCheckSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonsPowerUpCheckSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Balloon.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Balloon.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PSVFX_ShieldGainPU.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PSVFX_ShieldGainPU.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PUBomb.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PUBomb.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PUShield.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PUShield.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Projectile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Projectile.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -131,7 +130,7 @@
       <updated>1602883661300</updated>
       <workItem from="1602883670295" duration="546000" />
       <workItem from="1602885509754" duration="25000" />
-      <workItem from="1603061436445" duration="22335000" />
+      <workItem from="1603061436445" duration="22986000" />
     </task>
     <servers />
   </component>
