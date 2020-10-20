@@ -32,12 +32,7 @@ public class ProjectileShieldSystem : ReactiveSystem<GameEntity>
                 var shields = projectileEntity.projectileBounceShield.Value;
                 projectileEntity.ReplaceProjectileBounceShield(shields + 1);
 
-                // play particle fx
-                var gain = _contexts.game.CreateEntity();
-                gain.AddParticleFXParent(projectileEntity.linkedView.Value);
-                gain.AddPlayParticleFX("PSVFX_ShieldGain");
-                gain.AddParticleFXStartColor(
-                    _configuration.BalloonColor(projectileEntity.balloonColor.Value));
+
             }
         }
     }

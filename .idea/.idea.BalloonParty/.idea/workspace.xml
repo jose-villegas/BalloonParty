@@ -20,37 +20,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpComponent.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpComponent.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpController.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpDisplay.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpDisplay.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonsPowerUpCheckSystem.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonsPowerUpCheckSystem.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Events/BalloonsPowerUpCheckEventComponent.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Events/BalloonsPowerUpCheckEventComponent.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/NewBalloonComponent.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/NewBalloonComponent.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpConfiguration.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpConfiguration.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpSettings.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpSettings.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitPowerUpSystem.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitPowerUpSystem.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileShieldFXSystem.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileShieldFXSystem.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Generated/Events/GameEventSystems.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Events/GameEventSystems.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Generated/Game/GameComponentsLookup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Game/GameComponentsLookup.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/Balloon.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Balloon.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/PUShield.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PUShield.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonLineSpawnerSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonLineSpawnerSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/GameStartedBalloonsSpawnSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/GameStartedBalloonsSpawnSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/NewBalloonLinesInstanceSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/NewBalloonLinesInstanceSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/IGameConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/IGameConfiguration.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameUpdateSystems.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameUpdateSystems.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/ColorProgressBar.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/ColorProgressBar.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/ColorProgressBarInstancer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/ColorProgressBarInstancer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileBounceSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileBounceSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileShieldSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileShieldSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,7 +56,6 @@
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileBounceShieldComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileBounceShieldController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Thrower/ReadyToThrowComponent.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/UI/ShieldCounterLabel.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/UI/ShieldCounterAnimation.cs" />
         <option value="$PROJECT_DIR$/Assets/Shaders/SpriteShine.shader" />
@@ -83,26 +63,30 @@
         <option value="$PROJECT_DIR$/Assets/Source/UI/GameStartButton.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Game/GameStartedFirstTurnSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalanceBalloonsSystem.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileBounceSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/GameStartedBalloonsSpawnSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonColorComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonLineSpawnerSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/Events/BalloonsBalanceEventComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/NewBalloonLinesInstanceSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonComponent.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Configuration/IGameConfiguration.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpConfiguration.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpSettings.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonAnimationController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpComponent.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Game/GameUpdateSystems.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonsPowerUpCheckSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/UI/ColorProgressBarInstancer.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/UI/ColorProgressBar.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpDrawer.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpDisplay.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitPowerUpSystem.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileShieldSystem.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileBounceSystem.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Game/GameUpdateSystems.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Configuration/IGameConfiguration.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileShieldFXSystem.cs" />
       </list>
     </option>
   </component>
@@ -150,7 +134,7 @@
       <updated>1602883661300</updated>
       <workItem from="1602883670295" duration="546000" />
       <workItem from="1602885509754" duration="25000" />
-      <workItem from="1603061436445" duration="17408000" />
+      <workItem from="1603061436445" duration="19509000" />
     </task>
     <servers />
   </component>
@@ -178,74 +162,74 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state width="476" height="466" key="DebuggerActiveHint/0.0.1920.1040@0.0.1920.1040" timestamp="1603145798211" />
-    <state width="1877" height="375" key="GridCell.Tab.0.bottom" timestamp="1603145990140">
+    <state width="1877" height="375" key="GridCell.Tab.0.bottom" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1603145990140" />
-    <state width="1877" height="375" key="GridCell.Tab.0.center" timestamp="1603145990140">
+    <state width="1877" height="375" key="GridCell.Tab.0.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.0.center" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1603145990140" />
-    <state width="1877" height="375" key="GridCell.Tab.0.left" timestamp="1603145990140">
+    <state width="1877" height="375" key="GridCell.Tab.0.center/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.0.left" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1603145990140" />
-    <state width="1877" height="375" key="GridCell.Tab.0.right" timestamp="1603145990140">
+    <state width="1877" height="375" key="GridCell.Tab.0.left/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.0.right" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1603145990140" />
-    <state width="1877" height="375" key="GridCell.Tab.1.bottom" timestamp="1603146008680">
+    <state width="1877" height="375" key="GridCell.Tab.0.right/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.1.bottom" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1603146008680" />
-    <state width="1877" height="375" key="GridCell.Tab.1.center" timestamp="1603146008680">
+    <state width="1877" height="375" key="GridCell.Tab.1.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.1.center" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1603146008680" />
-    <state width="1877" height="375" key="GridCell.Tab.1.left" timestamp="1603146008680">
+    <state width="1877" height="375" key="GridCell.Tab.1.center/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.1.left" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1603146008680" />
-    <state width="1877" height="375" key="GridCell.Tab.1.right" timestamp="1603146008680">
+    <state width="1877" height="375" key="GridCell.Tab.1.left/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.1.right" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1603146008680" />
-    <state width="1877" height="375" key="GridCell.Tab.2.bottom" timestamp="1603145990018">
+    <state width="1877" height="375" key="GridCell.Tab.1.right/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.2.bottom" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1603145990018" />
-    <state width="1877" height="375" key="GridCell.Tab.2.center" timestamp="1603145990017">
+    <state width="1877" height="375" key="GridCell.Tab.2.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.2.center" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1603145990017" />
-    <state width="1877" height="375" key="GridCell.Tab.2.left" timestamp="1603145990017">
+    <state width="1877" height="375" key="GridCell.Tab.2.center/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.2.left" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1603145990017" />
-    <state width="1877" height="375" key="GridCell.Tab.2.right" timestamp="1603145990018">
+    <state width="1877" height="375" key="GridCell.Tab.2.left/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.2.right" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1603145990018" />
-    <state width="1877" height="375" key="GridCell.Tab.3.bottom" timestamp="1603145990018">
+    <state width="1877" height="375" key="GridCell.Tab.2.right/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.3.bottom" timestamp="1603156102489">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.3.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1603145990018" />
-    <state width="1877" height="375" key="GridCell.Tab.3.center" timestamp="1603145990018">
+    <state width="1877" height="375" key="GridCell.Tab.3.bottom/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102489" />
+    <state width="1877" height="375" key="GridCell.Tab.3.center" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.3.center/0.0.1920.1040@0.0.1920.1040" timestamp="1603145990018" />
-    <state width="1877" height="375" key="GridCell.Tab.3.left" timestamp="1603145990018">
+    <state width="1877" height="375" key="GridCell.Tab.3.center/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.3.left" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.3.left/0.0.1920.1040@0.0.1920.1040" timestamp="1603145990018" />
-    <state width="1877" height="375" key="GridCell.Tab.3.right" timestamp="1603145990018">
+    <state width="1877" height="375" key="GridCell.Tab.3.left/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state width="1877" height="375" key="GridCell.Tab.3.right" timestamp="1603156102488">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="375" key="GridCell.Tab.3.right/0.0.1920.1040@0.0.1920.1040" timestamp="1603145990018" />
-    <state x="713" y="235" key="RiderGenerateDialog" timestamp="1603134496411">
+    <state width="1877" height="375" key="GridCell.Tab.3.right/0.0.1920.1040@0.0.1920.1040" timestamp="1603156102488" />
+    <state x="713" y="235" key="RiderGenerateDialog" timestamp="1603156274623">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="713" y="235" key="RiderGenerateDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1603134496411" />
+    <state x="713" y="235" key="RiderGenerateDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1603156274623" />
     <state x="461" y="164" key="SettingsEditor" timestamp="1603061475737">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>

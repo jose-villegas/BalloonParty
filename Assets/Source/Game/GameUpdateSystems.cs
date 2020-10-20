@@ -12,8 +12,10 @@ public class GameUpdateSystems : Feature
         Add(new BalloonLineSpawnerSystem(contexts));
         Add(new ProjectileShieldSystem(contexts));
         Add(new BalloonHitScoreSystem(contexts));
+        Add(new BalloonHitPowerUpSystem(contexts));
         Add(new BalloonHitNudgeAnimationSystem(contexts));
         Add(new BalloonHitDestructionSystem(contexts));
+        Add(new ProjectileShieldFXSystem(contexts));
 
         // movement
         Add(new ThrowerDirectionSystem(contexts));

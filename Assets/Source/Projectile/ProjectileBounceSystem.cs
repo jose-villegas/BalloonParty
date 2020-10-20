@@ -69,16 +69,6 @@ public class ProjectileBounceSystem : IExecuteSystem
                 if (shield > 0)
                 {
                     freeProjectile.ReplaceProjectileBounceShield(shield - 1);
-
-                    // play particle fx
-                    var e = _contexts.game.CreateEntity();
-                    e.AddParticleFXParent(freeProjectile.linkedView.Value);
-                    e.AddPlayParticleFX("PSVFX_ShieldLose");
-
-                    if (freeProjectile.hasBalloonColor)
-                    {
-                        e.AddParticleFXStartColor(_configuration.BalloonColor(freeProjectile.balloonColor.Value));
-                    }
                 }
                 else
                 {

@@ -304,6 +304,7 @@
             <e p="BalloonHitComponent.cs" t="Include" />
             <e p="BalloonHitDestructionSystem.cs" t="Include" />
             <e p="BalloonHitNudgeAnimationSystem.cs" t="Include" />
+            <e p="BalloonHitPowerUpSystem.cs" t="Include" />
             <e p="BalloonHitScoreSystem.cs" t="Include" />
             <e p="BalloonLastColorPopCountComponent.cs" t="Include" />
             <e p="BalloonLineSpawnerSystem.cs" t="Include" />
@@ -386,6 +387,7 @@
             <e p="ProjectileComponent.cs" t="Include" />
             <e p="ProjectileGlowColorController.cs" t="Include" />
             <e p="ProjectileReloadSystem.cs" t="Include" />
+            <e p="ProjectileShieldFXSystem.cs" t="Include" />
             <e p="ProjectileShieldSystem.cs" t="Include" />
             <e p="ProjectileTransformSystem.cs" t="Include" />
           </e>

@@ -32,7 +32,7 @@ public class ThrowLoadedProjectileSystem : IExecuteSystem
                 pEntity.ReplaceSpeed(_configuration.ProjectileSpeed);
                 pEntity.isLoadedProjectile = false;
                 pEntity.isFreeProjectile = true;
-                pEntity.AddProjectileBounceShield(1);
+                pEntity.AddProjectileBounceShield(_configuration.ProjectileStartingShields);
 
                 // remove any previous collision
                 if (pEntity.hasTriggerEnter2D)
