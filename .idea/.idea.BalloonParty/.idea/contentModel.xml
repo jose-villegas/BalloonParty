@@ -71,6 +71,7 @@
               <e p="ThrowerListenerComponent.cs" t="Include" />
               <e p="TriggerEnter2DListenerComponent.cs" t="Include" />
               <e p="TriggerExit2DListenerComponent.cs" t="Include" />
+              <e p="TriggerStay2DListenerComponent.cs" t="Include" />
               <e p="TweenSequenceListenerComponent.cs" t="Include" />
               <e p="UpListenerComponent.cs" t="Include" />
             </e>
@@ -116,6 +117,7 @@
               <e p="IThrowerListener.cs" t="Include" />
               <e p="ITriggerEnter2DListener.cs" t="Include" />
               <e p="ITriggerExit2DListener.cs" t="Include" />
+              <e p="ITriggerStay2DListener.cs" t="Include" />
               <e p="ITweenSequenceListener.cs" t="Include" />
               <e p="IUpListener.cs" t="Include" />
             </e>
@@ -160,6 +162,7 @@
               <e p="ThrowerEventSystem.cs" t="Include" />
               <e p="TriggerEnter2DEventSystem.cs" t="Include" />
               <e p="TriggerExit2DEventSystem.cs" t="Include" />
+              <e p="TriggerStay2DEventSystem.cs" t="Include" />
               <e p="TweenSequenceEventSystem.cs" t="Include" />
               <e p="UpEventSystem.cs" t="Include" />
             </e>
@@ -256,6 +259,8 @@
               <e p="GameTriggerEnter2DListenerComponent.cs" t="Include" />
               <e p="GameTriggerExit2DComponent.cs" t="Include" />
               <e p="GameTriggerExit2DListenerComponent.cs" t="Include" />
+              <e p="GameTriggerStay2DComponent.cs" t="Include" />
+              <e p="GameTriggerStay2DListenerComponent.cs" t="Include" />
               <e p="GameTweenSequenceComponent.cs" t="Include" />
               <e p="GameTweenSequenceListenerComponent.cs" t="Include" />
               <e p="GameUpComponent.cs" t="Include" />
@@ -324,6 +329,9 @@
             <e p="GameStartedBalloonsSpawnSystem.cs" t="Include" />
             <e p="NewBalloonComponent.cs" t="Include" />
             <e p="NewBalloonLinesInstanceSystem.cs" t="Include" />
+            <e p="PowerUps" t="Include">
+              <e p="BombSphereCastHitController.cs" t="Include" />
+            </e>
             <e p="StableBalloonComponent.cs" t="Include" />
           </e>
           <e p="Camera" t="Include">
@@ -378,6 +386,7 @@
             <e p="TriggerEnter2DComponent.cs" t="Include" />
             <e p="TriggerExit2DComponent.cs" t="Include" />
             <e p="TriggerReporterController.cs" t="Include" />
+            <e p="TriggerStay2DComponent.cs" t="Include" />
           </e>
           <e p="Projectile" t="Include">
             <e p="FreeProjectileComponent.cs" t="Include" />

@@ -29,4 +29,14 @@ public class TriggerReporterController : MonoBehaviour
         var g = e as GameEntity;
         g.ReplaceTriggerExit2D(other);
     }
+
+    private void OnTriggerStay2D(Collider2D other)
+    {
+        var e = _listener.LinkedEntity;
+
+        if (!e.isEnabled) return;
+
+        var g = e as GameEntity;
+        g.ReplaceTriggerStay2D(other); 
+    }
 }

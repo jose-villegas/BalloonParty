@@ -97,12 +97,14 @@ public static class GameComponentsLookup {
     public const int TriggerEnter2DListener = 86;
     public const int TriggerExit2D = 87;
     public const int TriggerExit2DListener = 88;
-    public const int TweenSequence = 89;
-    public const int TweenSequenceListener = 90;
-    public const int Up = 91;
-    public const int UpListener = 92;
+    public const int TriggerStay2D = 89;
+    public const int TriggerStay2DListener = 90;
+    public const int TweenSequence = 91;
+    public const int TweenSequenceListener = 92;
+    public const int Up = 93;
+    public const int UpListener = 94;
 
-    public const int TotalComponents = 93;
+    public const int TotalComponents = 95;
 
     public static readonly string[] componentNames = {
         "AnyBalloonLineInstanceEventListener",
@@ -194,6 +196,8 @@ public static class GameComponentsLookup {
         "TriggerEnter2DListener",
         "TriggerExit2D",
         "TriggerExit2DListener",
+        "TriggerStay2D",
+        "TriggerStay2DListener",
         "TweenSequence",
         "TweenSequenceListener",
         "Up",
@@ -290,6 +294,8 @@ public static class GameComponentsLookup {
         typeof(TriggerEnter2DListenerComponent),
         typeof(TriggerExit2DComponent),
         typeof(TriggerExit2DListenerComponent),
+        typeof(TriggerStay2DComponent),
+        typeof(TriggerStay2DListenerComponent),
         typeof(TweenSequenceComponent),
         typeof(TweenSequenceListenerComponent),
         typeof(UpComponent),

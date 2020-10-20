@@ -51,6 +51,15 @@ public class BalloonHitPowerUpSystem : ReactiveSystem<GameEntity>
                     gain.AddPlayParticleFX("PSVFX_ShieldGainPU");
 
                     break;
+                case BalloonPowerUp.Bomb:
+                    var e = _contexts.game.CreateEntity();
+
+                    e.AddAsset("BombRange");
+                    e.isBalloonCollider = true;
+                    // initial position
+                    e.AddPosition(gameEntity.position.Value);
+                    
+                    break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
