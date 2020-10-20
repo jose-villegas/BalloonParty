@@ -57,9 +57,9 @@ MonoBehaviour:
       MaximumAllowed: 999
     - Type: 1
       TurnCheckEvery: 2
-      Weight: 80
+      Weight: 100
       MaximumAllowed: 5
     - Type: 2
       TurnCheckEvery: 3
-      Weight: 50
+      Weight: 80
       MaximumAllowed: 2
