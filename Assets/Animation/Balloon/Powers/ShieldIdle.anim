@@ -66,7 +66,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Shield
+    path: Body
   m_ScaleCurves: []
   m_FloatCurves:
   - curve:
@@ -94,7 +94,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._ShineLocation
-    path: Shield/Shield
+    path: Body/Shield
     classID: 212
     script: {fileID: 0}
   - curve:
@@ -122,7 +122,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._ShineLocation
-    path: Shield/Shield/Border
+    path: Body/Shield/Border
     classID: 212
     script: {fileID: 0}
   - curve:
@@ -150,7 +150,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._ShineLocation
-    path: Shield/Bullet/Body/Cylinder
+    path: Body/Bullet/Body/Cylinder
     classID: 212
     script: {fileID: 0}
   - curve:
@@ -196,7 +196,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._ShineWidth
-    path: Shield/Bullet/Body/Cylinder
+    path: Body/Bullet/Body/Cylinder
     classID: 212
     script: {fileID: 0}
   - curve:
@@ -242,7 +242,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._ShineWidth
-    path: Shield/Shield/Border
+    path: Body/Shield/Border
     classID: 212
     script: {fileID: 0}
   - curve:
@@ -288,7 +288,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._ShineWidth
-    path: Shield/Shield
+    path: Body/Shield
     classID: 212
     script: {fileID: 0}
   m_PPtrCurves: []
@@ -422,7 +422,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.x
-    path: Shield
+    path: Body
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -477,7 +477,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.y
-    path: Shield
+    path: Body
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -532,7 +532,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalPosition.z
-    path: Shield
+    path: Body
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -560,7 +560,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._ShineLocation
-    path: Shield/Shield
+    path: Body/Shield
     classID: 212
     script: {fileID: 0}
   - curve:
@@ -588,7 +588,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._ShineLocation
-    path: Shield/Shield/Border
+    path: Body/Shield/Border
     classID: 212
     script: {fileID: 0}
   - curve:
@@ -616,7 +616,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._ShineLocation
-    path: Shield/Bullet/Body/Cylinder
+    path: Body/Bullet/Body/Cylinder
     classID: 212
     script: {fileID: 0}
   - curve:
@@ -662,7 +662,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._ShineWidth
-    path: Shield/Bullet/Body/Cylinder
+    path: Body/Bullet/Body/Cylinder
     classID: 212
     script: {fileID: 0}
   - curve:
@@ -708,7 +708,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._ShineWidth
-    path: Shield/Shield/Border
+    path: Body/Shield/Border
     classID: 212
     script: {fileID: 0}
   - curve:
@@ -754,7 +754,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: material._ShineWidth
-    path: Shield/Shield
+    path: Body/Shield
     classID: 212
     script: {fileID: 0}
   m_EulerEditorCurves: []

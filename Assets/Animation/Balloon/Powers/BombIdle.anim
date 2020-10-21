@@ -65,7 +65,7 @@ AnimationClip:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    path: Bomb/Diffuse
+    path: Body/Diffuse
   m_PositionCurves: []
   m_ScaleCurves: []
   m_FloatCurves: []
@@ -158,7 +158,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.x
-    path: Bomb/Diffuse
+    path: Body/Diffuse
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -213,7 +213,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.y
-    path: Bomb/Diffuse
+    path: Body/Diffuse
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -268,7 +268,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: localEulerAnglesRaw.z
-    path: Bomb/Diffuse
+    path: Body/Diffuse
     classID: 4
     script: {fileID: 0}
   m_EulerEditorCurves:
@@ -279,7 +279,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.x
-    path: Bomb/Diffuse
+    path: Body/Diffuse
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -289,7 +289,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.y
-    path: Bomb/Diffuse
+    path: Body/Diffuse
     classID: 4
     script: {fileID: 0}
   - curve:
@@ -299,7 +299,7 @@ AnimationClip:
       m_PostInfinity: 2
       m_RotationOrder: 4
     attribute: m_LocalEulerAngles.z
-    path: Bomb/Diffuse
+    path: Body/Diffuse
     classID: 4
     script: {fileID: 0}
   m_HasGenericRootTransform: 0

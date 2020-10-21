@@ -404,7 +404,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EffectFactor: 0.5
   m_Width: 0.25
-  m_Rotation: -45
+  m_Rotation: 45
   m_Softness: 1
   m_Brightness: 0.35
   m_Gloss: 0.8
@@ -505,7 +505,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EffectFactor: 0.5
   m_Width: 0.25
-  m_Rotation: -45
+  m_Rotation: 45
   m_Softness: 1
   m_Brightness: 0.35
   m_Gloss: 0.8
@@ -635,7 +635,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_EffectFactor: 0.527
   m_Width: 0.15
-  m_Rotation: -45
+  m_Rotation: 45
   m_Softness: 1
   m_Brightness: 0.1
   m_Gloss: 0.7
