@@ -3,7 +3,7 @@
 [RequireComponent(typeof(LinkedViewController))]
 public class BalloonSpriteLayerController : MonoBehaviour, ISlotIndexListener
 {
-    [SerializeField] private SpriteRenderer[] _renderers;
+    [SerializeField] private Renderer[] _renderers;
 
     private LinkedViewController _linkedView;
     private IGameConfiguration _configuration;

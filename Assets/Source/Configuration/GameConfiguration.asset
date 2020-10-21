@@ -53,13 +53,13 @@ MonoBehaviour:
     _powerUps:
     - Type: 0
       TurnCheckEvery: 1
-      Weight: 80
+      Weight: 100
       MaximumAllowed: 999
     - Type: 1
       TurnCheckEvery: 2
-      Weight: 100
+      Weight: 300
       MaximumAllowed: 5
     - Type: 2
       TurnCheckEvery: 3
-      Weight: 80
-      MaximumAllowed: 2
+      Weight: 150
+      MaximumAllowed: 3
