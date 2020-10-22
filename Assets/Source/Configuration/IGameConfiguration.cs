@@ -39,6 +39,9 @@ public interface IGameConfiguration
     float ScorePointTraceDuration { get; }
     PowerUpConfiguration PowerUpConfiguration { get; }
     int ProjectileStartingShields { get; }
+    float PredictionTraceStep { get; }
+    int PredictionTraceMaxBounces { get; }
+    int PredictionTraceMaxSteps { get; }
 
     int PointsRequiredForLevel(int level);
     Color BalloonColor(string name);

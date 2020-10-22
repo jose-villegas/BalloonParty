@@ -57,6 +57,7 @@
               <e p="MovableRemovedListenerComponent.cs" t="Include" />
               <e p="NewBalloonListenerComponent.cs" t="Include" />
               <e p="PositionListenerComponent.cs" t="Include" />
+              <e p="PredictionTraceListenerComponent.cs" t="Include" />
               <e p="ProjectileBounceShieldListenerComponent.cs" t="Include" />
               <e p="ProjectileListenerComponent.cs" t="Include" />
               <e p="ReadyToLoadListenerComponent.cs" t="Include" />
@@ -103,6 +104,7 @@
               <e p="IMovableRemovedListener.cs" t="Include" />
               <e p="INewBalloonListener.cs" t="Include" />
               <e p="IPositionListener.cs" t="Include" />
+              <e p="IPredictionTraceListener.cs" t="Include" />
               <e p="IProjectileBounceShieldListener.cs" t="Include" />
               <e p="IProjectileListener.cs" t="Include" />
               <e p="IReadyToLoadListener.cs" t="Include" />
@@ -148,6 +150,7 @@
               <e p="MovableRemovedEventSystem.cs" t="Include" />
               <e p="NewBalloonEventSystem.cs" t="Include" />
               <e p="PositionEventSystem.cs" t="Include" />
+              <e p="PredictionTraceEventSystem.cs" t="Include" />
               <e p="ProjectileBounceShieldEventSystem.cs" t="Include" />
               <e p="ProjectileEventSystem.cs" t="Include" />
               <e p="ReadyToLoadEventSystem.cs" t="Include" />
@@ -229,6 +232,8 @@
               <e p="GamePlayParticleFXComponent.cs" t="Include" />
               <e p="GamePositionComponent.cs" t="Include" />
               <e p="GamePositionListenerComponent.cs" t="Include" />
+              <e p="GamePredictionTraceComponent.cs" t="Include" />
+              <e p="GamePredictionTraceListenerComponent.cs" t="Include" />
               <e p="GameProjectileBounceShieldComponent.cs" t="Include" />
               <e p="GameProjectileBounceShieldListenerComponent.cs" t="Include" />
               <e p="GameProjectileComponent.cs" t="Include" />
@@ -387,6 +392,11 @@
             <e p="TriggerExit2DComponent.cs" t="Include" />
             <e p="TriggerReporterController.cs" t="Include" />
             <e p="TriggerStay2DComponent.cs" t="Include" />
+          </e>
+          <e p="Prediction" t="Include">
+            <e p="PredictionTraceComponent.cs" t="Include" />
+            <e p="ProjectilePredictionTraceSystem.cs" t="Include" />
+            <e p="TraceDrawerController.cs" t="Include" />
           </e>
           <e p="Projectile" t="Include">
             <e p="FreeProjectileComponent.cs" t="Include" />

@@ -1295,7 +1295,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: -75}
-  m_SizeDelta: {x: -10.000004, y: 95}
+  m_SizeDelta: {x: -20, y: 95}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!225 &1127255599
 CanvasGroup:
@@ -1698,13 +1698,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1840100506}
   - component: {fileID: 1840100508}
+  - component: {fileID: 1840100507}
   m_Layer: 0
   m_Name: TraceDrawer
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &1840100506
 Transform:
   m_ObjectHideFlags: 0
@@ -1719,6 +1720,18 @@ Transform:
   m_Father: {fileID: 136022771}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1840100507
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1840100505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5af79d03430bf65408fc157ff4ea11fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!120 &1840100508
 LineRenderer:
   m_ObjectHideFlags: 0
@@ -1737,7 +1750,7 @@ LineRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 41573fdda236df946ad3f486af2e82f8, type: 2}
+  - {fileID: 2100000, guid: 0b58a1865a2b74448bf99b587dbbdb0d, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1755,15 +1768,15 @@ LineRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: -1
+  m_SortingLayerID: 147337309
+  m_SortingLayer: 4
+  m_SortingOrder: 0
   m_Positions:
   - {x: 0, y: 0, z: 0}
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 0.25
+    widthMultiplier: 0.175
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -1776,13 +1789,22 @@ LineRenderer:
         weightedMode: 0
         inWeight: 0.33333334
         outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 1
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
     colorGradient:
       serializedVersion: 2
-      key0: {r: 0.46666667, g: 0.8666667, b: 0.46666667, a: 0.49411765}
-      key1: {r: 0.68235296, g: 0.7764706, b: 0.8117647, a: 1}
+      key0: {r: 0.46666667, g: 0.8666667, b: 0.46666667, a: 0.5019608}
+      key1: {r: 0.68235296, g: 0.7764706, b: 0.8117647, a: 0.5019608}
       key2: {r: 0, g: 0, b: 0, a: 0}
       key3: {r: 0, g: 0, b: 0, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -1798,8 +1820,8 @@ LineRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 65535
-      atime2: 0
+      atime1: 52428
+      atime2: 65535
       atime3: 0
       atime4: 0
       atime5: 0
@@ -1807,7 +1829,7 @@ LineRenderer:
       atime7: 0
       m_Mode: 0
       m_NumColorKeys: 2
-      m_NumAlphaKeys: 2
+      m_NumAlphaKeys: 3
     numCornerVertices: 0
     numCapVertices: 0
     alignment: 0

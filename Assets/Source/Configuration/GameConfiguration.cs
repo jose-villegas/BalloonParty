@@ -30,7 +30,13 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
     [SerializeField] private float _nudgeDistance;
     [SerializeField] private float _nudgeDuration;
     [SerializeField] private float _scorePointTraceDuration;
+
+    [Header("Trace")] [SerializeField] private float _initialPredictionLength;
+    [SerializeField] private int _predictionTraceMaxBounces;
+    [SerializeField] private int _predictionTraceMaxSteps;
+
     [SerializeField] private PowerUpConfiguration _powerUpConfiguration;
+
 
     public Vector2 ThrowerSpawnPoint => _throwerSpawnPoint;
 
@@ -67,6 +73,12 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
     public PowerUpConfiguration PowerUpConfiguration => _powerUpConfiguration;
 
     public int ProjectileStartingShields => _projectileStartingShields;
+
+    public float PredictionTraceStep => _initialPredictionLength;
+
+    public int PredictionTraceMaxBounces => _predictionTraceMaxBounces;
+
+    public int PredictionTraceMaxSteps => _predictionTraceMaxSteps;
 
     public float ScorePointTraceDuration => _scorePointTraceDuration;
 

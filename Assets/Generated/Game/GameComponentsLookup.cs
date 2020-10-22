@@ -67,44 +67,46 @@ public static class GameComponentsLookup {
     public const int PlayParticleFX = 56;
     public const int Position = 57;
     public const int PositionListener = 58;
-    public const int ProjectileBounceShield = 59;
-    public const int ProjectileBounceShieldListener = 60;
-    public const int Projectile = 61;
-    public const int ProjectileListener = 62;
-    public const int ReadyToLoad = 63;
-    public const int ReadyToLoadListener = 64;
-    public const int ReadyToThrow = 65;
-    public const int Right = 66;
-    public const int RightListener = 67;
-    public const int Rotation = 68;
-    public const int RotationListener = 69;
-    public const int Scale = 70;
-    public const int ScaleListener = 71;
-    public const int SlotIndex = 72;
-    public const int SlotIndexListener = 73;
-    public const int SlotsIndexer = 74;
-    public const int Speed = 75;
-    public const int SpeedListener = 76;
-    public const int StableBalloon = 77;
-    public const int StableBalloonListener = 78;
-    public const int StableBalloonRemovedListener = 79;
-    public const int Tag = 80;
-    public const int TagListener = 81;
-    public const int Thrower = 82;
-    public const int ThrowerListener = 83;
-    public const int ThrowerLoadedProjectile = 84;
-    public const int TriggerEnter2D = 85;
-    public const int TriggerEnter2DListener = 86;
-    public const int TriggerExit2D = 87;
-    public const int TriggerExit2DListener = 88;
-    public const int TriggerStay2D = 89;
-    public const int TriggerStay2DListener = 90;
-    public const int TweenSequence = 91;
-    public const int TweenSequenceListener = 92;
-    public const int Up = 93;
-    public const int UpListener = 94;
+    public const int PredictionTrace = 59;
+    public const int PredictionTraceListener = 60;
+    public const int ProjectileBounceShield = 61;
+    public const int ProjectileBounceShieldListener = 62;
+    public const int Projectile = 63;
+    public const int ProjectileListener = 64;
+    public const int ReadyToLoad = 65;
+    public const int ReadyToLoadListener = 66;
+    public const int ReadyToThrow = 67;
+    public const int Right = 68;
+    public const int RightListener = 69;
+    public const int Rotation = 70;
+    public const int RotationListener = 71;
+    public const int Scale = 72;
+    public const int ScaleListener = 73;
+    public const int SlotIndex = 74;
+    public const int SlotIndexListener = 75;
+    public const int SlotsIndexer = 76;
+    public const int Speed = 77;
+    public const int SpeedListener = 78;
+    public const int StableBalloon = 79;
+    public const int StableBalloonListener = 80;
+    public const int StableBalloonRemovedListener = 81;
+    public const int Tag = 82;
+    public const int TagListener = 83;
+    public const int Thrower = 84;
+    public const int ThrowerListener = 85;
+    public const int ThrowerLoadedProjectile = 86;
+    public const int TriggerEnter2D = 87;
+    public const int TriggerEnter2DListener = 88;
+    public const int TriggerExit2D = 89;
+    public const int TriggerExit2DListener = 90;
+    public const int TriggerStay2D = 91;
+    public const int TriggerStay2DListener = 92;
+    public const int TweenSequence = 93;
+    public const int TweenSequenceListener = 94;
+    public const int Up = 95;
+    public const int UpListener = 96;
 
-    public const int TotalComponents = 95;
+    public const int TotalComponents = 97;
 
     public static readonly string[] componentNames = {
         "AnyBalloonLineInstanceEventListener",
@@ -166,6 +168,8 @@ public static class GameComponentsLookup {
         "PlayParticleFX",
         "Position",
         "PositionListener",
+        "PredictionTrace",
+        "PredictionTraceListener",
         "ProjectileBounceShield",
         "ProjectileBounceShieldListener",
         "Projectile",
@@ -264,6 +268,8 @@ public static class GameComponentsLookup {
         typeof(PlayParticleFXComponent),
         typeof(PositionComponent),
         typeof(PositionListenerComponent),
+        typeof(PredictionTraceComponent),
+        typeof(PredictionTraceListenerComponent),
         typeof(ProjectileBounceShieldComponent),
         typeof(ProjectileBounceShieldListenerComponent),
         typeof(ProjectileComponent),

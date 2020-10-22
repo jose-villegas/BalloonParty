@@ -28,7 +28,7 @@ MonoBehaviour:
   _projectileSpawnPoint: {x: 0, y: -4.1}
   _projectileStartingShields: 1
   _projectileSpeed: 7
-  _limitsClockwise: {x: 4.5, y: 2.25, z: -4.5, w: -2.25}
+  _limitsClockwise: {x: 4, y: 2.25, z: -4.5, w: -2.25}
   _slotsSize: {x: 6, y: 11}
   _slotSeparation: {x: 0.375, y: 0.65}
   _slotsOffset: {x: 5, y: 3.25}
@@ -49,6 +49,9 @@ MonoBehaviour:
   _nudgeDistance: 0.1
   _nudgeDuration: 0.4
   _scorePointTraceDuration: 1
+  _initialPredictionLength: 1
+  _predictionTraceMaxBounces: 2
+  _predictionTraceMaxSteps: 15
   _powerUpConfiguration:
     _powerUps:
     - Type: 0
@@ -57,9 +60,9 @@ MonoBehaviour:
       MaximumAllowed: 999
     - Type: 1
       TurnCheckEvery: 2
-      Weight: 300
+      Weight: 400
       MaximumAllowed: 5
     - Type: 2
       TurnCheckEvery: 3
-      Weight: 150
+      Weight: 235
       MaximumAllowed: 3

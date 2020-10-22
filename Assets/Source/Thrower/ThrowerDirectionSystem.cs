@@ -31,6 +31,7 @@ public class ThrowerDirectionSystem : IExecuteSystem
                 var pos = thrower.position.Value;
                 var screenPos = camera.WorldToScreenPoint(pos);
                 var direction = (mousePos - screenPos).normalized;
+                direction.z = 0;
 
                 thrower.ReplaceDirection(direction);
 #if UNITY_EDITOR

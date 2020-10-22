@@ -31,6 +31,7 @@ public class ProjectileReloadSystem : ReactiveSystem<GameEntity>, ILinkedViewLis
         e.AddAsset("Projectile");
         e.isProjectile = true;
         e.isLoadedProjectile = true;
+        e.isMovable = true;
 
         // initial position
         e.AddScale(Vector3.zero);

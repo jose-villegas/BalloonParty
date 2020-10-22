@@ -12,8 +12,10 @@ public class ProjectileTransformSystem : IExecuteSystem
     {
         _contexts = contexts;
         _configuration = _contexts.configuration.gameConfiguration.value;
-        _loadedProjectiles = _contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.Projectile, GameMatcher.LoadedProjectile));
-        _freeProjectiles = _contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.Projectile, GameMatcher.FreeProjectile));
+        _loadedProjectiles = _contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.Projectile,
+            GameMatcher.LoadedProjectile, GameMatcher.Movable));
+        _freeProjectiles = _contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.Projectile, GameMatcher.FreeProjectile,
+            GameMatcher.Movable));
     }
 
     public void Execute()

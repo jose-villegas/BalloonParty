@@ -27,6 +27,7 @@ public class GameUpdateSystems : Feature
         Add(new NewBalloonLinesInstanceSystem(contexts));
         Add(new BalloonsPowerUpCheckSystem(contexts));
         Add(new ProjectileBounceSystem(contexts));
+        Add(new ProjectilePredictionTraceSystem(contexts));
 
         // events
         Add(new GameEventSystems(contexts));

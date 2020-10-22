@@ -12,7 +12,7 @@ public class FreeProjectileMovementSystem : IExecuteSystem
         _contexts = contexts;
         _configuration = _contexts.configuration.gameConfiguration.value;
         _projectiles = _contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.Projectile, GameMatcher.FreeProjectile,
-            GameMatcher.Speed, GameMatcher.Direction));
+            GameMatcher.Speed, GameMatcher.Direction, GameMatcher.Movable));
     }
 
     public void Execute()
