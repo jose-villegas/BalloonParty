@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using TMPro;
+using UnityEngine;
 using UnityEngine.Serialization;
 
 [RequireComponent(typeof(LinkedViewController))]
@@ -18,6 +19,8 @@ public class BombSphereCastHitController : MonoBehaviour
     {
         var results =
             Physics2D.OverlapCircleAll(gameEntity.position.Value, _radius, LayerMask.GetMask("Balloons"));
+        var settings =
+            Contexts.sharedInstance.configuration.gameConfiguration.value.PowerUpConfiguration[BalloonPowerUp.Bomb];
 
         if (results != null && results.Length > 0)
         {
@@ -32,6 +35,7 @@ public class BombSphereCastHitController : MonoBehaviour
                     if (linkedEntity.isBalloon)
                     {
                         linkedEntity.isBalloonHit = true;
+                        linkedEntity.ReplaceBalloonNudge(settings.NudgeDuration, settings.NudgeDistance);
                     }
                 }
             }

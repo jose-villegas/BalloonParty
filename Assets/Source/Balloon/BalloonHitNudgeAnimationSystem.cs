@@ -18,12 +18,12 @@ public class BalloonHitNudgeAnimationSystem : ReactiveSystem<GameEntity>
 
     protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
     {
-        return context.CreateCollector(GameMatcher.AllOf(GameMatcher.Balloon, GameMatcher.BalloonHit));
+        return context.CreateCollector(GameMatcher.AllOf(GameMatcher.Balloon, GameMatcher.BalloonNudge));
     }
 
     protected override bool Filter(GameEntity entity)
     {
-        return entity.isBalloon && entity.isBalloonHit;
+        return entity.isBalloon && entity.isBalloonHit && entity.hasBalloonNudge && entity.hasSlotIndex;
     }
 
     protected override void Execute(List<GameEntity> entities)
@@ -32,14 +32,18 @@ public class BalloonHitNudgeAnimationSystem : ReactiveSystem<GameEntity>
         {
             // operate on indexing value
             var index = balloonEntity.slotIndex.Value;
+            
             // start nudge animation from explosion on neighboring slots
-            NudgeNeighbors(index, balloonEntity);
+            var distance = balloonEntity.balloonNudge.Distance;
+            var duration = balloonEntity.balloonNudge.Duration;
+            
+            NudgeNeighbors(index, balloonEntity, distance, duration);
             // remove from indexer
             _slots[index.x, index.y] = null;
         }
     }
 
-    private void NudgeNeighbors(Vector2Int index, GameEntity balloonEntity)
+    private void NudgeNeighbors(Vector2Int index, GameEntity balloonEntity, float distance, float duration)
     {
         var neighbors = _slots.GetNeighbors(index.x, index.y);
 
@@ -56,11 +60,8 @@ public class BalloonHitNudgeAnimationSystem : ReactiveSystem<GameEntity>
                     var slotIndex = neighborEntity.slotIndex.Value;
                     var sequence = DOTween.Sequence();
 
-                    sequence.Append(mono.transform.DOMove(
-                        position + direction.normalized * _configuration.NudgeDistance,
-                        _configuration.NudgeDuration / 2f));
-                    sequence.Append(mono.transform.DOMove(slotIndex.IndexToPosition(_configuration),
-                        _configuration.NudgeDuration / 2f));
+                    sequence.Append(mono.transform.DOMove(position + direction.normalized * distance, duration / 2f));
+                    sequence.Append(mono.transform.DOMove(slotIndex.IndexToPosition(_configuration), duration / 2f));
                     neighborEntity.isStableBalloon = false;
                     sequence.onComplete += () => { neighborEntity.isStableBalloon = true; };
 

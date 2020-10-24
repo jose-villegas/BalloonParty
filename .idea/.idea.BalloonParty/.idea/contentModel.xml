@@ -46,6 +46,7 @@
               <e p="AnyReadyToThrowListenerComponent.cs" t="Include" />
               <e p="BalloonColorListenerComponent.cs" t="Include" />
               <e p="BalloonLastColorPopCountListenerComponent.cs" t="Include" />
+              <e p="BalloonNudgeListenerComponent.cs" t="Include" />
               <e p="BalloonPowerUpListenerComponent.cs" t="Include" />
               <e p="CameraListenerComponent.cs" t="Include" />
               <e p="DestroyedListenerComponent.cs" t="Include" />
@@ -93,6 +94,7 @@
               <e p="IAnyReadyToThrowListener.cs" t="Include" />
               <e p="IBalloonColorListener.cs" t="Include" />
               <e p="IBalloonLastColorPopCountListener.cs" t="Include" />
+              <e p="IBalloonNudgeListener.cs" t="Include" />
               <e p="IBalloonPowerUpListener.cs" t="Include" />
               <e p="ICameraListener.cs" t="Include" />
               <e p="IDestroyedListener.cs" t="Include" />
@@ -139,6 +141,7 @@
               <e p="AnyReadyToThrowEventSystem.cs" t="Include" />
               <e p="BalloonColorEventSystem.cs" t="Include" />
               <e p="BalloonLastColorPopCountEventSystem.cs" t="Include" />
+              <e p="BalloonNudgeEventSystem.cs" t="Include" />
               <e p="BalloonPowerUpEventSystem.cs" t="Include" />
               <e p="CameraEventSystem.cs" t="Include" />
               <e p="DestroyedEventSystem.cs" t="Include" />
@@ -195,6 +198,8 @@
               <e p="GameBalloonLastColorPopCountComponent.cs" t="Include" />
               <e p="GameBalloonLastColorPopCountListenerComponent.cs" t="Include" />
               <e p="GameBalloonLineInstanceEventComponent.cs" t="Include" />
+              <e p="GameBalloonNudgeComponent.cs" t="Include" />
+              <e p="GameBalloonNudgeListenerComponent.cs" t="Include" />
               <e p="GameBalloonPowerUpComponent.cs" t="Include" />
               <e p="GameBalloonPowerUpListenerComponent.cs" t="Include" />
               <e p="GameBalloonsBalanceEventComponent.cs" t="Include" />
@@ -320,6 +325,7 @@
             <e p="BalloonHitScoreSystem.cs" t="Include" />
             <e p="BalloonLastColorPopCountComponent.cs" t="Include" />
             <e p="BalloonLineSpawnerSystem.cs" t="Include" />
+            <e p="BalloonNudgeComponent.cs" t="Include" />
             <e p="BalloonPowerUpComponent.cs" t="Include" />
             <e p="BalloonPowerUpController.cs" t="Include" />
             <e p="BalloonPowerUpDisplay.cs" t="Include" />

@@ -12,6 +12,7 @@ public sealed class GameEventSystems : Feature {
         Add(new BalloonColorEventSystem(contexts)); // priority: 0
         Add(new BalloonLastColorPopCountEventSystem(contexts)); // priority: 0
         Add(new AnyBalloonLineInstanceEventEventSystem(contexts)); // priority: 0
+        Add(new BalloonNudgeEventSystem(contexts)); // priority: 0
         Add(new BalloonPowerUpEventSystem(contexts)); // priority: 0
         Add(new AnyBalloonsBalanceEventEventSystem(contexts)); // priority: 0
         Add(new AnyBalloonsPowerUpCheckEventEventSystem(contexts)); // priority: 0

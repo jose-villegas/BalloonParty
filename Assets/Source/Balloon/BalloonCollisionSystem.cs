@@ -8,13 +8,11 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
     private readonly Contexts _contexts;
     private readonly int _layer;
     private readonly IGameConfiguration _configuration;
-    private IEntity[,] _slots;
 
     public BalloonCollisionSystem(Contexts contexts) : base(contexts.game)
     {
         _contexts = contexts;
         _layer = LayerMask.NameToLayer("Balloons");
-        _slots = _contexts.game.slotsIndexer.Value;
         _configuration = contexts.configuration.gameConfiguration.value;
     }
 
@@ -47,6 +45,7 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
                     if (collider.isFreeProjectile)
                     {
                         HandleProjectileCollider(balloonEntity.balloonColor.Value, collider);
+                        balloonEntity.ReplaceBalloonNudge(_configuration.NudgeDuration, _configuration.NudgeDistance);
                     }
                     
                     balloonEntity.isBalloonHit = true;
@@ -55,7 +54,7 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
         }
     }
 
-    private static void HandleProjectileCollider(string color, GameEntity projectile)
+    private void HandleProjectileCollider(string color, GameEntity projectile)
     {
         if (!projectile.hasBalloonColor)
         {
