@@ -71,4 +71,4 @@ MonoBehaviour:
       Weight: 235
       MaximumAllowed: 3
       NudgeDistance: 0.3
-      NudgeDuration: 0.6
+      NudgeDuration: 0.4

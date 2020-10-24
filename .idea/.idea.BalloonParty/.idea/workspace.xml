@@ -20,19 +20,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonNudgeComponent.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonNudgeComponent.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/contentModel.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Generated/Events/GameEventSystems.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Events/GameEventSystems.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Generated/Game/GameComponentsLookup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Game/GameComponentsLookup.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/BombRange.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/BombRange.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonCollisionSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonCollisionSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitNudgeAnimationSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitNudgeAnimationSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BombSphereCastHitController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BombSphereCastHitController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpConfiguration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpSettings.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -152,7 +141,7 @@
       <workItem from="1602883670295" duration="546000" />
       <workItem from="1602885509754" duration="25000" />
       <workItem from="1603061436445" duration="31135000" />
-      <workItem from="1603296789402" duration="15806000" />
+      <workItem from="1603296789402" duration="16405000" />
     </task>
     <servers />
   </component>
