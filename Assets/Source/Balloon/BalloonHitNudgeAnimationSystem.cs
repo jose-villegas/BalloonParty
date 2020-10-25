@@ -7,7 +7,7 @@ public class BalloonHitNudgeAnimationSystem : ReactiveSystem<GameEntity>
 {
     private readonly Contexts _contexts;
     private readonly IGameConfiguration _configuration;
-    private IEntity[,] _slots;
+    private readonly IEntity[,] _slots;
 
     public BalloonHitNudgeAnimationSystem(Contexts contexts) : base(contexts.game)
     {
