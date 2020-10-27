@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 [RequireComponent(typeof(LinkedViewController))]
-public class BalloonPowerUpController : MonoBehaviour, IBalloonPowerUpListener
+public class BalloonPowerUpDisplayController : MonoBehaviour, IBalloonPowerUpListener, IBalloonHitListener
 {
     [SerializeField] private List<DisplayPowerUp> _powerUps;
 
@@ -15,7 +15,7 @@ public class BalloonPowerUpController : MonoBehaviour, IBalloonPowerUpListener
     private class DisplayPowerUp
     {
         public BalloonPowerUp Type;
-        public BalloonPowerUpDisplay Reference;
+        public BalloonPowerUpController Reference;
     }
 
     private void Awake()
@@ -28,6 +28,7 @@ public class BalloonPowerUpController : MonoBehaviour, IBalloonPowerUpListener
     private void OnViewLinked(GameEntity gameEntity)
     {
         gameEntity.AddBalloonPowerUpListener(this);
+        gameEntity.AddBalloonHitListener(this);
     }
 
     public void OnBalloonPowerUp(GameEntity entity, BalloonPowerUp value)
@@ -39,7 +40,21 @@ public class BalloonPowerUpController : MonoBehaviour, IBalloonPowerUpListener
             if (displayPowerUp.Type == value)
             {
                 displayPowerUp.Reference.Setup(_configuration.BalloonColors
-                    .First(x => x.Name == entity.balloonColor.Value));
+                    .First(x => x.Name == entity.balloonColor.Value), entity);
+            }
+        }
+    }
+
+    public void OnBalloonHit(GameEntity entity)
+    {
+        foreach (var displayPowerUp in _powerUps)
+        {
+            var value = entity.balloonPowerUp.Value;
+            displayPowerUp.Reference.gameObject.SetActive(displayPowerUp.Type == value);
+
+            if (displayPowerUp.Type == value)
+            {
+                displayPowerUp.Reference.Activate();
             }
         }
     }

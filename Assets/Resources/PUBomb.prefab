@@ -334,15 +334,15 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2736908527754935631}
-  - component: {fileID: 842857935009348583}
   - component: {fileID: 5337200703228449610}
+  - component: {fileID: 2559532278226263729}
   m_Layer: 10
   m_Name: PUBomb
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2736908527754935631
 Transform:
   m_ObjectHideFlags: 0
@@ -361,21 +361,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &842857935009348583
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2023896797455516263}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fdbca5f9f3ea4482867a821f91ef945c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _spritesToSetColor:
-  - {fileID: 1027031010868380582}
-  _spritesAlpha: 0.75
 --- !u!95 &5337200703228449610
 Animator:
   serializedVersion: 3
@@ -395,6 +380,33 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &2559532278226263729
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023896797455516263}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f99f9408d0b43f2994065c0eb5faa92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _spritesToSetColor:
+  - {fileID: 1027031010868380582}
+  _layerController: {fileID: 0}
+  _renderers:
+  - {fileID: 6676025361800503554}
+  - {fileID: 5672223081432648906}
+  - {fileID: 246346821719131421}
+  - {fileID: 3881090381833403294}
+  - {fileID: 7909397290771805919}
+  - {fileID: 8980902445136755782}
+  - {fileID: 4313302362480233347}
+  - {fileID: 3269715518442401446}
+  - {fileID: 79708700176373506}
+  - {fileID: 1027031010868380582}
+  _spritesAlpha: 0.75
 --- !u!1 &2600297533626423555
 GameObject:
   m_ObjectHideFlags: 0
@@ -462,8 +474,8 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayerID: 1928968643
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 21300000, guid: d439da69ac2d95e44b5e4237e3c69c39, type: 3}
   m_Color: {r: 0.97647065, g: 0.65882355, b: 0.14509805, a: 0.5019608}

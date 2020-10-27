@@ -19,7 +19,37 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="" />
+    <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BombPowerUpController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BombPowerUpController.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/LaserPowerUpController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/LaserPowerUpController.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/ShieldPowerUpController.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/ShieldPowerUpController.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/LaserIdle.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/LaserIdle.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/PULaser.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/PULaser.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Generated/Events/GameEventSystems.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Events/GameEventSystems.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Generated/Game/GameComponentsLookup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Game/GameComponentsLookup.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/Balloon.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/Balloon.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PUBomb.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PUBomb.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PULaser.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PULaser.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PUShield.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PUShield.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitComponent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitPowerUpSystem.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitPowerUpSystem.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpComponent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpDisplayController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpController.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpDisplayController.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpDisplay.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpDisplay.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonSpriteLayerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonSpriteLayerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameUpdateSystems.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameUpdateSystems.cs" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -36,12 +66,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileBounceShieldComponent.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileBounceShieldController.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Thrower/ReadyToThrowComponent.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/UI/ShieldCounterLabel.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/UI/ShieldCounterAnimation.cs" />
-        <option value="$PROJECT_DIR$/Assets/Shaders/SpriteShine.shader" />
         <option value="$PROJECT_DIR$/Assets/Source/Game/GameLevelComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/UI/GameStartButton.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Game/GameStartedFirstTurnSystem.cs" />
@@ -56,26 +80,21 @@
         <option value="$PROJECT_DIR$/Assets/Source/UI/ColorProgressBarInstancer.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/UI/ColorProgressBar.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpDrawer.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpDisplay.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileShieldSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileBounceSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileShieldFXSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpComponent.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitPowerUpSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Physics/TriggerExit2DComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Physics/TriggerReporterController.cs" />
         <option value="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/ShieldIdle.anim" />
         <option value="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/BombIdle.anim" />
-        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonSpriteLayerController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Prediction/PredictionTraceComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Prediction/ProjectilePredictionSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/FreeProjectileMovementSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileTransformSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileReloadSystem.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Game/GameUpdateSystems.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerDirectionSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Prediction/TraceDrawerController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Configuration/IGameConfiguration.cs" />
@@ -87,6 +106,17 @@
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BombSphereCastHitController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonCollisionSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitNudgeAnimationSystem.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpActionController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/ShieldPowerUpController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpDisplayController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitPowerUpSystem.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Game/GameUpdateSystems.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BombPowerUpController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonSpriteLayerController.cs" />
       </list>
     </option>
   </component>
@@ -138,7 +168,7 @@
       <workItem from="1602883670295" duration="546000" />
       <workItem from="1602885509754" duration="25000" />
       <workItem from="1603061436445" duration="31135000" />
-      <workItem from="1603296789402" duration="17006000" />
+      <workItem from="1603296789402" duration="20391000" />
     </task>
     <servers />
   </component>

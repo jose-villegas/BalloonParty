@@ -11,5 +11,6 @@ public enum BalloonPowerUp
 {
     None,
     Shield,
-    Bomb
+    Bomb,
+    Laser
 }
