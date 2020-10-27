@@ -44,7 +44,7 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
                 {
                     if (collider.isFreeProjectile)
                     {
-                        HandleProjectileCollider(balloonEntity.balloonColor.Value, collider);
+                        HandleProjectileCollider(balloonEntity, collider);
                         balloonEntity.ReplaceBalloonNudge(_configuration.NudgeDuration, _configuration.NudgeDistance);
                     }
                     
@@ -54,23 +54,26 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
         }
     }
 
-    private void HandleProjectileCollider(string color, GameEntity projectile)
+    private void HandleProjectileCollider(GameEntity balloon, GameEntity projectile)
     {
         if (!projectile.hasBalloonColor)
         {
-            projectile.AddBalloonColor(color);
+            projectile.AddBalloonColor(balloon.balloonColor.Value);
             projectile.AddBalloonLastColorPopCount(1);
+            projectile.AddLastBalloonHit(balloon);
         }
         else
         {
-            if (color == projectile.balloonColor.Value)
+            if (balloon.balloonColor.Value == projectile.balloonColor.Value)
             {
+                if (projectile.lastBalloonHit.Value == balloon) return;
+                
                 var colorCount = projectile.balloonLastColorPopCount.Value;
                 projectile.ReplaceBalloonLastColorPopCount(colorCount + 1);
             }
             else
             {
-                projectile.ReplaceBalloonColor(color);
+                projectile.ReplaceBalloonColor(balloon.balloonColor.Value);
                 projectile.ReplaceBalloonLastColorPopCount(1);
             }
         }

@@ -53,6 +53,7 @@
               <e p="DestroyedListenerComponent.cs" t="Include" />
               <e p="DirectionListenerComponent.cs" t="Include" />
               <e p="ForwardListenerComponent.cs" t="Include" />
+              <e p="LastBalloonHitListenerComponent.cs" t="Include" />
               <e p="LayerListenerComponent.cs" t="Include" />
               <e p="LinkedViewListenerComponent.cs" t="Include" />
               <e p="MovableListenerComponent.cs" t="Include" />
@@ -102,6 +103,7 @@
               <e p="IDestroyedListener.cs" t="Include" />
               <e p="IDirectionListener.cs" t="Include" />
               <e p="IForwardListener.cs" t="Include" />
+              <e p="ILastBalloonHitListener.cs" t="Include" />
               <e p="ILayerListener.cs" t="Include" />
               <e p="ILinkedViewListener.cs" t="Include" />
               <e p="IMovableListener.cs" t="Include" />
@@ -150,6 +152,7 @@
               <e p="DestroyedEventSystem.cs" t="Include" />
               <e p="DirectionEventSystem.cs" t="Include" />
               <e p="ForwardEventSystem.cs" t="Include" />
+              <e p="LastBalloonHitEventSystem.cs" t="Include" />
               <e p="LayerEventSystem.cs" t="Include" />
               <e p="LinkedViewEventSystem.cs" t="Include" />
               <e p="MovableEventSystem.cs" t="Include" />
@@ -226,6 +229,8 @@
               <e p="GameGamePersistentScoreComponent.cs" t="Include" />
               <e p="GameGameStartedComponent.cs" t="Include" />
               <e p="GameGameTurnCounterComponent.cs" t="Include" />
+              <e p="GameLastBalloonHitComponent.cs" t="Include" />
+              <e p="GameLastBalloonHitListenerComponent.cs" t="Include" />
               <e p="GameLayerComponent.cs" t="Include" />
               <e p="GameLayerListenerComponent.cs" t="Include" />
               <e p="GameLinkedViewComponent.cs" t="Include" />
@@ -338,6 +343,7 @@
               <e p="BalloonsPowerUpCheckEventComponent.cs" t="Include" />
             </e>
             <e p="GameStartedBalloonsSpawnSystem.cs" t="Include" />
+            <e p="LastBalloonHitComponent.cs" t="Include" />
             <e p="NewBalloonComponent.cs" t="Include" />
             <e p="NewBalloonLinesInstanceSystem.cs" t="Include" />
             <e p="PowerUps" t="Include">

@@ -28,6 +28,7 @@ public sealed class GameEventSystems : Feature {
         Add(new AnyGamePersistentScoreEventSystem(contexts)); // priority: 0
         Add(new AnyGameStartedEventSystem(contexts)); // priority: 0
         Add(new AnyGameTurnCounterEventSystem(contexts)); // priority: 0
+        Add(new LastBalloonHitEventSystem(contexts)); // priority: 0
         Add(new LayerEventSystem(contexts)); // priority: 0
         Add(new LinkedViewEventSystem(contexts)); // priority: 0
         Add(new MovableEventSystem(contexts)); // priority: 0
