@@ -11,14 +11,14 @@ public partial class GameEntity {
     public LastBalloonHitComponent lastBalloonHit { get { return (LastBalloonHitComponent)GetComponent(GameComponentsLookup.LastBalloonHit); } }
     public bool hasLastBalloonHit { get { return HasComponent(GameComponentsLookup.LastBalloonHit); } }
 
-    public void AddLastBalloonHit(Entitas.IEntity newValue) {
+    public void AddLastBalloonHit(GameEntity newValue) {
         var index = GameComponentsLookup.LastBalloonHit;
         var component = (LastBalloonHitComponent)CreateComponent(index, typeof(LastBalloonHitComponent));
         component.Value = newValue;
         AddComponent(index, component);
     }
 
-    public void ReplaceLastBalloonHit(Entitas.IEntity newValue) {
+    public void ReplaceLastBalloonHit(GameEntity newValue) {
         var index = GameComponentsLookup.LastBalloonHit;
         var component = (LastBalloonHitComponent)CreateComponent(index, typeof(LastBalloonHitComponent));
         component.Value = newValue;

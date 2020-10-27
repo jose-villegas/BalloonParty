@@ -1,4 +1,6 @@
-﻿public class ShieldPowerUpController : BalloonPowerUpController
+﻿using UnityEngine;
+
+public class ShieldPowerUpController : BalloonPowerUpController
 {
     public override void Activate()
     {

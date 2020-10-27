@@ -18,7 +18,8 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
 
     protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
     {
-        return context.CreateCollector(GameMatcher.AnyOf(GameMatcher.TriggerEnter2D, GameMatcher.TriggerExit2D, GameMatcher.TriggerStay2D));
+        return context.CreateCollector(GameMatcher.AnyOf(GameMatcher.TriggerEnter2D, GameMatcher.TriggerExit2D,
+            GameMatcher.TriggerStay2D));
     }
 
     protected override bool Filter(GameEntity entity)
@@ -39,15 +40,16 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
             if ((collided.gameObject.layer & _layer) > 0)
             {
                 var linkedView = collided.GetComponent<ILinkedView>();
-                
+
                 if (linkedView.LinkedEntity is GameEntity balloonEntity && balloonEntity.isBalloon)
                 {
-                    if (collider.isFreeProjectile)
+                    if (collider.isFreeProjectile &&
+                        (!collider.hasLastBalloonHit || collider.lastBalloonHit.Value != balloonEntity))
                     {
                         HandleProjectileCollider(balloonEntity, collider);
                         balloonEntity.ReplaceBalloonNudge(_configuration.NudgeDuration, _configuration.NudgeDistance);
                     }
-                    
+
                     balloonEntity.isBalloonHit = true;
                 }
             }
@@ -60,14 +62,11 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
         {
             projectile.AddBalloonColor(balloon.balloonColor.Value);
             projectile.AddBalloonLastColorPopCount(1);
-            projectile.AddLastBalloonHit(balloon);
         }
         else
         {
             if (balloon.balloonColor.Value == projectile.balloonColor.Value)
             {
-                if (projectile.lastBalloonHit.Value == balloon) return;
-                
                 var colorCount = projectile.balloonLastColorPopCount.Value;
                 projectile.ReplaceBalloonLastColorPopCount(colorCount + 1);
             }
@@ -77,5 +76,7 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
                 projectile.ReplaceBalloonLastColorPopCount(1);
             }
         }
+        
+        projectile.ReplaceLastBalloonHit(balloon);
     }
 }

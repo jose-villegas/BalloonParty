@@ -7,5 +7,5 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public interface ILastBalloonHitListener {
-    void OnLastBalloonHit(GameEntity entity, Entitas.IEntity value);
+    void OnLastBalloonHit(GameEntity entity, GameEntity value);
 }
