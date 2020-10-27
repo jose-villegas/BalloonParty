@@ -31,8 +31,6 @@ public class ProjectileShieldSystem : ReactiveSystem<GameEntity>
             {
                 var shields = projectileEntity.projectileBounceShield.Value;
                 projectileEntity.ReplaceProjectileBounceShield(shields + 1);
-
-
             }
         }
     }

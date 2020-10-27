@@ -6,13 +6,15 @@ using UnityEngine;
 [RequireComponent(typeof(LinkedViewController))]
 public class BalloonPowerUpDisplayController : MonoBehaviour, IBalloonPowerUpListener, IBalloonHitListener
 {
-    [SerializeField] private List<DisplayPowerUp> _powerUps;
+    [SerializeField] private List<PowerUpControllerReference> _powerUps;
 
     private LinkedViewController _linkedView;
     private IGameConfiguration _configuration;
+    private PowerUpControllerReference _powerUpController;
+    private bool _activated;
 
     [Serializable]
-    private class DisplayPowerUp
+    private class PowerUpControllerReference
     {
         public BalloonPowerUp Type;
         public BalloonPowerUpController Reference;
@@ -33,29 +35,26 @@ public class BalloonPowerUpDisplayController : MonoBehaviour, IBalloonPowerUpLis
 
     public void OnBalloonPowerUp(GameEntity entity, BalloonPowerUp value)
     {
-        foreach (var displayPowerUp in _powerUps)
+        foreach (var powerUp in _powerUps)
         {
-            displayPowerUp.Reference.gameObject.SetActive(displayPowerUp.Type == value);
+            powerUp.Reference.gameObject.SetActive(powerUp.Type == value);
 
-            if (displayPowerUp.Type == value)
+            if (powerUp.Type == value)
             {
-                displayPowerUp.Reference.Setup(_configuration.BalloonColors
+                _powerUpController = powerUp;
+                _powerUpController.Reference.Setup(_configuration.BalloonColors
                     .First(x => x.Name == entity.balloonColor.Value), entity);
+
+                return;
             }
         }
     }
 
     public void OnBalloonHit(GameEntity entity)
     {
-        foreach (var displayPowerUp in _powerUps)
-        {
-            var value = entity.balloonPowerUp.Value;
-            displayPowerUp.Reference.gameObject.SetActive(displayPowerUp.Type == value);
-
-            if (displayPowerUp.Type == value)
-            {
-                displayPowerUp.Reference.Activate();
-            }
-        }
+        if (_activated) return;
+        
+        _activated = true;
+        _powerUpController.Reference.Activate();
     }
 }

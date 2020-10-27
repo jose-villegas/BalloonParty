@@ -4,7 +4,7 @@
     {
         var e = _contexts.game.CreateEntity();
         e.AddAsset("BombRange");
-        e.AddPosition(_gameEntity.position.Value);                    
-        e.isBalloonCollider = true;
+        e.AddPosition(_gameEntity.position.Value);
+        e.isBalloonCollider = transform;
     }
 }
