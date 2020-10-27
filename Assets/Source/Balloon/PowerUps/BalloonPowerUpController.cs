@@ -28,11 +28,11 @@ public abstract class BalloonPowerUpController : MonoBehaviour
             spriteRenderer.color = new Color(color.r, color.g, color.b, _spritesAlpha);
         }
 
-        var baseSort = _layerController.SortingOrder;
+        var baseSort = _layerController.SortingOrder + 1;
         
         foreach (var render in _renderers)
         {
-            render.sortingOrder = ++baseSort;
+            render.sortingOrder = baseSort++;
         }
     }
 

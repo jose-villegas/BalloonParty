@@ -21,12 +21,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Generated/Events/Interfaces/ILastBalloonHitListener.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Events/Interfaces/ILastBalloonHitListener.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Generated/Game/Components/GameLastBalloonHitComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Game/Components/GameLastBalloonHitComponent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonCollisionSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonCollisionSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/LastBalloonHitComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/LastBalloonHitComponent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/ShieldPowerUpController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/ShieldPowerUpController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileShieldSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileShieldSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PULaser.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PULaser.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,7 +82,6 @@
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonPowerUpDisplayController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonHitPowerUpSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Game/GameUpdateSystems.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonSpriteLayerController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/LaserRaycastHitController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/LaserPowerUpController.cs" />
@@ -98,6 +93,7 @@
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonCollisionSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileShieldSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/ShieldPowerUpController.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" />
       </list>
     </option>
   </component>
@@ -149,7 +145,7 @@
       <workItem from="1602883670295" duration="546000" />
       <workItem from="1602885509754" duration="25000" />
       <workItem from="1603061436445" duration="31135000" />
-      <workItem from="1603296789402" duration="27305000" />
+      <workItem from="1603296789402" duration="27932000" />
     </task>
     <servers />
   </component>

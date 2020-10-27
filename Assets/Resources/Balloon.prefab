@@ -546,6 +546,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PUBomb
       objectReference: {fileID: 0}
+    - target: {fileID: 2023896797455516263, guid: 0909fb1419fa47148a1cc0cd0ca72e9f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2559532278226263729, guid: 0909fb1419fa47148a1cc0cd0ca72e9f,
         type: 3}
       propertyPath: _layerController

@@ -716,7 +716,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91d81bd0cb124addb01cb8dce346f913, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _spritesToSetColor: []
+  _spritesToSetColor:
+  - {fileID: 1027031010868380582}
   _layerController: {fileID: 0}
   _renderers:
   - {fileID: 6676025361800503554}
@@ -747,7 +748,6 @@ MonoBehaviour:
   - {fileID: 79708700176373506}
   - {fileID: 1027031010868380582}
   _spritesAlpha: 0.75
-  _animator: {fileID: 0}
   _rotatingBody: {fileID: 5890326904912511798}
   _rotationSpeed: 100
 --- !u!1 &2263638903725674298
