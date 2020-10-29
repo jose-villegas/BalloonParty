@@ -22,7 +22,7 @@
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/PULaser.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/PULaser.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Sprites/blur_circle.png.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Sprites/blur_circle.png.meta" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,11 +33,9 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Resources/PULaser.prefab" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/351E49E2-A5BF-4FD6-BEAB-B458CE2255F3/f2/a50ce978/Enumerable.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Source/Configuration/GameConfiguration.asset" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Source/Balloon/PowerUps/LaserPowerUpController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/BFFF7C0B-1952-412C-B811-8DDDD204A124/27/a51b9d40/ReactiveSystem`1.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Source/Balloon/PowerUps/BombPowerUpController.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BombSphereCastHitController.cs" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
@@ -124,10 +122,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="14856">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="14856" />
+      <option name="pid" />
       <option name="selectedOptions">
         <set />
       </option>
@@ -146,6 +144,7 @@
       <workItem from="1602885509754" duration="25000" />
       <workItem from="1603061436445" duration="31135000" />
       <workItem from="1603296789402" duration="27932000" />
+      <workItem from="1603924230125" duration="1406000" />
     </task>
     <servers />
   </component>
@@ -242,6 +241,10 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="713" y="235" key="RiderGenerateDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1603156274623" />
+    <state x="745" y="229" key="RollbackChangesDialog" timestamp="1603991910227">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="745" y="229" key="RollbackChangesDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1603991910227" />
     <state x="461" y="164" key="SettingsEditor" timestamp="1603061475737">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
