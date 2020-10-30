@@ -61,20 +61,26 @@ MonoBehaviour:
       NudgeDistance: 0
       NudgeDuration: 0
     - Type: 1
-      TurnCheckEvery: 2
+      TurnCheckEvery: 1
       Weight: 400
       MaximumAllowed: 5
       NudgeDistance: 0
       NudgeDuration: 0
     - Type: 2
-      TurnCheckEvery: 3
-      Weight: 235
+      TurnCheckEvery: 2
+      Weight: 500
       MaximumAllowed: 3
       NudgeDistance: 0.3
       NudgeDuration: 0.4
     - Type: 3
-      TurnCheckEvery: 4
-      Weight: 400
+      TurnCheckEvery: 3
+      Weight: 1200
       MaximumAllowed: 3
       NudgeDistance: 0.2
       NudgeDuration: 0.2
+    - Type: 4
+      TurnCheckEvery: 4
+      Weight: 1000
+      MaximumAllowed: 3
+      NudgeDistance: 0.3
+      NudgeDuration: 0.5

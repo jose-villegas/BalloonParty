@@ -23,7 +23,7 @@ public class BalloonHitScoreSystem : ReactiveSystem<GameEntity>
 
     protected override bool Filter(GameEntity entity)
     {
-        return entity.isBalloon && entity.isBalloonHit;
+        return entity.isBalloon && entity.isBalloonHit && !entity.isBalloonScoreReady;
     }
 
     protected override void Execute(List<GameEntity> entities)
@@ -38,6 +38,7 @@ public class BalloonHitScoreSystem : ReactiveSystem<GameEntity>
 
             // add score
             _contexts.game.AddScore(balloonEntity.balloonColor.Value, out var progress);
+            balloonEntity.isBalloonScoreReady = true;
             // save position to know where this point comes from
             progress.ReplacePosition(balloonEntity.position.Value);
         }

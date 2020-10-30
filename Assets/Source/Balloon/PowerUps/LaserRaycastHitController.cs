@@ -50,6 +50,7 @@ public class LaserRaycastHitController : MonoBehaviour
                     if (linkedEntity.isBalloon)
                     {
                         linkedEntity.isBalloonHit = true;
+                        linkedEntity.isBalloonPowerUpHit = true;
                         linkedEntity.ReplaceBalloonNudge(settings.NudgeDuration, settings.NudgeDistance);
                     }
                 }

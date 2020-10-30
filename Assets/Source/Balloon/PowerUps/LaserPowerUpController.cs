@@ -18,6 +18,9 @@ public class LaserPowerUpController : BalloonPowerUpController
         e.AddPosition(_rotatingBody.transform.position);      
         e.AddRotation(_rotatingBody.transform.rotation);
         e.isBalloonCollider = transform;
+
+        // mark power up as consumed
+        _gameEntity.isBalloonPowerUpActivated = true;
     }
 
     private void Update()

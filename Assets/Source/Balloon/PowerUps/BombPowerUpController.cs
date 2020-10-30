@@ -6,5 +6,8 @@
         e.AddAsset("BombRange");
         e.AddPosition(_gameEntity.position.Value);
         e.isBalloonCollider = transform;
+        
+        // mark power up as consumed
+        _gameEntity.isBalloonPowerUpActivated = true;
     }
 }

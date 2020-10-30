@@ -48,7 +48,10 @@
               <e p="BalloonHitListenerComponent.cs" t="Include" />
               <e p="BalloonLastColorPopCountListenerComponent.cs" t="Include" />
               <e p="BalloonNudgeListenerComponent.cs" t="Include" />
+              <e p="BalloonPowerUpActivatedListenerComponent.cs" t="Include" />
+              <e p="BalloonPowerUpHitListenerComponent.cs" t="Include" />
               <e p="BalloonPowerUpListenerComponent.cs" t="Include" />
+              <e p="BalloonScoreReadyListenerComponent.cs" t="Include" />
               <e p="CameraListenerComponent.cs" t="Include" />
               <e p="DestroyedListenerComponent.cs" t="Include" />
               <e p="DirectionListenerComponent.cs" t="Include" />
@@ -98,7 +101,10 @@
               <e p="IBalloonHitListener.cs" t="Include" />
               <e p="IBalloonLastColorPopCountListener.cs" t="Include" />
               <e p="IBalloonNudgeListener.cs" t="Include" />
+              <e p="IBalloonPowerUpActivatedListener.cs" t="Include" />
+              <e p="IBalloonPowerUpHitListener.cs" t="Include" />
               <e p="IBalloonPowerUpListener.cs" t="Include" />
+              <e p="IBalloonScoreReadyListener.cs" t="Include" />
               <e p="ICameraListener.cs" t="Include" />
               <e p="IDestroyedListener.cs" t="Include" />
               <e p="IDirectionListener.cs" t="Include" />
@@ -147,7 +153,10 @@
               <e p="BalloonHitEventSystem.cs" t="Include" />
               <e p="BalloonLastColorPopCountEventSystem.cs" t="Include" />
               <e p="BalloonNudgeEventSystem.cs" t="Include" />
+              <e p="BalloonPowerUpActivatedEventSystem.cs" t="Include" />
               <e p="BalloonPowerUpEventSystem.cs" t="Include" />
+              <e p="BalloonPowerUpHitEventSystem.cs" t="Include" />
+              <e p="BalloonScoreReadyEventSystem.cs" t="Include" />
               <e p="CameraEventSystem.cs" t="Include" />
               <e p="DestroyedEventSystem.cs" t="Include" />
               <e p="DirectionEventSystem.cs" t="Include" />
@@ -207,9 +216,15 @@
               <e p="GameBalloonLineInstanceEventComponent.cs" t="Include" />
               <e p="GameBalloonNudgeComponent.cs" t="Include" />
               <e p="GameBalloonNudgeListenerComponent.cs" t="Include" />
+              <e p="GameBalloonPowerUpActivatedComponent.cs" t="Include" />
+              <e p="GameBalloonPowerUpActivatedListenerComponent.cs" t="Include" />
               <e p="GameBalloonPowerUpComponent.cs" t="Include" />
+              <e p="GameBalloonPowerUpHitComponent.cs" t="Include" />
+              <e p="GameBalloonPowerUpHitListenerComponent.cs" t="Include" />
               <e p="GameBalloonPowerUpListenerComponent.cs" t="Include" />
               <e p="GameBalloonsBalanceEventComponent.cs" t="Include" />
+              <e p="GameBalloonScoreReadyComponent.cs" t="Include" />
+              <e p="GameBalloonScoreReadyListenerComponent.cs" t="Include" />
               <e p="GameBalloonSlotWeightComponent.cs" t="Include" />
               <e p="GameBalloonsPowerUpCheckEventComponent.cs" t="Include" />
               <e p="GameCameraComponent.cs" t="Include" />
@@ -334,6 +349,7 @@
             <e p="BalloonLastColorPopCountComponent.cs" t="Include" />
             <e p="BalloonLineSpawnerSystem.cs" t="Include" />
             <e p="BalloonNudgeComponent.cs" t="Include" />
+            <e p="BalloonScoreReadyComponent.cs" t="Include" />
             <e p="BalloonSlotWeightComponent.cs" t="Include" />
             <e p="BalloonsPowerUpCheckSystem.cs" t="Include" />
             <e p="BalloonSpriteLayerController.cs" t="Include" />
@@ -348,12 +364,16 @@
             <e p="NewBalloonLinesInstanceSystem.cs" t="Include" />
             <e p="PowerUps" t="Include">
               <e p="BalloonPowerUpComponent.cs" t="Include" />
+              <e p="BalloonPowerUpConsumedComponent.cs" t="Include" />
               <e p="BalloonPowerUpController.cs" t="Include" />
               <e p="BalloonPowerUpDisplayController.cs" t="Include" />
+              <e p="BalloonPowerUpHitComponent.cs" t="Include" />
               <e p="BombPowerUpController.cs" t="Include" />
               <e p="BombSphereCastHitController.cs" t="Include" />
+              <e p="ChainLightning.cs" t="Include" />
               <e p="LaserPowerUpController.cs" t="Include" />
               <e p="LaserRaycastHitController.cs" t="Include" />
+              <e p="LightningPowerUpController.cs" t="Include" />
               <e p="ShieldPowerUpController.cs" t="Include" />
             </e>
             <e p="StableBalloonComponent.cs" t="Include" />

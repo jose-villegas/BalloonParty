@@ -15,5 +15,8 @@ public class ShieldPowerUpController : BalloonPowerUpController
         gain.AddPosition(_gameEntity.position.Value);
         gain.AddParticleFXStartColor(_configuration.BalloonColor(_gameEntity.balloonColor.Value));
         gain.AddPlayParticleFX("PSVFX_ShieldGainPU");
+        
+        // mark power up as consumed
+        _gameEntity.isBalloonPowerUpActivated = true;
     }
 }

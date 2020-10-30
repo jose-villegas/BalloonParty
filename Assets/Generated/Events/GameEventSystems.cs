@@ -15,7 +15,10 @@ public sealed class GameEventSystems : Feature {
         Add(new AnyBalloonLineInstanceEventEventSystem(contexts)); // priority: 0
         Add(new BalloonNudgeEventSystem(contexts)); // priority: 0
         Add(new BalloonPowerUpEventSystem(contexts)); // priority: 0
+        Add(new BalloonPowerUpActivatedEventSystem(contexts)); // priority: 0
+        Add(new BalloonPowerUpHitEventSystem(contexts)); // priority: 0
         Add(new AnyBalloonsBalanceEventEventSystem(contexts)); // priority: 0
+        Add(new BalloonScoreReadyEventSystem(contexts)); // priority: 0
         Add(new AnyBalloonsPowerUpCheckEventEventSystem(contexts)); // priority: 0
         Add(new CameraEventSystem(contexts)); // priority: 0
         Add(new DestroyedEventSystem(contexts)); // priority: 0

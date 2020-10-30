@@ -29,8 +29,8 @@ public class BalloonPowerUpDisplayController : MonoBehaviour, IBalloonPowerUpLis
 
     private void OnViewLinked(GameEntity gameEntity)
     {
-        gameEntity.AddBalloonPowerUpListener(this);
         gameEntity.AddBalloonHitListener(this);
+        gameEntity.AddBalloonPowerUpListener(this);
     }
 
     public void OnBalloonPowerUp(GameEntity entity, BalloonPowerUp value)
@@ -52,7 +52,7 @@ public class BalloonPowerUpDisplayController : MonoBehaviour, IBalloonPowerUpLis
 
     public void OnBalloonHit(GameEntity entity)
     {
-        if (_activated) return;
+        if (_powerUpController == null || _activated) return;
         
         _activated = true;
         _powerUpController.Reference.Activate();
