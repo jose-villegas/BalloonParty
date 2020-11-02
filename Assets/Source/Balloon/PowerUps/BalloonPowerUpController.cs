@@ -1,4 +1,5 @@
-﻿using Entitas;
+﻿using System;
+using Entitas;
 using UnityEngine;
 
 public abstract class BalloonPowerUpController : MonoBehaviour
@@ -15,7 +16,7 @@ public abstract class BalloonPowerUpController : MonoBehaviour
     protected IGameConfiguration _configuration;
     protected GameEntity _gameEntity;
 
-    public void Setup(IBalloonColorConfiguration colorConfiguration, GameEntity gameEntity)
+    public virtual void Setup(IBalloonColorConfiguration colorConfiguration, GameEntity gameEntity)
     {
         _contexts = Contexts.sharedInstance;
         _configuration = _contexts.configuration.gameConfiguration.value;

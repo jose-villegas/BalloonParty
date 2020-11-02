@@ -658,7 +658,6 @@ MonoBehaviour:
   - {fileID: 3725863025413630875}
   - {fileID: 922201884749502957}
   - {fileID: 1498905595158372971}
-  - {fileID: 79708700176373506}
   - {fileID: 1027031010868380582}
   _spritesAlpha: 0.75
   _chainLightningPrefab: {fileID: 7631623338781391609, guid: 13e7e2e2dfc559e4589ff207046c99ee,
@@ -1532,7 +1531,7 @@ GameObject:
   - component: {fileID: 5005659120650447104}
   - component: {fileID: 1498905595158372971}
   m_Layer: 10
-  m_Name: Shine
+  m_Name: Dust
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

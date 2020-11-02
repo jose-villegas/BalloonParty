@@ -4,7 +4,7 @@ using UnityEngine.Serialization;
 [RequireComponent(typeof(LinkedViewController))]
 public class BalloonSpriteLayerController : MonoBehaviour, ISlotIndexListener
 {
-    [SerializeField] private int baseLayer;
+    [SerializeField] private int _baseLayer;
     [SerializeField] private Renderer[] _renderers;
 
     public int SortingOrder { get; private set; }
@@ -32,12 +32,12 @@ public class BalloonSpriteLayerController : MonoBehaviour, ISlotIndexListener
 
     public void OnSlotIndex(GameEntity entity, Vector2Int value)
     {
-        var baseLayer = (value.x + (value.y * _configuration.SlotsSize.x)) * this.baseLayer;
+        var startLayerIndex = (value.x + (value.y * _configuration.SlotsSize.x)) * _baseLayer;
 
         for (int i = 0; i < _renderers.Length; i++)
         {
             var spriteRenderer = _renderers[i];
-            spriteRenderer.sortingOrder = baseLayer + i + 1;
+            spriteRenderer.sortingOrder = startLayerIndex + i + 1;
             SortingOrder = spriteRenderer.sortingOrder;
         }
     }

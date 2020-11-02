@@ -44,7 +44,7 @@ MonoBehaviour:
   - _name: Purple
     _color: {r: 0.6117647, g: 0.15294118, b: 0.6901961, a: 1}
   _timeForBalloonsBalance: 1.75
-  _newProjectileBalloonLines: 2
+  _newProjectileBalloonLines: 3
   _newBalloonLinesTimeInterval: 0.35
   _nudgeDistance: 0.1
   _nudgeDuration: 0.4
@@ -62,13 +62,13 @@ MonoBehaviour:
       NudgeDuration: 0
     - Type: 1
       TurnCheckEvery: 1
-      Weight: 400
+      Weight: 600
       MaximumAllowed: 5
       NudgeDistance: 0
       NudgeDuration: 0
     - Type: 2
       TurnCheckEvery: 2
-      Weight: 500
+      Weight: 800
       MaximumAllowed: 3
       NudgeDistance: 0.3
       NudgeDuration: 0.4

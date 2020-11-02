@@ -60,12 +60,14 @@ public class NewBalloonLinesInstanceSystem : ReactiveSystem<GameEntity>
         
         yield return new WaitForEndOfFrame();
         
-        // check if balloons can be moved to re-balance
-        var b = _contexts.game.CreateEntity();
-        b.isBalloonsBalanceEvent = true;
-        
         // check if new balloons have a power up
         var p = _contexts.game.CreateEntity();
         p.isBalloonsPowerUpCheckEvent = true;
+        
+        yield return new WaitForEndOfFrame();
+        
+        // check if balloons can be moved to re-balance
+        var b = _contexts.game.CreateEntity();
+        b.isBalloonsBalanceEvent = true;
     }
 }

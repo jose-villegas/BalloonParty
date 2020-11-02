@@ -7,102 +7,146 @@ public class ChainLightning : MonoBehaviour
 {
     [SerializeField] private LineRenderer[] _lineRenderers;
     [SerializeField] private LineRenderer _glowLineRenderer;
-    
-    [Header("Segmentation")]
-    [SerializeField] private float _segmentsMultiplier;
+
+    [Header("Segmentation")] [SerializeField]
+    private float _segmentsMultiplier;
+
     [SerializeField] private float _randomness;
-    
-    [Header("Animation Times")]
-    [SerializeField] private float _appearAnimationTime;
-    [SerializeField] private float _holdAnimationTime;
-    [SerializeField] private float _dissapearAnimation;
+
+    [Header("Animation Times")] [SerializeField]
+    private float _lightningJumpTime;
+
+    private Dictionary<LineRenderer, Queue<Vector3[]>> _chainSegmentsQueue;
+    private Dictionary<LineRenderer, Stack<Vector3[]>> _chainSegmentsStack;
+    private List<GameEntity> _targets;
 
     public void Setup(List<GameEntity> targets)
     {
-        var positions = targets.Select(x => x.position.Value).ToArray();
-        var chainPositions = new List<Vector3>[_lineRenderers.Length];
+        _targets = targets;
+        _chainSegmentsQueue = new Dictionary<LineRenderer, Queue<Vector3[]>>();
+        _chainSegmentsStack = new Dictionary<LineRenderer, Stack<Vector3[]>>();
 
-        // initialize chain positions arrays
-        for (int i = 0; i < chainPositions.Length; i++)
+        for (int i = 0; i < targets.Count - 1; i++)
         {
-            chainPositions[i] = new List<Vector3>();
-        }
-
-        for (int i = 0; i < positions.Length - 1; i++)
-        {
-            var origin = positions[i];
-            var target = positions[i + 1];
+            var origin = targets[i].position.Value;
+            var target = targets[i + 1].position.Value;
             var segments = Mathf.FloorToInt(Vector3.Distance(origin, target) * _segmentsMultiplier);
-
+            
+            // it needs at least two entries, origin and target
+            segments = Mathf.Max(segments, 2);
+            
             for (int j = 0; j < _lineRenderers.Length; j++)
             {
                 var lastPosition = origin;
-                chainPositions[j].Add(origin);
+
+                if (!_chainSegmentsQueue.TryGetValue(_lineRenderers[j], out var lineSegmentsQueue))
+                {
+                    _chainSegmentsQueue[_lineRenderers[j]] = lineSegmentsQueue = new Queue<Vector3[]>();
+                }
+                
+                if (!_chainSegmentsStack.TryGetValue(_lineRenderers[j], out var lineSegmentsStack))
+                {
+                    _chainSegmentsStack[_lineRenderers[j]] = lineSegmentsStack = new Stack<Vector3[]>();
+                }
+
+                // create space for new segments list
+                var randomized = new Vector3[segments];
+                randomized[0] = origin;
 
                 for (int k = 1; k < segments - 1; k++)
                 {
                     // add randomness to simulate electricity
                     var token = Vector3.Lerp(origin, target, k / (float) segments);
                     lastPosition = new Vector3(token.x + Random.Range(-_randomness, _randomness),
-                        token.y + Random.Range(-_randomness, _randomness), token.z);
+                        token.y + Random.Range(-_randomness, _randomness), 0);
                     // register position
-                    chainPositions[j].Add(lastPosition);
+                    randomized[k] = lastPosition;
                 }
-                
-                chainPositions[j].Add(target);
+
+                randomized[segments - 1] = target;
+                lineSegmentsQueue.Enqueue(randomized);
+                lineSegmentsStack.Push(randomized);
             }
         }
-
-        for (int i = 0; i < _lineRenderers.Length; i++)
-        {
-            _lineRenderers[i].positionCount = chainPositions[i].Count;
-            _lineRenderers[i].SetPositions(chainPositions[i].ToArray());
-        }
-
-        StartCoroutine(ChainLightningAnimation(chainPositions, targets));
     }
 
-    private IEnumerator ChainLightningAnimation(List<Vector3>[] chainPositions, List<GameEntity> gameEntities)
+    private IEnumerator ChainLightningAnimation()
     {
-        var chainCount = chainPositions[0].Count;
-
-        for (int i = 1; i < chainCount - 1; i++)
+        var positions = new List<Vector3>[_lineRenderers.Length];
+        var lineRenderers = _chainSegmentsQueue.Keys.ToArray();
+        
+        for (var i = 0; i < _targets.Count; i++)
         {
-            for (int j = 0; j < _lineRenderers.Length; j++)
+            var gameEntity = _targets[i];
+
+            for (int j = 0; j < lineRenderers.Length; j++)
             {
-                _glowLineRenderer.positionCount = i + 1;
-                _lineRenderers[j].positionCount = i + 1;
-                _lineRenderers[j].SetPositions(chainPositions[j].ToArray());
-                _glowLineRenderer.SetPositions(chainPositions[j].ToArray());
+                var lineRenderer = lineRenderers[j];
+                var queue = _chainSegmentsQueue[lineRenderer];
+                
+                if (queue.Count > 0)
+                {
+                    if (positions[j] == null)
+                    {
+                        positions[j] = new List<Vector3>();
+                    }
+                    
+                    positions[j].AddRange(queue.Dequeue());
+                    lineRenderer.positionCount = positions[j].Count;
+                    lineRenderer.SetPositions(positions[j].ToArray());
+                }
             }
-            
-            yield return new WaitForSeconds(_appearAnimationTime / chainCount);
-        }
 
-        foreach (var t in gameEntities)
-        {
-            if (!t.isEnabled) continue;
-            
-            t.isBalloonPowerUpHit = t.isBalloonHit = true;
-            yield return new WaitForSeconds(_holdAnimationTime / gameEntities.Count);
+            if (positions != null && positions.Length > 0)
+            {
+                _glowLineRenderer.positionCount = positions[0].Count;
+                _glowLineRenderer.SetPositions(positions[0].ToArray());
+            }
+
+            if (gameEntity.isEnabled)
+            {
+                gameEntity.isBalloonPowerUpHit = gameEntity.isBalloonHit = true;
+            }
+
+            yield return new WaitForSeconds(_lightningJumpTime);
         }
         
-        for (int i = chainCount -2; i >= 0; i--)
+        for (var i = 0; i < _targets.Count; i++)
         {
-            for (int j = 0; j < _lineRenderers.Length; j++)
+            for (int j = 0; j < lineRenderers.Length; j++)
             {
-                if (i == chainCount -2)
-                {
-                    chainPositions[j].Reverse();
-                }
+                var lineRenderer = lineRenderers[j];
+                var stack = _chainSegmentsStack[lineRenderer];
                 
-                _glowLineRenderer.positionCount = i + 1;
-                _lineRenderers[j].positionCount = i + 1;
-                _lineRenderers[j].SetPositions(chainPositions[j].ToArray());
-                _glowLineRenderer.SetPositions(chainPositions[j].ToArray());
+                if (stack.Count > 0)
+                {
+                    if (positions[j] == null)
+                    {
+                        positions[j] = new List<Vector3>();
+                    }
+
+                    var pop = stack.Pop();
+                    
+                    positions[j].RemoveRange(positions[j].Count - pop.Length, pop.Length);
+                    lineRenderer.positionCount = positions[j].Count;
+                    lineRenderer.SetPositions(positions[j].ToArray());
+                }
             }
-            
-            yield return new WaitForSeconds(_dissapearAnimation / chainCount);
+
+            if (positions != null && positions.Length > 0)
+            {
+                _glowLineRenderer.positionCount = positions[0].Count;
+                _glowLineRenderer.SetPositions(positions[0].ToArray());
+            }
+
+            yield return new WaitForSeconds(_lightningJumpTime);
         }
+
+        Destroy(gameObject);
+    }
+
+    public void Display()
+    {
+        StartCoroutine(ChainLightningAnimation());
     }
 }

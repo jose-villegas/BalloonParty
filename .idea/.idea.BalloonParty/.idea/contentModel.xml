@@ -34,6 +34,7 @@
               <e p="AnyBalloonLineInstanceEventListenerComponent.cs" t="Include" />
               <e p="AnyBalloonsBalanceEventListenerComponent.cs" t="Include" />
               <e p="AnyBalloonsPowerUpCheckEventListenerComponent.cs" t="Include" />
+              <e p="AnyFreeProjectileListenerComponent.cs" t="Include" />
               <e p="AnyGameEventListenerComponent.cs" t="Include" />
               <e p="AnyGameLevelListenerComponent.cs" t="Include" />
               <e p="AnyGameLevelProgressListenerComponent.cs" t="Include" />
@@ -87,6 +88,7 @@
               <e p="IAnyBalloonLineInstanceEventListener.cs" t="Include" />
               <e p="IAnyBalloonsBalanceEventListener.cs" t="Include" />
               <e p="IAnyBalloonsPowerUpCheckEventListener.cs" t="Include" />
+              <e p="IAnyFreeProjectileListener.cs" t="Include" />
               <e p="IAnyGameEventListener.cs" t="Include" />
               <e p="IAnyGameLevelListener.cs" t="Include" />
               <e p="IAnyGameLevelProgressListener.cs" t="Include" />
@@ -139,6 +141,7 @@
               <e p="AnyBalloonLineInstanceEventEventSystem.cs" t="Include" />
               <e p="AnyBalloonsBalanceEventEventSystem.cs" t="Include" />
               <e p="AnyBalloonsPowerUpCheckEventEventSystem.cs" t="Include" />
+              <e p="AnyFreeProjectileEventSystem.cs" t="Include" />
               <e p="AnyGameEventEventSystem.cs" t="Include" />
               <e p="AnyGameLevelEventSystem.cs" t="Include" />
               <e p="AnyGameLevelProgressEventSystem.cs" t="Include" />
@@ -194,6 +197,7 @@
               <e p="GameAnyBalloonLineInstanceEventListenerComponent.cs" t="Include" />
               <e p="GameAnyBalloonsBalanceEventListenerComponent.cs" t="Include" />
               <e p="GameAnyBalloonsPowerUpCheckEventListenerComponent.cs" t="Include" />
+              <e p="GameAnyFreeProjectileListenerComponent.cs" t="Include" />
               <e p="GameAnyGameEventListenerComponent.cs" t="Include" />
               <e p="GameAnyGameLevelListenerComponent.cs" t="Include" />
               <e p="GameAnyGameLevelProgressListenerComponent.cs" t="Include" />

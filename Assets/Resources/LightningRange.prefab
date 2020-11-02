@@ -120,7 +120,7 @@ LineRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 0
+    numCornerVertices: 5
     numCapVertices: 0
     alignment: 0
     textureMode: 0
@@ -203,7 +203,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 2.25
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -309,10 +309,8 @@ MonoBehaviour:
   - {fileID: 1780500698417090463}
   _glowLineRenderer: {fileID: 6873477818569197240}
   _segmentsMultiplier: 2.5
-  _randomness: 0.2
-  _appearAnimationTime: 0.15
-  _holdAnimationTime: 0.1
-  _dissapearAnimation: 0.15
+  _randomness: 0.35
+  _lightningJumpTime: 0.035
 --- !u!1 &3178895422590311903
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,7 +431,7 @@ LineRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 0
+    numCornerVertices: 5
     numCapVertices: 0
     alignment: 0
     textureMode: 0
@@ -561,7 +559,7 @@ LineRenderer:
       m_Mode: 0
       m_NumColorKeys: 2
       m_NumAlphaKeys: 2
-    numCornerVertices: 0
+    numCornerVertices: 5
     numCapVertices: 0
     alignment: 0
     textureMode: 0

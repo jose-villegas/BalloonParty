@@ -745,7 +745,6 @@ MonoBehaviour:
   - {fileID: 3834867992951114489}
   - {fileID: 6255907559423230984}
   - {fileID: 8112941791452189649}
-  - {fileID: 79708700176373506}
   - {fileID: 1027031010868380582}
   _spritesAlpha: 0.75
   _rotatingBody: {fileID: 5890326904912511798}
