@@ -7,10 +7,10 @@ public class BalloonSpriteLayerController : MonoBehaviour, ISlotIndexListener
     [SerializeField] private int _baseLayer;
     [SerializeField] private Renderer[] _renderers;
 
-    public int SortingOrder { get; private set; }
-    
     private LinkedViewController _linkedView;
     private IGameConfiguration _configuration;
+
+    public Renderer[] Renderers => _renderers;
 
     private void Awake()
     {
@@ -38,7 +38,6 @@ public class BalloonSpriteLayerController : MonoBehaviour, ISlotIndexListener
         {
             var spriteRenderer = _renderers[i];
             spriteRenderer.sortingOrder = startLayerIndex + i + 1;
-            SortingOrder = spriteRenderer.sortingOrder;
         }
     }
 }

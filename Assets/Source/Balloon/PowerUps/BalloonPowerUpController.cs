@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Linq;
 using Entitas;
 using UnityEngine;
 
-public abstract class BalloonPowerUpController : MonoBehaviour
+public abstract class BalloonPowerUpController : MonoBehaviour, ISlotIndexListener
 {
     [SerializeField] private SpriteRenderer[] _spritesToSetColor;
 
@@ -22,20 +23,26 @@ public abstract class BalloonPowerUpController : MonoBehaviour
         _configuration = _contexts.configuration.gameConfiguration.value;
         _freeProjectiles = _contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.FreeProjectile));
         _gameEntity = gameEntity;
+        _gameEntity.AddSlotIndexListener(this);
 
         foreach (var spriteRenderer in _spritesToSetColor)
         {
             var color = colorConfiguration.Color;
             spriteRenderer.color = new Color(color.r, color.g, color.b, _spritesAlpha);
         }
+        
+        OnSlotIndex(gameEntity, Vector2Int.zero);
+    }
 
-        var baseSort = _layerController.SortingOrder + 1;
+    public abstract void Activate();
+    
+    public void OnSlotIndex(GameEntity entity, Vector2Int value)
+    {
+        var baseSort = _layerController.Renderers.Last().sortingOrder + 1;
         
         foreach (var render in _renderers)
         {
             render.sortingOrder = baseSort++;
         }
     }
-
-    public abstract void Activate();
 }

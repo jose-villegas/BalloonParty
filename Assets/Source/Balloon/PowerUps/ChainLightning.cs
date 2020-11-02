@@ -20,7 +20,7 @@ public class ChainLightning : MonoBehaviour
     private Dictionary<LineRenderer, Stack<Vector3[]>> _chainSegmentsStack;
     private List<GameEntity> _targets;
 
-    public void Setup(List<GameEntity> targets)
+    public void Display(List<GameEntity> targets)
     {
         _targets = targets;
         _chainSegmentsQueue = new Dictionary<LineRenderer, Queue<Vector3[]>>();
@@ -68,6 +68,8 @@ public class ChainLightning : MonoBehaviour
                 lineSegmentsStack.Push(randomized);
             }
         }
+        
+        StartCoroutine(ChainLightningAnimation());
     }
 
     private IEnumerator ChainLightningAnimation()
@@ -143,10 +145,5 @@ public class ChainLightning : MonoBehaviour
         }
 
         Destroy(gameObject);
-    }
-
-    public void Display()
-    {
-        StartCoroutine(ChainLightningAnimation());
     }
 }

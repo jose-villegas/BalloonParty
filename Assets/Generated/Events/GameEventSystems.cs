@@ -24,7 +24,6 @@ public sealed class GameEventSystems : Feature {
         Add(new DestroyedEventSystem(contexts)); // priority: 0
         Add(new DirectionEventSystem(contexts)); // priority: 0
         Add(new ForwardEventSystem(contexts)); // priority: 0
-        Add(new AnyFreeProjectileEventSystem(contexts)); // priority: 0
         Add(new AnyGameEventEventSystem(contexts)); // priority: 0
         Add(new AnyGameLevelEventSystem(contexts)); // priority: 0
         Add(new AnyGameLevelProgressEventSystem(contexts)); // priority: 0

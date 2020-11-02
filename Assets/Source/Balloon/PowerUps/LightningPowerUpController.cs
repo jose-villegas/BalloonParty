@@ -1,24 +1,12 @@
-﻿using System;
-using System.Linq;
-using Entitas;
+﻿using System.Linq;
 using UnityEngine;
 
-public class LightningPowerUpController : BalloonPowerUpController, IAnyBalloonsBalanceEventListener, IAnyFreeProjectileListener
+public class LightningPowerUpController : BalloonPowerUpController
 {
     [SerializeField] private ChainLightning _chainLightningPrefab;
     private ChainLightning _chainLightning;
-    private GameEntity _listener;
 
-    public override void Setup(IBalloonColorConfiguration colorConfiguration, GameEntity gameEntity)
-    {
-        base.Setup(colorConfiguration, gameEntity);
-        
-        _listener = _contexts.game.CreateEntity();
-        _listener.AddAnyBalloonsBalanceEventListener(this);
-        _listener.AddAnyFreeProjectileListener(this);
-    }
-
-    private void SetupLightning()
+    public override void Activate()
     {
         // setup chain lighting drawer
         var color = _gameEntity.balloonColor.Value;
@@ -31,16 +19,9 @@ public class LightningPowerUpController : BalloonPowerUpController, IAnyBalloons
         if (_chainLightning == null)
         {
             _chainLightning = Instantiate(_chainLightningPrefab);
-            _chainLightning.gameObject.SetActive(true);
         }
 
-        _chainLightning.Setup(targets);
-    }
-
-    public override void Activate()
-    {
-        _chainLightning.Display();
-        
+        _chainLightning.Display(targets);
         // mark power up as consumed
         _gameEntity.isBalloonPowerUpActivated = true;
     }
@@ -51,20 +32,5 @@ public class LightningPowerUpController : BalloonPowerUpController, IAnyBalloons
         var d1 = Vector3.Distance(x.position.Value, origin);
         var d2 = Vector3.Distance(y.position.Value, origin);
         return d1.CompareTo(d2);
-    }
-
-    public void OnAnyBalloonsBalanceEvent(GameEntity entity)
-    {
-        SetupLightning();
-    }
-
-    public void OnAnyFreeProjectile(GameEntity entity)
-    {
-        SetupLightning();
-    }
-
-    private void OnDestroy()
-    {
-        _listener.Destroy();
     }
 }
