@@ -204,7 +204,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1946cc5e4c4ede04f937fbc9c3c9c6e9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseLayer: 50
+  _baseLayer: 50
   _renderers:
   - {fileID: 4475536555041591237}
   - {fileID: 264100499786580991}
