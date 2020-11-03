@@ -38,7 +38,7 @@ public abstract class BalloonPowerUpController : MonoBehaviour, ISlotIndexListen
     
     public void OnSlotIndex(GameEntity entity, Vector2Int value)
     {
-        var baseSort = _layerController.Renderers.Last().sortingOrder + 1;
+        var baseSort = _layerController.Renderers[_layerController.Renderers.Length - 1].sortingOrder + 1;
         
         foreach (var render in _renderers)
         {

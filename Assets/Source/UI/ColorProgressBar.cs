@@ -87,28 +87,26 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
             _trails = new List<ScorePointTrail>();
         }
 
-        var usable = _trails.FindIndex(x => x.IsUsable);
+        var reusableTrail = _trails.FirstOrDefault(x => x.IsUsable);
         ScorePointTrail trail = null;
 
-        if (_trails.Count == 0 || usable < 0)
+        if (_trails.Count == 0 || reusableTrail == null)
         {
             trail = Instantiate(_scoreTrail, entity.position.Value, Quaternion.identity);
             _trails.Add(trail);
         }
 
-        if (usable >= 0 && usable < _trails.Count)
+        if (reusableTrail != null)
         {
-            trail = _trails[usable];
+            trail = reusableTrail;
             trail.transform.position = entity.position.Value;
             trail.transform.localScale = Vector3.one;
         }
 
         if (trail != null)
         {
-            trail.Setup(transform.position, _colorConfiguration.Color, _configuration, () =>
-            {
-                _animator.SetTrigger("TrailHit");
-            });
+            trail.Setup(transform.position, _colorConfiguration.Color, _configuration,
+                () => { _animator.SetTrigger("TrailHit"); });
         }
     }
 
