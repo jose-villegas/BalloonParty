@@ -19,7 +19,13 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="" />
+    <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/contentModel.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/LevelUpRays.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/LevelUpRays.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/LevelUp.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/LevelUp.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,23 +36,12 @@
   </component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/351E49E2-A5BF-4FD6-BEAB-B458CE2255F3/f2/a50ce978/Enumerable.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Source/Balloon/NewBalloonLinesInstanceSystem.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Source/Balloon/PowerUps/ChainLightning.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///Dummy.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Source/Configuration/GameConfiguration.asset" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Resources/PULaser.prefab" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Source/Configuration/GameConfiguration.asset" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/BFFF7C0B-1952-412C-B811-8DDDD204A124/27/a51b9d40/ReactiveSystem`1.cs" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BombSphereCastHitController.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Source/Balloon/NewBalloonLinesInstanceSystem.cs" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock://C:/Users/ville/Documents/Projects/BalloonParty/Assets/Source/Balloon/PowerUps/ChainLightning.cs" root0="SKIP_HIGHLIGHTING" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Physics/TriggerExit2DComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Physics/TriggerReporterController.cs" />
@@ -97,6 +92,7 @@
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonSpriteLayerController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/UI/ColorProgressBar.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/UI/LevelUpPopUp.cs" />
       </list>
     </option>
   </component>
@@ -127,10 +123,10 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" ignored-value-for-modified-check="21732">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="21732" />
+      <option name="pid" />
       <option name="selectedOptions">
         <set />
       </option>
@@ -150,6 +146,7 @@
       <workItem from="1603061436445" duration="31135000" />
       <workItem from="1603296789402" duration="27932000" />
       <workItem from="1603924230125" duration="29893000" />
+      <workItem from="1605634620732" duration="796000" />
     </task>
     <task id="LOCAL-00001" summary="Update">
       <created>1604380601698</created>

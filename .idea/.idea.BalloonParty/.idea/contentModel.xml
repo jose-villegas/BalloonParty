@@ -329,6 +329,16 @@
               <e p="readme.txt" t="Include" />
             </e>
           </e>
+          <e p="UIRays" t="Include">
+            <e p="Assets" t="Include">
+              <e p="Shaders" t="Include">
+                <e p="Rays.shader" t="Include" />
+              </e>
+            </e>
+            <e p="ProjectSettings" t="Include">
+              <e p="ProjectVersion.txt" t="Include" />
+            </e>
+          </e>
         </e>
         <e p="Shaders" t="Include">
           <e p="SpriteShine.shader" t="Include" />
@@ -481,6 +491,7 @@
             <e p="GameStartButton.cs" t="Include" />
             <e p="IReusable.cs" t="Include" />
             <e p="LevelLabel.cs" t="Include" />
+            <e p="LevelUpPopUp.cs" t="Include" />
             <e p="ScoreCounterLabel.cs" t="Include" />
             <e p="ScoreNotice.cs" t="Include" />
             <e p="ScorePointTrail.cs" t="Include" />
