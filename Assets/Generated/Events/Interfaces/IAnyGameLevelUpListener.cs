@@ -7,5 +7,5 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public interface IAnyGameLevelUpListener {
-    void OnAnyGameLevelUp(GameEntity entity);
+    void OnAnyGameLevelUp(GameEntity entity, int value);
 }

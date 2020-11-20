@@ -25,17 +25,17 @@ public sealed class AnyGameLevelUpEventSystem : Entitas.ReactiveSystem<GameEntit
     }
 
     protected override bool Filter(GameEntity entity) {
-        return entity.isGameLevelUp;
+        return entity.hasGameLevelUp;
     }
 
     protected override void Execute(System.Collections.Generic.List<GameEntity> entities) {
         foreach (var e in entities) {
-            
+            var component = e.gameLevelUp;
             foreach (var listenerEntity in _listeners.GetEntities(_entityBuffer)) {
                 _listenerBuffer.Clear();
                 _listenerBuffer.AddRange(listenerEntity.anyGameLevelUpListener.value);
                 foreach (var listener in _listenerBuffer) {
-                    listener.OnAnyGameLevelUp(e);
+                    listener.OnAnyGameLevelUp(e, component.Value);
                 }
             }
         }

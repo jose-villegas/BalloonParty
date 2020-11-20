@@ -8,25 +8,25 @@
 //------------------------------------------------------------------------------
 public partial class GameEntity {
 
-    static readonly GameLevelUpComponent gameLevelUpComponent = new GameLevelUpComponent();
+    public GameLevelUpComponent gameLevelUp { get { return (GameLevelUpComponent)GetComponent(GameComponentsLookup.GameLevelUp); } }
+    public bool hasGameLevelUp { get { return HasComponent(GameComponentsLookup.GameLevelUp); } }
 
-    public bool isGameLevelUp {
-        get { return HasComponent(GameComponentsLookup.GameLevelUp); }
-        set {
-            if (value != isGameLevelUp) {
-                var index = GameComponentsLookup.GameLevelUp;
-                if (value) {
-                    var componentPool = GetComponentPool(index);
-                    var component = componentPool.Count > 0
-                            ? componentPool.Pop()
-                            : gameLevelUpComponent;
+    public void AddGameLevelUp(int newValue) {
+        var index = GameComponentsLookup.GameLevelUp;
+        var component = (GameLevelUpComponent)CreateComponent(index, typeof(GameLevelUpComponent));
+        component.Value = newValue;
+        AddComponent(index, component);
+    }
 
-                    AddComponent(index, component);
-                } else {
-                    RemoveComponent(index);
-                }
-            }
-        }
+    public void ReplaceGameLevelUp(int newValue) {
+        var index = GameComponentsLookup.GameLevelUp;
+        var component = (GameLevelUpComponent)CreateComponent(index, typeof(GameLevelUpComponent));
+        component.Value = newValue;
+        ReplaceComponent(index, component);
+    }
+
+    public void RemoveGameLevelUp() {
+        RemoveComponent(GameComponentsLookup.GameLevelUp);
     }
 }
 

@@ -242,7 +242,7 @@ public static class GameContextExtensions
 
             var e = context.CreateEntity();
             e.isGameEvent = true;
-            e.isGameLevelUp = true;
+            e.AddGameLevelUp(level + 1);
         }
     }
 }
