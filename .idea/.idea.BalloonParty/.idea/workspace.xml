@@ -21,12 +21,8 @@
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Generated/Events/Interfaces/IAnyGameLevelUpListener.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Events/Interfaces/IAnyGameLevelUpListener.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Generated/Events/Systems/AnyGameLevelUpEventSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Events/Systems/AnyGameLevelUpEventSystem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Generated/Game/Components/GameGameLevelUpComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Game/Components/GameGameLevelUpComponent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/LevelUpRays.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/LevelUpRays.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/LevelUp.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/LevelUp.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/Events/GameLevelUpComponent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/Events/GameLevelUpComponent.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameContextExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameContextExtensions.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/UI/LevelUpPopUp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/LevelUpPopUp.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -94,8 +90,8 @@
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Game/Events/GameLevelUpComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Game/GameContextExtensions.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/UI/LevelUpPopUp.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/UI/ColorProgressBar.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/UI/LevelUpPopUp.cs" />
       </list>
     </option>
   </component>
@@ -149,7 +145,8 @@
       <workItem from="1603061436445" duration="31135000" />
       <workItem from="1603296789402" duration="27932000" />
       <workItem from="1603924230125" duration="29893000" />
-      <workItem from="1605634620732" duration="1767000" />
+      <workItem from="1605634620732" duration="2369000" />
+      <workItem from="1606059383044" duration="2177000" />
     </task>
     <task id="LOCAL-00001" summary="Update">
       <created>1604380601698</created>
