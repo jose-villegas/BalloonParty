@@ -243,6 +243,9 @@ public static class GameContextExtensions
             var e = context.CreateEntity();
             e.isGameEvent = true;
             e.AddGameLevelUp(level + 1);
+            
+            // pause game
+            context.isGamePaused = true;
         }
     }
 }

@@ -20,9 +20,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Game/Events/GamePausedComponent.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Game/Events/GamePausedComponent.cs.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/contentModel.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/contentModel.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/LevelUpRays.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/LevelUpRays.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animation/Progress/LevelUp.controller" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animation/Progress/LevelUp.controller" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Generated/Events/GameEventSystems.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Events/GameEventSystems.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Generated/Game/GameComponentsLookup.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Generated/Game/GameComponentsLookup.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Resources/LevelUp.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/LevelUp.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameContextExtensions.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameContextExtensions.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Prediction/ProjectilePredictionTraceSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Prediction/ProjectilePredictionTraceSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerDirectionSystem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerDirectionSystem.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/UI/LevelUpPopUp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/LevelUpPopUp.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -41,19 +50,14 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/Assets/Source/Physics/TriggerReporterController.cs" />
-        <option value="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/ShieldIdle.anim" />
-        <option value="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/BombIdle.anim" />
         <option value="$PROJECT_DIR$/Assets/Source/Prediction/PredictionTraceComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Prediction/ProjectilePredictionSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/FreeProjectileMovementSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileTransformSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileReloadSystem.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerDirectionSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Prediction/TraceDrawerController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Configuration/IGameConfiguration.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Prediction/ProjectilePredictionTraceSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonNudgeComponent.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpSettings.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Configuration/PowerUpConfiguration.cs" />
@@ -88,9 +92,14 @@
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/LightningPowerUpController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/BalloonSpriteLayerController.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/Balloon/PowerUps/BalloonPowerUpController.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Game/Events/GameLevelUpComponent.cs" />
-        <option value="$PROJECT_DIR$/Assets/Source/Game/GameContextExtensions.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/UI/ColorProgressBar.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Game/Events/GameLevelUpComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Game/Events/GamePauseComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Game/Events/GamePausedComponent.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Game/GameContextExtensions.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerDirectionSystem.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Thrower/ThrowLoadedProjectileSystem.cs" />
+        <option value="$PROJECT_DIR$/Assets/Source/Prediction/ProjectilePredictionTraceSystem.cs" />
         <option value="$PROJECT_DIR$/Assets/Source/UI/LevelUpPopUp.cs" />
       </list>
     </option>
@@ -146,7 +155,7 @@
       <workItem from="1603296789402" duration="27932000" />
       <workItem from="1603924230125" duration="29893000" />
       <workItem from="1605634620732" duration="2369000" />
-      <workItem from="1606059383044" duration="2177000" />
+      <workItem from="1606059383044" duration="3914000" />
     </task>
     <task id="LOCAL-00001" summary="Update">
       <created>1604380601698</created>
@@ -265,18 +274,18 @@
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="92" y="92" width="1736" height="856" key="VCS.FileHistoryDialog/0.0.1920.1040@0.0.1920.1040" timestamp="1604341428704" />
-    <state x="621" y="76" width="678" height="888" key="find.popup" timestamp="1604341688292">
+    <state x="621" y="76" width="678" height="888" key="find.popup" timestamp="1606062032080">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="621" y="76" width="678" height="888" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1604341688292" />
+    <state x="621" y="76" width="678" height="888" key="find.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606062032080" />
     <state x="616" y="240" key="run.anything.popup" timestamp="1603143666009">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="616" y="240" key="run.anything.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603143666009" />
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1603297455146">
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1606063469937">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1603297455146" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040@0.0.1920.1040" timestamp="1606063469937" />
   </component>
   <component name="XDebuggerManager">
     <watches-manager>

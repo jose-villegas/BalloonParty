@@ -38,6 +38,7 @@
               <e p="AnyGameLevelListenerComponent.cs" t="Include" />
               <e p="AnyGameLevelProgressListenerComponent.cs" t="Include" />
               <e p="AnyGameLevelUpListenerComponent.cs" t="Include" />
+              <e p="AnyGamePausedListenerComponent.cs" t="Include" />
               <e p="AnyGamePersistentScoreListenerComponent.cs" t="Include" />
               <e p="AnyGameStartedListenerComponent.cs" t="Include" />
               <e p="AnyGameTurnCounterListenerComponent.cs" t="Include" />
@@ -91,6 +92,7 @@
               <e p="IAnyGameLevelListener.cs" t="Include" />
               <e p="IAnyGameLevelProgressListener.cs" t="Include" />
               <e p="IAnyGameLevelUpListener.cs" t="Include" />
+              <e p="IAnyGamePausedListener.cs" t="Include" />
               <e p="IAnyGamePersistentScoreListener.cs" t="Include" />
               <e p="IAnyGameStartedListener.cs" t="Include" />
               <e p="IAnyGameTurnCounterListener.cs" t="Include" />
@@ -143,6 +145,7 @@
               <e p="AnyGameLevelEventSystem.cs" t="Include" />
               <e p="AnyGameLevelProgressEventSystem.cs" t="Include" />
               <e p="AnyGameLevelUpEventSystem.cs" t="Include" />
+              <e p="AnyGamePausedEventSystem.cs" t="Include" />
               <e p="AnyGamePersistentScoreEventSystem.cs" t="Include" />
               <e p="AnyGameStartedEventSystem.cs" t="Include" />
               <e p="AnyGameTurnCounterEventSystem.cs" t="Include" />
@@ -198,6 +201,7 @@
               <e p="GameAnyGameLevelListenerComponent.cs" t="Include" />
               <e p="GameAnyGameLevelProgressListenerComponent.cs" t="Include" />
               <e p="GameAnyGameLevelUpListenerComponent.cs" t="Include" />
+              <e p="GameAnyGamePausedListenerComponent.cs" t="Include" />
               <e p="GameAnyGamePersistentScoreListenerComponent.cs" t="Include" />
               <e p="GameAnyGameStartedListenerComponent.cs" t="Include" />
               <e p="GameAnyGameTurnCounterListenerComponent.cs" t="Include" />
@@ -241,6 +245,7 @@
               <e p="GameGameLevelComponent.cs" t="Include" />
               <e p="GameGameLevelProgressComponent.cs" t="Include" />
               <e p="GameGameLevelUpComponent.cs" t="Include" />
+              <e p="GameGamePausedComponent.cs" t="Include" />
               <e p="GameGamePersistentScoreComponent.cs" t="Include" />
               <e p="GameGameStartedComponent.cs" t="Include" />
               <e p="GameGameTurnCounterComponent.cs" t="Include" />
@@ -415,6 +420,7 @@
             <e p="Events" t="Include">
               <e p="GameEventComponent.cs" t="Include" />
               <e p="GameLevelUpComponent.cs" t="Include" />
+              <e p="GamePausedComponent.cs" t="Include" />
               <e p="GameStartedComponent.cs" t="Include" />
             </e>
             <e p="GameContextExtensions.cs" t="Include" />

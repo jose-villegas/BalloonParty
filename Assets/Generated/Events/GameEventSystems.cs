@@ -28,6 +28,7 @@ public sealed class GameEventSystems : Feature {
         Add(new AnyGameLevelEventSystem(contexts)); // priority: 0
         Add(new AnyGameLevelProgressEventSystem(contexts)); // priority: 0
         Add(new AnyGameLevelUpEventSystem(contexts)); // priority: 0
+        Add(new AnyGamePausedEventSystem(contexts)); // priority: 0
         Add(new AnyGamePersistentScoreEventSystem(contexts)); // priority: 0
         Add(new AnyGameStartedEventSystem(contexts)); // priority: 0
         Add(new AnyGameTurnCounterEventSystem(contexts)); // priority: 0

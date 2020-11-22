@@ -23,6 +23,8 @@ public class ThrowLoadedProjectileSystem : IExecuteSystem
     {
         // check if all current balloons are stable
         var unstable = _balloons.AsEnumerable().Any(x => !x.isStableBalloon);
+        
+        if (_contexts.game.isGamePaused) return;
 
         if (Input.GetMouseButtonUp(0) && !unstable)
         {

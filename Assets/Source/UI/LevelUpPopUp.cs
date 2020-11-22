@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Linq;
 using Entitas;
 using UnityEngine;
 using UnityEngine.UI;
@@ -11,6 +12,10 @@ public class LevelUpPopUp : EntityLinkerController, IAnyGameLevelUpListener
     [SerializeField] private ParticleSystem _levelGlowFillParticleSystem;
     [Header("Animation")] [SerializeField] private float _fillAnimationDelay;
     [SerializeField] private float _playParticlesDelay;
+    [SerializeField] private float _continueUnpauseDelay;
+
+    
+    private IGroup<GameEntity> _balloons;
 
     protected override void DefineEntity(IEntity e)
     {
@@ -19,14 +24,28 @@ public class LevelUpPopUp : EntityLinkerController, IAnyGameLevelUpListener
         var gameEntity = e as GameEntity;
         
         gameEntity.AddAnyGameLevelUpListener(this);
+        
+        // save balloons reference
+        _balloons = _contexts.game.GetGroup(GameMatcher.AllOf(GameMatcher.Balloon));
     }
 
     public void OnAnyGameLevelUp(GameEntity entity, int value)
     {
+        StartCoroutine(WaitForStability(value));
+    }
+
+    private IEnumerator WaitForStability(int value)
+    {
+        // check if all current balloons are stable
+        while (_balloons.AsEnumerable().Any(x => !x.isStableBalloon))
+        {
+            yield return new WaitForEndOfFrame();
+        }
+        
         _levelLabel.text = (value - 1).ToString("N0");
         _animator.SetTrigger("Appear");
 
-        StartCoroutine(LevelGlowFill(value));
+        yield return LevelGlowFill(value);
     }
 
     private IEnumerator LevelGlowFill(int value)
@@ -49,5 +68,17 @@ public class LevelUpPopUp : EntityLinkerController, IAnyGameLevelUpListener
 
         _levelGlowFill.fillAmount = 1f;
         _levelLabel.text = value.ToString("N0");
+    }
+
+    public void OnContinue()
+    {
+        _animator.SetTrigger("Hide");
+        StartCoroutine(WaitToUnpause());
+    }
+    
+    private IEnumerator WaitToUnpause()
+    {
+        yield return new WaitForSeconds(_continueUnpauseDelay);
+        _contexts.game.isGamePaused = false;
     }
 }

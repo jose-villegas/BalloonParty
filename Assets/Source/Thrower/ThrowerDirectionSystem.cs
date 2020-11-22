@@ -22,6 +22,8 @@ public class ThrowerDirectionSystem : IExecuteSystem
 
         if (_cameras.count <= 0) return;
 
+        if (_contexts.game.isGamePaused) return;
+
         foreach (var entity in _cameras)
         {
             var camera = entity.camera.Value;

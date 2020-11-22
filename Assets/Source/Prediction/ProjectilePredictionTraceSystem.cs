@@ -23,9 +23,10 @@ public class ProjectilePredictionTraceSystem : IExecuteSystem
         if (_projectiles.count <= 0 || _projectiles.count > 1) return;
 
         var projectile = _projectiles.GetEntities()[0];
+        var isPaused = _contexts.game.isGamePaused;
 
         // free projectiles don't get a trace
-        if (projectile.isFreeProjectile || !Input.GetMouseButton(0))
+        if (projectile.isFreeProjectile || !Input.GetMouseButton(0) || isPaused)
         {
             _contexts.game.ReplacePredictionTrace(null);
             return;
