@@ -67,60 +67,61 @@ public static class GameComponentsLookup {
     public const int LastBalloonHitListener = 56;
     public const int Layer = 57;
     public const int LayerListener = 58;
-    public const int LinkedView = 59;
-    public const int LinkedViewListener = 60;
-    public const int LoadedProjectile = 61;
-    public const int Movable = 62;
-    public const int MovableListener = 63;
-    public const int MovableRemovedListener = 64;
-    public const int NewBalloon = 65;
-    public const int NewBalloonListener = 66;
-    public const int ParticleFXParent = 67;
-    public const int ParticleFXStartColor = 68;
-    public const int PlayParticleFX = 69;
-    public const int Position = 70;
-    public const int PositionListener = 71;
-    public const int PredictionTrace = 72;
-    public const int PredictionTraceListener = 73;
-    public const int ProjectileBounceShield = 74;
-    public const int ProjectileBounceShieldListener = 75;
-    public const int Projectile = 76;
-    public const int ProjectileListener = 77;
-    public const int ReadyToLoad = 78;
-    public const int ReadyToLoadListener = 79;
-    public const int ReadyToThrow = 80;
-    public const int Right = 81;
-    public const int RightListener = 82;
-    public const int Rotation = 83;
-    public const int RotationListener = 84;
-    public const int Scale = 85;
-    public const int ScaleListener = 86;
-    public const int SlotIndex = 87;
-    public const int SlotIndexListener = 88;
-    public const int SlotsIndexer = 89;
-    public const int Speed = 90;
-    public const int SpeedListener = 91;
-    public const int StableBalloon = 92;
-    public const int StableBalloonListener = 93;
-    public const int StableBalloonRemovedListener = 94;
-    public const int Tag = 95;
-    public const int TagListener = 96;
-    public const int Thrower = 97;
-    public const int ThrowerListener = 98;
-    public const int ThrowerLoadedProjectile = 99;
-    public const int Trigger2D = 100;
-    public const int TriggerEnter2D = 101;
-    public const int TriggerEnter2DListener = 102;
-    public const int TriggerExit2D = 103;
-    public const int TriggerExit2DListener = 104;
-    public const int TriggerStay2D = 105;
-    public const int TriggerStay2DListener = 106;
-    public const int TweenSequence = 107;
-    public const int TweenSequenceListener = 108;
-    public const int Up = 109;
-    public const int UpListener = 110;
+    public const int LinkedViewColliderCache = 59;
+    public const int LinkedView = 60;
+    public const int LinkedViewListener = 61;
+    public const int LoadedProjectile = 62;
+    public const int Movable = 63;
+    public const int MovableListener = 64;
+    public const int MovableRemovedListener = 65;
+    public const int NewBalloon = 66;
+    public const int NewBalloonListener = 67;
+    public const int ParticleFXParent = 68;
+    public const int ParticleFXStartColor = 69;
+    public const int PlayParticleFX = 70;
+    public const int Position = 71;
+    public const int PositionListener = 72;
+    public const int PredictionTrace = 73;
+    public const int PredictionTraceListener = 74;
+    public const int ProjectileBounceShield = 75;
+    public const int ProjectileBounceShieldListener = 76;
+    public const int Projectile = 77;
+    public const int ProjectileListener = 78;
+    public const int ReadyToLoad = 79;
+    public const int ReadyToLoadListener = 80;
+    public const int ReadyToThrow = 81;
+    public const int Right = 82;
+    public const int RightListener = 83;
+    public const int Rotation = 84;
+    public const int RotationListener = 85;
+    public const int Scale = 86;
+    public const int ScaleListener = 87;
+    public const int SlotIndex = 88;
+    public const int SlotIndexListener = 89;
+    public const int SlotsIndexer = 90;
+    public const int Speed = 91;
+    public const int SpeedListener = 92;
+    public const int StableBalloon = 93;
+    public const int StableBalloonListener = 94;
+    public const int StableBalloonRemovedListener = 95;
+    public const int Tag = 96;
+    public const int TagListener = 97;
+    public const int Thrower = 98;
+    public const int ThrowerListener = 99;
+    public const int ThrowerLoadedProjectile = 100;
+    public const int Trigger2D = 101;
+    public const int TriggerEnter2D = 102;
+    public const int TriggerEnter2DListener = 103;
+    public const int TriggerExit2D = 104;
+    public const int TriggerExit2DListener = 105;
+    public const int TriggerStay2D = 106;
+    public const int TriggerStay2DListener = 107;
+    public const int TweenSequence = 108;
+    public const int TweenSequenceListener = 109;
+    public const int Up = 110;
+    public const int UpListener = 111;
 
-    public const int TotalComponents = 111;
+    public const int TotalComponents = 112;
 
     public static readonly string[] componentNames = {
         "AnyBalloonLineInstanceEventListener",
@@ -182,6 +183,7 @@ public static class GameComponentsLookup {
         "LastBalloonHitListener",
         "Layer",
         "LayerListener",
+        "LinkedViewColliderCache",
         "LinkedView",
         "LinkedViewListener",
         "LoadedProjectile",
@@ -296,6 +298,7 @@ public static class GameComponentsLookup {
         typeof(LastBalloonHitListenerComponent),
         typeof(LayerComponent),
         typeof(LayerListenerComponent),
+        typeof(LinkedViewColliderCacheComponent),
         typeof(LinkedViewComponent),
         typeof(LinkedViewListenerComponent),
         typeof(LoadedProjectileComponent),

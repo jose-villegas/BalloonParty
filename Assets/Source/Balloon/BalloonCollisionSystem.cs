@@ -8,12 +8,21 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
     private readonly Contexts _contexts;
     private readonly int _layer;
     private readonly IGameConfiguration _configuration;
+    private LinkedViewColliderCacheComponent _cache;
 
     public BalloonCollisionSystem(Contexts contexts) : base(contexts.game)
     {
         _contexts = contexts;
         _layer = LayerMask.NameToLayer("Balloons");
         _configuration = contexts.configuration.gameConfiguration.value;
+
+        // obtain collider cache
+        var cacheEntity = _contexts.game.GetEntities(GameMatcher.LinkedViewColliderCache);
+
+        if (cacheEntity != null && cacheEntity.Length > 0)
+        {
+            _cache = cacheEntity[0].GetComponent(GameComponentsLookup.LinkedViewColliderCache) as LinkedViewColliderCacheComponent;
+        }
     }
 
     protected override ICollector<GameEntity> GetTrigger(IContext<GameEntity> context)
@@ -32,7 +41,7 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
         foreach (var entity in entities)
         {
             var collider = entity.hasTriggerEnter2D ? entity.triggerEnter2D.Value :
-                entity.hasTriggerStay2D ? entity.triggerStay2D.Value : 
+                entity.hasTriggerStay2D ? entity.triggerStay2D.Value :
                 entity.hasTriggerExit2D ? entity.triggerExit2D.Value : null;
 
             if (collider == null) continue;
@@ -40,7 +49,7 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
             // we are colliding with the balloons layer
             if ((collider.gameObject.layer & _layer) > 0)
             {
-                var linkedView = collider.GetComponent<ILinkedView>();
+                var linkedView = _cache.Fetch(collider);
 
                 if (linkedView.LinkedEntity is GameEntity balloonEntity && balloonEntity.isBalloon)
                 {
@@ -77,7 +86,7 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
                 projectile.ReplaceBalloonLastColorPopCount(1);
             }
         }
-        
+
         projectile.ReplaceLastBalloonHit(balloon);
     }
 }

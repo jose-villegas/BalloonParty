@@ -1,6 +1,5 @@
-﻿using TMPro;
+﻿using Entitas;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 [RequireComponent(typeof(LinkedViewController))]
 public class BombSphereCastHitController : MonoBehaviour
@@ -8,11 +7,21 @@ public class BombSphereCastHitController : MonoBehaviour
     [SerializeField] private float _radius;
 
     private LinkedViewController _linkedView;
+    private LinkedViewColliderCacheComponent _cache;
 
     private void Awake()
     {
         _linkedView = GetComponent<LinkedViewController>();
         _linkedView.OnViewLinked += OnViewLinked;
+
+        // obtain collider cache
+        var _contexts = Contexts.sharedInstance;
+        var cacheEntity = _contexts.game.GetEntities(GameMatcher.LinkedViewColliderCache);
+
+        if (cacheEntity != null && cacheEntity.Length > 0)
+        {
+            _cache = cacheEntity[0].GetComponent(GameComponentsLookup.LinkedViewColliderCache) as LinkedViewColliderCacheComponent;
+        }
     }
 
     private void OnViewLinked(GameEntity gameEntity)
@@ -26,7 +35,7 @@ public class BombSphereCastHitController : MonoBehaviour
         {
             foreach (var result in results)
             {
-                var linkedView = result.GetComponent<LinkedViewController>();
+                var linkedView = _cache.Fetch(result);
 
                 if (linkedView != null)
                 {
