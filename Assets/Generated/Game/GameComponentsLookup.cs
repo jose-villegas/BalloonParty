@@ -108,18 +108,19 @@ public static class GameComponentsLookup {
     public const int Thrower = 97;
     public const int ThrowerListener = 98;
     public const int ThrowerLoadedProjectile = 99;
-    public const int TriggerEnter2D = 100;
-    public const int TriggerEnter2DListener = 101;
-    public const int TriggerExit2D = 102;
-    public const int TriggerExit2DListener = 103;
-    public const int TriggerStay2D = 104;
-    public const int TriggerStay2DListener = 105;
-    public const int TweenSequence = 106;
-    public const int TweenSequenceListener = 107;
-    public const int Up = 108;
-    public const int UpListener = 109;
+    public const int Trigger2D = 100;
+    public const int TriggerEnter2D = 101;
+    public const int TriggerEnter2DListener = 102;
+    public const int TriggerExit2D = 103;
+    public const int TriggerExit2DListener = 104;
+    public const int TriggerStay2D = 105;
+    public const int TriggerStay2DListener = 106;
+    public const int TweenSequence = 107;
+    public const int TweenSequenceListener = 108;
+    public const int Up = 109;
+    public const int UpListener = 110;
 
-    public const int TotalComponents = 110;
+    public const int TotalComponents = 111;
 
     public static readonly string[] componentNames = {
         "AnyBalloonLineInstanceEventListener",
@@ -222,6 +223,7 @@ public static class GameComponentsLookup {
         "Thrower",
         "ThrowerListener",
         "ThrowerLoadedProjectile",
+        "Trigger2D",
         "TriggerEnter2D",
         "TriggerEnter2DListener",
         "TriggerExit2D",
@@ -335,6 +337,7 @@ public static class GameComponentsLookup {
         typeof(ThrowerComponent),
         typeof(ThrowerListenerComponent),
         typeof(ThrowerLoadedProjectileComponent),
+        typeof(Trigger2DComponent),
         typeof(TriggerEnter2DComponent),
         typeof(TriggerEnter2DListenerComponent),
         typeof(TriggerExit2DComponent),
