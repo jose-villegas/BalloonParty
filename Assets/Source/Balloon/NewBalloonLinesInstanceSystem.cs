@@ -31,7 +31,7 @@ public class NewBalloonLinesInstanceSystem : ReactiveSystem<GameEntity>
 
     protected override bool Filter(GameEntity entity)
     {
-        return entity.hasGameTurnCounter && entity.gameTurnCounter.Value > 1;
+        return entity.hasGameTurnCounter && entity.gameTurnCounter.Value > 1 && !_contexts.game.isGamePaused;
     }
 
     protected override void Execute(List<GameEntity> entities)
