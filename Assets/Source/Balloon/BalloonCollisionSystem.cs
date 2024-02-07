@@ -24,29 +24,30 @@ public class BalloonCollisionSystem : ReactiveSystem<GameEntity>
 
     protected override bool Filter(GameEntity entity)
     {
-        return entity.isBalloonCollider && (entity.hasTriggerEnter2D || entity.hasTriggerStay2D);
+        return entity.isBalloonCollider && (entity.hasTriggerEnter2D || entity.hasTriggerStay2D || entity.hasTriggerExit2D);
     }
 
     protected override void Execute(List<GameEntity> entities)
     {
-        foreach (var collider in entities)
+        foreach (var entity in entities)
         {
-            var collided = collider.hasTriggerEnter2D ? collider.triggerEnter2D.Value :
-                collider.hasTriggerStay2D ? collider.triggerStay2D.Value : null;
+            var collider = entity.hasTriggerEnter2D ? entity.triggerEnter2D.Value :
+                entity.hasTriggerStay2D ? entity.triggerStay2D.Value : 
+                entity.hasTriggerExit2D ? entity.triggerExit2D.Value : null;
 
-            if (collided == null) continue;
+            if (collider == null) continue;
 
-            // we are colliding with balloons
-            if ((collided.gameObject.layer & _layer) > 0)
+            // we are colliding with the balloons layer
+            if ((collider.gameObject.layer & _layer) > 0)
             {
-                var linkedView = collided.GetComponent<ILinkedView>();
+                var linkedView = collider.GetComponent<ILinkedView>();
 
                 if (linkedView.LinkedEntity is GameEntity balloonEntity && balloonEntity.isBalloon)
                 {
-                    if (collider.isFreeProjectile &&
-                        (!collider.hasLastBalloonHit || collider.lastBalloonHit.Value != balloonEntity))
+                    if (entity.isFreeProjectile &&
+                        (!entity.hasLastBalloonHit || entity.lastBalloonHit.Value != balloonEntity))
                     {
-                        HandleProjectileCollider(balloonEntity, collider);
+                        HandleProjectileCollider(balloonEntity, entity);
                         balloonEntity.ReplaceBalloonNudge(_configuration.NudgeDuration, _configuration.NudgeDistance);
                     }
 

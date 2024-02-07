@@ -3,7 +3,6 @@ using Entitas.CodeGeneration.Attributes;
 using UnityEngine;
 
 [Event(EventTarget.Self)]
-public sealed class TriggerStay2DComponent : IComponent
+public sealed class TriggerStay2DComponent : Trigger2DComponent
 {
-    public Collider2D Value;
 }
