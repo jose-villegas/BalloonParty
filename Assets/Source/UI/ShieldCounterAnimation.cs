@@ -6,7 +6,7 @@ public class ShieldCounterAnimation : MonoBehaviour, IAnyProjectileBounceShieldL
 {
     private Animator _animator;
     private Contexts _contexts;
-    private int _currentShieldCount;
+    private float _currentShieldTimer;
 
     private void Awake()
     {
@@ -35,24 +35,24 @@ public class ShieldCounterAnimation : MonoBehaviour, IAnyProjectileBounceShieldL
         }
     }
 
-    public void OnAnyProjectileBounceShield(GameEntity entity, int value)
+    public void OnAnyProjectileBounceShield(GameEntity entity, float value)
     {
-        if (value > _currentShieldCount)
+        if (value > _currentShieldTimer)
         {
             _animator.SetTrigger("Gain");
         }
-        else if (value < _currentShieldCount)
+        else if (value < _currentShieldTimer)
         {
             _animator.SetTrigger("Lost");
         }
 
-        _currentShieldCount = value;
+        _currentShieldTimer = value;
     }
 
     public void OnAnyReadyToThrow(GameEntity entity)
     {
         _animator.SetTrigger("Ready");
-        _currentShieldCount = 1; 
+        _currentShieldTimer = 1f; 
     }
 
     public void OnAnyBalloonsBalanceEvent(GameEntity entity)

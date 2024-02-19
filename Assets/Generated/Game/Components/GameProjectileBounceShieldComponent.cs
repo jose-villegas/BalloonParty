@@ -11,14 +11,14 @@ public partial class GameEntity {
     public ProjectileBounceShieldComponent projectileBounceShield { get { return (ProjectileBounceShieldComponent)GetComponent(GameComponentsLookup.ProjectileBounceShield); } }
     public bool hasProjectileBounceShield { get { return HasComponent(GameComponentsLookup.ProjectileBounceShield); } }
 
-    public void AddProjectileBounceShield(int newValue) {
+    public void AddProjectileBounceShield(float newValue) {
         var index = GameComponentsLookup.ProjectileBounceShield;
         var component = (ProjectileBounceShieldComponent)CreateComponent(index, typeof(ProjectileBounceShieldComponent));
         component.Value = newValue;
         AddComponent(index, component);
     }
 
-    public void ReplaceProjectileBounceShield(int newValue) {
+    public void ReplaceProjectileBounceShield(float newValue) {
         var index = GameComponentsLookup.ProjectileBounceShield;
         var component = (ProjectileBounceShieldComponent)CreateComponent(index, typeof(ProjectileBounceShieldComponent));
         component.Value = newValue;

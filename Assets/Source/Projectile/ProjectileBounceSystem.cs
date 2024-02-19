@@ -56,40 +56,7 @@ public class ProjectileBounceSystem : IExecuteSystem
             // the projectile has bounced, consume a shield
             if (reflect != Vector3.zero)
             {
-                // play bounce particle fx
-                var bounce = _contexts.game.CreateEntity();
-                bounce.AddPosition(position);
-                bounce.AddPlayParticleFX("PSVFX_ShieldBounce");
-
-                if (freeProjectile.hasBalloonColor)
-                {
-                    bounce.AddParticleFXStartColor(_configuration.BalloonColor(freeProjectile.balloonColor.Value));
-                }
-
-                if (shield > 0)
-                {
-                    freeProjectile.ReplaceProjectileBounceShield(shield - 1);
-                }
-                else
-                {
-                    freeProjectile.isDestroyed = true;
-
-                    // check if balloons can be moved to re-balance
-                    var e = _contexts.game.CreateEntity();
-                    e.isBalloonsBalanceEvent = true;
-                    
-                    // increase the turn counter, a game turn ends at projectile dead
-                    if (_contexts.game.hasGameTurnCounter)
-                    {
-                        _contexts.game.ReplaceGameTurnCounter(_contexts.game.gameTurnCounter.Value + 1);
-                    }
-                    
-                    // reload projectile
-                    var thrower = _contexts.game.throwerEntity;
-                    thrower.isReadyToLoad = true;
-                    
-                    continue;
-                }
+                if (OnProjectileWallHit(freeProjectile, shield, position)) continue;
             }
 
             freeProjectile.ReplaceDirection(Vector2.Reflect(direction, reflect.normalized));
@@ -106,5 +73,45 @@ public class ProjectileBounceSystem : IExecuteSystem
         Debug.DrawLine(Vector3.right * _configuration.LimitsClockwise.w + Vector3.up * 100,
             Vector3.right * _configuration.LimitsClockwise.w - Vector3.up * 100, Color.red);
 #endif
+    }
+
+    private bool OnProjectileWallHit(GameEntity freeProjectile, float shield, Vector3 position)
+    {
+        // play bounce particle fx
+        var bounce = _contexts.game.CreateEntity();
+        bounce.AddPosition(position);
+        bounce.AddPlayParticleFX("PSVFX_ShieldBounce");
+
+        if (freeProjectile.hasBalloonColor)
+        {
+            bounce.AddParticleFXStartColor(_configuration.BalloonColor(freeProjectile.balloonColor.Value));
+        }
+
+        if (shield > 0)
+        {
+            freeProjectile.ReplaceProjectileBounceShield(shield - 1);
+        }
+        else
+        {
+            freeProjectile.isDestroyed = true;
+
+            // check if balloons can be moved to re-balance
+            var e = _contexts.game.CreateEntity();
+            e.isBalloonsBalanceEvent = true;
+
+            // increase the turn counter, a game turn ends at projectile dead
+            if (_contexts.game.hasGameTurnCounter)
+            {
+                _contexts.game.ReplaceGameTurnCounter(_contexts.game.gameTurnCounter.Value + 1);
+            }
+
+            // reload projectile
+            var thrower = _contexts.game.throwerEntity;
+            thrower.isReadyToLoad = true;
+
+            return true;
+        }
+
+        return false;
     }
 }

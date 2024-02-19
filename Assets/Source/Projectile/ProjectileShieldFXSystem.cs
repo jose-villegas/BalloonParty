@@ -6,7 +6,7 @@ public class ProjectileShieldFXSystem : ReactiveSystem<GameEntity>
 {
     private readonly Contexts _contexts;
     private readonly IGameConfiguration _configuration;
-    private int _counter;
+    private float _counter;
 
     public ProjectileShieldFXSystem(Contexts contexts) : base(contexts.game)
     {

@@ -34,7 +34,7 @@ public class ShieldCounterLabel : MonoBehaviour, IAnyProjectileBounceShieldListe
         }
     }
 
-    public void OnAnyProjectileBounceShield(GameEntity entity, int value)
+    public void OnAnyProjectileBounceShield(GameEntity entity, float value)
     {
         _label.text = value.ToString("N0");
     }

@@ -7,5 +7,5 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 public interface IProjectileBounceShieldListener {
-    void OnProjectileBounceShield(GameEntity entity, int value);
+    void OnProjectileBounceShield(GameEntity entity, float value);
 }

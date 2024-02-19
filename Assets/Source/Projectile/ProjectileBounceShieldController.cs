@@ -37,7 +37,7 @@ public class ProjectileBounceShieldController : MonoBehaviour, IProjectileBounce
         gameEntity.AddBalloonColorListener(this);
     }
 
-    public void OnProjectileBounceShield(GameEntity entity, int value)
+    public void OnProjectileBounceShield(GameEntity entity, float value)
     {
         for (var i = 0; i < _shields.Count; i++)
         {
