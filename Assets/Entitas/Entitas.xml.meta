@@ -1,7 +1,14 @@
 fileFormatVersion: 2
-guid: 2ae22566766c0d24d89b60641d890e67
+guid: b52f3c54084b4462d98c311787060dd8
 TextScriptImporter:
   externalObjects: {}
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87638
+  packageName: Entitas
+  packageVersion: 1.12.3
+  assetPath: Assets/Entitas/Entitas.xml
+  uploadId: 295513

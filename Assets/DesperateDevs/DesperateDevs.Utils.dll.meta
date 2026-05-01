@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5333b5252b3bf2142b5ce4033f78e538
+guid: 5729bedb27dcc474cbfc4f45735ebbf9
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,7 +9,6 @@ PluginImporter:
   isPreloaded: 0
   isOverridable: 0
   isExplicitlyReferenced: 0
-  validateReferences: 1
   platformData:
   - first:
       Any: 
@@ -31,3 +30,10 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87638
+  packageName: Entitas
+  packageVersion: 1.12.3
+  assetPath: Assets/DesperateDevs/DesperateDevs.Utils.dll
+  uploadId: 295513

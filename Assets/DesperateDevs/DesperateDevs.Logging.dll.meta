@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: a7044e2a0582c8748888b1f9ac4cc0c4
+guid: 9b13241e9ebb44be0b8d65494bfaf343
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,7 +9,6 @@ PluginImporter:
   isPreloaded: 0
   isOverridable: 0
   isExplicitlyReferenced: 0
-  validateReferences: 1
   platformData:
   - first:
       Any: 
@@ -31,3 +30,10 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87638
+  packageName: Entitas
+  packageVersion: 1.12.3
+  assetPath: Assets/DesperateDevs/DesperateDevs.Logging.dll
+  uploadId: 295513

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 645470144531f2d4baaaef4de205bed5
+guid: dbea8526eaa744080ae9172c7d5042e6
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,7 +9,6 @@ PluginImporter:
   isPreloaded: 0
   isOverridable: 0
   isExplicitlyReferenced: 0
-  validateReferences: 1
   platformData:
   - first:
       Any: 
@@ -31,3 +30,10 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87638
+  packageName: Entitas
+  packageVersion: 1.12.3
+  assetPath: Assets/Entitas/Editor/Plugins/Entitas.VisualDebugging.CodeGeneration.Plugins.dll
+  uploadId: 295513

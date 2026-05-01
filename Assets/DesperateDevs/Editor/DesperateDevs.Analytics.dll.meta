@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7f7b2892f3cdbf24497f9f91ba4490a4
+guid: ba6a5ed1d4d5b4291b69f46fa122213c
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,7 +9,6 @@ PluginImporter:
   isPreloaded: 0
   isOverridable: 0
   isExplicitlyReferenced: 0
-  validateReferences: 1
   platformData:
   - first:
       Any: 
@@ -31,3 +30,10 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87638
+  packageName: Entitas
+  packageVersion: 1.12.3
+  assetPath: Assets/DesperateDevs/Editor/DesperateDevs.Analytics.dll
+  uploadId: 295513

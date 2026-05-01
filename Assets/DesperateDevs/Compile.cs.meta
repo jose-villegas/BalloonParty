@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5bae7c176aa8d8741a172d4e4b511aa8
+guid: 7a69f492a85d145d0a875e58c97b57ff
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,3 +9,10 @@ MonoImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87638
+  packageName: Entitas
+  packageVersion: 1.12.3
+  assetPath: Assets/DesperateDevs/Compile.cs
+  uploadId: 295513

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 2695ce9e824d4994592eaae64bbd19ed
+guid: 30b61886d449845a4a8c8219448d6e20
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,7 +9,6 @@ PluginImporter:
   isPreloaded: 0
   isOverridable: 0
   isExplicitlyReferenced: 0
-  validateReferences: 1
   platformData:
   - first:
       Any: 
@@ -31,3 +30,10 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87638
+  packageName: Entitas
+  packageVersion: 1.12.3
+  assetPath: Assets/DesperateDevs/Editor/DesperateDevs.CodeGeneration.CodeGenerator.Unity.Editor.dll
+  uploadId: 295513

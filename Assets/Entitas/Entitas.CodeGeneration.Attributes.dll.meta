@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: bbf4e9dfe92eee142aedc24d25e0d818
+guid: 3f006de0f284841d3b5c5d6c75248c95
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,7 +9,6 @@ PluginImporter:
   isPreloaded: 0
   isOverridable: 0
   isExplicitlyReferenced: 0
-  validateReferences: 1
   platformData:
   - first:
       Any: 
@@ -31,3 +30,10 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87638
+  packageName: Entitas
+  packageVersion: 1.12.3
+  assetPath: Assets/Entitas/Entitas.CodeGeneration.Attributes.dll
+  uploadId: 295513

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1013841da412d81479de29a9a0480a15
+guid: d15b022f83e924ca89fc8e84174d258e
 PluginImporter:
   externalObjects: {}
   serializedVersion: 2
@@ -9,7 +9,6 @@ PluginImporter:
   isPreloaded: 0
   isOverridable: 0
   isExplicitlyReferenced: 0
-  validateReferences: 1
   platformData:
   - first:
       Any: 
@@ -31,3 +30,10 @@ PluginImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 87638
+  packageName: Entitas
+  packageVersion: 1.12.3
+  assetPath: Assets/Entitas/Editor/Entitas.Unity.Editor.dll
+  uploadId: 295513
