@@ -53,7 +53,8 @@ Assets/Source/
   Balloon/
     Model/          BalloonModel.cs
     View/           BalloonView.cs
-    Controller/     BalloonController.cs, BalloonBalancer.cs, BalloonSpawner.cs
+    Controller/     BalloonController.cs, BalloonBalancer.cs
+    Spawner/        BalloonSpawner.cs, BalloonSpawnerSettings.cs
     PowerUps/       Bomb/, Laser/, Lightning/, Shield/
   Slots/
     SlotGrid.cs, SlotGridController.cs, SlotGridView.cs
@@ -67,6 +68,8 @@ Assets/Source/
   Shared/
     IGameConfiguration.cs
     Messages/       BalanceBalloonsMessage.cs, BalloonHitMessage.cs, ...
+  Debug/
+    ICheat.cs, CheatConsoleView.cs, BalloonRemoverCheat.cs, ...
 
 Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
 ```
@@ -200,13 +203,13 @@ builder.Register<BalloonController>(Lifetime.Transient);
    - `[Inject] IPublisher<BalanceBalloonsMessage> _balancePublisher`
    - In `Start()`: subscribe to `SpawnBalloonLineMessage` → call `SpawnLine()`
    - `SpawnLine()` — finds the bottom-most empty row in each column (mirrors `BottomSlotsIndexes` logic), picks a random color from `IGameConfiguration.BalloonColors`, calls `SpawnBalloon()` for each, then publishes `BalanceBalloonsMessage`
-   - `SpawnBalloon(colorName, slot)` — instantiates the `Balloon` prefab from Resources, creates a `BalloonModel`, wires up a `BalloonController`, places the model in `SlotGrid`, and animates the balloon dropping in from above using DOTween `DOMove` + `DOScale` (mirrors the `OnLinkedView` animation in the legacy system)
+   - `SpawnBalloon(colorName, slot)` — instantiates the balloon prefab (injected via `BalloonSpawnerSettings`), creates a `BalloonModel`, wires up a `BalloonController`, places the model in `SlotGrid`, and animates the balloon rising from below to its slot using DOTween `DOMove` + `DOScale` — start position is `slot + Vector2Int.up * 4` in grid space, mirroring the `OnLinkedView` animation in the legacy system
 4. Register as an entry point:
    ```csharp
    builder.RegisterEntryPoint<BalloonSpawner>();
    ```
 5. Add `SpawnBalloonLineCheat` (`Debug/`) — publishes `SpawnBalloonLineMessage` from the cheat console to spawn a new line on demand.
-6. ✅ **Checkpoint:** Press Play → use the "Spawn Balloon Line" cheat → a new row of balloons drops in from above and settles into the bottom empty slots.
+6. ✅ **Checkpoint:** Press Play → use the "Spawn Balloon Line" cheat → a new row of balloons rises from below and settles into the available slots.
 
 ---
 
@@ -391,7 +394,7 @@ When porting an animation:
 
 ---
 
-
+### `IGameConfiguration` as the Single Source of Truth
 
 All game data — balloon colors, slot dimensions, timing values, spawn counts — lives in the `GameConfiguration` ScriptableObject and is accessed exclusively through `IGameConfiguration`. Rules:
 

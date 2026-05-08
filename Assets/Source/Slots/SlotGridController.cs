@@ -10,7 +10,6 @@ namespace BalloonParty.Slots
 
         [Inject] private SlotGrid _grid;
         [Inject] private BalloonSpawner _spawner;
-        [Inject] private IGameConfiguration _config;
 
         private void Start()
         {
@@ -19,14 +18,11 @@ namespace BalloonParty.Slots
 
         private void PopulateGrid()
         {
-            var colorIndex = 0;
             for (int row = 0; row < _initialLines; row++)
             {
                 for (int col = 0; col < _grid.Columns; col++)
                 {
-                    var color = _config.BalloonColors[colorIndex % _config.BalloonColors.Length].Name;
-                    _spawner.SpawnBalloon(color, new Vector2Int(col, row));
-                    colorIndex++;
+                    _spawner.SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, row));
                 }
             }
         }

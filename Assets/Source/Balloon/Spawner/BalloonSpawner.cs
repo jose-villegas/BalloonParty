@@ -46,11 +46,10 @@ namespace BalloonParty.Balloon.Spawner
         {
             for (int col = 0; col < _grid.Columns; col++)
             {
-                var bottomEmptyRow = FindBottomEmptyRow(col);
-                if (!bottomEmptyRow.HasValue) continue;
+                var firstEmptyRow = FindFirstEmptyRowFromTop(col);
+                if (!firstEmptyRow.HasValue) continue;
 
-                var slot = new Vector2Int(col, bottomEmptyRow.Value);
-                SpawnBalloon(_grid.RandomColorName(), slot);
+                SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, firstEmptyRow.Value));
             }
 
             _balancePublisher.Publish(default);
@@ -92,7 +91,7 @@ namespace BalloonParty.Balloon.Spawner
                 .OnComplete(() => model.IsStable.Value = true);
         }
 
-        private int? FindBottomEmptyRow(int col)
+        private int? FindFirstEmptyRowFromTop(int col)
         {
             for (int row = 0; row < _grid.Rows; row++)
             {
