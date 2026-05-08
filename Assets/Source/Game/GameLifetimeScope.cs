@@ -3,6 +3,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using BalloonParty.Configuration;
+using BalloonParty.Slots;
 
 namespace BalloonParty.Game
 {
@@ -13,7 +14,11 @@ namespace BalloonParty.Game
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterMessagePipe();
+
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
+
+            builder.Register<SlotGrid>(Lifetime.Singleton);
+            builder.RegisterComponentInHierarchy<SlotGridView>();
         }
     }
 }

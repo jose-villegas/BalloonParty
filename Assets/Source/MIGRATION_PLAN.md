@@ -283,13 +283,32 @@ builder.Register<BalloonController>(Lifetime.Transient);
 
 ## Coexistence Strategy (Phases 1–7)
 
-- **Scopes are independent:** `GameLifetimeScope` (VContainer) and `GameControllerBehaviour` (Entitas) can coexist in the same scene without conflict.
-- Add a `bool UseLegacy` flag on `GameManager` to toggle which path drives the game loop per phase — no need for a separate scene fork.
-- `IGameConfiguration` ScriptableObject registered once in `GameLifetimeScope` and shared by both old and new code:
-  ```csharp
-  builder.RegisterInstance<IGameConfiguration>(gameConfigSO);
-  ```
-- **MessagePipe as a seam:** ECS systems not yet ported can publish MessagePipe messages via a thin bridge MonoBehaviour, letting MVC controllers react immediately without waiting for the full system to be migrated.
+The goal is **full removal** of Entitas and `Assets/Source_Old` by Phase 8. Every decision during the transition must serve that end — nothing in `Source_Old` should be extended or improved; it is read-only reference material.
+
+### Principles
+
+- **One system at a time.** For each phase, the new MVC system goes live and its Entitas counterpart is disabled (commented out or removed from `GameUpdateSystems` / `GameFixedUpdateSystems`). Never run both versions of the same system simultaneously.
+- **Scene stays runnable throughout.** After disabling a legacy system, the new MVC replacement must cover its full behaviour before moving to the next phase. The game must be playable at every phase boundary.
+- **`IGameConfiguration` is shared via VContainer.** The existing `GameConfiguration` ScriptableObject already implements the new `BalloonParty.Configuration.IGameConfiguration` — register it once in `GameLifetimeScope` and never access it through `Contexts.sharedInstance` in new code.
+- **No new code in `Source_Old`.** Bug fixes in legacy systems are only allowed if they unblock a migration step. Every fix applied to `Source_Old` should immediately inform the equivalent new implementation.
+- **Entitas context access is a hard boundary.** New code in `Assets/Source` must never reference `Contexts`, `GameEntity`, `GameMatcher`, or any Entitas type. If temporary data needs to flow from a legacy system to a new one during transition, use a MessagePipe message as the bridge — not a shared Entitas entity.
+
+### Removal Checklist (to complete before Phase 8)
+
+Each item must be ticked before `Source_Old` and the Entitas package can be deleted:
+
+- [ ] `SloIndexerSystem` → replaced by `SlotGrid` (Phase 2)
+- [ ] `BalanceBalloonsSystem` → replaced by `BalloonBalancer` (Phase 3)
+- [ ] `GameStartedBalloonsSpawnSystem`, `BalloonLineSpawnerSystem`, `NewBalloonLinesInstanceSystem` → replaced by `BalloonSpawner` (Phase 4)
+- [ ] `AssetInstancingSystem` → replaced by VContainer factory in `BalloonSpawner` (Phase 4)
+- [ ] `ThrowerDirectionSystem`, `ThrowerRotationSystem`, `ThrowLoadedProjectileSystem` → replaced by `ThrowerController` (Phase 5)
+- [ ] `FreeProjectileMovementSystem`, `ProjectileBounceSystem`, `ProjectileTransformSystem` → replaced by `ProjectileController` (Phase 5)
+- [ ] `BalloonCollisionSystem`, `TriggerReporterController`, `Cleanup2DTriggersSystem` → replaced by `OnTriggerEnter2D` on `ProjectileView` (Phase 5)
+- [ ] `BalloonHitDestructionSystem`, `BalloonHitNudgeAnimationSystem`, `BalloonHitScoreSystem` → replaced by `BalloonController` + `ScoreController` (Phase 6)
+- [ ] `BalloonsPowerUpCheckSystem`, all `*PowerUpController` → replaced by power-up controllers (Phase 7)
+- [ ] `GameControllerBehaviour`, `GameController`, `GameUpdateSystems`, `GameFixedUpdateSystems` → replaced by `GameManager` + `GameLifetimeScope` (Phase 8)
+- [ ] All Entitas-generated code in `Assets/Generated/` → deleted (Phase 8)
+- [ ] Entitas and DesperateDevs packages removed from `manifest.json` (Phase 8)
 
 ---
 
@@ -381,9 +400,9 @@ These constraints apply to all code generated or written during this migration.
 
 | Phase | Description                        | Status  |
 |-------|------------------------------------|---------|
-| 0     | Preparation & Folder Scaffold      | ⬜ Todo |
+| 0     | Preparation & Folder Scaffold      | ✅ Done |
 | 1     | Balloon Model + View               | ✅ Done |
-| 2     | Slot Grid Model & Placement        | ⬜ Todo |
+| 2     | Slot Grid Model & Placement        | ✅ Done |
 | 3     | Balance / Movement Logic           | ⬜ Todo |
 | 4     | Balloon Spawning & Line Management | ⬜ Todo |
 | 5     | Projectile & Thrower               | ⬜ Todo |
