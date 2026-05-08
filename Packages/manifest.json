@@ -1,5 +1,21 @@
 {
+  "scopedRegistries": [
+    {
+      "name": "OpenUPM",
+      "url": "https://package.openupm.com",
+      "scopes": [
+        "com.neuecc",
+        "jp.hadashikick",
+        "com.cysharp"
+      ]
+    }
+  ],
   "dependencies": {
+    "com.neuecc.unirx": "7.1.0",
+    "jp.hadashikick.vcontainer": "1.16.8",
+    "com.cysharp.unitask": "2.5.10",
+    "com.cysharp.messagepipe": "1.8.1",
+    "com.cysharp.messagepipe.vcontainer": "1.8.1",
     "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
