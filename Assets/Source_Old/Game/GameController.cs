@@ -1,8 +1,8 @@
+using System;
 using Entitas;
 
-/// <summary>
-/// Base class serves as interaction point between ECS and Unity
-/// </summary>
+// Legacy ECS entry point — being replaced by GameManager (MVC). See MIGRATION_PLAN.md.
+[Obsolete("Replaced by Assets/Source/Game/GameManager.cs")]
 public class GameController
 {
     private readonly Systems _updateSystems;

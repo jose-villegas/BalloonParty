@@ -134,7 +134,7 @@ public class ColorProgressBar : MonoBehaviour, IAnyGameLevelProgressListener, IA
 
     public void OnAnyGameLevel(GameEntity entity, int value)
     {
-        var requirement = GameConfiguration.PointsRequiredForLevel(value + 1);
+        var requirement = _configuration.PointsRequiredForLevel(value + 1);
 
         _progressSlider.maxValue = requirement;
         _progressSlider.value = 0;

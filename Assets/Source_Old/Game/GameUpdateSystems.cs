@@ -1,3 +1,7 @@
+using System;
+
+// Legacy ECS update loop — being replaced by VContainer entry points. See MIGRATION_PLAN.md.
+[Obsolete("Replaced by individual ITickable/IStartable controllers in Assets/Source")]
 public class GameUpdateSystems : Feature
 {
     public GameUpdateSystems(Contexts contexts)

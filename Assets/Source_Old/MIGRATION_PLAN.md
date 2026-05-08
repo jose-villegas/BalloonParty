@@ -382,7 +382,7 @@ These constraints apply to all code generated or written during this migration.
 | Phase | Description                        | Status  |
 |-------|------------------------------------|---------|
 | 0     | Preparation & Folder Scaffold      | ⬜ Todo |
-| 1     | Balloon Model + View               | ✅ Done |
+| 1     | Balloon Model + View               | ⬜ Todo |
 | 2     | Slot Grid Model & Placement        | ⬜ Todo |
 | 3     | Balance / Movement Logic           | ⬜ Todo |
 | 4     | Balloon Spawning & Line Management | ⬜ Todo |

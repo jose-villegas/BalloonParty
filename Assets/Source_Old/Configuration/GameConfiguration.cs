@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Configuration/Game Configuration", fileName = "GameConfiguration")]
-public class GameConfiguration : ScriptableObject, IGameConfiguration
+public class GameConfiguration : ScriptableObject, IGameConfiguration, BalloonParty.Configuration.IGameConfiguration
 {
     [Header("Display")] [SerializeField] private GameDisplayConfiguration _displayConfiguration;
 
@@ -82,15 +82,12 @@ public class GameConfiguration : ScriptableObject, IGameConfiguration
 
     public float ScorePointTraceDuration => _scorePointTraceDuration;
 
-    public static int PointsRequiredForLevel(int level)
+    public int PointsRequiredForLevel(int level)
     {
-        return (int) (Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI)) + 25f);
+        return (int)(Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI)) + 25f);
     }
 
-    int IGameConfiguration.PointsRequiredForLevel(int level)
-    {
-        return PointsRequiredForLevel(level);
-    }
+    int IGameConfiguration.PointsRequiredForLevel(int level) => PointsRequiredForLevel(level);
 
     public Color BalloonColor(string name)
     {

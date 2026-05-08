@@ -1,0 +1,31 @@
+using UnityEngine;
+using BalloonParty.Configuration;
+
+namespace BalloonParty.Configuration
+{
+    public interface IGameConfiguration
+    {
+        Vector2 ThrowerSpawnPoint { get; }
+        Vector2 ProjectileSpawnPoint { get; }
+        float ProjectileSpeed { get; }
+        Vector4 LimitsClockwise { get; }
+        Vector2Int SlotsSize { get; }
+        Vector2 SlotSeparation { get; }
+        Vector2 SlotsOffset { get; }
+        Vector2 BalloonSpawnAnimationDurationRange { get; }
+        int GameStartedBalloonLines { get; }
+        float TimeForBalloonsBalance { get; }
+        int NewProjectileBalloonLines { get; }
+        float NewBalloonLinesTimeInterval { get; }
+        float NudgeDistance { get; }
+        float NudgeDuration { get; }
+        float ScorePointTraceDuration { get; }
+        int ProjectileStartingShields { get; }
+        float PredictionTraceStep { get; }
+        int PredictionTraceMaxBounces { get; }
+        int PredictionTraceMaxSteps { get; }
+
+        int PointsRequiredForLevel(int level);
+        Color BalloonColor(string colorName);
+    }
+}
