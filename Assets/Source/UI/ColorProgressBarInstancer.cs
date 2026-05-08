@@ -1,6 +1,7 @@
-using UnityEngine;
 using VContainer;
 using BalloonParty.Game;
+using UnityEngine;
+using VContainer.Unity;
 
 namespace BalloonParty.UI
 {
@@ -16,8 +17,7 @@ namespace BalloonParty.UI
         {
             foreach (var color in _config.BalloonColors)
             {
-                var bar = Object.Instantiate(_colorProgressBarPrefab, transform);
-                _resolver.Inject(bar);
+                var bar = _resolver.Instantiate(_colorProgressBarPrefab, transform);
                 bar.Setup(color, _scoreController);
             }
         }

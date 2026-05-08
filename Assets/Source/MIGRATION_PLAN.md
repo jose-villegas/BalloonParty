@@ -245,75 +245,92 @@ builder.Register<BalloonController>(Lifetime.Transient);
 
 ---
 
-## Phase 6 — Balloon Hit, Destruction & Score
+## Phase 6 — Balloon Hit, Destruction & Score Logic
 
-**Goal:** Port hit/pop/score/nudge systems using MessagePipe, including the full per-color progress bar UI.
+**Goal:** Port the hit pipeline and scoring mechanics — pop VFX, grid removal, score tracking, level-up, and persistence. No UI wiring required; verify with the cheat console.
 
-> References: `BalloonHitDestructionSystem`, `BalloonHitScoreSystem`, `BalloonHitNudgeAnimationSystem`, `BalloonAnimationController`, `ColorProgressBar`, `ColorProgressBarInstancer`, `LevelUpPopUp`, `LevelLabel`
+> References: `BalloonHitDestructionSystem`, `BalloonHitScoreSystem`, `BalloonAnimationController`
 
-1. `BalloonHitMessage` — struct carrying `BalloonModel` + `WorldPosition` (captured before the view is destroyed)
-2. `BalloonController` injects `ISubscriber<BalloonHitMessage>`, filters by its own model:
-   - Calls `BalloonView.PlayPopEffect(color)` — instantiates `PSVFX_BalloonPop` at world position, sets `startColor`, auto-destroys
-   - Removes from `SlotGrid`, destroys the view GO, publishes `BalanceBalloonsMessage`
+1. `BalloonHitMessage` — struct carrying `BalloonModel` + `WorldPosition` (position captured before the view is destroyed; used later by score trail UI)
+2. `BalloonController` subscribes to `BalloonHitMessage`, filtered by its own model:
+   - Calls `BalloonView.PlayPopEffect(color)` — instantiates `PSVFX_BalloonPop` at world position, sets `startColor`, auto-destroys after particle lifetime
+   - Removes model from `SlotGrid`, destroys the view GO, publishes `BalanceBalloonsMessage`
 3. `ScoreController` (`IStartable` + `IDisposable`):
    - Loads per-color persistent score + level progress from `PlayerPrefs` on `Start()`
-   - On each `BalloonHitMessage`: increments that color's persistent score and level progress; checks if all colors meet `IGameConfiguration.PointsRequiredForLevel(level + 1)`; on level-up resets all progress, increments `Level`, publishes `ScoreLevelUpMessage`, and pauses via `Time.timeScale = 0`
-   - Publishes `BalloonScoredMessage` (carries `ColorName`, `WorldPosition`, `TotalScore`) after every hit
+   - On each `BalloonHitMessage`: increments that color's persistent score and level progress; checks if all colors meet `IGameConfiguration.PointsRequiredForLevel(level + 1)`; on level-up resets all progress, increments `Level`, publishes `ScoreLevelUpMessage`, pauses via `Time.timeScale = 0`
+   - Publishes `BalloonScoredMessage` (carries `ColorName`, `WorldPosition`, `TotalScore`) after every hit — consumed by score trail UI in Phase 7a
    - Saves to `PlayerPrefs` on `Application.quitting` and focus-lost
    - Exposes `ReactiveProperty<int> TotalScore`, `ReactiveProperty<int> Level`, `GetProgress(colorName)`, `GetRequiredPoints()`
-4. Per-color progress bar UI (`Assets/Source/UI/`):
-   - `ColorProgressBarInstancer` — spawns one `ColorProgressBar` per `IGameConfiguration.BalloonColors` entry at Start; injects the bar via `IObjectResolver.Inject()` then calls `bar.Setup(color, scoreController)`
-   - `ColorProgressBar` — subscribes to `BalloonScoredMessage` (filtered by color) and `ScoreLevelUpMessage`; drives a `Slider`; owns its own `ScoreNotice` and `ScorePointTrail` pools; on trail arrival triggers `"TrailHit"` animator; on bar completion plays `completionParticleSystem` + `"Completed"` animator bool; on level-up resets slider max/value and VFX
-   - `ScorePointTrail` — orb that `DOMove`s FROM balloon world position TO the bar's position (not a global counter)
-   - `ScoreNotice` — floating "+N" popup pooled per bar; uses `Animator` + `Text`
-   - `LevelLabel` — `[RequireComponent(Text)]`; subscribes to `ScoreController.Level`; `_showNextLevel` bool shows `level + 1`
-   - `ScoreCounterLabel` — subscribes to `ScoreController.TotalScore`
-5. `LevelUpPopUp` — waits for `SlotGrid.AllBalloonsStable()`, triggers `"Appear"` animator, animates glow fill image + particle system using `Time.unscaledDeltaTime` (game is paused); `OnContinue()` button restores `Time.timeScale = 1`
-6. `SlotGrid.AllBalloonsStable()` — scans all slots, returns true when every non-null model has `IsStable.Value == true`
-7. Register in `GameLifetimeScope`:
+4. `SlotGrid.AllBalloonsStable()` — scans all slots, returns true when every non-null model has `IsStable.Value == true` (used by `LevelUpPopUp` in Phase 7a)
+5. Register in `GameLifetimeScope`:
    ```csharp
    builder.RegisterMessageBroker<BalloonScoredMessage>(options);
    builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
    builder.RegisterEntryPoint<ScoreController>().AsSelf();
-   builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
-   builder.RegisterComponentInHierarchy<LevelUpPopUp>();
    ```
-8. ✅ **Checkpoint:** Hit balloon → colored pop VFX → correct color bar fills → orb flies to that bar → "+N" notice pops at bar → all bars full → level-up popup appears → glow fills → Continue resumes game → progress reset.
+6. Update `BalloonRemoverCheat` — replace direct `Destroy` with `_hitPublisher.Publish(new BalloonHitMessage(model, worldPos))` so removal routes through the full destruction pipeline
+7. ✅ **Checkpoint:** Use the "Remove Balloons" cheat → balloons pop with colored VFX → `ScoreController.TotalScore` increments (verify in debugger or cheat console) → balance animation triggers. No UI required for this checkpoint.
 
 ---
 
-## Phase 7a — Score UI (Progress Bars, Notices, Trails)
+## Phase 7a — Score Feedback UI (Progress Bars, Notices, Trails, Labels)
 
-**Goal:** Wire the per-color progress bar system so scoring feedback is fully visible in Play Mode.
+**Goal:** Wire per-hit score feedback so every balloon pop updates the correct color bar, spawns a trail orb and notice, and reflects in the level/total-score labels.
 
-> All C# files in this phase are **already coded**. This phase is Unity Editor wiring only.
+> All C# files were written during Phase 6. This phase is **Unity Editor wiring only**.
 
-| File | Status |
+| File | What it does |
 |---|---|
-| `ColorProgressBar.cs` | ✅ Coded |
-| `ColorProgressBarInstancer.cs` | ✅ Coded |
-| `ScoreNotice.cs` | ✅ Coded |
-| `ScorePointTrail.cs` | ✅ Coded |
-| `ScoreCounterLabel.cs` | ✅ Coded |
-| `LevelLabel.cs` | ✅ Coded |
-| `LevelUpPopUp.cs` | ✅ Coded |
-| `BalloonScoredMessage` | ✅ Coded |
-| `ScoreLevelUpMessage` | ✅ Coded |
+| `ColorProgressBar.cs` | Per-color slider; owns `ScoreNotice` + `ScorePointTrail` pools; completion VFX |
+| `ColorProgressBarInstancer.cs` | Spawns one `ColorProgressBar` per color at Start |
+| `ScoreNotice.cs` | Pooled floating "+N" popup at the bar |
+| `ScorePointTrail.cs` | Pooled orb that flies from balloon world position → bar position |
+| `ScoreCounterLabel.cs` | Binds total-score `Text` to `ScoreController.TotalScore` |
+| `LevelLabel.cs` | Binds level `Text` to `ScoreController.Level`; `_showNextLevel` toggle |
+
+**`GameLifetimeScope` registration** (code — do this first):
+```csharp
+builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
+```
 
 **Unity Editor steps:**
 
-1. **`ColorProgressBar` prefab** — duplicate the legacy prefab; swap all legacy MonoBehaviours for the new `ColorProgressBar`; wire Inspector slots: `_graphicsToSetColor` (color-tinted images), `_progressSlider`, `_animator`, `_completionParticleSystem`, `_noticePrefab` (ScoreNotice prefab), `_trailPrefab` (ScorePointTrail prefab)
-2. **`ColorProgressBarInstancer`** — place a GameObject under the UI Canvas; add `ColorProgressBarInstancer`; assign the `ColorProgressBar` prefab; VContainer auto-injects the rest
+1. **`ColorProgressBar` prefab** — duplicate legacy; remove old MonoBehaviours; add new `ColorProgressBar`; wire `_graphicsToSetColor`, `_progressSlider`, `_animator`, `_completionParticleSystem`, `_noticePrefab`, `_trailPrefab`
+2. **`ColorProgressBarInstancer`** — add to a Canvas GameObject; assign the `ColorProgressBar` prefab
 3. **`ScoreCounterLabel`** — add to the total-score `Text` element
-4. **`LevelLabel`** — add to the current-level `Text`; add a second instance with `_showNextLevel` ticked on the "next level" label
-5. **`LevelUpPopUp`** — add to the popup GameObject; wire `_animator`, `_levelLabel`, `_levelGlowFill`, `_levelGlowFillParticleSystem`, and the three delay floats; wire **Continue** button `OnClick` → `LevelUpPopUp.OnContinue()`; add `RegisterComponentInHierarchy<LevelUpPopUp>()` to `GameLifetimeScope`
-6. **Disable legacy** — in the scene, disable: old `ColorProgressBarInstancer`, old `ScoreCounterLabel`, old `LevelLabel`, old `LevelUpPopUp`, old `GameScoreController`
+4. **`LevelLabel`** — add to the current-level `Text`; add a second instance with `_showNextLevel` ticked for the "next level" label
+5. **Disable legacy** — disable: old `ColorProgressBarInstancer`, old `ScoreCounterLabel`, old `LevelLabel`, old `GameScoreController`
 
-✅ **Checkpoint:** Hit balloons → correct color bar fills → score notice pops at bar → trail orb flies to bar → all bars complete → level-up popup appears (game pauses) → glow fills → Continue resumes.
+✅ **Checkpoint:** Hit balloons → correct color bar fills → score notice pops at bar → trail orb flies to bar → score counter and level labels update. Bars completing is visible but the level-up popup is not yet wired.
 
 ---
 
-## Phase 7b — Shield Counter HUD
+## Phase 7b — Level-Up Popup
+
+**Goal:** Wire the full-screen level-up ceremony that fires when all color bars complete — game pauses, glow fills, player continues.
+
+> `LevelUpPopUp.cs` was written during Phase 6. This phase is **Unity Editor wiring only**.
+
+| File | What it does |
+|---|---|
+| `LevelUpPopUp.cs` | Waits for `AllBalloonsStable()`; triggers `"Appear"` animator; animates glow fill using `Time.unscaledDeltaTime`; `OnContinue()` restores `Time.timeScale = 1` |
+
+**`GameLifetimeScope` registration** (code — do this first):
+```csharp
+builder.RegisterComponentInHierarchy<LevelUpPopUp>();
+```
+
+**Unity Editor steps:**
+
+1. **`LevelUpPopUp`** — add to the popup GameObject; wire `_animator`, `_levelLabel`, `_levelGlowFill`, `_levelGlowFillParticleSystem`, and the three delay floats (`_fillAnimationDelay`, `_playParticlesDelay`, `_continueUnpauseDelay`)
+2. Wire the **Continue** button `OnClick` → `LevelUpPopUp.OnContinue()`
+3. **Disable legacy** — disable the old `LevelUpPopUp` MonoBehaviour
+
+✅ **Checkpoint:** All color bars complete → game pauses → level-up popup appears with previous level number → glow particle fills the circle → level number updates to the new level → Continue resumes the game and resets all bars.
+
+---
+
+## Phase 7c — Shield Counter HUD
 
 **Goal:** Wire the shield counter HUD so bounce feedback is visible and driven by `ProjectileModel.ShieldsRemaining`.
 
@@ -353,7 +370,7 @@ builder.RegisterComponentInHierarchy<ShieldCounterAnimation>();
 
 ---
 
-## Phase 7c — Game Start
+## Phase 7d — Game Start
 
 **Goal:** Replace the legacy `isGameStarted` entity flag with `GameStartButton` publishing `SpawnBalloonLineMessage`, so the game can be started independently of any Entitas system.
 
@@ -374,7 +391,7 @@ builder.RegisterComponentInHierarchy<ShieldCounterAnimation>();
 
 ---
 
-## Phase 7d — HUD Audit & Cleanup
+## Phase 7e — HUD Audit & Cleanup
 
 **Goal:** Confirm zero active Entitas UI in the scene; remove stubs.
 
@@ -598,19 +615,20 @@ These constraints apply to all code generated or written during this migration.
 
 ## Progress Tracker
 
-| Phase | Description                               | Status    |
-|-------|-------------------------------------------|-----------|
-| 0     | Preparation & Folder Scaffold             | ✅ Done   |
-| 1     | Balloon Model + View                      | ✅ Done   |
-| 2     | Slot Grid Model & Placement               | ✅ Done   |
-| 3     | Balance / Movement Logic                  | ✅ Done   |
-| 4     | Balloon Spawning & Line Management        | ✅ Done   |
-| 5     | Projectile & Thrower                      | ✅ Done   |
-| 6     | Hit, Destruction & Score                  | ✅ Done   |
-| 7a    | Score UI — Progress Bars, Notices, Trails | ⬜ Wiring |
-| 7b    | Shield Counter HUD                        | ⬜ Code + Wiring |
-| 7c    | Game Start                                | ⬜ Wiring |
-| 7d    | HUD Audit & Cleanup                       | ⬜ Todo   |
-| 8     | Power-Ups                                 | ⬜ Todo   |
-| 9     | Game Loop, UI & Cleanup                   | ⬜ Todo   |
+| Phase | Description                               | Status          |
+|-------|-------------------------------------------|-----------------|
+| 0     | Preparation & Folder Scaffold             | ✅ Done         |
+| 1     | Balloon Model + View                      | ✅ Done         |
+| 2     | Slot Grid Model & Placement               | ✅ Done         |
+| 3     | Balance / Movement Logic                  | ✅ Done         |
+| 4     | Balloon Spawning & Line Management        | ✅ Done         |
+| 5     | Projectile & Thrower                      | ✅ Done         |
+| 6     | Hit, Destruction & Score Logic            | ✅ Done (code)  |
+| 7a    | Score Feedback UI                         | ⬜ Wiring only  |
+| 7b    | Level-Up Popup                            | ⬜ Wiring only  |
+| 7c    | Shield Counter HUD                        | ⬜ Code + Wiring|
+| 7d    | Game Start                                | ⬜ Wiring only  |
+| 7e    | HUD Audit & Cleanup                       | ⬜ Todo         |
+| 8     | Power-Ups                                 | ⬜ Todo         |
+| 9     | Game Loop, UI & Cleanup                   | ⬜ Todo         |
 

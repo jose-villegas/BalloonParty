@@ -1,8 +1,6 @@
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
-using VContainer;
-using BalloonParty.Game;
 
 namespace BalloonParty.UI
 {
@@ -11,18 +9,14 @@ namespace BalloonParty.UI
     {
         [SerializeField] private bool _showNextLevel;
 
-        [Inject] private ScoreController _scoreController;
-
         private Text _label;
 
         private void Awake() => _label = GetComponent<Text>();
 
-        private void Start()
+        public void Bind(IReadOnlyReactiveProperty<int> level)
         {
-            _scoreController.Level
-                .Subscribe(level => _label.text = (level + (_showNextLevel ? 1 : 0)).ToString("N0"))
-                .AddTo(this);
+            level.Subscribe(l => _label.text = (l + (_showNextLevel ? 1 : 0)).ToString("N0"))
+                 .AddTo(this);
         }
     }
 }
-

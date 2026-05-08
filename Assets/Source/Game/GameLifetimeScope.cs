@@ -8,7 +8,6 @@ using BalloonParty.Debug;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using BalloonParty.Thrower;
-using BalloonParty.UI;
 
 namespace BalloonParty.Game
 {
@@ -42,8 +41,6 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
 
             builder.RegisterComponentInHierarchy<ThrowerController>().AsImplementedInterfaces().AsSelf();
-            builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
-            builder.RegisterComponentInHierarchy<LevelUpPopUp>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();
@@ -52,8 +49,7 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces()
                 .AsSelf();
             builder.RegisterComponentOnNewGameObject<CheatConsoleView>(Lifetime.Singleton, "CheatConsole")
-                .AsImplementedInterfaces()
-                .AsSelf();
+                .AsImplementedInterfaces();
 #endif
         }
     }
