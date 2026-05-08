@@ -268,8 +268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1596bec1437c4b9793ed44234d8a7217, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Slots.SlotGridController
-  _balloonPrefab: {fileID: 5923847143892959990, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-    type: 3}
   _initialLines: 3
 --- !u!1 &854596298
 GameObject:
@@ -305,6 +303,8 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects: []
   _gameConfiguration: {fileID: 11400000, guid: cb5eb9b399cb65f4cbc8875a2f79715c, type: 2}
+  _balloonPrefab: {fileID: 5923847143892959990, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+    type: 3}
 --- !u!4 &854596300
 Transform:
   m_ObjectHideFlags: 0

@@ -185,20 +185,28 @@ builder.Register<BalloonController>(Lifetime.Transient);
 
 ## Phase 4 — Balloon Spawning & Line Management
 
-**Goal:** Port spawner systems using a VContainer factory.
+**Goal:** Port spawner systems using a VContainer entry point and MessagePipe — replacing `BalloonLineSpawnerSystem`, `GameStartedBalloonsSpawnSystem`, and `NewBalloonLinesInstanceSystem`.
 
 > References: `BalloonLineSpawnerSystem.cs`, `GameStartedBalloonsSpawnSystem.cs`, `NewBalloonLinesInstanceSystem.cs`
 
-1. Create `Assets/Source/Balloon/Controller/BalloonSpawner.cs`
-   - `[Inject] IObjectResolver _resolver`, `[Inject] SlotGrid _grid`
-   - `[Inject] IPublisher<BalanceBalloonsMessage> _publisher`
-   - API: `BalloonController Spawn(string color, Vector2Int slotIndex)`
-   - Publishes `BalanceBalloonsMessage` after placing new balloon lines
+1. Create `Assets/Source/Shared/Messages/SpawnBalloonLineMessage.cs` — empty struct that triggers spawning of one balloon line.
 2. Register in `GameLifetimeScope`:
    ```csharp
-   builder.Register<BalloonSpawner>(Lifetime.Singleton);
+   builder.RegisterMessageBroker<SpawnBalloonLineMessage>(options);
    ```
-3. ✅ **Checkpoint:** `BalloonSpawner` populates the initial grid on game start.
+3. Create `Assets/Source/Balloon/Spawner/BalloonSpawner.cs` implementing `IStartable`
+   - `[Inject] SlotGrid _grid`, `[Inject] IGameConfiguration _config`, `[Inject] IObjectResolver _resolver`
+   - `[Inject] ISubscriber<SpawnBalloonLineMessage> _lineSubscriber`
+   - `[Inject] IPublisher<BalanceBalloonsMessage> _balancePublisher`
+   - In `Start()`: subscribe to `SpawnBalloonLineMessage` → call `SpawnLine()`
+   - `SpawnLine()` — finds the bottom-most empty row in each column (mirrors `BottomSlotsIndexes` logic), picks a random color from `IGameConfiguration.BalloonColors`, calls `SpawnBalloon()` for each, then publishes `BalanceBalloonsMessage`
+   - `SpawnBalloon(colorName, slot)` — instantiates the `Balloon` prefab from Resources, creates a `BalloonModel`, wires up a `BalloonController`, places the model in `SlotGrid`, and animates the balloon dropping in from above using DOTween `DOMove` + `DOScale` (mirrors the `OnLinkedView` animation in the legacy system)
+4. Register as an entry point:
+   ```csharp
+   builder.RegisterEntryPoint<BalloonSpawner>();
+   ```
+5. Add `SpawnBalloonLineCheat` (`Debug/`) — publishes `SpawnBalloonLineMessage` from the cheat console to spawn a new line on demand.
+6. ✅ **Checkpoint:** Press Play → use the "Spawn Balloon Line" cheat → a new row of balloons drops in from above and settles into the bottom empty slots.
 
 ---
 
@@ -371,7 +379,19 @@ _subscriber.Subscribe(_ => BalanceBalloons()).AddTo(_disposable);
 
 ---
 
-### `IGameConfiguration` as the single source of truth
+### Animation Fidelity
+
+All tween animations must reproduce the original behaviour **exactly** — same ease, same duration source, same start/end values. Do not substitute eases or durations unless there is an explicit design reason to change them.
+
+When porting an animation:
+1. Read the original tween call in `Source_Old` before writing any new code.
+2. Match the ease type — if the original omits `SetEase`, use DOTween's default (`InOutQuad`); do not add `OutBack`, `OutBounce`, or any other ease unless it was there originally.
+3. Use the same configuration fields for timing (`IGameConfiguration.BalloonSpawnAnimationDurationRange`, `TimeForBalloonsBalance`, etc.) — never substitute hardcoded values.
+4. Match the start conditions (e.g. scale starts at `Vector3.zero`, position offset is `+Vector2Int.up * 4` rows in grid space).
+
+---
+
+
 
 All game data — balloon colors, slot dimensions, timing values, spawn counts — lives in the `GameConfiguration` ScriptableObject and is accessed exclusively through `IGameConfiguration`. Rules:
 
@@ -443,7 +463,7 @@ These constraints apply to all code generated or written during this migration.
 | 1     | Balloon Model + View               | ✅ Done |
 | 2     | Slot Grid Model & Placement        | ✅ Done |
 | 3     | Balance / Movement Logic           | ✅ Done |
-| 4     | Balloon Spawning & Line Management | ⬜ Todo |
+| 4     | Balloon Spawning & Line Management | ✅ Done |
 | 5     | Projectile & Thrower               | ⬜ Todo |
 | 6     | Hit, Destruction & Score           | ⬜ Todo |
 | 7     | Power-Ups                          | ⬜ Todo |

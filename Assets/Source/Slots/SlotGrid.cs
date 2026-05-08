@@ -17,6 +17,9 @@ namespace BalloonParty.Slots
         public int Columns => _slots.GetLength(0);
         public int Rows => _slots.GetLength(1);
 
+        public string RandomColorName() =>
+            _config.BalloonColors[UnityEngine.Random.Range(0, _config.BalloonColors.Length)].Name;
+
         public SlotGrid(IGameConfiguration config)
         {
             _config = config;
