@@ -21,7 +21,7 @@ namespace BalloonParty.Debug
 
         private float _consoleHeight = 280f;
         private const float MinHeight = 80f;
-        private const float HandleHeight = 10f;
+        private const float HandleHeight = 14f;
         private const float ReferenceHeight = 720f;
         private bool _resizing;
 
@@ -29,6 +29,28 @@ namespace BalloonParty.Debug
         {
             if (Input.GetKeyDown(KeyCode.BackQuote))
                 _visible = !_visible;
+
+            if (!_visible) return;
+
+            var scale = Screen.height / ReferenceHeight;
+            var handleTopInScreenSpace = Screen.height - (_consoleHeight + HandleHeight) * scale;
+            var handleBottomInScreenSpace = Screen.height - _consoleHeight * scale;
+
+            // Input.mousePosition has y=0 at bottom; convert to top-left for comparison.
+            var mouseY = Screen.height - Input.mousePosition.y;
+
+            if (Input.GetMouseButtonDown(0) && mouseY >= handleTopInScreenSpace && mouseY <= handleBottomInScreenSpace)
+                _resizing = true;
+
+            if (Input.GetMouseButtonUp(0))
+                _resizing = false;
+
+            if (_resizing && Input.GetMouseButton(0))
+            {
+                // mouseY in screen pixels from the top; convert to reference height space.
+                var referenceMouseY = mouseY / scale;
+                _consoleHeight = Mathf.Clamp(ReferenceHeight - referenceMouseY, MinHeight, ReferenceHeight * 0.9f);
+            }
         }
 
         private void OnGUI()
@@ -38,49 +60,21 @@ namespace BalloonParty.Debug
             var scale = Screen.height / ReferenceHeight;
             GUI.matrix = Matrix4x4.Scale(new Vector3(scale, scale, 1f));
 
-            // all coords are now in reference-resolution space
             var sw = Screen.width / scale;
             var sh = ReferenceHeight;
 
             var handleRect = new Rect(0, sh - _consoleHeight - HandleHeight, sw, HandleHeight);
             var bodyRect   = new Rect(0, sh - _consoleHeight, sw, _consoleHeight);
 
-            HandleResize(handleRect, sh, scale);
-
-            GUI.Box(handleRect, "▲ ─────────────────── drag to resize ─────────────────── ▲");
+            // Visual cursor hint when hovering or dragging the handle.
+            var guiMouseY = Event.current.mousePosition.y / scale;
+            var overHandle = guiMouseY >= handleRect.y && guiMouseY <= handleRect.yMax;
+            GUI.Box(handleRect, overHandle || _resizing ? "↕" : "—");
             GUI.Box(bodyRect, GUIContent.none);
 
             GUILayout.BeginArea(new Rect(bodyRect.x + 6, bodyRect.y + 6, bodyRect.width - 12, bodyRect.height - 12));
             DrawContent();
             GUILayout.EndArea();
-        }
-
-        private void HandleResize(Rect handleRect, float scaledScreenHeight, float scale)
-        {
-            var e = Event.current;
-            // Event.current.mousePosition is in raw screen pixels; convert to reference space.
-            var mousePos = e.mousePosition / scale;
-
-            if (e.type == EventType.MouseDown && handleRect.Contains(mousePos))
-            {
-                _resizing = true;
-                e.Use();
-            }
-
-            if (_resizing)
-            {
-                if (e.type == EventType.MouseDrag)
-                {
-                    _consoleHeight = Mathf.Clamp(scaledScreenHeight - mousePos.y, MinHeight, scaledScreenHeight * 0.9f);
-                    e.Use();
-                }
-
-                if (e.type == EventType.MouseUp)
-                {
-                    _resizing = false;
-                    e.Use();
-                }
-            }
         }
 
         private void DrawContent()
