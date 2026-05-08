@@ -117,6 +117,15 @@ namespace BalloonParty.Slots
             return neighbors;
         }
 
+        public bool AllBalloonsStable()
+        {
+            for (int col = 0; col < Columns; col++)
+                for (int row = 0; row < Rows; row++)
+                    if (_slots[col, row] != null && !_slots[col, row].IsStable.Value)
+                        return false;
+            return true;
+        }
+
         public Vector3 IndexToWorldPosition(Vector2Int index)
         {
             var hIndex = index.x * 2 + index.y % 2;

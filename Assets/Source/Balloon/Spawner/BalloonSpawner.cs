@@ -19,6 +19,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IObjectResolver _resolver;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
+        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
 
         [Inject]
         public BalloonSpawner(
@@ -27,7 +28,8 @@ namespace BalloonParty.Balloon.Spawner
             IGameConfiguration config,
             IObjectResolver resolver,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
-            IPublisher<BalanceBalloonsMessage> balancePublisher)
+            IPublisher<BalanceBalloonsMessage> balancePublisher,
+            ISubscriber<BalloonHitMessage> hitSubscriber)
         {
             _grid = grid;
             _settings = settings;
@@ -35,6 +37,7 @@ namespace BalloonParty.Balloon.Spawner
             _resolver = resolver;
             _lineSubscriber = lineSubscriber;
             _balancePublisher = balancePublisher;
+            _hitSubscriber = hitSubscriber;
         }
 
         public void Start()
@@ -68,7 +71,7 @@ namespace BalloonParty.Balloon.Spawner
             model.Color.Value = colorName;
             model.SlotIndex.Value = slot;
 
-            var controller = new BalloonController(model, view);
+            var controller = new BalloonController(model, view, _hitSubscriber, _balancePublisher, _grid, _config);
             controller.Start();
 
             _grid.Place(model, slot);

@@ -8,6 +8,7 @@ using BalloonParty.Debug;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using BalloonParty.Thrower;
+using BalloonParty.UI;
 
 namespace BalloonParty.Game
 {
@@ -23,6 +24,10 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<BalanceBalloonsMessage>(options);
             builder.RegisterMessageBroker<SpawnBalloonLineMessage>(options);
             builder.RegisterMessageBroker<ProjectileDestroyedMessage>(options);
+            builder.RegisterMessageBroker<BalloonHitMessage>(options);
+            builder.RegisterMessageBroker<BalloonScoredMessage>(options);
+            builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
+            builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
 
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
             builder.RegisterInstance(new BalloonSpawnerSettings(_balloonPrefab));
@@ -34,8 +39,11 @@ namespace BalloonParty.Game
 
             builder.RegisterEntryPoint<BalloonBalancer>();
             builder.RegisterEntryPoint<BalloonSpawner>().AsSelf();
+            builder.RegisterEntryPoint<ScoreController>().AsSelf();
 
             builder.RegisterComponentInHierarchy<ThrowerController>().AsImplementedInterfaces().AsSelf();
+            builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
+            builder.RegisterComponentInHierarchy<LevelUpPopUp>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();

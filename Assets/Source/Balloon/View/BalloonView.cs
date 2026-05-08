@@ -12,6 +12,7 @@ namespace BalloonParty.Balloon.View
         [SerializeField] private SpriteRenderer _shadowRenderer;
         [SerializeField] private Animator _animator;
         [SerializeField] private Renderer[] _spriteLayerRenderers;
+        [SerializeField] private ParticleSystem _popVfxPrefab;
 
         [SerializeField] [Range(0f, 1f)] private float _shadowAlpha;
         [SerializeField] [Range(0f, 5f)] private float _shadowIntensity;
@@ -36,6 +37,17 @@ namespace BalloonParty.Balloon.View
             model.IsStable
                 .Subscribe(stable => _animator.SetBool("IsStable", stable))
                 .AddTo(this);
+        }
+
+        public void PlayPopEffect(Color color)
+        {
+            if (_popVfxPrefab == null) return;
+
+            var vfx = Instantiate(_popVfxPrefab, transform.position, Quaternion.identity);
+            var main = vfx.main;
+            main.startColor = color;
+            vfx.Play();
+            Destroy(vfx.gameObject, main.duration + main.startLifetime.constantMax);
         }
 
         private void ApplyColor(string colorName)

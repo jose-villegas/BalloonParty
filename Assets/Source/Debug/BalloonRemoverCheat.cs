@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 
@@ -12,6 +13,7 @@ namespace BalloonParty.Debug
     {
         [Inject] private SlotGrid _grid;
         [Inject] private IPublisher<BalanceBalloonsMessage> _publisher;
+        [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
 
         public string Name => _active ? "Remove Balloons  [ON]" : "Remove Balloons";
         public string Section => "Grid";
@@ -75,12 +77,8 @@ namespace BalloonParty.Debug
             foreach (var slot in hitSlots)
             {
                 var model = _grid.At(slot);
-                _grid.Remove(slot);
-
-                // TODO (Phase 6): replace with _publisher.Publish(new BalloonHitMessage(model)) once
-                // BalloonHitMessage and the destruction pipeline are in place. Remove the Destroy call below.
-                if (model?.View != null)
-                    Destroy(model.View.gameObject);
+                if (model != null)
+                    _hitPublisher.Publish(new BalloonHitMessage(model, _grid.IndexToWorldPosition(slot)));
             }
 
             _publisher.Publish(default);

@@ -18,6 +18,7 @@ namespace BalloonParty.Thrower
         [Inject] private IObjectResolver _resolver;
         [Inject] private SlotGrid _grid;
         [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        [Inject] private IPublisher<ProjectileLoadedMessage> _loadedPublisher;
 
         private ProjectileModel _activeProjectile;
         private ProjectileView _activeView;
@@ -115,12 +116,13 @@ namespace BalloonParty.Thrower
             _activeProjectile = new ProjectileModel
             {
                 Speed = _config.ProjectileSpeed,
-                ShieldsRemaining = _config.ProjectileStartingShields,
                 IsFree = false,
                 Direction = _direction,
             };
+            _activeProjectile.ShieldsRemaining.Value = _config.ProjectileStartingShields;
 
             _activeView.Bind(_activeProjectile);
+            _loadedPublisher.Publish(default);
         }
 
         public void FireImmediate()

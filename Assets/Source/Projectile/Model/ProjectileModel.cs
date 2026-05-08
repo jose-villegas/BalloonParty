@@ -1,3 +1,4 @@
+using UniRx;
 using UnityEngine;
 using BalloonParty.Balloon.Model;
 
@@ -7,7 +8,7 @@ namespace BalloonParty.Projectile.Model
     {
         public Vector3 Direction;
         public float Speed;
-        public int ShieldsRemaining;
+        public ReactiveProperty<int> ShieldsRemaining { get; } = new(0);
         public bool IsFree;
 
         public string ColorName;

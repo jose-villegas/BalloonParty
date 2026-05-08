@@ -6,6 +6,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
+using BalloonParty.Balloon.View;
 
 namespace BalloonParty.Projectile.View
 {
@@ -18,6 +19,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private IGameConfiguration _config;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
+        [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
         [Inject] private SlotGrid _grid;
 
         private Model.ProjectileModel _model;
@@ -44,11 +46,11 @@ namespace BalloonParty.Projectile.View
 
             if (reflect != Vector3.zero)
             {
-                _model.ShieldsRemaining--;
+                _model.ShieldsRemaining.Value--;
 
                 PlayBounceEffect(pos);
 
-                if (_model.ShieldsRemaining < 0)
+                if (_model.ShieldsRemaining.Value < 0)
                 {
                     _balancePublisher.Publish(default);
                     _destroyedPublisher.Publish(default);
@@ -79,6 +81,7 @@ namespace BalloonParty.Projectile.View
 
             TrackColor(balloonModel.Color.Value);
             NudgeNeighbors(balloonModel);
+            _hitPublisher.Publish(new BalloonHitMessage(balloonModel, balloonView.transform.position));
         }
 
         private void TrackColor(string hitColor)
