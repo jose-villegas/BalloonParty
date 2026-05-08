@@ -1,7 +1,7 @@
 # BalloonParty — ECS → MVC Migration Plan
 
 > Created: 2026-05-08  
-> Context: Migrating from Entitas ECS (`Assets/Source_Old`) to a plain MVC architecture (`Assets/Source`) using MonoBehaviours, **UniRx** for reactive programming, and **Extenject (Zenject)** for dependency injection. Each phase ends with a **testable Unity Editor checkpoint**.
+> Context: Migrating from Entitas ECS (`Assets/Source_Old`) to a plain MVC architecture (`Assets/Source`) using MonoBehaviours, **UniRx** for reactive programming, and **VContainer** for dependency injection. Each phase ends with a **testable Unity Editor checkpoint**.
 
 ---
 
@@ -17,7 +17,8 @@
 
 - **Pattern:** MVC (Model → pure C# class, View → MonoBehaviour, Controller → mediator)
 - **Reactive layer:** [UniRx](https://github.com/neuecc/UniRx) — `ReactiveProperty<T>`, `Subject<T>`, `.Subscribe()` replacing plain C# events and Entitas reactive collectors
-- **Dependency Injection:** [Extenject (Zenject)](https://github.com/Mathijs-Bakker/Extenject) — `[Inject]` attributes, `Installer` classes, `GameObjectContext` / `SceneContext` replacing manual wiring and `Contexts.sharedInstance`
+- **Dependency Injection:** [VContainer](https://vcontainer.hadashikick.jp/) — `[Inject]` attributes, `LifetimeScope`, `IContainerBuilder` replacing manual wiring and `Contexts.sharedInstance`
+- **Messaging / Signals:** [MessagePipe](https://github.com/Cysharp/MessagePipe) — VContainer's recommended pub/sub companion, replaces Zenject's SignalBus
 - **New folder:** `Assets/Source/`
 - **No Entitas dependency** in new code
 
@@ -31,16 +32,17 @@
 | `ICollector` / `GameMatcher` | `Subject<T>` or `Observable.Merge(...)` |
 | `entity.isStableBalloon = true` (flag flip) | `model.IsStable.Value = true` (ReactiveProperty) |
 | `IGroup<GameEntity>` filter | `.Where(...)` operator on observable stream |
-| Event entities (`isBalloonsBalanceEvent`) | `Subject<Unit>` signal bus |
+| Event entities (`isBalloonsBalanceEvent`) | `IPublisher<T>` / `ISubscriber<T>` (MessagePipe) |
 
-## How Extenject Replaces Manual Wiring
+## How VContainer Replaces Manual Wiring
 
-| Old Pattern | Extenject Equivalent |
+| Old Pattern | VContainer Equivalent |
 |---|---|
 | `Contexts.sharedInstance` | `[Inject] IGameConfiguration _config` |
-| `new SomeSystem(contexts)` in GameController | Bound in a `GameInstaller : MonoInstaller` |
-| Prefab instantiation with manual linking | `IFactory<BalloonController>` or `MemoryPool<BalloonView>` |
+| `new SomeSystem(contexts)` in GameController | `builder.RegisterEntryPoint<GameManager>()` in `LifetimeScope` |
+| Prefab instantiation with manual linking | `builder.RegisterFactory<BalloonController>(...)` |
 | `GetComponent<>` coupling | `[Inject]` on fields/constructor |
+| Entitas `IInitializeSystem` / `IExecuteSystem` | `IStartable` / `ITickable` (VContainer entry points) |
 
 ---
 
@@ -61,13 +63,10 @@ Assets/Source/
     ThrowerController.cs
   Game/
     GameManager.cs, ScoreController.cs
+    GameLifetimeScope.cs   ← root VContainer scope
   Shared/
     IGameConfiguration.cs
-    SignalBus/      BalloonsBalanceSignal.cs, BalloonHitSignal.cs, ...
-  Installers/
-    GameInstaller.cs
-    BalloonInstaller.cs
-    ProjectileInstaller.cs
+    Messages/       BalanceBalloonsMessage.cs, BalloonHitMessage.cs, ...
 
 Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
 ```
@@ -83,20 +82,22 @@ Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
 1. Rename `Assets/Source` → `Assets/Source_Old` in the Unity Editor **Project window** (preserves `.meta` GUIDs).
 2. Install packages:
    - **UniRx** — OpenUPM: `openupm add com.neuecc.unirx`
-   - **Extenject** — import from the [Extenject releases](https://github.com/Mathijs-Bakker/Extenject/releases) `.unitypackage`
+   - **VContainer** — OpenUPM: `openupm add jp.hadashikick.vcontainer`
+   - **MessagePipe** — OpenUPM: `openupm add net.cysharp.messagepipe`  
+     *(VContainer has first-class MessagePipe integration via `RegisterMessagePipe()` + `RegisterMessageBroker<T>()`)*
 3. Add an `[Obsolete]` banner comment to key entry-point files in `Source_Old`:
    - `GameController.cs`
    - `GameUpdateSystems.cs`
    - `GameFixedUpdateSystems.cs`
 4. Create the new `Assets/Source/` folder tree (see structure above).
-5. Add a `SceneContext` GameObject to the main scene (Extenject) — this will be the root DI container.
+5. Create `Assets/Source/Game/GameLifetimeScope.cs` — a `LifetimeScope` (VContainer's composition root) attached to a root GameObject in the main scene.
 6. ✅ **Checkpoint:** Project compiles and runs in Play Mode — no runtime behaviour changed.
 
 ---
 
 ## Phase 1 — Balloon Model + View *(First Testable Milestone)*
 
-**Goal:** A standalone `BalloonPrefab` backed by a reactive `BalloonModel`, wired via Extenject — no Entitas dependency.
+**Goal:** A standalone `BalloonPrefab` backed by a reactive `BalloonModel`, wired via VContainer — no Entitas dependency.
 
 ### BalloonModel (`Assets/Source/Balloon/Model/BalloonModel.cs`)
 - Pure C# class with **UniRx** `ReactiveProperty<T>` fields:
@@ -112,19 +113,22 @@ Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
 - MonoBehaviour with `[SerializeField]` references: `SpriteRenderer`, shadow renderer.
 - `public void Bind(BalloonModel model)` — subscribes to `model.Color` and `model.SlotIndex` using `.Subscribe(...).AddTo(this)`.
 - Port color-application logic from `Source_Old/Balloon/BalloonColorController.cs` here.
-- Inject `IGameConfiguration` via `[Inject]` instead of `Contexts.sharedInstance`.
+- Receives `IGameConfiguration` via `[Inject]`.
 
 ### BalloonController (`Assets/Source/Balloon/Controller/BalloonController.cs`)
 - Plain C# mediator — receives `BalloonModel` and `BalloonView` via **`[Inject]`**.
-- Calls `view.Bind(model)` on construction.
+- Calls `view.Bind(model)` on construction / `IStartable.Start()`.
 
-### BalloonInstaller (`Assets/Source/Installers/BalloonInstaller.cs`)
-- `MonoInstaller` that binds `BalloonModel` and `BalloonView` for the prefab's `GameObjectContext`.
-- Pulls `IGameConfiguration` from the scene-level container.
+### Registration in `GameLifetimeScope`
+```csharp
+builder.Register<BalloonModel>(Lifetime.Transient);
+builder.RegisterComponentInHierarchy<BalloonView>();
+builder.Register<BalloonController>(Lifetime.Transient);
+```
 
 ### Steps
 1. Create `BalloonModel.cs`, `BalloonView.cs`, `BalloonController.cs` as above.
-2. Create `BalloonPrefab`: add `GameObjectContext` + `BalloonInstaller`, `BalloonView`, `BalloonController` MonoBehaviours. This prefab replaces the legacy one — no suffix needed.
+2. Create `BalloonPrefab`: add `BalloonView` MonoBehaviour. This prefab replaces the legacy one — no suffix needed.
 3. ✅ **Checkpoint:** Drag prefab into scene → set `Color` in Inspector → Press Play → balloon renders and reacts to model changes automatically via UniRx.
 
 ---
@@ -137,12 +141,15 @@ Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
    - Wraps `BalloonModel[,]`
    - Exposes `Subject<SlotGridChangedEvent> OnChanged` (UniRx) — fires on any `Place`/`Remove`
    - Methods: `Place`, `Remove`, `IsEmpty`, `IsUnbalanced`, `OptimalNextEmptySlot`
-   - Bound as a **singleton** in `GameInstaller`: `Container.Bind<SlotGrid>().AsSingle()`
+   - Registered as a **singleton** in `GameLifetimeScope`:
+     ```csharp
+     builder.Register<SlotGrid>(Lifetime.Singleton);
+     ```
 2. Create `Assets/Source/Slots/SlotGridView.cs`
    - MonoBehaviour subscribing to `SlotGrid.OnChanged` to redraw Gizmos
 3. Create `Assets/Source/Slots/SlotGridController.cs`
    - `[Inject] SlotGrid _grid`, `[Inject] IGameConfiguration _config`
-   - Spawns `BalloonController` instances into the grid using a Zenject `IFactory<BalloonController>`
+   - Spawns `BalloonController` instances into the grid via injected factory
 4. ✅ **Checkpoint:** `SlotGridController` in scene → configure rows/cols → Press Play → balloons populate grid positions visually.
 
 ---
@@ -153,41 +160,45 @@ Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
 
 > Reference: `Assets/Source_Old/Balloon/BalanceBalloonsSystem.cs`
 
-1. Create `Assets/Source/Shared/SignalBus/BalanceBalloonsSignal.cs` — empty struct used as a Zenject signal.
-2. Register in `GameInstaller`:
+1. Create `Assets/Source/Shared/Messages/BalanceBalloonsMessage.cs` — empty struct used as a MessagePipe message.
+2. Register in `GameLifetimeScope`:
    ```csharp
-   Container.DeclareSignal<BalanceBalloonsSignal>();
+   builder.RegisterMessagePipe();
+   builder.RegisterMessageBroker<BalanceBalloonsMessage>();
    ```
-3. Create `Assets/Source/Balloon/Controller/BalloonBalancer.cs`
-   - `[Inject] SignalBus _signalBus`, `[Inject] SlotGrid _grid`, `[Inject] IGameConfiguration _config`
-   - In `Initialize()`:
+3. Create `Assets/Source/Balloon/Controller/BalloonBalancer.cs` implementing `IStartable`
+   - `[Inject] ISubscriber<BalanceBalloonsMessage> _subscriber`
+   - `[Inject] SlotGrid _grid`, `[Inject] IGameConfiguration _config`
+   - In `Start()`:
      ```csharp
-     _signalBus.GetStream<BalanceBalloonsSignal>()
-               .Subscribe(_ => BalanceBalloons())
-               .AddTo(this);
+     _subscriber.Subscribe(_ => BalanceBalloons()).AddTo(_disposable);
      ```
    - `BalanceBalloons()` runs the same bubble-loop algorithm from the old system
    - Updates `BalloonModel.SlotIndex.Value` and fires DOTween path animations on `BalloonView.transform`
    - Sets `BalloonModel.IsStable.Value = true` in tween `onComplete`
-4. Any code that previously set `isBalloonsBalanceEvent` now calls `_signalBus.Fire<BalanceBalloonsSignal>()`
-5. ✅ **Checkpoint:** Remove a balloon via a debug button → `BalanceBalloonsSignal` fires → remaining balloons animate to fill gaps.
+4. Any code that previously set `isBalloonsBalanceEvent` now injects `IPublisher<BalanceBalloonsMessage>` and calls `_publisher.Publish(default)`
+5. Register `BalloonBalancer` as an entry point:
+   ```csharp
+   builder.RegisterEntryPoint<BalloonBalancer>();
+   ```
+6. ✅ **Checkpoint:** Remove a balloon via a debug button → `BalanceBalloonsMessage` published → remaining balloons animate to fill gaps.
 
 ---
 
 ## Phase 4 — Balloon Spawning & Line Management
 
-**Goal:** Port spawner systems using a Zenject factory + memory pool.
+**Goal:** Port spawner systems using a VContainer factory.
 
 > References: `BalloonLineSpawnerSystem.cs`, `GameStartedBalloonsSpawnSystem.cs`, `NewBalloonLinesInstanceSystem.cs`
 
 1. Create `Assets/Source/Balloon/Controller/BalloonSpawner.cs`
-   - `[Inject] IFactory<BalloonController> _factory`, `[Inject] SlotGrid _grid`, `[Inject] SignalBus _signalBus`
+   - `[Inject] IObjectResolver _resolver`, `[Inject] SlotGrid _grid`
+   - `[Inject] IPublisher<BalanceBalloonsMessage> _publisher`
    - API: `BalloonController Spawn(string color, Vector2Int slotIndex)`
-   - Fires `BalanceBalloonsSignal` after placing new balloon lines
-2. Bind factory in `BalloonInstaller`:
+   - Publishes `BalanceBalloonsMessage` after placing new balloon lines
+2. Register in `GameLifetimeScope`:
    ```csharp
-   Container.BindFactory<BalloonController, BalloonController.Factory>()
-       .FromSubContainerResolve().ByNewPrefab(balloonPrefab);
+   builder.Register<BalloonSpawner>(Lifetime.Singleton);
    ```
 3. ✅ **Checkpoint:** `BalloonSpawner` populates the initial grid on game start.
 
@@ -199,45 +210,56 @@ Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
 
 > References: `ThrowerDirectionSystem`, `ThrowerRotationSystem`, `ThrowLoadedProjectileSystem`, `ProjectileBounceSystem`
 
-1. Create `ProjectileModel.cs` with `ReactiveProperty<Vector2> Velocity`, `ReactiveProperty<bool> IsFree`
-2. Create `ProjectileView.cs` — subscribes to model, handles `OnTriggerEnter2D` directly (replaces `TriggerReporterController`)
-3. Create `Assets/Source/Thrower/ThrowerController.cs`
-   - `[Inject] SignalBus _signalBus`, `[Inject] IGameConfiguration _config`
+1. Create `Assets/Source/Shared/Messages/ProjectileFiredMessage.cs`
+2. Create `ProjectileModel.cs` with `ReactiveProperty<Vector2> Velocity`, `ReactiveProperty<bool> IsFree`
+3. Create `ProjectileView.cs` — subscribes to model, handles `OnTriggerEnter2D` directly (replaces `TriggerReporterController`)
+4. Create `Assets/Source/Thrower/ThrowerController.cs` implementing `ITickable`
+   - `[Inject] IPublisher<ProjectileFiredMessage> _publisher`, `[Inject] IGameConfiguration _config`
    - Uses `Observable.EveryUpdate().Where(_ => Input.GetMouseButtonDown(0))` for input stream
-   - Fires `ProjectileFiredSignal` via SignalBus
-4. Create `ProjectileController.cs`
-   - Subscribes to `ProjectileFiredSignal`, drives movement and bounce via `Observable.EveryFixedUpdate()`
-5. Bind in `ProjectileInstaller`; use `MemoryPool<ProjectileView>` for object reuse
-6. ✅ **Checkpoint:** Thrower fires projectile → bounces off walls → hits balloon → destruction triggered.
+5. Create `ProjectileController.cs` implementing `IStartable`
+   - `[Inject] ISubscriber<ProjectileFiredMessage> _subscriber`
+   - Drives movement and bounce via `Observable.EveryFixedUpdate()`
+6. Register entry points in `GameLifetimeScope`:
+   ```csharp
+   builder.RegisterMessageBroker<ProjectileFiredMessage>();
+   builder.RegisterEntryPoint<ThrowerController>();
+   builder.RegisterEntryPoint<ProjectileController>();
+   ```
+7. ✅ **Checkpoint:** Thrower fires projectile → bounces off walls → hits balloon → destruction triggered.
 
 ---
 
 ## Phase 6 — Balloon Hit, Destruction & Score
 
-**Goal:** Port hit/pop/score/nudge systems using signal bus.
+**Goal:** Port hit/pop/score/nudge systems using MessagePipe.
 
 > References: `BalloonHitDestructionSystem`, `BalloonHitScoreSystem`, `BalloonHitNudgeAnimationSystem`, `BalloonAnimationController`
 
-1. Create `Assets/Source/Shared/SignalBus/BalloonHitSignal.cs` — carries `BalloonModel` reference
-2. `BalloonController` subscribes to `BalloonHitSignal` filtered by its own model:
+1. Create `Assets/Source/Shared/Messages/BalloonHitMessage.cs` — carries `BalloonModel` reference
+2. `BalloonController` injects `ISubscriber<BalloonHitMessage>`, filters by its own model:
    - Triggers nudge animation on `BalloonView`, then destruction
-3. Create `Assets/Source/Game/ScoreController.cs`
-   - `[Inject] SignalBus _signalBus`
-   - `_signalBus.GetStream<BalloonHitSignal>().Subscribe(s => AddScore(s.Model)).AddTo(this)`
-   - Maintains `ReactiveProperty<int> Score` — UI binds to this directly via UniRx
-4. ✅ **Checkpoint:** Full loop: hit → pop → score UI updates reactively → balance animation triggers.
+3. Create `Assets/Source/Game/ScoreController.cs` implementing `IStartable`
+   - `[Inject] ISubscriber<BalloonHitMessage> _subscriber`
+   - Subscribes and increments `ReactiveProperty<int> Score`
+   - UI binds to `Score` directly via UniRx: `scoreController.Score.SubscribeToText(scoreLabel).AddTo(this)`
+4. Register in `GameLifetimeScope`:
+   ```csharp
+   builder.RegisterMessageBroker<BalloonHitMessage>();
+   builder.RegisterEntryPoint<ScoreController>();
+   ```
+5. ✅ **Checkpoint:** Full loop: hit → pop → score UI updates reactively → balance animation triggers.
 
 ---
 
 ## Phase 7 — Power-Ups
 
-**Goal:** Port the 5 power-up controllers using signals and DI.
+**Goal:** Port the 5 power-up controllers using MessagePipe and VContainer.
 
 > References: `BombPowerUpController`, `LaserPowerUpController`, `LightningPowerUpController`, Shield, `BalloonsPowerUpCheckSystem`
 
-1. Create `Assets/Source/Shared/SignalBus/PowerUpActivatedSignal.cs` — carries power-up type and position
-2. Create `Assets/Source/Balloon/PowerUps/` — one controller per power-up, each `[Inject]`ing `SignalBus` and `SlotGrid`
-3. Subscribe to `BalloonHitSignal` to check power-up trigger conditions (replaces `BalloonsPowerUpCheckSystem`)
+1. Create `Assets/Source/Shared/Messages/PowerUpActivatedMessage.cs` — carries power-up type and position
+2. Create `Assets/Source/Balloon/PowerUps/` — one controller per power-up, each injecting `IPublisher`/`ISubscriber` and `SlotGrid`
+3. Subscribe to `BalloonHitMessage` to check power-up trigger conditions (replaces `BalloonsPowerUpCheckSystem`)
 4. ✅ **Checkpoint:** Power-up triggers and visual effects work correctly.
 
 ---
@@ -246,14 +268,14 @@ Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
 
 **Goal:** Replace `GameControllerBehaviour` entry point; retire `Source_Old`.
 
-1. Create `Assets/Source/Game/GameManager.cs` implementing `IInitializable`, `ITickable` (Zenject interfaces)
-   - Bound in `GameInstaller` — Zenject calls `Initialize()` and `Tick()` automatically, no manual `Update` needed
+1. Create `Assets/Source/Game/GameManager.cs` implementing `IStartable`, `ITickable`
+   - Registered via `builder.RegisterEntryPoint<GameManager>()` — VContainer calls `Start()` and `Tick()` automatically
    - Owns orchestration of `SlotGrid`, `BalloonSpawner`, `ThrowerController`, `ScoreController`
 2. Bind all UI to reactive properties:
    ```csharp
    scoreController.Score.SubscribeToText(scoreLabel).AddTo(this);
    ```
-3. Remove `GameControllerBehaviour` from root scene object → replace with `SceneContext` + `GameInstaller`
+3. Remove `GameControllerBehaviour` from root scene object → `GameLifetimeScope` becomes the sole composition root
 4. ✅ **Checkpoint:** Full game loop runs end-to-end without any Entitas references.
 5. After full verification → delete `Assets/Source_Old`.
 
@@ -261,13 +283,13 @@ Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
 
 ## Coexistence Strategy (Phases 1–7)
 
-- **DI containers are separate:** `SceneContext` (Extenject) and `GameControllerBehaviour` (Entitas) can both live in the scene without conflict.
+- **Scopes are independent:** `GameLifetimeScope` (VContainer) and `GameControllerBehaviour` (Entitas) can coexist in the same scene without conflict.
 - Add a `bool UseLegacy` flag on `GameManager` to toggle which path drives the game loop per phase — no need for a separate scene fork.
-- `IGameConfiguration` ScriptableObject bound once in `GameInstaller` and shared by both old and new code during transition:
+- `IGameConfiguration` ScriptableObject registered once in `GameLifetimeScope` and shared by both old and new code:
   ```csharp
-  Container.Bind<IGameConfiguration>().FromScriptableObjectResource("GameConfiguration").AsSingle();
+  builder.RegisterInstance<IGameConfiguration>(gameConfigSO);
   ```
-- **SignalBus as a seam:** ECS systems not yet ported can fire Zenject signals via a thin bridge adapter, letting MVC controllers react immediately without waiting for the full system to be migrated.
+- **MessagePipe as a seam:** ECS systems not yet ported can publish MessagePipe messages via a thin bridge MonoBehaviour, letting MVC controllers react immediately without waiting for the full system to be migrated.
 
 ---
 
@@ -278,10 +300,8 @@ Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
 // Reactive model property — auto-updates view on change
 model.Color.Subscribe(c => spriteRenderer.color = colorMap[c]).AddTo(this);
 
-// Zenject signal as observable stream
-signalBus.GetStream<BalanceBalloonsSignal>()
-         .Subscribe(_ => BalanceBalloons())
-         .AddTo(this);
+// MessagePipe message as observable stream
+_subscriber.Subscribe(_ => BalanceBalloons()).AddTo(_disposable);
 
 // Input as stream
 Observable.EveryUpdate()
@@ -290,21 +310,70 @@ Observable.EveryUpdate()
           .AddTo(this);
 ```
 
-### Extenject
+### VContainer
 ```csharp
-// Scene-level singleton
-Container.Bind<SlotGrid>().AsSingle();
+// GameLifetimeScope.cs
+protected override void Configure(IContainerBuilder builder)
+{
+    // Singleton service
+    builder.Register<SlotGrid>(Lifetime.Singleton);
 
-// Signal declaration + direct binding
-Container.DeclareSignal<BalloonHitSignal>();
-Container.BindSignal<BalloonHitSignal>()
-         .ToMethod<ScoreController>(x => x.OnBalloonHit)
-         .FromResolve();
+    // ScriptableObject instance
+    builder.RegisterInstance<IGameConfiguration>(gameConfigSO);
 
-// Injection
-[Inject] private IGameConfiguration _config;
-[Inject] private SignalBus _signalBus;
+    // Entry points (IStartable / ITickable)
+    builder.RegisterEntryPoint<GameManager>();
+    builder.RegisterEntryPoint<BalloonBalancer>();
+
+    // MessagePipe
+    builder.RegisterMessagePipe();
+    builder.RegisterMessageBroker<BalanceBalloonsMessage>();
+    builder.RegisterMessageBroker<BalloonHitMessage>();
+}
 ```
+
+### MessagePipe
+```csharp
+// Publisher (fires message)
+[Inject] IPublisher<BalanceBalloonsMessage> _publisher;
+_publisher.Publish(default);
+
+// Subscriber (reacts to message)
+[Inject] ISubscriber<BalanceBalloonsMessage> _subscriber;
+_subscriber.Subscribe(_ => BalanceBalloons()).AddTo(_disposable);
+```
+
+### Injection
+```csharp
+[Inject] private IGameConfiguration _config;
+[Inject] private IPublisher<BalloonHitMessage> _publisher;
+[Inject] private ISubscriber<BalloonHitMessage> _subscriber;
+```
+
+---
+
+## Code Quality Constraints
+
+These constraints apply to all code generated or written during this migration.
+
+### Comments
+- **Only comment the *why***, never the *what* or *how* — if the code needs a comment to explain what it does, it should be renamed or refactored instead.
+- **No redundant comments.** Avoid comments like `// inject dependencies`, `// constructor`, `// update position` above self-evident code.
+- **No block comment headers** on every file or class (e.g. `// ====== BalloonModel ======`).
+- XML doc comments (`/// <summary>`) only on public API surfaces that are non-obvious to a consumer.
+
+### Naming & Readability
+- Code must be **self-explanatory through naming, namespaces, and context**. A reader should understand intent without comments.
+- Prefer longer, descriptive names over short ambiguous ones (`FindOptimalEmptySlot` over `GetSlot`).
+- Namespaces must reflect folder structure (e.g. `BalloonParty.Balloon.Model`, `BalloonParty.Slots`).
+
+### Architecture & Reuse
+- **Before writing new code, check for existing methods** in the codebase (including `Source_Old`) that can be ported, extracted, or called directly.
+- **Identify commonalities** across systems early — if two controllers share a pattern, extract it into a base class or generic utility.
+- **Prefer generic implementations** over copy-paste specialisations (e.g. a generic `ModelView<TModel>` base for all View MonoBehaviours rather than boilerplate per class).
+- **Extension methods** over utility classes where possible — keep them in a dedicated `Extensions/` namespace.
+- Keep classes **small and focused** — if a class is growing beyond one clear responsibility, split it.
+- Avoid `static` state; prefer injected singleton services via VContainer.
 
 ---
 
