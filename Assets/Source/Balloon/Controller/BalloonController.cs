@@ -19,6 +19,7 @@ namespace BalloonParty.Balloon.Controller
 
         public void Start()
         {
+            _model.View = _view;
             _view.Bind(_model);
         }
 

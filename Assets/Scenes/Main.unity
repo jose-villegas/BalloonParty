@@ -270,7 +270,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Slots.SlotGridController
   _balloonPrefab: {fileID: 5923847143892959990, guid: 85afc73ba92384dafa9d8a43874d2dd6,
     type: 3}
-  _colors: []
   _initialLines: 3
 --- !u!1 &854596298
 GameObject:
