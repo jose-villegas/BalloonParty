@@ -371,6 +371,17 @@ _subscriber.Subscribe(_ => BalanceBalloons()).AddTo(_disposable);
 
 ---
 
+### `IGameConfiguration` as the single source of truth
+
+All game data — balloon colors, slot dimensions, timing values, spawn counts — lives in the `GameConfiguration` ScriptableObject and is accessed exclusively through `IGameConfiguration`. Rules:
+
+- **Never hardcode** color names, slot counts, or timing values in new code. Always read from `IGameConfiguration`.
+- **Never use `[SerializeField]`** to duplicate data that already exists in `GameConfiguration` (e.g. no `_colors` array on a spawner — use `_config.BalloonColors`).
+- `IGameConfiguration` is registered once as a singleton in `GameLifetimeScope` and injected wherever needed — no `Contexts.sharedInstance` access in new code.
+- When porting a legacy system, check what configuration fields it reads and ensure they are present on `BalloonParty.Configuration.IGameConfiguration` before writing the new implementation.
+
+---
+
 ## Code Quality Constraints
 
 These constraints apply to all code generated or written during this migration.
@@ -403,7 +414,6 @@ These constraints apply to all code generated or written during this migration.
 | 0     | Preparation & Folder Scaffold      | ✅ Done |
 | 1     | Balloon Model + View               | ✅ Done |
 | 2     | Slot Grid Model & Placement        | ✅ Done |
-| 3     | Balance / Movement Logic           | ⬜ Todo |
 | 4     | Balloon Spawning & Line Management | ⬜ Todo |
 | 5     | Projectile & Thrower               | ⬜ Todo |
 | 6     | Hit, Destruction & Score           | ⬜ Todo |

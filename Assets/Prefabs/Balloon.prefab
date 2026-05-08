@@ -413,10 +413,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44080bb13dae4dbe9a47142efe1221cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.BalloonView
-  _renderer: {fileID: 0}
-  _shadowRenderer: {fileID: 0}
-  _animator: {fileID: 0}
-  _spriteLayerRenderers: []
+  _renderer: {fileID: 7503708300241224956}
+  _shadowRenderer: {fileID: 235527459738301781}
+  _animator: {fileID: 6706276318355311262}
+  _spriteLayerRenderers:
+  - {fileID: 235527459738301781}
+  - {fileID: 7503708300241224956}
+  - {fileID: 4867988701194507481}
+  - {fileID: 7087590600817567023}
   _shadowAlpha: 0
   _shadowIntensity: 0
   _baseSortingLayer: 0

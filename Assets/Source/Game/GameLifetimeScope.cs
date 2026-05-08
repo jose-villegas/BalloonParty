@@ -19,6 +19,7 @@ namespace BalloonParty.Game
 
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.RegisterComponentInHierarchy<SlotGridView>();
+            builder.RegisterComponentInHierarchy<SlotGridController>();
         }
     }
 }

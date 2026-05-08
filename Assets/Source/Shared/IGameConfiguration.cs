@@ -1,5 +1,4 @@
 using UnityEngine;
-using BalloonParty.Configuration;
 
 namespace BalloonParty.Configuration
 {
@@ -24,8 +23,10 @@ namespace BalloonParty.Configuration
         float PredictionTraceStep { get; }
         int PredictionTraceMaxBounces { get; }
         int PredictionTraceMaxSteps { get; }
+        BalloonColorConfiguration[] BalloonColors { get; }
 
         int PointsRequiredForLevel(int level);
         Color BalloonColor(string colorName);
     }
 }
+
