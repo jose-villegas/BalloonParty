@@ -382,6 +382,19 @@ All game data — balloon colors, slot dimensions, timing values, spawn counts �
 
 ---
 
+### Living Documentation
+
+Each feature folder contains a `README.md` that describes what that feature covers — its gameplay purpose, how it works, and how it interacts with other systems. These are not implementation notes; they explain intent and behaviour at the feature level.
+
+**Keep them current.** Update a folder's `README.md` whenever:
+- A new mechanic is added or an existing one changes significantly
+- A system's responsibility shifts (e.g. a controller absorbs logic from another)
+- Interactions with other systems are added, removed, or change in character
+
+The test for whether a README needs updating: if a new developer read only that file, would they still have an accurate picture of what the feature does and how it connects to the rest of the game?
+
+---
+
 ## Code Quality Constraints
 
 These constraints apply to all code generated or written during this migration.
