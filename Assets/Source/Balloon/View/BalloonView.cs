@@ -19,8 +19,12 @@ namespace BalloonParty.Balloon.View
 
         [Inject] private IGameConfiguration _config;
 
+        public BalloonModel Model { get; private set; }
+
         public void Bind(BalloonModel model)
         {
+            Model = model;
+
             model.Color
                 .Subscribe(ApplyColor)
                 .AddTo(this);

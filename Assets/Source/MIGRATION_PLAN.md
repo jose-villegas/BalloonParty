@@ -217,24 +217,31 @@ builder.Register<BalloonController>(Lifetime.Transient);
 
 **Goal:** Port thrower direction, rotation, loading, firing, bounce, and collision.
 
-> References: `ThrowerDirectionSystem`, `ThrowerRotationSystem`, `ThrowLoadedProjectileSystem`, `ProjectileBounceSystem`
+> References: `ThrowerDirectionSystem`, `ThrowerRotationSystem`, `ThrowLoadedProjectileSystem`, `ProjectileBounceSystem`, `ProjectileTransformSystem`, `BalloonCollisionSystem`
 
-1. Create `Assets/Source/Shared/Messages/ProjectileFiredMessage.cs`
-2. Create `ProjectileModel.cs` with `ReactiveProperty<Vector2> Velocity`, `ReactiveProperty<bool> IsFree`
-3. Create `ProjectileView.cs` — subscribes to model, handles `OnTriggerEnter2D` directly (replaces `TriggerReporterController`)
-4. Create `Assets/Source/Thrower/ThrowerController.cs` implementing `ITickable`
-   - `[Inject] IPublisher<ProjectileFiredMessage> _publisher`, `[Inject] IGameConfiguration _config`
-   - Uses `Observable.EveryUpdate().Where(_ => Input.GetMouseButtonDown(0))` for input stream
-5. Create `ProjectileController.cs` implementing `IStartable`
-   - `[Inject] ISubscriber<ProjectileFiredMessage> _subscriber`
-   - Drives movement and bounce via `Observable.EveryFixedUpdate()`
-6. Register entry points in `GameLifetimeScope`:
+1. Create `Assets/Source/Shared/Messages/ProjectileDestroyedMessage.cs` — empty struct published when the projectile runs out of shields.
+2. Register in `GameLifetimeScope`:
    ```csharp
-   builder.RegisterMessageBroker<ProjectileFiredMessage>();
-   builder.RegisterEntryPoint<ThrowerController>();
-   builder.RegisterEntryPoint<ProjectileController>();
+   builder.RegisterMessageBroker<ProjectileDestroyedMessage>(options);
    ```
-7. ✅ **Checkpoint:** Thrower fires projectile → bounces off walls → hits balloon → destruction triggered.
+3. Create `Assets/Source/Projectile/Model/ProjectileModel.cs` — plain C# data object: `Direction`, `Speed`, `ShieldsRemaining`, `IsFree`, `ColorName`, `ColorPopCount`, `LastHitBalloon`.
+4. Create `Assets/Source/Projectile/View/ProjectileView.cs` (MonoBehaviour on the projectile prefab)
+   - `[Inject]` receives `IGameConfiguration`, `IPublisher<BalanceBalloonsMessage>`, `IPublisher<ProjectileDestroyedMessage>`, `SlotGrid`
+   - `FixedUpdate()` drives manual movement (direction × speed × fixedDeltaTime); checks `LimitsClockwise` for wall hits; reflects direction, clamps position, decrements shields; destroys self and publishes both messages when shields < 0
+   - `OnTriggerEnter2D` resolves `BalloonView` from the collider, tracks absorbed color (exact `BalloonCollisionSystem` logic), runs DOTween neighbor-nudge sequence matching `BalloonHitNudgeAnimationSystem`
+5. Create `Assets/Source/Thrower/ThrowerController.cs` (MonoBehaviour, `IStartable`, scene-placed)
+   - `[Inject]` receives `IGameConfiguration`, `IObjectResolver`, `SlotGrid`, `ISubscriber<ProjectileDestroyedMessage>`
+   - `[SerializeField] GameObject _projectilePrefab` — holds the projectile prefab reference
+   - `Start()`: DOMove from `ThrowerSpawnPoint + Vector2.down` to `ThrowerSpawnPoint` over 1 second (matches `GameStartedThrowerSpawnSystem`), then calls `LoadProjectile()`
+   - `Update()`: updates direction from mouse (matches `ThrowerDirectionSystem`), rotates transform (matches `ThrowerRotationSystem`), orbits loaded projectile around spawn point (matches `ProjectileTransformSystem`), fires on mouse-up when all balloons are stable (matches `ThrowLoadedProjectileSystem`)
+   - Subscribes to `ProjectileDestroyedMessage` → reloads
+6. Add `BalloonView.Model` public property — set in `Bind()` so `ProjectileView` can reach the `BalloonModel` from a trigger collider.
+7. Register in `GameLifetimeScope`:
+   ```csharp
+   builder.RegisterComponentInHierarchy<ThrowerController>().AsImplementedInterfaces().AsSelf();
+   ```
+8. Add `FireProjectileCheat` (`Debug/`) — calls `ThrowerController.FireImmediate()` to force-fire the loaded projectile regardless of mouse state.
+9. ✅ **Checkpoint:** Thrower slides into position → loads projectile → aim with mouse → release to fire → projectile bounces off walls → hitting balloons nudges neighbors → when shields deplete, grid rebalances and thrower reloads.
 
 ---
 
@@ -467,7 +474,7 @@ These constraints apply to all code generated or written during this migration.
 | 2     | Slot Grid Model & Placement        | ✅ Done |
 | 3     | Balance / Movement Logic           | ✅ Done |
 | 4     | Balloon Spawning & Line Management | ✅ Done |
-| 5     | Projectile & Thrower               | ⬜ Todo |
+| 5     | Projectile & Thrower               | ✅ Done |
 | 6     | Hit, Destruction & Score           | ⬜ Todo |
 | 7     | Power-Ups                          | ⬜ Todo |
 | 8     | Game Loop, UI & Cleanup            | ⬜ Todo |

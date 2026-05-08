@@ -7,6 +7,7 @@ using BalloonParty.Balloon.Spawner;
 using BalloonParty.Debug;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
+using BalloonParty.Thrower;
 
 namespace BalloonParty.Game
 {
@@ -14,15 +15,18 @@ namespace BalloonParty.Game
     {
         [SerializeField] private GameConfiguration _gameConfiguration;
         [SerializeField] private GameObject _balloonPrefab;
+        [SerializeField] private GameObject _projectilePrefab;
 
         protected override void Configure(IContainerBuilder builder)
         {
             var options = builder.RegisterMessagePipe();
             builder.RegisterMessageBroker<BalanceBalloonsMessage>(options);
             builder.RegisterMessageBroker<SpawnBalloonLineMessage>(options);
+            builder.RegisterMessageBroker<ProjectileDestroyedMessage>(options);
 
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
             builder.RegisterInstance(new BalloonSpawnerSettings(_balloonPrefab));
+            builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
 
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.RegisterComponentInHierarchy<SlotGridView>();
@@ -31,8 +35,11 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BalloonBalancer>();
             builder.RegisterEntryPoint<BalloonSpawner>().AsSelf();
 
+            builder.RegisterComponentInHierarchy<ThrowerController>().AsImplementedInterfaces().AsSelf();
+
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<FireProjectileCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.RegisterComponentOnNewGameObject<BalloonRemoverCheat>(Lifetime.Singleton, "BalloonRemoverCheat")
                 .AsImplementedInterfaces()
                 .AsSelf();
