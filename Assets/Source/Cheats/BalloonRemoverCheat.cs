@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using VContainer;
 
-namespace BalloonParty.Debug
+namespace BalloonParty.Cheats
 {
     public class BalloonRemoverCheat : MonoBehaviour, ICheat
     {

@@ -1,8 +1,8 @@
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Projectile.Model;
-using BalloonParty.Shared.Messages;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using DG.Tweening;
 using MessagePipe;
@@ -176,27 +176,33 @@ namespace BalloonParty.Projectile.View
         private void NudgeNeighbors(BalloonModel hitBalloon)
         {
             var hitSlot = hitBalloon.SlotIndex.Value;
+            var hitSlotPos = _grid.IndexToWorldPosition(hitSlot);
             var neighbors = _grid.GetNeighbors(hitSlot.x, hitSlot.y);
 
             foreach (var neighbor in neighbors)
             {
                 if (neighbor?.View == null) continue;
-                if (!neighbor.IsStable.Value) continue;
 
-                var neighborPos = neighbor.View.transform.position;
-                var direction = neighborPos - hitBalloon.View.transform.position;
-                var targetSlotPos = _grid.IndexToWorldPosition(neighbor.SlotIndex.Value);
+                var view = neighbor.View;
+                var slotPos = _grid.IndexToWorldPosition(neighbor.SlotIndex.Value);
+                var direction = slotPos - hitSlotPos;
 
-                DOTween.Kill(neighbor.View.GetInstanceID());
+                // Kill standalone spawn tweens so nudge takes over position cleanly
+                var currentScale = view.transform.localScale;
+                view.transform.DOKill();
 
                 var sequence = DOTween.Sequence();
-                sequence.SetId(neighbor.View.GetInstanceID());
-                sequence.Append(neighbor.View.transform.DOMove(
-                    neighborPos + direction.normalized * _config.NudgeDistance, _config.NudgeDuration / 2f));
-                sequence.Append(neighbor.View.transform.DOMove(targetSlotPos, _config.NudgeDuration / 2f));
+                sequence.Append(view.transform.DOMove(
+                    slotPos + direction.normalized * _config.NudgeDistance, _config.NudgeDuration / 2f));
+                sequence.Append(view.transform.DOMove(slotPos, _config.NudgeDuration / 2f));
 
                 neighbor.IsStable.Value = false;
                 sequence.OnComplete(() => neighbor.IsStable.Value = true);
+
+                view.TweenTracker.Replace(sequence);
+
+                if (currentScale != Vector3.one)
+                    view.transform.DOScale(Vector3.one, _config.NudgeDuration);
             }
         }
 

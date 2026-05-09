@@ -1,6 +1,6 @@
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
-using BalloonParty.Debug;
+using BalloonParty.Cheats;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;

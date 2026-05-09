@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 
-namespace BalloonParty.Debug
+namespace BalloonParty.Cheats
 {
     public class SpawnBalloonLineCheat : ICheat
     {

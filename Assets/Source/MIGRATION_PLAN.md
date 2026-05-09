@@ -674,56 +674,157 @@ None — no new serialized references. `PoolManager` is already registered as a 
 
 ---
 
-## Phase 7i — Configuration Migration
+## Phase 8 — Redo Balance Animation System
 
-**Goal:** Move `GameConfiguration` and its supporting types out of `Source_Old` into `Source/` so the configuration layer is self-contained in the new codebase before `Source_Old` is deleted.
+**Goal:** Rewrite the balloon balance/nudge/spawn animation system so that tweens compose correctly — matching the legacy Entitas system's behaviour where balance appends to running animations instead of killing them.
 
-> Current state: `GameConfiguration.cs` still lives in `Source_Old/Configuration/` and implements both the old Entitas `IGameConfiguration` and the new `BalloonParty.Configuration.IGameConfiguration`. `BalloonColorConfiguration.cs` is global-namespace in `Source_Old`. The `.asset` file is also in `Source_Old`.
+### Legacy system analysis
 
-### Files to move (all moves must be done in the **Unity Editor Project window** to preserve `.meta` GUIDs)
+The legacy code across four Entitas systems worked together:
 
-| File | From | To |
-|---|---|---|
-| `BalloonColorConfiguration.cs` | `Source_Old/Configuration/` | `Source/Shared/` |
-| `GameConfiguration.cs` | `Source_Old/Configuration/` | `Source/Configuration/` |
-| `GameConfiguration.asset` | `Source_Old/Configuration/` | `Source/Configuration/` |
+#### Execution order (driven by Entitas reactive systems + coroutines)
 
-> **Do not move yet** (needed for Phase 8): `PowerUpConfiguration.cs`, `PowerUpSettings.cs`  
-> **Leave in place** (no longer needed in new code): `IBalloonColorConfiguration.cs`, old `IGameConfiguration.cs`
+1. **Projectile hits balloon** → `BalloonHitNudgeAnimationSystem` fires:
+   - Nudges all neighbors (no stability check — nudges everyone).
+   - Creates a `DOTween.Sequence` (push out → return to slot).
+   - **Stores the sequence on the entity**: `neighborEntity.ReplaceTweenSequence(sequence)`.
+   - Sets `isStableBalloon = false`; sequence `onComplete` → `isStableBalloon = true`.
+   - Removes the hit balloon from the slot array: `_slots[index.x, index.y] = null`.
 
-### Code changes after moving
+2. **Balloon destruction** → `BalloonHitDestructionSystem` fires:
+   - Removes from slot indexer, marks entity as destroyed.
 
-1. **`BalloonColorConfiguration.cs`** — add `namespace BalloonParty.Configuration { }` wrapper; remove the `IBalloonColorConfiguration` implementation (that interface is Entitas-only and unused in new code)
+3. **New balloon lines** → `NewBalloonLinesInstanceSystem` fires (on turn counter change):
+   - Marks ALL existing balloons as `isNewBalloon = false`.
+   - Spawns new lines via coroutine with `WaitForSeconds` delays between lines.
+   - **After ALL lines spawned**: `yield return new WaitForEndOfFrame()` × 2, THEN creates balance event.
 
-2. **`GameConfiguration.cs`** — add `namespace BalloonParty.Configuration { }` wrapper; remove the explicit `IGameConfiguration` (old, Entitas) interface declaration — keep only `BalloonParty.Configuration.IGameConfiguration`. The double-implementation currently reads:
-   ```csharp
-   public class GameConfiguration : ScriptableObject,
-       IGameConfiguration,                        // ← remove (old Entitas interface)
-       BalloonParty.Configuration.IGameConfiguration  // ← keep, becomes implicit
-   ```
-   Also remove the duplicate explicit implementation at the bottom:
-   ```csharp
-   int IGameConfiguration.PointsRequiredForLevel(int level) => PointsRequiredForLevel(level); // ← remove
-   ```
+4. **Balloon line spawner** → `BalloonLineSpawnerSystem`:
+   - Creates balloon entity at first empty row per column.
+   - Spawn animation: `DOMove` + `DOScale` (separate tweens, NOT in a sequence).
+   - `DOMove.onComplete` → `isStableBalloon = true`.
+   - **No tween sequence stored on entity** — spawn tweens are standalone.
 
-3. **`Source/Shared/IGameConfiguration.cs`** — already uses `BalloonColorConfiguration`; once `BalloonColorConfiguration` is in the same `BalloonParty.Configuration` namespace, the `using` is implicit and no change needed.
+5. **Balance** → `BalanceBalloonsSystem` fires (from balance event):
+   - Single-pass `while (hasUnbalanced)` loop, bottom-to-top.
+   - Does NOT skip any balloon — processes all, regardless of stability or new/old status.
+   - `HandlePathTween` checks entity's stored tween sequence:
+     - **If has sequence AND not complete**: `entity.tweenSequence.Value.Append(balanceTween)` — **balance is APPENDED after the running nudge**.
+     - **If has sequence AND complete**: removes old sequence, creates new balance tween.
+     - **If no sequence**: creates new balance tween directly.
+   - Balance tween: `DOPath(CatmullRom)` with fixed `TimeForBalloonsBalance` duration.
+   - `onComplete` → `isStableBalloon = true`.
 
-### Asset GUID note
+#### Key insight: tween composition via entity-stored sequences
 
-`BalloonColorConfiguration` is `[Serializable]` and stored by value in the asset (not by type reference), so adding a namespace does **not** break the serialized asset data — Unity serializes its fields by name only.
+The nudge system stored its `Sequence` on the entity. When balance ran later, it checked if a sequence was still playing and **appended** the balance DOPath to it. This meant:
+- A nudged balloon finished its push-out → return animation, THEN started its balance movement.
+- No tween was ever killed — animations chained naturally.
+- Spawn tweens (move + scale) were NOT stored in a sequence, so balance would create a new DOPath that ran in PARALLEL with the spawn tweens. Since spawn and balance both moved the balloon, this created competing move tweens — but in practice, balance only ran after `WaitForEndOfFrame` so spawn tweens had time to finish or nearly finish.
 
-`GameConfiguration.asset` holds a `m_Script` reference to the `.meta` GUID of `GameConfiguration.cs`. Moving the `.cs` file in the Unity Editor Project window preserves that GUID, so the asset continues to load correctly.
+#### Weight algorithm (`CalculateWeight`)
 
-### Removal Checklist additions
-After this phase:
-- [ ] `Source_Old/Configuration/IGameConfiguration.cs` — superseded by `Source/Shared/IGameConfiguration.cs`
-- [ ] `Source_Old/Configuration/IBalloonColorConfiguration.cs` — no longer used in new code
+Purpose: when a balloon has TWO empty slots above it (directly above and diagonally above), the weight determines which one it moves to. The weight of a candidate slot = count of occupied slots in the tree above it (recursive). Higher weight = more "support" above = preferred target. This biases balloons toward the side of the grid that has more balloons, creating natural clustering.
 
-5. ✅ **Checkpoint:** Project compiles; `GameLifetimeScope` serialized field still points to `GameConfiguration.asset`; no references to the Entitas `IGameConfiguration` in `Assets/Source/`.
+```csharp
+// Legacy: Source_Old/Game/GameContextExtensions.cs
+public static int CalculateWeight(this IEntity[,] slots, int i, int j)
+{
+    if (j == 0) return slots.IsEmpty(i, j) ? 0 : 1;
+    if (j > 0)
+    {
+        var weight = slots.IsEmpty(i, j) ? 0 : 1;
+        weight += slots.CalculateWeight(i, j - 1);
+        weight += slots.CalculateWeight(i + (j % 2 == 0 ? -1 : 1), j - 1);
+        return weight;
+    }
+    return 0;
+}
+```
+
+**Difference from current code**: legacy `OptimalNextEmptySlot` initialises weight at `0` and uses `>=` comparison (`if (slotWeight >= weight)`), so the LAST candidate with equal weight wins (favours diagonal). Our current code uses `-1` initial and `>` comparison, so the FIRST candidate wins (favours straight-up). This changes tie-breaking behaviour — needs to match legacy.
+
+### Design for new implementation
+
+#### `TweenTracker` — MonoBehaviour (generic, reusable)
+
+Replaces the Entitas `TweenSequenceComponent`. Lives on any view that needs tween composition. Located in `Assets/Source/Shared/TweenTracker.cs`.
+
+```
+Fields:
+  - Sequence _active (nullable)
+
+Methods:
+  - Append(Tween tween): if _active is alive and playing, Append; else create new Sequence containing the tween
+  - Replace(Tween tween): kill _active if alive, create new Sequence containing the tween
+  - Kill(): kill _active if alive, set null
+  - bool IsPlaying: _active != null && _active.IsActive() && !_active.IsComplete()
+```
+
+#### Animation flow
+
+**Spawn** (`BalloonSpawner.AnimateSpawn`):
+- Create move + scale as standalone tweens (matching legacy — NOT stored in tracker).
+- `DOMove.onComplete` → `IsStable = true`.
+- Do NOT call `tracker.Append` — spawn tweens live outside the tracker.
+
+**Nudge** (`ProjectileView.NudgeNeighbors`):
+- Kills standalone spawn tweens via `view.transform.DOKill()` before creating the nudge sequence.
+- Uses slot positions (logical positions) for push direction and return, not visual `transform.position`.
+- `tracker.Replace(nudgeSequence)` — kills any previous nudge/balance and stores new one.
+- Nudge sequence: push out from slot position → return to slot position.
+- `onComplete` → `IsStable = true`.
+
+**Balance** (`BalloonBalancer.AnimatePaths`):
+- `tracker.Append(balanceDOPath)` — if nudge is still playing, balance is appended AFTER it. If no active sequence, creates a new one.
+- `onComplete` → `IsStable = true`.
+- `PathType.CatmullRom`, fixed `TimeForBalloonsBalance` duration.
+
+**Despawn** (`BalloonView.OnDespawned`):
+- `tracker.Kill()` — clean up everything.
+- Also kill standalone spawn tweens (DOKill on transform as fallback).
+
+#### Balance timing — turn-based (matches legacy)
+
+Balance fires ONCE after the projectile is destroyed and new lines have spawned — never mid-flight. This eliminates re-balance-during-balance conflicts and keeps animation phases sequential:
+
+1. **Hit phase** — projectile bounces and pops balloons; each pop nudges neighbors (local elastic animation only, no rebalancing).
+2. **Spawn phase** — after projectile dies, new balloon lines spawn with delay.
+3. **Balance phase** — single balance pass runs after all spawning is done.
+
+`BalloonController` no longer publishes `BalanceBalloonsMessage`. Balance sources:
+- `ProjectileView` — on projectile death (fallback for turn 1 / no-spawn).
+- `BalloonSpawner` — after all lines spawned.
+
+#### Weight algorithm fix
+
+In `SlotGrid.OptimalNextEmptySlot`, change:
+- `bestWeight = -1` → `bestWeight = 0`
+- `if (weight > bestWeight)` → `if (weight >= bestWeight)`
+
+This matches legacy tie-breaking: prefer the diagonal candidate when weights are equal.
+
+### Files to create/modify
+
+| File | Change |
+|---|---|
+| `TweenTracker.cs` | New generic MonoBehaviour in `Shared/` — `Append`, `Replace`, `Kill`, `IsPlaying` |
+| `BalloonView.cs` | Reference tracker (via `GetComponent` in `Awake`); `OnDespawned` calls `tracker.Kill()` + `transform.DOKill()` for standalone spawn tweens |
+| `BalloonPoolChannel.cs` | Ensure tracker component exists on pooled instances (add in `Create` if not on prefab) |
+| `BalloonSpawner.cs` | `AnimateSpawn`: standalone move + scale tweens (no tracker, no SetId) — matches legacy |
+| `BalloonBalancer.cs` | `AnimatePaths`: use `tracker.Append` instead of `DOTween.Kill` + new tween. Remove `DOTween.Kill(id)`. |
+| `ProjectileView.cs` | `NudgeNeighbors`: use `tracker.Replace` instead of `DOTween.Kill` + new sequence |
+| `SlotGrid.cs` | Fix `OptimalNextEmptySlot` weight comparison to match legacy (`0` initial, `>=` compare) |
+
+### Unity Editor steps
+
+1. Add `BalloonTweenTracker` component to the balloon prefab (or let `BalloonPoolChannel.Create` add it).
+
+✅ **Checkpoint:** Spawn balloons → they rise smoothly with scale → hit a balloon → neighbors nudge outward and return → balance runs → nudged balloons finish nudge THEN float upward → spawning balloons continue their rise uninterrupted (balance appends after spawn completes) → no snapping, no zipping, no scale pops, no downward movement.
 
 ---
 
-## Phase 8 — Power-Ups
+## Phase 9 — Power-Ups
 
 **Goal:** Port the 5 power-up controllers using MessagePipe and VContainer.
 
@@ -736,7 +837,7 @@ After this phase:
 
 ---
 
-## Phase 9 — Game Loop, UI & Cleanup
+## Phase 10 — Game Loop, UI & Cleanup
 
 **Goal:** Replace `GameControllerBehaviour` entry point; retire `Source_Old`.
 
@@ -1078,6 +1179,7 @@ All async work in `Assets/Source/` must use **UniTask** instead of Unity corouti
 | 7j    | Migrate ScorePointTrail to PoolManager    | ✅ Done         |
 | 7k    | Migrate Balloon Instances to PoolManager  | ✅ Done         |
 | 7i    | Configuration Migration                   | ⬜ Todo         |
-| 8     | Power-Ups                                 | ⬜ Todo         |
-| 9     | Game Loop, UI & Cleanup                   | ⬜ Todo         |
+| 8     | Redo Balance Animation System             | ✅ Done         |
+| 9     | Power-Ups                                 | ⬜ Todo         |
+| 10    | Game Loop, UI & Cleanup                   | ⬜ Todo         |
 

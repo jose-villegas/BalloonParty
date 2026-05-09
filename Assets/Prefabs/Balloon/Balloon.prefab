@@ -286,6 +286,7 @@ GameObject:
   - component: {fileID: 1515709501248549657}
   - component: {fileID: 6706276318355311262}
   - component: {fileID: 7744549277022113413}
+  - component: {fileID: -4720687053981353126}
   m_Layer: 10
   m_Name: Balloon
   m_TagString: Balloons
@@ -426,6 +427,18 @@ MonoBehaviour:
   _shadowAlpha: 0
   _shadowIntensity: 0
   _baseSortingLayer: 0
+--- !u!114 &-4720687053981353126
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5923847143892959990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 322dfc07781b4b79b3ca0e66b477a26c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Shared.TweenTracker
 --- !u!1 &9101512376242678319
 GameObject:
   m_ObjectHideFlags: 0

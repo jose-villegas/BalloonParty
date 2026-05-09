@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
@@ -16,6 +17,8 @@ namespace BalloonParty.Balloon.Controller
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
 
+        private bool _balanceRequested;
+
         [Inject]
         public BalloonBalancer(SlotGrid grid, IGameConfiguration config, ISubscriber<BalanceBalloonsMessage> subscriber)
         {
@@ -26,7 +29,21 @@ namespace BalloonParty.Balloon.Controller
 
         public void Start()
         {
-            _subscriber.Subscribe(_ => Balance());
+            _subscriber.Subscribe(_ => RequestBalance());
+        }
+
+        private void RequestBalance()
+        {
+            if (_balanceRequested) return;
+            _balanceRequested = true;
+            BalanceNextFrameAsync().Forget();
+        }
+
+        private async UniTaskVoid BalanceNextFrameAsync()
+        {
+            await UniTask.Yield();
+            _balanceRequested = false;
+            Balance();
         }
 
         private void Balance()
@@ -72,13 +89,18 @@ namespace BalloonParty.Balloon.Controller
                 var view = balloon.View;
                 if (view == null) continue;
 
-                // Kill only move tweens so spawn scale animation can finish.
-                DOTween.Kill(view.GetInstanceID());
+                view.TweenTracker.Kill();
+                view.transform.DOKill();
 
-                view.transform
+                var currentScale = view.transform.localScale;
+                var tween = view.transform
                     .DOPath(path.ToArray(), _config.TimeForBalloonsBalance, PathType.CatmullRom)
-                    .SetId(view.GetInstanceID())
                     .OnComplete(() => balloon.IsStable.Value = true);
+
+                view.TweenTracker.Append(tween);
+
+                if (currentScale != Vector3.one)
+                    view.transform.DOScale(Vector3.one, _config.TimeForBalloonsBalance);
             }
         }
     }

@@ -5,7 +5,7 @@ using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UnityEngine;
 
-namespace BalloonParty.Debug
+namespace BalloonParty.Cheats
 {
     internal static class ScoreCheatHelper
     {

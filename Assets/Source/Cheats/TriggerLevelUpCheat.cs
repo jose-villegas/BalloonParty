@@ -4,11 +4,11 @@ using BalloonParty.Game;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 
-namespace BalloonParty.Debug
+namespace BalloonParty.Cheats
 {
-    public class NearLevelUpCheat : ICheat
+    public class TriggerLevelUpCheat : ICheat
     {
-        public string Name => "Near Level Up";
+        public string Name => "Trigger Level Up";
         public string Section => "Score";
         public IReadOnlyList<string> Tags => new[] { "score", "levelup" };
 
@@ -16,7 +16,7 @@ namespace BalloonParty.Debug
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
         private readonly ScoreController _scoreController;
 
-        public NearLevelUpCheat(
+        public TriggerLevelUpCheat(
             IGameConfiguration config,
             ScoreController scoreController,
             IPublisher<BalloonHitMessage> hitPublisher)
@@ -28,9 +28,9 @@ namespace BalloonParty.Debug
 
         public void Execute()
         {
-            var oneBeforeRequired = _config.PointsRequiredForLevel(_scoreController.Level.Value + 1) - 1;
+            var required = _config.PointsRequiredForLevel(_scoreController.Level.Value + 1);
             foreach (var color in _config.BalloonColors)
-                ScoreCheatHelper.FillColor(color, oneBeforeRequired, _scoreController, _hitPublisher);
+                ScoreCheatHelper.FillColor(color, required, _scoreController, _hitPublisher);
         }
     }
 }

@@ -81,7 +81,7 @@ namespace BalloonParty.Balloon.Spawner
             model.Color.Value = colorName;
             model.SlotIndex.Value = slot;
 
-            var controller = new BalloonController(model, view, _hitSubscriber, _balancePublisher, _grid, _config, _poolManager);
+            var controller = new BalloonController(model, view, _hitSubscriber, _grid, _config, _poolManager);
             controller.Start();
 
             _grid.Place(model, slot);
@@ -99,9 +99,10 @@ namespace BalloonParty.Balloon.Spawner
                 _config.BalloonSpawnAnimationDurationRange.x,
                 _config.BalloonSpawnAnimationDurationRange.y);
 
-            view.transform.DOMove(targetPosition, duration).SetId(view.GetInstanceID());
-            view.transform.DOScale(Vector3.one, duration)
+            view.transform.DOMove(targetPosition, duration)
                 .OnComplete(() => model.IsStable.Value = true);
+
+            view.transform.DOScale(Vector3.one, duration);
         }
 
         private int? FindFirstEmptyRowFromTop(int col)

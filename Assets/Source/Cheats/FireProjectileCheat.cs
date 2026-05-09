@@ -4,7 +4,7 @@ using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 
-namespace BalloonParty.Debug
+namespace BalloonParty.Cheats
 {
     public class FireProjectileCheat : ICheat
     {

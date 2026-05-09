@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEngine;
 using VContainer;
 
-namespace BalloonParty.Debug
+namespace BalloonParty.Cheats
 {
     public class CheatConsoleView : MonoBehaviour
     {

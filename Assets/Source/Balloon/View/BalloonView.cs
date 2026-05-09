@@ -31,6 +31,12 @@ namespace BalloonParty.Balloon.View
         private readonly CompositeDisposable _bindDisposables = new();
 
         public BalloonModel Model { get; private set; }
+        public TweenTracker TweenTracker { get; private set; }
+
+        private void Awake()
+        {
+            TweenTracker = GetComponent<TweenTracker>();
+        }
 
         public void RegisterDisposeOnDespawn(IDisposable disposable)
         {
@@ -63,10 +69,12 @@ namespace BalloonParty.Balloon.View
         public void OnSpawned()
         {
             transform.localScale = Vector3.one;
+            transform.position = Vector3.one * -1000f;
         }
 
         public void OnDespawned()
         {
+            TweenTracker.Kill();
             transform.DOKill();
             _bindDisposables.Clear();
             Model = null;

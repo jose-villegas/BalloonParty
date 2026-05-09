@@ -30,6 +30,13 @@ namespace BalloonParty.Slots
 
         public void Place(BalloonModel balloon, Vector2Int index)
         {
+            if (_slots[index.x, index.y] != null)
+            {
+                UnityEngine.Debug.LogError(
+                    $"SlotGrid.Place: slot ({index.x},{index.y}) is already occupied! Skipping.");
+                return;
+            }
+
             _slots[index.x, index.y] = balloon;
             balloon.SlotIndex.Value = index;
             _onChanged.OnNext(new SlotGridChangedEvent(index, SlotGridChangeType.Placed));
@@ -74,7 +81,7 @@ namespace BalloonParty.Slots
                 new Vector2Int(col + (row % 2 == 0 ? -1 : 1), row - 1)
             };
 
-            var bestWeight = -1;
+            var bestWeight = 0;
             var bestIndex = -1;
 
             for (var k = 0; k < candidates.Length; k++)
@@ -84,7 +91,7 @@ namespace BalloonParty.Slots
                 if (!IsEmpty(candidate.x, candidate.y)) continue;
 
                 var weight = CalculateWeight(candidate.x, candidate.y);
-                if (weight > bestWeight)
+                if (weight >= bestWeight)
                 {
                     bestWeight = weight;
                     bestIndex = k;
