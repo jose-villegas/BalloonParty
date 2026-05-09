@@ -1468,16 +1468,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Progress
       objectReference: {fileID: 0}
-    - target: {fileID: 3841112476605814567, guid: 4a32d51f61f22427e898e3636e5511cc,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6582683723459465260, guid: 4a32d51f61f22427e898e3636e5511cc,
-        type: 3}
-      propertyPath: parentReference.TypeName
-      value: BalloonParty.Game.GameLifetimeScope
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

@@ -61,7 +61,7 @@ Assets/Source/
     SlotGridController.cs, SlotGridView.cs
   Projectile/
     Model/          ProjectileModel.cs
-    View/           ProjectileView.cs
+    View/           ProjectileView.cs, ProjectileShieldView.cs
     Controller/     ← Phase 9 (currently handled inside ProjectileView)
   Thrower/
     ThrowerController.cs, ThrowerSettings.cs
@@ -421,7 +421,7 @@ protected override void Configure(IContainerBuilder builder)
 1. **`ProjectileShieldView.cs`** (`Assets/Source/Projectile/View/`)
    - `[SerializeField] List<SpriteRenderer> _shields` — the ordered shield orb renderers (children of projectile)
    - `[SerializeField] float _alpha`, `_colorDuration`, `_scaleDuration`, `Vector2 _scaleIncrements`
-   - `[Inject] IGameConfiguration _config`
+   - `[Inject] IGameConfiguration _config` — injected by `_resolver.Instantiate()` from `ThrowerController`
    - `Bind(ProjectileModel model)`:
      - Subscribe to `model.ShieldsRemaining` → `UpdateShieldVisuals(count)`
      - Track previous count to determine gain vs loss → play `PSVFX_ShieldGain` or `PSVFX_ShieldLose`
@@ -433,9 +433,9 @@ protected override void Configure(IContainerBuilder builder)
    - After incrementing `ColorPopCount`, check `if (_model.ColorPopCount >= 3)` → increment `_model.ShieldsRemaining.Value++`, reset `ColorPopCount = 0`
    - This replaces `ProjectileShieldSystem`
 
-3. **`ProjectileView.Bind()`** — also call `_shieldView.Bind(model)` (get via `GetComponent` or `[SerializeField]`)
+3. **`ProjectileView`** — resolves `ProjectileShieldView` via `GetComponent` in `Awake()`; calls `_shieldView.Bind(model)` in `Bind()`
 
-4. **Color update**: `ProjectileShieldView` observes color changes — either subscribe to a new `ReactiveProperty<string>` on the model, or have `ProjectileView` call `_shieldView.UpdateColor(colorName)` directly in `TrackColor()`
+4. **Color update**: `ProjectileShieldView` subscribes to `model.ColorName` (now a `ReactiveProperty<string>`) directly
 
 ### VFX
 
@@ -451,8 +451,8 @@ protected override void Configure(IContainerBuilder builder)
 
 1. Add `ProjectileShieldView` to the projectile prefab
 2. Wire `_shields` list to the shield orb `SpriteRenderer` children (ordered bottom to top)
-3. Set `_alpha`, `_colorDuration`, `_scaleDuration`, `_scaleIncrements` to match legacy values
-4. Assign VFX prefabs
+3. Set `_alpha: 0.3`, `_colorDuration: 0.5`, `_scaleDuration: 1`, `_scaleIncrements: (0.5, 0.2)` (legacy values from the old prefab)
+4. Assign VFX prefabs (`PSVFX_ShieldGain`, `PSVFX_ShieldLose`, `PSVFX_ShieldBounce`)
 
 ✅ **Checkpoint:** Fire projectile → shields start visible at initial count → hit 3 same-color balloons → new shield appears with gain VFX → bounce off wall → shield disappears with lose VFX → shield color matches last balloon hit.
 
@@ -718,6 +718,12 @@ Each self-contained UI panel or popup owns its own child `LifetimeScope`. This i
 
 **Rule:** Any UI element that is logically self-contained (a popup, a full-screen panel, a HUD section) gets its own `LifetimeScope` on its root GameObject. Flat components that are always part of a larger panel (e.g. `ScoreCounterLabel` inside the Score HUD) stay registered in that panel's scope.
 
+### Dynamically Instantiated Prefab Injection
+
+Prefabs instantiated at runtime (e.g. the projectile) use `IObjectResolver.Instantiate()` from VContainer. This injects all `[Inject]` fields on every MonoBehaviour in the prefab hierarchy in a single pass — no child `LifetimeScope` needed. The resolver is injected into the spawner (e.g. `ThrowerController`) from `GameLifetimeScope`.
+
+**Do not use child `LifetimeScope` on dynamically instantiated prefabs.** A `LifetimeScope` placed on a prefab runs `Build()` in its `Awake()`, which requires `FindParent()` to locate the parent scope. For dynamically instantiated objects this is fragile — the build order between the scope's `Awake()` and sibling components is undefined, and `FindFirstObjectByType` may race with the parent scope's own lifecycle. Use child scopes only for scene-placed GameObjects (UI panels, popups, HUD sections).
+
 **Current scopes:**
 
 | Scope | Base | GameObject | Registers |
@@ -844,7 +850,7 @@ Classes follow a strict top-to-bottom ordering by visibility and purpose:
 | 7a    | Score Feedback UI                         | ✅ Done         |
 | 7b    | Level-Up Popup                            | ✅ Done         |
 | 7c    | Shield Counter HUD                        | ✅ Done         |
-| 7d    | Projectile Shield Visuals & Gain Logic    | ⬜ Todo         |
+| 7d    | Projectile Shield Visuals & Gain Logic    | ⬜ Wiring only  |
 | 7e    | Game Start                                | ⬜ Wiring only  |
 | 7f    | HUD Audit & Cleanup                       | ⬜ Todo         |
 | 7g    | Configuration Migration                   | ⬜ Todo         |

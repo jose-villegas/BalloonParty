@@ -6,7 +6,7 @@ namespace BalloonParty.Projectile.Model
 {
     public class ProjectileModel
     {
-        public string ColorName;
+        public ReactiveProperty<string> ColorName { get; } = new(null);
         public int ColorPopCount;
         public Vector3 Direction;
         public bool IsFree;

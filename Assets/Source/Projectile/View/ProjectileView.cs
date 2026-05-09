@@ -24,6 +24,12 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
 
         private ProjectileModel _model;
+        private ProjectileShieldView _shieldView;
+
+        private void Awake()
+        {
+            _shieldView = GetComponent<ProjectileShieldView>();
+        }
 
         private void FixedUpdate()
         {
@@ -102,29 +108,37 @@ namespace BalloonParty.Projectile.View
         public void Bind(ProjectileModel model)
         {
             _model = model;
+            if (_shieldView != null)
+                _shieldView.Bind(model);
         }
 
 
         private void TrackColor(string hitColor)
         {
-            if (string.IsNullOrEmpty(_model.ColorName))
+            if (string.IsNullOrEmpty(_model.ColorName.Value))
             {
-                _model.ColorName = hitColor;
+                _model.ColorName.Value = hitColor;
                 _model.ColorPopCount = 1;
             }
-            else if (_model.ColorName == hitColor)
+            else if (_model.ColorName.Value == hitColor)
             {
                 _model.ColorPopCount++;
             }
             else
             {
-                _model.ColorName = hitColor;
+                _model.ColorName.Value = hitColor;
                 _model.ColorPopCount = 1;
+            }
+
+            if (_model.ColorPopCount >= 3)
+            {
+                _model.ShieldsRemaining.Value++;
+                _model.ColorPopCount = 0;
             }
 
             if (_glowRenderer != null)
             {
-                var color = _config.BalloonColor(_model.ColorName);
+                var color = _config.BalloonColor(_model.ColorName.Value);
                 _glowRenderer.DOColor(new Color(color.r, color.g, color.b, _glowAlpha), _glowColorDuration);
             }
         }
@@ -154,7 +168,8 @@ namespace BalloonParty.Projectile.View
 
         private void PlayBounceEffect(Vector3 position)
         {
-            // visual bounce effect placeholder — particle FX wired in Phase 6/7
+            if (_shieldView == null || string.IsNullOrEmpty(_model?.ColorName.Value)) return;
+            _shieldView.PlayBounceVfx(position, _config.BalloonColor(_model.ColorName.Value));
         }
     }
 }

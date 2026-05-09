@@ -14,11 +14,12 @@ The player holds the mouse button to aim — the thrower rotates to face the cur
 - Orbits the loaded projectile around the spawn point to preview the trajectory
 - Fires on mouse-up when all balloons have settled (unstable balloons block firing)
 
-When a `ProjectileDestroyedMessage` arrives, `ThrowerController` creates a new projectile automatically.
+When a `ProjectileDestroyedMessage` arrives, `ThrowerController` creates a new projectile automatically. The projectile prefab is instantiated via `IObjectResolver.Instantiate()`, which injects all `[Inject]` fields on `ProjectileView` and `ProjectileShieldView` in a single pass.
 
 ## Interactions
 
 - **SlotGrid** — queried to check balloon stability before allowing a shot
-- **ProjectileView** — instantiated and bound to a `ProjectileModel` on each load
+- **IObjectResolver** — injects all MonoBehaviours on the projectile prefab at instantiation time
 - **ProjectileDestroyedMessage** — triggers reload
+- **ProjectileLoadedMessage** — published after each load so shield UI can self-bind
 - **IGameConfiguration** — provides `ThrowerSpawnPoint`, `ProjectileSpawnPoint`, `ProjectileSpeed`, `ProjectileStartingShields`
