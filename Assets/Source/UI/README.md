@@ -2,14 +2,23 @@
 
 All HUD and menu elements. Each sub-folder owns one distinct player-facing feature.
 
-`ScoreUILifetimeScope` is a VContainer child scope scoped specifically to the score UI. It lives on the Score UI Canvas root GameObject, inherits all game services from `GameLifetimeScope` via `EnqueueParent`, and registers only score-related components. `ShieldCounterLabel`, `ShieldCounterAnimation`, and `GameStartButton` have no sub-scope — they are registered directly in `GameLifetimeScope` because they interact tightly with game-layer systems (thrower, projectile).
+Each self-contained UI section has its own VContainer child scope, inheriting all game services from `GameLifetimeScope` while keeping its registrations local. Components that interact tightly with game-layer systems (thrower, projectile) are registered directly in `GameLifetimeScope` instead.
+
+## Scopes
+
+| Scope | GameObject | Registers |
+|---|---|---|
+| `ScoreUILifetimeScope` | Score UI Canvas root | `ColorProgressBarInstancer` |
+| `LevelUpLifetimeScope` | LevelUp popup root | `LevelUpPopUp` |
+| `ShieldUILifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation` |
+| `GameLifetimeScope` (direct) | — | `GameStartButton` |
 
 ## Feature folders
 
 | Folder | What it owns | Scope |
 |---|---|---|
 | `Score/` | Progress bars, score trail orbs, floating notices, score/level labels, `ScoreUILifetimeScope` | `ScoreUILifetimeScope` (child of `GameLifetimeScope`) |
-| `LevelUp/` | Full-screen level-up ceremony popup (`LevelUpPopUp`) | `ScoreUILifetimeScope` (child of `GameLifetimeScope`) |
+| `LevelUp/` | Full-screen level-up ceremony popup (`LevelUpPopUp`) | `LevelUpLifetimeScope` (child of `GameLifetimeScope`) |
 | `Shields/` | Shield counter label and bounce animation | `GameLifetimeScope` |
 | `GameStart/` | Start-button logic that kicks off the first balloon spawn | `GameLifetimeScope` |
 

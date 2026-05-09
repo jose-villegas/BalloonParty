@@ -11,6 +11,8 @@ namespace BalloonParty.Balloon.Controller
 {
     public class BalloonController : IStartable
     {
+        public BalloonModel Model { get; }
+
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly IGameConfiguration _config;
         private readonly SlotGrid _grid;
@@ -31,8 +33,6 @@ namespace BalloonParty.Balloon.Controller
             _grid = grid;
             _config = config;
         }
-
-        public BalloonModel Model { get; }
 
         public void Start()
         {

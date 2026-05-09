@@ -1,10 +1,18 @@
 # UI/Score
 
-Tracks and displays player progress toward the next level — one bar per balloon color, plus score counters and the level-up ceremony.
+Tracks and displays player progress toward the next level — one bar per balloon color, plus score and level counters.
 
-## Scope
+## Contents
 
-`ScoreUILifetimeScope` is a VContainer child scope attached to the Score UI Canvas root. It calls `EnqueueParent(FindFirstObjectByType<GameLifetimeScope>())` before `base.Awake()` so the parent container is established before `Build()` runs. It registers `ColorProgressBarInstancer` and `LevelUpPopUp` via `RegisterComponentInHierarchy`, then binds `ScoreCounterLabel` and `LevelLabel` imperatively in `Start()` by resolving `ScoreController` from its own container (which can reach the parent scope's registrations).
+| File | What it does |
+|---|---|
+| `ScoreUILifetimeScope` | VContainer child scope on the Score UI Canvas root; registers `ColorProgressBarInstancer` |
+| `ColorProgressBarInstancer` | Spawns one `ColorProgressBar` at runtime per color in `IGameConfiguration.BalloonColors` |
+| `ColorProgressBar` | Per-color slider; owns `ScoreNotice` + `ScorePointTrail` pools; completion VFX |
+| `ScoreNotice` | Pooled floating "+N" popup at the bar |
+| `ScorePointTrail` | Pooled orb that flies from balloon world position → bar position |
+| `ScoreCounterLabel` | Binds total-score `Text` to `ScoreController.TotalScore` |
+| `LevelLabel` | Binds level `Text` to `ScoreController.Level`; `_showNextLevel` toggle |
 
 ## How it works
 
@@ -16,7 +24,6 @@ Every balloon score also spawns two pooled objects from the bar's own pools: a `
 
 `ScoreCounterLabel` and `LevelLabel` are bound imperatively from `ScoreUILifetimeScope.Start()` — they receive the `ScoreController`'s reactive properties and subscribe with UniRx.
 
-On `ScoreLevelUpMessage`, all bars reset their sliders and update their `maxValue` to the points required for the new level. `LevelUpPopUp` (in `UI/LevelUp/`) handles the full-screen ceremony that follows.
 
 ## Interactions
 

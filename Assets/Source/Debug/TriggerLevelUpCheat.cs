@@ -1,15 +1,17 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 using System.Collections.Generic;
-using BalloonParty.Balloon.Model;
 using BalloonParty.Game;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
-using UnityEngine;
 
 namespace BalloonParty.Debug
 {
     public class TriggerLevelUpCheat : ICheat
     {
+        public string Name => "Trigger Level Up";
+        public string Section => "Score";
+        public IReadOnlyList<string> Tags => new[] { "score", "levelup" };
+
         private readonly IGameConfiguration _config;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
         private readonly ScoreController _scoreController;
@@ -24,27 +26,11 @@ namespace BalloonParty.Debug
             _hitPublisher = hitPublisher;
         }
 
-        public string Name => "Trigger Level Up";
-        public string Section => "Score";
-        public IReadOnlyList<string> Tags => new[] { "score", "levelup" };
-
         public void Execute()
         {
             var required = _config.PointsRequiredForLevel(_scoreController.Level.Value + 1);
             foreach (var color in _config.BalloonColors)
-                FillColor(color, required);
-        }
-
-        private void FillColor(BalloonColorConfiguration color, int target)
-        {
-            var missing = target - _scoreController.GetProgress(color.Name);
-            if (missing <= 0) return;
-
-            var fakeModel = new BalloonModel();
-            fakeModel.Color.Value = color.Name;
-
-            for (var i = 0; i < missing; i++)
-                _hitPublisher.Publish(new BalloonHitMessage(fakeModel, Vector3.zero));
+                ScoreCheatHelper.FillColor(color, required, _scoreController, _hitPublisher);
         }
     }
 }

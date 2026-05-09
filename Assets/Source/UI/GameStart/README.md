@@ -2,6 +2,12 @@
 
 The button the player presses to begin a game session.
 
+## Contents
+
+| File | What it does |
+|---|---|
+| `GameStartButton` | `[RequireComponent(typeof(Button))]` MonoBehaviour; publishes `SpawnBalloonLineMessage` on click, then deactivates itself |
+
 ## How it works
 
 `GameStartButton` is a `[RequireComponent(typeof(Button))]` MonoBehaviour. When clicked it publishes one `SpawnBalloonLineMessage` per `IGameConfiguration.GameStartedBalloonLines`, then deactivates itself. The `BalloonSpawner` handles each message and the thrower activates once balancing completes — the button has no knowledge of either.

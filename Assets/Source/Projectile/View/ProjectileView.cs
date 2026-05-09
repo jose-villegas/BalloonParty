@@ -1,4 +1,3 @@
-using System.Collections;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Projectile.Model;
@@ -18,7 +17,6 @@ namespace BalloonParty.Projectile.View
 
         [SerializeField] [Range(0f, 1f)] private float _glowAlpha = 0.5f;
         [SerializeField] private float _glowColorDuration = 0.2f;
-        [SerializeField] private TrailRenderer _trail;
 
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IGameConfiguration _config;
@@ -28,11 +26,40 @@ namespace BalloonParty.Projectile.View
 
         private ProjectileModel _model;
         private ProjectileShieldView _shieldView;
+        private ProjectileTrail _projectileTrail;
         private bool _shieldShown;
+
+        public void Bind(ProjectileModel model)
+        {
+            _model = model;
+            _shieldShown = false;
+            if (_shieldView != null)
+                _shieldView.Bind(model);
+        }
+
+        public void OnSpawned()
+        {
+            _shieldShown = false;
+        }
+
+        public void OnDespawned()
+        {
+            _model = null;
+            _shieldShown = false;
+            if (_glowRenderer != null)
+            {
+                _glowRenderer.DOKill();
+                _glowRenderer.color = new Color(1f, 1f, 1f, 0f);
+            }
+            _projectileTrail?.Disable();
+            if (_shieldView != null)
+                _shieldView.Reset();
+        }
 
         private void Awake()
         {
             _shieldView = GetComponentInChildren<ProjectileShieldView>(true);
+            _projectileTrail = GetComponentInChildren<ProjectileTrail>(true);
         }
 
         private void FixedUpdate()
@@ -43,6 +70,7 @@ namespace BalloonParty.Projectile.View
             {
                 _shieldView.Show();
                 _shieldShown = true;
+                _projectileTrail?.Enable();
             }
 
             var pos = transform.position;
@@ -83,6 +111,7 @@ namespace BalloonParty.Projectile.View
 
                 if (_model.ShieldsRemaining.Value < 0)
                 {
+                    _projectileTrail?.Disable();
                     _balancePublisher.Publish(default);
                     _destroyedPublisher.Publish(default);
                     return;
@@ -112,46 +141,6 @@ namespace BalloonParty.Projectile.View
             TrackColor(balloonModel.Color.Value);
             NudgeNeighbors(balloonModel);
             _hitPublisher.Publish(new BalloonHitMessage(balloonModel, balloonView.transform.position));
-        }
-
-        public void Bind(ProjectileModel model)
-        {
-            _model = model;
-            _shieldShown = false;
-            if (_shieldView != null)
-                _shieldView.Bind(model);
-        }
-
-        public void OnSpawned()
-        {
-            _shieldShown = false;
-            if (_trail != null)
-                StartCoroutine(EnableTrailNextFrame());
-        }
-
-        public void OnDespawned()
-        {
-            _model = null;
-            _shieldShown = false;
-            if (_glowRenderer != null)
-            {
-                _glowRenderer.DOKill();
-                _glowRenderer.color = new Color(1f, 1f, 1f, 0f);
-            }
-            if (_trail != null)
-            {
-                _trail.emitting = false;
-                _trail.Clear();
-            }
-            if (_shieldView != null)
-                _shieldView.Reset();
-        }
-
-        private IEnumerator EnableTrailNextFrame()
-        {
-            yield return null;
-            if (_trail != null)
-                _trail.emitting = true;
         }
 
         private void TrackColor(string hitColor)

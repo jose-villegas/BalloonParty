@@ -5,7 +5,7 @@ A generic object pooling system for Unity components. Pools are managed centrall
 ## Architecture
 
 - **`IPoolChannel`** — non-generic marker interface. Allows `PoolManager` to store heterogeneous channels in a type-safe `Dictionary<string, IPoolChannel>` instead of `Dictionary<string, object>`.
-- **`PoolChannel<TItem>`** — abstract base implementing `IPoolChannel`. Owns a `Stack<TItem>` of inactive instances. `Get()` pops or calls `Create()`. `Return()` despawns and pushes back. Subclasses implement `Create()` with their specific instantiation logic.
+- **`PoolChannel<TItem>`** — abstract base implementing `IPoolChannel`. Owns a `Stack<TItem>` of inactive instances. `Get()` pops or calls `Create()`; skips destroyed items in the stack. `Return()` despawns and pushes back; early-exits if the item has been destroyed. Subclasses implement `Create()` with their specific instantiation logic.
 - **`PoolManager`** — injectable singleton registry. Stores channels in a `Dictionary<string, IPoolChannel>` keyed by `string`. Channels are registered explicitly via `Register()`, then consumers call `Get<TItem>(key)` / `Return(key, item)` without needing to know the channel type.
 - **`IPoolable`** — interface on pooled components: `OnSpawned()` (called after activation) and `OnDespawned()` (called before deactivation).
 

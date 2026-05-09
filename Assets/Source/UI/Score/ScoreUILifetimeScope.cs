@@ -6,6 +6,11 @@ namespace BalloonParty.UI.Score
 {
     public class ScoreUILifetimeScope : GameChildLifetimeScope
     {
+        protected override void Configure(IContainerBuilder builder)
+        {
+            builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
+        }
+
         private void Start()
         {
             var scoreController = Container.Resolve<ScoreController>();
@@ -15,11 +20,6 @@ namespace BalloonParty.UI.Score
 
             foreach (var label in GetComponentsInChildren<LevelLabel>(true))
                 label.Bind(scoreController.Level);
-        }
-
-        protected override void Configure(IContainerBuilder builder)
-        {
-            builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
         }
     }
 }

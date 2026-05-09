@@ -2,9 +2,15 @@
 
 Types and utilities used across multiple features.
 
-`IGameConfiguration` is the single source of truth for all game data — slot dimensions, balloon colors, timing values, spawn counts, shield counts, score thresholds. Any system that needs game data gets it from here, never from hardcoded values or duplicated fields.
+## Contents
 
-`IReusable` is the contract for pooled objects (score notices, score trails) — a single `IsUsable` bool that pools query before recycling an instance.
+| File / Folder | What it provides |
+|---|---|
+| `IGameConfiguration` | Single source of truth for all game data — slot dimensions, balloon colors, timing values, spawn counts, shield counts, score thresholds |
+| `IReusable` | Contract for pooled UI objects (score notices, score trails) — a single `IsUsable` bool that pools query before recycling |
+| `Pool/` | Generic object pooling system — `PoolManager`, `PoolChannel<T>`, `IPoolable`, `VfxPoolChannel`, `PoolableParticle` (see `Pool/README.md`) |
+| `Messages/` | MessagePipe signal structs that decouple systems from one another |
+| `Extensions/` | Extension methods (reserved for future use) |
 
 ## Messages
 
@@ -17,5 +23,5 @@ Messages are the signals that decouple systems from one another. A publisher fir
 | `BalloonHitMessage` | `ProjectileView`, cheats | `BalloonController`, `ScoreController` |
 | `BalloonScoredMessage` | `ScoreController` | `ColorProgressBar` |
 | `ScoreLevelUpMessage` | `ScoreController` | `ColorProgressBar`, `LevelUpPopUp` |
-| `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController` |
+| `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController`, `BalloonSpawner` |
 | `ProjectileLoadedMessage` | `ThrowerController` | `ShieldCounterLabel`, `ShieldCounterAnimation` |

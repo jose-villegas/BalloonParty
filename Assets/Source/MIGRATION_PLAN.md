@@ -19,6 +19,7 @@
 - **Reactive layer:** [UniRx](https://github.com/neuecc/UniRx) — `ReactiveProperty<T>`, `Subject<T>`, `.Subscribe()` replacing plain C# events and Entitas reactive collectors
 - **Dependency Injection:** [VContainer](https://vcontainer.hadashikick.jp/) — `[Inject]` attributes, `LifetimeScope`, `IContainerBuilder` replacing manual wiring and `Contexts.sharedInstance`
 - **Messaging / Signals:** [MessagePipe](https://github.com/Cysharp/MessagePipe) — VContainer's recommended pub/sub companion, replaces Zenject's SignalBus
+- **Async:** [UniTask](https://github.com/Cysharp/UniTask) — `async`/`await` replacing Unity coroutines for delays, polling, and frame yields
 - **New folder:** `Assets/Source/`
 - **No Entitas dependency** in new code
 
@@ -62,13 +63,14 @@ Assets/Source/
   Projectile/
     ProjectileLifetimeScope.cs, ProjectilePoolChannel.cs
     Model/          ProjectileModel.cs
-    View/           ProjectileView.cs, ProjectileShieldView.cs
-    Controller/     ← Phase 9 (currently handled inside ProjectileView)
+    View/           ProjectileView.cs, ProjectileShieldView.cs, ProjectileTrail.cs
+    Controller/     ← reserved; logic currently lives in ProjectileView
   Thrower/
     ThrowerController.cs, ThrowerSettings.cs
   Game/
     ScoreController.cs
     GameLifetimeScope.cs   ← root VContainer scope
+    GameChildLifetimeScope.cs ← abstract base for all child scopes
     GameManager.cs         ← Phase 9
   Shared/
     IGameConfiguration.cs, IReusable.cs
@@ -78,6 +80,7 @@ Assets/Source/
                     BalloonScoredMessage.cs, ScoreLevelUpMessage.cs,
                     SpawnBalloonLineMessage.cs, ProjectileDestroyedMessage.cs,
                     ProjectileLoadedMessage.cs
+    Extensions/     ← reserved for future extension methods
   UI/
     Score/          ColorProgressBar.cs, ColorProgressBarInstancer.cs,
                     ScoreNotice.cs, ScorePointTrail.cs,
@@ -90,7 +93,9 @@ Assets/Source/
   Debug/
     ICheat.cs, CheatConsoleView.cs
     BalloonRemoverCheat.cs, SpawnBalloonLineCheat.cs,
-    FireProjectileCheat.cs, TriggerLevelUpCheat.cs, NearLevelUpCheat.cs
+    FireProjectileCheat.cs, TriggerLevelUpCheat.cs, NearLevelUpCheat.cs,
+    ScoreCheatHelper.cs   ← shared helper for score-related cheats
+  README.md              ← each feature folder contains a README.md (living documentation)
 
 Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
 ```
@@ -481,7 +486,7 @@ All logic lives in `BalloonSpawner`:
 
 1. **`BalloonSpawner`** subscribes to `ProjectileDestroyedMessage` in addition to `SpawnBalloonLineMessage`
 2. Tracks `_turnCount` — incremented on each `ProjectileDestroyedMessage`; skips spawning on turn ≤ 1 (first death is the initial projectile fired after game start)
-3. On turn > 1: runs a coroutine that spawns `NewProjectileBalloonLines` lines with `NewBalloonLinesTimeInterval` delay between each, then publishes `BalanceBalloonsMessage` once after all lines
+3. On turn > 1: runs `SpawnLinesWithDelayAsync()` (`async UniTaskVoid` with `CancellationTokenSource`) that spawns `NewProjectileBalloonLines` lines with `NewBalloonLinesTimeInterval` delay between each, then publishes `BalanceBalloonsMessage` once after all lines
 4. Uses `SpawnLineInternal()` (no per-line balance) vs `SpawnLine()` (with balance) to avoid redundant balance passes during multi-line spawning
 
 ### `SpawnBalloonLineMessage` changes
@@ -489,15 +494,15 @@ All logic lives in `BalloonSpawner`:
 - Added `LineCount` field (default 1) so callers can request multiple delayed lines in a single message
 - `GameStartButton` now publishes `new SpawnBalloonLineMessage(GameStartedBalloonLines)` — game-start lines also spawn with delays between them, matching legacy
 
-### Coroutine runner
+### Async delay
 
-`BalloonSpawner` is a plain C# class (`IStartable`), so it injects `SlotGridView` (a scene-placed MonoBehaviour) as a coroutine runner. This is the same pattern the legacy used with `_contexts.game.coroutineRunner.Value`.
+`BalloonSpawner` is a plain C# class (`IStartable`), so it uses `async UniTaskVoid` with a `CancellationTokenSource` for delayed multi-line spawning. No coroutine runner dependency is needed.
 
 ### Files changed
 
 | File | Change |
 |---|---|
-| `BalloonSpawner.cs` | Added `ProjectileDestroyedMessage` subscription, turn tracking, `SpawnLinesWithDelay` coroutine, `SpawnLineInternal` extraction |
+| `BalloonSpawner.cs` | Added `ProjectileDestroyedMessage` subscription, turn tracking, `SpawnLinesWithDelayAsync` (`async UniTaskVoid`), `SpawnLineInternal` extraction, removed `SlotGridView` coroutine runner dependency |
 | `SpawnBalloonLineMessage.cs` | Added `LineCount` property |
 | `GameStartButton.cs` | Publishes single message with `LineCount` instead of N separate messages |
 
@@ -568,17 +573,23 @@ All pooling goes through a single pattern: `PoolChannel<TItem>` + `PoolManager`.
 - **Projectile is pooled, not destroyed** — `ProjectileView` implements `IPoolable`; on death it publishes messages but does not `Destroy`. `ThrowerController.Reload()` returns it to the pool and immediately gets it back (single-item pool).
 - **`ProjectileShieldView` hides on `Awake()`, shows on first fired frame** — mirrors legacy timing where shields were added at fire time, not load time.
 - **VFX are world-space orphans** — `VfxPoolChannel` instantiates particles unparented; `PoolableParticle` auto-returns after lifetime. No VFX is a child of the projectile.
+- **Pool defensiveness** — `PoolChannel.Get()` skips destroyed items in the stack (Unity's `== null` check catches destroyed-but-not-GC'd objects). `PoolChannel.Return()` early-exits if the item has been destroyed. This guards against race conditions where a VFX prefab's `Stop Action: Destroy` competes with the pool's auto-return.
 
 ### Trail handling
 
-- **`OnDespawned()`** — `_trail.emitting = false` + `_trail.Clear()`
-- **`OnSpawned()`** — re-enable `_trail.emitting` after one frame via coroutine (prevents snap artifact)
+Trail management is extracted into `ProjectileTrail`, a child component on the trail GameObject. It is **not** `IPoolable` — the projectile itself is pooled, so its children's lifecycle is managed by the projectile's `OnSpawned`/`OnDespawned`. `ProjectileTrail` exposes `Enable()` / `Disable()`:
+
+- **`Disable()`** — `_trail.emitting = false` + `_trail.Clear()`
+- **`Enable()`** — `async UniTaskVoid` that yields one frame (via `UniTask.Yield(destroyCancellationToken)`), clears the trail, then re-enables emitting (prevents snap artifact from position change)
+
+`ProjectileView` calls `_projectileTrail.Enable()` on fire (first `FixedUpdate` frame where `IsFree` is true) and `_projectileTrail.Disable()` on death and despawn.
 
 ### Changes to existing files
 
 | File | Change |
 |---|---|
-| `ProjectileView.cs` | Implements `IPoolable`; `[SerializeField] TrailRenderer _trail`; trail clear/re-enable on pool transitions; removed `Destroy(gameObject)` |
+| `ProjectileView.cs` | Implements `IPoolable`; delegates trail management to `ProjectileTrail`; removed `Destroy(gameObject)` |
+| `ProjectileTrail.cs` | New — `Enable()`/`Disable()` via `async UniTaskVoid`; child component on trail GameObject |
 | `ProjectileShieldView.cs` | Injects `PoolManager`; uses `VfxPoolChannel` for VFX; added `Reset()` and `Show()` |
 | `BalloonView.cs` | Injects `PoolManager`; uses `VfxPoolChannel` for pop VFX |
 | `ThrowerController.cs` | Removed `IStartable`; uses `PoolManager` + `ProjectilePoolChannel` |
@@ -596,6 +607,36 @@ builder.Register<PoolManager>(Lifetime.Singleton);
 1. On the projectile prefab, assign the `Trail` child's `TrailRenderer` to `ProjectileView._trail`
 
 ✅ **Checkpoint:** Fire projectile → it bounces and dies → no trail line artifact on reload → shield gain/lose/bounce VFX play at correct world positions and fade independently of the projectile lifecycle. Only one projectile instance exists in the hierarchy.
+
+---
+
+## Phase 7j — Migrate ScorePointTrail to PoolManager
+
+**Goal:** Replace the hand-rolled `List<ScorePointTrail>` + `IReusable` pattern in `ColorProgressBar` with the generic `PoolManager` / `PoolChannel` system, so score trails live under the `[Pool]` hierarchy instead of cluttering the scene root.
+
+### Problem
+
+`ColorProgressBar.SpawnTrail()` maintained its own `List<ScorePointTrail>` and used `FindAvailable()` (scanning for `IReusable.IsUsable`) to reuse instances. This duplicated pooling logic already solved by `PoolChannel<T>` and left instantiated trails at the scene root.
+
+### Solution
+
+| File | Change |
+|---|---|
+| `ScorePointTrail.cs` | Replaced `IReusable` with `IPoolable`; added `Initialize(Action<ScorePointTrail>)` callback for auto-return; removed `IsUsable` property; calls return callback on tween completion |
+| `ScoreTrailPoolChannel.cs` | New — `PoolChannel<ScorePointTrail>` that instantiates from a prefab under `Container` and wires the auto-return callback |
+| `ColorProgressBar.cs` | Injects `PoolManager`; removed `_trails` list and `FindAvailable` usage for trails; uses `_poolManager.GetOrRegister()` with a per-color key (`ScoreTrail_{colorName}`) so each color gets its own pool channel |
+
+### Key decisions
+
+- **Per-color pool keys** (`ScoreTrail_Red`, `ScoreTrail_Blue`, etc.) — each `ColorProgressBar` instance registers its own channel keyed by color name. All share the same prefab but are separated in the hierarchy for clarity.
+- **Auto-return via callback** — same pattern as `PoolableParticle`: the trail calls a return delegate on tween completion, so `ColorProgressBar` never manually returns items.
+- **`ScoreNotice` stays as-is** — notices are UI elements parented to the progress bar (`transform`), not world-space objects. Their reuse via `IReusable` + `FindAvailable` is appropriate for UI-local recycling.
+
+### Unity Editor steps
+
+None — no new serialized references. `PoolManager` is already registered as a singleton.
+
+✅ **Checkpoint:** Pop a balloon → score trail flies from world position to progress bar → trail instance appears under `[Pool]/ScoreTrail_{color}` in hierarchy → trail auto-returns and is reused on next pop.
 
 ---
 
@@ -795,6 +836,24 @@ _subscriber.Subscribe(_ => BalanceBalloons()).AddTo(_disposable);
 [Inject] private ISubscriber<BalloonHitMessage> _subscriber;
 ```
 
+### UniTask
+```csharp
+// Fire-and-forget async (MonoBehaviour)
+private async UniTaskVoid DoSomethingAsync()
+{
+    await UniTask.Delay(500, cancellationToken: destroyCancellationToken);
+    await UniTask.WaitUntil(() => _ready, cancellationToken: destroyCancellationToken);
+    await UniTask.Yield(cancellationToken: destroyCancellationToken);
+}
+
+// Fire-and-forget async (plain C# class — manual CancellationTokenSource)
+private readonly CancellationTokenSource _cts = new();
+SpawnAsync(_cts.Token).Forget();
+
+// Ignoring time scale (for paused-game UI)
+await UniTask.Delay(1000, ignoreTimeScale: true, cancellationToken: destroyCancellationToken);
+```
+
 ---
 
 ### Animation Fidelity
@@ -949,6 +1008,18 @@ Classes follow a strict top-to-bottom ordering by visibility and purpose:
    - `[Inject]` methods sit immediately after lifecycle methods in their visibility group
    - `[Inject]` methods must only perform injection-related work (subscribing to injected dependencies, wiring injected references). Non-injection logic (e.g. triggering animations, setting initial visual state) belongs in Unity lifecycle methods (`Awake`, `Start`).
 
+### Async: Prefer UniTask over Coroutines
+
+All async work in `Assets/Source/` must use **UniTask** instead of Unity coroutines. No `StartCoroutine` / `IEnumerator` patterns in new code.
+
+- **`async UniTaskVoid`** for fire-and-forget operations (call `.Forget()` at the call site)
+- **`async UniTask`** when the caller needs to `await` the result
+- **`UniTask.Delay(milliseconds)`** replaces `WaitForSeconds`; use `ignoreTimeScale: true` where the game is paused
+- **`UniTask.WaitUntil(() => condition)`** replaces `yield return null` polling loops
+- **`UniTask.Yield()`** replaces `yield return null` for single-frame delays
+- **Cancellation:** use `destroyCancellationToken` for MonoBehaviour-scoped tasks (auto-cancels on destroy). Use `CancellationTokenSource` for plain C# classes with manually controlled lifetimes.
+- **Child components of pooled objects** (e.g. `ProjectileTrail`) use `destroyCancellationToken` — the pooled parent deactivates/reactivates them, but does not destroy them, so `destroyCancellationToken` only fires on actual destruction.
+
 ---
 
 ## Progress Tracker
@@ -965,11 +1036,12 @@ Classes follow a strict top-to-bottom ordering by visibility and purpose:
 | 7a    | Score Feedback UI                         | ✅ Done         |
 | 7b    | Level-Up Popup                            | ✅ Done         |
 | 7c    | Shield Counter HUD                        | ✅ Done         |
-| 7d    | Projectile Shield Visuals & Gain Logic    | ⬜ Wiring only  |
+| 7d    | Projectile Shield Visuals & Gain Logic    | ⬜ Code done — Unity wiring pending  |
 | 7e    | Auto-Spawning on Projectile Death         | ✅ Done         |
-| 7f    | Game Start                                | ⬜ Wiring only  |
+| 7f    | Game Start                                | ⬜ Code done — Unity wiring pending  |
 | 7g    | HUD Audit & Cleanup                       | ⬜ Todo         |
 | 7h    | Object Pooling & VFX/Trail Decoupling     | ✅ Done         |
+| 7j    | Migrate ScorePointTrail to PoolManager    | ✅ Done         |
 | 7i    | Configuration Migration                   | ⬜ Todo         |
 | 8     | Power-Ups                                 | ⬜ Todo         |
 | 9     | Game Loop, UI & Cleanup                   | ⬜ Todo         |

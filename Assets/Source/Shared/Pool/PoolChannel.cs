@@ -6,11 +6,20 @@ namespace BalloonParty.Shared
     /// <summary>
     /// Non-generic marker so we can store any PoolChannel in a typed dictionary.
     /// </summary>
-    public interface IPoolChannel { }
+    public interface IPoolChannel
+    {
+        void SetParent(Transform parent);
+    }
 
     public abstract class PoolChannel<TItem> : IPoolChannel where TItem : Component, IPoolable
     {
         private readonly Stack<TItem> _available = new();
+        protected Transform Container { get; private set; }
+
+        public void SetParent(Transform parent)
+        {
+            Container = parent;
+        }
 
         public TItem Get()
         {
@@ -33,6 +42,8 @@ namespace BalloonParty.Shared
             if (item == null) return;
             item.OnDespawned();
             item.gameObject.SetActive(false);
+            if (Container != null)
+                item.transform.SetParent(Container);
             _available.Push(item);
         }
 

@@ -1,25 +1,28 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 using System.Collections.Generic;
-using BalloonParty.Thrower;
+using BalloonParty.Projectile.Model;
+using BalloonParty.Shared.Messages;
+using MessagePipe;
 
 namespace BalloonParty.Debug
 {
     public class FireProjectileCheat : ICheat
     {
-        private readonly ThrowerController _thrower;
-
-        public FireProjectileCheat(ThrowerController thrower)
-        {
-            _thrower = thrower;
-        }
-
         public string Name => "Fire Projectile";
         public string Section => "Thrower";
         public IReadOnlyList<string> Tags => new[] { "projectile", "thrower" };
 
+        private ProjectileModel _activeProjectile;
+
+        public FireProjectileCheat(ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
+        {
+            loadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model);
+        }
+
         public void Execute()
         {
-            _thrower.FireImmediate();
+            if (_activeProjectile == null || _activeProjectile.IsFree) return;
+            _activeProjectile.IsFree = true;
         }
     }
 }

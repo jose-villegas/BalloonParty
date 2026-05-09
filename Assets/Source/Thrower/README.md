@@ -2,6 +2,13 @@
 
 The thrower is the player-controlled launcher at the bottom of the screen. It aims at the balloon grid and fires projectiles.
 
+## Contents
+
+| File | What it does |
+|---|---|
+| `ThrowerController` | MonoBehaviour — aiming, rotation, loading, firing, and reload logic |
+| `ThrowerSettings` | Holds the `ProjectileLifetimeScope` prefab reference for pool creation |
+
 ## Gameplay
 
 The player holds the mouse button to aim — the thrower rotates to face the cursor. Releasing the mouse fires the loaded projectile. Once the projectile is destroyed (shields depleted), the thrower automatically reloads and is ready for the next shot.

@@ -12,8 +12,15 @@ On contact with a balloon the projectile absorbs that balloon's color. Consecuti
 
 The projectile is **pooled, not destroyed**. A single instance is created via `ProjectilePoolChannel` on first load and reused across turns. On death the projectile publishes messages but does not self-destruct — `ThrowerController` returns it to the pool and immediately re-gets it.
 
-- **`OnDespawned()`** — nulls model, resets glow, clears trail (`TrailRenderer.Clear()` + disable emitting), resets shield view
-- **`OnSpawned()`** — re-enables trail emitting after one frame (coroutine) to prevent snap artifact from old position
+- **`OnDespawned()`** — nulls model, resets glow, disables trail via `ProjectileTrail.Disable()`, resets shield view
+- **`OnSpawned()`** — resets shield-shown flag; trail stays disabled until the projectile is fired
+
+Trail management is handled by `ProjectileTrail`, a child component on the trail GameObject. It is **not** `IPoolable` — the projectile itself is pooled, so its children's lifecycle follows the parent. `ProjectileTrail` exposes `Enable()` / `Disable()`:
+
+- **`Enable()`** — `async UniTaskVoid` that yields one frame (`UniTask.Yield(destroyCancellationToken)`), clears the trail, then re-enables emitting (prevents snap artifact from position change)
+- **`Disable()`** — stops emitting and clears immediately
+
+`ProjectileView` calls `Enable()` on the first `FixedUpdate` frame where `IsFree` is true (fired) and `Disable()` on death and despawn.
 
 Shield orbs are hidden until the projectile is fired. `ProjectileShieldView` starts inactive on `Awake()` and is shown via `Show()` on the first `FixedUpdate` frame where `IsFree` is true — matching the legacy timing where shields were added at fire time.
 
@@ -29,6 +36,7 @@ All VFX are spawned via `VfxPoolChannel` as world-space orphans — they are not
 - **`ProjectilePoolChannel`** — `PoolChannel<ProjectileView>` that creates projectiles via `CreateChildFromPrefab`. Accessed through `PoolManager`.
 - **`ProjectileModel`** — plain C# data object: direction vector, speed, `ReactiveProperty<int> ShieldsRemaining`, `ReactiveProperty<string> ColorName`, pop-count, last-hit balloon reference.
 - **`ProjectileView`** — MonoBehaviour implementing `IPoolable`. Drives manual movement in `FixedUpdate`, checks bounds against `IGameConfiguration.LimitsClockwise`, reflects direction and clamps position on bounce. Handles `OnTriggerEnter2D` — resolves the `BalloonView` and `BalloonModel` from the collider, tracks color, triggers shield gain on 2 consecutive same-color pops, and runs the neighbor nudge sequence. Publishes `ProjectileDestroyedMessage` and `BalanceBalloonsMessage` when shields reach zero.
+- **`ProjectileTrail`** — child MonoBehaviour on the trail GameObject. `Enable()`/`Disable()` manage `TrailRenderer` emitting state using `async UniTaskVoid` with `destroyCancellationToken`. Not `IPoolable` — lifecycle follows the pooled projectile parent.
 - **`ProjectileShieldView`** — MonoBehaviour on the projectile prefab. Subscribes to `ShieldsRemaining` and `ColorName` via UniRx. Scales shield orb sprites, tints them to the current color, and spawns gain/lose/bounce VFX via `VfxPoolChannel`.
 
 ## Interactions

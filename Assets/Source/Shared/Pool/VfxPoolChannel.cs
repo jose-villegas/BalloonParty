@@ -13,7 +13,7 @@ namespace BalloonParty.Shared
 
         protected override PoolableParticle Create()
         {
-            var instance = Object.Instantiate(_prefab);
+            var instance = Object.Instantiate(_prefab, Container);
             instance.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
 
             var poolable = instance.gameObject.AddComponent<PoolableParticle>();

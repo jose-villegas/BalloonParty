@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Game;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
@@ -20,19 +21,21 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ParticleSystem _completionParticleSystem;
         [SerializeField] private ScoreNotice _noticePrefab;
         [SerializeField] private ScorePointTrail _trailPrefab;
-        private readonly List<ScoreNotice> _notices = new();
-        private readonly List<ScorePointTrail> _trails = new();
-
-        private BalloonColorConfiguration _colorConfig;
 
         [Inject] private IGameConfiguration _config;
-        [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
-        private int _localCount;
         [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
+        [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
+        [Inject] private PoolManager _poolManager;
+
+        private readonly List<ScoreNotice> _notices = new();
+        private BalloonColorConfiguration _colorConfig;
+        private int _localCount;
+        private string _trailPoolKey;
 
         public void Setup(BalloonColorConfiguration colorConfig, ScoreController scoreController)
         {
             _colorConfig = colorConfig;
+            _trailPoolKey = $"ScoreTrail_{colorConfig.Name}";
 
             foreach (var g in _graphicsToSetColor)
                 g.color = colorConfig.Color;
@@ -88,31 +91,17 @@ namespace BalloonParty.UI.Score
 
         private void SpawnTrail(Vector3 fromWorldPosition)
         {
-            var trail = FindAvailable(_trails);
-            if (trail == null)
-            {
-                trail = Instantiate(_trailPrefab, fromWorldPosition, Quaternion.identity);
-                _trails.Add(trail);
-            }
-            else
-            {
-                trail.transform.position = fromWorldPosition;
-                trail.transform.localScale = Vector3.one;
-            }
+            var trail = _poolManager.GetOrRegister(_trailPoolKey,
+                () => new ScoreTrailPoolChannel(_trailPrefab));
+
+            trail.transform.position = fromWorldPosition;
+            trail.transform.localScale = Vector3.one;
 
             trail.Setup(transform.position, _colorConfig.Color, _config,
                 () => _animator.SetTrigger("TrailHit"));
         }
 
-        private static ScoreNotice FindAvailable(List<ScoreNotice> pool)
-        {
-            foreach (var item in pool)
-                if (item.IsUsable)
-                    return item;
-            return null;
-        }
-
-        private static ScorePointTrail FindAvailable(List<ScorePointTrail> pool)
+        private static T FindAvailable<T>(List<T> pool) where T : MonoBehaviour, IReusable
         {
             foreach (var item in pool)
                 if (item.IsUsable)

@@ -7,7 +7,6 @@ namespace BalloonParty.Slots
     {
         [Inject] private SlotGrid _grid;
 
-        // OnDrawGizmos is called every frame by Unity's Scene view — no subscription needed.
         private void OnDrawGizmos()
         {
             if (_grid == null) return;

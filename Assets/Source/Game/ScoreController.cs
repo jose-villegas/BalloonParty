@@ -12,14 +12,15 @@ namespace BalloonParty.Game
 {
     public class ScoreController : IStartable, IDisposable
     {
+        public ReactiveProperty<int> TotalScore { get; } = new(0);
+        public ReactiveProperty<int> Level { get; } = new(0);
+
         private const string LevelKey = "Level";
         private const string ProgressSuffix = ".Progress";
         private readonly IGameConfiguration _config;
-
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly Dictionary<string, int> _levelProgress = new();
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
-
         private readonly Dictionary<string, int> _persistentScore = new();
         private readonly IPublisher<BalloonScoredMessage> _scoredPublisher;
         private IDisposable _subscription;
@@ -36,9 +37,6 @@ namespace BalloonParty.Game
             _levelUpPublisher = levelUpPublisher;
             _config = config;
         }
-
-        public ReactiveProperty<int> TotalScore { get; } = new(0);
-        public ReactiveProperty<int> Level { get; } = new(0);
 
         public void Dispose()
         {
@@ -75,7 +73,7 @@ namespace BalloonParty.Game
             return _config.PointsRequiredForLevel(Level.Value + 1);
         }
 
-        public void Save()
+        private void Save()
         {
             foreach (var color in _config.BalloonColors)
             {
@@ -100,7 +98,6 @@ namespace BalloonParty.Game
 
             _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, TotalScore.Value));
         }
-
 
         private void CheckLevelUp()
         {

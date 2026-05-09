@@ -2,6 +2,14 @@
 
 Displays the projectile's remaining shields and animates state changes as the projectile bounces or is replaced.
 
+## Contents
+
+| File | What it does |
+|---|---|
+| `ShieldUILifetimeScope` | VContainer child scope on the shield HUD root; registers `ShieldCounterLabel[]` and `ShieldCounterAnimation` |
+| `ShieldCounterLabel` | Shows the shield count; resets to "--" during balance passes |
+| `ShieldCounterAnimation` | Drives Animator triggers (`Ready`, `Lost`, `Gain`, `Waiting`) based on `ShieldsRemaining` changes |
+
 ## How it works
 
 `ShieldCounterLabel` shows the starting shield count when a `ProjectileLoadedMessage` arrives and resets to "--" while the grid is balancing (indicated by `BalanceBalloonsMessage`).

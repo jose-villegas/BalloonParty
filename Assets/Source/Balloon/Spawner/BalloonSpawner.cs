@@ -1,11 +1,12 @@
-using System.Collections;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MessagePipe;
+using System.Threading;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -22,9 +23,9 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IObjectResolver _resolver;
         private readonly BalloonSpawnerSettings _settings;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
-        private readonly MonoBehaviour _coroutineRunner;
 
         private int _turnCount;
+        private CancellationTokenSource _cts = new();
 
         [Inject]
         public BalloonSpawner(
@@ -35,8 +36,7 @@ namespace BalloonParty.Balloon.Spawner
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
             ISubscriber<BalloonHitMessage> hitSubscriber,
-            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
-            SlotGridView coroutineRunner)
+            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber)
         {
             _grid = grid;
             _settings = settings;
@@ -46,7 +46,6 @@ namespace BalloonParty.Balloon.Spawner
             _balancePublisher = balancePublisher;
             _hitSubscriber = hitSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
-            _coroutineRunner = coroutineRunner;
         }
 
         public void Start()
@@ -55,7 +54,7 @@ namespace BalloonParty.Balloon.Spawner
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
         }
 
-        public void SpawnLine()
+        private void SpawnLine()
         {
             SpawnLineInternal();
             _balancePublisher.Publish(default);
@@ -124,7 +123,7 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            _coroutineRunner.StartCoroutine(SpawnLinesWithDelay(lineCount));
+            SpawnLinesWithDelayAsync(lineCount, _cts.Token).Forget();
         }
 
         private void OnProjectileDestroyed()
@@ -132,15 +131,17 @@ namespace BalloonParty.Balloon.Spawner
             _turnCount++;
             if (_turnCount <= 1) return;
 
-            _coroutineRunner.StartCoroutine(SpawnLinesWithDelay(_config.NewProjectileBalloonLines));
+            SpawnLinesWithDelayAsync(_config.NewProjectileBalloonLines, _cts.Token).Forget();
         }
 
-        private IEnumerator SpawnLinesWithDelay(int lineCount)
+        private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct)
         {
             for (var i = 0; i < lineCount; i++)
             {
                 SpawnLineInternal();
-                yield return new WaitForSeconds(_config.NewBalloonLinesTimeInterval);
+                await UniTask.Delay(
+                    (int)(_config.NewBalloonLinesTimeInterval * 1000),
+                    cancellationToken: ct);
             }
 
             _balancePublisher.Publish(default);

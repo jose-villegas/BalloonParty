@@ -13,15 +13,24 @@ namespace BalloonParty.Debug
     {
         private const float PickRadius = 0.25f;
         private const float PathSampleDistance = 0.05f;
-        private readonly List<Vector3> _path = new();
 
-        private bool _active;
-        private bool _dragging;
         [Inject] private SlotGrid _grid;
         [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
-
-        private Material _lineMaterial;
         [Inject] private IPublisher<BalanceBalloonsMessage> _publisher;
+
+        private readonly List<Vector3> _path = new();
+        private bool _active;
+        private bool _dragging;
+        private Material _lineMaterial;
+
+        public string Name => _active ? "Remove Balloons  [ON]" : "Remove Balloons";
+        public string Section => "Grid";
+        public IReadOnlyList<string> Tags => new[] { "balloons", "grid" };
+
+        public void Execute()
+        {
+            _active = !_active;
+        }
 
         private void Awake()
         {
@@ -73,15 +82,6 @@ namespace BalloonParty.Debug
                     0.05f);
 
             GL.PopMatrix();
-        }
-
-        public string Name => _active ? "Remove Balloons  [ON]" : "Remove Balloons";
-        public string Section => "Grid";
-        public IReadOnlyList<string> Tags => new[] { "balloons", "grid" };
-
-        public void Execute()
-        {
-            _active = !_active;
         }
 
         private void SampleMousePosition()

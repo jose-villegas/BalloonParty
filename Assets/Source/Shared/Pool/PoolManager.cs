@@ -1,15 +1,30 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace BalloonParty.Shared
 {
     public class PoolManager
     {
         private readonly Dictionary<string, IPoolChannel> _channels = new();
+        private Transform _root;
+
+        private Transform Root
+        {
+            get
+            {
+                if (_root == null)
+                {
+                    var go = new GameObject("[Pool]");
+                    UnityEngine.Object.DontDestroyOnLoad(go);
+                    _root = go.transform;
+                }
+                return _root;
+            }
+        }
 
         /// <summary>
-        /// Register a channel under <paramref name="key"/>. Throws if the key is already taken.
-        /// Call once during setup.
+        /// Throws if the key is already taken. Call once during setup.
         /// </summary>
         public void Register<TItem>(string key, PoolChannel<TItem> channel)
             where TItem : UnityEngine.Component, IPoolable
@@ -17,28 +32,23 @@ namespace BalloonParty.Shared
             if (!_channels.TryAdd(key, channel))
                 throw new InvalidOperationException(
                     $"Pool channel '{key}' is already registered.");
+
+            var container = new GameObject(key);
+            container.transform.SetParent(Root);
+            channel.SetParent(container.transform);
         }
 
-        /// <summary>
-        /// Register a channel using the channel type name as the key.
-        /// </summary>
         public void Register<TItem>(PoolChannel<TItem> channel)
             where TItem : UnityEngine.Component, IPoolable
         {
             Register(channel.GetType().Name, channel);
         }
 
-        /// <summary>
-        /// Get an instance from the channel registered under <paramref name="key"/>.
-        /// </summary>
         public TItem Get<TItem>(string key) where TItem : UnityEngine.Component, IPoolable
         {
             return GetChannel<TItem>(key).Get();
         }
 
-        /// <summary>
-        /// Return an instance to the channel registered under <paramref name="key"/>.
-        /// </summary>
         public void Return<TItem>(string key, TItem item) where TItem : UnityEngine.Component, IPoolable
         {
             GetChannel<TItem>(key).Return(item);

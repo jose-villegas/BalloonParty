@@ -18,7 +18,7 @@ namespace BalloonParty.Projectile
         protected override ProjectileView Create()
         {
             var childScope = _parentScope.CreateChildFromPrefab(_prefab);
-            childScope.transform.SetParent(null);
+            childScope.transform.SetParent(Container);
             return childScope.GetComponentInChildren<ProjectileView>();
         }
     }

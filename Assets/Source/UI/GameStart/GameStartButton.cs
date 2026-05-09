@@ -9,9 +9,10 @@ namespace BalloonParty.UI.GameStart
     [RequireComponent(typeof(Button))]
     public class GameStartButton : MonoBehaviour
     {
-        private Button _button;
         [Inject] private IGameConfiguration _config;
         [Inject] private IPublisher<SpawnBalloonLineMessage> _spawnPublisher;
+
+        private Button _button;
 
         private void Start()
         {

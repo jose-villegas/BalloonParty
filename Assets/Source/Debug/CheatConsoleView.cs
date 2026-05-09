@@ -3,19 +3,19 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using VContainer;
-using VContainer.Unity;
 
 namespace BalloonParty.Debug
 {
-    public class CheatConsoleView : MonoBehaviour, IInitializable
+    public class CheatConsoleView : MonoBehaviour
     {
         private const float MinHeight = 80f;
         private const float HandleHeight = 14f;
         private const float ReferenceHeight = 720f;
-        private readonly HashSet<string> _favorites = new();
-        private string _activeTag = string.Empty;
+
         [Inject] private IEnumerable<ICheat> _cheats;
 
+        private readonly HashSet<string> _favorites = new();
+        private string _activeTag = string.Empty;
         private float _consoleHeight = 280f;
         private bool _resizing;
         private Vector2 _scroll;
@@ -73,10 +73,6 @@ namespace BalloonParty.Debug
             GUILayout.BeginArea(new Rect(bodyRect.x + 6, bodyRect.y + 6, bodyRect.width - 12, bodyRect.height - 12));
             DrawContent();
             GUILayout.EndArea();
-        }
-
-        public void Initialize()
-        {
         }
 
         private void DrawContent()

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3554677060457432560}
   - component: {fileID: 6748887692955340221}
+  - component: {fileID: 996541116237176817}
   m_Layer: 9
   m_Name: Trail
   m_TagString: Untagged
@@ -142,6 +143,18 @@ TrailRenderer:
   m_Autodestruct: 0
   m_Emitting: 1
   m_ApplyActiveColorSpace: 0
+--- !u!114 &996541116237176817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 429521604649796107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7efccb99fc684e6da45632440ae6cbd8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Projectile.View.ProjectileTrail
 --- !u!1 &2167444347925108120
 GameObject:
   m_ObjectHideFlags: 0

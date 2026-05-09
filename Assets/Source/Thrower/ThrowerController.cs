@@ -44,13 +44,6 @@ namespace BalloonParty.Thrower
             });
         }
 
-        public void FireImmediate()
-        {
-            if (_activeProjectile == null || _activeProjectile.IsFree) return;
-            _activeProjectile.IsFree = true;
-            _activeProjectile.Direction = _direction;
-        }
-
         private void Update()
         {
             if (!_isMovable) return;
@@ -103,13 +96,7 @@ namespace BalloonParty.Thrower
         {
             if (_activeProjectile == null || _activeView == null || _activeProjectile.IsFree) return;
             if (!Input.GetMouseButtonUp(0)) return;
-            if (_grid == null) return;
-
-            // Only fire when all balloons have settled (mirrors ThrowLoadedProjectileSystem)
-            for (var col = 0; col < _grid.Columns; col++)
-            for (var row = 0; row < _grid.Rows; row++)
-                if (!_grid.IsEmpty(col, row) && !_grid.At(new Vector2Int(col, row)).IsStable.Value)
-                    return;
+            if (!_grid.AllBalloonsStable()) return;
 
             _activeProjectile.IsFree = true;
             _activeProjectile.Direction = _direction;

@@ -1,6 +1,6 @@
-using System.Collections;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
+using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
@@ -31,7 +31,7 @@ namespace BalloonParty.UI.LevelUp
         private void Start()
         {
             _levelUpSubscriber
-                .Subscribe(msg => StartCoroutine(WaitForStability(msg.NewLevel)))
+                .Subscribe(msg => WaitForStabilityAsync(msg.NewLevel).Forget())
                 .AddTo(_disposable);
         }
 
@@ -43,24 +43,26 @@ namespace BalloonParty.UI.LevelUp
         public void OnContinue()
         {
             _animator.SetTrigger("Hide");
-            StartCoroutine(UnpauseAfterDelay());
+            UnpauseAfterDelayAsync().Forget();
         }
 
-
-        private IEnumerator WaitForStability(int newLevel)
+        private async UniTaskVoid WaitForStabilityAsync(int newLevel)
         {
-            while (!_grid.AllBalloonsStable())
-                yield return null;
+            await UniTask.WaitUntil(() => _grid.AllBalloonsStable(),
+                cancellationToken: destroyCancellationToken);
 
             _levelLabel.text = (newLevel - 1).ToString("N0");
             _animator.SetTrigger("Appear");
 
-            yield return LevelGlowFill(newLevel);
+            await LevelGlowFillAsync(newLevel);
         }
 
-        private IEnumerator LevelGlowFill(int newLevel)
+        private async UniTask LevelGlowFillAsync(int newLevel)
         {
-            yield return new WaitForSecondsRealtime(_playParticlesDelay);
+            await UniTask.Delay(
+                (int)(_playParticlesDelay * 1000),
+                ignoreTimeScale: true,
+                cancellationToken: destroyCancellationToken);
 
             var duration = _levelGlowFillParticleSystem.main.duration;
             var elapsed = 0f;
@@ -68,22 +70,28 @@ namespace BalloonParty.UI.LevelUp
             _levelGlowFillParticleSystem.Stop();
             _levelGlowFillParticleSystem.Play();
 
-            yield return new WaitForSecondsRealtime(_fillAnimationDelay);
+            await UniTask.Delay(
+                (int)(_fillAnimationDelay * 1000),
+                ignoreTimeScale: true,
+                cancellationToken: destroyCancellationToken);
 
             while (elapsed <= duration)
             {
                 _levelGlowFill.fillAmount = elapsed / duration;
                 elapsed += Time.unscaledDeltaTime;
-                yield return null;
+                await UniTask.Yield(cancellationToken: destroyCancellationToken);
             }
 
             _levelGlowFill.fillAmount = 1f;
             _levelLabel.text = newLevel.ToString("N0");
         }
 
-        private IEnumerator UnpauseAfterDelay()
+        private async UniTaskVoid UnpauseAfterDelayAsync()
         {
-            yield return new WaitForSecondsRealtime(_continueUnpauseDelay);
+            await UniTask.Delay(
+                (int)(_continueUnpauseDelay * 1000),
+                ignoreTimeScale: true,
+                cancellationToken: destroyCancellationToken);
             Time.timeScale = 1f;
         }
     }

@@ -11,7 +11,6 @@ namespace BalloonParty.UI.Score
         [SerializeField] private Text _shadow;
         [SerializeField] private float _maxScale = 2f;
         [SerializeField] private float _maxScaleScore = 100f;
-        public Animator Animator => _animator;
 
         private void Awake()
         {
