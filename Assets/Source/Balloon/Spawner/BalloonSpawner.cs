@@ -1,6 +1,7 @@
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
@@ -23,7 +24,9 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IObjectResolver _resolver;
         private readonly BalloonSpawnerSettings _settings;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private readonly PoolManager _poolManager;
 
+        private const string BalloonPoolKey = "Balloon";
         private int _turnCount;
         private CancellationTokenSource _cts = new();
 
@@ -36,7 +39,8 @@ namespace BalloonParty.Balloon.Spawner
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
             ISubscriber<BalloonHitMessage> hitSubscriber,
-            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber)
+            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
+            PoolManager poolManager)
         {
             _grid = grid;
             _settings = settings;
@@ -46,10 +50,14 @@ namespace BalloonParty.Balloon.Spawner
             _balancePublisher = balancePublisher;
             _hitSubscriber = hitSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
+            _poolManager = poolManager;
         }
 
         public void Start()
         {
+            _poolManager.Register(BalloonPoolKey,
+                new BalloonPoolChannel(_settings.BalloonPrefab, _resolver));
+
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount));
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
         }
@@ -66,14 +74,14 @@ namespace BalloonParty.Balloon.Spawner
             // grid rows increase downward on screen, so +up*4 is 4 rows below the target
             var spawnPosition = _grid.IndexToWorldPosition(slot + Vector2Int.up * 4);
 
-            var instance = _resolver.Instantiate(_settings.BalloonPrefab, spawnPosition, Quaternion.identity);
-            var view = instance.GetComponent<BalloonView>();
+            var view = _poolManager.Get<BalloonView>(BalloonPoolKey);
+            view.transform.position = spawnPosition;
 
             var model = new BalloonModel();
             model.Color.Value = colorName;
             model.SlotIndex.Value = slot;
 
-            var controller = new BalloonController(model, view, _hitSubscriber, _balancePublisher, _grid, _config);
+            var controller = new BalloonController(model, view, _hitSubscriber, _balancePublisher, _grid, _config, _poolManager);
             controller.Start();
 
             _grid.Place(model, slot);
@@ -91,7 +99,7 @@ namespace BalloonParty.Balloon.Spawner
                 _config.BalloonSpawnAnimationDurationRange.x,
                 _config.BalloonSpawnAnimationDurationRange.y);
 
-            view.transform.DOMove(targetPosition, duration);
+            view.transform.DOMove(targetPosition, duration).SetId(view.GetInstanceID());
             view.transform.DOScale(Vector3.one, duration)
                 .OnComplete(() => model.IsStable.Value = true);
         }

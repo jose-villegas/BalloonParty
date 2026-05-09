@@ -72,11 +72,12 @@ namespace BalloonParty.Balloon.Controller
                 var view = balloon.View;
                 if (view == null) continue;
 
-                // Kill any in-progress tween so the new path takes over cleanly.
-                view.transform.DOKill();
+                // Kill only move tweens so spawn scale animation can finish.
+                DOTween.Kill(view.GetInstanceID());
 
                 view.transform
                     .DOPath(path.ToArray(), _config.TimeForBalloonsBalance, PathType.CatmullRom)
+                    .SetId(view.GetInstanceID())
                     .OnComplete(() => balloon.IsStable.Value = true);
             }
         }

@@ -640,6 +640,40 @@ None — no new serialized references. `PoolManager` is already registered as a 
 
 ---
 
+## Phase 7k — Migrate Balloon Instances to PoolManager
+
+**Goal:** Replace `Instantiate`/`Destroy` for balloon GameObjects with the `PoolManager` / `PoolChannel` system, so popped balloons are recycled instead of destroyed and all balloon instances live under the `[Pool]` hierarchy.
+
+### Problem
+
+`BalloonSpawner` called `_resolver.Instantiate` for every new balloon and `BalloonController` called `Object.Destroy` on hit. With dozens of balloons spawning and dying per game, this caused constant allocation and GC pressure, and left instances scattered at the hierarchy root.
+
+### Solution
+
+| File | Change |
+|---|---|
+| `BalloonView.cs` | Implements `IPoolable`; `OnSpawned()` resets scale; `OnDespawned()` kills DOTween tweens, clears reactive subscriptions via `CompositeDisposable`, nulls model. Subscriptions use `_bindDisposables` instead of `AddTo(this)` to support rebinding on reuse. Added `RegisterDisposeOnDespawn(IDisposable)` so external subscribers (e.g. `BalloonController`) can tie their subscription lifetime to the view's pool cycle. |
+| `BalloonPoolChannel.cs` | New — `PoolChannel<BalloonView>` that creates via `_resolver.Instantiate` (VContainer injection-aware) and parents under `Container` |
+| `BalloonSpawner.cs` | Injects `PoolManager`; registers `BalloonPoolChannel` in `Start()`; `SpawnBalloon` gets from pool instead of instantiating |
+| `BalloonController.cs` | Injects `PoolManager`; on hit calls `_poolManager.Return("Balloon", _view)` instead of `Object.Destroy`. No longer implements `IStartable` (it's manually constructed, not DI-resolved). Hit subscription is stored as `IDisposable` and disposed immediately on hit + registered with `view.RegisterDisposeOnDespawn()` as a safety net. |
+
+### Key decisions
+
+- **`CompositeDisposable` for reactive subscriptions** — `AddTo(this)` ties disposal to MonoBehaviour destruction, which never happens for pooled objects. `_bindDisposables` is cleared on each `Bind()` and on `OnDespawned()`, preventing subscription accumulation across reuse cycles.
+- **`DOTween.Kill` on despawn** — balloons may be mid-spawn-animation when popped; killing tweens prevents callbacks from firing on a recycled view.
+- **VContainer injection preserved** — `BalloonPoolChannel` uses `IObjectResolver.Instantiate` so `[Inject]` fields on `BalloonView` are populated on first creation and remain valid across pool cycles (fields are injected once at instantiation, not re-injected).
+- **Pool key is a constant** (`"Balloon"`) — all balloons share one pool regardless of color since the same prefab is used; color is applied via model binding.
+- **BalloonController subscription lifecycle** — `BalloonController` subscribes to `BalloonHitMessage` globally. Without disposal, old controllers (from previous pool cycles) would accumulate subscriptions forever — each holding a reference to `_view` (the recycled view). Although the `msg.Balloon != Model` guard prevents wrong execution, the subscriptions prevent GC of dead controllers and waste CPU scanning every hit message. Fix: the subscription `IDisposable` is disposed immediately when the hit fires and is also registered via `view.RegisterDisposeOnDespawn()` so it's cleaned up on pool return even if the balloon is never hit (e.g. game reset).
+- **BalloonController no longer implements `IStartable`** — it's constructed manually with `new`, not resolved by VContainer, so `IStartable` was never honoured by the container. Removed to avoid confusion.
+
+### Unity Editor steps
+
+None — no new serialized references. `PoolManager` is already registered as a singleton.
+
+✅ **Checkpoint:** Spawn balloons → pop them → they disappear (pop VFX plays) → balloon instances move under `[Pool]/Balloon` in hierarchy (inactive) → new spawn line reuses existing instances → no `Destroy` calls in console.
+
+---
+
 ## Phase 7i — Configuration Migration
 
 **Goal:** Move `GameConfiguration` and its supporting types out of `Source_Old` into `Source/` so the configuration layer is self-contained in the new codebase before `Source_Old` is deleted.
@@ -1042,6 +1076,7 @@ All async work in `Assets/Source/` must use **UniTask** instead of Unity corouti
 | 7g    | HUD Audit & Cleanup                       | ⬜ Todo         |
 | 7h    | Object Pooling & VFX/Trail Decoupling     | ✅ Done         |
 | 7j    | Migrate ScorePointTrail to PoolManager    | ✅ Done         |
+| 7k    | Migrate Balloon Instances to PoolManager  | ✅ Done         |
 | 7i    | Configuration Migration                   | ⬜ Todo         |
 | 8     | Power-Ups                                 | ⬜ Todo         |
 | 9     | Game Loop, UI & Cleanup                   | ⬜ Todo         |

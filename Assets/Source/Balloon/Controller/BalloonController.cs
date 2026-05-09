@@ -1,15 +1,16 @@
+using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using MessagePipe;
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
 namespace BalloonParty.Balloon.Controller
 {
-    public class BalloonController : IStartable
+    public class BalloonController
     {
         public BalloonModel Model { get; }
 
@@ -18,13 +19,16 @@ namespace BalloonParty.Balloon.Controller
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly BalloonView _view;
+        private readonly PoolManager _poolManager;
 
-        [Inject]
+        private IDisposable _hitSubscription;
+
         public BalloonController(BalloonModel model, BalloonView view,
             ISubscriber<BalloonHitMessage> hitSubscriber,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
             SlotGrid grid,
-            IGameConfiguration config)
+            IGameConfiguration config,
+            PoolManager poolManager)
         {
             Model = model;
             _view = view;
@@ -32,6 +36,7 @@ namespace BalloonParty.Balloon.Controller
             _balancePublisher = balancePublisher;
             _grid = grid;
             _config = config;
+            _poolManager = poolManager;
         }
 
         public void Start()
@@ -39,14 +44,20 @@ namespace BalloonParty.Balloon.Controller
             Model.View = _view;
             _view.Bind(Model);
 
-            _hitSubscriber.Subscribe(msg =>
+            _hitSubscription = _hitSubscriber.Subscribe(msg =>
             {
                 if (msg.Balloon != Model) return;
+
+                _hitSubscription?.Dispose();
+                _hitSubscription = null;
+
                 _view.PlayPopEffect(_config.BalloonColor(Model.Color.Value));
                 _grid.Remove(Model.SlotIndex.Value);
-                Object.Destroy(_view.gameObject);
+                _poolManager.Return("Balloon", _view);
                 _balancePublisher.Publish(default);
             });
+
+            _view.RegisterDisposeOnDespawn(_hitSubscription);
         }
     }
 }

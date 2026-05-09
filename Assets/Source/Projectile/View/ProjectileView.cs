@@ -181,12 +181,16 @@ namespace BalloonParty.Projectile.View
             foreach (var neighbor in neighbors)
             {
                 if (neighbor?.View == null) continue;
+                if (!neighbor.IsStable.Value) continue;
 
                 var neighborPos = neighbor.View.transform.position;
                 var direction = neighborPos - hitBalloon.View.transform.position;
                 var targetSlotPos = _grid.IndexToWorldPosition(neighbor.SlotIndex.Value);
 
+                DOTween.Kill(neighbor.View.GetInstanceID());
+
                 var sequence = DOTween.Sequence();
+                sequence.SetId(neighbor.View.GetInstanceID());
                 sequence.Append(neighbor.View.transform.DOMove(
                     neighborPos + direction.normalized * _config.NudgeDistance, _config.NudgeDuration / 2f));
                 sequence.Append(neighbor.View.transform.DOMove(targetSlotPos, _config.NudgeDuration / 2f));

@@ -1,12 +1,14 @@
+using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Shared;
+using DG.Tweening;
 using UniRx;
 using UnityEngine;
 using VContainer;
 
 namespace BalloonParty.Balloon.View
 {
-    public class BalloonView : MonoBehaviour
+    public class BalloonView : MonoBehaviour, IPoolable
     {
         [Header("References")] [SerializeField]
         private SpriteRenderer _renderer;
@@ -26,28 +28,48 @@ namespace BalloonParty.Balloon.View
         [Inject] private IGameConfiguration _config;
         [Inject] private PoolManager _poolManager;
 
+        private readonly CompositeDisposable _bindDisposables = new();
+
         public BalloonModel Model { get; private set; }
+
+        public void RegisterDisposeOnDespawn(IDisposable disposable)
+        {
+            _bindDisposables.Add(disposable);
+        }
 
         public void Bind(BalloonModel model)
         {
+            _bindDisposables.Clear();
             Model = model;
 
             model.Color
                 .Subscribe(ApplyColor)
-                .AddTo(this);
+                .AddTo(_bindDisposables);
 
             model.SlotIndex
                 .Subscribe(ApplySortingOrder)
-                .AddTo(this);
+                .AddTo(_bindDisposables);
 
             model.IsStable
                 .Subscribe(stable => _animator.SetBool("IsStable", stable))
-                .AddTo(this);
+                .AddTo(_bindDisposables);
         }
 
         public void PlayPopEffect(Color color)
         {
             _poolManager.GetOrRegister(_popVfxPrefab.name, () => new VfxPoolChannel(_popVfxPrefab)).Play(transform.position, color);
+        }
+
+        public void OnSpawned()
+        {
+            transform.localScale = Vector3.one;
+        }
+
+        public void OnDespawned()
+        {
+            transform.DOKill();
+            _bindDisposables.Clear();
+            Model = null;
         }
 
         private void ApplyColor(string colorName)
