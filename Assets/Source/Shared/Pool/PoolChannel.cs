@@ -4,7 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Shared
 {
     /// <summary>
-    /// Non-generic marker so we can store any PoolChannel in a typed dictionary.
+    ///     Non-generic marker so we can store any PoolChannel in a typed dictionary.
     /// </summary>
     public interface IPoolChannel
     {

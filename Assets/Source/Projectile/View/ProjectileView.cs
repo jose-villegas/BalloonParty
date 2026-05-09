@@ -187,7 +187,7 @@ namespace BalloonParty.Projectile.View
                 var slotPos = _grid.IndexToWorldPosition(neighbor.SlotIndex.Value);
                 var direction = slotPos - hitSlotPos;
 
-                // Kill standalone spawn tweens so nudge takes over position cleanly
+                // Standalone spawn tweens would compete with the nudge sequence
                 var currentScale = view.transform.localScale;
                 view.transform.DOKill();
 

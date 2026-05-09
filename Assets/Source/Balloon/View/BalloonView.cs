@@ -10,6 +10,9 @@ namespace BalloonParty.Balloon.View
 {
     public class BalloonView : MonoBehaviour, IPoolable
     {
+        public BalloonModel Model { get; private set; }
+        public TweenTracker TweenTracker { get; private set; }
+
         [Header("References")] [SerializeField]
         private SpriteRenderer _renderer;
 
@@ -30,8 +33,6 @@ namespace BalloonParty.Balloon.View
 
         private readonly CompositeDisposable _bindDisposables = new();
 
-        public BalloonModel Model { get; private set; }
-        public TweenTracker TweenTracker { get; private set; }
 
         private void Awake()
         {

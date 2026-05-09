@@ -1,5 +1,4 @@
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UniRx;
@@ -25,7 +24,6 @@ namespace BalloonParty.UI.LevelUp
 
         private readonly CompositeDisposable _disposable = new();
 
-        [Inject] private SlotGrid _grid;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
 
         private void Start()

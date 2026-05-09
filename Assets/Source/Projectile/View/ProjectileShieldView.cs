@@ -11,28 +11,41 @@ namespace BalloonParty.Projectile.View
     public class ProjectileShieldView : MonoBehaviour
     {
         [SerializeField] private List<SpriteRenderer> _shields;
-        [SerializeField, Range(0f, 1f)] private float _alpha;
+        [SerializeField] [Range(0f, 1f)] private float _alpha;
         [SerializeField] private float _colorDuration;
 
-        [Header("Scaling")]
-        [SerializeField] private float _scaleDuration;
+        [Header("Scaling")] [SerializeField] private float _scaleDuration;
+
         [SerializeField] private Vector2 _scaleIncrements;
 
-        [Header("VFX")]
-        [SerializeField] private ParticleSystem _shieldGainVfxPrefab;
+        [Header("VFX")] [SerializeField] private ParticleSystem _shieldGainVfxPrefab;
+
         [SerializeField] private ParticleSystem _shieldLoseVfxPrefab;
         [SerializeField] private ParticleSystem _shieldBounceVfxPrefab;
 
+        private readonly CompositeDisposable _disposable = new();
+
         [Inject] private IGameConfiguration _config;
         [Inject] private PoolManager _poolManager;
-
-        private readonly CompositeDisposable _disposable = new();
         private int _previousShieldCount;
 
         private void Awake()
         {
             foreach (var shield in _shields)
                 shield.transform.localScale = Vector3.zero;
+            gameObject.SetActive(false);
+        }
+
+        public void Reset()
+        {
+            _disposable.Clear();
+            _previousShieldCount = 0;
+            foreach (var shield in _shields)
+            {
+                shield.transform.localScale = Vector3.zero;
+                shield.DOKill();
+            }
+
             gameObject.SetActive(false);
         }
 
@@ -67,18 +80,6 @@ namespace BalloonParty.Projectile.View
             UpdateShieldVisuals(_previousShieldCount);
         }
 
-        public void Reset()
-        {
-            _disposable.Clear();
-            _previousShieldCount = 0;
-            foreach (var shield in _shields)
-            {
-                shield.transform.localScale = Vector3.zero;
-                shield.DOKill();
-            }
-            gameObject.SetActive(false);
-        }
-
         public void PlayBounceVfx(Vector3 position, Color color)
         {
             SpawnVfx(_shieldBounceVfxPrefab, position, color);
@@ -102,10 +103,8 @@ namespace BalloonParty.Projectile.View
             var targetColor = new Color(color.r, color.g, color.b, _alpha);
 
             foreach (var shield in _shields)
-            {
                 if (shield != null)
                     shield.DOColor(targetColor, _colorDuration);
-            }
         }
 
         private void PlayShieldChangeFx(int currentCount)

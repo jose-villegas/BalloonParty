@@ -1,4 +1,4 @@
-# Debug
+# Cheats
 
 Runtime cheat console for testing and debugging without modifying game state manually.
 
@@ -6,7 +6,11 @@ Press **backtick (`)** in Play Mode to toggle the console window. The console Ga
 
 ## Build visibility
 
-The entire `Debug/` system — console, `ICheat`, and all cheat implementations — is wrapped in `#if UNITY_EDITOR || DEVELOPMENT_BUILD`. It compiles out completely in release builds. Registration in `GameLifetimeScope` is guarded by the same directive.
+The entire `Cheats/` system — console, `ICheat`, and all cheat implementations — is wrapped in `#if UNITY_EDITOR || DEVELOPMENT_BUILD`. It compiles out completely in release builds. Registration in `GameLifetimeScope` is guarded by the same directive.
+
+## VContainer registration
+
+`CheatConsoleView` and `BalloonRemoverCheat` are MonoBehaviours created via `RegisterComponentOnNewGameObject`. VContainer singletons are **lazy** — the GameObject is only created when resolved. Both require `RegisterBuildCallback(resolver => resolver.Resolve<T>())` to force eager creation at scope build time.
 
 ## Adding a new cheat
 

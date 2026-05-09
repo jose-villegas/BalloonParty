@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace BalloonParty.Shared
 {
@@ -16,18 +17,19 @@ namespace BalloonParty.Shared
                 if (_root == null)
                 {
                     var go = new GameObject("[Pool]");
-                    UnityEngine.Object.DontDestroyOnLoad(go);
+                    Object.DontDestroyOnLoad(go);
                     _root = go.transform;
                 }
+
                 return _root;
             }
         }
 
         /// <summary>
-        /// Throws if the key is already taken. Call once during setup.
+        ///     Throws if the key is already taken. Call once during setup.
         /// </summary>
         public void Register<TItem>(string key, PoolChannel<TItem> channel)
-            where TItem : UnityEngine.Component, IPoolable
+            where TItem : Component, IPoolable
         {
             if (!_channels.TryAdd(key, channel))
                 throw new InvalidOperationException(
@@ -39,28 +41,28 @@ namespace BalloonParty.Shared
         }
 
         public void Register<TItem>(PoolChannel<TItem> channel)
-            where TItem : UnityEngine.Component, IPoolable
+            where TItem : Component, IPoolable
         {
             Register(channel.GetType().Name, channel);
         }
 
-        public TItem Get<TItem>(string key) where TItem : UnityEngine.Component, IPoolable
+        public TItem Get<TItem>(string key) where TItem : Component, IPoolable
         {
             return GetChannel<TItem>(key).Get();
         }
 
-        public void Return<TItem>(string key, TItem item) where TItem : UnityEngine.Component, IPoolable
+        public void Return<TItem>(string key, TItem item) where TItem : Component, IPoolable
         {
             GetChannel<TItem>(key).Return(item);
         }
 
         /// <summary>
-        /// Register a channel if the key is not already taken, then return the item.
-        /// Use this for prefab-keyed channels (e.g. VFX) where many channels share the same
-        /// type but differ by asset — the key disambiguates.
+        ///     Register a channel if the key is not already taken, then return the item.
+        ///     Use this for prefab-keyed channels (e.g. VFX) where many channels share the same
+        ///     type but differ by asset — the key disambiguates.
         /// </summary>
         public TItem GetOrRegister<TItem>(string key, Func<PoolChannel<TItem>> factory)
-            where TItem : UnityEngine.Component, IPoolable
+            where TItem : Component, IPoolable
         {
             if (!_channels.ContainsKey(key))
                 Register(key, factory());
@@ -68,10 +70,10 @@ namespace BalloonParty.Shared
         }
 
         /// <summary>
-        /// Access the underlying channel if needed (e.g. for direct channel reference in auto-return callbacks).
+        ///     Access the underlying channel if needed (e.g. for direct channel reference in auto-return callbacks).
         /// </summary>
         public PoolChannel<TItem> GetChannel<TItem>(string key)
-            where TItem : UnityEngine.Component, IPoolable
+            where TItem : Component, IPoolable
         {
             if (_channels.TryGetValue(key, out var channel))
                 return (PoolChannel<TItem>)channel;

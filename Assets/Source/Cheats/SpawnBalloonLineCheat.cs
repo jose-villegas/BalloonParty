@@ -20,7 +20,7 @@ namespace BalloonParty.Cheats
 
         public void Execute()
         {
-            _publisher.Publish(default);
+            _publisher.Publish(new SpawnBalloonLineMessage(1));
         }
     }
 }

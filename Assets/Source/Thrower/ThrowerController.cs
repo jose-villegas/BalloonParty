@@ -14,18 +14,17 @@ namespace BalloonParty.Thrower
 {
     public class ThrowerController : MonoBehaviour
     {
+        private ProjectileModel _activeProjectile;
+        private ProjectileView _activeView;
         [Inject] private IGameConfiguration _config;
         [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private Vector3 _direction = Vector3.up;
         [Inject] private SlotGrid _grid;
+        private bool _isMovable;
         [Inject] private IPublisher<ProjectileLoadedMessage> _loadedPublisher;
         [Inject] private LifetimeScope _parentScope;
         [Inject] private PoolManager _poolManager;
         [Inject] private ThrowerSettings _settings;
-
-        private ProjectileModel _activeProjectile;
-        private ProjectileView _activeView;
-        private Vector3 _direction = Vector3.up;
-        private bool _isMovable;
 
         private string ProjectilePoolKey => _settings.ProjectileScopePrefab.name;
 
@@ -127,6 +126,5 @@ namespace BalloonParty.Thrower
             _activeView = null;
             LoadProjectile();
         }
-
     }
 }

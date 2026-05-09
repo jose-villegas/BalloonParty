@@ -17,6 +17,11 @@ namespace BalloonParty.UI.Shields
             _label.text = "--";
         }
 
+        private void OnDestroy()
+        {
+            _subscription?.Dispose();
+        }
+
         public void Bind(IReadOnlyReactiveProperty<int> shields)
         {
             _subscription?.Dispose();
@@ -28,11 +33,6 @@ namespace BalloonParty.UI.Shields
             _subscription?.Dispose();
             _subscription = null;
             _label.text = "--";
-        }
-
-        private void OnDestroy()
-        {
-            _subscription?.Dispose();
         }
     }
 }

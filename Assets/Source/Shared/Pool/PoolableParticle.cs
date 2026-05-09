@@ -8,6 +8,21 @@ namespace BalloonParty.Shared
         private ParticleSystem _particle;
         private Action<PoolableParticle> _returnToPool;
 
+        private void Update()
+        {
+            if (_particle != null && !_particle.IsAlive())
+                _returnToPool?.Invoke(this);
+        }
+
+        public void OnSpawned()
+        {
+        }
+
+        public void OnDespawned()
+        {
+            _particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
+
         public void Initialize(Action<PoolableParticle> returnToPool)
         {
             _particle = GetComponent<ParticleSystem>();
@@ -21,19 +36,5 @@ namespace BalloonParty.Shared
             main.startColor = color;
             _particle.Play();
         }
-
-        public void OnSpawned() { }
-
-        public void OnDespawned()
-        {
-            _particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-        }
-
-        private void Update()
-        {
-            if (_particle != null && !_particle.IsAlive())
-                _returnToPool?.Invoke(this);
-        }
     }
 }
-

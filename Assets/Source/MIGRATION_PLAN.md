@@ -923,10 +923,10 @@ Each item must be ticked before `Source_Old` and the Entitas package can be dele
 - [ ] `FreeProjectileMovementSystem`, `ProjectileBounceSystem`, `ProjectileTransformSystem` → replaced by `ProjectileController` (Phase 5)
 - [ ] `BalloonCollisionSystem`, `TriggerReporterController`, `Cleanup2DTriggersSystem` → replaced by `OnTriggerEnter2D` on `ProjectileView` (Phase 5)
 - [ ] `BalloonHitDestructionSystem`, `BalloonHitNudgeAnimationSystem`, `BalloonHitScoreSystem` → replaced by `BalloonController` + `ScoreController` (Phase 6)
-- [ ] `BalloonsPowerUpCheckSystem`, all `*PowerUpController` → replaced by power-up controllers (Phase 8)
-- [ ] `GameControllerBehaviour`, `GameController`, `GameUpdateSystems`, `GameFixedUpdateSystems` → replaced by `GameManager` + `GameLifetimeScope` (Phase 9)
-- [ ] All Entitas-generated code in `Assets/Generated/` → deleted (Phase 8)
-- [ ] Entitas and DesperateDevs packages removed from `manifest.json` (Phase 8)
+- [ ] `BalloonsPowerUpCheckSystem`, all `*PowerUpController` → replaced by power-up controllers (Phase 9)
+- [ ] `GameControllerBehaviour`, `GameController`, `GameUpdateSystems`, `GameFixedUpdateSystems` → replaced by `GameManager` + `GameLifetimeScope` (Phase 10)
+- [ ] All Entitas-generated code in `Assets/Generated/` → deleted (Phase 10)
+- [ ] Entitas and DesperateDevs packages removed from `manifest.json` (Phase 10)
 
 ---
 
@@ -1088,6 +1088,20 @@ VContainer's `[Inject]` (both field injection and method injection) runs during 
 - **`[Inject]` methods run before the component's own `Awake()`** — Unity has not yet called `Awake()` on the target MonoBehaviour when VContainer injects it. Do not rely on `Awake()`-initialized fields inside an `[Inject]` method. Use `GetComponent<T>()` directly if needed.
 - **`Start()` runs after injection** — if the scope builds during its `Awake()`, child components' `Start()` will have all injected fields available. However, prefer `[Inject]` methods for subscription wiring rather than `Start()`, to make the dependency on injection explicit.
 - **Animator triggers from the same frame:** When multiple MessagePipe messages fire in the same frame (e.g. `BalanceBalloonsMessage` + `ProjectileDestroyedMessage` from `ProjectileView`), their subscribers execute synchronously. If both set animator triggers, call `ResetTrigger` on conflicting triggers before setting the intended one.
+- **`Time.timeScale = 0` freezes DOTween and physics.** Any code that pauses time must ensure that pending `OnComplete` callbacks, `WaitUntil` conditions, and Animator playback are not deadlocked. Animators that must play while paused need `updateMode = AnimatorUpdateMode.UnscaledTime`. UniTask delays and waits that must resolve while paused need `ignoreTimeScale: true`.
+
+---
+
+### VContainer Lazy Singletons
+
+`RegisterComponentOnNewGameObject<T>(Lifetime.Singleton, ...)` is **lazy** — the GameObject is created only when `T` is resolved by another registration or by a `RegisterBuildCallback`. If nothing resolves `T`, the component never exists.
+
+**Rule:** Any `RegisterComponentOnNewGameObject` registration that must exist at startup (e.g. debug tools, always-on HUD elements) needs an explicit `RegisterBuildCallback`:
+
+```csharp
+builder.RegisterComponentOnNewGameObject<MyView>(Lifetime.Singleton, "MyView");
+builder.RegisterBuildCallback(resolver => resolver.Resolve<MyView>());
+```
 
 ---
 
@@ -1101,7 +1115,7 @@ VContainer's `[Inject]` (both field injection and method injection) runs during 
 
 ### Cheat Console
 
-A self-building runtime debug console lives in `Assets/Source/Debug/`. Press **backtick (`)** in Play Mode to toggle it.
+A self-building runtime debug console lives in `Assets/Source/Cheats/`. Press **backtick (`)** in Play Mode to toggle it.
 
 **Adding a cheat:**
 1. Implement `ICheat` — provide `Name`, `Section`, and `Tags[]`
@@ -1109,6 +1123,8 @@ A self-building runtime debug console lives in `Assets/Source/Debug/`. Press **b
 3. Register in `GameLifetimeScope`: `builder.Register<YourCheat>(Lifetime.Singleton).AsImplementedInterfaces()`
 
 The console discovers all registered `ICheat` implementations automatically. Features: live search by name, tag filter pills, section grouping, and per-cheat favorites (★).
+
+**Eager creation:** `CheatConsoleView` and `BalloonRemoverCheat` are MonoBehaviours created via `RegisterComponentOnNewGameObject`. VContainer's singleton lifetime is **lazy** — the GameObject is only created when resolved. Use `RegisterBuildCallback(resolver => resolver.Resolve<T>())` to force creation at scope build time. Without this, the component will never exist because nothing else resolves it.
 
 Every phase that introduces a new triggerable behaviour should add a corresponding cheat so it can be tested in isolation without running the full game loop.
 
