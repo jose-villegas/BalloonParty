@@ -742,7 +742,7 @@ public static int CalculateWeight(this IEntity[,] slots, int i, int j)
 }
 ```
 
-**Difference from current code**: legacy `OptimalNextEmptySlot` initialises weight at `0` and uses `>=` comparison (`if (slotWeight >= weight)`), so the LAST candidate with equal weight wins (favours diagonal). Our current code uses `-1` initial and `>` comparison, so the FIRST candidate wins (favours straight-up). This changes tie-breaking behaviour — needs to match legacy.
+**Difference from current code**: legacy `OptimalNextEmptySlot` initialises weight at `0` and uses `>=` comparison (`if (slotWeight >= weight)`), so the LAST candidate with equal weight wins (favours diagonal). ✅ Fixed — our code now matches legacy.
 
 ### Design for new implementation
 
@@ -756,7 +756,7 @@ Fields:
 
 Methods:
   - Append(Tween tween): if _active is alive and playing, Append; else create new Sequence containing the tween
-  - Replace(Tween tween): kill _active if alive, create new Sequence containing the tween
+  - Replace(Sequence sequence): kill _active if alive, store new sequence
   - Kill(): kill _active if alive, set null
   - bool IsPlaying: _active != null && _active.IsActive() && !_active.IsComplete()
 ```
@@ -769,20 +769,23 @@ Methods:
 - Do NOT call `tracker.Append` — spawn tweens live outside the tracker.
 
 **Nudge** (`ProjectileView.NudgeNeighbors`):
-- Kills standalone spawn tweens via `view.transform.DOKill()` before creating the nudge sequence.
-- Uses slot positions (logical positions) for push direction and return, not visual `transform.position`.
-- `tracker.Replace(nudgeSequence)` — kills any previous nudge/balance and stores new one.
+- Captures current scale, then kills standalone spawn tweens via `view.transform.DOKill()`.
+- Uses slot positions (logical positions) for push direction and return, not visual `transform.position` — ensures consistent nudge regardless of in-progress animations.
+- `tracker.Replace(nudgeSequence)` — kills any previous nudge and stores new one.
 - Nudge sequence: push out from slot position → return to slot position.
+- If balloon was mid-scale-up, creates a parallel `DOScale(Vector3.one, nudgeDuration)` for smooth scale recovery.
 - `onComplete` → `IsStable = true`.
 
 **Balance** (`BalloonBalancer.AnimatePaths`):
-- `tracker.Append(balanceDOPath)` — if nudge is still playing, balance is appended AFTER it. If no active sequence, creates a new one.
+- Kills tracker and standalone tweens (`tracker.Kill()` + `transform.DOKill()`), captures current scale.
+- Creates `DOPath(CatmullRom)` with fixed `TimeForBalloonsBalance` duration.
+- `tracker.Append(balanceTween)` — creates a new tracked sequence.
+- If balloon was mid-scale-up, creates a parallel `DOScale(Vector3.one, balanceDuration)` for smooth scale recovery.
 - `onComplete` → `IsStable = true`.
-- `PathType.CatmullRom`, fixed `TimeForBalloonsBalance` duration.
 
 **Despawn** (`BalloonView.OnDespawned`):
-- `tracker.Kill()` — clean up everything.
-- Also kill standalone spawn tweens (DOKill on transform as fallback).
+- `tracker.Kill()` — clean up tracked sequences.
+- `transform.DOKill()` — clean up standalone spawn tweens.
 
 #### Balance timing — turn-based (matches legacy)
 
@@ -796,13 +799,31 @@ Balance fires ONCE after the projectile is destroyed and new lines have spawned 
 - `ProjectileView` — on projectile death (fallback for turn 1 / no-spawn).
 - `BalloonSpawner` — after all lines spawned.
 
+**Why turn-based over real-time**: mid-flight balance (per-hit) was attempted and caused cascading issues — competing tweens, stale balance paths, double-occupation visuals, and required complex `AppendOrReplace` logic with tween type tracking. Turn-based eliminates these by design: phases are sequential, tweens never overlap by category, and `TweenTracker` stays simple.
+
 #### Weight algorithm fix
 
-In `SlotGrid.OptimalNextEmptySlot`, change:
-- `bestWeight = -1` → `bestWeight = 0`
-- `if (weight > bestWeight)` → `if (weight >= bestWeight)`
+In `SlotGrid.OptimalNextEmptySlot`:
+- ✅ `bestWeight = 0` (was `-1`)
+- ✅ `if (weight >= bestWeight)` (was `>`)
 
 This matches legacy tie-breaking: prefer the diagonal candidate when weights are equal.
+
+#### SlotGrid defensive guard
+
+`SlotGrid.Place` now rejects placement if the slot is already occupied (returns early with `Debug.LogError`). This prevents silent overwrites where the first balloon would become orphaned — still in the scene with a running view but invisible to the grid.
+
+### Findings and issues resolved during implementation
+
+1. **Competing spawn + nudge tweens** — spawn move was initially routed through the tracker; nudge's `Replace` killed it mid-flight causing jumps. Fix: spawn move stays standalone (matching legacy); nudge calls `transform.DOKill()` to explicitly take over.
+
+2. **Scale freeze on interruption** — `transform.DOKill()` in nudge/balance killed the standalone scale tween mid-animation, leaving balloons at partial scale (visually invisible near zero). Fix: capture `localScale` before DOKill; create parallel `DOScale` if not yet at full size.
+
+3. **Re-balance during balance** — with per-hit balance, a second balance could fire while the first was still animating, causing balloons to travel through stale intermediate positions. Fix: switched to turn-based balance (one pass after projectile death).
+
+4. **Nudge using visual position** — nudge originally read `transform.position` for push direction. Mid-animation, this was an arbitrary point along a path, causing unnatural nudge directions. Fix: use `IndexToWorldPosition(SlotIndex)` (logical slot position) for both push direction and return target.
+
+5. **Double-occupation via silent overwrite** — `SlotGrid.Place` overwrote without checking occupancy. If two code paths placed at the same slot, the first balloon was orphaned. Fix: guard with early return + error log.
 
 ### Files to create/modify
 
@@ -814,13 +835,23 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 | `BalloonSpawner.cs` | `AnimateSpawn`: standalone move + scale tweens (no tracker, no SetId) — matches legacy |
 | `BalloonBalancer.cs` | `AnimatePaths`: use `tracker.Append` instead of `DOTween.Kill` + new tween. Remove `DOTween.Kill(id)`. |
 | `ProjectileView.cs` | `NudgeNeighbors`: use `tracker.Replace` instead of `DOTween.Kill` + new sequence |
-| `SlotGrid.cs` | Fix `OptimalNextEmptySlot` weight comparison to match legacy (`0` initial, `>=` compare) |
+### Files created/modified
+
+| File | Change |
+|---|---|
+| `TweenTracker.cs` | New generic MonoBehaviour in `Shared/` — `Append`, `Replace`, `Kill`, `IsPlaying` |
+| `BalloonView.cs` | Reference tracker (via `GetComponent` in `Awake`); `OnDespawned` calls `tracker.Kill()` + `transform.DOKill()` |
+| `BalloonSpawner.cs` | `AnimateSpawn`: standalone move + scale tweens (no tracker) — matches legacy |
+| `BalloonBalancer.cs` | Kills tracker + standalone tweens, creates fresh `DOPath`, parallel `DOScale` for scale recovery. Removed per-hit balance dependency. |
+| `BalloonController.cs` | Removed `BalanceBalloonsMessage` publisher — balance is now turn-based (post-death only) |
+| `ProjectileView.cs` | `NudgeNeighbors`: uses slot positions, kills standalone tweens, `tracker.Replace`, parallel `DOScale` for scale recovery |
+| `SlotGrid.cs` | Fixed weight tie-breaking (`0` initial, `>=` compare). Added `Place` guard rejecting double-occupation. |
 
 ### Unity Editor steps
 
-1. Add `BalloonTweenTracker` component to the balloon prefab (or let `BalloonPoolChannel.Create` add it).
+1. Add `TweenTracker` component to the balloon prefab.
 
-✅ **Checkpoint:** Spawn balloons → they rise smoothly with scale → hit a balloon → neighbors nudge outward and return → balance runs → nudged balloons finish nudge THEN float upward → spawning balloons continue their rise uninterrupted (balance appends after spawn completes) → no snapping, no zipping, no scale pops, no downward movement.
+✅ **Checkpoint:** Spawn balloons → they rise smoothly with scale → hit a balloon → neighbors nudge outward and return (using logical slot positions) → projectile dies → new lines spawn → balance runs ONCE → balloons float upward smoothly → mid-scale balloons finish scaling alongside movement → no snapping, no zipping, no double-occupation, no invisible balloons.
 
 ---
 

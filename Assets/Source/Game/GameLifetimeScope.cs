@@ -55,8 +55,10 @@ namespace BalloonParty.Game
             builder.RegisterComponentOnNewGameObject<BalloonRemoverCheat>(Lifetime.Singleton, "BalloonRemoverCheat")
                 .AsImplementedInterfaces()
                 .AsSelf();
-            builder.RegisterComponentOnNewGameObject<CheatConsoleView>(Lifetime.Singleton, "CheatConsole")
-                .AsImplementedInterfaces();
+            builder.RegisterBuildCallback(resolver => resolver.Resolve<BalloonRemoverCheat>());
+
+            builder.RegisterComponentOnNewGameObject<CheatConsoleView>(Lifetime.Singleton, "CheatConsole");
+            builder.RegisterBuildCallback(resolver => resolver.Resolve<CheatConsoleView>());
 #endif
         }
     }

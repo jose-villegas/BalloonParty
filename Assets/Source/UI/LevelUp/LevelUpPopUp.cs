@@ -30,6 +30,8 @@ namespace BalloonParty.UI.LevelUp
 
         private void Start()
         {
+            _animator.updateMode = AnimatorUpdateMode.UnscaledTime;
+
             _levelUpSubscriber
                 .Subscribe(msg => WaitForStabilityAsync(msg.NewLevel).Forget())
                 .AddTo(_disposable);
@@ -48,8 +50,8 @@ namespace BalloonParty.UI.LevelUp
 
         private async UniTaskVoid WaitForStabilityAsync(int newLevel)
         {
-            await UniTask.WaitUntil(() => _grid.AllBalloonsStable(),
-                cancellationToken: destroyCancellationToken);
+            // Wait one frame so the pause from ScoreController takes effect
+            await UniTask.Yield(PlayerLoopTiming.Update, destroyCancellationToken);
 
             _levelLabel.text = (newLevel - 1).ToString("N0");
             _animator.SetTrigger("Appear");

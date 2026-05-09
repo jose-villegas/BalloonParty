@@ -7,24 +7,45 @@ Represents balloons in the game — their state, appearance, spawning, and destr
 | Folder | What it owns |
 |---|---|
 | `Model/` | `BalloonModel` — pure C# data class with reactive properties (`Color`, `SlotIndex`, `IsStable`) |
-| `View/` | `BalloonView` — MonoBehaviour that binds to a model and renders color, shadow, sorting order, and pop VFX |
-| `Controller/` | `BalloonController` — mediator that wires model to view and handles hit destruction; `BalloonBalancer` — rebalances the grid when gaps appear |
-| `Spawner/` | `BalloonSpawner` — creates balloon lines at game start and after each projectile death; `BalloonSpawnerSettings` — holds the balloon prefab reference |
-| `PowerUps/` | Power-up balloon types (Phase 8) |
+| `View/` | `BalloonView` — MonoBehaviour implementing `IPoolable` that binds to a model and renders color, shadow, sorting order, and pop VFX. Holds a `TweenTracker` reference for animation composition |
+| `Controller/` | `BalloonController` — mediator that wires model to view and handles hit destruction; `BalloonBalancer` — rebalances the grid after projectile death |
+| `Spawner/` | `BalloonSpawner` — creates balloon lines at game start and after each projectile death; `BalloonSpawnerSettings` — holds the balloon prefab reference; `BalloonPoolChannel` — pool channel using VContainer injection |
+| `PowerUps/` | Power-up balloon types (Phase 9) |
 
 ## Behaviour
 
 A balloon knows its color, where it sits in the grid, and whether it has settled into position. When any of these change, the view updates automatically via UniRx subscriptions.
 
-When a gap appears in the grid (because a balloon was destroyed), `BalloonBalancer` scans for unbalanced balloons and moves them upward along the best available path, animating smoothly into their new slot. A balloon is marked unstable for the duration of that animation.
+### Pooling
 
-When a projectile hits a balloon, `BalloonController` receives the `BalloonHitMessage` (filtered to its own model), plays the pop particle effect via `VfxPoolChannel`, removes the model from the slot grid, destroys the view GameObject, and publishes a `BalanceBalloonsMessage` so the remaining balloons settle.
+Balloon views are pooled via `PoolManager` / `BalloonPoolChannel`. A `CompositeDisposable` replaces `AddTo(this)` for reactive subscriptions — cleared on each `Bind()` and `OnDespawned()`. External subscribers (e.g. `BalloonController`'s hit subscription) register via `RegisterDisposeOnDespawn()` so they're cleaned up on pool return.
+
+### Animation phases (turn-based)
+
+Balloon animations are organized into sequential, non-overlapping phases per turn:
+
+1. **Hit phase** — projectile bounces and pops balloons. Each pop nudges neighbors outward and back (local elastic animation). No rebalancing occurs during flight.
+2. **Spawn phase** — after the projectile dies, new balloon lines spawn with a delay between each line. Spawn uses standalone `DOMove` + `DOScale` tweens (not tracked).
+3. **Balance phase** — a single balance pass runs after all spawning completes. `BalloonBalancer` scans for unbalanced balloons and moves them upward along the optimal path using `DOPath(CatmullRom)`.
+
+### Tween composition
+
+A `TweenTracker` component on each balloon view manages position tween sequencing:
+
+- **Nudge** calls `tracker.Replace(sequence)` — kills any existing tracked tween (previous nudge) and stores the new push-out → return sequence. Also kills standalone spawn tweens via `transform.DOKill()` so nudge cleanly takes over position. If the balloon was mid-scale-up, a parallel `DOScale` smoothly finishes scaling to full size.
+- **Balance** calls `tracker.Append(tween)` — if a nudge is still playing, the balance path chains after it. If the tracker is idle, starts a new sequence.
+- **Despawn** calls `tracker.Kill()` + `transform.DOKill()` — cleans up everything.
+
+### Scale recovery
+
+When nudge or balance interrupts a spawning balloon, `transform.DOKill()` kills the standalone scale tween mid-animation. Both nudge and balance capture the current scale beforehand and create a parallel `DOScale(Vector3.one, duration)` if the balloon hasn't reached full size — so the balloon smoothly finishes scaling alongside its movement.
 
 ## Interactions
 
-- **SlotGrid** — balloons occupy positions in it; spawner places, controller removes
-- **BalloonBalancer** — moves balloons when gaps appear below
-- **ProjectileView** — triggers destruction on collision via `BalloonHitMessage`
+- **SlotGrid** — balloons occupy positions in it; spawner places, controller removes, balancer relocates
+- **BalloonBalancer** — moves balloons when gaps appear; fires once per turn after spawning
+- **ProjectileView** — triggers destruction on collision via `BalloonHitMessage`; nudges neighbors on impact
 - **ScoreController** — records each hit via `BalloonHitMessage`
-- **PoolManager** — `BalloonView` uses `VfxPoolChannel` for pop VFX
-- **IGameConfiguration** — balloon colors, spawn animation timing, balance timing
+- **PoolManager** — `BalloonView` instances are pooled via `BalloonPoolChannel`; pop VFX pooled via `VfxPoolChannel`
+- **TweenTracker** — generic `MonoBehaviour` in `Shared/` that manages tween sequencing (append, replace, kill)
+- **IGameConfiguration** — balloon colors, spawn animation timing, balance timing, nudge distance/duration

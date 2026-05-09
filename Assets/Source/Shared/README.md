@@ -8,6 +8,7 @@ Types and utilities used across multiple features.
 |---|---|
 | `IGameConfiguration` | Single source of truth for all game data — slot dimensions, balloon colors, timing values, spawn counts, shield counts, score thresholds |
 | `IReusable` | Contract for pooled UI objects (score notices, score trails) — a single `IsUsable` bool that pools query before recycling |
+| `TweenTracker` | Generic `MonoBehaviour` for DOTween sequence composition — `Append` (chain after current), `Replace` (kill current and start new), `Kill`, `IsPlaying`. Used by balloon views to manage nudge → balance tween chaining without conflicts |
 | `Pool/` | Generic object pooling system — `PoolManager`, `PoolChannel<T>`, `IPoolable`, `VfxPoolChannel`, `PoolableParticle` (see `Pool/README.md`) |
 | `Messages/` | MessagePipe signal structs that decouple systems from one another |
 | `Extensions/` | Extension methods (reserved for future use) |
@@ -18,7 +19,7 @@ Messages are the signals that decouple systems from one another. A publisher fir
 
 | Message | Published by | Consumed by |
 |---|---|---|
-| `BalanceBalloonsMessage` | `BalloonController`, `ProjectileView`, `BalloonSpawner` | `BalloonBalancer` |
+| `BalanceBalloonsMessage` | `ProjectileView`, `BalloonSpawner` | `BalloonBalancer` |
 | `SpawnBalloonLineMessage` | `GameStartButton` | `BalloonSpawner` |
 | `BalloonHitMessage` | `ProjectileView`, cheats | `BalloonController`, `ScoreController` |
 | `BalloonScoredMessage` | `ScoreController` | `ColorProgressBar` |

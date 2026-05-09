@@ -6,7 +6,17 @@ The projectile is the ball fired by the thrower. It travels in a straight line, 
 
 Each shot starts loaded on the thrower. When fired it moves freely across the screen, reflecting off the top, left, and right boundaries. Each bounce costs one shield. When shields are exhausted the projectile is destroyed, the grid rebalances, and the thrower reloads.
 
-On contact with a balloon the projectile absorbs that balloon's color. Consecutive hits of the same color increment the pop-count. After 2 consecutive same-color pops the projectile gains a shield and the counter resets. Neighboring balloons nudge outward from the impact point.
+On contact with a balloon the projectile absorbs that balloon's color. Consecutive hits of the same color increment the pop-count. After 2 consecutive same-color pops the projectile gains a shield and the counter resets. Neighboring balloons nudge outward from the impact point using slot-based positions (logical grid positions, not visual transform positions) to ensure consistent nudge direction regardless of in-progress animations.
+
+## Turn-based flow
+
+The game follows a turn-based animation pipeline:
+
+1. **Projectile flight** — bounces, pops balloons, nudges neighbors. No rebalancing during flight.
+2. **Projectile death** — publishes `BalanceBalloonsMessage` (fallback) and `ProjectileDestroyedMessage`.
+3. **Spawn + balance** — `BalloonSpawner` spawns new lines, then publishes `BalanceBalloonsMessage` after all lines are placed.
+
+Balance was intentionally moved to post-death (matching legacy) because mid-flight rebalancing caused animation conflicts — competing tweens, double-occupation visuals, and stale balance paths.
 
 ## Pooling
 
@@ -35,7 +45,7 @@ All VFX are spawned via `VfxPoolChannel` as world-space orphans — they are not
 - **`ProjectileLifetimeScope`** — child `GameChildLifetimeScope` on the projectile prefab root. Registers `ProjectileView` and `ProjectileShieldView` via `RegisterComponentInHierarchy`. Created by `ProjectilePoolChannel` via `parentScope.CreateChildFromPrefab()`.
 - **`ProjectilePoolChannel`** — `PoolChannel<ProjectileView>` that creates projectiles via `CreateChildFromPrefab`. Accessed through `PoolManager`.
 - **`ProjectileModel`** — plain C# data object: direction vector, speed, `ReactiveProperty<int> ShieldsRemaining`, `ReactiveProperty<string> ColorName`, pop-count, last-hit balloon reference.
-- **`ProjectileView`** — MonoBehaviour implementing `IPoolable`. Drives manual movement in `FixedUpdate`, checks bounds against `IGameConfiguration.LimitsClockwise`, reflects direction and clamps position on bounce. Handles `OnTriggerEnter2D` — resolves the `BalloonView` and `BalloonModel` from the collider, tracks color, triggers shield gain on 2 consecutive same-color pops, and runs the neighbor nudge sequence. Publishes `ProjectileDestroyedMessage` and `BalanceBalloonsMessage` when shields reach zero.
+- **`ProjectileView`** — MonoBehaviour implementing `IPoolable`. Drives manual movement in `FixedUpdate`, checks bounds against `IGameConfiguration.LimitsClockwise`, reflects direction and clamps position on bounce. Handles `OnTriggerEnter2D` — resolves the `BalloonView` and `BalloonModel` from the collider, tracks color, triggers shield gain on 2 consecutive same-color pops, and runs the neighbor nudge sequence via `TweenTracker.Replace`. Publishes `ProjectileDestroyedMessage` and `BalanceBalloonsMessage` when shields reach zero.
 - **`ProjectileTrail`** — child MonoBehaviour on the trail GameObject. `Enable()`/`Disable()` manage `TrailRenderer` emitting state using `async UniTaskVoid` with `destroyCancellationToken`. Not `IPoolable` — lifecycle follows the pooled projectile parent.
 - **`ProjectileShieldView`** — MonoBehaviour on the projectile prefab. Subscribes to `ShieldsRemaining` and `ColorName` via UniRx. Scales shield orb sprites, tints them to the current color, and spawns gain/lose/bounce VFX via `VfxPoolChannel`.
 

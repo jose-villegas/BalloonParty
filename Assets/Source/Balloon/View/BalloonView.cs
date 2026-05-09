@@ -97,7 +97,8 @@ namespace BalloonParty.Balloon.View
 
         private void ApplySortingOrder(Vector2Int slotIndex)
         {
-            var baseOrder = (slotIndex.x + slotIndex.y * _config.SlotsSize.x) * _baseSortingLayer;
+            var maxRow = _config.SlotsSize.y - 1;
+            var baseOrder = (slotIndex.x + (maxRow - slotIndex.y) * _config.SlotsSize.x) * _baseSortingLayer;
 
             for (var i = 0; i < _spriteLayerRenderers.Length; i++)
                 _spriteLayerRenderers[i].sortingOrder = baseOrder + i + 1;
