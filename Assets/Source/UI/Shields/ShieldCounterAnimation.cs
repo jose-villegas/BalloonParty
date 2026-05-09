@@ -11,22 +11,25 @@ namespace BalloonParty.UI.Shields
     [RequireComponent(typeof(Animator))]
     public class ShieldCounterAnimation : MonoBehaviour
     {
+        [Inject] private ShieldCounterLabel[] _labels;
+
+        [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+        [Inject] private ISubscriber<BalanceBalloonsMessage> _balanceSubscriber;
+
         private readonly CompositeDisposable _disposable = new();
         private Animator _animator;
-        [Inject] private ISubscriber<BalanceBalloonsMessage> _balanceSubscriber;
         private int _lastShieldValue;
-        [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private IDisposable _shieldSubscription;
 
         private void Awake()
         {
             _animator = GetComponent<Animator>();
+            _animator.SetTrigger("Waiting");
         }
 
-        private void Start()
+        [Inject]
+        private void Initialize()
         {
-            _animator.SetTrigger("Waiting");
-
             _loadedSubscriber.Subscribe(OnProjectileLoaded).AddTo(_disposable);
             _balanceSubscriber.Subscribe(_ => OnBalancing()).AddTo(_disposable);
         }
@@ -37,7 +40,7 @@ namespace BalloonParty.UI.Shields
             _shieldSubscription?.Dispose();
         }
 
-        public void BindProjectile(ProjectileModel model)
+        private void BindProjectile(ProjectileModel model)
         {
             _shieldSubscription?.Dispose();
             _lastShieldValue = model.ShieldsRemaining.Value;
@@ -51,16 +54,20 @@ namespace BalloonParty.UI.Shields
                 });
         }
 
-        private void OnProjectileLoaded(ProjectileLoadedMessage _)
+        private void OnProjectileLoaded(ProjectileLoadedMessage msg)
         {
+            BindProjectile(msg.Model);
+            foreach (var label in _labels) label.Bind(msg.Model.ShieldsRemaining);
+            _animator.ResetTrigger("Waiting");
+            _animator.ResetTrigger("Lost");
             _animator.SetTrigger("Ready");
-            _lastShieldValue = 1;
         }
 
         private void OnBalancing()
         {
             _animator.SetTrigger("Waiting");
             _shieldSubscription?.Dispose();
+            foreach (var label in _labels) label.Unbind();
         }
     }
 }

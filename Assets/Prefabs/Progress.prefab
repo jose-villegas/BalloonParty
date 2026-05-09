@@ -389,7 +389,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.UI.Score.ScoreUILifetimeScope
   parentReference:
-    TypeName: 
+    TypeName: BalloonParty.Game.GameLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
 --- !u!1 &3918607577803489134
@@ -1054,11 +1054,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Shields
       objectReference: {fileID: 0}
-    - target: {fileID: 5039888242599991259, guid: 37efd7135ce79cb41840a855dac524f8,
-        type: 3}
-      propertyPath: m_Rotation
-      value: 45
-      objectReference: {fileID: 0}
     - target: {fileID: 5425669691414113702, guid: 37efd7135ce79cb41840a855dac524f8,
         type: 3}
       propertyPath: m_Pivot.x
@@ -1068,11 +1063,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5425669691414113702, guid: 37efd7135ce79cb41840a855dac524f8,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5425669691414113702, guid: 37efd7135ce79cb41840a855dac524f8,
         type: 3}
@@ -1163,16 +1153,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7096305769049723891, guid: 37efd7135ce79cb41840a855dac524f8,
-        type: 3}
-      propertyPath: m_Rotation
-      value: 45
-      objectReference: {fileID: 0}
-    - target: {fileID: 7718608121346759560, guid: 37efd7135ce79cb41840a855dac524f8,
-        type: 3}
-      propertyPath: m_Rotation
-      value: 45
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

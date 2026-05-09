@@ -12,32 +12,22 @@ namespace BalloonParty.Thrower
 {
     public class ThrowerController : MonoBehaviour, IStartable
     {
-        private ProjectileModel _activeProjectile;
-        private ProjectileView _activeView;
         [Inject] private IGameConfiguration _config;
         [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
-        private Vector3 _direction = Vector3.up;
         [Inject] private SlotGrid _grid;
-        private bool _isMovable;
         [Inject] private IPublisher<ProjectileLoadedMessage> _loadedPublisher;
         [Inject] private IObjectResolver _resolver;
         [Inject] private ThrowerSettings _settings;
 
-        private void Update()
-        {
-            if (!_isMovable) return;
-
-            UpdateDirection();
-            RotateToDirection();
-            UpdateLoadedProjectilePosition();
-            TryFire();
-        }
+        private ProjectileModel _activeProjectile;
+        private ProjectileView _activeView;
+        private Vector3 _direction = Vector3.up;
+        private bool _isMovable;
 
         public void Start()
         {
             _destroyedSubscriber.Subscribe(_ => Reload());
 
-            // Mirror GameStartedThrowerSpawnSystem: drop in from below then become active
             transform.position = _config.ThrowerSpawnPoint + Vector2.down;
             transform.DOMove(_config.ThrowerSpawnPoint, 1f).OnComplete(() =>
             {
@@ -51,6 +41,16 @@ namespace BalloonParty.Thrower
             if (_activeProjectile == null || _activeProjectile.IsFree) return;
             _activeProjectile.IsFree = true;
             _activeProjectile.Direction = _direction;
+        }
+
+        private void Update()
+        {
+            if (!_isMovable) return;
+
+            UpdateDirection();
+            RotateToDirection();
+            UpdateLoadedProjectilePosition();
+            TryFire();
         }
 
         private void UpdateDirection()
@@ -129,7 +129,7 @@ namespace BalloonParty.Thrower
             _activeProjectile.ShieldsRemaining.Value = _config.ProjectileStartingShields;
 
             _activeView.Bind(_activeProjectile);
-            _loadedPublisher.Publish(default);
+            _loadedPublisher.Publish(new ProjectileLoadedMessage(_activeProjectile));
         }
 
 

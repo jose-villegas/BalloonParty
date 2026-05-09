@@ -42,8 +42,6 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
 
             builder.RegisterComponentInHierarchy<ThrowerController>().AsImplementedInterfaces().AsSelf();
-            builder.RegisterComponentInHierarchy<ShieldCounterLabel>();
-            builder.RegisterComponentInHierarchy<ShieldCounterAnimation>();
             builder.RegisterComponentInHierarchy<GameStartButton>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

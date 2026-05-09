@@ -1468,6 +1468,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Progress
       objectReference: {fileID: 0}
+    - target: {fileID: 3841112476605814567, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6582683723459465260, guid: 4a32d51f61f22427e898e3636e5511cc,
         type: 3}
       propertyPath: parentReference.TypeName
@@ -1495,6 +1500,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: LevelUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5901442715913872863, guid: 3404597e7e0434d0b92898c564f537b8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7844991998452278162, guid: 3404597e7e0434d0b92898c564f537b8,
         type: 3}
@@ -1613,6 +1623,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Thrower
+      objectReference: {fileID: 0}
+    - target: {fileID: 5911013269540393590, guid: 0ea0a8b48930245ba944bd64372eead0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6132985126811919246, guid: 0ea0a8b48930245ba944bd64372eead0,
         type: 3}

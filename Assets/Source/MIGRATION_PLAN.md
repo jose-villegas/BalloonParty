@@ -81,7 +81,8 @@ Assets/Source/
                     ScoreCounterLabel.cs, LevelLabel.cs,
                     ScoreUILifetimeScope.cs   ← child VContainer scope
     LevelUp/        LevelUpPopUp.cs, LevelUpLifetimeScope.cs
-    Shields/        ShieldCounterLabel.cs, ShieldCounterAnimation.cs
+    Shields/        ShieldCounterLabel.cs, ShieldCounterAnimation.cs,
+                    ShieldUILifetimeScope.cs   ← child VContainer scope
     GameStart/      GameStartButton.cs
   Debug/
     ICheat.cs, CheatConsoleView.cs
@@ -365,38 +366,24 @@ protected override void Configure(IContainerBuilder builder)
 
 **Goal:** Wire the shield counter HUD so bounce feedback is visible and driven by `ProjectileModel.ShieldsRemaining`.
 
-> All C# files in this phase are **already coded**. This phase is Unity Editor wiring + one code touch in `ThrowerController`.
+### Architecture
 
-| File | Status |
-|---|---|
-| `ShieldCounterLabel.cs` | ✅ Coded |
-| `ShieldCounterAnimation.cs` | ✅ Coded |
-| `ProjectileLoadedMessage` | ✅ Coded |
-| `ProjectileModel.ShieldsRemaining` → `ReactiveProperty<int>` | ✅ Coded |
-| `ThrowerController` publishes `ProjectileLoadedMessage` | ✅ Coded |
-| `ThrowerController` injects + calls `ShieldCounterAnimation.BindProjectile` | ❌ Needs code |
+- **`ShieldUILifetimeScope`** — child scope on the shield HUD root; registers `ShieldCounterLabel[]` (via `GetComponentsInChildren`) and `ShieldCounterAnimation`
+- **`ShieldCounterAnimation`** — orchestrator; subscribes to `ProjectileLoadedMessage` and `BalanceBalloonsMessage`; binds/unbinds labels and drives animator triggers
+- **`ShieldCounterLabel`** — simple view (no injection needed); exposes `Bind(IReadOnlyReactiveProperty<int>)` / `Unbind()`; multiple instances supported
+- **`ProjectileLoadedMessage`** — carries `ProjectileModel` so subscribers can self-bind without coupling to `ThrowerController`
 
-**Code step — bind `ShieldCounterAnimation` from `ThrowerController`:**
+### Key decisions
 
-Add to `ThrowerController`:
-```csharp
-[Inject] private ShieldCounterAnimation _shieldAnim;
-```
-Call after creating the model in `LoadProjectile()`:
-```csharp
-_shieldAnim.BindProjectile(_activeProjectile);
-```
-`ShieldCounterLabel` and `ShieldCounterAnimation` are already registered in `GameLifetimeScope`:
-```csharp
-builder.RegisterComponentInHierarchy<ShieldCounterLabel>();
-builder.RegisterComponentInHierarchy<ShieldCounterAnimation>();
-```
+- `ThrowerController` does **not** know about shield UI — decoupling is achieved via `ProjectileLoadedMessage` carrying the model
+- `ShieldCounterAnimation` resets stale triggers (`ResetTrigger("Waiting")`, `ResetTrigger("Lost")`) before setting `"Ready"` — both `BalanceBalloonsMessage` and `ProjectileDestroyedMessage` fire in the same frame when the projectile is destroyed, so without reset the animator would flash through the Waiting state
 
-**Unity Editor steps:**
+### Unity Editor steps
 
-1. **`ShieldCounterLabel`** — add to the shield count `Text` element; VContainer auto-injects subscribers and config
-2. **`ShieldCounterAnimation`** — add to the Animator GameObject; VContainer auto-injects subscribers
-3. **Disable legacy** — disable old `ShieldCounterLabel` and `ShieldCounterAnimation` MonoBehaviours in the scene
+1. Add `ShieldUILifetimeScope` to the shield HUD root GameObject (must be an ancestor of all shield UI components)
+2. Add `ShieldCounterAnimation` to the Animator GameObject (child of scope root)
+3. Add `ShieldCounterLabel` to each shield count `Text` element (child of scope root)
+4. Disable legacy `ShieldCounterLabel` and `ShieldCounterAnimation` MonoBehaviours
 
 ✅ **Checkpoint:** Thrower loads → shield counter shows starting value → each wall bounce decrements with `"Lost"` animation → projectile destroyed and reloaded → counter resets with `"Ready"` animation.
 
@@ -669,10 +656,31 @@ Each self-contained UI panel or popup owns its own child `LifetimeScope`. This i
 | `GameLifetimeScope` | `LifetimeScope` | scene root | all game systems, messages, cheats |
 | `ScoreUILifetimeScope` | `GameChildLifetimeScope` | Score HUD canvas root | `ColorProgressBarInstancer` |
 | `LevelUpLifetimeScope` | `GameChildLifetimeScope` | LevelUp popup root | `LevelUpPopUp` |
+| `ShieldUILifetimeScope` | `GameChildLifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation` |
 
 Future popups (power-up unlocks, game-over screen, etc.) extend `GameChildLifetimeScope` — parent is wired automatically via `FindParent()`.
 
 **`RegisterComponentInHierarchy` scope boundary:** VContainer searches for the component only within the `LifetimeScope`'s own GameObject subtree. Registering a component in a scope whose root is not an ancestor of that component's GameObject will throw `VContainerException: X is not in this scene`. Always place the `LifetimeScope` on or above the registered component in the hierarchy.
+
+**Multiple instances of the same component:** When a scope's subtree contains multiple instances of a component (e.g. several `ShieldCounterLabel` on different Text elements), use `GetComponentsInChildren<T>(true)` in `Configure()` and register the array via `builder.RegisterInstance(array)`. The consumer injects `T[]`.
+
+---
+
+### VContainer Injection Timing
+
+VContainer's `[Inject]` (both field injection and method injection) runs during the scope's `Build()` phase, which executes inside the scope's `Awake()`. This has important implications for MonoBehaviours registered via `RegisterComponentInHierarchy`:
+
+- **`[Inject]` methods run before the component's own `Awake()`** — Unity has not yet called `Awake()` on the target MonoBehaviour when VContainer injects it. Do not rely on `Awake()`-initialized fields inside an `[Inject]` method. Use `GetComponent<T>()` directly if needed.
+- **`Start()` runs after injection** — if the scope builds during its `Awake()`, child components' `Start()` will have all injected fields available. However, prefer `[Inject]` methods for subscription wiring rather than `Start()`, to make the dependency on injection explicit.
+- **Animator triggers from the same frame:** When multiple MessagePipe messages fire in the same frame (e.g. `BalanceBalloonsMessage` + `ProjectileDestroyedMessage` from `ProjectileView`), their subscribers execute synchronously. If both set animator triggers, call `ResetTrigger` on conflicting triggers before setting the intended one.
+
+---
+
+### Message Design
+
+- **Carry relevant data.** If a subscriber needs access to the source object (model, position, etc.), include it in the message struct rather than forcing the subscriber to inject the producer. Example: `ProjectileLoadedMessage` carries `ProjectileModel` so shield UI can self-bind without knowing about `ThrowerController`.
+- **Prefer decoupling over direct injection** between unrelated systems. A controller should not inject a UI component; instead publish a message that the UI subscribes to independently.
+- **Empty structs** are fine for pure signals where no data is needed (`BalanceBalloonsMessage`, `SpawnBalloonLineMessage`).
 
 ---
 
@@ -721,6 +729,12 @@ These constraints apply to all code generated or written during this migration.
 - Prefer longer, descriptive names over short ambiguous ones (`FindOptimalEmptySlot` over `GetSlot`).
 - Namespaces must reflect folder structure (e.g. `BalloonParty.Balloon.Model`, `BalloonParty.Slots`).
 
+### Visibility
+- **Default to `private`**. Only increase visibility when there is a concrete consumer.
+- Expose only intentional service methods as `public` — if nothing outside the class calls it, it stays `private`.
+- Prefer `internal` over `public` when the consumer is within the same assembly but outside the class.
+- Never make a field or method `public` "just in case" — widen access only when a use case demands it.
+
 ### Architecture & Reuse
 - **Before writing new code, check for existing methods** in the codebase (including `Source_Old`) that can be ported, extracted, or called directly.
 - **Identify commonalities** across systems early — if two controllers share a pattern, extract it into a base class or generic utility.
@@ -728,6 +742,22 @@ These constraints apply to all code generated or written during this migration.
 - **Extension methods** over utility classes where possible — keep them in a dedicated `Extensions/` namespace.
 - Keep classes **small and focused** — if a class is growing beyond one clear responsibility, split it.
 - Avoid `static` state; prefer injected singleton services via VContainer.
+
+### Member Ordering
+
+Classes follow a strict top-to-bottom ordering by visibility and purpose:
+
+1. **Fields & Properties** (top of class)
+   - `public` → `protected` → `private`
+   - Within each visibility group, order by purpose:
+     1. `[SerializeField]` fields (grouped by `[Header]` when purpose/context warrants it)
+     2. `[Inject]` fields
+     3. Regular fields and auto-properties
+2. **Methods** (below fields)
+   - `public` → `protected` → `private`
+   - Unity lifecycle methods (`Awake`, `Start`, `Update`, etc.) sit at the top of their visibility group in lifecycle order
+   - `[Inject]` methods sit immediately after lifecycle methods in their visibility group
+   - `[Inject]` methods must only perform injection-related work (subscribing to injected dependencies, wiring injected references). Non-injection logic (e.g. triggering animations, setting initial visual state) belongs in Unity lifecycle methods (`Awake`, `Start`).
 
 ---
 
@@ -741,10 +771,10 @@ These constraints apply to all code generated or written during this migration.
 | 3     | Balance / Movement Logic                  | ✅ Done         |
 | 4     | Balloon Spawning & Line Management        | ✅ Done         |
 | 5     | Projectile & Thrower                      | ✅ Done         |
-| 6     | Hit, Destruction & Score Logic            | ✅ Done (code)  |
-| 7a    | Score Feedback UI                         | ⬜ Wiring only  |
-| 7b    | Level-Up Popup                            | ⬜ Wiring only  |
-| 7c    | Shield Counter HUD                        | ⬜ ThrowerController code + Wiring |
+| 6     | Hit, Destruction & Score Logic            | ✅ Done         |
+| 7a    | Score Feedback UI                         | ✅ Done         |
+| 7b    | Level-Up Popup                            | ✅ Done         |
+| 7c    | Shield Counter HUD                        | ✅ Done         |
 | 7d    | Game Start                                | ⬜ Wiring only  |
 | 7e    | HUD Audit & Cleanup                       | ⬜ Todo         |
 | 7f    | Configuration Migration                   | ⬜ Todo         |
