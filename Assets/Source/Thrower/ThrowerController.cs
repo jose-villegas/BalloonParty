@@ -1,3 +1,4 @@
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared.Messages;
@@ -16,7 +17,7 @@ namespace BalloonParty.Thrower
         [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         [Inject] private SlotGrid _grid;
         [Inject] private IPublisher<ProjectileLoadedMessage> _loadedPublisher;
-        [Inject] private IObjectResolver _resolver;
+        [Inject] private LifetimeScope _parentScope;
         [Inject] private ThrowerSettings _settings;
 
         private ProjectileModel _activeProjectile;
@@ -109,14 +110,17 @@ namespace BalloonParty.Thrower
 
         private void LoadProjectile()
         {
-            if (_settings.ProjectilePrefab == null) return;
+            if (_settings.ProjectileScopePrefab == null) return;
 
-            var instance = _resolver.Instantiate(_settings.ProjectilePrefab, transform.position, Quaternion.identity);
-            _activeView = instance.GetComponent<ProjectileView>();
+            var childScope = _parentScope.CreateChildFromPrefab(_settings.ProjectileScopePrefab);
+            childScope.transform.SetParent(null);
+            childScope.transform.position = transform.position;
+
+            _activeView = childScope.GetComponentInChildren<ProjectileView>();
 
             if (_activeView == null)
             {
-                Destroy(instance);
+                Destroy(childScope.gameObject);
                 return;
             }
 

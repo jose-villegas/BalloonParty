@@ -60,6 +60,7 @@ Assets/Source/
     SlotGrid.cs, SlotGridChangedEvent.cs
     SlotGridController.cs, SlotGridView.cs
   Projectile/
+    ProjectileLifetimeScope.cs
     Model/          ProjectileModel.cs
     View/           ProjectileView.cs, ProjectileShieldView.cs
     Controller/     ← Phase 9 (currently handled inside ProjectileView)
@@ -429,13 +430,15 @@ protected override void Configure(IContainerBuilder builder)
    - `UpdateColor(string colorName)`: DOColor all visible shields to `_config.BalloonColor(colorName)` with alpha
    - On `Awake()`: set all shields to `localScale = Vector3.zero`
 
-2. **Shield gain logic in `ProjectileView.TrackColor()`**:
+3. **Shield gain logic in `ProjectileView.TrackColor()`**:
    - After incrementing `ColorPopCount`, check `if (_model.ColorPopCount >= 3)` → increment `_model.ShieldsRemaining.Value++`, reset `ColorPopCount = 0`
    - This replaces `ProjectileShieldSystem`
 
-3. **`ProjectileView`** — resolves `ProjectileShieldView` via `GetComponent` in `Awake()`; calls `_shieldView.Bind(model)` in `Bind()`
+4. **`ProjectileView`** — resolves `ProjectileShieldView` via `GetComponent` in `Awake()`; calls `_shieldView.Bind(model)` in `Bind()`
 
-4. **Color update**: `ProjectileShieldView` subscribes to `model.ColorName` (now a `ReactiveProperty<string>`) directly
+5. **`ThrowerController`** — injects `LifetimeScope` (the parent scope auto-registered by VContainer) and calls `_parentScope.CreateChildFromPrefab(_settings.ProjectileScopePrefab)` to instantiate the projectile with a properly wired child scope. `ThrowerSettings` now holds a `ProjectileLifetimeScope` reference instead of a plain `GameObject`.
+
+6. **Color update**: `ProjectileShieldView` subscribes to `model.ColorName` (now a `ReactiveProperty<string>`) directly
 
 ### VFX
 
@@ -718,11 +721,17 @@ Each self-contained UI panel or popup owns its own child `LifetimeScope`. This i
 
 **Rule:** Any UI element that is logically self-contained (a popup, a full-screen panel, a HUD section) gets its own `LifetimeScope` on its root GameObject. Flat components that are always part of a larger panel (e.g. `ScoreCounterLabel` inside the Score HUD) stay registered in that panel's scope.
 
-### Dynamically Instantiated Prefab Injection
+### Dynamically Instantiated Prefab Scopes
 
-Prefabs instantiated at runtime (e.g. the projectile) use `IObjectResolver.Instantiate()` from VContainer. This injects all `[Inject]` fields on every MonoBehaviour in the prefab hierarchy in a single pass — no child `LifetimeScope` needed. The resolver is injected into the spawner (e.g. `ThrowerController`) from `GameLifetimeScope`.
+Prefabs that carry multiple MonoBehaviours needing injection (e.g. the projectile) use VContainer's `LifetimeScope.CreateChildFromPrefab()`. Place a child `GameChildLifetimeScope` on the prefab root and register its components via `RegisterComponentInHierarchy`. The spawner injects the parent `LifetimeScope` and calls `parentScope.CreateChildFromPrefab(prefab)` — this deactivates the prefab before `Instantiate`, wires the parent reference, then reactivates so `Awake()` → `Build()` runs with the correct parent. The child scope inherits all parent services (messages, config, grid) automatically.
 
-**Do not use child `LifetimeScope` on dynamically instantiated prefabs.** A `LifetimeScope` placed on a prefab runs `Build()` in its `Awake()`, which requires `FindParent()` to locate the parent scope. For dynamically instantiated objects this is fragile — the build order between the scope's `Awake()` and sibling components is undefined, and `FindFirstObjectByType` may race with the parent scope's own lifecycle. Use child scopes only for scene-placed GameObjects (UI panels, popups, HUD sections).
+**Do not use plain `Object.Instantiate` for prefabs with child scopes** — the scope's `FindParent()` races with sibling `Awake()` calls and may fail to find the parent. `CreateChildFromPrefab` avoids this by explicitly setting `parentReference.Object` before activation.
+
+**Do not use `IObjectResolver.Instantiate()` on prefabs with a `LifetimeScope`** — the resolver injects fields from the parent container but does not build the child scope, leaving `RegisterComponentInHierarchy` registrations unresolved.
+
+**When to use each pattern:**
+- **`CreateChildFromPrefab`** — prefab has a `LifetimeScope` with local registrations (2+ injected MonoBehaviours, or the component set may grow independently)
+- **`IObjectResolver.Instantiate()`** — prefab has no `LifetimeScope`; a single MonoBehaviour needs injection from the parent container
 
 **Current scopes:**
 
@@ -732,6 +741,7 @@ Prefabs instantiated at runtime (e.g. the projectile) use `IObjectResolver.Insta
 | `ScoreUILifetimeScope` | `GameChildLifetimeScope` | Score HUD canvas root | `ColorProgressBarInstancer` |
 | `LevelUpLifetimeScope` | `GameChildLifetimeScope` | LevelUp popup root | `LevelUpPopUp` |
 | `ShieldUILifetimeScope` | `GameChildLifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation` |
+| `ProjectileLifetimeScope` | `GameChildLifetimeScope` | Projectile prefab root | `ProjectileView`, `ProjectileShieldView` |
 
 Future popups (power-up unlocks, game-over screen, etc.) extend `GameChildLifetimeScope` — parent is wired automatically via `FindParent()`.
 

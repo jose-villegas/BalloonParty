@@ -277,7 +277,7 @@ GameObject:
   - component: {fileID: 5947983209125754954}
   - component: {fileID: 2467315418981097903}
   - component: {fileID: 7317932863533360661}
-  - component: {fileID: 2537239960924369076}
+  - component: {fileID: 6407778786473359134}
   m_Layer: 9
   m_Name: Projectile
   m_TagString: Projectile
@@ -384,7 +384,7 @@ MonoBehaviour:
   _glowRenderer: {fileID: 7696335967090054620}
   _glowAlpha: 0.5
   _glowColorDuration: 0.2
---- !u!114 &2537239960924369076
+--- !u!114 &6407778786473359134
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -393,7 +393,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 6726302742424803540}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e2cae9567aa248b18a805bb4b3a5cced, type: 3}
+  m_Script: {fileID: 11500000, guid: 750cabac973a4d789886282a44eb5240, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Projectile.ProjectileLifetimeScope
   parentReference:

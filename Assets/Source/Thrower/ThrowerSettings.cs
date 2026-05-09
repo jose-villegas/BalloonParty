@@ -1,14 +1,14 @@
-using UnityEngine;
+using BalloonParty.Projectile;
 
 namespace BalloonParty.Thrower
 {
     public class ThrowerSettings
     {
-        public readonly GameObject ProjectilePrefab;
+        public readonly ProjectileLifetimeScope ProjectileScopePrefab;
 
-        public ThrowerSettings(GameObject projectilePrefab)
+        public ThrowerSettings(ProjectileLifetimeScope projectileScopePrefab)
         {
-            ProjectilePrefab = projectilePrefab;
+            ProjectileScopePrefab = projectileScopePrefab;
         }
     }
 }

@@ -957,7 +957,7 @@ MonoBehaviour:
   _gameConfiguration: {fileID: 11400000, guid: cb5eb9b399cb65f4cbc8875a2f79715c, type: 2}
   _balloonPrefab: {fileID: 5923847143892959990, guid: 85afc73ba92384dafa9d8a43874d2dd6,
     type: 3}
-  _projectilePrefab: {fileID: 6726302742424803540, guid: 514e1ddc348a5498aa3edae2404ff130,
+  _projectileScopePrefab: {fileID: 6407778786473359134, guid: 514e1ddc348a5498aa3edae2404ff130,
     type: 3}
 --- !u!4 &854596300
 Transform:

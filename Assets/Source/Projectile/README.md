@@ -14,11 +14,11 @@ The projectile carries N shield orbs (`SpriteRenderer` children) managed by `Pro
 
 ## How it works
 
+- **`ProjectileLifetimeScope`** — child `GameChildLifetimeScope` on the projectile prefab root. Registers `ProjectileView` and `ProjectileShieldView` via `RegisterComponentInHierarchy`. Instantiated by `ThrowerController` via `parentScope.CreateChildFromPrefab()`, which wires the parent scope explicitly before activation — ensuring all parent services (messages, config, grid) are available.
 - **`ProjectileModel`** — plain C# data object: direction vector, speed, `ReactiveProperty<int> ShieldsRemaining`, `ReactiveProperty<string> ColorName`, pop-count, last-hit balloon reference.
 - **`ProjectileView`** — MonoBehaviour on the projectile prefab. Drives manual movement in `FixedUpdate`, checks bounds against `IGameConfiguration.LimitsClockwise`, reflects direction and clamps position on bounce. Handles `OnTriggerEnter2D` — resolves the `BalloonView` and `BalloonModel` from the collider, tracks color, triggers shield gain on 3 consecutive same-color pops, and runs the neighbor nudge sequence. Publishes `ProjectileDestroyedMessage` and `BalanceBalloonsMessage` when shields reach zero.
 - **`ProjectileShieldView`** — MonoBehaviour on the projectile prefab. Subscribes to `ShieldsRemaining` and `ColorName` via UniRx. Scales shield orb sprites, tints them to the current color, and spawns gain/lose/bounce VFX.
 
-All `[Inject]` fields on both views are injected by `IObjectResolver.Instantiate()` from `ThrowerController` — no child `LifetimeScope` on the prefab.
 
 ## Interactions
 
