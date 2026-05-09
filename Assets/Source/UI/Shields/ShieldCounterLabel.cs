@@ -6,7 +6,7 @@ using VContainer;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.Shields
 {
     [RequireComponent(typeof(Text))]
     public class ShieldCounterLabel : MonoBehaviour

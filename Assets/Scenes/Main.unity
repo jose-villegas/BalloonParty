@@ -1628,9 +1628,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 7655411305707014727}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9e6dd69a6ab0417bac43d80f93a9a47b, type: 3}
+  m_Script: {fileID: 11500000, guid: a65ae2fa966f461ab72955c5cf61e045, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.UI.UILifetimeScope
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.UI.Score.ScoreUILifetimeScope
   parentReference:
     TypeName: BalloonParty.Game.GameLifetimeScope
   autoRun: 1

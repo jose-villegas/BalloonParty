@@ -1,15 +1,15 @@
-using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using BalloonParty.Game;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.Score
 {
-    public class UILifetimeScope : LifetimeScope
+    public class ScoreUILifetimeScope : LifetimeScope
     {
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
+            builder.RegisterComponentInHierarchy<LevelUpPopUp>();
         }
 
         private void Start()
@@ -24,3 +24,5 @@ namespace BalloonParty.UI
         }
     }
 }
+
+

@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using BalloonParty.Shared;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.Score
 {
     public class ScoreNotice : MonoBehaviour, IReusable
     {

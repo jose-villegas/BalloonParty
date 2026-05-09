@@ -5,7 +5,7 @@ using VContainer;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.GameStart
 {
     [RequireComponent(typeof(Button))]
     public class GameStartButton : MonoBehaviour

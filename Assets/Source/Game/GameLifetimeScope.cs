@@ -8,6 +8,8 @@ using BalloonParty.Debug;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using BalloonParty.Thrower;
+using BalloonParty.UI.GameStart;
+using BalloonParty.UI.Shields;
 
 namespace BalloonParty.Game
 {
@@ -41,6 +43,9 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
 
             builder.RegisterComponentInHierarchy<ThrowerController>().AsImplementedInterfaces().AsSelf();
+            builder.RegisterComponentInHierarchy<ShieldCounterLabel>();
+            builder.RegisterComponentInHierarchy<ShieldCounterAnimation>();
+            builder.RegisterComponentInHierarchy<GameStartButton>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();

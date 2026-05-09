@@ -3,7 +3,7 @@ using BalloonParty.Game;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.Score
 {
     public class ColorProgressBarInstancer : MonoBehaviour
     {

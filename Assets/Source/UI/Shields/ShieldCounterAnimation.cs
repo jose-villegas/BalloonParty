@@ -6,7 +6,7 @@ using VContainer;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.Shields
 {
     [RequireComponent(typeof(Animator))]
     public class ShieldCounterAnimation : MonoBehaviour

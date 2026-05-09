@@ -7,7 +7,7 @@ using VContainer;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.Score
 {
     public class LevelUpPopUp : MonoBehaviour
     {

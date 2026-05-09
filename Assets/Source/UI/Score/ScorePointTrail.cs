@@ -4,7 +4,7 @@ using UnityEngine;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.Score
 {
     public class ScorePointTrail : MonoBehaviour, IReusable
     {

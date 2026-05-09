@@ -8,7 +8,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Game;
 using BalloonParty.Shared.Messages;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.Score
 {
     public class ColorProgressBar : MonoBehaviour
     {

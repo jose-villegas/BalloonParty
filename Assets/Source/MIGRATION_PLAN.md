@@ -68,6 +68,13 @@ Assets/Source/
   Shared/
     IGameConfiguration.cs
     Messages/       BalanceBalloonsMessage.cs, BalloonHitMessage.cs, ...
+  UI/
+    Score/          ColorProgressBar.cs, ColorProgressBarInstancer.cs,
+                    ScoreNotice.cs, ScorePointTrail.cs,
+                    ScoreCounterLabel.cs, LevelLabel.cs, LevelUpPopUp.cs,
+                    ScoreUILifetimeScope.cs   ← child VContainer scope
+    Shields/        ShieldCounterLabel.cs, ShieldCounterAnimation.cs
+    GameStart/      GameStartButton.cs
   Debug/
     ICheat.cs, CheatConsoleView.cs, BalloonRemoverCheat.cs, ...
 
@@ -288,7 +295,7 @@ builder.Register<BalloonController>(Lifetime.Transient);
 | `ScoreCounterLabel.cs` | Binds total-score `Text` to `ScoreController.TotalScore` |
 | `LevelLabel.cs` | Binds level `Text` to `ScoreController.Level`; `_showNextLevel` toggle |
 
-**`GameLifetimeScope` registration** (code — do this first):
+**`ScoreUILifetimeScope` registration** (code — already done):
 ```csharp
 builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
 ```
@@ -296,7 +303,7 @@ builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
 **Unity Editor steps:**
 
 1. **`ColorProgressBar` prefab** — duplicate legacy; remove old MonoBehaviours; add new `ColorProgressBar`; wire `_graphicsToSetColor`, `_progressSlider`, `_animator`, `_completionParticleSystem`, `_noticePrefab`, `_trailPrefab`
-2. **`ColorProgressBarInstancer`** — add to a Canvas GameObject; assign the `ColorProgressBar` prefab
+2. **`ColorProgressBarInstancer`** — add to the Score UI Canvas root (the same GameObject that has `ScoreUILifetimeScope`); assign the `ColorProgressBar` prefab in the Inspector
 3. **`ScoreCounterLabel`** — add to the total-score `Text` element
 4. **`LevelLabel`** — add to the current-level `Text`; add a second instance with `_showNextLevel` ticked for the "next level" label
 5. **Disable legacy** — disable: old `ColorProgressBarInstancer`, old `ScoreCounterLabel`, old `LevelLabel`, old `GameScoreController`
@@ -315,7 +322,7 @@ builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
 |---|---|
 | `LevelUpPopUp.cs` | Waits for `AllBalloonsStable()`; triggers `"Appear"` animator; animates glow fill using `Time.unscaledDeltaTime`; `OnContinue()` restores `Time.timeScale = 1` |
 
-**`GameLifetimeScope` registration** (code — do this first):
+**`ScoreUILifetimeScope` registration** (code — already done):
 ```csharp
 builder.RegisterComponentInHierarchy<LevelUpPopUp>();
 ```
@@ -355,8 +362,9 @@ Call after creating the model in `LoadProjectile()`:
 ```csharp
 _shieldAnim.BindProjectile(_activeProjectile);
 ```
-Register in `GameLifetimeScope`:
+`ShieldCounterLabel` and `ShieldCounterAnimation` are already registered in `GameLifetimeScope`:
 ```csharp
+builder.RegisterComponentInHierarchy<ShieldCounterLabel>();
 builder.RegisterComponentInHierarchy<ShieldCounterAnimation>();
 ```
 
@@ -381,7 +389,7 @@ builder.RegisterComponentInHierarchy<ShieldCounterAnimation>();
 **Unity Editor steps:**
 
 1. **`GameStartButton`** — add to the start button GameObject in the scene
-2. Register in `GameLifetimeScope`:
+2. `GameStartButton` is already registered in `GameLifetimeScope`:
    ```csharp
    builder.RegisterComponentInHierarchy<GameStartButton>();
    ```
@@ -397,9 +405,58 @@ builder.RegisterComponentInHierarchy<ShieldCounterAnimation>();
 
 1. Open the scene; search for any remaining MonoBehaviours from `Source_Old/UI/` still active — `grep` for `IAny*Listener` or inspect each UI GameObject
 2. For each still-active legacy component, either port it or confirm it is superseded and disable it
-3. Verify `GameLifetimeScope` has a `RegisterComponentInHierarchy` call for every new UI component that needs injection
-4. Delete `ScoreUIController.cs` (already a comment-only stub)
+3. Verify `GameLifetimeScope` and `ScoreUILifetimeScope` have `RegisterComponentInHierarchy` calls for every new UI component that needs injection
+4. ~~Delete `ScoreUIController.cs`~~ — already deleted
 5. ✅ **Checkpoint:** No `Contexts.sharedInstance` calls execute from any UI component during Play Mode; all HUD elements update reactively.
+
+---
+
+## Phase 7f — Configuration Migration
+
+**Goal:** Move `GameConfiguration` and its supporting types out of `Source_Old` into `Source/` so the configuration layer is self-contained in the new codebase before `Source_Old` is deleted.
+
+> Current state: `GameConfiguration.cs` still lives in `Source_Old/Configuration/` and implements both the old Entitas `IGameConfiguration` and the new `BalloonParty.Configuration.IGameConfiguration`. `BalloonColorConfiguration.cs` is global-namespace in `Source_Old`. The `.asset` file is also in `Source_Old`.
+
+### Files to move (all moves must be done in the **Unity Editor Project window** to preserve `.meta` GUIDs)
+
+| File | From | To |
+|---|---|---|
+| `BalloonColorConfiguration.cs` | `Source_Old/Configuration/` | `Source/Shared/` |
+| `GameConfiguration.cs` | `Source_Old/Configuration/` | `Source/Configuration/` |
+| `GameConfiguration.asset` | `Source_Old/Configuration/` | `Source/Configuration/` |
+
+> **Do not move yet** (needed for Phase 8): `PowerUpConfiguration.cs`, `PowerUpSettings.cs`  
+> **Leave in place** (no longer needed in new code): `IBalloonColorConfiguration.cs`, old `IGameConfiguration.cs`
+
+### Code changes after moving
+
+1. **`BalloonColorConfiguration.cs`** — add `namespace BalloonParty.Configuration { }` wrapper; remove the `IBalloonColorConfiguration` implementation (that interface is Entitas-only and unused in new code)
+
+2. **`GameConfiguration.cs`** — add `namespace BalloonParty.Configuration { }` wrapper; remove the explicit `IGameConfiguration` (old, Entitas) interface declaration — keep only `BalloonParty.Configuration.IGameConfiguration`. The double-implementation currently reads:
+   ```csharp
+   public class GameConfiguration : ScriptableObject,
+       IGameConfiguration,                        // ← remove (old Entitas interface)
+       BalloonParty.Configuration.IGameConfiguration  // ← keep, becomes implicit
+   ```
+   Also remove the duplicate explicit implementation at the bottom:
+   ```csharp
+   int IGameConfiguration.PointsRequiredForLevel(int level) => PointsRequiredForLevel(level); // ← remove
+   ```
+
+3. **`Source/Shared/IGameConfiguration.cs`** — already uses `BalloonColorConfiguration`; once `BalloonColorConfiguration` is in the same `BalloonParty.Configuration` namespace, the `using` is implicit and no change needed.
+
+### Asset GUID note
+
+`BalloonColorConfiguration` is `[Serializable]` and stored by value in the asset (not by type reference), so adding a namespace does **not** break the serialized asset data — Unity serializes its fields by name only.
+
+`GameConfiguration.asset` holds a `m_Script` reference to the `.meta` GUID of `GameConfiguration.cs`. Moving the `.cs` file in the Unity Editor Project window preserves that GUID, so the asset continues to load correctly.
+
+### Removal Checklist additions
+After this phase:
+- [ ] `Source_Old/Configuration/IGameConfiguration.cs` — superseded by `Source/Shared/IGameConfiguration.cs`
+- [ ] `Source_Old/Configuration/IBalloonColorConfiguration.cs` — no longer used in new code
+
+5. ✅ **Checkpoint:** Project compiles; `GameLifetimeScope` serialized field still points to `GameConfiguration.asset`; no references to the Entitas `IGameConfiguration` in `Assets/Source/`.
 
 ---
 
@@ -515,6 +572,15 @@ protected override void Configure(IContainerBuilder builder)
     builder.RegisterMessageBroker<BalanceBalloonsMessage>();
     builder.RegisterMessageBroker<BalloonHitMessage>();
 }
+
+// Child scope — finds and enqueues its parent before Build() runs
+// Used by ScoreUILifetimeScope (and any future feature sub-scopes)
+protected override void Awake()
+{
+    var parent = FindFirstObjectByType<GameLifetimeScope>();
+    using (EnqueueParent(parent))
+        base.Awake();
+}
 ```
 
 ### MessagePipe
@@ -626,9 +692,10 @@ These constraints apply to all code generated or written during this migration.
 | 6     | Hit, Destruction & Score Logic            | ✅ Done (code)  |
 | 7a    | Score Feedback UI                         | ⬜ Wiring only  |
 | 7b    | Level-Up Popup                            | ⬜ Wiring only  |
-| 7c    | Shield Counter HUD                        | ⬜ Code + Wiring|
+| 7c    | Shield Counter HUD                        | ⬜ ThrowerController code + Wiring |
 | 7d    | Game Start                                | ⬜ Wiring only  |
 | 7e    | HUD Audit & Cleanup                       | ⬜ Todo         |
+| 7f    | Configuration Migration                   | ⬜ Todo         |
 | 8     | Power-Ups                                 | ⬜ Todo         |
 | 9     | Game Loop, UI & Cleanup                   | ⬜ Todo         |
 

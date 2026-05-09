@@ -2,7 +2,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.Score
 {
     [RequireComponent(typeof(Text))]
     public class LevelLabel : MonoBehaviour
