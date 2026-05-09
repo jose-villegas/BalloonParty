@@ -126,7 +126,7 @@ namespace BalloonParty.Projectile.View
         private void SpawnVfx(ParticleSystem prefab, Vector3 position, Color color)
         {
             if (prefab == null) return;
-            _poolManager.Channel(prefab, () => new VfxPoolChannel(prefab)).Get().Play(position, color);
+            _poolManager.GetOrRegister(prefab.name, () => new VfxPoolChannel(prefab)).Play(position, color);
         }
     }
 }

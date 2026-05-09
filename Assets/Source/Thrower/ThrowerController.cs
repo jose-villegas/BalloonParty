@@ -27,8 +27,13 @@ namespace BalloonParty.Thrower
         private Vector3 _direction = Vector3.up;
         private bool _isMovable;
 
+        private string ProjectilePoolKey => _settings.ProjectileScopePrefab.name;
+
         private void Start()
         {
+            _poolManager.Register(ProjectilePoolKey,
+                new ProjectilePoolChannel(_parentScope, _settings.ProjectileScopePrefab));
+
             _destroyedSubscriber.Subscribe(_ => Reload());
 
             transform.position = _config.ThrowerSpawnPoint + Vector2.down;
@@ -112,8 +117,7 @@ namespace BalloonParty.Thrower
 
         private void LoadProjectile()
         {
-            _activeView = _poolManager.Channel(() =>
-                new ProjectilePoolChannel(_parentScope, _settings.ProjectileScopePrefab)).Get();
+            _activeView = _poolManager.Get<ProjectileView>(ProjectilePoolKey);
             _activeView.transform.position = transform.position;
 
             _activeProjectile = new ProjectileModel
@@ -131,7 +135,7 @@ namespace BalloonParty.Thrower
         private void Reload()
         {
             if (_activeView != null)
-                _poolManager.Channel<ProjectilePoolChannel>().Return(_activeView);
+                _poolManager.Return(ProjectilePoolKey, _activeView);
             _activeProjectile = null;
             _activeView = null;
             LoadProjectile();

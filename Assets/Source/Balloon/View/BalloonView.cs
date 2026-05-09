@@ -47,7 +47,7 @@ namespace BalloonParty.Balloon.View
 
         public void PlayPopEffect(Color color)
         {
-            _poolManager.Channel(_popVfxPrefab, () => new VfxPoolChannel(_popVfxPrefab)).Get().Play(transform.position, color);
+            _poolManager.GetOrRegister(_popVfxPrefab.name, () => new VfxPoolChannel(_popVfxPrefab)).Play(transform.position, color);
         }
 
         private void ApplyColor(string colorName)

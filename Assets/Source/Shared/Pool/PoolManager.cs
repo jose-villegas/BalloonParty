@@ -5,32 +5,69 @@ namespace BalloonParty.Shared
 {
     public class PoolManager
     {
-        private readonly Dictionary<(Type, object), object> _channels = new();
+        private readonly Dictionary<string, IPoolChannel> _channels = new();
 
-        public T Channel<T>(object key, Func<T> factory) where T : class
+        /// <summary>
+        /// Register a channel under <paramref name="key"/>. Throws if the key is already taken.
+        /// Call once during setup.
+        /// </summary>
+        public void Register<TItem>(string key, PoolChannel<TItem> channel)
+            where TItem : UnityEngine.Component, IPoolable
         {
-            var compositeKey = (typeof(T), key);
-            if (_channels.TryGetValue(compositeKey, out var existing))
-                return (T)existing;
-
-            var channel = factory();
-            _channels[compositeKey] = channel;
-            return channel;
+            if (!_channels.TryAdd(key, channel))
+                throw new InvalidOperationException(
+                    $"Pool channel '{key}' is already registered.");
         }
 
-        public T Channel<T>(Func<T> factory) where T : class
+        /// <summary>
+        /// Register a channel using the channel type name as the key.
+        /// </summary>
+        public void Register<TItem>(PoolChannel<TItem> channel)
+            where TItem : UnityEngine.Component, IPoolable
         {
-            return Channel(typeof(T), factory);
+            Register(channel.GetType().Name, channel);
         }
 
-        public T Channel<T>() where T : class
+        /// <summary>
+        /// Get an instance from the channel registered under <paramref name="key"/>.
+        /// </summary>
+        public TItem Get<TItem>(string key) where TItem : UnityEngine.Component, IPoolable
         {
-            var compositeKey = (typeof(T), (object)typeof(T));
-            if (_channels.TryGetValue(compositeKey, out var existing))
-                return (T)existing;
+            return GetChannel<TItem>(key).Get();
+        }
+
+        /// <summary>
+        /// Return an instance to the channel registered under <paramref name="key"/>.
+        /// </summary>
+        public void Return<TItem>(string key, TItem item) where TItem : UnityEngine.Component, IPoolable
+        {
+            GetChannel<TItem>(key).Return(item);
+        }
+
+        /// <summary>
+        /// Register a channel if the key is not already taken, then return the item.
+        /// Use this for prefab-keyed channels (e.g. VFX) where many channels share the same
+        /// type but differ by asset — the key disambiguates.
+        /// </summary>
+        public TItem GetOrRegister<TItem>(string key, Func<PoolChannel<TItem>> factory)
+            where TItem : UnityEngine.Component, IPoolable
+        {
+            if (!_channels.ContainsKey(key))
+                Register(key, factory());
+            return Get<TItem>(key);
+        }
+
+        /// <summary>
+        /// Access the underlying channel if needed (e.g. for direct channel reference in auto-return callbacks).
+        /// </summary>
+        public PoolChannel<TItem> GetChannel<TItem>(string key)
+            where TItem : UnityEngine.Component, IPoolable
+        {
+            if (_channels.TryGetValue(key, out var channel))
+                return (PoolChannel<TItem>)channel;
 
             throw new InvalidOperationException(
-                $"Pool channel {typeof(T).Name} not registered. Use Channel<T>(factory) first.");
+                $"Pool channel '{key}' not registered. Call Register() first.");
         }
     }
 }

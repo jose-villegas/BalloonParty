@@ -554,9 +554,10 @@ All pooling goes through a single pattern: `PoolChannel<TItem>` + `PoolManager`.
 
 | File | Location | Responsibility |
 |---|---|---|
-| `PoolChannel<TItem>` | `Shared/Pool/ComponentPool.cs` | Abstract base — `Stack<TItem>`, `Get()`/`Return()`, abstract `Create()` |
+| `IPoolChannel` | `Shared/Pool/PoolChannel.cs` | Non-generic marker interface for type-safe dictionary storage |
+| `PoolChannel<TItem>` | `Shared/Pool/PoolChannel.cs` | Abstract base implementing `IPoolChannel` — `Stack<TItem>`, `Get()`/`Return()`, abstract `Create()` |
 | `IPoolable` | `Shared/Pool/IPoolable.cs` | Contract: `OnSpawned()`, `OnDespawned()` |
-| `PoolManager` | `Shared/Pool/PoolManager.cs` | Injectable singleton registry; channels keyed by `(Type, object)` for multi-instance support |
+| `PoolManager` | `Shared/Pool/PoolManager.cs` | Injectable singleton registry; `Dictionary<string, IPoolChannel>` keyed by string (prefab name or explicit key) |
 | `VfxPoolChannel` | `Shared/Pool/VfxPoolChannel.cs` | Particle pool — one channel per prefab, auto-returns via `PoolableParticle` |
 | `PoolableParticle` | `Shared/Pool/PoolableParticle.cs` | `IPoolable` wrapper; auto-returns when `!IsAlive()` |
 | `ProjectilePoolChannel` | `Projectile/ProjectilePoolChannel.cs` | Projectile pool — creates via `CreateChildFromPrefab` |
