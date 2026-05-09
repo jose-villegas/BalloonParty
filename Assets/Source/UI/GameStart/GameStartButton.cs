@@ -26,9 +26,7 @@ namespace BalloonParty.UI.GameStart
 
         private void OnClick()
         {
-            for (var i = 0; i < _config.GameStartedBalloonLines; i++)
-                _spawnPublisher.Publish(default);
-
+            _spawnPublisher.Publish(new SpawnBalloonLineMessage(_config.GameStartedBalloonLines));
             gameObject.SetActive(false);
         }
     }

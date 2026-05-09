@@ -60,7 +60,7 @@ Assets/Source/
     SlotGrid.cs, SlotGridChangedEvent.cs
     SlotGridController.cs, SlotGridView.cs
   Projectile/
-    ProjectileLifetimeScope.cs
+    ProjectileLifetimeScope.cs, ProjectilePoolChannel.cs
     Model/          ProjectileModel.cs
     View/           ProjectileView.cs, ProjectileShieldView.cs
     Controller/     ← Phase 9 (currently handled inside ProjectileView)
@@ -72,6 +72,8 @@ Assets/Source/
     GameManager.cs         ← Phase 9
   Shared/
     IGameConfiguration.cs, IReusable.cs
+    Pool/           PoolChannel.cs, IPoolable.cs, PoolManager.cs,
+                    PoolableParticle.cs, VfxPoolChannel.cs
     Messages/       BalanceBalloonsMessage.cs, BalloonHitMessage.cs,
                     BalloonScoredMessage.cs, ScoreLevelUpMessage.cs,
                     SpawnBalloonLineMessage.cs, ProjectileDestroyedMessage.cs,
@@ -461,7 +463,49 @@ protected override void Configure(IContainerBuilder builder)
 
 ---
 
-## Phase 7e — Game Start
+## Phase 7e — Auto-Spawning Balloon Lines on Projectile Death
+
+**Goal:** After each projectile death (from the second turn onward), automatically spawn new balloon lines — replacing `NewBalloonLinesInstanceSystem` and `GameStartedBalloonsSpawnSystem`.
+
+> References: `NewBalloonLinesInstanceSystem.cs`, `GameStartedBalloonsSpawnSystem.cs`, `GameTurnCounterComponent.cs`
+
+### Legacy behaviour
+
+1. A `GameTurnCounter` component tracks the turn number (incremented each time a projectile dies in `ProjectileBounceSystem`)
+2. `GameStartedBalloonsSpawnSystem` spawns `GameStartedBalloonLines` lines on game start, with `NewBalloonLinesTimeInterval` delay between each
+3. `NewBalloonLinesInstanceSystem` reacts to `GameTurnCounter` changes — on turn > 1 (i.e. not the first projectile death), spawns `NewProjectileBalloonLines` lines with `NewBalloonLinesTimeInterval` delay, then triggers power-up check and balance
+
+### New implementation
+
+All logic lives in `BalloonSpawner`:
+
+1. **`BalloonSpawner`** subscribes to `ProjectileDestroyedMessage` in addition to `SpawnBalloonLineMessage`
+2. Tracks `_turnCount` — incremented on each `ProjectileDestroyedMessage`; skips spawning on turn ≤ 1 (first death is the initial projectile fired after game start)
+3. On turn > 1: runs a coroutine that spawns `NewProjectileBalloonLines` lines with `NewBalloonLinesTimeInterval` delay between each, then publishes `BalanceBalloonsMessage` once after all lines
+4. Uses `SpawnLineInternal()` (no per-line balance) vs `SpawnLine()` (with balance) to avoid redundant balance passes during multi-line spawning
+
+### `SpawnBalloonLineMessage` changes
+
+- Added `LineCount` field (default 1) so callers can request multiple delayed lines in a single message
+- `GameStartButton` now publishes `new SpawnBalloonLineMessage(GameStartedBalloonLines)` — game-start lines also spawn with delays between them, matching legacy
+
+### Coroutine runner
+
+`BalloonSpawner` is a plain C# class (`IStartable`), so it injects `SlotGridView` (a scene-placed MonoBehaviour) as a coroutine runner. This is the same pattern the legacy used with `_contexts.game.coroutineRunner.Value`.
+
+### Files changed
+
+| File | Change |
+|---|---|
+| `BalloonSpawner.cs` | Added `ProjectileDestroyedMessage` subscription, turn tracking, `SpawnLinesWithDelay` coroutine, `SpawnLineInternal` extraction |
+| `SpawnBalloonLineMessage.cs` | Added `LineCount` property |
+| `GameStartButton.cs` | Publishes single message with `LineCount` instead of N separate messages |
+
+✅ **Checkpoint:** Fire projectile → it bounces and dies → new balloon lines spawn from below with staggered timing → grid rebalances after all lines settle. First projectile death (after game start) does **not** spawn new lines.
+
+---
+
+## Phase 7f — Game Start
 
 **Goal:** Replace the legacy `isGameStarted` entity flag with `GameStartButton` publishing `SpawnBalloonLineMessage`, so the game can be started independently of any Entitas system.
 
@@ -482,7 +526,7 @@ protected override void Configure(IContainerBuilder builder)
 
 ---
 
-## Phase 7f — HUD Audit & Cleanup
+## Phase 7g — HUD Audit & Cleanup
 
 **Goal:** Confirm zero active Entitas UI in the scene; remove stubs.
 
@@ -494,7 +538,67 @@ protected override void Configure(IContainerBuilder builder)
 
 ---
 
-## Phase 7g — Configuration Migration
+## Phase 7h — Object Pooling & VFX/Trail Decoupling
+
+**Goal:** Replace all `Instantiate`/`Destroy` patterns with a generic pooling system. Decouple VFX and trails from the projectile hierarchy so they survive projectile recycling.
+
+### Problem
+
+1. Projectile instances were never cleaned up — `Destroy(gameObject)` left orphaned scopes, and `IStartable` on a MonoBehaviour caused double `Start()` calls, spawning duplicate projectiles.
+2. When the projectile is pooled and reactivated, `TrailRenderer` snaps to the new position, creating a visible line artifact.
+3. VFX parented to the projectile get repositioned or cut short on recycle.
+
+### Solution — Generic Pool Architecture
+
+All pooling goes through a single pattern: `PoolChannel<TItem>` + `PoolManager`. See `Assets/Source/Shared/Pool/README.md` for full documentation.
+
+| File | Location | Responsibility |
+|---|---|---|
+| `PoolChannel<TItem>` | `Shared/Pool/ComponentPool.cs` | Abstract base — `Stack<TItem>`, `Get()`/`Return()`, abstract `Create()` |
+| `IPoolable` | `Shared/Pool/IPoolable.cs` | Contract: `OnSpawned()`, `OnDespawned()` |
+| `PoolManager` | `Shared/Pool/PoolManager.cs` | Injectable singleton registry; channels keyed by `(Type, object)` for multi-instance support |
+| `VfxPoolChannel` | `Shared/Pool/VfxPoolChannel.cs` | Particle pool — one channel per prefab, auto-returns via `PoolableParticle` |
+| `PoolableParticle` | `Shared/Pool/PoolableParticle.cs` | `IPoolable` wrapper; auto-returns when `!IsAlive()` |
+| `ProjectilePoolChannel` | `Projectile/ProjectilePoolChannel.cs` | Projectile pool — creates via `CreateChildFromPrefab` |
+
+### Key decisions
+
+- **`ThrowerController` no longer implements `IStartable`** — a MonoBehaviour registered via `RegisterComponentInHierarchy` gets `Start()` called by both Unity and VContainer, causing duplicate projectile spawns. Removed `IStartable`; uses Unity's `Start()` only.
+- **Projectile is pooled, not destroyed** — `ProjectileView` implements `IPoolable`; on death it publishes messages but does not `Destroy`. `ThrowerController.Reload()` returns it to the pool and immediately gets it back (single-item pool).
+- **`ProjectileShieldView` hides on `Awake()`, shows on first fired frame** — mirrors legacy timing where shields were added at fire time, not load time.
+- **VFX are world-space orphans** — `VfxPoolChannel` instantiates particles unparented; `PoolableParticle` auto-returns after lifetime. No VFX is a child of the projectile.
+
+### Trail handling
+
+- **`OnDespawned()`** — `_trail.emitting = false` + `_trail.Clear()`
+- **`OnSpawned()`** — re-enable `_trail.emitting` after one frame via coroutine (prevents snap artifact)
+
+### Changes to existing files
+
+| File | Change |
+|---|---|
+| `ProjectileView.cs` | Implements `IPoolable`; `[SerializeField] TrailRenderer _trail`; trail clear/re-enable on pool transitions; removed `Destroy(gameObject)` |
+| `ProjectileShieldView.cs` | Injects `PoolManager`; uses `VfxPoolChannel` for VFX; added `Reset()` and `Show()` |
+| `BalloonView.cs` | Injects `PoolManager`; uses `VfxPoolChannel` for pop VFX |
+| `ThrowerController.cs` | Removed `IStartable`; uses `PoolManager` + `ProjectilePoolChannel` |
+| `GameLifetimeScope.cs` | Registers `PoolManager` as singleton |
+
+### Registration
+
+```csharp
+// GameLifetimeScope
+builder.Register<PoolManager>(Lifetime.Singleton);
+```
+
+### Unity Editor steps
+
+1. On the projectile prefab, assign the `Trail` child's `TrailRenderer` to `ProjectileView._trail`
+
+✅ **Checkpoint:** Fire projectile → it bounces and dies → no trail line artifact on reload → shield gain/lose/bounce VFX play at correct world positions and fade independently of the projectile lifecycle. Only one projectile instance exists in the hierarchy.
+
+---
+
+## Phase 7i — Configuration Migration
 
 **Goal:** Move `GameConfiguration` and its supporting types out of `Source_Old` into `Source/` so the configuration layer is self-contained in the new codebase before `Source_Old` is deleted.
 
@@ -861,9 +965,11 @@ Classes follow a strict top-to-bottom ordering by visibility and purpose:
 | 7b    | Level-Up Popup                            | ✅ Done         |
 | 7c    | Shield Counter HUD                        | ✅ Done         |
 | 7d    | Projectile Shield Visuals & Gain Logic    | ⬜ Wiring only  |
-| 7e    | Game Start                                | ⬜ Wiring only  |
-| 7f    | HUD Audit & Cleanup                       | ⬜ Todo         |
-| 7g    | Configuration Migration                   | ⬜ Todo         |
+| 7e    | Auto-Spawning on Projectile Death         | ✅ Done         |
+| 7f    | Game Start                                | ⬜ Wiring only  |
+| 7g    | HUD Audit & Cleanup                       | ⬜ Todo         |
+| 7h    | Object Pooling & VFX/Trail Decoupling     | ✅ Done         |
+| 7i    | Configuration Migration                   | ⬜ Todo         |
 | 8     | Power-Ups                                 | ⬜ Todo         |
 | 9     | Game Loop, UI & Cleanup                   | ⬜ Todo         |
 

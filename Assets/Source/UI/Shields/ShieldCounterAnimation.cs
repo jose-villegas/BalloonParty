@@ -14,7 +14,7 @@ namespace BalloonParty.UI.Shields
         [Inject] private ShieldCounterLabel[] _labels;
 
         [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
-        [Inject] private ISubscriber<BalanceBalloonsMessage> _balanceSubscriber;
+        [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
 
         private readonly CompositeDisposable _disposable = new();
         private Animator _animator;
@@ -31,7 +31,7 @@ namespace BalloonParty.UI.Shields
         private void Initialize()
         {
             _loadedSubscriber.Subscribe(OnProjectileLoaded).AddTo(_disposable);
-            _balanceSubscriber.Subscribe(_ => OnBalancing()).AddTo(_disposable);
+            _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed()).AddTo(_disposable);
         }
 
         private void OnDestroy()
@@ -63,7 +63,7 @@ namespace BalloonParty.UI.Shields
             _animator.SetTrigger("Ready");
         }
 
-        private void OnBalancing()
+        private void OnProjectileDestroyed()
         {
             _animator.SetTrigger("Waiting");
             _shieldSubscription?.Dispose();

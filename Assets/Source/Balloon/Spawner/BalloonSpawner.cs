@@ -1,3 +1,4 @@
+using System.Collections;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
@@ -20,6 +21,10 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly IObjectResolver _resolver;
         private readonly BalloonSpawnerSettings _settings;
+        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private readonly MonoBehaviour _coroutineRunner;
+
+        private int _turnCount;
 
         [Inject]
         public BalloonSpawner(
@@ -29,7 +34,9 @@ namespace BalloonParty.Balloon.Spawner
             IObjectResolver resolver,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
-            ISubscriber<BalloonHitMessage> hitSubscriber)
+            ISubscriber<BalloonHitMessage> hitSubscriber,
+            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
+            SlotGridView coroutineRunner)
         {
             _grid = grid;
             _settings = settings;
@@ -38,23 +45,19 @@ namespace BalloonParty.Balloon.Spawner
             _lineSubscriber = lineSubscriber;
             _balancePublisher = balancePublisher;
             _hitSubscriber = hitSubscriber;
+            _destroyedSubscriber = destroyedSubscriber;
+            _coroutineRunner = coroutineRunner;
         }
 
         public void Start()
         {
-            _lineSubscriber.Subscribe(_ => SpawnLine());
+            _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount));
+            _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
         }
 
         public void SpawnLine()
         {
-            for (var col = 0; col < _grid.Columns; col++)
-            {
-                var firstEmptyRow = FindFirstEmptyRowFromTop(col);
-                if (!firstEmptyRow.HasValue) continue;
-
-                SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, firstEmptyRow.Value));
-            }
-
+            SpawnLineInternal();
             _balancePublisher.Publish(default);
         }
 
@@ -100,6 +103,47 @@ namespace BalloonParty.Balloon.Spawner
                 if (_grid.IsEmpty(col, row))
                     return row;
             return null;
+        }
+
+        private void SpawnLineInternal()
+        {
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                var firstEmptyRow = FindFirstEmptyRowFromTop(col);
+                if (!firstEmptyRow.HasValue) continue;
+
+                SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, firstEmptyRow.Value));
+            }
+        }
+
+        private void OnSpawnLinesRequested(int lineCount)
+        {
+            if (lineCount <= 1)
+            {
+                SpawnLine();
+                return;
+            }
+
+            _coroutineRunner.StartCoroutine(SpawnLinesWithDelay(lineCount));
+        }
+
+        private void OnProjectileDestroyed()
+        {
+            _turnCount++;
+            if (_turnCount <= 1) return;
+
+            _coroutineRunner.StartCoroutine(SpawnLinesWithDelay(_config.NewProjectileBalloonLines));
+        }
+
+        private IEnumerator SpawnLinesWithDelay(int lineCount)
+        {
+            for (var i = 0; i < lineCount; i++)
+            {
+                SpawnLineInternal();
+                yield return new WaitForSeconds(_config.NewBalloonLinesTimeInterval);
+            }
+
+            _balancePublisher.Publish(default);
         }
     }
 }

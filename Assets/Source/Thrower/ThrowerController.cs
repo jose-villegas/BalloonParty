@@ -1,6 +1,7 @@
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Projectile.View;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using DG.Tweening;
@@ -11,13 +12,14 @@ using VContainer.Unity;
 
 namespace BalloonParty.Thrower
 {
-    public class ThrowerController : MonoBehaviour, IStartable
+    public class ThrowerController : MonoBehaviour
     {
         [Inject] private IGameConfiguration _config;
         [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         [Inject] private SlotGrid _grid;
         [Inject] private IPublisher<ProjectileLoadedMessage> _loadedPublisher;
         [Inject] private LifetimeScope _parentScope;
+        [Inject] private PoolManager _poolManager;
         [Inject] private ThrowerSettings _settings;
 
         private ProjectileModel _activeProjectile;
@@ -25,7 +27,7 @@ namespace BalloonParty.Thrower
         private Vector3 _direction = Vector3.up;
         private bool _isMovable;
 
-        public void Start()
+        private void Start()
         {
             _destroyedSubscriber.Subscribe(_ => Reload());
 
@@ -110,19 +112,9 @@ namespace BalloonParty.Thrower
 
         private void LoadProjectile()
         {
-            if (_settings.ProjectileScopePrefab == null) return;
-
-            var childScope = _parentScope.CreateChildFromPrefab(_settings.ProjectileScopePrefab);
-            childScope.transform.SetParent(null);
-            childScope.transform.position = transform.position;
-
-            _activeView = childScope.GetComponentInChildren<ProjectileView>();
-
-            if (_activeView == null)
-            {
-                Destroy(childScope.gameObject);
-                return;
-            }
+            _activeView = _poolManager.Channel(() =>
+                new ProjectilePoolChannel(_parentScope, _settings.ProjectileScopePrefab)).Get();
+            _activeView.transform.position = transform.position;
 
             _activeProjectile = new ProjectileModel
             {
@@ -136,12 +128,14 @@ namespace BalloonParty.Thrower
             _loadedPublisher.Publish(new ProjectileLoadedMessage(_activeProjectile));
         }
 
-
         private void Reload()
         {
+            if (_activeView != null)
+                _poolManager.Channel<ProjectilePoolChannel>().Return(_activeView);
             _activeProjectile = null;
             _activeView = null;
             LoadProjectile();
         }
+
     }
 }

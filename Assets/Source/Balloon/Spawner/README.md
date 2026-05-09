@@ -2,7 +2,14 @@
 
 Responsible for introducing balloons into the grid — both at game start and during play.
 
-When a spawn-line signal is received, the spawner finds the bottom-most empty slot in each column and creates a balloon there. Each balloon drops in from above its target position with a randomised animation duration. After all balloons in a line are placed, a balance pass is triggered so the grid settles correctly.
+When a spawn-line signal is received, the spawner finds the first empty slot from the top in each column and creates a balloon there. Each balloon drops in from above its target position with a randomised animation duration. After all balloons in a line are placed, a balance pass is triggered so the grid settles correctly.
 
-The spawner interacts with the slot grid (to place balloons), the balancer (which it notifies after each line), and the game loop (which controls when lines are spawned and how many).
+After each projectile death (starting from the second turn onward), the spawner automatically spawns `NewProjectileBalloonLines` lines with `NewBalloonLinesTimeInterval` delay between each — matching the legacy `NewBalloonLinesInstanceSystem` behaviour. The first projectile death is skipped because game-start lines are spawned separately via `GameStartButton`.
 
+## Interactions
+
+- **SlotGrid** — queried for empty slots, used to place balloon models
+- **BalloonBalancer** — notified via `BalanceBalloonsMessage` after each line spawns
+- **SpawnBalloonLineMessage** — triggers a single line spawn (used by `GameStartButton` and cheats)
+- **ProjectileDestroyedMessage** — triggers automatic multi-line spawning after each turn
+- **IGameConfiguration** — provides `BalloonColors`, `BalloonSpawnAnimationDurationRange`, `NewProjectileBalloonLines`, `NewBalloonLinesTimeInterval`

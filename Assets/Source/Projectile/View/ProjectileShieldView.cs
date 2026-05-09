@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared;
 using DG.Tweening;
 using UniRx;
 using UnityEngine;
@@ -23,6 +24,7 @@ namespace BalloonParty.Projectile.View
         [SerializeField] private ParticleSystem _shieldBounceVfxPrefab;
 
         [Inject] private IGameConfiguration _config;
+        [Inject] private PoolManager _poolManager;
 
         private readonly CompositeDisposable _disposable = new();
         private int _previousShieldCount;
@@ -31,6 +33,7 @@ namespace BalloonParty.Projectile.View
         {
             foreach (var shield in _shields)
                 shield.transform.localScale = Vector3.zero;
+            gameObject.SetActive(false);
         }
 
         private void OnDestroy()
@@ -43,6 +46,7 @@ namespace BalloonParty.Projectile.View
             _previousShieldCount = model.ShieldsRemaining.Value;
 
             model.ShieldsRemaining
+                .Skip(1)
                 .Subscribe(count =>
                 {
                     UpdateShieldVisuals(count);
@@ -55,6 +59,24 @@ namespace BalloonParty.Projectile.View
                 .Where(c => !string.IsNullOrEmpty(c))
                 .Subscribe(UpdateColor)
                 .AddTo(_disposable);
+        }
+
+        public void Show()
+        {
+            gameObject.SetActive(true);
+            UpdateShieldVisuals(_previousShieldCount);
+        }
+
+        public void Reset()
+        {
+            _disposable.Clear();
+            _previousShieldCount = 0;
+            foreach (var shield in _shields)
+            {
+                shield.transform.localScale = Vector3.zero;
+                shield.DOKill();
+            }
+            gameObject.SetActive(false);
         }
 
         public void PlayBounceVfx(Vector3 position, Color color)
@@ -101,17 +123,10 @@ namespace BalloonParty.Projectile.View
             return Color.white;
         }
 
-        private static void SpawnVfx(ParticleSystem prefab, Vector3 position, Color color)
+        private void SpawnVfx(ParticleSystem prefab, Vector3 position, Color color)
         {
             if (prefab == null) return;
-
-            var vfx = Instantiate(prefab, position, Quaternion.identity);
-            var main = vfx.main;
-            main.startColor = color;
-            vfx.Play();
-            Destroy(vfx.gameObject, main.duration + main.startLifetime.constantMax);
+            _poolManager.Channel(prefab, () => new VfxPoolChannel(prefab)).Get().Play(position, color);
         }
     }
 }
-
-

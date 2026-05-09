@@ -2,6 +2,7 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Debug;
 using BalloonParty.Projectile;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using BalloonParty.Thrower;
@@ -35,6 +36,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance(new ThrowerSettings(_projectileScopePrefab));
 
             builder.Register<SlotGrid>(Lifetime.Singleton);
+            builder.Register<PoolManager>(Lifetime.Singleton);
             builder.RegisterComponentInHierarchy<SlotGridView>();
             builder.RegisterComponentInHierarchy<SlotGridController>();
 
@@ -42,7 +44,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BalloonSpawner>().AsSelf();
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
 
-            builder.RegisterComponentInHierarchy<ThrowerController>().AsImplementedInterfaces().AsSelf();
+            builder.RegisterComponentInHierarchy<ThrowerController>().AsSelf();
             builder.RegisterComponentInHierarchy<GameStartButton>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

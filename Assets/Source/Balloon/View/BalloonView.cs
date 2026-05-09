@@ -1,4 +1,5 @@
 using BalloonParty.Balloon.Model;
+using BalloonParty.Shared;
 using UniRx;
 using UnityEngine;
 using VContainer;
@@ -23,6 +24,7 @@ namespace BalloonParty.Balloon.View
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private IGameConfiguration _config;
+        [Inject] private PoolManager _poolManager;
 
         public BalloonModel Model { get; private set; }
 
@@ -45,13 +47,7 @@ namespace BalloonParty.Balloon.View
 
         public void PlayPopEffect(Color color)
         {
-            if (_popVfxPrefab == null) return;
-
-            var vfx = Instantiate(_popVfxPrefab, transform.position, Quaternion.identity);
-            var main = vfx.main;
-            main.startColor = color;
-            vfx.Play();
-            Destroy(vfx.gameObject, main.duration + main.startLifetime.constantMax);
+            _poolManager.Channel(_popVfxPrefab, () => new VfxPoolChannel(_popVfxPrefab)).Get().Play(transform.position, color);
         }
 
         private void ApplyColor(string colorName)

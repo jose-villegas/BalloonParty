@@ -1,7 +1,9 @@
+using System.Collections;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared;
 using BalloonParty.Slots;
 using DG.Tweening;
 using MessagePipe;
@@ -10,12 +12,13 @@ using VContainer;
 
 namespace BalloonParty.Projectile.View
 {
-    public class ProjectileView : MonoBehaviour
+    public class ProjectileView : MonoBehaviour, IPoolable
     {
         [Header("Glow")] [SerializeField] private SpriteRenderer _glowRenderer;
 
         [SerializeField] [Range(0f, 1f)] private float _glowAlpha = 0.5f;
         [SerializeField] private float _glowColorDuration = 0.2f;
+        [SerializeField] private TrailRenderer _trail;
 
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IGameConfiguration _config;
@@ -25,15 +28,22 @@ namespace BalloonParty.Projectile.View
 
         private ProjectileModel _model;
         private ProjectileShieldView _shieldView;
+        private bool _shieldShown;
 
         private void Awake()
         {
-            _shieldView = GetComponent<ProjectileShieldView>();
+            _shieldView = GetComponentInChildren<ProjectileShieldView>(true);
         }
 
         private void FixedUpdate()
         {
             if (_model == null || !_model.IsFree) return;
+
+            if (!_shieldShown && _shieldView != null)
+            {
+                _shieldView.Show();
+                _shieldShown = true;
+            }
 
             var pos = transform.position;
             pos += _model.Direction * _model.Speed * Time.fixedDeltaTime;
@@ -75,7 +85,6 @@ namespace BalloonParty.Projectile.View
                 {
                     _balancePublisher.Publish(default);
                     _destroyedPublisher.Publish(default);
-                    Destroy(gameObject);
                     return;
                 }
 
@@ -108,10 +117,42 @@ namespace BalloonParty.Projectile.View
         public void Bind(ProjectileModel model)
         {
             _model = model;
+            _shieldShown = false;
             if (_shieldView != null)
                 _shieldView.Bind(model);
         }
 
+        public void OnSpawned()
+        {
+            _shieldShown = false;
+            if (_trail != null)
+                StartCoroutine(EnableTrailNextFrame());
+        }
+
+        public void OnDespawned()
+        {
+            _model = null;
+            _shieldShown = false;
+            if (_glowRenderer != null)
+            {
+                _glowRenderer.DOKill();
+                _glowRenderer.color = new Color(1f, 1f, 1f, 0f);
+            }
+            if (_trail != null)
+            {
+                _trail.emitting = false;
+                _trail.Clear();
+            }
+            if (_shieldView != null)
+                _shieldView.Reset();
+        }
+
+        private IEnumerator EnableTrailNextFrame()
+        {
+            yield return null;
+            if (_trail != null)
+                _trail.emitting = true;
+        }
 
         private void TrackColor(string hitColor)
         {
@@ -130,7 +171,7 @@ namespace BalloonParty.Projectile.View
                 _model.ColorPopCount = 1;
             }
 
-            if (_model.ColorPopCount >= 3)
+            if (_model.ColorPopCount >= 2)
             {
                 _model.ShieldsRemaining.Value++;
                 _model.ColorPopCount = 0;
