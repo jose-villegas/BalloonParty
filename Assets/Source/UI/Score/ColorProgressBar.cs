@@ -22,14 +22,14 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ScoreNotice _noticePrefab;
         [SerializeField] private ScorePointTrail _trailPrefab;
 
-        [Inject] private IGameConfiguration _config;
-        [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
-        [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
-        [Inject] private PoolManager _poolManager;
-
         private readonly List<ScoreNotice> _notices = new();
         private BalloonColorConfiguration _colorConfig;
+
+        [Inject] private IGameConfiguration _config;
+        [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private int _localCount;
+        [Inject] private PoolManager _poolManager;
+        [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
         private string _trailPoolKey;
 
         public void Setup(BalloonColorConfiguration colorConfig, ScoreController scoreController)

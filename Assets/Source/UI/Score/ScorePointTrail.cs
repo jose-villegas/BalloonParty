@@ -14,6 +14,14 @@ namespace BalloonParty.UI.Score
 
         private Action<ScorePointTrail> _returnToPool;
 
+        public void OnSpawned()
+        {
+        }
+
+        public void OnDespawned()
+        {
+        }
+
         public void Initialize(Action<ScorePointTrail> returnToPool)
         {
             _returnToPool = returnToPool;
@@ -36,9 +44,5 @@ namespace BalloonParty.UI.Score
                 _returnToPool?.Invoke(this);
             });
         }
-
-        public void OnSpawned() { }
-
-        public void OnDespawned() { }
     }
 }

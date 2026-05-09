@@ -25,36 +25,9 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
 
         private ProjectileModel _model;
-        private ProjectileShieldView _shieldView;
         private ProjectileTrail _projectileTrail;
         private bool _shieldShown;
-
-        public void Bind(ProjectileModel model)
-        {
-            _model = model;
-            _shieldShown = false;
-            if (_shieldView != null)
-                _shieldView.Bind(model);
-        }
-
-        public void OnSpawned()
-        {
-            _shieldShown = false;
-        }
-
-        public void OnDespawned()
-        {
-            _model = null;
-            _shieldShown = false;
-            if (_glowRenderer != null)
-            {
-                _glowRenderer.DOKill();
-                _glowRenderer.color = new Color(1f, 1f, 1f, 0f);
-            }
-            _projectileTrail?.Disable();
-            if (_shieldView != null)
-                _shieldView.Reset();
-        }
+        private ProjectileShieldView _shieldView;
 
         private void Awake()
         {
@@ -141,6 +114,34 @@ namespace BalloonParty.Projectile.View
             TrackColor(balloonModel.Color.Value);
             NudgeNeighbors(balloonModel);
             _hitPublisher.Publish(new BalloonHitMessage(balloonModel, balloonView.transform.position));
+        }
+
+        public void OnSpawned()
+        {
+            _shieldShown = false;
+        }
+
+        public void OnDespawned()
+        {
+            _model = null;
+            _shieldShown = false;
+            if (_glowRenderer != null)
+            {
+                _glowRenderer.DOKill();
+                _glowRenderer.color = new Color(1f, 1f, 1f, 0f);
+            }
+
+            _projectileTrail?.Disable();
+            if (_shieldView != null)
+                _shieldView.Reset();
+        }
+
+        public void Bind(ProjectileModel model)
+        {
+            _model = model;
+            _shieldShown = false;
+            if (_shieldView != null)
+                _shieldView.Bind(model);
         }
 
         private void TrackColor(string hitColor)

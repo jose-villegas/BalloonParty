@@ -61,7 +61,7 @@ namespace BalloonParty.UI.LevelUp
         {
             await UniTask.Delay(
                 (int)(_playParticlesDelay * 1000),
-                ignoreTimeScale: true,
+                true,
                 cancellationToken: destroyCancellationToken);
 
             var duration = _levelGlowFillParticleSystem.main.duration;
@@ -72,14 +72,14 @@ namespace BalloonParty.UI.LevelUp
 
             await UniTask.Delay(
                 (int)(_fillAnimationDelay * 1000),
-                ignoreTimeScale: true,
+                true,
                 cancellationToken: destroyCancellationToken);
 
             while (elapsed <= duration)
             {
                 _levelGlowFill.fillAmount = elapsed / duration;
                 elapsed += Time.unscaledDeltaTime;
-                await UniTask.Yield(cancellationToken: destroyCancellationToken);
+                await UniTask.Yield(destroyCancellationToken);
             }
 
             _levelGlowFill.fillAmount = 1f;
@@ -90,7 +90,7 @@ namespace BalloonParty.UI.LevelUp
         {
             await UniTask.Delay(
                 (int)(_continueUnpauseDelay * 1000),
-                ignoreTimeScale: true,
+                true,
                 cancellationToken: destroyCancellationToken);
             Time.timeScale = 1f;
         }

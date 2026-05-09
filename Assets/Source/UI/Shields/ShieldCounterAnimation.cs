@@ -11,14 +11,13 @@ namespace BalloonParty.UI.Shields
     [RequireComponent(typeof(Animator))]
     public class ShieldCounterAnimation : MonoBehaviour
     {
-        [Inject] private ShieldCounterLabel[] _labels;
-
-        [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
-        [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
-
         private readonly CompositeDisposable _disposable = new();
         private Animator _animator;
+        [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        [Inject] private ShieldCounterLabel[] _labels;
         private int _lastShieldValue;
+
+        [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private IDisposable _shieldSubscription;
 
         private void Awake()
@@ -27,17 +26,17 @@ namespace BalloonParty.UI.Shields
             _animator.SetTrigger("Waiting");
         }
 
+        private void OnDestroy()
+        {
+            _disposable.Dispose();
+            _shieldSubscription?.Dispose();
+        }
+
         [Inject]
         private void Initialize()
         {
             _loadedSubscriber.Subscribe(OnProjectileLoaded).AddTo(_disposable);
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed()).AddTo(_disposable);
-        }
-
-        private void OnDestroy()
-        {
-            _disposable.Dispose();
-            _shieldSubscription?.Dispose();
         }
 
         private void BindProjectile(ProjectileModel model)

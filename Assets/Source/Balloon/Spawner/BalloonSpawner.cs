@@ -1,3 +1,4 @@
+using System.Threading;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
@@ -7,7 +8,6 @@ using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MessagePipe;
-using System.Threading;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -16,19 +16,18 @@ namespace BalloonParty.Balloon.Spawner
 {
     public class BalloonSpawner : IStartable
     {
+        private const string BalloonPoolKey = "Balloon";
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly IGameConfiguration _config;
+        private readonly CancellationTokenSource _cts = new();
+        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
+        private readonly PoolManager _poolManager;
         private readonly IObjectResolver _resolver;
         private readonly BalloonSpawnerSettings _settings;
-        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
-        private readonly PoolManager _poolManager;
-
-        private const string BalloonPoolKey = "Balloon";
         private int _turnCount;
-        private CancellationTokenSource _cts = new();
 
         [Inject]
         public BalloonSpawner(

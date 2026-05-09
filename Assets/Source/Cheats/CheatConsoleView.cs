@@ -12,10 +12,10 @@ namespace BalloonParty.Cheats
         private const float HandleHeight = 14f;
         private const float ReferenceHeight = 720f;
 
-        [Inject] private IEnumerable<ICheat> _cheats;
-
         private readonly HashSet<string> _favorites = new();
         private string _activeTag = string.Empty;
+
+        [Inject] private IEnumerable<ICheat> _cheats;
         private float _consoleHeight = 280f;
         private bool _resizing;
         private Vector2 _scroll;

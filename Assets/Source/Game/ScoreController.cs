@@ -12,9 +12,6 @@ namespace BalloonParty.Game
 {
     public class ScoreController : IStartable, IDisposable
     {
-        public ReactiveProperty<int> TotalScore { get; } = new(0);
-        public ReactiveProperty<int> Level { get; } = new(0);
-
         private const string LevelKey = "Level";
         private const string ProgressSuffix = ".Progress";
         private readonly IGameConfiguration _config;
@@ -37,6 +34,9 @@ namespace BalloonParty.Game
             _levelUpPublisher = levelUpPublisher;
             _config = config;
         }
+
+        public ReactiveProperty<int> TotalScore { get; } = new(0);
+        public ReactiveProperty<int> Level { get; } = new(0);
 
         public void Dispose()
         {

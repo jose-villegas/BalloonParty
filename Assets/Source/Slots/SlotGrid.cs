@@ -32,7 +32,7 @@ namespace BalloonParty.Slots
         {
             if (_slots[index.x, index.y] != null)
             {
-                UnityEngine.Debug.LogError(
+                Debug.LogError(
                     $"SlotGrid.Place: slot ({index.x},{index.y}) is already occupied! Skipping.");
                 return;
             }

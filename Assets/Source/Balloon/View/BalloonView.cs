@@ -10,9 +10,6 @@ namespace BalloonParty.Balloon.View
 {
     public class BalloonView : MonoBehaviour, IPoolable
     {
-        public BalloonModel Model { get; private set; }
-        public TweenTracker TweenTracker { get; private set; }
-
         [Header("References")] [SerializeField]
         private SpriteRenderer _renderer;
 
@@ -28,15 +25,31 @@ namespace BalloonParty.Balloon.View
 
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
+        private readonly CompositeDisposable _bindDisposables = new();
+
         [Inject] private IGameConfiguration _config;
         [Inject] private PoolManager _poolManager;
-
-        private readonly CompositeDisposable _bindDisposables = new();
+        public BalloonModel Model { get; private set; }
+        public TweenTracker TweenTracker { get; private set; }
 
 
         private void Awake()
         {
             TweenTracker = GetComponent<TweenTracker>();
+        }
+
+        public void OnSpawned()
+        {
+            transform.localScale = Vector3.one;
+            transform.position = Vector3.one * -1000f;
+        }
+
+        public void OnDespawned()
+        {
+            TweenTracker.Kill();
+            transform.DOKill();
+            _bindDisposables.Clear();
+            Model = null;
         }
 
         public void RegisterDisposeOnDespawn(IDisposable disposable)
@@ -64,21 +77,8 @@ namespace BalloonParty.Balloon.View
 
         public void PlayPopEffect(Color color)
         {
-            _poolManager.GetOrRegister(_popVfxPrefab.name, () => new VfxPoolChannel(_popVfxPrefab)).Play(transform.position, color);
-        }
-
-        public void OnSpawned()
-        {
-            transform.localScale = Vector3.one;
-            transform.position = Vector3.one * -1000f;
-        }
-
-        public void OnDespawned()
-        {
-            TweenTracker.Kill();
-            transform.DOKill();
-            _bindDisposables.Clear();
-            Model = null;
+            _poolManager.GetOrRegister(_popVfxPrefab.name, () => new VfxPoolChannel(_popVfxPrefab))
+                .Play(transform.position, color);
         }
 
         private void ApplyColor(string colorName)

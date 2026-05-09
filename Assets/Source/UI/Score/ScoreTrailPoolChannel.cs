@@ -21,4 +21,3 @@ namespace BalloonParty.UI.Score
         }
     }
 }
-
