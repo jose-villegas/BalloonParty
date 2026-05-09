@@ -14,6 +14,9 @@ namespace BalloonParty.Slots
         }
     }
 
-    public enum SlotGridChangeType { Placed, Removed }
+    public enum SlotGridChangeType
+    {
+        Placed,
+        Removed
+    }
 }
-

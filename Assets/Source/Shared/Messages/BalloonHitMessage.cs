@@ -1,5 +1,5 @@
-using UnityEngine;
 using BalloonParty.Balloon.Model;
+using UnityEngine;
 
 namespace BalloonParty.Shared.Messages
 {
@@ -15,4 +15,3 @@ namespace BalloonParty.Shared.Messages
         }
     }
 }
-

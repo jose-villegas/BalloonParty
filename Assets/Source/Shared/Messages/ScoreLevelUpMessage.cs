@@ -4,7 +4,9 @@ namespace BalloonParty.Shared.Messages
     {
         public readonly int NewLevel;
 
-        public ScoreLevelUpMessage(int newLevel) => NewLevel = newLevel;
+        public ScoreLevelUpMessage(int newLevel)
+        {
+            NewLevel = newLevel;
+        }
     }
 }
-

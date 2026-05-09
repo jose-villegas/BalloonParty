@@ -12,18 +12,15 @@ namespace BalloonParty.Slots
         {
             if (_grid == null) return;
 
-            for (int col = 0; col < _grid.Columns; col++)
+            for (var col = 0; col < _grid.Columns; col++)
+            for (var row = 0; row < _grid.Rows; row++)
             {
-                for (int row = 0; row < _grid.Rows; row++)
-                {
-                    var position = _grid.IndexToWorldPosition(new Vector2Int(col, row));
-                    Gizmos.color = _grid.IsEmpty(col, row)
-                        ? new Color(1f, 1f, 1f, 0.2f)
-                        : new Color(0f, 1f, 0f, 0.4f);
-                    Gizmos.DrawWireSphere(position, 0.2f);
-                }
+                var position = _grid.IndexToWorldPosition(new Vector2Int(col, row));
+                Gizmos.color = _grid.IsEmpty(col, row)
+                    ? new Color(1f, 1f, 1f, 0.2f)
+                    : new Color(0f, 1f, 0f, 0.4f);
+                Gizmos.DrawWireSphere(position, 0.2f);
             }
         }
     }
 }
-

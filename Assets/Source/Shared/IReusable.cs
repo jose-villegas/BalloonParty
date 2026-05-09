@@ -5,4 +5,3 @@ namespace BalloonParty.Shared
         bool IsUsable { get; }
     }
 }
-

@@ -1,8 +1,7 @@
+using BalloonParty.Balloon.Model;
 using UniRx;
 using UnityEngine;
 using VContainer;
-using BalloonParty.Balloon.Model;
-using BalloonParty.Configuration;
 
 namespace BalloonParty.Balloon.View
 {

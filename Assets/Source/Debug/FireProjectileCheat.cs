@@ -8,17 +8,19 @@ namespace BalloonParty.Debug
     {
         private readonly ThrowerController _thrower;
 
-        public string Name => "Fire Projectile";
-        public string Section => "Thrower";
-        public IReadOnlyList<string> Tags => new[] { "projectile", "thrower" };
-
         public FireProjectileCheat(ThrowerController thrower)
         {
             _thrower = thrower;
         }
 
-        public void Execute() => _thrower.FireImmediate();
+        public string Name => "Fire Projectile";
+        public string Section => "Thrower";
+        public IReadOnlyList<string> Tags => new[] { "projectile", "thrower" };
+
+        public void Execute()
+        {
+            _thrower.FireImmediate();
+        }
     }
 }
 #endif
-

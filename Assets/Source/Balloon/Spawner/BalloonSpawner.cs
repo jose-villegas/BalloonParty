@@ -1,25 +1,25 @@
-using DG.Tweening;
-using MessagePipe;
-using UnityEngine;
-using VContainer;
-using VContainer.Unity;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
+using DG.Tweening;
+using MessagePipe;
+using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace BalloonParty.Balloon.Spawner
 {
     public class BalloonSpawner : IStartable
     {
-        private readonly SlotGrid _grid;
-        private readonly BalloonSpawnerSettings _settings;
-        private readonly IGameConfiguration _config;
-        private readonly IObjectResolver _resolver;
-        private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
+        private readonly IGameConfiguration _config;
+        private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
+        private readonly IObjectResolver _resolver;
+        private readonly BalloonSpawnerSettings _settings;
 
         [Inject]
         public BalloonSpawner(
@@ -47,7 +47,7 @@ namespace BalloonParty.Balloon.Spawner
 
         public void SpawnLine()
         {
-            for (int col = 0; col < _grid.Columns; col++)
+            for (var col = 0; col < _grid.Columns; col++)
             {
                 var firstEmptyRow = FindFirstEmptyRowFromTop(col);
                 if (!firstEmptyRow.HasValue) continue;
@@ -96,13 +96,10 @@ namespace BalloonParty.Balloon.Spawner
 
         private int? FindFirstEmptyRowFromTop(int col)
         {
-            for (int row = 0; row < _grid.Rows; row++)
-            {
+            for (var row = 0; row < _grid.Rows; row++)
                 if (_grid.IsEmpty(col, row))
                     return row;
-            }
             return null;
         }
     }
 }
-

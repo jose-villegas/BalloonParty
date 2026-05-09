@@ -1,6 +1,6 @@
-using VContainer;
 using BalloonParty.Game;
 using UnityEngine;
+using VContainer;
 using VContainer.Unity;
 
 namespace BalloonParty.UI.Score
@@ -23,5 +23,3 @@ namespace BalloonParty.UI.Score
         }
     }
 }
-
-

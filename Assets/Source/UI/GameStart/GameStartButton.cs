@@ -1,19 +1,17 @@
+using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using BalloonParty.Configuration;
-using BalloonParty.Shared.Messages;
 
 namespace BalloonParty.UI.GameStart
 {
     [RequireComponent(typeof(Button))]
     public class GameStartButton : MonoBehaviour
     {
-        [Inject] private IPublisher<SpawnBalloonLineMessage> _spawnPublisher;
-        [Inject] private IGameConfiguration _config;
-
         private Button _button;
+        [Inject] private IGameConfiguration _config;
+        [Inject] private IPublisher<SpawnBalloonLineMessage> _spawnPublisher;
 
         private void Start()
         {
@@ -21,7 +19,10 @@ namespace BalloonParty.UI.GameStart
             _button.onClick.AddListener(OnClick);
         }
 
-        private void OnDestroy() => _button.onClick.RemoveListener(OnClick);
+        private void OnDestroy()
+        {
+            _button.onClick.RemoveListener(OnClick);
+        }
 
         private void OnClick()
         {
@@ -32,4 +33,3 @@ namespace BalloonParty.UI.GameStart
         }
     }
 }
-

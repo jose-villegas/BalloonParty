@@ -1,33 +1,28 @@
+using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.View;
+using BalloonParty.Projectile.Model;
+using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
-using BalloonParty.Balloon.Model;
-using BalloonParty.Configuration;
-using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
-using BalloonParty.Balloon.View;
 
 namespace BalloonParty.Projectile.View
 {
     public class ProjectileView : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer _glowRenderer;
-        [SerializeField, Range(0f, 1f)] private float _glowAlpha = 0.5f;
+        [SerializeField] [Range(0f, 1f)] private float _glowAlpha = 0.5f;
         [SerializeField] private float _glowColorDuration = 0.2f;
+        [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
 
         [Inject] private IGameConfiguration _config;
-        [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
-        [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
         [Inject] private SlotGrid _grid;
+        [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
 
-        private Model.ProjectileModel _model;
-
-        public void Bind(Model.ProjectileModel model)
-        {
-            _model = model;
-        }
+        private ProjectileModel _model;
 
         private void FixedUpdate()
         {
@@ -39,10 +34,29 @@ namespace BalloonParty.Projectile.View
             var reflect = Vector3.zero;
             var limits = _config.LimitsClockwise;
 
-            if (pos.y > limits.x) { reflect += Vector3.down; pos.y = limits.x; }
-            if (pos.x > limits.y) { reflect += Vector3.left; pos.x = limits.y; }
-            if (pos.y < limits.z) { reflect += Vector3.up;   pos.y = limits.z; }
-            if (pos.x < limits.w) { reflect += Vector3.right; pos.x = limits.w; }
+            if (pos.y > limits.x)
+            {
+                reflect += Vector3.down;
+                pos.y = limits.x;
+            }
+
+            if (pos.x > limits.y)
+            {
+                reflect += Vector3.left;
+                pos.x = limits.y;
+            }
+
+            if (pos.y < limits.z)
+            {
+                reflect += Vector3.up;
+                pos.y = limits.z;
+            }
+
+            if (pos.x < limits.w)
+            {
+                reflect += Vector3.right;
+                pos.x = limits.w;
+            }
 
             if (reflect != Vector3.zero)
             {
@@ -70,7 +84,7 @@ namespace BalloonParty.Projectile.View
             if (_model == null || !_model.IsFree) return;
             if (other.gameObject.layer != LayerMask.NameToLayer("Balloons")) return;
 
-            var balloonView = other.GetComponentInParent<Balloon.View.BalloonView>();
+            var balloonView = other.GetComponentInParent<BalloonView>();
             if (balloonView == null) return;
 
             var balloonModel = balloonView.Model;
@@ -82,6 +96,11 @@ namespace BalloonParty.Projectile.View
             TrackColor(balloonModel.Color.Value);
             NudgeNeighbors(balloonModel);
             _hitPublisher.Publish(new BalloonHitMessage(balloonModel, balloonView.transform.position));
+        }
+
+        public void Bind(ProjectileModel model)
+        {
+            _model = model;
         }
 
         private void TrackColor(string hitColor)
@@ -122,7 +141,8 @@ namespace BalloonParty.Projectile.View
                 var targetSlotPos = _grid.IndexToWorldPosition(neighbor.SlotIndex.Value);
 
                 var sequence = DOTween.Sequence();
-                sequence.Append(neighbor.View.transform.DOMove(neighborPos + direction.normalized * _config.NudgeDistance, _config.NudgeDuration / 2f));
+                sequence.Append(neighbor.View.transform.DOMove(
+                    neighborPos + direction.normalized * _config.NudgeDistance, _config.NudgeDuration / 2f));
                 sequence.Append(neighbor.View.transform.DOMove(targetSlotPos, _config.NudgeDuration / 2f));
 
                 neighbor.IsStable.Value = false;
@@ -136,4 +156,3 @@ namespace BalloonParty.Projectile.View
         }
     }
 }
-

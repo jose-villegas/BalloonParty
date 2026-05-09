@@ -1,6 +1,6 @@
+using BalloonParty.Balloon.Spawner;
 using UnityEngine;
 using VContainer;
-using BalloonParty.Balloon.Spawner;
 
 namespace BalloonParty.Slots
 {
@@ -18,13 +18,9 @@ namespace BalloonParty.Slots
 
         private void PopulateGrid()
         {
-            for (int row = 0; row < _initialLines; row++)
-            {
-                for (int col = 0; col < _grid.Columns; col++)
-                {
-                    _spawner.SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, row));
-                }
-            }
+            for (var row = 0; row < _initialLines; row++)
+            for (var col = 0; col < _grid.Columns; col++)
+                _spawner.SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, row));
         }
     }
 }

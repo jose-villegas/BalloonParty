@@ -1,5 +1,6 @@
 namespace BalloonParty.Shared.Messages
 {
-    public readonly struct ProjectileLoadedMessage { }
+    public readonly struct ProjectileLoadedMessage
+    {
+    }
 }
-

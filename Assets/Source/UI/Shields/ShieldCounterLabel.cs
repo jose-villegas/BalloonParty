@@ -1,24 +1,26 @@
+using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using BalloonParty.Configuration;
-using BalloonParty.Shared.Messages;
 
 namespace BalloonParty.UI.Shields
 {
     [RequireComponent(typeof(Text))]
     public class ShieldCounterLabel : MonoBehaviour
     {
-        [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+        private readonly CompositeDisposable _disposable = new();
         [Inject] private ISubscriber<BalanceBalloonsMessage> _balanceSubscriber;
         [Inject] private IGameConfiguration _config;
 
         private Text _label;
-        private readonly CompositeDisposable _disposable = new();
+        [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
 
-        private void Awake() => _label = GetComponent<Text>();
+        private void Awake()
+        {
+            _label = GetComponent<Text>();
+        }
 
         private void Start()
         {
@@ -33,7 +35,9 @@ namespace BalloonParty.UI.Shields
                 .AddTo(_disposable);
         }
 
-        private void OnDestroy() => _disposable.Dispose();
+        private void OnDestroy()
+        {
+            _disposable.Dispose();
+        }
     }
 }
-

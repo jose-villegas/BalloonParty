@@ -1,11 +1,11 @@
 using System.Collections;
+using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
 
 namespace BalloonParty.UI.LevelUp
 {
@@ -19,10 +19,10 @@ namespace BalloonParty.UI.LevelUp
         [SerializeField] private float _playParticlesDelay;
         [SerializeField] private float _continueUnpauseDelay;
 
-        [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
+        private readonly CompositeDisposable _disposable = new();
         [Inject] private SlotGrid _grid;
 
-        private readonly CompositeDisposable _disposable = new();
+        [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
 
         private void Start()
         {
@@ -31,7 +31,10 @@ namespace BalloonParty.UI.LevelUp
                 .AddTo(_disposable);
         }
 
-        private void OnDestroy() => _disposable.Dispose();
+        private void OnDestroy()
+        {
+            _disposable.Dispose();
+        }
 
         public void OnContinue()
         {
@@ -80,6 +83,3 @@ namespace BalloonParty.UI.LevelUp
         }
     }
 }
-
-
-

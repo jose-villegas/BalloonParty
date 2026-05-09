@@ -1,6 +1,5 @@
 using UnityEngine;
 using UnityEngine.UI;
-using BalloonParty.Shared;
 
 namespace BalloonParty.UI.Score
 {
@@ -12,8 +11,6 @@ namespace BalloonParty.UI.Score
         [SerializeField] private Text _shadow;
         [SerializeField] private float _maxScale = 2f;
         [SerializeField] private float _maxScaleScore = 100f;
-
-        public bool IsUsable { get; private set; }
         public Animator Animator => _animator;
 
         private void Awake()
@@ -21,6 +18,8 @@ namespace BalloonParty.UI.Score
             IsUsable = false;
             InvokeRepeating(nameof(CheckAvailability), 0f, 0.15f);
         }
+
+        public bool IsUsable { get; private set; }
 
         private void CheckAvailability()
         {
@@ -40,4 +39,3 @@ namespace BalloonParty.UI.Score
         }
     }
 }
-

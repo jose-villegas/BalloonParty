@@ -1,12 +1,11 @@
 using System.Collections.Generic;
+using BalloonParty.Game;
+using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using BalloonParty.Configuration;
-using BalloonParty.Game;
-using BalloonParty.Shared.Messages;
 
 namespace BalloonParty.UI.Score
 {
@@ -18,15 +17,15 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ParticleSystem _completionParticleSystem;
         [SerializeField] private ScoreNotice _noticePrefab;
         [SerializeField] private ScorePointTrail _trailPrefab;
-
-        [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
-        [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
-        [Inject] private IGameConfiguration _config;
-
-        private BalloonColorConfiguration _colorConfig;
         private readonly List<ScoreNotice> _notices = new();
         private readonly List<ScorePointTrail> _trails = new();
+
+        private BalloonColorConfiguration _colorConfig;
+        [Inject] private IGameConfiguration _config;
+        [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private int _localCount;
+
+        [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
 
         public void Setup(BalloonColorConfiguration colorConfig, ScoreController scoreController)
         {
@@ -85,6 +84,7 @@ namespace BalloonParty.UI.Score
                 notice = Instantiate(_noticePrefab, transform);
                 _notices.Add(notice);
             }
+
             notice.Show(_localCount, _colorConfig.Color);
         }
 
@@ -109,16 +109,17 @@ namespace BalloonParty.UI.Score
         private static ScoreNotice FindAvailable(List<ScoreNotice> pool)
         {
             foreach (var item in pool)
-                if (item.IsUsable) return item;
+                if (item.IsUsable)
+                    return item;
             return null;
         }
 
         private static ScorePointTrail FindAvailable(List<ScorePointTrail> pool)
         {
             foreach (var item in pool)
-                if (item.IsUsable) return item;
+                if (item.IsUsable)
+                    return item;
             return null;
         }
     }
 }
-

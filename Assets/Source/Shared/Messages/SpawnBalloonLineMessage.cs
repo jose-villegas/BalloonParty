@@ -1,5 +1,6 @@
 namespace BalloonParty.Shared.Messages
 {
-    public readonly struct SpawnBalloonLineMessage { }
+    public readonly struct SpawnBalloonLineMessage
+    {
+    }
 }
-

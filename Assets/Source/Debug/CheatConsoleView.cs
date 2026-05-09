@@ -9,21 +9,19 @@ namespace BalloonParty.Debug
 {
     public class CheatConsoleView : MonoBehaviour, IInitializable
     {
-        [Inject] private IEnumerable<ICheat> _cheats;
-
-        public void Initialize() { }
-
-        private bool _visible;
-        private string _search = string.Empty;
-        private string _activeTag = string.Empty;
-        private Vector2 _scroll;
-        private readonly HashSet<string> _favorites = new HashSet<string>();
-
-        private float _consoleHeight = 280f;
         private const float MinHeight = 80f;
         private const float HandleHeight = 14f;
         private const float ReferenceHeight = 720f;
+        private readonly HashSet<string> _favorites = new();
+        private string _activeTag = string.Empty;
+        [Inject] private IEnumerable<ICheat> _cheats;
+
+        private float _consoleHeight = 280f;
         private bool _resizing;
+        private Vector2 _scroll;
+        private string _search = string.Empty;
+
+        private bool _visible;
 
         private void Update()
         {
@@ -64,7 +62,7 @@ namespace BalloonParty.Debug
             var sh = ReferenceHeight;
 
             var handleRect = new Rect(0, sh - _consoleHeight - HandleHeight, sw, HandleHeight);
-            var bodyRect   = new Rect(0, sh - _consoleHeight, sw, _consoleHeight);
+            var bodyRect = new Rect(0, sh - _consoleHeight, sw, _consoleHeight);
 
             // Visual cursor hint when hovering or dragging the handle.
             var guiMouseY = Event.current.mousePosition.y / scale;
@@ -77,6 +75,10 @@ namespace BalloonParty.Debug
             GUILayout.EndArea();
         }
 
+        public void Initialize()
+        {
+        }
+
         private void DrawContent()
         {
             var cheats = _cheats.ToList();
@@ -84,9 +86,9 @@ namespace BalloonParty.Debug
             DrawSearchBar();
             DrawTagFilters(cheats);
 
-            var filtered  = ApplyFilters(cheats);
+            var filtered = ApplyFilters(cheats);
             var favorites = filtered.Where(c => _favorites.Contains(c.Name)).ToList();
-            var rest      = filtered.Where(c => !_favorites.Contains(c.Name)).ToList();
+            var rest = filtered.Where(c => !_favorites.Contains(c.Name)).ToList();
 
             _scroll = GUILayout.BeginScrollView(_scroll);
 

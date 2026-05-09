@@ -29,4 +29,3 @@ namespace BalloonParty.Configuration
         Color BalloonColor(string colorName);
     }
 }
-

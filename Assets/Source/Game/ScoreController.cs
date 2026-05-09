@@ -1,34 +1,28 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using BalloonParty.Configuration;
-using BalloonParty.Shared.Messages;
 
 namespace BalloonParty.Game
 {
-    public class ScoreController : IStartable, System.IDisposable
+    public class ScoreController : IStartable, IDisposable
     {
         private const string LevelKey = "Level";
         private const string ProgressSuffix = ".Progress";
-
-        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
-        private readonly IPublisher<BalloonScoredMessage> _scoredPublisher;
-        private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private readonly IGameConfiguration _config;
 
-        private readonly Dictionary<string, int> _persistentScore = new();
+        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly Dictionary<string, int> _levelProgress = new();
-        private System.IDisposable _subscription;
+        private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
 
-        public ReactiveProperty<int> TotalScore { get; } = new(0);
-        public ReactiveProperty<int> Level { get; } = new(0);
-
-        public int GetProgress(string colorName) => _levelProgress.GetValueOrDefault(colorName);
-        public int GetRequiredPoints() => _config.PointsRequiredForLevel(Level.Value + 1);
+        private readonly Dictionary<string, int> _persistentScore = new();
+        private readonly IPublisher<BalloonScoredMessage> _scoredPublisher;
+        private IDisposable _subscription;
 
         [Inject]
         public ScoreController(
@@ -41,6 +35,16 @@ namespace BalloonParty.Game
             _scoredPublisher = scoredPublisher;
             _levelUpPublisher = levelUpPublisher;
             _config = config;
+        }
+
+        public ReactiveProperty<int> TotalScore { get; } = new(0);
+        public ReactiveProperty<int> Level { get; } = new(0);
+
+        public void Dispose()
+        {
+            Application.quitting -= Save;
+            Application.focusChanged -= OnFocusChanged;
+            _subscription?.Dispose();
         }
 
         public void Start()
@@ -61,11 +65,14 @@ namespace BalloonParty.Game
             Application.focusChanged += OnFocusChanged;
         }
 
-        public void Dispose()
+        public int GetProgress(string colorName)
         {
-            Application.quitting -= Save;
-            Application.focusChanged -= OnFocusChanged;
-            _subscription?.Dispose();
+            return _levelProgress.GetValueOrDefault(colorName);
+        }
+
+        public int GetRequiredPoints()
+        {
+            return _config.PointsRequiredForLevel(Level.Value + 1);
         }
 
         public void Save()
@@ -106,7 +113,7 @@ namespace BalloonParty.Game
                 _levelProgress[key] = 0;
 
             _levelUpPublisher.Publish(new ScoreLevelUpMessage(Level.Value));
-            UnityEngine.Time.timeScale = 0f;
+            Time.timeScale = 0f;
         }
 
         private void OnFocusChanged(bool hasFocus)
@@ -115,4 +122,3 @@ namespace BalloonParty.Game
         }
     }
 }
-

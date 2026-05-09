@@ -1,29 +1,31 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Balloon.Model;
 using UniRx;
 using UnityEngine;
-using BalloonParty.Balloon.Model;
-using BalloonParty.Configuration;
+using Random = UnityEngine.Random;
 
 namespace BalloonParty.Slots
 {
     public class SlotGrid
     {
-        private readonly BalloonModel[,] _slots;
         private readonly IGameConfiguration _config;
-        private readonly Subject<SlotGridChangedEvent> _onChanged = new Subject<SlotGridChangedEvent>();
-
-        public IObservable<SlotGridChangedEvent> OnChanged => _onChanged;
-        public int Columns => _slots.GetLength(0);
-        public int Rows => _slots.GetLength(1);
-
-        public string RandomColorName() =>
-            _config.BalloonColors[UnityEngine.Random.Range(0, _config.BalloonColors.Length)].Name;
+        private readonly Subject<SlotGridChangedEvent> _onChanged = new();
+        private readonly BalloonModel[,] _slots;
 
         public SlotGrid(IGameConfiguration config)
         {
             _config = config;
             _slots = new BalloonModel[config.SlotsSize.x, config.SlotsSize.y];
+        }
+
+        public IObservable<SlotGridChangedEvent> OnChanged => _onChanged;
+        public int Columns => _slots.GetLength(0);
+        public int Rows => _slots.GetLength(1);
+
+        public string RandomColorName()
+        {
+            return _config.BalloonColors[Random.Range(0, _config.BalloonColors.Length)].Name;
         }
 
         public void Place(BalloonModel balloon, Vector2Int index)
@@ -39,13 +41,16 @@ namespace BalloonParty.Slots
             _onChanged.OnNext(new SlotGridChangedEvent(index, SlotGridChangeType.Removed));
         }
 
-        public BalloonModel At(Vector2Int index) => _slots[index.x, index.y];
+        public BalloonModel At(Vector2Int index)
+        {
+            return _slots[index.x, index.y];
+        }
 
         public bool IsEmpty(int col, int row)
         {
             return col < 0 || col >= Columns
-                || row < 0 || row >= Rows
-                || _slots[col, row] == null;
+                           || row < 0 || row >= Rows
+                           || _slots[col, row] == null;
         }
 
         // A slot is unbalanced when either of the two slots directly above it is empty.
@@ -66,13 +71,13 @@ namespace BalloonParty.Slots
             var candidates = new[]
             {
                 new Vector2Int(col, row - 1),
-                new Vector2Int(col + (row % 2 == 0 ? -1 : 1), row - 1),
+                new Vector2Int(col + (row % 2 == 0 ? -1 : 1), row - 1)
             };
 
             var bestWeight = -1;
             var bestIndex = -1;
 
-            for (int k = 0; k < candidates.Length; k++)
+            for (var k = 0; k < candidates.Length; k++)
             {
                 var candidate = candidates[k];
                 if (candidate.x < 0 || candidate.x >= Columns) continue;
@@ -91,14 +96,12 @@ namespace BalloonParty.Slots
 
         public IEnumerable<Vector2Int> BottomEmptySlotPerColumn()
         {
-            for (int col = 0; col < Columns; col++)
+            for (var col = 0; col < Columns; col++)
+            for (var row = 0; row < Rows; row++)
             {
-                for (int row = 0; row < Rows; row++)
-                {
-                    if (!IsEmpty(col, row)) continue;
-                    yield return new Vector2Int(col, row);
-                    break;
-                }
+                if (!IsEmpty(col, row)) continue;
+                yield return new Vector2Int(col, row);
+                break;
             }
         }
 
@@ -119,10 +122,10 @@ namespace BalloonParty.Slots
 
         public bool AllBalloonsStable()
         {
-            for (int col = 0; col < Columns; col++)
-                for (int row = 0; row < Rows; row++)
-                    if (_slots[col, row] != null && !_slots[col, row].IsStable.Value)
-                        return false;
+            for (var col = 0; col < Columns; col++)
+            for (var row = 0; row < Rows; row++)
+                if (_slots[col, row] != null && !_slots[col, row].IsStable.Value)
+                    return false;
             return true;
         }
 
@@ -152,4 +155,3 @@ namespace BalloonParty.Slots
         }
     }
 }
-

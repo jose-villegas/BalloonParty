@@ -1,23 +1,21 @@
+using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.View;
+using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-using BalloonParty.Balloon.Model;
-using BalloonParty.Balloon.View;
-using BalloonParty.Configuration;
-using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
 
 namespace BalloonParty.Balloon.Controller
 {
     public class BalloonController : IStartable
     {
-        private readonly BalloonModel _model;
-        private readonly BalloonView _view;
-        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
-        private readonly SlotGrid _grid;
         private readonly IGameConfiguration _config;
+        private readonly SlotGrid _grid;
+        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly BalloonView _view;
 
         [Inject]
         public BalloonController(BalloonModel model, BalloonView view,
@@ -26,7 +24,7 @@ namespace BalloonParty.Balloon.Controller
             SlotGrid grid,
             IGameConfiguration config)
         {
-            _model = model;
+            Model = model;
             _view = view;
             _hitSubscriber = hitSubscriber;
             _balancePublisher = balancePublisher;
@@ -34,21 +32,21 @@ namespace BalloonParty.Balloon.Controller
             _config = config;
         }
 
+        public BalloonModel Model { get; }
+
         public void Start()
         {
-            _model.View = _view;
-            _view.Bind(_model);
+            Model.View = _view;
+            _view.Bind(Model);
 
             _hitSubscriber.Subscribe(msg =>
             {
-                if (msg.Balloon != _model) return;
-                _view.PlayPopEffect(_config.BalloonColor(_model.Color.Value));
-                _grid.Remove(_model.SlotIndex.Value);
+                if (msg.Balloon != Model) return;
+                _view.PlayPopEffect(_config.BalloonColor(Model.Color.Value));
+                _grid.Remove(Model.SlotIndex.Value);
                 Object.Destroy(_view.gameObject);
                 _balancePublisher.Publish(default);
             });
         }
-
-        public BalloonModel Model => _model;
     }
 }

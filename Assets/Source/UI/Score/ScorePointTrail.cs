@@ -1,8 +1,6 @@
 using System;
 using DG.Tweening;
 using UnityEngine;
-using BalloonParty.Configuration;
-using BalloonParty.Shared;
 
 namespace BalloonParty.UI.Score
 {
@@ -36,4 +34,3 @@ namespace BalloonParty.UI.Score
         }
     }
 }
-

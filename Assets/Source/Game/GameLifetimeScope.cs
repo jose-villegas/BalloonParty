@@ -1,15 +1,13 @@
-using MessagePipe;
-using UnityEngine;
-using VContainer;
-using VContainer.Unity;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Debug;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using BalloonParty.Thrower;
-using BalloonParty.UI.GameStart;
-using BalloonParty.UI.Shields;
+using MessagePipe;
+using UnityEngine;
+using VContainer;
+using VContainer.Unity;
 
 namespace BalloonParty.Game
 {

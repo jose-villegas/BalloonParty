@@ -1,25 +1,28 @@
 using System;
+using BalloonParty.Projectile.Model;
+using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer;
-using BalloonParty.Projectile.Model;
-using BalloonParty.Shared.Messages;
 
 namespace BalloonParty.UI.Shields
 {
     [RequireComponent(typeof(Animator))]
     public class ShieldCounterAnimation : MonoBehaviour
     {
-        [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
-        [Inject] private ISubscriber<BalanceBalloonsMessage> _balanceSubscriber;
+        private readonly CompositeDisposable _disposable = new();
 
         private Animator _animator;
+        [Inject] private ISubscriber<BalanceBalloonsMessage> _balanceSubscriber;
         private int _lastShieldValue;
-        private readonly CompositeDisposable _disposable = new();
+        [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private IDisposable _shieldSubscription;
 
-        private void Awake() => _animator = GetComponent<Animator>();
+        private void Awake()
+        {
+            _animator = GetComponent<Animator>();
+        }
 
         private void Start()
         {
@@ -67,5 +70,3 @@ namespace BalloonParty.UI.Shields
         }
     }
 }
-
-

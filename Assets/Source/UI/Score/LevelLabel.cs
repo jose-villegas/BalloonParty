@@ -11,12 +11,15 @@ namespace BalloonParty.UI.Score
 
         private Text _label;
 
-        private void Awake() => _label = GetComponent<Text>();
+        private void Awake()
+        {
+            _label = GetComponent<Text>();
+        }
 
         public void Bind(IReadOnlyReactiveProperty<int> level)
         {
             level.Subscribe(l => _label.text = (l + (_showNextLevel ? 1 : 0)).ToString("N0"))
-                 .AddTo(this);
+                .AddTo(this);
         }
     }
 }
