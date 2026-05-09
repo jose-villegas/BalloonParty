@@ -13,7 +13,6 @@ namespace BalloonParty.UI.Shields
         private readonly CompositeDisposable _disposable = new();
         [Inject] private ISubscriber<BalanceBalloonsMessage> _balanceSubscriber;
         [Inject] private IGameConfiguration _config;
-
         private Text _label;
         [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
 

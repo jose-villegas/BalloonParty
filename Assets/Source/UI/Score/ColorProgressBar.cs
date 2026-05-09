@@ -11,9 +11,12 @@ namespace BalloonParty.UI.Score
 {
     public class ColorProgressBar : MonoBehaviour
     {
-        [SerializeField] private Graphic[] _graphicsToSetColor;
-        [SerializeField] private Slider _progressSlider;
-        [SerializeField] private Animator _animator;
+        [Header("Visuals")] [SerializeField] private Graphic[] _graphicsToSetColor;
+
+        [Header("Progress")] [SerializeField] private Slider _progressSlider;
+
+        [Header("Feedback")] [SerializeField] private Animator _animator;
+
         [SerializeField] private ParticleSystem _completionParticleSystem;
         [SerializeField] private ScoreNotice _noticePrefab;
         [SerializeField] private ScorePointTrail _trailPrefab;
@@ -21,10 +24,10 @@ namespace BalloonParty.UI.Score
         private readonly List<ScorePointTrail> _trails = new();
 
         private BalloonColorConfiguration _colorConfig;
+
         [Inject] private IGameConfiguration _config;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private int _localCount;
-
         [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
 
         public void Setup(BalloonColorConfiguration colorConfig, ScoreController scoreController)
@@ -38,13 +41,8 @@ namespace BalloonParty.UI.Score
             _progressSlider.maxValue = required;
             _progressSlider.value = scoreController.GetProgress(colorConfig.Name);
 
-            _scoredSubscriber
-                .Subscribe(OnBalloonScored)
-                .AddTo(this);
-
-            _levelUpSubscriber
-                .Subscribe(OnLevelUp)
-                .AddTo(this);
+            _scoredSubscriber.Subscribe(OnBalloonScored).AddTo(this);
+            _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(this);
         }
 
         private void OnBalloonScored(BalloonScoredMessage msg)

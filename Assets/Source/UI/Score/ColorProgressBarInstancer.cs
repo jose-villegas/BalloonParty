@@ -7,7 +7,7 @@ namespace BalloonParty.UI.Score
 {
     public class ColorProgressBarInstancer : MonoBehaviour
     {
-        [SerializeField] private ColorProgressBar _colorProgressBarPrefab;
+        [Header("Prefabs")] [SerializeField] private ColorProgressBar _colorProgressBarPrefab;
 
         [Inject] private IGameConfiguration _config;
         [Inject] private IObjectResolver _resolver;

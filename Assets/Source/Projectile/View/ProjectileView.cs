@@ -12,11 +12,12 @@ namespace BalloonParty.Projectile.View
 {
     public class ProjectileView : MonoBehaviour
     {
-        [SerializeField] private SpriteRenderer _glowRenderer;
+        [Header("Glow")] [SerializeField] private SpriteRenderer _glowRenderer;
+
         [SerializeField] [Range(0f, 1f)] private float _glowAlpha = 0.5f;
         [SerializeField] private float _glowColorDuration = 0.2f;
-        [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
 
+        [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IGameConfiguration _config;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private SlotGrid _grid;
@@ -102,6 +103,7 @@ namespace BalloonParty.Projectile.View
         {
             _model = model;
         }
+
 
         private void TrackColor(string hitColor)
         {

@@ -46,6 +46,13 @@ namespace BalloonParty.Thrower
             });
         }
 
+        public void FireImmediate()
+        {
+            if (_activeProjectile == null || _activeProjectile.IsFree) return;
+            _activeProjectile.IsFree = true;
+            _activeProjectile.Direction = _direction;
+        }
+
         private void UpdateDirection()
         {
             if (!Input.GetMouseButton(0)) return;
@@ -125,12 +132,6 @@ namespace BalloonParty.Thrower
             _loadedPublisher.Publish(default);
         }
 
-        public void FireImmediate()
-        {
-            if (_activeProjectile == null || _activeProjectile.IsFree) return;
-            _activeProjectile.IsFree = true;
-            _activeProjectile.Direction = _direction;
-        }
 
         private void Reload()
         {

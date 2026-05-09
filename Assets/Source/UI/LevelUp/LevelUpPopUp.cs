@@ -11,17 +11,21 @@ namespace BalloonParty.UI.LevelUp
 {
     public class LevelUpPopUp : MonoBehaviour
     {
-        [SerializeField] private Animator _animator;
+        [Header("References")] [SerializeField]
+        private Animator _animator;
+
         [SerializeField] private Text _levelLabel;
         [SerializeField] private Image _levelGlowFill;
         [SerializeField] private ParticleSystem _levelGlowFillParticleSystem;
-        [SerializeField] private float _fillAnimationDelay;
+
+        [Header("Timing")] [SerializeField] private float _fillAnimationDelay;
+
         [SerializeField] private float _playParticlesDelay;
         [SerializeField] private float _continueUnpauseDelay;
 
         private readonly CompositeDisposable _disposable = new();
-        [Inject] private SlotGrid _grid;
 
+        [Inject] private SlotGrid _grid;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
 
         private void Start()
@@ -41,6 +45,7 @@ namespace BalloonParty.UI.LevelUp
             _animator.SetTrigger("Hide");
             StartCoroutine(UnpauseAfterDelay());
         }
+
 
         private IEnumerator WaitForStability(int newLevel)
         {

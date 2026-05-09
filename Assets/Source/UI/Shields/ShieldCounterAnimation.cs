@@ -12,7 +12,6 @@ namespace BalloonParty.UI.Shields
     public class ShieldCounterAnimation : MonoBehaviour
     {
         private readonly CompositeDisposable _disposable = new();
-
         private Animator _animator;
         [Inject] private ISubscriber<BalanceBalloonsMessage> _balanceSubscriber;
         private int _lastShieldValue;
@@ -28,13 +27,8 @@ namespace BalloonParty.UI.Shields
         {
             _animator.SetTrigger("Waiting");
 
-            _loadedSubscriber
-                .Subscribe(OnProjectileLoaded)
-                .AddTo(_disposable);
-
-            _balanceSubscriber
-                .Subscribe(_ => OnBalancing())
-                .AddTo(_disposable);
+            _loadedSubscriber.Subscribe(OnProjectileLoaded).AddTo(_disposable);
+            _balanceSubscriber.Subscribe(_ => OnBalancing()).AddTo(_disposable);
         }
 
         private void OnDestroy()

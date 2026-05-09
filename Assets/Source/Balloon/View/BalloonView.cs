@@ -7,15 +7,20 @@ namespace BalloonParty.Balloon.View
 {
     public class BalloonView : MonoBehaviour
     {
-        [SerializeField] private SpriteRenderer _renderer;
+        [Header("References")] [SerializeField]
+        private SpriteRenderer _renderer;
+
         [SerializeField] private SpriteRenderer _shadowRenderer;
         [SerializeField] private Animator _animator;
         [SerializeField] private Renderer[] _spriteLayerRenderers;
         [SerializeField] private ParticleSystem _popVfxPrefab;
 
-        [SerializeField] [Range(0f, 1f)] private float _shadowAlpha;
+        [Header("Shadow")] [SerializeField] [Range(0f, 1f)]
+        private float _shadowAlpha;
+
         [SerializeField] [Range(0f, 5f)] private float _shadowIntensity;
-        [SerializeField] private int _baseSortingLayer;
+
+        [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private IGameConfiguration _config;
 
