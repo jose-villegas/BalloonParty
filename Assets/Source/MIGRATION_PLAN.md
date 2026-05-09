@@ -389,7 +389,76 @@ protected override void Configure(IContainerBuilder builder)
 
 ---
 
-## Phase 7d — Game Start
+## Phase 7d — Projectile Shield Visuals & Gain Logic
+
+**Goal:** Port the visual shield orbs on the projectile and the "gain a shield on 3 same-color pops" mechanic — replacing `ProjectileBounceShieldController`, `ProjectileShieldSystem`, and `ProjectileShieldFXSystem`.
+
+### Behaviour Summary
+
+- The projectile carries N shield orbs (`SpriteRenderer` children) that visually represent `ShieldsRemaining`
+- On load: all shields start at `scale = 0`; shields scale up to represent starting count
+- On bounce (shield lost): the topmost visible shield scales down to zero; plays `PSVFX_ShieldLose` with current color
+- On 3 consecutive same-color balloon pops: `ShieldsRemaining` increments; a new shield orb scales up; plays `PSVFX_ShieldGain` with current color
+- Shield orbs tint to the current `ColorName` via DOTween color lerp (matches glow behavior)
+- Each orb has a slightly larger scale than the previous: `Vector3.one + Vector3.right * incrementX * i + Vector3.up * incrementY * i`
+
+### References
+
+| Legacy file | What it does |
+|---|---|
+| `ProjectileBounceShieldController.cs` | View: scales shield sprites on shield count change; tints to balloon color |
+| `ProjectileShieldSystem.cs` | Logic: when `ColorPopCount >= 3`, increment shield count |
+| `ProjectileShieldFXSystem.cs` | VFX: spawns `PSVFX_ShieldGain`/`PSVFX_ShieldLose` particles on shield change |
+
+### New files
+
+| File | Responsibility |
+|---|---|
+| `ProjectileShieldView.cs` | MonoBehaviour on projectile prefab; `[SerializeField] List<SpriteRenderer> _shields`; observes `ShieldsRemaining` and `ColorName` via UniRx; scales/tints shields; spawns VFX |
+
+### Implementation
+
+1. **`ProjectileShieldView.cs`** (`Assets/Source/Projectile/View/`)
+   - `[SerializeField] List<SpriteRenderer> _shields` — the ordered shield orb renderers (children of projectile)
+   - `[SerializeField] float _alpha`, `_colorDuration`, `_scaleDuration`, `Vector2 _scaleIncrements`
+   - `[Inject] IGameConfiguration _config`
+   - `Bind(ProjectileModel model)`:
+     - Subscribe to `model.ShieldsRemaining` → `UpdateShieldVisuals(count)`
+     - Track previous count to determine gain vs loss → play `PSVFX_ShieldGain` or `PSVFX_ShieldLose`
+   - `UpdateShieldVisuals(int count)`: for each shield sprite, DOScale to target (or zero if index >= count)
+   - `UpdateColor(string colorName)`: DOColor all visible shields to `_config.BalloonColor(colorName)` with alpha
+   - On `Awake()`: set all shields to `localScale = Vector3.zero`
+
+2. **Shield gain logic in `ProjectileView.TrackColor()`**:
+   - After incrementing `ColorPopCount`, check `if (_model.ColorPopCount >= 3)` → increment `_model.ShieldsRemaining.Value++`, reset `ColorPopCount = 0`
+   - This replaces `ProjectileShieldSystem`
+
+3. **`ProjectileView.Bind()`** — also call `_shieldView.Bind(model)` (get via `GetComponent` or `[SerializeField]`)
+
+4. **Color update**: `ProjectileShieldView` observes color changes — either subscribe to a new `ReactiveProperty<string>` on the model, or have `ProjectileView` call `_shieldView.UpdateColor(colorName)` directly in `TrackColor()`
+
+### VFX
+
+- `PSVFX_ShieldGain` — instantiated at projectile position on shield gain, `startColor` set to balloon color
+- `PSVFX_ShieldLose` — instantiated at projectile position on shield loss, `startColor` set to current color
+- `PSVFX_ShieldBounce` — instantiated at bounce position (integrate into `PlayBounceEffect`)
+
+### Model changes
+
+- `ProjectileModel.ColorName` → convert to `ReactiveProperty<string>` so `ProjectileShieldView` can observe color changes for tinting
+
+### Unity Editor steps
+
+1. Add `ProjectileShieldView` to the projectile prefab
+2. Wire `_shields` list to the shield orb `SpriteRenderer` children (ordered bottom to top)
+3. Set `_alpha`, `_colorDuration`, `_scaleDuration`, `_scaleIncrements` to match legacy values
+4. Assign VFX prefabs
+
+✅ **Checkpoint:** Fire projectile → shields start visible at initial count → hit 3 same-color balloons → new shield appears with gain VFX → bounce off wall → shield disappears with lose VFX → shield color matches last balloon hit.
+
+---
+
+## Phase 7e — Game Start
 
 **Goal:** Replace the legacy `isGameStarted` entity flag with `GameStartButton` publishing `SpawnBalloonLineMessage`, so the game can be started independently of any Entitas system.
 
@@ -410,7 +479,7 @@ protected override void Configure(IContainerBuilder builder)
 
 ---
 
-## Phase 7e — HUD Audit & Cleanup
+## Phase 7f — HUD Audit & Cleanup
 
 **Goal:** Confirm zero active Entitas UI in the scene; remove stubs.
 
@@ -422,7 +491,7 @@ protected override void Configure(IContainerBuilder builder)
 
 ---
 
-## Phase 7f — Configuration Migration
+## Phase 7g — Configuration Migration
 
 **Goal:** Move `GameConfiguration` and its supporting types out of `Source_Old` into `Source/` so the configuration layer is self-contained in the new codebase before `Source_Old` is deleted.
 
@@ -775,9 +844,10 @@ Classes follow a strict top-to-bottom ordering by visibility and purpose:
 | 7a    | Score Feedback UI                         | ✅ Done         |
 | 7b    | Level-Up Popup                            | ✅ Done         |
 | 7c    | Shield Counter HUD                        | ✅ Done         |
-| 7d    | Game Start                                | ⬜ Wiring only  |
-| 7e    | HUD Audit & Cleanup                       | ⬜ Todo         |
-| 7f    | Configuration Migration                   | ⬜ Todo         |
+| 7d    | Projectile Shield Visuals & Gain Logic    | ⬜ Todo         |
+| 7e    | Game Start                                | ⬜ Wiring only  |
+| 7f    | HUD Audit & Cleanup                       | ⬜ Todo         |
+| 7g    | Configuration Migration                   | ⬜ Todo         |
 | 8     | Power-Ups                                 | ⬜ Todo         |
 | 9     | Game Loop, UI & Cleanup                   | ⬜ Todo         |
 
