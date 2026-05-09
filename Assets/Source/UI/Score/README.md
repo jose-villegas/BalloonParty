@@ -16,11 +16,10 @@ Every balloon score also spawns two pooled objects from the bar's own pools: a `
 
 `ScoreCounterLabel` and `LevelLabel` are bound imperatively from `ScoreUILifetimeScope.Start()` — they receive the `ScoreController`'s reactive properties and subscribe with UniRx.
 
-`LevelUpPopUp` listens for `ScoreLevelUpMessage`, waits until all balloons have settled (`SlotGrid.AllBalloonsStable()`), then triggers the "Appear" animation, animates the glow fill ring over the particle duration, and updates the level label. The Continue button restores `Time.timeScale` and hides the popup.
+On `ScoreLevelUpMessage`, all bars reset their sliders and update their `maxValue` to the points required for the new level. `LevelUpPopUp` (in `UI/LevelUp/`) handles the full-screen ceremony that follows.
 
 ## Interactions
 
 - **ScoreController** — source of `BalloonScoredMessage`, `ScoreLevelUpMessage`, `TotalScore`, `Level`
-- **SlotGrid** — polled by `LevelUpPopUp` to defer appearance until grid is stable
 - **IGameConfiguration** — `PointsRequiredForLevel`, `ScorePointTraceDuration`
-- **ScoreUILifetimeScope** — registers `ColorProgressBarInstancer` and `LevelUpPopUp`; binds labels in `Start()`
+- **ScoreUILifetimeScope** — registers `ColorProgressBarInstancer`; binds labels in `Start()`

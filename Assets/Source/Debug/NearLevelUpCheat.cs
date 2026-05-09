@@ -1,0 +1,52 @@
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+using System.Collections.Generic;
+using MessagePipe;
+using UnityEngine;
+using BalloonParty.Balloon.Model;
+using BalloonParty.Configuration;
+using BalloonParty.Game;
+using BalloonParty.Shared.Messages;
+
+namespace BalloonParty.Debug
+{
+    public class NearLevelUpCheat : ICheat
+    {
+        private readonly IGameConfiguration _config;
+        private readonly ScoreController _scoreController;
+        private readonly IPublisher<BalloonHitMessage> _hitPublisher;
+
+        public string Name => "Near Level Up";
+        public string Section => "Score";
+        public IReadOnlyList<string> Tags => new[] { "score", "levelup" };
+
+        public NearLevelUpCheat(
+            IGameConfiguration config,
+            ScoreController scoreController,
+            IPublisher<BalloonHitMessage> hitPublisher)
+        {
+            _config = config;
+            _scoreController = scoreController;
+            _hitPublisher = hitPublisher;
+        }
+
+        public void Execute()
+        {
+            var oneBeforeRequired = _config.PointsRequiredForLevel(_scoreController.Level.Value + 1) - 1;
+            foreach (var color in _config.BalloonColors)
+                FillColor(color, oneBeforeRequired);
+        }
+
+        private void FillColor(BalloonColorConfiguration color, int target)
+        {
+            var missing = target - _scoreController.GetProgress(color.Name);
+            if (missing <= 0) return;
+
+            var fakeModel = new BalloonModel();
+            fakeModel.Color.Value = color.Name;
+
+            for (var i = 0; i < missing; i++)
+                _hitPublisher.Publish(new BalloonHitMessage(fakeModel, Vector3.zero));
+        }
+    }
+}
+#endif

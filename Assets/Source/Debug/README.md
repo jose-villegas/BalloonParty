@@ -25,3 +25,12 @@ That's all. The console picks it up automatically.
 - **Sections** — cheats are grouped by their `Section` property
 - **Favorites** — click ☆ next to any cheat to pin it to the top of the list
 
+## Current cheats
+
+| Name | Section | What it does |
+|---|---|---|
+| Spawn Balloon Line | Spawning | Publishes `SpawnBalloonLineMessage` — spawns one new row of balloons |
+| Fire Projectile | Thrower | Calls `ThrowerController.FireImmediate()` — fires regardless of mouse state |
+| Remove Balloons | Spawning | Draw across balloons to remove them and trigger a balance pass |
+| Trigger Level Up | Score | Fills all color bars to the current threshold and immediately triggers the level-up ceremony |
+| Near Level Up | Score | Fills all color bars to one point below the threshold — pop one balloon of each color to complete the level naturally |

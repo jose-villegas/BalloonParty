@@ -94,6 +94,7 @@ namespace BalloonParty.Game
             _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, TotalScore.Value));
         }
 
+
         private void CheckLevelUp()
         {
             var required = _config.PointsRequiredForLevel(Level.Value + 1);

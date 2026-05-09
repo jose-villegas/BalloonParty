@@ -55,28 +55,38 @@ Assets/Source/
     View/           BalloonView.cs
     Controller/     BalloonController.cs, BalloonBalancer.cs
     Spawner/        BalloonSpawner.cs, BalloonSpawnerSettings.cs
-    PowerUps/       Bomb/, Laser/, Lightning/, Shield/
+    PowerUps/       Bomb/, Laser/, Lightning/, Shield/   ← Phase 8
   Slots/
-    SlotGrid.cs, SlotGridController.cs, SlotGridView.cs
+    SlotGrid.cs, SlotGridChangedEvent.cs
+    SlotGridController.cs, SlotGridView.cs
   Projectile/
-    Model/, View/, Controller/
+    Model/          ProjectileModel.cs
+    View/           ProjectileView.cs
+    Controller/     ← Phase 9 (currently handled inside ProjectileView)
   Thrower/
-    ThrowerController.cs
+    ThrowerController.cs, ThrowerSettings.cs
   Game/
-    GameManager.cs, ScoreController.cs
+    ScoreController.cs
     GameLifetimeScope.cs   ← root VContainer scope
+    GameManager.cs         ← Phase 9
   Shared/
-    IGameConfiguration.cs
-    Messages/       BalanceBalloonsMessage.cs, BalloonHitMessage.cs, ...
+    IGameConfiguration.cs, IReusable.cs
+    Messages/       BalanceBalloonsMessage.cs, BalloonHitMessage.cs,
+                    BalloonScoredMessage.cs, ScoreLevelUpMessage.cs,
+                    SpawnBalloonLineMessage.cs, ProjectileDestroyedMessage.cs,
+                    ProjectileLoadedMessage.cs
   UI/
     Score/          ColorProgressBar.cs, ColorProgressBarInstancer.cs,
                     ScoreNotice.cs, ScorePointTrail.cs,
-                    ScoreCounterLabel.cs, LevelLabel.cs, LevelUpPopUp.cs,
+                    ScoreCounterLabel.cs, LevelLabel.cs,
                     ScoreUILifetimeScope.cs   ← child VContainer scope
+    LevelUp/        LevelUpPopUp.cs
     Shields/        ShieldCounterLabel.cs, ShieldCounterAnimation.cs
     GameStart/      GameStartButton.cs
   Debug/
-    ICheat.cs, CheatConsoleView.cs, BalloonRemoverCheat.cs, ...
+    ICheat.cs, CheatConsoleView.cs
+    BalloonRemoverCheat.cs, SpawnBalloonLineCheat.cs,
+    FireProjectileCheat.cs, TriggerLevelUpCheat.cs, NearLevelUpCheat.cs
 
 Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
 ```
@@ -316,7 +326,7 @@ builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
 
 **Goal:** Wire the full-screen level-up ceremony that fires when all color bars complete — game pauses, glow fills, player continues.
 
-> `LevelUpPopUp.cs` was written during Phase 6. This phase is **Unity Editor wiring only**.
+> `LevelUpPopUp.cs` lives in `UI/LevelUp/`. This phase is **Unity Editor wiring only** plus one Editor file move.
 
 | File | What it does |
 |---|---|
@@ -327,11 +337,18 @@ builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
 builder.RegisterComponentInHierarchy<LevelUpPopUp>();
 ```
 
+**Test cheats** (code — already done, registered in `GameLifetimeScope`):
+- **"Trigger Level Up"** — fills all color bars to the current threshold and immediately triggers the popup. Use this to test the full ceremony without playing.
+- **"Near Level Up"** — fills all bars to one point below the threshold. Pop one balloon of each color in-game to complete the level naturally and verify the transition from gameplay into the popup.
+
 **Unity Editor steps:**
 
-1. **`LevelUpPopUp`** — add to the popup GameObject; wire `_animator`, `_levelLabel`, `_levelGlowFill`, `_levelGlowFillParticleSystem`, and the three delay floats (`_fillAnimationDelay`, `_playParticlesDelay`, `_continueUnpauseDelay`)
-2. Wire the **Continue** button `OnClick` → `LevelUpPopUp.OnContinue()`
-3. **Disable legacy** — disable the old `LevelUpPopUp` MonoBehaviour
+1. **Move `LevelUpPopUp.cs`** — in the Project window drag it from `UI/Score/` into `UI/LevelUp/` to preserve its `.meta` GUID
+2. **`LevelUpPopUp`** — add to the popup GameObject; wire `_animator`, `_levelLabel`, `_levelGlowFill`, `_levelGlowFillParticleSystem`, and the three delay floats (`_fillAnimationDelay`, `_playParticlesDelay`, `_continueUnpauseDelay`)
+3. Set the popup's **Animator Update Mode → Unscaled Time** — the game is paused at level-up so a Normal-mode Animator will freeze
+4. Ensure the popup GameObject is **active** in the scene — it hides via CanvasGroup alpha, not `SetActive`; if disabled, `Start()` never runs
+5. Wire the **Continue** button `OnClick` → `LevelUpPopUp.OnContinue()`
+6. **Disable legacy** — disable the old `LevelUpPopUp` MonoBehaviour
 
 ✅ **Checkpoint:** All color bars complete → game pauses → level-up popup appears with previous level number → glow particle fills the circle → level number updates to the new level → Continue resumes the game and resets all bars.
 
@@ -632,12 +649,14 @@ A self-building runtime debug console lives in `Assets/Source/Debug/`. Press **b
 
 **Adding a cheat:**
 1. Implement `ICheat` — provide `Name`, `Section`, and `Tags[]`
-2. Inject the publishers or services it needs via constructor
+2. Inject whatever publishers or services it needs via the constructor
 3. Register in `GameLifetimeScope`: `builder.Register<YourCheat>(Lifetime.Singleton).AsImplementedInterfaces()`
 
 The console discovers all registered `ICheat` implementations automatically. Features: live search by name, tag filter pills, section grouping, and per-cheat favorites (★).
 
 Every phase that introduces a new triggerable behaviour should add a corresponding cheat so it can be tested in isolation without running the full game loop.
+
+**Cheat ownership principle:** All logic specific to a cheat lives in the cheat class itself — game systems must not expose methods solely to serve cheats. A cheat drives behaviour through the same messages and public APIs that gameplay uses. Where a cheat needs to simulate a game event (e.g. a balloon being hit), it creates a temporary model and publishes the appropriate message; existing subscribers react normally. This keeps game systems ignorant of the debug layer and ensures the cheat exercises the real pipeline rather than a shortcut.
 
 ---
 

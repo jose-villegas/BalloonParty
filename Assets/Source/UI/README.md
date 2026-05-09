@@ -8,7 +8,8 @@ All HUD and menu elements. Each sub-folder owns one distinct player-facing featu
 
 | Folder | What it owns | Scope |
 |---|---|---|
-| `Score/` | Progress bars, score trail orbs, floating notices, level labels, level-up popup, `ScoreUILifetimeScope` | `ScoreUILifetimeScope` (child of `GameLifetimeScope`) |
+| `Score/` | Progress bars, score trail orbs, floating notices, score/level labels, `ScoreUILifetimeScope` | `ScoreUILifetimeScope` (child of `GameLifetimeScope`) |
+| `LevelUp/` | Full-screen level-up ceremony popup (`LevelUpPopUp`) | `ScoreUILifetimeScope` (child of `GameLifetimeScope`) |
 | `Shields/` | Shield counter label and bounce animation | `GameLifetimeScope` |
 | `GameStart/` | Start-button logic that kicks off the first balloon spawn | `GameLifetimeScope` |
 

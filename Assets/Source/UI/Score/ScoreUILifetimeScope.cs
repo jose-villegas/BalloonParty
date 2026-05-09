@@ -1,6 +1,7 @@
 using VContainer;
 using VContainer.Unity;
 using BalloonParty.Game;
+using BalloonParty.UI.LevelUp;
 
 namespace BalloonParty.UI.Score
 {

@@ -12,9 +12,9 @@ Messages are the signals that decouple systems from one another. A publisher fir
 
 | Message | Published by | Consumed by |
 |---|---|---|
-| `BalanceBalloonsMessage` | `BalloonController`, `ProjectileView`, `BalloonSpawner` | `BalloonBalancer`, `ShieldCounterAnimation`, `ShieldCounterLabel` |
+| `BalanceBalloonsMessage` | `BalloonController`, `ProjectileView`, `BalloonSpawner` | `BalloonBalancer` |
 | `SpawnBalloonLineMessage` | `GameStartButton` | `BalloonSpawner` |
-| `BalloonHitMessage` | `ProjectileView` | `BalloonController` |
+| `BalloonHitMessage` | `ProjectileView`, cheats | `BalloonController`, `ScoreController` |
 | `BalloonScoredMessage` | `ScoreController` | `ColorProgressBar` |
 | `ScoreLevelUpMessage` | `ScoreController` | `ColorProgressBar`, `LevelUpPopUp` |
 | `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController` |
