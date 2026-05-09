@@ -80,7 +80,7 @@ Assets/Source/
                     ScoreNotice.cs, ScorePointTrail.cs,
                     ScoreCounterLabel.cs, LevelLabel.cs,
                     ScoreUILifetimeScope.cs   ← child VContainer scope
-    LevelUp/        LevelUpPopUp.cs
+    LevelUp/        LevelUpPopUp.cs, LevelUpLifetimeScope.cs
     Shields/        ShieldCounterLabel.cs, ShieldCounterAnimation.cs
     GameStart/      GameStartButton.cs
   Debug/
@@ -326,15 +326,20 @@ builder.RegisterComponentInHierarchy<ColorProgressBarInstancer>();
 
 **Goal:** Wire the full-screen level-up ceremony that fires when all color bars complete — game pauses, glow fills, player continues.
 
-> `LevelUpPopUp.cs` lives in `UI/LevelUp/`. This phase is **Unity Editor wiring only** plus one Editor file move.
+> `LevelUpPopUp.cs` lives in `UI/LevelUp/`. This phase requires creating `LevelUpLifetimeScope` and removing `LevelUpPopUp` from `ScoreUILifetimeScope`.
 
 | File | What it does |
 |---|---|
 | `LevelUpPopUp.cs` | Waits for `AllBalloonsStable()`; triggers `"Appear"` animator; animates glow fill using `Time.unscaledDeltaTime`; `OnContinue()` restores `Time.timeScale = 1` |
+| `LevelUpLifetimeScope.cs` | Child scope on the LevelUp popup root — registers only what the popup needs |
 
-**`ScoreUILifetimeScope` registration** (code — already done):
+**Registration** — remove `LevelUpPopUp` from `ScoreUILifetimeScope` and create `LevelUpLifetimeScope`:
 ```csharp
-builder.RegisterComponentInHierarchy<LevelUpPopUp>();
+// LevelUpLifetimeScope.cs — on the LevelUp popup root GameObject
+protected override void Configure(IContainerBuilder builder)
+{
+    builder.RegisterComponentInHierarchy<LevelUpPopUp>();
+}
 ```
 
 **Test cheats** (code — already done, registered in `GameLifetimeScope`):
@@ -343,12 +348,14 @@ builder.RegisterComponentInHierarchy<LevelUpPopUp>();
 
 **Unity Editor steps:**
 
-1. **Move `LevelUpPopUp.cs`** — in the Project window drag it from `UI/Score/` into `UI/LevelUp/` to preserve its `.meta` GUID
-2. **`LevelUpPopUp`** — add to the popup GameObject; wire `_animator`, `_levelLabel`, `_levelGlowFill`, `_levelGlowFillParticleSystem`, and the three delay floats (`_fillAnimationDelay`, `_playParticlesDelay`, `_continueUnpauseDelay`)
-3. Set the popup's **Animator Update Mode → Unscaled Time** — the game is paused at level-up so a Normal-mode Animator will freeze
-4. Ensure the popup GameObject is **active** in the scene — it hides via CanvasGroup alpha, not `SetActive`; if disabled, `Start()` never runs
-5. Wire the **Continue** button `OnClick` → `LevelUpPopUp.OnContinue()`
-6. **Disable legacy** — disable the old `LevelUpPopUp` MonoBehaviour
+1. Create `LevelUpLifetimeScope.cs` in `UI/LevelUp/` — child `LifetimeScope` that registers `LevelUpPopUp` via `RegisterComponentInHierarchy`
+2. Add `LevelUpLifetimeScope` to the LevelUp popup root GameObject in the scene; set its **Parent** to `GameLifetimeScope` (or leave auto-discovered via `EnqueueParent`)
+3. Remove `builder.RegisterComponentInHierarchy<LevelUpPopUp>()` from `ScoreUILifetimeScope`
+4. **`LevelUpPopUp`** — add to the popup GameObject; wire `_animator`, `_levelLabel`, `_levelGlowFill`, `_levelGlowFillParticleSystem`, and the three delay floats (`_fillAnimationDelay`, `_playParticlesDelay`, `_continueUnpauseDelay`)
+5. Set the popup's **Animator Update Mode → Unscaled Time** — the game is paused at level-up so a Normal-mode Animator will freeze
+6. Ensure the popup GameObject is **active** in the scene — it hides via CanvasGroup alpha, not `SetActive`; if disabled, `Start()` never runs
+7. Wire the **Continue** button `OnClick` → `LevelUpPopUp.OnContinue()`
+8. **Disable legacy** — disable the old `LevelUpPopUp` MonoBehaviour
 
 ✅ **Checkpoint:** All color bars complete → game pauses → level-up popup appears with previous level number → glow particle fills the circle → level number updates to the new level → Continue resumes the game and resets all bars.
 
@@ -590,13 +597,19 @@ protected override void Configure(IContainerBuilder builder)
     builder.RegisterMessageBroker<BalloonHitMessage>();
 }
 
-// Child scope — finds and enqueues its parent before Build() runs
-// Used by ScoreUILifetimeScope (and any future feature sub-scopes)
-protected override void Awake()
+// GameLifetimeScope runs at -5001 so its container is ready before any child scope
+// (VContainer's LifetimeScope base runs at -5000).
+// Child scopes override FindParent() — VContainer's built-in hook called inside Build()
+// before CreateScope runs. No Awake override or EnqueueParent needed.
+
+// GameLifetimeScope.cs
+[DefaultExecutionOrder(-5001)]
+public class GameLifetimeScope : LifetimeScope { ... }
+
+// GameChildLifetimeScope.cs  (abstract base for all UI and feature child scopes)
+public abstract class GameChildLifetimeScope : LifetimeScope
 {
-    var parent = FindFirstObjectByType<GameLifetimeScope>();
-    using (EnqueueParent(parent))
-        base.Awake();
+    protected override LifetimeScope FindParent() => FindFirstObjectByType<GameLifetimeScope>();
 }
 ```
 
@@ -640,6 +653,26 @@ All game data — balloon colors, slot dimensions, timing values, spawn counts �
 - **Never use `[SerializeField]`** to duplicate data that already exists in `GameConfiguration` (e.g. no `_colors` array on a spawner — use `_config.BalloonColors`).
 - `IGameConfiguration` is registered once as a singleton in `GameLifetimeScope` and injected wherever needed — no `Contexts.sharedInstance` access in new code.
 - When porting a legacy system, check what configuration fields it reads and ensure they are present on `BalloonParty.Configuration.IGameConfiguration` before writing the new implementation.
+
+---
+
+### UI Scope Architecture
+
+Each self-contained UI panel or popup owns its own child `LifetimeScope`. This is intentional: a scoped popup can resolve its dependencies from its parent scope (the game) while keeping its own registrations local. The concrete benefit is that the popup can eventually be opened in isolation — e.g. in a dedicated preview scene — without needing the full game running. It only needs to read state (via injected reactive properties or message subscribers), never to drive gameplay.
+
+**Rule:** Any UI element that is logically self-contained (a popup, a full-screen panel, a HUD section) gets its own `LifetimeScope` on its root GameObject. Flat components that are always part of a larger panel (e.g. `ScoreCounterLabel` inside the Score HUD) stay registered in that panel's scope.
+
+**Current scopes:**
+
+| Scope | Base | GameObject | Registers |
+|---|---|---|---|
+| `GameLifetimeScope` | `LifetimeScope` | scene root | all game systems, messages, cheats |
+| `ScoreUILifetimeScope` | `GameChildLifetimeScope` | Score HUD canvas root | `ColorProgressBarInstancer` |
+| `LevelUpLifetimeScope` | `GameChildLifetimeScope` | LevelUp popup root | `LevelUpPopUp` |
+
+Future popups (power-up unlocks, game-over screen, etc.) extend `GameChildLifetimeScope` — parent is wired automatically via `FindParent()`.
+
+**`RegisterComponentInHierarchy` scope boundary:** VContainer searches for the component only within the `LifetimeScope`'s own GameObject subtree. Registering a component in a scope whose root is not an ancestor of that component's GameObject will throw `VContainerException: X is not in this scene`. Always place the `LifetimeScope` on or above the registered component in the hierarchy.
 
 ---
 

@@ -11,6 +11,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Game
 {
+    [DefaultExecutionOrder(-5001)]
     public class GameLifetimeScope : LifetimeScope
     {
         [SerializeField] private GameConfiguration _gameConfiguration;

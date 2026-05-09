@@ -310,7 +310,7 @@ GameObject:
   - component: {fileID: 2613889795244706835}
   - component: {fileID: 3487536930285470040}
   - component: {fileID: 2980971025094655158}
-  - component: {fileID: 4701779208659119127}
+  - component: {fileID: 6582683723459465260}
   m_Layer: 5
   m_Name: Progress
   m_TagString: Untagged
@@ -376,7 +376,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &4701779208659119127
+--- !u!114 &6582683723459465260
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -385,17 +385,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 3841112476605814567}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bf380b075442425bbf68d938ae6e069e, type: 3}
+  m_Script: {fileID: 11500000, guid: a65ae2fa966f461ab72955c5cf61e045, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.UI.ScoreHUDBinder
-  _scoreCounterLabels:
-  - {fileID: 7104847264656133539}
-  - {fileID: 1678633452349082150}
-  _levelLabels:
-  - {fileID: 6448319452144662123}
-  - {fileID: 5193612619597975244}
-  - {fileID: 190620392299211341}
-  - {fileID: 6214698209236344835}
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.UI.Score.ScoreUILifetimeScope
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects: []
 --- !u!1 &3918607577803489134
 GameObject:
   m_ObjectHideFlags: 0

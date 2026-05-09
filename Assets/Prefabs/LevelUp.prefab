@@ -741,13 +741,14 @@ GameObject:
   - component: {fileID: 1555552709011772290}
   - component: {fileID: 7986452418663952722}
   - component: {fileID: 54371529176432135}
+  - component: {fileID: 2728364919296532837}
   m_Layer: 5
   m_Name: LevelUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &7844991998452278162
 RectTransform:
   m_ObjectHideFlags: 0
@@ -794,7 +795,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: 30d2f3791c160aa44a0842eee28c4f6c, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 0
+  m_UpdateMode: 2
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
@@ -823,6 +824,22 @@ MonoBehaviour:
   _fillAnimationDelay: 0.2
   _playParticlesDelay: 0.1
   _continueUnpauseDelay: 0.1
+--- !u!114 &2728364919296532837
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5901442715913872863}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7be6d7810a28442193b7e16c19a56be5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.UI.LevelUp.LevelUpLifetimeScope
+  parentReference:
+    TypeName: 
+  autoRun: 1
+  autoInjectGameObjects: []
 --- !u!1 &6972155775935914839
 GameObject:
   m_ObjectHideFlags: 0
@@ -1174,8 +1191,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
+      - m_Target: {fileID: 54371529176432135}
+        m_TargetAssemblyTypeName: BalloonParty.UI.Score.LevelUpPopUp, Assembly-CSharp
         m_MethodName: OnContinue
         m_Mode: 1
         m_Arguments:
