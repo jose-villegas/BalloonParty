@@ -1,17 +1,26 @@
 using BalloonParty.Shared;
 using UnityEngine;
-using VContainer;
+using VContainer.Unity;
 
 namespace BalloonParty.Display
 {
-    [RequireComponent(typeof(Camera))]
-    public class OrthogonalSizeCameraController : MonoBehaviour
+    public class OrthogonalSizeCameraController : IStartable
     {
-        [Inject] private IGameConfiguration _config;
+        private readonly IGameConfiguration _config;
 
-        private void Start()
+        public OrthogonalSizeCameraController(IGameConfiguration config)
         {
-            var camera = GetComponent<Camera>();
+            _config = config;
+        }
+
+        public void Start()
+        {
+            var camera = Camera.main;
+            if (camera == null)
+            {
+                return;
+            }
+
             var size = _config.DisplayConfiguration.GetOrthogonalSize();
 
             if (size > 0)

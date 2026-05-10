@@ -48,7 +48,8 @@ namespace BalloonParty.Game
 
             builder.RegisterComponentInHierarchy<ThrowerController>().AsSelf();
             builder.RegisterComponentInHierarchy<GameStartButton>();
-            builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
+
+            builder.RegisterEntryPoint<OrthogonalSizeCameraController>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();
