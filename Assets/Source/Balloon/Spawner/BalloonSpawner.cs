@@ -23,8 +23,8 @@ namespace BalloonParty.Balloon.Spawner
         private const string BalloonPoolKey = "Balloon";
         private readonly IGameConfiguration _config;
         private readonly SlotGrid _grid;
+        private readonly LifetimeScope _parentScope;
         private readonly PoolManager _poolManager;
-        private readonly IObjectResolver _resolver;
         private readonly BalloonSpawnerSettings _settings;
 
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
@@ -41,7 +41,7 @@ namespace BalloonParty.Balloon.Spawner
             SlotGrid grid,
             BalloonSpawnerSettings settings,
             IGameConfiguration config,
-            IObjectResolver resolver,
+            LifetimeScope parentScope,
             PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
@@ -51,7 +51,7 @@ namespace BalloonParty.Balloon.Spawner
             _grid = grid;
             _settings = settings;
             _config = config;
-            _resolver = resolver;
+            _parentScope = parentScope;
             _poolManager = poolManager;
             _lineSubscriber = lineSubscriber;
             _balancePublisher = balancePublisher;
@@ -62,7 +62,7 @@ namespace BalloonParty.Balloon.Spawner
         public void Start()
         {
             _poolManager.Register(BalloonPoolKey,
-                new BalloonPoolChannel(_settings.BalloonPrefab, _resolver));
+                new BalloonPoolChannel(_parentScope, _settings.BalloonScopePrefab));
 
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount));
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());

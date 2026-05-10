@@ -2,6 +2,7 @@
 
 using System;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Items;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -39,6 +40,8 @@ namespace BalloonParty.Balloon.View
 
         private readonly CompositeDisposable _bindDisposables = new();
 
+        private ItemDisplayService _itemService;
+
         public IBalloonModel Model { get; private set; }
         public TweenTracker TweenTracker { get; private set; }
 
@@ -46,6 +49,7 @@ namespace BalloonParty.Balloon.View
         private void Awake()
         {
             TweenTracker = GetComponent<TweenTracker>();
+            _itemService = GetComponent<ItemDisplayService>();
         }
 
         public void OnSpawned()
@@ -59,6 +63,7 @@ namespace BalloonParty.Balloon.View
             TweenTracker.Kill();
             transform.DOKill();
             _bindDisposables.Clear();
+            _itemService?.Unbind();
             Model = null;
         }
 
@@ -85,12 +90,15 @@ namespace BalloonParty.Balloon.View
                 .AddTo(_bindDisposables);
 
             _nudgeSubscriber.Subscribe(OnNudge).AddTo(_bindDisposables);
+
+            _itemService?.Bind(model, _config, _baseSortingLayer);
         }
 
         public void PlayPopEffect(Color color)
         {
-            _poolManager.GetOrRegister(_popVfxPrefab.name, () => new VfxPoolChannel(_popVfxPrefab))
-                .Play(transform.position, color);
+            var key = _popVfxPrefab.name;
+            var vfx = _poolManager.GetOrRegister(key, () => new VfxPoolChannel(_popVfxPrefab));
+            vfx.Play(transform.position, color, () => _poolManager.Return(key, vfx));
         }
 
         private void OnNudge(BalloonNudgeMessage msg)
@@ -152,13 +160,8 @@ namespace BalloonParty.Balloon.View
 
         private void ApplySortingOrder(Vector2Int slotIndex)
         {
-            var maxRow = _config.SlotsSize.y - 1;
-            var baseOrder = (slotIndex.x + ((maxRow - slotIndex.y) * _config.SlotsSize.x)) * _baseSortingLayer;
-
-            for (var i = 0; i < _spriteLayerRenderers.Length; i++)
-            {
-                _spriteLayerRenderers[i].sortingOrder = baseOrder + i + 1;
-            }
+            var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);
+            SortingHelper.ApplySortingOrder(_spriteLayerRenderers, baseOrder);
         }
     }
 }

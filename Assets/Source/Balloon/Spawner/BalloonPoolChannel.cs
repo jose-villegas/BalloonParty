@@ -2,8 +2,6 @@
 
 using BalloonParty.Balloon.View;
 using BalloonParty.Shared;
-using UnityEngine;
-using VContainer;
 using VContainer.Unity;
 
 #endregion
@@ -12,20 +10,20 @@ namespace BalloonParty.Balloon.Spawner
 {
     public class BalloonPoolChannel : PoolChannel<BalloonView>
     {
-        private readonly GameObject _prefab;
-        private readonly IObjectResolver _resolver;
+        private readonly LifetimeScope _parentScope;
+        private readonly LifetimeScope _prefab;
 
-        public BalloonPoolChannel(GameObject prefab, IObjectResolver resolver)
+        public BalloonPoolChannel(LifetimeScope parentScope, LifetimeScope prefab)
         {
+            _parentScope = parentScope;
             _prefab = prefab;
-            _resolver = resolver;
         }
 
         protected override BalloonView Create()
         {
-            var instance = _resolver.Instantiate(_prefab, Vector3.zero, Quaternion.identity);
-            instance.transform.SetParent(Container);
-            return instance.GetComponent<BalloonView>();
+            var childScope = _parentScope.CreateChildFromPrefab(_prefab);
+            childScope.transform.SetParent(Container);
+            return childScope.GetComponentInChildren<BalloonView>();
         }
     }
 }

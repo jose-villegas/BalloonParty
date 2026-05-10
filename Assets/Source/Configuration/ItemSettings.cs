@@ -7,9 +7,9 @@ using System;
 namespace BalloonParty.Configuration
 {
     [Serializable]
-    public class PowerUpSettings
+    public class ItemSettings
     {
-        public BalloonPowerUp Type;
+        public ItemType Type;
         public int TurnCheckEvery;
         public float Weight;
         public int MaximumAllowed;
@@ -18,3 +18,4 @@ namespace BalloonParty.Configuration
         public float NudgeDuration;
     }
 }
+

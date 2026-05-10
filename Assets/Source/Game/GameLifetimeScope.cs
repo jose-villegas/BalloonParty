@@ -1,5 +1,6 @@
 #region
 
+using BalloonParty.Balloon;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Cheats;
@@ -22,7 +23,7 @@ namespace BalloonParty.Game
     public class GameLifetimeScope : LifetimeScope
     {
         [SerializeField] private GameConfiguration _gameConfiguration;
-        [SerializeField] private GameObject _balloonPrefab;
+        [SerializeField] private BalloonLifetimeScope _balloonScopePrefab;
         [SerializeField] private ProjectileLifetimeScope _projectileScopePrefab;
 
         protected override void Configure(IContainerBuilder builder)
@@ -38,7 +39,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
 
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
-            builder.RegisterInstance(new BalloonSpawnerSettings(_balloonPrefab));
+            builder.RegisterInstance(new BalloonSpawnerSettings(_balloonScopePrefab));
             builder.RegisterInstance(new ThrowerSettings(_projectileScopePrefab));
 
             builder.Register<SlotGrid>(Lifetime.Singleton);

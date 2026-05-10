@@ -30,7 +30,7 @@ namespace BalloonParty.Shared
         int PredictionTraceMaxSteps { get; }
         BalloonColorConfiguration[] BalloonColors { get; }
         GameDisplayConfiguration DisplayConfiguration { get; }
-        PowerUpConfiguration PowerUpConfiguration { get; }
+        ItemConfiguration ItemConfiguration { get; }
 
         int PointsRequiredForLevel(int level);
         Color BalloonColor(string colorName);

@@ -31,6 +31,7 @@ namespace BalloonParty.Projectile.View
         private bool _shieldShown;
         private ProjectileShieldView _shieldView;
 
+
         private void Awake()
         {
             _shieldView = GetComponentInChildren<ProjectileShieldView>(true);

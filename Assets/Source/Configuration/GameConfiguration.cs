@@ -43,8 +43,8 @@ namespace BalloonParty.Configuration
         [SerializeField] private int _predictionTraceMaxBounces;
         [SerializeField] private int _predictionTraceMaxSteps;
 
-        [Header("Power-Ups")]
-        [SerializeField] private PowerUpConfiguration _powerUpConfiguration;
+        [Header("Items")]
+        [SerializeField] private ItemConfiguration _itemConfiguration;
 
         public Vector2 ThrowerSpawnPoint => _throwerSpawnPoint;
         public Vector2 ProjectileSpawnPoint => _projectileSpawnPoint;
@@ -67,7 +67,10 @@ namespace BalloonParty.Configuration
         public int PredictionTraceMaxSteps => _predictionTraceMaxSteps;
         public float ScorePointTraceDuration => _scorePointTraceDuration;
         public GameDisplayConfiguration DisplayConfiguration => _displayConfiguration;
-        public PowerUpConfiguration PowerUpConfiguration => _powerUpConfiguration;
+        public ItemConfiguration ItemConfiguration => _itemConfiguration;
+
+        // Legacy backward-compatible bridge — Source_Old IGameConfiguration requires this property
+        public PowerUpConfiguration PowerUpConfiguration => null;
 
         public int PointsRequiredForLevel(int level)
         {

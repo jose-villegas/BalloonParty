@@ -1,5 +1,6 @@
 #region
 
+using BalloonParty.Configuration;
 using UniRx;
 using UnityEngine;
 
@@ -12,6 +13,7 @@ namespace BalloonParty.Balloon.Model
         new ReactiveProperty<string> Color { get; }
         new ReactiveProperty<Vector2Int> SlotIndex { get; }
         new ReactiveProperty<bool> IsStable { get; }
+        new ReactiveProperty<ItemType> Item { get; }
     }
 }
 

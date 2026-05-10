@@ -19,7 +19,6 @@ namespace BalloonParty.UI.Score
         protected override ScorePointTrail Create()
         {
             var instance = Object.Instantiate(_prefab, Container);
-            instance.Initialize(Return);
             instance.gameObject.SetActive(false);
             return instance;
         }

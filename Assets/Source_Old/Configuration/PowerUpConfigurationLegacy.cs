@@ -1,11 +1,10 @@
-#region
+// Legacy backward-compatible stub — the canonical type is now
+// ItemConfiguration in Assets/Source/Configuration.
 
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-
-#endregion
 
 namespace BalloonParty.Configuration
 {
@@ -19,3 +18,4 @@ namespace BalloonParty.Configuration
         public PowerUpSettings this[BalloonPowerUp type] => _powerUps.First(x => x.Type == type);
     }
 }
+

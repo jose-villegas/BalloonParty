@@ -1,5 +1,7 @@
 #region
 
+using System;
+using BalloonParty.Shared;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -7,26 +9,41 @@ using UnityEngine.UI;
 
 namespace BalloonParty.UI.Score
 {
-    public class ScoreNotice : MonoBehaviour, IReusable
+    public class ScoreNotice : MonoBehaviour, IPoolable
     {
         [SerializeField] private Graphic[] _graphicsToSetColor;
         [SerializeField] private Animator _animator;
+        [SerializeField] private Transform _labelTransform;
         [SerializeField] private Text _label;
         [SerializeField] private Text _shadow;
-        [SerializeField] private float _maxScale = 2f;
-        [SerializeField] private float _maxScaleScore = 100f;
+        [SerializeField] private AnimationCurve _scaleCurve;
 
-        public bool IsUsable { get; private set; }
+        private Action _onComplete;
+        private Transform _parent;
 
-        private void Awake()
+        public bool IsFullyShown { get; private set; }
+
+        public void OnSpawned()
         {
-            IsUsable = false;
-            InvokeRepeating(nameof(CheckAvailability), 0f, 0.15f);
+            IsFullyShown = false;
+            _onComplete = null;
+            if (_parent != null)
+            {
+                transform.SetParent(_parent, false);
+            }
         }
 
+        public void OnDespawned() { }
 
-        public void Show(int score, Color color)
+        public void SetParent(Transform parent)
         {
+            _parent = parent;
+        }
+
+        public void Show(int score, Color color, Action onComplete)
+        {
+            _onComplete = onComplete;
+
             foreach (var g in _graphicsToSetColor)
             {
                 g.color = color;
@@ -36,12 +53,24 @@ namespace BalloonParty.UI.Score
             _label.text = _shadow.text = score.ToString("N0");
 
             transform.localScale = Vector3.one;
-            transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * _maxScale, score / _maxScaleScore);
+            _labelTransform.localScale = Vector3.one * _scaleCurve.Evaluate(score);
         }
 
-        private void CheckAvailability()
+        public void Dismiss()
         {
-            IsUsable = _animator.GetCurrentAnimatorStateInfo(0).IsTag("Available");
+            _animator.Play("ScoreDisappear");
+        }
+
+        private void OnAnimationScoreFully()
+        {
+            IsFullyShown = true;
+        }
+
+        private void OnAnimationCompleted()
+        {
+            var callback = _onComplete;
+            _onComplete = null;
+            callback?.Invoke();
         }
     }
 }

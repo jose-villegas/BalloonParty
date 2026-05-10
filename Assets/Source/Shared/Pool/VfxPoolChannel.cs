@@ -21,7 +21,6 @@ namespace BalloonParty.Shared
             instance.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
 
             var poolable = instance.gameObject.AddComponent<PoolableParticle>();
-            poolable.Initialize(p => Return(p));
 
             instance.gameObject.SetActive(false);
             return poolable;

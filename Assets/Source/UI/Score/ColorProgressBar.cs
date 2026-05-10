@@ -32,15 +32,17 @@ namespace BalloonParty.UI.Score
         [Inject] private PoolManager _poolManager;
         [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
 
-        private readonly List<ScoreNotice> _notices = new();
+        private readonly List<ScoreNotice> _activeNotices = new();
 
         private BalloonColorConfiguration _colorConfig;
         private int _localCount;
+        private string _noticePoolKey;
         private string _trailPoolKey;
 
         public void Setup(BalloonColorConfiguration colorConfig, ScoreController scoreController)
         {
             _colorConfig = colorConfig;
+            _noticePoolKey = $"ScoreNotice_{colorConfig.Name}";
             _trailPoolKey = $"ScoreTrail_{colorConfig.Name}";
 
             foreach (var g in _graphicsToSetColor)
@@ -60,6 +62,7 @@ namespace BalloonParty.UI.Score
         {
             if (msg.ColorName != _colorConfig.Name)
             {
+                _localCount = 0;
                 return;
             }
 
@@ -90,14 +93,29 @@ namespace BalloonParty.UI.Score
 
         private void SpawnNotice()
         {
-            var notice = FindAvailable(_notices);
-            if (notice == null)
-            {
-                notice = Instantiate(_noticePrefab, transform);
-                _notices.Add(notice);
-            }
+            DismissFullyShownNotices();
 
-            notice.Show(_localCount, _colorConfig.Color);
+            var notice = _poolManager.GetOrRegister(_noticePoolKey,
+                () => new ScoreNoticePoolChannel(_noticePrefab));
+
+            notice.SetParent(transform);
+            _activeNotices.Add(notice);
+            notice.Show(_localCount, _colorConfig.Color, () =>
+            {
+                _activeNotices.Remove(notice);
+                _poolManager.Return(_noticePoolKey, notice);
+            });
+        }
+
+        private void DismissFullyShownNotices()
+        {
+            for (var i = _activeNotices.Count - 1; i >= 0; i--)
+            {
+                if (_activeNotices[i].IsFullyShown)
+                {
+                    _activeNotices[i].Dismiss();
+                }
+            }
         }
 
         private void SpawnTrail(Vector3 fromWorldPosition)
@@ -111,21 +129,11 @@ namespace BalloonParty.UI.Score
             trail.Setup(transform.position,
                 _colorConfig.Color,
                 _config,
-                () => _animator.SetTrigger("TrailHit"));
-        }
-
-        private static T FindAvailable<T>(List<T> pool)
-            where T : MonoBehaviour, IReusable
-        {
-            foreach (var item in pool)
-            {
-                if (item.IsUsable)
+                () =>
                 {
-                    return item;
-                }
-            }
-
-            return null;
+                    _animator.SetTrigger("TrailHit");
+                    _poolManager.Return(_trailPoolKey, trail);
+                });
         }
     }
 }

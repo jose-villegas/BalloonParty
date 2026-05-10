@@ -16,15 +16,19 @@ namespace BalloonParty.UI.Score
         [SerializeField] private AnimationCurve _scaleCurve;
         [SerializeField] private AnimationCurve _moveCurve;
 
-        private Action<ScorePointTrail> _returnToPool;
 
         public void OnSpawned() { }
 
         public void OnDespawned() { }
 
-        public void Initialize(Action<ScorePointTrail> returnToPool)
+        private void Awake()
         {
-            _returnToPool = returnToPool;
+            const string sortingLayer = "UI";
+            const int sortingOrder = 100;
+            _renderer.sortingLayerName = sortingLayer;
+            _renderer.sortingOrder = sortingOrder;
+            _trailRenderer.sortingLayerName = sortingLayer;
+            _trailRenderer.sortingOrder = sortingOrder;
         }
 
         public void Setup(Vector3 target, Color color, IGameConfiguration config, Action onCompleted)
@@ -38,11 +42,7 @@ namespace BalloonParty.UI.Score
             scaleTween.SetEase(_scaleCurve);
             moveTween.SetEase(_moveCurve);
 
-            scaleTween.OnComplete(() =>
-            {
-                onCompleted?.Invoke();
-                _returnToPool?.Invoke(this);
-            });
+            scaleTween.OnComplete(() => onCompleted?.Invoke());
         }
     }
 }

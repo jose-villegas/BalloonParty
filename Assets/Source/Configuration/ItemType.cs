@@ -1,6 +1,6 @@
 namespace BalloonParty.Configuration
 {
-    public enum BalloonPowerUp
+    public enum ItemType
     {
         None,
         Shield,
@@ -9,3 +9,4 @@ namespace BalloonParty.Configuration
         Lightning
     }
 }
+

@@ -1,6 +1,6 @@
 #region
 
-using UnityEngine;
+using VContainer.Unity;
 
 #endregion
 
@@ -8,11 +8,13 @@ namespace BalloonParty.Balloon.Spawner
 {
     public class BalloonSpawnerSettings
     {
-        public readonly GameObject BalloonPrefab;
+        public readonly LifetimeScope BalloonScopePrefab;
 
-        public BalloonSpawnerSettings(GameObject balloonPrefab)
+        public BalloonSpawnerSettings(LifetimeScope balloonScopePrefab)
         {
-            BalloonPrefab = balloonPrefab;
+            BalloonScopePrefab = balloonScopePrefab;
         }
     }
 }
+
+

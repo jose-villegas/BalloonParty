@@ -9,14 +9,21 @@ namespace BalloonParty.Shared
 {
     public class PoolableParticle : MonoBehaviour, IPoolable
     {
+        private Action _onComplete;
         private ParticleSystem _particle;
-        private Action<PoolableParticle> _returnToPool;
+
+        private void Awake()
+        {
+            _particle = GetComponent<ParticleSystem>();
+        }
 
         private void Update()
         {
-            if (_particle != null && !_particle.IsAlive())
+            if (_onComplete != null && _particle != null && !_particle.IsAlive())
             {
-                _returnToPool?.Invoke(this);
+                var callback = _onComplete;
+                _onComplete = null;
+                callback.Invoke();
             }
         }
 
@@ -24,17 +31,13 @@ namespace BalloonParty.Shared
 
         public void OnDespawned()
         {
+            _onComplete = null;
             _particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
-        public void Initialize(Action<PoolableParticle> returnToPool)
+        public void Play(Vector3 position, Color color, Action onComplete)
         {
-            _particle = GetComponent<ParticleSystem>();
-            _returnToPool = returnToPool;
-        }
-
-        public void Play(Vector3 position, Color color)
-        {
+            _onComplete = onComplete;
             transform.position = position;
             var main = _particle.main;
             main.startColor = color;
