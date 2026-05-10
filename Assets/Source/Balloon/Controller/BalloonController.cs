@@ -10,7 +10,6 @@ namespace BalloonParty.Balloon.Controller
 {
     public class BalloonController
     {
-        public BalloonModel Model { get; }
         private readonly IGameConfiguration _config;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
@@ -34,6 +33,8 @@ namespace BalloonParty.Balloon.Controller
             _config = config;
             _poolManager = poolManager;
         }
+
+        public BalloonModel Model { get; }
 
         public void Start()
         {

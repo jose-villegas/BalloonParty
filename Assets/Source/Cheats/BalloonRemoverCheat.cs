@@ -15,13 +15,16 @@ namespace BalloonParty.Cheats
         private const float PathSampleDistance = 0.05f;
 
         private readonly List<Vector3> _path = new();
+
         private bool _active;
         private bool _dragging;
 
         [Inject] private SlotGrid _grid;
         [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
+
         private Material _lineMaterial;
         [Inject] private IPublisher<BalanceBalloonsMessage> _publisher;
+
 
         private void Awake()
         {

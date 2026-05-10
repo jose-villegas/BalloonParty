@@ -917,6 +917,21 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 
 ---
 
+### Phase 14 — Noted for Future Review
+
+The following Unity API usages in controllers/models were identified during the audit. They work correctly today but violate strict MVC separation. Consider abstracting behind interfaces if the codebase grows or testing requirements demand it.
+
+| Class | Unity API Used | Possible Abstraction |
+|---|---|---|
+| `ScoreController` | `PlayerPrefs.GetInt/SetInt/Save` | Extract `IScorePersistence` interface; implement with `PlayerPrefs` in a view-layer class |
+| `ScoreController` | `Application.quitting`, `Application.focusChanged` | Inject an `IApplicationLifecycle` or use a thin MonoBehaviour that publishes lifecycle messages |
+| `ScoreController` | `Time.timeScale = 0f` | Publish a `GamePausedMessage`; let a view-layer class set `Time.timeScale` |
+| `OrthogonalSizeCameraController` | `Camera.main`, `camera.orthographicSize` | Already minimal — entire purpose is camera setup. Could become a MonoBehaviour view if needed |
+| `SlotGrid` | `UnityEngine.Random.Range` | Inject `System.Random` or an `IRandom` interface for deterministic testing |
+| `SlotGrid` | `Debug.LogError` | Replace with a logging abstraction or simply remove the guard (fail fast) |
+
+---
+
 ## Phase 15 — Power-Ups
 
 **Goal:** Port the 5 power-up controllers using MessagePipe and VContainer.
@@ -1258,13 +1273,16 @@ Classes follow a strict top-to-bottom ordering by visibility and purpose:
 1. **Fields & Properties** (top of class)
    - `public` → `protected` → `private`
    - Within each visibility group, order by purpose:
-     1. Constants
-     2. `[SerializeField]` fields (grouped by `[Header]` when purpose/context warrants it)
-     3. `[Inject]` fields
-     4. Regular fields (services, config, resolver, etc.)
-     5. MessagePipe publishers and subscribers (`IPublisher<T>`, `ISubscriber<T>`) — grouped together after regular fields
-     6. Cancellation tokens (`CancellationTokenSource`, `CancellationToken`) — grouped last among readonly fields
-     7. Auto-properties and mutable state
+     1. Constants (`const`) — *enforced by Rider*
+     2. Static readonly fields — *enforced by Rider*
+     3. `[SerializeField]` fields (grouped by `[Header]` when purpose/context warrants it) — *manual*
+     4. `[Inject]` fields — *manual*
+     5. Readonly instance fields (services, config, resolver) — *enforced by Rider (grouped with 3–4)*
+     6. MessagePipe publishers and subscribers (`IPublisher<T>`, `ISubscriber<T>`) — *manual, within readonly/mutable group*
+     7. Cancellation tokens (`CancellationTokenSource`, `CancellationToken`) — *manual, within readonly/mutable group*
+     8. Mutable instance fields — *enforced by Rider (always last among fields)*
+     9. Auto-properties — *enforced by Rider (after all fields)*
+   > **Tooling note:** Rider enforces the broad grouping: constants → static readonly → readonly → mutable → properties. The sub-ordering within readonly/mutable fields (`[SerializeField]` before `[Inject]` before services before publishers before CTS) is a manual convention enforced by code review.
 2. **Methods** (below fields)
    - `public` → `protected` → `private`
    - Unity lifecycle methods (`Awake`, `Start`, `Update`, etc.) sit at the top of their visibility group in lifecycle order

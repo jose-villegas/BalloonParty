@@ -1,4 +1,4 @@
-<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
 
 	<!-- ================================================================ -->
 	<!-- Formatting — Allman brace style                                  -->
@@ -11,7 +11,7 @@
 	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/CASE_BLOCK_BRACE_STYLE/@EntryValue">NEXT_LINE</s:String>
 	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/INITIALIZER_BRACE_STYLE/@EntryValue">NEXT_LINE</s:String>
 	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/OTHER_BRACE_STYLE/@EntryValue">NEXT_LINE</s:String>
-	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/EMPTY_BLOCK_STYLE/@EntryValue">TOGETHER_SAME_LINE</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/EMPTY_BLOCK_STYLE/@EntryValue">MULTILINE</s:String>
 
 	<!-- Braces for control flow -->
 	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/FORCE_ATTRIBUTE_STYLE/@EntryValue">SEPARATE</s:String>
@@ -22,6 +22,11 @@
 	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BRACES_FOR_USING/@EntryValue">REQUIRED</s:String>
 	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BRACES_FOR_LOCK/@EntryValue">REQUIRED</s:String>
 	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BRACES_FOR_FIXED/@EntryValue">REQUIRED</s:String>
+
+	<!-- ================================================================ -->
+	<!-- Modifiers — default to private                                    -->
+	<!-- ================================================================ -->
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/DEFAULT_MEMBER_ACCESS/@EntryValue">PRIVATE</s:String>
 
 	<!-- ================================================================ -->
 	<!-- Spacing                                                          -->
@@ -79,92 +84,388 @@
 	<!-- ================================================================ -->
 	<s:String x:Key="/Default/CodeStyle/CSharpFileLayoutPatterns/Pattern/@EntryValue"><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
 <Patterns xmlns="urn:schemas-jetbrains-com:member-reordering-patterns">
+  <TypePattern DisplayName="Non-reorderable types">
+    <TypePattern.Match>
+      <Or>
+        <And>
+          <Kind Is="Interface" />
+          <Or>
+            <HasAttribute Name="System.Runtime.InteropServices.InterfaceTypeAttribute" />
+            <HasAttribute Name="System.Runtime.InteropServices.ComImport" />
+          </Or>
+        </And>
+        <Kind Is="Struct" />
+        <HasAttribute Name="JetBrains.Annotations.NoReorderAttribute" />
+        <HasAttribute Name="JetBrains.Annotations.NoReorder" />
+      </Or>
+    </TypePattern.Match>
+  </TypePattern>
+
+  <TypePattern DisplayName="xUnit.net Test Classes" RemoveRegions="All">
+    <TypePattern.Match>
+      <And>
+        <Kind Is="Class" />
+        <HasMember>
+          <And>
+            <Kind Is="Method" />
+            <HasAttribute Name="Xunit.FactAttribute" Inherited="True" />
+          </And>
+        </HasMember>
+      </And>
+    </TypePattern.Match>
+
+    <Entry DisplayName="Setup/Teardown Methods">
+      <Entry.Match>
+        <Or>
+          <Kind Is="Constructor" />
+          <And>
+            <Kind Is="Method" />
+            <ImplementsInterface Name="System.IDisposable" />
+          </And>
+        </Or>
+      </Entry.Match>
+
+      <Entry.SortBy>
+        <Kind Order="Constructor" />
+      </Entry.SortBy>
+    </Entry>
+
+    <Entry DisplayName="All other members" />
+    <Entry Priority="100" DisplayName="Test Methods">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <HasAttribute Name="Xunit.FactAttribute" />
+        </And>
+      </Entry.Match>
+    </Entry>
+  </TypePattern>
+
+  <TypePattern DisplayName="NUnit Test Fixtures" RemoveRegions="All">
+    <TypePattern.Match>
+      <And>
+        <Kind Is="Class" />
+        <HasAttribute Name="NUnit.Framework.TestFixtureAttribute" Inherited="True" />
+      </And>
+    </TypePattern.Match>
+
+    <Entry DisplayName="Setup/Teardown Methods">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Or>
+            <HasAttribute Name="NUnit.Framework.SetUpAttribute" Inherited="True" />
+            <HasAttribute Name="NUnit.Framework.TearDownAttribute" Inherited="True" />
+            <HasAttribute Name="NUnit.Framework.FixtureSetUpAttribute" Inherited="True" />
+            <HasAttribute Name="NUnit.Framework.FixtureTearDownAttribute" Inherited="True" />
+          </Or>
+        </And>
+      </Entry.Match>
+    </Entry>
+
+    <Entry DisplayName="All other members" />
+
+    <Entry Priority="100" DisplayName="Test Methods">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <HasAttribute Name="NUnit.Framework.TestAttribute" />
+        </And>
+      </Entry.Match>
+    </Entry>
+  </TypePattern>
+
   <TypePattern DisplayName="Default Pattern">
-    <Entry DisplayName="Public fields">
-      <Entry.Match>
-        <And>
-          <Kind Is="Field" />
-          <Access Is="Public" />
-        </And>
-      </Entry.Match>
-    </Entry>
-    <Entry DisplayName="Public properties">
-      <Entry.Match>
-        <And>
-          <Kind Is="Property" />
-          <Access Is="Public" />
-        </And>
-      </Entry.Match>
-    </Entry>
-    <Entry DisplayName="Protected fields">
-      <Entry.Match>
-        <And>
-          <Kind Is="Field" />
-          <Access Is="Protected" />
-        </And>
-      </Entry.Match>
-    </Entry>
-    <Entry DisplayName="Protected properties">
-      <Entry.Match>
-        <And>
-          <Kind Is="Property" />
-          <Access Is="Protected" />
-        </And>
-      </Entry.Match>
-    </Entry>
-    <Entry DisplayName="Private fields">
-      <Entry.Match>
-        <And>
-          <Kind Is="Field" />
-          <Access Is="Private" />
-        </And>
-      </Entry.Match>
-    </Entry>
-    <Entry DisplayName="Private properties">
-      <Entry.Match>
-        <And>
-          <Kind Is="Property" />
-          <Access Is="Private" />
-        </And>
-      </Entry.Match>
-    </Entry>
-    <Entry DisplayName="Constructors">
-      <Entry.Match>
-        <Kind Is="Constructor" />
-      </Entry.Match>
-    </Entry>
-    <Entry DisplayName="Public methods">
-      <Entry.Match>
-        <And>
-          <Kind Is="Method" />
-          <Access Is="Public" />
-        </And>
-      </Entry.Match>
-    </Entry>
-    <Entry DisplayName="Protected methods">
-      <Entry.Match>
-        <And>
-          <Kind Is="Method" />
-          <Access Is="Protected" />
-        </And>
-      </Entry.Match>
-    </Entry>
-    <Entry DisplayName="Private methods">
-      <Entry.Match>
-        <And>
-          <Kind Is="Method" />
-          <Access Is="Private" />
-        </And>
-      </Entry.Match>
-    </Entry>
-    <Entry DisplayName="Nested types">
+    <Entry DisplayName="Nested Types">
       <Entry.Match>
         <Kind Is="Type" />
       </Entry.Match>
     </Entry>
-    <Entry DisplayName="Other members" />
+
+    <Entry Priority="100" DisplayName="Public Delegates">
+      <Entry.Match>
+        <And>
+          <Access Is="Public" />
+          <Kind Is="Delegate" />
+        </And>
+      </Entry.Match>
+    </Entry>
+
+    <Entry Priority="100" DisplayName="Public Enums">
+      <Entry.Match>
+        <And>
+          <Access Is="Public" />
+          <Kind Is="Enum" />
+        </And>
+      </Entry.Match>
+    </Entry>
+
+    <Entry DisplayName="Static Fields and Constants">
+      <Entry.Match>
+        <Or>
+          <And>
+            <Kind Is="Constant" />
+            <Access Is="Public" />
+          </And>
+          <And>
+            <Kind Is="Field" />
+            <Access Is="Public" />
+            <Static />
+          </And>
+        </Or>
+      </Entry.Match>
+
+      <Entry.SortBy>
+        <Kind Order="Constant Field" />
+      </Entry.SortBy>
+    </Entry>
+
+    <Entry DisplayName="Public Fields">
+      <Entry.Match>
+        <And>
+          <Access Is="Public" />
+          <Kind Is="Field" />
+        </And>
+      </Entry.Match>
+
+      <Entry.SortBy>
+        <Readonly />
+      </Entry.SortBy>
+    </Entry>
+
+    <Entry DisplayName="Serialized Fields">
+      <Entry.Match>
+        <And>
+          <Kind Is="Field" />
+          <HasAttribute Name="SerializeField" />
+        </And>
+      </Entry.Match>
+
+      <Entry.SortBy>
+        <Readonly />
+      </Entry.SortBy>
+    </Entry>
+
+    <Entry DisplayName="Private Static Fields and Constants">
+      <Entry.Match>
+        <Or>
+          <Kind Is="Constant" />
+          <And>
+            <Kind Is="Field" />
+            <Static />
+          </And>
+        </Or>
+      </Entry.Match>
+
+      <Entry.SortBy>
+        <Kind Order="Constant Field" />
+      </Entry.SortBy>
+    </Entry>
+
+    <Entry DisplayName="Private Fields">
+      <Entry.Match>
+        <And>
+          <Kind Is="Field" />
+          <Not>
+            <Static />
+          </Not>
+        </And>
+      </Entry.Match>
+
+      <Entry.SortBy>
+        <Readonly />
+      </Entry.SortBy>
+    </Entry>
+
+    <Entry DisplayName="Constructors">
+      <Entry.Match>
+        <Kind Is="Constructor" />
+      </Entry.Match>
+
+      <Entry.SortBy>
+        <Static />
+      </Entry.SortBy>
+    </Entry>
+
+    <Entry DisplayName="Properties, Indexers">
+      <Entry.Match>
+        <Or>
+          <Kind Is="Property" />
+          <Kind Is="Indexer" />
+        </Or>
+      </Entry.Match>
+    </Entry>
+
+    <Entry Priority="100" DisplayName="Interface Implementations">
+      <Entry.Match>
+        <And>
+          <Kind Is="Member" />
+          <ImplementsInterface />
+        </And>
+      </Entry.Match>
+
+      <Entry.SortBy>
+        <ImplementsInterface Immediate="True" />
+      </Entry.SortBy>
+    </Entry>
+
+    <Entry DisplayName="Public Methods">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Access Is="Public" />
+        </And>
+      </Entry.Match>
+    </Entry>
+
+    <Entry DisplayName="Core Unity MonoBehaviour Messages">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Or>
+            <Name Is="Awake" />
+            <Name Is="Start" />
+          </Or>
+        </And>
+      </Entry.Match>
+
+      <Entry.SortBy>
+        <Name />
+      </Entry.SortBy>
+    </Entry>
+
+    <Entry DisplayName="OnEnable MonoBehaviour Message">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Name Is="OnEnable" />
+        </And>
+      </Entry.Match>
+    </Entry>
+
+    <Entry DisplayName="OnDisable MonoBehaviour Message">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Name Is="OnDisable" />
+        </And>
+      </Entry.Match>
+    </Entry>
+
+    <Entry DisplayName="OnDestroy MonoBehaviour Message">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Name Is="OnDestroy" />
+        </And>
+      </Entry.Match>
+    </Entry>
+
+    <Entry DisplayName="Update MonoBehaviour Message">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Name Is="Update" />
+        </And>
+      </Entry.Match>
+    </Entry>
+
+    <Entry DisplayName="Unity MonoBehaviour Special Update Messages">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Or>
+            <Name Is="FixedUpdate" />
+            <Name Is="LateUpdate" />
+          </Or>
+        </And>
+      </Entry.Match>
+
+      <Entry.SortBy>
+        <Name />
+      </Entry.SortBy>
+    </Entry>
+
+    <Entry DisplayName="All Other Unity MonoBehaviour Messages">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Or>
+            <Name Is="OnAnimatorIK" />
+            <Name Is="OnAnimatorMove" />
+            <Name Is="OnApplicationFocus" />
+            <Name Is="OnApplicationPause" />
+            <Name Is="OnApplicationQuit" />
+            <Name Is="OnAudioFilterRead" />
+            <Name Is="OnBecameInvisible" />
+            <Name Is="OnBecameVisible" />
+            <Name Is="OnCollisionEnter" />
+            <Name Is="OnCollisionEnter2D" />
+            <Name Is="OnCollisionExit" />
+            <Name Is="OnCollisionExit2D" />
+            <Name Is="OnCollisionStay" />
+            <Name Is="OnCollisionStay2D" />
+            <Name Is="OnConnectedToServer" />
+            <Name Is="OnControllerColliderHit" />
+            <Name Is="OnDisconnectedFromServer" />
+            <Name Is="OnDrawGizmos" />
+            <Name Is="OnDrawGizmosSelected" />
+            <Name Is="OnFailedToConnect" />
+            <Name Is="OnFailedToConnectToMasterServer" />
+            <Name Is="OnGUI" />
+            <Name Is="OnJointBreak" />
+            <Name Is="OnJointBreak2D" />
+            <Name Is="OnMasterServerEvent" />
+            <Name Is="OnMouseDown" />
+            <Name Is="OnMouseDrag" />
+            <Name Is="OnMouseEnter" />
+            <Name Is="OnMouseExit" />
+            <Name Is="OnMouseOver" />
+            <Name Is="OnMouseUp" />
+            <Name Is="OnMouseUpAsButton" />
+            <Name Is="OnNetworkInstantiate" />
+            <Name Is="OnParticleCollision" />
+            <Name Is="OnParticleSystemStopped" />
+            <Name Is="OnParticleTrigger" />
+            <Name Is="OnParticleUpdateJobScheduled" />
+            <Name Is="OnPlayerConnected" />
+            <Name Is="OnPlayerDisconnected" />
+            <Name Is="OnPostRender" />
+            <Name Is="OnPreCull" />
+            <Name Is="OnPreRender" />
+            <Name Is="OnRenderImage" />
+            <Name Is="OnRenderObject" />
+            <Name Is="OnSerializeNetworkView" />
+            <Name Is="OnServerInitialized" />
+            <Name Is="OnTransformChildrenChanged" />
+            <Name Is="OnTransformParentChanged" />
+            <Name Is="OnTriggerEnter" />
+            <Name Is="OnTriggerEnter2D" />
+            <Name Is="OnTriggerExit" />
+            <Name Is="OnTriggerExit2D" />
+            <Name Is="OnTriggerStay" />
+            <Name Is="OnTriggerStay2D" />
+            <Name Is="OnValidate" />
+            <Name Is="OnWillRenderObject" />
+            <Name Is="Reset" />
+          </Or>
+        </And>
+      </Entry.Match>
+
+      <Entry.SortBy>
+        <Name />
+      </Entry.SortBy>
+    </Entry>
+
+    <Entry DisplayName="All Other Members" />
   </TypePattern>
 </Patterns>]]></s:String>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EFeature_002EServices_002ECodeCleanup_002EFileHeader_002EFileHeaderSettingsMigrate/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpKeepExistingMigration/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpPlaceEmbeddedOnSameLineMigration/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ECSharpUseContinuousIndentInsideBracesMigration/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002EMemberReordering_002EMigrations_002ECSharpFileLayoutPatternRemoveIsAttributeUpgrade/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/Environment/SettingsMigration/IsMigratorApplied/=JetBrains_002EReSharper_002EPsi_002ECSharp_002ECodeStyle_002ESettingsUpgrade_002EMigrateBlankLinesAroundFieldToBlankLinesAroundProperty/@EntryIndexedValue">True</s:Boolean>
 
 </wpf:ResourceDictionary>
 

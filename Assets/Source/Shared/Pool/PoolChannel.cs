@@ -14,8 +14,8 @@ namespace BalloonParty.Shared
     public abstract class PoolChannel<TItem> : IPoolChannel
         where TItem : Component, IPoolable
     {
-        protected Transform Container { get; private set; }
         private readonly Stack<TItem> _available = new();
+        protected Transform Container { get; private set; }
 
         public void SetParent(Transform parent)
         {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BalloonParty.Prediction;
 using DG.Tweening;
 using UnityEngine;
@@ -30,7 +31,7 @@ namespace BalloonParty.Thrower
             return transform.DOMove(target, duration);
         }
 
-        public void SetTrace(System.Collections.Generic.List<Vector3> points)
+        public void SetTrace(List<Vector3> points)
         {
             if (_traceView == null)
             {
@@ -46,4 +47,3 @@ namespace BalloonParty.Thrower
         }
     }
 }
-

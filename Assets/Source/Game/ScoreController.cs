@@ -5,24 +5,25 @@ using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
-using VContainer;
 using VContainer.Unity;
 
 namespace BalloonParty.Game
 {
     public class ScoreController : IStartable, IDisposable
     {
-        public ReactiveProperty<int> TotalScore { get; } = new(0);
-        public ReactiveProperty<int> Level { get; } = new(0);
+        private const string LevelKey = "Level";
+        private const string ProgressSuffix = ".Progress";
+
         private readonly IGameConfiguration _config;
-        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly Dictionary<string, int> _levelProgress = new();
-        private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private readonly Dictionary<string, int> _persistentScore = new();
+
         private readonly IPublisher<BalloonScoredMessage> _scoredPublisher;
+        private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
+        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+
         private IDisposable _subscription;
 
-        [Inject]
         public ScoreController(
             ISubscriber<BalloonHitMessage> hitSubscriber,
             IPublisher<BalloonScoredMessage> scoredPublisher,
@@ -34,6 +35,9 @@ namespace BalloonParty.Game
             _levelUpPublisher = levelUpPublisher;
             _config = config;
         }
+
+        public ReactiveProperty<int> TotalScore { get; } = new(0);
+        public ReactiveProperty<int> Level { get; } = new(0);
 
         public void Dispose()
         {
@@ -125,8 +129,5 @@ namespace BalloonParty.Game
                 Save();
             }
         }
-
-        private const string LevelKey = "Level";
-        private const string ProgressSuffix = ".Progress";
     }
 }

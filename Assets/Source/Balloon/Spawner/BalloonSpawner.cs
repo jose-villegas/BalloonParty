@@ -17,7 +17,6 @@ namespace BalloonParty.Balloon.Spawner
     public class BalloonSpawner : IStartable
     {
         private const string BalloonPoolKey = "Balloon";
-
         private readonly IGameConfiguration _config;
         private readonly SlotGrid _grid;
         private readonly PoolManager _poolManager;

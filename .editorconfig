@@ -220,13 +220,16 @@ resharper_csharp_blank_lines_around_single_line_invocable = 0
 
 resharper_csharp_place_simple_embedded_statement_on_same_line = false
 resharper_csharp_keep_existing_arrangement = true
+resharper_csharp_empty_block_style = multiline
 
 resharper_arrange_type_member_modifiers_highlighting = suggestion
 resharper_member_can_be_private_global_highlighting = suggestion
 resharper_member_can_be_protected_global_highlighting = suggestion
+resharper_member_ordering_highlighting = warning
 
 resharper_csharp_wrap_after_declaration_lpar = true
 resharper_csharp_wrap_parameters_style = chop_if_long
 resharper_csharp_wrap_arguments_style = chop_if_long
 resharper_csharp_wrap_before_first_type_parameter_constraint = true
 resharper_csharp_place_type_constraints_on_same_line = false
+

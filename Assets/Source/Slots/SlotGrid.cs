@@ -9,9 +9,6 @@ namespace BalloonParty.Slots
 {
     public class SlotGrid
     {
-        public IObservable<SlotGridChangedEvent> OnChanged => _onChanged;
-        public int Columns => _slots.GetLength(0);
-        public int Rows => _slots.GetLength(1);
         private readonly IGameConfiguration _config;
         private readonly Subject<SlotGridChangedEvent> _onChanged = new();
         private readonly BalloonModel[,] _slots;
@@ -21,6 +18,10 @@ namespace BalloonParty.Slots
             _config = config;
             _slots = new BalloonModel[config.SlotsSize.x, config.SlotsSize.y];
         }
+
+        public IObservable<SlotGridChangedEvent> OnChanged => _onChanged;
+        public int Columns => _slots.GetLength(0);
+        public int Rows => _slots.GetLength(1);
 
         public string RandomColorName()
         {

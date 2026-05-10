@@ -32,8 +32,6 @@ namespace BalloonParty.Thrower
         private bool _isMovable;
         private PredictionTraceCalculator _traceCalculator;
 
-        private string ProjectilePoolKey => _settings.ProjectileScopePrefab.name;
-
         [Inject]
         public ThrowerController(
             ThrowerView view,
@@ -54,6 +52,8 @@ namespace BalloonParty.Thrower
             _destroyedSubscriber = destroyedSubscriber;
             _loadedPublisher = loadedPublisher;
         }
+
+        private string ProjectilePoolKey => _settings.ProjectileScopePrefab.name;
 
         public void Start()
         {
@@ -118,7 +118,7 @@ namespace BalloonParty.Thrower
             var rad = angle * Mathf.Deg2Rad;
 
             var rotatedX = (Mathf.Cos(rad) * (spawnPoint.x - center.x)) -
-                           (Mathf.Sin(rad) * (spawnPoint.y - center.y)) + center.x;
+                (Mathf.Sin(rad) * (spawnPoint.y - center.y)) + center.x;
             var rotatedY = (Mathf.Sin(rad) * (spawnPoint.x - center.x)) +
                            (Mathf.Cos(rad) * (spawnPoint.y - center.y)) + center.y;
 
