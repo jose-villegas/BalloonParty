@@ -543,7 +543,9 @@ All logic lives in `BalloonSpawner`:
 
 ---
 
-## Phase 7h — Object Pooling & VFX/Trail Decoupling
+## Phase 8 — Object Pooling
+
+### Phase 8a — Generic Pool System & VFX/Trail Decoupling
 
 **Goal:** Replace all `Instantiate`/`Destroy` patterns with a generic pooling system. Decouple VFX and trails from the projectile hierarchy so they survive projectile recycling.
 
@@ -610,7 +612,7 @@ builder.Register<PoolManager>(Lifetime.Singleton);
 
 ---
 
-## Phase 7j — Migrate ScorePointTrail to PoolManager
+### Phase 8b — Migrate ScorePointTrail to PoolManager
 
 **Goal:** Replace the hand-rolled `List<ScorePointTrail>` + `IReusable` pattern in `ColorProgressBar` with the generic `PoolManager` / `PoolChannel` system, so score trails live under the `[Pool]` hierarchy instead of cluttering the scene root.
 
@@ -640,7 +642,7 @@ None — no new serialized references. `PoolManager` is already registered as a 
 
 ---
 
-## Phase 7k — Migrate Balloon Instances to PoolManager
+### Phase 8c — Migrate Balloon Instances to PoolManager
 
 **Goal:** Replace `Instantiate`/`Destroy` for balloon GameObjects with the `PoolManager` / `PoolChannel` system, so popped balloons are recycled instead of destroyed and all balloon instances live under the `[Pool]` hierarchy.
 
@@ -674,7 +676,7 @@ None — no new serialized references. `PoolManager` is already registered as a 
 
 ---
 
-## Phase 8 — Redo Balance Animation System
+## Phase 9 — Balance Animation System Redo
 
 **Goal:** Rewrite the balloon balance/nudge/spawn animation system so that tweens compose correctly — matching the legacy Entitas system's behaviour where balance appends to running animations instead of killing them.
 
@@ -855,7 +857,13 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 
 ---
 
-## Phase 9 — Power-Ups
+## Phase 10 — Configuration Migration
+
+**Goal:** Move `GameConfiguration` out of `Source_Old` into `Source/` so it can be maintained independently.
+
+---
+
+## Phase 11 — Power-Ups
 
 **Goal:** Port the 5 power-up controllers using MessagePipe and VContainer.
 
@@ -868,7 +876,7 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 
 ---
 
-## Phase 10 — Game Loop, UI & Cleanup
+## Phase 12 — Game Loop, UI & Cleanup
 
 **Goal:** Replace `GameControllerBehaviour` entry point; retire `Source_Old`.
 
@@ -923,10 +931,10 @@ Each item must be ticked before `Source_Old` and the Entitas package can be dele
 - [ ] `FreeProjectileMovementSystem`, `ProjectileBounceSystem`, `ProjectileTransformSystem` → replaced by `ProjectileController` (Phase 5)
 - [ ] `BalloonCollisionSystem`, `TriggerReporterController`, `Cleanup2DTriggersSystem` → replaced by `OnTriggerEnter2D` on `ProjectileView` (Phase 5)
 - [ ] `BalloonHitDestructionSystem`, `BalloonHitNudgeAnimationSystem`, `BalloonHitScoreSystem` → replaced by `BalloonController` + `ScoreController` (Phase 6)
-- [ ] `BalloonsPowerUpCheckSystem`, all `*PowerUpController` → replaced by power-up controllers (Phase 9)
-- [ ] `GameControllerBehaviour`, `GameController`, `GameUpdateSystems`, `GameFixedUpdateSystems` → replaced by `GameManager` + `GameLifetimeScope` (Phase 10)
-- [ ] All Entitas-generated code in `Assets/Generated/` → deleted (Phase 10)
-- [ ] Entitas and DesperateDevs packages removed from `manifest.json` (Phase 10)
+- [ ] `BalloonsPowerUpCheckSystem`, all `*PowerUpController` → replaced by power-up controllers (Phase 11)
+- [ ] `GameControllerBehaviour`, `GameController`, `GameUpdateSystems`, `GameFixedUpdateSystems` → replaced by `GameManager` + `GameLifetimeScope` (Phase 12)
+- [ ] All Entitas-generated code in `Assets/Generated/` → deleted (Phase 12)
+- [ ] Entitas and DesperateDevs packages removed from `manifest.json` (Phase 12)
 
 ---
 
@@ -1215,18 +1223,21 @@ All async work in `Assets/Source/` must use **UniTask** instead of Unity corouti
 | 4     | Balloon Spawning & Line Management        | ✅ Done         |
 | 5     | Projectile & Thrower                      | ✅ Done         |
 | 6     | Hit, Destruction & Score Logic            | ✅ Done         |
-| 7a    | Score Feedback UI                         | ✅ Done         |
-| 7b    | Level-Up Popup                            | ✅ Done         |
-| 7c    | Shield Counter HUD                        | ✅ Done         |
-| 7d    | Projectile Shield Visuals & Gain Logic    | ⬜ Code done — Unity wiring pending  |
-| 7e    | Auto-Spawning on Projectile Death         | ✅ Done         |
-| 7f    | Game Start                                | ⬜ Code done — Unity wiring pending  |
-| 7g    | HUD Audit & Cleanup                       | ⬜ Todo         |
-| 7h    | Object Pooling & VFX/Trail Decoupling     | ✅ Done         |
-| 7j    | Migrate ScorePointTrail to PoolManager    | ✅ Done         |
-| 7k    | Migrate Balloon Instances to PoolManager  | ✅ Done         |
-| 7i    | Configuration Migration                   | ⬜ Todo         |
-| 8     | Redo Balance Animation System             | ✅ Done         |
-| 9     | Power-Ups                                 | ⬜ Todo         |
-| 10    | Game Loop, UI & Cleanup                   | ⬜ Todo         |
+| 7     | HUD & Score UI                            | ✅ Done         |
+| 7a    | — Score Feedback (bars, notices, trails)   | ✅ Done         |
+| 7b    | — Level-Up Popup                          | ✅ Done         |
+| 7c    | — Shield Counter HUD                      | ✅ Done         |
+| 7d    | — Projectile Shield Visuals               | ⬜ Unity wiring pending |
+| 7e    | — Auto-Spawning on Projectile Death       | ✅ Done         |
+| 7f    | — Game Start Button                       | ⬜ Unity wiring pending |
+| 7g    | — HUD Audit & Cleanup                    | ⬜ Todo         |
+| 8     | Object Pooling                            | ✅ Done         |
+| 8a    | — Generic Pool System & VFX/Trail         | ✅ Done         |
+| 8b    | — Migrate ScorePointTrail to PoolManager  | ✅ Done         |
+| 8c    | — Migrate Balloon Instances to PoolManager| ✅ Done         |
+| 9     | Balance Animation System Redo             | ✅ Done         |
+| 10    | Prediction Trace                          | ✅ Done (Unity wiring pending) |
+| 11    | Configuration Migration                   | ⬜ Todo         |
+| 12    | Power-Ups                                 | ⬜ Todo         |
+| 13    | Game Loop, UI & Cleanup                   | ⬜ Todo         |
 

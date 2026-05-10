@@ -379,15 +379,4 @@ These constraints apply to all code generated or written during this migration.
 
 ## Progress Tracker
 
-| Phase | Description                        | Status  |
-|-------|------------------------------------|---------|
-| 0     | Preparation & Folder Scaffold      | ⬜ Todo |
-| 1     | Balloon Model + View               | ⬜ Todo |
-| 2     | Slot Grid Model & Placement        | ⬜ Todo |
-| 3     | Balance / Movement Logic           | ⬜ Todo |
-| 4     | Balloon Spawning & Line Management | ⬜ Todo |
-| 5     | Projectile & Thrower               | ⬜ Todo |
-| 6     | Hit, Destruction & Score           | ⬜ Todo |
-| 7     | Power-Ups                          | ⬜ Todo |
-| 8     | Game Loop, UI & Cleanup            | ⬜ Todo |
-
+> ⚠️ **This file is stale.** The live migration plan is at `Assets/Source/MIGRATION_PLAN.md`.

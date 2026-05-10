@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using BalloonParty.Prediction;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Projectile.View;
@@ -26,10 +28,17 @@ namespace BalloonParty.Thrower
         [Inject] private PoolManager _poolManager;
         [Inject] private ThrowerSettings _settings;
 
+        private PredictionTraceCalculator _traceCalculator;
+        private PredictionTraceView _traceView;
+        private readonly List<Vector3> _tracePoints = new();
+
         private string ProjectilePoolKey => _settings.ProjectileScopePrefab.name;
 
         private void Start()
         {
+            _traceCalculator = new PredictionTraceCalculator(_config);
+            _traceView = GetComponentInChildren<PredictionTraceView>(true);
+
             _poolManager.Register(ProjectilePoolKey,
                 new ProjectilePoolChannel(_parentScope, _settings.ProjectileScopePrefab));
 
@@ -50,6 +59,7 @@ namespace BalloonParty.Thrower
             UpdateDirection();
             RotateToDirection();
             UpdateLoadedProjectilePosition();
+            UpdatePredictionTrace();
             TryFire();
         }
 
@@ -99,6 +109,22 @@ namespace BalloonParty.Thrower
 
             _activeProjectile.IsFree = true;
             _activeProjectile.Direction = _direction;
+            _traceView?.Clear();
+        }
+
+        private void UpdatePredictionTrace()
+        {
+            if (_traceView == null) return;
+
+            // Only show trace while aiming a loaded (not yet fired) projectile
+            if (_activeProjectile == null || _activeProjectile.IsFree || !Input.GetMouseButton(0))
+            {
+                _traceView.Clear();
+                return;
+            }
+
+            _traceCalculator.Calculate(_activeView.transform.position, _direction, _tracePoints);
+            _traceView.SetTrace(_tracePoints);
         }
 
         private void LoadProjectile()
