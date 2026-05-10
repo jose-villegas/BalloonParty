@@ -1,6 +1,8 @@
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Cheats;
+using BalloonParty.Configuration;
+using BalloonParty.Display;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
@@ -46,6 +48,7 @@ namespace BalloonParty.Game
 
             builder.RegisterComponentInHierarchy<ThrowerController>().AsSelf();
             builder.RegisterComponentInHierarchy<GameStartButton>();
+            builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();

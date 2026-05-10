@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Configuration;
 using UnityEngine;
 
 [RequireComponent(typeof(LinkedViewController))]
@@ -53,7 +54,7 @@ public class BalloonPowerUpDisplayController : MonoBehaviour, IBalloonPowerUpLis
     public void OnBalloonHit(GameEntity entity)
     {
         if (_powerUpController == null || _activated) return;
-        
+
         _activated = true;
         _powerUpController.Reference.Activate();
     }

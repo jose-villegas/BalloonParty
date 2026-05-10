@@ -6,6 +6,8 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using BalloonParty.Configuration;
+
 public interface IBalloonPowerUpListener {
     void OnBalloonPowerUp(GameEntity entity, BalloonPowerUp value);
 }

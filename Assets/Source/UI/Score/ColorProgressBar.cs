@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Configuration;
 using BalloonParty.Game;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;

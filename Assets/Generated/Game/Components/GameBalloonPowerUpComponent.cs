@@ -6,6 +6,8 @@
 //     the code is regenerated.
 // </auto-generated>
 //------------------------------------------------------------------------------
+using BalloonParty.Configuration;
+
 public partial class GameEntity {
 
     public BalloonPowerUpComponent balloonPowerUp { get { return (BalloonPowerUpComponent)GetComponent(GameComponentsLookup.BalloonPowerUp); } }

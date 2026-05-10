@@ -1,3 +1,4 @@
+using BalloonParty.Configuration;
 using UnityEngine;
 
 public class GameControllerBehaviour : MonoBehaviour

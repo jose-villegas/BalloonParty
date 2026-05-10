@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Configuration;
 using Entitas;
 using UnityEngine;
 
@@ -59,7 +60,7 @@ public class BalloonsPowerUpCheckSystem : ReactiveSystem<GameEntity>
             var sumOfProbabilities = powerUpSettings.Sum(x => x.Weight);
             var probabilityCheck = Random.Range(0f, sumOfProbabilities);
             var shift = 0f;
-            
+
             // check for which power up is going to be activated
             foreach (var powerUpSetting in powerUpSettings)
             {

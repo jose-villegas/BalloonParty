@@ -863,7 +863,7 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 
 ---
 
-## Phase 11 — Power-Ups
+## Phase 14 — Power-Ups
 
 **Goal:** Port the 5 power-up controllers using MessagePipe and VContainer.
 
@@ -876,7 +876,31 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 
 ---
 
-## Phase 12 — Game Loop, UI & Cleanup
+## Phase 12 — Camera & Display Setup
+
+**Goal:** Port the camera orthographic-size controller and audit the `AspectRatio` utility.
+
+> References: `OrthogonalSizeCameraController`, `AspectRatio`
+
+1. Create `Assets/Source/Display/OrthogonalSizeCameraController.cs` — inject `IGameConfiguration`, read `DisplayConfiguration.GetOrthogonalSize()` and apply to the camera on `Start()`
+2. Audit `AspectRatio` utility — currently unused (no callers). Confirm it can be dropped; if any future display logic needs it, port to `BalloonParty.Display` namespace.
+3. ✅ **Checkpoint:** Camera orthographic size adapts correctly to different aspect ratios at startup.
+
+---
+
+## Phase 13 — Projectile Visuals
+
+**Goal:** Port the projectile glow color and shield ring visuals to the new architecture.
+
+> References: `ProjectileGlowColorController`, `ProjectileBounceShieldController`
+
+1. Port glow color logic into the projectile view hierarchy — tint a glow sprite to match the loaded balloon color. Inject `IGameConfiguration` for color lookup; subscribe to the projectile model's color via UniRx.
+2. Port shield ring scaling and color tinting — subscribe to shield count changes and balloon color. Match original DOTween eases and durations.
+3. ✅ **Checkpoint:** Projectile glow matches loaded balloon color; shield rings scale in/out and tint correctly.
+
+---
+
+## Phase 14 — Game Loop, UI & Cleanup
 
 **Goal:** Replace `GameControllerBehaviour` entry point; retire `Source_Old`.
 
@@ -931,10 +955,10 @@ Each item must be ticked before `Source_Old` and the Entitas package can be dele
 - [ ] `FreeProjectileMovementSystem`, `ProjectileBounceSystem`, `ProjectileTransformSystem` → replaced by `ProjectileController` (Phase 5)
 - [ ] `BalloonCollisionSystem`, `TriggerReporterController`, `Cleanup2DTriggersSystem` → replaced by `OnTriggerEnter2D` on `ProjectileView` (Phase 5)
 - [ ] `BalloonHitDestructionSystem`, `BalloonHitNudgeAnimationSystem`, `BalloonHitScoreSystem` → replaced by `BalloonController` + `ScoreController` (Phase 6)
-- [ ] `BalloonsPowerUpCheckSystem`, all `*PowerUpController` → replaced by power-up controllers (Phase 11)
-- [ ] `GameControllerBehaviour`, `GameController`, `GameUpdateSystems`, `GameFixedUpdateSystems` → replaced by `GameManager` + `GameLifetimeScope` (Phase 12)
-- [ ] All Entitas-generated code in `Assets/Generated/` → deleted (Phase 12)
-- [ ] Entitas and DesperateDevs packages removed from `manifest.json` (Phase 12)
+- [ ] `BalloonsPowerUpCheckSystem`, all `*PowerUpController` → replaced by power-up controllers (Phase 14)
+- [ ] `GameControllerBehaviour`, `GameController`, `GameUpdateSystems`, `GameFixedUpdateSystems` → replaced by `GameManager` + `GameLifetimeScope` (Phase 15)
+- [ ] All Entitas-generated code in `Assets/Generated/` → deleted (Phase 15)
+- [ ] Entitas and DesperateDevs packages removed from `manifest.json` (Phase 15)
 
 ---
 
@@ -1083,7 +1107,7 @@ Prefabs that carry multiple MonoBehaviours needing injection (e.g. the projectil
 
 Future popups (power-up unlocks, game-over screen, etc.) extend `GameChildLifetimeScope` — parent is wired automatically via `FindParent()`.
 
-**`RegisterComponentInHierarchy` scope boundary:** VContainer searches for the component only within the `LifetimeScope`'s own GameObject subtree. Registering a component in a scope whose root is not an ancestor of that component's GameObject will throw `VContainerException: X is not in this scene`. Always place the `LifetimeScope` on or above the registered component in the hierarchy.
+**`RegisterComponentInHierarchy` scope boundary:** For scene-based `LifetimeScope`s, VContainer searches the **entire scene** for the component (not just the scope's subtree). For prefab-based scopes created via `CreateChildFromPrefab`, the search is limited to the prefab's `GetComponentInChildren`. Always ensure the component exists in the expected search space.
 
 **Multiple instances of the same component:** When a scope's subtree contains multiple instances of a component (e.g. several `ShieldCounterLabel` on different Text elements), use `GetComponentsInChildren<T>(true)` in `Configure()` and register the array via `builder.RegisterInstance(array)`. The consumer injects `T[]`.
 
@@ -1245,7 +1269,9 @@ All async work in `Assets/Source/` must use **UniTask** instead of Unity corouti
 | 8c    | — Migrate Balloon Instances to PoolManager| ✅ Done         |
 | 9     | Balance Animation System Redo             | ✅ Done         |
 | 10    | Prediction Trace                          | ✅ Done (Unity wiring pending) |
-| 11    | Configuration Migration                   | ⬜ Todo         |
-| 12    | Power-Ups                                 | ⬜ Todo         |
-| 13    | Game Loop, UI & Cleanup                   | ⬜ Todo         |
+| 11    | Configuration Migration                   | ✅ Done         |
+| 12    | Camera & Display Setup                    | ✅ Done         |
+| 13    | Projectile Visuals (Glow + Shield Rings)  | ✅ Done         |
+| 14    | Power-Ups                                 | ⬜ Todo         |
+| 15    | Game Loop, UI & Cleanup                   | ⬜ Todo         |
 

@@ -1,4 +1,5 @@
-﻿using Entitas;
+﻿using BalloonParty.Configuration;
+using Entitas;
 using UnityEngine;
 
 [RequireComponent(typeof(LinkedViewController))]

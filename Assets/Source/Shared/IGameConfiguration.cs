@@ -1,3 +1,4 @@
+using BalloonParty.Configuration;
 using UnityEngine;
 
 namespace BalloonParty.Shared
@@ -24,6 +25,8 @@ namespace BalloonParty.Shared
         int PredictionTraceMaxBounces { get; }
         int PredictionTraceMaxSteps { get; }
         BalloonColorConfiguration[] BalloonColors { get; }
+        GameDisplayConfiguration DisplayConfiguration { get; }
+        PowerUpConfiguration PowerUpConfiguration { get; }
 
         int PointsRequiredForLevel(int level);
         Color BalloonColor(string colorName);

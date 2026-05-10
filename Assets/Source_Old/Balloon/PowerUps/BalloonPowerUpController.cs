@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using BalloonParty.Configuration;
 using Entitas;
 using UnityEngine;
 
@@ -30,16 +31,16 @@ public abstract class BalloonPowerUpController : MonoBehaviour, ISlotIndexListen
             var color = colorConfiguration.Color;
             spriteRenderer.color = new Color(color.r, color.g, color.b, _spritesAlpha);
         }
-        
+
         OnSlotIndex(gameEntity, Vector2Int.zero);
     }
 
     public abstract void Activate();
-    
+
     public void OnSlotIndex(GameEntity entity, Vector2Int value)
     {
         var baseSort = _layerController.Renderers[_layerController.Renderers.Length - 1].sortingOrder + 1;
-        
+
         foreach (var render in _renderers)
         {
             render.sortingOrder = baseSort++;
