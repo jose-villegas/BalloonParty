@@ -6,7 +6,9 @@ The thrower is the player-controlled launcher at the bottom of the screen. It ai
 
 | File | What it does |
 |---|---|
-| `ThrowerController` | MonoBehaviour — aiming, rotation, loading, firing, prediction trace, and reload logic |
+| `ThrowerController` | Plain C# class (`IStartable`, `ITickable`) — aiming, loading, firing, prediction trace, and reload logic |
+| `ThrowerView` | MonoBehaviour — owns the thrower's transform, rotation, entrance animation, and prediction trace display |
+| `ThrowerLifetimeScope` | Child `LifetimeScope` on the Thrower GameObject — registers `ThrowerView` and `ThrowerController` |
 | `ThrowerSettings` | Holds the `ProjectileLifetimeScope` prefab reference for pool creation |
 
 ## Gameplay
@@ -15,11 +17,11 @@ The player holds the mouse button to aim — the thrower rotates to face the cur
 
 ## How it works
 
-`ThrowerController` is a MonoBehaviour placed in the scene. On start it slides into position from below the screen, then loads a projectile and waits for input. Each frame it:
+`ThrowerController` is a plain C# class registered as an entry point in `ThrowerLifetimeScope`. It delegates all visual operations to `ThrowerView`. On start it slides into position from below the screen, then loads a projectile and waits for input. Each frame it:
 - Updates its aim direction from the mouse cursor position
-- Rotates its transform to match that direction
+- Tells the view to rotate to match that direction
 - Orbits the loaded projectile around the spawn point to preview the trajectory
-- Updates the prediction trace line (via `PredictionTraceCalculator` and `PredictionTraceView`) showing the projected path with wall bounces
+- Updates the prediction trace line (via `PredictionTraceCalculator` and `ThrowerView`) showing the projected path with wall bounces
 - Fires on mouse-up when all balloons have settled (unstable balloons block firing); clears the prediction trace on fire
 
 When a `ProjectileDestroyedMessage` arrives, `ThrowerController` creates a new projectile automatically. The projectile prefab carries a `ProjectileLifetimeScope`, so instantiation uses `parentScope.CreateChildFromPrefab()` — this wires the parent scope before activation, ensuring all injected dependencies resolve correctly. The pool key is derived from the prefab's name (`_settings.ProjectileScopePrefab.name`), keeping it consistent with the VFX pooling convention.

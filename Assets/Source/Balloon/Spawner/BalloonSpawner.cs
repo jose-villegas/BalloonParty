@@ -16,16 +16,21 @@ namespace BalloonParty.Balloon.Spawner
 {
     public class BalloonSpawner : IStartable
     {
-        private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
+        private const string BalloonPoolKey = "Balloon";
+
         private readonly IGameConfiguration _config;
-        private readonly CancellationTokenSource _cts = new();
-        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
-        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
-        private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly PoolManager _poolManager;
         private readonly IObjectResolver _resolver;
         private readonly BalloonSpawnerSettings _settings;
+
+        private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
+        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
+
+        private readonly CancellationTokenSource _cts = new();
+
         private int _turnCount;
 
         [Inject]
@@ -34,21 +39,21 @@ namespace BalloonParty.Balloon.Spawner
             BalloonSpawnerSettings settings,
             IGameConfiguration config,
             IObjectResolver resolver,
+            PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
             ISubscriber<BalloonHitMessage> hitSubscriber,
-            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
-            PoolManager poolManager)
+            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber)
         {
             _grid = grid;
             _settings = settings;
             _config = config;
             _resolver = resolver;
+            _poolManager = poolManager;
             _lineSubscriber = lineSubscriber;
             _balancePublisher = balancePublisher;
             _hitSubscriber = hitSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
-            _poolManager = poolManager;
         }
 
         public void Start()
@@ -58,12 +63,13 @@ namespace BalloonParty.Balloon.Spawner
 
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount));
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
+
+            PopulateInitialGrid();
         }
 
         public BalloonController SpawnBalloon(string colorName, Vector2Int slot)
         {
             var targetPosition = _grid.IndexToWorldPosition(slot);
-            // grid rows increase downward on screen, so +up*4 is 4 rows below the target
             var spawnPosition = _grid.IndexToWorldPosition(slot + (Vector2Int.up * 4));
 
             var view = _poolManager.Get<BalloonView>(BalloonPoolKey);
@@ -82,10 +88,33 @@ namespace BalloonParty.Balloon.Spawner
             return controller;
         }
 
+        private void PopulateInitialGrid()
+        {
+            for (var row = 0; row < _config.GameStartedBalloonLines; row++)
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, row));
+            }
+        }
+
         private void SpawnLine()
         {
             SpawnLineInternal();
             _balancePublisher.Publish(default);
+        }
+
+        private void SpawnLineInternal()
+        {
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                var firstEmptyRow = FindFirstEmptyRowFromTop(col);
+                if (!firstEmptyRow.HasValue)
+                {
+                    continue;
+                }
+
+                SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, firstEmptyRow.Value));
+            }
         }
 
         private void AnimateSpawn(BalloonView view, Vector3 targetPosition, BalloonModel model)
@@ -114,20 +143,6 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             return null;
-        }
-
-        private void SpawnLineInternal()
-        {
-            for (var col = 0; col < _grid.Columns; col++)
-            {
-                var firstEmptyRow = FindFirstEmptyRowFromTop(col);
-                if (!firstEmptyRow.HasValue)
-                {
-                    continue;
-                }
-
-                SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, firstEmptyRow.Value));
-            }
         }
 
         private void OnSpawnLinesRequested(int lineCount)
@@ -164,7 +179,5 @@ namespace BalloonParty.Balloon.Spawner
 
             _balancePublisher.Publish(default);
         }
-
-        private const string BalloonPoolKey = "Balloon";
     }
 }

@@ -14,45 +14,65 @@ using VContainer.Unity;
 
 namespace BalloonParty.Thrower
 {
-    public class ThrowerController : MonoBehaviour
+    public class ThrowerController : IStartable, ITickable
     {
+        private readonly IGameConfiguration _config;
+        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private readonly SlotGrid _grid;
+        private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
+        private readonly LifetimeScope _parentScope;
+        private readonly PoolManager _poolManager;
+        private readonly ThrowerSettings _settings;
+        private readonly ThrowerView _view;
         private readonly List<Vector3> _tracePoints = new();
+
         private ProjectileModel _activeProjectile;
         private ProjectileView _activeView;
-        [Inject] private IGameConfiguration _config;
-        [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private Vector3 _direction = Vector3.up;
-        [Inject] private SlotGrid _grid;
         private bool _isMovable;
-        [Inject] private IPublisher<ProjectileLoadedMessage> _loadedPublisher;
-        [Inject] private LifetimeScope _parentScope;
-        [Inject] private PoolManager _poolManager;
-        [Inject] private ThrowerSettings _settings;
-
         private PredictionTraceCalculator _traceCalculator;
-        private PredictionTraceView _traceView;
 
         private string ProjectilePoolKey => _settings.ProjectileScopePrefab.name;
 
-        private void Start()
+        [Inject]
+        public ThrowerController(
+            ThrowerView view,
+            IGameConfiguration config,
+            SlotGrid grid,
+            PoolManager poolManager,
+            LifetimeScope parentScope,
+            ThrowerSettings settings,
+            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
+            IPublisher<ProjectileLoadedMessage> loadedPublisher)
+        {
+            _view = view;
+            _config = config;
+            _grid = grid;
+            _poolManager = poolManager;
+            _parentScope = parentScope;
+            _settings = settings;
+            _destroyedSubscriber = destroyedSubscriber;
+            _loadedPublisher = loadedPublisher;
+        }
+
+        public void Start()
         {
             _traceCalculator = new PredictionTraceCalculator(_config);
-            _traceView = GetComponentInChildren<PredictionTraceView>(true);
 
             _poolManager.Register(ProjectilePoolKey,
                 new ProjectilePoolChannel(_parentScope, _settings.ProjectileScopePrefab));
 
             _destroyedSubscriber.Subscribe(_ => Reload());
 
-            transform.position = _config.ThrowerSpawnPoint + Vector2.down;
-            transform.DOMove(_config.ThrowerSpawnPoint, 1f).OnComplete(() =>
+            _view.Position = _config.ThrowerSpawnPoint + Vector2.down;
+            _view.AnimateEntrance(_config.ThrowerSpawnPoint, 1f).OnComplete(() =>
             {
                 _isMovable = true;
                 LoadProjectile();
             });
         }
 
-        private void Update()
+        public void Tick()
         {
             if (!_isMovable)
             {
@@ -60,7 +80,7 @@ namespace BalloonParty.Thrower
             }
 
             UpdateDirection();
-            RotateToDirection();
+            _view.RotateTo(_direction);
             UpdateLoadedProjectilePosition();
             UpdatePredictionTrace();
             TryFire();
@@ -79,16 +99,10 @@ namespace BalloonParty.Thrower
                 return;
             }
 
-            var screenPos = cam.WorldToScreenPoint(transform.position);
+            var screenPos = cam.WorldToScreenPoint(_view.Position);
             var rawDir = (Input.mousePosition - screenPos).normalized;
             rawDir.z = 0f;
             _direction = rawDir;
-        }
-
-        private void RotateToDirection()
-        {
-            var angle = Vector3.Angle(_direction, Vector3.right) - 90f;
-            transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
 
         private void UpdateLoadedProjectilePosition()
@@ -99,14 +113,14 @@ namespace BalloonParty.Thrower
             }
 
             var spawnPoint = _config.ProjectileSpawnPoint;
-            var center = transform.position;
+            var center = _view.Position;
             var angle = Vector3.Angle(_direction, Vector3.right) - 90f;
             var rad = angle * Mathf.Deg2Rad;
 
-            var rotatedX = (Mathf.Cos(rad) * (spawnPoint.x - center.x)) - (Mathf.Sin(rad) * (spawnPoint.y - center.y)) +
-                           center.x;
-            var rotatedY = (Mathf.Sin(rad) * (spawnPoint.x - center.x)) + (Mathf.Cos(rad) * (spawnPoint.y - center.y)) +
-                           center.y;
+            var rotatedX = (Mathf.Cos(rad) * (spawnPoint.x - center.x)) -
+                           (Mathf.Sin(rad) * (spawnPoint.y - center.y)) + center.x;
+            var rotatedY = (Mathf.Sin(rad) * (spawnPoint.x - center.x)) +
+                           (Mathf.Cos(rad) * (spawnPoint.y - center.y)) + center.y;
 
             _activeView.transform.position = new Vector3(rotatedX, rotatedY, 0f);
             _activeView.transform.up = _direction;
@@ -132,31 +146,25 @@ namespace BalloonParty.Thrower
 
             _activeProjectile.IsFree = true;
             _activeProjectile.Direction = _direction;
-            _traceView?.Clear();
+            _view.ClearTrace();
         }
 
         private void UpdatePredictionTrace()
         {
-            if (_traceView == null)
-            {
-                return;
-            }
-
-            // Only show trace while aiming a loaded (not yet fired) projectile
             if (_activeProjectile == null || _activeProjectile.IsFree || !Input.GetMouseButton(0))
             {
-                _traceView.Clear();
+                _view.ClearTrace();
                 return;
             }
 
             _traceCalculator.Calculate(_activeView.transform.position, _direction, _tracePoints);
-            _traceView.SetTrace(_tracePoints);
+            _view.SetTrace(_tracePoints);
         }
 
         private void LoadProjectile()
         {
             _activeView = _poolManager.Get<ProjectileView>(ProjectilePoolKey);
-            _activeView.transform.position = transform.position;
+            _activeView.transform.position = _view.Position;
 
             _activeProjectile = new ProjectileModel
             {

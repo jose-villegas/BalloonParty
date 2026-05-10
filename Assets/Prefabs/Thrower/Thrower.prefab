@@ -683,7 +683,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6132985126811919246}
-  - component: {fileID: 856178578978120201}
+  - component: {fileID: 1679979597599564690}
+  - component: {fileID: 8611030970407435584}
   m_Layer: 0
   m_Name: Thrower
   m_TagString: Untagged
@@ -710,7 +711,7 @@ Transform:
   - {fileID: 4269344500528897411}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &856178578978120201
+--- !u!114 &1679979597599564690
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -719,9 +720,25 @@ MonoBehaviour:
   m_GameObject: {fileID: 5911013269540393590}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 29e0e7a86b884953bad3f78f99581151, type: 3}
+  m_Script: {fileID: 11500000, guid: a232b3cce7b84b2aaaf10fad5be3e86d, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Thrower.ThrowerController
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Thrower.ThrowerLifetimeScope
+  parentReference:
+    TypeName: BalloonParty.Game.GameLifetimeScope
+  autoRun: 1
+  autoInjectGameObjects: []
+--- !u!114 &8611030970407435584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5911013269540393590}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1f80b74fd4694087b40ad3c4a3c89ca8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Thrower.ThrowerView
 --- !u!1 &6093874039620899883
 GameObject:
   m_ObjectHideFlags: 0

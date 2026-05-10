@@ -40,13 +40,11 @@ namespace BalloonParty.Game
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.Register<PoolManager>(Lifetime.Singleton);
             builder.RegisterComponentInHierarchy<SlotGridView>();
-            builder.RegisterComponentInHierarchy<SlotGridController>();
 
             builder.RegisterEntryPoint<BalloonBalancer>();
             builder.RegisterEntryPoint<BalloonSpawner>().AsSelf();
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
 
-            builder.RegisterComponentInHierarchy<ThrowerController>().AsSelf();
             builder.RegisterComponentInHierarchy<GameStartButton>();
 
             builder.RegisterEntryPoint<OrthogonalSizeCameraController>();

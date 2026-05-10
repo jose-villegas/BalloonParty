@@ -857,22 +857,9 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 
 ---
 
-## Phase 10 — Configuration Migration
+## Phase 11 — Configuration Migration
 
 **Goal:** Move `GameConfiguration` out of `Source_Old` into `Source/` so it can be maintained independently.
-
----
-
-## Phase 14 — Power-Ups
-
-**Goal:** Port the 5 power-up controllers using MessagePipe and VContainer.
-
-> References: `BombPowerUpController`, `LaserPowerUpController`, `LightningPowerUpController`, Shield, `BalloonsPowerUpCheckSystem`
-
-1. Create `Assets/Source/Shared/Messages/PowerUpActivatedMessage.cs` — carries power-up type and position
-2. Create `Assets/Source/Balloon/PowerUps/` — one controller per power-up, each injecting `IPublisher`/`ISubscriber` and `SlotGrid`
-3. Subscribe to `BalloonHitMessage` to check power-up trigger conditions (replaces `BalloonsPowerUpCheckSystem`)
-4. ✅ **Checkpoint:** Power-up triggers and visual effects work correctly.
 
 ---
 
@@ -882,7 +869,7 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 
 > References: `OrthogonalSizeCameraController`, `AspectRatio`
 
-1. Create `Assets/Source/Display/OrthogonalSizeCameraController.cs` — inject `IGameConfiguration`, read `DisplayConfiguration.GetOrthogonalSize()` and apply to the camera on `Start()`
+1. Create `Assets/Source/Display/OrthogonalSizeCameraController.cs` as an `IStartable` — inject `IGameConfiguration`, find `Camera.main`, read `DisplayConfiguration.GetOrthogonalSize()` and apply on start
 2. Audit `AspectRatio` utility — currently unused (no callers). Confirm it can be dropped; if any future display logic needs it, port to `BalloonParty.Display` namespace.
 3. ✅ **Checkpoint:** Camera orthographic size adapts correctly to different aspect ratios at startup.
 
@@ -900,7 +887,50 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 
 ---
 
-## Phase 14 — Game Loop, UI & Cleanup
+## Phase 14 — MVC Architecture Audit
+
+**Goal:** Enforce strict MVC separation — Models and Controllers must not be `MonoBehaviour`s. Only Views interact directly with Unity engine APIs.
+
+### Audit Targets
+
+| Class | Current | Issue | Action |
+|---|---|---|---|
+| `SlotGridController` | `MonoBehaviour` | Pure logic in `Start()`, uses `[SerializeField]` for config data already in `IGameConfiguration` | Convert to `IStartable`, use `IGameConfiguration.GameStartedBalloonLines` |
+| `ThrowerController` | `MonoBehaviour` | Uses `transform`, `Update()`, `GetComponentInChildren` — tightly coupled to GameObject | Split into `ThrowerController` (`IStartable` + `ITickable`) and `ThrowerView` (`MonoBehaviour`), add `ThrowerLifetimeScope` |
+
+### Rules Going Forward
+
+- **Model** — plain C# class. Holds reactive state (`ReactiveProperty<T>`). No Unity dependencies.
+- **Controller** — plain C# class registered via `Register<T>` or `RegisterEntryPoint<T>`. Uses `IStartable`, `ITickable`, `IFixedTickable` for lifecycle. No `MonoBehaviour`, no `transform`, no `Update()`.
+- **View** — `MonoBehaviour`. Owns the visual representation, reads model state via UniRx subscriptions, publishes user input as messages. May use `[Inject]` for dependencies.
+- When a controller needs engine interaction (transform, physics), split into a thin `View` (MonoBehaviour) and a `Controller` (plain C# class). The controller injects the view. Use a child `LifetimeScope` on the view's GameObject to wire them together.
+
+### Steps
+
+1. Convert `SlotGridController` from `MonoBehaviour` to `IStartable`, use `IGameConfiguration.GameStartedBalloonLines`
+2. Update `GameLifetimeScope` — change `RegisterComponentInHierarchy` to `RegisterEntryPoint` for `SlotGridController`
+3. Remove the `SlotGridController` component from the scene
+4. Split `ThrowerController` into `ThrowerView` (MonoBehaviour) + `ThrowerController` (`IStartable` + `ITickable`)
+5. Create `ThrowerLifetimeScope` — registers `ThrowerView` and `ThrowerController` as child of `GameLifetimeScope`
+6. Remove old `ThrowerController` MonoBehaviour from the Thrower GameObject, add `ThrowerView` and `ThrowerLifetimeScope` instead
+7. ✅ **Checkpoint:** No controller or model class inherits `MonoBehaviour`. All engine interaction goes through Views.
+
+---
+
+## Phase 15 — Power-Ups
+
+**Goal:** Port the 5 power-up controllers using MessagePipe and VContainer.
+
+> References: `BombPowerUpController`, `LaserPowerUpController`, `LightningPowerUpController`, Shield, `BalloonsPowerUpCheckSystem`
+
+1. Create `Assets/Source/Shared/Messages/PowerUpActivatedMessage.cs` — carries power-up type and position
+2. Create `Assets/Source/Balloon/PowerUps/` — one controller per power-up, each injecting `IPublisher`/`ISubscriber` and `SlotGrid`
+3. Subscribe to `BalloonHitMessage` to check power-up trigger conditions (replaces `BalloonsPowerUpCheckSystem`)
+4. ✅ **Checkpoint:** Power-up triggers and visual effects work correctly.
+
+---
+
+## Phase 16 — Game Loop, UI & Cleanup
 
 **Goal:** Replace `GameControllerBehaviour` entry point; retire `Source_Old`.
 
@@ -955,10 +985,10 @@ Each item must be ticked before `Source_Old` and the Entitas package can be dele
 - [ ] `FreeProjectileMovementSystem`, `ProjectileBounceSystem`, `ProjectileTransformSystem` → replaced by `ProjectileController` (Phase 5)
 - [ ] `BalloonCollisionSystem`, `TriggerReporterController`, `Cleanup2DTriggersSystem` → replaced by `OnTriggerEnter2D` on `ProjectileView` (Phase 5)
 - [ ] `BalloonHitDestructionSystem`, `BalloonHitNudgeAnimationSystem`, `BalloonHitScoreSystem` → replaced by `BalloonController` + `ScoreController` (Phase 6)
-- [ ] `BalloonsPowerUpCheckSystem`, all `*PowerUpController` → replaced by power-up controllers (Phase 14)
-- [ ] `GameControllerBehaviour`, `GameController`, `GameUpdateSystems`, `GameFixedUpdateSystems` → replaced by `GameManager` + `GameLifetimeScope` (Phase 15)
-- [ ] All Entitas-generated code in `Assets/Generated/` → deleted (Phase 15)
-- [ ] Entitas and DesperateDevs packages removed from `manifest.json` (Phase 15)
+- [ ] `BalloonsPowerUpCheckSystem`, all `*PowerUpController` → replaced by power-up controllers (Phase 15)
+- [ ] `GameControllerBehaviour`, `GameController`, `GameUpdateSystems`, `GameFixedUpdateSystems` → replaced by `GameManager` + `GameLifetimeScope` (Phase 16)
+- [ ] All Entitas-generated code in `Assets/Generated/` → deleted (Phase 16)
+- [ ] Entitas and DesperateDevs packages removed from `manifest.json` (Phase 16)
 
 ---
 
@@ -1100,6 +1130,7 @@ Prefabs that carry multiple MonoBehaviours needing injection (e.g. the projectil
 | Scope | Base | GameObject | Registers |
 |---|---|---|---|
 | `GameLifetimeScope` | `LifetimeScope` | scene root | all game systems, messages, cheats |
+| `ThrowerLifetimeScope` | `GameChildLifetimeScope` | Thrower GameObject | `ThrowerView`, `ThrowerController` |
 | `ScoreUILifetimeScope` | `GameChildLifetimeScope` | Score HUD canvas root | `ColorProgressBarInstancer` |
 | `LevelUpLifetimeScope` | `GameChildLifetimeScope` | LevelUp popup root | `LevelUpPopUp` |
 | `ShieldUILifetimeScope` | `GameChildLifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation` |
@@ -1183,6 +1214,12 @@ The test for whether a README needs updating: if a new developer read only that 
 
 These constraints apply to all code generated or written during this migration.
 
+### MVC Separation
+- **Model** — plain C# class. Holds reactive state (`ReactiveProperty<T>`). No Unity dependencies, no `MonoBehaviour`.
+- **Controller** — plain C# class. Registered via `Register<T>` or `RegisterEntryPoint<T>`. Uses VContainer lifecycle interfaces (`IStartable`, `ITickable`, `IFixedTickable`) instead of Unity's `Start()` / `Update()`. No `MonoBehaviour`, no `transform`.
+- **View** — `MonoBehaviour`. The only layer that touches Unity APIs (transforms, renderers, UI, physics). Reads model state via UniRx subscriptions. Publishes input/events via MessagePipe.
+- When a controller needs engine interaction, split into a thin **View** (MonoBehaviour) + **Controller** (plain C# class). Wire them via a child `LifetimeScope` on the view's GameObject.
+
 ### Comments
 - **Only comment the *why***, never the *what* or *how* — if the code needs a comment to explain what it does, it should be renamed or refactored instead.
 - **No redundant comments.** Avoid comments like `// inject dependencies`, `// constructor`, `// update position` above self-evident code.
@@ -1221,9 +1258,13 @@ Classes follow a strict top-to-bottom ordering by visibility and purpose:
 1. **Fields & Properties** (top of class)
    - `public` → `protected` → `private`
    - Within each visibility group, order by purpose:
-     1. `[SerializeField]` fields (grouped by `[Header]` when purpose/context warrants it)
-     2. `[Inject]` fields
-     3. Regular fields and auto-properties
+     1. Constants
+     2. `[SerializeField]` fields (grouped by `[Header]` when purpose/context warrants it)
+     3. `[Inject]` fields
+     4. Regular fields (services, config, resolver, etc.)
+     5. MessagePipe publishers and subscribers (`IPublisher<T>`, `ISubscriber<T>`) — grouped together after regular fields
+     6. Cancellation tokens (`CancellationTokenSource`, `CancellationToken`) — grouped last among readonly fields
+     7. Auto-properties and mutable state
 2. **Methods** (below fields)
    - `public` → `protected` → `private`
    - Unity lifecycle methods (`Awake`, `Start`, `Update`, etc.) sit at the top of their visibility group in lifecycle order
@@ -1272,6 +1313,7 @@ All async work in `Assets/Source/` must use **UniTask** instead of Unity corouti
 | 11    | Configuration Migration                   | ✅ Done         |
 | 12    | Camera & Display Setup                    | ✅ Done         |
 | 13    | Projectile Visuals (Glow + Shield Rings)  | ✅ Done         |
-| 14    | Power-Ups                                 | ⬜ Todo         |
-| 15    | Game Loop, UI & Cleanup                   | ⬜ Todo         |
+| 14    | MVC Architecture Audit                    | ⬜ Todo         |
+| 15    | Power-Ups                                 | ⬜ Todo         |
+| 16    | Game Loop, UI & Cleanup                   | ⬜ Todo         |
 
