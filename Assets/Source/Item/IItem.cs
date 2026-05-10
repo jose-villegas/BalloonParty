@@ -1,8 +1,7 @@
-namespace BalloonParty.Balloon.Items
+namespace BalloonParty.Item
 {
     public interface IItem
     {
         void Activate();
     }
 }
-

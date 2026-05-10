@@ -6,8 +6,9 @@ Types and utilities used across multiple features.
 
 | File / Folder | What it provides |
 |---|---|
-| `IGameConfiguration` | Read-only interface for all game data — slot dimensions, balloon colors, timing values, spawn counts, shield counts, power-ups, display settings. Concrete implementation lives in `Configuration/GameConfiguration` |
+| `IGameConfiguration` | Read-only interface for all game data — slot dimensions, balloon colors, timing values, spawn counts, shield counts, items, display settings. Concrete implementation lives in `Configuration/GameConfiguration` |
 | `TweenTracker` | Generic `MonoBehaviour` for DOTween sequence composition — `Append` (chain after current), `Replace` (kill current and start new), `Kill`, `IsPlaying`. Used by balloon views to manage nudge → balance tween chaining without conflicts |
+| `SortingHelper` | Static utility for Unity sorting order calculations — `SlotBaseSortingOrder` computes base order from grid position, `ApplySortingOrder` applies sequential orders to renderer arrays. Used by `BalloonView`, `ItemDisplayService`, and `ItemVisualView` |
 | `Pool/` | Generic object pooling system — `PoolManager`, `PoolChannel<T>`, `IPoolable`, `VfxPoolChannel`, `PoolableParticle` (see `Pool/README.md`) |
 | `Messages/` | MessagePipe signal structs that decouple systems from one another |
 | `Extensions/` | Extension methods (reserved for future use) |

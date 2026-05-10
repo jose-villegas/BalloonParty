@@ -11,25 +11,26 @@ namespace BalloonParty.UI.Score
 {
     public class ScorePointTrail : MonoBehaviour, IPoolable
     {
+        private const string OverlaySortingLayer = "UI";
+        private const int OverlaySortingOrder = 100;
+
         [SerializeField] private SpriteRenderer _renderer;
         [SerializeField] private TrailRenderer _trailRenderer;
         [SerializeField] private AnimationCurve _scaleCurve;
         [SerializeField] private AnimationCurve _moveCurve;
 
 
+        private void Awake()
+        {
+            _renderer.sortingLayerName = OverlaySortingLayer;
+            _renderer.sortingOrder = OverlaySortingOrder;
+            _trailRenderer.sortingLayerName = OverlaySortingLayer;
+            _trailRenderer.sortingOrder = OverlaySortingOrder;
+        }
+
         public void OnSpawned() { }
 
         public void OnDespawned() { }
-
-        private void Awake()
-        {
-            const string sortingLayer = "UI";
-            const int sortingOrder = 100;
-            _renderer.sortingLayerName = sortingLayer;
-            _renderer.sortingOrder = sortingOrder;
-            _trailRenderer.sortingLayerName = sortingLayer;
-            _trailRenderer.sortingOrder = sortingOrder;
-        }
 
         public void Setup(Vector3 target, Color color, IGameConfiguration config, Action onCompleted)
         {

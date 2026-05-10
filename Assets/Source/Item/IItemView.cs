@@ -1,7 +1,7 @@
 using BalloonParty.Configuration;
 using UnityEngine;
 
-namespace BalloonParty.Balloon.Items
+namespace BalloonParty.Item
 {
     public interface IItemView
     {
@@ -11,4 +11,3 @@ namespace BalloonParty.Balloon.Items
         void ApplySortingOrder(int startOrder);
     }
 }
-

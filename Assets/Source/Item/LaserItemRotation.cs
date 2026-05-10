@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BalloonParty.Balloon.Items
+namespace BalloonParty.Item
 {
     public class LaserItemRotation : MonoBehaviour
     {
@@ -20,4 +20,3 @@ namespace BalloonParty.Balloon.Items
         }
     }
 }
-

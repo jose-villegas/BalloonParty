@@ -100,11 +100,13 @@ namespace BalloonParty.UI.Score
 
             notice.SetParent(transform);
             _activeNotices.Add(notice);
-            notice.Show(_localCount, _colorConfig.Color, () =>
-            {
-                _activeNotices.Remove(notice);
-                _poolManager.Return(_noticePoolKey, notice);
-            });
+            notice.Show(_localCount,
+                _colorConfig.Color,
+                () =>
+                {
+                    _activeNotices.Remove(notice);
+                    _poolManager.Return(_noticePoolKey, notice);
+                });
         }
 
         private void DismissFullyShownNotices()

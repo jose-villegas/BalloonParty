@@ -9,4 +9,3 @@ namespace BalloonParty.Configuration
         Lightning
     }
 }
-

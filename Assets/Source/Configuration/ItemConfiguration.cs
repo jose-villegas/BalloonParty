@@ -19,4 +19,3 @@ namespace BalloonParty.Configuration
         public ItemSettings this[ItemType type] => _items.First(x => x.Type == type);
     }
 }
-

@@ -26,7 +26,7 @@ Every balloon score spawns two pooled objects via `PoolManager`:
 
 - **`ScoreNotice`** — a floating label showing the streak count, scaled by an `AnimationCurve` (X = score, Y = scale). The bar tracks active notices; when a new one spawns, any previous notice that is fully shown (`IsFullyShown`, set by animation event) is dismissed with `ScoreDisappear` (played immediately via `Animator.Play`). Both the Score and ScoreDisappear animations fire `OnAnimationCompleted`, which invokes the consumer's return callback to send the notice back to the pool. Notices reparent themselves under the progress bar via `OnSpawned()`.
 
-- **`ScorePointTrail`** — a colored orb that flies from the balloon's world position to the bar via DOTween. On tween completion, the consumer's callback fires — triggering the "TrailHit" animator event on the bar and returning the trail to the pool.
+- **`ScorePointTrail`** — a colored orb that flies from the balloon's world position to the bar via DOTween. On tween completion, the consumer's callback fires — triggering the "TrailHit" animator event on the bar and returning the trail to the pool. The trail uses world-space renderers (`SpriteRenderer` + `TrailRenderer`) set to the `UI` sorting layer with `sortingOrder = 100` so they render on top of the Canvas-based progress bars.
 
 `ScoreCounterLabel` and `LevelLabel` are bound imperatively from `ScoreUILifetimeScope.Start()` — they receive the `ScoreController`'s reactive properties and subscribe with UniRx.
 

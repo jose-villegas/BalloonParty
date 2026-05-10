@@ -1,6 +1,5 @@
 #region
 
-using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using UniRx;
@@ -8,7 +7,7 @@ using UnityEngine;
 
 #endregion
 
-namespace BalloonParty.Balloon.Items
+namespace BalloonParty.Item
 {
     public class ItemDisplayService : MonoBehaviour
     {
@@ -21,21 +20,26 @@ namespace BalloonParty.Balloon.Items
         public IReadOnlyReactiveProperty<Color> ActiveColor => _activeColor;
         public IReadOnlyReactiveProperty<int> SortingStartOrder => _sortingStartOrder;
 
-        public void Bind(IBalloonModel model, IGameConfiguration config, int baseSortingOffset)
+        public void Bind(
+            IReadOnlyReactiveProperty<ItemType> item,
+            IReadOnlyReactiveProperty<string> colorName,
+            IReadOnlyReactiveProperty<Vector2Int> slotIndex,
+            IGameConfiguration config,
+            int baseSortingOffset)
         {
             Unbind();
 
-            model.Item
+            item
                 .Subscribe(type =>
                 {
                     _activeItem.Value = type;
                     _activeColor.Value = type != ItemType.None
-                        ? config.BalloonColor(model.Color.Value)
+                        ? config.BalloonColor(colorName.Value)
                         : default;
                 })
                 .AddTo(_disposables);
 
-            model.SlotIndex
+            slotIndex
                 .Subscribe(slot =>
                 {
                     var baseOrder = SortingHelper.SlotBaseSortingOrder(slot, config.SlotsSize, baseSortingOffset);

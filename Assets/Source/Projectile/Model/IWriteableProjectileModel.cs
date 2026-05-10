@@ -19,4 +19,3 @@ namespace BalloonParty.Projectile.Model
         new IBalloonModel LastHitBalloon { get; set; }
     }
 }
-

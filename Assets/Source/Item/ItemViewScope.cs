@@ -6,7 +6,7 @@ using VContainer.Unity;
 
 #endregion
 
-namespace BalloonParty.Balloon.Items
+namespace BalloonParty.Item
 {
     public class ItemViewScope : LifetimeScope
     {

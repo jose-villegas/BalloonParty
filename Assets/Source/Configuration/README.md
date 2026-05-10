@@ -10,9 +10,9 @@ All game data lives in the `GameConfiguration` ScriptableObject and is accessed 
 | `IGameConfiguration` *(in Shared/)* | Read-only interface that all systems inject; decouples consumers from the concrete SO |
 | `BalloonColorConfiguration` | Serializable pair of color name + `Color`, used by the balloon color array |
 | `IBalloonColorConfiguration` | Read-only interface for balloon color entries |
-| `BalloonPowerUp` | Enum listing all power-up types: `None`, `Shield`, `Bomb`, `Laser`, `Lightning` |
-| `PowerUpSettings` | Per-power-up tuning data: check frequency, weight, max count, nudge values |
-| `PowerUpConfiguration` | Serializable list of `PowerUpSettings` with indexer by `BalloonPowerUp` type |
+| `ItemType` | Enum listing all item types: `None`, `Shield`, `Bomb`, `Laser`, `Lightning` |
+| `ItemSettings` | Per-item tuning data: check frequency, weight, max count, nudge values |
+| `ItemConfiguration` | Serializable list of `ItemSettings` with indexer by `ItemType` |
 | `GameDisplayConfiguration` | Aspect-ratio → orthographic-size lookup for camera sizing |
 | `DisplayOption` | Single aspect-ratio / orthographic-size pair used by `GameDisplayConfiguration` |
 
@@ -22,4 +22,3 @@ All game data lives in the `GameConfiguration` ScriptableObject and is accessed 
 - **Never duplicate** configuration data via `[SerializeField]` on individual systems.
 - `IGameConfiguration` is registered once as a singleton in `GameLifetimeScope` and injected wherever needed.
 - New configuration fields are added to both `IGameConfiguration` (interface) and `GameConfiguration` (implementation + serialized field).
-

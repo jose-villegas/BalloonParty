@@ -18,4 +18,3 @@ namespace BalloonParty.Configuration
         public float NudgeDuration;
     }
 }
-

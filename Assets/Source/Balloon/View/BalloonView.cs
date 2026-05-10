@@ -2,7 +2,7 @@
 
 using System;
 using BalloonParty.Balloon.Model;
-using BalloonParty.Balloon.Items;
+using BalloonParty.Item;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -91,7 +91,7 @@ namespace BalloonParty.Balloon.View
 
             _nudgeSubscriber.Subscribe(OnNudge).AddTo(_bindDisposables);
 
-            _itemService?.Bind(model, _config, _baseSortingLayer);
+            _itemService?.Bind(model.Item, model.Color, model.SlotIndex, _config, _baseSortingLayer);
         }
 
         public void PlayPopEffect(Color color)
@@ -116,7 +116,7 @@ namespace BalloonParty.Balloon.View
             Nudge(slotPos, direction, () => writeable.IsStable.Value = true);
         }
 
-        private void Nudge(Vector3 slotPosition, Vector3 direction, System.Action onComplete)
+        private void Nudge(Vector3 slotPosition, Vector3 direction, Action onComplete)
         {
             // Standalone spawn tweens would compete with the nudge sequence
             var currentScale = transform.localScale;

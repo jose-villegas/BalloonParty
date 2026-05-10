@@ -14,7 +14,9 @@ The entry point that starts and runs the game.
 
 `GameLifetimeScope` is the sole composition root. All other systems — spawner, balancer, thrower, score — are wired here and injected wherever needed.
 
-`GameChildLifetimeScope` is the abstract base that all child scopes extend (`ScoreUILifetimeScope`, `LevelUpLifetimeScope`, `ShieldUILifetimeScope`, `ProjectileLifetimeScope`). It overrides `FindParent()` to locate `GameLifetimeScope` automatically, so child scopes inherit all parent services without manual wiring.
+`GameChildLifetimeScope` is the abstract base that most child scopes extend (`ScoreUILifetimeScope`, `LevelUpLifetimeScope`, `ShieldUILifetimeScope`, `ProjectileLifetimeScope`, `BalloonLifetimeScope`). It overrides `FindParent()` to locate `GameLifetimeScope` automatically, so child scopes inherit all parent services without manual wiring.
+
+**Exception:** `ItemViewScope` extends `LifetimeScope` directly with a custom `FindParent()` that walks the transform hierarchy. This is necessary because `ItemViewScope` is a nested child scope (under `BalloonLifetimeScope`) and needs to parent to its own balloon's root scope rather than the game scope.
 
 `ScoreController` lives here. On each balloon hit it publishes `BalloonScoredMessage` for the UI and checks whether all colors have met the threshold for the next level; when they have it publishes `ScoreLevelUpMessage` and pauses the game. It saves to `PlayerPrefs` on quit and focus-lost.
 

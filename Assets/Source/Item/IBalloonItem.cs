@@ -1,7 +1,7 @@
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 
-namespace BalloonParty.Balloon.Items
+namespace BalloonParty.Item
 {
     public interface IBalloonItem : IItem
     {
@@ -9,4 +9,3 @@ namespace BalloonParty.Balloon.Items
         void Setup(IBalloonModel balloon);
     }
 }
-

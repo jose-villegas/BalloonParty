@@ -58,10 +58,11 @@ Assets/Source/
     View/           BalloonView.cs
     Controller/     BalloonController.cs, BalloonBalancer.cs, BalloonNudgeHandler.cs
     Spawner/        BalloonSpawner.cs, BalloonSpawnerSettings.cs, BalloonPoolChannel.cs
-    Items/          IItem.cs, IBalloonItem.cs, IItemView.cs,
-                    ItemDisplayService.cs, ItemViewScope.cs,
-                    ItemVisualView.cs, LaserItemRotation.cs
-                    Bomb/, Laser/, Lightning/, Shield/   ← Phase 15d
+  Item/
+    IItem.cs, IBalloonItem.cs, IItemView.cs,
+    ItemDisplayService.cs, ItemViewScope.cs,
+    ItemVisualView.cs, LaserItemRotation.cs
+    Bomb/, Laser/, Lightning/, Shield/   ← Phase 15d (activation handlers)
   Slots/
     SlotGrid.cs, SlotGridChangedEvent.cs
     SlotGridView.cs
@@ -873,15 +874,15 @@ The `GameConfiguration` ScriptableObject and all supporting types were moved to 
 
 ---
 
-## Phase 15 — Balloon Items
+## Phase 15 — Items
 
 **Goal:** Port the item assignment, display, activation, and per-type destruction logic using MessagePipe and VContainer — replacing `BalloonsPowerUpCheckSystem`, `BalloonPowerUpDisplayController`, all `*PowerUpController` subclasses, and their associated hit controllers (`BombSphereCastHitController`, `LaserRaycastHitController`, `ChainLightning`).
 
 > References: `BalloonsPowerUpCheckSystem`, `BalloonPowerUpDisplayController`, `BalloonPowerUpController` (abstract base), `BombPowerUpController`, `BombSphereCastHitController`, `LaserPowerUpController`, `LaserRaycastHitController`, `LightningPowerUpController`, `ChainLightning`, `ShieldPowerUpController`
 
-> **Terminology:** The legacy codebase calls these "power-ups". In the new architecture they are "items" — specifically "balloon items" (`IBalloonItem`). Each concrete item implements `IBalloonItem : IItem`, providing a `Type` property and `Setup`/`Activate` lifecycle. The `IItem` base interface exists for potential future non-balloon items. The enum is `ItemType` (not `BalloonItem`).
+> **Terminology:** The legacy codebase calls these "power-ups". In the new architecture they are "items" — a **game-wide system** that lives in `Assets/Source/Item/` with the namespace `BalloonParty.Item`. Items are context-independent: the display and activation systems have no knowledge of what hosts them. The `IItem` base interface defines the activation contract; `IBalloonItem` is a thin adapter for the specific case where a balloon activates an item on hit. The enum is `ItemType`. Balloons are currently the only host, but the architecture supports items appearing anywhere in the game (UI, rewards, shop, etc.).
 
-### Interaction Analysis — Balloon Items × Other Systems
+### Interaction Analysis — Items × Other Systems
 
 Balloon items touch nearly every system. The following interactions were identified upfront to avoid mid-phase surprises:
 
@@ -938,23 +939,27 @@ Balloon items touch nearly every system. The following interactions were identif
 
 #### Architecture
 
-Scope-based display pattern: `ItemViewScope` (a reusable child `LifetimeScope`) registers `ItemDisplayService` so that `ItemVisualView` children can receive it via `[Inject]`. This scope can be placed on any prefab that needs item display visuals — balloons, preview panels, etc.
+Items are a **game-wide system**, not a balloon feature. The `Item/` folder has no dependency on `Balloon/`. `ItemDisplayService.Bind()` accepts a model interface and configuration — it does not know what is hosting it. Balloons are currently the only host, but the same `ItemViewScope` + `ItemDisplayService` + `ItemVisualView` unit can be dropped onto any prefab (UI panels, reward screens, shop previews) without modification.
+
+Scope-based display pattern: `ItemViewScope` (a reusable child `LifetimeScope`) registers `ItemDisplayService` so that `ItemVisualView` children can receive it via `[Inject]`. The scope inherits all parent registrations automatically through VContainer's scope hierarchy.
 
 | File | Responsibility |
 |---|---|
 | `ItemDisplayService.cs` | MonoBehaviour on the scope root — subscribes to `model.Item` and `model.SlotIndex`; exposes `ActiveItem`, `ActiveColor`, `SortingStartOrder` as reactive properties for visual views to observe |
 | `IItemView.cs` | Interface defining the contract for item visual components: `Type`, `Activate(Color)`, `Deactivate()`, `ApplySortingOrder(int)` |
 | `ItemVisualView.cs` | MonoBehaviour on each item sub-prefab (PUBomb, PULaser, etc.) — implements `IItemView`; carries `[SerializeField] ItemType _type`, `_spritesToSetColor`, `_sortingRenderers`, `_spritesAlpha`; receives `ItemDisplayService` via `[Inject]` and subscribes to its reactive properties |
-| `ItemViewScope.cs` | `GameChildLifetimeScope` on the prefab's item container child — registers `ItemDisplayService` via `RegisterComponentInHierarchy` and injects all `ItemVisualView` children via `RegisterBuildCallback` + `resolver.Inject()`. Any prefab carrying this scope must be instantiated via `CreateChildFromPrefab` on an ancestor scope (e.g. `BalloonLifetimeScope`) to ensure proper scope hierarchy. |
+| `ItemViewScope.cs` | `LifetimeScope` (custom `FindParent`) on the prefab's item container child — registers `ItemDisplayService` via `RegisterComponentInHierarchy` and injects all `ItemVisualView` children via `RegisterBuildCallback` + `resolver.Inject()`. Any prefab carrying this scope must be instantiated via `CreateChildFromPrefab` on an ancestor scope (e.g. `BalloonLifetimeScope`) to ensure proper scope hierarchy. |
 | `LaserItemRotation.cs` | MonoBehaviour on the laser's rotating body child — spins at `_rotationSpeed`, resets angle on enable |
 
-The scope-based approach ensures `ItemViewScope` is reusable: any prefab that needs item visuals adds `ItemViewScope` + `ItemDisplayService` + `ItemVisualView` children. The parent scope's registrations (config, grid, messages, etc.) are inherited automatically through VContainer's scope hierarchy.
+> All item display files live in `Assets/Source/Item/`. The namespace is `BalloonParty.Item`.
+
+The scope-based approach ensures `ItemViewScope` is context-independent: any prefab that needs item visuals adds `ItemViewScope` + `ItemDisplayService` + `ItemVisualView` children. The parent scope's registrations (config, grid, messages, etc.) are inherited automatically through VContainer's scope hierarchy. `IBalloonItem` (Phase 15d) is the balloon system's adapter for item activation — it lives in `Item/` only because the interface references `ItemType`, not because items belong to balloons.
 
 > **Pooled prefabs with child scopes must use `CreateChildFromPrefab`**, not `_resolver.Instantiate()`. The latter injects from the parent container but does not build child scopes, leaving `RegisterComponentInHierarchy` registrations unresolved. `BalloonPoolChannel` follows the same pattern as `ProjectilePoolChannel` — it receives a `LifetimeScope` parent and prefab, and calls `_parentScope.CreateChildFromPrefab(_prefab)`.
 
-1. `ItemDisplayService` (on the balloon prefab root, alongside `BalloonView`)
+1. `ItemDisplayService` (on the item container child, alongside `ItemViewScope`)
    - Exposes `ReactiveProperty<ItemType> ActiveItem`, `ReactiveProperty<Color> ActiveColor`, `ReactiveProperty<int> SortingStartOrder`
-   - `Bind(model, config, baseSortingOffset)` — subscribes to `model.Item` and `model.SlotIndex`
+   - `Bind(IReadOnlyReactiveProperty<ItemType> item, IReadOnlyReactiveProperty<string> colorName, IReadOnlyReactiveProperty<Vector2Int> slotIndex, IGameConfiguration config, int baseSortingOffset)` — accepts individual reactive properties, not a model type. This keeps `ItemDisplayService` host-agnostic: callers pass whatever reactive properties they have
    - On item change → sets `ActiveItem.Value` and `ActiveColor.Value`
    - On slot change → computes and sets `SortingStartOrder.Value`
    - `Unbind()` — clears subscriptions and resets `ActiveItem` to `None`
@@ -972,7 +977,7 @@ The scope-based approach ensures `ItemViewScope` is reusable: any prefab that ne
    - Registers `ItemDisplayService` via `RegisterComponentInHierarchy`
    - Uses `RegisterBuildCallback` to `resolver.Inject()` all `ItemVisualView` children (multiple instances, one per item type)
    - Hierarchy-based `FindParent()` ensures each pooled balloon instance's `ItemViewScope` parents to its OWN `BalloonLifetimeScope`, not a random one found via `FindFirstObjectByType`
-4. `BalloonView.Bind()` — calls `_itemService.Bind(model, config, baseSortingOffset)` if the component exists
+4. `BalloonView.Bind()` — calls `_itemService.Bind(model.Item, model.Color, model.SlotIndex, config, baseSortingOffset)` if the component exists
 5. `BalloonView.OnDespawned()` — calls `_itemService.Unbind()` to reset active item
 
 #### Legacy values (from source prefabs)
@@ -1024,7 +1029,7 @@ The scope-based approach ensures `ItemViewScope` is reusable: any prefab that ne
 
 > Reference: `BalloonsPowerUpCheckSystem.cs`, `NewBalloonLinesInstanceSystem.cs` (lines 64–65)
 
-1. Create `Assets/Source/Balloon/Items/ItemAssigner.cs` (`IStartable`)
+1. Create `Assets/Source/Item/ItemAssigner.cs` (`IStartable`)
    - `[Inject] IGameConfiguration _config`, `SlotGrid _grid`
    - `[Inject] ISubscriber<ItemCheckMessage> _checkSubscriber`
    - On `ItemCheckMessage`: receives the list of newly-spawned balloon models
@@ -1136,12 +1141,12 @@ Legacy `ChainLightning` uses a coroutine with `WaitForSeconds(_lightningJumpTime
 
 | File | Location |
 |---|---|
-| `ItemActivator.cs` | `Balloon/Items/` |
-| `BombItemHandler.cs` | `Balloon/Items/Bomb/` |
-| `LaserItemHandler.cs` | `Balloon/Items/Laser/` |
-| `LightningItemHandler.cs` | `Balloon/Items/Lightning/` |
-| `ChainLightningView.cs` | `Balloon/Items/Lightning/` |
-| `ShieldItemHandler.cs` | `Balloon/Items/Shield/` |
+| `ItemActivator.cs` | `Item/` |
+| `BombItemHandler.cs` | `Item/Bomb/` |
+| `LaserItemHandler.cs` | `Item/Laser/` |
+| `LightningItemHandler.cs` | `Item/Lightning/` |
+| `ChainLightningView.cs` | `Item/Lightning/` |
+| `ShieldItemHandler.cs` | `Item/Shield/` |
 | `ItemActivatedMessage.cs` | `Shared/Messages/` |
 
 #### Files to modify
@@ -1374,13 +1379,27 @@ Prefabs that carry multiple MonoBehaviours needing injection (e.g. the projectil
 | `ShieldUILifetimeScope` | `GameChildLifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation` |
 | `ProjectileLifetimeScope` | `GameChildLifetimeScope` | Projectile prefab root | `ProjectileView`, `ProjectileShieldView` |
 | `BalloonLifetimeScope` | `GameChildLifetimeScope` | Balloon prefab root | `BalloonView` |
-| `ItemViewScope` | `LifetimeScope` (custom `FindParent`) | Balloon "Item" child (reusable on any item-displaying prefab) | `ItemDisplayService`; injects `ItemVisualView[]` via build callback |
+| `ItemViewScope` | `LifetimeScope` (custom `FindParent`) | Balloon "Item" child (reusable on any item-displaying prefab) | `ItemDisplayService`; injects `ItemVisualView[]` via build callback. Lives in `Item/` folder (`BalloonParty.Item` namespace) |
 
 Future popups (power-up unlocks, game-over screen, etc.) extend `GameChildLifetimeScope` — parent is wired automatically via `FindParent()`.
 
 **`RegisterComponentInHierarchy` scope boundary:** For scene-based `LifetimeScope`s, VContainer searches the **entire scene** for the component (not just the scope's subtree). For prefab-based scopes created via `CreateChildFromPrefab`, the search is limited to the prefab's `GetComponentInChildren`. Always ensure the component exists in the expected search space.
 
 **Multiple instances of the same component:** When a scope's subtree contains multiple instances of a component (e.g. several `ShieldCounterLabel` on different Text elements), use `GetComponentsInChildren<T>(true)` in `Configure()` and register the array via `builder.RegisterInstance(array)`. The consumer injects `T[]`.
+
+---
+
+### Unity Project Settings — Never Edit Directly
+
+**Never edit Unity project settings files (`TagManager.asset`, `ProjectSettings/*.asset`) outside the Unity Editor.** These files contain internal IDs, ordering, and cross-references that Unity manages. Editing them by hand (e.g. reordering sorting layers in `TagManager.asset`) can silently break references, physics layer matrices, and rendering order throughout the project.
+
+All changes to sorting layers, tags, physics layers, and other project settings must be made through the Unity Editor's Project Settings window.
+
+---
+
+### Score Trail Rendering Order
+
+`ScorePointTrail` uses world-space renderers (`SpriteRenderer` + `TrailRenderer`), but needs to render on top of the UI Canvas progress bars. Since the Canvas uses **Screen Space - Camera** mode on the `UI` sorting layer, the trail renderers are set to the `UI` sorting layer with `sortingOrder = 100` in `Awake()`. This places them above the Canvas content without requiring changes to the global sorting layer stack.
 
 ---
 
@@ -1654,10 +1673,11 @@ All async work in `Assets/Source/` must use **UniTask** instead of Unity corouti
 | 13    | Projectile Visuals (Glow + Shield Rings)  | ✅ Done         |
 | 14    | MVC Architecture Audit                    | ✅ Done         |
 | 14a   | ScoreNotice Pool & Pool Design Refactor   | ✅ Done         |
-| 15    | Balloon Items                             | 🔄 In Progress  |
+| 15    | Items                                     | 🔄 In Progress  |
 | 15a   | — BalloonModel Item Property              | ✅ Done         |
 | 15b   | — Item Display on Balloons                | ✅ Done (Unity wiring pending) |
 | 15b.1 | — Helpers & Extensions                    | ✅ Done         |
+| 15b.2 | — Item folder reorganization (`Item/`)    | ✅ Done         |
 | 15c   | — Item Assignment (Check System)          | ⬜ Todo         |
 | 15d   | — Item Activation & Per-Type Effects      | ⬜ Todo         |
 | 15e   | — Item Cheats                             | ⬜ Todo         |

@@ -16,4 +16,3 @@ namespace BalloonParty.Balloon.Model
         new ReactiveProperty<ItemType> Item { get; }
     }
 }
-

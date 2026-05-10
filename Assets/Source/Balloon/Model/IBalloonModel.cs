@@ -16,4 +16,3 @@ namespace BalloonParty.Balloon.Model
         IReadOnlyReactiveProperty<ItemType> Item { get; }
     }
 }
-

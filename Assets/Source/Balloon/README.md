@@ -6,15 +6,15 @@ Represents balloons in the game — their state, appearance, spawning, and destr
 
 | Folder | What it owns |
 |---|---|
-| `Model/` | `IBalloonModel` (read-only interface), `IWriteableBalloonModel` (mutable interface), `BalloonModel` (concrete) — pure C# data with reactive properties (`Color`, `SlotIndex`, `IsStable`). Consumers use the narrowest interface: views and messages receive `IBalloonModel`; controllers, spawners, and grid operations use `IWriteableBalloonModel` |
-| `View/` | `BalloonView` — MonoBehaviour implementing `IPoolable` that binds to a model and renders color, shadow, sorting order, and pop VFX. Holds a `TweenTracker` reference for animation composition |
+| `Model/` | `IBalloonModel` (read-only interface), `IWriteableBalloonModel` (mutable interface), `BalloonModel` (concrete) — pure C# data with reactive properties (`Color`, `SlotIndex`, `IsStable`, `Item`). Consumers use the narrowest interface: views and messages receive `IBalloonModel`; controllers, spawners, and grid operations use `IWriteableBalloonModel` |
+| `View/` | `BalloonView` — MonoBehaviour implementing `IPoolable` that binds to a model and renders color, shadow, sorting order, and pop VFX. Holds a `TweenTracker` reference for animation composition. Delegates item display to `ItemDisplayService` (in `Item/`) |
 | `Controller/` | `BalloonController` — mediator that wires model to view and handles hit destruction; `BalloonBalancer` — rebalances the grid after projectile death; `BalloonNudgeHandler` — subscribes to `BalloonHitMessage` and nudges neighboring balloons with elastic push-out/return animations |
-| `Spawner/` | `BalloonSpawner` — creates balloon lines at game start and after each projectile death; `BalloonSpawnerSettings` — holds the balloon prefab reference; `BalloonPoolChannel` — pool channel using VContainer injection |
-| `PowerUps/` | Power-up balloon types (Phase 15) |
+| `Spawner/` | `BalloonSpawner` — creates balloon lines at game start and after each projectile death; `BalloonSpawnerSettings` — holds the balloon prefab reference; `BalloonPoolChannel` — pool channel using VContainer `CreateChildFromPrefab` |
+| `BalloonLifetimeScope` | Root scope on the balloon prefab — registers `BalloonView`; enables `CreateChildFromPrefab` instantiation for proper child scope building |
 
 ## Behaviour
 
-A balloon knows its color, where it sits in the grid, and whether it has settled into position. When any of these change, the view updates automatically via UniRx subscriptions.
+A balloon knows its color, where it sits in the grid, whether it has settled into position, and whether it carries an item. When any of these change, the view updates automatically via UniRx subscriptions.
 
 ### Pooling
 
@@ -49,4 +49,5 @@ When nudge or balance interrupts a spawning balloon, `transform.DOKill()` kills 
 - **ScoreController** — records each hit via `BalloonHitMessage`
 - **PoolManager** — `BalloonView` instances are pooled via `BalloonPoolChannel`; pop VFX pooled via `VfxPoolChannel`
 - **TweenTracker** — generic `MonoBehaviour` in `Shared/` that manages tween sequencing (append, replace, kill)
+- **Item system** — balloons are one host for the game-wide item system (in `Item/`). `BalloonView` calls `ItemDisplayService.Bind()`/`Unbind()` to connect item visuals; the item system itself has no knowledge of balloons
 - **IGameConfiguration** — balloon colors, spawn animation timing, balance timing, nudge distance/duration
