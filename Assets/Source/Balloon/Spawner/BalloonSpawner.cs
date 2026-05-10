@@ -28,8 +28,8 @@ namespace BalloonParty.Balloon.Spawner
         private readonly BalloonSpawnerSettings _settings;
 
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
-        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
 
         private readonly CancellationTokenSource _cts = new();
@@ -85,7 +85,7 @@ namespace BalloonParty.Balloon.Spawner
             var controller = new BalloonController(model, view, _hitSubscriber, _grid, _config, _poolManager);
             controller.Start();
 
-            _grid.Place(model, slot);
+            _grid.Place(model, view, slot);
             AnimateSpawn(view, targetPosition, model);
 
             return controller;
@@ -120,7 +120,7 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        private void AnimateSpawn(BalloonView view, Vector3 targetPosition, BalloonModel model)
+        private void AnimateSpawn(BalloonView view, Vector3 targetPosition, IWriteableBalloonModel model)
         {
             model.IsStable.Value = false;
             view.transform.localScale = Vector3.zero;

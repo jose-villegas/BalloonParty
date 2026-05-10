@@ -7,15 +7,16 @@ using UnityEngine;
 
 namespace BalloonParty.Shared.Messages
 {
-    public readonly struct BalloonHitMessage
+    public readonly struct BalloonNudgeMessage
     {
         public readonly IBalloonModel Balloon;
-        public readonly Vector3 WorldPosition;
+        public readonly Vector3 HitSlotPosition;
 
-        public BalloonHitMessage(IBalloonModel balloon, Vector3 worldPosition)
+        public BalloonNudgeMessage(IBalloonModel balloon, Vector3 hitSlotPosition)
         {
             Balloon = balloon;
-            WorldPosition = worldPosition;
+            HitSlotPosition = hitSlotPosition;
         }
     }
 }
+

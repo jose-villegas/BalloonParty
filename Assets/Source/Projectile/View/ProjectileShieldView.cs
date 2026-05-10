@@ -49,7 +49,7 @@ namespace BalloonParty.Projectile.View
             _disposable.Dispose();
         }
 
-        public void Bind(ProjectileModel model)
+        public void Bind(IProjectileModel model)
         {
             _previousShieldCount = model.ShieldsRemaining.Value;
 

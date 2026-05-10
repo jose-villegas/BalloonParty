@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.View;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
@@ -56,7 +57,7 @@ namespace BalloonParty.Balloon.Controller
 
         private void Balance()
         {
-            var paths = new Dictionary<BalloonModel, List<Vector3>>();
+            var paths = new Dictionary<IWriteableBalloonModel, List<Vector3>>();
             var hasUnbalanced = true;
 
             while (hasUnbalanced)
@@ -84,9 +85,11 @@ namespace BalloonParty.Balloon.Controller
 
                     hasUnbalanced = true;
 
-                    var balloon = _grid.At(new Vector2Int(col, row));
-                    _grid.Remove(new Vector2Int(col, row));
-                    _grid.Place(balloon, nextSlot.Value);
+                    var currentSlot = new Vector2Int(col, row);
+                    var balloon = _grid.At(currentSlot);
+                    var balloonView = _grid.ViewAt(currentSlot);
+                    _grid.Remove(currentSlot);
+                    _grid.Place(balloon, balloonView, nextSlot.Value);
                     balloon.IsStable.Value = false;
 
                     var targetPosition = _grid.IndexToWorldPosition(nextSlot.Value);
@@ -104,11 +107,11 @@ namespace BalloonParty.Balloon.Controller
             AnimatePaths(paths);
         }
 
-        private void AnimatePaths(Dictionary<BalloonModel, List<Vector3>> paths)
+        private void AnimatePaths(Dictionary<IWriteableBalloonModel, List<Vector3>> paths)
         {
             foreach (var (balloon, path) in paths)
             {
-                var view = balloon.View;
+                var view = _grid.ViewAt(balloon.SlotIndex.Value);
                 if (view == null)
                 {
                     continue;

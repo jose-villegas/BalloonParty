@@ -44,7 +44,7 @@ namespace BalloonParty.UI.Shields
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed()).AddTo(_disposable);
         }
 
-        private void BindProjectile(ProjectileModel model)
+        private void BindProjectile(IProjectileModel model)
         {
             _shieldSubscription?.Dispose();
             _lastShieldValue = model.ShieldsRemaining.Value;

@@ -32,6 +32,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<SpawnBalloonLineMessage>(options);
             builder.RegisterMessageBroker<ProjectileDestroyedMessage>(options);
             builder.RegisterMessageBroker<BalloonHitMessage>(options);
+            builder.RegisterMessageBroker<BalloonNudgeMessage>(options);
             builder.RegisterMessageBroker<BalloonScoredMessage>(options);
             builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
@@ -45,6 +46,7 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<SlotGridView>();
 
             builder.RegisterEntryPoint<BalloonBalancer>();
+            builder.RegisterEntryPoint<BalloonNudgeHandler>();
             builder.RegisterEntryPoint<BalloonSpawner>().AsSelf();
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
 

@@ -3,7 +3,10 @@
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using DG.Tweening;
+using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer;
@@ -30,11 +33,13 @@ namespace BalloonParty.Balloon.View
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private IGameConfiguration _config;
+        [Inject] private SlotGrid _grid;
+        [Inject] private ISubscriber<BalloonNudgeMessage> _nudgeSubscriber;
         [Inject] private PoolManager _poolManager;
 
         private readonly CompositeDisposable _bindDisposables = new();
 
-        public BalloonModel Model { get; private set; }
+        public IBalloonModel Model { get; private set; }
         public TweenTracker TweenTracker { get; private set; }
 
 
@@ -62,7 +67,7 @@ namespace BalloonParty.Balloon.View
             _bindDisposables.Add(disposable);
         }
 
-        public void Bind(BalloonModel model)
+        public void Bind(IBalloonModel model)
         {
             _bindDisposables.Clear();
             Model = model;
@@ -78,12 +83,52 @@ namespace BalloonParty.Balloon.View
             model.IsStable
                 .Subscribe(stable => _animator.SetBool("IsStable", stable))
                 .AddTo(_bindDisposables);
+
+            _nudgeSubscriber.Subscribe(OnNudge).AddTo(_bindDisposables);
         }
 
         public void PlayPopEffect(Color color)
         {
             _poolManager.GetOrRegister(_popVfxPrefab.name, () => new VfxPoolChannel(_popVfxPrefab))
                 .Play(transform.position, color);
+        }
+
+        private void OnNudge(BalloonNudgeMessage msg)
+        {
+            if (msg.Balloon != Model)
+            {
+                return;
+            }
+
+            var writeable = _grid.At(Model.SlotIndex.Value);
+            var slotPos = _grid.IndexToWorldPosition(Model.SlotIndex.Value);
+            var direction = slotPos - msg.HitSlotPosition;
+
+            writeable.IsStable.Value = false;
+            Nudge(slotPos, direction, () => writeable.IsStable.Value = true);
+        }
+
+        private void Nudge(Vector3 slotPosition, Vector3 direction, System.Action onComplete)
+        {
+            // Standalone spawn tweens would compete with the nudge sequence
+            var currentScale = transform.localScale;
+            transform.DOKill();
+
+            var nudgeDuration = _config.NudgeDuration;
+
+            var sequence = DOTween.Sequence();
+            sequence.Append(transform.DOMove(
+                slotPosition + (direction.normalized * _config.NudgeDistance),
+                nudgeDuration / 2f));
+            sequence.Append(transform.DOMove(slotPosition, nudgeDuration / 2f));
+            sequence.OnComplete(() => onComplete?.Invoke());
+
+            TweenTracker.Replace(sequence);
+
+            if (currentScale != Vector3.one)
+            {
+                transform.DOScale(Vector3.one, nudgeDuration);
+            }
         }
 
         private void ApplyColor(string colorName)

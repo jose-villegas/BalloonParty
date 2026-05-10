@@ -22,9 +22,9 @@ namespace BalloonParty.Game
         private readonly Dictionary<string, int> _levelProgress = new();
         private readonly Dictionary<string, int> _persistentScore = new();
 
-        private readonly IPublisher<BalloonScoredMessage> _scoredPublisher;
-        private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
+        private readonly IPublisher<BalloonScoredMessage> _scoredPublisher;
 
         private IDisposable _subscription;
 

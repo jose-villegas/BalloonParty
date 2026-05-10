@@ -5,7 +5,6 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
@@ -25,10 +24,9 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IGameConfiguration _config;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
-        [Inject] private SlotGrid _grid;
         [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
 
-        private ProjectileModel _model;
+        private IWriteableProjectileModel _model;
         private ProjectileTrail _projectileTrail;
         private bool _shieldShown;
         private ProjectileShieldView _shieldView;
@@ -136,7 +134,6 @@ namespace BalloonParty.Projectile.View
             _model.LastHitBalloon = balloonModel;
 
             TrackColor(balloonModel.Color.Value);
-            NudgeNeighbors(balloonModel);
             _hitPublisher.Publish(new BalloonHitMessage(balloonModel, balloonView.transform.position));
         }
 
@@ -162,7 +159,7 @@ namespace BalloonParty.Projectile.View
             }
         }
 
-        public void Bind(ProjectileModel model)
+        public void Bind(IWriteableProjectileModel model)
         {
             _model = model;
             _shieldShown = false;
@@ -202,44 +199,6 @@ namespace BalloonParty.Projectile.View
             }
         }
 
-        private void NudgeNeighbors(BalloonModel hitBalloon)
-        {
-            var hitSlot = hitBalloon.SlotIndex.Value;
-            var hitSlotPos = _grid.IndexToWorldPosition(hitSlot);
-            var neighbors = _grid.GetNeighbors(hitSlot.x, hitSlot.y);
-
-            foreach (var neighbor in neighbors)
-            {
-                if (neighbor?.View == null)
-                {
-                    continue;
-                }
-
-                var view = neighbor.View;
-                var slotPos = _grid.IndexToWorldPosition(neighbor.SlotIndex.Value);
-                var direction = slotPos - hitSlotPos;
-
-                // Standalone spawn tweens would compete with the nudge sequence
-                var currentScale = view.transform.localScale;
-                view.transform.DOKill();
-
-                var sequence = DOTween.Sequence();
-                sequence.Append(view.transform.DOMove(
-                    slotPos + (direction.normalized * _config.NudgeDistance),
-                    _config.NudgeDuration / 2f));
-                sequence.Append(view.transform.DOMove(slotPos, _config.NudgeDuration / 2f));
-
-                neighbor.IsStable.Value = false;
-                sequence.OnComplete(() => neighbor.IsStable.Value = true);
-
-                view.TweenTracker.Replace(sequence);
-
-                if (currentScale != Vector3.one)
-                {
-                    view.transform.DOScale(Vector3.one, _config.NudgeDuration);
-                }
-            }
-        }
 
         private void PlayBounceEffect(Vector3 position)
         {

@@ -21,7 +21,8 @@ Messages are the signals that decouple systems from one another. A publisher fir
 |---|---|---|
 | `BalanceBalloonsMessage` | `ProjectileView`, `BalloonSpawner` | `BalloonBalancer` |
 | `SpawnBalloonLineMessage` | `GameStartButton` | `BalloonSpawner` |
-| `BalloonHitMessage` | `ProjectileView`, cheats | `BalloonController`, `ScoreController` |
+| `BalloonHitMessage` | `ProjectileView`, cheats | `BalloonController`, `ScoreController`, `BalloonNudgeHandler` |
+| `BalloonNudgeMessage` | `BalloonNudgeHandler` | neighboring `BalloonView`s (nudge animation) |
 | `BalloonScoredMessage` | `ScoreController` | `ColorProgressBar` |
 | `ScoreLevelUpMessage` | `ScoreController` | `ColorProgressBar`, `LevelUpPopUp` |
 | `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController`, `BalloonSpawner` |

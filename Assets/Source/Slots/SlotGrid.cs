@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.View;
 using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -15,7 +16,8 @@ namespace BalloonParty.Slots
     {
         private readonly IGameConfiguration _config;
         private readonly Subject<SlotGridChangedEvent> _onChanged = new();
-        private readonly BalloonModel[,] _slots;
+        private readonly IWriteableBalloonModel[,] _slots;
+        private readonly BalloonView[,] _views;
 
         public IObservable<SlotGridChangedEvent> OnChanged => _onChanged;
         public int Columns => _slots.GetLength(0);
@@ -24,7 +26,8 @@ namespace BalloonParty.Slots
         public SlotGrid(IGameConfiguration config)
         {
             _config = config;
-            _slots = new BalloonModel[config.SlotsSize.x, config.SlotsSize.y];
+            _slots = new IWriteableBalloonModel[config.SlotsSize.x, config.SlotsSize.y];
+            _views = new BalloonView[config.SlotsSize.x, config.SlotsSize.y];
         }
 
         public string RandomColorName()
@@ -32,7 +35,7 @@ namespace BalloonParty.Slots
             return _config.BalloonColors[Random.Range(0, _config.BalloonColors.Length)].Name;
         }
 
-        public void Place(BalloonModel balloon, Vector2Int index)
+        public void Place(IWriteableBalloonModel balloon, BalloonView view, Vector2Int index)
         {
             if (_slots[index.x, index.y] != null)
             {
@@ -42,6 +45,7 @@ namespace BalloonParty.Slots
             }
 
             _slots[index.x, index.y] = balloon;
+            _views[index.x, index.y] = view;
             balloon.SlotIndex.Value = index;
             _onChanged.OnNext(new SlotGridChangedEvent(index, SlotGridChangeType.Placed));
         }
@@ -49,12 +53,18 @@ namespace BalloonParty.Slots
         public void Remove(Vector2Int index)
         {
             _slots[index.x, index.y] = null;
+            _views[index.x, index.y] = null;
             _onChanged.OnNext(new SlotGridChangedEvent(index, SlotGridChangeType.Removed));
         }
 
-        public BalloonModel At(Vector2Int index)
+        public IWriteableBalloonModel At(Vector2Int index)
         {
             return _slots[index.x, index.y];
+        }
+
+        public BalloonView ViewAt(Vector2Int index)
+        {
+            return _views[index.x, index.y];
         }
 
         public bool IsEmpty(int col, int row)
@@ -135,9 +145,9 @@ namespace BalloonParty.Slots
             }
         }
 
-        public List<BalloonModel> GetNeighbors(int col, int row)
+        public List<IWriteableBalloonModel> GetNeighbors(int col, int row)
         {
-            var neighbors = new List<BalloonModel>();
+            var neighbors = new List<IWriteableBalloonModel>();
             var shiftedCol = col + (row % 2 == 0 ? -1 : 1);
 
             TryAddNeighbor(neighbors, col - 1, row);
@@ -186,7 +196,7 @@ namespace BalloonParty.Slots
             return weight;
         }
 
-        private void TryAddNeighbor(List<BalloonModel> neighbors, int col, int row)
+        private void TryAddNeighbor(List<IWriteableBalloonModel> neighbors, int col, int row)
         {
             if (!IsEmpty(col, row))
             {

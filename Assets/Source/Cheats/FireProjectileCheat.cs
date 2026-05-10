@@ -13,7 +13,7 @@ namespace BalloonParty.Cheats
 {
     public class FireProjectileCheat : ICheat
     {
-        private ProjectileModel _activeProjectile;
+        private IWriteableProjectileModel _activeProjectile;
 
         public string Name => "Fire Projectile";
         public string Section => "Thrower";
@@ -21,7 +21,7 @@ namespace BalloonParty.Cheats
 
         public FireProjectileCheat(ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
-            loadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model);
+            loadedSubscriber.Subscribe(msg => _activeProjectile = (IWriteableProjectileModel)msg.Model);
         }
 
         public void Execute()

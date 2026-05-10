@@ -27,10 +27,10 @@ namespace BalloonParty.Thrower
         private readonly LifetimeScope _parentScope;
         private readonly PoolManager _poolManager;
         private readonly ThrowerSettings _settings;
-        private readonly ThrowerView _view;
         private readonly List<Vector3> _tracePoints = new();
+        private readonly ThrowerView _view;
 
-        private ProjectileModel _activeProjectile;
+        private IWriteableProjectileModel _activeProjectile;
         private ProjectileView _activeView;
         private Vector3 _direction = Vector3.up;
         private bool _isMovable;

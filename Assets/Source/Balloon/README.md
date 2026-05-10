@@ -6,11 +6,11 @@ Represents balloons in the game — their state, appearance, spawning, and destr
 
 | Folder | What it owns |
 |---|---|
-| `Model/` | `BalloonModel` — pure C# data class with reactive properties (`Color`, `SlotIndex`, `IsStable`) |
+| `Model/` | `IBalloonModel` (read-only interface), `IWriteableBalloonModel` (mutable interface), `BalloonModel` (concrete) — pure C# data with reactive properties (`Color`, `SlotIndex`, `IsStable`). Consumers use the narrowest interface: views and messages receive `IBalloonModel`; controllers, spawners, and grid operations use `IWriteableBalloonModel` |
 | `View/` | `BalloonView` — MonoBehaviour implementing `IPoolable` that binds to a model and renders color, shadow, sorting order, and pop VFX. Holds a `TweenTracker` reference for animation composition |
-| `Controller/` | `BalloonController` — mediator that wires model to view and handles hit destruction; `BalloonBalancer` — rebalances the grid after projectile death |
+| `Controller/` | `BalloonController` — mediator that wires model to view and handles hit destruction; `BalloonBalancer` — rebalances the grid after projectile death; `BalloonNudgeHandler` — subscribes to `BalloonHitMessage` and nudges neighboring balloons with elastic push-out/return animations |
 | `Spawner/` | `BalloonSpawner` — creates balloon lines at game start and after each projectile death; `BalloonSpawnerSettings` — holds the balloon prefab reference; `BalloonPoolChannel` — pool channel using VContainer injection |
-| `PowerUps/` | Power-up balloon types (Phase 9) |
+| `PowerUps/` | Power-up balloon types (Phase 15) |
 
 ## Behaviour
 
@@ -42,9 +42,10 @@ When nudge or balance interrupts a spawning balloon, `transform.DOKill()` kills 
 
 ## Interactions
 
-- **SlotGrid** — balloons occupy positions in it; spawner places, controller removes, balancer relocates
+- **SlotGrid** — balloons occupy positions in it; stores both models and views in parallel arrays. Spawner places, controller removes, balancer relocates. Systems that need the view for a model look it up via `_grid.ViewAt(slotIndex)`
 - **BalloonBalancer** — moves balloons when gaps appear; fires once per turn after spawning
-- **ProjectileView** — triggers destruction on collision via `BalloonHitMessage`; nudges neighbors on impact
+- **ProjectileView** — triggers destruction on collision via `BalloonHitMessage`
+- **BalloonNudgeHandler** — subscribes to `BalloonHitMessage` and nudges neighboring balloon views (push-out → return) with scale recovery; uses `SlotGrid.ViewAt()` to reach views
 - **ScoreController** — records each hit via `BalloonHitMessage`
 - **PoolManager** — `BalloonView` instances are pooled via `BalloonPoolChannel`; pop VFX pooled via `VfxPoolChannel`
 - **TweenTracker** — generic `MonoBehaviour` in `Shared/` that manages tween sequencing (append, replace, kill)

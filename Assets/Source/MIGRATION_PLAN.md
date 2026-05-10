@@ -52,52 +52,63 @@
 ```
 Assets/Source/
   Balloon/
-    Model/          BalloonModel.cs
+    Model/          IBalloonModel.cs, IWriteableBalloonModel.cs, BalloonModel.cs
     View/           BalloonView.cs
-    Controller/     BalloonController.cs, BalloonBalancer.cs
-    Spawner/        BalloonSpawner.cs, BalloonSpawnerSettings.cs
-    PowerUps/       Bomb/, Laser/, Lightning/, Shield/   ← Phase 8
+    Controller/     BalloonController.cs, BalloonBalancer.cs, BalloonNudgeHandler.cs
+    Spawner/        BalloonSpawner.cs, BalloonSpawnerSettings.cs, BalloonPoolChannel.cs
+    PowerUps/       Bomb/, Laser/, Lightning/, Shield/   ← Phase 15
   Slots/
     SlotGrid.cs, SlotGridChangedEvent.cs
-    SlotGridController.cs, SlotGridView.cs
+    SlotGridView.cs
   Projectile/
     ProjectileLifetimeScope.cs, ProjectilePoolChannel.cs
-    Model/          ProjectileModel.cs
+    Model/          IProjectileModel.cs, IWriteableProjectileModel.cs, ProjectileModel.cs
     View/           ProjectileView.cs, ProjectileShieldView.cs, ProjectileTrail.cs
     Controller/     ← reserved; logic currently lives in ProjectileView
   Thrower/
-    ThrowerController.cs, ThrowerSettings.cs
+    ThrowerController.cs, ThrowerView.cs
+    ThrowerLifetimeScope.cs, ThrowerSettings.cs
+  Prediction/
+    PredictionTraceCalculator.cs, PredictionTraceView.cs
   Game/
     ScoreController.cs
     GameLifetimeScope.cs   ← root VContainer scope
     GameChildLifetimeScope.cs ← abstract base for all child scopes
-    GameManager.cs         ← Phase 9
+    GameManager.cs         ← Phase 16
+  Configuration/
+    GameConfiguration.cs (ScriptableObject), GameConfiguration.asset
+    BalloonColorConfiguration.cs, IBalloonColorConfiguration.cs
+    BalloonPowerUp.cs, PowerUpSettings.cs, PowerUpConfiguration.cs
+    GameDisplayConfiguration.cs, DisplayOption.cs
   Shared/
-    IGameConfiguration.cs, IReusable.cs
+    IGameConfiguration.cs, IReusable.cs, TweenTracker.cs
     Pool/           PoolChannel.cs, IPoolable.cs, PoolManager.cs,
                     PoolableParticle.cs, VfxPoolChannel.cs
     Messages/       BalanceBalloonsMessage.cs, BalloonHitMessage.cs,
-                    BalloonScoredMessage.cs, ScoreLevelUpMessage.cs,
+                    BalloonNudgeMessage.cs, BalloonScoredMessage.cs,
+                    ScoreLevelUpMessage.cs,
                     SpawnBalloonLineMessage.cs, ProjectileDestroyedMessage.cs,
                     ProjectileLoadedMessage.cs
     Extensions/     ← reserved for future extension methods
   UI/
     Score/          ColorProgressBar.cs, ColorProgressBarInstancer.cs,
-                    ScoreNotice.cs, ScorePointTrail.cs,
+                    ScoreNotice.cs, ScorePointTrail.cs, ScoreTrailPoolChannel.cs,
                     ScoreCounterLabel.cs, LevelLabel.cs,
                     ScoreUILifetimeScope.cs   ← child VContainer scope
     LevelUp/        LevelUpPopUp.cs, LevelUpLifetimeScope.cs
     Shields/        ShieldCounterLabel.cs, ShieldCounterAnimation.cs,
                     ShieldUILifetimeScope.cs   ← child VContainer scope
     GameStart/      GameStartButton.cs
-  Debug/
+  Display/
+    OrthogonalSizeCameraController.cs
+  Cheats/
     ICheat.cs, CheatConsoleView.cs
     BalloonRemoverCheat.cs, SpawnBalloonLineCheat.cs,
     FireProjectileCheat.cs, TriggerLevelUpCheat.cs, NearLevelUpCheat.cs,
     ScoreCheatHelper.cs   ← shared helper for score-related cheats
   README.md              ← each feature folder contains a README.md (living documentation)
 
-Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
+Assets/Source_Old/   ← legacy Entitas, untouched until Phase 16
 ```
 
 > **Prefab naming:** New prefabs replace old ones directly — no suffixes (e.g. `BalloonPrefab`, not `BalloonPrefab_MVC`).
@@ -201,7 +212,7 @@ builder.Register<BalloonController>(Lifetime.Transient);
    - In `Start()`, subscribe to `BalanceBalloonsMessage` and run the bubble-loop algorithm from `BalanceBalloonsSystem`: bottom-up scan for unbalanced slots, move each to its optimal empty slot, collect per-balloon movement paths
    - Animate each balloon along its path via `DOPath` (CatmullRom); kill any in-progress tween before starting a new one
    - Set `BalloonModel.IsStable.Value = true` in tween `onComplete`
-4. Add `BalloonModel.View` — a back-reference to `BalloonView` set at bind time so the balancer can reach the transform without coupling to Unity from the model.
+4. `SlotGrid` stores a parallel `BalloonView[,]` array alongside the model array. `Place()` accepts both model and view; `ViewAt()` returns the view for a given slot index. This lets the balancer and nudge logic reach the view's transform without coupling the model to Unity types.
 5. Any code that previously set `isBalloonsBalanceEvent` now injects `IPublisher<BalanceBalloonsMessage>` and calls `_publisher.Publish(default)`.
 6. Register `BalloonBalancer` as an entry point:
    ```csharp
@@ -399,14 +410,14 @@ protected override void Configure(IContainerBuilder builder)
 
 ## Phase 7d — Projectile Shield Visuals & Gain Logic
 
-**Goal:** Port the visual shield orbs on the projectile and the "gain a shield on 3 same-color pops" mechanic — replacing `ProjectileBounceShieldController`, `ProjectileShieldSystem`, and `ProjectileShieldFXSystem`.
+**Goal:** Port the visual shield orbs on the projectile and the "gain a shield on 2 same-color pops" mechanic — replacing `ProjectileBounceShieldController`, `ProjectileShieldSystem`, and `ProjectileShieldFXSystem`.
 
 ### Behaviour Summary
 
 - The projectile carries N shield orbs (`SpriteRenderer` children) that visually represent `ShieldsRemaining`
 - On load: all shields start at `scale = 0`; shields scale up to represent starting count
 - On bounce (shield lost): the topmost visible shield scales down to zero; plays `PSVFX_ShieldLose` with current color
-- On 3 consecutive same-color balloon pops: `ShieldsRemaining` increments; a new shield orb scales up; plays `PSVFX_ShieldGain` with current color
+- On 2 consecutive same-color balloon pops: `ShieldsRemaining` increments; a new shield orb scales up; plays `PSVFX_ShieldGain` with current color
 - Shield orbs tint to the current `ColorName` via DOTween color lerp (matches glow behavior)
 - Each orb has a slightly larger scale than the previous: `Vector3.one + Vector3.right * incrementX * i + Vector3.up * incrementY * i`
 
@@ -415,7 +426,7 @@ protected override void Configure(IContainerBuilder builder)
 | Legacy file | What it does |
 |---|---|
 | `ProjectileBounceShieldController.cs` | View: scales shield sprites on shield count change; tints to balloon color |
-| `ProjectileShieldSystem.cs` | Logic: when `ColorPopCount >= 3`, increment shield count |
+| `ProjectileShieldSystem.cs` | Logic: when `ColorPopCount >= 2`, increment shield count |
 | `ProjectileShieldFXSystem.cs` | VFX: spawns `PSVFX_ShieldGain`/`PSVFX_ShieldLose` particles on shield change |
 
 ### New files
@@ -438,7 +449,7 @@ protected override void Configure(IContainerBuilder builder)
    - On `Awake()`: set all shields to `localScale = Vector3.zero`
 
 3. **Shield gain logic in `ProjectileView.TrackColor()`**:
-   - After incrementing `ColorPopCount`, check `if (_model.ColorPopCount >= 3)` → increment `_model.ShieldsRemaining.Value++`, reset `ColorPopCount = 0`
+   - After incrementing `ColorPopCount`, check `if (_model.ColorPopCount >= 2)` → increment `_model.ShieldsRemaining.Value++`, reset `ColorPopCount = 0`
    - This replaces `ProjectileShieldSystem`
 
 4. **`ProjectileView`** — resolves `ProjectileShieldView` via `GetComponent` in `Awake()`; calls `_shieldView.Bind(model)` in `Bind()`
@@ -464,7 +475,7 @@ protected override void Configure(IContainerBuilder builder)
 3. Set `_alpha: 0.3`, `_colorDuration: 0.5`, `_scaleDuration: 1`, `_scaleIncrements: (0.5, 0.2)` (legacy values from the old prefab)
 4. Assign VFX prefabs (`PSVFX_ShieldGain`, `PSVFX_ShieldLose`, `PSVFX_ShieldBounce`)
 
-✅ **Checkpoint:** Fire projectile → shields start visible at initial count → hit 3 same-color balloons → new shield appears with gain VFX → bounce off wall → shield disappears with lose VFX → shield color matches last balloon hit.
+✅ **Checkpoint:** Fire projectile → shields start visible at initial count → hit 2 same-color balloons → new shield appears with gain VFX → bounce off wall → shield disappears with lose VFX → shield color matches last balloon hit.
 
 ---
 
@@ -665,7 +676,7 @@ None — no new serialized references. `PoolManager` is already registered as a 
 - **`DOTween.Kill` on despawn** — balloons may be mid-spawn-animation when popped; killing tweens prevents callbacks from firing on a recycled view.
 - **VContainer injection preserved** — `BalloonPoolChannel` uses `IObjectResolver.Instantiate` so `[Inject]` fields on `BalloonView` are populated on first creation and remain valid across pool cycles (fields are injected once at instantiation, not re-injected).
 - **Pool key is a constant** (`"Balloon"`) — all balloons share one pool regardless of color since the same prefab is used; color is applied via model binding.
-- **BalloonController subscription lifecycle** — `BalloonController` subscribes to `BalloonHitMessage` globally. Without disposal, old controllers (from previous pool cycles) would accumulate subscriptions forever — each holding a reference to `_view` (the recycled view). Although the `msg.Balloon != Model` guard prevents wrong execution, the subscriptions prevent GC of dead controllers and waste CPU scanning every hit message. Fix: the subscription `IDisposable` is disposed immediately when the hit fires and is also registered via `view.RegisterDisposeOnDespawn()` so it's cleaned up on pool return even if the balloon is never hit (e.g. game reset).
+- **BalloonController subscription lifecycle** — `BalloonController` subscribes to `BalloonHitMessage` globally. Without disposal, old controllers (from previous pool cycles) would accumulate subscriptions forever — each holding a reference to `_view` (the recycled view). Fix: the subscription `IDisposable` is disposed immediately when the hit fires and is also registered via `view.RegisterDisposeOnDespawn()` so it's cleaned up on pool return even if the balloon is never hit (e.g. game reset).
 - **BalloonController no longer implements `IStartable`** — it's constructed manually with `new`, not resolved by VContainer, so `IStartable` was never honoured by the container. Removed to avoid confusion.
 
 ### Unity Editor steps
@@ -770,7 +781,7 @@ Methods:
 - `DOMove.onComplete` → `IsStable = true`.
 - Do NOT call `tracker.Append` — spawn tweens live outside the tracker.
 
-**Nudge** (`ProjectileView.NudgeNeighbors`):
+**Nudge** (`BalloonNudgeHandler.OnBalloonHit`):
 - Captures current scale, then kills standalone spawn tweens via `view.transform.DOKill()`.
 - Uses slot positions (logical positions) for push direction and return, not visual `transform.position` — ensures consistent nudge regardless of in-progress animations.
 - `tracker.Replace(nudgeSequence)` — kills any previous nudge and stores new one.
@@ -836,7 +847,8 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 | `BalloonPoolChannel.cs` | Ensure tracker component exists on pooled instances (add in `Create` if not on prefab) |
 | `BalloonSpawner.cs` | `AnimateSpawn`: standalone move + scale tweens (no tracker, no SetId) — matches legacy |
 | `BalloonBalancer.cs` | `AnimatePaths`: use `tracker.Append` instead of `DOTween.Kill` + new tween. Remove `DOTween.Kill(id)`. |
-| `ProjectileView.cs` | `NudgeNeighbors`: use `tracker.Replace` instead of `DOTween.Kill` + new sequence |
+| `BalloonNudgeHandler.cs` | New — subscribes to `BalloonHitMessage`, nudges neighboring balloon views via `SlotGrid.ViewAt()` |
+| `ProjectileView.cs` | Removed `NudgeNeighbors` — nudge responsibility moved to `BalloonNudgeHandler` |
 ### Files created/modified
 
 | File | Change |
@@ -846,7 +858,7 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 | `BalloonSpawner.cs` | `AnimateSpawn`: standalone move + scale tweens (no tracker) — matches legacy |
 | `BalloonBalancer.cs` | Kills tracker + standalone tweens, creates fresh `DOPath`, parallel `DOScale` for scale recovery. Removed per-hit balance dependency. |
 | `BalloonController.cs` | Removed `BalanceBalloonsMessage` publisher — balance is now turn-based (post-death only) |
-| `ProjectileView.cs` | `NudgeNeighbors`: uses slot positions, kills standalone tweens, `tracker.Replace`, parallel `DOScale` for scale recovery |
+| `ProjectileView.cs` | Removed `NudgeNeighbors` — nudge is now handled by `BalloonNudgeHandler` |
 | `SlotGrid.cs` | Fixed weight tie-breaking (`0` initial, `>=` compare). Added `Place` guard rejecting double-occupation. |
 
 ### Unity Editor steps
@@ -857,9 +869,59 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 
 ---
 
+## Phase 10 — Prediction Trace
+
+**Goal:** Show the player a dotted trajectory line while aiming — replacing the implicit "where will it go?" guesswork with visual feedback that shows the projectile's predicted path including wall bounces.
+
+### Architecture
+
+| File | Responsibility |
+|---|---|
+| `PredictionTraceCalculator` | Pure C# class — takes origin, direction, and a reusable `List<Vector3>`, fills it with world-space trace points by stepping forward and reflecting off walls. Bounces off left, right, and top limits (from `LimitsClockwise`). A top-wall hit terminates further bounces. |
+| `PredictionTraceView` | MonoBehaviour with a `LineRenderer` — call `SetTrace(points)` to update or `Clear()` to hide. Attach to the Thrower prefab alongside a `LineRenderer`. |
+
+### Integration
+
+`ThrowerController` owns a `PredictionTraceCalculator` (created in `Start()`) and delegates display to `ThrowerView`, which finds a `PredictionTraceView` via `GetComponentInChildren`. During `Tick()`, while the player holds the mouse button and the projectile hasn't been fired, it calculates the trace and pushes it to the view. On fire or release, the line is cleared.
+
+### Unity Editor steps
+
+1. Add a child GameObject to the Thrower prefab
+2. Add `LineRenderer` + `PredictionTraceView` components
+3. Configure the `LineRenderer` material, width, and color to match the desired visual style
+
+✅ **Checkpoint:** Aim with mouse → dotted line shows predicted path with wall bounces → release to fire → line disappears → reload → line reappears on next aim.
+
+---
+
 ## Phase 11 — Configuration Migration
 
-**Goal:** Move `GameConfiguration` out of `Source_Old` into `Source/` so it can be maintained independently.
+**Goal:** Move all game configuration out of `Source_Old` into `Assets/Source/Configuration/` so it can be maintained independently of the legacy codebase.
+
+### What was done
+
+The `GameConfiguration` ScriptableObject and all supporting types were moved to `Assets/Source/Configuration/`:
+
+| File | What it provides |
+|---|---|
+| `GameConfiguration` | `ScriptableObject` implementing `IGameConfiguration` — the single serialized asset holding every tunable value |
+| `IGameConfiguration` *(in Shared/)* | Read-only interface that all systems inject; decouples consumers from the concrete SO |
+| `BalloonColorConfiguration` | Serializable pair of color name + `Color`, used by the balloon color array |
+| `IBalloonColorConfiguration` | Read-only interface for balloon color entries |
+| `BalloonPowerUp` | Enum listing all power-up types: `None`, `Shield`, `Bomb`, `Laser`, `Lightning` |
+| `PowerUpSettings` | Per-power-up tuning data: check frequency, weight, max count, nudge values |
+| `PowerUpConfiguration` | Serializable list of `PowerUpSettings` with indexer by `BalloonPowerUp` type |
+| `GameDisplayConfiguration` | Aspect-ratio → orthographic-size lookup for camera sizing |
+| `DisplayOption` | Single aspect-ratio / orthographic-size pair used by `GameDisplayConfiguration` |
+
+### Design rules
+
+- **Never hardcode** values that exist in `GameConfiguration` — always read through `IGameConfiguration`.
+- **Never duplicate** configuration data via `[SerializeField]` on individual systems.
+- `IGameConfiguration` is registered once as a singleton in `GameLifetimeScope` and injected wherever needed.
+- New configuration fields are added to both `IGameConfiguration` (interface) and `GameConfiguration` (implementation + serialized field).
+
+✅ **Checkpoint:** All systems read configuration through `IGameConfiguration`. No `Source_Old` configuration files are referenced by new code.
 
 ---
 
@@ -869,21 +931,28 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 
 > References: `OrthogonalSizeCameraController`, `AspectRatio`
 
-1. Create `Assets/Source/Display/OrthogonalSizeCameraController.cs` as an `IStartable` — inject `IGameConfiguration`, find `Camera.main`, read `DisplayConfiguration.GetOrthogonalSize()` and apply on start
-2. Audit `AspectRatio` utility — currently unused (no callers). Confirm it can be dropped; if any future display logic needs it, port to `BalloonParty.Display` namespace.
-3. ✅ **Checkpoint:** Camera orthographic size adapts correctly to different aspect ratios at startup.
+### What was done
+
+1. Created `Assets/Source/Display/OrthogonalSizeCameraController.cs` as an `IStartable` — registered via `builder.RegisterEntryPoint<OrthogonalSizeCameraController>()` in `GameLifetimeScope`. Injects `IGameConfiguration`, finds `Camera.main`, reads `DisplayConfiguration.GetOrthogonalSize()` and applies on start.
+2. `AspectRatio` utility — confirmed unused (no callers). Dropped; if future display logic needs it, port to `BalloonParty.Display` namespace.
+
+✅ **Checkpoint:** Camera orthographic size adapts correctly to different aspect ratios at startup.
 
 ---
 
 ## Phase 13 — Projectile Visuals
 
-**Goal:** Port the projectile glow color and shield ring visuals to the new architecture.
+**Goal:** Confirm that all projectile visual systems — glow color and shield ring visuals — are fully ported and working.
 
 > References: `ProjectileGlowColorController`, `ProjectileBounceShieldController`
 
-1. Port glow color logic into the projectile view hierarchy — tint a glow sprite to match the loaded balloon color. Inject `IGameConfiguration` for color lookup; subscribe to the projectile model's color via UniRx.
-2. Port shield ring scaling and color tinting — subscribe to shield count changes and balloon color. Match original DOTween eases and durations.
-3. ✅ **Checkpoint:** Projectile glow matches loaded balloon color; shield rings scale in/out and tint correctly.
+### What was done
+
+The glow color logic was ported into `ProjectileView` — the glow sprite tints to match the last-hit balloon color. `ProjectileShieldView` (created in Phase 7d) handles shield ring scaling, tinting, and VFX. Both subscribe to `ProjectileModel` reactive properties via UniRx.
+
+All legacy visual systems (`ProjectileGlowColorController`, `ProjectileBounceShieldController`, `ProjectileShieldFXSystem`) are fully replaced by `ProjectileView` + `ProjectileShieldView`.
+
+✅ **Checkpoint:** Projectile glow matches loaded balloon color; shield rings scale in/out and tint correctly.
 
 ---
 
@@ -891,12 +960,13 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 
 **Goal:** Enforce strict MVC separation — Models and Controllers must not be `MonoBehaviour`s. Only Views interact directly with Unity engine APIs.
 
-### Audit Targets
+### Completed
 
-| Class | Current | Issue | Action |
-|---|---|---|---|
-| `SlotGridController` | `MonoBehaviour` | Pure logic in `Start()`, uses `[SerializeField]` for config data already in `IGameConfiguration` | Convert to `IStartable`, use `IGameConfiguration.GameStartedBalloonLines` |
-| `ThrowerController` | `MonoBehaviour` | Uses `transform`, `Update()`, `GetComponentInChildren` — tightly coupled to GameObject | Split into `ThrowerController` (`IStartable` + `ITickable`) and `ThrowerView` (`MonoBehaviour`), add `ThrowerLifetimeScope` |
+| Class | Was | Action Taken |
+|---|---|---|
+| `SlotGridController` | `MonoBehaviour` | Removed entirely — spawning logic consolidated in `BalloonSpawner`; grid dimensions come from `IGameConfiguration` |
+| `ThrowerController` | `MonoBehaviour` | Split into `ThrowerController` (`IStartable` + `ITickable`, plain C#) and `ThrowerView` (`MonoBehaviour`); added `ThrowerLifetimeScope` as child scope |
+| `OrthogonalSizeCameraController` | `MonoBehaviour` (legacy) | Ported as `IStartable` registered via `RegisterEntryPoint` — no MonoBehaviour |
 
 ### Rules Going Forward
 
@@ -904,16 +974,6 @@ This matches legacy tie-breaking: prefer the diagonal candidate when weights are
 - **Controller** — plain C# class registered via `Register<T>` or `RegisterEntryPoint<T>`. Uses `IStartable`, `ITickable`, `IFixedTickable` for lifecycle. No `MonoBehaviour`, no `transform`, no `Update()`.
 - **View** — `MonoBehaviour`. Owns the visual representation, reads model state via UniRx subscriptions, publishes user input as messages. May use `[Inject]` for dependencies.
 - When a controller needs engine interaction (transform, physics), split into a thin `View` (MonoBehaviour) and a `Controller` (plain C# class). The controller injects the view. Use a child `LifetimeScope` on the view's GameObject to wire them together.
-
-### Steps
-
-1. Convert `SlotGridController` from `MonoBehaviour` to `IStartable`, use `IGameConfiguration.GameStartedBalloonLines`
-2. Update `GameLifetimeScope` — change `RegisterComponentInHierarchy` to `RegisterEntryPoint` for `SlotGridController`
-3. Remove the `SlotGridController` component from the scene
-4. Split `ThrowerController` into `ThrowerView` (MonoBehaviour) + `ThrowerController` (`IStartable` + `ITickable`)
-5. Create `ThrowerLifetimeScope` — registers `ThrowerView` and `ThrowerController` as child of `GameLifetimeScope`
-6. Remove old `ThrowerController` MonoBehaviour from the Thrower GameObject, add `ThrowerView` and `ThrowerLifetimeScope` instead
-7. ✅ **Checkpoint:** No controller or model class inherits `MonoBehaviour`. All engine interaction goes through Views.
 
 ---
 
@@ -926,7 +986,7 @@ The following Unity API usages in controllers/models were identified during the 
 | `ScoreController` | `PlayerPrefs.GetInt/SetInt/Save` | Extract `IScorePersistence` interface; implement with `PlayerPrefs` in a view-layer class |
 | `ScoreController` | `Application.quitting`, `Application.focusChanged` | Inject an `IApplicationLifecycle` or use a thin MonoBehaviour that publishes lifecycle messages |
 | `ScoreController` | `Time.timeScale = 0f` | Publish a `GamePausedMessage`; let a view-layer class set `Time.timeScale` |
-| `OrthogonalSizeCameraController` | `Camera.main`, `camera.orthographicSize` | Already minimal — entire purpose is camera setup. Could become a MonoBehaviour view if needed |
+| `OrthogonalSizeCameraController` | `Camera.main`, `camera.orthographicSize` | Extract to `ICameraService` interface; implement with a view-layer class that wraps Unity's camera API |
 | `SlotGrid` | `UnityEngine.Random.Range` | Inject `System.Random` or an `IRandom` interface for deterministic testing |
 | `SlotGrid` | `Debug.LogError` | Replace with a logging abstraction or simply remove the guard (fail fast) |
 
@@ -976,9 +1036,9 @@ Files that are already pure visual with no Entitas coupling (`ShieldCounterAnima
 
 ---
 
-### Coexistence Strategy (Phases 1–8)
+### Coexistence Strategy (Phases 1–16)
 
-The goal is **full removal** of Entitas and `Assets/Source_Old` by Phase 8. Every decision during the transition must serve that end — nothing in `Source_Old` should be extended or improved; it is read-only reference material.
+The goal is **full removal** of Entitas and `Assets/Source_Old` by Phase 16. Every decision during the transition must serve that end — nothing in `Source_Old` should be extended or improved; it is read-only reference material.
 
 ### Principles
 
@@ -988,7 +1048,7 @@ The goal is **full removal** of Entitas and `Assets/Source_Old` by Phase 8. Ever
 - **No new code in `Source_Old`.** Bug fixes in legacy systems are only allowed if they unblock a migration step. Every fix applied to `Source_Old` should immediately inform the equivalent new implementation.
 - **Entitas context access is a hard boundary.** New code in `Assets/Source` must never reference `Contexts`, `GameEntity`, `GameMatcher`, or any Entitas type. If temporary data needs to flow from a legacy system to a new one during transition, use a MessagePipe message as the bridge — not a shared Entitas entity.
 
-### Removal Checklist (to complete before Phase 8)
+### Removal Checklist (to complete before Phase 16)
 
 Each item must be ticked before `Source_Old` and the Entitas package can be deleted:
 
@@ -1116,9 +1176,9 @@ When porting an animation:
 All game data — balloon colors, slot dimensions, timing values, spawn counts — lives in the `GameConfiguration` ScriptableObject and is accessed exclusively through `IGameConfiguration`. Rules:
 
 - **Never hardcode** color names, slot counts, or timing values in new code. Always read from `IGameConfiguration`.
-- **Never use `[SerializeField]`** to duplicate data that already exists in `GameConfiguration` (e.g. no `_colors` array on a spawner — use `_config.BalloonColors`).
-- `IGameConfiguration` is registered once as a singleton in `GameLifetimeScope` and injected wherever needed — no `Contexts.sharedInstance` access in new code.
-- When porting a legacy system, check what configuration fields it reads and ensure they are present on `BalloonParty.Configuration.IGameConfiguration` before writing the new implementation.
+- **Never duplicate** configuration data via `[SerializeField]` on individual systems.
+- `IGameConfiguration` is registered once as a singleton in `GameLifetimeScope` and injected wherever needed.
+- New configuration fields are added to both `IGameConfiguration` (interface) and `GameConfiguration` (implementation + serialized field).
 
 ---
 
@@ -1170,19 +1230,6 @@ VContainer's `[Inject]` (both field injection and method injection) runs during 
 
 ---
 
-### VContainer Lazy Singletons
-
-`RegisterComponentOnNewGameObject<T>(Lifetime.Singleton, ...)` is **lazy** — the GameObject is created only when `T` is resolved by another registration or by a `RegisterBuildCallback`. If nothing resolves `T`, the component never exists.
-
-**Rule:** Any `RegisterComponentOnNewGameObject` registration that must exist at startup (e.g. debug tools, always-on HUD elements) needs an explicit `RegisterBuildCallback`:
-
-```csharp
-builder.RegisterComponentOnNewGameObject<MyView>(Lifetime.Singleton, "MyView");
-builder.RegisterBuildCallback(resolver => resolver.Resolve<MyView>());
-```
-
----
-
 ### Message Design
 
 - **Carry relevant data.** If a subscriber needs access to the source object (model, position, etc.), include it in the message struct rather than forcing the subscriber to inject the producer. Example: `ProjectileLoadedMessage` carries `ProjectileModel` so shield UI can self-bind without knowing about `ThrowerController`.
@@ -1212,7 +1259,7 @@ Every phase that introduces a new triggerable behaviour should add a correspondi
 
 ### Living Documentation
 
-Each feature folder contains a `README.md` that describes what that feature covers — its gameplay purpose, how it works, and how it interacts with other systems. These are not implementation notes; they explain intent and behaviour at the feature level.
+Each feature folder contains a `README.md` that describes what that feature covers — its gameplay purpose, how it works, and how it interacts with other systems. These are not implementation notes; they explain the current architecture as if it were always the intended design.
 
 **Keep them current.** Update a folder's `README.md` whenever:
 - A new mechanic is added or an existing one changes significantly
@@ -1347,6 +1394,57 @@ public class BalloonRemoverCheat : MonoBehaviour, ICheat
 }
 ```
 
+### Model Interface Pattern (Read/Write Separation)
+
+Every Model exposes two interfaces to enforce read/write separation at the type level:
+
+| Type | Purpose | Typical Consumer |
+|---|---|---|
+| `IModel` (e.g. `IBalloonModel`) | **Read-only** — exposes state as `IReadOnlyReactiveProperty<T>` and read-only plain properties | Views, score controllers, hit messages, any code that only observes |
+| `IWriteableModel` (e.g. `IWriteableBalloonModel`) | **Mutable** — extends `IModel`; exposes `ReactiveProperty<T>` (via `new` keyword) and setters | Controllers, spawners, balancers, any code that mutates state |
+| `Model` (e.g. `BalloonModel`) | **Concrete class** — implements `IWriteableModel`; explicit interface implementations for the read-only accessors | Only referenced at construction sites (factories/spawners) |
+
+**Rules:**
+
+1. **Use the narrowest interface.** A consumer that only reads state receives `IModel`. A consumer that needs to mutate state receives `IWriteableModel`. Direct use of the concrete `Model` class is limited to factory/spawner code that calls `new`.
+2. **Messages always carry the read-only interface.** `BalloonHitMessage.Balloon` is `IBalloonModel`; `ProjectileLoadedMessage.Model` is `IProjectileModel`. Messages are consumed by many subscribers — none should receive write access through a message. If a consumer (e.g. a debug cheat) genuinely needs to mutate, it downcasts explicitly at its own call site.
+3. **`new` keyword for property hiding.** `IWriteableModel` re-declares reactive properties with `new` to return `ReactiveProperty<T>` instead of `IReadOnlyReactiveProperty<T>`. The concrete class provides explicit interface implementations for the read-only versions.
+4. **No view references on models.** Models must not hold back-references to views (`BalloonView`, `Transform`, etc.). When a system needs the view for a model, it looks it up via `SlotGrid.ViewAt(model.SlotIndex.Value)`. This keeps models free of Unity dependencies and view coupling.
+
+**Example — BalloonModel:**
+
+```csharp
+// Read-only interface
+public interface IBalloonModel
+{
+    IReadOnlyReactiveProperty<string> Color { get; }
+    IReadOnlyReactiveProperty<Vector2Int> SlotIndex { get; }
+    IReadOnlyReactiveProperty<bool> IsStable { get; }
+}
+
+// Mutable interface
+public interface IWriteableBalloonModel : IBalloonModel
+{
+    new ReactiveProperty<string> Color { get; }
+    new ReactiveProperty<Vector2Int> SlotIndex { get; }
+    new ReactiveProperty<bool> IsStable { get; }
+}
+
+// Concrete class — only used at creation sites
+public class BalloonModel : IWriteableBalloonModel
+{
+    public ReactiveProperty<string> Color { get; } = new();
+    public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
+    public ReactiveProperty<bool> IsStable { get; } = new(true);
+
+    IReadOnlyReactiveProperty<string> IBalloonModel.Color => Color;
+    IReadOnlyReactiveProperty<Vector2Int> IBalloonModel.SlotIndex => SlotIndex;
+    IReadOnlyReactiveProperty<bool> IBalloonModel.IsStable => IsStable;
+}
+```
+
+---
+
 ### Async: Prefer UniTask over Coroutines
 
 All async work in `Assets/Source/` must use **UniTask** instead of Unity coroutines. No `StartCoroutine` / `IEnumerator` patterns in new code.
@@ -1389,7 +1487,7 @@ All async work in `Assets/Source/` must use **UniTask** instead of Unity corouti
 | 11    | Configuration Migration                   | ✅ Done         |
 | 12    | Camera & Display Setup                    | ✅ Done         |
 | 13    | Projectile Visuals (Glow + Shield Rings)  | ✅ Done         |
-| 14    | MVC Architecture Audit                    | ⬜ Todo         |
+| 14    | MVC Architecture Audit                    | ✅ Done         |
 | 15    | Power-Ups                                 | ⬜ Todo         |
 | 16    | Game Loop, UI & Cleanup                   | ⬜ Todo         |
 

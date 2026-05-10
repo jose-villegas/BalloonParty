@@ -8,9 +8,9 @@ namespace BalloonParty.Shared.Messages
 {
     public readonly struct ProjectileLoadedMessage
     {
-        public ProjectileModel Model { get; }
+        public IProjectileModel Model { get; }
 
-        public ProjectileLoadedMessage(ProjectileModel model)
+        public ProjectileLoadedMessage(IProjectileModel model)
         {
             Model = model;
         }
