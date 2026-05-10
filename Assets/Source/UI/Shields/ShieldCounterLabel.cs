@@ -1,7 +1,11 @@
+#region
+
 using System;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
+
+#endregion
 
 namespace BalloonParty.UI.Shields
 {

@@ -1,6 +1,10 @@
+#region
+
 using BalloonParty.Balloon.View;
 using UniRx;
 using UnityEngine;
+
+#endregion
 
 namespace BalloonParty.Balloon.Model
 {

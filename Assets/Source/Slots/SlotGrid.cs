@@ -1,9 +1,13 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
+
+#endregion
 
 namespace BalloonParty.Slots
 {
@@ -13,15 +17,15 @@ namespace BalloonParty.Slots
         private readonly Subject<SlotGridChangedEvent> _onChanged = new();
         private readonly BalloonModel[,] _slots;
 
+        public IObservable<SlotGridChangedEvent> OnChanged => _onChanged;
+        public int Columns => _slots.GetLength(0);
+        public int Rows => _slots.GetLength(1);
+
         public SlotGrid(IGameConfiguration config)
         {
             _config = config;
             _slots = new BalloonModel[config.SlotsSize.x, config.SlotsSize.y];
         }
-
-        public IObservable<SlotGridChangedEvent> OnChanged => _onChanged;
-        public int Columns => _slots.GetLength(0);
-        public int Rows => _slots.GetLength(1);
 
         public string RandomColorName()
         {
@@ -60,7 +64,6 @@ namespace BalloonParty.Slots
                            || _slots[col, row] == null;
         }
 
-        // A slot is unbalanced when either of the two slots directly above it is empty.
         public bool IsUnbalanced(int col, int row)
         {
             if (row == 0)

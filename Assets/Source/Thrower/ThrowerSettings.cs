@@ -1,4 +1,8 @@
+#region
+
 using BalloonParty.Projectile;
+
+#endregion
 
 namespace BalloonParty.Thrower
 {

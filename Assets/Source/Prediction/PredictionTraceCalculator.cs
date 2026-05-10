@@ -1,5 +1,9 @@
+#region
+
 using System.Collections.Generic;
 using UnityEngine;
+
+#endregion
 
 namespace BalloonParty.Prediction
 {
@@ -39,7 +43,6 @@ namespace BalloonParty.Prediction
                 var extended = origin + (direction * shift);
                 var reflect = Vector3.zero;
 
-                // Collided with right limit
                 if (extended.x > limits.y)
                 {
                     reflect += Vector3.left;
@@ -47,7 +50,6 @@ namespace BalloonParty.Prediction
                     extended = origin + (direction * shift);
                 }
 
-                // Collided with left limit
                 if (extended.x < limits.w)
                 {
                     reflect += Vector3.right;
@@ -55,7 +57,6 @@ namespace BalloonParty.Prediction
                     extended = origin + (direction * shift);
                 }
 
-                // Collided with top limit — no further bounces
                 if (extended.y > limits.x)
                 {
                     reflect += Vector3.down;

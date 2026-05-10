@@ -1,3 +1,5 @@
+#region
+
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Game;
@@ -8,6 +10,8 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
+
+#endregion
 
 namespace BalloonParty.UI.Score
 {
@@ -23,14 +27,15 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ScoreNotice _noticePrefab;
         [SerializeField] private ScorePointTrail _trailPrefab;
 
-        private readonly List<ScoreNotice> _notices = new();
-        private BalloonColorConfiguration _colorConfig;
-
         [Inject] private IGameConfiguration _config;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
-        private int _localCount;
         [Inject] private PoolManager _poolManager;
         [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
+
+        private readonly List<ScoreNotice> _notices = new();
+
+        private BalloonColorConfiguration _colorConfig;
+        private int _localCount;
         private string _trailPoolKey;
 
         public void Setup(BalloonColorConfiguration colorConfig, ScoreController scoreController)

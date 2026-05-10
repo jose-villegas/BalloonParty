@@ -1,3 +1,5 @@
+#region
+
 using System.Collections.Generic;
 using BalloonParty.Prediction;
 using BalloonParty.Projectile;
@@ -11,6 +13,8 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+
+#endregion
 
 namespace BalloonParty.Thrower
 {
@@ -31,6 +35,8 @@ namespace BalloonParty.Thrower
         private Vector3 _direction = Vector3.up;
         private bool _isMovable;
         private PredictionTraceCalculator _traceCalculator;
+
+        private string ProjectilePoolKey => _settings.ProjectileScopePrefab.name;
 
         [Inject]
         public ThrowerController(
@@ -53,7 +59,6 @@ namespace BalloonParty.Thrower
             _loadedPublisher = loadedPublisher;
         }
 
-        private string ProjectilePoolKey => _settings.ProjectileScopePrefab.name;
 
         public void Start()
         {

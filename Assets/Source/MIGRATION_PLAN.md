@@ -1268,26 +1268,84 @@ These constraints apply to all code generated or written during this migration.
 
 ### Member Ordering
 
-Classes follow a strict top-to-bottom ordering by visibility and purpose:
+> **Enforcement:** Rider's File Layout cannot reliably automate this ordering. It is enforced exclusively through **code review and periodic audits** against this specification. Every audit phase must verify member ordering compliance.
 
-1. **Fields & Properties** (top of class)
-   - `public` → `protected` → `private`
-   - Within each visibility group, order by purpose:
-     1. Constants (`const`) — *enforced by Rider*
-     2. Static readonly fields — *enforced by Rider*
-     3. `[SerializeField]` fields (grouped by `[Header]` when purpose/context warrants it) — *manual*
-     4. `[Inject]` fields — *manual*
-     5. Readonly instance fields (services, config, resolver) — *enforced by Rider (grouped with 3–4)*
-     6. MessagePipe publishers and subscribers (`IPublisher<T>`, `ISubscriber<T>`) — *manual, within readonly/mutable group*
-     7. Cancellation tokens (`CancellationTokenSource`, `CancellationToken`) — *manual, within readonly/mutable group*
-     8. Mutable instance fields — *enforced by Rider (always last among fields)*
-     9. Auto-properties — *enforced by Rider (after all fields)*
-   > **Tooling note:** Rider enforces the broad grouping: constants → static readonly → readonly → mutable → properties. The sub-ordering within readonly/mutable fields (`[SerializeField]` before `[Inject]` before services before publishers before CTS) is a manual convention enforced by code review.
-2. **Methods** (below fields)
-   - `public` → `protected` → `private`
-   - Unity lifecycle methods (`Awake`, `Start`, `Update`, etc.) sit at the top of their visibility group in lifecycle order
-   - `[Inject]` methods sit immediately after lifecycle methods in their visibility group
-   - `[Inject]` methods must only perform injection-related work (subscribing to injected dependencies, wiring injected references). Non-injection logic (e.g. triggering animations, setting initial visual state) belongs in Unity lifecycle methods (`Awake`, `Start`).
+Classes follow a strict top-to-bottom ordering. Within each numbered group, sort alphabetically unless a different order is noted.
+
+#### Fields & Properties (top of class)
+
+Order within the class, top to bottom:
+
+| # | Group | Example | Notes |
+|---|-------|---------|-------|
+| 1 | **Constants** (`const`) | `private const float PickRadius = 0.25f;` | All visibilities; `public` before `private` |
+| 2 | **Static readonly fields** | `private static readonly Color DefaultColor = Color.white;` | |
+| 3 | **`[SerializeField]` fields** | `[SerializeField] private SpriteRenderer _renderer;` | Grouped by `[Header]` when context warrants it |
+| 4 | **`[Inject]` fields** | `[Inject] private SlotGrid _grid;` | All `[Inject]` together, alphabetical by type name |
+| 5 | **Readonly instance fields** | `private readonly List<Vector3> _path = new();` | Services, config, disposables, collections |
+| 6 | **Mutable instance fields** | `private bool _active;` | Always last among fields |
+| 7 | **Auto-properties** | `public string Name => ...;` | After all fields |
+
+**Key rule:** Fields decorated with an attribute (`[SerializeField]`, `[Inject]`) are grouped by that attribute, not by readonly/mutable. An `[Inject]` mutable field sits in group 4, not group 6.
+
+#### Methods (below fields)
+
+| # | Group | Notes |
+|---|-------|-------|
+| 1 | **Constructors** | Static constructors before instance constructors |
+| 2 | **Unity lifecycle methods** | In lifecycle order: `Awake` → `OnEnable` → `Start` → `Update` → `FixedUpdate` → `LateUpdate` → `OnDisable` → `OnDestroy` → other callbacks |
+| 3 | **`[Inject]` methods** | Immediately after lifecycle methods; only injection-related wiring |
+| 4 | **Interface implementations** | `IStartable.Start()`, `ITickable.Tick()`, `IDisposable.Dispose()`, `IPoolable`, etc. |
+| 5 | **Public methods** | Alphabetical |
+| 6 | **Protected methods** | Alphabetical |
+| 7 | **Private methods** | Alphabetical; helper methods called by a single public method may sit directly below their caller for locality |
+
+#### Canonical Example
+
+```csharp
+public class BalloonRemoverCheat : MonoBehaviour, ICheat
+{
+    // 1. Constants
+    private const float PickRadius = 0.25f;
+    private const float PathSampleDistance = 0.05f;
+
+    // 4. [Inject] fields (grouped by attribute)
+    [Inject] private SlotGrid _grid;
+    [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
+    [Inject] private IPublisher<BalanceBalloonsMessage> _publisher;
+
+    // 5. Readonly instance fields
+    private readonly List<Vector3> _path = new();
+
+    // 6. Mutable instance fields (always last among fields)
+    private bool _active;
+    private bool _dragging;
+    private Material _lineMaterial;
+
+    // 7. Auto-properties
+    public string Name => _active ? "Remove Balloons  [ON]" : "Remove Balloons";
+    public string Section => "Grid";
+    public IReadOnlyList<string> Tags => new[] { "balloons", "grid" };
+
+    // --- Methods ---
+
+    // Unity lifecycle (in lifecycle order)
+    private void Awake() { ... }
+    private void Update() { ... }
+    private void OnRenderObject() { ... }
+
+    // Interface implementations
+    public void Execute() { ... }
+
+    // Private helpers (alphabetical)
+    private HashSet<Vector2Int> CollectHitSlots() { ... }
+    private static void DrawThickCircle(...) { ... }
+    private static void DrawThickPath(...) { ... }
+    private static Vector3? MouseWorldPosition() { ... }
+    private void RemoveBalloonsAlongPath() { ... }
+    private void SampleMousePosition() { ... }
+}
+```
 
 ### Async: Prefer UniTask over Coroutines
 

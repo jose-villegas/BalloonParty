@@ -1,5 +1,9 @@
+#region
+
 using UnityEngine;
 using UnityEngine.UI;
+
+#endregion
 
 namespace BalloonParty.UI.Score
 {
@@ -12,18 +16,14 @@ namespace BalloonParty.UI.Score
         [SerializeField] private float _maxScale = 2f;
         [SerializeField] private float _maxScaleScore = 100f;
 
+        public bool IsUsable { get; private set; }
+
         private void Awake()
         {
             IsUsable = false;
             InvokeRepeating(nameof(CheckAvailability), 0f, 0.15f);
         }
 
-        public bool IsUsable { get; private set; }
-
-        private void CheckAvailability()
-        {
-            IsUsable = _animator.GetCurrentAnimatorStateInfo(0).IsTag("Available");
-        }
 
         public void Show(int score, Color color)
         {
@@ -37,6 +37,11 @@ namespace BalloonParty.UI.Score
 
             transform.localScale = Vector3.one;
             transform.localScale = Vector3.Lerp(Vector3.one, Vector3.one * _maxScale, score / _maxScaleScore);
+        }
+
+        private void CheckAvailability()
+        {
+            IsUsable = _animator.GetCurrentAnimatorStateInfo(0).IsTag("Available");
         }
     }
 }

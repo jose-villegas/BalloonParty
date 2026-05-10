@@ -1,3 +1,5 @@
+#region
+
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Shared;
@@ -5,6 +7,8 @@ using DG.Tweening;
 using UniRx;
 using UnityEngine;
 using VContainer;
+
+#endregion
 
 namespace BalloonParty.Balloon.View
 {
@@ -25,10 +29,11 @@ namespace BalloonParty.Balloon.View
 
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
-        private readonly CompositeDisposable _bindDisposables = new();
-
         [Inject] private IGameConfiguration _config;
         [Inject] private PoolManager _poolManager;
+
+        private readonly CompositeDisposable _bindDisposables = new();
+
         public BalloonModel Model { get; private set; }
         public TweenTracker TweenTracker { get; private set; }
 

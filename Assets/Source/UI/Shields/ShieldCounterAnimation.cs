@@ -1,3 +1,5 @@
+#region
+
 using System;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
@@ -6,18 +8,21 @@ using UniRx;
 using UnityEngine;
 using VContainer;
 
+#endregion
+
 namespace BalloonParty.UI.Shields
 {
     [RequireComponent(typeof(Animator))]
     public class ShieldCounterAnimation : MonoBehaviour
     {
-        private readonly CompositeDisposable _disposable = new();
-        private Animator _animator;
         [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         [Inject] private ShieldCounterLabel[] _labels;
-        private int _lastShieldValue;
-
         [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+
+        private readonly CompositeDisposable _disposable = new();
+
+        private Animator _animator;
+        private int _lastShieldValue;
         private IDisposable _shieldSubscription;
 
         private void Awake()

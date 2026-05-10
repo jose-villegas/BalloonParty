@@ -1,4 +1,7 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
+
+#region
+
 using System.Collections.Generic;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -7,6 +10,8 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using VContainer;
 
+#endregion
+
 namespace BalloonParty.Cheats
 {
     public class BalloonRemoverCheat : MonoBehaviour, ICheat
@@ -14,17 +19,19 @@ namespace BalloonParty.Cheats
         private const float PickRadius = 0.25f;
         private const float PathSampleDistance = 0.05f;
 
+        [Inject] private SlotGrid _grid;
+        [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
+        [Inject] private IPublisher<BalanceBalloonsMessage> _publisher;
+
         private readonly List<Vector3> _path = new();
 
         private bool _active;
         private bool _dragging;
-
-        [Inject] private SlotGrid _grid;
-        [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
-
         private Material _lineMaterial;
-        [Inject] private IPublisher<BalanceBalloonsMessage> _publisher;
 
+        public string Name => _active ? "Remove Balloons  [ON]" : "Remove Balloons";
+        public string Section => "Grid";
+        public IReadOnlyList<string> Tags => new[] { "balloons", "grid" };
 
         private void Awake()
         {
@@ -94,9 +101,6 @@ namespace BalloonParty.Cheats
             GL.PopMatrix();
         }
 
-        public string Name => _active ? "Remove Balloons  [ON]" : "Remove Balloons";
-        public string Section => "Grid";
-        public IReadOnlyList<string> Tags => new[] { "balloons", "grid" };
 
         public void Execute()
         {

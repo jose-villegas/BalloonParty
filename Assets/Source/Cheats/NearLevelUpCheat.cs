@@ -1,8 +1,13 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
+
+#region
+
 using System.Collections.Generic;
 using BalloonParty.Game;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
+
+#endregion
 
 namespace BalloonParty.Cheats
 {
@@ -11,6 +16,10 @@ namespace BalloonParty.Cheats
         private readonly IGameConfiguration _config;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
         private readonly ScoreController _scoreController;
+
+        public string Name => "Near Level Up";
+        public string Section => "Score";
+        public IReadOnlyList<string> Tags => new[] { "score", "levelup" };
 
         public NearLevelUpCheat(
             IGameConfiguration config,
@@ -22,9 +31,6 @@ namespace BalloonParty.Cheats
             _hitPublisher = hitPublisher;
         }
 
-        public string Name => "Near Level Up";
-        public string Section => "Score";
-        public IReadOnlyList<string> Tags => new[] { "score", "levelup" };
 
         public void Execute()
         {

@@ -82,8 +82,7 @@
 	<!-- ================================================================ -->
 	<!-- Member ordering layout matching MIGRATION_PLAN.md                -->
 	<!-- ================================================================ -->
-	<s:String x:Key="/Default/CodeStyle/CSharpFileLayoutPatterns/Pattern/@EntryValue"><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
-<Patterns xmlns="urn:schemas-jetbrains-com:member-reordering-patterns">
+	<s:String x:Key="/Default/CodeStyle/CSharpFileLayoutPatterns/Pattern/@EntryValue"><![CDATA[<Patterns xmlns="urn:schemas-jetbrains-com:member-reordering-patterns">
   <TypePattern DisplayName="Non-reorderable types">
     <TypePattern.Match>
       <Or>
@@ -113,7 +112,6 @@
         </HasMember>
       </And>
     </TypePattern.Match>
-
     <Entry DisplayName="Setup/Teardown Methods">
       <Entry.Match>
         <Or>
@@ -124,12 +122,10 @@
           </And>
         </Or>
       </Entry.Match>
-
       <Entry.SortBy>
         <Kind Order="Constructor" />
       </Entry.SortBy>
     </Entry>
-
     <Entry DisplayName="All other members" />
     <Entry Priority="100" DisplayName="Test Methods">
       <Entry.Match>
@@ -148,7 +144,6 @@
         <HasAttribute Name="NUnit.Framework.TestFixtureAttribute" Inherited="True" />
       </And>
     </TypePattern.Match>
-
     <Entry DisplayName="Setup/Teardown Methods">
       <Entry.Match>
         <And>
@@ -162,9 +157,7 @@
         </And>
       </Entry.Match>
     </Entry>
-
     <Entry DisplayName="All other members" />
-
     <Entry Priority="100" DisplayName="Test Methods">
       <Entry.Match>
         <And>
@@ -214,7 +207,6 @@
           </And>
         </Or>
       </Entry.Match>
-
       <Entry.SortBy>
         <Kind Order="Constant Field" />
       </Entry.SortBy>
@@ -227,7 +219,6 @@
           <Kind Is="Field" />
         </And>
       </Entry.Match>
-
       <Entry.SortBy>
         <Readonly />
       </Entry.SortBy>
@@ -240,9 +231,20 @@
           <HasAttribute Name="SerializeField" />
         </And>
       </Entry.Match>
-
       <Entry.SortBy>
         <Readonly />
+      </Entry.SortBy>
+    </Entry>
+
+    <Entry DisplayName="Injected Fields">
+      <Entry.Match>
+        <And>
+          <Kind Is="Field" />
+          <HasAttribute Name="VContainer.InjectAttribute" />
+        </And>
+      </Entry.Match>
+      <Entry.SortBy>
+        <Name />
       </Entry.SortBy>
     </Entry>
 
@@ -256,7 +258,6 @@
           </And>
         </Or>
       </Entry.Match>
-
       <Entry.SortBy>
         <Kind Order="Constant Field" />
       </Entry.SortBy>
@@ -271,7 +272,6 @@
           </Not>
         </And>
       </Entry.Match>
-
       <Entry.SortBy>
         <Readonly />
       </Entry.SortBy>
@@ -281,7 +281,6 @@
       <Entry.Match>
         <Kind Is="Constructor" />
       </Entry.Match>
-
       <Entry.SortBy>
         <Static />
       </Entry.SortBy>
@@ -303,7 +302,6 @@
           <ImplementsInterface />
         </And>
       </Entry.Match>
-
       <Entry.SortBy>
         <ImplementsInterface Immediate="True" />
       </Entry.SortBy>
@@ -328,7 +326,6 @@
           </Or>
         </And>
       </Entry.Match>
-
       <Entry.SortBy>
         <Name />
       </Entry.SortBy>
@@ -380,7 +377,6 @@
           </Or>
         </And>
       </Entry.Match>
-
       <Entry.SortBy>
         <Name />
       </Entry.SortBy>
@@ -451,7 +447,6 @@
           </Or>
         </And>
       </Entry.Match>
-
       <Entry.SortBy>
         <Name />
       </Entry.SortBy>

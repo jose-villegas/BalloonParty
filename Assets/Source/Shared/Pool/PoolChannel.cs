@@ -1,5 +1,9 @@
+#region
+
 using System.Collections.Generic;
 using UnityEngine;
+
+#endregion
 
 namespace BalloonParty.Shared
 {

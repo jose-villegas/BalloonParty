@@ -1,5 +1,9 @@
+#region
+
 using BalloonParty.Shared;
 using UnityEngine;
+
+#endregion
 
 namespace BalloonParty.UI.Score
 {

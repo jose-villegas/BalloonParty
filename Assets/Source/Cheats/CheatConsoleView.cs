@@ -1,8 +1,13 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
+
+#region
+
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using VContainer;
+
+#endregion
 
 namespace BalloonParty.Cheats
 {
@@ -12,10 +17,11 @@ namespace BalloonParty.Cheats
         private const float HandleHeight = 14f;
         private const float ReferenceHeight = 720f;
 
-        private readonly HashSet<string> _favorites = new();
-        private string _activeTag = string.Empty;
-
         [Inject] private IEnumerable<ICheat> _cheats;
+
+        private readonly HashSet<string> _favorites = new();
+
+        private string _activeTag = string.Empty;
         private float _consoleHeight = 280f;
         private bool _resizing;
         private Vector2 _scroll;
@@ -76,7 +82,6 @@ namespace BalloonParty.Cheats
             var handleRect = new Rect(0, sh - _consoleHeight - HandleHeight, sw, HandleHeight);
             var bodyRect = new Rect(0, sh - _consoleHeight, sw, _consoleHeight);
 
-            // Visual cursor hint when hovering or dragging the handle.
             var guiMouseY = Event.current.mousePosition.y / scale;
             var overHandle = guiMouseY >= handleRect.y && guiMouseY <= handleRect.yMax;
             GUI.Box(handleRect, overHandle || _resizing ? "↕" : "—");

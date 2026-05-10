@@ -1,3 +1,5 @@
+#region
+
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -5,6 +7,8 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
+
+#endregion
 
 namespace BalloonParty.UI.LevelUp
 {
@@ -22,9 +26,9 @@ namespace BalloonParty.UI.LevelUp
         [SerializeField] private float _playParticlesDelay;
         [SerializeField] private float _continueUnpauseDelay;
 
-        private readonly CompositeDisposable _disposable = new();
-
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
+
+        private readonly CompositeDisposable _disposable = new();
 
         private void Start()
         {

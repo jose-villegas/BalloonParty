@@ -1,3 +1,5 @@
+#region
+
 using System.Collections.Generic;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
@@ -5,6 +7,8 @@ using DG.Tweening;
 using UniRx;
 using UnityEngine;
 using VContainer;
+
+#endregion
 
 namespace BalloonParty.Projectile.View
 {
@@ -23,10 +27,11 @@ namespace BalloonParty.Projectile.View
         [SerializeField] private ParticleSystem _shieldLoseVfxPrefab;
         [SerializeField] private ParticleSystem _shieldBounceVfxPrefab;
 
-        private readonly CompositeDisposable _disposable = new();
-
         [Inject] private IGameConfiguration _config;
         [Inject] private PoolManager _poolManager;
+
+        private readonly CompositeDisposable _disposable = new();
+
         private int _previousShieldCount;
 
         private void Awake()
@@ -34,19 +39,6 @@ namespace BalloonParty.Projectile.View
             foreach (var shield in _shields)
             {
                 shield.transform.localScale = Vector3.zero;
-            }
-
-            gameObject.SetActive(false);
-        }
-
-        public void Reset()
-        {
-            _disposable.Clear();
-            _previousShieldCount = 0;
-            foreach (var shield in _shields)
-            {
-                shield.transform.localScale = Vector3.zero;
-                shield.DOKill();
             }
 
             gameObject.SetActive(false);
@@ -77,15 +69,28 @@ namespace BalloonParty.Projectile.View
                 .AddTo(_disposable);
         }
 
+        public void PlayBounceVfx(Vector3 position, Color color)
+        {
+            SpawnVfx(_shieldBounceVfxPrefab, position, color);
+        }
+
+        public void Reset()
+        {
+            _disposable.Clear();
+            _previousShieldCount = 0;
+            foreach (var shield in _shields)
+            {
+                shield.transform.localScale = Vector3.zero;
+                shield.DOKill();
+            }
+
+            gameObject.SetActive(false);
+        }
+
         public void Show()
         {
             gameObject.SetActive(true);
             UpdateShieldVisuals(_previousShieldCount);
-        }
-
-        public void PlayBounceVfx(Vector3 position, Color color)
-        {
-            SpawnVfx(_shieldBounceVfxPrefab, position, color);
         }
 
         private void UpdateShieldVisuals(int count)

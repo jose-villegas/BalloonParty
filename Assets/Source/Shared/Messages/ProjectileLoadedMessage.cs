@@ -1,4 +1,8 @@
+#region
+
 using BalloonParty.Projectile.Model;
+
+#endregion
 
 namespace BalloonParty.Shared.Messages
 {

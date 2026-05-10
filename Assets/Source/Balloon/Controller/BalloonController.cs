@@ -1,3 +1,5 @@
+#region
+
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
@@ -5,6 +7,8 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using MessagePipe;
+
+#endregion
 
 namespace BalloonParty.Balloon.Controller
 {
@@ -17,6 +21,8 @@ namespace BalloonParty.Balloon.Controller
         private readonly BalloonView _view;
 
         private IDisposable _hitSubscription;
+
+        public BalloonModel Model { get; }
 
         public BalloonController(
             BalloonModel model,
@@ -34,7 +40,6 @@ namespace BalloonParty.Balloon.Controller
             _poolManager = poolManager;
         }
 
-        public BalloonModel Model { get; }
 
         public void Start()
         {

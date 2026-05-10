@@ -1,8 +1,13 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
+
+#region
+
 using System.Collections.Generic;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
+
+#endregion
 
 namespace BalloonParty.Cheats
 {
@@ -10,14 +15,14 @@ namespace BalloonParty.Cheats
     {
         private ProjectileModel _activeProjectile;
 
+        public string Name => "Fire Projectile";
+        public string Section => "Thrower";
+        public IReadOnlyList<string> Tags => new[] { "projectile", "thrower" };
+
         public FireProjectileCheat(ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
             loadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model);
         }
-
-        public string Name => "Fire Projectile";
-        public string Section => "Thrower";
-        public IReadOnlyList<string> Tags => new[] { "projectile", "thrower" };
 
         public void Execute()
         {

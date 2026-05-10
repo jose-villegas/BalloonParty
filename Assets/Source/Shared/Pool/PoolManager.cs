@@ -1,7 +1,11 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
+
+#endregion
 
 namespace BalloonParty.Shared
 {

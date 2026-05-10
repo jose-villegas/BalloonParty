@@ -1,7 +1,12 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
+
+#region
+
 using System.Collections.Generic;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
+
+#endregion
 
 namespace BalloonParty.Cheats
 {
@@ -9,14 +14,14 @@ namespace BalloonParty.Cheats
     {
         private readonly IPublisher<SpawnBalloonLineMessage> _publisher;
 
+        public string Name => "Spawn Balloon Line";
+        public string Section => "Spawning";
+        public IReadOnlyList<string> Tags => new[] { "balloons", "spawning" };
+
         public SpawnBalloonLineCheat(IPublisher<SpawnBalloonLineMessage> publisher)
         {
             _publisher = publisher;
         }
-
-        public string Name => "Spawn Balloon Line";
-        public string Section => "Spawning";
-        public IReadOnlyList<string> Tags => new[] { "balloons", "spawning" };
 
         public void Execute()
         {

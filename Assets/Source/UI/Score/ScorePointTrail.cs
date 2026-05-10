@@ -1,7 +1,11 @@
+#region
+
 using System;
 using BalloonParty.Shared;
 using DG.Tweening;
 using UnityEngine;
+
+#endregion
 
 namespace BalloonParty.UI.Score
 {

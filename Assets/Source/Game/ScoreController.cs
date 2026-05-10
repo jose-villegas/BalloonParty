@@ -1,3 +1,5 @@
+#region
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +8,8 @@ using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer.Unity;
+
+#endregion
 
 namespace BalloonParty.Game
 {
@@ -24,6 +28,9 @@ namespace BalloonParty.Game
 
         private IDisposable _subscription;
 
+        public ReactiveProperty<int> TotalScore { get; } = new(0);
+        public ReactiveProperty<int> Level { get; } = new(0);
+
         public ScoreController(
             ISubscriber<BalloonHitMessage> hitSubscriber,
             IPublisher<BalloonScoredMessage> scoredPublisher,
@@ -36,8 +43,6 @@ namespace BalloonParty.Game
             _config = config;
         }
 
-        public ReactiveProperty<int> TotalScore { get; } = new(0);
-        public ReactiveProperty<int> Level { get; } = new(0);
 
         public void Dispose()
         {
