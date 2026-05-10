@@ -37,7 +37,10 @@ namespace BalloonParty.Projectile.View
 
         private void FixedUpdate()
         {
-            if (_model == null || !_model.IsFree) return;
+            if (_model == null || !_model.IsFree)
+            {
+                return;
+            }
 
             if (!_shieldShown && _shieldView != null)
             {
@@ -99,15 +102,32 @@ namespace BalloonParty.Projectile.View
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (_model == null || !_model.IsFree) return;
-            if (other.gameObject.layer != LayerMask.NameToLayer("Balloons")) return;
+            if (_model == null || !_model.IsFree)
+            {
+                return;
+            }
+
+            if (other.gameObject.layer != LayerMask.NameToLayer("Balloons"))
+            {
+                return;
+            }
 
             var balloonView = other.GetComponentInParent<BalloonView>();
-            if (balloonView == null) return;
+            if (balloonView == null)
+            {
+                return;
+            }
 
             var balloonModel = balloonView.Model;
-            if (balloonModel == null) return;
-            if (_model.LastHitBalloon == balloonModel) return;
+            if (balloonModel == null)
+            {
+                return;
+            }
+
+            if (_model.LastHitBalloon == balloonModel)
+            {
+                return;
+            }
 
             _model.LastHitBalloon = balloonModel;
 
@@ -133,7 +153,9 @@ namespace BalloonParty.Projectile.View
 
             _projectileTrail?.Disable();
             if (_shieldView != null)
+            {
                 _shieldView.Reset();
+            }
         }
 
         public void Bind(ProjectileModel model)
@@ -141,7 +163,9 @@ namespace BalloonParty.Projectile.View
             _model = model;
             _shieldShown = false;
             if (_shieldView != null)
+            {
                 _shieldView.Bind(model);
+            }
         }
 
         private void TrackColor(string hitColor)
@@ -182,7 +206,10 @@ namespace BalloonParty.Projectile.View
 
             foreach (var neighbor in neighbors)
             {
-                if (neighbor?.View == null) continue;
+                if (neighbor?.View == null)
+                {
+                    continue;
+                }
 
                 var view = neighbor.View;
                 var slotPos = _grid.IndexToWorldPosition(neighbor.SlotIndex.Value);
@@ -194,7 +221,8 @@ namespace BalloonParty.Projectile.View
 
                 var sequence = DOTween.Sequence();
                 sequence.Append(view.transform.DOMove(
-                    slotPos + direction.normalized * _config.NudgeDistance, _config.NudgeDuration / 2f));
+                    slotPos + (direction.normalized * _config.NudgeDistance),
+                    _config.NudgeDuration / 2f));
                 sequence.Append(view.transform.DOMove(slotPos, _config.NudgeDuration / 2f));
 
                 neighbor.IsStable.Value = false;
@@ -203,13 +231,19 @@ namespace BalloonParty.Projectile.View
                 view.TweenTracker.Replace(sequence);
 
                 if (currentScale != Vector3.one)
+                {
                     view.transform.DOScale(Vector3.one, _config.NudgeDuration);
+                }
             }
         }
 
         private void PlayBounceEffect(Vector3 position)
         {
-            if (_shieldView == null || string.IsNullOrEmpty(_model?.ColorName.Value)) return;
+            if (_shieldView == null || string.IsNullOrEmpty(_model?.ColorName.Value))
+            {
+                return;
+            }
+
             _shieldView.PlayBounceVfx(position, _config.BalloonColor(_model.ColorName.Value));
         }
     }

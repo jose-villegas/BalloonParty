@@ -11,10 +11,14 @@ namespace BalloonParty.UI.Score
             var scoreController = Container.Resolve<ScoreController>();
 
             foreach (var label in GetComponentsInChildren<ScoreCounterLabel>(true))
+            {
                 label.Bind(scoreController.TotalScore);
+            }
 
             foreach (var label in GetComponentsInChildren<LevelLabel>(true))
+            {
                 label.Bind(scoreController.Level);
+            }
         }
 
         protected override void Configure(IContainerBuilder builder)

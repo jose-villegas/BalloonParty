@@ -34,7 +34,11 @@ namespace BalloonParty.Balloon.Controller
 
         private void RequestBalance()
         {
-            if (_balanceRequested) return;
+            if (_balanceRequested)
+            {
+                return;
+            }
+
             _balanceRequested = true;
             BalanceNextFrameAsync().Forget();
         }
@@ -58,11 +62,21 @@ namespace BalloonParty.Balloon.Controller
                 for (var col = 0; col < _grid.Columns; col++)
                 for (var row = _grid.Rows - 1; row >= 0; row--)
                 {
-                    if (_grid.IsEmpty(col, row)) continue;
-                    if (!_grid.IsUnbalanced(col, row)) continue;
+                    if (_grid.IsEmpty(col, row))
+                    {
+                        continue;
+                    }
+
+                    if (!_grid.IsUnbalanced(col, row))
+                    {
+                        continue;
+                    }
 
                     var nextSlot = _grid.OptimalNextEmptySlot(col, row);
-                    if (!nextSlot.HasValue) continue;
+                    if (!nextSlot.HasValue)
+                    {
+                        continue;
+                    }
 
                     hasUnbalanced = true;
 
@@ -73,9 +87,13 @@ namespace BalloonParty.Balloon.Controller
 
                     var targetPosition = _grid.IndexToWorldPosition(nextSlot.Value);
                     if (paths.TryGetValue(balloon, out var path))
+                    {
                         path.Add(targetPosition);
+                    }
                     else
+                    {
                         paths[balloon] = new List<Vector3> { targetPosition };
+                    }
                 }
             }
 
@@ -87,7 +105,10 @@ namespace BalloonParty.Balloon.Controller
             foreach (var (balloon, path) in paths)
             {
                 var view = balloon.View;
-                if (view == null) continue;
+                if (view == null)
+                {
+                    continue;
+                }
 
                 view.TweenTracker.Kill();
                 view.transform.DOKill();
@@ -100,7 +121,9 @@ namespace BalloonParty.Balloon.Controller
                 view.TweenTracker.Append(tween);
 
                 if (currentScale != Vector3.one)
+                {
                     view.transform.DOScale(Vector3.one, _config.TimeForBalloonsBalance);
+                }
             }
         }
     }

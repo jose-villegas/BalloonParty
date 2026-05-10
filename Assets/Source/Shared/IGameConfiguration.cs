@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BalloonParty.Configuration
+namespace BalloonParty.Shared
 {
     public interface IGameConfiguration
     {

@@ -7,16 +7,15 @@ namespace BalloonParty.Cheats
 {
     public class SpawnBalloonLineCheat : ICheat
     {
+        public string Name => "Spawn Balloon Line";
+        public string Section => "Spawning";
+        public IReadOnlyList<string> Tags => new[] { "balloons", "spawning" };
         private readonly IPublisher<SpawnBalloonLineMessage> _publisher;
 
         public SpawnBalloonLineCheat(IPublisher<SpawnBalloonLineMessage> publisher)
         {
             _publisher = publisher;
         }
-
-        public string Name => "Spawn Balloon Line";
-        public string Section => "Spawning";
-        public IReadOnlyList<string> Tags => new[] { "balloons", "spawning" };
 
         public void Execute()
         {

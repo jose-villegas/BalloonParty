@@ -16,7 +16,7 @@ The game follows a turn-based animation pipeline:
 2. **Projectile death** — publishes `BalanceBalloonsMessage` (fallback) and `ProjectileDestroyedMessage`.
 3. **Spawn + balance** — `BalloonSpawner` spawns new lines, then publishes `BalanceBalloonsMessage` after all lines are placed.
 
-Balance was intentionally moved to post-death (matching legacy) because mid-flight rebalancing caused animation conflicts — competing tweens, double-occupation visuals, and stale balance paths.
+Balance was intentionally moved to post-death because mid-flight rebalancing caused animation conflicts — competing tweens, double-occupation visuals, and stale balance paths.
 
 ## Pooling
 
@@ -32,7 +32,7 @@ Trail management is handled by `ProjectileTrail`, a child component on the trail
 
 `ProjectileView` calls `Enable()` on the first `FixedUpdate` frame where `IsFree` is true (fired) and `Disable()` on death and despawn.
 
-Shield orbs are hidden until the projectile is fired. `ProjectileShieldView` starts inactive on `Awake()` and is shown via `Show()` on the first `FixedUpdate` frame where `IsFree` is true — matching the legacy timing where shields were added at fire time.
+Shield orbs are hidden until the projectile is fired. `ProjectileShieldView` starts inactive on `Awake()` and is shown via `Show()` on the first `FixedUpdate` frame where `IsFree` is true.
 
 ## Shield Visuals
 

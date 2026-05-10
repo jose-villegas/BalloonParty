@@ -12,8 +12,8 @@ namespace BalloonParty.Game
 {
     public class ScoreController : IStartable, IDisposable
     {
-        private const string LevelKey = "Level";
-        private const string ProgressSuffix = ".Progress";
+        public ReactiveProperty<int> TotalScore { get; } = new(0);
+        public ReactiveProperty<int> Level { get; } = new(0);
         private readonly IGameConfiguration _config;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly Dictionary<string, int> _levelProgress = new();
@@ -34,9 +34,6 @@ namespace BalloonParty.Game
             _levelUpPublisher = levelUpPublisher;
             _config = config;
         }
-
-        public ReactiveProperty<int> TotalScore { get; } = new(0);
-        public ReactiveProperty<int> Level { get; } = new(0);
 
         public void Dispose()
         {
@@ -88,7 +85,10 @@ namespace BalloonParty.Game
         private void OnBalloonHit(BalloonHitMessage msg)
         {
             var color = msg.Balloon.Color.Value;
-            if (!_persistentScore.ContainsKey(color)) return;
+            if (!_persistentScore.ContainsKey(color))
+            {
+                return;
+            }
 
             _persistentScore[color]++;
             _levelProgress[color]++;
@@ -102,12 +102,17 @@ namespace BalloonParty.Game
         private void CheckLevelUp()
         {
             var required = _config.PointsRequiredForLevel(Level.Value + 1);
-            if (_levelProgress.Values.Any(p => p < required)) return;
+            if (_levelProgress.Values.Any(p => p < required))
+            {
+                return;
+            }
 
             Level.Value++;
 
             foreach (var key in _levelProgress.Keys.ToArray())
+            {
                 _levelProgress[key] = 0;
+            }
 
             _levelUpPublisher.Publish(new ScoreLevelUpMessage(Level.Value));
             Time.timeScale = 0f;
@@ -115,7 +120,13 @@ namespace BalloonParty.Game
 
         private void OnFocusChanged(bool hasFocus)
         {
-            if (!hasFocus) Save();
+            if (!hasFocus)
+            {
+                Save();
+            }
         }
+
+        private const string LevelKey = "Level";
+        private const string ProgressSuffix = ".Progress";
     }
 }

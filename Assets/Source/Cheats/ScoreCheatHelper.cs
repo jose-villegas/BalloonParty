@@ -16,13 +16,18 @@ namespace BalloonParty.Cheats
             IPublisher<BalloonHitMessage> hitPublisher)
         {
             var missing = target - scoreController.GetProgress(color.Name);
-            if (missing <= 0) return;
+            if (missing <= 0)
+            {
+                return;
+            }
 
             var fakeModel = new BalloonModel();
             fakeModel.Color.Value = color.Name;
 
             for (var i = 0; i < missing; i++)
+            {
                 hitPublisher.Publish(new BalloonHitMessage(fakeModel, Vector3.zero));
+            }
         }
     }
 }

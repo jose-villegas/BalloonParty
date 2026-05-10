@@ -35,7 +35,10 @@ namespace BalloonParty.Cheats
 
         private void Update()
         {
-            if (!_active) return;
+            if (!_active)
+            {
+                return;
+            }
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -44,7 +47,9 @@ namespace BalloonParty.Cheats
             }
 
             if (_dragging && Input.GetMouseButton(0))
+            {
                 SampleMousePosition();
+            }
 
             if (_dragging && Input.GetMouseButtonUp(0))
             {
@@ -56,21 +61,32 @@ namespace BalloonParty.Cheats
 
         private void OnRenderObject()
         {
-            if (!_active || _path.Count < 2) return;
+            if (!_active || _path.Count < 2)
+            {
+                return;
+            }
 
             _lineMaterial.SetPass(0);
 
             var hitSlots = CollectHitSlots();
             var cam = Camera.main;
-            if (cam == null) return;
+            if (cam == null)
+            {
+                return;
+            }
 
             GL.PushMatrix();
 
             DrawThickPath(_path, new Color(1f, 0.3f, 0.1f, 0.8f), 0.06f);
 
             foreach (var slot in hitSlots)
-                DrawThickCircle(_grid.IndexToWorldPosition(slot), PickRadius, 24, new Color(1f, 0.1f, 0.1f, 0.9f),
+            {
+                DrawThickCircle(_grid.IndexToWorldPosition(slot),
+                    PickRadius,
+                    24,
+                    new Color(1f, 0.1f, 0.1f, 0.9f),
                     0.05f);
+            }
 
             GL.PopMatrix();
         }
@@ -87,22 +103,32 @@ namespace BalloonParty.Cheats
         private void SampleMousePosition()
         {
             var pos = MouseWorldPosition();
-            if (pos == null) return;
+            if (pos == null)
+            {
+                return;
+            }
 
             if (_path.Count == 0 || Vector3.Distance(pos.Value, _path[_path.Count - 1]) >= PathSampleDistance)
+            {
                 _path.Add(pos.Value);
+            }
         }
 
         private void RemoveBalloonsAlongPath()
         {
             var hitSlots = CollectHitSlots();
-            if (hitSlots.Count == 0) return;
+            if (hitSlots.Count == 0)
+            {
+                return;
+            }
 
             foreach (var slot in hitSlots)
             {
                 var model = _grid.At(slot);
                 if (model != null)
+                {
                     _hitPublisher.Publish(new BalloonHitMessage(model, _grid.IndexToWorldPosition(slot)));
+                }
             }
 
             _publisher.Publish(default);
@@ -115,16 +141,21 @@ namespace BalloonParty.Cheats
             for (var col = 0; col < _grid.Columns; col++)
             for (var row = 0; row < _grid.Rows; row++)
             {
-                if (_grid.IsEmpty(col, row)) continue;
+                if (_grid.IsEmpty(col, row))
+                {
+                    continue;
+                }
 
                 var balloonWorld = _grid.IndexToWorldPosition(new Vector2Int(col, row));
 
                 foreach (var point in _path)
+                {
                     if (Vector2.Distance(point, balloonWorld) <= PickRadius)
                     {
                         hit.Add(new Vector2Int(col, row));
                         break;
                     }
+                }
             }
 
             return hit;
@@ -163,10 +194,10 @@ namespace BalloonParty.Cheats
             {
                 var a0 = i * Mathf.PI * 2f / segments;
                 var a1 = (i + 1) * Mathf.PI * 2f / segments;
-                var p0 = center + new Vector3(Mathf.Cos(a0), Mathf.Sin(a0)) * radius;
-                var p1 = center + new Vector3(Mathf.Cos(a1), Mathf.Sin(a1)) * radius;
-                var out0 = center + new Vector3(Mathf.Cos(a0), Mathf.Sin(a0)) * (radius + halfWidth);
-                var out1 = center + new Vector3(Mathf.Cos(a1), Mathf.Sin(a1)) * (radius + halfWidth);
+                var p0 = center + (new Vector3(Mathf.Cos(a0), Mathf.Sin(a0)) * radius);
+                var p1 = center + (new Vector3(Mathf.Cos(a1), Mathf.Sin(a1)) * radius);
+                var out0 = center + (new Vector3(Mathf.Cos(a0), Mathf.Sin(a0)) * (radius + halfWidth));
+                var out1 = center + (new Vector3(Mathf.Cos(a1), Mathf.Sin(a1)) * (radius + halfWidth));
 
                 GL.Vertex(p0);
                 GL.Vertex(out0);
@@ -182,7 +213,10 @@ namespace BalloonParty.Cheats
         private static Vector3? MouseWorldPosition()
         {
             var cam = Camera.main;
-            if (cam == null) return null;
+            if (cam == null)
+            {
+                return null;
+            }
 
             // For 2D orthographic: XY is correct with any z input; flatten result to z=0.
             var world = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));

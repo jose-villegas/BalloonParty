@@ -9,7 +9,10 @@ namespace BalloonParty.Slots
 
         private void OnDrawGizmos()
         {
-            if (_grid == null) return;
+            if (_grid == null)
+            {
+                return;
+            }
 
             for (var col = 0; col < _grid.Columns; col++)
             for (var row = 0; row < _grid.Rows; row++)

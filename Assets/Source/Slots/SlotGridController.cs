@@ -20,7 +20,9 @@ namespace BalloonParty.Slots
         {
             for (var row = 0; row < _initialLines; row++)
             for (var col = 0; col < _grid.Columns; col++)
+            {
                 _spawner.SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, row));
+            }
         }
     }
 }

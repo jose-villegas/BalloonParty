@@ -11,10 +11,11 @@ namespace BalloonParty.Shared
         void SetParent(Transform parent);
     }
 
-    public abstract class PoolChannel<TItem> : IPoolChannel where TItem : Component, IPoolable
+    public abstract class PoolChannel<TItem> : IPoolChannel
+        where TItem : Component, IPoolable
     {
-        private readonly Stack<TItem> _available = new();
         protected Transform Container { get; private set; }
+        private readonly Stack<TItem> _available = new();
 
         public void SetParent(Transform parent)
         {
@@ -27,7 +28,11 @@ namespace BalloonParty.Shared
             while (_available.Count > 0)
             {
                 item = _available.Pop();
-                if (item != null) break;
+                if (item != null)
+                {
+                    break;
+                }
+
                 item = null;
             }
 
@@ -39,11 +44,18 @@ namespace BalloonParty.Shared
 
         public void Return(TItem item)
         {
-            if (item == null) return;
+            if (item == null)
+            {
+                return;
+            }
+
             item.OnDespawned();
             item.gameObject.SetActive(false);
             if (Container != null)
+            {
                 item.transform.SetParent(Container);
+            }
+
             _available.Push(item);
         }
 

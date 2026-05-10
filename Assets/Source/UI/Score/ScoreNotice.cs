@@ -28,7 +28,9 @@ namespace BalloonParty.UI.Score
         public void Show(int score, Color color)
         {
             foreach (var g in _graphicsToSetColor)
+            {
                 g.color = color;
+            }
 
             _animator.SetTrigger("Score");
             _label.text = _shadow.text = score.ToString("N0");

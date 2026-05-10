@@ -56,7 +56,11 @@ namespace BalloonParty.UI.Shields
         private void OnProjectileLoaded(ProjectileLoadedMessage msg)
         {
             BindProjectile(msg.Model);
-            foreach (var label in _labels) label.Bind(msg.Model.ShieldsRemaining);
+            foreach (var label in _labels)
+            {
+                label.Bind(msg.Model.ShieldsRemaining);
+            }
+
             _animator.ResetTrigger("Waiting");
             _animator.ResetTrigger("Lost");
             _animator.SetTrigger("Ready");
@@ -66,7 +70,10 @@ namespace BalloonParty.UI.Shields
         {
             _animator.SetTrigger("Waiting");
             _shieldSubscription?.Dispose();
-            foreach (var label in _labels) label.Unbind();
+            foreach (var label in _labels)
+            {
+                label.Unbind();
+            }
         }
     }
 }

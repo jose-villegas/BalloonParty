@@ -1,13 +1,11 @@
 using System.Collections.Generic;
-using BalloonParty.Shared;
 using UnityEngine;
 
 namespace BalloonParty.Prediction
 {
     /// <summary>
-    /// Pure-logic calculator that produces a list of world-space points representing
-    /// the projectile's predicted trajectory, including wall bounces.
-    /// Replaces the legacy Entitas <c>ProjectilePredictionTraceSystem</c>.
+    ///     Pure-logic calculator that produces a list of world-space points representing
+    ///     the projectile's predicted trajectory, including wall bounces.
     /// </summary>
     public class PredictionTraceCalculator
     {
@@ -19,9 +17,9 @@ namespace BalloonParty.Prediction
         }
 
         /// <summary>
-        /// Calculates the prediction trace from <paramref name="origin"/> in the given
-        /// <paramref name="direction"/>, bouncing off the left/right/top walls defined
-        /// by <see cref="IGameConfiguration.LimitsClockwise"/>.
+        ///     Calculates the prediction trace from <paramref name="origin" /> in the given
+        ///     <paramref name="direction" />, bouncing off the left/right/top walls defined
+        ///     by <see cref="IGameConfiguration.LimitsClockwise" />.
         /// </summary>
         /// <param name="origin">Starting world position.</param>
         /// <param name="direction">Normalized direction vector.</param>
@@ -38,7 +36,7 @@ namespace BalloonParty.Prediction
             while (stepsLeft > 0 && maxBounces > 0)
             {
                 var shift = _config.PredictionTraceStep;
-                var extended = origin + direction * shift;
+                var extended = origin + (direction * shift);
                 var reflect = Vector3.zero;
 
                 // Collided with right limit
@@ -46,7 +44,7 @@ namespace BalloonParty.Prediction
                 {
                     reflect += Vector3.left;
                     shift = (limits.y - origin.x) / direction.x;
-                    extended = origin + direction * shift;
+                    extended = origin + (direction * shift);
                 }
 
                 // Collided with left limit
@@ -54,7 +52,7 @@ namespace BalloonParty.Prediction
                 {
                     reflect += Vector3.right;
                     shift = (limits.w - origin.x) / direction.x;
-                    extended = origin + direction * shift;
+                    extended = origin + (direction * shift);
                 }
 
                 // Collided with top limit — no further bounces
@@ -62,7 +60,7 @@ namespace BalloonParty.Prediction
                 {
                     reflect += Vector3.down;
                     shift = (limits.x - origin.y) / direction.y;
-                    extended = origin + direction * shift;
+                    extended = origin + (direction * shift);
                     maxBounces = 0;
                 }
 
@@ -79,4 +77,3 @@ namespace BalloonParty.Prediction
         }
     }
 }
-

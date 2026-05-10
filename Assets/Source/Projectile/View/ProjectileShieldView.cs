@@ -32,7 +32,10 @@ namespace BalloonParty.Projectile.View
         private void Awake()
         {
             foreach (var shield in _shields)
+            {
                 shield.transform.localScale = Vector3.zero;
+            }
+
             gameObject.SetActive(false);
         }
 
@@ -90,7 +93,7 @@ namespace BalloonParty.Projectile.View
             for (var i = 0; i < _shields.Count; i++)
             {
                 var target = i < count
-                    ? Vector3.one + Vector3.right * _scaleIncrements.x * i + Vector3.up * _scaleIncrements.y * i
+                    ? Vector3.one + (Vector3.right * _scaleIncrements.x * i) + (Vector3.up * _scaleIncrements.y * i)
                     : Vector3.zero;
 
                 _shields[i].transform.DOScale(target, _scaleDuration);
@@ -103,28 +106,43 @@ namespace BalloonParty.Projectile.View
             var targetColor = new Color(color.r, color.g, color.b, _alpha);
 
             foreach (var shield in _shields)
+            {
                 if (shield != null)
+                {
                     shield.DOColor(targetColor, _colorDuration);
+                }
+            }
         }
 
         private void PlayShieldChangeFx(int currentCount)
         {
             if (currentCount > _previousShieldCount)
+            {
                 SpawnVfx(_shieldGainVfxPrefab, transform.position, CurrentColor());
+            }
             else if (currentCount < _previousShieldCount)
+            {
                 SpawnVfx(_shieldLoseVfxPrefab, transform.position, CurrentColor());
+            }
         }
 
         private Color CurrentColor()
         {
             if (_shields.Count > 0 && _shields[0] != null)
+            {
                 return _shields[0].color;
+            }
+
             return Color.white;
         }
 
         private void SpawnVfx(ParticleSystem prefab, Vector3 position, Color color)
         {
-            if (prefab == null) return;
+            if (prefab == null)
+            {
+                return;
+            }
+
             _poolManager.GetOrRegister(prefab.name, () => new VfxPoolChannel(prefab)).Play(position, color);
         }
     }

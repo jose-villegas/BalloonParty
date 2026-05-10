@@ -1,0 +1,170 @@
+<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+
+	<!-- ================================================================ -->
+	<!-- Formatting — Allman brace style                                  -->
+	<!-- ================================================================ -->
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BRACE_STYLE/@EntryValue">NEXT_LINE</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/INVOCABLE_DECLARATION_BRACE_STYLE/@EntryValue">NEXT_LINE</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/ANONYMOUS_METHOD_DECLARATION_BRACE_STYLE/@EntryValue">NEXT_LINE</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/ACCESSOR_OWNER_DECLARATION_BRACE_STYLE/@EntryValue">NEXT_LINE</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/ACCESSOR_DECLARATION_BRACE_STYLE/@EntryValue">NEXT_LINE</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/CASE_BLOCK_BRACE_STYLE/@EntryValue">NEXT_LINE</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/INITIALIZER_BRACE_STYLE/@EntryValue">NEXT_LINE</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/OTHER_BRACE_STYLE/@EntryValue">NEXT_LINE</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/EMPTY_BLOCK_STYLE/@EntryValue">TOGETHER_SAME_LINE</s:String>
+
+	<!-- Braces for control flow -->
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/FORCE_ATTRIBUTE_STYLE/@EntryValue">SEPARATE</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BRACES_FOR_IFELSE/@EntryValue">REQUIRED</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BRACES_FOR_FOR/@EntryValue">REQUIRED</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BRACES_FOR_FOREACH/@EntryValue">REQUIRED</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BRACES_FOR_WHILE/@EntryValue">REQUIRED</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BRACES_FOR_USING/@EntryValue">REQUIRED</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BRACES_FOR_LOCK/@EntryValue">REQUIRED</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BRACES_FOR_FIXED/@EntryValue">REQUIRED</s:String>
+
+	<!-- ================================================================ -->
+	<!-- Spacing                                                          -->
+	<!-- ================================================================ -->
+	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/SPACE_AFTER_TYPECAST_PARENTHESES/@EntryValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/SPACE_WITHIN_SINGLE_LINE_ARRAY_INITIALIZER_BRACES/@EntryValue">True</s:Boolean>
+
+	<!-- ================================================================ -->
+	<!-- Blank lines                                                      -->
+	<!-- ================================================================ -->
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_AROUND_TYPE/@EntryValue">1</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_AROUND_FIELD/@EntryValue">0</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_AROUND_SINGLE_LINE_FIELD/@EntryValue">0</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_AROUND_PROPERTY/@EntryValue">0</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_AROUND_SINGLE_LINE_PROPERTY/@EntryValue">0</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_AROUND_AUTO_PROPERTY/@EntryValue">0</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_AROUND_SINGLE_LINE_AUTO_PROPERTY/@EntryValue">0</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_AROUND_INVOCABLE/@EntryValue">1</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_AROUND_SINGLE_LINE_INVOCABLE/@EntryValue">0</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_INSIDE_TYPE/@EntryValue">0</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_AROUND_NAMESPACE/@EntryValue">1</s:Int64>
+	<s:Int64 x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/BLANK_LINES_AFTER_USING_LIST/@EntryValue">1</s:Int64>
+
+	<!-- ================================================================ -->
+	<!-- Wrapping                                                         -->
+	<!-- ================================================================ -->
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/WRAP_PARAMETERS_STYLE/@EntryValue">CHOP_IF_LONG</s:String>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/WRAP_ARGUMENTS_STYLE/@EntryValue">CHOP_IF_LONG</s:String>
+	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/WRAP_AFTER_DECLARATION_LPAR/@EntryValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/WRAP_BEFORE_FIRST_TYPE_PARAMETER_CONSTRAINT/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/PLACE_TYPE_CONSTRAINTS_ON_SAME_LINE/@EntryValue">NEVER</s:String>
+	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/PLACE_SIMPLE_EMBEDDED_STATEMENT_ON_SAME_LINE/@EntryValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/KEEP_EXISTING_ARRANGEMENT/@EntryValue">True</s:Boolean>
+
+	<!-- ================================================================ -->
+	<!-- Namespace style — block-scoped                                   -->
+	<!-- ================================================================ -->
+	<s:String x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/NAMESPACE_DECLARATION_BRACE_STYLE/@EntryValue">NEXT_LINE</s:String>
+
+	<!-- ================================================================ -->
+	<!-- Using directives                                                 -->
+	<!-- ================================================================ -->
+	<s:Boolean x:Key="/Default/CodeStyle/CodeFormatting/CSharpFormat/PREFER_SEPARATE_DECONSTRUCTED_VARIABLES_DECLARATION/@EntryValue">True</s:Boolean>
+	<s:String x:Key="/Default/CodeStyle/CSharpUsingsSettings/QualifiedUsingAtNestedScope/@EntryValue">False</s:String>
+	<s:Boolean x:Key="/Default/CodeStyle/CSharpUsingsSettings/AddImportsToDeepestScope/@EntryValue">False</s:Boolean>
+	<s:Boolean x:Key="/Default/CodeStyle/CSharpUsingsSettings/SortSystemFirst/@EntryValue">True</s:Boolean>
+
+	<!-- ================================================================ -->
+	<!-- File header — disabled                                           -->
+	<!-- ================================================================ -->
+	<s:Boolean x:Key="/Default/CodeStyle/FileHeader/UpdateFileHeader/@EntryValue">False</s:Boolean>
+
+	<!-- ================================================================ -->
+	<!-- Member ordering layout matching MIGRATION_PLAN.md                -->
+	<!-- ================================================================ -->
+	<s:String x:Key="/Default/CodeStyle/CSharpFileLayoutPatterns/Pattern/@EntryValue"><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<Patterns xmlns="urn:schemas-jetbrains-com:member-reordering-patterns">
+  <TypePattern DisplayName="Default Pattern">
+    <Entry DisplayName="Public fields">
+      <Entry.Match>
+        <And>
+          <Kind Is="Field" />
+          <Access Is="Public" />
+        </And>
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Public properties">
+      <Entry.Match>
+        <And>
+          <Kind Is="Property" />
+          <Access Is="Public" />
+        </And>
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Protected fields">
+      <Entry.Match>
+        <And>
+          <Kind Is="Field" />
+          <Access Is="Protected" />
+        </And>
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Protected properties">
+      <Entry.Match>
+        <And>
+          <Kind Is="Property" />
+          <Access Is="Protected" />
+        </And>
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Private fields">
+      <Entry.Match>
+        <And>
+          <Kind Is="Field" />
+          <Access Is="Private" />
+        </And>
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Private properties">
+      <Entry.Match>
+        <And>
+          <Kind Is="Property" />
+          <Access Is="Private" />
+        </And>
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Constructors">
+      <Entry.Match>
+        <Kind Is="Constructor" />
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Public methods">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Access Is="Public" />
+        </And>
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Protected methods">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Access Is="Protected" />
+        </And>
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Private methods">
+      <Entry.Match>
+        <And>
+          <Kind Is="Method" />
+          <Access Is="Private" />
+        </And>
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Nested types">
+      <Entry.Match>
+        <Kind Is="Type" />
+      </Entry.Match>
+    </Entry>
+    <Entry DisplayName="Other members" />
+  </TypePattern>
+</Patterns>]]></s:String>
+
+</wpf:ResourceDictionary>
+

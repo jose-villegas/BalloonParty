@@ -6,7 +6,7 @@ The thrower is the player-controlled launcher at the bottom of the screen. It ai
 
 | File | What it does |
 |---|---|
-| `ThrowerController` | MonoBehaviour — aiming, rotation, loading, firing, and reload logic |
+| `ThrowerController` | MonoBehaviour — aiming, rotation, loading, firing, prediction trace, and reload logic |
 | `ThrowerSettings` | Holds the `ProjectileLifetimeScope` prefab reference for pool creation |
 
 ## Gameplay
@@ -19,7 +19,8 @@ The player holds the mouse button to aim — the thrower rotates to face the cur
 - Updates its aim direction from the mouse cursor position
 - Rotates its transform to match that direction
 - Orbits the loaded projectile around the spawn point to preview the trajectory
-- Fires on mouse-up when all balloons have settled (unstable balloons block firing)
+- Updates the prediction trace line (via `PredictionTraceCalculator` and `PredictionTraceView`) showing the projected path with wall bounces
+- Fires on mouse-up when all balloons have settled (unstable balloons block firing); clears the prediction trace on fire
 
 When a `ProjectileDestroyedMessage` arrives, `ThrowerController` creates a new projectile automatically. The projectile prefab carries a `ProjectileLifetimeScope`, so instantiation uses `parentScope.CreateChildFromPrefab()` — this wires the parent scope before activation, ensuring all injected dependencies resolve correctly. The pool key is derived from the prefab's name (`_settings.ProjectileScopePrefab.name`), keeping it consistent with the VFX pooling convention.
 
@@ -30,3 +31,4 @@ When a `ProjectileDestroyedMessage` arrives, `ThrowerController` creates a new p
 - **ProjectileDestroyedMessage** — triggers reload
 - **ProjectileLoadedMessage** — published after each load so shield UI can self-bind
 - **IGameConfiguration** — provides `ThrowerSpawnPoint`, `ProjectileSpawnPoint`, `ProjectileSpeed`, `ProjectileStartingShields`
+- **PredictionTraceCalculator / PredictionTraceView** — calculates and renders the aim trajectory line while the player holds the mouse button

@@ -31,7 +31,10 @@ namespace BalloonParty.Shared
         public void Kill()
         {
             if (_active != null && _active.IsActive())
+            {
                 _active.Kill();
+            }
+
             _active = null;
         }
     }

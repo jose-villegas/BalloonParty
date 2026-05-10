@@ -16,7 +16,6 @@ namespace BalloonParty.Balloon.Spawner
 {
     public class BalloonSpawner : IStartable
     {
-        private const string BalloonPoolKey = "Balloon";
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly IGameConfiguration _config;
         private readonly CancellationTokenSource _cts = new();
@@ -61,17 +60,11 @@ namespace BalloonParty.Balloon.Spawner
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
         }
 
-        private void SpawnLine()
-        {
-            SpawnLineInternal();
-            _balancePublisher.Publish(default);
-        }
-
         public BalloonController SpawnBalloon(string colorName, Vector2Int slot)
         {
             var targetPosition = _grid.IndexToWorldPosition(slot);
             // grid rows increase downward on screen, so +up*4 is 4 rows below the target
-            var spawnPosition = _grid.IndexToWorldPosition(slot + Vector2Int.up * 4);
+            var spawnPosition = _grid.IndexToWorldPosition(slot + (Vector2Int.up * 4));
 
             var view = _poolManager.Get<BalloonView>(BalloonPoolKey);
             view.transform.position = spawnPosition;
@@ -87,6 +80,12 @@ namespace BalloonParty.Balloon.Spawner
             AnimateSpawn(view, targetPosition, model);
 
             return controller;
+        }
+
+        private void SpawnLine()
+        {
+            SpawnLineInternal();
+            _balancePublisher.Publish(default);
         }
 
         private void AnimateSpawn(BalloonView view, Vector3 targetPosition, BalloonModel model)
@@ -107,8 +106,13 @@ namespace BalloonParty.Balloon.Spawner
         private int? FindFirstEmptyRowFromTop(int col)
         {
             for (var row = 0; row < _grid.Rows; row++)
+            {
                 if (_grid.IsEmpty(col, row))
+                {
                     return row;
+                }
+            }
+
             return null;
         }
 
@@ -117,7 +121,10 @@ namespace BalloonParty.Balloon.Spawner
             for (var col = 0; col < _grid.Columns; col++)
             {
                 var firstEmptyRow = FindFirstEmptyRowFromTop(col);
-                if (!firstEmptyRow.HasValue) continue;
+                if (!firstEmptyRow.HasValue)
+                {
+                    continue;
+                }
 
                 SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, firstEmptyRow.Value));
             }
@@ -137,7 +144,10 @@ namespace BalloonParty.Balloon.Spawner
         private void OnProjectileDestroyed()
         {
             _turnCount++;
-            if (_turnCount <= 1) return;
+            if (_turnCount <= 1)
+            {
+                return;
+            }
 
             SpawnLinesWithDelayAsync(_config.NewProjectileBalloonLines, _cts.Token).Forget();
         }
@@ -154,5 +164,7 @@ namespace BalloonParty.Balloon.Spawner
 
             _balancePublisher.Publish(default);
         }
+
+        private const string BalloonPoolKey = "Balloon";
     }
 }

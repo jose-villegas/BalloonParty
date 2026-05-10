@@ -86,23 +86,29 @@ namespace BalloonParty.Balloon.View
             var color = _config.BalloonColor(colorName);
 
             if (_renderer != null)
+            {
                 _renderer.color = color;
+            }
 
             if (_shadowRenderer != null)
+            {
                 _shadowRenderer.color = new Color(
                     color.r * _shadowIntensity,
                     color.g * _shadowIntensity,
                     color.b * _shadowIntensity,
                     _shadowAlpha);
+            }
         }
 
         private void ApplySortingOrder(Vector2Int slotIndex)
         {
             var maxRow = _config.SlotsSize.y - 1;
-            var baseOrder = (slotIndex.x + (maxRow - slotIndex.y) * _config.SlotsSize.x) * _baseSortingLayer;
+            var baseOrder = (slotIndex.x + ((maxRow - slotIndex.y) * _config.SlotsSize.x)) * _baseSortingLayer;
 
             for (var i = 0; i < _spriteLayerRenderers.Length; i++)
+            {
                 _spriteLayerRenderers[i].sortingOrder = baseOrder + i + 1;
+            }
         }
     }
 }

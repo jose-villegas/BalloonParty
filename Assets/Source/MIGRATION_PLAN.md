@@ -1,6 +1,6 @@
 # BalloonParty — ECS → MVC Migration Plan
 
-> Created: 2026-05-08  
+> Created: 2026-05-08
 > Context: Migrating from Entitas ECS (`Assets/Source_Old`) to a plain MVC architecture (`Assets/Source`) using MonoBehaviours, **UniRx** for reactive programming, and **VContainer** for dependency injection. Each phase ends with a **testable Unity Editor checkpoint**.
 
 ---
@@ -112,7 +112,7 @@ Assets/Source_Old/   ← legacy Entitas, untouched until Phase 8
 2. Install packages:
    - **UniRx** — OpenUPM: `openupm add com.neuecc.unirx`
    - **VContainer** — OpenUPM: `openupm add jp.hadashikick.vcontainer`
-   - **MessagePipe** — OpenUPM: `openupm add net.cysharp.messagepipe`  
+   - **MessagePipe** — OpenUPM: `openupm add net.cysharp.messagepipe`
      *(VContainer has first-class MessagePipe integration via `RegisterMessagePipe()` + `RegisterMessageBroker<T>()`)*
 3. Add an `[Obsolete]` banner comment to key entry-point files in `Source_Old`:
    - `GameController.cs`
@@ -1151,6 +1151,8 @@ Each feature folder contains a `README.md` that describes what that feature cove
 
 The test for whether a README needs updating: if a new developer read only that file, would they still have an accurate picture of what the feature does and how it connects to the rest of the game?
 
+**No migration references.** READMEs and code comments in `Assets/Source/` must not mention Entitas, the legacy codebase, or the migration effort. They describe the current architecture as if it were always the intended design.
+
 ---
 
 ## Code Quality Constraints
@@ -1181,6 +1183,12 @@ These constraints apply to all code generated or written during this migration.
 - **Extension methods** over utility classes where possible — keep them in a dedicated `Extensions/` namespace.
 - Keep classes **small and focused** — if a class is growing beyond one clear responsibility, split it.
 - Avoid `static` state; prefer injected singleton services via VContainer.
+
+### Formatting
+
+- **Allman brace style** — every opening brace goes on its own line.
+- **Braces are always required** for `if`, `else`, `for`, `foreach`, `while`, `using`, `lock`, and `fixed` — even single-line bodies. No braceless statements.
+- These rules are enforced via `.editorconfig` and `BalloonParty.sln.DotSettings` at the project root.
 
 ### Member Ordering
 

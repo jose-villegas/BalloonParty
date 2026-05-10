@@ -38,7 +38,9 @@ namespace BalloonParty.UI.Score
             _trailPoolKey = $"ScoreTrail_{colorConfig.Name}";
 
             foreach (var g in _graphicsToSetColor)
+            {
                 g.color = colorConfig.Color;
+            }
 
             var required = scoreController.GetRequiredPoints();
             _progressSlider.maxValue = required;
@@ -50,7 +52,10 @@ namespace BalloonParty.UI.Score
 
         private void OnBalloonScored(BalloonScoredMessage msg)
         {
-            if (msg.ColorName != _colorConfig.Name) return;
+            if (msg.ColorName != _colorConfig.Name)
+            {
+                return;
+            }
 
             _localCount++;
             _progressSlider.value = Mathf.Min(_progressSlider.value + 1, _progressSlider.maxValue);
@@ -97,15 +102,23 @@ namespace BalloonParty.UI.Score
             trail.transform.position = fromWorldPosition;
             trail.transform.localScale = Vector3.one;
 
-            trail.Setup(transform.position, _colorConfig.Color, _config,
+            trail.Setup(transform.position,
+                _colorConfig.Color,
+                _config,
                 () => _animator.SetTrigger("TrailHit"));
         }
 
-        private static T FindAvailable<T>(List<T> pool) where T : MonoBehaviour, IReusable
+        private static T FindAvailable<T>(List<T> pool)
+            where T : MonoBehaviour, IReusable
         {
             foreach (var item in pool)
+            {
                 if (item.IsUsable)
+                {
                     return item;
+                }
+            }
+
             return null;
         }
     }

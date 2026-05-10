@@ -4,15 +4,9 @@ Prediction trace system — draws a dotted line showing the projectile's predict
 
 ## Architecture
 
-| Legacy (Entitas)                        | New                            |
-|-----------------------------------------|--------------------------------|
-| `PredictionTraceComponent`              | Removed — no component needed  |
-| `ProjectilePredictionTraceSystem`       | `PredictionTraceCalculator`    |
-| `TraceDrawerController` + entity linker | `PredictionTraceView`          |
-
 ### PredictionTraceCalculator
 
-Pure C# class (no MonoBehaviour) that takes an origin, direction, and reusable `List<Vector3>`, then fills it with world-space trace points by stepping forward and reflecting off walls. Matches legacy bounce logic exactly (right, left, top limits from `LimitsClockwise`). Top-wall hit terminates further bounces.
+Pure C# class (no MonoBehaviour) that takes an origin, direction, and reusable `List<Vector3>`, then fills it with world-space trace points by stepping forward and reflecting off walls. Bounces off left, right, and top limits (from `LimitsClockwise`). A top-wall hit terminates further bounces.
 
 ### PredictionTraceView
 
@@ -26,5 +20,5 @@ MonoBehaviour with a `LineRenderer`. Call `SetTrace(points)` to update or `Clear
 
 1. Add a child GameObject to the Thrower prefab
 2. Add `LineRenderer` + `PredictionTraceView` components
-3. Configure the `LineRenderer` material, width, color (copy from legacy prefab)
+3. Configure the `LineRenderer` material, width, and color to match the desired visual style
 

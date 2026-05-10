@@ -4,9 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Prediction
 {
     /// <summary>
-    /// Draws the prediction trace using a <see cref="LineRenderer"/>.
-    /// Attach to the same GameObject that holds the LineRenderer (e.g. the Thrower).
-    /// Replaces the legacy Entitas <c>TraceDrawerController</c>.
+    ///     Draws the prediction trace using a <see cref="LineRenderer" />.
     /// </summary>
     [RequireComponent(typeof(LineRenderer))]
     public class PredictionTraceView : MonoBehaviour
@@ -19,8 +17,8 @@ namespace BalloonParty.Prediction
         }
 
         /// <summary>
-        /// Updates the line renderer with the given trace points.
-        /// Pass null or empty to hide the line.
+        ///     Updates the line renderer with the given trace points.
+        ///     Pass null or empty to hide the line.
         /// </summary>
         public void SetTrace(List<Vector3> points)
         {
@@ -41,4 +39,3 @@ namespace BalloonParty.Prediction
         }
     }
 }
-

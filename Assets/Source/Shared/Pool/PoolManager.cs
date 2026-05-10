@@ -32,8 +32,10 @@ namespace BalloonParty.Shared
             where TItem : Component, IPoolable
         {
             if (!_channels.TryAdd(key, channel))
+            {
                 throw new InvalidOperationException(
                     $"Pool channel '{key}' is already registered.");
+            }
 
             var container = new GameObject(key);
             container.transform.SetParent(Root);
@@ -46,12 +48,14 @@ namespace BalloonParty.Shared
             Register(channel.GetType().Name, channel);
         }
 
-        public TItem Get<TItem>(string key) where TItem : Component, IPoolable
+        public TItem Get<TItem>(string key)
+            where TItem : Component, IPoolable
         {
             return GetChannel<TItem>(key).Get();
         }
 
-        public void Return<TItem>(string key, TItem item) where TItem : Component, IPoolable
+        public void Return<TItem>(string key, TItem item)
+            where TItem : Component, IPoolable
         {
             GetChannel<TItem>(key).Return(item);
         }
@@ -65,7 +69,10 @@ namespace BalloonParty.Shared
             where TItem : Component, IPoolable
         {
             if (!_channels.ContainsKey(key))
+            {
                 Register(key, factory());
+            }
+
             return Get<TItem>(key);
         }
 
@@ -76,7 +83,9 @@ namespace BalloonParty.Shared
             where TItem : Component, IPoolable
         {
             if (_channels.TryGetValue(key, out var channel))
+            {
                 return (PoolChannel<TItem>)channel;
+            }
 
             throw new InvalidOperationException(
                 $"Pool channel '{key}' not registered. Call Register() first.");

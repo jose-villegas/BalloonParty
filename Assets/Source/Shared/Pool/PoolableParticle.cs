@@ -11,12 +11,12 @@ namespace BalloonParty.Shared
         private void Update()
         {
             if (_particle != null && !_particle.IsAlive())
+            {
                 _returnToPool?.Invoke(this);
+            }
         }
 
-        public void OnSpawned()
-        {
-        }
+        public void OnSpawned() { }
 
         public void OnDespawned()
         {

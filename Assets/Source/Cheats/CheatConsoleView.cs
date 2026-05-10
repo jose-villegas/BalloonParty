@@ -26,22 +26,31 @@ namespace BalloonParty.Cheats
         private void Update()
         {
             if (Input.GetKeyDown(KeyCode.BackQuote))
+            {
                 _visible = !_visible;
+            }
 
-            if (!_visible) return;
+            if (!_visible)
+            {
+                return;
+            }
 
             var scale = Screen.height / ReferenceHeight;
-            var handleTopInScreenSpace = Screen.height - (_consoleHeight + HandleHeight) * scale;
-            var handleBottomInScreenSpace = Screen.height - _consoleHeight * scale;
+            var handleTopInScreenSpace = Screen.height - ((_consoleHeight + HandleHeight) * scale);
+            var handleBottomInScreenSpace = Screen.height - (_consoleHeight * scale);
 
             // Input.mousePosition has y=0 at bottom; convert to top-left for comparison.
             var mouseY = Screen.height - Input.mousePosition.y;
 
             if (Input.GetMouseButtonDown(0) && mouseY >= handleTopInScreenSpace && mouseY <= handleBottomInScreenSpace)
+            {
                 _resizing = true;
+            }
 
             if (Input.GetMouseButtonUp(0))
+            {
                 _resizing = false;
+            }
 
             if (_resizing && Input.GetMouseButton(0))
             {
@@ -53,7 +62,10 @@ namespace BalloonParty.Cheats
 
         private void OnGUI()
         {
-            if (!_visible) return;
+            if (!_visible)
+            {
+                return;
+            }
 
             var scale = Screen.height / ReferenceHeight;
             GUI.matrix = Matrix4x4.Scale(new Vector3(scale, scale, 1f));
@@ -89,10 +101,14 @@ namespace BalloonParty.Cheats
             _scroll = GUILayout.BeginScrollView(_scroll);
 
             if (favorites.Count > 0)
+            {
                 DrawSection("★ Favorites", favorites);
+            }
 
             foreach (var section in rest.GroupBy(c => c.Section).OrderBy(g => g.Key))
+            {
                 DrawSection(section.Key, section.ToList());
+            }
 
             GUILayout.EndScrollView();
         }
@@ -103,26 +119,36 @@ namespace BalloonParty.Cheats
             GUILayout.Label("Search:", GUILayout.Width(55));
             _search = GUILayout.TextField(_search);
             if (GUILayout.Button("✕", GUILayout.Width(28)))
+            {
                 _search = string.Empty;
+            }
+
             GUILayout.EndHorizontal();
         }
 
         private void DrawTagFilters(List<ICheat> cheats)
         {
             var allTags = cheats.SelectMany(c => c.Tags).Distinct().OrderBy(t => t).ToList();
-            if (allTags.Count == 0) return;
+            if (allTags.Count == 0)
+            {
+                return;
+            }
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Tags:", GUILayout.Width(40));
 
             if (GUILayout.Toggle(_activeTag == string.Empty, "All", GUI.skin.button, GUILayout.Width(36)))
+            {
                 _activeTag = string.Empty;
+            }
 
             foreach (var tagLabel in allTags)
             {
                 var active = _activeTag == tagLabel;
                 if (GUILayout.Toggle(active, tagLabel, GUI.skin.button) != active)
+                {
                     _activeTag = active ? string.Empty : tagLabel;
+                }
             }
 
             GUILayout.EndHorizontal();
@@ -132,7 +158,9 @@ namespace BalloonParty.Cheats
         {
             GUILayout.Label($"— {title} —");
             foreach (var cheat in cheats)
+            {
                 DrawCheatRow(cheat);
+            }
         }
 
         private void DrawCheatRow(ICheat cheat)
@@ -142,12 +170,20 @@ namespace BalloonParty.Cheats
             var isFavorite = _favorites.Contains(cheat.Name);
             if (GUILayout.Button(isFavorite ? "★" : "☆", GUILayout.Width(28)))
             {
-                if (isFavorite) _favorites.Remove(cheat.Name);
-                else _favorites.Add(cheat.Name);
+                if (isFavorite)
+                {
+                    _favorites.Remove(cheat.Name);
+                }
+                else
+                {
+                    _favorites.Add(cheat.Name);
+                }
             }
 
             if (GUILayout.Button(cheat.Name))
+            {
                 cheat.Execute();
+            }
 
             GUILayout.EndHorizontal();
         }
@@ -157,10 +193,14 @@ namespace BalloonParty.Cheats
             var result = cheats.AsEnumerable();
 
             if (!string.IsNullOrEmpty(_search))
+            {
                 result = result.Where(c => c.Name.ToLower().Contains(_search.ToLower()));
+            }
 
             if (!string.IsNullOrEmpty(_activeTag))
+            {
                 result = result.Where(c => c.Tags.Contains(_activeTag));
+            }
 
             return result.ToList();
         }

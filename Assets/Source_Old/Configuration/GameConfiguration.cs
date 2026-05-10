@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Configuration/Game Configuration", fileName = "GameConfiguration")]
-public class GameConfiguration : ScriptableObject, IGameConfiguration, BalloonParty.Configuration.IGameConfiguration
+public class GameConfiguration : ScriptableObject, IGameConfiguration, BalloonParty.Shared.IGameConfiguration
 {
     [Header("Display")] [SerializeField] private GameDisplayConfiguration _displayConfiguration;
 

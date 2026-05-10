@@ -16,6 +16,7 @@ namespace BalloonParty.Thrower
 {
     public class ThrowerController : MonoBehaviour
     {
+        private readonly List<Vector3> _tracePoints = new();
         private ProjectileModel _activeProjectile;
         private ProjectileView _activeView;
         [Inject] private IGameConfiguration _config;
@@ -30,7 +31,6 @@ namespace BalloonParty.Thrower
 
         private PredictionTraceCalculator _traceCalculator;
         private PredictionTraceView _traceView;
-        private readonly List<Vector3> _tracePoints = new();
 
         private string ProjectilePoolKey => _settings.ProjectileScopePrefab.name;
 
@@ -54,7 +54,10 @@ namespace BalloonParty.Thrower
 
         private void Update()
         {
-            if (!_isMovable) return;
+            if (!_isMovable)
+            {
+                return;
+            }
 
             UpdateDirection();
             RotateToDirection();
@@ -65,10 +68,16 @@ namespace BalloonParty.Thrower
 
         private void UpdateDirection()
         {
-            if (!Input.GetMouseButton(0)) return;
+            if (!Input.GetMouseButton(0))
+            {
+                return;
+            }
 
             var cam = Camera.main;
-            if (cam == null) return;
+            if (cam == null)
+            {
+                return;
+            }
 
             var screenPos = cam.WorldToScreenPoint(transform.position);
             var rawDir = (Input.mousePosition - screenPos).normalized;
@@ -84,16 +93,19 @@ namespace BalloonParty.Thrower
 
         private void UpdateLoadedProjectilePosition()
         {
-            if (_activeProjectile == null || _activeView == null || _activeProjectile.IsFree) return;
+            if (_activeProjectile == null || _activeView == null || _activeProjectile.IsFree)
+            {
+                return;
+            }
 
             var spawnPoint = _config.ProjectileSpawnPoint;
             var center = transform.position;
             var angle = Vector3.Angle(_direction, Vector3.right) - 90f;
             var rad = angle * Mathf.Deg2Rad;
 
-            var rotatedX = Mathf.Cos(rad) * (spawnPoint.x - center.x) - Mathf.Sin(rad) * (spawnPoint.y - center.y) +
+            var rotatedX = (Mathf.Cos(rad) * (spawnPoint.x - center.x)) - (Mathf.Sin(rad) * (spawnPoint.y - center.y)) +
                            center.x;
-            var rotatedY = Mathf.Sin(rad) * (spawnPoint.x - center.x) + Mathf.Cos(rad) * (spawnPoint.y - center.y) +
+            var rotatedY = (Mathf.Sin(rad) * (spawnPoint.x - center.x)) + (Mathf.Cos(rad) * (spawnPoint.y - center.y)) +
                            center.y;
 
             _activeView.transform.position = new Vector3(rotatedX, rotatedY, 0f);
@@ -103,9 +115,20 @@ namespace BalloonParty.Thrower
 
         private void TryFire()
         {
-            if (_activeProjectile == null || _activeView == null || _activeProjectile.IsFree) return;
-            if (!Input.GetMouseButtonUp(0)) return;
-            if (!_grid.AllBalloonsStable()) return;
+            if (_activeProjectile == null || _activeView == null || _activeProjectile.IsFree)
+            {
+                return;
+            }
+
+            if (!Input.GetMouseButtonUp(0))
+            {
+                return;
+            }
+
+            if (!_grid.AllBalloonsStable())
+            {
+                return;
+            }
 
             _activeProjectile.IsFree = true;
             _activeProjectile.Direction = _direction;
@@ -114,7 +137,10 @@ namespace BalloonParty.Thrower
 
         private void UpdatePredictionTrace()
         {
-            if (_traceView == null) return;
+            if (_traceView == null)
+            {
+                return;
+            }
 
             // Only show trace while aiming a loaded (not yet fired) projectile
             if (_activeProjectile == null || _activeProjectile.IsFree || !Input.GetMouseButton(0))
@@ -147,7 +173,10 @@ namespace BalloonParty.Thrower
         private void Reload()
         {
             if (_activeView != null)
+            {
                 _poolManager.Return(ProjectilePoolKey, _activeView);
+            }
+
             _activeProjectile = null;
             _activeView = null;
             LoadProjectile();

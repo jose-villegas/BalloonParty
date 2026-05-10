@@ -8,6 +8,9 @@ namespace BalloonParty.Cheats
 {
     public class FireProjectileCheat : ICheat
     {
+        public string Name => "Fire Projectile";
+        public string Section => "Thrower";
+        public IReadOnlyList<string> Tags => new[] { "projectile", "thrower" };
         private ProjectileModel _activeProjectile;
 
         public FireProjectileCheat(ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
@@ -15,13 +18,13 @@ namespace BalloonParty.Cheats
             loadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model);
         }
 
-        public string Name => "Fire Projectile";
-        public string Section => "Thrower";
-        public IReadOnlyList<string> Tags => new[] { "projectile", "thrower" };
-
         public void Execute()
         {
-            if (_activeProjectile == null || _activeProjectile.IsFree) return;
+            if (_activeProjectile == null || _activeProjectile.IsFree)
+            {
+                return;
+            }
+
             _activeProjectile.IsFree = true;
         }
     }

@@ -10,6 +10,7 @@ namespace BalloonParty.Balloon.Controller
 {
     public class BalloonController
     {
+        public BalloonModel Model { get; }
         private readonly IGameConfiguration _config;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
@@ -18,7 +19,9 @@ namespace BalloonParty.Balloon.Controller
 
         private IDisposable _hitSubscription;
 
-        public BalloonController(BalloonModel model, BalloonView view,
+        public BalloonController(
+            BalloonModel model,
+            BalloonView view,
             ISubscriber<BalloonHitMessage> hitSubscriber,
             SlotGrid grid,
             IGameConfiguration config,
@@ -32,8 +35,6 @@ namespace BalloonParty.Balloon.Controller
             _poolManager = poolManager;
         }
 
-        public BalloonModel Model { get; }
-
         public void Start()
         {
             Model.View = _view;
@@ -41,7 +42,10 @@ namespace BalloonParty.Balloon.Controller
 
             _hitSubscription = _hitSubscriber.Subscribe(msg =>
             {
-                if (msg.Balloon != Model) return;
+                if (msg.Balloon != Model)
+                {
+                    return;
+                }
 
                 _hitSubscription?.Dispose();
                 _hitSubscription = null;
