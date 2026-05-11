@@ -1,10 +1,6 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 
-#region
-
 using System.Collections.Generic;
-
-#endregion
 
 namespace BalloonParty.Cheats
 {

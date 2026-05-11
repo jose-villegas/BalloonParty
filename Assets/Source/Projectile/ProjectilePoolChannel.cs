@@ -1,10 +1,6 @@
-#region
-
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
 using VContainer.Unity;
-
-#endregion
 
 namespace BalloonParty.Projectile
 {

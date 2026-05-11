@@ -1,13 +1,9 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 
-#region
-
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using VContainer;
-
-#endregion
 
 namespace BalloonParty.Cheats
 {

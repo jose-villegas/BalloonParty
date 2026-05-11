@@ -1,8 +1,4 @@
-#region
-
 using BalloonParty.Balloon.Model;
-
-#endregion
 
 namespace BalloonParty.Shared.Messages
 {

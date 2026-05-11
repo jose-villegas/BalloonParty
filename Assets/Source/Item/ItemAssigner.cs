@@ -1,5 +1,3 @@
-#region
-
 using System.Linq;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
@@ -8,8 +6,6 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-
-#endregion
 
 namespace BalloonParty.Item
 {

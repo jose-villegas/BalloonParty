@@ -1,13 +1,9 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 
-#region
-
 using System.Collections.Generic;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
-
-#endregion
 
 namespace BalloonParty.Cheats
 {

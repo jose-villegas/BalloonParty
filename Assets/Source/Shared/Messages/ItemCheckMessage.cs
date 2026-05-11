@@ -1,9 +1,5 @@
-#region
-
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
-
-#endregion
 
 namespace BalloonParty.Shared.Messages
 {

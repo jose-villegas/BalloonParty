@@ -1,5 +1,3 @@
-#region
-
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
@@ -11,8 +9,6 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-
-#endregion
 
 namespace BalloonParty.Item.Laser
 {
@@ -68,7 +64,6 @@ namespace BalloonParty.Item.Laser
             return UniTask.CompletedTask;
         }
 
-
         private void CastCross(ItemSettings settings)
         {
             var radius = settings.LaserCircleCastRadius;
@@ -87,7 +82,10 @@ namespace BalloonParty.Item.Laser
             CastDirection(down, radius, distance, hitModels);
         }
 
-        private void CastDirection(Vector2 direction, float radius, float distance,
+        private void CastDirection(
+            Vector2 direction,
+            float radius,
+            float distance,
             HashSet<IBalloonModel> hitModels)
         {
             var results = Physics2D.CircleCastAll(_worldPosition, radius, direction, distance, BalloonsLayer);
@@ -129,4 +127,3 @@ namespace BalloonParty.Item.Laser
         }
     }
 }
-

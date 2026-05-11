@@ -1,12 +1,8 @@
-#region
-
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using MessagePipe;
 using VContainer;
 using VContainer.Unity;
-
-#endregion
 
 namespace BalloonParty.Balloon.Controller
 {

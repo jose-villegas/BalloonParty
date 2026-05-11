@@ -1,12 +1,8 @@
-#region
-
 using BalloonParty.Game;
 using BalloonParty.Shared;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-
-#endregion
 
 namespace BalloonParty.UI.Score
 {

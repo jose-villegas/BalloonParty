@@ -1,9 +1,5 @@
-#region
-
 using UnityEngine;
 using VContainer;
-
-#endregion
 
 namespace BalloonParty.Slots
 {

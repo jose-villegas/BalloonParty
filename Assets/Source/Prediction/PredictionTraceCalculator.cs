@@ -1,10 +1,6 @@
-#region
-
 using System.Collections.Generic;
 using BalloonParty.Shared;
 using UnityEngine;
-
-#endregion
 
 namespace BalloonParty.Prediction
 {

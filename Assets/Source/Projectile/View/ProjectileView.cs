@@ -1,5 +1,3 @@
-#region
-
 using BalloonParty.Balloon.View;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
@@ -8,8 +6,6 @@ using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
-
-#endregion
 
 namespace BalloonParty.Projectile.View
 {
@@ -31,7 +27,6 @@ namespace BalloonParty.Projectile.View
         private ProjectileTrail _projectileTrail;
         private bool _shieldShown;
         private ProjectileShieldView _shieldView;
-
 
         private void Awake()
         {
@@ -205,7 +200,6 @@ namespace BalloonParty.Projectile.View
                 _glowRenderer.DOColor(new Color(color.r, color.g, color.b, _glowAlpha), _glowColorDuration);
             }
         }
-
 
         private void PlayBounceEffect(Vector3 position)
         {

@@ -1,5 +1,3 @@
-#region
-
 using System.Collections.Generic;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
@@ -7,8 +5,6 @@ using DG.Tweening;
 using UniRx;
 using UnityEngine;
 using VContainer;
-
-#endregion
 
 namespace BalloonParty.Projectile.View
 {

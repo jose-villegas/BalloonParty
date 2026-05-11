@@ -1,10 +1,6 @@
-#region
-
 using BalloonParty.Balloon.Model;
 using UniRx;
 using UnityEngine;
-
-#endregion
 
 namespace BalloonParty.Projectile.Model
 {

@@ -1,5 +1,3 @@
-#region
-
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,8 +7,6 @@ using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer.Unity;
-
-#endregion
 
 namespace BalloonParty.Game
 {
@@ -44,7 +40,6 @@ namespace BalloonParty.Game
             _levelUpPublisher = levelUpPublisher;
             _config = config;
         }
-
 
         public void Dispose()
         {

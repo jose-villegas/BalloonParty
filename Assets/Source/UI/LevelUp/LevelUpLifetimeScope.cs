@@ -1,10 +1,6 @@
-#region
-
 using BalloonParty.Game;
 using VContainer;
 using VContainer.Unity;
-
-#endregion
 
 namespace BalloonParty.UI.LevelUp
 {

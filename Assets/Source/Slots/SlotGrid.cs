@@ -1,5 +1,3 @@
-#region
-
 using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
@@ -8,8 +6,6 @@ using BalloonParty.Shared;
 using UniRx;
 using UnityEngine;
 using Random = UnityEngine.Random;
-
-#endregion
 
 namespace BalloonParty.Slots
 {

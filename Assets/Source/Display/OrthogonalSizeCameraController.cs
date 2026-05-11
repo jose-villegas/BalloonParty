@@ -1,10 +1,6 @@
-#region
-
 using BalloonParty.Shared;
 using UnityEngine;
 using VContainer.Unity;
-
-#endregion
 
 namespace BalloonParty.Display
 {

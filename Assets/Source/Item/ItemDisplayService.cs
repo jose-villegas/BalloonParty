@@ -1,11 +1,7 @@
-#region
-
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using UniRx;
 using UnityEngine;
-
-#endregion
 
 namespace BalloonParty.Item
 {
@@ -56,7 +52,6 @@ namespace BalloonParty.Item
             ReturnActiveVisual();
         }
 
-
         private void ApplySorting(Vector2Int slot)
         {
             if (_activeView == null || _config == null)
@@ -95,7 +90,6 @@ namespace BalloonParty.Item
             _activeView.Activate(color);
             ApplySorting(_slotIndex.Value);
         }
-
 
         private void ReturnActiveVisual()
         {

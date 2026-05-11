@@ -1,9 +1,5 @@
-#region
-
 using System;
 using UnityEngine;
-
-#endregion
 
 namespace BalloonParty.Shared
 {
@@ -108,4 +104,3 @@ namespace BalloonParty.Shared
         }
     }
 }
-

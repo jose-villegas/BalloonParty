@@ -1,5 +1,3 @@
-#region
-
 using System.Collections.Generic;
 using BalloonParty.Prediction;
 using BalloonParty.Projectile;
@@ -13,8 +11,6 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-
-#endregion
 
 namespace BalloonParty.Thrower
 {
@@ -58,7 +54,6 @@ namespace BalloonParty.Thrower
             _destroyedSubscriber = destroyedSubscriber;
             _loadedPublisher = loadedPublisher;
         }
-
 
         public void Start()
         {

@@ -20,36 +20,93 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Laser.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Laser/LaserItemHandler.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Laser/LaserItemHandler.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemRotationCapturedMessage.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemRotationCapturedMessage.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableVfx.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableVfx.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/LaserIdle.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/LaserIdle.anim" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Configuration/ItemConfiguration.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Configuration/ItemConfiguration.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/PU_Laser.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/PU_Laser.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/LaserRange.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LaserRange.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/LaserRange.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LaserRange.prefab.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/LightningRange.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LightningRange.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/LightningRange.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LightningRange.prefab.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonLifetimeScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonBalancer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonBalancer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonNudgeHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonNudgeHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Model/BalloonModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Model/BalloonModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Model/IBalloonModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Model/IBalloonModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Model/IWriteableBalloonModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Model/IWriteableBalloonModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonPoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonPoolChannel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawnerSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawnerSettings.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Cheats/BalloonRemoverCheat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Cheats/BalloonRemoverCheat.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Cheats/CheatConsoleView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Cheats/CheatConsoleView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Cheats/FireProjectileCheat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Cheats/FireProjectileCheat.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Cheats/ICheat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Cheats/ICheat.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Cheats/NearLevelUpCheat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Cheats/NearLevelUpCheat.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Cheats/ScoreCheatHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Cheats/ScoreCheatHelper.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Cheats/SpawnBalloonLineCheat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Cheats/SpawnBalloonLineCheat.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Cheats/TriggerLevelUpCheat.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Cheats/TriggerLevelUpCheat.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/BalloonColorConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/BalloonColorConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/DisplayOption.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/DisplayOption.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameDisplayConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/GameDisplayConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/IBalloonColorConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/IBalloonColorConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/ItemConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/ItemConfiguration.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Display/OrthogonalSizeCameraController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Display/OrthogonalSizeCameraController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameChildLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameChildLifetimeScope.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/ScoreController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/ScoreController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Bomb/BombItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Bomb/BombItemHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/IBalloonItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/IBalloonItem.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemActivator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemActivator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemAssigner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemAssigner.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemViewScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemViewScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualPoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualPoolChannel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Laser/LaserItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Laser/LaserItemHandler.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Item/LaserItemRotation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/LaserItemRotation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/MIGRATION_PLAN.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/MIGRATION_PLAN.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Prediction/PredictionTraceCalculator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Prediction/PredictionTraceCalculator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Prediction/PredictionTraceView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Prediction/PredictionTraceView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/Model/IProjectileModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/Model/IProjectileModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/Model/IWriteableProjectileModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/Model/IWriteableProjectileModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/Model/ProjectileModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/Model/ProjectileModel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectileLifetimeScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectilePoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectilePoolChannel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileShieldView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileShieldView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileTrail.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileTrail.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/IGameConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/IGameConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Messages/BalloonHitMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/BalloonHitMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Messages/BalloonNudgeMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/BalloonNudgeMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Messages/BalloonScoredMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/BalloonScoredMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemActivatedMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemActivatedMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemCheckMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemCheckMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemRotationCapturedMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemRotationCapturedMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ProjectileLoadedMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ProjectileLoadedMessage.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolChannel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableParticle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableParticle.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableVfx.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableVfx.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/VfxPoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/VfxPoolChannel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/TweenTracker.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/TweenTracker.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Slots/SlotGrid.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Slots/SlotGrid.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Slots/SlotGridChangedEvent.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Slots/SlotGridChangedEvent.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Slots/SlotGridView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Slots/SlotGridView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerLifetimeScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/GameStart/GameStartButton.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/GameStart/GameStartButton.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/LevelUp/LevelUpLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/LevelUp/LevelUpLifetimeScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/LevelUp/LevelUpPopUp.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/LevelUp/LevelUpPopUp.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ColorProgressBar.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ColorProgressBar.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ColorProgressBarInstancer.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ColorProgressBarInstancer.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/LevelLabel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/LevelLabel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreCounterLabel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreCounterLabel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreNotice.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreNotice.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreNoticePoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreNoticePoolChannel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScorePointTrail.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScorePointTrail.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreTrailPoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreTrailPoolChannel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreUILifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreUILifetimeScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Shields/ShieldCounterAnimation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Shields/ShieldCounterAnimation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Shields/ShieldCounterLabel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Shields/ShieldCounterLabel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Shields/ShieldUILifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Shields/ShieldUILifetimeScope.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -142,7 +199,7 @@
             <option name="modeId" value="Agent" />
             <option name="modelType" value="builtin_family" />
             <option name="modelValue" value="claude-opus-4.6" />
-            <option name="status" value="Processing" />
+            <option name="status" value="Completed" />
             <option name="targetType" value="LOCAL" />
           </session>
         </option>

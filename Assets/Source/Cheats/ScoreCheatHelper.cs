@@ -1,15 +1,11 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 
-#region
-
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Game;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UnityEngine;
-
-#endregion
 
 namespace BalloonParty.Cheats
 {

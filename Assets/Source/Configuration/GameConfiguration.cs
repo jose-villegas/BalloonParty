@@ -1,10 +1,6 @@
-#region
-
 using System.Linq;
 using BalloonParty.Shared;
 using UnityEngine;
-
-#endregion
 
 namespace BalloonParty.Configuration
 {
@@ -43,8 +39,6 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _initialPredictionLength;
         [SerializeField] private int _predictionTraceMaxBounces;
         [SerializeField] private int _predictionTraceMaxSteps;
-
-
         public Vector2 ThrowerSpawnPoint => _throwerSpawnPoint;
         public Vector2 ProjectileSpawnPoint => _projectileSpawnPoint;
         public float ProjectileSpeed => _projectileSpeed;
@@ -66,7 +60,6 @@ namespace BalloonParty.Configuration
         public int PredictionTraceMaxSteps => _predictionTraceMaxSteps;
         public float ScorePointTraceDuration => _scorePointTraceDuration;
         public GameDisplayConfiguration DisplayConfiguration => _displayConfiguration;
-
 
         public int PointsRequiredForLevel(int level)
         {

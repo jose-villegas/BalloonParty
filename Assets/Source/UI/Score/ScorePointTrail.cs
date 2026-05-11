@@ -1,11 +1,7 @@
-#region
-
 using System;
 using BalloonParty.Shared;
 using DG.Tweening;
 using UnityEngine;
-
-#endregion
 
 namespace BalloonParty.UI.Score
 {
@@ -18,7 +14,6 @@ namespace BalloonParty.UI.Score
         [SerializeField] private TrailRenderer _trailRenderer;
         [SerializeField] private AnimationCurve _scaleCurve;
         [SerializeField] private AnimationCurve _moveCurve;
-
 
         private void Awake()
         {

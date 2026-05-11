@@ -1,9 +1,5 @@
-#region
-
 using BalloonParty.Configuration;
 using UnityEngine;
-
-#endregion
 
 namespace BalloonParty.Shared
 {

@@ -1,13 +1,9 @@
-#region
-
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-
-#endregion
 
 namespace BalloonParty.UI.GameStart
 {

@@ -1,14 +1,10 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 
-#region
-
 using System.Collections.Generic;
 using BalloonParty.Game;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
-
-#endregion
 
 namespace BalloonParty.Cheats
 {
@@ -31,7 +27,6 @@ namespace BalloonParty.Cheats
             _scoreController = scoreController;
             _hitPublisher = hitPublisher;
         }
-
 
         public void Execute()
         {

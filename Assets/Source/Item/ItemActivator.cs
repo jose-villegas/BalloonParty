@@ -1,5 +1,3 @@
-#region
-
 using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Configuration;
@@ -8,8 +6,6 @@ using Cysharp.Threading.Tasks;
 using MessagePipe;
 using VContainer;
 using VContainer.Unity;
-
-#endregion
 
 namespace BalloonParty.Item
 {

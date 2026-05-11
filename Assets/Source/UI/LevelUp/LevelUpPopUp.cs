@@ -1,5 +1,3 @@
-#region
-
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -7,8 +5,6 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-
-#endregion
 
 namespace BalloonParty.UI.LevelUp
 {

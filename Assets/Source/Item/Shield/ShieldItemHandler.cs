@@ -1,5 +1,3 @@
-#region
-
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Projectile.Model;
@@ -10,8 +8,6 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
-
-#endregion
 
 namespace BalloonParty.Item.Shield
 {

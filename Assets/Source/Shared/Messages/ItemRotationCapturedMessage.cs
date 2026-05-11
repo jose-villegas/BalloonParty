@@ -1,8 +1,4 @@
-#region
-
 using UnityEngine;
-
-#endregion
 
 namespace BalloonParty.Shared.Messages
 {
@@ -16,4 +12,3 @@ namespace BalloonParty.Shared.Messages
         }
     }
 }
-

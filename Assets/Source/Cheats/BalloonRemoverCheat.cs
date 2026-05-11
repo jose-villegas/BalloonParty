@@ -1,7 +1,5 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 
-#region
-
 using System.Collections.Generic;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -9,8 +7,6 @@ using MessagePipe;
 using UnityEngine;
 using UnityEngine.Rendering;
 using VContainer;
-
-#endregion
 
 namespace BalloonParty.Cheats
 {
@@ -105,7 +101,6 @@ namespace BalloonParty.Cheats
 
             GL.PopMatrix();
         }
-
 
         public void Execute()
         {

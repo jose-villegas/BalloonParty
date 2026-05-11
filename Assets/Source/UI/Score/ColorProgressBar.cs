@@ -1,5 +1,3 @@
-#region
-
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Game;
@@ -10,8 +8,6 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-
-#endregion
 
 namespace BalloonParty.UI.Score
 {

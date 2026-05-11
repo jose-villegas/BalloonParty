@@ -1,5 +1,3 @@
-#region
-
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
@@ -8,8 +6,6 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using MessagePipe;
-
-#endregion
 
 namespace BalloonParty.Balloon.Controller
 {

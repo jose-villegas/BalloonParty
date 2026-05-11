@@ -1,9 +1,5 @@
-#region
-
 using DG.Tweening;
 using UnityEngine;
-
-#endregion
 
 namespace BalloonParty.Shared
 {

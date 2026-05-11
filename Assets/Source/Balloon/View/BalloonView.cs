@@ -1,5 +1,3 @@
-#region
-
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
@@ -12,8 +10,6 @@ using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer;
-
-#endregion
 
 namespace BalloonParty.Balloon.View
 {
@@ -43,7 +39,6 @@ namespace BalloonParty.Balloon.View
 
         public IBalloonModel Model { get; private set; }
         public TweenTracker TweenTracker { get; private set; }
-
 
         private void Awake()
         {
@@ -126,7 +121,6 @@ namespace BalloonParty.Balloon.View
 
             _itemService?.Unbind();
         }
-
 
         public void PlayPopEffect(Color color)
         {

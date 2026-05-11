@@ -1,5 +1,3 @@
-#region
-
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
@@ -10,8 +8,6 @@ using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
-
-#endregion
 
 namespace BalloonParty.Item.Bomb
 {
@@ -156,4 +152,3 @@ namespace BalloonParty.Item.Bomb
         }
     }
 }
-

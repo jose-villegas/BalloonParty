@@ -1,10 +1,6 @@
-#region
-
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using UnityEngine;
-
-#endregion
 
 namespace BalloonParty.Item
 {
