@@ -16,8 +16,10 @@ namespace BalloonParty.Item
         private IGameConfiguration _config;
         private int _baseSortingOffset;
         private int _balloonRendererCount;
-        private GameObject _activeInstance;
+        private ItemVisualView _activeView;
         private IReadOnlyReactiveProperty<Vector2Int> _slotIndex;
+        private PoolManager _poolManager;
+        private string _activePoolKey;
 
         public void Bind(
             IReadOnlyReactiveProperty<ItemType> item,
@@ -25,7 +27,8 @@ namespace BalloonParty.Item
             IReadOnlyReactiveProperty<Vector2Int> slotIndex,
             IGameConfiguration config,
             int baseSortingOffset,
-            int balloonRendererCount)
+            int balloonRendererCount,
+            PoolManager poolManager)
         {
             Unbind();
 
@@ -33,6 +36,7 @@ namespace BalloonParty.Item
             _baseSortingOffset = baseSortingOffset;
             _balloonRendererCount = balloonRendererCount;
             _slotIndex = slotIndex;
+            _poolManager = poolManager;
 
             item
                 .Subscribe(type => OnItemChanged(type, colorName.Value))
@@ -46,14 +50,14 @@ namespace BalloonParty.Item
         public void Unbind()
         {
             _disposables.Clear();
-            DestroyActiveVisual();
+            ReturnActiveVisual();
         }
 
         private void OnItemChanged(ItemType type, string colorName)
         {
-            DestroyActiveVisual();
+            ReturnActiveVisual();
 
-            if (type == ItemType.None || _config == null)
+            if (type == ItemType.None || _config == null || _poolManager == null)
             {
                 return;
             }
@@ -64,40 +68,39 @@ namespace BalloonParty.Item
                 return;
             }
 
-            _activeInstance = Instantiate(settings.VisualPrefab, transform);
-            _activeInstance.transform.localPosition = Vector3.zero;
+            var key = settings.VisualPrefab.name;
+            _activePoolKey = key;
+            _activeView = _poolManager.GetOrRegister(key, () => new ItemVisualPoolChannel(settings.VisualPrefab));
+
+            _activeView.transform.SetParent(transform, false);
+            _activeView.transform.localPosition = Vector3.zero;
+            _activeView.transform.localScale = Vector3.one;
 
             var color = _config.BalloonColor(colorName);
-            var view = _activeInstance.GetComponent<ItemVisualView>();
-            if (view != null)
-            {
-                view.Activate(color);
-                ApplySorting(_slotIndex.Value);
-            }
+            _activeView.Activate(color);
+            ApplySorting(_slotIndex.Value);
         }
 
         private void ApplySorting(Vector2Int slot)
         {
-            if (_activeInstance == null || _config == null)
+            if (_activeView == null || _config == null)
             {
                 return;
             }
 
             var baseOrder = SortingHelper.SlotBaseSortingOrder(slot, _config.SlotsSize, _baseSortingOffset);
-            var view = _activeInstance.GetComponent<ItemVisualView>();
-            if (view != null)
-            {
-                view.ApplySortingOrder(baseOrder + _balloonRendererCount);
-            }
+            _activeView.ApplySortingOrder(baseOrder + _balloonRendererCount);
         }
 
-        private void DestroyActiveVisual()
+        private void ReturnActiveVisual()
         {
-            if (_activeInstance != null)
+            if (_activeView != null && _poolManager != null && _activePoolKey != null)
             {
-                Destroy(_activeInstance);
-                _activeInstance = null;
+                _poolManager.Return(_activePoolKey, _activeView);
             }
+
+            _activeView = null;
+            _activePoolKey = null;
         }
     }
 }

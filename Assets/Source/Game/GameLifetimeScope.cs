@@ -7,6 +7,7 @@ using BalloonParty.Cheats;
 using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Item;
+using BalloonParty.Item.Shield;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
@@ -41,6 +42,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
             builder.RegisterMessageBroker<ItemCheckMessage>(options);
+            builder.RegisterMessageBroker<ItemActivatedMessage>(options);
 
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
             builder.RegisterInstance(new BalloonSpawnerSettings(_balloonScopePrefab));
@@ -55,6 +57,9 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BalloonSpawner>().AsSelf();
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
             builder.RegisterEntryPoint<ItemAssigner>();
+            builder.RegisterEntryPoint<ItemActivator>();
+
+            builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 
             //builder.RegisterComponentInHierarchy<GameStartButton>();
 

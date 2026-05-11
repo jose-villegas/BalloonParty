@@ -57,7 +57,7 @@ namespace BalloonParty.Shared
             item.gameObject.SetActive(false);
             if (Container != null)
             {
-                item.transform.SetParent(Container);
+                item.transform.SetParent(Container, false);
             }
 
             _available.Push(item);

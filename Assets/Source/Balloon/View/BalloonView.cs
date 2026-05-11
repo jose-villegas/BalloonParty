@@ -26,6 +26,7 @@ namespace BalloonParty.Balloon.View
         [SerializeField] private Animator _animator;
         [SerializeField] private Renderer[] _spriteLayerRenderers;
         [SerializeField] private ParticleSystem _popVfxPrefab;
+        [SerializeField] private Collider2D _collider;
 
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
@@ -52,6 +53,12 @@ namespace BalloonParty.Balloon.View
         {
             transform.localScale = Vector3.one;
             transform.position = Vector3.one * -1000f;
+
+            foreach (var r in _spriteLayerRenderers)
+                r.enabled = true;
+
+            if (_collider != null)
+                _collider.enabled = true;
         }
 
         public void OnDespawned()
@@ -89,8 +96,24 @@ namespace BalloonParty.Balloon.View
 
             if (_itemService != null)
             {
-                _itemService.Bind(model.Item, model.Color, model.SlotIndex, _config, _baseSortingLayer, _spriteLayerRenderers.Length);
+                _itemService.Bind(model.Item, model.Color, model.SlotIndex, _config, _baseSortingLayer,
+                    _spriteLayerRenderers.Length, _poolManager);
             }
+        }
+
+        /// <summary>
+        ///     Hides all visuals and disables the collider immediately. Called when an item balloon
+        ///     is hit but before the item effect completes and the balloon returns to pool.
+        /// </summary>
+        public void Hide()
+        {
+            foreach (var r in _spriteLayerRenderers)
+                r.enabled = false;
+
+            if (_collider != null)
+                _collider.enabled = false;
+
+            _itemService?.Unbind();
         }
 
         public void PlayPopEffect(Color color)

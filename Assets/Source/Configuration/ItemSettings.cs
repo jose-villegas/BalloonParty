@@ -15,11 +15,13 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _weight;
         [SerializeField] private int _maximumAllowed;
         [SerializeField] private GameObject _visualPrefab;
+        [SerializeField] private ParticleSystem _activationVfxPrefab;
 
         public ItemType Type => _type;
         public int TurnCheckEvery => _turnCheckEvery;
         public float Weight => _weight;
         public int MaximumAllowed => _maximumAllowed;
         public GameObject VisualPrefab => _visualPrefab;
+        public ParticleSystem ActivationVfxPrefab => _activationVfxPrefab;
     }
 }

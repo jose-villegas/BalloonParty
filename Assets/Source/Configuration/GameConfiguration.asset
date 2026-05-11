@@ -55,26 +55,31 @@ MonoBehaviour:
   _itemConfiguration:
     _items:
     - _type: 2
-      _turnCheckEvery: 1
-      _weight: 30
+      _turnCheckEvery: 0
+      _weight: 0
       _maximumAllowed: 1
       _visualPrefab: {fileID: 2023896797455516263, guid: 0909fb1419fa47148a1cc0cd0ca72e9f,
         type: 3}
+      _activationVfxPrefab: {fileID: 0}
     - _type: 3
-      _turnCheckEvery: 1
-      _weight: 30
+      _turnCheckEvery: 0
+      _weight: 0
       _maximumAllowed: 1
       _visualPrefab: {fileID: 2023896797455516263, guid: ea0a89bfc43787544a6501da72afd299,
         type: 3}
+      _activationVfxPrefab: {fileID: 0}
     - _type: 4
-      _turnCheckEvery: 1
-      _weight: 30
+      _turnCheckEvery: 0
+      _weight: 0
       _maximumAllowed: 1
       _visualPrefab: {fileID: 2023896797455516263, guid: dd84523fdbc2f8c4497d487f89fa32c8,
         type: 3}
+      _activationVfxPrefab: {fileID: 0}
     - _type: 1
       _turnCheckEvery: 1
-      _weight: 30
-      _maximumAllowed: 1
+      _weight: 100
+      _maximumAllowed: 3
       _visualPrefab: {fileID: 7402881001233824042, guid: ecdbdd2040aac4c7baea4111845f0501,
+        type: 3}
+      _activationVfxPrefab: {fileID: 1947199329108356482, guid: 6e855a2c07caa6547947b364836193df,
         type: 3}

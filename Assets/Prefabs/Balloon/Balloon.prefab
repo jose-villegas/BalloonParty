@@ -372,6 +372,7 @@ MonoBehaviour:
   - {fileID: 7087590600817567023}
   _popVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d,
     type: 3}
+  _collider: {fileID: 7822387025677367451}
   _baseSortingLayer: 50
 --- !u!114 &-4720687053981353126
 MonoBehaviour:

@@ -28,6 +28,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IPublisher<ItemCheckMessage> _itemCheckPublisher;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly LifetimeScope _parentScope;
@@ -48,6 +49,7 @@ namespace BalloonParty.Balloon.Spawner
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
             ISubscriber<BalloonHitMessage> hitSubscriber,
+            ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher)
         {
@@ -59,6 +61,7 @@ namespace BalloonParty.Balloon.Spawner
             _lineSubscriber = lineSubscriber;
             _balancePublisher = balancePublisher;
             _hitSubscriber = hitSubscriber;
+            _itemActivatedSubscriber = itemActivatedSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
         }
@@ -87,7 +90,7 @@ namespace BalloonParty.Balloon.Spawner
             model.Color.Value = colorName;
             model.SlotIndex.Value = slot;
 
-            var controller = new BalloonController(model, view, _hitSubscriber, _grid, _config, _poolManager);
+            var controller = new BalloonController(model, view, _hitSubscriber, _itemActivatedSubscriber, _grid, _config, _poolManager);
             controller.Start();
 
             _grid.Place(model, view, slot);

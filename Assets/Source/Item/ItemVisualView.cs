@@ -8,11 +8,25 @@ using UnityEngine;
 
 namespace BalloonParty.Item
 {
-    public class ItemVisualView : MonoBehaviour, IItemView
+    public class ItemVisualView : MonoBehaviour, IItemView, IPoolable
     {
+        [SerializeField] private ItemType _type;
         [SerializeField] private SpriteRenderer[] _spritesToSetColor;
         [SerializeField] private Renderer[] _sortingRenderers;
         [SerializeField] [Range(0f, 1f)] private float _spritesAlpha;
+
+        public ItemType Type => _type;
+
+        public void OnSpawned()
+        {
+            transform.localScale = Vector3.one;
+            transform.localPosition = Vector3.zero;
+        }
+
+        public void OnDespawned()
+        {
+            Deactivate();
+        }
 
         public void Activate(Color balloonColor)
         {
