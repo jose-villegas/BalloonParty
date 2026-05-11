@@ -2,6 +2,7 @@
 
 using System;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Configuration;
 using BalloonParty.Item;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
@@ -31,6 +32,7 @@ namespace BalloonParty.Balloon.View
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private IGameConfiguration _config;
+        [Inject] private ItemConfiguration _itemConfig;
         [Inject] private SlotGrid _grid;
         [Inject] private ISubscriber<BalloonNudgeMessage> _nudgeSubscriber;
         [Inject] private PoolManager _poolManager;
@@ -99,6 +101,7 @@ namespace BalloonParty.Balloon.View
                     model.Color,
                     model.SlotIndex,
                     _config,
+                    _itemConfig,
                     _baseSortingLayer,
                     _spriteLayerRenderers.Length,
                     _poolManager);

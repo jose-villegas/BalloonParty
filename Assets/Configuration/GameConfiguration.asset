@@ -60,7 +60,9 @@ MonoBehaviour:
       _maximumAllowed: 1
       _visualPrefab: {fileID: 2023896797455516263, guid: 0909fb1419fa47148a1cc0cd0ca72e9f,
         type: 3}
-      _activationVfxPrefab: {fileID: 0}
+      _activationVfxPrefab: {fileID: 3044695920632228802, guid: 00eef9bcf5537e24b8829da45a994469,
+        type: 3}
+      _bombRadius: 1.25
     - _type: 3
       _turnCheckEvery: 0
       _weight: 0
@@ -68,6 +70,7 @@ MonoBehaviour:
       _visualPrefab: {fileID: 2023896797455516263, guid: ea0a89bfc43787544a6501da72afd299,
         type: 3}
       _activationVfxPrefab: {fileID: 0}
+      _bombRadius: 1.25
     - _type: 4
       _turnCheckEvery: 0
       _weight: 0
@@ -75,6 +78,7 @@ MonoBehaviour:
       _visualPrefab: {fileID: 2023896797455516263, guid: dd84523fdbc2f8c4497d487f89fa32c8,
         type: 3}
       _activationVfxPrefab: {fileID: 0}
+      _bombRadius: 1.25
     - _type: 1
       _turnCheckEvery: 1
       _weight: 100
@@ -83,3 +87,4 @@ MonoBehaviour:
         type: 3}
       _activationVfxPrefab: {fileID: 1947199329108356482, guid: 6e855a2c07caa6547947b364836193df,
         type: 3}
+      _bombRadius: 1.25

@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eab17e1ff0c9410db21b071d8a7f918c, type: 3}
+  m_Name: ItemConfiguration
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Configuration.ItemConfiguration
+  _items:
+  - _type: 2
+    _turnCheckEvery: 1
+    _weight: 100000
+    _maximumAllowed: 3
+    _visualPrefab: {fileID: 2023896797455516263, guid: 0909fb1419fa47148a1cc0cd0ca72e9f,
+      type: 3}
+    _activationVfxPrefab: {fileID: 3044695920632228802, guid: 00eef9bcf5537e24b8829da45a994469,
+      type: 3}
+    _bombRadius: 1.25
+  - _type: 3
+    _turnCheckEvery: 0
+    _weight: 0
+    _maximumAllowed: 1
+    _visualPrefab: {fileID: 2023896797455516263, guid: ea0a89bfc43787544a6501da72afd299,
+      type: 3}
+    _activationVfxPrefab: {fileID: 0}
+    _bombRadius: 1.25
+  - _type: 4
+    _turnCheckEvery: 0
+    _weight: 0
+    _maximumAllowed: 1
+    _visualPrefab: {fileID: 2023896797455516263, guid: dd84523fdbc2f8c4497d487f89fa32c8,
+      type: 3}
+    _activationVfxPrefab: {fileID: 0}
+    _bombRadius: 1.25
+  - _type: 1
+    _turnCheckEvery: 1
+    _weight: 100
+    _maximumAllowed: 3
+    _visualPrefab: {fileID: 7402881001233824042, guid: ecdbdd2040aac4c7baea4111845f0501,
+      type: 3}
+    _activationVfxPrefab: {fileID: 1947199329108356482, guid: 6e855a2c07caa6547947b364836193df,
+      type: 3}
+    _bombRadius: 1.25

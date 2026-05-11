@@ -18,6 +18,7 @@ namespace BalloonParty.Item.Shield
     public class ShieldItemHandler : IBalloonItem, IStartable
     {
         private readonly IGameConfiguration _config;
+        private readonly ItemConfiguration _itemConfig;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private readonly PoolManager _poolManager;
 
@@ -30,10 +31,12 @@ namespace BalloonParty.Item.Shield
         [Inject]
         public ShieldItemHandler(
             IGameConfiguration config,
+            ItemConfiguration itemConfig,
             PoolManager poolManager,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
             _config = config;
+            _itemConfig = itemConfig;
             _poolManager = poolManager;
             _loadedSubscriber = loadedSubscriber;
         }
@@ -62,7 +65,7 @@ namespace BalloonParty.Item.Shield
 
         private void PlayVfx()
         {
-            var settings = _config.ItemConfiguration[ItemType.Shield];
+            var settings = _itemConfig[ItemType.Shield];
             if (settings.ActivationVfxPrefab == null)
             {
                 return;

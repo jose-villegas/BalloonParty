@@ -7,6 +7,7 @@ using BalloonParty.Cheats;
 using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Item;
+using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Shield;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
@@ -27,6 +28,7 @@ namespace BalloonParty.Game
     public class GameLifetimeScope : LifetimeScope
     {
         [SerializeField] private GameConfiguration _gameConfiguration;
+        [SerializeField] private ItemConfiguration _itemConfiguration;
         [SerializeField] private BalloonLifetimeScope _balloonScopePrefab;
         [SerializeField] private ProjectileLifetimeScope _projectileScopePrefab;
 
@@ -45,6 +47,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ItemActivatedMessage>(options);
 
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
+            builder.RegisterInstance(_itemConfiguration);
             builder.RegisterInstance(new BalloonSpawnerSettings(_balloonScopePrefab));
             builder.RegisterInstance(new ThrowerSettings(_projectileScopePrefab));
 
@@ -60,6 +63,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ItemActivator>();
 
             builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 
             //builder.RegisterComponentInHierarchy<GameStartButton>();
 

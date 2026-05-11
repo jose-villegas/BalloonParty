@@ -1,6 +1,5 @@
 #region
 
-using System;
 using System.Linq;
 using BalloonParty.Shared;
 using UnityEngine;
@@ -45,8 +44,6 @@ namespace BalloonParty.Configuration
         [SerializeField] private int _predictionTraceMaxBounces;
         [SerializeField] private int _predictionTraceMaxSteps;
 
-        [Header("Items")]
-        [SerializeField] private ItemConfiguration _itemConfiguration;
 
         public Vector2 ThrowerSpawnPoint => _throwerSpawnPoint;
         public Vector2 ProjectileSpawnPoint => _projectileSpawnPoint;
@@ -69,7 +66,6 @@ namespace BalloonParty.Configuration
         public int PredictionTraceMaxSteps => _predictionTraceMaxSteps;
         public float ScorePointTraceDuration => _scorePointTraceDuration;
         public GameDisplayConfiguration DisplayConfiguration => _displayConfiguration;
-        public ItemConfiguration ItemConfiguration => _itemConfiguration;
 
 
         public int PointsRequiredForLevel(int level)

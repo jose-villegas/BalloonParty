@@ -2,7 +2,6 @@
 
 using System.Linq;
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using MessagePipe;
@@ -16,17 +15,17 @@ namespace BalloonParty.Item
 {
     public class ItemAssigner : IStartable
     {
-        private readonly IGameConfiguration _config;
+        private readonly ItemConfiguration _itemConfig;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<ItemCheckMessage> _checkSubscriber;
 
         [Inject]
         public ItemAssigner(
-            IGameConfiguration config,
+            ItemConfiguration itemConfig,
             SlotGrid grid,
             ISubscriber<ItemCheckMessage> checkSubscriber)
         {
-            _config = config;
+            _itemConfig = itemConfig;
             _grid = grid;
             _checkSubscriber = checkSubscriber;
         }
@@ -44,7 +43,7 @@ namespace BalloonParty.Item
             }
 
             var turns = msg.TurnCount;
-            var items = _config.ItemConfiguration.Items;
+            var items = _itemConfig.Items;
 
             // Filter by turn frequency
             var available = items

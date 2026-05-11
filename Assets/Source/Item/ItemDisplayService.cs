@@ -18,6 +18,7 @@ namespace BalloonParty.Item
         private int _balloonRendererCount;
         private int _baseSortingOffset;
         private IGameConfiguration _config;
+        private ItemConfiguration _itemConfig;
         private PoolManager _poolManager;
         private IReadOnlyReactiveProperty<Vector2Int> _slotIndex;
 
@@ -26,6 +27,7 @@ namespace BalloonParty.Item
             IReadOnlyReactiveProperty<string> colorName,
             IReadOnlyReactiveProperty<Vector2Int> slotIndex,
             IGameConfiguration config,
+            ItemConfiguration itemConfig,
             int baseSortingOffset,
             int balloonRendererCount,
             PoolManager poolManager)
@@ -33,6 +35,7 @@ namespace BalloonParty.Item
             Unbind();
 
             _config = config;
+            _itemConfig = itemConfig;
             _baseSortingOffset = baseSortingOffset;
             _balloonRendererCount = balloonRendererCount;
             _slotIndex = slotIndex;
@@ -73,7 +76,7 @@ namespace BalloonParty.Item
                 return;
             }
 
-            var settings = _config.ItemConfiguration[type];
+            var settings = _itemConfig[type];
             if (settings.VisualPrefab == null)
             {
                 return;

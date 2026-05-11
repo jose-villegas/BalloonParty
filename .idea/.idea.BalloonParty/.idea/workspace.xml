@@ -20,16 +20,29 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Configuration/ItemConfiguration.asset" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Configuration/ItemConfiguration.asset.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Bomb.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Bomb/BombItemHandler.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Bomb/BombItemHandler.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Game/GameLifetimeScope.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Game/GameLifetimeScope.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/BombRange.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/BombRange.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/BombRange.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/BombRange.prefab.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PUShield.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/PUShield.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Configuration.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemActivator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemActivator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Configuration/GameConfiguration.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Configuration/GameConfiguration.asset.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/ItemConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/ItemConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemAssigner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemAssigner.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualPoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualPoolChannel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemActivatedMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemActivatedMessage.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/IGameConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/IGameConfiguration.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,7 +52,7 @@
   <component name="CopilotChats">
     <option name="panelChat">
       <chat>
-        <option name="activeSessionId" value="e9c3ec54-15b8-443e-9dd7-a69a77d8d088" />
+        <option name="activeSessionId" value="fbc34869-b67e-405b-a6b3-3afe0feb7490" />
         <option name="sessions">
           <session>
             <option name="chatType" value="PANEL" />
@@ -116,6 +129,15 @@
             <option name="status" value="Completed" />
             <option name="targetType" value="LOCAL" />
           </session>
+          <session>
+            <option name="chatType" value="PANEL" />
+            <option name="id" value="fbc34869-b67e-405b-a6b3-3afe0feb7490" />
+            <option name="modeId" value="Agent" />
+            <option name="modelType" value="builtin_family" />
+            <option name="modelValue" value="claude-opus-4.6" />
+            <option name="status" value="Completed" />
+            <option name="targetType" value="LOCAL" />
+          </session>
         </option>
         <option name="type" value="PANEL" />
       </chat>
@@ -158,6 +180,7 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/c5eeda5e65d44b388e164c6c5cfe0702469400/67/cc99aa29/Lazy`1.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f7e6b41d60594934bad30fa8d4151a76212a00/67/b7883088/MonoBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f7e6b41d60594934bad30fa8d4151a76212a00/81/a4b1b1b9/LayerMask.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Configuration/ItemConfiguration.asset" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Prefabs/Projectile/Projectile.prefab" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Shaders/SpriteShadow.shader" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonBalancer.cs" root0="FORCE_HIGHLIGHTING" />
@@ -172,7 +195,6 @@
     <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Cheats/BalloonRemoverCheat.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Configuration/BalloonColorConfiguration.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Configuration/GameDisplayConfiguration.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Configuration/IBalloonColorConfiguration.cs" root0="FORCE_HIGHLIGHTING" />
@@ -183,6 +205,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Source/Game/GameChildLifetimeScope.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Game/ScoreController.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Source/Item/Bomb/BombItemHandler.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Item/ItemActivator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Item/ItemAssigner.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Item/ItemVisualPoolChannel.cs" root0="FORCE_HIGHLIGHTING" />

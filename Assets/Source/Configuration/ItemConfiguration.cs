@@ -1,6 +1,5 @@
 #region
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -9,8 +8,8 @@ using UnityEngine;
 
 namespace BalloonParty.Configuration
 {
-    [Serializable]
-    public class ItemConfiguration
+    [CreateAssetMenu(menuName = "Configuration/Item Configuration", fileName = "ItemConfiguration")]
+    public class ItemConfiguration : ScriptableObject
     {
         [SerializeField] private List<ItemSettings> _items;
 
