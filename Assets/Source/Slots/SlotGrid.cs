@@ -133,15 +133,17 @@ namespace BalloonParty.Slots
         public IEnumerable<Vector2Int> BottomEmptySlotPerColumn()
         {
             for (var col = 0; col < Columns; col++)
-            for (var row = 0; row < Rows; row++)
             {
-                if (!IsEmpty(col, row))
+                for (var row = 0; row < Rows; row++)
                 {
-                    continue;
-                }
+                    if (!IsEmpty(col, row))
+                    {
+                        continue;
+                    }
 
-                yield return new Vector2Int(col, row);
-                break;
+                    yield return new Vector2Int(col, row);
+                    break;
+                }
             }
         }
 
@@ -163,11 +165,13 @@ namespace BalloonParty.Slots
         public bool AllBalloonsStable()
         {
             for (var col = 0; col < Columns; col++)
-            for (var row = 0; row < Rows; row++)
             {
-                if (_slots[col, row] != null && !_slots[col, row].IsStable.Value)
+                for (var row = 0; row < Rows; row++)
                 {
-                    return false;
+                    if (_slots[col, row] != null && !_slots[col, row].IsStable.Value)
+                    {
+                        return false;
+                    }
                 }
             }
 

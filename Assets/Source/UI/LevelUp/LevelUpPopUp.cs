@@ -14,6 +14,8 @@ namespace BalloonParty.UI.LevelUp
 {
     public class LevelUpPopUp : MonoBehaviour
     {
+        private static readonly int AppearTrigger = Animator.StringToHash("Appear");
+        private static readonly int HideTrigger = Animator.StringToHash("Hide");
         [Header("References")] [SerializeField]
         private Animator _animator;
 
@@ -46,7 +48,7 @@ namespace BalloonParty.UI.LevelUp
 
         public void OnContinue()
         {
-            _animator.SetTrigger("Hide");
+            _animator.SetTrigger(HideTrigger);
             UnpauseAfterDelayAsync().Forget();
         }
 
@@ -56,7 +58,7 @@ namespace BalloonParty.UI.LevelUp
             await UniTask.Yield(PlayerLoopTiming.Update, destroyCancellationToken);
 
             _levelLabel.text = (newLevel - 1).ToString("N0");
-            _animator.SetTrigger("Appear");
+            _animator.SetTrigger(AppearTrigger);
 
             await LevelGlowFillAsync(newLevel);
         }

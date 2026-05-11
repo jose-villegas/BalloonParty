@@ -2,7 +2,6 @@
 
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
-using BalloonParty.Balloon.View;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
@@ -65,41 +64,43 @@ namespace BalloonParty.Balloon.Controller
                 hasUnbalanced = false;
 
                 for (var col = 0; col < _grid.Columns; col++)
-                for (var row = _grid.Rows - 1; row >= 0; row--)
                 {
-                    if (_grid.IsEmpty(col, row))
+                    for (var row = _grid.Rows - 1; row >= 0; row--)
                     {
-                        continue;
-                    }
+                        if (_grid.IsEmpty(col, row))
+                        {
+                            continue;
+                        }
 
-                    if (!_grid.IsUnbalanced(col, row))
-                    {
-                        continue;
-                    }
+                        if (!_grid.IsUnbalanced(col, row))
+                        {
+                            continue;
+                        }
 
-                    var nextSlot = _grid.OptimalNextEmptySlot(col, row);
-                    if (!nextSlot.HasValue)
-                    {
-                        continue;
-                    }
+                        var nextSlot = _grid.OptimalNextEmptySlot(col, row);
+                        if (!nextSlot.HasValue)
+                        {
+                            continue;
+                        }
 
-                    hasUnbalanced = true;
+                        hasUnbalanced = true;
 
-                    var currentSlot = new Vector2Int(col, row);
-                    var balloon = _grid.At(currentSlot);
-                    var balloonView = _grid.ViewAt(currentSlot);
-                    _grid.Remove(currentSlot);
-                    _grid.Place(balloon, balloonView, nextSlot.Value);
-                    balloon.IsStable.Value = false;
+                        var currentSlot = new Vector2Int(col, row);
+                        var balloon = _grid.At(currentSlot);
+                        var balloonView = _grid.ViewAt(currentSlot);
+                        _grid.Remove(currentSlot);
+                        _grid.Place(balloon, balloonView, nextSlot.Value);
+                        balloon.IsStable.Value = false;
 
-                    var targetPosition = _grid.IndexToWorldPosition(nextSlot.Value);
-                    if (paths.TryGetValue(balloon, out var path))
-                    {
-                        path.Add(targetPosition);
-                    }
-                    else
-                    {
-                        paths[balloon] = new List<Vector3> { targetPosition };
+                        var targetPosition = _grid.IndexToWorldPosition(nextSlot.Value);
+                        if (paths.TryGetValue(balloon, out var path))
+                        {
+                            path.Add(targetPosition);
+                        }
+                        else
+                        {
+                            paths[balloon] = new List<Vector3> { targetPosition };
+                        }
                     }
                 }
             }

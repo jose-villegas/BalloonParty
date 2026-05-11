@@ -11,9 +11,9 @@ namespace BalloonParty.Item
 {
     public class ItemDisplayService : MonoBehaviour
     {
-        private readonly CompositeDisposable _disposables = new();
-        private readonly ReactiveProperty<ItemType> _activeItem = new(ItemType.None);
         private readonly ReactiveProperty<Color> _activeColor = new(default);
+        private readonly ReactiveProperty<ItemType> _activeItem = new(ItemType.None);
+        private readonly CompositeDisposable _disposables = new();
         private readonly ReactiveProperty<int> _sortingStartOrder = new(0);
 
         public IReadOnlyReactiveProperty<ItemType> ActiveItem => _activeItem;

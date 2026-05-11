@@ -7,9 +7,6 @@ using UnityEngine;
 
 namespace BalloonParty.Prediction
 {
-    /// <summary>
-    ///     Draws the prediction trace using a <see cref="LineRenderer" />.
-    /// </summary>
     [RequireComponent(typeof(LineRenderer))]
     public class PredictionTraceView : MonoBehaviour
     {
@@ -20,10 +17,6 @@ namespace BalloonParty.Prediction
             _lineRenderer = GetComponent<LineRenderer>();
         }
 
-        /// <summary>
-        ///     Updates the line renderer with the given trace points.
-        ///     Pass null or empty to hide the line.
-        /// </summary>
         public void SetTrace(List<Vector3> points)
         {
             if (points == null || points.Count == 0)
@@ -36,7 +29,6 @@ namespace BalloonParty.Prediction
             _lineRenderer.SetPositions(points.ToArray());
         }
 
-        /// <summary>Hides the prediction line.</summary>
         public void Clear()
         {
             _lineRenderer.positionCount = 0;

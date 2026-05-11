@@ -21,18 +21,17 @@ namespace BalloonParty.Balloon.Spawner
     public class BalloonSpawner : IStartable
     {
         private const string BalloonPoolKey = "Balloon";
+        private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly IGameConfiguration _config;
+        private readonly CancellationTokenSource _cts = new();
+        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
+        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly LifetimeScope _parentScope;
         private readonly PoolManager _poolManager;
         private readonly BalloonSpawnerSettings _settings;
 
-        private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
-        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
-        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
-        private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
-
-        private readonly CancellationTokenSource _cts = new();
 
         private int _turnCount;
 
@@ -70,7 +69,7 @@ namespace BalloonParty.Balloon.Spawner
             PopulateInitialGrid();
         }
 
-        public BalloonController SpawnBalloon(string colorName, Vector2Int slot)
+        private void SpawnBalloon(string colorName, Vector2Int slot)
         {
             var targetPosition = _grid.IndexToWorldPosition(slot);
             var spawnPosition = _grid.IndexToWorldPosition(slot + (Vector2Int.up * 4));
@@ -87,16 +86,16 @@ namespace BalloonParty.Balloon.Spawner
 
             _grid.Place(model, view, slot);
             AnimateSpawn(view, targetPosition, model);
-
-            return controller;
         }
 
         private void PopulateInitialGrid()
         {
             for (var row = 0; row < _config.GameStartedBalloonLines; row++)
-            for (var col = 0; col < _grid.Columns; col++)
             {
-                SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, row));
+                for (var col = 0; col < _grid.Columns; col++)
+                {
+                    SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, row));
+                }
             }
         }
 

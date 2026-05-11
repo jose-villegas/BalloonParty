@@ -18,6 +18,8 @@ namespace BalloonParty.Balloon.View
 {
     public class BalloonView : MonoBehaviour, IPoolable
     {
+        private static readonly int IsStableParam = Animator.StringToHash("IsStable");
+
         [Header("References")] [SerializeField]
         private SpriteRenderer _renderer;
 
@@ -80,7 +82,7 @@ namespace BalloonParty.Balloon.View
                 .AddTo(_bindDisposables);
 
             model.IsStable
-                .Subscribe(stable => _animator.SetBool("IsStable", stable))
+                .Subscribe(stable => _animator.SetBool(IsStableParam, stable))
                 .AddTo(_bindDisposables);
 
             _nudgeSubscriber.Subscribe(OnNudge).AddTo(_bindDisposables);

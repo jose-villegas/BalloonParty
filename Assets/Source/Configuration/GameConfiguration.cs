@@ -1,5 +1,6 @@
 #region
 
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -69,7 +70,7 @@ namespace BalloonParty.Configuration
         public GameDisplayConfiguration DisplayConfiguration => _displayConfiguration;
         public ItemConfiguration ItemConfiguration => _itemConfiguration;
 
-        // Legacy backward-compatible bridge — Source_Old IGameConfiguration requires this property
+        [Obsolete]
         public PowerUpConfiguration PowerUpConfiguration => null;
 
         public int PointsRequiredForLevel(int level)

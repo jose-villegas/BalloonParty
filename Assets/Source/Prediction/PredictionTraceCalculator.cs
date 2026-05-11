@@ -7,10 +7,6 @@ using UnityEngine;
 
 namespace BalloonParty.Prediction
 {
-    /// <summary>
-    ///     Pure-logic calculator that produces a list of world-space points representing
-    ///     the projectile's predicted trajectory, including wall bounces.
-    /// </summary>
     public class PredictionTraceCalculator
     {
         private readonly IGameConfiguration _config;

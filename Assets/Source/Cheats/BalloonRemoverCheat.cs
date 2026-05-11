@@ -19,6 +19,11 @@ namespace BalloonParty.Cheats
         private const float PickRadius = 0.25f;
         private const float PathSampleDistance = 0.05f;
 
+        private static readonly int SrcBlendId = Shader.PropertyToID("_SrcBlend");
+        private static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
+        private static readonly int CullId = Shader.PropertyToID("_Cull");
+        private static readonly int ZWriteId = Shader.PropertyToID("_ZWrite");
+
         [Inject] private SlotGrid _grid;
         [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
         [Inject] private IPublisher<BalanceBalloonsMessage> _publisher;
@@ -37,10 +42,10 @@ namespace BalloonParty.Cheats
         {
             var shader = Shader.Find("Hidden/Internal-Colored");
             _lineMaterial = new Material(shader) { hideFlags = HideFlags.HideAndDontSave };
-            _lineMaterial.SetInt("_SrcBlend", (int)BlendMode.SrcAlpha);
-            _lineMaterial.SetInt("_DstBlend", (int)BlendMode.OneMinusSrcAlpha);
-            _lineMaterial.SetInt("_Cull", (int)CullMode.Off);
-            _lineMaterial.SetInt("_ZWrite", 0);
+            _lineMaterial.SetInt(SrcBlendId, (int)BlendMode.SrcAlpha);
+            _lineMaterial.SetInt(DstBlendId, (int)BlendMode.OneMinusSrcAlpha);
+            _lineMaterial.SetInt(CullId, (int)CullMode.Off);
+            _lineMaterial.SetInt(ZWriteId, 0);
         }
 
         private void Update()
@@ -146,21 +151,23 @@ namespace BalloonParty.Cheats
             var hit = new HashSet<Vector2Int>();
 
             for (var col = 0; col < _grid.Columns; col++)
-            for (var row = 0; row < _grid.Rows; row++)
             {
-                if (_grid.IsEmpty(col, row))
+                for (var row = 0; row < _grid.Rows; row++)
                 {
-                    continue;
-                }
-
-                var balloonWorld = _grid.IndexToWorldPosition(new Vector2Int(col, row));
-
-                foreach (var point in _path)
-                {
-                    if (Vector2.Distance(point, balloonWorld) <= PickRadius)
+                    if (_grid.IsEmpty(col, row))
                     {
-                        hit.Add(new Vector2Int(col, row));
-                        break;
+                        continue;
+                    }
+
+                    var balloonWorld = _grid.IndexToWorldPosition(new Vector2Int(col, row));
+
+                    foreach (var point in _path)
+                    {
+                        if (Vector2.Distance(point, balloonWorld) <= PickRadius)
+                        {
+                            hit.Add(new Vector2Int(col, row));
+                            break;
+                        }
                     }
                 }
             }

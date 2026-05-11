@@ -11,6 +11,8 @@ namespace BalloonParty.UI.Score
 {
     public class ScoreNotice : MonoBehaviour, IPoolable
     {
+        private static readonly int ScoreTrigger = Animator.StringToHash("Score");
+        private static readonly int ScoreDisappearState = Animator.StringToHash("ScoreDisappear");
         [SerializeField] private Graphic[] _graphicsToSetColor;
         [SerializeField] private Animator _animator;
         [SerializeField] private Transform _labelTransform;
@@ -49,7 +51,7 @@ namespace BalloonParty.UI.Score
                 g.color = color;
             }
 
-            _animator.SetTrigger("Score");
+            _animator.SetTrigger(ScoreTrigger);
             _label.text = _shadow.text = score.ToString("N0");
 
             transform.localScale = Vector3.one;
@@ -58,7 +60,7 @@ namespace BalloonParty.UI.Score
 
         public void Dismiss()
         {
-            _animator.Play("ScoreDisappear");
+            _animator.Play(ScoreDisappearState);
         }
 
         private void OnAnimationScoreFully()

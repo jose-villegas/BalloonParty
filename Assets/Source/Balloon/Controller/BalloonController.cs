@@ -23,7 +23,6 @@ namespace BalloonParty.Balloon.Controller
 
         private IDisposable _hitSubscription;
 
-        public IBalloonModel Model => _model;
 
         public BalloonController(
             IWriteableBalloonModel model,
@@ -48,7 +47,7 @@ namespace BalloonParty.Balloon.Controller
 
             _hitSubscription = _hitSubscriber.Subscribe(msg =>
             {
-                if (msg.Balloon != Model)
+                if (msg.Balloon != _model)
                 {
                     return;
                 }
@@ -56,8 +55,8 @@ namespace BalloonParty.Balloon.Controller
                 _hitSubscription?.Dispose();
                 _hitSubscription = null;
 
-                _view.PlayPopEffect(_config.BalloonColor(Model.Color.Value));
-                _grid.Remove(Model.SlotIndex.Value);
+                _view.PlayPopEffect(_config.BalloonColor(_model.Color.Value));
+                _grid.Remove(_model.SlotIndex.Value);
                 _poolManager.Return("Balloon", _view);
             });
 

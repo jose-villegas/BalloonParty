@@ -1,6 +1,5 @@
 #region
 
-using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
@@ -16,6 +15,8 @@ namespace BalloonParty.Projectile.View
 {
     public class ProjectileView : MonoBehaviour, IPoolable
     {
+        private static int BalloonsLayer = -1;
+
         [Header("Glow")] [SerializeField] private SpriteRenderer _glowRenderer;
 
         [SerializeField] [Range(0f, 1f)] private float _glowAlpha = 0.5f;
@@ -34,6 +35,11 @@ namespace BalloonParty.Projectile.View
 
         private void Awake()
         {
+            if (BalloonsLayer == -1)
+            {
+                BalloonsLayer = LayerMask.NameToLayer("Balloons");
+            }
+
             _shieldView = GetComponentInChildren<ProjectileShieldView>(true);
             _projectileTrail = GetComponentInChildren<ProjectileTrail>(true);
         }
@@ -53,7 +59,7 @@ namespace BalloonParty.Projectile.View
             }
 
             var pos = transform.position;
-            pos += _model.Direction * _model.Speed * Time.fixedDeltaTime;
+            pos += _model.Direction * (_model.Speed * Time.fixedDeltaTime);
 
             var reflect = Vector3.zero;
             var limits = _config.LimitsClockwise;
@@ -110,7 +116,7 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            if (other.gameObject.layer != LayerMask.NameToLayer("Balloons"))
+            if (other.gameObject.layer != BalloonsLayer)
             {
                 return;
             }

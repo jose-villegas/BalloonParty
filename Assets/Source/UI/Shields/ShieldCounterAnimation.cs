@@ -15,6 +15,11 @@ namespace BalloonParty.UI.Shields
     [RequireComponent(typeof(Animator))]
     public class ShieldCounterAnimation : MonoBehaviour
     {
+        private static readonly int GainTrigger = Animator.StringToHash("Gain");
+        private static readonly int LostTrigger = Animator.StringToHash("Lost");
+        private static readonly int ReadyTrigger = Animator.StringToHash("Ready");
+        private static readonly int WaitingTrigger = Animator.StringToHash("Waiting");
+
         [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         [Inject] private ShieldCounterLabel[] _labels;
         [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
@@ -28,7 +33,7 @@ namespace BalloonParty.UI.Shields
         private void Awake()
         {
             _animator = GetComponent<Animator>();
-            _animator.SetTrigger("Waiting");
+            _animator.SetTrigger(WaitingTrigger);
         }
 
         private void OnDestroy()
@@ -53,7 +58,7 @@ namespace BalloonParty.UI.Shields
                 .Skip(1)
                 .Subscribe(value =>
                 {
-                    _animator.SetTrigger(value > _lastShieldValue ? "Gain" : "Lost");
+                    _animator.SetTrigger(value > _lastShieldValue ? GainTrigger : LostTrigger);
                     _lastShieldValue = value;
                 });
         }
@@ -66,14 +71,14 @@ namespace BalloonParty.UI.Shields
                 label.Bind(msg.Model.ShieldsRemaining);
             }
 
-            _animator.ResetTrigger("Waiting");
-            _animator.ResetTrigger("Lost");
-            _animator.SetTrigger("Ready");
+            _animator.ResetTrigger(WaitingTrigger);
+            _animator.ResetTrigger(LostTrigger);
+            _animator.SetTrigger(ReadyTrigger);
         }
 
         private void OnProjectileDestroyed()
         {
-            _animator.SetTrigger("Waiting");
+            _animator.SetTrigger(WaitingTrigger);
             _shieldSubscription?.Dispose();
             foreach (var label in _labels)
             {

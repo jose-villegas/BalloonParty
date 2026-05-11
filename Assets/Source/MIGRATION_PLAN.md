@@ -116,6 +116,10 @@ Assets/Source/
   README.md              ← each feature folder contains a README.md (living documentation)
 
 Assets/Source_Old/   ← legacy Entitas, untouched until Phase 16
+
+Assets/Shaders/
+  SpriteShadow.shader   ← 2D drop-shadow shader (SpriteRenderer / particles / UI)
+  SpriteShine.shader
 ```
 
 > **Prefab naming:** New prefabs replace old ones directly — no suffixes (e.g. `BalloonPrefab`, not `BalloonPrefab_MVC`).
@@ -1023,6 +1027,130 @@ The scope-based approach ensures `ItemViewScope` is context-independent: any pre
 
 ---
 
+### Phase 15b.2 — Item Folder Reorganization
+
+**Goal:** Consolidate all item-related files into a single `Assets/Source/Item/` folder with a unified `BalloonParty.Item` namespace.
+
+Moved to `Assets/Source/Item/`:
+- `IItem.cs`, `IBalloonItem.cs`, `IItemView.cs`
+- `ItemDisplayService.cs`, `ItemViewScope.cs`
+- `ItemVisualView.cs`, `LaserItemRotation.cs`
+
+Updated namespaces from various locations to `BalloonParty.Item`. No behavioral changes.
+
+✅ **Checkpoint:** Project compiles. No namespace import errors.
+
+---
+
+### Phase 15b.3 — Visual Infrastructure: SpriteShadow Shader
+
+**Goal:** Provide a reusable 2D drop-shadow shader for sprite-based renderers, eliminating any need to control shadow appearance from code.
+
+`Assets/Shaders/SpriteShadow.shader` renders a two-layer composite (shadow behind sprite) in a single pass. Compatible with `SpriteRenderer`, particle system materials, and UI raw images.
+
+| Property | Default | Purpose |
+|---|---|---|
+| `_MainTex` | — | The sprite texture (alpha-keyed); assign in the material Inspector |
+| `_Color` | white | Per-renderer color tint passed via `IN.color` (same as Unity sprite tinting) |
+| `_ShadowColor` | (0.2, 0.2, 0.2, 0.75) | Shadow RGBA base tint; multiplied by renderer color so the shadow shares the object's color |
+| `_ShadowOffset` | (0.025, -0.025, 0, 0) | XY offset of the shadow UV relative to the sprite UV |
+| `_ShadowSoftness` | 0 | 9-tap box-blur radius on the shadow alpha mask |
+| `_SpriteScale` | 1.0 | Shrinks sprite UV inward from center — creates transparent margins so the shadow can bleed outside the quad |
+
+**Shadow UV formula:** `spriteUV = (uv - 0.5) / _SpriteScale + 0.5`, then `shadowUV = spriteUV - _ShadowOffset.xy`.
+
+**Color tinting:** Shadow RGB = `_ShadowColor.rgb * IN.color.rgb`. This means the shadow automatically picks up the per-renderer color (e.g. balloon color tint) without any code change.
+
+**Stencil / Z block:** The shader includes a UI stencil block and a `_ZTest` property, making it usable in Canvas overlays.
+
+**Common gotcha — `[PerRendererData]` on `_MainTex`:** Never add `[PerRendererData]` to `_MainTex`. That attribute tells Unity the texture is set by a `MaterialPropertyBlock` at runtime, which greys out the slot in the Inspector and prevents direct texture assignment on the material asset.
+
+**Architecture principle:** Shadow appearance is a material concern, not a code concern. `BalloonView` must not carry fields for shadow alpha, shadow renderer references, or intensity. Any future per-instance tinting (e.g. matching balloon color) is achieved automatically via the renderer's assigned color — no code changes needed.
+
+✅ **Checkpoint:** Balloon shadow renders via material. No shadow fields in `BalloonView`.
+
+---
+
+### Phase 15b.4 — BalloonView Shadow Cleanup & ItemDisplayService Decoupling
+
+**Goal:** Remove shadow state management from `BalloonView` and decouple `ItemDisplayService.Bind()` from any specific model type.
+
+#### BalloonView shadow cleanup
+
+`BalloonView` previously carried `_shadowRenderer`, `_shadowAlpha`, and `_shadowIntensity` `[SerializeField]` fields that drove shadow color and transparency from code. With the `SpriteShadow` shader in place, these fields and all shadow-syncing code were removed. The shadow is fully material-driven.
+
+#### ItemDisplayService API decoupling
+
+`ItemDisplayService.Bind()` changed from accepting an `IBalloonModel` to accepting individual reactive properties:
+
+```csharp
+// Before:
+void Bind(IBalloonModel model, IGameConfiguration config, int baseSortingOffset)
+
+// After:
+void Bind(
+    IReadOnlyReactiveProperty<ItemType> item,
+    IReadOnlyReactiveProperty<string> colorName,
+    IReadOnlyReactiveProperty<Vector2Int> slotIndex,
+    IGameConfiguration config,
+    int baseSortingOffset)
+```
+
+This removes `Item/`'s dependency on `Balloon/`. Any object that exposes these three reactive properties can host item display visuals without `ItemDisplayService` knowing what it is.
+
+`BalloonView.Bind()` passes these from the model: `_itemService?.Bind(model.Item, model.Color, model.SlotIndex, _config, _baseSortingLayer)`.
+
+✅ **Checkpoint:** Project compiles. Shadow renders via material. `ItemDisplayService` carries no `Balloon/` imports.
+
+---
+
+### Phase 15b.5 — Code Quality Audit
+
+**Goal:** Full audit of `Assets/Source/` against the Code Quality Constraints. All violations found and fixed in one pass.
+
+#### Findings and fixes (Round 1 - Phase 15b)
+
+| File | Violation | Resolution |
+|---|---|---|
+| `BalloonController.cs` | `public IBalloonModel Model` property — never accessed externally | Removed; `Start()` uses `_model` directly |
+| `BalloonSpawner.cs` | Readonly fields split into two declaration blocks (core + messaging) | Merged into one alphabetical block |
+| `ScoreController.cs` | Readonly fields grouped by concern (data vs. messaging) | Merged into one alphabetical block |
+| `ItemDisplayService.cs` | Readonly fields in declaration order, not alphabetical | Reordered alphabetically |
+| `GameConfiguration.cs` | `PowerUpConfiguration` null stub carried a comment referencing legacy systems | Comment removed; `[Obsolete]` attribute added |
+| `ItemSettings.cs` | Public fields on a `[Serializable]` data class | Changed to `[SerializeField] private` + `[FormerlySerializedAs]` + public read-only properties |
+
+#### Findings and fixes (Round 2 - Phase 15b.5 continuation)
+
+| File | Violation | Resolution |
+|---|---|---|
+| `ScoreController.cs` | `TotalScore` and `Level` exposed as `public ReactiveProperty<int>` — external code could call `.Value = x` | Changed to `private readonly ReactiveProperty<int>` backing fields; public surface exposes `IReadOnlyReactiveProperty<int>` |
+| `BalloonSpawner.cs` | `SpawnBalloon()` was `public BalloonController` — no external caller exists; return value never used | Changed to `private void` |
+| `BalloonView.cs` | `_animator.SetBool("IsStable", ...)` — magic string in animator call | Replaced with `private static readonly int IsStableParam = Animator.StringToHash("IsStable")` |
+| `ColorProgressBar.cs` | `SetBool("Completed", ...)` and `SetTrigger("TrailHit")` — magic strings | Replaced with `static readonly int` hashes |
+| `LevelUpPopUp.cs` | `SetTrigger("Appear")` and `SetTrigger("Hide")` — magic strings | Replaced with `static readonly int` hashes |
+| `ShieldCounterAnimation.cs` | `SetTrigger("Waiting")`, `SetTrigger("Ready")`, `SetTrigger("Gain")`, `SetTrigger("Lost")`, `ResetTrigger(...)` — magic strings | Replaced with `static readonly int` hashes |
+| `ScoreNotice.cs` | `SetTrigger("Score")` and `Play("ScoreDisappear")` — magic strings | Replaced with `static readonly int` hashes via `Animator.StringToHash` |
+| `ProjectileView.cs` | `LayerMask.NameToLayer("Balloons")` called on each `OnTriggerEnter2D` — string lookup per collision | Replaced with `private static readonly int BalloonsLayer = LayerMask.NameToLayer("Balloons")` |
+| `ProjectileView.cs` | `_model.Direction * _model.Speed * Time.fixedDeltaTime` — left-to-right evaluation does `Vector2 * float * float`; the second multiply is also Vector2 × float | Parenthesized to `_model.Direction * (_model.Speed * Time.fixedDeltaTime)` — scalar multiply first |
+| `ProjectileView.cs` | Unused `using BalloonParty.Balloon.Model` | Removed |
+| `BalloonBalancer.cs` | Unused `using BalloonParty.Balloon.View` (type accessed through `var` inference, import not needed) | Removed |
+| `BalloonRemoverCheat.cs` | `Material.SetInt("_SrcBlend", ...)` etc. — string-keyed shader property lookups | Replaced with `Shader.PropertyToID(...)` cached as `static readonly int` fields |
+| `PredictionTraceView.cs` | XML doc comments on `SetTrace` and `Clear` explaining what is already obvious from the method names | Removed both summaries |
+| `PredictionTraceCalculator.cs` | Class-level `/// <summary>` restating what the class name already says | Removed; retained param docs on `Calculate()` (non-obvious for a consumer) |
+| `BalloonBalancer.cs`, `BalloonSpawner.cs`, `SlotGrid.cs`, `BalloonRemoverCheat.cs` | Nested `for (col) for (row) { }` — outer `for` missing braces (guideline: braces always required) | Wrapped outer `for` bodies in `{ }` in all four files |
+
+#### Accepted exceptions (documented non-violations)
+
+- **`ProjectileView.cs`** — movement and collision logic lives in the view. Acknowledged trade-off; `ProjectileController/` folder is reserved for the eventual split (Phase 5 note).
+- **`ScoreController.cs`** — calls `Time.timeScale = 0f` from a plain C# class. This is a single game-state transition; wrapping it in a message/MonoBehaviour round-trip adds noise without benefit.
+- **`BalloonRemoverCheat.cs`** — `// perpendicular offset…` comment in `DrawThickPath`. Retained: debug rendering geometry is not part of the domain model, and a terse label on the math variable is justified.
+- **`BalloonRemoverCheat.cs`** / **`CheatConsoleView.cs`** — coordinate-system comments (`// Input.mousePosition has y=0 at bottom`, `// For 2D orthographic:…`). Retained: non-obvious Unity API behaviour worth documenting inline.
+- **`LevelUpPopUp.cs`** — `// Wait one frame so the pause from ScoreController takes effect`. Retained: explains timing dependency between two systems that is not obvious from the code.
+
+✅ **Checkpoint:** All violations fixed. No regressions. All edited files re-validated with no compile errors.
+
+---
+
 ### Phase 15c — Item Assignment (Check System)
 
 **Goal:** Port `BalloonsPowerUpCheckSystem` — after new balloon lines spawn, probabilistically assign an item to one of the newly-spawned balloons.
@@ -1397,6 +1525,12 @@ All changes to sorting layers, tags, physics layers, and other project settings 
 
 ---
 
+### Shadow Rendering: SpriteShadow Shader
+
+Balloon drop shadows are rendered via `Assets/Shaders/SpriteShadow.shader`, not via code. Shadow properties (`_ShadowColor`, `_ShadowOffset`, `_ShadowSoftness`) are set per-material in the Inspector. No code may carry shadow state or sync shadow colors to balloon colors — if per-balloon tinting becomes a design requirement, use `MaterialPropertyBlock` to override `_ShadowColor` on the specific renderer without creating material instances.
+
+---
+
 ### Score Trail Rendering Order
 
 `ScorePointTrail` uses world-space renderers (`SpriteRenderer` + `TrailRenderer`), but needs to render on top of the UI Canvas progress bars. Since the Canvas uses **Screen Space - Camera** mode on the `UI` sorting layer, the trail renderers are set to the `UI` sorting layer with `sortingOrder = 100` in `Awake()`. This places them above the Canvas content without requiring changes to the global sorting layer stack.
@@ -1678,6 +1812,9 @@ All async work in `Assets/Source/` must use **UniTask** instead of Unity corouti
 | 15b   | — Item Display on Balloons                | ✅ Done (Unity wiring pending) |
 | 15b.1 | — Helpers & Extensions                    | ✅ Done         |
 | 15b.2 | — Item folder reorganization (`Item/`)    | ✅ Done         |
+| 15b.3 | — Visual Infrastructure: SpriteShadow Shader | ✅ Done      |
+| 15b.4 | — BalloonView Shadow Cleanup & Service Decoupling | ✅ Done  |
+| 15b.5 | — Code Quality Audit                      | ✅ Done         |
 | 15c   | — Item Assignment (Check System)          | ⬜ Todo         |
 | 15d   | — Item Activation & Per-Type Effects      | ⬜ Todo         |
 | 15e   | — Item Cheats                             | ⬜ Todo         |

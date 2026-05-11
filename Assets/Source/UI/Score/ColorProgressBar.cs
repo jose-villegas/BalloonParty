@@ -17,6 +17,9 @@ namespace BalloonParty.UI.Score
 {
     public class ColorProgressBar : MonoBehaviour
     {
+        private static readonly int CompletedParam = Animator.StringToHash("Completed");
+        private static readonly int TrailHitTrigger = Animator.StringToHash("TrailHit");
+
         [Header("Visuals")] [SerializeField] private Graphic[] _graphicsToSetColor;
 
         [Header("Progress")] [SerializeField] private Slider _progressSlider;
@@ -76,7 +79,7 @@ namespace BalloonParty.UI.Score
             {
                 _completionParticleSystem.gameObject.SetActive(true);
                 _completionParticleSystem.Play();
-                _animator.SetBool("Completed", true);
+                _animator.SetBool(CompletedParam, true);
             }
         }
 
@@ -88,7 +91,7 @@ namespace BalloonParty.UI.Score
 
             _completionParticleSystem.Stop();
             _completionParticleSystem.gameObject.SetActive(false);
-            _animator.SetBool("Completed", false);
+            _animator.SetBool(CompletedParam, false);
         }
 
         private void SpawnNotice()
@@ -133,7 +136,7 @@ namespace BalloonParty.UI.Score
                 _config,
                 () =>
                 {
-                    _animator.SetTrigger("TrailHit");
+                    _animator.SetTrigger(TrailHitTrigger);
                     _poolManager.Return(_trailPoolKey, trail);
                 });
         }
