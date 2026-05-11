@@ -40,9 +40,10 @@ Balloon (root)         ← BalloonLifetimeScope
 ### Display flow
 
 1. A host (e.g. `BalloonView.Bind()`) calls `ItemDisplayService.Bind(model, config, sortingOffset)`
-2. `ItemDisplayService` subscribes to the model's `Item` and `SlotIndex` properties, exposing them as reactive properties
-3. Each `ItemVisualView` subscribes to `ItemDisplayService.ActiveItem` — when the active type matches its own `_type`, it activates (enables renderers, tints sprites); otherwise it deactivates
-4. Sorting order updates flow through `ItemDisplayService.SortingStartOrder` → `ItemVisualView.ApplySortingOrder()`
+2. `ItemDisplayService` subscribes to the model's `Item` property
+3. When the item type changes to non-None, `ItemDisplayService` looks up the `VisualPrefab` from `ItemSettings` in the config, instantiates it under its own transform, and calls `ItemVisualView.Activate(color)` on the instance
+4. When the item type changes again or `Unbind()` is called, the active visual instance is destroyed
+5. Sorting order updates flow through `ItemDisplayService` → `ItemVisualView.ApplySortingOrder()` on the active instance
 
 ## Item types
 

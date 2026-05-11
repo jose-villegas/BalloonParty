@@ -555,26 +555,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: GameStarter
       objectReference: {fileID: 0}
-    - target: {fileID: 7888538842032058290, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888538842032058292, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888538842032058292, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Mode
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888538842032058292, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_Mode
-      value: 1
-      objectReference: {fileID: 0}
     - target: {fileID: 7888538842032058292, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -585,31 +565,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Target
       value: 
       objectReference: {fileID: 7655411305707014745}
-    - target: {fileID: 7888538842032058292, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[3].m_CallState
-      value: 2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888538842032058292, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
-      value: SetTrigger
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888538842032058292, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
-      value: Hide
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888538842032058292, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_StringArgument
-      value: Appear
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888538842032058292, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_Arguments.m_ObjectArgumentAssemblyTypeName
-      value: UnityEngine.Object, UnityEngine
-      objectReference: {fileID: 0}
     - target: {fileID: 7888538842032058293, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
         type: 3}
       propertyPath: m_Pivot.x
@@ -619,11 +574,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Pivot.y
       value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888538842032058293, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7888538842032058293, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
         type: 3}
@@ -714,26 +664,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888538843054127158, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888538843054127158, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888538843054127158, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0.7071068
-      objectReference: {fileID: 0}
-    - target: {fileID: 7888538843054127158, guid: f6f4beaf46c76a94f8022e0e5dda8b69,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 90
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

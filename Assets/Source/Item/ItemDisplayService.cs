@@ -11,14 +11,11 @@ namespace BalloonParty.Item
 {
     public class ItemDisplayService : MonoBehaviour
     {
-        private readonly ReactiveProperty<Color> _activeColor = new(default);
-        private readonly ReactiveProperty<ItemType> _activeItem = new(ItemType.None);
         private readonly CompositeDisposable _disposables = new();
-        private readonly ReactiveProperty<int> _sortingStartOrder = new(0);
 
-        public IReadOnlyReactiveProperty<ItemType> ActiveItem => _activeItem;
-        public IReadOnlyReactiveProperty<Color> ActiveColor => _activeColor;
-        public IReadOnlyReactiveProperty<int> SortingStartOrder => _sortingStartOrder;
+        private IGameConfiguration _config;
+        private int _baseSortingOffset;
+        private GameObject _activeInstance;
 
         public void Bind(
             IReadOnlyReactiveProperty<ItemType> item,
@@ -29,29 +26,78 @@ namespace BalloonParty.Item
         {
             Unbind();
 
+            _config = config;
+            _baseSortingOffset = baseSortingOffset;
+
             item
-                .Subscribe(type =>
-                {
-                    _activeItem.Value = type;
-                    _activeColor.Value = type != ItemType.None
-                        ? config.BalloonColor(colorName.Value)
-                        : default;
-                })
+                .Subscribe(type => OnItemChanged(type, colorName.Value))
                 .AddTo(_disposables);
 
             slotIndex
-                .Subscribe(slot =>
-                {
-                    var baseOrder = SortingHelper.SlotBaseSortingOrder(slot, config.SlotsSize, baseSortingOffset);
-                    _sortingStartOrder.Value = baseOrder + baseSortingOffset;
-                })
+                .Subscribe(slot => ApplySorting(slot))
                 .AddTo(_disposables);
         }
 
         public void Unbind()
         {
             _disposables.Clear();
-            _activeItem.Value = ItemType.None;
+            DestroyActiveVisual();
+        }
+
+        private void OnItemChanged(ItemType type, string colorName)
+        {
+            DestroyActiveVisual();
+
+            if (type == ItemType.None || _config == null)
+            {
+                return;
+            }
+
+            var settings = _config.ItemConfiguration[type];
+            if (settings.VisualPrefab == null)
+            {
+                Debug.LogWarning($"[ItemDisplayService] VisualPrefab is null for {type} — assign it in ItemConfiguration.");
+                return;
+            }
+
+            _activeInstance = Instantiate(settings.VisualPrefab, transform);
+            _activeInstance.transform.localPosition = Vector3.zero;
+
+            var color = _config.BalloonColor(colorName);
+            var view = _activeInstance.GetComponent<ItemVisualView>();
+            if (view != null)
+            {
+                view.Activate(color);
+                Debug.Log($"[ItemDisplayService] Spawned {type} visual on {transform.parent?.name ?? "root"}");
+            }
+            else
+            {
+                Debug.LogWarning($"[ItemDisplayService] VisualPrefab for {type} has no ItemVisualView component.");
+            }
+        }
+
+        private void ApplySorting(Vector2Int slot)
+        {
+            if (_activeInstance == null || _config == null)
+            {
+                return;
+            }
+
+            var baseOrder = SortingHelper.SlotBaseSortingOrder(slot, _config.SlotsSize, _baseSortingOffset);
+            var view = _activeInstance.GetComponent<ItemVisualView>();
+            if (view != null)
+            {
+                view.ApplySortingOrder(baseOrder + _baseSortingOffset);
+            }
+        }
+
+        private void DestroyActiveVisual()
+        {
+            if (_activeInstance != null)
+            {
+                Destroy(_activeInstance);
+                _activeInstance = null;
+            }
         }
     }
 }

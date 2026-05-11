@@ -52,35 +52,29 @@ MonoBehaviour:
   _initialPredictionLength: 1
   _predictionTraceMaxBounces: 2
   _predictionTraceMaxSteps: 15
-  _powerUpConfiguration:
-    _powerUps:
-    - Type: 0
-      TurnCheckEvery: 1
-      Weight: 100
-      MaximumAllowed: 999
-      NudgeDistance: 0
-      NudgeDuration: 0
-    - Type: 1
-      TurnCheckEvery: 1
-      Weight: 600
-      MaximumAllowed: 5
-      NudgeDistance: 0
-      NudgeDuration: 0
-    - Type: 2
-      TurnCheckEvery: 2
-      Weight: 800
-      MaximumAllowed: 3
-      NudgeDistance: 0.3
-      NudgeDuration: 0.4
-    - Type: 3
-      TurnCheckEvery: 3
-      Weight: 1200
-      MaximumAllowed: 3
-      NudgeDistance: 0.2
-      NudgeDuration: 0.2
-    - Type: 4
-      TurnCheckEvery: 4
-      Weight: 1000
-      MaximumAllowed: 3
-      NudgeDistance: 0.3
-      NudgeDuration: 0.5
+  _itemConfiguration:
+    _items:
+    - _type: 2
+      _turnCheckEvery: 1
+      _weight: 30
+      _maximumAllowed: 1
+      _visualPrefab: {fileID: 2023896797455516263, guid: 0909fb1419fa47148a1cc0cd0ca72e9f,
+        type: 3}
+    - _type: 3
+      _turnCheckEvery: 1
+      _weight: 30
+      _maximumAllowed: 1
+      _visualPrefab: {fileID: 2023896797455516263, guid: ea0a89bfc43787544a6501da72afd299,
+        type: 3}
+    - _type: 4
+      _turnCheckEvery: 1
+      _weight: 30
+      _maximumAllowed: 1
+      _visualPrefab: {fileID: 2023896797455516263, guid: dd84523fdbc2f8c4497d487f89fa32c8,
+        type: 3}
+    - _type: 1
+      _turnCheckEvery: 1
+      _weight: 30
+      _maximumAllowed: 1
+      _visualPrefab: {fileID: 7402881001233824042, guid: ecdbdd2040aac4c7baea4111845f0501,
+        type: 3}

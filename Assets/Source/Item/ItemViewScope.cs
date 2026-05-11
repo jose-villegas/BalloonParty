@@ -27,14 +27,6 @@ namespace BalloonParty.Item
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<ItemDisplayService>();
-
-            builder.RegisterBuildCallback(resolver =>
-            {
-                foreach (var view in GetComponentsInChildren<ItemVisualView>(true))
-                {
-                    resolver.Inject(view);
-                }
-            });
         }
     }
 }

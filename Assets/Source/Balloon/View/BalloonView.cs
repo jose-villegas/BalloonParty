@@ -45,7 +45,7 @@ namespace BalloonParty.Balloon.View
         private void Awake()
         {
             TweenTracker = GetComponent<TweenTracker>();
-            _itemService = GetComponent<ItemDisplayService>();
+            _itemService = GetComponentInChildren<ItemDisplayService>();
         }
 
         public void OnSpawned()
@@ -87,7 +87,14 @@ namespace BalloonParty.Balloon.View
 
             _nudgeSubscriber.Subscribe(OnNudge).AddTo(_bindDisposables);
 
-            _itemService?.Bind(model.Item, model.Color, model.SlotIndex, _config, _baseSortingLayer);
+            if (_itemService != null)
+            {
+                _itemService.Bind(model.Item, model.Color, model.SlotIndex, _config, _baseSortingLayer);
+            }
+            else
+            {
+                Debug.LogWarning($"[BalloonView] _itemService is null on {gameObject.name} — ItemDisplayService not found in children.");
+            }
         }
 
         public void PlayPopEffect(Color color)

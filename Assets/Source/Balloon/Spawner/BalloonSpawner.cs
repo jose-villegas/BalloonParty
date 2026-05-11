@@ -170,6 +170,7 @@ namespace BalloonParty.Balloon.Spawner
         private void OnProjectileDestroyed()
         {
             _turnCount++;
+            Debug.Log($"[BalloonSpawner] OnProjectileDestroyed, turnCount={_turnCount}");
             if (_turnCount <= 1)
             {
                 return;
@@ -194,6 +195,7 @@ namespace BalloonParty.Balloon.Spawner
 
         private void PublishItemCheck()
         {
+            Debug.Log($"[BalloonSpawner] PublishItemCheck, newlySpawned={_newlySpawnedBalloons.Count}, turnCount={_turnCount}");
             if (_newlySpawnedBalloons.Count > 0)
             {
                 _itemCheckPublisher.Publish(

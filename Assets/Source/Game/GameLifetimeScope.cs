@@ -56,7 +56,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
             builder.RegisterEntryPoint<ItemAssigner>();
 
-            builder.RegisterComponentInHierarchy<GameStartButton>();
+            //builder.RegisterComponentInHierarchy<GameStartButton>();
 
             builder.RegisterEntryPoint<OrthogonalSizeCameraController>();
 

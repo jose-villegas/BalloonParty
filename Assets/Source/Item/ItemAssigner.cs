@@ -34,17 +34,26 @@ namespace BalloonParty.Item
         public void Start()
         {
             _checkSubscriber.Subscribe(OnItemCheck);
+            Debug.Log("[ItemAssigner] Subscribed to ItemCheckMessage.");
         }
 
         private void OnItemCheck(ItemCheckMessage msg)
         {
             if (msg.NewBalloons == null || msg.NewBalloons.Count == 0)
             {
+                Debug.Log("[ItemAssigner] No new balloons in message, skipping.");
                 return;
             }
 
             var turns = msg.TurnCount;
             var items = _config.ItemConfiguration.Items;
+            Debug.Log($"[ItemAssigner] Turn {turns}, checking {items.Count} item types for {msg.NewBalloons.Count} new balloons.");
+
+            foreach (var item in items)
+            {
+                var passesFreq = item.TurnCheckEvery > 0 && turns % item.TurnCheckEvery == 0;
+                Debug.Log($"[ItemAssigner]   {item.Type}: TurnCheckEvery={item.TurnCheckEvery}, turn%check={turns % Mathf.Max(1, item.TurnCheckEvery)}, passes={passesFreq}");
+            }
 
             // Filter by turn frequency
             var available = items
@@ -61,8 +70,11 @@ namespace BalloonParty.Item
 
             if (candidates.Length == 0)
             {
+                Debug.Log($"[ItemAssigner] No candidates passed turn/cap filters at turn {turns}.");
                 return;
             }
+
+            Debug.Log($"[ItemAssigner] {candidates.Length} candidates after filtering: {string.Join(", ", candidates.Select(c => c.Type))}");
 
             // Weighted random pick
             var sumOfProbabilities = candidates.Sum(x => x.Weight);
@@ -78,6 +90,11 @@ namespace BalloonParty.Item
                         var indexOf = Random.Range(0, msg.NewBalloons.Count);
                         var balloon = msg.NewBalloons[indexOf];
                         balloon.Item.Value = candidate.Type;
+                        Debug.Log($"[ItemAssigner] Assigned {candidate.Type} to balloon at slot {balloon.SlotIndex.Value}");
+                    }
+                    else
+                    {
+                        Debug.Log("[ItemAssigner] Picked ItemType.None, no assignment.");
                     }
 
                     break;

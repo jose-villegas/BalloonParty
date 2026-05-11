@@ -76,7 +76,7 @@ Material:
     - _ShadowSoftness: 0.03
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SpriteScale: 0.7
+    - _SpriteScale: 0.75
     - _SrcBlend: 1
     - _Stencil: 0
     - _StencilComp: 8
