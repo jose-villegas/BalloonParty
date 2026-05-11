@@ -8,6 +8,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Item;
 using BalloonParty.Item.Bomb;
+using BalloonParty.Item.Laser;
 using BalloonParty.Item.Shield;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
@@ -45,6 +46,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
             builder.RegisterMessageBroker<ItemCheckMessage>(options);
             builder.RegisterMessageBroker<ItemActivatedMessage>(options);
+            builder.RegisterMessageBroker<ItemRotationCapturedMessage>(options);
 
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
             builder.RegisterInstance(_itemConfiguration);
@@ -64,6 +66,7 @@ namespace BalloonParty.Game
 
             builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 
             //builder.RegisterComponentInHierarchy<GameStartButton>();
 

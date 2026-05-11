@@ -1275,15 +1275,23 @@ Message carrying the balloon model — published after the item effect finishes,
 | `BalloonSpawner.cs` | Injects + passes `ISubscriber<ItemActivatedMessage>` to `BalloonController` |
 | `BalloonNudgeMessage.cs` | Added `float? NudgeDistance`, `float? NudgeDuration` optional overrides |
 | `BalloonView.OnNudge()` | Reads nudge overrides from message, falls back to config |
-| `ItemSettings.cs` | Added `ParticleSystem ActivationVfxPrefab` |
-| `PoolChannel.cs` | `Return()` uses `SetParent(..., false)` to prevent scale drift |
+| `ItemSettings.cs` | Added `ActivationVfxPrefab` (now `GameObject` for both particle + animator VFX) |
+| `PoolChannel.cs` | `Return()` uses `SetParent(..., false)` to prevent scale drift; added `Peek()` for reading pooled item state |
 | `GameLifetimeScope.cs` | Registers `ItemActivatedMessage`, `ItemActivator`, `ShieldItemHandler` |
 
-##### Files still to modify (shared — before Bomb/Laser)
+##### Architectural changes applied during Bomb/Laser
 
-| File | Change |
+| Change | Detail |
 |---|---|
-| `ItemSettings.cs` | Add `NudgeDuration` and `NudgeDistance` fields |
+| `ItemConfiguration` → standalone `ScriptableObject` | Extracted from `GameConfiguration`; registered independently in `GameLifetimeScope`; all consumers inject `ItemConfiguration` directly |
+| `VfxPoolChannel` unified for Particle + Animator | Changed from `ParticleSystem` to `GameObject` prefab; `PoolableVfx` auto-detects `ParticleSystem` or `Animator`; single `ActivationVfxPrefab` field on `ItemSettings` serves both |
+| `PoolableVfx.cs` | New unified poolable VFX component; `Play(position, color, onComplete)` + `Play(position, rotation, color, onComplete)` overloads |
+| `ItemActivator` yields before activation | `await UniTask.Yield()` ensures all synchronous `BalloonHitMessage` subscribers (e.g. `BalloonController` capturing rotation) finish before item handlers run |
+| `ItemRotationCapturedMessage` | Lightweight message published by `BalloonController` with the frozen laser rotation; subscribed by `LaserItemHandler` |
+
+##### Files still to modify (shared — before Lightning)
+
+_None — all shared infrastructure is in place._
 
 ##### Registration (shared) ✅
 
@@ -1327,118 +1335,89 @@ builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces(
 
 ---
 
-#### Phase 15d.2 — Bomb Item
+#### Phase 15d.2 — Bomb Item ✅
 
-**Goal:** Port the area-of-effect explosion — spawns a `BombRange` visual and destroys all balloons within a radius.
+**Goal:** Port the area-of-effect explosion — destroys all balloons within a radius, nudges all surviving balloons with exponential distance falloff, and spawns a VFX.
 
-##### Legacy behaviour (`BombPowerUpController` + `BombSphereCastHitController`)
+##### Implementation (completed)
 
-1. `BombPowerUpController.Activate()` creates an entity with `Asset("BombRange")` at the balloon's position and a collider reference
-2. The `AssetInstancingSystem` instantiates the `BombRange` prefab from Resources
-3. `BombSphereCastHitController` (MonoBehaviour on `BombRange` prefab) runs on `OnViewLinked`:
-   - `Physics2D.OverlapCircleAll(position, _radius, LayerMask.GetMask("Balloons"))` — finds balloons in blast radius
-   - For each hit collider → resolves the balloon entity → sets `isBalloonHit = true`, `isBalloonPowerUpHit = true`
-   - Applies per-item nudge: `ReplaceBalloonNudge(settings.NudgeDuration, settings.NudgeDistance)`
-   - `_radius` is a `[SerializeField]` on the prefab (not from config)
+`BombItemHandler` (`Item/Bomb/BombItemHandler.cs`):
+- Implements `IBalloonItem`
+- `Type` → `ItemType.Bomb`
+- `Setup(balloon, worldPosition)` — stores balloon model and world position
+- `Activate()`:
+  - `Physics2D.OverlapCircleAll` at balloon position with `settings.BombRadius` on `"Balloons"` layer
+  - For each hit collider → `GetComponentInParent<BalloonView>()` → skips the bomb balloon itself → publishes `BalloonHitMessage`
+  - **Nudge with exponential falloff**: iterates all balloons in `SlotGrid`, computes world-space distance, applies `nudgeDistance * e^(-falloff * d)` per balloon, publishes `BalloonNudgeMessage` (skips negligible nudges < 0.001)
+  - Spawns activation VFX via `PoolManager.GetOrRegister` + `VfxPoolChannel`
+- Returns `UniTask.CompletedTask` (synchronous)
 
-##### Rendering analysis
+##### Config fields added to `ItemSettings`
 
-- **`BombRange` prefab** (`Assets/Resources/BombRange.prefab`):
-  - Has an **Animator** controller (`Animation/Balloon/Powers/BombRange.controller`) — drives an expanding circle animation
-  - The animation plays once on instantiation, then the prefab is destroyed
-  - Visually it's a circle SpriteRenderer that scales up rapidly (explosion ring effect)
-  - The physics query (`OverlapCircleAll`) runs immediately at spawn — the visual animation is purely cosmetic, applied after the hit detection
-- **Lifecycle**: instantiate → physics query runs immediately → animation plays → auto-destroy after animation length
-- **No particle system** — purely Animator + SpriteRenderer
-
-##### Pooling strategy
-
-- **`PoolChannel<BombRangeView>`** keyed as `"BombRange"` in `PoolManager`
-- `BombRangeView` (`MonoBehaviour` on the prefab) implements `IPoolable`:
-  - `OnSpawned()` — resets Animator to initial state, sets position, triggers animation
-  - `OnDespawned()` — hides the GameObject
-- **Auto-return** — `BombRangeView` uses an `AnimationEvent` or a timed callback (`UniTask.Delay` matching animation length) to invoke the return callback after the animation completes
-- **Alternative (simpler)**: skip pooling for now — these fire rarely (once per item balloon hit). Use `Instantiate` + `Destroy(gameObject, animationLength)` and mark as a pooling candidate for Phase 15d.5 optimization pass. **Decision: TBD during implementation.**
-
-##### Implementation
-
-| File | Location | Responsibility |
+| Field | Default | Purpose |
 |---|---|---|
-| `BombItemHandler.cs` | `Item/Bomb/` | `IBalloonItem` — `OverlapCircleAll` at balloon position; publishes `BalloonHitMessage` per hit balloon (with item nudge overrides); spawns `BombRange` visual |
+| `_bombRadius` | `1.25` | `OverlapCircleAll` blast radius (matches legacy prefab) |
+| `_bombNudgeDistance` | `0.15` | Maximum nudge distance at epicenter |
+| `_bombNudgeFalloff` | `1.5` | Exponential decay rate for distance falloff |
 
-##### Open questions
-
-- What is the `_radius` value on the existing `BombRange` prefab? Needs to be read from the prefab's `[SerializeField]` or moved to `ItemSettings`.
-- Should the handler receive `_radius` via config or via the prefab? Leaning toward config (`ItemSettings`) for consistency.
-
-##### Registration
+##### Registration ✅
 
 ```csharp
 builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 ```
 
-✅ **Checkpoint:** Hit a bomb balloon → `OverlapCircleAll` finds nearby balloons → each is destroyed with item nudge values → `BombRange` circle animation plays at balloon position → score increments for each destroyed balloon.
+✅ **Checkpoint:** Hit a bomb balloon → `OverlapCircleAll` finds nearby balloons → each is destroyed → all surviving balloons nudge outward with exponential falloff → BombRange VFX plays at balloon position → score increments for each destroyed balloon.
 
 ---
 
-#### Phase 15d.3 — Laser Item
+#### Phase 15d.3 — Laser Item ✅
 
-**Goal:** Port the cross-shaped raycast destruction — spawns a `LaserRange` visual and destroys all balloons along 4 axes.
+**Goal:** Port the cross-shaped raycast destruction — stops rotation, captures the laser angle, casts 4 beams, destroys hit balloons, and spawns a `LaserRange` visual at the captured angle.
 
-##### Legacy behaviour (`LaserPowerUpController` + `LaserRaycastHitController`)
+##### Implementation (completed)
 
-1. `LaserPowerUpController.Activate()`:
-   - Stops rotation (`_rotationSpeed = 0f`)
-   - Creates entity with `Asset("LaserRange")` at the **rotating body's** position and **rotation**
-   - The laser's current rotation angle determines the cross-shaped hit direction
-2. `LaserRaycastHitController` (MonoBehaviour on `LaserRange` prefab) runs on `OnViewLinked`:
-   - 4x `Physics2D.CircleCastAll` in `transform.right`, `-transform.right`, `transform.up`, `-transform.up`
-   - `_circleCastRadius` and `_raycastDistance` are `[SerializeField]` on the prefab
-   - For each hit collider → resolves balloon → `isBalloonHit = true`, `isBalloonPowerUpHit = true`
-   - Applies per-item nudge: `ReplaceBalloonNudge(settings.NudgeDuration, settings.NudgeDistance)`
-   - `Destroy(gameObject, _destroyAfter)` — delayed destroy
+`LaserItemHandler` (`Item/Laser/LaserItemHandler.cs`):
+- Implements `IBalloonItem` + `IStartable`
+- `Type` → `ItemType.Laser`
+- Subscribes to `ItemRotationCapturedMessage` in `Start()` to receive the frozen rotation
+- `Setup(balloon, worldPosition)` — stores balloon model and world position
+- `Activate()`:
+  - 4× `Physics2D.CircleCastAll` in rotated cross directions (right, left, up, down)
+  - Uses `HashSet<IBalloonModel>` to deduplicate hits from overlapping axes
+  - For each hit → `GetComponentInParent<BalloonView>()` → skips self → publishes `BalloonHitMessage`
+  - Spawns `LaserRange` VFX with rotation via `PoolableVfx.Play(position, rotation, color, onComplete)`
+- Returns `UniTask.CompletedTask` (synchronous)
 
-##### Rendering analysis
+##### Rotation capture flow
 
-- **`LaserRange` prefab** (`Assets/Resources/LaserRange.prefab`):
-  - Has an **Animator** controller (`Animation/Balloon/Powers/LaserRange.controller`) — drives a cross-shaped beam animation
-  - The cross visual is rotated to match the laser item's rotation at activation time
-  - Visually: 4 beams extending outward from center, scaling or fading out over `_destroyAfter` seconds
-  - Purely cosmetic — physics queries run immediately, animation is just feedback
-- **Lifecycle**: instantiate at position + rotation → physics queries run immediately → animation plays → `Destroy(gameObject, _destroyAfter)`
-- **Position comes from the rotating body**, not the balloon root — this means the visual center is the laser sub-prefab's child transform, which may be slightly offset
+1. `BalloonController` receives `BalloonHitMessage` for a laser balloon
+2. Before `Hide()`: finds `LaserItemRotation` via `GetComponentInChildren`, calls `Stop()`, reads `transform.rotation`
+3. Publishes `ItemRotationCapturedMessage` with the frozen rotation
+4. `ItemActivator.ActivateAsync` yields one frame (`await UniTask.Yield()`) to ensure the message arrives before `Setup`/`Activate`
+5. `LaserItemHandler.Start()` subscriber stores the rotation → used in `Activate()`
 
-##### Pooling strategy
+##### Key supporting changes
 
-- Same as Bomb: rare activation, Animator-driven visual, short lifecycle
-- **`PoolChannel<LaserRangeView>`** keyed as `"LaserRange"` — or skip pooling initially with `Instantiate`/`Destroy`
-- If pooled: `LaserRangeView` implements `IPoolable`; `OnSpawned()` resets Animator, sets position + rotation; auto-return after `_destroyAfter` seconds via `UniTask.Delay`
+- **`LaserItemRotation.cs`**: Added `Stop()` method (sets `_stopped` flag); `OnEnable` resets `_angle`, `_stopped`, and `localRotation` for clean pool reuse; uses `localRotation` instead of world `rotation`
+- **`ItemVisualView.OnSpawned()`**: Added `localRotation = Quaternion.identity` reset
+- **`ItemActivator.ActivateAsync()`**: Added `await UniTask.Yield()` before `Setup`/`Activate` to ensure all synchronous `BalloonHitMessage` subscribers finish first
+- **`ItemRotationCapturedMessage`** (`Shared/Messages/`): New lightweight message carrying `Quaternion Rotation`
 
-##### Interaction with `LaserItemRotation`
+##### Config fields added to `ItemSettings`
 
-The existing `LaserItemRotation.cs` (already in `Item/`) handles the idle rotation of the laser visual on the balloon. On activation:
-- `LaserItemRotation` must stop (legacy set `_rotationSpeed = 0f`)
-- The current `_angle` at activation time determines the `LaserRange` prefab's rotation
-- **Approach**: `LaserItemHandler` reads the rotation from `LaserItemRotation` (via the balloon's `ItemVisualView` or a direct component lookup on the balloon view's item container) before spawning the range prefab
-
-##### Implementation
-
-| File | Location | Responsibility |
+| Field | Default | Purpose |
 |---|---|---|
-| `LaserItemHandler.cs` | `Item/Laser/` | `IBalloonItem` — reads laser rotation from balloon; 4x `CircleCastAll`; publishes `BalloonHitMessage` per hit (with item nudge overrides); spawns `LaserRange` visual at the rotated position |
+| `_laserRaycastDistance` | `20` | How far each beam travels |
+| `_laserCircleCastRadius` | `0.065` | Width of each beam's circle cast |
 
-##### Open questions
-
-- How does the handler access the laser's current rotation? Options: (a) `ItemActivator` passes the balloon's `Transform` or the item visual's `Transform` to the handler; (b) `IBalloonItem.Activate()` receives the balloon's `BalloonView` for component access; (c) `BalloonHitMessage` carries the item visual's world rotation. Leaning toward (b) — the view is already available in the hit pipeline.
-- `_circleCastRadius` and `_raycastDistance` — move to `ItemSettings` or keep on the prefab? Config is more consistent.
-
-##### Registration
+##### Registration ✅
 
 ```csharp
 builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+builder.RegisterMessageBroker<ItemRotationCapturedMessage>(options);
 ```
 
-✅ **Checkpoint:** Hit a laser balloon → rotation stops → cross-shaped `CircleCastAll` finds balloons along 4 axes → each is destroyed with item nudge values → `LaserRange` cross animation plays at the rotated angle → score increments for each.
+✅ **Checkpoint:** Hit a laser balloon → rotation stops → cross-shaped `CircleCastAll` finds balloons along 4 rotated axes → each is destroyed → `LaserRange` cross animation plays at the captured angle → score increments for each.
 
 ---
 
@@ -1549,11 +1528,15 @@ builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfac
 | `ItemActivator.cs` | `Item/` | ✅ Done |
 | `ItemVisualPoolChannel.cs` | `Item/` | ✅ Done |
 | `ShieldItemHandler.cs` | `Item/Shield/` | ✅ Done |
-| `BombItemHandler.cs` | `Item/Bomb/` | ⬜ Pending |
-| `LaserItemHandler.cs` | `Item/Laser/` | ⬜ Pending |
+| `BombItemHandler.cs` | `Item/Bomb/` | ✅ Done |
+| `LaserItemHandler.cs` | `Item/Laser/` | ✅ Done |
 | `LightningItemHandler.cs` | `Item/Lightning/` | ⬜ Pending |
 | `ChainLightningView.cs` | `Item/Lightning/` | ⬜ Pending |
 | `ItemActivatedMessage.cs` | `Shared/Messages/` | ✅ Done |
+| `ItemRotationCapturedMessage.cs` | `Shared/Messages/` | ✅ Done |
+| `PoolableVfx.cs` | `Shared/Pool/` | ✅ Done |
+| `ItemConfiguration.cs` | `Configuration/` | ✅ Done (ScriptableObject) |
+| `ItemConfiguration.asset` | `Configuration/` | ✅ Done |
 
 #### Summary — files modified across all 15d subphases
 
@@ -1562,25 +1545,33 @@ builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfac
 | `IItem.cs` | `Activate()` → `UniTask`; `Type` property | ✅ Done |
 | `IBalloonItem.cs` | `Setup(IBalloonModel, Vector3)`; removed duplicate `Type` | ✅ Done |
 | `IItemView.cs` | `Type` removed (moved to `IItem`) | ✅ Done |
-| `ItemVisualView.cs` | Implements `IPoolable`; `OnSpawned` resets transform | ✅ Done |
-| `ItemDisplayService.cs` | Pool-based visual lifecycle; `PoolManager` param in `Bind()` | ✅ Done |
-| `ItemSettings.cs` | Added `ActivationVfxPrefab`; **`NudgeDuration`/`NudgeDistance` still needed** | ⬜ Partial |
+| `ItemVisualView.cs` | Implements `IPoolable`; `OnSpawned` resets transform + rotation | ✅ Done |
+| `ItemDisplayService.cs` | Pool-based visual lifecycle; `PoolManager` + `ItemConfiguration` params in `Bind()` | ✅ Done |
+| `ItemSettings.cs` | `ActivationVfxPrefab` (GameObject), `BombRadius`/`BombNudgeDistance`/`BombNudgeFalloff`, `LaserRaycastDistance`/`LaserCircleCastRadius` | ✅ Done |
+| `LaserItemRotation.cs` | `Stop()` method, `_stopped` flag, `OnEnable` resets rotation, uses `localRotation` | ✅ Done |
 | `BalloonNudgeMessage.cs` | Added `float? NudgeDistance`, `float? NudgeDuration` overrides | ✅ Done |
-| `BalloonView.cs` | `Collider2D` field; `Hide()`; `OnSpawned` re-enables renderers+collider; passes `PoolManager` to item service | ✅ Done |
-| `BalloonController.cs` | Defers pool return; calls `Hide()` for item balloons | ✅ Done |
-| `BalloonSpawner.cs` | Injects + forwards `ISubscriber<ItemActivatedMessage>` | ✅ Done |
-| `PoolChannel.cs` | `SetParent(..., false)` on return | ✅ Done |
-| `GameLifetimeScope.cs` | Registers `ItemActivatedMessage`, `ItemActivator`, `ShieldItemHandler` | ✅ Done |
+| `BalloonView.cs` | `Collider2D` field; `Hide()`; `OnSpawned` re-enables renderers+collider; passes `PoolManager` + `ItemConfiguration` to item service | ✅ Done |
+| `BalloonController.cs` | Defers pool return; calls `Hide()` for item balloons; captures laser rotation + publishes `ItemRotationCapturedMessage` | ✅ Done |
+| `BalloonSpawner.cs` | Injects + forwards `ISubscriber<ItemActivatedMessage>`, `IPublisher<ItemRotationCapturedMessage>` | ✅ Done |
+| `VfxPoolChannel.cs` | Now takes `GameObject` prefab; creates `PoolableVfx` instances | ✅ Done |
+| `PoolChannel.cs` | `SetParent(..., false)` on return; added `Peek()` | ✅ Done |
+| `PoolManager.cs` | Added `TryGetChannel()` | ✅ Done |
+| `ItemActivator.cs` | `await UniTask.Yield()` before `Setup`/`Activate` | ✅ Done |
+| `GameConfiguration.cs` | Removed `ItemConfiguration` field (extracted to standalone SO) | ✅ Done |
+| `IGameConfiguration.cs` | Removed `ItemConfiguration` property | ✅ Done |
+| `GameLifetimeScope.cs` | Registers `ItemActivatedMessage`, `ItemRotationCapturedMessage`, `ItemConfiguration`, `ItemActivator`, `ShieldItemHandler`, `BombItemHandler`, `LaserItemHandler` | ✅ Done |
 
 #### Full registration (all items)
 
 ```csharp
 builder.RegisterMessageBroker<ItemActivatedMessage>(options);
+builder.RegisterMessageBroker<ItemRotationCapturedMessage>(options);
 builder.RegisterEntryPoint<ItemActivator>();
-builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
-builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();     // Phase 15d.2
-builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();    // Phase 15d.3
-builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces(); // Phase 15d.4
+builder.RegisterInstance(_itemConfiguration);
+builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();    // ✅ Phase 15d.1
+builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();      // ✅ Phase 15d.2
+builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();     // ✅ Phase 15d.3
+builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces(); // ⬜ Phase 15d.4
 ```
 
 ✅ **Phase 15d complete checkpoint:** All four items activate correctly — Shield grants shield, Bomb area-destroys, Laser cross-destroys, Lightning chain-destroys same-color. All effects render and clean up properly. Pooling is in place for all item visuals and activation effects.

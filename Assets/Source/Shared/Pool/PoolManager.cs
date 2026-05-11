@@ -94,5 +94,22 @@ namespace BalloonParty.Shared
             throw new InvalidOperationException(
                 $"Pool channel '{key}' not registered. Call Register() first.");
         }
+
+        /// <summary>
+        ///     Try to access the underlying channel without throwing.
+        ///     Returns false if the key is not registered.
+        /// </summary>
+        public bool TryGetChannel<TItem>(string key, out PoolChannel<TItem> channel)
+            where TItem : Component, IPoolable
+        {
+            if (_channels.TryGetValue(key, out var raw))
+            {
+                channel = (PoolChannel<TItem>)raw;
+                return true;
+            }
+
+            channel = null;
+            return false;
+        }
     }
 }

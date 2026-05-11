@@ -30,6 +30,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IPublisher<ItemCheckMessage> _itemCheckPublisher;
+        private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly LifetimeScope _parentScope;
         private readonly PoolManager _poolManager;
@@ -51,7 +52,8 @@ namespace BalloonParty.Balloon.Spawner
             ISubscriber<BalloonHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
-            IPublisher<ItemCheckMessage> itemCheckPublisher)
+            IPublisher<ItemCheckMessage> itemCheckPublisher,
+            IPublisher<ItemRotationCapturedMessage> rotationPublisher)
         {
             _grid = grid;
             _settings = settings;
@@ -64,6 +66,7 @@ namespace BalloonParty.Balloon.Spawner
             _itemActivatedSubscriber = itemActivatedSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
+            _rotationPublisher = rotationPublisher;
         }
 
         public void Start()
@@ -94,6 +97,7 @@ namespace BalloonParty.Balloon.Spawner
                 view,
                 _hitSubscriber,
                 _itemActivatedSubscriber,
+                _rotationPublisher,
                 _grid,
                 _config,
                 _poolManager);

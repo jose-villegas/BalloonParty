@@ -1995,7 +1995,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 414bf5e95bf84ec4becc7353e01f8877, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Items.LaserItemRotation
-  _rotationSpeed: 0.25
+  _rotationSpeed: 45
 --- !u!1 &6107985816931030234
 GameObject:
   m_ObjectHideFlags: 0

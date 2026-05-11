@@ -56,6 +56,7 @@ namespace BalloonParty.Item
             ReturnActiveVisual();
         }
 
+
         private void ApplySorting(Vector2Int slot)
         {
             if (_activeView == null || _config == null)

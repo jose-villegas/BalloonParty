@@ -46,6 +46,7 @@ namespace BalloonParty.Item
         {
             transform.localScale = Vector3.one;
             transform.localPosition = Vector3.zero;
+            transform.localRotation = Quaternion.identity;
         }
 
         private void SetVisible(bool visible)

@@ -127,10 +127,11 @@ namespace BalloonParty.Balloon.View
             _itemService?.Unbind();
         }
 
+
         public void PlayPopEffect(Color color)
         {
             var key = _popVfxPrefab.name;
-            var vfx = _poolManager.GetOrRegister(key, () => new VfxPoolChannel(_popVfxPrefab));
+            var vfx = _poolManager.GetOrRegister(key, () => new VfxPoolChannel(_popVfxPrefab.gameObject));
             vfx.Play(transform.position, color, () => _poolManager.Return(key, vfx));
         }
 

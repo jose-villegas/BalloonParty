@@ -63,6 +63,17 @@ namespace BalloonParty.Shared
             _available.Push(item);
         }
 
+        /// <summary>
+        ///     Returns the most recently returned item without removing it from the pool
+        ///     or activating it. Useful for reading state that was preserved on the
+        ///     component before it was returned (e.g. rotation snapshots).
+        ///     Returns null if no items are available.
+        /// </summary>
+        public TItem Peek()
+        {
+            return _available.Count > 0 ? _available.Peek() : null;
+        }
+
         protected abstract TItem Create();
     }
 }

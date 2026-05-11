@@ -20,9 +20,35 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Laser.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Laser/LaserItemHandler.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Laser/LaserItemHandler.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemRotationCapturedMessage.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemRotationCapturedMessage.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableVfx.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableVfx.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/LaserIdle.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/LaserIdle.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Configuration/ItemConfiguration.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Configuration/ItemConfiguration.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/PU_Laser.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/PU_Laser.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/LaserRange.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LaserRange.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/LaserRange.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LaserRange.prefab.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/LightningRange.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LightningRange.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Resources/LightningRange.prefab.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LightningRange.prefab.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Bomb/BombItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Bomb/BombItemHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemActivator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemActivator.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/LaserItemRotation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/LaserItemRotation.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/MIGRATION_PLAN.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/MIGRATION_PLAN.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileShieldView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileShieldView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolChannel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/VfxPoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/VfxPoolChannel.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -116,7 +142,7 @@
             <option name="modeId" value="Agent" />
             <option name="modelType" value="builtin_family" />
             <option name="modelValue" value="claude-opus-4.6" />
-            <option name="status" value="Completed" />
+            <option name="status" value="Processing" />
             <option name="targetType" value="LOCAL" />
           </session>
         </option>
@@ -190,6 +216,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Source/Item/ItemActivator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Item/ItemAssigner.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Item/ItemVisualPoolChannel.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Source/Item/Laser/LaserItemHandler.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Prediction/PredictionTraceCalculator.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Prediction/PredictionTraceView.cs" root0="FORCE_HIGHLIGHTING" />
@@ -208,10 +235,12 @@
     <setting file="file://$PROJECT_DIR$/Assets/Source/Shared/Messages/BalloonScoredMessage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemActivatedMessage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemCheckMessage.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemRotationCapturedMessage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Shared/Messages/ProjectileDestroyedMessage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Shared/Messages/ProjectileLoadedMessage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Shared/Messages/ScoreLevelUpMessage.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Shared/Messages/SpawnBalloonLineMessage.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableVfx.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Shared/SortingHelper.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Shared/TweenTracker.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Slots/SlotGrid.cs" root0="FORCE_HIGHLIGHTING" />

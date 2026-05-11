@@ -19,6 +19,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
+        private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
         private readonly IWriteableBalloonModel _model;
         private readonly PoolManager _poolManager;
         private readonly BalloonView _view;
@@ -31,6 +32,7 @@ namespace BalloonParty.Balloon.Controller
             BalloonView view,
             ISubscriber<BalloonHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
+            IPublisher<ItemRotationCapturedMessage> rotationPublisher,
             SlotGrid grid,
             IGameConfiguration config,
             PoolManager poolManager)
@@ -39,6 +41,7 @@ namespace BalloonParty.Balloon.Controller
             _view = view;
             _hitSubscriber = hitSubscriber;
             _itemActivatedSubscriber = itemActivatedSubscriber;
+            _rotationPublisher = rotationPublisher;
             _grid = grid;
             _config = config;
             _poolManager = poolManager;
@@ -67,6 +70,15 @@ namespace BalloonParty.Balloon.Controller
                 }
                 else
                 {
+                    // Snapshot item visual rotation before hiding — the laser handler
+                    // reads this from the model after the visual is gone.
+                    var laserRotation = _view.GetComponentInChildren<Item.LaserItemRotation>(true);
+                    if (laserRotation != null)
+                    {
+                        laserRotation.Stop();
+                        _rotationPublisher.Publish(new ItemRotationCapturedMessage(laserRotation.transform.rotation));
+                    }
+
                     // Hide immediately — item effect plays world-space; balloon visual
                     // and collider must not persist while we wait for activation to finish.
                     _view.Hide();

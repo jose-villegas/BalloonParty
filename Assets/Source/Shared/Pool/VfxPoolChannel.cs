@@ -6,23 +6,33 @@ using UnityEngine;
 
 namespace BalloonParty.Shared
 {
-    public class VfxPoolChannel : PoolChannel<PoolableParticle>
+    public class VfxPoolChannel : PoolChannel<PoolableVfx>
     {
-        private readonly ParticleSystem _prefab;
+        private readonly GameObject _prefab;
 
-        public VfxPoolChannel(ParticleSystem prefab)
+        public VfxPoolChannel(GameObject prefab)
         {
             _prefab = prefab;
         }
 
-        protected override PoolableParticle Create()
+        protected override PoolableVfx Create()
         {
             var instance = Object.Instantiate(_prefab, Container);
-            instance.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
 
-            var poolable = instance.gameObject.AddComponent<PoolableParticle>();
+            // Stop any auto-playing particle system
+            var particle = instance.GetComponent<ParticleSystem>();
+            if (particle != null)
+            {
+                particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
 
-            instance.gameObject.SetActive(false);
+            var poolable = instance.GetComponent<PoolableVfx>();
+            if (poolable == null)
+            {
+                poolable = instance.AddComponent<PoolableVfx>();
+            }
+
+            instance.SetActive(false);
             return poolable;
         }
     }

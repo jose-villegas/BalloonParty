@@ -53,6 +53,10 @@ namespace BalloonParty.Item
 
         private async UniTaskVoid ActivateAsync(IBalloonItem handler, BalloonHitMessage msg)
         {
+            // Yield one frame so all synchronous BalloonHitMessage subscribers
+            // (e.g. BalloonController capturing item rotation) finish first.
+            await UniTask.Yield();
+
             handler.Setup(msg.Balloon, msg.WorldPosition);
             await handler.Activate();
             _itemActivatedPublisher.Publish(new ItemActivatedMessage(msg.Balloon));
