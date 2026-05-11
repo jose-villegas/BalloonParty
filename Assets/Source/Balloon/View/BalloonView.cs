@@ -21,15 +21,9 @@ namespace BalloonParty.Balloon.View
         [Header("References")] [SerializeField]
         private SpriteRenderer _renderer;
 
-        [SerializeField] private SpriteRenderer _shadowRenderer;
         [SerializeField] private Animator _animator;
         [SerializeField] private Renderer[] _spriteLayerRenderers;
         [SerializeField] private ParticleSystem _popVfxPrefab;
-
-        [Header("Shadow")] [SerializeField] [Range(0f, 1f)]
-        private float _shadowAlpha;
-
-        [SerializeField] [Range(0f, 5f)] private float _shadowIntensity;
 
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
@@ -146,15 +140,6 @@ namespace BalloonParty.Balloon.View
             if (_renderer != null)
             {
                 _renderer.color = color;
-            }
-
-            if (_shadowRenderer != null)
-            {
-                _shadowRenderer.color = new Color(
-                    color.r * _shadowIntensity,
-                    color.g * _shadowIntensity,
-                    color.b * _shadowIntensity,
-                    _shadowAlpha);
             }
         }
 

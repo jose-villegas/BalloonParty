@@ -20,46 +20,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/README.md.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Shaders/SpriteShadow.shader" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Shaders/SpriteShadow.shader.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/BalloonLifetimeScope.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonNudgeHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonNudgeHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/IBalloonItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/IBalloonItem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/IBalloonItem.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/IBalloonItem.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/IItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/IItem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/IItem.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/IItem.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/IItemView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/IItemView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/IItemView.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/IItemView.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/ItemDisplayService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/ItemDisplayService.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/ItemViewScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemViewScope.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/ItemViewScope.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemViewScope.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/ItemVisualView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/ItemVisualView.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/LaserItemRotation.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/LaserItemRotation.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Items/LaserItemRotation.cs.meta" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/LaserItemRotation.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Model/IBalloonModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Model/IBalloonModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Model/IWriteableBalloonModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Model/IWriteableBalloonModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawnerSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawnerSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/ItemConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/ItemConfiguration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/ItemType.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/ItemType.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/MIGRATION_PLAN.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/MIGRATION_PLAN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/Model/IProjectileModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/Model/IProjectileModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/Model/IWriteableProjectileModel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/Model/IWriteableProjectileModel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Messages/BalloonNudgeMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/BalloonNudgeMessage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/SortingHelper.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/SortingHelper.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ColorProgressBar.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ColorProgressBar.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreNoticePoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreNoticePoolChannel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScorePointTrail.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScorePointTrail.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_BalloonPop.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/PSMaterial_BalloonPop.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Balloon/Balloon.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Balloon/Balloon.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,7 +91,7 @@
             <option name="id" value="9ed02d7b-dcd7-4104-a943-7911bf11638f" />
             <option name="modeId" value="Agent" />
             <option name="modelType" value="builtin_family" />
-            <option name="modelValue" value="claude-opus-4.6" />
+            <option name="modelValue" value="claude-sonnet-4.6" />
             <option name="status" value="Completed" />
             <option name="targetType" value="LOCAL" />
           </session>
@@ -170,16 +136,10 @@
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/12e4ef6f719f4224b1f95b70422644a8a6e400/5f/b2d02134/AnimatorStateMachine.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$APPLICATION_CONFIG_DIR$/resharper-host/DecompilerCache/decompiler/f7e6b41d60594934bad30fa8d4151a76212a00/67/b7883088/MonoBehaviour.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Prefabs/Projectile/Projectile.prefab" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Shaders/SpriteShadow.shader" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonBalancer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonController.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonNudgeHandler.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Items/IBalloonItem.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Items/IItem.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Items/IItemView.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Items/ItemDisplayService.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Items/ItemViewScope.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Items/ItemVisualView.cs" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Items/LaserItemRotation.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Model/BalloonModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Model/IBalloonModel.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/Model/IWriteableBalloonModel.cs" root0="FORCE_HIGHLIGHTING" />
@@ -333,7 +293,7 @@
     "RunOnceActivity.typescript.service.memoryLimit.init": "true",
     "cidr.known.project.marker": "true",
     "codeWithMe.voiceChat.enabledByDefault": "false",
-    "git-widget-placeholder": "Migration",
+    "git-widget-placeholder": "master",
     "nodejs_package_manager_path": "npm",
     "settings.editor.selected.configurable": "preferences.sourceCode.C#",
     "vue.rearranger.settings.migration": "true"
@@ -373,15 +333,13 @@
       </option>
       <method v="2" />
     </configuration>
-    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false" ignored-value-for-modified-check="94750">
+    <configuration name="Attach to Unity Editor" type="UNITY_DEBUG_RUN_CONFIGURATION" factoryName="Unity Debug" show_console_on_std_err="false" show_console_on_std_out="false" port="50000" address="localhost" useMixedMode="false">
       <option name="allowRunningInParallel" value="false" />
       <option name="listenPortForConnections" value="false" />
-      <option name="pid" value="94750" />
+      <option name="pid" />
       <option name="projectPathOnTarget" />
       <option name="runtimes">
-        <list>
-          <MonoRuntime />
-        </list>
+        <list />
       </option>
       <option name="selectedOptions">
         <list />
