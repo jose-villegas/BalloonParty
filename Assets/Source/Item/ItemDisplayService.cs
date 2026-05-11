@@ -13,13 +13,13 @@ namespace BalloonParty.Item
     {
         private readonly CompositeDisposable _disposables = new();
 
-        private IGameConfiguration _config;
-        private int _baseSortingOffset;
-        private int _balloonRendererCount;
-        private ItemVisualView _activeView;
-        private IReadOnlyReactiveProperty<Vector2Int> _slotIndex;
-        private PoolManager _poolManager;
         private string _activePoolKey;
+        private ItemVisualView _activeView;
+        private int _balloonRendererCount;
+        private int _baseSortingOffset;
+        private IGameConfiguration _config;
+        private PoolManager _poolManager;
+        private IReadOnlyReactiveProperty<Vector2Int> _slotIndex;
 
         public void Bind(
             IReadOnlyReactiveProperty<ItemType> item,
@@ -53,6 +53,17 @@ namespace BalloonParty.Item
             ReturnActiveVisual();
         }
 
+        private void ApplySorting(Vector2Int slot)
+        {
+            if (_activeView == null || _config == null)
+            {
+                return;
+            }
+
+            var baseOrder = SortingHelper.SlotBaseSortingOrder(slot, _config.SlotsSize, _baseSortingOffset);
+            _activeView.ApplySortingOrder(baseOrder + _balloonRendererCount);
+        }
+
         private void OnItemChanged(ItemType type, string colorName)
         {
             ReturnActiveVisual();
@@ -81,16 +92,6 @@ namespace BalloonParty.Item
             ApplySorting(_slotIndex.Value);
         }
 
-        private void ApplySorting(Vector2Int slot)
-        {
-            if (_activeView == null || _config == null)
-            {
-                return;
-            }
-
-            var baseOrder = SortingHelper.SlotBaseSortingOrder(slot, _config.SlotsSize, _baseSortingOffset);
-            _activeView.ApplySortingOrder(baseOrder + _balloonRendererCount);
-        }
 
         private void ReturnActiveVisual()
         {

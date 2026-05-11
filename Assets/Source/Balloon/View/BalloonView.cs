@@ -55,10 +55,14 @@ namespace BalloonParty.Balloon.View
             transform.position = Vector3.one * -1000f;
 
             foreach (var r in _spriteLayerRenderers)
+            {
                 r.enabled = true;
+            }
 
             if (_collider != null)
+            {
                 _collider.enabled = true;
+            }
         }
 
         public void OnDespawned()
@@ -68,11 +72,6 @@ namespace BalloonParty.Balloon.View
             _bindDisposables.Clear();
             _itemService?.Unbind();
             Model = null;
-        }
-
-        public void RegisterDisposeOnDespawn(IDisposable disposable)
-        {
-            _bindDisposables.Add(disposable);
         }
 
         public void Bind(IBalloonModel model)
@@ -96,8 +95,13 @@ namespace BalloonParty.Balloon.View
 
             if (_itemService != null)
             {
-                _itemService.Bind(model.Item, model.Color, model.SlotIndex, _config, _baseSortingLayer,
-                    _spriteLayerRenderers.Length, _poolManager);
+                _itemService.Bind(model.Item,
+                    model.Color,
+                    model.SlotIndex,
+                    _config,
+                    _baseSortingLayer,
+                    _spriteLayerRenderers.Length,
+                    _poolManager);
             }
         }
 
@@ -108,10 +112,14 @@ namespace BalloonParty.Balloon.View
         public void Hide()
         {
             foreach (var r in _spriteLayerRenderers)
+            {
                 r.enabled = false;
+            }
 
             if (_collider != null)
+            {
                 _collider.enabled = false;
+            }
 
             _itemService?.Unbind();
         }
@@ -123,27 +131,33 @@ namespace BalloonParty.Balloon.View
             vfx.Play(transform.position, color, () => _poolManager.Return(key, vfx));
         }
 
-        private void OnNudge(BalloonNudgeMessage msg)
+        public void RegisterDisposeOnDespawn(IDisposable disposable)
         {
-            if (msg.Balloon != Model)
-            {
-                return;
-            }
-
-            var writeable = _grid.At(Model.SlotIndex.Value);
-            var slotPos = _grid.IndexToWorldPosition(Model.SlotIndex.Value);
-            var direction = slotPos - msg.HitSlotPosition;
-
-            var nudgeDistance = msg.NudgeDistance ?? _config.NudgeDistance;
-            var nudgeDuration = msg.NudgeDuration ?? _config.NudgeDuration;
-
-            writeable.IsStable.Value = false;
-            Nudge(slotPosition: slotPos, direction: direction, nudgeDistance: nudgeDistance,
-                nudgeDuration: nudgeDuration, onComplete: () => writeable.IsStable.Value = true);
+            _bindDisposables.Add(disposable);
         }
 
-        private void Nudge(Vector3 slotPosition, Vector3 direction, float nudgeDistance,
-            float nudgeDuration, Action onComplete)
+        private void ApplyColor(string colorName)
+        {
+            var color = _config.BalloonColor(colorName);
+
+            if (_renderer != null)
+            {
+                _renderer.color = color;
+            }
+        }
+
+        private void ApplySortingOrder(Vector2Int slotIndex)
+        {
+            var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);
+            SortingHelper.ApplySortingOrder(_spriteLayerRenderers, baseOrder);
+        }
+
+        private void Nudge(
+            Vector3 slotPosition,
+            Vector3 direction,
+            float nudgeDistance,
+            float nudgeDuration,
+            Action onComplete)
         {
             // Standalone spawn tweens would compete with the nudge sequence
             var currentScale = transform.localScale;
@@ -164,20 +178,26 @@ namespace BalloonParty.Balloon.View
             }
         }
 
-        private void ApplyColor(string colorName)
+        private void OnNudge(BalloonNudgeMessage msg)
         {
-            var color = _config.BalloonColor(colorName);
-
-            if (_renderer != null)
+            if (msg.Balloon != Model)
             {
-                _renderer.color = color;
+                return;
             }
-        }
 
-        private void ApplySortingOrder(Vector2Int slotIndex)
-        {
-            var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);
-            SortingHelper.ApplySortingOrder(_spriteLayerRenderers, baseOrder);
+            var writeable = _grid.At(Model.SlotIndex.Value);
+            var slotPos = _grid.IndexToWorldPosition(Model.SlotIndex.Value);
+            var direction = slotPos - msg.HitSlotPosition;
+
+            var nudgeDistance = msg.NudgeDistance ?? _config.NudgeDistance;
+            var nudgeDuration = msg.NudgeDuration ?? _config.NudgeDuration;
+
+            writeable.IsStable.Value = false;
+            Nudge(slotPos,
+                direction,
+                nudgeDistance,
+                nudgeDuration,
+                () => writeable.IsStable.Value = true);
         }
     }
 }

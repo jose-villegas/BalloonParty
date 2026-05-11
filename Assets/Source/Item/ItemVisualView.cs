@@ -17,17 +17,6 @@ namespace BalloonParty.Item
 
         public ItemType Type => _type;
 
-        public void OnSpawned()
-        {
-            transform.localScale = Vector3.one;
-            transform.localPosition = Vector3.zero;
-        }
-
-        public void OnDespawned()
-        {
-            Deactivate();
-        }
-
         public void Activate(Color balloonColor)
         {
             SetVisible(true);
@@ -38,14 +27,25 @@ namespace BalloonParty.Item
             }
         }
 
+        public void ApplySortingOrder(int startOrder)
+        {
+            SortingHelper.ApplySortingOrder(_sortingRenderers, startOrder);
+        }
+
         public void Deactivate()
         {
             SetVisible(false);
         }
 
-        public void ApplySortingOrder(int startOrder)
+        public void OnDespawned()
         {
-            SortingHelper.ApplySortingOrder(_sortingRenderers, startOrder);
+            Deactivate();
+        }
+
+        public void OnSpawned()
+        {
+            transform.localScale = Vector3.one;
+            transform.localPosition = Vector3.zero;
         }
 
         private void SetVisible(bool visible)

@@ -7,10 +7,6 @@ using UnityEngine;
 
 namespace BalloonParty.Item
 {
-    /// <summary>
-    ///     One pool channel per item visual prefab. Keyed by prefab name in <see cref="PoolManager" />.
-    ///     Instances are parented to the balloon's Display child when in use, then returned here on release.
-    /// </summary>
     public class ItemVisualPoolChannel : PoolChannel<ItemVisualView>
     {
         private readonly GameObject _prefab;
@@ -29,4 +25,3 @@ namespace BalloonParty.Item
         }
     }
 }
-

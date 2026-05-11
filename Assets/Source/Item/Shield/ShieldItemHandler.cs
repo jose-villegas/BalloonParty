@@ -15,20 +15,17 @@ using VContainer.Unity;
 
 namespace BalloonParty.Item.Shield
 {
-    /// <summary>
-    ///     Handles activation of <see cref="ItemType.Shield" /> balloons.
-    ///     Increments <see cref="IWriteableProjectileModel.ShieldsRemaining" /> on the active projectile
-    ///     and plays the <c>PSVFX_ShieldGainPU</c> particle at the balloon's world position.
-    /// </summary>
     public class ShieldItemHandler : IBalloonItem, IStartable
     {
         private readonly IGameConfiguration _config;
-        private readonly PoolManager _poolManager;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+        private readonly PoolManager _poolManager;
 
         private IWriteableProjectileModel _activeProjectile;
         private IBalloonModel _balloon;
         private Vector3 _worldPosition;
+
+        public ItemType Type => ItemType.Shield;
 
         [Inject]
         public ShieldItemHandler(
@@ -41,21 +38,9 @@ namespace BalloonParty.Item.Shield
             _loadedSubscriber = loadedSubscriber;
         }
 
-        // ---- IStartable ----
-
         public void Start()
         {
             _loadedSubscriber.Subscribe(msg => _activeProjectile = (IWriteableProjectileModel)msg.Model);
-        }
-
-        // ---- IBalloonItem ----
-
-        public ItemType Type => ItemType.Shield;
-
-        public void Setup(IBalloonModel balloon, Vector3 worldPosition)
-        {
-            _balloon = balloon;
-            _worldPosition = worldPosition;
         }
 
         public UniTask Activate()
@@ -69,7 +54,11 @@ namespace BalloonParty.Item.Shield
             return UniTask.CompletedTask;
         }
 
-        // ---- Private ----
+        public void Setup(IBalloonModel balloon, Vector3 worldPosition)
+        {
+            _balloon = balloon;
+            _worldPosition = worldPosition;
+        }
 
         private void PlayVfx()
         {
@@ -87,4 +76,3 @@ namespace BalloonParty.Item.Shield
         }
     }
 }
-

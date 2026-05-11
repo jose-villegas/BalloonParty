@@ -13,12 +13,6 @@ using VContainer.Unity;
 
 namespace BalloonParty.Item
 {
-    /// <summary>
-    ///     Central orchestrator for item balloon activations. Listens for <see cref="BalloonHitMessage" />
-    ///     filtered to balloons that carry an item. Delegates to the matching <see cref="IBalloonItem" />
-    ///     handler, awaits the effect, then publishes <see cref="ItemActivatedMessage" /> so the balloon
-    ///     controller can return the balloon to pool.
-    /// </summary>
     public class ItemActivator : IStartable
     {
         private readonly IEnumerable<IBalloonItem> _handlers;
@@ -65,4 +59,3 @@ namespace BalloonParty.Item
         }
     }
 }
-

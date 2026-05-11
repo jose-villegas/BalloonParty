@@ -90,7 +90,13 @@ namespace BalloonParty.Balloon.Spawner
             model.Color.Value = colorName;
             model.SlotIndex.Value = slot;
 
-            var controller = new BalloonController(model, view, _hitSubscriber, _itemActivatedSubscriber, _grid, _config, _poolManager);
+            var controller = new BalloonController(model,
+                view,
+                _hitSubscriber,
+                _itemActivatedSubscriber,
+                _grid,
+                _config,
+                _poolManager);
             controller.Start();
 
             _grid.Place(model, view, slot);
