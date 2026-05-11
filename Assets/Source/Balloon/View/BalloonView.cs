@@ -91,10 +91,6 @@ namespace BalloonParty.Balloon.View
             {
                 _itemService.Bind(model.Item, model.Color, model.SlotIndex, _config, _baseSortingLayer, _spriteLayerRenderers.Length);
             }
-            else
-            {
-                Debug.LogWarning($"[BalloonView] _itemService is null on {gameObject.name} — ItemDisplayService not found in children.");
-            }
         }
 
         public void PlayPopEffect(Color color)

@@ -61,7 +61,6 @@ namespace BalloonParty.Item
             var settings = _config.ItemConfiguration[type];
             if (settings.VisualPrefab == null)
             {
-                Debug.LogWarning($"[ItemDisplayService] VisualPrefab is null for {type} — assign it in ItemConfiguration.");
                 return;
             }
 
@@ -74,11 +73,6 @@ namespace BalloonParty.Item
             {
                 view.Activate(color);
                 ApplySorting(_slotIndex.Value);
-                Debug.Log($"[ItemDisplayService] Spawned {type} visual on {transform.parent?.name ?? "root"}");
-            }
-            else
-            {
-                Debug.LogWarning($"[ItemDisplayService] VisualPrefab for {type} has no ItemVisualView component.");
             }
         }
 

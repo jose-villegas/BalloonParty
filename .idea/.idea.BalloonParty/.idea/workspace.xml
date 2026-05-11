@@ -21,22 +21,10 @@
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/BalloonMaterial.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/BalloonMaterial.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Materials/ProjectileMaterial.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/ProjectileMaterial.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Balloon/Balloon.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Balloon/Balloon.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Resources/GameStarter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Resources/GameStarter.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawner.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemAssigner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemAssigner.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemViewScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemViewScope.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +108,7 @@
             <option name="modeId" value="Agent" />
             <option name="modelType" value="builtin_family" />
             <option name="modelValue" value="claude-opus-4.6" />
-            <option name="status" value="Processing" />
+            <option name="status" value="Completed" />
             <option name="targetType" value="LOCAL" />
           </session>
         </option>
@@ -407,7 +395,7 @@
       <workItem from="1778417946445" duration="2440000" />
       <workItem from="1778420701633" duration="1520000" />
       <workItem from="1778423335281" duration="27131000" />
-      <workItem from="1778501347659" duration="4364000" />
+      <workItem from="1778501347659" duration="5144000" />
     </task>
     <task id="LOCAL-00001" summary="Update">
       <created>1604380601698</created>
