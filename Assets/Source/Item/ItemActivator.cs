@@ -24,19 +24,16 @@ namespace BalloonParty.Item
         private readonly IEnumerable<IBalloonItem> _handlers;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly IPublisher<ItemActivatedMessage> _itemActivatedPublisher;
-        private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
 
         [Inject]
         public ItemActivator(
             IEnumerable<IBalloonItem> handlers,
             ISubscriber<BalloonHitMessage> hitSubscriber,
-            IPublisher<ItemActivatedMessage> itemActivatedPublisher,
-            IPublisher<BalanceBalloonsMessage> balancePublisher)
+            IPublisher<ItemActivatedMessage> itemActivatedPublisher)
         {
             _handlers = handlers;
             _hitSubscriber = hitSubscriber;
             _itemActivatedPublisher = itemActivatedPublisher;
-            _balancePublisher = balancePublisher;
         }
 
         public void Start()
@@ -65,7 +62,6 @@ namespace BalloonParty.Item
             handler.Setup(msg.Balloon, msg.WorldPosition);
             await handler.Activate();
             _itemActivatedPublisher.Publish(new ItemActivatedMessage(msg.Balloon));
-            _balancePublisher.Publish(new BalanceBalloonsMessage());
         }
     }
 }

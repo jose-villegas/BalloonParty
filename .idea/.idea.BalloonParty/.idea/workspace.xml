@@ -20,38 +20,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/Game/GameLifetimeScope.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/Game/GameLifetimeScope.prefab.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/Game/Main Camera.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/Game/Main Camera.prefab.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/Game/SlotGrid.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/Game/SlotGrid.prefab.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/Game/UICanvas.prefab" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/Game/UICanvas.prefab.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemActivator.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemActivator.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualPoolChannel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualPoolChannel.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Shield.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemActivatedMessage.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ItemActivatedMessage.cs.meta" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/copilotDiffState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/copilotDiffState.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Balloon/Balloon.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Balloon/Balloon.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonController.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawner.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/IBalloonItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/IBalloonItem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/IItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/IItem.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemActivator.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemActivator.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -135,7 +104,7 @@
             <option name="modeId" value="Agent" />
             <option name="modelType" value="builtin_family" />
             <option name="modelValue" value="claude-sonnet-4.6" />
-            <option name="status" value="Completed" />
+            <option name="status" value="Processing" />
             <option name="targetType" value="LOCAL" />
           </session>
         </option>
@@ -334,23 +303,23 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Attach to Unity Editor.Attach to Unity Editor.executor&quot;: &quot;Debug&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Attach to Unity Editor.Attach to Unity Editor.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
+    "cidr.known.project.marker": "true",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "git-widget-placeholder": "power__up",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="Attach to Unity Editor.Attach to Unity Editor">
     <configuration name="Start Unity" type="RunUnityExe" factoryName="Unity Executable">
       <option name="EXE_PATH" value="/Applications/Unity/Hub/Editor/6000.3.15f1/Unity.app/Contents/MacOS/Unity" />
