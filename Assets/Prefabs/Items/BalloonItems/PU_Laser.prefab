@@ -741,7 +741,7 @@ GameObject:
   - component: {fileID: 5337200703228449610}
   - component: {fileID: 7322574212741565716}
   m_Layer: 10
-  m_Name: PULaser
+  m_Name: PU_Laser
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
