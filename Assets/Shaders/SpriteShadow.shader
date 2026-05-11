@@ -17,7 +17,7 @@ Shader "BalloonParty/SpriteShadow"
         _Color ("Tint", Color) = (1, 1, 1, 1)
 
         [Header(Shadow)]
-        _ShadowColor    ("Color",    Color)             = (0, 0, 0, 0.75)
+        _ShadowColor    ("Color",    Color)             = (0.2, 0.2, 0.2, 0.75)
         _ShadowOffset   ("Offset",   Vector)            = (0.025, -0.025, 0, 0)
         _ShadowSoftness ("Softness", Range(0.0, 0.1))   = 0.01
 
@@ -174,13 +174,15 @@ Shader "BalloonParty/SpriteShadow"
                 // Porter-Duff "over": composite shadow under sprite
                 //   A_out   = A_sprite + A_shadow * (1 - A_sprite)
                 //   RGB_out = (RGB_sprite * A_sprite + RGB_shadow * A_shadow * (1 - A_sprite)) / A_out
+                // Shadow RGB is tinted by the renderer's vertex color, mirroring how the sprite is tinted.
+                fixed3 shadowRGB = _ShadowColor.rgb * IN.color.rgb;
                 fixed spriteA   = sprite.a;
                 fixed combinedA = spriteA + shadowAlpha * (1.0 - spriteA);
 
                 fixed4 result;
                 result.a   = combinedA;
                 result.rgb = combinedA > 0.0001
-                    ? (sprite.rgb * spriteA + _ShadowColor.rgb * shadowAlpha * (1.0 - spriteA)) / combinedA
+                    ? (sprite.rgb * spriteA + shadowRGB * shadowAlpha * (1.0 - spriteA)) / combinedA
                     : sprite.rgb;
 
                 #ifdef UNITY_UI_CLIP_RECT

@@ -20,11 +20,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Shaders/SpriteShadow.shader" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Shaders/SpriteShadow.shader.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/copilotDiffState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/copilotDiffState.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/BalloonMaterial.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/BalloonMaterial.mat" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_BalloonPop.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/PSMaterial_BalloonPop.mat" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Balloon/Balloon.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Balloon/Balloon.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/TrailMaterial_Projectile.mat" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Materials/TrailMaterial_Projectile.mat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Projectile/Projectile.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Projectile/Projectile.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Score/VFX/ScoreTrail.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Score/VFX/ScoreTrail.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Shaders/SpriteShadow.shader" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Shaders/SpriteShadow.shader" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
