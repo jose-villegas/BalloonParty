@@ -10,13 +10,9 @@ namespace BalloonParty.Item
 {
     public class ItemVisualView : MonoBehaviour, IItemView
     {
-        [SerializeField] private ItemType _type;
         [SerializeField] private SpriteRenderer[] _spritesToSetColor;
         [SerializeField] private Renderer[] _sortingRenderers;
         [SerializeField] [Range(0f, 1f)] private float _spritesAlpha;
-
-        public ItemType Type => _type;
-
 
         public void Activate(Color balloonColor)
         {

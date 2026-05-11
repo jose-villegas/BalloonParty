@@ -20,12 +20,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/copilotDiffState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/copilotDiffState.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/MIGRATION_PLAN.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/MIGRATION_PLAN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Messages/BalloonNudgeMessage.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/BalloonNudgeMessage.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/IBalloonItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/IBalloonItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/IItem.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/IItem.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/IItemView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/IItemView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
