@@ -19,6 +19,8 @@ namespace BalloonParty.Configuration
 
         [Header("Bomb")]
         [SerializeField] private float _bombRadius = 1.25f;
+        [SerializeField] private float _bombNudgeDistance = 0.15f;
+        [SerializeField] private float _bombNudgeFalloff = 1.5f;
 
         public ItemType Type => _type;
         public int TurnCheckEvery => _turnCheckEvery;
@@ -27,5 +29,7 @@ namespace BalloonParty.Configuration
         public GameObject VisualPrefab => _visualPrefab;
         public ParticleSystem ActivationVfxPrefab => _activationVfxPrefab;
         public float BombRadius => _bombRadius;
+        public float BombNudgeDistance => _bombNudgeDistance;
+        public float BombNudgeFalloff => _bombNudgeFalloff;
     }
 }
