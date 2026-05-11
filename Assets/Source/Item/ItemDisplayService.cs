@@ -15,19 +15,24 @@ namespace BalloonParty.Item
 
         private IGameConfiguration _config;
         private int _baseSortingOffset;
+        private int _balloonRendererCount;
         private GameObject _activeInstance;
+        private IReadOnlyReactiveProperty<Vector2Int> _slotIndex;
 
         public void Bind(
             IReadOnlyReactiveProperty<ItemType> item,
             IReadOnlyReactiveProperty<string> colorName,
             IReadOnlyReactiveProperty<Vector2Int> slotIndex,
             IGameConfiguration config,
-            int baseSortingOffset)
+            int baseSortingOffset,
+            int balloonRendererCount)
         {
             Unbind();
 
             _config = config;
             _baseSortingOffset = baseSortingOffset;
+            _balloonRendererCount = balloonRendererCount;
+            _slotIndex = slotIndex;
 
             item
                 .Subscribe(type => OnItemChanged(type, colorName.Value))
@@ -68,6 +73,7 @@ namespace BalloonParty.Item
             if (view != null)
             {
                 view.Activate(color);
+                ApplySorting(_slotIndex.Value);
                 Debug.Log($"[ItemDisplayService] Spawned {type} visual on {transform.parent?.name ?? "root"}");
             }
             else
@@ -87,7 +93,7 @@ namespace BalloonParty.Item
             var view = _activeInstance.GetComponent<ItemVisualView>();
             if (view != null)
             {
-                view.ApplySortingOrder(baseOrder + _baseSortingOffset);
+                view.ApplySortingOrder(baseOrder + _balloonRendererCount);
             }
         }
 

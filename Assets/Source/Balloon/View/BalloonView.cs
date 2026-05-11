@@ -89,7 +89,7 @@ namespace BalloonParty.Balloon.View
 
             if (_itemService != null)
             {
-                _itemService.Bind(model.Item, model.Color, model.SlotIndex, _config, _baseSortingLayer);
+                _itemService.Bind(model.Item, model.Color, model.SlotIndex, _config, _baseSortingLayer, _spriteLayerRenderers.Length);
             }
             else
             {
