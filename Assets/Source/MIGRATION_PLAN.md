@@ -60,9 +60,12 @@ Assets/Source/
     Spawner/        BalloonSpawner.cs, BalloonSpawnerSettings.cs, BalloonPoolChannel.cs
   Item/
     IItem.cs, IBalloonItem.cs, IItemView.cs,
-    ItemDisplayService.cs, ItemViewScope.cs,
-    ItemVisualView.cs, LaserItemRotation.cs
-    Bomb/, Laser/, Lightning/, Shield/   ← Phase 15d (activation handlers)
+    ItemActivator.cs, ItemDisplayService.cs, ItemViewScope.cs,
+    ItemVisualView.cs, ItemVisualPoolChannel.cs, LaserItemRotation.cs
+    Bomb/       BombItemHandler.cs          ← Phase 15d.2 (pending)
+    Laser/      LaserItemHandler.cs         ← Phase 15d.3 (pending)
+    Lightning/  LightningItemHandler.cs, ChainLightningView.cs  ← Phase 15d.4 (pending)
+    Shield/     ShieldItemHandler.cs        ← ✅ Phase 15d.1 done
   Slots/
     SlotGrid.cs, SlotGridChangedEvent.cs
     SlotGridView.cs
@@ -94,7 +97,8 @@ Assets/Source/
                     BalloonNudgeMessage.cs, BalloonScoredMessage.cs,
                     ScoreLevelUpMessage.cs,
                     SpawnBalloonLineMessage.cs, ProjectileDestroyedMessage.cs,
-                    ProjectileLoadedMessage.cs
+                    ProjectileLoadedMessage.cs, ItemCheckMessage.cs,
+                    ItemActivatedMessage.cs
     Extensions/     ← reserved for future extension methods
   UI/
     Score/          ColorProgressBar.cs, ColorProgressBarInstancer.cs,
@@ -951,7 +955,7 @@ Scope-based display pattern: `ItemViewScope` (a reusable child `LifetimeScope`) 
 |---|---|
 | `ItemDisplayService.cs` | MonoBehaviour on the scope root — subscribes to `model.Item` and `model.SlotIndex`; exposes `ActiveItem`, `ActiveColor`, `SortingStartOrder` as reactive properties for visual views to observe |
 | `IItemView.cs` | Interface defining the contract for item visual components: `Type`, `Activate(Color)`, `Deactivate()`, `ApplySortingOrder(int)` |
-| `ItemVisualView.cs` | MonoBehaviour on each item sub-prefab (PUBomb, PULaser, etc.) — implements `IItemView`; carries `[SerializeField] ItemType _type`, `_spritesToSetColor`, `_sortingRenderers`, `_spritesAlpha`; receives `ItemDisplayService` via `[Inject]` and subscribes to its reactive properties |
+| `ItemVisualView.cs` | MonoBehaviour on each item sub-prefab (PU_Bomb, PU_Laser, etc.) — implements `IItemView`; carries `[SerializeField] ItemType _type`, `_spritesToSetColor`, `_sortingRenderers`, `_spritesAlpha`; receives `ItemDisplayService` via `[Inject]` and subscribes to its reactive properties |
 | `ItemViewScope.cs` | `LifetimeScope` (custom `FindParent`) on the prefab's item container child — registers `ItemDisplayService` via `RegisterComponentInHierarchy` and injects all `ItemVisualView` children via `RegisterBuildCallback` + `resolver.Inject()`. Any prefab carrying this scope must be instantiated via `CreateChildFromPrefab` on an ancestor scope (e.g. `BalloonLifetimeScope`) to ensure proper scope hierarchy. |
 | `LaserItemRotation.cs` | MonoBehaviour on the laser's rotating body child — spins at `_rotationSpeed`, resets angle on enable |
 
@@ -967,7 +971,7 @@ The scope-based approach ensures `ItemViewScope` is context-independent: any pre
    - On item change → sets `ActiveItem.Value` and `ActiveColor.Value`
    - On slot change → computes and sets `SortingStartOrder.Value`
    - `Unbind()` — clears subscriptions and resets `ActiveItem` to `None`
-2. `ItemVisualView` (on each sub-prefab root: PUBomb, PULaser, PULightning, PUShield)
+2. `ItemVisualView` (on each sub-prefab root: PU_Bomb, PU_Laser, PU_Lightning, PU_Shield)
    - `[Inject] ItemDisplayService _display` — resolved from `ItemViewScope`
    - `Start()` → subscribes to `_display.ActiveItem` and `_display.SortingStartOrder`
    - On `ActiveItem` change: if matches `_type` → `Activate(color)`, else → `Deactivate()`
@@ -988,8 +992,8 @@ The scope-based approach ensures `ItemViewScope` is context-independent: any pre
 
 | Setting | Value | Source |
 |---|---|---|
-| `_spritesAlpha` | `0.75` | All 4 sub-prefabs (PUBomb, PULaser, PULightning, PUShield) |
-| `_rotationSpeed` | `100` | PULaser sub-prefab |
+| `_spritesAlpha` | `0.75` | All 4 sub-prefabs (PU_Bomb, PU_Laser, PU_Lightning, PU_Shield) |
+| `_rotationSpeed` | `100` | PU_Laser sub-prefab |
 | Child `m_IsActive` | `0` (disabled) | All 4 sub-prefabs in the balloon prefab |
 
 ### Unity Editor steps
@@ -998,12 +1002,12 @@ The scope-based approach ensures `ItemViewScope` is context-independent: any pre
 2. **`ItemDisplayService`** — add to the "Item" child GameObject (same as `ItemViewScope`)
 3. **`ItemViewScope`** — already on the "Item" child; verify it shows `GameChildLifetimeScope` base
 4. **`GameLifetimeScope`** — assign the Balloon prefab to the `_balloonScopePrefab` field (field type is `BalloonLifetimeScope`)
-5. On each sub-prefab (PUBomb, PULaser, PULightning, PUShield), **replace** the old `BalloonPowerUpController` with **`ItemVisualView`**:
+5. On each sub-prefab (PU_Bomb, PU_Laser, PU_Lightning, PU_Shield), **replace** the old `BalloonPowerUpController` with **`ItemVisualView`**:
    - Set `_type` to the matching `ItemType` enum value
    - Wire `_spritesToSetColor` — the same SpriteRenderers that were on the old controller
    - Wire `_sortingRenderers` — the same Renderers that were on the old controller's `_renderers`
    - Set `_spritesAlpha` to `0.75`
-4. On the PULaser sub-prefab, add **`LaserItemRotation`** to the rotating body child and set `_rotationSpeed` to `100`
+4. On the PU_Laser sub-prefab, add **`LaserItemRotation`** to the rotating body child and set `_rotationSpeed` to `100`
 5. Verify all 4 sub-prefab roots start **disabled** (`SetActive(false)`)
 
 ✅ **Checkpoint:** Manually set `model.Item.Value = ItemType.Bomb` in debugger or cheat → bomb visual appears on the balloon, tinted to balloon color. Other types similarly.
@@ -1205,52 +1209,83 @@ Legacy `BalloonHitDestructionSystem` defers destruction: if a balloon `hasBalloo
 New flow:
 1. `BalloonController.OnHit`:
    - If `model.Item.Value == ItemType.None` → destroy immediately (current behavior)
-   - If `model.Item.Value != None` → play pop VFX, remove from grid, but do **not** return to pool yet; wait for item effect to complete before pool return
+   - If `model.Item.Value != None` → play pop VFX, call `_view.Hide()`, remove from grid, subscribe to `ItemActivatedMessage`, and return to pool when the matching message arrives
 2. `ItemActivator` subscribes to `BalloonHitMessage` filtered for item balloons. It resolves the correct `IBalloonItem` handler and runs activation. After activation completes, publishes `ItemActivatedMessage` so the item balloon can finalize destruction.
 3. `BalloonController` subscribes to `ItemActivatedMessage` → when it matches its model → return to pool
 
+##### `BalloonView.Hide()`
+
+Called on item balloon hit — immediately disables all `_spriteLayerRenderers`, disables the `CircleCollider2D` (prevents phantom Physics2D hits while the effect plays), and calls `_itemService.Unbind()` (returns the item visual to pool). Renderers and collider are re-enabled in `OnSpawned()` for the next pool cycle.
+
+##### Item visual pooling — `ItemDisplayService` + `ItemVisualPoolChannel`
+
+`ItemDisplayService` previously used `Instantiate`/`Destroy` for the item visual on each balloon. Now uses `PoolManager`:
+
+- **`ItemVisualPoolChannel`** (`Item/ItemVisualPoolChannel.cs`) — one channel per item visual prefab, keyed by `prefab.name`. Created lazily via `GetOrRegister` on first use.
+- **`ItemVisualView`** implements `IPoolable`:
+  - `OnSpawned()` — resets `localScale = Vector3.one` and `localPosition = Vector3.zero`
+  - `OnDespawned()` — calls `Deactivate()` (hides renderers)
+- `ItemDisplayService.Bind()` now accepts `PoolManager` as an additional parameter
+- `PoolChannel.Return()` and `ItemDisplayService` both use `SetParent(..., worldPositionStays: false)` to prevent scale drift on reparent
+
 ##### Nudge overrides for item hits
 
-Bomb and Laser items use per-type `NudgeDuration` and `NudgeDistance` from `ItemSettings` instead of the global config values. `ItemSettings` must be extended with these fields (they existed in the legacy `PowerUpSettings` but were not carried forward).
+Bomb and Laser items use per-type `NudgeDuration` and `NudgeDistance` from `ItemSettings`. Overrides are carried on **`BalloonNudgeMessage`** (not `BalloonHitMessage`) as `float? NudgeDistance` and `float? NudgeDuration`. `BalloonNudgeHandler` publishes these per-neighbor; `BalloonView.OnNudge` falls back to config values when `null`. Item handlers pass overrides when publishing `BalloonNudgeMessage` directly, or they can publish `BalloonHitMessage` normally and let `BalloonNudgeHandler` re-publish nudge messages — the override travels with the nudge message, not the hit.
 
-Extend `BalloonHitMessage` with optional `NudgeDuration?` and `NudgeDistance?` fields. `BalloonNudgeHandler` reads these if present, otherwise falls back to config. This keeps the flow simple: item handler → `BalloonHitMessage(balloon, pos, nudgeDuration, nudgeDistance)` → nudge handler picks them up.
+> **`ItemSettings` still needs `NudgeDuration` and `NudgeDistance` fields** — required before Bomb and Laser handlers can use per-item nudge values.
+
+##### `IItem` / `IBalloonItem` interface
+
+- `IItem.Activate()` returns `UniTask` — supports async items (Lightning); synchronous items return `UniTask.CompletedTask`
+- `IBalloonItem.Setup(IBalloonModel balloon, Vector3 worldPosition)` — called before `Activate()`; gives handlers the balloon model and its world position at hit time
 
 ##### `ItemActivator.cs` — central orchestrator
 
-`IStartable` — subscribes to `BalloonHitMessage`; when the hit balloon has an item, delegates to the correct `IBalloonItem` handler. Registered as `RegisterEntryPoint<ItemActivator>()`. Resolves all `IBalloonItem` handlers via `IEnumerable<IBalloonItem>` injection (VContainer resolves all registered implementations).
+`IStartable` — subscribes to `BalloonHitMessage`; when the hit balloon has an item, finds the matching `IBalloonItem` handler by `Type`, calls `Setup` + `await Activate()`, then publishes `ItemActivatedMessage`. Does **not** publish `BalanceBalloonsMessage` — turn-end rebalancing via `ProjectileDestroyedMessage` handles it naturally.
 
 ##### `ItemActivatedMessage.cs`
 
-Message carrying the balloon model — published after the item effect finishes, signaling that the item balloon can now be destroyed.
+Message carrying the balloon model — published after the item effect finishes, signaling that the item balloon can now be returned to pool.
 
-##### Item effect pooling strategy — `ItemEffectPoolChannel`
+##### Item effect pooling strategy — `ItemVisualPoolChannel` / `VfxPoolChannel`
 
-All item effects (BombRange, LaserRange, ChainLightning) are GameObjects instantiated at activation time and destroyed/returned after the effect completes. Currently these use `Instantiate`/`Destroy`. The pooling strategy:
+- **Item visuals on balloons** — use `ItemVisualPoolChannel` (one per prefab, keyed by name). ✅ Implemented.
+- **Item activation effects** (BombRange, LaserRange, ChainLightning) — each handler registers its own channel via `PoolManager.GetOrRegister()`. Effect prefabs implement `IPoolable`; world-space, unparented; auto-return after effect completes.
+- **Particle VFX** (e.g. `PSVFX_ShieldGainPU`) — use existing `VfxPoolChannel`. ✅ Implemented for Shield.
 
-- **One `PoolChannel` per effect prefab** — keyed by prefab name (e.g. `"BombRange"`, `"LaserRange"`, `"ChainLightning"`). Each handler registers its own channel with `PoolManager.GetOrRegister()` on first use, same pattern as `ScoreTrailPoolChannel`.
-- **Effect prefabs implement `IPoolable`** — `OnSpawned()` resets state (position, rotation, scale, animation, line renderers); `OnDespawned()` kills any running tweens/async, hides the GameObject.
-- **Auto-return** — each effect carries a completion callback (set by the handler) that returns it to the pool. For Bomb/Laser this fires after the Animator-driven animation completes. For Lightning this fires after the async retraction sequence.
-- **World-space, unparented** — effects are instantiated at world position, not parented to the balloon. This prevents pool return from affecting the balloon's transform hierarchy.
-- **Lazy channel creation** — channels are created on first `Get()` call per prefab, not at startup. This avoids pre-creating pools for items that may never appear in a session.
-
-##### Files to create (shared)
+##### Files created (shared) ✅
 
 | File | Location |
 |---|---|
 | `ItemActivator.cs` | `Item/` |
+| `ItemVisualPoolChannel.cs` | `Item/` |
 | `ItemActivatedMessage.cs` | `Shared/Messages/` |
 
-##### Files to modify (shared)
+##### Files modified (shared) ✅
+
+| File | Change |
+|---|---|
+| `IItem.cs` | `Activate()` returns `UniTask`; `Type` property added |
+| `IBalloonItem.cs` | `Setup(IBalloonModel, Vector3)`; `Type` moved to `IItem` |
+| `IItemView.cs` | `Type` removed (now on `IItem`) |
+| `ItemVisualView.cs` | Implements `IPoolable`; `OnSpawned` resets transform | ✅ Done |
+| `ItemDisplayService.cs` | Uses `PoolManager`; `Bind()` takes `PoolManager` param |
+| `BalloonView.cs` | Added `[SerializeField] Collider2D _collider`; `Hide()` method; `OnSpawned()` re-enables renderers + collider; passes `_poolManager` to `_itemService.Bind()` |
+| `BalloonController.cs` | Defers pool return for item balloons until `ItemActivatedMessage` fires |
+| `BalloonSpawner.cs` | Injects + passes `ISubscriber<ItemActivatedMessage>` to `BalloonController` |
+| `BalloonNudgeMessage.cs` | Added `float? NudgeDistance`, `float? NudgeDuration` optional overrides |
+| `BalloonView.OnNudge()` | Reads nudge overrides from message, falls back to config |
+| `ItemSettings.cs` | Added `ParticleSystem ActivationVfxPrefab` |
+| `PoolChannel.cs` | `Return()` uses `SetParent(..., false)` to prevent scale drift |
+| `GameLifetimeScope.cs` | Registers `ItemActivatedMessage`, `ItemActivator`, `ShieldItemHandler` |
+
+##### Files still to modify (shared — before Bomb/Laser)
 
 | File | Change |
 |---|---|
 | `ItemSettings.cs` | Add `NudgeDuration` and `NudgeDistance` fields |
-| `BalloonHitMessage.cs` | Add optional `NudgeDuration?` and `NudgeDistance?` fields |
-| `BalloonNudgeHandler.cs` | Respect nudge overrides from the hit message if present |
-| `BalloonController.cs` | Defer pool return for item balloons until `ItemActivatedMessage` fires |
-| `GameLifetimeScope.cs` | Register `ItemActivator` and new message brokers |
 
-##### Registration (shared)
+##### Registration (shared) ✅
 
 ```csharp
 builder.RegisterMessageBroker<ItemActivatedMessage>(options);
@@ -1259,7 +1294,7 @@ builder.RegisterEntryPoint<ItemActivator>();
 
 ---
 
-#### Phase 15d.1 — Shield Item
+#### Phase 15d.1 — Shield Item ✅
 
 **Goal:** The simplest item — no spawned effect prefab, no physics queries, no async. Validates the full activation pipeline end-to-end.
 
@@ -1270,34 +1305,25 @@ builder.RegisterEntryPoint<ItemActivator>();
 3. Spawns `PSVFX_ShieldGainPU` at the balloon's position with the balloon's color
 4. Marks `isBalloonPowerUpActivated = true`
 
-##### Rendering analysis
-
-- **No effect prefab** — only a particle VFX (`PSVFX_ShieldGainPU`)
-- `PSVFX_ShieldGainPU` is a fire-and-forget particle; already handled by `VfxPoolChannel` (same system used for shield gain/lose VFX on the projectile)
-- The `ProjectileShieldView` already observes `ShieldsRemaining` and will automatically react to the increment (new orb scales up + `PSVFX_ShieldGain` at projectile position)
-- So the Shield item produces **two** VFX: one at the balloon position (`PSVFX_ShieldGainPU`) and one at the projectile position (automatic via `ProjectileShieldView`)
-
-##### Pooling
-
-- **No new pool needed** — `PSVFX_ShieldGainPU` uses the existing `VfxPoolChannel` pattern. Obtain via `PoolManager`, play at balloon position, auto-return via `PoolableParticle`.
-
-##### Projectile access
-
-The Shield item needs the active `ProjectileModel` to increment `ShieldsRemaining`. Inject `ISubscriber<ProjectileLoadedMessage>` → capture the current `ProjectileModel` reference. Same pattern as `ShieldCounterAnimation`.
-
 ##### Implementation
 
-| File | Location | Responsibility |
-|---|---|---|
-| `ShieldItemHandler.cs` | `Item/Shield/` | `IBalloonItem` — increments `ShieldsRemaining.Value++`; plays `PSVFX_ShieldGainPU` at balloon position via `PoolManager`; immediate (no async) |
+`ShieldItemHandler` (`Item/Shield/ShieldItemHandler.cs`):
+- Implements `IBalloonItem` + `IStartable`
+- `Type` → `ItemType.Shield`
+- Subscribes to `ProjectileLoadedMessage` in `Start()` to keep a reference to `IWriteableProjectileModel`
+- `Setup(balloon, worldPosition)` — stores balloon model and world position
+- `Activate()` → increments `ShieldsRemaining.Value++`; plays `PSVFX_ShieldGainPU` at balloon world position via `PoolManager.GetOrRegister` + `VfxPoolChannel`; returns `UniTask.CompletedTask` (synchronous)
+- `ProjectileShieldView` automatically reacts to the shield increment (orb scale up + `PSVFX_ShieldGain` at projectile position)
 
-##### Registration
+`ItemSettings` — added `ParticleSystem _activationVfxPrefab` / `ActivationVfxPrefab` property. Assign `PSVFX_ShieldGainPU` to Shield entry in `GameConfiguration` inspector.
+
+##### Registration ✅
 
 ```csharp
 builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 ```
 
-✅ **Checkpoint:** Hit a shield balloon → projectile gains +1 shield → shield orb scales up on projectile → `PSVFX_ShieldGainPU` plays at balloon position → `PSVFX_ShieldGain` plays at projectile position (automatic) → item balloon returns to pool after activation.
+✅ **Checkpoint:** Hit a shield balloon → balloon hides immediately (collider disabled, visuals off) → projectile gains +1 shield → shield orb scales up on projectile → `PSVFX_ShieldGainPU` plays at balloon position → `PSVFX_ShieldGain` plays at projectile position (automatic) → item balloon returns to pool after activation → grid rebalances at turn end.
 
 ---
 
@@ -1516,29 +1542,35 @@ builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfac
 
 ---
 
-#### Summary — files to create across all 15d subphases
+#### Summary — files created across all 15d subphases
 
-| File | Location |
-|---|---|
-| `ItemActivator.cs` | `Item/` |
-| `ShieldItemHandler.cs` | `Item/Shield/` |
-| `BombItemHandler.cs` | `Item/Bomb/` |
-| `LaserItemHandler.cs` | `Item/Laser/` |
-| `LightningItemHandler.cs` | `Item/Lightning/` |
-| `ChainLightningView.cs` | `Item/Lightning/` |
-| `ItemActivatedMessage.cs` | `Shared/Messages/` |
+| File | Location | Status |
+|---|---|---|
+| `ItemActivator.cs` | `Item/` | ✅ Done |
+| `ItemVisualPoolChannel.cs` | `Item/` | ✅ Done |
+| `ShieldItemHandler.cs` | `Item/Shield/` | ✅ Done |
+| `BombItemHandler.cs` | `Item/Bomb/` | ⬜ Pending |
+| `LaserItemHandler.cs` | `Item/Laser/` | ⬜ Pending |
+| `LightningItemHandler.cs` | `Item/Lightning/` | ⬜ Pending |
+| `ChainLightningView.cs` | `Item/Lightning/` | ⬜ Pending |
+| `ItemActivatedMessage.cs` | `Shared/Messages/` | ✅ Done |
 
-#### Summary — files to modify across all 15d subphases
+#### Summary — files modified across all 15d subphases
 
-| File | Change |
-|---|---|
-| `ItemSettings.cs` | Add `NudgeDuration` and `NudgeDistance` fields |
-| `BalloonHitMessage.cs` | Add optional `NudgeDuration?` and `NudgeDistance?` fields |
-| `BalloonNudgeHandler.cs` | Respect nudge overrides from hit message |
-| `BalloonController.cs` | Defer pool return for item balloons until `ItemActivatedMessage` |
-| `IBalloonItem.cs` | Change `Activate()` return type to `UniTask` (for async items) |
-| `IItem.cs` | Change `Activate()` return type to `UniTask` |
-| `GameLifetimeScope.cs` | Register `ItemActivator`, all handlers, new message brokers |
+| File | Change | Status |
+|---|---|---|
+| `IItem.cs` | `Activate()` → `UniTask`; `Type` property | ✅ Done |
+| `IBalloonItem.cs` | `Setup(IBalloonModel, Vector3)`; removed duplicate `Type` | ✅ Done |
+| `IItemView.cs` | `Type` removed (moved to `IItem`) | ✅ Done |
+| `ItemVisualView.cs` | Implements `IPoolable`; `OnSpawned` resets transform | ✅ Done |
+| `ItemDisplayService.cs` | Pool-based visual lifecycle; `PoolManager` param in `Bind()` | ✅ Done |
+| `ItemSettings.cs` | Added `ActivationVfxPrefab`; **`NudgeDuration`/`NudgeDistance` still needed** | ⬜ Partial |
+| `BalloonNudgeMessage.cs` | Added `float? NudgeDistance`, `float? NudgeDuration` overrides | ✅ Done |
+| `BalloonView.cs` | `Collider2D` field; `Hide()`; `OnSpawned` re-enables renderers+collider; passes `PoolManager` to item service | ✅ Done |
+| `BalloonController.cs` | Defers pool return; calls `Hide()` for item balloons | ✅ Done |
+| `BalloonSpawner.cs` | Injects + forwards `ISubscriber<ItemActivatedMessage>` | ✅ Done |
+| `PoolChannel.cs` | `SetParent(..., false)` on return | ✅ Done |
+| `GameLifetimeScope.cs` | Registers `ItemActivatedMessage`, `ItemActivator`, `ShieldItemHandler` | ✅ Done |
 
 #### Full registration (all items)
 
@@ -1546,12 +1578,12 @@ builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfac
 builder.RegisterMessageBroker<ItemActivatedMessage>(options);
 builder.RegisterEntryPoint<ItemActivator>();
 builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
-builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
-builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
-builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();     // Phase 15d.2
+builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();    // Phase 15d.3
+builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces(); // Phase 15d.4
 ```
 
-✅ **Phase 15d complete checkpoint:** All four items activate correctly — Shield grants shield, Bomb area-destroys, Laser cross-destroys, Lightning chain-destroys same-color. All effects render and clean up properly. Pooling is in place or confirmed unnecessary.
+✅ **Phase 15d complete checkpoint:** All four items activate correctly — Shield grants shield, Bomb area-destroys, Laser cross-destroys, Lightning chain-destroys same-color. All effects render and clean up properly. Pooling is in place for all item visuals and activation effects.
 
 ---
 
