@@ -1190,114 +1190,368 @@ This removes `Item/`'s dependency on `Balloon/`. Any object that exposes these t
 
 ### Phase 15d — Item Activation & Per-Type Effects
 
-**Goal:** Port all four item activation flows — Bomb, Laser, Lightning, Shield — triggered when an item balloon is hit by the projectile. Each handler implements `IBalloonItem`.
+**Goal:** Port all four item activation flows — Bomb, Laser, Lightning, Shield — one item at a time. Each subphase first analyses how the effect renders visually, designs a pooling strategy for the spawned effect, then implements the activation handler.
 
 > References: `BombPowerUpController`, `BombSphereCastHitController`, `LaserPowerUpController`, `LaserRaycastHitController`, `LightningPowerUpController`, `ChainLightning`, `ShieldPowerUpController`
 
-#### Architecture
+---
 
-| File | Responsibility |
-|---|---|
-| `ItemActivator.cs` | `IStartable` — subscribes to `BalloonHitMessage`; when the hit balloon has an item, delegates to the correct `IBalloonItem` handler; defers destruction until activation completes |
-| `BombItemHandler.cs` | `IBalloonItem` — runs `OverlapCircleAll`; hits all balloons in radius; publishes `BalloonHitMessage` for each |
-| `LaserItemHandler.cs` | `IBalloonItem` — runs cross-shaped `CircleCastAll`; hits all balloons along the 4 axes; publishes `BalloonHitMessage` for each |
-| `LightningItemHandler.cs` | `IBalloonItem` — finds all balloons of the same color, sorted by distance; creates `ChainLightning` VFX; hits each target sequentially with delay; publishes `BalloonHitMessage` per target |
-| `ShieldItemHandler.cs` | `IBalloonItem` — increments `ShieldsRemaining` on the active projectile model; plays `PSVFX_ShieldGainPU` at balloon position |
-| `ItemActivatedMessage.cs` | Message carrying the balloon model — published after the item effect finishes, signaling that the item balloon can now be destroyed |
+#### Shared Infrastructure (before any individual item)
 
-#### Nudge overrides for item hits
-
-The Bomb and Laser items use per-type `NudgeDuration` and `NudgeDistance` from `ItemSettings` instead of the global config values. Options:
-- **Option A**: Extend `BalloonHitMessage` with optional `NudgeDuration?` and `NudgeDistance?` fields. `BalloonNudgeHandler` reads these if present, otherwise falls back to config.
-- **Option B**: Extend `BalloonNudgeMessage` with the override values. The item handler publishes its own nudge messages with custom values.
-
-Prefer **Option A** — keeps the flow simple: item handler → `BalloonHitMessage(balloon, pos, nudgeDuration, nudgeDistance)` → nudge handler picks them up.
-
-#### Hit pipeline changes for item balloons
+##### Hit pipeline changes for item balloons
 
 Legacy `BalloonHitDestructionSystem` defers destruction: if a balloon `hasBalloonPowerUp`, it only destroys when `isBalloonPowerUpActivated` is also set. The current `BalloonController` destroys immediately on any `BalloonHitMessage`.
 
 New flow:
 1. `BalloonController.OnHit`:
    - If `model.Item.Value == ItemType.None` → destroy immediately (current behavior)
-   - If `model.Item.Value != None` → play pop VFX, remove from grid, but do **not** return to pool yet; publish `ItemActivatedMessage` request to `ItemActivator`
-2. `ItemActivator` receives the hit, runs the appropriate `IBalloonItem` handler, then on completion publishes `ItemActivatedMessage`
+   - If `model.Item.Value != None` → play pop VFX, remove from grid, but do **not** return to pool yet; wait for item effect to complete before pool return
+2. `ItemActivator` subscribes to `BalloonHitMessage` filtered for item balloons. It resolves the correct `IBalloonItem` handler and runs activation. After activation completes, publishes `ItemActivatedMessage` so the item balloon can finalize destruction.
 3. `BalloonController` subscribes to `ItemActivatedMessage` → when it matches its model → return to pool
 
-Alternative (simpler): `ItemActivator` subscribes to `BalloonHitMessage` with a filter for item balloons. It calls the handler synchronously (or with async for lightning). After the handler finishes, the normal `BalloonController` flow continues. Since `BalloonController` already handles grid removal and pool return, `ItemActivator` only needs to fire secondary `BalloonHitMessage`s for affected balloons.
+##### Nudge overrides for item hits
 
-#### Shield item — projectile access
+Bomb and Laser items use per-type `NudgeDuration` and `NudgeDistance` from `ItemSettings` instead of the global config values. `ItemSettings` must be extended with these fields (they existed in the legacy `PowerUpSettings` but were not carried forward).
 
-The Shield item needs to increment `ShieldsRemaining` on the active projectile. Options:
-- Inject `ISubscriber<ProjectileLoadedMessage>` into `ShieldItemHandler` to capture the current `ProjectileModel`
-- Or have `ItemActivator` inject the subscriber and pass the model to Shield handler
+Extend `BalloonHitMessage` with optional `NudgeDuration?` and `NudgeDistance?` fields. `BalloonNudgeHandler` reads these if present, otherwise falls back to config. This keeps the flow simple: item handler → `BalloonHitMessage(balloon, pos, nudgeDuration, nudgeDistance)` → nudge handler picks them up.
 
-Prefer the first — handler self-binds via the loaded message, same pattern as `ShieldCounterAnimation`.
+##### `ItemActivator.cs` — central orchestrator
 
-#### Lightning — async chain with delays
+`IStartable` — subscribes to `BalloonHitMessage`; when the hit balloon has an item, delegates to the correct `IBalloonItem` handler. Registered as `RegisterEntryPoint<ItemActivator>()`. Resolves all `IBalloonItem` handlers via `IEnumerable<IBalloonItem>` injection (VContainer resolves all registered implementations).
 
-Legacy `ChainLightning` uses a coroutine with `WaitForSeconds(_lightningJumpTime)` between each target hit. Port using `async UniTaskVoid` with `UniTask.Delay`. The chain lightning VFX (line renderers) is a separate visual concern — create `ChainLightningView.cs` as a MonoBehaviour on the VFX prefab, replacing the legacy `ChainLightning.cs`.
+##### `ItemActivatedMessage.cs`
 
-#### Per-type implementation details
+Message carrying the balloon model — published after the item effect finishes, signaling that the item balloon can now be destroyed.
 
-**Bomb:**
-- `Physics2D.OverlapCircleAll(position, radius, LayerMask.GetMask("Balloons"))` — finds all balloons in blast radius
-- For each hit collider, resolve `BalloonView` → `BalloonModel` → publish `BalloonHitMessage`
-- Nudge values from `ItemSettings[ItemType.Bomb]`
-- The `BombRange` prefab is instantiated for visual effect only (expanding circle); auto-destroy after animation
+##### Item effect pooling strategy — `ItemEffectPoolChannel`
 
-**Laser:**
-- 4-direction `Physics2D.CircleCastAll` (up, down, left, right) from the laser's rotated position
-- For each hit collider → `BalloonView` → `BalloonModel` → publish `BalloonHitMessage`
-- Nudge values from `ItemSettings[ItemType.Laser]`
-- Rotation stops on activation (legacy: `_rotationSpeed = 0f`)
-- `LaserRange` prefab for visual; auto-destroy after `_destroyAfter`
+All item effects (BombRange, LaserRange, ChainLightning) are GameObjects instantiated at activation time and destroyed/returned after the effect completes. Currently these use `Instantiate`/`Destroy`. The pooling strategy:
 
-**Lightning:**
-- Find all balloons of the same color as the item balloon (query `SlotGrid`)
-- Sort by distance from the item balloon
-- Spawn `ChainLightning` VFX
-- Sequentially hit each target with `_lightningJumpTime` delay
-- After all targets hit, retract lightning effect (reverse animation)
+- **One `PoolChannel` per effect prefab** — keyed by prefab name (e.g. `"BombRange"`, `"LaserRange"`, `"ChainLightning"`). Each handler registers its own channel with `PoolManager.GetOrRegister()` on first use, same pattern as `ScoreTrailPoolChannel`.
+- **Effect prefabs implement `IPoolable`** — `OnSpawned()` resets state (position, rotation, scale, animation, line renderers); `OnDespawned()` kills any running tweens/async, hides the GameObject.
+- **Auto-return** — each effect carries a completion callback (set by the handler) that returns it to the pool. For Bomb/Laser this fires after the Animator-driven animation completes. For Lightning this fires after the async retraction sequence.
+- **World-space, unparented** — effects are instantiated at world position, not parented to the balloon. This prevents pool return from affecting the balloon's transform hierarchy.
+- **Lazy channel creation** — channels are created on first `Get()` call per prefab, not at startup. This avoids pre-creating pools for items that may never appear in a session.
 
-**Shield:**
-- Increment `ShieldsRemaining.Value++` on the active projectile model
-- Play `PSVFX_ShieldGainPU` at the balloon's position with the balloon's color
-- Immediate — no async, no secondary hits
-
-#### Files to create
+##### Files to create (shared)
 
 | File | Location |
 |---|---|
 | `ItemActivator.cs` | `Item/` |
-| `BombItemHandler.cs` | `Item/Bomb/` |
-| `LaserItemHandler.cs` | `Item/Laser/` |
-| `LightningItemHandler.cs` | `Item/Lightning/` |
-| `ChainLightningView.cs` | `Item/Lightning/` |
-| `ShieldItemHandler.cs` | `Item/Shield/` |
 | `ItemActivatedMessage.cs` | `Shared/Messages/` |
 
-#### Files to modify
+##### Files to modify (shared)
 
 | File | Change |
 |---|---|
-| `BalloonHitMessage.cs` | Add optional `NudgeDuration?` and `NudgeDistance?` fields for item nudge overrides |
-| `BalloonNudgeHandler.cs` or `BalloonView.OnNudge` | Respect nudge overrides from the hit message if present |
+| `ItemSettings.cs` | Add `NudgeDuration` and `NudgeDistance` fields |
+| `BalloonHitMessage.cs` | Add optional `NudgeDuration?` and `NudgeDistance?` fields |
+| `BalloonNudgeHandler.cs` | Respect nudge overrides from the hit message if present |
 | `BalloonController.cs` | Defer pool return for item balloons until `ItemActivatedMessage` fires |
-| `GameLifetimeScope.cs` | Register `ItemActivator`, all handlers, and new message brokers |
+| `GameLifetimeScope.cs` | Register `ItemActivator` and new message brokers |
 
-#### Registration in `GameLifetimeScope`
+##### Registration (shared)
 
 ```csharp
 builder.RegisterMessageBroker<ItemActivatedMessage>(options);
 builder.RegisterEntryPoint<ItemActivator>();
-builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
-builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
-builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+```
+
+---
+
+#### Phase 15d.1 — Shield Item
+
+**Goal:** The simplest item — no spawned effect prefab, no physics queries, no async. Validates the full activation pipeline end-to-end.
+
+##### Legacy behaviour (`ShieldPowerUpController`)
+
+1. Finds the active free projectile via `_freeProjectiles` group
+2. Increments `ProjectileBounceShield` by 1
+3. Spawns `PSVFX_ShieldGainPU` at the balloon's position with the balloon's color
+4. Marks `isBalloonPowerUpActivated = true`
+
+##### Rendering analysis
+
+- **No effect prefab** — only a particle VFX (`PSVFX_ShieldGainPU`)
+- `PSVFX_ShieldGainPU` is a fire-and-forget particle; already handled by `VfxPoolChannel` (same system used for shield gain/lose VFX on the projectile)
+- The `ProjectileShieldView` already observes `ShieldsRemaining` and will automatically react to the increment (new orb scales up + `PSVFX_ShieldGain` at projectile position)
+- So the Shield item produces **two** VFX: one at the balloon position (`PSVFX_ShieldGainPU`) and one at the projectile position (automatic via `ProjectileShieldView`)
+
+##### Pooling
+
+- **No new pool needed** — `PSVFX_ShieldGainPU` uses the existing `VfxPoolChannel` pattern. Obtain via `PoolManager`, play at balloon position, auto-return via `PoolableParticle`.
+
+##### Projectile access
+
+The Shield item needs the active `ProjectileModel` to increment `ShieldsRemaining`. Inject `ISubscriber<ProjectileLoadedMessage>` → capture the current `ProjectileModel` reference. Same pattern as `ShieldCounterAnimation`.
+
+##### Implementation
+
+| File | Location | Responsibility |
+|---|---|---|
+| `ShieldItemHandler.cs` | `Item/Shield/` | `IBalloonItem` — increments `ShieldsRemaining.Value++`; plays `PSVFX_ShieldGainPU` at balloon position via `PoolManager`; immediate (no async) |
+
+##### Registration
+
+```csharp
 builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 ```
 
-✅ **Checkpoint:** Hit a bomb balloon → nearby balloons are destroyed with nudge → score increments for each. Hit a laser balloon → cross-shaped destruction. Hit a lightning balloon → chain hits same-color balloons with delay and lightning VFX. Hit a shield balloon → projectile gains +1 shield with VFX.
+✅ **Checkpoint:** Hit a shield balloon → projectile gains +1 shield → shield orb scales up on projectile → `PSVFX_ShieldGainPU` plays at balloon position → `PSVFX_ShieldGain` plays at projectile position (automatic) → item balloon returns to pool after activation.
+
+---
+
+#### Phase 15d.2 — Bomb Item
+
+**Goal:** Port the area-of-effect explosion — spawns a `BombRange` visual and destroys all balloons within a radius.
+
+##### Legacy behaviour (`BombPowerUpController` + `BombSphereCastHitController`)
+
+1. `BombPowerUpController.Activate()` creates an entity with `Asset("BombRange")` at the balloon's position and a collider reference
+2. The `AssetInstancingSystem` instantiates the `BombRange` prefab from Resources
+3. `BombSphereCastHitController` (MonoBehaviour on `BombRange` prefab) runs on `OnViewLinked`:
+   - `Physics2D.OverlapCircleAll(position, _radius, LayerMask.GetMask("Balloons"))` — finds balloons in blast radius
+   - For each hit collider → resolves the balloon entity → sets `isBalloonHit = true`, `isBalloonPowerUpHit = true`
+   - Applies per-item nudge: `ReplaceBalloonNudge(settings.NudgeDuration, settings.NudgeDistance)`
+   - `_radius` is a `[SerializeField]` on the prefab (not from config)
+
+##### Rendering analysis
+
+- **`BombRange` prefab** (`Assets/Resources/BombRange.prefab`):
+  - Has an **Animator** controller (`Animation/Balloon/Powers/BombRange.controller`) — drives an expanding circle animation
+  - The animation plays once on instantiation, then the prefab is destroyed
+  - Visually it's a circle SpriteRenderer that scales up rapidly (explosion ring effect)
+  - The physics query (`OverlapCircleAll`) runs immediately at spawn — the visual animation is purely cosmetic, applied after the hit detection
+- **Lifecycle**: instantiate → physics query runs immediately → animation plays → auto-destroy after animation length
+- **No particle system** — purely Animator + SpriteRenderer
+
+##### Pooling strategy
+
+- **`PoolChannel<BombRangeView>`** keyed as `"BombRange"` in `PoolManager`
+- `BombRangeView` (`MonoBehaviour` on the prefab) implements `IPoolable`:
+  - `OnSpawned()` — resets Animator to initial state, sets position, triggers animation
+  - `OnDespawned()` — hides the GameObject
+- **Auto-return** — `BombRangeView` uses an `AnimationEvent` or a timed callback (`UniTask.Delay` matching animation length) to invoke the return callback after the animation completes
+- **Alternative (simpler)**: skip pooling for now — these fire rarely (once per item balloon hit). Use `Instantiate` + `Destroy(gameObject, animationLength)` and mark as a pooling candidate for Phase 15d.5 optimization pass. **Decision: TBD during implementation.**
+
+##### Implementation
+
+| File | Location | Responsibility |
+|---|---|---|
+| `BombItemHandler.cs` | `Item/Bomb/` | `IBalloonItem` — `OverlapCircleAll` at balloon position; publishes `BalloonHitMessage` per hit balloon (with item nudge overrides); spawns `BombRange` visual |
+
+##### Open questions
+
+- What is the `_radius` value on the existing `BombRange` prefab? Needs to be read from the prefab's `[SerializeField]` or moved to `ItemSettings`.
+- Should the handler receive `_radius` via config or via the prefab? Leaning toward config (`ItemSettings`) for consistency.
+
+##### Registration
+
+```csharp
+builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+```
+
+✅ **Checkpoint:** Hit a bomb balloon → `OverlapCircleAll` finds nearby balloons → each is destroyed with item nudge values → `BombRange` circle animation plays at balloon position → score increments for each destroyed balloon.
+
+---
+
+#### Phase 15d.3 — Laser Item
+
+**Goal:** Port the cross-shaped raycast destruction — spawns a `LaserRange` visual and destroys all balloons along 4 axes.
+
+##### Legacy behaviour (`LaserPowerUpController` + `LaserRaycastHitController`)
+
+1. `LaserPowerUpController.Activate()`:
+   - Stops rotation (`_rotationSpeed = 0f`)
+   - Creates entity with `Asset("LaserRange")` at the **rotating body's** position and **rotation**
+   - The laser's current rotation angle determines the cross-shaped hit direction
+2. `LaserRaycastHitController` (MonoBehaviour on `LaserRange` prefab) runs on `OnViewLinked`:
+   - 4x `Physics2D.CircleCastAll` in `transform.right`, `-transform.right`, `transform.up`, `-transform.up`
+   - `_circleCastRadius` and `_raycastDistance` are `[SerializeField]` on the prefab
+   - For each hit collider → resolves balloon → `isBalloonHit = true`, `isBalloonPowerUpHit = true`
+   - Applies per-item nudge: `ReplaceBalloonNudge(settings.NudgeDuration, settings.NudgeDistance)`
+   - `Destroy(gameObject, _destroyAfter)` — delayed destroy
+
+##### Rendering analysis
+
+- **`LaserRange` prefab** (`Assets/Resources/LaserRange.prefab`):
+  - Has an **Animator** controller (`Animation/Balloon/Powers/LaserRange.controller`) — drives a cross-shaped beam animation
+  - The cross visual is rotated to match the laser item's rotation at activation time
+  - Visually: 4 beams extending outward from center, scaling or fading out over `_destroyAfter` seconds
+  - Purely cosmetic — physics queries run immediately, animation is just feedback
+- **Lifecycle**: instantiate at position + rotation → physics queries run immediately → animation plays → `Destroy(gameObject, _destroyAfter)`
+- **Position comes from the rotating body**, not the balloon root — this means the visual center is the laser sub-prefab's child transform, which may be slightly offset
+
+##### Pooling strategy
+
+- Same as Bomb: rare activation, Animator-driven visual, short lifecycle
+- **`PoolChannel<LaserRangeView>`** keyed as `"LaserRange"` — or skip pooling initially with `Instantiate`/`Destroy`
+- If pooled: `LaserRangeView` implements `IPoolable`; `OnSpawned()` resets Animator, sets position + rotation; auto-return after `_destroyAfter` seconds via `UniTask.Delay`
+
+##### Interaction with `LaserItemRotation`
+
+The existing `LaserItemRotation.cs` (already in `Item/`) handles the idle rotation of the laser visual on the balloon. On activation:
+- `LaserItemRotation` must stop (legacy set `_rotationSpeed = 0f`)
+- The current `_angle` at activation time determines the `LaserRange` prefab's rotation
+- **Approach**: `LaserItemHandler` reads the rotation from `LaserItemRotation` (via the balloon's `ItemVisualView` or a direct component lookup on the balloon view's item container) before spawning the range prefab
+
+##### Implementation
+
+| File | Location | Responsibility |
+|---|---|---|
+| `LaserItemHandler.cs` | `Item/Laser/` | `IBalloonItem` — reads laser rotation from balloon; 4x `CircleCastAll`; publishes `BalloonHitMessage` per hit (with item nudge overrides); spawns `LaserRange` visual at the rotated position |
+
+##### Open questions
+
+- How does the handler access the laser's current rotation? Options: (a) `ItemActivator` passes the balloon's `Transform` or the item visual's `Transform` to the handler; (b) `IBalloonItem.Activate()` receives the balloon's `BalloonView` for component access; (c) `BalloonHitMessage` carries the item visual's world rotation. Leaning toward (b) — the view is already available in the hit pipeline.
+- `_circleCastRadius` and `_raycastDistance` — move to `ItemSettings` or keep on the prefab? Config is more consistent.
+
+##### Registration
+
+```csharp
+builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+```
+
+✅ **Checkpoint:** Hit a laser balloon → rotation stops → cross-shaped `CircleCastAll` finds balloons along 4 axes → each is destroyed with item nudge values → `LaserRange` cross animation plays at the rotated angle → score increments for each.
+
+---
+
+#### Phase 15d.4 — Lightning Item
+
+**Goal:** Port the chain lightning effect — the most complex item. Finds all same-color balloons, hits them sequentially with async delays, and renders a multi-segment lightning VFX.
+
+##### Legacy behaviour (`LightningPowerUpController` + `ChainLightning`)
+
+1. `LightningPowerUpController.Activate()`:
+   - Reads the item balloon's color
+   - Queries **all** balloons of that color from the game group
+   - Sorts targets by distance from the item balloon (nearest first)
+   - Instantiates `ChainLightning` prefab (or reuses existing instance)
+   - Calls `_chainLightning.Display(targets)`
+   - Marks `isBalloonPowerUpActivated = true`
+
+2. `ChainLightning.Display(targets)`:
+   - Pre-computes all line segments between consecutive targets:
+     - For each pair (targets[i] → targets[i+1]): computes randomized intermediate points (simulates jagged electricity)
+     - Segment count = `Distance * _segmentsMultiplier` (min 2)
+     - Each intermediate point = lerped position + random XY offset (`_randomness`)
+   - Stores segments in a **queue** (for forward animation) and a **stack** (for reverse retraction)
+   - Multiple `LineRenderer` instances (`_lineRenderers[]`) + one `_glowLineRenderer` — all get the same positions but with different widths/materials for a glow effect
+   - Starts `ChainLightningAnimation()` coroutine
+
+3. `ChainLightningAnimation()` coroutine:
+   - **Forward pass** — for each target (in order):
+     - Dequeues the next segment and appends it to each LineRenderer's positions
+     - Updates the glow LineRenderer similarly
+     - Marks the target as hit (`isBalloonHit = true`, `isBalloonPowerUpHit = true`)
+     - `yield return new WaitForSeconds(_lightningJumpTime)`
+   - **Reverse pass** — for each target (in reverse):
+     - Pops the last segment from the stack and removes from LineRenderer positions
+     - `yield return new WaitForSeconds(_lightningJumpTime)`
+   - After full retraction: `Destroy(gameObject)`
+
+##### Rendering analysis
+
+- **`ChainLightning` prefab**:
+  - Multiple `LineRenderer[]` — main lightning bolts (jagged lines between targets)
+  - One `_glowLineRenderer` — wider, softer glow behind the main bolts
+  - **No Animator** — animation is entirely code-driven (coroutine adds/removes line positions over time)
+  - **No ParticleSystem** — purely line renderers
+  - Jagged appearance comes from randomized intermediate points between each target pair
+  - The visual grows forward (jump by jump) then retracts backward (jump by jump)
+- **Lifecycle**: instantiate → forward animation (N jumps × `_lightningJumpTime` seconds) → reverse retraction (N jumps × `_lightningJumpTime` seconds) → `Destroy`
+- **Duration**: total = `2 × targetCount × _lightningJumpTime` — can be several seconds for many targets
+- **World-space**: line positions are absolute world positions of the balloon targets
+
+##### Pooling strategy
+
+- **`PoolChannel<ChainLightningView>`** keyed as `"ChainLightning"`
+- `ChainLightningView` (MonoBehaviour on prefab) implements `IPoolable`:
+  - `OnSpawned()` — clears all LineRenderer positions, resets internal state
+  - `OnDespawned()` — cancels any running async, clears LineRenderers, hides GO
+- **Auto-return** — after the retraction phase completes, invokes return callback
+- **Cancellation** — if the view is despawned mid-animation (e.g. game reset), the `CancellationToken` from `destroyCancellationToken` or a manual CTS cancels the async chain
+- **Worth pooling?** Lightning targets can be numerous (all same-color balloons). The prefab's LineRenderers persist between uses. A pool avoids repeated `Instantiate` for line-heavy GOs. **Decision: pool from the start** — the ChainLightning prefab is heavier than Bomb/Laser due to multiple LineRenderers.
+
+##### Async migration
+
+Legacy uses `StartCoroutine` + `WaitForSeconds`. Port to `async UniTaskVoid` + `UniTask.Delay(milliseconds)`. The `ChainLightningView` is a MonoBehaviour so it can use `destroyCancellationToken`.
+
+##### Target resolution
+
+Legacy queries all balloons via Entitas group. New approach: query `SlotGrid` for all non-null models where `Color.Value == itemBalloonColor`, then resolve their `BalloonView` via `SlotGrid.ViewAt()`. Sort by `Vector3.Distance` from the item balloon's world position.
+
+##### Implementation
+
+| File | Location | Responsibility |
+|---|---|---|
+| `LightningItemHandler.cs` | `Item/Lightning/` | `IBalloonItem` — queries SlotGrid for same-color balloons; sorts by distance; spawns `ChainLightningView` via pool; passes targets; each target hit publishes `BalloonHitMessage`; async — returns `UniTask` |
+| `ChainLightningView.cs` | `Item/Lightning/` | MonoBehaviour on prefab — `IPoolable`; `Display(List<Vector3> targets)` drives the forward/reverse line animation via `async UniTaskVoid`; exposes completion callback for pool return |
+
+##### Open questions
+
+- Does `LightningItemHandler` publish `BalloonHitMessage` for each target during the forward pass (one per jump delay), or all at once before the animation? Legacy hits during the animation (per-jump). Preserving this means the handler must await `ChainLightningView`'s animation coroutine and publish hits in sync. **Preferred: per-jump hits** — matches legacy timing where balloons pop sequentially as the lightning reaches them.
+- Should `IBalloonItem.Activate()` return `UniTask` instead of `void` to support async items like Lightning? Or should the handler fire-and-forget and signal completion via a message? **Preferred: return `UniTask`** — `ItemActivator` awaits it, then publishes `ItemActivatedMessage`.
+- Color of the lightning lines — legacy doesn't tint them (they use the prefab's default material). Confirm if this is correct or if they should tint to the balloon color.
+
+##### Registration
+
+```csharp
+builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+```
+
+✅ **Checkpoint:** Hit a lightning balloon → all same-color balloons are identified → lightning bolts grow forward, jumping target-to-target with delay → each target pops as the bolt reaches it → after all targets hit, lightning retracts → ChainLightningView returns to pool.
+
+---
+
+#### Phase 15d.5 — Pooling Optimization Pass
+
+**Goal:** Revisit Bomb and Laser effect prefabs and finalize pooling decisions. If initial implementation used `Instantiate`/`Destroy`, migrate to `PoolChannel` if play-testing shows noticeable GC spikes.
+
+- Evaluate frequency of Bomb/Laser activations during normal gameplay
+- If pooling is warranted: add `IPoolable` to `BombRangeView`/`LaserRangeView`, register channels in `PoolManager`
+- Ensure all effect prefabs reset cleanly on `OnSpawned()` (Animator state, transform, renderer visibility)
+
+✅ **Checkpoint:** All item effect prefabs either pooled or confirmed OK without pooling. No GC spikes from item activations.
+
+---
+
+#### Summary — files to create across all 15d subphases
+
+| File | Location |
+|---|---|
+| `ItemActivator.cs` | `Item/` |
+| `ShieldItemHandler.cs` | `Item/Shield/` |
+| `BombItemHandler.cs` | `Item/Bomb/` |
+| `LaserItemHandler.cs` | `Item/Laser/` |
+| `LightningItemHandler.cs` | `Item/Lightning/` |
+| `ChainLightningView.cs` | `Item/Lightning/` |
+| `ItemActivatedMessage.cs` | `Shared/Messages/` |
+
+#### Summary — files to modify across all 15d subphases
+
+| File | Change |
+|---|---|
+| `ItemSettings.cs` | Add `NudgeDuration` and `NudgeDistance` fields |
+| `BalloonHitMessage.cs` | Add optional `NudgeDuration?` and `NudgeDistance?` fields |
+| `BalloonNudgeHandler.cs` | Respect nudge overrides from hit message |
+| `BalloonController.cs` | Defer pool return for item balloons until `ItemActivatedMessage` |
+| `IBalloonItem.cs` | Change `Activate()` return type to `UniTask` (for async items) |
+| `IItem.cs` | Change `Activate()` return type to `UniTask` |
+| `GameLifetimeScope.cs` | Register `ItemActivator`, all handlers, new message brokers |
+
+#### Full registration (all items)
+
+```csharp
+builder.RegisterMessageBroker<ItemActivatedMessage>(options);
+builder.RegisterEntryPoint<ItemActivator>();
+builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+```
+
+✅ **Phase 15d complete checkpoint:** All four items activate correctly — Shield grants shield, Bomb area-destroys, Laser cross-destroys, Lightning chain-destroys same-color. All effects render and clean up properly. Pooling is in place or confirmed unnecessary.
 
 ---
 
@@ -1815,8 +2069,13 @@ All async work in `Assets/Source/` must use **UniTask** instead of Unity corouti
 | 15b.3 | — Visual Infrastructure: SpriteShadow Shader | ✅ Done      |
 | 15b.4 | — BalloonView Shadow Cleanup & Service Decoupling | ✅ Done  |
 | 15b.5 | — Code Quality Audit                      | ✅ Done         |
-| 15c   | — Item Assignment (Check System)          | ⬜ Todo         |
+| 15c   | — Item Assignment (Check System)          | ✅ Done         |
 | 15d   | — Item Activation & Per-Type Effects      | ⬜ Todo         |
+| 15d.1 | — Shield Item                             | ⬜ Todo         |
+| 15d.2 | — Bomb Item                               | ⬜ Todo         |
+| 15d.3 | — Laser Item                              | ⬜ Todo         |
+| 15d.4 | — Lightning Item                          | ⬜ Todo         |
+| 15d.5 | — Pooling Optimization Pass               | ⬜ Todo         |
 | 15e   | — Item Cheats                             | ⬜ Todo         |
 | 16    | Game Loop, UI & Cleanup                   | ⬜ Todo         |
 

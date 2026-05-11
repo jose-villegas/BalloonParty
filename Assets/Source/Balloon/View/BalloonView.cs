@@ -111,21 +111,24 @@ namespace BalloonParty.Balloon.View
             var slotPos = _grid.IndexToWorldPosition(Model.SlotIndex.Value);
             var direction = slotPos - msg.HitSlotPosition;
 
+            var nudgeDistance = msg.NudgeDistance ?? _config.NudgeDistance;
+            var nudgeDuration = msg.NudgeDuration ?? _config.NudgeDuration;
+
             writeable.IsStable.Value = false;
-            Nudge(slotPos, direction, () => writeable.IsStable.Value = true);
+            Nudge(slotPosition: slotPos, direction: direction, nudgeDistance: nudgeDistance,
+                nudgeDuration: nudgeDuration, onComplete: () => writeable.IsStable.Value = true);
         }
 
-        private void Nudge(Vector3 slotPosition, Vector3 direction, Action onComplete)
+        private void Nudge(Vector3 slotPosition, Vector3 direction, float nudgeDistance,
+            float nudgeDuration, Action onComplete)
         {
             // Standalone spawn tweens would compete with the nudge sequence
             var currentScale = transform.localScale;
             transform.DOKill();
 
-            var nudgeDuration = _config.NudgeDuration;
-
             var sequence = DOTween.Sequence();
             sequence.Append(transform.DOMove(
-                slotPosition + (direction.normalized * _config.NudgeDistance),
+                slotPosition + (direction.normalized * nudgeDistance),
                 nudgeDuration / 2f));
             sequence.Append(transform.DOMove(slotPosition, nudgeDuration / 2f));
             sequence.OnComplete(() => onComplete?.Invoke());
