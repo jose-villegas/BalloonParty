@@ -2,6 +2,7 @@
 
 using System;
 using System.Linq;
+using BalloonParty.Shared;
 using UnityEngine;
 
 #endregion
@@ -70,8 +71,6 @@ namespace BalloonParty.Configuration
         public GameDisplayConfiguration DisplayConfiguration => _displayConfiguration;
         public ItemConfiguration ItemConfiguration => _itemConfiguration;
 
-        [Obsolete]
-        public PowerUpConfiguration PowerUpConfiguration => null;
 
         public int PointsRequiredForLevel(int level)
         {

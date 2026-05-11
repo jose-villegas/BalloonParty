@@ -1,8 +1,9 @@
-﻿using Entitas;
-using Entitas.CodeGeneration.Attributes;
-
-[Game, Event(EventTarget.Self)]
-public sealed class BalloonLastColorPopCountComponent : IComponent
-{
-    public int Value;
-}
+// DEPRECATED - commented out during migration. See MIGRATION_PLAN.md.
+// ﻿using Entitas;
+// using Entitas.CodeGeneration.Attributes;
+// 
+// [Game, Event(EventTarget.Self)]
+// public sealed class BalloonLastColorPopCountComponent : IComponent
+// {
+//     public int Value;
+// }

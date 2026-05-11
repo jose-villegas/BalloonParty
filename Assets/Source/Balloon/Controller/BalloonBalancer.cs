@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;

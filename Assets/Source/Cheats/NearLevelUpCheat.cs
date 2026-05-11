@@ -4,6 +4,7 @@
 
 using System.Collections.Generic;
 using BalloonParty.Game;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 

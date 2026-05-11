@@ -1,8 +1,9 @@
-﻿using Entitas;
-using Entitas.CodeGeneration.Attributes;
-
-[Unique, Event(EventTarget.Any)]
-public class GameLevelComponent : IComponent
-{
-    public int Value;
-}
+// DEPRECATED - commented out during migration. See MIGRATION_PLAN.md.
+// ﻿using Entitas;
+// using Entitas.CodeGeneration.Attributes;
+// 
+// [Unique, Event(EventTarget.Any)]
+// public class GameLevelComponent : IComponent
+// {
+//     public int Value;
+// }

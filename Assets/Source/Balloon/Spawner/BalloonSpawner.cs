@@ -1,5 +1,6 @@
 #region
 
+using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
@@ -27,11 +28,13 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly IPublisher<ItemCheckMessage> _itemCheckPublisher;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly LifetimeScope _parentScope;
         private readonly PoolManager _poolManager;
         private readonly BalloonSpawnerSettings _settings;
 
+        private readonly List<IWriteableBalloonModel> _newlySpawnedBalloons = new();
 
         private int _turnCount;
 
@@ -45,7 +48,8 @@ namespace BalloonParty.Balloon.Spawner
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
             ISubscriber<BalloonHitMessage> hitSubscriber,
-            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber)
+            ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
+            IPublisher<ItemCheckMessage> itemCheckPublisher)
         {
             _grid = grid;
             _settings = settings;
@@ -56,6 +60,7 @@ namespace BalloonParty.Balloon.Spawner
             _balancePublisher = balancePublisher;
             _hitSubscriber = hitSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
+            _itemCheckPublisher = itemCheckPublisher;
         }
 
         public void Start()
@@ -67,6 +72,7 @@ namespace BalloonParty.Balloon.Spawner
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
 
             PopulateInitialGrid();
+            _newlySpawnedBalloons.Clear();
         }
 
         private void SpawnBalloon(string colorName, Vector2Int slot)
@@ -86,6 +92,8 @@ namespace BalloonParty.Balloon.Spawner
 
             _grid.Place(model, view, slot);
             AnimateSpawn(view, targetPosition, model);
+
+            _newlySpawnedBalloons.Add(model);
         }
 
         private void PopulateInitialGrid()
@@ -102,6 +110,7 @@ namespace BalloonParty.Balloon.Spawner
         private void SpawnLine()
         {
             SpawnLineInternal();
+            PublishItemCheck();
             _balancePublisher.Publish(default);
         }
 
@@ -179,7 +188,18 @@ namespace BalloonParty.Balloon.Spawner
                     cancellationToken: ct);
             }
 
+            PublishItemCheck();
             _balancePublisher.Publish(default);
+        }
+
+        private void PublishItemCheck()
+        {
+            if (_newlySpawnedBalloons.Count > 0)
+            {
+                _itemCheckPublisher.Publish(
+                    new ItemCheckMessage(_newlySpawnedBalloons.ToArray(), _turnCount));
+                _newlySpawnedBalloons.Clear();
+            }
         }
     }
 }

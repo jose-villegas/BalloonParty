@@ -1,5 +1,6 @@
 #region
 
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UnityEngine;
