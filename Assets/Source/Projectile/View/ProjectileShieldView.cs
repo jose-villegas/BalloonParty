@@ -134,7 +134,9 @@ namespace BalloonParty.Projectile.View
             }
             else if (currentCount < _previousShieldCount)
             {
-                SpawnVfx(_shieldLoseVfxPrefab, transform.position, CurrentColor());
+                var direction = _model?.Direction ?? Vector3.up;
+                var rotation = Quaternion.LookRotation(Vector3.forward, direction);
+                SpawnVfxRotated(_shieldLoseVfxPrefab, transform.position, rotation, CurrentColor());
             }
         }
 
@@ -153,6 +155,18 @@ namespace BalloonParty.Projectile.View
             var key = prefab.name;
             var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(prefab.gameObject));
             effect.Play(position, color, () => _poolManager.Return(key, effect));
+        }
+
+        private void SpawnVfxRotated(ParticleSystem prefab, Vector3 position, Quaternion rotation, Color color)
+        {
+            if (prefab == null)
+            {
+                return;
+            }
+
+            var key = prefab.name;
+            var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(prefab.gameObject));
+            effect.Play(position, rotation, color, () => _poolManager.Return(key, effect));
         }
     }
 }
