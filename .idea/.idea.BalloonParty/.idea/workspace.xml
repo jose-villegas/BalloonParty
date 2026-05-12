@@ -18,15 +18,82 @@
     </expand>
     <select />
   </component>
+  <component name="CMakeProjectFlavorService">
+    <option name="flavorId" value="CMakePlainProjectFlavor" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/copilotDiffState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/copilotDiffState.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/SceneTransition.cs" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/SceneTransition.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/AVFX_LaserRange.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/AVFX_LaserRange.prefab" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Lightning/LightningItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Lightning/LightningItemHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/manifest.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/manifest.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Packages/packages-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/Packages/packages-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectSettings/PackageManagerSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/PackageManagerSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/BalloonMaterial.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/BalloonMaterial.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/LevelUpRays.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/LevelUpRays.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/LineMaterial_Lightning.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/LineMaterial_Lightning.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/LineMaterial_LightningGlow.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/LineMaterial_LightningGlow.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Material_PUShield.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/Material_PUShield.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_BalloonPop.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_BalloonPop.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_BalloonPopTrail.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_BalloonPopTrail.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_BombRangePU.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_BombRangePU.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_BombRangePUTrail.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_BombRangePUTrail.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_CompletedColorProgress.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_CompletedColorProgress.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_LevelUpFill.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_LevelUpFill.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_PUBombCoordSparks.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_PUBombCoordSparks.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_PUBombCoordSparksTrail.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_PUBombCoordSparksTrail.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_PULightningSparks.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_PULightningSparks.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldBounce.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldBounce.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldBounceTrail.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldBounceTrail.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldGain.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldGain.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldGainPU.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldGainPU.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldGainPUTrail.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldGainPUTrail.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldGainTrace.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldGainTrace.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldLose.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldLose.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldTrailLose.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/PSMaterial_ShieldTrailLose.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/ProjectileMaterial.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/ProjectileMaterial.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/ScoreTrail.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/ScoreTrail.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/TrailMaterial_Prediction.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/TrailMaterial_Prediction.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/TrailMaterial_Projectile.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/TrailMaterial_Projectile.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/TrailMaterial_ScoreTrail.mat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Materials/TrailMaterial_ScoreTrail.mat.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Game/UICanvas.prefab" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Game/UICanvas.prefab.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/PSVFX_ShieldGainPU.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/PSVFX_ShieldGainPU.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Shield/VFX/PSVFX_ShieldGain.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Shield/VFX/PSVFX_ShieldGain.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game_OLD.unity" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game_OLD.unity.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/MIGRATION_PLAN.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/MIGRATION_PLAN.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/GameStart/GameStartButton.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/GameStart/GameStartButton.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/GameStart/README.md" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/GameStart/README.md.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectSettings/EditorBuildSettings.asset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/EditorUserSettings.asset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

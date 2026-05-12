@@ -1,7 +1,7 @@
 # BalloonParty — ECS → MVC Migration Plan
 
 > Created: 2026-05-08
-> Last Updated: 2026-05-11
+> Last Updated: 2026-05-12
 > Context: Migrating from Entitas ECS (`Assets/Source_Old`) to a plain MVC architecture (`Assets/Source`) using MonoBehaviours, **UniRx** for reactive programming, and **VContainer** for dependency injection. Each phase ends with a **testable Unity Editor checkpoint**.
 
 ---
@@ -62,8 +62,8 @@ Assets/Source/
     IItem.cs, IBalloonItem.cs, IItemView.cs,
     ItemActivator.cs, ItemDisplayService.cs, ItemViewScope.cs,
     ItemVisualView.cs, ItemVisualPoolChannel.cs, LaserItemRotation.cs
-    Bomb/       BombItemHandler.cs          ← Phase 15d.2 (pending)
-    Laser/      LaserItemHandler.cs         ← Phase 15d.3 (pending)
+    Bomb/       BombItemHandler.cs          ← ✅ Phase 15d.2 done
+    Laser/      LaserItemHandler.cs         ← ✅ Phase 15d.3 done
     Lightning/  LightningItemHandler.cs, ChainLightningView.cs  ← ✅ Phase 15d.4 done
     Shield/     ShieldItemHandler.cs        ← ✅ Phase 15d.1 done
   Slots/
@@ -83,7 +83,7 @@ Assets/Source/
     ScoreController.cs
     GameLifetimeScope.cs   ← root VContainer scope
     GameChildLifetimeScope.cs ← abstract base for all child scopes
-    GameManager.cs         ← Phase 16
+    GameManager.cs         ← ✅ Phase 16
   Configuration/
     GameConfiguration.cs (ScriptableObject), GameConfiguration.asset
     BalloonColorConfiguration.cs, IBalloonColorConfiguration.cs
@@ -109,7 +109,7 @@ Assets/Source/
     LevelUp/        LevelUpPopUp.cs, LevelUpLifetimeScope.cs
     Shields/        ShieldCounterLabel.cs, ShieldCounterAnimation.cs,
                     ShieldUILifetimeScope.cs   ← child VContainer scope
-    GameStart/      GameStartButton.cs
+    GameStart/      ← removed; use SceneTransition (Shared/) wired directly to Button.onClick
   Display/
     OrthogonalSizeCameraController.cs
   Cheats/
@@ -530,7 +530,7 @@ All logic lives in `BalloonSpawner`:
 |---|---|
 | `BalloonSpawner.cs` | Added `ProjectileDestroyedMessage` subscription, turn tracking, `SpawnLinesWithDelayAsync` (`async UniTaskVoid`), `SpawnLineInternal` extraction, removed `SlotGridView` coroutine runner dependency |
 | `SpawnBalloonLineMessage.cs` | Added `LineCount` property |
-| `GameStartButton.cs` | Publishes single message with `LineCount` instead of N separate messages |
+| `GameStartButton.cs` | Publishes single message with `LineCount` instead of N separate messages — _subsequently removed; replaced by `SceneTransition`_ |
 
 ✅ **Checkpoint:** Fire projectile → it bounces and dies → new balloon lines spawn from below with staggered timing → grid rebalances after all lines settle. First projectile death (after game start) does **not** spawn new lines.
 
@@ -538,22 +538,9 @@ All logic lives in `BalloonSpawner`:
 
 ## Phase 7f — Game Start
 
-**Goal:** Replace the legacy `isGameStarted` entity flag with `GameStartButton` publishing `SpawnBalloonLineMessage`, so the game can be started independently of any Entitas system.
+**Goal:** Replace the legacy `isGameStarted` entity flag. Handled by `SceneTransition` (`Shared/SceneTransition.cs`) wired directly to the start button's `onClick` in the Inspector — no dedicated component needed.
 
-| File | Status |
-|---|---|
-| `GameStartButton.cs` | ✅ Coded |
-
-**Unity Editor steps:**
-
-1. **`GameStartButton`** — add to the start button GameObject in the scene
-2. `GameStartButton` is already registered in `GameLifetimeScope`:
-   ```csharp
-   builder.RegisterComponentInHierarchy<GameStartButton>();
-   ```
-3. **Disable legacy** — disable the old `GameStartButton` MonoBehaviour and comment out the `isGameStarted` handling in `GameUpdateSystems` / `GameFixedUpdateSystems`
-
-✅ **Checkpoint:** Press the start button → initial balloon lines spawn and settle → thrower slides in → game is fully playable without Entitas handling game start.
+✅ **Checkpoint:** Press the start button → scene loads → game is fully playable without Entitas handling game start.
 
 ---
 
@@ -1421,7 +1408,7 @@ builder.RegisterMessageBroker<ItemRotationCapturedMessage>(options);
 
 ---
 
-#### Phase 15d.4 — Lightning Item
+#### Phase 15d.4 — Lightning Item ✅
 
 **Goal:** Port the chain lightning effect — the most complex item. Finds all same-color balloons, hits them sequentially with async delays, and renders a multi-segment lightning VFX.
 
@@ -1509,7 +1496,7 @@ builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfac
 
 ---
 
-#### Phase 15d.5 — Pooling Optimization Pass
+#### Phase 15d.5 — Pooling Optimization Pass ✅
 
 **Goal:** Revisit Bomb and Laser effect prefabs and finalize pooling decisions. If initial implementation used `Instantiate`/`Destroy`, migrate to `PoolChannel` if play-testing shows noticeable GC spikes.
 
@@ -2069,36 +2056,36 @@ All async work in `Assets/Source/` must use **UniTask** instead of Unity corouti
 | 7a    | — Score Feedback (bars, notices, trails)   | ✅ Done         |
 | 7b    | — Level-Up Popup                          | ✅ Done         |
 | 7c    | — Shield Counter HUD                      | ✅ Done         |
-| 7d    | — Projectile Shield Visuals               | ⬜ Unity wiring pending |
+| 7d    | — Projectile Shield Visuals               | ✅ Done         |
 | 7e    | — Auto-Spawning on Projectile Death       | ✅ Done         |
-| 7f    | — Game Start Button                       | ⬜ Unity wiring pending |
-| 7g    | — HUD Audit & Cleanup                    | ⬜ Todo         |
+| 7f    | — Game Start Button                       | ✅ Done         |
+| 7g    | — HUD Audit & Cleanup                    | ✅ Done         |
 | 8     | Object Pooling                            | ✅ Done         |
 | 8a    | — Generic Pool System & VFX/Trail         | ✅ Done         |
 | 8b    | — Migrate ScorePointTrail to PoolManager  | ✅ Done         |
 | 8c    | — Migrate Balloon Instances to PoolManager| ✅ Done         |
 | 9     | Balance Animation System Redo             | ✅ Done         |
-| 10    | Prediction Trace                          | ✅ Done (Unity wiring pending) |
+| 10    | Prediction Trace                          | ✅ Done         |
 | 11    | Configuration Migration                   | ✅ Done         |
 | 12    | Camera & Display Setup                    | ✅ Done         |
 | 13    | Projectile Visuals (Glow + Shield Rings)  | ✅ Done         |
 | 14    | MVC Architecture Audit                    | ✅ Done         |
 | 14a   | ScoreNotice Pool & Pool Design Refactor   | ✅ Done         |
-| 15    | Items                                     | 🔄 In Progress  |
+| 15    | Items                                     | ✅ Done         |
 | 15a   | — BalloonModel Item Property              | ✅ Done         |
-| 15b   | — Item Display on Balloons                | ✅ Done (Unity wiring pending) |
+| 15b   | — Item Display on Balloons                | ✅ Done         |
 | 15b.1 | — Helpers & Extensions                    | ✅ Done         |
 | 15b.2 | — Item folder reorganization (`Item/`)    | ✅ Done         |
 | 15b.3 | — Visual Infrastructure: SpriteShadow Shader | ✅ Done      |
 | 15b.4 | — BalloonView Shadow Cleanup & Service Decoupling | ✅ Done  |
 | 15b.5 | — Code Quality Audit                      | ✅ Done         |
 | 15c   | — Item Assignment (Check System)          | ✅ Done         |
-| 15d   | — Item Activation & Per-Type Effects      | ⬜ Todo         |
-| 15d.1 | — Shield Item                             | ⬜ Todo         |
-| 15d.2 | — Bomb Item                               | ⬜ Todo         |
-| 15d.3 | — Laser Item                              | ⬜ Todo         |
+| 15d   | — Item Activation & Per-Type Effects      | ✅ Done         |
+| 15d.1 | — Shield Item                             | ✅ Done         |
+| 15d.2 | — Bomb Item                               | ✅ Done         |
+| 15d.3 | — Laser Item                              | ✅ Done         |
 | 15d.4 | — Lightning Item                          | ✅ Done         |
-| 15d.5 | — Pooling Optimization Pass               | ⬜ Todo         |
-| 15e   | — Item Cheats                             | ⬜ Todo         |
-| 16    | Game Loop, UI & Cleanup                   | ⬜ Todo         |
+| 15d.5 | — Pooling Optimization Pass               | ✅ Done         |
+| 15e   | — Item Cheats                             | ✅ Done         |
+| 16    | Game Loop, UI & Cleanup                   | ✅ Done         |
 

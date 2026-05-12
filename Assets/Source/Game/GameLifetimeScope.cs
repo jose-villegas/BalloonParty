@@ -14,7 +14,6 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using BalloonParty.Thrower;
-using BalloonParty.UI.GameStart;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
@@ -65,8 +64,6 @@ namespace BalloonParty.Game
             builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
-
-            //builder.RegisterComponentInHierarchy<GameStartButton>();
 
             builder.RegisterEntryPoint<OrthogonalSizeCameraController>();
 
