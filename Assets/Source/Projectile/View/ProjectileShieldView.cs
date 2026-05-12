@@ -145,8 +145,8 @@ namespace BalloonParty.Projectile.View
             }
 
             var key = prefab.name;
-            var vfx = _poolManager.GetOrRegister(key, () => new VfxPoolChannel(prefab.gameObject));
-            vfx.Play(position, color, () => _poolManager.Return(key, vfx));
+            var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(prefab.gameObject));
+            effect.Play(position, color, () => _poolManager.Return(key, effect));
         }
     }
 }

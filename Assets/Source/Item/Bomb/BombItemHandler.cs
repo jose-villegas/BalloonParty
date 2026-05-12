@@ -139,16 +139,16 @@ namespace BalloonParty.Item.Bomb
 
         private void SpawnVisual(ItemSettings settings)
         {
-            if (settings.ActivationVfxPrefab == null)
+            if (settings.ActivationEffectPrefab == null)
             {
                 return;
             }
 
-            var key = settings.ActivationVfxPrefab.name;
-            var vfx = _poolManager.GetOrRegister(key, () => new VfxPoolChannel(settings.ActivationVfxPrefab));
+            var key = settings.ActivationEffectPrefab.name;
+            var effect = _poolManager.GetOrRegister(key, () => new EffectPoolChannel(settings.ActivationEffectPrefab));
 
             var balloonColor = _config.BalloonColor(_balloon.Color.Value);
-            vfx.Play(_worldPosition, balloonColor, () => _poolManager.Return(key, vfx));
+            effect.Play(_worldPosition, balloonColor, () => _poolManager.Return(key, effect));
         }
     }
 }

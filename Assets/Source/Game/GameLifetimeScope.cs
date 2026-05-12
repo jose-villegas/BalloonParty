@@ -7,6 +7,7 @@ using BalloonParty.Display;
 using BalloonParty.Item;
 using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Laser;
+using BalloonParty.Item.Lightning;
 using BalloonParty.Item.Shield;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
@@ -63,6 +64,7 @@ namespace BalloonParty.Game
             builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 
             //builder.RegisterComponentInHierarchy<GameStartButton>();
 

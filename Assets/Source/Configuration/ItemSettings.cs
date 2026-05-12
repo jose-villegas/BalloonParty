@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Shared;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -11,7 +12,7 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _weight;
         [SerializeField] private int _maximumAllowed;
         [SerializeField] private GameObject _visualPrefab;
-        [SerializeField] private GameObject _activationVfxPrefab;
+        [SerializeField] private EffectView _activationEffectPrefab;
 
         [Header("Bomb")]
         [SerializeField] private float _bombRadius = 1.25f;
@@ -22,16 +23,26 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _laserRaycastDistance = 20f;
         [SerializeField] private float _laserCircleCastRadius = 0.065f;
 
+        [Header("Lightning")]
+        [SerializeField] private GameObject _lightningPrefab;
+        [SerializeField] private float _lightningSegmentsMultiplier = 3f;
+        [SerializeField] private float _lightningRandomness = 0.2f;
+        [SerializeField] private float _lightningJumpTime = 0.15f;
+
         public ItemType Type => _type;
         public int TurnCheckEvery => _turnCheckEvery;
         public float Weight => _weight;
         public int MaximumAllowed => _maximumAllowed;
         public GameObject VisualPrefab => _visualPrefab;
-        public GameObject ActivationVfxPrefab => _activationVfxPrefab;
+        public EffectView ActivationEffectPrefab => _activationEffectPrefab;
         public float BombRadius => _bombRadius;
         public float BombNudgeDistance => _bombNudgeDistance;
         public float BombNudgeFalloff => _bombNudgeFalloff;
         public float LaserRaycastDistance => _laserRaycastDistance;
         public float LaserCircleCastRadius => _laserCircleCastRadius;
+        public GameObject LightningPrefab => _lightningPrefab;
+        public float LightningSegmentsMultiplier => _lightningSegmentsMultiplier;
+        public float LightningRandomness => _lightningRandomness;
+        public float LightningJumpTime => _lightningJumpTime;
     }
 }

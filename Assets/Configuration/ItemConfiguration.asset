@@ -19,48 +19,62 @@ MonoBehaviour:
     _maximumAllowed: 3
     _visualPrefab: {fileID: 2023896797455516263, guid: 0909fb1419fa47148a1cc0cd0ca72e9f,
       type: 3}
-    _activationVfxPrefab: {fileID: 7384406449779274632, guid: 00eef9bcf5537e24b8829da45a994469,
+    _activationEffectPrefab: {fileID: 1545043174332561462, guid: 00eef9bcf5537e24b8829da45a994469,
       type: 3}
     _bombRadius: 1.25
     _bombNudgeDistance: 2
     _bombNudgeFalloff: 0.75
     _laserRaycastDistance: 20
     _laserCircleCastRadius: 0.065
+    _lightningPrefab: {fileID: 0}
+    _lightningSegmentsMultiplier: 3
+    _lightningRandomness: 0.2
+    _lightningJumpTime: 0.15
   - _type: 3
     _turnCheckEvery: 1
     _weight: 10000
     _maximumAllowed: 3
     _visualPrefab: {fileID: 2023896797455516263, guid: ea0a89bfc43787544a6501da72afd299,
       type: 3}
-    _activationVfxPrefab: {fileID: 5266042713840032911, guid: 09e04fef865adae47bf118af97e3e371,
-      type: 3}
+    _activationEffectPrefab: {fileID: 0}
     _bombRadius: 1.25
     _bombNudgeDistance: 0.15
     _bombNudgeFalloff: 1.5
     _laserRaycastDistance: 20
     _laserCircleCastRadius: 0.065
+    _lightningPrefab: {fileID: 0}
+    _lightningSegmentsMultiplier: 3
+    _lightningRandomness: 0.2
+    _lightningJumpTime: 0.15
   - _type: 4
     _turnCheckEvery: 0
     _weight: 0
     _maximumAllowed: 1
     _visualPrefab: {fileID: 2023896797455516263, guid: dd84523fdbc2f8c4497d487f89fa32c8,
       type: 3}
-    _activationVfxPrefab: {fileID: 0}
+    _activationEffectPrefab: {fileID: 0}
     _bombRadius: 1.25
     _bombNudgeDistance: 0.15
     _bombNudgeFalloff: 1.5
     _laserRaycastDistance: 20
     _laserCircleCastRadius: 0.065
+    _lightningPrefab: {fileID: 0}
+    _lightningSegmentsMultiplier: 3
+    _lightningRandomness: 0.2
+    _lightningJumpTime: 0.15
   - _type: 1
     _turnCheckEvery: 1
     _weight: 100
     _maximumAllowed: 3
     _visualPrefab: {fileID: 7402881001233824042, guid: ecdbdd2040aac4c7baea4111845f0501,
       type: 3}
-    _activationVfxPrefab: {fileID: 5654394001867162603, guid: 6e855a2c07caa6547947b364836193df,
-      type: 3}
+    _activationEffectPrefab: {fileID: 0}
     _bombRadius: 1.25
     _bombNudgeDistance: 0.15
     _bombNudgeFalloff: 1.5
     _laserRaycastDistance: 20
     _laserCircleCastRadius: 0.065
+    _lightningPrefab: {fileID: 0}
+    _lightningSegmentsMultiplier: 3
+    _lightningRandomness: 0.2
+    _lightningJumpTime: 0.15

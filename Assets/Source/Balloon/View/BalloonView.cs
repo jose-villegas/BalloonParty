@@ -125,8 +125,8 @@ namespace BalloonParty.Balloon.View
         public void PlayPopEffect(Color color)
         {
             var key = _popVfxPrefab.name;
-            var vfx = _poolManager.GetOrRegister(key, () => new VfxPoolChannel(_popVfxPrefab.gameObject));
-            vfx.Play(transform.position, color, () => _poolManager.Return(key, vfx));
+            var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(_popVfxPrefab.gameObject));
+            effect.Play(transform.position, color, () => _poolManager.Return(key, effect));
         }
 
         public void RegisterDisposeOnDespawn(IDisposable disposable)

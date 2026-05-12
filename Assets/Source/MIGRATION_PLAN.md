@@ -64,7 +64,7 @@ Assets/Source/
     ItemVisualView.cs, ItemVisualPoolChannel.cs, LaserItemRotation.cs
     Bomb/       BombItemHandler.cs          ← Phase 15d.2 (pending)
     Laser/      LaserItemHandler.cs         ← Phase 15d.3 (pending)
-    Lightning/  LightningItemHandler.cs, ChainLightningView.cs  ← Phase 15d.4 (pending)
+    Lightning/  LightningItemHandler.cs, ChainLightningView.cs  ← ✅ Phase 15d.4 done
     Shield/     ShieldItemHandler.cs        ← ✅ Phase 15d.1 done
   Slots/
     SlotGrid.cs, SlotGridChangedEvent.cs
@@ -1530,8 +1530,8 @@ builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfac
 | `ShieldItemHandler.cs` | `Item/Shield/` | ✅ Done |
 | `BombItemHandler.cs` | `Item/Bomb/` | ✅ Done |
 | `LaserItemHandler.cs` | `Item/Laser/` | ✅ Done |
-| `LightningItemHandler.cs` | `Item/Lightning/` | ⬜ Pending |
-| `ChainLightningView.cs` | `Item/Lightning/` | ⬜ Pending |
+| `LightningItemHandler.cs` | `Item/Lightning/` | ✅ Done |
+| `ChainLightningView.cs` | `Item/Lightning/` | ✅ Done |
 | `ItemActivatedMessage.cs` | `Shared/Messages/` | ✅ Done |
 | `ItemRotationCapturedMessage.cs` | `Shared/Messages/` | ✅ Done |
 | `PoolableVfx.cs` | `Shared/Pool/` | ✅ Done |
@@ -1571,7 +1571,7 @@ builder.RegisterInstance(_itemConfiguration);
 builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();    // ✅ Phase 15d.1
 builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();      // ✅ Phase 15d.2
 builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();     // ✅ Phase 15d.3
-builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces(); // ⬜ Phase 15d.4
+builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces(); // ✅ Phase 15d.4
 ```
 
 ✅ **Phase 15d complete checkpoint:** All four items activate correctly — Shield grants shield, Bomb area-destroys, Laser cross-destroys, Lightning chain-destroys same-color. All effects render and clean up properly. Pooling is in place for all item visuals and activation effects.
@@ -2097,7 +2097,7 @@ All async work in `Assets/Source/` must use **UniTask** instead of Unity corouti
 | 15d.1 | — Shield Item                             | ⬜ Todo         |
 | 15d.2 | — Bomb Item                               | ⬜ Todo         |
 | 15d.3 | — Laser Item                              | ⬜ Todo         |
-| 15d.4 | — Lightning Item                          | ⬜ Todo         |
+| 15d.4 | — Lightning Item                          | ✅ Done         |
 | 15d.5 | — Pooling Optimization Pass               | ⬜ Todo         |
 | 15e   | — Item Cheats                             | ⬜ Todo         |
 | 16    | Game Loop, UI & Cleanup                   | ⬜ Todo         |

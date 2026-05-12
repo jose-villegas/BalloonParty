@@ -1862,8 +1862,9 @@ GameObject:
   m_Component:
   - component: {fileID: 3169692521933047321}
   - component: {fileID: 4949984372360077627}
+  - component: {fileID: 7084871819143963872}
   m_Layer: 10
-  m_Name: LaserRange
+  m_Name: AVFX_LaserRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1908,6 +1909,18 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &7084871819143963872
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5266042713840032911}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4988a12c624403f9234afbd114618be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Shared.AnimatorEffectView
 --- !u!1 &5405885084401642091
 GameObject:
   m_ObjectHideFlags: 0

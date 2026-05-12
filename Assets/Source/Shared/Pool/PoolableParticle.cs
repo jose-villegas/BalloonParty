@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BalloonParty.Shared
 {
-    public class PoolableParticle : MonoBehaviour, IPoolable
+    public class PoolableParticle : MonoBehaviour, IPoolable, IEffect
     {
         private Action _onComplete;
         private ParticleSystem _particle;
@@ -23,6 +23,8 @@ namespace BalloonParty.Shared
             }
         }
 
+        // ── IPoolable ─────────────────────────────────────────────────────────────
+
         public void OnSpawned() { }
 
         public void OnDespawned()
@@ -31,13 +33,26 @@ namespace BalloonParty.Shared
             _particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
-        public void Play(Vector3 position, Color color, Action onComplete)
+        // ── IEffect ───────────────────────────────────────────────────────────────
+
+        public void Play(Vector3 position, Color tint, Action onComplete = null)
         {
             _onComplete = onComplete;
             transform.position = position;
             var main = _particle.main;
-            main.startColor = color;
+            main.startColor = tint;
             _particle.Play();
+        }
+
+        public void Play(Vector3 position, Quaternion rotation, Color tint, Action onComplete = null)
+        {
+            transform.rotation = rotation;
+            Play(position, tint, onComplete);
+        }
+
+        public void Stop()
+        {
+            OnDespawned();
         }
     }
 }
