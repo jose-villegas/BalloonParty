@@ -1,3 +1,4 @@
+using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
@@ -23,6 +24,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private IGameConfiguration _config;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
+        [Inject] private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
 
         private IWriteableProjectileModel _model;
         private ProjectileTrail _projectileTrail;
@@ -48,62 +50,8 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            if (!_shieldShown && _shieldView != null)
-            {
-                _shieldView.Show();
-                _shieldShown = true;
-                _projectileTrail?.Enable();
-            }
-
-            var pos = transform.position;
-            pos += _model.Direction * (_model.Speed * Time.fixedDeltaTime);
-
-            var reflect = Vector3.zero;
-            var limits = _config.LimitsClockwise;
-
-            if (pos.y > limits.x)
-            {
-                reflect += Vector3.down;
-                pos.y = limits.x;
-            }
-
-            if (pos.x > limits.y)
-            {
-                reflect += Vector3.left;
-                pos.x = limits.y;
-            }
-
-            if (pos.y < limits.z)
-            {
-                reflect += Vector3.up;
-                pos.y = limits.z;
-            }
-
-            if (pos.x < limits.w)
-            {
-                reflect += Vector3.right;
-                pos.x = limits.w;
-            }
-
-            if (reflect != Vector3.zero)
-            {
-                _model.ShieldsRemaining.Value--;
-
-                PlayBounceEffect(pos);
-
-                if (_model.ShieldsRemaining.Value < 0)
-                {
-                    _projectileTrail?.Disable();
-                    _balancePublisher.Publish(default);
-                    _destroyedPublisher.Publish(default);
-                    return;
-                }
-
-                _model.Direction = Vector2.Reflect(_model.Direction, reflect.normalized);
-            }
-
-            transform.position = pos;
-            transform.up = _model.Direction;
+            RevealShieldOnFirstFreeFrame();
+            MoveAndBounce();
         }
 
         private void OnTriggerEnter2D(Collider2D other)
@@ -113,31 +61,14 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            if (other.gameObject.layer != BalloonsLayer)
-            {
-                return;
-            }
-
-            var balloonView = other.GetComponentInParent<BalloonView>();
-            if (balloonView == null)
-            {
-                return;
-            }
-
-            var balloonModel = balloonView.Model;
-            if (balloonModel == null)
-            {
-                return;
-            }
-
-            if (_model.LastHitBalloon == balloonModel)
+            if (!TryGetHitBalloon(other, out var balloonView, out var balloonModel))
             {
                 return;
             }
 
             _model.LastHitBalloon = balloonModel;
 
-            TrackColor(balloonModel.Color.Value);
+            TrackColorStreak(balloonModel.Color.Value);
             _hitPublisher.Publish(new BalloonHitMessage(balloonModel, balloonView.transform.position));
         }
 
@@ -173,33 +104,92 @@ namespace BalloonParty.Projectile.View
             }
         }
 
-        private void TrackColor(string hitColor)
+        private void TrackColorStreak(string hitColor)
         {
-            if (string.IsNullOrEmpty(_model.ColorName.Value))
+            if (string.IsNullOrEmpty(_model.ColorName.Value) || _model.ColorName.Value != hitColor)
             {
                 _model.ColorName.Value = hitColor;
                 _model.ColorPopCount = 1;
-            }
-            else if (_model.ColorName.Value == hitColor)
-            {
-                _model.ColorPopCount++;
             }
             else
             {
-                _model.ColorName.Value = hitColor;
-                _model.ColorPopCount = 1;
+                _model.ColorPopCount++;
             }
 
+            AwardShieldOnStreak();
+            UpdateGlowColor();
+        }
+
+        private void AwardShieldOnStreak()
+        {
             if (_model.ColorPopCount >= 2)
             {
                 _model.ShieldsRemaining.Value++;
+                _shieldGainedPublisher.Publish(new ShieldGainedMessage(_model.LastHitBalloon.SlotIndex.Value));
+            }
+        }
+
+        private Vector3 ClampToLimits(Vector3 pos, out Vector3 reflect)
+        {
+            reflect = Vector3.zero;
+            var limits = _config.LimitsClockwise;
+
+            if (pos.y > limits.x)
+            {
+                reflect += Vector3.down;
+                pos.y = limits.x;
             }
 
-            if (_glowRenderer != null)
+            if (pos.x > limits.y)
             {
-                var color = _config.BalloonColor(_model.ColorName.Value);
-                _glowRenderer.DOColor(new Color(color.r, color.g, color.b, _glowAlpha), _glowColorDuration);
+                reflect += Vector3.left;
+                pos.x = limits.y;
             }
+
+            if (pos.y < limits.z)
+            {
+                reflect += Vector3.up;
+                pos.y = limits.z;
+            }
+
+            if (pos.x < limits.w)
+            {
+                reflect += Vector3.right;
+                pos.x = limits.w;
+            }
+
+            return pos;
+        }
+
+        private void DestroyProjectile()
+        {
+            _projectileTrail?.Disable();
+            _balancePublisher.Publish(default);
+            _destroyedPublisher.Publish(default);
+        }
+
+        private void MoveAndBounce()
+        {
+            var pos = transform.position;
+            pos += _model.Direction * (_model.Speed * Time.fixedDeltaTime);
+            pos = ClampToLimits(pos, out var reflect);
+
+            if (reflect != Vector3.zero)
+            {
+                _model.ShieldsRemaining.Value--;
+                PlayBounceEffect(pos);
+
+                if (_model.ShieldsRemaining.Value < 0)
+                {
+                    DestroyProjectile();
+                    return;
+                }
+
+                _model.Direction = Vector2.Reflect(_model.Direction, reflect.normalized);
+            }
+
+            transform.position = pos;
+            transform.up = _model.Direction;
         }
 
         private void PlayBounceEffect(Vector3 position)
@@ -210,6 +200,55 @@ namespace BalloonParty.Projectile.View
             }
 
             _shieldView.PlayBounceVfx(position, _config.BalloonColor(_model.ColorName.Value));
+        }
+
+        private void RevealShieldOnFirstFreeFrame()
+        {
+            if (_shieldShown || _shieldView == null)
+            {
+                return;
+            }
+
+            _shieldView.Show();
+            _shieldShown = true;
+            _projectileTrail?.Enable();
+        }
+
+        private bool TryGetHitBalloon(Collider2D other, out BalloonView balloonView,
+            out IBalloonModel balloonModel)
+        {
+            balloonView = null;
+            balloonModel = null;
+
+            if (other.gameObject.layer != BalloonsLayer)
+            {
+                return false;
+            }
+
+            balloonView = other.GetComponentInParent<BalloonView>();
+            if (balloonView == null)
+            {
+                return false;
+            }
+
+            balloonModel = balloonView.Model;
+            if (balloonModel == null)
+            {
+                return false;
+            }
+
+            return _model.LastHitBalloon != balloonModel;
+        }
+
+        private void UpdateGlowColor()
+        {
+            if (_glowRenderer == null)
+            {
+                return;
+            }
+
+            var color = _config.BalloonColor(_model.ColorName.Value);
+            _glowRenderer.DOColor(new Color(color.r, color.g, color.b, _glowAlpha), _glowColorDuration);
         }
     }
 }

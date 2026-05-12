@@ -130,7 +130,7 @@ namespace BalloonParty.UI.Score
 
             trail.Setup(transform.position,
                 _colorConfig.Color,
-                _config,
+                _config.ScorePointTraceDuration,
                 () =>
                 {
                     _animator.SetTrigger(TrailHitTrigger);

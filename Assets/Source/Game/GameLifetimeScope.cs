@@ -44,6 +44,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ItemCheckMessage>(options);
             builder.RegisterMessageBroker<ItemActivatedMessage>(options);
             builder.RegisterMessageBroker<ItemRotationCapturedMessage>(options);
+            builder.RegisterMessageBroker<ShieldGainedMessage>(options);
 
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
             builder.RegisterInstance(_itemConfiguration);

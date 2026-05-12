@@ -11,6 +11,7 @@ namespace BalloonParty.UI.Shields
             var labels = GetComponentsInChildren<ShieldCounterLabel>(true);
             builder.RegisterInstance(labels);
             builder.RegisterComponentInHierarchy<ShieldCounterAnimation>();
+            builder.RegisterComponentInHierarchy<ShieldTrailController>();
         }
     }
 }

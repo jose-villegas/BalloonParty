@@ -20,6 +20,7 @@ namespace BalloonParty.Shared
         float NudgeDistance { get; }
         float NudgeDuration { get; }
         float ScorePointTraceDuration { get; }
+        float ShieldTrailDuration { get; }
         int ProjectileStartingShields { get; }
         float PredictionTraceStep { get; }
         int PredictionTraceMaxBounces { get; }

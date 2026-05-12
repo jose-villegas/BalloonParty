@@ -1,5 +1,4 @@
 using System;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using DG.Tweening;
 using UnityEngine;
@@ -28,14 +27,19 @@ namespace BalloonParty.UI.Score
 
         public void OnDespawned() { }
 
-        public void Setup(Vector3 target, Color color, IGameConfiguration config, Action onCompleted)
+        public void Setup(Vector3 target, Color color, float duration, Action onCompleted)
         {
             _renderer.color = color;
             _trailRenderer.startColor = color;
+            Setup(target, duration, onCompleted);
+        }
+
+        public void Setup(Vector3 target, float duration, Action onCompleted)
+        {
             _trailRenderer.Clear();
 
-            var moveTween = transform.DOMove(target, config.ScorePointTraceDuration);
-            var scaleTween = transform.DOScale(Vector3.zero, config.ScorePointTraceDuration);
+            var moveTween = transform.DOMove(target, duration);
+            var scaleTween = transform.DOScale(Vector3.zero, duration);
             scaleTween.SetEase(_scaleCurve);
             moveTween.SetEase(_moveCurve);
 

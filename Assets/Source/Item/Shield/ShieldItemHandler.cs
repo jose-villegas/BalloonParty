@@ -18,6 +18,7 @@ namespace BalloonParty.Item.Shield
         private readonly ItemConfiguration _itemConfig;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private readonly PoolManager _poolManager;
+        private readonly IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
 
         private IWriteableProjectileModel _activeProjectile;
         private IBalloonModel _balloon;
@@ -30,11 +31,13 @@ namespace BalloonParty.Item.Shield
             IGameConfiguration config,
             ItemConfiguration itemConfig,
             PoolManager poolManager,
+            IPublisher<ShieldGainedMessage> shieldGainedPublisher,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
             _config = config;
             _itemConfig = itemConfig;
             _poolManager = poolManager;
+            _shieldGainedPublisher = shieldGainedPublisher;
             _loadedSubscriber = loadedSubscriber;
         }
 
@@ -50,6 +53,7 @@ namespace BalloonParty.Item.Shield
                 _activeProjectile.ShieldsRemaining.Value++;
             }
 
+            _shieldGainedPublisher.Publish(new ShieldGainedMessage(_balloon.SlotIndex.Value));
             PlayVfx();
             return UniTask.CompletedTask;
         }

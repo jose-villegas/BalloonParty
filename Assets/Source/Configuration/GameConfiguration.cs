@@ -34,6 +34,7 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _nudgeDistance;
         [SerializeField] private float _nudgeDuration;
         [SerializeField] private float _scorePointTraceDuration;
+        [SerializeField] private float _shieldTrailDuration;
 
         [Header("Trace")]
         [SerializeField] private float _initialPredictionLength;
@@ -59,6 +60,7 @@ namespace BalloonParty.Configuration
         public int PredictionTraceMaxBounces => _predictionTraceMaxBounces;
         public int PredictionTraceMaxSteps => _predictionTraceMaxSteps;
         public float ScorePointTraceDuration => _scorePointTraceDuration;
+        public float ShieldTrailDuration => _shieldTrailDuration;
         public GameDisplayConfiguration DisplayConfiguration => _displayConfiguration;
 
         public int PointsRequiredForLevel(int level)

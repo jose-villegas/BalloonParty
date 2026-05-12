@@ -540,6 +540,7 @@ GameObject:
   - component: {fileID: 4015439784760386464}
   - component: {fileID: 1721115894007489708}
   - component: {fileID: 8613479355252238620}
+  - component: {fileID: 6304226271776308719}
   m_Layer: 5
   m_Name: ShieldsCounter
   m_TagString: Untagged
@@ -708,6 +709,20 @@ MonoBehaviour:
     TypeName: BalloonParty.Game.GameLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
+--- !u!114 &6304226271776308719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4349961165590194991}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 775287d2d3c94e3ba370e3a81abaa6a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.UI.Shields.ShieldTrailController
+  _trailPrefab: {fileID: 1429749022553535108, guid: e92696c6c390e4d7f86cad7337b550de,
+    type: 3}
 --- !u!1 &4604229308440299303
 GameObject:
   m_ObjectHideFlags: 0
