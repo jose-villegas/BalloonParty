@@ -11,6 +11,7 @@ using BalloonParty.Item.Lightning;
 using BalloonParty.Item.Shield;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using BalloonParty.Thrower;

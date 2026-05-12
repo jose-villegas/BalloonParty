@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Pool;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -24,8 +25,6 @@ namespace BalloonParty.Item.Lightning
         private float _randomness;
         private float _jumpTime;
         private Action<int> _onTargetHit;
-
-        // ── EffectView ────────────────────────────────────────────────────────────
 
         public override void OnSpawned()
         {
@@ -63,8 +62,6 @@ namespace BalloonParty.Item.Lightning
             PlayAsync().Forget();
         }
 
-        // ── Public setup ──────────────────────────────────────────────────────────
-
         /// <summary>
         ///     Sets the target chain before calling <see cref="Play" />.
         ///     Index 0 must be the item-balloon world position; subsequent entries are
@@ -85,8 +82,6 @@ namespace BalloonParty.Item.Lightning
             _onTargetHit = onTargetHit;
         }
 
-        // ── Animation ─────────────────────────────────────────────────────────────
-
         private async UniTaskVoid PlayAsync()
         {
             var ct = _cts?.Token ?? CancellationToken.None;
@@ -94,7 +89,6 @@ namespace BalloonParty.Item.Lightning
             var rendererCount = _lineRenderers != null ? _lineRenderers.Length : 0;
             var delayMs = Mathf.RoundToInt(_jumpTime * 1000f);
 
-            // ── Pre-compute segment sizes and cumulative offsets ──────────────────
             // segmentSizes[i]  = number of points for jump i
             // cumOffsets[i]    = total points used by jumps 0 … i-1
             // cumOffsets[jumpCount] = total points for all jumps combined
@@ -113,7 +107,6 @@ namespace BalloonParty.Item.Lightning
 
             var totalPoints = cumOffsets[jumpCount];
 
-            // ── Pre-allocate and pre-fill per-renderer buffers ────────────────────
             // Each renderer gets independent random jitter, so each has its own buffer.
             // During animation only positionCount changes — no per-frame allocation.
             // LineRenderer.SetPositions reads min(array.Length, positionCount) items,
@@ -134,7 +127,6 @@ namespace BalloonParty.Item.Lightning
                 }
             }
 
-            // ── Forward pass ──────────────────────────────────────────────────────
             for (var i = 0; i < jumpCount; i++)
             {
                 if (ct.IsCancellationRequested)
@@ -145,7 +137,11 @@ namespace BalloonParty.Item.Lightning
                 var count = cumOffsets[i + 1];
                 for (var j = 0; j < rendererCount; j++)
                 {
-                    if (_lineRenderers[j] == null) continue;
+                    if (_lineRenderers[j] == null)
+                    {
+                        continue;
+                    }
+
                     _lineRenderers[j].positionCount = count;
                     _lineRenderers[j].SetPositions(lineBuffers[j]);
                 }
@@ -161,7 +157,6 @@ namespace BalloonParty.Item.Lightning
                 }
             }
 
-            // ── Reverse pass (retraction) ─────────────────────────────────────────
             for (var i = jumpCount - 1; i >= 0; i--)
             {
                 if (ct.IsCancellationRequested)
@@ -172,7 +167,11 @@ namespace BalloonParty.Item.Lightning
                 var count = cumOffsets[i];
                 for (var j = 0; j < rendererCount; j++)
                 {
-                    if (_lineRenderers[j] == null) continue;
+                    if (_lineRenderers[j] == null)
+                    {
+                        continue;
+                    }
+
                     _lineRenderers[j].positionCount = count;
                     if (count > 0)
                     {
@@ -193,7 +192,6 @@ namespace BalloonParty.Item.Lightning
             InvokeComplete();
         }
 
-        // ── Helpers ───────────────────────────────────────────────────────────────
 
         private void SyncGlow(Vector3[][] lineBuffers, int count, int rendererCount)
         {
@@ -253,4 +251,3 @@ namespace BalloonParty.Item.Lightning
         }
     }
 }
-

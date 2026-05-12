@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Slots;
 using DG.Tweening;
 using UniRx;
@@ -25,8 +26,8 @@ namespace BalloonParty.Projectile.View
         [SerializeField] private ParticleSystem _shieldBounceVfxPrefab;
 
         [Inject] private IGameConfiguration _config;
-        [Inject] private PoolManager _poolManager;
         [Inject] private SlotGrid _grid;
+        [Inject] private PoolManager _poolManager;
 
         private readonly CompositeDisposable _disposable = new();
 

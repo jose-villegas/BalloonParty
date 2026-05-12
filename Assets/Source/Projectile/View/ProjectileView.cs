@@ -1,6 +1,7 @@
 using BalloonParty.Balloon.View;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using DG.Tweening;
 using MessagePipe;
@@ -30,6 +31,7 @@ namespace BalloonParty.Projectile.View
 
         private void Awake()
         {
+            // NameToLayer cannot be called from a static field initializer on a MonoBehaviour.
             if (BalloonsLayer == -1)
             {
                 BalloonsLayer = LayerMask.NameToLayer("Balloons");

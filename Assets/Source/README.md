@@ -228,7 +228,19 @@ All tween animations must reproduce the authored values **exactly**:
 - Prefer longer, descriptive names over short ambiguous ones (`FindOptimalEmptySlot` > `GetSlot`).
 - Namespaces must reflect folder structure (`BalloonParty.Balloon.Model`, `BalloonParty.Slots`, etc.).
 - Animator parameter names are cached as `private static readonly int Param = Animator.StringToHash("Param")` — never pass magic strings to `SetTrigger` / `SetBool`.
-- Physics layer masks are cached as `private static readonly int Layer = LayerMask.NameToLayer("Name")` — never looked up per-frame.
+- Physics layer masks are cached as `private static readonly int Layer = LayerMask.NameToLayer("Name")` — never looked up per-frame. **Exception:** in `MonoBehaviour` subclasses, `NameToLayer` / `GetMask` cannot be called from a static field initializer (it runs in the static constructor, before the engine is ready). Use a lazy-init sentinel instead — initialize to `-1` in the field declaration and resolve once in `Awake`:
+
+  ```csharp
+  // MonoBehaviour — lazy-init (only safe option)
+  private static int BalloonsLayer = -1;
+  private void Awake()
+  {
+      if (BalloonsLayer == -1) BalloonsLayer = LayerMask.NameToLayer("Balloons");
+  }
+
+  // Plain C# class — static readonly is fine, no MonoBehaviour static-constructor restriction
+  private static readonly int BalloonsLayer = LayerMask.NameToLayer("Balloons");
+  ```
 
 ### Visibility
 

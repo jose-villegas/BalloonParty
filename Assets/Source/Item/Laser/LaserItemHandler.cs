@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -16,14 +17,13 @@ namespace BalloonParty.Item.Laser
     {
         private static readonly int BalloonsLayer = LayerMask.GetMask("Balloons");
 
-        private readonly List<RaycastHit2D> _castResults = new(4);
         private readonly ContactFilter2D _balloonFilter;
-
+        private readonly List<RaycastHit2D> _castResults = new(4);
         private readonly IGameConfiguration _config;
-        private readonly ItemConfiguration _itemConfig;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
-        private readonly ISubscriber<ItemRotationCapturedMessage> _rotationSubscriber;
+        private readonly ItemConfiguration _itemConfig;
         private readonly PoolManager _poolManager;
+        private readonly ISubscriber<ItemRotationCapturedMessage> _rotationSubscriber;
 
         private IBalloonModel _balloon;
         private Vector3 _worldPosition;

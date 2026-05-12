@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.Pool
 {
     /// <summary>
     ///     Non-generic marker so we can store any PoolChannel in a typed dictionary.

@@ -1,6 +1,6 @@
 using Object = UnityEngine.Object;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.Pool
 {
     /// <summary>
     ///     Creates <see cref="EffectView" /> instances from a prefab that already has
@@ -24,4 +24,3 @@ namespace BalloonParty.Shared
         }
     }
 }
-

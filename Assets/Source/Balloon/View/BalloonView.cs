@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Item;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using DG.Tweening;
@@ -28,8 +29,8 @@ namespace BalloonParty.Balloon.View
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private IGameConfiguration _config;
-        [Inject] private ItemConfiguration _itemConfig;
         [Inject] private SlotGrid _grid;
+        [Inject] private ItemConfiguration _itemConfig;
         [Inject] private ISubscriber<BalloonNudgeMessage> _nudgeSubscriber;
         [Inject] private PoolManager _poolManager;
 

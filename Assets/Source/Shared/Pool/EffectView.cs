@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.Pool
 {
     /// <summary>
     ///     Abstract base for poolable effect MonoBehaviours. Subclass with
@@ -13,7 +13,6 @@ namespace BalloonParty.Shared
     {
         protected Action OnComplete;
 
-        // ── IPoolable ─────────────────────────────────────────────────────────────
 
         public virtual void OnSpawned() { }
 
@@ -22,7 +21,6 @@ namespace BalloonParty.Shared
             OnComplete = null;
         }
 
-        // ── IEffect ───────────────────────────────────────────────────────────────
 
         public abstract void Play(Vector3 position, Color tint, Action onComplete = null);
 
@@ -37,7 +35,6 @@ namespace BalloonParty.Shared
             OnDespawned();
         }
 
-        // ── Protected helpers ─────────────────────────────────────────────────────
 
         protected void InvokeComplete()
         {

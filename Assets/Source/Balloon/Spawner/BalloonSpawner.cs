@@ -4,6 +4,7 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
@@ -26,10 +27,10 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IPublisher<ItemCheckMessage> _itemCheckPublisher;
-        private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly LifetimeScope _parentScope;
         private readonly PoolManager _poolManager;
+        private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
         private readonly BalloonSpawnerSettings _settings;
 
         private readonly List<IWriteableBalloonModel> _newlySpawnedBalloons = new();

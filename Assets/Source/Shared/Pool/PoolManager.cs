@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.Pool
 {
     public class PoolManager
     {
@@ -91,10 +91,6 @@ namespace BalloonParty.Shared
                 $"Pool channel '{key}' not registered. Call Register() first.");
         }
 
-        /// <summary>
-        ///     Try to access the underlying channel without throwing.
-        ///     Returns false if the key is not registered.
-        /// </summary>
         public bool TryGetChannel<TItem>(string key, out PoolChannel<TItem> channel)
             where TItem : Component, IPoolable
         {

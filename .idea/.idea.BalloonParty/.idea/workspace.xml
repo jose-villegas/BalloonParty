@@ -23,8 +23,43 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Source/README.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/README.md.meta" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Controller/BalloonController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonPoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonPoolChannel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/Spawner/BalloonSpawner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Bomb/BombItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Bomb/BombItemHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemAssigner.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemAssigner.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemDisplayService.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualPoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualPoolChannel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/ItemVisualView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Laser/LaserItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Laser/LaserItemHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Lightning/ChainLightningView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Lightning/ChainLightningView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Lightning/LightningItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Lightning/LightningItemHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectilePoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/ProjectilePoolChannel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileShieldView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileShieldView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/IEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/IEffect.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/AnimatorEffectView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/AnimatorEffectView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/EffectPoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/EffectPoolChannel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/EffectView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/EffectView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/IPoolable.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/IPoolable.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/ParticleEffectView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/ParticleEffectView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/ParticlePoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/ParticlePoolChannel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolChannel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolManager.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolManager.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableParticle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableParticle.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/SceneTransition.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/SceneTransition.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerController.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ColorProgressBar.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ColorProgressBar.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreNotice.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreNotice.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreNoticePoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreNoticePoolChannel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScorePointTrail.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScorePointTrail.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreTrailPoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScoreTrailPoolChannel.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

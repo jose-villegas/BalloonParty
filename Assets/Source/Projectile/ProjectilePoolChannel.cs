@@ -1,5 +1,6 @@
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Pool;
 using VContainer.Unity;
 
 namespace BalloonParty.Projectile

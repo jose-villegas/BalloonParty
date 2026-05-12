@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.Pool
 {
     public class PoolableParticle : MonoBehaviour, IPoolable, IEffect
     {
@@ -23,7 +23,6 @@ namespace BalloonParty.Shared
             }
         }
 
-        // ── IPoolable ─────────────────────────────────────────────────────────────
 
         public void OnSpawned()
         {
@@ -39,7 +38,6 @@ namespace BalloonParty.Shared
             _particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
-        // ── IEffect ───────────────────────────────────────────────────────────────
 
         public void Play(Vector3 position, Color tint, Action onComplete = null)
         {

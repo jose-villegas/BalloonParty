@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
@@ -18,9 +18,9 @@ namespace BalloonParty.Item.Lightning
     /// </summary>
     public class LightningItemHandler : IBalloonItem
     {
-        private readonly ItemConfiguration _itemConfig;
-        private readonly IPublisher<BalloonHitMessage> _hitPublisher;
         private readonly SlotGrid _grid;
+        private readonly IPublisher<BalloonHitMessage> _hitPublisher;
+        private readonly ItemConfiguration _itemConfig;
         private readonly PoolManager _poolManager;
 
         private IBalloonModel _balloon;
@@ -98,7 +98,6 @@ namespace BalloonParty.Item.Lightning
             return UniTask.CompletedTask;
         }
 
-        // ── Target collection ─────────────────────────────────────────────────────
 
         private List<(IBalloonModel model, Vector3 worldPos)> CollectSortedTargets()
         {

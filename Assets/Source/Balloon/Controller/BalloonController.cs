@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using MessagePipe;
@@ -15,9 +16,9 @@ namespace BalloonParty.Balloon.Controller
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
-        private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
         private readonly IWriteableBalloonModel _model;
         private readonly PoolManager _poolManager;
+        private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
         private readonly BalloonView _view;
 
         private IDisposable _hitSubscription;

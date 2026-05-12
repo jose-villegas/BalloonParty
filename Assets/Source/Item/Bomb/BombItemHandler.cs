@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
@@ -16,14 +17,13 @@ namespace BalloonParty.Item.Bomb
     {
         private static readonly int BalloonsLayer = LayerMask.GetMask("Balloons");
 
-        private readonly List<Collider2D> _overlapResults = new(8);
         private readonly ContactFilter2D _balloonFilter;
-
         private readonly IGameConfiguration _config;
-        private readonly ItemConfiguration _itemConfig;
-        private readonly IPublisher<BalloonHitMessage> _hitPublisher;
-        private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
         private readonly SlotGrid _grid;
+        private readonly IPublisher<BalloonHitMessage> _hitPublisher;
+        private readonly ItemConfiguration _itemConfig;
+        private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
+        private readonly List<Collider2D> _overlapResults = new(8);
         private readonly PoolManager _poolManager;
 
         private IBalloonModel _balloon;
@@ -92,12 +92,9 @@ namespace BalloonParty.Item.Bomb
             }
         }
 
-        /// <summary>
-        ///     Pushes every surviving balloon outward from the explosion center.
-        ///     Nudge distance falls off exponentially with distance:
-        ///     <c>distance * e^(-falloff * d)</c> where <c>d</c> is the world-space
-        ///     distance from the bomb to the balloon.
-        /// </summary>
+        // Nudge distance falls off exponentially with distance from the explosion center:
+        //   attenuated = nudgeDistance * e^(-falloff * d)
+        // where d is the world-space distance to the balloon.
         private void NudgeAllBalloons(ItemSettings settings)
         {
             var nudgeDistance = settings.BombNudgeDistance;

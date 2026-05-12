@@ -1,4 +1,4 @@
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.Pool
 {
     public interface IPoolable
     {

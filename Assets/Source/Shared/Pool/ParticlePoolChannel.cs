@@ -1,7 +1,7 @@
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.Pool
 {
     /// <summary>
     ///     Pool channel for effects driven exclusively by a <see cref="ParticleSystem" />.
@@ -39,4 +39,3 @@ namespace BalloonParty.Shared
         }
     }
 }
-

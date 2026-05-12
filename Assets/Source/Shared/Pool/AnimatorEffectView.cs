@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.Pool
 {
     /// <summary>
     ///     Poolable effect driven by an <see cref="Animator" />. Completion is
@@ -42,7 +42,6 @@ namespace BalloonParty.Shared
             }
         }
 
-        // ── EffectView ────────────────────────────────────────────────────────────
 
         public override void OnDespawned()
         {
@@ -67,4 +66,3 @@ namespace BalloonParty.Shared
         }
     }
 }
-

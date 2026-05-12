@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.Pool
 {
     /// <summary>
     ///     Poolable effect driven by a <see cref="ParticleSystem" />. Completion is
@@ -25,7 +25,6 @@ namespace BalloonParty.Shared
             }
         }
 
-        // ── EffectView ────────────────────────────────────────────────────────────
 
         public override void OnSpawned()
         {
@@ -62,4 +61,3 @@ namespace BalloonParty.Shared
         }
     }
 }
-
