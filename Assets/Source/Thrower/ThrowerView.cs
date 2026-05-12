@@ -7,6 +7,8 @@ namespace BalloonParty.Thrower
 {
     public class ThrowerView : MonoBehaviour
     {
+        [SerializeField] private Transform _projectileSpawnPoint;
+
         private PredictionTraceView _traceView;
 
         public Vector3 Position
@@ -14,6 +16,10 @@ namespace BalloonParty.Thrower
             get => transform.position;
             set => transform.position = value;
         }
+
+        public Vector3 SpawnPointPosition => _projectileSpawnPoint.position;
+
+        public Quaternion Rotation => transform.rotation;
 
         private void Awake()
         {

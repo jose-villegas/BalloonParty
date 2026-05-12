@@ -5,7 +5,6 @@ namespace BalloonParty.Shared
 {
     public interface IGameConfiguration
     {
-        Vector2 ProjectileSpawnPoint { get; }
         float ProjectileSpeed { get; }
         Vector4 LimitsClockwise { get; }
         Vector2Int SlotsSize { get; }

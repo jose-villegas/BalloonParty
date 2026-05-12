@@ -81,6 +81,7 @@ namespace BalloonParty.Projectile.View
         {
             _model = null;
             _shieldShown = false;
+            transform.rotation = Quaternion.identity;
             if (_glowRenderer != null)
             {
                 _glowRenderer.DOKill();

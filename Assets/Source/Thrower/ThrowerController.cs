@@ -31,6 +31,8 @@ namespace BalloonParty.Thrower
         private ProjectileView _activeView;
         private Vector3 _direction = Vector3.up;
         private bool _isMovable;
+        private float _loadElapsed;
+        private float _loadDuration;
         private PredictionTraceCalculator _traceCalculator;
 
         private string ProjectilePoolKey => _settings.ProjectileScopePrefab.name;
@@ -113,18 +115,19 @@ namespace BalloonParty.Thrower
                 return;
             }
 
-            var spawnPoint = _config.ProjectileSpawnPoint;
-            var center = _view.Position;
-            var angle = Vector3.Angle(_direction, Vector3.right) - 90f;
-            var rad = angle * Mathf.Deg2Rad;
+            if (_loadElapsed < _loadDuration)
+            {
+                _loadElapsed += Time.deltaTime;
+                var t = Mathf.Clamp01(_loadElapsed / _loadDuration);
+                var eased = DOVirtual.EasedValue(0f, 1f, t, Ease.OutBack);
+                _activeView.transform.position = Vector3.Lerp(_view.Position, _view.SpawnPointPosition, eased);
+            }
+            else
+            {
+                _activeView.transform.position = _view.SpawnPointPosition;
+            }
 
-            var rotatedX = (Mathf.Cos(rad) * (spawnPoint.x - center.x)) -
-                (Mathf.Sin(rad) * (spawnPoint.y - center.y)) + center.x;
-            var rotatedY = (Mathf.Sin(rad) * (spawnPoint.x - center.x)) +
-                           (Mathf.Cos(rad) * (spawnPoint.y - center.y)) + center.y;
-
-            _activeView.transform.position = new Vector3(rotatedX, rotatedY, 0f);
-            _activeView.transform.up = _direction;
+            _activeView.transform.rotation = _view.Rotation;
             _activeProjectile.Direction = _direction;
         }
 
@@ -166,6 +169,7 @@ namespace BalloonParty.Thrower
         {
             _activeView = _poolManager.Get<ProjectileView>(ProjectilePoolKey);
             _activeView.transform.position = _view.Position;
+            _activeView.transform.rotation = _view.Rotation;
 
             _activeProjectile = new ProjectileModel
             {
@@ -177,6 +181,9 @@ namespace BalloonParty.Thrower
 
             _activeView.Bind(_activeProjectile);
             _loadedPublisher.Publish(new ProjectileLoadedMessage(_activeProjectile));
+
+            _loadElapsed = 0f;
+            _loadDuration = 0.3f;
         }
 
         private void Reload()

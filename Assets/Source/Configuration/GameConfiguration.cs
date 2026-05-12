@@ -8,7 +8,6 @@ namespace BalloonParty.Configuration
     public class GameConfiguration : ScriptableObject, IGameConfiguration
     {
         [Header("Projectile")]
-        [SerializeField] private Vector2 _projectileSpawnPoint;
         [SerializeField] private int _projectileStartingShields;
         [SerializeField] private float _projectileSpeed;
         [SerializeField] private Vector4 _limitsClockwise;
@@ -34,7 +33,6 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _initialPredictionLength;
         [SerializeField] private int _predictionTraceMaxBounces;
         [SerializeField] private int _predictionTraceMaxSteps;
-        public Vector2 ProjectileSpawnPoint => _projectileSpawnPoint;
         public float ProjectileSpeed => _projectileSpeed;
         public Vector4 LimitsClockwise => _limitsClockwise;
         public Vector2 SlotSeparation => _slotSeparation;
