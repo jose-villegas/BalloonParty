@@ -1,4 +1,4 @@
-using BalloonParty.Shared;
+using BalloonParty.Configuration;
 using UnityEngine;
 using VContainer.Unity;
 
@@ -6,11 +6,11 @@ namespace BalloonParty.Display
 {
     public class OrthogonalSizeCameraController : IStartable
     {
-        private readonly IGameConfiguration _config;
+        private readonly GameDisplayConfiguration _displayConfig;
 
-        public OrthogonalSizeCameraController(IGameConfiguration config)
+        public OrthogonalSizeCameraController(GameDisplayConfiguration displayConfig)
         {
-            _config = config;
+            _displayConfig = displayConfig;
         }
 
         public void Start()
@@ -21,12 +21,7 @@ namespace BalloonParty.Display
                 return;
             }
 
-            var size = _config.DisplayConfiguration.GetOrthogonalSize();
-
-            if (size > 0)
-            {
-                camera.orthographicSize = size;
-            }
+            camera.orthographicSize = _displayConfig.GetOrthogonalSize();
         }
     }
 }

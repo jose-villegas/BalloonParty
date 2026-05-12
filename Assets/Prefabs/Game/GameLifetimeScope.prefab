@@ -49,6 +49,8 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects: []
   _gameConfiguration: {fileID: 11400000, guid: cb5eb9b399cb65f4cbc8875a2f79715c, type: 2}
+  _displayConfiguration: {fileID: 11400000, guid: d49451b27c31244c7af3bd85cc6f1cd2,
+    type: 2}
   _itemConfiguration: {fileID: 11400000, guid: 96695d3f4e4804c36a07426bdef377c3, type: 2}
   _balloonScopePrefab: {fileID: 7284149923872934421, guid: 85afc73ba92384dafa9d8a43874d2dd6,
     type: 3}

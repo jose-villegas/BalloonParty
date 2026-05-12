@@ -5,7 +5,6 @@ namespace BalloonParty.Shared
 {
     public interface IGameConfiguration
     {
-        Vector2 ThrowerSpawnPoint { get; }
         Vector2 ProjectileSpawnPoint { get; }
         float ProjectileSpeed { get; }
         Vector4 LimitsClockwise { get; }
@@ -26,7 +25,6 @@ namespace BalloonParty.Shared
         int PredictionTraceMaxBounces { get; }
         int PredictionTraceMaxSteps { get; }
         BalloonColorConfiguration[] BalloonColors { get; }
-        GameDisplayConfiguration DisplayConfiguration { get; }
 
         int PointsRequiredForLevel(int level);
         Color BalloonColor(string colorName);

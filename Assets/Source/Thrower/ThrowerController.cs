@@ -65,8 +65,8 @@ namespace BalloonParty.Thrower
 
             _destroyedSubscriber.Subscribe(_ => Reload());
 
-            _view.Position = _config.ThrowerSpawnPoint + Vector2.down;
-            _view.AnimateEntrance(_config.ThrowerSpawnPoint, 1f).OnComplete(() =>
+            var targetPos = _view.Position + Vector3.up / 2;
+            _view.AnimateEntrance(targetPos, 1f).OnComplete(() =>
             {
                 _isMovable = true;
                 LoadProjectile();

@@ -7,12 +7,6 @@ namespace BalloonParty.Configuration
     [CreateAssetMenu(menuName = "Configuration/Game Configuration", fileName = "GameConfiguration")]
     public class GameConfiguration : ScriptableObject, IGameConfiguration
     {
-        [Header("Display")]
-        [SerializeField] private GameDisplayConfiguration _displayConfiguration;
-
-        [Header("Thrower")]
-        [SerializeField] private Vector2 _throwerSpawnPoint;
-
         [Header("Projectile")]
         [SerializeField] private Vector2 _projectileSpawnPoint;
         [SerializeField] private int _projectileStartingShields;
@@ -40,7 +34,6 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _initialPredictionLength;
         [SerializeField] private int _predictionTraceMaxBounces;
         [SerializeField] private int _predictionTraceMaxSteps;
-        public Vector2 ThrowerSpawnPoint => _throwerSpawnPoint;
         public Vector2 ProjectileSpawnPoint => _projectileSpawnPoint;
         public float ProjectileSpeed => _projectileSpeed;
         public Vector4 LimitsClockwise => _limitsClockwise;
@@ -61,7 +54,6 @@ namespace BalloonParty.Configuration
         public int PredictionTraceMaxSteps => _predictionTraceMaxSteps;
         public float ScorePointTraceDuration => _scorePointTraceDuration;
         public float ShieldTrailDuration => _shieldTrailDuration;
-        public GameDisplayConfiguration DisplayConfiguration => _displayConfiguration;
 
         public int PointsRequiredForLevel(int level)
         {

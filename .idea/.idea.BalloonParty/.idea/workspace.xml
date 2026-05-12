@@ -23,26 +23,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ShieldGainedMessage.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Shared/Messages/ShieldGainedMessage.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/UI/Shields/ShieldTrailController.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/UI/Shields/ShieldTrailController.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/UI/Shields/ShieldTrailPoolChannel.cs" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/UI/Shields/ShieldTrailPoolChannel.cs.meta" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Assets/Source/Configuration/Editor/GameDisplayConfigurationDrawer.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/copilotDiffState.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/copilotDiffState.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Configuration/GameConfiguration.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Configuration/GameConfiguration.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Shield/UI/ShieldsCounter.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Shield/UI/ShieldsCounter.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/Appear.anim" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Animation/Balloon/Powers/Appear.anim" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Game/GameLifetimeScope.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Game/GameLifetimeScope.prefab" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Scenes/Game.unity" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Scenes/Game.unity" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/DisplayOption.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/DisplayOption.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/GameDisplayConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/GameDisplayConfiguration.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Display/OrthogonalSizeCameraController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Display/OrthogonalSizeCameraController.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileView.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/IGameConfiguration.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/IGameConfiguration.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ColorProgressBar.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ColorProgressBar.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Score/ScorePointTrail.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Score/ScorePointTrail.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Shields/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Shields/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/UI/Shields/ShieldUILifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/UI/Shields/ShieldUILifetimeScope.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerController.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Thrower/ThrowerController.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -204,6 +198,7 @@
     <setting file="file://$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Cheats/BalloonRemoverCheat.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Configuration/BalloonColorConfiguration.cs" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Assets/Source/Configuration/Editor/GameDisplayConfigurationDrawer.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Configuration/GameConfiguration.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Configuration/GameDisplayConfiguration.cs" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Assets/Source/Configuration/IBalloonColorConfiguration.cs" root0="FORCE_HIGHLIGHTING" />
