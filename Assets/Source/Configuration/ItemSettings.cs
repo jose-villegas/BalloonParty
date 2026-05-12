@@ -24,7 +24,6 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _laserCircleCastRadius = 0.065f;
 
         [Header("Lightning")]
-        [SerializeField] private GameObject _lightningPrefab;
         [SerializeField] private float _lightningSegmentsMultiplier = 3f;
         [SerializeField] private float _lightningRandomness = 0.2f;
         [SerializeField] private float _lightningJumpTime = 0.15f;
@@ -40,7 +39,6 @@ namespace BalloonParty.Configuration
         public float BombNudgeFalloff => _bombNudgeFalloff;
         public float LaserRaycastDistance => _laserRaycastDistance;
         public float LaserCircleCastRadius => _laserCircleCastRadius;
-        public GameObject LightningPrefab => _lightningPrefab;
         public float LightningSegmentsMultiplier => _lightningSegmentsMultiplier;
         public float LightningRandomness => _lightningRandomness;
         public float LightningJumpTime => _lightningJumpTime;

@@ -20,41 +20,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="8f4ac864-5fc0-496d-8902-5608f4f69d7b" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Lightning.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Lightning/ChainLightningPoolChannel.cs.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Assets/Source/Item/Lightning/ChainLightningView.cs.meta" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.BalloonParty/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Configuration/ItemConfiguration.asset" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Configuration/ItemConfiguration.asset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/BombRange.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/BombRange.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LaserRange.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LaserRange.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LightningRange.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LightningRange.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Shield/VFX/PSVFX_ShieldGainPU.prefab" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Shield/VFX/PSVFX_ShieldGainPU.prefab.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Balloon/View/BalloonView.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LVFX_LightningRange.prefab" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Prefabs/Items/BalloonItems/VFX/LVFX_LightningRange.prefab" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Configuration/ItemSettings.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Game/GameLifetimeScope.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Bomb/BombItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Bomb/BombItemHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Laser/LaserItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Laser/LaserItemHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Lightning/ChainLightningPoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Lightning/ChainLightningPoolChannel.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Lightning/ChainLightningPoolChannel.cs" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Lightning/ChainLightningPoolChannel.cs.meta" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Lightning/ChainLightningView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Lightning/ChainLightningView.cs" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Lightning/LightningItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Lightning/LightningItemHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Item/Shield/ShieldItemHandler.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/MIGRATION_PLAN.md" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/MIGRATION_PLAN.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileShieldView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Projectile/View/ProjectileShieldView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/IEffect.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/IEffect.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/AnimatorEffectView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/AnimatorEffectView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/EffectPoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/EffectPoolChannel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/EffectView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/EffectView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/ParticleEffectView.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/ParticleEffectView.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/ParticlePoolChannel.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/ParticlePoolChannel.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableParticle.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableParticle.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableVfx.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/PoolableVfx.cs.meta" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/VfxPoolChannel.cs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Assets/Source/Shared/Pool/VfxPoolChannel.cs.meta" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" beforeDir="false" afterPath="$PROJECT_DIR$/UserSettings/Layouts/CurrentMaximizeLayout.dwlt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

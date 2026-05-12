@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Threading;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
@@ -14,10 +13,8 @@ namespace BalloonParty.Item.Lightning
 {
     /// <summary>
     ///     Handles the Lightning item. Finds all same-color balloons, sorts them by
-    ///     distance, then plays the chain-lightning animation — hitting each target
-    ///     as the bolt arrives (per-jump). Returns a <see cref="UniTask" /> that
-    ///     completes after the full forward+reverse animation so <see cref="ItemActivator" />
-    ///     can publish <c>ItemActivatedMessage</c> at the right time.
+    ///     distance nearest-first, then plays the chain-lightning animation fire-and-forget —
+    ///     hitting each target per-jump via <see cref="ChainLightningView.PrepareDisplay" />.
     /// </summary>
     public class LightningItemHandler : IBalloonItem
     {
@@ -52,54 +49,53 @@ namespace BalloonParty.Item.Lightning
             _worldPosition = worldPosition;
         }
 
-        public async UniTask Activate()
+        public UniTask Activate()
         {
             var settings = _itemConfig[ItemType.Lightning];
             var targets = CollectSortedTargets();
 
             if (targets.Count == 0)
             {
-                return;
+                return UniTask.CompletedTask;
             }
 
-            // No prefab configured — instant-hit all targets without animation
-            if (settings.LightningPrefab == null)
+            if (settings.ActivationEffectPrefab == null)
             {
                 foreach (var (model, pos) in targets)
                 {
                     _hitPublisher.Publish(new BalloonHitMessage(model, pos));
                 }
 
-                return;
+                return UniTask.CompletedTask;
             }
 
-            // Build the position chain: item balloon origin → target0 → target1 → …
             var positions = new List<Vector3>(targets.Count + 1) { _worldPosition };
             foreach (var (_, pos) in targets)
             {
                 positions.Add(pos);
             }
 
-            var view = _poolManager.GetOrRegister(PoolKey,
-                () => new ChainLightningPoolChannel(settings.LightningPrefab));
+            var key = settings.ActivationEffectPrefab.name;
+            var view = (ChainLightningView)_poolManager.GetOrRegister(key,
+                () => new EffectPoolChannel(settings.ActivationEffectPrefab));
 
-            await view.Display(
+            view.PrepareDisplay(
                 positions,
                 settings.LightningSegmentsMultiplier,
                 settings.LightningRandomness,
                 settings.LightningJumpTime,
                 index =>
                 {
-                    // index 0 = first target balloon (positions[1]) — item balloon is positions[0]
                     if (index < targets.Count)
                     {
                         var (model, pos) = targets[index];
                         _hitPublisher.Publish(new BalloonHitMessage(model, pos));
                     }
-                },
-                CancellationToken.None);
+                });
 
-            _poolManager.Return(PoolKey, view);
+            view.Play(Vector3.zero, Color.white, () => _poolManager.Return(key, view));
+
+            return UniTask.CompletedTask;
         }
 
         // ── Target collection ─────────────────────────────────────────────────────
@@ -135,7 +131,6 @@ namespace BalloonParty.Item.Lightning
                 }
             }
 
-            // Sort nearest-first (matching legacy Comparison())
             result.Sort((a, b) =>
                 Vector3.Distance(_worldPosition, a.Item2)
                     .CompareTo(Vector3.Distance(_worldPosition, b.Item2)));
@@ -144,5 +139,3 @@ namespace BalloonParty.Item.Lightning
         }
     }
 }
-
-

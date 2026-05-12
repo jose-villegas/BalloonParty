@@ -337,6 +337,9 @@ MonoBehaviour:
   - {fileID: 5735112468169355169}
   - {fileID: 1780500698417090463}
   _glowLineRenderer: {fileID: 6873477818569197240}
+  _segmentsMultiplier: 3
+  _randomness: 0.2
+  _jumpTime: 0.05
 --- !u!1 &3178895422590311903
 GameObject:
   m_ObjectHideFlags: 0
