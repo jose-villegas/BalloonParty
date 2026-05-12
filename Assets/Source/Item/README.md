@@ -4,60 +4,90 @@ Items are game-wide collectible effects — Bomb, Laser, Lightning, and Shield. 
 
 ## Contents
 
+### Display
+
 | File | What it does |
 |---|---|
-| `IItem` | Base interface for all items — `Activate()` |
-| `IBalloonItem` | Context-specific interface for items hosted on balloons — `Type`, `Setup(IBalloonModel)` |
+| `IItem` | Base interface — `ItemType Type`, `UniTask Activate()` |
+| `IBalloonItem` | Balloon-hosted activation adapter — `Setup(IBalloonModel, Vector3)` called before `Activate()` |
 | `IItemView` | Contract for per-type visual components — `Type`, `Activate(Color)`, `Deactivate()`, `ApplySortingOrder(int)` |
-| `ItemDisplayService` | MonoBehaviour on the item container — bridges an external data source (e.g. a model's `Item` property) to reactive properties (`ActiveItem`, `ActiveColor`, `SortingStartOrder`) that visual views observe |
+| `ItemDisplayService` | MonoBehaviour on the item container — bridges an external data source (e.g. a model's `Item` reactive property) to `ActiveItem`, `ActiveColor`, and `SortingStartOrder` reactive properties that visual views observe. Manages the active visual's lifecycle via `ItemVisualPoolChannel` |
 | `ItemViewScope` | Reusable `LifetimeScope` — registers `ItemDisplayService` and injects all `ItemVisualView` children via `RegisterBuildCallback`. Custom `FindParent()` walks the transform hierarchy so it parents to whatever ancestor scope hosts it |
-| `ItemVisualView` | MonoBehaviour on each item type's visual (PUBomb, PULaser, etc.) — implements `IItemView`; receives `ItemDisplayService` via `[Inject]`; subscribes to active item changes and toggles visibility/color/sorting |
-| `LaserItemRotation` | MonoBehaviour on the laser body child — continuous Z-axis rotation at `_rotationSpeed`; resets angle on enable |
+| `ItemVisualView` | MonoBehaviour on each item type's visual (PU_Bomb, PU_Laser, etc.) — implements `IItemView` and `IPoolable`; receives `ItemDisplayService` via `[Inject]`; subscribes to active item changes and toggles visibility/color/sorting |
+| `ItemVisualPoolChannel` | `PoolChannel<ItemVisualView>` — one channel per visual prefab, keyed by prefab name. Managed by `ItemDisplayService` via `PoolManager.GetOrRegister()` |
+| `LaserItemRotation` | MonoBehaviour on the laser body child — continuous Z-axis rotation at `_rotationSpeed`; resets angle and stops on `OnEnable` or `Stop()` |
+
+### Assignment
+
+| File | What it does |
+|---|---|
+| `ItemAssigner` | `IStartable` — subscribes to `ItemCheckMessage`; picks a random newly-spawned balloon and assigns an item based on turn frequency, weight, and per-type max-cap rules |
+
+### Activation
+
+| File | What it does |
+|---|---|
+| `ItemActivator` | `IStartable` — subscribes to `BalloonHitMessage`; when the hit balloon carries an item, finds the matching `IBalloonItem` handler by type, calls `Setup` + `await Activate()`, then publishes `ItemActivatedMessage`. Yields one frame before activation to let all synchronous `BalloonHitMessage` subscribers finish first |
+| `Bomb/BombItemHandler` | Area explosion — `Physics2D.OverlapCircleAll` at balloon position; destroys balloons in radius; nudges survivors with exponential distance falloff |
+| `Laser/LaserItemHandler` | Cross beam — 4× `Physics2D.CircleCastAll` in rotated directions; reads captured rotation from `ItemRotationCapturedMessage` |
+| `Lightning/LightningItemHandler` | Chain lightning — queries `SlotGrid` for all same-color balloons, sorts by distance, spawns `ChainLightningView` via `EffectPoolChannel`, hits each target sequentially with async delay |
+| `Lightning/ChainLightningView` | `EffectView` subclass for chain lightning — multiple `LineRenderer`s; `PrepareDisplay(positions, segMul, randomness, jumpTime, onTargetHit)` pre-computes jagged bolt segments; `Play()` starts `async UniTaskVoid` that grows forward jump-by-jump then retracts |
+| `Shield/ShieldItemHandler` | Shield grant — increments `ShieldsRemaining` on the active projectile; spawns `PSVFX_ShieldGainPU` at the balloon's grid position |
 
 ## Architecture
 
-The item display system is designed around a **reusable scope pattern**. `ItemViewScope` + `ItemDisplayService` + `ItemVisualView` children form a self-contained unit that can be dropped onto any prefab or GameObject hierarchy. The scope inherits all parent registrations (config, messages, etc.) automatically through VContainer's scope hierarchy — no manual wiring needed.
+The item display system is designed around a **reusable scope pattern**. `ItemViewScope` + `ItemDisplayService` + `ItemVisualView` children form a self-contained unit that can be dropped onto any prefab or GameObject hierarchy. The scope inherits all parent registrations automatically through VContainer's scope hierarchy — no manual wiring needed.
 
 ### Design principle: items are not balloons
 
-The `Item/` folder has no dependency on `Balloon/`. `ItemDisplayService.Bind()` accepts a model interface and configuration — it does not know whether the caller is a balloon, a UI panel, or a reward screen. Future contexts (shop previews, inventory, tutorial highlights) can host items by adding `ItemViewScope` to their prefab and calling `Bind()` with appropriate data.
+The `Item/` folder has no dependency on `Balloon/`. `ItemDisplayService.Bind()` accepts individual reactive properties — it does not know whether the caller is a balloon, a UI panel, or a reward screen. Future contexts (shop previews, inventory, tutorial highlights) can host items by adding `ItemViewScope` to their prefab and calling `Bind()` with appropriate reactive properties.
 
-`IBalloonItem` exists only as a thin adapter for the balloon-hosted activation flow (Phase 15d). It is the balloon system's way of interacting with items, not the item system's knowledge of balloons.
+`IBalloonItem` exists only as a thin adapter for the balloon-hosted activation flow. It is the balloon system's way of interacting with items, not the item system's knowledge of balloons.
 
 ### Scope hierarchy example (balloon prefab)
 
 ```
 Balloon (root)         ← BalloonLifetimeScope
   └── Item             ← ItemViewScope, ItemDisplayService
-       ├── PUBomb      ← ItemVisualView (Type = Bomb)
-       ├── PULaser     ← ItemVisualView (Type = Laser)
-       ├── PULightning ← ItemVisualView (Type = Lightning)
-       └── PUShield    ← ItemVisualView (Type = Shield)
+       ├── PU_Bomb     ← ItemVisualView (Type = Bomb)
+       ├── PU_Laser    ← ItemVisualView (Type = Laser)
+       ├── PU_Lightning← ItemVisualView (Type = Lightning)
+       └── PU_Shield   ← ItemVisualView (Type = Shield)
 ```
 
-`ItemViewScope` extends `LifetimeScope` directly (not `GameChildLifetimeScope`) with a custom `FindParent()` that walks the transform hierarchy to find the nearest ancestor `LifetimeScope`. This makes it host-agnostic — it chains to whatever scope contains it, whether that's a `BalloonLifetimeScope`, a UI panel scope, or the game scope itself.
+`ItemViewScope` extends `LifetimeScope` directly with a custom `FindParent()` that walks the transform hierarchy, not `FindFirstObjectByType` — so each pooled balloon's scope parents to its own balloon's root scope rather than a random one.
 
 ### Display flow
 
-1. A host (e.g. `BalloonView.Bind()`) calls `ItemDisplayService.Bind(model, config, sortingOffset)`
-2. `ItemDisplayService` subscribes to the model's `Item` property
-3. When the item type changes to non-None, `ItemDisplayService` looks up the `VisualPrefab` from `ItemSettings` in the config, instantiates it under its own transform, and calls `ItemVisualView.Activate(color)` on the instance
-4. When the item type changes again or `Unbind()` is called, the active visual instance is destroyed
+1. A host (e.g. `BalloonView.Bind()`) calls `ItemDisplayService.Bind(item, colorName, slotIndex, config, poolManager, itemConfig, sortingOffset)`
+2. `ItemDisplayService` subscribes to the model's `Item` reactive property
+3. When the item type changes to non-None, `ItemDisplayService` gets a `ItemVisualView` instance from `PoolManager.GetOrRegister()` keyed by the visual prefab name, reparents it, and calls `Activate(color)`
+4. When `Unbind()` is called or the item changes back to None, the active visual is returned to its pool via `PoolManager.Return()`
 5. Sorting order updates flow through `ItemDisplayService` → `ItemVisualView.ApplySortingOrder()` on the active instance
+
+### Activation flow
+
+1. `ProjectileView.OnTriggerEnter2D` publishes `BalloonHitMessage` for the hit balloon
+2. `BalloonController` receives it, calls `_view.Hide()` (disables collider and renderers), and waits for `ItemActivatedMessage` before returning to pool
+3. `ItemActivator` receives the same `BalloonHitMessage`, yields one frame, then calls `Setup(balloon, worldPos)` + `await Activate()` on the matching handler
+4. The handler runs its effect (may be async, e.g. lightning), publishing `BalloonHitMessage` for each secondary balloon
+5. `ItemActivator` publishes `ItemActivatedMessage` — `BalloonController` receives it and returns the item balloon to pool
 
 ## Item types
 
-| Type | Visual | Activation effect (Phase 15d) |
+| Type | Visual | Activation effect |
 |---|---|---|
-| **Bomb** | Bomb icon, tinted to host color | Area-of-effect explosion — destroys nearby balloons in a radius |
-| **Laser** | Rotating cross, tinted to host color | Cross-shaped beam — destroys balloons along four axes |
-| **Lightning** | Lightning icon, tinted to host color | Chain lightning — hits all same-color balloons sequentially |
+| **Bomb** | Bomb icon, tinted to host color | Area-of-effect explosion — destroys nearby balloons in a radius with exponential nudge falloff |
+| **Laser** | Rotating cross, tinted to host color | Cross-shaped beam — destroys balloons along four rotated axes; rotation is captured from `LaserItemRotation` at hit time |
+| **Lightning** | Lightning icon, tinted to host color | Chain lightning — hits all same-color balloons sequentially with a growing/retracting `LineRenderer` effect |
 | **Shield** | Shield icon, tinted to host color | Grants the active projectile +1 bounce shield |
 
 ## Interactions
 
-- **Any host view** — calls `ItemDisplayService.Bind()`/`Unbind()` to connect/disconnect item display. Currently `BalloonView` is the only host; future hosts follow the same pattern
-- **Host model** — an `IReadOnlyReactiveProperty<ItemType>` drives which visual is active
-- **Host scope** — `ItemViewScope` chains to the nearest ancestor `LifetimeScope` via transform hierarchy
-- **IGameConfiguration** — provides color lookup and item settings
-- **SortingHelper** — shared utility for sorting order calculation
+- **Any host view** — calls `ItemDisplayService.Bind()`/`Unbind()` to connect/disconnect item display
+- **BalloonController** — defers balloon pool return until `ItemActivatedMessage` arrives; captures laser rotation and publishes `ItemRotationCapturedMessage`
+- **ItemActivator** — central orchestrator; routes activation to the correct handler after yielding one frame
+- **SlotGrid** — `LightningItemHandler` queries all balloons of a given color; `ShieldItemHandler` resolves the balloon's grid-center world position
+- **PoolManager** — item visual lifecycle via `ItemVisualPoolChannel`; activation effect lifecycle via `EffectPoolChannel`
+- **IEffect / EffectView** — `ChainLightningView` extends `EffectView`; all item activation effects that need async Play/Stop extend `EffectView`
+- **IGameConfiguration / ItemConfiguration** — color lookup, item settings (radius, nudge values, laser cast params, lightning timing)

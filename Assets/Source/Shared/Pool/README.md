@@ -1,21 +1,39 @@
 # Pool
 
-A generic object pooling system for Unity components. Pools are managed centrally through `PoolManager` and accessed by string key. Each channel is bound to what it creates at construction — callers just call `Get(key)`.
+A generic object pooling system for Unity components. Pools are managed centrally through `PoolManager` and accessed by string key.
 
 ## Architecture
 
-- **`IPoolChannel`** — non-generic marker interface with `SetParent(Transform)`. Allows `PoolManager` to store heterogeneous channels in a type-safe `Dictionary<string, IPoolChannel>`.
-- **`PoolChannel<TItem>`** — abstract base implementing `IPoolChannel`. Owns a `Stack<TItem>` of inactive instances. `Get()` pops or calls `Create()`; skips destroyed items in the stack. `Return()` despawns, deactivates, and pushes back. Subclasses implement `Create()` with their specific instantiation logic.
-- **`PoolManager`** — injectable singleton registry. Stores channels in a `Dictionary<string, IPoolChannel>` keyed by `string`. Channels are registered explicitly via `Register()`, then consumers call `Get<TItem>(key)` / `Return(key, item)`. `GetOrRegister()` combines registration and retrieval for lazy-init channels.
-- **`IPoolable`** — pure lifecycle interface on pooled components: `OnSpawned()` (called after activation) and `OnDespawned()` (called before deactivation). Items never reference the pool — they don't know they're pooled.
+- **`IPoolable`** — pure lifecycle interface: `OnSpawned()` (called after activation) and `OnDespawned()` (called before deactivation). Items never reference the pool — they don't know they're pooled.
+- **`PoolChannel<TItem>`** — abstract base owning a `Stack<TItem>`. `Get()` pops or calls `Create()`; skips destroyed items in the stack. `Return()` despawns, deactivates, and pushes back. On return, `SetParent(..., worldPositionStays: false)` prevents scale drift from reparenting. Subclasses implement `Create()`.
+- **`PoolManager`** — injectable singleton registry keyed by `string`. Channels are registered via `Register()` or lazily via `GetOrRegister()`. Consumers call `Get<TItem>(key)` / `Return(key, item)`.
+
+## Effect Abstraction
+
+Effects (VFX that need to `Play` and `Stop`) have their own hierarchy, separate from raw particle pooling:
+
+- **`IEffect`** — interface with `Play(position, tint)`, `Play(position, rotation, tint)`, and `Stop()`. Not item-specific — any system that wants to abstract a visual effect can use it.
+- **`EffectView`** — abstract `MonoBehaviour` implementing `IPoolable` + `IEffect`. Holds an `Action onComplete` callback. Subclasses implement `Play()` and `Stop()`.
+- **`ParticleEffectView`** — `EffectView` subclass for particle effects. Stops and clears the particle in `OnSpawned()` (prevents stale color from Play-on-Awake). Detects completion via `!_particle.IsAlive()` in `Update()`.
+- **`AnimatorEffectView`** — `EffectView` subclass for animator-driven effects. Timer-based completion against the first clip's length.
+- **`EffectPoolChannel`** — `PoolChannel<EffectView>` that takes an `EffectView` prefab directly. No auto-detection — the prefab must already have the correct `EffectView` subclass attached.
+
+## Particle Pooling (simple effects)
+
+For simple particle effects that don't need the full `EffectView` contract:
+
+- **`PoolableParticle`** — `MonoBehaviour` implementing `IPoolable` and `IEffect`. `OnSpawned()` stops the particle to prevent stale color from Play-on-Awake. The consumer calls `Play(pos, color, onComplete)` and handles the return in the `onComplete` callback.
+- **`ParticlePoolChannel`** — `PoolChannel<PoolableParticle>` that takes a `GameObject` prefab and adds `PoolableParticle` via `AddComponent`. Used for balloon pop VFX and shield VFX.
 
 ## Return Responsibility
 
-**The consumer that calls `Get()` is responsible for calling `Return()`.** Pooled items signal completion via their own public API callbacks (e.g. `Action onComplete` parameters), and the consumer bundles the `Return()` call into that callback. Items never self-return.
+**The consumer that calls `Get()` is responsible for calling `Return()`.**
+Items signal completion via callbacks passed to their `Play()` or `Setup()` calls. The consumer bundles the `Return()` into that callback.
 
 | Item | Completion signal | Who returns |
 |---|---|---|
-| `PoolableParticle` | `Play(pos, color, onComplete)` — fires when `!IsAlive()` | Consumer (e.g. `BalloonView`, `ProjectileShieldView`) |
+| `PoolableParticle` | `Play(pos, color, onComplete)` — caller supplies the callback | Consumer (e.g. `BalloonView`, `ProjectileShieldView`) |
+| `EffectView` (any subclass) | `Play(pos, tint, onComplete)` — caller supplies the callback | Consumer (e.g. item handlers) |
 | `ScorePointTrail` | `Setup(target, color, config, onComplete)` — fires on tween completion | `ColorProgressBar` |
 | `ScoreNotice` | `Show(score, color, onComplete)` — fires from `OnAnimationCompleted` animation event | `ColorProgressBar` |
 | `BalloonView` | No completion callback — returned directly on hit | `BalloonController` |
@@ -25,9 +43,11 @@ A generic object pooling system for Unity components. Pools are managed centrall
 
 | Channel | Key | Item | Creates via |
 |---|---|---|---|
-| `VfxPoolChannel` | prefab name (e.g. `"PopVfx"`) | `PoolableParticle` | `Object.Instantiate` + `AddComponent<PoolableParticle>` |
+| `ParticlePoolChannel` | prefab name (e.g. `"PopVfx"`) | `PoolableParticle` | `Object.Instantiate` + `AddComponent<PoolableParticle>` |
+| `EffectPoolChannel` | prefab name | `EffectView` (subclass) | `Object.Instantiate` |
 | `ProjectilePoolChannel` | prefab name | `ProjectileView` | `CreateChildFromPrefab` (VContainer) |
-| `BalloonPoolChannel` | `"Balloon"` | `BalloonView` | `IObjectResolver.Instantiate` |
+| `BalloonPoolChannel` | `"Balloon"` | `BalloonView` | `CreateChildFromPrefab` (VContainer) |
+| `ItemVisualPoolChannel` | prefab name | `ItemVisualView` | `Object.Instantiate` |
 | `ScoreTrailPoolChannel` | `ScoreTrail_{color}` | `ScorePointTrail` | `Object.Instantiate` |
 | `ScoreNoticePoolChannel` | `ScoreNotice_{color}` | `ScoreNotice` | `Object.Instantiate` |
 
@@ -41,9 +61,13 @@ _poolManager.Register(prefab.name, new ProjectilePoolChannel(scope, prefab));
 var view = _poolManager.Get<ProjectileView>(prefab.name);
 _poolManager.Return(prefab.name, view);
 
-// === Lazy registration + get (one channel per key) ===
-var vfx = _poolManager.GetOrRegister(prefab.name, () => new VfxPoolChannel(prefab));
-vfx.Play(pos, color, () => _poolManager.Return(prefab.name, vfx));
+// === Lazy registration + get — particle ===
+var particle = _poolManager.GetOrRegister(prefab.name, () => new ParticlePoolChannel(prefab));
+particle.Play(pos, color, () => _poolManager.Return(prefab.name, particle));
+
+// === Lazy registration + get — EffectView ===
+var effect = _poolManager.GetOrRegister(prefab.name, () => new EffectPoolChannel(effectPrefab));
+effect.Play(pos, tint, () => _poolManager.Return(prefab.name, effect));
 ```
 
 ## Adding a new pool
@@ -53,5 +77,4 @@ vfx.Play(pos, color, () => _poolManager.Return(prefab.name, vfx));
 3. Implement `Create()` — instantiate and configure the item; start it deactivated
 4. Have the pooled component implement `IPoolable` for lifecycle hooks
 5. Register via `_poolManager.Register(key, new YourChannel(...))`
-6. On `Get()`, the consumer passes a return callback through the item's public API
-7. The callback calls `_poolManager.Return(key, item)` when the item signals completion
+6. The consumer passes a return callback through the item's public API; the callback calls `Return(key, item)` on completion

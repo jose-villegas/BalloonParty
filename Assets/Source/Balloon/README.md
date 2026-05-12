@@ -47,7 +47,7 @@ When nudge or balance interrupts a spawning balloon, `transform.DOKill()` kills 
 - **ProjectileView** — triggers destruction on collision via `BalloonHitMessage`
 - **BalloonNudgeHandler** — subscribes to `BalloonHitMessage` and nudges neighboring balloon views (push-out → return) with scale recovery; uses `SlotGrid.ViewAt()` to reach views
 - **ScoreController** — records each hit via `BalloonHitMessage`
-- **PoolManager** — `BalloonView` instances are pooled via `BalloonPoolChannel`; pop VFX pooled via `VfxPoolChannel`
+- **PoolManager** — `BalloonView` instances are pooled via `BalloonPoolChannel`; pop VFX pooled via `ParticlePoolChannel`
 - **TweenTracker** — generic `MonoBehaviour` in `Shared/` that manages tween sequencing (append, replace, kill)
 - **Item system** — balloons are one host for the game-wide item system (in `Item/`). `BalloonView` calls `ItemDisplayService.Bind()`/`Unbind()` to connect item visuals; the item system itself has no knowledge of balloons
 - **IGameConfiguration** — balloon colors, spawn animation timing, balance timing, nudge distance/duration

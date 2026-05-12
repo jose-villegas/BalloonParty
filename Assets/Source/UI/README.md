@@ -2,7 +2,7 @@
 
 All HUD and menu elements. Each sub-folder owns one distinct player-facing feature.
 
-Each self-contained UI section has its own VContainer child scope, inheriting all game services from `GameLifetimeScope` while keeping its registrations local. Components that interact tightly with game-layer systems (thrower, projectile) are registered directly in `GameLifetimeScope` instead.
+Each self-contained UI section has its own VContainer child scope, inheriting all game services from `GameLifetimeScope` while keeping its registrations local.
 
 ## Scopes
 
@@ -11,7 +11,6 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 | `ScoreUILifetimeScope` | Score UI Canvas root | `ColorProgressBarInstancer` |
 | `LevelUpLifetimeScope` | LevelUp popup root | `LevelUpPopUp` |
 | `ShieldUILifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation` |
-| `GameLifetimeScope` (direct) | — | `GameStartButton` |
 
 ## Feature folders
 
@@ -19,8 +18,11 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 |---|---|---|
 | `Score/` | Progress bars, score trail orbs, floating notices, score/level labels, `ScoreUILifetimeScope` | `ScoreUILifetimeScope` (child of `GameLifetimeScope`) |
 | `LevelUp/` | Full-screen level-up ceremony popup (`LevelUpPopUp`) | `LevelUpLifetimeScope` (child of `GameLifetimeScope`) |
-| `Shields/` | Shield counter label and bounce animation | `GameLifetimeScope` |
-| `GameStart/` | Start-button logic that kicks off the first balloon spawn | `GameLifetimeScope` |
+| `Shields/` | Shield counter label and bounce animation | `ShieldUILifetimeScope` (child of `GameLifetimeScope`) |
+
+## Game start
+
+Scene loading is handled by `SceneTransition` (in `Shared/`) — a MonoBehaviour wired directly to the start button's `onClick` in the Inspector. No dedicated start-screen component is needed.
 
 ## Interactions
 
