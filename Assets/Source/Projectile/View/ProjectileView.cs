@@ -105,22 +105,6 @@ namespace BalloonParty.Projectile.View
             }
         }
 
-        private void TrackColorStreak(string hitColor)
-        {
-            if (string.IsNullOrEmpty(_model.ColorName.Value) || _model.ColorName.Value != hitColor)
-            {
-                _model.ColorName.Value = hitColor;
-                _model.ColorPopCount = 1;
-            }
-            else
-            {
-                _model.ColorPopCount++;
-            }
-
-            AwardShieldOnStreak();
-            UpdateGlowColor();
-        }
-
         private void AwardShieldOnStreak()
         {
             if (_model.ColorPopCount >= 2)
@@ -213,6 +197,22 @@ namespace BalloonParty.Projectile.View
             _shieldView.Show();
             _shieldShown = true;
             _projectileTrail?.Enable();
+        }
+
+        private void TrackColorStreak(string hitColor)
+        {
+            if (string.IsNullOrEmpty(_model.ColorName.Value) || _model.ColorName.Value != hitColor)
+            {
+                _model.ColorName.Value = hitColor;
+                _model.ColorPopCount = 1;
+            }
+            else
+            {
+                _model.ColorPopCount++;
+            }
+
+            AwardShieldOnStreak();
+            UpdateGlowColor();
         }
 
         private bool TryGetHitBalloon(Collider2D other, out BalloonView balloonView,

@@ -8,6 +8,8 @@ namespace BalloonParty.Thrower
     public class ThrowerView : MonoBehaviour
     {
         [SerializeField] private Transform _projectileSpawnPoint;
+        [SerializeField] private float _entranceDuration = 1f;
+        [SerializeField] private Vector3 _entranceOffset = new(0f, 0.5f, 0f);
 
         private PredictionTraceView _traceView;
 
@@ -26,15 +28,20 @@ namespace BalloonParty.Thrower
             _traceView = GetComponentInChildren<PredictionTraceView>(true);
         }
 
+        public Tween AnimateEntrance()
+        {
+            return transform.DOMove(transform.position + _entranceOffset, _entranceDuration);
+        }
+
+        public void ClearTrace()
+        {
+            _traceView?.Clear();
+        }
+
         public void RotateTo(Vector3 direction)
         {
             var angle = Vector3.Angle(direction, Vector3.right) - 90f;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
-        }
-
-        public Tween AnimateEntrance(Vector2 target, float duration)
-        {
-            return transform.DOMove(target, duration);
         }
 
         public void SetTrace(List<Vector3> points)
@@ -45,11 +52,6 @@ namespace BalloonParty.Thrower
             }
 
             _traceView.SetTrace(points);
-        }
-
-        public void ClearTrace()
-        {
-            _traceView?.Clear();
         }
     }
 }

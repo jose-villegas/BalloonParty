@@ -6,6 +6,7 @@ namespace BalloonParty.Shared
     public class TweenTracker : MonoBehaviour
     {
         private Sequence _active;
+
         public bool IsPlaying => _active != null && _active.IsActive() && !_active.IsComplete();
 
         public void Append(Tween tween)
@@ -22,12 +23,6 @@ namespace BalloonParty.Shared
             }
         }
 
-        public void Replace(Sequence sequence)
-        {
-            Kill();
-            _active = sequence;
-        }
-
         public void Kill()
         {
             if (_active != null && _active.IsActive())
@@ -36,6 +31,12 @@ namespace BalloonParty.Shared
             }
 
             _active = null;
+        }
+
+        public void Replace(Sequence sequence)
+        {
+            Kill();
+            _active = sequence;
         }
     }
 }

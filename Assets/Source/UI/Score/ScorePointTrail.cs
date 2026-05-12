@@ -23,9 +23,13 @@ namespace BalloonParty.UI.Score
             _trailRenderer.sortingOrder = OverlaySortingOrder;
         }
 
-        public void OnSpawned() { }
+        public void OnSpawned()
+        {
+        }
 
-        public void OnDespawned() { }
+        public void OnDespawned()
+        {
+        }
 
         public void Setup(Vector3 target, Color color, float duration, Action onCompleted)
         {

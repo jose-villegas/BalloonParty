@@ -67,8 +67,7 @@ namespace BalloonParty.Thrower
 
             _destroyedSubscriber.Subscribe(_ => Reload());
 
-            var targetPos = _view.Position + Vector3.up / 2;
-            _view.AnimateEntrance(targetPos, 1f).OnComplete(() =>
+            _view.AnimateEntrance().OnComplete(() =>
             {
                 _isMovable = true;
                 LoadProjectile();
@@ -87,6 +86,56 @@ namespace BalloonParty.Thrower
             UpdateLoadedProjectilePosition();
             UpdatePredictionTrace();
             TryFire();
+        }
+
+        private void LoadProjectile()
+        {
+            _activeView = _poolManager.Get<ProjectileView>(ProjectilePoolKey);
+            _activeView.transform.position = _view.Position;
+            _activeView.transform.rotation = _view.Rotation;
+
+            _activeProjectile = new ProjectileModel
+            {
+                Speed = _config.ProjectileSpeed,
+                IsFree = false,
+                Direction = _direction
+            };
+            _activeProjectile.ShieldsRemaining.Value = _config.ProjectileStartingShields;
+
+            _activeView.Bind(_activeProjectile);
+            _loadedPublisher.Publish(new ProjectileLoadedMessage(_activeProjectile));
+
+            _loadElapsed = 0f;
+            _loadDuration = _config.ProjectileLoadDuration;
+        }
+
+        private void Reload()
+        {
+            if (_activeView != null)
+            {
+                _poolManager.Return(ProjectilePoolKey, _activeView);
+            }
+
+            _activeProjectile = null;
+            _activeView = null;
+            LoadProjectile();
+        }
+
+        private void TryFire()
+        {
+            if (_activeProjectile == null || _activeView == null || _activeProjectile.IsFree)
+            {
+                return;
+            }
+
+            if (!Input.GetMouseButtonUp(0))
+            {
+                return;
+            }
+
+            _activeProjectile.IsFree = true;
+            _activeProjectile.Direction = _direction;
+            _view.ClearTrace();
         }
 
         private void UpdateDirection()
@@ -131,23 +180,6 @@ namespace BalloonParty.Thrower
             _activeProjectile.Direction = _direction;
         }
 
-        private void TryFire()
-        {
-            if (_activeProjectile == null || _activeView == null || _activeProjectile.IsFree)
-            {
-                return;
-            }
-
-            if (!Input.GetMouseButtonUp(0))
-            {
-                return;
-            }
-
-            _activeProjectile.IsFree = true;
-            _activeProjectile.Direction = _direction;
-            _view.ClearTrace();
-        }
-
         private void UpdatePredictionTrace()
         {
             if (_activeProjectile == null || _activeProjectile.IsFree || !Input.GetMouseButton(0))
@@ -158,39 +190,6 @@ namespace BalloonParty.Thrower
 
             _traceCalculator.Calculate(_activeView.transform.position, _direction, _tracePoints);
             _view.SetTrace(_tracePoints);
-        }
-
-        private void LoadProjectile()
-        {
-            _activeView = _poolManager.Get<ProjectileView>(ProjectilePoolKey);
-            _activeView.transform.position = _view.Position;
-            _activeView.transform.rotation = _view.Rotation;
-
-            _activeProjectile = new ProjectileModel
-            {
-                Speed = _config.ProjectileSpeed,
-                IsFree = false,
-                Direction = _direction
-            };
-            _activeProjectile.ShieldsRemaining.Value = _config.ProjectileStartingShields;
-
-            _activeView.Bind(_activeProjectile);
-            _loadedPublisher.Publish(new ProjectileLoadedMessage(_activeProjectile));
-
-            _loadElapsed = 0f;
-            _loadDuration = 0.3f;
-        }
-
-        private void Reload()
-        {
-            if (_activeView != null)
-            {
-                _poolManager.Return(ProjectilePoolKey, _activeView);
-            }
-
-            _activeProjectile = null;
-            _activeView = null;
-            LoadProjectile();
         }
     }
 }
