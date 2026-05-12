@@ -158,7 +158,6 @@ namespace BalloonParty.Balloon.View
             float nudgeDuration,
             Action onComplete)
         {
-            // Standalone spawn tweens would compete with the nudge sequence
             var currentScale = transform.localScale;
             transform.DOKill();
 
@@ -185,6 +184,11 @@ namespace BalloonParty.Balloon.View
             }
 
             var writeable = _grid.At(Model.SlotIndex.Value);
+            if (!writeable.IsStable.Value)
+            {
+                return;
+            }
+
             var slotPos = _grid.IndexToWorldPosition(Model.SlotIndex.Value);
             var direction = slotPos - msg.HitSlotPosition;
 

@@ -143,11 +143,6 @@ namespace BalloonParty.Thrower
                 return;
             }
 
-            if (!_grid.AllBalloonsStable())
-            {
-                return;
-            }
-
             _activeProjectile.IsFree = true;
             _activeProjectile.Direction = _direction;
             _view.ClearTrace();
