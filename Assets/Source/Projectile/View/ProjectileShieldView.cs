@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
+using BalloonParty.Slots;
 using DG.Tweening;
 using UniRx;
 using UnityEngine;
@@ -25,10 +26,13 @@ namespace BalloonParty.Projectile.View
 
         [Inject] private IGameConfiguration _config;
         [Inject] private PoolManager _poolManager;
+        [Inject] private SlotGrid _grid;
 
         private readonly CompositeDisposable _disposable = new();
 
         private int _previousShieldCount;
+        private Color _currentColor = Color.white;
+        private IProjectileModel _model;
 
         private void Awake()
         {
@@ -47,6 +51,7 @@ namespace BalloonParty.Projectile.View
 
         public void Bind(IProjectileModel model)
         {
+            _model = model;
             _previousShieldCount = model.ShieldsRemaining.Value;
 
             model.ShieldsRemaining
@@ -73,6 +78,7 @@ namespace BalloonParty.Projectile.View
         public void Reset()
         {
             _disposable.Clear();
+            _model = null;
             _previousShieldCount = 0;
             foreach (var shield in _shields)
             {
@@ -103,8 +109,8 @@ namespace BalloonParty.Projectile.View
 
         private void UpdateColor(string colorName)
         {
-            var color = _config.BalloonColor(colorName);
-            var targetColor = new Color(color.r, color.g, color.b, _alpha);
+            _currentColor = _config.BalloonColor(colorName);
+            var targetColor = new Color(_currentColor.r, _currentColor.g, _currentColor.b, _alpha);
 
             foreach (var shield in _shields)
             {
@@ -119,7 +125,11 @@ namespace BalloonParty.Projectile.View
         {
             if (currentCount > _previousShieldCount)
             {
-                SpawnVfx(_shieldGainVfxPrefab, transform.position, CurrentColor());
+                var lastHit = _model?.LastHitBalloon;
+                var gainPosition = lastHit != null
+                    ? _grid.IndexToWorldPosition(lastHit.SlotIndex.Value)
+                    : transform.position;
+                SpawnVfx(_shieldGainVfxPrefab, gainPosition, CurrentColor());
             }
             else if (currentCount < _previousShieldCount)
             {
@@ -129,12 +139,7 @@ namespace BalloonParty.Projectile.View
 
         private Color CurrentColor()
         {
-            if (_shields.Count > 0 && _shields[0] != null)
-            {
-                return _shields[0].color;
-            }
-
-            return Color.white;
+            return _currentColor;
         }
 
         private void SpawnVfx(ParticleSystem prefab, Vector3 position, Color color)

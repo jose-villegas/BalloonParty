@@ -191,7 +191,6 @@ namespace BalloonParty.Projectile.View
             if (_model.ColorPopCount >= 2)
             {
                 _model.ShieldsRemaining.Value++;
-                _model.ColorPopCount = 0;
             }
 
             if (_glowRenderer != null)

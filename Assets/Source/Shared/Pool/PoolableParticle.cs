@@ -25,7 +25,13 @@ namespace BalloonParty.Shared
 
         // ── IPoolable ─────────────────────────────────────────────────────────────
 
-        public void OnSpawned() { }
+        public void OnSpawned()
+        {
+            // PoolChannel calls SetActive(true) before OnSpawned, so a particle system
+            // with "Play on Awake" enabled would fire with the stale colour from the
+            // previous use. Stop+clear here so Play() always applies a fresh colour.
+            _particle?.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
 
         public void OnDespawned()
         {

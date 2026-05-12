@@ -27,6 +27,15 @@ namespace BalloonParty.Shared
 
         // ── EffectView ────────────────────────────────────────────────────────────
 
+        public override void OnSpawned()
+        {
+            base.OnSpawned();
+            // PoolChannel calls SetActive(true) before OnSpawned, so a particle system
+            // with "Play on Awake" enabled would fire immediately with the stale colour
+            // from the previous use. Stop+clear here so Play() always applies a fresh colour.
+            _particle?.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
+
         public override void OnDespawned()
         {
             base.OnDespawned();
