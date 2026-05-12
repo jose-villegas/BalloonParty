@@ -18,7 +18,7 @@ All game data lives in the `GameConfiguration` ScriptableObject and is accessed 
 
 ## Design Rules
 
-- **Never hardcode** values that exist in `GameConfiguration` — always read through `IGameConfiguration`.
+- **Never hardcode** values that exist in a configuration asset — always inject the relevant configuration object and read through it.
 - **Never duplicate** configuration data via `[SerializeField]` on individual systems.
-- `IGameConfiguration` is registered once as a singleton in `GameLifetimeScope` and injected wherever needed.
-- New configuration fields are added to both `IGameConfiguration` (interface) and `GameConfiguration` (implementation + serialized field).
+- Each configuration asset is registered once as a singleton in `GameLifetimeScope` and injected wherever needed.
+- New configuration fields are added to the appropriate asset type and its interface (if one exists). When a domain of settings grows large enough to stand alone, extract it into its own ScriptableObject rather than bloating an existing one.
