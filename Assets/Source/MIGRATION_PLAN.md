@@ -1,16 +1,16 @@
 # BalloonParty — ECS → MVC Migration Plan
 
 > Created: 2026-05-08
-> Last Updated: 2026-05-12
+> Last Updated: 2026-05-12 — Migration complete. Entitas fully removed.
 > Context: Migrating from Entitas ECS (`Assets/Source_Old`) to a plain MVC architecture (`Assets/Source`) using MonoBehaviours, **UniRx** for reactive programming, and **VContainer** for dependency injection. Each phase ends with a **testable Unity Editor checkpoint**.
 
 ---
 
 ## Current Architecture
 
-- **Framework:** Entitas ECS
-- **Legacy folder:** `Assets/Source_Old` (renamed from `Assets/Source`)
-- **Key patterns:** `ReactiveSystem`, `IComponent`, `Contexts`, `GameEntity`, `GameMatcher`
+- **Framework:** Entitas ECS *(fully removed — see Phase 16)*
+- **Legacy folder:** `Assets/Source_Old` *(deleted)*
+- **Key patterns:** `ReactiveSystem`, `IComponent`, `Contexts`, `GameEntity`, `GameMatcher` *(all removed)*
 
 ---
 
@@ -119,10 +119,11 @@ Assets/Source/
     ScoreCheatHelper.cs   ← shared helper for score-related cheats
   README.md              ← each feature folder contains a README.md (living documentation)
 
-Assets/Source_Old/   ← legacy Entitas, untouched until Phase 16
+Assets/Source_Old/   ← deleted (Phase 16)
 
 Assets/Shaders/
-  SpriteShadow.shader   ← 2D drop-shadow shader (SpriteRenderer / particles / UI)
+  SpriteShadow.shader          ← 2D drop-shadow shader (SpriteRenderer / particles / UI)
+  SpriteShadowComposite.shader ← two-layer composite shadow shader (second sprite + per-layer color)
   SpriteShine.shader
 ```
 
@@ -1608,22 +1609,26 @@ The goal is **full removal** of Entitas and `Assets/Source_Old` by Phase 16. Eve
 - **No new code in `Source_Old`.** Bug fixes in legacy systems are only allowed if they unblock a migration step. Every fix applied to `Source_Old` should immediately inform the equivalent new implementation.
 - **Entitas context access is a hard boundary.** New code in `Assets/Source` must never reference `Contexts`, `GameEntity`, `GameMatcher`, or any Entitas type. If temporary data needs to flow from a legacy system to a new one during transition, use a MessagePipe message as the bridge — not a shared Entitas entity.
 
-### Removal Checklist (to complete before Phase 16)
+### Removal Checklist ✅ Complete
 
-Each item must be ticked before `Source_Old` and the Entitas package can be deleted:
+All items below were verified before `Source_Old` and the Entitas assets were deleted in Phase 16:
 
-- [ ] `SloIndexerSystem` → replaced by `SlotGrid` (Phase 2)
-- [ ] `BalanceBalloonsSystem` → replaced by `BalloonBalancer` (Phase 3)
-- [ ] `GameStartedBalloonsSpawnSystem`, `BalloonLineSpawnerSystem`, `NewBalloonLinesInstanceSystem` → replaced by `BalloonSpawner` (Phase 4)
-- [ ] `AssetInstancingSystem` → replaced by VContainer factory in `BalloonSpawner` (Phase 4)
-- [ ] `ThrowerDirectionSystem`, `ThrowerRotationSystem`, `ThrowLoadedProjectileSystem` → replaced by `ThrowerController` (Phase 5)
-- [ ] `FreeProjectileMovementSystem`, `ProjectileBounceSystem`, `ProjectileTransformSystem` → replaced by `ProjectileController` (Phase 5)
-- [ ] `BalloonCollisionSystem`, `TriggerReporterController`, `Cleanup2DTriggersSystem` → replaced by `OnTriggerEnter2D` on `ProjectileView` (Phase 5)
-- [ ] `BalloonHitDestructionSystem`, `BalloonHitNudgeAnimationSystem`, `BalloonHitScoreSystem` → replaced by `BalloonController` + `ScoreController` (Phase 6)
-- [ ] `BalloonsPowerUpCheckSystem`, all `*PowerUpController` → replaced by item handlers (Phase 15)
-- [ ] `GameControllerBehaviour`, `GameController`, `GameUpdateSystems`, `GameFixedUpdateSystems` → replaced by `GameManager` + `GameLifetimeScope` (Phase 16)
-- [ ] All Entitas-generated code in `Assets/Generated/` → deleted (Phase 16)
-- [ ] Entitas and DesperateDevs packages removed from `manifest.json` (Phase 16)
+- [x] `SloIndexerSystem` → replaced by `SlotGrid` (Phase 2)
+- [x] `BalanceBalloonsSystem` → replaced by `BalloonBalancer` (Phase 3)
+- [x] `GameStartedBalloonsSpawnSystem`, `BalloonLineSpawnerSystem`, `NewBalloonLinesInstanceSystem` → replaced by `BalloonSpawner` (Phase 4)
+- [x] `AssetInstancingSystem` → replaced by VContainer factory in `BalloonSpawner` (Phase 4)
+- [x] `ThrowerDirectionSystem`, `ThrowerRotationSystem`, `ThrowLoadedProjectileSystem` → replaced by `ThrowerController` (Phase 5)
+- [x] `FreeProjectileMovementSystem`, `ProjectileBounceSystem`, `ProjectileTransformSystem` → replaced by `ProjectileController` (Phase 5)
+- [x] `BalloonCollisionSystem`, `TriggerReporterController`, `Cleanup2DTriggersSystem` → replaced by `OnTriggerEnter2D` on `ProjectileView` (Phase 5)
+- [x] `BalloonHitDestructionSystem`, `BalloonHitNudgeAnimationSystem`, `BalloonHitScoreSystem` → replaced by `BalloonController` + `ScoreController` (Phase 6)
+- [x] `BalloonsPowerUpCheckSystem`, all `*PowerUpController` → replaced by item handlers (Phase 15)
+- [x] `GameControllerBehaviour`, `GameController`, `GameUpdateSystems`, `GameFixedUpdateSystems` → replaced by `GameManager` + `GameLifetimeScope` (Phase 16)
+- [x] All Entitas-generated code in `Assets/Generated/` → deleted
+- [x] `Assets/Source_Old/` → deleted
+- [x] `Assets/Entitas/` (local DLLs) → deleted
+- [x] `Assets/DesperateDevs/` (local DLLs) → deleted
+- [x] `Entitas.properties`, `Jenny.properties` → deleted
+- [x] Old `Assets/Resources/` prefabs (Balloon, Projectile, Thrower, etc.) → deleted
 
 ---
 
