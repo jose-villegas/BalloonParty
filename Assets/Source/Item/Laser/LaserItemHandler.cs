@@ -16,6 +16,9 @@ namespace BalloonParty.Item.Laser
     {
         private static readonly int BalloonsLayer = LayerMask.GetMask("Balloons");
 
+        private readonly List<RaycastHit2D> _castResults = new(4);
+        private readonly ContactFilter2D _balloonFilter;
+
         private readonly IGameConfiguration _config;
         private readonly ItemConfiguration _itemConfig;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
@@ -41,6 +44,10 @@ namespace BalloonParty.Item.Laser
             _hitPublisher = hitPublisher;
             _rotationSubscriber = rotationSubscriber;
             _poolManager = poolManager;
+
+            _balloonFilter = new ContactFilter2D();
+            _balloonFilter.SetLayerMask(BalloonsLayer);
+            _balloonFilter.useTriggers = true;
         }
 
         public void Start()
@@ -88,11 +95,11 @@ namespace BalloonParty.Item.Laser
             float distance,
             HashSet<IBalloonModel> hitModels)
         {
-            var results = Physics2D.CircleCastAll(_worldPosition, radius, direction, distance, BalloonsLayer);
+            var count = Physics2D.CircleCast(_worldPosition, radius, direction, _balloonFilter, _castResults, distance);
 
-            foreach (var hit in results)
+            for (var i = 0; i < count; i++)
             {
-                var balloonView = hit.collider.GetComponentInParent<BalloonView>();
+                var balloonView = _castResults[i].collider.GetComponentInParent<BalloonView>();
                 if (balloonView == null || balloonView.Model == null)
                 {
                     continue;

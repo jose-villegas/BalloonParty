@@ -90,44 +90,51 @@ namespace BalloonParty.Item.Lightning
         private async UniTaskVoid PlayAsync()
         {
             var ct = _cts?.Token ?? CancellationToken.None;
-
             var jumpCount = _targetPositions.Count - 1;
             var rendererCount = _lineRenderers != null ? _lineRenderers.Length : 0;
+            var delayMs = Mathf.RoundToInt(_jumpTime * 1000f);
 
-            // ── Build segments ───────────────────────────────────────────────────
-            var segmentQueues = new Queue<Vector3[]>[rendererCount];
-            var segmentStacks = new Stack<Vector3[]>[rendererCount];
-
-            for (var j = 0; j < rendererCount; j++)
-            {
-                segmentQueues[j] = new Queue<Vector3[]>();
-                segmentStacks[j] = new Stack<Vector3[]>();
-            }
-
+            // ── Pre-compute segment sizes and cumulative offsets ──────────────────
+            // segmentSizes[i]  = number of points for jump i
+            // cumOffsets[i]    = total points used by jumps 0 … i-1
+            // cumOffsets[jumpCount] = total points for all jumps combined
+            var segmentSizes = new int[jumpCount];
             for (var i = 0; i < jumpCount; i++)
             {
-                var origin = _targetPositions[i];
-                var target = _targetPositions[i + 1];
-                var segments = Mathf.Max(
-                    Mathf.FloorToInt(Vector3.Distance(origin, target) * _segmentsMultiplier), 2);
+                var d = Vector3.Distance(_targetPositions[i], _targetPositions[i + 1]);
+                segmentSizes[i] = Mathf.Max(Mathf.FloorToInt(d * _segmentsMultiplier), 2);
+            }
 
-                for (var j = 0; j < rendererCount; j++)
+            var cumOffsets = new int[jumpCount + 1];
+            for (var i = 0; i < jumpCount; i++)
+            {
+                cumOffsets[i + 1] = cumOffsets[i] + segmentSizes[i];
+            }
+
+            var totalPoints = cumOffsets[jumpCount];
+
+            // ── Pre-allocate and pre-fill per-renderer buffers ────────────────────
+            // Each renderer gets independent random jitter, so each has its own buffer.
+            // During animation only positionCount changes — no per-frame allocation.
+            // LineRenderer.SetPositions reads min(array.Length, positionCount) items,
+            // so passing the full buffer with a smaller positionCount is safe.
+            var lineBuffers = new Vector3[rendererCount][];
+            for (var j = 0; j < rendererCount; j++)
+            {
+                lineBuffers[j] = new Vector3[totalPoints];
+                for (var i = 0; i < jumpCount; i++)
                 {
-                    var points = BuildSegment(origin, target, segments, _randomness);
-                    segmentQueues[j].Enqueue(points);
-                    segmentStacks[j].Push(points);
+                    FillSegment(
+                        _targetPositions[i],
+                        _targetPositions[i + 1],
+                        segmentSizes[i],
+                        _randomness,
+                        lineBuffers[j],
+                        cumOffsets[i]);
                 }
             }
 
-            var linePositions = new List<Vector3>[rendererCount];
-            for (var j = 0; j < rendererCount; j++)
-            {
-                linePositions[j] = new List<Vector3>();
-            }
-
-            var delayMs = Mathf.RoundToInt(_jumpTime * 1000f);
-
-            // ── Forward pass ─────────────────────────────────────────────────────
+            // ── Forward pass ──────────────────────────────────────────────────────
             for (var i = 0; i < jumpCount; i++)
             {
                 if (ct.IsCancellationRequested)
@@ -135,17 +142,15 @@ namespace BalloonParty.Item.Lightning
                     return;
                 }
 
+                var count = cumOffsets[i + 1];
                 for (var j = 0; j < rendererCount; j++)
                 {
-                    if (segmentQueues[j].Count > 0)
-                    {
-                        linePositions[j].AddRange(segmentQueues[j].Dequeue());
-                        _lineRenderers[j].positionCount = linePositions[j].Count;
-                        _lineRenderers[j].SetPositions(linePositions[j].ToArray());
-                    }
+                    if (_lineRenderers[j] == null) continue;
+                    _lineRenderers[j].positionCount = count;
+                    _lineRenderers[j].SetPositions(lineBuffers[j]);
                 }
 
-                SyncGlow(linePositions, rendererCount);
+                SyncGlow(lineBuffers, count, rendererCount);
                 _onTargetHit?.Invoke(i);
 
                 await UniTask.Delay(delayMs, cancellationToken: ct).SuppressCancellationThrow();
@@ -156,31 +161,26 @@ namespace BalloonParty.Item.Lightning
                 }
             }
 
-            // ── Reverse pass (retraction) ────────────────────────────────────────
-            for (var i = 0; i < jumpCount; i++)
+            // ── Reverse pass (retraction) ─────────────────────────────────────────
+            for (var i = jumpCount - 1; i >= 0; i--)
             {
                 if (ct.IsCancellationRequested)
                 {
                     return;
                 }
 
+                var count = cumOffsets[i];
                 for (var j = 0; j < rendererCount; j++)
                 {
-                    if (segmentStacks[j].Count > 0)
+                    if (_lineRenderers[j] == null) continue;
+                    _lineRenderers[j].positionCount = count;
+                    if (count > 0)
                     {
-                        var popped = segmentStacks[j].Pop();
-                        var newCount = linePositions[j].Count - popped.Length;
-                        if (newCount >= 0)
-                        {
-                            linePositions[j].RemoveRange(newCount, popped.Length);
-                        }
-
-                        _lineRenderers[j].positionCount = linePositions[j].Count;
-                        _lineRenderers[j].SetPositions(linePositions[j].ToArray());
+                        _lineRenderers[j].SetPositions(lineBuffers[j]);
                     }
                 }
 
-                SyncGlow(linePositions, rendererCount);
+                SyncGlow(lineBuffers, count, rendererCount);
 
                 await UniTask.Delay(delayMs, cancellationToken: ct).SuppressCancellationThrow();
 
@@ -195,34 +195,42 @@ namespace BalloonParty.Item.Lightning
 
         // ── Helpers ───────────────────────────────────────────────────────────────
 
-        private void SyncGlow(List<Vector3>[] linePositions, int rendererCount)
+        private void SyncGlow(Vector3[][] lineBuffers, int count, int rendererCount)
         {
             if (_glowLineRenderer == null || rendererCount == 0)
             {
                 return;
             }
 
-            _glowLineRenderer.positionCount = linePositions[0].Count;
-            _glowLineRenderer.SetPositions(linePositions[0].ToArray());
+            _glowLineRenderer.positionCount = count;
+            if (count > 0)
+            {
+                _glowLineRenderer.SetPositions(lineBuffers[0]);
+            }
         }
 
-        private static Vector3[] BuildSegment(
-            Vector3 origin, Vector3 target, int segments, float randomness)
+        // Writes segment points directly into buffer[offset .. offset+segments-1].
+        // No allocation — replaces the old BuildSegment that returned a new Vector3[].
+        private static void FillSegment(
+            Vector3 origin,
+            Vector3 target,
+            int segments,
+            float randomness,
+            Vector3[] buffer,
+            int offset)
         {
-            var points = new Vector3[segments];
-            points[0] = origin;
+            buffer[offset] = origin;
 
             for (var k = 1; k < segments - 1; k++)
             {
                 var lerped = Vector3.Lerp(origin, target, k / (float)segments);
-                points[k] = new Vector3(
+                buffer[offset + k] = new Vector3(
                     lerped.x + UnityEngine.Random.Range(-randomness, randomness),
                     lerped.y + UnityEngine.Random.Range(-randomness, randomness),
                     0f);
             }
 
-            points[segments - 1] = target;
-            return points;
+            buffer[offset + segments - 1] = target;
         }
 
         private void ClearRenderers()

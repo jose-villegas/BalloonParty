@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
@@ -14,6 +15,9 @@ namespace BalloonParty.Item.Bomb
     public class BombItemHandler : IBalloonItem
     {
         private static readonly int BalloonsLayer = LayerMask.GetMask("Balloons");
+
+        private readonly List<Collider2D> _overlapResults = new(8);
+        private readonly ContactFilter2D _balloonFilter;
 
         private readonly IGameConfiguration _config;
         private readonly ItemConfiguration _itemConfig;
@@ -42,6 +46,10 @@ namespace BalloonParty.Item.Bomb
             _nudgePublisher = nudgePublisher;
             _grid = grid;
             _poolManager = poolManager;
+
+            _balloonFilter = new ContactFilter2D();
+            _balloonFilter.SetLayerMask(BalloonsLayer);
+            _balloonFilter.useTriggers = true;
         }
 
         public void Setup(IBalloonModel balloon, Vector3 worldPosition)
@@ -63,16 +71,11 @@ namespace BalloonParty.Item.Bomb
 
         private void BlastBalloons(float radius)
         {
-            var results = Physics2D.OverlapCircleAll(_worldPosition, radius, BalloonsLayer);
+            var count = Physics2D.OverlapCircle(_worldPosition, radius, _balloonFilter, _overlapResults);
 
-            if (results == null || results.Length == 0)
+            for (var i = 0; i < count; i++)
             {
-                return;
-            }
-
-            foreach (var col in results)
-            {
-                var balloonView = col.GetComponentInParent<BalloonView>();
+                var balloonView = _overlapResults[i].GetComponentInParent<BalloonView>();
                 if (balloonView == null || balloonView.Model == null)
                 {
                     continue;
