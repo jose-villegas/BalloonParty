@@ -34,9 +34,10 @@ MonoBehaviour:
     m_Name: OpenUPM
     m_Url: https://package.openupm.com
     m_Scopes:
+    - com.cysharp
+    - com.dbrizov.naughtyattributes-x
     - com.neuecc
     - jp.hadashikick
-    - com.cysharp
     m_IsDefault: 0
     m_Capabilities: 0
     m_ConfigSource: 4
@@ -48,6 +49,6 @@ MonoBehaviour:
   m_RegistryInfoDraft:
     m_Modified: 0
     m_ErrorMessage: 
-    m_UserModificationsInstanceId: -918
-    m_OriginalInstanceId: -920
+    m_UserModificationsInstanceId: -900
+    m_OriginalInstanceId: -904
   m_LoadAssets: 0

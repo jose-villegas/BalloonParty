@@ -18,8 +18,6 @@ namespace BalloonParty.Item.Lightning
     /// </summary>
     public class LightningItemHandler : IBalloonItem
     {
-        private const string PoolKey = "ChainLightning";
-
         private readonly ItemConfiguration _itemConfig;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
         private readonly SlotGrid _grid;
@@ -76,8 +74,10 @@ namespace BalloonParty.Item.Lightning
             }
 
             var key = settings.ActivationEffectPrefab.name;
-            var view = (ChainLightningView)_poolManager.GetOrRegister(key,
+            var effect = _poolManager.GetOrRegister(key,
                 () => new EffectPoolChannel(settings.ActivationEffectPrefab));
+
+            var view = (ChainLightningView)effect;
 
             view.PrepareDisplay(
                 positions,
@@ -93,7 +93,7 @@ namespace BalloonParty.Item.Lightning
                     }
                 });
 
-            view.Play(Vector3.zero, Color.white, () => _poolManager.Return(key, view));
+            view.Play(Vector3.zero, Color.white, () => _poolManager.Return(key, effect));
 
             return UniTask.CompletedTask;
         }

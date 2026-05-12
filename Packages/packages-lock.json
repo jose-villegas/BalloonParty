@@ -28,6 +28,13 @@
       "dependencies": {},
       "url": "https://package.openupm.com"
     },
+    "com.dbrizov.naughtyattributes-x": {
+      "version": "2.2.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://package.openupm.com"
+    },
     "com.neuecc.unirx": {
       "version": "7.1.0",
       "depth": 0,
