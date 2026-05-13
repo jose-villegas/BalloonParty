@@ -15,15 +15,12 @@ namespace BalloonParty.Configuration
         [SerializeField] private GameObject _visualPrefab;
         [SerializeField] private EffectView _activationEffectPrefab;
 
-        [Header("Bomb")]
         [SerializeField] private float _bombRadius = 1.25f;
         [SerializeField] private NudgeOverride[] _nudgeOverrides;
 
-        [Header("Laser")]
         [SerializeField] private float _laserRaycastDistance = 20f;
         [SerializeField] private float _laserCircleCastRadius = 0.065f;
 
-        [Header("Lightning")]
         [SerializeField] private float _lightningSegmentsMultiplier = 3f;
         [SerializeField] private float _lightningRandomness = 0.2f;
         [SerializeField] private float _lightningJumpTime = 0.15f;
