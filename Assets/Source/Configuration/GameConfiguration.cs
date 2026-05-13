@@ -10,6 +10,7 @@ namespace BalloonParty.Configuration
         [Header("Projectile")]
         [SerializeField] private int _projectileStartingShields;
         [SerializeField] private float _projectileSpeed;
+        [SerializeField] private float _projectileLoadDuration;
         [SerializeField] private Vector4 _limitsClockwise;
 
         [Header("Slots")]
@@ -33,7 +34,9 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _initialPredictionLength;
         [SerializeField] private int _predictionTraceMaxBounces;
         [SerializeField] private int _predictionTraceMaxSteps;
+        
         public float ProjectileSpeed => _projectileSpeed;
+        public float ProjectileLoadDuration => _projectileLoadDuration;
         public Vector4 LimitsClockwise => _limitsClockwise;
         public Vector2 SlotSeparation => _slotSeparation;
         public Vector2 SlotsOffset => _slotsOffset;
