@@ -21,7 +21,6 @@ namespace BalloonParty.Balloon.Spawner
     {
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly BalloonsConfiguration _balloonsConfig;
-        private readonly GamePalette _palette;
         private readonly CancellationTokenSource _cts = new();
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
@@ -44,7 +43,6 @@ namespace BalloonParty.Balloon.Spawner
         public BalloonSpawner(
             SlotGrid grid,
             BalloonsConfiguration balloonsConfig,
-            GamePalette palette,
             LifetimeScope parentScope,
             PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
@@ -59,7 +57,6 @@ namespace BalloonParty.Balloon.Spawner
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
-            _palette = palette;
             _parentScope = parentScope;
             _poolManager = poolManager;
             _lineSubscriber = lineSubscriber;
@@ -119,13 +116,13 @@ namespace BalloonParty.Balloon.Spawner
                 () => _activeCounts[poolKey]--,
                 entry.NudgeDistanceOverride,
                 entry.NudgeDurationOverride,
+                entry.PopVfxPrefab,
                 _hitSubscriber,
                 _itemActivatedSubscriber,
                 _rotationPublisher,
                 _deflectedPublisher,
                 _nudgePublisher,
                 _grid,
-                _palette,
                 _poolManager);
             controller.Start();
 

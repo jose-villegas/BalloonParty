@@ -39,6 +39,13 @@ namespace BalloonParty.Shared.Pool
         }
 
 
+        public void Play(Vector3 position, Action onComplete = null)
+        {
+            _onComplete = onComplete;
+            transform.position = position;
+            _particle.Play();
+        }
+
         public void Play(Vector3 position, Color tint, Action onComplete = null)
         {
             _onComplete = onComplete;

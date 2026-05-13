@@ -6,12 +6,12 @@ using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using MessagePipe;
+using UnityEngine;
 
 namespace BalloonParty.Balloon.Controller
 {
     public class BalloonController
     {
-        private readonly GamePalette _palette;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
@@ -25,6 +25,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly Action _onReturned;
         private readonly float? _nudgeDistanceOverride;
         private readonly float? _nudgeDurationOverride;
+        private readonly ParticleSystem _popVfxOverride;
 
         private IDisposable _hitSubscription;
         private IDisposable _itemActivatedSubscription;
@@ -36,13 +37,13 @@ namespace BalloonParty.Balloon.Controller
             Action onReturned,
             float? nudgeDistanceOverride,
             float? nudgeDurationOverride,
+            ParticleSystem popVfxOverride,
             ISubscriber<BalloonHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
             IPublisher<ItemRotationCapturedMessage> rotationPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
             IPublisher<BalloonNudgeMessage> nudgePublisher,
             SlotGrid grid,
-            GamePalette palette,
             PoolManager poolManager)
         {
             _model = model;
@@ -51,13 +52,13 @@ namespace BalloonParty.Balloon.Controller
             _onReturned = onReturned;
             _nudgeDistanceOverride = nudgeDistanceOverride;
             _nudgeDurationOverride = nudgeDurationOverride;
+            _popVfxOverride = popVfxOverride;
             _hitSubscriber = hitSubscriber;
             _itemActivatedSubscriber = itemActivatedSubscriber;
             _rotationPublisher = rotationPublisher;
             _deflectedPublisher = deflectedPublisher;
             _nudgePublisher = nudgePublisher;
             _grid = grid;
-            _palette = palette;
             _poolManager = poolManager;
         }
 
@@ -65,6 +66,11 @@ namespace BalloonParty.Balloon.Controller
         {
             _model.NudgeDistanceOverride = _nudgeDistanceOverride;
             _model.NudgeDurationOverride = _nudgeDurationOverride;
+
+            if (_popVfxOverride != null)
+            {
+                _view.SetPopVfxOverride(_popVfxOverride);
+            }
 
             _view.Bind(_model);
 
@@ -115,10 +121,7 @@ namespace BalloonParty.Balloon.Controller
             _hitSubscription?.Dispose();
             _hitSubscription = null;
 
-            if (!string.IsNullOrEmpty(_model.Color.Value))
-            {
-                _view.PlayPopEffect(_palette.GetColor(_model.Color.Value));
-            }
+            _view.PlayPopEffect();
 
             _grid.Remove(_model.SlotIndex.Value);
 

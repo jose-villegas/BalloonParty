@@ -17,6 +17,9 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _nudgeDistanceOverride;
         [SerializeField] private float _nudgeDurationOverride;
 
+        [SerializeField] private bool _overridePopVfx;
+        [SerializeField] private ParticleSystem _popVfxPrefab;
+
         public BalloonLifetimeScope Prefab => _prefab;
         public float Weight => _weight;
 
@@ -28,6 +31,10 @@ namespace BalloonParty.Configuration
 
         /// <summary>Null when override is disabled — falls back to global config default.</summary>
         public float? NudgeDurationOverride => _overrideNudge ? _nudgeDurationOverride : null;
+
+        /// <summary>Null when override is disabled — view uses default VFX with balloon color.</summary>
+        public ParticleSystem PopVfxPrefab => _overridePopVfx ? _popVfxPrefab : null;
+
 
         /// <summary>Derived from the prefab's GameObject name — no manual key needed.</summary>
         public string PoolKey => _prefab != null ? _prefab.name : string.Empty;

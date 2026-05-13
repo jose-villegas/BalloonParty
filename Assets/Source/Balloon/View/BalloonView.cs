@@ -23,7 +23,6 @@ namespace BalloonParty.Balloon.View
 
         [SerializeField] private Animator _animator;
         [SerializeField] private Renderer[] _spriteLayerRenderers;
-        [SerializeField] private ParticleSystem _popVfxPrefab;
         [SerializeField] private Collider2D _collider;
 
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
@@ -39,6 +38,7 @@ namespace BalloonParty.Balloon.View
         private readonly CompositeDisposable _bindDisposables = new();
 
         private ItemDisplayService _itemService;
+        private ParticleSystem _popVfxOverride;
 
         public IBalloonModel Model { get; private set; }
         public TweenTracker TweenTracker { get; private set; }
@@ -72,6 +72,7 @@ namespace BalloonParty.Balloon.View
             _bindDisposables.Clear();
             _itemService?.Unbind();
             Model = null;
+            _popVfxOverride = null;
         }
 
         public void Bind(IBalloonModel model)
@@ -126,11 +127,32 @@ namespace BalloonParty.Balloon.View
             _itemService?.Unbind();
         }
 
-        public void PlayPopEffect(Color color)
+        public void SetPopVfxOverride(ParticleSystem prefab)
         {
-            var key = _popVfxPrefab.name;
-            var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(_popVfxPrefab.gameObject));
-            effect.Play(transform.position, color, () => _poolManager.Return(key, effect));
+            _popVfxOverride = prefab;
+        }
+
+        public void PlayPopEffect()
+        {
+            if (_popVfxOverride != null)
+            {
+                // Override VFX — plays with its own baked color, no tinting
+                var key = _popVfxOverride.name;
+                var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(_popVfxOverride.gameObject));
+                effect.Play(transform.position, () => _poolManager.Return(key, effect));
+                return;
+            }
+
+            var defaultPrefab = _balloonsConfig.DefaultPopVfxPrefab;
+            if (defaultPrefab == null || string.IsNullOrEmpty(Model?.Color.Value))
+            {
+                return; // No VFX configured for this balloon type
+            }
+
+            // Default VFX — tinted to the balloon's palette color
+            var defaultKey = defaultPrefab.name;
+            var defaultEffect = _poolManager.GetOrRegister(defaultKey, () => new ParticlePoolChannel(defaultPrefab.gameObject));
+            defaultEffect.Play(transform.position, _palette.GetColor(Model.Color.Value), () => _poolManager.Return(defaultKey, defaultEffect));
         }
 
         public void RegisterDisposeOnDespawn(IDisposable disposable)

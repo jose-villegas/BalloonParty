@@ -9,6 +9,10 @@ namespace BalloonParty.Configuration
     {
         [SerializeField] private BalloonPrefabEntry[] _entries;
 
+        [Header("Pop VFX")]
+        [Tooltip("Default pop particle used for colored balloons. Tinted to the balloon's palette color at runtime.")]
+        [SerializeField] private ParticleSystem _defaultPopVfxPrefab;
+
         [Header("Spawning")]
         [SerializeField] private int _gameStartedBalloonLines;
         [SerializeField] private int _newProjectileBalloonLines;
@@ -23,6 +27,7 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _nudgeDuration = 0.15f;
 
         public BalloonPrefabEntry[] Entries => _entries;
+        public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
         public int GameStartedBalloonLines => _gameStartedBalloonLines;
         public int NewProjectileBalloonLines => _newProjectileBalloonLines;
         public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;

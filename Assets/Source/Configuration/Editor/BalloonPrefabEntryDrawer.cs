@@ -19,6 +19,13 @@ namespace BalloonParty.Source.Configuration.Editor
                 lines += 2; // nudgeDistanceOverride, nudgeDurationOverride
             }
 
+            lines += 1; // overridePopVfx toggle
+            var overridePopVfx = property.FindPropertyRelative("_overridePopVfx");
+            if (overridePopVfx != null && overridePopVfx.boolValue)
+            {
+                lines += 1; // popVfxPrefab only
+            }
+
             return property.isExpanded
                 ? (lines + 1) * (LineHeight + Spacing)
                 : LineHeight + Spacing;
@@ -48,7 +55,17 @@ namespace BalloonParty.Source.Configuration.Editor
                 {
                     EditorGUI.indentLevel = indent + 2;
                     y = DrawField(position, y, property, "_nudgeDistanceOverride", "Distance");
-                    DrawField(position, y, property, "_nudgeDurationOverride", "Duration");
+                    y = DrawField(position, y, property, "_nudgeDurationOverride", "Duration");
+                    EditorGUI.indentLevel = indent + 1;
+                }
+
+                y = DrawField(position, y, property, "_overridePopVfx", "Override Pop VFX");
+
+                var overridePopVfx = property.FindPropertyRelative("_overridePopVfx");
+                if (overridePopVfx != null && overridePopVfx.boolValue)
+                {
+                    EditorGUI.indentLevel = indent + 2;
+                    y = DrawField(position, y, property, "_popVfxPrefab", "VFX Prefab");
                     EditorGUI.indentLevel = indent + 1;
                 }
 
