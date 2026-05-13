@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
+using BalloonParty.Nudge;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -101,8 +101,9 @@ namespace BalloonParty.Item.Bomb
         private void NudgeAllBalloons(ItemSettings settings)
         {
             var nudgeDistance = NudgeOverrideResolver.ResolveDistance(
-                settings.NudgeOverrides, NudgeType.Neighbor, null, _balloonsConfig.NudgeDistance);
-            var nudgeFalloff = settings.BombNudgeFalloff;
+                settings.NudgeOverrides, NudgeType.Shockwave, null, _balloonsConfig.NudgeDistance);
+            var nudgeFalloff = NudgeOverrideResolver.ResolveFalloff(
+                settings.NudgeOverrides, NudgeType.Shockwave, _balloonsConfig.NudgeFalloff);
 
             for (var col = 0; col < _grid.Columns; col++)
             {
@@ -136,7 +137,7 @@ namespace BalloonParty.Item.Bomb
                     _nudgePublisher.Publish(new BalloonNudgeMessage(
                         model,
                         _worldPosition,
-                        NudgeType.Neighbor,
+                        NudgeType.Shockwave,
                         attenuated));
                 }
             }

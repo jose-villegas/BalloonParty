@@ -2,7 +2,7 @@ using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
+using BalloonParty.Nudge;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;

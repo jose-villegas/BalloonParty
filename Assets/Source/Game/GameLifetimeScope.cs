@@ -8,6 +8,7 @@ using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Laser;
 using BalloonParty.Item.Lightning;
 using BalloonParty.Item.Shield;
+using BalloonParty.Nudge;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;

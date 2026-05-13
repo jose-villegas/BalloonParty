@@ -25,6 +25,7 @@ namespace BalloonParty.Configuration
         [Header("Nudge")]
         [SerializeField] private float _nudgeDistance = 0.3f;
         [SerializeField] private float _nudgeDuration = 0.15f;
+        [SerializeField] private float _nudgeFalloff = 1.5f;
 
         public BalloonPrefabEntry[] Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
@@ -35,6 +36,7 @@ namespace BalloonParty.Configuration
         public float TimeForBalloonsBalance => _timeForBalloonsBalance;
         public float NudgeDistance => _nudgeDistance;
         public float NudgeDuration => _nudgeDuration;
+        public float NudgeFalloff => _nudgeFalloff;
 
         /// <summary>
         /// Picks a random entry using weighted random selection, excluding entries that have

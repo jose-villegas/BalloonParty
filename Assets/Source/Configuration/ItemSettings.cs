@@ -1,5 +1,5 @@
 using System;
-using BalloonParty.Shared;
+using BalloonParty.Nudge;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
 
@@ -18,7 +18,6 @@ namespace BalloonParty.Configuration
         [Header("Bomb")]
         [SerializeField] private float _bombRadius = 1.25f;
         [SerializeField] private NudgeOverride[] _nudgeOverrides;
-        [SerializeField] private float _bombNudgeFalloff = 1.5f;
 
         [Header("Laser")]
         [SerializeField] private float _laserRaycastDistance = 20f;
@@ -37,7 +36,6 @@ namespace BalloonParty.Configuration
         public EffectView ActivationEffectPrefab => _activationEffectPrefab;
         public float BombRadius => _bombRadius;
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
-        public float BombNudgeFalloff => _bombNudgeFalloff;
         public float LaserRaycastDistance => _laserRaycastDistance;
         public float LaserCircleCastRadius => _laserCircleCastRadius;
         public float LightningSegmentsMultiplier => _lightningSegmentsMultiplier;

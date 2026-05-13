@@ -1,6 +1,6 @@
 using System;
 using BalloonParty.Balloon;
-using BalloonParty.Shared;
+using BalloonParty.Nudge;
 using UnityEngine;
 
 namespace BalloonParty.Configuration

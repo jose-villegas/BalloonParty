@@ -1,6 +1,6 @@
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
+using BalloonParty.Nudge;
 using UniRx;
 using UnityEngine;
 
