@@ -16,35 +16,38 @@ Today each balloon is defined by a `BalloonColorConfiguration` entry — a `(nam
 
 ### New state (type → optional color)
 
+Balloon types are **MonoBehaviour components** that live on the balloon **prefab**. Each prefab variant carries a component implementing the `IBalloonTypeConfiguration` interface. The balloon is responsible for its own color — the type component picks and applies the color during initialization.
+
 ```
-IBalloonTypeConfiguration          ← interface: Name, HitsToPop, Prefab (optional)
-├── ColoredBalloonType             ← MonoBehaviour component: adds AllowedColors mask, picks a random color
-├── ToughBalloonType               ← MonoBehaviour component: no color, fixed visual, HitsToPop > 0
+IBalloonTypeConfiguration          ← interface: TypeName, HitsToPop, PickColor()
+├── ColorableBalloonType           ← abstract MonoBehaviour: adds AllowedColors, picks a random color
+│   └── SimpleBalloonType          ← concrete MonoBehaviour: standard colored balloon (HitsToPop = 1)
+├── ToughBalloonType               ← concrete MonoBehaviour: no color, fixed visual, HitsToPop > 1 or -1
 └── (future types)                 ← any MonoBehaviour implementing IBalloonTypeConfiguration
 ```
 
 #### `IBalloonTypeConfiguration` (interface)
 
-The contract that every balloon type must satisfy. Lives on a **prefab** or **ScriptableObject** — the `GameConfiguration` references these via `[SerializeField, SerializeReference]` or a typed array.
+The contract that every balloon type must satisfy. Lives on the balloon **prefab** as a MonoBehaviour component. Registered in `BalloonLifetimeScope` via `RegisterComponentInHierarchy<IBalloonTypeConfiguration>()`.
 
 ```csharp
 public interface IBalloonTypeConfiguration
 {
     string TypeName { get; }
-    int HitsToPop { get; }           // 0 = pop on hit, >0 = tough, -1 = unbreakable
+    int HitsToPop { get; }           // 1 = pop on first hit, >1 = tough, -1 = unbreakable
     string PickColor(GamePalette palette);  // returns a color name, or null if this type has no color
 }
 ```
 
-#### `ColorableBalloonType` (abstract base for colored balloons)
+#### `ColorableBalloonType` (abstract MonoBehaviour base for colored balloons)
 
-An abstract class for any balloon type that wants color selection. Handles the color-picking logic with a dropdown mask of allowed palette colors.
+An abstract MonoBehaviour for any balloon type that wants color selection. Handles the color-picking logic with a serialized list of allowed palette color names.
 
 ```csharp
-public abstract class ColorableBalloonType : ScriptableObject, IBalloonTypeConfiguration
+public abstract class ColorableBalloonType : MonoBehaviour, IBalloonTypeConfiguration
 {
     [SerializeField] private string _typeName;
-    [SerializeField] private int _hitsToPop;
+    [SerializeField] private int _hitsToPop = 1;
     [SerializeField] private string[] _allowedColorNames;  // subset of GamePalette entries
 
     public string TypeName => _typeName;
@@ -52,7 +55,8 @@ public abstract class ColorableBalloonType : ScriptableObject, IBalloonTypeConfi
 
     public string PickColor(GamePalette palette)
     {
-        // Pick a random color from _allowedColorNames
+        if (_allowedColorNames == null || _allowedColorNames.Length == 0)
+            return null;
         return _allowedColorNames[Random.Range(0, _allowedColorNames.Length)];
     }
 }
@@ -61,26 +65,26 @@ public abstract class ColorableBalloonType : ScriptableObject, IBalloonTypeConfi
 #### `SimpleBalloonType` (concrete — current colored balloons)
 
 ```csharp
-[CreateAssetMenu(menuName = "Configuration/Balloon Types/Simple")]
 public class SimpleBalloonType : ColorableBalloonType { }
 ```
 
-This is the 1:1 replacement for `BalloonColorConfiguration`. `HitsToPop = 0`, allowed colors = all palette colors.
+This is the 1:1 replacement for `BalloonColorConfiguration`. `HitsToPop = 1`, allowed colors = all palette colors. Added as a component on the standard balloon prefab.
 
 #### `ToughBalloonType` (concrete — new tough/unbreakable)
 
 ```csharp
-[CreateAssetMenu(menuName = "Configuration/Balloon Types/Tough")]
-public class ToughBalloonType : ScriptableObject, IBalloonTypeConfiguration
+public class ToughBalloonType : MonoBehaviour, IBalloonTypeConfiguration
 {
     [SerializeField] private string _typeName;
-    [SerializeField] private int _hitsToPop;
+    [SerializeField] private int _hitsToPop = 2;
 
     public string TypeName => _typeName;
     public int HitsToPop => _hitsToPop;
     public string PickColor(GamePalette palette) => null;  // no color
 }
 ```
+
+Added as a component on a separate tough balloon prefab variant.
 
 ### `GamePalette` (new ScriptableObject)
 
@@ -93,7 +97,7 @@ public class GamePalette : ScriptableObject
     [SerializeField] private PaletteEntry[] _colors;
 
     public PaletteEntry[] Colors => _colors;
-    public Color GetColor(string name) => _colors.First(c => c.Name == name).Color;
+    public Color GetColor(string colorName) => _colors.First(c => c.Name == colorName).Color;
 }
 
 [Serializable]
@@ -110,16 +114,20 @@ Registered in `GameLifetimeScope` as a singleton. All consumers that currently c
 
 ### `GameConfiguration` changes
 
-Replace `BalloonColorConfiguration[] _balloonColors` with:
+- Remove `BalloonColorConfiguration[] _balloonColors` field and `BalloonColors` property
+- Remove `BalloonColor(string name)` method — moves to `GamePalette.GetColor(string colorName)`
+- Remove `BalloonColors` from `IGameConfiguration`
+- No `_balloonTypes` array needed — types live on prefabs
+
+### `BalloonLifetimeScope` changes
+
+Register the type component from the prefab hierarchy:
 
 ```csharp
-[SerializeField] private ScriptableObject[] _balloonTypes;  // each implements IBalloonTypeConfiguration
-
-public IBalloonTypeConfiguration[] BalloonTypes =>
-    _balloonTypes.Cast<IBalloonTypeConfiguration>().ToArray();
+builder.RegisterComponentInHierarchy<IBalloonTypeConfiguration>();
 ```
 
-Remove `BalloonColor(string)` and `BalloonColors` — those move to `GamePalette`.
+This makes the type injectable into the balloon's `BalloonController` and `BalloonView`.
 
 ---
 
@@ -200,15 +208,16 @@ The hit balloon itself nudges in the direction the projectile was traveling (pus
 
 ## Step-by-step Implementation
 
-### Step 1 — Create `GamePalette` ScriptableObject
+### ✅ Step 1 — Create `GamePalette` ScriptableObject
 
 **New files:** `Configuration/GamePalette.cs`, `Configuration/PaletteEntry.cs`
 
 - `PaletteEntry`: `[Serializable]` class with `string Name` and `Color Color`
-- `GamePalette`: ScriptableObject with `PaletteEntry[] _colors`, `Color GetColor(string name)`, `PaletteEntry[] Colors`
+- `GamePalette`: ScriptableObject with `PaletteEntry[] _colors`, `Color GetColor(string colorName)`, `PaletteEntry[] Colors`
 - Register in `GameLifetimeScope` as `builder.RegisterInstance(_gamePalette)`
+- Created `GamePalette.asset` with existing colors copied from `GameConfiguration.asset`
 
-### Step 2 — Create `IBalloonTypeConfiguration` interface
+### ✅ Step 2 — Create `IBalloonTypeConfiguration` interface
 
 **New file:** `Configuration/IBalloonTypeConfiguration.cs`
 
@@ -221,22 +230,22 @@ public interface IBalloonTypeConfiguration
 }
 ```
 
-### Step 3 — Create `ColorableBalloonType` abstract base + `SimpleBalloonType`
+### ✅ Step 3 — Create `ColorableBalloonType` abstract base + `SimpleBalloonType`
 
 **New files:** `Configuration/ColorableBalloonType.cs`, `Configuration/SimpleBalloonType.cs`
 
-- `ColorableBalloonType`: abstract ScriptableObject implementing `IBalloonTypeConfiguration`. Has `_allowedColorNames` (string array — names matching `GamePalette` entries). `PickColor()` returns a random allowed color. Editor drawer provides a dropdown mask populated from the palette.
-- `SimpleBalloonType`: concrete subclass with `[CreateAssetMenu]`. No additional fields — `HitsToPop` defaults to `1` (pops on first hit).
+- `ColorableBalloonType`: abstract **MonoBehaviour** implementing `IBalloonTypeConfiguration`. Has `_allowedColorNames` (string array — names matching `GamePalette` entries). `PickColor()` returns a random allowed color.
+- `SimpleBalloonType`: concrete subclass. No additional fields — `HitsToPop` defaults to `1` (pops on first hit). Added as a component on the standard balloon prefab.
 
-### Step 4 — Create `ToughBalloonType`
+### ✅ Step 4 — Create `ToughBalloonType`
 
 **New file:** `Configuration/ToughBalloonType.cs`
 
-- Implements `IBalloonTypeConfiguration` directly (not `ColorableBalloonType` — no color)
-- `HitsToPop` configurable per asset
+- **MonoBehaviour** implementing `IBalloonTypeConfiguration` directly (not `ColorableBalloonType` — no color)
+- `HitsToPop` configurable per prefab variant (default `2`)
 - `PickColor()` returns `null`
 
-### Step 5 — Model: add `HitsRemaining` and `TypeName`
+### ✅ Step 5 — Model: add `HitsRemaining` and `TypeName`
 
 **Files:** `IBalloonModel.cs`, `IWriteableBalloonModel.cs`, `BalloonModel.cs`
 
@@ -246,14 +255,20 @@ Add to the balloon model:
 
 The existing `Color` property remains — it's the visual color name (null/empty for colorless balloon types).
 
+### ✅ Step 5b — Register `IBalloonTypeConfiguration` in `BalloonLifetimeScope`
+
+**File:** `BalloonLifetimeScope.cs`
+
+- `builder.RegisterComponentInHierarchy<IBalloonTypeConfiguration>()` — makes the type component injectable into the balloon's controller and view
+
 ### Step 6 — Update `GameConfiguration`
 
 **Files:** `GameConfiguration.cs`, `IGameConfiguration.cs`
 
-- Replace `BalloonColorConfiguration[] _balloonColors` with `ScriptableObject[] _balloonTypes` (each cast to `IBalloonTypeConfiguration`)
-- Remove `BalloonColor(string name)` — moves to `GamePalette.GetColor(string name)`
-- Remove `BalloonColors` property — replaced by `BalloonTypes`
-- Add `IBalloonTypeConfiguration[] BalloonTypes { get; }` to `IGameConfiguration`
+- Remove `BalloonColorConfiguration[] _balloonColors` field and `BalloonColors` property
+- Remove `BalloonColor(string name)` method — moves to `GamePalette.GetColor(string colorName)`
+- Remove `BalloonColors` from `IGameConfiguration`
+- No `_balloonTypes` array needed — types live on prefabs
 
 ### Step 7 — Update all `BalloonColor()` consumers to use `GamePalette`
 
@@ -274,16 +289,17 @@ The existing `Color` property remains — it's the visual color name (null/empty
 
 **Files:** `BalloonSpawner.cs`
 
-`SpawnBalloon` changes from `(string colorName, Vector2Int slot)` to `(IBalloonTypeConfiguration type, Vector2Int slot)`:
+The spawner creates the `BalloonModel` and the balloon's own type component (from the prefab) initializes it:
 
 ```csharp
-var color = type.PickColor(_palette);   // may be null for non-colored types
+var typeConfig = view.GetComponent<IBalloonTypeConfiguration>();
+var color = typeConfig.PickColor(_palette);   // may be null for non-colored types
 model.Color.Value = color ?? "";
-model.TypeName.Value = type.TypeName;
-model.HitsRemaining.Value = type.HitsToPop;
+model.TypeName.Value = typeConfig.TypeName;
+model.HitsRemaining.Value = typeConfig.HitsToPop;
 ```
 
-Balloon type selection (which type to spawn) replaces `RandomColorName()`. For now, pick a random type from `_config.BalloonTypes` weighted by configuration (or uniform).
+For spawning different balloon types, the spawner selects from multiple prefab pool keys (e.g., "Balloon", "ToughBalloon") based on game rules or difficulty.
 
 ### Step 9 — New message: `BalloonDeflectedMessage`
 
@@ -358,31 +374,32 @@ The `OnBalloonHit` handler already gates on `_persistentScore.ContainsKey(color)
 | 1 | `Configuration/GamePalette.cs` | **New** — ScriptableObject holding color definitions |
 | 2 | `Configuration/PaletteEntry.cs` | **New** — `[Serializable]` name + color pair |
 | 3 | `Configuration/IBalloonTypeConfiguration.cs` | **New** — interface: `TypeName`, `HitsToPop`, `PickColor()` |
-| 4 | `Configuration/ColorableBalloonType.cs` | **New** — abstract SO base for colored balloon types |
-| 5 | `Configuration/SimpleBalloonType.cs` | **New** — concrete colored balloon (`HitsToPop = 0`) |
-| 6 | `Configuration/ToughBalloonType.cs` | **New** — concrete tough/unbreakable balloon (no color) |
+| 4 | `Configuration/ColorableBalloonType.cs` | **New** — abstract MonoBehaviour base for colored balloon types |
+| 5 | `Configuration/SimpleBalloonType.cs` | **New** — concrete colored balloon MonoBehaviour (`HitsToPop = 1`) |
+| 6 | `Configuration/ToughBalloonType.cs` | **New** — concrete tough/unbreakable balloon MonoBehaviour (no color) |
 | 7 | `Shared/Messages/BalloonDeflectedMessage.cs` | **New** — deflection message |
 | 8 | `Balloon/Model/IBalloonModel.cs` | Add `HitsRemaining`, `TypeName` |
 | 9 | `Balloon/Model/IWriteableBalloonModel.cs` | Add `HitsRemaining`, `TypeName` |
 | 10 | `Balloon/Model/BalloonModel.cs` | Add `HitsRemaining`, `TypeName` |
 | 11 | `Shared/Messages/BalloonHitMessage.cs` | Add `ProjectileDirection` |
-| 12 | `Shared/IGameConfiguration.cs` | Replace `BalloonColors` with `BalloonTypes`; remove `BalloonColor()` |
-| 13 | `Configuration/GameConfiguration.cs` | Replace colors with types array; remove color lookup |
+| 12 | `Shared/IGameConfiguration.cs` | Remove `BalloonColors` and `BalloonColor()` |
+| 13 | `Configuration/GameConfiguration.cs` | Remove `_balloonColors` field, `BalloonColors` property, and `BalloonColor()` method |
 | 14 | `GameLifetimeScope.cs` | Register `GamePalette`, `BalloonDeflectedMessage` broker |
-| 15 | `Balloon/Spawner/BalloonSpawner.cs` | Spawn by type; set `HitsRemaining`, `TypeName`, `Color` from type config |
-| 16 | `Balloon/Controller/BalloonController.cs` | Deflect-or-pop branching; inject deflect + nudge publishers; inject `GamePalette` |
-| 17 | `Projectile/View/ProjectileView.cs` | Subscribe to deflection; reflect direction; gate streak on `HitsRemaining == 0`; inject `GamePalette` |
-| 18 | `Balloon/View/BalloonView.cs` | Inject `GamePalette` for color lookup |
-| 19 | `Slots/SlotGrid.cs` | Remove `RandomColorName()` (moves to spawner) |
-| 20 | `UI/Score/ColorProgressBar.cs` | Inject `GamePalette`; receive `PaletteEntry` instead of `BalloonColorConfiguration` |
-| 21 | `UI/Score/ColorProgressBarInstancer.cs` | Iterate `GamePalette.Colors` |
-| 22 | `Game/ScoreController.cs` | Iterate `GamePalette.Colors` for keys |
-| 23 | `Projectile/View/ProjectileShieldView.cs` | Inject `GamePalette` |
-| 24 | `Item/Laser/LaserItemHandler.cs` | Inject `GamePalette` |
-| 25 | `Item/Bomb/BombItemHandler.cs` | Inject `GamePalette` |
-| 26 | `Item/ItemDisplayService.cs` | Inject `GamePalette` |
-| 27 | `Configuration/BalloonColorConfiguration.cs` | **Delete** |
-| 28 | `Configuration/IBalloonColorConfiguration.cs` | **Delete** |
+| 15 | `Balloon/BalloonLifetimeScope.cs` | Register `IBalloonTypeConfiguration` component from prefab |
+| 16 | `Balloon/Spawner/BalloonSpawner.cs` | Read type from prefab component; set `HitsRemaining`, `TypeName`, `Color` from it |
+| 17 | `Balloon/Controller/BalloonController.cs` | Deflect-or-pop branching; inject deflect + nudge publishers; inject `GamePalette` |
+| 18 | `Projectile/View/ProjectileView.cs` | Subscribe to deflection; reflect direction; gate streak on `HitsRemaining <= 1`; inject `GamePalette` |
+| 19 | `Balloon/View/BalloonView.cs` | Inject `GamePalette` for color lookup |
+| 20 | `Slots/SlotGrid.cs` | Remove `RandomColorName()` (moves to spawner) |
+| 21 | `UI/Score/ColorProgressBar.cs` | Inject `GamePalette`; receive `PaletteEntry` instead of `BalloonColorConfiguration` |
+| 22 | `UI/Score/ColorProgressBarInstancer.cs` | Iterate `GamePalette.Colors` |
+| 23 | `Game/ScoreController.cs` | Iterate `GamePalette.Colors` for keys |
+| 24 | `Projectile/View/ProjectileShieldView.cs` | Inject `GamePalette` |
+| 25 | `Item/Laser/LaserItemHandler.cs` | Inject `GamePalette` |
+| 26 | `Item/Bomb/BombItemHandler.cs` | Inject `GamePalette` |
+| 27 | `Item/ItemDisplayService.cs` | Inject `GamePalette` |
+| 28 | `Configuration/BalloonColorConfiguration.cs` | **Delete** |
+| 29 | `Configuration/IBalloonColorConfiguration.cs` | **Delete** |
 
 ---
 
@@ -390,24 +407,25 @@ The `OnBalloonHit` handler already gates on `_persistentScore.ContainsKey(color)
 
 | Case | Resolution |
 |---|---|
-| Tough balloon with an item | Items should only be assigned to normal balloons (`HitsToPop == 0`). Enforce in item assignment logic. |
+| Tough balloon with an item | Items should only be assigned to normal balloons (`HitsToPop == 1`). Enforce in item assignment logic. |
 | Projectile hits unbreakable, reflects into same balloon | `LastHitBalloon` guard already prevents immediate re-hit. After reflecting and hitting a different balloon, the guard resets. |
 | Multiple projectiles in flight (future) | Each projectile tracks its own `LastHitBalloon` — no conflict. |
 | Tough balloon at 1 hit remaining gets hit | `HitsRemaining == 1` → `<= 1` branch → pops normally. Streak tracks, items activate, neighbors nudge — all existing flow. |
 | Color streak on deflection | Deflections do **not** count toward the color streak. Only `HitsRemaining <= 1` hits (actual pops) do. |
 | Non-colored balloon popped (future tough with 0 remaining) | `ScoreController` ignores empty color keys — no score, no progress bar. This is correct: tough balloons don't contribute to color scoring. |
 | `ColorProgressBar` only shows palette colors | Correct — progress bars are per-palette-color, not per-balloon-type. Tough/unbreakable balloons have no progress bar. |
+| Different balloon prefabs in pool | Each type variant uses a separate pool key (e.g., "Balloon", "ToughBalloon"). The spawner selects the appropriate pool key based on game rules. |
 
 ---
 
 ## Unity Editor Setup (after implementation)
 
 1. **Create GamePalette asset:** Right-click → Create → Configuration → Game Palette. Move existing color entries from `GameConfiguration._balloonColors` into `_colors`.
-2. **Create SimpleBalloonType assets:** One per color group (or one "Simple" type with all colors allowed). `HitsToPop` defaults to `1` — select allowed colors via the dropdown mask.
-3. **Create ToughBalloonType assets:** Set `TypeName` (e.g. "Tough"), `HitsToPop` to `2` or more (or `-1` for unbreakable). `0` is invalid and should be prevented by the editor.
-4. **Update GameConfiguration:** Assign the new type assets into `_balloonTypes` array. Remove old `_balloonColors` (field is deleted).
+2. **Standard balloon prefab:** Add a `SimpleBalloonType` component. Set `TypeName` (e.g., "Simple"), `HitsToPop` to `1`, and `AllowedColorNames` to all palette color names.
+3. **Tough balloon prefab:** Duplicate the balloon prefab. Replace the `SimpleBalloonType` component with `ToughBalloonType`. Set `TypeName` (e.g., "Tough"), `HitsToPop` to `2` or more (or `-1` for unbreakable).
+4. **Register prefab pools:** Add the tough balloon prefab to the pool system (new pool key in `BalloonSpawner`).
 5. **Assign GamePalette** to `GameLifetimeScope._gamePalette` field.
-6. No new prefabs needed for basic implementation — the same balloon prefab handles all types. Future types may use distinct prefabs referenced from their type config.
+6. **Remove old config:** The `_balloonColors` field on `GameConfiguration` is deleted — no migration needed beyond step 1.
 
 ---
 

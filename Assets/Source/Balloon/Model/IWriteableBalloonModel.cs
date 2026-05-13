@@ -7,6 +7,8 @@ namespace BalloonParty.Balloon.Model
     public interface IWriteableBalloonModel : IBalloonModel
     {
         new ReactiveProperty<string> Color { get; }
+        new ReactiveProperty<string> TypeName { get; }
+        new ReactiveProperty<int> HitsRemaining { get; }
         new ReactiveProperty<Vector2Int> SlotIndex { get; }
         new ReactiveProperty<bool> IsStable { get; }
         new ReactiveProperty<ItemType> Item { get; }

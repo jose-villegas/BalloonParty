@@ -1,3 +1,4 @@
+using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Game;
 using VContainer;
@@ -10,6 +11,7 @@ namespace BalloonParty.Balloon
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<BalloonView>();
+            builder.RegisterComponentInHierarchy<IBalloonTypeConfiguration>();
         }
     }
 }
