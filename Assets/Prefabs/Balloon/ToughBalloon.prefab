@@ -150,7 +150,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8b15cc7c4eb204dd3904962cbfd8c40b, type: 2}
+  - {fileID: 2100000, guid: 3d2ce65bd525e48fd8f51c66f173c21c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -417,7 +417,7 @@ MonoBehaviour:
   _typeName: 1
   _hitsToPop: 2
   _renderer: {fileID: 1501219056772195943}
-  _crackAnimDuration: 0.5
+  _crackAnimDuration: 2
 --- !u!1 &5998279519084830477
 GameObject:
   m_ObjectHideFlags: 0

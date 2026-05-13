@@ -7,12 +7,10 @@ Shader "Sprites/ToughBalloon"
 
         // -- Damage state (driven from C#) --
         _DamageProgress ("Damage Progress", Range(0,1)) = 0
-        _HitTime ("Hit Time", Float) = -999
-        _HitFlashDuration ("Hit Flash Duration", Float) = 0.15
 
         // -- Specular highlight --
-        // UV-space offset from sprite center; upper-left by default
         _SpecularOffset ("Specular Offset (UV)", Vector) = (-0.12, 0.12, 0, 0)
+        _SpecularRotation ("Specular Rotation (degrees)", Range(0, 360)) = 0
         _SpecularColor ("Specular Color", Color) = (0.75, 0.78, 0.85, 1)
         _SpecularRadius ("Specular Radius", Range(0.01, 0.5)) = 0.19
         _SpecularSoftness ("Specular Softness", Range(0.001, 0.3)) = 0.10
@@ -31,9 +29,6 @@ Shader "Sprites/ToughBalloon"
 
         // -- Ash tint at max damage --
         _AshColor ("Ash Color (max damage)", Color) = (0.20, 0.20, 0.22, 1)
-
-        // -- Hit flash color --
-        _HitFlashColor ("Hit Flash Color", Color) = (0.82, 0.84, 0.90, 1)
     }
 
     SubShader
@@ -78,10 +73,9 @@ Shader "Sprites/ToughBalloon"
             fixed4 _Color;
 
             float  _DamageProgress;
-            float  _HitTime;
-            float  _HitFlashDuration;
 
             float4 _SpecularOffset;
+            float  _SpecularRotation;
             fixed4 _SpecularColor;
             float  _SpecularRadius;
             float  _SpecularSoftness;
@@ -97,7 +91,6 @@ Shader "Sprites/ToughBalloon"
             float  _CrackSharpness;
 
             fixed4 _AshColor;
-            fixed4 _HitFlashColor;
 
             // ----------------------------------------------------------------
             // Voronoi helpers
@@ -138,6 +131,14 @@ Shader "Sprites/ToughBalloon"
                 return float2(sqrt(d0), sqrt(d1));
             }
 
+            // Rotate a 2D vector by angleDeg degrees
+            float2 Rotate2D(float2 v, float angleDeg)
+            {
+                float a = angleDeg * (UNITY_PI / 180.0);
+                float s = sin(a), c = cos(a);
+                return float2(v.x * c - v.y * s, v.x * s + v.y * c);
+            }
+
             // ----------------------------------------------------------------
             v2f vert(appdata_t IN)
             {
@@ -173,8 +174,10 @@ Shader "Sprites/ToughBalloon"
                 fixed3 col = lerp(fixed3(0.04, 0.04, 0.05), _AshColor.rgb, dmg * dmg);
 
                 // ---- Specular highlight (world-space — never rotates) ----------
-                float2 specUV   = worldUV - _SpecularOffset.xy;
-                specUV.x       *= 0.65;
+                // Rotate worldUV by _SpecularRotation to spin the light source position.
+                float2 rotatedUV = Rotate2D(worldUV, _SpecularRotation);
+                float2 specUV    = rotatedUV - _SpecularOffset.xy;
+                specUV.x        *= 0.65;
                 float  specDist = length(specUV);
 
                 float  specR    = lerp(_SpecularRadius,        _SpecularRadius * 0.3, dmg);
@@ -203,22 +206,22 @@ Shader "Sprites/ToughBalloon"
                 float2 voro = Voronoi(vUV);
                 float  edge = voro.y - voro.x;
 
-                float crackLine = smoothstep(_CrackThreshold - 0.02, _CrackThreshold + 0.01, edge);
-                crackLine       = pow(crackLine, _CrackSharpness * 0.05);
-                float crackFade = smoothstep(0.15, 0.70, dmg);
+                // At dmg=0, threshold is 0.25 — only the narrow band at cell boundaries
+                // qualifies, giving thin hairlines. As dmg→1 it drops to _CrackThreshold,
+                // widening into full splits. Opacity (crackFade) also scales with dmg so
+                // early hairlines are nearly transparent and grow opaque alongside their width.
+                float dynThreshold = lerp(0.25, _CrackThreshold, dmg);
+                float softness     = lerp(0.003, 0.018, dmg);
+                float crackLine    = smoothstep(dynThreshold - softness, dynThreshold + softness, edge);
+                // No pow crushing at low damage — thin lines need to survive.
+                // Sharpness only kicks in as cracks widen.
+                crackLine          = pow(crackLine, lerp(1.0, _CrackSharpness * 0.03, dmg));
+
+                float crackFade = dmg;
 
                 float cellFracture = (1.0 - crackLine) * dmg * 0.35;
                 col = lerp(col, col * (1.0 - cellFracture), dmg);
                 col = lerp(col, _CrackColor.rgb, crackLine * crackFade * (1.0 - rim));
-
-                // ---- Hit flash -----------------------------------------------
-                float timeSinceHit = _Time.y - _HitTime;
-                if (timeSinceHit >= 0.0 && timeSinceHit < _HitFlashDuration)
-                {
-                    float t     = 1.0 - (timeSinceHit / _HitFlashDuration);
-                    float flash = t * t * 0.75;
-                    col = lerp(col, _HitFlashColor.rgb, flash);
-                }
 
                 return fixed4(col * alpha, alpha);
             }

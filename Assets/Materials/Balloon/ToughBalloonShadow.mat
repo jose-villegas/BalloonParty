@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: ToughBalloonMaterial
-  m_Shader: {fileID: 4800000, guid: cc2def581e02479d9cbd0ad6a89f98c7, type: 3}
+  m_Name: ToughBalloonShadow
+  m_Shader: {fileID: 4800000, guid: dd8d29a9ebb54e03899553b37431f377, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -63,32 +63,19 @@ Material:
     m_Floats:
     - _BumpScale: 1
     - _ColorMask: 15
-    - _CrackSharpness: 60
-    - _CrackThreshold: 0.15
     - _Cutoff: 0.5
-    - _DamageProgress: 0
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _HitFlashDuration: 5
-    - _HitTime: -999
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RimWidth: 0.23
     - _ShadowSoftness: 0.03
     - _SmoothnessTextureChannel: 0
-    - _SpecularDotEdge: 0.03
-    - _SpecularDotRadius: 0.0505
-    - _SpecularEdge: 0.0373
     - _SpecularHighlights: 1
-    - _SpecularRadius: 0.051
-    - _SpecularRotation: 131
-    - _SpecularSoftness: 0.022
-    - _SphereWarp: 2.3
     - _SpriteScale: 0.75
     - _SrcBlend: 1
     - _Stencil: 0
@@ -98,21 +85,12 @@ Material:
     - _StencilWriteMask: 255
     - _UVSec: 0
     - _UseUIAlphaClip: 0
-    - _VoronoiScale: 8
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
-    - _AshColor: {r: 0.3764706, g: 0.3764706, b: 0.3764706, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _CrackColor: {r: 0.09803922, g: 0.09803922, b: 0.09803922, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _HitFlashColor: {r: 1, g: 0.27058825, b: 0, a: 1}
-    - _RimColor: {r: 0.8627452, g: 0.8627452, b: 0.8627452, a: 1}
-    - _ShadowColor: {r: 0.8784314, g: 0.8784314, b: 0.8784314, a: 0.2509804}
+    - _ShadowColor: {r: 0, g: 0, b: 0, a: 0.61960787}
     - _ShadowOffset: {r: 0.1, g: -0.1, b: 0, a: 0}
-    - _SpecularColor: {r: 0.8679245, g: 0.8679245, b: 0.8679245, a: 1}
-    - _SpecularDotOffset: {r: -0.14, g: -0.13, b: 0, a: 0}
-    - _SpecularOffset: {r: -0.01, g: -0.23, b: 0, a: 0}
-    - _VoronoiSeed: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
