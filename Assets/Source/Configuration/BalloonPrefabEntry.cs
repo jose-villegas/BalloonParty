@@ -1,6 +1,5 @@
 using System;
 using BalloonParty.Balloon;
-using NaughtyAttributes;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -15,11 +14,7 @@ namespace BalloonParty.Configuration
         [SerializeField] private int _maxCount;
 
         [SerializeField] private bool _overrideNudge;
-
-        [ShowIf(nameof(_overrideNudge))]
         [SerializeField] private float _nudgeDistanceOverride;
-
-        [ShowIf(nameof(_overrideNudge))]
         [SerializeField] private float _nudgeDurationOverride;
 
         public BalloonLifetimeScope Prefab => _prefab;
@@ -38,4 +33,3 @@ namespace BalloonParty.Configuration
         public string PoolKey => _prefab != null ? _prefab.name : string.Empty;
     }
 }
-
