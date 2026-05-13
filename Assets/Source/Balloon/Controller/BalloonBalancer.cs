@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
-using BalloonParty.Shared;
+using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
@@ -14,17 +14,17 @@ namespace BalloonParty.Balloon.Controller
 {
     public class BalloonBalancer : IStartable
     {
-        private readonly IGameConfiguration _config;
+        private readonly BalloonsConfiguration _balloonsConfig;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
 
         private bool _balanceRequested;
 
         [Inject]
-        public BalloonBalancer(SlotGrid grid, IGameConfiguration config, ISubscriber<BalanceBalloonsMessage> subscriber)
+        public BalloonBalancer(SlotGrid grid, BalloonsConfiguration balloonsConfig, ISubscriber<BalanceBalloonsMessage> subscriber)
         {
             _grid = grid;
-            _config = config;
+            _balloonsConfig = balloonsConfig;
             _subscriber = subscriber;
         }
 
@@ -120,14 +120,14 @@ namespace BalloonParty.Balloon.Controller
 
                 var currentScale = view.transform.localScale;
                 var tween = view.transform
-                    .DOPath(path.ToArray(), _config.TimeForBalloonsBalance, PathType.CatmullRom)
+                    .DOPath(path.ToArray(), _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
                     .OnComplete(() => balloon.IsStable.Value = true);
 
                 view.TweenTracker.Append(tween);
 
                 if (currentScale != Vector3.one)
                 {
-                    view.transform.DOScale(Vector3.one, _config.TimeForBalloonsBalance);
+                    view.transform.DOScale(Vector3.one, _balloonsConfig.TimeForBalloonsBalance);
                 }
             }
         }

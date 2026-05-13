@@ -8,26 +8,17 @@ namespace BalloonParty.Shared
         float ProjectileSpeed { get; }
         float ProjectileLoadDuration { get; }
         Vector4 LimitsClockwise { get; }
+        float ShieldTrailDuration { get; }
 
         Vector2Int SlotsSize { get; }
         Vector2 SlotSeparation { get; }
         Vector2 SlotsOffset { get; }
 
-        Vector2 BalloonSpawnAnimationDurationRange { get; }
-        int GameStartedBalloonLines { get; }
-        float TimeForBalloonsBalance { get; }
-        int NewProjectileBalloonLines { get; }
-        float NewBalloonLinesTimeInterval { get; }
-
-        float NudgeDistance { get; }
-        float NudgeDuration { get; }
-
-        float ScorePointTraceDuration { get; }
-        float ShieldTrailDuration { get; }
-
         float PredictionTraceStep { get; }
         int PredictionTraceMaxBounces { get; }
         int PredictionTraceMaxSteps { get; }
+
+        float ScorePointTraceDuration { get; }
 
         int PointsRequiredForLevel(int level);
     }

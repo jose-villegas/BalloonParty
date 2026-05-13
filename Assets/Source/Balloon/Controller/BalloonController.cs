@@ -23,6 +23,8 @@ namespace BalloonParty.Balloon.Controller
         private readonly BalloonView _view;
         private readonly string _poolKey;
         private readonly Action _onReturned;
+        private readonly float? _nudgeDistanceOverride;
+        private readonly float? _nudgeDurationOverride;
 
         private IDisposable _hitSubscription;
         private IDisposable _itemActivatedSubscription;
@@ -32,6 +34,8 @@ namespace BalloonParty.Balloon.Controller
             BalloonView view,
             string poolKey,
             Action onReturned,
+            float? nudgeDistanceOverride,
+            float? nudgeDurationOverride,
             ISubscriber<BalloonHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
             IPublisher<ItemRotationCapturedMessage> rotationPublisher,
@@ -45,6 +49,8 @@ namespace BalloonParty.Balloon.Controller
             _view = view;
             _poolKey = poolKey;
             _onReturned = onReturned;
+            _nudgeDistanceOverride = nudgeDistanceOverride;
+            _nudgeDurationOverride = nudgeDurationOverride;
             _hitSubscriber = hitSubscriber;
             _itemActivatedSubscriber = itemActivatedSubscriber;
             _rotationPublisher = rotationPublisher;
@@ -57,6 +63,9 @@ namespace BalloonParty.Balloon.Controller
 
         public void Start()
         {
+            _model.NudgeDistanceOverride = _nudgeDistanceOverride;
+            _model.NudgeDurationOverride = _nudgeDurationOverride;
+
             _view.Bind(_model);
 
             _hitSubscription = _hitSubscriber.Subscribe(msg =>
@@ -95,8 +104,10 @@ namespace BalloonParty.Balloon.Controller
             var balloonWorldPos = _grid.IndexToWorldPosition(_model.SlotIndex.Value);
             _deflectedPublisher.Publish(new BalloonDeflectedMessage(_model, balloonWorldPos, msg.ProjectileDirection));
 
-            // Pushback nudge — balloon moves in the direction the projectile was traveling
-            _nudgePublisher.Publish(new BalloonNudgeMessage(_model, balloonWorldPos - msg.ProjectileDirection.normalized));
+            // Pushback nudge — BalloonView will apply model-level overrides automatically
+            _nudgePublisher.Publish(new BalloonNudgeMessage(
+                _model,
+                balloonWorldPos - msg.ProjectileDirection.normalized));
         }
 
         private void Pop()

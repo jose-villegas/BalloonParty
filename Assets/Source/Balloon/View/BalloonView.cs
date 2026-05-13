@@ -30,6 +30,7 @@ namespace BalloonParty.Balloon.View
 
         [Inject] private IGameConfiguration _config;
         [Inject] private GamePalette _palette;
+        [Inject] private BalloonsConfiguration _balloonsConfig;
         [Inject] private SlotGrid _grid;
         [Inject] private ItemConfiguration _itemConfig;
         [Inject] private ISubscriber<BalloonNudgeMessage> _nudgeSubscriber;
@@ -199,8 +200,8 @@ namespace BalloonParty.Balloon.View
             var slotPos = _grid.IndexToWorldPosition(Model.SlotIndex.Value);
             var direction = slotPos - msg.HitSlotPosition;
 
-            var nudgeDistance = msg.NudgeDistance ?? _config.NudgeDistance;
-            var nudgeDuration = msg.NudgeDuration ?? _config.NudgeDuration;
+            var nudgeDistance = Model.NudgeDistanceOverride ?? msg.NudgeDistance ?? _balloonsConfig.NudgeDistance;
+            var nudgeDuration = Model.NudgeDurationOverride ?? msg.NudgeDuration ?? _balloonsConfig.NudgeDuration;
 
             writeable.IsStable.Value = false;
             Nudge(slotPos,

@@ -13,5 +13,8 @@ namespace BalloonParty.Balloon.Model
         new ReactiveProperty<Vector2Int> SlotIndex { get; }
         new ReactiveProperty<bool> IsStable { get; }
         new ReactiveProperty<ItemType> Item { get; }
+
+        new float? NudgeDistanceOverride { get; set; }
+        new float? NudgeDurationOverride { get; set; }
     }
 }

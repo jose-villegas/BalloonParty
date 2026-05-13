@@ -9,7 +9,27 @@ namespace BalloonParty.Configuration
     {
         [SerializeField] private BalloonPrefabEntry[] _entries;
 
+        [Header("Spawning")]
+        [SerializeField] private int _gameStartedBalloonLines;
+        [SerializeField] private int _newProjectileBalloonLines;
+        [SerializeField] private float _newBalloonLinesTimeInterval;
+        [SerializeField] private Vector2 _balloonSpawnAnimationSpeedRange;
+
+        [Header("Balancing")]
+        [SerializeField] private float _timeForBalloonsBalance;
+
+        [Header("Nudge")]
+        [SerializeField] private float _nudgeDistance = 0.3f;
+        [SerializeField] private float _nudgeDuration = 0.15f;
+
         public BalloonPrefabEntry[] Entries => _entries;
+        public int GameStartedBalloonLines => _gameStartedBalloonLines;
+        public int NewProjectileBalloonLines => _newProjectileBalloonLines;
+        public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;
+        public Vector2 BalloonSpawnAnimationDurationRange => _balloonSpawnAnimationSpeedRange;
+        public float TimeForBalloonsBalance => _timeForBalloonsBalance;
+        public float NudgeDistance => _nudgeDistance;
+        public float NudgeDuration => _nudgeDuration;
 
         /// <summary>
         /// Picks a random entry using weighted random selection, excluding entries that have

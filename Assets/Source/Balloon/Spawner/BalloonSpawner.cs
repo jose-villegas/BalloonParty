@@ -5,7 +5,6 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -21,9 +20,8 @@ namespace BalloonParty.Balloon.Spawner
     public class BalloonSpawner : IStartable
     {
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
-        private readonly IGameConfiguration _config;
-        private readonly GamePalette _palette;
         private readonly BalloonsConfiguration _balloonsConfig;
+        private readonly GamePalette _palette;
         private readonly CancellationTokenSource _cts = new();
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
@@ -46,7 +44,6 @@ namespace BalloonParty.Balloon.Spawner
         public BalloonSpawner(
             SlotGrid grid,
             BalloonsConfiguration balloonsConfig,
-            IGameConfiguration config,
             GamePalette palette,
             LifetimeScope parentScope,
             PoolManager poolManager,
@@ -62,7 +59,6 @@ namespace BalloonParty.Balloon.Spawner
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
-            _config = config;
             _palette = palette;
             _parentScope = parentScope;
             _poolManager = poolManager;
@@ -121,6 +117,8 @@ namespace BalloonParty.Balloon.Spawner
                 view,
                 poolKey,
                 () => _activeCounts[poolKey]--,
+                entry.NudgeDistanceOverride,
+                entry.NudgeDurationOverride,
                 _hitSubscriber,
                 _itemActivatedSubscriber,
                 _rotationPublisher,
@@ -139,7 +137,7 @@ namespace BalloonParty.Balloon.Spawner
 
         private void PopulateInitialGrid()
         {
-            for (var row = 0; row < _config.GameStartedBalloonLines; row++)
+            for (var row = 0; row < _balloonsConfig.GameStartedBalloonLines; row++)
             {
                 for (var col = 0; col < _grid.Columns; col++)
                 {
@@ -175,8 +173,8 @@ namespace BalloonParty.Balloon.Spawner
             view.transform.localScale = Vector3.zero;
 
             var duration = Random.Range(
-                _config.BalloonSpawnAnimationDurationRange.x,
-                _config.BalloonSpawnAnimationDurationRange.y);
+                _balloonsConfig.BalloonSpawnAnimationDurationRange.x,
+                _balloonsConfig.BalloonSpawnAnimationDurationRange.y);
 
             view.transform.DOMove(targetPosition, duration)
                 .OnComplete(() => model.IsStable.Value = true);
@@ -216,7 +214,7 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            SpawnLinesWithDelayAsync(_config.NewProjectileBalloonLines, _cts.Token).Forget();
+            SpawnLinesWithDelayAsync(_balloonsConfig.NewProjectileBalloonLines, _cts.Token).Forget();
         }
 
         private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct)
@@ -225,7 +223,7 @@ namespace BalloonParty.Balloon.Spawner
             {
                 SpawnLineInternal();
                 await UniTask.Delay(
-                    (int)(_config.NewBalloonLinesTimeInterval * 1000),
+                    (int)(_balloonsConfig.NewBalloonLinesTimeInterval * 1000),
                     cancellationToken: ct);
             }
 

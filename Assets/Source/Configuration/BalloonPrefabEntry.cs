@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Balloon;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -11,13 +12,27 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _weight = 1f;
 
         [Tooltip("Maximum number of this balloon type allowed on the grid at once. 0 = no limit.")]
-        [SerializeField] private int _maxCount = 0;
+        [SerializeField] private int _maxCount;
+
+        [SerializeField] private bool _overrideNudge;
+
+        [ShowIf(nameof(_overrideNudge))]
+        [SerializeField] private float _nudgeDistanceOverride;
+
+        [ShowIf(nameof(_overrideNudge))]
+        [SerializeField] private float _nudgeDurationOverride;
 
         public BalloonLifetimeScope Prefab => _prefab;
         public float Weight => _weight;
 
         /// <summary>0 means no limit.</summary>
         public int MaxCount => _maxCount;
+
+        /// <summary>Null when override is disabled — falls back to global config default.</summary>
+        public float? NudgeDistanceOverride => _overrideNudge ? _nudgeDistanceOverride : null;
+
+        /// <summary>Null when override is disabled — falls back to global config default.</summary>
+        public float? NudgeDurationOverride => _overrideNudge ? _nudgeDurationOverride : null;
 
         /// <summary>Derived from the prefab's GameObject name — no manual key needed.</summary>
         public string PoolKey => _prefab != null ? _prefab.name : string.Empty;

@@ -14,6 +14,9 @@ namespace BalloonParty.Balloon.Model
         public ReactiveProperty<bool> IsStable { get; } = new(true);
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
 
+        public float? NudgeDistanceOverride { get; set; }
+        public float? NudgeDurationOverride { get; set; }
+
         IReadOnlyReactiveProperty<string> IBalloonModel.Color => Color;
         IReadOnlyReactiveProperty<BalloonType> IBalloonModel.TypeName => TypeName;
         IReadOnlyReactiveProperty<int> IBalloonModel.HitsRemaining => HitsRemaining;
