@@ -13,6 +13,7 @@ namespace BalloonParty.Balloon.Controller
     public class BalloonController
     {
         private readonly IGameConfiguration _config;
+        private readonly GamePalette _palette;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
@@ -32,6 +33,7 @@ namespace BalloonParty.Balloon.Controller
             IPublisher<ItemRotationCapturedMessage> rotationPublisher,
             SlotGrid grid,
             IGameConfiguration config,
+            GamePalette palette,
             PoolManager poolManager)
         {
             _model = model;
@@ -41,6 +43,7 @@ namespace BalloonParty.Balloon.Controller
             _rotationPublisher = rotationPublisher;
             _grid = grid;
             _config = config;
+            _palette = palette;
             _poolManager = poolManager;
         }
 
@@ -58,7 +61,7 @@ namespace BalloonParty.Balloon.Controller
                 _hitSubscription?.Dispose();
                 _hitSubscription = null;
 
-                _view.PlayPopEffect(_config.BalloonColor(_model.Color.Value));
+                _view.PlayPopEffect(_palette.GetColor(_model.Color.Value));
                 _grid.Remove(_model.SlotIndex.Value);
 
                 if (_model.Item.Value == ItemType.None)

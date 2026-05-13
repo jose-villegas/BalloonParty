@@ -1,3 +1,4 @@
+using BalloonParty.Configuration;
 using BalloonParty.Game;
 using BalloonParty.Shared;
 using UnityEngine;
@@ -11,12 +12,13 @@ namespace BalloonParty.UI.Score
         [Header("Prefabs")] [SerializeField] private ColorProgressBar _colorProgressBarPrefab;
 
         [Inject] private IGameConfiguration _config;
+        [Inject] private GamePalette _palette;
         [Inject] private IObjectResolver _resolver;
         [Inject] private ScoreController _scoreController;
 
         private void Start()
         {
-            foreach (var color in _config.BalloonColors)
+            foreach (var color in _palette.Colors)
             {
                 var bar = _resolver.Instantiate(_colorProgressBarPrefab, transform);
                 bar.Setup(color, _scoreController);

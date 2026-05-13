@@ -1,4 +1,3 @@
-using System.Linq;
 using BalloonParty.Shared;
 using UnityEngine;
 
@@ -21,7 +20,6 @@ namespace BalloonParty.Configuration
         [Header("Balloons")]
         [SerializeField] private Vector2 _balloonSpawnAnimationSpeedRange;
         [SerializeField] private int _gameStartedBalloonLines;
-        [SerializeField] private BalloonColorConfiguration[] _balloonColors;
         [SerializeField] private float _timeForBalloonsBalance;
         [SerializeField] private int _newProjectileBalloonLines;
         [SerializeField] private float _newBalloonLinesTimeInterval;
@@ -44,7 +42,6 @@ namespace BalloonParty.Configuration
         public Vector2 BalloonSpawnAnimationDurationRange => _balloonSpawnAnimationSpeedRange;
         public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;
         public int GameStartedBalloonLines => _gameStartedBalloonLines;
-        public BalloonColorConfiguration[] BalloonColors => _balloonColors;
         public float TimeForBalloonsBalance => _timeForBalloonsBalance;
         public int NewProjectileBalloonLines => _newProjectileBalloonLines;
         public float NudgeDistance => _nudgeDistance;
@@ -59,11 +56,6 @@ namespace BalloonParty.Configuration
         public int PointsRequiredForLevel(int level)
         {
             return (int)((Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI))) + 25f);
-        }
-
-        public Color BalloonColor(string colorName)
-        {
-            return _balloonColors.First(x => x.Name == colorName).Color;
         }
     }
 }

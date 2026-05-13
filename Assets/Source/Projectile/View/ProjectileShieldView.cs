@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Configuration;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
@@ -26,6 +27,7 @@ namespace BalloonParty.Projectile.View
         [SerializeField] private ParticleSystem _shieldBounceVfxPrefab;
 
         [Inject] private IGameConfiguration _config;
+        [Inject] private GamePalette _palette;
         [Inject] private SlotGrid _grid;
         [Inject] private PoolManager _poolManager;
 
@@ -110,7 +112,7 @@ namespace BalloonParty.Projectile.View
 
         private void UpdateColor(string colorName)
         {
-            _currentColor = _config.BalloonColor(colorName);
+            _currentColor = _palette.GetColor(colorName);
             var targetColor = new Color(_currentColor.r, _currentColor.g, _currentColor.b, _alpha);
 
             foreach (var shield in _shields)

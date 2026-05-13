@@ -1,7 +1,6 @@
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Projectile.Model;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
@@ -14,7 +13,7 @@ namespace BalloonParty.Item.Shield
 {
     public class ShieldItemHandler : IBalloonItem, IStartable
     {
-        private readonly IGameConfiguration _config;
+        private readonly GamePalette _palette;
         private readonly ItemConfiguration _itemConfig;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private readonly PoolManager _poolManager;
@@ -28,13 +27,13 @@ namespace BalloonParty.Item.Shield
 
         [Inject]
         public ShieldItemHandler(
-            IGameConfiguration config,
+            GamePalette palette,
             ItemConfiguration itemConfig,
             PoolManager poolManager,
             IPublisher<ShieldGainedMessage> shieldGainedPublisher,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
         {
-            _config = config;
+            _palette = palette;
             _itemConfig = itemConfig;
             _poolManager = poolManager;
             _shieldGainedPublisher = shieldGainedPublisher;
@@ -75,7 +74,7 @@ namespace BalloonParty.Item.Shield
             var key = settings.ActivationEffectPrefab.name;
             var effect = _poolManager.GetOrRegister(key, () => new EffectPoolChannel(settings.ActivationEffectPrefab));
 
-            var balloonColor = _config.BalloonColor(_balloon.Color.Value);
+            var balloonColor = _palette.GetColor(_balloon.Color.Value);
             effect.Play(_worldPosition, balloonColor, () => _poolManager.Return(key, effect));
         }
     }

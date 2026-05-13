@@ -29,6 +29,7 @@ namespace BalloonParty.Balloon.View
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private IGameConfiguration _config;
+        [Inject] private GamePalette _palette;
         [Inject] private SlotGrid _grid;
         [Inject] private ItemConfiguration _itemConfig;
         [Inject] private ISubscriber<BalloonNudgeMessage> _nudgeSubscriber;
@@ -98,6 +99,7 @@ namespace BalloonParty.Balloon.View
                     model.SlotIndex,
                     _config,
                     _itemConfig,
+                    _palette,
                     _baseSortingLayer,
                     _spriteLayerRenderers.Length,
                     _poolManager);
@@ -137,7 +139,12 @@ namespace BalloonParty.Balloon.View
 
         private void ApplyColor(string colorName)
         {
-            var color = _config.BalloonColor(colorName);
+            if (string.IsNullOrEmpty(colorName))
+            {
+                return;
+            }
+
+            var color = _palette.GetColor(colorName);
 
             if (_renderer != null)
             {

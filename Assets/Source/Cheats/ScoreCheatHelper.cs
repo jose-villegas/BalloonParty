@@ -12,7 +12,7 @@ namespace BalloonParty.Cheats
     internal static class ScoreCheatHelper
     {
         internal static void FillColor(
-            BalloonColorConfiguration color,
+            PaletteEntry color,
             int target,
             ScoreController scoreController,
             IPublisher<BalloonHitMessage> hitPublisher)

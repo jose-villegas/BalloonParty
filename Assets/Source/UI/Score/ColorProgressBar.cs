@@ -34,12 +34,12 @@ namespace BalloonParty.UI.Score
 
         private readonly List<ScoreNotice> _activeNotices = new();
 
-        private BalloonColorConfiguration _colorConfig;
+        private PaletteEntry _colorConfig;
         private int _localCount;
         private string _noticePoolKey;
         private string _trailPoolKey;
 
-        public void Setup(BalloonColorConfiguration colorConfig, ScoreController scoreController)
+        public void Setup(PaletteEntry colorConfig, ScoreController scoreController)
         {
             _colorConfig = colorConfig;
             _noticePoolKey = $"ScoreNotice_{colorConfig.Name}";

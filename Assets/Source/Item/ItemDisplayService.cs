@@ -15,6 +15,7 @@ namespace BalloonParty.Item
         private int _balloonRendererCount;
         private int _baseSortingOffset;
         private IGameConfiguration _config;
+        private GamePalette _palette;
         private ItemConfiguration _itemConfig;
         private PoolManager _poolManager;
         private IReadOnlyReactiveProperty<Vector2Int> _slotIndex;
@@ -25,6 +26,7 @@ namespace BalloonParty.Item
             IReadOnlyReactiveProperty<Vector2Int> slotIndex,
             IGameConfiguration config,
             ItemConfiguration itemConfig,
+            GamePalette palette,
             int baseSortingOffset,
             int balloonRendererCount,
             PoolManager poolManager)
@@ -33,6 +35,7 @@ namespace BalloonParty.Item
 
             _config = config;
             _itemConfig = itemConfig;
+            _palette = palette;
             _baseSortingOffset = baseSortingOffset;
             _balloonRendererCount = balloonRendererCount;
             _slotIndex = slotIndex;
@@ -87,7 +90,7 @@ namespace BalloonParty.Item
             _activeView.transform.localPosition = Vector3.zero;
             _activeView.transform.localScale = Vector3.one;
 
-            var color = _config.BalloonColor(colorName);
+            var color = _palette.GetColor(colorName);
             _activeView.Activate(color);
             ApplySorting(_slotIndex.Value);
         }

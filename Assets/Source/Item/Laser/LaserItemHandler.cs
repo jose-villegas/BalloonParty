@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
@@ -19,7 +18,7 @@ namespace BalloonParty.Item.Laser
 
         private readonly ContactFilter2D _balloonFilter;
         private readonly List<RaycastHit2D> _castResults = new(4);
-        private readonly IGameConfiguration _config;
+        private readonly GamePalette _palette;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
         private readonly ItemConfiguration _itemConfig;
         private readonly PoolManager _poolManager;
@@ -33,13 +32,13 @@ namespace BalloonParty.Item.Laser
 
         [Inject]
         public LaserItemHandler(
-            IGameConfiguration config,
+            GamePalette palette,
             ItemConfiguration itemConfig,
             IPublisher<BalloonHitMessage> hitPublisher,
             ISubscriber<ItemRotationCapturedMessage> rotationSubscriber,
             PoolManager poolManager)
         {
-            _config = config;
+            _palette = palette;
             _itemConfig = itemConfig;
             _hitPublisher = hitPublisher;
             _rotationSubscriber = rotationSubscriber;
@@ -129,7 +128,7 @@ namespace BalloonParty.Item.Laser
             var key = settings.ActivationEffectPrefab.name;
             var effect = _poolManager.GetOrRegister(key, () => new EffectPoolChannel(settings.ActivationEffectPrefab));
 
-            var balloonColor = _config.BalloonColor(_balloon.Color.Value);
+            var balloonColor = _palette.GetColor(_balloon.Color.Value);
             effect.Play(_worldPosition, _laserRotation, balloonColor, () => _poolManager.Return(key, effect));
         }
     }

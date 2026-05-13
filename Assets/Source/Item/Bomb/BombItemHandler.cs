@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -18,7 +17,7 @@ namespace BalloonParty.Item.Bomb
         private static readonly int BalloonsLayer = LayerMask.GetMask("Balloons");
 
         private readonly ContactFilter2D _balloonFilter;
-        private readonly IGameConfiguration _config;
+        private readonly GamePalette _palette;
         private readonly SlotGrid _grid;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
         private readonly ItemConfiguration _itemConfig;
@@ -33,14 +32,14 @@ namespace BalloonParty.Item.Bomb
 
         [Inject]
         public BombItemHandler(
-            IGameConfiguration config,
+            GamePalette palette,
             ItemConfiguration itemConfig,
             IPublisher<BalloonHitMessage> hitPublisher,
             IPublisher<BalloonNudgeMessage> nudgePublisher,
             SlotGrid grid,
             PoolManager poolManager)
         {
-            _config = config;
+            _palette = palette;
             _itemConfig = itemConfig;
             _hitPublisher = hitPublisher;
             _nudgePublisher = nudgePublisher;
@@ -147,7 +146,7 @@ namespace BalloonParty.Item.Bomb
             var key = settings.ActivationEffectPrefab.name;
             var effect = _poolManager.GetOrRegister(key, () => new EffectPoolChannel(settings.ActivationEffectPrefab));
 
-            var balloonColor = _config.BalloonColor(_balloon.Color.Value);
+            var balloonColor = _palette.GetColor(_balloon.Color.Value);
             effect.Play(_worldPosition, balloonColor, () => _poolManager.Return(key, effect));
         }
     }

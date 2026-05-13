@@ -1,5 +1,6 @@
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Configuration;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
@@ -22,6 +23,7 @@ namespace BalloonParty.Projectile.View
 
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IGameConfiguration _config;
+        [Inject] private GamePalette _palette;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
         [Inject] private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
@@ -184,7 +186,7 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            _shieldView.PlayBounceVfx(position, _config.BalloonColor(_model.ColorName.Value));
+            _shieldView.PlayBounceVfx(position, _palette.GetColor(_model.ColorName.Value));
         }
 
         private void RevealShieldOnFirstFreeFrame()
@@ -248,7 +250,7 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            var color = _config.BalloonColor(_model.ColorName.Value);
+            var color = _palette.GetColor(_model.ColorName.Value);
             _glowRenderer.DOColor(new Color(color.r, color.g, color.b, _glowAlpha), _glowColorDuration);
         }
     }

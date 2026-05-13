@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
@@ -16,6 +17,7 @@ namespace BalloonParty.Game
         private const string ProgressSuffix = ".Progress";
 
         private readonly IGameConfiguration _config;
+        private readonly GamePalette _palette;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ReactiveProperty<int> _level = new(0);
         private readonly Dictionary<string, int> _levelProgress = new();
@@ -33,12 +35,14 @@ namespace BalloonParty.Game
             ISubscriber<BalloonHitMessage> hitSubscriber,
             IPublisher<BalloonScoredMessage> scoredPublisher,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
-            IGameConfiguration config)
+            IGameConfiguration config,
+            GamePalette palette)
         {
             _hitSubscriber = hitSubscriber;
             _scoredPublisher = scoredPublisher;
             _levelUpPublisher = levelUpPublisher;
             _config = config;
+            _palette = palette;
         }
 
         public void Dispose()
@@ -52,7 +56,7 @@ namespace BalloonParty.Game
         {
             _level.Value = PlayerPrefs.GetInt(LevelKey, 0);
 
-            foreach (var color in _config.BalloonColors)
+            foreach (var color in _palette.Colors)
             {
                 _persistentScore[color.Name] = PlayerPrefs.GetInt(color.Name, 0);
                 _levelProgress[color.Name] = PlayerPrefs.GetInt(color.Name + ProgressSuffix, 0);
@@ -78,7 +82,7 @@ namespace BalloonParty.Game
 
         private void Save()
         {
-            foreach (var color in _config.BalloonColors)
+            foreach (var color in _palette.Colors)
             {
                 PlayerPrefs.SetInt(color.Name, _persistentScore.GetValueOrDefault(color.Name));
                 PlayerPrefs.SetInt(color.Name + ProgressSuffix, _levelProgress.GetValueOrDefault(color.Name));

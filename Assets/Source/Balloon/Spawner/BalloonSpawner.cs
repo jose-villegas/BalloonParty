@@ -4,6 +4,7 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
+using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
@@ -22,6 +23,7 @@ namespace BalloonParty.Balloon.Spawner
         private const string BalloonPoolKey = "Balloon";
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly IGameConfiguration _config;
+        private readonly GamePalette _palette;
         private readonly CancellationTokenSource _cts = new();
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
@@ -43,6 +45,7 @@ namespace BalloonParty.Balloon.Spawner
             SlotGrid grid,
             BalloonSpawnerSettings settings,
             IGameConfiguration config,
+            GamePalette palette,
             LifetimeScope parentScope,
             PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
@@ -56,6 +59,7 @@ namespace BalloonParty.Balloon.Spawner
             _grid = grid;
             _settings = settings;
             _config = config;
+            _palette = palette;
             _parentScope = parentScope;
             _poolManager = poolManager;
             _lineSubscriber = lineSubscriber;
@@ -100,6 +104,7 @@ namespace BalloonParty.Balloon.Spawner
                 _rotationPublisher,
                 _grid,
                 _config,
+                _palette,
                 _poolManager);
             controller.Start();
 
