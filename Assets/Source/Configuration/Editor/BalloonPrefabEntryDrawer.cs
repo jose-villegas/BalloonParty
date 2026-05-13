@@ -2,7 +2,7 @@ using BalloonParty.Configuration;
 using UnityEditor;
 using UnityEngine;
 
-namespace BalloonParty.Source.Configuration.Editor
+namespace BalloonParty.Configuration.Editor
 {
     [CustomPropertyDrawer(typeof(BalloonPrefabEntry))]
     public class BalloonPrefabEntryDrawer : PropertyDrawer

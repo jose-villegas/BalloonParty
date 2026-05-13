@@ -7,9 +7,9 @@ namespace BalloonParty.Configuration.Editor
     [CustomPropertyDrawer(typeof(PaletteColorMaskAttribute))]
     public class PaletteColorMaskDrawer : PropertyDrawer
     {
+        private bool _initialized;
         private GamePalette _palette;
         private string[] _paletteNames;
-        private bool _initialized;
 
         private void EnsureInitialized()
         {

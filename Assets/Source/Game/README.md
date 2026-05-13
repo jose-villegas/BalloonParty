@@ -6,25 +6,25 @@ The entry point that starts and runs the game.
 
 | File | What it does |
 |---|---|
-| `GameLifetimeScope` | VContainer composition root — registers all game services, entry points, MessagePipe brokers, and cheats |
-| `GameChildLifetimeScope` | Abstract base for all child scopes — provides `FindParent()` wiring to `GameLifetimeScope` |
-| `ScoreController` | Tracks per-color progress and total score; persists via `PlayerPrefs`; drives level progression |
+| `GameLifetimeScope` | VContainer composition root — registers all game services, entry points, MessagePipe brokers, configuration assets, and (in dev builds) cheats |
+| `GameChildLifetimeScope` | Abstract base for all child scopes — `FindParent()` resolves to `GameLifetimeScope` automatically |
+| `ScoreController` | Tracks per-color level progress and total score; persists via `PlayerPrefs`; triggers level-ups and pauses the game when all color thresholds are met |
 
 ## Architecture
 
-`GameLifetimeScope` is the sole composition root. All other systems — spawner, balancer, thrower, score — are wired here and injected wherever needed.
+`GameLifetimeScope` is the sole composition root. All systems — spawner, balancer, nudge, thrower, score, items — are wired here and inherit into child scopes automatically.
 
-`GameChildLifetimeScope` is the abstract base that most child scopes extend (`ScoreUILifetimeScope`, `LevelUpLifetimeScope`, `ShieldUILifetimeScope`, `ProjectileLifetimeScope`, `BalloonLifetimeScope`). It overrides `FindParent()` to locate `GameLifetimeScope` automatically, so child scopes inherit all parent services without manual wiring.
+`GameChildLifetimeScope` is the abstract base extended by: `ScoreUILifetimeScope`, `LevelUpLifetimeScope`, `ShieldUILifetimeScope`, `ProjectileLifetimeScope`, `BalloonLifetimeScope`, and `ThrowerLifetimeScope`. It overrides `FindParent()` to locate `GameLifetimeScope` in the scene.
 
-**Exception:** `ItemViewScope` extends `LifetimeScope` directly with a custom `FindParent()` that walks the transform hierarchy. This is necessary because `ItemViewScope` is a nested child scope (under `BalloonLifetimeScope`) and needs to parent to its own balloon's root scope rather than the game scope.
+**Exception:** `ItemViewScope` extends `LifetimeScope` directly with a custom `FindParent()` that walks the transform hierarchy — so each pooled balloon's item scope parents to its own balloon's root scope rather than a random one.
 
-`ScoreController` lives here. On each balloon hit it publishes `BalloonScoredMessage` for the UI and checks whether all colors have met the threshold for the next level; when they have it publishes `ScoreLevelUpMessage` and pauses the game. It saves to `PlayerPrefs` on quit and focus-lost.
+`ScoreController` subscribes to `BalloonHitMessage`. It only scores actual pops — deflections (`HitsRemaining > 1` or `-1`) are ignored. On each qualifying hit it increments per-color `_levelProgress` and `_persistentScore`, publishes `BalloonScoredMessage`, and checks whether all colors have met the level threshold. When they have, it increments the level, resets per-color progress, publishes `ScoreLevelUpMessage`, and calls `Time.timeScale = 0`. It saves to `PlayerPrefs` on quit and focus-lost.
 
 ## Interactions
 
 - **BalloonSpawner** — spawns initial and subsequent balloon lines
-- **BalloonBalancer** — rebalances the grid whenever a gap is created
+- **BalloonBalancer** — rebalances the grid after spawn
+- **NudgeService** — handles all balloon nudge animations
 - **ThrowerController** — the player-facing launcher; reloads after each projectile death
 - **SlotGrid** — the shared grid state all systems read and write
-- **ScoreUILifetimeScope** — child scope for score HUD; inherits all registrations from here
-- **IGameConfiguration** — registered once here as a singleton; consumed everywhere
+- **GameLifetimeScope config** — `GameConfiguration`, `BalloonsConfiguration`, `GamePalette`, `GameDisplayConfiguration`, `ItemConfiguration` all registered here as singletons

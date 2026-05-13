@@ -14,10 +14,10 @@ namespace BalloonParty.Item.Shield
     public class ShieldItemHandler : IBalloonItem, IStartable
     {
         private readonly GamePalette _palette;
-        private readonly ItemConfiguration _itemConfig;
-        private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
-        private readonly PoolManager _poolManager;
         private readonly IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
+        private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+        private readonly ItemConfiguration _itemConfig;
+        private readonly PoolManager _poolManager;
 
         private IWriteableProjectileModel _activeProjectile;
         private IBalloonModel _balloon;

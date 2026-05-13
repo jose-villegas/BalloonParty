@@ -28,9 +28,9 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ScorePointTrail _trailPrefab;
 
         [Inject] private IGameConfiguration _config;
+        [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private PoolManager _poolManager;
-        [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
 
         private readonly List<ScoreNotice> _activeNotices = new();
 

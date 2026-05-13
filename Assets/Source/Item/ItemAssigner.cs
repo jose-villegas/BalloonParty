@@ -13,8 +13,8 @@ namespace BalloonParty.Item
     public class ItemAssigner : IStartable
     {
         private readonly ISubscriber<ItemCheckMessage> _checkSubscriber;
-        private readonly SlotGrid _grid;
         private readonly ItemConfiguration _itemConfig;
+        private readonly SlotGrid _grid;
 
         [Inject]
         public ItemAssigner(

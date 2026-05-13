@@ -72,6 +72,16 @@ public abstract class GameChildLifetimeScope : LifetimeScope
 | `ShieldUILifetimeScope` | `GameChildLifetimeScope` | Shield HUD root |
 | `ItemViewScope` | `LifetimeScope` (custom `FindParent`) | Item container child (reusable on any item-displaying prefab) |
 
+**Configuration assets registered in `GameLifetimeScope`:**
+
+| Asset | Type | Injected as |
+|---|---|---|
+| `GameConfiguration` | `ScriptableObject` | `IGameConfiguration` (interface) |
+| `BalloonsConfiguration` | `ScriptableObject` | `BalloonsConfiguration` (concrete) |
+| `GamePalette` | `ScriptableObject` | `GamePalette` (concrete) |
+| `GameDisplayConfiguration` | `ScriptableObject` | `GameDisplayConfiguration` (concrete) |
+| `ItemConfiguration` | `ScriptableObject` | `ItemConfiguration` (concrete) |
+
 ### Instantiating prefabs with child scopes
 
 | Scenario | Method |
@@ -183,17 +193,21 @@ Key rules:
 
 ## Configuration — Single Source of Truth
 
-Game data is split across focused configuration ScriptableObjects, each registered as a singleton in `GameLifetimeScope` and injected wherever needed.
+Game data is split across focused ScriptableObjects, each registered as a singleton in `GameLifetimeScope` and injected wherever needed.
 
 | Asset | Interface / Type | What it holds |
 |---|---|---|
-| `GameConfiguration` | `IGameConfiguration` | Slot dimensions, balloon colors, timing values, spawn counts, shield counts, display settings |
+| `GameConfiguration` | `IGameConfiguration` | Projectile settings, slot dimensions, timing values, prediction trace params, score trail timing, points formula |
+| `BalloonsConfiguration` | `BalloonsConfiguration` | Balloon prefab entries (weight, cap, nudge overrides, pop VFX), spawn line counts, animation range, balance delay, global nudge defaults |
+| `GamePalette` | `GamePalette` | Named color entries — the single source for all balloon colors |
+| `GameDisplayConfiguration` | `GameDisplayConfiguration` | Aspect-ratio → orthographic-size lookup for camera sizing |
 | `ItemConfiguration` | `ItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, physics params, effect prefab |
 
 Rules:
 - **Never hardcode** values that exist in a configuration asset.
 - **Never duplicate** configuration data via `[SerializeField]` on individual systems. If a system needs a value, it injects the relevant configuration object.
-- New configuration fields are added to the appropriate configuration type and its interface (if one exists). If a new domain of settings grows large enough to stand alone, extract it into its own ScriptableObject rather than bloating an existing one.
+- `IGameConfiguration` is the read-only interface for `GameConfiguration`; all other SOs are injected by their concrete type.
+- New configuration fields are added to the appropriate asset type. If a new domain of settings grows large enough to stand alone, extract it into its own ScriptableObject rather than bloating an existing one.
 
 ---
 

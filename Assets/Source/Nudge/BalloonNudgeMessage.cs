@@ -8,7 +8,6 @@ namespace BalloonParty.Nudge
         /// <summary>Target balloon. Null for shockwave (all balloons).</summary>
         public readonly IBalloonModel Balloon;
 
-        /// <summary>World-space position where the nudge originates.</summary>
         public readonly Vector3 Origin;
 
         public readonly NudgeType Source;

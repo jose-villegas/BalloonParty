@@ -2,7 +2,7 @@ using BalloonParty.Nudge;
 using UnityEditor;
 using UnityEngine;
 
-namespace BalloonParty.Source.Nudge.Editor
+namespace BalloonParty.Nudge.Editor
 {
     [CustomPropertyDrawer(typeof(NudgeOverride))]
     public class NudgeOverrideDrawer : PropertyDrawer

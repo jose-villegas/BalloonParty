@@ -6,6 +6,8 @@ namespace BalloonParty.Configuration.Editor
     [CustomEditor(typeof(GameDisplayConfiguration))]
     public class GameDisplayConfigurationEditor : UnityEditor.Editor
     {
+        private const float PreviewBoxHeight = 120f;
+
         private static readonly (string Label, float Aspect)[] CommonRatios =
         {
             ("9:21  (tall phone)", 9f / 21f),
@@ -19,7 +21,6 @@ namespace BalloonParty.Configuration.Editor
         private static readonly Color ReferenceBoxColor = new(0.4f, 0.7f, 1f, 0.9f);
         private static readonly Color ReferenceBoxFill = new(0.25f, 0.4f, 0.6f, 0.08f);
 
-        private const float PreviewBoxHeight = 120f;
 
         private bool _showInScene = true;
 

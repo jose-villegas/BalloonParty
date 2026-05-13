@@ -11,8 +11,8 @@ namespace BalloonParty.UI.Score
     {
         [Header("Prefabs")] [SerializeField] private ColorProgressBar _colorProgressBarPrefab;
 
-        [Inject] private IGameConfiguration _config;
         [Inject] private GamePalette _palette;
+        [Inject] private IGameConfiguration _config;
         [Inject] private IObjectResolver _resolver;
         [Inject] private ScoreController _scoreController;
 

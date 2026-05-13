@@ -6,7 +6,6 @@ using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
@@ -18,13 +17,12 @@ namespace BalloonParty.Thrower
     public class ThrowerController : IStartable, ITickable
     {
         private readonly IGameConfiguration _config;
-        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
-        private readonly SlotGrid _grid;
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
+        private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly LifetimeScope _parentScope;
+        private readonly List<Vector3> _tracePoints = new();
         private readonly PoolManager _poolManager;
         private readonly ThrowerSettings _settings;
-        private readonly List<Vector3> _tracePoints = new();
         private readonly ThrowerView _view;
 
         private IWriteableProjectileModel _activeProjectile;
@@ -41,7 +39,6 @@ namespace BalloonParty.Thrower
         public ThrowerController(
             ThrowerView view,
             IGameConfiguration config,
-            SlotGrid grid,
             PoolManager poolManager,
             LifetimeScope parentScope,
             ThrowerSettings settings,
@@ -50,7 +47,6 @@ namespace BalloonParty.Thrower
         {
             _view = view;
             _config = config;
-            _grid = grid;
             _poolManager = poolManager;
             _parentScope = parentScope;
             _settings = settings;

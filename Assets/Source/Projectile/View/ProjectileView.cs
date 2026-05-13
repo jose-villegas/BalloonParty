@@ -22,13 +22,13 @@ namespace BalloonParty.Projectile.View
         [SerializeField] [Range(0f, 1f)] private float _glowAlpha = 0.5f;
         [SerializeField] private float _glowColorDuration = 0.2f;
 
-        [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
-        [Inject] private IGameConfiguration _config;
-        [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
-        [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
-        [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
         [Inject] private GamePalette _palette;
+        [Inject] private IGameConfiguration _config;
+        [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
+        [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
+        [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
+        [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
 
         private IWriteableProjectileModel _model;
         private IDisposable _deflectedSubscription;
@@ -196,6 +196,17 @@ namespace BalloonParty.Projectile.View
             transform.up = _model.Direction;
         }
 
+        private void OnBalloonDeflected(BalloonDeflectedMessage msg)
+        {
+            if (_model == null || msg.Balloon != _model.LastHitBalloon)
+            {
+                return;
+            }
+
+            var surfaceNormal = ((Vector2)transform.position - (Vector2)msg.BalloonWorldPosition).normalized;
+            _model.Direction = Vector2.Reflect(_model.Direction, surfaceNormal);
+        }
+
         private void PlayBounceEffect(Vector3 position)
         {
             if (_shieldView == null || string.IsNullOrEmpty(_model?.ColorName.Value))
@@ -271,17 +282,6 @@ namespace BalloonParty.Projectile.View
 
             var color = _palette.GetColor(_model.ColorName.Value);
             _glowRenderer.DOColor(new Color(color.r, color.g, color.b, _glowAlpha), _glowColorDuration);
-        }
-
-        private void OnBalloonDeflected(BalloonDeflectedMessage msg)
-        {
-            if (_model == null || msg.Balloon != _model.LastHitBalloon)
-            {
-                return;
-            }
-
-            var surfaceNormal = ((Vector2)transform.position - (Vector2)msg.BalloonWorldPosition).normalized;
-            _model.Direction = Vector2.Reflect(_model.Direction, surfaceNormal);
         }
     }
 }

@@ -17,12 +17,12 @@ namespace BalloonParty.Item.Laser
         private static readonly int BalloonsLayer = LayerMask.GetMask("Balloons");
 
         private readonly ContactFilter2D _balloonFilter;
-        private readonly List<RaycastHit2D> _castResults = new(4);
         private readonly GamePalette _palette;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
-        private readonly ItemConfiguration _itemConfig;
-        private readonly PoolManager _poolManager;
         private readonly ISubscriber<ItemRotationCapturedMessage> _rotationSubscriber;
+        private readonly ItemConfiguration _itemConfig;
+        private readonly List<RaycastHit2D> _castResults = new(4);
+        private readonly PoolManager _poolManager;
 
         private IBalloonModel _balloon;
         private Vector3 _worldPosition;

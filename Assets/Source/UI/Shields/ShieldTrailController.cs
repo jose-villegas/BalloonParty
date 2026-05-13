@@ -17,8 +17,8 @@ namespace BalloonParty.UI.Shields
         [SerializeField] private ScorePointTrail _trailPrefab;
 
         [Inject] private IGameConfiguration _config;
-        [Inject] private PoolManager _poolManager;
         [Inject] private ISubscriber<ShieldGainedMessage> _shieldGainedSubscriber;
+        [Inject] private PoolManager _poolManager;
         [Inject] private SlotGrid _slotGrid;
 
         private readonly CompositeDisposable _disposable = new();

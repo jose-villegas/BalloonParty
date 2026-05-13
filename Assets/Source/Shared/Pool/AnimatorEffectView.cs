@@ -11,10 +11,10 @@ namespace BalloonParty.Shared.Pool
     /// </summary>
     public class AnimatorEffectView : EffectView
     {
-        private Animator _animator;
         private float _animationLength;
         private bool _animationPlaying;
         private float _animationTimer;
+        private Animator _animator;
 
         private void Awake()
         {

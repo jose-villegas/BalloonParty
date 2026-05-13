@@ -20,17 +20,16 @@ The player holds the mouse button to aim — the thrower rotates to face the cur
 `ThrowerController` is a plain C# class registered as an entry point in `ThrowerLifetimeScope`. It delegates all visual operations to `ThrowerView`. On start it slides into position from below the screen, then loads a projectile and waits for input. Each frame it:
 - Updates its aim direction from the mouse cursor position
 - Tells the view to rotate to match that direction
-- Orbits the loaded projectile around the spawn point to preview the trajectory
-- Updates the prediction trace line (via `PredictionTraceCalculator` and `ThrowerView`) showing the projected path with wall bounces
-- Fires on mouse-up when all balloons have settled (unstable balloons block firing); clears the prediction trace on fire
+- Eases the loaded projectile into the spawn point position using `Ease.OutBack`
+- Updates the prediction trace line while the mouse button is held
+- Fires on mouse-up
 
-When a `ProjectileDestroyedMessage` arrives, `ThrowerController` creates a new projectile automatically. The projectile prefab carries a `ProjectileLifetimeScope`, so instantiation uses `parentScope.CreateChildFromPrefab()` — this wires the parent scope before activation, ensuring all injected dependencies resolve correctly. The pool key is derived from the prefab's name (`_settings.ProjectileScopePrefab.name`), keeping it consistent with the VFX pooling convention.
+When a `ProjectileDestroyedMessage` arrives, `ThrowerController` returns the old projectile to the pool and loads a new one immediately. The projectile prefab carries a `ProjectileLifetimeScope`, so instantiation uses `parentScope.CreateChildFromPrefab()` — this wires the parent scope before activation, ensuring all injected dependencies resolve correctly. The pool key is derived from the prefab's name.
 
 ## Interactions
 
-- **SlotGrid** — queried to check balloon stability before allowing a shot
-- **LifetimeScope** — the parent scope injected into `ThrowerController`; used to call `CreateChildFromPrefab` for projectile instantiation
+- **LifetimeScope** — the parent scope; used to call `CreateChildFromPrefab` for projectile instantiation
 - **ProjectileDestroyedMessage** — triggers reload
 - **ProjectileLoadedMessage** — published after each load so shield UI can self-bind
-- **IGameConfiguration** — provides `ThrowerSpawnPoint`, `ProjectileSpawnPoint`, `ProjectileSpeed`, `ProjectileStartingShields`
-- **PredictionTraceCalculator / PredictionTraceView** — calculates and renders the aim trajectory line while the player holds the mouse button
+- **IGameConfiguration** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`
+- **PredictionTraceCalculator / ThrowerView** — calculates and renders the aim trajectory line while the player holds the mouse button

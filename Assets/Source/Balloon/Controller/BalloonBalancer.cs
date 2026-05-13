@@ -15,8 +15,8 @@ namespace BalloonParty.Balloon.Controller
     public class BalloonBalancer : IStartable
     {
         private readonly BalloonsConfiguration _balloonsConfig;
-        private readonly SlotGrid _grid;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
+        private readonly SlotGrid _grid;
 
         private bool _balanceRequested;
 

@@ -26,10 +26,10 @@ namespace BalloonParty.Projectile.View
         [SerializeField] private ParticleSystem _shieldLoseVfxPrefab;
         [SerializeField] private ParticleSystem _shieldBounceVfxPrefab;
 
-        [Inject] private IGameConfiguration _config;
         [Inject] private GamePalette _palette;
-        [Inject] private SlotGrid _grid;
+        [Inject] private IGameConfiguration _config;
         [Inject] private PoolManager _poolManager;
+        [Inject] private SlotGrid _grid;
 
         private readonly CompositeDisposable _disposable = new();
 

@@ -20,9 +20,9 @@ namespace BalloonParty.Cheats
         private static readonly int CullId = Shader.PropertyToID("_Cull");
         private static readonly int ZWriteId = Shader.PropertyToID("_ZWrite");
 
-        [Inject] private SlotGrid _grid;
-        [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
         [Inject] private IPublisher<BalanceBalloonsMessage> _publisher;
+        [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
+        [Inject] private SlotGrid _grid;
 
         private readonly List<Vector3> _path = new();
 

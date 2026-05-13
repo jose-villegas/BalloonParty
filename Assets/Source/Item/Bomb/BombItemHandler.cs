@@ -19,8 +19,8 @@ namespace BalloonParty.Item.Bomb
         private readonly ContactFilter2D _balloonFilter;
         private readonly GamePalette _palette;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
-        private readonly ItemConfiguration _itemConfig;
         private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
+        private readonly ItemConfiguration _itemConfig;
         private readonly List<Collider2D> _overlapResults = new(8);
         private readonly PoolManager _poolManager;
 

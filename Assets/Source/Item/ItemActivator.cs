@@ -12,8 +12,8 @@ namespace BalloonParty.Item
     public class ItemActivator : IStartable
     {
         private readonly IEnumerable<IBalloonItem> _handlers;
-        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly IPublisher<ItemActivatedMessage> _itemActivatedPublisher;
+        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
 
         [Inject]
         public ItemActivator(

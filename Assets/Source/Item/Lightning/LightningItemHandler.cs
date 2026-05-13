@@ -18,10 +18,10 @@ namespace BalloonParty.Item.Lightning
     /// </summary>
     public class LightningItemHandler : IBalloonItem
     {
-        private readonly SlotGrid _grid;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
         private readonly ItemConfiguration _itemConfig;
         private readonly PoolManager _poolManager;
+        private readonly SlotGrid _grid;
 
         private IBalloonModel _balloon;
         private Vector3 _worldPosition;

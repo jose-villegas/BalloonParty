@@ -24,9 +24,9 @@ namespace BalloonParty.Balloon.View
 
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
-        [Inject] private IGameConfiguration _config;
-        [Inject] private GamePalette _palette;
         [Inject] private BalloonsConfiguration _balloonsConfig;
+        [Inject] private GamePalette _palette;
+        [Inject] private IGameConfiguration _config;
         [Inject] private ItemConfiguration _itemConfig;
         [Inject] private PoolManager _poolManager;
 
@@ -121,9 +121,29 @@ namespace BalloonParty.Balloon.View
             _itemService?.Unbind();
         }
 
-        public void SetPopVfxOverride(ParticleSystem prefab)
+        public void Nudge(
+            Vector3 slotPosition,
+            Vector3 direction,
+            float nudgeDistance,
+            float nudgeDuration,
+            Action onComplete)
         {
-            _popVfxOverride = prefab;
+            var currentScale = transform.localScale;
+            transform.DOKill();
+
+            var sequence = DOTween.Sequence();
+            sequence.Append(transform.DOMove(
+                slotPosition + (direction.normalized * nudgeDistance),
+                nudgeDuration / 2f));
+            sequence.Append(transform.DOMove(slotPosition, nudgeDuration / 2f));
+            sequence.OnComplete(() => onComplete?.Invoke());
+
+            TweenTracker.Replace(sequence);
+
+            if (currentScale != Vector3.one)
+            {
+                transform.DOScale(Vector3.one, nudgeDuration);
+            }
         }
 
         public void PlayPopEffect()
@@ -156,6 +176,11 @@ namespace BalloonParty.Balloon.View
             _bindDisposables.Add(disposable);
         }
 
+        public void SetPopVfxOverride(ParticleSystem prefab)
+        {
+            _popVfxOverride = prefab;
+        }
+
         private void ApplyColor(string colorName)
         {
             if (string.IsNullOrEmpty(colorName))
@@ -175,31 +200,6 @@ namespace BalloonParty.Balloon.View
         {
             var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);
             SortingHelper.ApplySortingOrder(_spriteLayerRenderers, baseOrder);
-        }
-
-        public void Nudge(
-            Vector3 slotPosition,
-            Vector3 direction,
-            float nudgeDistance,
-            float nudgeDuration,
-            Action onComplete)
-        {
-            var currentScale = transform.localScale;
-            transform.DOKill();
-
-            var sequence = DOTween.Sequence();
-            sequence.Append(transform.DOMove(
-                slotPosition + (direction.normalized * nudgeDistance),
-                nudgeDuration / 2f));
-            sequence.Append(transform.DOMove(slotPosition, nudgeDuration / 2f));
-            sequence.OnComplete(() => onComplete?.Invoke());
-
-            TweenTracker.Replace(sequence);
-
-            if (currentScale != Vector3.one)
-            {
-                transform.DOScale(Vector3.one, nudgeDuration);
-            }
         }
     }
 }
