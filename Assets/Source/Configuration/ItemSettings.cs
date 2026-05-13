@@ -17,7 +17,7 @@ namespace BalloonParty.Configuration
 
         [Header("Bomb")]
         [SerializeField] private float _bombRadius = 1.25f;
-        [SerializeField] private float _bombNudgeDistance = 0.15f;
+        [SerializeField] private NudgeOverride[] _nudgeOverrides;
         [SerializeField] private float _bombNudgeFalloff = 1.5f;
 
         [Header("Laser")]
@@ -36,7 +36,7 @@ namespace BalloonParty.Configuration
         public GameObject VisualPrefab => _visualPrefab;
         public EffectView ActivationEffectPrefab => _activationEffectPrefab;
         public float BombRadius => _bombRadius;
-        public float BombNudgeDistance => _bombNudgeDistance;
+        public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
         public float BombNudgeFalloff => _bombNudgeFalloff;
         public float LaserRaycastDistance => _laserRaycastDistance;
         public float LaserCircleCastRadius => _laserCircleCastRadius;

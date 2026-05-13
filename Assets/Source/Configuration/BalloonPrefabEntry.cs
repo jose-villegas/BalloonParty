@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Balloon;
+using BalloonParty.Shared;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -13,9 +14,7 @@ namespace BalloonParty.Configuration
         [Tooltip("Maximum number of this balloon type allowed on the grid at once. 0 = no limit.")]
         [SerializeField] private int _maxCount;
 
-        [SerializeField] private bool _overrideNudge;
-        [SerializeField] private float _nudgeDistanceOverride;
-        [SerializeField] private float _nudgeDurationOverride;
+        [SerializeField] private NudgeOverride[] _nudgeOverrides;
 
         [SerializeField] private bool _overridePopVfx;
         [SerializeField] private ParticleSystem _popVfxPrefab;
@@ -26,11 +25,7 @@ namespace BalloonParty.Configuration
         /// <summary>0 means no limit.</summary>
         public int MaxCount => _maxCount;
 
-        /// <summary>Null when override is disabled — falls back to global config default.</summary>
-        public float? NudgeDistanceOverride => _overrideNudge ? _nudgeDistanceOverride : null;
-
-        /// <summary>Null when override is disabled — falls back to global config default.</summary>
-        public float? NudgeDurationOverride => _overrideNudge ? _nudgeDurationOverride : null;
+        public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
 
         /// <summary>Null when override is disabled — view uses default VFX with balloon color.</summary>
         public ParticleSystem PopVfxPrefab => _overridePopVfx ? _popVfxPrefab : null;

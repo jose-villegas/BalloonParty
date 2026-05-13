@@ -1,5 +1,6 @@
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
+using BalloonParty.Shared;
 using UniRx;
 using UnityEngine;
 
@@ -14,10 +15,7 @@ namespace BalloonParty.Balloon.Model
         IReadOnlyReactiveProperty<bool> IsStable { get; }
         IReadOnlyReactiveProperty<ItemType> Item { get; }
 
-        /// <summary>Per-type nudge distance override. Null = use global config default.</summary>
-        float? NudgeDistanceOverride { get; }
-
-        /// <summary>Per-type nudge duration override. Null = use global config default.</summary>
-        float? NudgeDurationOverride { get; }
+        /// <summary>Per-type nudge overrides. Empty/null = use global config defaults.</summary>
+        NudgeOverride[] NudgeOverrides { get; }
     }
 }

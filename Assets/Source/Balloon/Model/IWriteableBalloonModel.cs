@@ -1,5 +1,6 @@
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
+using BalloonParty.Shared;
 using UniRx;
 using UnityEngine;
 
@@ -14,7 +15,6 @@ namespace BalloonParty.Balloon.Model
         new ReactiveProperty<bool> IsStable { get; }
         new ReactiveProperty<ItemType> Item { get; }
 
-        new float? NudgeDistanceOverride { get; set; }
-        new float? NudgeDurationOverride { get; set; }
+        new NudgeOverride[] NudgeOverrides { get; set; }
     }
 }

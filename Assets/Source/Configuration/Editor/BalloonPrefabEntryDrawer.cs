@@ -12,11 +12,18 @@ namespace BalloonParty.Source.Configuration.Editor
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            var lines = 4; // prefab, weight, maxCount, overrideNudge
-            var overrideNudge = property.FindPropertyRelative("_overrideNudge");
-            if (overrideNudge != null && overrideNudge.boolValue)
+            if (!property.isExpanded)
             {
-                lines += 2; // nudgeDistanceOverride, nudgeDurationOverride
+                return LineHeight + Spacing;
+            }
+
+            var lines = 3; // prefab, weight, maxCount
+
+            var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
+            if (nudgeOverrides != null)
+            {
+                lines += 1; // array header
+                lines += (int)EditorGUI.GetPropertyHeight(nudgeOverrides, true) / (int)(LineHeight + Spacing);
             }
 
             lines += 1; // overridePopVfx toggle
@@ -26,9 +33,7 @@ namespace BalloonParty.Source.Configuration.Editor
                 lines += 1; // popVfxPrefab only
             }
 
-            return property.isExpanded
-                ? (lines + 1) * (LineHeight + Spacing)
-                : LineHeight + Spacing;
+            return (lines + 1) * (LineHeight + Spacing);
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -48,15 +53,14 @@ namespace BalloonParty.Source.Configuration.Editor
                 y = DrawField(position, y, property, "_prefab",        "Prefab");
                 y = DrawField(position, y, property, "_weight",        "Weight");
                 y = DrawField(position, y, property, "_maxCount",      "Max Count");
-                y = DrawField(position, y, property, "_overrideNudge", "Override Nudge");
 
-                var overrideNudge = property.FindPropertyRelative("_overrideNudge");
-                if (overrideNudge != null && overrideNudge.boolValue)
+                var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
+                if (nudgeOverrides != null)
                 {
-                    EditorGUI.indentLevel = indent + 2;
-                    y = DrawField(position, y, property, "_nudgeDistanceOverride", "Distance");
-                    y = DrawField(position, y, property, "_nudgeDurationOverride", "Duration");
-                    EditorGUI.indentLevel = indent + 1;
+                    var height = EditorGUI.GetPropertyHeight(nudgeOverrides, true);
+                    var rect = new Rect(position.x, y, position.width, height);
+                    EditorGUI.PropertyField(rect, nudgeOverrides, new GUIContent("Nudge Overrides"), true);
+                    y += height + Spacing;
                 }
 
                 y = DrawField(position, y, property, "_overridePopVfx", "Override Pop VFX");

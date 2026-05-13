@@ -222,8 +222,10 @@ namespace BalloonParty.Balloon.View
             var slotPos = _grid.IndexToWorldPosition(Model.SlotIndex.Value);
             var direction = slotPos - msg.HitSlotPosition;
 
-            var nudgeDistance = Model.NudgeDistanceOverride ?? msg.NudgeDistance ?? _balloonsConfig.NudgeDistance;
-            var nudgeDuration = Model.NudgeDurationOverride ?? msg.NudgeDuration ?? _balloonsConfig.NudgeDuration;
+            var nudgeDistance = NudgeOverrideResolver.ResolveDistance(
+                Model.NudgeOverrides, msg.Source, msg.NudgeDistance, _balloonsConfig.NudgeDistance);
+            var nudgeDuration = NudgeOverrideResolver.ResolveDuration(
+                Model.NudgeOverrides, msg.Source, msg.NudgeDuration, _balloonsConfig.NudgeDuration);
 
             writeable.IsStable.Value = false;
             Nudge(slotPos,

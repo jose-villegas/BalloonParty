@@ -2,6 +2,7 @@ using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -23,8 +24,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly BalloonView _view;
         private readonly string _poolKey;
         private readonly Action _onReturned;
-        private readonly float? _nudgeDistanceOverride;
-        private readonly float? _nudgeDurationOverride;
+        private readonly NudgeOverride[] _nudgeOverrides;
         private readonly ParticleSystem _popVfxOverride;
 
         private IDisposable _hitSubscription;
@@ -35,8 +35,7 @@ namespace BalloonParty.Balloon.Controller
             BalloonView view,
             string poolKey,
             Action onReturned,
-            float? nudgeDistanceOverride,
-            float? nudgeDurationOverride,
+            NudgeOverride[] nudgeOverrides,
             ParticleSystem popVfxOverride,
             ISubscriber<BalloonHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
@@ -50,8 +49,7 @@ namespace BalloonParty.Balloon.Controller
             _view = view;
             _poolKey = poolKey;
             _onReturned = onReturned;
-            _nudgeDistanceOverride = nudgeDistanceOverride;
-            _nudgeDurationOverride = nudgeDurationOverride;
+            _nudgeOverrides = nudgeOverrides;
             _popVfxOverride = popVfxOverride;
             _hitSubscriber = hitSubscriber;
             _itemActivatedSubscriber = itemActivatedSubscriber;
@@ -64,8 +62,7 @@ namespace BalloonParty.Balloon.Controller
 
         public void Start()
         {
-            _model.NudgeDistanceOverride = _nudgeDistanceOverride;
-            _model.NudgeDurationOverride = _nudgeDurationOverride;
+            _model.NudgeOverrides = _nudgeOverrides;
 
             if (_popVfxOverride != null)
             {
@@ -113,7 +110,8 @@ namespace BalloonParty.Balloon.Controller
             // Pushback nudge — BalloonView will apply model-level overrides automatically
             _nudgePublisher.Publish(new BalloonNudgeMessage(
                 _model,
-                balloonWorldPos - msg.ProjectileDirection.normalized));
+                balloonWorldPos - msg.ProjectileDirection.normalized,
+                NudgeType.Deflect));
         }
 
         private void Pop()

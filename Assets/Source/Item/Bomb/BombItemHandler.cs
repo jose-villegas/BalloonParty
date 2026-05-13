@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -21,6 +22,7 @@ namespace BalloonParty.Item.Bomb
         private readonly SlotGrid _grid;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
         private readonly ItemConfiguration _itemConfig;
+        private readonly BalloonsConfiguration _balloonsConfig;
         private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
         private readonly List<Collider2D> _overlapResults = new(8);
         private readonly PoolManager _poolManager;
@@ -34,6 +36,7 @@ namespace BalloonParty.Item.Bomb
         public BombItemHandler(
             GamePalette palette,
             ItemConfiguration itemConfig,
+            BalloonsConfiguration balloonsConfig,
             IPublisher<BalloonHitMessage> hitPublisher,
             IPublisher<BalloonNudgeMessage> nudgePublisher,
             SlotGrid grid,
@@ -41,6 +44,7 @@ namespace BalloonParty.Item.Bomb
         {
             _palette = palette;
             _itemConfig = itemConfig;
+            _balloonsConfig = balloonsConfig;
             _hitPublisher = hitPublisher;
             _nudgePublisher = nudgePublisher;
             _grid = grid;
@@ -96,7 +100,8 @@ namespace BalloonParty.Item.Bomb
         // where d is the world-space distance to the balloon.
         private void NudgeAllBalloons(ItemSettings settings)
         {
-            var nudgeDistance = settings.BombNudgeDistance;
+            var nudgeDistance = NudgeOverrideResolver.ResolveDistance(
+                settings.NudgeOverrides, NudgeType.Neighbor, null, _balloonsConfig.NudgeDistance);
             var nudgeFalloff = settings.BombNudgeFalloff;
 
             for (var col = 0; col < _grid.Columns; col++)
@@ -131,6 +136,7 @@ namespace BalloonParty.Item.Bomb
                     _nudgePublisher.Publish(new BalloonNudgeMessage(
                         model,
                         _worldPosition,
+                        NudgeType.Neighbor,
                         attenuated));
                 }
             }

@@ -1,3 +1,4 @@
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using MessagePipe;
@@ -36,7 +37,7 @@ namespace BalloonParty.Balloon.Controller
 
             foreach (var neighbor in neighbors)
             {
-                _nudgePublisher.Publish(new BalloonNudgeMessage(neighbor, hitSlotPos));
+                _nudgePublisher.Publish(new BalloonNudgeMessage(neighbor, hitSlotPos, NudgeType.Neighbor));
             }
         }
     }
