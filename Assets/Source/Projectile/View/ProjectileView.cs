@@ -7,6 +7,7 @@ using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using DG.Tweening;
 using MessagePipe;
+using UniRx;
 using UnityEngine;
 using VContainer;
 
@@ -27,8 +28,10 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
         [Inject] private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
+        [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
 
         private IWriteableProjectileModel _model;
+        private IDisposable _deflectedSubscription;
         private ProjectileTrail _projectileTrail;
         private bool _shieldShown;
         private ProjectileShieldView _shieldView;
@@ -70,17 +73,26 @@ namespace BalloonParty.Projectile.View
 
             _model.LastHitBalloon = balloonModel;
 
-            TrackColorStreak(balloonModel.Color.Value);
-            _hitPublisher.Publish(new BalloonHitMessage(balloonModel, balloonView.transform.position));
+            // Only track color streak on actual pops (HitsRemaining <= 1), not deflections
+            if (balloonModel.HitsRemaining.Value <= 1)
+            {
+                TrackColorStreak(balloonModel.Color.Value);
+            }
+
+            _hitPublisher.Publish(new BalloonHitMessage(balloonModel, balloonView.transform.position, _model.Direction));
         }
 
         public void OnSpawned()
         {
             _shieldShown = false;
+            _deflectedSubscription?.Dispose();
+            _deflectedSubscription = null;
         }
 
         public void OnDespawned()
         {
+            _deflectedSubscription?.Dispose();
+            _deflectedSubscription = null;
             _model = null;
             _shieldShown = false;
             transform.rotation = Quaternion.identity;
@@ -105,6 +117,9 @@ namespace BalloonParty.Projectile.View
             {
                 _shieldView.Bind(model);
             }
+
+            _deflectedSubscription?.Dispose();
+            _deflectedSubscription = _deflectedSubscriber.Subscribe(OnBalloonDeflected);
         }
 
         private void AwardShieldOnStreak()
@@ -252,6 +267,17 @@ namespace BalloonParty.Projectile.View
 
             var color = _palette.GetColor(_model.ColorName.Value);
             _glowRenderer.DOColor(new Color(color.r, color.g, color.b, _glowAlpha), _glowColorDuration);
+        }
+
+        private void OnBalloonDeflected(BalloonDeflectedMessage msg)
+        {
+            if (_model == null || msg.Balloon != _model.LastHitBalloon)
+            {
+                return;
+            }
+
+            var surfaceNormal = ((Vector2)transform.position - (Vector2)msg.BalloonWorldPosition).normalized;
+            _model.Direction = Vector2.Reflect(_model.Direction, surfaceNormal);
         }
     }
 }

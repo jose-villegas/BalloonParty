@@ -87,7 +87,7 @@ namespace BalloonParty.Item.Bomb
                     continue;
                 }
 
-                _hitPublisher.Publish(new BalloonHitMessage(balloonView.Model, balloonView.transform.position));
+                _hitPublisher.Publish(new BalloonHitMessage(balloonView.Model, balloonView.transform.position, Vector3.zero));
             }
         }
 

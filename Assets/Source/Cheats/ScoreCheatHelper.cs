@@ -28,7 +28,7 @@ namespace BalloonParty.Cheats
 
             for (var i = 0; i < missing; i++)
             {
-                hitPublisher.Publish(new BalloonHitMessage(fakeModel, Vector3.zero));
+                hitPublisher.Publish(new BalloonHitMessage(fakeModel, Vector3.zero, Vector3.zero));
             }
         }
     }

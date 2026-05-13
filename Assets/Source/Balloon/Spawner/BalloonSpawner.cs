@@ -34,6 +34,8 @@ namespace BalloonParty.Balloon.Spawner
         private readonly LifetimeScope _parentScope;
         private readonly PoolManager _poolManager;
         private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
+        private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
+        private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
         private readonly BalloonSpawnerSettings _settings;
 
         private readonly List<IWriteableBalloonModel> _newlySpawnedBalloons = new();
@@ -54,7 +56,9 @@ namespace BalloonParty.Balloon.Spawner
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
-            IPublisher<ItemRotationCapturedMessage> rotationPublisher)
+            IPublisher<ItemRotationCapturedMessage> rotationPublisher,
+            IPublisher<BalloonDeflectedMessage> deflectedPublisher,
+            IPublisher<BalloonNudgeMessage> nudgePublisher)
         {
             _grid = grid;
             _settings = settings;
@@ -69,6 +73,8 @@ namespace BalloonParty.Balloon.Spawner
             _destroyedSubscriber = destroyedSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
             _rotationPublisher = rotationPublisher;
+            _deflectedPublisher = deflectedPublisher;
+            _nudgePublisher = nudgePublisher;
         }
 
         public void Start()
@@ -102,6 +108,8 @@ namespace BalloonParty.Balloon.Spawner
                 _hitSubscriber,
                 _itemActivatedSubscriber,
                 _rotationPublisher,
+                _deflectedPublisher,
+                _nudgePublisher,
                 _grid,
                 _config,
                 _palette,

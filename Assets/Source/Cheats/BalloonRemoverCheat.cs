@@ -134,7 +134,7 @@ namespace BalloonParty.Cheats
                 var model = _grid.At(slot);
                 if (model != null)
                 {
-                    _hitPublisher.Publish(new BalloonHitMessage(model, _grid.IndexToWorldPosition(slot)));
+                    _hitPublisher.Publish(new BalloonHitMessage(model, _grid.IndexToWorldPosition(slot), Vector3.zero));
                 }
             }
 

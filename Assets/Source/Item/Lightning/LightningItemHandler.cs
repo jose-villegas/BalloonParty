@@ -61,7 +61,7 @@ namespace BalloonParty.Item.Lightning
             {
                 foreach (var (model, pos) in targets)
                 {
-                    _hitPublisher.Publish(new BalloonHitMessage(model, pos));
+                    _hitPublisher.Publish(new BalloonHitMessage(model, pos, Vector3.zero));
                 }
 
                 return UniTask.CompletedTask;
@@ -89,7 +89,7 @@ namespace BalloonParty.Item.Lightning
                     if (index < targets.Count)
                     {
                         var (model, pos) = targets[index];
-                        _hitPublisher.Publish(new BalloonHitMessage(model, pos));
+                        _hitPublisher.Publish(new BalloonHitMessage(model, pos, Vector3.zero));
                     }
                 });
 
