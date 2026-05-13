@@ -20,10 +20,10 @@ namespace BalloonParty.Balloon.Spawner
 {
     public class BalloonSpawner : IStartable
     {
-        private const string BalloonPoolKey = "Balloon";
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly IGameConfiguration _config;
         private readonly GamePalette _palette;
+        private readonly BalloonsConfiguration _balloonsConfig;
         private readonly CancellationTokenSource _cts = new();
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
@@ -36,16 +36,16 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
         private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
-        private readonly BalloonSpawnerSettings _settings;
 
         private readonly List<IWriteableBalloonModel> _newlySpawnedBalloons = new();
+        private readonly Dictionary<string, int> _activeCounts = new();
 
         private int _turnCount;
 
         [Inject]
         public BalloonSpawner(
             SlotGrid grid,
-            BalloonSpawnerSettings settings,
+            BalloonsConfiguration balloonsConfig,
             IGameConfiguration config,
             GamePalette palette,
             LifetimeScope parentScope,
@@ -61,7 +61,7 @@ namespace BalloonParty.Balloon.Spawner
             IPublisher<BalloonNudgeMessage> nudgePublisher)
         {
             _grid = grid;
-            _settings = settings;
+            _balloonsConfig = balloonsConfig;
             _config = config;
             _palette = palette;
             _parentScope = parentScope;
@@ -79,8 +79,12 @@ namespace BalloonParty.Balloon.Spawner
 
         public void Start()
         {
-            _poolManager.Register(BalloonPoolKey,
-                new BalloonPoolChannel(_parentScope, _settings.BalloonScopePrefab));
+            // Register a pool for each balloon prefab entry
+            foreach (var entry in _balloonsConfig.Entries)
+            {
+                _poolManager.Register(entry.PoolKey,
+                    new BalloonPoolChannel(_parentScope, entry.Prefab));
+            }
 
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount));
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
@@ -91,10 +95,20 @@ namespace BalloonParty.Balloon.Spawner
 
         private void SpawnBalloon(Vector2Int slot)
         {
+            var entry = _balloonsConfig.PickRandom(_activeCounts);
+            if (entry == null)
+            {
+                // All balloon types are at their max count — skip this slot
+                return;
+            }
+
             var targetPosition = _grid.IndexToWorldPosition(slot);
             var spawnPosition = _grid.IndexToWorldPosition(slot + (Vector2Int.up * 4));
+            var poolKey = entry.PoolKey;
 
-            var view = _poolManager.Get<BalloonView>(BalloonPoolKey);
+            _activeCounts[poolKey] = _activeCounts.GetValueOrDefault(poolKey) + 1;
+
+            var view = _poolManager.Get<BalloonView>(poolKey);
             view.transform.position = spawnPosition;
 
             var model = new BalloonModel();
@@ -105,13 +119,14 @@ namespace BalloonParty.Balloon.Spawner
 
             var controller = new BalloonController(model,
                 view,
+                poolKey,
+                () => _activeCounts[poolKey]--,
                 _hitSubscriber,
                 _itemActivatedSubscriber,
                 _rotationPublisher,
                 _deflectedPublisher,
                 _nudgePublisher,
                 _grid,
-                _config,
                 _palette,
                 _poolManager);
             controller.Start();

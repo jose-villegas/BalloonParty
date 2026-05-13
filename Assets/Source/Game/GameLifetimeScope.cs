@@ -1,4 +1,3 @@
-using BalloonParty.Balloon;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Cheats;
@@ -29,7 +28,7 @@ namespace BalloonParty.Game
         [SerializeField] private GameDisplayConfiguration _displayConfiguration;
         [SerializeField] private ItemConfiguration _itemConfiguration;
         [SerializeField] private GamePalette _gamePalette;
-        [SerializeField] private BalloonLifetimeScope _balloonScopePrefab;
+        [SerializeField] private BalloonsConfiguration _balloonsConfiguration;
         [SerializeField] private ProjectileLifetimeScope _projectileScopePrefab;
 
         protected override void Configure(IContainerBuilder builder)
@@ -53,7 +52,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance(_displayConfiguration);
             builder.RegisterInstance(_itemConfiguration);
             builder.RegisterInstance(_gamePalette);
-            builder.RegisterInstance(new BalloonSpawnerSettings(_balloonScopePrefab));
+            builder.RegisterInstance(_balloonsConfiguration);
             builder.RegisterInstance(new ThrowerSettings(_projectileScopePrefab));
 
             builder.Register<SlotGrid>(Lifetime.Singleton);

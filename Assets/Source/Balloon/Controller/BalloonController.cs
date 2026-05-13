@@ -2,7 +2,6 @@ using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -12,7 +11,6 @@ namespace BalloonParty.Balloon.Controller
 {
     public class BalloonController
     {
-        private readonly IGameConfiguration _config;
         private readonly GamePalette _palette;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
@@ -23,6 +21,8 @@ namespace BalloonParty.Balloon.Controller
         private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
         private readonly BalloonView _view;
+        private readonly string _poolKey;
+        private readonly Action _onReturned;
 
         private IDisposable _hitSubscription;
         private IDisposable _itemActivatedSubscription;
@@ -30,25 +30,27 @@ namespace BalloonParty.Balloon.Controller
         public BalloonController(
             IWriteableBalloonModel model,
             BalloonView view,
+            string poolKey,
+            Action onReturned,
             ISubscriber<BalloonHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
             IPublisher<ItemRotationCapturedMessage> rotationPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
             IPublisher<BalloonNudgeMessage> nudgePublisher,
             SlotGrid grid,
-            IGameConfiguration config,
             GamePalette palette,
             PoolManager poolManager)
         {
             _model = model;
             _view = view;
+            _poolKey = poolKey;
+            _onReturned = onReturned;
             _hitSubscriber = hitSubscriber;
             _itemActivatedSubscriber = itemActivatedSubscriber;
             _rotationPublisher = rotationPublisher;
             _deflectedPublisher = deflectedPublisher;
             _nudgePublisher = nudgePublisher;
             _grid = grid;
-            _config = config;
             _palette = palette;
             _poolManager = poolManager;
         }
@@ -94,7 +96,7 @@ namespace BalloonParty.Balloon.Controller
             _deflectedPublisher.Publish(new BalloonDeflectedMessage(_model, balloonWorldPos, msg.ProjectileDirection));
 
             // Pushback nudge — balloon moves in the direction the projectile was traveling
-            _nudgePublisher.Publish(new BalloonNudgeMessage(_model, balloonWorldPos - (Vector3)msg.ProjectileDirection.normalized));
+            _nudgePublisher.Publish(new BalloonNudgeMessage(_model, balloonWorldPos - msg.ProjectileDirection.normalized));
         }
 
         private void Pop()
@@ -111,7 +113,8 @@ namespace BalloonParty.Balloon.Controller
 
             if (_model.Item.Value == ItemType.None)
             {
-                _poolManager.Return("Balloon", _view);
+                _onReturned?.Invoke();
+                _poolManager.Return(_poolKey, _view);
             }
             else
             {
@@ -137,7 +140,8 @@ namespace BalloonParty.Balloon.Controller
 
                     _itemActivatedSubscription?.Dispose();
                     _itemActivatedSubscription = null;
-                    _poolManager.Return("Balloon", _view);
+                    _onReturned?.Invoke();
+                    _poolManager.Return(_poolKey, _view);
                 });
 
                 _view.RegisterDisposeOnDespawn(_itemActivatedSubscription);

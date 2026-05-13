@@ -94,8 +94,14 @@ namespace BalloonParty.Game
 
         private void OnBalloonHit(BalloonHitMessage msg)
         {
+            // Only score actual pops — deflections (HitsRemaining > 1 or -1) don't count
+            if (msg.Balloon.HitsRemaining.Value > 1 || msg.Balloon.HitsRemaining.Value == -1)
+            {
+                return;
+            }
+
             var color = msg.Balloon.Color.Value;
-            if (!_persistentScore.ContainsKey(color))
+            if (string.IsNullOrEmpty(color) || !_persistentScore.ContainsKey(color))
             {
                 return;
             }

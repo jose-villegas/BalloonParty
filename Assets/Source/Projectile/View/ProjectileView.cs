@@ -1,3 +1,4 @@
+using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
@@ -7,7 +8,6 @@ using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using DG.Tweening;
 using MessagePipe;
-using UniRx;
 using UnityEngine;
 using VContainer;
 
@@ -73,8 +73,8 @@ namespace BalloonParty.Projectile.View
 
             _model.LastHitBalloon = balloonModel;
 
-            // Only track color streak on actual pops (HitsRemaining <= 1), not deflections
-            if (balloonModel.HitsRemaining.Value <= 1)
+            // Only track color streak on actual pops of colored balloons
+            if (balloonModel.HitsRemaining.Value <= 1 && !string.IsNullOrEmpty(balloonModel.Color.Value))
             {
                 TrackColorStreak(balloonModel.Color.Value);
             }
@@ -260,7 +260,7 @@ namespace BalloonParty.Projectile.View
 
         private void UpdateGlowColor()
         {
-            if (_glowRenderer == null)
+            if (_glowRenderer == null || string.IsNullOrEmpty(_model.ColorName.Value))
             {
                 return;
             }

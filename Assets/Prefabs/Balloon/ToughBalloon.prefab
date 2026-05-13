@@ -240,7 +240,6 @@ GameObject:
   - component: {fileID: 6706276318355311262}
   - component: {fileID: 7744549277022113413}
   - component: {fileID: -4720687053981353126}
-  - component: {fileID: 6173351546761552298}
   - component: {fileID: 7284149923872934421}
   - component: {fileID: 4511724507119628781}
   m_Layer: 10
@@ -387,21 +386,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 322dfc07781b4b79b3ca0e66b477a26c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Shared.TweenTracker
---- !u!114 &6173351546761552298
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5923847143892959990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0b41bc00cab413a93829eab1ea35a5c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.SimpleBalloonType
-  _typeName: 0
-  _hitsToPop: 1
-  _allowedColorsMask: -1
 --- !u!114 &7284149923872934421
 MonoBehaviour:
   m_ObjectHideFlags: 0
