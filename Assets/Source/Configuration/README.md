@@ -18,7 +18,7 @@ All game data is split across focused ScriptableObjects. Each is registered as a
 
 | File | What it does |
 |---|---|
-| `BalloonPrefabEntry` | Serializable entry in `BalloonsConfiguration` — holds a `BalloonLifetimeScope` prefab reference, spawn weight, optional max-count cap, per-type `NudgeOverride[]`, and optional pop VFX override. Pool key is derived from the prefab's GameObject name. |
+| `BalloonPrefabEntry` | Serializable entry in `BalloonsConfiguration` — holds a `BalloonLifetimeScope` prefab reference, spawn weight, optional max-count cap, per-type `NudgeOverride[]`, optional pop VFX override, and `CanHoldItem` flag (controls whether items can be assigned to this balloon type). Pool key is derived from the prefab's GameObject name. |
 | `PaletteEntry` | Serializable name + `Color` pair used in `GamePalette` |
 | `ItemType` | Enum — `None`, `Shield`, `Bomb`, `Laser`, `Lightning` |
 | `ItemSettings` | Per-item tuning data for `ItemConfiguration` |
@@ -28,7 +28,7 @@ All game data is split across focused ScriptableObjects. Each is registered as a
 
 | File | What it does |
 |---|---|
-| `BalloonPrefabEntryDrawer` | Custom `PropertyDrawer` for `BalloonPrefabEntry` — compact layout with foldout for nudge overrides and pop VFX fields |
+| `BalloonPrefabEntryDrawer` | Custom `PropertyDrawer` for `BalloonPrefabEntry` — compact layout with foldout for nudge overrides and pop VFX fields; includes the `CanHoldItem` toggle |
 | `GameDisplayConfigurationDrawer` | Custom `PropertyDrawer` for `GameDisplayConfiguration` — inline aspect-ratio / orthographic-size pair editing |
 | `PaletteColorMaskDrawer` | Custom `PropertyDrawer` for `PaletteColorMaskAttribute` — renders a bitmask int as labeled checkboxes matching the current `GamePalette` entries |
 

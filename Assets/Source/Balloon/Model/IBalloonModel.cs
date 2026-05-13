@@ -14,6 +14,7 @@ namespace BalloonParty.Balloon.Model
         IReadOnlyReactiveProperty<Vector2Int> SlotIndex { get; }
         IReadOnlyReactiveProperty<bool> IsStable { get; }
         IReadOnlyReactiveProperty<ItemType> Item { get; }
+        bool CanHoldItem { get; }
 
         /// <summary>Per-type nudge overrides. Empty/null = use global config defaults.</summary>
         NudgeOverride[] NudgeOverrides { get; }

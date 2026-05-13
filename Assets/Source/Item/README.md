@@ -21,7 +21,7 @@ Items are game-wide collectible effects — Bomb, Laser, Lightning, and Shield. 
 
 | File | What it does |
 |---|---|
-| `ItemAssigner` | `IStartable` — subscribes to `ItemCheckMessage`; picks a random newly-spawned balloon and assigns an item based on turn frequency, weight, and per-type max-cap rules |
+| `ItemAssigner` | `IStartable` — subscribes to `ItemCheckMessage`; picks a random newly-spawned balloon that has `CanHoldItem = true` and assigns an item based on turn frequency, weight, and per-type max-cap rules. Balloons where `CanHoldItem` is false (e.g. tough balloons) are excluded from selection entirely |
 
 ### Activation
 

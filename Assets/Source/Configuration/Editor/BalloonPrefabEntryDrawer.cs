@@ -17,7 +17,7 @@ namespace BalloonParty.Configuration.Editor
                 return LineHeight + Spacing;
             }
 
-            var lines = 3; // prefab, weight, maxCount
+            var lines = 4; // prefab, weight, maxCount, canHoldItem
 
             var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
             if (nudgeOverrides != null)
@@ -53,6 +53,7 @@ namespace BalloonParty.Configuration.Editor
                 y = DrawField(position, y, property, "_prefab", "Prefab");
                 y = DrawField(position, y, property, "_weight", "Weight");
                 y = DrawField(position, y, property, "_maxCount", "Max Count");
+                y = DrawField(position, y, property, "_canHoldItem", "Can Hold Item");
 
                 var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
                 if (nudgeOverrides != null)

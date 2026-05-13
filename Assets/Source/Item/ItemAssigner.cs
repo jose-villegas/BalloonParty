@@ -71,8 +71,14 @@ namespace BalloonParty.Item
                 {
                     if (candidate.Type != ItemType.None)
                     {
-                        var indexOf = Random.Range(0, msg.NewBalloons.Count);
-                        var balloon = (IWriteableBalloonModel)msg.NewBalloons[indexOf];
+                        var eligible = msg.NewBalloons
+                            .Where(b => b.CanHoldItem)
+                            .ToList();
+
+                        if (eligible.Count == 0) { break; }
+
+                        var indexOf = Random.Range(0, eligible.Count);
+                        var balloon = (IWriteableBalloonModel)eligible[indexOf];
                         balloon.Item.Value = candidate.Type;
                     }
 

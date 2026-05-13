@@ -10,7 +10,7 @@ Represents balloons in the game — their state, appearance, spawning, and destr
 | `View/` | `BalloonView` — MonoBehaviour implementing `IPoolable` that binds to a model and renders color, sorting order, and pop VFX. Holds a `TweenTracker` for animation composition. Delegates item display to `ItemDisplayService` (in `Item/`) |
 | `Controller/` | `BalloonController` — wires model to view and handles hit/deflect/pop routing; `BalloonBalancer` — rebalances the grid after each turn |
 | `Spawner/` | `BalloonSpawner` — creates balloon lines at game start and after each projectile death; `BalloonPoolChannel` — pool channel using VContainer `CreateChildFromPrefab` |
-| `Type/` | `BalloonType` enum, `IBalloonTypeConfiguration`, `ColorableBalloonType`, `SimpleBalloonType`, `ToughBalloonType` — per-prefab type components that initialize hit count and color on the model (see `Type/README.md`) |
+| `Type/` | `BalloonType` enum, `IBalloonTypeConfiguration`, `IBalloonViewBinding`, `ColorableBalloonType`, `SimpleBalloonType`, `ToughBalloonType` — per-prefab type components that initialize hit count and color on the model. `IBalloonViewBinding` is a secondary interface that any prefab component can implement to receive `Bind(model, disposables)` calls from `BalloonView` — used by `ToughBalloonType` to drive shader damage state (see `Type/README.md`) |
 | `BalloonLifetimeScope` | Root scope on the balloon prefab — registers `BalloonView`; enables `CreateChildFromPrefab` instantiation for proper child scope building |
 
 ## Behaviour
@@ -27,7 +27,7 @@ Neighbor nudges for every hit are handled independently by `NudgeService` in `Nu
 
 ### Pooling
 
-Balloon views are pooled via `PoolManager` / `BalloonPoolChannel`. A `CompositeDisposable` replaces `AddTo(this)` for reactive subscriptions — cleared on each `Bind()` and `OnDespawned()`. External subscribers (e.g. `BalloonController`'s hit subscription) register via `RegisterDisposeOnDespawn()` so they're cleaned up on pool return.
+Balloon views are pooled via `PoolManager` / `BalloonPoolChannel`. A `CompositeDisposable` replaces `AddTo(this)` for reactive subscriptions — cleared on each `Bind()` and `OnDespawned()`. External subscribers (e.g. `BalloonController`'s hit subscription) register via `RegisterDisposeOnDespawn()` so they're cleaned up on pool return. `IBalloonViewBinding` components (e.g. `ToughBalloonType`) receive the same `CompositeDisposable` so their subscriptions are cleared automatically in the same lifecycle.
 
 ### Animation phases (turn-based)
 

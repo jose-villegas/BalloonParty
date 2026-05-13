@@ -16,5 +16,6 @@ namespace BalloonParty.Balloon.Model
         new ReactiveProperty<ItemType> Item { get; }
 
         new NudgeOverride[] NudgeOverrides { get; set; }
+        new bool CanHoldItem { get; set; }
     }
 }

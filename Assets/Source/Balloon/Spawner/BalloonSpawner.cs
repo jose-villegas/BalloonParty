@@ -105,6 +105,7 @@ namespace BalloonParty.Balloon.Spawner
 
             var model = new BalloonModel();
             model.SlotIndex.Value = slot;
+            model.CanHoldItem = entry.CanHoldItem;
 
             var typeConfig = view.GetComponentInParent<IBalloonTypeConfiguration>();
             typeConfig.Initialize(model);

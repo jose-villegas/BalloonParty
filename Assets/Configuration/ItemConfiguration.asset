@@ -15,7 +15,7 @@ MonoBehaviour:
   _items:
   - _type: 2
     _turnCheckEvery: 1
-    _weight: 10000
+    _weight: 10
     _maximumAllowed: 3
     _visualPrefab: {fileID: 2023896797455516263, guid: 0909fb1419fa47148a1cc0cd0ca72e9f,
       type: 3}
@@ -49,7 +49,7 @@ MonoBehaviour:
     _lightningJumpTime: 0.15
   - _type: 4
     _turnCheckEvery: 1
-    _weight: 10
+    _weight: 5
     _maximumAllowed: 2
     _visualPrefab: {fileID: 2023896797455516263, guid: dd84523fdbc2f8c4497d487f89fa32c8,
       type: 3}
@@ -64,7 +64,7 @@ MonoBehaviour:
     _lightningJumpTime: 0.05
   - _type: 1
     _turnCheckEvery: 1
-    _weight: 70
+    _weight: 90
     _maximumAllowed: 3
     _visualPrefab: {fileID: 7402881001233824042, guid: ecdbdd2040aac4c7baea4111845f0501,
       type: 3}

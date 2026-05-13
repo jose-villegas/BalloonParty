@@ -19,6 +19,9 @@ namespace BalloonParty.Configuration
         [SerializeField] private bool _overridePopVfx;
         [SerializeField] private ParticleSystem _popVfxPrefab;
 
+        [Tooltip("Whether balloons of this type can receive items. Disable for tough/unbreakable types.")]
+        [SerializeField] private bool _canHoldItem = true;
+
         public BalloonLifetimeScope Prefab => _prefab;
         public float Weight => _weight;
 
@@ -29,6 +32,8 @@ namespace BalloonParty.Configuration
 
         /// <summary>Null when override is disabled — view uses default VFX with balloon color.</summary>
         public ParticleSystem PopVfxPrefab => _overridePopVfx ? _popVfxPrefab : null;
+
+        public bool CanHoldItem => _canHoldItem;
 
 
         /// <summary>Derived from the prefab's GameObject name — no manual key needed.</summary>
