@@ -61,7 +61,7 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<SlotGridView>();
 
             builder.RegisterEntryPoint<BalloonBalancer>();
-            builder.RegisterEntryPoint<BalloonNudgeHandler>();
+            builder.RegisterEntryPoint<NudgeService>();
             builder.RegisterEntryPoint<BalloonSpawner>().AsSelf();
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
             builder.RegisterEntryPoint<ItemAssigner>();

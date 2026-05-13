@@ -2,12 +2,9 @@ using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Item;
-using BalloonParty.Nudge;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
-using BalloonParty.Slots;
 using DG.Tweening;
-using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer;
@@ -30,9 +27,7 @@ namespace BalloonParty.Balloon.View
         [Inject] private IGameConfiguration _config;
         [Inject] private GamePalette _palette;
         [Inject] private BalloonsConfiguration _balloonsConfig;
-        [Inject] private SlotGrid _grid;
         [Inject] private ItemConfiguration _itemConfig;
-        [Inject] private ISubscriber<BalloonNudgeMessage> _nudgeSubscriber;
         [Inject] private PoolManager _poolManager;
 
         private readonly CompositeDisposable _bindDisposables = new();
@@ -92,7 +87,6 @@ namespace BalloonParty.Balloon.View
                 .Subscribe(stable => _animator.SetBool(IsStableParam, stable))
                 .AddTo(_bindDisposables);
 
-            _nudgeSubscriber.Subscribe(OnNudge).AddTo(_bindDisposables);
 
             if (_itemService != null)
             {
@@ -181,7 +175,7 @@ namespace BalloonParty.Balloon.View
             SortingHelper.ApplySortingOrder(_spriteLayerRenderers, baseOrder);
         }
 
-        private void Nudge(
+        public void Nudge(
             Vector3 slotPosition,
             Vector3 direction,
             float nudgeDistance,
@@ -204,35 +198,6 @@ namespace BalloonParty.Balloon.View
             {
                 transform.DOScale(Vector3.one, nudgeDuration);
             }
-        }
-
-        private void OnNudge(BalloonNudgeMessage msg)
-        {
-            if (msg.Balloon != Model)
-            {
-                return;
-            }
-
-            var writeable = _grid.At(Model.SlotIndex.Value);
-            if (!writeable.IsStable.Value)
-            {
-                return;
-            }
-
-            var slotPos = _grid.IndexToWorldPosition(Model.SlotIndex.Value);
-            var direction = slotPos - msg.HitSlotPosition;
-
-            var nudgeDistance = NudgeOverrideResolver.ResolveDistance(
-                Model.NudgeOverrides, msg.Source, msg.NudgeDistance, _balloonsConfig.NudgeDistance);
-            var nudgeDuration = NudgeOverrideResolver.ResolveDuration(
-                Model.NudgeOverrides, msg.Source, msg.NudgeDuration, _balloonsConfig.NudgeDuration);
-
-            writeable.IsStable.Value = false;
-            Nudge(slotPos,
-                direction,
-                nudgeDistance,
-                nudgeDuration,
-                () => writeable.IsStable.Value = true);
         }
     }
 }

@@ -11,6 +11,16 @@ namespace BalloonParty.Nudge
         [SerializeField] private float _duration;
         [SerializeField] private float _falloff;
 
+        public NudgeOverride() { }
+
+        public NudgeOverride(NudgeType appliesTo, float distance, float duration = 0f, float falloff = 0f)
+        {
+            _appliesTo = appliesTo;
+            _distance = distance;
+            _duration = duration;
+            _falloff = falloff;
+        }
+
         public NudgeType AppliesTo => _appliesTo;
         public float Distance => _distance;
         public float Duration => _duration;

@@ -5,24 +5,27 @@ namespace BalloonParty.Nudge
 {
     public readonly struct BalloonNudgeMessage
     {
+        /// <summary>Target balloon. Null for shockwave (all balloons).</summary>
         public readonly IBalloonModel Balloon;
-        public readonly Vector3 HitSlotPosition;
+
+        /// <summary>World-space position where the nudge originates.</summary>
+        public readonly Vector3 Origin;
+
         public readonly NudgeType Source;
-        public readonly float? NudgeDistance;
-        public readonly float? NudgeDuration;
+
+        /// <summary>Publisher-side overrides (e.g. bomb settings). Null = use balloon/global defaults.</summary>
+        public readonly NudgeOverride[] Overrides;
 
         public BalloonNudgeMessage(
             IBalloonModel balloon,
-            Vector3 hitSlotPosition,
+            Vector3 origin,
             NudgeType source,
-            float? nudgeDistance = null,
-            float? nudgeDuration = null)
+            NudgeOverride[] overrides = null)
         {
             Balloon = balloon;
-            HitSlotPosition = hitSlotPosition;
+            Origin = origin;
             Source = source;
-            NudgeDistance = nudgeDistance;
-            NudgeDuration = nudgeDuration;
+            Overrides = overrides;
         }
     }
 }

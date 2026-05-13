@@ -1,6 +1,4 @@
 using System.Linq;
-using BalloonParty.Balloon.Model;
-using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -114,7 +112,7 @@ namespace BalloonParty.Nudge
                     if (balloonOverride != null)
                     {
                         distance = balloonOverride.Distance;
-                        duration = balloonOverride.Duration > 0f ? balloonOverride.Duration : baseDuration;
+                        duration = balloonOverride.Duration;
                     }
                     else
                     {
@@ -162,10 +160,16 @@ namespace BalloonParty.Nudge
         private float ResolveDistance(NudgeOverride[] balloonOverrides, NudgeOverride[] publisherOverrides, NudgeType source)
         {
             var entry = FindOverride(balloonOverrides, source);
-            if (entry != null) return entry.Distance;
+            if (entry != null)
+            {
+                return entry.Distance;
+            }
 
             var pubEntry = FindOverride(publisherOverrides, source);
-            if (pubEntry != null) return pubEntry.Distance;
+            if (pubEntry != null)
+            {
+                return pubEntry.Distance;
+            }
 
             return _config.NudgeDistance;
         }
@@ -173,10 +177,16 @@ namespace BalloonParty.Nudge
         private float ResolveDuration(NudgeOverride[] balloonOverrides, NudgeOverride[] publisherOverrides, NudgeType source)
         {
             var entry = FindOverride(balloonOverrides, source);
-            if (entry != null && entry.Duration > 0f) return entry.Duration;
+            if (entry != null)
+            {
+                return entry.Duration;
+            }
 
             var pubEntry = FindOverride(publisherOverrides, source);
-            if (pubEntry != null && pubEntry.Duration > 0f) return pubEntry.Duration;
+            if (pubEntry != null)
+            {
+                return pubEntry.Duration;
+            }
 
             return _config.NudgeDuration;
         }
@@ -184,7 +194,7 @@ namespace BalloonParty.Nudge
         private float ResolveFalloff(NudgeOverride[] overrides, NudgeType source)
         {
             var entry = FindOverride(overrides, source);
-            return entry != null && entry.Falloff > 0f ? entry.Falloff : _config.NudgeFalloff;
+            return entry != null ? entry.Falloff : _config.NudgeFalloff;
         }
 
         private static NudgeOverride FindOverride(NudgeOverride[] overrides, NudgeType source)
@@ -193,4 +203,6 @@ namespace BalloonParty.Nudge
         }
     }
 }
+
+
 

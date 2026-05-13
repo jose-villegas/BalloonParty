@@ -5,7 +5,6 @@ using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
@@ -19,10 +18,8 @@ namespace BalloonParty.Item.Bomb
 
         private readonly ContactFilter2D _balloonFilter;
         private readonly GamePalette _palette;
-        private readonly SlotGrid _grid;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
         private readonly ItemConfiguration _itemConfig;
-        private readonly BalloonsConfiguration _balloonsConfig;
         private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
         private readonly List<Collider2D> _overlapResults = new(8);
         private readonly PoolManager _poolManager;
@@ -36,18 +33,14 @@ namespace BalloonParty.Item.Bomb
         public BombItemHandler(
             GamePalette palette,
             ItemConfiguration itemConfig,
-            BalloonsConfiguration balloonsConfig,
             IPublisher<BalloonHitMessage> hitPublisher,
             IPublisher<BalloonNudgeMessage> nudgePublisher,
-            SlotGrid grid,
             PoolManager poolManager)
         {
             _palette = palette;
             _itemConfig = itemConfig;
-            _balloonsConfig = balloonsConfig;
             _hitPublisher = hitPublisher;
             _nudgePublisher = nudgePublisher;
-            _grid = grid;
             _poolManager = poolManager;
 
             _balloonFilter = new ContactFilter2D();
@@ -66,7 +59,14 @@ namespace BalloonParty.Item.Bomb
             var settings = _itemConfig[ItemType.Bomb];
 
             BlastBalloons(settings.BombRadius);
-            NudgeAllBalloons(settings);
+
+            // Publish a single shockwave — NudgeService handles grid iteration and falloff
+            _nudgePublisher.Publish(new BalloonNudgeMessage(
+                null,
+                _worldPosition,
+                NudgeType.Shockwave,
+                settings.NudgeOverrides));
+
             SpawnVisual(settings);
 
             return UniTask.CompletedTask;
@@ -95,53 +95,6 @@ namespace BalloonParty.Item.Bomb
             }
         }
 
-        // Nudge distance falls off exponentially with distance from the explosion center:
-        //   attenuated = nudgeDistance * e^(-falloff * d)
-        // where d is the world-space distance to the balloon.
-        private void NudgeAllBalloons(ItemSettings settings)
-        {
-            var nudgeDistance = NudgeOverrideResolver.ResolveDistance(
-                settings.NudgeOverrides, NudgeType.Shockwave, null, _balloonsConfig.NudgeDistance);
-            var nudgeFalloff = NudgeOverrideResolver.ResolveFalloff(
-                settings.NudgeOverrides, NudgeType.Shockwave, _balloonsConfig.NudgeFalloff);
-
-            for (var col = 0; col < _grid.Columns; col++)
-            {
-                for (var row = 0; row < _grid.Rows; row++)
-                {
-                    if (_grid.IsEmpty(col, row))
-                    {
-                        continue;
-                    }
-
-                    var slot = new Vector2Int(col, row);
-                    var model = _grid.At(slot);
-
-                    if (model == null || model == _balloon)
-                    {
-                        continue;
-                    }
-
-                    var balloonPos = _grid.IndexToWorldPosition(slot);
-                    var d = Vector3.Distance(_worldPosition, balloonPos);
-
-                    // Exponential falloff: closer balloons get a stronger push
-                    var attenuated = nudgeDistance * Mathf.Exp(-nudgeFalloff * d);
-
-                    // Skip negligible nudges
-                    if (attenuated < 0.001f)
-                    {
-                        continue;
-                    }
-
-                    _nudgePublisher.Publish(new BalloonNudgeMessage(
-                        model,
-                        _worldPosition,
-                        NudgeType.Shockwave,
-                        attenuated));
-                }
-            }
-        }
 
         private void SpawnVisual(ItemSettings settings)
         {

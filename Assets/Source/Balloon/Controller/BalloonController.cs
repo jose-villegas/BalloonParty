@@ -107,7 +107,7 @@ namespace BalloonParty.Balloon.Controller
             var balloonWorldPos = _grid.IndexToWorldPosition(_model.SlotIndex.Value);
             _deflectedPublisher.Publish(new BalloonDeflectedMessage(_model, balloonWorldPos, msg.ProjectileDirection));
 
-            // Pushback nudge — BalloonView will apply model-level overrides automatically
+            // Pushback nudge — NudgeService resolves overrides and applies the tween
             _nudgePublisher.Publish(new BalloonNudgeMessage(
                 _model,
                 balloonWorldPos - msg.ProjectileDirection.normalized,

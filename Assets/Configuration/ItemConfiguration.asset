@@ -22,8 +22,11 @@ MonoBehaviour:
     _activationEffectPrefab: {fileID: 1545043174332561462, guid: 00eef9bcf5537e24b8829da45a994469,
       type: 3}
     _bombRadius: 1.25
-    _bombNudgeDistance: 2
-    _bombNudgeFalloff: 0.75
+    _nudgeOverrides:
+    - _appliesTo: 4
+      _distance: 2
+      _duration: 0.4
+      _falloff: 0.75
     _laserRaycastDistance: 20
     _laserCircleCastRadius: 0.065
     _lightningSegmentsMultiplier: 3
@@ -38,8 +41,7 @@ MonoBehaviour:
     _activationEffectPrefab: {fileID: 7084871819143963872, guid: 09e04fef865adae47bf118af97e3e371,
       type: 3}
     _bombRadius: 1.25
-    _bombNudgeDistance: 0.15
-    _bombNudgeFalloff: 1.5
+    _nudgeOverrides: []
     _laserRaycastDistance: 20
     _laserCircleCastRadius: 0.065
     _lightningSegmentsMultiplier: 3
@@ -54,8 +56,7 @@ MonoBehaviour:
     _activationEffectPrefab: {fileID: 7298086300349085861, guid: 13e7e2e2dfc559e4589ff207046c99ee,
       type: 3}
     _bombRadius: 1.25
-    _bombNudgeDistance: 0.15
-    _bombNudgeFalloff: 1.5
+    _nudgeOverrides: []
     _laserRaycastDistance: 20
     _laserCircleCastRadius: 0.065
     _lightningSegmentsMultiplier: 5
@@ -70,8 +71,7 @@ MonoBehaviour:
     _activationEffectPrefab: {fileID: 7907502374385259114, guid: c9065b5aefca784428d0d85cce5fa762,
       type: 3}
     _bombRadius: 1.25
-    _bombNudgeDistance: 0.15
-    _bombNudgeFalloff: 1.5
+    _nudgeOverrides: []
     _laserRaycastDistance: 20
     _laserCircleCastRadius: 0.065
     _lightningSegmentsMultiplier: 3
