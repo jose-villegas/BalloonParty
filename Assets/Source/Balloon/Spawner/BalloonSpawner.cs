@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
@@ -78,7 +79,7 @@ namespace BalloonParty.Balloon.Spawner
             _newlySpawnedBalloons.Clear();
         }
 
-        private void SpawnBalloon(string colorName, Vector2Int slot)
+        private void SpawnBalloon(Vector2Int slot)
         {
             var targetPosition = _grid.IndexToWorldPosition(slot);
             var spawnPosition = _grid.IndexToWorldPosition(slot + (Vector2Int.up * 4));
@@ -87,8 +88,10 @@ namespace BalloonParty.Balloon.Spawner
             view.transform.position = spawnPosition;
 
             var model = new BalloonModel();
-            model.Color.Value = colorName;
             model.SlotIndex.Value = slot;
+
+            var typeConfig = view.GetComponentInParent<IBalloonTypeConfiguration>();
+            typeConfig.Initialize(model);
 
             var controller = new BalloonController(model,
                 view,
@@ -112,7 +115,7 @@ namespace BalloonParty.Balloon.Spawner
             {
                 for (var col = 0; col < _grid.Columns; col++)
                 {
-                    SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, row));
+                    SpawnBalloon(new Vector2Int(col, row));
                 }
             }
         }
@@ -134,7 +137,7 @@ namespace BalloonParty.Balloon.Spawner
                     continue;
                 }
 
-                SpawnBalloon(_grid.RandomColorName(), new Vector2Int(col, firstEmptyRow.Value));
+                SpawnBalloon(new Vector2Int(col, firstEmptyRow.Value));
             }
         }
 

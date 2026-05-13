@@ -241,6 +241,7 @@ GameObject:
   - component: {fileID: 7744549277022113413}
   - component: {fileID: -4720687053981353126}
   - component: {fileID: 7284149923872934421}
+  - component: {fileID: 6173351546761552298}
   m_Layer: 10
   m_Name: Balloon
   m_TagString: Balloons
@@ -263,7 +264,6 @@ Transform:
   m_Children:
   - {fileID: 8217776062739370819}
   - {fileID: 6555064605166848896}
-  - {fileID: 9183634829321680531}
   - {fileID: 486833216842763078}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -402,6 +402,21 @@ MonoBehaviour:
     TypeName: BalloonParty.Game.GameLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
+--- !u!114 &6173351546761552298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5923847143892959990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a0b41bc00cab413a93829eab1ea35a5c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.SimpleBalloonType
+  _typeName: 0
+  _hitsToPop: 1
+  _allowedColorsMask: -1
 --- !u!1 &7558929490291297603
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,12 +491,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9101512376242678319}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.05, z: 0}
-  m_LocalScale: {x: 0.8500001, y: 0.8500001, z: 1}
+  m_LocalRotation: {x: -0, y: -0, z: 0.7071068, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: 0.015000001, z: 0}
+  m_LocalScale: {x: 0.85000014, y: 0.85000014, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 1788660481030380393}
+  m_Father: {fileID: 6555064605166848896}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
 --- !u!212 &7087590600817567023
 SpriteRenderer:
@@ -572,5 +587,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2866547851019694503}
+  - {fileID: 9183634829321680531}
   m_Father: {fileID: 1788660481030380393}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

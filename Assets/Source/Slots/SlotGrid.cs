@@ -5,7 +5,6 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Shared;
 using UniRx;
 using UnityEngine;
-using Random = UnityEngine.Random;
 
 namespace BalloonParty.Slots
 {
@@ -27,10 +26,6 @@ namespace BalloonParty.Slots
             _views = new BalloonView[config.SlotsSize.x, config.SlotsSize.y];
         }
 
-        public string RandomColorName()
-        {
-            return _config.BalloonColors[Random.Range(0, _config.BalloonColors.Length)].Name;
-        }
 
         public void Place(IWriteableBalloonModel balloon, BalloonView view, Vector2Int index)
         {
