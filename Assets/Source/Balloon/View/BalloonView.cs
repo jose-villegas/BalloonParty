@@ -87,6 +87,10 @@ namespace BalloonParty.Balloon.View
                 .Subscribe(stable => _animator.SetBool(IsStableParam, stable))
                 .AddTo(_bindDisposables);
 
+            foreach (var binding in GetComponentsInChildren<IBalloonViewBinding>())
+            {
+                binding.Bind(model, _bindDisposables);
+            }
 
             if (_itemService != null)
             {
