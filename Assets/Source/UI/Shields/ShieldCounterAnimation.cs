@@ -17,8 +17,8 @@ namespace BalloonParty.UI.Shields
         private static readonly int WaitingTrigger = Animator.StringToHash("Waiting");
 
         [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
-        [Inject] private ShieldCounterLabel[] _labels;
         [Inject] private ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+        [Inject] private ShieldCounterLabel[] _labels;
 
         private readonly CompositeDisposable _disposable = new();
 

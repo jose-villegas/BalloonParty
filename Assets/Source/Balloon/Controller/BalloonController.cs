@@ -13,19 +13,19 @@ namespace BalloonParty.Balloon.Controller
 {
     public class BalloonController
     {
+        private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IWriteableBalloonModel _model;
+        private readonly NudgeOverride[] _nudgeOverrides;
+        private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
+        private readonly Action _onReturned;
+        private readonly ParticleSystem _popVfxOverride;
+        private readonly string _poolKey;
         private readonly PoolManager _poolManager;
         private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
-        private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
-        private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
         private readonly BalloonView _view;
-        private readonly string _poolKey;
-        private readonly Action _onReturned;
-        private readonly NudgeOverride[] _nudgeOverrides;
-        private readonly ParticleSystem _popVfxOverride;
 
         private IDisposable _hitSubscription;
         private IDisposable _itemActivatedSubscription;
@@ -107,7 +107,6 @@ namespace BalloonParty.Balloon.Controller
             var balloonWorldPos = _grid.IndexToWorldPosition(_model.SlotIndex.Value);
             _deflectedPublisher.Publish(new BalloonDeflectedMessage(_model, balloonWorldPos, msg.ProjectileDirection));
 
-            // Pushback nudge — NudgeService resolves overrides and applies the tween
             _nudgePublisher.Publish(new BalloonNudgeMessage(
                 _model,
                 balloonWorldPos - msg.ProjectileDirection.normalized,

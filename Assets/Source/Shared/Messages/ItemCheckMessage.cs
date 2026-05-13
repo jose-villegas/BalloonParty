@@ -5,10 +5,10 @@ namespace BalloonParty.Shared.Messages
 {
     public readonly struct ItemCheckMessage
     {
-        public readonly IReadOnlyList<IWriteableBalloonModel> NewBalloons;
+        public readonly IReadOnlyList<IBalloonModel> NewBalloons;
         public readonly int TurnCount;
 
-        public ItemCheckMessage(IReadOnlyList<IWriteableBalloonModel> newBalloons, int turnCount)
+        public ItemCheckMessage(IReadOnlyList<IBalloonModel> newBalloons, int turnCount)
         {
             NewBalloons = newBalloons;
             TurnCount = turnCount;

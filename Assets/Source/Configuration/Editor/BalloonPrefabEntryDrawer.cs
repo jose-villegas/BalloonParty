@@ -50,9 +50,9 @@ namespace BalloonParty.Source.Configuration.Editor
 
                 var y = position.y + LineHeight + Spacing;
 
-                y = DrawField(position, y, property, "_prefab",        "Prefab");
-                y = DrawField(position, y, property, "_weight",        "Weight");
-                y = DrawField(position, y, property, "_maxCount",      "Max Count");
+                y = DrawField(position, y, property, "_prefab", "Prefab");
+                y = DrawField(position, y, property, "_weight", "Weight");
+                y = DrawField(position, y, property, "_maxCount", "Max Count");
 
                 var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
                 if (nudgeOverrides != null)
@@ -79,7 +79,12 @@ namespace BalloonParty.Source.Configuration.Editor
             EditorGUI.EndProperty();
         }
 
-        private static float DrawField(Rect position, float y, SerializedProperty parent, string fieldName, string displayName)
+        private static float DrawField(
+            Rect position,
+            float y,
+            SerializedProperty parent,
+            string fieldName,
+            string displayName)
         {
             var prop = parent.FindPropertyRelative(fieldName);
             if (prop == null)
@@ -93,4 +98,3 @@ namespace BalloonParty.Source.Configuration.Editor
         }
     }
 }
-

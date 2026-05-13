@@ -13,4 +13,3 @@ namespace BalloonParty.Configuration
         public Color Color => _color;
     }
 }
-

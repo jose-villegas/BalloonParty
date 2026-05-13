@@ -24,11 +24,11 @@ namespace BalloonParty.Projectile.View
 
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IGameConfiguration _config;
-        [Inject] private GamePalette _palette;
+        [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
+        [Inject] private GamePalette _palette;
         [Inject] private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
-        [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
 
         private IWriteableProjectileModel _model;
         private IDisposable _deflectedSubscription;
@@ -79,7 +79,9 @@ namespace BalloonParty.Projectile.View
                 TrackColorStreak(balloonModel.Color.Value);
             }
 
-            _hitPublisher.Publish(new BalloonHitMessage(balloonModel, balloonView.transform.position, _model.Direction));
+            _hitPublisher.Publish(new BalloonHitMessage(balloonModel,
+                balloonView.transform.position,
+                _model.Direction));
         }
 
         public void OnSpawned()
@@ -232,7 +234,9 @@ namespace BalloonParty.Projectile.View
             UpdateGlowColor();
         }
 
-        private bool TryGetHitBalloon(Collider2D other, out BalloonView balloonView,
+        private bool TryGetHitBalloon(
+            Collider2D other,
+            out BalloonView balloonView,
             out IBalloonModel balloonModel)
         {
             balloonView = null;

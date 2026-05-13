@@ -7,4 +7,3 @@ namespace BalloonParty.Balloon.Type
         Unbreakable
     }
 }
-

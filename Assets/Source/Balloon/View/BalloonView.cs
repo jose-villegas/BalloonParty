@@ -143,10 +143,12 @@ namespace BalloonParty.Balloon.View
                 return; // No VFX configured for this balloon type
             }
 
-            // Default VFX — tinted to the balloon's palette color
             var defaultKey = defaultPrefab.name;
-            var defaultEffect = _poolManager.GetOrRegister(defaultKey, () => new ParticlePoolChannel(defaultPrefab.gameObject));
-            defaultEffect.Play(transform.position, _palette.GetColor(Model.Color.Value), () => _poolManager.Return(defaultKey, defaultEffect));
+            var defaultEffect =
+                _poolManager.GetOrRegister(defaultKey, () => new ParticlePoolChannel(defaultPrefab.gameObject));
+            defaultEffect.Play(transform.position,
+                _palette.GetColor(Model.Color.Value),
+                () => _poolManager.Return(defaultKey, defaultEffect));
         }
 
         public void RegisterDisposeOnDespawn(IDisposable disposable)

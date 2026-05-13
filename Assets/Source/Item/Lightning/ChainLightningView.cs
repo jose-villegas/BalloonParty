@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -207,8 +206,7 @@ namespace BalloonParty.Item.Lightning
             }
         }
 
-        // Writes segment points directly into buffer[offset .. offset+segments-1].
-        // No allocation — replaces the old BuildSegment that returned a new Vector3[].
+        // No allocation — buffer is pre-allocated per renderer and reused across all jumps.
         private static void FillSegment(
             Vector3 origin,
             Vector3 target,

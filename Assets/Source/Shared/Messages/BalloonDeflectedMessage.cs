@@ -20,4 +20,3 @@ namespace BalloonParty.Shared.Messages
         }
     }
 }
-

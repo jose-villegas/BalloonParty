@@ -54,4 +54,3 @@ namespace BalloonParty.UI.Shields
         }
     }
 }
-

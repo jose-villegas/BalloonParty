@@ -21,7 +21,10 @@ namespace BalloonParty.Balloon.Controller
         private bool _balanceRequested;
 
         [Inject]
-        public BalloonBalancer(SlotGrid grid, BalloonsConfiguration balloonsConfig, ISubscriber<BalanceBalloonsMessage> subscriber)
+        public BalloonBalancer(
+            SlotGrid grid,
+            BalloonsConfiguration balloonsConfig,
+            ISubscriber<BalanceBalloonsMessage> subscriber)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;

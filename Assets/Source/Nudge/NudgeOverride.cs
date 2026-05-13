@@ -27,4 +27,3 @@ namespace BalloonParty.Nudge
         public float Falloff => _falloff;
     }
 }
-

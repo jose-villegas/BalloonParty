@@ -13,12 +13,12 @@ namespace BalloonParty.Nudge
 {
     public class NudgeService : IStartable
     {
-        private readonly SlotGrid _grid;
         private readonly BalloonsConfiguration _config;
+        private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<BalloonNudgeMessage> _nudgeSubscriber;
 
-        /// <summary>Balloons currently mid-nudge tween. Distinguishes nudge-unstable from spawn-unstable.</summary>
+        // Balloons currently mid-nudge tween. Distinguishes nudge-unstable from spawn-unstable.
         private readonly HashSet<IBalloonModel> _nudging = new();
 
         [Inject]
@@ -40,9 +40,6 @@ namespace BalloonParty.Nudge
             _nudgeSubscriber.Subscribe(OnNudge);
         }
 
-        /// <summary>
-        /// Neighbor nudge: every neighbor of the hit balloon gets a small push.
-        /// </summary>
         private void OnBalloonHit(BalloonHitMessage msg)
         {
             var hitSlot = msg.Balloon.SlotIndex.Value;
@@ -83,9 +80,6 @@ namespace BalloonParty.Nudge
             NudgeBalloon(slot, msg.Origin, distance, duration);
         }
 
-        /// <summary>
-        /// Shockwave: every balloon on the grid gets nudged with exponential distance falloff.
-        /// </summary>
         private void HandleShockwave(BalloonNudgeMessage msg)
         {
             var baseDistance = ResolveDistance(null, msg.Overrides, NudgeType.Shockwave);
@@ -165,16 +159,22 @@ namespace BalloonParty.Nudge
 
             _nudging.Add(model);
             model.IsStable.Value = false;
-            view.Nudge(slotPos, direction, distance, duration, () =>
-            {
-                model.IsStable.Value = true;
-                _nudging.Remove(model);
-            });
+            view.Nudge(slotPos,
+                direction,
+                distance,
+                duration,
+                () =>
+                {
+                    model.IsStable.Value = true;
+                    _nudging.Remove(model);
+                });
         }
 
-        // ── Resolution helpers ──────────────────────────────────────────────
 
-        private float ResolveDistance(NudgeOverride[] balloonOverrides, NudgeOverride[] publisherOverrides, NudgeType source)
+        private float ResolveDistance(
+            NudgeOverride[] balloonOverrides,
+            NudgeOverride[] publisherOverrides,
+            NudgeType source)
         {
             var entry = FindOverride(balloonOverrides, source);
             if (entry != null)
@@ -191,7 +191,10 @@ namespace BalloonParty.Nudge
             return _config.NudgeDistance;
         }
 
-        private float ResolveDuration(NudgeOverride[] balloonOverrides, NudgeOverride[] publisherOverrides, NudgeType source)
+        private float ResolveDuration(
+            NudgeOverride[] balloonOverrides,
+            NudgeOverride[] publisherOverrides,
+            NudgeType source)
         {
             var entry = FindOverride(balloonOverrides, source);
             if (entry != null)
@@ -220,6 +223,3 @@ namespace BalloonParty.Nudge
         }
     }
 }
-
-
-

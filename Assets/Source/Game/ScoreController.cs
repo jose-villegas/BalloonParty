@@ -17,11 +17,11 @@ namespace BalloonParty.Game
         private const string ProgressSuffix = ".Progress";
 
         private readonly IGameConfiguration _config;
-        private readonly GamePalette _palette;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ReactiveProperty<int> _level = new(0);
         private readonly Dictionary<string, int> _levelProgress = new();
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
+        private readonly GamePalette _palette;
         private readonly Dictionary<string, int> _persistentScore = new();
         private readonly IPublisher<BalloonScoredMessage> _scoredPublisher;
         private readonly ReactiveProperty<int> _totalScore = new(0);

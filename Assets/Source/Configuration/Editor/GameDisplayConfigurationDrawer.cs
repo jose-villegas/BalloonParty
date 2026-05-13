@@ -13,7 +13,7 @@ namespace BalloonParty.Configuration.Editor
             ("9:18  (Galaxy S)", 9f / 18f),
             ("9:16  (standard)", 9f / 16f),
             ("3:4   (iPad)", 3f / 4f),
-            ("1:1   (square)", 1f),
+            ("1:1   (square)", 1f)
         };
 
         private static readonly Color ReferenceBoxColor = new(0.4f, 0.7f, 1f, 0.9f);
@@ -66,7 +66,8 @@ namespace BalloonParty.Configuration.Editor
             }
 
             EditorGUILayout.Space();
-            var boxRect = GUILayoutUtility.GetRect(GUIContent.none, GUIStyle.none,
+            var boxRect = GUILayoutUtility.GetRect(GUIContent.none,
+                GUIStyle.none,
                 GUILayout.Height(PreviewBoxHeight));
             DrawPreviewBox(boxRect, refWidth, refHeight);
 
@@ -107,10 +108,12 @@ namespace BalloonParty.Configuration.Editor
                 DrawWorldRect(center, visibleW, visibleH, deviceColor, Color.clear);
 
                 var labelPos = center + new Vector3(visibleW / 2f, visibleH / 2f, 0f);
-                Handles.Label(labelPos, label, new GUIStyle(EditorStyles.miniLabel)
-                {
-                    normal = { textColor = new Color(1f, 1f, 1f, 0.5f) }
-                });
+                Handles.Label(labelPos,
+                    label,
+                    new GUIStyle(EditorStyles.miniLabel)
+                    {
+                        normal = { textColor = new Color(1f, 1f, 1f, 0.5f) }
+                    });
             }
 
             var refLabelStyle = new GUIStyle(EditorStyles.boldLabel)
@@ -118,11 +121,16 @@ namespace BalloonParty.Configuration.Editor
                 alignment = TextAnchor.MiddleCenter,
                 normal = { textColor = ReferenceBoxColor }
             };
-            Handles.Label(center + new Vector3(0f, refHeight / 2f + 0.3f, 0f),
-                $"Reference  {refWidth} × {refHeight}", refLabelStyle);
+            Handles.Label(center + new Vector3(0f, (refHeight / 2f) + 0.3f, 0f),
+                $"Reference  {refWidth} × {refHeight}",
+                refLabelStyle);
         }
 
-        private static void DrawWorldRect(Vector3 center, float width, float height, Color outlineColor,
+        private static void DrawWorldRect(
+            Vector3 center,
+            float width,
+            float height,
+            Color outlineColor,
             Color fillColor)
         {
             var halfW = width / 2f;
@@ -136,7 +144,9 @@ namespace BalloonParty.Configuration.Editor
             if (fillColor.a > 0f)
             {
                 Handles.DrawSolidRectangleWithOutline(
-                    new[] { bl, br, tr, tl }, fillColor, Color.clear);
+                    new[] { bl, br, tr, tl },
+                    fillColor,
+                    Color.clear);
             }
 
             Handles.color = outlineColor;
@@ -156,23 +166,24 @@ namespace BalloonParty.Configuration.Editor
             }
 
             var margin = 10f;
-            var innerW = area.width - margin * 2;
-            var innerH = area.height - margin * 2;
+            var innerW = area.width - (margin * 2);
+            var innerH = area.height - (margin * 2);
 
             var scale = Mathf.Min(innerW / refWidth, innerH / refHeight);
             var scaledW = refWidth * scale;
             var scaledH = refHeight * scale;
 
             var refRect = new Rect(
-                area.x + (area.width - scaledW) / 2f,
-                area.y + (area.height - scaledH) / 2f,
-                scaledW, scaledH);
+                area.x + ((area.width - scaledW) / 2f),
+                area.y + ((area.height - scaledH) / 2f),
+                scaledW,
+                scaledH);
 
             EditorGUI.DrawRect(refRect, new Color(0.25f, 0.4f, 0.6f, 0.3f));
             DrawRectOutline(refRect, new Color(0.4f, 0.7f, 1f, 0.8f));
 
-            var centerX = refRect.x + refRect.width / 2f;
-            var centerY = refRect.y + refRect.height / 2f;
+            var centerX = refRect.x + (refRect.width / 2f);
+            var centerY = refRect.y + (refRect.height / 2f);
 
             foreach (var (_, aspect) in CommonRatios)
             {
@@ -184,9 +195,10 @@ namespace BalloonParty.Configuration.Editor
                 var devH = visibleH * scale;
 
                 var devRect = new Rect(
-                    centerX - devW / 2f,
-                    centerY - devH / 2f,
-                    devW, devH);
+                    centerX - (devW / 2f),
+                    centerY - (devH / 2f),
+                    devW,
+                    devH);
 
                 DrawRectOutline(devRect, new Color(1f, 1f, 1f, 0.25f));
             }

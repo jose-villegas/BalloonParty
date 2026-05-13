@@ -9,7 +9,7 @@ namespace BalloonParty.Balloon.Type
     {
         [SerializeField] private BalloonType _typeName;
         [SerializeField] private int _hitsToPop = 1;
-        [SerializeField, PaletteColorMask] private int _allowedColorsMask = ~0;
+        [SerializeField] [PaletteColorMask] private int _allowedColorsMask = ~0;
 
         [Inject] private GamePalette _palette;
 

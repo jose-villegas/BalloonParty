@@ -46,7 +46,9 @@ namespace BalloonParty.Source.Nudge.Editor
                 {
                     var rect = new Rect(position.x, y, position.width, LineHeight);
                     appliesToProp.intValue = (int)(NudgeType)EditorGUI.EnumFlagsField(
-                        rect, new GUIContent("Applies To"), (NudgeType)appliesToProp.intValue);
+                        rect,
+                        new GUIContent("Applies To"),
+                        (NudgeType)appliesToProp.intValue);
                     y += LineHeight + Spacing;
                 }
 
@@ -64,7 +66,12 @@ namespace BalloonParty.Source.Nudge.Editor
             EditorGUI.EndProperty();
         }
 
-        private static float DrawField(Rect position, float y, SerializedProperty parent, string fieldName, string displayName)
+        private static float DrawField(
+            Rect position,
+            float y,
+            SerializedProperty parent,
+            string fieldName,
+            string displayName)
         {
             var prop = parent.FindPropertyRelative(fieldName);
             if (prop == null)
@@ -78,6 +85,3 @@ namespace BalloonParty.Source.Nudge.Editor
         }
     }
 }
-
-
-

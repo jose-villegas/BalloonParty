@@ -61,7 +61,9 @@ namespace BalloonParty.Configuration.Editor
                 return;
             }
 
-            var maskRect = new Rect(position.x, position.y, position.width,
+            var maskRect = new Rect(position.x,
+                position.y,
+                position.width,
                 EditorGUIUtility.singleLineHeight);
 
             var newMask = EditorGUI.MaskField(maskRect, label, property.intValue, _paletteNames);
@@ -142,13 +144,17 @@ namespace BalloonParty.Configuration.Editor
                 var swatchRect = new Rect(curX, curY, swatchSize, swatchSize);
                 EditorGUI.DrawRect(swatchRect, entry.Color);
                 EditorGUI.DrawRect(
-                    new Rect(swatchRect.x - 1, swatchRect.y - 1, swatchRect.width + 2, 1), Color.black);
+                    new Rect(swatchRect.x - 1, swatchRect.y - 1, swatchRect.width + 2, 1),
+                    Color.black);
                 EditorGUI.DrawRect(
-                    new Rect(swatchRect.x - 1, swatchRect.yMax, swatchRect.width + 2, 1), Color.black);
+                    new Rect(swatchRect.x - 1, swatchRect.yMax, swatchRect.width + 2, 1),
+                    Color.black);
                 EditorGUI.DrawRect(
-                    new Rect(swatchRect.x - 1, swatchRect.y, 1, swatchRect.height), Color.black);
+                    new Rect(swatchRect.x - 1, swatchRect.y, 1, swatchRect.height),
+                    Color.black);
                 EditorGUI.DrawRect(
-                    new Rect(swatchRect.xMax, swatchRect.y, 1, swatchRect.height), Color.black);
+                    new Rect(swatchRect.xMax, swatchRect.y, 1, swatchRect.height),
+                    Color.black);
 
                 var labelRect = new Rect(swatchRect.xMax + labelPadding, curY, labelWidth, swatchSize);
                 EditorGUI.LabelField(labelRect, entry.Name, style);
@@ -170,4 +176,3 @@ namespace BalloonParty.Configuration.Editor
         }
     }
 }
-

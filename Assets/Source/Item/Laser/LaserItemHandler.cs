@@ -114,7 +114,9 @@ namespace BalloonParty.Item.Laser
                     continue;
                 }
 
-                _hitPublisher.Publish(new BalloonHitMessage(balloonView.Model, balloonView.transform.position, Vector3.zero));
+                _hitPublisher.Publish(new BalloonHitMessage(balloonView.Model,
+                    balloonView.transform.position,
+                    Vector3.zero));
             }
         }
 

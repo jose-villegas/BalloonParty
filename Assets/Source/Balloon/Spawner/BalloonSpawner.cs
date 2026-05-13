@@ -20,23 +20,22 @@ namespace BalloonParty.Balloon.Spawner
 {
     public class BalloonSpawner : IStartable
     {
+        private readonly Dictionary<string, int> _activeCounts = new();
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly BalloonsConfiguration _balloonsConfig;
         private readonly CancellationTokenSource _cts = new();
+        private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IPublisher<ItemCheckMessage> _itemCheckPublisher;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
+        private readonly List<IBalloonModel> _newlySpawnedBalloons = new();
+        private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
         private readonly LifetimeScope _parentScope;
         private readonly PoolManager _poolManager;
         private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
-        private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
-        private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
-
-        private readonly List<IWriteableBalloonModel> _newlySpawnedBalloons = new();
-        private readonly Dictionary<string, int> _activeCounts = new();
 
         private int _turnCount;
 
@@ -73,7 +72,6 @@ namespace BalloonParty.Balloon.Spawner
 
         public void Start()
         {
-            // Register a pool for each balloon prefab entry
             foreach (var entry in _balloonsConfig.Entries)
             {
                 _poolManager.Register(entry.PoolKey,

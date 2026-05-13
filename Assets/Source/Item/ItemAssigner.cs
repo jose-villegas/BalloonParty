@@ -1,4 +1,5 @@
 using System.Linq;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -71,7 +72,7 @@ namespace BalloonParty.Item
                     if (candidate.Type != ItemType.None)
                     {
                         var indexOf = Random.Range(0, msg.NewBalloons.Count);
-                        var balloon = msg.NewBalloons[indexOf];
+                        var balloon = (IWriteableBalloonModel)msg.NewBalloons[indexOf];
                         balloon.Item.Value = candidate.Type;
                     }
 
