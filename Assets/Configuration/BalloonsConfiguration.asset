@@ -17,18 +17,22 @@ MonoBehaviour:
       type: 3}
     _weight: 1
     _maxCount: 0
-    _overrideNudge: 0
-    _nudgeDistanceOverride: 0
-    _nudgeDurationOverride: 0
+    _nudgeOverrides: []
     _overridePopVfx: 0
     _popVfxPrefab: {fileID: 0}
   - _prefab: {fileID: 7284149923872934421, guid: 2a9d607f6443e4b7b81f98f6c878d594,
       type: 3}
     _weight: 0.3
     _maxCount: 2
-    _overrideNudge: 1
-    _nudgeDistanceOverride: 0.5
-    _nudgeDurationOverride: 0.5
+    _nudgeOverrides:
+    - _appliesTo: 1
+      _distance: 0.5
+      _duration: 0.5
+      _falloff: 0
+    - _appliesTo: 2
+      _distance: 0.02
+      _duration: 0.4
+      _falloff: 0
     _overridePopVfx: 1
     _popVfxPrefab: {fileID: 2148469744637963286, guid: 96f46efd86e994a7f95e53ccf7be9cb6,
       type: 3}
@@ -39,5 +43,6 @@ MonoBehaviour:
   _newBalloonLinesTimeInterval: 0.35
   _balloonSpawnAnimationSpeedRange: {x: 1.25, y: 2}
   _timeForBalloonsBalance: 1.75
-  _nudgeDistance: 0.1
+  _nudgeDistance: 0.15
   _nudgeDuration: 0.4
+  _nudgeFalloff: 1.5

@@ -58,15 +58,15 @@ namespace BalloonParty.Item.Bomb
         {
             var settings = _itemConfig[ItemType.Bomb];
 
-            BlastBalloons(settings.BombRadius);
-
-            // Publish a single shockwave — NudgeService handles grid iteration and falloff
+            // Shockwave first — nudges all balloons before any get popped or
+            // marked unstable by the blast's neighbor nudges.
             _nudgePublisher.Publish(new BalloonNudgeMessage(
                 null,
                 _worldPosition,
                 NudgeType.Shockwave,
                 settings.NudgeOverrides));
 
+            BlastBalloons(settings.BombRadius);
             SpawnVisual(settings);
 
             return UniTask.CompletedTask;

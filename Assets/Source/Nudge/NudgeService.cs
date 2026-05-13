@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -15,6 +17,9 @@ namespace BalloonParty.Nudge
         private readonly BalloonsConfiguration _config;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<BalloonNudgeMessage> _nudgeSubscriber;
+
+        /// <summary>Balloons currently mid-nudge tween. Distinguishes nudge-unstable from spawn-unstable.</summary>
+        private readonly HashSet<IBalloonModel> _nudging = new();
 
         [Inject]
         public NudgeService(
@@ -137,7 +142,14 @@ namespace BalloonParty.Nudge
         private void NudgeBalloon(Vector2Int slot, Vector3 origin, float distance, float duration)
         {
             var model = _grid.At(slot);
-            if (model == null || !model.IsStable.Value)
+            if (model == null)
+            {
+                return;
+            }
+
+            // Allow interrupting a mid-nudge balloon, but not one that is
+            // spawning or rebalancing (genuinely not at its grid position yet).
+            if (!model.IsStable.Value && !_nudging.Contains(model))
             {
                 return;
             }
@@ -151,8 +163,13 @@ namespace BalloonParty.Nudge
             var slotPos = _grid.IndexToWorldPosition(slot);
             var direction = slotPos - origin;
 
+            _nudging.Add(model);
             model.IsStable.Value = false;
-            view.Nudge(slotPos, direction, distance, duration, () => model.IsStable.Value = true);
+            view.Nudge(slotPos, direction, distance, duration, () =>
+            {
+                model.IsStable.Value = true;
+                _nudging.Remove(model);
+            });
         }
 
         // ── Resolution helpers ──────────────────────────────────────────────

@@ -15,7 +15,7 @@ MonoBehaviour:
   _items:
   - _type: 2
     _turnCheckEvery: 1
-    _weight: 12
+    _weight: 10000
     _maximumAllowed: 3
     _visualPrefab: {fileID: 2023896797455516263, guid: 0909fb1419fa47148a1cc0cd0ca72e9f,
       type: 3}
@@ -24,7 +24,7 @@ MonoBehaviour:
     _bombRadius: 1.25
     _nudgeOverrides:
     - _appliesTo: 4
-      _distance: 2
+      _distance: 3
       _duration: 0.4
       _falloff: 0.75
     _laserRaycastDistance: 20
