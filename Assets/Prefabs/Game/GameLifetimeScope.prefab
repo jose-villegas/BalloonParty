@@ -52,6 +52,7 @@ MonoBehaviour:
   _displayConfiguration: {fileID: 11400000, guid: d49451b27c31244c7af3bd85cc6f1cd2,
     type: 2}
   _itemConfiguration: {fileID: 11400000, guid: 96695d3f4e4804c36a07426bdef377c3, type: 2}
+  _gamePalette: {fileID: 11400000, guid: 5000030a039a46e8807ca639499df679, type: 2}
   _balloonScopePrefab: {fileID: 7284149923872934421, guid: 85afc73ba92384dafa9d8a43874d2dd6,
     type: 3}
   _projectileScopePrefab: {fileID: 6407778786473359134, guid: 514e1ddc348a5498aa3edae2404ff130,

@@ -28,6 +28,7 @@ namespace BalloonParty.Game
         [SerializeField] private GameConfiguration _gameConfiguration;
         [SerializeField] private GameDisplayConfiguration _displayConfiguration;
         [SerializeField] private ItemConfiguration _itemConfiguration;
+        [SerializeField] private GamePalette _gamePalette;
         [SerializeField] private BalloonLifetimeScope _balloonScopePrefab;
         [SerializeField] private ProjectileLifetimeScope _projectileScopePrefab;
 
@@ -50,6 +51,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
             builder.RegisterInstance(_displayConfiguration);
             builder.RegisterInstance(_itemConfiguration);
+            builder.RegisterInstance(_gamePalette);
             builder.RegisterInstance(new BalloonSpawnerSettings(_balloonScopePrefab));
             builder.RegisterInstance(new ThrowerSettings(_projectileScopePrefab));
 
