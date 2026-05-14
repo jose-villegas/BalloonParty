@@ -13,4 +13,3 @@ namespace BalloonParty.Balloon.View
         void Bind(IBalloonModel model, CompositeDisposable disposables);
     }
 }
-

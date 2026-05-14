@@ -22,7 +22,7 @@ Messages are the signals that decouple systems from one another. A publisher fir
 |---|---|---|
 | `BalanceBalloonsMessage` | `ProjectileView`, `BalloonSpawner` | `BalloonBalancer` |
 | `SpawnBalloonLineMessage` | `SceneTransition` (game start), cheats | `BalloonSpawner` |
-| `BalloonHitMessage` | `ProjectileView`, item handlers, cheats | `BalloonController`, `ScoreController`, `NudgeService`, `ItemActivator` |
+| `BalloonHitMessage` | `ProjectileView`, item handlers, cheats | `BalloonController`, `ScoreController`, `NudgeService`, `ItemActivator` — carries `Damage` (int, default 1); item handlers pass `ItemSettings.Damage`, projectile hits always use 1 |
 | `BalloonDeflectedMessage` | `BalloonController` (on deflect) | `ProjectileView` (color-tracking on deflect hit) |
 | `BalloonScoredMessage` | `ScoreController` | `ColorProgressBar` |
 | `ScoreLevelUpMessage` | `ScoreController` | `ColorProgressBar`, `LevelUpPopUp` |

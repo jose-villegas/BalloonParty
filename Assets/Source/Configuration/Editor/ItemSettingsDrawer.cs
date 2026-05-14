@@ -1,142 +1,97 @@
+using System.Collections.Generic;
+using BalloonParty.Editor;
 using UnityEditor;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Editor
 {
     [CustomPropertyDrawer(typeof(ItemSettings))]
-    public class ItemSettingsDrawer : PropertyDrawer
+    public class ItemSettingsDrawer : AutoFieldPropertyDrawer
     {
-        private const float LineHeight = 20f;
-        private const float Spacing = 2f;
-
-        // Common fields count (excluding the foldout header row itself):
-        //   _type, _turnCheckEvery, _weight, _maximumAllowed, _visualPrefab, _activationEffectPrefab
-        private const int CommonFieldCount = 6;
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        /// <summary>
+        ///     Fields that belong to a specific item type and must NOT be drawn
+        ///     in the shared common section. Add new type-specific field names here
+        ///     when they are introduced; everything else is drawn automatically.
+        /// </summary>
+        protected override HashSet<string> ExcludedFields { get; } = new()
         {
-            if (!property.isExpanded)
-            {
-                return LineHeight + Spacing;
-            }
+            "_bombRadius",
+            "_nudgeOverrides",
+            "_laserRaycastDistance",
+            "_laserCircleCastRadius",
+            "_lightningSegmentsMultiplier",
+            "_lightningRandomness",
+            "_lightningJumpTime",
+        };
 
+        protected override GUIContent BuildFoldoutLabel(GUIContent label, SerializedProperty property)
+        {
             var itemType = (ItemType)property.FindPropertyRelative("_type").intValue;
+            return new GUIContent($"{label.text}  [{itemType}]");
+        }
 
-            // Foldout header + common fields
-            var height = (1 + CommonFieldCount) * (LineHeight + Spacing);
+        protected override float DrawSpecialFields(Rect position, float y, SerializedProperty property)
+        {
+            var itemType = (ItemType)property.FindPropertyRelative("_type").intValue;
 
             switch (itemType)
             {
                 case ItemType.Bomb:
-                    height += LineHeight + Spacing; // section label
-                    height += LineHeight + Spacing; // _bombRadius
+                    y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Bomb");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_bombRadius", "Bomb Radius");
                     var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
                     if (nudgeOverrides != null)
                     {
-                        height += EditorGUI.GetPropertyHeight(nudgeOverrides, true) + Spacing;
+                        var h = EditorGUI.GetPropertyHeight(nudgeOverrides, true);
+                        EditorGUI.PropertyField(
+                            new Rect(position.x, y, position.width, h),
+                            nudgeOverrides,
+                            new GUIContent("Nudge Overrides"),
+                            true);
+                        y += h + PropertyDrawerHelper.Spacing;
                     }
                     break;
 
                 case ItemType.Laser:
-                    height += LineHeight + Spacing; // section label
-                    height += (LineHeight + Spacing) * 2; // _laserRaycastDistance, _laserCircleCastRadius
+                    y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Laser");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_laserRaycastDistance", "Raycast Distance");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_laserCircleCastRadius", "Circle Cast Radius");
                     break;
 
                 case ItemType.Lightning:
-                    height += LineHeight + Spacing; // section label
-                    height += (LineHeight + Spacing) * 3; // _lightningSegmentsMultiplier, _lightningRandomness, _lightningJumpTime
+                    y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Lightning");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_lightningSegmentsMultiplier", "Segments Multiplier");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_lightningRandomness", "Randomness");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_lightningJumpTime", "Jump Time");
                     break;
             }
 
-            return height;
+            return y;
         }
 
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        protected override float GetSpecialFieldsHeight(SerializedProperty property)
         {
-            EditorGUI.BeginProperty(position, label, property);
+            var itemType = (ItemType)property.FindPropertyRelative("_type").intValue;
+            var row = PropertyDrawerHelper.LineHeight + PropertyDrawerHelper.Spacing;
 
-            var typeProp = property.FindPropertyRelative("_type");
-            var itemType = (ItemType)typeProp.intValue;
-
-            var foldoutLabel = new GUIContent($"{label.text}  [{itemType}]");
-            var headerRect = new Rect(position.x, position.y, position.width, LineHeight);
-            property.isExpanded = EditorGUI.Foldout(headerRect, property.isExpanded, foldoutLabel, true);
-
-            if (property.isExpanded)
+            switch (itemType)
             {
-                var indent = EditorGUI.indentLevel;
-                EditorGUI.indentLevel = indent + 1;
+                case ItemType.Bomb:
+                    var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
+                    var nudgeHeight = nudgeOverrides != null
+                        ? EditorGUI.GetPropertyHeight(nudgeOverrides, true) + PropertyDrawerHelper.Spacing
+                        : 0f;
+                    return row * 2 + nudgeHeight;
 
-                var y = position.y + LineHeight + Spacing;
+                case ItemType.Laser:
+                    return row * 3;
 
-                y = DrawField(position, y, property, "_type", "Type");
-                y = DrawField(position, y, property, "_turnCheckEvery", "Turn Check Every");
-                y = DrawField(position, y, property, "_weight", "Weight");
-                y = DrawField(position, y, property, "_maximumAllowed", "Maximum Allowed");
-                y = DrawField(position, y, property, "_visualPrefab", "Visual Prefab");
-                y = DrawField(position, y, property, "_activationEffectPrefab", "Activation Effect Prefab");
+                case ItemType.Lightning:
+                    return row * 4;
 
-                switch (itemType)
-                {
-                    case ItemType.Bomb:
-                        y = DrawSectionHeader(position, y, "Bomb");
-                        y = DrawField(position, y, property, "_bombRadius", "Bomb Radius");
-                        var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
-                        if (nudgeOverrides != null)
-                        {
-                            var h = EditorGUI.GetPropertyHeight(nudgeOverrides, true);
-                            EditorGUI.PropertyField(
-                                new Rect(position.x, y, position.width, h),
-                                nudgeOverrides,
-                                new GUIContent("Nudge Overrides"),
-                                true);
-                        }
-                        break;
-
-                    case ItemType.Laser:
-                        y = DrawSectionHeader(position, y, "Laser");
-                        y = DrawField(position, y, property, "_laserRaycastDistance", "Raycast Distance");
-                        DrawField(position, y, property, "_laserCircleCastRadius", "Circle Cast Radius");
-                        break;
-
-                    case ItemType.Lightning:
-                        y = DrawSectionHeader(position, y, "Lightning");
-                        y = DrawField(position, y, property, "_lightningSegmentsMultiplier", "Segments Multiplier");
-                        y = DrawField(position, y, property, "_lightningRandomness", "Randomness");
-                        DrawField(position, y, property, "_lightningJumpTime", "Jump Time");
-                        break;
-                }
-
-                EditorGUI.indentLevel = indent;
+                default:
+                    return 0f;
             }
-
-            EditorGUI.EndProperty();
-        }
-
-        private static float DrawSectionHeader(Rect position, float y, string title)
-        {
-            var rect = new Rect(position.x, y, position.width, LineHeight);
-            EditorGUI.LabelField(rect, title, EditorStyles.boldLabel);
-            return y + LineHeight + Spacing;
-        }
-
-        private static float DrawField(
-            Rect position,
-            float y,
-            SerializedProperty parent,
-            string fieldName,
-            string displayName)
-        {
-            var prop = parent.FindPropertyRelative(fieldName);
-            if (prop == null)
-            {
-                return y;
-            }
-            EditorGUI.PropertyField(
-                new Rect(position.x, y, position.width, LineHeight),
-                prop,
-                new GUIContent(displayName));
-            return y + LineHeight + Spacing;
         }
     }
 }

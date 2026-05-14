@@ -15,6 +15,8 @@ namespace BalloonParty.Configuration
         [SerializeField] private GameObject _visualPrefab;
         [SerializeField] private EffectView _activationEffectPrefab;
 
+        [SerializeField] private int _damage = 1;
+
         [SerializeField] private float _bombRadius = 1.25f;
         [SerializeField] private NudgeOverride[] _nudgeOverrides;
 
@@ -31,6 +33,7 @@ namespace BalloonParty.Configuration
         public int MaximumAllowed => _maximumAllowed;
         public GameObject VisualPrefab => _visualPrefab;
         public EffectView ActivationEffectPrefab => _activationEffectPrefab;
+        public int Damage => _damage;
         public float BombRadius => _bombRadius;
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
         public float LaserRaycastDistance => _laserRaycastDistance;

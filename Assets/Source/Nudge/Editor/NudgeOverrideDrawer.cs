@@ -1,87 +1,74 @@
-using BalloonParty.Nudge;
+using System.Collections.Generic;
+using BalloonParty.Editor;
 using UnityEditor;
 using UnityEngine;
 
 namespace BalloonParty.Nudge.Editor
 {
     [CustomPropertyDrawer(typeof(NudgeOverride))]
-    public class NudgeOverrideDrawer : PropertyDrawer
+    public class NudgeOverrideDrawer : AutoFieldPropertyDrawer
     {
-        private const float LineHeight = 20f;
-        private const float Spacing = 2f;
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        /// <summary>
+        ///     <c>_appliesTo</c> needs a custom <c>EditorGUI.EnumFlagsField</c> instead of
+        ///     the default PropertyField. <c>_falloff</c> is conditional on the Shockwave flag.
+        ///     Everything else (<c>_distance</c>, <c>_duration</c>) is drawn automatically.
+        /// </summary>
+        protected override HashSet<string> ExcludedFields { get; } = new()
         {
-            if (!property.isExpanded)
-            {
-                return LineHeight + Spacing;
-            }
+            "_appliesTo",
+            "_falloff",
+        };
 
-            var lines = 4; // header, appliesTo, distance, duration
+        protected override GUIContent BuildFoldoutLabel(GUIContent label, SerializedProperty property)
+        {
             var appliesToProp = property.FindPropertyRelative("_appliesTo");
-            if (appliesToProp != null && ((NudgeType)appliesToProp.intValue).HasFlag(NudgeType.Shockwave))
+            if (appliesToProp == null)
             {
-                lines += 1; // falloff
+                return label;
             }
 
-            return lines * (LineHeight + Spacing);
+            var nudgeType = (NudgeType)appliesToProp.intValue;
+            return new GUIContent($"{label.text}  [{nudgeType}]");
         }
 
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        protected override float DrawPinnedFields(Rect position, float y, SerializedProperty property)
         {
-            EditorGUI.BeginProperty(position, label, property);
-
-            var headerRect = new Rect(position.x, position.y, position.width, LineHeight);
-            property.isExpanded = EditorGUI.Foldout(headerRect, property.isExpanded, label, true);
-
-            if (property.isExpanded)
-            {
-                var indent = EditorGUI.indentLevel;
-                EditorGUI.indentLevel = indent + 1;
-
-                var y = position.y + LineHeight + Spacing;
-
-                var appliesToProp = property.FindPropertyRelative("_appliesTo");
-                if (appliesToProp != null)
-                {
-                    var rect = new Rect(position.x, y, position.width, LineHeight);
-                    appliesToProp.intValue = (int)(NudgeType)EditorGUI.EnumFlagsField(
-                        rect,
-                        new GUIContent("Applies To"),
-                        (NudgeType)appliesToProp.intValue);
-                    y += LineHeight + Spacing;
-                }
-
-                y = DrawField(position, y, property, "_distance", "Distance");
-                y = DrawField(position, y, property, "_duration", "Duration");
-
-                if (appliesToProp != null && ((NudgeType)appliesToProp.intValue).HasFlag(NudgeType.Shockwave))
-                {
-                    DrawField(position, y, property, "_falloff", "Falloff");
-                }
-
-                EditorGUI.indentLevel = indent;
-            }
-
-            EditorGUI.EndProperty();
-        }
-
-        private static float DrawField(
-            Rect position,
-            float y,
-            SerializedProperty parent,
-            string fieldName,
-            string displayName)
-        {
-            var prop = parent.FindPropertyRelative(fieldName);
-            if (prop == null)
+            var appliesToProp = property.FindPropertyRelative("_appliesTo");
+            if (appliesToProp == null)
             {
                 return y;
             }
 
-            var rect = new Rect(position.x, y, position.width, LineHeight);
-            EditorGUI.PropertyField(rect, prop, new GUIContent(displayName));
-            return y + LineHeight + Spacing;
+            appliesToProp.intValue = (int)(NudgeType)EditorGUI.EnumFlagsField(
+                new Rect(position.x, y, position.width, PropertyDrawerHelper.LineHeight),
+                new GUIContent("Applies To"),
+                (NudgeType)appliesToProp.intValue);
+            return y + PropertyDrawerHelper.LineHeight + PropertyDrawerHelper.Spacing;
+        }
+
+        protected override float DrawSpecialFields(Rect position, float y, SerializedProperty property)
+        {
+            var appliesToProp = property.FindPropertyRelative("_appliesTo");
+            if (appliesToProp != null && ((NudgeType)appliesToProp.intValue).HasFlag(NudgeType.Shockwave))
+            {
+                y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_falloff", "Falloff");
+            }
+
+            return y;
+        }
+
+        protected override float GetPinnedFieldsHeight(SerializedProperty property)
+            => PropertyDrawerHelper.LineHeight + PropertyDrawerHelper.Spacing;
+
+        protected override float GetSpecialFieldsHeight(SerializedProperty property)
+        {
+            var appliesToProp = property.FindPropertyRelative("_appliesTo");
+            if (appliesToProp != null && ((NudgeType)appliesToProp.intValue).HasFlag(NudgeType.Shockwave))
+            {
+                return PropertyDrawerHelper.LineHeight + PropertyDrawerHelper.Spacing;
+            }
+
+            return 0f;
         }
     }
 }

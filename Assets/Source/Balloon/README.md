@@ -10,18 +10,18 @@ Represents balloons in the game — their state, appearance, spawning, and destr
 | `View/` | `BalloonView` — MonoBehaviour implementing `IPoolable` that binds to a model and renders color, sorting order, and pop VFX. Holds a `TweenTracker` for animation composition. Delegates item display to `ItemDisplayService` (in `Item/`) |
 | `Controller/` | `BalloonController` — wires model to view and handles hit/deflect/pop routing; `BalloonBalancer` — rebalances the grid after each turn |
 | `Spawner/` | `BalloonSpawner` — creates balloon lines at game start and after each projectile death; `BalloonPoolChannel` — pool channel using VContainer `CreateChildFromPrefab` |
-| `Type/` | `BalloonType` enum, `IBalloonTypeConfiguration`, `IBalloonViewBinding`, `ColorableBalloonType`, `SimpleBalloonType`, `ToughBalloonType` — per-prefab type components that initialize hit count and color on the model. `IBalloonViewBinding` is a secondary interface that any prefab component can implement to receive `Bind(model, disposables)` calls from `BalloonView` — used by `ToughBalloonType` to drive shader damage state (see `Type/README.md`) |
+| `Type/` | `BalloonType` enum, `IBalloonVariant`, `IBalloonViewBinding`, `ColorableBalloonVariant`, `SimpleBalloonVariant`, `ToughBalloonVariant` — per-prefab variant components that initialize type and color on the model. `IBalloonViewBinding` is a secondary interface that any prefab component can implement to receive `Bind(model, disposables)` calls from `BalloonView` — used by `ToughBalloonVariant` to drive shader damage state (see `Type/README.md`) |
 | `BalloonLifetimeScope` | Root scope on the balloon prefab — registers `BalloonView`; enables `CreateChildFromPrefab` instantiation for proper child scope building |
 
 ## Behaviour
 
 A balloon knows its color, type, how many hits it can absorb, where it sits in the grid, whether it has settled into position, and whether it carries an item. When any reactive property changes, the view updates automatically via UniRx subscriptions.
 
-`BalloonController` routes incoming `BalloonHitMessage`s based on `HitsRemaining`:
+`BalloonController` routes incoming `BalloonHitMessage`s based on `HitsRemaining` and the message's `Damage` value:
 
-- **Unbreakable (`-1`)** — deflect: publishes `BalloonDeflectedMessage` and `BalloonNudgeMessage(Deflect)`; never pops.
-- **Tough (`> 1`)** — decrement and deflect.
-- **Normal / last hit** — pop: plays VFX, removes from grid, returns to pool (deferred if the balloon carries an item).
+- **Unbreakable (`-1`)** — deflect regardless of damage: publishes `BalloonDeflectedMessage` and `BalloonNudgeMessage(Deflect)`; never pops.
+- **`HitsRemaining - Damage > 0`** — decrement by `Damage` and deflect. A high-damage hit (e.g. Bomb with `Damage = 2`) can bypass the deflect threshold entirely if it removes enough hits in one blow.
+- **`HitsRemaining - Damage ≤ 0`** — pop: plays VFX, removes from grid, returns to pool (deferred if the balloon carries an item). Overkill damage is not tracked.
 
 Neighbor nudges for every hit are handled independently by `NudgeService` in `Nudge/`, which subscribes to `BalloonHitMessage` and dispatches push-out → return animations to all 6 grid neighbors.
 

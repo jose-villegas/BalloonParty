@@ -80,22 +80,21 @@ namespace BalloonParty.Balloon.Controller
 
                 var hitsRemaining = _model.HitsRemaining.Value;
 
-                // Unbreakable — deflect, never pop
+                // Unbreakable — deflects regardless of damage
                 if (hitsRemaining == -1)
                 {
                     Deflect(msg);
                     return;
                 }
 
-                // Tough — decrement and deflect, not yet popping
-                if (hitsRemaining > 1)
+                var hitsAfterDamage = hitsRemaining - msg.Damage;
+                if (hitsAfterDamage > 0)
                 {
-                    _model.HitsRemaining.Value--;
+                    _model.HitsRemaining.Value = hitsAfterDamage;
                     Deflect(msg);
                     return;
                 }
 
-                // Normal / last hit — pop
                 Pop();
             });
 

@@ -28,11 +28,11 @@ Items are game-wide collectible effects — Bomb, Laser, Lightning, and Shield. 
 | File | What it does |
 |---|---|
 | `ItemActivator` | `IStartable` — subscribes to `BalloonHitMessage`; when the hit balloon carries an item, finds the matching `IBalloonItem` handler by type, calls `Setup` + `await Activate()`, then publishes `ItemActivatedMessage`. Yields one frame before activation to let all synchronous `BalloonHitMessage` subscribers finish first |
-| `Bomb/BombItemHandler` | Area explosion — `Physics2D.OverlapCircleAll` at balloon position; destroys balloons in radius; nudges survivors with exponential distance falloff |
-| `Laser/LaserItemHandler` | Cross beam — 4× `Physics2D.CircleCastAll` in rotated directions; reads captured rotation from `ItemRotationCapturedMessage` |
-| `Lightning/LightningItemHandler` | Chain lightning — queries `SlotGrid` for all same-color balloons, sorts by distance, spawns `ChainLightningView` via `EffectPoolChannel`, hits each target sequentially with async delay |
+| `Bomb/BombItemHandler` | Area explosion — `Physics2D.OverlapCircleAll` at balloon position; destroys balloons in radius; nudges survivors with exponential distance falloff. Passes `ItemSettings.Damage` into each `BalloonHitMessage` |
+| `Laser/LaserItemHandler` | Cross beam — 4× `Physics2D.CircleCastAll` in rotated directions; reads captured rotation from `ItemRotationCapturedMessage`. Passes `ItemSettings.Damage` into each `BalloonHitMessage` |
+| `Lightning/LightningItemHandler` | Chain lightning — queries `SlotGrid` for all same-color balloons, sorts by distance, spawns `ChainLightningView` via `EffectPoolChannel`, hits each target sequentially with async delay. Passes `ItemSettings.Damage` into each `BalloonHitMessage` |
 | `Lightning/ChainLightningView` | `EffectView` subclass for chain lightning — multiple `LineRenderer`s; `PrepareDisplay(positions, segMul, randomness, jumpTime, onTargetHit)` pre-computes jagged bolt segments; `Play()` starts `async UniTaskVoid` that grows forward jump-by-jump then retracts |
-| `Shield/ShieldItemHandler` | Shield grant — increments `ShieldsRemaining` on the active projectile; spawns `PSVFX_ShieldGainPU` at the balloon's grid position |
+| `Shield/ShieldItemHandler` | Shield grant — increments `ShieldsRemaining` on the active projectile; spawns `PSVFX_ShieldGainPU` at the balloon's grid position. Does not deal damage |
 
 ## Architecture
 
@@ -67,27 +67,33 @@ Balloon (root)         ← BalloonLifetimeScope
 
 ### Activation flow
 
-1. `ProjectileView.OnTriggerEnter2D` publishes `BalloonHitMessage` for the hit balloon
+1. `ProjectileView.OnTriggerEnter2D` publishes `BalloonHitMessage` for the hit balloon (always `Damage = 1`)
 2. `BalloonController` receives it, calls `_view.Hide()` (disables collider and renderers), and waits for `ItemActivatedMessage` before returning to pool
 3. `ItemActivator` receives the same `BalloonHitMessage`, yields one frame, then calls `Setup(balloon, worldPos)` + `await Activate()` on the matching handler
-4. The handler runs its effect (may be async, e.g. lightning), publishing `BalloonHitMessage` for each secondary balloon
+4. The handler runs its effect (may be async, e.g. lightning), publishing `BalloonHitMessage` for each secondary balloon with `Damage = settings.Damage`
 5. `ItemActivator` publishes `ItemActivatedMessage` — `BalloonController` receives it and returns the item balloon to pool
 
 ## Item types
 
-| Type | Visual | Activation effect |
-|---|---|---|
-| **Bomb** | Bomb icon, tinted to host color | Area-of-effect explosion — destroys nearby balloons in a radius with exponential nudge falloff |
-| **Laser** | Rotating cross, tinted to host color | Cross-shaped beam — destroys balloons along four rotated axes; rotation is captured from `LaserItemRotation` at hit time |
-| **Lightning** | Lightning icon, tinted to host color | Chain lightning — hits all same-color balloons sequentially with a growing/retracting `LineRenderer` effect |
-| **Shield** | Shield icon, tinted to host color | Grants the active projectile +1 bounce shield |
+| Type | Visual | Activation effect | Damage |
+|---|---|---|---|
+| **Bomb** | Bomb icon, tinted to host color | Area-of-effect explosion — destroys nearby balloons in a radius with exponential nudge falloff | Configurable — set to 2 to instantly pop tough balloons |
+| **Laser** | Rotating cross, tinted to host color | Cross-shaped beam — destroys balloons along four rotated axes; rotation is captured from `LaserItemRotation` at hit time | Configurable |
+| **Lightning** | Lightning icon, tinted to host color | Chain lightning — hits all same-color balloons sequentially with a growing/retracting `LineRenderer` effect | Configurable |
+| **Shield** | Shield icon, tinted to host color | Grants the active projectile +1 bounce shield | N/A — no damage dealt |
+
+## Damage
+
+Each damaging item reads `ItemSettings.Damage` (configured per item in `ItemConfiguration`) and passes it as the `Damage` field of `BalloonHitMessage`. `BalloonController` subtracts that value from `HitsRemaining` in one step — exact kills and overkill both pop the balloon. Unbreakable balloons (`HitsRemaining = -1`) deflect regardless of damage value.
+
+Setting `Damage = 1` (the default) reproduces normal one-hit behaviour. Setting it higher on Bomb, for example, allows a single blast to pop tough balloons that would otherwise survive.
 
 ## Interactions
 
 - **Any host view** — calls `ItemDisplayService.Bind()`/`Unbind()` to connect/disconnect item display
-- **BalloonController** — defers balloon pool return until `ItemActivatedMessage` arrives; captures laser rotation and publishes `ItemRotationCapturedMessage`
+- **BalloonController** — defers balloon pool return until `ItemActivatedMessage` arrives; captures laser rotation and publishes `ItemRotationCapturedMessage`; applies `BalloonHitMessage.Damage` to `HitsRemaining`
 - **ItemActivator** — central orchestrator; routes activation to the correct handler after yielding one frame
 - **SlotGrid** — `LightningItemHandler` queries all balloons of a given color; `ShieldItemHandler` resolves the balloon's grid-center world position
 - **PoolManager** — item visual lifecycle via `ItemVisualPoolChannel`; activation effect lifecycle via `EffectPoolChannel`
 - **IEffect / EffectView** — `ChainLightningView` extends `EffectView`; all item activation effects that need async Play/Stop extend `EffectView`
-- **IGameConfiguration / ItemConfiguration** — color lookup, item settings (radius, nudge values, laser cast params, lightning timing)
+- **IGameConfiguration / ItemConfiguration** — color lookup, item settings (radius, nudge values, laser cast params, lightning timing, damage)

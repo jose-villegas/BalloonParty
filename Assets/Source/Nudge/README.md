@@ -10,7 +10,7 @@ Elastic push-out/return animations for balloons — triggered by projectile hits
 | `NudgeType` | `[Flags]` enum — `Deflect`, `Neighbor`, `Shockwave`; controls which override entries apply |
 | `NudgeOverride` | Serializable per-source struct: `AppliesTo` (flag mask), `Distance`, `Duration`, `Falloff` |
 | `BalloonNudgeMessage` | Pub/sub signal — carries target balloon (null = shockwave), origin, source type, and optional publisher overrides |
-| `Editor/NudgeOverrideDrawer` | Custom property drawer for `NudgeOverride[]` arrays in the Inspector |
+| `Editor/NudgeOverrideDrawer` | Extends `AutoFieldPropertyDrawer` (in `Source/Editor/`) — auto-draws `_distance` and `_duration`; pins `_appliesTo` above the auto section via `DrawPinnedFields` using `EnumFlagsField`; conditionally draws `_falloff` only when the Shockwave flag is set. Overrides `BuildFoldoutLabel` to append the current `NudgeType` value to each array element header (e.g. `Element 0  [Deflect]`) |
 
 ## Nudge types
 

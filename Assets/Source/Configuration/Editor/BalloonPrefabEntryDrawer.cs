@@ -1,102 +1,70 @@
-using BalloonParty.Configuration;
+using System.Collections.Generic;
+using BalloonParty.Editor;
 using UnityEditor;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Editor
 {
     [CustomPropertyDrawer(typeof(BalloonPrefabEntry))]
-    public class BalloonPrefabEntryDrawer : PropertyDrawer
+    public class BalloonPrefabEntryDrawer : AutoFieldPropertyDrawer
     {
-        private const float LineHeight = 20f;
-        private const float Spacing = 2f;
-
-        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        /// <summary>
+        ///     Fields handled manually because they have variable height, conditional
+        ///     visibility, or special layout. Everything else is drawn automatically.
+        /// </summary>
+        protected override HashSet<string> ExcludedFields { get; } = new()
         {
-            if (!property.isExpanded)
-            {
-                return LineHeight + Spacing;
-            }
+            "_nudgeOverrides",
+            "_overridePopVfx",
+            "_popVfxPrefab",
+        };
 
-            var lines = 5; // prefab, weight, maxCount, canHoldItem, hitsToPop
-
+        protected override float DrawSpecialFields(Rect position, float y, SerializedProperty property)
+        {
             var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
             if (nudgeOverrides != null)
             {
-                lines += 1; // array header
-                lines += (int)EditorGUI.GetPropertyHeight(nudgeOverrides, true) / (int)(LineHeight + Spacing);
+                var h = EditorGUI.GetPropertyHeight(nudgeOverrides, true);
+                EditorGUI.PropertyField(
+                    new Rect(position.x, y, position.width, h),
+                    nudgeOverrides,
+                    new GUIContent("Nudge Overrides"),
+                    true);
+                y += h + PropertyDrawerHelper.Spacing;
             }
 
-            lines += 1; // overridePopVfx toggle
+            y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_overridePopVfx", "Override Pop VFX");
+
             var overridePopVfx = property.FindPropertyRelative("_overridePopVfx");
             if (overridePopVfx != null && overridePopVfx.boolValue)
             {
-                lines += 1; // popVfxPrefab only
-            }
-
-            return (lines + 1) * (LineHeight + Spacing);
-        }
-
-        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-        {
-            EditorGUI.BeginProperty(position, label, property);
-
-            var headerRect = new Rect(position.x, position.y, position.width, LineHeight);
-            property.isExpanded = EditorGUI.Foldout(headerRect, property.isExpanded, label, true);
-
-            if (property.isExpanded)
-            {
                 var indent = EditorGUI.indentLevel;
                 EditorGUI.indentLevel = indent + 1;
-
-                var y = position.y + LineHeight + Spacing;
-
-                y = DrawField(position, y, property, "_prefab",      "Prefab");
-                y = DrawField(position, y, property, "_weight",      "Weight");
-                y = DrawField(position, y, property, "_maxCount",    "Max Count");
-                y = DrawField(position, y, property, "_hitsToPop",   "Hits To Pop");
-                y = DrawField(position, y, property, "_canHoldItem", "Can Hold Item");
-
-                var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
-                if (nudgeOverrides != null)
-                {
-                    var height = EditorGUI.GetPropertyHeight(nudgeOverrides, true);
-                    var rect = new Rect(position.x, y, position.width, height);
-                    EditorGUI.PropertyField(rect, nudgeOverrides, new GUIContent("Nudge Overrides"), true);
-                    y += height + Spacing;
-                }
-
-                y = DrawField(position, y, property, "_overridePopVfx", "Override Pop VFX");
-
-                var overridePopVfx = property.FindPropertyRelative("_overridePopVfx");
-                if (overridePopVfx != null && overridePopVfx.boolValue)
-                {
-                    EditorGUI.indentLevel = indent + 2;
-                    y = DrawField(position, y, property, "_popVfxPrefab", "VFX Prefab");
-                    EditorGUI.indentLevel = indent + 1;
-                }
-
+                y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_popVfxPrefab", "VFX Prefab");
                 EditorGUI.indentLevel = indent;
             }
 
-            EditorGUI.EndProperty();
+            return y;
         }
 
-        private static float DrawField(
-            Rect position,
-            float y,
-            SerializedProperty parent,
-            string fieldName,
-            string displayName)
+        protected override float GetSpecialFieldsHeight(SerializedProperty property)
         {
-            var prop = parent.FindPropertyRelative(fieldName);
-            if (prop == null)
+            var row = PropertyDrawerHelper.LineHeight + PropertyDrawerHelper.Spacing;
+
+            var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
+            var nudgeHeight = nudgeOverrides != null
+                ? EditorGUI.GetPropertyHeight(nudgeOverrides, true) + PropertyDrawerHelper.Spacing
+                : 0f;
+
+            var height = nudgeHeight + row;
+
+            var overridePopVfx = property.FindPropertyRelative("_overridePopVfx");
+            if (overridePopVfx != null && overridePopVfx.boolValue)
             {
-                return y;
+                height += row;
             }
 
-            var rect = new Rect(position.x, y, position.width, LineHeight);
-            EditorGUI.PropertyField(rect, prop, new GUIContent(displayName));
-            return y + LineHeight + Spacing;
+            return height;
         }
     }
 }
