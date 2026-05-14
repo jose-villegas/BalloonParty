@@ -71,7 +71,7 @@ namespace BalloonParty.UI.Score
             _streak++;
             _progressSlider.value = Mathf.Min(_progressSlider.value + msg.Points, _progressSlider.maxValue);
 
-            SpawnNotice(_streak);
+            SpawnNotice(_streak, msg.Points);
             SpawnTrailsAsync(TrailOrigins(msg.WorldPosition, msg.Points)).Forget();
 
             if (_progressSlider.value >= _progressSlider.maxValue)
@@ -93,22 +93,16 @@ namespace BalloonParty.UI.Score
             _animator.SetBool(CompletedParam, false);
         }
 
-        private void SpawnNotice(int points)
+        private void SpawnNotice(int streak, int points)
         {
-            DismissFullyShownNotices();
+            if (points <= 1)
+            {
+                DismissFullyShownNotices();
+                SpawnSingleNotice(streak, Vector2.zero);
+                return;
+            }
 
-            var notice = _poolManager.GetOrRegister(_noticePoolKey,
-                () => new ScoreNoticePoolChannel(_noticePrefab));
-
-            notice.SetParent(transform);
-            _activeNotices.Add(notice);
-            notice.Show(points,
-                _colorConfig.Color,
-                () =>
-                {
-                    _activeNotices.Remove(notice);
-                    _poolManager.Return(_noticePoolKey, notice);
-                });
+            SpawnScatteredNoticesAsync(points).Forget();
         }
 
         private void DismissFullyShownNotices()
@@ -118,6 +112,57 @@ namespace BalloonParty.UI.Score
                 if (_activeNotices[i].IsFullyShown)
                 {
                     _activeNotices[i].Dismiss();
+                }
+            }
+        }
+
+        private Vector2 RandomPositionInRect()
+        {
+            var rect = ((RectTransform)transform).rect;
+            return new Vector2(
+                Random.Range(rect.xMin, rect.xMax),
+                Random.Range(2f * rect.yMin, 2f * rect.yMax));
+        }
+
+        private void SpawnSingleNotice(int score, Vector2 anchoredPosition)
+        {
+            var notice = _poolManager.GetOrRegister(_noticePoolKey,
+                () => new ScoreNoticePoolChannel(_noticePrefab));
+
+            notice.SetParent(transform);
+            notice.SetAnchoredPosition(anchoredPosition);
+            _activeNotices.Add(notice);
+            notice.Show(score,
+                _colorConfig.Color,
+                () =>
+                {
+                    _activeNotices.Remove(notice);
+                    _poolManager.Return(_noticePoolKey, notice);
+                });
+        }
+
+        private void SpawnUntrackedNotice(Vector2 anchoredPosition)
+        {
+            var notice = _poolManager.GetOrRegister(_noticePoolKey,
+                () => new ScoreNoticePoolChannel(_noticePrefab));
+
+            notice.SetParent(transform);
+            notice.SetAnchoredPosition(anchoredPosition);
+            notice.Show(1,
+                _colorConfig.Color,
+                () => _poolManager.Return(_noticePoolKey, notice));
+        }
+
+
+        private async UniTaskVoid SpawnScatteredNoticesAsync(int count)
+        {
+            var delayMs = Mathf.RoundToInt(3f * _trailSpawnDelay * 1000f);
+            for (var i = 0; i < count; i++)
+            {
+                SpawnUntrackedNotice(RandomPositionInRect());
+                if (i < count - 1)
+                {
+                    await UniTask.Delay(delayMs, cancellationToken: destroyCancellationToken);
                 }
             }
         }

@@ -1,5 +1,4 @@
 using System;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
 using UnityEngine.UI;
@@ -34,9 +33,15 @@ namespace BalloonParty.UI.Score
 
         public void OnDespawned() { }
 
+        public void SetAnchoredPosition(Vector2 position)
+        {
+            ((RectTransform)transform).anchoredPosition = position;
+        }
+
         public void SetParent(Transform parent)
         {
             _parent = parent;
+            transform.SetParent(parent, false);
         }
 
         public void Show(int score, Color color, Action onComplete)
