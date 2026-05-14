@@ -1,6 +1,7 @@
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using TMPro;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -15,7 +16,7 @@ namespace BalloonParty.UI.LevelUp
         [Header("References")] [SerializeField]
         private Animator _animator;
 
-        [SerializeField] private Text _levelLabel;
+        [SerializeField] private TMP_Text _levelLabel;
         [SerializeField] private Image _levelGlowFill;
         [SerializeField] private ParticleSystem _levelGlowFillParticleSystem;
 

@@ -1,19 +1,19 @@
+using TMPro;
 using UniRx;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BalloonParty.UI.Score
 {
-    [RequireComponent(typeof(Text))]
+    [RequireComponent(typeof(TMP_Text))]
     public class LevelLabel : MonoBehaviour
     {
         [SerializeField] private bool _showNextLevel;
 
-        private Text _label;
+        private TMP_Text _label;
 
         private void Awake()
         {
-            _label = GetComponent<Text>();
+            _label = GetComponent<TMP_Text>();
         }
 
         public void Bind(IReadOnlyReactiveProperty<int> level)
