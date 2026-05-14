@@ -16,7 +16,7 @@ namespace BalloonParty.Nudge.Editor
         protected override HashSet<string> ExcludedFields { get; } = new()
         {
             "_appliesTo",
-            "_falloff",
+            "_falloff"
         };
 
         protected override GUIContent BuildFoldoutLabel(GUIContent label, SerializedProperty property)
@@ -58,7 +58,9 @@ namespace BalloonParty.Nudge.Editor
         }
 
         protected override float GetPinnedFieldsHeight(SerializedProperty property)
-            => PropertyDrawerHelper.LineHeight + PropertyDrawerHelper.Spacing;
+        {
+            return PropertyDrawerHelper.LineHeight + PropertyDrawerHelper.Spacing;
+        }
 
         protected override float GetSpecialFieldsHeight(SerializedProperty property)
         {

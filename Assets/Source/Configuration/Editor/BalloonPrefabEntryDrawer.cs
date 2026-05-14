@@ -16,7 +16,7 @@ namespace BalloonParty.Configuration.Editor
         {
             "_nudgeOverrides",
             "_overridePopVfx",
-            "_popVfxPrefab",
+            "_popVfxPrefab"
         };
 
         protected override float DrawSpecialFields(Rect position, float y, SerializedProperty property)

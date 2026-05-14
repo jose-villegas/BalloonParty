@@ -42,11 +42,9 @@ namespace BalloonParty.Item
             var turns = msg.TurnCount;
             var items = _itemConfig.Items;
 
-            // Filter by turn frequency
             var available = items
                 .Where(x => x.TurnCheckEvery > 0 && turns % x.TurnCheckEvery == 0);
 
-            // Filter by maximum cap
             available = available.Where(item =>
             {
                 var currentActive = CountBalloonsWithItem(item.Type);
@@ -60,7 +58,6 @@ namespace BalloonParty.Item
                 return;
             }
 
-            // Weighted random pick
             var sumOfProbabilities = candidates.Sum(x => x.Weight);
             var probabilityCheck = Random.Range(0f, sumOfProbabilities);
             var shift = 0f;
@@ -75,7 +72,10 @@ namespace BalloonParty.Item
                             .Where(b => b.CanHoldItem)
                             .ToList();
 
-                        if (eligible.Count == 0) { break; }
+                        if (eligible.Count == 0)
+                        {
+                            break;
+                        }
 
                         var indexOf = Random.Range(0, eligible.Count);
                         var balloon = (IWriteableBalloonModel)eligible[indexOf];

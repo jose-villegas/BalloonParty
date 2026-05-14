@@ -370,8 +370,6 @@ MonoBehaviour:
   - {fileID: 7503708300241224956}
   - {fileID: 4867988701194507481}
   - {fileID: 7087590600817567023}
-  _popVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d,
-    type: 3}
   _collider: {fileID: 7822387025677367451}
   _baseSortingLayer: 50
 --- !u!114 &-4720687053981353126
@@ -415,7 +413,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.SimpleBalloonType
   _typeName: 0
-  _hitsToPop: 1
   _allowedColorsMask: -1
 --- !u!1 &7558929490291297603
 GameObject:
@@ -524,7 +521,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 40d2c680aea5c40ce93a402222e4f4d8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

@@ -12,18 +12,16 @@ Shader "BalloonParty/Balloon/ToughBalloon"
         [Space(2)]
         // < 1 fast early / slow late  |  1 linear  |  > 1 slow early / dramatic late
         _DamageCurve ("Curve  (0.5 sqrt · 1 linear · 2 square)", Range(0.3, 3.0)) = 1.8
+        [GradientTexture] _AshGradient   ("Ash Gradient",   2D) = "white" {}
+        [GradientTexture] _CrackGradient ("Crack Gradient", 2D) = "white" {}
 
-        // ---- Surface appearance --------------------------------------------
-        [Header(Surface)]
-        _AshColor ("Ash Color (max damage)", Color) = (0.20, 0.20, 0.22, 1)
-
+        // ---- Rim -----------------------------------------------------------
         [Header(Rim)]
         _RimColor ("Color", Color) = (0.18, 0.18, 0.22, 1)
         _RimWidth ("Width", Range(0, 0.5)) = 0.11
 
         // ---- Voronoi cracks ------------------------------------------------
         [Header(Cracks  Base)]
-        _CrackColor ("Color", Color) = (0.55, 0.55, 0.60, 1)
         _CrackThreshold ("Edge Threshold", Range(0.02, 0.15)) = 0.08
         _CrackSharpness ("Sharpness", Range(5, 60)) = 28
 
@@ -83,13 +81,14 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             sampler2D _MainTex;
             fixed4 _Color;
 
-            float  _DamageProgress;
-            float  _DamageCurve;
+            float     _DamageProgress;
+            float     _DamageCurve;
+            sampler2D _AshGradient;
+            sampler2D _CrackGradient;
 
             fixed4 _RimColor;
             float  _RimWidth;
 
-            fixed4 _CrackColor;
             float  _VoronoiScale;
             float  _VoronoiScaleDamageBoost;
             float  _SphereWarp;
@@ -97,8 +96,6 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             float2 _VoronoiSeed;
             float  _CrackThreshold;
             float  _CrackSharpness;
-
-            fixed4 _AshColor;
 
             // ----------------------------------------------------------------
             // Voronoi helpers
@@ -172,8 +169,11 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 float  dmg    = _DamageProgress;
                 float  dmgVis = pow(dmg, _DamageCurve);
 
-                // ---- Base: black rubber, goes ashy under stress ----
-                fixed3 col = lerp(fixed3(0.04, 0.04, 0.05), _AshColor.rgb, dmgVis * dmgVis);
+                fixed3 ashColor   = tex2D(_AshGradient,   float2(dmgVis, 0.5)).rgb;
+                fixed3 crackColor = tex2D(_CrackGradient, float2(dmgVis, 0.5)).rgb;
+
+                // ---- Base: black rubber, bleaches toward ash gradient under stress ----
+                fixed3 col = lerp(fixed3(0.04, 0.04, 0.05), ashColor, dmgVis * dmgVis);
 
                 // ---- Rim / subsurface fringe (world-space — never rotates) -----
                 float rimW = _RimWidth * (1.0 - dmgVis * 0.72);
@@ -205,7 +205,7 @@ Shader "BalloonParty/Balloon/ToughBalloon"
 
                 float cellFracture = (1.0 - crackLine) * dmgVis * 0.35;
                 col = lerp(col, col * (1.0 - cellFracture), dmgVis);
-                col = lerp(col, _CrackColor.rgb, crackLine * crackFade * (1.0 - rim));
+                col = lerp(col, crackColor, crackLine * crackFade * (1.0 - rim));
 
                 return fixed4(col * alpha, alpha);
             }

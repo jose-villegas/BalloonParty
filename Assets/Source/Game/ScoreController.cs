@@ -94,8 +94,7 @@ namespace BalloonParty.Game
 
         private void OnBalloonHit(BalloonHitMessage msg)
         {
-            // Only score actual pops — deflections (HitsRemaining > 1 or -1) don't count
-            if (msg.Balloon.HitsRemaining.Value > 1 || msg.Balloon.HitsRemaining.Value == -1)
+            if (msg.Balloon.HitsRemaining.Value == -1 || msg.Balloon.HitsRemaining.Value - msg.Damage > 0)
             {
                 return;
             }

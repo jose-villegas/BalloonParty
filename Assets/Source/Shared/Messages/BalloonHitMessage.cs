@@ -16,7 +16,11 @@ namespace BalloonParty.Shared.Messages
         /// </summary>
         public readonly int Damage;
 
-        public BalloonHitMessage(IBalloonModel balloon, Vector3 worldPosition, Vector3 projectileDirection, int damage = 1)
+        public BalloonHitMessage(
+            IBalloonModel balloon,
+            Vector3 worldPosition,
+            Vector3 projectileDirection,
+            int damage = 1)
         {
             Balloon = balloon;
             WorldPosition = worldPosition;

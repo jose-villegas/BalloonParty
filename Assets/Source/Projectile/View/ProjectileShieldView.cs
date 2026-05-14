@@ -98,30 +98,9 @@ namespace BalloonParty.Projectile.View
             UpdateShieldVisuals(_previousShieldCount);
         }
 
-        private void UpdateShieldVisuals(int count)
+        private Color CurrentColor()
         {
-            for (var i = 0; i < _shields.Count; i++)
-            {
-                var target = i < count
-                    ? Vector3.one + (Vector3.right * _scaleIncrements.x * i) + (Vector3.up * _scaleIncrements.y * i)
-                    : Vector3.zero;
-
-                _shields[i].transform.DOScale(target, _scaleDuration);
-            }
-        }
-
-        private void UpdateColor(string colorName)
-        {
-            _currentColor = _palette.GetColor(colorName);
-            var targetColor = new Color(_currentColor.r, _currentColor.g, _currentColor.b, _alpha);
-
-            foreach (var shield in _shields)
-            {
-                if (shield != null)
-                {
-                    shield.DOColor(targetColor, _colorDuration);
-                }
-            }
+            return _currentColor;
         }
 
         private void PlayShieldChangeFx(int currentCount)
@@ -140,11 +119,6 @@ namespace BalloonParty.Projectile.View
                 var rotation = Quaternion.LookRotation(Vector3.forward, direction);
                 SpawnVfxRotated(_shieldLoseVfxPrefab, transform.position, rotation, CurrentColor());
             }
-        }
-
-        private Color CurrentColor()
-        {
-            return _currentColor;
         }
 
         private void SpawnVfx(ParticleSystem prefab, Vector3 position, Color color)
@@ -169,6 +143,32 @@ namespace BalloonParty.Projectile.View
             var key = prefab.name;
             var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(prefab.gameObject));
             effect.Play(position, rotation, color, () => _poolManager.Return(key, effect));
+        }
+
+        private void UpdateColor(string colorName)
+        {
+            _currentColor = _palette.GetColor(colorName);
+            var targetColor = new Color(_currentColor.r, _currentColor.g, _currentColor.b, _alpha);
+
+            foreach (var shield in _shields)
+            {
+                if (shield != null)
+                {
+                    shield.DOColor(targetColor, _colorDuration);
+                }
+            }
+        }
+
+        private void UpdateShieldVisuals(int count)
+        {
+            for (var i = 0; i < _shields.Count; i++)
+            {
+                var target = i < count
+                    ? Vector3.one + (Vector3.right * _scaleIncrements.x * i) + (Vector3.up * _scaleIncrements.y * i)
+                    : Vector3.zero;
+
+                _shields[i].transform.DOScale(target, _scaleDuration);
+            }
         }
     }
 }

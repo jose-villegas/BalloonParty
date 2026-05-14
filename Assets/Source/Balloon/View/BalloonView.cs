@@ -164,7 +164,7 @@ namespace BalloonParty.Balloon.View
             var defaultPrefab = _balloonsConfig.DefaultPopVfxPrefab;
             if (defaultPrefab == null || string.IsNullOrEmpty(Model?.Color.Value))
             {
-                return; // No VFX configured for this balloon type
+                return;
             }
 
             var defaultKey = defaultPrefab.name;

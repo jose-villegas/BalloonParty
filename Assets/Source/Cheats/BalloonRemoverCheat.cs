@@ -15,9 +15,9 @@ namespace BalloonParty.Cheats
         private const float PickRadius = 0.25f;
         private const float PathSampleDistance = 0.05f;
 
-        private static readonly int SrcBlendId = Shader.PropertyToID("_SrcBlend");
-        private static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
         private static readonly int CullId = Shader.PropertyToID("_Cull");
+        private static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
+        private static readonly int SrcBlendId = Shader.PropertyToID("_SrcBlend");
         private static readonly int ZWriteId = Shader.PropertyToID("_ZWrite");
 
         [Inject] private IPublisher<BalanceBalloonsMessage> _publisher;

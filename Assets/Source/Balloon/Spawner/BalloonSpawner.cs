@@ -85,6 +85,77 @@ namespace BalloonParty.Balloon.Spawner
             _newlySpawnedBalloons.Clear();
         }
 
+        private void AnimateSpawn(BalloonView view, Vector3 targetPosition, IWriteableBalloonModel model)
+        {
+            model.IsStable.Value = false;
+            view.transform.localScale = Vector3.zero;
+
+            var duration = Random.Range(
+                _balloonsConfig.BalloonSpawnAnimationDurationRange.x,
+                _balloonsConfig.BalloonSpawnAnimationDurationRange.y);
+
+            view.transform.DOMove(targetPosition, duration)
+                .OnComplete(() => model.IsStable.Value = true);
+
+            view.transform.DOScale(Vector3.one, duration);
+        }
+
+        private int? FindFirstEmptyRowFromTop(int col)
+        {
+            for (var row = 0; row < _grid.Rows; row++)
+            {
+                if (_grid.IsEmpty(col, row))
+                {
+                    return row;
+                }
+            }
+
+            return null;
+        }
+
+        private void OnProjectileDestroyed()
+        {
+            _turnCount++;
+            if (_turnCount <= 1)
+            {
+                return;
+            }
+
+            SpawnLinesWithDelayAsync(_balloonsConfig.NewProjectileBalloonLines, _cts.Token).Forget();
+        }
+
+        private void OnSpawnLinesRequested(int lineCount)
+        {
+            if (lineCount <= 1)
+            {
+                SpawnLine();
+                return;
+            }
+
+            SpawnLinesWithDelayAsync(lineCount, _cts.Token).Forget();
+        }
+
+        private void PopulateInitialGrid()
+        {
+            for (var row = 0; row < _balloonsConfig.GameStartedBalloonLines; row++)
+            {
+                for (var col = 0; col < _grid.Columns; col++)
+                {
+                    SpawnBalloon(new Vector2Int(col, row));
+                }
+            }
+        }
+
+        private void PublishItemCheck()
+        {
+            if (_newlySpawnedBalloons.Count > 0)
+            {
+                _itemCheckPublisher.Publish(
+                    new ItemCheckMessage(_newlySpawnedBalloons.ToArray(), _turnCount));
+                _newlySpawnedBalloons.Clear();
+            }
+        }
+
         private void SpawnBalloon(Vector2Int slot)
         {
             var entry = _balloonsConfig.PickRandom(_activeCounts);
@@ -132,17 +203,6 @@ namespace BalloonParty.Balloon.Spawner
             _newlySpawnedBalloons.Add(model);
         }
 
-        private void PopulateInitialGrid()
-        {
-            for (var row = 0; row < _balloonsConfig.GameStartedBalloonLines; row++)
-            {
-                for (var col = 0; col < _grid.Columns; col++)
-                {
-                    SpawnBalloon(new Vector2Int(col, row));
-                }
-            }
-        }
-
         private void SpawnLine()
         {
             SpawnLineInternal();
@@ -164,56 +224,6 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        private void AnimateSpawn(BalloonView view, Vector3 targetPosition, IWriteableBalloonModel model)
-        {
-            model.IsStable.Value = false;
-            view.transform.localScale = Vector3.zero;
-
-            var duration = Random.Range(
-                _balloonsConfig.BalloonSpawnAnimationDurationRange.x,
-                _balloonsConfig.BalloonSpawnAnimationDurationRange.y);
-
-            view.transform.DOMove(targetPosition, duration)
-                .OnComplete(() => model.IsStable.Value = true);
-
-            view.transform.DOScale(Vector3.one, duration);
-        }
-
-        private int? FindFirstEmptyRowFromTop(int col)
-        {
-            for (var row = 0; row < _grid.Rows; row++)
-            {
-                if (_grid.IsEmpty(col, row))
-                {
-                    return row;
-                }
-            }
-
-            return null;
-        }
-
-        private void OnSpawnLinesRequested(int lineCount)
-        {
-            if (lineCount <= 1)
-            {
-                SpawnLine();
-                return;
-            }
-
-            SpawnLinesWithDelayAsync(lineCount, _cts.Token).Forget();
-        }
-
-        private void OnProjectileDestroyed()
-        {
-            _turnCount++;
-            if (_turnCount <= 1)
-            {
-                return;
-            }
-
-            SpawnLinesWithDelayAsync(_balloonsConfig.NewProjectileBalloonLines, _cts.Token).Forget();
-        }
-
         private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct)
         {
             for (var i = 0; i < lineCount; i++)
@@ -226,16 +236,6 @@ namespace BalloonParty.Balloon.Spawner
 
             PublishItemCheck();
             _balancePublisher.Publish(default);
-        }
-
-        private void PublishItemCheck()
-        {
-            if (_newlySpawnedBalloons.Count > 0)
-            {
-                _itemCheckPublisher.Publish(
-                    new ItemCheckMessage(_newlySpawnedBalloons.ToArray(), _turnCount));
-                _newlySpawnedBalloons.Clear();
-            }
         }
     }
 }

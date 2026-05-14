@@ -19,11 +19,11 @@ namespace BalloonParty.Item.Lightning
         [SerializeField] private LineRenderer _glowLineRenderer;
 
         private CancellationTokenSource _cts;
-        private List<Vector3> _targetPositions;
-        private float _segmentsMultiplier;
-        private float _randomness;
         private float _jumpTime;
         private Action<int> _onTargetHit;
+        private float _randomness;
+        private float _segmentsMultiplier;
+        private List<Vector3> _targetPositions;
 
         public override void OnSpawned()
         {
@@ -81,6 +81,48 @@ namespace BalloonParty.Item.Lightning
             _onTargetHit = onTargetHit;
         }
 
+        private void ClearRenderers()
+        {
+            if (_lineRenderers != null)
+            {
+                foreach (var lr in _lineRenderers)
+                {
+                    if (lr != null)
+                    {
+                        lr.positionCount = 0;
+                    }
+                }
+            }
+
+            if (_glowLineRenderer != null)
+            {
+                _glowLineRenderer.positionCount = 0;
+            }
+        }
+
+        // No allocation — buffer is pre-allocated per renderer and reused across all jumps.
+        private static void FillSegment(
+            Vector3 origin,
+            Vector3 target,
+            int segments,
+            float randomness,
+            Vector3[] buffer,
+            int offset)
+        {
+            buffer[offset] = origin;
+
+            for (var k = 1; k < segments - 1; k++)
+            {
+                var lerped = Vector3.Lerp(origin, target, k / (float)segments);
+                buffer[offset + k] = new Vector3(
+                    lerped.x + UnityEngine.Random.Range(-randomness, randomness),
+                    lerped.y + UnityEngine.Random.Range(-randomness, randomness),
+                    0f);
+            }
+
+            buffer[offset + segments - 1] = target;
+        }
+
         private async UniTaskVoid PlayAsync()
         {
             var ct = _cts?.Token ?? CancellationToken.None;
@@ -88,9 +130,6 @@ namespace BalloonParty.Item.Lightning
             var rendererCount = _lineRenderers != null ? _lineRenderers.Length : 0;
             var delayMs = Mathf.RoundToInt(_jumpTime * 1000f);
 
-            // segmentSizes[i]  = number of points for jump i
-            // cumOffsets[i]    = total points used by jumps 0 … i-1
-            // cumOffsets[jumpCount] = total points for all jumps combined
             var segmentSizes = new int[jumpCount];
             for (var i = 0; i < jumpCount; i++)
             {
@@ -191,7 +230,6 @@ namespace BalloonParty.Item.Lightning
             InvokeComplete();
         }
 
-
         private void SyncGlow(Vector3[][] lineBuffers, int count, int rendererCount)
         {
             if (_glowLineRenderer == null || rendererCount == 0)
@@ -203,48 +241,6 @@ namespace BalloonParty.Item.Lightning
             if (count > 0)
             {
                 _glowLineRenderer.SetPositions(lineBuffers[0]);
-            }
-        }
-
-        // No allocation — buffer is pre-allocated per renderer and reused across all jumps.
-        private static void FillSegment(
-            Vector3 origin,
-            Vector3 target,
-            int segments,
-            float randomness,
-            Vector3[] buffer,
-            int offset)
-        {
-            buffer[offset] = origin;
-
-            for (var k = 1; k < segments - 1; k++)
-            {
-                var lerped = Vector3.Lerp(origin, target, k / (float)segments);
-                buffer[offset + k] = new Vector3(
-                    lerped.x + UnityEngine.Random.Range(-randomness, randomness),
-                    lerped.y + UnityEngine.Random.Range(-randomness, randomness),
-                    0f);
-            }
-
-            buffer[offset + segments - 1] = target;
-        }
-
-        private void ClearRenderers()
-        {
-            if (_lineRenderers != null)
-            {
-                foreach (var lr in _lineRenderers)
-                {
-                    if (lr != null)
-                    {
-                        lr.positionCount = 0;
-                    }
-                }
-            }
-
-            if (_glowLineRenderer != null)
-            {
-                _glowLineRenderer.positionCount = 0;
             }
         }
     }

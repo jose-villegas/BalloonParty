@@ -21,9 +21,9 @@ namespace BalloonParty.Balloon.Controller
         private readonly NudgeOverride[] _nudgeOverrides;
         private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
         private readonly Action _onReturned;
-        private readonly ParticleSystem _popVfxOverride;
         private readonly string _poolKey;
         private readonly PoolManager _poolManager;
+        private readonly ParticleSystem _popVfxOverride;
         private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
         private readonly BalloonView _view;
 

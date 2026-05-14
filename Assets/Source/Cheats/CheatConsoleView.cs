@@ -9,8 +9,8 @@ namespace BalloonParty.Cheats
 {
     public class CheatConsoleView : MonoBehaviour
     {
-        private const float MinHeight = 80f;
         private const float HandleHeight = 14f;
+        private const float MinHeight = 80f;
         private const float ReferenceHeight = 720f;
 
         [Inject] private IEnumerable<ICheat> _cheats;
@@ -88,6 +88,48 @@ namespace BalloonParty.Cheats
             GUILayout.EndArea();
         }
 
+        private List<ICheat> ApplyFilters(List<ICheat> cheats)
+        {
+            var result = cheats.AsEnumerable();
+
+            if (!string.IsNullOrEmpty(_search))
+            {
+                result = result.Where(c => c.Name.ToLower().Contains(_search.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(_activeTag))
+            {
+                result = result.Where(c => c.Tags.Contains(_activeTag));
+            }
+
+            return result.ToList();
+        }
+
+        private void DrawCheatRow(ICheat cheat)
+        {
+            GUILayout.BeginHorizontal();
+
+            var isFavorite = _favorites.Contains(cheat.Name);
+            if (GUILayout.Button(isFavorite ? "★" : "☆", GUILayout.Width(28)))
+            {
+                if (isFavorite)
+                {
+                    _favorites.Remove(cheat.Name);
+                }
+                else
+                {
+                    _favorites.Add(cheat.Name);
+                }
+            }
+
+            if (GUILayout.Button(cheat.Name))
+            {
+                cheat.Execute();
+            }
+
+            GUILayout.EndHorizontal();
+        }
+
         private void DrawContent()
         {
             var cheats = _cheats.ToList();
@@ -127,6 +169,15 @@ namespace BalloonParty.Cheats
             GUILayout.EndHorizontal();
         }
 
+        private void DrawSection(string title, List<ICheat> cheats)
+        {
+            GUILayout.Label($"— {title} —");
+            foreach (var cheat in cheats)
+            {
+                DrawCheatRow(cheat);
+            }
+        }
+
         private void DrawTagFilters(List<ICheat> cheats)
         {
             var allTags = cheats.SelectMany(c => c.Tags).Distinct().OrderBy(t => t).ToList();
@@ -153,57 +204,6 @@ namespace BalloonParty.Cheats
             }
 
             GUILayout.EndHorizontal();
-        }
-
-        private void DrawSection(string title, List<ICheat> cheats)
-        {
-            GUILayout.Label($"— {title} —");
-            foreach (var cheat in cheats)
-            {
-                DrawCheatRow(cheat);
-            }
-        }
-
-        private void DrawCheatRow(ICheat cheat)
-        {
-            GUILayout.BeginHorizontal();
-
-            var isFavorite = _favorites.Contains(cheat.Name);
-            if (GUILayout.Button(isFavorite ? "★" : "☆", GUILayout.Width(28)))
-            {
-                if (isFavorite)
-                {
-                    _favorites.Remove(cheat.Name);
-                }
-                else
-                {
-                    _favorites.Add(cheat.Name);
-                }
-            }
-
-            if (GUILayout.Button(cheat.Name))
-            {
-                cheat.Execute();
-            }
-
-            GUILayout.EndHorizontal();
-        }
-
-        private List<ICheat> ApplyFilters(List<ICheat> cheats)
-        {
-            var result = cheats.AsEnumerable();
-
-            if (!string.IsNullOrEmpty(_search))
-            {
-                result = result.Where(c => c.Name.ToLower().Contains(_search.ToLower()));
-            }
-
-            if (!string.IsNullOrEmpty(_activeTag))
-            {
-                result = result.Where(c => c.Tags.Contains(_activeTag));
-            }
-
-            return result.ToList();
         }
     }
 }

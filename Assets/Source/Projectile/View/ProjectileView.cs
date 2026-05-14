@@ -73,7 +73,6 @@ namespace BalloonParty.Projectile.View
 
             _model.LastHitBalloon = balloonModel;
 
-            // Only track color streak on actual pops of colored balloons
             if (balloonModel.HitsRemaining.Value <= 1 && !string.IsNullOrEmpty(balloonModel.Color.Value))
             {
                 TrackColorStreak(balloonModel.Color.Value);

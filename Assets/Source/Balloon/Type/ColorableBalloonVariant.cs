@@ -27,7 +27,6 @@ namespace BalloonParty.Balloon.Type
                 return null;
             }
 
-            // Collect allowed color names from bitmask
             var colors = _palette.Colors;
             var count = 0;
 

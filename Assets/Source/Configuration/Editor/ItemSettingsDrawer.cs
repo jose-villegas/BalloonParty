@@ -21,7 +21,7 @@ namespace BalloonParty.Configuration.Editor
             "_laserCircleCastRadius",
             "_lightningSegmentsMultiplier",
             "_lightningRandomness",
-            "_lightningJumpTime",
+            "_lightningJumpTime"
         };
 
         protected override GUIContent BuildFoldoutLabel(GUIContent label, SerializedProperty property)
@@ -50,18 +50,35 @@ namespace BalloonParty.Configuration.Editor
                             true);
                         y += h + PropertyDrawerHelper.Spacing;
                     }
+
                     break;
 
                 case ItemType.Laser:
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Laser");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_laserRaycastDistance", "Raycast Distance");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_laserCircleCastRadius", "Circle Cast Radius");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_laserRaycastDistance",
+                        "Raycast Distance");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_laserCircleCastRadius",
+                        "Circle Cast Radius");
                     break;
 
                 case ItemType.Lightning:
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Lightning");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_lightningSegmentsMultiplier", "Segments Multiplier");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_lightningRandomness", "Randomness");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_lightningSegmentsMultiplier",
+                        "Segments Multiplier");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_lightningRandomness",
+                        "Randomness");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_lightningJumpTime", "Jump Time");
                     break;
             }
@@ -81,7 +98,7 @@ namespace BalloonParty.Configuration.Editor
                     var nudgeHeight = nudgeOverrides != null
                         ? EditorGUI.GetPropertyHeight(nudgeOverrides, true) + PropertyDrawerHelper.Spacing
                         : 0f;
-                    return row * 2 + nudgeHeight;
+                    return (row * 2) + nudgeHeight;
 
                 case ItemType.Laser:
                     return row * 3;

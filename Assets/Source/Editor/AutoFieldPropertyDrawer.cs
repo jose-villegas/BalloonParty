@@ -72,7 +72,9 @@ namespace BalloonParty.Editor
         ///     Default returns <paramref name="label"/> unchanged.
         /// </summary>
         protected virtual GUIContent BuildFoldoutLabel(GUIContent label, SerializedProperty property)
-            => label;
+        {
+            return label;
+        }
 
         /// <summary>
         ///     Draws fields that must appear above the auto section, such as an enum
@@ -81,7 +83,9 @@ namespace BalloonParty.Editor
         ///     Override together with <see cref="GetPinnedFieldsHeight"/>. Default does nothing.
         /// </summary>
         protected virtual float DrawPinnedFields(Rect position, float y, SerializedProperty property)
-            => y;
+        {
+            return y;
+        }
 
         /// <summary>
         ///     Draws the excluded fields below the auto section and returns the updated Y position.
@@ -92,7 +96,10 @@ namespace BalloonParty.Editor
         ///     Returns the pixel height of any fields pinned above the auto section.
         ///     Override together with <see cref="DrawPinnedFields"/>. Default returns 0.
         /// </summary>
-        protected virtual float GetPinnedFieldsHeight(SerializedProperty property) => 0f;
+        protected virtual float GetPinnedFieldsHeight(SerializedProperty property)
+        {
+            return 0f;
+        }
 
         /// <summary>
         ///     Returns the total pixel height required by the special (excluded) section.

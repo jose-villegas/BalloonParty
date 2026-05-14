@@ -15,8 +15,8 @@ namespace BalloonParty.Balloon.Controller
     public class BalloonBalancer : IStartable
     {
         private readonly BalloonsConfiguration _balloonsConfig;
-        private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
         private readonly SlotGrid _grid;
+        private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
 
         private bool _balanceRequested;
 
@@ -36,22 +36,31 @@ namespace BalloonParty.Balloon.Controller
             _subscriber.Subscribe(_ => RequestBalance());
         }
 
-        private void RequestBalance()
+        private void AnimatePaths(Dictionary<IWriteableBalloonModel, List<Vector3>> paths)
         {
-            if (_balanceRequested)
+            foreach (var (balloon, path) in paths)
             {
-                return;
+                var view = _grid.ViewAt(balloon.SlotIndex.Value);
+                if (view == null)
+                {
+                    continue;
+                }
+
+                view.TweenTracker.Kill();
+                view.transform.DOKill();
+
+                var currentScale = view.transform.localScale;
+                var tween = view.transform
+                    .DOPath(path.ToArray(), _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
+                    .OnComplete(() => balloon.IsStable.Value = true);
+
+                view.TweenTracker.Append(tween);
+
+                if (currentScale != Vector3.one)
+                {
+                    view.transform.DOScale(Vector3.one, _balloonsConfig.TimeForBalloonsBalance);
+                }
             }
-
-            _balanceRequested = true;
-            BalanceNextFrameAsync().Forget();
-        }
-
-        private async UniTaskVoid BalanceNextFrameAsync()
-        {
-            await UniTask.Yield();
-            _balanceRequested = false;
-            Balance();
         }
 
         private void Balance()
@@ -108,31 +117,22 @@ namespace BalloonParty.Balloon.Controller
             AnimatePaths(paths);
         }
 
-        private void AnimatePaths(Dictionary<IWriteableBalloonModel, List<Vector3>> paths)
+        private async UniTaskVoid BalanceNextFrameAsync()
         {
-            foreach (var (balloon, path) in paths)
+            await UniTask.Yield();
+            _balanceRequested = false;
+            Balance();
+        }
+
+        private void RequestBalance()
+        {
+            if (_balanceRequested)
             {
-                var view = _grid.ViewAt(balloon.SlotIndex.Value);
-                if (view == null)
-                {
-                    continue;
-                }
-
-                view.TweenTracker.Kill();
-                view.transform.DOKill();
-
-                var currentScale = view.transform.localScale;
-                var tween = view.transform
-                    .DOPath(path.ToArray(), _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
-                    .OnComplete(() => balloon.IsStable.Value = true);
-
-                view.TweenTracker.Append(tween);
-
-                if (currentScale != Vector3.one)
-                {
-                    view.transform.DOScale(Vector3.one, _balloonsConfig.TimeForBalloonsBalance);
-                }
+                return;
             }
+
+            _balanceRequested = true;
+            BalanceNextFrameAsync().Forget();
         }
     }
 }
