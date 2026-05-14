@@ -4,6 +4,7 @@ using BalloonParty.Game;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
@@ -26,6 +27,7 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ParticleSystem _completionParticleSystem;
         [SerializeField] private ScoreNotice _noticePrefab;
         [SerializeField] private ScorePointTrail _trailPrefab;
+        [SerializeField] private float _trailSpawnDelay = 0.08f;
 
         [Inject] private IGameConfiguration _config;
         [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
@@ -35,7 +37,7 @@ namespace BalloonParty.UI.Score
         private readonly List<ScoreNotice> _activeNotices = new();
 
         private PaletteEntry _colorConfig;
-        private int _localCount;
+        private int _streak;
         private string _noticePoolKey;
         private string _trailPoolKey;
 
@@ -62,15 +64,15 @@ namespace BalloonParty.UI.Score
         {
             if (msg.ColorName != _colorConfig.Name)
             {
-                _localCount = 0;
+                _streak = 0;
                 return;
             }
 
-            _localCount++;
-            _progressSlider.value = Mathf.Min(_progressSlider.value + 1, _progressSlider.maxValue);
+            _streak++;
+            _progressSlider.value = Mathf.Min(_progressSlider.value + msg.Points, _progressSlider.maxValue);
 
-            SpawnNotice();
-            SpawnTrail(msg.WorldPosition);
+            SpawnNotice(_streak);
+            SpawnTrailsAsync(TrailOrigins(msg.WorldPosition, msg.Points)).Forget();
 
             if (_progressSlider.value >= _progressSlider.maxValue)
             {
@@ -82,7 +84,7 @@ namespace BalloonParty.UI.Score
 
         private void OnLevelUp(ScoreLevelUpMessage msg)
         {
-            _localCount = 0;
+            _streak = 0;
             _progressSlider.maxValue = _config.PointsRequiredForLevel(msg.NewLevel + 1);
             _progressSlider.value = 0;
 
@@ -91,7 +93,7 @@ namespace BalloonParty.UI.Score
             _animator.SetBool(CompletedParam, false);
         }
 
-        private void SpawnNotice()
+        private void SpawnNotice(int points)
         {
             DismissFullyShownNotices();
 
@@ -100,7 +102,7 @@ namespace BalloonParty.UI.Score
 
             notice.SetParent(transform);
             _activeNotices.Add(notice);
-            notice.Show(_localCount,
+            notice.Show(points,
                 _colorConfig.Color,
                 () =>
                 {
@@ -118,6 +120,39 @@ namespace BalloonParty.UI.Score
                     _activeNotices[i].Dismiss();
                 }
             }
+        }
+
+        private async UniTaskVoid SpawnTrailsAsync(Vector3[] origins)
+        {
+            var delayMs = Mathf.RoundToInt(_trailSpawnDelay * 1000f);
+            for (var i = 0; i < origins.Length; i++)
+            {
+                SpawnTrail(origins[i]);
+                if (i < origins.Length - 1)
+                {
+                    await UniTask.Delay(delayMs, cancellationToken: destroyCancellationToken);
+                }
+            }
+        }
+
+        private Vector3[] TrailOrigins(Vector3 center, int count)
+        {
+            var origins = new Vector3[count];
+
+            if (count <= 1)
+            {
+                origins[0] = center;
+                return origins;
+            }
+
+            var radius = Mathf.Min(_config.SlotSeparation.x, _config.SlotSeparation.y) * 1.5f;
+            for (var i = 0; i < count; i++)
+            {
+                var angle = 2f * Mathf.PI * i / count;
+                origins[i] = center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius;
+            }
+
+            return origins;
         }
 
         private void SpawnTrail(Vector3 fromWorldPosition)

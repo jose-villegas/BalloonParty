@@ -7,12 +7,14 @@ namespace BalloonParty.Shared.Messages
         public readonly string ColorName;
         public readonly Vector3 WorldPosition;
         public readonly int TotalScore;
+        public readonly int Points;
 
-        public BalloonScoredMessage(string colorName, Vector3 worldPosition, int totalScore)
+        public BalloonScoredMessage(string colorName, Vector3 worldPosition, int totalScore, int points)
         {
-            ColorName = colorName;
+            ColorName     = colorName;
             WorldPosition = worldPosition;
-            TotalScore = totalScore;
+            TotalScore    = totalScore;
+            Points        = points;
         }
     }
 }

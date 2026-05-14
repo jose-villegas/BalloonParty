@@ -17,5 +17,6 @@ namespace BalloonParty.Balloon.Model
 
         new NudgeOverride[] NudgeOverrides { get; set; }
         new bool CanHoldItem { get; set; }
+        new int ScoreValue { get; set; }
     }
 }

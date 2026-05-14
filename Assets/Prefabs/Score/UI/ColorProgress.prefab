@@ -106,6 +106,7 @@ MonoBehaviour:
     type: 3}
   _trailPrefab: {fileID: 1429749022553535108, guid: 17e678e81b22a4d3481d8307861019b8,
     type: 3}
+  _trailSpawnDelay: 0.02
 --- !u!1 &2206703212851759282
 GameObject:
   m_ObjectHideFlags: 0

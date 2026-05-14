@@ -105,13 +105,14 @@ namespace BalloonParty.Game
                 return;
             }
 
-            _persistentScore[color]++;
-            _levelProgress[color]++;
+            var points = msg.Balloon.ScoreValue;
+            _persistentScore[color] += points;
+            _levelProgress[color]   += points;
             _totalScore.Value = _persistentScore.Values.Sum();
 
             CheckLevelUp();
 
-            _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, _totalScore.Value));
+            _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, _totalScore.Value, points));
         }
 
         private void CheckLevelUp()

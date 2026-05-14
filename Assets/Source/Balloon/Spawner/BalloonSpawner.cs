@@ -178,6 +178,8 @@ namespace BalloonParty.Balloon.Spawner
             model.SlotIndex.Value = slot;
             model.CanHoldItem = entry.CanHoldItem;
             model.HitsRemaining.Value = entry.HitsToPop;
+            model.TypeName.Value = entry.BalloonType;
+            model.ScoreValue = entry.ScoreValue;
 
             var variant = view.GetComponentInParent<IBalloonVariant>();
             variant.Initialize(model);

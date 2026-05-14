@@ -69,8 +69,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 9.5, y: -2}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchoredPosition: {x: 30.5473, y: -2}
+  m_SizeDelta: {x: 47.3273, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8413169285119971553
 CanvasRenderer:
@@ -94,7 +94,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 0.8627451}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -107,7 +107,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -173,7 +173,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.95, g: 0.95, b: 0.9098039, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -227,8 +227,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 7.5, y: 0}
-  m_SizeDelta: {x: 30, y: 30}
+  m_AnchoredPosition: {x: 27.392212, y: 0}
+  m_SizeDelta: {x: 47.3273, y: 30}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &1842159610333394552
 CanvasRenderer:
@@ -252,7 +252,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.95, g: 0.95, b: 0.9098039, a: 1}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -265,7 +265,7 @@ MonoBehaviour:
     m_BestFit: 0
     m_MinSize: 1
     m_MaxSize: 40
-    m_Alignment: 4
+    m_Alignment: 3
     m_AlignByGeometry: 0
     m_RichText: 1
     m_HorizontalOverflow: 0
@@ -331,7 +331,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 0.8627451}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -463,26 +463,26 @@ MonoBehaviour:
       inWeight: 0.23312885
       outWeight: 0.33333334
     - serializedVersion: 3
-      time: 3
-      value: 1
-      inSlope: 0.34041274
-      outSlope: 0.34041274
+      time: 3.5583205
+      value: 0.8737625
+      inSlope: 0.0762446
+      outSlope: 0.0762446
       tangentMode: 0
       weightedMode: 0
-      inWeight: 0.13496935
-      outWeight: 0.33333334
+      inWeight: 0.11991726
+      outWeight: 0.09513347
     - serializedVersion: 3
-      time: 5
-      value: 1.5
-      inSlope: 0.12617171
-      outSlope: 0.12617171
+      time: 6.975782
+      value: 1.0965958
+      inSlope: 0.11654888
+      outSlope: 0.11654888
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.33333334
-      outWeight: 0.33333334
+      outWeight: 0.08915266
     - serializedVersion: 3
-      time: 10.0061035
-      value: 2.5
+      time: 10
+      value: 1.5
       inSlope: 0.17055638
       outSlope: 0.17055638
       tangentMode: 0

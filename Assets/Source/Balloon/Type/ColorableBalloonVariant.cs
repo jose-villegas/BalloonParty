@@ -7,16 +7,12 @@ namespace BalloonParty.Balloon.Type
 {
     public abstract class ColorableBalloonVariant : MonoBehaviour, IBalloonVariant
     {
-        [SerializeField] private BalloonType _typeName;
         [SerializeField] [PaletteColorMask] private int _allowedColorsMask = ~0;
 
         [Inject] private GamePalette _palette;
 
-        public BalloonType TypeName => _typeName;
-
         public virtual void Initialize(IWriteableBalloonModel model)
         {
-            model.TypeName.Value = _typeName;
             model.Color.Value = PickColor() ?? "";
         }
 

@@ -11,7 +11,6 @@ namespace BalloonParty.Balloon.Type
         private static readonly int DamageProgressId = Shader.PropertyToID("_DamageProgress");
         private static readonly int VoronoiSeedId = Shader.PropertyToID("_VoronoiSeed");
 
-        [SerializeField] private BalloonType _typeName = BalloonType.Tough;
         [SerializeField] private SpriteRenderer _renderer;
         [SerializeField] private float _crackAnimDuration = 0.5f;
 
@@ -19,7 +18,6 @@ namespace BalloonParty.Balloon.Type
         private Tween _damageTween;
         private float _currentDamageProgress;
 
-        public BalloonType TypeName => _typeName;
 
         private void Awake()
         {
@@ -68,10 +66,7 @@ namespace BalloonParty.Balloon.Type
                 .AddTo(disposables);
         }
 
-        public void Initialize(IWriteableBalloonModel model)
-        {
-            model.TypeName.Value = _typeName;
-        }
+        public void Initialize(IWriteableBalloonModel model) { }
 
         private void SetFloat(int id, float value)
         {
