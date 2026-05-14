@@ -605,7 +605,7 @@ ParticleSystem:
         m_RotationOrder: 4
     randomizeRotationDirection: 0
     gravitySource: 1
-    maxNumParticles: 10
+    maxNumParticles: 30
     customEmitterVelocity: {x: 0, y: 0, z: 0}
     size3D: 0
     rotation3D: 0
@@ -871,7 +871,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 1
+      scalar: 5
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -1770,7 +1770,7 @@ ParticleSystem:
     orbitalZ:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 2
+      scalar: 6
       minScalar: 0
       maxCurve:
         serializedVersion: 2
@@ -4956,7 +4956,7 @@ PrefabInstance:
     - target: {fileID: 5923847143892959990, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: m_Name
-      value: Balloon5
+      value: Balloon10
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
