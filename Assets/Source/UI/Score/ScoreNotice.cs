@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Shared.Pool;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,8 +13,8 @@ namespace BalloonParty.UI.Score
         [SerializeField] private Graphic[] _graphicsToSetColor;
         [SerializeField] private Animator _animator;
         [SerializeField] private Transform _labelTransform;
-        [SerializeField] private Text _label;
-        [SerializeField] private Text _shadow;
+        [SerializeField] private TMP_Text _label;
+        [SerializeField] private TMP_Text _shadow;
         [SerializeField] private AnimationCurve _scaleCurve;
 
         private Action _onComplete;
@@ -35,7 +36,8 @@ namespace BalloonParty.UI.Score
 
         public void SetAnchoredPosition(Vector2 position)
         {
-            ((RectTransform)transform).anchoredPosition = position;
+            var rect = ((RectTransform)transform);
+            rect.anchoredPosition = position;
         }
 
         public void SetParent(Transform parent)
