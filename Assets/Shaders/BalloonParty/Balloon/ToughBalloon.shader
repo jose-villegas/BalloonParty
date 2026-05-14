@@ -1,4 +1,4 @@
-Shader "Sprites/ToughBalloon"
+Shader "BalloonParty/Balloon/ToughBalloon"
 {
     Properties
     {
@@ -7,13 +7,6 @@ Shader "Sprites/ToughBalloon"
 
         // -- Damage state (driven from C#) --
         _DamageProgress ("Damage Progress", Range(0,1)) = 0
-
-        // -- Specular highlight --
-        _SpecularOffset ("Specular Offset (UV)", Vector) = (-0.12, 0.12, 0, 0)
-        _SpecularRotation ("Specular Rotation (degrees)", Range(0, 360)) = 0
-        _SpecularColor ("Specular Color", Color) = (0.75, 0.78, 0.85, 1)
-        _SpecularRadius ("Specular Radius", Range(0.01, 0.5)) = 0.19
-        _SpecularSoftness ("Specular Softness", Range(0.001, 0.3)) = 0.10
 
         // -- Rim / subsurface edge --
         _RimColor ("Rim Color", Color) = (0.18, 0.18, 0.22, 1)
@@ -52,6 +45,8 @@ Shader "Sprites/ToughBalloon"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma target 3.0
+            #pragma multi_compile _ PIXELSNAP_ON
             #include "UnityCG.cginc"
 
             struct appdata_t
@@ -67,18 +62,15 @@ Shader "Sprites/ToughBalloon"
                 fixed4 color     : COLOR;
                 float2 texcoord  : TEXCOORD0;
                 float2 worldPos  : TEXCOORD1;
+                // xy = world-space object center, z = world-space extent (X scale)
+                // Computed in vertex to avoid per-fragment matrix work.
+                float3 worldData : TEXCOORD2;
             };
 
             sampler2D _MainTex;
             fixed4 _Color;
 
             float  _DamageProgress;
-
-            float4 _SpecularOffset;
-            float  _SpecularRotation;
-            fixed4 _SpecularColor;
-            float  _SpecularRadius;
-            float  _SpecularSoftness;
 
             fixed4 _RimColor;
             float  _RimWidth;
@@ -131,14 +123,6 @@ Shader "Sprites/ToughBalloon"
                 return float2(sqrt(d0), sqrt(d1));
             }
 
-            // Rotate a 2D vector by angleDeg degrees
-            float2 Rotate2D(float2 v, float angleDeg)
-            {
-                float a = angleDeg * (UNITY_PI / 180.0);
-                float s = sin(a), c = cos(a);
-                return float2(v.x * c - v.y * s, v.x * s + v.y * c);
-            }
-
             // ----------------------------------------------------------------
             v2f vert(appdata_t IN)
             {
@@ -147,6 +131,16 @@ Shader "Sprites/ToughBalloon"
                 OUT.texcoord = IN.texcoord;
                 OUT.color    = IN.color * _Color;
                 OUT.worldPos = mul(unity_ObjectToWorld, IN.vertex).xy;
+
+                float2 worldCenter = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xy;
+                float  worldExtent = length(float3(unity_ObjectToWorld._m00,
+                                                   unity_ObjectToWorld._m10,
+                                                   unity_ObjectToWorld._m20));
+                OUT.worldData = float3(worldCenter, worldExtent);
+
+#ifdef PIXELSNAP_ON
+                OUT.vertex = UnityPixelSnap(OUT.vertex);
+#endif
                 return OUT;
             }
 
@@ -156,36 +150,14 @@ Shader "Sprites/ToughBalloon"
                 float  alpha  = sprite.a;
                 if (alpha < 0.01) discard;
 
-                // UV centered at (0,0), range ~[-0.5, 0.5] — rotates with object, used for Voronoi
-                float2 uv  = IN.texcoord - 0.5;
-                float  r   = length(uv);
-
-                // World-space UV — fixed regardless of object rotation, used for specular & rim.
-                // worldExtent = world-space radius of the sprite (X scale of the object).
-                float2 worldCenter = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xy;
-                float  worldExtent = length(float3(unity_ObjectToWorld._m00,
-                                                   unity_ObjectToWorld._m10,
-                                                   unity_ObjectToWorld._m20));
-                float2 worldUV = (IN.worldPos - worldCenter) / max(worldExtent, 0.0001);
+                float2 uv     = IN.texcoord - 0.5;
+                float2 worldUV = (IN.worldPos - IN.worldData.xy) / max(IN.worldData.z, 0.0001);
 
                 float  dmg = _DamageProgress;
 
                 // ---- Base: black rubber, goes ashy under stress ----
                 fixed3 col = lerp(fixed3(0.04, 0.04, 0.05), _AshColor.rgb, dmg * dmg);
 
-                // ---- Specular highlight (world-space — never rotates) ----------
-                // Rotate worldUV by _SpecularRotation to spin the light source position.
-                float2 rotatedUV = Rotate2D(worldUV, _SpecularRotation);
-                float2 specUV    = rotatedUV - _SpecularOffset.xy;
-                specUV.x        *= 0.65;
-                float  specDist = length(specUV);
-
-                float  specR    = lerp(_SpecularRadius,        _SpecularRadius * 0.3, dmg);
-                float  specSoft = lerp(_SpecularSoftness, _SpecularSoftness * 0.18, dmg);
-                float  specAmt  = lerp(0.50,  0.90, dmg);
-                float  specular = smoothstep(specR + specSoft, specR - specSoft, specDist) * specAmt;
-
-                col += _SpecularColor.rgb * specular;
 
                 // ---- Rim / subsurface fringe (world-space — never rotates) -----
                 float rimW  = _RimWidth * (1.0 - dmg * 0.72);

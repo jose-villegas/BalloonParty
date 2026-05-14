@@ -11,7 +11,7 @@ Responsible for introducing balloons into the grid — both at game start and du
 
 ## Behaviour
 
-At game start `BalloonSpawner` spawns the initial grid rows from `BalloonsConfiguration.GameStartedBalloonLines`. For each empty slot it picks a balloon type via weighted random selection from `BalloonsConfiguration.Entries`, respecting each entry's `MaxCount` cap. After getting a view from the pool it calls `IBalloonTypeConfiguration.Initialize(model)` on the prefab root — this sets the balloon's type, hit count, and color. `model.CanHoldItem` is then set from the entry's `CanHoldItem` flag — this is the authoritative source, separate from the type component.
+At game start `BalloonSpawner` spawns the initial grid rows from `BalloonsConfiguration.GameStartedBalloonLines`. For each empty slot it picks a balloon type via weighted random selection from `BalloonsConfiguration.Entries`, respecting each entry's `MaxCount` cap. Before calling `IBalloonTypeConfiguration.Initialize(model)`, the spawner writes `HitsRemaining` and `CanHoldItem` from `BalloonPrefabEntry` directly onto the model — these are the authoritative per-entry values. `Initialize()` then handles type-specific data only (`TypeName`, color).
 
 After each projectile death (starting from the second turn) the spawner fires `BalloonsConfiguration.NewProjectileBalloonLines` new lines with `BalloonsConfiguration.NewBalloonLinesTimeInterval` delay between lines. Multi-line spawning uses `async UniTaskVoid` with a `CancellationTokenSource`, avoiding any coroutine runner dependency. The first projectile death is skipped because game-start lines are seeded separately — `SceneTransition` publishes `SpawnBalloonLineMessage` on scene load.
 

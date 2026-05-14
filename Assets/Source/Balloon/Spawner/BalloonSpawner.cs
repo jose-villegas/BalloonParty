@@ -106,9 +106,10 @@ namespace BalloonParty.Balloon.Spawner
             var model = new BalloonModel();
             model.SlotIndex.Value = slot;
             model.CanHoldItem = entry.CanHoldItem;
+            model.HitsRemaining.Value = entry.HitsToPop;
 
-            var typeConfig = view.GetComponentInParent<IBalloonTypeConfiguration>();
-            typeConfig.Initialize(model);
+            var variant = view.GetComponentInParent<IBalloonVariant>();
+            variant.Initialize(model);
 
             var controller = new BalloonController(model,
                 view,

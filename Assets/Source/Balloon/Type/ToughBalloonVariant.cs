@@ -6,13 +6,12 @@ using UnityEngine;
 
 namespace BalloonParty.Balloon.Type
 {
-    public class ToughBalloonType : MonoBehaviour, IBalloonTypeConfiguration, IBalloonViewBinding
+    public class ToughBalloonVariant : MonoBehaviour, IBalloonVariant, IBalloonViewBinding
     {
         private static readonly int DamageProgressId = Shader.PropertyToID("_DamageProgress");
         private static readonly int VoronoiSeedId    = Shader.PropertyToID("_VoronoiSeed");
 
         [SerializeField] private BalloonType _typeName = BalloonType.Tough;
-        [SerializeField] private int _hitsToPop = 2;
         [SerializeField] private SpriteRenderer _renderer;
         [SerializeField] private float _crackAnimDuration = 0.5f;
 
@@ -21,7 +20,6 @@ namespace BalloonParty.Balloon.Type
         private float  _currentDamageProgress;
 
         public BalloonType TypeName => _typeName;
-        public int HitsToPop => _hitsToPop;
 
         private void Awake()
         {
@@ -31,7 +29,6 @@ namespace BalloonParty.Balloon.Type
         public void Initialize(IWriteableBalloonModel model)
         {
             model.TypeName.Value = _typeName;
-            model.HitsRemaining.Value = _hitsToPop;
         }
 
         public void Bind(IBalloonModel model, CompositeDisposable disposables)

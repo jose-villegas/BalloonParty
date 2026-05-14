@@ -2,10 +2,9 @@ using BalloonParty.Balloon.Model;
 
 namespace BalloonParty.Balloon.Type
 {
-    public interface IBalloonTypeConfiguration
+    public interface IBalloonVariant
     {
         BalloonType TypeName { get; }
-        int HitsToPop { get; }
         void Initialize(IWriteableBalloonModel model);
     }
 }

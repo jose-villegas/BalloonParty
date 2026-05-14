@@ -7,15 +7,15 @@ Balloon types define hit capacity, color selection, and per-type Inspector confi
 | File | What it does |
 |---|---|
 | `BalloonType` | Enum — `Simple`, `Tough`, `Unbreakable` |
-| `IBalloonTypeConfiguration` | Interface on balloon prefab root MonoBehaviours — `TypeName`, `HitsToPop`, `Initialize(IWriteableBalloonModel)` |
+| `IBalloonTypeConfiguration` | Interface on balloon prefab root MonoBehaviours — `TypeName`, `Initialize(IWriteableBalloonModel)`. Hit count, item eligibility, and other per-type data are owned by `BalloonPrefabEntry` and written by `BalloonSpawner` before `Initialize()` is called |
 | `IBalloonViewBinding` | Interface for MonoBehaviours on a balloon prefab that need to react to model binding. `BalloonView` discovers all components implementing this interface via `GetComponentsInChildren` and calls `Bind(IBalloonModel, CompositeDisposable)` automatically — keeping `BalloonView` agnostic of specific balloon types |
-| `ColorableBalloonType` | Abstract `MonoBehaviour` — picks a random color from `GamePalette` filtered by `_allowedColorsMask`; sets `TypeName`, `HitsRemaining`, and `Color` on the model via `Initialize()` |
+| `ColorableBalloonType` | Abstract `MonoBehaviour` — picks a random color from `GamePalette` filtered by `_allowedColorsMask`; sets `TypeName` and `Color` on the model via `Initialize()` |
 | `SimpleBalloonType` | Extends `ColorableBalloonType` — one-hit colored balloon; no additional behavior |
-| `ToughBalloonType` | `MonoBehaviour` implementing both `IBalloonTypeConfiguration` and `IBalloonViewBinding` — configurable `_hitsToPop` (default 2); not colorable. On `Bind()` subscribes to `HitsRemaining` and animates `_DamageProgress` on the `ToughBalloon` shader via `MaterialPropertyBlock` using a DOTween tween |
+| `ToughBalloonType` | `MonoBehaviour` implementing both `IBalloonTypeConfiguration` and `IBalloonViewBinding` — not colorable; sets only `TypeName` in `Initialize()`. On `Bind()` subscribes to `HitsRemaining` and animates `_DamageProgress` on the `ToughBalloon` shader via `MaterialPropertyBlock` using a DOTween tween |
 
 ## How it works
 
-During spawning, `BalloonSpawner` calls `IBalloonTypeConfiguration.Initialize(model)` on the balloon prefab's root component. This writes `TypeName`, `HitsRemaining`, and (for colored types) `Color` directly onto the model. `CanHoldItem` is written separately by `BalloonSpawner` from the `BalloonPrefabEntry` — it is not the type component's responsibility.
+During spawning, `BalloonSpawner` writes `HitsRemaining`, `CanHoldItem` directly onto the model from `BalloonPrefabEntry` before calling `IBalloonTypeConfiguration.Initialize(model)`. `Initialize()` is then responsible only for type-specific data: `TypeName` and (for colored types) `Color`. This keeps per-type balance values centralized in the configuration asset rather than scattered across MonoBehaviours.
 
 Then `BalloonView.Bind(model)` calls `Bind()` on all `IBalloonViewBinding` components found in the hierarchy. `ToughBalloonType` uses this to subscribe to `HitsRemaining` and drive shader damage visuals.
 
@@ -36,13 +36,13 @@ Each deflect publishes `BalloonDeflectedMessage` (carries the balloon model, its
 - **`_DamageProgress`** (`0` pristine → `1` critical) — animated via `DOVirtual.Float` over `_crackAnimDuration` seconds using `Ease.OutCubic`. When a second hit arrives before the tween completes, the new tween starts from the current animated value so transitions chain smoothly.
 - **`_VoronoiSeed`** — set to a random `Vector2` at bind time so each balloon instance has a unique crack pattern.
 
-The shader produces procedural damage visuals: a broad soft specular highlight (world-space, rotation-independent) that tightens and sharpens as damage increases; a subsurface rim fringe that thins with damage; and spherically-projected Voronoi crack lines that grow from invisible hairlines to full splits as `_DamageProgress` increases.
+The shader produces procedural damage visuals: a subsurface rim fringe that thins with damage, and spherically-projected Voronoi crack lines that grow from invisible hairlines to full splits as `_DamageProgress` increases.
 
 ## Interactions
 
-- **BalloonSpawner** — calls `Initialize()` after getting a view from the pool; writes `model.CanHoldItem` from `BalloonPrefabEntry`
+- **BalloonSpawner** — writes `HitsRemaining` and `CanHoldItem` from `BalloonPrefabEntry` before calling `Initialize()`; calls `IBalloonViewBinding.Bind()` indirectly via `BalloonView`
 - **BalloonView** — auto-discovers and calls `IBalloonViewBinding.Bind()` on all components in the hierarchy
 - **BalloonController** — reads `HitsRemaining` to route hit/deflect/pop
 - **GamePalette** — injected into `ColorableBalloonType` to resolve allowed color names
 - **PaletteColorMaskAttribute** — drives the Inspector bitmask drawer for color filtering
-- **`Sprites/ToughBalloon` shader** — receives `_DamageProgress` and `_VoronoiSeed` per-instance via `MaterialPropertyBlock`
+- **`BalloonParty/Balloon/ToughBalloon` shader** — receives `_DamageProgress` and `_VoronoiSeed` per-instance via `MaterialPropertyBlock`

@@ -11,7 +11,7 @@ namespace BalloonParty.Balloon
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<BalloonView>();
-            builder.RegisterComponentInHierarchy<IBalloonTypeConfiguration>();
+            builder.RegisterComponentInHierarchy<IBalloonVariant>();
         }
     }
 }
