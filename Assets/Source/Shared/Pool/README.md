@@ -34,7 +34,7 @@ Items signal completion via callbacks passed to their `Play()` or `Setup()` call
 |---|---|---|
 | `PoolableParticle` | `Play(pos, color, onComplete)` — caller supplies the callback | Consumer (e.g. `BalloonView`, `ProjectileShieldView`) |
 | `EffectView` (any subclass) | `Play(pos, tint, onComplete)` — caller supplies the callback | Consumer (e.g. item handlers) |
-| `ScorePointTrail` | `Setup(target, color, config, onComplete)` — fires on tween completion | `ColorProgressBar` |
+| `ScorePointTrail` | `Setup(target, color, config, onComplete)` — fires on tween completion | `ScoreTrailService` |
 | `ScoreNotice` | `Show(score, color, onComplete)` — fires from `OnAnimationCompleted` animation event | `ColorProgressBar` |
 | `BalloonView` | No completion callback — returned directly on hit | `BalloonController` |
 | `ProjectileView` | No completion callback — returned directly on death | `ThrowerController` |

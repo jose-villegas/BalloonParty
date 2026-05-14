@@ -42,3 +42,13 @@ Subclasses declare one required property and up to three optional overrides:
 | `BalloonPrefabEntryDrawer` | `Configuration/Editor/` | Special section handles `_nudgeOverrides` (variable height), `_overridePopVfx` toggle, and conditional `_popVfxPrefab` |
 | `NudgeOverrideDrawer` | `Nudge/Editor/` | `BuildFoldoutLabel` appends `[NudgeType]`; `_appliesTo` pinned to top via `DrawPinnedFields` using `EnumFlagsField`; `_falloff` conditional on Shockwave flag |
 
+## Standalone drawers
+
+These drawers extend `PropertyDrawer` directly and handle their own rendering without the auto-field pattern:
+
+| Drawer | Location | What it customises |
+|---|---|---|
+| `GameDisplayConfigurationDrawer` | `Configuration/Editor/` | Inline aspect-ratio / orthographic-size pair editing |
+| `PaletteColorMaskDrawer` | `Configuration/Editor/` | Renders a bitmask `int` as labeled per-color checkboxes from `GamePalette` |
+| `PaletteColorNameDrawer` | `Configuration/Editor/` | Renders a `string` field as a popup of `GamePalette` color names with a color swatch |
+

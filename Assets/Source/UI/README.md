@@ -8,7 +8,7 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 
 | Scope | GameObject | Registers |
 |---|---|---|
-| `ScoreUILifetimeScope` | Score UI Canvas root | `ColorProgressBarInstancer` |
+| `ScoreUILifetimeScope` | Score UI Canvas root | Injects scene-placed `ColorProgressBar` instances via `RegisterBuildCallback`; binds `ScoreCounterLabel` and `LevelLabel` |
 | `LevelUpLifetimeScope` | LevelUp popup root | `LevelUpPopUp` |
 | `ShieldUILifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation` |
 
@@ -27,6 +27,7 @@ Scene loading is handled by `SceneTransition` (in `Shared/`) — a MonoBehaviour
 ## Interactions
 
 - **ScoreController** — all score UI subscribes to its `TotalScore` / `Level` reactive properties and `BalloonScoredMessage` / `ScoreLevelUpMessage` events
+- **ScoreTrailService** — `ColorProgressBar` registers trail target providers and subscribes to `ScoreTrailArrivedMessage`
 - **SlotGrid** — `LevelUpPopUp` polls `AllBalloonsStable()` before revealing itself
 - **ThrowerController** — binds `ShieldCounterAnimation` to the active `ProjectileModel` after each reload
 - **IGameConfiguration** — read for point thresholds and trail animation timing

@@ -6,7 +6,7 @@ Types and utilities used across multiple features.
 
 | File / Folder | What it provides |
 |---|---|
-| `IGameConfiguration` | Read-only interface for core game data — projectile settings, slot grid dimensions, prediction trace params, score trail timing, points-per-level formula. Concrete implementation in `Configuration/GameConfiguration` |
+| `IGameConfiguration` | Read-only interface for core game data — projectile settings, slot grid dimensions, prediction trace params, score trail timing, score points scatter delay, points-per-level formula. Concrete implementation in `Configuration/GameConfiguration` |
 | `IEffect` | Interface for poolable visual effects — `Play(position, tint)`, `Play(position, rotation, tint)`, `Stop()`. Not item-specific; used by any system that abstracts a VFX |
 | `TweenTracker` | Generic `MonoBehaviour` for DOTween sequence composition — `Append` (chain after current), `Replace` (kill current and start new), `Kill`, `IsPlaying`. Used by balloon views to manage nudge → balance tween chaining without conflicts |
 | `SortingHelper` | Static utility for Unity sorting order calculations — `SlotBaseSortingOrder` computes base order from grid position, `ApplySortingOrder` applies sequential orders to renderer arrays. Used by `BalloonView`, `ItemDisplayService`, and `ItemVisualView` |
@@ -24,8 +24,9 @@ Messages are the signals that decouple systems from one another. A publisher fir
 | `SpawnBalloonLineMessage` | `SceneTransition` (game start), cheats | `BalloonSpawner` |
 | `BalloonHitMessage` | `ProjectileView`, item handlers, cheats | `BalloonController`, `ScoreController`, `NudgeService`, `ItemActivator` — carries `Damage` (int, default 1); item handlers pass `ItemSettings.Damage`, projectile hits always use 1 |
 | `BalloonDeflectedMessage` | `BalloonController` (on deflect) | `ProjectileView` (color-tracking on deflect hit) |
-| `BalloonScoredMessage` | `ScoreController` | `ColorProgressBar` |
+| `BalloonScoredMessage` | `ScoreController` | `ColorProgressBar`, `ScoreTrailService` |
 | `ScoreLevelUpMessage` | `ScoreController` | `ColorProgressBar`, `LevelUpPopUp` |
+| `ScoreTrailArrivedMessage` | `ScoreTrailService` | `ColorProgressBar` |
 | `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController`, `BalloonSpawner` |
 | `ProjectileLoadedMessage` | `ThrowerController` | `ShieldCounterLabel`, `ShieldCounterAnimation` |
 | `ItemCheckMessage` | `BalloonSpawner` | `ItemAssigner` |

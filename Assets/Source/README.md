@@ -197,7 +197,7 @@ Game data is split across focused ScriptableObjects, each registered as a single
 
 | Asset | Interface / Type | What it holds |
 |---|---|---|
-| `GameConfiguration` | `IGameConfiguration` | Projectile settings, slot dimensions, timing values, prediction trace params, score trail timing, points formula |
+| `GameConfiguration` | `IGameConfiguration` | Projectile settings, slot dimensions, timing values, prediction trace params, score trail timing, score points scatter delay, points formula |
 | `BalloonsConfiguration` | `BalloonsConfiguration` | Balloon prefab entries (weight, cap, nudge overrides, pop VFX), spawn line counts, animation range, balance delay, global nudge defaults |
 | `GamePalette` | `GamePalette` | Named color entries — the single source for all balloon colors |
 | `GameDisplayConfiguration` | `GameDisplayConfiguration` | Aspect-ratio → orthographic-size lookup for camera sizing |

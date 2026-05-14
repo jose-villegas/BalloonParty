@@ -81,3 +81,18 @@ MonoBehaviour:
     _lightningSegmentsMultiplier: 3
     _lightningRandomness: 0.2
     _lightningJumpTime: 0.15
+  - _type: 5
+    _turnCheckEvery: 1
+    _weight: 90000
+    _maximumAllowed: 3
+    _visualPrefab: {fileID: 7402881001233824042, guid: 25f067838ae3341e380226109e89b975,
+      type: 3}
+    _activationEffectPrefab: {fileID: 0}
+    _damage: 1
+    _bombRadius: 1.25
+    _nudgeOverrides: []
+    _laserRaycastDistance: 20
+    _laserCircleCastRadius: 0.065
+    _lightningSegmentsMultiplier: 3
+    _lightningRandomness: 0.2
+    _lightningJumpTime: 0.15
