@@ -22,7 +22,7 @@ namespace BalloonParty.Game
         private readonly ScorePointTrail _trailPrefab;
         private readonly Dictionary<string, Color> _colorLookup = new();
         private readonly Dictionary<string, string> _poolKeys = new();
-        private readonly Dictionary<string, Vector3> _targets = new();
+        private readonly Dictionary<string, Func<Vector3>> _targetProviders = new();
         private readonly CancellationTokenSource _cts = new();
 
         private IDisposable _subscription;
@@ -54,9 +54,9 @@ namespace BalloonParty.Game
             _subscription = _scoredSubscriber.Subscribe(OnBalloonScored);
         }
 
-        public void RegisterTarget(string colorName, Vector3 worldPosition, Color color)
+        public void RegisterTarget(string colorName, Func<Vector3> targetProvider, Color color)
         {
-            _targets[colorName] = worldPosition;
+            _targetProviders[colorName] = targetProvider;
             _colorLookup[colorName] = color;
 
             if (!_poolKeys.ContainsKey(colorName))
@@ -87,7 +87,7 @@ namespace BalloonParty.Game
 
         private void OnBalloonScored(BalloonScoredMessage msg)
         {
-            if (!_targets.ContainsKey(msg.ColorName))
+            if (!_targetProviders.ContainsKey(msg.ColorName))
             {
                 return;
             }
@@ -113,7 +113,7 @@ namespace BalloonParty.Game
 
         private void SpawnTrail(string colorName, string poolKey, Vector3 fromWorldPosition)
         {
-            var target = _targets[colorName];
+            var target = _targetProviders[colorName]();
             var color = _colorLookup.TryGetValue(colorName, out var c) ? c : Color.white;
 
             var trail = _poolManager.GetOrRegister(poolKey,

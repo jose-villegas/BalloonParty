@@ -47,37 +47,6 @@ namespace BalloonParty.UI.Score
 
         private const string PreviewNameSuffix = " [Preview]";
 
-        [Button("Preview Notices", EButtonEnableMode.Always)]
-        private void PreviewNotices()
-        {
-            for (var i = transform.childCount - 1; i >= 0; i--)
-            {
-                var child = transform.GetChild(i);
-                if (child.name.EndsWith(PreviewNameSuffix))
-                {
-                    DestroyImmediate(child.gameObject);
-                }
-            }
-
-            if (_noticePrefab == null)
-            {
-                return;
-            }
-
-            var maxScore = _noticePrefab.MaxPreviewScore;
-            var color    = _graphicsToSetColor is { Length: > 0 } && _graphicsToSetColor[0] != null
-                ? _graphicsToSetColor[0].color
-                : Color.white;
-
-            for (var score = 1; score <= maxScore; score++)
-            {
-                var copy = Instantiate(_noticePrefab, transform);
-                copy.name = $"Score {score}{PreviewNameSuffix}";
-                ((RectTransform)copy.transform).anchoredPosition = Vector2.zero;
-                copy.Show(score, color, () => { });
-            }
-        }
-
         private void OnValidate()
         {
 #if UNITY_EDITOR
@@ -104,7 +73,8 @@ namespace BalloonParty.UI.Score
             {
                 if (g != null)
                 {
-                    g.color = entry.Color;
+                    var c = entry.Color;
+                    g.color = new Color(c.r, c.g, c.b, g.color.a);
                 }
             }
 #endif
@@ -117,14 +87,15 @@ namespace BalloonParty.UI.Score
 
             foreach (var g in _graphicsToSetColor)
             {
-                g.color = _colorConfig.Color;
+                var c = _colorConfig.Color;
+                g.color = new Color(c.r, c.g, c.b, g.color.a);
             }
 
             var required = _scoreController.GetRequiredPoints();
             _progressSlider.maxValue = required;
             _progressSlider.value = _scoreController.GetProgress(_colorConfig.Name);
 
-            _scoreTrailService.RegisterTarget(_colorConfig.Name, transform.position, _colorConfig.Color);
+            _scoreTrailService.RegisterTarget(_colorConfig.Name, RandomWorldPositionInRect, _colorConfig.Color);
 
             _scoredSubscriber.Subscribe(OnBalloonScored).AddTo(this);
             _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(this);
@@ -200,6 +171,17 @@ namespace BalloonParty.UI.Score
             return new Vector2(
                 Random.Range(rect.xMin, rect.xMax),
                 Random.Range(2f * rect.yMin, 2f * rect.yMax));
+        }
+
+        private Vector3 RandomWorldPositionInRect()
+        {
+            var rectTransform = (RectTransform)transform;
+            var rect = rectTransform.rect;
+            var local = new Vector3(
+                Random.Range(rect.xMin, rect.xMax),
+                Random.Range(rect.yMin, rect.yMax),
+                0f);
+            return rectTransform.TransformPoint(local);
         }
 
         private void SpawnSingleNotice(int score, Vector2 anchoredPosition)
