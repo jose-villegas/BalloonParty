@@ -7,7 +7,7 @@ The full-screen level-up ceremony that plays when all color bars complete.
 | File | What it does |
 |---|---|
 | `LevelUpLifetimeScope` | VContainer child scope on the LevelUp popup root; registers `LevelUpPopUp` |
-| `LevelUpPopUp` | Subscribes to `ScoreLevelUpMessage`; animates glow fill ring; updates level label |
+| `LevelUpPopUp` | Subscribes to `ScoreLevelUpMessage`; animates glow fill ring; updates TMP level label |
 
 ## How it works
 

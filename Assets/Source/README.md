@@ -81,6 +81,7 @@ public abstract class GameChildLifetimeScope : LifetimeScope
 | `GamePalette` | `ScriptableObject` | `GamePalette` (concrete) |
 | `GameDisplayConfiguration` | `ScriptableObject` | `GameDisplayConfiguration` (concrete) |
 | `ItemConfiguration` | `ScriptableObject` | `ItemConfiguration` (concrete) |
+| `ScorePointTrail` | Prefab instance | `ScorePointTrail` (concrete) |
 
 ### Instantiating prefabs with child scopes
 
