@@ -29,22 +29,21 @@ namespace BalloonParty.UI.Score
 
         [SerializeField] private ParticleSystem _completionParticleSystem;
         [SerializeField] private ScoreNotice _noticePrefab;
-        [SerializeField] private ScorePointTrail _trailPrefab;
-        [SerializeField] private float _trailSpawnDelay = 0.08f;
 
         [Inject] private GamePalette _palette;
         [Inject] private IGameConfiguration _config;
         [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
+        [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         [Inject] private PoolManager _poolManager;
         [Inject] private ScoreController _scoreController;
+        [Inject] private ScoreTrailService _scoreTrailService;
 
         private readonly List<ScoreNotice> _activeNotices = new();
 
         private PaletteEntry _colorConfig;
         private int _streak;
         private string _noticePoolKey;
-        private string _trailPoolKey;
 
         private const string PreviewNameSuffix = " [Preview]";
 
@@ -115,7 +114,6 @@ namespace BalloonParty.UI.Score
         {
             _colorConfig = _palette.Colors.First(c => c.Name == _colorName);
             _noticePoolKey = $"ScoreNotice_{_colorConfig.Name}";
-            _trailPoolKey = $"ScoreTrail_{_colorConfig.Name}";
 
             foreach (var g in _graphicsToSetColor)
             {
@@ -126,8 +124,11 @@ namespace BalloonParty.UI.Score
             _progressSlider.maxValue = required;
             _progressSlider.value = _scoreController.GetProgress(_colorConfig.Name);
 
+            _scoreTrailService.RegisterTarget(_colorConfig.Name, transform.position, _colorConfig.Color);
+
             _scoredSubscriber.Subscribe(OnBalloonScored).AddTo(this);
             _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(this);
+            _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
         }
 
         private void OnBalloonScored(BalloonScoredMessage msg)
@@ -142,7 +143,6 @@ namespace BalloonParty.UI.Score
             _progressSlider.value = Mathf.Min(_progressSlider.value + msg.Points, _progressSlider.maxValue);
 
             SpawnNotice(_streak, msg.Points);
-            SpawnTrailsAsync(TrailOrigins(msg.WorldPosition, msg.Points)).Forget();
 
             if (_progressSlider.value >= _progressSlider.maxValue)
             {
@@ -161,6 +161,14 @@ namespace BalloonParty.UI.Score
             _completionParticleSystem.Stop();
             _completionParticleSystem.gameObject.SetActive(false);
             _animator.SetBool(CompletedParam, false);
+        }
+
+        private void OnTrailArrived(ScoreTrailArrivedMessage msg)
+        {
+            if (msg.ColorName == _colorConfig.Name)
+            {
+                _animator.SetTrigger(TrailHitTrigger);
+            }
         }
 
         private void SpawnNotice(int streak, int points)
@@ -226,7 +234,7 @@ namespace BalloonParty.UI.Score
 
         private async UniTaskVoid SpawnScatteredNoticesAsync(int count)
         {
-            var delayMs = Mathf.RoundToInt(3f * _trailSpawnDelay * 1000f);
+            var delayMs = Mathf.RoundToInt(3f * _config.ScorePointsScatterDelay * 1000f);
             for (var i = 0; i < count; i++)
             {
                 SpawnUntrackedNotice(RandomPositionInRect());
@@ -235,57 +243,6 @@ namespace BalloonParty.UI.Score
                     await UniTask.Delay(delayMs, cancellationToken: destroyCancellationToken);
                 }
             }
-        }
-
-        private async UniTaskVoid SpawnTrailsAsync(Vector3[] origins)
-        {
-            var delayMs = Mathf.RoundToInt(_trailSpawnDelay * 1000f);
-            for (var i = 0; i < origins.Length; i++)
-            {
-                SpawnTrail(origins[i]);
-                if (i < origins.Length - 1)
-                {
-                    await UniTask.Delay(delayMs, cancellationToken: destroyCancellationToken);
-                }
-            }
-        }
-
-        private Vector3[] TrailOrigins(Vector3 center, int count)
-        {
-            var origins = new Vector3[count];
-
-            if (count <= 1)
-            {
-                origins[0] = center;
-                return origins;
-            }
-
-            var radius = Mathf.Min(_config.SlotSeparation.x, _config.SlotSeparation.y) * 1.5f;
-            for (var i = 0; i < count; i++)
-            {
-                var angle = 2f * Mathf.PI * i / count;
-                origins[i] = center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius;
-            }
-
-            return origins;
-        }
-
-        private void SpawnTrail(Vector3 fromWorldPosition)
-        {
-            var trail = _poolManager.GetOrRegister(_trailPoolKey,
-                () => new ScoreTrailPoolChannel(_trailPrefab));
-
-            trail.transform.position = fromWorldPosition;
-            trail.transform.localScale = Vector3.one;
-
-            trail.Setup(transform.position,
-                _colorConfig.Color,
-                _config.ScorePointTraceDuration,
-                () =>
-                {
-                    _animator.SetTrigger(TrailHitTrigger);
-                    _poolManager.Return(_trailPoolKey, trail);
-                });
         }
     }
 }

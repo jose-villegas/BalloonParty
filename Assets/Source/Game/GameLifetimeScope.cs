@@ -15,6 +15,7 @@ using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using BalloonParty.Thrower;
+using BalloonParty.UI.Score;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
@@ -31,6 +32,7 @@ namespace BalloonParty.Game
         [SerializeField] private GamePalette _gamePalette;
         [SerializeField] private BalloonsConfiguration _balloonsConfiguration;
         [SerializeField] private ProjectileLifetimeScope _projectileScopePrefab;
+        [SerializeField] private ScorePointTrail _scoreTrailPrefab;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -48,6 +50,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ItemActivatedMessage>(options);
             builder.RegisterMessageBroker<ItemRotationCapturedMessage>(options);
             builder.RegisterMessageBroker<ShieldGainedMessage>(options);
+            builder.RegisterMessageBroker<ScoreTrailArrivedMessage>(options);
 
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
             builder.RegisterInstance(_displayConfiguration);
@@ -55,6 +58,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance(_gamePalette);
             builder.RegisterInstance(_balloonsConfiguration);
             builder.RegisterInstance(new ThrowerSettings(_projectileScopePrefab));
+            builder.RegisterInstance(_scoreTrailPrefab);
 
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.Register<PoolManager>(Lifetime.Singleton);
@@ -64,6 +68,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<NudgeService>();
             builder.RegisterEntryPoint<BalloonSpawner>().AsSelf();
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
+            builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();
             builder.RegisterEntryPoint<ItemAssigner>();
             builder.RegisterEntryPoint<ItemActivator>();
 

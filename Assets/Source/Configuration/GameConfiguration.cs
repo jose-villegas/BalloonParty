@@ -25,6 +25,7 @@ namespace BalloonParty.Configuration
 
         [Header("Score")]
         [SerializeField] private float _scorePointTraceDuration;
+        [SerializeField] private float _scorePointsScatterDelay = 0.08f;
 
         public float ProjectileSpeed => _projectileSpeed;
         public float ProjectileLoadDuration => _projectileLoadDuration;
@@ -38,6 +39,7 @@ namespace BalloonParty.Configuration
         public int PredictionTraceMaxBounces => _predictionTraceMaxBounces;
         public int PredictionTraceMaxSteps => _predictionTraceMaxSteps;
         public float ScorePointTraceDuration => _scorePointTraceDuration;
+        public float ScorePointsScatterDelay => _scorePointsScatterDelay;
 
         public int PointsRequiredForLevel(int level)
         {

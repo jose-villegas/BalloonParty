@@ -19,6 +19,7 @@ namespace BalloonParty.Shared
         int PredictionTraceMaxSteps { get; }
 
         float ScorePointTraceDuration { get; }
+        float ScorePointsScatterDelay { get; }
 
         int PointsRequiredForLevel(int level);
     }
