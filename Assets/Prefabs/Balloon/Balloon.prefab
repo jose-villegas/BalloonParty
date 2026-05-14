@@ -101,6 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8217776062739370819}
   - component: {fileID: 7503708300241224956}
+  - component: {fileID: 2040907640834312498}
   m_Layer: 10
   m_Name: Ballon
   m_TagString: Untagged
@@ -182,6 +183,18 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &2040907640834312498
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1949076881470733533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
 --- !u!1 &5394957553681577040
 GameObject:
   m_ObjectHideFlags: 0
@@ -364,7 +377,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44080bb13dae4dbe9a47142efe1221cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.BalloonView
-  _renderer: {fileID: 7503708300241224956}
+  _colorableRenderers:
+  - {fileID: 2040907640834312498}
   _animator: {fileID: 6706276318355311262}
   _spriteLayerRenderers:
   - {fileID: 7503708300241224956}

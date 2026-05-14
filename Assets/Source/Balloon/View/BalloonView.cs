@@ -16,7 +16,7 @@ namespace BalloonParty.Balloon.View
         private static readonly int IsStableParam = Animator.StringToHash("IsStable");
 
         [Header("References")] [SerializeField]
-        private SpriteRenderer _renderer;
+        private ColorableRenderer[] _colorableRenderers;
 
         [SerializeField] private Animator _animator;
         [SerializeField] private Renderer[] _spriteLayerRenderers;
@@ -194,9 +194,9 @@ namespace BalloonParty.Balloon.View
 
             var color = _palette.GetColor(colorName);
 
-            if (_renderer != null)
+            foreach (var r in _colorableRenderers)
             {
-                _renderer.color = color;
+                r.SetColor(color);
             }
         }
 
