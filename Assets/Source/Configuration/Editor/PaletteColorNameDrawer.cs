@@ -1,0 +1,104 @@
+using System.Linq;
+using UnityEditor;
+using UnityEngine;
+
+namespace BalloonParty.Configuration.Editor
+{
+    [CustomPropertyDrawer(typeof(PaletteColorNameAttribute))]
+    public class PaletteColorNameDrawer : PropertyDrawer
+    {
+        private const float SwatchSize = 16f;
+        private const float SwatchSpacing = 4f;
+
+        private bool _initialized;
+        private GamePalette _palette;
+        private string[] _paletteNames;
+
+        private void EnsureInitialized()
+        {
+            if (_initialized)
+            {
+                return;
+            }
+
+            _initialized = true;
+            _palette = FindPalette();
+            _paletteNames = _palette != null
+                ? _palette.Colors.Select(c => c.Name).ToArray()
+                : System.Array.Empty<string>();
+        }
+
+        public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
+        {
+            return EditorGUIUtility.singleLineHeight;
+        }
+
+        public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
+        {
+            EnsureInitialized();
+
+            if (_palette == null)
+            {
+                EditorGUI.HelpBox(position,
+                    "No GamePalette asset found. Create one via Create → Configuration → Game Palette.",
+                    MessageType.Warning);
+                return;
+            }
+
+            if (property.propertyType != SerializedPropertyType.String)
+            {
+                EditorGUI.PropertyField(position, property, label);
+                return;
+            }
+
+            var swatchRect = new Rect(position.xMax - SwatchSize, position.y, SwatchSize, SwatchSize);
+            var popupRect  = new Rect(position.x, position.y, position.width - SwatchSize - SwatchSpacing, position.height);
+
+            var currentIndex = System.Array.IndexOf(_paletteNames, property.stringValue);
+            var newIndex     = EditorGUI.Popup(popupRect, label, currentIndex, BuildPopupOptions());
+
+            if (newIndex != currentIndex && newIndex >= 0)
+            {
+                property.stringValue = _paletteNames[newIndex];
+            }
+
+            if (newIndex >= 0 && newIndex < _palette.Colors.Length)
+            {
+                DrawSwatch(swatchRect, _palette.Colors[newIndex].Color);
+            }
+        }
+
+        private GUIContent[] BuildPopupOptions()
+        {
+            var options = new GUIContent[_paletteNames.Length];
+            for (var i = 0; i < _paletteNames.Length; i++)
+            {
+                options[i] = new GUIContent(_paletteNames[i]);
+            }
+
+            return options;
+        }
+
+        private static void DrawSwatch(Rect rect, Color color)
+        {
+            EditorGUI.DrawRect(rect, color);
+            EditorGUI.DrawRect(new Rect(rect.x - 1,    rect.y - 1,    rect.width + 2, 1),             Color.black);
+            EditorGUI.DrawRect(new Rect(rect.x - 1,    rect.yMax,     rect.width + 2, 1),             Color.black);
+            EditorGUI.DrawRect(new Rect(rect.x - 1,    rect.y,        1,              rect.height),   Color.black);
+            EditorGUI.DrawRect(new Rect(rect.xMax,      rect.y,        1,              rect.height),   Color.black);
+        }
+
+        private static GamePalette FindPalette()
+        {
+            var guids = AssetDatabase.FindAssets("t:GamePalette");
+            if (guids.Length == 0)
+            {
+                return null;
+            }
+
+            var path = AssetDatabase.GUIDToAssetPath(guids[0]);
+            return AssetDatabase.LoadAssetAtPath<GamePalette>(path);
+        }
+    }
+}
+

@@ -14,8 +14,8 @@ namespace BalloonParty.UI.Score
         [SerializeField] private Animator _animator;
         [SerializeField] private Transform _labelTransform;
         [SerializeField] private TMP_Text _label;
-        [SerializeField] private TMP_Text _shadow;
         [SerializeField] private AnimationCurve _scaleCurve;
+        [SerializeField] private AnimationCurve _labelOffsetXCurve;
 
         private Action _onComplete;
         private Transform _parent;
@@ -56,10 +56,13 @@ namespace BalloonParty.UI.Score
             }
 
             _animator.SetTrigger(ScoreTrigger);
-            _label.text = _shadow.text = score.ToString("N0");
+            _label.text = score.ToString("N0");
 
             transform.localScale = Vector3.one;
             _labelTransform.localScale = Vector3.one * _scaleCurve.Evaluate(score);
+
+            var labelRect = (RectTransform)_labelTransform;
+            labelRect.anchoredPosition = new Vector2(_labelOffsetXCurve.Evaluate(score), labelRect.anchoredPosition.y);
         }
 
         public void Dismiss()
@@ -78,5 +81,9 @@ namespace BalloonParty.UI.Score
             _onComplete = null;
             callback?.Invoke();
         }
+
+        public int MaxPreviewScore => _scaleCurve != null && _scaleCurve.length > 0
+            ? Mathf.RoundToInt(_scaleCurve.keys[_scaleCurve.length - 1].time)
+            : 1;
     }
 }

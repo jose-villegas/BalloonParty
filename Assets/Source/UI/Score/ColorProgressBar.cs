@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using BalloonParty.Configuration;
 using BalloonParty.Game;
 using BalloonParty.Shared;
@@ -6,6 +7,7 @@ using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using NaughtyAttributes;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,6 +20,7 @@ namespace BalloonParty.UI.Score
         private static readonly int CompletedParam = Animator.StringToHash("Completed");
         private static readonly int TrailHitTrigger = Animator.StringToHash("TrailHit");
 
+        [Header("Configuration")] [PaletteColorName] [SerializeField] private string _colorName;
         [Header("Visuals")] [SerializeField] private Graphic[] _graphicsToSetColor;
 
         [Header("Progress")] [SerializeField] private Slider _progressSlider;
@@ -29,10 +32,12 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ScorePointTrail _trailPrefab;
         [SerializeField] private float _trailSpawnDelay = 0.08f;
 
+        [Inject] private GamePalette _palette;
         [Inject] private IGameConfiguration _config;
         [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private PoolManager _poolManager;
+        [Inject] private ScoreController _scoreController;
 
         private readonly List<ScoreNotice> _activeNotices = new();
 
@@ -41,20 +46,85 @@ namespace BalloonParty.UI.Score
         private string _noticePoolKey;
         private string _trailPoolKey;
 
-        public void Setup(PaletteEntry colorConfig, ScoreController scoreController)
+        private const string PreviewNameSuffix = " [Preview]";
+
+        [Button("Preview Notices", EButtonEnableMode.Always)]
+        private void PreviewNotices()
         {
-            _colorConfig = colorConfig;
-            _noticePoolKey = $"ScoreNotice_{colorConfig.Name}";
-            _trailPoolKey = $"ScoreTrail_{colorConfig.Name}";
+            for (var i = transform.childCount - 1; i >= 0; i--)
+            {
+                var child = transform.GetChild(i);
+                if (child.name.EndsWith(PreviewNameSuffix))
+                {
+                    DestroyImmediate(child.gameObject);
+                }
+            }
+
+            if (_noticePrefab == null)
+            {
+                return;
+            }
+
+            var maxScore = _noticePrefab.MaxPreviewScore;
+            var color    = _graphicsToSetColor is { Length: > 0 } && _graphicsToSetColor[0] != null
+                ? _graphicsToSetColor[0].color
+                : Color.white;
+
+            for (var score = 1; score <= maxScore; score++)
+            {
+                var copy = Instantiate(_noticePrefab, transform);
+                copy.name = $"Score {score}{PreviewNameSuffix}";
+                ((RectTransform)copy.transform).anchoredPosition = Vector2.zero;
+                copy.Show(score, color, () => { });
+            }
+        }
+
+        private void OnValidate()
+        {
+#if UNITY_EDITOR
+            if (string.IsNullOrEmpty(_colorName) || _graphicsToSetColor == null)
+            {
+                return;
+            }
+
+            var guids = UnityEditor.AssetDatabase.FindAssets("t:GamePalette");
+            if (guids.Length == 0)
+            {
+                return;
+            }
+
+            var path    = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+            var palette = UnityEditor.AssetDatabase.LoadAssetAtPath<GamePalette>(path);
+            var entry   = System.Array.Find(palette.Colors, c => c.Name == _colorName);
+            if (entry == null)
+            {
+                return;
+            }
 
             foreach (var g in _graphicsToSetColor)
             {
-                g.color = colorConfig.Color;
+                if (g != null)
+                {
+                    g.color = entry.Color;
+                }
+            }
+#endif
+        }
+
+        private void Start()
+        {
+            _colorConfig = _palette.Colors.First(c => c.Name == _colorName);
+            _noticePoolKey = $"ScoreNotice_{_colorConfig.Name}";
+            _trailPoolKey = $"ScoreTrail_{_colorConfig.Name}";
+
+            foreach (var g in _graphicsToSetColor)
+            {
+                g.color = _colorConfig.Color;
             }
 
-            var required = scoreController.GetRequiredPoints();
+            var required = _scoreController.GetRequiredPoints();
             _progressSlider.maxValue = required;
-            _progressSlider.value = scoreController.GetProgress(colorConfig.Name);
+            _progressSlider.value = _scoreController.GetProgress(_colorConfig.Name);
 
             _scoredSubscriber.Subscribe(OnBalloonScored).AddTo(this);
             _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(this);
