@@ -21,6 +21,7 @@ MonoBehaviour:
     _overridePopVfx: 0
     _popVfxPrefab: {fileID: 0}
     _canHoldItem: 1
+    _hitsToPop: 1
   - _prefab: {fileID: 7284149923872934421, guid: 2a9d607f6443e4b7b81f98f6c878d594,
       type: 3}
     _weight: 0.3
@@ -38,6 +39,7 @@ MonoBehaviour:
     _popVfxPrefab: {fileID: 2148469744637963286, guid: 96f46efd86e994a7f95e53ccf7be9cb6,
       type: 3}
     _canHoldItem: 0
+    _hitsToPop: 3
   _defaultPopVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d,
     type: 3}
   _gameStartedBalloonLines: 6

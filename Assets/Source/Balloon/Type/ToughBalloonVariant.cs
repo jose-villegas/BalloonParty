@@ -59,7 +59,7 @@ namespace BalloonParty.Balloon.Type
                             SetFloat(DamageProgressId, v);
                         })
                         .SetEase(Ease.OutCubic)
-                        .SetLink(gameObject); // auto-killed if the GO is disabled (pool return)
+                        .SetLink(gameObject);
                 })
                 .AddTo(disposables);
         }

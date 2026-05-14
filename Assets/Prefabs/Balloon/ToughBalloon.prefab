@@ -416,9 +416,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.ToughBalloonType
   _typeName: 1
-  _hitsToPop: 3
   _renderer: {fileID: 1501219056772195943}
   _crackAnimDuration: 2
+  _hitScaleFactor: 1
 --- !u!1 &5986825045512745116
 GameObject:
   m_ObjectHideFlags: 0

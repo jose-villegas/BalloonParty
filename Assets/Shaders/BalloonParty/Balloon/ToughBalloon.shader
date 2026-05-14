@@ -2,26 +2,39 @@ Shader "BalloonParty/Balloon/ToughBalloon"
 {
     Properties
     {
+        // ---- Sprite --------------------------------------------------------
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
 
-        // -- Damage state (driven from C#) --
-        _DamageProgress ("Damage Progress", Range(0,1)) = 0
+        // ---- Damage (driven from C#) ---------------------------------------
+        [Header(Damage)]
+        _DamageProgress ("Progress", Range(0,1)) = 0
+        [Space(2)]
+        // < 1 fast early / slow late  |  1 linear  |  > 1 slow early / dramatic late
+        _DamageCurve ("Curve  (0.5 sqrt · 1 linear · 2 square)", Range(0.3, 3.0)) = 1.8
 
-        // -- Rim / subsurface edge --
-        _RimColor ("Rim Color", Color) = (0.18, 0.18, 0.22, 1)
-        _RimWidth ("Rim Width", Range(0, 0.5)) = 0.11
-
-        // -- Voronoi stress cracks --
-        _CrackColor ("Crack Color", Color) = (0.55, 0.55, 0.60, 1)
-        _VoronoiScale ("Voronoi Scale", Range(2, 12)) = 4.5
-        _SphereWarp ("Sphere Warp Strength", Range(1, 6)) = 2.5
-        _VoronoiSeed ("Voronoi Seed", Vector) = (0, 0, 0, 0)
-        _CrackThreshold ("Crack Edge Threshold", Range(0.02, 0.15)) = 0.08
-        _CrackSharpness ("Crack Sharpness", Range(5, 60)) = 28
-
-        // -- Ash tint at max damage --
+        // ---- Surface appearance --------------------------------------------
+        [Header(Surface)]
         _AshColor ("Ash Color (max damage)", Color) = (0.20, 0.20, 0.22, 1)
+
+        [Header(Rim)]
+        _RimColor ("Color", Color) = (0.18, 0.18, 0.22, 1)
+        _RimWidth ("Width", Range(0, 0.5)) = 0.11
+
+        // ---- Voronoi cracks ------------------------------------------------
+        [Header(Cracks  Base)]
+        _CrackColor ("Color", Color) = (0.55, 0.55, 0.60, 1)
+        _CrackThreshold ("Edge Threshold", Range(0.02, 0.15)) = 0.08
+        _CrackSharpness ("Sharpness", Range(5, 60)) = 28
+
+        [Header(Cracks  Sphere Projection)]
+        _SphereWarp ("Warp Strength", Range(1, 6)) = 2.5
+        _SphereWarpDamageBoost ("Warp Damage Boost", Range(0, 6)) = 2.0
+        _VoronoiScale ("Cell Scale", Range(2, 12)) = 4.5
+        _VoronoiScaleDamageBoost ("Cell Scale Damage Boost", Range(0, 12)) = 3.0
+
+        [Header(Cracks  Instance)]
+        [HideInInspector] _VoronoiSeed ("Voronoi Seed (set at runtime)", Vector) = (0, 0, 0, 0)
     }
 
     SubShader
@@ -71,13 +84,16 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             fixed4 _Color;
 
             float  _DamageProgress;
+            float  _DamageCurve;
 
             fixed4 _RimColor;
             float  _RimWidth;
 
             fixed4 _CrackColor;
             float  _VoronoiScale;
+            float  _VoronoiScaleDamageBoost;
             float  _SphereWarp;
+            float  _SphereWarpDamageBoost;
             float2 _VoronoiSeed;
             float  _CrackThreshold;
             float  _CrackSharpness;
@@ -150,20 +166,20 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 float  alpha  = sprite.a;
                 if (alpha < 0.01) discard;
 
-                float2 uv     = IN.texcoord - 0.5;
+                float2 uv      = IN.texcoord - 0.5;
                 float2 worldUV = (IN.worldPos - IN.worldData.xy) / max(IN.worldData.z, 0.0001);
 
-                float  dmg = _DamageProgress;
+                float  dmg    = _DamageProgress;
+                float  dmgVis = pow(dmg, _DamageCurve);
 
                 // ---- Base: black rubber, goes ashy under stress ----
-                fixed3 col = lerp(fixed3(0.04, 0.04, 0.05), _AshColor.rgb, dmg * dmg);
-
+                fixed3 col = lerp(fixed3(0.04, 0.04, 0.05), _AshColor.rgb, dmgVis * dmgVis);
 
                 // ---- Rim / subsurface fringe (world-space — never rotates) -----
-                float rimW  = _RimWidth * (1.0 - dmg * 0.72);
-                float rimR  = length(worldUV);
-                float rim   = smoothstep(0.50 - rimW, 0.50, rimR) * alpha * (1.0 - dmg * 0.45);
-                col         = lerp(col, _RimColor.rgb, rim);
+                float rimW = _RimWidth * (1.0 - dmgVis * 0.72);
+                float rimR = length(worldUV);
+                float rim  = smoothstep(0.50 - rimW, 0.50, rimR) * alpha * (1.0 - dmgVis * 0.45);
+                col        = lerp(col, _RimColor.rgb, rim);
 
                 // ---- Voronoi stress cracks (object UV — cracks live on the surface) ----
                 float2 p     = uv * 2.0;
@@ -173,26 +189,22 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 float  theta = acos(zSph);
 
                 float  thetaNorm = theta / (UNITY_PI * 0.5);
-                float  vorR = pow(thetaNorm, _SphereWarp) * _VoronoiScale;
+                float  effectiveWarp  = _SphereWarp   + _SphereWarpDamageBoost   * (dmgVis * dmgVis);
+                float  effectiveScale = _VoronoiScale + _VoronoiScaleDamageBoost * (dmgVis * dmgVis);
+                float  vorR = pow(thetaNorm, effectiveWarp) * effectiveScale;
                 float2 vUV  = float2(cos(phi) * vorR, sin(phi) * vorR) + _VoronoiSeed;
                 float2 voro = Voronoi(vUV);
                 float  edge = voro.y - voro.x;
 
-                // At dmg=0, threshold is 0.25 — only the narrow band at cell boundaries
-                // qualifies, giving thin hairlines. As dmg→1 it drops to _CrackThreshold,
-                // widening into full splits. Opacity (crackFade) also scales with dmg so
-                // early hairlines are nearly transparent and grow opaque alongside their width.
-                float dynThreshold = lerp(0.25, _CrackThreshold, dmg);
-                float softness     = lerp(0.003, 0.018, dmg);
+                float dynThreshold = lerp(0.18, _CrackThreshold, dmgVis);
+                float softness     = lerp(0.003, 0.018, dmgVis);
                 float crackLine    = smoothstep(dynThreshold - softness, dynThreshold + softness, edge);
-                // No pow crushing at low damage — thin lines need to survive.
-                // Sharpness only kicks in as cracks widen.
-                crackLine          = pow(crackLine, lerp(1.0, _CrackSharpness * 0.03, dmg));
+                crackLine          = pow(crackLine, lerp(1.0, _CrackSharpness * 0.03, dmgVis));
 
-                float crackFade = dmg;
+                float crackFade    = dmgVis;
 
-                float cellFracture = (1.0 - crackLine) * dmg * 0.35;
-                col = lerp(col, col * (1.0 - cellFracture), dmg);
+                float cellFracture = (1.0 - crackLine) * dmgVis * 0.35;
+                col = lerp(col, col * (1.0 - cellFracture), dmgVis);
                 col = lerp(col, _CrackColor.rgb, crackLine * crackFade * (1.0 - rim));
 
                 return fixed4(col * alpha, alpha);
