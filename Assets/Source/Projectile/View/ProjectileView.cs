@@ -266,6 +266,10 @@ namespace BalloonParty.Projectile.View
             balloonModel = balloonView.Model;
             if (balloonModel == null)
             {
+                Debug.LogWarning(
+                    $"ProjectileView.TryGetHitBalloon: BalloonView on " +
+                    $"\"{balloonView.gameObject.name}\" has a null Model — possible pool recycle race.",
+                    balloonView);
                 return false;
             }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using UnityEngine;
 
@@ -12,7 +13,14 @@ namespace BalloonParty.Configuration
 
         public Color GetColor(string colorName)
         {
-            return _colors.First(c => c.Name == colorName).Color;
+            var entry = _colors.FirstOrDefault(c => c.Name == colorName);
+            if (entry == null)
+            {
+                throw new ArgumentException(
+                    $"GamePalette.GetColor: no palette entry found for color \"{colorName}\".");
+            }
+
+            return entry.Color;
         }
     }
 }

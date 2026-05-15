@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
@@ -40,10 +41,13 @@ namespace BalloonParty.Balloon.Controller
         {
             foreach (var (balloon, path) in paths)
             {
-                var view = _grid.ViewAt(balloon.SlotIndex.Value);
+                var slot = balloon.SlotIndex.Value;
+                var view = _grid.ViewAt(slot);
                 if (view == null)
                 {
-                    continue;
+                    throw new InvalidOperationException(
+                        $"BalloonBalancer.AnimatePaths: no view found at slot ({slot.x},{slot.y}) " +
+                        "— model/view desync.");
                 }
 
                 view.TweenTracker.Kill();

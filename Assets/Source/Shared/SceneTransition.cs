@@ -11,6 +11,17 @@ namespace BalloonParty.Shared
     {
         [SerializeField] private string _sceneName;
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (string.IsNullOrWhiteSpace(_sceneName))
+            {
+                Debug.LogWarning(
+                    $"[SceneTransition] No scene name configured on \"{gameObject.name}\".", this);
+            }
+        }
+#endif
+
         public void Load()
         {
             if (string.IsNullOrWhiteSpace(_sceneName))

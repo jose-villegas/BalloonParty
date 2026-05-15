@@ -1,3 +1,4 @@
+using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using UnityEngine;
@@ -18,9 +19,16 @@ namespace BalloonParty.Balloon.Type
 
         private string PickColor()
         {
-            if (_palette == null || _palette.Colors == null || _palette.Colors.Length == 0)
+            if (_palette == null)
             {
-                return null;
+                throw new InvalidOperationException(
+                    $"{GetType().Name}.PickColor: GamePalette is null — DI not configured.");
+            }
+
+            if (_palette.Colors == null || _palette.Colors.Length == 0)
+            {
+                throw new InvalidOperationException(
+                    $"{GetType().Name}.PickColor: GamePalette has no colors configured.");
             }
 
             var colors = _palette.Colors;
@@ -36,10 +44,12 @@ namespace BalloonParty.Balloon.Type
 
             if (count == 0)
             {
+                Debug.LogError(
+                    $"{GetType().Name}.PickColor: allowed-colors mask excludes all palette colors.");
                 return null;
             }
 
-            var pick = Random.Range(0, count);
+            var pick = UnityEngine.Random.Range(0, count);
             var current = 0;
 
             for (var i = 0; i < colors.Length; i++)

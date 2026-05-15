@@ -162,7 +162,14 @@ namespace BalloonParty.Balloon.View
             }
 
             var defaultPrefab = _balloonsConfig.DefaultPopVfxPrefab;
-            if (defaultPrefab == null || string.IsNullOrEmpty(Model?.Color.Value))
+            if (defaultPrefab == null)
+            {
+                Debug.LogWarning(
+                    "BalloonView.PlayPopEffect: DefaultPopVfxPrefab is null in BalloonsConfiguration.", this);
+                return;
+            }
+
+            if (string.IsNullOrEmpty(Model?.Color.Value))
             {
                 return;
             }

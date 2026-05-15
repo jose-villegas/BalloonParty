@@ -46,6 +46,9 @@ namespace BalloonParty.Shared.Pool
         {
             if (item == null)
             {
+                Debug.LogWarning(
+                    $"PoolChannel<{typeof(TItem).Name}>.Return: attempted to return a null item " +
+                    "— possible double-return.");
                 return;
             }
 

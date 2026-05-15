@@ -161,7 +161,9 @@ namespace BalloonParty.Balloon.Spawner
             var entry = _balloonsConfig.PickRandom(_activeCounts);
             if (entry == null)
             {
-                // All balloon types are at their max count — skip this slot
+                Debug.LogWarning(
+                    $"BalloonSpawner.SpawnBalloon: PickRandom returned null for slot ({slot.x},{slot.y}) " +
+                    "— all balloon types are at their max count.");
                 return;
             }
 

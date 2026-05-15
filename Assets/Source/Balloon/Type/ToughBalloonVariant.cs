@@ -28,6 +28,9 @@ namespace BalloonParty.Balloon.Type
         {
             if (_renderer == null)
             {
+                Debug.LogError(
+                    $"ToughBalloonVariant.Bind: _renderer is not assigned on \"{gameObject.name}\" " +
+                    "— crack damage visuals will be disabled. Fix the prefab.", this);
                 return;
             }
 

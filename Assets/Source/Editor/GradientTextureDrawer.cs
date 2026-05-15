@@ -138,8 +138,11 @@ namespace BalloonParty.Editor
                 var storage = JsonUtility.FromJson<GradientStorage>(json);
                 return storage?.ToGradient() ?? DefaultGradient();
             }
-            catch
+            catch (Exception e)
             {
+                Debug.LogWarning(
+                    $"GradientTextureDrawer.LoadGradient: failed to deserialize gradient " +
+                    $"for \"{propName}\" — {e.Message}. Using default gradient.");
                 return DefaultGradient();
             }
         }
@@ -223,6 +226,9 @@ namespace BalloonParty.Editor
             var importer = GetImporter(material);
             if (importer == null)
             {
+                Debug.LogWarning(
+                    $"GradientTextureDrawer.WriteUserData: cannot persist gradient for " +
+                    $"\"{material.name}\" — material has no asset importer (unsaved asset?).");
                 return;
             }
 

@@ -89,6 +89,9 @@ namespace BalloonParty.Game
         {
             if (!_targetProviders.ContainsKey(msg.ColorName))
             {
+                Debug.LogWarning(
+                    $"ScoreTrailService.OnBalloonScored: no target provider registered for " +
+                    $"color \"{msg.ColorName}\" — score trail skipped.");
                 return;
             }
 

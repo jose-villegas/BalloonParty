@@ -29,6 +29,7 @@ namespace BalloonParty.Thrower
         private ProjectileView _activeView;
         private Vector3 _direction = Vector3.up;
         private bool _isMovable;
+        private bool _cameraNullWarned;
         private float _loadElapsed;
         private float _loadDuration;
         private PredictionTraceCalculator _traceCalculator;
@@ -144,6 +145,12 @@ namespace BalloonParty.Thrower
             var cam = Camera.main;
             if (cam == null)
             {
+                if (!_cameraNullWarned)
+                {
+                    Debug.LogWarning("ThrowerController.UpdateDirection: Camera.main is null.");
+                    _cameraNullWarned = true;
+                }
+
                 return;
             }
 

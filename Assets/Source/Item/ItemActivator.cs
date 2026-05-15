@@ -1,9 +1,11 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -41,6 +43,9 @@ namespace BalloonParty.Item
             var handler = _handlers.FirstOrDefault(h => h.Type == msg.Balloon.Item.Value);
             if (handler == null)
             {
+                Debug.LogError(
+                    $"ItemActivator.OnBalloonHit: no handler registered for item type " +
+                    $"\"{msg.Balloon.Item.Value}\" — this is a configuration bug.");
                 return;
             }
 
@@ -49,13 +54,24 @@ namespace BalloonParty.Item
 
         private async UniTaskVoid ActivateAsync(IBalloonItem handler, BalloonHitMessage msg)
         {
-            // Yield one frame so all synchronous BalloonHitMessage subscribers
-            // (e.g. BalloonController capturing item rotation) finish first.
-            await UniTask.Yield();
+            try
+            {
+                // Yield one frame so all synchronous BalloonHitMessage subscribers
+                // (e.g. BalloonController capturing item rotation) finish first.
+                await UniTask.Yield();
 
-            handler.Setup(msg.Balloon, msg.WorldPosition);
-            await handler.Activate();
-            _itemActivatedPublisher.Publish(new ItemActivatedMessage(msg.Balloon));
+                handler.Setup(msg.Balloon, msg.WorldPosition);
+                await handler.Activate();
+                _itemActivatedPublisher.Publish(new ItemActivatedMessage(msg.Balloon));
+            }
+            catch (OperationCanceledException)
+            {
+                // Expected during teardown — swallow silently.
+            }
+            catch (Exception e)
+            {
+                Debug.LogException(e);
+            }
         }
     }
 }
