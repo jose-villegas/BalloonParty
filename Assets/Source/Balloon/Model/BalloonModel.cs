@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace BalloonParty.Balloon.Model
 {
-    public class BalloonModel : IWriteableBalloonModel
+    internal class BalloonModel : IWriteableBalloonModel
     {
         public ReactiveProperty<string> Color { get; } = new();
         public ReactiveProperty<BalloonType> TypeName { get; } = new();

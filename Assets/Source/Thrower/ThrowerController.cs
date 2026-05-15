@@ -14,7 +14,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Thrower
 {
-    public class ThrowerController : IStartable, ITickable
+    internal class ThrowerController : IStartable, ITickable
     {
         private readonly IGameConfiguration _config;
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
@@ -37,7 +37,7 @@ namespace BalloonParty.Thrower
         private string ProjectilePoolKey => _settings.ProjectileScopePrefab.name;
 
         [Inject]
-        public ThrowerController(
+        internal ThrowerController(
             ThrowerView view,
             IGameConfiguration config,
             PoolManager poolManager,

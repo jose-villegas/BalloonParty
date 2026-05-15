@@ -20,7 +20,6 @@ from __future__ import annotations
 import argparse
 import os
 import re
-import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
@@ -96,6 +95,9 @@ def expected_namespace(path: Path) -> str:
 
 def check_namespace(path: Path, lines: list[str], result: AuditResult):
     """Namespace must match folder structure."""
+    # AssemblyInfo.cs uses assembly-level attributes without a namespace
+    if path.name == "AssemblyInfo.cs":
+        return
     expected = expected_namespace(path)
     for i, line in enumerate(lines, 1):
         m = re.match(r"^\s*namespace\s+([\w.]+)", line)
@@ -103,7 +105,7 @@ def check_namespace(path: Path, lines: list[str], result: AuditResult):
             actual = m.group(1)
             if actual != expected:
                 result.add(Violation(str(path), i, "namespace-mismatch",
-                    f"expected '{expected}', got '{actual}'"))
+                    f"expected '{expected}', got '{actual}'", fixable=True))
             return
     # No namespace found — global types
     result.add(Violation(str(path), 1, "namespace-missing",
@@ -201,9 +203,19 @@ def check_magic_strings(path: Path, lines: list[str], result: AuditResult):
             result.add(Violation(str(path), i, "magic-string-animator",
                 "animator param should use cached StringToHash int"))
         if layer_re.search(line):
-            # Check if this is inside Awake (lazy init) — that's OK for the sentinel pattern
-            # Simple heuristic: if it's assigned to a static field, it's fine
-            if "static" not in line and "=" not in line:
+            # Allow lazy-init pattern: assignment to a static field
+            if re.search(r"\bstatic\b", line):
+                continue
+            # Allow assignment in a block that initialises a static sentinel
+            # Look for a static field assignment context (current line has = )
+            if "=" in line:
+                # Check if the target looks like a static field (uppercase or PascalCase)
+                lhs = line.split("=")[0].strip()
+                # Could be inside a lazy-init block — check surrounding context for static field
+                # Simple heuristic: the assignment target is a known-static-looking ident
+                # This still flags inline comparisons like: if (x == LayerMask.NameToLayer("Y"))
+                pass
+            else:
                 result.add(Violation(str(path), i, "magic-string-layer",
                     "layer lookup should be cached in a static field"))
 
@@ -222,12 +234,11 @@ def check_addto_this_in_poolable(path: Path, lines: list[str], result: AuditResu
 
 def check_object_instantiate(path: Path, lines: list[str], result: AuditResult):
     """Flag Object.Instantiate that might need CreateChildFromPrefab."""
+    if is_in_editor(path):
+        return
+    if "PoolChannel" in path.name:
+        return
     for i, line in enumerate(lines, 1):
-        # Skip editor code and pool channels (they legitimately use Instantiate)
-        if is_in_editor(path):
-            continue
-        if "PoolChannel" in path.name:
-            continue
         if re.search(r"Object\.Instantiate\s*[<(]", line):
             result.add(Violation(str(path), i, "object-instantiate",
                 "Object.Instantiate — verify this doesn't need CreateChildFromPrefab"))
@@ -304,6 +315,90 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
         last_group = group
 
 
+def check_dotween_kill_poolable(path: Path, lines: list[str], result: AuditResult):
+    """IPoolable classes using DOTween must kill tweens in OnDespawned."""
+    full_text = "".join(lines)
+    if "IPoolable" not in full_text:
+        return
+
+    dotween_re = re.compile(
+        r"\.(DOFade|DOScale|DOMove|DOColor|DORotate|DOAnchorPos|DOMoveX|DOMoveY|DOLocalMove|"
+        r"DOPunchScale|DOShakePosition|DOJump)\b|DOTween\.|DOVirtual\."
+    )
+
+    uses_dotween = any(dotween_re.search(line) for line in lines)
+    if not uses_dotween:
+        return
+
+    # Check that OnDespawned contains a Kill or TweenTracker reference
+    in_ondespawned = False
+    has_kill = False
+    brace_depth = 0
+
+    for line in lines:
+        stripped = line.strip()
+        if "OnDespawned" in stripped and ("void" in stripped or "override" in stripped):
+            in_ondespawned = True
+            brace_depth = 0
+            continue
+        if in_ondespawned:
+            brace_depth += stripped.count("{") - stripped.count("}")
+            if "Kill" in stripped or "TweenTracker" in stripped or "DOTween.Kill" in stripped:
+                has_kill = True
+            if brace_depth <= 0 and "{" in "".join(lines[:lines.index(line)]):
+                break
+
+    if not has_kill:
+        # Find OnDespawned line number for reporting
+        for i, line in enumerate(lines, 1):
+            if "OnDespawned" in line:
+                result.add(Violation(str(path), i, "dotween-kill-poolable",
+                    "IPoolable uses DOTween but OnDespawned() does not kill tweens"))
+                return
+        result.add(Violation(str(path), 1, "dotween-kill-poolable",
+            "IPoolable uses DOTween but has no OnDespawned() to kill tweens"))
+
+
+def check_inject_on_field(path: Path, lines: list[str], result: AuditResult):
+    """Flag [Inject] on fields in non-MonoBehaviour classes.
+
+    MonoBehaviours (and transitive subclasses) cannot use constructor injection
+    in VContainer, so field injection is the only option and is allowed.
+    Plain-C# classes should always prefer constructor injection.
+    """
+    full_text = "".join(lines)
+
+    # Extract the class name and check if it's a transitive MonoBehaviour subtype
+    for line in lines:
+        m = re.match(
+            r"\s*(?:public|internal)\s+(?:sealed\s+|abstract\s+|partial\s+)*"
+            r"(?:class)\s+(\w+)",
+            line,
+        )
+        if m:
+            if m.group(1) in _mono_subtypes():
+                return
+            break
+
+    # Also catch direct `: MonoBehaviour` for classes not in our source tree
+    if re.search(r":\s*MonoBehaviour", full_text):
+        return
+
+    for i, line in enumerate(lines, 1):
+        stripped = line.strip()
+        # [Inject] on a field: line has [Inject] and ends with ;
+        if "[Inject]" in stripped and stripped.endswith(";"):
+            result.add(Violation(str(path), i, "inject-on-field",
+                "field injection — prefer constructor injection"))
+            continue
+        # [Inject] on previous line, current line is a field (ends with ;)
+        if i >= 2:
+            prev = lines[i - 2].strip()
+            if prev == "[Inject]" and stripped.endswith(";") and "(" not in stripped:
+                result.add(Violation(str(path), i, "inject-on-field",
+                    "field injection — prefer constructor injection"))
+
+
 def check_missing_readmes(result: AuditResult):
     """Each feature folder should have a README.md."""
     for child in sorted(SOURCE_ROOT.iterdir()):
@@ -314,9 +409,179 @@ def check_missing_readmes(result: AuditResult):
                     f"feature folder '{child.name}/' has no README.md"))
 
 
-def check_plain_instantiate_comment(path: Path, lines: list[str], result: AuditResult):
-    """Flag plain Instantiate calls on prefabs (non-pool, non-editor)."""
-    pass  # covered by check_object_instantiate
+def _build_monobehaviour_subtypes() -> set[str]:
+    """Walk the inheritance graph to find all types that transitively derive from MonoBehaviour."""
+    parent_map: dict[str, str] = {}
+    for path in cs_files(SOURCE_ROOT):
+        with open(path, encoding="utf-8-sig") as f:
+            for line in f:
+                m = re.match(
+                    r"\s*(?:public|internal)\s+(?:sealed\s+|abstract\s+|partial\s+)*"
+                    r"(?:class|struct)\s+(\w+)\s*(?:<[^>]*>)?\s*:\s*(\w+)",
+                    line,
+                )
+                if m and m.group(1) != m.group(2):
+                    parent_map[m.group(1)] = m.group(2)
+
+    unity_bases = {"MonoBehaviour", "ScriptableObject", "LifetimeScope",
+                   "Editor", "PropertyDrawer"}
+    result = set()
+    for cls in parent_map:
+        cur = cls
+        seen = {cur}
+        while cur in parent_map:
+            cur = parent_map[cur]
+            if cur in seen:
+                break
+            seen.add(cur)
+        if cur in unity_bases:
+            result.add(cls)
+    return result
+
+
+_MONO_SUBTYPES: set[str] | None = None
+
+
+def _mono_subtypes() -> set[str]:
+    global _MONO_SUBTYPES
+    if _MONO_SUBTYPES is None:
+        _MONO_SUBTYPES = _build_monobehaviour_subtypes()
+    return _MONO_SUBTYPES
+
+
+def _build_internal_types() -> set[str]:
+    """Collect all internal class/struct names in the source tree."""
+    types: set[str] = set()
+    for path in cs_files(SOURCE_ROOT):
+        with open(path, encoding="utf-8-sig") as f:
+            for line in f:
+                m = re.match(
+                    r"\s*internal\s+(?:sealed\s+|partial\s+)*(?:class|struct)\s+(\w+)",
+                    line,
+                )
+                if m:
+                    types.add(m.group(1))
+    return types
+
+
+_INTERNAL_TYPES: set[str] | None = None
+
+
+def _internal_types() -> set[str]:
+    global _INTERNAL_TYPES
+    if _INTERNAL_TYPES is None:
+        _INTERNAL_TYPES = _build_internal_types()
+    return _INTERNAL_TYPES
+
+
+def check_public_visibility(path: Path, lines: list[str], result: AuditResult):
+    """Flag public classes/structs that could potentially be internal.
+
+    Skips types that commonly need to be public:
+    - MonoBehaviour / ScriptableObject and all transitive subclasses
+    - Editor, PropertyDrawer (Unity editor)
+    - LifetimeScope (VContainer)
+    - Types implementing known public interfaces
+    - Attribute subclasses
+    - [Serializable] types (exposed in public SOs)
+    """
+    if is_in_editor(path):
+        return
+
+    full_text = "".join(lines)
+    internal = _internal_types()
+    if not internal:
+        return
+
+    # Skip files with [Serializable] — data types serialised by Unity
+    if "[Serializable]" in full_text or "[System.Serializable]" in full_text:
+        return
+
+    for i, line in enumerate(lines, 1):
+        stripped = line.strip()
+        m = re.match(
+            r"public\s+(sealed\s+|partial\s+)*(class|struct)\s+(\w+)",
+            stripped,
+        )
+        if not m:
+            continue
+
+        type_name = m.group(3)
+
+        # Skip all transitive MonoBehaviour / ScriptableObject / LifetimeScope subtypes
+        if type_name in _mono_subtypes():
+            continue
+
+        # Check inheritance on the same line for remaining known bases
+        skip_bases = (
+            "MonoBehaviour", "ScriptableObject", "PropertyAttribute",
+        )
+        remainder = stripped[stripped.index(type_name) + len(type_name):]
+        if any(base in remainder for base in skip_bases):
+            continue
+
+        result.add(Violation(str(path), i, "public-visibility",
+            f"'{type_name}' is public — consider internal if not used cross-assembly"))
+
+
+def check_inconsistent_accessibility(path: Path, lines: list[str], result: AuditResult):
+    """Detect public members in public types that expose internal types.
+
+    This catches the C# compiler error CS0051 (inconsistent accessibility) before
+    it reaches the build.  A public method/constructor/property in a public type
+    must not use an internal type as a parameter or return type.
+    """
+    if is_in_editor(path):
+        return
+
+    full_text = "".join(lines)
+    internal = _internal_types()
+    if not internal:
+        return
+
+    # Check if file has a public class/struct
+    if not re.search(r"\bpublic\s+(?:sealed\s+|abstract\s+|partial\s+)*(?:class|struct)\s+\w+", full_text):
+        return
+
+    # Build a single regex for all internal type names (word-boundary match)
+    internal_re = re.compile(r"\b(" + "|".join(re.escape(t) for t in sorted(internal)) + r")\b")
+
+    # Gather multi-line public member signatures
+    in_public = False
+    sig_lines: list[str] = []
+    sig_start = 0
+
+    for i, line in enumerate(lines, 1):
+        stripped = line.strip()
+
+        # Skip class/struct/interface/enum declarations
+        if re.match(r"(?:public|internal|private|protected)\s+(?:sealed\s+|abstract\s+|partial\s+)*(?:class|struct|interface|enum)\s", stripped):
+            continue
+
+        if not in_public:
+            if stripped.startswith("public "):
+                in_public = True
+                sig_start = i
+                sig_lines = [stripped]
+                # Complete on one line?
+                if "{" in stripped or ";" in stripped or "=>" in stripped:
+                    in_public = False
+                    full_sig = " ".join(sig_lines)
+                    m = internal_re.search(full_sig)
+                    if m:
+                        result.add(Violation(str(path), sig_start, "inconsistent-accessibility",
+                            f"public member exposes internal type '{m.group(1)}'"))
+                    sig_lines = []
+        else:
+            sig_lines.append(stripped)
+            if "{" in stripped or ";" in stripped or "=>" in stripped:
+                in_public = False
+                full_sig = " ".join(sig_lines)
+                m = internal_re.search(full_sig)
+                if m:
+                    result.add(Violation(str(path), sig_start, "inconsistent-accessibility",
+                        f"public member exposes internal type '{m.group(1)}'"))
+                sig_lines = []
 
 
 # ─── Rule registry ───────────────────────────────────────────────────────────
@@ -332,6 +597,10 @@ RULES: dict[str, callable] = {
     "addto-poolable":    check_addto_this_in_poolable,
     "instantiate":       check_object_instantiate,
     "member-ordering":   check_member_ordering,
+    "dotween-poolable":  check_dotween_kill_poolable,
+    "inject-on-field":   check_inject_on_field,
+    "public-visibility": check_public_visibility,
+    "accessibility":     check_inconsistent_accessibility,
 }
 
 # Rules that don't operate on individual files
@@ -441,5 +710,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
-

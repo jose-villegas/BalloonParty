@@ -4,7 +4,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Display
 {
-    public class OrthogonalSizeCameraController : IStartable
+    internal class OrthogonalSizeCameraController : IStartable
     {
         private readonly GameDisplayConfiguration _displayConfig;
 

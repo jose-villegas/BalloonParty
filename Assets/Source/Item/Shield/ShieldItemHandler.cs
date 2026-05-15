@@ -11,7 +11,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Item.Shield
 {
-    public class ShieldItemHandler : IBalloonItem, IStartable
+    internal class ShieldItemHandler : IBalloonItem, IStartable
     {
         private readonly GamePalette _palette;
         private readonly IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
@@ -26,7 +26,7 @@ namespace BalloonParty.Item.Shield
         public ItemType Type => ItemType.Shield;
 
         [Inject]
-        public ShieldItemHandler(
+        internal ShieldItemHandler(
             GamePalette palette,
             ItemConfiguration itemConfig,
             PoolManager poolManager,

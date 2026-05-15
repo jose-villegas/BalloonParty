@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BalloonParty.Prediction
 {
-    public class PredictionTraceCalculator
+    internal class PredictionTraceCalculator
     {
         private readonly IGameConfiguration _config;
 

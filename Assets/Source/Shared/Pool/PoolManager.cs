@@ -5,7 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace BalloonParty.Shared.Pool
 {
-    public class PoolManager
+    internal class PoolManager
     {
         private readonly Dictionary<string, IPoolChannel> _channels = new();
         private Transform _root;

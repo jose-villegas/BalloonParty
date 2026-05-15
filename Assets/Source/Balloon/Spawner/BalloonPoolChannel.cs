@@ -5,7 +5,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Balloon.Spawner
 {
-    public class BalloonPoolChannel : PoolChannel<BalloonView>
+    internal class BalloonPoolChannel : PoolChannel<BalloonView>
     {
         private readonly LifetimeScope _parentScope;
         private readonly LifetimeScope _prefab;

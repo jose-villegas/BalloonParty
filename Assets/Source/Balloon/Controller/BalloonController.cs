@@ -11,7 +11,7 @@ using UnityEngine;
 
 namespace BalloonParty.Balloon.Controller
 {
-    public class BalloonController
+    internal class BalloonController
     {
         private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly SlotGrid _grid;

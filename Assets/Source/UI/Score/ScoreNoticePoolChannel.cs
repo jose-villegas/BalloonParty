@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BalloonParty.UI.Score
 {
-    public class ScoreNoticePoolChannel : PoolChannel<ScoreNotice>
+    internal class ScoreNoticePoolChannel : PoolChannel<ScoreNotice>
     {
         private readonly ScoreNotice _prefab;
 

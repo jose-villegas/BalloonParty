@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BalloonParty.Item
 {
-    public class ItemVisualPoolChannel : PoolChannel<ItemVisualView>
+    internal class ItemVisualPoolChannel : PoolChannel<ItemVisualView>
     {
         private readonly GameObject _prefab;
 

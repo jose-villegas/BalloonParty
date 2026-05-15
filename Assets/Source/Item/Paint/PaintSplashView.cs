@@ -68,7 +68,7 @@ namespace BalloonParty.Item.Paint
         ///     invoked per blob arrival with the target index — use it to change the
         ///     balloon's color at exactly the right moment.
         /// </summary>
-        public void PrepareDisplay(
+        internal void PrepareDisplay(
             List<(Vector3 from, Vector3 to)> flights,
             float flightDuration,
             float arcHeight,

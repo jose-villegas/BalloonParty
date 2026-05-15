@@ -20,7 +20,7 @@ namespace BalloonParty.Item
         private PoolManager _poolManager;
         private IReadOnlyReactiveProperty<Vector2Int> _slotIndex;
 
-        public void Bind(
+        internal void Bind(
             IReadOnlyReactiveProperty<ItemType> item,
             IReadOnlyReactiveProperty<string> colorName,
             IReadOnlyReactiveProperty<Vector2Int> slotIndex,

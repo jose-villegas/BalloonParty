@@ -11,7 +11,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Item
 {
-    public class ItemActivator : IStartable
+    internal class ItemActivator : IStartable
     {
         private readonly IEnumerable<IBalloonItem> _handlers;
         private readonly IPublisher<ItemActivatedMessage> _itemActivatedPublisher;

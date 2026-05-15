@@ -3,7 +3,7 @@ using BalloonParty.Configuration;
 
 namespace BalloonParty.Nudge
 {
-    public class NudgeOverrideResolver
+    internal class NudgeOverrideResolver
     {
         private readonly BalloonsConfiguration _config;
 

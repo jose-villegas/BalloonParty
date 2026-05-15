@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BalloonParty.UI.Shields
 {
-    public class ShieldTrailPoolChannel : PoolChannel<ScorePointTrail>
+    internal class ShieldTrailPoolChannel : PoolChannel<ScorePointTrail>
     {
         private readonly ScorePointTrail _prefab;
 

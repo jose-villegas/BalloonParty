@@ -45,6 +45,7 @@ namespace BalloonParty.UI.LevelUp
 
         public void OnContinue()
         {
+            _animator.ResetTrigger(AppearTrigger);
             _animator.SetTrigger(HideTrigger);
             UnpauseAfterDelayAsync().Forget();
         }
@@ -55,6 +56,8 @@ namespace BalloonParty.UI.LevelUp
             await UniTask.Yield(PlayerLoopTiming.Update, destroyCancellationToken);
 
             _levelLabel.text = (newLevel - 1).ToString("N0");
+            // Stale HideTrigger from the previous dismiss would instantly close the popup
+            _animator.ResetTrigger(HideTrigger);
             _animator.SetTrigger(AppearTrigger);
 
             await LevelGlowFillAsync(newLevel);

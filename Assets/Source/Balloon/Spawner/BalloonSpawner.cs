@@ -18,7 +18,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Balloon.Spawner
 {
-    public class BalloonSpawner : IStartable
+    internal class BalloonSpawner : IStartable
     {
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
@@ -40,7 +40,7 @@ namespace BalloonParty.Balloon.Spawner
         private int _turnCount;
 
         [Inject]
-        public BalloonSpawner(
+        internal BalloonSpawner(
             SlotGrid grid,
             BalloonsConfiguration balloonsConfig,
             LifetimeScope parentScope,

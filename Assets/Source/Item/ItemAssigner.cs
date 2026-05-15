@@ -10,14 +10,14 @@ using VContainer.Unity;
 
 namespace BalloonParty.Item
 {
-    public class ItemAssigner : IStartable
+    internal class ItemAssigner : IStartable
     {
         private readonly ISubscriber<ItemCheckMessage> _checkSubscriber;
         private readonly ItemConfiguration _itemConfig;
         private readonly SlotGrid _grid;
 
         [Inject]
-        public ItemAssigner(
+        internal ItemAssigner(
             ItemConfiguration itemConfig,
             SlotGrid grid,
             ISubscriber<ItemCheckMessage> checkSubscriber)

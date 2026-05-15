@@ -16,7 +16,7 @@ namespace BalloonParty.Item.Lightning
     ///     distance nearest-first, then plays the chain-lightning animation fire-and-forget —
     ///     hitting each target per-jump via <see cref="ChainLightningView.PrepareDisplay" />.
     /// </summary>
-    public class LightningItemHandler : IBalloonItem
+    internal class LightningItemHandler : IBalloonItem
     {
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
         private readonly ItemConfiguration _itemConfig;

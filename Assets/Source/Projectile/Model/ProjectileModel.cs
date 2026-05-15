@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BalloonParty.Projectile.Model
 {
-    public class ProjectileModel : IWriteableProjectileModel
+    internal class ProjectileModel : IWriteableProjectileModel
     {
         public ReactiveProperty<string> ColorName { get; } = new(null);
         public ReactiveProperty<int> ShieldsRemaining { get; } = new(0);

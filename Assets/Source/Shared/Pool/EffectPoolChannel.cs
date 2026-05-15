@@ -7,7 +7,7 @@ namespace BalloonParty.Shared.Pool
     ///     a concrete <see cref="EffectView" /> subclass attached
     ///     (<see cref="ParticleEffectView" /> or <see cref="AnimatorEffectView" />).
     /// </summary>
-    public class EffectPoolChannel : PoolChannel<EffectView>
+    internal class EffectPoolChannel : PoolChannel<EffectView>
     {
         private readonly EffectView _prefab;
 

@@ -12,7 +12,7 @@ using VContainer;
 
 namespace BalloonParty.Item.Bomb
 {
-    public class BombItemHandler : IBalloonItem
+    internal class BombItemHandler : IBalloonItem
     {
         private static readonly int BalloonsLayer = LayerMask.GetMask("Balloons");
 

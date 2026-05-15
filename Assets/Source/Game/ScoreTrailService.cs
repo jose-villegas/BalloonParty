@@ -13,7 +13,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Game
 {
-    public class ScoreTrailService : IStartable, IDisposable
+    internal class ScoreTrailService : IStartable, IDisposable
     {
         private readonly IGameConfiguration _config;
         private readonly IPublisher<ScoreTrailArrivedMessage> _arrivedPublisher;
@@ -28,7 +28,7 @@ namespace BalloonParty.Game
         private IDisposable _subscription;
 
         [Inject]
-        public ScoreTrailService(
+        internal ScoreTrailService(
             IGameConfiguration config,
             ISubscriber<BalloonScoredMessage> scoredSubscriber,
             IPublisher<ScoreTrailArrivedMessage> arrivedPublisher,

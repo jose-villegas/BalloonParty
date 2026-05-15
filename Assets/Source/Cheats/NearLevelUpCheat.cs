@@ -9,7 +9,7 @@ using MessagePipe;
 
 namespace BalloonParty.Cheats
 {
-    public class NearLevelUpCheat : ICheat
+    internal class NearLevelUpCheat : ICheat
     {
         private readonly IGameConfiguration _config;
         private readonly GamePalette _palette;

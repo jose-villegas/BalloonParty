@@ -7,7 +7,7 @@ using MessagePipe;
 
 namespace BalloonParty.Cheats
 {
-    public class FireProjectileCheat : ICheat
+    internal class FireProjectileCheat : ICheat
     {
         private IWriteableProjectileModel _activeProjectile;
 

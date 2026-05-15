@@ -6,7 +6,7 @@ using MessagePipe;
 
 namespace BalloonParty.Cheats
 {
-    public class SpawnBalloonLineCheat : ICheat
+    internal class SpawnBalloonLineCheat : ICheat
     {
         private readonly IPublisher<SpawnBalloonLineMessage> _publisher;
 

@@ -29,6 +29,7 @@ namespace BalloonParty.UI.Score
 
         public void OnDespawned()
         {
+            transform.DOKill();
         }
 
         public void Setup(Vector3 target, Color color, float duration, Action onCompleted)

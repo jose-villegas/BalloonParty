@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BalloonParty.UI.Score
 {
-    public class ScoreTrailPoolChannel : PoolChannel<ScorePointTrail>
+    internal class ScoreTrailPoolChannel : PoolChannel<ScorePointTrail>
     {
         private readonly ScorePointTrail _prefab;
 

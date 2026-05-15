@@ -12,7 +12,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Item.Laser
 {
-    public class LaserItemHandler : IBalloonItem, IStartable
+    internal class LaserItemHandler : IBalloonItem, IStartable
     {
         private static readonly int BalloonsLayer = LayerMask.GetMask("Balloons");
 
@@ -31,7 +31,7 @@ namespace BalloonParty.Item.Laser
         public ItemType Type => ItemType.Laser;
 
         [Inject]
-        public LaserItemHandler(
+        internal LaserItemHandler(
             GamePalette palette,
             ItemConfiguration itemConfig,
             IPublisher<BalloonHitMessage> hitPublisher,

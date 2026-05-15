@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace BalloonParty.Slots
 {
-    public class SlotGrid
+    internal class SlotGrid
     {
         private readonly IGameConfiguration _config;
         private readonly Subject<SlotGridChangedEvent> _onChanged = new();

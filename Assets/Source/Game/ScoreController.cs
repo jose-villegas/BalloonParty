@@ -12,7 +12,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Game
 {
-    public class ScoreController : IStartable, IDisposable
+    internal class ScoreController : IStartable, IDisposable
     {
         private const string LevelKey = "Level";
         private const string ProgressSuffix = ".Progress";

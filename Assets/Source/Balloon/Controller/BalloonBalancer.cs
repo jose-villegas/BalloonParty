@@ -13,7 +13,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Balloon.Controller
 {
-    public class BalloonBalancer : IStartable
+    internal class BalloonBalancer : IStartable
     {
         private readonly BalloonsConfiguration _balloonsConfig;
         private readonly SlotGrid _grid;
@@ -22,7 +22,7 @@ namespace BalloonParty.Balloon.Controller
         private bool _balanceRequested;
 
         [Inject]
-        public BalloonBalancer(
+        internal BalloonBalancer(
             SlotGrid grid,
             BalloonsConfiguration balloonsConfig,
             ISubscriber<BalanceBalloonsMessage> subscriber)

@@ -9,7 +9,7 @@ using MessagePipe;
 
 namespace BalloonParty.Cheats
 {
-    public class TriggerLevelUpCheat : ICheat
+    internal class TriggerLevelUpCheat : ICheat
     {
         private readonly IGameConfiguration _config;
         private readonly GamePalette _palette;

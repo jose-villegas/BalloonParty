@@ -8,7 +8,7 @@ namespace BalloonParty.Shared.Pool
     ///     For effects that may use an <see cref="Animator" /> instead, use
     ///     <see cref="EffectPoolChannel" />.
     /// </summary>
-    public class ParticlePoolChannel : PoolChannel<PoolableParticle>
+    internal class ParticlePoolChannel : PoolChannel<PoolableParticle>
     {
         private readonly GameObject _prefab;
 

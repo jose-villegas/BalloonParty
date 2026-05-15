@@ -5,7 +5,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Projectile
 {
-    public class ProjectilePoolChannel : PoolChannel<ProjectileView>
+    internal class ProjectilePoolChannel : PoolChannel<ProjectileView>
     {
         private readonly LifetimeScope _parentScope;
         private readonly ProjectileLifetimeScope _prefab;

@@ -14,7 +14,7 @@ namespace BalloonParty.Item.Paint
     ///     popped balloon, launches a paint blob VFX toward each one, and converts their
     ///     color to the popped balloon's color on splash — Splatoon-style.
     /// </summary>
-    public class PaintItemHandler : IBalloonItem
+    internal class PaintItemHandler : IBalloonItem
     {
         private const int NeighborCount = 6;
 

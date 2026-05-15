@@ -2,7 +2,7 @@ using BalloonParty.Projectile;
 
 namespace BalloonParty.Thrower
 {
-    public class ThrowerSettings
+    internal class ThrowerSettings
     {
         public readonly ProjectileLifetimeScope ProjectileScopePrefab;
 

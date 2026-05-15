@@ -10,7 +10,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Nudge
 {
-    public class NudgeService : IStartable
+    internal class NudgeService : IStartable
     {
         private readonly BalloonsConfiguration _config;
         private readonly HashSet<IBalloonModel> _nudging = new();
@@ -20,7 +20,7 @@ namespace BalloonParty.Nudge
         private readonly SlotGrid _grid;
 
         [Inject]
-        public NudgeService(
+        internal NudgeService(
             SlotGrid grid,
             BalloonsConfiguration config,
             NudgeOverrideResolver resolver,
