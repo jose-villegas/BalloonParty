@@ -1,6 +1,6 @@
-# BalloonParty — Unit Testing Plan
+# BalloonParty — Testing Standards
 
-> Test everything that could reasonably break. Don't test what can't break on its own.
+> This document is the authoritative reference for unit testing philosophy, conventions, and coverage across `Assets/Tests/`. All new tests must conform to the rules defined here.
 
 ---
 
@@ -39,10 +39,45 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 | Math formulas | `IndexToWorldPosition` staggered grid | Wrong offset or sign breaks the grid |
 | Reflection/bounce physics | `PredictionTraceCalculator` | Wall detection, direction math |
 | Hit routing decisions | `BalloonModel.EvaluateHit` | Damage thresholds, unbreakable flag |
+| Multi-tier override cascades | `NudgeService.ResolveDistance` | Priority inversion between balloon, publisher, and config defaults |
+| Weighted selection with caps | `BalloonsConfiguration.PickRandom` | MaxCount filtering, cumulative weight edge cases |
+| Pipeline filtering | `ItemAssigner.OnItemCheck` | Turn modulo, cap enforcement, eligibility gating |
 
 ---
 
-## Current Tests (Phase 1)
+## Test Infrastructure
+
+### Stack
+
+| Tool | Role |
+|---|---|
+| [NUnit](https://nunit.org/) | Test framework — `[TestFixture]`, `[Test]`, `[SetUp]`, `[TearDown]` |
+| [NSubstitute](https://nsubstitute.github.io/) | Mocking — `Substitute.For<T>()`, `.Returns()`, `.Received()` |
+| Unity Test Runner | EditMode runner — **Window → General → Test Runner → EditMode** |
+
+### Conventions
+
+- **All tests are EditMode** — pure C#, no Play Mode. They run in milliseconds.
+- **Real objects over mocks** — use real `BalloonModel`, `SlotGrid`, etc. when the class is a plain C# type. Reserve NSubstitute for interfaces (`IGameConfiguration`, `IPublisher<T>`, `ISubscriber<T>`) and ScriptableObjects that need reflection setup.
+- **MessagePipe subscriber capture** — `ISubscriber<T>.Subscribe(Action<T>)` is an extension method that wraps the action in `AnonymousMessageHandler<T>` and calls the interface's `Subscribe(IMessageHandler<T>, ...)`. Capture the handler via NSubstitute:
+  ```csharp
+  IMessageHandler<MyMessage> handler;
+  subscriber
+      .Subscribe(
+          Arg.Do<IMessageHandler<MyMessage>>(h => handler = h),
+          Arg.Any<MessageHandlerFilter<MyMessage>[]>())
+      .Returns(Substitute.For<IDisposable>());
+  // After Start():
+  handler.Handle(new MyMessage(...));
+  ```
+- **ScriptableObject + reflection** — for `ScriptableObject` configs with `[SerializeField] private` fields, use `ScriptableObject.CreateInstance<T>()` and set fields via reflection. Destroy in `TearDown`.
+- **Deterministic over random** — when testing weighted-selection or random-assignment logic, use single-candidate scenarios to eliminate `Random.Range` non-determinism.
+- **PlayerPrefs isolation** — tests that touch `PlayerPrefs` must clean all used keys in both `SetUp` and `TearDown`.
+- **`[InternalsVisibleTo]`** — `AssemblyInfo.cs` in `Assets/Source/` exposes internals to `BalloonParty.Tests.EditMode`. Use `internal` visibility for methods that need direct testing but should not be public API.
+
+---
+
+## Current Coverage — 55 tests
 
 ### `SlotGridTests` — 17 tests
 
@@ -71,17 +106,9 @@ Tests the trajectory bounce algorithm — pure math with wall reflection.
 | Max steps | 1 | Step exhaustion before wall hit |
 | Zig-zag | 1 | Multiple reflections chain correctly |
 
-**Total: 24 tests** — each one protecting logic that could reasonably break.
-
----
-
-## Current Tests (Phase 2)
-
 ### `ScoreControllerTests` — 6 tests
 
 Tests the scoring pipeline and level-up logic — multi-map accumulation with an all-colors threshold gate.
-
-Setup: capture `IMessageHandler<BalloonHitMessage>` from NSubstitute subscriber; mock `IGameConfiguration`, publishers; create `GamePalette` + `PaletteEntry` via reflection. `PlayerPrefs` cleaned in SetUp/TearDown.
 
 | Area | Tests | What could break |
 |---|---|---|
@@ -96,7 +123,7 @@ Setup: capture `IMessageHandler<BalloonHitMessage>` from NSubstitute subscriber;
 
 Tests `EvaluateHit` — the hit-outcome decision that both `BalloonController` and `ScoreController` depend on.
 
-Design note: `EvaluateHit` was moved from a static method on `BalloonController` to `IBalloonModel` after tests revealed the same decision logic was duplicated in `ScoreController.OnBalloonHit`. The balloon now owns its hit semantics — both consumers call `model.EvaluateHit(damage)` instead of re-implementing the check.
+Design note: `EvaluateHit` lives on `IBalloonModel` so that both consumers call `model.EvaluateHit(damage)` instead of re-implementing the check. Tests revealed the decision logic was duplicated across `BalloonController` and `ScoreController` — moving it to the model eliminated that duplication.
 
 | Area | Tests | What could break |
 |---|---|---|
@@ -111,8 +138,6 @@ Design note: `EvaluateHit` was moved from a static method on `BalloonController`
 
 Tests the 3-tier override resolution cascade (balloon → publisher → config default) and flag-based override matching.
 
-Design note: `ResolveDistance`, `ResolveDuration`, `ResolveFalloff` changed from `private` to `internal`. `[InternalsVisibleTo]` added via `AssemblyInfo.cs`.
-
 | Area | Tests | What could break |
 |---|---|---|
 | ResolveDistance — balloon override | 1 | Wrong priority in cascade |
@@ -126,49 +151,39 @@ Design note: `ResolveDistance`, `ResolveDuration`, `ResolveFalloff` changed from
 | `NudgeType.All` flag matches any source | 1 | `HasFlag` logic broken |
 | Mismatched flag falls through | 1 | Flag filtering skipped |
 
-**Phase 2 total: 22 tests · Grand total: 46 tests**
+### `BalloonsConfigurationTests` — 4 tests
 
----
-
-## Future Test Targets — Medium Value (test on change)
-
-### `BalloonsConfiguration.PickRandom` — ~4 tests
-
-Testable now — public method on a ScriptableObject. Use `ScriptableObject.CreateInstance<BalloonsConfiguration>()` and set `_entries` via reflection.
+Tests `PickRandom` weighted selection with `MaxCount` cap logic.
 
 | Area | Tests | What could break |
 |---|---|---|
 | All entries at max → returns `null` | 1 | Missing null guard upstream |
 | `MaxCount = 0` means no limit | 1 | Wrong zero-check excludes unlimited types |
 | Single candidate always selected | 1 | Edge case in cumulative sum |
-| Weight distribution respected | 1 | Off-by-one in `roll < cumulative` |
+| Capped entry excluded, other selected | 1 | Cap filtering skips wrong entry |
 
-### `ItemAssigner.OnItemCheck` — ~4 tests
+### `ItemAssignerTests` — 5 tests
 
-Has real logic: turn-based filtering, max cap via `CountBalloonsWithItem`, weighted selection, `CanHoldItem` filtering. Requires reflection to set `ItemSettings` fields or extraction of logic into testable methods.
+Tests the item-assignment pipeline: turn filtering, max-cap enforcement via grid scan, `CanHoldItem` gating, and the happy path.
 
 | Area | Tests | What could break |
 |---|---|---|
-| No eligible balloons (`CanHoldItem = false`) → no assignment | 1 | Missing null check |
-| All items at max → no assignment | 1 | Cap off-by-one |
-| Turn not divisible by `TurnCheckEvery` → skipped | 1 | Modulo check wrong |
 | Empty `NewBalloons` → early return | 1 | Null guard missed |
+| Turn not divisible by `TurnCheckEvery` → skipped | 1 | Modulo check wrong |
+| All items at max → no assignment | 1 | Cap off-by-one in `CountBalloonsWithItem` |
+| No eligible balloons (`CanHoldItem = false`) | 1 | Missing filter on `CanHoldItem` |
+| Eligible balloon gets item assigned | 1 | Assignment path broken |
 
 ---
 
-## Future Test Targets (write when the code changes or a bug is found)
+## Deferred Systems
 
-### Not ready / low value now
+These systems are not tested because they are either too coupled to Unity runtime, too simple, or already covered indirectly.
 
 | System | Why defer |
 |---|---|
-| `BalloonBalancer` relocation | Scan+move loop depends on well-tested `IsUnbalanced`/`OptimalNextEmptySlot` + DOTween animation. Test if changes. |
+| `BalloonBalancer` | Scan+move loop depends on well-tested `IsUnbalanced`/`OptimalNextEmptySlot` + DOTween animation. Test if it changes. |
 | `BalloonSpawner` | Heavy Unity/DI coupling (`PoolManager`, `LifetimeScope`, DOTween). Little pure logic beyond forwarding. |
-
-### Skip unless they grow complex
-
-| System | Why skip |
-|---|---|
 | `ProjectileModel` | Pure data bag — too simple to break |
 | `OrthogonalSizeCameraController` | Forwards config lookup to camera — simple delegation |
 | `ThrowerView.RotateTo` | Single `AngleAxis` call — too simple |
@@ -191,5 +206,3 @@ Has real logic: turn-based filtering, max cap via `CountBalloonsWithItem`, weigh
 Run **all** Edit Mode tests on every code change. They're pure C# — they take milliseconds.
 
 In Unity: **Window → General → Test Runner → EditMode → Run All**
-
-

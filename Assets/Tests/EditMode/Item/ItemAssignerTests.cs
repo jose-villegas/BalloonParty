@@ -1,0 +1,145 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
+using BalloonParty.Balloon.Model;
+using BalloonParty.Configuration;
+using BalloonParty.Item;
+using BalloonParty.Shared;
+using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
+using MessagePipe;
+using NSubstitute;
+using NUnit.Framework;
+using UnityEngine;
+
+namespace BalloonParty.Tests.Item
+{
+    [TestFixture]
+    public class ItemAssignerTests
+    {
+        private SlotGrid _grid;
+        private ItemConfiguration _itemConfig;
+        private IMessageHandler<ItemCheckMessage> _handler;
+
+        [SetUp]
+        public void SetUp()
+        {
+            var gameConfig = Substitute.For<IGameConfiguration>();
+            gameConfig.SlotsSize.Returns(new Vector2Int(6, 10));
+            gameConfig.SlotSeparation.Returns(new Vector2(1f, 0.85f));
+            gameConfig.SlotsOffset.Returns(new Vector2(2.5f, 4f));
+
+            _grid = new SlotGrid(gameConfig);
+
+            _itemConfig = ScriptableObject.CreateInstance<ItemConfiguration>();
+
+            var subscriber = Substitute.For<ISubscriber<ItemCheckMessage>>();
+            subscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ItemCheckMessage>>(h => _handler = h),
+                    Arg.Any<MessageHandlerFilter<ItemCheckMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            var assigner = new ItemAssigner(_itemConfig, _grid, subscriber);
+            assigner.Start();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            UnityEngine.Object.DestroyImmediate(_itemConfig);
+        }
+
+        [Test]
+        public void OnItemCheck_EmptyNewBalloons_NoAssignment()
+        {
+            SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 5));
+
+            var model = new BalloonModel { CanHoldItem = true };
+            FireItemCheck(Array.Empty<IBalloonModel>(), turnCount: 1);
+
+            Assert.AreEqual(ItemType.None, model.Item.Value);
+        }
+
+        [Test]
+        public void OnItemCheck_TurnNotDivisible_NoAssignment()
+        {
+            SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 3, weight: 1f, maxAllowed: 5));
+
+            var model = new BalloonModel { CanHoldItem = true };
+            FireItemCheck(new IBalloonModel[] { model }, turnCount: 2);
+
+            Assert.AreEqual(ItemType.None, model.Item.Value);
+        }
+
+        [Test]
+        public void OnItemCheck_AllItemsAtMax_NoAssignment()
+        {
+            SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 1));
+
+            // Place an existing balloon with the item on the grid to hit the cap
+            var existing = new BalloonModel();
+            existing.Item.Value = ItemType.Bomb;
+            _grid.Place(existing, null, new Vector2Int(0, 0));
+
+            var model = new BalloonModel { CanHoldItem = true };
+            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
+
+            Assert.AreEqual(ItemType.None, model.Item.Value);
+        }
+
+        [Test]
+        public void OnItemCheck_NoEligibleBalloons_CanHoldItemFalse_NoAssignment()
+        {
+            SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 5));
+
+            var model = new BalloonModel { CanHoldItem = false };
+            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
+
+            Assert.AreEqual(ItemType.None, model.Item.Value);
+        }
+
+        [Test]
+        public void OnItemCheck_EligibleBalloon_GetsItemAssigned()
+        {
+            SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 5));
+
+            var model = new BalloonModel { CanHoldItem = true };
+            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
+
+            Assert.AreEqual(ItemType.Bomb, model.Item.Value);
+        }
+
+        private void FireItemCheck(IReadOnlyList<IBalloonModel> balloons, int turnCount)
+        {
+            _handler.Handle(new ItemCheckMessage(balloons, turnCount));
+        }
+
+        private void SetItems(params ItemSettings[] items)
+        {
+            SetField(_itemConfig, "_items", new List<ItemSettings>(items));
+        }
+
+        private static ItemSettings CreateItemSettings(
+            ItemType type,
+            int turnCheckEvery,
+            float weight,
+            int maxAllowed)
+        {
+            var settings = new ItemSettings();
+            SetField(settings, "_type", type);
+            SetField(settings, "_turnCheckEvery", turnCheckEvery);
+            SetField(settings, "_weight", weight);
+            SetField(settings, "_maximumAllowed", maxAllowed);
+            return settings;
+        }
+
+        private static void SetField(object target, string fieldName, object value)
+        {
+            target.GetType()
+                .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance)!
+                .SetValue(target, value);
+        }
+    }
+}
+
