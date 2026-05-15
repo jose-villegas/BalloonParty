@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Item;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using DG.Tweening;
 using UniRx;
@@ -75,8 +76,8 @@ namespace BalloonParty.Balloon.View
             _bindDisposables.Clear();
             Model = model;
 
-            model.Color
-                .Subscribe(ApplyColor)
+            _colorableRenderers
+                .BindColor(model.Color, _palette.GetColor)
                 .AddTo(_bindDisposables);
 
             model.SlotIndex
@@ -192,20 +193,6 @@ namespace BalloonParty.Balloon.View
             _popVfxOverride = prefab;
         }
 
-        private void ApplyColor(string colorName)
-        {
-            if (string.IsNullOrEmpty(colorName))
-            {
-                return;
-            }
-
-            var color = _palette.GetColor(colorName);
-
-            foreach (var r in _colorableRenderers)
-            {
-                r.SetColor(color);
-            }
-        }
 
         private void ApplySortingOrder(Vector2Int slotIndex)
         {

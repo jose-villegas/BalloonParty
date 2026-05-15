@@ -24,7 +24,9 @@ namespace BalloonParty.Configuration.Editor
             "_lightningJumpTime",
             "_paintBlobFlightDuration",
             "_paintBlobArcHeight",
-            "_paintBlobStartScale"
+            "_paintBlobStartScale",
+            "_paintBlobArcCurve",
+            "_paintBlobScaleCurve"
         };
 
         protected override GUIContent BuildFoldoutLabel(GUIContent label, SerializedProperty property)
@@ -93,6 +95,10 @@ namespace BalloonParty.Configuration.Editor
                         "Blob Arc Height");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_paintBlobStartScale",
                         "Blob Start Scale");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_paintBlobArcCurve",
+                        "Blob Arc Curve");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_paintBlobScaleCurve",
+                        "Blob Scale Curve");
                     break;
             }
 
@@ -120,7 +126,7 @@ namespace BalloonParty.Configuration.Editor
                     return row * 4;
 
                 case ItemType.Paint:
-                    return row * 4;
+                    return row * 6;
 
                 default:
                     return 0f;

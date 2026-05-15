@@ -17,7 +17,11 @@ namespace BalloonParty.Item
         public void Activate(Color balloonColor)
         {
             SetVisible(true);
+            SetColor(balloonColor);
+        }
 
+        public void SetColor(Color balloonColor)
+        {
             foreach (var sr in _spritesToSetColor)
             {
                 sr.color = new Color(balloonColor.r, balloonColor.g, balloonColor.b, _spritesAlpha);

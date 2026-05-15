@@ -19,11 +19,6 @@ namespace BalloonParty.Editor
         private static readonly FieldInfo SplashPrefabField =
             typeof(PaintSplashView).GetField("_splashParticlePrefab", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private static readonly FieldInfo ArcCurveField =
-            typeof(PaintSplashView).GetField("_arcCurve", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        private static readonly FieldInfo ScaleCurveField =
-            typeof(PaintSplashView).GetField("_scaleCurve", BindingFlags.NonPublic | BindingFlags.Instance);
 
         private int _blobCount = 6;
         private List<FlightState> _flights;
@@ -40,8 +35,6 @@ namespace BalloonParty.Editor
         private PaintSplashView Target => (PaintSplashView)target;
         private ColorableRenderer[] Blobs => (ColorableRenderer[])BlobRenderersField.GetValue(Target);
         private ParticleSystem SplashPrefab => (ParticleSystem)SplashPrefabField.GetValue(Target);
-        private AnimationCurve ArcCurve => (AnimationCurve)ArcCurveField.GetValue(Target);
-        private AnimationCurve ScaleCurve => (AnimationCurve)ScaleCurveField.GetValue(Target);
 
         private ItemSettings PaintSettings
         {
@@ -55,6 +48,9 @@ namespace BalloonParty.Editor
         private float ArcHeight => PaintSettings?.PaintBlobArcHeight ?? 0.6f;
         private float BlobScale => PaintSettings?.PaintBlobStartScale ?? 0.5f;
         private float FlightDuration => PaintSettings?.PaintBlobFlightDuration ?? 0.35f;
+
+        private AnimationCurve ArcCurve => PaintSettings?.PaintBlobArcCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
+        private AnimationCurve ScaleCurve => PaintSettings?.PaintBlobScaleCurve ?? AnimationCurve.Constant(0f, 1f, 1f);
 
         private float FlightRadius
         {

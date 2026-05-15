@@ -10,6 +10,14 @@ namespace BalloonParty.Balloon.View
         {
             var main = Renderer.main;
             main.startColor = color;
+
+            // Force-restart so all particles immediately reflect the new color.
+            Renderer.Clear();
+
+            if (Renderer.isPlaying)
+            {
+                Renderer.Play();
+            }
         }
     }
 }

@@ -12,6 +12,7 @@ Types and utilities used across multiple features.
 | `SortingHelper` | Static utility for Unity sorting order calculations — `SlotBaseSortingOrder` computes base order from grid position, `ApplySortingOrder` applies sequential orders to renderer arrays. Used by `BalloonView`, `ItemDisplayService`, and `ItemVisualView` |
 | `SceneTransition` | MonoBehaviour wired to a button's `onClick` — calls `SceneManager.LoadScene(_sceneName)` and publishes `SpawnBalloonLineMessage` to seed the initial balloon grid |
 | `Pool/` | Generic object pooling system — `PoolManager`, `PoolChannel<T>`, `IPoolable`, `EffectView`, `EffectPoolChannel`, `ParticlePoolChannel`, `PoolableParticle` (see `Pool/README.md`) |
+| `Extensions/` | Extension methods — `ColorableRendererExtensions` (`BindColor` for reactive color subscriptions) |
 | `Messages/` | MessagePipe signal structs that decouple systems from one another |
 
 ## Messages

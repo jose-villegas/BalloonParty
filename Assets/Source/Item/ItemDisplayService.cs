@@ -45,6 +45,10 @@ namespace BalloonParty.Item
                 .Subscribe(type => OnItemChanged(type, colorName.Value))
                 .AddTo(_disposables);
 
+            colorName
+                .Subscribe(RecolorActiveVisual)
+                .AddTo(_disposables);
+
             slotIndex
                 .Subscribe(slot => ApplySorting(slot))
                 .AddTo(_disposables);
@@ -93,6 +97,16 @@ namespace BalloonParty.Item
             var color = _palette.GetColor(colorName);
             _activeView.Activate(color);
             ApplySorting(_slotIndex.Value);
+        }
+
+        private void RecolorActiveVisual(string colorName)
+        {
+            if (_activeView == null || string.IsNullOrEmpty(colorName))
+            {
+                return;
+            }
+
+            _activeView.SetColor(_palette.GetColor(colorName));
         }
 
         private void ReturnActiveVisual()

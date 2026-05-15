@@ -107,6 +107,8 @@ namespace BalloonParty.Item.Paint
                 settings.PaintBlobFlightDuration,
                 settings.PaintBlobArcHeight,
                 settings.PaintBlobStartScale,
+                settings.PaintBlobArcCurve,
+                settings.PaintBlobScaleCurve,
                 _poolManager,
                 index =>
                 {

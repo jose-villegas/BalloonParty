@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6168776841544682305}
   - component: {fileID: 3702900025065173228}
   - component: {fileID: 2974752064676068089}
+  - component: {fileID: 5822253737736993656}
   m_Layer: 9
   m_Name: Blob
   m_TagString: Untagged
@@ -106,6 +107,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+--- !u!114 &5822253737736993656
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4613524145958907830}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92cc1fbc987ef400a802243c6222281b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::PaintBlobRenderer
+  _timeOffsetRange: 100
 --- !u!1 &7552820408029425139
 GameObject:
   m_ObjectHideFlags: 0

@@ -27,17 +27,8 @@ namespace BalloonParty.Item.Paint
         [Tooltip("Particle prefab spawned at each blob's target on arrival. Pooled independently.")]
         [SerializeField] private ParticleSystem _splashParticlePrefab;
 
-        [Header("Flight Curves")]
-        [Tooltip("Scale multiplier over flight progress (0→1). Defaults to a sine bulge if left empty.")]
-        [SerializeField] private AnimationCurve _scaleCurve = AnimationCurve.Constant(0f, 1f, 1f);
-
-        [Tooltip("Vertical offset multiplier over flight progress (0→1). Peaks at 0.5 for a parabolic arc.")]
-        [SerializeField] private AnimationCurve _arcCurve = new(
-            new Keyframe(0f, 0f, 0f, 4f),
-            new Keyframe(0.5f, 1f, 0f, 0f),
-            new Keyframe(1f, 0f, -4f, 0f));
-
         private List<BlobFlight> _activeFlights;
+        private AnimationCurve _arcCurve;
         private float _arcHeight;
         private float _blobScale;
         private Color _color;
@@ -45,6 +36,7 @@ namespace BalloonParty.Item.Paint
         private Action<int> _onTargetHit;
         private bool _playing;
         private PoolManager _poolManager;
+        private AnimationCurve _scaleCurve;
 
         private void Update()
         {
@@ -81,12 +73,16 @@ namespace BalloonParty.Item.Paint
             float flightDuration,
             float arcHeight,
             float blobScale,
+            AnimationCurve arcCurve,
+            AnimationCurve scaleCurve,
             PoolManager poolManager,
             Action<int> onTargetHit)
         {
             _flightDuration = Mathf.Max(flightDuration, 0.01f);
             _arcHeight = arcHeight;
             _blobScale = blobScale;
+            _arcCurve = arcCurve;
+            _scaleCurve = scaleCurve;
             _poolManager = poolManager;
             _onTargetHit = onTargetHit;
 

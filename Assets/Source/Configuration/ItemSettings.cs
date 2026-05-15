@@ -31,6 +31,13 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _paintBlobArcHeight = 0.6f;
         [SerializeField] private float _paintBlobStartScale = 0.5f;
 
+        [SerializeField] private AnimationCurve _paintBlobArcCurve = new(
+            new Keyframe(0f, 0f, 0f, 4f),
+            new Keyframe(0.5f, 1f, 0f, 0f),
+            new Keyframe(1f, 0f, -4f, 0f));
+
+        [SerializeField] private AnimationCurve _paintBlobScaleCurve = AnimationCurve.Constant(0f, 1f, 1f);
+
         public ItemType Type => _type;
         public int TurnCheckEvery => _turnCheckEvery;
         public float Weight => _weight;
@@ -48,5 +55,7 @@ namespace BalloonParty.Configuration
         public float PaintBlobFlightDuration => _paintBlobFlightDuration;
         public float PaintBlobArcHeight => _paintBlobArcHeight;
         public float PaintBlobStartScale => _paintBlobStartScale;
+        public AnimationCurve PaintBlobArcCurve => _paintBlobArcCurve;
+        public AnimationCurve PaintBlobScaleCurve => _paintBlobScaleCurve;
     }
 }
