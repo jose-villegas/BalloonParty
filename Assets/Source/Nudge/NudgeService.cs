@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
@@ -14,21 +13,23 @@ namespace BalloonParty.Nudge
     public class NudgeService : IStartable
     {
         private readonly BalloonsConfiguration _config;
-        // Balloons currently mid-nudge tween. Distinguishes nudge-unstable from spawn-unstable.
         private readonly HashSet<IBalloonModel> _nudging = new();
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
         private readonly ISubscriber<BalloonNudgeMessage> _nudgeSubscriber;
+        private readonly NudgeOverrideResolver _resolver;
         private readonly SlotGrid _grid;
 
         [Inject]
         public NudgeService(
             SlotGrid grid,
             BalloonsConfiguration config,
+            NudgeOverrideResolver resolver,
             ISubscriber<BalloonHitMessage> hitSubscriber,
             ISubscriber<BalloonNudgeMessage> nudgeSubscriber)
         {
             _grid = grid;
             _config = config;
+            _resolver = resolver;
             _hitSubscriber = hitSubscriber;
             _nudgeSubscriber = nudgeSubscriber;
         }
@@ -39,11 +40,6 @@ namespace BalloonParty.Nudge
             _nudgeSubscriber.Subscribe(OnNudge);
         }
 
-        private static NudgeOverride FindOverride(NudgeOverride[] overrides, NudgeType source)
-        {
-            return overrides?.FirstOrDefault(o => o.AppliesTo.HasFlag(source));
-        }
-
         private void NudgeBalloon(Vector2Int slot, Vector3 origin, float distance, float duration)
         {
             var model = _grid.At(slot);
@@ -52,8 +48,6 @@ namespace BalloonParty.Nudge
                 return;
             }
 
-            // Allow interrupting a mid-nudge balloon, but not one that is
-            // spawning or rebalancing (genuinely not at its grid position yet).
             if (!model.IsStable.Value && !_nudging.Contains(model))
             {
                 return;
@@ -90,8 +84,8 @@ namespace BalloonParty.Nudge
             foreach (var neighbor in neighbors)
             {
                 var slot = neighbor.SlotIndex.Value;
-                var distance = ResolveDistance(neighbor.NudgeOverrides, null, NudgeType.Neighbor);
-                var duration = ResolveDuration(neighbor.NudgeOverrides, null, NudgeType.Neighbor);
+                var distance = _resolver.ResolveDistance(neighbor.NudgeOverrides, null, NudgeType.Neighbor);
+                var duration = _resolver.ResolveDuration(neighbor.NudgeOverrides, null, NudgeType.Neighbor);
                 NudgeBalloon(slot, hitSlotPos, distance, duration);
             }
         }
@@ -116,16 +110,16 @@ namespace BalloonParty.Nudge
             }
 
             var slot = msg.Balloon.SlotIndex.Value;
-            var distance = ResolveDistance(msg.Balloon.NudgeOverrides, msg.Overrides, msg.Source);
-            var duration = ResolveDuration(msg.Balloon.NudgeOverrides, msg.Overrides, msg.Source);
+            var distance = _resolver.ResolveDistance(msg.Balloon.NudgeOverrides, msg.Overrides, msg.Source);
+            var duration = _resolver.ResolveDuration(msg.Balloon.NudgeOverrides, msg.Overrides, msg.Source);
             NudgeBalloon(slot, msg.Origin, distance, duration);
         }
 
         private void HandleShockwave(BalloonNudgeMessage msg)
         {
-            var baseDistance = ResolveDistance(null, msg.Overrides, NudgeType.Shockwave);
-            var baseDuration = ResolveDuration(null, msg.Overrides, NudgeType.Shockwave);
-            var falloff = ResolveFalloff(msg.Overrides, NudgeType.Shockwave);
+            var baseDistance = _resolver.ResolveDistance(null, msg.Overrides, NudgeType.Shockwave);
+            var baseDuration = _resolver.ResolveDuration(null, msg.Overrides, NudgeType.Shockwave);
+            var falloff = _resolver.ResolveFalloff(msg.Overrides, NudgeType.Shockwave);
 
             for (var col = 0; col < _grid.Columns; col++)
             {
@@ -145,7 +139,7 @@ namespace BalloonParty.Nudge
                     }
 
                     // Per-balloon shockwave override takes priority over publisher attenuation
-                    var balloonOverride = FindOverride(model.NudgeOverrides, NudgeType.Shockwave);
+                    var balloonOverride = NudgeOverrideResolver.FindOverride(model.NudgeOverrides, NudgeType.Shockwave);
                     float distance;
                     float duration;
 
@@ -172,52 +166,6 @@ namespace BalloonParty.Nudge
                     NudgeBalloon(slot, msg.Origin, distance, duration);
                 }
             }
-        }
-
-        internal float ResolveDistance(
-            NudgeOverride[] balloonOverrides,
-            NudgeOverride[] publisherOverrides,
-            NudgeType source)
-        {
-            var entry = FindOverride(balloonOverrides, source);
-            if (entry != null)
-            {
-                return entry.Distance;
-            }
-
-            var pubEntry = FindOverride(publisherOverrides, source);
-            if (pubEntry != null)
-            {
-                return pubEntry.Distance;
-            }
-
-            return _config.NudgeDistance;
-        }
-
-        internal float ResolveDuration(
-            NudgeOverride[] balloonOverrides,
-            NudgeOverride[] publisherOverrides,
-            NudgeType source)
-        {
-            var entry = FindOverride(balloonOverrides, source);
-            if (entry != null)
-            {
-                return entry.Duration;
-            }
-
-            var pubEntry = FindOverride(publisherOverrides, source);
-            if (pubEntry != null)
-            {
-                return pubEntry.Duration;
-            }
-
-            return _config.NudgeDuration;
-        }
-
-        internal float ResolveFalloff(NudgeOverride[] overrides, NudgeType source)
-        {
-            var entry = FindOverride(overrides, source);
-            return entry != null ? entry.Falloff : _config.NudgeFalloff;
         }
     }
 }

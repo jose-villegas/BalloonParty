@@ -6,6 +6,7 @@
         "VContainer",
         "VContainer.Editor",
         "UniRx",
+        "UniTask",
         "MessagePipe.Editor",
         "MessagePipe",
         "MessagePipe.VContainer"

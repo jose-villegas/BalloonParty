@@ -77,7 +77,7 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 55 tests
+## Current Coverage — 62 tests
 
 ### `SlotGridTests` — 17 tests
 
@@ -134,9 +134,11 @@ Design note: `EvaluateHit` lives on `IBalloonModel` so that both consumers call 
 | Overkill (damage > remaining) | 1 | Negative remainder mishandled |
 | Exact kill with higher values | 1 | Arithmetic error at larger numbers |
 
-### `NudgeServiceTests` — 10 tests
+### `NudgeOverrideResolverTests` — 10 tests
 
 Tests the 3-tier override resolution cascade (balloon → publisher → config default) and flag-based override matching.
+
+Design note: the resolve logic was extracted from `NudgeService` into `NudgeOverrideResolver` — a standalone class with public methods, testable without `[InternalsVisibleTo]`. `NudgeService` injects the resolver.
 
 | Area | Tests | What could break |
 |---|---|---|
@@ -174,6 +176,27 @@ Tests the item-assignment pipeline: turn filtering, max-cap enforcement via grid
 | No eligible balloons (`CanHoldItem = false`) | 1 | Missing filter on `CanHoldItem` |
 | Eligible balloon gets item assigned | 1 | Assignment path broken |
 
+### `LightningItemHandlerTests` — 4 tests
+
+Tests the lightning item's target collection and hit publishing — color matching, self-exclusion, and configured damage.
+
+| Area | Tests | What could break |
+|---|---|---|
+| No same-color balloons → no hits | 1 | Color comparison wrong or missing |
+| Same-color balloons → hit published for each | 1 | Grid scan misses occupied slots |
+| Self excluded from targets | 1 | Source balloon hit by own lightning |
+| Configured damage applied | 1 | Settings damage ignored or hardcoded |
+
+### `ShieldItemHandlerTests` — 3 tests
+
+Tests the shield item's projectile shield increment and message publishing.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Active projectile → shield incremented | 1 | Wrong field or no increment |
+| No active projectile → no crash | 1 | Null guard missing |
+| ShieldGainedMessage published with correct slot | 1 | Wrong slot index in message |
+
 ---
 
 ## Deferred Systems
@@ -182,6 +205,8 @@ These systems are not tested because they are either too coupled to Unity runtim
 
 | System | Why defer |
 |---|---|
+| `BombItemHandler` | `BlastBalloons` uses `Physics2D.OverlapCircle` — needs real colliders and physics simulation. Shockwave nudge publish is covered indirectly by NudgeService tests. |
+| `LaserItemHandler` | `CastCross` uses `Physics2D.CircleCast` — needs real colliders and physics simulation. |
 | `BalloonBalancer` | Scan+move loop depends on well-tested `IsUnbalanced`/`OptimalNextEmptySlot` + DOTween animation. Test if it changes. |
 | `BalloonSpawner` | Heavy Unity/DI coupling (`PoolManager`, `LifetimeScope`, DOTween). Little pure logic beyond forwarding. |
 | `ProjectileModel` | Pure data bag — too simple to break |
@@ -206,3 +231,5 @@ These systems are not tested because they are either too coupled to Unity runtim
 Run **all** Edit Mode tests on every code change. They're pure C# — they take milliseconds.
 
 In Unity: **Window → General → Test Runner → EditMode → Run All**
+
+
