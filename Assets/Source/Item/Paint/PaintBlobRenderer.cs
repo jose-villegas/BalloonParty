@@ -1,26 +1,28 @@
 using UnityEngine;
 
-/// <summary>
-/// Assigns a random <c>_TimeOffset</c> to the PaintBlob shader via a
-/// MaterialPropertyBlock so every balloon looks different while sharing
-/// one material (no extra material instances, no SRP batching breakage).
-/// </summary>
-[RequireComponent(typeof(SpriteRenderer))]
-public class PaintBlobRenderer : MonoBehaviour
+namespace BalloonParty.Item.Paint
 {
-    [Tooltip("Scale of the random offset. Larger values spread the phase further apart.")]
-    [SerializeField] private float _timeOffsetRange = 100f;
-
-    private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
-
-    private void Awake()
+    /// <summary>
+    ///     Assigns a random <c>_TimeOffset</c> to the PaintBlob shader via a
+    ///     MaterialPropertyBlock so every blob looks different while sharing
+    ///     one material (no extra material instances, no SRP batching breakage).
+    /// </summary>
+    [RequireComponent(typeof(SpriteRenderer))]
+    public class PaintBlobRenderer : MonoBehaviour
     {
-        var spriteRenderer = GetComponent<SpriteRenderer>();
-        var block = new MaterialPropertyBlock();
+        private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
 
-        // Read any existing block values so we don't stomp them.
-        spriteRenderer.GetPropertyBlock(block);
-        block.SetFloat(TimeOffsetId, Random.value * _timeOffsetRange);
-        spriteRenderer.SetPropertyBlock(block);
+        [Tooltip("Scale of the random offset. Larger values spread the phase further apart.")]
+        [SerializeField] private float _timeOffsetRange = 100f;
+
+        private void Awake()
+        {
+            var spriteRenderer = GetComponent<SpriteRenderer>();
+            var block = new MaterialPropertyBlock();
+
+            spriteRenderer.GetPropertyBlock(block);
+            block.SetFloat(TimeOffsetId, Random.value * _timeOffsetRange);
+            spriteRenderer.SetPropertyBlock(block);
+        }
     }
 }

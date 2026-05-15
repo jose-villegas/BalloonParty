@@ -43,10 +43,8 @@ namespace BalloonParty.UI.Score
         private readonly List<ScoreNotice> _activeNotices = new();
 
         private PaletteEntry _colorConfig;
-        private int _streak;
         private string _noticePoolKey;
-
-        private const string PreviewNameSuffix = " [Preview]";
+        private int _streak;
 
         private void OnValidate()
         {

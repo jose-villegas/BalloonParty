@@ -24,9 +24,6 @@ namespace BalloonParty.Editor
         private const string TagPrefix = "[GradientTexture:";
         private const string BakedNamePrefix = "_GradientBaked_";
 
-        // ----------------------------------------------------------------
-        // MaterialPropertyDrawer overrides
-        // ----------------------------------------------------------------
 
         public override float GetPropertyHeight(MaterialProperty prop, string label, MaterialEditor editor)
         {
@@ -58,9 +55,6 @@ namespace BalloonParty.Editor
             }
         }
 
-        // ----------------------------------------------------------------
-        // Baking
-        // ----------------------------------------------------------------
 
         private static void BakeAndApply(Material material, MaterialProperty prop, Gradient gradient)
         {
@@ -116,12 +110,6 @@ namespace BalloonParty.Editor
             return newTex;
         }
 
-        // ----------------------------------------------------------------
-        // Gradient persistence — stored in AssetImporter.userData as tagged
-        // JSON blocks so multiple gradient properties coexist safely.
-        //
-        // Format: [GradientTexture:_PropA]{...json...}[GradientTexture:_PropB]{...json...}
-        // ----------------------------------------------------------------
 
         private static Gradient LoadGradient(Material material, string propName)
         {
@@ -154,9 +142,6 @@ namespace BalloonParty.Editor
             WriteUserData(material, ReplaceBlock(userData, propName, json));
         }
 
-        // ----------------------------------------------------------------
-        // Tagged-block helpers
-        // ----------------------------------------------------------------
 
         private static string ExtractBlock(string userData, string propName)
         {
@@ -211,9 +196,6 @@ namespace BalloonParty.Editor
             return userData + tag + json;
         }
 
-        // ----------------------------------------------------------------
-        // AssetImporter.userData access
-        // ----------------------------------------------------------------
 
         private static string ReadUserData(Material material)
         {
@@ -242,11 +224,10 @@ namespace BalloonParty.Editor
             return string.IsNullOrEmpty(path) ? null : AssetImporter.GetAtPath(path);
         }
 
-        // ----------------------------------------------------------------
-        // Gradient storage — plain-struct wrapper because JsonUtility cannot
-        // serialise Gradient as a root object directly.
-        // ----------------------------------------------------------------
-
+        /// <summary>
+        ///     Plain-struct wrapper because JsonUtility cannot serialise
+        ///     Gradient as a root object directly.
+        /// </summary>
         [Serializable]
         private class GradientStorage
         {

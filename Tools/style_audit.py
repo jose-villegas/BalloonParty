@@ -1,0 +1,445 @@
+#!/usr/bin/env python3
+"""
+BalloonParty Code Style Auditor
+================================
+Scans Assets/Source/**/*.cs for violations of the project's code-style guide.
+
+Usage:
+    python3 Tools/style_audit.py                  # full report
+    python3 Tools/style_audit.py --fix             # auto-fix safe issues
+    python3 Tools/style_audit.py --rule braces     # run only one rule
+    python3 Tools/style_audit.py --file Foo.cs     # audit one file
+
+Rules are categorised:
+    [REPORT]  — flagged for manual review
+    [FIXABLE] — can be auto-corrected with --fix
+"""
+
+from __future__ import annotations
+
+import argparse
+import os
+import re
+import sys
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Optional
+
+# ─── Configuration ───────────────────────────────────────────────────────────
+
+SOURCE_ROOT = Path(__file__).resolve().parent.parent / "Assets" / "Source"
+EDITOR_FOLDERS = {"Editor"}
+
+# Folders that should contain a README.md
+FEATURE_FOLDERS_DEPTH = 1  # immediate children of Source/
+
+# ─── Data types ──────────────────────────────────────────────────────────────
+
+@dataclass
+class Violation:
+    file: str
+    line: int
+    rule: str
+    message: str
+    fixable: bool = False
+
+    def __str__(self):
+        tag = "[FIXABLE]" if self.fixable else "[REPORT]"
+        rel = os.path.relpath(self.file, SOURCE_ROOT)
+        return f"  {tag} {rel}:{self.line}  ({self.rule}) {self.message}"
+
+
+@dataclass
+class AuditResult:
+    violations: list[Violation] = field(default_factory=list)
+
+    def add(self, v: Violation):
+        self.violations.append(v)
+
+    def summary(self) -> str:
+        by_rule: dict[str, int] = {}
+        for v in self.violations:
+            by_rule[v.rule] = by_rule.get(v.rule, 0) + 1
+        lines = [f"\n{'='*60}", f"  Total violations: {len(self.violations)}", f"{'='*60}"]
+        for rule, count in sorted(by_rule.items(), key=lambda x: -x[1]):
+            lines.append(f"    {rule:40s}  {count}")
+        return "\n".join(lines)
+
+
+# ─── Helpers ─────────────────────────────────────────────────────────────────
+
+def cs_files(root: Path):
+    """Yield all .cs files under root, skipping Editor~ and hidden dirs."""
+    for p in sorted(root.rglob("*.cs")):
+        if any(part.startswith(".") for part in p.parts):
+            continue
+        yield p
+
+
+def read_lines(path: Path) -> list[str]:
+    with open(path, encoding="utf-8-sig") as f:
+        return f.readlines()
+
+
+def is_in_editor(path: Path) -> bool:
+    return any(part in EDITOR_FOLDERS for part in path.relative_to(SOURCE_ROOT).parts)
+
+
+def expected_namespace(path: Path) -> str:
+    """Derive expected namespace from folder path relative to Source/."""
+    rel = path.relative_to(SOURCE_ROOT).parent
+    parts = ["BalloonParty"] + [p for p in rel.parts if p not in (".", "")]
+    return ".".join(parts)
+
+
+# ─── Rule implementations ───────────────────────────────────────────────────
+
+def check_namespace(path: Path, lines: list[str], result: AuditResult):
+    """Namespace must match folder structure."""
+    expected = expected_namespace(path)
+    for i, line in enumerate(lines, 1):
+        m = re.match(r"^\s*namespace\s+([\w.]+)", line)
+        if m:
+            actual = m.group(1)
+            if actual != expected:
+                result.add(Violation(str(path), i, "namespace-mismatch",
+                    f"expected '{expected}', got '{actual}'"))
+            return
+    # No namespace found — global types
+    result.add(Violation(str(path), 1, "namespace-missing",
+        f"no namespace declaration; expected '{expected}'"))
+
+
+def check_braces_required(path: Path, lines: list[str], result: AuditResult):
+    """Braces required for if/else/for/foreach/while/using/lock/fixed."""
+    control_re = re.compile(
+        r"^\s*(if|else\s+if|else|for|foreach|while|using|lock|fixed)\s*(\(.*\))?\s*$"
+    )
+    for i, line in enumerate(lines, 1):
+        stripped = line.rstrip()
+        if control_re.match(stripped):
+            # Next non-empty line should start with { or be on the same line
+            for j in range(i, min(i + 3, len(lines))):
+                next_line = lines[j].strip()
+                if not next_line:
+                    continue
+                if next_line.startswith("{") or next_line.startswith("//"):
+                    break
+                # It's a statement without braces
+                result.add(Violation(str(path), i, "braces-required",
+                    f"control statement without braces: {stripped.strip()}"))
+                break
+
+
+def check_allman_braces(path: Path, lines: list[str], result: AuditResult):
+    """Opening brace must be on its own line (Allman style).
+    Exceptions: object/collection initialisers, lambdas, array init, auto-properties."""
+    for i, line in enumerate(lines, 1):
+        stripped = line.rstrip()
+        # Skip lines that are ONLY a brace
+        if stripped.strip() == "{":
+            continue
+        # Skip string interpolation, attributes, lambdas, arrow functions
+        if "=>" in stripped:
+            continue
+        if re.search(r'"\$?.*\{', stripped):
+            continue
+        # Detect: ) { or keyword {  at end of line (but not initialiser = new Foo {)
+        if stripped.endswith("{") and not re.search(r"(=|new\s+\w+.*|new\(.*\))\s*\{$", stripped):
+            # Could be control flow or method signature with brace on same line
+            if re.search(r"(if|else|for|foreach|while|using|lock|fixed|class|struct|enum|interface|namespace|switch|try|catch|finally|do)\b.*\{$", stripped):
+                result.add(Violation(str(path), i, "allman-braces",
+                    f"opening brace on same line: {stripped.strip()[:80]}"))
+            elif re.match(r"\s*(public|private|protected|internal|static|async|override|virtual|abstract|sealed|void|[\w<>\[\],\s]+)\s+\w+\s*\(.*\)\s*\{$", stripped):
+                result.add(Violation(str(path), i, "allman-braces",
+                    f"method brace on same line: {stripped.strip()[:80]}"))
+
+
+def check_block_comment_headers(path: Path, lines: list[str], result: AuditResult):
+    """No block comment headers like // ====== or // ------."""
+    header_re = re.compile(r"^\s*//\s*[=\-*#]{4,}")
+    for i, line in enumerate(lines, 1):
+        if header_re.match(line):
+            result.add(Violation(str(path), i, "block-comment-header",
+                f"block comment header: {line.strip()[:60]}"))
+
+
+def check_redundant_comments(path: Path, lines: list[str], result: AuditResult):
+    """Flag common redundant comment patterns."""
+    patterns = [
+        (re.compile(r"^\s*//\s*(inject\s+depend|constructor|update\s+position|set\s+color|"
+                     r"get\s+component|initialize|cleanup|dispose|destructor|"
+                     r"fields|properties|methods|private\s+methods|public\s+methods)\s*$", re.I),
+         "redundant comment"),
+    ]
+    for i, line in enumerate(lines, 1):
+        for pat, desc in patterns:
+            if pat.match(line):
+                result.add(Violation(str(path), i, "redundant-comment",
+                    f"{desc}: {line.strip()[:60]}"))
+
+
+def check_start_coroutine(path: Path, lines: list[str], result: AuditResult):
+    """No StartCoroutine / IEnumerator in new code."""
+    for i, line in enumerate(lines, 1):
+        if "StartCoroutine" in line and "//" not in line.split("StartCoroutine")[0]:
+            result.add(Violation(str(path), i, "no-coroutines",
+                "StartCoroutine usage — use UniTask instead"))
+        # IEnumerator return type (but allow in test code)
+        if re.match(r"\s*(private|public|protected|internal)?\s*IEnumerator\s+\w+", line):
+            result.add(Violation(str(path), i, "no-coroutines",
+                "IEnumerator method — use async UniTask instead"))
+
+
+def check_magic_strings(path: Path, lines: list[str], result: AuditResult):
+    """Animator params and physics layers must be cached, not passed as magic strings."""
+    # SetTrigger("Foo"), SetBool("Foo"), etc.
+    anim_re = re.compile(r'\.(SetTrigger|SetBool|SetFloat|SetInteger|GetBool|GetFloat|GetInteger)\s*\(\s*"')
+    layer_re = re.compile(r'(LayerMask\.NameToLayer|LayerMask\.GetMask)\s*\(\s*"')
+    for i, line in enumerate(lines, 1):
+        if anim_re.search(line):
+            result.add(Violation(str(path), i, "magic-string-animator",
+                "animator param should use cached StringToHash int"))
+        if layer_re.search(line):
+            # Check if this is inside Awake (lazy init) — that's OK for the sentinel pattern
+            # Simple heuristic: if it's assigned to a static field, it's fine
+            if "static" not in line and "=" not in line:
+                result.add(Violation(str(path), i, "magic-string-layer",
+                    "layer lookup should be cached in a static field"))
+
+
+def check_addto_this_in_poolable(path: Path, lines: list[str], result: AuditResult):
+    """Pooled objects must use CompositeDisposable, not AddTo(this)."""
+    # First check if the class implements IPoolable
+    full_text = "".join(lines)
+    if "IPoolable" not in full_text:
+        return
+    for i, line in enumerate(lines, 1):
+        if ".AddTo(this)" in line or ".AddTo( this )" in line:
+            result.add(Violation(str(path), i, "addto-this-poolable",
+                "AddTo(this) in IPoolable class — use CompositeDisposable instead"))
+
+
+def check_object_instantiate(path: Path, lines: list[str], result: AuditResult):
+    """Flag Object.Instantiate that might need CreateChildFromPrefab."""
+    for i, line in enumerate(lines, 1):
+        # Skip editor code and pool channels (they legitimately use Instantiate)
+        if is_in_editor(path):
+            continue
+        if "PoolChannel" in path.name:
+            continue
+        if re.search(r"Object\.Instantiate\s*[<(]", line):
+            result.add(Violation(str(path), i, "object-instantiate",
+                "Object.Instantiate — verify this doesn't need CreateChildFromPrefab"))
+
+
+def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
+    """Basic member ordering: [SerializeField] before [Inject] before readonly before mutable."""
+    GROUP_CONST = 1
+    GROUP_STATIC_READONLY = 2
+    GROUP_SERIALIZE = 3
+    GROUP_INJECT = 4
+    GROUP_READONLY = 5
+    GROUP_MUTABLE = 6
+
+    last_group = 0
+    in_class = False
+    brace_depth = 0
+    class_brace_depth = 0
+
+    for i, line in enumerate(lines, 1):
+        stripped = line.strip()
+
+        brace_depth += stripped.count("{") - stripped.count("}")
+
+        if re.match(r"(public|internal|private|protected)?\s*(abstract\s+|sealed\s+|static\s+|partial\s+)*(class|struct)\s+", stripped):
+            in_class = True
+            last_group = 0
+            class_brace_depth = brace_depth
+            continue
+
+        if not in_class:
+            continue
+
+        # Only check direct class members (depth = class + 1)
+        if brace_depth != class_brace_depth + 1:
+            continue
+
+        # Skip methods, constructors, properties with bodies
+        if "(" in stripped and ")" in stripped and "=" not in stripped.split("(")[0]:
+            continue
+
+        # Check previous line for attributes that may span to this line
+        prev_stripped = lines[i - 2].strip() if i >= 2 else ""
+        has_serialize_above = "[SerializeField]" in prev_stripped
+        has_inject_above = "[Inject]" in prev_stripped
+        has_header_above = "[Header" in prev_stripped
+
+        # Detect field declarations
+        if re.match(r"\s*(private|public|protected|internal)\s+const\s+", stripped):
+            group = GROUP_CONST
+        elif re.match(r"\s*(private|public|protected|internal)?\s*static\s+readonly\s+", stripped):
+            group = GROUP_STATIC_READONLY
+        elif "[SerializeField]" in stripped or has_serialize_above:
+            group = GROUP_SERIALIZE
+        elif "[Inject]" in stripped and ";" in stripped:
+            group = GROUP_INJECT
+        elif has_inject_above and ";" in stripped:
+            group = GROUP_INJECT
+        elif re.match(r"\s*(private|public|protected|internal)\s+readonly\s+", stripped):
+            group = GROUP_READONLY
+        elif re.match(r"\s*(private|public|protected|internal)\s+\w+[\w<>\[\],\s]*\s+_\w+\s*[;=]", stripped):
+            if "[SerializeField]" not in stripped and "[Inject]" not in stripped and not has_serialize_above and not has_inject_above:
+                group = GROUP_MUTABLE
+            else:
+                continue
+        else:
+            continue
+
+        if group < last_group:
+            group_names = {1: "const", 2: "static readonly", 3: "[SerializeField]",
+                          4: "[Inject]", 5: "readonly", 6: "mutable"}
+            result.add(Violation(str(path), i, "member-ordering",
+                f"{group_names.get(group, '?')} field after {group_names.get(last_group, '?')} field"))
+        last_group = group
+
+
+def check_missing_readmes(result: AuditResult):
+    """Each feature folder should have a README.md."""
+    for child in sorted(SOURCE_ROOT.iterdir()):
+        if child.is_dir() and not child.name.startswith(".") and child.name != "Editor":
+            readme = child / "README.md"
+            if not readme.exists():
+                result.add(Violation(str(child), 0, "missing-readme",
+                    f"feature folder '{child.name}/' has no README.md"))
+
+
+def check_plain_instantiate_comment(path: Path, lines: list[str], result: AuditResult):
+    """Flag plain Instantiate calls on prefabs (non-pool, non-editor)."""
+    pass  # covered by check_object_instantiate
+
+
+# ─── Rule registry ───────────────────────────────────────────────────────────
+
+RULES: dict[str, callable] = {
+    "namespace":         check_namespace,
+    "braces":            check_braces_required,
+    "allman":            check_allman_braces,
+    "block-comments":    check_block_comment_headers,
+    "redundant-comments":check_redundant_comments,
+    "coroutines":        check_start_coroutine,
+    "magic-strings":     check_magic_strings,
+    "addto-poolable":    check_addto_this_in_poolable,
+    "instantiate":       check_object_instantiate,
+    "member-ordering":   check_member_ordering,
+}
+
+# Rules that don't operate on individual files
+META_RULES: dict[str, callable] = {
+    "missing-readme": check_missing_readmes,
+}
+
+
+# ─── Auto-fix implementations ───────────────────────────────────────────────
+
+def fix_namespace(path: Path, lines: list[str]) -> list[str]:
+    """Fix namespace to match folder structure."""
+    expected = expected_namespace(path)
+    fixed = []
+    for line in lines:
+        m = re.match(r"^(\s*)namespace\s+([\w.]+)", line)
+        if m:
+            indent = m.group(1)
+            fixed.append(f"{indent}namespace {expected}\n")
+        else:
+            fixed.append(line)
+    return fixed
+
+
+# ─── Main ────────────────────────────────────────────────────────────────────
+
+def run_audit(rule_filter: Optional[str] = None, file_filter: Optional[str] = None) -> AuditResult:
+    result = AuditResult()
+
+    # Per-file rules
+    for path in cs_files(SOURCE_ROOT):
+        if file_filter and file_filter not in str(path):
+            continue
+
+        lines = read_lines(path)
+
+        for name, check_fn in RULES.items():
+            if rule_filter and rule_filter != name:
+                continue
+            check_fn(path, lines, result)
+
+    # Meta rules
+    if not file_filter:
+        for name, check_fn in META_RULES.items():
+            if rule_filter and rule_filter != name:
+                continue
+            check_fn(result)
+
+    return result
+
+
+def run_fix(result: AuditResult):
+    """Apply auto-fixes for fixable violations."""
+    # Group namespace fixes by file
+    ns_files = set()
+    for v in result.violations:
+        if v.rule == "namespace-mismatch":
+            ns_files.add(v.file)
+
+    fixed_count = 0
+    for fpath in ns_files:
+        path = Path(fpath)
+        lines = read_lines(path)
+        new_lines = fix_namespace(path, lines)
+        if new_lines != lines:
+            with open(path, "w", encoding="utf-8") as f:
+                f.writelines(new_lines)
+            fixed_count += 1
+            print(f"  FIXED namespace in {os.path.relpath(fpath, SOURCE_ROOT)}")
+
+    print(f"\n  Auto-fixed {fixed_count} file(s).")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="BalloonParty Code Style Auditor")
+    parser.add_argument("--fix", action="store_true", help="Auto-fix safe issues (currently: namespace)")
+    parser.add_argument("--rule", type=str, default=None,
+                        help=f"Run only one rule. Available: {', '.join(sorted(list(RULES) + list(META_RULES)))}")
+    parser.add_argument("--file", type=str, default=None, help="Audit only files matching this substring")
+    args = parser.parse_args()
+
+    print(f"Scanning {SOURCE_ROOT} ...")
+    result = run_audit(rule_filter=args.rule, file_filter=args.file)
+
+    if not result.violations:
+        print("\n  ✅  No violations found!")
+        return
+
+    # Print violations grouped by file
+    by_file: dict[str, list[Violation]] = {}
+    for v in result.violations:
+        by_file.setdefault(v.file, []).append(v)
+
+    for fpath in sorted(by_file):
+        rel = os.path.relpath(fpath, SOURCE_ROOT)
+        print(f"\n{rel}")
+        for v in sorted(by_file[fpath], key=lambda v: v.line):
+            tag = "[FIXABLE]" if v.fixable else "[REPORT]"
+            print(f"  {v.line:4d}  {tag:10s}  {v.rule:25s}  {v.message}")
+
+    print(result.summary())
+
+    if args.fix:
+        print("\nApplying auto-fixes...")
+        run_fix(result)
+
+
+if __name__ == "__main__":
+    main()
+
+
