@@ -1,0 +1,21 @@
+{
+    "name": "BalloonParty.Editor",
+    "rootNamespace": "BalloonParty.Editor",
+    "references": [
+        "BalloonParty.Runtime",
+        "NaughtyAttributes.Core",
+        "NaughtyAttributes.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+

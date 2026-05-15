@@ -9,17 +9,17 @@ namespace BalloonParty.Editor
     ///     All methods operate on Unity's <see cref="SerializedProperty"/> API so they work across
     ///     any serialized type without needing type-specific knowledge.
     /// </summary>
-    internal static class PropertyDrawerHelper
+    public static class PropertyDrawerHelper
     {
-        internal const float LineHeight = 20f;
-        internal const float Spacing = 2f;
+        public const float LineHeight = 20f;
+        public const float Spacing = 2f;
 
         /// <summary>
         ///     Returns the number of direct serialized children of <paramref name="property"/>
         ///     whose names are NOT in <paramref name="excluded"/>.
         ///     Use this result to calculate <c>GetPropertyHeight</c> for the auto section.
         /// </summary>
-        internal static int CountCommonFields(SerializedProperty property, HashSet<string> excluded)
+        public static int CountCommonFields(SerializedProperty property, HashSet<string> excluded)
         {
             var count = 0;
             ForEachCommonChild(property, excluded, _ => count++);
@@ -32,7 +32,7 @@ namespace BalloonParty.Editor
         ///     <see cref="ObjectNames.NicifyVariableName"/> for the display label.
         ///     Returns the updated Y position after the last drawn field.
         /// </summary>
-        internal static float DrawCommonFields(
+        public static float DrawCommonFields(
             Rect position,
             float y,
             SerializedProperty property,
@@ -60,7 +60,7 @@ namespace BalloonParty.Editor
         ///     declaration order differs from the desired display order.
         ///     Returns the updated Y position, or the unchanged Y if the field is not found.
         /// </summary>
-        internal static float DrawNamedField(
+        public static float DrawNamedField(
             Rect position,
             float y,
             SerializedProperty parent,
@@ -83,7 +83,7 @@ namespace BalloonParty.Editor
         /// <summary>
         ///     Draws a bold section-header label and advances Y by one line.
         /// </summary>
-        internal static float DrawSectionHeader(Rect position, float y, string title)
+        public static float DrawSectionHeader(Rect position, float y, string title)
         {
             EditorGUI.LabelField(
                 new Rect(position.x, y, position.width, LineHeight),
@@ -98,7 +98,7 @@ namespace BalloonParty.Editor
         ///     <c>name</c> is NOT present in <paramref name="excluded"/>,
         ///     passing a safe <c>Copy()</c> to <paramref name="visit"/>.
         /// </summary>
-        internal static void ForEachCommonChild(
+        public static void ForEachCommonChild(
             SerializedProperty root,
             HashSet<string> excluded,
             System.Action<SerializedProperty> visit)

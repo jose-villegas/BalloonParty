@@ -1,0 +1,20 @@
+{
+    "name": "BalloonParty.Configuration.Editor",
+    "rootNamespace": "BalloonParty.Configuration.Editor",
+    "references": [
+        "BalloonParty.Runtime",
+        "BalloonParty.Editor"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
+
