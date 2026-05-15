@@ -64,16 +64,10 @@ namespace BalloonParty.Item.Paint
             }
 
             var tint = _palette.GetColor(paintColor);
-            var targets = new List<(IWriteableBalloonModel model, Vector3 pos)>();
+            var targets = new List<(IWriteableBalloonModel model, Vector3 pos, bool shouldPaint)>();
 
             foreach (var neighbor in neighbors)
             {
-                // Skip balloons that already have the same color
-                if (neighbor.Color.Value == paintColor)
-                {
-                    continue;
-                }
-
                 // Skip non-paintable balloons (e.g. tough, unbreakable)
                 if (!neighbor.IsPaintable)
                 {
@@ -82,7 +76,11 @@ namespace BalloonParty.Item.Paint
 
                 var neighborSlot = neighbor.SlotIndex.Value;
                 var targetPos = _grid.IndexToWorldPosition(neighborSlot);
-                targets.Add((neighbor, targetPos));
+
+                // All paintable neighbors get a blob for visual impact,
+                // but only different-color ones actually change color.
+                var shouldPaint = neighbor.Color.Value != paintColor;
+                targets.Add((neighbor, targetPos, shouldPaint));
             }
 
             if (targets.Count == 0)
@@ -93,16 +91,19 @@ namespace BalloonParty.Item.Paint
             if (settings.ActivationEffectPrefab == null)
             {
                 // No effect prefab — change colors immediately
-                foreach (var (model, _) in targets)
+                foreach (var (model, _, shouldPaint) in targets)
                 {
-                    model.Color.Value = paintColor;
+                    if (shouldPaint)
+                    {
+                        model.Color.Value = paintColor;
+                    }
                 }
 
                 return UniTask.CompletedTask;
             }
 
             var flights = new List<(Vector3 from, Vector3 to)>(targets.Count);
-            foreach (var (_, targetPos) in targets)
+            foreach (var (_, targetPos, _) in targets)
             {
                 flights.Add((_worldPosition, targetPos));
             }
@@ -120,7 +121,7 @@ namespace BalloonParty.Item.Paint
                 settings.PaintBlobStartScale,
                 index =>
                 {
-                    if (index < targets.Count)
+                    if (index < targets.Count && targets[index].shouldPaint)
                     {
                         targets[index].model.Color.Value = paintColor;
                     }

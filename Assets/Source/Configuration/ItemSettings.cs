@@ -29,7 +29,7 @@ namespace BalloonParty.Configuration
 
         [SerializeField] private float _paintBlobFlightDuration = 0.35f;
         [SerializeField] private float _paintBlobArcHeight = 0.6f;
-        [SerializeField] private float _paintBlobStartScale = 0.25f;
+        [SerializeField] private float _paintBlobStartScale = 0.5f;
 
         public ItemType Type => _type;
         public int TurnCheckEvery => _turnCheckEvery;

@@ -1,7 +1,8 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
-using DG.Tweening;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace BalloonParty.Item.Paint
@@ -11,7 +12,7 @@ namespace BalloonParty.Item.Paint
     ///     participates in the standard effect-pool pipeline via <see cref="EffectPoolChannel" />.
     ///     The prefab holds pre-placed <see cref="SpriteRenderer" /> children (one per
     ///     potential neighbor — 6 for a hex grid) with the PaintBlob shader material,
-    ///     plus an optional child <see cref="ParticleSystem" /> for the splash burst.
+    ///     plus matching child <see cref="ParticleSystem" />s for the splash bursts.
     ///     Call <see cref="PrepareDisplay" /> with target data before <see cref="Play" />.
     /// </summary>
     public class PaintSplashView : EffectView
@@ -24,37 +25,50 @@ namespace BalloonParty.Item.Paint
         [SerializeField] private SpriteRenderer[] _blobRenderers;
 
         [Header("Splash")]
-        [SerializeField] private ParticleSystem _splashParticle;
+        [Tooltip("Per-blob splash particles — indices match _blobRenderers. Each plays at its blob's target.")]
+        [SerializeField] private ParticleSystem[] _splashParticles;
 
-        private List<(Vector3 from, Vector3 to)> _flights;
+        [Header("Flight Curves")]
+        [Tooltip("Scale multiplier over flight progress (0→1). Defaults to a sine bulge if left empty.")]
+        [SerializeField] private AnimationCurve _scaleCurve = AnimationCurve.Constant(0f, 1f, 1f);
+
+        [Tooltip("Vertical offset multiplier over flight progress (0→1). Peaks at 0.5 for a parabolic arc.")]
+        [SerializeField] private AnimationCurve _arcCurve = new(
+            new Keyframe(0f, 0f, 0f, 4f),
+            new Keyframe(0.5f, 1f, 0f, 0f),
+            new Keyframe(1f, 0f, -4f, 0f));
+
+        private List<BlobFlight> _activeFlights;
         private float _flightDuration;
         private float _arcHeight;
         private float _blobScale;
         private Action<int> _onTargetHit;
-        private Sequence _sequence;
+        private bool _playing;
+
+
+        private void Update()
+        {
+            if (!_playing)
+            {
+                return;
+            }
+
+            TickFlights(Time.deltaTime);
+        }
 
         public override void OnSpawned()
         {
             base.OnSpawned();
             HideAllBlobs();
-
-            if (_splashParticle != null)
-            {
-                _splashParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            }
+            StopAllSplashes();
         }
 
         public override void OnDespawned()
         {
-            _sequence?.Kill();
-            _sequence = null;
+            _playing = false;
+            _activeFlights = null;
             HideAllBlobs();
-
-            if (_splashParticle != null)
-            {
-                _splashParticle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            }
-
+            StopAllSplashes();
             base.OnDespawned();
         }
 
@@ -71,15 +85,38 @@ namespace BalloonParty.Item.Paint
             float blobScale,
             Action<int> onTargetHit)
         {
-            _flights = flights;
             _flightDuration = Mathf.Max(flightDuration, 0.01f);
             _arcHeight = arcHeight;
             _blobScale = blobScale;
             _onTargetHit = onTargetHit;
+
+            var blobCount = _blobRenderers != null ? _blobRenderers.Length : 0;
+            var splashCount = _splashParticles != null ? _splashParticles.Length : 0;
+
+            _activeFlights = new List<BlobFlight>();
+
+            for (var i = 0; i < flights.Count; i++)
+            {
+                var blob = i < blobCount ? _blobRenderers[i] : null;
+
+                if (blob == null)
+                {
+                    continue;
+                }
+
+                _activeFlights.Add(new BlobFlight
+                {
+                    From = flights[i].from,
+                    To = flights[i].to,
+                    Blob = blob,
+                    Splash = i < splashCount ? _splashParticles[i] : null,
+                    Index = i
+                });
+            }
         }
 
         /// <summary>
-        ///     Starts all paint-blob arcs in parallel via DOTween.
+        ///     Starts all paint-blob arcs in parallel.
         ///     <paramref name="tint" /> sets the PaintBlob shader color and splash particle
         ///     start color. <paramref name="onComplete" /> fires after every blob has landed.
         /// </summary>
@@ -87,46 +124,41 @@ namespace BalloonParty.Item.Paint
         {
             OnComplete = onComplete;
 
-            if (_flights == null || _flights.Count == 0)
+            if (_activeFlights == null || _activeFlights.Count == 0)
             {
                 InvokeComplete();
                 return;
             }
 
             ApplySplashColor(tint);
-            BuildSequence(tint);
+            InitialiseBlobs(tint);
+            _playing = true;
         }
 
         private void ApplySplashColor(Color tint)
         {
-            if (_splashParticle != null)
+            if (_splashParticles == null)
             {
-                var main = _splashParticle.main;
-                main.startColor = tint;
+                return;
+            }
+
+            foreach (var splash in _splashParticles)
+            {
+                if (splash != null)
+                {
+                    var main = splash.main;
+                    main.startColor = tint;
+                }
             }
         }
 
-        private void BuildSequence(Color tint)
+        private void InitialiseBlobs(Color tint)
         {
-            _sequence?.Kill();
-
-            var blobCount = _blobRenderers != null ? _blobRenderers.Length : 0;
-            _sequence = DOTween.Sequence();
-
-            for (var i = 0; i < _flights.Count; i++)
+            foreach (var flight in _activeFlights)
             {
-                var index = i;
-                var (from, to) = _flights[i];
-                var blob = index < blobCount ? _blobRenderers[index] : null;
-
-                if (blob == null)
-                {
-                    continue;
-                }
-
-                // Initialise blob
+                var blob = flight.Blob;
                 blob.enabled = true;
-                blob.transform.position = from;
+                blob.transform.position = flight.From;
                 blob.transform.localScale = Vector3.one * _blobScale;
 
                 var block = new MaterialPropertyBlock();
@@ -134,47 +166,52 @@ namespace BalloonParty.Item.Paint
                 block.SetColor(ColorId, tint);
                 block.SetFloat(TimeOffsetId, UnityEngine.Random.Range(0f, 100f));
                 blob.SetPropertyBlock(block);
+            }
+        }
 
-                // Arc tween: animate a 0→1 progress float, compute parabolic position each step
-                var capturedFrom = from;
-                var capturedTo = to;
-                var capturedBlob = blob;
-                var capturedIndex = index;
-                var progress = 0f;
+        private void TickFlights(float delta)
+        {
+            var allLanded = true;
 
-                var arcTween = DOTween.To(
-                        () => progress,
-                        t =>
-                        {
-                            progress = t;
-                            var pos = Vector3.Lerp(capturedFrom, capturedTo, t);
-                            pos.y += _arcHeight * 4f * t * (1f - t);
-                            capturedBlob.transform.position = pos;
+            foreach (var flight in _activeFlights)
+            {
+                if (flight.Landed)
+                {
+                    continue;
+                }
 
-                            var scaleMultiplier = 1f + 0.3f * Mathf.Sin(t * Mathf.PI);
-                            capturedBlob.transform.localScale = Vector3.one * (_blobScale * scaleMultiplier);
-                        },
-                        1f,
-                        _flightDuration)
-                    .SetEase(Ease.Linear)
-                    .OnComplete(() =>
+                flight.Progress += delta / _flightDuration;
+
+                if (flight.Progress >= 1f)
+                {
+                    flight.Progress = 1f;
+                    flight.Landed = true;
+                    flight.Blob.enabled = false;
+
+                    if (flight.Splash != null)
                     {
-                        capturedBlob.enabled = false;
+                        flight.Splash.transform.position = flight.To;
+                        flight.Splash.Play();
+                    }
 
-                        if (_splashParticle != null)
-                        {
-                            _splashParticle.transform.position = capturedTo;
-                            _splashParticle.Play();
-                        }
+                    _onTargetHit?.Invoke(flight.Index);
+                    continue;
+                }
 
-                        _onTargetHit?.Invoke(capturedIndex);
-                    });
+                allLanded = false;
 
-                // Join all arcs so they fly in parallel
-                _sequence.Join(arcTween);
+                flight.Blob.transform.position =
+                    CurveUtility.LerpWithVerticalCurve(flight.From, flight.To, flight.Progress, _arcHeight, _arcCurve);
+
+                flight.Blob.transform.localScale =
+                    Vector3.one * CurveUtility.SampleMultiplied(flight.Progress, _blobScale, _scaleCurve);
             }
 
-            _sequence.OnComplete(InvokeComplete);
+            if (allLanded)
+            {
+                _playing = false;
+                InvokeComplete();
+            }
         }
 
         private void HideAllBlobs()
@@ -191,6 +228,33 @@ namespace BalloonParty.Item.Paint
                     blob.enabled = false;
                 }
             }
+        }
+
+        private void StopAllSplashes()
+        {
+            if (_splashParticles == null)
+            {
+                return;
+            }
+
+            foreach (var splash in _splashParticles)
+            {
+                if (splash != null)
+                {
+                    splash.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                }
+            }
+        }
+
+        private class BlobFlight
+        {
+            public SpriteRenderer Blob;
+            public Vector3 From;
+            public int Index;
+            public bool Landed;
+            public float Progress;
+            public ParticleSystem Splash;
+            public Vector3 To;
         }
     }
 }

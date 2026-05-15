@@ -25,6 +25,13 @@ Shader "BalloonParty/Paint/PaintBlob"
         _SpecularSharpness  ("Specular Sharpness",   Range(1, 20))       = 7.0
         _SpecularOffsetX    ("Specular Offset X",    Range(-0.40, 0.40)) = -0.14
         _SpecularOffsetY    ("Specular Offset Y",    Range(-0.40, 0.40)) =  0.18
+
+        [Header(Shadow)]
+        [Toggle(_SHADOW_ON)] _EnableShadow ("Enable Shadow", Float) = 0
+        _ShadowColor        ("Shadow Color",   Color)              = (0.15, 0.15, 0.15, 0.6)
+        _ShadowOffsetX      ("Shadow Offset X", Range(-0.20, 0.20)) = 0.02
+        _ShadowOffsetY      ("Shadow Offset Y", Range(-0.20, 0.20)) = -0.03
+        _ShadowSoftness     ("Shadow Softness", Range(0.001, 0.08)) = 0.02
     }
 
     SubShader
@@ -40,7 +47,7 @@ Shader "BalloonParty/Paint/PaintBlob"
         Cull Off
         Lighting Off
         ZWrite Off
-        Blend One OneMinusSrcAlpha
+        Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
         {
@@ -48,6 +55,7 @@ Shader "BalloonParty/Paint/PaintBlob"
             #pragma vertex   vert
             #pragma fragment frag
             #pragma target 3.0
+            #pragma shader_feature _SHADOW_ON
             #include "UnityCG.cginc"
 
             struct appdata_t
@@ -85,6 +93,39 @@ Shader "BalloonParty/Paint/PaintBlob"
             float  _SpecularOffsetX;
             float  _SpecularOffsetY;
 
+            #ifdef _SHADOW_ON
+            fixed4 _ShadowColor;
+            float  _ShadowOffsetX;
+            float  _ShadowOffsetY;
+            float  _ShadowSoftness;
+            #endif
+
+            // Computes the blob SDF boundary at a given UV offset from center.
+            // Returns the alpha (0 = outside, 1 = inside) using the wobble + edge softness.
+            float BlobAlpha(float2 uv, float edgeSoftness)
+            {
+                float  r   = length(uv);
+                float  t   = _Time.y + _TimeOffset;
+                float2 dir = (r > 0.0001) ? (uv / r) : float2(1.0, 0.0);
+
+                float2 z1 = float2(1.0, 0.0);
+                int    n1 = (int)round(_WobbleFrequency);
+                for (int i = 0; i < n1; i++)
+                    z1 = float2(z1.x*dir.x - z1.y*dir.y, z1.x*dir.y + z1.y*dir.x);
+                float w1 = z1.y * cos(_WobbleSpeed * t) + z1.x * sin(_WobbleSpeed * t);
+
+                float2 z2 = float2(1.0, 0.0);
+                int    n2 = (int)round(_WobbleFrequency2);
+                for (int j = 0; j < n2; j++)
+                    z2 = float2(z2.x*dir.x - z2.y*dir.y, z2.x*dir.y + z2.y*dir.x);
+                float w2 = z2.y * cos(_WobbleSpeed2 * t) - z2.x * sin(_WobbleSpeed2 * t);
+
+                float wobble   = _WobbleAmplitude * w1 + _WobbleAmplitude2 * w2;
+                float boundary = _BlobRadius + wobble;
+                float sdf      = boundary - r;
+                return smoothstep(0.0, edgeSoftness, sdf);
+            }
+
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
@@ -100,48 +141,63 @@ Shader "BalloonParty/Paint/PaintBlob"
                 float  r   = length(uv);
                 float  t   = _Time.y + _TimeOffset;
 
-                // Wobble via iterated complex-number rotation: avoids atan2 entirely,
-                // removing the ±π discontinuity that leaves a faint horizontal seam.
-                // dir = (cos φ, sin φ).  Multiplying z by dir n times yields (cos nφ, sin nφ).
-                // sin(n·φ ± speed·t) is then expanded with the angle-addition identity.
+                // ── Main blob alpha ──
+                float alpha = BlobAlpha(uv, _EdgeSoftness);
+
+                // ── Shadow (composited behind the blob) ──
+                #ifdef _SHADOW_ON
+                float2 shadowUV    = uv - float2(_ShadowOffsetX, _ShadowOffsetY);
+                float  shadowAlpha = BlobAlpha(shadowUV, _ShadowSoftness) * _ShadowColor.a;
+                #endif
+
+                // Early discard — nothing to draw if both blob and shadow are invisible
+                #ifdef _SHADOW_ON
+                if (alpha < 0.001 && shadowAlpha < 0.001) discard;
+                #else
+                if (alpha < 0.001) discard;
+                #endif
+
+                // ── Blob surface shading ──
                 float2 dir = (r > 0.0001) ? (uv / r) : float2(1.0, 0.0);
 
                 float2 z1 = float2(1.0, 0.0);
                 int    n1 = (int)round(_WobbleFrequency);
                 for (int i = 0; i < n1; i++)
                     z1 = float2(z1.x*dir.x - z1.y*dir.y, z1.x*dir.y + z1.y*dir.x);
-                // sin(F1·φ + speed1·t) = sin(F1·φ)·cos(speed1·t) + cos(F1·φ)·sin(speed1·t)
                 float w1 = z1.y * cos(_WobbleSpeed  * t) + z1.x * sin(_WobbleSpeed  * t);
 
                 float2 z2 = float2(1.0, 0.0);
                 int    n2 = (int)round(_WobbleFrequency2);
-                for (int i = 0; i < n2; i++)
+                for (int j = 0; j < n2; j++)
                     z2 = float2(z2.x*dir.x - z2.y*dir.y, z2.x*dir.y + z2.y*dir.x);
-                // sin(F2·φ − speed2·t) = sin(F2·φ)·cos(speed2·t) − cos(F2·φ)·sin(speed2·t)
                 float w2 = z2.y * cos(_WobbleSpeed2 * t) - z2.x * sin(_WobbleSpeed2 * t);
 
                 float wobble   = _WobbleAmplitude * w1 + _WobbleAmplitude2 * w2;
                 float boundary = _BlobRadius + wobble;
 
-                // Signed distance: positive inside the blob, negative outside.
-                float sdf   = boundary - r;
-                float alpha = smoothstep(0.0, _EdgeSoftness, sdf);
-                if (alpha < 0.001) discard;
-
-                // Radial gradient from center (0) to edge (1) — drives the rim darkening
-                // to fake the curvature of a sphere without a 3-D normal.
+                // Radial gradient for rim darkening
                 float innerT  = saturate(r / max(boundary, 0.0001));
                 float rimMask = pow(innerT, 1.0 / max(_RimWidth, 0.001));
                 fixed3 col    = IN.color.rgb * (1.0 - rimMask * _RimDarkness);
 
-                // Single offset specular highlight to sell the wet, glossy paint surface.
+                // Specular highlight
                 float2 specCenter = float2(_SpecularOffsetX, _SpecularOffsetY);
                 float  specDist   = length(uv - specCenter);
                 float  specMask   = pow(saturate(1.0 - specDist / max(_SpecularSize, 0.001)),
                                         _SpecularSharpness);
                 col = lerp(col, _SpecularColor.rgb, specMask * _SpecularColor.a);
 
-                return fixed4(col * alpha, alpha);
+                // ── Composite: shadow under blob (Porter-Duff "over") ──
+                #ifdef _SHADOW_ON
+                fixed3 shadowRGB = _ShadowColor.rgb;
+                fixed  combinedA = alpha + shadowAlpha * (1.0 - alpha);
+                fixed3 combinedRGB = combinedA > 0.0001
+                    ? (col * alpha + shadowRGB * shadowAlpha * (1.0 - alpha)) / combinedA
+                    : col;
+                return fixed4(combinedRGB, combinedA);
+                #else
+                return fixed4(col, alpha);
+                #endif
             }
             ENDCG
         }

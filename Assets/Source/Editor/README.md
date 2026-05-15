@@ -52,3 +52,9 @@ These drawers extend `PropertyDrawer` directly and handle their own rendering wi
 | `PaletteColorMaskDrawer` | `Configuration/Editor/` | Renders a bitmask `int` as labeled per-color checkboxes from `GamePalette` |
 | `PaletteColorNameDrawer` | `Configuration/Editor/` | Renders a `string` field as a popup of `GamePalette` color names with a color swatch |
 
+## Custom editors
+
+| Editor | Target | What it does |
+|---|---|---|
+| `PaintSplashViewEditor` | `PaintSplashView` | Adds an editor-time preview panel below the default inspector. Generates radial flight paths around the object using the hex diagonal neighbor distance computed from `GameConfiguration.SlotSeparation`. Animates blobs via `EditorApplication.update`, calling `PaintSplashView.EvaluateArcPosition` / `EvaluateScale` for the arc math (shared with runtime). Particles are driven via `ParticleSystem.Simulate(totalElapsed, restart: true)` since `Play()` doesn't work in edit mode. Private fields are read via cached `System.Reflection.FieldInfo`. Tint uses `GamePalette` color names via popup. Controls: Play/Pause (single toggle), Stop, Playback Speed slider |
+
