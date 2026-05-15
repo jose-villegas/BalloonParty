@@ -26,4 +26,5 @@ The grid is a two-dimensional space of slots arranged in a staggered pattern (od
 - **BalloonController** — calls `Remove` when a balloon is popped
 - **BalloonBalancer** — reads occupancy to find gaps; calls `Remove` + `Place` to relocate balloons; uses `ViewAt` to reach views for animation
 - **NudgeService** — uses `GetNeighbors` and `IndexToWorldPosition` to direct nudge animations
+- **PaintItemHandler** — uses `HexNeighborIndices` and `IndexToWorldPosition` to compute all 6 neighbor flight targets; uses `IsEmpty` and `At` to resolve paintable balloons
 - **IGameConfiguration** — provides `SlotsSize`, `SlotSeparation`, `SlotsOffset` for grid construction and position calculations

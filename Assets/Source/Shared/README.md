@@ -6,13 +6,16 @@ Types and utilities used across multiple features.
 
 | File / Folder | What it provides |
 |---|---|
+| `ColorableRenderer` | Abstract `MonoBehaviour` base implementing `IColorableRenderer` — required so Unity can serialise `ColorableRenderer[]` fields. Generic `ColorableRenderer<T>` subclass lazy-fetches the renderer component. Concrete subclasses (`SpriteColorableRenderer`, `ParticleColorableRenderer`) override `SetColor` with type-specific logic |
+| `CompositeColorableRenderer` | `ColorableRenderer` that holds a serialised `ColorableRenderer[]` and forwards `SetColor` to all of them — composites multiple renderers under a single colorable |
+| `CurveUtility` | Static math utilities for `AnimationCurve`-driven interpolation — `LerpWithVerticalCurve` (position along an arc) and `SampleMultiplied` (curve-scaled value). Used by `PaintSplashView` and its editor preview |
 | `IGameConfiguration` | Read-only interface for core game data — projectile settings, slot grid dimensions, prediction trace params, score trail timing, score points scatter delay, points-per-level formula. Concrete implementation in `Configuration/GameConfiguration` |
 | `IEffect` | Interface for poolable visual effects — `Play(position, tint)`, `Play(position, rotation, tint)`, `Stop()`. Not item-specific; used by any system that abstracts a VFX |
 | `TweenTracker` | Generic `MonoBehaviour` for DOTween sequence composition — `Append` (chain after current), `Replace` (kill current and start new), `Kill`, `IsPlaying`. Used by balloon views to manage nudge → balance tween chaining without conflicts |
 | `SortingHelper` | Static utility for Unity sorting order calculations — `SlotBaseSortingOrder` computes base order from grid position, `ApplySortingOrder` applies sequential orders to renderer arrays. Used by `BalloonView`, `ItemDisplayService`, and `ItemVisualView` |
 | `SceneTransition` | MonoBehaviour wired to a button's `onClick` — calls `SceneManager.LoadScene(_sceneName)` and publishes `SpawnBalloonLineMessage` to seed the initial balloon grid |
 | `Pool/` | Generic object pooling system — `PoolManager`, `PoolChannel<T>`, `IPoolable`, `EffectView`, `EffectPoolChannel`, `ParticlePoolChannel`, `PoolableParticle` (see `Pool/README.md`) |
-| `Extensions/` | Extension methods — `ColorableRendererExtensions` (`BindColor` for reactive color subscriptions) |
+| `Extensions/` | Extension methods — `ColorableRendererExtensions` provides `BindColor` overloads that subscribe a `ColorableRenderer` (or array) to a reactive color source, with optional `Action<Color>` callback for custom work beyond `SetColor` |
 | `Messages/` | MessagePipe signal structs that decouple systems from one another |
 
 ## Messages

@@ -202,7 +202,7 @@ Game data is split across focused ScriptableObjects, each registered as a single
 | `BalloonsConfiguration` | `BalloonsConfiguration` | Balloon prefab entries (weight, cap, nudge overrides, pop VFX), spawn line counts, animation range, balance delay, global nudge defaults |
 | `GamePalette` | `GamePalette` | Named color entries — the single source for all balloon colors |
 | `GameDisplayConfiguration` | `GameDisplayConfiguration` | Aspect-ratio → orthographic-size lookup for camera sizing |
-| `ItemConfiguration` | `ItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, physics params, effect prefab |
+| `ItemConfiguration` | `ItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, physics params, effect prefab, damage (damaging types only), paint flight curves/duration/arc/scale |
 
 Rules:
 - **Never hardcode** values that exist in a configuration asset.
