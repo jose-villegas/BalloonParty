@@ -36,6 +36,7 @@ MonoBehaviour:
     m_Scopes:
     - com.cysharp
     - com.dbrizov.naughtyattributes-x
+    - com.github-glitchenzo.nugetforunity
     - com.neuecc
     - jp.hadashikick
     m_IsDefault: 0
