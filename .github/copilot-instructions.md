@@ -72,4 +72,8 @@ python3 Tools/style_audit.py --fix        # auto-fix namespaces
 cp Tools/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 ```
 
+## IDE Enforcement
+- `.editorconfig` — Allman braces, required braces, naming conventions, block-scoped namespaces, `var` usage. Applied by any editor.
+- `BalloonParty.sln.DotSettings` — Rider/ReSharper settings for member ordering warnings, modifier defaults, formatting.
+
 

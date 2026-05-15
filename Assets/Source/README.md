@@ -432,3 +432,33 @@ Each feature folder contains a `README.md` describing its gameplay purpose, how 
 
 **No implementation notes.** READMEs explain the current architecture as if it were always the intended design. They are written for a new developer reading the folder for the first time, not as a changelog.
 
+---
+
+## Enforcement Tooling
+
+The style guide is enforced at multiple layers so violations are caught as early as possible:
+
+| Layer | Tool | What it enforces |
+|---|---|---|
+| **IDE (real-time)** | `.editorconfig` | Allman braces, required braces, naming conventions (`_camelCase` fields, `PascalCase` members, `I`-prefixed interfaces), block-scoped namespaces, `var` usage, accessibility modifiers |
+| **IDE (real-time)** | `BalloonParty.sln.DotSettings` | Rider/ReSharper-specific: member ordering warnings, modifier defaults, blank line rules, wrapping |
+| **Git (per commit)** | `Tools/pre-commit` | Runs `style_audit.py` on staged `.cs` files; blocks commit on violations |
+| **Manual / CI** | `Tools/style_audit.py` | Member ordering, block comment headers, redundant comments, `StartCoroutine` usage, magic strings (uncached animator/layer params), `AddTo(this)` in poolable classes, namespace mismatches, missing READMEs |
+
+### Quick reference
+
+```bash
+# Full audit
+python3 Tools/style_audit.py
+
+# Single rule or file
+python3 Tools/style_audit.py --rule braces
+python3 Tools/style_audit.py --file BalloonView
+
+# Auto-fix namespaces
+python3 Tools/style_audit.py --fix
+
+# Install pre-commit hook
+cp Tools/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+```
+
