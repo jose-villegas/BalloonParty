@@ -67,9 +67,14 @@ namespace BalloonParty.Game
 
         private Vector3[] ComputeOrigins(Vector3 center, int count)
         {
+            if (count <= 0)
+            {
+                return Array.Empty<Vector3>();
+            }
+
             var origins = new Vector3[count];
 
-            if (count <= 1)
+            if (count == 1)
             {
                 origins[0] = center;
                 return origins;
@@ -87,6 +92,11 @@ namespace BalloonParty.Game
 
         private void OnBalloonScored(BalloonScoredMessage msg)
         {
+            if (msg.Points <= 0)
+            {
+                return;
+            }
+
             if (!_targetProviders.ContainsKey(msg.ColorName))
             {
                 Debug.LogWarning(

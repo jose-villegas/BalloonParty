@@ -17,6 +17,7 @@ namespace BalloonParty.Balloon.Model
 
         public NudgeOverride[] NudgeOverrides { get; set; }
         public bool CanHoldItem { get; set; } = true;
+        public bool IsPaintable { get; set; } = true;
         public int ScoreValue { get; set; } = 1;
 
         IReadOnlyReactiveProperty<string> IBalloonModel.Color => Color;

@@ -27,6 +27,10 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _lightningRandomness = 0.2f;
         [SerializeField] private float _lightningJumpTime = 0.15f;
 
+        [SerializeField] private float _paintBlobFlightDuration = 0.35f;
+        [SerializeField] private float _paintBlobArcHeight = 0.6f;
+        [SerializeField] private float _paintBlobStartScale = 0.25f;
+
         public ItemType Type => _type;
         public int TurnCheckEvery => _turnCheckEvery;
         public float Weight => _weight;
@@ -41,5 +45,8 @@ namespace BalloonParty.Configuration
         public float LightningSegmentsMultiplier => _lightningSegmentsMultiplier;
         public float LightningRandomness => _lightningRandomness;
         public float LightningJumpTime => _lightningJumpTime;
+        public float PaintBlobFlightDuration => _paintBlobFlightDuration;
+        public float PaintBlobArcHeight => _paintBlobArcHeight;
+        public float PaintBlobStartScale => _paintBlobStartScale;
     }
 }

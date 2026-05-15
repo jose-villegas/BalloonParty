@@ -27,6 +27,9 @@ namespace BalloonParty.Configuration
         [Tooltip("How many hits this balloon type absorbs before popping. 1 = normal, 2+ = tough, -1 = unbreakable.")]
         [SerializeField] private int _hitsToPop = 1;
 
+        [Tooltip("Whether paint blobs can recolor this balloon. Disable for tough/unbreakable types.")]
+        [SerializeField] private bool _isPaintable = true;
+
         [Tooltip("How many points of the balloon's color are awarded when this balloon pops.")]
         [SerializeField] private int _scoreValue = 1;
 
@@ -43,6 +46,7 @@ namespace BalloonParty.Configuration
         public ParticleSystem PopVfxPrefab => _overridePopVfx ? _popVfxPrefab : null;
 
         public bool CanHoldItem => _canHoldItem;
+        public bool IsPaintable => _isPaintable;
         public int HitsToPop => _hitsToPop;
         public int ScoreValue => _scoreValue;
 

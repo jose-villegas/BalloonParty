@@ -21,7 +21,10 @@ namespace BalloonParty.Configuration.Editor
             "_laserCircleCastRadius",
             "_lightningSegmentsMultiplier",
             "_lightningRandomness",
-            "_lightningJumpTime"
+            "_lightningJumpTime",
+            "_paintBlobFlightDuration",
+            "_paintBlobArcHeight",
+            "_paintBlobStartScale"
         };
 
         protected override GUIContent BuildFoldoutLabel(GUIContent label, SerializedProperty property)
@@ -81,6 +84,16 @@ namespace BalloonParty.Configuration.Editor
                         "Randomness");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_lightningJumpTime", "Jump Time");
                     break;
+
+                case ItemType.Paint:
+                    y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Paint");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_paintBlobFlightDuration",
+                        "Blob Flight Duration");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_paintBlobArcHeight",
+                        "Blob Arc Height");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_paintBlobStartScale",
+                        "Blob Start Scale");
+                    break;
             }
 
             return y;
@@ -104,6 +117,9 @@ namespace BalloonParty.Configuration.Editor
                     return row * 3;
 
                 case ItemType.Lightning:
+                    return row * 4;
+
+                case ItemType.Paint:
                     return row * 4;
 
                 default:

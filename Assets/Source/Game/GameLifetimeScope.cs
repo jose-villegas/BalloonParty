@@ -7,6 +7,7 @@ using BalloonParty.Item;
 using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Laser;
 using BalloonParty.Item.Lightning;
+using BalloonParty.Item.Paint;
 using BalloonParty.Item.Shield;
 using BalloonParty.Nudge;
 using BalloonParty.Projectile;
@@ -77,6 +78,7 @@ namespace BalloonParty.Game
             builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<PaintItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 
             builder.RegisterEntryPoint<OrthogonalSizeCameraController>();
 

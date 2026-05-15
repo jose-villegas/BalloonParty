@@ -179,6 +179,7 @@ namespace BalloonParty.Balloon.Spawner
             var model = new BalloonModel();
             model.SlotIndex.Value = slot;
             model.CanHoldItem = entry.CanHoldItem;
+            model.IsPaintable = entry.IsPaintable;
             model.HitsRemaining.Value = entry.HitsToPop;
             model.TypeName.Value = entry.BalloonType;
             model.ScoreValue = entry.ScoreValue;
