@@ -26,11 +26,13 @@ namespace BalloonParty.Shared
     public abstract class ColorableRenderer<T> : ColorableRenderer
         where T : Component
     {
-        protected T Renderer { get; private set; }
+        private T _renderer;
+
+        protected T Renderer => _renderer != null ? _renderer : (_renderer = GetComponent<T>());
 
         private void Awake()
         {
-            Renderer = GetComponent<T>();
+            _renderer = GetComponent<T>();
         }
     }
 }

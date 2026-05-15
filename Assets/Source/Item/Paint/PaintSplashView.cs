@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
-using NaughtyAttributes;
 using UnityEngine;
 
 namespace BalloonParty.Item.Paint
@@ -10,23 +9,23 @@ namespace BalloonParty.Item.Paint
     /// <summary>
     ///     Poolable paint-splash effect. Extends <see cref="EffectView" /> so it
     ///     participates in the standard effect-pool pipeline via <see cref="EffectPoolChannel" />.
-    ///     The prefab holds pre-placed <see cref="SpriteRenderer" /> children (one per
-    ///     potential neighbor — 6 for a hex grid) with the PaintBlob shader material,
-    ///     plus matching child <see cref="ParticleSystem" />s for the splash bursts.
+    ///     The prefab holds pre-placed <see cref="ColorableRenderer" /> children (one per
+    ///     potential neighbor — 6 for a hex grid) with the PaintBlob shader material.
+    ///     Splash particles are spawned as independent pooled instances via
+    ///     <see cref="ParticlePoolChannel" /> so they outlive the view's pool return.
     ///     Call <see cref="PrepareDisplay" /> with target data before <see cref="Play" />.
     /// </summary>
     public class PaintSplashView : EffectView
     {
-        private static readonly int ColorId = Shader.PropertyToID("_Color");
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
 
         [Header("Blobs")]
-        [Tooltip("Pre-placed blob SpriteRenderers — one per possible neighbor (6 for hex grid).")]
-        [SerializeField] private SpriteRenderer[] _blobRenderers;
+        [Tooltip("Pre-placed blob ColorableRenderers — one per possible neighbor (6 for hex grid).")]
+        [SerializeField] private ColorableRenderer[] _blobRenderers;
 
         [Header("Splash")]
-        [Tooltip("Per-blob splash particles — indices match _blobRenderers. Each plays at its blob's target.")]
-        [SerializeField] private ParticleSystem[] _splashParticles;
+        [Tooltip("Particle prefab spawned at each blob's target on arrival. Pooled independently.")]
+        [SerializeField] private ParticleSystem _splashParticlePrefab;
 
         [Header("Flight Curves")]
         [Tooltip("Scale multiplier over flight progress (0→1). Defaults to a sine bulge if left empty.")]
@@ -39,12 +38,13 @@ namespace BalloonParty.Item.Paint
             new Keyframe(1f, 0f, -4f, 0f));
 
         private List<BlobFlight> _activeFlights;
-        private float _flightDuration;
         private float _arcHeight;
         private float _blobScale;
+        private Color _color;
+        private float _flightDuration;
         private Action<int> _onTargetHit;
         private bool _playing;
-
+        private PoolManager _poolManager;
 
         private void Update()
         {
@@ -60,7 +60,6 @@ namespace BalloonParty.Item.Paint
         {
             base.OnSpawned();
             HideAllBlobs();
-            StopAllSplashes();
         }
 
         public override void OnDespawned()
@@ -68,7 +67,6 @@ namespace BalloonParty.Item.Paint
             _playing = false;
             _activeFlights = null;
             HideAllBlobs();
-            StopAllSplashes();
             base.OnDespawned();
         }
 
@@ -83,15 +81,16 @@ namespace BalloonParty.Item.Paint
             float flightDuration,
             float arcHeight,
             float blobScale,
+            PoolManager poolManager,
             Action<int> onTargetHit)
         {
             _flightDuration = Mathf.Max(flightDuration, 0.01f);
             _arcHeight = arcHeight;
             _blobScale = blobScale;
+            _poolManager = poolManager;
             _onTargetHit = onTargetHit;
 
             var blobCount = _blobRenderers != null ? _blobRenderers.Length : 0;
-            var splashCount = _splashParticles != null ? _splashParticles.Length : 0;
 
             _activeFlights = new List<BlobFlight>();
 
@@ -109,7 +108,6 @@ namespace BalloonParty.Item.Paint
                     From = flights[i].from,
                     To = flights[i].to,
                     Blob = blob,
-                    Splash = i < splashCount ? _splashParticles[i] : null,
                     Index = i
                 });
             }
@@ -130,26 +128,9 @@ namespace BalloonParty.Item.Paint
                 return;
             }
 
-            ApplySplashColor(tint);
+            _color = tint;
             InitialiseBlobs(tint);
             _playing = true;
-        }
-
-        private void ApplySplashColor(Color tint)
-        {
-            if (_splashParticles == null)
-            {
-                return;
-            }
-
-            foreach (var splash in _splashParticles)
-            {
-                if (splash != null)
-                {
-                    var main = splash.main;
-                    main.startColor = tint;
-                }
-            }
         }
 
         private void InitialiseBlobs(Color tint)
@@ -157,16 +138,34 @@ namespace BalloonParty.Item.Paint
             foreach (var flight in _activeFlights)
             {
                 var blob = flight.Blob;
-                blob.enabled = true;
+                blob.gameObject.SetActive(true);
                 blob.transform.position = flight.From;
                 blob.transform.localScale = Vector3.one * _blobScale;
 
-                var block = new MaterialPropertyBlock();
-                blob.GetPropertyBlock(block);
-                block.SetColor(ColorId, tint);
-                block.SetFloat(TimeOffsetId, UnityEngine.Random.Range(0f, 100f));
-                blob.SetPropertyBlock(block);
+                blob.SetColor(tint);
+
+                var blobRenderer = blob.GetComponent<Renderer>();
+                if (blobRenderer != null)
+                {
+                    var block = new MaterialPropertyBlock();
+                    blobRenderer.GetPropertyBlock(block);
+                    block.SetFloat(TimeOffsetId, UnityEngine.Random.Range(0f, 100f));
+                    blobRenderer.SetPropertyBlock(block);
+                }
             }
+        }
+
+        private void PlaySplash(Vector3 position)
+        {
+            if (_splashParticlePrefab == null || _poolManager == null)
+            {
+                return;
+            }
+
+            var key = _splashParticlePrefab.name;
+            var splash = _poolManager.GetOrRegister(key,
+                () => new ParticlePoolChannel(_splashParticlePrefab.gameObject));
+            splash.Play(position, _color, () => _poolManager.Return(key, splash));
         }
 
         private void TickFlights(float delta)
@@ -186,14 +185,9 @@ namespace BalloonParty.Item.Paint
                 {
                     flight.Progress = 1f;
                     flight.Landed = true;
-                    flight.Blob.enabled = false;
+                    flight.Blob.gameObject.SetActive(false);
 
-                    if (flight.Splash != null)
-                    {
-                        flight.Splash.transform.position = flight.To;
-                        flight.Splash.Play();
-                    }
-
+                    PlaySplash(flight.To);
                     _onTargetHit?.Invoke(flight.Index);
                     continue;
                 }
@@ -225,35 +219,18 @@ namespace BalloonParty.Item.Paint
             {
                 if (blob != null)
                 {
-                    blob.enabled = false;
-                }
-            }
-        }
-
-        private void StopAllSplashes()
-        {
-            if (_splashParticles == null)
-            {
-                return;
-            }
-
-            foreach (var splash in _splashParticles)
-            {
-                if (splash != null)
-                {
-                    splash.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                    blob.gameObject.SetActive(false);
                 }
             }
         }
 
         private class BlobFlight
         {
-            public SpriteRenderer Blob;
+            public ColorableRenderer Blob;
             public Vector3 From;
             public int Index;
             public bool Landed;
             public float Progress;
-            public ParticleSystem Splash;
             public Vector3 To;
         }
     }

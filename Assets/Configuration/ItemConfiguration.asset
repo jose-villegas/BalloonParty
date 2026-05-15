@@ -109,6 +109,6 @@ MonoBehaviour:
     _lightningSegmentsMultiplier: 3
     _lightningRandomness: 0.2
     _lightningJumpTime: 0.15
-    _paintBlobFlightDuration: 0.35
-    _paintBlobArcHeight: 0.6
-    _paintBlobStartScale: 0.25
+    _paintBlobFlightDuration: 0.75
+    _paintBlobArcHeight: 1
+    _paintBlobStartScale: 0.2

@@ -16,6 +16,8 @@ namespace BalloonParty.Item.Paint
     /// </summary>
     public class PaintItemHandler : IBalloonItem
     {
+        private const int NeighborCount = 6;
+
         private readonly GamePalette _palette;
         private readonly ItemConfiguration _itemConfig;
         private readonly SlotGrid _grid;
@@ -56,44 +58,28 @@ namespace BalloonParty.Item.Paint
             }
 
             var slot = _balloon.SlotIndex.Value;
-            var neighbors = _grid.GetNeighbors(slot.x, slot.y);
-
-            if (neighbors.Count == 0)
-            {
-                return UniTask.CompletedTask;
-            }
-
+            var neighborIndices = SlotGrid.HexNeighborIndices(slot.x, slot.y);
             var tint = _palette.GetColor(paintColor);
-            var targets = new List<(IWriteableBalloonModel model, Vector3 pos, bool shouldPaint)>();
 
-            foreach (var neighbor in neighbors)
+            // Build a paint target per neighbor index — null when the slot is empty or non-paintable.
+            var paintTargets = new IWriteableBalloonModel[NeighborCount];
+
+            for (var i = 0; i < NeighborCount; i++)
             {
-                // Skip non-paintable balloons (e.g. tough, unbreakable)
-                if (!neighbor.IsPaintable)
+                var idx = neighborIndices[i];
+                var model = _grid.IsEmpty(idx.x, idx.y) ? null : _grid.At(idx);
+
+                if (model != null && model.IsPaintable && model.Color.Value != paintColor)
                 {
-                    continue;
+                    paintTargets[i] = model;
                 }
-
-                var neighborSlot = neighbor.SlotIndex.Value;
-                var targetPos = _grid.IndexToWorldPosition(neighborSlot);
-
-                // All paintable neighbors get a blob for visual impact,
-                // but only different-color ones actually change color.
-                var shouldPaint = neighbor.Color.Value != paintColor;
-                targets.Add((neighbor, targetPos, shouldPaint));
-            }
-
-            if (targets.Count == 0)
-            {
-                return UniTask.CompletedTask;
             }
 
             if (settings.ActivationEffectPrefab == null)
             {
-                // No effect prefab — change colors immediately
-                foreach (var (model, _, shouldPaint) in targets)
+                foreach (var model in paintTargets)
                 {
-                    if (shouldPaint)
+                    if (model != null)
                     {
                         model.Color.Value = paintColor;
                     }
@@ -102,10 +88,12 @@ namespace BalloonParty.Item.Paint
                 return UniTask.CompletedTask;
             }
 
-            var flights = new List<(Vector3 from, Vector3 to)>(targets.Count);
-            foreach (var (_, targetPos, _) in targets)
+            // Always launch all 6 blobs regardless of occupancy.
+            var flights = new List<(Vector3 from, Vector3 to)>(NeighborCount);
+
+            for (var i = 0; i < NeighborCount; i++)
             {
-                flights.Add((_worldPosition, targetPos));
+                flights.Add((_worldPosition, _grid.IndexToWorldPosition(neighborIndices[i])));
             }
 
             var key = settings.ActivationEffectPrefab.name;
@@ -119,11 +107,12 @@ namespace BalloonParty.Item.Paint
                 settings.PaintBlobFlightDuration,
                 settings.PaintBlobArcHeight,
                 settings.PaintBlobStartScale,
+                _poolManager,
                 index =>
                 {
-                    if (index < targets.Count && targets[index].shouldPaint)
+                    if (index < NeighborCount && paintTargets[index] != null)
                     {
-                        targets[index].model.Color.Value = paintColor;
+                        paintTargets[index].Color.Value = paintColor;
                     }
                 });
 
@@ -131,6 +120,7 @@ namespace BalloonParty.Item.Paint
 
             return UniTask.CompletedTask;
         }
+
     }
 }
 

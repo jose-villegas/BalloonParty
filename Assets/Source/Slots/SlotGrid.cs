@@ -138,17 +138,29 @@ namespace BalloonParty.Slots
             }
         }
 
+        public static Vector2Int[] HexNeighborIndices(int col, int row)
+        {
+            var shiftedCol = col + (row % 2 == 0 ? -1 : 1);
+
+            return new[]
+            {
+                new Vector2Int(col - 1, row),
+                new Vector2Int(col + 1, row),
+                new Vector2Int(col, row - 1),
+                new Vector2Int(shiftedCol, row - 1),
+                new Vector2Int(col, row + 1),
+                new Vector2Int(shiftedCol, row + 1)
+            };
+        }
+
         public List<IWriteableBalloonModel> GetNeighbors(int col, int row)
         {
             var neighbors = new List<IWriteableBalloonModel>();
-            var shiftedCol = col + (row % 2 == 0 ? -1 : 1);
 
-            TryAddNeighbor(neighbors, col - 1, row);
-            TryAddNeighbor(neighbors, col + 1, row);
-            TryAddNeighbor(neighbors, col, row - 1);
-            TryAddNeighbor(neighbors, shiftedCol, row - 1);
-            TryAddNeighbor(neighbors, col, row + 1);
-            TryAddNeighbor(neighbors, shiftedCol, row + 1);
+            foreach (var idx in HexNeighborIndices(col, row))
+            {
+                TryAddNeighbor(neighbors, idx.x, idx.y);
+            }
 
             return neighbors;
         }
