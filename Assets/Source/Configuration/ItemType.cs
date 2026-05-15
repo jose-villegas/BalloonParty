@@ -7,6 +7,6 @@ namespace BalloonParty.Configuration
         Bomb,
         Laser,
         Lightning,
-        Paint,
+        Paint
     }
 }

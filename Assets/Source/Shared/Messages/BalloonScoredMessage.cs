@@ -11,10 +11,10 @@ namespace BalloonParty.Shared.Messages
 
         public BalloonScoredMessage(string colorName, Vector3 worldPosition, int totalScore, int points)
         {
-            ColorName     = colorName;
+            ColorName = colorName;
             WorldPosition = worldPosition;
-            TotalScore    = totalScore;
-            Points        = points;
+            TotalScore = totalScore;
+            Points = points;
         }
     }
 }

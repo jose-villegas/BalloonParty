@@ -19,5 +19,11 @@ namespace BalloonParty.Balloon.Model
 
         /// <summary>Per-type nudge overrides. Empty/null = use global config defaults.</summary>
         NudgeOverride[] NudgeOverrides { get; }
+
+        /// <summary>
+        ///     Pure query: given incoming damage, will this balloon deflect or pop?
+        ///     Unbreakable balloons (HitsRemaining == -1) always deflect.
+        /// </summary>
+        HitOutcome EvaluateHit(int damage);
     }
 }

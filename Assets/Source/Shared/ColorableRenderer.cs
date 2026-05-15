@@ -23,7 +23,8 @@ namespace BalloonParty.Shared
     ///     on <c>Awake</c>. Concrete subclasses only need <c>[RequireComponent]</c> and
     ///     a <c>SetColor</c> override.
     /// </summary>
-    public abstract class ColorableRenderer<T> : ColorableRenderer where T : Component
+    public abstract class ColorableRenderer<T> : ColorableRenderer
+        where T : Component
     {
         protected T Renderer { get; private set; }
 

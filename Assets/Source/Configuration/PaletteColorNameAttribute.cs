@@ -6,4 +6,3 @@ namespace BalloonParty.Configuration
     {
     }
 }
-

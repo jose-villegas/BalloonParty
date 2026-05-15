@@ -52,10 +52,13 @@ namespace BalloonParty.Configuration.Editor
             }
 
             var swatchRect = new Rect(position.xMax - SwatchSize, position.y, SwatchSize, SwatchSize);
-            var popupRect  = new Rect(position.x, position.y, position.width - SwatchSize - SwatchSpacing, position.height);
+            var popupRect = new Rect(position.x,
+                position.y,
+                position.width - SwatchSize - SwatchSpacing,
+                position.height);
 
             var currentIndex = System.Array.IndexOf(_paletteNames, property.stringValue);
-            var newIndex     = EditorGUI.Popup(popupRect, label, currentIndex, BuildPopupOptions());
+            var newIndex = EditorGUI.Popup(popupRect, label, currentIndex, BuildPopupOptions());
 
             if (newIndex != currentIndex && newIndex >= 0)
             {
@@ -82,10 +85,10 @@ namespace BalloonParty.Configuration.Editor
         private static void DrawSwatch(Rect rect, Color color)
         {
             EditorGUI.DrawRect(rect, color);
-            EditorGUI.DrawRect(new Rect(rect.x - 1,    rect.y - 1,    rect.width + 2, 1),             Color.black);
-            EditorGUI.DrawRect(new Rect(rect.x - 1,    rect.yMax,     rect.width + 2, 1),             Color.black);
-            EditorGUI.DrawRect(new Rect(rect.x - 1,    rect.y,        1,              rect.height),   Color.black);
-            EditorGUI.DrawRect(new Rect(rect.xMax,      rect.y,        1,              rect.height),   Color.black);
+            EditorGUI.DrawRect(new Rect(rect.x - 1, rect.y - 1, rect.width + 2, 1), Color.black);
+            EditorGUI.DrawRect(new Rect(rect.x - 1, rect.yMax, rect.width + 2, 1), Color.black);
+            EditorGUI.DrawRect(new Rect(rect.x - 1, rect.y, 1, rect.height), Color.black);
+            EditorGUI.DrawRect(new Rect(rect.xMax, rect.y, 1, rect.height), Color.black);
         }
 
         private static GamePalette FindPalette()
@@ -101,4 +104,3 @@ namespace BalloonParty.Configuration.Editor
         }
     }
 }
-

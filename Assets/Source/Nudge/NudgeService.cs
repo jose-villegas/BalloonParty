@@ -174,7 +174,7 @@ namespace BalloonParty.Nudge
             }
         }
 
-        private float ResolveDistance(
+        internal float ResolveDistance(
             NudgeOverride[] balloonOverrides,
             NudgeOverride[] publisherOverrides,
             NudgeType source)
@@ -194,7 +194,7 @@ namespace BalloonParty.Nudge
             return _config.NudgeDistance;
         }
 
-        private float ResolveDuration(
+        internal float ResolveDuration(
             NudgeOverride[] balloonOverrides,
             NudgeOverride[] publisherOverrides,
             NudgeType source)
@@ -214,7 +214,7 @@ namespace BalloonParty.Nudge
             return _config.NudgeDuration;
         }
 
-        private float ResolveFalloff(NudgeOverride[] overrides, NudgeType source)
+        internal float ResolveFalloff(NudgeOverride[] overrides, NudgeType source)
         {
             var entry = FindOverride(overrides, source);
             return entry != null ? entry.Falloff : _config.NudgeFalloff;

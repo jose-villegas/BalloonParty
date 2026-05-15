@@ -78,19 +78,15 @@ namespace BalloonParty.Balloon.Controller
                     return;
                 }
 
-                var hitsRemaining = _model.HitsRemaining.Value;
+                var outcome = _model.EvaluateHit(msg.Damage);
 
-                // Unbreakable — deflects regardless of damage
-                if (hitsRemaining == -1)
+                if (outcome == HitOutcome.Deflect)
                 {
-                    Deflect(msg);
-                    return;
-                }
+                    if (_model.HitsRemaining.Value != -1)
+                    {
+                        _model.HitsRemaining.Value -= msg.Damage;
+                    }
 
-                var hitsAfterDamage = hitsRemaining - msg.Damage;
-                if (hitsAfterDamage > 0)
-                {
-                    _model.HitsRemaining.Value = hitsAfterDamage;
                     Deflect(msg);
                     return;
                 }

@@ -20,7 +20,8 @@ namespace BalloonParty.UI.Score
         private static readonly int CompletedParam = Animator.StringToHash("Completed");
         private static readonly int TrailHitTrigger = Animator.StringToHash("TrailHit");
 
-        [Header("Configuration")] [PaletteColorName] [SerializeField] private string _colorName;
+        [Header("Configuration")] [PaletteColorName] [SerializeField]
+        private string _colorName;
         [Header("Visuals")] [SerializeField] private Graphic[] _graphicsToSetColor;
 
         [Header("Progress")] [SerializeField] private Slider _progressSlider;
@@ -61,9 +62,9 @@ namespace BalloonParty.UI.Score
                 return;
             }
 
-            var path    = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
+            var path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
             var palette = UnityEditor.AssetDatabase.LoadAssetAtPath<GamePalette>(path);
-            var entry   = System.Array.Find(palette.Colors, c => c.Name == _colorName);
+            var entry = System.Array.Find(palette.Colors, c => c.Name == _colorName);
             if (entry == null)
             {
                 return;

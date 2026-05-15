@@ -20,8 +20,8 @@ namespace BalloonParty.Editor
     /// </remarks>
     public class GradientTextureDrawer : MaterialPropertyDrawer
     {
-        private const int    BakeResolution  = 128;
-        private const string TagPrefix       = "[GradientTexture:";
+        private const int BakeResolution = 128;
+        private const string TagPrefix = "[GradientTexture:";
         private const string BakedNamePrefix = "_GradientBaked_";
 
         // ----------------------------------------------------------------
@@ -34,10 +34,10 @@ namespace BalloonParty.Editor
         }
 
         public override void OnGUI(
-            Rect             position,
+            Rect position,
             MaterialProperty prop,
-            GUIContent       label,
-            MaterialEditor   editor)
+            GUIContent label,
+            MaterialEditor editor)
         {
             var material = (Material)editor.target;
             var gradient = LoadGradient(material, prop.name);
@@ -64,7 +64,7 @@ namespace BalloonParty.Editor
 
         private static void BakeAndApply(Material material, MaterialProperty prop, Gradient gradient)
         {
-            var tex    = GetOrCreateBakedTexture(material, prop.name);
+            var tex = GetOrCreateBakedTexture(material, prop.name);
             var pixels = new Color[BakeResolution];
 
             for (var i = 0; i < BakeResolution; i++)
@@ -88,7 +88,7 @@ namespace BalloonParty.Editor
         private static Texture2D GetOrCreateBakedTexture(Material material, string propName)
         {
             var texName = BakedNamePrefix + propName;
-            var path    = AssetDatabase.GetAssetPath(material);
+            var path = AssetDatabase.GetAssetPath(material);
 
             if (!string.IsNullOrEmpty(path))
             {
@@ -103,9 +103,9 @@ namespace BalloonParty.Editor
 
             var newTex = new Texture2D(BakeResolution, 1, TextureFormat.RGBA32, false)
             {
-                name       = texName,
-                wrapMode   = TextureWrapMode.Clamp,
-                filterMode = FilterMode.Bilinear,
+                name = texName,
+                wrapMode = TextureWrapMode.Clamp,
+                filterMode = FilterMode.Bilinear
             };
 
             if (!string.IsNullOrEmpty(path))
@@ -126,7 +126,7 @@ namespace BalloonParty.Editor
         private static Gradient LoadGradient(Material material, string propName)
         {
             var userData = ReadUserData(material);
-            var json     = ExtractBlock(userData, propName);
+            var json = ExtractBlock(userData, propName);
 
             if (string.IsNullOrEmpty(json))
             {
@@ -146,7 +146,7 @@ namespace BalloonParty.Editor
 
         private static void SaveGradient(Material material, string propName, Gradient gradient)
         {
-            var json     = JsonUtility.ToJson(GradientStorage.From(gradient));
+            var json = JsonUtility.ToJson(GradientStorage.From(gradient));
             var userData = ReadUserData(material);
             WriteUserData(material, ReplaceBlock(userData, propName, json));
         }
@@ -157,7 +157,7 @@ namespace BalloonParty.Editor
 
         private static string ExtractBlock(string userData, string propName)
         {
-            var tag   = TagPrefix + propName + "]";
+            var tag = TagPrefix + propName + "]";
             var start = userData.IndexOf(tag, StringComparison.Ordinal);
             if (start < 0)
             {
@@ -192,12 +192,12 @@ namespace BalloonParty.Editor
 
         private static string ReplaceBlock(string userData, string propName, string json)
         {
-            var tag      = TagPrefix + propName + "]";
+            var tag = TagPrefix + propName + "]";
             var existing = ExtractBlock(userData, propName);
 
             if (existing != null)
             {
-                var full  = tag + existing;
+                var full = tag + existing;
                 var index = userData.IndexOf(full, StringComparison.Ordinal);
                 if (index >= 0)
                 {
@@ -244,9 +244,9 @@ namespace BalloonParty.Editor
         [Serializable]
         private class GradientStorage
         {
-            public ColorKeyEntry[]  colorKeys = Array.Empty<ColorKeyEntry>();
-            public AlphaKeyEntry[]  alphaKeys = Array.Empty<AlphaKeyEntry>();
-            public int              mode;
+            public ColorKeyEntry[] colorKeys = Array.Empty<ColorKeyEntry>();
+            public AlphaKeyEntry[] alphaKeys = Array.Empty<AlphaKeyEntry>();
+            public int mode;
 
             [Serializable]
             public class ColorKeyEntry
@@ -262,17 +262,17 @@ namespace BalloonParty.Editor
 
             public static GradientStorage From(Gradient gradient)
             {
-                var s  = new GradientStorage { mode = (int)gradient.mode };
+                var s = new GradientStorage { mode = (int)gradient.mode };
                 var ck = gradient.colorKeys;
                 s.colorKeys = new ColorKeyEntry[ck.Length];
                 for (var i = 0; i < ck.Length; i++)
                 {
                     s.colorKeys[i] = new ColorKeyEntry
                     {
-                        r    = ck[i].color.r,
-                        g    = ck[i].color.g,
-                        b    = ck[i].color.b,
-                        time = ck[i].time,
+                        r = ck[i].color.r,
+                        g = ck[i].color.g,
+                        b = ck[i].color.b,
+                        time = ck[i].time
                     };
                 }
 
@@ -290,14 +290,14 @@ namespace BalloonParty.Editor
             {
                 var g = new Gradient { mode = (GradientMode)mode };
 
-                var ck    = colorKeys ?? Array.Empty<ColorKeyEntry>();
+                var ck = colorKeys ?? Array.Empty<ColorKeyEntry>();
                 var outCk = new GradientColorKey[ck.Length];
                 for (var i = 0; i < ck.Length; i++)
                 {
                     outCk[i] = new GradientColorKey(new Color(ck[i].r, ck[i].g, ck[i].b), ck[i].time);
                 }
 
-                var ak    = alphaKeys ?? Array.Empty<AlphaKeyEntry>();
+                var ak = alphaKeys ?? Array.Empty<AlphaKeyEntry>();
                 var outAk = new GradientAlphaKey[ak.Length];
                 for (var i = 0; i < ak.Length; i++)
                 {
@@ -317,15 +317,14 @@ namespace BalloonParty.Editor
                 new[]
                 {
                     new GradientColorKey(new Color(0.35f, 0.35f, 0.38f), 0f),
-                    new GradientColorKey(new Color(0.55f, 0.55f, 0.60f), 1f),
+                    new GradientColorKey(new Color(0.55f, 0.55f, 0.60f), 1f)
                 },
                 new[]
                 {
                     new GradientAlphaKey(1f, 0f),
-                    new GradientAlphaKey(1f, 1f),
+                    new GradientAlphaKey(1f, 1f)
                 });
             return gradient;
         }
     }
 }
-

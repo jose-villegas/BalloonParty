@@ -79,7 +79,7 @@ namespace BalloonParty.Game
             for (var i = 0; i < count; i++)
             {
                 var angle = 2f * Mathf.PI * i / count;
-                origins[i] = center + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius;
+                origins[i] = center + (new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius);
             }
 
             return origins;

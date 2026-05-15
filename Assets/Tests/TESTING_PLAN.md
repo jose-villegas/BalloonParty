@@ -12,7 +12,7 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 - **Test what could reasonably break** — conditional logic, algorithms, boundary guards, math formulas, side effects with real consequences.
 - **When a bug is reported** — write a failing test that exposes it, then fix it. The test prevents regression.
 - **If something is hard to test** — that's a design improvement opportunity, not an excuse to skip testing.
-- **Models are too simple to break** — `BalloonModel` and `ProjectileModel` are pure data bags: auto-properties and `ReactiveProperty<T>` field declarations. Testing that `Color.Value = "Red"` returns `"Red"` is testing UniRx and the C# compiler. Don't.
+- **Models are too simple to break** — `BalloonModel` and `ProjectileModel` are mostly pure data bags: auto-properties and `ReactiveProperty<T>` field declarations. Exception: `BalloonModel.EvaluateHit` contains hit-outcome decision logic that both `BalloonController` and `ScoreController` depend on — this is tested because it could reasonably break.
 
 ---
 
@@ -38,7 +38,7 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 | Algorithms | `OptimalNextEmptySlot` weight calculation | Recursive logic, tie-breaking rules |
 | Math formulas | `IndexToWorldPosition` staggered grid | Wrong offset or sign breaks the grid |
 | Reflection/bounce physics | `PredictionTraceCalculator` | Wall detection, direction math |
-| Hit routing decisions | `BalloonController` deflect vs pop | Damage thresholds, unbreakable flag |
+| Hit routing decisions | `BalloonModel.EvaluateHit` | Damage thresholds, unbreakable flag |
 
 ---
 
@@ -75,54 +75,62 @@ Tests the trajectory bounce algorithm — pure math with wall reflection.
 
 ---
 
-## Phase 2 — Ready to Test Now
+## Current Tests (Phase 2)
 
-### `ScoreControllerTests` — ~6 tests (High value)
+### `ScoreControllerTests` — 6 tests
 
 Tests the scoring pipeline and level-up logic — multi-map accumulation with an all-colors threshold gate.
 
-Setup: mock `ISubscriber<BalloonHitMessage>` with NSubstitute to capture the callback; mock `IGameConfiguration`, `IPublisher<BalloonScoredMessage>`, `IPublisher<ScoreLevelUpMessage>`, and `GamePalette`. `PlayerPrefs` and `Time.timeScale` work in EditMode.
+Setup: capture `IMessageHandler<BalloonHitMessage>` from NSubstitute subscriber; mock `IGameConfiguration`, publishers; create `GamePalette` + `PaletteEntry` via reflection. `PlayerPrefs` cleaned in SetUp/TearDown.
 
 | Area | Tests | What could break |
 |---|---|---|
 | Unbreakable balloon hit (`-1`) | 1 | Wrong guard skips scoring for valid pops |
-| Hit that doesn't kill (`hitsRemaining - damage > 0`) | 1 | Off-by-one on survive check |
+| Hit that doesn't kill | 1 | Off-by-one on survive check |
 | Valid pop — per-color + total accumulation | 1 | Wrong dictionary key or sum |
 | Level-up when all colors meet threshold | 1 | `Any(p < required)` — wrong comparator |
-| Level-up resets all color progress to 0 | 1 | Missed key in reset loop |
 | No level-up when one color is short | 1 | Partial threshold confusion |
+| Level-up resets all color progress | 1 | Missed key in reset loop |
 
-### `BalloonControllerTests` — ~6 tests (High value)
+### `BalloonModelTests` — 6 tests
 
-Tests the hit subscription's three-branch routing — unbreakable deflect, absorb-and-deflect, and pop — plus the item branch inside `Pop()`.
+Tests `EvaluateHit` — the hit-outcome decision that both `BalloonController` and `ScoreController` depend on.
 
-Setup: mock `BalloonView`, `SlotGrid`, `PoolManager`, all publishers/subscribers with NSubstitute. Capture the `BalloonHitMessage` callback from `_hitSubscriber.Subscribe(...)`.
-
-| Area | Tests | What could break |
-|---|---|---|
-| Unbreakable (`hitsRemaining == -1`) deflects | 1 | Wrong sentinel value check |
-| Absorb damage (`hitsAfterDamage > 0`) deflects | 1 | Off-by-one (`> 0` vs `>= 0`) |
-| Exact-kill (`hitsAfterDamage == 0`) pops | 1 | Damage arithmetic wrong |
-| Overkill (`hitsAfterDamage < 0`) pops | 1 | Negative remainder mishandled |
-| Pop with item — hides and waits for activation | 1 | Item branch skipped, returned to pool early |
-| Pop without item — returns to pool immediately | 1 | Missing null/None check |
-
-### `NudgeServiceTests` — ~4 tests (High value)
-
-Tests the 3-tier override resolution cascade and the shockwave exponential falloff formula.
-
-Setup: mock `SlotGrid`, `BalloonsConfiguration`, subscribers. Consider making `ResolveDistance`/`ResolveDuration`/`ResolveFalloff` `internal` with `[InternalsVisibleTo]` for direct testing, or test through `OnNudge`/`OnBalloonHit` via subscriber capture.
+Design note: `EvaluateHit` was moved from a static method on `BalloonController` to `IBalloonModel` after tests revealed the same decision logic was duplicated in `ScoreController.OnBalloonHit`. The balloon now owns its hit semantics — both consumers call `model.EvaluateHit(damage)` instead of re-implementing the check.
 
 | Area | Tests | What could break |
 |---|---|---|
-| Balloon override present → uses it over config | 1 | Wrong priority in cascade |
-| Only publisher override → uses it over config | 1 | Falls through to default incorrectly |
-| No overrides → uses config default | 1 | Missing fallback |
-| Shockwave exponential falloff math | 1 | Wrong sign, exponent, or distance calc |
+| Unbreakable (`-1`) | 1 | Wrong sentinel value check |
+| Unbreakable with high damage | 1 | Sentinel bypassed by large damage |
+| Absorb damage (remaining > damage) | 1 | Off-by-one (`> 0` vs `>= 0`) |
+| Exact kill (remaining == damage) | 1 | Boundary mishandled |
+| Overkill (damage > remaining) | 1 | Negative remainder mishandled |
+| Exact kill with higher values | 1 | Arithmetic error at larger numbers |
+
+### `NudgeServiceTests` — 10 tests
+
+Tests the 3-tier override resolution cascade (balloon → publisher → config default) and flag-based override matching.
+
+Design note: `ResolveDistance`, `ResolveDuration`, `ResolveFalloff` changed from `private` to `internal`. `[InternalsVisibleTo]` added via `AssemblyInfo.cs`.
+
+| Area | Tests | What could break |
+|---|---|---|
+| ResolveDistance — balloon override | 1 | Wrong priority in cascade |
+| ResolveDistance — publisher override only | 1 | Falls through to default incorrectly |
+| ResolveDistance — no overrides (config default) | 1 | Missing fallback |
+| ResolveDistance — balloon beats publisher | 1 | Priority inversion |
+| ResolveDuration — balloon override | 1 | Duration cascade differs from distance |
+| ResolveDuration — config default | 1 | Missing fallback |
+| ResolveFalloff — override present | 1 | Falloff resolution differs |
+| ResolveFalloff — config default | 1 | Missing fallback |
+| `NudgeType.All` flag matches any source | 1 | `HasFlag` logic broken |
+| Mismatched flag falls through | 1 | Flag filtering skipped |
+
+**Phase 2 total: 22 tests · Grand total: 46 tests**
 
 ---
 
-## Phase 2 — Medium Value (test on change)
+## Future Test Targets — Medium Value (test on change)
 
 ### `BalloonsConfiguration.PickRandom` — ~4 tests
 
@@ -161,7 +169,7 @@ Has real logic: turn-based filtering, max cap via `CountBalloonsWithItem`, weigh
 
 | System | Why skip |
 |---|---|
-| `BalloonModel` / `ProjectileModel` | Pure data bags — too simple to break |
+| `ProjectileModel` | Pure data bag — too simple to break |
 | `OrthogonalSizeCameraController` | Forwards config lookup to camera — simple delegation |
 | `ThrowerView.RotateTo` | Single `AngleAxis` call — too simple |
 | `SceneTransition` | Button handler wiring — too simple |

@@ -36,7 +36,7 @@ namespace BalloonParty.UI.Score
 
         public void SetAnchoredPosition(Vector2 position)
         {
-            var rect = ((RectTransform)transform);
+            var rect = (RectTransform)transform;
             rect.anchoredPosition = position;
         }
 

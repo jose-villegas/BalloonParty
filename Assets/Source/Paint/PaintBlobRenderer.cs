@@ -16,7 +16,7 @@ public class PaintBlobRenderer : MonoBehaviour
     private void Awake()
     {
         var spriteRenderer = GetComponent<SpriteRenderer>();
-        var block          = new MaterialPropertyBlock();
+        var block = new MaterialPropertyBlock();
 
         // Read any existing block values so we don't stomp them.
         spriteRenderer.GetPropertyBlock(block);
@@ -24,4 +24,3 @@ public class PaintBlobRenderer : MonoBehaviour
         spriteRenderer.SetPropertyBlock(block);
     }
 }
-

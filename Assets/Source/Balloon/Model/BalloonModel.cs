@@ -25,5 +25,15 @@ namespace BalloonParty.Balloon.Model
         IReadOnlyReactiveProperty<Vector2Int> IBalloonModel.SlotIndex => SlotIndex;
         IReadOnlyReactiveProperty<bool> IBalloonModel.IsStable => IsStable;
         IReadOnlyReactiveProperty<ItemType> IBalloonModel.Item => Item;
+
+        public HitOutcome EvaluateHit(int damage)
+        {
+            if (HitsRemaining.Value == -1)
+            {
+                return HitOutcome.Deflect;
+            }
+
+            return HitsRemaining.Value - damage > 0 ? HitOutcome.Deflect : HitOutcome.Pop;
+        }
     }
 }

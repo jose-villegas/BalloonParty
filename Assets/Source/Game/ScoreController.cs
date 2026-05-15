@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
@@ -94,7 +95,7 @@ namespace BalloonParty.Game
 
         private void OnBalloonHit(BalloonHitMessage msg)
         {
-            if (msg.Balloon.HitsRemaining.Value == -1 || msg.Balloon.HitsRemaining.Value - msg.Damage > 0)
+            if (msg.Balloon.EvaluateHit(msg.Damage) != HitOutcome.Pop)
             {
                 return;
             }
@@ -107,7 +108,7 @@ namespace BalloonParty.Game
 
             var points = msg.Balloon.ScoreValue;
             _persistentScore[color] += points;
-            _levelProgress[color]   += points;
+            _levelProgress[color] += points;
             _totalScore.Value = _persistentScore.Values.Sum();
 
             CheckLevelUp();
