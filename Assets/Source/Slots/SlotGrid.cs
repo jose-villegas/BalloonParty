@@ -31,9 +31,8 @@ namespace BalloonParty.Slots
         {
             if (_slots[index.x, index.y] != null)
             {
-                Debug.LogError(
-                    $"SlotGrid.Place: slot ({index.x},{index.y}) is already occupied! Skipping.");
-                return;
+                throw new InvalidOperationException(
+                    $"SlotGrid.Place: slot ({index.x},{index.y}) is already occupied.");
             }
 
             _slots[index.x, index.y] = balloon;

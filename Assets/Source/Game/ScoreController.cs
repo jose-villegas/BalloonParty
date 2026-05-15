@@ -19,7 +19,7 @@ namespace BalloonParty.Game
 
         private readonly IGameConfiguration _config;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
-        private readonly ReactiveProperty<int> _level = new(0);
+        private readonly ReactiveProperty<int> _level = new(1);
         private readonly Dictionary<string, int> _levelProgress = new();
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private readonly GamePalette _palette;
@@ -55,7 +55,7 @@ namespace BalloonParty.Game
 
         public void Start()
         {
-            _level.Value = PlayerPrefs.GetInt(LevelKey, 0);
+            _level.Value = PlayerPrefs.GetInt(LevelKey, 1);
 
             foreach (var color in _palette.Colors)
             {

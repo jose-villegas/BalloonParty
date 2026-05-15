@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System;
 using System.Linq;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Shared;
@@ -6,7 +6,6 @@ using BalloonParty.Slots;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
-using UnityEngine.TestTools;
 
 namespace BalloonParty.Tests.Slots
 {
@@ -197,7 +196,7 @@ namespace BalloonParty.Tests.Slots
         }
 
         [Test]
-        public void Place_IntoOccupiedSlot_DoesNotOverwrite()
+        public void Place_IntoOccupiedSlot_Throws()
         {
             var first = CreateModel();
             var second = CreateModel();
@@ -205,10 +204,7 @@ namespace BalloonParty.Tests.Slots
 
             _grid.Place(first, null, index);
 
-            LogAssert.Expect(LogType.Error,
-                $"SlotGrid.Place: slot ({index.x},{index.y}) is already occupied! Skipping.");
-            _grid.Place(second, null, index);
-
+            Assert.Throws<InvalidOperationException>(() => _grid.Place(second, null, index));
             Assert.AreSame(first, _grid.At(index));
         }
 

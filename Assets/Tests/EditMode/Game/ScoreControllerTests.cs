@@ -116,32 +116,32 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void CheckLevelUp_AllColorsMeetThreshold_LevelsUp()
         {
-            _config.PointsRequiredForLevel(1).Returns(2);
+            _config.PointsRequiredForLevel(2).Returns(2);
 
             FirePop(Red, 2);
             FirePop(Blue, 2);
 
             _levelUpPublisher.Received(1).Publish(
-                Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 1));
-            Assert.AreEqual(1, _controller.Level.Value);
+                Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
+            Assert.AreEqual(2, _controller.Level.Value);
         }
 
         [Test]
         public void CheckLevelUp_OneColorShort_DoesNotLevelUp()
         {
-            _config.PointsRequiredForLevel(1).Returns(5);
+            _config.PointsRequiredForLevel(2).Returns(5);
 
             FirePop(Red, 5);
             // Blue has not scored — progress is 0
 
             _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
-            Assert.AreEqual(0, _controller.Level.Value);
+            Assert.AreEqual(1, _controller.Level.Value);
         }
 
         [Test]
         public void CheckLevelUp_LevelUp_ResetsAllColorProgress()
         {
-            _config.PointsRequiredForLevel(1).Returns(2);
+            _config.PointsRequiredForLevel(2).Returns(2);
 
             FirePop(Red, 2);
             FirePop(Blue, 2);
