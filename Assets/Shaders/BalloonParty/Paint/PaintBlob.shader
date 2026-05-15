@@ -9,6 +9,7 @@ Shader "BalloonParty/Paint/PaintBlob"
         _EdgeSoftness       ("Edge Softness",        Range(0.001, 0.05)) = 0.012
 
         [Header(Wobble)]
+        _TimeOffset         ("Time Offset",          Float)              = 0.0
         _WobbleSpeed        ("Speed",                Range(0, 6))        = 1.4
         _WobbleAmplitude    ("Amplitude",            Range(0, 0.08))     = 0.028
         _WobbleFrequency    ("Frequency  (lobes)",   Range(1, 8))        = 4.0
@@ -74,6 +75,7 @@ Shader "BalloonParty/Paint/PaintBlob"
             float  _WobbleSpeed2;
             float  _WobbleAmplitude2;
             float  _WobbleFrequency2;
+            float  _TimeOffset;
 
             float  _RimWidth;
             float  _RimDarkness;
@@ -96,7 +98,7 @@ Shader "BalloonParty/Paint/PaintBlob"
             {
                 float2 uv  = IN.texcoord - 0.5;
                 float  r   = length(uv);
-                float  t   = _Time.y;
+                float  t   = _Time.y + _TimeOffset;
 
                 // Wobble via iterated complex-number rotation: avoids atan2 entirely,
                 // removing the ±π discontinuity that leaves a faint horizontal seam.
