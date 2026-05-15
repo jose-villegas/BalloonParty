@@ -1,6 +1,9 @@
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+using BalloonParty.Cheats;
+#endif
+
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
-using BalloonParty.Cheats;
 using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Item;

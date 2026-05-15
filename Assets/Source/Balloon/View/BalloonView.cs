@@ -166,7 +166,8 @@ namespace BalloonParty.Balloon.View
             if (defaultPrefab == null)
             {
                 Debug.LogWarning(
-                    "BalloonView.PlayPopEffect: DefaultPopVfxPrefab is null in BalloonsConfiguration.", this);
+                    "BalloonView.PlayPopEffect: DefaultPopVfxPrefab is null in BalloonsConfiguration.",
+                    this);
                 return;
             }
 

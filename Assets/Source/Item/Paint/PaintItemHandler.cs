@@ -122,9 +122,5 @@ namespace BalloonParty.Item.Paint
 
             return UniTask.CompletedTask;
         }
-
     }
 }
-
-
-

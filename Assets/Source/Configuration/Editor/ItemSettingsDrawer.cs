@@ -15,6 +15,7 @@ namespace BalloonParty.Configuration.Editor
         /// </summary>
         protected override HashSet<string> ExcludedFields { get; } = new()
         {
+            "_damage",
             "_bombRadius",
             "_nudgeOverrides",
             "_laserRaycastDistance",
@@ -43,6 +44,7 @@ namespace BalloonParty.Configuration.Editor
             {
                 case ItemType.Bomb:
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Bomb");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_damage", "Damage");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_bombRadius", "Bomb Radius");
                     var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
                     if (nudgeOverrides != null)
@@ -60,6 +62,7 @@ namespace BalloonParty.Configuration.Editor
 
                 case ItemType.Laser:
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Laser");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_damage", "Damage");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
                         property,
@@ -74,6 +77,7 @@ namespace BalloonParty.Configuration.Editor
 
                 case ItemType.Lightning:
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Lightning");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_damage", "Damage");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
                         property,
@@ -89,15 +93,30 @@ namespace BalloonParty.Configuration.Editor
 
                 case ItemType.Paint:
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Paint");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_paintBlobFlightDuration",
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_paintBlobFlightDuration",
                         "Blob Flight Duration");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_paintBlobArcHeight",
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_paintBlobArcHeight",
                         "Blob Arc Height");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_paintBlobStartScale",
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_paintBlobStartScale",
                         "Blob Start Scale");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_paintBlobArcCurve",
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_paintBlobArcCurve",
                         "Blob Arc Curve");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_paintBlobScaleCurve",
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_paintBlobScaleCurve",
                         "Blob Scale Curve");
                     break;
             }
@@ -117,13 +136,13 @@ namespace BalloonParty.Configuration.Editor
                     var nudgeHeight = nudgeOverrides != null
                         ? EditorGUI.GetPropertyHeight(nudgeOverrides, true) + PropertyDrawerHelper.Spacing
                         : 0f;
-                    return (row * 2) + nudgeHeight;
+                    return (row * 3) + nudgeHeight;
 
                 case ItemType.Laser:
-                    return row * 3;
+                    return row * 4;
 
                 case ItemType.Lightning:
-                    return row * 4;
+                    return row * 5;
 
                 case ItemType.Paint:
                     return row * 6;

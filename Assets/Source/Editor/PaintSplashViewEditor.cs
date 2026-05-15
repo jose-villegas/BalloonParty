@@ -65,7 +65,7 @@ namespace BalloonParty.Editor
 
                 // Hex grid diagonal neighbor distance: half-cell horizontal shift + one row vertical.
                 var sep = _gameConfig.SlotSeparation;
-                return Mathf.Sqrt(sep.x * sep.x + sep.y * sep.y);
+                return Mathf.Sqrt((sep.x * sep.x) + (sep.y * sep.y));
             }
         }
 
@@ -308,7 +308,7 @@ namespace BalloonParty.Editor
 
                 var angle = 360f / count * i * Mathf.Deg2Rad;
                 var direction = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
-                var destination = origin + direction * radius;
+                var destination = origin + (direction * radius);
 
                 blob.gameObject.SetActive(true);
                 blob.transform.position = origin;
@@ -379,7 +379,11 @@ namespace BalloonParty.Editor
                 allLanded = false;
 
                 flight.Blob.transform.position = CurveUtility.LerpWithVerticalCurve(
-                    flight.From, flight.To, flight.Progress, ArcHeight, flight.ArcCurve);
+                    flight.From,
+                    flight.To,
+                    flight.Progress,
+                    ArcHeight,
+                    flight.ArcCurve);
 
                 flight.Blob.transform.localScale =
                     Vector3.one * CurveUtility.SampleMultiplied(flight.Progress, BlobScale, flight.ScaleCurve);
@@ -398,7 +402,7 @@ namespace BalloonParty.Editor
                 return;
             }
 
-            var instance = Object.Instantiate(prefab, position, Quaternion.identity);
+            var instance = Instantiate(prefab, position, Quaternion.identity);
             instance.gameObject.hideFlags = HideFlags.DontSave;
 
             var main = instance.main;
@@ -431,7 +435,7 @@ namespace BalloonParty.Editor
 
                 if (splash.Elapsed >= 1f && splash.Particle.particleCount == 0)
                 {
-                    Object.DestroyImmediate(splash.Particle.gameObject);
+                    DestroyImmediate(splash.Particle.gameObject);
                     _splashes.RemoveAt(i);
                     continue;
                 }
@@ -453,7 +457,7 @@ namespace BalloonParty.Editor
             {
                 if (splash.Particle != null)
                 {
-                    Object.DestroyImmediate(splash.Particle.gameObject);
+                    DestroyImmediate(splash.Particle.gameObject);
                 }
             }
 

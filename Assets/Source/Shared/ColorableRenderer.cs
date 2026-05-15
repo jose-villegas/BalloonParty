@@ -28,7 +28,7 @@ namespace BalloonParty.Shared
     {
         private T _renderer;
 
-        protected T Renderer => _renderer != null ? _renderer : (_renderer = GetComponent<T>());
+        protected T Renderer => _renderer != null ? _renderer : _renderer = GetComponent<T>();
 
         private void Awake()
         {

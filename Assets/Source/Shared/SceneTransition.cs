@@ -17,7 +17,8 @@ namespace BalloonParty.Shared
             if (string.IsNullOrWhiteSpace(_sceneName))
             {
                 Debug.LogWarning(
-                    $"[SceneTransition] No scene name configured on \"{gameObject.name}\".", this);
+                    $"[SceneTransition] No scene name configured on \"{gameObject.name}\".",
+                    this);
             }
         }
 #endif
