@@ -17,7 +17,7 @@ namespace BalloonParty.Item
                 }
             }
 
-            return FindFirstObjectByType<GameLifetimeScope>();
+            return GameLifetimeScope.Instance;
         }
 
         protected override void Configure(IContainerBuilder builder)

@@ -55,7 +55,7 @@ public class GameLifetimeScope : LifetimeScope
 // GameChildLifetimeScope — abstract base for all child scopes
 public abstract class GameChildLifetimeScope : LifetimeScope
 {
-    protected override LifetimeScope FindParent() => FindFirstObjectByType<GameLifetimeScope>();
+    protected override LifetimeScope FindParent() => GameLifetimeScope.Instance;
 }
 ```
 

@@ -61,45 +61,17 @@ Mobile platform overrides (iPhone + Android) now cap texture sizes. Desktop/Stan
 | `cartoon-smoke.png` | 1024×1024 | 256 | Particle effect |
 | `background_counter.png` | 1024×1024 | 512 | UI background element (needs slightly more detail) |
 
-### 5. LINQ Allocations in `PickRandom()` — Called 36× at Startup
+### 5. ~~LINQ Allocations in `PickRandom()` — Called 36× at Startup~~ ✅ FIXED
 
 **Location:** `BalloonsConfiguration.PickRandom()`
 
-```csharp
-var candidates = _entries.Where(e => ...).ToArray();  // allocation
-var totalWeight = candidates.Sum(e => e.Weight);      // allocation
-```
+Replaced LINQ `Where().ToArray()` and `.Sum()` with a reusable `List<BalloonPrefabEntry>` buffer (`_candidateBuffer`) and a manual `foreach` loop that accumulates `totalWeight` inline. The buffer is cleared and reused on each call, eliminating all per-call allocations. Also removed the now-unused `System.Linq` import.
 
-Called once per balloon spawn — 36 `ToArray()` allocations in `PopulateInitialGrid()`. Each allocation triggers GC pressure that compounds with the other per-balloon work.
-
-**Fix:** Use a reusable list or iterate without LINQ:
-```csharp
-private readonly List<BalloonPrefabEntry> _candidateBuffer = new();
-
-public BalloonPrefabEntry PickRandom(IReadOnlyDictionary<string, int> activeCounts)
-{
-    _candidateBuffer.Clear();
-    var totalWeight = 0f;
-
-    foreach (var e in _entries)
-    {
-        if (e.MaxCount == 0 || activeCounts.GetValueOrDefault(e.PoolKey) < e.MaxCount)
-        {
-            _candidateBuffer.Add(e);
-            totalWeight += e.Weight;
-        }
-    }
-    // ... rest using _candidateBuffer
-}
-```
-
-### 6. `FindFirstObjectByType<GameLifetimeScope>()` in Child Scopes
+### 6. ~~`FindFirstObjectByType<GameLifetimeScope>()` in Child Scopes~~ ✅ FIXED
 
 **Location:** `GameChildLifetimeScope.FindParent()` and `ItemViewScope.FindParent()`
 
-`FindFirstObjectByType` scans all loaded objects. Called by every `GameChildLifetimeScope` subclass during `Awake`. For pre-warmed balloon scopes (created 36× during pre-warming), this runs during `PrewarmAsync` rather than `PopulateInitialGrid`, but still adds significant cost to the pre-warming phase.
-
-**Fix:** Cache the `GameLifetimeScope` reference in a static field after the first lookup, or use VContainer's parent scope wiring instead of `FindFirstObjectByType`.
+`GameLifetimeScope` now exposes a static `Instance` property, set in `Awake()` and cleared in `OnDestroy()`. `GameChildLifetimeScope.FindParent()` and `ItemViewScope.FindParent()` return the cached instance directly instead of calling `FindFirstObjectByType`, eliminating the full-scene scan for every child scope creation.
 
 ### 7. Per-Balloon `GetComponentsInChildren<IBalloonViewBinding>()` in Bind()
 
@@ -165,9 +137,9 @@ With 7+ unique custom shaders and no shader variant pre-warming (`ShaderVariantC
 | 2 | ~~**Enable GPU Instancing** (shaders + materials)~~ ✅ | 🔴 High | Medium |
 | 7 | **Cache `IBalloonViewBinding[]`** | 🟡 Medium | Low |
 | 8 | **Cache `IBalloonVariant` lookup** | 🟡 Medium | Low |
-| 5 | **Remove LINQ from `PickRandom`** | 🟡 Medium | Low |
+| 5 | ~~**Remove LINQ from `PickRandom`**~~ ✅ | 🟡 Medium | Low |
 | 9 | **Pre-allocate DOTween capacity** | 🟡 Medium | Low |
-| 6 | **Cache `FindFirstObjectByType` result** | 🟡 Medium | Low |
+| 6 | ~~**Cache `FindFirstObjectByType` result**~~ ✅ | 🟡 Medium | Low |
 | 11 | **Shader variant pre-warming** | 🟡 Medium | Low |
 | 4 | ~~**Reduce texture sizes for mobile**~~ ✅ | 🟡 Medium | Low |
 | 10 | **Cache `Camera.main`** | 🟢 Low | Low |

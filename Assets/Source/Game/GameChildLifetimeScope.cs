@@ -6,7 +6,7 @@ namespace BalloonParty.Game
     {
         protected override LifetimeScope FindParent()
         {
-            return FindFirstObjectByType<GameLifetimeScope>();
+            return GameLifetimeScope.Instance;
         }
     }
 }

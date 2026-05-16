@@ -30,6 +30,8 @@ namespace BalloonParty.Game
     [DefaultExecutionOrder(-5001)]
     public class GameLifetimeScope : LifetimeScope
     {
+        internal static GameLifetimeScope Instance { get; private set; }
+
         [SerializeField] private GameConfiguration _gameConfiguration;
         [SerializeField] private GameDisplayConfiguration _displayConfiguration;
         [SerializeField] private ItemConfiguration _itemConfiguration;
@@ -37,6 +39,22 @@ namespace BalloonParty.Game
         [SerializeField] private BalloonsConfiguration _balloonsConfiguration;
         [SerializeField] private ProjectileLifetimeScope _projectileScopePrefab;
         [SerializeField] private ScorePointTrail _scoreTrailPrefab;
+
+        protected override void Awake()
+        {
+            Instance = this;
+            base.Awake();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+
+            if (Instance == this)
+            {
+                Instance = null;
+            }
+        }
 
         protected override void Configure(IContainerBuilder builder)
         {

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -38,6 +37,8 @@ namespace BalloonParty.Configuration
         public float NudgeDuration => _nudgeDuration;
         public float NudgeFalloff => _nudgeFalloff;
 
+        private readonly List<BalloonPrefabEntry> _candidateBuffer = new();
+
         /// <summary>
         /// Picks a random entry using weighted random selection, excluding entries that have
         /// reached their <see cref="BalloonPrefabEntry.MaxCount"/> limit.
@@ -45,21 +46,29 @@ namespace BalloonParty.Configuration
         /// </summary>
         public BalloonPrefabEntry PickRandom(IReadOnlyDictionary<string, int> activeCounts)
         {
-            // Build candidate list — skip entries that are at or over their max (0 = no limit)
-            var candidates = _entries.Where(e =>
-                e.MaxCount == 0 ||
-                activeCounts.GetValueOrDefault(e.PoolKey) < e.MaxCount).ToArray();
+            _candidateBuffer.Clear();
+            var totalWeight = 0f;
 
-            if (candidates.Length == 0)
+            foreach (var e in _entries)
+            {
+                if (e.MaxCount != 0 && activeCounts.GetValueOrDefault(e.PoolKey) >= e.MaxCount)
+                {
+                    continue;
+                }
+
+                _candidateBuffer.Add(e);
+                totalWeight += e.Weight;
+            }
+
+            if (_candidateBuffer.Count == 0)
             {
                 return null;
             }
 
-            var totalWeight = candidates.Sum(e => e.Weight);
             var roll = Random.Range(0f, totalWeight);
             var cumulative = 0f;
 
-            foreach (var entry in candidates)
+            foreach (var entry in _candidateBuffer)
             {
                 cumulative += entry.Weight;
                 if (roll < cumulative)
@@ -68,7 +77,7 @@ namespace BalloonParty.Configuration
                 }
             }
 
-            return candidates[0];
+            return _candidateBuffer[0];
         }
     }
 }
