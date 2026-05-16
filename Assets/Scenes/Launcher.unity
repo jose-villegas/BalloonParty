@@ -532,6 +532,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Shared.SceneTransition
   _sceneName: Game
+  _preload: 1
 --- !u!1001 &7918599745940459811
 PrefabInstance:
   m_ObjectHideFlags: 0

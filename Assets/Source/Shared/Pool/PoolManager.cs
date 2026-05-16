@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -102,6 +104,56 @@ namespace BalloonParty.Shared.Pool
 
             channel = null;
             return false;
+        }
+
+        /// <summary>
+        ///     Synchronously pre-warm a registered channel. Use only for lightweight items.
+        /// </summary>
+        public void Prewarm(string key, int count)
+        {
+            if (!_channels.TryGetValue(key, out var channel))
+            {
+                throw new InvalidOperationException(
+                    $"Pool channel '{key}' not registered. Call Register() first.");
+            }
+
+            channel.Prewarm(count);
+        }
+
+        /// <summary>
+        ///     Pre-warm a registered channel spread across frames (one item per yield).
+        /// </summary>
+        public UniTask PrewarmAsync(string key, int count, CancellationToken ct = default)
+        {
+            if (!_channels.TryGetValue(key, out var channel))
+            {
+                throw new InvalidOperationException(
+                    $"Pool channel '{key}' not registered. Call Register() first.");
+            }
+
+            return channel.PrewarmAsync(count, ct);
+        }
+
+        /// <summary>
+        ///     Pre-warm every registered channel that has fewer than <paramref name="counts"/>
+        ///     specifies. Keys not present in the dictionary are skipped.
+        ///     Items are created round-robin across channels, one per frame.
+        /// </summary>
+        public async UniTask PrewarmAllAsync(
+            IReadOnlyDictionary<string, int> counts,
+            CancellationToken ct = default)
+        {
+            foreach (var (key, count) in counts)
+            {
+                if (_channels.TryGetValue(key, out var channel))
+                {
+                    var needed = count - channel.AvailableCount;
+                    if (needed > 0)
+                    {
+                        await channel.PrewarmAsync(needed, ct);
+                    }
+                }
+            }
         }
     }
 }

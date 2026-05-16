@@ -70,6 +70,34 @@ var effect = _poolManager.GetOrRegister(prefab.name, () => new EffectPoolChannel
 effect.Play(pos, tint, () => _poolManager.Return(prefab.name, effect));
 ```
 
+## Pre-warming
+
+Pre-warming creates pool items ahead of time so the first `Get()` call hits a warm cache instead of calling `Create()`.
+
+- **`Prewarm(int count)`** — synchronous, creates all items in the current frame. Use for lightweight items (simple prefabs, particles).
+- **`PrewarmAsync(int count, CancellationToken)`** — spreads creation across frames (one item per `UniTask.Yield`). Use for heavy items like VContainer child scopes.
+- **`PoolManager.PrewarmAllAsync(counts, ct)`** — pre-warms a set of registered channels by key, skipping channels that already have enough items.
+
+Pre-warmed items are created, deactivated, and pushed onto the available stack. They never have `OnSpawned()` called — that only happens on the first `Get()`.
+
+```csharp
+// === Synchronous (lightweight items) ===
+_poolManager.Register(key, new ParticlePoolChannel(prefab));
+_poolManager.Prewarm(key, 4);
+
+// === Async (heavy items — e.g. VContainer balloon scopes) ===
+_poolManager.Register(key, new BalloonPoolChannel(scope, prefab));
+await _poolManager.PrewarmAsync(key, 36, ct);
+
+// === Batch async — multiple channels by key ===
+var counts = new Dictionary<string, int>
+{
+    { "Balloon", 30 },
+    { "ToughBalloon", 3 },
+};
+await _poolManager.PrewarmAllAsync(counts, ct);
+```
+
 ## Adding a new pool
 
 1. Create a class extending `PoolChannel<TItem>`

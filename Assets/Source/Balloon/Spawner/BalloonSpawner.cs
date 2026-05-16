@@ -81,6 +81,22 @@ namespace BalloonParty.Balloon.Spawner
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount));
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
 
+            PrewarmAndPopulateAsync(_cts.Token).Forget();
+        }
+
+        private async UniTaskVoid PrewarmAndPopulateAsync(CancellationToken ct)
+        {
+            var totalSlots = _grid.Columns * _balloonsConfig.GameStartedBalloonLines;
+
+            foreach (var entry in _balloonsConfig.Entries)
+            {
+                var count = entry.MaxCount > 0
+                    ? Mathf.Min(entry.MaxCount, totalSlots)
+                    : totalSlots;
+
+                await _poolManager.PrewarmAsync(entry.PoolKey, count, ct);
+            }
+
             PopulateInitialGrid();
             _newlySpawnedBalloons.Clear();
         }

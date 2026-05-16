@@ -62,6 +62,8 @@ namespace BalloonParty.Thrower
             _poolManager.Register(ProjectilePoolKey,
                 new ProjectilePoolChannel(_parentScope, _settings.ProjectileScopePrefab));
 
+            _poolManager.Prewarm(ProjectilePoolKey, 2);
+
             _destroyedSubscriber.Subscribe(_ => Reload());
 
             _view.AnimateEntrance().OnComplete(() =>

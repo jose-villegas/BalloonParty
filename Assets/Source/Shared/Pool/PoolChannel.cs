@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace BalloonParty.Shared.Pool
@@ -9,6 +11,19 @@ namespace BalloonParty.Shared.Pool
     public interface IPoolChannel
     {
         void SetParent(Transform parent);
+        int AvailableCount { get; }
+
+        /// <summary>
+        ///     Creates <paramref name="count"/> items and pushes them into the pool
+        ///     in a single frame. Use only for lightweight items.
+        /// </summary>
+        void Prewarm(int count);
+
+        /// <summary>
+        ///     Creates <paramref name="count"/> items spread across multiple frames
+        ///     (one item per yield). Ideal for heavy prefabs (e.g. VContainer child scopes).
+        /// </summary>
+        UniTask PrewarmAsync(int count, CancellationToken ct = default);
     }
 
     public abstract class PoolChannel<TItem> : IPoolChannel
@@ -16,6 +31,8 @@ namespace BalloonParty.Shared.Pool
     {
         private readonly Stack<TItem> _available = new();
         protected Transform Container { get; private set; }
+
+        public int AvailableCount => _available.Count;
 
         public void SetParent(Transform parent)
         {
@@ -73,6 +90,35 @@ namespace BalloonParty.Shared.Pool
             return _available.Count > 0 ? _available.Peek() : null;
         }
 
+        public void Prewarm(int count)
+        {
+            for (var i = 0; i < count; i++)
+            {
+                PushWarm(Create());
+            }
+        }
+
+        public async UniTask PrewarmAsync(int count, CancellationToken ct = default)
+        {
+            for (var i = 0; i < count; i++)
+            {
+                ct.ThrowIfCancellationRequested();
+                PushWarm(Create());
+                await UniTask.Yield(ct);
+            }
+        }
+
         protected abstract TItem Create();
+
+        private void PushWarm(TItem item)
+        {
+            item.gameObject.SetActive(false);
+            if (Container != null)
+            {
+                item.transform.SetParent(Container, false);
+            }
+
+            _available.Push(item);
+        }
     }
 }
