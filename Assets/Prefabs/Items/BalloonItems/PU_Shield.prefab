@@ -170,7 +170,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1928968643
   m_SortingLayer: 1
-  m_SortingOrder: 4
+  m_SortingOrder: 20
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 29fd8399092ce19468fdb7f7f692a91e, type: 3}
   m_Color: {r: 0.99215686, g: 0.9252718, b: 0.7639608, a: 0.5019608}
@@ -467,12 +467,12 @@ PrefabInstance:
         type: 3}
       propertyPath: '_sortingRenderers.Array.data[3]'
       value: 
-      objectReference: {fileID: 8686151533202713230}
+      objectReference: {fileID: 8901203415686261499}
     - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
       propertyPath: '_sortingRenderers.Array.data[4]'
       value: 
-      objectReference: {fileID: 8901203415686261499}
+      objectReference: {fileID: 8686151533202713230}
     - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
       propertyPath: '_sortingRenderers.Array.data[5]'
