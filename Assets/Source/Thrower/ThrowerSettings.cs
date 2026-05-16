@@ -1,14 +1,14 @@
-using BalloonParty.Projectile;
+using BalloonParty.Projectile.View;
 
 namespace BalloonParty.Thrower
 {
     internal class ThrowerSettings
     {
-        public readonly ProjectileLifetimeScope ProjectileScopePrefab;
+        public readonly ProjectileView ProjectilePrefab;
 
-        public ThrowerSettings(ProjectileLifetimeScope projectileScopePrefab)
+        public ThrowerSettings(ProjectileView projectilePrefab)
         {
-            ProjectileScopePrefab = projectileScopePrefab;
+            ProjectilePrefab = projectilePrefab;
         }
     }
 }

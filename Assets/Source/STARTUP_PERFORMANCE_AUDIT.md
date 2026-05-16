@@ -71,7 +71,7 @@ Replaced LINQ `Where().ToArray()` and `.Sum()` with a reusable `List<BalloonPref
 
 **Location:** `GameChildLifetimeScope.FindParent()` and `ItemViewScope.FindParent()`
 
-`GameLifetimeScope` now exposes a static `Instance` property, set in `Awake()` and cleared in `OnDestroy()`. `GameChildLifetimeScope.FindParent()` and `ItemViewScope.FindParent()` return the cached instance directly instead of calling `FindFirstObjectByType`, eliminating the full-scene scan for every child scope creation.
+`GameChildLifetimeScope` has been removed. All child scopes extend `LifetimeScope` directly, with parent references set via VContainer's `parentReference` field in the Inspector. `ItemViewScope` no longer overrides `FindParent()` either. This eliminates all runtime parent-lookup cost.
 
 ### 7. Per-Balloon `GetComponentsInChildren<IBalloonViewBinding>()` in Bind()
 
@@ -132,6 +132,7 @@ With 7+ unique custom shaders and no shader variant pre-warming (`ShaderVariantC
 
 | # | Fix | Impact | Effort |
 |---|-----|--------|--------|
+| 13 | ~~**Eliminate per-balloon child scopes** (`InjectingPoolChannel`)~~ ✅ | 🔴 High | Medium |
 | 1 | ~~**Pre-warm balloon pool**~~ ✅ | 🔴 High | Medium |
 | 3 | ~~**Add Sprite Atlases**~~ ✅ | 🔴 High | Low |
 | 2 | ~~**Enable GPU Instancing** (shaders + materials)~~ ✅ | 🔴 High | Medium |
@@ -145,4 +146,20 @@ With 7+ unique custom shaders and no shader variant pre-warming (`ShaderVariantC
 | 10 | **Cache `Camera.main`** | 🟢 Low | Low |
 
 > **If the hitch persists after all moderate fixes:** spread `PopulateInitialGrid()` across frames — spawn 1–2 rows per frame using `async UniTask` with `UniTask.Yield()` between rows. This is the nuclear option and should be unnecessary if the per-balloon cost is reduced sufficiently.
+
+---
+
+## ~~🔴 High-Impact Opportunity — Eliminate Per-Balloon Child Scopes~~ ✅ FIXED
+
+### 13. ~~`CreateChildFromPrefab` creates 2 VContainer child scopes per balloon during pre-warm~~ ✅ FIXED
+
+**Location:** `BalloonPoolChannel.Create()`, `ProjectilePoolChannel.Create()`
+
+Introduced `InjectingPoolChannel<TItem>` — a generic `PoolChannel` that uses `IObjectResolver.InjectGameObject()` instead of `LifetimeScope.CreateChildFromPrefab()`. It instantiates the prefab while inactive, sets `autoRun = false` on any `LifetimeScope` components on the clone (preventing child container builds on activation), then injects all `[Inject]` fields from the parent container in a single flat pass.
+
+Both `BalloonPoolChannel` and `ProjectilePoolChannel` now extend `InjectingPoolChannel<T>` and accept `IObjectResolver` + the view prefab instead of `LifetimeScope` + scope prefab. `BalloonPrefabEntry._prefab` changed from `BalloonLifetimeScope` to `BalloonView`; `ThrowerSettings` changed from `ProjectileLifetimeScope` to `ProjectileView`. `BalloonSpawner` and `ThrowerController` inject `IObjectResolver` instead of `LifetimeScope`.
+
+**Eliminated per balloon:** 2× `Build()` (child container allocation), 2× `Configure()` with 3× `RegisterComponentInHierarchy` hierarchy walks, 2× `InstallTo()` reflection overhead. Replaced with a single `InjectGameObject()` pass.
+
+**Note:** The `BalloonLifetimeScope` and `ProjectileLifetimeScope` classes still exist but are no longer referenced by pool channels. The `LifetimeScope` components remain on prefabs for now — `InjectingPoolChannel` neutralises them via `autoRun = false`. They can be removed from prefabs in the Unity Editor when convenient.
 

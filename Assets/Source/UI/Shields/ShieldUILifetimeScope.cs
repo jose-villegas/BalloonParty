@@ -1,10 +1,9 @@
-using BalloonParty.Game;
 using VContainer;
 using VContainer.Unity;
 
 namespace BalloonParty.UI.Shields
 {
-    public class ShieldUILifetimeScope : GameChildLifetimeScope
+    public class ShieldUILifetimeScope : LifetimeScope
     {
         protected override void Configure(IContainerBuilder builder)
         {

@@ -4,7 +4,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.UI.Score
 {
-    public class ScoreUILifetimeScope : GameChildLifetimeScope
+    public class ScoreUILifetimeScope : LifetimeScope
     {
         private void Start()
         {

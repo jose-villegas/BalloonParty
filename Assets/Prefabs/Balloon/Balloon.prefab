@@ -254,7 +254,6 @@ GameObject:
   - component: {fileID: 6706276318355311262}
   - component: {fileID: 7744549277022113413}
   - component: {fileID: -4720687053981353126}
-  - component: {fileID: 7284149923872934421}
   - component: {fileID: 6173351546761552298}
   m_Layer: 10
   m_Name: Balloon
@@ -385,6 +384,8 @@ MonoBehaviour:
   - {fileID: 4867988701194507481}
   - {fileID: 7087590600817567023}
   _collider: {fileID: 7822387025677367451}
+  _tweenTracker: {fileID: -4720687053981353126}
+  _itemService: {fileID: 5541380524191057241}
   _baseSortingLayer: 50
 --- !u!114 &-4720687053981353126
 MonoBehaviour:
@@ -398,22 +399,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 322dfc07781b4b79b3ca0e66b477a26c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Shared.TweenTracker
---- !u!114 &7284149923872934421
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5923847143892959990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 08a1dd129ee8451d898ab2e520e5a210, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.BalloonLifetimeScope
-  parentReference:
-    TypeName: BalloonParty.Game.GameLifetimeScope
-  autoRun: 1
-  autoInjectGameObjects: []
 --- !u!114 &6173351546761552298
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -436,7 +421,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 486833216842763078}
-  - component: {fileID: 1030680750274552702}
   m_Layer: 0
   m_Name: Item
   m_TagString: Untagged
@@ -460,22 +444,6 @@ Transform:
   - {fileID: 5758734118519379432}
   m_Father: {fileID: 1788660481030380393}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1030680750274552702
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7558929490291297603}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1fb76bf1654246d4b5cb6083d922f7dc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Items.ItemViewScope
-  parentReference:
-    TypeName: BalloonParty.Balloon.BalloonLifetimeScope
-  autoRun: 1
-  autoInjectGameObjects: []
 --- !u!1 &9101512376242678319
 GameObject:
   m_ObjectHideFlags: 0

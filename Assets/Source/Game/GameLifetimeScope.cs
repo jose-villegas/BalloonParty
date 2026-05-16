@@ -13,7 +13,7 @@ using BalloonParty.Item.Lightning;
 using BalloonParty.Item.Paint;
 using BalloonParty.Item.Shield;
 using BalloonParty.Nudge;
-using BalloonParty.Projectile;
+using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
@@ -30,31 +30,14 @@ namespace BalloonParty.Game
     [DefaultExecutionOrder(-5001)]
     public class GameLifetimeScope : LifetimeScope
     {
-        internal static GameLifetimeScope Instance { get; private set; }
-
         [SerializeField] private GameConfiguration _gameConfiguration;
         [SerializeField] private GameDisplayConfiguration _displayConfiguration;
         [SerializeField] private ItemConfiguration _itemConfiguration;
         [SerializeField] private GamePalette _gamePalette;
         [SerializeField] private BalloonsConfiguration _balloonsConfiguration;
-        [SerializeField] private ProjectileLifetimeScope _projectileScopePrefab;
+        [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private ScorePointTrail _scoreTrailPrefab;
 
-        protected override void Awake()
-        {
-            Instance = this;
-            base.Awake();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-
-            if (Instance == this)
-            {
-                Instance = null;
-            }
-        }
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -79,7 +62,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance(_itemConfiguration);
             builder.RegisterInstance(_gamePalette);
             builder.RegisterInstance(_balloonsConfiguration);
-            builder.RegisterInstance(new ThrowerSettings(_projectileScopePrefab));
+            builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
 
             builder.Register<SlotGrid>(Lifetime.Singleton);

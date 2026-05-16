@@ -39,14 +39,22 @@ Items signal completion via callbacks passed to their `Play()` or `Setup()` call
 | `BalloonView` | No completion callback — returned directly on hit | `BalloonController` |
 | `ProjectileView` | No completion callback — returned directly on death | `ThrowerController` |
 
+## Injecting Pool Channel
+
+For prefabs that have `[Inject]` fields but don't need their own VContainer child scope (all injected dependencies are singletons from an ancestor scope):
+
+- **`InjectingPoolChannel<TItem>`** — generic `PoolChannel<TItem>` that takes an `IObjectResolver` and a prefab. `Create()` instantiates the prefab while inactive, sets `autoRun = false` on any `LifetimeScope` components found on the clone (preventing child container builds), then calls `resolver.InjectGameObject()` to populate all `[Inject]` fields from the parent container. Much faster than `CreateChildFromPrefab` because it skips container creation, `Configure()`, and `RegisterComponentInHierarchy` traversals.
+- **`BalloonPoolChannel`** and **`ProjectilePoolChannel`** extend `InjectingPoolChannel<T>` as thin type aliases.
+
 ## Channels
 
 | Channel | Key | Item | Creates via |
 |---|---|---|---|
+| `InjectingPoolChannel<T>` | (varies) | any `IPoolable` | `Object.Instantiate` + `InjectGameObject` |
+| `BalloonPoolChannel` | prefab name | `BalloonView` | `InjectingPoolChannel` |
+| `ProjectilePoolChannel` | prefab name | `ProjectileView` | `InjectingPoolChannel` |
 | `ParticlePoolChannel` | prefab name (e.g. `"PopVfx"`) | `PoolableParticle` | `Object.Instantiate` + `AddComponent<PoolableParticle>` |
 | `EffectPoolChannel` | prefab name | `EffectView` (subclass) | `Object.Instantiate` |
-| `ProjectilePoolChannel` | prefab name | `ProjectileView` | `CreateChildFromPrefab` (VContainer) |
-| `BalloonPoolChannel` | `"Balloon"` | `BalloonView` | `CreateChildFromPrefab` (VContainer) |
 | `ItemVisualPoolChannel` | prefab name | `ItemVisualView` | `Object.Instantiate` |
 | `ScoreTrailPoolChannel` | `ScoreTrail_{color}` | `ScorePointTrail` | `Object.Instantiate` |
 | `ScoreNoticePoolChannel` | `ScoreNotice_{color}` | `ScoreNotice` | `Object.Instantiate` |
@@ -54,8 +62,11 @@ Items signal completion via callbacks passed to their `Play()` or `Setup()` call
 ## Usage
 
 ```csharp
+// === Registration — injecting channel (prefabs with [Inject] fields) ===
+_poolManager.Register(prefab.name, new BalloonPoolChannel(resolver, prefab));
+
 // === Registration (once, during setup) ===
-_poolManager.Register(prefab.name, new ProjectilePoolChannel(scope, prefab));
+_poolManager.Register(prefab.name, new ParticlePoolChannel(prefab));
 
 // === Getting / Returning ===
 var view = _poolManager.Get<ProjectileView>(prefab.name);
@@ -75,7 +86,7 @@ effect.Play(pos, tint, () => _poolManager.Return(prefab.name, effect));
 Pre-warming creates pool items ahead of time so the first `Get()` call hits a warm cache instead of calling `Create()`.
 
 - **`Prewarm(int count)`** — synchronous, creates all items in the current frame. Use for lightweight items (simple prefabs, particles).
-- **`PrewarmAsync(int count, CancellationToken)`** — spreads creation across frames (one item per `UniTask.Yield`). Use for heavy items like VContainer child scopes.
+- **`PrewarmAsync(int count, CancellationToken)`** — spreads creation across frames (one item per `UniTask.Yield`). Use for heavier items (e.g. balloons, projectiles).
 - **`PoolManager.PrewarmAllAsync(counts, ct)`** — pre-warms a set of registered channels by key, skipping channels that already have enough items.
 
 Pre-warmed items are created, deactivated, and pushed onto the available stack. They never have `OnSpawned()` called — that only happens on the first `Get()`.
@@ -85,8 +96,8 @@ Pre-warmed items are created, deactivated, and pushed onto the available stack. 
 _poolManager.Register(key, new ParticlePoolChannel(prefab));
 _poolManager.Prewarm(key, 4);
 
-// === Async (heavy items — e.g. VContainer balloon scopes) ===
-_poolManager.Register(key, new BalloonPoolChannel(scope, prefab));
+// === Async (heavier items — e.g. balloons with injection) ===
+_poolManager.Register(key, new BalloonPoolChannel(resolver, prefab));
 await _poolManager.PrewarmAsync(key, 36, ct);
 
 // === Batch async — multiple channels by key ===
@@ -100,7 +111,7 @@ await _poolManager.PrewarmAllAsync(counts, ct);
 
 ## Adding a new pool
 
-1. Create a class extending `PoolChannel<TItem>`
+1. Create a class extending `PoolChannel<TItem>` — or use `InjectingPoolChannel<TItem>` if the prefab has `[Inject]` fields
 2. Accept the creation key (prefab, config, etc.) in the constructor
 3. Implement `Create()` — instantiate and configure the item; start it deactivated
 4. Have the pooled component implement `IPoolable` for lifecycle hooks

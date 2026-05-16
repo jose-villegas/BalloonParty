@@ -1,26 +1,14 @@
 using BalloonParty.Projectile.View;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
-using VContainer.Unity;
+using VContainer;
 
 namespace BalloonParty.Projectile
 {
-    internal class ProjectilePoolChannel : PoolChannel<ProjectileView>
+    internal class ProjectilePoolChannel : InjectingPoolChannel<ProjectileView>
     {
-        private readonly LifetimeScope _parentScope;
-        private readonly ProjectileLifetimeScope _prefab;
-
-        public ProjectilePoolChannel(LifetimeScope parentScope, ProjectileLifetimeScope prefab)
+        public ProjectilePoolChannel(IObjectResolver resolver, ProjectileView prefab)
+            : base(resolver, prefab)
         {
-            _parentScope = parentScope;
-            _prefab = prefab;
-        }
-
-        protected override ProjectileView Create()
-        {
-            var childScope = _parentScope.CreateChildFromPrefab(_prefab);
-            childScope.transform.SetParent(Container);
-            return childScope.GetComponentInChildren<ProjectileView>();
         }
     }
 }

@@ -42,7 +42,7 @@ All VFX are spawned via `ParticlePoolChannel` as world-space orphans — they ar
 
 ## How it works
 
-- **`ProjectileLifetimeScope`** — child `GameChildLifetimeScope` on the projectile prefab root. Registers `ProjectileView` and `ProjectileShieldView` via `RegisterComponentInHierarchy`. Created by `ProjectilePoolChannel` via `parentScope.CreateChildFromPrefab()`.
+- **`ProjectileLifetimeScope`** — `LifetimeScope` on the projectile prefab root. Registers `ProjectileView` and `ProjectileShieldView` via `RegisterComponentInHierarchy`. Has `autoRun` disabled — injection is handled by `InjectingPoolChannel`.
 - **`ProjectilePoolChannel`** — `PoolChannel<ProjectileView>` that creates projectiles via `CreateChildFromPrefab`. Accessed through `PoolManager`.
 - **`IProjectileModel`** — read-only interface exposing `IReadOnlyReactiveProperty<string> ColorName`, `IReadOnlyReactiveProperty<int> ShieldsRemaining`, and read-only plain properties (`Direction`, `Speed`, `IsFree`, `ColorPopCount`, `LastHitBalloon`). Used by shield UI and views that only observe state.
 - **`IWriteableProjectileModel`** — mutable interface extending `IProjectileModel`; re-declares reactive properties as `ReactiveProperty<T>` (via `new` keyword) and adds setters. Used by `ProjectileView`, `ThrowerController`, and cheats that mutate state.

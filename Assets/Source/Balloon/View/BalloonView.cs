@@ -22,6 +22,8 @@ namespace BalloonParty.Balloon.View
         [SerializeField] private Animator _animator;
         [SerializeField] private Renderer[] _spriteLayerRenderers;
         [SerializeField] private Collider2D _collider;
+        [SerializeField] private TweenTracker _tweenTracker;
+        [SerializeField] private ItemDisplayService _itemService;
 
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
@@ -33,17 +35,10 @@ namespace BalloonParty.Balloon.View
 
         private readonly CompositeDisposable _bindDisposables = new();
 
-        private ItemDisplayService _itemService;
         private ParticleSystem _popVfxOverride;
 
         public IBalloonModel Model { get; private set; }
-        public TweenTracker TweenTracker { get; private set; }
-
-        private void Awake()
-        {
-            TweenTracker = GetComponent<TweenTracker>();
-            _itemService = GetComponentInChildren<ItemDisplayService>();
-        }
+        public TweenTracker TweenTracker => _tweenTracker;
 
         public void OnSpawned()
         {

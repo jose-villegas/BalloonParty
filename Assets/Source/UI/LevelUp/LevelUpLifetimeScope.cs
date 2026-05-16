@@ -1,10 +1,9 @@
-using BalloonParty.Game;
 using VContainer;
 using VContainer.Unity;
 
 namespace BalloonParty.UI.LevelUp
 {
-    public class LevelUpLifetimeScope : GameChildLifetimeScope
+    public class LevelUpLifetimeScope : LifetimeScope
     {
         protected override void Configure(IContainerBuilder builder)
         {

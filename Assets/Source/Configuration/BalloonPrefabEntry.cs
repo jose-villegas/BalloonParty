@@ -1,6 +1,6 @@
 using System;
-using BalloonParty.Balloon;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Balloon.View;
 using BalloonParty.Nudge;
 using UnityEngine;
 
@@ -9,7 +9,7 @@ namespace BalloonParty.Configuration
     [Serializable]
     public class BalloonPrefabEntry
     {
-        [SerializeField] private BalloonLifetimeScope _prefab;
+        [SerializeField] private BalloonView _prefab;
         [SerializeField] private BalloonType _balloonType;
         [SerializeField] private float _weight = 1f;
 
@@ -33,7 +33,7 @@ namespace BalloonParty.Configuration
         [Tooltip("How many points of the balloon's color are awarded when this balloon pops.")]
         [SerializeField] private int _scoreValue = 1;
 
-        public BalloonLifetimeScope Prefab => _prefab;
+        public BalloonView Prefab => _prefab;
         public BalloonType BalloonType => _balloonType;
         public float Weight => _weight;
 

@@ -52,11 +52,6 @@ public class GameLifetimeScope : LifetimeScope
     }
 }
 
-// GameChildLifetimeScope — abstract base for all child scopes
-public abstract class GameChildLifetimeScope : LifetimeScope
-{
-    protected override LifetimeScope FindParent() => GameLifetimeScope.Instance;
-}
 ```
 
 **Current scope hierarchy:**
@@ -65,13 +60,12 @@ public abstract class GameChildLifetimeScope : LifetimeScope
 |---|---|---|
 | `LaunchLifetimeScope` | `LifetimeScope` | Launcher scene root |
 | `GameLifetimeScope` | `LifetimeScope` | Game scene root |
-| `ThrowerLifetimeScope` | `GameChildLifetimeScope` | Thrower GameObject |
-| `ProjectileLifetimeScope` | `GameChildLifetimeScope` | Projectile prefab root |
-| `BalloonLifetimeScope` | `GameChildLifetimeScope` | Balloon prefab root |
-| `ScoreUILifetimeScope` | `GameChildLifetimeScope` | Score HUD canvas root |
-| `LevelUpLifetimeScope` | `GameChildLifetimeScope` | LevelUp popup root |
-| `ShieldUILifetimeScope` | `GameChildLifetimeScope` | Shield HUD root |
-| `ItemViewScope` | `LifetimeScope` (custom `FindParent`) | Item container child (reusable on any item-displaying prefab) |
+| `ThrowerLifetimeScope` | `LifetimeScope` | Thrower GameObject |
+| `ScoreUILifetimeScope` | `LifetimeScope` | Score HUD canvas root |
+| `LevelUpLifetimeScope` | `LifetimeScope` | LevelUp popup root |
+| `ShieldUILifetimeScope` | `LifetimeScope` | Shield HUD root |
+
+> **Note:** Balloon and projectile prefabs no longer use child scopes. Their `[Inject]` fields are populated via `InjectingPoolChannel` (flat `IObjectResolver.InjectGameObject()` without container creation). `BalloonLifetimeScope`, `ProjectileLifetimeScope`, and `ItemViewScope` components remain on prefabs with `autoRun = false` — they can be removed from prefabs when convenient.
 
 **Configuration assets registered in `GameLifetimeScope`:**
 

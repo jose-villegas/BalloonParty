@@ -34,7 +34,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly List<IBalloonModel> _newlySpawnedBalloons = new();
         private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
-        private readonly LifetimeScope _parentScope;
+        private readonly IObjectResolver _resolver;
         private readonly PoolManager _poolManager;
         private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
 
@@ -44,7 +44,7 @@ namespace BalloonParty.Balloon.Spawner
         internal BalloonSpawner(
             SlotGrid grid,
             BalloonsConfiguration balloonsConfig,
-            LifetimeScope parentScope,
+            IObjectResolver resolver,
             PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
@@ -58,7 +58,7 @@ namespace BalloonParty.Balloon.Spawner
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
-            _parentScope = parentScope;
+            _resolver = resolver;
             _poolManager = poolManager;
             _lineSubscriber = lineSubscriber;
             _balancePublisher = balancePublisher;
@@ -76,7 +76,7 @@ namespace BalloonParty.Balloon.Spawner
             foreach (var entry in _balloonsConfig.Entries)
             {
                 _poolManager.Register(entry.PoolKey,
-                    new BalloonPoolChannel(_parentScope, entry.Prefab));
+                    new BalloonPoolChannel(_resolver, entry.Prefab));
             }
 
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount));

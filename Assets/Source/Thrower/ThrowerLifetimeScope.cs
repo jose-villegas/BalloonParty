@@ -1,10 +1,9 @@
-using BalloonParty.Game;
 using VContainer;
 using VContainer.Unity;
 
 namespace BalloonParty.Thrower
 {
-    public class ThrowerLifetimeScope : GameChildLifetimeScope
+    public class ThrowerLifetimeScope : LifetimeScope
     {
         protected override void Configure(IContainerBuilder builder)
         {

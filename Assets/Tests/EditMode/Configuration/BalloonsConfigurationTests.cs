@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Reflection;
-using BalloonParty.Balloon;
+using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using NUnit.Framework;
 using UnityEngine;
@@ -83,11 +83,11 @@ namespace BalloonParty.Tests.Configuration
         {
             var go = new GameObject(name);
             go.SetActive(false);
-            var scope = go.AddComponent<BalloonLifetimeScope>();
+            var view = go.AddComponent<BalloonView>();
             _prefabObjects.Add(go);
 
             var entry = new BalloonPrefabEntry();
-            SetField(entry, "_prefab", scope);
+            SetField(entry, "_prefab", view);
             SetField(entry, "_weight", weight);
             SetField(entry, "_maxCount", maxCount);
             return entry;

@@ -20,7 +20,7 @@ namespace BalloonParty.Thrower
         private readonly IGameConfiguration _config;
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
-        private readonly LifetimeScope _parentScope;
+        private readonly IObjectResolver _resolver;
         private readonly List<Vector3> _tracePoints = new();
         private readonly PoolManager _poolManager;
         private readonly ThrowerSettings _settings;
@@ -34,14 +34,14 @@ namespace BalloonParty.Thrower
         private float _loadDuration;
         private PredictionTraceCalculator _traceCalculator;
 
-        private string ProjectilePoolKey => _settings.ProjectileScopePrefab.name;
+        private string ProjectilePoolKey => _settings.ProjectilePrefab.name;
 
         [Inject]
         internal ThrowerController(
             ThrowerView view,
             IGameConfiguration config,
             PoolManager poolManager,
-            LifetimeScope parentScope,
+            IObjectResolver resolver,
             ThrowerSettings settings,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ProjectileLoadedMessage> loadedPublisher)
@@ -49,7 +49,7 @@ namespace BalloonParty.Thrower
             _view = view;
             _config = config;
             _poolManager = poolManager;
-            _parentScope = parentScope;
+            _resolver = resolver;
             _settings = settings;
             _destroyedSubscriber = destroyedSubscriber;
             _loadedPublisher = loadedPublisher;
@@ -60,7 +60,7 @@ namespace BalloonParty.Thrower
             _traceCalculator = new PredictionTraceCalculator(_config);
 
             _poolManager.Register(ProjectilePoolKey,
-                new ProjectilePoolChannel(_parentScope, _settings.ProjectileScopePrefab));
+                new ProjectilePoolChannel(_resolver, _settings.ProjectilePrefab));
 
             _poolManager.Prewarm(ProjectilePoolKey, 2);
 
