@@ -15,6 +15,7 @@ Shader "BalloonParty/Sprite/SpriteShadow"
     {
         _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1, 1, 1, 1)
+        [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
 
         [Header(Shadow)]
         _ShadowColor    ("Color",    Color)             = (0.2, 0.2, 0.2, 0.75)
@@ -85,6 +86,7 @@ Shader "BalloonParty/Sprite/SpriteShadow"
 
             #pragma multi_compile __ UNITY_UI_CLIP_RECT
             #pragma multi_compile __ UNITY_UI_ALPHACLIP
+            #pragma multi_compile_instancing
 
             struct Attributes
             {
@@ -105,12 +107,22 @@ Shader "BalloonParty/Sprite/SpriteShadow"
 
             sampler2D _MainTex;
             float4    _MainTex_ST;
-            fixed4    _Color;
             fixed4    _ShadowColor;
             float2    _ShadowOffset;
             float     _ShadowSoftness;
             float     _SpriteScale;
             float4    _ClipRect;
+
+            #ifdef UNITY_INSTANCING_ENABLED
+                UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
+                    UNITY_DEFINE_INSTANCED_PROP(fixed4, unity_SpriteRendererColorArray)
+                UNITY_INSTANCING_BUFFER_END(PerDrawSprite)
+                #define _RendererColor UNITY_ACCESS_INSTANCED_PROP(PerDrawSprite, unity_SpriteRendererColorArray)
+            #else
+                fixed4 _RendererColor;
+            #endif
+
+            fixed4 _Color;
 
             Varyings vert(Attributes IN)
             {
@@ -120,7 +132,7 @@ Shader "BalloonParty/Sprite/SpriteShadow"
                 OUT.worldPosition = IN.vertex;
                 OUT.vertex        = UnityObjectToClipPos(IN.vertex);
                 OUT.uv            = TRANSFORM_TEX(IN.uv, _MainTex);
-                OUT.color         = IN.color * _Color;
+                OUT.color         = IN.color * _Color * _RendererColor;
                 return OUT;
             }
 

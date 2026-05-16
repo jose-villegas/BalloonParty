@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a611b958f9945ba4c86675d2b67889ed, type: 3}
   m_Name: DisplayConfiguration
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Configuration.GameDisplayConfiguration
-  _referenceWorldWidth: 5.4
+  _referenceWorldWidth: 5.2
   _referenceWorldHeight: 9.6

@@ -21,6 +21,7 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
     {
         _MainTex ("Sprite Texture (Layer 1)", 2D) = "white" {}
         _Color   ("Tint (both layers)",       Color) = (1, 1, 1, 1)
+        [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
 
         [Header(First Layer)]
         _FirstLayerColor ("Color", Color) = (1, 1, 1, 1)
@@ -98,6 +99,7 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
 
             #pragma multi_compile __ UNITY_UI_CLIP_RECT
             #pragma multi_compile __ UNITY_UI_ALPHACLIP
+            #pragma multi_compile_instancing
 
             struct Attributes
             {
@@ -119,7 +121,6 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
             sampler2D _MainTex;
             float4    _MainTex_ST;
             sampler2D _SecondTex;
-            fixed4    _Color;
             fixed4    _FirstLayerColor;
             fixed4    _SecondLayerColor;
             fixed4    _ShadowColor;
@@ -127,6 +128,17 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
             float     _ShadowSoftness;
             float     _SpriteScale;
             float4    _ClipRect;
+
+            #ifdef UNITY_INSTANCING_ENABLED
+                UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
+                    UNITY_DEFINE_INSTANCED_PROP(fixed4, unity_SpriteRendererColorArray)
+                UNITY_INSTANCING_BUFFER_END(PerDrawSprite)
+                #define _RendererColor UNITY_ACCESS_INSTANCED_PROP(PerDrawSprite, unity_SpriteRendererColorArray)
+            #else
+                fixed4 _RendererColor;
+            #endif
+
+            fixed4 _Color;
 
             Varyings vert(Attributes IN)
             {
@@ -136,7 +148,7 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
                 OUT.worldPosition = IN.vertex;
                 OUT.vertex        = UnityObjectToClipPos(IN.vertex);
                 OUT.uv            = TRANSFORM_TEX(IN.uv, _MainTex);
-                OUT.color         = IN.color * _Color;
+                OUT.color         = IN.color * _Color * _RendererColor;
                 return OUT;
             }
 

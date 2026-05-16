@@ -21,7 +21,7 @@ SpriteAtlas:
       crunchedCompression: 0
       sRGB: 1
     platformSettings:
-    - serializedVersion: 3
+    - serializedVersion: 4
       m_BuildTarget: DefaultTexturePlatform
       m_MaxTextureSize: 2048
       m_ResizeAlgorithm: 0
@@ -67,6 +67,8 @@ SpriteAtlas:
     - {fileID: 2800000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
     - {fileID: 2800000, guid: 9da0a4da54eb62c49878b8e42ee76e35, type: 3}
     - {fileID: 2800000, guid: 64f50f40b21f54c4c8ba1d6bba36c6c5, type: 3}
+    - {fileID: 2800000, guid: 3302d7f7cd2bc3446aa20542e4d28441, type: 3}
+    - {fileID: 2800000, guid: 24e519986ebd99b4593578b57c7068db, type: 3}
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
@@ -77,5 +79,3 @@ SpriteAtlas:
   m_RenderDataMap: {}
   m_Tag: VFX
   m_IsVariant: 0
-
-

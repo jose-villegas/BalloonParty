@@ -4,6 +4,7 @@ Shader "BalloonParty/Sprite/Blur"
     {
         [PerRendererData] _MainTex ("Sprite Texture", 2D) = "white" {}
         _Color ("Tint", Color) = (1,1,1,1)
+        [HideInInspector] _RendererColor ("Renderer Color", Color) = (1,1,1,1)
 
         // How many texels each blur step reaches. Higher = softer/wider.
         _BlurAmount ("Blur Amount (pixels)", Range(0, 16)) = 2.0
@@ -37,6 +38,7 @@ Shader "BalloonParty/Sprite/Blur"
             #pragma fragment frag
             #pragma target 2.5
             #pragma multi_compile _ PIXELSNAP_ON
+            #pragma multi_compile_instancing
             #include "UnityCG.cginc"
 
             struct appdata_t
@@ -44,6 +46,7 @@ Shader "BalloonParty/Sprite/Blur"
                 float4 vertex   : POSITION;
                 float4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct v2f
@@ -51,20 +54,33 @@ Shader "BalloonParty/Sprite/Blur"
                 float4 vertex   : SV_POSITION;
                 fixed4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             sampler2D _MainTex;
             float4    _MainTex_TexelSize;
-            fixed4    _Color;
             float     _BlurAmount;
             float     _SpriteScale;
+
+            #ifdef UNITY_INSTANCING_ENABLED
+                UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
+                    UNITY_DEFINE_INSTANCED_PROP(fixed4, unity_SpriteRendererColorArray)
+                UNITY_INSTANCING_BUFFER_END(PerDrawSprite)
+                #define _RendererColor UNITY_ACCESS_INSTANCED_PROP(PerDrawSprite, unity_SpriteRendererColorArray)
+            #else
+                fixed4 _RendererColor;
+            #endif
+
+            fixed4 _Color;
 
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
+                UNITY_SETUP_INSTANCE_ID(IN);
+                UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
                 OUT.vertex   = UnityObjectToClipPos(IN.vertex);
                 OUT.texcoord = IN.texcoord;
-                OUT.color    = IN.color * _Color;
+                OUT.color    = IN.color * _Color * _RendererColor;
 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
 #endif
@@ -102,6 +118,7 @@ Shader "BalloonParty/Sprite/Blur"
 
             fixed4 frag(v2f IN) : SV_Target
             {
+                UNITY_SETUP_INSTANCE_ID(IN);
                 float2 tc  = ScaleUV(IN.texcoord);
                 half4  col = SampleBlurred(tc) * IN.color;
 

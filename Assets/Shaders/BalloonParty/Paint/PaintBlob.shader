@@ -3,6 +3,7 @@ Shader "BalloonParty/Paint/PaintBlob"
     Properties
     {
         _Color              ("Paint Color",          Color)              = (1, 0.2, 0.2, 1)
+        [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
 
         [Header(Blob Shape)]
         _BlobRadius         ("Base Radius",          Range(0.10, 0.50))  = 0.40
@@ -56,6 +57,7 @@ Shader "BalloonParty/Paint/PaintBlob"
             #pragma fragment frag
             #pragma target 3.0
             #pragma shader_feature _SHADOW_ON
+            #pragma multi_compile_instancing
             #include "UnityCG.cginc"
 
             struct appdata_t
@@ -63,6 +65,7 @@ Shader "BalloonParty/Paint/PaintBlob"
                 float4 vertex   : POSITION;
                 float4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct v2f
@@ -70,7 +73,17 @@ Shader "BalloonParty/Paint/PaintBlob"
                 float4 vertex   : SV_POSITION;
                 fixed4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
+                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
+
+            #ifdef UNITY_INSTANCING_ENABLED
+                UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
+                    UNITY_DEFINE_INSTANCED_PROP(fixed4, unity_SpriteRendererColorArray)
+                UNITY_INSTANCING_BUFFER_END(PerDrawSprite)
+                #define _RendererColor UNITY_ACCESS_INSTANCED_PROP(PerDrawSprite, unity_SpriteRendererColorArray)
+            #else
+                fixed4 _RendererColor;
+            #endif
 
             fixed4 _Color;
 
@@ -129,14 +142,17 @@ Shader "BalloonParty/Paint/PaintBlob"
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
+                UNITY_SETUP_INSTANCE_ID(IN);
+                UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
                 OUT.vertex   = UnityObjectToClipPos(IN.vertex);
                 OUT.texcoord = IN.texcoord;
-                OUT.color    = IN.color * _Color;
+                OUT.color    = IN.color * _Color * _RendererColor;
                 return OUT;
             }
 
             fixed4 frag(v2f IN) : SV_Target
             {
+                UNITY_SETUP_INSTANCE_ID(IN);
                 float2 uv  = IN.texcoord - 0.5;
                 float  r   = length(uv);
                 float  t   = _Time.y + _TimeOffset;
