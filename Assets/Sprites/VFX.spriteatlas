@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!687078895 &4343727234628468604
+SpriteAtlas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: VFX
+  m_EditorData:
+    serializedVersion: 2
+    textureSettings:
+      serializedVersion: 2
+      anisoLevel: 1
+      compressionQuality: 50
+      maxTextureSize: 2048
+      textureCompression: 1
+      filterMode: 1
+      generateMipMaps: 0
+      readable: 0
+      crunchedCompression: 0
+      sRGB: 1
+    platformSettings:
+    - serializedVersion: 3
+      m_BuildTarget: DefaultTexturePlatform
+      m_MaxTextureSize: 2048
+      m_ResizeAlgorithm: 0
+      m_TextureFormat: -1
+      m_TextureCompression: 1
+      m_CompressionQuality: 50
+      m_CrunchedCompression: 0
+      m_AllowsAlphaSplitting: 0
+      m_Overridden: 0
+      m_IgnorePlatformSupport: 0
+      m_AndroidETC2FallbackOverride: 0
+      m_ForceMaximumCompressionQuality_BC6H_BC7: 0
+    packingSettings:
+      serializedVersion: 2
+      padding: 4
+      blockOffset: 1
+      allowAlphaSplitting: 0
+      enableRotation: 1
+      enableTightPacking: 1
+      enableAlphaDilation: 0
+    secondaryTextureSettings: {}
+    variantMultiplier: 1
+    packables:
+    - {fileID: 2800000, guid: d439da69ac2d95e44b5e4237e3c69c39, type: 3}
+    - {fileID: 2800000, guid: fadb38d8dcc05ba44a8574d6430ce9ce, type: 3}
+    - {fileID: 2800000, guid: 7b5f2f68fa1f6f146b2c8c144f3e5b09, type: 3}
+    - {fileID: 2800000, guid: 619b6ce62ab7dc84b97e4774ab04ee77, type: 3}
+    - {fileID: 2800000, guid: 2aa2446dce46c484db33bb1ea1e9c445, type: 3}
+    - {fileID: 2800000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
+    - {fileID: 2800000, guid: bc21683484b73d146bd146d9686e4522, type: 3}
+    - {fileID: 2800000, guid: 655a03dcaa0999342864fc46358241b0, type: 3}
+    - {fileID: 2800000, guid: 061e0ad6a6e63d74998f4253fdc01f8b, type: 3}
+    - {fileID: 2800000, guid: 1e610928538ada34b97e63e01e4831cd, type: 3}
+    - {fileID: 2800000, guid: 8b68cc04095677f45b8a0f3afeff2335, type: 3}
+    - {fileID: 2800000, guid: 38ab6d33108086143acdbaaab3c8e5c7, type: 3}
+    - {fileID: 2800000, guid: 491c552672f943e4db1fd1bc5ada8088, type: 3}
+    - {fileID: 2800000, guid: ab55c46dc02300d4293bddd258a3b076, type: 3}
+    - {fileID: 2800000, guid: 22969674ee4ba0840b697a53083070f3, type: 3}
+    - {fileID: 2800000, guid: cc594f0418a1249e3959a27f7a611d74, type: 3}
+    - {fileID: 2800000, guid: c7b526b8da291f04ab19d6fc3f529da5, type: 3}
+    - {fileID: 2800000, guid: 24d76b163c70c5d49aa0487cfc29e0e1, type: 3}
+    - {fileID: 2800000, guid: 5e278044598260e479e2348104387296, type: 3}
+    - {fileID: 2800000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
+    - {fileID: 2800000, guid: 9da0a4da54eb62c49878b8e42ee76e35, type: 3}
+    - {fileID: 2800000, guid: 64f50f40b21f54c4c8ba1d6bba36c6c5, type: 3}
+    bindAsDefault: 1
+    isAtlasV2: 0
+    cachedData: {fileID: 0}
+    packedSpriteRenderDataKeys: []
+  m_MasterAtlas: {fileID: 0}
+  m_PackedSprites: []
+  m_PackedSpriteNamesToIndex: []
+  m_RenderDataMap: {}
+  m_Tag: VFX
+  m_IsVariant: 0
+
+
