@@ -35,7 +35,7 @@ Items are game-wide collectible effects — Bomb, Laser, Lightning, Paint, and S
 | `Shield/ShieldItemHandler` | Shield grant — increments `ShieldsRemaining` on the active projectile; spawns `PSVFX_ShieldGainPU` at the balloon's grid position. Does not deal damage |
 | `Paint/PaintItemHandler` | Splatoon-style color spread — computes all 6 hex neighbor positions via `SlotGrid.HexNeighborIndices`, launches paint blob arcs toward each via `PaintSplashView`, and changes paintable different-color neighbors to the popped balloon's color on blob arrival |
 | `Paint/PaintSplashView` | `EffectView` subclass — animates `ColorableRenderer` blobs along arc paths using `CurveUtility`; spawns fire-and-forget splash particles via `ParticlePoolChannel` on landing. Flight curves, duration, arc height, and scale are driven by `ItemConfiguration` |
-| `Paint/PaintBlobRenderer` | MonoBehaviour on each blob child — assigns a random `_TimeOffset` to the PaintBlob shader via `MaterialPropertyBlock` so each blob's animation phase differs without breaking SRP batching |
+| `Paint/PaintBlobRenderer` | MonoBehaviour on each blob child — assigns a random `_TimeOffset` to the PaintBlob shader via `MaterialPropertyBlock` so each blob's animation phase differs. GPU instancing is disabled on `PaintBlob` and `PaintFlyingBlob` materials because `_TimeOffset` is set per-instance via MPB (see `Assets/Shaders/BalloonParty/README.md`) |
 
 ## Architecture
 

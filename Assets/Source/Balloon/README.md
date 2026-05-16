@@ -15,6 +15,10 @@ Represents balloons in the game — their state, appearance, spawning, and destr
 
 `View/` also contains `SpriteColorableRenderer` (`ColorableRenderer<SpriteRenderer>` — sets `renderer.color`) and `ParticleColorableRenderer` (`ColorableRenderer<ParticleSystem>` — sets `startColor` and immediately recolors live particles via `Clear`+`Play`).
 
+### Rendering and GPU instancing
+
+Balloon materials (`BalloonMaterial`, `SpecularBalloonBlur`, etc.) have GPU instancing enabled. Per-balloon color is applied via `SpriteRenderer.color`, which Unity streams to the shader as `unity_SpriteRendererColorArray` in the instancing buffer. All 6 custom shaders follow the `UnitySprites.cginc` pattern with a `_RendererColor` fallback for non-SpriteRenderer components. Balloon sprites are packed into `Balloons.spriteatlas` for draw call reduction. See `Assets/Shaders/BalloonParty/README.md` for the instancing policy and `Assets/Sprites/README.md` for atlas groupings.
+
 ## Behaviour
 
 A balloon knows its color, type, how many hits it can absorb, where it sits in the grid, whether it has settled into position, and whether it carries an item. When any reactive property changes, the view updates automatically via UniRx subscriptions.

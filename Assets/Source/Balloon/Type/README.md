@@ -36,6 +36,8 @@ Each deflect publishes `BalloonDeflectedMessage` (carries the balloon model, its
 - **`_DamageProgress`** (`0` pristine → `1` critical) — animated via `DOVirtual.Float` over `_crackAnimDuration` seconds using `Ease.OutCubic`. When a second hit arrives before the tween completes, the new tween starts from the current animated value so transitions chain smoothly.
 - **`_VoronoiSeed`** — set to a random `Vector2` at bind time so each balloon instance has a unique crack pattern.
 
+> **GPU instancing is disabled** on `ToughBalloonMaterial` because `_DamageProgress` and `_VoronoiSeed` are set per-instance via `MaterialPropertyBlock`. Instancing batching discards MPB values not declared in the shader's instancing buffer. See `Assets/Shaders/BalloonParty/README.md` for the full instancing policy.
+
 The shader applies a `_DamageCurve` power exponent to `_DamageProgress` before driving all visual effects, controlling how damage distributes perceptually across the hit range (values `> 1` concentrate the visual impact on later hits, recommended for 3-hit balloons). Effects driven by this curve:
 
 - **Ash tint** — base colour transitions from deep black to the configured ash tint

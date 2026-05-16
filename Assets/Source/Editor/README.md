@@ -58,3 +58,9 @@ These drawers extend `PropertyDrawer` directly and handle their own rendering wi
 |---|---|---|
 | `PaintSplashViewEditor` | `PaintSplashView` | Adds an editor-time preview panel below the default inspector. Generates radial flight paths around the object using the hex diagonal neighbor distance from `GameConfiguration.SlotSeparation`. Animates `ColorableRenderer` blobs via `EditorApplication.update` using `CurveUtility` arc math (shared with runtime). Flight duration, arc height, blob scale, and flight curves are all read from `ItemConfiguration`. Particles are driven via `ParticleSystem.Simulate(totalElapsed, restart: true)` since `Play()` doesn't work in edit mode. Private fields are read via cached `System.Reflection.FieldInfo`. Tint uses `GamePalette` color names via popup. Controls: Play/Pause (single toggle), Stop, Playback Speed slider |
 
+## Context menu tools
+
+| Tool | Menu path | What it does |
+|---|---|---|
+| `SetMobileTextureSize` | `Assets > Texture > Set Mobile Max Size > {size}` | Sets platform-specific max texture size overrides for iPhone and Android on all selected textures. Sizes: 64, 128, 256, 512, 1024, 2048. "Reset to Default" removes the mobile overrides. Only appears when the selection contains `Texture2D` assets |
+
