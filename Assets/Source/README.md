@@ -63,7 +63,8 @@ public abstract class GameChildLifetimeScope : LifetimeScope
 
 | Scope | Base | Lives on |
 |---|---|---|
-| `GameLifetimeScope` | `LifetimeScope` | scene root |
+| `LaunchLifetimeScope` | `LifetimeScope` | Launcher scene root |
+| `GameLifetimeScope` | `LifetimeScope` | Game scene root |
 | `ThrowerLifetimeScope` | `GameChildLifetimeScope` | Thrower GameObject |
 | `ProjectileLifetimeScope` | `GameChildLifetimeScope` | Projectile prefab root |
 | `BalloonLifetimeScope` | `GameChildLifetimeScope` | Balloon prefab root |
@@ -176,6 +177,31 @@ await UniTask.Delay(1000, ignoreTimeScale: true, cancellationToken: destroyCance
 - MonoBehaviours: use `destroyCancellationToken` — auto-cancels on destroy.
 - Plain C# classes: use a `CancellationTokenSource` with manually controlled lifetime.
 - Child components of pooled objects: `destroyCancellationToken` fires on actual destruction only (not on pool deactivation), so it is safe to use on pool-child MonoBehaviours.
+
+---
+
+## Navigation State
+
+App-wide navigation is tracked via a static `Navigation` class holding a `ReactiveProperty<NavigationState>`. Any system can observe or transition the current state without DI wiring across scene boundaries.
+
+### States
+
+| State | Meaning | Set by |
+|---|---|---|
+| `Launch` | App startup, Launcher UI visible | Default (initial value) |
+| `Game` | Active gameplay, thrower and balloons active | `NavigationTrigger` on the Launch play button |
+| `LevelUp` | Level-up popup visible, game paused | `ScoreController` on level threshold |
+
+### Scene preloading flow
+
+1. **Launcher `Start`** — `SceneTransition` loads the Game scene additively with rendering suppressed (layer-based camera isolation + `SuppressRendering`). VContainer resolves, pools pre-warm asynchronously.
+2. **Player taps Play** — `NavigationTrigger.Transition()` sets state to `Game`. `SceneTransition.Load()` restores rendering and unloads the Launcher.
+3. **`BalloonSpawner`** — awaits `NavigationState.Game` after pre-warming, then populates the grid with spawn animations.
+4. **`ThrowerController`** — observes state reactively; plays entrance animation on `Game`, blocks input during `LevelUp`.
+
+### Editor standalone play
+
+`EditorNavigationBootstrap` (editor-only) auto-transitions to `Game` when playing a scene directly, but only if the scene is the active scene (inert during additive preloading).
 
 ---
 
