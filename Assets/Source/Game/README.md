@@ -6,7 +6,7 @@ The entry point that starts and runs the game.
 
 | File | What it does |
 |---|---|
-| `GameLifetimeScope` | VContainer composition root — registers all game services, entry points, MessagePipe brokers, configuration assets, and (in dev builds) cheats |
+| `GameLifetimeScope` | VContainer composition root — registers all game services, entry points, MessagePipe brokers, configuration assets, and (in dev builds) cheats. `Awake()` pre-allocates DOTween capacity (`SetTweensCapacity(200, 50)`) before building the container to avoid GC from array resizing during the initial balloon spawn burst |
 | `LaunchLifetimeScope` | VContainer root for the Launcher scene — registers `GameDisplayConfiguration` and `OrthogonalSizeCameraController` for the launch camera |
 | `ScoreController` | Tracks per-color level progress and total score; persists via `PlayerPrefs`; triggers level-ups by transitioning navigation to `LevelUp` and pausing via `Time.timeScale = 0` |
 | `ScoreTrailService` | `IStartable` — subscribes to `BalloonScoredMessage`; spawns pooled `ScorePointTrail` orbs from balloon world position to per-color bar targets; publishes `ScoreTrailArrivedMessage` on arrival. Bars register `Func<Vector3>` target providers for randomised trail destinations |

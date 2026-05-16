@@ -7,7 +7,7 @@ Responsible for introducing balloons into the grid — both at game start and du
 | File | What it does |
 |---|---|
 | `BalloonSpawner` | `IStartable` — creates and places balloons, manages per-type pool registration and active-count caps |
-| `BalloonPoolChannel` | `PoolChannel<BalloonView>` — creates balloon instances via `parentScope.CreateChildFromPrefab()` so each balloon's `BalloonLifetimeScope` resolves its dependencies correctly |
+| `BalloonPoolChannel` | `InjectingPoolChannel<BalloonView>` — creates balloon instances via `IObjectResolver.Instantiate()`, injecting all `[Inject]` fields from the parent container without creating child scopes |
 
 ## Behaviour
 

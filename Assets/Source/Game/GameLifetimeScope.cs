@@ -20,6 +20,7 @@ using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using BalloonParty.Thrower;
 using BalloonParty.UI.Score;
+using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
@@ -38,6 +39,11 @@ namespace BalloonParty.Game
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private ScorePointTrail _scoreTrailPrefab;
 
+        protected override void Awake()
+        {
+            DOTween.SetTweensCapacity(200, 50);
+            base.Awake();
+        }
 
         protected override void Configure(IContainerBuilder builder)
         {

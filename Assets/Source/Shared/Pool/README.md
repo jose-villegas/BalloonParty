@@ -43,7 +43,7 @@ Items signal completion via callbacks passed to their `Play()` or `Setup()` call
 
 For prefabs that have `[Inject]` fields but don't need their own VContainer child scope (all injected dependencies are singletons from an ancestor scope):
 
-- **`InjectingPoolChannel<TItem>`** — generic `PoolChannel<TItem>` that takes an `IObjectResolver` and a prefab. `Create()` instantiates the prefab while inactive, sets `autoRun = false` on any `LifetimeScope` components found on the clone (preventing child container builds), then calls `resolver.InjectGameObject()` to populate all `[Inject]` fields from the parent container. Much faster than `CreateChildFromPrefab` because it skips container creation, `Configure()`, and `RegisterComponentInHierarchy` traversals.
+- **`InjectingPoolChannel<TItem>`** — generic `PoolChannel<TItem>` that takes an `IObjectResolver` and a prefab. `Create()` calls `resolver.Instantiate(prefab, container)` — VContainer's built-in extension that deactivates the prefab, clones, injects all `[Inject]` fields from the parent container, and reactivates. Much faster than `CreateChildFromPrefab` because it skips container creation, `Configure()`, and `RegisterComponentInHierarchy` traversals. Any `LifetimeScope` components on the prefab should have `autoRun` disabled in the Inspector.
 - **`BalloonPoolChannel`** and **`ProjectilePoolChannel`** extend `InjectingPoolChannel<T>` as thin type aliases.
 
 ## Channels

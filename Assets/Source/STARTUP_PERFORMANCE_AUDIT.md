@@ -73,38 +73,25 @@ Replaced LINQ `Where().ToArray()` and `.Sum()` with a reusable `List<BalloonPref
 
 `GameChildLifetimeScope` has been removed. All child scopes extend `LifetimeScope` directly, with parent references set via VContainer's `parentReference` field in the Inspector. `ItemViewScope` no longer overrides `FindParent()` either. This eliminates all runtime parent-lookup cost.
 
-### 7. Per-Balloon `GetComponentsInChildren<IBalloonViewBinding>()` in Bind()
+### 7. ~~Per-Balloon `GetComponentsInChildren<IBalloonViewBinding>()` in Bind()~~ ✅ FIXED
 
-**Location:** `BalloonView.Bind()` line 91
+**Location:** `BalloonView.Bind()`
 
-Every time a balloon is bound (36× during `PopulateInitialGrid()`), `GetComponentsInChildren<IBalloonViewBinding>()` walks the 27-GameObject hierarchy. This is 36 × 27 = ~972 component lookups in a single frame.
+Cached `IBalloonViewBinding[]` in `Awake()`. The hierarchy walk now runs once per pooled instance instead of every `Bind()` call (36x during `PopulateInitialGrid()`).
 
-**Fix:** Cache the bindings array in `Awake()`:
-```csharp
-private IBalloonViewBinding[] _viewBindings;
+### 8. ~~`GetComponentInParent<IBalloonVariant>()` per Balloon Spawn~~ ✅ FIXED
 
-private void Awake()
-{
-    // ...existing code...
-    _viewBindings = GetComponentsInChildren<IBalloonViewBinding>();
-}
-```
+**Location:** `BalloonSpawner.SpawnBalloon()`
 
-### 8. `GetComponentInParent<IBalloonVariant>()` per Balloon Spawn
+Cached `IBalloonVariant` in `BalloonView.Awake()` and exposed via a `Variant` property. `BalloonSpawner` now reads `view.Variant` instead of calling `GetComponentInParent` per spawn.
 
-**Location:** `BalloonSpawner.SpawnBalloon()` line 187
-
-Called 36 times during `PopulateInitialGrid()`, each walking up the hierarchy.
-
-**Fix:** Cache on the `BalloonView` or resolve through DI.
-
-### 9. 36 Concurrent DOTween Sequences at Startup
+### 9. ~~36 Concurrent DOTween Sequences at Startup~~ ✅ FIXED
 
 **Location:** `BalloonSpawner.AnimateSpawn()` — called per balloon in `PopulateInitialGrid()`
 
 Each balloon spawn creates 2 tweens (`DOMove` + `DOScale`). That's **72 tweens** created simultaneously in one frame. DOTween's internal data structures resize dynamically, causing GC allocations from array resizing.
 
-**Fix:** Call `DOTween.SetTweensCapacity(200, 50)` early in startup to pre-allocate DOTween's internal arrays.
+`DOTween.SetTweensCapacity(200, 50)` is now called in `GameLifetimeScope.Awake()` before any entry points run, pre-allocating internal arrays to handle the initial burst without resizing.
 
 ---
 
@@ -136,10 +123,10 @@ With 7+ unique custom shaders and no shader variant pre-warming (`ShaderVariantC
 | 1 | ~~**Pre-warm balloon pool**~~ ✅ | 🔴 High | Medium |
 | 3 | ~~**Add Sprite Atlases**~~ ✅ | 🔴 High | Low |
 | 2 | ~~**Enable GPU Instancing** (shaders + materials)~~ ✅ | 🔴 High | Medium |
-| 7 | **Cache `IBalloonViewBinding[]`** | 🟡 Medium | Low |
-| 8 | **Cache `IBalloonVariant` lookup** | 🟡 Medium | Low |
+| 7 | ~~**Cache `IBalloonViewBinding[]`**~~ ✅ | 🟡 Medium | Low |
+| 8 | ~~**Cache `IBalloonVariant` lookup**~~ ✅ | 🟡 Medium | Low |
 | 5 | ~~**Remove LINQ from `PickRandom`**~~ ✅ | 🟡 Medium | Low |
-| 9 | **Pre-allocate DOTween capacity** | 🟡 Medium | Low |
+| 9 | ~~**Pre-allocate DOTween capacity**~~ ✅ | 🟡 Medium | Low |
 | 6 | ~~**Cache `FindFirstObjectByType` result**~~ ✅ | 🟡 Medium | Low |
 | 11 | **Shader variant pre-warming** | 🟡 Medium | Low |
 | 4 | ~~**Reduce texture sizes for mobile**~~ ✅ | 🟡 Medium | Low |

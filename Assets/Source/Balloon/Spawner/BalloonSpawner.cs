@@ -205,7 +205,7 @@ namespace BalloonParty.Balloon.Spawner
             model.TypeName.Value = entry.BalloonType;
             model.ScoreValue = entry.ScoreValue;
 
-            var variant = view.GetComponentInParent<IBalloonVariant>();
+            var variant = view.Variant;
             variant.Initialize(model);
 
             var controller = new BalloonController(model,

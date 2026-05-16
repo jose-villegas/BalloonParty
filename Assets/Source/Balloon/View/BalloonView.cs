@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Item;
 using BalloonParty.Shared;
@@ -35,10 +36,19 @@ namespace BalloonParty.Balloon.View
 
         private readonly CompositeDisposable _bindDisposables = new();
 
+        private IBalloonViewBinding[] _viewBindings;
+        private IBalloonVariant _variant;
         private ParticleSystem _popVfxOverride;
 
         public IBalloonModel Model { get; private set; }
+        public IBalloonVariant Variant => _variant;
         public TweenTracker TweenTracker => _tweenTracker;
+
+        private void Awake()
+        {
+            _viewBindings = GetComponentsInChildren<IBalloonViewBinding>();
+            _variant = GetComponentInParent<IBalloonVariant>();
+        }
 
         public void OnSpawned()
         {
@@ -83,7 +93,7 @@ namespace BalloonParty.Balloon.View
                 .Subscribe(stable => _animator.SetBool(IsStableParam, stable))
                 .AddTo(_bindDisposables);
 
-            foreach (var binding in GetComponentsInChildren<IBalloonViewBinding>())
+            foreach (var binding in _viewBindings)
             {
                 binding.Bind(model, _bindDisposables);
             }
