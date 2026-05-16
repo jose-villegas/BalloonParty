@@ -8,6 +8,7 @@ Shared editor tooling used across all `PropertyDrawer` implementations in the pr
 |---|---|
 | `PropertyDrawerHelper` | `internal static` utility class — shared constants (`LineHeight`, `Spacing`) and drawing primitives used by every custom drawer. `DrawCommonFields` iterates a serialized type's direct children via `SerializedProperty`, skipping a caller-supplied exclusion set, and renders each with a nicified display name. `DrawNamedField` and `DrawSectionHeader` handle individual named fields and bold group labels. `CountCommonFields` mirrors `DrawCommonFields` for height calculation |
 | `AutoFieldPropertyDrawer` | Abstract base class for `PropertyDrawer`s that want common fields rendered automatically. Seals `GetPropertyHeight` and `OnGUI` and exposes four override points |
+| `EditorUI/` | Reusable UI building blocks for editor windows — `SortableHeader` (sortable column with ▲/▼), `SelectionTracker` (`ISelectable` + toggle-all + per-row checkbox + count + get-selected), `AssetLinkLabel` (clickable ping-to-select), `StyledRow` (bold label + highlighted row), `SearchFilterToolbar` (search + enum filter + refresh). See `EditorUI/README.md` |
 
 ## AutoFieldPropertyDrawer
 
@@ -63,4 +64,5 @@ These drawers extend `PropertyDrawer` directly and handle their own rendering wi
 | Tool | Menu path | What it does |
 |---|---|---|
 | `SetMobileTextureSize` | `Assets > Texture > Set Mobile Max Size > {size}` | Sets platform-specific max texture size overrides for iPhone and Android on all selected textures. Sizes: 64, 128, 256, 512, 1024, 2048. "Reset to Default" removes the mobile overrides. Only appears when the selection contains `Texture2D` assets |
+| `TextureAuditWindow` | `Assets > Texture > Texture Audit Window` | Opens an editor window pre-populated with all textures from the selected folder(s) or individual texture selection. Shows a sortable table (Name, Source size, Default/iPhone/Android max, Override status). Filters: All, No Override, With Override. Text search by name. Rows without mobile overrides are highlighted orange. Click a name to ping it in the Project view. Select rows → choose a size → Apply/Reset from the bottom bar |
 

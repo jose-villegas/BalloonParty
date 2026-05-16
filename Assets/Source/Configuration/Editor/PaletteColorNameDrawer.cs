@@ -1,4 +1,5 @@
 using System.Linq;
+using BalloonParty.Editor.EditorUI;
 using UnityEditor;
 using UnityEngine;
 
@@ -10,8 +11,9 @@ namespace BalloonParty.Configuration.Editor
         private const float SwatchSize = 16f;
         private const float SwatchSpacing = 4f;
 
+        private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
+
         private bool _initialized;
-        private GamePalette _palette;
         private string[] _paletteNames;
 
         private void EnsureInitialized()
@@ -22,9 +24,9 @@ namespace BalloonParty.Configuration.Editor
             }
 
             _initialized = true;
-            _palette = FindPalette();
-            _paletteNames = _palette != null
-                ? _palette.Colors.Select(c => c.Name).ToArray()
+            var palette = _paletteCache.Value;
+            _paletteNames = palette != null
+                ? palette.Colors.Select(c => c.Name).ToArray()
                 : System.Array.Empty<string>();
         }
 
@@ -37,7 +39,9 @@ namespace BalloonParty.Configuration.Editor
         {
             EnsureInitialized();
 
-            if (_palette == null)
+            var palette = _paletteCache.Value;
+
+            if (palette == null)
             {
                 EditorGUI.HelpBox(position,
                     "No GamePalette asset found. Create one via Create → Configuration → Game Palette.",
@@ -65,9 +69,9 @@ namespace BalloonParty.Configuration.Editor
                 property.stringValue = _paletteNames[newIndex];
             }
 
-            if (newIndex >= 0 && newIndex < _palette.Colors.Length)
+            if (newIndex >= 0 && newIndex < palette.Colors.Length)
             {
-                DrawSwatch(swatchRect, _palette.Colors[newIndex].Color);
+                PaletteColorPicker.DrawSwatch(swatchRect, palette.Colors[newIndex].Color);
             }
         }
 
@@ -80,27 +84,6 @@ namespace BalloonParty.Configuration.Editor
             }
 
             return options;
-        }
-
-        private static void DrawSwatch(Rect rect, Color color)
-        {
-            EditorGUI.DrawRect(rect, color);
-            EditorGUI.DrawRect(new Rect(rect.x - 1, rect.y - 1, rect.width + 2, 1), Color.black);
-            EditorGUI.DrawRect(new Rect(rect.x - 1, rect.yMax, rect.width + 2, 1), Color.black);
-            EditorGUI.DrawRect(new Rect(rect.x - 1, rect.y, 1, rect.height), Color.black);
-            EditorGUI.DrawRect(new Rect(rect.xMax, rect.y, 1, rect.height), Color.black);
-        }
-
-        private static GamePalette FindPalette()
-        {
-            var guids = AssetDatabase.FindAssets("t:GamePalette");
-            if (guids.Length == 0)
-            {
-                return null;
-            }
-
-            var path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            return AssetDatabase.LoadAssetAtPath<GamePalette>(path);
         }
     }
 }

@@ -1,4 +1,5 @@
 using System.Linq;
+using BalloonParty.Editor.EditorUI;
 using UnityEditor;
 using UnityEngine;
 
@@ -7,9 +8,12 @@ namespace BalloonParty.Configuration.Editor
     [CustomPropertyDrawer(typeof(PaletteColorMaskAttribute))]
     public class PaletteColorMaskDrawer : PropertyDrawer
     {
+        private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
+
         private bool _initialized;
-        private GamePalette _palette;
         private string[] _paletteNames;
+
+        private GamePalette Palette => _paletteCache.Value;
 
         private void EnsureInitialized()
         {
@@ -19,9 +23,9 @@ namespace BalloonParty.Configuration.Editor
             }
 
             _initialized = true;
-            _palette = FindPalette();
-            _paletteNames = _palette != null
-                ? _palette.Colors.Select(c => c.Name).ToArray()
+            var palette = Palette;
+            _paletteNames = palette != null
+                ? palette.Colors.Select(c => c.Name).ToArray()
                 : System.Array.Empty<string>();
         }
 
@@ -29,7 +33,7 @@ namespace BalloonParty.Configuration.Editor
         {
             EnsureInitialized();
 
-            if (_palette == null || property.propertyType != SerializedPropertyType.Integer)
+            if (Palette == null || property.propertyType != SerializedPropertyType.Integer)
             {
                 return EditorGUIUtility.singleLineHeight;
             }
@@ -47,7 +51,7 @@ namespace BalloonParty.Configuration.Editor
         {
             EnsureInitialized();
 
-            if (_palette == null)
+            if (Palette == null)
             {
                 EditorGUI.HelpBox(position,
                     "No GamePalette asset found. Create one via Create → Configuration → Game Palette.",
@@ -131,7 +135,7 @@ namespace BalloonParty.Configuration.Editor
                     continue;
                 }
 
-                var entry = _palette.Colors[i];
+                var entry = Palette.Colors[i];
                 var labelWidth = style.CalcSize(new GUIContent(entry.Name)).x;
                 var itemWidth = swatchSize + labelPadding + labelWidth + itemSpacing;
 
@@ -142,37 +146,13 @@ namespace BalloonParty.Configuration.Editor
                 }
 
                 var swatchRect = new Rect(curX, curY, swatchSize, swatchSize);
-                EditorGUI.DrawRect(swatchRect, entry.Color);
-                EditorGUI.DrawRect(
-                    new Rect(swatchRect.x - 1, swatchRect.y - 1, swatchRect.width + 2, 1),
-                    Color.black);
-                EditorGUI.DrawRect(
-                    new Rect(swatchRect.x - 1, swatchRect.yMax, swatchRect.width + 2, 1),
-                    Color.black);
-                EditorGUI.DrawRect(
-                    new Rect(swatchRect.x - 1, swatchRect.y, 1, swatchRect.height),
-                    Color.black);
-                EditorGUI.DrawRect(
-                    new Rect(swatchRect.xMax, swatchRect.y, 1, swatchRect.height),
-                    Color.black);
+                PaletteColorPicker.DrawSwatch(swatchRect, entry.Color);
 
                 var labelRect = new Rect(swatchRect.xMax + labelPadding, curY, labelWidth, swatchSize);
                 EditorGUI.LabelField(labelRect, entry.Name, style);
 
                 curX += itemWidth;
             }
-        }
-
-        private static GamePalette FindPalette()
-        {
-            var guids = AssetDatabase.FindAssets("t:GamePalette");
-            if (guids.Length == 0)
-            {
-                return null;
-            }
-
-            var path = AssetDatabase.GUIDToAssetPath(guids[0]);
-            return AssetDatabase.LoadAssetAtPath<GamePalette>(path);
         }
     }
 }

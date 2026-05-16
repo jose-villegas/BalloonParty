@@ -6,43 +6,30 @@
 
 ## 🔴 Critical Issues
 
-### 1. No Pool Pre-warming — 36 Balloons Instantiated Synchronously on First Frame
+### 1. ~~No Pool Pre-warming — 36 Balloons Instantiated Synchronously on First Frame~~ ✅ FIXED
 
-**Location:** `BalloonSpawner.Start()` → `PopulateInitialGrid()`
+**Location:** `BalloonSpawner.PrewarmAndPopulateAsync()`
 
-The grid is **6 columns × 11 rows**, and `_gameStartedBalloonLines` is **6**.
-That means **36 balloons** are spawned in `Start()`. Every balloon calls `PoolChannel.Get()`, which on the first frame has an empty pool, so it calls `Create()` every single time.
+Pool pre-warming now spreads `Create()` calls across frames via `PrewarmAsync()` before the Game scene transitions. `PopulateInitialGrid()` runs only after pre-warming completes and the navigation state reaches `Game`.
 
-Each `BalloonPoolChannel.Create()` does:
-```
-_parentScope.CreateChildFromPrefab(_prefab)  // VContainer DI resolve
-childScope.GetComponentInChildren<BalloonView>()
-```
-
-The `Balloon.prefab` has **27 GameObjects**. Instantiating 36 of them = **~972 GameObjects** created in a single frame, each going through VContainer's DI resolution, `Awake()`, `GetComponent` calls, Animator initialization, and sprite renderer setup.
-
-**This is almost certainly the primary cause of the startup hitch.**
-
-**Fix:** Add pre-warming to `PoolChannel<T>` and call it during a loading screen or spread it across frames:
-
-```csharp
-public async UniTask PrewarmAsync(int count, CancellationToken ct)
-{
-    for (var i = 0; i < count; i++)
-    {
-        var item = Create();
-        item.gameObject.SetActive(false);
-        _available.Push(item);
-        await UniTask.Yield(ct); // spread across frames
-    }
-}
-```
+**Remaining hitch:** Even with a warm pool, `PopulateInitialGrid()` calls `SpawnBalloon()` **36 times synchronously** in one frame. Each call does: `PickRandom` (LINQ alloc), `Get` (pool hit — fast), `new BalloonModel`, 8 model property sets, `GetComponentInParent<IBalloonVariant>` (hierarchy walk), `Initialize`, `new BalloonController` (10+ injected deps), `controller.Start` (message subscriptions), `grid.Place`, `view.Bind` (3 UniRx subscriptions + `GetComponentsInChildren<IBalloonViewBinding>` hierarchy walk + `ItemDisplayService.Bind`), and `AnimateSpawn` (2 DOTween tweens). The per-balloon cost is moderate individually, but **×36 in one frame** creates a visible hitch. The fixes below (#5–#9) reduce per-balloon cost; if still insufficient, `PopulateInitialGrid` itself should be spread across frames.
 
 ### 2. ~~Zero GPU Instancing on All 41 Materials~~ ✅ FIXED
 
-**Location:** Every `.mat` file under `Assets/Materials/`
+**Location:** Every `.mat` file under `Assets/Materials/`, every `.shader` under `Assets/Shaders/BalloonParty/`
 
-All 41 materials now have `m_EnableInstancingVariants: 1`. All 6 custom shaders (`ToughBalloon`, `SpriteBlur`, `SpriteShine`, `SpriteShadow`, `SpriteShadowComposite`, `PaintBlob`) now include `#pragma multi_compile_instancing`, `UNITY_VERTEX_INPUT_INSTANCE_ID` in input/output structs, `UNITY_SETUP_INSTANCE_ID` in vertex and fragment functions, and `UNITY_TRANSFER_INSTANCE_ID` where needed.
+All 6 custom shaders now support GPU instancing following Unity's `UnitySprites.cginc` pattern:
+
+- `#pragma multi_compile_instancing` and `UNITY_VERTEX_INPUT_INSTANCE_ID` in vertex input/output structs
+- Per-instance renderer color via `unity_SpriteRendererColorArray` in a `PerDrawSprite` instancing buffer (matches Unity's built-in SpriteRenderer instancing path)
+- `_RendererColor` fallback uniform for non-SpriteRenderer components, declared in the `Properties` block with default white `(1,1,1,1)` so trails, particles, and UI renderers work without SpriteRenderer populating the buffer
+- Vertex shader multiplies `IN.color * _Color * _RendererColor`
+
+**30 materials** have GPU instancing enabled — 12 SpriteRenderer-based custom-shader materials (balloon, specular overlays, projectile, UI sprites) and 18 particle/trail/line materials using Unity's built-in shaders.
+
+**11 materials** have GPU instancing deliberately disabled:
+- `ToughBalloonMaterial`, `PaintBlob`, `PaintFlyingBlob` — require per-instance `MaterialPropertyBlock` properties (`_DamageProgress`, `_VoronoiSeed`, `_TimeOffset`) that are incompatible with instancing batching
+- 8 particle/trail materials using custom shaders (`PSMaterial_BalloonPop`, `PSMaterial_ToughBalloonPopSmoke`, `PSMaterial_BombRangePU`, `PSMaterial_ShieldGain`, `PSMaterial_ShieldGainPU`, `PSMaterial_ShieldLose`, `TrailMaterial_Projectile`, `TrailMaterial_Shield`) — ParticleSystem and TrailRenderer do not populate `unity_SpriteRendererColorArray`
 
 ### 3. ~~No Sprite Atlases — Every Sprite is a Separate Draw Call~~ ✅ FIXED
 
@@ -58,23 +45,21 @@ Also enabled `m_SpritePackerMode: 2` (Sprite Atlas V1 — Always Enabled) in `Pr
 
 ---
 
-## 🟡 Moderate Issues
+## 🟡 Moderate Issues — Per-Balloon Cost During `PopulateInitialGrid()`
 
-### 4. Oversized Textures for Mobile
+> With pool pre-warming solved, the remaining hitch is the **synchronous per-balloon work** inside `PopulateInitialGrid()`. Each fix below reduces per-balloon cost; together they should eliminate or significantly reduce the frame spike. If the hitch persists after all moderate fixes, the final step is spreading `PopulateInitialGrid` itself across frames (1–2 rows per frame).
 
-Several sprites are 1024×1024 for elements that render quite small on screen:
+### 4. ~~Oversized Textures for Mobile~~ ✅ FIXED
 
-| Sprite | Size | Likely Use |
-|--------|------|------------|
-| `balloon_shine.png` | 1024×1024 | Specular overlay on balloons |
-| `bomb_spec.png` | 1024×1024 | Specular overlay on bombs |
-| `circle_dust.png` | 1024×1024 | Particle effect |
-| `cartoon-smoke.png` | 1024×1024 | Particle effect |
-| `background_counter.png` | 1024×1024 | UI background |
+Mobile platform overrides (iPhone + Android) now cap texture sizes. Desktop/Standalone remains at original 1024×1024.
 
-Balloons render at roughly 0.375 world units wide. Even on a high-DPI phone, a 256×256 or 512×512 texture is sufficient for overlays. Particle sprites rarely need more than 256×256.
-
-**Fix:** Set platform-specific max texture sizes in the import settings: 512 or 256 for mobile for overlay/particle sprites.
+| Sprite | Source | Mobile Max | Reason |
+|--------|--------|------------|--------|
+| `balloon_shine.png` | 1024×1024 | 256 | Specular overlay on ~0.375 world-unit balloons |
+| `bomb_spec.png` | 1024×1024 | 256 | Specular overlay on bombs |
+| `circle_dust.png` | 1024×1024 | 256 | Particle effect |
+| `cartoon-smoke.png` | 1024×1024 | 256 | Particle effect |
+| `background_counter.png` | 1024×1024 | 512 | UI background element (needs slightly more detail) |
 
 ### 5. LINQ Allocations in `PickRandom()` — Called 36× at Startup
 
@@ -85,7 +70,7 @@ var candidates = _entries.Where(e => ...).ToArray();  // allocation
 var totalWeight = candidates.Sum(e => e.Weight);      // allocation
 ```
 
-This is called once per balloon spawn (36 times at startup), creating temporary arrays each time.
+Called once per balloon spawn — 36 `ToArray()` allocations in `PopulateInitialGrid()`. Each allocation triggers GC pressure that compounds with the other per-balloon work.
 
 **Fix:** Use a reusable list or iterate without LINQ:
 ```csharp
@@ -112,7 +97,7 @@ public BalloonPrefabEntry PickRandom(IReadOnlyDictionary<string, int> activeCoun
 
 **Location:** `GameChildLifetimeScope.FindParent()` and `ItemViewScope.FindParent()`
 
-`FindFirstObjectByType` scans all loaded objects. This is called by every `GameChildLifetimeScope` subclass (`ScoreUILifetimeScope`, `ShieldUILifetimeScope`, `ThrowerLifetimeScope`, `LevelUpLifetimeScope`, `BalloonLifetimeScope`) during their `Awake`. For balloon scopes (created 36× at startup), this is particularly expensive.
+`FindFirstObjectByType` scans all loaded objects. Called by every `GameChildLifetimeScope` subclass during `Awake`. For pre-warmed balloon scopes (created 36× during pre-warming), this runs during `PrewarmAsync` rather than `PopulateInitialGrid`, but still adds significant cost to the pre-warming phase.
 
 **Fix:** Cache the `GameLifetimeScope` reference in a static field after the first lookup, or use VContainer's parent scope wiring instead of `FindFirstObjectByType`.
 
@@ -120,7 +105,7 @@ public BalloonPrefabEntry PickRandom(IReadOnlyDictionary<string, int> activeCoun
 
 **Location:** `BalloonView.Bind()` line 91
 
-Every time a balloon is bound (36× at startup), `GetComponentsInChildren<IBalloonViewBinding>()` walks the hierarchy. Since the Balloon prefab has 27 GameObjects, this is 36 × 27 = ~972 component lookups.
+Every time a balloon is bound (36× during `PopulateInitialGrid()`), `GetComponentsInChildren<IBalloonViewBinding>()` walks the 27-GameObject hierarchy. This is 36 × 27 = ~972 component lookups in a single frame.
 
 **Fix:** Cache the bindings array in `Awake()`:
 ```csharp
@@ -137,15 +122,15 @@ private void Awake()
 
 **Location:** `BalloonSpawner.SpawnBalloon()` line 187
 
-Called 36 times at startup, each walking up the hierarchy.
+Called 36 times during `PopulateInitialGrid()`, each walking up the hierarchy.
 
 **Fix:** Cache on the `BalloonView` or resolve through DI.
 
 ### 9. 36 Concurrent DOTween Sequences at Startup
 
-**Location:** `BalloonSpawner.AnimateSpawn()` — called per balloon
+**Location:** `BalloonSpawner.AnimateSpawn()` — called per balloon in `PopulateInitialGrid()`
 
-Each balloon spawn creates 2 tweens (`DOMove` + `DOScale`). At startup that's **72 tweens** created simultaneously. DOTween's internal data structures resize dynamically, causing GC allocations from array resizing.
+Each balloon spawn creates 2 tweens (`DOMove` + `DOScale`). That's **72 tweens** created simultaneously in one frame. DOTween's internal data structures resize dynamically, causing GC allocations from array resizing.
 
 **Fix:** Call `DOTween.SetTweensCapacity(200, 50)` early in startup to pre-allocate DOTween's internal arrays.
 
@@ -175,15 +160,17 @@ With 7+ unique custom shaders and no shader variant pre-warming (`ShaderVariantC
 
 | # | Fix | Impact | Effort |
 |---|-----|--------|--------|
-| 1 | **Pre-warm balloon pool** (spread across loading frames) | 🔴 High | Medium |
+| 1 | ~~**Pre-warm balloon pool**~~ ✅ | 🔴 High | Medium |
 | 3 | ~~**Add Sprite Atlases**~~ ✅ | 🔴 High | Low |
 | 2 | ~~**Enable GPU Instancing** (shaders + materials)~~ ✅ | 🔴 High | Medium |
-| 11 | **Shader variant pre-warming** | 🟡 Medium | Low |
-| 6 | **Cache `FindFirstObjectByType` result** | 🟡 Medium | Low |
 | 7 | **Cache `IBalloonViewBinding[]`** | 🟡 Medium | Low |
-| 9 | **Pre-allocate DOTween capacity** | 🟡 Medium | Low |
+| 8 | **Cache `IBalloonVariant` lookup** | 🟡 Medium | Low |
 | 5 | **Remove LINQ from `PickRandom`** | 🟡 Medium | Low |
-| 4 | **Reduce texture sizes for mobile** | 🟡 Medium | Low |
-| 8 | **Cache `IBalloonVariant` lookup** | 🟢 Low | Low |
+| 9 | **Pre-allocate DOTween capacity** | 🟡 Medium | Low |
+| 6 | **Cache `FindFirstObjectByType` result** | 🟡 Medium | Low |
+| 11 | **Shader variant pre-warming** | 🟡 Medium | Low |
+| 4 | ~~**Reduce texture sizes for mobile**~~ ✅ | 🟡 Medium | Low |
 | 10 | **Cache `Camera.main`** | 🟢 Low | Low |
+
+> **If the hitch persists after all moderate fixes:** spread `PopulateInitialGrid()` across frames — spawn 1–2 rows per frame using `async UniTask` with `UniTask.Yield()` between rows. This is the nuclear option and should be unnecessary if the per-balloon cost is reduced sufficiently.
 
