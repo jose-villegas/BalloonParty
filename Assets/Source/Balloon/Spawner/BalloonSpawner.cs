@@ -7,6 +7,7 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -99,7 +100,7 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             await UniTask.WaitUntil(
-                () => Navigation.State.Value == NavigationState.Game,
+                () => Navigation.Current.Value == NavigationState.Game,
                 cancellationToken: ct);
 
             PopulateInitialGrid();

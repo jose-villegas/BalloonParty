@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.Rendering
 {
     public interface IColorableRenderer
     {

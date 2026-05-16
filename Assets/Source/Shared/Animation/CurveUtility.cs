@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.Animation
 {
     public static class CurveUtility
     {

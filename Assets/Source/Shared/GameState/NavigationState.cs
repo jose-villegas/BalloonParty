@@ -1,4 +1,4 @@
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.GameState
 {
     internal enum NavigationState
     {

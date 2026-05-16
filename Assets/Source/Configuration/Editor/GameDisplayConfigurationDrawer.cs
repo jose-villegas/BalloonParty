@@ -1,3 +1,4 @@
+using BalloonParty.Editor;
 using UnityEditor;
 using UnityEngine;
 
@@ -97,7 +98,7 @@ namespace BalloonParty.Configuration.Editor
 
             var center = Vector3.zero;
 
-            DrawWorldRect(center, refWidth, refHeight, ReferenceBoxColor, ReferenceBoxFill);
+            SceneDrawingHelper.DrawWorldRect(center, refWidth, refHeight, ReferenceBoxColor, ReferenceBoxFill);
 
             foreach (var (label, aspect) in CommonRatios)
             {
@@ -106,7 +107,7 @@ namespace BalloonParty.Configuration.Editor
                 var visibleW = visibleH * aspect;
 
                 var deviceColor = new Color(1f, 1f, 1f, 0.15f);
-                DrawWorldRect(center, visibleW, visibleH, deviceColor, Color.clear);
+                SceneDrawingHelper.DrawWorldRect(center, visibleW, visibleH, deviceColor, Color.clear);
 
                 var labelPos = center + new Vector3(visibleW / 2f, visibleH / 2f, 0f);
                 Handles.Label(labelPos,
@@ -127,35 +128,6 @@ namespace BalloonParty.Configuration.Editor
                 refLabelStyle);
         }
 
-        private static void DrawWorldRect(
-            Vector3 center,
-            float width,
-            float height,
-            Color outlineColor,
-            Color fillColor)
-        {
-            var halfW = width / 2f;
-            var halfH = height / 2f;
-
-            var bl = center + new Vector3(-halfW, -halfH, 0f);
-            var br = center + new Vector3(halfW, -halfH, 0f);
-            var tr = center + new Vector3(halfW, halfH, 0f);
-            var tl = center + new Vector3(-halfW, halfH, 0f);
-
-            if (fillColor.a > 0f)
-            {
-                Handles.DrawSolidRectangleWithOutline(
-                    new[] { bl, br, tr, tl },
-                    fillColor,
-                    Color.clear);
-            }
-
-            Handles.color = outlineColor;
-            Handles.DrawLine(bl, br);
-            Handles.DrawLine(br, tr);
-            Handles.DrawLine(tr, tl);
-            Handles.DrawLine(tl, bl);
-        }
 
         private static void DrawPreviewBox(Rect area, float refWidth, float refHeight)
         {

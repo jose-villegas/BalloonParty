@@ -4,6 +4,7 @@ using BalloonParty.Projectile;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using DG.Tweening;
@@ -66,7 +67,7 @@ namespace BalloonParty.Thrower
 
             _destroyedSubscriber.Subscribe(_ => Reload());
 
-            Navigation.State
+            Navigation.Current
                 .Where(state => state == NavigationState.Game)
                 .Take(1)
                 .Subscribe(_ => PlayEntrance());
@@ -74,7 +75,7 @@ namespace BalloonParty.Thrower
 
         public void Tick()
         {
-            if (!_isMovable || Navigation.State.Value != NavigationState.Game)
+            if (!_isMovable || Navigation.Current.Value != NavigationState.Game)
             {
                 return;
             }

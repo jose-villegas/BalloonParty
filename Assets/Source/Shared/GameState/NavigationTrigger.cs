@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.GameState
 {
     /// <summary>
     ///     Triggers a navigation state transition. Wire the public <see cref="Transition" />

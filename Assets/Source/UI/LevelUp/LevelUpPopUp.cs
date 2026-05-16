@@ -1,4 +1,4 @@
-using BalloonParty.Shared;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -7,7 +7,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using Navigation = BalloonParty.Shared.Navigation;
+using Navigation = BalloonParty.Shared.GameState.Navigation;
 
 namespace BalloonParty.UI.LevelUp
 {

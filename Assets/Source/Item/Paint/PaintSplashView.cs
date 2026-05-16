@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Animation;
+using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
 

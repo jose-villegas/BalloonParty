@@ -4,6 +4,8 @@ using BalloonParty.Configuration;
 using BalloonParty.Editor.EditorUI;
 using BalloonParty.Item.Paint;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Animation;
+using BalloonParty.Shared.Rendering;
 using NaughtyAttributes.Editor;
 using UnityEditor;
 using UnityEngine;

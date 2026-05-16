@@ -1,6 +1,6 @@
 using UniRx;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.GameState
 {
     /// <summary>
     ///     App-wide navigation state. Static so both scenes can access it
@@ -10,7 +10,7 @@ namespace BalloonParty.Shared
     {
         private static readonly ReactiveProperty<NavigationState> _state = new(NavigationState.Launch);
 
-        public static IReadOnlyReactiveProperty<NavigationState> State => _state;
+        public static IReadOnlyReactiveProperty<NavigationState> Current => _state;
 
         public static void TransitionTo(NavigationState state)
         {

@@ -58,6 +58,12 @@ VContainer (DI), UniRx (reactive), MessagePipe (pub/sub), UniTask (async), DOTwe
 - Update when mechanics change
 - Written for new developers, not as changelog
 
+### Gizmos & Editor Drawing
+- `GizmoDrawingHelper` (`Shared/Rendering/`) — Gizmos API for `OnDrawGizmos`
+- `SceneDrawingHelper` (`Editor/`) — Handles API for `SceneView.duringSceneGui`
+- Both share method signatures and coordinate conventions — decouple drawing logic from the rendering API
+- Guard `GizmoDrawingHelper`, gizmo-only fields, and `OnDrawGizmos` in `#if UNITY_EDITOR`
+
 ## Audit Script
 ```bash
 python3 Tools/style_audit.py              # full scan
@@ -75,5 +81,3 @@ cp Tools/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 ## IDE Enforcement
 - `.editorconfig` — Allman braces, required braces, naming conventions, block-scoped namespaces, `var` usage. Applied by any editor.
 - `BalloonParty.sln.DotSettings` — Rider/ReSharper settings for member ordering warnings, modifier defaults, formatting.
-
-

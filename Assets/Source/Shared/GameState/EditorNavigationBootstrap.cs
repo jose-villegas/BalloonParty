@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.GameState
 {
     /// <summary>
     ///     Editor-only bootstrap that transitions to <see cref="_targetState" /> on Awake
@@ -15,7 +15,7 @@ namespace BalloonParty.Shared
 
         private void Awake()
         {
-            if (Navigation.State.Value == NavigationState.Launch
+            if (Navigation.Current.Value == NavigationState.Launch
                 && gameObject.scene == UnityEngine.SceneManagement.SceneManager.GetActiveScene())
             {
                 Navigation.TransitionTo(_targetState);

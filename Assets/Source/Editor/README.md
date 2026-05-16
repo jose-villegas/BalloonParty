@@ -7,6 +7,7 @@ Shared editor tooling used across all `PropertyDrawer` implementations in the pr
 | File | What it does |
 |---|---|
 | `PropertyDrawerHelper` | `internal static` utility class — shared constants (`LineHeight`, `Spacing`) and drawing primitives used by every custom drawer. `DrawCommonFields` iterates a serialized type's direct children via `SerializedProperty`, skipping a caller-supplied exclusion set, and renders each with a nicified display name. `DrawNamedField` and `DrawSectionHeader` handle individual named fields and bold group labels. `CountCommonFields` mirrors `DrawCommonFields` for height calculation |
+| `SceneDrawingHelper` | `public static` utility class — shared Scene-view drawing primitives via `Handles`. `DrawWorldRect` draws an axis-aligned rectangle from center/width/height. `DrawWorldRectFromLimits` draws from explicit top/right/bottom/left edges (clockwise `Vector4` convention). Used by `GameDisplayConfigurationEditor` and `MapLimitsSceneOverlay` |
 | `AutoFieldPropertyDrawer` | Abstract base class for `PropertyDrawer`s that want common fields rendered automatically. Seals `GetPropertyHeight` and `OnGUI` and exposes four override points |
 | `EditorUI/` | Reusable UI building blocks for editor windows — `SortableHeader` (sortable column with ▲/▼), `SelectionTracker` (`ISelectable` + toggle-all + per-row checkbox + count + get-selected), `AssetLinkLabel` (clickable ping-to-select), `StyledRow` (bold label + highlighted row), `SearchFilterToolbar` (search + enum filter + refresh). See `EditorUI/README.md` |
 
@@ -58,6 +59,13 @@ These drawers extend `PropertyDrawer` directly and handle their own rendering wi
 | Editor | Target | What it does |
 |---|---|---|
 | `PaintSplashViewEditor` | `PaintSplashView` | Adds an editor-time preview panel below the default inspector. Generates radial flight paths around the object using the hex diagonal neighbor distance from `GameConfiguration.SlotSeparation`. Animates `ColorableRenderer` blobs via `EditorApplication.update` using `CurveUtility` arc math (shared with runtime). Flight duration, arc height, blob scale, and flight curves are all read from `ItemConfiguration`. Particles are driven via `ParticleSystem.Simulate(totalElapsed, restart: true)` since `Play()` doesn't work in edit mode. Private fields are read via cached `System.Reflection.FieldInfo`. Tint uses `GamePalette` color names via popup. Controls: Play/Pause (single toggle), Stop, Playback Speed slider |
+| `GameConfigurationEditor` | `GameConfiguration` | Adds a "Show Limits In Scene" toggle below the default inspector that controls `MapLimitsSceneOverlay` |
+
+## Scene overlays
+
+| Overlay | What it draws |
+|---|---|
+| `MapLimitsSceneOverlay` | `[InitializeOnLoad]` static class — draws the `GameConfiguration.LimitsClockwise` map boundary as an orange rectangle with edge-value labels in the Scene view. Active in both edit and play mode regardless of inspector selection. Uses `ConfigAssetCache<GameConfiguration>` to locate the asset. Toggle persisted via `EditorPrefs` and controllable from the `GameConfigurationEditor` inspector |
 
 ## Context menu tools
 

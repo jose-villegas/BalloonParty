@@ -176,7 +176,17 @@ await UniTask.Delay(1000, ignoreTimeScale: true, cancellationToken: destroyCance
 
 ## Navigation State
 
-App-wide navigation is tracked via a static `Navigation` class holding a `ReactiveProperty<NavigationState>`. Any system can observe or transition the current state without DI wiring across scene boundaries.
+App-wide navigation is tracked via a static `Navigation` class (in `Shared/GameState/`) holding a `ReactiveProperty<NavigationState>`. Any system can observe or transition the current state without DI wiring across scene boundaries.
+
+```csharp
+using BalloonParty.Shared.GameState;
+
+// Observe
+Navigation.Current.Where(s => s == NavigationState.Game).Subscribe(...);
+
+// Transition
+Navigation.TransitionTo(NavigationState.LevelUp);
+```
 
 ### States
 
@@ -441,6 +451,50 @@ A runtime debug console in `Cheats/`. Press **backtick (`)** to toggle. The enti
 
 ---
 
+## Gizmos & Editor Drawing
+
+Two parallel drawing helpers provide identical method signatures and coordinate conventions across editor and runtime contexts:
+
+| Helper | Location | API | Used by |
+|---|---|---|---|
+| `SceneDrawingHelper` | `Editor/` | `Handles` | Custom editors, `[InitializeOnLoad]` scene overlays |
+| `GizmoDrawingHelper` | `Shared/Rendering/` | `Gizmos` | Any `MonoBehaviour.OnDrawGizmos` callback |
+
+Both expose `DrawWorldRect(center, width, height, outlineColor, fillColor)` and `DrawWorldRectFromLimits(top, right, bottom, left, outlineColor, fillColor)` using the clockwise `Vector4` convention (top → right → bottom → left).
+
+### Build-stripping rules
+
+All gizmo-related code must be guarded with `#if UNITY_EDITOR` to compile out in builds:
+
+1. **`GizmoDrawingHelper` itself** is wrapped entirely in `#if UNITY_EDITOR` / `#endif`. It lives in the runtime assembly (`Shared/Rendering/`) so runtime MonoBehaviours can reference it, but it compiles out completely in builds.
+
+2. **Consumer MonoBehaviours** must wrap gizmo-only fields (`static readonly` colors, `[Inject]` dependencies) **and** the `OnDrawGizmos` method in `#if UNITY_EDITOR`. `OnDrawGizmos` is stripped automatically in builds, but fields and `[Inject]` decorations are **not** — they remain in the build, cause DI resolution overhead, and hold references that would otherwise not exist.
+
+```csharp
+public class SlotGridView : MonoBehaviour
+{
+#if UNITY_EDITOR
+    private static readonly Color EmptySlotColor = new(1f, 1f, 1f, 0.2f);
+
+    [Inject] private IGameConfiguration _config;
+
+    private void OnDrawGizmos()
+    {
+        // draw using _config and EmptySlotColor
+    }
+#endif
+}
+```
+
+This ensures:
+- No `[Inject]` resolution in builds for gizmo-only dependencies.
+- No `static readonly` allocations for gizmo-only colors.
+- The class compiles as an empty (or minimal) MonoBehaviour in release.
+
+Fields shared between gizmo drawing **and** runtime logic (e.g. `SlotGrid _grid` used by both gameplay and `OnDrawGizmos`) should **not** be guarded — they are needed regardless.
+
+---
+
 ## Living Documentation
 
 Each feature folder contains a `README.md` describing its gameplay purpose, how it works, and how it interacts with other systems.
@@ -481,4 +535,3 @@ python3 Tools/style_audit.py --fix
 # Install pre-commit hook
 cp Tools/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 ```
-

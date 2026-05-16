@@ -2,7 +2,7 @@ using BalloonParty.Shared.Extensions;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace BalloonParty.Shared
+namespace BalloonParty.Shared.GameState
 {
     /// <summary>
     ///     General-purpose scene transition component. Attach to any GameObject and
