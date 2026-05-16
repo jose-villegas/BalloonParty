@@ -13,9 +13,13 @@ Types and utilities used across multiple features.
 | `IEffect` | Interface for poolable visual effects — `Play(position, tint)`, `Play(position, rotation, tint)`, `Stop()`. Not item-specific; used by any system that abstracts a VFX |
 | `TweenTracker` | Generic `MonoBehaviour` for DOTween sequence composition — `Append` (chain after current), `Replace` (kill current and start new), `Kill`, `IsPlaying`. Used by balloon views to manage nudge → balance tween chaining without conflicts |
 | `SortingHelper` | Static utility for Unity sorting order calculations — `SlotBaseSortingOrder` computes base order from grid position, `ApplySortingOrder` applies sequential orders to renderer arrays. Used by `BalloonView`, `ItemDisplayService`, and `ItemVisualView` |
-| `SceneTransition` | MonoBehaviour wired to a button's `onClick` — calls `SceneManager.LoadScene(_sceneName)` and publishes `SpawnBalloonLineMessage` to seed the initial balloon grid |
+| `SceneTransition` | MonoBehaviour wired to a button's `onClick`. When `_preload` is enabled, loads the target scene additively on `Start` with rendering suppressed (cameras, canvases, audio listeners, event systems disabled via `SceneExtensions`). `Load()` restores rendering, sets the preloaded scene as active, and unloads the current scene. Without preload, falls back to `SceneManager.LoadScene` |
+| `Navigation` | Static app-wide navigation state — `ReactiveProperty<NavigationState>` with `TransitionTo()`. Accessible from any scene without DI |
+| `NavigationState` | Enum: `Launch`, `Game`, `LevelUp` |
+| `NavigationTrigger` | MonoBehaviour with `[SerializeField] NavigationState _targetState`. Wire `Transition()` to a button's onClick to change navigation state from the Inspector |
+| `EditorNavigationBootstrap` | Editor-only MonoBehaviour — auto-transitions to `_targetState` on `Awake` when playing a scene directly (skipping the full navigation path). Only fires when the scene is the active scene, so it is inert during additive preloading |
 | `Pool/` | Generic object pooling system — `PoolManager`, `PoolChannel<T>`, `IPoolable`, `EffectView`, `EffectPoolChannel`, `ParticlePoolChannel`, `PoolableParticle` (see `Pool/README.md`) |
-| `Extensions/` | Extension methods — `ColorableRendererExtensions` provides `BindColor` overloads that subscribe a `ColorableRenderer` (or array) to a reactive color source, with optional `Action<Color>` callback for custom work beyond `SetColor` |
+| `Extensions/` | Extension methods — `ColorableRendererExtensions` provides `BindColor` overloads for reactive color subscriptions. `SceneExtensions` provides `SuppressRendering()` / `SceneRenderingHandle.Restore()` for disabling and restoring cameras, canvases, audio listeners, and event systems on a loaded scene |
 | `Messages/` | MessagePipe signal structs that decouple systems from one another |
 
 ## Messages

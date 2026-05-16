@@ -17,12 +17,16 @@ The player holds the mouse button to aim — the thrower rotates to face the cur
 
 ## How it works
 
-`ThrowerController` is a plain C# class registered as an entry point in `ThrowerLifetimeScope`. It delegates all visual operations to `ThrowerView`. On start it slides into position from below the screen, then loads a projectile and waits for input. Each frame it:
+`ThrowerController` is a plain C# class registered as an entry point in `ThrowerLifetimeScope`. It delegates all visual operations to `ThrowerView`. On start it registers the projectile pool and pre-warms two instances. It subscribes reactively to `Navigation.State` — when the state becomes `Game` (via `NavigationTrigger` on the Launch button), it plays the entrance animation. After the entrance animation completes, input is enabled.
+
+Each frame (`Tick`), only when navigation state is `Game` and the entrance animation is complete, the controller:
 - Updates its aim direction from the mouse cursor position
 - Tells the view to rotate to match that direction
 - Eases the loaded projectile into the spawn point position using `Ease.OutBack`
 - Updates the prediction trace line while the mouse button is held
 - Fires on mouse-up
+
+During `LevelUp` state, `Tick` is a no-op — the thrower cannot aim or fire while the level-up popup is visible.
 
 When a `ProjectileDestroyedMessage` arrives, `ThrowerController` returns the old projectile to the pool and loads a new one immediately. The projectile prefab carries a `ProjectileLifetimeScope`, so instantiation uses `parentScope.CreateChildFromPrefab()` — this wires the parent scope before activation, ensuring all injected dependencies resolve correctly. The pool key is derived from the prefab's name.
 
