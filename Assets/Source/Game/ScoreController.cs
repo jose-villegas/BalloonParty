@@ -132,6 +132,7 @@ namespace BalloonParty.Game
             }
 
             _levelUpPublisher.Publish(new ScoreLevelUpMessage(_level.Value));
+            Navigation.TransitionTo(NavigationState.LevelUp);
             Time.timeScale = 0f;
         }
 

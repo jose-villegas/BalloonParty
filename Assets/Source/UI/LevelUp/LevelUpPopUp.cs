@@ -1,3 +1,4 @@
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -6,6 +7,7 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
+using Navigation = BalloonParty.Shared.Navigation;
 
 namespace BalloonParty.UI.LevelUp
 {
@@ -99,6 +101,7 @@ namespace BalloonParty.UI.LevelUp
                 true,
                 cancellationToken: destroyCancellationToken);
             Time.timeScale = 1f;
+            Navigation.TransitionTo(NavigationState.Game);
         }
     }
 }

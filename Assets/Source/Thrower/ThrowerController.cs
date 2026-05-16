@@ -8,6 +8,7 @@ using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using DG.Tweening;
 using MessagePipe;
+using UniRx;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -29,7 +30,6 @@ namespace BalloonParty.Thrower
         private ProjectileView _activeView;
         private Vector3 _direction = Vector3.up;
         private bool _isMovable;
-        private bool _cameraNullWarned;
         private float _loadElapsed;
         private float _loadDuration;
         private PredictionTraceCalculator _traceCalculator;
@@ -66,25 +66,34 @@ namespace BalloonParty.Thrower
 
             _destroyedSubscriber.Subscribe(_ => Reload());
 
-            _view.AnimateEntrance().OnComplete(() =>
-            {
-                _isMovable = true;
-                LoadProjectile();
-            });
+            Navigation.State
+                .Where(state => state == NavigationState.Game)
+                .Take(1)
+                .Subscribe(_ => PlayEntrance());
         }
 
         public void Tick()
         {
-            if (!_isMovable)
+            if (!_isMovable || Navigation.State.Value != NavigationState.Game)
             {
                 return;
             }
+            // ...existing code...
 
             UpdateDirection();
             _view.RotateTo(_direction);
             UpdateLoadedProjectilePosition();
             UpdatePredictionTrace();
             TryFire();
+        }
+
+        private void PlayEntrance()
+        {
+            _view.AnimateEntrance().OnComplete(() =>
+            {
+                _isMovable = true;
+                LoadProjectile();
+            });
         }
 
         private void LoadProjectile()
@@ -147,12 +156,6 @@ namespace BalloonParty.Thrower
             var cam = Camera.main;
             if (cam == null)
             {
-                if (!_cameraNullWarned)
-                {
-                    Debug.LogWarning("ThrowerController.UpdateDirection: Camera.main is null.");
-                    _cameraNullWarned = true;
-                }
-
                 return;
             }
 

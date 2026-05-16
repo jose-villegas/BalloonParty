@@ -6,6 +6,7 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -96,6 +97,10 @@ namespace BalloonParty.Balloon.Spawner
 
                 await _poolManager.PrewarmAsync(entry.PoolKey, count, ct);
             }
+
+            await UniTask.WaitUntil(
+                () => Navigation.State.Value == NavigationState.Game,
+                cancellationToken: ct);
 
             PopulateInitialGrid();
             _newlySpawnedBalloons.Clear();
