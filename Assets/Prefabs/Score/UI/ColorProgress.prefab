@@ -104,7 +104,9 @@ MonoBehaviour:
   _progressSlider: {fileID: 9159033291817326827}
   _animator: {fileID: 3379769437596866724}
   _completionParticleSystem: {fileID: 1749563476980793392}
-  _noticePrefab: {fileID: 7432267095509265830, guid: 8026f44bf1b214739b2bc56e217d5105,
+  _pointNoticePrefab: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
+    type: 3}
+  _streakNoticePrefab: {fileID: 1756242622803079448, guid: 60a6214e69e9d4320a4c99d58853cb82,
     type: 3}
 --- !u!223 &7363056953030294436
 Canvas:

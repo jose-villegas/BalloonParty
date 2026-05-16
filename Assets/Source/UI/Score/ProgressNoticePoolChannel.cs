@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace BalloonParty.UI.Score
 {
-    internal class ScoreNoticePoolChannel : PoolChannel<ScoreNotice>
+    internal class ProgressNoticePoolChannel : PoolChannel<ProgressNotice>
     {
-        private readonly ScoreNotice _prefab;
+        private readonly ProgressNotice _prefab;
 
-        public ScoreNoticePoolChannel(ScoreNotice prefab)
+        public ProgressNoticePoolChannel(ProgressNotice prefab)
         {
             _prefab = prefab;
         }
 
-        protected override ScoreNotice Create()
+        protected override ProgressNotice Create()
         {
             var instance = Object.Instantiate(_prefab, Container);
             instance.gameObject.SetActive(false);

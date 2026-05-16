@@ -20,6 +20,7 @@ namespace BalloonParty.Game
 
         private readonly IGameConfiguration _config;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly ReactiveProperty<int> _level = new(1);
         private readonly Dictionary<string, int> _levelProgress = new();
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
@@ -29,18 +30,21 @@ namespace BalloonParty.Game
         private readonly ReactiveProperty<int> _totalScore = new(0);
 
         private IDisposable _subscription;
+        private IDisposable _trailSubscription;
 
         public IReadOnlyReactiveProperty<int> Level => _level;
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
 
         public ScoreController(
             ISubscriber<BalloonHitMessage> hitSubscriber,
+            ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
             IPublisher<BalloonScoredMessage> scoredPublisher,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
             IGameConfiguration config,
             GamePalette palette)
         {
             _hitSubscriber = hitSubscriber;
+            _trailArrivedSubscriber = trailArrivedSubscriber;
             _scoredPublisher = scoredPublisher;
             _levelUpPublisher = levelUpPublisher;
             _config = config;
@@ -52,6 +56,7 @@ namespace BalloonParty.Game
             Application.quitting -= Save;
             Application.focusChanged -= OnFocusChanged;
             _subscription?.Dispose();
+            _trailSubscription?.Dispose();
         }
 
         public void Start()
@@ -67,6 +72,7 @@ namespace BalloonParty.Game
             _totalScore.Value = _persistentScore.Values.Sum();
 
             _subscription = _hitSubscriber.Subscribe(OnBalloonHit);
+            _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
 
             Application.quitting += Save;
             Application.focusChanged += OnFocusChanged;
@@ -108,13 +114,22 @@ namespace BalloonParty.Game
             }
 
             var points = msg.Balloon.ScoreValue;
-            _persistentScore[color] += points;
-            _levelProgress[color] += points;
+
+            _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, points));
+        }
+
+        private void OnTrailArrived(ScoreTrailArrivedMessage msg)
+        {
+            if (!_persistentScore.ContainsKey(msg.ColorName))
+            {
+                return;
+            }
+
+            _persistentScore[msg.ColorName]++;
             _totalScore.Value = _persistentScore.Values.Sum();
 
+            _levelProgress[msg.ColorName]++;
             CheckLevelUp();
-
-            _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, _totalScore.Value, points));
         }
 
         private void CheckLevelUp()

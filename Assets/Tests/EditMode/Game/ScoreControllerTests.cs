@@ -24,6 +24,7 @@ namespace BalloonParty.Tests.Game
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private ScoreController _controller;
         private IMessageHandler<BalloonHitMessage> _hitHandler;
+        private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
 
         [SetUp]
         public void SetUp()
@@ -44,6 +45,7 @@ namespace BalloonParty.Tests.Game
             SetField(_palette, "_colors", colors);
 
             var hitSubscriber = Substitute.For<ISubscriber<BalloonHitMessage>>();
+            var trailArrivedSubscriber = Substitute.For<ISubscriber<ScoreTrailArrivedMessage>>();
             _scoredPublisher = Substitute.For<IPublisher<BalloonScoredMessage>>();
             _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
 
@@ -55,8 +57,15 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<BalloonHitMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            trailArrivedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ScoreTrailArrivedMessage>>(h => _trailArrivedHandler = h),
+                    Arg.Any<MessageHandlerFilter<ScoreTrailArrivedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
             _controller = new ScoreController(
                 hitSubscriber,
+                trailArrivedSubscriber,
                 _scoredPublisher,
                 _levelUpPublisher,
                 _config,
@@ -102,7 +111,7 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void OnBalloonHit_BalloonPops_AccumulatesScore()
+        public void OnBalloonHit_BalloonPops_PublishesScoredMessage()
         {
             var model = CreateModel(Red, 1, 5);
 
@@ -110,7 +119,16 @@ namespace BalloonParty.Tests.Game
 
             _scoredPublisher.Received(1).Publish(
                 Arg.Is<BalloonScoredMessage>(m => m.ColorName == Red && m.Points == 5));
-            Assert.AreEqual(5, _controller.TotalScore.Value);
+            Assert.AreEqual(0, _controller.TotalScore.Value);
+        }
+
+        [Test]
+        public void OnTrailArrived_AccumulatesScore()
+        {
+            FireTrailArrived(Red);
+            FireTrailArrived(Red);
+
+            Assert.AreEqual(2, _controller.TotalScore.Value);
         }
 
         [Test]
@@ -118,8 +136,10 @@ namespace BalloonParty.Tests.Game
         {
             _config.PointsRequiredForLevel(2).Returns(2);
 
-            FirePop(Red, 2);
-            FirePop(Blue, 2);
+            FireTrailArrived(Red);
+            FireTrailArrived(Red);
+            FireTrailArrived(Blue);
+            FireTrailArrived(Blue);
 
             _levelUpPublisher.Received(1).Publish(
                 Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
@@ -131,7 +151,10 @@ namespace BalloonParty.Tests.Game
         {
             _config.PointsRequiredForLevel(2).Returns(5);
 
-            FirePop(Red, 5);
+            for (var i = 0; i < 5; i++)
+            {
+                FireTrailArrived(Red);
+            }
             // Blue has not scored — progress is 0
 
             _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
@@ -143,11 +166,21 @@ namespace BalloonParty.Tests.Game
         {
             _config.PointsRequiredForLevel(2).Returns(2);
 
-            FirePop(Red, 2);
-            FirePop(Blue, 2);
+            FireTrailArrived(Red);
+            FireTrailArrived(Red);
+            FireTrailArrived(Blue);
+            FireTrailArrived(Blue);
 
             Assert.AreEqual(0, _controller.GetProgress(Red));
             Assert.AreEqual(0, _controller.GetProgress(Blue));
+        }
+
+        [Test]
+        public void OnBalloonHit_Pop_DoesNotIncrementLevelProgress()
+        {
+            FirePop(Red, 3);
+
+            Assert.AreEqual(0, _controller.GetProgress(Red));
         }
 
         private void FireHit(IBalloonModel model, int damage)
@@ -159,6 +192,11 @@ namespace BalloonParty.Tests.Game
         {
             var model = CreateModel(color, 1, scoreValue);
             FireHit(model, 1);
+        }
+
+        private void FireTrailArrived(string color)
+        {
+            _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color));
         }
 
         private static IBalloonModel CreateModel(string color, int hitsRemaining, int scoreValue = 1)

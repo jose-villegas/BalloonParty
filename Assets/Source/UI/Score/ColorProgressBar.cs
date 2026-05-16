@@ -5,9 +5,7 @@ using BalloonParty.Game;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using Cysharp.Threading.Tasks;
 using MessagePipe;
-using NaughtyAttributes;
 using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,7 +27,8 @@ namespace BalloonParty.UI.Score
         [Header("Feedback")] [SerializeField] private Animator _animator;
 
         [SerializeField] private ParticleSystem _completionParticleSystem;
-        [SerializeField] private ScoreNotice _noticePrefab;
+        [SerializeField] private ProgressNotice _pointNoticePrefab;
+        [SerializeField] private ProgressNotice _streakNoticePrefab;
 
         [Inject] private GamePalette _palette;
         [Inject] private IGameConfiguration _config;
@@ -40,10 +39,11 @@ namespace BalloonParty.UI.Score
         [Inject] private ScoreController _scoreController;
         [Inject] private ScoreTrailService _scoreTrailService;
 
-        private readonly List<ScoreNotice> _activeNotices = new();
+        private readonly List<ProgressNotice> _activeNotices = new();
 
         private PaletteEntry _colorConfig;
-        private string _noticePoolKey;
+        private string _pointNoticePoolKey;
+        private string _streakNoticePoolKey;
         private int _streak;
 
 
@@ -83,7 +83,8 @@ namespace BalloonParty.UI.Score
         private void Start()
         {
             _colorConfig = _palette.Colors.First(c => c.Name == _colorName);
-            _noticePoolKey = $"ScoreNotice_{_colorConfig.Name}";
+            _pointNoticePoolKey = $"PointNotice_{_colorConfig.Name}";
+            _streakNoticePoolKey = $"StreakNotice_{_colorConfig.Name}";
 
             foreach (var g in _graphicsToSetColor)
             {
@@ -111,16 +112,9 @@ namespace BalloonParty.UI.Score
             }
 
             _streak++;
-            _progressSlider.value = Mathf.Min(_progressSlider.value + msg.Points, _progressSlider.maxValue);
 
-            SpawnNotice(_streak, msg.Points);
-
-            if (_progressSlider.value >= _progressSlider.maxValue)
-            {
-                _completionParticleSystem.gameObject.SetActive(true);
-                _completionParticleSystem.Play();
-                _animator.SetBool(CompletedParam, true);
-            }
+            DismissFullyShownNotices();
+            SpawnStreakNotice(_streak);
         }
 
         private void OnLevelUp(ScoreLevelUpMessage msg)
@@ -136,22 +130,22 @@ namespace BalloonParty.UI.Score
 
         private void OnTrailArrived(ScoreTrailArrivedMessage msg)
         {
-            if (msg.ColorName == _colorConfig.Name)
+            if (msg.ColorName != _colorConfig.Name)
             {
-                _animator.SetTrigger(TrailHitTrigger);
-            }
-        }
-
-        private void SpawnNotice(int streak, int points)
-        {
-            if (points <= 1)
-            {
-                DismissFullyShownNotices();
-                SpawnSingleNotice(streak, Vector2.zero);
                 return;
             }
 
-            SpawnScatteredNoticesAsync(points).Forget();
+            _animator.SetTrigger(TrailHitTrigger);
+            _progressSlider.value = Mathf.Min(_progressSlider.value + 1, _progressSlider.maxValue);
+
+            SpawnPointNotice(RandomPositionInRect());
+
+            if (_progressSlider.value >= _progressSlider.maxValue)
+            {
+                _completionParticleSystem.gameObject.SetActive(true);
+                _completionParticleSystem.Play();
+                _animator.SetBool(CompletedParam, true);
+            }
         }
 
         private void DismissFullyShownNotices()
@@ -165,14 +159,6 @@ namespace BalloonParty.UI.Score
             }
         }
 
-        private Vector2 RandomPositionInRect()
-        {
-            var rect = ((RectTransform)transform).rect;
-            return new Vector2(
-                Random.Range(rect.xMin, rect.xMax),
-                Random.Range(2f * rect.yMin, 2f * rect.yMax));
-        }
-
         private Vector3 RandomWorldPositionInRect()
         {
             var rectTransform = (RectTransform)transform;
@@ -184,47 +170,40 @@ namespace BalloonParty.UI.Score
             return rectTransform.TransformPoint(local);
         }
 
-        private void SpawnSingleNotice(int score, Vector2 anchoredPosition)
+        private Vector2 RandomPositionInRect()
         {
-            var notice = _poolManager.GetOrRegister(_noticePoolKey,
-                () => new ScoreNoticePoolChannel(_noticePrefab));
+            var rect = ((RectTransform)transform).rect;
+            return new Vector2(
+                Random.Range(rect.xMin, rect.xMax),
+                Random.Range(2f * rect.yMin, 2f * rect.yMax));
+        }
+
+        private void SpawnStreakNotice(int streak)
+        {
+            var notice = _poolManager.GetOrRegister(_streakNoticePoolKey,
+                () => new ProgressNoticePoolChannel(_streakNoticePrefab));
 
             notice.SetParent(transform);
-            notice.SetAnchoredPosition(anchoredPosition);
+            notice.SetAnchoredPosition(Vector2.zero);
             _activeNotices.Add(notice);
-            notice.Show(score,
-                _colorConfig.Color,
+            notice.Show(streak,
                 () =>
                 {
                     _activeNotices.Remove(notice);
-                    _poolManager.Return(_noticePoolKey, notice);
-                });
+                    _poolManager.Return(_streakNoticePoolKey, notice);
+                },
+                _colorConfig.Color);
         }
 
-        private void SpawnUntrackedNotice(Vector2 anchoredPosition)
+        private void SpawnPointNotice(Vector2 anchoredPosition)
         {
-            var notice = _poolManager.GetOrRegister(_noticePoolKey,
-                () => new ScoreNoticePoolChannel(_noticePrefab));
+            var notice = _poolManager.GetOrRegister(_pointNoticePoolKey,
+                () => new ProgressNoticePoolChannel(_pointNoticePrefab));
 
             notice.SetParent(transform);
             notice.SetAnchoredPosition(anchoredPosition);
             notice.Show(1,
-                _colorConfig.Color,
-                () => _poolManager.Return(_noticePoolKey, notice));
-        }
-
-
-        private async UniTaskVoid SpawnScatteredNoticesAsync(int count)
-        {
-            var delayMs = Mathf.RoundToInt(3f * _config.ScorePointsScatterDelay * 1000f);
-            for (var i = 0; i < count; i++)
-            {
-                SpawnUntrackedNotice(RandomPositionInRect());
-                if (i < count - 1)
-                {
-                    await UniTask.Delay(delayMs, cancellationToken: destroyCancellationToken);
-                }
-            }
+                () => _poolManager.Return(_pointNoticePoolKey, notice));
         }
     }
 }

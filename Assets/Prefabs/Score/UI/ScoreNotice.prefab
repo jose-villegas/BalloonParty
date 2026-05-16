@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 7127859830720381120}
   - component: {fileID: 1062911308734177940}
   m_Layer: 0
-  m_Name: X
+  m_Name: Prefix
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -102,7 +102,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: x
+  m_text: +
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 30803236da9104a3e9e1345227e4b512, type: 2}
   m_sharedMaterial: {fileID: 8741496717316544357, guid: 30803236da9104a3e9e1345227e4b512,
@@ -326,8 +326,8 @@ GameObject:
   - component: {fileID: 703661213927668032}
   - component: {fileID: 7735398952300550109}
   - component: {fileID: 8115177882997527811}
-  - component: {fileID: 7432267095509265830}
   - component: {fileID: 1319174416173524732}
+  - component: {fileID: 4022841750403956333}
   m_Layer: 5
   m_Name: ScoreNotice
   m_TagString: Untagged
@@ -389,7 +389,30 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &7432267095509265830
+--- !u!223 &1319174416173524732
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7487055791320916758}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 0
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: -1446856603
+  m_SortingOrder: 100
+  m_TargetDisplay: 0
+--- !u!114 &4022841750403956333
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -398,10 +421,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 7487055791320916758}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab0b9bac45c5439fa432c1629de6af59, type: 3}
+  m_Script: {fileID: 11500000, guid: 76608933b52f14154959df063e13ca68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.UI.ScoreNotice
-  _graphicsToSetColor: []
+  _graphicsToSetColor:
+  - {fileID: 1062911308734177940}
+  - {fileID: 6315786945281002352}
   _animator: {fileID: 8115177882997527811}
   _labelTransform: {fileID: 6478643938032442419}
   _label: {fileID: 6315786945281002352}
@@ -534,26 +559,3 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!223 &1319174416173524732
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7487055791320916758}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 0
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_UpdateRectTransformForStandalone: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0

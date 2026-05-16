@@ -1,16 +1,17 @@
 using System;
+using System.Linq;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.Rendering;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace BalloonParty.UI.Score
 {
-    public class ScoreNotice : MonoBehaviour, IPoolable
+    public class ProgressNotice : MonoBehaviour, IPoolable
     {
         private static readonly int ScoreTrigger = Animator.StringToHash("Score");
         private static readonly int ScoreDisappearState = Animator.StringToHash("ScoreDisappear");
-        [SerializeField] private Graphic[] _graphicsToSetColor;
+        [SerializeField] private ColorableRenderer[] _colorableRenderer;
         [SerializeField] private Animator _animator;
         [SerializeField] private Transform _labelTransform;
         [SerializeField] private TMP_Text _label;
@@ -22,10 +23,12 @@ namespace BalloonParty.UI.Score
 
         public bool IsFullyShown { get; private set; }
 
+
         public void OnSpawned()
         {
             IsFullyShown = false;
             _onComplete = null;
+
             if (_parent != null)
             {
                 transform.SetParent(_parent, false);
@@ -46,17 +49,21 @@ namespace BalloonParty.UI.Score
             transform.SetParent(parent, false);
         }
 
-        public void Show(int score, Color color, Action onComplete)
+        public void Show(int score, Action onComplete, Color? color = null)
         {
             _onComplete = onComplete;
 
-            foreach (var g in _graphicsToSetColor)
+            if (color.HasValue && _colorableRenderer != null && _colorableRenderer.Length > 0)
             {
-                g.color = color;
+                foreach (var colorable in _colorableRenderer)
+                {
+                    colorable.SetColor(color.Value);
+                }
             }
 
             _animator.SetTrigger(ScoreTrigger);
             _label.text = score.ToString("N0");
+
 
             transform.localScale = Vector3.one;
             _labelTransform.localScale = Vector3.one * _scaleCurve.Evaluate(score);
@@ -81,9 +88,5 @@ namespace BalloonParty.UI.Score
             _onComplete = null;
             callback?.Invoke();
         }
-
-        public int MaxPreviewScore => _scaleCurve != null && _scaleCurve.length > 0
-            ? Mathf.RoundToInt(_scaleCurve.keys[_scaleCurve.length - 1].time)
-            : 1;
     }
 }
