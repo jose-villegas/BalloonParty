@@ -83,7 +83,7 @@ namespace BalloonParty.Game
             builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<PaintItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 
-            builder.RegisterEntryPoint<OrthogonalSizeCameraController>();
+            builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();

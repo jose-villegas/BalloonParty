@@ -13,18 +13,20 @@
     }
   ],
   "dependencies": {
-    "com.neuecc.unirx": "7.1.0",
-    "jp.hadashikick.vcontainer": "1.16.8",
-    "com.cysharp.unitask": "2.5.10",
+    "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git",
     "com.cysharp.messagepipe": "1.8.1",
     "com.cysharp.messagepipe.vcontainer": "1.8.1",
-    "com.coffee.ui-effect": "https://github.com/mob-sakai/UIEffect.git",
+    "com.cysharp.unitask": "2.5.10",
+    "com.dbrizov.naughtyattributes-x": "2.2.1",
+    "com.github-glitchenzo.nugetforunity": "4.5.0",
+    "com.neuecc.unirx": "7.1.0",
     "com.unity.2d.sprite": "1.0.0",
     "com.unity.2d.tilemap": "1.0.0",
     "com.unity.ads": "4.16.4",
     "com.unity.ai.navigation": "2.0.12",
     "com.unity.analytics": "3.8.2",
     "com.unity.collab-proxy": "2.12.4",
+    "com.unity.device-simulator.devices": "1.0.1",
     "com.unity.ide.rider": "3.0.39",
     "com.unity.ide.visualstudio": "2.0.26",
     "com.unity.ide.vscode": "1.2.5",
@@ -34,6 +36,7 @@
     "com.unity.timeline": "1.8.12",
     "com.unity.ugui": "2.0.0",
     "com.unity.xr.legacyinputhelpers": "2.1.13",
+    "jp.hadashikick.vcontainer": "1.16.8",
     "com.unity.modules.accessibility": "1.0.0",
     "com.unity.modules.adaptiveperformance": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
@@ -67,8 +70,6 @@
     "com.unity.modules.video": "1.0.0",
     "com.unity.modules.vr": "1.0.0",
     "com.unity.modules.wind": "1.0.0",
-    "com.unity.modules.xr": "1.0.0",
-    "com.dbrizov.naughtyattributes-x": "2.2.1",
-    "com.github-glitchenzo.nugetforunity": "4.5.0"
+    "com.unity.modules.xr": "1.0.0"
   }
 }

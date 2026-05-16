@@ -259,8 +259,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 8121256251203489458, guid: 5009292be55fb4a12afec084df651435,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 834494875442057149}
   m_SourcePrefab: {fileID: 100100000, guid: 5009292be55fb4a12afec084df651435, type: 3}
+--- !u!1 &834494875442057148 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8121256251203489458, guid: 5009292be55fb4a12afec084df651435,
+    type: 3}
+  m_PrefabInstance: {fileID: 834494875442057147}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &834494875442057149
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 834494875442057148}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8c8c7454304ee4a3545316419efd73, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.EditorNavigationBootstrap
+  _targetState: 1
 --- !u!1001 &860825355249607939
 PrefabInstance:
   m_ObjectHideFlags: 0

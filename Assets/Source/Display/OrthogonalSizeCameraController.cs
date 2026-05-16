@@ -1,27 +1,35 @@
 using BalloonParty.Configuration;
 using UnityEngine;
-using VContainer.Unity;
+using VContainer;
 
 namespace BalloonParty.Display
 {
-    internal class OrthogonalSizeCameraController : IStartable
+    internal class OrthogonalSizeCameraController : MonoBehaviour
     {
-        private readonly GameDisplayConfiguration _displayConfig;
+        [SerializeField] private Camera _camera;
+        [SerializeField] private bool _continuous;
 
-        public OrthogonalSizeCameraController(GameDisplayConfiguration displayConfig)
+        [Inject] private GameDisplayConfiguration _displayConfig;
+
+        private void Start()
         {
-            _displayConfig = displayConfig;
+            Apply();
         }
 
-        public void Start()
+        private void LateUpdate()
         {
-            var camera = Camera.main;
-            if (camera == null)
+            if (_continuous)
             {
-                return;
+                Apply();
             }
+        }
 
-            camera.orthographicSize = _displayConfig.GetOrthogonalSize();
+        private void Apply()
+        {
+            if (_camera != null)
+            {
+                _camera.orthographicSize = _displayConfig.GetOrthogonalSize();
+            }
         }
     }
 }
