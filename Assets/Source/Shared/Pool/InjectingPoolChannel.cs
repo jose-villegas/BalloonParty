@@ -24,24 +24,7 @@ namespace BalloonParty.Shared.Pool
 
         protected override TItem Create()
         {
-            var wasActive = _prefab.gameObject.activeSelf;
-
-            if (wasActive)
-            {
-                _prefab.gameObject.SetActive(false);
-            }
-
-            var instance = Object.Instantiate(_prefab, Container);
-
-            _resolver.InjectGameObject(instance.gameObject);
-
-            if (wasActive)
-            {
-                _prefab.gameObject.SetActive(true);
-            }
-
-            instance.gameObject.SetActive(false);
-            return instance;
+            return _resolver.Instantiate(_prefab, Container);
         }
     }
 }

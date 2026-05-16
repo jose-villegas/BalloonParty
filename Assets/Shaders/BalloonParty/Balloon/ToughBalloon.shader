@@ -21,10 +21,22 @@ Shader "BalloonParty/Balloon/ToughBalloon"
         _RimColor ("Color", Color) = (0.18, 0.18, 0.22, 1)
         _RimWidth ("Width", Range(0, 0.5)) = 0.11
 
+        // ---- Surface grain (leather-like bumps) --------------------------------
+        [Header(Surface Grain)]
+        _GrainScale ("Scale", Range(2, 80)) = 20
+        _GrainStrength ("Strength", Range(0, 1.0)) = 0.25
+        _GrainLightDir ("Light Direction XY", Vector) = (0.4, 0.6, 0, 0)
+
         // ---- Voronoi cracks ------------------------------------------------
         [Header(Cracks  Base)]
         _CrackThreshold ("Edge Threshold", Range(0.02, 0.15)) = 0.08
         _CrackSharpness ("Sharpness", Range(5, 60)) = 28
+
+        [Header(Cracks  Fibers)]
+        _FiberDensity ("Fiber Density", Range(4, 40)) = 16
+        _FiberThickness ("Fiber Thickness", Range(0.01, 15.0)) = 1.0
+        _FiberIntensity ("Fiber Intensity", Range(0, 1)) = 0.6
+        _FiberColor ("Fiber Color", Color) = (0.06, 0.05, 0.05, 1)
 
         [Header(Cracks  Sphere Projection)]
         _SphereWarp ("Warp Strength", Range(1, 6)) = 2.5
@@ -103,6 +115,10 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             fixed4 _RimColor;
             float  _RimWidth;
 
+            float  _GrainScale;
+            float  _GrainStrength;
+            float4 _GrainLightDir;
+
             float  _VoronoiScale;
             float  _VoronoiScaleDamageBoost;
             float  _SphereWarp;
@@ -110,6 +126,52 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             float2 _VoronoiSeed;
             float  _CrackThreshold;
             float  _CrackSharpness;
+            float  _FiberDensity;
+            float  _FiberThickness;
+            float  _FiberIntensity;
+            fixed4 _FiberColor;
+
+            // ----------------------------------------------------------------
+            // Grain - faked leather micro-bumps via smooth value noise
+            // ----------------------------------------------------------------
+            float GrainHash(float2 p)
+            {
+                float3 p3 = frac(float3(p.xyx) * float3(443.897, 441.423, 437.195));
+                p3 += dot(p3, p3.yzx + 19.19);
+                return frac((p3.x + p3.y) * p3.z);
+            }
+
+            // Smooth value noise with bilinear interpolation for visible bumps.
+            float GrainNoise(float2 p)
+            {
+                float2 i = floor(p);
+                float2 f = frac(p);
+                // Smooth hermite for rounded bumps
+                float2 u = f * f * (3.0 - 2.0 * f);
+
+                float a = GrainHash(i);
+                float b = GrainHash(i + float2(1, 0));
+                float c = GrainHash(i + float2(0, 1));
+                float d = GrainHash(i + float2(1, 1));
+
+                return lerp(lerp(a, b, u.x), lerp(c, d, u.x), u.y);
+            }
+
+            // Returns a fake NdotL bump value from the noise gradient,
+            // using the sphere normal to orient the shading.
+            float LeatherGrain(float2 uv, float3 sphereNormal, float scale, float2 lightDir)
+            {
+                float2 suv = uv * scale;
+                float eps  = 0.5;
+                float h    = GrainNoise(suv);
+                float hx   = GrainNoise(suv + float2(eps, 0));
+                float hy   = GrainNoise(suv + float2(0, eps));
+                float2 grad = float2(hx - h, hy - h) / eps;
+
+                // Scale gradient by surface facing — bumps flatten at sphere edges
+                float facing = max(sphereNormal.z, 0.0);
+                return dot(normalize(lightDir), grad) * facing;
+            }
 
             // ----------------------------------------------------------------
             // Voronoi helpers
@@ -129,6 +191,8 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 float2 f    = frac(uv);
 
                 float d0 = 8.0, d1 = 8.0;
+                float2 nearestPt = 0;
+                float2 secondPt  = 0;
 
                 UNITY_UNROLL
                 for (int y = -1; y <= 1; y++)
@@ -137,17 +201,120 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                     for (int x = -1; x <= 1; x++)
                     {
                         float2 n   = float2(x, y);
-                        float2 pt  = VoronoiHash(cell + n);  // random point inside cell
+                        float2 pt  = VoronoiHash(cell + n);
                         float2 dv  = n + pt - f;
-                        float  d   = dot(dv, dv);             // squared — avoids sqrt
+                        float  d   = dot(dv, dv);
 
-                        if (d < d0) { d1 = d0; d0 = d; }
-                        else if (d < d1) { d1 = d; }
+                        if (d < d0) { d1 = d0; secondPt = nearestPt; d0 = d; nearestPt = dv; }
+                        else if (d < d1) { d1 = d; secondPt = dv; }
                     }
                 }
 
-                // sqrt only for the final values we expose
                 return float2(sqrt(d0), sqrt(d1));
+            }
+
+            // Voronoi with edge direction output for fiber orientation.
+            float2 VoronoiWithDir(float2 uv, out float2 edgeDir)
+            {
+                float2 cell = floor(uv);
+                float2 f    = frac(uv);
+
+                float d0 = 8.0, d1 = 8.0;
+                float2 nearestPt = 0;
+                float2 secondPt  = 0;
+
+                UNITY_UNROLL
+                for (int y = -1; y <= 1; y++)
+                {
+                    UNITY_UNROLL
+                    for (int x = -1; x <= 1; x++)
+                    {
+                        float2 n   = float2(x, y);
+                        float2 pt  = VoronoiHash(cell + n);
+                        float2 dv  = n + pt - f;
+                        float  d   = dot(dv, dv);
+
+                        if (d < d0) { d1 = d0; secondPt = nearestPt; d0 = d; nearestPt = dv; }
+                        else if (d < d1) { d1 = d; secondPt = dv; }
+                    }
+                }
+
+                // Edge direction runs between the two nearest cell points;
+                // fibers stretch perpendicular to the crack (along the bridge).
+                edgeDir = normalize(secondPt - nearestPt);
+                return float2(sqrt(d0), sqrt(d1));
+            }
+
+            // 1D hash for fiber fragment placement.
+            float FiberHash(float p)
+            {
+                return frac(sin(p * 127.1) * 43758.5453);
+            }
+
+            // 2D hash returning 0-1.
+            float FiberHash2(float2 p)
+            {
+                return frac(sin(dot(p, float2(127.1, 311.7))) * 43758.5453);
+            }
+
+            // Generates scattered fiber fragments like torn leather across cracks.
+            // crackWidth: normalized crack opening (0 = closed, 1 = fully open)
+            float RubberFibers(float2 uv, float2 edgeDir, float density, float thickness, float seed, float crackWidth)
+            {
+                float2 scaled = uv * density;
+                float2 cell   = floor(scaled);
+                float2 f      = frac(scaled) - 0.5;
+
+                // Perpendicular to crack edge - fibers bridge across
+                float2 bridgeDir = float2(-edgeDir.y, edgeDir.x);
+                float baseAngle  = atan2(bridgeDir.y, bridgeDir.x);
+
+                // Crack width drives fragment size and spread
+                float sizeScale = lerp(0.3, 1.5, crackWidth);
+
+                float result = 0.0;
+
+                UNITY_UNROLL
+                for (int oy = -1; oy <= 1; oy++)
+                {
+                    UNITY_UNROLL
+                    for (int ox = -1; ox <= 1; ox++)
+                    {
+                        float2 neighbor = float2(ox, oy);
+                        float2 nc       = cell + neighbor;
+
+                        float h1 = FiberHash2(nc + seed * 5.3);
+                        float h2 = FiberHash2(nc * 1.73 + seed * 3.1);
+                        float h3 = FiberHash2(nc * 2.91 + seed * 7.7);
+                        float h4 = FiberHash2(nc * 0.67 + seed * 11.3);
+
+                        float2 pos   = neighbor + float2(h2 - 0.5, h3 - 0.5) * 0.7;
+                        float2 delta = f - pos;
+
+                        // Tight alignment to bridge direction with slight wobble
+                        float angle = baseAngle + (h4 - 0.5) * 0.5;
+                        float2 dir  = float2(cos(angle), sin(angle));
+                        float2 perp = float2(-dir.y, dir.x);
+
+                        float along  = abs(dot(delta, dir));
+                        float across = abs(dot(delta, perp));
+
+                        // Use noise to vary thickness per fragment
+                        float noiseThick = GrainNoise(nc * 3.7 + seed) * 0.7 + 0.5;
+
+                        float fragLen   = lerp(0.25, 0.55, h2) * thickness * noiseThick * sizeScale;
+                        float fragWidth = fragLen * lerp(0.06, 0.18, h3) * noiseThick * sizeScale;
+
+                        float shape = smoothstep(fragLen, fragLen * 0.3, along)
+                                    * smoothstep(fragWidth, fragWidth * 0.15, across);
+
+                        // More cells spawn fibers as cracks widen
+                        float spawnChance = lerp(0.2, 0.5, crackWidth);
+                        result = max(result, shape * step(h1, spawnChance));
+                    }
+                }
+
+                return result;
             }
 
             // ----------------------------------------------------------------
@@ -192,37 +359,66 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 // ---- Base: black rubber, bleaches toward ash gradient under stress ----
                 fixed3 col = lerp(fixed3(0.04, 0.04, 0.05), ashColor, dmgVis * dmgVis);
 
+                // ---- Sphere projection ----
+                float2 p     = uv * 2.0;
+                float  rFlat = min(length(p), 0.9999);
+                float  zSph  = sqrt(1.0 - rFlat * rFlat);
+                float  phi   = atan2(p.y, p.x);
+                float  theta = acos(zSph);
+                float3 sphereNormal = float3(p.x, p.y, zSph);
+
+                // Stable Voronoi UV — uses base warp/scale only so cells never move.
+                // Damage boosts are applied to crack rendering, not cell positions.
+                float  thetaNorm = theta / (UNITY_PI * 0.5);
+                float  vorR = pow(thetaNorm, _SphereWarp) * _VoronoiScale;
+                float2 vUV  = float2(cos(phi) * vorR, sin(phi) * vorR) + _VoronoiSeed;
+
+                // ---- Leather-like surface grain (sampled in sphere-projected UV) ----
+                float grain = LeatherGrain(vUV, sphereNormal, _GrainScale, _GrainLightDir.xy);
+                col += col * grain * _GrainStrength;
+
                 // ---- Rim / subsurface fringe (world-space — never rotates) -----
                 float rimW = _RimWidth * (1.0 - dmgVis * 0.72);
                 float rimR = length(worldUV);
                 float rim  = smoothstep(0.50 - rimW, 0.50, rimR) * alpha * (1.0 - dmgVis * 0.45);
                 col        = lerp(col, _RimColor.rgb, rim);
 
-                // ---- Voronoi stress cracks (object UV — cracks live on the surface) ----
-                float2 p     = uv * 2.0;
-                float  rFlat = min(length(p), 0.9999);
-                float  zSph  = sqrt(1.0 - rFlat * rFlat);
-                float  phi   = atan2(p.y, p.x);
-                float  theta = acos(zSph);
-
-                float  thetaNorm = theta / (UNITY_PI * 0.5);
-                float  effectiveWarp  = _SphereWarp   + _SphereWarpDamageBoost   * (dmgVis * dmgVis);
-                float  effectiveScale = _VoronoiScale + _VoronoiScaleDamageBoost * (dmgVis * dmgVis);
-                float  vorR = pow(thetaNorm, effectiveWarp) * effectiveScale;
-                float2 vUV  = float2(cos(phi) * vorR, sin(phi) * vorR) + _VoronoiSeed;
-                float2 voro = Voronoi(vUV);
+                // ---- Voronoi stress cracks (using stable sphere-projected UV) ----
+                float2 edgeDir;
+                float2 voro = VoronoiWithDir(vUV, edgeDir);
                 float  edge = voro.y - voro.x;
 
-                float dynThreshold = lerp(0.18, _CrackThreshold, dmgVis);
-                float softness     = lerp(0.003, 0.018, dmgVis);
+                // Damage boosts widen cracks via threshold and softness, not UV
+                float warpBoost  = _SphereWarpDamageBoost * (dmgVis * dmgVis);
+                float scaleBoost = _VoronoiScaleDamageBoost * (dmgVis * dmgVis);
+                float dynThreshold = lerp(0.18, _CrackThreshold, dmgVis)
+                                   + (warpBoost + scaleBoost) * 0.01;
+                float baseSoftness = lerp(0.003, 0.018, dmgVis)
+                                   + warpBoost * 0.005;
+                // Widen the transition where UV changes rapidly to prevent aliasing
+                float softness     = max(baseSoftness, fwidth(edge) * 1.5);
                 float crackLine    = smoothstep(dynThreshold - softness, dynThreshold + softness, edge);
                 crackLine          = pow(crackLine, lerp(1.0, _CrackSharpness * 0.03, dmgVis));
+
+                // ---- Rubber fibers bridging across cracks ----
+                float crackWidth = saturate(1.0 - edge / max(dynThreshold * 2.0, 0.001));
+                float fibers     = RubberFibers(vUV, edgeDir,
+                                     _FiberDensity, _FiberThickness, _VoronoiSeed.x, crackWidth);
+
+                // Mask: fibers visible only inside cracks, strongest at mid-depth
+                float crackMask = (1.0 - crackLine) * dmgVis;
+                fibers *= crackMask * _FiberIntensity;
+
+                fixed3 fiberColor = _FiberColor.rgb;
 
                 float crackFade    = dmgVis;
 
                 float cellFracture = (1.0 - crackLine) * dmgVis * 0.35;
                 col = lerp(col, col * (1.0 - cellFracture), dmgVis);
                 col = lerp(col, crackColor, crackLine * crackFade * (1.0 - rim));
+
+                // Overlay fibers on top of crack color
+                col = lerp(col, fiberColor, fibers * (1.0 - rim));
 
                 return fixed4(col * alpha, alpha);
             }

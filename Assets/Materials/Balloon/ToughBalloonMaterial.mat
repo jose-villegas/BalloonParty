@@ -78,13 +78,18 @@ Material:
     - _CrackSharpness: 60
     - _CrackThreshold: 0.15
     - _Cutoff: 0.5
-    - _DamageCurve: 0.5
+    - _DamageCurve: 0.63
     - _DamageProgress: 0
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _FiberDensity: 27.4
+    - _FiberIntensity: 1
+    - _FiberThickness: 8
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _GrainScale: 62.7
+    - _GrainStrength: 0.25
     - _HitDuration: 0.5
     - _HitFlashDuration: 5
     - _HitScaleFactor: 0.3
@@ -104,7 +109,7 @@ Material:
     - _SpecularRotation: 131
     - _SpecularSoftness: 0.022
     - _SphereWarp: 1
-    - _SphereWarpDamageBoost: 3
+    - _SphereWarpDamageBoost: 6
     - _SpriteScale: 0.75
     - _SrcBlend: 1
     - _Stencil: 0
@@ -115,7 +120,7 @@ Material:
     - _UVSec: 0
     - _UseUIAlphaClip: 0
     - _VoronoiScale: 7
-    - _VoronoiScaleDamageBoost: 7
+    - _VoronoiScaleDamageBoost: 12
     - _ZTest: 4
     - _ZWrite: 1
     m_Colors:
@@ -123,7 +128,10 @@ Material:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _CrackColor: {r: 0.09803922, g: 0.09803922, b: 0.09803922, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FiberColor: {r: 0.49056602, g: 0.49056602, b: 0.49056602, a: 1}
+    - _GrainLightDir: {r: -5, g: 5, b: 0, a: 0}
     - _HitFlashColor: {r: 1, g: 0.27058825, b: 0, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 0.8627452, g: 0.8627452, b: 0.8627452, a: 1}
     - _ShadowColor: {r: 0.8784314, g: 0.8784314, b: 0.8784314, a: 0.2509804}
     - _ShadowOffset: {r: 0.1, g: -0.1, b: 0, a: 0}
@@ -219,7 +227,7 @@ Texture2D:
   m_ColorSpace: 1
   m_PlatformBlob: 
   image data: 512
-  _typelessdata: 635b3eff635c3fff645c40ff655d41ff655e42ff665f43ff675f44ff676045ff686146ff696247ff696248ff6a6349ff6b644aff6b654bff6c654cff6d664eff6d674fff6e6850ff6f6851ff6f6952ff706a53ff716b54ff716b55ff726c56ff736d57ff746e58ff746e59ff756f5aff76705bff76715cff77725dff78725eff78735fff797460ff7a7561ff7a7562ff7b7663ff7c7765ff7c7866ff7d7867ff7e7968ff7e7a69ff7f7b6aff807b6bff807c6cff817d6dff827e6eff827e6fff837f70ff848071ff848172ff858173ff868274ff868375ff878476ff888477ff888578ff898679ff8a877aff8a877bff8b887dff8c897eff8d8a7fff8d8a80ff8e8b81ff8f8c82ff8f8d83ff908d84ff918e85ff918f86ff929087ff939088ff939189ff94928aff95938bff95938cff96948dff97958eff97968fff989690ff999791ff999892ff9a9993ff9b9995ff9b9a96ff9c9b97ff9d9c98ff9d9c99ff9e9d9aff9f9e9bff9f9f9cffa09f9dffa1a09effa1a19fffa2a2a0ffa3a2a1ffa3a3a2ffa4a4a3ffa5a5a4ffa5a5a5ffa7a7a7ffa9a9a9ffacacacffaeaeaeffb1b1b1ffb3b3b3ffb5b5b5ffb8b8b8ffbababaffbdbdbdffbfbfbfffc2c2c2ffc4c4c4ffc7c7c7ffc9c9c9ffccccccffcececeffd1d1d1ffd3d3d3ffd6d6d6ffd8d8d8ffdbdbdbffddddddffdfdfdfffe2e2e2ffe4e4e4ffe7e7e7ffe9e9e9ff
+  _typelessdata: 4f4f4fff505050ff515151ff515151ff525252ff535353ff535353ff545454ff555555ff555555ff565656ff575757ff575757ff585858ff595959ff595959ff5a5a5aff5b5b5bff5b5b5bff5c5c5cff5d5d5dff5d5d5dff5e5e5eff5f5f5fff5f5f5fff606060ff616161ff616161ff626262ff636363ff636363ff646464ff656565ff656565ff666666ff676767ff676767ff686868ff696969ff696969ff6a6a6aff6b6b6bff6b6b6bff6c6c6cff6d6d6dff6d6d6dff6e6e6eff6f6f6fff6f6f6fff707070ff717171ff717171ff727272ff737373ff737373ff747474ff757575ff757575ff767676ff777777ff777777ff787878ff787878ff787878ff787878ff797979ff797979ff797979ff797979ff797979ff797979ff797979ff797979ff797979ff797979ff797979ff797979ff797979ff797979ff7a7a7aff7a7a7aff7a7a7aff7a7a7aff7a7a7aff7a7a7aff7a7a7aff7a7a7aff7a7a7aff7a7a7aff7a7a7aff7a7a7aff7a7a7aff7b7b7bff7b7b7bff7b7b7bff7b7b7bff7b7b7bff7b7b7bff7b7b7bff7b7b7bff7b7b7bff7b7b7bff7b7b7bff7b7b7bff7b7b7bff7b7b7bff7c7c7cff7c7c7cff7c7c7cff7c7c7cff7c7c7cff7c7c7cff7c7c7cff7c7c7cff7c7c7cff7c7c7cff7c7c7cff7c7c7cff7c7c7cff7d7d7dff7d7d7dff7d7d7dff7d7d7dff7d7d7dff7d7d7dff7d7d7dff7d7d7dff7d7d7dff
   m_StreamData:
     serializedVersion: 2
     offset: 0
@@ -311,7 +319,7 @@ Texture2D:
   m_ColorSpace: 1
   m_PlatformBlob: 
   image data: 512
-  _typelessdata: 595961ff585860ff58585fff57575eff56565dff55555cff54545bff53535aff535359ff525259ff515158ff505057ff4f4f56ff4e4e55ff4e4e54ff4d4d53ff4c4c52ff4b4b51ff4a4a50ff4a4a4fff49494eff48484dff47474dff46464cff45454bff45454aff444449ff434348ff424247ff414146ff404045ff404044ff3f3f43ff3e3e42ff3d3d41ff3c3c41ff3b3b40ff3b3b3fff3a3a3eff39393dff38383cff37373bff37373aff363639ff353538ff343437ff333336ff323235ff323234ff313134ff303033ff2f2f32ff2e2e31ff2d2d30ff2d2d2fff2c2c2eff2b2b2dff2a2a2cff29292bff28282aff282829ff272728ff262628ff252527ff242426ff232325ff232324ff222223ff212122ff202021ff1f1f20ff1f1f1fff1e1e1eff1d1d1dff1c1c1cff1b1b1bff1a1a1bff1a1a1aff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff191919ff
+  _typelessdata: 373737ff373737ff363636ff363636ff363636ff353535ff353535ff343434ff343434ff343434ff333333ff333333ff323232ff323232ff313131ff313131ff313131ff303030ff303030ff2f2f2fff2f2f2fff2e2e2eff2e2e2eff2e2e2eff2d2d2dff2d2d2dff2c2c2cff2c2c2cff2c2c2cff2b2b2bff2b2b2bff2a2a2aff2a2a2aff292929ff292929ff292929ff282828ff282828ff272727ff272727ff272727ff262626ff262626ff252525ff252525ff242424ff242424ff242424ff232323ff232323ff222222ff222222ff212121ff212121ff212121ff202020ff202020ff1f1f1fff1f1f1fff1f1f1fff1e1e1eff1e1e1eff1d1d1dff1d1d1dff1c1c1cff1c1c1cff1c1c1cff1b1b1bff1b1b1bff1a1a1aff1a1a1aff191919ff191919ff191919ff191919ff191919ff1a1a1aff1a1a1aff1a1a1aff1a1a1aff1a1a1aff1a1a1aff1b1b1bff1b1b1bff1b1b1bff1b1b1bff1b1b1bff1b1b1bff1c1c1cff1c1c1cff1c1c1cff1c1c1cff1c1c1cff1c1c1cff1c1c1cff1d1d1dff1d1d1dff1d1d1dff1d1d1dff1d1d1dff1d1d1dff1e1e1eff1e1e1eff1e1e1eff1e1e1eff1e1e1eff1e1e1eff1f1f1fff1f1f1fff1f1f1fff1f1f1fff1f1f1fff1f1f1fff1f1f1fff202020ff202020ff202020ff202020ff202020ff202020ff212121ff212121ff212121ff212121ff212121ff212121ff222222ff222222ff
   m_StreamData:
     serializedVersion: 2
     offset: 0
