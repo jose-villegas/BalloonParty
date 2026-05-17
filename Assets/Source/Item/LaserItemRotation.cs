@@ -22,9 +22,9 @@ namespace BalloonParty.Item
 
         private void OnEnable()
         {
-            _angle = 0f;
+            _angle = Random.Range(0f, 360f);
             _stopped = false;
-            transform.localRotation = Quaternion.identity;
+            transform.localRotation = Quaternion.AngleAxis(_angle, Vector3.forward);
         }
 
         public void Stop()

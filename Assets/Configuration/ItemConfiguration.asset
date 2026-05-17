@@ -15,7 +15,7 @@ MonoBehaviour:
   _items:
   - _type: 2
     _turnCheckEvery: 1
-    _weight: 9
+    _weight: 12
     _maximumAllowed: 3
     _visualPrefab: {fileID: 6668210511114258713, guid: c84f5087a41054dfab7db5d53bf62e5e,
       type: 3}
@@ -144,7 +144,7 @@ MonoBehaviour:
     _paintBlobSpinSpeed: 720
   - _type: 3
     _turnCheckEvery: 1
-    _weight: 900
+    _weight: 10
     _maximumAllowed: 2
     _visualPrefab: {fileID: 6897192337968396076, guid: db265edefece34cbf86ee0995069bbbf,
       type: 3}
