@@ -85,6 +85,40 @@ namespace BalloonParty.Tests.Slots
         }
 
         [Test]
+        public void HexNeighborIndices_EvenRow_ShiftsLeft()
+        {
+            var indices = SlotGrid.HexNeighborIndices(2, 2);
+
+            Assert.Contains(new Vector2Int(1, 2), indices);
+            Assert.Contains(new Vector2Int(3, 2), indices);
+            Assert.Contains(new Vector2Int(2, 1), indices);
+            Assert.Contains(new Vector2Int(1, 1), indices);
+            Assert.Contains(new Vector2Int(2, 3), indices);
+            Assert.Contains(new Vector2Int(1, 3), indices);
+        }
+
+        [Test]
+        public void HexNeighborIndices_OddRow_ShiftsRight()
+        {
+            var indices = SlotGrid.HexNeighborIndices(2, 3);
+
+            Assert.Contains(new Vector2Int(1, 3), indices);
+            Assert.Contains(new Vector2Int(3, 3), indices);
+            Assert.Contains(new Vector2Int(2, 2), indices);
+            Assert.Contains(new Vector2Int(3, 2), indices);
+            Assert.Contains(new Vector2Int(2, 4), indices);
+            Assert.Contains(new Vector2Int(3, 4), indices);
+        }
+
+        [Test]
+        public void HexNeighborIndices_AlwaysReturnsSixIndices()
+        {
+            var indices = SlotGrid.HexNeighborIndices(0, 0);
+
+            Assert.AreEqual(6, indices.Length);
+        }
+
+        [Test]
         public void IndexToWorldPosition_EvenRow_CalculatesCorrectly()
         {
             var pos = _grid.IndexToWorldPosition(new Vector2Int(0, 0));

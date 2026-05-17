@@ -42,6 +42,9 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 | Multi-tier override cascades | `NudgeService.ResolveDistance` | Priority inversion between balloon, publisher, and config defaults |
 | Weighted selection with caps | `BalloonsConfiguration.PickRandom` | MaxCount filtering, cumulative weight edge cases |
 | Pipeline filtering | `ItemAssigner.OnItemCheck` | Turn modulo, cap enforcement, eligibility gating |
+| Neighbor paint targeting | `PaintItemHandler.Activate` | Paintability filter, same-color skip, empty-color guard |
+| Curve-driven math | `CurveUtility.LerpWithVerticalCurve` | Wrong axis, missing offset, zero-height edge case |
+| Static index generation | `SlotGrid.HexNeighborIndices` | Even/odd shift direction (consumed independently by PaintItemHandler) |
 
 ---
 
@@ -77,9 +80,9 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 62 tests
+## Current Coverage — 76 tests
 
-### `SlotGridTests` — 17 tests
+### `SlotGridTests` — 20 tests
 
 Tests the core grid data structure — the most complex pure-logic class in the codebase.
 
@@ -91,6 +94,7 @@ Tests the core grid data structure — the most complex pure-logic class in the 
 | OptimalNextEmptySlot | 5 | Weight tie-breaking (`>=`), out-of-bounds candidate, recursive weight, row-0 null |
 | BottomEmptySlotPerColumn | 1 | Skipping logic returns wrong row |
 | GetNeighbors | 3 | Even/odd diagonal shift direction, boundary filtering |
+| HexNeighborIndices | 3 | Even/odd diagonal shift, always returns 6 indices (used independently by PaintItemHandler) |
 | IndexToWorldPosition | 2 | Staggered grid formula — even/odd offset |
 
 ### `PredictionTraceCalculatorTests` — 7 tests
@@ -106,18 +110,20 @@ Tests the trajectory bounce algorithm — pure math with wall reflection.
 | Max steps | 1 | Step exhaustion before wall hit |
 | Zig-zag | 1 | Multiple reflections chain correctly |
 
-### `ScoreControllerTests` — 6 tests
+### `ScoreControllerTests` — 8 tests
 
-Tests the scoring pipeline and level-up logic — multi-map accumulation with an all-colors threshold gate.
+Tests the scoring pipeline and level-up logic — deferred scoring via trail arrival, multi-map accumulation with an all-colors threshold gate.
 
 | Area | Tests | What could break |
 |---|---|---|
 | Unbreakable balloon hit (`-1`) | 1 | Wrong guard skips scoring for valid pops |
 | Hit that doesn't kill | 1 | Off-by-one on survive check |
-| Valid pop — per-color + total accumulation | 1 | Wrong dictionary key or sum |
+| Valid pop publishes scored message | 1 | Message not published or wrong fields |
+| Trail arrival accumulates score | 1 | Wrong dictionary key or sum |
 | Level-up when all colors meet threshold | 1 | `Any(p < required)` — wrong comparator |
 | No level-up when one color is short | 1 | Partial threshold confusion |
 | Level-up resets all color progress | 1 | Missed key in reset loop |
+| Pop does not increment level progress | 1 | Score mutated on hit instead of trail arrival |
 
 ### `BalloonModelTests` — 6 tests
 
@@ -197,6 +203,31 @@ Tests the shield item's projectile shield increment and message publishing.
 | No active projectile → no crash | 1 | Null guard missing |
 | ShieldGainedMessage published with correct slot | 1 | Wrong slot index in message |
 
+### `PaintItemHandlerTests` — 5 tests
+
+Tests the paint item's neighbor color conversion — paintability filter, same-color skip, empty-color guard.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Paints different-color neighbors | 1 | Wrong color assignment or neighbor lookup |
+| Skips same-color neighbors | 1 | Missing color comparison |
+| Skips non-paintable neighbors | 1 | `IsPaintable` guard missing |
+| Empty color → no action | 1 | Null/empty guard missing |
+| No neighbors → no crash | 1 | Out-of-bounds on corner slot |
+
+### `CurveUtilityTests` — 6 tests
+
+Tests the math utilities used by paint blob arcs and scale animation.
+
+| Area | Tests | What could break |
+|---|---|---|
+| LerpWithVerticalCurve at start | 1 | Non-zero offset at t=0 |
+| LerpWithVerticalCurve at end | 1 | Wrong offset at t=1 |
+| LerpWithVerticalCurve midpoint | 1 | Offset applied to wrong axis |
+| LerpWithVerticalCurve zero height | 1 | Height=0 alters base lerp |
+| SampleMultiplied returns base × curve | 1 | Multiplication order or wrong eval |
+| SampleMultiplied zero base | 1 | Zero not handled |
+
 ---
 
 ## Deferred Systems
@@ -208,11 +239,14 @@ These systems are not tested because they are either too coupled to Unity runtim
 | `BombItemHandler` | `BlastBalloons` uses `Physics2D.OverlapCircle` — needs real colliders and physics simulation. Shockwave nudge publish is covered indirectly by NudgeService tests. |
 | `LaserItemHandler` | `CastCross` uses `Physics2D.CircleCast` — needs real colliders and physics simulation. |
 | `BalloonBalancer` | Scan+move loop depends on well-tested `IsUnbalanced`/`OptimalNextEmptySlot` + DOTween animation. Test if it changes. |
-| `BalloonSpawner` | Heavy Unity/DI coupling (`PoolManager`, `LifetimeScope`, DOTween). Little pure logic beyond forwarding. |
+| `BalloonSpawner` | Heavy Unity/DI coupling (`PoolManager`, `IObjectResolver`, DOTween). Little pure logic beyond forwarding. |
 | `ProjectileModel` | Pure data bag — too simple to break |
 | `OrthogonalSizeCameraController` | Forwards config lookup to camera — simple delegation |
 | `ThrowerView.RotateTo` | Single `AngleAxis` call — too simple |
-| `SceneTransition` | Button handler wiring — too simple |
+| `SceneTransition` / `Navigation` | Button handler wiring / static state machine — too simple |
+| `PaintSplashView` | MonoBehaviour with `Update`-driven animation; visual correctness is a Play Mode concern. Core logic (target collection, paintability) tested via `PaintItemHandlerTests` |
+| `ScoreTrailService` | Trail spawning depends on `PoolManager` + DOTween flight. Trail arrival message is tested via `ScoreControllerTests` |
+| `PoolChannel.Prewarm` / `PrewarmAsync` | Requires MonoBehaviour instantiation (`Create()` returns `Component`). Straightforward push-to-stack logic |
 | Views in general | Bind→Subscribe→SetValue chains are tested by UniRx; visual correctness is a Play Mode concern |
 
 ---
