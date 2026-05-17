@@ -23,10 +23,10 @@ namespace BalloonParty.Game
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly ReactiveProperty<int> _level = new(1);
         private readonly Dictionary<string, int> _levelProgress = new();
+        private readonly Dictionary<string, int> _projectedProgress = new();
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private readonly GamePalette _palette;
         private readonly Dictionary<string, int> _persistentScore = new();
-        private readonly Dictionary<string, int> _pendingPoints = new();
         private readonly IPublisher<BalloonScoredMessage> _scoredPublisher;
         private readonly ReactiveProperty<int> _totalScore = new(0);
 
@@ -68,6 +68,7 @@ namespace BalloonParty.Game
             {
                 _persistentScore[color.Name] = PlayerPrefs.GetInt(color.Name, 0);
                 _levelProgress[color.Name] = PlayerPrefs.GetInt(color.Name + ProgressSuffix, 0);
+                _projectedProgress[color.Name] = _levelProgress[color.Name];
             }
 
             _totalScore.Value = _persistentScore.Values.Sum();
@@ -90,12 +91,11 @@ namespace BalloonParty.Game
         }
 
         /// <summary>
-        ///     Predicts whether adding <paramref name="points" /> to the given color
-        ///     would complete the level. Other colors must already have enough
-        ///     actual progress — pending in-flight trails are only projected for the
-        ///     scored color, since the cinematic pauses everything else.
+        ///     Checks whether the projected progress for <paramref name="colorName" />
+        ///     already reaches the level-up threshold. Called after projected
+        ///     progress has been incremented for the current pop.
         /// </summary>
-        internal bool WillLevelUp(string colorName, int points)
+        internal bool WillLevelUp(string colorName)
         {
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
 
@@ -103,10 +103,7 @@ namespace BalloonParty.Game
             {
                 if (kvp.Key == colorName)
                 {
-                    var projected = kvp.Value
-                                    + _pendingPoints.GetValueOrDefault(kvp.Key)
-                                    + points;
-                    if (projected < required)
+                    if (_projectedProgress[colorName] < required)
                     {
                         return false;
                     }
@@ -132,12 +129,6 @@ namespace BalloonParty.Game
             PlayerPrefs.Save();
         }
 
-        internal int PointsNeededForLevelUp(string colorName)
-        {
-            var required = _config.PointsRequiredForLevel(_level.Value + 1);
-            return Mathf.Max(0, required - _levelProgress.GetValueOrDefault(colorName));
-        }
-
         private void OnBalloonHit(BalloonHitMessage msg)
         {
             if (msg.Balloon.EvaluateHit(msg.Damage) != HitOutcome.Pop)
@@ -152,9 +143,9 @@ namespace BalloonParty.Game
             }
 
             var points = msg.Balloon.ScoreValue;
-
-            _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, points));
-            _pendingPoints[color] = _pendingPoints.GetValueOrDefault(color) + points;
+            var currentProgress = _projectedProgress.GetValueOrDefault(color);
+            _projectedProgress[color] = currentProgress + points;
+            _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, points, currentProgress));
         }
 
         private void OnTrailArrived(ScoreTrailArrivedMessage msg)
@@ -163,9 +154,6 @@ namespace BalloonParty.Game
             {
                 return;
             }
-
-            _pendingPoints[msg.ColorName] = Math.Max(0,
-                _pendingPoints.GetValueOrDefault(msg.ColorName) - 1);
 
             _persistentScore[msg.ColorName]++;
             _totalScore.Value = _persistentScore.Values.Sum();
@@ -187,25 +175,19 @@ namespace BalloonParty.Game
             foreach (var key in _levelProgress.Keys.ToArray())
             {
                 _levelProgress[key] = 0;
+                _projectedProgress[key] = 0;
             }
-
 
             _levelUpPublisher.Publish(new ScoreLevelUpMessage(_level.Value));
             Navigation.TransitionTo(NavigationState.LevelUp);
             Time.timeScale = 0f;
         }
 
-        private bool AllColorsComplete(int required, string extraColor = null, int extraPoints = 0)
+        private bool AllColorsComplete(int required)
         {
             foreach (var kvp in _levelProgress)
             {
-                var projected = kvp.Value;
-                if (kvp.Key == extraColor)
-                {
-                    projected += extraPoints;
-                }
-
-                if (projected < required)
+                if (kvp.Value < required)
                 {
                     return false;
                 }

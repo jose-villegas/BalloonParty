@@ -196,7 +196,7 @@ namespace BalloonParty.Tests.Game
 
         private void FireTrailArrived(string color)
         {
-            _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, Vector3.zero));
+            _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, 0, Vector3.zero));
         }
 
         private static IBalloonModel CreateModel(string color, int hitsRemaining, int scoreValue = 1)

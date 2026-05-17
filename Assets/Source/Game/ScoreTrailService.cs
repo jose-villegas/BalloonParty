@@ -26,7 +26,7 @@ namespace BalloonParty.Game
         private readonly Dictionary<string, string> _poolKeys = new();
         private readonly Dictionary<string, Func<Vector3>> _targetProviders = new();
         private readonly CancellationTokenSource _cts = new();
-        private readonly Dictionary<string, Transform> _lastSpawnedTrails = new();
+        private readonly Dictionary<(string Color, int Score), Transform> _inFlightTrails = new();
         private readonly HashSet<Transform> _activeTrails = new();
 
         private IDisposable _subscription;
@@ -103,21 +103,17 @@ namespace BalloonParty.Game
             }
         }
 
-        internal Transform GetLastSpawnedTrail(string colorName)
+        internal Transform GetTrailTransform(string colorName, int score)
         {
-            return _lastSpawnedTrails.GetValueOrDefault(colorName);
+            return _inFlightTrails.TryGetValue((colorName, score), out var t) ? t : null;
         }
 
-
-        /// <summary>
-        ///     Resumes the tweens on a specific trail so the cinematic can
-        ///     track it while all other trails stay paused.
-        /// </summary>
-        internal void ResumeTrail(Transform trail)
+        internal void ResumeTrail(string colorName, int score)
         {
-            if (trail != null)
+            var t = GetTrailTransform(colorName, score);
+            if (t != null)
             {
-                trail.DOPlay();
+                t.DOPlay();
             }
         }
 
@@ -162,10 +158,16 @@ namespace BalloonParty.Game
             }
 
             var origins = ComputeOrigins(msg.WorldPosition, msg.Points);
-            SpawnTrailsAsync(msg.ColorName, origins).Forget();
+            var scores = new int[origins.Length];
+            for (var i = 0; i < origins.Length; i++)
+            {
+                scores[i] = msg.CurrentProgress + i + 1;
+            }
+
+            SpawnTrailsAsync(msg.ColorName, origins, scores).Forget();
         }
 
-        private async UniTaskVoid SpawnTrailsAsync(string colorName, Vector3[] origins)
+        private async UniTaskVoid SpawnTrailsAsync(string colorName, Vector3[] origins, int[] scores)
         {
             var delayMs = Mathf.RoundToInt(_config.ScorePointsScatterDelay * 1000f);
             var poolKey = _poolKeys[colorName];
@@ -179,7 +181,7 @@ namespace BalloonParty.Game
                         cancellationToken: _cts.Token);
                 }
 
-                SpawnTrail(colorName, poolKey, origins[i]);
+                SpawnTrail(colorName, poolKey, origins[i], scores[i]);
                 if (i < origins.Length - 1)
                 {
                     await UniTask.Delay(delayMs, cancellationToken: _cts.Token);
@@ -187,7 +189,7 @@ namespace BalloonParty.Game
             }
         }
 
-        private void SpawnTrail(string colorName, string poolKey, Vector3 fromWorldPosition)
+        private void SpawnTrail(string colorName, string poolKey, Vector3 fromWorldPosition, int score)
         {
             var target = _targetProviders[colorName]();
             var color = _colorLookup.TryGetValue(colorName, out var c) ? c : Color.white;
@@ -198,7 +200,8 @@ namespace BalloonParty.Game
             trail.transform.position = fromWorldPosition;
             trail.transform.localScale = Vector3.one;
 
-            _lastSpawnedTrails[colorName] = trail.transform;
+            var key = (colorName, score);
+            _inFlightTrails[key] = trail.transform;
             _activeTrails.Add(trail.transform);
 
             if (Cinematic.IsPlaying)
@@ -212,16 +215,8 @@ namespace BalloonParty.Game
                 () =>
                 {
                     _activeTrails.Remove(trail.transform);
-
-                    // Only clear the entry if this trail is still the latest
-                    // spawn — a newer trail may have overwritten it.
-                    if (_lastSpawnedTrails.TryGetValue(colorName, out var last)
-                        && last == trail.transform)
-                    {
-                        _lastSpawnedTrails.Remove(colorName);
-                    }
-
-                    _arrivedPublisher.Publish(new ScoreTrailArrivedMessage(colorName, target));
+                    _inFlightTrails.Remove(key);
+                    _arrivedPublisher.Publish(new ScoreTrailArrivedMessage(colorName, score, target));
                     _poolManager.Return(poolKey, trail);
                 });
         }

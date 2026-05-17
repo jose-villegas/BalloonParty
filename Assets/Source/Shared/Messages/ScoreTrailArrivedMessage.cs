@@ -5,11 +5,13 @@ namespace BalloonParty.Shared.Messages
     public readonly struct ScoreTrailArrivedMessage
     {
         public readonly string ColorName;
+        public readonly int Score;
         public readonly Vector3 WorldPosition;
 
-        public ScoreTrailArrivedMessage(string colorName, Vector3 worldPosition)
+        public ScoreTrailArrivedMessage(string colorName, int score, Vector3 worldPosition)
         {
             ColorName = colorName;
+            Score = score;
             WorldPosition = worldPosition;
         }
     }

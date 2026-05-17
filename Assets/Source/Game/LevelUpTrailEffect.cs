@@ -34,12 +34,10 @@ namespace BalloonParty.Game
         private Vector3 _basePosition;
         private bool _following;
         private bool _active;
-        private bool _waitingForTip;
-        private int _arrivalsBeforeTip;
+        private string _tippingColor;
+        private int _tippingScore;
         private Transform _trackedTrail;
         private Vector3 _lastTrailPosition;
-        private string _pendingColor;
-        private bool _pendingCinematicStart;
         private Tween _timeScaleTween;
         private Tween _zoomTween;
 
@@ -59,17 +57,14 @@ namespace BalloonParty.Game
                 return;
             }
 
-            if (_trackedTrail == null && _pendingColor != null)
+            if (_trackedTrail == null && _tippingScore > 0)
             {
-                _trackedTrail = _scoreTrailService.GetLastSpawnedTrail(_pendingColor);
+                _trackedTrail = _scoreTrailService.GetTrailTransform(_tippingColor, _tippingScore);
 
-                // Tipping trail just became available — now safe to freeze
-                // other trails without blocking the spawn loop.
-                if (_trackedTrail != null && _pendingCinematicStart)
+                if (_trackedTrail != null)
                 {
-                    _pendingCinematicStart = false;
                     Cinematic.Begin(CinematicState.LevelUpTrail);
-                    _scoreTrailService.ResumeTrail(_trackedTrail);
+                    _scoreTrailService.ResumeTrail(_tippingColor, _tippingScore);
                 }
             }
 
@@ -94,8 +89,6 @@ namespace BalloonParty.Game
                 return;
             }
 
-            // DOTween overwrites position each Update; re-apply camera
-            // compensation so the trail stays aligned with the UI bar.
             var cameraDelta = _camera.transform.position - _basePosition;
             cameraDelta.z = 0f;
             _trackedTrail.position += cameraDelta;
@@ -121,48 +114,21 @@ namespace BalloonParty.Game
                 return;
             }
 
-            if (!_scoreController.WillLevelUp(msg.ColorName, msg.Points))
+            if (!_scoreController.WillLevelUp(msg.ColorName))
             {
                 return;
             }
 
             _active = true;
-            _pendingColor = msg.ColorName;
+            _tippingColor = msg.ColorName;
+            _tippingScore = _scoreController.GetRequiredPoints();
 
-            var arrivalsNeeded = _scoreController.PointsNeededForLevelUp(msg.ColorName);
-
-            if (arrivalsNeeded <= 1)
-            {
-                BeginCinematic(_scoreTrailService.GetLastSpawnedTrail(msg.ColorName));
-                return;
-            }
-
-            _waitingForTip = true;
-            _arrivalsBeforeTip = arrivalsNeeded - 1;
+            BeginSlowMotion(msg.WorldPosition);
         }
 
         private void OnTrailArrived(ScoreTrailArrivedMessage msg)
         {
-            if (!_active || msg.ColorName != _pendingColor)
-            {
-                return;
-            }
-
-            if (_waitingForTip)
-            {
-                _arrivalsBeforeTip--;
-                if (_arrivalsBeforeTip > 0)
-                {
-                    return;
-                }
-
-                _waitingForTip = false;
-                var trail = _scoreTrailService.GetLastSpawnedTrail(_pendingColor);
-                BeginCinematic(trail);
-                return;
-            }
-
-            if (!_following)
+            if (!_active || msg.ColorName != _tippingColor || msg.Score != _tippingScore)
             {
                 return;
             }
@@ -180,28 +146,6 @@ namespace BalloonParty.Game
             }
 
             Restore();
-        }
-
-        private void BeginCinematic(Transform trail)
-        {
-            _trackedTrail = trail;
-
-            if (_trackedTrail != null)
-            {
-                Cinematic.Begin(CinematicState.LevelUpTrail);
-                _scoreTrailService.ResumeTrail(_trackedTrail);
-            }
-            else
-            {
-                // Trail hasn't spawned yet (stagger delay). Start slow-mo
-                // now; Update will activate the cinematic guard once the
-                // trail appears.
-                _pendingCinematicStart = true;
-            }
-
-            BeginSlowMotion(_trackedTrail != null
-                ? _trackedTrail.position
-                : Vector3.zero);
         }
 
         private void BeginSlowMotion(Vector3 focusWorldPosition)
@@ -255,9 +199,6 @@ namespace BalloonParty.Game
         {
             _active = false;
             _following = false;
-            _waitingForTip = false;
-            _pendingCinematicStart = false;
-            _pendingColor = null;
             _trackedTrail = null;
 
             KillTweens();
@@ -307,5 +248,6 @@ namespace BalloonParty.Game
             _timeScaleTween = null;
             _zoomTween = null;
         }
+
     }
 }
