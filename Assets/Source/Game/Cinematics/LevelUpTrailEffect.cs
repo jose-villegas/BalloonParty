@@ -1,4 +1,5 @@
 using BalloonParty.Display;
+using BalloonParty.Game.Score;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using DG.Tweening;
@@ -36,7 +37,6 @@ namespace BalloonParty.Game.Cinematics
         private Vector3 _lastTrailPosition;
         private bool _sessionActive;
         private Tween _timeScaleTween;
-        private string _tippingColor;
         private int _tippingScore;
         private Transform _trackedTrail;
         private Tween _zoomTween;
@@ -88,15 +88,11 @@ namespace BalloonParty.Game.Cinematics
             }
 
             _sessionActive = true;
-            _tippingColor = msg.ColorName;
             _tippingScore = _scoreController.GetRequiredPoints();
             _trackedTrail = null;
+            _lastTrailPosition = msg.WorldPosition;
 
-            PreparePanIn(msg.WorldPosition);
-
-            _director.PlayScene(new CinematicScene(
-                onTick: PanInTick,
-                onEnd: OnPanInComplete));
+            _scoreTrailService.TrackTrail(_tippingScore, OnTippingTrailSpawned);
         }
 
         private void OnLevelUpDismissed(LevelUpDismissedMessage msg)
@@ -124,11 +120,6 @@ namespace BalloonParty.Game.Cinematics
                 onEnd: OnRestoreComplete));
         }
 
-        private void OnPanInComplete()
-        {
-            // Level-up popup appears from ScoreController's ScoreLevelUpMessage.
-        }
-
         private void OnRestoreComplete()
         {
             _sessionActive = false;
@@ -142,6 +133,21 @@ namespace BalloonParty.Game.Cinematics
             Navigation.TransitionTo(NavigationState.Game);
         }
 
+        private void OnTippingTrailSpawned(Transform trailTransform)
+        {
+            _trackedTrail = trailTransform;
+            _lastTrailPosition = trailTransform.position;
+
+            _director.BeginCinematic(CinematicState.LevelUpTrail);
+
+            PreparePanIn();
+
+            _scoreTrailService.ResumeTrail(_tippingScore);
+
+            _director.PlayScene(new CinematicScene(
+                onTick: PanInTick));
+        }
+
         private void OnTrailArrived(ScoreTrailArrivedMessage msg)
         {
             if (!_director.IsScenePlaying)
@@ -149,12 +155,13 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            if (msg.ColorName != _tippingColor || msg.Score != _tippingScore)
+            if (msg.Score != _tippingScore)
             {
                 return;
             }
 
             _trackedTrail = null;
+            _scoreTrailService.ClearTrackedTrail(_tippingScore);
             KillTweens();
             _director.CompleteScene();
         }
@@ -164,17 +171,6 @@ namespace BalloonParty.Game.Cinematics
             if (_camera == null)
             {
                 return;
-            }
-
-            if (_trackedTrail == null && _tippingScore > 0)
-            {
-                _trackedTrail = _scoreTrailService.GetTrailTransform(_tippingColor, _tippingScore);
-
-                if (_trackedTrail != null)
-                {
-                    _director.BeginCinematic(CinematicState.LevelUpTrail);
-                    _scoreTrailService.ResumeTrailsForColor(_tippingColor);
-                }
             }
 
             if (_trackedTrail != null)
@@ -191,10 +187,9 @@ namespace BalloonParty.Game.Cinematics
                 _cameraFollowSpeed * Time.unscaledDeltaTime);
         }
 
-        private void PreparePanIn(Vector3 focusWorldPosition)
+        private void PreparePanIn()
         {
             KillTweens();
-            _lastTrailPosition = focusWorldPosition;
 
             if (_orthoController != null)
             {

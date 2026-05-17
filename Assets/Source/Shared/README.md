@@ -28,7 +28,7 @@ Messages are the signals that decouple systems from one another. A publisher fir
 | `BalloonDeflectedMessage` | `BalloonController` (on deflect) | `ProjectileView` (color-tracking on deflect hit) |
 | `BalloonScoredMessage` | `ScoreController` | `ColorProgressBar`, `ScoreTrailService`, `LevelUpTrailEffect` — carries `ColorName`, `WorldPosition`, `Points`, and `CurrentProgress` (projected level progress before this pop, used by `ScoreTrailService` to assign unique score values to each trail) |
 | `ScoreLevelUpMessage` | `ScoreController` | `ColorProgressBar`, `LevelUpPopUp` |
-| `ScoreTrailArrivedMessage` | `ScoreTrailService` | `ScoreController`, `ColorProgressBar`, `LevelUpTrailEffect` — carries `ColorName`, `Score` (the level progress value this trail represents), and `WorldPosition` |
+| `ScoreTrailArrivedMessage` | `ScoreTrailService` | `ScoreController`, `ColorProgressBar`, `LevelUpTrailEffect` — carries `ColorName`, `Score` (the unique trail identity / level progress value this trail represents), and `WorldPosition` |
 | `LevelUpDismissedMessage` | `LevelUpPopUp` | `LevelUpTrailEffect` |
 | `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController`, `BalloonSpawner` |
 | `ProjectileLoadedMessage` | `ThrowerController` | `ShieldCounterLabel`, `ShieldCounterAnimation` |

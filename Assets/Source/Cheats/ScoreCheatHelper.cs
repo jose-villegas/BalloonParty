@@ -2,7 +2,7 @@
 
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
-using BalloonParty.Game;
+using BalloonParty.Game.Score;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using UnityEngine;

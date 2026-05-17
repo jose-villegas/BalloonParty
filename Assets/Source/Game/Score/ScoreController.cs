@@ -11,7 +11,7 @@ using UniRx;
 using UnityEngine;
 using VContainer.Unity;
 
-namespace BalloonParty.Game
+namespace BalloonParty.Game.Score
 {
     internal class ScoreController : IStartable, IDisposable
     {
@@ -117,9 +117,9 @@ namespace BalloonParty.Game
             return true;
         }
 
-        private bool AllColorsComplete(int required)
+        private bool AllColorsProjected(int required)
         {
-            foreach (var kvp in _levelProgress)
+            foreach (var kvp in _projectedProgress)
             {
                 if (kvp.Value < required)
                 {
@@ -133,7 +133,7 @@ namespace BalloonParty.Game
         private void CheckLevelUp()
         {
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
-            if (!AllColorsComplete(required))
+            if (!AllColorsProjected(required))
             {
                 return;
             }
@@ -148,7 +148,6 @@ namespace BalloonParty.Game
 
             _levelUpPublisher.Publish(new ScoreLevelUpMessage(_level.Value));
             Navigation.TransitionTo(NavigationState.LevelUp);
-            Time.timeScale = 0f;
         }
 
         private void OnBalloonHit(BalloonHitMessage msg)
@@ -188,7 +187,12 @@ namespace BalloonParty.Game
             _persistentScore[msg.ColorName]++;
             _totalScore.Value = _persistentScore.Values.Sum();
 
-            _levelProgress[msg.ColorName]++;
+            var newProgress = ++_levelProgress[msg.ColorName];
+            if (_projectedProgress.GetValueOrDefault(msg.ColorName) < newProgress)
+            {
+                _projectedProgress[msg.ColorName] = newProgress;
+            }
+
             CheckLevelUp();
         }
 

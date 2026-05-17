@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Configuration;
 using BalloonParty.Game;
+using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;

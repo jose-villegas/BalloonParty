@@ -7,6 +7,7 @@ using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Game.Cinematics;
+using BalloonParty.Game.Score;
 using BalloonParty.Item;
 using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Laser;

@@ -32,14 +32,16 @@ namespace BalloonParty.UI.Score
             transform.DOKill();
         }
 
-        public void Setup(Vector3 target, Color color, float duration, Action onCompleted)
+        public void Setup(Vector3 target, Color color, float duration, Action onCompleted,
+            bool useUnscaledTime = false)
         {
             _renderer.color = color;
             _trailRenderer.startColor = color;
-            Setup(target, duration, onCompleted);
+            Setup(target, duration, onCompleted, useUnscaledTime);
         }
 
-        public void Setup(Vector3 target, float duration, Action onCompleted)
+        public void Setup(Vector3 target, float duration, Action onCompleted,
+            bool useUnscaledTime = false)
         {
             _trailRenderer.Clear();
 
@@ -47,6 +49,12 @@ namespace BalloonParty.UI.Score
             var scaleTween = transform.DOScale(Vector3.zero, duration);
             scaleTween.SetEase(_scaleCurve);
             moveTween.SetEase(_moveCurve);
+
+            if (useUnscaledTime)
+            {
+                moveTween.SetUpdate(true);
+                scaleTween.SetUpdate(true);
+            }
 
             scaleTween.OnComplete(() => onCompleted?.Invoke());
         }

@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 using BalloonParty.Configuration;
-using BalloonParty.Game;
+using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using MessagePipe;

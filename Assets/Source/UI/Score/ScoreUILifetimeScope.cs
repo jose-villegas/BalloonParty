@@ -1,4 +1,5 @@
 using BalloonParty.Game;
+using BalloonParty.Game.Score;
 using VContainer;
 using VContainer.Unity;
 
