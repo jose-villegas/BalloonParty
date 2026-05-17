@@ -40,16 +40,19 @@ namespace BalloonParty.Balloon.View
 
         private IBalloonViewBinding[] _viewBindings;
         private IBalloonVariant _variant;
+        private ITransformCapture _transformCapture;
         private ParticleSystem _popVfxOverride;
 
         public IBalloonModel Model { get; private set; }
         public IBalloonVariant Variant => _variant;
         public TweenTracker TweenTracker => _tweenTracker;
+        internal ITransformCapture TransformCapture => _transformCapture;
 
         private void Awake()
         {
             _viewBindings = GetComponentsInChildren<IBalloonViewBinding>();
             _variant = GetComponentInParent<IBalloonVariant>();
+            _transformCapture = GetComponentInChildren<ITransformCapture>();
         }
 
         public void OnSpawned()

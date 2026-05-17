@@ -19,7 +19,7 @@ namespace BalloonParty.Item.Laser
         private readonly ContactFilter2D _balloonFilter;
         private readonly GamePalette _palette;
         private readonly IPublisher<BalloonHitMessage> _hitPublisher;
-        private readonly ISubscriber<ItemRotationCapturedMessage> _rotationSubscriber;
+        private readonly ISubscriber<TransformCapturedMessage> _transformCapturedSubscriber;
         private readonly ItemConfiguration _itemConfig;
         private readonly List<RaycastHit2D> _castResults = new(4);
         private readonly PoolManager _poolManager;
@@ -35,13 +35,13 @@ namespace BalloonParty.Item.Laser
             GamePalette palette,
             ItemConfiguration itemConfig,
             IPublisher<BalloonHitMessage> hitPublisher,
-            ISubscriber<ItemRotationCapturedMessage> rotationSubscriber,
+            ISubscriber<TransformCapturedMessage> transformCapturedSubscriber,
             PoolManager poolManager)
         {
             _palette = palette;
             _itemConfig = itemConfig;
             _hitPublisher = hitPublisher;
-            _rotationSubscriber = rotationSubscriber;
+            _transformCapturedSubscriber = transformCapturedSubscriber;
             _poolManager = poolManager;
 
             _balloonFilter = new ContactFilter2D();
@@ -51,7 +51,7 @@ namespace BalloonParty.Item.Laser
 
         public void Start()
         {
-            _rotationSubscriber.Subscribe(msg => _laserRotation = msg.Rotation);
+            _transformCapturedSubscriber.Subscribe(msg => _laserRotation = msg.Snapshot.Rotation);
         }
 
         public void Setup(IBalloonModel balloon, Vector3 worldPosition)

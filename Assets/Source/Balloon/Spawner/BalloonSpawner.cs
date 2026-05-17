@@ -37,7 +37,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
         private readonly IObjectResolver _resolver;
         private readonly PoolManager _poolManager;
-        private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
+        private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
 
         private int _turnCount;
 
@@ -53,7 +53,7 @@ namespace BalloonParty.Balloon.Spawner
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
-            IPublisher<ItemRotationCapturedMessage> rotationPublisher,
+            IPublisher<TransformCapturedMessage> transformCapturedPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
             IPublisher<BalloonNudgeMessage> nudgePublisher)
         {
@@ -67,7 +67,7 @@ namespace BalloonParty.Balloon.Spawner
             _itemActivatedSubscriber = itemActivatedSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
-            _rotationPublisher = rotationPublisher;
+            _transformCapturedPublisher = transformCapturedPublisher;
             _deflectedPublisher = deflectedPublisher;
             _nudgePublisher = nudgePublisher;
         }
@@ -217,7 +217,7 @@ namespace BalloonParty.Balloon.Spawner
                 entry.PopVfxPrefab,
                 _hitSubscriber,
                 _itemActivatedSubscriber,
-                _rotationPublisher,
+                _transformCapturedPublisher,
                 _deflectedPublisher,
                 _nudgePublisher,
                 _grid,

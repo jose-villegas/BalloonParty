@@ -24,7 +24,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly string _poolKey;
         private readonly PoolManager _poolManager;
         private readonly ParticleSystem _popVfxOverride;
-        private readonly IPublisher<ItemRotationCapturedMessage> _rotationPublisher;
+        private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly BalloonView _view;
 
         private IDisposable _hitSubscription;
@@ -39,7 +39,7 @@ namespace BalloonParty.Balloon.Controller
             ParticleSystem popVfxOverride,
             ISubscriber<BalloonHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
-            IPublisher<ItemRotationCapturedMessage> rotationPublisher,
+            IPublisher<TransformCapturedMessage> transformCapturedPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
             IPublisher<BalloonNudgeMessage> nudgePublisher,
             SlotGrid grid,
@@ -53,7 +53,7 @@ namespace BalloonParty.Balloon.Controller
             _popVfxOverride = popVfxOverride;
             _hitSubscriber = hitSubscriber;
             _itemActivatedSubscriber = itemActivatedSubscriber;
-            _rotationPublisher = rotationPublisher;
+            _transformCapturedPublisher = transformCapturedPublisher;
             _deflectedPublisher = deflectedPublisher;
             _nudgePublisher = nudgePublisher;
             _grid = grid;
@@ -124,13 +124,11 @@ namespace BalloonParty.Balloon.Controller
             }
             else
             {
-                // Snapshot item visual rotation before hiding — the laser handler
-                // reads this from the model after the visual is gone.
-                var laserRotation = _view.GetComponentInChildren<Item.LaserItemRotation>(true);
-                if (laserRotation != null)
+                var transformCapture = _view.TransformCapture;
+                if (transformCapture != null)
                 {
-                    laserRotation.Stop();
-                    _rotationPublisher.Publish(new ItemRotationCapturedMessage(laserRotation.transform.rotation));
+                    var snapshot = transformCapture.CaptureSnapshot();
+                    _transformCapturedPublisher.Publish(new TransformCapturedMessage(snapshot));
                 }
 
                 // Hide immediately — item effect plays world-space; balloon visual

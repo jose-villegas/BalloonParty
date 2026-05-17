@@ -59,7 +59,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
             builder.RegisterMessageBroker<ItemCheckMessage>(options);
             builder.RegisterMessageBroker<ItemActivatedMessage>(options);
-            builder.RegisterMessageBroker<ItemRotationCapturedMessage>(options);
+            builder.RegisterMessageBroker<TransformCapturedMessage>(options);
             builder.RegisterMessageBroker<ShieldGainedMessage>(options);
             builder.RegisterMessageBroker<ScoreTrailArrivedMessage>(options);
 

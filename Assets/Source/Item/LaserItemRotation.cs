@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace BalloonParty.Item
 {
-    public class LaserItemRotation : MonoBehaviour
+    public class LaserItemRotation : MonoBehaviour, ITransformCapture
     {
         [SerializeField] private float _rotationSpeed;
 
@@ -27,9 +27,10 @@ namespace BalloonParty.Item
             transform.localRotation = Quaternion.AngleAxis(_angle, Vector3.forward);
         }
 
-        public void Stop()
+        public TransformSnapshot CaptureSnapshot()
         {
             _stopped = true;
+            return new TransformSnapshot(transform);
         }
     }
 }

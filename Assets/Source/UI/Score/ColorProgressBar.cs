@@ -113,8 +113,11 @@ namespace BalloonParty.UI.Score
 
             _streak++;
 
-            DismissFullyShownNotices();
-            SpawnStreakNotice(_streak);
+            if (_streak > 1)
+            {
+                DismissFullyShownNotices();
+                SpawnStreakNotice(_streak);
+            }
         }
 
         private void OnLevelUp(ScoreLevelUpMessage msg)
