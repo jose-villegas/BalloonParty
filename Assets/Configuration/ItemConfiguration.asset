@@ -15,7 +15,7 @@ MonoBehaviour:
   _items:
   - _type: 2
     _turnCheckEvery: 1
-    _weight: 7
+    _weight: 9
     _maximumAllowed: 3
     _visualPrefab: {fileID: 6668210511114258713, guid: c84f5087a41054dfab7db5d53bf62e5e,
       type: 3}
@@ -33,6 +33,8 @@ MonoBehaviour:
     _lightningSegmentsMultiplier: 3
     _lightningRandomness: 0.2
     _lightningJumpTime: 0.15
+    _lightningGlowSubdivisions: 4
+    _lightningFractalDecay: 0.55
     _paintBlobFlightDuration: 0.35
     _paintBlobArcCurve:
       serializedVersion: 2
@@ -148,7 +150,7 @@ MonoBehaviour:
       type: 3}
     _activationEffectPrefab: {fileID: 7084871819143963872, guid: 09e04fef865adae47bf118af97e3e371,
       type: 3}
-    _damage: 2
+    _damage: 3
     _bombRadius: 1.25
     _nudgeOverrides: []
     _laserRaycastDistance: 20
@@ -156,6 +158,8 @@ MonoBehaviour:
     _lightningSegmentsMultiplier: 3
     _lightningRandomness: 0.2
     _lightningJumpTime: 0.15
+    _lightningGlowSubdivisions: 4
+    _lightningFractalDecay: 0.55
     _paintBlobFlightDuration: 0.35
     _paintBlobArcCurve:
       serializedVersion: 2
@@ -265,7 +269,7 @@ MonoBehaviour:
     _paintBlobSpinSpeed: 720
   - _type: 4
     _turnCheckEvery: 1
-    _weight: 10000
+    _weight: 8
     _maximumAllowed: 2
     _visualPrefab: {fileID: 868192500419445839, guid: ad757d902f90141549750e28fe439d82,
       type: 3}
@@ -277,8 +281,10 @@ MonoBehaviour:
     _laserRaycastDistance: 20
     _laserCircleCastRadius: 0.065
     _lightningSegmentsMultiplier: 5
-    _lightningRandomness: 0.5
+    _lightningRandomness: 1
     _lightningJumpTime: 0.05
+    _lightningGlowSubdivisions: 3
+    _lightningFractalDecay: 0.7
     _paintBlobFlightDuration: 0.35
     _paintBlobArcCurve:
       serializedVersion: 2
@@ -402,6 +408,8 @@ MonoBehaviour:
     _lightningSegmentsMultiplier: 3
     _lightningRandomness: 0.2
     _lightningJumpTime: 0.15
+    _lightningGlowSubdivisions: 4
+    _lightningFractalDecay: 0.55
     _paintBlobFlightDuration: 0.35
     _paintBlobArcCurve:
       serializedVersion: 2
@@ -525,6 +533,8 @@ MonoBehaviour:
     _lightningSegmentsMultiplier: 3
     _lightningRandomness: 0.2
     _lightningJumpTime: 0.15
+    _lightningGlowSubdivisions: 4
+    _lightningFractalDecay: 0.55
     _paintBlobFlightDuration: 0.75
     _paintBlobArcCurve:
       serializedVersion: 2

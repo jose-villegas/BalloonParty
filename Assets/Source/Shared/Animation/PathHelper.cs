@@ -163,6 +163,60 @@ namespace BalloonParty.Shared.Animation
 
             return result;
         }
+
+        /// <summary>
+        ///     Fills <paramref name="count" /> points between <paramref name="start" />
+        ///     and <paramref name="end" /> using recursive midpoint displacement.
+        ///     Produces fractal jagged lines typical of electricity arcs.
+        ///     <paramref name="displacement" /> is the initial perpendicular offset
+        ///     magnitude; <paramref name="decay" /> (0–1) scales it each recursion level
+        ///     (0.5 = classic lightning, higher = more fine detail).
+        /// </summary>
+        internal static void MidpointDisplacement(
+            Vector3 start,
+            Vector3 end,
+            float displacement,
+            float decay,
+            Vector3[] buffer,
+            int offset,
+            int count)
+        {
+            buffer[offset] = start;
+            buffer[offset + count - 1] = end;
+
+            if (count <= 2)
+            {
+                return;
+            }
+
+            var dir = (end - start).normalized;
+            var perp = new Vector3(-dir.y, dir.x, 0f);
+
+            Subdivide(buffer, offset, 0, count - 1, displacement, decay, perp);
+        }
+
+        private static void Subdivide(
+            Vector3[] buffer,
+            int offset,
+            int left,
+            int right,
+            float scale,
+            float decay,
+            Vector3 perp)
+        {
+            if (right - left <= 1)
+            {
+                return;
+            }
+
+            var mid = (left + right) / 2;
+            var midpoint = (buffer[offset + left] + buffer[offset + right]) * 0.5f;
+            buffer[offset + mid] = midpoint + perp * UnityEngine.Random.Range(-scale, scale);
+
+            var reduced = scale * decay;
+            Subdivide(buffer, offset, left, mid, reduced, decay, perp);
+            Subdivide(buffer, offset, mid, right, reduced, decay, perp);
+        }
     }
 }
 

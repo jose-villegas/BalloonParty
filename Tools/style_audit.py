@@ -584,6 +584,69 @@ def check_inconsistent_accessibility(path: Path, lines: list[str], result: Audit
                 sig_lines = []
 
 
+def check_repeated_accessor(path: Path, lines: list[str], result: AuditResult):
+    """Flag calls where 3+ arguments are accessed from the same object (e.g. obj.A, obj.B, obj.C).
+
+    This suggests the callee should accept the object directly instead of
+    unpacking every property at the call site.
+    """
+    # Join continuation lines to reconstruct multi-line call expressions.
+    # A simple heuristic: if a line ends with ',' and the next is indented
+    # more, it is a continuation.
+    joined: list[tuple[int, str]] = []  # (start_line, full_text)
+    buf: list[str] = []
+    start = 1
+
+    for i, raw in enumerate(lines, 1):
+        stripped = raw.rstrip()
+        if not buf:
+            start = i
+        buf.append(stripped)
+        # Continue joining while the line ends with ',' or the expression is
+        # clearly not finished (open parens).
+        open_parens = sum(s.count("(") - s.count(")") for s in buf)
+        if open_parens <= 0:
+            joined.append((start, " ".join(b.strip() for b in buf)))
+            buf = []
+
+    if buf:
+        joined.append((start, " ".join(b.strip() for b in buf)))
+
+    # Pattern: extract the argument list inside the outermost parentheses of a
+    # method call.  We look for ident( ... ) where ... contains commas.
+    call_re = re.compile(r"\w+\s*\((.+)\)")
+    accessor_re = re.compile(r"^([\w]+)\.\w+$")
+
+    # Value-type accessors like position.x, rect.width, color.r are fine to unpack.
+    IGNORE_PREFIXES = {"position", "rect", "c", "color", "col", "row", "v", "p"}
+
+    for line_no, text in joined:
+        m = call_re.search(text)
+        if not m:
+            continue
+
+        args_str = m.group(1)
+        # Cheap split — won't handle nested calls perfectly but good enough for
+        # the `settings.X, settings.Y, …` pattern.
+        args = [a.strip() for a in args_str.split(",")]
+
+        # Count args that share the same prefix.
+        prefix_runs: dict[str, int] = {}
+        for arg in args:
+            am = accessor_re.match(arg)
+            if am:
+                prefix = am.group(1)
+                prefix_runs[prefix] = prefix_runs.get(prefix, 0) + 1
+
+        for prefix, count in prefix_runs.items():
+            # Skip single-char, numeric, or known value-type prefixes.
+            if len(prefix) <= 1 or prefix.isdigit() or prefix in IGNORE_PREFIXES:
+                continue
+            if count >= 3:
+                result.add(Violation(str(path), line_no, "repeated-accessor",
+                    f"{count} arguments read from '{prefix}' — consider passing the object directly"))
+
+
 # ─── Rule registry ───────────────────────────────────────────────────────────
 
 RULES: dict[str, callable] = {
@@ -601,6 +664,7 @@ RULES: dict[str, callable] = {
     "inject-on-field":   check_inject_on_field,
     "public-visibility": check_public_visibility,
     "accessibility":     check_inconsistent_accessibility,
+    "repeated-accessor": check_repeated_accessor,
 }
 
 # Rules that don't operate on individual files

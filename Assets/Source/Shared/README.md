@@ -8,7 +8,7 @@ Types and utilities used across multiple features.
 |---|---|
 | `Rendering/` | Visual rendering utilities — `ColorableRenderer` (abstract base + generic `<T>`), `CompositeColorableRenderer`, `SortingHelper` (sorting order calculations), `GizmoDrawingHelper` (Gizmos API primitives for `OnDrawGizmos`, guarded in `#if UNITY_EDITOR`) |
 | `GameState/` | App-wide navigation — `Navigation` (static `ReactiveProperty<NavigationState>` with `Current` and `TransitionTo`), `NavigationState` enum, `NavigationTrigger` (button wiring), `SceneTransition` (preload + additive scene loading), `EditorNavigationBootstrap` (editor-only auto-transition) |
-| `Animation/` | Tween/animation utilities — `TweenTracker` (DOTween sequence composition for nudge → balance chaining), `CurveUtility` (AnimationCurve-driven arc interpolation) |
+| `Animation/` | Tween/animation and math utilities — `TweenTracker` (DOTween sequence composition for nudge → balance chaining), `PathHelper` (Catmull-Rom spline paths + loops, midpoint displacement for fractal lightning, fractional-index array sampling, linear resampling, prefix sums), `VectorMathHelper` (centroid, bounding radius for point sets) |
 | `Pool/` | Generic object pooling system — `PoolManager`, `PoolChannel<T>`, `IPoolable`, `EffectView`, `EffectPoolChannel`, `ParticlePoolChannel`, `PoolableParticle` (see `Pool/README.md`) |
 | `Extensions/` | Extension methods — `ColorableRendererExtensions` (`BindColor` overloads for reactive color subscriptions), `SceneExtensions` (`SuppressRendering()` / `SceneRenderingHandle.Restore()`) |
 | `Messages/` | MessagePipe signal structs that decouple systems from one another |

@@ -81,9 +81,7 @@ namespace BalloonParty.Item.Lightning
 
             view.PrepareDisplay(
                 positions,
-                settings.LightningSegmentsMultiplier,
-                settings.LightningRandomness,
-                settings.LightningJumpTime,
+                settings,
                 index =>
                 {
                     if (index < targets.Count)

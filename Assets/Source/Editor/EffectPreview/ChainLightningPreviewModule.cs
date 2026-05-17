@@ -18,7 +18,6 @@ namespace BalloonParty.Editor.EffectPreview
     /// </summary>
     internal sealed class ChainLightningPreviewModule : IEffectPreviewModule
     {
-        private const int GlowSubdivisions = 4;
 
         private static readonly FieldInfo LineRenderersField =
             typeof(ChainLightningView).GetField("_lineRenderers", BindingFlags.NonPublic | BindingFlags.Instance);
@@ -46,6 +45,7 @@ namespace BalloonParty.Editor.EffectPreview
         private float[] _glowDiameters;
         private float _glowFromIdx;
         private float _glowToIdx;
+        private int _glowSubdivisions;
 
         internal ChainLightningPreviewModule(ChainLightningView view)
         {
@@ -81,6 +81,8 @@ namespace BalloonParty.Editor.EffectPreview
             var segMul = settings?.LightningSegmentsMultiplier ?? 3f;
             var randomness = settings?.LightningRandomness ?? 0.2f;
             _jumpTime = settings?.LightningJumpTime ?? 0.15f;
+            _glowSubdivisions = settings?.LightningGlowSubdivisions ?? 4;
+            var fractalDecay = settings?.LightningFractalDecay ?? 0.55f;
 
             var origin = _view.transform.position;
 
@@ -111,9 +113,9 @@ namespace BalloonParty.Editor.EffectPreview
             var rendererCount = _lineRenderers != null ? _lineRenderers.Length : 0;
 
             (_lineBuffers, _cumOffsets) = ChainLightningView.BuildBoltBuffers(
-                targets, rendererCount, segMul, randomness);
+                targets, rendererCount, segMul, randomness, fractalDecay);
 
-            (_glowPath, _glowDiameters) = ChainLightningView.BuildGlowPath(targets);
+            (_glowPath, _glowDiameters) = ChainLightningView.BuildGlowPath(targets, _glowSubdivisions);
 
             _elapsed = 0f;
             _currentJump = 0;
@@ -156,15 +158,15 @@ namespace BalloonParty.Editor.EffectPreview
                     ApplyRenderers(_cumOffsets[_currentJump]);
 
                     var stage = _currentJump - 1;
-                    _glowFromIdx = Mathf.Min((_jumpCount - 1) * GlowSubdivisions, GlowMaxIdx);
-                    _glowToIdx = stage >= 0 ? Mathf.Min(stage * GlowSubdivisions, GlowMaxIdx) : 0f;
+                    _glowFromIdx = Mathf.Min((_jumpCount - 1) * _glowSubdivisions, GlowMaxIdx);
+                    _glowToIdx = stage >= 0 ? Mathf.Min(stage * _glowSubdivisions, GlowMaxIdx) : 0f;
                     return true;
                 }
 
                 ApplyRenderers(_cumOffsets[_currentJump + 1]);
 
-                _glowFromIdx = Mathf.Min((_currentJump - 1) * GlowSubdivisions, GlowMaxIdx);
-                _glowToIdx = Mathf.Min(_currentJump * GlowSubdivisions, GlowMaxIdx);
+                _glowFromIdx = Mathf.Min((_currentJump - 1) * _glowSubdivisions, GlowMaxIdx);
+                _glowToIdx = Mathf.Min(_currentJump * _glowSubdivisions, GlowMaxIdx);
             }
             else
             {
@@ -184,7 +186,7 @@ namespace BalloonParty.Editor.EffectPreview
 
                     var stage = _currentJump - 1;
                     _glowFromIdx = _glowToIdx;
-                    _glowToIdx = stage >= 0 ? Mathf.Min(stage * GlowSubdivisions, GlowMaxIdx) : 0f;
+                    _glowToIdx = stage >= 0 ? Mathf.Min(stage * _glowSubdivisions, GlowMaxIdx) : 0f;
                 }
                 else
                 {

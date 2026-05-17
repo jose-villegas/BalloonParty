@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using BalloonParty.Configuration;
 using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Pool;
 using Cysharp.Threading.Tasks;
@@ -16,12 +17,12 @@ namespace BalloonParty.Item.Lightning
     /// </summary>
     public class ChainLightningView : EffectView
     {
-        private const int GlowSubdivisions = 4;
-
         [SerializeField] private LineRenderer[] _lineRenderers;
         [SerializeField] private SpriteRenderer _glowRenderer;
 
         private CancellationTokenSource _cts;
+        private float _fractalDecay;
+        private int _glowSubdivisions;
         private float _jumpTime;
         private Action<int> _onTargetHit;
         private float _randomness;
@@ -72,15 +73,15 @@ namespace BalloonParty.Item.Lightning
         /// </summary>
         public void PrepareDisplay(
             List<Vector3> targetPositions,
-            float segmentsMultiplier,
-            float randomness,
-            float jumpTime,
+            ItemSettings settings,
             Action<int> onTargetHit)
         {
             _targetPositions = targetPositions;
-            _segmentsMultiplier = segmentsMultiplier;
-            _randomness = randomness;
-            _jumpTime = jumpTime;
+            _segmentsMultiplier = settings.LightningSegmentsMultiplier;
+            _randomness = settings.LightningRandomness;
+            _jumpTime = settings.LightningJumpTime;
+            _glowSubdivisions = settings.LightningGlowSubdivisions;
+            _fractalDecay = settings.LightningFractalDecay;
             _onTargetHit = onTargetHit;
         }
 
@@ -104,30 +105,17 @@ namespace BalloonParty.Item.Lightning
             }
         }
 
-        // No allocation — buffer is pre-allocated per renderer and reused across all jumps.
+
         internal static void FillSegment(
-            Vector3 p0,
-            Vector3 p1,
-            Vector3 p2,
-            Vector3 p3,
+            Vector3 start,
+            Vector3 end,
             int segments,
-            float randomness,
+            float displacement,
+            float fractalDecay,
             Vector3[] buffer,
             int offset)
         {
-            buffer[offset] = p1;
-
-            for (var k = 1; k < segments - 1; k++)
-            {
-                var t = k / (float)segments;
-                var point = PathHelper.CatmullRom(p0, p1, p2, p3, t);
-                buffer[offset + k] = new Vector3(
-                    point.x + UnityEngine.Random.Range(-randomness, randomness),
-                    point.y + UnityEngine.Random.Range(-randomness, randomness),
-                    0f);
-            }
-
-            buffer[offset + segments - 1] = p2;
+            PathHelper.MidpointDisplacement(start, end, displacement, fractalDecay, buffer, offset, segments);
         }
 
         /// <summary>
@@ -138,7 +126,8 @@ namespace BalloonParty.Item.Lightning
             List<Vector3> positions,
             int rendererCount,
             float segmentsMultiplier,
-            float randomness)
+            float randomness,
+            float fractalDecay)
         {
             var jumpCount = positions.Count - 1;
 
@@ -158,15 +147,12 @@ namespace BalloonParty.Item.Lightning
                 lineBuffers[j] = new Vector3[totalPoints];
                 for (var i = 0; i < jumpCount; i++)
                 {
-                    var p0 = positions[Mathf.Max(i - 1, 0)];
-                    var p1 = positions[i];
-                    var p2 = positions[i + 1];
-                    var p3 = positions[Mathf.Min(i + 2, positions.Count - 1)];
-
                     FillSegment(
-                        p0, p1, p2, p3,
+                        positions[i],
+                        positions[i + 1],
                         segmentSizes[i],
                         randomness,
+                        fractalDecay,
                         lineBuffers[j],
                         cumOffsets[i]);
                 }
@@ -182,7 +168,7 @@ namespace BalloonParty.Item.Lightning
         /// </summary>
         internal static (Vector3[] positions, float[] diameters) BuildGlowPath(
             List<Vector3> targetPositions,
-            int subdivisions = GlowSubdivisions)
+            int subdivisions)
         {
             var (centroids, rawDiameters) = ComputeStageCentroids(targetPositions);
 
@@ -243,13 +229,13 @@ namespace BalloonParty.Item.Lightning
             var rendererCount = _lineRenderers != null ? _lineRenderers.Length : 0;
 
             var (lineBuffers, cumOffsets) = BuildBoltBuffers(
-                _targetPositions, rendererCount, _segmentsMultiplier, _randomness);
+                _targetPositions, rendererCount, _segmentsMultiplier, _randomness, _fractalDecay);
 
-            var (glowPath, glowDia) = BuildGlowPath(_targetPositions);
+            var (glowPath, glowDia) = BuildGlowPath(_targetPositions, _glowSubdivisions);
             var hasGlow = _glowRenderer != null && glowPath.Length > 0;
             var maxPathIdx = (float)(glowPath.Length - 1);
 
-            float GlowIdx(int stage) => Mathf.Min(stage * GlowSubdivisions, maxPathIdx);
+            float GlowIdx(int stage) => Mathf.Min(stage * _glowSubdivisions, maxPathIdx);
 
             // Forward: reveal jumps 0 → jumpCount-1
             for (var i = 0; i < jumpCount; i++)

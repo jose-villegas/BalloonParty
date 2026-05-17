@@ -23,6 +23,8 @@ namespace BalloonParty.Configuration.Editor
             "_lightningSegmentsMultiplier",
             "_lightningRandomness",
             "_lightningJumpTime",
+            "_lightningGlowSubdivisions",
+            "_lightningFractalDecay",
             "_paintBlobFlightDuration",
             "_paintBlobArcCurve",
             "_paintBlobScaleCurve",
@@ -90,6 +92,16 @@ namespace BalloonParty.Configuration.Editor
                         "_lightningRandomness",
                         "Randomness");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_lightningJumpTime", "Jump Time");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_lightningGlowSubdivisions",
+                        "Glow Subdivisions");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_lightningFractalDecay",
+                        "Fractal Decay");
                     break;
 
                 case ItemType.Paint:
@@ -148,7 +160,7 @@ namespace BalloonParty.Configuration.Editor
                     return row * 4;
 
                 case ItemType.Lightning:
-                    return row * 5;
+                    return row * 7;
 
                 case ItemType.Paint:
                     return row * 7;
