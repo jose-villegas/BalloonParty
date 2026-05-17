@@ -125,8 +125,8 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void OnTrailArrived_AccumulatesScore()
         {
-            FireTrailArrived(Red);
-            FireTrailArrived(Red);
+            FireTrailArrived(Red, 1);
+            FireTrailArrived(Red, 2);
 
             Assert.AreEqual(2, _controller.TotalScore.Value);
         }
@@ -136,10 +136,10 @@ namespace BalloonParty.Tests.Game
         {
             _config.PointsRequiredForLevel(2).Returns(2);
 
-            FireTrailArrived(Red);
-            FireTrailArrived(Red);
-            FireTrailArrived(Blue);
-            FireTrailArrived(Blue);
+            FireTrailArrived(Red, 1);
+            FireTrailArrived(Red, 2);
+            FireTrailArrived(Blue, 1);
+            FireTrailArrived(Blue, 2);
 
             _levelUpPublisher.Received(1).Publish(
                 Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
@@ -151,9 +151,9 @@ namespace BalloonParty.Tests.Game
         {
             _config.PointsRequiredForLevel(2).Returns(5);
 
-            for (var i = 0; i < 5; i++)
+            for (var i = 1; i <= 5; i++)
             {
-                FireTrailArrived(Red);
+                FireTrailArrived(Red, i);
             }
             // Blue has not scored — progress is 0
 
@@ -166,10 +166,10 @@ namespace BalloonParty.Tests.Game
         {
             _config.PointsRequiredForLevel(2).Returns(2);
 
-            FireTrailArrived(Red);
-            FireTrailArrived(Red);
-            FireTrailArrived(Blue);
-            FireTrailArrived(Blue);
+            FireTrailArrived(Red, 1);
+            FireTrailArrived(Red, 2);
+            FireTrailArrived(Blue, 1);
+            FireTrailArrived(Blue, 2);
 
             Assert.AreEqual(0, _controller.GetProgress(Red));
             Assert.AreEqual(0, _controller.GetProgress(Blue));
@@ -194,9 +194,9 @@ namespace BalloonParty.Tests.Game
             FireHit(model, 1);
         }
 
-        private void FireTrailArrived(string color)
+        private void FireTrailArrived(string color, int score)
         {
-            _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, 0, Vector3.zero));
+            _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, score, _controller.Level.Value, Vector3.zero));
         }
 
         private static IBalloonModel CreateModel(string color, int hitsRemaining, int scoreValue = 1)

@@ -37,7 +37,7 @@ namespace BalloonParty.Game.Cinematics
         private Vector3 _lastTrailPosition;
         private bool _sessionActive;
         private Tween _timeScaleTween;
-        private int _tippingScore;
+        private TrailId _tippingTrailId;
         private Transform _trackedTrail;
         private Tween _zoomTween;
 
@@ -88,11 +88,14 @@ namespace BalloonParty.Game.Cinematics
             }
 
             _sessionActive = true;
-            _tippingScore = _scoreController.GetRequiredPoints();
+            _tippingTrailId = new TrailId(
+                msg.ColorName,
+                _scoreController.GetRequiredPoints(),
+                msg.Level);
             _trackedTrail = null;
             _lastTrailPosition = msg.WorldPosition;
 
-            _scoreTrailService.TrackTrail(_tippingScore, OnTippingTrailSpawned);
+            _scoreTrailService.TrackTrail(_tippingTrailId, OnTippingTrailSpawned);
         }
 
         private void OnLevelUpDismissed(LevelUpDismissedMessage msg)
@@ -140,9 +143,11 @@ namespace BalloonParty.Game.Cinematics
 
             _director.BeginCinematic(CinematicState.LevelUpTrail);
 
+            _scoreTrailService.PauseTrailsAbove(_tippingTrailId);
+
             PreparePanIn();
 
-            _scoreTrailService.ResumeTrail(_tippingScore);
+            _scoreTrailService.ResumeTrail(_tippingTrailId);
 
             _director.PlayScene(new CinematicScene(
                 onTick: PanInTick));
@@ -155,13 +160,15 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            if (msg.Score != _tippingScore)
+            if (msg.ColorName != _tippingTrailId.Color
+                || msg.Score != _tippingTrailId.Score
+                || msg.Level != _tippingTrailId.Level)
             {
                 return;
             }
 
             _trackedTrail = null;
-            _scoreTrailService.ClearTrackedTrail(_tippingScore);
+            _scoreTrailService.ClearTrackedTrail(_tippingTrailId);
             KillTweens();
             _director.CompleteScene();
         }
@@ -187,6 +194,15 @@ namespace BalloonParty.Game.Cinematics
                 _cameraFollowSpeed * Time.unscaledDeltaTime);
         }
 
+        private void CaptureBaseState()
+        {
+            if (_camera != null)
+            {
+                _baseOrthoSize = _camera.orthographicSize;
+                _basePosition = _camera.transform.position;
+            }
+        }
+
         private void PreparePanIn()
         {
             KillTweens();
@@ -196,11 +212,7 @@ namespace BalloonParty.Game.Cinematics
                 _orthoController.enabled = false;
             }
 
-            if (_camera != null)
-            {
-                _baseOrthoSize = _camera.orthographicSize;
-                _basePosition = _camera.transform.position;
-            }
+            CaptureBaseState();
 
             _timeScaleTween = DOTween.To(
                     () => Time.timeScale,
@@ -235,16 +247,21 @@ namespace BalloonParty.Game.Cinematics
 
             if (_camera != null)
             {
-                var sequence = DOTween.Sequence().SetUpdate(true);
-                sequence.Join(
-                    _camera.transform.DOMove(_basePosition, _restoreDuration)
-                        .SetEase(Ease.InOutQuad));
-                sequence.Join(
-                    DOTween.To(
+                var moveTween = _camera.transform.DOMove(_basePosition, _restoreDuration)
+                    .SetEase(Ease.InOutQuad)
+                    .SetUpdate(true);
+
+                var sizeTween = DOTween.To(
                         () => _camera.orthographicSize,
                         x => _camera.orthographicSize = x,
                         _baseOrthoSize,
-                        _restoreDuration).SetEase(Ease.InOutQuad));
+                        _restoreDuration)
+                    .SetEase(Ease.InOutQuad)
+                    .SetUpdate(true);
+
+                var sequence = DOTween.Sequence().SetUpdate(true);
+                sequence.Join(moveTween);
+                sequence.Join(sizeTween);
 
                 _zoomTween = sequence;
             }
@@ -257,7 +274,7 @@ namespace BalloonParty.Game.Cinematics
                 _orthoController.enabled = true;
             }
 
-            if (_camera != null)
+            if (_camera != null && _baseOrthoSize > 0f)
             {
                 _camera.orthographicSize = _baseOrthoSize;
                 _camera.transform.position = _basePosition;

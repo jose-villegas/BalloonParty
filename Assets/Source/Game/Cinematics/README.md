@@ -23,37 +23,42 @@ The director does not know about level-ups, trails, or cameras. It only knows ho
 | Step | What happens |
 |---|---|
 | **Trigger** | `BalloonScoredMessage` received, `ScoreController.WillLevelUp` returns true |
-| **Setup** | Registers the tipping trail identity with `ScoreTrailService.TrackTrail`. No visual changes yet — slow-motion and camera effects start only when the tracked trail is actually spawned |
-| **Spawn callback** | `ScoreTrailService` spawns trails sequentially. When the tipping trail (score = required points) spawns, it is paused immediately and `LevelUpTrailEffect.OnTippingTrailSpawned` fires. This begins the cinematic: pauses all other trails, starts slow-motion + camera zoom, resumes only the tipping trail (with unscaled time so it ignores timeScale). Remaining trail spawns are gated behind `Cinematic.IsPlaying` |
+| **Setup** | Builds a `TrailId(color, requiredPoints, level)` and registers it with `ScoreTrailService.TrackTrail`. No visual changes yet — slow-motion and camera effects start only when the tracked trail is actually spawned |
+| **Spawn callback** | `ScoreTrailService` yields one frame then spawns trails sequentially. When the tipping trail spawns, it is paused immediately and `OnTippingTrailSpawned` fires. This begins the cinematic, calls `PauseTrailsAbove` to selectively pause only post-tipping trails (same color, score > tipping), starts slow-motion + camera zoom, and resumes only the tipping trail (with unscaled time). Pre-tipping trails (any color) keep flying to their bars. Remaining trail spawns are gated behind `Cinematic.IsPlaying` |
 | **Tick** | Camera pans toward the tipping trail's world position each frame |
-| **End trigger** | `ScoreTrailArrivedMessage` matches tipping score |
-| **End callback** | No-op — the level-up popup appears independently from `ScoreController`'s `ScoreLevelUpMessage` |
+| **End trigger** | `ScoreTrailArrivedMessage` matches tipping `TrailId`. `ScoreController` processes the arrival first — sets `_levelProgress` to the trail's score (which equals `requiredPoints`), triggering `CheckLevelUp` → `ScoreLevelUpMessage`. Then the effect completes the scene |
+| **End callback** | No-op — the level-up popup appears independently from `ScoreLevelUpMessage` and pauses the game (`Time.timeScale = 0`) |
 
 ### Scene 2 — Restore
 
 | Step | What happens |
 |---|---|
 | **Trigger** | `LevelUpDismissedMessage` received (player pressed Continue) |
-| **Prepare** | Tweens `Time.timeScale` back to 1 and camera back to base position/size |
+| **Prepare** | Tweens `Time.timeScale` from 0 back to 1 and camera back to base position/size (all using unscaled time) |
 | **End trigger** | Restore tween completes (via `OnComplete` callback) |
-| **End callback** | Re-enables `OrthogonalSizeCameraController`, calls `director.EndCinematic` (resumes all paused trails, unblocks trail spawning), transitions navigation to `Game` |
+| **End callback** | Re-enables `OrthogonalSizeCameraController`, calls `director.EndCinematic` (resumes post-tipping trails via `OnCinematicEnd`, unblocks trail spawning), transitions navigation to `Game` |
 
 ### Trail Identity
 
-Each score trail is identified by its `int score` value — the level progress value it represents within the current level. `ScoreController` maintains a single projected progress counter that advances immediately on balloon pop, so each trail from the same balloon gets a unique score even for multi-point pops. The tipping trail is simply the one with `score == requiredPoints`. `ScoreTrailService.GetTrailColor(score)` provides the reverse lookup when color is needed.
+Each score trail is identified by a `TrailId(Color, Score, Level)`. Color is required because `_projectedProgress` is per-color, so two colors can produce the same numeric score. Level prevents post-reset collisions when progress restarts from 1. The tipping trail's identity is `TrailId(tippingColor, requiredPoints, currentLevel)`.
+
+### Selective Pause
+
+Only next-level trails are paused during the cinematic — trails of the **same color** with `Level > tippingLevel`. Post-tipping trails are automatically tagged as `Level + 1` and their scores renumbered relative to the new level at spawn time (see `Score/README.md`). Pre-tipping trails from any color keep flying so their progress bar arrivals complete naturally. `LevelUpTrailEffect` calls `PauseTrailsAbove(tippingTrailId)` explicitly after `BeginCinematic`; the generic `OnCinematicBegin` callback is a no-op. `OnCinematicEnd` resumes only the cinematically-paused trails.
 
 ### Tipping Trail Lifecycle
 
-1. `LevelUpTrailEffect` calls `TrackTrail(score, callback)` on `ScoreTrailService`
-2. `ScoreTrailService` spawns trails sequentially — when the matching trail spawns, it pauses it and fires the callback
-3. The callback starts the cinematic, which pauses all other trails and resumes only the tracked trail with unscaled time
-4. `SpawnTrailsAsync` gates remaining spawns behind `Cinematic.IsPlaying`, so no new trails appear during the cinematic
-5. On trail arrival, `ClearTrackedTrail` resets the tracking state
+1. `LevelUpTrailEffect` builds `TrailId(color, requiredPoints, level)` and calls `TrackTrail(id, callback)` on `ScoreTrailService`
+2. `SpawnTrailsAsync` yields one frame first, so `TrackTrail` is always registered before any spawn occurs
+3. When the matching trail spawns, it is paused and the callback fires; if the trail was already in-flight (edge case), the callback fires immediately
+4. The callback starts the cinematic, selectively pauses post-tipping trails, and resumes the tracked trail with unscaled time
+5. Pre-tipping trails keep flying; post-tipping spawns are gated by `Cinematic.IsPlaying`
+6. On trail arrival, `ClearTrackedTrail` resets the tracking state
 
 ## Interactions
 
-- **`ScoreController`** — queried for `WillLevelUp` and `GetRequiredPoints`; uses `_projectedProgress` for level-up threshold so the tipping trail's single arrival triggers level-up even when earlier trails from the same pop are still paused
-- **`ScoreTrailService`** — owns `TrackTrail`/`ClearTrackedTrail` API for the producer; spawns trails with `useUnscaledTime` for the tracked trail; implements `ICinematicAware` to pause/resume all trails on `Cinematic.Begin`/`End`; gates `SpawnTrailsAsync` on `Cinematic.IsPlaying`
-- **`Cinematic`** (static, `Shared/GameState/`) — the director calls `Begin`/`End` to broadcast pause/resume to all `ICinematicAware` services
-- **`LevelUpPopUp`** — subscribes to `ScoreLevelUpMessage` independently; publishes `LevelUpDismissedMessage` on Continue
+- **`ScoreController`** — queried for `WillLevelUp` and `GetRequiredPoints`; on tipping trail arrival, sets `_levelProgress` to the trail's score (= `requiredPoints`), which triggers `CheckLevelUp` → level-up
+- **`ScoreTrailService`** — owns `TrackTrail`/`ClearTrackedTrail`/`PauseTrailsAbove` API for the producer; spawns trails with `useUnscaledTime` for the tracked trail; resumes cinematically-paused trails on `OnCinematicEnd`; gates `SpawnTrailsAsync` on `Cinematic.IsPlaying`
+- **`Cinematic`** (static, `Shared/GameState/`) — the director calls `Begin`/`End` to broadcast state changes to all `ICinematicAware` services
+- **`LevelUpPopUp`** — subscribes to `ScoreLevelUpMessage` independently; pauses the game (`Time.timeScale = 0`) on appear; publishes `LevelUpDismissedMessage` on Continue
 - **`OrthogonalSizeCameraController`** — disabled during cinematic to prevent conflicting camera size changes

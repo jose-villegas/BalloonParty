@@ -11,7 +11,7 @@ The full-screen level-up ceremony that plays when all color bars complete.
 
 ## How it works
 
-`ScoreController` pauses the game (`Time.timeScale = 0`) immediately on level-up and publishes `ScoreLevelUpMessage`. `LevelUpPopUp` subscribes to this message. When it arrives, it yields one frame (to let the pause take effect), then triggers the `"Appear"` animator trigger, waits for the configured delay via `UniTask.Delay(ignoreTimeScale: true)`, plays the glow particle system, animates the glow fill ring frame-by-frame using `UniTask.Yield` and `Time.unscaledDeltaTime`, and finally updates the level label to the new level. The Continue button calls `OnContinue()`, which triggers `"Hide"` and publishes `LevelUpDismissedMessage`. Navigation back to `Game` is owned by `LevelUpTrailEffect` — it waits for the camera/timeScale restore tweens to complete before transitioning. All async work uses `destroyCancellationToken` for automatic cleanup on destroy.
+`ScoreController` publishes `ScoreLevelUpMessage` and transitions navigation to `LevelUp` on level-up. `LevelUpPopUp` subscribes to this message. When it arrives, it immediately pauses the game (`Time.timeScale = 0`), triggers the `"Appear"` animator trigger, and kicks off the glow fill animation. The glow fill waits for the configured delay via `UniTask.Delay(ignoreTimeScale: true)`, plays the glow particle system, animates the glow fill ring frame-by-frame using `UniTask.Yield` and `Time.unscaledDeltaTime`, and finally updates the level label to the new level. The Continue button calls `OnContinue()`, which triggers `"Hide"` and publishes `LevelUpDismissedMessage`. Navigation back to `Game` is owned by `LevelUpTrailEffect` — it waits for the camera/timeScale restore tweens to complete before transitioning. All async work uses `destroyCancellationToken` for automatic cleanup on destroy.
 
 The Animator's `updateMode` is set to `UnscaledTime` in code (`Start()`), so animations play even while the game is paused.
 
@@ -22,6 +22,6 @@ The Animator's `updateMode` is set to `UnscaledTime` in code (`Start()`), so ani
 
 ## Interactions
 
-- **ScoreController** — publishes `ScoreLevelUpMessage` and pauses the game (`Time.timeScale = 0`)
+- **ScoreController** — publishes `ScoreLevelUpMessage` and transitions navigation to `LevelUp`
 - **LevelUpTrailEffect** — subscribes to `LevelUpDismissedMessage`; restores timeScale, camera, and canvas; transitions navigation to `Game` once restore completes
 - **LevelUpLifetimeScope** — registers this component and provides injection

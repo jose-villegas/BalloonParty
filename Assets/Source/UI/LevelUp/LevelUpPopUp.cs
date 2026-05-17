@@ -35,7 +35,7 @@ namespace BalloonParty.UI.LevelUp
             _animator.updateMode = AnimatorUpdateMode.UnscaledTime;
 
             _levelUpSubscriber
-                .Subscribe(msg => WaitForStabilityAsync(msg.NewLevel).Forget())
+                .Subscribe(OnLevelUp)
                 .AddTo(_disposable);
         }
 
@@ -52,17 +52,16 @@ namespace BalloonParty.UI.LevelUp
             ResumeAfterDelayAsync().Forget();
         }
 
-        private async UniTaskVoid WaitForStabilityAsync(int newLevel)
+        private void OnLevelUp(ScoreLevelUpMessage msg)
         {
-            // Wait one frame so the pause from ScoreController takes effect
-            await UniTask.Yield(PlayerLoopTiming.Update, destroyCancellationToken);
+            Time.timeScale = 0f;
 
-            _levelLabel.text = (newLevel - 1).ToString("N0");
+            _levelLabel.text = (msg.NewLevel - 1).ToString("N0");
             // Stale HideTrigger from the previous dismiss would instantly close the popup
             _animator.ResetTrigger(HideTrigger);
             _animator.SetTrigger(AppearTrigger);
 
-            await LevelGlowFillAsync(newLevel);
+            LevelGlowFillAsync(msg.NewLevel).Forget();
         }
 
         private async UniTask LevelGlowFillAsync(int newLevel)

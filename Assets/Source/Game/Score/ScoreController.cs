@@ -117,9 +117,9 @@ namespace BalloonParty.Game.Score
             return true;
         }
 
-        private bool AllColorsProjected(int required)
+        private bool AllColorsConfirmed(int required)
         {
-            foreach (var kvp in _projectedProgress)
+            foreach (var kvp in _levelProgress)
             {
                 if (kvp.Value < required)
                 {
@@ -133,7 +133,7 @@ namespace BalloonParty.Game.Score
         private void CheckLevelUp()
         {
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
-            if (!AllColorsProjected(required))
+            if (!AllColorsConfirmed(required))
             {
                 return;
             }
@@ -166,7 +166,7 @@ namespace BalloonParty.Game.Score
             var points = msg.Balloon.ScoreValue;
             var currentProgress = _projectedProgress.GetValueOrDefault(color);
             _projectedProgress[color] = currentProgress + points;
-            _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, points, currentProgress));
+            _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, points, currentProgress, _level.Value));
         }
 
         private void OnFocusChanged(bool hasFocus)
@@ -187,11 +187,7 @@ namespace BalloonParty.Game.Score
             _persistentScore[msg.ColorName]++;
             _totalScore.Value = _persistentScore.Values.Sum();
 
-            var newProgress = ++_levelProgress[msg.ColorName];
-            if (_projectedProgress.GetValueOrDefault(msg.ColorName) < newProgress)
-            {
-                _projectedProgress[msg.ColorName] = newProgress;
-            }
+            _levelProgress[msg.ColorName] = msg.Score;
 
             CheckLevelUp();
         }

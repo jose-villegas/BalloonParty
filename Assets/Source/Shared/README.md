@@ -26,9 +26,9 @@ Messages are the signals that decouple systems from one another. A publisher fir
 | `SpawnBalloonLineMessage` | `SceneTransition` (game start), cheats | `BalloonSpawner` |
 | `BalloonHitMessage` | `ProjectileView`, item handlers, cheats | `BalloonController`, `ScoreController`, `NudgeService`, `ItemActivator` — carries `Damage` (int, default 1); item handlers pass `ItemSettings.Damage`, projectile hits always use 1 |
 | `BalloonDeflectedMessage` | `BalloonController` (on deflect) | `ProjectileView` (color-tracking on deflect hit) |
-| `BalloonScoredMessage` | `ScoreController` | `ColorProgressBar`, `ScoreTrailService`, `LevelUpTrailEffect` — carries `ColorName`, `WorldPosition`, `Points`, and `CurrentProgress` (projected level progress before this pop, used by `ScoreTrailService` to assign unique score values to each trail) |
+| `BalloonScoredMessage` | `ScoreController` | `ColorProgressBar`, `ScoreTrailService`, `LevelUpTrailEffect` — carries `ColorName`, `WorldPosition`, `Points`, `CurrentProgress` (projected level progress before this pop), and `Level` (current level at pop time, used by `ScoreTrailService` to build `TrailId`) |
 | `ScoreLevelUpMessage` | `ScoreController` | `ColorProgressBar`, `LevelUpPopUp` |
-| `ScoreTrailArrivedMessage` | `ScoreTrailService` | `ScoreController`, `ColorProgressBar`, `LevelUpTrailEffect` — carries `ColorName`, `Score` (the unique trail identity / level progress value this trail represents), and `WorldPosition` |
+| `ScoreTrailArrivedMessage` | `ScoreTrailService` | `ScoreController`, `ColorProgressBar`, `LevelUpTrailEffect` — carries `ColorName`, `Score` (the level progress value this trail represents), `Level` (the level the trail was spawned during), and `WorldPosition` |
 | `LevelUpDismissedMessage` | `LevelUpPopUp` | `LevelUpTrailEffect` |
 | `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController`, `BalloonSpawner` |
 | `ProjectileLoadedMessage` | `ThrowerController` | `ShieldCounterLabel`, `ShieldCounterAnimation` |

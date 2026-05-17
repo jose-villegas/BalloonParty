@@ -17,18 +17,17 @@ namespace BalloonParty.Game.Score
 {
     internal class ScoreTrailService : IStartable, IDisposable, ICinematicAware
     {
-        private readonly HashSet<Transform> _activeTrails = new();
         private readonly IPublisher<ScoreTrailArrivedMessage> _arrivedPublisher;
+        private readonly HashSet<TrailId> _cinematicPausedTrails = new();
         private readonly Dictionary<string, Color> _colorLookup = new();
         private readonly IGameConfiguration _config;
         private readonly CancellationTokenSource _cts = new();
-        private readonly Dictionary<int, Transform> _inFlightTrails = new();
+        private readonly Dictionary<TrailId, Transform> _inFlightTrails = new();
         private readonly Dictionary<string, string> _poolKeys = new();
         private readonly PoolManager _poolManager;
-        private readonly Dictionary<int, string> _scoreColorMap = new();
         private readonly ISubscriber<BalloonScoredMessage> _scoredSubscriber;
         private readonly Dictionary<string, Func<Vector3>> _targetProviders = new();
-        private readonly Dictionary<int, Action<Transform>> _trackedTrails = new();
+        private readonly Dictionary<TrailId, Action<Transform>> _trackedTrails = new();
         private readonly ScorePointTrail _trailPrefab;
 
         private IDisposable _subscription;
@@ -64,7 +63,6 @@ namespace BalloonParty.Game.Score
 
         public void OnCinematicBegin(CinematicState state)
         {
-            PauseActiveTrails();
         }
 
         public void OnCinematicEnd()
@@ -83,24 +81,46 @@ namespace BalloonParty.Game.Score
             }
         }
 
-        internal void ClearTrackedTrail(int score)
+        internal void ClearTrackedTrail(TrailId id)
         {
-            _trackedTrails.Remove(score);
+            _trackedTrails.Remove(id);
         }
 
-        internal string GetTrailColor(int score)
+        internal Transform GetTrailTransform(TrailId id)
         {
-            return _scoreColorMap.GetValueOrDefault(score);
+            return _inFlightTrails.TryGetValue(id, out var t) ? t : null;
         }
 
-        internal Transform GetTrailTransform(int score)
+        /// <summary>
+        ///     Pauses all in-flight trails of the same color whose score exceeds
+        ///     the given threshold. These are post-tipping trails that belong to
+        ///     the next level conceptually. Resumed automatically on cinematic end.
+        /// </summary>
+        internal void PauseTrailsAbove(TrailId threshold)
         {
-            return _inFlightTrails.TryGetValue(score, out var t) ? t : null;
+            foreach (var kvp in _inFlightTrails)
+            {
+                if (kvp.Key.Color != threshold.Color)
+                {
+                    continue;
+                }
+
+                if (kvp.Key.Level <= threshold.Level)
+                {
+                    continue;
+                }
+
+                if (kvp.Value != null)
+                {
+                    kvp.Value.DOPause();
+                    _cinematicPausedTrails.Add(kvp.Key);
+                }
+            }
         }
 
-        internal void ResumeTrail(int score)
+        internal void ResumeTrail(TrailId id)
         {
-            var t = GetTrailTransform(score);
+            var t = GetTrailTransform(id);
             if (t != null)
             {
                 t.DOPlay();
@@ -109,12 +129,21 @@ namespace BalloonParty.Game.Score
 
         /// <summary>
         ///     Registers a trail identity to watch for. When a trail with this
-        ///     score is spawned, it is paused immediately and
-        ///     <paramref name="onSpawned"/> is invoked with its transform.
+        ///     id is spawned, it is paused immediately and
+        ///     <paramref name="onSpawned" /> is invoked with its transform.
+        ///     If the trail is already in-flight, it is paused and the callback
+        ///     fires immediately.
         /// </summary>
-        internal void TrackTrail(int score, Action<Transform> onSpawned)
+        internal void TrackTrail(TrailId id, Action<Transform> onSpawned)
         {
-            _trackedTrails[score] = onSpawned;
+            if (_inFlightTrails.TryGetValue(id, out var existingTrail))
+            {
+                existingTrail.DOPause();
+                onSpawned?.Invoke(existingTrail);
+                return;
+            }
+
+            _trackedTrails[id] = onSpawned;
         }
 
         private Vector3[] ComputeOrigins(Vector3 center, int count)
@@ -158,39 +187,39 @@ namespace BalloonParty.Game.Score
             }
 
             var origins = ComputeOrigins(msg.WorldPosition, msg.Points);
-            var scores = new int[origins.Length];
+            var required = _config.PointsRequiredForLevel(msg.Level + 1);
+            var ids = new TrailId[origins.Length];
             for (var i = 0; i < origins.Length; i++)
             {
-                scores[i] = msg.CurrentProgress + i + 1;
+                var rawScore = msg.CurrentProgress + i + 1;
+                ids[i] = rawScore > required
+                    ? new TrailId(msg.ColorName, rawScore - required, msg.Level + 1)
+                    : new TrailId(msg.ColorName, rawScore, msg.Level);
             }
 
-            SpawnTrailsAsync(msg.ColorName, origins, scores).Forget();
-        }
-
-        private void PauseActiveTrails()
-        {
-            foreach (var trail in _activeTrails)
-            {
-                if (trail != null)
-                {
-                    trail.DOPause();
-                }
-            }
+            SpawnTrailsAsync(msg.ColorName, origins, ids).Forget();
         }
 
         private void ResumeActiveTrails()
         {
-            foreach (var trail in _activeTrails)
+            foreach (var id in _cinematicPausedTrails)
             {
-                if (trail != null)
+                if (_inFlightTrails.TryGetValue(id, out var trail) && trail != null)
                 {
                     trail.DOPlay();
                 }
             }
+
+            _cinematicPausedTrails.Clear();
         }
 
-        private async UniTaskVoid SpawnTrailsAsync(string colorName, Vector3[] origins, int[] scores)
+        private async UniTaskVoid SpawnTrailsAsync(string colorName, Vector3[] origins, TrailId[] ids)
         {
+            // Yield one frame so all BalloonScoredMessage handlers finish before
+            // the first spawn. This lets LevelUpTrailEffect register TrackTrail
+            // before the tipping trail is instantiated.
+            await UniTask.Yield(cancellationToken: _cts.Token);
+
             var delayMs = Mathf.RoundToInt(_config.ScorePointsScatterDelay * 1000f);
             var poolKey = _poolKeys[colorName];
 
@@ -201,7 +230,7 @@ namespace BalloonParty.Game.Score
                     await UniTask.WaitWhile(() => Cinematic.IsPlaying, cancellationToken: _cts.Token);
                 }
 
-                SpawnTrail(colorName, poolKey, origins[i], scores[i]);
+                SpawnTrail(colorName, poolKey, origins[i], ids[i]);
 
                 if (i < origins.Length - 1)
                 {
@@ -210,7 +239,7 @@ namespace BalloonParty.Game.Score
             }
         }
 
-        private void SpawnTrail(string colorName, string poolKey, Vector3 fromWorldPosition, int score)
+        private void SpawnTrail(string colorName, string poolKey, Vector3 fromWorldPosition, TrailId id)
         {
             var target = _targetProviders[colorName]();
             var color = _colorLookup.TryGetValue(colorName, out var c) ? c : Color.white;
@@ -221,21 +250,19 @@ namespace BalloonParty.Game.Score
             trail.transform.position = fromWorldPosition;
             trail.transform.localScale = Vector3.one;
 
-            _inFlightTrails[score] = trail.transform;
-            _scoreColorMap[score] = colorName;
-            _activeTrails.Add(trail.transform);
+            _inFlightTrails[id] = trail.transform;
 
-            var isTracked = _trackedTrails.TryGetValue(score, out var trackedCallback);
+            var isTracked = _trackedTrails.TryGetValue(id, out var trackedCallback);
 
             trail.Setup(target,
                 color,
                 _config.ScorePointTraceDuration,
                 () =>
                 {
-                    _activeTrails.Remove(trail.transform);
-                    _inFlightTrails.Remove(score);
-                    _scoreColorMap.Remove(score);
-                    _arrivedPublisher.Publish(new ScoreTrailArrivedMessage(colorName, score, target));
+                    _inFlightTrails.Remove(id);
+                    _cinematicPausedTrails.Remove(id);
+                    _arrivedPublisher.Publish(
+                        new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
                     _poolManager.Return(poolKey, trail);
                 },
                 isTracked);
