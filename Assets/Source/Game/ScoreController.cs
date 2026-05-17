@@ -91,8 +91,9 @@ namespace BalloonParty.Game
 
         /// <summary>
         ///     Predicts whether adding <paramref name="points" /> to the given color
-        ///     would complete the level, accounting for in-flight trails that have
-        ///     been scored but not yet arrived.
+        ///     would complete the level. Other colors must already have enough
+        ///     actual progress — pending in-flight trails are only projected for the
+        ///     scored color, since the cinematic pauses everything else.
         /// </summary>
         internal bool WillLevelUp(string colorName, int points)
         {
@@ -100,13 +101,17 @@ namespace BalloonParty.Game
 
             foreach (var kvp in _levelProgress)
             {
-                var projected = kvp.Value + _pendingPoints.GetValueOrDefault(kvp.Key);
                 if (kvp.Key == colorName)
                 {
-                    projected += points;
+                    var projected = kvp.Value
+                                    + _pendingPoints.GetValueOrDefault(kvp.Key)
+                                    + points;
+                    if (projected < required)
+                    {
+                        return false;
+                    }
                 }
-
-                if (projected < required)
+                else if (kvp.Value < required)
                 {
                     return false;
                 }
@@ -125,6 +130,12 @@ namespace BalloonParty.Game
 
             PlayerPrefs.SetInt(LevelKey, _level.Value);
             PlayerPrefs.Save();
+        }
+
+        internal int PointsNeededForLevelUp(string colorName)
+        {
+            var required = _config.PointsRequiredForLevel(_level.Value + 1);
+            return Mathf.Max(0, required - _levelProgress.GetValueOrDefault(colorName));
         }
 
         private void OnBalloonHit(BalloonHitMessage msg)
@@ -177,6 +188,7 @@ namespace BalloonParty.Game
             {
                 _levelProgress[key] = 0;
             }
+
 
             _levelUpPublisher.Publish(new ScoreLevelUpMessage(_level.Value));
             Navigation.TransitionTo(NavigationState.LevelUp);

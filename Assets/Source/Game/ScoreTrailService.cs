@@ -108,17 +108,6 @@ namespace BalloonParty.Game
             return _lastSpawnedTrails.GetValueOrDefault(colorName);
         }
 
-        /// <summary>
-        ///     Returns the current world-space target position for a color's
-        ///     progress bar. Used by cinematics to align the UI toward the
-        ///     trail destination.
-        /// </summary>
-        internal Vector3 GetTargetPosition(string colorName)
-        {
-            return _targetProviders.TryGetValue(colorName, out var provider)
-                ? provider()
-                : Vector3.zero;
-        }
 
         /// <summary>
         ///     Resumes the tweens on a specific trail so the cinematic can
@@ -223,7 +212,15 @@ namespace BalloonParty.Game
                 () =>
                 {
                     _activeTrails.Remove(trail.transform);
-                    _lastSpawnedTrails.Remove(colorName);
+
+                    // Only clear the entry if this trail is still the latest
+                    // spawn — a newer trail may have overwritten it.
+                    if (_lastSpawnedTrails.TryGetValue(colorName, out var last)
+                        && last == trail.transform)
+                    {
+                        _lastSpawnedTrails.Remove(colorName);
+                    }
+
                     _arrivedPublisher.Publish(new ScoreTrailArrivedMessage(colorName, target));
                     _poolManager.Return(poolKey, trail);
                 });
