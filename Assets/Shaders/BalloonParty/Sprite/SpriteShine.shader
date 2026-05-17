@@ -10,6 +10,8 @@
          [HideInInspector] _RendererColor("Renderer Color", Color) = (1,1,1,1)
          _ShineLocation("ShineLocation", Range(0,1)) = 0
          _ShineWidth("ShineWidth", Range(0,1)) = 0
+         _ShineSpeed("ShineSpeed", Float) = 0
+         [PerRendererData] _TimeOffset("TimeOffset", Float) = 0
          [MaterialToggle] PixelSnap("Pixel snap", Float) = 0
      }
 
@@ -85,6 +87,8 @@
      float _AlphaSplitEnabled;
      float _ShineLocation;
      float _ShineWidth;
+     float _ShineSpeed;
+     float _TimeOffset;
 
      fixed4 SampleSpriteTexture(float2 uv)
      {
@@ -95,14 +99,17 @@
              color.a = tex2D(_AlphaTex, uv).r;
  #endif //UNITY_TEXTURE_ALPHASPLIT_ALLOWED
 
+         float location = _ShineLocation;
+         if (_ShineSpeed > 0)
+         {
+             location = frac((_Time.y + _TimeOffset) * _ShineSpeed);
+         }
 
-
-
-         float lowLevel = _ShineLocation - _ShineWidth;
-         float highLevel = _ShineLocation + _ShineWidth;
+         float lowLevel = location - _ShineWidth;
+         float highLevel = location + _ShineWidth;
          float currentDistanceProjection = (uv.x + uv.y) / 2;
          if (currentDistanceProjection > lowLevel && currentDistanceProjection < highLevel) {
-             float whitePower = 1- (abs(currentDistanceProjection - _ShineLocation ) / _ShineWidth);
+             float whitePower = 1- (abs(currentDistanceProjection - location) / _ShineWidth);
              color.rgb +=  color.a * whitePower;
          }
 
