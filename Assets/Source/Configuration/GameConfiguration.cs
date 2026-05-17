@@ -43,6 +43,7 @@ namespace BalloonParty.Configuration
 
         public int PointsRequiredForLevel(int level)
         {
+            return 3;
             return (int)((Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI))) + 25f);
         }
     }

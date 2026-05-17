@@ -2,10 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Shared;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
 using BalloonParty.UI.Score;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
@@ -13,7 +15,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Game
 {
-    internal class ScoreTrailService : IStartable, IDisposable
+    internal class ScoreTrailService : IStartable, IDisposable, ICinematicAware
     {
         private readonly IGameConfiguration _config;
         private readonly IPublisher<ScoreTrailArrivedMessage> _arrivedPublisher;
@@ -24,6 +26,8 @@ namespace BalloonParty.Game
         private readonly Dictionary<string, string> _poolKeys = new();
         private readonly Dictionary<string, Func<Vector3>> _targetProviders = new();
         private readonly CancellationTokenSource _cts = new();
+        private readonly Dictionary<string, Transform> _lastSpawnedTrails = new();
+        private readonly HashSet<Transform> _activeTrails = new();
 
         private IDisposable _subscription;
 
@@ -44,6 +48,7 @@ namespace BalloonParty.Game
 
         public void Dispose()
         {
+            Cinematic.Unregister(this);
             _cts.Cancel();
             _cts.Dispose();
             _subscription?.Dispose();
@@ -52,6 +57,39 @@ namespace BalloonParty.Game
         public void Start()
         {
             _subscription = _scoredSubscriber.Subscribe(OnBalloonScored);
+            Cinematic.Register(this);
+        }
+
+        public void OnCinematicBegin(CinematicState state)
+        {
+            PauseActiveTrails();
+        }
+
+        public void OnCinematicEnd()
+        {
+            ResumeActiveTrails();
+        }
+
+        private void PauseActiveTrails()
+        {
+            foreach (var trail in _activeTrails)
+            {
+                if (trail != null)
+                {
+                    trail.DOPause();
+                }
+            }
+        }
+
+        private void ResumeActiveTrails()
+        {
+            foreach (var trail in _activeTrails)
+            {
+                if (trail != null)
+                {
+                    trail.DOPlay();
+                }
+            }
         }
 
         public void RegisterTarget(string colorName, Func<Vector3> targetProvider, Color color)
@@ -62,6 +100,35 @@ namespace BalloonParty.Game
             if (!_poolKeys.ContainsKey(colorName))
             {
                 _poolKeys[colorName] = $"ScoreTrail_{colorName}";
+            }
+        }
+
+        internal Transform GetLastSpawnedTrail(string colorName)
+        {
+            return _lastSpawnedTrails.GetValueOrDefault(colorName);
+        }
+
+        /// <summary>
+        ///     Returns the current world-space target position for a color's
+        ///     progress bar. Used by cinematics to align the UI toward the
+        ///     trail destination.
+        /// </summary>
+        internal Vector3 GetTargetPosition(string colorName)
+        {
+            return _targetProviders.TryGetValue(colorName, out var provider)
+                ? provider()
+                : Vector3.zero;
+        }
+
+        /// <summary>
+        ///     Resumes the tweens on a specific trail so the cinematic can
+        ///     track it while all other trails stay paused.
+        /// </summary>
+        internal void ResumeTrail(Transform trail)
+        {
+            if (trail != null)
+            {
+                trail.DOPlay();
             }
         }
 
@@ -116,6 +183,13 @@ namespace BalloonParty.Game
 
             for (var i = 0; i < origins.Length; i++)
             {
+                if (Cinematic.IsPlaying)
+                {
+                    await UniTask.WaitUntil(
+                        () => !Cinematic.IsPlaying,
+                        cancellationToken: _cts.Token);
+                }
+
                 SpawnTrail(colorName, poolKey, origins[i]);
                 if (i < origins.Length - 1)
                 {
@@ -135,11 +209,21 @@ namespace BalloonParty.Game
             trail.transform.position = fromWorldPosition;
             trail.transform.localScale = Vector3.one;
 
+            _lastSpawnedTrails[colorName] = trail.transform;
+            _activeTrails.Add(trail.transform);
+
+            if (Cinematic.IsPlaying)
+            {
+                trail.transform.DOPause();
+            }
+
             trail.Setup(target,
                 color,
                 _config.ScorePointTraceDuration,
                 () =>
                 {
+                    _activeTrails.Remove(trail.transform);
+                    _lastSpawnedTrails.Remove(colorName);
                     _arrivedPublisher.Publish(new ScoreTrailArrivedMessage(colorName, target));
                     _poolManager.Return(poolKey, trail);
                 });

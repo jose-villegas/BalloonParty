@@ -207,6 +207,48 @@ Navigation.TransitionTo(NavigationState.LevelUp);
 
 `EditorNavigationBootstrap` (editor-only) auto-transitions to `Game` when playing a scene directly, but only if the scene is the active scene (inert during additive preloading).
 
+## Cinematic State
+
+A static `Cinematic` class (in `Shared/GameState/`) tracks whether a cinematic sequence is playing. Mirrors the `Navigation` pattern — static reactive property, no DI required. Services that need to pause/resume work during cinematics implement `ICinematicAware` and register with `Cinematic`.
+
+```csharp
+using BalloonParty.Shared.GameState;
+
+// Query
+if (Cinematic.IsPlaying) return;
+
+// Observe
+Cinematic.Current.Where(s => s == CinematicState.None).Subscribe(...);
+
+// Control (from the cinematic owner)
+Cinematic.Begin(CinematicState.LevelUpTrail);
+Cinematic.End();
+```
+
+### ICinematicAware
+
+Services that should react to cinematic state changes implement `ICinematicAware`:
+
+```csharp
+internal class MyService : ICinematicAware
+{
+    public void Start() => Cinematic.Register(this);
+    public void Dispose() => Cinematic.Unregister(this);
+
+    public void OnCinematicBegin(CinematicState state) { /* pause work */ }
+    public void OnCinematicEnd() { /* resume work */ }
+}
+```
+
+`Cinematic.Begin` / `End` call all registered listeners synchronously, so the cinematic owner can immediately follow up (e.g., resume a specific trail).
+
+### States
+
+| State | Meaning | Set by |
+|---|---|---|
+| `None` | No cinematic active | Default; `LevelUpTrailEffect.OnRestoreComplete` |
+| `LevelUpTrail` | Level-up trail cinematic — slow-mo, zoom, camera pan | `LevelUpTrailEffect.OnBalloonScored` |
+
 ---
 
 ## Object Pooling

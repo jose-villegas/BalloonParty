@@ -4,6 +4,7 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using DG.Tweening;
@@ -50,7 +51,7 @@ namespace BalloonParty.Projectile.View
 
         private void FixedUpdate()
         {
-            if (_model == null || !_model.IsFree)
+            if (_model == null || !_model.IsFree || Cinematic.IsPlaying)
             {
                 return;
             }
@@ -61,7 +62,7 @@ namespace BalloonParty.Projectile.View
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (_model == null || !_model.IsFree)
+            if (_model == null || !_model.IsFree || Cinematic.IsPlaying)
             {
                 return;
             }

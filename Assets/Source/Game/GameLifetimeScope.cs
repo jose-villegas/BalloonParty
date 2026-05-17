@@ -62,6 +62,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<TransformCapturedMessage>(options);
             builder.RegisterMessageBroker<ShieldGainedMessage>(options);
             builder.RegisterMessageBroker<ScoreTrailArrivedMessage>(options);
+            builder.RegisterMessageBroker<LevelUpDismissedMessage>(options);
 
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
             builder.RegisterInstance(_displayConfiguration);
@@ -91,6 +92,8 @@ namespace BalloonParty.Game
             builder.Register<PaintItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 
             builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
+
+            builder.RegisterComponentInHierarchy<LevelUpTrailEffect>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();

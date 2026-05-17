@@ -10,6 +10,7 @@ The entry point that starts and runs the game.
 | `LaunchLifetimeScope` | VContainer root for the Launcher scene — registers `GameDisplayConfiguration` and `OrthogonalSizeCameraController` for the launch camera |
 | `ScoreController` | Tracks per-color level progress and total score; persists via `PlayerPrefs`. On balloon pop, publishes `BalloonScoredMessage` (no score mutation). On trail arrival (`ScoreTrailArrivedMessage`), increments persistent score, total score, and level progress; triggers level-ups by transitioning navigation to `LevelUp` and pausing via `Time.timeScale = 0` |
 | `ScoreTrailService` | `IStartable` — subscribes to `BalloonScoredMessage`; spawns pooled `ScorePointTrail` orbs from balloon world position to per-color bar targets; publishes `ScoreTrailArrivedMessage` on arrival. Bars register `Func<Vector3>` target providers for randomised trail destinations |
+| `LevelUpTrailEffect` | MonoBehaviour — cinematic slow-motion + camera-focus effect for level-up trails. On `BalloonScoredMessage`, checks `ScoreController.WillLevelUp`; if true, eases `Time.timeScale` down and pans/zooms the camera toward the balloon origin. While the trail flies, the camera drifts back toward the base position. On trail arrival, stops drifting but keeps the camera focused and timeScale frozen — the level-up popup appears over this frozen frame. On `LevelUpDismissedMessage` (Continue pressed), smoothly tweens the camera and timeScale back to normal |
 
 ## Architecture
 
@@ -23,6 +24,8 @@ Scene-placed child scopes (`ScoreUILifetimeScope`, `LevelUpLifetimeScope`, `Shie
 
 `ScoreTrailService` is a plain C# `IStartable` + `IDisposable` that follows the same pattern as `NudgeService`. It subscribes to `BalloonScoredMessage` and spawns pooled `ScorePointTrail` orbs — one per point earned — from the balloon's world position to a per-color target. Multi-point scores produce staggered trails fanning out in a circle, delayed by `ScorePointsScatterDelay`. Each `ColorProgressBar` registers a `Func<Vector3>` target provider (returning a random world-space point within the bar's rect) and receives `ScoreTrailArrivedMessage` (carrying the trail's world-space landing position) on arrival for animator feedback and point notice placement.
 
+`LevelUpTrailEffect` is a MonoBehaviour placed in the game scene and registered via `RegisterComponentInHierarchy`. It subscribes to `BalloonScoredMessage` and checks `ScoreController.WillLevelUp` to predict whether the incoming trails will complete a level-up. When they will, it eases `Time.timeScale` down (via DOTween with unscaled time) and pans + zooms the camera toward the balloon's world position. Once the initial pan completes, the camera drifts back toward its base position each frame using `Vector3.Lerp` on unscaled delta time, creating a smooth tracking effect as the trails fly toward the progress bars. When the last pending trail arrives, `EndSlowMotion` stops the drift and kills tweens but preserves the camera position and timeScale — `CheckLevelUp` freezes the game to `timeScale = 0` on the same frame, and the popup appears over the zoomed-in frozen frame. When the player presses Continue, `LevelUpPopUp` publishes `LevelUpDismissedMessage`; `Restore()` receives it and smoothly tweens the camera back to its original position/zoom and eases `timeScale` to 1, all using unscaled-time DOTween.
+
 ## Interactions
 
 - **BalloonSpawner** — spawns initial and subsequent balloon lines
@@ -31,4 +34,5 @@ Scene-placed child scopes (`ScoreUILifetimeScope`, `LevelUpLifetimeScope`, `Shie
 - **ScoreTrailService** — manages score trail orb spawning, flight, and arrival notification
 - **ThrowerController** — the player-facing launcher; reloads after each projectile death
 - **SlotGrid** — the shared grid state all systems read and write
+- **LevelUpTrailEffect** — cinematic slow-motion and camera-focus effect for level-up trails; subscribes to `BalloonScoredMessage`, `ScoreTrailArrivedMessage`, and `LevelUpDismissedMessage`
 - **GameLifetimeScope config** — `GameConfiguration`, `BalloonsConfiguration`, `GamePalette`, `GameDisplayConfiguration`, `ItemConfiguration` all registered here as singletons; `ScorePointTrail` prefab registered as instance

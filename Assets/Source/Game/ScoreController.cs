@@ -26,6 +26,7 @@ namespace BalloonParty.Game
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private readonly GamePalette _palette;
         private readonly Dictionary<string, int> _persistentScore = new();
+        private readonly Dictionary<string, int> _pendingPoints = new();
         private readonly IPublisher<BalloonScoredMessage> _scoredPublisher;
         private readonly ReactiveProperty<int> _totalScore = new(0);
 
@@ -88,6 +89,32 @@ namespace BalloonParty.Game
             return _config.PointsRequiredForLevel(Level.Value + 1);
         }
 
+        /// <summary>
+        ///     Predicts whether adding <paramref name="points" /> to the given color
+        ///     would complete the level, accounting for in-flight trails that have
+        ///     been scored but not yet arrived.
+        /// </summary>
+        internal bool WillLevelUp(string colorName, int points)
+        {
+            var required = _config.PointsRequiredForLevel(_level.Value + 1);
+
+            foreach (var kvp in _levelProgress)
+            {
+                var projected = kvp.Value + _pendingPoints.GetValueOrDefault(kvp.Key);
+                if (kvp.Key == colorName)
+                {
+                    projected += points;
+                }
+
+                if (projected < required)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
         private void Save()
         {
             foreach (var color in _palette.Colors)
@@ -116,6 +143,7 @@ namespace BalloonParty.Game
             var points = msg.Balloon.ScoreValue;
 
             _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, points));
+            _pendingPoints[color] = _pendingPoints.GetValueOrDefault(color) + points;
         }
 
         private void OnTrailArrived(ScoreTrailArrivedMessage msg)
@@ -124,6 +152,9 @@ namespace BalloonParty.Game
             {
                 return;
             }
+
+            _pendingPoints[msg.ColorName] = Math.Max(0,
+                _pendingPoints.GetValueOrDefault(msg.ColorName) - 1);
 
             _persistentScore[msg.ColorName]++;
             _totalScore.Value = _persistentScore.Values.Sum();
@@ -135,7 +166,7 @@ namespace BalloonParty.Game
         private void CheckLevelUp()
         {
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
-            if (_levelProgress.Values.Any(p => p < required))
+            if (!AllColorsComplete(required))
             {
                 return;
             }
@@ -150,6 +181,25 @@ namespace BalloonParty.Game
             _levelUpPublisher.Publish(new ScoreLevelUpMessage(_level.Value));
             Navigation.TransitionTo(NavigationState.LevelUp);
             Time.timeScale = 0f;
+        }
+
+        private bool AllColorsComplete(int required, string extraColor = null, int extraPoints = 0)
+        {
+            foreach (var kvp in _levelProgress)
+            {
+                var projected = kvp.Value;
+                if (kvp.Key == extraColor)
+                {
+                    projected += extraPoints;
+                }
+
+                if (projected < required)
+                {
+                    return false;
+                }
+            }
+
+            return true;
         }
 
         private void OnFocusChanged(bool hasFocus)

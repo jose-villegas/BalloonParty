@@ -1,4 +1,3 @@
-using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -7,7 +6,6 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
-using Navigation = BalloonParty.Shared.GameState.Navigation;
 
 namespace BalloonParty.UI.LevelUp
 {
@@ -28,6 +26,7 @@ namespace BalloonParty.UI.LevelUp
         [SerializeField] private float _continueUnpauseDelay;
 
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
+        [Inject] private IPublisher<LevelUpDismissedMessage> _dismissedPublisher;
 
         private readonly CompositeDisposable _disposable = new();
 
@@ -49,7 +48,8 @@ namespace BalloonParty.UI.LevelUp
         {
             _animator.ResetTrigger(AppearTrigger);
             _animator.SetTrigger(HideTrigger);
-            UnpauseAfterDelayAsync().Forget();
+            _dismissedPublisher.Publish(new LevelUpDismissedMessage());
+            ResumeAfterDelayAsync().Forget();
         }
 
         private async UniTaskVoid WaitForStabilityAsync(int newLevel)
@@ -94,14 +94,12 @@ namespace BalloonParty.UI.LevelUp
             _levelLabel.text = newLevel.ToString("N0");
         }
 
-        private async UniTaskVoid UnpauseAfterDelayAsync()
+        private async UniTaskVoid ResumeAfterDelayAsync()
         {
             await UniTask.Delay(
                 (int)(_continueUnpauseDelay * 1000),
                 true,
                 cancellationToken: destroyCancellationToken);
-            Time.timeScale = 1f;
-            Navigation.TransitionTo(NavigationState.Game);
         }
     }
 }
