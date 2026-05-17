@@ -4,11 +4,12 @@ using BalloonParty.Configuration;
 using BalloonParty.Editor.EditorUI;
 using BalloonParty.Item.Paint;
 using BalloonParty.Shared;
-using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Rendering;
 using NaughtyAttributes.Editor;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace BalloonParty.Editor
 {
@@ -43,12 +44,13 @@ namespace BalloonParty.Editor
             }
         }
 
-        private float ArcHeight => PaintSettings?.PaintBlobArcHeight ?? 0.6f;
-        private float BlobScale => PaintSettings?.PaintBlobStartScale ?? 0.5f;
         private float FlightDuration => PaintSettings?.PaintBlobFlightDuration ?? 0.35f;
 
         private AnimationCurve ArcCurve => PaintSettings?.PaintBlobArcCurve ?? AnimationCurve.Linear(0f, 0f, 1f, 1f);
         private AnimationCurve ScaleCurve => PaintSettings?.PaintBlobScaleCurve ?? AnimationCurve.Constant(0f, 1f, 1f);
+        private AnimationCurve ShadowScaleCurve => PaintSettings?.PaintBlobShadowScaleCurve ?? AnimationCurve.Constant(0f, 1f, 1f);
+        private AnimationCurve SpriteScaleCurve => PaintSettings?.PaintBlobSpriteScaleCurve ?? AnimationCurve.Constant(0f, 1f, 1f);
+        private float SpinSpeed => PaintSettings?.PaintBlobSpinSpeed ?? 720f;
 
         private float FlightRadius
         {
@@ -78,8 +80,6 @@ namespace BalloonParty.Editor
                 _colorPicker.DrawLayout();
                 _blobCount = EditorGUILayout.IntSlider("Blob Count", _blobCount, 1, 6);
                 EditorGUILayout.LabelField("Flight Duration", $"{FlightDuration:F2}  (from ItemConfiguration)");
-                EditorGUILayout.LabelField("Arc Height", $"{ArcHeight:F2}  (from ItemConfiguration)");
-                EditorGUILayout.LabelField("Blob Scale", $"{BlobScale:F2}  (from ItemConfiguration)");
                 EditorGUILayout.LabelField("Flight Radius", $"{FlightRadius:F2}  (from SlotSeparation)");
             }
 
@@ -102,6 +102,14 @@ namespace BalloonParty.Editor
 
         private void CleanUp()
         {
+            if (_flights != null)
+            {
+                foreach (var flight in _flights)
+                {
+                    StopBlobParticles(flight);
+                }
+            }
+
             var blobs = Blobs;
 
             if (blobs != null)
@@ -128,6 +136,7 @@ namespace BalloonParty.Editor
             var blobs = Blobs;
             var arcCurve = ArcCurve;
             var scaleCurve = ScaleCurve;
+            var shadowScaleCurve = ShadowScaleCurve;
             var origin = Target.transform.position;
             var tint = _colorPicker.SelectedColor;
             var count = Mathf.Clamp(_blobCount, 1, 6);
@@ -151,26 +160,23 @@ namespace BalloonParty.Editor
 
                 blob.gameObject.SetActive(true);
                 blob.transform.position = origin;
-                blob.transform.localScale = Vector3.one * BlobScale;
+                blob.transform.localScale = Vector3.one * scaleCurve.Evaluate(0f);
+                blob.transform.rotation = Quaternion.identity;
 
                 blob.SetColor(tint);
-
-                var blobRenderer = blob.GetComponent<Renderer>();
-                if (blobRenderer != null)
-                {
-                    var block = new MaterialPropertyBlock();
-                    blobRenderer.GetPropertyBlock(block);
-                    block.SetFloat(Shader.PropertyToID("_TimeOffset"), Random.Range(0f, 100f));
-                    blobRenderer.SetPropertyBlock(block);
-                }
 
                 _flights.Add(new FlightState
                 {
                     Blob = blob,
                     From = origin,
                     To = destination,
+                    Index = i,
                     ArcCurve = arcCurve,
-                    ScaleCurve = scaleCurve
+                    ScaleCurve = scaleCurve,
+                    ShadowScaleCurve = shadowScaleCurve,
+                    SpriteScaleCurve = SpriteScaleCurve,
+                    BlobParticles = CollectBlobParticles(blob),
+                    TimeOffset = Random.Range(0f, 100f)
                 });
             }
 
@@ -208,6 +214,7 @@ namespace BalloonParty.Editor
                 {
                     flight.Progress = 1f;
                     flight.Landed = true;
+                    StopBlobParticles(flight);
                     flight.Blob.gameObject.SetActive(false);
                     SpawnEditorSplash(flight.To);
                     continue;
@@ -215,18 +222,87 @@ namespace BalloonParty.Editor
 
                 allLanded = false;
 
-                flight.Blob.transform.position = CurveUtility.LerpWithVerticalCurve(
-                    flight.From,
-                    flight.To,
-                    flight.Progress,
-                    ArcHeight,
-                    flight.ArcCurve);
+                var pos = Vector3.Lerp(flight.From, flight.To, flight.Progress);
+                pos.y += flight.ArcCurve.Evaluate(flight.Progress);
+                pos.z -= flight.Index * 0.001f;
+                flight.Blob.transform.position = pos;
 
                 flight.Blob.transform.localScale =
-                    Vector3.one * CurveUtility.SampleMultiplied(flight.Progress, BlobScale, flight.ScaleCurve);
+                    Vector3.one * flight.ScaleCurve.Evaluate(flight.Progress);
+
+                var blobRenderer = flight.Blob.GetComponentInChildren<Renderer>();
+                if (blobRenderer != null)
+                {
+                    var block = new MaterialPropertyBlock();
+                    block.SetFloat(Shader.PropertyToID("_TimeOffset"), flight.TimeOffset);
+
+                    if (flight.ShadowScaleCurve != null)
+                    {
+                        block.SetFloat(Shader.PropertyToID("_ShadowScale"), flight.ShadowScaleCurve.Evaluate(flight.Progress));
+                    }
+
+                    if (flight.SpriteScaleCurve != null)
+                    {
+                        block.SetFloat(Shader.PropertyToID("_SpriteScale"), flight.SpriteScaleCurve.Evaluate(flight.Progress));
+                    }
+
+                    blobRenderer.SetPropertyBlock(block);
+                }
+
+                SimulateBlobParticles(flight, delta);
+
+                flight.Blob.transform.Rotate(0f, 0f, -SpinSpeed * delta);
             }
 
             return !allLanded;
+        }
+
+        private static ParticleSystem[] CollectBlobParticles(ColorableRenderer blob)
+        {
+            var particles = blob.GetComponentsInChildren<ParticleSystem>(true);
+
+            foreach (var ps in particles)
+            {
+                var main = ps.main;
+                main.playOnAwake = false;
+                main.cullingMode = ParticleSystemCullingMode.AlwaysSimulate;
+                ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                ps.Play(true);
+            }
+
+            return particles;
+        }
+
+        private static void SimulateBlobParticles(FlightState flight, float delta)
+        {
+            if (flight.BlobParticles == null)
+            {
+                return;
+            }
+
+            foreach (var ps in flight.BlobParticles)
+            {
+                if (ps != null)
+                {
+                    ps.Simulate(delta, true, false, false);
+                }
+            }
+        }
+
+        private static void StopBlobParticles(FlightState flight)
+        {
+            if (flight.BlobParticles == null)
+            {
+                return;
+            }
+
+            foreach (var ps in flight.BlobParticles)
+            {
+                if (ps != null)
+                {
+                    ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+                }
+            }
         }
 
         private void SpawnEditorSplash(Vector3 position)
@@ -235,24 +311,48 @@ namespace BalloonParty.Editor
 
             if (prefab == null)
             {
-                Debug.LogWarning("PaintSplashView: _splashParticlePrefab is not assigned.", Target);
+                Debug.LogWarning("[PaintSplash] _splashParticlePrefab is not assigned.", Target);
                 return;
             }
 
-            var instance = Instantiate(prefab, position, Quaternion.identity);
-            instance.gameObject.hideFlags = HideFlags.DontSave;
+            var go = Object.Instantiate(prefab.gameObject, position, Quaternion.identity);
+            go.hideFlags = HideFlags.DontSave;
+            go.name = $"[EditorSplash] {prefab.name}";
 
-            var main = instance.main;
-            main.startColor = _colorPicker.SelectedColor;
-            main.playOnAwake = false;
-            main.simulationSpeed = 1f;
-            main.cullingMode = ParticleSystemCullingMode.AlwaysSimulate;
+            // In prefab edit mode, objects must live in the prefab stage scene to be visible.
+            var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+            if (prefabStage != null)
+            {
+                SceneManager.MoveGameObjectToScene(go, prefabStage.scene);
+            }
 
-            instance.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
-            instance.useAutoRandomSeed = true;
-            instance.Simulate(0.016f, true, true, false);
+            var instance = go.GetComponent<ParticleSystem>();
 
-            _splashes.Add(new SplashInstance { Particle = instance, Elapsed = 0.016f });
+            if (instance == null)
+            {
+                DestroyImmediate(go);
+                return;
+            }
+
+            var seed = (uint)Random.Range(1, int.MaxValue);
+
+            foreach (var ps in go.GetComponentsInChildren<ParticleSystem>(true))
+            {
+                var main = ps.main;
+                main.playOnAwake = false;
+                main.cullingMode = ParticleSystemCullingMode.AlwaysSimulate;
+                ps.useAutoRandomSeed = false;
+                ps.randomSeed = seed++;
+                ps.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            }
+
+            var rootMain = instance.main;
+            rootMain.startColor = _colorPicker.SelectedColor;
+
+            instance.Simulate(0.001f, true, true, false);
+
+
+            _splashes.Add(new SplashInstance { Particle = instance, Elapsed = 0.001f });
         }
 
         private bool TickSplashes(float delta)
@@ -270,7 +370,13 @@ namespace BalloonParty.Editor
                 splash.Elapsed += delta;
                 splash.Particle.Simulate(splash.Elapsed, true, true, false);
 
-                if (splash.Elapsed >= 1f && splash.Particle.particleCount == 0)
+                var totalParticles = 0;
+                foreach (var ps in splash.Particle.GetComponentsInChildren<ParticleSystem>(true))
+                {
+                    totalParticles += ps.particleCount;
+                }
+
+                if (splash.Elapsed >= 2f && totalParticles == 0)
                 {
                     DestroyImmediate(splash.Particle.gameObject);
                     _splashes.RemoveAt(i);
@@ -305,10 +411,15 @@ namespace BalloonParty.Editor
         {
             public AnimationCurve ArcCurve;
             public ColorableRenderer Blob;
+            public ParticleSystem[] BlobParticles;
             public Vector3 From;
+            public int Index;
             public bool Landed;
             public float Progress;
             public AnimationCurve ScaleCurve;
+            public AnimationCurve ShadowScaleCurve;
+            public AnimationCurve SpriteScaleCurve;
+            public float TimeOffset;
             public Vector3 To;
         }
 

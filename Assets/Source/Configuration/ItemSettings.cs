@@ -28,8 +28,6 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _lightningJumpTime = 0.15f;
 
         [SerializeField] private float _paintBlobFlightDuration = 0.35f;
-        [SerializeField] private float _paintBlobArcHeight = 0.6f;
-        [SerializeField] private float _paintBlobStartScale = 0.5f;
 
         [SerializeField] private AnimationCurve _paintBlobArcCurve = new(
             new Keyframe(0f, 0f, 0f, 4f),
@@ -37,6 +35,12 @@ namespace BalloonParty.Configuration
             new Keyframe(1f, 0f, -4f, 0f));
 
         [SerializeField] private AnimationCurve _paintBlobScaleCurve = AnimationCurve.Constant(0f, 1f, 1f);
+
+        [SerializeField] private AnimationCurve _paintBlobShadowScaleCurve = AnimationCurve.Constant(0f, 1f, 1f);
+
+        [SerializeField] private AnimationCurve _paintBlobSpriteScaleCurve = AnimationCurve.Constant(0f, 1f, 1f);
+
+        [SerializeField] private float _paintBlobSpinSpeed = 720f;
 
         public ItemType Type => _type;
         public int TurnCheckEvery => _turnCheckEvery;
@@ -53,9 +57,10 @@ namespace BalloonParty.Configuration
         public float LightningRandomness => _lightningRandomness;
         public float LightningJumpTime => _lightningJumpTime;
         public float PaintBlobFlightDuration => _paintBlobFlightDuration;
-        public float PaintBlobArcHeight => _paintBlobArcHeight;
-        public float PaintBlobStartScale => _paintBlobStartScale;
         public AnimationCurve PaintBlobArcCurve => _paintBlobArcCurve;
         public AnimationCurve PaintBlobScaleCurve => _paintBlobScaleCurve;
+        public AnimationCurve PaintBlobShadowScaleCurve => _paintBlobShadowScaleCurve;
+        public AnimationCurve PaintBlobSpriteScaleCurve => _paintBlobSpriteScaleCurve;
+        public float PaintBlobSpinSpeed => _paintBlobSpinSpeed;
     }
 }

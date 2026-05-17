@@ -11,7 +11,7 @@ Custom shaders for BalloonParty under `BalloonParty/` namespace.
 | `BalloonParty/Sprite/SpriteShadowComposite` | `Sprite/SpriteShadowComposite.shader` | `PSMaterial_ShieldGain` — extends SpriteShadow with a second sprite layer composited via Porter-Duff "over" |
 | `BalloonParty/Sprite/Blur` | `Sprite/SpriteBlur.shader` | `SpecularBalloonBlur`, `SpecularBlur`, `SpecularBlur2`, `BlurSprite` — 9-tap box blur with configurable radius and sprite scale margin |
 | `BalloonParty/Sprite/ShinyDefault` | `Sprite/SpriteShine.shader` | Specular shine overlay — diagonal shine band controlled by `_ShineLocation` and `_ShineWidth` |
-| `BalloonParty/Paint/PaintBlob` | `Paint/PaintBlob.shader` | `PaintBlob`, `PaintFlyingBlob` — procedural wobbling paint blob with dual-frequency sine wobble, rim darkening, specular highlight, and optional shadow. Per-instance `_TimeOffset` via `MaterialPropertyBlock` |
+| `BalloonParty/Paint/PaintBlob` | `Paint/PaintBlob.shader` | `PaintBlob`, `PaintFlyingBlob` — procedural wobbling paint blob with dual-frequency sine wobble, rim darkening, specular highlight, and optional shadow with configurable `_ShadowScale`. Per-instance `_TimeOffset` and `_ShadowScale` via `MaterialPropertyBlock` |
 
 ## GPU instancing
 

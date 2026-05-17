@@ -17,6 +17,7 @@ VContainer (DI), UniRx (reactive), MessagePipe (pub/sub), UniTask (async), DOTwe
 
 ### Methods — order top to bottom
 1. Constructors 2. Unity lifecycle 3. `[Inject]` 4. Interface impls 5. public 6. protected 7. private
+- Prefer passing a config/settings object over many parameters
 
 ### Formatting
 - **Allman braces** — opening `{` on own line

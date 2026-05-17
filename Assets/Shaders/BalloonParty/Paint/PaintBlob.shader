@@ -6,6 +6,7 @@ Shader "BalloonParty/Paint/PaintBlob"
         [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
 
         [Header(Blob Shape)]
+        _SpriteScale        ("Sprite Scale",         Range(0.50, 1.00))  = 1.0
         _BlobRadius         ("Base Radius",          Range(0.10, 0.50))  = 0.40
         _EdgeSoftness       ("Edge Softness",        Range(0.001, 0.05)) = 0.012
 
@@ -33,6 +34,7 @@ Shader "BalloonParty/Paint/PaintBlob"
         _ShadowOffsetX      ("Shadow Offset X", Range(-0.20, 0.20)) = 0.02
         _ShadowOffsetY      ("Shadow Offset Y", Range(-0.20, 0.20)) = -0.03
         _ShadowSoftness     ("Shadow Softness", Range(0.001, 0.08)) = 0.02
+        _ShadowScale        ("Shadow Scale",    Range(0.10, 3.00))  = 1.0
     }
 
     SubShader
@@ -87,6 +89,7 @@ Shader "BalloonParty/Paint/PaintBlob"
 
             fixed4 _Color;
 
+            float  _SpriteScale;
             float  _BlobRadius;
             float  _EdgeSoftness;
 
@@ -111,6 +114,7 @@ Shader "BalloonParty/Paint/PaintBlob"
             float  _ShadowOffsetX;
             float  _ShadowOffsetY;
             float  _ShadowSoftness;
+            float  _ShadowScale;
             #endif
 
             // Computes the blob SDF boundary at a given UV offset from center.
@@ -153,7 +157,7 @@ Shader "BalloonParty/Paint/PaintBlob"
             fixed4 frag(v2f IN) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
-                float2 uv  = IN.texcoord - 0.5;
+                float2 uv  = (IN.texcoord - 0.5) / _SpriteScale;
                 float  r   = length(uv);
                 float  t   = _Time.y + _TimeOffset;
 
@@ -162,8 +166,8 @@ Shader "BalloonParty/Paint/PaintBlob"
 
                 // ── Shadow (composited behind the blob) ──
                 #ifdef _SHADOW_ON
-                float2 shadowUV    = uv - float2(_ShadowOffsetX, _ShadowOffsetY);
-                float  shadowAlpha = BlobAlpha(shadowUV, _ShadowSoftness) * _ShadowColor.a;
+                float2 shadowUV    = (uv - float2(_ShadowOffsetX, _ShadowOffsetY)) / max(_ShadowScale, 0.001);
+                float  shadowAlpha = BlobAlpha(shadowUV, _ShadowSoftness / max(_ShadowScale, 0.001)) * _ShadowColor.a;
                 #endif
 
                 // Early discard — nothing to draw if both blob and shadow are invisible

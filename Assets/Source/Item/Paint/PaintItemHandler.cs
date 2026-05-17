@@ -104,11 +104,7 @@ namespace BalloonParty.Item.Paint
 
             view.PrepareDisplay(
                 flights,
-                settings.PaintBlobFlightDuration,
-                settings.PaintBlobArcHeight,
-                settings.PaintBlobStartScale,
-                settings.PaintBlobArcCurve,
-                settings.PaintBlobScaleCurve,
+                settings,
                 _poolManager,
                 index =>
                 {

@@ -34,7 +34,7 @@ Items are game-wide collectible effects — Bomb, Laser, Lightning, Paint, and S
 | `Lightning/ChainLightningView` | `EffectView` subclass for chain lightning — multiple `LineRenderer`s; `PrepareDisplay(positions, segMul, randomness, jumpTime, onTargetHit)` pre-computes jagged bolt segments; `Play()` starts `async UniTaskVoid` that grows forward jump-by-jump then retracts |
 | `Shield/ShieldItemHandler` | Shield grant — increments `ShieldsRemaining` on the active projectile; spawns `PSVFX_ShieldGainPU` at the balloon's grid position. Does not deal damage |
 | `Paint/PaintItemHandler` | Splatoon-style color spread — computes all 6 hex neighbor positions via `SlotGrid.HexNeighborIndices`, launches paint blob arcs toward each via `PaintSplashView`, and changes paintable different-color neighbors to the popped balloon's color on blob arrival |
-| `Paint/PaintSplashView` | `EffectView` subclass — animates `ColorableRenderer` blobs along arc paths using `CurveUtility`; spawns fire-and-forget splash particles via `ParticlePoolChannel` on landing. Flight curves, duration, arc height, and scale are driven by `ItemConfiguration` |
+| `Paint/PaintSplashView` | `EffectView` subclass — animates `ColorableRenderer` blobs along arc paths using `CurveUtility`; spawns fire-and-forget splash particles via `ParticlePoolChannel` on landing. Flight curves, duration, arc height, scale, and shadow scale are driven by `ItemConfiguration`. Shadow scale is applied per-frame via `MaterialPropertyBlock` to fake perspective during the arc |
 | `Paint/PaintBlobRenderer` | MonoBehaviour on each blob child — assigns a random `_TimeOffset` to the PaintBlob shader via `MaterialPropertyBlock` so each blob's animation phase differs. GPU instancing is disabled on `PaintBlob` and `PaintFlyingBlob` materials because `_TimeOffset` is set per-instance via MPB (see `Assets/Shaders/BalloonParty/README.md`) |
 
 ## Architecture
@@ -101,6 +101,6 @@ Setting `Damage = 1` (the default) reproduces normal one-hit behaviour. Setting 
 - **SlotGrid** — `LightningItemHandler` queries all balloons of a given color; `ShieldItemHandler` resolves the balloon's grid-center world position
 - **PoolManager** — item visual lifecycle via `ItemVisualPoolChannel`; activation effect lifecycle via `EffectPoolChannel`
 - **IEffect / EffectView** — `ChainLightningView` extends `EffectView`; all item activation effects that need async Play/Stop extend `EffectView`
-- **IGameConfiguration / ItemConfiguration** — color lookup, item settings (radius, nudge values, laser cast params, lightning timing, paint flight curves/duration/arc/scale, damage)
+- **IGameConfiguration / ItemConfiguration** — color lookup, item settings (radius, nudge values, laser cast params, lightning timing, paint flight curves/duration/arc/scale/shadow-scale, damage)
 - **SlotGrid** — `LightningItemHandler` queries all balloons of a given color; `ShieldItemHandler` resolves the balloon's grid-center world position; `PaintItemHandler` uses `HexNeighborIndices` and `IndexToWorldPosition` for neighbor targeting
 - **ColorableRenderer** — `PaintSplashView` uses `ColorableRenderer[]` for blobs so they participate in the standard color pipeline

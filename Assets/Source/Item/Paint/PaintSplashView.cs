@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Configuration;
 using BalloonParty.Shared;
-using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
@@ -20,6 +20,8 @@ namespace BalloonParty.Item.Paint
     public class PaintSplashView : EffectView
     {
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
+        private static readonly int ShadowScaleId = Shader.PropertyToID("_ShadowScale");
+        private static readonly int SpriteScaleId = Shader.PropertyToID("_SpriteScale");
 
         [Header("Blobs")]
         [Tooltip("Pre-placed blob ColorableRenderers — one per possible neighbor (6 for hex grid).")]
@@ -30,15 +32,11 @@ namespace BalloonParty.Item.Paint
         [SerializeField] private ParticleSystem _splashParticlePrefab;
 
         private List<BlobFlight> _activeFlights;
-        private AnimationCurve _arcCurve;
-        private float _arcHeight;
-        private float _blobScale;
         private Color _color;
-        private float _flightDuration;
         private Action<int> _onTargetHit;
         private bool _playing;
         private PoolManager _poolManager;
-        private AnimationCurve _scaleCurve;
+        private ItemSettings _settings;
 
         private void Update()
         {
@@ -72,19 +70,11 @@ namespace BalloonParty.Item.Paint
         /// </summary>
         internal void PrepareDisplay(
             List<(Vector3 from, Vector3 to)> flights,
-            float flightDuration,
-            float arcHeight,
-            float blobScale,
-            AnimationCurve arcCurve,
-            AnimationCurve scaleCurve,
+            ItemSettings settings,
             PoolManager poolManager,
             Action<int> onTargetHit)
         {
-            _flightDuration = Mathf.Max(flightDuration, 0.01f);
-            _arcHeight = arcHeight;
-            _blobScale = blobScale;
-            _arcCurve = arcCurve;
-            _scaleCurve = scaleCurve;
+            _settings = settings;
             _poolManager = poolManager;
             _onTargetHit = onTargetHit;
 
@@ -106,6 +96,8 @@ namespace BalloonParty.Item.Paint
                     From = flights[i].from,
                     To = flights[i].to,
                     Blob = blob,
+                    BlobRenderer = blob.GetComponentInChildren<Renderer>(),
+                    TimeOffset = UnityEngine.Random.Range(0f, 100f),
                     Index = i
                 });
             }
@@ -138,18 +130,10 @@ namespace BalloonParty.Item.Paint
                 var blob = flight.Blob;
                 blob.gameObject.SetActive(true);
                 blob.transform.position = flight.From;
-                blob.transform.localScale = Vector3.one * _blobScale;
+                blob.transform.localScale = Vector3.one * _settings.PaintBlobScaleCurve.Evaluate(0f);
+                blob.transform.rotation = Quaternion.identity;
 
                 blob.SetColor(tint);
-
-                var blobRenderer = blob.GetComponent<Renderer>();
-                if (blobRenderer != null)
-                {
-                    var block = new MaterialPropertyBlock();
-                    blobRenderer.GetPropertyBlock(block);
-                    block.SetFloat(TimeOffsetId, UnityEngine.Random.Range(0f, 100f));
-                    blobRenderer.SetPropertyBlock(block);
-                }
             }
         }
 
@@ -169,6 +153,7 @@ namespace BalloonParty.Item.Paint
         private void TickFlights(float delta)
         {
             var allLanded = true;
+            var flightDuration = Mathf.Max(_settings.PaintBlobFlightDuration, 0.01f);
 
             foreach (var flight in _activeFlights)
             {
@@ -177,7 +162,7 @@ namespace BalloonParty.Item.Paint
                     continue;
                 }
 
-                flight.Progress += delta / _flightDuration;
+                flight.Progress += delta / flightDuration;
 
                 if (flight.Progress >= 1f)
                 {
@@ -192,11 +177,34 @@ namespace BalloonParty.Item.Paint
 
                 allLanded = false;
 
-                flight.Blob.transform.position =
-                    CurveUtility.LerpWithVerticalCurve(flight.From, flight.To, flight.Progress, _arcHeight, _arcCurve);
+                var pos = Vector3.Lerp(flight.From, flight.To, flight.Progress);
+                pos.y += _settings.PaintBlobArcCurve.Evaluate(flight.Progress);
+                flight.Blob.transform.position = pos;
 
                 flight.Blob.transform.localScale =
-                    Vector3.one * CurveUtility.SampleMultiplied(flight.Progress, _blobScale, _scaleCurve);
+                    Vector3.one * _settings.PaintBlobScaleCurve.Evaluate(flight.Progress);
+
+                if (flight.BlobRenderer != null)
+                {
+                    var block = new MaterialPropertyBlock();
+                    block.SetFloat(TimeOffsetId, flight.TimeOffset);
+
+                    var shadowCurve = _settings.PaintBlobShadowScaleCurve;
+                    if (shadowCurve != null)
+                    {
+                        block.SetFloat(ShadowScaleId, shadowCurve.Evaluate(flight.Progress));
+                    }
+
+                    var spriteCurve = _settings.PaintBlobSpriteScaleCurve;
+                    if (spriteCurve != null)
+                    {
+                        block.SetFloat(SpriteScaleId, spriteCurve.Evaluate(flight.Progress));
+                    }
+
+                    flight.BlobRenderer.SetPropertyBlock(block);
+                }
+
+                flight.Blob.transform.Rotate(0f, 0f, -_settings.PaintBlobSpinSpeed * delta);
             }
 
             if (allLanded)
@@ -225,10 +233,12 @@ namespace BalloonParty.Item.Paint
         private class BlobFlight
         {
             public ColorableRenderer Blob;
+            public Renderer BlobRenderer;
             public Vector3 From;
             public int Index;
             public bool Landed;
             public float Progress;
+            public float TimeOffset;
             public Vector3 To;
         }
     }

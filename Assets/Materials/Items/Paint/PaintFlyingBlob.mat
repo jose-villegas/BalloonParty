@@ -80,6 +80,7 @@ Material:
     - _RimWidth: 0.2
     - _ShadowOffsetX: 0.1
     - _ShadowOffsetY: -0.1
+    - _ShadowScale: 1
     - _ShadowSoftness: 0.0177
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -87,6 +88,7 @@ Material:
     - _SpecularOffsetY: 0.175
     - _SpecularSharpness: 3
     - _SpecularSize: 0.3
+    - _SpriteScale: 1
     - _SrcBlend: 1
     - _TimeOffset: 0
     - _UVSec: 0
@@ -100,6 +102,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.15, g: 0.15, b: 0.15, a: 0.6}
     - _SpecularColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []

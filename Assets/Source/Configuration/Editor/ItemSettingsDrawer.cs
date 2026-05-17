@@ -24,10 +24,11 @@ namespace BalloonParty.Configuration.Editor
             "_lightningRandomness",
             "_lightningJumpTime",
             "_paintBlobFlightDuration",
-            "_paintBlobArcHeight",
-            "_paintBlobStartScale",
             "_paintBlobArcCurve",
-            "_paintBlobScaleCurve"
+            "_paintBlobScaleCurve",
+            "_paintBlobShadowScaleCurve",
+            "_paintBlobSpriteScaleCurve",
+            "_paintBlobSpinSpeed"
         };
 
         protected override GUIContent BuildFoldoutLabel(GUIContent label, SerializedProperty property)
@@ -101,16 +102,6 @@ namespace BalloonParty.Configuration.Editor
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
                         property,
-                        "_paintBlobArcHeight",
-                        "Blob Arc Height");
-                    y = PropertyDrawerHelper.DrawNamedField(position,
-                        y,
-                        property,
-                        "_paintBlobStartScale",
-                        "Blob Start Scale");
-                    y = PropertyDrawerHelper.DrawNamedField(position,
-                        y,
-                        property,
                         "_paintBlobArcCurve",
                         "Blob Arc Curve");
                     y = PropertyDrawerHelper.DrawNamedField(position,
@@ -118,6 +109,21 @@ namespace BalloonParty.Configuration.Editor
                         property,
                         "_paintBlobScaleCurve",
                         "Blob Scale Curve");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_paintBlobShadowScaleCurve",
+                        "Blob Shadow Scale Curve");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_paintBlobSpriteScaleCurve",
+                        "Blob Sprite Scale Curve");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        property,
+                        "_paintBlobSpinSpeed",
+                        "Blob Spin Speed");
                     break;
             }
 
@@ -145,7 +151,7 @@ namespace BalloonParty.Configuration.Editor
                     return row * 5;
 
                 case ItemType.Paint:
-                    return row * 6;
+                    return row * 7;
 
                 default:
                     return 0f;
