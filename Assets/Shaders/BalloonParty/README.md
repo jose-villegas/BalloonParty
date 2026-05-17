@@ -11,7 +11,7 @@ Custom shaders for BalloonParty under `BalloonParty/` namespace.
 | `BalloonParty/Sprite/SpriteShadowComposite` | `Sprite/SpriteShadowComposite.shader` | `PSMaterial_ShieldGain` — extends SpriteShadow with a second sprite layer composited via Porter-Duff "over" |
 | `BalloonParty/Sprite/Blur` | `Sprite/SpriteBlur.shader` | `SpecularBalloonBlur`, `SpecularBlur`, `SpecularBlur2`, `BlurSprite` — 9-tap box blur with configurable radius and sprite scale margin |
 | `BalloonParty/Sprite/ShinyDefault` | `Sprite/SpriteShine.shader` | Specular shine overlay — diagonal shine band controlled by `_ShineLocation` and `_ShineWidth` |
-| `BalloonParty/Paint/PaintBlob` | `Paint/PaintBlob.shader` | `PaintBlob`, `PaintFlyingBlob` — procedural wobbling paint blob with dual-frequency sine wobble, rim darkening, specular highlight, and optional shadow with configurable `_ShadowScale`. Per-instance `_TimeOffset` and `_ShadowScale` via `MaterialPropertyBlock` |
+| `BalloonParty/Paint/PaintBlob` | `Paint/PaintBlob.shader` | `PaintBlob`, `PaintFlyingBlob` — procedural wobbling paint blob with dual-frequency sine wobble, rim darkening, specular highlight, and optional shadow with configurable `_ShadowScale`. `_SpriteScale` controls content inset within the quad, preventing shadow clipping at edges. Per-instance `_TimeOffset`, `_ShadowScale`, and `_SpriteScale` via `MaterialPropertyBlock` |
 
 ## GPU instancing
 
@@ -41,6 +41,6 @@ OUT.color = IN.color * _Color * _RendererColor;
 - **`_RendererColor`** must be declared in the `Properties` block with default `(1,1,1,1)`. SpriteRenderer populates it via the instancing buffer; other renderer types (TrailRenderer, ParticleSystemRenderer, UI) use the material default.
 - **`_Color`** stays as a regular uniform — it is the material-level tint, not per-instance.
 - **Do NOT use `CBUFFER_START(UnityPerDrawSprite)`** — it is only populated for SpriteRenderer. Use a plain `#else fixed4 _RendererColor;` fallback instead.
-- Materials using `MaterialPropertyBlock` for per-instance shader properties (`_DamageProgress`, `_VoronoiSeed`, `_TimeOffset`) must have GPU instancing **disabled** — instancing batching discards MPB values for properties not in the instancing buffer.
+- Materials using `MaterialPropertyBlock` for per-instance shader properties (`_DamageProgress`, `_VoronoiSeed`, `_TimeOffset`, `_ShadowScale`, `_SpriteScale`) must have GPU instancing **disabled** — instancing batching discards MPB values for properties not in the instancing buffer.
 - Materials on ParticleSystem or TrailRenderer using custom shaders must have GPU instancing **disabled** — these renderer types do not populate `unity_SpriteRendererColorArray`.
 

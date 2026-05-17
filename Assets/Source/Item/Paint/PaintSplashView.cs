@@ -134,6 +134,11 @@ namespace BalloonParty.Item.Paint
                 blob.transform.rotation = Quaternion.identity;
 
                 blob.SetColor(tint);
+
+                if (flight.BlobRenderer is SpriteRenderer spriteRenderer)
+                {
+                    spriteRenderer.sortingOrder = flight.Index;
+                }
             }
         }
 

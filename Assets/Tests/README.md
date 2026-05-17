@@ -43,7 +43,6 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 | Weighted selection with caps | `BalloonsConfiguration.PickRandom` | MaxCount filtering, cumulative weight edge cases |
 | Pipeline filtering | `ItemAssigner.OnItemCheck` | Turn modulo, cap enforcement, eligibility gating |
 | Neighbor paint targeting | `PaintItemHandler.Activate` | Paintability filter, same-color skip, empty-color guard |
-| Curve-driven math | `CurveUtility.LerpWithVerticalCurve` | Wrong axis, missing offset, zero-height edge case |
 | Static index generation | `SlotGrid.HexNeighborIndices` | Even/odd shift direction (consumed independently by PaintItemHandler) |
 
 ---
@@ -80,7 +79,7 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 76 tests
+## Current Coverage — 70 tests
 
 ### `SlotGridTests` — 20 tests
 
@@ -215,18 +214,6 @@ Tests the paint item's neighbor color conversion — paintability filter, same-c
 | Empty color → no action | 1 | Null/empty guard missing |
 | No neighbors → no crash | 1 | Out-of-bounds on corner slot |
 
-### `CurveUtilityTests` — 6 tests
-
-Tests the math utilities used by paint blob arcs and scale animation.
-
-| Area | Tests | What could break |
-|---|---|---|
-| LerpWithVerticalCurve at start | 1 | Non-zero offset at t=0 |
-| LerpWithVerticalCurve at end | 1 | Wrong offset at t=1 |
-| LerpWithVerticalCurve midpoint | 1 | Offset applied to wrong axis |
-| LerpWithVerticalCurve zero height | 1 | Height=0 alters base lerp |
-| SampleMultiplied returns base × curve | 1 | Multiplication order or wrong eval |
-| SampleMultiplied zero base | 1 | Zero not handled |
 
 ---
 

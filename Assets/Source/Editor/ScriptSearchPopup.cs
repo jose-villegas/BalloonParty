@@ -13,11 +13,12 @@ namespace BalloonParty.Editor
         private const float SearchBarHeight = 22f;
         private const float Padding = 4f;
 
+        private readonly List<MonoScript> _filtered = new();
+
         private string _search = "";
         private Vector2 _scroll;
         private Action<MonoScript> _onSelected;
         private MonoScript[] _allScripts;
-        private readonly List<MonoScript> _filtered = new();
         private int _focusIndex;
         private bool _focusSearch = true;
 

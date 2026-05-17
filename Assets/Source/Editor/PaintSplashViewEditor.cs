@@ -165,12 +165,17 @@ namespace BalloonParty.Editor
 
                 blob.SetColor(tint);
 
+                var childRenderer = blob.GetComponentInChildren<SpriteRenderer>();
+                if (childRenderer != null)
+                {
+                    childRenderer.sortingOrder = i;
+                }
+
                 _flights.Add(new FlightState
                 {
                     Blob = blob,
                     From = origin,
                     To = destination,
-                    Index = i,
                     ArcCurve = arcCurve,
                     ScaleCurve = scaleCurve,
                     ShadowScaleCurve = shadowScaleCurve,
@@ -224,7 +229,6 @@ namespace BalloonParty.Editor
 
                 var pos = Vector3.Lerp(flight.From, flight.To, flight.Progress);
                 pos.y += flight.ArcCurve.Evaluate(flight.Progress);
-                pos.z -= flight.Index * 0.001f;
                 flight.Blob.transform.position = pos;
 
                 flight.Blob.transform.localScale =
@@ -413,7 +417,6 @@ namespace BalloonParty.Editor
             public ColorableRenderer Blob;
             public ParticleSystem[] BlobParticles;
             public Vector3 From;
-            public int Index;
             public bool Landed;
             public float Progress;
             public AnimationCurve ScaleCurve;

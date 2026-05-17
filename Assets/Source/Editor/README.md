@@ -42,7 +42,7 @@ Subclasses declare one required property and up to three optional overrides:
 
 | Drawer | Location | What it customises |
 |---|---|---|
-| `ItemSettingsDrawer` | `Configuration/Editor/` | `BuildFoldoutLabel` appends `[ItemType]`; special section for Bomb/Laser/Lightning/Paint type-specific fields with section headers. `_damage` is drawn only for damaging types (hidden for Paint and Shield) |
+| `ItemSettingsDrawer` | `Configuration/Editor/` | `BuildFoldoutLabel` appends `[ItemType]`; special section for Bomb/Laser/Lightning/Paint type-specific fields with section headers. Paint section draws flight duration, arc curve, scale curve, shadow scale curve, sprite scale curve, and spin speed. `_damage` is drawn only for damaging types (hidden for Paint and Shield) |
 | `BalloonPrefabEntryDrawer` | `Configuration/Editor/` | Special section handles `_nudgeOverrides` (variable height), `_overridePopVfx` toggle, and conditional `_popVfxPrefab` |
 | `NudgeOverrideDrawer` | `Nudge/Editor/` | `BuildFoldoutLabel` appends `[NudgeType]`; `_appliesTo` pinned to top via `DrawPinnedFields` using `EnumFlagsField`; `_falloff` conditional on Shockwave flag |
 
@@ -60,7 +60,7 @@ These drawers extend `PropertyDrawer` directly and handle their own rendering wi
 
 | Editor | Target | What it does |
 |---|---|---|
-| `PaintSplashViewEditor` | `PaintSplashView` | Adds an editor-time preview panel below the default inspector. Generates radial flight paths around the object using the hex diagonal neighbor distance from `GameConfiguration.SlotSeparation`. Animates `ColorableRenderer` blobs via `EditorApplication.update` using `CurveUtility` arc math (shared with runtime). Flight duration, arc height, blob scale, and flight curves are all read from `ItemConfiguration`. Particles are driven via `ParticleSystem.Simulate(totalElapsed, restart: true)` since `Play()` doesn't work in edit mode. Private fields are read via cached `System.Reflection.FieldInfo`. Tint uses `GamePalette` color names via popup. Controls: Play/Pause (single toggle), Stop, Playback Speed slider |
+| `PaintSplashViewEditor` | `PaintSplashView` | Adds an editor-time preview panel below the default inspector. Generates radial flight paths around the object using the hex diagonal neighbor distance from `GameConfiguration.SlotSeparation`. Animates `ColorableRenderer` blobs via `EditorApplication.update` using arc, scale, shadow scale, sprite scale, and spin speed curves — all read from `ItemConfiguration`. Each blob gets a unique `sortingOrder` to prevent transparent sprite flickering. All MPB values (`_TimeOffset`, `_ShadowScale`, `_SpriteScale`) are set every frame on a fresh `MaterialPropertyBlock`. Blob child particle systems are manually simulated via `ParticleSystem.Simulate()` during preview since `Play()` doesn't work in edit mode. Private fields are read via cached `System.Reflection.FieldInfo`. Tint uses `GamePalette` color names via popup. Controls: Play/Pause (single toggle), Stop, Playback Speed slider |
 | `GameConfigurationEditor` | `GameConfiguration` | Adds a "Show Limits In Scene" toggle below the default inspector that controls `MapLimitsSceneOverlay` |
 
 ## Scene overlays

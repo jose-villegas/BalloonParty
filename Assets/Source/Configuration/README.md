@@ -32,7 +32,7 @@ All custom `PropertyDrawer` implementations in this folder extend `AutoFieldProp
 | File | What it does |
 |---|---|
 | `BalloonPrefabEntryDrawer` | Extends `AutoFieldPropertyDrawer` — auto-draws common fields; manually handles `_nudgeOverrides` (variable-height array), `_overridePopVfx` (toggle), and `_popVfxPrefab` (conditional on toggle) |
-| `ItemSettingsDrawer` | Extends `AutoFieldPropertyDrawer` — auto-draws common fields (including `Damage`); manually handles type-specific sections (Bomb, Laser, Lightning) with section headers; overrides `BuildFoldoutLabel` to append `[ItemType]` to the header |
+| `ItemSettingsDrawer` | Extends `AutoFieldPropertyDrawer` — auto-draws common fields (including `Damage`); manually handles type-specific sections (Bomb, Laser, Lightning, Paint) with section headers. Paint section includes: Blob Flight Duration, Blob Arc Curve, Blob Scale Curve, Blob Shadow Scale Curve, Blob Sprite Scale Curve, Blob Spin Speed. `_damage` is drawn only for damaging types (hidden for Paint and Shield); overrides `BuildFoldoutLabel` to append `[ItemType]` to the header |
 | `GameDisplayConfigurationDrawer` | Custom `PropertyDrawer` for `GameDisplayConfiguration` — inline aspect-ratio / orthographic-size pair editing |
 | `PaletteColorMaskDrawer` | Custom `PropertyDrawer` for `PaletteColorMaskAttribute` — renders a bitmask int as labeled checkboxes matching the current `GamePalette` entries |
 | `PaletteColorNameDrawer` | Custom `PropertyDrawer` for `PaletteColorNameAttribute` — renders a string field as a popup listing all `GamePalette` color names with a color swatch beside the selected entry. Loads the palette lazily via `AssetDatabase.FindAssets("t:GamePalette")` |
