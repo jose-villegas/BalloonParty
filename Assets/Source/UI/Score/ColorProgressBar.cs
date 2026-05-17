@@ -138,7 +138,7 @@ namespace BalloonParty.UI.Score
             _animator.SetTrigger(TrailHitTrigger);
             _progressSlider.value = Mathf.Min(_progressSlider.value + 1, _progressSlider.maxValue);
 
-            SpawnPointNotice(RandomPositionInRect());
+            SpawnPointNotice(WorldToAnchoredPosition(msg.WorldPosition));
 
             if (_progressSlider.value >= _progressSlider.maxValue)
             {
@@ -170,12 +170,13 @@ namespace BalloonParty.UI.Score
             return rectTransform.TransformPoint(local);
         }
 
-        private Vector2 RandomPositionInRect()
+        private Vector2 WorldToAnchoredPosition(Vector3 worldPosition)
         {
-            var rect = ((RectTransform)transform).rect;
-            return new Vector2(
-                Random.Range(rect.xMin, rect.xMax),
-                Random.Range(2f * rect.yMin, 2f * rect.yMax));
+            var rectTransform = (RectTransform)transform;
+            var screenPoint = RectTransformUtility.WorldToScreenPoint(null, worldPosition);
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(
+                rectTransform, screenPoint, null, out var localPoint);
+            return localPoint;
         }
 
         private void SpawnStreakNotice(int streak)

@@ -28,7 +28,7 @@ Messages are the signals that decouple systems from one another. A publisher fir
 | `BalloonDeflectedMessage` | `BalloonController` (on deflect) | `ProjectileView` (color-tracking on deflect hit) |
 | `BalloonScoredMessage` | `ScoreController` | `ColorProgressBar`, `ScoreTrailService` |
 | `ScoreLevelUpMessage` | `ScoreController` | `ColorProgressBar`, `LevelUpPopUp` |
-| `ScoreTrailArrivedMessage` | `ScoreTrailService` | `ColorProgressBar` |
+| `ScoreTrailArrivedMessage` | `ScoreTrailService` | `ScoreController`, `ColorProgressBar` |
 | `ProjectileDestroyedMessage` | `ProjectileView` | `ThrowerController`, `BalloonSpawner` |
 | `ProjectileLoadedMessage` | `ThrowerController` | `ShieldCounterLabel`, `ShieldCounterAnimation` |
 | `ItemCheckMessage` | `BalloonSpawner` | `ItemAssigner` |

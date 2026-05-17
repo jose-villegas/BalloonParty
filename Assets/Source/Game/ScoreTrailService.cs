@@ -140,7 +140,7 @@ namespace BalloonParty.Game
                 _config.ScorePointTraceDuration,
                 () =>
                 {
-                    _arrivedPublisher.Publish(new ScoreTrailArrivedMessage(colorName));
+                    _arrivedPublisher.Publish(new ScoreTrailArrivedMessage(colorName, target));
                     _poolManager.Return(poolKey, trail);
                 });
         }

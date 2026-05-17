@@ -7,9 +7,10 @@ Tracks and displays player progress toward the next level — one bar per balloo
 | File | What it does |
 |---|---|
 | `ScoreUILifetimeScope` | VContainer child scope on the Score UI Canvas root; injects all scene-placed `ColorProgressBar` instances via `RegisterBuildCallback`; binds `ScoreCounterLabel` and `LevelLabel` in `Start()` |
-| `ColorProgressBar` | Per-color progress slider placed directly in the scene. Listens for `BalloonScoredMessage` (streak counting, slider advancement, notice spawning) and `ScoreTrailArrivedMessage` (trail-hit feedback). Registers a `Func<Vector3>` target provider with `ScoreTrailService` for randomised trail destinations. Uses `[PaletteColorName]` to select its color from `GamePalette` in the Inspector |
-| `ScoreNotice` | Pooled floating "+N" TMP popup at the bar; label scale driven by `AnimationCurve`; `_labelOffsetXCurve` compensates for scale-induced horizontal drift; dismisses via `ScoreDisappear` animation when replaced |
-| `ScoreNoticePoolChannel` | `PoolChannel<ScoreNotice>` — per-color pool keyed by `ScoreNotice_{colorName}` |
+| `ColorProgressBar` | Per-color progress slider placed directly in the scene. Listens for `BalloonScoredMessage` (streak counting, immediate streak notice), `ScoreTrailArrivedMessage` (slider advancement, point notice spawning, trail-hit feedback), and `ScoreLevelUpMessage` (reset). Registers a `Func<Vector3>` target provider with `ScoreTrailService` for randomised trail destinations. Uses `[PaletteColorName]` to select its color from `GamePalette` in the Inspector |
+| `ProgressNotice` | Pooled floating TMP popup at the bar. Uses `ColorableRenderer` for tinting. Label scale driven by `AnimationCurve`; `_labelOffsetXCurve` compensates for scale-induced horizontal drift; dismisses via `ScoreDisappear` animation when replaced. Two prefab variants: streak notices ("x3") shown immediately on hit, and point notices ("+1") shown on trail arrival |
+| `ProgressNoticePoolChannel` | `PoolChannel<ProgressNotice>` — separate per-color pools keyed by `StreakNotice_{colorName}` and `PointNotice_{colorName}` |
+| `GraphicColorableRenderer` | `ColorableRenderer<Graphic>` — enables `ColorableRenderer`-based tinting for UI `Graphic` components |
 | `ScorePointTrail` | Pooled orb that flies from balloon world position → bar position via DOTween |
 | `ScoreTrailPoolChannel` | `PoolChannel<ScorePointTrail>` — per-color pool keyed by `ScoreTrail_{colorName}` |
 | `ScoreCounterLabel` | Binds total-score `TMP_Text` to `ScoreController.TotalScore` |
@@ -21,23 +22,35 @@ Four `ColorProgressBar` instances are placed in the scene under the Score UI Can
 
 Each bar identifies its color through a `[PaletteColorName]` string field, which renders in the Inspector as a popup dropdown with color swatch. On `Start()` the bar resolves its `PaletteEntry`, tints its graphics (preserving existing alpha), sets up the slider, and registers a target provider with `ScoreTrailService`.
 
-When a `BalloonScoredMessage` arrives whose color matches the bar, a per-color streak counter increments and the slider advances. For single-point scores, any fully-shown notice is dismissed and a new `ScoreNotice` spawns at the bar origin. For multi-point scores (e.g. items), multiple untracked notices spawn at random positions within the bar's rect, staggered by `ScorePointsScatterDelay`.
+### Scoring flow
+
+Scoring is deferred to trail arrival — points, persistent score, and level progress all update when a `ScoreTrailArrivedMessage` is received, not immediately on balloon pop. This synchronises the visual trail animation with the actual score state.
+
+1. **Balloon popped** → `ScoreController` publishes `BalloonScoredMessage` (no score mutation yet)
+2. **`ColorProgressBar.OnBalloonScored`** → increments the streak counter for consecutive same-color hits, immediately spawns a **streak notice** ("x3") at the bar centre using the `_streakNoticePrefab`. Different-color hits reset the streak
+3. **`ScoreTrailService`** → spawns pooled trail orbs from the balloon's world position toward the bar
+4. **Trail arrives** → `ScoreTrailService` publishes `ScoreTrailArrivedMessage`
+5. **`ScoreController.OnTrailArrived`** → increments `_persistentScore`, `_totalScore`, `_levelProgress`, and checks for level-up
+6. **`ColorProgressBar.OnTrailArrived`** → advances the slider by 1, spawns a **point notice** ("+1") at the trail's arrival world position (converted to local anchored space via `WorldToAnchoredPosition`) using the `_pointNoticePrefab`, triggers "TrailHit" animator feedback
+
+### Notices
+
+`ProgressNotice` is a pooled TMP popup with `ColorableRenderer`-based tinting. Two separate prefabs and pools are used:
+
+- **Streak notices** (`_streakNoticePrefab`, pool key `StreakNotice_{color}`) — shown immediately on balloon hit at bar centre, tinted with the bar's color. Tracked in `_activeNotices` for dismiss-on-replace
+- **Point notices** (`_pointNoticePrefab`, pool key `PointNotice_{color}`) — shown on trail arrival at the trail's world-space landing position (converted to local anchored coordinates). Untracked (returned to pool on animation complete)
 
 `OnValidate()` provides editor-time color preview — it loads `GamePalette` via `AssetDatabase`, finds the matching entry, and tints `_graphicsToSetColor` while preserving each graphic's existing alpha.
 
-Score trail orbs are managed by `ScoreTrailService` (in `Game/`). When a trail arrives at this bar's target, `ScoreTrailArrivedMessage` triggers the "TrailHit" animator feedback. The bar's target position is randomised each trail via `RandomWorldPositionInRect()`, registering a `Func<Vector3>` with the trail service.
-
 When the slider reaches its maximum, a completion particle plays and the bar enters its "Completed" animator state. On `ScoreLevelUpMessage`, all bars reset their sliders and update their `maxValue` to the points required for the new level.
-
-`ScoreNotice` uses TMP labels (`TMP_Text`). The label scale is driven by an `AnimationCurve` (X = score, Y = scale), and `_labelOffsetXCurve` applies horizontal position compensation so the label stays centred as it scales up. Both the Score and ScoreDisappear animations fire `OnAnimationCompleted`, which invokes the consumer's return callback to send the notice back to the pool.
 
 `ScoreCounterLabel` and `LevelLabel` are bound imperatively from `ScoreUILifetimeScope.Start()` — they receive the `ScoreController`'s reactive properties and subscribe with UniRx.
 
 ## Interactions
 
-- **ScoreController** — source of `BalloonScoredMessage`, `ScoreLevelUpMessage`, `TotalScore`, `Level`
+- **ScoreController** — source of `BalloonScoredMessage`, `ScoreLevelUpMessage`, `TotalScore`, `Level`; score mutation deferred to `ScoreTrailArrivedMessage`
 - **ScoreTrailService** — manages trail orb spawning and flight; bar registers a `Func<Vector3>` target provider and receives `ScoreTrailArrivedMessage` on trail arrival
-- **PoolManager** — per-color pools for `ScoreNotice` and `ScorePointTrail`; consumer handles return
-- **IGameConfiguration** — `PointsRequiredForLevel`, `ScorePointTraceDuration`, `ScorePointsScatterDelay`
+- **PoolManager** — separate per-color pools for streak notices, point notices, and `ScorePointTrail`; consumer handles return
+- **IGameConfiguration** — `PointsRequiredForLevel`, `ScorePointTraceDuration`
 - **GamePalette** — resolves color name → `Color` for tinting graphics and trail orbs
 - **ScoreUILifetimeScope** — injects all bars via `RegisterBuildCallback`; binds labels in `Start()`

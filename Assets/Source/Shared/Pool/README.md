@@ -35,7 +35,7 @@ Items signal completion via callbacks passed to their `Play()` or `Setup()` call
 | `PoolableParticle` | `Play(pos, color, onComplete)` — caller supplies the callback | Consumer (e.g. `BalloonView`, `ProjectileShieldView`) |
 | `EffectView` (any subclass) | `Play(pos, tint, onComplete)` — caller supplies the callback | Consumer (e.g. item handlers) |
 | `ScorePointTrail` | `Setup(target, color, config, onComplete)` — fires on tween completion | `ScoreTrailService` |
-| `ScoreNotice` | `Show(score, color, onComplete)` — fires from `OnAnimationCompleted` animation event | `ColorProgressBar` |
+| `ProgressNotice` | `Show(score, onComplete, color?)` — fires from `OnAnimationCompleted` animation event | `ColorProgressBar` |
 | `BalloonView` | No completion callback — returned directly on hit | `BalloonController` |
 | `ProjectileView` | No completion callback — returned directly on death | `ThrowerController` |
 
@@ -57,7 +57,7 @@ For prefabs that have `[Inject]` fields but don't need their own VContainer chil
 | `EffectPoolChannel` | prefab name | `EffectView` (subclass) | `Object.Instantiate` |
 | `ItemVisualPoolChannel` | prefab name | `ItemVisualView` | `Object.Instantiate` |
 | `ScoreTrailPoolChannel` | `ScoreTrail_{color}` | `ScorePointTrail` | `Object.Instantiate` |
-| `ScoreNoticePoolChannel` | `ScoreNotice_{color}` | `ScoreNotice` | `Object.Instantiate` |
+| `ProgressNoticePoolChannel` | `StreakNotice_{color}`, `PointNotice_{color}` | `ProgressNotice` | `Object.Instantiate` |
 
 ## Usage
 
