@@ -1,16 +1,17 @@
+using BalloonParty.Configuration;
 using BalloonParty.Editor.EffectPreview;
-using BalloonParty.Item.Paint;
+using BalloonParty.Item.Lightning;
 using NaughtyAttributes.Editor;
 using UnityEditor;
 
 namespace BalloonParty.Editor
 {
-    [CustomEditor(typeof(PaintSplashView))]
-    public class PaintSplashViewEditor : NaughtyInspector
+    [CustomEditor(typeof(ChainLightningView))]
+    public class ChainLightningViewEditor : NaughtyInspector
     {
         private EffectViewPreviewPlayer _player;
 
-        private PaintSplashView Target => (PaintSplashView)target;
+        private ChainLightningView Target => (ChainLightningView)target;
 
         public override void OnInspectorGUI()
         {
@@ -32,12 +33,13 @@ namespace BalloonParty.Editor
                 return;
             }
 
-            var module = new PaintSplashPreviewModule(Target);
+            var module = new ChainLightningPreviewModule(Target);
             _player = new EffectViewPreviewPlayer(
                 module,
-                "Paint Splash Preview",
-                Configuration.ItemType.Paint,
+                "Chain Lightning Preview",
+                ItemType.Lightning,
                 Repaint);
         }
     }
 }
+

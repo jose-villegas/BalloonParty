@@ -6,7 +6,7 @@ The grid that holds all balloons in play.
 
 | File | What it does |
 |---|---|
-| `SlotGrid` | Core data structure — parallel 2D arrays of `IWriteableBalloonModel` and `BalloonView`; `Place`, `Remove`, `At`, `ViewAt`, `IsEmpty`, `IsUnbalanced`, `OptimalNextEmptySlot`, `BottomEmptySlotPerColumn`, `HexNeighborIndices` (static), `GetNeighbors`, `IndexToWorldPosition`, `OnChanged` |
+| `SlotGrid` | Core data structure — parallel 2D arrays of `IWriteableBalloonModel` and `BalloonView`; `Place`, `Remove`, `At`, `ViewAt`, `IsEmpty`, `IsUnbalanced`, `OptimalNextEmptySlot`, `BottomEmptySlotPerColumn`, `HexNeighborIndices` (static), `GetNeighbors`, `IndexToWorldPosition` (instance delegates to static overload taking `separation`/`offset` — used by editor preview without a grid instance), `OnChanged` |
 | `SlotGridChangedEvent` | Struct fired on every `Place` or `Remove` — carries the affected index and change type |
 | `SlotGridView` | MonoBehaviour — draws gizmo spheres in `OnDrawGizmos` to visualise occupied/empty slots in the Editor |
 

@@ -9,6 +9,18 @@ using UnityEngine;
 namespace BalloonParty.Item.Paint
 {
     /// <summary>
+    ///     Computed per-frame state for a paint blob in flight.
+    ///     Produced by <see cref="PaintSplashView.ComputeBlobFlight" />.
+    /// </summary>
+    internal struct BlobFlightSnapshot
+    {
+        public Vector3 Position;
+        public float Scale;
+        public float ShadowScale;
+        public float SpriteScale;
+    }
+
+    /// <summary>
     ///     Poolable paint-splash effect. Extends <see cref="EffectView" /> so it
     ///     participates in the standard effect-pool pipeline via <see cref="EffectPoolChannel" />.
     ///     The prefab holds pre-placed <see cref="ColorableRenderer" /> children (one per
@@ -22,6 +34,44 @@ namespace BalloonParty.Item.Paint
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
         private static readonly int ShadowScaleId = Shader.PropertyToID("_ShadowScale");
         private static readonly int SpriteScaleId = Shader.PropertyToID("_SpriteScale");
+
+        /// <summary>
+        ///     Pure math — computes blob position, scale, and MPB values for a given
+        ///     progress along the flight arc. Shared by runtime and editor preview.
+        /// </summary>
+        internal static BlobFlightSnapshot ComputeBlobFlight(
+            float progress,
+            Vector3 from,
+            Vector3 to,
+            ItemSettings settings)
+        {
+            var pos = Vector3.Lerp(from, to, progress);
+            pos.y += settings.PaintBlobArcCurve.Evaluate(progress);
+
+            return new BlobFlightSnapshot
+            {
+                Position = pos,
+                Scale = settings.PaintBlobScaleCurve.Evaluate(progress),
+                ShadowScale = settings.PaintBlobShadowScaleCurve?.Evaluate(progress) ?? 1f,
+                SpriteScale = settings.PaintBlobSpriteScaleCurve?.Evaluate(progress) ?? 1f
+            };
+        }
+
+        /// <summary>
+        ///     Applies <see cref="BlobFlightSnapshot" /> MPB values plus a time offset
+        ///     to a renderer. Shared by runtime and editor preview.
+        /// </summary>
+        internal static void ApplyBlobMaterial(
+            Renderer renderer,
+            float timeOffset,
+            BlobFlightSnapshot snapshot)
+        {
+            var block = new MaterialPropertyBlock();
+            block.SetFloat(TimeOffsetId, timeOffset);
+            block.SetFloat(ShadowScaleId, snapshot.ShadowScale);
+            block.SetFloat(SpriteScaleId, snapshot.SpriteScale);
+            renderer.SetPropertyBlock(block);
+        }
 
         [Header("Blobs")]
         [Tooltip("Pre-placed blob ColorableRenderers — one per possible neighbor (6 for hex grid).")]
@@ -182,31 +232,13 @@ namespace BalloonParty.Item.Paint
 
                 allLanded = false;
 
-                var pos = Vector3.Lerp(flight.From, flight.To, flight.Progress);
-                pos.y += _settings.PaintBlobArcCurve.Evaluate(flight.Progress);
-                flight.Blob.transform.position = pos;
-
-                flight.Blob.transform.localScale =
-                    Vector3.one * _settings.PaintBlobScaleCurve.Evaluate(flight.Progress);
+                var snapshot = ComputeBlobFlight(flight.Progress, flight.From, flight.To, _settings);
+                flight.Blob.transform.position = snapshot.Position;
+                flight.Blob.transform.localScale = Vector3.one * snapshot.Scale;
 
                 if (flight.BlobRenderer != null)
                 {
-                    var block = new MaterialPropertyBlock();
-                    block.SetFloat(TimeOffsetId, flight.TimeOffset);
-
-                    var shadowCurve = _settings.PaintBlobShadowScaleCurve;
-                    if (shadowCurve != null)
-                    {
-                        block.SetFloat(ShadowScaleId, shadowCurve.Evaluate(flight.Progress));
-                    }
-
-                    var spriteCurve = _settings.PaintBlobSpriteScaleCurve;
-                    if (spriteCurve != null)
-                    {
-                        block.SetFloat(SpriteScaleId, spriteCurve.Evaluate(flight.Progress));
-                    }
-
-                    flight.BlobRenderer.SetPropertyBlock(block);
+                    ApplyBlobMaterial(flight.BlobRenderer, flight.TimeOffset, snapshot);
                 }
 
                 flight.Blob.transform.Rotate(0f, 0f, -_settings.PaintBlobSpinSpeed * delta);

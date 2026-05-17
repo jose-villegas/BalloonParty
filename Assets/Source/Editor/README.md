@@ -12,6 +12,7 @@ Shared editor tooling used across all `PropertyDrawer` implementations in the pr
 | `ScriptReferenceRemap` | `internal static` — context menu tool for remapping script GUIDs in prefab/scene files after class renames. Available from Inspector component "⋮" menu and Project window right-click on `.cs` files |
 | `ScriptSearchPopup` | `internal sealed EditorWindow` — searchable popup for picking a `MonoScript`, similar to Unity's "Add Component" search. Used by `ScriptReferenceRemap` |
 | `EditorUI/` | Reusable UI building blocks for editor windows — `SortableHeader` (sortable column with ▲/▼), `SelectionTracker` (`ISelectable` + toggle-all + per-row checkbox + count + get-selected), `AssetLinkLabel` (clickable ping-to-select), `StyledRow` (bold label + highlighted row), `SearchFilterToolbar` (search + enum filter + refresh). See `EditorUI/README.md` |
+| `EffectPreview/` | Reusable editor-time preview system for `EffectView` subclasses — `IEffectPreviewModule` (interface for pluggable rendering logic), `EffectViewPreviewPlayer` (animation loop, color picker, config caches, inspector GUI), `EditorGridHelper` (slot grid position math without a runtime `SlotGrid`), `PaintSplashPreviewModule` (blob flight preview), `ChainLightningPreviewModule` (line renderer bolt preview). See `EffectPreview/README.md` |
 
 ## AutoFieldPropertyDrawer
 
@@ -60,7 +61,8 @@ These drawers extend `PropertyDrawer` directly and handle their own rendering wi
 
 | Editor | Target | What it does |
 |---|---|---|
-| `PaintSplashViewEditor` | `PaintSplashView` | Adds an editor-time preview panel below the default inspector. Generates radial flight paths around the object using the hex diagonal neighbor distance from `GameConfiguration.SlotSeparation`. Animates `ColorableRenderer` blobs via `EditorApplication.update` using arc, scale, shadow scale, sprite scale, and spin speed curves — all read from `ItemConfiguration`. Each blob gets a unique `sortingOrder` to prevent transparent sprite flickering. All MPB values (`_TimeOffset`, `_ShadowScale`, `_SpriteScale`) are set every frame on a fresh `MaterialPropertyBlock`. Blob child particle systems are manually simulated via `ParticleSystem.Simulate()` during preview since `Play()` doesn't work in edit mode. Private fields are read via cached `System.Reflection.FieldInfo`. Tint uses `GamePalette` color names via popup. Controls: Play/Pause (single toggle), Stop, Playback Speed slider |
+| `PaintSplashViewEditor` | `PaintSplashView` | Constructs an `EffectViewPreviewPlayer` with a `PaintSplashPreviewModule`. The module handles radial blob flights, arc/scale/shadow/sprite curves, spin, MPB updates, blob particle simulation, and splash particle spawning (prefab-stage-aware). The player manages the animation loop, palette color picker, and config caches. All preview logic is in `EffectPreview/PaintSplashPreviewModule` |
+| `ChainLightningViewEditor` | `ChainLightningView` | Constructs an `EffectViewPreviewPlayer` with a `ChainLightningPreviewModule`. The module generates random slot positions via `EditorGridHelper`, fills jagged bolt segments into the view's `LineRenderer`s, and animates forward growth + retraction via a delta-time state machine. All preview logic is in `EffectPreview/ChainLightningPreviewModule` |
 | `GameConfigurationEditor` | `GameConfiguration` | Adds a "Show Limits In Scene" toggle below the default inspector that controls `MapLimitsSceneOverlay` |
 
 ## Scene overlays

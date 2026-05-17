@@ -168,10 +168,15 @@ namespace BalloonParty.Slots
 
         public Vector3 IndexToWorldPosition(Vector2Int index)
         {
+            return IndexToWorldPosition(index, _config.SlotSeparation, _config.SlotsOffset);
+        }
+
+        internal static Vector3 IndexToWorldPosition(Vector2Int index, Vector2 separation, Vector2 offset)
+        {
             var hIndex = (index.x * 2) + (index.y % 2);
             return new Vector3(
-                ((hIndex - _config.SlotsOffset.x) * _config.SlotSeparation.x) - (_config.SlotSeparation.x / 2f),
-                (-index.y * _config.SlotSeparation.y) + _config.SlotsOffset.y,
+                ((hIndex - offset.x) * separation.x) - (separation.x / 2f),
+                (-index.y * separation.y) + offset.y,
                 0f);
         }
 

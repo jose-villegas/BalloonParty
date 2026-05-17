@@ -101,7 +101,7 @@ namespace BalloonParty.Item.Lightning
         }
 
         // No allocation — buffer is pre-allocated per renderer and reused across all jumps.
-        private static void FillSegment(
+        internal static void FillSegment(
             Vector3 origin,
             Vector3 target,
             int segments,
@@ -123,18 +123,23 @@ namespace BalloonParty.Item.Lightning
             buffer[offset + segments - 1] = target;
         }
 
-        private async UniTaskVoid PlayAsync()
+        /// <summary>
+        ///     Pre-computes jagged bolt segments for all jumps and renderers.
+        ///     Returns per-renderer position buffers and cumulative offset array.
+        /// </summary>
+        internal static (Vector3[][] lineBuffers, int[] cumOffsets) BuildBoltBuffers(
+            List<Vector3> positions,
+            int rendererCount,
+            float segmentsMultiplier,
+            float randomness)
         {
-            var ct = _cts?.Token ?? CancellationToken.None;
-            var jumpCount = _targetPositions.Count - 1;
-            var rendererCount = _lineRenderers != null ? _lineRenderers.Length : 0;
-            var delayMs = Mathf.RoundToInt(_jumpTime * 1000f);
+            var jumpCount = positions.Count - 1;
 
             var segmentSizes = new int[jumpCount];
             for (var i = 0; i < jumpCount; i++)
             {
-                var d = Vector3.Distance(_targetPositions[i], _targetPositions[i + 1]);
-                segmentSizes[i] = Mathf.Max(Mathf.FloorToInt(d * _segmentsMultiplier), 2);
+                var d = Vector3.Distance(positions[i], positions[i + 1]);
+                segmentSizes[i] = Mathf.Max(Mathf.FloorToInt(d * segmentsMultiplier), 2);
             }
 
             var cumOffsets = new int[jumpCount + 1];
@@ -145,10 +150,6 @@ namespace BalloonParty.Item.Lightning
 
             var totalPoints = cumOffsets[jumpCount];
 
-            // Each renderer gets independent random jitter, so each has its own buffer.
-            // During animation only positionCount changes — no per-frame allocation.
-            // LineRenderer.SetPositions reads min(array.Length, positionCount) items,
-            // so passing the full buffer with a smaller positionCount is safe.
             var lineBuffers = new Vector3[rendererCount][];
             for (var j = 0; j < rendererCount; j++)
             {
@@ -156,14 +157,27 @@ namespace BalloonParty.Item.Lightning
                 for (var i = 0; i < jumpCount; i++)
                 {
                     FillSegment(
-                        _targetPositions[i],
-                        _targetPositions[i + 1],
+                        positions[i],
+                        positions[i + 1],
                         segmentSizes[i],
-                        _randomness,
+                        randomness,
                         lineBuffers[j],
                         cumOffsets[i]);
                 }
             }
+
+            return (lineBuffers, cumOffsets);
+        }
+
+        private async UniTaskVoid PlayAsync()
+        {
+            var ct = _cts?.Token ?? CancellationToken.None;
+            var jumpCount = _targetPositions.Count - 1;
+            var rendererCount = _lineRenderers != null ? _lineRenderers.Length : 0;
+            var delayMs = Mathf.RoundToInt(_jumpTime * 1000f);
+
+            var (lineBuffers, cumOffsets) = BuildBoltBuffers(
+                _targetPositions, rendererCount, _segmentsMultiplier, _randomness);
 
             for (var i = 0; i < jumpCount; i++)
             {
