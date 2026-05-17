@@ -3,6 +3,7 @@ using System.Reflection;
 using BalloonParty.Configuration;
 using BalloonParty.Editor.EditorUI;
 using BalloonParty.Item.Lightning;
+using BalloonParty.Shared.Animation;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,15 +13,18 @@ namespace BalloonParty.Editor.EffectPreview
     ///     Preview module for <see cref="ChainLightningView" />. Generates random
     ///     grid positions as targets, fills jagged bolt segments into the view's
     ///     <see cref="LineRenderer" />s, and animates forward growth + retraction
-    ///     synchronously via delta-time ticks.
+    ///     synchronously via delta-time ticks. The glow sprite slides along a smooth
+    ///     Catmull-Rom path through per-jump centroids.
     /// </summary>
     internal sealed class ChainLightningPreviewModule : IEffectPreviewModule
     {
+        private const int GlowSubdivisions = 4;
+
         private static readonly FieldInfo LineRenderersField =
             typeof(ChainLightningView).GetField("_lineRenderers", BindingFlags.NonPublic | BindingFlags.Instance);
 
         private static readonly FieldInfo GlowRendererField =
-            typeof(ChainLightningView).GetField("_glowLineRenderer", BindingFlags.NonPublic | BindingFlags.Instance);
+            typeof(ChainLightningView).GetField("_glowRenderer", BindingFlags.NonPublic | BindingFlags.Instance);
 
         private readonly ChainLightningView _view;
         private readonly ConfigAssetCache<ItemConfiguration> _itemConfigCache = new();
@@ -28,7 +32,7 @@ namespace BalloonParty.Editor.EffectPreview
         private int _targetCount = 5;
 
         private LineRenderer[] _lineRenderers;
-        private LineRenderer _glowRenderer;
+        private SpriteRenderer _glowRenderer;
         private Vector3[][] _lineBuffers;
         private int[] _cumOffsets;
         private int _jumpCount;
@@ -37,6 +41,11 @@ namespace BalloonParty.Editor.EffectPreview
         private int _currentJump;
         private bool _retracting;
         private bool _finished;
+
+        private Vector3[] _glowPath;
+        private float[] _glowDiameters;
+        private float _glowFromIdx;
+        private float _glowToIdx;
 
         internal ChainLightningPreviewModule(ChainLightningView view)
         {
@@ -66,7 +75,7 @@ namespace BalloonParty.Editor.EffectPreview
         public void Start(EffectPreviewContext context)
         {
             _lineRenderers = (LineRenderer[])LineRenderersField.GetValue(_view);
-            _glowRenderer = (LineRenderer)GlowRendererField.GetValue(_view);
+            _glowRenderer = (SpriteRenderer)GlowRendererField.GetValue(_view);
 
             var settings = context.Settings;
             var segMul = settings?.LightningSegmentsMultiplier ?? 3f;
@@ -85,7 +94,6 @@ namespace BalloonParty.Editor.EffectPreview
             }
             else
             {
-                // Fallback: radial positions around origin
                 for (var i = 0; i < _targetCount; i++)
                 {
                     var angle = 360f / _targetCount * i * Mathf.Deg2Rad;
@@ -105,15 +113,19 @@ namespace BalloonParty.Editor.EffectPreview
             (_lineBuffers, _cumOffsets) = ChainLightningView.BuildBoltBuffers(
                 targets, rendererCount, segMul, randomness);
 
+            (_glowPath, _glowDiameters) = ChainLightningView.BuildGlowPath(targets);
+
             _elapsed = 0f;
             _currentJump = 0;
             _retracting = false;
             _finished = false;
+            _glowFromIdx = 0f;
+            _glowToIdx = 0f;
 
             ClearRenderers();
 
-            // Show the first jump immediately
             ApplyRenderers(_cumOffsets[1]);
+            SetGlowFromPath(0f);
         }
 
         public bool Tick(float delta)
@@ -127,6 +139,7 @@ namespace BalloonParty.Editor.EffectPreview
 
             if (_elapsed < _jumpTime)
             {
+                InterpolateGlow();
                 return true;
             }
 
@@ -141,10 +154,17 @@ namespace BalloonParty.Editor.EffectPreview
                     _retracting = true;
                     _currentJump = _jumpCount - 1;
                     ApplyRenderers(_cumOffsets[_currentJump]);
+
+                    var stage = _currentJump - 1;
+                    _glowFromIdx = Mathf.Min((_jumpCount - 1) * GlowSubdivisions, GlowMaxIdx);
+                    _glowToIdx = stage >= 0 ? Mathf.Min(stage * GlowSubdivisions, GlowMaxIdx) : 0f;
                     return true;
                 }
 
                 ApplyRenderers(_cumOffsets[_currentJump + 1]);
+
+                _glowFromIdx = Mathf.Min((_currentJump - 1) * GlowSubdivisions, GlowMaxIdx);
+                _glowToIdx = Mathf.Min(_currentJump * GlowSubdivisions, GlowMaxIdx);
             }
             else
             {
@@ -161,6 +181,10 @@ namespace BalloonParty.Editor.EffectPreview
                 if (count > 0)
                 {
                     ApplyRenderers(count);
+
+                    var stage = _currentJump - 1;
+                    _glowFromIdx = _glowToIdx;
+                    _glowToIdx = stage >= 0 ? Mathf.Min(stage * GlowSubdivisions, GlowMaxIdx) : 0f;
                 }
                 else
                 {
@@ -176,6 +200,43 @@ namespace BalloonParty.Editor.EffectPreview
             ClearRenderers();
             _lineBuffers = null;
             _cumOffsets = null;
+            _glowPath = null;
+            _glowDiameters = null;
+        }
+
+        private float GlowMaxIdx => _glowPath != null && _glowPath.Length > 0 ? _glowPath.Length - 1 : 0f;
+
+        private void InterpolateGlow()
+        {
+            if (_glowRenderer == null || _glowPath == null || _glowPath.Length == 0)
+            {
+                return;
+            }
+
+            if (!_retracting && _currentJump == 0 && _glowFromIdx == 0f && _glowToIdx == 0f)
+            {
+                SetGlowFromPath(0f);
+                return;
+            }
+
+            var t = Mathf.Clamp01(_elapsed / _jumpTime);
+            var pathIdx = Mathf.Lerp(_glowFromIdx, _glowToIdx, t);
+            SetGlowFromPath(pathIdx);
+        }
+
+        private void SetGlowFromPath(float pathIndex)
+        {
+            if (_glowRenderer == null || _glowPath == null || _glowPath.Length == 0)
+            {
+                return;
+            }
+
+            var pos = PathHelper.SampleAt(_glowPath, pathIndex);
+            var dia = PathHelper.SampleAt(_glowDiameters, pathIndex);
+
+            _glowRenderer.enabled = true;
+            _glowRenderer.transform.position = pos;
+            _glowRenderer.transform.localScale = new Vector3(dia, dia, 1f);
         }
 
         private void ApplyRenderers(int pointCount)
@@ -192,8 +253,6 @@ namespace BalloonParty.Editor.EffectPreview
                 _lineRenderers[j].positionCount = pointCount;
                 _lineRenderers[j].SetPositions(_lineBuffers[j]);
             }
-
-            SyncGlow(pointCount, rendererCount);
         }
 
         private void ClearRenderers()
@@ -211,23 +270,9 @@ namespace BalloonParty.Editor.EffectPreview
 
             if (_glowRenderer != null)
             {
-                _glowRenderer.positionCount = 0;
-            }
-        }
-
-        private void SyncGlow(int count, int rendererCount)
-        {
-            if (_glowRenderer == null || rendererCount == 0)
-            {
-                return;
-            }
-
-            _glowRenderer.positionCount = count;
-            if (count > 0)
-            {
-                _glowRenderer.SetPositions(_lineBuffers[0]);
+                _glowRenderer.enabled = false;
+                _glowRenderer.transform.localScale = Vector3.zero;
             }
         }
     }
 }
-

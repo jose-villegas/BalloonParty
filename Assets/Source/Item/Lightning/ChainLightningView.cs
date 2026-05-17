@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Pool;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -15,8 +16,10 @@ namespace BalloonParty.Item.Lightning
     /// </summary>
     public class ChainLightningView : EffectView
     {
+        private const int GlowSubdivisions = 4;
+
         [SerializeField] private LineRenderer[] _lineRenderers;
-        [SerializeField] private LineRenderer _glowLineRenderer;
+        [SerializeField] private SpriteRenderer _glowRenderer;
 
         private CancellationTokenSource _cts;
         private float _jumpTime;
@@ -94,33 +97,37 @@ namespace BalloonParty.Item.Lightning
                 }
             }
 
-            if (_glowLineRenderer != null)
+            if (_glowRenderer != null)
             {
-                _glowLineRenderer.positionCount = 0;
+                _glowRenderer.enabled = false;
+                _glowRenderer.transform.localScale = Vector3.zero;
             }
         }
 
         // No allocation — buffer is pre-allocated per renderer and reused across all jumps.
         internal static void FillSegment(
-            Vector3 origin,
-            Vector3 target,
+            Vector3 p0,
+            Vector3 p1,
+            Vector3 p2,
+            Vector3 p3,
             int segments,
             float randomness,
             Vector3[] buffer,
             int offset)
         {
-            buffer[offset] = origin;
+            buffer[offset] = p1;
 
             for (var k = 1; k < segments - 1; k++)
             {
-                var lerped = Vector3.Lerp(origin, target, k / (float)segments);
+                var t = k / (float)segments;
+                var point = PathHelper.CatmullRom(p0, p1, p2, p3, t);
                 buffer[offset + k] = new Vector3(
-                    lerped.x + UnityEngine.Random.Range(-randomness, randomness),
-                    lerped.y + UnityEngine.Random.Range(-randomness, randomness),
+                    point.x + UnityEngine.Random.Range(-randomness, randomness),
+                    point.y + UnityEngine.Random.Range(-randomness, randomness),
                     0f);
             }
 
-            buffer[offset + segments - 1] = target;
+            buffer[offset + segments - 1] = p2;
         }
 
         /// <summary>
@@ -142,12 +149,7 @@ namespace BalloonParty.Item.Lightning
                 segmentSizes[i] = Mathf.Max(Mathf.FloorToInt(d * segmentsMultiplier), 2);
             }
 
-            var cumOffsets = new int[jumpCount + 1];
-            for (var i = 0; i < jumpCount; i++)
-            {
-                cumOffsets[i + 1] = cumOffsets[i] + segmentSizes[i];
-            }
-
+            var cumOffsets = PathHelper.PrefixSum(segmentSizes);
             var totalPoints = cumOffsets[jumpCount];
 
             var lineBuffers = new Vector3[rendererCount][];
@@ -156,9 +158,13 @@ namespace BalloonParty.Item.Lightning
                 lineBuffers[j] = new Vector3[totalPoints];
                 for (var i = 0; i < jumpCount; i++)
                 {
+                    var p0 = positions[Mathf.Max(i - 1, 0)];
+                    var p1 = positions[i];
+                    var p2 = positions[i + 1];
+                    var p3 = positions[Mathf.Min(i + 2, positions.Count - 1)];
+
                     FillSegment(
-                        positions[i],
-                        positions[i + 1],
+                        p0, p1, p2, p3,
                         segmentSizes[i],
                         randomness,
                         lineBuffers[j],
@@ -169,93 +175,209 @@ namespace BalloonParty.Item.Lightning
             return (lineBuffers, cumOffsets);
         }
 
+        /// <summary>
+        ///     Builds a smooth Catmull-Rom path through the per-jump centroids so the
+        ///     glow sprite can slide instead of snapping between discrete positions.
+        ///     Also returns interpolated diameters that match each path sample.
+        /// </summary>
+        internal static (Vector3[] positions, float[] diameters) BuildGlowPath(
+            List<Vector3> targetPositions,
+            int subdivisions = GlowSubdivisions)
+        {
+            var (centroids, rawDiameters) = ComputeStageCentroids(targetPositions);
+
+            if (centroids.Count <= 1)
+            {
+                return (centroids.ToArray(), rawDiameters);
+            }
+
+            var smoothPositions = PathHelper.CatmullRomPath(centroids, centroids.Count, subdivisions);
+            var smoothDiameters = PathHelper.ResampleLinear(rawDiameters, smoothPositions.Length);
+
+            return (smoothPositions, smoothDiameters);
+        }
+
+        /// <summary>
+        ///     Computes the centroid and bounding diameter for each visible glow stage.
+        ///     Stage <c>s</c> (1-indexed) covers <c>targetPositions[0..s]</c>.
+        /// </summary>
+        private static (List<Vector3> centroids, float[] diameters) ComputeStageCentroids(
+            List<Vector3> targetPositions)
+        {
+            var stageCount = targetPositions.Count - 1;
+            var centroids = new List<Vector3>(stageCount);
+            var diameters = new float[stageCount];
+
+            for (var stage = 1; stage <= stageCount; stage++)
+            {
+                var count = stage + 1;
+                var centroid = VectorMathHelper.Centroid(targetPositions, count);
+                centroids.Add(centroid);
+
+                var radius = VectorMathHelper.BoundingRadius(targetPositions, count, centroid);
+                diameters[stage - 1] = (radius + 1f) * 2f;
+            }
+
+            return (centroids, diameters);
+        }
+
+        private void SetGlowFromPath(Vector3[] path, float[] diameters, float pathIndex)
+        {
+            if (_glowRenderer == null || path.Length == 0)
+            {
+                return;
+            }
+
+            var pos = PathHelper.SampleAt(path, pathIndex);
+            var dia = PathHelper.SampleAt(diameters, pathIndex);
+
+            _glowRenderer.enabled = true;
+            _glowRenderer.transform.position = pos;
+            _glowRenderer.transform.localScale = new Vector3(dia, dia, 1f);
+        }
+
         private async UniTaskVoid PlayAsync()
         {
             var ct = _cts?.Token ?? CancellationToken.None;
             var jumpCount = _targetPositions.Count - 1;
             var rendererCount = _lineRenderers != null ? _lineRenderers.Length : 0;
-            var delayMs = Mathf.RoundToInt(_jumpTime * 1000f);
 
             var (lineBuffers, cumOffsets) = BuildBoltBuffers(
                 _targetPositions, rendererCount, _segmentsMultiplier, _randomness);
 
+            var (glowPath, glowDia) = BuildGlowPath(_targetPositions);
+            var hasGlow = _glowRenderer != null && glowPath.Length > 0;
+            var maxPathIdx = (float)(glowPath.Length - 1);
+
+            float GlowIdx(int stage) => Mathf.Min(stage * GlowSubdivisions, maxPathIdx);
+
+            // Forward: reveal jumps 0 → jumpCount-1
             for (var i = 0; i < jumpCount; i++)
             {
-                if (ct.IsCancellationRequested)
-                {
-                    return;
-                }
-
-                var count = cumOffsets[i + 1];
-                for (var j = 0; j < rendererCount; j++)
-                {
-                    if (_lineRenderers[j] == null)
-                    {
-                        continue;
-                    }
-
-                    _lineRenderers[j].positionCount = count;
-                    _lineRenderers[j].SetPositions(lineBuffers[j]);
-                }
-
-                SyncGlow(lineBuffers, count, rendererCount);
-                _onTargetHit?.Invoke(i);
-
-                await UniTask.Delay(delayMs, cancellationToken: ct).SuppressCancellationThrow();
-
-                if (ct.IsCancellationRequested)
+                if (await StepJump(i + 1, i > 0 ? i - 1 : -1, i, true))
                 {
                     return;
                 }
             }
 
+            // Retraction: remove jumps jumpCount-1 → 0
             for (var i = jumpCount - 1; i >= 0; i--)
             {
-                if (ct.IsCancellationRequested)
-                {
-                    return;
-                }
-
-                var count = cumOffsets[i];
-                for (var j = 0; j < rendererCount; j++)
-                {
-                    if (_lineRenderers[j] == null)
-                    {
-                        continue;
-                    }
-
-                    _lineRenderers[j].positionCount = count;
-                    if (count > 0)
-                    {
-                        _lineRenderers[j].SetPositions(lineBuffers[j]);
-                    }
-                }
-
-                SyncGlow(lineBuffers, count, rendererCount);
-
-                await UniTask.Delay(delayMs, cancellationToken: ct).SuppressCancellationThrow();
-
-                if (ct.IsCancellationRequested)
+                if (await StepJump(i, i >= 1 ? i : -1, i >= 1 ? i - 1 : -1, false))
                 {
                     return;
                 }
             }
 
             InvokeComplete();
+            return;
+
+            async UniTask<bool> StepJump(int lineStage, int glowFrom, int glowTo, bool forward)
+            {
+                if (ct.IsCancellationRequested)
+                {
+                    return true;
+                }
+
+                ApplyLineRenderers(lineBuffers, cumOffsets[lineStage], rendererCount);
+
+                if (forward)
+                {
+                    _onTargetHit?.Invoke(lineStage - 1);
+                }
+
+                if (hasGlow && glowFrom >= 0 && glowTo >= 0)
+                {
+                    return await AnimateGlowSegment(
+                        glowPath, glowDia, GlowIdx(glowFrom), GlowIdx(glowTo), ct);
+                }
+
+                if (hasGlow && forward)
+                {
+                    SetGlowFromPath(glowPath, glowDia, 0f);
+                }
+                else if (hasGlow)
+                {
+                    DisableGlow();
+                }
+
+                return await WaitJump(ct);
+            }
         }
 
-        private void SyncGlow(Vector3[][] lineBuffers, int count, int rendererCount)
+        private void ApplyLineRenderers(Vector3[][] lineBuffers, int pointCount, int rendererCount)
         {
-            if (_glowLineRenderer == null || rendererCount == 0)
+            for (var j = 0; j < rendererCount; j++)
+            {
+                if (_lineRenderers[j] == null)
+                {
+                    continue;
+                }
+
+                _lineRenderers[j].positionCount = pointCount;
+                if (pointCount > 0)
+                {
+                    _lineRenderers[j].SetPositions(lineBuffers[j]);
+                }
+            }
+        }
+
+        private void DisableGlow()
+        {
+            if (_glowRenderer == null)
             {
                 return;
             }
 
-            _glowLineRenderer.positionCount = count;
-            if (count > 0)
+            _glowRenderer.enabled = false;
+            _glowRenderer.transform.localScale = Vector3.zero;
+        }
+
+        /// <summary>
+        ///     Slides the glow sprite from one path index to another over <see cref="_jumpTime" />.
+        ///     Returns <c>true</c> when cancelled.
+        /// </summary>
+        private async UniTask<bool> AnimateGlowSegment(
+            Vector3[] path,
+            float[] diameters,
+            float fromIdx,
+            float toIdx,
+            CancellationToken ct)
+        {
+            var elapsed = 0f;
+            while (elapsed < _jumpTime)
             {
-                _glowLineRenderer.SetPositions(lineBuffers[0]);
+                if (ct.IsCancellationRequested)
+                {
+                    return true;
+                }
+
+                var t = Mathf.Clamp01(elapsed / _jumpTime);
+                SetGlowFromPath(path, diameters, Mathf.Lerp(fromIdx, toIdx, t));
+                elapsed += Time.deltaTime;
+
+                await UniTask.Yield(ct).SuppressCancellationThrow();
+
+                if (ct.IsCancellationRequested)
+                {
+                    return true;
+                }
             }
+
+            SetGlowFromPath(path, diameters, toIdx);
+            return false;
+        }
+
+        /// <summary>
+        ///     Waits one jump duration. Returns <c>true</c> when cancelled.
+        /// </summary>
+        private async UniTask<bool> WaitJump(CancellationToken ct)
+        {
+            var delayMs = Mathf.RoundToInt(_jumpTime * 1000f);
+
+            await UniTask.Delay(delayMs, cancellationToken: ct).SuppressCancellationThrow();
+
+            return ct.IsCancellationRequested;
         }
     }
 }
