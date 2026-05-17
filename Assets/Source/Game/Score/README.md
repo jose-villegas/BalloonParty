@@ -23,9 +23,9 @@ Each trail is identified by a `TrailId(Color, Score, Level)`:
 Two progress values exist per color:
 
 - **`_projectedProgress`** — advances immediately on balloon pop. Used by `WillLevelUp` and trail score assignment so multi-point balloons get unique, sequential trail identities.
-- **`_levelProgress`** — set to the arriving trail's score value on arrival. Represents the highest confirmed progress for that color. Used for the level-up threshold check and persistent save state.
+- **`_levelProgress`** — set to the arriving trail's score value on arrival (using `Math.Max` to prevent out-of-order decreases). Represents the highest confirmed progress for that color. Used for the level-up threshold check and persistent save state.
 
-`CheckLevelUp` uses `_levelProgress` (confirmed) for the threshold check. During the cinematic, pre-tipping trails keep flying and their arrivals push `_levelProgress` upward. The tipping trail arrives last (by score value), setting `_levelProgress` to `requiredPoints` and triggering the level-up. Post-tipping trails from the same pop are paused and resume after the cinematic.
+`WillLevelUp` checks `_projectedProgress` for **all** colors (not just the popping color). This ensures the cinematic registers even when multiple colors reach the threshold in close succession — their trails may still be in-flight but will confirm before the paused tipping trail arrives. `CheckLevelUp` uses `_levelProgress` (confirmed) for the final threshold check.
 
 ## Next-Level Trail Renumbering
 
@@ -40,11 +40,12 @@ After the level-up resets progress to 0, these next-level trails arrive with sco
 
 ## Selective Pause
 
-When the cinematic begins, only next-level trails are paused — trails of the **same color** with `Level > tippingLevel`. Pre-tipping trails (any color, current level) keep flying so their progress bar arrivals complete naturally. `PauseTrailsAbove(TrailId threshold)` handles this. Paused trails resume automatically on `OnCinematicEnd`. New spawns during the cinematic are gated by `Cinematic.IsPlaying` in `SpawnTrailsAsync`.
+When the cinematic begins, all next-level trails are paused — any trail (regardless of color) with `Level > tippingLevel`. Pre-tipping trails (any color, current level) keep flying so their progress bar arrivals complete naturally. `PauseTrailsAbove(TrailId threshold)` handles already in-flight trails. New trail spawns in `SpawnTrailsAsync` are only gated for next-level trails (`ids[i].Level > baseLevel`); current-level trails from all colors spawn freely even during the cinematic so that `CheckLevelUp` can confirm progress for every color.
 
 ## Spawn Timing
 
 `SpawnTrailsAsync` yields one frame before spawning the first trail. This ensures all synchronous `BalloonScoredMessage` handlers (including `LevelUpTrailEffect.OnBalloonScored` → `TrackTrail`) finish before any trail is instantiated. Without this yield, subscription ordering (`IStartable` before MonoBehaviour) would cause the trail to spawn before tracking is registered.
+
 
 ## Interactions
 

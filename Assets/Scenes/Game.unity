@@ -6052,16 +6052,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1003ca44ba534f69bc7807fd0c071f6f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Game.LevelUpTrailEffect
-  _slowTimeScale: 0.3
-  _slowDownDuration: 2
-  _restoreDuration: 0.4
-  _zoomAmount: 0.15
-  _cameraPanWeight: 0.4
-  _cameraFollowSpeed: 0.5
-  _canvasTargetScale: 1
-  _uiContent: {fileID: 1910519261}
-  _canvasPositionWeight: 0
-  _canvasFollowSpeed: 4
+  _slowTimeScale: 0.2
+  _slowDownDuration: 3
+  _restoreDuration: 0.5
+  _zoomAmount: 1.75
+  _cameraPanWeight: 0.5
+  _cameraFollowSpeed: 0.7
+  _trackedTrailScaleCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 0.012352265
+      value: 2.8729298
+      inSlope: 81.22478
+      outSlope: 81.22478
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.21330443
+      outWeight: 0.006128342
+    - serializedVersion: 3
+      time: 1
+      value: 5
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &833419453
 GameObject:
   m_ObjectHideFlags: 0
@@ -13273,12 +13302,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1345562760}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!224 &1910519261 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 1055335059502019106, guid: 66f9708a0b9b044198e0f57d389d660f,
-    type: 3}
-  m_PrefabInstance: {fileID: 3826009426338545574}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1930011481
 GameObject:
   m_ObjectHideFlags: 0

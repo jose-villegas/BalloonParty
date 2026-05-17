@@ -100,11 +100,6 @@ namespace BalloonParty.Game.Score
         {
             foreach (var kvp in _inFlightTrails)
             {
-                if (kvp.Key.Color != threshold.Color)
-                {
-                    continue;
-                }
-
                 if (kvp.Key.Level <= threshold.Level)
                 {
                     continue;
@@ -197,7 +192,7 @@ namespace BalloonParty.Game.Score
                     : new TrailId(msg.ColorName, rawScore, msg.Level);
             }
 
-            SpawnTrailsAsync(msg.ColorName, origins, ids).Forget();
+            SpawnTrailsAsync(msg.ColorName, origins, ids, msg.Level).Forget();
         }
 
         private void ResumeActiveTrails()
@@ -213,7 +208,11 @@ namespace BalloonParty.Game.Score
             _cinematicPausedTrails.Clear();
         }
 
-        private async UniTaskVoid SpawnTrailsAsync(string colorName, Vector3[] origins, TrailId[] ids)
+        private async UniTaskVoid SpawnTrailsAsync(
+            string colorName,
+            Vector3[] origins,
+            TrailId[] ids,
+            int baseLevel)
         {
             // Yield one frame so all BalloonScoredMessage handlers finish before
             // the first spawn. This lets LevelUpTrailEffect register TrackTrail
@@ -225,7 +224,9 @@ namespace BalloonParty.Game.Score
 
             for (var i = 0; i < origins.Length; i++)
             {
-                if (Cinematic.IsPlaying)
+                // Only gate next-level trails — current-level trails from all
+                // colors must keep arriving so CheckLevelUp can confirm progress.
+                if (Cinematic.IsPlaying && ids[i].Level > baseLevel)
                 {
                     await UniTask.WaitWhile(() => Cinematic.IsPlaying, cancellationToken: _cts.Token);
                 }

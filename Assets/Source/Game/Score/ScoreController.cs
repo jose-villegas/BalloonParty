@@ -91,24 +91,19 @@ namespace BalloonParty.Game.Score
         }
 
         /// <summary>
-        ///     Checks whether the projected progress for <paramref name="colorName" />
-        ///     already reaches the level-up threshold. Called after projected
-        ///     progress has been incremented for the current pop.
+        ///     Checks whether all colors have projected progress at or above the
+        ///     level-up threshold. Uses projected (not confirmed) progress so
+        ///     the cinematic can be registered even when multiple colors reach
+        ///     the threshold in close succession — their trails may still be
+        ///     in-flight but will confirm before the paused tipping trail arrives.
         /// </summary>
-        internal bool WillLevelUp(string colorName)
+        internal bool WillLevelUp()
         {
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
 
-            foreach (var kvp in _levelProgress)
+            foreach (var kvp in _projectedProgress)
             {
-                if (kvp.Key == colorName)
-                {
-                    if (_projectedProgress[colorName] < required)
-                    {
-                        return false;
-                    }
-                }
-                else if (kvp.Value < required)
+                if (kvp.Value < required)
                 {
                     return false;
                 }
@@ -187,7 +182,10 @@ namespace BalloonParty.Game.Score
             _persistentScore[msg.ColorName]++;
             _totalScore.Value = _persistentScore.Values.Sum();
 
-            _levelProgress[msg.ColorName] = msg.Score;
+            var previous = _levelProgress[msg.ColorName];
+            _levelProgress[msg.ColorName] = Math.Max(previous, msg.Score);
+            _projectedProgress[msg.ColorName] = Math.Max(_projectedProgress[msg.ColorName], msg.Score);
+
 
             CheckLevelUp();
         }

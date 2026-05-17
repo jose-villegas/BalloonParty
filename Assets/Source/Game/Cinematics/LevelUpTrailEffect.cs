@@ -22,6 +22,7 @@ namespace BalloonParty.Game.Cinematics
         [SerializeField] private float _zoomAmount = 0.5f;
         [SerializeField] private float _cameraPanWeight = 0.7f;
         [SerializeField] private float _cameraFollowSpeed = 5f;
+        [SerializeField] private AnimationCurve _trackedTrailScaleCurve = AnimationCurve.EaseInOut(0f, 2f, 1f, 1f);
 
         [Inject] private CinematicDirector _director;
         [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
@@ -39,6 +40,7 @@ namespace BalloonParty.Game.Cinematics
         private Tween _timeScaleTween;
         private TrailId _tippingTrailId;
         private Transform _trackedTrail;
+        private float _trailElapsed;
         private Tween _zoomTween;
 
         private void Start()
@@ -82,7 +84,9 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            if (!_scoreController.WillLevelUp(msg.ColorName))
+            var willLevelUp = _scoreController.WillLevelUp();
+
+            if (!willLevelUp)
             {
                 return;
             }
@@ -125,20 +129,21 @@ namespace BalloonParty.Game.Cinematics
 
         private void OnRestoreComplete()
         {
-            _sessionActive = false;
-
             if (_orthoController != null)
             {
                 _orthoController.enabled = true;
             }
 
+            _sessionActive = false;
             _director.EndCinematic();
             Navigation.TransitionTo(NavigationState.Game);
         }
 
+
         private void OnTippingTrailSpawned(Transform trailTransform)
         {
             _trackedTrail = trailTransform;
+            _trailElapsed = 0f;
             _lastTrailPosition = trailTransform.position;
 
             _director.BeginCinematic(CinematicState.LevelUpTrail);
@@ -155,14 +160,17 @@ namespace BalloonParty.Game.Cinematics
 
         private void OnTrailArrived(ScoreTrailArrivedMessage msg)
         {
-            if (!_director.IsScenePlaying)
+            var isScenePlaying = _director.IsScenePlaying;
+            var matches = msg.ColorName == _tippingTrailId.Color
+                          && msg.Score == _tippingTrailId.Score
+                          && msg.Level == _tippingTrailId.Level;
+
+            if (!isScenePlaying)
             {
                 return;
             }
 
-            if (msg.ColorName != _tippingTrailId.Color
-                || msg.Score != _tippingTrailId.Score
-                || msg.Level != _tippingTrailId.Level)
+            if (!matches)
             {
                 return;
             }
@@ -180,9 +188,13 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
+            _trailElapsed += Time.unscaledDeltaTime;
+
             if (_trackedTrail != null)
             {
                 _lastTrailPosition = _trackedTrail.position;
+                var scale = _trackedTrailScaleCurve.Evaluate(_trailElapsed);
+                _trackedTrail.localScale = Vector3.one * scale;
             }
 
             var panTarget = Vector3.Lerp(_basePosition, _lastTrailPosition, _cameraPanWeight);
