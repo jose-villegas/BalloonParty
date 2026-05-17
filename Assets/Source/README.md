@@ -246,8 +246,8 @@ internal class MyService : ICinematicAware
 
 | State | Meaning | Set by |
 |---|---|---|
-| `None` | No cinematic active | Default; `LevelUpTrailEffect.OnRestoreComplete` |
-| `LevelUpTrail` | Level-up trail cinematic — slow-mo, zoom, camera pan | `LevelUpTrailEffect.OnBalloonScored` |
+| `None` | No cinematic active | Default; `CinematicDirector.EndCinematic` |
+| `LevelUpTrail` | Level-up trail cinematic — slow-mo, zoom, camera pan | `CinematicDirector.BeginCinematic` (called by `LevelUpTrailEffect` via scene tick) |
 
 ---
 

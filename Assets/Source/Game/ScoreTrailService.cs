@@ -17,18 +17,19 @@ namespace BalloonParty.Game
 {
     internal class ScoreTrailService : IStartable, IDisposable, ICinematicAware
     {
-        private readonly IGameConfiguration _config;
+        private readonly HashSet<Transform> _activeTrails = new();
         private readonly IPublisher<ScoreTrailArrivedMessage> _arrivedPublisher;
-        private readonly ISubscriber<BalloonScoredMessage> _scoredSubscriber;
-        private readonly PoolManager _poolManager;
-        private readonly ScorePointTrail _trailPrefab;
         private readonly Dictionary<string, Color> _colorLookup = new();
-        private readonly Dictionary<string, string> _poolKeys = new();
-        private readonly Dictionary<string, Func<Vector3>> _targetProviders = new();
+        private readonly IGameConfiguration _config;
         private readonly CancellationTokenSource _cts = new();
         private readonly Dictionary<(string Color, int Score), Transform> _inFlightTrails = new();
-        private readonly HashSet<Transform> _activeTrails = new();
+        private readonly Dictionary<string, string> _poolKeys = new();
+        private readonly PoolManager _poolManager;
+        private readonly ISubscriber<BalloonScoredMessage> _scoredSubscriber;
+        private readonly Dictionary<string, Func<Vector3>> _targetProviders = new();
+        private readonly ScorePointTrail _trailPrefab;
 
+        private string _cinematicExemptColor;
         private IDisposable _subscription;
 
         [Inject]
@@ -67,29 +68,8 @@ namespace BalloonParty.Game
 
         public void OnCinematicEnd()
         {
+            _cinematicExemptColor = null;
             ResumeActiveTrails();
-        }
-
-        private void PauseActiveTrails()
-        {
-            foreach (var trail in _activeTrails)
-            {
-                if (trail != null)
-                {
-                    trail.DOPause();
-                }
-            }
-        }
-
-        private void ResumeActiveTrails()
-        {
-            foreach (var trail in _activeTrails)
-            {
-                if (trail != null)
-                {
-                    trail.DOPlay();
-                }
-            }
         }
 
         public void RegisterTarget(string colorName, Func<Vector3> targetProvider, Color color)
@@ -114,6 +94,19 @@ namespace BalloonParty.Game
             if (t != null)
             {
                 t.DOPlay();
+            }
+        }
+
+        internal void ResumeTrailsForColor(string colorName)
+        {
+            _cinematicExemptColor = colorName;
+
+            foreach (var kvp in _inFlightTrails)
+            {
+                if (kvp.Key.Color == colorName && kvp.Value != null)
+                {
+                    kvp.Value.DOPlay();
+                }
             }
         }
 
@@ -167,6 +160,28 @@ namespace BalloonParty.Game
             SpawnTrailsAsync(msg.ColorName, origins, scores).Forget();
         }
 
+        private void PauseActiveTrails()
+        {
+            foreach (var trail in _activeTrails)
+            {
+                if (trail != null)
+                {
+                    trail.DOPause();
+                }
+            }
+        }
+
+        private void ResumeActiveTrails()
+        {
+            foreach (var trail in _activeTrails)
+            {
+                if (trail != null)
+                {
+                    trail.DOPlay();
+                }
+            }
+        }
+
         private async UniTaskVoid SpawnTrailsAsync(string colorName, Vector3[] origins, int[] scores)
         {
             var delayMs = Mathf.RoundToInt(_config.ScorePointsScatterDelay * 1000f);
@@ -174,12 +189,6 @@ namespace BalloonParty.Game
 
             for (var i = 0; i < origins.Length; i++)
             {
-                if (Cinematic.IsPlaying)
-                {
-                    await UniTask.WaitUntil(
-                        () => !Cinematic.IsPlaying,
-                        cancellationToken: _cts.Token);
-                }
 
                 SpawnTrail(colorName, poolKey, origins[i], scores[i]);
                 if (i < origins.Length - 1)
@@ -204,7 +213,7 @@ namespace BalloonParty.Game
             _inFlightTrails[key] = trail.transform;
             _activeTrails.Add(trail.transform);
 
-            if (Cinematic.IsPlaying)
+            if (Cinematic.IsPlaying && colorName != _cinematicExemptColor)
             {
                 trail.transform.DOPause();
             }

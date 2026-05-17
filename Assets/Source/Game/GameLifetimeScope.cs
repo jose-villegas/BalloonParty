@@ -6,6 +6,7 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Display;
+using BalloonParty.Game.Cinematics;
 using BalloonParty.Item;
 using BalloonParty.Item.Bomb;
 using BalloonParty.Item.Laser;
@@ -93,6 +94,7 @@ namespace BalloonParty.Game
 
             builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
 
+            builder.RegisterEntryPoint<CinematicDirector>().AsSelf();
             builder.RegisterComponentInHierarchy<LevelUpTrailEffect>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

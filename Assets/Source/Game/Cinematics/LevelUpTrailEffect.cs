@@ -1,0 +1,272 @@
+using BalloonParty.Display;
+using BalloonParty.Shared.GameState;
+using BalloonParty.Shared.Messages;
+using DG.Tweening;
+using MessagePipe;
+using UniRx;
+using UnityEngine;
+using VContainer;
+using Navigation = BalloonParty.Shared.GameState.Navigation;
+
+namespace BalloonParty.Game.Cinematics
+{
+    internal class LevelUpTrailEffect : MonoBehaviour
+    {
+        [Header("Slow Motion")]
+        [SerializeField] private float _slowTimeScale = 0.3f;
+        [SerializeField] private float _slowDownDuration = 0.15f;
+        [SerializeField] private float _restoreDuration = 0.35f;
+
+        [Header("Camera")]
+        [SerializeField] private float _zoomAmount = 0.5f;
+        [SerializeField] private float _cameraPanWeight = 0.7f;
+        [SerializeField] private float _cameraFollowSpeed = 5f;
+
+        [Inject] private CinematicDirector _director;
+        [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
+        [Inject] private ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
+        [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
+        [Inject] private OrthogonalSizeCameraController _orthoController;
+        [Inject] private ScoreController _scoreController;
+        [Inject] private ScoreTrailService _scoreTrailService;
+
+        private Camera _camera;
+        private float _baseOrthoSize;
+        private Vector3 _basePosition;
+        private Vector3 _lastTrailPosition;
+        private bool _sessionActive;
+        private Tween _timeScaleTween;
+        private string _tippingColor;
+        private int _tippingScore;
+        private Transform _trackedTrail;
+        private Tween _zoomTween;
+
+        private void Start()
+        {
+            _camera = Camera.main;
+
+            _scoredSubscriber.Subscribe(OnBalloonScored).AddTo(this);
+            _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
+            _dismissedSubscriber.Subscribe(OnLevelUpDismissed).AddTo(this);
+        }
+
+        private void OnDestroy()
+        {
+            KillTweens();
+
+            if (_director.IsCinematicActive)
+            {
+                _director.EndCinematic();
+            }
+
+            if (_orthoController != null)
+            {
+                _orthoController.enabled = true;
+            }
+
+            Time.timeScale = 1f;
+        }
+
+        private void KillTweens()
+        {
+            _timeScaleTween?.Kill();
+            _zoomTween?.Kill();
+            _timeScaleTween = null;
+            _zoomTween = null;
+        }
+
+        private void OnBalloonScored(BalloonScoredMessage msg)
+        {
+            if (_sessionActive || Cinematic.IsPlaying || msg.Points <= 0)
+            {
+                return;
+            }
+
+            if (!_scoreController.WillLevelUp(msg.ColorName))
+            {
+                return;
+            }
+
+            _sessionActive = true;
+            _tippingColor = msg.ColorName;
+            _tippingScore = _scoreController.GetRequiredPoints();
+            _trackedTrail = null;
+
+            PreparePanIn(msg.WorldPosition);
+
+            _director.PlayScene(new CinematicScene(
+                onTick: PanInTick,
+                onEnd: OnPanInComplete));
+        }
+
+        private void OnLevelUpDismissed(LevelUpDismissedMessage msg)
+        {
+            if (!_sessionActive)
+            {
+                Time.timeScale = 1f;
+                Navigation.TransitionTo(NavigationState.Game);
+                return;
+            }
+
+            if (!_director.IsCinematicActive)
+            {
+                _sessionActive = false;
+                KillTweens();
+                RestoreImmediate();
+                Time.timeScale = 1f;
+                Navigation.TransitionTo(NavigationState.Game);
+                return;
+            }
+
+            PrepareRestore();
+
+            _director.PlayScene(new CinematicScene(
+                onEnd: OnRestoreComplete));
+        }
+
+        private void OnPanInComplete()
+        {
+            // Level-up popup appears from ScoreController's ScoreLevelUpMessage.
+        }
+
+        private void OnRestoreComplete()
+        {
+            _sessionActive = false;
+
+            if (_orthoController != null)
+            {
+                _orthoController.enabled = true;
+            }
+
+            _director.EndCinematic();
+            Navigation.TransitionTo(NavigationState.Game);
+        }
+
+        private void OnTrailArrived(ScoreTrailArrivedMessage msg)
+        {
+            if (!_director.IsScenePlaying)
+            {
+                return;
+            }
+
+            if (msg.ColorName != _tippingColor || msg.Score != _tippingScore)
+            {
+                return;
+            }
+
+            _trackedTrail = null;
+            KillTweens();
+            _director.CompleteScene();
+        }
+
+        private void PanInTick()
+        {
+            if (_camera == null)
+            {
+                return;
+            }
+
+            if (_trackedTrail == null && _tippingScore > 0)
+            {
+                _trackedTrail = _scoreTrailService.GetTrailTransform(_tippingColor, _tippingScore);
+
+                if (_trackedTrail != null)
+                {
+                    _director.BeginCinematic(CinematicState.LevelUpTrail);
+                    _scoreTrailService.ResumeTrailsForColor(_tippingColor);
+                }
+            }
+
+            if (_trackedTrail != null)
+            {
+                _lastTrailPosition = _trackedTrail.position;
+            }
+
+            var panTarget = Vector3.Lerp(_basePosition, _lastTrailPosition, _cameraPanWeight);
+            panTarget.z = _basePosition.z;
+
+            _camera.transform.position = Vector3.Lerp(
+                _camera.transform.position,
+                panTarget,
+                _cameraFollowSpeed * Time.unscaledDeltaTime);
+        }
+
+        private void PreparePanIn(Vector3 focusWorldPosition)
+        {
+            KillTweens();
+            _lastTrailPosition = focusWorldPosition;
+
+            if (_orthoController != null)
+            {
+                _orthoController.enabled = false;
+            }
+
+            if (_camera != null)
+            {
+                _baseOrthoSize = _camera.orthographicSize;
+                _basePosition = _camera.transform.position;
+            }
+
+            _timeScaleTween = DOTween.To(
+                    () => Time.timeScale,
+                    x => Time.timeScale = x,
+                    _slowTimeScale,
+                    _slowDownDuration)
+                .SetUpdate(true);
+
+            if (_camera != null)
+            {
+                _zoomTween = DOTween.To(
+                        () => _camera.orthographicSize,
+                        x => _camera.orthographicSize = x,
+                        _baseOrthoSize - _zoomAmount,
+                        _slowDownDuration)
+                    .SetEase(Ease.OutQuad)
+                    .SetUpdate(true);
+            }
+        }
+
+        private void PrepareRestore()
+        {
+            KillTweens();
+
+            _timeScaleTween = DOTween.To(
+                    () => Time.timeScale,
+                    x => Time.timeScale = x,
+                    1f,
+                    _restoreDuration)
+                .SetUpdate(true)
+                .OnComplete(() => _director.CompleteScene());
+
+            if (_camera != null)
+            {
+                var sequence = DOTween.Sequence().SetUpdate(true);
+                sequence.Join(
+                    _camera.transform.DOMove(_basePosition, _restoreDuration)
+                        .SetEase(Ease.InOutQuad));
+                sequence.Join(
+                    DOTween.To(
+                        () => _camera.orthographicSize,
+                        x => _camera.orthographicSize = x,
+                        _baseOrthoSize,
+                        _restoreDuration).SetEase(Ease.InOutQuad));
+
+                _zoomTween = sequence;
+            }
+        }
+
+        private void RestoreImmediate()
+        {
+            if (_orthoController != null)
+            {
+                _orthoController.enabled = true;
+            }
+
+            if (_camera != null)
+            {
+                _camera.orthographicSize = _baseOrthoSize;
+                _camera.transform.position = _basePosition;
+            }
+        }
+    }
+}

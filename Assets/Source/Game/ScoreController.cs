@@ -20,15 +20,15 @@ namespace BalloonParty.Game
 
         private readonly IGameConfiguration _config;
         private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
-        private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly ReactiveProperty<int> _level = new(1);
         private readonly Dictionary<string, int> _levelProgress = new();
-        private readonly Dictionary<string, int> _projectedProgress = new();
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private readonly GamePalette _palette;
         private readonly Dictionary<string, int> _persistentScore = new();
+        private readonly Dictionary<string, int> _projectedProgress = new();
         private readonly IPublisher<BalloonScoredMessage> _scoredPublisher;
         private readonly ReactiveProperty<int> _totalScore = new(0);
+        private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
 
         private IDisposable _subscription;
         private IDisposable _trailSubscription;
@@ -117,49 +117,17 @@ namespace BalloonParty.Game
             return true;
         }
 
-        private void Save()
+        private bool AllColorsComplete(int required)
         {
-            foreach (var color in _palette.Colors)
+            foreach (var kvp in _levelProgress)
             {
-                PlayerPrefs.SetInt(color.Name, _persistentScore.GetValueOrDefault(color.Name));
-                PlayerPrefs.SetInt(color.Name + ProgressSuffix, _levelProgress.GetValueOrDefault(color.Name));
+                if (kvp.Value < required)
+                {
+                    return false;
+                }
             }
 
-            PlayerPrefs.SetInt(LevelKey, _level.Value);
-            PlayerPrefs.Save();
-        }
-
-        private void OnBalloonHit(BalloonHitMessage msg)
-        {
-            if (msg.Balloon.EvaluateHit(msg.Damage) != HitOutcome.Pop)
-            {
-                return;
-            }
-
-            var color = msg.Balloon.Color.Value;
-            if (string.IsNullOrEmpty(color) || !_persistentScore.ContainsKey(color))
-            {
-                return;
-            }
-
-            var points = msg.Balloon.ScoreValue;
-            var currentProgress = _projectedProgress.GetValueOrDefault(color);
-            _projectedProgress[color] = currentProgress + points;
-            _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, points, currentProgress));
-        }
-
-        private void OnTrailArrived(ScoreTrailArrivedMessage msg)
-        {
-            if (!_persistentScore.ContainsKey(msg.ColorName))
-            {
-                return;
-            }
-
-            _persistentScore[msg.ColorName]++;
-            _totalScore.Value = _persistentScore.Values.Sum();
-
-            _levelProgress[msg.ColorName]++;
-            CheckLevelUp();
+            return true;
         }
 
         private void CheckLevelUp()
@@ -183,17 +151,23 @@ namespace BalloonParty.Game
             Time.timeScale = 0f;
         }
 
-        private bool AllColorsComplete(int required)
+        private void OnBalloonHit(BalloonHitMessage msg)
         {
-            foreach (var kvp in _levelProgress)
+            if (msg.Balloon.EvaluateHit(msg.Damage) != HitOutcome.Pop)
             {
-                if (kvp.Value < required)
-                {
-                    return false;
-                }
+                return;
             }
 
-            return true;
+            var color = msg.Balloon.Color.Value;
+            if (string.IsNullOrEmpty(color) || !_persistentScore.ContainsKey(color))
+            {
+                return;
+            }
+
+            var points = msg.Balloon.ScoreValue;
+            var currentProgress = _projectedProgress.GetValueOrDefault(color);
+            _projectedProgress[color] = currentProgress + points;
+            _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, points, currentProgress));
         }
 
         private void OnFocusChanged(bool hasFocus)
@@ -202,6 +176,32 @@ namespace BalloonParty.Game
             {
                 Save();
             }
+        }
+
+        private void OnTrailArrived(ScoreTrailArrivedMessage msg)
+        {
+            if (!_persistentScore.ContainsKey(msg.ColorName))
+            {
+                return;
+            }
+
+            _persistentScore[msg.ColorName]++;
+            _totalScore.Value = _persistentScore.Values.Sum();
+
+            _levelProgress[msg.ColorName]++;
+            CheckLevelUp();
+        }
+
+        private void Save()
+        {
+            foreach (var color in _palette.Colors)
+            {
+                PlayerPrefs.SetInt(color.Name, _persistentScore.GetValueOrDefault(color.Name));
+                PlayerPrefs.SetInt(color.Name + ProgressSuffix, _levelProgress.GetValueOrDefault(color.Name));
+            }
+
+            PlayerPrefs.SetInt(LevelKey, _level.Value);
+            PlayerPrefs.Save();
         }
     }
 }
