@@ -42,9 +42,13 @@ After the level-up resets progress to 0, these next-level trails arrive with sco
 
 When the cinematic begins, all next-level in-flight trails are paused — any trail (regardless of color) with `Level > tippingLevel`. Pre-tipping trails (any color, current level) keep flying so their progress bar arrivals complete naturally. `PauseTrailsAbove(TrailId threshold)` handles already in-flight trails. New trail spawns are gated by the `NextLevel` flag on each `ScorePointMessage`; current-level trails spawn freely even during the cinematic so that `CheckLevelUp` can confirm progress for every color.
 
-## Spawn Synchronization
+## Spawn & Tracking
 
-Each `ScorePointMessage` creates a spawn gate (`UniTaskCompletionSource`) that the async spawn task awaits before spawning. `LevelUpTrailEffect` releases the gate via `ReleaseSpawnGate()` after all `TrackTrail` registrations are complete. A one-frame auto-release serves as safety fallback. Multi-point pops use `GroupIndex` for stagger delay — the first point (index 0) spawns immediately, subsequent points are delayed by `GroupIndex × ScorePointsScatterDelay`.
+`ScoreTrailService` spawns trails directly from each `ScorePointMessage`. Multi-point pops use `GroupIndex` for stagger delay — the first point (index 0) spawns immediately, subsequent points are delayed by `GroupIndex × ScorePointsScatterDelay`. Next-level trails are gated by `Cinematic.IsPlaying && NextLevel`.
+
+`TrackTrail` supports both forward and retroactive registration:
+- **Forward** — if tracking is registered before the trail spawns (e.g., for `groupIndex > 0` trails that are delayed), the trail is paused at spawn and the callback fires.
+- **Retroactive** — if the trail already spawned (e.g., `groupIndex == 0` where subscription ordering causes the trail to spawn before `LevelUpTrailEffect` processes the message), the trail is paused and its tweens are switched to unscaled time via `DOTween.TweensByTarget`, then the callback fires.
 
 
 ## Interactions
