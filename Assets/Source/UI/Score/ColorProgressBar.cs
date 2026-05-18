@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Configuration;
-using BalloonParty.Game;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
@@ -45,7 +44,6 @@ namespace BalloonParty.UI.Score
         private PaletteEntry _colorConfig;
         private string _pointNoticePoolKey;
         private string _streakNoticePoolKey;
-        private int _streak;
 
 
         private void OnValidate()
@@ -106,30 +104,22 @@ namespace BalloonParty.UI.Score
 
         private void OnScorePoint(ScorePointMessage msg)
         {
-            // Streaks track consecutive same-color pops, not individual points.
-            if (msg.GroupIndex > 0)
+            if (msg.GroupIndex > 0 || msg.ColorName != _colorConfig.Name)
             {
                 return;
             }
 
-            if (msg.ColorName != _colorConfig.Name)
-            {
-                _streak = 0;
-                return;
-            }
+            var streak = _scoreController.GetStreak(_colorConfig.Name);
 
-            _streak++;
-
-            if (_streak > 1)
+            if (streak > 1)
             {
                 DismissFullyShownNotices();
-                SpawnStreakNotice(_streak);
+                SpawnStreakNotice(streak);
             }
         }
 
         private void OnLevelUp(ScoreLevelUpMessage msg)
         {
-            _streak = 0;
             _progressSlider.maxValue = _config.PointsRequiredForLevel(msg.NewLevel + 1);
             _progressSlider.value = 0;
 

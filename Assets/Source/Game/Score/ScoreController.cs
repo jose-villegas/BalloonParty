@@ -30,6 +30,8 @@ namespace BalloonParty.Game.Score
         private readonly ReactiveProperty<int> _totalScore = new(0);
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
 
+        private int _currentStreak;
+        private string _lastPoppedColor;
         private IDisposable _subscription;
         private IDisposable _trailSubscription;
 
@@ -90,6 +92,11 @@ namespace BalloonParty.Game.Score
             return _config.PointsRequiredForLevel(Level.Value + 1);
         }
 
+        internal int GetStreak(string colorName)
+        {
+            return _lastPoppedColor == colorName ? _currentStreak : 0;
+        }
+
         /// <summary>
         ///     Uses projected (not confirmed) progress so the cinematic can
         ///     register before in-flight trails from other colors arrive.
@@ -132,6 +139,9 @@ namespace BalloonParty.Game.Score
 
             _level.Value++;
 
+            _currentStreak = 0;
+            _lastPoppedColor = null;
+
             foreach (var key in _levelProgress.Keys.ToArray())
             {
                 _levelProgress[key] = 0;
@@ -153,6 +163,16 @@ namespace BalloonParty.Game.Score
             if (string.IsNullOrEmpty(color) || !_persistentScore.ContainsKey(color))
             {
                 return;
+            }
+
+            if (color == _lastPoppedColor)
+            {
+                _currentStreak++;
+            }
+            else
+            {
+                _lastPoppedColor = color;
+                _currentStreak = 1;
             }
 
             var points = msg.Balloon.ScoreValue;
