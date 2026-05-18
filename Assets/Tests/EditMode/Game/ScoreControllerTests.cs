@@ -183,6 +183,86 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(0, _controller.GetProgress(Red));
         }
 
+        [Test]
+        public void Streak_FirstPop_StreakIsOne()
+        {
+            FirePop(Red);
+
+            Assert.AreEqual(1, _controller.GetStreak(Red));
+        }
+
+        [Test]
+        public void Streak_ConsecutiveSameColor_Increments()
+        {
+            FirePop(Red);
+            FirePop(Red);
+            FirePop(Red);
+
+            Assert.AreEqual(3, _controller.GetStreak(Red));
+        }
+
+        [Test]
+        public void Streak_DifferentColor_Resets()
+        {
+            FirePop(Red);
+            FirePop(Red);
+            FirePop(Blue);
+
+            Assert.AreEqual(0, _controller.GetStreak(Red));
+            Assert.AreEqual(1, _controller.GetStreak(Blue));
+        }
+
+        [Test]
+        public void Streak_MultipliesPoints()
+        {
+            FirePop(Red);
+            _scoredPublisher.Received(1).Publish(
+                Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+
+            _scoredPublisher.ClearReceivedCalls();
+            FirePop(Red);
+            _scoredPublisher.Received(2).Publish(
+                Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+
+            _scoredPublisher.ClearReceivedCalls();
+            FirePop(Red);
+            _scoredPublisher.Received(3).Publish(
+                Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+        }
+
+        [Test]
+        public void Streak_MultipliesWithScoreValue()
+        {
+            var model = CreateModel(Red, 1, 2);
+            FireHit(model, 1);
+
+            // First pop: streak 1 × scoreValue 2 = 2 points
+            _scoredPublisher.Received(2).Publish(
+                Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+
+            _scoredPublisher.ClearReceivedCalls();
+            var model2 = CreateModel(Red, 1, 2);
+            FireHit(model2, 1);
+
+            // Second pop: streak 2 × scoreValue 2 = 4 points
+            _scoredPublisher.Received(4).Publish(
+                Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+        }
+
+        [Test]
+        public void Streak_ResetsOnLevelUp()
+        {
+            _config.PointsRequiredForLevel(2).Returns(1);
+
+            FirePop(Red);
+            FirePop(Red);
+
+            FireTrailArrived(Red, 1);
+            FireTrailArrived(Blue, 1);
+
+            Assert.AreEqual(0, _controller.GetStreak(Red));
+        }
+
         private void FireHit(IBalloonModel model, int damage)
         {
             _hitHandler.Handle(new BalloonHitMessage(model, Vector3.zero, Vector3.up, damage));

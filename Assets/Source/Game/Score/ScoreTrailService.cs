@@ -30,6 +30,8 @@ namespace BalloonParty.Game.Score
 
         private IDisposable _subscription;
 
+        internal TrailTracker<TrailId> Tracker => _tracker;
+
         [Inject]
         internal ScoreTrailService(
             IGameConfiguration config,
@@ -81,7 +83,6 @@ namespace BalloonParty.Game.Score
             }
         }
 
-        internal TrailTracker<TrailId> Tracker => _tracker;
 
         internal void PauseTrailsAbove(TrailId threshold)
         {

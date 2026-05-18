@@ -245,13 +245,14 @@ def check_object_instantiate(path: Path, lines: list[str], result: AuditResult):
 
 
 def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
-    """Basic member ordering: [SerializeField] before [Inject] before readonly before mutable."""
+    """Basic member ordering: [SerializeField] before [Inject] before readonly before mutable before properties."""
     GROUP_CONST = 1
     GROUP_STATIC_READONLY = 2
     GROUP_SERIALIZE = 3
     GROUP_INJECT = 4
     GROUP_READONLY = 5
     GROUP_MUTABLE = 6
+    GROUP_PROPERTY = 7
 
     last_group = 0
     in_class = False
@@ -304,12 +305,18 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
                 group = GROUP_MUTABLE
             else:
                 continue
+        elif "=>" in stripped and ";" in stripped and not stripped.startswith("//"):
+            # Expression-body property (e.g. `internal Foo Bar => _bar;`)
+            if re.match(r"\s*(private|public|protected|internal)\s+\S+.*\s+=>\s+", stripped):
+                group = GROUP_PROPERTY
+            else:
+                continue
         else:
             continue
 
         if group < last_group:
             group_names = {1: "const", 2: "static readonly", 3: "[SerializeField]",
-                          4: "[Inject]", 5: "readonly", 6: "mutable"}
+                          4: "[Inject]", 5: "readonly", 6: "mutable", 7: "property"}
             result.add(Violation(str(path), i, "member-ordering",
                 f"{group_names.get(group, '?')} field after {group_names.get(last_group, '?')} field"))
         last_group = group

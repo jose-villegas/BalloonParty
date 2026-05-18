@@ -44,6 +44,7 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 | Pipeline filtering | `ItemAssigner.OnItemCheck` | Turn modulo, cap enforcement, eligibility gating |
 | Neighbor paint targeting | `PaintItemHandler.Activate` | Paintability filter, same-color skip, empty-color guard |
 | Static index generation | `SlotGrid.HexNeighborIndices` | Even/odd shift direction (consumed independently by PaintItemHandler) |
+| Streak state machine | `ScoreController.GetStreak` | Reset on color change, reset on level-up, multiplied into published points |
 
 ---
 
@@ -79,7 +80,7 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 70 tests
+## Current Coverage — 77 tests
 
 ### `SlotGridTests` — 20 tests
 
@@ -109,9 +110,9 @@ Tests the trajectory bounce algorithm — pure math with wall reflection.
 | Max steps | 1 | Step exhaustion before wall hit |
 | Zig-zag | 1 | Multiple reflections chain correctly |
 
-### `ScoreControllerTests` — 8 tests
+### `ScoreControllerTests` — 15 tests
 
-Tests the scoring pipeline and level-up logic — deferred scoring via trail arrival, multi-map accumulation with an all-colors threshold gate.
+Tests the scoring pipeline, level-up logic, and streak multiplier — deferred scoring via trail arrival, multi-map accumulation with an all-colors threshold gate, and consecutive same-color pop multiplier.
 
 | Area | Tests | What could break |
 |---|---|---|
@@ -121,8 +122,14 @@ Tests the scoring pipeline and level-up logic — deferred scoring via trail arr
 | Trail arrival accumulates score | 1 | Wrong dictionary key or sum |
 | Level-up when all colors meet threshold | 1 | `Any(p < required)` — wrong comparator |
 | No level-up when one color is short | 1 | Partial threshold confusion |
-| Level-up resets all color progress | 1 | Missed key in reset loop |
+| Level-up resets all color progress | 1 | Level-up resets streak to 0 |
 | Pop does not increment level progress | 1 | Score mutated on hit instead of trail arrival |
+| Streak starts at 1 on first pop | 1 | Off-by-one in initialization |
+| Streak increments on consecutive same-color | 1 | Wrong comparison or missing increment |
+| Streak resets on different color | 1 | Missing reset branch |
+| Streak multiplies points published | 1 | Multiplication not applied or wrong factor |
+| Streak × scoreValue compound | 1 | Only one factor applied |
+| Streak resets on level-up | 1 | Missing reset in CheckLevelUp |
 
 ### `BalloonModelTests` — 6 tests
 

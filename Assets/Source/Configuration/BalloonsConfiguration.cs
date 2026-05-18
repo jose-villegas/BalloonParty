@@ -26,6 +26,8 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _nudgeDuration = 0.15f;
         [SerializeField] private float _nudgeFalloff = 1.5f;
 
+        private readonly List<BalloonPrefabEntry> _candidateBuffer = new();
+
         public BalloonPrefabEntry[] Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
         public int GameStartedBalloonLines => _gameStartedBalloonLines;
@@ -37,7 +39,6 @@ namespace BalloonParty.Configuration
         public float NudgeDuration => _nudgeDuration;
         public float NudgeFalloff => _nudgeFalloff;
 
-        private readonly List<BalloonPrefabEntry> _candidateBuffer = new();
 
         /// <summary>
         /// Picks a random entry using weighted random selection, excluding entries that have
