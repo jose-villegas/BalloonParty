@@ -175,7 +175,7 @@ namespace BalloonParty.Game.Score
                 _currentStreak = 1;
             }
 
-            var points = msg.Balloon.ScoreValue;
+            var points = msg.Balloon.ScoreValue * _currentStreak;
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
             var baseProgress = _projectedProgress.GetValueOrDefault(color);
 

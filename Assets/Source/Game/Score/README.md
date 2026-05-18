@@ -1,14 +1,28 @@
 # Score
 
-Tracks per-color scoring, level progress, and the visual trail orbs that fly from popped balloons to the progress bars.
+Tracks per-color scoring, level progress, streak multipliers, and the visual trail orbs that fly from popped balloons to the progress bars.
 
 ## Contents
 
 | File | What it does |
 |---|---|
-| `TrailId` | Readonly struct — uniquely identifies a score trail by `(Color, Score, Level)`. Two colors can share the same numeric score within a level, and scores restart after level reset, so all three are needed for uniqueness |
-| `ScoreController` | `IStartable` — tracks per-color level progress (confirmed on trail arrival) and projected progress (advanced immediately on pop). On balloon pop, publishes one `ScorePointMessage` per point with pre-computed `Score`, `Level`, and `NextLevel` flag — including next-level renumbering. On trail arrival, sets confirmed progress and checks for level-up via `ScoreLevelUpMessage` and `NavigationState.LevelUp` |
+| `TrailId` | Readonly struct — uniquely identifies a score trail by `(Color, Score, Level)`. Provides a convenience constructor from `ScorePointMessage`. Two colors can share the same numeric score within a level, and scores restart after level reset, so all three are needed for uniqueness |
+| `ScoreController` | `IStartable` — tracks per-color level progress (confirmed on trail arrival), projected progress (advanced immediately on pop), and the color streak multiplier. On balloon pop, publishes one `ScorePointMessage` per point (base score × streak) with pre-computed `Score`, `Level`, and `NextLevel` flag. On trail arrival, sets confirmed progress and checks for level-up via `ScoreLevelUpMessage` and `NavigationState.LevelUp` |
 | `ScoreTrailService` | `IStartable` + `ICinematicAware` — subscribes to `ScorePointMessage`; spawns one pooled `ScorePointTrail` orb per message. Uses `GroupIndex`/`GroupSize` for scatter positioning and stagger delay. Supports `TrackTrail` / `ClearTrackedTrail` for external trail interception. `PauseTrailsAbove` selectively pauses next-level trails. `NextLevel` flag gates spawns during cinematics |
+
+## Streak Multiplier
+
+`ScoreController` tracks the current color streak — consecutive pops of the same color:
+
+- First pop of a color: streak = 1 (no bonus)
+- Second consecutive same-color pop: streak = 2, points doubled
+- Third: streak = 3, points tripled
+- Popping a different color resets to streak = 1
+- Level-up resets the streak
+
+The balloon's `ScoreValue` is multiplied by the current streak before publishing `ScorePointMessage`s. More trails spawn, filling the progress bar faster.
+
+`GetStreak(string colorName)` exposes the current streak for a color so views can display a streak notice.
 
 ## Trail Identity
 
@@ -53,8 +67,8 @@ When the cinematic begins, all next-level in-flight trails are paused — any tr
 
 ## Interactions
 
-- **`ScorePointMessage`** — published by `ScoreController` on pop (one per point, carries pre-computed `Score`, `Level`, `NextLevel`), consumed by `ScoreTrailService`, `ColorProgressBar`, and `LevelUpTrailEffect`
+- **`ScorePointMessage`** — published by `ScoreController` on pop (one per point × streak, carries pre-computed `Score`, `Level`, `NextLevel`), consumed by `ScoreTrailService`, `ColorProgressBar`, and `LevelUpTrailEffect`
 - **`ScoreTrailArrivedMessage`** — published by `ScoreTrailService` on trail arrival (carries `Level`), consumed by `ScoreController`, `ColorProgressBar`, and `LevelUpTrailEffect`
 - **`ScoreLevelUpMessage`** — published by `ScoreController` on level-up, consumed by `ColorProgressBar` and `LevelUpPopUp`
 - **`Cinematics/`** — `LevelUpTrailEffect` uses `TrackTrail` to intercept the tipping trail at spawn, `PauseTrailsAbove` for selective pause, and `ResumeTrail` / `ClearTrackedTrail` for lifecycle management
-- **`ColorProgressBar`** — registers target providers via `ScoreTrailService.RegisterTarget`; reads progress from `ScoreController`
+- **`ColorProgressBar`** — registers target providers via `ScoreTrailService.RegisterTarget`; reads progress from `ScoreController`; reads streak via `ScoreController.GetStreak` for streak notice display

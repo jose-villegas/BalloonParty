@@ -55,9 +55,9 @@ Only next-level trails are paused during the cinematic — **any trail** (regard
 5. Pre-tipping trails keep flying; next-level spawns are gated by `Cinematic.IsPlaying && NextLevel`
 6. On trail arrival, `ClearTrackedTrail` resets the tracking state
 
-## Known Issues
+## Camera Reference
 
-**Mobile: camera pan/zoom not playing.** In Editor builds the cinematic (slow-motion, camera zoom, camera pan toward the tipping trail) plays correctly. On mobile (iOS/Android) the level-up popup appears but no camera movement or slow-motion is visible. The root cause is under investigation — likely related to the retroactive tween-switching path (`DOTween.TweensByTarget` + `SetUpdate(true)`) or unscaled-time DOTween behaviour differences on device. The tipping trail Detection and level-up logic itself works correctly on both platforms.
+`LevelUpTrailEffect` holds the camera as a `[SerializeField]` — assigned in the Inspector. This avoids `Camera.main` (which is fragile on Android where the activity pause/resume cycle can destroy and recreate the main camera, leaving a stale destroyed-object reference that passes C# `?.` checks but throws on access).
 
 
 ## Interactions
