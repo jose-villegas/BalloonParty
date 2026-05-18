@@ -7,7 +7,7 @@ Tracks and displays player progress toward the next level — one bar per balloo
 | File | What it does |
 |---|---|
 | `ScoreUILifetimeScope` | VContainer child scope on the Score UI Canvas root; injects all scene-placed `ColorProgressBar` instances via `RegisterBuildCallback`; binds `ScoreCounterLabel` and `LevelLabel` in `Start()` |
-| `ColorProgressBar` | Per-color progress slider placed directly in the scene. Listens for `BalloonScoredMessage` (streak counting, immediate streak notice), `ScoreTrailArrivedMessage` (slider advancement, point notice spawning, trail-hit feedback), and `ScoreLevelUpMessage` (reset). Registers a `Func<Vector3>` target provider with `ScoreTrailService` for randomised trail destinations. Uses `[PaletteColorName]` to select its color from `GamePalette` in the Inspector |
+| `ColorProgressBar` | Per-color progress slider placed directly in the scene. Listens for `ScorePointMessage` (streak counting on `GroupIndex == 0`), `ScoreTrailArrivedMessage` (slider advancement, point notice spawning, trail-hit feedback), and `ScoreLevelUpMessage` (reset). Registers a `Func<Vector3>` target provider with `ScoreTrailService` for randomised trail destinations. Uses `[PaletteColorName]` to select its color from `GamePalette` in the Inspector |
 | `ProgressNotice` | Pooled floating TMP popup at the bar. Uses `ColorableRenderer` for tinting. Label scale driven by `AnimationCurve`; `_labelOffsetXCurve` compensates for scale-induced horizontal drift; dismisses via `ScoreDisappear` animation when replaced. Two prefab variants: streak notices ("x3") shown immediately on hit, and point notices ("+1") shown on trail arrival |
 | `ProgressNoticePoolChannel` | `PoolChannel<ProgressNotice>` — separate per-color pools keyed by `StreakNotice_{colorName}` and `PointNotice_{colorName}` |
 | `GraphicColorableRenderer` | `ColorableRenderer<Graphic>` — enables `ColorableRenderer`-based tinting for UI `Graphic` components |
@@ -26,8 +26,8 @@ Each bar identifies its color through a `[PaletteColorName]` string field, which
 
 Scoring is deferred to trail arrival — points, persistent score, and level progress all update when a `ScoreTrailArrivedMessage` is received, not immediately on balloon pop. This synchronises the visual trail animation with the actual score state.
 
-1. **Balloon popped** → `ScoreController` publishes `BalloonScoredMessage` (no score mutation yet)
-2. **`ColorProgressBar.OnBalloonScored`** → increments the streak counter for consecutive same-color hits, immediately spawns a **streak notice** ("x3") at the bar centre using the `_streakNoticePrefab`. Different-color hits reset the streak
+1. **Balloon popped** → `ScoreController` publishes one `ScorePointMessage` per point (no score mutation yet)
+2. **`ColorProgressBar.OnScorePoint`** (`GroupIndex == 0` only) → increments the streak counter for consecutive same-color pops, spawns a **streak notice** ("x3") at the bar centre. Different-color pops reset the streak
 3. **`ScoreTrailService`** → spawns pooled trail orbs from the balloon's world position toward the bar
 4. **Trail arrives** → `ScoreTrailService` publishes `ScoreTrailArrivedMessage`
 5. **`ScoreController.OnTrailArrived`** → increments `_persistentScore`, `_totalScore`, `_levelProgress`, and checks for level-up
@@ -48,7 +48,7 @@ When the slider reaches its maximum, a completion particle plays and the bar ent
 
 ## Interactions
 
-- **ScoreController** — source of `BalloonScoredMessage`, `ScoreLevelUpMessage`, `TotalScore`, `Level`; score mutation deferred to `ScoreTrailArrivedMessage`
+- **ScoreController** — source of `ScorePointMessage`, `ScoreLevelUpMessage`, `TotalScore`, `Level`; score mutation deferred to `ScoreTrailArrivedMessage`
 - **ScoreTrailService** — manages trail orb spawning and flight; bar registers a `Func<Vector3>` target provider and receives `ScoreTrailArrivedMessage` on trail arrival
 - **PoolManager** — separate per-color pools for streak notices, point notices, and `ScorePointTrail`; consumer handles return
 - **IGameConfiguration** — `PointsRequiredForLevel`, `ScorePointTraceDuration`

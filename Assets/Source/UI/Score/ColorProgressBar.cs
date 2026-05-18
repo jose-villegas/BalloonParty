@@ -33,7 +33,7 @@ namespace BalloonParty.UI.Score
 
         [Inject] private GamePalette _palette;
         [Inject] private IGameConfiguration _config;
-        [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
+        [Inject] private ISubscriber<ScorePointMessage> _scoredSubscriber;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         [Inject] private PoolManager _poolManager;
@@ -99,13 +99,19 @@ namespace BalloonParty.UI.Score
 
             _scoreTrailService.RegisterTarget(_colorConfig.Name, RandomWorldPositionInRect, _colorConfig.Color);
 
-            _scoredSubscriber.Subscribe(OnBalloonScored).AddTo(this);
+            _scoredSubscriber.Subscribe(OnScorePoint).AddTo(this);
             _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(this);
             _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
         }
 
-        private void OnBalloonScored(BalloonScoredMessage msg)
+        private void OnScorePoint(ScorePointMessage msg)
         {
+            // Streaks track consecutive same-color pops, not individual points.
+            if (msg.GroupIndex > 0)
+            {
+                return;
+            }
+
             if (msg.ColorName != _colorConfig.Name)
             {
                 _streak = 0;

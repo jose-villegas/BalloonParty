@@ -26,7 +26,7 @@ namespace BalloonParty.Game.Score
         private readonly GamePalette _palette;
         private readonly Dictionary<string, int> _persistentScore = new();
         private readonly Dictionary<string, int> _projectedProgress = new();
-        private readonly IPublisher<BalloonScoredMessage> _scoredPublisher;
+        private readonly IPublisher<ScorePointMessage> _scoredPublisher;
         private readonly ReactiveProperty<int> _totalScore = new(0);
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
 
@@ -39,7 +39,7 @@ namespace BalloonParty.Game.Score
         public ScoreController(
             ISubscriber<BalloonHitMessage> hitSubscriber,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
-            IPublisher<BalloonScoredMessage> scoredPublisher,
+            IPublisher<ScorePointMessage> scoredPublisher,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
             IGameConfiguration config,
             GamePalette palette)
@@ -91,11 +91,8 @@ namespace BalloonParty.Game.Score
         }
 
         /// <summary>
-        ///     Checks whether all colors have projected progress at or above the
-        ///     level-up threshold. Uses projected (not confirmed) progress so
-        ///     the cinematic can be registered even when multiple colors reach
-        ///     the threshold in close succession — their trails may still be
-        ///     in-flight but will confirm before the paused tipping trail arrives.
+        ///     Uses projected (not confirmed) progress so the cinematic can
+        ///     register before in-flight trails from other colors arrive.
         /// </summary>
         internal bool WillLevelUp()
         {
@@ -159,9 +156,20 @@ namespace BalloonParty.Game.Score
             }
 
             var points = msg.Balloon.ScoreValue;
-            var currentProgress = _projectedProgress.GetValueOrDefault(color);
-            _projectedProgress[color] = currentProgress + points;
-            _scoredPublisher.Publish(new BalloonScoredMessage(color, msg.WorldPosition, points, currentProgress, _level.Value));
+            var required = _config.PointsRequiredForLevel(_level.Value + 1);
+            var baseProgress = _projectedProgress.GetValueOrDefault(color);
+
+            for (var i = 0; i < points; i++)
+            {
+                var rawScore = baseProgress + i + 1;
+                var nextLevel = rawScore > required;
+                var score = nextLevel ? rawScore - required : rawScore;
+                var level = nextLevel ? _level.Value + 1 : _level.Value;
+
+                _projectedProgress[color] = rawScore;
+                _scoredPublisher.Publish(new ScorePointMessage(
+                    color, msg.WorldPosition, score, level, nextLevel, points, i));
+            }
         }
 
         private void OnFocusChanged(bool hasFocus)
@@ -185,7 +193,6 @@ namespace BalloonParty.Game.Score
             var previous = _levelProgress[msg.ColorName];
             _levelProgress[msg.ColorName] = Math.Max(previous, msg.Score);
             _projectedProgress[msg.ColorName] = Math.Max(_projectedProgress[msg.ColorName], msg.Score);
-
 
             CheckLevelUp();
         }

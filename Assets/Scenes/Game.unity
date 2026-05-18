@@ -6071,14 +6071,14 @@ MonoBehaviour:
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
-      time: 0.012352265
-      value: 2.8729298
-      inSlope: 81.22478
-      outSlope: 81.22478
+      time: 0.009286732
+      value: 2.4511693
+      inSlope: 170.10445
+      outSlope: 170.10445
       tangentMode: 0
       weightedMode: 0
       inWeight: 0.21330443
-      outWeight: 0.006128342
+      outWeight: 0.007161742
     - serializedVersion: 3
       time: 1
       value: 5

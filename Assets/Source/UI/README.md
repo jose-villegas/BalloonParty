@@ -26,7 +26,7 @@ Scene loading is handled by `SceneTransition` (in `Shared/`) — a MonoBehaviour
 
 ## Interactions
 
-- **ScoreController** — all score UI subscribes to its `TotalScore` / `Level` reactive properties and `BalloonScoredMessage` / `ScoreLevelUpMessage` events
+- **ScoreController** — all score UI subscribes to its `TotalScore` / `Level` reactive properties and `ScorePointMessage` / `ScoreLevelUpMessage` events
 - **ScoreTrailService** — `ColorProgressBar` registers trail target providers and subscribes to `ScoreTrailArrivedMessage`
 - **SlotGrid** — `LevelUpPopUp` polls `AllBalloonsStable()` before revealing itself
 - **ThrowerController** — binds `ShieldCounterAnimation` to the active `ProjectileModel` after each reload

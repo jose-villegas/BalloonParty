@@ -20,7 +20,7 @@ namespace BalloonParty.Tests.Game
 
         private IGameConfiguration _config;
         private GamePalette _palette;
-        private IPublisher<BalloonScoredMessage> _scoredPublisher;
+        private IPublisher<ScorePointMessage> _scoredPublisher;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private ScoreController _controller;
         private IMessageHandler<BalloonHitMessage> _hitHandler;
@@ -46,7 +46,7 @@ namespace BalloonParty.Tests.Game
 
             var hitSubscriber = Substitute.For<ISubscriber<BalloonHitMessage>>();
             var trailArrivedSubscriber = Substitute.For<ISubscriber<ScoreTrailArrivedMessage>>();
-            _scoredPublisher = Substitute.For<IPublisher<BalloonScoredMessage>>();
+            _scoredPublisher = Substitute.For<IPublisher<ScorePointMessage>>();
             _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
 
             // Capture the IMessageHandler that ScoreController registers via the Subscribe extension method.
@@ -97,7 +97,7 @@ namespace BalloonParty.Tests.Game
 
             FireHit(model, 1);
 
-            _scoredPublisher.DidNotReceive().Publish(Arg.Any<BalloonScoredMessage>());
+            _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointMessage>());
         }
 
         [Test]
@@ -107,18 +107,18 @@ namespace BalloonParty.Tests.Game
 
             FireHit(model, 1);
 
-            _scoredPublisher.DidNotReceive().Publish(Arg.Any<BalloonScoredMessage>());
+            _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointMessage>());
         }
 
         [Test]
-        public void OnBalloonHit_BalloonPops_PublishesScoredMessage()
+        public void OnBalloonHit_BalloonPops_PublishesScorePoints()
         {
             var model = CreateModel(Red, 1, 5);
 
             FireHit(model, 1);
 
-            _scoredPublisher.Received(1).Publish(
-                Arg.Is<BalloonScoredMessage>(m => m.ColorName == Red && m.Points == 5));
+            _scoredPublisher.Received(5).Publish(
+                Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
             Assert.AreEqual(0, _controller.TotalScore.Value);
         }
 

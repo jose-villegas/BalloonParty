@@ -7,8 +7,8 @@ Tracks per-color scoring, level progress, and the visual trail orbs that fly fro
 | File | What it does |
 |---|---|
 | `TrailId` | Readonly struct — uniquely identifies a score trail by `(Color, Score, Level)`. Two colors can share the same numeric score within a level, and scores restart after level reset, so all three are needed for uniqueness |
-| `ScoreController` | `IStartable` — tracks per-color level progress (confirmed on trail arrival) and projected progress (advanced immediately on pop for trail identity). On balloon pop, publishes `BalloonScoredMessage` with current projected progress and level. On trail arrival, sets confirmed progress to the trail's score value and checks for level-up; triggers level-ups via `ScoreLevelUpMessage` and `NavigationState.LevelUp` |
-| `ScoreTrailService` | `IStartable` + `ICinematicAware` — subscribes to `BalloonScoredMessage`; spawns pooled `ScorePointTrail` orbs from balloon world position to per-color bar targets. Each trail is keyed by `TrailId`. Supports `TrackTrail` / `ClearTrackedTrail` API for external systems to intercept specific trails at spawn. Provides `PauseTrailsAbove` for selective pause of post-tipping trails. Gates new trail spawns during cinematics |
+| `ScoreController` | `IStartable` — tracks per-color level progress (confirmed on trail arrival) and projected progress (advanced immediately on pop). On balloon pop, publishes one `ScorePointMessage` per point with pre-computed `Score`, `Level`, and `NextLevel` flag — including next-level renumbering. On trail arrival, sets confirmed progress and checks for level-up via `ScoreLevelUpMessage` and `NavigationState.LevelUp` |
+| `ScoreTrailService` | `IStartable` + `ICinematicAware` — subscribes to `ScorePointMessage`; spawns one pooled `ScorePointTrail` orb per message. Uses `GroupIndex`/`GroupSize` for scatter positioning and stagger delay. Supports `TrackTrail` / `ClearTrackedTrail` for external trail interception. `PauseTrailsAbove` selectively pauses next-level trails. `NextLevel` flag gates spawns during cinematics |
 
 ## Trail Identity
 
@@ -29,27 +29,27 @@ Two progress values exist per color:
 
 ## Next-Level Trail Renumbering
 
-When a multi-point balloon pop produces trails that exceed the level-up threshold, `ScoreTrailService` tags those post-tipping trails as next-level trails. For example, if `requiredPoints = 10` and a pop creates scores `[9, 10, 11, 12]`:
+When a multi-point balloon pop produces points that exceed the level-up threshold, `ScoreController` tags each post-tipping point as next-level in its `ScorePointMessage`. For example, if `requiredPoints = 10` and a pop creates raw scores `[9, 10, 11, 12]`:
 
-- Score 9 → `TrailId(Red, 9, Level=1)` — current level, flies normally
-- Score 10 → `TrailId(Red, 10, Level=1)` — tipping trail, tracked by cinematic
-- Score 11 → `TrailId(Red, 1, Level=2)` — next level, renumbered `11 - 10 = 1`
-- Score 12 → `TrailId(Red, 2, Level=2)` — next level, renumbered `12 - 10 = 2`
+- Score 9 → `ScorePointMessage(Score=9, Level=1, NextLevel=false)` — current level
+- Score 10 → `ScorePointMessage(Score=10, Level=1, NextLevel=false)` — tipping trail, tracked by cinematic
+- Score 11 → `ScorePointMessage(Score=1, Level=2, NextLevel=true)` — next level, renumbered
+- Score 12 → `ScorePointMessage(Score=2, Level=2, NextLevel=true)` — next level, renumbered
 
 After the level-up resets progress to 0, these next-level trails arrive with scores that correctly represent their position in the new level's progress.
 
 ## Selective Pause
 
-When the cinematic begins, all next-level trails are paused — any trail (regardless of color) with `Level > tippingLevel`. Pre-tipping trails (any color, current level) keep flying so their progress bar arrivals complete naturally. `PauseTrailsAbove(TrailId threshold)` handles already in-flight trails. New trail spawns in `SpawnTrailsAsync` are only gated for next-level trails (`ids[i].Level > baseLevel`); current-level trails from all colors spawn freely even during the cinematic so that `CheckLevelUp` can confirm progress for every color.
+When the cinematic begins, all next-level in-flight trails are paused — any trail (regardless of color) with `Level > tippingLevel`. Pre-tipping trails (any color, current level) keep flying so their progress bar arrivals complete naturally. `PauseTrailsAbove(TrailId threshold)` handles already in-flight trails. New trail spawns are gated by the `NextLevel` flag on each `ScorePointMessage`; current-level trails spawn freely even during the cinematic so that `CheckLevelUp` can confirm progress for every color.
 
-## Spawn Timing
+## Spawn Synchronization
 
-`SpawnTrailsAsync` yields one frame before spawning the first trail. This ensures all synchronous `BalloonScoredMessage` handlers (including `LevelUpTrailEffect.OnBalloonScored` → `TrackTrail`) finish before any trail is instantiated. Without this yield, subscription ordering (`IStartable` before MonoBehaviour) would cause the trail to spawn before tracking is registered.
+Each `ScorePointMessage` creates a spawn gate (`UniTaskCompletionSource`) that the async spawn task awaits before spawning. `LevelUpTrailEffect` releases the gate via `ReleaseSpawnGate()` after all `TrackTrail` registrations are complete. A one-frame auto-release serves as safety fallback. Multi-point pops use `GroupIndex` for stagger delay — the first point (index 0) spawns immediately, subsequent points are delayed by `GroupIndex × ScorePointsScatterDelay`.
 
 
 ## Interactions
 
-- **`BalloonScoredMessage`** — published by `ScoreController` on pop (carries `Level`), consumed by `ScoreTrailService`, `ColorProgressBar`, and `LevelUpTrailEffect`
+- **`ScorePointMessage`** — published by `ScoreController` on pop (one per point, carries pre-computed `Score`, `Level`, `NextLevel`), consumed by `ScoreTrailService`, `ColorProgressBar`, and `LevelUpTrailEffect`
 - **`ScoreTrailArrivedMessage`** — published by `ScoreTrailService` on trail arrival (carries `Level`), consumed by `ScoreController`, `ColorProgressBar`, and `LevelUpTrailEffect`
 - **`ScoreLevelUpMessage`** — published by `ScoreController` on level-up, consumed by `ColorProgressBar` and `LevelUpPopUp`
 - **`Cinematics/`** — `LevelUpTrailEffect` uses `TrackTrail` to intercept the tipping trail at spawn, `PauseTrailsAbove` for selective pause, and `ResumeTrail` / `ClearTrackedTrail` for lifecycle management

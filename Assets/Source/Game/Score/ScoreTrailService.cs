@@ -25,17 +25,18 @@ namespace BalloonParty.Game.Score
         private readonly Dictionary<TrailId, Transform> _inFlightTrails = new();
         private readonly Dictionary<string, string> _poolKeys = new();
         private readonly PoolManager _poolManager;
-        private readonly ISubscriber<BalloonScoredMessage> _scoredSubscriber;
+        private readonly ISubscriber<ScorePointMessage> _scoredSubscriber;
         private readonly Dictionary<string, Func<Vector3>> _targetProviders = new();
         private readonly Dictionary<TrailId, Action<Transform>> _trackedTrails = new();
         private readonly ScorePointTrail _trailPrefab;
 
+        private UniTaskCompletionSource _spawnGate;
         private IDisposable _subscription;
 
         [Inject]
         internal ScoreTrailService(
             IGameConfiguration config,
-            ISubscriber<BalloonScoredMessage> scoredSubscriber,
+            ISubscriber<ScorePointMessage> scoredSubscriber,
             IPublisher<ScoreTrailArrivedMessage> arrivedPublisher,
             PoolManager poolManager,
             ScorePointTrail trailPrefab)
@@ -57,7 +58,7 @@ namespace BalloonParty.Game.Score
 
         public void Start()
         {
-            _subscription = _scoredSubscriber.Subscribe(OnBalloonScored);
+            _subscription = _scoredSubscriber.Subscribe(OnScorePoint);
             Cinematic.Register(this);
         }
 
@@ -91,11 +92,6 @@ namespace BalloonParty.Game.Score
             return _inFlightTrails.TryGetValue(id, out var t) ? t : null;
         }
 
-        /// <summary>
-        ///     Pauses all in-flight trails of the same color whose score exceeds
-        ///     the given threshold. These are post-tipping trails that belong to
-        ///     the next level conceptually. Resumed automatically on cinematic end.
-        /// </summary>
         internal void PauseTrailsAbove(TrailId threshold)
         {
             foreach (var kvp in _inFlightTrails)
@@ -122,13 +118,11 @@ namespace BalloonParty.Game.Score
             }
         }
 
-        /// <summary>
-        ///     Registers a trail identity to watch for. When a trail with this
-        ///     id is spawned, it is paused immediately and
-        ///     <paramref name="onSpawned" /> is invoked with its transform.
-        ///     If the trail is already in-flight, it is paused and the callback
-        ///     fires immediately.
-        /// </summary>
+        internal void ReleaseSpawnGate()
+        {
+            _spawnGate?.TrySetResult();
+        }
+
         internal void TrackTrail(TrailId id, Action<Transform> onSpawned)
         {
             if (_inFlightTrails.TryGetValue(id, out var existingTrail))
@@ -141,58 +135,41 @@ namespace BalloonParty.Game.Score
             _trackedTrails[id] = onSpawned;
         }
 
-        private Vector3[] ComputeOrigins(Vector3 center, int count)
+        private async UniTaskVoid AutoReleaseSpawnGateAsync(UniTaskCompletionSource gate)
         {
-            if (count <= 0)
-            {
-                return Array.Empty<Vector3>();
-            }
+            await UniTask.Yield(cancellationToken: _cts.Token);
+            gate.TrySetResult();
+        }
 
-            var origins = new Vector3[count];
-
-            if (count == 1)
+        private Vector3 ComputeScatterOrigin(Vector3 center, int index, int count)
+        {
+            if (count <= 1)
             {
-                origins[0] = center;
-                return origins;
+                return center;
             }
 
             var radius = Mathf.Min(_config.SlotSeparation.x, _config.SlotSeparation.y) * 1.5f;
-            for (var i = 0; i < count; i++)
-            {
-                var angle = 2f * Mathf.PI * i / count;
-                origins[i] = center + (new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius);
-            }
-
-            return origins;
+            var angle = 2f * Mathf.PI * index / count;
+            return center + (new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius);
         }
 
-        private void OnBalloonScored(BalloonScoredMessage msg)
+        private void OnScorePoint(ScorePointMessage msg)
         {
-            if (msg.Points <= 0)
-            {
-                return;
-            }
-
             if (!_targetProviders.ContainsKey(msg.ColorName))
             {
                 Debug.LogWarning(
-                    $"ScoreTrailService.OnBalloonScored: no target provider registered for " +
+                    $"ScoreTrailService: no target provider registered for " +
                     $"color \"{msg.ColorName}\" — score trail skipped.");
                 return;
             }
 
-            var origins = ComputeOrigins(msg.WorldPosition, msg.Points);
-            var required = _config.PointsRequiredForLevel(msg.Level + 1);
-            var ids = new TrailId[origins.Length];
-            for (var i = 0; i < origins.Length; i++)
-            {
-                var rawScore = msg.CurrentProgress + i + 1;
-                ids[i] = rawScore > required
-                    ? new TrailId(msg.ColorName, rawScore - required, msg.Level + 1)
-                    : new TrailId(msg.ColorName, rawScore, msg.Level);
-            }
+            var id = new TrailId(msg.ColorName, msg.Score, msg.Level);
+            var origin = ComputeScatterOrigin(msg.WorldPosition, msg.GroupIndex, msg.GroupSize);
 
-            SpawnTrailsAsync(msg.ColorName, origins, ids, msg.Level).Forget();
+            var gate = new UniTaskCompletionSource();
+            _spawnGate = gate;
+            SpawnTrailAsync(gate, msg.ColorName, origin, id, msg.NextLevel, msg.GroupIndex).Forget();
+            AutoReleaseSpawnGateAsync(gate).Forget();
         }
 
         private void ResumeActiveTrails()
@@ -206,38 +183,6 @@ namespace BalloonParty.Game.Score
             }
 
             _cinematicPausedTrails.Clear();
-        }
-
-        private async UniTaskVoid SpawnTrailsAsync(
-            string colorName,
-            Vector3[] origins,
-            TrailId[] ids,
-            int baseLevel)
-        {
-            // Yield one frame so all BalloonScoredMessage handlers finish before
-            // the first spawn. This lets LevelUpTrailEffect register TrackTrail
-            // before the tipping trail is instantiated.
-            await UniTask.Yield(cancellationToken: _cts.Token);
-
-            var delayMs = Mathf.RoundToInt(_config.ScorePointsScatterDelay * 1000f);
-            var poolKey = _poolKeys[colorName];
-
-            for (var i = 0; i < origins.Length; i++)
-            {
-                // Only gate next-level trails — current-level trails from all
-                // colors must keep arriving so CheckLevelUp can confirm progress.
-                if (Cinematic.IsPlaying && ids[i].Level > baseLevel)
-                {
-                    await UniTask.WaitWhile(() => Cinematic.IsPlaying, cancellationToken: _cts.Token);
-                }
-
-                SpawnTrail(colorName, poolKey, origins[i], ids[i]);
-
-                if (i < origins.Length - 1)
-                {
-                    await UniTask.Delay(delayMs, cancellationToken: _cts.Token);
-                }
-            }
         }
 
         private void SpawnTrail(string colorName, string poolKey, Vector3 fromWorldPosition, TrailId id)
@@ -273,6 +218,32 @@ namespace BalloonParty.Game.Score
                 trail.transform.DOPause();
                 trackedCallback?.Invoke(trail.transform);
             }
+        }
+
+        private async UniTaskVoid SpawnTrailAsync(
+            UniTaskCompletionSource gate,
+            string colorName,
+            Vector3 origin,
+            TrailId id,
+            bool nextLevel,
+            int groupIndex)
+        {
+            // Gate ensures TrackTrail registrations complete before any spawn.
+            await gate.Task;
+
+            if (groupIndex > 0)
+            {
+                var delayMs = Mathf.RoundToInt(_config.ScorePointsScatterDelay * 1000f) * groupIndex;
+                await UniTask.Delay(delayMs, cancellationToken: _cts.Token);
+            }
+
+            // Next-level trails must wait for the cinematic to finish.
+            if (Cinematic.IsPlaying && nextLevel)
+            {
+                await UniTask.WaitWhile(() => Cinematic.IsPlaying, cancellationToken: _cts.Token);
+            }
+
+            SpawnTrail(colorName, _poolKeys[colorName], origin, id);
         }
     }
 }

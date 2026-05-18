@@ -25,7 +25,7 @@ namespace BalloonParty.Game.Cinematics
         [SerializeField] private AnimationCurve _trackedTrailScaleCurve = AnimationCurve.EaseInOut(0f, 2f, 1f, 1f);
 
         [Inject] private CinematicDirector _director;
-        [Inject] private ISubscriber<BalloonScoredMessage> _scoredSubscriber;
+        [Inject] private ISubscriber<ScorePointMessage> _scoredSubscriber;
         [Inject] private ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         [Inject] private OrthogonalSizeCameraController _orthoController;
@@ -47,7 +47,7 @@ namespace BalloonParty.Game.Cinematics
         {
             _camera = Camera.main;
 
-            _scoredSubscriber.Subscribe(OnBalloonScored).AddTo(this);
+            _scoredSubscriber.Subscribe(OnScorePoint).AddTo(this);
             _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
             _dismissedSubscriber.Subscribe(OnLevelUpDismissed).AddTo(this);
         }
@@ -77,10 +77,11 @@ namespace BalloonParty.Game.Cinematics
             _zoomTween = null;
         }
 
-        private void OnBalloonScored(BalloonScoredMessage msg)
+        private void OnScorePoint(ScorePointMessage msg)
         {
-            if (_sessionActive || Cinematic.IsPlaying || msg.Points <= 0)
+            if (_sessionActive || Cinematic.IsPlaying)
             {
+                _scoreTrailService.ReleaseSpawnGate();
                 return;
             }
 
@@ -88,18 +89,17 @@ namespace BalloonParty.Game.Cinematics
 
             if (!willLevelUp)
             {
+                _scoreTrailService.ReleaseSpawnGate();
                 return;
             }
 
             _sessionActive = true;
-            _tippingTrailId = new TrailId(
-                msg.ColorName,
-                _scoreController.GetRequiredPoints(),
-                msg.Level);
+            _tippingTrailId = new TrailId(msg.ColorName, msg.Score, msg.Level);
             _trackedTrail = null;
             _lastTrailPosition = msg.WorldPosition;
 
             _scoreTrailService.TrackTrail(_tippingTrailId, OnTippingTrailSpawned);
+            _scoreTrailService.ReleaseSpawnGate();
         }
 
         private void OnLevelUpDismissed(LevelUpDismissedMessage msg)
