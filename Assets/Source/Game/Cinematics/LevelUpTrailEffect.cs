@@ -81,7 +81,6 @@ namespace BalloonParty.Game.Cinematics
         {
             if (_sessionActive || Cinematic.IsPlaying)
             {
-                _scoreTrailService.ReleaseSpawnGate();
                 return;
             }
 
@@ -89,7 +88,6 @@ namespace BalloonParty.Game.Cinematics
 
             if (!willLevelUp)
             {
-                _scoreTrailService.ReleaseSpawnGate();
                 return;
             }
 
@@ -99,7 +97,6 @@ namespace BalloonParty.Game.Cinematics
             _lastTrailPosition = msg.WorldPosition;
 
             _scoreTrailService.TrackTrail(_tippingTrailId, OnTippingTrailSpawned);
-            _scoreTrailService.ReleaseSpawnGate();
         }
 
         private void OnLevelUpDismissed(LevelUpDismissedMessage msg)

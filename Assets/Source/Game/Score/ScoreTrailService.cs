@@ -30,7 +30,6 @@ namespace BalloonParty.Game.Score
         private readonly Dictionary<TrailId, Action<Transform>> _trackedTrails = new();
         private readonly ScorePointTrail _trailPrefab;
 
-        private UniTaskCompletionSource _spawnGate;
         private IDisposable _subscription;
 
         [Inject]
@@ -118,27 +117,28 @@ namespace BalloonParty.Game.Score
             }
         }
 
-        internal void ReleaseSpawnGate()
-        {
-            _spawnGate?.TrySetResult();
-        }
-
         internal void TrackTrail(TrailId id, Action<Transform> onSpawned)
         {
             if (_inFlightTrails.TryGetValue(id, out var existingTrail))
             {
                 existingTrail.DOPause();
+
+                // Trail was spawned before tracking — switch to unscaled time
+                // so it runs during slow-motion.
+                var tweens = DOTween.TweensByTarget(existingTrail);
+                if (tweens != null)
+                {
+                    foreach (var tween in tweens)
+                    {
+                        tween.SetUpdate(true);
+                    }
+                }
+
                 onSpawned?.Invoke(existingTrail);
                 return;
             }
 
             _trackedTrails[id] = onSpawned;
-        }
-
-        private async UniTaskVoid AutoReleaseSpawnGateAsync(UniTaskCompletionSource gate)
-        {
-            await UniTask.Yield(cancellationToken: _cts.Token);
-            gate.TrySetResult();
         }
 
         private Vector3 ComputeScatterOrigin(Vector3 center, int index, int count)
@@ -166,10 +166,7 @@ namespace BalloonParty.Game.Score
             var id = new TrailId(msg.ColorName, msg.Score, msg.Level);
             var origin = ComputeScatterOrigin(msg.WorldPosition, msg.GroupIndex, msg.GroupSize);
 
-            var gate = new UniTaskCompletionSource();
-            _spawnGate = gate;
-            SpawnTrailAsync(gate, msg.ColorName, origin, id, msg.NextLevel, msg.GroupIndex).Forget();
-            AutoReleaseSpawnGateAsync(gate).Forget();
+            SpawnTrailAsync(msg.ColorName, origin, id, msg.NextLevel, msg.GroupIndex).Forget();
         }
 
         private void ResumeActiveTrails()
@@ -221,15 +218,12 @@ namespace BalloonParty.Game.Score
         }
 
         private async UniTaskVoid SpawnTrailAsync(
-            UniTaskCompletionSource gate,
             string colorName,
             Vector3 origin,
             TrailId id,
             bool nextLevel,
             int groupIndex)
         {
-            // Gate ensures TrackTrail registrations complete before any spawn.
-            await gate.Task;
 
             if (groupIndex > 0)
             {
