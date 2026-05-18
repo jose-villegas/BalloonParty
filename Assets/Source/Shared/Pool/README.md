@@ -34,7 +34,7 @@ Items signal completion via callbacks passed to their `Play()` or `Setup()` call
 |---|---|---|
 | `PoolableParticle` | `Play(pos, color, onComplete)` — caller supplies the callback | Consumer (e.g. `BalloonView`, `ProjectileShieldView`) |
 | `EffectView` (any subclass) | `Play(pos, tint, onComplete)` — caller supplies the callback | Consumer (e.g. item handlers) |
-| `ScorePointTrail` | `Setup(target, color, config, onComplete)` — fires on tween completion | `ScoreTrailService` |
+| `FlyingTrail` | `Setup(target, color, config, onComplete)` — fires on tween completion | `ScoreTrailService` |
 | `ProgressNotice` | `Show(score, onComplete, color?)` — fires from `OnAnimationCompleted` animation event | `ColorProgressBar` |
 | `BalloonView` | No completion callback — returned directly on hit | `BalloonController` |
 | `ProjectileView` | No completion callback — returned directly on death | `ThrowerController` |
@@ -56,7 +56,7 @@ For prefabs that have `[Inject]` fields but don't need their own VContainer chil
 | `ParticlePoolChannel` | prefab name (e.g. `"PopVfx"`) | `PoolableParticle` | `Object.Instantiate` + `AddComponent<PoolableParticle>` |
 | `EffectPoolChannel` | prefab name | `EffectView` (subclass) | `Object.Instantiate` |
 | `ItemVisualPoolChannel` | prefab name | `ItemVisualView` | `Object.Instantiate` |
-| `ScoreTrailPoolChannel` | `ScoreTrail_{color}` | `ScorePointTrail` | `Object.Instantiate` |
+| `ScoreTrailPoolChannel` | `ScoreTrail_{color}` | `FlyingTrail` | `Object.Instantiate` |
 | `ProgressNoticePoolChannel` | `StreakNotice_{color}`, `PointNotice_{color}` | `ProgressNotice` | `Object.Instantiate` |
 
 ## Usage
@@ -117,3 +117,48 @@ await _poolManager.PrewarmAllAsync(counts, ct);
 4. Have the pooled component implement `IPoolable` for lifecycle hooks
 5. Register via `_poolManager.Register(key, new YourChannel(...))`
 6. The consumer passes a return callback through the item's public API; the callback calls `Return(key, item)` on completion
+
+## Trail Utilities
+
+Two composable plain-C# helpers for trail orb services. Pick the level that matches your feature's complexity:
+
+### `TrailSpawner`
+
+Spawn-and-forget: handles pool get → position → setup → return on arrival.
+
+```csharp
+var spawner = new TrailSpawner(poolManager, "MyTrail", () => new MyPoolChannel(prefab));
+spawner.Spawn(from, to, duration, color, onArrived);
+spawner.SpawnUnscaled(from, to, duration);  // runs in unscaled time
+```
+
+Used by simple trail services (e.g. `ShieldTrailController`) that don't need identity or cinematic integration.
+
+### `TrailTracker<TId>`
+
+Identity-based flight tracking with selective pause, resume, and forward/retroactive interception. Does **not** own spawning — the service spawns itself and calls `Register`/`Unregister` to keep the tracker in sync.
+
+```csharp
+var tracker = new TrailTracker<TrailId>();
+
+// After spawning:
+tracker.Register(id, trail.transform);
+
+// On arrival:
+tracker.Unregister(id);
+
+// External interception (cinematic producer):
+tracker.TrackTrail(id, onSpawned);       // forward or retroactive
+tracker.ClearTrackedTrail(id);
+
+// Selective pause/resume:
+tracker.PauseWhere(id => id.Level > threshold);
+tracker.ResumeTrail(id);
+tracker.ResumeAll();
+
+// Query before spawn to know if unscaled time is needed:
+if (tracker.IsTracked(id, out var callback)) { /* spawn unscaled */ }
+```
+
+Used by trail services that need cinematic integration (e.g. `ScoreTrailService`). The service implements `ICinematicAware` itself and delegates state management to the tracker.
+

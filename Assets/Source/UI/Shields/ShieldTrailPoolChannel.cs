@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace BalloonParty.UI.Shields
 {
-    internal class ShieldTrailPoolChannel : PoolChannel<ScorePointTrail>
+    internal class ShieldTrailPoolChannel : PoolChannel<FlyingTrail>
     {
-        private readonly ScorePointTrail _prefab;
+        private readonly FlyingTrail _prefab;
 
-        public ShieldTrailPoolChannel(ScorePointTrail prefab)
+        public ShieldTrailPoolChannel(FlyingTrail prefab)
         {
             _prefab = prefab;
         }
 
-        protected override ScorePointTrail Create()
+        protected override FlyingTrail Create()
         {
             var instance = Object.Instantiate(_prefab, Container);
             instance.gameObject.SetActive(false);

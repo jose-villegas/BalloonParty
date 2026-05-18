@@ -94,7 +94,7 @@ namespace BalloonParty.Game.Cinematics
             _trackedTrail = null;
             _lastTrailPosition = msg.WorldPosition;
 
-            _scoreTrailService.TrackTrail(_tippingTrailId, OnTippingTrailSpawned);
+            _scoreTrailService.Tracker.TrackTrail(_tippingTrailId, OnTippingTrailSpawned);
         }
 
         private void OnLevelUpDismissed(LevelUpDismissedMessage msg)
@@ -148,7 +148,7 @@ namespace BalloonParty.Game.Cinematics
 
             PreparePanIn();
 
-            _scoreTrailService.ResumeTrail(_tippingTrailId);
+            _scoreTrailService.Tracker.ResumeTrail(_tippingTrailId);
 
             _director.PlayScene(new CinematicScene(
                 onTick: PanInTick));
@@ -172,7 +172,7 @@ namespace BalloonParty.Game.Cinematics
             }
 
             _trackedTrail = null;
-            _scoreTrailService.ClearTrackedTrail(_tippingTrailId);
+            _scoreTrailService.Tracker.ClearTrackedTrail(_tippingTrailId);
             KillTweens();
             _director.CompleteScene();
         }

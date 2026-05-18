@@ -1,19 +1,18 @@
-using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
 
 namespace BalloonParty.UI.Score
 {
-    internal class ScoreTrailPoolChannel : PoolChannel<ScorePointTrail>
+    internal class ScoreTrailPoolChannel : PoolChannel<FlyingTrail>
     {
-        private readonly ScorePointTrail _prefab;
+        private readonly FlyingTrail _prefab;
 
-        public ScoreTrailPoolChannel(ScorePointTrail prefab)
+        public ScoreTrailPoolChannel(FlyingTrail prefab)
         {
             _prefab = prefab;
         }
 
-        protected override ScorePointTrail Create()
+        protected override FlyingTrail Create()
         {
             var instance = Object.Instantiate(_prefab, Container);
             instance.gameObject.SetActive(false);

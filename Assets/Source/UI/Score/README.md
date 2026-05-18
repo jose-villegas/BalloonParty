@@ -11,8 +11,8 @@ Tracks and displays player progress toward the next level — one bar per balloo
 | `ProgressNotice` | Pooled floating TMP popup at the bar. Uses `ColorableRenderer` for tinting. Label scale driven by `AnimationCurve`; `_labelOffsetXCurve` compensates for scale-induced horizontal drift; dismisses via `ScoreDisappear` animation when replaced. Two prefab variants: streak notices ("x3") shown immediately on hit, and point notices ("+1") shown on trail arrival |
 | `ProgressNoticePoolChannel` | `PoolChannel<ProgressNotice>` — separate per-color pools keyed by `StreakNotice_{colorName}` and `PointNotice_{colorName}` |
 | `GraphicColorableRenderer` | `ColorableRenderer<Graphic>` — enables `ColorableRenderer`-based tinting for UI `Graphic` components |
-| `ScorePointTrail` | Pooled orb that flies from balloon world position → bar position via DOTween |
-| `ScoreTrailPoolChannel` | `PoolChannel<ScorePointTrail>` — per-color pool keyed by `ScoreTrail_{colorName}` |
+| `FlyingTrail` | Pooled orb that flies from balloon world position → bar position via DOTween |
+| `ScoreTrailPoolChannel` | `PoolChannel<FlyingTrail>` — per-color pool keyed by `ScoreTrail_{colorName}` |
 | `ScoreCounterLabel` | Binds total-score `TMP_Text` to `ScoreController.TotalScore` |
 | `LevelLabel` | Binds level `TMP_Text` to `ScoreController.Level`; `_showNextLevel` toggle |
 
@@ -50,7 +50,7 @@ When the slider reaches its maximum, a completion particle plays and the bar ent
 
 - **ScoreController** — source of `ScorePointMessage`, `ScoreLevelUpMessage`, `TotalScore`, `Level`; score mutation deferred to `ScoreTrailArrivedMessage`
 - **ScoreTrailService** — manages trail orb spawning and flight; bar registers a `Func<Vector3>` target provider and receives `ScoreTrailArrivedMessage` on trail arrival
-- **PoolManager** — separate per-color pools for streak notices, point notices, and `ScorePointTrail`; consumer handles return
+- **PoolManager** — separate per-color pools for streak notices, point notices, and `FlyingTrail`; consumer handles return
 - **IGameConfiguration** — `PointsRequiredForLevel`, `ScorePointTraceDuration`
 - **GamePalette** — resolves color name → `Color` for tinting graphics and trail orbs
 - **ScoreUILifetimeScope** — injects all bars via `RegisterBuildCallback`; binds labels in `Start()`

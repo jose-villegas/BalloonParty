@@ -1,56 +1,66 @@
+using System;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots;
 using BalloonParty.UI.Score;
 using MessagePipe;
-using UniRx;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace BalloonParty.UI.Shields
 {
-    public class ShieldTrailController : MonoBehaviour
+    internal class ShieldTrailController : IStartable, IDisposable
     {
         private const string TrailPoolKey = "ShieldTrail";
 
-        [SerializeField] private ScorePointTrail _trailPrefab;
+        private readonly IGameConfiguration _config;
+        private readonly FlyingTrail _prefab;
+        private readonly PoolManager _poolManager;
+        private readonly ISubscriber<ShieldGainedMessage> _shieldGainedSubscriber;
+        private readonly SlotGrid _slotGrid;
+        private readonly Func<Vector3> _targetProvider;
 
-        [Inject] private IGameConfiguration _config;
-        [Inject] private ISubscriber<ShieldGainedMessage> _shieldGainedSubscriber;
-        [Inject] private PoolManager _poolManager;
-        [Inject] private SlotGrid _slotGrid;
-
-        private readonly CompositeDisposable _disposable = new();
-
-        private void OnDestroy()
-        {
-            _disposable.Dispose();
-        }
+        private IDisposable _subscription;
+        private TrailSpawner _spawner;
 
         [Inject]
-        private void Initialize()
+        internal ShieldTrailController(
+            IGameConfiguration config,
+            ISubscriber<ShieldGainedMessage> shieldGainedSubscriber,
+            PoolManager poolManager,
+            SlotGrid slotGrid,
+            FlyingTrail prefab,
+            Func<Vector3> targetProvider)
         {
-            _shieldGainedSubscriber.Subscribe(OnShieldGained).AddTo(_disposable);
+            _config = config;
+            _shieldGainedSubscriber = shieldGainedSubscriber;
+            _poolManager = poolManager;
+            _slotGrid = slotGrid;
+            _prefab = prefab;
+            _targetProvider = targetProvider;
+        }
+
+        public void Dispose()
+        {
+            _subscription?.Dispose();
+        }
+
+        public void Start()
+        {
+            _spawner = new TrailSpawner(
+                _poolManager,
+                TrailPoolKey,
+                () => new ShieldTrailPoolChannel(_prefab));
+
+            _subscription = _shieldGainedSubscriber.Subscribe(OnShieldGained);
         }
 
         private void OnShieldGained(ShieldGainedMessage msg)
         {
             var fromWorldPosition = _slotGrid.IndexToWorldPosition(msg.SlotIndex);
-            SpawnTrail(fromWorldPosition);
-        }
-
-        private void SpawnTrail(Vector3 fromWorldPosition)
-        {
-            var trail = _poolManager.GetOrRegister(TrailPoolKey,
-                () => new ShieldTrailPoolChannel(_trailPrefab));
-
-            trail.transform.position = fromWorldPosition;
-            trail.transform.localScale = Vector3.one;
-
-            trail.Setup(transform.position,
-                _config.ShieldTrailDuration,
-                () => _poolManager.Return(TrailPoolKey, trail));
+            _spawner.Spawn(fromWorldPosition, _targetProvider(), _config.ShieldTrailDuration);
         }
     }
 }

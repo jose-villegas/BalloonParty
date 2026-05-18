@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace BalloonParty.UI.Score
 {
-    public class ScorePointTrail : MonoBehaviour, IPoolable
+    public class FlyingTrail : MonoBehaviour, IPoolable
     {
         private const string OverlaySortingLayer = "UI";
         private const int OverlaySortingOrder = 100;

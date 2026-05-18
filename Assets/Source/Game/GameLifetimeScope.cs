@@ -39,11 +39,11 @@ namespace BalloonParty.Game
         [SerializeField] private GamePalette _gamePalette;
         [SerializeField] private BalloonsConfiguration _balloonsConfiguration;
         [SerializeField] private ProjectileView _projectilePrefab;
-        [SerializeField] private ScorePointTrail _scoreTrailPrefab;
+        [SerializeField] private FlyingTrail _scoreTrailPrefab;
 
         protected override void Awake()
         {
-            DOTween.SetTweensCapacity(200, 50);
+            DOTween.SetTweensCapacity(1000, 50);
             base.Awake();
         }
 
