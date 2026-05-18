@@ -163,7 +163,7 @@ namespace BalloonParty.Game.Score
                 return;
             }
 
-            var id = new TrailId(msg.ColorName, msg.Score, msg.Level);
+            var id = new TrailId(msg);
             var origin = ComputeScatterOrigin(msg.WorldPosition, msg.GroupIndex, msg.GroupSize);
 
             SpawnTrailAsync(msg.ColorName, origin, id, msg.NextLevel, msg.GroupIndex).Forget();

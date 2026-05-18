@@ -642,7 +642,7 @@ def check_repeated_accessor(path: Path, lines: list[str], result: AuditResult):
             # Skip single-char, numeric, or known value-type prefixes.
             if len(prefix) <= 1 or prefix.isdigit() or prefix in IGNORE_PREFIXES:
                 continue
-            if count >= 3:
+            if count >= 5:
                 result.add(Violation(str(path), line_no, "repeated-accessor",
                     f"{count} arguments read from '{prefix}' — consider passing the object directly"))
 

@@ -214,6 +214,7 @@ MonoBehaviour:
   _slowTimeScale: 0.2
   _slowDownDuration: 3
   _restoreDuration: 0.5
+  _camera: {fileID: 253765506}
   _zoomAmount: 1.75
   _cameraPanWeight: 0.5
   _cameraFollowSpeed: 0.7

@@ -19,6 +19,7 @@ namespace BalloonParty.Game.Cinematics
         [SerializeField] private float _restoreDuration = 0.35f;
 
         [Header("Camera")]
+        [SerializeField] private Camera _camera;
         [SerializeField] private float _zoomAmount = 0.5f;
         [SerializeField] private float _cameraPanWeight = 0.7f;
         [SerializeField] private float _cameraFollowSpeed = 5f;
@@ -32,7 +33,6 @@ namespace BalloonParty.Game.Cinematics
         [Inject] private ScoreController _scoreController;
         [Inject] private ScoreTrailService _scoreTrailService;
 
-        private Camera _camera;
         private float _baseOrthoSize;
         private Vector3 _basePosition;
         private Vector3 _lastTrailPosition;
@@ -45,8 +45,6 @@ namespace BalloonParty.Game.Cinematics
 
         private void Start()
         {
-            _camera = Camera.main;
-
             _scoredSubscriber.Subscribe(OnScorePoint).AddTo(this);
             _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
             _dismissedSubscriber.Subscribe(OnLevelUpDismissed).AddTo(this);
@@ -92,7 +90,7 @@ namespace BalloonParty.Game.Cinematics
             }
 
             _sessionActive = true;
-            _tippingTrailId = new TrailId(msg.ColorName, msg.Score, msg.Level);
+            _tippingTrailId = new TrailId(msg);
             _trackedTrail = null;
             _lastTrailPosition = msg.WorldPosition;
 
@@ -142,6 +140,7 @@ namespace BalloonParty.Game.Cinematics
             _trackedTrail = trailTransform;
             _trailElapsed = 0f;
             _lastTrailPosition = trailTransform.position;
+
 
             _director.BeginCinematic(CinematicState.LevelUpTrail);
 
