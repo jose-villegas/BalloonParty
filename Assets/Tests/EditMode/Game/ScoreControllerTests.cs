@@ -6,6 +6,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots;
 using MessagePipe;
 using NSubstitute;
@@ -388,7 +389,7 @@ namespace BalloonParty.Tests.Game
 
         private void FireHit(IBalloonModel model, int damage)
         {
-            var outcome = model is IHitable h ? h.EvaluateHit(damage) : HitOutcome.PassThrough;
+            var outcome = model.EvaluateHit(damage);
             _hitHandler.Handle(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, damage));
         }
 

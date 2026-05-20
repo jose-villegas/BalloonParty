@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots;
 using MessagePipe;
 using UnityEngine;
@@ -135,7 +136,7 @@ namespace BalloonParty.Cheats
                 if (actor != null)
                 {
                     _hitPublisher.Publish(new ActorHitMessage(actor, _grid.IndexToWorldPosition(slot), Vector3.zero,
-                        actor is IHitable h ? h.EvaluateHit(1) : HitOutcome.Pop));
+                        actor.EvaluateHit(1, HitOutcome.Pop)));
                 }
             }
 

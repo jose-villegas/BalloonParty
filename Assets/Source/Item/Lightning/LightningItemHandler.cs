@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -62,7 +63,7 @@ namespace BalloonParty.Item.Lightning
                 foreach (var (model, pos) in targets)
                 {
                     _hitPublisher.Publish(new ActorHitMessage(model, pos, Vector3.zero,
-                        model is IHitable h ? h.EvaluateHit(settings.Damage) : HitOutcome.PassThrough,
+                        model.EvaluateHit(settings.Damage),
                         settings.Damage));
                 }
 
@@ -90,7 +91,7 @@ namespace BalloonParty.Item.Lightning
                     {
                         var (model, pos) = targets[index];
                         _hitPublisher.Publish(new ActorHitMessage(model, pos, Vector3.zero,
-                            model is IHitable h ? h.EvaluateHit(settings.Damage) : HitOutcome.PassThrough,
+                            model.EvaluateHit(settings.Damage),
                             settings.Damage));
                     }
                 });

@@ -119,6 +119,7 @@ actor has health. The inherited `EvaluateHit` is responsible for decrementing
 | Actor | Implements | `EvaluateHit` returns | `HitsRemaining` |
 |---|---|---|---|
 | Standard balloon (1 hit) | `IHasDurability` | `Pop` on kill | decremented → 0 |
+| Soft multi-hit balloon (3 hits) | `IHasDurability` | `PassThrough` × 2, `Pop` on kill | decremented per hit |
 | Tough balloon (3 hits) | `IHasDurability` | `Deflect` × 2, `Pop` on kill | decremented per hit |
 | Unbreakable balloon | **`IHitable` only** | Always `Deflect` | — |
 | Non-deflecting tough actor | `IHasDurability` | Always `Pop` | decremented per hit |
@@ -153,10 +154,15 @@ No convention-based fallback. Every actor that can be hit declares its response 
 
 ```
 HitOutcome
-├── Deflect  — projectile changes direction and continues flying
-├── Pop      — projectile continues flying, direction unchanged
-└── Absorb   — projectile is killed immediately — turn ends, new turn starts
+├── PassThrough — projectile continues unchanged; actor survived (soft balloon cracking)
+├── Deflect     — projectile changes direction; actor survived (tough balloon bounce)
+├── Pop         — projectile continues unchanged; actor destroyed
+└── Absorb      — projectile force-killed immediately — turn ends, new turn starts
 ```
+
+`PassThrough` vs `Deflect` distinguishes *how* the projectile reacts when an actor
+survives — it does not affect removal. `BalloonModel` (soft) returns `PassThrough`;
+`ToughBalloonModel` returns `Deflect`.
 
 Actor removal is always a separate step: check `HitsRemaining.Value <= 0`
 *after* `EvaluateHit` returns any outcome.
@@ -249,7 +255,7 @@ All `BalloonHitMessage` publishers/subscribers migrated to `ActorHitMessage`.
 
 ---
 
-### Phase 6 — Static actor evaluation *(next iteration)*
+### Phase 6 — Static actor evaluation ✅ Complete
 
 **Goal:** Place a handful of inert static actors in the grid and observe how the balancer
 handles them in practice. This is deliberately small — no special visuals, no damage
@@ -343,144 +349,77 @@ Spawn_DoesNotExceedAvailableSlots
 
 ---
 
-### Phase 7 — `IHitable` + Durability abstraction ✅ Complete
+### Phase 7 — `IHitable` + Durability abstraction ✅ Core complete; two items deferred
 
 Introduce `IHitable` as the base hit-response capability and `IHasDurability` extending
 it for actors that also track damage. Lift both from `IBalloonModel` into `Slots/` and
 move `HitOutcome` there too so all hit-system types live in the shared layer.
 
-#### Changes
+#### Changes — done
 
-- Move `HitOutcome` enum to `Slots/` and add `HitOutcome.Absorb`.
-- Add `IHitable` to `Slots/`.
-- Add `IHasDurability : IHitable` to `Slots/`.
-- **Remove `IsStable` from `ISlotActor`** — add `IDynamicSlotActor : ISlotActor` with
-  `IsStable`. Add `IWriteableDynamicSlotActor : IDynamicSlotActor, IWriteableSlotActor`
-  with writable `ReactiveProperty<bool> IsStable`. `IBalloonModel` extends
-  `IDynamicSlotActor`; balloon models satisfy the contract with no logic changes.
-- **Remove `HitsRemaining` from `IBalloonModel`** — it moves to `IHasDurability`.
-- **Add `UnbreakableBalloonModel : IBalloonModel, IHitable`** — `EvaluateHit` always
-  returns `Deflect`, no `HitsRemaining`. `BalloonPrefabEntry` selects the model class
-  at spawn time.
-- `BalloonModel` and `ToughBalloonModel` add `: IHasDurability` — no logic changes.
-- `IBalloonModel` adds `: IHitable` (via `IHasDurability` on durable types, directly on
-  `UnbreakableBalloonModel`).
-- **Caller pattern** — consumers check `IDynamicSlotActor` for stability, `IHitable` for
-  hit outcome, `IHasDurability` for removal:
-  ```csharp
-  if (msg.Actor is IHitable hitable)
-  {
-      var outcome = hitable.EvaluateHit(msg.Damage);
-      if (msg.Actor is IHasDurability durable && durable.HitsRemaining.Value <= 0)
-          // remove actor from grid
-  }
-  // Balancer / nudge:
-  if (actor is IDynamicSlotActor dynamic && dynamic.IsStable.Value) { ... }
-  ```
-- `ProjectileView` handles `Absorb` outcome via `ForceKill()` → `ProjectileDestroyedMessage`.
-- Writable `ReactiveProperty<int> HitsRemaining` stays on `IWriteableBalloonModel` for
-  spawn-time writes on durable types. `IHasDurability` exposes only the read-only view.
+- `HitOutcome` enum moved to `Slots/`; `Absorb` and `PassThrough` added.
+- `IHitable` added to `Slots/`.
+- `IHasDurability : IHitable` added to `Slots/`.
+- `IsStable` removed from `ISlotActor`; `IDynamicSlotActor : ISlotActor` with `IsStable`
+  added. `IWriteableDynamicSlotActor : IDynamicSlotActor, IWriteableSlotActor` added with
+  writable `ReactiveProperty<bool> IsStable`. `IBalloonModel` extends `IDynamicSlotActor`.
+- `HitsRemaining` removed from `IBalloonModel`; moved to `IHasDurability`.
+- `BalloonModelBase` and `ToughBalloonModel` implement `IHasDurability`.
+- `BalloonBalancer` and `NudgeService` cast to `IDynamicSlotActor` for stability queries.
+- All Phase 7 tests added: `BalloonModelTests`, `HitableTests`, `StaticActorTests`,
+  `ScoreControllerTests` additions.
+- `HitOutcome.PassThrough` added (undocumented in the original plan — see design notes
+  above). `BalloonModel` returns `PassThrough` when the balloon survives; `ToughBalloonModel`
+  overrides to return `Deflect` (projectile bounces). Both return `Pop` on death.
 
-#### Consumer migration
+#### Deferred items — moved to Phase 7.5
 
-| Consumer | Before | After |
-|---|---|---|
-| `BalloonController` | `msg.Actor is IBalloonModel` for all hit routing | `msg.Actor is IHitable` for outcome; `msg.Actor is IHasDurability` for removal; still downcasts to `IBalloonModel` for item/pool logic |
-| `BalloonBalancer` | `actor.Kind == Static → skip`; `actor.IsStable` | `actor is not IDynamicSlotActor dynamic → skip`; `dynamic.IsStable` |
-| `NudgeService` | `IHasNudge` filter + `actor.IsStable` | `IHasNudge` filter + `actor is IDynamicSlotActor d && d.IsStable` |
-| `ScoreController` | `msg.Actor is not IBalloonModel \|\| EvaluateHit != Pop` | `msg.Actor is not IHitable h \|\| h.EvaluateHit(…) != Pop`; `Absorb` never scores |
-| `ProjectileView` | `ProjectileDestroyedMessage` only on shield depletion | Also on `ForceKill()` for `Absorb` outcome |
-| `ItemActivator` | `msg.Actor is IBalloonModel` | Unchanged |
+- **`UnbreakableBalloonModel`** — not yet created. The `HitsToPop = -1` convention in
+  `BalloonPrefabEntry` is currently broken with the new model hierarchy (base `EvaluateHit`
+  would incorrectly return `Pop` for `-1`). Must be fixed before any unbreakable balloon
+  prefab is live.
+- **`Absorb` projectile routing** — `BalloonController` has a comment deferring the
+  `ForceKill()` path. `ProjectileView` has no `Absorb` handling yet. Move the
+  routing work into Phase 7.5 alongside the unbreakable model so the hit system is complete
+  before the Grid Spawner introduces new actor types.
 
-#### Failing tests — write first
+#### Consumer migration — actual state
 
-Additions to existing **`BalloonModelTests`** (regression guard):
+| Consumer | Change |
+|---|---|
+| `ProjectileView` | Calls `hitable.EvaluateHit(1)`; publishes `ActorHitMessage` with pre-computed outcome |
+| `BalloonController` | Switches on `msg.Outcome`; `PassThrough` → no-op (crack anim reactive); `Deflect` → `BalloonDeflectedMessage`; `Pop` → remove from grid; `Absorb` → deferred |
+| `BalloonBalancer` | `actor is not IDynamicSlotActor dynamic → skip`; `dynamic.IsStable` |
+| `NudgeService` | `IHasNudge` filter + `actor is IDynamicSlotActor d && d.IsStable` |
+| `ScoreController` | `msg.Outcome != Pop` (and `Absorb`) → no score |
+| `LightningItemHandler`, `BombItemHandler`, `LaserItemHandler` | Each calls `h.EvaluateHit(damage)` inline before publishing `ActorHitMessage` |
 
-```
-BalloonModel_ImplementsIDynamicSlotActor
-  — (new BalloonModel()) is IDynamicSlotActor == true
-  — fails at compile until IDynamicSlotActor exists and IBalloonModel extends it
+#### Tests — written and passing
 
-BalloonModel_ImplementsIHitable
-  — (new BalloonModel()) is IHitable == true
-
-BalloonModel_ImplementsIHasDurability
-  — (new BalloonModel()) is IHasDurability == true
-
-BalloonModel_EvaluateHit_IntermediateHit_StillDeflects
-  — BalloonModel with HitsRemaining=3; EvaluateHit(1) == Deflect; HitsRemaining == 2
-
-BalloonModel_EvaluateHit_KillingBlow_ReturnsPop_AndHitsRemainingIsZero
-  — BalloonModel with HitsRemaining=1; EvaluateHit(1) == Pop; HitsRemaining == 0
-```
-
-Additions to existing **`StaticActorTests`**:
-
-```
-StaticActorModel_IsNotIDynamicSlotActor
-  — (new StaticActorModel()) is IDynamicSlotActor == false
-  — static actors have no animation state
-```
-
-New fixture **`UnbreakableBalloonModelTests`**:
-
-```
-UnbreakableBalloonModel_IsIHitable
-  — (new UnbreakableBalloonModel()) is IHitable == true
-  — fails at compile until UnbreakableBalloonModel exists
-
-UnbreakableBalloonModel_IsNotIHasDurability
-  — (new UnbreakableBalloonModel()) is IHasDurability == false
-
-UnbreakableBalloonModel_EvaluateHit_AlwaysDeflects_RegardlessOfDamage
-  — EvaluateHit(1) == Deflect; EvaluateHit(99) == Deflect
-  — no magic number check — just the declared return value
-```
-
-New fixture **`HitableTests`** in `Assets/Tests/EditMode/Slots/`:
-
-```
-HitOutcome_AbsorbVariantExists
-  — HitOutcome.Absorb compiles and has a distinct value from Deflect and Pop
-
-IndestructibleAbsorbingActor_IsIHitable_NotIHasDurability
-  — IHitable-only impl, not IHasDurability — same pattern as unbreakable balloon
-
-IndestructibleAbsorbingActor_EvaluateHit_ReturnsAbsorb
-
-NonDeflectingActor_EvaluateHit_AlwaysReturnsPop_AndDecrementsHits
-  — IHasDurability impl with HitsRemaining=3, always returns Pop
-  — EvaluateHit(1) == Pop; HitsRemaining == 2
-
-NonDeflectingActor_HitsRemainingReachesZero_OnFinalHit
-  — HitsRemaining=1; EvaluateHit(1); HitsRemaining == 0
-
-HitRouting_IHitableWithoutIHasDurability_RemovalCheckSkipped
-  — actor is IHitable but not IHasDurability
-  — `msg.Actor is IHasDurability` == false → no removal attempt
-```
-
-Additions to existing **`ScoreControllerTests`**:
-
-```
-OnActorHit_IHitable_WithIHasColorAndIHasScore_PopOutcome_PublishesScore
-  — any IHitable + IHasColor + IHasScore actor that returns Pop scores normally
-
-OnActorHit_AbsorbOutcome_DoesNotScore
-  — actor returns Absorb; ScoreController publishes no ScorePointMessage
-```
-
-> `HitableTests` uses minimal hand-written inner classes —
-> `class AbsorbWall : IHitable { public HitOutcome EvaluateHit(int d) => HitOutcome.Absorb; }`
-> No NSubstitute needed.
+- `BalloonModelTests`: `BalloonModel_ImplementsIDynamicSlotActor`, `_ImplementsIHitable`,
+  `_ImplementsIHasDurability`, `_EvaluateHit_IntermediateHit_ReturnsPassThrough_AndDecrementsHits`,
+  `_EvaluateHit_KillingBlow_ReturnsPop_AndHitsRemainingIsZero`
+- `StaticActorTests`: `StaticActorModel_IsNotIDynamicSlotActor`
+- `HitableTests`: all fixtures with `AbsorbWall` and `NonDeflectingActor` inner classes
+- `ScoreControllerTests`: `OnActorHit_IHitable_…_PopOutcome_PublishesScore`,
+  `OnActorHit_AbsorbOutcome_DoesNotScore`
 
 ---
 
-### Phase 7.5 — `BalloonModelBase` hygiene *(do before Phase 8)*
+### Phase 7.5 — `BalloonModelBase` hygiene + hit system completion *(next)*
 
-`BalloonModelBase` currently carries several capabilities as hard defaults on every balloon.
-As new actor types are added these assumptions will break. Clean them up before `GridSpawner`
-introduces actors that opt out of them.
+Two threads merged here: cleaning up `BalloonModelBase` hard defaults before `GridSpawner`
+introduces actors that opt out of them, and completing the two items deferred from Phase 7.
+
+#### Deferred from Phase 7
+
+- **`UnbreakableBalloonModel : IBalloonModel, IHitable`** — `EvaluateHit` always returns
+  `Deflect`, no `HitsRemaining`. `BalloonPrefabEntry.HitsToPop = -1` selects this model
+  class at spawn time. Fixes the broken `-1` path in `BalloonSpawner` (currently
+  `BalloonModelBase.EvaluateHit` would incorrectly return `Pop` for `HitsRemaining = -1`).
+- **`Absorb` outcome routing in `ProjectileView`** — on `HitOutcome.Absorb`, call
+  `ForceKill()` on the projectile tween → publish `ProjectileDestroyedMessage` to end
+  the turn. `BalloonController` already has the case stub in its switch.
 
 #### Assumptions baked into `BalloonModelBase` today
 
@@ -522,6 +461,20 @@ instead of `IBalloonModel.CanHoldItem`.
 | `BalloonSpawner` | `model.CanHoldItem = entry.CanHoldItem` (init) | only set on `IHasWriteableItemSlot` |
 
 #### Failing tests — write first
+
+New fixture **`UnbreakableBalloonModelTests`** in `Assets/Tests/EditMode/Balloon/`:
+
+```
+UnbreakableBalloonModel_IsIHitable
+  — (new UnbreakableBalloonModel()) is IHitable == true
+  — fails at compile until UnbreakableBalloonModel exists
+
+UnbreakableBalloonModel_IsNotIHasDurability
+  — (new UnbreakableBalloonModel()) is IHasDurability == false
+
+UnbreakableBalloonModel_EvaluateHit_AlwaysDeflects_RegardlessOfDamage
+  — EvaluateHit(1) == Deflect; EvaluateHit(99) == Deflect
+```
 
 New fixture **`ItemSlotTests`** in `Assets/Tests/EditMode/Balloon/`:
 
@@ -744,7 +697,7 @@ Deferred until a concrete consumer appears.
 | 4 — Update tests | ✅ Complete |
 | 5 — Update documentation | ✅ Complete |
 | 6 — Static actor evaluation | ✅ Complete |
-| 7 — Durability abstraction | ✅ Complete |
-| 7.5 — BalloonModelBase hygiene | Next |
+| 7 — Durability abstraction | ✅ Core complete (`IHitable`, `IHasDurability`, `IDynamicSlotActor`, `PassThrough` outcome, all tests); `UnbreakableBalloonModel` + `Absorb` routing deferred to 7.5 |
+| 7.5 — BalloonModelBase hygiene + hit system completion | **Next** |
 | 8 — Grid Spawner / Level Spawner | Future |
 | 9 — Behavior-bound actors | Future (broadly defined) |

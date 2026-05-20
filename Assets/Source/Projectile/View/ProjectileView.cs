@@ -7,6 +7,7 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots;
 using DG.Tweening;
 using MessagePipe;
@@ -75,9 +76,7 @@ namespace BalloonParty.Projectile.View
 
             _model.LastHitBalloon = balloonModel;
 
-            var outcome = balloonModel is IHitable hitable
-                ? hitable.EvaluateHit(1)
-                : HitOutcome.PassThrough;
+            var outcome = balloonModel.EvaluateHit(1);
 
             if (outcome == HitOutcome.Pop && !string.IsNullOrEmpty(balloonModel.Color.Value))
             {

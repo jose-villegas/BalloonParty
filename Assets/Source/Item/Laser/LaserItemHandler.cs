@@ -4,6 +4,7 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -120,7 +121,7 @@ namespace BalloonParty.Item.Laser
                 _hitPublisher.Publish(new ActorHitMessage(balloonView.Model,
                     balloonView.transform.position,
                     Vector3.zero,
-                    balloonView.Model is IHitable h ? h.EvaluateHit(damage) : HitOutcome.PassThrough,
+                    balloonView.Model.EvaluateHit(damage),
                     damage));
             }
         }
