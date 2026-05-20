@@ -110,7 +110,7 @@ Material:
     - _SpecularSoftness: 0.022
     - _SphereWarp: 1
     - _SphereWarpDamageBoost: 6
-    - _SpriteScale: 0.75
+    - _SpriteScale: 0.735
     - _SrcBlend: 1
     - _Stencil: 0
     - _StencilComp: 8
@@ -133,7 +133,7 @@ Material:
     - _HitFlashColor: {r: 1, g: 0.27058825, b: 0, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 0.8627452, g: 0.8627452, b: 0.8627452, a: 1}
-    - _ShadowColor: {r: 0.8784314, g: 0.8784314, b: 0.8784314, a: 0.2509804}
+    - _ShadowColor: {r: 0.1254902, g: 0.1254902, b: 0.1254902, a: 0.6431373}
     - _ShadowOffset: {r: 0.1, g: -0.1, b: 0, a: 0}
     - _SpecularColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecularDotOffset: {r: -0.14, g: -0.13, b: 0, a: 0}

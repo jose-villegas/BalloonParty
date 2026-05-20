@@ -13,7 +13,7 @@ using VContainer;
 
 namespace BalloonParty.UI.Score
 {
-    public class ColorProgressBar : MonoBehaviour
+    public class ColorProgressBar : MonoBehaviour, ITrailTarget
     {
         private static readonly int CompletedParam = Animator.StringToHash("Completed");
         private static readonly int TrailHitTrigger = Animator.StringToHash("TrailHit");
@@ -95,7 +95,7 @@ namespace BalloonParty.UI.Score
             _progressSlider.maxValue = required;
             _progressSlider.value = _scoreController.GetProgress(_colorConfig.Name);
 
-            _scoreTrailService.RegisterTarget(_colorConfig.Name, RandomWorldPositionInRect, _colorConfig.Color);
+            _scoreTrailService.RegisterTarget(_colorConfig.Name, this, _colorConfig.Color);
 
             _scoredSubscriber.Subscribe(OnScorePoint).AddTo(this);
             _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(this);
@@ -159,7 +159,16 @@ namespace BalloonParty.UI.Score
             }
         }
 
-        private Vector3 RandomWorldPositionInRect()
+        public Vector3 Center
+        {
+            get
+            {
+                var rectTransform = (RectTransform)transform;
+                return rectTransform.TransformPoint(rectTransform.rect.center);
+            }
+        }
+
+        public Vector3 RandomPosition()
         {
             var rectTransform = (RectTransform)transform;
             var rect = rectTransform.rect;

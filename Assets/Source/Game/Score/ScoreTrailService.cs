@@ -24,13 +24,19 @@ namespace BalloonParty.Game.Score
         private readonly PoolManager _poolManager;
         private readonly ISubscriber<ScorePointMessage> _scoredSubscriber;
         private readonly Dictionary<string, TrailSpawner> _spawners = new();
-        private readonly Dictionary<string, Func<Vector3>> _targetProviders = new();
+        private readonly Dictionary<string, ITrailTarget> _targets = new();
         private readonly TrailTracker<TrailId> _tracker = new();
         private readonly FlyingTrail _trailPrefab;
 
         private IDisposable _subscription;
 
         internal TrailTracker<TrailId> Tracker => _tracker;
+
+        internal ITrailTarget GetTarget(string colorName)
+        {
+            return _targets[colorName];
+        }
+
 
         [Inject]
         internal ScoreTrailService(
@@ -70,10 +76,11 @@ namespace BalloonParty.Game.Score
             _tracker.ResumeAll();
         }
 
-        public void RegisterTarget(string colorName, Func<Vector3> targetProvider, Color color)
+        public void RegisterTarget(string colorName, ITrailTarget target, Color color)
         {
-            _targetProviders[colorName] = targetProvider;
+            _targets[colorName] = target;
             _colorLookup[colorName] = color;
+
 
             if (!_spawners.ContainsKey(colorName))
             {
@@ -104,7 +111,7 @@ namespace BalloonParty.Game.Score
 
         private void OnScorePoint(ScorePointMessage msg)
         {
-            if (!_targetProviders.ContainsKey(msg.ColorName))
+            if (!_targets.ContainsKey(msg.ColorName))
             {
                 Debug.LogWarning(
                     $"ScoreTrailService: no target provider registered for " +
@@ -120,7 +127,7 @@ namespace BalloonParty.Game.Score
 
         private void SpawnTrail(string colorName, Vector3 fromWorldPosition, TrailId id)
         {
-            var target = _targetProviders[colorName]();
+            var target = _targets[colorName].RandomPosition();
             var color = _colorLookup.TryGetValue(colorName, out var c) ? c : Color.white;
             var isTracked = _tracker.IsTracked(id, out var trackedCallback);
             var spawner = _spawners[colorName];

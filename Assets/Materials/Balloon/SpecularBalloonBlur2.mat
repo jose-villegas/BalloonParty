@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: SpecularBalloonBlur
+  m_Name: SpecularBalloonBlur2
   m_Shader: {fileID: 4800000, guid: 41449fd426f03405998ae224c6e9d08a, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -61,7 +61,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BlurAmount: 2
+    - _BlurAmount: 6
     - _BumpScale: 1
     - _ColorMask: 15
     - _Cutoff: 0.5

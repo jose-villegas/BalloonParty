@@ -15,6 +15,8 @@ namespace BalloonParty.UI.Score
         [SerializeField] private AnimationCurve _scaleCurve;
         [SerializeField] private AnimationCurve _moveCurve;
 
+        private Tweener _moveTween;
+
         private void Awake()
         {
             _renderer.sortingLayerName = OverlaySortingLayer;
@@ -29,6 +31,7 @@ namespace BalloonParty.UI.Score
 
         public void OnDespawned()
         {
+            _moveTween = null;
             transform.DOKill();
         }
 
@@ -45,18 +48,24 @@ namespace BalloonParty.UI.Score
         {
             _trailRenderer.Clear();
 
-            var moveTween = transform.DOMove(target, duration);
+            _moveTween = transform.DOMove(target, duration);
             var scaleTween = transform.DOScale(Vector3.zero, duration);
             scaleTween.SetEase(_scaleCurve);
-            moveTween.SetEase(_moveCurve);
+            _moveTween.SetEase(_moveCurve);
 
             if (useUnscaledTime)
             {
-                moveTween.SetUpdate(true);
+                _moveTween.SetUpdate(true);
                 scaleTween.SetUpdate(true);
             }
 
             scaleTween.OnComplete(() => onCompleted?.Invoke());
+        }
+
+        public void DisableMoveTween()
+        {
+            _moveTween?.Kill();
+            _moveTween = null;
         }
     }
 }

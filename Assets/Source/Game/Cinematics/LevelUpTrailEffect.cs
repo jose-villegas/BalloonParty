@@ -1,7 +1,10 @@
 using BalloonParty.Display;
 using BalloonParty.Game.Score;
+using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using BalloonParty.UI.Score;
 using DG.Tweening;
 using MessagePipe;
 using UniRx;
@@ -14,9 +17,8 @@ namespace BalloonParty.Game.Cinematics
     internal class LevelUpTrailEffect : MonoBehaviour
     {
         [Header("Slow Motion")]
-        [SerializeField] private float _slowTimeScale = 0.3f;
-        [SerializeField] private float _slowDownDuration = 0.15f;
-        [SerializeField] private float _restoreDuration = 0.35f;
+        [SerializeField] private AnimationCurve _slowDownCurve = AnimationCurve.EaseInOut(0f, 1f, 0.15f, 0.3f);
+        [SerializeField] private AnimationCurve _restoreCurve = AnimationCurve.EaseInOut(0f, 0.3f, 0.35f, 1f);
 
         [Header("Camera")]
         [SerializeField] private Camera _camera;
@@ -26,6 +28,7 @@ namespace BalloonParty.Game.Cinematics
         [SerializeField] private AnimationCurve _trackedTrailScaleCurve = AnimationCurve.EaseInOut(0f, 2f, 1f, 1f);
 
         [Inject] private CinematicDirector _director;
+        [Inject] private IGameConfiguration _config;
         [Inject] private ISubscriber<ScorePointMessage> _scoredSubscriber;
         [Inject] private ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
@@ -39,9 +42,13 @@ namespace BalloonParty.Game.Cinematics
         private bool _sessionActive;
         private Tween _timeScaleTween;
         private TrailId _tippingTrailId;
+        private FlyingTrail _trackedFlyingTrail;
         private Transform _trackedTrail;
         private float _trailElapsed;
+        private Vector3 _trailOrigin;
+        private Vector3 _trailTargetViewport;
         private Tween _zoomTween;
+
 
         private void Start()
         {
@@ -92,6 +99,7 @@ namespace BalloonParty.Game.Cinematics
             _sessionActive = true;
             _tippingTrailId = new TrailId(msg);
             _trackedTrail = null;
+            _trackedFlyingTrail = null;
             _lastTrailPosition = msg.WorldPosition;
 
             _scoreTrailService.Tracker.TrackTrail(_tippingTrailId, OnTippingTrailSpawned);
@@ -138,8 +146,18 @@ namespace BalloonParty.Game.Cinematics
         private void OnTippingTrailSpawned(Transform trailTransform)
         {
             _trackedTrail = trailTransform;
+            _trackedFlyingTrail = trailTransform.GetComponent<FlyingTrail>();
             _trailElapsed = 0f;
+            _trailOrigin = trailTransform.position;
             _lastTrailPosition = trailTransform.position;
+
+            if (_camera != null)
+            {
+                var worldTarget = _scoreTrailService.GetTarget(_tippingTrailId.Color).Center;
+                _trailTargetViewport = _camera.WorldToViewportPoint(worldTarget);
+            }
+
+            _trackedFlyingTrail.DisableMoveTween();
 
 
             _director.BeginCinematic(CinematicState.LevelUpTrail);
@@ -172,6 +190,7 @@ namespace BalloonParty.Game.Cinematics
             }
 
             _trackedTrail = null;
+            _trackedFlyingTrail = null;
             _scoreTrailService.Tracker.ClearTrackedTrail(_tippingTrailId);
             KillTweens();
             _director.CompleteScene();
@@ -188,9 +207,15 @@ namespace BalloonParty.Game.Cinematics
 
             if (_trackedTrail != null)
             {
-                _lastTrailPosition = _trackedTrail.position;
                 var scale = _trackedTrailScaleCurve.Evaluate(_trailElapsed);
                 _trackedTrail.localScale = Vector3.one * scale;
+
+                var target = _camera.ViewportToWorldPoint(_trailTargetViewport);
+                target.z = 0f;
+                var progress = Mathf.Clamp01(_trailElapsed / _config.ScorePointTraceDuration);
+                _trackedTrail.position = Vector3.Lerp(_trailOrigin, target, progress);
+
+                _lastTrailPosition = _trackedTrail.position;
             }
 
             var panTarget = Vector3.Lerp(_basePosition, _lastTrailPosition, _cameraPanWeight);
@@ -222,11 +247,19 @@ namespace BalloonParty.Game.Cinematics
 
             CaptureBaseState();
 
+            var slowDownDuration = _slowDownCurve.Duration();
+            var elapsed = 0f;
+
             _timeScaleTween = DOTween.To(
-                    () => Time.timeScale,
-                    x => Time.timeScale = x,
-                    _slowTimeScale,
-                    _slowDownDuration)
+                    () => elapsed,
+                    x =>
+                    {
+                        elapsed = x;
+                        Time.timeScale = _slowDownCurve.Evaluate(x);
+                    },
+                    slowDownDuration,
+                    slowDownDuration)
+                .SetEase(Ease.Linear)
                 .SetUpdate(true);
 
             if (_camera != null)
@@ -235,7 +268,7 @@ namespace BalloonParty.Game.Cinematics
                         () => _camera.orthographicSize,
                         x => _camera.orthographicSize = x,
                         _baseOrthoSize - _zoomAmount,
-                        _slowDownDuration)
+                        slowDownDuration)
                     .SetEase(Ease.OutQuad)
                     .SetUpdate(true);
             }
@@ -245,17 +278,25 @@ namespace BalloonParty.Game.Cinematics
         {
             KillTweens();
 
+            var restoreDuration = _restoreCurve.Duration();
+            var elapsed = 0f;
+
             _timeScaleTween = DOTween.To(
-                    () => Time.timeScale,
-                    x => Time.timeScale = x,
-                    1f,
-                    _restoreDuration)
+                    () => elapsed,
+                    x =>
+                    {
+                        elapsed = x;
+                        Time.timeScale = _restoreCurve.Evaluate(x);
+                    },
+                    restoreDuration,
+                    restoreDuration)
+                .SetEase(Ease.Linear)
                 .SetUpdate(true)
                 .OnComplete(() => _director.CompleteScene());
 
             if (_camera != null)
             {
-                var moveTween = _camera.transform.DOMove(_basePosition, _restoreDuration)
+                var moveTween = _camera.transform.DOMove(_basePosition, restoreDuration)
                     .SetEase(Ease.InOutQuad)
                     .SetUpdate(true);
 
@@ -263,7 +304,7 @@ namespace BalloonParty.Game.Cinematics
                         () => _camera.orthographicSize,
                         x => _camera.orthographicSize = x,
                         _baseOrthoSize,
-                        _restoreDuration)
+                        restoreDuration)
                     .SetEase(Ease.InOutQuad)
                     .SetUpdate(true);
 

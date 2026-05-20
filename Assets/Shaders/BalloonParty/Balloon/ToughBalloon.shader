@@ -46,6 +46,13 @@ Shader "BalloonParty/Balloon/ToughBalloon"
 
         [Header(Cracks  Instance)]
         [HideInInspector] _VoronoiSeed ("Voronoi Seed (set at runtime)", Vector) = (0, 0, 0, 0)
+
+        // ---- Shadow --------------------------------------------------------
+        [Header(Shadow)]
+        _ShadowColor    ("Color",    Color)             = (0.2, 0.2, 0.2, 0.75)
+        _ShadowOffset   ("Offset",   Vector)            = (0.025, -0.025, 0, 0)
+        _ShadowSoftness ("Softness", Range(0.0, 0.1))   = 0.01
+        _SpriteScale    ("Sprite Scale", Range(0.1, 1.0)) = 1.0
     }
 
     SubShader
@@ -130,6 +137,11 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             float  _FiberThickness;
             float  _FiberIntensity;
             fixed4 _FiberColor;
+
+            fixed4 _ShadowColor;
+            float2 _ShadowOffset;
+            float  _ShadowSoftness;
+            float  _SpriteScale;
 
             // ----------------------------------------------------------------
             // Grain - faked leather micro-bumps via smooth value noise
@@ -318,6 +330,29 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             }
 
             // ----------------------------------------------------------------
+            // Shadow helpers (matches SpriteShadow 9-tap box blur)
+            // ----------------------------------------------------------------
+            inline fixed SampleShadowAlpha(float2 uv)
+            {
+                return tex2D(_MainTex, uv).a;
+            }
+
+            inline fixed SoftShadowAlpha(float2 shadowUV, float s)
+            {
+                fixed a =
+                    SampleShadowAlpha(shadowUV + float2(-s, -s)) +
+                    SampleShadowAlpha(shadowUV + float2( 0, -s)) +
+                    SampleShadowAlpha(shadowUV + float2( s, -s)) +
+                    SampleShadowAlpha(shadowUV + float2(-s,  0)) +
+                    SampleShadowAlpha(shadowUV                 ) +
+                    SampleShadowAlpha(shadowUV + float2( s,  0)) +
+                    SampleShadowAlpha(shadowUV + float2(-s,  s)) +
+                    SampleShadowAlpha(shadowUV + float2( 0,  s)) +
+                    SampleShadowAlpha(shadowUV + float2( s,  s));
+                return a / 9.0;
+            }
+
+            // ----------------------------------------------------------------
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
@@ -343,11 +378,31 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             fixed4 frag(v2f IN) : SV_Target
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
-                fixed4 sprite = tex2D(_MainTex, IN.texcoord) * IN.color;
-                float  alpha  = sprite.a;
-                if (alpha < 0.01) discard;
 
-                float2 uv      = IN.texcoord - 0.5;
+                // Scale sprite UV inward so the quad has transparent margins for the shadow
+                float2 spriteUV = (IN.texcoord - 0.5) / _SpriteScale + 0.5;
+                float2 inBounds = step(0.0, spriteUV) * step(spriteUV, 1.0);
+                float  spriteMask = inBounds.x * inBounds.y;
+
+                fixed4 sprite = tex2D(_MainTex, spriteUV) * IN.color;
+                sprite.a *= spriteMask;
+                float  alpha  = sprite.a;
+
+                // ---- Shadow (sampled from scaled UV, shifted by offset) ----
+                float2 shadowUV = spriteUV - _ShadowOffset;
+                fixed shadowAlpha = _ShadowSoftness < 0.0001
+                    ? SampleShadowAlpha(shadowUV)
+                    : SoftShadowAlpha(shadowUV, _ShadowSoftness);
+                shadowAlpha *= IN.color.a * _ShadowColor.a;
+
+                fixed3 shadowRGB = _ShadowColor.rgb * IN.color.rgb;
+
+                // Early discard when both sprite and shadow are invisible
+                fixed combinedA = alpha + shadowAlpha * (1.0 - alpha);
+                if (combinedA < 0.01) discard;
+
+                // ---- Balloon shading (only when sprite is visible) ----
+                float2 uv      = spriteUV - 0.5;
                 float2 worldUV = (IN.worldPos - IN.worldData.xy) / max(IN.worldData.z, 0.0001);
 
                 float  dmg    = _DamageProgress;
@@ -420,7 +475,15 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 // Overlay fibers on top of crack color
                 col = lerp(col, fiberColor, fibers * (1.0 - rim));
 
-                return fixed4(col * alpha, alpha);
+                // ---- Composite shadow under balloon (premultiplied alpha) ----
+                // Blend mode is One / OneMinusSrcAlpha, so output is premultiplied.
+                // Porter-Duff "sprite over shadow":
+                //   RGB_out = RGB_sprite * A_sprite + RGB_shadow * A_shadow * (1 - A_sprite)
+                //   A_out   = A_sprite + A_shadow * (1 - A_sprite)
+                fixed3 premulSprite = col * alpha;
+                fixed3 premulShadow = shadowRGB * shadowAlpha * (1.0 - alpha);
+
+                return fixed4(premulSprite + premulShadow, combinedA);
             }
             ENDCG
         }
