@@ -267,6 +267,77 @@ namespace BalloonParty.Tests.Slots
         }
 
         [Test]
+        public void IsTraversable_EmptySlot_ReturnsTrue()
+        {
+            Assert.IsTrue(_grid.IsTraversable(2, 2));
+        }
+
+        [Test]
+        public void IsTraversable_SlotWithPassThroughActor_ReturnsTrue()
+        {
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(2, 2));
+
+            Assert.IsTrue(_grid.IsTraversable(2, 2));
+        }
+
+        [Test]
+        public void IsTraversable_SlotWithNonPassThroughActor_ReturnsFalse()
+        {
+            // BalloonModel does not implement IPassThrough
+            PlaceAt(2, 2);
+
+            Assert.IsFalse(_grid.IsTraversable(2, 2));
+        }
+
+        [Test]
+        public void ComputePath_VerticalPath_LengthEqualsRowDeltaPlusOne()
+        {
+            // Source row 4 → target row 0: 5 waypoints
+            var path = _grid.ComputePath(new Vector2Int(2, 4), new Vector2Int(2, 0));
+
+            Assert.AreEqual(5, path.Length);
+        }
+
+        [Test]
+        public void ComputePath_LastWaypointIsTargetWorldPosition()
+        {
+            var target = new Vector2Int(2, 3);
+            var path = _grid.ComputePath(new Vector2Int(2, 6), target);
+
+            Assert.AreEqual(_grid.IndexToWorldPosition(target), path[^1]);
+        }
+
+        [Test]
+        public void ComputePath_PassThroughActorAtIntermediate_IncludedInPath()
+        {
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(2, 2));
+
+            var path = _grid.ComputePath(new Vector2Int(2, 4), new Vector2Int(2, 0));
+
+            Assert.AreEqual(5, path.Length);
+            Assert.AreEqual(_grid.IndexToWorldPosition(new Vector2Int(2, 2)), path[2]);
+        }
+
+        [Test]
+        public void ComputePath_SourceOutsideGridBounds_IncludesOutOfBoundsPosition()
+        {
+            // Source at row 12 — outside the 10-row grid; path length = 13
+            var path = _grid.ComputePath(new Vector2Int(2, 12), new Vector2Int(2, 0));
+
+            Assert.AreEqual(13, path.Length);
+        }
+
+        [Test]
+        public void ComputePath_SameSourceAndTarget_ReturnsSingleWaypoint()
+        {
+            var target = new Vector2Int(2, 3);
+            var path = _grid.ComputePath(target, target);
+
+            Assert.AreEqual(1, path.Length);
+            Assert.AreEqual(_grid.IndexToWorldPosition(target), path[0]);
+        }
+
+        [Test]
         public void AllEmptySlots_EmptyGrid_ReturnsAllSlots()
         {
             var slots = _grid.AllEmptySlots();
@@ -290,8 +361,10 @@ namespace BalloonParty.Tests.Slots
         [Test]
         public void IsUnbalanced_BalloonAboveStaticActor_ReturnsFalse()
         {
-            // Static actor at (2,0) counts as structural support for balloon at (2,1)
+            // Row 1 (odd): needs direct support at (2,0) AND diagonal at (3,0).
+            // Static actor provides the direct support — verifies it counts the same as any occupant.
             _grid.Place(new StaticActorModel(), null, new Vector2Int(2, 0));
+            PlaceAt(3, 0);
             PlaceAt(2, 1);
 
             Assert.IsFalse(_grid.IsUnbalanced(2, 1));

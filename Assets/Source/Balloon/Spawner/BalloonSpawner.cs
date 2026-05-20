@@ -107,7 +107,7 @@ namespace BalloonParty.Balloon.Spawner
             _newlySpawnedBalloons.Clear();
         }
 
-        private void AnimateSpawn(BalloonView view, Vector3 targetPosition, IWriteableBalloonModel model)
+        private void AnimateSpawn(BalloonView view, Vector3[] spawnPath, IWriteableBalloonModel model)
         {
             model.IsStable.Value = false;
             view.transform.localScale = Vector3.zero;
@@ -116,7 +116,18 @@ namespace BalloonParty.Balloon.Spawner
                 _balloonsConfig.BalloonSpawnAnimationDurationRange.x,
                 _balloonsConfig.BalloonSpawnAnimationDurationRange.y);
 
-            view.transform.DOMove(targetPosition, duration)
+            // spawnPath[0] is already set as the transform's starting position in SpawnBalloon.
+            // Waypoints are the remaining positions the balloon travels through.
+            var waypoints = new Vector3[spawnPath.Length - 1];
+            System.Array.Copy(spawnPath, 1, waypoints, 0, waypoints.Length);
+
+            if (waypoints.Length == 0)
+            {
+                model.IsStable.Value = true;
+                return;
+            }
+
+            view.transform.DOPath(waypoints, duration, PathType.CatmullRom)
                 .OnComplete(() => model.IsStable.Value = true);
 
             view.transform.DOScale(Vector3.one, duration);
@@ -194,14 +205,14 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            var targetPosition = _grid.IndexToWorldPosition(slot);
-            var spawnPosition = _grid.IndexToWorldPosition(slot + (Vector2Int.up * 4));
+            var source = new Vector2Int(slot.x, slot.y + _balloonsConfig.SpawnEntryRowOffset);
+            var spawnPath = _grid.ComputePath(source, slot);
             var poolKey = entry.PoolKey;
 
             _activeCounts[poolKey] = _activeCounts.GetValueOrDefault(poolKey) + 1;
 
             var view = _poolManager.Get<BalloonView>(poolKey);
-            view.transform.position = spawnPosition;
+            view.transform.position = spawnPath[0];
 
             IWriteableBalloonModel model = entry.IsPaintable ? new BalloonModel() : new ToughBalloonModel();
             model.SlotIndex.Value = slot;
@@ -229,7 +240,7 @@ namespace BalloonParty.Balloon.Spawner
             controller.Start();
 
             _grid.Place(model, view, slot);
-            AnimateSpawn(view, targetPosition, model);
+            AnimateSpawn(view, spawnPath, model);
 
             _newlySpawnedBalloons.Add(model);
         }

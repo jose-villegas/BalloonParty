@@ -77,7 +77,8 @@ MonoBehaviour:
   _gameStartedBalloonLines: 6
   _newProjectileBalloonLines: 3
   _newBalloonLinesTimeInterval: 0.35
-  _balloonSpawnAnimationSpeedRange: {x: 1.25, y: 2}
+  _balloonSpawnAnimationSpeedRange: {x: 1.5, y: 3}
+  _spawnEntryRowOffset: 4
   _timeForBalloonsBalance: 1.75
   _nudgeDistance: 0.15
   _nudgeDuration: 0.4

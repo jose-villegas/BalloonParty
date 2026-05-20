@@ -209,6 +209,7 @@ ISlotActorView
 | `IHasWriteableColor` | Paintable — writable color | `BalloonModel` only (not `ToughBalloonModel`) |
 | `IHasScore` | Awards score on pop | `IBalloonModel` (all balloon types) |
 | `IHasNudge` | Participates in nudge system | `IBalloonModel` (all balloon types) |
+| `IPassThrough` | Slot can be crossed by animation paths | `StaticActorModel` |
 
 Subscribers that previously cast to `IBalloonModel` now cast to the narrowest capability interface needed (`IHasColor`, `IHasScore`, `IHasNudge`). `BalloonController` is the only subscriber that still casts to `IBalloonModel` — it needs `EvaluateHit()` which is balloon-specific. See `Slots/README.md` for full detail.
 

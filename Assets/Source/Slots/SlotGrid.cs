@@ -82,6 +82,61 @@ namespace BalloonParty.Slots
             return _slots[col, row].Kind == kind;
         }
 
+        /// <summary>
+        ///     Returns true if the slot can be crossed by an animation path:
+        ///     empty slots and slots occupied by an <see cref="IPassThrough"/> actor are traversable.
+        /// </summary>
+        public bool IsTraversable(int col, int row)
+        {
+            if (IsEmpty(col, row))
+            {
+                return true;
+            }
+
+            return _slots[col, row] is IPassThrough;
+        }
+
+        /// <summary>
+        ///     Computes world-space waypoints along the straight-line grid path from
+        ///     <paramref name="source"/> to <paramref name="target"/>. Either coordinate may
+        ///     be outside the grid bounds — the world position is still computed correctly.
+        ///     In-bounds slots occupied by non-<see cref="IPassThrough"/> actors emit a warning;
+        ///     rerouting is deferred to Phase 9.
+        /// </summary>
+        public Vector3[] ComputePath(Vector2Int source, Vector2Int target)
+        {
+            var colDelta = target.x - source.x;
+            var rowDelta = target.y - source.y;
+            var steps = Mathf.Max(Mathf.Abs(colDelta), Mathf.Abs(rowDelta));
+
+            if (steps == 0)
+            {
+                return new[] { IndexToWorldPosition(target) };
+            }
+
+            var path = new List<Vector3>(steps + 1);
+
+            for (var i = 0; i <= steps; i++)
+            {
+                var t = (float)i / steps;
+                var col = Mathf.RoundToInt(Mathf.Lerp(source.x, target.x, t));
+                var row = Mathf.RoundToInt(Mathf.Lerp(source.y, target.y, t));
+
+                var inBounds = col >= 0 && col < Columns && row >= 0 && row < Rows;
+
+                if (inBounds && !IsTraversable(col, row))
+                {
+                    Debug.LogWarning(
+                        $"SlotGrid.ComputePath: slot ({col},{row}) is not traversable. " +
+                        "Path passes through it — rerouting not yet implemented (Phase 9).");
+                }
+
+                path.Add(IndexToWorldPosition(new Vector2Int(col, row)));
+            }
+
+            return path.ToArray();
+        }
+
         public bool IsUnbalanced(int col, int row)
         {
             if (row == 0)

@@ -17,6 +17,8 @@ namespace BalloonParty.Configuration
         [SerializeField] private int _newProjectileBalloonLines;
         [SerializeField] private float _newBalloonLinesTimeInterval;
         [SerializeField] private Vector2 _balloonSpawnAnimationSpeedRange;
+        [Tooltip("How many rows below the target slot the balloon enters from. Can exceed the grid bounds — the world position is still computed correctly.")]
+        [SerializeField] private int _spawnEntryRowOffset = 4;
 
         [Header("Balancing")]
         [SerializeField] private float _timeForBalloonsBalance;
@@ -34,6 +36,7 @@ namespace BalloonParty.Configuration
         public int NewProjectileBalloonLines => _newProjectileBalloonLines;
         public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;
         public Vector2 BalloonSpawnAnimationDurationRange => _balloonSpawnAnimationSpeedRange;
+        public int SpawnEntryRowOffset => _spawnEntryRowOffset;
         public float TimeForBalloonsBalance => _timeForBalloonsBalance;
         public float NudgeDistance => _nudgeDistance;
         public float NudgeDuration => _nudgeDuration;

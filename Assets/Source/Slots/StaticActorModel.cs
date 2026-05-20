@@ -3,7 +3,9 @@ using UnityEngine;
 
 namespace BalloonParty.Slots
 {
-    internal class StaticActorModel : IWriteableSlotActor
+    // Static actors are inert obstacles — their slot can be visually traversed by
+    // spawn and balance animations without requiring a detour.
+    internal class StaticActorModel : IWriteableSlotActor, IPassThrough
     {
         public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
 

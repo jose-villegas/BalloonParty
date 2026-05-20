@@ -25,6 +25,7 @@ Optional traits actors can advertise to consumers:
 | `IHasWriteableColor` | Actor has a writable color — the type system flag for paintability |
 | `IHasScore` | Actor awards score when destroyed |
 | `IHasNudge` | Actor participates in the nudge force system |
+| `IPassThrough` | Actor's slot can be crossed by animation paths (spawn entry, balance moves). Actors that do NOT implement this block traversal; Phase 9 introduces rerouting for blocking actors. |
 
 Paintability is expressed purely through types: a `BalloonModel` implements `IHasWriteableColor`; a `ToughBalloonModel` does not — no runtime flag needed.
 
