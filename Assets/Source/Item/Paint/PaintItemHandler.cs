@@ -61,17 +61,17 @@ namespace BalloonParty.Item.Paint
             var neighborIndices = SlotGrid.HexNeighborIndices(slot.x, slot.y);
             var tint = _palette.GetColor(paintColor);
 
-            // Build a paint target per neighbor index — null when the slot is empty or non-paintable.
-            var paintTargets = new IWriteableBalloonModel[NeighborCount];
+            // Build a paint target per neighbor index — null when slot is empty or non-paintable.
+            var paintTargets = new IHasWriteableColor[NeighborCount];
 
             for (var i = 0; i < NeighborCount; i++)
             {
                 var idx = neighborIndices[i];
-                var model = _grid.IsEmpty(idx.x, idx.y) ? null : _grid.At(idx);
+                var actor = _grid.IsEmpty(idx.x, idx.y) ? null : _grid.At(idx);
 
-                if (model != null && model.IsPaintable && model.Color.Value != paintColor)
+                if (actor is IHasWriteableColor colorable && colorable.Color.Value != paintColor)
                 {
-                    paintTargets[i] = model;
+                    paintTargets[i] = colorable;
                 }
             }
 

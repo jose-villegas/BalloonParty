@@ -21,7 +21,7 @@ namespace BalloonParty.Cheats
         private static readonly int ZWriteId = Shader.PropertyToID("_ZWrite");
 
         [Inject] private IPublisher<BalanceBalloonsMessage> _publisher;
-        [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
+        [Inject] private IPublisher<ActorHitMessage> _hitPublisher;
         [Inject] private SlotGrid _grid;
 
         private readonly List<Vector3> _path = new();
@@ -131,10 +131,10 @@ namespace BalloonParty.Cheats
 
             foreach (var slot in hitSlots)
             {
-                var model = _grid.At(slot);
-                if (model != null)
+                var actor = _grid.At(slot);
+                if (actor != null)
                 {
-                    _hitPublisher.Publish(new BalloonHitMessage(model, _grid.IndexToWorldPosition(slot), Vector3.zero));
+                    _hitPublisher.Publish(new ActorHitMessage(actor, _grid.IndexToWorldPosition(slot), Vector3.zero));
                 }
             }
 

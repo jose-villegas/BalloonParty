@@ -8,6 +8,7 @@ using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Slots;
 using DG.Tweening;
 using UniRx;
 using UnityEngine;
@@ -15,7 +16,7 @@ using VContainer;
 
 namespace BalloonParty.Balloon.View
 {
-    public class BalloonView : MonoBehaviour, IPoolable
+    public class BalloonView : MonoBehaviour, IPoolable, ISlotActorView
     {
         private static readonly int IsStableParam = Animator.StringToHash("IsStable");
 
@@ -46,6 +47,7 @@ namespace BalloonParty.Balloon.View
         public IBalloonModel Model { get; private set; }
         public IBalloonVariant Variant => _variant;
         public TweenTracker TweenTracker => _tweenTracker;
+        public SlotActorKind ActorKind => SlotActorKind.Dynamic;
         internal ITransformCapture TransformCapture => _transformCapture;
 
         private void Awake()

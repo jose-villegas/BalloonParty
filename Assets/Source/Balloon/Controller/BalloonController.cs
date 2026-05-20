@@ -15,7 +15,7 @@ namespace BalloonParty.Balloon.Controller
     {
         private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly SlotGrid _grid;
-        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IWriteableBalloonModel _model;
         private readonly NudgeOverride[] _nudgeOverrides;
@@ -37,7 +37,7 @@ namespace BalloonParty.Balloon.Controller
             Action onReturned,
             NudgeOverride[] nudgeOverrides,
             ParticleSystem popVfxOverride,
-            ISubscriber<BalloonHitMessage> hitSubscriber,
+            ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
             IPublisher<TransformCapturedMessage> transformCapturedPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
@@ -73,7 +73,7 @@ namespace BalloonParty.Balloon.Controller
 
             _hitSubscription = _hitSubscriber.Subscribe(msg =>
             {
-                if (msg.Balloon != _model)
+                if (msg.Actor is not IBalloonModel balloon || !ReferenceEquals(balloon, _model))
                 {
                     return;
                 }
@@ -97,7 +97,7 @@ namespace BalloonParty.Balloon.Controller
             _view.RegisterDisposeOnDespawn(_hitSubscription);
         }
 
-        private void Deflect(BalloonHitMessage msg)
+        private void Deflect(ActorHitMessage msg)
         {
             var balloonWorldPos = _grid.IndexToWorldPosition(_model.SlotIndex.Value);
             _deflectedPublisher.Publish(new BalloonDeflectedMessage(_model, balloonWorldPos, msg.ProjectileDirection));

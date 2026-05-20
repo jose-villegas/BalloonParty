@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
@@ -15,12 +16,12 @@ namespace BalloonParty.Item
     {
         private readonly IEnumerable<IBalloonItem> _handlers;
         private readonly IPublisher<ItemActivatedMessage> _itemActivatedPublisher;
-        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
 
         [Inject]
         public ItemActivator(
             IEnumerable<IBalloonItem> handlers,
-            ISubscriber<BalloonHitMessage> hitSubscriber,
+            ISubscriber<ActorHitMessage> hitSubscriber,
             IPublisher<ItemActivatedMessage> itemActivatedPublisher)
         {
             _handlers = handlers;
@@ -30,39 +31,44 @@ namespace BalloonParty.Item
 
         public void Start()
         {
-            _hitSubscriber.Subscribe(OnBalloonHit);
+            _hitSubscriber.Subscribe(OnActorHit);
         }
 
-        private void OnBalloonHit(BalloonHitMessage msg)
+        private void OnActorHit(ActorHitMessage msg)
         {
-            if (msg.Balloon.Item.Value == ItemType.None)
+            if (msg.Actor is not IBalloonModel balloon)
             {
                 return;
             }
 
-            var handler = _handlers.FirstOrDefault(h => h.Type == msg.Balloon.Item.Value);
+            if (balloon.Item.Value == ItemType.None)
+            {
+                return;
+            }
+
+            var handler = _handlers.FirstOrDefault(h => h.Type == balloon.Item.Value);
             if (handler == null)
             {
                 Debug.LogError(
-                    $"ItemActivator.OnBalloonHit: no handler registered for item type " +
-                    $"\"{msg.Balloon.Item.Value}\" — this is a configuration bug.");
+                    $"ItemActivator.OnActorHit: no handler registered for item type " +
+                    $"\"{balloon.Item.Value}\" — this is a configuration bug.");
                 return;
             }
 
-            ActivateAsync(handler, msg).Forget();
+            ActivateAsync(handler, balloon, msg.WorldPosition).Forget();
         }
 
-        private async UniTaskVoid ActivateAsync(IBalloonItem handler, BalloonHitMessage msg)
+        private async UniTaskVoid ActivateAsync(IBalloonItem handler, IBalloonModel balloon, Vector3 worldPosition)
         {
             try
             {
-                // Yield one frame so all synchronous BalloonHitMessage subscribers
+                // Yield one frame so all synchronous ActorHitMessage subscribers
                 // (e.g. BalloonController capturing item rotation) finish first.
                 await UniTask.Yield();
 
-                handler.Setup(msg.Balloon, msg.WorldPosition);
+                handler.Setup(balloon, worldPosition);
                 await handler.Activate();
-                _itemActivatedPublisher.Publish(new ItemActivatedMessage(msg.Balloon));
+                _itemActivatedPublisher.Publish(new ItemActivatedMessage(balloon));
             }
             catch (OperationCanceledException)
             {

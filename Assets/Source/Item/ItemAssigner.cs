@@ -102,7 +102,7 @@ namespace BalloonParty.Item
                         continue;
                     }
 
-                    var model = _grid.At(new Vector2Int(col, row));
+                    var model = _grid.ActorAt<BalloonModel>(new Vector2Int(col, row));
                     if (model != null && model.Item.Value == type)
                     {
                         count++;

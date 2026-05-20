@@ -1,7 +1,5 @@
 using System;
 using System.Collections.Generic;
-using BalloonParty.Balloon.Model;
-using BalloonParty.Balloon.View;
 using BalloonParty.Shared;
 using UniRx;
 using UnityEngine;
@@ -12,8 +10,8 @@ namespace BalloonParty.Slots
     {
         private readonly IGameConfiguration _config;
         private readonly Subject<SlotGridChangedEvent> _onChanged = new();
-        private readonly IWriteableBalloonModel[,] _slots;
-        private readonly BalloonView[,] _views;
+        private readonly IWriteableSlotActor[,] _slots;
+        private readonly ISlotActorView[,] _views;
 
         public IObservable<SlotGridChangedEvent> OnChanged => _onChanged;
         public int Columns => _slots.GetLength(0);
@@ -22,12 +20,11 @@ namespace BalloonParty.Slots
         public SlotGrid(IGameConfiguration config)
         {
             _config = config;
-            _slots = new IWriteableBalloonModel[config.SlotsSize.x, config.SlotsSize.y];
-            _views = new BalloonView[config.SlotsSize.x, config.SlotsSize.y];
+            _slots = new IWriteableSlotActor[config.SlotsSize.x, config.SlotsSize.y];
+            _views = new ISlotActorView[config.SlotsSize.x, config.SlotsSize.y];
         }
 
-
-        public void Place(IWriteableBalloonModel balloon, BalloonView view, Vector2Int index)
+        public void Place(IWriteableSlotActor actor, ISlotActorView view, Vector2Int index)
         {
             if (_slots[index.x, index.y] != null)
             {
@@ -35,9 +32,9 @@ namespace BalloonParty.Slots
                     $"SlotGrid.Place: slot ({index.x},{index.y}) is already occupied.");
             }
 
-            _slots[index.x, index.y] = balloon;
+            _slots[index.x, index.y] = actor;
             _views[index.x, index.y] = view;
-            balloon.SlotIndex.Value = index;
+            actor.SlotIndex.Value = index;
             _onChanged.OnNext(new SlotGridChangedEvent(index, SlotGridChangeType.Placed));
         }
 
@@ -48,14 +45,24 @@ namespace BalloonParty.Slots
             _onChanged.OnNext(new SlotGridChangedEvent(index, SlotGridChangeType.Removed));
         }
 
-        public IWriteableBalloonModel At(Vector2Int index)
+        public IWriteableSlotActor At(Vector2Int index)
         {
             return _slots[index.x, index.y];
         }
 
-        public BalloonView ViewAt(Vector2Int index)
+        public T ActorAt<T>(Vector2Int index) where T : class, IWriteableSlotActor
+        {
+            return _slots[index.x, index.y] as T;
+        }
+
+        public ISlotActorView ViewAt(Vector2Int index)
         {
             return _views[index.x, index.y];
+        }
+
+        public T ActorViewAt<T>(Vector2Int index) where T : class, ISlotActorView
+        {
+            return _views[index.x, index.y] as T;
         }
 
         public bool IsEmpty(int col, int row)
@@ -63,6 +70,16 @@ namespace BalloonParty.Slots
             return col < 0 || col >= Columns
                            || row < 0 || row >= Rows
                            || _slots[col, row] == null;
+        }
+
+        public bool IsKind(int col, int row, SlotActorKind kind)
+        {
+            if (IsEmpty(col, row))
+            {
+                return false;
+            }
+
+            return _slots[col, row].Kind == kind;
         }
 
         public bool IsUnbalanced(int col, int row)
@@ -153,9 +170,9 @@ namespace BalloonParty.Slots
             };
         }
 
-        public List<IWriteableBalloonModel> GetNeighbors(int col, int row)
+        public List<IWriteableSlotActor> GetNeighbors(int col, int row)
         {
-            var neighbors = new List<IWriteableBalloonModel>();
+            var neighbors = new List<IWriteableSlotActor>();
 
             foreach (var idx in HexNeighborIndices(col, row))
             {
@@ -193,7 +210,7 @@ namespace BalloonParty.Slots
             return weight;
         }
 
-        private void TryAddNeighbor(List<IWriteableBalloonModel> neighbors, int col, int row)
+        private void TryAddNeighbor(List<IWriteableSlotActor> neighbors, int col, int row)
         {
             if (!IsEmpty(col, row))
             {

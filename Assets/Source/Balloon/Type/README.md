@@ -21,7 +21,7 @@ Then `BalloonView.Bind(model)` calls `Bind()` on all `IBalloonViewBinding` compo
 
 The `_allowedColorsMask` on `ColorableBalloonVariant` is a bitmask over `GamePalette.Colors` shown in the Inspector as per-color checkboxes via `PaletteColorMaskAttribute`. `PickColor()` builds a list of allowed color names from the bitmask and picks uniformly at random.
 
-`BalloonController` reads `HitsRemaining` on each `BalloonHitMessage`:
+`BalloonController` reads `HitsRemaining` on each `ActorHitMessage` (filtered to `IBalloonModel`):
 
 - **`-1`** (Unbreakable) → deflect without decrementing
 - **`> 1`** (Tough) → decrement and deflect

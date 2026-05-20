@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
-using BalloonParty.Configuration;
+using BalloonParty.Balloon.View;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using MessagePipe;
@@ -12,9 +12,8 @@ namespace BalloonParty.Nudge
 {
     internal class NudgeService : IStartable
     {
-        private readonly BalloonsConfiguration _config;
-        private readonly HashSet<IBalloonModel> _nudging = new();
-        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly HashSet<IWriteableSlotActor> _nudging = new();
+        private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ISubscriber<BalloonNudgeMessage> _nudgeSubscriber;
         private readonly NudgeOverrideResolver _resolver;
         private readonly SlotGrid _grid;
@@ -22,13 +21,11 @@ namespace BalloonParty.Nudge
         [Inject]
         internal NudgeService(
             SlotGrid grid,
-            BalloonsConfiguration config,
             NudgeOverrideResolver resolver,
-            ISubscriber<BalloonHitMessage> hitSubscriber,
+            ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<BalloonNudgeMessage> nudgeSubscriber)
         {
             _grid = grid;
-            _config = config;
             _resolver = resolver;
             _hitSubscriber = hitSubscriber;
             _nudgeSubscriber = nudgeSubscriber;
@@ -36,7 +33,7 @@ namespace BalloonParty.Nudge
 
         public void Start()
         {
-            _hitSubscriber.Subscribe(OnBalloonHit);
+            _hitSubscriber.Subscribe(OnActorHit);
             _nudgeSubscriber.Subscribe(OnNudge);
         }
 
@@ -53,8 +50,7 @@ namespace BalloonParty.Nudge
                 return;
             }
 
-            var view = _grid.ViewAt(slot);
-            if (view == null)
+            if (_grid.ViewAt(slot) is not BalloonView balloonView)
             {
                 return;
             }
@@ -64,7 +60,7 @@ namespace BalloonParty.Nudge
 
             _nudging.Add(model);
             model.IsStable.Value = false;
-            view.Nudge(slotPos,
+            balloonView.Nudge(slotPos,
                 direction,
                 distance,
                 duration,
@@ -75,17 +71,27 @@ namespace BalloonParty.Nudge
                 });
         }
 
-        private void OnBalloonHit(BalloonHitMessage msg)
+        private void OnActorHit(ActorHitMessage msg)
         {
-            var hitSlot = msg.Balloon.SlotIndex.Value;
+            if (msg.Actor is not IHasNudge)
+            {
+                return;
+            }
+
+            var hitSlot = msg.Actor.SlotIndex.Value;
             var hitSlotPos = _grid.IndexToWorldPosition(hitSlot);
             var neighbors = _grid.GetNeighbors(hitSlot.x, hitSlot.y);
 
             foreach (var neighbor in neighbors)
             {
+                if (neighbor is not IHasNudge nudgeable)
+                {
+                    continue;
+                }
+
                 var slot = neighbor.SlotIndex.Value;
-                var distance = _resolver.ResolveDistance(neighbor.NudgeOverrides, null, NudgeType.Neighbor);
-                var duration = _resolver.ResolveDuration(neighbor.NudgeOverrides, null, NudgeType.Neighbor);
+                var distance = _resolver.ResolveDistance(nudgeable.NudgeOverrides, null, NudgeType.Neighbor);
+                var duration = _resolver.ResolveDuration(nudgeable.NudgeOverrides, null, NudgeType.Neighbor);
                 NudgeBalloon(slot, hitSlotPos, distance, duration);
             }
         }
@@ -138,15 +144,21 @@ namespace BalloonParty.Nudge
                         continue;
                     }
 
-                    // Per-balloon shockwave override takes priority over publisher attenuation
-                    var balloonOverride = NudgeOverrideResolver.FindOverride(model.NudgeOverrides, NudgeType.Shockwave);
+                    NudgeOverride[] actorOverrides = null;
+                    if (model is IHasNudge nudgeable)
+                    {
+                        actorOverrides = nudgeable.NudgeOverrides;
+                    }
+
+                    // Per-actor shockwave override takes priority over publisher attenuation
+                    var actorOverride = NudgeOverrideResolver.FindOverride(actorOverrides, NudgeType.Shockwave);
                     float distance;
                     float duration;
 
-                    if (balloonOverride != null)
+                    if (actorOverride != null)
                     {
-                        distance = balloonOverride.Distance;
-                        duration = balloonOverride.Duration;
+                        distance = actorOverride.Distance;
+                        duration = actorOverride.Duration;
                     }
                     else
                     {

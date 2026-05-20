@@ -18,7 +18,7 @@ namespace BalloonParty.Item.Bomb
 
         private readonly ContactFilter2D _balloonFilter;
         private readonly GamePalette _palette;
-        private readonly IPublisher<BalloonHitMessage> _hitPublisher;
+        private readonly IPublisher<ActorHitMessage> _hitPublisher;
         private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
         private readonly ItemConfiguration _itemConfig;
         private readonly List<Collider2D> _overlapResults = new(8);
@@ -33,7 +33,7 @@ namespace BalloonParty.Item.Bomb
         public BombItemHandler(
             GamePalette palette,
             ItemConfiguration itemConfig,
-            IPublisher<BalloonHitMessage> hitPublisher,
+            IPublisher<ActorHitMessage> hitPublisher,
             IPublisher<BalloonNudgeMessage> nudgePublisher,
             PoolManager poolManager)
         {
@@ -91,7 +91,7 @@ namespace BalloonParty.Item.Bomb
                     continue;
                 }
 
-                _hitPublisher.Publish(new BalloonHitMessage(balloonView.Model,
+                _hitPublisher.Publish(new ActorHitMessage(balloonView.Model,
                     balloonView.transform.position,
                     Vector3.zero,
                     damage));

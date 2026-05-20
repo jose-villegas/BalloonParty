@@ -19,7 +19,7 @@ namespace BalloonParty.Tests.Item
     {
         private SlotGrid _grid;
         private ItemConfiguration _itemConfig;
-        private IPublisher<BalloonHitMessage> _hitPublisher;
+        private IPublisher<ActorHitMessage> _hitPublisher;
         private LightningItemHandler _handler;
 
         [SetUp]
@@ -36,7 +36,7 @@ namespace BalloonParty.Tests.Item
             var lightningSettings = CreateItemSettings(ItemType.Lightning, damage: 1);
             SetField(_itemConfig, "_items", new List<ItemSettings> { lightningSettings });
 
-            _hitPublisher = Substitute.For<IPublisher<BalloonHitMessage>>();
+            _hitPublisher = Substitute.For<IPublisher<ActorHitMessage>>();
 
             _handler = new LightningItemHandler(
                 _itemConfig,
@@ -60,7 +60,7 @@ namespace BalloonParty.Tests.Item
             _handler.Setup(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
             _handler.Activate();
 
-            _hitPublisher.DidNotReceive().Publish(Arg.Any<BalloonHitMessage>());
+            _hitPublisher.DidNotReceive().Publish(Arg.Any<ActorHitMessage>());
         }
 
         [Test]
@@ -73,7 +73,7 @@ namespace BalloonParty.Tests.Item
             _handler.Setup(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
             _handler.Activate();
 
-            _hitPublisher.Received(2).Publish(Arg.Any<BalloonHitMessage>());
+            _hitPublisher.Received(2).Publish(Arg.Any<ActorHitMessage>());
         }
 
         [Test]
@@ -85,9 +85,9 @@ namespace BalloonParty.Tests.Item
             _handler.Setup(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
             _handler.Activate();
 
-            _hitPublisher.Received(1).Publish(Arg.Any<BalloonHitMessage>());
+            _hitPublisher.Received(1).Publish(Arg.Any<ActorHitMessage>());
             _hitPublisher.DidNotReceive().Publish(
-                Arg.Is<BalloonHitMessage>(m => m.Balloon == source));
+                Arg.Is<ActorHitMessage>(m => ReferenceEquals(m.Actor, source)));
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace BalloonParty.Tests.Item
             _handler.Activate();
 
             _hitPublisher.Received(1).Publish(
-                Arg.Is<BalloonHitMessage>(m => m.Damage == 1));
+                Arg.Is<ActorHitMessage>(m => m.Damage == 1));
         }
 
         private BalloonModel PlaceBalloon(int col, int row, string color)

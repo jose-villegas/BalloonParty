@@ -359,11 +359,11 @@ Each step compiles and passes tests independently.
 
 | Phase | Status |
 |---|---|
-| 1 — Define actor interfaces | Not started |
-| 2 — Refactor SlotGrid | Not started |
-| 3 — Update consumers | Not started |
-| 4 — Update tests | Not started |
-| 5 — Update documentation | Not started |
+| 1 — Define actor interfaces | ✅ Complete |
+| 2 — Refactor SlotGrid | ✅ Complete |
+| 3 — Update consumers | ✅ Complete |
+| 4 — Update tests | ✅ Complete |
+| 5 — Update documentation | ✅ Complete |
 | 6 — Static actor implementation | Future |
 | 7 — Spawner actor behavior | Future |
 

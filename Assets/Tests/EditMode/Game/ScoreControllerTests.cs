@@ -23,7 +23,7 @@ namespace BalloonParty.Tests.Game
         private IPublisher<ScorePointMessage> _scoredPublisher;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private ScoreController _controller;
-        private IMessageHandler<BalloonHitMessage> _hitHandler;
+        private IMessageHandler<ActorHitMessage> _hitHandler;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
 
         [SetUp]
@@ -44,7 +44,7 @@ namespace BalloonParty.Tests.Game
             var colors = new[] { CreatePaletteEntry(Red), CreatePaletteEntry(Blue) };
             SetField(_palette, "_colors", colors);
 
-            var hitSubscriber = Substitute.For<ISubscriber<BalloonHitMessage>>();
+            var hitSubscriber = Substitute.For<ISubscriber<ActorHitMessage>>();
             var trailArrivedSubscriber = Substitute.For<ISubscriber<ScoreTrailArrivedMessage>>();
             _scoredPublisher = Substitute.For<IPublisher<ScorePointMessage>>();
             _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
@@ -53,8 +53,8 @@ namespace BalloonParty.Tests.Game
             // The extension wraps Action<T> in AnonymousMessageHandler and calls the interface method.
             hitSubscriber
                 .Subscribe(
-                    Arg.Do<IMessageHandler<BalloonHitMessage>>(h => _hitHandler = h),
-                    Arg.Any<MessageHandlerFilter<BalloonHitMessage>[]>())
+                    Arg.Do<IMessageHandler<ActorHitMessage>>(h => _hitHandler = h),
+                    Arg.Any<MessageHandlerFilter<ActorHitMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
             trailArrivedSubscriber
@@ -265,7 +265,7 @@ namespace BalloonParty.Tests.Game
 
         private void FireHit(IBalloonModel model, int damage)
         {
-            _hitHandler.Handle(new BalloonHitMessage(model, Vector3.zero, Vector3.up, damage));
+            _hitHandler.Handle(new ActorHitMessage(model, Vector3.zero, Vector3.up, damage));
         }
 
         private void FirePop(string color, int scoreValue = 1)

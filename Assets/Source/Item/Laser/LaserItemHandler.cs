@@ -18,7 +18,7 @@ namespace BalloonParty.Item.Laser
 
         private readonly ContactFilter2D _balloonFilter;
         private readonly GamePalette _palette;
-        private readonly IPublisher<BalloonHitMessage> _hitPublisher;
+        private readonly IPublisher<ActorHitMessage> _hitPublisher;
         private readonly ISubscriber<TransformCapturedMessage> _transformCapturedSubscriber;
         private readonly ItemConfiguration _itemConfig;
         private readonly List<RaycastHit2D> _castResults = new(4);
@@ -34,7 +34,7 @@ namespace BalloonParty.Item.Laser
         internal LaserItemHandler(
             GamePalette palette,
             ItemConfiguration itemConfig,
-            IPublisher<BalloonHitMessage> hitPublisher,
+            IPublisher<ActorHitMessage> hitPublisher,
             ISubscriber<TransformCapturedMessage> transformCapturedSubscriber,
             PoolManager poolManager)
         {
@@ -116,7 +116,7 @@ namespace BalloonParty.Item.Laser
                     continue;
                 }
 
-                _hitPublisher.Publish(new BalloonHitMessage(balloonView.Model,
+                _hitPublisher.Publish(new ActorHitMessage(balloonView.Model,
                     balloonView.transform.position,
                     Vector3.zero,
                     damage));

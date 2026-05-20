@@ -15,7 +15,7 @@ namespace BalloonParty.Cheats
             PaletteEntry color,
             int target,
             ScoreController scoreController,
-            IPublisher<BalloonHitMessage> hitPublisher)
+            IPublisher<ActorHitMessage> hitPublisher)
         {
             var missing = target - scoreController.GetProgress(color.Name);
             if (missing <= 0)
@@ -28,7 +28,7 @@ namespace BalloonParty.Cheats
 
             for (var i = 0; i < missing; i++)
             {
-                hitPublisher.Publish(new BalloonHitMessage(fakeModel, Vector3.zero, Vector3.zero));
+                hitPublisher.Publish(new ActorHitMessage(fakeModel, Vector3.zero, Vector3.zero));
             }
         }
     }

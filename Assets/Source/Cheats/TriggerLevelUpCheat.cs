@@ -13,7 +13,7 @@ namespace BalloonParty.Cheats
     {
         private readonly IGameConfiguration _config;
         private readonly GamePalette _palette;
-        private readonly IPublisher<BalloonHitMessage> _hitPublisher;
+        private readonly IPublisher<ActorHitMessage> _hitPublisher;
         private readonly ScoreController _scoreController;
 
         public string Name => "Trigger Level Up";
@@ -24,7 +24,7 @@ namespace BalloonParty.Cheats
             IGameConfiguration config,
             GamePalette palette,
             ScoreController scoreController,
-            IPublisher<BalloonHitMessage> hitPublisher)
+            IPublisher<ActorHitMessage> hitPublisher)
         {
             _config = config;
             _palette = palette;

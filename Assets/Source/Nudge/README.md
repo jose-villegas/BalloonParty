@@ -1,12 +1,12 @@
 # Nudge
 
-Elastic push-out/return animations for balloons — triggered by projectile hits, tough-balloon deflections, and item shockwaves.
+Elastic push-out/return animations for actors — triggered by projectile hits, tough-balloon deflections, and item shockwaves.
 
 ## Folder structure
 
 | File | What it owns |
 |---|---|
-| `NudgeService` | `IStartable` — subscribes to `BalloonHitMessage` and `BalloonNudgeMessage`; resolves per-balloon and per-publisher overrides; dispatches nudge animations to `BalloonView` |
+| `NudgeService` | `IStartable` — subscribes to `ActorHitMessage` (filtered by `IHasNudge`) and `BalloonNudgeMessage`; resolves per-actor and per-publisher overrides; dispatches nudge animations to `BalloonView` |
 | `NudgeType` | `[Flags]` enum — `Deflect`, `Neighbor`, `Shockwave`; controls which override entries apply |
 | `NudgeOverride` | Serializable per-source struct: `AppliesTo` (flag mask), `Distance`, `Duration`, `Falloff` |
 | `BalloonNudgeMessage` | Pub/sub signal — carries target balloon (null = shockwave), origin, source type, and optional publisher overrides |
@@ -16,30 +16,31 @@ Elastic push-out/return animations for balloons — triggered by projectile hits
 
 | Type | Trigger | Target |
 |---|---|---|
-| `Neighbor` | Any `BalloonHitMessage` — automatic | All 6 grid neighbors of the hit slot |
-| `Deflect` | Projectile bounces off a tough or unbreakable balloon | The deflecting balloon itself |
+| `Neighbor` | Any `ActorHitMessage` where the hit actor implements `IHasNudge` | All 6 grid neighbors that also implement `IHasNudge` |
+| `Deflect` | Projectile bounces off a tough or unbreakable balloon | The deflecting balloon itself via `BalloonNudgeMessage` |
 | `Shockwave` | Item handler (e.g. Bomb) publishes `BalloonNudgeMessage(Source=Shockwave, Balloon=null)` | All occupied grid slots, attenuated by distance |
 
 ## Override resolution
 
-Distance, duration, and falloff are resolved in priority order for each affected balloon:
+Distance, duration, and falloff are resolved in priority order for each affected actor:
 
-1. **Per-balloon override** — `NudgeOverride[]` on the balloon's model (`IBalloonModel.NudgeOverrides`), sourced from `BalloonPrefabEntry`
+1. **Per-actor override** — `NudgeOverride[]` from `IHasNudge.NudgeOverrides` on the actor's model, sourced from `BalloonPrefabEntry`
 2. **Publisher override** — `NudgeOverride[]` carried in the `BalloonNudgeMessage` (set by item handlers)
 3. **Global default** — `BalloonsConfiguration.NudgeDistance`, `NudgeDuration`, `NudgeFalloff`
 
-Shockwave uses exponential distance falloff: `distance = baseDistance × exp(−falloff × d)`. A per-balloon shockwave override skips the falloff entirely and uses its fixed `Distance`.
+Shockwave uses exponential distance falloff: `distance = baseDistance × exp(−falloff × d)`. A per-actor shockwave override skips the falloff entirely and uses its fixed `Distance`.
 
 ## Stability tracking
 
-`NudgeService` maintains `_nudging: HashSet<IBalloonModel>`. A balloon can be nudged if it is stable or already mid-nudge (allowing nudge-to-nudge interrupts). Balloons that are unstable for other reasons (spawning, balancing) are skipped to avoid conflicts. On nudge start `IsStable = false` and the model is added to `_nudging`; on nudge complete `IsStable = true` and it is removed.
+`NudgeService` maintains `_nudging: HashSet<IWriteableSlotActor>`. An actor can be nudged if it is stable or already mid-nudge (allowing nudge-to-nudge interrupts). Actors that are unstable for other reasons (spawning, balancing) are skipped to avoid conflicts. On nudge start `IsStable = false` and the actor is added to `_nudging`; on nudge complete `IsStable = true` and it is removed.
+
+Only actors whose view is a `BalloonView` are nudged — nudging is balloon-specific until a second actor type with its own nudge animation is introduced.
 
 ## Interactions
 
-- **BalloonHitMessage** — triggers automatic neighbor nudges for every hit
+- **ActorHitMessage** — triggers automatic neighbor nudges for every hit on an `IHasNudge` actor
 - **BalloonNudgeMessage** — triggers single-balloon (Deflect) or shockwave nudges from controllers and item handlers
 - **BalloonView.Nudge()** — executes the push-out → return DOTween sequence on the view
-- **SlotGrid** — resolves neighboring models and slot world positions
+- **SlotGrid** — resolves neighboring actors and slot world positions
 - **BalloonsConfiguration** — global nudge defaults (`NudgeDistance`, `NudgeDuration`, `NudgeFalloff`)
 - **BalloonPrefabEntry** — per-type `NudgeOverride[]` assigned to the model by `BalloonController`
-

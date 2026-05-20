@@ -26,7 +26,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private GamePalette _palette;
         [Inject] private IGameConfiguration _config;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
-        [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
+        [Inject] private IPublisher<ActorHitMessage> _hitPublisher;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
@@ -79,7 +79,7 @@ namespace BalloonParty.Projectile.View
                 TrackColorStreak(balloonModel.Color.Value);
             }
 
-            _hitPublisher.Publish(new BalloonHitMessage(balloonModel,
+            _hitPublisher.Publish(new ActorHitMessage(balloonModel,
                 balloonView.transform.position,
                 _model.Direction));
         }

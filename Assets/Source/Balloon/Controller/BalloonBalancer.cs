@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -37,11 +36,11 @@ namespace BalloonParty.Balloon.Controller
             _subscriber.Subscribe(_ => RequestBalance());
         }
 
-        private void AnimatePaths(Dictionary<IWriteableBalloonModel, List<Vector3>> paths)
+        private void AnimatePaths(Dictionary<IWriteableSlotActor, List<Vector3>> paths)
         {
-            foreach (var (balloon, path) in paths)
+            foreach (var (actor, path) in paths)
             {
-                var slot = balloon.SlotIndex.Value;
+                var slot = actor.SlotIndex.Value;
                 var view = _grid.ViewAt(slot);
                 if (view == null)
                 {
@@ -56,7 +55,7 @@ namespace BalloonParty.Balloon.Controller
                 var currentScale = view.transform.localScale;
                 var tween = view.transform
                     .DOPath(path.ToArray(), _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
-                    .OnComplete(() => balloon.IsStable.Value = true);
+                    .OnComplete(() => actor.IsStable.Value = true);
 
                 view.TweenTracker.Append(tween);
 
@@ -69,7 +68,7 @@ namespace BalloonParty.Balloon.Controller
 
         private void Balance()
         {
-            var paths = new Dictionary<IWriteableBalloonModel, List<Vector3>>();
+            var paths = new Dictionary<IWriteableSlotActor, List<Vector3>>();
             var hasUnbalanced = true;
 
             while (hasUnbalanced)
@@ -90,6 +89,14 @@ namespace BalloonParty.Balloon.Controller
                             continue;
                         }
 
+                        var currentSlot = new Vector2Int(col, row);
+                        var actor = _grid.At(currentSlot);
+
+                        if (actor.Kind == SlotActorKind.Static)
+                        {
+                            continue;
+                        }
+
                         var nextSlot = _grid.OptimalNextEmptySlot(col, row);
                         if (!nextSlot.HasValue)
                         {
@@ -98,21 +105,19 @@ namespace BalloonParty.Balloon.Controller
 
                         hasUnbalanced = true;
 
-                        var currentSlot = new Vector2Int(col, row);
-                        var balloon = _grid.At(currentSlot);
-                        var balloonView = _grid.ViewAt(currentSlot);
+                        var actorView = _grid.ViewAt(currentSlot);
                         _grid.Remove(currentSlot);
-                        _grid.Place(balloon, balloonView, nextSlot.Value);
-                        balloon.IsStable.Value = false;
+                        _grid.Place(actor, actorView, nextSlot.Value);
+                        actor.IsStable.Value = false;
 
                         var targetPosition = _grid.IndexToWorldPosition(nextSlot.Value);
-                        if (paths.TryGetValue(balloon, out var path))
+                        if (paths.TryGetValue(actor, out var path))
                         {
                             path.Add(targetPosition);
                         }
                         else
                         {
-                            paths[balloon] = new List<Vector3> { targetPosition };
+                            paths[actor] = new List<Vector3> { targetPosition };
                         }
                     }
                 }

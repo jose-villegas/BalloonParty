@@ -29,7 +29,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
-        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IPublisher<ItemCheckMessage> _itemCheckPublisher;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
@@ -49,7 +49,7 @@ namespace BalloonParty.Balloon.Spawner
             PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
-            ISubscriber<BalloonHitMessage> hitSubscriber,
+            ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
@@ -198,10 +198,9 @@ namespace BalloonParty.Balloon.Spawner
             var view = _poolManager.Get<BalloonView>(poolKey);
             view.transform.position = spawnPosition;
 
-            var model = new BalloonModel();
+            IWriteableBalloonModel model = entry.IsPaintable ? new BalloonModel() : new ToughBalloonModel();
             model.SlotIndex.Value = slot;
             model.CanHoldItem = entry.CanHoldItem;
-            model.IsPaintable = entry.IsPaintable;
             model.HitsRemaining.Value = entry.HitsToPop;
             model.TypeName.Value = entry.BalloonType;
             model.ScoreValue = entry.ScoreValue;

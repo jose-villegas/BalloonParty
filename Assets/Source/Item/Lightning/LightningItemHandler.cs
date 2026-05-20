@@ -18,7 +18,7 @@ namespace BalloonParty.Item.Lightning
     /// </summary>
     internal class LightningItemHandler : IBalloonItem
     {
-        private readonly IPublisher<BalloonHitMessage> _hitPublisher;
+        private readonly IPublisher<ActorHitMessage> _hitPublisher;
         private readonly ItemConfiguration _itemConfig;
         private readonly PoolManager _poolManager;
         private readonly SlotGrid _grid;
@@ -31,7 +31,7 @@ namespace BalloonParty.Item.Lightning
         [Inject]
         public LightningItemHandler(
             ItemConfiguration itemConfig,
-            IPublisher<BalloonHitMessage> hitPublisher,
+            IPublisher<ActorHitMessage> hitPublisher,
             SlotGrid grid,
             PoolManager poolManager)
         {
@@ -61,7 +61,7 @@ namespace BalloonParty.Item.Lightning
             {
                 foreach (var (model, pos) in targets)
                 {
-                    _hitPublisher.Publish(new BalloonHitMessage(model, pos, Vector3.zero, settings.Damage));
+                    _hitPublisher.Publish(new ActorHitMessage(model, pos, Vector3.zero, settings.Damage));
                 }
 
                 return UniTask.CompletedTask;
@@ -87,7 +87,7 @@ namespace BalloonParty.Item.Lightning
                     if (index < targets.Count)
                     {
                         var (model, pos) = targets[index];
-                        _hitPublisher.Publish(new BalloonHitMessage(model, pos, Vector3.zero, settings.Damage));
+                        _hitPublisher.Publish(new ActorHitMessage(model, pos, Vector3.zero, settings.Damage));
                     }
                 });
 
@@ -112,9 +112,12 @@ namespace BalloonParty.Item.Lightning
                     }
 
                     var slot = new Vector2Int(col, row);
-                    var model = _grid.At(slot);
+                    if (_grid.At(slot) is not IBalloonModel model)
+                    {
+                        continue;
+                    }
 
-                    if (model == null || model == _balloon)
+                    if (ReferenceEquals(model, _balloon))
                     {
                         continue;
                     }

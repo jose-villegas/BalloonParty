@@ -48,7 +48,7 @@ public class GameLifetimeScope : LifetimeScope
         builder.RegisterEntryPoint<BalloonBalancer>();
 
         var options = builder.RegisterMessagePipe();
-        builder.RegisterMessageBroker<BalloonHitMessage>(options);
+        builder.RegisterMessageBroker<ActorHitMessage>(options);
     }
 }
 
@@ -128,11 +128,11 @@ Use MessagePipe for communication between systems that should not hold direct re
 
 ```csharp
 // Publisher
-[Inject] private IPublisher<BalloonHitMessage> _publisher;
-_publisher.Publish(new BalloonHitMessage(model, worldPos));
+[Inject] private IPublisher<ActorHitMessage> _publisher;
+_publisher.Publish(new ActorHitMessage(actor, worldPos, direction));
 
 // Subscriber
-[Inject] private ISubscriber<BalloonHitMessage> _subscriber;
+[Inject] private ISubscriber<ActorHitMessage> _subscriber;
 _subscriber.Subscribe(msg => OnHit(msg)).AddTo(_disposable);
 ```
 
@@ -394,7 +394,7 @@ public class BalloonRemoverCheat : MonoBehaviour, ICheat
 
     // 4. [Inject] fields
     [Inject] private SlotGrid _grid;
-    [Inject] private IPublisher<BalloonHitMessage> _hitPublisher;
+    [Inject] private IPublisher<ActorHitMessage> _hitPublisher;
 
     // 5. Readonly instance fields
     private readonly List<Vector3> _path = new();

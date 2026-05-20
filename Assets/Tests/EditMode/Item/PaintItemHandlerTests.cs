@@ -84,8 +84,7 @@ namespace BalloonParty.Tests.Item
         public void Activate_SkipsNonPaintableNeighbors()
         {
             var source = PlaceBalloon(2, 2, "Red");
-            var tough = PlaceBalloon(1, 2, "Blue");
-            tough.IsPaintable = false;
+            var tough = PlaceToughBalloon(1, 2, "Blue");
 
             _handler.Setup(source, Vector3.zero);
             _handler.Activate();
@@ -118,6 +117,14 @@ namespace BalloonParty.Tests.Item
         private BalloonModel PlaceBalloon(int col, int row, string color)
         {
             var model = new BalloonModel();
+            model.Color.Value = color;
+            _grid.Place(model, null, new Vector2Int(col, row));
+            return model;
+        }
+
+        private ToughBalloonModel PlaceToughBalloon(int col, int row, string color)
+        {
+            var model = new ToughBalloonModel();
             model.Color.Value = color;
             _grid.Place(model, null, new Vector2Int(col, row));
             return model;

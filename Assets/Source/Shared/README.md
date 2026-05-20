@@ -24,7 +24,7 @@ Messages are the signals that decouple systems from one another. A publisher fir
 |---|---|---|
 | `BalanceBalloonsMessage` | `ProjectileView`, `BalloonSpawner` | `BalloonBalancer` |
 | `SpawnBalloonLineMessage` | `SceneTransition` (game start), cheats | `BalloonSpawner` |
-| `BalloonHitMessage` | `ProjectileView`, item handlers, cheats | `BalloonController`, `ScoreController`, `NudgeService`, `ItemActivator` — carries `Damage` (int, default 1); item handlers pass `ItemSettings.Damage`, projectile hits always use 1 |
+| `ActorHitMessage` | `ProjectileView`, item handlers, cheats | `BalloonController`, `ScoreController`, `NudgeService`, `ItemActivator` — carries `ISlotActor Actor` and `Damage` (int, default 1); item handlers pass `ItemSettings.Damage`, projectile hits always use 1. Subscribers downcast `Actor` to the specific interface they need (`IBalloonModel`, `IHasColor`, `IHasNudge`, etc.) |
 | `BalloonDeflectedMessage` | `BalloonController` (on deflect) | `ProjectileView` (color-tracking on deflect hit) |
 | `ScorePointMessage` | `ScoreController` | `ColorProgressBar`, `ScoreTrailService`, `LevelUpTrailEffect` — one message per individual score point; carries `ColorName`, `WorldPosition`, `Score` (1-based within level), `Level` (pre-computed, including next-level renumbering), `NextLevel` (bool), `GroupSize` and `GroupIndex` (for scatter positioning) |
 | `ScoreLevelUpMessage` | `ScoreController` | `ColorProgressBar`, `LevelUpPopUp` |

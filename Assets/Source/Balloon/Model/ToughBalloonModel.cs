@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal class BalloonModel : IWriteableBalloonModel, IHasWriteableColor
+    internal class ToughBalloonModel : IWriteableBalloonModel
     {
         public ReactiveProperty<string> Color { get; } = new();
         public ReactiveProperty<BalloonType> TypeName { get; } = new();
@@ -17,7 +17,7 @@ namespace BalloonParty.Balloon.Model
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
 
         public NudgeOverride[] NudgeOverrides { get; set; }
-        public bool CanHoldItem { get; set; } = true;
+        public bool CanHoldItem { get; set; }
         public int ScoreValue { get; set; } = 1;
 
         public SlotActorKind Kind => SlotActorKind.Dynamic;
@@ -40,3 +40,4 @@ namespace BalloonParty.Balloon.Model
         }
     }
 }
+

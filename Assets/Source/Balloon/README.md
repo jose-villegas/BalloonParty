@@ -6,8 +6,8 @@ Represents balloons in the game — their state, appearance, spawning, and destr
 
 | Folder | What it owns |
 |---|---|
-| `Model/` | `IBalloonModel` (read-only interface), `IWriteableBalloonModel` (mutable interface), `BalloonModel` (concrete) — pure C# data with reactive properties (`Color`, `TypeName`, `HitsRemaining`, `SlotIndex`, `IsStable`, `Item`) and `NudgeOverrides`. Consumers use the narrowest interface: views receive `IBalloonModel`; controllers, spawners, and grid operations use `IWriteableBalloonModel` |
-| `View/` | `BalloonView` — MonoBehaviour implementing `IPoolable` that binds to a model and renders color, sorting order, and pop VFX. Uses `ColorableRendererExtensions.BindColor` to reactively update all `ColorableRenderer[]` children when the model's color changes. Caches `IBalloonViewBinding[]` and `IBalloonVariant` in `Awake()` to avoid per-bind/per-spawn hierarchy walks. Exposes `Variant` for `BalloonSpawner`. `TweenTracker` and `ItemDisplayService` are `[SerializeField]` references (set in Inspector) |
+| `Model/` | `IBalloonModel` (read-only interface — extends `ISlotActor`, `IHasColor`, `IHasScore`, `IHasNudge`), `IWriteableBalloonModel` (mutable — extends `IWriteableSlotActor`), `BalloonModel` (concrete — also implements `IHasWriteableColor`, paintable), `ToughBalloonModel` (concrete — does NOT implement `IHasWriteableColor`, not paintable). Consumers use the narrowest interface: views receive `IBalloonModel`; controllers, spawners, and grid operations use `IWriteableBalloonModel` |
+| `View/` | `BalloonView` — MonoBehaviour implementing `IPoolable` and `ISlotActorView` that binds to a model and renders color, sorting order, and pop VFX. `ActorKind` returns `Dynamic`. Uses `ColorableRendererExtensions.BindColor` to reactively update all `ColorableRenderer[]` children when the model's color changes. Caches `IBalloonViewBinding[]` and `IBalloonVariant` in `Awake()`. Exposes `Variant` for `BalloonSpawner`. `TweenTracker` and `ItemDisplayService` are `[SerializeField]` references |
 | `Controller/` | `BalloonController` — wires model to view and handles hit/deflect/pop routing; `BalloonBalancer` — rebalances the grid after each turn |
 | `Spawner/` | `BalloonSpawner` — creates balloon lines at game start and after each projectile death; `BalloonPoolChannel` — pool channel using `InjectingPoolChannel` with `IObjectResolver.Instantiate` |
 | `Type/` | `BalloonType` enum, `IBalloonVariant`, `IBalloonViewBinding`, `ColorableBalloonVariant`, `SimpleBalloonVariant`, `ToughBalloonVariant` — per-prefab variant components that initialize type and color on the model. `IBalloonViewBinding` is a secondary interface that any prefab component can implement to receive `Bind(model, disposables)` calls from `BalloonView` — used by `ToughBalloonVariant` to drive shader damage state (see `Type/README.md`) |
@@ -23,13 +23,13 @@ Balloon materials (`BalloonMaterial`, `SpecularBalloonBlur`, etc.) have GPU inst
 
 A balloon knows its color, type, how many hits it can absorb, where it sits in the grid, whether it has settled into position, and whether it carries an item. When any reactive property changes, the view updates automatically via UniRx subscriptions.
 
-`BalloonController` routes incoming `BalloonHitMessage`s based on `HitsRemaining` and the message's `Damage` value:
+`BalloonController` routes incoming `ActorHitMessage`s (filtered via `msg.Actor is IBalloonModel`) based on `HitsRemaining` and the message's `Damage` value:
 
 - **Unbreakable (`-1`)** — deflect regardless of damage: publishes `BalloonDeflectedMessage` and `BalloonNudgeMessage(Deflect)`; never pops.
 - **`HitsRemaining - Damage > 0`** — decrement by `Damage` and deflect. A high-damage hit (e.g. Bomb with `Damage = 2`) can bypass the deflect threshold entirely if it removes enough hits in one blow.
 - **`HitsRemaining - Damage ≤ 0`** — pop: plays VFX, removes from grid, returns to pool (deferred if the balloon carries an item). Overkill damage is not tracked.
 
-Neighbor nudges for every hit are handled independently by `NudgeService` in `Nudge/`, which subscribes to `BalloonHitMessage` and dispatches push-out → return animations to all 6 grid neighbors.
+Neighbor nudges for every hit are handled independently by `NudgeService` in `Nudge/`, which subscribes to `ActorHitMessage` (filtering by `IHasNudge`) and dispatches push-out → return animations to all 6 grid neighbors that also implement `IHasNudge`.
 
 ### Pooling
 
@@ -59,9 +59,9 @@ When nudge or balance interrupts a spawning balloon, `transform.DOKill()` kills 
 
 - **SlotGrid** — balloons occupy positions in it; stores models and views in parallel arrays. Spawner places, controller removes, balancer relocates. `_grid.ViewAt(slotIndex)` reaches views from models.
 - **BalloonBalancer** — moves balloons when gaps appear; fires once per turn after spawning
-- **NudgeService** — subscribes to `BalloonHitMessage` and `BalloonNudgeMessage`; nudges neighboring and deflecting balloon views
-- **ProjectileView** — triggers destruction on collision via `BalloonHitMessage`
-- **ScoreController** — records each qualifying pop via `BalloonHitMessage`
+- **NudgeService** — subscribes to `ActorHitMessage` and `BalloonNudgeMessage`; nudges neighboring and deflecting balloon views
+- **ProjectileView** — triggers destruction on collision via `ActorHitMessage`
+- **ScoreController** — records each qualifying pop via `ActorHitMessage` (filters `IBalloonModel`)
 - **PoolManager** — `BalloonView` instances are pooled via `BalloonPoolChannel`; pop VFX pooled via `ParticlePoolChannel`
 - **TweenTracker** — generic `MonoBehaviour` in `Shared/` that manages tween sequencing (append, replace, kill)
 - **Item system** — balloons are one host for the game-wide item system (in `Item/`). `BalloonView` calls `ItemDisplayService.Bind()`/`Unbind()` to connect item visuals; the item system itself has no knowledge of balloons

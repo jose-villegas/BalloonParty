@@ -53,7 +53,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<BalanceBalloonsMessage>(options);
             builder.RegisterMessageBroker<SpawnBalloonLineMessage>(options);
             builder.RegisterMessageBroker<ProjectileDestroyedMessage>(options);
-            builder.RegisterMessageBroker<BalloonHitMessage>(options);
+            builder.RegisterMessageBroker<ActorHitMessage>(options);
             builder.RegisterMessageBroker<BalloonDeflectedMessage>(options);
             builder.RegisterMessageBroker<BalloonNudgeMessage>(options);
             builder.RegisterMessageBroker<ScorePointMessage>(options);

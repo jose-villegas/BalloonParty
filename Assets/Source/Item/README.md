@@ -27,10 +27,10 @@ Items are game-wide collectible effects — Bomb, Laser, Lightning, Paint, and S
 
 | File | What it does |
 |---|---|
-| `ItemActivator` | `IStartable` — subscribes to `BalloonHitMessage`; when the hit balloon carries an item, finds the matching `IBalloonItem` handler by type, calls `Setup` + `await Activate()`, then publishes `ItemActivatedMessage`. Yields one frame before activation to let all synchronous `BalloonHitMessage` subscribers finish first |
-| `Bomb/BombItemHandler` | Area explosion — `Physics2D.OverlapCircleAll` at balloon position; destroys balloons in radius; nudges survivors with exponential distance falloff. Passes `ItemSettings.Damage` into each `BalloonHitMessage` |
-| `Laser/LaserItemHandler` | Cross beam — 4× `Physics2D.CircleCastAll` in rotated directions; reads captured rotation from `ItemRotationCapturedMessage`. Passes `ItemSettings.Damage` into each `BalloonHitMessage` |
-| `Lightning/LightningItemHandler` | Chain lightning — queries `SlotGrid` for all same-color balloons, sorts by distance, spawns `ChainLightningView` via `EffectPoolChannel`, passes `ItemSettings` directly to `PrepareDisplay`, hits each target sequentially with async delay. Passes `ItemSettings.Damage` into each `BalloonHitMessage` |
+| `ItemActivator` | `IStartable` — subscribes to `ActorHitMessage`; when the hit actor is a balloon carrying an item, finds the matching `IBalloonItem` handler by type, calls `Setup` + `await Activate()`, then publishes `ItemActivatedMessage`. Yields one frame before activation to let all synchronous `ActorHitMessage` subscribers finish first |
+| `Bomb/BombItemHandler` | Area explosion — `Physics2D.OverlapCircleAll` at balloon position; destroys balloons in radius; nudges survivors with exponential distance falloff. Passes `ItemSettings.Damage` into each `ActorHitMessage` |
+| `Laser/LaserItemHandler` | Cross beam — 4× `Physics2D.CircleCastAll` in rotated directions; reads captured rotation from `ItemRotationCapturedMessage`. Passes `ItemSettings.Damage` into each `ActorHitMessage` |
+| `Lightning/LightningItemHandler` | Chain lightning — queries `SlotGrid` for all same-color balloons, sorts by distance, spawns `ChainLightningView` via `EffectPoolChannel`, passes `ItemSettings` directly to `PrepareDisplay`, hits each target sequentially with async delay. Passes `ItemSettings.Damage` into each `ActorHitMessage` |
 | `Lightning/ChainLightningView` | `EffectView` subclass for chain lightning — multiple `LineRenderer`s + a `SpriteRenderer` glow. `PrepareDisplay(positions, settings, onTargetHit)` accepts `ItemSettings` directly; `Play()` starts `async UniTaskVoid` that grows forward jump-by-jump then retracts. Bolt segments use fractal **midpoint displacement** (`PathHelper.MidpointDisplacement`) with configurable `FractalDecay` for realistic jagged electricity. Glow follows a smooth **Catmull-Rom path** through per-jump centroids (`BuildGlowPath`), animated per-frame during each jump delay. `BuildBoltBuffers`, `BuildGlowPath`, and `FillSegment` are `internal static` — shared with editor preview (single source of truth). Uses `VectorMathHelper.Centroid`/`BoundingRadius` and `PathHelper.SampleAt`/`ResampleLinear`/`PrefixSum` for math |
 | `Shield/ShieldItemHandler` | Shield grant — increments `ShieldsRemaining` on the active projectile; spawns `PSVFX_ShieldGainPU` at the balloon's grid position. Does not deal damage |
 | `Paint/PaintItemHandler` | Splatoon-style color spread — computes all 6 hex neighbor positions via `SlotGrid.HexNeighborIndices`, launches paint blob arcs toward each via `PaintSplashView`, and changes paintable different-color neighbors to the popped balloon's color on blob arrival |
@@ -71,10 +71,10 @@ Balloon (root)         ← BalloonLifetimeScope
 
 ### Activation flow
 
-1. `ProjectileView.OnTriggerEnter2D` publishes `BalloonHitMessage` for the hit balloon (always `Damage = 1`)
+1. `ProjectileView.OnTriggerEnter2D` publishes `ActorHitMessage` for the hit balloon (always `Damage = 1`)
 2. `BalloonController` receives it, calls `_view.Hide()` (disables collider and renderers), and waits for `ItemActivatedMessage` before returning to pool
-3. `ItemActivator` receives the same `BalloonHitMessage`, yields one frame, then calls `Setup(balloon, worldPos)` + `await Activate()` on the matching handler
-4. The handler runs its effect (may be async, e.g. lightning), publishing `BalloonHitMessage` for each secondary balloon with `Damage = settings.Damage`
+3. `ItemActivator` receives the same `ActorHitMessage`, yields one frame, then calls `Setup(balloon, worldPos)` + `await Activate()` on the matching handler
+4. The handler runs its effect (may be async, e.g. lightning), publishing `ActorHitMessage` for each secondary balloon with `Damage = settings.Damage`
 5. `ItemActivator` publishes `ItemActivatedMessage` — `BalloonController` receives it and returns the item balloon to pool
 
 ## Item types
@@ -89,14 +89,14 @@ Balloon (root)         ← BalloonLifetimeScope
 
 ## Damage
 
-Each damaging item reads `ItemSettings.Damage` (configured per item in `ItemConfiguration`) and passes it as the `Damage` field of `BalloonHitMessage`. `BalloonController` subtracts that value from `HitsRemaining` in one step — exact kills and overkill both pop the balloon. Unbreakable balloons (`HitsRemaining = -1`) deflect regardless of damage value. Non-damaging items (Paint, Shield) do not use the `Damage` field — the `ItemSettingsDrawer` hides it for those types.
+Each damaging item reads `ItemSettings.Damage` (configured per item in `ItemConfiguration`) and passes it as the `Damage` field of `ActorHitMessage`. `BalloonController` subtracts that value from `HitsRemaining` in one step — exact kills and overkill both pop the balloon. Unbreakable balloons (`HitsRemaining = -1`) deflect regardless of damage value. Non-damaging items (Paint, Shield) do not use the `Damage` field — the `ItemSettingsDrawer` hides it for those types.
 
 Setting `Damage = 1` (the default) reproduces normal one-hit behaviour. Setting it higher on Bomb, for example, allows a single blast to pop tough balloons that would otherwise survive.
 
 ## Interactions
 
 - **Any host view** — calls `ItemDisplayService.Bind()`/`Unbind()` to connect/disconnect item display
-- **BalloonController** — defers balloon pool return until `ItemActivatedMessage` arrives; captures laser rotation and publishes `ItemRotationCapturedMessage`; applies `BalloonHitMessage.Damage` to `HitsRemaining`
+- **BalloonController** — defers balloon pool return until `ItemActivatedMessage` arrives; captures laser rotation and publishes `ItemRotationCapturedMessage`; applies `ActorHitMessage.Damage` to `HitsRemaining`
 - **ItemActivator** — central orchestrator; routes activation to the correct handler after yielding one frame
 - **SlotGrid** — `LightningItemHandler` queries all balloons of a given color; `ShieldItemHandler` resolves the balloon's grid-center world position
 - **PoolManager** — item visual lifecycle via `ItemVisualPoolChannel`; activation effect lifecycle via `EffectPoolChannel`

@@ -6,6 +6,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace BalloonParty.Game.Score
         private const string ProgressSuffix = ".Progress";
 
         private readonly IGameConfiguration _config;
-        private readonly ISubscriber<BalloonHitMessage> _hitSubscriber;
+        private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ReactiveProperty<int> _level = new(1);
         private readonly Dictionary<string, int> _levelProgress = new();
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
@@ -39,7 +40,7 @@ namespace BalloonParty.Game.Score
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
 
         public ScoreController(
-            ISubscriber<BalloonHitMessage> hitSubscriber,
+            ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
             IPublisher<ScorePointMessage> scoredPublisher,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
@@ -75,7 +76,7 @@ namespace BalloonParty.Game.Score
 
             _totalScore.Value = _persistentScore.Values.Sum();
 
-            _subscription = _hitSubscriber.Subscribe(OnBalloonHit);
+            _subscription = _hitSubscriber.Subscribe(OnActorHit);
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
 
             Application.quitting += Save;
@@ -152,14 +153,20 @@ namespace BalloonParty.Game.Score
             Navigation.TransitionTo(NavigationState.LevelUp);
         }
 
-        private void OnBalloonHit(BalloonHitMessage msg)
+        private void OnActorHit(ActorHitMessage msg)
         {
-            if (msg.Balloon.EvaluateHit(msg.Damage) != HitOutcome.Pop)
+            if (msg.Actor is not (IHasColor colorable and IHasScore scoreable))
             {
                 return;
             }
 
-            var color = msg.Balloon.Color.Value;
+            // EvaluateHit is balloon-specific — non-balloon scored actors will need their own path here
+            if (msg.Actor is not IBalloonModel balloon || balloon.EvaluateHit(msg.Damage) != HitOutcome.Pop)
+            {
+                return;
+            }
+
+            var color = colorable.Color.Value;
             if (string.IsNullOrEmpty(color) || !_persistentScore.ContainsKey(color))
             {
                 return;
@@ -175,7 +182,7 @@ namespace BalloonParty.Game.Score
                 _currentStreak = 1;
             }
 
-            var points = msg.Balloon.ScoreValue * _currentStreak;
+            var points = scoreable.ScoreValue * _currentStreak;
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
             var baseProgress = _projectedProgress.GetValueOrDefault(color);
 

@@ -57,12 +57,12 @@ GameLifetimeScope (composition root, -5001)
 ## Message Flow
 
 ```
-BalloonHitMessage
+ActorHitMessage
   ProjectileView / ItemHandlers / Cheats
-    → BalloonController     (pop/deflect logic)
-    → ScoreController       (score computation, streak)
-    → NudgeService          (visual knockback)
-    → ItemActivator         (item activation trigger)
+    → BalloonController     (pop/deflect logic — filters IBalloonModel)
+    → ScoreController       (score computation, streak — filters IHasColor+IHasScore)
+    → NudgeService          (visual knockback — filters IHasNudge)
+    → ItemActivator         (item activation trigger — filters IBalloonModel)
 
 ScorePointMessage  (one per point × streak)
   ScoreController
@@ -103,7 +103,7 @@ ProjectileDestroyedMessage
 Balloon Pop
     │
     ▼
-ScoreController.OnBalloonHit
+ScoreController.OnActorHit
     │  streak tracking (consecutive same-color multiplier)
     │  publishes N × ScorePointMessage (score × streak)
     │
