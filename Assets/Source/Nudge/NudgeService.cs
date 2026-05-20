@@ -120,7 +120,7 @@ namespace BalloonParty.Nudge
                 return;
             }
 
-            var slot = msg.Balloon.SlotIndex;
+            var slot = msg.Balloon.SlotIndex.Value;
             var distance = _resolver.ResolveDistance(msg.Balloon.NudgeOverrides, msg.Overrides, msg.Source);
             var duration = _resolver.ResolveDuration(msg.Balloon.NudgeOverrides, msg.Overrides, msg.Source);
             NudgeBalloon(slot, msg.Origin, distance, duration);

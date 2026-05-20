@@ -70,7 +70,7 @@ MonoBehaviour:
       type: 3}
     _canHoldItem: 0
     _hitsToPop: 3
-    _isPaintable: 1
+    _isPaintable: 0
     _scoreValue: 0
   _defaultPopVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d,
     type: 3}

@@ -12,7 +12,7 @@ namespace BalloonParty.Balloon.Model
     {
         public BalloonType TypeName { get; }
         public ReactiveProperty<int> HitsRemaining { get; }
-        public Vector2Int SlotIndex { get; set; }
+        public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
         public ReactiveProperty<bool> IsStable { get; } = new(true);
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
 
@@ -24,7 +24,16 @@ namespace BalloonParty.Balloon.Model
 
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
         IReadOnlyReactiveProperty<bool> IDynamicSlotActor.IsStable => IsStable;
+        IReadOnlyReactiveProperty<Vector2Int> IDynamicSlotActor.SlotIndex => SlotIndex;
         IReadOnlyReactiveProperty<ItemType> IBalloonModel.Item => Item;
+
+        Vector2Int ISlotActor.SlotIndex => SlotIndex.Value;
+
+        Vector2Int IWriteableSlotActor.SlotIndex
+        {
+            get => SlotIndex.Value;
+            set => SlotIndex.Value = value;
+        }
 
         protected BalloonModelBase(BalloonModelConfig config)
         {

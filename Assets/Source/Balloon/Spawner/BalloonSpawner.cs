@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
@@ -212,9 +213,12 @@ namespace BalloonParty.Balloon.Spawner
 
             var config = BalloonModelConfig.From(entry);
 
-            IWriteableBalloonModel model = entry.IsPaintable
-                ? new BalloonModel(config)
-                : new ToughBalloonModel(config);
+            IWriteableBalloonModel model = entry.BalloonType switch
+            {
+                BalloonType.Simple => new BalloonModel(config),
+                BalloonType.Tough => new ToughBalloonModel(config),
+                _ => throw new System.ArgumentOutOfRangeException(nameof(entry.BalloonType), entry.BalloonType, null)
+            };
 
             var variant = view.Variant;
             variant.Initialize(model);

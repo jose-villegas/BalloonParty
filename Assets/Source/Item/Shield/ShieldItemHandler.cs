@@ -53,7 +53,7 @@ namespace BalloonParty.Item.Shield
                 _activeProjectile.ShieldsRemaining.Value++;
             }
 
-            _shieldGainedPublisher.Publish(new ShieldGainedMessage(_balloon.SlotIndex));
+            _shieldGainedPublisher.Publish(new ShieldGainedMessage(_balloon.SlotIndex.Value));
             PlayVfx();
             return UniTask.CompletedTask;
         }

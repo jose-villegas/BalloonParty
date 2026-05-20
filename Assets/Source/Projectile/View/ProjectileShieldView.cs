@@ -110,7 +110,7 @@ namespace BalloonParty.Projectile.View
             {
                 var lastHit = _model?.LastHitBalloon;
                 var gainPosition = lastHit != null
-                    ? _grid.IndexToWorldPosition(lastHit.SlotIndex)
+                    ? _grid.IndexToWorldPosition(lastHit.SlotIndex.Value)
                     : transform.position;
                 SpawnVfx(_shieldGainVfxPrefab, gainPosition, CurrentColor());
             }

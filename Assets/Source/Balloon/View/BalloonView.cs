@@ -95,7 +95,9 @@ namespace BalloonParty.Balloon.View
                     .AddTo(_bindDisposables);
             }
 
-            ApplySortingOrder(model.SlotIndex);
+            model.SlotIndex
+                .Subscribe(ApplySortingOrder)
+                .AddTo(_bindDisposables);
 
             model.IsStable
                 .Subscribe(stable => _animator.SetBool(IsStableParam, stable))

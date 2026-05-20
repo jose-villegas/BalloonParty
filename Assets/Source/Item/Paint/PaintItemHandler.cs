@@ -63,7 +63,7 @@ namespace BalloonParty.Item.Paint
                 return UniTask.CompletedTask;
             }
 
-            var slot = _balloon.SlotIndex;
+            var slot = _balloon.SlotIndex.Value;
             var neighborIndices = SlotGrid.HexNeighborIndices(slot.x, slot.y);
             var tint = _palette.GetColor(paintColor);
 

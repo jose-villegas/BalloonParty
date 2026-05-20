@@ -134,7 +134,7 @@ namespace BalloonParty.Projectile.View
             if (_model.ColorPopCount >= 2)
             {
                 _model.ShieldsRemaining.Value++;
-                _shieldGainedPublisher.Publish(new ShieldGainedMessage(_model.LastHitBalloon.SlotIndex));
+                _shieldGainedPublisher.Publish(new ShieldGainedMessage(_model.LastHitBalloon.SlotIndex.Value));
             }
         }
 

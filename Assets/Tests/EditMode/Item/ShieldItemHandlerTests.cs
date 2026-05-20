@@ -100,7 +100,7 @@ namespace BalloonParty.Tests.Item
         private static BalloonModel CreateBalloon(Vector2Int slot)
         {
             var model = new BalloonModel();
-            model.SlotIndex = slot;
+            model.SlotIndex.Value = slot;
             return model;
         }
 
