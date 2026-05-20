@@ -26,9 +26,10 @@ namespace BalloonParty.Item.Laser
         private readonly List<RaycastHit2D> _castResults = new(4);
         private readonly PoolManager _poolManager;
 
+        private readonly Dictionary<ISlotActor, Quaternion> _capturedRotations = new();
+
         private IBalloonModel _balloon;
         private Vector3 _worldPosition;
-        private Quaternion _laserRotation;
 
         public ItemType Type => ItemType.Laser;
 
@@ -53,7 +54,7 @@ namespace BalloonParty.Item.Laser
 
         public void Start()
         {
-            _transformCapturedSubscriber.Subscribe(msg => _laserRotation = msg.Snapshot.Rotation);
+            _transformCapturedSubscriber.Subscribe(msg => _capturedRotations[msg.Source] = msg.Snapshot.Rotation);
         }
 
         public void Setup(IBalloonModel balloon, Vector3 worldPosition)
@@ -66,22 +67,25 @@ namespace BalloonParty.Item.Laser
         {
             var settings = _itemConfig[ItemType.Laser];
 
-            CastCross(settings);
-            SpawnVisual(settings);
+            _capturedRotations.TryGetValue(_balloon, out var laserRotation);
+            _capturedRotations.Remove(_balloon);
+
+            CastCross(settings, laserRotation);
+            SpawnVisual(settings, laserRotation);
 
             return UniTask.CompletedTask;
         }
 
-        private void CastCross(ItemSettings settings)
+        private void CastCross(ItemSettings settings, Quaternion laserRotation)
         {
             var radius = settings.LaserCircleCastRadius;
             var distance = settings.LaserRaycastDistance;
             var damage = settings.Damage;
 
-            var right = _laserRotation * Vector3.right;
-            var left = _laserRotation * Vector3.left;
-            var up = _laserRotation * Vector3.up;
-            var down = _laserRotation * Vector3.down;
+            var right = laserRotation * Vector3.right;
+            var left = laserRotation * Vector3.left;
+            var up = laserRotation * Vector3.up;
+            var down = laserRotation * Vector3.down;
 
             var hitModels = new HashSet<IBalloonModel>();
 
@@ -126,7 +130,7 @@ namespace BalloonParty.Item.Laser
             }
         }
 
-        private void SpawnVisual(ItemSettings settings)
+        private void SpawnVisual(ItemSettings settings, Quaternion laserRotation)
         {
             if (settings.ActivationEffectPrefab == null)
             {
@@ -137,7 +141,7 @@ namespace BalloonParty.Item.Laser
             var effect = _poolManager.GetOrRegister(key, () => new EffectPoolChannel(settings.ActivationEffectPrefab));
 
             var balloonColor = _palette.GetColor(_balloon.Color.Value);
-            effect.Play(_worldPosition, _laserRotation, balloonColor, () => _poolManager.Return(key, effect));
+            effect.Play(_worldPosition, laserRotation, balloonColor, () => _poolManager.Return(key, effect));
         }
     }
 }

@@ -136,7 +136,7 @@ namespace BalloonParty.Balloon.Controller
                 if (transformCapture != null)
                 {
                     var snapshot = transformCapture.CaptureSnapshot();
-                    _transformCapturedPublisher.Publish(new TransformCapturedMessage(snapshot));
+                    _transformCapturedPublisher.Publish(new TransformCapturedMessage(_model, snapshot));
                 }
 
                 // Hide immediately — item effect plays world-space; balloon visual
