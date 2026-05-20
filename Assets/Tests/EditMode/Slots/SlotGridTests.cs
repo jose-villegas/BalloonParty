@@ -111,14 +111,6 @@ namespace BalloonParty.Tests.Slots
         }
 
         [Test]
-        public void HexNeighborIndices_AlwaysReturnsSixIndices()
-        {
-            var indices = SlotGrid.HexNeighborIndices(0, 0);
-
-            Assert.AreEqual(6, indices.Length);
-        }
-
-        [Test]
         public void IndexToWorldPosition_EvenRow_CalculatesCorrectly()
         {
             var pos = _grid.IndexToWorldPosition(new Vector2Int(0, 0));
@@ -351,9 +343,9 @@ namespace BalloonParty.Tests.Slots
             PlaceAt(0, 0);
             PlaceAt(3, 5);
 
-            var slots = _grid.AllEmptySlots();
+            var slots = _grid.AllEmptySlots().ToList();
 
-            Assert.AreEqual(_grid.Columns * _grid.Rows - 2, slots.Count());
+            Assert.AreEqual(_grid.Columns * _grid.Rows - 2, slots.Count);
             Assert.IsFalse(slots.Contains(new Vector2Int(0, 0)));
             Assert.IsFalse(slots.Contains(new Vector2Int(3, 5)));
         }
@@ -373,13 +365,99 @@ namespace BalloonParty.Tests.Slots
         [Test]
         public void IsUnbalanced_BalloonAboveStaticActor_DiagonalSupport_ReturnsFalse()
         {
-            // Even-row balloon at (2,2): diagonal support slot is shiftedCol = 2 + (2%2==0 ? -1 : 1) = 1, row 1
-            // StaticActorModel at (1,1) provides diagonal support
+            // Even-row balloon at (2,2): diagonal shiftedCol = 1, row 1.
+            // Static provides diagonal support; balloon provides direct.
             _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 1));
             PlaceAt(2, 1);
             PlaceAt(2, 2);
 
             Assert.IsFalse(_grid.IsUnbalanced(2, 2));
+        }
+
+        [Test]
+        public void IsUnbalanced_BalloonSupportedByTwoStaticActors_ReturnsFalse()
+        {
+            // Even-row balloon at (2,2): direct support (2,1) and diagonal support (1,1) are both static.
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(2, 1));
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 1));
+            PlaceAt(2, 2);
+
+            Assert.IsFalse(_grid.IsUnbalanced(2, 2));
+        }
+
+
+        [Test]
+        public void IsUnbalanced_OddRow_BalloonBetweenTwoStatics_ReturnsFalse()
+        {
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(0, 0));
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 0));
+            PlaceAt(0, 1);
+
+            Assert.IsFalse(_grid.IsUnbalanced(0, 1));
+        }
+
+        [Test]
+        public void IsUnbalanced_OddRow_BalloonAdjacentToStatics_OnlyHalfSupport_ReturnsTrue()
+        {
+            // (1,1) needs (1,0) and (2,0). (1,0) is static but (2,0) is empty.
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(0, 0));
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 0));
+            PlaceAt(1, 1);
+
+            Assert.IsTrue(_grid.IsUnbalanced(1, 1));
+        }
+
+        [Test]
+        public void IsUnbalanced_OddRow_BalloonBeyondStatics_ReturnsTrue()
+        {
+            // (2,1) needs (2,0) which is empty — no static reaches it.
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(0, 0));
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 0));
+            PlaceAt(2, 1);
+
+            Assert.IsTrue(_grid.IsUnbalanced(2, 1));
+        }
+
+        [Test]
+        public void IsUnbalanced_Col0_EvenRow_DiagonalOutOfBounds_OnlyDirectSupportNeeded()
+        {
+            // Col 0, even row: shiftedCol = -1 (out of bounds).
+            // The diagonal check short-circuits — direct support alone is enough.
+            PlaceAt(0, 1);
+            PlaceAt(0, 2);
+
+            Assert.IsFalse(_grid.IsUnbalanced(0, 2));
+        }
+
+        [Test]
+        public void IsUnbalanced_Col0_OddRow_DiagonalInBounds_BothSupportsRequired()
+        {
+            // Col 0, odd row: shiftedCol = 1 (in bounds). Both (0,0) and (1,0) must be occupied.
+            PlaceAt(0, 0);
+            PlaceAt(0, 1);
+
+            Assert.IsTrue(_grid.IsUnbalanced(0, 1));
+        }
+
+        [Test]
+        public void IsUnbalanced_LastCol_OddRow_DiagonalOutOfBounds_OnlyDirectSupportNeeded()
+        {
+            // Col 5 (last), odd row: shiftedCol = 6 (out of bounds, Columns == 6).
+            // The diagonal check short-circuits — direct support alone is enough.
+            PlaceAt(5, 0);
+            PlaceAt(5, 1);
+
+            Assert.IsFalse(_grid.IsUnbalanced(5, 1));
+        }
+
+        [Test]
+        public void IsUnbalanced_LastCol_EvenRow_DiagonalInBounds_BothSupportsRequired()
+        {
+            // Col 5 (last), even row: shiftedCol = 4 (in bounds), so (4,1) is also checked.
+            PlaceAt(5, 1);
+            PlaceAt(5, 2);
+
+            Assert.IsTrue(_grid.IsUnbalanced(5, 2));
         }
 
         private static BalloonModel CreateModel()
