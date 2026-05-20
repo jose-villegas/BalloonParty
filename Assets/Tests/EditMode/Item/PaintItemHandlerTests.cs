@@ -8,6 +8,7 @@ using BalloonParty.Shared.Pool;
 using BalloonParty.Slots;
 using NSubstitute;
 using NUnit.Framework;
+using UniRx;
 using UnityEngine;
 
 namespace BalloonParty.Tests.Item
@@ -90,9 +91,7 @@ namespace BalloonParty.Tests.Item
             _handler.Activate();
 
             Assert.AreEqual("Blue", tough.Color.Value);
-        }
-
-        [Test]
+        }        [Test]
         public void Activate_EmptyColor_DoesNothing()
         {
             var source = PlaceBalloon(2, 2, "");

@@ -5,6 +5,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
@@ -94,6 +95,7 @@ namespace BalloonParty.Item.Bomb
                 _hitPublisher.Publish(new ActorHitMessage(balloonView.Model,
                     balloonView.transform.position,
                     Vector3.zero,
+                    balloonView.Model is IHitable h ? h.EvaluateHit(damage) : HitOutcome.PassThrough,
                     damage));
             }
         }

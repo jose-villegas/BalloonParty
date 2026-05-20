@@ -5,17 +5,10 @@ using UniRx;
 
 namespace BalloonParty.Balloon.Model
 {
-    public interface IBalloonModel : ISlotActor, IHasColor, IHasScore, IHasNudge
+    public interface IBalloonModel : IDynamicSlotActor, IHitable, IHasColor, IHasScore, IHasNudge
     {
-        IReadOnlyReactiveProperty<BalloonType> TypeName { get; }
-        IReadOnlyReactiveProperty<int> HitsRemaining { get; }
+        BalloonType TypeName { get; }
         IReadOnlyReactiveProperty<ItemType> Item { get; }
         bool CanHoldItem { get; }
-
-        /// <summary>
-        ///     Pure query: given incoming damage, will this balloon deflect or pop?
-        ///     Unbreakable balloons (HitsRemaining == -1) always deflect.
-        /// </summary>
-        HitOutcome EvaluateHit(int damage);
     }
 }

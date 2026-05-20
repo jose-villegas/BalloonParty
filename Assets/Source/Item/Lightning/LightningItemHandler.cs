@@ -61,7 +61,9 @@ namespace BalloonParty.Item.Lightning
             {
                 foreach (var (model, pos) in targets)
                 {
-                    _hitPublisher.Publish(new ActorHitMessage(model, pos, Vector3.zero, settings.Damage));
+                    _hitPublisher.Publish(new ActorHitMessage(model, pos, Vector3.zero,
+                        model is IHitable h ? h.EvaluateHit(settings.Damage) : HitOutcome.PassThrough,
+                        settings.Damage));
                 }
 
                 return UniTask.CompletedTask;
@@ -87,7 +89,9 @@ namespace BalloonParty.Item.Lightning
                     if (index < targets.Count)
                     {
                         var (model, pos) = targets[index];
-                        _hitPublisher.Publish(new ActorHitMessage(model, pos, Vector3.zero, settings.Damage));
+                        _hitPublisher.Publish(new ActorHitMessage(model, pos, Vector3.zero,
+                            model is IHitable h ? h.EvaluateHit(settings.Damage) : HitOutcome.PassThrough,
+                            settings.Damage));
                     }
                 });
 

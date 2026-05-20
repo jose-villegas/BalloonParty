@@ -591,6 +591,63 @@ def check_inconsistent_accessibility(path: Path, lines: list[str], result: Audit
                 sig_lines = []
 
 
+def check_large_anonymous_functions(path: Path, lines: list[str], result: AuditResult):
+    """Block lambdas with more than 3 non-empty body lines should be extracted to named methods."""
+    MAX_BODY_LINES = 3
+    n = len(lines)
+    i = 0
+    while i < n:
+        stripped = lines[i].rstrip()
+
+        # Skip comment lines
+        if stripped.lstrip().startswith("//"):
+            i += 1
+            continue
+
+        ends_with_arrow = bool(re.search(r'=>\s*$', stripped))
+        arrow_then_brace = bool(re.search(r'=>\s*\{', stripped))
+
+        if not (ends_with_arrow or arrow_then_brace):
+            i += 1
+            continue
+
+        if ends_with_arrow:
+            # Find the next non-empty line — it must start with { to be a block lambda
+            j = i + 1
+            while j < n and not lines[j].strip():
+                j += 1
+            if j >= n or not lines[j].strip().startswith('{'):
+                i += 1
+                continue
+            brace_line = j
+        else:
+            brace_line = i
+
+        # Walk from the opening brace to the matching closing brace, counting body lines
+        depth = 0
+        body_lines = 0
+        started = False
+        k = brace_line
+        while k < n:
+            for ch in lines[k]:
+                if ch == '{':
+                    depth += 1
+                    started = True
+                elif ch == '}':
+                    depth -= 1
+            if started and depth == 0:
+                break
+            if started and k > brace_line and lines[k].strip():
+                body_lines += 1
+            k += 1
+
+        if body_lines > MAX_BODY_LINES:
+            result.add(Violation(str(path), i + 1, "large-lambda",
+                f"anonymous function body has {body_lines} lines — extract to a named method"))
+
+        i += 1
+
+
 def check_repeated_accessor(path: Path, lines: list[str], result: AuditResult):
     """Flag calls where 3+ arguments are accessed from the same object (e.g. obj.A, obj.B, obj.C).
 
@@ -672,6 +729,7 @@ RULES: dict[str, callable] = {
     "public-visibility": check_public_visibility,
     "accessibility":     check_inconsistent_accessibility,
     "repeated-accessor": check_repeated_accessor,
+    "large-lambda":      check_large_anonymous_functions,
 }
 
 # Rules that don't operate on individual files

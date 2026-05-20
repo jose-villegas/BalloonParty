@@ -13,6 +13,14 @@ namespace BalloonParty.Tests.Slots
 
             Assert.AreEqual(SlotActorKind.Static, model.Kind);
         }
+
+        [Test]
+        public void StaticActorModel_IsNotIDynamicSlotActor()
+        {
+            var model = new StaticActorModel();
+
+            Assert.IsFalse(model is IDynamicSlotActor);
+        }
     }
 }
 

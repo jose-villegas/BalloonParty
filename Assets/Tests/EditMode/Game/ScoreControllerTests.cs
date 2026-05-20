@@ -6,9 +6,11 @@ using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
+using UniRx;
 using UnityEngine;
 
 namespace BalloonParty.Tests.Game
@@ -364,9 +366,30 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(2, received[2].GroupIndex);
         }
 
+        [Test]
+        public void OnActorHit_IHitable_WithIHasColorAndIHasScore_PopOutcome_PublishesScore()
+        {
+            var actor = new DurableActor("Red", 1);
+            var outcome = actor.EvaluateHit(1);
+            _hitHandler.Handle(new ActorHitMessage(actor, Vector3.zero, Vector3.up, outcome, 1));
+
+            _scoredPublisher.Received(1).Publish(
+                Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+        }
+
+        [Test]
+        public void OnActorHit_AbsorbOutcome_DoesNotScore()
+        {
+            var actor = new AbsorbingActor("Red");
+            _hitHandler.Handle(new ActorHitMessage(actor, Vector3.zero, Vector3.up, actor.EvaluateHit(1), 1));
+
+            _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointMessage>());
+        }
+
         private void FireHit(IBalloonModel model, int damage)
         {
-            _hitHandler.Handle(new ActorHitMessage(model, Vector3.zero, Vector3.up, damage));
+            var outcome = model is IHitable h ? h.EvaluateHit(damage) : HitOutcome.PassThrough;
+            _hitHandler.Handle(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, damage));
         }
 
         private void FirePop(string color, int scoreValue = 1)
@@ -401,6 +424,40 @@ namespace BalloonParty.Tests.Game
             target.GetType()
                 .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance)!
                 .SetValue(target, value);
+        }
+
+        private class DurableActor : ISlotActor, IHasDurability, IHasColor, IHasScore
+        {
+            private readonly ReactiveProperty<int> _hits;
+
+            public DurableActor(string color, int hits)
+            {
+                Color = new ReactiveProperty<string>(color);
+                _hits = new ReactiveProperty<int>(hits);
+            }
+
+            public IReadOnlyReactiveProperty<Vector2Int> SlotIndex { get; } = new ReactiveProperty<Vector2Int>();
+            public SlotActorKind Kind => SlotActorKind.Dynamic;
+            public IReadOnlyReactiveProperty<string> Color { get; }
+            public int ScoreValue => 1;
+            public IReadOnlyReactiveProperty<int> HitsRemaining => _hits;
+
+            public HitOutcome EvaluateHit(int damage)
+            {
+                _hits.Value -= damage;
+                return _hits.Value <= 0 ? HitOutcome.Pop : HitOutcome.Deflect;
+            }
+        }
+
+        private class AbsorbingActor : ISlotActor, IHitable, IHasColor, IHasScore
+        {
+            public AbsorbingActor(string color) => Color = new ReactiveProperty<string>(color);
+
+            public IReadOnlyReactiveProperty<Vector2Int> SlotIndex { get; } = new ReactiveProperty<Vector2Int>();
+            public SlotActorKind Kind => SlotActorKind.Static;
+            public IReadOnlyReactiveProperty<string> Color { get; }
+            public int ScoreValue => 1;
+            public HitOutcome EvaluateHit(int damage) => HitOutcome.Absorb;
         }
     }
 }

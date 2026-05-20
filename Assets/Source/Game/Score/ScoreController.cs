@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
@@ -155,13 +154,12 @@ namespace BalloonParty.Game.Score
 
         private void OnActorHit(ActorHitMessage msg)
         {
-            if (msg.Actor is not (IHasColor colorable and IHasScore scoreable))
+            if (msg.Outcome != HitOutcome.Pop)
             {
                 return;
             }
 
-            // EvaluateHit is balloon-specific — non-balloon scored actors will need their own path here
-            if (msg.Actor is not IBalloonModel balloon || balloon.EvaluateHit(msg.Damage) != HitOutcome.Pop)
+            if (msg.Actor is not (IHasColor colorable and IHasScore scoreable))
             {
                 return;
             }

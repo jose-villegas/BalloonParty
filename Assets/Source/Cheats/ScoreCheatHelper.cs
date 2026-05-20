@@ -4,6 +4,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using MessagePipe;
 using UnityEngine;
 
@@ -28,7 +29,7 @@ namespace BalloonParty.Cheats
 
             for (var i = 0; i < missing; i++)
             {
-                hitPublisher.Publish(new ActorHitMessage(fakeModel, Vector3.zero, Vector3.zero));
+                hitPublisher.Publish(new ActorHitMessage(fakeModel, Vector3.zero, Vector3.zero, HitOutcome.Pop));
             }
         }
     }

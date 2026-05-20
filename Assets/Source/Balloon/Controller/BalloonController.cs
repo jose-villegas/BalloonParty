@@ -18,7 +18,6 @@ namespace BalloonParty.Balloon.Controller
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IWriteableBalloonModel _model;
-        private readonly NudgeOverride[] _nudgeOverrides;
         private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
         private readonly Action _onReturned;
         private readonly string _poolKey;
@@ -35,7 +34,6 @@ namespace BalloonParty.Balloon.Controller
             BalloonView view,
             string poolKey,
             Action onReturned,
-            NudgeOverride[] nudgeOverrides,
             ParticleSystem popVfxOverride,
             ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
@@ -49,7 +47,6 @@ namespace BalloonParty.Balloon.Controller
             _view = view;
             _poolKey = poolKey;
             _onReturned = onReturned;
-            _nudgeOverrides = nudgeOverrides;
             _popVfxOverride = popVfxOverride;
             _hitSubscriber = hitSubscriber;
             _itemActivatedSubscriber = itemActivatedSubscriber;
@@ -62,8 +59,6 @@ namespace BalloonParty.Balloon.Controller
 
         public void Start()
         {
-            _model.NudgeOverrides = _nudgeOverrides;
-
             if (_popVfxOverride != null)
             {
                 _view.SetPopVfxOverride(_popVfxOverride);
@@ -71,29 +66,7 @@ namespace BalloonParty.Balloon.Controller
 
             _view.Bind(_model);
 
-            _hitSubscription = _hitSubscriber.Subscribe(msg =>
-            {
-                if (msg.Actor is not IBalloonModel balloon || !ReferenceEquals(balloon, _model))
-                {
-                    return;
-                }
-
-                var outcome = _model.EvaluateHit(msg.Damage);
-
-                if (outcome == HitOutcome.Deflect)
-                {
-                    if (_model.HitsRemaining.Value != -1)
-                    {
-                        _model.HitsRemaining.Value -= msg.Damage;
-                    }
-
-                    Deflect(msg);
-                    return;
-                }
-
-                Pop();
-            });
-
+            _hitSubscription = _hitSubscriber.Subscribe(OnActorHit);
             _view.RegisterDisposeOnDespawn(_hitSubscription);
         }
 
@@ -108,13 +81,48 @@ namespace BalloonParty.Balloon.Controller
                 NudgeType.Deflect));
         }
 
+        private void OnActorHit(ActorHitMessage msg)
+        {
+            if (msg.Actor is not IBalloonModel balloon || !ReferenceEquals(balloon, _model))
+            {
+                return;
+            }
+
+            switch (msg.Outcome)
+            {
+                case HitOutcome.Pop:
+                    Pop();
+                    break;
+                case HitOutcome.PassThrough:
+                    // Projectile continues; balloon stays with reduced HitsRemaining.
+                    // Crack animation is driven reactively by HitsRemaining subscription.
+                    break;
+                case HitOutcome.Deflect:
+                    Deflect(msg);
+                    break;
+                // HitOutcome.Absorb: projectile force-kill routed through ProjectileView — Phase 9.
+            }
+        }
+
+        private void OnItemActivated(ItemActivatedMessage msg)
+        {
+            if (msg.Balloon != _model)
+            {
+                return;
+            }
+
+            _itemActivatedSubscription?.Dispose();
+            _itemActivatedSubscription = null;
+            _onReturned?.Invoke();
+            _poolManager.Return(_poolKey, _view);
+        }
+
         private void Pop()
         {
             _hitSubscription?.Dispose();
             _hitSubscription = null;
 
             _view.PlayPopEffect();
-
             _grid.Remove(_model.SlotIndex.Value);
 
             if (_model.Item.Value == ItemType.None)
@@ -135,19 +143,7 @@ namespace BalloonParty.Balloon.Controller
                 // and collider must not persist while we wait for activation to finish.
                 _view.Hide();
 
-                _itemActivatedSubscription = _itemActivatedSubscriber.Subscribe(activatedMsg =>
-                {
-                    if (activatedMsg.Balloon != _model)
-                    {
-                        return;
-                    }
-
-                    _itemActivatedSubscription?.Dispose();
-                    _itemActivatedSubscription = null;
-                    _onReturned?.Invoke();
-                    _poolManager.Return(_poolKey, _view);
-                });
-
+                _itemActivatedSubscription = _itemActivatedSubscriber.Subscribe(OnItemActivated);
                 _view.RegisterDisposeOnDespawn(_itemActivatedSubscription);
             }
         }

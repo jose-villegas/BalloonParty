@@ -7,6 +7,7 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
@@ -74,14 +75,19 @@ namespace BalloonParty.Projectile.View
 
             _model.LastHitBalloon = balloonModel;
 
-            if (balloonModel.HitsRemaining.Value <= 1 && !string.IsNullOrEmpty(balloonModel.Color.Value))
+            var outcome = balloonModel is IHitable hitable
+                ? hitable.EvaluateHit(1)
+                : HitOutcome.PassThrough;
+
+            if (outcome == HitOutcome.Pop && !string.IsNullOrEmpty(balloonModel.Color.Value))
             {
                 TrackColorStreak(balloonModel.Color.Value);
             }
 
             _hitPublisher.Publish(new ActorHitMessage(balloonModel,
                 balloonView.transform.position,
-                _model.Direction));
+                _model.Direction,
+                outcome));
         }
 
         public void OnSpawned()

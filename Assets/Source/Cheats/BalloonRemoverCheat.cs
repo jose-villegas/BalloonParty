@@ -134,7 +134,8 @@ namespace BalloonParty.Cheats
                 var actor = _grid.At(slot);
                 if (actor != null)
                 {
-                    _hitPublisher.Publish(new ActorHitMessage(actor, _grid.IndexToWorldPosition(slot), Vector3.zero));
+                    _hitPublisher.Publish(new ActorHitMessage(actor, _grid.IndexToWorldPosition(slot), Vector3.zero,
+                        actor is IHitable h ? h.EvaluateHit(1) : HitOutcome.Pop));
                 }
             }
 

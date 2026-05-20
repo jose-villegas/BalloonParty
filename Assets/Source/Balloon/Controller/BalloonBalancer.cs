@@ -36,7 +36,7 @@ namespace BalloonParty.Balloon.Controller
             _subscriber.Subscribe(_ => RequestBalance());
         }
 
-        private void AnimatePaths(Dictionary<IWriteableSlotActor, List<Vector3>> paths)
+        private void AnimatePaths(Dictionary<IWriteableDynamicSlotActor, List<Vector3>> paths)
         {
             foreach (var (actor, path) in paths)
             {
@@ -68,7 +68,7 @@ namespace BalloonParty.Balloon.Controller
 
         private void Balance()
         {
-            var paths = new Dictionary<IWriteableSlotActor, List<Vector3>>();
+            var paths = new Dictionary<IWriteableDynamicSlotActor, List<Vector3>>();
             var hasUnbalanced = true;
 
             while (hasUnbalanced)
@@ -92,7 +92,7 @@ namespace BalloonParty.Balloon.Controller
                         var currentSlot = new Vector2Int(col, row);
                         var actor = _grid.At(currentSlot);
 
-                        if (actor.Kind == SlotActorKind.Static)
+                        if (actor is not IWriteableDynamicSlotActor dynamicActor)
                         {
                             continue;
                         }
@@ -107,17 +107,17 @@ namespace BalloonParty.Balloon.Controller
 
                         var actorView = _grid.ViewAt(currentSlot);
                         _grid.Remove(currentSlot);
-                        _grid.Place(actor, actorView, nextSlot.Value);
-                        actor.IsStable.Value = false;
+                        _grid.Place(dynamicActor, actorView, nextSlot.Value);
+                        dynamicActor.IsStable.Value = false;
 
                         var targetPosition = _grid.IndexToWorldPosition(nextSlot.Value);
-                        if (paths.TryGetValue(actor, out var path))
+                        if (paths.TryGetValue(dynamicActor, out var path))
                         {
                             path.Add(targetPosition);
                         }
                         else
                         {
-                            paths[actor] = new List<Vector3> { targetPosition };
+                            paths[dynamicActor] = new List<Vector3> { targetPosition };
                         }
                     }
                 }

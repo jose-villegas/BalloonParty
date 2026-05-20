@@ -6,15 +6,16 @@ using UniRx;
 
 namespace BalloonParty.Balloon.Model
 {
-    public interface IWriteableBalloonModel : IWriteableSlotActor, IBalloonModel
+    public interface IWriteableBalloonModel : IWriteableDynamicSlotActor, IBalloonModel
     {
         new ReactiveProperty<string> Color { get; }
-        new ReactiveProperty<BalloonType> TypeName { get; }
+        new BalloonType TypeName { get; init; }
+        // Writable for spawn-time writes; IHasDurability exposes the read-only view.
         new ReactiveProperty<int> HitsRemaining { get; }
         new ReactiveProperty<ItemType> Item { get; }
 
-        new NudgeOverride[] NudgeOverrides { get; set; }
-        new bool CanHoldItem { get; set; }
-        new int ScoreValue { get; set; }
+        new NudgeOverride[] NudgeOverrides { get; init; }
+        new bool CanHoldItem { get; init; }
+        new int ScoreValue { get; init; }
     }
 }

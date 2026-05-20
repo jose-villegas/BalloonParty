@@ -1,5 +1,6 @@
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Slots;
 using DG.Tweening;
 using UniRx;
 using UnityEngine;
@@ -35,6 +36,11 @@ namespace BalloonParty.Balloon.Type
                 return;
             }
 
+            if (model is not IHasDurability durable)
+            {
+                return;
+            }
+
             // Kill any in-flight tween from a previous pool cycle
             _damageTween?.Kill();
             _currentDamageProgress = 0f;
@@ -42,31 +48,10 @@ namespace BalloonParty.Balloon.Type
             SetFloat(DamageProgressId, 0f);
             SetVector(VoronoiSeedId, new Vector4(Random.Range(-999f, 999f), Random.Range(-999f, 999f)));
 
-            var maxHits = model.HitsRemaining.Value;
+            var maxHits = durable.HitsRemaining.Value;
 
-            model.HitsRemaining
-                .Subscribe(hits =>
-                {
-                    if (maxHits <= 1)
-                    {
-                        return;
-                    }
-
-                    var target = Mathf.Clamp01(1f - ((hits - 1f) / (maxHits - 1f)));
-
-                    _damageTween?.Kill();
-                    _damageTween = DOVirtual
-                        .Float(_currentDamageProgress,
-                            target,
-                            _crackAnimDuration,
-                            v =>
-                            {
-                                _currentDamageProgress = v;
-                                SetFloat(DamageProgressId, v);
-                            })
-                        .SetEase(Ease.OutCubic)
-                        .SetLink(gameObject);
-                })
+            durable.HitsRemaining
+                .Subscribe(hits => ApplyDamageProgress(hits, maxHits))
                 .AddTo(disposables);
         }
 
@@ -84,6 +69,26 @@ namespace BalloonParty.Balloon.Type
             _renderer.GetPropertyBlock(_block);
             _block.SetVector(id, value);
             _renderer.SetPropertyBlock(_block);
+        }
+
+        private void ApplyDamageProgress(int hits, int maxHits)
+        {
+            if (maxHits <= 1)
+            {
+                return;
+            }
+
+            var target = Mathf.Clamp01(1f - ((hits - 1f) / (maxHits - 1f)));
+
+            _damageTween?.Kill();
+            _damageTween = DOVirtual
+                .Float(_currentDamageProgress, target, _crackAnimDuration, v =>
+                {
+                    _currentDamageProgress = v;
+                    SetFloat(DamageProgressId, v);
+                })
+                .SetEase(Ease.OutCubic)
+                .SetLink(gameObject);
         }
     }
 }

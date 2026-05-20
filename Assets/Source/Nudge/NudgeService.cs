@@ -45,7 +45,12 @@ namespace BalloonParty.Nudge
                 return;
             }
 
-            if (!model.IsStable.Value && !_nudging.Contains(model))
+            if (model is not IWriteableDynamicSlotActor dynamicModel)
+            {
+                return;
+            }
+
+            if (!dynamicModel.IsStable.Value && !_nudging.Contains(model))
             {
                 return;
             }
@@ -59,14 +64,14 @@ namespace BalloonParty.Nudge
             var direction = slotPos - origin;
 
             _nudging.Add(model);
-            model.IsStable.Value = false;
+            dynamicModel.IsStable.Value = false;
             balloonView.Nudge(slotPos,
                 direction,
                 distance,
                 duration,
                 () =>
                 {
-                    model.IsStable.Value = true;
+                    dynamicModel.IsStable.Value = true;
                     _nudging.Remove(model);
                 });
         }

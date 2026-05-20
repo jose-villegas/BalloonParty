@@ -343,7 +343,7 @@ Spawn_DoesNotExceedAvailableSlots
 
 ---
 
-### Phase 7 — `IHitable` + Durability abstraction *(next iteration)*
+### Phase 7 — `IHitable` + Durability abstraction ✅ Complete
 
 Introduce `IHitable` as the base hit-response capability and `IHasDurability` extending
 it for actors that also track damage. Lift both from `IBalloonModel` into `Slots/` and
@@ -473,6 +473,68 @@ OnActorHit_AbsorbOutcome_DoesNotScore
 > `HitableTests` uses minimal hand-written inner classes —
 > `class AbsorbWall : IHitable { public HitOutcome EvaluateHit(int d) => HitOutcome.Absorb; }`
 > No NSubstitute needed.
+
+---
+
+### Phase 7.5 — `BalloonModelBase` hygiene *(do before Phase 8)*
+
+`BalloonModelBase` currently carries several capabilities as hard defaults on every balloon.
+As new actor types are added these assumptions will break. Clean them up before `GridSpawner`
+introduces actors that opt out of them.
+
+#### Assumptions baked into `BalloonModelBase` today
+
+| Property | Problem | Fix |
+|---|---|---|
+| `Item : ReactiveProperty<ItemType>` | Every balloon carries an item slot, even `ToughBalloonModel` which ignores it | Extract to `IHasItemSlot` / `IHasWriteableItemSlot` and remove from base; only `BalloonModel` opts in |
+| `CanHoldItem : bool` | Same — even `ToughBalloonModel` has it (always `false`) | Moves to `IHasItemSlot`; absence of the interface *is* the "cannot hold" signal |
+| `ScoreValue : int` | Every balloon scores, even future decorative or structural actors | Extract to `IHasScore` (already exists as a read interface) + `IHasWriteableScore` writable pair; only scoring actors opt in |
+| `NudgeOverrides : NudgeOverride[]` | Baked into the base even though `IHasNudge` already exists as the correct capability gate | `NudgeOverrides` should live only on actors that implement `IHasNudge`; keep it on `IBalloonModel` via `IHasNudge`, remove from base for any future actor that isn't nudgeable |
+
+#### `IHasItemSlot` design
+
+```csharp
+// Slots/ — read-only capability
+public interface IHasItemSlot
+{
+    bool CanHoldItem { get; }
+    IReadOnlyReactiveProperty<ItemType> Item { get; }
+}
+
+// Balloon/Model/ — writable spawn-time view
+public interface IHasWriteableItemSlot : IHasItemSlot
+{
+    new ReactiveProperty<ItemType> Item { get; }
+}
+```
+
+`IBalloonModel` removes `Item` and `CanHoldItem`. `BalloonModel` adds `: IHasWriteableItemSlot`.
+`ToughBalloonModel` does not. `ItemAssigner` and `BalloonController` filter by `IHasItemSlot`
+instead of `IBalloonModel.CanHoldItem`.
+
+#### Consumer migration sketch
+
+| Consumer | Before | After |
+|---|---|---|
+| `ItemAssigner` | `b.CanHoldItem` | `b is IHasItemSlot slot && slot.CanHoldItem` |
+| `BalloonController.Pop` | `_model.Item.Value` | `(_model as IHasItemSlot)?.Item.Value ?? ItemType.None` |
+| `BalloonView.Bind` | `model.Item` | `(model as IHasItemSlot)?.Item` — guard or skip binding |
+| `BalloonSpawner` | `model.CanHoldItem = entry.CanHoldItem` (init) | only set on `IHasWriteableItemSlot` |
+
+#### Failing tests — write first
+
+New fixture **`ItemSlotTests`** in `Assets/Tests/EditMode/Balloon/`:
+
+```
+BalloonModel_ImplementsIHasItemSlot
+  — (new BalloonModel()) is IHasItemSlot == true
+
+ToughBalloonModel_DoesNotImplementIHasItemSlot
+  — (new ToughBalloonModel()) is IHasItemSlot == false
+
+BalloonController_Pop_WithNoItemSlot_DoesNotThrow
+  — model that is not IHasItemSlot; Pop path completes without exception
+```
 
 ---
 
@@ -682,6 +744,7 @@ Deferred until a concrete consumer appears.
 | 4 — Update tests | ✅ Complete |
 | 5 — Update documentation | ✅ Complete |
 | 6 — Static actor evaluation | ✅ Complete |
-| 7 — Durability abstraction | Future |
+| 7 — Durability abstraction | ✅ Complete |
+| 7.5 — BalloonModelBase hygiene | Next |
 | 8 — Grid Spawner / Level Spawner | Future |
 | 9 — Behavior-bound actors | Future (broadly defined) |

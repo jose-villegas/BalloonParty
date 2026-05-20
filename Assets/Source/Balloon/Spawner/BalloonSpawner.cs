@@ -212,12 +212,11 @@ namespace BalloonParty.Balloon.Spawner
             var view = _poolManager.Get<BalloonView>(poolKey);
             view.transform.position = spawnPath[0];
 
-            IWriteableBalloonModel model = entry.IsPaintable ? new BalloonModel() : new ToughBalloonModel();
+            IWriteableBalloonModel model = entry.IsPaintable
+                ? new BalloonModel { CanHoldItem = entry.CanHoldItem, ScoreValue = entry.ScoreValue, TypeName = entry.BalloonType, NudgeOverrides = entry.NudgeOverrides }
+                : new ToughBalloonModel { CanHoldItem = entry.CanHoldItem, ScoreValue = entry.ScoreValue, TypeName = entry.BalloonType, NudgeOverrides = entry.NudgeOverrides };
             model.SlotIndex.Value = slot;
-            model.CanHoldItem = entry.CanHoldItem;
             model.HitsRemaining.Value = entry.HitsToPop;
-            model.TypeName.Value = entry.BalloonType;
-            model.ScoreValue = entry.ScoreValue;
 
             var variant = view.Variant;
             variant.Initialize(model);
@@ -226,7 +225,6 @@ namespace BalloonParty.Balloon.Spawner
                 view,
                 poolKey,
                 () => _activeCounts[poolKey]--,
-                entry.NudgeOverrides,
                 entry.PopVfxPrefab,
                 _hitSubscriber,
                 _itemActivatedSubscriber,
