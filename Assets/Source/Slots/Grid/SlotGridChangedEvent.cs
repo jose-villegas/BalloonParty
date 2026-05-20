@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.Grid
 {
     public readonly struct SlotGridChangedEvent
     {

@@ -6,7 +6,6 @@ using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots;
 using MessagePipe;
 using NSubstitute;
@@ -321,10 +320,9 @@ namespace BalloonParty.Tests.Game
             // i=3: rawScore=4 → Score=1, Level=2, NextLevel=true   (renumbered: 4 - 3 = 1)
             _config.PointsRequiredForLevel(2).Returns(3);
 
-            var model = new BalloonModel();
+            var model = new BalloonModel { ScoreValue = 4 };
             model.Color.Value = Red;
             model.HitsRemaining.Value = 1;
-            model.ScoreValue = 4;
             FireHit(model, 1);
 
             _scoredPublisher.Received(3).Publish(
@@ -336,10 +334,9 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void ScorePoint_GroupSizeEqualsPoints()
         {
-            var model = new BalloonModel();
+            var model = new BalloonModel { ScoreValue = 3 };
             model.Color.Value = Red;
             model.HitsRemaining.Value = 1;
-            model.ScoreValue = 3;
             FireHit(model, 1);
 
             // streak=1, scoreValue=3 → points=3, GroupSize=3 on all messages
@@ -355,10 +352,9 @@ namespace BalloonParty.Tests.Game
                 .When(p => p.Publish(Arg.Any<ScorePointMessage>()))
                 .Do(ci => received.Add(ci.Arg<ScorePointMessage>()));
 
-            var model = new BalloonModel();
+            var model = new BalloonModel { ScoreValue = 3 };
             model.Color.Value = Red;
             model.HitsRemaining.Value = 1;
-            model.ScoreValue = 3;
             FireHit(model, 1);
 
             Assert.AreEqual(3, received.Count);
@@ -406,10 +402,9 @@ namespace BalloonParty.Tests.Game
 
         private static IBalloonModel CreateModel(string color, int hitsRemaining, int scoreValue = 1)
         {
-            var model = new BalloonModel();
+            var model = new BalloonModel { ScoreValue = scoreValue };
             model.Color.Value = color;
             model.HitsRemaining.Value = hitsRemaining;
-            model.ScoreValue = scoreValue;
             return model;
         }
 

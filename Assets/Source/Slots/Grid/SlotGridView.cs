@@ -4,7 +4,7 @@ using BalloonParty.Shared.Rendering;
 using UnityEngine;
 using VContainer;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.Grid
 {
     public class SlotGridView : MonoBehaviour
     {

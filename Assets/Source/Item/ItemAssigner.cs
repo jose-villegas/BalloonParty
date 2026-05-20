@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
+using BalloonParty.Slots.Grid;
 using MessagePipe;
 using UnityEngine;
 using VContainer;

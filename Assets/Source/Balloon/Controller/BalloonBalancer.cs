@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
+using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MessagePipe;

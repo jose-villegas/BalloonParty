@@ -22,6 +22,8 @@ using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
 using BalloonParty.Thrower;
 using BalloonParty.UI.Score;
+using BalloonParty.Slots.Grid;
+using BalloonParty.Slots.StaticActor;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;

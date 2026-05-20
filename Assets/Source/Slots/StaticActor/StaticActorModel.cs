@@ -1,7 +1,7 @@
 using UniRx;
 using UnityEngine;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.StaticActor
 {
     internal class StaticActorModel : IWriteableSlotActor, IPassThrough
     {

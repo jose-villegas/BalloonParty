@@ -1,5 +1,7 @@
 using BalloonParty.Shared;
 using BalloonParty.Slots;
+using BalloonParty.Slots.Grid;
+using BalloonParty.Slots.StaticActor;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;

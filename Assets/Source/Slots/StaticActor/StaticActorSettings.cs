@@ -1,4 +1,4 @@
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.StaticActor
 {
     internal class StaticActorSettings
     {

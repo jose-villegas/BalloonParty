@@ -2,11 +2,12 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Slots.Grid;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.StaticActor
 {
     internal class StaticActorSpawner : IStartable
     {

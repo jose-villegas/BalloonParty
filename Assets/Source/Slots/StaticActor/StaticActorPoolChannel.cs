@@ -1,7 +1,7 @@
 using BalloonParty.Shared.Pool;
 using VContainer;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.StaticActor
 {
     internal class StaticActorPoolChannel : InjectingPoolChannel<StaticActorView>
     {

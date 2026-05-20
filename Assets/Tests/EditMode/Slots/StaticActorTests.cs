@@ -1,4 +1,5 @@
 using BalloonParty.Slots;
+using BalloonParty.Slots.StaticActor;
 using NUnit.Framework;
 
 namespace BalloonParty.Tests.Slots

@@ -6,6 +6,7 @@ using BalloonParty.Nudge;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
+using BalloonParty.Slots.Grid;
 using MessagePipe;
 using UnityEngine;
 

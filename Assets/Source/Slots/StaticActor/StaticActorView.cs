@@ -2,7 +2,7 @@ using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.StaticActor
 {
     internal class StaticActorView : MonoBehaviour, IPoolable, ISlotActorView
     {

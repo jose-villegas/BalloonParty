@@ -4,7 +4,7 @@ using BalloonParty.Shared;
 using UniRx;
 using UnityEngine;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.Grid
 {
     internal class SlotGrid
     {
