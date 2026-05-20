@@ -14,10 +14,8 @@ namespace BalloonParty.Balloon.Model
         public ReactiveProperty<int> HitsRemaining { get; }
         public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
         public ReactiveProperty<bool> IsStable { get; } = new(true);
-        public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
 
         public IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
-        public bool CanHoldItem { get; }
         public int ScoreValue { get; }
 
         public SlotActorKind Kind => SlotActorKind.Dynamic;
@@ -25,7 +23,6 @@ namespace BalloonParty.Balloon.Model
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
         IReadOnlyReactiveProperty<bool> IDynamicSlotActor.IsStable => IsStable;
         IReadOnlyReactiveProperty<Vector2Int> IDynamicSlotActor.SlotIndex => SlotIndex;
-        IReadOnlyReactiveProperty<ItemType> IBalloonModel.Item => Item;
 
         Vector2Int ISlotActor.SlotIndex => SlotIndex.Value;
 
@@ -39,7 +36,6 @@ namespace BalloonParty.Balloon.Model
         {
             TypeName = config.TypeName;
             ScoreValue = config.ScoreValue;
-            CanHoldItem = config.CanHoldItem;
             NudgeOverrides = config.NudgeOverrides;
             HitsRemaining = new ReactiveProperty<int>(config.HitsToPop);
         }

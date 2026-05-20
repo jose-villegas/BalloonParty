@@ -4,6 +4,7 @@ using System.Linq;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
@@ -41,17 +42,17 @@ namespace BalloonParty.Item
                 return;
             }
 
-            if (balloon.Item.Value == ItemType.None)
+            if (balloon is not IHasItemSlot itemSlot || itemSlot.Item.Value == ItemType.None)
             {
                 return;
             }
 
-            var handler = _handlers.FirstOrDefault(h => h.Type == balloon.Item.Value);
+            var handler = _handlers.FirstOrDefault(h => h.Type == itemSlot.Item.Value);
             if (handler == null)
             {
                 Debug.LogError(
                     $"ItemActivator.OnActorHit: no handler registered for item type " +
-                    $"\"{balloon.Item.Value}\" — this is a configuration bug.");
+                    $"\"{itemSlot.Item.Value}\" — this is a configuration bug.");
                 return;
             }
 

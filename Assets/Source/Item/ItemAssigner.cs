@@ -70,7 +70,7 @@ namespace BalloonParty.Item
                     if (candidate.Type != ItemType.None)
                     {
                         var eligible = msg.NewBalloons
-                            .Where(b => b.CanHoldItem)
+                            .OfType<IHasWriteableItemSlot>()
                             .ToList();
 
                         if (eligible.Count == 0)
@@ -79,8 +79,7 @@ namespace BalloonParty.Item
                         }
 
                         var indexOf = Random.Range(0, eligible.Count);
-                        var balloon = (IWriteableBalloonModel)eligible[indexOf];
-                        balloon.Item.Value = candidate.Type;
+                        eligible[indexOf].Item.Value = candidate.Type;
                     }
 
                     break;

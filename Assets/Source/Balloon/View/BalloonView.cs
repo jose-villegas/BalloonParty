@@ -108,14 +108,10 @@ namespace BalloonParty.Balloon.View
                 binding.Bind(model, _bindDisposables);
             }
 
-            if (_itemService != null)
+            if (_itemService != null && model is IHasItemSlot itemSlot)
             {
-                var colorProperty = model is IHasColor c
-                    ? c.Color
-                    : new ReactiveProperty<string>(string.Empty);
-
-                _itemService.Bind(model.Item,
-                    colorProperty,
+                _itemService.Bind(itemSlot.Item,
+                    itemSlot.Color,
                     model.SlotIndex,
                     _config,
                     _itemConfig,

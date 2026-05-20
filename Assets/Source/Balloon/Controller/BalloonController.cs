@@ -126,7 +126,7 @@ namespace BalloonParty.Balloon.Controller
             _view.PlayPopEffect();
             _grid.Remove(_model.SlotIndex.Value);
 
-            if (_model.Item.Value == ItemType.None)
+            if (_model is not IHasItemSlot itemSlot || itemSlot.Item.Value == ItemType.None)
             {
                 _onReturned?.Invoke();
                 _poolManager.Return(_poolKey, _view);

@@ -6,6 +6,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Item;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using NSubstitute;
@@ -55,7 +56,7 @@ namespace BalloonParty.Tests.Item
         {
             SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 5));
 
-            var model = new BalloonModel(new BalloonModelConfig(canHoldItem: true));
+            var model = new BalloonModel();
             FireItemCheck(Array.Empty<IBalloonModel>(), turnCount: 1);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
@@ -66,7 +67,7 @@ namespace BalloonParty.Tests.Item
         {
             SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 3, weight: 1f, maxAllowed: 5));
 
-            var model = new BalloonModel(new BalloonModelConfig(canHoldItem: true));
+            var model = new BalloonModel();
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 2);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
@@ -82,21 +83,22 @@ namespace BalloonParty.Tests.Item
             existing.Item.Value = ItemType.Bomb;
             _grid.Place(existing, null, new Vector2Int(0, 0));
 
-            var model = new BalloonModel(new BalloonModelConfig(canHoldItem: true));
+            var model = new BalloonModel();
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
         }
 
         [Test]
-        public void OnItemCheck_NoEligibleBalloons_CanHoldItemFalse_NoAssignment()
+        public void OnItemCheck_NoEligibleBalloons_NonItemSlotActor_NoAssignment()
         {
             SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 5));
 
-            var model = new BalloonModel(new BalloonModelConfig(canHoldItem: false));
+            var model = new ToughBalloonModel(new BalloonModelConfig());
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
 
-            Assert.AreEqual(ItemType.None, model.Item.Value);
+            // ToughBalloonModel does not implement IHasItemSlot — ItemAssigner skips it
+            Assert.IsFalse(model is IHasItemSlot);
         }
 
         [Test]
@@ -104,7 +106,7 @@ namespace BalloonParty.Tests.Item
         {
             SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 5));
 
-            var model = new BalloonModel(new BalloonModelConfig(canHoldItem: true));
+            var model = new BalloonModel();
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
 
             Assert.AreEqual(ItemType.Bomb, model.Item.Value);
