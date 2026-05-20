@@ -80,9 +80,9 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 77 tests
+## Current Coverage — 88 tests
 
-### `SlotGridTests` — 20 tests
+### `SlotGridTests` — 23 tests
 
 Tests the core grid data structure — the most complex pure-logic class in the codebase.
 
@@ -96,6 +96,7 @@ Tests the core grid data structure — the most complex pure-logic class in the 
 | GetNeighbors | 3 | Even/odd diagonal shift direction, boundary filtering |
 | HexNeighborIndices | 3 | Even/odd diagonal shift, always returns 6 indices (used independently by PaintItemHandler) |
 | IndexToWorldPosition | 2 | Staggered grid formula — even/odd offset |
+| IsKind | 3 | Empty slot returns false; occupied slot matches/mismatches kind |
 
 ### `PredictionTraceCalculatorTests` — 7 tests
 
@@ -110,9 +111,9 @@ Tests the trajectory bounce algorithm — pure math with wall reflection.
 | Max steps | 1 | Step exhaustion before wall hit |
 | Zig-zag | 1 | Multiple reflections chain correctly |
 
-### `ScoreControllerTests` — 15 tests
+### `ScoreControllerTests` — 21 tests
 
-Tests the scoring pipeline, level-up logic, and streak multiplier — deferred scoring via trail arrival, multi-map accumulation with an all-colors threshold gate, and consecutive same-color pop multiplier.
+Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` projected-progress check, and next-level trail renumbering — deferred scoring via trail arrival, multi-map accumulation with an all-colors threshold gate, consecutive same-color pop multiplier, projected vs confirmed progress, and `ScorePointMessage` field correctness.
 
 | Area | Tests | What could break |
 |---|---|---|
@@ -130,6 +131,13 @@ Tests the scoring pipeline, level-up logic, and streak multiplier — deferred s
 | Streak multiplies points published | 1 | Multiplication not applied or wrong factor |
 | Streak × scoreValue compound | 1 | Only one factor applied |
 | Streak resets on level-up | 1 | Missing reset in CheckLevelUp |
+| `WillLevelUp` — all colors projected | 1 | Wrong dictionary or comparator on projected map |
+| `WillLevelUp` — one color short | 1 | Returns true prematurely |
+| `ScorePointMessage` below threshold | 1 | Wrong `Level` or spurious `NextLevel` flag |
+| `ScorePointMessage` at tipping point | 1 | Off-by-one — `>` vs `>=` makes tipping point next-level |
+| `ScorePointMessage` above threshold renumbered | 1 | Score not renumbered, level not incremented, or flag missing |
+| `GroupSize` equals points published | 1 | Wrong group size breaks stagger timing in `ScoreTrailService` |
+| `GroupIndex` sequential | 1 | Non-sequential indices break trail scatter delay order |
 
 ### `BalloonModelTests` — 6 tests
 
@@ -240,6 +248,8 @@ These systems are not tested because they are either too coupled to Unity runtim
 | `SceneTransition` / `Navigation` | Button handler wiring / static state machine — too simple |
 | `PaintSplashView` | MonoBehaviour with `Update`-driven animation; visual correctness is a Play Mode concern. Core logic (target collection, paintability) tested via `PaintItemHandlerTests` |
 | `ScoreTrailService` | Trail spawning depends on `PoolManager` + DOTween flight. Trail arrival message is tested via `ScoreControllerTests` |
+| `TrailTracker<TId>` | `PauseWhere`, `ResumeAll`, and `TrackTrail` (retroactive path) call `DOPause`/`DOPlay`/`DOTween.TweensByTarget` — require live tweens. The forward `IsTracked` path is too simple (dict lookup + callback store). |
+| `CinematicDirector` / `LevelUpTrailEffect` | Orchestration across DOTween, unscaled time, camera, and `ScoreTrailService` — all runtime concerns. Covered indirectly via `ScoreControllerTests` |
 | `PoolChannel.Prewarm` / `PrewarmAsync` | Requires MonoBehaviour instantiation (`Create()` returns `Component`). Straightforward push-to-stack logic |
 | Views in general | Bind→Subscribe→SetValue chains are tested by UniRx; visual correctness is a Play Mode concern |
 

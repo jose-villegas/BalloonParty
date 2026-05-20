@@ -242,6 +242,30 @@ namespace BalloonParty.Tests.Slots
             Assert.AreSame(first, _grid.At(index));
         }
 
+        [Test]
+        public void IsKind_EmptySlot_ReturnsFalse()
+        {
+            Assert.IsFalse(_grid.IsKind(0, 0, SlotActorKind.Dynamic));
+        }
+
+        [Test]
+        public void IsKind_OccupiedMatchingKind_ReturnsTrue()
+        {
+            // BalloonModel.Kind is always Dynamic
+            PlaceAt(1, 1);
+
+            Assert.IsTrue(_grid.IsKind(1, 1, SlotActorKind.Dynamic));
+        }
+
+        [Test]
+        public void IsKind_OccupiedWrongKind_ReturnsFalse()
+        {
+            // BalloonModel.Kind is Dynamic, not Static
+            PlaceAt(1, 1);
+
+            Assert.IsFalse(_grid.IsKind(1, 1, SlotActorKind.Static));
+        }
+
         private static BalloonModel CreateModel()
         {
             return new BalloonModel();

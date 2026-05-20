@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
@@ -261,6 +262,106 @@ namespace BalloonParty.Tests.Game
             FireTrailArrived(Blue, 1);
 
             Assert.AreEqual(0, _controller.GetStreak(Red));
+        }
+
+        [Test]
+        public void WillLevelUp_AllColorsProjected_ReturnsTrue()
+        {
+            _config.PointsRequiredForLevel(2).Returns(1);
+
+            FirePop(Red);
+            FirePop(Blue);
+
+            Assert.IsTrue(_controller.WillLevelUp());
+        }
+
+        [Test]
+        public void WillLevelUp_OneColorShort_ReturnsFalse()
+        {
+            _config.PointsRequiredForLevel(2).Returns(2);
+
+            FirePop(Red);
+
+            Assert.IsFalse(_controller.WillLevelUp());
+        }
+
+        [Test]
+        public void ScorePoint_BelowThreshold_NextLevelFalse()
+        {
+            _config.PointsRequiredForLevel(2).Returns(5);
+
+            FirePop(Red);
+
+            _scoredPublisher.Received(1).Publish(
+                Arg.Is<ScorePointMessage>(m => !m.NextLevel && m.Level == 1 && m.Score == 1));
+        }
+
+        [Test]
+        public void ScorePoint_AtThreshold_NotNextLevel()
+        {
+            // rawScore == required → rawScore > required is false → not next level
+            _config.PointsRequiredForLevel(2).Returns(1);
+
+            FirePop(Red);
+
+            _scoredPublisher.Received(1).Publish(
+                Arg.Is<ScorePointMessage>(m => !m.NextLevel && m.Level == 1 && m.Score == 1));
+        }
+
+        [Test]
+        public void ScorePoint_AboveThreshold_NextLevelTrueAndScoreRenumbered()
+        {
+            // threshold = 3, scoreValue = 4, streak = 1 → publishes 4 messages:
+            // i=0: rawScore=1 → Score=1, Level=1, NextLevel=false
+            // i=1: rawScore=2 → Score=2, Level=1, NextLevel=false
+            // i=2: rawScore=3 → Score=3, Level=1, NextLevel=false  (tipping point, 3 > 3 is false)
+            // i=3: rawScore=4 → Score=1, Level=2, NextLevel=true   (renumbered: 4 - 3 = 1)
+            _config.PointsRequiredForLevel(2).Returns(3);
+
+            var model = new BalloonModel();
+            model.Color.Value = Red;
+            model.HitsRemaining.Value = 1;
+            model.ScoreValue = 4;
+            FireHit(model, 1);
+
+            _scoredPublisher.Received(3).Publish(
+                Arg.Is<ScorePointMessage>(m => !m.NextLevel && m.Level == 1));
+            _scoredPublisher.Received(1).Publish(
+                Arg.Is<ScorePointMessage>(m => m.NextLevel && m.Level == 2 && m.Score == 1));
+        }
+
+        [Test]
+        public void ScorePoint_GroupSizeEqualsPoints()
+        {
+            var model = new BalloonModel();
+            model.Color.Value = Red;
+            model.HitsRemaining.Value = 1;
+            model.ScoreValue = 3;
+            FireHit(model, 1);
+
+            // streak=1, scoreValue=3 → points=3, GroupSize=3 on all messages
+            _scoredPublisher.Received(3).Publish(
+                Arg.Is<ScorePointMessage>(m => m.GroupSize == 3));
+        }
+
+        [Test]
+        public void ScorePoint_GroupIndexIsSequential()
+        {
+            var received = new List<ScorePointMessage>();
+            _scoredPublisher
+                .When(p => p.Publish(Arg.Any<ScorePointMessage>()))
+                .Do(ci => received.Add(ci.Arg<ScorePointMessage>()));
+
+            var model = new BalloonModel();
+            model.Color.Value = Red;
+            model.HitsRemaining.Value = 1;
+            model.ScoreValue = 3;
+            FireHit(model, 1);
+
+            Assert.AreEqual(3, received.Count);
+            Assert.AreEqual(0, received[0].GroupIndex);
+            Assert.AreEqual(1, received[1].GroupIndex);
+            Assert.AreEqual(2, received[2].GroupIndex);
         }
 
         private void FireHit(IBalloonModel model, int damage)

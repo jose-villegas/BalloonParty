@@ -180,6 +180,38 @@ Cinematic (Shared/GameState/)
 └── ICinematicAware listeners (Register/Unregister)
 ```
 
+
+## Slot Actor Abstraction
+
+`SlotGrid` owns two parallel 2D arrays — `IWriteableSlotActor[,]` (model side) and `ISlotActorView[,]` (view side). Every grid occupant is referred to through these interfaces rather than balloon-specific types.
+
+```
+ISlotActor (read-only)
+├── SlotIndex: IReadOnlyReactiveProperty<Vector2Int>
+├── IsStable:  IReadOnlyReactiveProperty<bool>
+└── Kind:      SlotActorKind (Dynamic | Static)
+
+IWriteableSlotActor : ISlotActor
+├── SlotIndex: ReactiveProperty<Vector2Int>   (new, writable)
+└── IsStable:  ReactiveProperty<bool>          (new, writable)
+
+ISlotActorView
+├── transform:   Transform
+├── TweenTracker: TweenTracker
+└── ActorKind:   SlotActorKind
+```
+
+**Capability interfaces** — optional traits subscribers cast for at their call site:
+
+| Interface | Meaning | Implemented by |
+|---|---|---|
+| `IHasColor` | Read-only color | `IBalloonModel` (all balloon types) |
+| `IHasWriteableColor` | Paintable — writable color | `BalloonModel` only (not `ToughBalloonModel`) |
+| `IHasScore` | Awards score on pop | `IBalloonModel` (all balloon types) |
+| `IHasNudge` | Participates in nudge system | `IBalloonModel` (all balloon types) |
+
+Subscribers that previously cast to `IBalloonModel` now cast to the narrowest capability interface needed (`IHasColor`, `IHasScore`, `IHasNudge`). `BalloonController` is the only subscriber that still casts to `IBalloonModel` — it needs `EvaluateHit()` which is balloon-specific. See `Slots/README.md` for full detail.
+
 ---
 
 ## Folder → Namespace Mapping
