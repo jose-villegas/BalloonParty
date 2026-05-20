@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -84,7 +83,7 @@ namespace BalloonParty.Nudge
                 return;
             }
 
-            var hitSlot = msg.Actor.SlotIndex.Value;
+            var hitSlot = msg.Actor.SlotIndex;
             var hitSlotPos = _grid.IndexToWorldPosition(hitSlot);
             var neighbors = _grid.GetNeighbors(hitSlot.x, hitSlot.y);
 
@@ -95,7 +94,7 @@ namespace BalloonParty.Nudge
                     continue;
                 }
 
-                var slot = neighbor.SlotIndex.Value;
+                var slot = neighbor.SlotIndex;
                 var distance = _resolver.ResolveDistance(nudgeable.NudgeOverrides, null, NudgeType.Neighbor);
                 var duration = _resolver.ResolveDuration(nudgeable.NudgeOverrides, null, NudgeType.Neighbor);
                 NudgeBalloon(slot, hitSlotPos, distance, duration);
@@ -121,7 +120,7 @@ namespace BalloonParty.Nudge
                 return;
             }
 
-            var slot = msg.Balloon.SlotIndex.Value;
+            var slot = msg.Balloon.SlotIndex;
             var distance = _resolver.ResolveDistance(msg.Balloon.NudgeOverrides, msg.Overrides, msg.Source);
             var duration = _resolver.ResolveDuration(msg.Balloon.NudgeOverrides, msg.Overrides, msg.Source);
             NudgeBalloon(slot, msg.Origin, distance, duration);
@@ -150,7 +149,7 @@ namespace BalloonParty.Nudge
                         continue;
                     }
 
-                    NudgeOverride[] actorOverrides = null;
+                    IReadOnlyList<NudgeOverride> actorOverrides = null;
                     if (model is IHasNudge nudgeable)
                     {
                         actorOverrides = nudgeable.NudgeOverrides;

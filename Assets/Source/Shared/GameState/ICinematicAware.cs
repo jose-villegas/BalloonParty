@@ -11,4 +11,3 @@ namespace BalloonParty.Shared.GameState
         void OnCinematicEnd();
     }
 }
-

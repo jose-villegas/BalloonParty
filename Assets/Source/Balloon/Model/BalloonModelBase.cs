@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
@@ -9,24 +10,30 @@ namespace BalloonParty.Balloon.Model
 {
     internal abstract class BalloonModelBase : IWriteableBalloonModel, IHasDurability
     {
-        public ReactiveProperty<string> Color { get; } = new();
-        public BalloonType TypeName { get; init; }
-        public ReactiveProperty<int> HitsRemaining { get; } = new(1);
-        public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
+        public BalloonType TypeName { get; }
+        public ReactiveProperty<int> HitsRemaining { get; }
+        public Vector2Int SlotIndex { get; set; }
         public ReactiveProperty<bool> IsStable { get; } = new(true);
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
 
-        public NudgeOverride[] NudgeOverrides { get; init; }
-        public bool CanHoldItem { get; init; }
-        public int ScoreValue { get; init; } = 1;
+        public IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
+        public bool CanHoldItem { get; }
+        public int ScoreValue { get; }
 
         public SlotActorKind Kind => SlotActorKind.Dynamic;
 
-        IReadOnlyReactiveProperty<string> IHasColor.Color => Color;
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
-        IReadOnlyReactiveProperty<Vector2Int> ISlotActor.SlotIndex => SlotIndex;
         IReadOnlyReactiveProperty<bool> IDynamicSlotActor.IsStable => IsStable;
         IReadOnlyReactiveProperty<ItemType> IBalloonModel.Item => Item;
+
+        protected BalloonModelBase(BalloonModelConfig config)
+        {
+            TypeName = config.TypeName;
+            ScoreValue = config.ScoreValue;
+            CanHoldItem = config.CanHoldItem;
+            NudgeOverrides = config.NudgeOverrides;
+            HitsRemaining = new ReactiveProperty<int>(config.HitsToPop);
+        }
 
         public virtual HitOutcome EvaluateHit(int damage)
         {
@@ -36,4 +43,3 @@ namespace BalloonParty.Balloon.Model
         }
     }
 }
-

@@ -212,9 +212,13 @@ namespace BalloonParty.Editor
                     GUILayout.Width(70));
                 EditorGUILayout.LabelField(entry.DefaultMax.ToString(), GUILayout.Width(55));
                 StyledRow.DrawStyledLabel(
-                    entry.IPhoneMax.ToString(), entry.IPhoneOverridden, 55);
+                    entry.IPhoneMax.ToString(),
+                    entry.IPhoneOverridden,
+                    55);
                 StyledRow.DrawStyledLabel(
-                    entry.AndroidMax.ToString(), entry.AndroidOverridden, 55);
+                    entry.AndroidMax.ToString(),
+                    entry.AndroidOverridden,
+                    55);
                 EditorGUILayout.LabelField(entry.HasOverride ? "✅" : "❌", GUILayout.Width(55));
                 GUILayout.FlexibleSpace();
                 EditorGUILayout.EndHorizontal();
@@ -230,8 +234,10 @@ namespace BalloonParty.Editor
             GUILayout.FlexibleSpace();
 
             EditorGUILayout.LabelField("Mobile Max:", GUILayout.Width(72));
-            _selectedSizeIndex = EditorGUILayout.Popup(_selectedSizeIndex, SizeLabels,
-                EditorStyles.toolbarPopup, GUILayout.Width(60));
+            _selectedSizeIndex = EditorGUILayout.Popup(_selectedSizeIndex,
+                SizeLabels,
+                EditorStyles.toolbarPopup,
+                GUILayout.Width(60));
 
             if (GUILayout.Button("Apply", EditorStyles.toolbarButton, GUILayout.Width(50)))
             {

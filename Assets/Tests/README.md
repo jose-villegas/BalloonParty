@@ -80,9 +80,9 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 88 tests
+## Current Coverage — 122 tests
 
-### `SlotGridTests` — 23 tests
+### `SlotGridTests` — 42 tests
 
 Tests the core grid data structure — the most complex pure-logic class in the codebase.
 
@@ -90,13 +90,16 @@ Tests the core grid data structure — the most complex pure-logic class in the 
 |---|---|---|
 | Place guard | 1 | Double-occupation silently overwrites a balloon |
 | IsEmpty bounds | 1 | Out-of-range index throws instead of returning true |
-| IsUnbalanced | 4 | Even/odd row shift direction, row-0 edge case, diagonal vs direct support |
+| IsUnbalanced | 14 | Even/odd row shift direction, row-0 edge case, diagonal vs direct support, static actor as structural support |
 | OptimalNextEmptySlot | 5 | Weight tie-breaking (`>=`), out-of-bounds candidate, recursive weight, row-0 null |
 | BottomEmptySlotPerColumn | 1 | Skipping logic returns wrong row |
 | GetNeighbors | 3 | Even/odd diagonal shift direction, boundary filtering |
-| HexNeighborIndices | 3 | Even/odd diagonal shift, always returns 6 indices (used independently by PaintItemHandler) |
+| HexNeighborIndices | 2 | Even/odd diagonal shift (used independently by PaintItemHandler) |
 | IndexToWorldPosition | 2 | Staggered grid formula — even/odd offset |
 | IsKind | 3 | Empty slot returns false; occupied slot matches/mismatches kind |
+| IsTraversable | 3 | Empty slot, `IPassThrough` actor, blocking actor |
+| ComputePath | 5 | Vertical path length, last waypoint, passthrough intermediate, out-of-bounds source, same source+target |
+| AllEmptySlots | 2 | Empty grid returns all, partial fill excludes occupied |
 
 ### `PredictionTraceCalculatorTests` — 7 tests
 
@@ -111,13 +114,12 @@ Tests the trajectory bounce algorithm — pure math with wall reflection.
 | Max steps | 1 | Step exhaustion before wall hit |
 | Zig-zag | 1 | Multiple reflections chain correctly |
 
-### `ScoreControllerTests` — 21 tests
+### `ScoreControllerTests` — 22 tests
 
-Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` projected-progress check, and next-level trail renumbering — deferred scoring via trail arrival, multi-map accumulation with an all-colors threshold gate, consecutive same-color pop multiplier, projected vs confirmed progress, and `ScorePointMessage` field correctness.
+Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` projected-progress check, and next-level trail renumbering — deferred scoring via trail arrival, multi-map accumulation with an all-colors threshold gate, consecutive same-color pop multiplier, projected vs confirmed progress, `ScorePointMessage` field correctness, and `IHitable`-based scoring with non-balloon actors.
 
 | Area | Tests | What could break |
 |---|---|---|
-| Unbreakable balloon hit (`-1`) | 1 | Wrong guard skips scoring for valid pops |
 | Hit that doesn't kill | 1 | Off-by-one on survive check |
 | Valid pop publishes scored message | 1 | Message not published or wrong fields |
 | Trail arrival accumulates score | 1 | Wrong dictionary key or sum |
@@ -138,21 +140,56 @@ Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` pro
 | `ScorePointMessage` above threshold renumbered | 1 | Score not renumbered, level not incremented, or flag missing |
 | `GroupSize` equals points published | 1 | Wrong group size breaks stagger timing in `ScoreTrailService` |
 | `GroupIndex` sequential | 1 | Non-sequential indices break trail scatter delay order |
+| `IHitable` non-balloon actor — `Pop` outcome scores | 1 | Scoring pipeline too narrowly typed to `IBalloonModel` |
+| `Absorb` outcome — does not score | 1 | Absorb mis-routed as Pop |
 
-### `BalloonModelTests` — 6 tests
+### `BalloonModelTests` — 9 tests
 
-Tests `EvaluateHit` — the hit-outcome decision that both `BalloonController` and `ScoreController` depend on.
+Tests `EvaluateHit` outcomes and `IHasDurability` / `IDynamicSlotActor` / `IHitable` interface conformance.
 
-Design note: `EvaluateHit` lives on `IBalloonModel` so that both consumers call `model.EvaluateHit(damage)` instead of re-implementing the check. Tests revealed the decision logic was duplicated across `BalloonController` and `ScoreController` — moving it to the model eliminated that duplication.
+Design note: `EvaluateHit` is defined on `IHitable` and implemented in `BalloonModelBase`. It is **state-mutating** — it decrements `HitsRemaining` and returns the outcome in a single call. `ProjectileView` calls it once and embeds the result in `ActorHitMessage.Outcome`; `BalloonController` reads `msg.Outcome` without calling `EvaluateHit` again. Tests verify that the outcome is correct and the state change is correct in the same call.
+
+`BalloonModel` returns `PassThrough` on survival (projectile continues, crack animation is reactive). `ToughBalloonModel` overrides to return `Deflect` (projectile bounces). Both return `Pop` on death.
 
 | Area | Tests | What could break |
 |---|---|---|
-| Unbreakable (`-1`) | 1 | Wrong sentinel value check |
-| Unbreakable with high damage | 1 | Sentinel bypassed by large damage |
-| Absorb damage (remaining > damage) | 1 | Off-by-one (`> 0` vs `>= 0`) |
-| Exact kill (remaining == damage) | 1 | Boundary mishandled |
-| Overkill (damage > remaining) | 1 | Negative remainder mishandled |
-| Exact kill with higher values | 1 | Arithmetic error at larger numbers |
+| Survive → `PassThrough` | 1 | Wrong outcome for soft balloon |
+| Exact kill → `Pop` | 1 | Boundary mishandled |
+| Overkill → `Pop` | 1 | Negative remainder mishandled |
+| Exact kill with higher values → `Pop` | 1 | Arithmetic error at larger numbers |
+| Intermediate hit decrements `HitsRemaining` | 1 | State mutation skipped or wrong value |
+| Killing blow zeroes `HitsRemaining` | 1 | State mutation missing on final hit |
+| Implements `IDynamicSlotActor` | 1 | Interface conformance regression |
+| Implements `IHitable` | 1 | Interface conformance regression |
+| Implements `IHasDurability` | 1 | Interface conformance regression |
+
+### `HitableTests` — 6 tests
+
+Tests the `IHitable` / `IHasDurability` capability contract using minimal hand-written actor stubs. No NSubstitute needed.
+
+| Area | Tests | What could break |
+|---|---|---|
+| `HitOutcome.Absorb` value distinct from others | 1 | Enum value collision |
+| `IHitable` actor without `IHasDurability` — correct interfaces | 1 | Removal check mis-skipped |
+| `IHitable` absorb wall — `EvaluateHit` returns `Absorb` | 1 | Wrong outcome from IHitable-only impl |
+| `IHasDurability` non-deflecting actor — always `Pop`, decrements | 1 | State mutation or return value |
+| `IHasDurability` non-deflecting actor — `HitsRemaining` zeroed on final hit | 1 | Final state after single hit |
+| Removal check skipped when actor is `IHitable` but not `IHasDurability` | 1 | Compiler/type-check regression |
+
+### `StaticActorTests` — 2 tests
+
+| Area | Tests | What could break |
+|---|---|---|
+| `StaticActorModel.Kind == Static` | 1 | Wrong `Kind` breaks balancer skip logic |
+| `StaticActorModel` is not `IDynamicSlotActor` | 1 | Stability read on a static actor would break |
+
+### `StaticActorSpawnerTests` — 3 tests
+
+| Area | Tests | What could break |
+|---|---|---|
+| Places exact count when grid has enough slots | 1 | Off-by-one or wrong slot source |
+| All placed actors have `Kind == Static` | 1 | Wrong model type used |
+| Does not exceed available slots | 1 | Missing guard on slot exhaustion |
 
 ### `NudgeOverrideResolverTests` — 10 tests
 

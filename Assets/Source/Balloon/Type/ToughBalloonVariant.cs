@@ -82,11 +82,14 @@ namespace BalloonParty.Balloon.Type
 
             _damageTween?.Kill();
             _damageTween = DOVirtual
-                .Float(_currentDamageProgress, target, _crackAnimDuration, v =>
-                {
-                    _currentDamageProgress = v;
-                    SetFloat(DamageProgressId, v);
-                })
+                .Float(_currentDamageProgress,
+                    target,
+                    _crackAnimDuration,
+                    v =>
+                    {
+                        _currentDamageProgress = v;
+                        SetFloat(DamageProgressId, v);
+                    })
                 .SetEase(Ease.OutCubic)
                 .SetLink(gameObject);
         }

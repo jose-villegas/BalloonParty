@@ -28,5 +28,3 @@ namespace BalloonParty.Shared.Pool
         }
     }
 }
-
-

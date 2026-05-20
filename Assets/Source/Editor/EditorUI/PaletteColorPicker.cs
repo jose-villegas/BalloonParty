@@ -56,13 +56,17 @@ namespace BalloonParty.Editor.EditorUI
             EnsureOptions(palette);
 
             var rect = EditorGUILayout.GetControlRect();
-            var popupRect = new Rect(rect.x, rect.y,
-                rect.width - SwatchSize - SwatchSpacing, rect.height);
+            var popupRect = new Rect(rect.x,
+                rect.y,
+                rect.width - SwatchSize - SwatchSpacing,
+                rect.height);
             var swatchRect = new Rect(rect.xMax - SwatchSize, rect.y, SwatchSize, SwatchSize);
 
             _selectedIndex = Mathf.Clamp(_selectedIndex, 0, _popupOptions.Length - 1);
-            _selectedIndex = EditorGUI.Popup(popupRect, new GUIContent(label),
-                _selectedIndex, _popupOptions);
+            _selectedIndex = EditorGUI.Popup(popupRect,
+                new GUIContent(label),
+                _selectedIndex,
+                _popupOptions);
 
             DrawSwatch(swatchRect, palette.Colors[_selectedIndex].Color);
             return true;

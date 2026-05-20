@@ -7,4 +7,3 @@ namespace BalloonParty.Shared.GameState
         LevelUp
     }
 }
-

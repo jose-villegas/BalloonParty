@@ -4,7 +4,6 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -140,7 +139,7 @@ namespace BalloonParty.Item.Laser
             var key = settings.ActivationEffectPrefab.name;
             var effect = _poolManager.GetOrRegister(key, () => new EffectPoolChannel(settings.ActivationEffectPrefab));
 
-            var balloonColor = _palette.GetColor(_balloon.Color.Value);
+            var balloonColor = _palette.GetColor((_balloon as IHasColor)?.Color.Value);
             effect.Play(_worldPosition, laserRotation, balloonColor, () => _poolManager.Return(key, effect));
         }
     }

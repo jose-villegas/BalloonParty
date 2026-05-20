@@ -88,13 +88,14 @@ namespace BalloonParty.Balloon.View
             _bindDisposables.Clear();
             Model = model;
 
-            _colorableRenderers
-                .BindColor(model.Color, _palette.GetColor)
-                .AddTo(_bindDisposables);
+            if (model is IHasColor colorable)
+            {
+                _colorableRenderers
+                    .BindColor(colorable.Color, _palette.GetColor)
+                    .AddTo(_bindDisposables);
+            }
 
-            model.SlotIndex
-                .Subscribe(ApplySortingOrder)
-                .AddTo(_bindDisposables);
+            ApplySortingOrder(model.SlotIndex);
 
             model.IsStable
                 .Subscribe(stable => _animator.SetBool(IsStableParam, stable))
@@ -107,8 +108,12 @@ namespace BalloonParty.Balloon.View
 
             if (_itemService != null)
             {
+                var colorProperty = model is IHasColor c
+                    ? c.Color
+                    : new ReactiveProperty<string>(string.Empty);
+
                 _itemService.Bind(model.Item,
-                    model.Color,
+                    colorProperty,
                     model.SlotIndex,
                     _config,
                     _itemConfig,
@@ -183,7 +188,7 @@ namespace BalloonParty.Balloon.View
                 return;
             }
 
-            if (string.IsNullOrEmpty(Model?.Color.Value))
+            if (Model is not IHasColor modelColor || string.IsNullOrEmpty(modelColor.Color.Value))
             {
                 return;
             }
@@ -192,7 +197,7 @@ namespace BalloonParty.Balloon.View
             var defaultEffect =
                 _poolManager.GetOrRegister(defaultKey, () => new ParticlePoolChannel(defaultPrefab.gameObject));
             defaultEffect.Play(transform.position,
-                _palette.GetColor(Model.Color.Value),
+                _palette.GetColor(modelColor.Color.Value),
                 () => _poolManager.Return(defaultKey, defaultEffect));
         }
 

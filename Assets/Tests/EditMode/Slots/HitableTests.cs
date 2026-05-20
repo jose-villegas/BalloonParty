@@ -64,7 +64,7 @@ namespace BalloonParty.Tests.Slots
 
         private class AbsorbWall : ISlotActor, IHitable
         {
-            public IReadOnlyReactiveProperty<Vector2Int> SlotIndex { get; } = new ReactiveProperty<Vector2Int>();
+            public Vector2Int SlotIndex => default;
             public SlotActorKind Kind => SlotActorKind.Static;
             public HitOutcome EvaluateHit(int damage) => HitOutcome.Absorb;
         }
@@ -75,7 +75,7 @@ namespace BalloonParty.Tests.Slots
 
             public NonDeflectingActor(int hits) => _hits = new ReactiveProperty<int>(hits);
 
-            public IReadOnlyReactiveProperty<Vector2Int> SlotIndex { get; } = new ReactiveProperty<Vector2Int>();
+            public Vector2Int SlotIndex => default;
             public SlotActorKind Kind => SlotActorKind.Static;
             public IReadOnlyReactiveProperty<int> HitsRemaining => _hits;
 

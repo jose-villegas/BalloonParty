@@ -7,4 +7,3 @@ namespace BalloonParty.Slots
         IReadOnlyReactiveProperty<bool> IsStable { get; }
     }
 }
-

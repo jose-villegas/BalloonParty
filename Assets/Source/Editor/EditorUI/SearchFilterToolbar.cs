@@ -17,7 +17,8 @@ namespace BalloonParty.Editor.EditorUI
             ref string searchText,
             TEnum currentFilter,
             string[] filterLabels,
-            Action onRefresh = null) where TEnum : Enum
+            Action onRefresh = null)
+            where TEnum : Enum
         {
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
 
@@ -49,4 +50,3 @@ namespace BalloonParty.Editor.EditorUI
         }
     }
 }
-

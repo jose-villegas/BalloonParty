@@ -8,4 +8,3 @@ namespace BalloonParty.Game.Score
         Vector3 RandomPosition();
     }
 }
-

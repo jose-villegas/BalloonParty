@@ -15,4 +15,3 @@ namespace BalloonParty.Editor.EffectPreview
         public GameConfiguration GameConfig;
     }
 }
-

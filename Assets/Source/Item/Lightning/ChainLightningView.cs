@@ -229,13 +229,20 @@ namespace BalloonParty.Item.Lightning
             var rendererCount = _lineRenderers != null ? _lineRenderers.Length : 0;
 
             var (lineBuffers, cumOffsets) = BuildBoltBuffers(
-                _targetPositions, rendererCount, _segmentsMultiplier, _randomness, _fractalDecay);
+                _targetPositions,
+                rendererCount,
+                _segmentsMultiplier,
+                _randomness,
+                _fractalDecay);
 
             var (glowPath, glowDia) = BuildGlowPath(_targetPositions, _glowSubdivisions);
             var hasGlow = _glowRenderer != null && glowPath.Length > 0;
             var maxPathIdx = (float)(glowPath.Length - 1);
 
-            float GlowIdx(int stage) => Mathf.Min(stage * _glowSubdivisions, maxPathIdx);
+            float GlowIdx(int stage)
+            {
+                return Mathf.Min(stage * _glowSubdivisions, maxPathIdx);
+            }
 
             // Forward: reveal jumps 0 → jumpCount-1
             for (var i = 0; i < jumpCount; i++)
@@ -275,7 +282,11 @@ namespace BalloonParty.Item.Lightning
                 if (hasGlow && glowFrom >= 0 && glowTo >= 0)
                 {
                     return await AnimateGlowSegment(
-                        glowPath, glowDia, GlowIdx(glowFrom), GlowIdx(glowTo), ct);
+                        glowPath,
+                        glowDia,
+                        GlowIdx(glowFrom),
+                        GlowIdx(glowTo),
+                        ct);
                 }
 
                 if (hasGlow && forward)

@@ -54,5 +54,3 @@ namespace BalloonParty.Shared.Diagnostics
 #endif
     }
 }
-
-

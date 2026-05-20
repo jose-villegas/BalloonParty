@@ -43,4 +43,3 @@ namespace BalloonParty.Shared.Animation
         }
     }
 }
-

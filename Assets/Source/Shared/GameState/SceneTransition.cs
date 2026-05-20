@@ -87,7 +87,8 @@ namespace BalloonParty.Shared.GameState
 
             SceneManager.sceneLoaded -= OnSceneLoaded;
             Debug.LogWarning(
-                $"[SceneTransition] Failed to preload scene \"{_sceneName}\".", this);
+                $"[SceneTransition] Failed to preload scene \"{_sceneName}\".",
+                this);
         }
 
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)

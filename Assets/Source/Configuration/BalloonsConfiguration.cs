@@ -17,7 +17,8 @@ namespace BalloonParty.Configuration
         [SerializeField] private int _newProjectileBalloonLines;
         [SerializeField] private float _newBalloonLinesTimeInterval;
         [SerializeField] private Vector2 _balloonSpawnAnimationSpeedRange;
-        [Tooltip("How many rows below the target slot the balloon enters from. Can exceed the grid bounds — the world position is still computed correctly.")]
+        [Tooltip(
+            "How many rows below the target slot the balloon enters from. Can exceed the grid bounds — the world position is still computed correctly.")]
         [SerializeField] private int _spawnEntryRowOffset = 4;
 
         [Header("Balancing")]

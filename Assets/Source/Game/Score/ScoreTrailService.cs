@@ -86,7 +86,9 @@ namespace BalloonParty.Game.Score
             {
                 var poolKey = $"ScoreTrail_{colorName}";
                 _spawners[colorName] = new TrailSpawner(
-                    _poolManager, poolKey, () => new ScoreTrailPoolChannel(_trailPrefab));
+                    _poolManager,
+                    poolKey,
+                    () => new ScoreTrailPoolChannel(_trailPrefab));
             }
         }
 
@@ -133,18 +135,26 @@ namespace BalloonParty.Game.Score
             var spawner = _spawners[colorName];
 
             var transform = isTracked
-                ? spawner.SpawnUnscaled(fromWorldPosition, target, _config.ScorePointTraceDuration, color, () =>
-                {
-                    _tracker.Unregister(id);
-                    _arrivedPublisher.Publish(
-                        new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
-                })
-                : spawner.Spawn(fromWorldPosition, target, _config.ScorePointTraceDuration, color, () =>
-                {
-                    _tracker.Unregister(id);
-                    _arrivedPublisher.Publish(
-                        new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
-                });
+                ? spawner.SpawnUnscaled(fromWorldPosition,
+                    target,
+                    _config.ScorePointTraceDuration,
+                    color,
+                    () =>
+                    {
+                        _tracker.Unregister(id);
+                        _arrivedPublisher.Publish(
+                            new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
+                    })
+                : spawner.Spawn(fromWorldPosition,
+                    target,
+                    _config.ScorePointTraceDuration,
+                    color,
+                    () =>
+                    {
+                        _tracker.Unregister(id);
+                        _arrivedPublisher.Publish(
+                            new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
+                    });
 
             _tracker.Register(id, transform);
 

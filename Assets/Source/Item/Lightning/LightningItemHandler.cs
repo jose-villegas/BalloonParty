@@ -3,7 +3,6 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
@@ -63,7 +62,9 @@ namespace BalloonParty.Item.Lightning
             {
                 foreach (var (model, pos) in targets)
                 {
-                    _hitPublisher.Publish(new ActorHitMessage(model, pos, Vector3.zero,
+                    _hitPublisher.Publish(new ActorHitMessage(model,
+                        pos,
+                        Vector3.zero,
                         model.EvaluateHit(settings.Damage),
                         settings.Damage));
                 }
@@ -83,30 +84,38 @@ namespace BalloonParty.Item.Lightning
 
             var view = (ChainLightningView)effect;
 
-            view.PrepareDisplay(
-                positions,
-                settings,
-                index =>
-                {
-                    if (index < targets.Count)
-                    {
-                        var (model, pos) = targets[index];
-                        _hitPublisher.Publish(new ActorHitMessage(model, pos, Vector3.zero,
-                            model.EvaluateHit(settings.Damage),
-                            settings.Damage));
-                    }
-                });
-
+            view.PrepareDisplay(positions, settings, OnJump);
             view.Play(Vector3.zero, Color.white, () => _poolManager.Return(key, effect));
 
             return UniTask.CompletedTask;
+
+            void OnJump(int index)
+            {
+                if (index >= targets.Count)
+                {
+                    return;
+                }
+
+                var (model, pos) = targets[index];
+                _hitPublisher.Publish(new ActorHitMessage(model,
+                    pos,
+                    Vector3.zero,
+                    model.EvaluateHit(settings.Damage),
+                    settings.Damage));
+            }
         }
 
 
         private List<(IBalloonModel model, Vector3 worldPos)> CollectSortedTargets()
         {
-            var color = _balloon.Color.Value;
             var result = new List<(IBalloonModel, Vector3)>();
+
+            if (_balloon is not IHasColor sourceColor)
+            {
+                return result;
+            }
+
+            var color = sourceColor.Color.Value;
 
             for (var col = 0; col < _grid.Columns; col++)
             {
@@ -128,7 +137,7 @@ namespace BalloonParty.Item.Lightning
                         continue;
                     }
 
-                    if (model.Color.Value != color)
+                    if (model is not IHasColor modelColor || modelColor.Color.Value != color)
                     {
                         continue;
                     }

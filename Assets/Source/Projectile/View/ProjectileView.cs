@@ -7,7 +7,6 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots;
 using DG.Tweening;
 using MessagePipe;
@@ -78,9 +77,10 @@ namespace BalloonParty.Projectile.View
 
             var outcome = balloonModel.EvaluateHit(1);
 
-            if (outcome == HitOutcome.Pop && !string.IsNullOrEmpty(balloonModel.Color.Value))
+            if (outcome == HitOutcome.Pop && balloonModel is IHasColor colorable &&
+                !string.IsNullOrEmpty(colorable.Color.Value))
             {
-                TrackColorStreak(balloonModel.Color.Value);
+                TrackColorStreak(colorable.Color.Value);
             }
 
             _hitPublisher.Publish(new ActorHitMessage(balloonModel,
@@ -134,7 +134,7 @@ namespace BalloonParty.Projectile.View
             if (_model.ColorPopCount >= 2)
             {
                 _model.ShieldsRemaining.Value++;
-                _shieldGainedPublisher.Publish(new ShieldGainedMessage(_model.LastHitBalloon.SlotIndex.Value));
+                _shieldGainedPublisher.Publish(new ShieldGainedMessage(_model.LastHitBalloon.SlotIndex));
             }
         }
 

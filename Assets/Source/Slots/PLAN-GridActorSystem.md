@@ -364,30 +364,40 @@ move `HitOutcome` there too so all hit-system types live in the shared layer.
   added. `IWriteableDynamicSlotActor : IDynamicSlotActor, IWriteableSlotActor` added with
   writable `ReactiveProperty<bool> IsStable`. `IBalloonModel` extends `IDynamicSlotActor`.
 - `HitsRemaining` removed from `IBalloonModel`; moved to `IHasDurability`.
-- `BalloonModelBase` and `ToughBalloonModel` implement `IHasDurability`.
+- `IHasColor` removed from `IBalloonModel` interface hierarchy. `BalloonModel` directly
+  implements `IHasWriteableColor`; consumers that need color cast to `IHasColor`.
+- `BalloonModelBase` introduced as abstract base for all balloon models, implementing
+  `IWriteableBalloonModel, IHasDurability`. `BalloonModelConfig` struct carries all
+  constructor arguments — both `BalloonModel` and `ToughBalloonModel` delegate to it.
+- `ToughBalloonModel` refactored to extend `BalloonModelBase`; overrides `EvaluateHit`
+  to return `Deflect` on survival.
+- `BalloonController` constructor `NudgeOverrides` parameter removed — now supplied via
+  `BalloonModelConfig`. `Start()` no longer assigns it.
+- `BalloonController` migrated to `msg.Outcome` switch — no longer calls `EvaluateHit`
+  a second time.
 - `BalloonBalancer` and `NudgeService` cast to `IDynamicSlotActor` for stability queries.
 - All Phase 7 tests added: `BalloonModelTests`, `HitableTests`, `StaticActorTests`,
   `ScoreControllerTests` additions.
-- `HitOutcome.PassThrough` added (undocumented in the original plan — see design notes
-  above). `BalloonModel` returns `PassThrough` when the balloon survives; `ToughBalloonModel`
-  overrides to return `Deflect` (projectile bounces). Both return `Pop` on death.
+- `HitOutcome.PassThrough` added (undocumented in original plan). `BalloonModel` returns
+  `PassThrough` when surviving; `ToughBalloonModel` overrides to return `Deflect`.
+  Both return `Pop` on death. **`EvaluateHit` is state-mutating** — it decrements
+  `HitsRemaining.Value` inline. This is by design: `IHasDurability` documents that
+  `EvaluateHit` is responsible for decrementing `HitsRemaining`.
 
 #### Deferred items — moved to Phase 7.5
 
-- **`UnbreakableBalloonModel`** — not yet created. The `HitsToPop = -1` convention in
-  `BalloonPrefabEntry` is currently broken with the new model hierarchy (base `EvaluateHit`
-  would incorrectly return `Pop` for `-1`). Must be fixed before any unbreakable balloon
-  prefab is live.
+- **`UnbreakableBalloonModel`** — not yet created. `BalloonModelBase.EvaluateHit`
+  intentionally has no `-1` sentinel guard: `UnbreakableBalloonModel` is the correct
+  fix, not a magic-number branch in the base. Any `BalloonPrefabEntry` with
+  `HitsToPop = -1` is broken until Phase 7.5 ships.
 - **`Absorb` projectile routing** — `BalloonController` has a comment deferring the
-  `ForceKill()` path. `ProjectileView` has no `Absorb` handling yet. Move the
-  routing work into Phase 7.5 alongside the unbreakable model so the hit system is complete
-  before the Grid Spawner introduces new actor types.
+  `ForceKill()` path. `ProjectileView` has no `Absorb` handling yet.
 
 #### Consumer migration — actual state
 
 | Consumer | Change |
 |---|---|
-| `ProjectileView` | Calls `hitable.EvaluateHit(1)`; publishes `ActorHitMessage` with pre-computed outcome |
+| `ProjectileView` | Calls `hitable.EvaluateHit(damage)`; publishes `ActorHitMessage` with pre-computed outcome |
 | `BalloonController` | Switches on `msg.Outcome`; `PassThrough` → no-op (crack anim reactive); `Deflect` → `BalloonDeflectedMessage`; `Pop` → remove from grid; `Absorb` → deferred |
 | `BalloonBalancer` | `actor is not IDynamicSlotActor dynamic → skip`; `dynamic.IsStable` |
 | `NudgeService` | `IHasNudge` filter + `actor is IDynamicSlotActor d && d.IsStable` |
@@ -403,20 +413,25 @@ move `HitOutcome` there too so all hit-system types live in the shared layer.
 - `HitableTests`: all fixtures with `AbsorbWall` and `NonDeflectingActor` inner classes
 - `ScoreControllerTests`: `OnActorHit_IHitable_…_PopOutcome_PublishesScore`,
   `OnActorHit_AbsorbOutcome_DoesNotScore`
+- ~~`ScoreControllerTests.OnBalloonHit_Unbreakable_DoesNotScore`~~ — removed; the `-1`
+  sentinel is not handled in `BalloonModelBase` by design. `UnbreakableBalloonModel`
+  replaces the sentinel in Phase 7.5.
 
 ---
 
 ### Phase 7.5 — `BalloonModelBase` hygiene + hit system completion *(next)*
 
-Two threads merged here: cleaning up `BalloonModelBase` hard defaults before `GridSpawner`
-introduces actors that opt out of them, and completing the two items deferred from Phase 7.
+Two threads merged here: completing the two items deferred from Phase 7, and cleaning up
+`BalloonModelBase` hard defaults before `GridSpawner` introduces actors that opt out of them.
+`BalloonModelBase` itself already exists (introduced in Phase 7) — the hygiene work is now
+scoped to what it carries versus what each concrete model should opt into.
 
 #### Deferred from Phase 7
 
 - **`UnbreakableBalloonModel : IBalloonModel, IHitable`** — `EvaluateHit` always returns
-  `Deflect`, no `HitsRemaining`. `BalloonPrefabEntry.HitsToPop = -1` selects this model
-  class at spawn time. Fixes the broken `-1` path in `BalloonSpawner` (currently
-  `BalloonModelBase.EvaluateHit` would incorrectly return `Pop` for `HitsRemaining = -1`).
+  `Deflect`, no `IHasDurability`. `BalloonPrefabEntry.HitsToPop = -1` selects this class
+  at spawn time in `BalloonSpawner`. The `-1` sentinel has no guard in `BalloonModelBase`
+  by design — `UnbreakableBalloonModel` is the replacement, not a magic-number branch.
 - **`Absorb` outcome routing in `ProjectileView`** — on `HitOutcome.Absorb`, call
   `ForceKill()` on the projectile tween → publish `ProjectileDestroyedMessage` to end
   the turn. `BalloonController` already has the case stub in its switch.
@@ -425,16 +440,22 @@ introduces actors that opt out of them, and completing the two items deferred fr
 
 | Property | Problem | Fix |
 |---|---|---|
-| `Item : ReactiveProperty<ItemType>` | Every balloon carries an item slot, even `ToughBalloonModel` which ignores it | Extract to `IHasItemSlot` / `IHasWriteableItemSlot` and remove from base; only `BalloonModel` opts in |
+| `Item : ReactiveProperty<ItemType>` | Every balloon carries an item slot, even `ToughBalloonModel` which ignores it | Extract to `IHasItemSlot` / `IHasWriteableItemSlot`; only `BalloonModel` opts in |
 | `CanHoldItem : bool` | Same — even `ToughBalloonModel` has it (always `false`) | Moves to `IHasItemSlot`; absence of the interface *is* the "cannot hold" signal |
-| `ScoreValue : int` | Every balloon scores, even future decorative or structural actors | Extract to `IHasScore` (already exists as a read interface) + `IHasWriteableScore` writable pair; only scoring actors opt in |
-| `NudgeOverrides : NudgeOverride[]` | Baked into the base even though `IHasNudge` already exists as the correct capability gate | `NudgeOverrides` should live only on actors that implement `IHasNudge`; keep it on `IBalloonModel` via `IHasNudge`, remove from base for any future actor that isn't nudgeable |
+| `ScoreValue : int` | Every balloon scores, even future decorative or structural actors | `IHasScore` read interface already exists; add `IHasWriteableScore` writable pair; only scoring actors opt in |
+| `NudgeOverrides : IReadOnlyList<NudgeOverride>` | Baked into the base even though `IHasNudge` already exists as the correct capability gate | `NudgeOverrides` should live only on actors that implement `IHasNudge`; remove from base for any future actor that isn't nudgeable |
 
 #### `IHasItemSlot` design
 
+`IHasItemSlot` extends `IHasColor`. Item visuals are always tinted to match the host's
+color — an actor that can hold an item without a color is semantically incoherent, and
+the constraint eliminates a runtime fallback that would otherwise be needed everywhere a
+color property is read from an item-holding actor.
+
 ```csharp
 // Slots/ — read-only capability
-public interface IHasItemSlot
+// Extends IHasColor: item visuals are tinted to the host's color; a colorless item host is incoherent.
+public interface IHasItemSlot : IHasColor
 {
     bool CanHoldItem { get; }
     IReadOnlyReactiveProperty<ItemType> Item { get; }
@@ -457,8 +478,31 @@ instead of `IBalloonModel.CanHoldItem`.
 |---|---|---|
 | `ItemAssigner` | `b.CanHoldItem` | `b is IHasItemSlot slot && slot.CanHoldItem` |
 | `BalloonController.Pop` | `_model.Item.Value` | `(_model as IHasItemSlot)?.Item.Value ?? ItemType.None` |
-| `BalloonView.Bind` | `model.Item` | `(model as IHasItemSlot)?.Item` — guard or skip binding |
+| `BalloonView.Bind` | `model.Item` + fallback `new ReactiveProperty<string>(string.Empty)` for colorless models | `model is IHasItemSlot itemSlot` — color is guaranteed by the interface, no fallback needed |
 | `BalloonSpawner` | `model.CanHoldItem = entry.CanHoldItem` (init) | only set on `IHasWriteableItemSlot` |
+
+**`BalloonView.Bind` before:**
+```csharp
+if (_itemService != null)
+{
+    var colorProperty = model is IHasColor c
+        ? c.Color
+        : new ReactiveProperty<string>(string.Empty);
+
+    _itemService.Bind(model.Item, colorProperty, ...);
+}
+```
+
+**`BalloonView.Bind` after — no fallback, no dual cast:**
+```csharp
+if (_itemService != null && model is IHasItemSlot itemSlot)
+{
+    _itemService.Bind(itemSlot.Item, itemSlot.Color, ...);
+}
+```
+
+The `IHasColor` guard on `_colorableRenderers.BindColor` stays separate — not every
+colorable actor holds items. The item binding and color binding are independent paths.
 
 #### Failing tests — write first
 
@@ -473,7 +517,7 @@ UnbreakableBalloonModel_IsNotIHasDurability
   — (new UnbreakableBalloonModel()) is IHasDurability == false
 
 UnbreakableBalloonModel_EvaluateHit_AlwaysDeflects_RegardlessOfDamage
-  — EvaluateHit(1) == Deflect; EvaluateHit(99) == Deflect
+  — EvaluateHit(1) == Deflect; EvaluateHit(99) == Deflect; no state mutation
 ```
 
 New fixture **`ItemSlotTests`** in `Assets/Tests/EditMode/Balloon/`:
@@ -482,11 +526,19 @@ New fixture **`ItemSlotTests`** in `Assets/Tests/EditMode/Balloon/`:
 BalloonModel_ImplementsIHasItemSlot
   — (new BalloonModel()) is IHasItemSlot == true
 
+BalloonModel_IHasItemSlot_AlsoImplementsIHasColor
+  — (new BalloonModel()) is IHasColor == true
+  — verifies IHasItemSlot : IHasColor constraint; a colorless item host must not compile
+
 ToughBalloonModel_DoesNotImplementIHasItemSlot
   — (new ToughBalloonModel()) is IHasItemSlot == false
 
 BalloonController_Pop_WithNoItemSlot_DoesNotThrow
   — model that is not IHasItemSlot; Pop path completes without exception
+
+BalloonView_Bind_NoItemSlot_DoesNotCallItemServiceBind
+  — model is IHasColor but not IHasItemSlot; _itemService.Bind is never called
+  — guards the BalloonView.Bind "model is IHasItemSlot" guard path
 ```
 
 ---
@@ -676,8 +728,10 @@ Deferred until a concrete consumer appears.
 ## What NOT to change (updated)
 
 - **Item system stays separate** — items are passengers on actors, not actors themselves
-- **`IBalloonModel` keeps all its fields** — durability lifts to `IHasDurability` as
-  an additive supertype; nothing is removed from `IBalloonModel`
+- **`IBalloonModel` is an interface, not a bag of fields** — `HitsRemaining` moved to
+  `IHasDurability`; `IHasColor` moved off the interface hierarchy onto `BalloonModel`
+  directly. Phase 7.5 continues removing `Item` / `CanHoldItem` / `ScoreValue` /
+  `NudgeOverrides` from the base toward capability interfaces
 - **No `StartCoroutine`** — all async via UniTask
 - **`BalloonsConfiguration` is not replaced** — the Grid Spawner reads it for balloon
   entries; the SO gains new actor-type sections incrementally rather than being replaced
@@ -697,7 +751,7 @@ Deferred until a concrete consumer appears.
 | 4 — Update tests | ✅ Complete |
 | 5 — Update documentation | ✅ Complete |
 | 6 — Static actor evaluation | ✅ Complete |
-| 7 — Durability abstraction | ✅ Core complete (`IHitable`, `IHasDurability`, `IDynamicSlotActor`, `PassThrough` outcome, all tests); `UnbreakableBalloonModel` + `Absorb` routing deferred to 7.5 |
+| 7 — Durability abstraction | ✅ Complete (`IHitable`, `IHasDurability`, `IDynamicSlotActor`, `BalloonModelBase`, `BalloonModelConfig`, `PassThrough` outcome, `BalloonController` switched to `msg.Outcome`, all tests passing); `UnbreakableBalloonModel` + `Absorb` routing deferred to 7.5 |
 | 7.5 — BalloonModelBase hygiene + hit system completion | **Next** |
 | 8 — Grid Spawner / Level Spawner | Future |
 | 9 — Behavior-bound actors | Future (broadly defined) |

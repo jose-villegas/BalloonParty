@@ -18,4 +18,3 @@ namespace BalloonParty.Shared.GameState
         }
     }
 }
-

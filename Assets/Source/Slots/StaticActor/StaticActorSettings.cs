@@ -10,4 +10,3 @@ namespace BalloonParty.Slots.StaticActor
         }
     }
 }
-

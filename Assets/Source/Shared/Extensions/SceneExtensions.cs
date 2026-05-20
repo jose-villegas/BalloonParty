@@ -27,7 +27,8 @@ namespace BalloonParty.Shared.Extensions
             return handle;
         }
 
-        private static void Collect<T>(GameObject root, List<T> targets) where T : Behaviour
+        private static void Collect<T>(GameObject root, List<T> targets)
+            where T : Behaviour
         {
             foreach (var component in root.GetComponentsInChildren<T>(true))
             {
@@ -55,7 +56,8 @@ namespace BalloonParty.Shared.Extensions
             Restore(EventSystems);
         }
 
-        private static void Restore<T>(List<T> targets) where T : Behaviour
+        private static void Restore<T>(List<T> targets)
+            where T : Behaviour
         {
             foreach (var component in targets)
             {
@@ -69,4 +71,3 @@ namespace BalloonParty.Shared.Extensions
         }
     }
 }
-

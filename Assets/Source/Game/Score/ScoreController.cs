@@ -193,7 +193,13 @@ namespace BalloonParty.Game.Score
 
                 _projectedProgress[color] = rawScore;
                 _scoredPublisher.Publish(new ScorePointMessage(
-                    color, msg.WorldPosition, score, level, nextLevel, points, i));
+                    color,
+                    msg.WorldPosition,
+                    score,
+                    level,
+                    nextLevel,
+                    points,
+                    i));
             }
         }
 

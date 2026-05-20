@@ -269,7 +269,7 @@ namespace BalloonParty.Tests.Slots
         [Test]
         public void IsTraversable_SlotWithPassThroughActor_ReturnsTrue()
         {
-            _grid.Place(new StaticActorModel(), null, new Vector2Int(2, 2));
+            _grid.Place(new StaticActorModel(new Vector2Int(2, 2)), null, new Vector2Int(2, 2));
 
             Assert.IsTrue(_grid.IsTraversable(2, 2));
         }
@@ -304,7 +304,7 @@ namespace BalloonParty.Tests.Slots
         [Test]
         public void ComputePath_PassThroughActorAtIntermediate_IncludedInPath()
         {
-            _grid.Place(new StaticActorModel(), null, new Vector2Int(2, 2));
+            _grid.Place(new StaticActorModel(new Vector2Int(2, 2)), null, new Vector2Int(2, 2));
 
             var path = _grid.ComputePath(new Vector2Int(2, 4), new Vector2Int(2, 0));
 
@@ -357,7 +357,7 @@ namespace BalloonParty.Tests.Slots
         {
             // Row 1 (odd): needs direct support at (2,0) AND diagonal at (3,0).
             // Static actor provides the direct support — verifies it counts the same as any occupant.
-            _grid.Place(new StaticActorModel(), null, new Vector2Int(2, 0));
+            _grid.Place(new StaticActorModel(new Vector2Int(2, 0)), null, new Vector2Int(2, 0));
             PlaceAt(3, 0);
             PlaceAt(2, 1);
 
@@ -369,7 +369,7 @@ namespace BalloonParty.Tests.Slots
         {
             // Even-row balloon at (2,2): diagonal shiftedCol = 1, row 1.
             // Static provides diagonal support; balloon provides direct.
-            _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 1));
+            _grid.Place(new StaticActorModel(new Vector2Int(1, 1)), null, new Vector2Int(1, 1));
             PlaceAt(2, 1);
             PlaceAt(2, 2);
 
@@ -380,8 +380,8 @@ namespace BalloonParty.Tests.Slots
         public void IsUnbalanced_BalloonSupportedByTwoStaticActors_ReturnsFalse()
         {
             // Even-row balloon at (2,2): direct support (2,1) and diagonal support (1,1) are both static.
-            _grid.Place(new StaticActorModel(), null, new Vector2Int(2, 1));
-            _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 1));
+            _grid.Place(new StaticActorModel(new Vector2Int(2, 1)), null, new Vector2Int(2, 1));
+            _grid.Place(new StaticActorModel(new Vector2Int(1, 1)), null, new Vector2Int(1, 1));
             PlaceAt(2, 2);
 
             Assert.IsFalse(_grid.IsUnbalanced(2, 2));
@@ -391,8 +391,8 @@ namespace BalloonParty.Tests.Slots
         [Test]
         public void IsUnbalanced_OddRow_BalloonBetweenTwoStatics_ReturnsFalse()
         {
-            _grid.Place(new StaticActorModel(), null, new Vector2Int(0, 0));
-            _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 0));
+            _grid.Place(new StaticActorModel(new Vector2Int(0, 0)), null, new Vector2Int(0, 0));
+            _grid.Place(new StaticActorModel(new Vector2Int(1, 0)), null, new Vector2Int(1, 0));
             PlaceAt(0, 1);
 
             Assert.IsFalse(_grid.IsUnbalanced(0, 1));
@@ -402,8 +402,8 @@ namespace BalloonParty.Tests.Slots
         public void IsUnbalanced_OddRow_BalloonAdjacentToStatics_OnlyHalfSupport_ReturnsTrue()
         {
             // (1,1) needs (1,0) and (2,0). (1,0) is static but (2,0) is empty.
-            _grid.Place(new StaticActorModel(), null, new Vector2Int(0, 0));
-            _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 0));
+            _grid.Place(new StaticActorModel(new Vector2Int(0, 0)), null, new Vector2Int(0, 0));
+            _grid.Place(new StaticActorModel(new Vector2Int(1, 0)), null, new Vector2Int(1, 0));
             PlaceAt(1, 1);
 
             Assert.IsTrue(_grid.IsUnbalanced(1, 1));
@@ -413,8 +413,8 @@ namespace BalloonParty.Tests.Slots
         public void IsUnbalanced_OddRow_BalloonBeyondStatics_ReturnsTrue()
         {
             // (2,1) needs (2,0) which is empty — no static reaches it.
-            _grid.Place(new StaticActorModel(), null, new Vector2Int(0, 0));
-            _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 0));
+            _grid.Place(new StaticActorModel(new Vector2Int(0, 0)), null, new Vector2Int(0, 0));
+            _grid.Place(new StaticActorModel(new Vector2Int(1, 0)), null, new Vector2Int(1, 0));
             PlaceAt(2, 1);
 
             Assert.IsTrue(_grid.IsUnbalanced(2, 1));

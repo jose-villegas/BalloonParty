@@ -73,7 +73,7 @@ namespace BalloonParty.Balloon.Controller
 
         private void Deflect(ActorHitMessage msg)
         {
-            var balloonWorldPos = _grid.IndexToWorldPosition(_model.SlotIndex.Value);
+            var balloonWorldPos = _grid.IndexToWorldPosition(_model.SlotIndex);
             _deflectedPublisher.Publish(new BalloonDeflectedMessage(_model, balloonWorldPos, msg.ProjectileDirection));
 
             _nudgePublisher.Publish(new BalloonNudgeMessage(
@@ -124,7 +124,7 @@ namespace BalloonParty.Balloon.Controller
             _hitSubscription = null;
 
             _view.PlayPopEffect();
-            _grid.Remove(_model.SlotIndex.Value);
+            _grid.Remove(_model.SlotIndex);
 
             if (_model.Item.Value == ItemType.None)
             {

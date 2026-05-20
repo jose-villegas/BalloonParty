@@ -9,25 +9,46 @@ namespace BalloonParty.Editor
         private static readonly string[] MobilePlatforms = { "iPhone", "Android" };
 
         [MenuItem("Assets/Texture/Set Mobile Max Size/64", false, 2000)]
-        private static void Set64() => Apply(64);
+        private static void Set64()
+        {
+            Apply(64);
+        }
 
         [MenuItem("Assets/Texture/Set Mobile Max Size/128", false, 2001)]
-        private static void Set128() => Apply(128);
+        private static void Set128()
+        {
+            Apply(128);
+        }
 
         [MenuItem("Assets/Texture/Set Mobile Max Size/256", false, 2002)]
-        private static void Set256() => Apply(256);
+        private static void Set256()
+        {
+            Apply(256);
+        }
 
         [MenuItem("Assets/Texture/Set Mobile Max Size/512", false, 2003)]
-        private static void Set512() => Apply(512);
+        private static void Set512()
+        {
+            Apply(512);
+        }
 
         [MenuItem("Assets/Texture/Set Mobile Max Size/1024", false, 2004)]
-        private static void Set1024() => Apply(1024);
+        private static void Set1024()
+        {
+            Apply(1024);
+        }
 
         [MenuItem("Assets/Texture/Set Mobile Max Size/2048", false, 2005)]
-        private static void Set2048() => Apply(2048);
+        private static void Set2048()
+        {
+            Apply(2048);
+        }
 
         [MenuItem("Assets/Texture/Set Mobile Max Size/Reset to Default", false, 2100)]
-        private static void ResetToDefault() => Apply(-1);
+        private static void ResetToDefault()
+        {
+            Apply(-1);
+        }
 
         [MenuItem("Assets/Texture/Set Mobile Max Size/64", true)]
         [MenuItem("Assets/Texture/Set Mobile Max Size/128", true)]
@@ -99,4 +120,3 @@ namespace BalloonParty.Editor
         }
     }
 }
-

@@ -1,14 +1,22 @@
-using UniRx;
 using UnityEngine;
 
 namespace BalloonParty.Slots.StaticActor
 {
     internal class StaticActorModel : IWriteableSlotActor, IPassThrough
     {
-        public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
+        public Vector2Int SlotIndex { get; private set; }
+
+        Vector2Int IWriteableSlotActor.SlotIndex
+        {
+            get => SlotIndex;
+            set => SlotIndex = value;
+        }
 
         public SlotActorKind Kind => SlotActorKind.Static;
 
-        IReadOnlyReactiveProperty<Vector2Int> ISlotActor.SlotIndex => SlotIndex;
+        internal StaticActorModel(Vector2Int slotIndex)
+        {
+            SlotIndex = slotIndex;
+        }
     }
 }

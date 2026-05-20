@@ -34,7 +34,7 @@ namespace BalloonParty.Slots.Grid
 
             _slots[index.x, index.y] = actor;
             _views[index.x, index.y] = view;
-            actor.SlotIndex.Value = index;
+            actor.SlotIndex = index;
             _onChanged.OnNext(new SlotGridChangedEvent(index, SlotGridChangeType.Placed));
         }
 
@@ -50,7 +50,8 @@ namespace BalloonParty.Slots.Grid
             return _slots[index.x, index.y];
         }
 
-        public T ActorAt<T>(Vector2Int index) where T : class, IWriteableSlotActor
+        public T ActorAt<T>(Vector2Int index)
+            where T : class, IWriteableSlotActor
         {
             return _slots[index.x, index.y] as T;
         }
@@ -60,7 +61,8 @@ namespace BalloonParty.Slots.Grid
             return _views[index.x, index.y];
         }
 
-        public T ActorViewAt<T>(Vector2Int index) where T : class, ISlotActorView
+        public T ActorViewAt<T>(Vector2Int index)
+            where T : class, ISlotActorView
         {
             return _views[index.x, index.y] as T;
         }

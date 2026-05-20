@@ -18,7 +18,6 @@ namespace BalloonParty.Editor.EffectPreview
     /// </summary>
     internal sealed class ChainLightningPreviewModule : IEffectPreviewModule
     {
-
         private static readonly FieldInfo LineRenderersField =
             typeof(ChainLightningView).GetField("_lineRenderers", BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -60,7 +59,7 @@ namespace BalloonParty.Editor.EffectPreview
 
             var settings = PreStartSettings;
             EditorGUILayout.LabelField("Jump Time",
-                $"{(settings?.LightningJumpTime ?? 0.15f):F2}s  (from ItemConfiguration)");
+                $"{settings?.LightningJumpTime ?? 0.15f:F2}s  (from ItemConfiguration)");
         }
 
         private ItemSettings PreStartSettings
@@ -91,7 +90,9 @@ namespace BalloonParty.Editor.EffectPreview
             if (context.GameConfig != null)
             {
                 var gridPositions = EditorGridHelper.RandomSlotPositions(
-                    _targetCount, context.GameConfig, origin);
+                    _targetCount,
+                    context.GameConfig,
+                    origin);
                 targets.AddRange(gridPositions);
             }
             else
@@ -99,7 +100,7 @@ namespace BalloonParty.Editor.EffectPreview
                 for (var i = 0; i < _targetCount; i++)
                 {
                     var angle = 360f / _targetCount * i * Mathf.Deg2Rad;
-                    targets.Add(origin + new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * 2f);
+                    targets.Add(origin + (new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * 2f));
                 }
             }
 
@@ -113,7 +114,11 @@ namespace BalloonParty.Editor.EffectPreview
             var rendererCount = _lineRenderers != null ? _lineRenderers.Length : 0;
 
             (_lineBuffers, _cumOffsets) = ChainLightningView.BuildBoltBuffers(
-                targets, rendererCount, segMul, randomness, fractalDecay);
+                targets,
+                rendererCount,
+                segMul,
+                randomness,
+                fractalDecay);
 
             (_glowPath, _glowDiameters) = ChainLightningView.BuildGlowPath(targets, _glowSubdivisions);
 

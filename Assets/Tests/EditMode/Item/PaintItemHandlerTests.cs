@@ -86,12 +86,12 @@ namespace BalloonParty.Tests.Item
         public void Activate_SkipsNonPaintableNeighbors()
         {
             var source = PlaceBalloon(2, 2, "Red");
-            var tough = PlaceToughBalloon(1, 2, "Blue");
+            var tough = PlaceToughBalloon(1, 2);
 
             _handler.Setup(source, Vector3.zero);
             _handler.Activate();
 
-            Assert.AreEqual("Blue", tough.Color.Value);
+            Assert.IsFalse(tough is IHasWriteableColor);
         }        [Test]
         public void Activate_EmptyColor_DoesNothing()
         {
@@ -122,10 +122,9 @@ namespace BalloonParty.Tests.Item
             return model;
         }
 
-        private ToughBalloonModel PlaceToughBalloon(int col, int row, string color)
+        private ToughBalloonModel PlaceToughBalloon(int col, int row)
         {
-            var model = new ToughBalloonModel();
-            model.Color.Value = color;
+            var model = new ToughBalloonModel(new BalloonModelConfig());
             _grid.Place(model, null, new Vector2Int(col, row));
             return model;
         }

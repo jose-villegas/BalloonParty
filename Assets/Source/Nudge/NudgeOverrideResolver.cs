@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Configuration;
 
@@ -13,8 +14,8 @@ namespace BalloonParty.Nudge
         }
 
         public float ResolveDistance(
-            NudgeOverride[] balloonOverrides,
-            NudgeOverride[] publisherOverrides,
+            IReadOnlyList<NudgeOverride> balloonOverrides,
+            IReadOnlyList<NudgeOverride> publisherOverrides,
             NudgeType source)
         {
             var entry = FindOverride(balloonOverrides, source);
@@ -33,8 +34,8 @@ namespace BalloonParty.Nudge
         }
 
         public float ResolveDuration(
-            NudgeOverride[] balloonOverrides,
-            NudgeOverride[] publisherOverrides,
+            IReadOnlyList<NudgeOverride> balloonOverrides,
+            IReadOnlyList<NudgeOverride> publisherOverrides,
             NudgeType source)
         {
             var entry = FindOverride(balloonOverrides, source);
@@ -52,13 +53,13 @@ namespace BalloonParty.Nudge
             return _config.NudgeDuration;
         }
 
-        public float ResolveFalloff(NudgeOverride[] overrides, NudgeType source)
+        public float ResolveFalloff(IReadOnlyList<NudgeOverride> overrides, NudgeType source)
         {
             var entry = FindOverride(overrides, source);
             return entry != null ? entry.Falloff : _config.NudgeFalloff;
         }
 
-        internal static NudgeOverride FindOverride(NudgeOverride[] overrides, NudgeType source)
+        internal static NudgeOverride FindOverride(IReadOnlyList<NudgeOverride> overrides, NudgeType source)
         {
             return overrides?.FirstOrDefault(o => o.AppliesTo.HasFlag(source));
         }

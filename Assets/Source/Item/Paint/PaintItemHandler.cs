@@ -51,14 +51,19 @@ namespace BalloonParty.Item.Paint
         public UniTask Activate()
         {
             var settings = _itemConfig[ItemType.Paint];
-            var paintColor = _balloon.Color.Value;
+            if (_balloon is not IHasColor sourceColor)
+            {
+                return UniTask.CompletedTask;
+            }
+
+            var paintColor = sourceColor.Color.Value;
 
             if (string.IsNullOrEmpty(paintColor))
             {
                 return UniTask.CompletedTask;
             }
 
-            var slot = _balloon.SlotIndex.Value;
+            var slot = _balloon.SlotIndex;
             var neighborIndices = SlotGrid.HexNeighborIndices(slot.x, slot.y);
             var tint = _palette.GetColor(paintColor);
 
@@ -78,11 +83,11 @@ namespace BalloonParty.Item.Paint
 
             if (settings.ActivationEffectPrefab == null)
             {
-                foreach (var model in paintTargets)
+                foreach (var colorable in paintTargets)
                 {
-                    if (model != null)
+                    if (colorable != null)
                     {
-                        model.Color.Value = paintColor;
+                        colorable.Color.Value = paintColor;
                     }
                 }
 
@@ -103,21 +108,18 @@ namespace BalloonParty.Item.Paint
 
             var view = (PaintSplashView)effect;
 
-            view.PrepareDisplay(
-                flights,
-                settings,
-                _poolManager,
-                index =>
-                {
-                    if (index < NeighborCount && paintTargets[index] != null)
-                    {
-                        paintTargets[index].Color.Value = paintColor;
-                    }
-                });
-
+            view.PrepareDisplay(flights, settings, _poolManager, OnSplash);
             view.Play(_worldPosition, tint, () => _poolManager.Return(key, effect));
 
             return UniTask.CompletedTask;
+
+            void OnSplash(int index)
+            {
+                if (index < NeighborCount && paintTargets[index] != null)
+                {
+                    paintTargets[index].Color.Value = paintColor;
+                }
+            }
         }
     }
 }

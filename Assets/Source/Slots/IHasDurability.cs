@@ -7,4 +7,3 @@ namespace BalloonParty.Slots
         IReadOnlyReactiveProperty<int> HitsRemaining { get; }
     }
 }
-

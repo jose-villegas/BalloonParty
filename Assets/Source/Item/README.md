@@ -89,14 +89,16 @@ Balloon (root)         ← BalloonLifetimeScope
 
 ## Damage
 
-Each damaging item reads `ItemSettings.Damage` (configured per item in `ItemConfiguration`) and passes it as the `Damage` field of `ActorHitMessage`. `BalloonController` subtracts that value from `HitsRemaining` in one step — exact kills and overkill both pop the balloon. Unbreakable balloons (`HitsRemaining = -1`) deflect regardless of damage value. Non-damaging items (Paint, Shield) do not use the `Damage` field — the `ItemSettingsDrawer` hides it for those types.
+Each damaging item reads `ItemSettings.Damage` (configured per item in `ItemConfiguration`) and passes it as the `Damage` field of `ActorHitMessage`. The outcome is pre-computed by calling `EvaluateHit(damage)` on the hit actor before publishing — `BalloonController` reads `msg.Outcome` and routes accordingly. Setting `Damage = 1` (the default) reproduces normal one-hit behaviour. Setting it higher on Bomb, for example, allows a single blast to pop tough balloons that would otherwise survive.
 
-Setting `Damage = 1` (the default) reproduces normal one-hit behaviour. Setting it higher on Bomb, for example, allows a single blast to pop tough balloons that would otherwise survive.
+Non-damaging items (Paint, Shield) do not use the `Damage` field — the `ItemSettingsDrawer` hides it for those types.
+
+> **Unbreakable balloons** — `UnbreakableBalloonModel` (Phase 7.5) will always return `Deflect` from `EvaluateHit` regardless of damage. Until that model exists, `BalloonPrefabEntry.HitsToPop = -1` is a broken path.
 
 ## Interactions
 
 - **Any host view** — calls `ItemDisplayService.Bind()`/`Unbind()` to connect/disconnect item display
-- **BalloonController** — defers balloon pool return until `ItemActivatedMessage` arrives; captures laser rotation and publishes `ItemRotationCapturedMessage`; applies `ActorHitMessage.Damage` to `HitsRemaining`
+- **BalloonController** — defers balloon pool return until `ItemActivatedMessage` arrives; captures laser rotation and publishes `ItemRotationCapturedMessage`; routes on `msg.Outcome` switch (`PassThrough`/`Deflect`/`Pop`)
 - **ItemActivator** — central orchestrator; routes activation to the correct handler after yielding one frame
 - **SlotGrid** — `LightningItemHandler` queries all balloons of a given color; `ShieldItemHandler` resolves the balloon's grid-center world position
 - **PoolManager** — item visual lifecycle via `ItemVisualPoolChannel`; activation effect lifecycle via `EffectPoolChannel`

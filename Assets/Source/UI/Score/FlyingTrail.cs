@@ -35,7 +35,11 @@ namespace BalloonParty.UI.Score
             transform.DOKill();
         }
 
-        public void Setup(Vector3 target, Color color, float duration, Action onCompleted,
+        public void Setup(
+            Vector3 target,
+            Color color,
+            float duration,
+            Action onCompleted,
             bool useUnscaledTime = false)
         {
             _renderer.color = color;
@@ -43,7 +47,10 @@ namespace BalloonParty.UI.Score
             Setup(target, duration, onCompleted, useUnscaledTime);
         }
 
-        public void Setup(Vector3 target, float duration, Action onCompleted,
+        public void Setup(
+            Vector3 target,
+            float duration,
+            Action onCompleted,
             bool useUnscaledTime = false)
         {
             _trailRenderer.Clear();

@@ -6,7 +6,6 @@ using BalloonParty.Configuration;
 using BalloonParty.Item;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using NSubstitute;
@@ -56,7 +55,7 @@ namespace BalloonParty.Tests.Item
         {
             SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 5));
 
-            var model = new BalloonModel { CanHoldItem = true };
+            var model = new BalloonModel(new BalloonModelConfig(canHoldItem: true));
             FireItemCheck(Array.Empty<IBalloonModel>(), turnCount: 1);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
@@ -67,7 +66,7 @@ namespace BalloonParty.Tests.Item
         {
             SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 3, weight: 1f, maxAllowed: 5));
 
-            var model = new BalloonModel { CanHoldItem = true };
+            var model = new BalloonModel(new BalloonModelConfig(canHoldItem: true));
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 2);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
@@ -83,7 +82,7 @@ namespace BalloonParty.Tests.Item
             existing.Item.Value = ItemType.Bomb;
             _grid.Place(existing, null, new Vector2Int(0, 0));
 
-            var model = new BalloonModel { CanHoldItem = true };
+            var model = new BalloonModel(new BalloonModelConfig(canHoldItem: true));
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
@@ -94,7 +93,7 @@ namespace BalloonParty.Tests.Item
         {
             SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 5));
 
-            var model = new BalloonModel { CanHoldItem = false };
+            var model = new BalloonModel(new BalloonModelConfig(canHoldItem: false));
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
 
             Assert.AreEqual(ItemType.None, model.Item.Value);
@@ -105,7 +104,7 @@ namespace BalloonParty.Tests.Item
         {
             SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 5));
 
-            var model = new BalloonModel { CanHoldItem = true };
+            var model = new BalloonModel(new BalloonModelConfig(canHoldItem: true));
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
 
             Assert.AreEqual(ItemType.Bomb, model.Item.Value);

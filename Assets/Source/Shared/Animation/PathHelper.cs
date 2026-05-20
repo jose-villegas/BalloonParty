@@ -71,7 +71,7 @@ namespace BalloonParty.Shared.Animation
 
             for (var i = 0; i < count; i++)
             {
-                var p0 = waypoints[((i - 1) + count) % count];
+                var p0 = waypoints[(i - 1 + count) % count];
                 var p1 = waypoints[i];
                 var p2 = waypoints[(i + 1) % count];
                 var p3 = waypoints[(i + 2) % count];
@@ -211,7 +211,7 @@ namespace BalloonParty.Shared.Animation
 
             var mid = (left + right) / 2;
             var midpoint = (buffer[offset + left] + buffer[offset + right]) * 0.5f;
-            buffer[offset + mid] = midpoint + perp * UnityEngine.Random.Range(-scale, scale);
+            buffer[offset + mid] = midpoint + (perp * UnityEngine.Random.Range(-scale, scale));
 
             var reduced = scale * decay;
             Subdivide(buffer, offset, left, mid, reduced, decay, perp);
@@ -219,4 +219,3 @@ namespace BalloonParty.Shared.Animation
         }
     }
 }
-

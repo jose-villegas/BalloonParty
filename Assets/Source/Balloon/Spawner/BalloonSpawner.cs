@@ -2,15 +2,12 @@ using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
-using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
-using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -213,11 +210,11 @@ namespace BalloonParty.Balloon.Spawner
             var view = _poolManager.Get<BalloonView>(poolKey);
             view.transform.position = spawnPath[0];
 
+            var config = BalloonModelConfig.From(entry);
+
             IWriteableBalloonModel model = entry.IsPaintable
-                ? new BalloonModel { CanHoldItem = entry.CanHoldItem, ScoreValue = entry.ScoreValue, TypeName = entry.BalloonType, NudgeOverrides = entry.NudgeOverrides }
-                : new ToughBalloonModel { CanHoldItem = entry.CanHoldItem, ScoreValue = entry.ScoreValue, TypeName = entry.BalloonType, NudgeOverrides = entry.NudgeOverrides };
-            model.SlotIndex.Value = slot;
-            model.HitsRemaining.Value = entry.HitsToPop;
+                ? new BalloonModel(config)
+                : new ToughBalloonModel(config);
 
             var variant = view.Variant;
             variant.Initialize(model);

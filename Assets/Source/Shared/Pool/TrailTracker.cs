@@ -11,7 +11,8 @@ namespace BalloonParty.Shared.Pool
     ///     trail services that need cinematic integration — the service handles its
     ///     own spawning and calls Register/Unregister to keep the tracker in sync.
     /// </summary>
-    internal class TrailTracker<TId> where TId : struct, IEquatable<TId>
+    internal class TrailTracker<TId>
+        where TId : struct, IEquatable<TId>
     {
         private readonly Dictionary<TId, Transform> _inFlightTrails = new();
         private readonly HashSet<TId> _pausedTrails = new();

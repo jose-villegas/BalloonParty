@@ -19,12 +19,12 @@ namespace BalloonParty.Item
         private GamePalette _palette;
         private ItemConfiguration _itemConfig;
         private PoolManager _poolManager;
-        private IReadOnlyReactiveProperty<Vector2Int> _slotIndex;
+        private Vector2Int _slotIndex;
 
         internal void Bind(
             IReadOnlyReactiveProperty<ItemType> item,
             IReadOnlyReactiveProperty<string> colorName,
-            IReadOnlyReactiveProperty<Vector2Int> slotIndex,
+            Vector2Int slotIndex,
             IGameConfiguration config,
             ItemConfiguration itemConfig,
             GamePalette palette,
@@ -48,10 +48,6 @@ namespace BalloonParty.Item
 
             colorName
                 .Subscribe(RecolorActiveVisual)
-                .AddTo(_disposables);
-
-            slotIndex
-                .Subscribe(slot => ApplySorting(slot))
                 .AddTo(_disposables);
         }
 
@@ -97,7 +93,7 @@ namespace BalloonParty.Item
 
             var color = _palette.GetColor(colorName);
             _activeView.Activate(color);
-            ApplySorting(_slotIndex.Value);
+            ApplySorting(_slotIndex);
         }
 
         private void RecolorActiveVisual(string colorName)

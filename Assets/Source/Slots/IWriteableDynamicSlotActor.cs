@@ -7,4 +7,3 @@ namespace BalloonParty.Slots
         new ReactiveProperty<bool> IsStable { get; }
     }
 }
-

@@ -27,6 +27,3 @@ namespace BalloonParty.Item
         TransformSnapshot CaptureSnapshot();
     }
 }
-
-
-

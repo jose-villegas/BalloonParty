@@ -32,7 +32,8 @@ namespace BalloonParty.Editor
                 .ToArray();
             window.RebuildFiltered();
 
-            var height = SearchBarHeight + Padding * 3 + RowHeight * Mathf.Min(MaxVisible, window._filtered.Count + 1);
+            var height = SearchBarHeight + (Padding * 3) +
+                         (RowHeight * Mathf.Min(MaxVisible, window._filtered.Count + 1));
             var size = new Vector2(activatorRect.width, height);
             window.ShowAsDropDown(activatorRect, size);
         }
@@ -122,7 +123,7 @@ namespace BalloonParty.Editor
 
         private void ScrollToFocused()
         {
-            _scroll.y = Mathf.Max(0, _focusIndex * RowHeight - RowHeight * 2);
+            _scroll.y = Mathf.Max(0, (_focusIndex * RowHeight) - (RowHeight * 2));
             Repaint();
         }
 
@@ -155,4 +156,3 @@ namespace BalloonParty.Editor
         }
     }
 }
-

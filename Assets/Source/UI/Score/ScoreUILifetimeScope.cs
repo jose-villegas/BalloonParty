@@ -25,13 +25,16 @@ namespace BalloonParty.UI.Score
         protected override void Configure(IContainerBuilder builder)
         {
             var bars = GetComponentsInChildren<ColorProgressBar>(true);
-            builder.RegisterBuildCallback(resolver =>
+            builder.RegisterBuildCallback(InjectBars);
+            return;
+
+            void InjectBars(IObjectResolver resolver)
             {
                 foreach (var bar in bars)
                 {
                     resolver.Inject(bar);
                 }
-            });
+            }
         }
     }
 }

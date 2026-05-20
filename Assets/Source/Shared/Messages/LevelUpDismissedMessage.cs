@@ -1,5 +1,6 @@
 namespace BalloonParty.Shared.Messages
 {
-    public readonly struct LevelUpDismissedMessage { }
+    public readonly struct LevelUpDismissedMessage
+    {
+    }
 }
-

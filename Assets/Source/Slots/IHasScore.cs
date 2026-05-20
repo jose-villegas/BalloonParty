@@ -5,4 +5,3 @@ namespace BalloonParty.Slots
         int ScoreValue { get; }
     }
 }
-

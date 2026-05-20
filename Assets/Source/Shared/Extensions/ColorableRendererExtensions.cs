@@ -12,7 +12,9 @@ namespace BalloonParty.Shared.Extensions
             IReadOnlyReactiveProperty<string> colorName,
             Func<string, Color> resolve)
         {
-            return colorName.Subscribe(name =>
+            return colorName.Subscribe(Apply);
+
+            void Apply(string name)
             {
                 if (string.IsNullOrEmpty(name))
                 {
@@ -25,7 +27,7 @@ namespace BalloonParty.Shared.Extensions
                 {
                     renderer.SetColor(color);
                 }
-            });
+            }
         }
     }
 }

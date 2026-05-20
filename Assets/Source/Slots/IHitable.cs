@@ -5,4 +5,3 @@ namespace BalloonParty.Slots
         HitOutcome EvaluateHit(int damage);
     }
 }
-

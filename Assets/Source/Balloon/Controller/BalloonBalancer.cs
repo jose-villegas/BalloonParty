@@ -41,7 +41,7 @@ namespace BalloonParty.Balloon.Controller
         {
             foreach (var (actor, path) in paths)
             {
-                var slot = actor.SlotIndex.Value;
+                var slot = actor.SlotIndex;
                 var view = _grid.ViewAt(slot);
                 if (view == null)
                 {

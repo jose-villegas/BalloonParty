@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Slots;
 using UnityEngine;
 using VContainer;
 
@@ -14,7 +15,10 @@ namespace BalloonParty.Balloon.Type
 
         public virtual void Initialize(IWriteableBalloonModel model)
         {
-            model.Color.Value = PickColor() ?? "";
+            if (model is IHasWriteableColor colorable)
+            {
+                colorable.Color.Value = PickColor() ?? "";
+            }
         }
 
         private string PickColor()

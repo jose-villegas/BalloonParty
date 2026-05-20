@@ -38,18 +38,18 @@ namespace BalloonParty.Editor
             SerializedProperty property,
             HashSet<string> excluded)
         {
-            ForEachCommonChild(property,
-                excluded,
-                child =>
-                {
-                    var displayName = ObjectNames.NicifyVariableName(child.name);
-                    EditorGUI.PropertyField(
-                        new Rect(position.x, y, position.width, LineHeight),
-                        child,
-                        new GUIContent(displayName));
-                    y += LineHeight + Spacing;
-                });
+            ForEachCommonChild(property, excluded, DrawField);
             return y;
+
+            void DrawField(SerializedProperty child)
+            {
+                var displayName = ObjectNames.NicifyVariableName(child.name);
+                EditorGUI.PropertyField(
+                    new Rect(position.x, y, position.width, LineHeight),
+                    child,
+                    new GUIContent(displayName));
+                y += LineHeight + Spacing;
+            }
         }
 
 

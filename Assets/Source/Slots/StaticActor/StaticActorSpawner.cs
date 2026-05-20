@@ -69,7 +69,7 @@ namespace BalloonParty.Slots.StaticActor
 
             for (var i = 0; i < count; i++)
             {
-                var model = new StaticActorModel();
+                var model = new StaticActorModel(slots[i]);
                 var view = _viewFactory();
 
                 if (view != null)
@@ -91,4 +91,3 @@ namespace BalloonParty.Slots.StaticActor
         }
     }
 }
-

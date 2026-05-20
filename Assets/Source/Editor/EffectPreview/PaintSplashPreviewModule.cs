@@ -105,7 +105,7 @@ namespace BalloonParty.Editor.EffectPreview
                 blob.gameObject.SetActive(true);
                 blob.transform.position = origin;
                 blob.transform.localScale = Vector3.one *
-                    (context.Settings?.PaintBlobScaleCurve?.Evaluate(0f) ?? 1f);
+                                            (context.Settings?.PaintBlobScaleCurve?.Evaluate(0f) ?? 1f);
                 blob.transform.rotation = Quaternion.identity;
 
                 blob.SetColor(context.Tint);
@@ -186,7 +186,10 @@ namespace BalloonParty.Editor.EffectPreview
                 allLanded = false;
 
                 var snapshot = PaintSplashView.ComputeBlobFlight(
-                    flight.Progress, flight.From, flight.To, _ctx.Settings);
+                    flight.Progress,
+                    flight.From,
+                    flight.To,
+                    _ctx.Settings);
                 flight.Blob.transform.position = snapshot.Position;
                 flight.Blob.transform.localScale = Vector3.one * snapshot.Scale;
 
@@ -371,6 +374,3 @@ namespace BalloonParty.Editor.EffectPreview
         }
     }
 }
-
-
-

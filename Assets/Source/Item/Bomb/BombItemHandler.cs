@@ -5,6 +5,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
@@ -110,7 +111,7 @@ namespace BalloonParty.Item.Bomb
             var key = settings.ActivationEffectPrefab.name;
             var effect = _poolManager.GetOrRegister(key, () => new EffectPoolChannel(settings.ActivationEffectPrefab));
 
-            var balloonColor = _palette.GetColor(_balloon.Color.Value);
+            var balloonColor = _palette.GetColor((_balloon as IHasColor)?.Color.Value);
             effect.Play(_worldPosition, balloonColor, () => _poolManager.Return(key, effect));
         }
     }

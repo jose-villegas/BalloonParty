@@ -26,8 +26,12 @@ namespace BalloonParty.Slots.Grid
             {
                 var limits = _config.LimitsClockwise;
                 GizmoDrawingHelper.DrawWorldRectFromLimits(
-                    limits.x, limits.y, limits.z, limits.w,
-                    LimitsOutlineColor, LimitsFillColor);
+                    limits.x,
+                    limits.y,
+                    limits.z,
+                    limits.w,
+                    LimitsOutlineColor,
+                    LimitsFillColor);
             }
 
             if (_grid == null)

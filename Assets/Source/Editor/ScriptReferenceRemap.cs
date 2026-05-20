@@ -39,7 +39,10 @@ namespace BalloonParty.Editor
             var capturedPath = assetPath;
             var capturedGuids = brokenGuids;
 
-            ScriptSearchPopup.Show(new Rect(Vector2.zero, new Vector2(320, 0)), newScript =>
+            ScriptSearchPopup.Show(new Rect(Vector2.zero, new Vector2(320, 0)), OnScriptSelected);
+            return;
+
+            void OnScriptSelected(MonoScript newScript)
             {
                 var newGuid = AssetDatabase.AssetPathToGUID(AssetDatabase.GetAssetPath(newScript));
                 var newName = newScript.GetClass()?.Name ?? newScript.name;
@@ -60,7 +63,7 @@ namespace BalloonParty.Editor
 
                     menu.ShowAsContext();
                 }
-            });
+            }
         }
 
         private static List<string> FindBrokenGuids(string assetPath)

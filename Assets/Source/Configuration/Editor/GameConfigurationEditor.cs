@@ -54,8 +54,12 @@ namespace BalloonParty.Configuration.Editor
                 return;
             }
 
-            SceneDrawingHelper.DrawWorldRectFromLimits(top, right, bottom, left,
-                OutlineColor, FillColor);
+            SceneDrawingHelper.DrawWorldRectFromLimits(top,
+                right,
+                bottom,
+                left,
+                OutlineColor,
+                FillColor);
 
             var labelStyle = new GUIStyle(EditorStyles.boldLabel)
             {
@@ -76,13 +80,17 @@ namespace BalloonParty.Configuration.Editor
             };
 
             Handles.Label(new Vector3(centerX, top + 0.1f, 0f),
-                $"T {top:F2}", edgeLabelStyle);
+                $"T {top:F2}",
+                edgeLabelStyle);
             Handles.Label(new Vector3(right + 0.1f, (top + bottom) / 2f, 0f),
-                $"R {right:F2}", edgeLabelStyle);
+                $"R {right:F2}",
+                edgeLabelStyle);
             Handles.Label(new Vector3(centerX, bottom - 0.2f, 0f),
-                $"B {bottom:F2}", edgeLabelStyle);
+                $"B {bottom:F2}",
+                edgeLabelStyle);
             Handles.Label(new Vector3(left - 0.5f, (top + bottom) / 2f, 0f),
-                $"L {left:F2}", edgeLabelStyle);
+                $"L {left:F2}",
+                edgeLabelStyle);
         }
     }
 
@@ -104,4 +112,3 @@ namespace BalloonParty.Configuration.Editor
         }
     }
 }
-

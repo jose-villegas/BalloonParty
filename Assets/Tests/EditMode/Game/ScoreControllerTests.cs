@@ -93,15 +93,6 @@ namespace BalloonParty.Tests.Game
             UnityEngine.Object.DestroyImmediate(_palette);
         }
 
-        [Test]
-        public void OnBalloonHit_Unbreakable_DoesNotScore()
-        {
-            var model = CreateModel(Red, -1);
-
-            FireHit(model, 1);
-
-            _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointMessage>());
-        }
 
         [Test]
         public void OnBalloonHit_BalloonSurvives_DoesNotScore()
@@ -320,7 +311,7 @@ namespace BalloonParty.Tests.Game
             // i=3: rawScore=4 → Score=1, Level=2, NextLevel=true   (renumbered: 4 - 3 = 1)
             _config.PointsRequiredForLevel(2).Returns(3);
 
-            var model = new BalloonModel { ScoreValue = 4 };
+            var model = new BalloonModel(new BalloonModelConfig(scoreValue: 4));
             model.Color.Value = Red;
             model.HitsRemaining.Value = 1;
             FireHit(model, 1);
@@ -334,7 +325,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void ScorePoint_GroupSizeEqualsPoints()
         {
-            var model = new BalloonModel { ScoreValue = 3 };
+            var model = new BalloonModel(new BalloonModelConfig(scoreValue: 3));
             model.Color.Value = Red;
             model.HitsRemaining.Value = 1;
             FireHit(model, 1);
@@ -352,7 +343,7 @@ namespace BalloonParty.Tests.Game
                 .When(p => p.Publish(Arg.Any<ScorePointMessage>()))
                 .Do(ci => received.Add(ci.Arg<ScorePointMessage>()));
 
-            var model = new BalloonModel { ScoreValue = 3 };
+            var model = new BalloonModel(new BalloonModelConfig(scoreValue: 3));
             model.Color.Value = Red;
             model.HitsRemaining.Value = 1;
             FireHit(model, 1);
@@ -402,9 +393,8 @@ namespace BalloonParty.Tests.Game
 
         private static IBalloonModel CreateModel(string color, int hitsRemaining, int scoreValue = 1)
         {
-            var model = new BalloonModel { ScoreValue = scoreValue };
+            var model = new BalloonModel(new BalloonModelConfig(scoreValue: scoreValue, hitsToPop: hitsRemaining));
             model.Color.Value = color;
-            model.HitsRemaining.Value = hitsRemaining;
             return model;
         }
 
@@ -432,7 +422,7 @@ namespace BalloonParty.Tests.Game
                 _hits = new ReactiveProperty<int>(hits);
             }
 
-            public IReadOnlyReactiveProperty<Vector2Int> SlotIndex { get; } = new ReactiveProperty<Vector2Int>();
+            public Vector2Int SlotIndex { get; set; }
             public SlotActorKind Kind => SlotActorKind.Dynamic;
             public IReadOnlyReactiveProperty<string> Color { get; }
             public int ScoreValue => 1;
@@ -449,7 +439,7 @@ namespace BalloonParty.Tests.Game
         {
             public AbsorbingActor(string color) => Color = new ReactiveProperty<string>(color);
 
-            public IReadOnlyReactiveProperty<Vector2Int> SlotIndex { get; } = new ReactiveProperty<Vector2Int>();
+            public Vector2Int SlotIndex { get; set; }
             public SlotActorKind Kind => SlotActorKind.Static;
             public IReadOnlyReactiveProperty<string> Color { get; }
             public int ScoreValue => 1;

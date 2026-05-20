@@ -5,7 +5,7 @@ using UniRx;
 
 namespace BalloonParty.Balloon.Model
 {
-    public interface IBalloonModel : IDynamicSlotActor, IHitable, IHasColor, IHasScore, IHasNudge
+    public interface IBalloonModel : IDynamicSlotActor, IHitable, IHasScore, IHasNudge
     {
         BalloonType TypeName { get; }
         IReadOnlyReactiveProperty<ItemType> Item { get; }

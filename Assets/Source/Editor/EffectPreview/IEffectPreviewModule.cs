@@ -42,4 +42,3 @@ namespace BalloonParty.Editor.EffectPreview
         void CleanUp();
     }
 }
-

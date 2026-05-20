@@ -184,7 +184,10 @@ namespace BalloonParty.UI.Score
             var rectTransform = (RectTransform)transform;
             var screenPoint = RectTransformUtility.WorldToScreenPoint(null, worldPosition);
             RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                rectTransform, screenPoint, null, out var localPoint);
+                rectTransform,
+                screenPoint,
+                null,
+                out var localPoint);
             return localPoint;
         }
 

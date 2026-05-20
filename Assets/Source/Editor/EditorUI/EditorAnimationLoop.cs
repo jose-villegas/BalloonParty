@@ -132,8 +132,10 @@ namespace BalloonParty.Editor.EditorUI
         }
 
         /// <summary>Draws a playback speed slider. Call from <c>OnInspectorGUI</c>.</summary>
-        internal void DrawSpeedSlider(string label = "Playback Speed",
-            float min = 0.05f, float max = 3f)
+        internal void DrawSpeedSlider(
+            string label = "Playback Speed",
+            float min = 0.05f,
+            float max = 3f)
         {
             TimeScale = EditorGUILayout.Slider(label, TimeScale, min, max);
         }
@@ -167,4 +169,3 @@ namespace BalloonParty.Editor.EditorUI
         }
     }
 }
-

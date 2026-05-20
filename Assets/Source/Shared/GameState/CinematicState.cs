@@ -6,4 +6,3 @@ namespace BalloonParty.Shared.GameState
         LevelUpTrail
     }
 }
-

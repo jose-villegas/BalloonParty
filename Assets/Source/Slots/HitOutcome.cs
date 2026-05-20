@@ -8,4 +8,3 @@ namespace BalloonParty.Slots
         Absorb
     }
 }
-
