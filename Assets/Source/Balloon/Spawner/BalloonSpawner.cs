@@ -116,8 +116,6 @@ namespace BalloonParty.Balloon.Spawner
                 _balloonsConfig.BalloonSpawnAnimationDurationRange.x,
                 _balloonsConfig.BalloonSpawnAnimationDurationRange.y);
 
-            // spawnPath[0] is already set as the transform's starting position in SpawnBalloon.
-            // Waypoints are the remaining positions the balloon travels through.
             var waypoints = new Vector3[spawnPath.Length - 1];
             System.Array.Copy(spawnPath, 1, waypoints, 0, waypoints.Length);
 

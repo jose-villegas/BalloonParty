@@ -34,7 +34,7 @@ namespace BalloonParty.Slots
             _settings = settings;
         }
 
-        // For tests — avoids pool and MonoBehaviour overhead.
+        // Bypasses pool and MonoBehaviour infrastructure — used in tests.
         internal StaticActorSpawner(SlotGrid grid, IGameConfiguration config, Func<StaticActorView> viewFactory)
         {
             _grid = grid;

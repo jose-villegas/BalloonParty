@@ -213,6 +213,16 @@ Key types in `Slots/`: `ISlotActor`, `IWriteableSlotActor`, `ISlotActorView`,
 > Follow the same conventions as `Assets/Tests/README.md`: real objects over mocks for
 > plain C# types; NSubstitute only for interfaces and ScriptableObjects.
 
+> **Style rule for all future phases:** follow `Assets/Source/README.md` exactly.
+> Key points relevant to this plan:
+> - Comments only on the *why* — never the *what*. If a line of code needs a comment to
+>   explain what it does, rewrite the code.
+> - No XML docs on `internal` types or obvious public members. XML docs only where the
+>   API contract is genuinely non-obvious (e.g. marker interfaces with no members).
+> - Capability interfaces have no doc if their name + single property are self-explanatory.
+> - Coordination contracts and non-obvious lifecycle invariants are the right place for
+>   inline comments (e.g. why a method must stay synchronous).
+
 ### Phase 1 — Define actor interfaces ✅ Complete
 
 New files: `ISlotActor`, `IWriteableSlotActor`, `ISlotActorView`, `SlotActorKind`,
@@ -247,17 +257,28 @@ response, no config editor. The purpose is to learn, not to ship.
 
 #### Scope
 
-- `StaticActorModel : IWriteableSlotActor` — minimal concrete model, `Kind == Static`.
-  No `IHasDurability` (indestructible), no `IHasColor`, no `IHasScore`.
-- `StaticActorView : MonoBehaviour, ISlotActorView` — placeholder view. Can be a visible
-  solid-coloured sprite or Editor-only gizmo sphere. Pooled via `InjectingPoolChannel`.
-- `StaticActorSpawner : IStartable` — places N random static actors at game start by
-  sampling from **all empty slots** across the full grid. Count configured in `GameConfiguration`
-  (two fields: `MinStaticActors`, `MaxStaticActors`) so it can be tweaked per run without
-  code changes.
-- No config SO yet — values live in `GameConfiguration` until the SO is justified.
-- No item interaction — projectile hits deflect off static actors unchanged
-  (no `IHasDurability`, so no hit outcome evaluated).
+- `StaticActorModel : IWriteableSlotActor, IPassThrough` — minimal concrete model,
+  `Kind == Static`. No `IHasDurability`, no `IHasColor`, no `IHasScore`. Implements
+  `IPassThrough` so spawn animations may cross its slot without rerouting.
+- `StaticActorView : MonoBehaviour, ISlotActorView` — placeholder view. Pooled via
+  `InjectingPoolChannel`. `TweenTracker` is optional (balancer skips static actors).
+- `StaticActorSpawner : IStartable` — samples N random slots from `SlotGrid.AllEmptySlots()`
+  across the full grid. Count configured in `GameConfiguration` (`MinStaticActors`,
+  `MaxStaticActors`). **Must stay synchronous** — see coordination contract in the class.
+- `StaticActorSettings` — lightweight prefab carrier injected into the spawner (same
+  pattern as `ThrowerSettings`). No config SO until one is justified.
+- `IPassThrough` — capability marker. Actors implementing this declare their slot can be
+  crossed by animation paths. Actors without it block traversal (rerouting: Phase 9).
+- `SlotGrid.IsTraversable(col, row)` — true if empty or occupant is `IPassThrough`.
+- `SlotGrid.AllEmptySlots()` — yields every empty slot across the full grid.
+- `SlotGrid.ComputePath(source, target)` — world-space waypoints along the straight-line
+  grid path. Either endpoint may be outside grid bounds. Non-traversable in-bounds slots
+  emit a warning; rerouting deferred to Phase 9.
+- `BalloonsConfiguration.SpawnEntryRowOffset` — replaces the hardcoded `4` row offset.
+  The spawner computes the entry point as `(slot.x, slot.y + offset)` and calls
+  `ComputePath(entry, slot)`. `AnimateSpawn` uses `DOPath(CatmullRom)` instead of `DOMove`.
+- `BalloonSpawner.PopulateInitialGrid` — now skips already-occupied slots so static
+  actors placed before navigation state changes are never double-occupied.
 
 #### What to evaluate
 
@@ -273,10 +294,12 @@ response, no config editor. The purpose is to learn, not to ship.
 
 | File | Location | What it does |
 |---|---|---|
-| `StaticActorModel.cs` | `Slots/` | Minimal `IWriteableSlotActor`, `Kind = Static` |
+| `StaticActorModel.cs` | `Slots/` | `IWriteableSlotActor` + `IPassThrough`, `Kind = Static` |
 | `StaticActorView.cs` | `Slots/` | Placeholder `ISlotActorView` MonoBehaviour |
-| `StaticActorSpawner.cs` | `Slots/` | `IStartable` — places random static actors at start |
+| `StaticActorSpawner.cs` | `Slots/` | `IStartable` — random placement via `AllEmptySlots` |
 | `StaticActorPoolChannel.cs` | `Slots/` | `InjectingPoolChannel<StaticActorView>` |
+| `StaticActorSettings.cs` | `Slots/` | Prefab carrier for spawner injection |
+| `IPassThrough.cs` | `Slots/` | Marker — slot can be crossed by animation paths |
 
 #### Failing tests — write first
 

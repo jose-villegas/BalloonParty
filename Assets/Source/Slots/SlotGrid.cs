@@ -82,10 +82,6 @@ namespace BalloonParty.Slots
             return _slots[col, row].Kind == kind;
         }
 
-        /// <summary>
-        ///     Returns true if the slot can be crossed by an animation path:
-        ///     empty slots and slots occupied by an <see cref="IPassThrough"/> actor are traversable.
-        /// </summary>
         public bool IsTraversable(int col, int row)
         {
             if (IsEmpty(col, row))
@@ -96,13 +92,6 @@ namespace BalloonParty.Slots
             return _slots[col, row] is IPassThrough;
         }
 
-        /// <summary>
-        ///     Computes world-space waypoints along the straight-line grid path from
-        ///     <paramref name="source"/> to <paramref name="target"/>. Either coordinate may
-        ///     be outside the grid bounds — the world position is still computed correctly.
-        ///     In-bounds slots occupied by non-<see cref="IPassThrough"/> actors emit a warning;
-        ///     rerouting is deferred to Phase 9.
-        /// </summary>
         public Vector3[] ComputePath(Vector2Int source, Vector2Int target)
         {
             var colDelta = target.x - source.x;
