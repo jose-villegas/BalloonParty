@@ -155,6 +155,20 @@ namespace BalloonParty.Slots
             }
         }
 
+        public IEnumerable<Vector2Int> AllEmptySlots()
+        {
+            for (var col = 0; col < Columns; col++)
+            {
+                for (var row = 0; row < Rows; row++)
+                {
+                    if (IsEmpty(col, row))
+                    {
+                        yield return new Vector2Int(col, row);
+                    }
+                }
+            }
+        }
+
         public static Vector2Int[] HexNeighborIndices(int col, int row)
         {
             var shiftedCol = col + (row % 2 == 0 ? -1 : 1);

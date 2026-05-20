@@ -266,6 +266,49 @@ namespace BalloonParty.Tests.Slots
             Assert.IsFalse(_grid.IsKind(1, 1, SlotActorKind.Static));
         }
 
+        [Test]
+        public void AllEmptySlots_EmptyGrid_ReturnsAllSlots()
+        {
+            var slots = _grid.AllEmptySlots();
+
+            Assert.AreEqual(_grid.Columns * _grid.Rows, slots.Count());
+        }
+
+        [Test]
+        public void AllEmptySlots_PartiallyFilled_ExcludesOccupied()
+        {
+            PlaceAt(0, 0);
+            PlaceAt(3, 5);
+
+            var slots = _grid.AllEmptySlots();
+
+            Assert.AreEqual(_grid.Columns * _grid.Rows - 2, slots.Count());
+            Assert.IsFalse(slots.Contains(new Vector2Int(0, 0)));
+            Assert.IsFalse(slots.Contains(new Vector2Int(3, 5)));
+        }
+
+        [Test]
+        public void IsUnbalanced_BalloonAboveStaticActor_ReturnsFalse()
+        {
+            // Static actor at (2,0) counts as structural support for balloon at (2,1)
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(2, 0));
+            PlaceAt(2, 1);
+
+            Assert.IsFalse(_grid.IsUnbalanced(2, 1));
+        }
+
+        [Test]
+        public void IsUnbalanced_BalloonAboveStaticActor_DiagonalSupport_ReturnsFalse()
+        {
+            // Even-row balloon at (2,2): diagonal support slot is shiftedCol = 2 + (2%2==0 ? -1 : 1) = 1, row 1
+            // StaticActorModel at (1,1) provides diagonal support
+            _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 1));
+            PlaceAt(2, 1);
+            PlaceAt(2, 2);
+
+            Assert.IsFalse(_grid.IsUnbalanced(2, 2));
+        }
+
         private static BalloonModel CreateModel()
         {
             return new BalloonModel();

@@ -40,6 +40,7 @@ namespace BalloonParty.Game
         [SerializeField] private BalloonsConfiguration _balloonsConfiguration;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
+        [SerializeField] private StaticActorView _staticActorPrefab;
 
         protected override void Awake()
         {
@@ -73,6 +74,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance(_balloonsConfiguration);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
+            builder.RegisterInstance(new StaticActorSettings(_staticActorPrefab));
 
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.Register<PoolManager>(Lifetime.Singleton);
@@ -81,6 +83,7 @@ namespace BalloonParty.Game
 
             builder.RegisterEntryPoint<BalloonBalancer>();
             builder.RegisterEntryPoint<NudgeService>();
+            builder.RegisterEntryPoint<StaticActorSpawner>();
             builder.RegisterEntryPoint<BalloonSpawner>().AsSelf();
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();

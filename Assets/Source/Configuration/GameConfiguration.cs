@@ -27,6 +27,10 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _scorePointTraceDuration;
         [SerializeField] private float _scorePointsScatterDelay = 0.08f;
 
+        [Header("Static Actors")]
+        [SerializeField] private int _minStaticActors;
+        [SerializeField] private int _maxStaticActors;
+
         public float ProjectileSpeed => _projectileSpeed;
         public float ProjectileLoadDuration => _projectileLoadDuration;
         public Vector4 LimitsClockwise => _limitsClockwise;
@@ -40,6 +44,8 @@ namespace BalloonParty.Configuration
         public int PredictionTraceMaxSteps => _predictionTraceMaxSteps;
         public float ScorePointTraceDuration => _scorePointTraceDuration;
         public float ScorePointsScatterDelay => _scorePointsScatterDelay;
+        public int MinStaticActors => _minStaticActors;
+        public int MaxStaticActors => _maxStaticActors;
 
         public int PointsRequiredForLevel(int level)
         {

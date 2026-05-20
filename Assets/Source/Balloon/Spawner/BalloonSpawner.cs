@@ -163,6 +163,11 @@ namespace BalloonParty.Balloon.Spawner
             {
                 for (var col = 0; col < _grid.Columns; col++)
                 {
+                    if (!_grid.IsEmpty(col, row))
+                    {
+                        continue;
+                    }
+
                     SpawnBalloon(new Vector2Int(col, row));
                 }
             }

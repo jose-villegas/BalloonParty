@@ -25,3 +25,5 @@ MonoBehaviour:
   _predictionTraceMaxSteps: 15
   _scorePointTraceDuration: 1
   _scorePointsScatterDelay: 0.02
+  _minStaticActors: 1
+  _maxStaticActors: 3

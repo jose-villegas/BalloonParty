@@ -251,8 +251,8 @@ response, no config editor. The purpose is to learn, not to ship.
   No `IHasDurability` (indestructible), no `IHasColor`, no `IHasScore`.
 - `StaticActorView : MonoBehaviour, ISlotActorView` — placeholder view. Can be a visible
   solid-coloured sprite or Editor-only gizmo sphere. Pooled via `InjectingPoolChannel`.
-- `StaticActorSpawner : IStartable` — places N random static actors at game start using
-  `SlotGrid.BottomEmptySlotPerColumn` to pick slots. Count configured in `GameConfiguration`
+- `StaticActorSpawner : IStartable` — places N random static actors at game start by
+  sampling from **all empty slots** across the full grid. Count configured in `GameConfiguration`
   (two fields: `MinStaticActors`, `MaxStaticActors`) so it can be tweaked per run without
   code changes.
 - No config SO yet — values live in `GameConfiguration` until the SO is justified.
@@ -320,7 +320,7 @@ Spawn_DoesNotExceedAvailableSlots
 
 ---
 
-### Phase 7 — `IHitable` + Durability abstraction
+### Phase 7 — `IHitable` + Durability abstraction *(next iteration)*
 
 Introduce `IHitable` as the base hit-response capability and `IHasDurability` extending
 it for actors that also track damage. Lift both from `IBalloonModel` into `Slots/` and
@@ -457,6 +457,36 @@ OnActorHit_AbsorbOutcome_DoesNotScore
 
 Evolve `BalloonSpawner` into a `GridSpawner` that manages multiple actor types,
 drives procedural placement, and eventually couples to level difficulty.
+
+#### Spawner coordination — known limitation from Phase 6
+
+`StaticActorSpawner` and `BalloonSpawner` are currently coordinated implicitly:
+`StaticActorSpawner.Start()` is **synchronous** — it runs inline during VContainer init and
+completes before any frame yields. `BalloonSpawner.PrewarmAndPopulateAsync` yields immediately
+for pool prewarming and then waits for `NavigationState.Game`, so balloons are always placed
+after statics. This holds as long as `StaticActorSpawner.Start()` never yields. The contract
+is documented in a code comment, but it is still implicit.
+
+**When Phase 8 introduces `GridSpawner`**, replace the implicit ordering with a
+`GridSpawnerCoordinator : IStartable` that:
+
+- Owns a single `WaitAndSpawnAsync` — one navigation-state wait shared across all spawners
+- Calls spawners in explicit priority order (e.g. `SpawnPriority.Static` before `SpawnPriority.Dynamic`)
+- Gives Phase 8's `GridSpawner` a clean API to participate in the sequence
+
+```
+IGridSpawner (future)
+├── Priority: int
+└── SpawnAsync(CancellationToken): UniTask
+
+GridSpawnerCoordinator : IStartable (future)
+├── Collects all IGridSpawner registrations
+├── Waits for NavigationState.Game
+└── Calls spawners sorted by Priority
+```
+
+Until then, `StaticActorSpawner.Start()` must **not yield** — see the coordination
+contract comment in the class.
 
 #### Design principles
 
@@ -628,7 +658,7 @@ Deferred until a concrete consumer appears.
 | 3 — Update consumers | ✅ Complete |
 | 4 — Update tests | ✅ Complete |
 | 5 — Update documentation | ✅ Complete |
-| 6 — Static actor evaluation | 🔜 Next iteration |
+| 6 — Static actor evaluation | ✅ Complete |
 | 7 — Durability abstraction | Future |
 | 8 — Grid Spawner / Level Spawner | Future |
 | 9 — Behavior-bound actors | Future (broadly defined) |

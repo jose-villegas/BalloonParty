@@ -39,6 +39,11 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IHa
 | `IWriteableSlotActor.cs` | Writable actor interface |
 | `ISlotActorView.cs` | View-side actor interface |
 | `SlotActorKind.cs` | Mobility enum |
+| `StaticActorModel.cs` | Minimal `IWriteableSlotActor`, `Kind = Static` — no color, no score, no durability |
+| `StaticActorView.cs` | Placeholder `ISlotActorView` MonoBehaviour — pooled, no animations |
+| `StaticActorPoolChannel.cs` | `InjectingPoolChannel<StaticActorView>` |
+| `StaticActorSettings.cs` | Lightweight prefab carrier injected into `StaticActorSpawner` |
+| `StaticActorSpawner.cs` | `IStartable` — picks N random bottom-empty slots and places static actors at game start |
 | `IHasColor.cs` / `IHasWriteableColor.cs` | Color capability |
 | `IHasScore.cs` | Score capability |
 | `IHasNudge.cs` | Nudge override capability |
@@ -55,7 +60,8 @@ The grid is a two-dimensional space of slots arranged in a staggered pattern (od
 
 ## Interactions
 
-- **BalloonSpawner** — calls `Place` for each new balloon
+- **BalloonSpawner** — calls `Place` for each new balloon; skips already-occupied slots in `PopulateInitialGrid`
+- **StaticActorSpawner** — calls `Place` for each static actor at game start using `BottomEmptySlotPerColumn`
 - **BalloonController** — calls `Remove` when a balloon is popped; subscribes to `ActorHitMessage`
 - **BalloonBalancer** — reads occupancy to find gaps; skips `Static` actors; calls `Remove` + `Place` to relocate dynamic actors; uses `ViewAt` to reach views for animation
 - **NudgeService** — uses `GetNeighbors` and `IndexToWorldPosition` to direct nudge animations; filters by `IHasNudge`
