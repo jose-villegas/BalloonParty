@@ -33,6 +33,7 @@ namespace BalloonParty.Tests.Slots
 
             var spawner = new StaticActorSpawner(_grid, _config, () => null);
             spawner.Start();
+            spawner.SpawnAsync(default).GetAwaiter().GetResult();
 
             Assert.AreEqual(3, CountActorsInGrid());
         }
@@ -45,6 +46,7 @@ namespace BalloonParty.Tests.Slots
 
             var spawner = new StaticActorSpawner(_grid, _config, () => null);
             spawner.Start();
+            spawner.SpawnAsync(default).GetAwaiter().GetResult();
 
             for (var col = 0; col < _grid.Columns; col++)
             {
@@ -70,7 +72,11 @@ namespace BalloonParty.Tests.Slots
 
             var spawner = new StaticActorSpawner(_grid, _config, () => null);
 
-            Assert.DoesNotThrow(() => spawner.Start());
+            Assert.DoesNotThrow(() =>
+            {
+                spawner.Start();
+                spawner.SpawnAsync(default).GetAwaiter().GetResult();
+            });
             Assert.AreEqual(2, CountActorsInGrid());
         }
 

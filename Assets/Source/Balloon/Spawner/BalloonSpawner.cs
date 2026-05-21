@@ -6,9 +6,9 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
-using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;
@@ -19,7 +19,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Balloon.Spawner
 {
-    internal class BalloonSpawner : IStartable
+    internal class BalloonSpawner : IStartable, IGridSpawner
     {
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
@@ -39,6 +39,9 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
 
         private int _turnCount;
+        private UniTask _prewarmTask;
+
+        public SpawnStage SpawnPriority => SpawnStage.BalloonActors;
 
         [Inject]
         internal BalloonSpawner(
@@ -82,10 +85,18 @@ namespace BalloonParty.Balloon.Spawner
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount));
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
 
-            PrewarmAndPopulateAsync(_cts.Token).Forget();
+            // Begin prewarm immediately so pools are ready before SpawnAsync is called.
+            _prewarmTask = PrewarmAsync(_cts.Token);
         }
 
-        private async UniTaskVoid PrewarmAndPopulateAsync(CancellationToken ct)
+        public async UniTask SpawnAsync(CancellationToken ct)
+        {
+            await _prewarmTask;
+            PopulateInitialGrid();
+            _newlySpawnedBalloons.Clear();
+        }
+
+        private async UniTask PrewarmAsync(CancellationToken ct)
         {
             var totalSlots = _grid.Columns * _balloonsConfig.GameStartedBalloonLines;
 
@@ -97,13 +108,6 @@ namespace BalloonParty.Balloon.Spawner
 
                 await _poolManager.PrewarmAsync(entry.PoolKey, count, ct);
             }
-
-            await UniTask.WaitUntil(
-                () => Navigation.Current.Value == NavigationState.Game,
-                cancellationToken: ct);
-
-            PopulateInitialGrid();
-            _newlySpawnedBalloons.Clear();
         }
 
         private void AnimateSpawn(BalloonView view, Vector3[] spawnPath, IWriteableBalloonModel model)

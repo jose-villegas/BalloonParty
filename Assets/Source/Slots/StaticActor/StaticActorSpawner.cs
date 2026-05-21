@@ -1,15 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Grid;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
 namespace BalloonParty.Slots.StaticActor
 {
-    internal class StaticActorSpawner : IStartable
+    internal class StaticActorSpawner : IStartable, IGridSpawner
     {
         internal const string PoolKey = "StaticActor";
 
@@ -19,6 +21,8 @@ namespace BalloonParty.Slots.StaticActor
         private readonly IObjectResolver _resolver;
         private readonly StaticActorSettings _settings;
         private Func<StaticActorView> _viewFactory;
+
+        public SpawnStage SpawnPriority => SpawnStage.StaticActors;
 
         [Inject]
         internal StaticActorSpawner(
@@ -43,10 +47,6 @@ namespace BalloonParty.Slots.StaticActor
             _viewFactory = viewFactory;
         }
 
-        // Coordination contract: Start() must remain synchronous and must not yield.
-        // BalloonSpawner.PrewarmAndPopulateAsync awaits NavigationState.Game before filling
-        // the grid — that async gap guarantees statics are already placed when balloons land.
-        // If this ever needs to become async, introduce a GridSpawnerCoordinator (see Phase 8).
         public void Start()
         {
             if (_viewFactory == null)
@@ -54,8 +54,12 @@ namespace BalloonParty.Slots.StaticActor
                 _poolManager.Register(PoolKey, new StaticActorPoolChannel(_resolver, _settings.Prefab));
                 _viewFactory = () => _poolManager.Get<StaticActorView>(PoolKey);
             }
+        }
 
+        public UniTask SpawnAsync(CancellationToken ct)
+        {
             SpawnStaticActors();
+            return UniTask.CompletedTask;
         }
 
         internal void SpawnStaticActors()

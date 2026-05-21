@@ -17,6 +17,7 @@ using BalloonParty.Item.Shield;
 using BalloonParty.Nudge;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots;
@@ -85,8 +86,10 @@ namespace BalloonParty.Game
 
             builder.RegisterEntryPoint<BalloonBalancer>();
             builder.RegisterEntryPoint<NudgeService>();
-            builder.RegisterEntryPoint<StaticActorSpawner>();
-            builder.RegisterEntryPoint<BalloonSpawner>().AsSelf();
+            builder.RegisterInstance<IReadyGate>(new NavigationReadyGate(NavigationState.Game));
+            builder.RegisterEntryPoint<GridSpawnerCoordinator>();
+            builder.RegisterEntryPoint<StaticActorSpawner>().As<IGridSpawner>();
+            builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf();
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();
             builder.RegisterEntryPoint<ItemAssigner>();
