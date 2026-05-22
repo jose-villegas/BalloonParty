@@ -1,3 +1,4 @@
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -27,6 +28,7 @@ namespace BalloonParty.UI.LevelUp
 
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private IPublisher<LevelUpDismissedMessage> _dismissedPublisher;
+        [Inject] private IReadyGate _gate;
 
         private readonly CompositeDisposable _disposable = new();
 
@@ -54,6 +56,13 @@ namespace BalloonParty.UI.LevelUp
 
         private void OnLevelUp(ScoreLevelUpMessage msg)
         {
+            ShowAfterGateAsync(msg).Forget();
+        }
+
+        private async UniTaskVoid ShowAfterGateAsync(ScoreLevelUpMessage msg)
+        {
+            await _gate.WaitAsync(destroyCancellationToken);
+
             Time.timeScale = 0f;
 
             _levelLabel.text = (msg.NewLevel - 1).ToString("N0");

@@ -107,27 +107,8 @@ namespace BalloonParty.Game.Cinematics
 
         private void OnLevelUpDismissed(LevelUpDismissedMessage msg)
         {
-            if (!_sessionActive)
-            {
-                Time.timeScale = 1f;
-                Navigation.TransitionTo(NavigationState.Game);
-                return;
-            }
-
-            if (!_director.IsCinematicActive)
-            {
-                _sessionActive = false;
-                KillTweens();
-                RestoreImmediate();
-                Time.timeScale = 1f;
-                Navigation.TransitionTo(NavigationState.Game);
-                return;
-            }
-
-            PrepareRestore();
-
-            _director.PlayScene(new CinematicScene(
-                onEnd: OnRestoreComplete));
+            Time.timeScale = 1f;
+            Navigation.TransitionTo(NavigationState.Game);
         }
 
         private void OnRestoreComplete()
@@ -139,7 +120,6 @@ namespace BalloonParty.Game.Cinematics
 
             _sessionActive = false;
             _director.EndCinematic();
-            Navigation.TransitionTo(NavigationState.Game);
         }
 
 
@@ -194,6 +174,9 @@ namespace BalloonParty.Game.Cinematics
             _scoreTrailService.Tracker.ClearTrackedTrail(_tippingTrailId);
             KillTweens();
             _director.CompleteScene();
+
+            PrepareRestore();
+            _director.PlayScene(new CinematicScene(onEnd: OnRestoreComplete));
         }
 
         private void PanInTick()
