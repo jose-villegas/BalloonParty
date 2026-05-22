@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Nudge;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.Capabilities
 {
     public interface IHasNudge
     {

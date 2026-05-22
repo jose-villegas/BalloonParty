@@ -5,7 +5,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;

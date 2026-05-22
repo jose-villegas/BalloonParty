@@ -1,6 +1,7 @@
+using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 
-namespace BalloonParty.Slots.StaticActor
+namespace BalloonParty.Slots.Actor
 {
     internal class StaticActorModel : IWriteableSlotActor, IPassThrough
     {

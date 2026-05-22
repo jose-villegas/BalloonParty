@@ -4,7 +4,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using MessagePipe;
 using UnityEngine;
 

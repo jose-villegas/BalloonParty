@@ -1,5 +1,5 @@
 using BalloonParty.Configuration;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using UniRx;
 
 namespace BalloonParty.Balloon.Model

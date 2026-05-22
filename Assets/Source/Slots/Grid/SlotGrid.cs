@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Shared;
+using BalloonParty.Slots.Actor;
+using BalloonParty.Slots.Capabilities;
 using UniRx;
 using UnityEngine;
 

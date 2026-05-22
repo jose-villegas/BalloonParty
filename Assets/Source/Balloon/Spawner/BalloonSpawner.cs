@@ -8,7 +8,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Spawner;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;

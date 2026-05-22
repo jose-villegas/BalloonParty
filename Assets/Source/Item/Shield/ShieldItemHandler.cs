@@ -3,7 +3,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;

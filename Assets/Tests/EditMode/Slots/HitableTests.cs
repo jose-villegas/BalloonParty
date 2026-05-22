@@ -1,4 +1,5 @@
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
+using BalloonParty.Slots.Actor;
 using NUnit.Framework;
 using UniRx;
 using UnityEngine;

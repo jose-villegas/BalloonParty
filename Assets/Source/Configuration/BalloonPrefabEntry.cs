@@ -21,9 +21,6 @@ namespace BalloonParty.Configuration
         [SerializeField] private bool _overridePopVfx;
         [SerializeField] private ParticleSystem _popVfxPrefab;
 
-        [Tooltip("Whether balloons of this type can receive items. Disable for tough/unbreakable types.")]
-        [SerializeField] private bool _canHoldItem = true;
-
         [Tooltip("How many hits this balloon type absorbs before popping. 1 = normal, 2+ = tough, -1 = unbreakable.")]
         [SerializeField] private int _hitsToPop = 1;
 

@@ -1,4 +1,4 @@
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.Capabilities
 {
     /// <summary>
     ///     Marks an actor whose grid slot can be visually crossed by other actors'

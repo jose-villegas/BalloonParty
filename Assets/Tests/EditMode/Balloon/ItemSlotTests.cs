@@ -1,6 +1,6 @@
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using NUnit.Framework;
 
 namespace BalloonParty.Tests.Balloon

@@ -7,7 +7,7 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;

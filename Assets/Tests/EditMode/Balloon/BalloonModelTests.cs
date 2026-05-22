@@ -1,5 +1,6 @@
 using BalloonParty.Balloon.Model;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
+using BalloonParty.Slots.Actor;
 using NUnit.Framework;
 
 namespace BalloonParty.Tests.Balloon

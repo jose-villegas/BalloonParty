@@ -6,10 +6,12 @@ Responsible for introducing balloons into the grid — both at game start and du
 
 | File | What it does |
 |---|---|
-| `BalloonSpawner` | `IStartable` — creates and places balloons, manages per-type pool registration and active-count caps |
+| `BalloonSpawner` | `IStartable` + `IGridSpawner` — creates and places balloons, manages per-type pool registration and active-count caps. `SpawnPriority` is `SpawnStage.BalloonActors` (100). `Start()` registers pools and kicks off pre-warm asynchronously; `SpawnAsync()` awaits the pre-warm then populates the initial grid |
 | `BalloonPoolChannel` | `InjectingPoolChannel<BalloonView>` — creates balloon instances via `IObjectResolver.Instantiate()`, injecting all `[Inject]` fields from the parent container without creating child scopes |
 
 ## Behaviour
+
+`BalloonSpawner` implements `IGridSpawner` with `SpawnPriority = SpawnStage.BalloonActors`. `GridSpawnerCoordinator` calls `SpawnAsync()` after the Navigation gate opens and all lower-priority spawners (e.g. `StaticActorSpawner`) have completed. `SpawnAsync` awaits the pre-warm task started in `Start()` — so pool pre-warming and the navigation/static-actor wait overlap rather than serialize.
 
 At game start `BalloonSpawner` spawns the initial grid rows from `BalloonsConfiguration.GameStartedBalloonLines`. For each empty slot it picks a balloon type via weighted random selection from `BalloonsConfiguration.Entries`, respecting each entry's `MaxCount` cap. All model configuration — `TypeName`, `ScoreValue`, `CanHoldItem`, `HitsToPop`, and `NudgeOverrides` — is bundled into a `BalloonModelConfig` struct and passed to the model constructor. Paintable entries (`entry.IsPaintable`) use `BalloonModel`; non-paintable entries use `ToughBalloonModel`; both extend `BalloonModelBase`. The variant's `Initialize(model)` handles color. Spawn animation follows the path returned by `SlotGrid.ComputePath`, driving a `DOPath(CatmullRom)` from the entry-row offset down to the target slot.
 

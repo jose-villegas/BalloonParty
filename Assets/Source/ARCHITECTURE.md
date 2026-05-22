@@ -43,11 +43,12 @@ GameLifetimeScope (composition root, -5001)
 │  ┌──────┴───────────────────┴──────────────────────────────────────┐   │
 │  │                     Entry Points (IStartable)                    │   │
 │  │                                                                  │   │
-│  │  BalloonSpawner ─── BalloonBalancer ─── NudgeService            │   │
-│  │  ThrowerController                                               │   │
-│  │  ScoreController ─── ScoreTrailService                           │   │
-│  │  CinematicDirector                                               │   │
-│  │  ItemAssigner                                                    │   │
+  │  BalloonSpawner ─── BalloonBalancer ─── NudgeService            │   │
+  │  GridSpawnerCoordinator (waits IReadyGate, sequences IGridSpawner) │  │
+  │  ThrowerController                                               │   │
+  │  ScoreController ─── ScoreTrailService                           │   │
+  │  CinematicDirector                                               │   │
+  │  ItemAssigner                                                    │   │
 │  └──────────────────────────────────────────────────────────────────┘   │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -78,7 +79,7 @@ ScoreTrailArrivedMessage
 
 ScoreLevelUpMessage
   ScoreController
-    → LevelUpPopUp          (Time.timeScale = 0, show popup)
+    → LevelUpPopUp          (awaits CinematicEndGate(LevelUpPanIn), then Time.timeScale = 0, show popup)
     → ColorProgressBar      (reset bar)
 
 LevelUpDismissedMessage
@@ -115,25 +116,35 @@ ScoreTrailService                    LevelUpTrailEffect
     │         │                          │
     │         ▼                          ▼
     │  Trail in-flight ◄──── CinematicDirector.PlayScene(PanInTick)
+    │         │                    BeginCinematic(LevelUpPanIn)
     │         │                    slow-mo, zoom, camera pan
     │         ▼
     │  Trail arrives
     │         │
     ▼         ▼
-ScoreController.OnTrailArrived
-    │  confirms _levelProgress
-    │  CheckLevelUp → ScoreLevelUpMessage
-    │
+ScoreController.OnTrailArrived          LevelUpTrailEffect.OnTrailArrived
+    │  confirms _levelProgress               CompleteScene → EndCinematic
+    │  CheckLevelUp → ScoreLevelUpMessage    (CinematicState → None)
+    │  Navigation → LevelUp                  ↓ gate opens
+    │                                    CinematicEndGate(LevelUpPanIn) unblocks
     ▼
-LevelUpPopUp (Time.timeScale = 0)
+LevelUpPopUp.ShowAfterGateAsync
+    │  Time.timeScale = 0
+    │  show popup (camera still zoomed/panned)
     │
     ▼ (player taps Continue)
 LevelUpDismissedMessage
     │
     ▼
-LevelUpTrailEffect.PrepareRestore
-    │  tweens timeScale → 1, camera → base
+LevelUpTrailEffect (dismissed handler)
+    │  BeginCinematic(LevelUpRestore)
+    │  PrepareRestore — tweens timeScale → 1, camera → base (unscaled)
+    │
+    ▼
+OnRestoreComplete
     │  EndCinematic → resumes paused trails
+    │  _sessionActive = false
+    └→ Navigation.Game
 ```
 
 ---
@@ -174,7 +185,7 @@ Navigation (Shared/GameState/)
 
 Cinematic (Shared/GameState/)
 ├── Current: ReactiveProperty<CinematicState>
-├── States: None, LevelUpTrail
+├── States: None, LevelUpPanIn, LevelUpRestore
 ├── IsPlaying: bool
 ├── Begin(state) / End()
 └── ICinematicAware listeners (Register/Unregister)
@@ -222,7 +233,10 @@ Subscribers that previously cast to `IBalloonModel` now cast to the narrowest ca
 | `Balloon/` | `BalloonParty.Balloon.{Model,View,Controller}` | MVC |
 | `Projectile/` | `BalloonParty.Projectile.{Model,View}` | MVC |
 | `Thrower/` | `BalloonParty.Thrower` | Controller + View |
-| `Slots/` | `BalloonParty.Slots` | Model (grid state) |
+| `Slots/Grid/` | `BalloonParty.Slots.Grid` | Model (grid state) |
+| `Slots/Actor/` | `BalloonParty.Slots.Actor` | Model (actor contracts + static actor) |
+| `Slots/Capabilities/` | `BalloonParty.Slots.Capabilities` | Model (capability interfaces) |
+| `Slots/Spawner/` | `BalloonParty.Slots.Spawner` | Controller (spawn coordination) |
 | `Game/` | `BalloonParty.Game` | Composition root |
 | `Game/Score/` | `BalloonParty.Game.Score` | Controller |
 | `Game/Cinematics/` | `BalloonParty.Game.Cinematics` | Controller + View |

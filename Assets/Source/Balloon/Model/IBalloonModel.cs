@@ -1,5 +1,6 @@
 using BalloonParty.Balloon.Type;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
+using BalloonParty.Slots.Actor;
 
 namespace BalloonParty.Balloon.Model
 {

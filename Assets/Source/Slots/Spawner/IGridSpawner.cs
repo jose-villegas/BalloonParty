@@ -1,7 +1,7 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.Spawner
 {
     internal interface IGridSpawner
     {

@@ -1,7 +1,7 @@
 using UniRx;
 using UnityEngine;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.Actor
 {
     public interface IWriteableDynamicSlotActor : IDynamicSlotActor, IWriteableSlotActor
     {

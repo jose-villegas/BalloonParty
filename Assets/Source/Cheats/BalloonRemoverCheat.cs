@@ -3,7 +3,7 @@
 using System.Collections.Generic;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Extensions;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using UnityEngine;

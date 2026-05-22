@@ -5,7 +5,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using MessagePipe;
 using UniRx;
 using UnityEngine;

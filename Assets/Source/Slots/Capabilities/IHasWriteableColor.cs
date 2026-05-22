@@ -1,6 +1,6 @@
 using UniRx;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.Capabilities
 {
     public interface IHasWriteableColor : IHasColor
     {

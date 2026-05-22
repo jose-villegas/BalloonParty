@@ -1,7 +1,7 @@
 using BalloonParty.Configuration;
 using UniRx;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.Capabilities
 {
     /// <summary>
     /// Declares that an actor can host an item. Extends <see cref="IHasColor"/> because item

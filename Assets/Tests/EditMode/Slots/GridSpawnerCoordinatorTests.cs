@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Shared;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Spawner;
 using Cysharp.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;

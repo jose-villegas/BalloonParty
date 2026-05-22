@@ -1,4 +1,4 @@
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.Spawner
 {
     internal enum SpawnStage
     {

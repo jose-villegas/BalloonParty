@@ -200,7 +200,7 @@ Navigation.TransitionTo(NavigationState.LevelUp);
 
 1. **Launcher `Start`** — `SceneTransition` loads the Game scene additively with rendering suppressed (layer-based camera isolation + `SuppressRendering`). VContainer resolves, pools pre-warm asynchronously.
 2. **Player taps Play** — `NavigationTrigger.Transition()` sets state to `Game`. `SceneTransition.Load()` restores rendering and unloads the Launcher.
-3. **`BalloonSpawner`** — awaits `NavigationState.Game` after pre-warming, then populates the grid with spawn animations.
+3. **`GridSpawnerCoordinator`** — waits on `NavigationReadyGate(Game)` (`IReadyGate`), then runs all `IGridSpawner` implementations in `SpawnStage` order: `StaticActors(0)` → `DynamicActors(50)` → `BalloonActors(100)`. Spawners within the same stage run in parallel via `UniTask.WhenAll`.
 4. **`ThrowerController`** — observes state reactively; plays entrance animation on `Game`, blocks input during `LevelUp`.
 
 ### Editor standalone play
@@ -221,7 +221,7 @@ if (Cinematic.IsPlaying) return;
 Cinematic.Current.Where(s => s == CinematicState.None).Subscribe(...);
 
 // Control (from the cinematic owner)
-Cinematic.Begin(CinematicState.LevelUpTrail);
+Cinematic.Begin(CinematicState.LevelUpPanIn);
 Cinematic.End();
 ```
 
@@ -247,7 +247,8 @@ internal class MyService : ICinematicAware
 | State | Meaning | Set by |
 |---|---|---|
 | `None` | No cinematic active | Default; `CinematicDirector.EndCinematic` |
-| `LevelUpTrail` | Level-up trail cinematic — slow-mo, zoom, camera pan | `CinematicDirector.BeginCinematic` (called by `LevelUpTrailEffect` when the tipping trail spawns) |
+| `LevelUpPanIn` | Pan-in phase — slow-mo, zoom, camera tracks tipping trail | `CinematicDirector.BeginCinematic` (called by `LevelUpTrailEffect` at trail spawn) |
+| `LevelUpRestore` | Restore phase — tweens timeScale and camera back to base | `CinematicDirector.BeginCinematic` (called by `LevelUpTrailEffect` on popup dismiss) |
 
 ---
 

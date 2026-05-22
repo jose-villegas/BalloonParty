@@ -5,7 +5,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Item.Paint;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using NSubstitute;
 using NUnit.Framework;

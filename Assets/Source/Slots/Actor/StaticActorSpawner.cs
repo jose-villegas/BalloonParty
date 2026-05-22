@@ -4,12 +4,13 @@ using System.Threading;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Grid;
+using BalloonParty.Slots.Spawner;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace BalloonParty.Slots.StaticActor
+namespace BalloonParty.Slots.Actor
 {
     internal class StaticActorSpawner : IStartable, IGridSpawner
     {

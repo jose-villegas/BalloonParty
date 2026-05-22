@@ -1,7 +1,8 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.View;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using UnityEngine;

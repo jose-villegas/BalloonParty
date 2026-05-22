@@ -1,4 +1,4 @@
-using BalloonParty.Slots;
+using BalloonParty.Slots.Actor;
 
 namespace BalloonParty.Balloon.Model
 {

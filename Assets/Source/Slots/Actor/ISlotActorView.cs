@@ -1,7 +1,7 @@
 using BalloonParty.Shared.Animation;
 using UnityEngine;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.Actor
 {
     public interface ISlotActorView
     {

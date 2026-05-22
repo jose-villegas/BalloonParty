@@ -6,14 +6,30 @@ The full-screen level-up ceremony that plays when all color bars complete.
 
 | File | What it does |
 |---|---|
-| `LevelUpLifetimeScope` | VContainer child scope on the LevelUp popup root; registers `LevelUpPopUp` |
-| `LevelUpPopUp` | Subscribes to `ScoreLevelUpMessage`; animates glow fill ring; updates TMP level label; publishes `LevelUpDismissedMessage` on Continue |
+| `LevelUpLifetimeScope` | VContainer child scope on the LevelUp popup root; registers `LevelUpPopUp` and a `CinematicEndGate(LevelUpPanIn)` as `IReadyGate` |
+| `LevelUpPopUp` | Waits for the pan-in cinematic to end (via `IReadyGate`), then freezes time and shows the popup; publishes `LevelUpDismissedMessage` on Continue |
 
 ## How it works
 
-`ScoreController` publishes `ScoreLevelUpMessage` and transitions navigation to `LevelUp` on level-up. `LevelUpPopUp` subscribes to this message. When it arrives, it immediately pauses the game (`Time.timeScale = 0`), triggers the `"Appear"` animator trigger, and kicks off the glow fill animation. The glow fill waits for the configured delay via `UniTask.Delay(ignoreTimeScale: true)`, plays the glow particle system, animates the glow fill ring frame-by-frame using `UniTask.Yield` and `Time.unscaledDeltaTime`, and finally updates the level label to the new level. The Continue button calls `OnContinue()`, which triggers `"Hide"` and publishes `LevelUpDismissedMessage`. Navigation back to `Game` is owned by `LevelUpTrailEffect` — it waits for the camera/timeScale restore tweens to complete before transitioning. All async work uses `destroyCancellationToken` for automatic cleanup on destroy.
+### Sequence
 
-The Animator's `updateMode` is set to `UnscaledTime` in code (`Start()`), so animations play even while the game is paused.
+1. **Pan-in ends** — `LevelUpTrailEffect` calls `EndCinematic()` after the tipping trail arrives, setting `CinematicState` to `None`.
+2. **Gate opens** — `CinematicEndGate(LevelUpPanIn)` unblocks: `Cinematic.Current != LevelUpPanIn` is now true.
+3. **Popup shows** — `LevelUpPopUp.ShowAfterGateAsync` sets `Time.timeScale = 0f`, triggers the `"Appear"` animator, and kicks off the glow fill animation. The level label initially shows the old level; the `LevelGlowFillAsync` animation updates it to the new level after the fill completes.
+4. **Player taps Continue** — `OnContinue()` triggers `"Hide"`, publishes `LevelUpDismissedMessage`, and starts `ResumeAfterDelayAsync` (a configurable settle delay).
+5. **Restore cinematic** — `LevelUpTrailEffect` receives `LevelUpDismissedMessage` and starts `CinematicState.LevelUpRestore` — tweens `Time.timeScale` back to 1 and camera back to its base position/size.
+6. **Navigate** — once restore completes, `LevelUpTrailEffect` calls `Navigation.TransitionTo(Game)`.
+
+The Animator's `updateMode` is set to `UnscaledTime` in `Start()`, so animations play even while the game is paused.
+
+### Gate pattern
+
+`LevelUpLifetimeScope` registers `new CinematicEndGate(CinematicState.LevelUpPanIn)` as `IReadyGate`. This mirrors how `GameLifetimeScope` registers `NavigationReadyGate(NavigationState.Game)` — both use `UniTask.WaitUntil` on a reactive property, just on different state machines.
+
+```
+CinematicEndGate(LevelUpPanIn) → opens when Cinematic.Current != LevelUpPanIn
+NavigationReadyGate(Game)      → opens when Navigation.Current == Game
+```
 
 ## Wiring requirements
 
@@ -22,6 +38,6 @@ The Animator's `updateMode` is set to `UnscaledTime` in code (`Start()`), so ani
 
 ## Interactions
 
-- **ScoreController** — publishes `ScoreLevelUpMessage` and transitions navigation to `LevelUp`
-- **LevelUpTrailEffect** — subscribes to `LevelUpDismissedMessage`; restores timeScale, camera, and canvas; transitions navigation to `Game` once restore completes
-- **LevelUpLifetimeScope** — registers this component and provides injection
+- **`ScoreController`** — publishes `ScoreLevelUpMessage` (triggers `ShowAfterGateAsync`) and transitions navigation to `LevelUp`
+- **`LevelUpTrailEffect`** — owns both cinematics; opens the gate by ending the pan-in cinematic; starts restore on `LevelUpDismissedMessage`; navigates to `Game` once restore completes
+- **`LevelUpLifetimeScope`** — registers this component and provides the `IReadyGate` injection

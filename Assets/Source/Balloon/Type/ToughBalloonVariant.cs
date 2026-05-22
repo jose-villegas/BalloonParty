@@ -1,6 +1,6 @@
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using DG.Tweening;
 using UniRx;
 using UnityEngine;

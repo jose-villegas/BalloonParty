@@ -7,7 +7,7 @@ using Cysharp.Threading.Tasks;
 using VContainer;
 using VContainer.Unity;
 
-namespace BalloonParty.Slots
+namespace BalloonParty.Slots.Spawner
 {
     internal class GridSpawnerCoordinator : IStartable, IDisposable
     {

@@ -3,7 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
 using MessagePipe;

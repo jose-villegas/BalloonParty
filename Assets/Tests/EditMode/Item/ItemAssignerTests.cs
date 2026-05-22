@@ -6,7 +6,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Item;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using NSubstitute;

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
 using DG.Tweening;

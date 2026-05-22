@@ -1,5 +1,5 @@
 using BalloonParty.Item;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Actor;
 
 namespace BalloonParty.Shared.Messages
 {

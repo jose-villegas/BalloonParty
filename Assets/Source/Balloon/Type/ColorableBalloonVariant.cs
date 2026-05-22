@@ -1,7 +1,7 @@
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
-using BalloonParty.Slots;
+using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 using VContainer;
 

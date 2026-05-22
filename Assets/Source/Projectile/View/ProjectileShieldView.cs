@@ -3,7 +3,6 @@ using BalloonParty.Configuration;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
-using BalloonParty.Slots;
 using BalloonParty.Slots.Grid;
 using DG.Tweening;
 using UniRx;

@@ -45,29 +45,12 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IHa
 
 ## Contents
 
-| File | What it does |
+| File / Folder | What it does |
 |---|---|
-| `SlotGrid` | Core data structure — parallel 2D arrays of `IWriteableSlotActor` and `ISlotActorView`; `Place`, `Remove`, `At`, `ViewAt`, `ActorAt<T>`, `ActorViewAt<T>`, `IsEmpty`, `IsKind`, `IsTraversable`, `IsUnbalanced`, `OptimalNextEmptySlot`, `BottomEmptySlotPerColumn`, `AllEmptySlots`, `HexNeighborIndices` (static), `GetNeighbors`, `IndexToWorldPosition`, `ComputePath` |
-| `SlotGridChangedEvent` | Struct fired on every `Place` or `Remove` — carries the affected index and change type |
-| `SlotGridView` | MonoBehaviour — draws gizmo spheres in `OnDrawGizmos` to visualise occupied/empty slots in the Editor |
-| `ISlotActor.cs` | Read-only actor interface |
-| `IWriteableSlotActor.cs` | Writable actor interface |
-| `IDynamicSlotActor.cs` | Dynamic actor interface — adds reactive `IsStable` |
-| `IWriteableDynamicSlotActor.cs` | Writable dynamic actor interface |
-| `ISlotActorView.cs` | View-side actor interface |
-| `SlotActorKind.cs` | Mobility enum |
-| `IHitable.cs` | Hit capability — `EvaluateHit(int damage)` |
-| `IHasDurability.cs` | Durability capability — extends `IHitable`, adds `HitsRemaining` |
-| `HitOutcome.cs` | Enum — `PassThrough`, `Deflect`, `Pop`, `Absorb` |
-| `StaticActorModel.cs` | Minimal `IWriteableSlotActor`, `Kind = Static` — no color, no score, no durability |
-| `StaticActorView.cs` | Placeholder `ISlotActorView` MonoBehaviour — pooled, no animations |
-| `StaticActorPoolChannel.cs` | `InjectingPoolChannel<StaticActorView>` |
-| `StaticActorSettings.cs` | Lightweight prefab carrier injected into `StaticActorSpawner` |
-| `StaticActorSpawner.cs` | `IStartable` — picks N random bottom-empty slots and places static actors at game start |
-| `IHasColor.cs` / `IHasWriteableColor.cs` | Color capability |
-| `IHasScore.cs` | Score capability |
-| `IHasNudge.cs` | Nudge override capability |
-| `IPassThrough.cs` | Traversal transparency marker |
+| `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView` — core grid data structure (namespace `BalloonParty.Slots.Grid`) |
+| `Actor/` | Core actor interfaces, identity enum, and static actor implementation — `ISlotActor`, `IWriteableSlotActor`, `IDynamicSlotActor`, `IWriteableDynamicSlotActor`, `ISlotActorView`, `SlotActorKind`, `StaticActorModel`, `StaticActorView`, `StaticActorPoolChannel`, `StaticActorSettings`, `StaticActorSpawner` (namespace `BalloonParty.Slots.Actor`) |
+| `Capabilities/` | Optional capability interfaces — `IHasColor`, `IHasWriteableColor`, `IHasScore`, `IHasNudge`, `IHasItemSlot`, `IHitable`, `IHasDurability`, `IPassThrough`, `HitOutcome` (namespace `BalloonParty.Slots.Capabilities`) |
+| `Spawner/` | Spawner coordination — `IGridSpawner`, `SpawnStage`, `GridSpawnerCoordinator` (namespace `BalloonParty.Slots.Spawner`) |
 
 ## How it works
 
@@ -84,6 +67,31 @@ The grid is a two-dimensional space of slots arranged in a staggered pattern (od
 `IsTraversable(col, row)` returns true if the slot is empty or the occupant implements `IPassThrough` — used by `ComputePath` to build spawn animation waypoints.
 
 `ComputePath(source, target)` returns world-space waypoints along the straight-line grid path between two slot indices. Either endpoint may be outside grid bounds. Non-traversable in-bounds slots emit a warning; rerouting is deferred.
+
+## Spawner Coordination
+
+`GridSpawnerCoordinator` owns the sequencing of all grid population. Individual spawners (`StaticActorSpawner`, `BalloonSpawner`) implement `IGridSpawner` and declare their priority via `SpawnStage`. The coordinator:
+
+1. **Waits** on `IReadyGate` (a `NavigationReadyGate(Game)`) — nothing spawns until the game scene is fully active.
+2. **Groups** all registered spawners by `SpawnStage`, sorted ascending.
+3. **Runs** each group with `UniTask.WhenAll` (parallel within a stage) before advancing to the next stage.
+
+```
+NavigationReadyGate opens
+        │
+        ▼
+SpawnStage.StaticActors (0)  ──→  StaticActorSpawner.SpawnAsync
+        │
+        ▼
+SpawnStage.DynamicActors (50) ──→  (future GridSpawner)
+        │
+        ▼
+SpawnStage.BalloonActors (100) ──→  BalloonSpawner.SpawnAsync
+```
+
+Spawners are injected as `IEnumerable<IGridSpawner>` via VContainer's collection injection — each registered with `.As<IGridSpawner>()` in `GameLifetimeScope`.
+
+`StaticActorSpawner.Start()` registers the pool immediately (synchronous, runs at scene start before the gate opens). `BalloonSpawner.Start()` starts pre-warming pools asynchronously and stores the task; `SpawnAsync` awaits it before populating the grid — so pre-warm and navigation wait overlap rather than serialize.
 
 ## Interactions
 
