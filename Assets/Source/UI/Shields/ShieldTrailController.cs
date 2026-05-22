@@ -55,13 +55,11 @@ namespace BalloonParty.UI.Shields
                 TrailPoolKey,
                 () => new ShieldTrailPoolChannel(_prefab));
 
-            _subscription = _shieldGainedSubscriber.Subscribe(OnShieldGained);
-        }
-
-        private void OnShieldGained(ShieldGainedMessage msg)
-        {
-            var fromWorldPosition = _slotGrid.IndexToWorldPosition(msg.SlotIndex);
-            _spawner.Spawn(fromWorldPosition, _targetProvider(), _config.ShieldTrailDuration);
+            _subscription = _shieldGainedSubscriber.Subscribe(msg =>
+            {
+                var fromWorldPosition = _slotGrid.IndexToWorldPosition(msg.SlotIndex);
+                _spawner.Spawn(fromWorldPosition, _targetProvider(), _config.ShieldTrailDuration);
+            });
         }
     }
 }

@@ -46,11 +46,7 @@ namespace BalloonParty.Item
             var available = items
                 .Where(x => x.TurnCheckEvery > 0 && turns % x.TurnCheckEvery == 0);
 
-            available = available.Where(item =>
-            {
-                var currentActive = CountBalloonsWithItem(item.Type);
-                return currentActive < item.MaximumAllowed;
-            });
+            available = available.Where(IsItemSlotAvailable);
 
             var candidates = available.ToArray();
 
@@ -87,10 +83,10 @@ namespace BalloonParty.Item
 
                 shift += candidate.Weight;
             }
-        }
+            available = available.Where(item =>
+                CountBalloonsWithItem(item.Type) < item.MaximumAllowed);
 
         private int CountBalloonsWithItem(ItemType type)
-        {
             var count = 0;
 
             for (var col = 0; col < _grid.Columns; col++)

@@ -37,7 +37,7 @@ namespace BalloonParty.UI.LevelUp
             _animator.updateMode = AnimatorUpdateMode.UnscaledTime;
 
             _levelUpSubscriber
-                .Subscribe(OnLevelUp)
+                .Subscribe(msg => ShowAfterGateAsync(msg).Forget())
                 .AddTo(_disposable);
         }
 
@@ -54,12 +54,7 @@ namespace BalloonParty.UI.LevelUp
             ResumeAfterDelayAsync().Forget();
         }
 
-        private void OnLevelUp(ScoreLevelUpMessage msg)
-        {
-            ShowAfterGateAsync(msg).Forget();
-        }
-
-        private async UniTaskVoid ShowAfterGateAsync(ScoreLevelUpMessage msg)
+        private void ShowAfterGateAsync
         {
             await _gate.WaitAsync(destroyCancellationToken);
 

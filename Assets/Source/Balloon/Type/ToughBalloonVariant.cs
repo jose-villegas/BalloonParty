@@ -85,10 +85,10 @@ namespace BalloonParty.Balloon.Type
                 .Float(_currentDamageProgress,
                     target,
                     _crackAnimDuration,
-                    v =>
+                    progress =>
                     {
-                        _currentDamageProgress = v;
-                        SetFloat(DamageProgressId, v);
+                        _currentDamageProgress = progress;
+                        SetFloat(DamageProgressId, progress);
                     })
                 .SetEase(Ease.OutCubic)
                 .SetLink(gameObject);

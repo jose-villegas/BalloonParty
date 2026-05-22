@@ -54,7 +54,11 @@ namespace BalloonParty.Game.Cinematics
         {
             _scoredSubscriber.Subscribe(OnScorePoint).AddTo(this);
             _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
-            _dismissedSubscriber.Subscribe(OnLevelUpDismissed).AddTo(this);
+            _dismissedSubscriber.Subscribe(_ =>
+            {
+                Time.timeScale = 1f;
+                Navigation.TransitionTo(NavigationState.Game);
+            }).AddTo(this);
         }
 
         private void OnDestroy()
@@ -105,11 +109,6 @@ namespace BalloonParty.Game.Cinematics
             _scoreTrailService.Tracker.TrackTrail(_tippingTrailId, OnTippingTrailSpawned);
         }
 
-        private void OnLevelUpDismissed(LevelUpDismissedMessage msg)
-        {
-            Time.timeScale = 1f;
-            Navigation.TransitionTo(NavigationState.Game);
-        }
 
         private void OnRestoreComplete()
         {

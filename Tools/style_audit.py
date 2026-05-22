@@ -591,6 +591,178 @@ def check_inconsistent_accessibility(path: Path, lines: list[str], result: Audit
                 sig_lines = []
 
 
+_CSHARP_KEYWORDS = frozenset({
+    'abstract', 'as', 'async', 'await', 'base', 'bool', 'break', 'byte',
+    'case', 'catch', 'char', 'checked', 'class', 'const', 'continue',
+    'decimal', 'default', 'delegate', 'do', 'double', 'else', 'enum',
+    'event', 'explicit', 'extern', 'false', 'finally', 'fixed', 'float',
+    'for', 'foreach', 'get', 'goto', 'if', 'implicit', 'in', 'int',
+    'interface', 'internal', 'is', 'lock', 'long', 'namespace', 'nameof',
+    'new', 'not', 'null', 'object', 'operator', 'out', 'override', 'params',
+    'partial', 'private', 'protected', 'public', 'readonly', 'ref', 'return',
+    'sbyte', 'sealed', 'set', 'short', 'sizeof', 'stackalloc', 'static',
+    'string', 'struct', 'switch', 'this', 'throw', 'true', 'try', 'typeof',
+    'uint', 'ulong', 'unchecked', 'unsafe', 'ushort', 'using', 'value',
+    'var', 'virtual', 'void', 'volatile', 'when', 'where', 'while', 'yield',
+})
+
+# Patterns that recognise local-variable / parameter declarations.
+# Each pattern must have exactly one capturing group for the variable name.
+_LOCAL_DECL_PATTERNS = [
+    # var name = / var name;
+    re.compile(r'\bvar\s+([a-z]\w*)\b'),
+    # Primitive typed local: int name = / float name, …
+    re.compile(
+        r'\b(?:int|uint|long|ulong|short|ushort|byte|sbyte|float|double|'
+        r'decimal|bool|char|string)\s+([a-z]\w*)\s*[=;,()]'
+    ),
+    # foreach (AnyType name in …)
+    re.compile(r'\bforeach\s*\([^)]*?\s+([a-z]\w*)\s+in\b'),
+    # PascalCase type (or interface) + camelCase name — catches both locals and params.
+    # Deliberately excludes _field patterns by requiring [a-z] start on the name.
+    re.compile(r'\b[A-Z]\w*(?:<[^>]*>)?(?:\[\])?\s+([a-z]\w*)\s*[=;,()]'),
+]
+
+
+def _collect_outer_locals(lines: list[str], start: int, end: int) -> set:
+    """
+    Return all camelCase names declared as locals or parameters in lines[start:end].
+    Used to detect what a lambda at line `end` could be closing over.
+    """
+    names: set[str] = set()
+    for i in range(start, end):
+        raw = lines[i]
+        stripped = raw.strip()
+        if stripped.startswith('//') or stripped.startswith('*'):
+            continue
+        for pat in _LOCAL_DECL_PATTERNS:
+            for m in pat.finditer(raw):
+                name = m.group(1)
+                if name and name not in _CSHARP_KEYWORDS and len(name) > 1:
+                    names.add(name)
+    return names
+
+
+def _lambda_own_params(line: str) -> set:
+    """
+    Extract the parameter name(s) declared by a lambda on `line`.
+    Handles: `x =>`, `_ =>`, `(x, y) =>`, `(Type x, Type y) =>`.
+    """
+    params: set[str] = set()
+    arrow = line.rfind('=>')
+    if arrow < 0:
+        return params
+    before = line[:arrow].strip()
+    # Strip any trailing call context: `.Subscribe(`, `.Returns(`  etc.
+    # Keep only the part that looks like lambda params (last `(…)` or bare word).
+    m = re.search(r'\(([^()]*)\)\s*$', before)
+    if m:
+        param_list = m.group(1)
+    else:
+        words = re.findall(r'\b[a-z_]\w*\b', before)
+        if words:
+            name = words[-1].lstrip('_')
+            if name and name not in _CSHARP_KEYWORDS:
+                params.add(name)
+        return params
+    for part in param_list.split(','):
+        words = part.strip().split()
+        if words:
+            name = words[-1].lstrip('_')
+            if name and name[0].islower() and name not in _CSHARP_KEYWORDS:
+                params.add(name)
+    return params
+
+
+def _lambda_body_captures(body_lines: list[str], candidates: set) -> bool:
+    """Return True if any line in body_lines contains a standalone reference to a candidate name."""
+    for line in body_lines:
+        if line.strip().startswith('//'):
+            continue
+        for name in candidates:
+            if re.search(r'\b' + re.escape(name) + r'\b', line):
+                return True
+    return False
+
+
+def check_non_capturing_lambda(path: Path, lines: list[str], result: AuditResult):
+    """Large block lambdas (>3 body lines) that close over no outer locals should be named methods.
+    Small lambdas (≤3 lines) are fine inline regardless of capture."""
+    MAX_BODY_LINES = 3
+    SCAN_WINDOW = 150  # lines to scan backward for outer locals
+    n = len(lines)
+    i = 0
+    while i < n:
+        raw = lines[i].rstrip()
+        if raw.lstrip().startswith('//'):
+            i += 1
+            continue
+
+        ends_with_arrow = bool(re.search(r'=>\s*$', raw))
+        arrow_then_brace = bool(re.search(r'=>\s*\{', raw))
+
+        if not (ends_with_arrow or arrow_then_brace):
+            i += 1
+            continue
+
+        # Locate the { that opens the block body
+        if ends_with_arrow:
+            j = i + 1
+            while j < n and not lines[j].strip():
+                j += 1
+            if j >= n or not lines[j].strip().startswith('{'):
+                i += 1
+                continue
+            brace_line = j
+        else:
+            brace_line = i
+
+        # Walk to the matching closing brace, collecting body lines
+        depth = 0
+        body_lines: list[str] = []
+        started = False
+        close_line = brace_line
+        k = brace_line
+        while k < n:
+            for ch in lines[k]:
+                if ch == '{':
+                    depth += 1
+                    started = True
+                elif ch == '}':
+                    depth -= 1
+            if started:
+                if k > brace_line:
+                    body_lines.append(lines[k])
+                if depth == 0:
+                    close_line = k
+                    break
+            k += 1
+
+        if not body_lines:
+            i = close_line + 1
+            continue
+
+        # Only flag LARGE lambdas — small ones (≤ MAX_BODY_LINES) are fine inline.
+        meaningful_lines = sum(
+            1 for l in body_lines
+            if l.strip() and l.strip() != '{' and not l.strip().startswith('}')
+        )
+        if meaningful_lines <= MAX_BODY_LINES:
+            i = close_line + 1
+            continue
+
+        own_params = _lambda_own_params(raw)
+        scope_start = max(0, i - SCAN_WINDOW)
+        outer_locals = _collect_outer_locals(lines, scope_start, i)
+        candidates = outer_locals - own_params
+
+        if not _lambda_body_captures(body_lines, candidates):
+            result.add(Violation(str(path), i + 1, "non-capturing-lambda",
+                "large block lambda closes over no outer locals — extract to a named method"))
+
+        i = close_line + 1
+
+
 def check_large_anonymous_functions(path: Path, lines: list[str], result: AuditResult):
     """Block lambdas with more than 3 non-empty body lines should be extracted to named methods."""
     MAX_BODY_LINES = 3
@@ -730,6 +902,7 @@ RULES: dict[str, callable] = {
     "accessibility":     check_inconsistent_accessibility,
     "repeated-accessor": check_repeated_accessor,
     "large-lambda":      check_large_anonymous_functions,
+    "non-capturing-lambda": check_non_capturing_lambda,
 }
 
 # Rules that don't operate on individual files
