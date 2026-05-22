@@ -5,10 +5,13 @@ namespace BalloonParty.Shared.GameState
 {
     internal class CinematicEndGate : IReadyGate
     {
+        private readonly CinematicState _awaitedState;
+
+        internal CinematicEndGate(CinematicState awaitedState) => _awaitedState = awaitedState;
+
         public UniTask WaitAsync(CancellationToken ct) =>
             UniTask.WaitUntil(
-                () => !Cinematic.IsPlaying,
+                () => Cinematic.Current.Value != _awaitedState,
                 cancellationToken: ct);
     }
 }
-

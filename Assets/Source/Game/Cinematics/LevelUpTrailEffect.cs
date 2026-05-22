@@ -56,8 +56,9 @@ namespace BalloonParty.Game.Cinematics
             _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
             _dismissedSubscriber.Subscribe(_ =>
             {
-                Time.timeScale = 1f;
-                Navigation.TransitionTo(NavigationState.Game);
+                _director.BeginCinematic(CinematicState.LevelUpRestore);
+                PrepareRestore();
+                _director.PlayScene(new CinematicScene(onEnd: OnRestoreComplete));
             }).AddTo(this);
         }
 
@@ -119,6 +120,7 @@ namespace BalloonParty.Game.Cinematics
 
             _sessionActive = false;
             _director.EndCinematic();
+            Navigation.TransitionTo(NavigationState.Game);
         }
 
 
@@ -138,8 +140,7 @@ namespace BalloonParty.Game.Cinematics
 
             _trackedFlyingTrail.DisableMoveTween();
 
-
-            _director.BeginCinematic(CinematicState.LevelUpTrail);
+            _director.BeginCinematic(CinematicState.LevelUpPanIn);
 
             _scoreTrailService.PauseTrailsAbove(_tippingTrailId);
 
@@ -173,9 +174,7 @@ namespace BalloonParty.Game.Cinematics
             _scoreTrailService.Tracker.ClearTrackedTrail(_tippingTrailId);
             KillTweens();
             _director.CompleteScene();
-
-            PrepareRestore();
-            _director.PlayScene(new CinematicScene(onEnd: OnRestoreComplete));
+            _director.EndCinematic();
         }
 
         private void PanInTick()
@@ -295,20 +294,6 @@ namespace BalloonParty.Game.Cinematics
                 sequence.Join(sizeTween);
 
                 _zoomTween = sequence;
-            }
-        }
-
-        private void RestoreImmediate()
-        {
-            if (_orthoController != null)
-            {
-                _orthoController.enabled = true;
-            }
-
-            if (_camera != null && _baseOrthoSize > 0f)
-            {
-                _camera.orthographicSize = _baseOrthoSize;
-                _camera.transform.position = _basePosition;
             }
         }
     }

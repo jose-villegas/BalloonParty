@@ -54,7 +54,7 @@ namespace BalloonParty.UI.LevelUp
             ResumeAfterDelayAsync().Forget();
         }
 
-        private void ShowAfterGateAsync
+        private async UniTaskVoid ShowAfterGateAsync(ScoreLevelUpMessage msg)
         {
             await _gate.WaitAsync(destroyCancellationToken);
 

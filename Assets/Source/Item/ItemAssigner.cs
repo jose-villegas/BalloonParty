@@ -2,7 +2,6 @@ using System.Linq;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using UnityEngine;
@@ -44,9 +43,8 @@ namespace BalloonParty.Item
             var items = _itemConfig.Items;
 
             var available = items
-                .Where(x => x.TurnCheckEvery > 0 && turns % x.TurnCheckEvery == 0);
-
-            available = available.Where(IsItemSlotAvailable);
+                .Where(x => x.TurnCheckEvery > 0 && turns % x.TurnCheckEvery == 0)
+                .Where(item => CountBalloonsWithItem(item.Type) < item.MaximumAllowed);
 
             var candidates = available.ToArray();
 
@@ -83,10 +81,10 @@ namespace BalloonParty.Item
 
                 shift += candidate.Weight;
             }
-            available = available.Where(item =>
-                CountBalloonsWithItem(item.Type) < item.MaximumAllowed);
+        }
 
         private int CountBalloonsWithItem(ItemType type)
+        {
             var count = 0;
 
             for (var col = 0; col < _grid.Columns; col++)

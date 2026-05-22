@@ -10,7 +10,7 @@ namespace BalloonParty.UI.LevelUp
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<LevelUpPopUp>();
-            builder.RegisterInstance<IReadyGate>(new CinematicEndGate());
+            builder.RegisterInstance<IReadyGate>(new CinematicEndGate(CinematicState.LevelUpPanIn));
         }
     }
 }
