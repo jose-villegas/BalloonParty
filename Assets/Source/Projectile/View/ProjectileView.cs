@@ -7,6 +7,7 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using DG.Tweening;
 using MessagePipe;
@@ -76,6 +77,12 @@ namespace BalloonParty.Projectile.View
             _model.LastHitBalloon = balloonModel;
 
             var outcome = balloonModel.EvaluateHit(1);
+
+            if (outcome == HitOutcome.Absorb)
+            {
+                OnAbsorb(balloonModel, balloonView.transform.position);
+                return;
+            }
 
             if (outcome == HitOutcome.Pop && balloonModel is IHasColor colorable &&
                 !string.IsNullOrEmpty(colorable.Color.Value))
@@ -168,6 +175,14 @@ namespace BalloonParty.Projectile.View
             }
 
             return pos;
+        }
+
+        // Separated so the absorb terminal path is testable without physics.
+        internal void OnAbsorb(ISlotActor actor, Vector3 worldPos)
+        {
+            _hitPublisher.Publish(new ActorHitMessage(actor, worldPos, _model.Direction, HitOutcome.Absorb));
+            _model.IsFree = false;
+            DestroyProjectile();
         }
 
         private void DestroyProjectile()

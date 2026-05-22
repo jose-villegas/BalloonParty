@@ -94,14 +94,12 @@ namespace BalloonParty.Balloon.Controller
                 case HitOutcome.Pop:
                     Pop();
                     break;
-                case HitOutcome.PassThrough:
-                    // Projectile continues; balloon stays with reduced HitsRemaining.
-                    // Crack animation is driven reactively by HitsRemaining subscription.
-                    break;
                 case HitOutcome.Deflect:
                     Deflect(msg);
                     break;
-                // HitOutcome.Absorb: projectile force-kill routed through ProjectileView — Phase 9.
+                case HitOutcome.PassThrough:
+                case HitOutcome.Absorb:
+                    break;
             }
         }
 

@@ -14,8 +14,10 @@ the content and systems on top of that foundation.
 The four threads — in order:
 
 ```
-8.0  Spawner Coordination     — infrastructure; explicit ordering replaces implicit contract
-8.1  Hit System Completion    — UnbreakableBalloonModel + Absorb routing (deferred from 7.5)
+8.0  Spawner Coordination     ✅ DONE — priority-based coordinator, IReadyGate gating, parallel-within-stage
+8.1a Absorb Routing           ✅ DONE — OnAbsorb in ProjectileView; IsFree=false + DestroyProjectile; 3 tests
+8.1b DamageContext Migration  — IHitable API breaking change; compiler-driven, no new gameplay
+8.1c UnbreakableBalloon       — uses DamageContext; forces ScoreValue off BalloonModelBase
 8.2  Actor Archetypes         — the vocabulary the procedural algorithm needs to be interesting
 8.3  Procedural Placement     — weighted, rule-based GridSpawner; retires BalloonSpawner
 8.4  Difficulty + Levels      — tuning knobs driven by score-based level progression
@@ -48,7 +50,7 @@ implement. They are the building blocks the procedural algorithm needs.
 
 ### Grid actor archetypes
 
-These all live in `Slots/Actors/` as separate model/view pairs, not subclasses of anything
+These all live in `Slots/Actor/` as separate model/view pairs, not subclasses of anything
 balloon-specific.
 
 | Archetype | Kind | `IPassThrough` | `IHitable` | Outcome | Durability | Role |
@@ -75,6 +77,41 @@ is not traversable at the type level — there is no runtime toggle. This means 
 and Block must be separate model classes (`CloudObstacleModel`, `BlockObstacleModel`)
 rather than a single class with a flag. The type IS the capability signal, consistent
 with the rest of the codebase.
+
+**Future extension — `IPassThrough` as a behaviour surface (Phase 9 candidate):**
+
+The current marker interface only answers "can I pass through?". Two natural extensions
+that the actor vocabulary will eventually need:
+
+*Density / passage resistance* — a Cloud-like actor could expose a `float Density` (0–1)
+that the animation system uses to modulate travel speed. A thin mist barely slows the
+path; a dense cloud visibly delays it. The interface extension:
+```csharp
+public interface IPassThrough
+{
+    float Density { get; }  // 0 = no resistance, 1 = maximum slow
+}
+```
+The spawn animation driver reads `Density` and scales the DOTween duration multiplier
+for the segment that crosses the slot. No behaviour change to the grid or hit system —
+purely visual pacing.
+
+*Pass-through triggers* — when a balloon's spawn animation crosses a traversable slot,
+the occupant of that slot could react. A new capability interface covers this:
+```csharp
+public interface IOnPassThrough
+{
+    void OnActorPassedThrough(ISlotActor passing);
+}
+```
+Example uses: a **Recolorer** cloud that tints any balloon whose path arcs through it; a
+**PowerUp** cloud that assigns an item to the passing balloon; a **Curse** cloud that
+reduces `HitsRemaining` by 1 on pass. None of these require structural changes to the
+grid or the hit pipeline — `ComputePath` already returns a waypoint sequence, so the
+animation driver just needs to call `OnActorPassedThrough` as each waypoint is reached.
+
+Both extensions are additive — `IPassThrough` stays a marker today and gains members
+(or a companion interface) only when a concrete actor type demands it.
 
 **Rerouting note:** A `Block` in any computed path currently causes `ComputePath`
 to emit a warning and proceed anyway (Phase 6 decision). Full rerouting — finding a
@@ -131,71 +168,104 @@ hit outcome alone is sufficient.
 
 ---
 
-### Phase 8.0 — Spawner Coordination
+### ✅ Phase 8.0 — Spawner Coordination
 
-**Goal:** Replace the implicit ordering contract between `StaticActorSpawner` and
-`BalloonSpawner` with an explicit priority-based coordination layer. Zero gameplay change —
-purely infrastructure.
+**Status: Complete.** Zero gameplay change — purely infrastructure.
 
-**Why now:** Every Phase 8+ spawner needs this integration point. One coordinator is
-simpler and more testable than n implicit contracts.
+#### What was built
 
-#### Design
-
+**`IGridSpawner`** (`Slots/Spawner/`):
 ```csharp
-public interface IGridSpawner
+internal interface IGridSpawner
 {
-    int SpawnPriority { get; }  // lower = runs first
+    SpawnStage SpawnPriority { get; }
     UniTask SpawnAsync(CancellationToken ct);
 }
+```
 
-internal class GridSpawnerCoordinator : IStartable
+**`SpawnStage`** (`Slots/Spawner/`):
+```csharp
+internal enum SpawnStage
 {
-    // Owns the single NavigationState.Game wait.
-    // Collects all IGridSpawner registrations via VContainer.
-    // Calls spawners in SpawnPriority order, awaiting each before the next.
+    StaticActors  = 0,   // must exist before balloons — balancer support
+    DynamicActors = 50,  // reserved for Phase 8.3 GridSpawner
+    BalloonActors = 100, // fills around statics
 }
 ```
 
-Priority convention:
+**`GridSpawnerCoordinator`** (`Slots/Spawner/`) — `IStartable` + `IDisposable`:
+- Injects `IEnumerable<IGridSpawner>` (VContainer collection injection) and `IReadyGate`
+- Awaits `IReadyGate.WaitAsync` before spawning (backed by `NavigationReadyGate(Game)`)
+- Groups spawners by `SpawnStage`, runs groups **sequentially**
+- Spawners within the same stage run **in parallel** via `UniTask.WhenAll`
+- Owns a `CancellationTokenSource`; disposes on scope teardown
+
+**`IReadyGate`** (`Shared/`) — injectable precondition gate:
+```csharp
+internal interface IReadyGate
+{
+    UniTask WaitAsync(CancellationToken ct);
+}
 ```
-0   Static actors   (must exist before balloons — balancer support)
-100 Balloon actors  (fills around statics)
+Implementations: `NavigationReadyGate(NavigationState)` and `CinematicEndGate(CinematicState)`.
+Registered in `GameLifetimeScope` as `new NavigationReadyGate(NavigationState.Game)`.
+
+**Spawner changes:**
+- `StaticActorSpawner` — implements `IGridSpawner`. `Start()` registers the pool (synchronous). `SpawnAsync()` places static actors. `SpawnPriority = SpawnStage.StaticActors`.
+- `BalloonSpawner` — implements `IGridSpawner`. `Start()` kicks off pool pre-warm as a stored `UniTask`. `SpawnAsync()` awaits pre-warm then populates the initial grid. `SpawnPriority = SpawnStage.BalloonActors`. Nav wait removed — coordinator owns it.
+
+**Folder structure** (`Slots/` reorganised in this session):
+```
+Slots/
+├── Grid/           BalloonParty.Slots.Grid
+├── Actor/          BalloonParty.Slots.Actor   ← interfaces + StaticActor all flat
+├── Capabilities/   BalloonParty.Slots.Capabilities
+├── Spawner/        BalloonParty.Slots.Spawner
 ```
 
-`StaticActorSpawner` and `BalloonSpawner` each implement `IGridSpawner`. The coordinator
-takes over the `NavigationState.Game` wait; both spawners' `SpawnAsync` become purely
-placement logic with no navigation dependency.
+**Tests** (`Tests/EditMode/Slots/GridSpawnerCoordinatorTests.cs`):
+- `GridSpawnerCoordinator_CallsSpawnersInPriorityOrder` ✅
+- `GridSpawnerCoordinator_AwaitsHigherPriorityStageBeforeNext` ✅
+- `GridSpawnerCoordinator_SamePriority_RunsInParallel` ✅
 
-#### What changes in existing spawners
-- `StaticActorSpawner.Start()` loses its synchronous coordination comment — the
-  coordinator's ordering is now explicit.
-- `BalloonSpawner.PrewarmAndPopulateAsync` still prewarms pools unconditionally on `Start()`;
-  the population step moves into `SpawnAsync`.
-
-#### Failing tests
-```
-GridSpawnerCoordinator_CallsSpawnersInPriorityOrder
-  — two mock IGridSpawner; lower priority runs first, verified by call sequence
-  — fails at compile until GridSpawnerCoordinator exists
-
-GridSpawnerCoordinator_AwaitsEachSpawnerInSequence
-  — second spawner does not start until first's SpawnAsync completes
-```
+Test double: `ImmediateGate : IReadyGate` — `WaitAsync` returns immediately.
 
 ---
 
-### Phase 8.1 — Hit System Completion
+### ✅ Phase 8.1a — Absorb Routing
 
-**Goal:** Deliver the two items deferred from Phase 7.5 (`UnbreakableBalloonModel` and
-`Absorb` routing), and introduce `DamageContext` so item mechanics can bypass the
-unbreakable state when configured to do so.
+**Status: Complete.**
+
+#### What was built
+
+`ProjectileView.OnAbsorb(ISlotActor actor, Vector3 worldPos)` — `internal` terminal method called when `EvaluateHit` returns `HitOutcome.Absorb`:
+1. Publishes `ActorHitMessage` with `HitOutcome.Absorb` (so Phase 8.2 `GridActorHitController` can react).
+2. Sets `_model.IsFree = false` — stops `FixedUpdate` movement immediately.
+3. Calls `DestroyProjectile()` — publishes `ProjectileDestroyedMessage` + `BalanceBalloonsMessage`, ending the turn.
+
+`OnTriggerEnter2D` delegates to `OnAbsorb` and returns early when the outcome is `Absorb`.
+
+`BalloonController` comment updated from "Phase 9" to "Phase 8.1a".
+
+**Tests** (`Tests/EditMode/Projectile/ProjectileViewAbsorbTests.cs`):
+- `ProjectileView_OnAbsorb_PublishesProjectileDestroyed` ✅
+- `ProjectileView_OnAbsorb_SetsModelNotFree` ✅
+- `ProjectileView_OnAbsorb_PublishesActorHitMessageWithAbsorbOutcome` ✅
+
+---
+
+### Phase 8.1b — DamageContext API Migration
+
+**Goal:** Replace `IHitable.EvaluateHit(int damage)` with
+`IHitable.EvaluateHit(DamageContext context)` everywhere. No new gameplay — pure API
+migration. This is the breaking change that 8.1c depends on.
+
+**Why separate from 8.1c:** The migration touches every `IHitable` implementor and every
+caller (projectile, item handlers, tests). Keeping it as its own phase makes the diff
+reviewable and lets failing tests serve as a mechanical checklist — the build doesn't pass
+until every caller is updated.
 
 #### `DamageContext` + `DamageFlags`
-
-`IHitable.EvaluateHit(int damage)` is replaced by `IHitable.EvaluateHit(DamageContext context)`.
-This is a breaking change across all callers — worth absorbing here since
-`UnbreakableBalloonModel` is being added in the same phase.
 
 ```csharp
 // Slots/Capabilities/
@@ -220,13 +290,12 @@ public enum DamageFlags
 }
 ```
 
-`Piercing` is the flag name — it borrows from established game-design vocabulary ("piercing
-damage ignores armor") and generalises correctly: it applies to *any* defensive posture an
-actor holds, not just unbreakable. A 5-hitpoint `ToughBalloonModel` hit with `Piercing`
-pops in one shot; an `UnbreakableBalloonModel` hit with `Piercing` also pops. One flag,
-consistent semantics across all actor types.
+`Piercing` borrows from established game-design vocabulary and generalises correctly: it
+applies to *any* defensive posture an actor holds, not just unbreakable. A 5-hitpoint
+`ToughBalloonModel` hit with `Piercing` pops in one shot; an `UnbreakableBalloonModel`
+hit with `Piercing` also pops. One flag, consistent semantics across all actor types.
 
-`BalloonModelBase.EvaluateHit` handles `Piercing` before normal durability logic:
+`BalloonModelBase.EvaluateHit` updated to handle `Piercing` before normal durability logic:
 ```csharp
 public override HitOutcome EvaluateHit(DamageContext context)
 {
@@ -241,25 +310,36 @@ public override HitOutcome EvaluateHit(DamageContext context)
 }
 ```
 
-**Callers:**
-- `ProjectileView` — passes `new DamageContext(msg.Damage)` (no flags; standard hit)
-- Item handlers (bomb, laser, lightning, …) — pass `new DamageContext(damage, _itemConfig.DamageFlags)`
-- All tests — wrap raw `int` in `new DamageContext(n)`
+**Callers updated:**
+- `ProjectileView` — `new DamageContext(msg.Damage)` (no flags; standard hit)
+- All item handlers (bomb, laser, lightning, …) — `new DamageContext(damage, _itemConfig.DamageFlags)`
+- All tests — raw `int` wrapped in `new DamageContext(n)`
 
-**`ItemSettings`** gains `[SerializeField] private DamageFlags _damageFlags`. Bomb and laser
-can be toggled in the SO to include `Piercing`; all others default to `None`.
+**`ItemSettings`** gains `[SerializeField] private DamageFlags _damageFlags`. Bomb and
+laser can be toggled in the SO to include `Piercing`; all others default to `None`.
+
+#### Failing tests
+All existing `EvaluateHit` tests fail at compile until callers are updated — the
+compiler drives completion. No new test cases; all existing coverage is preserved.
+
+---
+
+### Phase 8.1c — UnbreakableBalloonModel + BalloonModelBase Cleanup
+
+**Goal:** Introduce `UnbreakableBalloonModel` using `DamageContext.Piercing`, and remove
+`ScoreValue` from `BalloonModelBase` — a cleanup `UnbreakableBalloonModel` forces because
+it is a permanent obstacle that awards no score.
+
+**Depends on:** 8.1b (`DamageContext` must exist).
 
 #### `UnbreakableBalloonModel`
 
 ```csharp
 internal class UnbreakableBalloonModel : BalloonModelBase, IHitable
 {
-    // EvaluateHit returns Pop only when BypassesUnbreakable is set — otherwise Deflect.
-    // No IHasDurability, no HitsRemaining.
+    // No IHasDurability. No HitsRemaining. Deflects all hits unless Piercing.
 }
-```
 
-```csharp
 public override HitOutcome EvaluateHit(DamageContext context) =>
     context.Flags.HasFlag(DamageFlags.Piercing)
         ? HitOutcome.Pop
@@ -273,16 +353,9 @@ BalloonType.Unbreakable => new UnbreakableBalloonModel(config),
 
 #### `ScoreValue` on `BalloonModelBase`
 
-`UnbreakableBalloonModel` does not score — it is a permanent obstacle, not a target.
-This makes `ScoreValue` on `BalloonModelBase` a misplaced field. Remove it from the base
-at this phase; `BalloonModel` and `ToughBalloonModel` hold their own `ScoreValue` from
-config. `IHasScore` (already exists) is the read interface for `ScoreController`.
-
-#### `Absorb` routing in `ProjectileView`
-
-On `HitOutcome.Absorb`: call `ForceKill()` on the projectile tween, then publish
-`ProjectileDestroyedMessage` to end the turn immediately. `BalloonController` already has
-the stub case — no change needed there.
+`UnbreakableBalloonModel` does not score — making `ScoreValue` on the base a lie.
+Remove it: `BalloonModel` and `ToughBalloonModel` each hold their own `ScoreValue` from
+config. `IHasScore` is the read interface for `ScoreController` — nothing else changes.
 
 #### Failing tests
 New fixture **`UnbreakableBalloonModelTests`**:
@@ -320,16 +393,19 @@ algorithm produces monotonous grids.
 
 #### Files
 
-| File | Location | Role |
-|---|---|---|
-| `CloudObstacleModel.cs` | `Slots/Actors/` | Rename/replace `StaticActorModel`; `IWriteableSlotActor` + `IPassThrough`; spawn paths traverse freely |
-| `BlockObstacleModel.cs` | `Slots/Actors/` | New; `IWriteableSlotActor` only; spawn paths are blocked |
-| `DeflectorActorModel.cs` | `Slots/Actors/` | `IWriteableSlotActor`, `IHitable` → `Deflect`; no durability |
-| `AbsorberActorModel.cs` | `Slots/Actors/` | `IWriteableSlotActor`, `IHitable` → `Absorb`; no durability |
-| `GatekeeperActorModel.cs` | `Slots/Actors/` | `IWriteableSlotActor`, `IHasDurability`; `Deflect` on survive, `Pop` on kill |
-| `GridActorHitController.cs` | `Slots/Actors/` | `IStartable`; handles `ActorHitMessage` for non-balloon actors |
-| `GridActorPrefabEntry.cs` | `Configuration/` | Serializable config entry: prefab, weight, maxCount, actor type |
-| View + pool channel per actor | `Slots/Actors/` | Same pattern as `StaticActorView` |
+All new actor files live flat in `Slots/Actor/` (namespace `BalloonParty.Slots.Actor`),
+alongside the existing `StaticActorModel` and its view/pool/settings/spawner files.
+
+| File | Role |
+|---|---|
+| `CloudObstacleModel.cs` | Rename/replace `StaticActorModel`; `IWriteableSlotActor` + `IPassThrough`; spawn paths traverse freely |
+| `BlockObstacleModel.cs` | New; `IWriteableSlotActor` only; spawn paths are blocked |
+| `DeflectorActorModel.cs` | `IWriteableSlotActor`, `IHitable` → `Deflect`; no durability |
+| `AbsorberActorModel.cs` | `IWriteableSlotActor`, `IHitable` → `Absorb`; no durability |
+| `GatekeeperActorModel.cs` | `IWriteableSlotActor`, `IHasDurability`; `Deflect` on survive, `Pop` on kill |
+| `GridActorHitController.cs` | `IStartable`; handles `ActorHitMessage` for non-balloon actors |
+| `GridActorPrefabEntry.cs` | `Configuration/` — serializable config entry: prefab, weight, maxCount, actor type |
+| View + pool channel per actor | Same pattern as `StaticActorView` |
 
 `GridActorType` enum: `Cloud`, `Block`, `Deflector`, `Absorber`, `Gatekeeper`.
 
@@ -382,7 +458,9 @@ is validated in-game.
 
 #### Design
 
-`GridSpawner` is the Phase 8.0 `IGridSpawner` implementor with `SpawnPriority = 50`.
+`GridSpawner` implements `IGridSpawner` with `SpawnPriority = SpawnStage.DynamicActors`
+(value 50). It slots between the retired static and balloon spawners in the coordinator's
+stage ordering — when both legacy spawners are removed, only this stage remains.
 
 ```
 GridSpawner
@@ -404,9 +482,9 @@ GridSpawner
 
 #### Migration path
 1. `GridSpawner.SpawnAsync` duplicates `BalloonSpawner`'s population logic — test parity.
-2. Disable `BalloonSpawner`/`StaticActorSpawner` VContainer registration when `GridSpawner`
-   passes in-game validation.
-3. Remove the retired spawners.
+2. Register `GridSpawner` as `IGridSpawner` alongside the legacy spawners. Coordinator runs all three in stage order (`StaticActors=0`, `DynamicActors=50`, `BalloonActors=100`).
+3. Disable legacy spawner registrations when `GridSpawner` passes in-game validation.
+4. Remove the retired spawners; `DynamicActors=50` becomes the only active stage.
 
 #### Failing tests
 New fixture **`GridSpawnerTests`**:
@@ -446,7 +524,7 @@ active `DifficultyProfile`. `GridSpawner` reads the active profile on each spawn
 
 **Knob graduation — suggested starting curve:**
 ```
-Level 1–3:   Only Simple + occasional Tough; no statics beyond Obstacle
+Level 1–3:   Only Simple + occasional Tough; no statics beyond Cloud obstacle
 Level 4–6:   Deflectors introduced; Tough ratio rises
 Level 7–10:  Gatekeepers introduced; Cracking balloons appear
 Level 11+:   Absorbers introduced; Unbreakable balloons; density climbs
@@ -494,15 +572,11 @@ These are known design gaps to resolve during implementation:
 
 | Phase | Status |
 |---|---|
-| 8.0 — Spawner Coordination | Next |
-| 8.1 — Hit System Completion | Next (can run in parallel with 8.0) |
-| 8.2 — Actor Archetypes | Blocked on 8.1 |
+| 8.0 — Spawner Coordination | ✅ Complete |
+| 8.1a — Absorb Routing | ✅ Complete |
+| 8.1b — DamageContext Migration | **Next** |
+| 8.1c — UnbreakableBalloonModel | Blocked on 8.1b |
+| 8.2 — Actor Archetypes | Blocked on 8.1c |
 | 8.3 — Procedural Placement | Blocked on 8.2 |
 | 8.4 — Difficulty + Levels | Blocked on 8.3 |
 | Phase 9 — Behavior-bound actors | Future (broadly defined) |
-
-
-
-
-
-
