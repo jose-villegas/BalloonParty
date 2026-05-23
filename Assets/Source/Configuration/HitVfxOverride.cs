@@ -16,4 +16,3 @@ namespace BalloonParty.Configuration
         public ParticleSystem Prefab => _prefab;
     }
 }
-

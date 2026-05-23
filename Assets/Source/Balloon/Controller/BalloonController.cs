@@ -8,7 +8,6 @@ using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
-using UnityEngine;
 
 namespace BalloonParty.Balloon.Controller
 {
@@ -17,13 +16,13 @@ namespace BalloonParty.Balloon.Controller
         private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
+        private readonly HitVfxOverride[] _hitVfxOverrides;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IWriteableBalloonModel _model;
         private readonly IPublisher<NudgeMessage> _nudgePublisher;
         private readonly Action _onReturned;
         private readonly string _poolKey;
         private readonly PoolManager _poolManager;
-        private readonly ParticleSystem _popVfxOverride;
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly BalloonView _view;
 
@@ -35,7 +34,7 @@ namespace BalloonParty.Balloon.Controller
             BalloonView view,
             string poolKey,
             Action onReturned,
-            ParticleSystem popVfxOverride,
+            HitVfxOverride[] hitVfxOverrides,
             ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
             IPublisher<TransformCapturedMessage> transformCapturedPublisher,
@@ -48,7 +47,7 @@ namespace BalloonParty.Balloon.Controller
             _view = view;
             _poolKey = poolKey;
             _onReturned = onReturned;
-            _popVfxOverride = popVfxOverride;
+            _hitVfxOverrides = hitVfxOverrides;
             _hitSubscriber = hitSubscriber;
             _itemActivatedSubscriber = itemActivatedSubscriber;
             _transformCapturedPublisher = transformCapturedPublisher;
@@ -60,11 +59,7 @@ namespace BalloonParty.Balloon.Controller
 
         public void Start()
         {
-            if (_popVfxOverride != null)
-            {
-                _view.SetPopVfxOverride(_popVfxOverride);
-            }
-
+            _view.SetHitVfxOverrides(_hitVfxOverrides);
             _view.Bind(_model);
 
             _hitSubscription = _hitSubscriber.Subscribe(OnActorHit);
@@ -98,6 +93,8 @@ namespace BalloonParty.Balloon.Controller
                     Deflect(msg);
                     break;
                 case HitOutcome.PassThrough:
+                    _view.PlayHitVfxForOutcome(HitOutcome.PassThrough);
+                    break;
                 case HitOutcome.Absorb:
                     break;
             }
@@ -121,7 +118,7 @@ namespace BalloonParty.Balloon.Controller
             _hitSubscription?.Dispose();
             _hitSubscription = null;
 
-            _view.PlayPopEffect();
+            _view.PlayHitVfxForOutcome(HitOutcome.Pop);
             _grid.Remove(_model.SlotIndex.Value);
 
             if (_model is not IHasItemSlot itemSlot || itemSlot.Item.Value == ItemType.None)

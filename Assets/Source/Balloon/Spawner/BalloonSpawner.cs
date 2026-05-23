@@ -233,7 +233,7 @@ namespace BalloonParty.Balloon.Spawner
                 view,
                 poolKey,
                 () => _activeCounts[poolKey]--,
-                entry.PopVfxPrefab,
+                entry.HitVfxOverrides,
                 _hitSubscriber,
                 _itemActivatedSubscriber,
                 _transformCapturedPublisher,

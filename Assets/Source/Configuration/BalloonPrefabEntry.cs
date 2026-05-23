@@ -18,8 +18,7 @@ namespace BalloonParty.Configuration
 
         [SerializeField] private NudgeOverride[] _nudgeOverrides;
 
-        [SerializeField] private bool _overridePopVfx;
-        [SerializeField] private ParticleSystem _popVfxPrefab;
+        [SerializeField] private HitVfxOverride[] _hitVfxOverrides;
 
         [Tooltip("How many hits this balloon type absorbs before popping. 1 = normal, 2+ = tough, -1 = unbreakable.")]
         [SerializeField] private int _hitsToPop = 1;
@@ -36,8 +35,7 @@ namespace BalloonParty.Configuration
 
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
 
-        /// <summary>Null when override is disabled — view uses default VFX with balloon color.</summary>
-        public ParticleSystem PopVfxPrefab => _overridePopVfx ? _popVfxPrefab : null;
+        public HitVfxOverride[] HitVfxOverrides => _hitVfxOverrides;
 
         public int HitsToPop => _hitsToPop;
         public int ScoreValue => _scoreValue;

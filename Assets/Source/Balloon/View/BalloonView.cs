@@ -43,7 +43,7 @@ namespace BalloonParty.Balloon.View
 
         private IBalloonViewBinding[] _viewBindings;
         private IBalloonVariant _variant;
-        private ParticleSystem _popVfxOverride;
+        private HitVfxOverride[] _hitVfxOverrides;
         private bool _isNudging;
 
         public IBalloonModel Model { get; private set; }
@@ -82,7 +82,7 @@ namespace BalloonParty.Balloon.View
             _bindDisposables.Clear();
             _itemService?.Unbind();
             Model = null;
-            _popVfxOverride = null;
+            _hitVfxOverrides = null;
             _isNudging = false;
         }
 
@@ -195,20 +195,28 @@ namespace BalloonParty.Balloon.View
             onComplete?.Invoke();
         }
 
-        public void PlayPopEffect()
+        public void RegisterDisposeOnDespawn(IDisposable disposable)
         {
-            if (_popVfxOverride != null)
+            _bindDisposables.Add(disposable);
+        }
+
+        public void SetHitVfxOverrides(HitVfxOverride[] overrides)
+        {
+            _hitVfxOverrides = overrides;
+        }
+
+        public void PlayHitVfxForOutcome(HitOutcome outcome)
+        {
+            var prefab = FindHitVfxPrefab(outcome);
+            if (prefab != null)
             {
-                var key = _popVfxOverride.name;
-                var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(_popVfxOverride.gameObject));
-                if (Model is IHasColor c && !string.IsNullOrEmpty(c.Color.Value))
-                {
-                    effect.Play(transform.position, _palette.GetColor(c.Color.Value), () => _poolManager.Return(key, effect));
-                }
-                else
-                {
-                    effect.Play(transform.position, () => _poolManager.Return(key, effect));
-                }
+                PlayHitEffect(prefab);
+                return;
+            }
+
+            // Pop has a palette-colored default VFX when no override is configured.
+            if (outcome != HitOutcome.Pop)
+            {
                 return;
             }
 
@@ -216,7 +224,7 @@ namespace BalloonParty.Balloon.View
             if (defaultPrefab == null)
             {
                 Debug.LogWarning(
-                    "BalloonView.PlayPopEffect: DefaultPopVfxPrefab is null in BalloonsConfiguration.",
+                    "BalloonView.PlayHitVfxForOutcome: DefaultPopVfxPrefab is null in BalloonsConfiguration.",
                     this);
                 return;
             }
@@ -234,15 +242,39 @@ namespace BalloonParty.Balloon.View
                 () => _poolManager.Return(defaultKey, defaultEffect));
         }
 
-        public void RegisterDisposeOnDespawn(IDisposable disposable)
+
+        private ParticleSystem FindHitVfxPrefab(HitOutcome outcome)
         {
-            _bindDisposables.Add(disposable);
+            if (_hitVfxOverrides == null)
+            {
+                return null;
+            }
+
+            foreach (var o in _hitVfxOverrides)
+            {
+                if (o.AppliesTo.HasFlag(outcome))
+                {
+                    return o.Prefab;
+                }
+            }
+
+            return null;
         }
 
-        public void SetPopVfxOverride(ParticleSystem prefab)
+        private void PlayHitEffect(ParticleSystem prefab)
         {
-            _popVfxOverride = prefab;
+            var key = prefab.name;
+            var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(prefab.gameObject));
+            if (Model is IHasColor c && !string.IsNullOrEmpty(c.Color.Value))
+            {
+                effect.Play(transform.position, _palette.GetColor(c.Color.Value), () => _poolManager.Return(key, effect));
+            }
+            else
+            {
+                effect.Play(transform.position, () => _poolManager.Return(key, effect));
+            }
         }
+
 
         private void ApplySortingOrder(Vector2Int slotIndex)
         {

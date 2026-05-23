@@ -13,8 +13,7 @@ namespace BalloonParty.Configuration.Editor
         {
             "_balloonType",
             "_nudgeOverrides",
-            "_overridePopVfx",
-            "_popVfxPrefab"
+            "_hitVfxOverrides"
         };
 
         protected override GUIContent BuildFoldoutLabel(GUIContent label, SerializedProperty property)
@@ -53,15 +52,16 @@ namespace BalloonParty.Configuration.Editor
                 y += h + PropertyDrawerHelper.Spacing;
             }
 
-            y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_overridePopVfx", "Override Pop VFX");
-
-            var overridePopVfx = property.FindPropertyRelative("_overridePopVfx");
-            if (overridePopVfx != null && overridePopVfx.boolValue)
+            var hitVfxOverrides = property.FindPropertyRelative("_hitVfxOverrides");
+            if (hitVfxOverrides != null)
             {
-                var indent = EditorGUI.indentLevel;
-                EditorGUI.indentLevel = indent + 1;
-                y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_popVfxPrefab", "VFX Prefab");
-                EditorGUI.indentLevel = indent;
+                var h = EditorGUI.GetPropertyHeight(hitVfxOverrides, true);
+                EditorGUI.PropertyField(
+                    new Rect(position.x, y, position.width, h),
+                    hitVfxOverrides,
+                    new GUIContent("Hit VFX Overrides"),
+                    true);
+                y += h + PropertyDrawerHelper.Spacing;
             }
 
             return y;
@@ -69,22 +69,17 @@ namespace BalloonParty.Configuration.Editor
 
         protected override float GetSpecialFieldsHeight(SerializedProperty property)
         {
-            var row = PropertyDrawerHelper.LineHeight + PropertyDrawerHelper.Spacing;
-
             var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
             var nudgeHeight = nudgeOverrides != null
                 ? EditorGUI.GetPropertyHeight(nudgeOverrides, true) + PropertyDrawerHelper.Spacing
                 : 0f;
 
-            var height = nudgeHeight + row;
+            var hitVfxOverrides = property.FindPropertyRelative("_hitVfxOverrides");
+            var hitVfxHeight = hitVfxOverrides != null
+                ? EditorGUI.GetPropertyHeight(hitVfxOverrides, true) + PropertyDrawerHelper.Spacing
+                : 0f;
 
-            var overridePopVfx = property.FindPropertyRelative("_overridePopVfx");
-            if (overridePopVfx != null && overridePopVfx.boolValue)
-            {
-                height += row;
-            }
-
-            return height;
+            return nudgeHeight + hitVfxHeight;
         }
     }
 }
