@@ -80,7 +80,7 @@ namespace BalloonParty.Item.Laser
         {
             var radius = settings.LaserCircleCastRadius;
             var distance = settings.LaserRaycastDistance;
-            var damage = settings.Damage;
+            var context = new DamageContext(settings.Damage, settings.Flags);
 
             var right = laserRotation * Vector3.right;
             var left = laserRotation * Vector3.left;
@@ -89,17 +89,17 @@ namespace BalloonParty.Item.Laser
 
             var hitModels = new HashSet<IBalloonModel>();
 
-            CastDirection(right, radius, distance, damage, hitModels);
-            CastDirection(left, radius, distance, damage, hitModels);
-            CastDirection(up, radius, distance, damage, hitModels);
-            CastDirection(down, radius, distance, damage, hitModels);
+            CastDirection(right, radius, distance, context, hitModels);
+            CastDirection(left, radius, distance, context, hitModels);
+            CastDirection(up, radius, distance, context, hitModels);
+            CastDirection(down, radius, distance, context, hitModels);
         }
 
         private void CastDirection(
             Vector2 direction,
             float radius,
             float distance,
-            int damage,
+            DamageContext context,
             HashSet<IBalloonModel> hitModels)
         {
             var count = Physics2D.CircleCast(_worldPosition, radius, direction, _balloonFilter, _castResults, distance);
@@ -125,8 +125,8 @@ namespace BalloonParty.Item.Laser
                 _hitPublisher.Publish(new ActorHitMessage(balloonView.Model,
                     balloonView.transform.position,
                     Vector3.zero,
-                    balloonView.Model.EvaluateHit(damage),
-                    damage));
+                    balloonView.Model.EvaluateHit(context),
+                    context.Damage));
             }
         }
 

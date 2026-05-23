@@ -21,7 +21,7 @@ namespace BalloonParty.Tests.Balloon
         {
             _model.HitsRemaining.Value = 3;
 
-            Assert.AreEqual(HitOutcome.PassThrough, _model.EvaluateHit(1));
+            Assert.AreEqual(HitOutcome.PassThrough, _model.EvaluateHit(new DamageContext(1)));
         }
 
         [Test]
@@ -29,7 +29,7 @@ namespace BalloonParty.Tests.Balloon
         {
             _model.HitsRemaining.Value = 1;
 
-            Assert.AreEqual(HitOutcome.Pop, _model.EvaluateHit(1));
+            Assert.AreEqual(HitOutcome.Pop, _model.EvaluateHit(new DamageContext(1)));
         }
 
         [Test]
@@ -37,7 +37,7 @@ namespace BalloonParty.Tests.Balloon
         {
             _model.HitsRemaining.Value = 1;
 
-            Assert.AreEqual(HitOutcome.Pop, _model.EvaluateHit(5));
+            Assert.AreEqual(HitOutcome.Pop, _model.EvaluateHit(new DamageContext(5)));
         }
 
         [Test]
@@ -45,7 +45,7 @@ namespace BalloonParty.Tests.Balloon
         {
             _model.HitsRemaining.Value = 3;
 
-            Assert.AreEqual(HitOutcome.Pop, _model.EvaluateHit(3));
+            Assert.AreEqual(HitOutcome.Pop, _model.EvaluateHit(new DamageContext(3)));
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace BalloonParty.Tests.Balloon
         {
             _model.HitsRemaining.Value = 3;
 
-            var outcome = _model.EvaluateHit(1);
+            var outcome = _model.EvaluateHit(new DamageContext(1));
 
             Assert.AreEqual(HitOutcome.PassThrough, outcome);
             Assert.AreEqual(2, _model.HitsRemaining.Value);
@@ -82,7 +82,18 @@ namespace BalloonParty.Tests.Balloon
         {
             _model.HitsRemaining.Value = 1;
 
-            var outcome = _model.EvaluateHit(1);
+            var outcome = _model.EvaluateHit(new DamageContext(1));
+
+            Assert.AreEqual(HitOutcome.Pop, outcome);
+            Assert.AreEqual(0, _model.HitsRemaining.Value);
+        }
+
+        [Test]
+        public void BalloonModel_EvaluateHit_PiercingFlag_PopsRegardlessOfHitsRemaining()
+        {
+            _model.HitsRemaining.Value = 5;
+
+            var outcome = _model.EvaluateHit(new DamageContext(1, DamageFlags.Piercing));
 
             Assert.AreEqual(HitOutcome.Pop, outcome);
             Assert.AreEqual(0, _model.HitsRemaining.Value);

@@ -359,7 +359,7 @@ namespace BalloonParty.Tests.Game
         public void OnActorHit_IHitable_WithIHasColorAndIHasScore_PopOutcome_PublishesScore()
         {
             var actor = new DurableActor("Red", 1);
-            var outcome = actor.EvaluateHit(1);
+            var outcome = actor.EvaluateHit(new DamageContext(1));
             _hitHandler.Handle(new ActorHitMessage(actor, Vector3.zero, Vector3.up, outcome, 1));
 
             _scoredPublisher.Received(1).Publish(
@@ -370,14 +370,14 @@ namespace BalloonParty.Tests.Game
         public void OnActorHit_AbsorbOutcome_DoesNotScore()
         {
             var actor = new AbsorbingActor("Red");
-            _hitHandler.Handle(new ActorHitMessage(actor, Vector3.zero, Vector3.up, actor.EvaluateHit(1), 1));
+            _hitHandler.Handle(new ActorHitMessage(actor, Vector3.zero, Vector3.up, actor.EvaluateHit(new DamageContext(1)), 1));
 
             _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointMessage>());
         }
 
         private void FireHit(IBalloonModel model, int damage)
         {
-            var outcome = model.EvaluateHit(damage);
+            var outcome = model.EvaluateHit(new DamageContext(damage));
             _hitHandler.Handle(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, damage));
         }
 
@@ -429,9 +429,9 @@ namespace BalloonParty.Tests.Game
             public int ScoreValue => 1;
             public IReadOnlyReactiveProperty<int> HitsRemaining => _hits;
 
-            public HitOutcome EvaluateHit(int damage)
+            public HitOutcome EvaluateHit(DamageContext context)
             {
-                _hits.Value -= damage;
+                _hits.Value -= context.Damage;
                 return _hits.Value <= 0 ? HitOutcome.Pop : HitOutcome.Deflect;
             }
         }
@@ -444,7 +444,7 @@ namespace BalloonParty.Tests.Game
             public SlotActorKind Kind => SlotActorKind.Static;
             public IReadOnlyReactiveProperty<string> Color { get; }
             public int ScoreValue => 1;
-            public HitOutcome EvaluateHit(int damage) => HitOutcome.Absorb;
+            public HitOutcome EvaluateHit(DamageContext context) => HitOutcome.Absorb;
         }
     }
 }

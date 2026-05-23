@@ -67,13 +67,13 @@ namespace BalloonParty.Item.Bomb
                 NudgeType.Shockwave,
                 settings.NudgeOverrides));
 
-            BlastBalloons(settings.BombRadius, settings.Damage);
+            BlastBalloons(settings.BombRadius, new DamageContext(settings.Damage, settings.Flags));
             SpawnVisual(settings);
 
             return UniTask.CompletedTask;
         }
 
-        private void BlastBalloons(float radius, int damage)
+        private void BlastBalloons(float radius, DamageContext context)
         {
             var count = Physics2D.OverlapCircle(_worldPosition, radius, _balloonFilter, _overlapResults);
 
@@ -95,8 +95,8 @@ namespace BalloonParty.Item.Bomb
                 _hitPublisher.Publish(new ActorHitMessage(balloonView.Model,
                     balloonView.transform.position,
                     Vector3.zero,
-                    balloonView.Model.EvaluateHit(damage),
-                    damage));
+                    balloonView.Model.EvaluateHit(context),
+                    context.Damage));
             }
         }
 

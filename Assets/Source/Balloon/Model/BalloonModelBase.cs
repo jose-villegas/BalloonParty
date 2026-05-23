@@ -41,10 +41,21 @@ namespace BalloonParty.Balloon.Model
             HitsRemaining = new ReactiveProperty<int>(config.HitsToPop);
         }
 
-        public virtual HitOutcome EvaluateHit(int damage)
+        public HitOutcome EvaluateHit(DamageContext context)
         {
-            var survives = HitsRemaining.Value - damage > 0;
-            HitsRemaining.Value -= damage;
+            if (context.Flags.HasFlag(DamageFlags.Piercing))
+            {
+                HitsRemaining.Value = 0;
+                return HitOutcome.Pop;
+            }
+
+            return EvaluateNormalHit(context);
+        }
+
+        protected virtual HitOutcome EvaluateNormalHit(DamageContext context)
+        {
+            var survives = HitsRemaining.Value - context.Damage > 0;
+            HitsRemaining.Value -= context.Damage;
             return survives ? HitOutcome.PassThrough : HitOutcome.Pop;
         }
     }

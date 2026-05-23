@@ -11,10 +11,10 @@ namespace BalloonParty.Shared.Extensions
         /// </summary>
         public static HitOutcome EvaluateHit(
             this ISlotActor actor,
-            int damage,
+            DamageContext context,
             HitOutcome fallback = HitOutcome.PassThrough)
         {
-            return actor is IHitable hitable ? hitable.EvaluateHit(damage) : fallback;
+            return actor is IHitable hitable ? hitable.EvaluateHit(context) : fallback;
         }
     }
 }

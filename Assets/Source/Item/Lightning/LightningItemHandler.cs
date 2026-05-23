@@ -58,6 +58,8 @@ namespace BalloonParty.Item.Lightning
                 return UniTask.CompletedTask;
             }
 
+            var context = new DamageContext(settings.Damage, settings.Flags);
+
             if (settings.ActivationEffectPrefab == null)
             {
                 foreach (var (model, pos) in targets)
@@ -65,8 +67,8 @@ namespace BalloonParty.Item.Lightning
                     _hitPublisher.Publish(new ActorHitMessage(model,
                         pos,
                         Vector3.zero,
-                        model.EvaluateHit(settings.Damage),
-                        settings.Damage));
+                        model.EvaluateHit(context),
+                        context.Damage));
                 }
 
                 return UniTask.CompletedTask;
@@ -100,8 +102,8 @@ namespace BalloonParty.Item.Lightning
                 _hitPublisher.Publish(new ActorHitMessage(model,
                     pos,
                     Vector3.zero,
-                    model.EvaluateHit(settings.Damage),
-                    settings.Damage));
+                    model.EvaluateHit(context),
+                    context.Damage));
             }
         }
 

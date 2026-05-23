@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -16,6 +17,7 @@ namespace BalloonParty.Configuration
         [SerializeField] private EffectView _activationEffectPrefab;
 
         [SerializeField] private int _damage = 1;
+        [SerializeField] private DamageFlags _damageFlags = DamageFlags.Normal;
 
         [SerializeField] private float _bombRadius = 1.25f;
         [SerializeField] private NudgeOverride[] _nudgeOverrides;
@@ -51,6 +53,7 @@ namespace BalloonParty.Configuration
         public GameObject VisualPrefab => _visualPrefab;
         public EffectView ActivationEffectPrefab => _activationEffectPrefab;
         public int Damage => _damage;
+        public DamageFlags Flags => _damageFlags;
         public float BombRadius => _bombRadius;
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
         public float LaserRaycastDistance => _laserRaycastDistance;

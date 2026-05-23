@@ -31,7 +31,7 @@ namespace BalloonParty.Tests.Slots
         {
             var actor = new AbsorbWall();
 
-            Assert.AreEqual(HitOutcome.Absorb, actor.EvaluateHit(1));
+            Assert.AreEqual(HitOutcome.Absorb, actor.EvaluateHit(new DamageContext(1)));
         }
 
         [Test]
@@ -39,7 +39,7 @@ namespace BalloonParty.Tests.Slots
         {
             var actor = new NonDeflectingActor(3);
 
-            Assert.AreEqual(HitOutcome.Pop, actor.EvaluateHit(1));
+            Assert.AreEqual(HitOutcome.Pop, actor.EvaluateHit(new DamageContext(1)));
             Assert.AreEqual(2, ((IHasDurability)actor).HitsRemaining.Value);
         }
 
@@ -48,7 +48,7 @@ namespace BalloonParty.Tests.Slots
         {
             var actor = new NonDeflectingActor(1);
 
-            actor.EvaluateHit(1);
+            actor.EvaluateHit(new DamageContext(1));
 
             Assert.AreEqual(0, ((IHasDurability)actor).HitsRemaining.Value);
         }
@@ -67,7 +67,7 @@ namespace BalloonParty.Tests.Slots
         {
             public Vector2Int SlotIndex => default;
             public SlotActorKind Kind => SlotActorKind.Static;
-            public HitOutcome EvaluateHit(int damage) => HitOutcome.Absorb;
+            public HitOutcome EvaluateHit(DamageContext context) => HitOutcome.Absorb;
         }
 
         private class NonDeflectingActor : ISlotActor, IHasDurability
@@ -80,9 +80,9 @@ namespace BalloonParty.Tests.Slots
             public SlotActorKind Kind => SlotActorKind.Static;
             public IReadOnlyReactiveProperty<int> HitsRemaining => _hits;
 
-            public HitOutcome EvaluateHit(int damage)
+            public HitOutcome EvaluateHit(DamageContext context)
             {
-                _hits.Value -= damage;
+                _hits.Value -= context.Damage;
                 return HitOutcome.Pop;
             }
         }

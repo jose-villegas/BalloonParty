@@ -16,7 +16,7 @@ The four threads — in order:
 ```
 8.0  Spawner Coordination     ✅ DONE — priority-based coordinator, IReadyGate gating, parallel-within-stage
 8.1a Absorb Routing           ✅ DONE — OnAbsorb in ProjectileView; IsFree=false + DestroyProjectile; 3 tests
-8.1b DamageContext Migration  — IHitable API breaking change; compiler-driven, no new gameplay
+8.1b DamageContext Migration  ✅ DONE — DamageContext/DamageFlags structs; IHitable API migrated; Piercing flag; ItemSettings.Flags; all callers + tests updated
 8.1c UnbreakableBalloon       — uses DamageContext; forces ScoreValue off BalloonModelBase
 8.2  Actor Archetypes         — the vocabulary the procedural algorithm needs to be interesting
 8.3  Procedural Placement     — weighted, rule-based GridSpawner; retires BalloonSpawner
@@ -254,7 +254,55 @@ Test double: `ImmediateGate : IReadyGate` — `WaitAsync` returns immediately.
 
 ---
 
-### Phase 8.1b — DamageContext API Migration
+### ✅ Phase 8.1b — DamageContext API Migration
+
+**Status: Complete.** No gameplay change — pure API migration.
+
+#### What was built
+
+**`DamageFlags`** (`Slots/Capabilities/DamageFlags.cs`):
+```csharp
+[Flags]
+public enum DamageFlags
+{
+    None     = 0,
+    Piercing = 1 << 0,
+}
+```
+
+**`DamageContext`** (`Slots/Capabilities/DamageContext.cs`):
+```csharp
+public readonly struct DamageContext
+{
+    public readonly int Damage;
+    public readonly DamageFlags Flags;
+    public DamageContext(int damage, DamageFlags flags = DamageFlags.None) { ... }
+}
+```
+
+**`IHitable`** — signature changed: `EvaluateHit(int damage)` → `EvaluateHit(DamageContext context)`.
+
+**`BalloonModelBase.EvaluateHit`** — handles `Piercing` flag before normal durability logic; sets `HitsRemaining = 0` and returns `Pop` immediately.
+
+**`ToughBalloonModel.EvaluateHit`** — same `Piercing` fast-path added; non-piercing path returns `Deflect` on survive.
+
+**`SlotActorExtensions.EvaluateHit`** — extension signature updated to `DamageContext context`.
+
+**`ItemSettings`** — gains `[SerializeField] private DamageFlags _damageFlags` + `public DamageFlags Flags` property. Bomb and Laser can be toggled to `Piercing` in the SO.
+
+**Callers updated:**
+- `ProjectileView` — `new DamageContext(1)`
+- `BombItemHandler` — `new DamageContext(settings.Damage, settings.Flags)`
+- `LaserItemHandler` — `new DamageContext(settings.Damage, settings.Flags)`
+- `LightningItemHandler` — `new DamageContext(settings.Damage, settings.Flags)`
+- `BalloonRemoverCheat` — `new DamageContext(1)`
+
+**Tests updated:** `HitableTests`, `BalloonModelTests`, `ScoreControllerTests` — all call sites and test-double implementations migrated to `DamageContext`. `BalloonModelTests` gains:
+- `BalloonModel_EvaluateHit_PiercingFlag_PopsRegardlessOfHitsRemaining`
+
+---
+
+### Phase 8.1c — UnbreakableBalloonModel + BalloonModelBase Cleanup
 
 **Goal:** Replace `IHitable.EvaluateHit(int damage)` with
 `IHitable.EvaluateHit(DamageContext context)` everywhere. No new gameplay — pure API
@@ -574,8 +622,8 @@ These are known design gaps to resolve during implementation:
 |---|---|
 | 8.0 — Spawner Coordination | ✅ Complete |
 | 8.1a — Absorb Routing | ✅ Complete |
-| 8.1b — DamageContext Migration | **Next** |
-| 8.1c — UnbreakableBalloonModel | Blocked on 8.1b |
+| 8.1b — DamageContext Migration | ✅ Complete |
+| 8.1c — UnbreakableBalloonModel | **Next** |
 | 8.2 — Actor Archetypes | Blocked on 8.1c |
 | 8.3 — Procedural Placement | Blocked on 8.2 |
 | 8.4 — Difficulty + Levels | Blocked on 8.3 |

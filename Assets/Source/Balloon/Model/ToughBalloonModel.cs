@@ -6,10 +6,10 @@ namespace BalloonParty.Balloon.Model
     {
         internal ToughBalloonModel(BalloonModelConfig config) : base(config) { }
 
-        public override HitOutcome EvaluateHit(int damage)
+        protected override HitOutcome EvaluateNormalHit(DamageContext context)
         {
-            var survives = HitsRemaining.Value - damage > 0;
-            HitsRemaining.Value -= damage;
+            var survives = HitsRemaining.Value - context.Damage > 0;
+            HitsRemaining.Value -= context.Damage;
             return survives ? HitOutcome.Deflect : HitOutcome.Pop;
         }
     }

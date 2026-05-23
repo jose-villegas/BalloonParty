@@ -76,7 +76,7 @@ namespace BalloonParty.Projectile.View
 
             _model.LastHitBalloon = balloonModel;
 
-            var outcome = balloonModel.EvaluateHit(1);
+            var outcome = balloonModel.EvaluateHit(new DamageContext(1));
 
             if (outcome == HitOutcome.Absorb)
             {
