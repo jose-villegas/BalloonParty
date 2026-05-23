@@ -28,7 +28,7 @@ to read the grid, tune difficulty, or playtest spawn density.
 | Actor / Balloon | Model class | Prefab | Sprite / Art | Animator | Animations | VFX | Config entry | Notes |
 |---|---|---|---|---|---|---|---|---|
 | **Simple** | `BalloonModel` | ✅ `Balloon.prefab` | ✅ | ✅ `Balloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_BalloonPop` | ✅ `BalloonsConfiguration` | Baseline; no blockers |
-| **Cracking** | `BalloonModel` (config) | ✅ reuse Simple | ❌ crack-state sprites | ❌ needs crack states | ❌ `OnHit` state | ❌ dust/crumble | ✅ add entry in config | Same prefab; view must react to `HitsRemaining` |
+| **Soap Cluster** | `BalloonModel` (`BalloonType.BubbleCluster`) | ❌ own prefab | ❌ bubble cluster sprite | ❌ | ❌ `BubblePop` per hit | ❌ pop burst per bubble | ❌ add entry in config | Cluster shrinks per hit; each bubble pop is a VFX event |
 | **Tough** | `ToughBalloonModel` | ✅ `ToughBalloon.prefab` | ✅ | ✅ `ToughBalloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_ToughBalloonPop` | ✅ `BalloonsConfiguration` | Baseline; no blockers |
 | **Unbreakable** | `UnbreakableBalloonModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect react | ❌ deflect hit, pierce-pop | ❌ add to `BalloonsConfiguration` | Permanent obstacle feel; no crack states |
 | **Puff** | `PuffObstacleModel` | ⚠️ `StaticTest.prefab` | ⚠️ placeholder | ❌ | ❌ Idle float | — | ❌ `GridActorConfiguration` | Dandelion puff / soft cloud; traversable |
@@ -71,26 +71,49 @@ Prefab location: `Assets/Prefabs/Grid/`
 
 ---
 
-### Cracking Balloon
+### Soap Cluster
 
-**What it is:** A Simple balloon that takes N hits before popping. The view must show
-visible damage between hits — cracks, dents, surface tears — that grow as
-`HitsRemaining` decreases reactively.
+**What it is:** A cluster of iridescent soap bubbles that floats as a single balloon-type
+unit. Each projectile hit pops one bubble — the cluster visibly shrinks. When the last
+bubble pops, the cluster is destroyed. Mechanically identical to `BalloonModel` with
+`HitsToPop > 1`; the model class is shared with Simple, distinguished by
+`BalloonType.BubbleCluster` in the spawner and config.
 
-**Art direction:** Balloon skin visibly cracking under pressure; same floaty shape as
-Simple, progressively damaged look.
+**Art direction:** 3–5 tightly bunched soap bubbles, each with the classic iridescent
+rainbow-film surface. They float together as a unit. The cluster feels light and permeable —
+it reads as "poppable, not solid." On each hit, one bubble in the foreground vanishes
+with a small pop (soap film flash + mist ring), revealing the smaller cluster behind.
+The final bubble pops with a bigger burst.
 
-- [ ] **Sprites** — crack overlay sprites for each intermediate hit state (N-1 states)
-      Suggested approach: sprite swap or crack overlay sprites layered on top of the base
-      balloon sprite, driven by `HitsRemaining` subscription in the view
-- [ ] **View update** — `BalloonView` (or a `CrackingBalloonVariant`) subscribes to
-      `IHasDurability.HitsRemaining` and swaps/blends crack overlay at each threshold
-- [ ] **VFX** — small dust/debris puff on each non-killing hit (`OnHit` feedback)
-- [ ] **Config entry** — add a Cracking entry to `BalloonsConfiguration` with `HitsToPop = 3`
-      (or 5); weight and maxCount to be tuned in playtesting
+Key differentiation from **Puff**: Puff is wispy, semi-transparent, cotton/dandelion —
+it never reacts. Soap Cluster is clearly bubble-shaped with defined round edges and
+rainbow sheen, and visibly loses bubbles on hit.
 
-**Dependency:** Uses existing `Balloon.prefab` — needs a crack overlay child or a
-sprite swap mechanism, not a new prefab root.
+Key differentiation from **Tough**: Tough is matte rubber/leather, solid-looking, and
+deflects the projectile. Soap Cluster is translucent/iridescent and lets the projectile
+pass through.
+
+- [ ] **Prefab** — `Assets/Prefabs/Balloon/SoapCluster.prefab` with `BalloonView` component;
+      **own prefab**, not a variant of `Balloon.prefab` (different sprite root and animator)
+- [ ] **Sprites** — one sprite per cluster size (N bubbles, N-1, …, 1), OR a single
+      "cluster" sprite with a child bubble count driven by `HitsRemaining`; sprite approach
+      should be decided before commissioning — recommend the **separate sprites per state**
+      approach for clarity on smaller screens
+- [ ] **Animator / Controller** — `SoapCluster.controller`
+      - `Idle_N` states per bubble count (or a single Idle with an `int` `BubblesRemaining`
+        parameter that crossfades between sprite frames)
+      - `BubblePop` trigger — one-shot "one bubble pops" animation (shrink + reform)
+- [ ] **View update** — `BalloonView` subscribes to `IHasDurability.HitsRemaining` and
+      drives the `BubblesRemaining` animator parameter; triggers `BubblePop` on each decrease
+- [ ] **VFX** — `PSVFX_SoapBubblePop` — small iridescent soap-film ring + mist burst, played
+      at the hit bubble's position on each non-killing hit;
+      `PSVFX_SoapClusterBurst` — larger multi-ring burst on final pop (reuse balloon pop
+      sound, replace VFX)
+- [ ] **Config entry** — add a `BubbleCluster` entry to `BalloonsConfiguration` with
+      `HitsToPop = 3` default; weight and maxCount to tune in playtesting
+
+**Dependency:** Needs its own prefab — sprite set is fundamentally different from Simple.
+`BalloonType.BubbleCluster` is already wired in the spawner (`=> new BalloonModel(config)`).
 
 ---
 
@@ -240,7 +263,7 @@ procedural engine can be tested with real (even rough) assets as early as possib
 1. GridActorConfiguration SO + registration         ← unblocks 8.3 wiring immediately
 2. Puff — simplest new actor; replaces placeholder  ← unblocks StaticActorSpawner tests in-game
 3. Bush — same pipeline as Puff, no hit reaction
-4. Simple balloon crack states                      ← view-only change, no new prefab
+4. Soap Cluster balloon                             ← own prefab; view-side HitsRemaining subscription
 5. Unbreakable balloon                              ← new prefab + controller
 6. Deflector — first hitable grid actor             ← introduces Deflect VFX pipeline
 7. Absorber                                         ← danger actor; needs distinctive look
@@ -255,9 +278,10 @@ procedural engine can be tested with real (even rough) assets as early as possib
 Assets/
 ├── Prefabs/
 │   ├── Balloon/
-│   │   ├── Balloon.prefab           ← Simple
-│   │   ├── ToughBalloon.prefab      ← Tough
-│   │   └── UnbreakableBalloon.prefab  ← NEW
+│   │   ├── Balloon.prefab               ← Simple
+│   │   ├── SoapCluster.prefab           ← NEW Soap Cluster (own prefab, not Simple variant)
+│   │   ├── ToughBalloon.prefab          ← Tough
+│   │   └── UnbreakableBalloon.prefab    ← NEW
 │   └── Grid/
 │       ├── StaticTest.prefab        ← retire once Puff is ready
 │       ├── Puff.prefab              ← NEW
@@ -283,9 +307,9 @@ Assets/
 
 ## Open questions for art direction
 
-1. **Cracking vs Unbreakable read** — Simple and Cracking use the same prefab root.
-   Crack-state sprites must be distinct enough that players understand "this takes
-   multiple hits" without confusing it with Unbreakable (which looks permanently solid).
+1. **Soap Cluster vs Unbreakable read** — Soap Cluster is iridescent/translucent and
+   shrinks on hit. Unbreakable is opaque/heavy. These should be immediately distinct.
+   Confirm both art directions before production so they don't converge.
 
 2. **Deflector angle** — Should the deflector have a fixed angle or rotate to reflect
    the projectile direction? Fixed angle is simpler and more strategic; rotating is

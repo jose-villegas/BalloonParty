@@ -31,8 +31,6 @@ namespace BalloonParty.Balloon.View
         [SerializeField] private TweenTracker _tweenTracker;
         [SerializeField] private ItemDisplayService _itemService;
 
-        private bool _isNudging;
-
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private BalloonsConfiguration _balloonsConfig;
@@ -47,6 +45,7 @@ namespace BalloonParty.Balloon.View
         private IBalloonVariant _variant;
         private ITransformCapture _transformCapture;
         private ParticleSystem _popVfxOverride;
+        private bool _isNudging;
 
         public IBalloonModel Model { get; private set; }
         public IBalloonVariant Variant => _variant;
@@ -176,16 +175,7 @@ namespace BalloonParty.Balloon.View
                 slotPosition + (direction.normalized * nudgeDistance),
                 nudgeDuration / 2f));
             sequence.Append(transform.DOMove(slotPosition, nudgeDuration / 2f));
-            sequence.OnComplete(() =>
-            {
-                if (Model is IWriteableDynamicSlotActor w)
-                {
-                    w.IsStable.Value = true;
-                }
-
-                _isNudging = false;
-                onComplete?.Invoke();
-            });
+            sequence.OnComplete(() => OnNudgeComplete(onComplete));
 
             TweenTracker.Replace(sequence);
 
@@ -193,6 +183,17 @@ namespace BalloonParty.Balloon.View
             {
                 transform.DOScale(Vector3.one, nudgeDuration);
             }
+        }
+
+        private void OnNudgeComplete(Action onComplete)
+        {
+            if (Model is IWriteableDynamicSlotActor w)
+            {
+                w.IsStable.Value = true;
+            }
+
+            _isNudging = false;
+            onComplete?.Invoke();
         }
 
         public void PlayPopEffect()

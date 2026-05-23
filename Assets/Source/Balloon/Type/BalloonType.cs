@@ -4,6 +4,7 @@ namespace BalloonParty.Balloon.Type
     {
         Simple,
         Tough,
-        Unbreakable
+        Unbreakable,
+        BubbleCluster
     }
 }

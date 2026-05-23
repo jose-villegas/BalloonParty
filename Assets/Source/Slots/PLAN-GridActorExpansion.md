@@ -42,7 +42,7 @@ implement. They are the building blocks the procedural algorithm needs.
 | Archetype | Model class | `EvaluateHit` | HitsToPop | `IHasItemSlot` | Notes |
 |---|---|---|---|---|---|
 | Simple | `BalloonModel` | PassThrough → Pop | 1 | ✅ | Default; paintable |
-| Cracking | `BalloonModel` (config only) | PassThrough × N-1 → Pop | N (3–5) | ✅ | Same class, different config; view reacts to `HitsRemaining` reactively |
+| Soap Cluster | `BalloonModel` (`BalloonType.BubbleCluster`) | PassThrough × N-1 → Pop | N (3–5) | ✅ | Cluster of iridescent soap bubbles; each hit pops one bubble visually — no crack sprites, cluster shrinks |
 | Tough | `ToughBalloonModel` | Deflect × N-1 → Pop | N | ❌ | Hard outer shell; not paintable |
 | Unbreakable | `UnbreakableBalloonModel` | Deflect always | ∞ | ❌ | Permanent obstacle; no `IHasDurability` |
 
@@ -556,6 +556,21 @@ would make it a base-class concern for types that have nothing to do with nudge.
 `UnbreakableBalloonModel` gets `NudgeOverrides => null` (permanent obstacles don't nudge).
 `IBalloonModel : IHasNudge` stays — only concrete balloon types implement it directly.
 
+#### NudgeService decoupling (done alongside 8.2c)
+
+`GatekeeperActorModel` introduced the first non-balloon `IHitable` actor, which exposed a
+coupling problem: `BalloonNudgeMessage` carried an `IBalloonModel` target, and `NudgeService`
+drove `BalloonView` directly. Neither was valid for non-balloon actors. Both were fixed:
+
+- `BalloonNudgeMessage` renamed to `NudgeMessage`; field `Balloon: IBalloonModel` replaced
+  by `Actor: IHasNudge` — any nudgeable actor can now be a nudge target.
+- `INudgeable` added to `Nudge/` — view-side interface: `Nudge(slotPosition, direction,
+  distance, duration, onComplete)`. `NudgeService` calls `_grid.ViewAt(slot) as INudgeable`.
+- `BalloonView` implements `INudgeable`. Stability tracking (`_isNudging`, `IsStable`)
+  moved from `NudgeService` into `BalloonView.Nudge()` — the view owns the animation state.
+- `ISpawnGate` pruned from `Slots/` — its body was empty. Canonical type is `IReadyGate`
+  in `Shared/`.
+
 #### Failing tests
 New fixture **`GatekeeperActorTests`** (`Tests/EditMode/Slots/`):
 ```
@@ -657,7 +672,7 @@ active `DifficultyProfile`. `GridSpawner` reads the active profile on each spawn
 ```
 Level 1–3:   Only Simple + occasional Tough; no statics beyond Puff obstacle
 Level 4–6:   Deflectors introduced; Tough ratio rises
-Level 7–10:  Gatekeepers introduced; Cracking balloons appear
+Level 7–10:  Gatekeepers introduced; Soap Cluster balloons appear
 Level 11+:   Absorbers introduced; Unbreakable balloons; density climbs
 ```
 

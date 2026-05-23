@@ -49,8 +49,10 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IHa
 |---|---|---|
 | `BalloonModel` (soft) | `IHasDurability` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately |
 | `ToughBalloonModel` | `IHasDurability` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately |
-| Unbreakable balloon *(Phase 7.5)* | `IHitable` only | Always `Deflect`; no `HitsRemaining` |
-| Absorbing wall *(future)* | `IHitable` only | Always `Absorb`; projectile is killed |
+| `UnbreakableBalloonModel` *(Phase 7.5)* | `IHitable` only | Always `Deflect`; no `HitsRemaining` |
+| `DeflectorActorModel` *(Phase 8.2b)* | `IHitable` only | Always `Deflect`; no `HitsRemaining`; not a balloon |
+| `AbsorberActorModel` *(Phase 8.2b)* | `IHitable` only | Always `Absorb`; kills the projectile |
+| `GatekeeperActorModel` *(Phase 8.2c)* | `IHasDurability` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. Blocks a column until destroyed. |
 | `StaticActorModel` | neither | No collider — not part of the hit pipeline |
 
 ## Contents
@@ -58,7 +60,8 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IHa
 | File / Folder | What it does |
 |---|---|
 | `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView` — core grid data structure (namespace `BalloonParty.Slots.Grid`) |
-| `Actor/` | Core actor interfaces, identity enum, and static actor implementation — `ISlotActor`, `IWriteableSlotActor`, `IDynamicSlotActor`, `IWriteableDynamicSlotActor`, `ISlotActorView`, `SlotActorKind`, `StaticActorModel`, `StaticActorView`, `StaticActorPoolChannel`, `StaticActorSettings`, `StaticActorSpawner` (namespace `BalloonParty.Slots.Actor`) |
+| `Actor/` | Core actor interfaces, identity enum, static actor implementation, and hit controller — `ISlotActor`, `IWriteableSlotActor`, `IDynamicSlotActor`, `IWriteableDynamicSlotActor`, `ISlotActorView`, `SlotActorKind`, `StaticActorModel`, `StaticActorView`, `StaticActorPoolChannel`, `StaticActorSettings`, `StaticActorSpawner`, `GridActorHitController` (namespace `BalloonParty.Slots.Actor`) |
+| `Actor/Archetype/` | Concrete grid actor models — `PuffObstacleModel`, `BushObstacleModel` (structural; no hit response), `DeflectorActorModel`, `AbsorberActorModel` (indestructible hitables), `GatekeeperActorModel` (durability-based column blocker), `GridActorView`, `GridActorPoolChannel`, `GridActorType` |
 | `Capabilities/` | Optional capability interfaces — `IHasColor`, `IHasWriteableColor`, `IHasScore`, `IHasNudge`, `IHasItemSlot`, `IHitable`, `IHasDurability`, `IPassThrough`, `HitOutcome`, `DamageContext`, `DamageFlags` (namespace `BalloonParty.Slots.Capabilities`) |
 | `Spawner/` | Spawner coordination — `IGridSpawner`, `SpawnStage`, `GridSpawnerCoordinator` (namespace `BalloonParty.Slots.Spawner`) |
 
