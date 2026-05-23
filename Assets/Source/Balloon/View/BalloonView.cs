@@ -43,7 +43,6 @@ namespace BalloonParty.Balloon.View
 
         private IBalloonViewBinding[] _viewBindings;
         private IBalloonVariant _variant;
-        private ITransformCapture _transformCapture;
         private ParticleSystem _popVfxOverride;
         private bool _isNudging;
 
@@ -51,13 +50,13 @@ namespace BalloonParty.Balloon.View
         public IBalloonVariant Variant => _variant;
         public TweenTracker TweenTracker => _tweenTracker;
         public SlotActorKind ActorKind => SlotActorKind.Dynamic;
-        internal ITransformCapture TransformCapture => _transformCapture;
+
+        internal ITransformCapture TransformCapture => _itemService?.TransformCapture;
 
         private void Awake()
         {
             _viewBindings = GetComponentsInChildren<IBalloonViewBinding>();
             _variant = GetComponentInParent<IBalloonVariant>();
-            _transformCapture = GetComponentInChildren<ITransformCapture>();
         }
 
         public void OnSpawned()

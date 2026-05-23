@@ -13,6 +13,7 @@ namespace BalloonParty.Item
 
         private string _activePoolKey;
         private ItemVisualView _activeView;
+        private ITransformCapture _activeCapture;
         private int _balloonRendererCount;
         private int _baseSortingOffset;
         private IGameConfiguration _config;
@@ -20,6 +21,8 @@ namespace BalloonParty.Item
         private ItemConfiguration _itemConfig;
         private PoolManager _poolManager;
         private IReadOnlyReactiveProperty<Vector2Int> _slotIndex;
+
+        internal ITransformCapture TransformCapture => _activeCapture;
 
         internal void Bind(
             IReadOnlyReactiveProperty<ItemType> item,
@@ -90,6 +93,7 @@ namespace BalloonParty.Item
             var key = settings.VisualPrefab.name;
             _activePoolKey = key;
             _activeView = _poolManager.GetOrRegister(key, () => new ItemVisualPoolChannel(settings.VisualPrefab));
+            _activeCapture = _activeView.GetComponentInChildren<ITransformCapture>();
 
             _activeView.transform.SetParent(transform, false);
             _activeView.transform.localPosition = Vector3.zero;
@@ -118,6 +122,7 @@ namespace BalloonParty.Item
             }
 
             _activeView = null;
+            _activeCapture = null;
             _activePoolKey = null;
         }
     }
