@@ -355,7 +355,7 @@ All tween animations must reproduce the authored values **exactly**:
 
 ## Member Ordering
 
-Classes follow a strict top-to-bottom ordering. Within each numbered group, sort **alphabetically** unless noted.
+Classes follow a strict top-to-bottom ordering across groups. Within a group, order by what reads most naturally — there is no alphabetical requirement.
 
 ### Fields & Properties
 
@@ -364,7 +364,7 @@ Classes follow a strict top-to-bottom ordering. Within each numbered group, sort
 | 1 | **Constants** (`const`) | `private const float PickRadius = 0.25f;` |
 | 2 | **Static readonly fields** | `private static readonly Color DefaultColor = Color.white;` |
 | 3 | **`[SerializeField]` fields** | `[SerializeField] private SpriteRenderer _renderer;` — grouped by `[Header]` where useful |
-| 4 | **`[Inject]` fields** | `[Inject] private SlotGrid _grid;` — all together, alphabetical by type name |
+| 4 | **`[Inject]` fields** | `[Inject] private SlotGrid _grid;` |
 | 5 | **Readonly instance fields** | `private readonly List<Vector3> _path = new();` |
 | 6 | **Mutable instance fields** | `private bool _active;` — always last among fields |
 | 7 | **Auto-properties / expression-body properties** | `public string Name => "...";` |
@@ -379,9 +379,9 @@ Classes follow a strict top-to-bottom ordering. Within each numbered group, sort
 | 2 | **Unity lifecycle** | `Awake` → `OnEnable` → `Start` → `Update` → `FixedUpdate` → `LateUpdate` → `OnDisable` → `OnDestroy` → other callbacks |
 | 3 | **`[Inject]` methods** | Immediately after lifecycle; injection wiring only |
 | 4 | **Interface implementations** | `IStartable.Start()`, `ITickable.Tick()`, `IDisposable.Dispose()`, `IPoolable`, etc. |
-| 5 | **Public methods** | Alphabetical |
-| 6 | **Protected methods** | Alphabetical |
-| 7 | **Private methods** | Alphabetical; helpers called only by one method may sit directly below their caller |
+| 5 | **Public methods** | |
+| 6 | **Protected methods** | |
+| 7 | **Private methods** | Helpers called only by one method may sit directly below their caller |
 
 ### Canonical Example
 
@@ -416,7 +416,7 @@ public class BalloonRemoverCheat : MonoBehaviour, ICheat
     // Interface implementations
     public void Execute() { ... }
 
-    // Private helpers (alphabetical)
+    // Private helpers
     private HashSet<Vector2Int> CollectHitSlots() { ... }
     private void RemoveBalloonsAlongPath() { ... }
 }

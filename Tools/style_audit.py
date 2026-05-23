@@ -129,7 +129,7 @@ def check_braces_required(path: Path, lines: list[str], result: AuditResult):
                     break
                 # It's a statement without braces
                 result.add(Violation(str(path), i, "braces-required",
-                    f"control statement without braces: {stripped.strip()}"))
+                    f"control statement without braces: {stripped.strip()}", fixable=True))
                 break
 
 
@@ -151,10 +151,10 @@ def check_allman_braces(path: Path, lines: list[str], result: AuditResult):
             # Could be control flow or method signature with brace on same line
             if re.search(r"(if|else|for|foreach|while|using|lock|fixed|class|struct|enum|interface|namespace|switch|try|catch|finally|do)\b.*\{$", stripped):
                 result.add(Violation(str(path), i, "allman-braces",
-                    f"opening brace on same line: {stripped.strip()[:80]}"))
+                    f"opening brace on same line: {stripped.strip()[:80]}", fixable=True))
             elif re.match(r"\s*(public|private|protected|internal|static|async|override|virtual|abstract|sealed|void|[\w<>\[\],\s]+)\s+\w+\s*\(.*\)\s*\{$", stripped):
                 result.add(Violation(str(path), i, "allman-braces",
-                    f"method brace on same line: {stripped.strip()[:80]}"))
+                    f"method brace on same line: {stripped.strip()[:80]}", fixable=True))
 
 
 def check_block_comment_headers(path: Path, lines: list[str], result: AuditResult):
@@ -163,7 +163,7 @@ def check_block_comment_headers(path: Path, lines: list[str], result: AuditResul
     for i, line in enumerate(lines, 1):
         if header_re.match(line):
             result.add(Violation(str(path), i, "block-comment-header",
-                f"block comment header: {line.strip()[:60]}"))
+                f"block comment header: {line.strip()[:60]}", fixable=True))
 
 
 def check_redundant_comments(path: Path, lines: list[str], result: AuditResult):
@@ -178,7 +178,7 @@ def check_redundant_comments(path: Path, lines: list[str], result: AuditResult):
         for pat, desc in patterns:
             if pat.match(line):
                 result.add(Violation(str(path), i, "redundant-comment",
-                    f"{desc}: {line.strip()[:60]}"))
+                    f"{desc}: {line.strip()[:60]}", fixable=True))
 
 
 def check_start_coroutine(path: Path, lines: list[str], result: AuditResult):
@@ -320,218 +320,6 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
             result.add(Violation(str(path), i, "member-ordering",
                 f"{group_names.get(group, '?')} field after {group_names.get(last_group, '?')} field"))
         last_group = group
-
-
-_UNITY_LIFECYCLE = frozenset({
-    "Awake", "Start", "OnEnable", "OnDisable", "OnDestroy",
-    "Update", "FixedUpdate", "LateUpdate", "Reset", "OnValidate",
-    "OnDrawGizmos", "OnDrawGizmosSelected",
-    "OnBecameVisible", "OnBecameInvisible",
-    "OnApplicationFocus", "OnApplicationPause", "OnApplicationQuit",
-    "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay",
-    "OnTriggerEnter2D", "OnTriggerExit2D", "OnTriggerStay2D",
-    "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay",
-    "OnCollisionEnter2D", "OnCollisionExit2D", "OnCollisionStay2D",
-    "OnGUI", "OnRenderObject", "OnWillRenderObject",
-    "OnPreCull", "OnPreRender", "OnPostRender",
-})
-
-
-def _alpha_key(name: str) -> str:
-    """Normalise a member name for alphabetical comparison (strips leading _ and lowercases)."""
-    return name.lstrip("_").lower()
-
-
-def _extract_field_name(stripped: str) -> str | None:
-    """Return the declared field name from a field declaration line, or None."""
-    # Remove attributes like [SerializeField], [Header("…")] etc.
-    s = re.sub(r"\[.*?\]", "", stripped).strip()
-    # Remove everything from = onward (initialiser)
-    s = s.split("=")[0].rstrip()
-    # Remove trailing ;
-    s = s.rstrip(";").rstrip()
-    # The last identifier is the name
-    idents = re.findall(r"\b([A-Za-z_]\w*)\b", s)
-    for ident in reversed(idents):
-        if ident not in _CSHARP_KEYWORDS:
-            return ident
-    return None
-
-
-def _extract_method_name(stripped: str) -> str | None:
-    """Return the declared method name from a method-signature line, or None."""
-    # Remove attributes
-    s = re.sub(r"\[.*?\]", "", stripped).strip()
-    # Match: <modifiers> <return-type> <Name>(<params...
-    m = re.match(
-        r"(?:(?:public|private|protected|internal|static|async|override|virtual|"
-        r"abstract|sealed|new|extern|unsafe)\s+)*"
-        r"(?:[\w<>\[\],\s\?]+?\s+)??"   # return type (optional, non-greedy)
-        r"([A-Za-z_]\w*)\s*(?:<[^>]*>)?\s*\(",
-        s,
-    )
-    if m:
-        name = m.group(1)
-        if name not in _CSHARP_KEYWORDS:
-            return name
-    return None
-
-
-def check_member_alpha_ordering(path: Path, lines: list[str], result: AuditResult):
-    """Within each field/method group, members must be in alphabetical order."""
-    GROUP_CONST = 1
-    GROUP_STATIC_READONLY = 2
-    GROUP_SERIALIZE = 3
-    GROUP_INJECT = 4
-    GROUP_READONLY = 5
-    GROUP_MUTABLE = 6
-    GROUP_PROPERTY = 7
-    GROUP_METHOD_PUBLIC = 10
-    GROUP_METHOD_PROTECTED = 11
-    GROUP_METHOD_PRIVATE = 12
-
-    GROUP_NAMES = {
-        GROUP_CONST: "const",
-        GROUP_STATIC_READONLY: "static readonly",
-        GROUP_SERIALIZE: "[SerializeField]",
-        GROUP_INJECT: "[Inject]",
-        GROUP_READONLY: "readonly",
-        GROUP_MUTABLE: "mutable",
-        GROUP_PROPERTY: "property",
-        GROUP_METHOD_PUBLIC: "public method",
-        GROUP_METHOD_PROTECTED: "protected method",
-        GROUP_METHOD_PRIVATE: "private/internal method",
-    }
-
-    brace_depth = 0
-    in_class = False
-    class_brace_depth = 0
-    class_name = ""
-
-    # Per-group last-seen name (reset when group changes)
-    current_group: int | None = None
-    last_name: str | None = None
-
-    # Multi-line attribute carry-forward
-    pending_serialize = False
-    pending_inject = False
-
-    for i, line in enumerate(lines, 1):
-        stripped = line.strip()
-        prev_stripped = lines[i - 2].strip() if i >= 2 else ""
-
-        brace_depth += stripped.count("{") - stripped.count("}")
-
-        # Detect class/struct entry (resets all state)
-        m = re.match(
-            r"(?:public|internal|private|protected)?\s*"
-            r"(?:abstract\s+|sealed\s+|static\s+|partial\s+)*"
-            r"(?:class|struct)\s+(\w+)",
-            stripped,
-        )
-        if m:
-            in_class = True
-            class_name = m.group(1)
-            current_group = None
-            last_name = None
-            class_brace_depth = brace_depth
-            continue
-
-        if not in_class:
-            continue
-
-        # Only inspect direct class members (depth = class_brace_depth + 1)
-        if brace_depth != class_brace_depth + 1:
-            pending_serialize = False
-            pending_inject = False
-            continue
-
-        # Carry-forward attribute flags from previous line
-        has_serialize_above = "[SerializeField]" in prev_stripped or pending_serialize
-        has_inject_above = "[Inject]" in prev_stripped or pending_inject
-        pending_serialize = "[SerializeField]" in stripped and ";" not in stripped
-        pending_inject = "[Inject]" in stripped and ";" not in stripped
-
-        # ── Field classification ──────────────────────────────────────────────
-        is_method = "(" in stripped and ")" in stripped and "=" not in stripped.split("(")[0]
-
-        if not is_method:
-            if re.match(r"(?:private|public|protected|internal)\s+const\s+", stripped):
-                group = GROUP_CONST
-            elif re.match(r"(?:private|public|protected|internal)?\s*static\s+readonly\s+", stripped):
-                group = GROUP_STATIC_READONLY
-            elif "[SerializeField]" in stripped or has_serialize_above:
-                group = GROUP_SERIALIZE
-            elif ("[Inject]" in stripped and ";" in stripped) or (has_inject_above and ";" in stripped):
-                group = GROUP_INJECT
-            elif re.match(r"(?:private|public|protected|internal)\s+readonly\s+", stripped):
-                group = GROUP_READONLY
-            elif re.match(r"(?:private|public|protected|internal)\s+\w+[\w<>\[\],\s]*\s+_\w+\s*[;=]", stripped):
-                if not ("[SerializeField]" in stripped or "[Inject]" in stripped
-                        or has_serialize_above or has_inject_above):
-                    group = GROUP_MUTABLE
-                else:
-                    continue
-            elif "=>" in stripped and ";" in stripped and not stripped.startswith("//"):
-                if re.match(r"(?:private|public|protected|internal)\s+\S+.*\s+=>\s+", stripped):
-                    group = GROUP_PROPERTY
-                else:
-                    continue
-            else:
-                continue
-
-            name = _extract_field_name(stripped)
-
-        else:
-            # ── Method classification ─────────────────────────────────────────
-            name = _extract_method_name(stripped)
-            if not name:
-                continue
-
-            # Skip constructors
-            if name == class_name:
-                current_group = None
-                last_name = None
-                continue
-
-            # Skip Unity lifecycle hooks
-            if name in _UNITY_LIFECYCLE:
-                current_group = None
-                last_name = None
-                continue
-
-            # Skip overrides / interface implementations (ordering is fixed by contract)
-            if "override" in stripped or (prev_stripped and "override" in prev_stripped):
-                current_group = None
-                last_name = None
-                continue
-
-            # Determine method visibility group
-            if re.match(r"public\s+", stripped):
-                group = GROUP_METHOD_PUBLIC
-            elif re.match(r"protected\s+", stripped):
-                group = GROUP_METHOD_PROTECTED
-            elif re.match(r"(?:private|internal)\s+", stripped):
-                group = GROUP_METHOD_PRIVATE
-            else:
-                continue
-
-        if not name:
-            continue
-
-        if group != current_group:
-            # Entering a new group — reset tracking
-            current_group = group
-            last_name = name
-        else:
-            # Same group — check alphabetical order
-            if last_name and _alpha_key(name) < _alpha_key(last_name):
-                result.add(Violation(
-                    str(path), i, "member-alpha-ordering",
-                    f"'{name}' should come before '{last_name}' "
-                    f"(alphabetical order within {GROUP_NAMES.get(group, '?')} group)",
-                ))
-            last_name = name
 
 
 def check_dotween_kill_poolable(path: Path, lines: list[str], result: AuditResult):
@@ -1045,6 +833,21 @@ def check_multiple_blank_lines(path: Path, lines: list[str], result: AuditResult
             consecutive = 0
 
 
+def check_trailing_newlines(path: Path, lines: list[str], result: AuditResult):
+    """File must end with exactly one newline — no trailing blank lines."""
+    if not lines:
+        return
+    trailing = 0
+    for line in reversed(lines):
+        if line.strip() == "":
+            trailing += 1
+        else:
+            break
+    if trailing > 0:
+        result.add(Violation(str(path), len(lines), "trailing-newlines",
+            f"{trailing} trailing blank line(s) at end of file", fixable=True))
+
+
 def check_repeated_accessor(path: Path, lines: list[str], result: AuditResult):
     """Flag calls where 3+ arguments are accessed from the same object (e.g. obj.A, obj.B, obj.C).
 
@@ -1121,7 +924,6 @@ RULES: dict[str, callable] = {
     "addto-poolable":    check_addto_this_in_poolable,
     "instantiate":       check_object_instantiate,
     "member-ordering":   check_member_ordering,
-    "member-alpha":      check_member_alpha_ordering,
     "dotween-poolable":  check_dotween_kill_poolable,
     "inject-on-field":   check_inject_on_field,
     "public-visibility": check_public_visibility,
@@ -1130,6 +932,7 @@ RULES: dict[str, callable] = {
     "large-lambda":      check_large_anonymous_functions,
     "non-capturing-lambda": check_non_capturing_lambda,
     "blank-lines":       check_multiple_blank_lines,
+    "trailing-newlines": check_trailing_newlines,
 }
 
 # Rules that don't operate on individual files
@@ -1169,6 +972,127 @@ def fix_multiple_blank_lines(path: Path, lines: list[str]) -> list[str]:
     return fixed
 
 
+def fix_trailing_newlines(path: Path, lines: list[str]) -> list[str]:
+    """Strip all trailing blank lines, keeping exactly one terminating newline."""
+    while lines and lines[-1].strip() == "":
+        lines = lines[:-1]
+    if lines and not lines[-1].endswith("\n"):
+        lines[-1] += "\n"
+    return lines
+
+
+def fix_block_comment_headers(path: Path, lines: list[str]) -> list[str]:
+    """Remove block comment header lines (// ====, // ----, etc.)."""
+    header_re = re.compile(r"^\s*//\s*[=\-*#]{4,}")
+    return [line for line in lines if not header_re.match(line)]
+
+
+def fix_redundant_comments(path: Path, lines: list[str]) -> list[str]:
+    """Remove redundant comment lines (// constructor, // fields, etc.)."""
+    pat = re.compile(
+        r"^\s*//\s*(inject\s+depend|constructor|update\s+position|set\s+color|"
+        r"get\s+component|initialize|cleanup|dispose|destructor|"
+        r"fields|properties|methods|private\s+methods|public\s+methods)\s*$",
+        re.I,
+    )
+    return [line for line in lines if not pat.match(line)]
+
+
+def fix_allman_braces(path: Path, lines: list[str]) -> list[str]:
+    """Split trailing { onto its own line (Allman brace style)."""
+    out = []
+    for line in lines:
+        stripped = line.rstrip()
+        # Apply the same exclusions as the checker
+        if stripped.strip() == "{":
+            out.append(line)
+            continue
+        if "=>" in stripped:
+            out.append(line)
+            continue
+        if re.search(r'"\$?.*\{', stripped):
+            out.append(line)
+            continue
+        if stripped.endswith("{") and not re.search(r"(=|new\s+\w+.*|new\(.*\))\s*\{$", stripped):
+            indent = len(line) - len(line.lstrip())
+            indent_str = line[:indent]
+            code_part = stripped[indent:].rstrip(" {").rstrip()
+            out.append(indent_str + code_part + "\n")
+            out.append(indent_str + "{\n")
+        else:
+            out.append(line)
+    return out
+
+
+def fix_braces_required(path: Path, lines: list[str]) -> list[str]:
+    """Wrap braceless control-flow bodies in { }."""
+    control_re = re.compile(
+        r"^\s*(if|else\s+if|else|for|foreach|while|using|lock|fixed)\s*(\(.*\))?\s*$"
+    )
+    result_lines = list(lines)
+    i = 0
+    while i < len(result_lines):
+        if control_re.match(result_lines[i].rstrip()):
+            j = i + 1
+            while j < len(result_lines) and j < i + 4 and not result_lines[j].strip():
+                j += 1
+            if j < len(result_lines):
+                next_s = result_lines[j].strip()
+                if not next_s.startswith("{") and not next_s.startswith("//"):
+                    ctrl_indent = len(result_lines[i]) - len(result_lines[i].lstrip())
+                    ctrl_indent_str = result_lines[i][:ctrl_indent]
+                    result_lines.insert(j, ctrl_indent_str + "{\n")
+                    result_lines.insert(j + 2, ctrl_indent_str + "}\n")
+                    i = j + 3
+                    continue
+        i += 1
+    return result_lines
+
+
+# Ordered pipeline: each entry is (violation-rule-name, fixer-function).
+# fix_trailing_newlines and fix_multiple_blank_lines run last so comment-deletion
+# fixers cannot re-introduce trailing gaps that escape cleanup.
+_FIXER_PIPELINE: list[tuple[str, callable]] = [
+    ("namespace-mismatch",    fix_namespace),
+    ("allman-braces",         fix_allman_braces),
+    ("braces-required",       fix_braces_required),
+    ("block-comment-header",  fix_block_comment_headers),
+    ("redundant-comment",     fix_redundant_comments),
+    ("multiple-blank-lines",  fix_multiple_blank_lines),
+    ("trailing-newlines",     fix_trailing_newlines),
+]
+
+
+def run_fix(result: AuditResult):
+    """Apply auto-fixes for all fixable violations, processing each file through
+    the full fixer pipeline so multiple fixes compose cleanly."""
+    files_rules: dict[str, set[str]] = {}
+    for v in result.violations:
+        if v.fixable:
+            files_rules.setdefault(v.file, set()).add(v.rule)
+
+    fixed_count = 0
+    for fpath, rules in sorted(files_rules.items()):
+        path = Path(fpath)
+        lines = read_lines(path)
+        original = list(lines)
+
+        for rule, fixer in _FIXER_PIPELINE:
+            # Always run blank-line and trailing-newline passes last — comment
+            # deletions may introduce gaps or a bare trailing blank that needs cleanup.
+            if rule in rules or rule in ("multiple-blank-lines", "trailing-newlines"):
+                lines = fixer(path, lines)
+
+        if lines != original:
+            with open(path, "w", encoding="utf-8") as f:
+                f.writelines(lines)
+            fixed_count += 1
+            applied = sorted(rules)
+            print(f"  FIXED [{', '.join(applied)}] in {os.path.relpath(fpath, SOURCE_ROOT)}")
+
+    print(f"\n  Auto-fixed {fixed_count} file(s).")
+
+
 # ─── Main ────────────────────────────────────────────────────────────────────
 
 def run_audit(rule_filter: Optional[str] = None, file_filter: Optional[str] = None) -> AuditResult:
@@ -1196,45 +1120,11 @@ def run_audit(rule_filter: Optional[str] = None, file_filter: Optional[str] = No
     return result
 
 
-def run_fix(result: AuditResult):
-    """Apply auto-fixes for fixable violations."""
-    # Group fixable violations by file and rule
-    ns_files: set[str] = set()
-    blank_files: set[str] = set()
-    for v in result.violations:
-        if v.rule == "namespace-mismatch":
-            ns_files.add(v.file)
-        elif v.rule == "multiple-blank-lines":
-            blank_files.add(v.file)
-
-    fixed_count = 0
-
-    for fpath in ns_files:
-        path = Path(fpath)
-        lines = read_lines(path)
-        new_lines = fix_namespace(path, lines)
-        if new_lines != lines:
-            with open(path, "w", encoding="utf-8") as f:
-                f.writelines(new_lines)
-            fixed_count += 1
-            print(f"  FIXED namespace in {os.path.relpath(fpath, SOURCE_ROOT)}")
-
-    for fpath in blank_files:
-        path = Path(fpath)
-        lines = read_lines(path)
-        new_lines = fix_multiple_blank_lines(path, lines)
-        if new_lines != lines:
-            with open(path, "w", encoding="utf-8") as f:
-                f.writelines(new_lines)
-            fixed_count += 1
-            print(f"  FIXED multiple blank lines in {os.path.relpath(fpath, SOURCE_ROOT)}")
-
-    print(f"\n  Auto-fixed {fixed_count} file(s).")
-
-
 def main():
     parser = argparse.ArgumentParser(description="BalloonParty Code Style Auditor")
-    parser.add_argument("--fix", action="store_true", help="Auto-fix safe issues (currently: namespace)")
+    parser.add_argument("--fix", action="store_true",
+                        help="Auto-fix safe issues (allman braces, braces-required, "
+                             "block/redundant comments, blank lines, namespace)")
     parser.add_argument("--rule", type=str, default=None,
                         help=f"Run only one rule. Available: {', '.join(sorted(list(RULES) + list(META_RULES)))}")
     parser.add_argument("--file", type=str, default=None, help="Audit only files matching this substring")

@@ -70,7 +70,7 @@ VContainer (DI), UniRx (reactive), MessagePipe (pub/sub), UniTask (async), DOTwe
 python3 Tools/style_audit.py              # full scan
 python3 Tools/style_audit.py --rule X     # single rule
 python3 Tools/style_audit.py --file X     # single file
-python3 Tools/style_audit.py --fix        # auto-fix namespaces
+python3 Tools/style_audit.py --fix        # auto-fix: allman braces, braces-required, blank lines, comments, namespace
 ```
 
 ## Pre-commit Hook
