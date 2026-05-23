@@ -52,8 +52,8 @@ Needs to be created, added to the scene's `GameLifetimeScope` bindings, and regi
 just like `BalloonsConfiguration` is today.
 
 Scope of work:
-- [ ] Write `GridActorConfiguration.cs` (mirrors `BalloonsConfiguration` structure)
-- [ ] Register in `GameLifetimeScope` with `builder.RegisterInstance`
+- [x] Write `GridActorConfiguration.cs` (mirrors `BalloonsConfiguration` structure)
+- [x] Register in `GameLifetimeScope` with `builder.RegisterInstance`
 - [ ] Create the SO asset in `Assets/ScriptableObjects/` (or equivalent)
 - [ ] Wire into `StaticActorSpawner` and eventually `GridSpawner`
 

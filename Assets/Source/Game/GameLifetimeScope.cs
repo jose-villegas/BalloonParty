@@ -41,6 +41,7 @@ namespace BalloonParty.Game
         [SerializeField] private ItemConfiguration _itemConfiguration;
         [SerializeField] private GamePalette _gamePalette;
         [SerializeField] private BalloonsConfiguration _balloonsConfiguration;
+        [SerializeField] private GridActorConfiguration _gridActorConfiguration;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
         [SerializeField] private StaticActorView _staticActorPrefab;
@@ -75,6 +76,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance(_itemConfiguration);
             builder.RegisterInstance(_gamePalette);
             builder.RegisterInstance(_balloonsConfiguration);
+            builder.RegisterInstance(_gridActorConfiguration);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
             builder.RegisterInstance(new StaticActorSettings(_staticActorPrefab));

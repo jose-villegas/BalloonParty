@@ -10,6 +10,7 @@ All game data is split across focused ScriptableObjects. Each is registered as a
 |---|---|
 | `GameConfiguration` | Implements `IGameConfiguration` — projectile settings, slot grid dimensions, prediction trace params, score trail timing, score points scatter delay, points-per-level formula |
 | `BalloonsConfiguration` | Balloon-specific configuration — `BalloonPrefabEntry[]` entries with per-type weight/cap/nudge/VFX, default pop VFX, spawn line counts, spawn animation range, balance delay, global nudge defaults |
+| `GridActorConfiguration` | Grid actor configuration — `GridActorPrefabEntry[]` entries with per-type weight, max-count cap, and `HitsToPop` for destructible actors (Gatekeeper). Used by the procedural `GridSpawner` (Phase 8.3) and `StaticActorSpawner` |
 | `GamePalette` | Array of `PaletteEntry` (name + `Color`) — the single source for all balloon colors; injected into `BalloonView`, `ColorableBalloonType`, `ScoreController`, `ColorProgressBar`, `ScoreTrailService`, `ItemDisplayService`, and anywhere a color name must be resolved to a `UnityEngine.Color` |
 | `GameDisplayConfiguration` | Aspect-ratio → orthographic-size lookup for camera sizing |
 | `ItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, damage, and type-specific effect params |
@@ -19,6 +20,7 @@ All game data is split across focused ScriptableObjects. Each is registered as a
 | File | What it does |
 |---|---|
 | `BalloonPrefabEntry` | Serializable entry in `BalloonsConfiguration` — holds a `BalloonView` prefab reference, spawn weight, optional max-count cap, `HitsToPop` (how many hits before popping; -1 = unbreakable), `ScoreValue` (points awarded on pop), per-type `NudgeOverride[]`, and optional pop VFX override. `BalloonType` drives which model class is created (`Simple` → `BalloonModel`, `Tough` → `ToughBalloonModel`). Item eligibility is determined by whether the model implements `IHasWriteableItemSlot` — not a flag. Pool key is derived from the prefab's GameObject name. |
+| `GridActorPrefabEntry` | Serializable entry in `GridActorConfiguration` — holds a `GridActorView` prefab reference, `GridActorType`, spawn weight, optional max-count cap, and `HitsToPop` (relevant only for `Gatekeeper`). Pool key is derived from the prefab's GameObject name. |
 | `ItemSettings` | Per-item tuning data for `ItemConfiguration` — common fields (type, frequency, weight, cap, visuals, `Damage`) plus type-specific fields (bomb radius, laser cast params, lightning timing). `Damage` controls how many hit-points a single activation removes from each affected balloon; defaults to 1 |
 | `PaletteEntry` | Serializable name + `Color` pair used in `GamePalette` |
 | `ItemType` | Enum — `None`, `Shield`, `Bomb`, `Laser`, `Lightning` |
