@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Item;
+using BalloonParty.Nudge;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Rendering;
@@ -17,7 +18,7 @@ using VContainer;
 
 namespace BalloonParty.Balloon.View
 {
-    public class BalloonView : MonoBehaviour, IPoolable, ISlotActorView
+    public class BalloonView : MonoBehaviour, IPoolable, ISlotActorView, INudgeable
     {
         private static readonly int IsStableParam = Animator.StringToHash("IsStable");
 
@@ -29,6 +30,8 @@ namespace BalloonParty.Balloon.View
         [SerializeField] private Collider2D _collider;
         [SerializeField] private TweenTracker _tweenTracker;
         [SerializeField] private ItemDisplayService _itemService;
+
+        private bool _isNudging;
 
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
@@ -82,6 +85,7 @@ namespace BalloonParty.Balloon.View
             _itemService?.Unbind();
             Model = null;
             _popVfxOverride = null;
+            _isNudging = false;
         }
 
         public void Bind(IBalloonModel model)
@@ -149,15 +153,39 @@ namespace BalloonParty.Balloon.View
             float nudgeDuration,
             Action onComplete)
         {
+            // Skip nudge if the balloon is mid-spawn/balance and we didn't cause the instability.
+            if (Model is IWriteableDynamicSlotActor stableChecker
+                && !stableChecker.IsStable.Value
+                && !_isNudging)
+            {
+                return;
+            }
+
             var currentScale = transform.localScale;
             transform.DOKill();
+
+            if (Model is IWriteableDynamicSlotActor writable)
+            {
+                writable.IsStable.Value = false;
+            }
+
+            _isNudging = true;
 
             var sequence = DOTween.Sequence();
             sequence.Append(transform.DOMove(
                 slotPosition + (direction.normalized * nudgeDistance),
                 nudgeDuration / 2f));
             sequence.Append(transform.DOMove(slotPosition, nudgeDuration / 2f));
-            sequence.OnComplete(() => onComplete?.Invoke());
+            sequence.OnComplete(() =>
+            {
+                if (Model is IWriteableDynamicSlotActor w)
+                {
+                    w.IsStable.Value = true;
+                }
+
+                _isNudging = false;
+                onComplete?.Invoke();
+            });
 
             TweenTracker.Replace(sequence);
 

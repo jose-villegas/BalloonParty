@@ -33,7 +33,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IPublisher<ItemCheckMessage> _itemCheckPublisher;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly List<IBalloonModel> _newlySpawnedBalloons = new();
-        private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
+        private readonly IPublisher<NudgeMessage> _nudgePublisher;
         private readonly IObjectResolver _resolver;
         private readonly PoolManager _poolManager;
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
@@ -57,7 +57,7 @@ namespace BalloonParty.Balloon.Spawner
             IPublisher<ItemCheckMessage> itemCheckPublisher,
             IPublisher<TransformCapturedMessage> transformCapturedPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
-            IPublisher<BalloonNudgeMessage> nudgePublisher)
+            IPublisher<NudgeMessage> nudgePublisher)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;

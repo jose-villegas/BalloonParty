@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using BalloonParty.Balloon.View;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
@@ -13,9 +12,8 @@ namespace BalloonParty.Nudge
 {
     internal class NudgeService : IStartable
     {
-        private readonly HashSet<IWriteableSlotActor> _nudging = new();
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
-        private readonly ISubscriber<BalloonNudgeMessage> _nudgeSubscriber;
+        private readonly ISubscriber<NudgeMessage> _nudgeSubscriber;
         private readonly NudgeOverrideResolver _resolver;
         private readonly SlotGrid _grid;
 
@@ -24,7 +22,7 @@ namespace BalloonParty.Nudge
             SlotGrid grid,
             NudgeOverrideResolver resolver,
             ISubscriber<ActorHitMessage> hitSubscriber,
-            ISubscriber<BalloonNudgeMessage> nudgeSubscriber)
+            ISubscriber<NudgeMessage> nudgeSubscriber)
         {
             _grid = grid;
             _resolver = resolver;
@@ -38,43 +36,15 @@ namespace BalloonParty.Nudge
             _nudgeSubscriber.Subscribe(OnNudge);
         }
 
-        private void NudgeBalloon(Vector2Int slot, Vector3 origin, float distance, float duration)
+        private void NudgeActor(Vector2Int slot, Vector3 origin, float distance, float duration)
         {
-            var model = _grid.At(slot);
-            if (model == null)
-            {
-                return;
-            }
-
-            if (model is not IWriteableDynamicSlotActor dynamicModel)
-            {
-                return;
-            }
-
-            if (!dynamicModel.IsStable.Value && !_nudging.Contains(model))
-            {
-                return;
-            }
-
-            if (_grid.ViewAt(slot) is not BalloonView balloonView)
+            if (_grid.ViewAt(slot) is not INudgeable nudgeableView)
             {
                 return;
             }
 
             var slotPos = _grid.IndexToWorldPosition(slot);
-            var direction = slotPos - origin;
-
-            _nudging.Add(model);
-            dynamicModel.IsStable.Value = false;
-            balloonView.Nudge(slotPos,
-                direction,
-                distance,
-                duration,
-                () =>
-                {
-                    dynamicModel.IsStable.Value = true;
-                    _nudging.Remove(model);
-                });
+            nudgeableView.Nudge(slotPos, slotPos - origin, distance, duration, null);
         }
 
         private void OnActorHit(ActorHitMessage msg)
@@ -98,11 +68,11 @@ namespace BalloonParty.Nudge
                 var slot = neighbor.SlotIndex;
                 var distance = _resolver.ResolveDistance(nudgeable.NudgeOverrides, null, NudgeType.Neighbor);
                 var duration = _resolver.ResolveDuration(nudgeable.NudgeOverrides, null, NudgeType.Neighbor);
-                NudgeBalloon(slot, hitSlotPos, distance, duration);
+                NudgeActor(slot, hitSlotPos, distance, duration);
             }
         }
 
-        private void OnNudge(BalloonNudgeMessage msg)
+        private void OnNudge(NudgeMessage msg)
         {
             if (msg.Source == NudgeType.Shockwave)
             {
@@ -110,24 +80,29 @@ namespace BalloonParty.Nudge
             }
             else
             {
-                HandleSingleBalloon(msg);
+                HandleSingleActor(msg);
             }
         }
 
-        private void HandleSingleBalloon(BalloonNudgeMessage msg)
+        private void HandleSingleActor(NudgeMessage msg)
         {
-            if (msg.Balloon == null)
+            if (msg.Actor == null)
             {
                 return;
             }
 
-            var slot = msg.Balloon.SlotIndex.Value;
-            var distance = _resolver.ResolveDistance(msg.Balloon.NudgeOverrides, msg.Overrides, msg.Source);
-            var duration = _resolver.ResolveDuration(msg.Balloon.NudgeOverrides, msg.Overrides, msg.Source);
-            NudgeBalloon(slot, msg.Origin, distance, duration);
+            if (msg.Actor is not ISlotActor slotActor)
+            {
+                return;
+            }
+
+            var slot = slotActor.SlotIndex;
+            var distance = _resolver.ResolveDistance(msg.Actor.NudgeOverrides, msg.Overrides, msg.Source);
+            var duration = _resolver.ResolveDuration(msg.Actor.NudgeOverrides, msg.Overrides, msg.Source);
+            NudgeActor(slot, msg.Origin, distance, duration);
         }
 
-        private void HandleShockwave(BalloonNudgeMessage msg)
+        private void HandleShockwave(NudgeMessage msg)
         {
             var baseDistance = _resolver.ResolveDistance(null, msg.Overrides, NudgeType.Shockwave);
             var baseDuration = _resolver.ResolveDuration(null, msg.Overrides, NudgeType.Shockwave);
@@ -181,7 +156,7 @@ namespace BalloonParty.Nudge
                         continue;
                     }
 
-                    NudgeBalloon(slot, msg.Origin, distance, duration);
+                    NudgeActor(slot, msg.Origin, distance, duration);
                 }
             }
         }

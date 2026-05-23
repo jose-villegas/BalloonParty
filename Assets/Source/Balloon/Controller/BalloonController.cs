@@ -19,7 +19,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IWriteableBalloonModel _model;
-        private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
+        private readonly IPublisher<NudgeMessage> _nudgePublisher;
         private readonly Action _onReturned;
         private readonly string _poolKey;
         private readonly PoolManager _poolManager;
@@ -40,7 +40,7 @@ namespace BalloonParty.Balloon.Controller
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
             IPublisher<TransformCapturedMessage> transformCapturedPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
-            IPublisher<BalloonNudgeMessage> nudgePublisher,
+            IPublisher<NudgeMessage> nudgePublisher,
             SlotGrid grid,
             PoolManager poolManager)
         {
@@ -76,7 +76,7 @@ namespace BalloonParty.Balloon.Controller
             var balloonWorldPos = _grid.IndexToWorldPosition(_model.SlotIndex.Value);
             _deflectedPublisher.Publish(new BalloonDeflectedMessage(_model, balloonWorldPos, msg.ProjectileDirection));
 
-            _nudgePublisher.Publish(new BalloonNudgeMessage(
+            _nudgePublisher.Publish(new NudgeMessage(
                 _model,
                 balloonWorldPos - msg.ProjectileDirection.normalized,
                 NudgeType.Deflect));

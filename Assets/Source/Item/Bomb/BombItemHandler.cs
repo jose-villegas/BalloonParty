@@ -20,7 +20,7 @@ namespace BalloonParty.Item.Bomb
         private readonly ContactFilter2D _balloonFilter;
         private readonly GamePalette _palette;
         private readonly IPublisher<ActorHitMessage> _hitPublisher;
-        private readonly IPublisher<BalloonNudgeMessage> _nudgePublisher;
+        private readonly IPublisher<NudgeMessage> _nudgePublisher;
         private readonly ItemConfiguration _itemConfig;
         private readonly List<Collider2D> _overlapResults = new(8);
         private readonly PoolManager _poolManager;
@@ -35,7 +35,7 @@ namespace BalloonParty.Item.Bomb
             GamePalette palette,
             ItemConfiguration itemConfig,
             IPublisher<ActorHitMessage> hitPublisher,
-            IPublisher<BalloonNudgeMessage> nudgePublisher,
+            IPublisher<NudgeMessage> nudgePublisher,
             PoolManager poolManager)
         {
             _palette = palette;
@@ -61,7 +61,7 @@ namespace BalloonParty.Item.Bomb
 
             // Shockwave first — nudges all balloons before any get popped or
             // marked unstable by the blast's neighbor nudges.
-            _nudgePublisher.Publish(new BalloonNudgeMessage(
+            _nudgePublisher.Publish(new NudgeMessage(
                 null,
                 _worldPosition,
                 NudgeType.Shockwave,
