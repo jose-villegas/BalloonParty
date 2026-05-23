@@ -66,6 +66,7 @@ namespace BalloonParty.Slots.Actor
 
         internal void SpawnStaticActors()
         {
+            return; // Temporarily disabled while we develop content.
             var slots = new List<Vector2Int>(_grid.AllEmptySlots());
             var count = Mathf.Min(
                 UnityEngine.Random.Range(_config.MinStaticActors, _config.MaxStaticActors + 1),
