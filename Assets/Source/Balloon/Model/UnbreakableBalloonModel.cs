@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using BalloonParty.Nudge;
 using BalloonParty.Slots.Capabilities;
 
 namespace BalloonParty.Balloon.Model
@@ -6,6 +8,8 @@ namespace BalloonParty.Balloon.Model
     {
         // No IHasDurability — this is a permanent obstacle; hits never deplete it.
         // No IHasScore — destroying via Piercing is intended to be a tool-cost, not a reward.
+        // No nudge overrides — permanent obstacles don't react to nudge animations.
+        public override IReadOnlyList<NudgeOverride> NudgeOverrides => null;
 
         internal UnbreakableBalloonModel(BalloonModelConfig config) : base(config) { }
 

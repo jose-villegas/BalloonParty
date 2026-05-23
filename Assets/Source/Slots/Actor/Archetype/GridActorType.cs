@@ -1,9 +1,12 @@
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    internal enum GridActorType
+    public enum GridActorType
     {
         Puff = 0,
         Bush = 1,
+        Deflector = 2,
+        Absorber = 3,
+        Gatekeeper = 4,
     }
 }
 

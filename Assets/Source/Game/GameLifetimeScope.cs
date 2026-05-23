@@ -86,6 +86,7 @@ namespace BalloonParty.Game
 
             builder.RegisterEntryPoint<BalloonBalancer>();
             builder.RegisterEntryPoint<NudgeService>();
+            builder.RegisterEntryPoint<GridActorHitController>();
             builder.RegisterInstance<IReadyGate>(new NavigationReadyGate(NavigationState.Game));
             builder.RegisterEntryPoint<GridSpawnerCoordinator>();
             builder.RegisterEntryPoint<StaticActorSpawner>().As<IGridSpawner>();

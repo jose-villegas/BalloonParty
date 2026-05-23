@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
-using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
@@ -16,7 +15,8 @@ namespace BalloonParty.Balloon.Model
         public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
         public ReactiveProperty<bool> IsStable { get; } = new(true);
 
-        public IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
+        // Subclasses own NudgeOverrides — not all balloons are nudgeable in the same way.
+        public abstract IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
         public SlotActorKind Kind => SlotActorKind.Dynamic;
 
@@ -34,7 +34,6 @@ namespace BalloonParty.Balloon.Model
         protected BalloonModelBase(BalloonModelConfig config)
         {
             TypeName = config.TypeName;
-            NudgeOverrides = config.NudgeOverrides;
             HitsRemaining = new ReactiveProperty<int>(config.HitsToPop);
         }
 
@@ -57,3 +56,4 @@ namespace BalloonParty.Balloon.Model
         }
     }
 }
+

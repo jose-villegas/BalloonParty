@@ -19,8 +19,8 @@ The four threads — in order:
 8.1b DamageContext Migration  ✅ DONE — DamageContext/DamageFlags(Normal/Piercing); IHitable migrated; Template Method (EvaluateNormalHit); ItemSettings.Flags; all callers + tests updated
 8.1c UnbreakableBalloon       ✅ DONE — uses DamageContext; ScoreValue moved off BalloonModelBase; IHasDurability moved to concrete subclasses
 8.2a Actor Archetypes: Structural  ✅ DONE — PuffObstacleModel + BushObstacleModel in Slots/Actor/Archetype/; StaticActorSpawner migrated
-8.2b Actor Archetypes: Hitables    — Deflector + Absorber models + GridActorPrefabEntry config
-8.2c Actor Archetypes: Gatekeeper  — GatekeeperActorModel (IHasDurability) + GridActorHitController + NudgeOverrides cleanup
+8.2b Actor Archetypes: Hitables    ✅ DONE — DeflectorActorModel + AbsorberActorModel + GridActorView/PoolChannel + GridActorPrefabEntry
+8.2c Actor Archetypes: Gatekeeper  ✅ DONE — GatekeeperActorModel (IHasDurability) + GridActorHitController + NudgeOverrides off BalloonModelBase
 8.3  Procedural Placement     — weighted, rule-based GridSpawner; retires BalloonSpawner
 8.4  Difficulty + Levels      — tuning knobs driven by score-based level progression
 ```
@@ -574,6 +574,10 @@ GridActorHitController_OnActorHit_Deflector_IsNotRemoved
 
 ### Phase 8.3 — Procedural Placement Engine
 
+> **Pre-requisite:** All actor prefabs and the `GridActorConfiguration` SO must exist
+> before this phase runs meaningfully in-game. See `PLAN-ContentProduction.md` for the
+> full art and asset checklist.
+
 **Goal:** Replace `BalloonSpawner` + `StaticActorSpawner` with a single `GridSpawner` that
 drives weighted, rule-based placement for all actor types.
 
@@ -703,8 +707,8 @@ These are known design gaps to resolve during implementation:
 | 8.1b — DamageContext Migration | ✅ Complete |
 | 8.1c — UnbreakableBalloonModel | ✅ Complete |
 | 8.2a — Structural Actors (Puff + Bush) | ✅ Complete |
-| 8.2b — Indestructible Hitables (Deflector + Absorber) | **Next** |
-| 8.2c — Gatekeeper + GridActorHitController | Blocked on 8.2b |
-| 8.3 — Procedural Placement | Blocked on 8.2c |
+| 8.2b — Indestructible Hitables (Deflector + Absorber) | ✅ Complete |
+| 8.2c — Gatekeeper + GridActorHitController | ✅ Complete |
+| 8.3 — Procedural Placement | **Blocked on content** — see `PLAN-ContentProduction.md` |
 | 8.4 — Difficulty + Levels | Blocked on 8.3 |
 | Phase 9 — Behavior-bound actors | Future (broadly defined) |
