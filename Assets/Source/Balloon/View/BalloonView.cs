@@ -239,7 +239,6 @@ namespace BalloonParty.Balloon.View
             _popVfxOverride = prefab;
         }
 
-
         private void ApplySortingOrder(Vector2Int slotIndex)
         {
             var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);

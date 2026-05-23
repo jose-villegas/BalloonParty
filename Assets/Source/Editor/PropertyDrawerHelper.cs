@@ -52,7 +52,6 @@ namespace BalloonParty.Editor
             }
         }
 
-
         /// <summary>
         ///     Draws a single field located by <paramref name="fieldName"/> on <paramref name="parent"/>
         ///     using an explicit <paramref name="displayName"/>.
@@ -91,7 +90,6 @@ namespace BalloonParty.Editor
                 EditorStyles.boldLabel);
             return y + LineHeight + Spacing;
         }
-
 
         /// <summary>
         ///     Visits every direct serialized child of <paramref name="root"/> whose

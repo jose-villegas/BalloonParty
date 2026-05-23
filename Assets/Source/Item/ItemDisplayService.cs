@@ -100,7 +100,6 @@ namespace BalloonParty.Item
             ApplySorting(_slotIndex.Value);
         }
 
-
         private void RecolorActiveVisual(string colorName)
         {
             if (_activeView == null || string.IsNullOrEmpty(colorName))

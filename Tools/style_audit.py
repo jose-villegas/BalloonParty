@@ -322,6 +322,218 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
         last_group = group
 
 
+_UNITY_LIFECYCLE = frozenset({
+    "Awake", "Start", "OnEnable", "OnDisable", "OnDestroy",
+    "Update", "FixedUpdate", "LateUpdate", "Reset", "OnValidate",
+    "OnDrawGizmos", "OnDrawGizmosSelected",
+    "OnBecameVisible", "OnBecameInvisible",
+    "OnApplicationFocus", "OnApplicationPause", "OnApplicationQuit",
+    "OnTriggerEnter", "OnTriggerExit", "OnTriggerStay",
+    "OnTriggerEnter2D", "OnTriggerExit2D", "OnTriggerStay2D",
+    "OnCollisionEnter", "OnCollisionExit", "OnCollisionStay",
+    "OnCollisionEnter2D", "OnCollisionExit2D", "OnCollisionStay2D",
+    "OnGUI", "OnRenderObject", "OnWillRenderObject",
+    "OnPreCull", "OnPreRender", "OnPostRender",
+})
+
+
+def _alpha_key(name: str) -> str:
+    """Normalise a member name for alphabetical comparison (strips leading _ and lowercases)."""
+    return name.lstrip("_").lower()
+
+
+def _extract_field_name(stripped: str) -> str | None:
+    """Return the declared field name from a field declaration line, or None."""
+    # Remove attributes like [SerializeField], [Header("…")] etc.
+    s = re.sub(r"\[.*?\]", "", stripped).strip()
+    # Remove everything from = onward (initialiser)
+    s = s.split("=")[0].rstrip()
+    # Remove trailing ;
+    s = s.rstrip(";").rstrip()
+    # The last identifier is the name
+    idents = re.findall(r"\b([A-Za-z_]\w*)\b", s)
+    for ident in reversed(idents):
+        if ident not in _CSHARP_KEYWORDS:
+            return ident
+    return None
+
+
+def _extract_method_name(stripped: str) -> str | None:
+    """Return the declared method name from a method-signature line, or None."""
+    # Remove attributes
+    s = re.sub(r"\[.*?\]", "", stripped).strip()
+    # Match: <modifiers> <return-type> <Name>(<params...
+    m = re.match(
+        r"(?:(?:public|private|protected|internal|static|async|override|virtual|"
+        r"abstract|sealed|new|extern|unsafe)\s+)*"
+        r"(?:[\w<>\[\],\s\?]+?\s+)??"   # return type (optional, non-greedy)
+        r"([A-Za-z_]\w*)\s*(?:<[^>]*>)?\s*\(",
+        s,
+    )
+    if m:
+        name = m.group(1)
+        if name not in _CSHARP_KEYWORDS:
+            return name
+    return None
+
+
+def check_member_alpha_ordering(path: Path, lines: list[str], result: AuditResult):
+    """Within each field/method group, members must be in alphabetical order."""
+    GROUP_CONST = 1
+    GROUP_STATIC_READONLY = 2
+    GROUP_SERIALIZE = 3
+    GROUP_INJECT = 4
+    GROUP_READONLY = 5
+    GROUP_MUTABLE = 6
+    GROUP_PROPERTY = 7
+    GROUP_METHOD_PUBLIC = 10
+    GROUP_METHOD_PROTECTED = 11
+    GROUP_METHOD_PRIVATE = 12
+
+    GROUP_NAMES = {
+        GROUP_CONST: "const",
+        GROUP_STATIC_READONLY: "static readonly",
+        GROUP_SERIALIZE: "[SerializeField]",
+        GROUP_INJECT: "[Inject]",
+        GROUP_READONLY: "readonly",
+        GROUP_MUTABLE: "mutable",
+        GROUP_PROPERTY: "property",
+        GROUP_METHOD_PUBLIC: "public method",
+        GROUP_METHOD_PROTECTED: "protected method",
+        GROUP_METHOD_PRIVATE: "private/internal method",
+    }
+
+    brace_depth = 0
+    in_class = False
+    class_brace_depth = 0
+    class_name = ""
+
+    # Per-group last-seen name (reset when group changes)
+    current_group: int | None = None
+    last_name: str | None = None
+
+    # Multi-line attribute carry-forward
+    pending_serialize = False
+    pending_inject = False
+
+    for i, line in enumerate(lines, 1):
+        stripped = line.strip()
+        prev_stripped = lines[i - 2].strip() if i >= 2 else ""
+
+        brace_depth += stripped.count("{") - stripped.count("}")
+
+        # Detect class/struct entry (resets all state)
+        m = re.match(
+            r"(?:public|internal|private|protected)?\s*"
+            r"(?:abstract\s+|sealed\s+|static\s+|partial\s+)*"
+            r"(?:class|struct)\s+(\w+)",
+            stripped,
+        )
+        if m:
+            in_class = True
+            class_name = m.group(1)
+            current_group = None
+            last_name = None
+            class_brace_depth = brace_depth
+            continue
+
+        if not in_class:
+            continue
+
+        # Only inspect direct class members (depth = class_brace_depth + 1)
+        if brace_depth != class_brace_depth + 1:
+            pending_serialize = False
+            pending_inject = False
+            continue
+
+        # Carry-forward attribute flags from previous line
+        has_serialize_above = "[SerializeField]" in prev_stripped or pending_serialize
+        has_inject_above = "[Inject]" in prev_stripped or pending_inject
+        pending_serialize = "[SerializeField]" in stripped and ";" not in stripped
+        pending_inject = "[Inject]" in stripped and ";" not in stripped
+
+        # ── Field classification ──────────────────────────────────────────────
+        is_method = "(" in stripped and ")" in stripped and "=" not in stripped.split("(")[0]
+
+        if not is_method:
+            if re.match(r"(?:private|public|protected|internal)\s+const\s+", stripped):
+                group = GROUP_CONST
+            elif re.match(r"(?:private|public|protected|internal)?\s*static\s+readonly\s+", stripped):
+                group = GROUP_STATIC_READONLY
+            elif "[SerializeField]" in stripped or has_serialize_above:
+                group = GROUP_SERIALIZE
+            elif ("[Inject]" in stripped and ";" in stripped) or (has_inject_above and ";" in stripped):
+                group = GROUP_INJECT
+            elif re.match(r"(?:private|public|protected|internal)\s+readonly\s+", stripped):
+                group = GROUP_READONLY
+            elif re.match(r"(?:private|public|protected|internal)\s+\w+[\w<>\[\],\s]*\s+_\w+\s*[;=]", stripped):
+                if not ("[SerializeField]" in stripped or "[Inject]" in stripped
+                        or has_serialize_above or has_inject_above):
+                    group = GROUP_MUTABLE
+                else:
+                    continue
+            elif "=>" in stripped and ";" in stripped and not stripped.startswith("//"):
+                if re.match(r"(?:private|public|protected|internal)\s+\S+.*\s+=>\s+", stripped):
+                    group = GROUP_PROPERTY
+                else:
+                    continue
+            else:
+                continue
+
+            name = _extract_field_name(stripped)
+
+        else:
+            # ── Method classification ─────────────────────────────────────────
+            name = _extract_method_name(stripped)
+            if not name:
+                continue
+
+            # Skip constructors
+            if name == class_name:
+                current_group = None
+                last_name = None
+                continue
+
+            # Skip Unity lifecycle hooks
+            if name in _UNITY_LIFECYCLE:
+                current_group = None
+                last_name = None
+                continue
+
+            # Skip overrides / interface implementations (ordering is fixed by contract)
+            if "override" in stripped or (prev_stripped and "override" in prev_stripped):
+                current_group = None
+                last_name = None
+                continue
+
+            # Determine method visibility group
+            if re.match(r"public\s+", stripped):
+                group = GROUP_METHOD_PUBLIC
+            elif re.match(r"protected\s+", stripped):
+                group = GROUP_METHOD_PROTECTED
+            elif re.match(r"(?:private|internal)\s+", stripped):
+                group = GROUP_METHOD_PRIVATE
+            else:
+                continue
+
+        if not name:
+            continue
+
+        if group != current_group:
+            # Entering a new group — reset tracking
+            current_group = group
+            last_name = name
+        else:
+            # Same group — check alphabetical order
+            if last_name and _alpha_key(name) < _alpha_key(last_name):
+                result.add(Violation(
+                    str(path), i, "member-alpha-ordering",
+                    f"'{name}' should come before '{last_name}' "
+                    f"(alphabetical order within {GROUP_NAMES.get(group, '?')} group)",
+                ))
+            last_name = name
+
+
 def check_dotween_kill_poolable(path: Path, lines: list[str], result: AuditResult):
     """IPoolable classes using DOTween must kill tweens in OnDespawned."""
     full_text = "".join(lines)
@@ -820,6 +1032,19 @@ def check_large_anonymous_functions(path: Path, lines: list[str], result: AuditR
         i += 1
 
 
+def check_multiple_blank_lines(path: Path, lines: list[str], result: AuditResult):
+    """No two or more consecutive blank lines — a single blank line is enough to separate segments."""
+    consecutive = 0
+    for i, line in enumerate(lines, 1):
+        if line.strip() == "":
+            consecutive += 1
+            if consecutive == 2:
+                result.add(Violation(str(path), i, "multiple-blank-lines",
+                    "two or more consecutive blank lines — use a single blank line", fixable=True))
+        else:
+            consecutive = 0
+
+
 def check_repeated_accessor(path: Path, lines: list[str], result: AuditResult):
     """Flag calls where 3+ arguments are accessed from the same object (e.g. obj.A, obj.B, obj.C).
 
@@ -896,6 +1121,7 @@ RULES: dict[str, callable] = {
     "addto-poolable":    check_addto_this_in_poolable,
     "instantiate":       check_object_instantiate,
     "member-ordering":   check_member_ordering,
+    "member-alpha":      check_member_alpha_ordering,
     "dotween-poolable":  check_dotween_kill_poolable,
     "inject-on-field":   check_inject_on_field,
     "public-visibility": check_public_visibility,
@@ -903,6 +1129,7 @@ RULES: dict[str, callable] = {
     "repeated-accessor": check_repeated_accessor,
     "large-lambda":      check_large_anonymous_functions,
     "non-capturing-lambda": check_non_capturing_lambda,
+    "blank-lines":       check_multiple_blank_lines,
 }
 
 # Rules that don't operate on individual files
@@ -923,6 +1150,21 @@ def fix_namespace(path: Path, lines: list[str]) -> list[str]:
             indent = m.group(1)
             fixed.append(f"{indent}namespace {expected}\n")
         else:
+            fixed.append(line)
+    return fixed
+
+
+def fix_multiple_blank_lines(path: Path, lines: list[str]) -> list[str]:
+    """Collapse runs of 2+ consecutive blank lines into a single blank line."""
+    fixed = []
+    blank_run = 0
+    for line in lines:
+        if line.strip() == "":
+            blank_run += 1
+            if blank_run <= 1:
+                fixed.append(line)
+        else:
+            blank_run = 0
             fixed.append(line)
     return fixed
 
@@ -956,13 +1198,17 @@ def run_audit(rule_filter: Optional[str] = None, file_filter: Optional[str] = No
 
 def run_fix(result: AuditResult):
     """Apply auto-fixes for fixable violations."""
-    # Group namespace fixes by file
-    ns_files = set()
+    # Group fixable violations by file and rule
+    ns_files: set[str] = set()
+    blank_files: set[str] = set()
     for v in result.violations:
         if v.rule == "namespace-mismatch":
             ns_files.add(v.file)
+        elif v.rule == "multiple-blank-lines":
+            blank_files.add(v.file)
 
     fixed_count = 0
+
     for fpath in ns_files:
         path = Path(fpath)
         lines = read_lines(path)
@@ -972,6 +1218,16 @@ def run_fix(result: AuditResult):
                 f.writelines(new_lines)
             fixed_count += 1
             print(f"  FIXED namespace in {os.path.relpath(fpath, SOURCE_ROOT)}")
+
+    for fpath in blank_files:
+        path = Path(fpath)
+        lines = read_lines(path)
+        new_lines = fix_multiple_blank_lines(path, lines)
+        if new_lines != lines:
+            with open(path, "w", encoding="utf-8") as f:
+                f.writelines(new_lines)
+            fixed_count += 1
+            print(f"  FIXED multiple blank lines in {os.path.relpath(fpath, SOURCE_ROOT)}")
 
     print(f"\n  Auto-fixed {fixed_count} file(s).")
 

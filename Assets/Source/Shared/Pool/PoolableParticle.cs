@@ -23,7 +23,6 @@ namespace BalloonParty.Shared.Pool
             }
         }
 
-
         public void OnSpawned()
         {
             // PoolChannel calls SetActive(true) before OnSpawned, so a particle system
@@ -37,7 +36,6 @@ namespace BalloonParty.Shared.Pool
             _onComplete = null;
             _particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
-
 
         public void Play(Vector3 position, Action onComplete = null)
         {

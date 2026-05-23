@@ -107,7 +107,6 @@ namespace BalloonParty.Item.Lightning
             }
         }
 
-
         private List<(IBalloonModel model, Vector3 worldPos)> CollectSortedTargets()
         {
             var result = new List<(IBalloonModel, Vector3)>();

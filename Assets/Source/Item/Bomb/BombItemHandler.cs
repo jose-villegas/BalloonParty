@@ -100,7 +100,6 @@ namespace BalloonParty.Item.Bomb
             }
         }
 
-
         private void SpawnVisual(ItemSettings settings)
         {
             if (settings.ActivationEffectPrefab == null)

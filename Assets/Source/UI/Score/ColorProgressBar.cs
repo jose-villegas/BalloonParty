@@ -45,7 +45,6 @@ namespace BalloonParty.UI.Score
         private string _pointNoticePoolKey;
         private string _streakNoticePoolKey;
 
-
         private void OnValidate()
         {
 #if UNITY_EDITOR

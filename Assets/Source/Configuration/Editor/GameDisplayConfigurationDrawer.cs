@@ -22,7 +22,6 @@ namespace BalloonParty.Configuration.Editor
         private static readonly Color ReferenceBoxColor = new(0.4f, 0.7f, 1f, 0.9f);
         private static readonly Color ReferenceBoxFill = new(0.25f, 0.4f, 0.6f, 0.08f);
 
-
         private bool _showInScene = true;
 
         private void OnEnable()
@@ -127,7 +126,6 @@ namespace BalloonParty.Configuration.Editor
                 $"Reference  {refWidth} × {refHeight}",
                 refLabelStyle);
         }
-
 
         private static void DrawPreviewBox(Rect area, float refWidth, float refHeight)
         {

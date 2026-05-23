@@ -19,7 +19,6 @@ namespace BalloonParty.Balloon.Type
         private Tween _damageTween;
         private float _currentDamageProgress;
 
-
         private void Awake()
         {
             _block = new MaterialPropertyBlock();

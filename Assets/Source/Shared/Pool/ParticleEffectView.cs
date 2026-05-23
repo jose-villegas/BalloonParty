@@ -25,7 +25,6 @@ namespace BalloonParty.Shared.Pool
             }
         }
 
-
         public override void OnSpawned()
         {
             base.OnSpawned();

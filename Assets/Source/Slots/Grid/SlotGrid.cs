@@ -244,7 +244,6 @@ namespace BalloonParty.Slots.Grid
             return neighbors;
         }
 
-
         public Vector3 IndexToWorldPosition(Vector2Int index)
         {
             return IndexToWorldPosition(index, _config.SlotSeparation, _config.SlotsOffset);

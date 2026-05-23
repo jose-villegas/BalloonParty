@@ -24,7 +24,6 @@ namespace BalloonParty.Editor
         private const string TagPrefix = "[GradientTexture:";
         private const string BakedNamePrefix = "_GradientBaked_";
 
-
         public override float GetPropertyHeight(MaterialProperty prop, string label, MaterialEditor editor)
         {
             return EditorGUIUtility.singleLineHeight;
@@ -54,7 +53,6 @@ namespace BalloonParty.Editor
                 BakeAndApply(material, prop, gradient);
             }
         }
-
 
         private static void BakeAndApply(Material material, MaterialProperty prop, Gradient gradient)
         {
@@ -110,7 +108,6 @@ namespace BalloonParty.Editor
             return newTex;
         }
 
-
         private static Gradient LoadGradient(Material material, string propName)
         {
             var userData = ReadUserData(material);
@@ -141,7 +138,6 @@ namespace BalloonParty.Editor
             var userData = ReadUserData(material);
             WriteUserData(material, ReplaceBlock(userData, propName, json));
         }
-
 
         private static string ExtractBlock(string userData, string propName)
         {
@@ -195,7 +191,6 @@ namespace BalloonParty.Editor
 
             return userData + tag + json;
         }
-
 
         private static string ReadUserData(Material material)
         {

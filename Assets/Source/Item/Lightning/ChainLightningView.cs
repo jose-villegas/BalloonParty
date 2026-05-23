@@ -105,7 +105,6 @@ namespace BalloonParty.Item.Lightning
             }
         }
 
-
         internal static void FillSegment(
             Vector3 start,
             Vector3 end,

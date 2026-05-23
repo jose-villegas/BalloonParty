@@ -22,7 +22,6 @@ namespace BalloonParty.UI.Score
 
         public bool IsFullyShown { get; private set; }
 
-
         public void OnSpawned()
         {
             IsFullyShown = false;
@@ -62,7 +61,6 @@ namespace BalloonParty.UI.Score
 
             _animator.SetTrigger(ScoreTrigger);
             _label.text = score.ToString("N0");
-
 
             transform.localScale = Vector3.one;
             _labelTransform.localScale = Vector3.one * _scaleCurve.Evaluate(score);

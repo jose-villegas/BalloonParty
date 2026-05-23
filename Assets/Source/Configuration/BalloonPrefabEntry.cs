@@ -42,7 +42,6 @@ namespace BalloonParty.Configuration
         public int HitsToPop => _hitsToPop;
         public int ScoreValue => _scoreValue;
 
-
         /// <summary>Derived from the prefab's GameObject name — no manual key needed.</summary>
         public string PoolKey => _prefab != null ? _prefab.name : string.Empty;
     }

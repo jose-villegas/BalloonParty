@@ -13,14 +13,12 @@ namespace BalloonParty.Shared.Pool
     {
         protected Action OnComplete;
 
-
         public virtual void OnSpawned() { }
 
         public virtual void OnDespawned()
         {
             OnComplete = null;
         }
-
 
         public abstract void Play(Vector3 position, Color tint, Action onComplete = null);
 
@@ -34,7 +32,6 @@ namespace BalloonParty.Shared.Pool
         {
             OnDespawned();
         }
-
 
         protected void InvokeComplete()
         {

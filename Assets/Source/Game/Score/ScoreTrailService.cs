@@ -37,7 +37,6 @@ namespace BalloonParty.Game.Score
             return _targets[colorName];
         }
 
-
         [Inject]
         internal ScoreTrailService(
             IGameConfiguration config,
@@ -81,7 +80,6 @@ namespace BalloonParty.Game.Score
             _targets[colorName] = target;
             _colorLookup[colorName] = color;
 
-
             if (!_spawners.ContainsKey(colorName))
             {
                 var poolKey = $"ScoreTrail_{colorName}";
@@ -92,12 +90,10 @@ namespace BalloonParty.Game.Score
             }
         }
 
-
         internal void PauseTrailsAbove(TrailId threshold)
         {
             _tracker.PauseWhere(id => id.Level > threshold.Level);
         }
-
 
         private Vector3 ComputeScatterOrigin(Vector3 center, int index, int count)
         {

@@ -49,7 +49,6 @@ namespace BalloonParty.Game.Cinematics
         private Vector3 _trailTargetViewport;
         private Tween _zoomTween;
 
-
         private void Start()
         {
             _scoredSubscriber.Subscribe(OnScorePoint).AddTo(this);
@@ -110,7 +109,6 @@ namespace BalloonParty.Game.Cinematics
             _scoreTrailService.Tracker.TrackTrail(_tippingTrailId, OnTippingTrailSpawned);
         }
 
-
         private void OnRestoreComplete()
         {
             if (_orthoController != null)
@@ -122,7 +120,6 @@ namespace BalloonParty.Game.Cinematics
             _director.EndCinematic();
             Navigation.TransitionTo(NavigationState.Game);
         }
-
 
         private void OnTippingTrailSpawned(Transform trailTransform)
         {

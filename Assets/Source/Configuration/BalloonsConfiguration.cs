@@ -43,7 +43,6 @@ namespace BalloonParty.Configuration
         public float NudgeDuration => _nudgeDuration;
         public float NudgeFalloff => _nudgeFalloff;
 
-
         /// <summary>
         /// Picks a random entry using weighted random selection, excluding entries that have
         /// reached their <see cref="BalloonPrefabEntry.MaxCount"/> limit.
