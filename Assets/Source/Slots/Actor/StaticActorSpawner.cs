@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Grid;
 using BalloonParty.Slots.Spawner;
 using Cysharp.Threading.Tasks;
@@ -74,7 +75,7 @@ namespace BalloonParty.Slots.Actor
 
             for (var i = 0; i < count; i++)
             {
-                var model = new StaticActorModel(slots[i]);
+                var model = new PuffObstacleModel();
                 var view = _viewFactory();
 
                 if (view != null)

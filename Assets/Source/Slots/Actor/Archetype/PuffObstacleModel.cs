@@ -1,9 +1,11 @@
 using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 
-namespace BalloonParty.Slots.Actor
+namespace BalloonParty.Slots.Actor.Archetype
 {
-    internal class StaticActorModel : IWriteableSlotActor, IPassThrough
+    // Traversable by spawn and balance animation paths — balloons arc through freely.
+    // No collider; not part of the hit pipeline.
+    internal class PuffObstacleModel : IWriteableSlotActor, IPassThrough
     {
         public Vector2Int SlotIndex { get; private set; }
 
@@ -16,3 +18,4 @@ namespace BalloonParty.Slots.Actor
         public SlotActorKind Kind => SlotActorKind.Static;
     }
 }
+

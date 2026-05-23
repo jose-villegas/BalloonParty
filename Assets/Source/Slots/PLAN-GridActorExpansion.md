@@ -18,13 +18,15 @@ The four threads — in order:
 8.1a Absorb Routing           ✅ DONE — OnAbsorb in ProjectileView; IsFree=false + DestroyProjectile; 3 tests
 8.1b DamageContext Migration  ✅ DONE — DamageContext/DamageFlags(Normal/Piercing); IHitable migrated; Template Method (EvaluateNormalHit); ItemSettings.Flags; all callers + tests updated
 8.1c UnbreakableBalloon       ✅ DONE — uses DamageContext; ScoreValue moved off BalloonModelBase; IHasDurability moved to concrete subclasses
-8.2  Actor Archetypes         — the vocabulary the procedural algorithm needs to be interesting
+8.2a Actor Archetypes: Structural  ✅ DONE — PuffObstacleModel + BushObstacleModel in Slots/Actor/Archetype/; StaticActorSpawner migrated
+8.2b Actor Archetypes: Hitables    — Deflector + Absorber models + GridActorPrefabEntry config
+8.2c Actor Archetypes: Gatekeeper  — GatekeeperActorModel (IHasDurability) + GridActorHitController + NudgeOverrides cleanup
 8.3  Procedural Placement     — weighted, rule-based GridSpawner; retires BalloonSpawner
 8.4  Difficulty + Levels      — tuning knobs driven by score-based level progression
 ```
 
 **Why this order:** You can't write a placement algorithm worth tuning until you have a
-diverse actor vocabulary (8.2 before 8.3). You can't tune difficulty until the algorithm
+diverse actor vocabulary (8.2a–c before 8.3). You can't tune difficulty until the algorithm
 runs (8.3 before 8.4). The coordinator is pure infrastructure with no gameplay impact — it
 goes first so all future spawners have a clean integration point.
 
@@ -32,7 +34,7 @@ goes first so all future spawners have a clean integration point.
 
 ## Actor Vocabulary — Design Reference
 
-Before detailing the phases, this section specifies the archetypes that Phase 8.2 will
+Before detailing the phases, this section specifies the archetypes that Phases 8.2a–c will
 implement. They are the building blocks the procedural algorithm needs.
 
 ### Balloon archetypes
@@ -55,13 +57,13 @@ balloon-specific.
 
 | Archetype | Kind | `IPassThrough` | `IHitable` | Outcome | Durability | Role |
 |---|---|---|---|---|---|---|
-| **Cloud** (current `StaticActorModel`) | Static | ✅ | ❌ | — | — | Structural support; spawn paths pass freely through it — think gas, mist, a permeable zone |
-| **Block** | Static | ❌ | ❌ | — | — | Structural support; spawn paths cannot cross it — requires rerouting (Phase 9). Currently logs a warning |
+| **Puff** (current `StaticActorModel`) | Static | ✅ | ❌ | — | — | Structural support; spawn paths pass freely through it — think gas, mist, a permeable zone |
+| **Bush** | Static | ❌ | ❌ | — | — | Structural support; spawn paths cannot cross it — requires rerouting (Phase 9). Currently logs a warning |
 | **Deflector** | Static | ❌ | ✅ | `Deflect` | ❌ indestructible | Redirects projectile; creates predictable bounce lanes |
 | **Absorber** | Static | ❌ | ✅ | `Absorb` | ❌ indestructible | Turn-ending hazard; player must route around it |
 | **Gatekeeper** | Static | ❌ | ✅ | `Deflect` | ✅ N hits | Blocks column until destroyed; temporary obstacle |
 
-**Cloud vs Block — the structural role:**
+**Puff vs Bush — the structural role:**
 Both variants occupy a slot, so `SlotGrid.IsEmpty` returns false and both count as
 structural support for any balloon above them. Neither is ever moved by the balancer.
 Neither has a collider — they are not part of the hit pipeline.
@@ -69,12 +71,12 @@ Neither has a collider — they are not part of the hit pipeline.
 The difference is purely **visual pathing**. Whenever the grid computes a movement path
 — spawn animations, balancer relocations, any future path computation — it calls
 `SlotGrid.IsTraversable`, which returns true only for empty slots or `IPassThrough`
-occupants. A balloon's animation can arc through a Cloud slot; it cannot travel through
-a Block slot. Structural support is identical regardless.
+occupants. A balloon's animation can arc through a Puff slot; it cannot travel through
+a Bush slot. Structural support is identical regardless.
 
 **On `IPassThrough`:** it is a marker interface, not a property. An actor either is or
-is not traversable at the type level — there is no runtime toggle. This means Cloud
-and Block must be separate model classes (`CloudObstacleModel`, `BlockObstacleModel`)
+is not traversable at the type level — there is no runtime toggle. This means Puff
+and Bush must be separate model classes (`PuffObstacleModel`, `BushObstacleModel`)
 rather than a single class with a flag. The type IS the capability signal, consistent
 with the rest of the codebase.
 
@@ -83,7 +85,7 @@ with the rest of the codebase.
 The current marker interface only answers "can I pass through?". Two natural extensions
 that the actor vocabulary will eventually need:
 
-*Density / passage resistance* — a Cloud-like actor could expose a `float Density` (0–1)
+*Density / passage resistance* — a Puff-like actor could expose a `float Density` (0–1)
 that the animation system uses to modulate travel speed. A thin mist barely slows the
 path; a dense cloud visibly delays it. The interface extension:
 ```csharp
@@ -113,7 +115,7 @@ animation driver just needs to call `OnActorPassedThrough` as each waypoint is r
 Both extensions are additive — `IPassThrough` stays a marker today and gains members
 (or a companion interface) only when a concrete actor type demands it.
 
-**Rerouting note:** A `Block` in any computed path currently causes `ComputePath`
+**Rerouting note:** A `Bush` in any computed path currently causes `ComputePath`
 to emit a warning and proceed anyway (Phase 6 decision). Full rerouting — finding a
 path around solid obstacles for both spawn and balance animations — is deferred to Phase 9.
 
@@ -137,7 +139,7 @@ path around solid obstacles for both spawn and balance animations — is deferre
 `BalloonController` is balloon-specific (it knows about `BalloonView.PlayPopEffect`,
 `IHasItemSlot`, etc.). Grid actors need a general hit-response controller.
 
-**`GridActorHitController`** (Phase 8.2) — a single `IStartable` that subscribes to
+**`GridActorHitController`** (Phase 8.2c) — a single `IStartable` that subscribes to
 `ActorHitMessage` and handles removal for any grid actor that is not an `IBalloonModel`:
 
 ```csharp
@@ -239,7 +241,7 @@ Test double: `ImmediateGate : IReadyGate` — `WaitAsync` returns immediately.
 #### What was built
 
 `ProjectileView.OnAbsorb(ISlotActor actor, Vector3 worldPos)` — `internal` terminal method called when `EvaluateHit` returns `HitOutcome.Absorb`:
-1. Publishes `ActorHitMessage` with `HitOutcome.Absorb` (so Phase 8.2 `GridActorHitController` can react).
+1. Publishes `ActorHitMessage` with `HitOutcome.Absorb` (so Phase 8.2c `GridActorHitController` can react).
 2. Sets `_model.IsFree = false` — stops `FixedUpdate` movement immediately.
 3. Calls `DestroyProjectile()` — publishes `ProjectileDestroyedMessage` + `BalanceBalloonsMessage`, ending the turn.
 
@@ -398,63 +400,171 @@ BalloonModel_EvaluateHit_PiercingFlag_PopsRegardlessOfHitsRemaining
 
 ---
 
-### Phase 8.2 — Actor Archetypes
+### Phase 8.2a — Structural Actors (Puff + Bush)
 
-**Goal:** Implement the three grid actor archetypes (Deflector, Absorber, Gatekeeper) and
-expose them to config so they can appear on the grid. Add `GridActorHitController`.
+**Goal:** Rename `StaticActorModel` to `PuffObstacleModel` and add `BushObstacleModel`.
+No hit pipeline involvement — purely structural/visual. Lowest-risk 8.2 step; unblocks
+the config groundwork that 8.2b and 8.2c depend on.
 
-This phase is the content prerequisite for Phase 8.3. Without actor variety, the procedural
-algorithm produces monotonous grids.
+#### Folder structure
+
+New archetype models live in `Slots/Actor/Archetype/`
+(namespace `BalloonParty.Slots.Actor.Archetype`). Existing interfaces, infrastructure
+(`StaticActorView`, `StaticActorSpawner`, pool channel, settings) remain flat in
+`Slots/Actor/` until the spawner is retired in Phase 8.3.
+
+```
+Slots/Actor/
+├── ISlotActor.cs, IDynamicSlotActor.cs, …   ← interfaces, unchanged
+├── SlotActorKind.cs                          ← unchanged
+├── StaticActorView.cs, StaticActorPoolChannel.cs, …  ← legacy infra, unchanged
+├── StaticActorSpawner.cs                     ← updated to spawn PuffObstacleModel
+└── Archetype/
+    ├── GridActorType.cs                      ← enum: Puff, Bush (extended in 8.2b–c)
+    ├── PuffObstacleModel.cs                 ← IWriteableSlotActor + IPassThrough
+    └── BushObstacleModel.cs                 ← IWriteableSlotActor only
+```
 
 #### Files
 
-All new actor files live flat in `Slots/Actor/` (namespace `BalloonParty.Slots.Actor`),
-alongside the existing `StaticActorModel` and its view/pool/settings/spawner files.
-
 | File | Role |
 |---|---|
-| `CloudObstacleModel.cs` | Rename/replace `StaticActorModel`; `IWriteableSlotActor` + `IPassThrough`; spawn paths traverse freely |
-| `BlockObstacleModel.cs` | New; `IWriteableSlotActor` only; spawn paths are blocked |
-| `DeflectorActorModel.cs` | `IWriteableSlotActor`, `IHitable` → `Deflect`; no durability |
-| `AbsorberActorModel.cs` | `IWriteableSlotActor`, `IHitable` → `Absorb`; no durability |
-| `GatekeeperActorModel.cs` | `IWriteableSlotActor`, `IHasDurability`; `Deflect` on survive, `Pop` on kill |
-| `GridActorHitController.cs` | `IStartable`; handles `ActorHitMessage` for non-balloon actors |
-| `GridActorPrefabEntry.cs` | `Configuration/` — serializable config entry: prefab, weight, maxCount, actor type |
-| View + pool channel per actor | Same pattern as `StaticActorView` |
+| `Archetype/GridActorType.cs` | Enum seed: `Puff = 0`, `Bush = 1` |
+| `Archetype/PuffObstacleModel.cs` | Direct successor to `StaticActorModel`; `IWriteableSlotActor + IPassThrough` |
+| `Archetype/BushObstacleModel.cs` | `IWriteableSlotActor` only; blocks spawn-path traversal |
 
-`GridActorType` enum: `Cloud`, `Block`, `Deflector`, `Absorber`, `Gatekeeper`.
-
-`CloudObstacleModel` is the direct successor to `StaticActorModel` — same role, clearer
-name. `StaticActorSpawner` migrates to spawn `CloudObstacleModel` or `BlockObstacleModel`
-based on config. The existing `StaticActorView` prefab maps to Cloud by default.
-
-#### `BalloonModelBase` cleanup opportunity
-When `GatekeeperActorModel` is introduced, it will prove `ScoreValue` and `NudgeOverrides`
-belong on concrete classes, not the base. If `Gatekeeper` does not score and is not
-nudgeable, removing those fields from `BalloonModelBase` becomes a concrete compiler
-demand rather than a design preference — do it at this phase.
+`StaticActorModel` is **not deleted** yet — the spawner still references it until Phase 8.3
+retires the legacy path. `StaticActorSpawner.SpawnStaticActors` switches to
+`new PuffObstacleModel(slot)` so the grid starts using the canonical type.
 
 #### Failing tests
-New fixture **`GridActorTests`**:
+New fixture **`StructuralActorTests`** (`Tests/EditMode/Slots/`):
 ```
-CloudObstacleModel_KindIsStatic
-CloudObstacleModel_IsIPassThrough
-CloudObstacleModel_IsNotIHitable
+PuffObstacleModel_KindIsStatic
+PuffObstacleModel_IsIPassThrough
+PuffObstacleModel_IsNotIHitable
 
-BlockObstacleModel_KindIsStatic
-BlockObstacleModel_IsNotIPassThrough
-BlockObstacleModel_IsNotIHitable
+BushObstacleModel_KindIsStatic
+BushObstacleModel_IsNotIPassThrough
+BushObstacleModel_IsNotIHitable
+```
 
+---
+
+### Phase 8.2b — Indestructible Hitable Actors (Deflector + Absorber)
+
+**Goal:** Add `DeflectorActorModel` and `AbsorberActorModel` — grid actors that participate
+in the hit pipeline but have no durability. Also introduces `GridActorPrefabEntry` so both
+types can be wired to prefabs and spawned via config.
+
+#### Files
+
+```
+Slots/Actor/Archetype/
+├── DeflectorActorModel.cs     ← IWriteableSlotActor + IHitable → Deflect; no IHasDurability
+├── AbsorberActorModel.cs      ← IWriteableSlotActor + IHitable → Absorb; no IHasDurability
+└── (GridActorType.cs updated) ← adds Deflector = 2, Absorber = 3
+
+Configuration/
+└── GridActorPrefabEntry.cs    ← [Serializable]; prefab, weight, maxCount, GridActorType, PoolKey
+```
+
+`GridActorPrefabEntry.PoolKey` follows the existing convention: derived from the prefab
+GameObject name, no manual key assignment needed.
+
+Views and pool channels for Deflector and Absorber follow the exact same pattern as
+`StaticActorView` / `StaticActorPoolChannel`. They live in `Slots/Actor/Archetype/` next
+to their models.
+
+#### Failing tests
+New fixture **`HitableActorTests`** (`Tests/EditMode/Slots/`):
+```
 DeflectorActor_EvaluateHit_ReturnsDeflect
 DeflectorActor_IsNotIHasDurability
 DeflectorActor_IsNotIBalloonModel
 
 AbsorberActor_EvaluateHit_ReturnsAbsorb
 AbsorberActor_IsNotIHasDurability
+```
 
+---
+
+### Phase 8.2c — Gatekeeper + GridActorHitController
+
+**Goal:** Add `GatekeeperActorModel` (the first grid actor with `IHasDurability`) and the
+`GridActorHitController` that handles removal when any non-balloon `IHasDurability` actor
+reaches zero hits.
+
+This is the most complex 8.2 step because it introduces durability tracking on a grid actor
+and the reactive controller that responds to it. It also forces the `NudgeOverrides` cleanup
+on `BalloonModelBase` — Gatekeeper is not nudgeable, so keeping `NudgeOverrides` on the
+base would be the same lie that `ScoreValue` was before 8.1c cleaned it up.
+
+#### Files
+
+```
+Slots/Actor/Archetype/
+├── GatekeeperActorModel.cs    ← IWriteableSlotActor + IHasDurability; Deflect→Pop on zero hits
+└── (GridActorType.cs updated) ← adds Gatekeeper = 4
+
+Slots/Actor/
+└── GridActorHitController.cs  ← IStartable; subscribes ActorHitMessage; removes durable non-balloon actors at zero hits
+```
+
+**`GridActorHitController`** lives flat in `Slots/Actor/` (not in `Archetype/`) because
+it is infrastructure that reacts to *any* grid actor, not an archetype itself.
+
+#### `GatekeeperActorModel`
+
+```csharp
+// Deflects projectiles until HitsRemaining reaches zero, then reports Pop.
+// IHasDurability exposed so GridActorHitController can watch HitsRemaining.
+internal class GatekeeperActorModel : IWriteableSlotActor, IHasDurability
+{
+    public ReactiveProperty<int> HitsRemaining { get; }
+    IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
+
+    public HitOutcome EvaluateHit(DamageContext context)
+    {
+        HitsRemaining.Value = Mathf.Max(0, HitsRemaining.Value - context.Damage);
+        return HitsRemaining.Value > 0 ? HitOutcome.Deflect : HitOutcome.Pop;
+    }
+    // …
+}
+```
+
+#### `GridActorHitController`
+
+```csharp
+// Filters out IBalloonModel — BalloonController handles those.
+// For any other IHasDurability actor: remove from grid when HitsRemaining <= 0.
+// Does NOT publish score — grid actors are not IHasScore unless explicitly designed to be.
+private void OnActorHit(ActorHitMessage msg)
+{
+    if (msg.Actor is IBalloonModel) return;
+    if (msg.Actor is not IHasDurability durable) return;
+    if (durable.HitsRemaining.Value > 0) return;
+    _grid.Remove(msg.Actor.SlotIndex.Value);
+}
+```
+
+#### `NudgeOverrides` cleanup on `BalloonModelBase`
+
+`GatekeeperActorModel` is not nudgeable. Keeping `NudgeOverrides` on `BalloonModelBase`
+would make it a base-class concern for types that have nothing to do with nudge. Move it:
+`BalloonModel` and `ToughBalloonModel` each declare their own `NudgeOverrides` from config.
+`UnbreakableBalloonModel` gets `NudgeOverrides => null` (permanent obstacles don't nudge).
+`IBalloonModel : IHasNudge` stays — only concrete balloon types implement it directly.
+
+#### Failing tests
+New fixture **`GatekeeperActorTests`** (`Tests/EditMode/Slots/`):
+```
 GatekeeperActor_EvaluateHit_Survives_ReturnsDeflect_AndDecrementsHits
 GatekeeperActor_EvaluateHit_KillingBlow_ReturnsPop_AndHitsRemainingIsZero
+```
 
+New fixture **`GridActorHitControllerTests`** (`Tests/EditMode/Slots/`):
+```
 GridActorHitController_OnActorHit_IBalloonModel_IsIgnored
 GridActorHitController_OnActorHit_Gatekeeper_WhenHitsReachZero_RemovesFromGrid
 GridActorHitController_OnActorHit_Deflector_IsNotRemoved
@@ -470,6 +580,8 @@ drives weighted, rule-based placement for all actor types.
 `BalloonSpawner` and `StaticActorSpawner` retire from `IGridSpawner` registration once
 `GridSpawner` covers all responsibilities. No flag day — they co-exist until `GridSpawner`
 is validated in-game.
+
+**Depends on:** 8.2c (all archetypes must exist before the procedural engine can place them).
 
 #### Design
 
@@ -539,7 +651,7 @@ active `DifficultyProfile`. `GridSpawner` reads the active profile on each spawn
 
 **Knob graduation — suggested starting curve:**
 ```
-Level 1–3:   Only Simple + occasional Tough; no statics beyond Cloud obstacle
+Level 1–3:   Only Simple + occasional Tough; no statics beyond Puff obstacle
 Level 4–6:   Deflectors introduced; Tough ratio rises
 Level 7–10:  Gatekeepers introduced; Cracking balloons appear
 Level 11+:   Absorbers introduced; Unbreakable balloons; density climbs
@@ -562,24 +674,23 @@ GridSpawner_AbsorberGated_NotSpawnedWhenFlagFalse
 These are known design gaps to resolve during implementation:
 
 1. **Score for grid actor kills** — `Gatekeeper` destroyed: does the player score? Should
-   `GatekeeperActorModel` implement `IHasScore`? Resolves in Phase 8.2.
+   `GatekeeperActorModel` implement `IHasScore`? Resolves in Phase 8.2c.
 
 2. **Nudge for grid actors** — Should a `Deflect` hit on a `Gatekeeper` trigger a nudge
    animation? Nudge is currently tied to `IHasNudge` on the model. If yes, `Gatekeeper`
-   implements `IHasNudge` + `NudgeOverrides` moves off `BalloonModelBase`. Resolves in 8.2.
+   implements `IHasNudge` + `NudgeOverrides` moves off `BalloonModelBase`. Resolves in 8.2c.
 
-3. **`ScoreValue` + `NudgeOverrides` on `BalloonModelBase`** — `UnbreakableBalloonModel`
-   in Phase 8.1 forces `ScoreValue` off the base (it doesn't score). Phase 8.2's
-   `GatekeeperActorModel` forces `NudgeOverrides` off the base. Clean up at the phase that
-   forces it — not before.
+3. **`NudgeOverrides` on `BalloonModelBase`** — `GatekeeperActorModel` in Phase 8.2c
+   forces `NudgeOverrides` off the base (it doesn't nudge). Clean up is scheduled in 8.2c —
+   `ScoreValue` was already removed in 8.1c.
 
-4. **Grid actor controller pattern** — `GridActorHitController` (Phase 8.2) handles
+4. **Grid actor controller pattern** — `GridActorHitController` (Phase 8.2c) handles
    removal. But behavior-bound actors need per-actor controllers (Phase 9). Define the
-   boundary clearly in 8.2: `GridActorHitController` handles reactive removal only;
+   boundary clearly in 8.2c: `GridActorHitController` handles reactive removal only;
    per-actor behavior controllers are Phase 9's domain.
 
 5. **Pool key for grid actors** — current `PoolKey` convention derives from prefab name.
-   `GridActorPrefabEntry.PoolKey` follows the same convention. Confirm before 8.2.
+   `GridActorPrefabEntry.PoolKey` follows the same convention. Confirm before 8.2b.
 
 ---
 
@@ -591,7 +702,9 @@ These are known design gaps to resolve during implementation:
 | 8.1a — Absorb Routing | ✅ Complete |
 | 8.1b — DamageContext Migration | ✅ Complete |
 | 8.1c — UnbreakableBalloonModel | ✅ Complete |
-| 8.2 — Actor Archetypes | **Next** |
-| 8.3 — Procedural Placement | Blocked on 8.2 |
+| 8.2a — Structural Actors (Puff + Bush) | ✅ Complete |
+| 8.2b — Indestructible Hitables (Deflector + Absorber) | **Next** |
+| 8.2c — Gatekeeper + GridActorHitController | Blocked on 8.2b |
+| 8.3 — Procedural Placement | Blocked on 8.2c |
 | 8.4 — Difficulty + Levels | Blocked on 8.3 |
 | Phase 9 — Behavior-bound actors | Future (broadly defined) |

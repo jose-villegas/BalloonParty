@@ -9,7 +9,7 @@ namespace BalloonParty.Tests.Slots
         [Test]
         public void StaticActorModel_KindIsStatic()
         {
-            var model = new StaticActorModel(default);
+            var model = new StaticActorModel();
 
             Assert.AreEqual(SlotActorKind.Static, model.Kind);
         }
@@ -17,10 +17,9 @@ namespace BalloonParty.Tests.Slots
         [Test]
         public void StaticActorModel_IsNotIDynamicSlotActor()
         {
-            var model = new StaticActorModel(default);
+            var model = new StaticActorModel();
 
             Assert.IsFalse(model is IDynamicSlotActor);
         }
     }
 }
-
