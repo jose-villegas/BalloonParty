@@ -160,6 +160,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: SoapCluster
       objectReference: {fileID: 0}
+    - target: {fileID: 7558929490291297603, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: _colorableRenderers.Array.size

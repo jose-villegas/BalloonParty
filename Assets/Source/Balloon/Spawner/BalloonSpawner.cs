@@ -220,7 +220,7 @@ namespace BalloonParty.Balloon.Spawner
             IWriteableBalloonModel model = entry.BalloonType switch
             {
                 BalloonType.Simple => new BalloonModel(config),
-                BalloonType.BubbleCluster => new BalloonModel(config),
+                BalloonType.BubbleCluster => new BubbleClusterModel(config),
                 BalloonType.Tough => new ToughBalloonModel(config),
                 BalloonType.Unbreakable => new UnbreakableBalloonModel(config),
                 _ => throw new System.ArgumentOutOfRangeException(nameof(entry.BalloonType), entry.BalloonType, null)
