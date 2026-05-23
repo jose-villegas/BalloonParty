@@ -89,6 +89,16 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void BalloonModel_EvaluateHit_DamageContext_SurvivesWithPassThrough()
+        {
+            _model.HitsRemaining.Value = 3;
+
+            var outcome = _model.EvaluateHit(new DamageContext(1));
+
+            Assert.AreEqual(HitOutcome.PassThrough, outcome);
+        }
+
+        [Test]
         public void BalloonModel_EvaluateHit_PiercingFlag_PopsRegardlessOfHitsRemaining()
         {
             _model.HitsRemaining.Value = 5;

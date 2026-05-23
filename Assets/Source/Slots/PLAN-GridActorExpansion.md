@@ -17,7 +17,7 @@ The four threads — in order:
 8.0  Spawner Coordination     ✅ DONE — priority-based coordinator, IReadyGate gating, parallel-within-stage
 8.1a Absorb Routing           ✅ DONE — OnAbsorb in ProjectileView; IsFree=false + DestroyProjectile; 3 tests
 8.1b DamageContext Migration  ✅ DONE — DamageContext/DamageFlags(Normal/Piercing); IHitable migrated; Template Method (EvaluateNormalHit); ItemSettings.Flags; all callers + tests updated
-8.1c UnbreakableBalloon       — uses DamageContext; forces ScoreValue off BalloonModelBase
+8.1c UnbreakableBalloon       ✅ DONE — uses DamageContext; ScoreValue moved off BalloonModelBase; IHasDurability moved to concrete subclasses
 8.2  Actor Archetypes         — the vocabulary the procedural algorithm needs to be interesting
 8.3  Procedural Placement     — weighted, rule-based GridSpawner; retires BalloonSpawner
 8.4  Difficulty + Levels      — tuning knobs driven by score-based level progression
@@ -590,8 +590,8 @@ These are known design gaps to resolve during implementation:
 | 8.0 — Spawner Coordination | ✅ Complete |
 | 8.1a — Absorb Routing | ✅ Complete |
 | 8.1b — DamageContext Migration | ✅ Complete |
-| 8.1c — UnbreakableBalloonModel | **Next** |
-| 8.2 — Actor Archetypes | Blocked on 8.1c |
+| 8.1c — UnbreakableBalloonModel | ✅ Complete |
+| 8.2 — Actor Archetypes | **Next** |
 | 8.3 — Procedural Placement | Blocked on 8.2 |
 | 8.4 — Difficulty + Levels | Blocked on 8.3 |
 | Phase 9 — Behavior-bound actors | Future (broadly defined) |

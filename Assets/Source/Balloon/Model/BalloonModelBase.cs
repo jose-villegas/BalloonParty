@@ -9,7 +9,7 @@ using UnityEngine;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal abstract class BalloonModelBase : IWriteableBalloonModel, IHasDurability
+    internal abstract class BalloonModelBase : IWriteableBalloonModel
     {
         public BalloonType TypeName { get; }
         public ReactiveProperty<int> HitsRemaining { get; }
@@ -17,11 +17,9 @@ namespace BalloonParty.Balloon.Model
         public ReactiveProperty<bool> IsStable { get; } = new(true);
 
         public IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
-        public int ScoreValue { get; }
 
         public SlotActorKind Kind => SlotActorKind.Dynamic;
 
-        IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
         IReadOnlyReactiveProperty<bool> IDynamicSlotActor.IsStable => IsStable;
         IReadOnlyReactiveProperty<Vector2Int> IDynamicSlotActor.SlotIndex => SlotIndex;
 
@@ -36,12 +34,11 @@ namespace BalloonParty.Balloon.Model
         protected BalloonModelBase(BalloonModelConfig config)
         {
             TypeName = config.TypeName;
-            ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
             HitsRemaining = new ReactiveProperty<int>(config.HitsToPop);
         }
 
-        public HitOutcome EvaluateHit(DamageContext context)
+        public virtual HitOutcome EvaluateHit(DamageContext context)
         {
             if (context.Flags.HasFlag(DamageFlags.Piercing))
             {

@@ -1,10 +1,18 @@
 using BalloonParty.Slots.Capabilities;
+using UniRx;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal class ToughBalloonModel : BalloonModelBase
+    internal class ToughBalloonModel : BalloonModelBase, IHasDurability, IHasScore
     {
-        internal ToughBalloonModel(BalloonModelConfig config) : base(config) { }
+        public int ScoreValue { get; }
+
+        IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
+
+        internal ToughBalloonModel(BalloonModelConfig config) : base(config)
+        {
+            ScoreValue = config.ScoreValue;
+        }
 
         protected override HitOutcome EvaluateNormalHit(DamageContext context)
         {

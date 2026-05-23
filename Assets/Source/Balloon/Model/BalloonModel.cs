@@ -4,16 +4,21 @@ using UniRx;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal class BalloonModel : BalloonModelBase, IHasWriteableColor, IHasWriteableItemSlot
+    internal class BalloonModel : BalloonModelBase, IHasWriteableColor, IHasWriteableItemSlot, IHasDurability, IHasScore
     {
         public ReactiveProperty<string> Color { get; } = new();
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
+        public int ScoreValue { get; }
 
         IReadOnlyReactiveProperty<string> IHasColor.Color => Color;
         IReadOnlyReactiveProperty<ItemType> IHasItemSlot.Item => Item;
+        IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
         internal BalloonModel() : this(new BalloonModelConfig()) { }
 
-        internal BalloonModel(BalloonModelConfig config) : base(config) { }
+        internal BalloonModel(BalloonModelConfig config) : base(config)
+        {
+            ScoreValue = config.ScoreValue;
+        }
     }
 }
