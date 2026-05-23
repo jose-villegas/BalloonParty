@@ -70,8 +70,8 @@ MonoBehaviour:
     _weight: 0.5
     _maxCount: 5
     _nudgeOverrides: []
-    _overridePopVfx: 0
-    _popVfxPrefab: {fileID: 2148469744637963286, guid: 96f46efd86e994a7f95e53ccf7be9cb6,
+    _overridePopVfx: 1
+    _popVfxPrefab: {fileID: 2148469744637963286, guid: 57a3039e315c843ceb8114acd91b4c90,
       type: 3}
     _hitsToPop: 3
     _scoreValue: 0

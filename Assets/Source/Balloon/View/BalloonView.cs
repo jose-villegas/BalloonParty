@@ -199,10 +199,16 @@ namespace BalloonParty.Balloon.View
         {
             if (_popVfxOverride != null)
             {
-                // Override VFX — plays with its own baked color, no tinting
                 var key = _popVfxOverride.name;
                 var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(_popVfxOverride.gameObject));
-                effect.Play(transform.position, () => _poolManager.Return(key, effect));
+                if (Model is IHasColor c && !string.IsNullOrEmpty(c.Color.Value))
+                {
+                    effect.Play(transform.position, _palette.GetColor(c.Color.Value), () => _poolManager.Return(key, effect));
+                }
+                else
+                {
+                    effect.Play(transform.position, () => _poolManager.Return(key, effect));
+                }
                 return;
             }
 
