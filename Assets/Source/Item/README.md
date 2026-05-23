@@ -21,7 +21,7 @@ Items are game-wide collectible effects — Bomb, Laser, Lightning, Paint, and S
 
 | File | What it does |
 |---|---|
-| `ItemAssigner` | `IStartable` — subscribes to `ItemCheckMessage`; picks a random newly-spawned balloon that has `CanHoldItem = true` and assigns an item based on turn frequency, weight, and per-type max-cap rules. Balloons where `CanHoldItem` is false (e.g. tough balloons) are excluded from selection entirely |
+| `ItemAssigner` | `IStartable` — subscribes to `ItemCheckMessage`; picks a random newly-spawned balloon that implements `IHasWriteableItemSlot` and assigns an item based on turn frequency, weight, and per-type max-cap rules. Balloons that do not implement `IHasWriteableItemSlot` (e.g. `ToughBalloonModel`) are excluded from selection entirely |
 
 ### Activation
 
@@ -89,7 +89,7 @@ Balloon (root)         ← BalloonLifetimeScope
 
 ## Damage
 
-Each damaging item reads `ItemSettings.Damage` (configured per item in `ItemConfiguration`) and passes it as the `Damage` field of `ActorHitMessage`. The outcome is pre-computed by calling `EvaluateHit(damage)` on the hit actor before publishing — `BalloonController` reads `msg.Outcome` and routes accordingly. Setting `Damage = 1` (the default) reproduces normal one-hit behaviour. Setting it higher on Bomb, for example, allows a single blast to pop tough balloons that would otherwise survive.
+Each damaging item reads `ItemSettings.Damage` (configured per item in `ItemConfiguration`) and passes it as the `Damage` field of `ActorHitMessage`. The outcome is pre-computed by calling `EvaluateHit(new DamageContext(damage))` on the hit actor before publishing — `BalloonController` reads `msg.Outcome` and routes accordingly. Setting `Damage = 1` (the default) reproduces normal one-hit behaviour. Setting it higher on Bomb, for example, allows a single blast to pop tough balloons that would otherwise survive.
 
 Non-damaging items (Paint, Shield) do not use the `Damage` field — the `ItemSettingsDrawer` hides it for those types.
 

@@ -18,7 +18,7 @@ All game data is split across focused ScriptableObjects. Each is registered as a
 
 | File | What it does |
 |---|---|
-| `BalloonPrefabEntry` | Serializable entry in `BalloonsConfiguration` — holds a `BalloonLifetimeScope` prefab reference, spawn weight, optional max-count cap, `HitsToPop` (how many hits before popping; -1 = unbreakable), per-type `NudgeOverride[]`, optional pop VFX override, and `CanHoldItem` flag. `HitsToPop` and `CanHoldItem` are set directly on the model by `BalloonSpawner` before `Initialize()` — type components have no ownership of these values. Pool key is derived from the prefab's GameObject name. |
+| `BalloonPrefabEntry` | Serializable entry in `BalloonsConfiguration` — holds a `BalloonView` prefab reference, spawn weight, optional max-count cap, `HitsToPop` (how many hits before popping; -1 = unbreakable), `ScoreValue` (points awarded on pop), per-type `NudgeOverride[]`, and optional pop VFX override. `BalloonType` drives which model class is created (`Simple` → `BalloonModel`, `Tough` → `ToughBalloonModel`). Item eligibility is determined by whether the model implements `IHasWriteableItemSlot` — not a flag. Pool key is derived from the prefab's GameObject name. |
 | `ItemSettings` | Per-item tuning data for `ItemConfiguration` — common fields (type, frequency, weight, cap, visuals, `Damage`) plus type-specific fields (bomb radius, laser cast params, lightning timing). `Damage` controls how many hit-points a single activation removes from each affected balloon; defaults to 1 |
 | `PaletteEntry` | Serializable name + `Color` pair used in `GamePalette` |
 | `ItemType` | Enum — `None`, `Shield`, `Bomb`, `Laser`, `Lightning` |

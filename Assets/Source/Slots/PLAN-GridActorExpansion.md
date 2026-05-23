@@ -16,7 +16,7 @@ The four threads — in order:
 ```
 8.0  Spawner Coordination     ✅ DONE — priority-based coordinator, IReadyGate gating, parallel-within-stage
 8.1a Absorb Routing           ✅ DONE — OnAbsorb in ProjectileView; IsFree=false + DestroyProjectile; 3 tests
-8.1b DamageContext Migration  ✅ DONE — DamageContext/DamageFlags structs; IHitable API migrated; Piercing flag; ItemSettings.Flags; all callers + tests updated
+8.1b DamageContext Migration  ✅ DONE — DamageContext/DamageFlags(Normal/Piercing); IHitable migrated; Template Method (EvaluateNormalHit); ItemSettings.Flags; all callers + tests updated
 8.1c UnbreakableBalloon       — uses DamageContext; forces ScoreValue off BalloonModelBase
 8.2  Actor Archetypes         — the vocabulary the procedural algorithm needs to be interesting
 8.3  Procedural Placement     — weighted, rule-based GridSpawner; retires BalloonSpawner
@@ -265,10 +265,13 @@ Test double: `ImmediateGate : IReadyGate` — `WaitAsync` returns immediately.
 [Flags]
 public enum DamageFlags
 {
-    None     = 0,
-    Piercing = 1 << 0,
+    Normal   = 0,        // standard hit; no special treatment
+    Piercing = 1 << 0,   // pops regardless of HitsRemaining or permanent Deflect
+    // Future: BypassesShield = 1 << 1, etc.
 }
 ```
+Zero-value named `Normal` (not `None`) so call sites read as `DamageFlags.Normal` rather
+than the ambiguous "no flags".
 
 **`DamageContext`** (`Slots/Capabilities/DamageContext.cs`):
 ```csharp
@@ -276,19 +279,50 @@ public readonly struct DamageContext
 {
     public readonly int Damage;
     public readonly DamageFlags Flags;
-    public DamageContext(int damage, DamageFlags flags = DamageFlags.None) { ... }
+    public DamageContext(int damage, DamageFlags flags = DamageFlags.Normal) { ... }
 }
 ```
 
 **`IHitable`** — signature changed: `EvaluateHit(int damage)` → `EvaluateHit(DamageContext context)`.
 
-**`BalloonModelBase.EvaluateHit`** — handles `Piercing` flag before normal durability logic; sets `HitsRemaining = 0` and returns `Pop` immediately.
+**Template Method on `BalloonModelBase`** — `EvaluateHit` is now non-virtual and owns the
+Piercing fast-path unconditionally. Subclasses override `EvaluateNormalHit` for their
+type-specific non-piercing logic:
+```csharp
+// Non-virtual — Piercing is always handled here, no subclass can bypass it.
+public HitOutcome EvaluateHit(DamageContext context)
+{
+    if (context.Flags.HasFlag(DamageFlags.Piercing))
+    {
+        HitsRemaining.Value = 0;
+        return HitOutcome.Pop;
+    }
+    return EvaluateNormalHit(context);
+}
 
-**`ToughBalloonModel.EvaluateHit`** — same `Piercing` fast-path added; non-piercing path returns `Deflect` on survive.
+// Override point for subclasses — called only when Piercing is NOT set.
+protected virtual HitOutcome EvaluateNormalHit(DamageContext context)
+{
+    var survives = HitsRemaining.Value - context.Damage > 0;
+    HitsRemaining.Value -= context.Damage;
+    return survives ? HitOutcome.PassThrough : HitOutcome.Pop;
+}
+```
+
+**`ToughBalloonModel`** — overrides `EvaluateNormalHit` only; Piercing handling removed
+(base owns it):
+```csharp
+protected override HitOutcome EvaluateNormalHit(DamageContext context)
+{
+    var survives = HitsRemaining.Value - context.Damage > 0;
+    HitsRemaining.Value -= context.Damage;
+    return survives ? HitOutcome.Deflect : HitOutcome.Pop;
+}
+```
 
 **`SlotActorExtensions.EvaluateHit`** — extension signature updated to `DamageContext context`.
 
-**`ItemSettings`** — gains `[SerializeField] private DamageFlags _damageFlags` + `public DamageFlags Flags` property. Bomb and Laser can be toggled to `Piercing` in the SO.
+**`ItemSettings`** — gains `[SerializeField] private DamageFlags _damageFlags` + `public DamageFlags Flags` property. Bomb and Laser can be toggled to `Piercing` in the SO; all others default to `Normal`.
 
 **Callers updated:**
 - `ProjectileView` — `new DamageContext(1)`
@@ -302,75 +336,6 @@ public readonly struct DamageContext
 
 ---
 
-### Phase 8.1c — UnbreakableBalloonModel + BalloonModelBase Cleanup
-
-**Goal:** Replace `IHitable.EvaluateHit(int damage)` with
-`IHitable.EvaluateHit(DamageContext context)` everywhere. No new gameplay — pure API
-migration. This is the breaking change that 8.1c depends on.
-
-**Why separate from 8.1c:** The migration touches every `IHitable` implementor and every
-caller (projectile, item handlers, tests). Keeping it as its own phase makes the diff
-reviewable and lets failing tests serve as a mechanical checklist — the build doesn't pass
-until every caller is updated.
-
-#### `DamageContext` + `DamageFlags`
-
-```csharp
-// Slots/Capabilities/
-public readonly struct DamageContext
-{
-    public readonly int Damage;
-    public readonly DamageFlags Flags;
-
-    public DamageContext(int damage, DamageFlags flags = DamageFlags.None)
-    {
-        Damage = damage;
-        Flags = flags;
-    }
-}
-
-[Flags]
-public enum DamageFlags
-{
-    None     = 0,
-    Piercing = 1 << 0,  // ignores all defensive hit responses — pops regardless of HitsRemaining or permanent Deflect
-    // Future: BypassesShield = 1 << 1, etc.
-}
-```
-
-`Piercing` borrows from established game-design vocabulary and generalises correctly: it
-applies to *any* defensive posture an actor holds, not just unbreakable. A 5-hitpoint
-`ToughBalloonModel` hit with `Piercing` pops in one shot; an `UnbreakableBalloonModel`
-hit with `Piercing` also pops. One flag, consistent semantics across all actor types.
-
-`BalloonModelBase.EvaluateHit` updated to handle `Piercing` before normal durability logic:
-```csharp
-public override HitOutcome EvaluateHit(DamageContext context)
-{
-    if (context.Flags.HasFlag(DamageFlags.Piercing))
-    {
-        HitsRemaining.Value = 0;
-        return HitOutcome.Pop;
-    }
-    var survives = HitsRemaining.Value - context.Damage > 0;
-    HitsRemaining.Value -= context.Damage;
-    return survives ? HitOutcome.PassThrough : HitOutcome.Pop;
-}
-```
-
-**Callers updated:**
-- `ProjectileView` — `new DamageContext(msg.Damage)` (no flags; standard hit)
-- All item handlers (bomb, laser, lightning, …) — `new DamageContext(damage, _itemConfig.DamageFlags)`
-- All tests — raw `int` wrapped in `new DamageContext(n)`
-
-**`ItemSettings`** gains `[SerializeField] private DamageFlags _damageFlags`. Bomb and
-laser can be toggled in the SO to include `Piercing`; all others default to `None`.
-
-#### Failing tests
-All existing `EvaluateHit` tests fail at compile until callers are updated — the
-compiler drives completion. No new test cases; all existing coverage is preserved.
-
----
 
 ### Phase 8.1c — UnbreakableBalloonModel + BalloonModelBase Cleanup
 
@@ -382,16 +347,18 @@ it is a permanent obstacle that awards no score.
 
 #### `UnbreakableBalloonModel`
 
-```csharp
-internal class UnbreakableBalloonModel : BalloonModelBase, IHitable
-{
-    // No IHasDurability. No HitsRemaining. Deflects all hits unless Piercing.
-}
+`UnbreakableBalloonModel` extends `BalloonModelBase` but has no `IHasDurability` — it
+is a permanent obstacle. Because `BalloonModelBase.EvaluateHit` already handles Piercing
+unconditionally, `UnbreakableBalloonModel` only overrides `EvaluateNormalHit`:
 
-public override HitOutcome EvaluateHit(DamageContext context) =>
-    context.Flags.HasFlag(DamageFlags.Piercing)
-        ? HitOutcome.Pop
-        : HitOutcome.Deflect;
+```csharp
+internal class UnbreakableBalloonModel : BalloonModelBase
+{
+    // No IHasDurability. HitsRemaining never changes. Deflects all non-piercing hits.
+    // Piercing is handled by BalloonModelBase.EvaluateHit before EvaluateNormalHit is called.
+
+    protected override HitOutcome EvaluateNormalHit(DamageContext context) => HitOutcome.Deflect;
+}
 ```
 
 `BalloonSpawner` switch gains:

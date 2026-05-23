@@ -27,9 +27,19 @@ Optional traits actors can advertise to consumers:
 | `IHasWriteableColor` | Actor has a writable color — the type system flag for paintability |
 | `IHasScore` | Actor awards score when destroyed |
 | `IHasNudge` | Actor participates in the nudge force system |
-| `IHitable` | Actor participates in the hit system — `EvaluateHit(int damage)` returns a `HitOutcome` and is responsible for mutating any internal state (e.g. decrementing health) |
+| `IHitable` | Actor participates in the hit system — `EvaluateHit(DamageContext)` returns a `HitOutcome` and is responsible for mutating any internal state (e.g. decrementing health). Takes a `DamageContext` containing `Damage` (int) and `DamageFlags` (`Normal` or `Piercing`). `Piercing` forces an immediate `Pop` regardless of `HitsRemaining` |
 | `IHasDurability` | Extends `IHitable` — actor also tracks `HitsRemaining`. Removal is determined by `HitsRemaining.Value <= 0` after `EvaluateHit` returns |
+| `IHasItemSlot` | Actor can host an item — extends `IHasColor` (item visuals always tint to the host color). Exposes `IReadOnlyReactiveProperty<ItemType> Item` |
 | `IPassThrough` | Actor's slot can be crossed by animation paths (spawn entry, balance moves). Actors that do NOT implement this block traversal; rerouting is deferred to a future phase. |
+
+### Hit types
+
+`DamageContext` wraps damage with optional flags:
+
+| Type | Description |
+|---|---|
+| `DamageContext` | Readonly struct — `int Damage` + `DamageFlags Flags`. Default `Flags = DamageFlags.Normal` |
+| `DamageFlags` | `[Flags]` enum — `Normal = 0`, `Piercing = 1 << 0`. `Piercing` bypasses `HitsRemaining` and forces `Pop` |
 
 Paintability is expressed purely through types: a `BalloonModel` implements `IHasWriteableColor`; a `ToughBalloonModel` does not — no runtime flag needed.
 
@@ -37,8 +47,8 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IHa
 
 | Actor | Implements | `EvaluateHit` behaviour |
 |---|---|---|
-| `BalloonModel` (soft) | `IHasDurability` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining` |
-| `ToughBalloonModel` | `IHasDurability` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining` |
+| `BalloonModel` (soft) | `IHasDurability` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately |
+| `ToughBalloonModel` | `IHasDurability` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately |
 | Unbreakable balloon *(Phase 7.5)* | `IHitable` only | Always `Deflect`; no `HitsRemaining` |
 | Absorbing wall *(future)* | `IHitable` only | Always `Absorb`; projectile is killed |
 | `StaticActorModel` | neither | No collider — not part of the hit pipeline |
@@ -49,7 +59,7 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IHa
 |---|---|
 | `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView` — core grid data structure (namespace `BalloonParty.Slots.Grid`) |
 | `Actor/` | Core actor interfaces, identity enum, and static actor implementation — `ISlotActor`, `IWriteableSlotActor`, `IDynamicSlotActor`, `IWriteableDynamicSlotActor`, `ISlotActorView`, `SlotActorKind`, `StaticActorModel`, `StaticActorView`, `StaticActorPoolChannel`, `StaticActorSettings`, `StaticActorSpawner` (namespace `BalloonParty.Slots.Actor`) |
-| `Capabilities/` | Optional capability interfaces — `IHasColor`, `IHasWriteableColor`, `IHasScore`, `IHasNudge`, `IHasItemSlot`, `IHitable`, `IHasDurability`, `IPassThrough`, `HitOutcome` (namespace `BalloonParty.Slots.Capabilities`) |
+| `Capabilities/` | Optional capability interfaces — `IHasColor`, `IHasWriteableColor`, `IHasScore`, `IHasNudge`, `IHasItemSlot`, `IHitable`, `IHasDurability`, `IPassThrough`, `HitOutcome`, `DamageContext`, `DamageFlags` (namespace `BalloonParty.Slots.Capabilities`) |
 | `Spawner/` | Spawner coordination — `IGridSpawner`, `SpawnStage`, `GridSpawnerCoordinator` (namespace `BalloonParty.Slots.Spawner`) |
 
 ## How it works

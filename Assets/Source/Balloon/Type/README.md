@@ -15,7 +15,7 @@ Balloon types define hit capacity, color selection, and per-type Inspector confi
 
 ## How it works
 
-During spawning, `BalloonSpawner` writes `HitsRemaining` and `CanHoldItem` directly onto the model from `BalloonPrefabEntry` before calling `IBalloonVariant.Initialize(model)`. `Initialize()` is then responsible only for type-specific data: `TypeName` and (for colored types) `Color`. This keeps per-type balance values centralized in the configuration asset rather than scattered across MonoBehaviours.
+During spawning, `BalloonSpawner` writes `HitsRemaining` directly onto the model from `BalloonPrefabEntry` before calling `IBalloonVariant.Initialize(model)`. `Initialize()` is then responsible only for type-specific data: `TypeName` and (for colored types) `Color`. This keeps per-type balance values centralized in the configuration asset rather than scattered across MonoBehaviours. Item eligibility is not a flag — it is determined structurally: `BalloonModel` implements `IHasWriteableItemSlot`; `ToughBalloonModel` does not.
 
 Then `BalloonView.Bind(model)` calls `Bind()` on all `IBalloonViewBinding` components found on the same GameObject. `ToughBalloonVariant` uses this to subscribe to `HitsRemaining` and drive shader damage visuals.
 
@@ -48,7 +48,7 @@ The shader properties are organised into labelled Inspector groups: **Damage**, 
 
 ## Interactions
 
-- **BalloonSpawner** — writes `HitsRemaining` and `CanHoldItem` from `BalloonPrefabEntry` before calling `Initialize()`
+- **BalloonSpawner** — writes `HitsRemaining` from `BalloonPrefabEntry` before calling `Initialize()`; model class (`BalloonModel` vs `ToughBalloonModel`) is chosen from `BalloonType`
 - **BalloonView** — auto-discovers and calls `IBalloonViewBinding.Bind()` on all components on the same GameObject
 - **BalloonController** — reads `HitsRemaining` to route hit/deflect/pop
 - **GamePalette** — injected into `ColorableBalloonVariant` to resolve allowed color names

@@ -38,11 +38,12 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 | Algorithms | `OptimalNextEmptySlot` weight calculation | Recursive logic, tie-breaking rules |
 | Math formulas | `IndexToWorldPosition` staggered grid | Wrong offset or sign breaks the grid |
 | Reflection/bounce physics | `PredictionTraceCalculator` | Wall detection, direction math |
-| Hit routing decisions | `BalloonModel.EvaluateHit` | Damage thresholds, unbreakable flag |
+| Hit routing decisions | `BalloonModel.EvaluateHit` | Damage thresholds, unbreakable flag, `DamageFlags.Piercing` bypass |
+| Interface conformance | `BalloonModel is IHasWriteableItemSlot`, `ToughBalloonModel is not` | Structural item-eligibility contract — affects `ItemAssigner` |
 | Multi-tier override cascades | `NudgeService.ResolveDistance` | Priority inversion between balloon, publisher, and config defaults |
 | Weighted selection with caps | `BalloonsConfiguration.PickRandom` | MaxCount filtering, cumulative weight edge cases |
 | Pipeline filtering | `ItemAssigner.OnItemCheck` | Turn modulo, cap enforcement, eligibility gating |
-| Neighbor paint targeting | `PaintItemHandler.Activate` | Paintability filter, same-color skip, empty-color guard |
+| Neighbor paint targeting | `PaintItemHandler.Activate` | `IHasWriteableColor` filter, same-color skip, empty-color guard |
 | Static index generation | `SlotGrid.HexNeighborIndices` | Even/odd shift direction (consumed independently by PaintItemHandler) |
 | Streak state machine | `ScoreController.GetStreak` | Reset on color change, reset on level-up, multiplied into published points |
 
@@ -80,7 +81,7 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 122 tests
+## Current Coverage — 133 tests
 
 ### `SlotGridTests` — 42 tests
 
@@ -143,13 +144,13 @@ Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` pro
 | `IHitable` non-balloon actor — `Pop` outcome scores | 1 | Scoring pipeline too narrowly typed to `IBalloonModel` |
 | `Absorb` outcome — does not score | 1 | Absorb mis-routed as Pop |
 
-### `BalloonModelTests` — 9 tests
+### `BalloonModelTests` — 10 tests
 
 Tests `EvaluateHit` outcomes and `IHasDurability` / `IDynamicSlotActor` / `IHitable` interface conformance.
 
-Design note: `EvaluateHit` is defined on `IHitable` and implemented in `BalloonModelBase`. It is **state-mutating** — it decrements `HitsRemaining` and returns the outcome in a single call. `ProjectileView` calls it once and embeds the result in `ActorHitMessage.Outcome`; `BalloonController` reads `msg.Outcome` without calling `EvaluateHit` again. Tests verify that the outcome is correct and the state change is correct in the same call.
+Design note: `EvaluateHit` is defined on `IHitable` and implemented in `BalloonModelBase`. It is **state-mutating** — it decrements `HitsRemaining` (or zeroes it for `Piercing`) and returns the outcome in a single call. `ProjectileView` calls it once and embeds the result in `ActorHitMessage.Outcome`; `BalloonController` reads `msg.Outcome` without calling `EvaluateHit` again. Tests verify that the outcome is correct and the state change is correct in the same call.
 
-`BalloonModel` returns `PassThrough` on survival (projectile continues, crack animation is reactive). `ToughBalloonModel` overrides to return `Deflect` (projectile bounces). Both return `Pop` on death.
+`BalloonModel` returns `PassThrough` on survival (projectile continues, crack animation is reactive). `ToughBalloonModel` overrides to return `Deflect` (projectile bounces). Both return `Pop` on death. `DamageFlags.Piercing` forces `Pop` on any model regardless of `HitsRemaining`.
 
 | Area | Tests | What could break |
 |---|---|---|
@@ -159,9 +160,21 @@ Design note: `EvaluateHit` is defined on `IHitable` and implemented in `BalloonM
 | Exact kill with higher values → `Pop` | 1 | Arithmetic error at larger numbers |
 | Intermediate hit decrements `HitsRemaining` | 1 | State mutation skipped or wrong value |
 | Killing blow zeroes `HitsRemaining` | 1 | State mutation missing on final hit |
+| `Piercing` flag → `Pop` regardless of `HitsRemaining` | 1 | Flag check missing or not zeroing state |
 | Implements `IDynamicSlotActor` | 1 | Interface conformance regression |
 | Implements `IHitable` | 1 | Interface conformance regression |
 | Implements `IHasDurability` | 1 | Interface conformance regression |
+
+### `ItemSlotTests` — 4 tests
+
+Tests `IHasItemSlot` / `IHasWriteableItemSlot` interface conformance on balloon models. Item eligibility is structural — `BalloonModel` implements the interface; `ToughBalloonModel` does not.
+
+| Area | Tests | What could break |
+|---|---|---|
+| `BalloonModel` implements `IHasItemSlot` | 1 | Interface missing — `ItemAssigner` can't filter eligible balloons |
+| `BalloonModel` as `IHasItemSlot` also implements `IHasColor` | 1 | `IHasItemSlot extends IHasColor` contract broken — item tinting breaks |
+| `ToughBalloonModel` does NOT implement `IHasItemSlot` | 1 | Type incorrectly made item-eligible |
+| `BalloonModel.Item` defaults to `ItemType.None` | 1 | Wrong default — visual glitch on first spawn |
 
 ### `HitableTests` — 6 tests
 
@@ -223,14 +236,14 @@ Tests `PickRandom` weighted selection with `MaxCount` cap logic.
 
 ### `ItemAssignerTests` — 5 tests
 
-Tests the item-assignment pipeline: turn filtering, max-cap enforcement via grid scan, `CanHoldItem` gating, and the happy path.
+Tests the item-assignment pipeline: turn filtering, max-cap enforcement via grid scan, `IHasWriteableItemSlot` eligibility gating, and the happy path.
 
 | Area | Tests | What could break |
 |---|---|---|
 | Empty `NewBalloons` → early return | 1 | Null guard missed |
 | Turn not divisible by `TurnCheckEvery` → skipped | 1 | Modulo check wrong |
 | All items at max → no assignment | 1 | Cap off-by-one in `CountBalloonsWithItem` |
-| No eligible balloons (`CanHoldItem = false`) | 1 | Missing filter on `CanHoldItem` |
+| No eligible balloons (do not implement `IHasWriteableItemSlot`) | 1 | Missing interface filter |
 | Eligible balloon gets item assigned | 1 | Assignment path broken |
 
 ### `LightningItemHandlerTests` — 4 tests
@@ -254,6 +267,26 @@ Tests the shield item's projectile shield increment and message publishing.
 | No active projectile → no crash | 1 | Null guard missing |
 | ShieldGainedMessage published with correct slot | 1 | Wrong slot index in message |
 
+### `ProjectileViewAbsorbTests` — 3 tests
+
+Tests `ProjectileView.OnAbsorb` — the absorb path that kills the projectile on contact with an absorbing actor.
+
+| Area | Tests | What could break |
+|---|---|---|
+| `OnAbsorb` publishes `ProjectileDestroyedMessage` | 1 | Projectile death not signalled — thrower never reloads |
+| `OnAbsorb` sets `model.IsFree = false` | 1 | Projectile keeps moving after absorption |
+| `OnAbsorb` publishes `ActorHitMessage` with `Absorb` outcome | 1 | Wrong outcome — hit routed as Pop or Deflect |
+
+### `GridSpawnerCoordinatorTests` — 3 tests
+
+Tests `GridSpawnerCoordinator` stage ordering and sequencing — isolated with an `ImmediateGate` to remove the `Navigation` static dependency.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Spawners called in ascending `SpawnStage` order | 1 | Sort direction wrong — high-priority runs first |
+| Each stage awaits completion before the next starts | 1 | Stage sequence serialization broken |
+| Multiple spawners at the same stage all run | 1 | Same-stage spawner skipped |
+
 ### `PaintItemHandlerTests` — 5 tests
 
 Tests the paint item's neighbor color conversion — paintability filter, same-color skip, empty-color guard.
@@ -262,7 +295,7 @@ Tests the paint item's neighbor color conversion — paintability filter, same-c
 |---|---|---|
 | Paints different-color neighbors | 1 | Wrong color assignment or neighbor lookup |
 | Skips same-color neighbors | 1 | Missing color comparison |
-| Skips non-paintable neighbors | 1 | `IsPaintable` guard missing |
+| Skips non-paintable neighbors | 1 | `IHasWriteableColor` interface check missing — tough balloons get painted |
 | Empty color → no action | 1 | Null/empty guard missing |
 | No neighbors → no crash | 1 | Out-of-bounds on corner slot |
 
