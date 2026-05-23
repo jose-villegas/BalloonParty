@@ -27,4 +27,3 @@ namespace BalloonParty.Configuration
         public string PoolKey => _prefab != null ? _prefab.name : string.Empty;
     }
 }
-

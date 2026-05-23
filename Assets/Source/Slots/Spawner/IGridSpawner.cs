@@ -9,4 +9,3 @@ namespace BalloonParty.Slots.Spawner
         UniTask SpawnAsync(CancellationToken ct);
     }
 }
-

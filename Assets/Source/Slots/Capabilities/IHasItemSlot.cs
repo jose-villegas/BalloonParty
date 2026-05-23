@@ -12,5 +12,3 @@ namespace BalloonParty.Slots.Capabilities
         IReadOnlyReactiveProperty<ItemType> Item { get; }
     }
 }
-
-

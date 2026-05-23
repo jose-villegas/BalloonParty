@@ -6,7 +6,6 @@ namespace BalloonParty.Slots.Actor.Archetype
         Bush = 1,
         Deflector = 2,
         Absorber = 3,
-        Gatekeeper = 4,
+        Gatekeeper = 4
     }
 }
-

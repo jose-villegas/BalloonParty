@@ -13,7 +13,16 @@ Responsible for introducing balloons into the grid — both at game start and du
 
 `BalloonSpawner` implements `IGridSpawner` with `SpawnPriority = SpawnStage.BalloonActors`. `GridSpawnerCoordinator` calls `SpawnAsync()` after the Navigation gate opens and all lower-priority spawners (e.g. `StaticActorSpawner`) have completed. `SpawnAsync` awaits the pre-warm task started in `Start()` — so pool pre-warming and the navigation/static-actor wait overlap rather than serialize.
 
-At game start `BalloonSpawner` spawns the initial grid rows from `BalloonsConfiguration.GameStartedBalloonLines`. For each empty slot it picks a balloon type via weighted random selection from `BalloonsConfiguration.Entries`, respecting each entry's `MaxCount` cap. All model configuration — `TypeName`, `ScoreValue`, `HitsToPop`, and `NudgeOverrides` — is bundled into a `BalloonModelConfig` struct and passed to the model constructor. The model class is chosen from `entry.BalloonType`: `Simple` → `BalloonModel` (implements `IHasWriteableColor` and `IHasWriteableItemSlot` — paintable and item-capable); `Tough` → `ToughBalloonModel` (not paintable, not item-capable). The variant's `Initialize(model)` handles color. Spawn animation follows the path returned by `SlotGrid.ComputePath`, driving a `DOPath(CatmullRom)` from the entry-row offset down to the target slot.
+At game start `BalloonSpawner` spawns the initial grid rows from `BalloonsConfiguration.GameStartedBalloonLines`. For each empty slot it picks a balloon type via weighted random selection from `BalloonsConfiguration.Entries`, respecting each entry's `MaxCount` cap. All model configuration — `TypeName`, `ScoreValue`, `HitsToPop`, and `NudgeOverrides` — is bundled into a `BalloonModelConfig` struct and passed to the model constructor. The model class is chosen from `entry.BalloonType`:
+
+| `BalloonType` | Model class | Notes |
+|---|---|---|
+| `Simple` | `BalloonModel` | Paintable, item-capable |
+| `BubbleCluster` | `BalloonModel` | Same class as Simple; `HitsToPop = 5` maps hits → bubble count via `SoapBubbleClusterVariant` |
+| `Tough` | `ToughBalloonModel` | Not paintable, not item-capable |
+| `Unbreakable` | `UnbreakableBalloonModel` | No `HitsRemaining`; only Piercing destroys |
+
+The variant's `Initialize(model)` handles color (for colorable types). Spawn animation follows the path returned by `SlotGrid.ComputePath`, driving a `DOPath(CatmullRom)` from the entry-row offset down to the target slot.
 
 After each projectile death (starting from the second turn) the spawner fires `BalloonsConfiguration.NewProjectileBalloonLines` new lines with `BalloonsConfiguration.NewBalloonLinesTimeInterval` delay between lines. Multi-line spawning uses `async UniTaskVoid` with a `CancellationTokenSource`, avoiding any coroutine runner dependency. The first projectile death is skipped because game-start lines are seeded separately — `SceneTransition` publishes `SpawnBalloonLineMessage` on scene load.
 

@@ -12,10 +12,11 @@ namespace BalloonParty.Shared.GameState
             _targetState = targetState;
         }
 
-        public UniTask WaitAsync(CancellationToken ct) =>
-            UniTask.WaitUntil(
+        public UniTask WaitAsync(CancellationToken ct)
+        {
+            return UniTask.WaitUntil(
                 () => Navigation.Current.Value == _targetState,
                 cancellationToken: ct);
+        }
     }
 }
-

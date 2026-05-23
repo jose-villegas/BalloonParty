@@ -21,9 +21,7 @@ MonoBehaviour:
     _nudgeOverrides: []
     _overridePopVfx: 0
     _popVfxPrefab: {fileID: 0}
-    _canHoldItem: 1
     _hitsToPop: 1
-    _isPaintable: 1
     _scoreValue: 1
   - _prefab: {fileID: 9117278215908477035, guid: 54754900e64eb4cb8a18cf270c1adf04,
       type: 3}
@@ -34,9 +32,7 @@ MonoBehaviour:
     _overridePopVfx: 0
     _popVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d,
       type: 3}
-    _canHoldItem: 0
     _hitsToPop: 1
-    _isPaintable: 1
     _scoreValue: 5
   - _prefab: {fileID: 9117278215908477035, guid: 003e22e6af95b4bc1856dbeb7826647a,
       type: 3}
@@ -47,9 +43,7 @@ MonoBehaviour:
     _overridePopVfx: 0
     _popVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d,
       type: 3}
-    _canHoldItem: 0
     _hitsToPop: 1
-    _isPaintable: 1
     _scoreValue: 10
   - _prefab: {fileID: 2456788019005336009, guid: c1864f9f05e28465cb3269154a459c35,
       type: 3}
@@ -68,9 +62,18 @@ MonoBehaviour:
     _overridePopVfx: 1
     _popVfxPrefab: {fileID: 2148469744637963286, guid: 96f46efd86e994a7f95e53ccf7be9cb6,
       type: 3}
-    _canHoldItem: 0
     _hitsToPop: 3
-    _isPaintable: 0
+    _scoreValue: 0
+  - _prefab: {fileID: 4318124338822199961, guid: 49cbb92bf41a2499797a1921677efaa9,
+      type: 3}
+    _balloonType: 3
+    _weight: 0.5
+    _maxCount: 5
+    _nudgeOverrides: []
+    _overridePopVfx: 0
+    _popVfxPrefab: {fileID: 2148469744637963286, guid: 96f46efd86e994a7f95e53ccf7be9cb6,
+      type: 3}
+    _hitsToPop: 3
     _scoreValue: 0
   _defaultPopVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d,
     type: 3}

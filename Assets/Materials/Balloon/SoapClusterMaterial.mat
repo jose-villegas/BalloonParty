@@ -1,0 +1,65 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 8
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: SoapClusterMaterial
+  m_Shader: {fileID: 4800000, guid: 4801602691df4f22ada5294f95b58632, type: 3}
+  m_Parent: {fileID: 0}
+  m_ModifiedSerializedProperties: 0
+  m_ValidKeywords:
+  - _SHADOW_ON
+  m_InvalidKeywords: []
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 1
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_LockedProperties: 
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs: []
+    m_Ints: []
+    m_Floats:
+    - _BreatheAmount: 0.15
+    - _BreatheSpeed: 0.5
+    - _BubbleCount: 3
+    - _BubbleRadius: 0.2
+    - _EnableShadow: 1
+    - _FilmAlpha: 0.849
+    - _FilmWidth: 0.0679
+    - _FloatAmount: 0
+    - _FloatSpeed: 1.14
+    - _InteriorAlpha: 0.066
+    - _IridescenceAmt: 0.7
+    - _IridescenceSat: 0.55
+    - _IridescenceSpeed: 0.025
+    - _JunctionAlpha: 0.35
+    - _JunctionLineAlpha: 0.74
+    - _JunctionLineWidth: 0.0147
+    - _JunctionOverlapAlpha: 0.054
+    - _RadiusVariance: 0.35
+    - _Rotation: 0
+    - _ShadowFilmWidth: 0.0027
+    - _ShadowOffsetX: 0.04
+    - _ShadowOffsetY: -0.04
+    - _ShadowSeamWidth: 0.0053
+    - _ShadowSoftness: 0.06
+    - _SpecOffsetX: -0.1
+    - _SpecOffsetY: 0.1
+    - _SpecSharpness: 5
+    - _SpecSize: 0.2
+    - _SpriteScale: 1
+    - _TimeOffset: 0
+    m_Colors:
+    - _Color: {r: 0.85, g: 0.95, b: 1, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _ShadowColor: {r: 0.06, g: 0.06, b: 0.14, a: 0.2509804}
+    - _SpecColor: {r: 1, g: 1, b: 1, a: 1}
+  m_BuildTextureStacks: []
+  m_AllowLocking: 1

@@ -18,4 +18,3 @@ namespace BalloonParty.Slots.Actor.Archetype
         public SlotActorKind Kind => SlotActorKind.Static;
     }
 }
-

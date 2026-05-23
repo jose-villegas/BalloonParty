@@ -56,9 +56,13 @@ MonoBehaviour:
   _gamePalette: {fileID: 11400000, guid: 5000030a039a46e8807ca639499df679, type: 2}
   _balloonsConfiguration: {fileID: 11400000, guid: 61708d778c4e342aa9841e216cc88726,
     type: 2}
+  _gridActorConfiguration: {fileID: 11400000, guid: ba75d46a7ad4943169a55f7c0bc2fb95,
+    type: 2}
   _projectilePrefab: {fileID: 7317932863533360661, guid: 514e1ddc348a5498aa3edae2404ff130,
     type: 3}
   _scoreTrailPrefab: {fileID: 1429749022553535108, guid: 17e678e81b22a4d3481d8307861019b8,
+    type: 3}
+  _staticActorPrefab: {fileID: -8564703341843647150, guid: 59ad6982d81514c65a28e527032efa50,
     type: 3}
 --- !u!114 &5521832732712766469
 MonoBehaviour:

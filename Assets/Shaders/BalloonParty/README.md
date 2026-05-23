@@ -12,6 +12,7 @@ Custom shaders for BalloonParty under `BalloonParty/` namespace.
 | `BalloonParty/Sprite/Blur` | `Sprite/SpriteBlur.shader` | `SpecularBalloonBlur`, `SpecularBlur`, `SpecularBlur2`, `BlurSprite` — 9-tap box blur with configurable radius and sprite scale margin |
 | `BalloonParty/Sprite/ShinyDefault` | `Sprite/SpriteShine.shader` | Specular shine overlay — diagonal shine band controlled by `_ShineLocation` and `_ShineWidth` |
 | `BalloonParty/Paint/PaintBlob` | `Paint/PaintBlob.shader` | `PaintBlob`, `PaintFlyingBlob` — procedural wobbling paint blob with dual-frequency sine wobble, rim darkening, specular highlight, and optional shadow with configurable `_ShadowScale`. `_SpriteScale` controls content inset within the quad, preventing shadow clipping at edges. Per-instance `_TimeOffset`, `_ShadowScale`, and `_SpriteScale` via `MaterialPropertyBlock` |
+| `BalloonParty/Balloon/SoapBubbleCluster` | `Balloon/SoapBubbleCluster.shader` | ⚗️ **Investigation prototype** — up to 5 discrete soap-bubble circles on a single quad. Uses Voronoi-style per-circle SDF ownership (no metaball merging). `_BubbleCount` (1–5) controls the active cluster size via `MaterialPropertyBlock` driven by `SoapBubbleClusterRenderer`. Features: iridescent rim hue, Plateau junction membrane between touching bubbles, per-bubble specular, gentle independent micro-float animation per bubble |
 
 ## GPU instancing
 

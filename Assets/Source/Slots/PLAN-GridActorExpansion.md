@@ -49,6 +49,15 @@ implement. They are the building blocks the procedural algorithm needs.
 **Not yet designed — Phase 9 consideration:**
 - *Chain* — pops adjacent same-color balloons when destroyed; needs neighbor query at pop time
 - *Ghost* — `PassThrough` always (projectile travels through), pops after N passes
+- *Soap Cluster merge* — two adjacent Soap Cluster balloons merge into a single larger cluster
+  when nudged together or when their world positions come within a proximity threshold.
+  Merged cluster gets `HitsRemaining = sum of both` (capped at 5), `_BubbleCount` updates
+  accordingly, and the two separate `IBalloonModel` instances collapse into one (the higher
+  slot survives; the other is returned to the pool).
+  Scoring idea: merge awards bonus points (e.g. `mergedHits × baseScore`), creating a
+  risk/reward trade-off — letting clusters grow costs you future scoring opportunities but
+  yields a burst payout. Needs: neighbor query on nudge completion, a merge message/event,
+  and a merge VFX (two soap-film rings flowing into each other).
 
 ### Grid actor archetypes
 

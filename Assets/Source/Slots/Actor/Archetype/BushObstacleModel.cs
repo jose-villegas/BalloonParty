@@ -19,4 +19,3 @@ namespace BalloonParty.Slots.Actor.Archetype
         internal BushObstacleModel() { }
     }
 }
-

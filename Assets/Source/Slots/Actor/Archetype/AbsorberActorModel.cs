@@ -16,7 +16,9 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         public SlotActorKind Kind => SlotActorKind.Static;
 
-        public HitOutcome EvaluateHit(DamageContext context) => HitOutcome.Absorb;
+        public HitOutcome EvaluateHit(DamageContext context)
+        {
+            return HitOutcome.Absorb;
+        }
     }
 }
-

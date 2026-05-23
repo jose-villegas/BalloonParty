@@ -273,6 +273,7 @@ Game data is split across focused ScriptableObjects, each registered as a single
 |---|---|---|
 | `GameConfiguration` | `IGameConfiguration` | Projectile settings, slot dimensions, timing values, prediction trace params, score trail timing, score points scatter delay, points formula |
 | `BalloonsConfiguration` | `BalloonsConfiguration` | Balloon prefab entries (weight, cap, nudge overrides, pop VFX), spawn line counts, animation range, balance delay, global nudge defaults |
+| `GridActorConfiguration` | `GridActorConfiguration` | Grid actor prefab entries (weight, max-count cap, `HitsToPop` for Gatekeeper) — read by procedural grid spawner (Phase 8.3) |
 | `GamePalette` | `GamePalette` | Named color entries — the single source for all balloon colors |
 | `GameDisplayConfiguration` | `GameDisplayConfiguration` | Aspect-ratio → orthographic-size lookup for camera sizing |
 | `ItemConfiguration` | `ItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, physics params, effect prefab, damage (damaging types only), paint flight curves/duration/arc/scale |

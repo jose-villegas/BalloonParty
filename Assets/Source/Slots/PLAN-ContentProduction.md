@@ -15,7 +15,7 @@
 The procedural algorithm (8.3) draws from two config lists:
 
 - `BalloonsConfiguration.Entries` — already contains Simple and Tough entries
-- `GridActorConfiguration.Entries` — **does not exist yet** (needs a new SO)
+- `GridActorConfiguration.Entries` — ✅ **code exists** (`GridActorConfiguration.cs` + registered in `GameLifetimeScope`); SO asset still needs to be created in Unity and wired into spawners
 
 Neither list is useful until the prefabs those entries reference actually exist with
 correct visuals, animations, and hit feedback. Placeholder grey boxes make it impossible
@@ -28,7 +28,7 @@ to read the grid, tune difficulty, or playtest spawn density.
 | Actor / Balloon | Model class | Prefab | Sprite / Art | Animator | Animations | VFX | Config entry | Notes |
 |---|---|---|---|---|---|---|---|---|
 | **Simple** | `BalloonModel` | ✅ `Balloon.prefab` | ✅ | ✅ `Balloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_BalloonPop` | ✅ `BalloonsConfiguration` | Baseline; no blockers |
-| **Soap Cluster** | `BalloonModel` (`BalloonType.BubbleCluster`) | ❌ own prefab | ❌ bubble cluster sprite | ❌ | ❌ `BubblePop` per hit | ❌ pop burst per bubble | ❌ add entry in config | Cluster shrinks per hit; each bubble pop is a VFX event |
+| **Soap Cluster** | `BalloonModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ❌ pop burst per bubble | ✅ `BalloonsConfiguration` | Only VFX remaining |
 | **Tough** | `ToughBalloonModel` | ✅ `ToughBalloon.prefab` | ✅ | ✅ `ToughBalloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_ToughBalloonPop` | ✅ `BalloonsConfiguration` | Baseline; no blockers |
 | **Unbreakable** | `UnbreakableBalloonModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect react | ❌ deflect hit, pierce-pop | ❌ add to `BalloonsConfiguration` | Permanent obstacle feel; no crack states |
 | **Puff** | `PuffObstacleModel` | ⚠️ `StaticTest.prefab` | ⚠️ placeholder | ❌ | ❌ Idle float | — | ❌ `GridActorConfiguration` | Dandelion puff / soft cloud; traversable |
@@ -74,46 +74,73 @@ Prefab location: `Assets/Prefabs/Grid/`
 ### Soap Cluster
 
 **What it is:** A cluster of iridescent soap bubbles that floats as a single balloon-type
-unit. Each projectile hit pops one bubble — the cluster visibly shrinks. When the last
+unit. Each projectile hit pops one bubble — the cluster visibly shrinks through distinct
+geometric layouts (5→pentagon, 4→square, 3→triangle, 2→pair, 1→single). When the last
 bubble pops, the cluster is destroyed. Mechanically identical to `BalloonModel` with
-`HitsToPop > 1`; the model class is shared with Simple, distinguished by
+`HitsToPop = 5`; the model class is shared with Simple, distinguished by
 `BalloonType.BubbleCluster` in the spawner and config.
 
-**Art direction:** 3–5 tightly bunched soap bubbles, each with the classic iridescent
-rainbow-film surface. They float together as a unit. The cluster feels light and permeable —
-it reads as "poppable, not solid." On each hit, one bubble in the foreground vanishes
-with a small pop (soap film flash + mist ring), revealing the smaller cluster behind.
-The final bubble pops with a bigger burst.
+**Art direction:** Cluster of iridescent soap bubbles. Thin rainbow-film rim per bubble,
+transparent interior, visible Plateau junction membranes between bubbles, soft specular
+highlight. Fully procedural — no sprites or textures required.
 
-Key differentiation from **Puff**: Puff is wispy, semi-transparent, cotton/dandelion —
-it never reacts. Soap Cluster is clearly bubble-shaped with defined round edges and
-rainbow sheen, and visibly loses bubbles on hit.
+Key differentiation from **Puff**: Puff is wispy, semi-transparent, static, never reacts.
+Soap Cluster has defined iridescent rim, animated breathe/float, and visibly loses bubbles on hit.
 
-Key differentiation from **Tough**: Tough is matte rubber/leather, solid-looking, and
-deflects the projectile. Soap Cluster is translucent/iridescent and lets the projectile
-pass through.
+Key differentiation from **Tough**: Tough is matte rubber/leather, deflects the projectile.
+Soap Cluster is translucent/iridescent, lets the projectile pass through.
 
-- [ ] **Prefab** — `Assets/Prefabs/Balloon/SoapCluster.prefab` with `BalloonView` component;
-      **own prefab**, not a variant of `Balloon.prefab` (different sprite root and animator)
-- [ ] **Sprites** — one sprite per cluster size (N bubbles, N-1, …, 1), OR a single
-      "cluster" sprite with a child bubble count driven by `HitsRemaining`; sprite approach
-      should be decided before commissioning — recommend the **separate sprites per state**
-      approach for clarity on smaller screens
-- [ ] **Animator / Controller** — `SoapCluster.controller`
-      - `Idle_N` states per bubble count (or a single Idle with an `int` `BubblesRemaining`
-        parameter that crossfades between sprite frames)
-      - `BubblePop` trigger — one-shot "one bubble pops" animation (shrink + reform)
-- [ ] **View update** — `BalloonView` subscribes to `IHasDurability.HitsRemaining` and
-      drives the `BubblesRemaining` animator parameter; triggers `BubblePop` on each decrease
-- [ ] **VFX** — `PSVFX_SoapBubblePop` — small iridescent soap-film ring + mist burst, played
-      at the hit bubble's position on each non-killing hit;
-      `PSVFX_SoapClusterBurst` — larger multi-ring burst on final pop (reuse balloon pop
-      sound, replace VFX)
-- [ ] **Config entry** — add a `BubbleCluster` entry to `BalloonsConfiguration` with
-      `HitsToPop = 3` default; weight and maxCount to tune in playtesting
+**Shader — `BalloonParty/Balloon/SoapBubbleCluster`** (investigation complete):
+- 5 independent circle SDFs; Voronoi ownership — bubbles never merge
+- Per-count shape layouts: 5=pentagon, 4=square, 3=triangle, 2=pair, 1=single
+- Per-bubble radius variance (`kRadiusVar[]`) — no two bubbles the same size
+- Iridescent hue: rim angle + slow global drift (`_IridescenceSpeed`)
+- Plateau junction: Voronoi boundary LINE (runs through interior) + overlap zone fill
+- Specular highlight: computed in unrotated UV space — does not spin with cluster
+- Shadow (`_SHADOW_ON`): projects rim + seams only (no interior fill);
+  offset in unrotated UV space — direction fixed regardless of cluster rotation;
+  `_ShadowFilmWidth` / `_ShadowSeamWidth` independently thin; `_ShadowSoftness` blurs edges without thickening
+- Cluster breathe (`_BreatheAmount`, `_BreatheSpeed`) — primary driver of seam interchange
+- Per-bubble micro-float (`_FloatAmount`) — independent phase per bubble
+- Shader-level rotation (`_Rotation` in radians via MPB) — transform stays identity
+- `_TimeOffset` driven by C# each frame (edit + play mode); `_Time.y` not used
 
-**Dependency:** Needs its own prefab — sprite set is fundamentally different from Simple.
-`BalloonType.BubbleCluster` is already wired in the spawner (`=> new BalloonModel(config)`).
+**C# — `Balloon/Type/SoapBubbleClusterVariant.cs`** (complete):
+- Implements `IBalloonVariant` + `IBalloonViewBinding`; discovered automatically by `BalloonView`
+- `[ExecuteAlways]` — animation runs in edit mode without Play mode
+- `Bind()`: random spawn rotation + random rotation speed (5–12 °/s ± direction) via `_Rotation` MPB
+- Subscribes to `IHasDurability.HitsRemaining` → `Mathf.Clamp(hits, 1, _maxBubbles)` → `_BubbleCount`
+- `Update()` accumulates `_rotationAngle` and pushes `_TimeOffset` using
+  `EditorApplication.timeSinceStartup` (edit) or `Time.time` (play)
+- `_previewBubbleCount` inspector field + `OnValidate()` for edit-mode cluster-state preview
+- `_renderer.transform.localRotation = Quaternion.identity` on each `Bind()` — rotation is shader-owned
+
+- [x] **Shader** — `Shaders/BalloonParty/Balloon/SoapBubbleCluster.shader`
+- [x] **C# Variant** — `Balloon/Type/SoapBubbleClusterVariant.cs`
+- [x] **BalloonType.BubbleCluster** — enum value added; spawner wired (`=> new BalloonModel(config)`)
+- [x] **Shader tuning at game scale** — rim/seam readability confirmed at ~0.9 world units
+- [x] **Prefab** — `Assets/Prefabs/Balloon/SoapCluster.prefab`:
+      `BalloonView` root + `SoapBubbleClusterVariant` + `SpriteRenderer` (no sprite assigned — procedural quad);
+      material uses `BalloonParty/Balloon/SoapBubbleCluster` with `_SHADOW_ON` enabled
+- [x] **Animator / Controller** — `SoapCluster.controller`
+      - `StableIdle` / `UnstableIdle` state switching only (shader handles all motion)
+      - `BubblePop` trigger — one-shot DOTween scale+dissolve on the removed bubble position
+        (future: drive from a `BubblePopController` that knows which bubble index was removed)
+- [ ] **Pop VFX** — `PSVFX_SoapBubblePop` — iridescent soap-film ring + mist burst at the
+      removed bubble's world position; `PSVFX_SoapClusterBurst` — larger multi-ring final pop
+- [x] **Config entry** — `BubbleCluster` entry added to `BalloonsConfiguration` with `HitsToPop = 5`
+
+**Dependency:** Fully procedural. `BalloonType.BubbleCluster` is already wired in the spawner.
+
+**Future idea (Phase 9) — Cluster Merge:**
+Adjacent Soap Cluster balloons merge when nudged together or when proximity drops below a
+threshold. The merged cluster's `HitsRemaining` = sum of both (capped at 5); `_BubbleCount`
+transitions to the new count via a merge animation (two soap-film rings flowing into each
+other). One `IBalloonModel` survives; the other is returned to the pool. Scoring angle:
+merge triggers a bonus payout (`mergedHits × baseScore`), creating a risk/reward dynamic —
+letting clusters grow is tempting but reduces future individual scoring opportunities.
+Needs: neighbor query post-nudge, `ClusterMergeMessage`, merge VFX, and a `BubblePopController`
+that knows which bubble index was added/removed for the transition animation.
 
 ---
 
@@ -260,11 +287,11 @@ Work bottom-up by complexity. Items that unblock config wiring come first so the
 procedural engine can be tested with real (even rough) assets as early as possible.
 
 ```
-1. GridActorConfiguration SO + registration         ← unblocks 8.3 wiring immediately
-2. Puff — simplest new actor; replaces placeholder  ← unblocks StaticActorSpawner tests in-game
-3. Bush — same pipeline as Puff, no hit reaction
-4. Soap Cluster balloon                             ← own prefab; view-side HitsRemaining subscription
-5. Unbreakable balloon                              ← new prefab + controller
+1. [x] GridActorConfiguration SO + registration         ← code done; SO asset still needed in Unity
+2. [x] Puff — simplest new actor; replaces placeholder
+3. [x] Bush — same pipeline as Puff, no hit reaction
+4. [x] Soap Cluster shader + C# Variant + prefab + config  ← only VFX remaining
+5. [x] Unbreakable balloon                              ← prefab + controller done
 6. Deflector — first hitable grid actor             ← introduces Deflect VFX pipeline
 7. Absorber                                         ← danger actor; needs distinctive look
 8. Gatekeeper                                       ← most complex; needs N-state animator
@@ -291,6 +318,7 @@ Assets/
 │       └── Gatekeeper.prefab        ← NEW
 ├── Animation/
 │   ├── Balloon/
+│   │   ├── SoapCluster.controller       ← NEW (StableIdle/UnstableIdle only — shader owns motion)
 │   │   └── UnbreakableBalloon.controller  ← NEW
 │   └── Grid/                        ← NEW folder for grid actor controllers
 │       ├── Puff.controller
