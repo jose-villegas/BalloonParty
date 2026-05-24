@@ -28,9 +28,9 @@ to read the grid, tune difficulty, or playtest spawn density.
 | Actor / Balloon | Model class | Prefab | Sprite / Art | Animator | Animations | VFX | Config entry | Notes |
 |---|---|---|---|---|---|---|---|---|
 | **Simple** | `BalloonModel` | ✅ `Balloon.prefab` | ✅ | ✅ `Balloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_BalloonPop` | ✅ `BalloonsConfiguration` | Baseline; no blockers |
-| **Soap Cluster** | `BubbleClusterModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ⚠️ pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | Done for now; pop VFX is polish |
+| **Soap Cluster** | `BubbleClusterModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ⚠️ pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | Done for now; Phase 9: `IHasScoreColor` all-colors jackpot scoring |
 | **Tough** | `ToughBalloonModel` | ✅ `ToughBalloon.prefab` | ✅ | ✅ `ToughBalloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_ToughBalloonPop` | ✅ `BalloonsConfiguration` | Baseline; no blockers |
-| **Unbreakable** | `UnbreakableBalloonModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect react | ❌ deflect hit, pierce-pop | ❌ add to `BalloonsConfiguration` | Permanent obstacle feel; no crack states |
+| **Unbreakable** | `UnbreakableBalloonModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect react | ❌ deflect hit, pierce-pop | ❌ add to `BalloonsConfiguration` | Scores in killer's color via `IHasScoreColor`; design questions deferred |
 | **Puff** | `PuffObstacleModel` | ⚠️ `StaticTest.prefab` | ⚠️ placeholder | ❌ | ❌ Idle float | — | ❌ `GridActorConfiguration` | Dandelion puff / soft cloud; traversable |
 | **Bush** | `BushObstacleModel` | ❌ | ❌ | ❌ | ❌ Idle sway | — | ❌ `GridActorConfiguration` | Park shrub; blocks paths, no hit reaction |
 | **Deflector** | `DeflectorActorModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect flash | ❌ bounce flash | ❌ `GridActorConfiguration` | Reflective surface; indestructible |
@@ -44,6 +44,70 @@ to read the grid, tune difficulty, or playtest spawn density.
 ## Shared infrastructure needed
 
 These items are pre-requisites that unlock multiple actors at once.
+
+### `IHasScoreColor` — score attribution decoupled from visual color
+
+**The problem:** `IHasColor` currently serves two unrelated consumers — the renderer
+(what color does this actor look like?) and the score system (which color bar advances
+when this actor is destroyed?). For simple balloons these are the same thing, so the
+conflation is invisible. Two upcoming actors break the assumption:
+
+| Actor | Visual color | Score color(s) |
+|---|---|---|
+| **Unbreakable** | None (no tint) | The color of the item that destroyed it — unknown until hit time |
+| **Bubble Cluster** | None (procedural shader) | Potentially all palette colors simultaneously |
+
+**The split:**
+
+```
+IHasColor      → "what color does this actor render as?" (single string, visual only)
+IHasScoreColor → "which color bars does this actor contribute to when destroyed?"
+```
+
+`IHasScoreColor` returns a collection — `IReadOnlyList<string>` or an `int` bitmask
+(the `[PaletteColorMask]` encoding already exists in the codebase). `ScoreController`
+iterates over it and awards `ScoreValue` points to *each* listed color bar.
+
+**Open design questions before implementation:**
+
+1. **Points per color or shared?** — If Bubble Cluster lists all five colors, does the
+   player earn `ScoreValue` per color (5×) or `ScoreValue ÷ 5` per color, or a flat
+   bonus unrelated to the per-color bars? The choice affects difficulty tuning
+   significantly. Options: full award per color (jackpot, very strong), flat bonus
+   pool split evenly (softer), or a separate "wildcard" score path that doesn't advance
+   any bar but gives a flat point bonus.
+
+2. **Runtime vs static for Unbreakable** — Unbreakable's score color isn't known until
+   the hit arrives (`DamageContext.SourceColor`). The model itself holds no color.
+   Options: (a) `IHasScoreColor` returns an empty list by default; `ActorHitMessage`
+   carries `SourceColor`; `ScoreController` uses `SourceColor` when the list is empty.
+   (b) The model stores the last `SourceColor` written at hit-eval time. (a) keeps the
+   model stateless; (b) is simpler for `ScoreController`.
+
+3. **Migration path for existing actors** — Does `BalloonModel` implement `IHasScoreColor`
+   (returning `[Color.Value]`) so `ScoreController` has one unified path? Or does
+   `ScoreController` keep its existing `IHasColor` branch as a fallback and only check
+   `IHasScoreColor` for new actor types? The unified path is cleaner long-term; the
+   fallback avoids touching every existing model and test.
+
+4. **Bitmask vs list** — The `[PaletteColorMask] int` encoding is already in use for
+   spawn filtering and maps directly to collection iteration. A list of strings is more
+   self-documenting but allocates. Decide before writing the interface.
+
+**Actors that benefit from this:**
+- Unbreakable Balloon — single inherited color, determined at hit time
+- Bubble Cluster — all-colors or configurable subset *(Phase 9 scoring, deferred)*
+- Future: Rainbow balloon type — static all-colors
+
+Scope of work (defer until Unbreakable scoring is implemented):
+- [ ] Decide open questions 1–4 above
+- [ ] `IHasScoreColor` interface in `Slots/Capabilities/`
+- [ ] `ScoreController` updated to consume `IHasScoreColor` (unified or fallback path)
+- [ ] `BalloonModel` / `ToughBalloonModel` implement `IHasScoreColor` if unified path chosen
+- [ ] `UnbreakableBalloonModel` implements `IHasScoreColor` (dynamic, from hit context)
+- [ ] `BubbleClusterModel` implements `IHasScoreColor` (all-colors or configurable)
+
+---
 
 ### `GridActorConfiguration` ScriptableObject
 
@@ -154,6 +218,12 @@ letting clusters grow is tempting but reduces future individual scoring opportun
 Needs: neighbor query post-nudge, `ClusterMergeMessage`, merge VFX, and a `BubblePopController`
 that knows which bubble index was added/removed for the transition animation.
 
+**Future idea (Phase 9) — Multi-color scoring:**
+`BubbleClusterModel` is a candidate for `IHasScoreColor` returning all palette colors —
+popping a cluster awards points to every color bar simultaneously (jackpot). The balance
+implication (points per color vs flat bonus) is an open question tracked in the
+**`IHasScoreColor`** shared infrastructure section above. No action needed now.
+
 ---
 
 ### Unbreakable Balloon
@@ -166,6 +236,21 @@ move easily". Could be metallic, stone-textured, or wrapped in thorns. Park them
 suggests a **knotted/tied-off balloon** with thick rubber texture, or a **stone balloon**
 (floaty but clearly different weight class).
 
+**Scoring design — "inherits killer's color":**
+Destroying an Unbreakable costs an item — the opportunity cost justifies a high score
+reward (3–5× base). The Unbreakable has no inherent color, but the item that delivers
+the Piercing damage does. Score is attributed to the color of that item's host balloon,
+making the payoff emotionally legible: "I spent my Red Bomb, I earned Red points."
+
+This will be implemented via `IHasScoreColor` (see **Shared infrastructure — `IHasScoreColor`**
+above). The Unbreakable's score color is not known at model creation time — it is
+determined dynamically from `DamageContext.SourceColor` at hit-eval time. The exact
+runtime strategy (stateless via `ActorHitMessage` vs model stores last source color)
+is an open design question tracked in the `IHasScoreColor` section.
+
+- Do NOT add `IHasWriteableColor` — paint cannot coat it
+- Do NOT add `IHasColor` — no renderer tint; Lightning targeting opts out entirely
+
 - [ ] **Sprite** — distinct from all other balloon types; should read as "tough/permanent"
       at a glance
 - [ ] **Prefab** — `Assets/Prefabs/Balloon/UnbreakableBalloon.prefab` with `BalloonView`
@@ -174,10 +259,13 @@ suggests a **knotted/tied-off balloon** with thick rubber texture, or a **stone 
       - `StableIdle` — slow, heavy float (slower than Simple idle)
       - `UnstableIdle` — subtle wobble during balancer movement
       - `DeflectReact` — brief recoil/shake when hit (does NOT pop)
-- [ ] **VFX** — `PSVFX_UnbreakableDeflect` — spark/clank on deflect hit
+- [ ] **VFX** — `PSVFX_UnbreakableDeflect` — spark/clank on deflect hit;
       `PSVFX_UnbreakablePop` — pop VFX for when Piercing finally destroys it
-- [ ] **Config entry** — add to `BalloonsConfiguration` with `HitsToPop = 1` (the Piercing
-      check bypasses HitsRemaining entirely); weight = low; maxCount = 2–3
+- [ ] **Config entry** — add to `BalloonsConfiguration`; `ScoreValue = 4` (suggested
+      starting point — tune in playtesting); weight = low; maxCount = 2–3
+- [ ] **Code — `IHasScore` on `UnbreakableBalloonModel`** — read `ScoreValue` from config
+- [ ] **Code — `IHasScoreColor` on `UnbreakableBalloonModel`** — dynamic, from hit context;
+      depends on `IHasScoreColor` shared infrastructure being resolved first
 
 ---
 
@@ -351,14 +439,22 @@ Assets/
    shrinks on hit, projectile passes through. Unbreakable is opaque/heavy, deflects all hits.
    Art directions are distinct by definition; confirm Unbreakable sprite before commission.
 
-2. **Deflector angle** — Should the deflector have a fixed angle or rotate to reflect
+2. ~~**Unbreakable scoring**~~ — ✅ Direction resolved. Scores high (3–5× base) in the
+   color of the item that destroyed it. Will be implemented via `IHasScoreColor` —
+   a new capability interface that decouples score attribution color from visual/paint
+   color. Bubble Cluster will also use it for all-colors jackpot scoring (Phase 9).
+   Four open design questions (points-per-color vs shared, runtime strategy, migration
+   path, bitmask vs list) are tracked in the **`IHasScoreColor`** shared infrastructure
+   section before implementation begins.
+
+3. **Deflector angle** — Should the deflector have a fixed angle or rotate to reflect
    the projectile direction? Fixed angle is simpler and more strategic; rotating is
    more physically satisfying. Resolve before animator design.
 
-3. **Gatekeeper hits-to-pop default** — 3 hits is the suggested default. This affects
+4. **Gatekeeper hits-to-pop default** — 3 hits is the suggested default. This affects
    how many intermediate sprite states are needed. Confirm before commissioning art.
 
-4. **Absorber vs Projectile destroyed sound** — When the Absorber consumes the
+5. **Absorber vs Projectile destroyed sound** — When the Absorber consumes the
    projectile, the turn ends. Does it play a unique SFX, or reuse
    `ProjectileDestroyedMessage` audio? Resolve before VFX production.
 ````
