@@ -28,7 +28,7 @@ to read the grid, tune difficulty, or playtest spawn density.
 | Actor / Balloon | Model class | Prefab | Sprite / Art | Animator | Animations | VFX | Config entry | Notes |
 |---|---|---|---|---|---|---|---|---|
 | **Simple** | `BalloonModel` | ✅ `Balloon.prefab` | ✅ | ✅ `Balloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_BalloonPop` | ✅ `BalloonsConfiguration` | Baseline; no blockers |
-| **Soap Cluster** | `BalloonModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ❌ pop burst per bubble | ✅ `BalloonsConfiguration` | Only VFX remaining |
+| **Soap Cluster** | `BubbleClusterModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ⚠️ pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | Done for now; pop VFX is polish |
 | **Tough** | `ToughBalloonModel` | ✅ `ToughBalloon.prefab` | ✅ | ✅ `ToughBalloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_ToughBalloonPop` | ✅ `BalloonsConfiguration` | Baseline; no blockers |
 | **Unbreakable** | `UnbreakableBalloonModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect react | ❌ deflect hit, pierce-pop | ❌ add to `BalloonsConfiguration` | Permanent obstacle feel; no crack states |
 | **Puff** | `PuffObstacleModel` | ⚠️ `StaticTest.prefab` | ⚠️ placeholder | ❌ | ❌ Idle float | — | ❌ `GridActorConfiguration` | Dandelion puff / soft cloud; traversable |
@@ -71,14 +71,15 @@ Prefab location: `Assets/Prefabs/Grid/`
 
 ---
 
-### Soap Cluster
+### Soap Cluster ✅ Done for now
 
 **What it is:** A cluster of iridescent soap bubbles that floats as a single balloon-type
 unit. Each projectile hit pops one bubble — the cluster visibly shrinks through distinct
 geometric layouts (5→pentagon, 4→square, 3→triangle, 2→pair, 1→single). When the last
-bubble pops, the cluster is destroyed. Mechanically identical to `BalloonModel` with
-`HitsToPop = 5`; the model class is shared with Simple, distinguished by
-`BalloonType.BubbleCluster` in the spawner and config.
+bubble pops, the cluster is destroyed. Uses a dedicated `BubbleClusterModel` (no color
+slot, no item slot, no score per pop) distinguished from Simple by `BalloonType.BubbleCluster`
+in the spawner and config. Projectiles pass through (no deflect); hit VFX per-entry
+override via the `HitVfxOverride[]` system on `BalloonPrefabEntry`.
 
 **Art direction:** Cluster of iridescent soap bubbles. Thin rainbow-film rim per bubble,
 transparent interior, visible Plateau junction membranes between bubbles, soft specular
@@ -115,9 +116,21 @@ Soap Cluster is translucent/iridescent, lets the projectile pass through.
 - `_previewBubbleCount` inspector field + `OnValidate()` for edit-mode cluster-state preview
 - `_renderer.transform.localRotation = Quaternion.identity` on each `Bind()` — rotation is shader-owned
 
+**C# — `Balloon/Model/BubbleClusterModel.cs`** (complete):
+- Dedicated model; no color, no item slot, no score-per-pop
+- Implements `IHasDurability`; `HitsRemaining` drives `_BubbleCount` in the variant
+- Spawner: `BalloonType.BubbleCluster => new BubbleClusterModel(config)`
+
+**Infrastructure — `HitVfxOverride`** (complete):
+- `HitVfxOverride[]` on `BalloonPrefabEntry` — per-entry override for hit/pass-through VFX
+- `BalloonController` receives the array and passes it to `BalloonView.SetHitVfxOverrides()`
+- `HitVfxOverrideDrawer` in editor for inspector display
+
 - [x] **Shader** — `Shaders/BalloonParty/Balloon/SoapBubbleCluster.shader`
 - [x] **C# Variant** — `Balloon/Type/SoapBubbleClusterVariant.cs`
-- [x] **BalloonType.BubbleCluster** — enum value added; spawner wired (`=> new BalloonModel(config)`)
+- [x] **C# Model** — `Balloon/Model/BubbleClusterModel.cs`
+- [x] **HitVfxOverride system** — `Configuration/HitVfxOverride.cs` + drawer + wired into spawner
+- [x] **BalloonType.BubbleCluster** — enum value added; spawner wired (`=> new BubbleClusterModel(config)`)
 - [x] **Shader tuning at game scale** — rim/seam readability confirmed at ~0.9 world units
 - [x] **Prefab** — `Assets/Prefabs/Balloon/SoapCluster.prefab`:
       `BalloonView` root + `SoapBubbleClusterVariant` + `SpriteRenderer` (no sprite assigned — procedural quad);
@@ -126,11 +139,10 @@ Soap Cluster is translucent/iridescent, lets the projectile pass through.
       - `StableIdle` / `UnstableIdle` state switching only (shader handles all motion)
       - `BubblePop` trigger — one-shot DOTween scale+dissolve on the removed bubble position
         (future: drive from a `BubblePopController` that knows which bubble index was removed)
-- [ ] **Pop VFX** — `PSVFX_SoapBubblePop` — iridescent soap-film ring + mist burst at the
-      removed bubble's world position; `PSVFX_SoapClusterBurst` — larger multi-ring final pop
 - [x] **Config entry** — `BubbleCluster` entry added to `BalloonsConfiguration` with `HitsToPop = 5`
-
-**Dependency:** Fully procedural. `BalloonType.BubbleCluster` is already wired in the spawner.
+- [ ] **Pop VFX** *(deferred — Phase 9)* — `PSVFX_SoapBubblePop` — iridescent soap-film ring + mist burst
+      at the removed bubble's world position; `PSVFX_SoapClusterBurst` — larger multi-ring final pop.
+      Not blocking; game plays correctly without them.
 
 **Future idea (Phase 9) — Cluster Merge:**
 Adjacent Soap Cluster balloons merge when nudged together or when proximity drops below a
@@ -290,7 +302,7 @@ procedural engine can be tested with real (even rough) assets as early as possib
 1. [x] GridActorConfiguration SO + registration         ← code done; SO asset still needed in Unity
 2. [x] Puff — simplest new actor; replaces placeholder
 3. [x] Bush — same pipeline as Puff, no hit reaction
-4. [x] Soap Cluster shader + C# Variant + prefab + config  ← only VFX remaining
+4. [x] Soap Cluster shader + C# Variant + model + prefab + config  ← done; pop VFX deferred to Phase 9
 5. [x] Unbreakable balloon                              ← prefab + controller done
 6. Deflector — first hitable grid actor             ← introduces Deflect VFX pipeline
 7. Absorber                                         ← danger actor; needs distinctive look
@@ -335,9 +347,9 @@ Assets/
 
 ## Open questions for art direction
 
-1. **Soap Cluster vs Unbreakable read** — Soap Cluster is iridescent/translucent and
-   shrinks on hit. Unbreakable is opaque/heavy. These should be immediately distinct.
-   Confirm both art directions before production so they don't converge.
+1. ~~**Soap Cluster vs Unbreakable read**~~ — ✅ Resolved. Soap Cluster is iridescent/translucent,
+   shrinks on hit, projectile passes through. Unbreakable is opaque/heavy, deflects all hits.
+   Art directions are distinct by definition; confirm Unbreakable sprite before commission.
 
 2. **Deflector angle** — Should the deflector have a fixed angle or rotate to reflect
    the projectile direction? Fixed angle is simpler and more strategic; rotating is

@@ -6,6 +6,7 @@ using BalloonParty.Nudge;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
+using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
@@ -75,6 +76,13 @@ namespace BalloonParty.Item.Bomb
 
         private void BlastBalloons(float radius, DamageContext context)
         {
+            var bombSlot = _balloon.SlotIndex.Value;
+            var neighborIndices = new HashSet<Vector2Int>(SlotGrid.HexNeighborIndices(bombSlot.x, bombSlot.y));
+
+            // Direct hex neighbors always receive piercing damage — the blast core
+            // guarantees a kill regardless of HitsRemaining or Deflect logic.
+            var piercingContext = new DamageContext(context.Damage, DamageFlags.Piercing);
+
             var count = Physics2D.OverlapCircle(_worldPosition, radius, _balloonFilter, _overlapResults);
 
             for (var i = 0; i < count; i++)
@@ -92,11 +100,15 @@ namespace BalloonParty.Item.Bomb
                     continue;
                 }
 
+                var hitContext = neighborIndices.Contains(balloonView.Model.SlotIndex.Value)
+                    ? piercingContext
+                    : context;
+
                 _hitPublisher.Publish(new ActorHitMessage(balloonView.Model,
                     balloonView.transform.position,
                     Vector3.zero,
-                    balloonView.Model.EvaluateHit(context),
-                    context.Damage));
+                    balloonView.Model.EvaluateHit(hitContext),
+                    hitContext.Damage));
             }
         }
 
