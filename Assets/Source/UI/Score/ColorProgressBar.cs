@@ -37,6 +37,7 @@ namespace BalloonParty.UI.Score
         [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         [Inject] private PoolManager _poolManager;
         [Inject] private ScoreController _scoreController;
+        [Inject] private ColorStreakTracker _streakTracker;
         [Inject] private ScoreTrailService _scoreTrailService;
 
         private readonly List<ProgressNotice> _activeNotices = new();
@@ -108,7 +109,7 @@ namespace BalloonParty.UI.Score
                 return;
             }
 
-            var streak = _scoreController.GetStreak(_colorConfig.Name);
+            var streak = _streakTracker.GetStreak(_colorConfig.Name);
 
             if (streak > 1)
             {

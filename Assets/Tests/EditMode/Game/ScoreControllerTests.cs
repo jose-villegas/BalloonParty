@@ -27,6 +27,7 @@ namespace BalloonParty.Tests.Game
         private IPublisher<ScorePointMessage> _scoredPublisher;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private ScoreController _controller;
+        private ColorStreakTracker _streakTracker;
         private IMessageHandler<ActorHitMessage> _hitHandler;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
 
@@ -50,6 +51,11 @@ namespace BalloonParty.Tests.Game
 
             var hitSubscriber = Substitute.For<ISubscriber<ActorHitMessage>>();
             var trailArrivedSubscriber = Substitute.For<ISubscriber<ScoreTrailArrivedMessage>>();
+            var levelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
+            levelUpSubscriber
+                .Subscribe(Arg.Any<IMessageHandler<ScoreLevelUpMessage>>(),
+                    Arg.Any<MessageHandlerFilter<ScoreLevelUpMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
             _scoredPublisher = Substitute.For<IPublisher<ScorePointMessage>>();
             _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
 
@@ -67,13 +73,15 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<ScoreTrailArrivedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            _streakTracker = new ColorStreakTracker(levelUpSubscriber);
             _controller = new ScoreController(
                 hitSubscriber,
                 trailArrivedSubscriber,
                 _scoredPublisher,
                 _levelUpPublisher,
                 _config,
-                _palette);
+                _palette,
+                _streakTracker);
 
             _controller.Start();
         }
@@ -183,7 +191,7 @@ namespace BalloonParty.Tests.Game
         {
             FirePop(Red);
 
-            Assert.AreEqual(1, _controller.GetStreak(Red));
+            Assert.AreEqual(1, _streakTracker.GetStreak(Red));
         }
 
         [Test]
@@ -193,7 +201,7 @@ namespace BalloonParty.Tests.Game
             FirePop(Red);
             FirePop(Red);
 
-            Assert.AreEqual(3, _controller.GetStreak(Red));
+            Assert.AreEqual(3, _streakTracker.GetStreak(Red));
         }
 
         [Test]
@@ -203,8 +211,8 @@ namespace BalloonParty.Tests.Game
             FirePop(Red);
             FirePop(Blue);
 
-            Assert.AreEqual(0, _controller.GetStreak(Red));
-            Assert.AreEqual(1, _controller.GetStreak(Blue));
+            Assert.AreEqual(0, _streakTracker.GetStreak(Red));
+            Assert.AreEqual(1, _streakTracker.GetStreak(Blue));
         }
 
         [Test]
@@ -255,7 +263,7 @@ namespace BalloonParty.Tests.Game
             FireTrailArrived(Red, 1);
             FireTrailArrived(Blue, 1);
 
-            Assert.AreEqual(0, _controller.GetStreak(Red));
+            Assert.AreEqual(0, _streakTracker.GetStreak(Red));
         }
 
         [Test]

@@ -84,6 +84,7 @@ namespace BalloonParty.Game
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.Register<PoolManager>(Lifetime.Singleton);
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);
+            builder.Register<ColorStreakTracker>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.RegisterComponentInHierarchy<SlotGridView>();
 
             builder.RegisterEntryPoint<BalloonBalancer>();

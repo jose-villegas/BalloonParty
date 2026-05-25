@@ -11,7 +11,6 @@ namespace BalloonParty.Projectile.Model
         Vector3 Direction { get; }
         float Speed { get; }
         bool IsFree { get; }
-        int ColorPopCount { get; }
         IBalloonModel LastHitBalloon { get; }
     }
 }

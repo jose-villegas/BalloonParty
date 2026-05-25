@@ -40,7 +40,7 @@ namespace BalloonParty.Balloon.Model
             for (var i = 0; i < HitsRemaining.Value + 1; i++)
             {
                 var colorId = colors[Random.Range(0, colors.Length)].Name;
-                results.Add(new ScoreAttribution(colorId, 1));
+                results.Add(new ScoreAttribution(colorId, 1, breaksStreak: true));
             }
         }
     }

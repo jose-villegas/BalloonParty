@@ -224,7 +224,7 @@ namespace BalloonParty.Balloon.Spawner
             {
                 BalloonType.Simple => new BalloonModel(config),
                 BalloonType.BubbleCluster => new BubbleClusterModel(config, _palette),
-                BalloonType.Tough => new ToughBalloonModel(config),
+                BalloonType.Tough => new ToughBalloonModel(config, _palette),
                 BalloonType.Unbreakable => new UnbreakableBalloonModel(config),
                 _ => throw new System.ArgumentOutOfRangeException(nameof(entry.BalloonType), entry.BalloonType, null)
             };

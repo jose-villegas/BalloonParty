@@ -27,11 +27,9 @@ namespace BalloonParty.Game.Score
         private readonly Dictionary<string, int> _persistentScore = new();
         private readonly Dictionary<string, int> _projectedProgress = new();
         private readonly IPublisher<ScorePointMessage> _scoredPublisher;
+        private readonly ColorStreakTracker _streakTracker;
         private readonly ReactiveProperty<int> _totalScore = new(0);
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
-
-        private int _currentStreak;
-        private string _lastPoppedColor;
         private IDisposable _subscription;
         private IDisposable _trailSubscription;
 
@@ -44,7 +42,8 @@ namespace BalloonParty.Game.Score
             IPublisher<ScorePointMessage> scoredPublisher,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
             IGameConfiguration config,
-            GamePalette palette)
+            GamePalette palette,
+            ColorStreakTracker streakTracker)
         {
             _hitSubscriber = hitSubscriber;
             _trailArrivedSubscriber = trailArrivedSubscriber;
@@ -52,6 +51,7 @@ namespace BalloonParty.Game.Score
             _levelUpPublisher = levelUpPublisher;
             _config = config;
             _palette = palette;
+            _streakTracker = streakTracker;
         }
 
         public void Dispose()
@@ -92,10 +92,6 @@ namespace BalloonParty.Game.Score
             return _config.PointsRequiredForLevel(Level.Value + 1);
         }
 
-        internal int GetStreak(string colorName)
-        {
-            return _lastPoppedColor == colorName ? _currentStreak : 0;
-        }
 
         /// <summary>
         ///     Uses projected (not confirmed) progress so the cinematic can
@@ -139,9 +135,6 @@ namespace BalloonParty.Game.Score
 
             _level.Value++;
 
-            _currentStreak = 0;
-            _lastPoppedColor = null;
-
             foreach (var key in _levelProgress.Keys.ToArray())
             {
                 _levelProgress[key] = 0;
@@ -168,49 +161,19 @@ namespace BalloonParty.Game.Score
                 scoreColor.ResolveScoreAttribution(in msg.Context, attributions);
                 foreach (var attribution in attributions)
                 {
-                    ApplyAttribution(attribution.ColorId, attribution.Points, msg.WorldPosition);
+                    ApplyAttribution(attribution.ColorId, attribution.Points, msg.WorldPosition, attribution.BreaksStreak);
                 }
-
-                return;
-            }
-
-            if (!isPop)
-            {
-                return;
-            }
-
-            // Fallback for actors that implement IHasColor+IHasScore but not IHasScoreColor yet.
-            // Removed in Phase 2 once all actors implement IHasScoreColor.
-            if (msg.Actor is not (IHasColor colorable and IHasScore scoreable))
-            {
-                return;
-            }
-
-            var fallbackColor = colorable.Color.Value;
-            if (!string.IsNullOrEmpty(fallbackColor))
-            {
-                ApplyAttribution(fallbackColor, scoreable.ScoreValue, msg.WorldPosition);
             }
         }
 
-        private void ApplyAttribution(string color, int basePoints, Vector3 worldPosition)
+        private void ApplyAttribution(string color, int basePoints, Vector3 worldPosition, bool breaksStreak = false)
         {
             if (string.IsNullOrEmpty(color) || !_persistentScore.ContainsKey(color))
             {
                 return;
             }
 
-            if (color == _lastPoppedColor)
-            {
-                _currentStreak++;
-            }
-            else
-            {
-                _lastPoppedColor = color;
-                _currentStreak = 1;
-            }
-
-            var points = basePoints * _currentStreak;
+            var points = basePoints * _streakTracker.Record(color, breaksStreak);
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
             var baseProgress = _projectedProgress.GetValueOrDefault(color);
 

@@ -5,11 +5,13 @@ namespace BalloonParty.Slots.Capabilities
     {
         public readonly string ColorId;
         public readonly int Points;
+        public readonly bool BreaksStreak;
 
-        public ScoreAttribution(string colorId, int points)
+        public ScoreAttribution(string colorId, int points, bool breaksStreak = false)
         {
             ColorId = colorId;
             Points = points;
+            BreaksStreak = breaksStreak;
         }
     }
 }

@@ -2,6 +2,7 @@ using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
@@ -32,6 +33,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
+        [Inject] private ColorStreakTracker _streakTracker;
 
         private IWriteableProjectileModel _model;
         private IDisposable _deflectedSubscription;
@@ -88,7 +90,7 @@ namespace BalloonParty.Projectile.View
             if (outcome == HitOutcome.Pop && balloonModel is IHasColor colorable &&
                 !string.IsNullOrEmpty(colorable.Color.Value))
             {
-                TrackColorStreak(colorable.Color.Value);
+                UpdateProjectileColor(colorable.Color.Value);
             }
 
             _hitPublisher.Publish(new ActorHitMessage(balloonModel,
@@ -96,6 +98,15 @@ namespace BalloonParty.Projectile.View
                 _model.Direction,
                 outcome,
                 damageContext));
+
+            // ScoreController processes the message synchronously above — tracker is already updated.
+            if (outcome == HitOutcome.Pop && balloonModel is IHasColor &&
+                _streakTracker.CurrentStreak >= 2 &&
+                _streakTracker.LastColor == _model.ColorName.Value)
+            {
+                _model.ShieldsRemaining.Value++;
+                _shieldGainedPublisher.Publish(new ShieldGainedMessage(_model.LastHitBalloon.SlotIndex.Value));
+            }
         }
 
         public void OnSpawned()
@@ -138,13 +149,15 @@ namespace BalloonParty.Projectile.View
             _deflectedSubscription = _deflectedSubscriber.Subscribe(OnBalloonDeflected);
         }
 
-        private void AwardShieldOnStreak()
+        private void UpdateProjectileColor(string hitColor)
         {
-            if (_model.ColorPopCount >= 2)
+            if (_model.ColorName.Value == hitColor)
             {
-                _model.ShieldsRemaining.Value++;
-                _shieldGainedPublisher.Publish(new ShieldGainedMessage(_model.LastHitBalloon.SlotIndex.Value));
+                return;
             }
+
+            _model.ColorName.Value = hitColor;
+            UpdateGlowColor();
         }
 
         private Vector3 ClampToLimits(Vector3 pos, out Vector3 reflect)
@@ -251,21 +264,6 @@ namespace BalloonParty.Projectile.View
             _projectileTrail?.Enable();
         }
 
-        private void TrackColorStreak(string hitColor)
-        {
-            if (string.IsNullOrEmpty(_model.ColorName.Value) || _model.ColorName.Value != hitColor)
-            {
-                _model.ColorName.Value = hitColor;
-                _model.ColorPopCount = 1;
-            }
-            else
-            {
-                _model.ColorPopCount++;
-            }
-
-            AwardShieldOnStreak();
-            UpdateGlowColor();
-        }
 
         private bool TryGetHitBalloon(
             Collider2D other,

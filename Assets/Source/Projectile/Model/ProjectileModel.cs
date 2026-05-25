@@ -12,7 +12,6 @@ namespace BalloonParty.Projectile.Model
         public Vector3 Direction { get; set; }
         public float Speed { get; set; }
         public bool IsFree { get; set; }
-        public int ColorPopCount { get; set; }
         public IBalloonModel LastHitBalloon { get; set; }
 
         IReadOnlyReactiveProperty<string> IProjectileModel.ColorName => ColorName;
