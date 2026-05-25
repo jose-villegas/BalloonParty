@@ -20,6 +20,7 @@ namespace BalloonParty.Shared
 
         float ScorePointTraceDuration { get; }
         float ScorePointsScatterDelay { get; }
+        float ScorePointBurstDuration { get; }
 
         int MinStaticActors { get; }
         int MaxStaticActors { get; }

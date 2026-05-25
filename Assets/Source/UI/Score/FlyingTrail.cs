@@ -69,6 +69,46 @@ namespace BalloonParty.UI.Score
             scaleTween.OnComplete(() => onCompleted?.Invoke());
         }
 
+        /// <summary>
+        /// Two-phase flight: bloom out from current position to <paramref name="burstTo"/>,
+        /// then follow the normal curve to <paramref name="target"/>.
+        /// The scale tween spans the full journey so the orb shrinks continuously.
+        /// </summary>
+        public void SetupBurst(
+            Vector3 burstTo,
+            Vector3 target,
+            Color color,
+            float burstDuration,
+            float traceDuration,
+            Action onCompleted,
+            bool useUnscaledTime = false)
+        {
+            _renderer.color = color;
+            _trailRenderer.startColor = color;
+            _trailRenderer.Clear();
+
+            var totalDuration = burstDuration + traceDuration;
+            var scaleTween = transform.DOScale(Vector3.zero, totalDuration).SetEase(_scaleCurve);
+
+            _moveTween = transform.DOMove(burstTo, burstDuration)
+                .OnComplete(() =>
+                {
+                    _moveTween = transform.DOMove(target, traceDuration).SetEase(_moveCurve);
+                    if (useUnscaledTime)
+                    {
+                        _moveTween.SetUpdate(true);
+                    }
+                });
+
+            if (useUnscaledTime)
+            {
+                _moveTween.SetUpdate(true);
+                scaleTween.SetUpdate(true);
+            }
+
+            scaleTween.OnComplete(() => onCompleted?.Invoke());
+        }
+
         public void DisableMoveTween()
         {
             _moveTween?.Kill();

@@ -22,6 +22,29 @@ namespace BalloonParty.Shared.Pool
             _channelFactory = channelFactory;
         }
 
+        internal Transform SpawnBurst(
+            Vector3 center,
+            Vector3 burstTo,
+            Vector3 to,
+            float burstDuration,
+            float traceDuration,
+            Color color,
+            Action onArrived = null,
+            bool useUnscaledTime = false)
+        {
+            var trail = _poolManager.GetOrRegister(_poolKey, _channelFactory);
+            trail.transform.position = center;
+            trail.transform.localScale = Vector3.one;
+            trail.SetupBurst(burstTo, to, color, burstDuration, traceDuration,
+                () =>
+                {
+                    onArrived?.Invoke();
+                    _poolManager.Return(_poolKey, trail);
+                },
+                useUnscaledTime);
+            return trail.transform;
+        }
+
         internal Transform Spawn(Vector3 from, Vector3 to, float duration, Color? color = null, Action onArrived = null)
         {
             var trail = _poolManager.GetOrRegister(_poolKey, _channelFactory);

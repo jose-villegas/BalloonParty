@@ -118,39 +118,59 @@ namespace BalloonParty.Game.Score
             }
 
             var id = new TrailId(msg);
-            var origin = ComputeScatterOrigin(msg.WorldPosition, msg.GroupIndex, msg.GroupSize);
+            var center = msg.WorldPosition;
+            var origin = ComputeScatterOrigin(center, msg.GroupIndex, msg.GroupSize);
 
-            SpawnTrailAsync(msg.ColorName, origin, id, msg.NextLevel, msg.GroupIndex).Forget();
+            SpawnTrailAsync(msg.ColorName, center, origin, id, msg.NextLevel, msg.GroupIndex).Forget();
         }
 
-        private void SpawnTrail(string colorName, Vector3 fromWorldPosition, TrailId id)
+        private void SpawnTrail(string colorName, Vector3 center, Vector3 scatterOrigin, TrailId id)
         {
             var target = _targets[colorName].RandomPosition();
             var color = _colorLookup.TryGetValue(colorName, out var c) ? c : Color.white;
             var isTracked = _tracker.IsTracked(id, out var trackedCallback);
             var spawner = _spawners[colorName];
+            var hasBurst = scatterOrigin != center;
 
-            var transform = isTracked
-                ? spawner.SpawnUnscaled(fromWorldPosition,
-                    target,
-                    _config.ScorePointTraceDuration,
-                    color,
-                    () =>
-                    {
-                        _tracker.Unregister(id);
-                        _arrivedPublisher.Publish(
-                            new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
-                    })
-                : spawner.Spawn(fromWorldPosition,
-                    target,
-                    _config.ScorePointTraceDuration,
-                    color,
-                    () =>
-                    {
-                        _tracker.Unregister(id);
-                        _arrivedPublisher.Publish(
-                            new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
-                    });
+            Transform transform;
+            if (hasBurst)
+            {
+                transform = isTracked
+                    ? spawner.SpawnBurst(center, scatterOrigin, target,
+                        _config.ScorePointBurstDuration, _config.ScorePointTraceDuration,
+                        color, () =>
+                        {
+                            _tracker.Unregister(id);
+                            _arrivedPublisher.Publish(
+                                new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
+                        }, true)
+                    : spawner.SpawnBurst(center, scatterOrigin, target,
+                        _config.ScorePointBurstDuration, _config.ScorePointTraceDuration,
+                        color, () =>
+                        {
+                            _tracker.Unregister(id);
+                            _arrivedPublisher.Publish(
+                                new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
+                        });
+            }
+            else
+            {
+                transform = isTracked
+                    ? spawner.SpawnUnscaled(scatterOrigin, target, _config.ScorePointTraceDuration,
+                        color, () =>
+                        {
+                            _tracker.Unregister(id);
+                            _arrivedPublisher.Publish(
+                                new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
+                        })
+                    : spawner.Spawn(scatterOrigin, target, _config.ScorePointTraceDuration,
+                        color, () =>
+                        {
+                            _tracker.Unregister(id);
+                            _arrivedPublisher.Publish(
+                                new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
+                        });
+            }
 
             _tracker.Register(id, transform);
 
@@ -163,7 +183,8 @@ namespace BalloonParty.Game.Score
 
         private async UniTaskVoid SpawnTrailAsync(
             string colorName,
-            Vector3 origin,
+            Vector3 center,
+            Vector3 scatterOrigin,
             TrailId id,
             bool nextLevel,
             int groupIndex)
@@ -180,7 +201,7 @@ namespace BalloonParty.Game.Score
                 await UniTask.WaitWhile(() => Cinematic.IsPlaying, cancellationToken: _cts.Token);
             }
 
-            SpawnTrail(colorName, origin, id);
+            SpawnTrail(colorName, center, scatterOrigin, id);
         }
     }
 }
