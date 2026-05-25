@@ -334,7 +334,10 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             // ----------------------------------------------------------------
             inline fixed SampleShadowAlpha(float2 uv)
             {
-                return tex2D(_MainTex, uv).a;
+                // Discard taps that fall outside the sprite quad to prevent
+                // cross-shaped bleed from texture border clamping.
+                float2 inBounds = step(0.0, uv) * step(uv, 1.0);
+                return tex2D(_MainTex, uv).a * inBounds.x * inBounds.y;
             }
 
             inline fixed SoftShadowAlpha(float2 shadowUV, float s)

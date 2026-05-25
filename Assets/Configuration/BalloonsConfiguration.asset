@@ -59,7 +59,7 @@ MonoBehaviour:
       _prefab: {fileID: 2148469744637963286, guid: 96f46efd86e994a7f95e53ccf7be9cb6,
         type: 3}
     _hitsToPop: 3
-    _scoreValue: 0
+    _scoreValue: 15
   - _prefab: {fileID: 4318124338822199961, guid: 49cbb92bf41a2499797a1921677efaa9,
       type: 3}
     _balloonType: 3
