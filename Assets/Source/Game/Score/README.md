@@ -7,22 +7,24 @@ Tracks per-color scoring, level progress, streak multipliers, and the visual tra
 | File | What it does |
 |---|---|
 | `TrailId` | Readonly struct — uniquely identifies a score trail by `(Color, Score, Level)`. Provides a convenience constructor from `ScorePointMessage`. Two colors can share the same numeric score within a level, and scores restart after level reset, so all three are needed for uniqueness |
-| `ScoreController` | `IStartable` — tracks per-color level progress (confirmed on trail arrival), projected progress (advanced immediately on pop), and the color streak multiplier. On balloon hit, casts actor to `IHasScoreColor` and calls `ResolveScoreAttribution(context, attributions)` — each returned `ScoreAttribution(colorId, points)` drives one or more `ScorePointMessage` publications (one per point × streak) with pre-computed `Score`, `Level`, and `NextLevel` flag. On trail arrival, sets confirmed progress and checks for level-up via `ScoreLevelUpMessage` and `NavigationState.LevelUp` |
+| `ScoreController` | `IStartable` — tracks per-color level progress (confirmed on trail arrival), projected progress (advanced immediately on pop). On balloon hit, casts actor to `IHasScoreColor` and calls `ResolveScoreAttribution(context, attributions)` — all returned `ScoreAttribution` entries are resolved and published together as one scatter group sharing `GroupSize`. On trail arrival, sets confirmed progress and checks for level-up via `ScoreLevelUpMessage` and `NavigationState.LevelUp` |
+| `ColorStreakTracker` | Plain C# singleton — single source of truth for the color streak. `Record(colorId, breaksStreak)` updates state and returns the multiplier to apply. `breaksStreak = true` resets the chain and returns 1 (attribution still scores, no bonus). Auto-resets on `ScoreLevelUpMessage`. Exposed as `GetStreak(colorName)` for UI consumers |
 | `ScoreTrailService` | `IStartable` + `ICinematicAware` — subscribes to `ScorePointMessage`; spawns one pooled `FlyingTrail` orb per message. Composes `TrailTracker<TrailId>` for flight tracking, cinematic pause/resume, and external interception. Uses `GroupIndex`/`GroupSize` for scatter positioning and stagger delay. `NextLevel` flag gates spawns during cinematics |
 
 ## Streak Multiplier
 
-`ScoreController` tracks the current color streak — consecutive pops of the same color:
+`ColorStreakTracker` tracks the current color streak — consecutive pops of the same color:
 
 - First pop of a color: streak = 1 (no bonus)
 - Second consecutive same-color pop: streak = 2, points doubled
 - Third: streak = 3, points tripled
 - Popping a different color resets to streak = 1
-- Level-up resets the streak
+- `BubbleClusterModel` attributions carry `BreaksStreak = true` — the chain is reset before crediting points, so clusters never benefit from or continue a streak
+- Level-up resets the streak automatically (tracker subscribes to `ScoreLevelUpMessage`)
 
 The balloon's `ScoreValue` is multiplied by the current streak before publishing `ScorePointMessage`s. More trails spawn, filling the progress bar faster.
 
-`GetStreak(string colorName)` exposes the current streak for a color so views can display a streak notice.
+`GetStreak(string colorName)` on `ColorStreakTracker` exposes the current streak for a color so views can display a streak notice.
 
 ## Trail Identity
 
@@ -69,6 +71,6 @@ When the cinematic begins, all next-level in-flight trails are paused — any tr
 
 - **`ScorePointMessage`** — published by `ScoreController` on pop (one per point × streak, carries pre-computed `Score`, `Level`, `NextLevel`), consumed by `ScoreTrailService`, `ColorProgressBar`, and `LevelUpTrailEffect`
 - **`ScoreTrailArrivedMessage`** — published by `ScoreTrailService` on trail arrival (carries `Level`), consumed by `ScoreController`, `ColorProgressBar`, and `LevelUpTrailEffect`
-- **`ScoreLevelUpMessage`** — published by `ScoreController` on level-up, consumed by `ColorProgressBar` and `LevelUpPopUp`
+- **`ScoreLevelUpMessage`** — published by `ScoreController` on level-up, consumed by `ColorProgressBar`, `LevelUpPopUp`, and `ColorStreakTracker` (auto-reset)
 - **`Cinematics/`** — `LevelUpTrailEffect` uses `TrackTrail` to intercept the tipping trail at spawn, `PauseTrailsAbove` for selective pause, and `ResumeTrail` / `ClearTrackedTrail` for lifecycle management
-- **`ColorProgressBar`** — registers target providers via `ScoreTrailService.RegisterTarget`; reads progress from `ScoreController`; reads streak via `ScoreController.GetStreak` for streak notice display
+- **`ColorProgressBar`** — registers target providers via `ScoreTrailService.RegisterTarget`; reads progress from `ScoreController`; reads streak via `ColorStreakTracker.GetStreak` for streak notice display

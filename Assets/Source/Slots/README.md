@@ -26,7 +26,7 @@ Optional traits actors can advertise to consumers:
 | `IHasColor` | Actor has a read-only reactive color identity (string) — consumed by views and item VFX for tinting |
 | `IPaintable` | Extends `IHasColor` — actor's color can be overwritten by the Paint item. Exposes `ReactiveProperty<string> Color`. Actors that don't implement this are immune to paint |
 | `IHasScore` | Actor awards score when destroyed |
-| `IHasScoreColor` | Score attribution contract — `ScoreColorMask` (palette bitmask), `ScoreDistribution` (strategy enum), and `ResolveScoreAttribution(DamageContext, IList<ScoreAttribution>)` called once by `ScoreController` at destruction. Consumed **only** by `ScoreController`; views never read it |
+| `IHasScoreColor` | Score attribution contract — `ResolveScoreAttribution(DamageContext, IList<ScoreAttribution>)` called once by `ScoreController` at destruction. Implementations append `(colorId, points, breaksStreak)` entries. Consumed **only** by `ScoreController`; views never read it |
 | `IHasNudge` | Actor participates in the nudge force system |
 | `IHitable` | Actor participates in the hit system — `EvaluateHit(DamageContext)` returns a `HitOutcome` and is responsible for mutating any internal state (e.g. decrementing health). Takes a `DamageContext` containing `Damage` (int), `DamageFlags` (`Normal` or `Piercing`), and `SourceColorId` (the color of the hitting projectile — used by `Inherited` score strategies). `Piercing` forces an immediate `Pop` regardless of `HitsRemaining` |
 | `IHasDurability` | Extends `IHitable` — actor also tracks `HitsRemaining`. Removal is determined by `HitsRemaining.Value <= 0` after `EvaluateHit` returns |
@@ -39,7 +39,7 @@ Optional traits actors can advertise to consumers:
 
 | Type | Description |
 |---|---|
-| `DamageContext` | Readonly struct — `int Damage` + `DamageFlags Flags` + `string SourceColorId`. Default `Flags = DamageFlags.Normal`, `SourceColorId = ""`. `SourceColorId` carries the palette color name of the projectile or item responsible for the hit — used by `Inherited` score strategies (`ToughBalloonModel`, `UnbreakableBalloonModel`) to attribute points to the right color bar |
+| `DamageContext` | Readonly struct — `int Damage` + `DamageFlags Flags` + `string SourceColorId`. Default `Flags = DamageFlags.Normal`, `SourceColorId = ""`. `SourceColorId` carries the palette color name of the projectile or item responsible for the hit — used by `ToughBalloonModel` and `UnbreakableBalloonModel` when scattering score to random palette colors |
 | `DamageFlags` | `[Flags]` enum — `Normal = 0`, `Piercing = 1 << 0`. `Piercing` bypasses `HitsRemaining` and forces `Pop` |
 
 Paintability is expressed purely through types: a `BalloonModel` implements `IPaintable`; a `ToughBalloonModel` does not — no runtime flag needed.
@@ -48,10 +48,10 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IPa
 
 | Actor | Implements | `EvaluateHit` behaviour |
 |---|---|---|
-| `BalloonModel` (soft) | `IHasDurability`, `IHasScoreColor` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately |
-| `ToughBalloonModel` | `IHasDurability`, `IHasScoreColor` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately. Score attributed to killer's color via `Inherited` mode |
-| `UnbreakableBalloonModel` *(Phase 7.5)* | `IHitable`, `IHasScoreColor` | Always `Deflect`; no `HitsRemaining`. `Piercing` forces `Pop`. Score attributed to killer's color via `Inherited` mode |
-| `BubbleClusterModel` | `IHasDurability`, `IHasScoreColor` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining` (bubble count). Score scattered to random palette colors via `RandomUntilDepleted` mode |
+| `BalloonModel` (soft) | `IHasDurability`, `IHasScoreColor` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately. No score attribution when `HitsRemaining > 0` after hit |
+| `ToughBalloonModel` | `IHasDurability`, `IHasScoreColor` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately. Score scattered to random palette colors on pop |
+| `UnbreakableBalloonModel` *(Phase 7.5)* | `IHitable`, `IHasScoreColor` | Always `Deflect`; no `HitsRemaining`. `Piercing` forces `Pop`. Score scattered to random palette colors on pop |
+| `BubbleClusterModel` | `IHasDurability`, `IHasScoreColor` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining` (bubble count). Score scatters one entry per point of damage to random palette colors; `BreaksStreak = true` on all attributions |
 | `DeflectorActorModel` *(Phase 8.2b)* | `IHitable` only | Always `Deflect`; no `HitsRemaining`; not a balloon |
 | `AbsorberActorModel` *(Phase 8.2b)* | `IHitable` only | Always `Absorb`; kills the projectile |
 | `GatekeeperActorModel` *(Phase 8.2c)* | `IHasDurability` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. Blocks a column until destroyed. |
@@ -64,7 +64,7 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IPa
 | `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView` — core grid data structure (namespace `BalloonParty.Slots.Grid`) |
 | `Actor/` | Core actor interfaces, identity enum, static actor implementation, and hit controller — `ISlotActor`, `IWriteableSlotActor`, `IDynamicSlotActor`, `IWriteableDynamicSlotActor`, `ISlotActorView`, `SlotActorKind`, `StaticActorModel`, `StaticActorView`, `StaticActorPoolChannel`, `StaticActorSettings`, `StaticActorSpawner`, `GridActorHitController` (namespace `BalloonParty.Slots.Actor`) |
 | `Actor/Archetype/` | Concrete grid actor models — `PuffObstacleModel`, `BushObstacleModel` (structural; no hit response), `DeflectorActorModel`, `AbsorberActorModel` (indestructible hitables), `GatekeeperActorModel` (durability-based column blocker), `GridActorView`, `GridActorPoolChannel`, `GridActorType` |
-| `Capabilities/` | Optional capability interfaces — `IHasColor`, `IPaintable`, `IHasScore`, `IHasScoreColor`, `IHasNudge`, `IHasItemSlot`, `IHitable`, `IHasDurability`, `IPassThrough`, `HitOutcome`, `DamageContext`, `DamageFlags`, `ScoreAttribution`, `ScoreDistributionMode` (namespace `BalloonParty.Slots.Capabilities`) |
+| `Capabilities/` | Optional capability interfaces — `IHasColor`, `IPaintable`, `IHasScore`, `IHasScoreColor`, `IHasNudge`, `IHasItemSlot`, `IHitable`, `IHasDurability`, `IPassThrough`, `HitOutcome`, `DamageContext`, `DamageFlags`, `ScoreAttribution` (namespace `BalloonParty.Slots.Capabilities`) |
 | `Spawner/` | Spawner coordination — `IGridSpawner`, `SpawnStage`, `GridSpawnerCoordinator` (namespace `BalloonParty.Slots.Spawner`) |
 
 ## How it works

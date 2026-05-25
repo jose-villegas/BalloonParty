@@ -28,7 +28,7 @@ to read the grid, tune difficulty, or playtest spawn density.
 | Actor / Balloon | Model class | Prefab | Sprite / Art | Animator | Animations | VFX | Config entry | Notes |
 |---|---|---|---|---|---|---|---|---|
 | **Simple** | `BalloonModel` | ✅ `Balloon.prefab` | ✅ | ✅ `Balloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_BalloonPop` | ✅ `BalloonsConfiguration` | Baseline; no blockers |
-| **Soap Cluster** | `BubbleClusterModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ⚠️ pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | Done for now; Phase 9: `IHasScoreColor` `RandomUntilDepleted` all-palette scoring |
+| **Soap Cluster** | `BubbleClusterModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ⚠️ pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | Done; scores one point per damage to random palette colors with `BreaksStreak = true` |
 | **Tough** | `ToughBalloonModel` | ✅ `ToughBalloon.prefab` | ✅ | ✅ `ToughBalloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_ToughBalloonPop` | ✅ `BalloonsConfiguration` | No `IHasColor`; scores via `IHasScoreColor` with `Inherited` strategy (killer earns points in their color) |
 | **Unbreakable** | `UnbreakableBalloonModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect react | ❌ deflect hit, pierce-pop | ❌ add to `BalloonsConfiguration` | `IHasScoreColor` mode `Inherited` — scores in killer's color at hit time |
 | **Puff** | `PuffObstacleModel` | ⚠️ `StaticTest.prefab` | ⚠️ placeholder | ❌ | ❌ Idle float | — | ❌ `GridActorConfiguration` | Dandelion puff / soft cloud; traversable |
@@ -45,17 +45,14 @@ to read the grid, tune difficulty, or playtest spawn density.
 
 These items are pre-requisites that unlock multiple actors at once.
 
-### `IHasScoreColor` — unified color and score attribution interface
+### `IHasScoreColor` — score attribution ✅ Complete
 
-> Full design, interface shape, distribution modes, spawn-time vs score-time resolution,
-> per-actor config defaults, and scope of work have been moved to
-> **[PLAN-ColorScoreAttribution.md](PLAN-ColorScoreAttribution.md)**.
+`IHasScoreColor` is implemented on all balloon models. `ResolveScoreAttribution` is the single extension point — no config fields required. `ScoreController` calls it on every `Pop` or `PassThrough` hit and publishes all returned attributions as one scatter group.
 
-Remaining items that block content production here:
-- [ ] Add `ScoreColorMask` + `ScoreDistribution` fields to `GridActorPrefabEntry`
-- [ ] Resolve Tough scoring question before migrating `ToughBalloonModel`
-- [ ] `ToughBalloonModel` implements `IHasScoreColor` — strategy TBD
-- [ ] `UnbreakableBalloonModel` implements `IHasScoreColor` — appends `(context.SourceColor, scoreValue)` at call time
+- [x] `BalloonModel` — scores in own color; no attribution when balloon survived
+- [x] `ToughBalloonModel` — scatters score to random palette colors on pop
+- [x] `UnbreakableBalloonModel` — scatters score to random palette colors on pop (Piercing-only)
+- [x] `BubbleClusterModel` — `BreaksStreak = true`; one attribution per damage point to random palette colors
 
 ---
 
@@ -85,7 +82,7 @@ Prefab location: `Assets/Prefabs/Grid/`
 
 ---
 
-### Soap Cluster ✅ Done for now
+### Soap Cluster ✅ Done
 
 **What it is:** A cluster of iridescent soap bubbles that floats as a single balloon-type
 unit. Each projectile hit pops one bubble — the cluster visibly shrinks through distinct
@@ -142,7 +139,7 @@ Soap Cluster is translucent/iridescent, lets the projectile pass through.
 
 - [x] **Shader** — `Shaders/BalloonParty/Balloon/SoapBubbleCluster.shader`
 - [x] **C# Variant** — `Balloon/Type/SoapBubbleClusterVariant.cs`
-- [x] **C# Model** — `Balloon/Model/BubbleClusterModel.cs`
+- [x] **C# Model** — `Balloon/Model/BubbleClusterModel.cs` — implements `IHasScoreColor`; one attribution per damage point to random palette colors; `BreaksStreak = true`
 - [x] **HitVfxOverride system** — `Configuration/HitVfxOverride.cs` + drawer + wired into spawner
 - [x] **BalloonType.BubbleCluster** — enum value added; spawner wired (`=> new BubbleClusterModel(config)`)
 - [x] **Shader tuning at game scale** — rim/seam readability confirmed at ~0.9 world units
@@ -168,22 +165,7 @@ letting clusters grow is tempting but reduces future individual scoring opportun
 Needs: neighbor query post-nudge, `ClusterMergeMessage`, merge VFX, and a `BubblePopController`
 that knows which bubble index was added/removed for the transition animation.
 
-**Future idea (Phase 9) — Multi-color scoring:**
-`BubbleClusterModel` will implement `IHasScoreColor` delegating to its config entry —
-the SO entry will be set to `ScoreColorMask` = all palette bits and
-`ScoreDistribution = RandomUntilDepleted`. Popping a cluster scatters its `ScoreValue`
-points across all color bars one-point-at-a-time, making every bar advance slightly
-without any single bar receiving a windfall. If playtesting shows this feels too diffuse,
-change the SO entry to `RandomPick` (one color wins the full `ScoreValue`, no code change
-needed); reserve `AllColors` only if a deliberate high-risk jackpot mechanic is introduced,
-and reduce `ScoreValue` in the same entry to compensate. No action needed now; interface
-design and config wiring are resolved.
-
----
-
-### Unbreakable Balloon
-
-**What it is:** A permanently present balloon obstacle. Deflects every hit. Only a
+**Future idea (Phase 9) — Cluster Merge:**
 Piercing item (Bomb, Laser) can pop it.
 
 **Art direction:** Heavier, more opaque than regular balloons — implies "this won't

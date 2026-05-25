@@ -147,54 +147,90 @@ namespace BalloonParty.Game.Score
 
         private void OnActorHit(ActorHitMessage msg)
         {
-            var isPop = msg.Outcome == HitOutcome.Pop;
-            var isPassThrough = msg.Outcome == HitOutcome.PassThrough;
-
-            if (!isPop && !isPassThrough)
+            if (msg.Outcome != HitOutcome.Pop && msg.Outcome != HitOutcome.PassThrough)
             {
                 return;
             }
 
-            if (msg.Actor is IHasScoreColor scoreColor)
+            if (msg.Actor is not IHasScoreColor scoreColor)
             {
-                using var results = UnityEngine.Pool.ListPool<ScoreAttribution>.Get(out var attributions);
-                scoreColor.ResolveScoreAttribution(in msg.Context, attributions);
-                foreach (var attribution in attributions)
+                return;
+            }
+
+            using var attributionPool = UnityEngine.Pool.ListPool<ScoreAttribution>.Get(out var attributions);
+            scoreColor.ResolveScoreAttribution(in msg.Context, attributions);
+            PublishAttributionGroup(attributions, msg.WorldPosition);
+        }
+
+        /// <summary>
+        /// Publishes all attributions from a single <see cref="IHasScoreColor.ResolveScoreAttribution"/>
+        /// call as one scatter group. Every message shares the same <c>GroupSize</c> so the UI can
+        /// fan them out together regardless of how many colours are involved.
+        /// </summary>
+        private void PublishAttributionGroup(IList<ScoreAttribution> attributions, Vector3 worldPosition)
+        {
+            if (attributions.Count == 0)
+            {
+                return;
+            }
+
+            using var resolvedPool = UnityEngine.Pool.ListPool<(string Color, int Points, int BaseProgress)>.Get(out var resolved);
+
+            var multiplier = 1;
+            if (attributions.Count == 1)
+            {
+                multiplier = _streakTracker.Record(attributions[0].ColorId, attributions[0].BreaksStreak);
+            }
+            else
+            {
+                _streakTracker.Record(null, breaksStreak: true);
+            }
+
+            foreach (var attribution in attributions)
+            {
+                var color = attribution.ColorId;
+                if (string.IsNullOrEmpty(color) || !_persistentScore.ContainsKey(color))
                 {
-                    ApplyAttribution(attribution.ColorId, attribution.Points, msg.WorldPosition, attribution.BreaksStreak);
+                    continue;
+                }
+
+                var pts = attribution.Points * multiplier;
+                var baseProgress = _projectedProgress.GetValueOrDefault(color);
+                _projectedProgress[color] = baseProgress + pts;
+                resolved.Add((color, pts, baseProgress));
+            }
+
+            var groupSize = 0;
+            foreach (var (_, pts, _) in resolved)
+            {
+                groupSize += pts;
+            }
+
+            if (groupSize <= 0)
+            {
+                return;
+            }
+
+            var required = _config.PointsRequiredForLevel(_level.Value + 1);
+            var groupIndex = 0;
+            foreach (var (color, points, baseProgress) in resolved)
+            {
+                for (var i = 0; i < points; i++, groupIndex++)
+                {
+                    var rawScore = baseProgress + i + 1;
+                    var nextLevel = rawScore > required;
+                    _scoredPublisher.Publish(new ScorePointMessage(
+                        color,
+                        worldPosition,
+                        nextLevel ? rawScore - required : rawScore,
+                        nextLevel ? _level.Value + 1 : _level.Value,
+                        nextLevel,
+                        groupSize,
+                        groupIndex));
                 }
             }
         }
 
-        private void ApplyAttribution(string color, int basePoints, Vector3 worldPosition, bool breaksStreak = false)
-        {
-            if (string.IsNullOrEmpty(color) || !_persistentScore.ContainsKey(color))
-            {
-                return;
-            }
-
-            var points = basePoints * _streakTracker.Record(color, breaksStreak);
-            var required = _config.PointsRequiredForLevel(_level.Value + 1);
-            var baseProgress = _projectedProgress.GetValueOrDefault(color);
-
-            for (var i = 0; i < points; i++)
-            {
-                var rawScore = baseProgress + i + 1;
-                var nextLevel = rawScore > required;
-                var score = nextLevel ? rawScore - required : rawScore;
-                var level = nextLevel ? _level.Value + 1 : _level.Value;
-
-                _projectedProgress[color] = rawScore;
-                _scoredPublisher.Publish(new ScorePointMessage(
-                    color,
-                    worldPosition,
-                    score,
-                    level,
-                    nextLevel,
-                    points,
-                    i));
-            }
-        }
 
         private void OnFocusChanged(bool hasFocus)
         {
