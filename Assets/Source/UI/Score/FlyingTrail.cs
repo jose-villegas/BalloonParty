@@ -33,6 +33,14 @@ namespace BalloonParty.UI.Score
         {
             _moveTween = null;
             transform.DOKill();
+            _renderer.sortingOrder = OverlaySortingOrder;
+            _trailRenderer.sortingOrder = OverlaySortingOrder;
+        }
+
+        public void SetSortingOrder(int order)
+        {
+            _renderer.sortingOrder = order;
+            _trailRenderer.sortingOrder = order;
         }
 
         public void Setup(

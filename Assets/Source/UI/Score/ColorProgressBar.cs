@@ -5,6 +5,7 @@ using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
@@ -35,6 +36,8 @@ namespace BalloonParty.UI.Score
         [Inject] private ISubscriber<ScorePointMessage> _scoredSubscriber;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
+        [Inject] private ISubscriber<LevelUpGlowTrailsMessage> _glowTrailsSubscriber;
+        [Inject] private ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         [Inject] private PoolManager _poolManager;
         [Inject] private ScoreController _scoreController;
         [Inject] private ColorStreakTracker _streakTracker;
@@ -44,6 +47,7 @@ namespace BalloonParty.UI.Score
 
         private PaletteEntry _colorConfig;
         private string _pointNoticePoolKey;
+        private int _stashedMaxValue;
         private string _streakNoticePoolKey;
 
         private void OnValidate()
@@ -100,6 +104,8 @@ namespace BalloonParty.UI.Score
             _scoredSubscriber.Subscribe(OnScorePoint).AddTo(this);
             _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(this);
             _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
+            _glowTrailsSubscriber.Subscribe(OnGlowTrails).AddTo(this);
+            _dismissedSubscriber.Subscribe(_ => OnDismissed()).AddTo(this);
         }
 
         private void OnScorePoint(ScorePointMessage msg)
@@ -120,12 +126,41 @@ namespace BalloonParty.UI.Score
 
         private void OnLevelUp(ScoreLevelUpMessage msg)
         {
-            _progressSlider.maxValue = _config.PointsRequiredForLevel(msg.NewLevel + 1);
-            _progressSlider.value = 0;
+            _stashedMaxValue = _config.PointsRequiredForLevel(msg.NewLevel + 1);
 
             _completionParticleSystem.Stop();
             _completionParticleSystem.gameObject.SetActive(false);
             _animator.SetBool(CompletedParam, false);
+        }
+
+        private void OnGlowTrails(LevelUpGlowTrailsMessage msg)
+        {
+            DrainSliderAsync(msg.TrailsPerBar, msg.StaggerDelay).Forget();
+        }
+
+        private void OnDismissed()
+        {
+            _progressSlider.maxValue = _stashedMaxValue;
+            _progressSlider.value = 0;
+        }
+
+        private async UniTaskVoid DrainSliderAsync(int steps, float staggerDelay)
+        {
+            var staggerMs = Mathf.RoundToInt(staggerDelay * 1000f);
+            var drainPerStep = _progressSlider.value / steps;
+
+            for (var i = 0; i < steps; i++)
+            {
+                _progressSlider.value = Mathf.Max(0f, _progressSlider.value - drainPerStep);
+
+                if (i < steps - 1)
+                {
+                    await UniTask.Delay(staggerMs, true,
+                        cancellationToken: destroyCancellationToken);
+                }
+            }
+
+            _progressSlider.value = 0f;
         }
 
         private void OnTrailArrived(ScoreTrailArrivedMessage msg)

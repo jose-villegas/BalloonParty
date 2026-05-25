@@ -71,6 +71,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ShieldGainedMessage>(options);
             builder.RegisterMessageBroker<ScoreTrailArrivedMessage>(options);
             builder.RegisterMessageBroker<LevelUpDismissedMessage>(options);
+            builder.RegisterMessageBroker<LevelUpGlowTrailsMessage>(options);
             builder.RegisterMessageBroker<PausedMessage>(options);
             builder.RegisterMessageBroker<ResumedMessage>(options);
 

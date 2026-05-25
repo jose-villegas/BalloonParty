@@ -29,6 +29,7 @@ namespace BalloonParty.Game.Score
         private IDisposable _scoreSubscription;
 
         internal TrailFlightRegistry<TrailId> Flights => _flights;
+        internal FlyingTrail TrailPrefab => _trailPrefab;
 
         internal ITrailTarget GetTarget(string colorName)
         {

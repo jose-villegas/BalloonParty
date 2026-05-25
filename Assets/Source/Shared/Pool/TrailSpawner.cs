@@ -14,12 +14,18 @@ namespace BalloonParty.Shared.Pool
         private readonly Func<PoolChannel<FlyingTrail>> _channelFactory;
         private readonly PoolManager _poolManager;
         private readonly string _poolKey;
+        private readonly int _sortingOrder;
 
-        internal TrailSpawner(PoolManager poolManager, string poolKey, Func<PoolChannel<FlyingTrail>> channelFactory)
+        internal TrailSpawner(
+            PoolManager poolManager,
+            string poolKey,
+            Func<PoolChannel<FlyingTrail>> channelFactory,
+            int sortingOrder = -1)
         {
             _poolManager = poolManager;
             _poolKey = poolKey;
             _channelFactory = channelFactory;
+            _sortingOrder = sortingOrder;
         }
 
         internal Transform SpawnBurst(
@@ -35,6 +41,7 @@ namespace BalloonParty.Shared.Pool
             var trail = _poolManager.GetOrRegister(_poolKey, _channelFactory);
             trail.transform.position = center;
             trail.transform.localScale = Vector3.one;
+            ApplySortingOrder(trail);
             trail.SetupBurst(burstTo,
                 to,
                 color,
@@ -55,6 +62,7 @@ namespace BalloonParty.Shared.Pool
 
             trail.transform.position = from;
             trail.transform.localScale = Vector3.one;
+            ApplySortingOrder(trail);
 
             if (color.HasValue)
             {
@@ -92,6 +100,7 @@ namespace BalloonParty.Shared.Pool
 
             trail.transform.position = from;
             trail.transform.localScale = Vector3.one;
+            ApplySortingOrder(trail);
 
             if (color.HasValue)
             {
@@ -118,6 +127,14 @@ namespace BalloonParty.Shared.Pool
             }
 
             return trail.transform;
+        }
+
+        private void ApplySortingOrder(FlyingTrail trail)
+        {
+            if (_sortingOrder >= 0)
+            {
+                trail.SetSortingOrder(_sortingOrder);
+            }
         }
     }
 }

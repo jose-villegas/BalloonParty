@@ -939,7 +939,10 @@ MonoBehaviour:
   _animator: {fileID: 7986452418663952722}
   _levelLabel: {fileID: 770970061098269959}
   _levelGlowFill: {fileID: 4548934755101861321}
-  _fillAnimationDelay: 1
+  _glowTrailsPerBar: 24
+  _glowTrailStaggerDelay: 0.04
+  _glowTrailDuration: 0.5
+  _glowTargetRadiusMultiplier: 0.4
   _continueUnpauseDelay: 0.5
 --- !u!114 &2728364919296532837
 MonoBehaviour:
