@@ -28,9 +28,9 @@ to read the grid, tune difficulty, or playtest spawn density.
 | Actor / Balloon | Model class | Prefab | Sprite / Art | Animator | Animations | VFX | Config entry | Notes |
 |---|---|---|---|---|---|---|---|---|
 | **Simple** | `BalloonModel` | ✅ `Balloon.prefab` | ✅ | ✅ `Balloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_BalloonPop` | ✅ `BalloonsConfiguration` | Baseline; no blockers |
-| **Soap Cluster** | `BubbleClusterModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ⚠️ pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | Done for now; Phase 9: `IHasScoreColor` all-colors jackpot scoring |
-| **Tough** | `ToughBalloonModel` | ✅ `ToughBalloon.prefab` | ✅ | ✅ `ToughBalloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_ToughBalloonPop` | ✅ `BalloonsConfiguration` | Baseline; no blockers |
-| **Unbreakable** | `UnbreakableBalloonModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect react | ❌ deflect hit, pierce-pop | ❌ add to `BalloonsConfiguration` | Scores in killer's color via `IHasScoreColor`; design questions deferred |
+| **Soap Cluster** | `BubbleClusterModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ⚠️ pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | Done for now; Phase 9: `IHasScoreColor` `RandomUntilDepleted` all-palette scoring |
+| **Tough** | `ToughBalloonModel` | ✅ `ToughBalloon.prefab` | ✅ | ✅ `ToughBalloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_ToughBalloonPop` | ✅ `BalloonsConfiguration` | No `IHasColor`; score attribution strategy unresolved (see `IHasScoreColor` section) |
+| **Unbreakable** | `UnbreakableBalloonModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect react | ❌ deflect hit, pierce-pop | ❌ add to `BalloonsConfiguration` | `IHasScoreColor` mode `Inherited` — scores in killer's color at hit time |
 | **Puff** | `PuffObstacleModel` | ⚠️ `StaticTest.prefab` | ⚠️ placeholder | ❌ | ❌ Idle float | — | ❌ `GridActorConfiguration` | Dandelion puff / soft cloud; traversable |
 | **Bush** | `BushObstacleModel` | ❌ | ❌ | ❌ | ❌ Idle sway | — | ❌ `GridActorConfiguration` | Park shrub; blocks paths, no hit reaction |
 | **Deflector** | `DeflectorActorModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect flash | ❌ bounce flash | ❌ `GridActorConfiguration` | Reflective surface; indestructible |
@@ -45,67 +45,17 @@ to read the grid, tune difficulty, or playtest spawn density.
 
 These items are pre-requisites that unlock multiple actors at once.
 
-### `IHasScoreColor` — score attribution decoupled from visual color
+### `IHasScoreColor` — unified color and score attribution interface
 
-**The problem:** `IHasColor` currently serves two unrelated consumers — the renderer
-(what color does this actor look like?) and the score system (which color bar advances
-when this actor is destroyed?). For simple balloons these are the same thing, so the
-conflation is invisible. Two upcoming actors break the assumption:
+> Full design, interface shape, distribution modes, spawn-time vs score-time resolution,
+> per-actor config defaults, and scope of work have been moved to
+> **[PLAN-ColorScoreAttribution.md](PLAN-ColorScoreAttribution.md)**.
 
-| Actor | Visual color | Score color(s) |
-|---|---|---|
-| **Unbreakable** | None (no tint) | The color of the item that destroyed it — unknown until hit time |
-| **Bubble Cluster** | None (procedural shader) | Potentially all palette colors simultaneously |
-
-**The split:**
-
-```
-IHasColor      → "what color does this actor render as?" (single string, visual only)
-IHasScoreColor → "which color bars does this actor contribute to when destroyed?"
-```
-
-`IHasScoreColor` returns a collection — `IReadOnlyList<string>` or an `int` bitmask
-(the `[PaletteColorMask]` encoding already exists in the codebase). `ScoreController`
-iterates over it and awards `ScoreValue` points to *each* listed color bar.
-
-**Open design questions before implementation:**
-
-1. **Points per color or shared?** — If Bubble Cluster lists all five colors, does the
-   player earn `ScoreValue` per color (5×) or `ScoreValue ÷ 5` per color, or a flat
-   bonus unrelated to the per-color bars? The choice affects difficulty tuning
-   significantly. Options: full award per color (jackpot, very strong), flat bonus
-   pool split evenly (softer), or a separate "wildcard" score path that doesn't advance
-   any bar but gives a flat point bonus.
-
-2. **Runtime vs static for Unbreakable** — Unbreakable's score color isn't known until
-   the hit arrives (`DamageContext.SourceColor`). The model itself holds no color.
-   Options: (a) `IHasScoreColor` returns an empty list by default; `ActorHitMessage`
-   carries `SourceColor`; `ScoreController` uses `SourceColor` when the list is empty.
-   (b) The model stores the last `SourceColor` written at hit-eval time. (a) keeps the
-   model stateless; (b) is simpler for `ScoreController`.
-
-3. **Migration path for existing actors** — Does `BalloonModel` implement `IHasScoreColor`
-   (returning `[Color.Value]`) so `ScoreController` has one unified path? Or does
-   `ScoreController` keep its existing `IHasColor` branch as a fallback and only check
-   `IHasScoreColor` for new actor types? The unified path is cleaner long-term; the
-   fallback avoids touching every existing model and test.
-
-4. **Bitmask vs list** — The `[PaletteColorMask] int` encoding is already in use for
-   spawn filtering and maps directly to collection iteration. A list of strings is more
-   self-documenting but allocates. Decide before writing the interface.
-
-**Actors that benefit from this:**
-- Unbreakable Balloon — single inherited color, determined at hit time
-- Bubble Cluster — all-colors or configurable subset *(Phase 9 scoring, deferred)*
-- Future: Rainbow balloon type — static all-colors
-
-Scope of work (defer until Unbreakable scoring is implemented):
-- [ ] Decide open questions 1–4 above
-- [ ] `IHasScoreColor` interface in `Slots/Capabilities/`
-- [ ] `ScoreController` updated to consume `IHasScoreColor` (unified or fallback path)
-- [ ] `BalloonModel` / `ToughBalloonModel` implement `IHasScoreColor` if unified path chosen
-- [ ] `UnbreakableBalloonModel` implements `IHasScoreColor` (dynamic, from hit context)
-- [ ] `BubbleClusterModel` implements `IHasScoreColor` (all-colors or configurable)
+Remaining items that block content production here:
+- [ ] Add `ScoreColorMask` + `ScoreDistribution` fields to `GridActorPrefabEntry`
+- [ ] Resolve Tough scoring question before migrating `ToughBalloonModel`
+- [ ] `ToughBalloonModel` implements `IHasScoreColor` — strategy TBD
+- [ ] `UnbreakableBalloonModel` implements `IHasScoreColor` — appends `(context.SourceColor, scoreValue)` at call time
 
 ---
 
@@ -219,10 +169,15 @@ Needs: neighbor query post-nudge, `ClusterMergeMessage`, merge VFX, and a `Bubbl
 that knows which bubble index was added/removed for the transition animation.
 
 **Future idea (Phase 9) — Multi-color scoring:**
-`BubbleClusterModel` is a candidate for `IHasScoreColor` returning all palette colors —
-popping a cluster awards points to every color bar simultaneously (jackpot). The balance
-implication (points per color vs flat bonus) is an open question tracked in the
-**`IHasScoreColor`** shared infrastructure section above. No action needed now.
+`BubbleClusterModel` will implement `IHasScoreColor` delegating to its config entry —
+the SO entry will be set to `ScoreColorMask` = all palette bits and
+`ScoreDistribution = RandomUntilDepleted`. Popping a cluster scatters its `ScoreValue`
+points across all color bars one-point-at-a-time, making every bar advance slightly
+without any single bar receiving a windfall. If playtesting shows this feels too diffuse,
+change the SO entry to `RandomPick` (one color wins the full `ScoreValue`, no code change
+needed); reserve `AllColors` only if a deliberate high-risk jackpot mechanic is introduced,
+and reduce `ScoreValue` in the same entry to compensate. No action needed now; interface
+design and config wiring are resolved.
 
 ---
 
@@ -242,14 +197,13 @@ reward (3–5× base). The Unbreakable has no inherent color, but the item that 
 the Piercing damage does. Score is attributed to the color of that item's host balloon,
 making the payoff emotionally legible: "I spent my Red Bomb, I earned Red points."
 
-This will be implemented via `IHasScoreColor` (see **Shared infrastructure — `IHasScoreColor`**
-above). The Unbreakable's score color is not known at model creation time — it is
-determined dynamically from `DamageContext.SourceColor` at hit-eval time. The exact
-runtime strategy (stateless via `ActorHitMessage` vs model stores last source color)
-is an open design question tracked in the `IHasScoreColor` section.
+Implemented via `IHasScoreColor`. `ResolveScoreAttribution` appends a single
+`ScoreAttribution(context.SourceColor, scoreValue)` — reading the killer's color
+directly from `DamageContext` at the moment of destruction. The model caches nothing
+and stores no color state.
 
+- Do NOT implement `IHasScoreColor` with a non-zero mask — no visual color, no score color; `Inherited` mode covers the score side
 - Do NOT add `IHasWriteableColor` — paint cannot coat it
-- Do NOT add `IHasColor` — no renderer tint; Lightning targeting opts out entirely
 
 - [ ] **Sprite** — distinct from all other balloon types; should read as "tough/permanent"
       at a glance
@@ -264,8 +218,7 @@ is an open design question tracked in the `IHasScoreColor` section.
 - [ ] **Config entry** — add to `BalloonsConfiguration`; `ScoreValue = 4` (suggested
       starting point — tune in playtesting); weight = low; maxCount = 2–3
 - [ ] **Code — `IHasScore` on `UnbreakableBalloonModel`** — read `ScoreValue` from config
-- [ ] **Code — `IHasScoreColor` on `UnbreakableBalloonModel`** — dynamic, from hit context;
-      depends on `IHasScoreColor` shared infrastructure being resolved first
+- [ ] **Code — `IHasScoreColor` on `UnbreakableBalloonModel`** — `ResolveScoreAttribution` appends `(context.SourceColor, scoreValue)`; SO set to mask `0`, mode `Inherited`
 
 ---
 
@@ -439,13 +392,7 @@ Assets/
    shrinks on hit, projectile passes through. Unbreakable is opaque/heavy, deflects all hits.
    Art directions are distinct by definition; confirm Unbreakable sprite before commission.
 
-2. ~~**Unbreakable scoring**~~ — ✅ Direction resolved. Scores high (3–5× base) in the
-   color of the item that destroyed it. Will be implemented via `IHasScoreColor` —
-   a new capability interface that decouples score attribution color from visual/paint
-   color. Bubble Cluster will also use it for all-colors jackpot scoring (Phase 9).
-   Four open design questions (points-per-color vs shared, runtime strategy, migration
-   path, bitmask vs list) are tracked in the **`IHasScoreColor`** shared infrastructure
-   section before implementation begins.
+2. ~~**Unbreakable scoring**~~ — ✅ Fully resolved. See **[PLAN-ColorScoreAttribution.md](PLAN-ColorScoreAttribution.md)** for the full `IHasScoreColor` design.
 
 3. **Deflector angle** — Should the deflector have a fixed angle or rotate to reflect
    the projectile direction? Fixed angle is simpler and more strategic; rotating is
