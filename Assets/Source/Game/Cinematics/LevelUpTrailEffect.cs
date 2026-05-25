@@ -44,7 +44,6 @@ namespace BalloonParty.Game.Cinematics
         private Vector3 _basePosition;
         private bool _hasBaseState;
         private Vector3 _lastTrailPosition;
-        private int _levelAtCinematicStart;
         private float _realElapsed;
         private bool _sessionActive;
         private Tween _timeScaleTween;
@@ -149,7 +148,6 @@ namespace BalloonParty.Game.Cinematics
 
             _director.BeginCinematic(CinematicState.LevelUpPanIn);
             _pauseService.Pause(PauseSource.Cinematic);
-            _levelAtCinematicStart = _scoreController.Level.Value;
 
             _trackedFlight.Transform.GetComponent<FlyingTrail>().DisableMoveTween();
             _trackedFlight.Pause();
@@ -179,15 +177,6 @@ namespace BalloonParty.Game.Cinematics
             _scoreTrailService.Flights.CompleteAll();
             _director.CompleteScene();
             _director.EndCinematic();
-
-            // Projected tipping trail was wrong — level didn't actually change.
-            if (_scoreController.Level.Value == _levelAtCinematicStart)
-            {
-                _pauseService.Resume(PauseSource.Cinematic);
-                _sessionActive = false;
-                AnimateCameraRestore();
-                return;
-            }
         }
 
         private void OnDismissed()
@@ -270,39 +259,6 @@ namespace BalloonParty.Game.Cinematics
             if (_orthoController != null)
             {
                 _orthoController.enabled = true;
-            }
-        }
-
-        private void AnimateCameraRestore()
-        {
-            KillTweens();
-
-            var duration = _restoreCurve.Duration();
-
-            if (_camera != null)
-            {
-                var moveTween = _camera.transform.DOMove(_basePosition, duration)
-                    .SetEase(Ease.InOutQuad)
-                    .SetUpdate(true);
-
-                var sizeTween = DOTween.To(
-                        () => _camera.orthographicSize,
-                        x => _camera.orthographicSize = x,
-                        _baseOrthoSize,
-                        duration)
-                    .SetEase(Ease.InOutQuad)
-                    .SetUpdate(true);
-
-                var sequence = DOTween.Sequence().SetUpdate(true);
-                sequence.Join(moveTween);
-                sequence.Join(sizeTween);
-                sequence.OnComplete(() => RestoreCamera());
-
-                _zoomTween = sequence;
-            }
-            else
-            {
-                RestoreCamera();
             }
         }
 

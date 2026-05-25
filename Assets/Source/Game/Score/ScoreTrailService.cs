@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.UI.Score;
 using Cysharp.Threading.Tasks;
@@ -23,7 +22,6 @@ namespace BalloonParty.Game.Score
         private readonly TrailFlightRegistry<TrailId> _flights = new();
         private readonly PoolManager _poolManager;
         private readonly ISubscriber<ScorePointMessage> _scoredSubscriber;
-        private readonly PauseService _pauseService;
         private readonly Dictionary<string, TrailSpawner> _spawners = new();
         private readonly Dictionary<string, ITrailTarget> _targets = new();
         private readonly FlyingTrail _trailPrefab;
@@ -42,14 +40,12 @@ namespace BalloonParty.Game.Score
             IGameConfiguration config,
             ISubscriber<ScorePointMessage> scoredSubscriber,
             IPublisher<ScoreTrailArrivedMessage> arrivedPublisher,
-            PauseService pauseService,
             PoolManager poolManager,
             FlyingTrail trailPrefab)
         {
             _config = config;
             _scoredSubscriber = scoredSubscriber;
             _arrivedPublisher = arrivedPublisher;
-            _pauseService = pauseService;
             _poolManager = poolManager;
             _trailPrefab = trailPrefab;
         }
@@ -80,7 +76,7 @@ namespace BalloonParty.Game.Score
             var center = msg.WorldPosition;
             var origin = ComputeScatterOrigin(center, msg.GroupIndex, msg.GroupSize);
 
-            SpawnTrailAsync(msg.ColorName, center, origin, id, msg.NextLevel, msg.GroupIndex).Forget();
+            SpawnTrailAsync(msg.ColorName, center, origin, id, msg.GroupIndex).Forget();
         }
 
         internal void RegisterTarget(string colorName, ITrailTarget target, Color color)
@@ -152,20 +148,12 @@ namespace BalloonParty.Game.Score
             Vector3 center,
             Vector3 scatterOrigin,
             TrailId id,
-            bool nextLevel,
             int groupIndex)
         {
             if (groupIndex > 0)
             {
                 var delayMs = Mathf.RoundToInt(_config.ScorePointsScatterDelay * 1000f) * groupIndex;
                 await UniTask.Delay(delayMs, cancellationToken: _cts.Token);
-            }
-
-            if (_pauseService.IsAnyPaused.Value)
-            {
-                await UniTask.WaitUntil(
-                    () => !_pauseService.IsAnyPaused.Value,
-                    cancellationToken: _cts.Token);
             }
 
             SpawnTrail(colorName, center, scatterOrigin, id);

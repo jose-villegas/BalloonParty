@@ -20,11 +20,9 @@ namespace BalloonParty.UI.LevelUp
 
         [SerializeField] private TMP_Text _levelLabel;
         [SerializeField] private Image _levelGlowFill;
-        [SerializeField] private ParticleSystem _levelGlowFillParticleSystem;
 
         [Header("Timing")] [SerializeField] private float _fillAnimationDelay;
 
-        [SerializeField] private float _playParticlesDelay;
         [SerializeField] private float _continueUnpauseDelay;
 
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
@@ -52,7 +50,6 @@ namespace BalloonParty.UI.LevelUp
         {
             _animator.ResetTrigger(AppearTrigger);
             _animator.SetTrigger(HideTrigger);
-            _dismissedPublisher.Publish(new LevelUpDismissedMessage());
             ResumeAfterDelayAsync().Forget();
         }
 
@@ -72,28 +69,12 @@ namespace BalloonParty.UI.LevelUp
 
         private async UniTask LevelGlowFillAsync(int newLevel)
         {
-            await UniTask.Delay(
-                (int)(_playParticlesDelay * 1000),
-                true,
-                cancellationToken: destroyCancellationToken);
-
-            var duration = _levelGlowFillParticleSystem.main.duration;
             var elapsed = 0f;
-
-            _levelGlowFillParticleSystem.Stop();
-            _levelGlowFillParticleSystem.Play();
 
             await UniTask.Delay(
                 (int)(_fillAnimationDelay * 1000),
                 true,
                 cancellationToken: destroyCancellationToken);
-
-            while (elapsed <= duration)
-            {
-                _levelGlowFill.fillAmount = elapsed / duration;
-                elapsed += Time.unscaledDeltaTime;
-                await UniTask.Yield(destroyCancellationToken);
-            }
 
             _levelGlowFill.fillAmount = 1f;
             _levelLabel.text = newLevel.ToString("N0");
@@ -106,6 +87,7 @@ namespace BalloonParty.UI.LevelUp
                 true,
                 cancellationToken: destroyCancellationToken);
 
+            _dismissedPublisher.Publish(new LevelUpDismissedMessage());
             _pauseService.Resume(PauseSource.LevelUp);
         }
     }

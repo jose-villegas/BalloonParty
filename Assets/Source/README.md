@@ -271,7 +271,7 @@ _resumedSubscriber.Subscribe(msg => { if (msg.Source == PauseSource.Cinematic) R
 
 During a level-up cinematic:
 - **Projectile** checks `PauseService.IsAnyPaused` in `FixedUpdate`/`OnTriggerEnter2D` to freeze movement.
-- **Trail spawning** is gated by `PauseService.IsAnyPaused` — trails wait until the pause lifts.
+- **Trail spawning** is not explicitly gated — the projectile freeze prevents new pops, so no new trails are queued during the cinematic.
 - **Balloon animators/particles** are frozen via `Time.timeScale = 0` when the popup shows (visual freeze, separate from logical pause).
 - **Score trails** (non-tipping) are never paused — they fly at normal speed during the cinematic.
 

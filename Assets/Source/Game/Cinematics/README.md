@@ -28,7 +28,6 @@ The director does not know about level-ups, trails, or cameras. Producers define
 | **Tick** | `_slowDownCurve` modulates tipping trail speed (1.0 → 0.3). Other trails fly at normal `Time.timeScale` (unmodified). Camera pans toward tipping trail |
 | **End trigger** | Tipping trail progress ≥ 1 → `Complete()` fires `onArrived` → `ScoreTrailArrivedMessage` |
 | **End** | `CompleteAll()` finishes stragglers, `EndCinematic()` → gate opens → popup shows |
-| **Abort** | If level didn't increment after `CompleteAll`, `Resume(Cinematic)`, reset `_sessionActive`, animate camera back |
 
 ### Gate — Popup Wait
 
@@ -47,7 +46,7 @@ The director does not know about level-ups, trails, or cameras. Producers define
 | System | Mechanism |
 |---|---|
 | Projectile | `PauseService.IsAnyPaused` in `FixedUpdate`/`OnTriggerEnter2D` |
-| Trail spawning | `PauseService.IsAnyPaused` gate in `SpawnTrailAsync` |
+| Trail spawning | Not gated — projectile is frozen so no new pops occur; scatter-delayed trails from the triggering pop complete before the popup |
 | Balloon animators/particles | `Time.timeScale = 0` when popup shows |
 | Popup UI | `AnimatorUpdateMode.UnscaledTime` + `ignoreTimeScale` delays |
 | Score trails (non-tipping) | Never paused — fly at normal speed during cinematic |
@@ -74,7 +73,7 @@ The director does not know about level-ups, trails, or cameras. Producers define
 | `Shared/Pool/TrailFlight.cs` | Per-trail flight controller (Pause/Resume/Complete/Speed) |
 | `Shared/Pool/TrailFlightRegistry.cs` | Registry with bulk operations (snapshot-safe `CompleteAll`) |
 | `Shared/Pool/FlightPhase.cs` | Enum: `Idle`, `InFlight`, `Paused` |
-| `Game/Score/ScoreTrailService.cs` | Trail spawning, flight registration, `IsAnyPaused` spawn gate |
+| `Game/Score/ScoreTrailService.cs` | Trail spawning, flight registration |
 | `Game/Score/ScoreController.cs` | Score tracking, `CheckLevelUp`, `WillLevelUp` |
 | `UI/LevelUp/LevelUpPopUp.cs` | Popup display, dismiss, `Time.timeScale = 0` |
 | `UI/LevelUp/LevelUpLifetimeScope.cs` | DI: registers `CinematicEndGate(LevelUpPanIn)` as `IReadyGate` |
