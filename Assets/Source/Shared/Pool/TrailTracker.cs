@@ -7,9 +7,7 @@ namespace BalloonParty.Shared.Pool
 {
     /// <summary>
     ///     Identity-based flight tracking for trail orbs. Manages in-flight state,
-    ///     forward/retroactive interception, and selective pause/resume. Composed by
-    ///     trail services that need cinematic integration — the service handles its
-    ///     own spawning and calls Register/Unregister to keep the tracker in sync.
+    ///     forward/retroactive interception, and selective pause/resume.
     /// </summary>
     internal class TrailTracker<TId>
         where TId : struct, IEquatable<TId>

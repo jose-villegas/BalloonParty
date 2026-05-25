@@ -1,5 +1,6 @@
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Pause;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using TMPro;
@@ -29,6 +30,7 @@ namespace BalloonParty.UI.LevelUp
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private IPublisher<LevelUpDismissedMessage> _dismissedPublisher;
         [Inject] private IReadyGate _gate;
+        [Inject] private PauseService _pauseService;
 
         private readonly CompositeDisposable _disposable = new();
 
@@ -56,15 +58,16 @@ namespace BalloonParty.UI.LevelUp
 
         private async UniTaskVoid ShowAfterGateAsync(ScoreLevelUpMessage msg)
         {
-            await _gate.WaitAsync(destroyCancellationToken);
-
+            // Pause gameplay immediately — broadcast is synchronous and lands in the same
+            // frame as the trail arriving, so there is no visible gap before the gate resolves.
+            _pauseService.Pause(PauseSource.LevelUp);
             Time.timeScale = 0f;
 
+            await _gate.WaitAsync(destroyCancellationToken);
+
             _levelLabel.text = (msg.NewLevel - 1).ToString("N0");
-            // Stale HideTrigger from the previous dismiss would instantly close the popup
             _animator.ResetTrigger(HideTrigger);
             _animator.SetTrigger(AppearTrigger);
-
             LevelGlowFillAsync(msg.NewLevel).Forget();
         }
 
@@ -103,6 +106,8 @@ namespace BalloonParty.UI.LevelUp
                 (int)(_continueUnpauseDelay * 1000),
                 true,
                 cancellationToken: destroyCancellationToken);
+
+            _pauseService.Resume(PauseSource.LevelUp);
         }
     }
 }

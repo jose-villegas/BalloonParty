@@ -18,6 +18,7 @@ using BalloonParty.Nudge;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
+using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
@@ -70,6 +71,8 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ShieldGainedMessage>(options);
             builder.RegisterMessageBroker<ScoreTrailArrivedMessage>(options);
             builder.RegisterMessageBroker<LevelUpDismissedMessage>(options);
+            builder.RegisterMessageBroker<PausedMessage>(options);
+            builder.RegisterMessageBroker<ResumedMessage>(options);
 
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
             builder.RegisterInstance(_displayConfiguration);
@@ -83,6 +86,7 @@ namespace BalloonParty.Game
 
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.Register<PoolManager>(Lifetime.Singleton);
+            builder.Register<PauseService>(Lifetime.Singleton);
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);
             builder.Register<ColorStreakTracker>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.RegisterComponentInHierarchy<SlotGridView>();

@@ -1,5 +1,5 @@
 using BalloonParty.Shared;
-using BalloonParty.Shared.GameState;
+using BalloonParty.Shared.Pause;
 using VContainer;
 using VContainer.Unity;
 
@@ -10,7 +10,9 @@ namespace BalloonParty.UI.LevelUp
         protected override void Configure(IContainerBuilder builder)
         {
             builder.RegisterComponentInHierarchy<LevelUpPopUp>();
-            builder.RegisterInstance<IReadyGate>(new CinematicEndGate(CinematicState.LevelUpPanIn));
+            builder.Register<PauseResumedGate>(Lifetime.Singleton)
+                .WithParameter(PauseSource.Cinematic)
+                .As<IReadyGate>();
         }
     }
 }

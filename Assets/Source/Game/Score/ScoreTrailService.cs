@@ -4,6 +4,7 @@ using System.Threading;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.UI.Score;
 using Cysharp.Threading.Tasks;
@@ -15,7 +16,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Game.Score
 {
-    internal class ScoreTrailService : IStartable, IDisposable, ICinematicAware
+    internal class ScoreTrailService : IStartable, IDisposable
     {
         private readonly IPublisher<ScoreTrailArrivedMessage> _arrivedPublisher;
         private readonly Dictionary<string, Color> _colorLookup = new();
@@ -23,12 +24,16 @@ namespace BalloonParty.Game.Score
         private readonly CancellationTokenSource _cts = new();
         private readonly PoolManager _poolManager;
         private readonly ISubscriber<ScorePointMessage> _scoredSubscriber;
+        private readonly ISubscriber<PausedMessage> _pausedSubscriber;
+        private readonly ISubscriber<ResumedMessage> _resumedSubscriber;
         private readonly Dictionary<string, TrailSpawner> _spawners = new();
         private readonly Dictionary<string, ITrailTarget> _targets = new();
         private readonly TrailTracker<TrailId> _tracker = new();
         private readonly FlyingTrail _trailPrefab;
 
-        private IDisposable _subscription;
+        private IDisposable _scoreSubscription;
+        private IDisposable _pauseSubscription;
+        private IDisposable _resumeSubscription;
 
         internal TrailTracker<TrailId> Tracker => _tracker;
 
@@ -41,12 +46,16 @@ namespace BalloonParty.Game.Score
         internal ScoreTrailService(
             IGameConfiguration config,
             ISubscriber<ScorePointMessage> scoredSubscriber,
+            ISubscriber<PausedMessage> pausedSubscriber,
+            ISubscriber<ResumedMessage> resumedSubscriber,
             IPublisher<ScoreTrailArrivedMessage> arrivedPublisher,
             PoolManager poolManager,
             FlyingTrail trailPrefab)
         {
             _config = config;
             _scoredSubscriber = scoredSubscriber;
+            _pausedSubscriber = pausedSubscriber;
+            _resumedSubscriber = resumedSubscriber;
             _arrivedPublisher = arrivedPublisher;
             _poolManager = poolManager;
             _trailPrefab = trailPrefab;
@@ -54,57 +63,18 @@ namespace BalloonParty.Game.Score
 
         public void Dispose()
         {
-            Cinematic.Unregister(this);
             _cts.Cancel();
             _cts.Dispose();
-            _subscription?.Dispose();
+            _scoreSubscription?.Dispose();
+            _pauseSubscription?.Dispose();
+            _resumeSubscription?.Dispose();
         }
 
         public void Start()
         {
-            _subscription = _scoredSubscriber.Subscribe(OnScorePoint);
-            Cinematic.Register(this);
-        }
-
-        public void OnCinematicBegin(CinematicState state)
-        {
-        }
-
-        public void OnCinematicEnd()
-        {
-            _tracker.ResumeAll();
-        }
-
-        public void RegisterTarget(string colorName, ITrailTarget target, Color color)
-        {
-            _targets[colorName] = target;
-            _colorLookup[colorName] = color;
-
-            if (!_spawners.ContainsKey(colorName))
-            {
-                var poolKey = $"ScoreTrail_{colorName}";
-                _spawners[colorName] = new TrailSpawner(
-                    _poolManager,
-                    poolKey,
-                    () => new ScoreTrailPoolChannel(_trailPrefab));
-            }
-        }
-
-        internal void PauseTrailsAbove(TrailId threshold)
-        {
-            _tracker.PauseWhere(id => id.Level > threshold.Level);
-        }
-
-        private Vector3 ComputeScatterOrigin(Vector3 center, int index, int count)
-        {
-            if (count <= 1)
-            {
-                return center;
-            }
-
-            var radius = Mathf.Min(_config.SlotSeparation.x, _config.SlotSeparation.y) * 1.5f;
-            var angle = 2f * Mathf.PI * index / count;
-            return center + (new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius);
+            _scoreSubscription = _scoredSubscriber.Subscribe(OnScorePoint);
+            _pauseSubscription = _pausedSubscriber.Subscribe(OnPaused);
+            _resumeSubscription = _resumedSubscriber.Subscribe(OnResumed);
         }
 
         private void OnScorePoint(ScorePointMessage msg)
@@ -123,6 +93,50 @@ namespace BalloonParty.Game.Score
 
             SpawnTrailAsync(msg.ColorName, center, origin, id, msg.NextLevel, msg.GroupIndex).Forget();
         }
+
+        private void OnPaused(PausedMessage msg)
+        {
+            if (msg.Source == PauseSource.Cinematic)
+            {
+                _tracker.PauseWhere(_ => true);
+            }
+        }
+
+        private void OnResumed(ResumedMessage msg)
+        {
+            if (msg.Source == PauseSource.Cinematic)
+            {
+                _tracker.ResumeAll();
+            }
+        }
+
+        internal void RegisterTarget(string colorName, ITrailTarget target, Color color)
+        {
+            _targets[colorName] = target;
+            _colorLookup[colorName] = color;
+
+            if (!_spawners.ContainsKey(colorName))
+            {
+                var poolKey = $"ScoreTrail_{colorName}";
+                _spawners[colorName] = new TrailSpawner(
+                    _poolManager,
+                    poolKey,
+                    () => new ScoreTrailPoolChannel(_trailPrefab));
+            }
+        }
+
+        private Vector3 ComputeScatterOrigin(Vector3 center, int index, int count)
+        {
+            if (count <= 1)
+            {
+                return center;
+            }
+
+            var radius = Mathf.Min(_config.SlotSeparation.x, _config.SlotSeparation.y) * 1.5f;
+            var angle = 2f * Mathf.PI * index / count;
+            return center + (new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius);
+        }
+
 
         private void SpawnTrail(string colorName, Vector3 center, Vector3 scatterOrigin, TrailId id)
         {

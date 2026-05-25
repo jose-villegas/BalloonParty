@@ -4,6 +4,7 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Pause;
 using BalloonParty.UI.Score;
 using DG.Tweening;
 using MessagePipe;
@@ -35,6 +36,7 @@ namespace BalloonParty.Game.Cinematics
         [Inject] private OrthogonalSizeCameraController _orthoController;
         [Inject] private ScoreController _scoreController;
         [Inject] private ScoreTrailService _scoreTrailService;
+        [Inject] private PauseService _pauseService;
 
         private float _baseOrthoSize;
         private Vector3 _basePosition;
@@ -68,6 +70,11 @@ namespace BalloonParty.Game.Cinematics
             if (_director.IsCinematicActive)
             {
                 _director.EndCinematic();
+            }
+
+            if (_pauseService.IsPaused(PauseSource.Cinematic))
+            {
+                _pauseService.Resume(PauseSource.Cinematic);
             }
 
             if (_orthoController != null)
@@ -138,8 +145,7 @@ namespace BalloonParty.Game.Cinematics
             _trackedFlyingTrail.DisableMoveTween();
 
             _director.BeginCinematic(CinematicState.LevelUpPanIn);
-
-            _scoreTrailService.PauseTrailsAbove(_tippingTrailId);
+            _pauseService.Pause(PauseSource.Cinematic);
 
             PreparePanIn();
 
@@ -172,6 +178,7 @@ namespace BalloonParty.Game.Cinematics
             KillTweens();
             _director.CompleteScene();
             _director.EndCinematic();
+            _pauseService.Resume(PauseSource.Cinematic);
         }
 
         private void PanInTick()
