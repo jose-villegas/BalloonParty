@@ -154,17 +154,47 @@ namespace BalloonParty.Game.Score
 
         private void OnActorHit(ActorHitMessage msg)
         {
-            if (msg.Outcome != HitOutcome.Pop)
+            var isPop = msg.Outcome == HitOutcome.Pop;
+            var isPassThrough = msg.Outcome == HitOutcome.PassThrough;
+
+            if (!isPop && !isPassThrough)
             {
                 return;
             }
 
+            if (msg.Actor is IHasScoreColor scoreColor)
+            {
+                using var results = UnityEngine.Pool.ListPool<ScoreAttribution>.Get(out var attributions);
+                scoreColor.ResolveScoreAttribution(in msg.Context, attributions);
+                foreach (var attribution in attributions)
+                {
+                    ApplyAttribution(attribution.ColorId, attribution.Points, msg.WorldPosition);
+                }
+
+                return;
+            }
+
+            if (!isPop)
+            {
+                return;
+            }
+
+            // Fallback for actors that implement IHasColor+IHasScore but not IHasScoreColor yet.
+            // Removed in Phase 2 once all actors implement IHasScoreColor.
             if (msg.Actor is not (IHasColor colorable and IHasScore scoreable))
             {
                 return;
             }
 
-            var color = colorable.Color.Value;
+            var fallbackColor = colorable.Color.Value;
+            if (!string.IsNullOrEmpty(fallbackColor))
+            {
+                ApplyAttribution(fallbackColor, scoreable.ScoreValue, msg.WorldPosition);
+            }
+        }
+
+        private void ApplyAttribution(string color, int basePoints, Vector3 worldPosition)
+        {
             if (string.IsNullOrEmpty(color) || !_persistentScore.ContainsKey(color))
             {
                 return;
@@ -180,7 +210,7 @@ namespace BalloonParty.Game.Score
                 _currentStreak = 1;
             }
 
-            var points = scoreable.ScoreValue * _currentStreak;
+            var points = basePoints * _currentStreak;
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
             var baseProgress = _projectedProgress.GetValueOrDefault(color);
 
@@ -194,7 +224,7 @@ namespace BalloonParty.Game.Score
                 _projectedProgress[color] = rawScore;
                 _scoredPublisher.Publish(new ScorePointMessage(
                     color,
-                    msg.WorldPosition,
+                    worldPosition,
                     score,
                     level,
                     nextLevel,

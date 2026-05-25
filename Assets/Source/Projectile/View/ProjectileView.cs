@@ -76,7 +76,8 @@ namespace BalloonParty.Projectile.View
 
             _model.LastHitBalloon = balloonModel;
 
-            var outcome = balloonModel.EvaluateHit(new DamageContext(1));
+            var damageContext = new DamageContext(1, DamageFlags.Normal, _model.ColorName.Value);
+            var outcome = balloonModel.EvaluateHit(damageContext);
 
             if (outcome == HitOutcome.Absorb)
             {
@@ -93,7 +94,8 @@ namespace BalloonParty.Projectile.View
             _hitPublisher.Publish(new ActorHitMessage(balloonModel,
                 balloonView.transform.position,
                 _model.Direction,
-                outcome));
+                outcome,
+                damageContext));
         }
 
         public void OnSpawned()

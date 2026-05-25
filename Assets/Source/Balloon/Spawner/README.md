@@ -18,7 +18,7 @@ At game start `BalloonSpawner` spawns the initial grid rows from `BalloonsConfig
 | `BalloonType` | Model class | Notes |
 |---|---|---|
 | `Simple` | `BalloonModel` | Paintable, item-capable |
-| `BubbleCluster` | `BalloonModel` | Same class as Simple; `HitsToPop = 5` maps hits → bubble count via `SoapBubbleClusterVariant` |
+| `BubbleCluster` | `BubbleClusterModel` | Not paintable, not item-capable; `HitsToPop = 5` maps hits → bubble count via `SoapBubbleClusterVariant`; scores scatter across random palette colors |
 | `Tough` | `ToughBalloonModel` | Not paintable, not item-capable |
 | `Unbreakable` | `UnbreakableBalloonModel` | No `HitsRemaining`; only Piercing destroys |
 

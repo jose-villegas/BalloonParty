@@ -15,9 +15,24 @@ namespace BalloonParty.Editor
         public const float Spacing = 2f;
 
         /// <summary>
+        ///     Returns the total pixel height required to draw all direct serialized children
+        ///     of <paramref name="property"/> whose names are NOT in <paramref name="excluded"/>,
+        ///     using each field's actual <see cref="EditorGUI.GetPropertyHeight"/> so that
+        ///     variable-height drawers (e.g. <c>[PaletteColorMask]</c>) are measured correctly.
+        /// </summary>
+        public static float GetCommonFieldsHeight(SerializedProperty property, HashSet<string> excluded)
+        {
+            var total = 0f;
+            ForEachCommonChild(property, excluded, child =>
+                total += EditorGUI.GetPropertyHeight(child, true) + Spacing);
+            return total;
+        }
+
+        /// <summary>
         ///     Returns the number of direct serialized children of <paramref name="property"/>
         ///     whose names are NOT in <paramref name="excluded"/>.
-        ///     Use this result to calculate <c>GetPropertyHeight</c> for the auto section.
+        ///     Use <see cref="GetCommonFieldsHeight"/> for height calculation when any field
+        ///     may have a variable-height drawer.
         /// </summary>
         public static int CountCommonFields(SerializedProperty property, HashSet<string> excluded)
         {
@@ -44,11 +59,12 @@ namespace BalloonParty.Editor
             void DrawField(SerializedProperty child)
             {
                 var displayName = ObjectNames.NicifyVariableName(child.name);
+                var h = EditorGUI.GetPropertyHeight(child, true);
                 EditorGUI.PropertyField(
-                    new Rect(position.x, y, position.width, LineHeight),
+                    new Rect(position.x, y, position.width, h),
                     child,
                     new GUIContent(displayName));
-                y += LineHeight + Spacing;
+                y += h + Spacing;
             }
         }
 

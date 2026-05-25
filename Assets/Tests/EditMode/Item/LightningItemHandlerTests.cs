@@ -100,7 +100,7 @@ namespace BalloonParty.Tests.Item
             _handler.Activate();
 
             _hitPublisher.Received(1).Publish(
-                Arg.Is<ActorHitMessage>(m => m.Damage == 1));
+                Arg.Is<ActorHitMessage>(m => m.Context.Damage == 1));
         }
 
         private BalloonModel PlaceBalloon(int col, int row, string color)

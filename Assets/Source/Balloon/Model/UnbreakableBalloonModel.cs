@@ -4,14 +4,23 @@ using BalloonParty.Slots.Capabilities;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal class UnbreakableBalloonModel : BalloonModelBase
+    internal class UnbreakableBalloonModel : BalloonModelBase, IHasScore, IHasScoreColor
     {
-        // No IHasDurability — this is a permanent obstacle; hits never deplete it.
-        // No IHasScore — destroying via Piercing is intended to be a tool-cost, not a reward.
-        // No nudge overrides — permanent obstacles don't react to nudge animations.
+        public int ScoreValue { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides => null;
 
-        internal UnbreakableBalloonModel(BalloonModelConfig config) : base(config) { }
+        internal UnbreakableBalloonModel(BalloonModelConfig config) : base(config)
+        {
+            ScoreValue = config.ScoreValue;
+        }
+
+        public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
+        {
+            if (!string.IsNullOrEmpty(context.SourceColorId))
+            {
+                results.Add(new ScoreAttribution(context.SourceColorId, ScoreValue));
+            }
+        }
 
         public override HitOutcome EvaluateHit(DamageContext context)
         {

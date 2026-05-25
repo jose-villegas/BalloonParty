@@ -360,7 +360,7 @@ namespace BalloonParty.Tests.Game
         {
             var actor = new DurableActor("Red", 1);
             var outcome = actor.EvaluateHit(new DamageContext(1));
-            _hitHandler.Handle(new ActorHitMessage(actor, Vector3.zero, Vector3.up, outcome, 1));
+            _hitHandler.Handle(new ActorHitMessage(actor, Vector3.zero, Vector3.up, outcome, new DamageContext(1)));
 
             _scoredPublisher.Received(1).Publish(
                 Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
@@ -370,7 +370,7 @@ namespace BalloonParty.Tests.Game
         public void OnActorHit_AbsorbOutcome_DoesNotScore()
         {
             var actor = new AbsorbingActor("Red");
-            _hitHandler.Handle(new ActorHitMessage(actor, Vector3.zero, Vector3.up, actor.EvaluateHit(new DamageContext(1)), 1));
+            _hitHandler.Handle(new ActorHitMessage(actor, Vector3.zero, Vector3.up, actor.EvaluateHit(new DamageContext(1)), new DamageContext(1)));
 
             _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointMessage>());
         }
@@ -378,7 +378,7 @@ namespace BalloonParty.Tests.Game
         private void FireHit(IBalloonModel model, int damage)
         {
             var outcome = model.EvaluateHit(new DamageContext(damage));
-            _hitHandler.Handle(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, damage));
+            _hitHandler.Handle(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, new DamageContext(damage)));
         }
 
         private void FirePop(string color, int scoreValue = 1)

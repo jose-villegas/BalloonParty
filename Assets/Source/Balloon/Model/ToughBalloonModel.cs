@@ -5,7 +5,7 @@ using UniRx;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal class ToughBalloonModel : BalloonModelBase, IHasDurability, IHasScore
+    internal class ToughBalloonModel : BalloonModelBase, IHasDurability, IHasScore, IHasScoreColor
     {
         public int ScoreValue { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
@@ -16,6 +16,14 @@ namespace BalloonParty.Balloon.Model
         {
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
+        }
+
+        public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
+        {
+            if (!string.IsNullOrEmpty(context.SourceColorId))
+            {
+                results.Add(new ScoreAttribution(context.SourceColorId, ScoreValue));
+            }
         }
 
         protected override HitOutcome EvaluateNormalHit(DamageContext context)

@@ -58,7 +58,8 @@ namespace BalloonParty.Item.Lightning
                 return UniTask.CompletedTask;
             }
 
-            var context = new DamageContext(settings.Damage, settings.Flags);
+            var sourceColorId = (_balloon as IHasColor)?.Color.Value ?? "";
+            var context = new DamageContext(settings.Damage, settings.Flags, sourceColorId);
 
             if (settings.ActivationEffectPrefab == null)
             {
@@ -68,7 +69,7 @@ namespace BalloonParty.Item.Lightning
                         pos,
                         Vector3.zero,
                         model.EvaluateHit(context),
-                        context.Damage));
+                        context));
                 }
 
                 return UniTask.CompletedTask;
@@ -103,7 +104,7 @@ namespace BalloonParty.Item.Lightning
                     pos,
                     Vector3.zero,
                     model.EvaluateHit(context),
-                    context.Damage));
+                    context));
             }
         }
 

@@ -139,7 +139,8 @@ namespace BalloonParty.Cheats
                     _hitPublisher.Publish(new ActorHitMessage(actor,
                         _grid.IndexToWorldPosition(slot),
                         Vector3.zero,
-                        actor.EvaluateHit(new DamageContext(1), HitOutcome.Pop)));
+                        HitOutcome.Pop,
+                        new DamageContext(1)));
                 }
             }
 

@@ -15,7 +15,6 @@ namespace BalloonParty.Balloon.Model
         public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
         public ReactiveProperty<bool> IsStable { get; } = new(true);
 
-        // Subclasses own NudgeOverrides — not all balloons are nudgeable in the same way.
         public abstract IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
         public SlotActorKind Kind => SlotActorKind.Dynamic;

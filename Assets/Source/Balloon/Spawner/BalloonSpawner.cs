@@ -24,6 +24,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly BalloonsConfiguration _balloonsConfig;
+        private readonly GamePalette _palette;
         private readonly CancellationTokenSource _cts = new();
         private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
@@ -47,6 +48,7 @@ namespace BalloonParty.Balloon.Spawner
         internal BalloonSpawner(
             SlotGrid grid,
             BalloonsConfiguration balloonsConfig,
+            GamePalette palette,
             IObjectResolver resolver,
             PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
@@ -61,6 +63,7 @@ namespace BalloonParty.Balloon.Spawner
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
+            _palette = palette;
             _resolver = resolver;
             _poolManager = poolManager;
             _lineSubscriber = lineSubscriber;
@@ -220,7 +223,7 @@ namespace BalloonParty.Balloon.Spawner
             IWriteableBalloonModel model = entry.BalloonType switch
             {
                 BalloonType.Simple => new BalloonModel(config),
-                BalloonType.BubbleCluster => new BubbleClusterModel(config),
+                BalloonType.BubbleCluster => new BubbleClusterModel(config, _palette),
                 BalloonType.Tough => new ToughBalloonModel(config),
                 BalloonType.Unbreakable => new UnbreakableBalloonModel(config),
                 _ => throw new System.ArgumentOutOfRangeException(nameof(entry.BalloonType), entry.BalloonType, null)

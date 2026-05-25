@@ -15,7 +15,7 @@ namespace BalloonParty.Balloon.Type
 
         public virtual void Initialize(IWriteableBalloonModel model)
         {
-            if (model is IHasWriteableColor colorable)
+            if (model is IPaintable colorable)
             {
                 colorable.Color.Value = PickColor() ?? "";
             }

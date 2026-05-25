@@ -91,7 +91,7 @@ namespace BalloonParty.Tests.Item
             _handler.Setup(source, Vector3.zero);
             _handler.Activate();
 
-            Assert.IsFalse(tough is IHasWriteableColor);
+            Assert.IsFalse(tough is IPaintable);
         }        [Test]
         public void Activate_EmptyColor_DoesNothing()
         {

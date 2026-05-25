@@ -2,6 +2,7 @@ using System;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Nudge;
+using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -25,6 +26,7 @@ namespace BalloonParty.Configuration
 
         [Tooltip("How many points of the balloon's color are awarded when this balloon pops.")]
         [SerializeField] private int _scoreValue = 1;
+
 
         public BalloonView Prefab => _prefab;
         public BalloonType BalloonType => _balloonType;

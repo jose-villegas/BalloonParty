@@ -9,21 +9,21 @@ namespace BalloonParty.Shared.Messages
         public readonly ISlotActor Actor;
         public readonly Vector3 WorldPosition;
         public readonly Vector3 ProjectileDirection;
-        public readonly int Damage;
         public readonly HitOutcome Outcome;
+        public readonly DamageContext Context;
 
         public ActorHitMessage(
             ISlotActor actor,
             Vector3 worldPosition,
             Vector3 projectileDirection,
             HitOutcome outcome,
-            int damage = 1)
+            DamageContext context = default)
         {
             Actor = actor;
             WorldPosition = worldPosition;
             ProjectileDirection = projectileDirection;
             Outcome = outcome;
-            Damage = damage;
+            Context = context;
         }
     }
 }

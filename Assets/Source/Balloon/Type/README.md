@@ -16,19 +16,18 @@ Balloon types define hit capacity, color selection, and per-type Inspector confi
 
 ## How it works
 
-During spawning, `BalloonSpawner` writes `HitsRemaining` directly onto the model from `BalloonPrefabEntry` before calling `IBalloonVariant.Initialize(model)`. `Initialize()` is then responsible only for type-specific data: `TypeName` and (for colored types) `Color`. This keeps per-type balance values centralized in the configuration asset rather than scattered across MonoBehaviours. Item eligibility is not a flag — it is determined structurally: `BalloonModel` implements `IHasWriteableItemSlot`; `ToughBalloonModel` and `UnbreakableBalloonModel` do not. `SoapBubbleClusterVariant` uses `BalloonModel` with `HitsToPop = 5` — each surviving hit maps to one fewer visible bubble rather than a damage-progress float.
+During spawning, `BalloonSpawner` writes `HitsRemaining` directly onto the model from `BalloonPrefabEntry` before calling `IBalloonVariant.Initialize(model)`. `Initialize()` is then responsible only for type-specific data: `TypeName` and (for colored types) `Color`. This keeps per-type balance values centralized in the configuration asset rather than scattered across MonoBehaviours. Item eligibility is not a flag — it is determined structurally: `BalloonModel` implements `IHasWriteableItemSlot`; `ToughBalloonModel`, `UnbreakableBalloonModel`, and `BubbleClusterModel` do not. `SoapBubbleClusterVariant` initializes a `BubbleClusterModel` with `HitsToPop = 5` — each surviving hit maps to one fewer visible bubble rather than a damage-progress float.
 
 Then `BalloonView.Bind(model)` calls `Bind()` on all `IBalloonViewBinding` components found on the same GameObject. `ToughBalloonVariant` uses this to subscribe to `HitsRemaining` and drive shader damage visuals.
 
-The `_allowedColorsMask` on `ColorableBalloonVariant` is a bitmask over `GamePalette.Colors` shown in the Inspector as per-color checkboxes via `PaletteColorMaskAttribute`. `PickColor()` builds a list of allowed color names from the bitmask and picks uniformly at random.
+The `_allowedColorsMask` on `ColorableBalloonVariant` is a bitmask over `GamePalette.Colors` shown in the Inspector as per-color checkboxes via `PaletteColorMaskAttribute`. `PickColor()` builds a list of allowed color names from the bitmask and picks uniformly at random. The picked color name is written to the model via an `IPaintable` cast (`model is IPaintable colorable`).
 
-`BalloonController` reads `HitsRemaining` on each `ActorHitMessage` (filtered to `IBalloonModel`):
+`BalloonController` reads `msg.Outcome` on each `ActorHitMessage` (filtered to `IBalloonModel`):
 
-- **`-1`** (Unbreakable) → deflect without decrementing
-- **`> 1`** (Tough) → decrement and deflect
-- **`≤ 1`** → pop
-
-Each deflect publishes `BalloonDeflectedMessage` (carries the balloon model, its world position, and the projectile direction) and `BalloonNudgeMessage(NudgeType.Deflect)` to push the balloon away from the projectile direction. The nudge is handled by `NudgeService` in `Nudge/`.
+- **`Pop`** — balloon destroyed: plays VFX, removes from grid, returns to pool
+- **`Deflect`** — balloon survived and deflected the projectile; publishes `BalloonDeflectedMessage` and `BalloonNudgeMessage(Deflect)`
+- **`PassThrough`** — balloon survived; projectile continues (Bubble Cluster pass-through). Plays the pass-through VFX.
+- **`Absorb`** — projectile destroyed by actor (handled upstream in `ProjectileView`)
 
 ## Tough balloon shader
 
@@ -67,7 +66,7 @@ Cluster animation layers (inside the shader, no C# involvement):
 
 ## Interactions
 
-- **BalloonSpawner** — writes `HitsRemaining` from `BalloonPrefabEntry` before calling `Initialize()`; model class (`BalloonModel` vs `ToughBalloonModel` vs `UnbreakableBalloonModel`) is chosen from `BalloonType`; `BubbleCluster` maps to `BalloonModel`
+- **BalloonSpawner** — writes `HitsRemaining` from `BalloonPrefabEntry` before calling `Initialize()`; model class is chosen from `BalloonType`: `Simple` → `BalloonModel`, `BubbleCluster` → `BubbleClusterModel`, `Tough` → `ToughBalloonModel`, `Unbreakable` → `UnbreakableBalloonModel`
 - **BalloonView** — auto-discovers and calls `IBalloonViewBinding.Bind()` on all components on the same GameObject
 - **BalloonController** — reads `HitsRemaining` to route hit/deflect/pop
 - **GamePalette** — injected into `ColorableBalloonVariant` to resolve allowed color names

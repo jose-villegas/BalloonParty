@@ -68,14 +68,14 @@ namespace BalloonParty.Item.Paint
             var tint = _palette.GetColor(paintColor);
 
             // Build a paint target per neighbor index — null when slot is empty or non-paintable.
-            var paintTargets = new IHasWriteableColor[NeighborCount];
+            var paintTargets = new IPaintable[NeighborCount];
 
             for (var i = 0; i < NeighborCount; i++)
             {
                 var idx = neighborIndices[i];
                 var actor = _grid.IsEmpty(idx.x, idx.y) ? null : _grid.At(idx);
 
-                if (actor is IHasWriteableColor colorable && colorable.Color.Value != paintColor)
+                if (actor is IPaintable colorable && colorable.Color.Value != paintColor)
                 {
                     paintTargets[i] = colorable;
                 }

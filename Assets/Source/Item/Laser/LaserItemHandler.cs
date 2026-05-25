@@ -80,7 +80,7 @@ namespace BalloonParty.Item.Laser
         {
             var radius = settings.LaserCircleCastRadius;
             var distance = settings.LaserRaycastDistance;
-            var context = new DamageContext(settings.Damage, settings.Flags);
+            var context = new DamageContext(settings.Damage, settings.Flags, (_balloon as IHasColor)?.Color.Value ?? "");
 
             var right = laserRotation * Vector3.right;
             var left = laserRotation * Vector3.left;
@@ -126,7 +126,7 @@ namespace BalloonParty.Item.Laser
                     balloonView.transform.position,
                     Vector3.zero,
                     balloonView.Model.EvaluateHit(context),
-                    context.Damage));
+                    context));
             }
         }
 

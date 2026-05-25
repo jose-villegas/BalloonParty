@@ -6,7 +6,7 @@ using UniRx;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal class BalloonModel : BalloonModelBase, IHasWriteableColor, IHasWriteableItemSlot, IHasDurability, IHasScore
+    internal class BalloonModel : BalloonModelBase, IPaintable, IHasWriteableItemSlot, IHasDurability, IHasScore, IHasScoreColor
     {
         public ReactiveProperty<string> Color { get; } = new();
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
@@ -23,6 +23,19 @@ namespace BalloonParty.Balloon.Model
         {
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
+        }
+
+        public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
+        {
+            if (HitsRemaining.Value > 0)
+            {
+                return;
+            }
+
+            if (!string.IsNullOrEmpty(Color.Value))
+            {
+                results.Add(new ScoreAttribution(Color.Value, ScoreValue));
+            }
         }
     }
 }

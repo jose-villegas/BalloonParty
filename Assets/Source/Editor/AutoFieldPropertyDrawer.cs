@@ -32,7 +32,7 @@ namespace BalloonParty.Editor
             var row = PropertyDrawerHelper.LineHeight + PropertyDrawerHelper.Spacing;
             var height = row;
             height += GetPinnedFieldsHeight(property);
-            height += PropertyDrawerHelper.CountCommonFields(property, ExcludedFields) * row;
+            height += PropertyDrawerHelper.GetCommonFieldsHeight(property, ExcludedFields);
             height += GetSpecialFieldsHeight(property);
 
             return height;

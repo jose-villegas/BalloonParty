@@ -68,7 +68,8 @@ namespace BalloonParty.Item.Bomb
                 NudgeType.Shockwave,
                 settings.NudgeOverrides));
 
-            BlastBalloons(settings.BombRadius, new DamageContext(settings.Damage, settings.Flags));
+            var sourceColorId = (_balloon as IHasColor)?.Color.Value ?? "";
+            BlastBalloons(settings.BombRadius, new DamageContext(settings.Damage, settings.Flags, sourceColorId));
             SpawnVisual(settings);
 
             return UniTask.CompletedTask;
@@ -81,7 +82,7 @@ namespace BalloonParty.Item.Bomb
 
             // Direct hex neighbors always receive piercing damage — the blast core
             // guarantees a kill regardless of HitsRemaining or Deflect logic.
-            var piercingContext = new DamageContext(context.Damage, DamageFlags.Piercing);
+            var piercingContext = new DamageContext(context.Damage, DamageFlags.Piercing, context.SourceColorId);
 
             var count = Physics2D.OverlapCircle(_worldPosition, radius, _balloonFilter, _overlapResults);
 
@@ -108,7 +109,7 @@ namespace BalloonParty.Item.Bomb
                     balloonView.transform.position,
                     Vector3.zero,
                     balloonView.Model.EvaluateHit(hitContext),
-                    hitContext.Damage));
+                    hitContext));
             }
         }
 
