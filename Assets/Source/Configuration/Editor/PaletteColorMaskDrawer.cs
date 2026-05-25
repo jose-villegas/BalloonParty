@@ -45,9 +45,9 @@ namespace BalloonParty.Configuration.Editor
             var innerHeight = mask == 0
                 ? EditorGUIUtility.singleLineHeight
                 : EditorGUIUtility.singleLineHeight + 4f + CalculateSwatchHeight(mask,
-                    EditorGUIUtility.currentViewWidth - EditorGUIUtility.labelWidth - 20f - BoxPadding * 2f);
+                    EditorGUIUtility.currentViewWidth - EditorGUIUtility.labelWidth - 20f - (BoxPadding * 2f));
 
-            return BoxPadding * 2f + innerHeight;
+            return (BoxPadding * 2f) + innerHeight;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -73,8 +73,8 @@ namespace BalloonParty.Configuration.Editor
             var inner = new Rect(
                 position.x + BoxPadding,
                 position.y + BoxPadding,
-                position.width - BoxPadding * 2f,
-                position.height - BoxPadding * 2f);
+                position.width - (BoxPadding * 2f),
+                position.height - (BoxPadding * 2f));
 
             var maskRect = new Rect(inner.x, inner.y, inner.width, EditorGUIUtility.singleLineHeight);
 
@@ -168,7 +168,7 @@ namespace BalloonParty.Configuration.Editor
             foreach (var row in rows)
             {
                 // Right-align: start so the last item ends at the available right edge.
-                var rowWidth = row.Count * itemWidth - itemSpacing;
+                var rowWidth = (row.Count * itemWidth) - itemSpacing;
                 var curX = startX + availableWidth - rowWidth;
 
                 foreach (var i in row)

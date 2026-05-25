@@ -27,7 +27,6 @@ namespace BalloonParty.Configuration
         [Tooltip("How many points of the balloon's color are awarded when this balloon pops.")]
         [SerializeField] private int _scoreValue = 1;
 
-
         public BalloonView Prefab => _prefab;
         public BalloonType BalloonType => _balloonType;
         public float Weight => _weight;

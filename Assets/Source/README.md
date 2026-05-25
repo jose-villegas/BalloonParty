@@ -77,6 +77,7 @@ public class GameLifetimeScope : LifetimeScope
 | `GameDisplayConfiguration` | `ScriptableObject` | `GameDisplayConfiguration` (concrete) |
 | `ItemConfiguration` | `ScriptableObject` | `ItemConfiguration` (concrete) |
 | `FlyingTrail` | Prefab instance | `FlyingTrail` (concrete) |
+| `PauseService` | Singleton service | `PauseService` (concrete) |
 
 ### Instantiating prefabs with child scopes
 
@@ -247,8 +248,34 @@ internal class MyService : ICinematicAware
 | State | Meaning | Set by |
 |---|---|---|
 | `None` | No cinematic active | Default; `CinematicDirector.EndCinematic` |
-| `LevelUpPanIn` | Pan-in phase — slow-mo, zoom, camera tracks tipping trail | `CinematicDirector.BeginCinematic` (called by `LevelUpTrailEffect` at trail spawn) |
+| `LevelUpPanIn` | Pan-in phase — camera tracks tipping trail, which slows via curve-modulated progress | `CinematicDirector.BeginCinematic` (called by `LevelUpTrailEffect` at trail spawn) |
 | `LevelUpRestore` | Restore phase — tweens timeScale and camera back to base | `CinematicDirector.BeginCinematic` (called by `LevelUpTrailEffect` on popup dismiss) |
+
+### Pause Integration
+
+`PauseService` (in `Shared/Pause/`) provides logical pause coordination independently of `Time.timeScale`. It is a singleton registered in `GameLifetimeScope`.
+
+```csharp
+using BalloonParty.Shared.Pause;
+
+// Signal
+_pauseService.Pause(PauseSource.Cinematic);
+_pauseService.Resume(PauseSource.Cinematic);
+
+// Query
+if (_pauseService.IsAnyPaused.Value) return;
+
+// React via MessagePipe
+_resumedSubscriber.Subscribe(msg => { if (msg.Source == PauseSource.Cinematic) ResumeWork(); });
+```
+
+During a level-up cinematic:
+- **Projectile** checks `PauseService.IsAnyPaused` in `FixedUpdate`/`OnTriggerEnter2D` to freeze movement.
+- **Trail spawning** is gated by `PauseService.IsAnyPaused` — trails wait until the pause lifts.
+- **Balloon animators/particles** are frozen via `Time.timeScale = 0` when the popup shows (visual freeze, separate from logical pause).
+- **Score trails** (non-tipping) are never paused — they fly at normal speed during the cinematic.
+
+See `Shared/Pause/README.md` for full documentation.
 
 ---
 

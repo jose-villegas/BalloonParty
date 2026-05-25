@@ -134,31 +134,48 @@ spawner.SpawnUnscaled(from, to, duration);  // runs in unscaled time
 
 Used by simple trail services (e.g. `ShieldTrailController`) that don't need identity or cinematic integration.
 
-### `TrailTracker<TId>`
+### `TrailFlightRegistry<TId>`
 
-Identity-based flight tracking with selective pause, resume, and forward/retroactive interception. Does **not** own spawning — the service spawns itself and calls `Register`/`Unregister` to keep the tracker in sync.
+Identity-based flight registry with per-trail control and bulk operations. Each trail is wrapped in a `TrailFlight` value object exposing transport-style commands: pause, resume, stop, complete, and speed control. The registry does **not** own spawning — the service spawns and calls `Register`/`Unregister`.
+
+#### `TrailFlight`
+
+Per-trail controller wrapping DOTween operations on a `Transform`. Tracks `FlightPhase` (`Idle`, `InFlight`, `Paused`), exposes `Origin`, `Speed`, and `Transform`.
 
 ```csharp
-var tracker = new TrailTracker<TrailId>();
-
-// After spawning:
-tracker.Register(id, trail.transform);
-
-// On arrival:
-tracker.Unregister(id);
-
-// External interception (cinematic producer):
-tracker.TrackTrail(id, onSpawned);       // forward or retroactive
-tracker.ClearTrackedTrail(id);
-
-// Selective pause/resume:
-tracker.PauseWhere(id => id.Level > threshold);
-tracker.ResumeTrail(id);
-tracker.ResumeAll();
-
-// Query before spawn to know if unscaled time is needed:
-if (tracker.IsTracked(id, out var callback)) { /* spawn unscaled */ }
+flight.Pause();          // DOPause, phase → Paused
+flight.Resume();         // DOPlay, phase → InFlight
+flight.Stop();           // DOKill, snap to origin
+flight.Complete();       // DOComplete, fires onComplete callbacks
+flight.SetSpeed(0.5f);   // timeScale on all tweens
+flight.SetUnscaledTime(true); // ignore Time.timeScale
 ```
 
-Used by trail services that need cinematic integration (e.g. `ScoreTrailService`). The service implements `ICinematicAware` itself and delegates state management to the tracker.
+#### Registry API
+
+```csharp
+var registry = new TrailFlightRegistry<TrailId>();
+
+// After spawning:
+var flight = registry.Register(id, trail.transform, origin);
+
+// On arrival:
+registry.Unregister(id);
+
+// Lookup:
+if (registry.TryGet(id, out var f)) { /* use f */ }
+
+// Bulk operations (snapshot-safe — CompleteAll clears before iterating):
+registry.PauseAll();
+registry.ResumeAll();
+registry.CompleteAll();
+registry.CompleteWhere(id => id.Level < threshold);
+registry.StopAll();
+
+// Speed control:
+registry.SetSpeedAll(0.5f);
+registry.SetSpeedWhere(0.3f, id => id == tippingId);
+```
+
+Used by `ScoreTrailService` for trail identity tracking and cinematic integration with `LevelUpTrailEffect`.
 

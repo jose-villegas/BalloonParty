@@ -58,12 +58,11 @@ namespace BalloonParty.UI.LevelUp
 
         private async UniTaskVoid ShowAfterGateAsync(ScoreLevelUpMessage msg)
         {
-            // Pause gameplay immediately — broadcast is synchronous and lands in the same
-            // frame as the trail arriving, so there is no visible gap before the gate resolves.
             _pauseService.Pause(PauseSource.LevelUp);
-            Time.timeScale = 0f;
 
             await _gate.WaitAsync(destroyCancellationToken);
+
+            Time.timeScale = 0f;
 
             _levelLabel.text = (msg.NewLevel - 1).ToString("N0");
             _animator.ResetTrigger(HideTrigger);

@@ -33,7 +33,7 @@ namespace BalloonParty.Balloon.Model
             for (var i = 0; i < ScoreValue; i++)
             {
                 var colorId = colors[Random.Range(0, colors.Length)].Name;
-                results.Add(new ScoreAttribution(colorId, 1, breaksStreak: true));
+                results.Add(new ScoreAttribution(colorId, 1, true));
             }
         }
 

@@ -43,15 +43,7 @@ namespace BalloonParty.Shared.Pause
             // Box the subscription so the lambda can dispose it without a modified-capture warning.
             var holder = new IDisposable[1];
             holder[0] = _resumedSubscriber.Subscribe(msg =>
-            {
-                if (msg.Source != _awaitedSource)
-                {
-                    return;
-                }
-
-                holder[0].Dispose();
-                tcs.TrySetResult();
-            });
+                OnResumed(msg, holder, tcs));
 
             ct.Register(() =>
             {
@@ -61,8 +53,16 @@ namespace BalloonParty.Shared.Pause
 
             return tcs.Task;
         }
+
+        private void OnResumed(ResumedMessage msg, IDisposable[] holder, UniTaskCompletionSource tcs)
+        {
+            if (msg.Source != _awaitedSource)
+            {
+                return;
+            }
+
+            holder[0].Dispose();
+            tcs.TrySetResult();
+        }
     }
 }
-
-
-

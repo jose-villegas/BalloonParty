@@ -9,4 +9,3 @@ namespace BalloonParty.Shared.Pause
         LevelUp
     }
 }
-

@@ -35,7 +35,11 @@ namespace BalloonParty.Shared.Pool
             var trail = _poolManager.GetOrRegister(_poolKey, _channelFactory);
             trail.transform.position = center;
             trail.transform.localScale = Vector3.one;
-            trail.SetupBurst(burstTo, to, color, burstDuration, traceDuration,
+            trail.SetupBurst(burstTo,
+                to,
+                color,
+                burstDuration,
+                traceDuration,
                 () =>
                 {
                     onArrived?.Invoke();

@@ -91,14 +91,7 @@ namespace BalloonParty.UI.Score
             var scaleTween = transform.DOScale(Vector3.zero, totalDuration).SetEase(_scaleCurve);
 
             _moveTween = transform.DOMove(burstTo, burstDuration)
-                .OnComplete(() =>
-                {
-                    _moveTween = transform.DOMove(target, traceDuration).SetEase(_moveCurve);
-                    if (useUnscaledTime)
-                    {
-                        _moveTween.SetUpdate(true);
-                    }
-                });
+                .OnComplete(() => BeginTraceFlight(target, traceDuration, useUnscaledTime));
 
             if (useUnscaledTime)
             {
@@ -113,6 +106,15 @@ namespace BalloonParty.UI.Score
         {
             _moveTween?.Kill();
             _moveTween = null;
+        }
+
+        private void BeginTraceFlight(Vector3 target, float duration, bool useUnscaledTime)
+        {
+            _moveTween = transform.DOMove(target, duration).SetEase(_moveCurve);
+            if (useUnscaledTime)
+            {
+                _moveTween.SetUpdate(true);
+            }
         }
     }
 }

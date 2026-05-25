@@ -59,7 +59,3 @@ namespace BalloonParty.Game.Score
         }
     }
 }
-
-
-
-

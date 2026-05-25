@@ -242,7 +242,6 @@ namespace BalloonParty.Balloon.View
                 () => _poolManager.Return(defaultKey, defaultEffect));
         }
 
-
         private ParticleSystem FindHitVfxPrefab(HitOutcome outcome)
         {
             if (_hitVfxOverrides == null)
@@ -267,14 +266,15 @@ namespace BalloonParty.Balloon.View
             var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(prefab.gameObject));
             if (Model is IHasColor c && !string.IsNullOrEmpty(c.Color.Value))
             {
-                effect.Play(transform.position, _palette.GetColor(c.Color.Value), () => _poolManager.Return(key, effect));
+                effect.Play(transform.position,
+                    _palette.GetColor(c.Color.Value),
+                    () => _poolManager.Return(key, effect));
             }
             else
             {
                 effect.Play(transform.position, () => _poolManager.Return(key, effect));
             }
         }
-
 
         private void ApplySortingOrder(Vector2Int slotIndex)
         {

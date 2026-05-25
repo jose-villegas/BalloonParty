@@ -6,7 +6,8 @@ using UniRx;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal class BalloonModel : BalloonModelBase, IPaintable, IHasWriteableItemSlot, IHasDurability, IHasScore, IHasScoreColor
+    internal class BalloonModel : BalloonModelBase, IPaintable, IHasWriteableItemSlot, IHasDurability, IHasScore,
+        IHasScoreColor
     {
         public ReactiveProperty<string> Color { get; } = new();
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);

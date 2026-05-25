@@ -7,4 +7,3 @@ namespace BalloonParty.Slots.Capabilities
         void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results);
     }
 }
-

@@ -2,13 +2,11 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Shared;
-using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.UI.Score;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
@@ -22,20 +20,17 @@ namespace BalloonParty.Game.Score
         private readonly Dictionary<string, Color> _colorLookup = new();
         private readonly IGameConfiguration _config;
         private readonly CancellationTokenSource _cts = new();
+        private readonly TrailFlightRegistry<TrailId> _flights = new();
         private readonly PoolManager _poolManager;
         private readonly ISubscriber<ScorePointMessage> _scoredSubscriber;
-        private readonly ISubscriber<PausedMessage> _pausedSubscriber;
-        private readonly ISubscriber<ResumedMessage> _resumedSubscriber;
+        private readonly PauseService _pauseService;
         private readonly Dictionary<string, TrailSpawner> _spawners = new();
         private readonly Dictionary<string, ITrailTarget> _targets = new();
-        private readonly TrailTracker<TrailId> _tracker = new();
         private readonly FlyingTrail _trailPrefab;
 
         private IDisposable _scoreSubscription;
-        private IDisposable _pauseSubscription;
-        private IDisposable _resumeSubscription;
 
-        internal TrailTracker<TrailId> Tracker => _tracker;
+        internal TrailFlightRegistry<TrailId> Flights => _flights;
 
         internal ITrailTarget GetTarget(string colorName)
         {
@@ -46,17 +41,15 @@ namespace BalloonParty.Game.Score
         internal ScoreTrailService(
             IGameConfiguration config,
             ISubscriber<ScorePointMessage> scoredSubscriber,
-            ISubscriber<PausedMessage> pausedSubscriber,
-            ISubscriber<ResumedMessage> resumedSubscriber,
             IPublisher<ScoreTrailArrivedMessage> arrivedPublisher,
+            PauseService pauseService,
             PoolManager poolManager,
             FlyingTrail trailPrefab)
         {
             _config = config;
             _scoredSubscriber = scoredSubscriber;
-            _pausedSubscriber = pausedSubscriber;
-            _resumedSubscriber = resumedSubscriber;
             _arrivedPublisher = arrivedPublisher;
+            _pauseService = pauseService;
             _poolManager = poolManager;
             _trailPrefab = trailPrefab;
         }
@@ -66,15 +59,11 @@ namespace BalloonParty.Game.Score
             _cts.Cancel();
             _cts.Dispose();
             _scoreSubscription?.Dispose();
-            _pauseSubscription?.Dispose();
-            _resumeSubscription?.Dispose();
         }
 
         public void Start()
         {
             _scoreSubscription = _scoredSubscriber.Subscribe(OnScorePoint);
-            _pauseSubscription = _pausedSubscriber.Subscribe(OnPaused);
-            _resumeSubscription = _resumedSubscriber.Subscribe(OnResumed);
         }
 
         private void OnScorePoint(ScorePointMessage msg)
@@ -92,22 +81,6 @@ namespace BalloonParty.Game.Score
             var origin = ComputeScatterOrigin(center, msg.GroupIndex, msg.GroupSize);
 
             SpawnTrailAsync(msg.ColorName, center, origin, id, msg.NextLevel, msg.GroupIndex).Forget();
-        }
-
-        private void OnPaused(PausedMessage msg)
-        {
-            if (msg.Source == PauseSource.Cinematic)
-            {
-                _tracker.PauseWhere(_ => true);
-            }
-        }
-
-        private void OnResumed(ResumedMessage msg)
-        {
-            if (msg.Source == PauseSource.Cinematic)
-            {
-                _tracker.ResumeAll();
-            }
         }
 
         internal void RegisterTarget(string colorName, ITrailTarget target, Color color)
@@ -137,62 +110,41 @@ namespace BalloonParty.Game.Score
             return center + (new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius);
         }
 
-
         private void SpawnTrail(string colorName, Vector3 center, Vector3 scatterOrigin, TrailId id)
         {
             var target = _targets[colorName].RandomPosition();
             var color = _colorLookup.TryGetValue(colorName, out var c) ? c : Color.white;
-            var isTracked = _tracker.IsTracked(id, out var trackedCallback);
             var spawner = _spawners[colorName];
             var hasBurst = scatterOrigin != center;
+
+            Action onArrived = () =>
+            {
+                _flights.Unregister(id);
+                _arrivedPublisher.Publish(
+                    new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
+            };
 
             Transform transform;
             if (hasBurst)
             {
-                transform = isTracked
-                    ? spawner.SpawnBurst(center, scatterOrigin, target,
-                        _config.ScorePointBurstDuration, _config.ScorePointTraceDuration,
-                        color, () =>
-                        {
-                            _tracker.Unregister(id);
-                            _arrivedPublisher.Publish(
-                                new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
-                        }, true)
-                    : spawner.SpawnBurst(center, scatterOrigin, target,
-                        _config.ScorePointBurstDuration, _config.ScorePointTraceDuration,
-                        color, () =>
-                        {
-                            _tracker.Unregister(id);
-                            _arrivedPublisher.Publish(
-                                new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
-                        });
+                transform = spawner.SpawnBurst(center,
+                    scatterOrigin,
+                    target,
+                    _config.ScorePointBurstDuration,
+                    _config.ScorePointTraceDuration,
+                    color,
+                    onArrived);
             }
             else
             {
-                transform = isTracked
-                    ? spawner.SpawnUnscaled(scatterOrigin, target, _config.ScorePointTraceDuration,
-                        color, () =>
-                        {
-                            _tracker.Unregister(id);
-                            _arrivedPublisher.Publish(
-                                new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
-                        })
-                    : spawner.Spawn(scatterOrigin, target, _config.ScorePointTraceDuration,
-                        color, () =>
-                        {
-                            _tracker.Unregister(id);
-                            _arrivedPublisher.Publish(
-                                new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
-                        });
+                transform = spawner.Spawn(scatterOrigin,
+                    target,
+                    _config.ScorePointTraceDuration,
+                    color,
+                    onArrived);
             }
 
-            _tracker.Register(id, transform);
-
-            if (isTracked)
-            {
-                transform.DOPause();
-                trackedCallback?.Invoke(transform);
-            }
+            _flights.Register(id, transform, center);
         }
 
         private async UniTaskVoid SpawnTrailAsync(
@@ -209,10 +161,11 @@ namespace BalloonParty.Game.Score
                 await UniTask.Delay(delayMs, cancellationToken: _cts.Token);
             }
 
-            // Next-level trails must wait for the cinematic to finish.
-            if (Cinematic.IsPlaying && nextLevel)
+            if (_pauseService.IsAnyPaused.Value)
             {
-                await UniTask.WaitWhile(() => Cinematic.IsPlaying, cancellationToken: _cts.Token);
+                await UniTask.WaitUntil(
+                    () => !_pauseService.IsAnyPaused.Value,
+                    cancellationToken: _cts.Token);
             }
 
             SpawnTrail(colorName, center, scatterOrigin, id);

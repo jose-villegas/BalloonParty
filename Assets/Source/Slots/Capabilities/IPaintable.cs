@@ -10,4 +10,3 @@ namespace BalloonParty.Slots.Capabilities
         new ReactiveProperty<string> Color { get; }
     }
 }
-

@@ -5,7 +5,9 @@ using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
+using BalloonParty.Shared.Pool;
 using BalloonParty.UI.Score;
+using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MessagePipe;
 using UniRx;
@@ -40,12 +42,14 @@ namespace BalloonParty.Game.Cinematics
 
         private float _baseOrthoSize;
         private Vector3 _basePosition;
+        private bool _hasBaseState;
         private Vector3 _lastTrailPosition;
+        private int _levelAtCinematicStart;
+        private float _realElapsed;
         private bool _sessionActive;
         private Tween _timeScaleTween;
         private TrailId _tippingTrailId;
-        private FlyingTrail _trackedFlyingTrail;
-        private Transform _trackedTrail;
+        private TrailFlight _trackedFlight;
         private float _trailElapsed;
         private Vector3 _trailOrigin;
         private Vector3 _trailTargetViewport;
@@ -55,12 +59,7 @@ namespace BalloonParty.Game.Cinematics
         {
             _scoredSubscriber.Subscribe(OnScorePoint).AddTo(this);
             _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
-            _dismissedSubscriber.Subscribe(_ =>
-            {
-                _director.BeginCinematic(CinematicState.LevelUpRestore);
-                PrepareRestore();
-                _director.PlayScene(new CinematicScene(onEnd: OnRestoreComplete));
-            }).AddTo(this);
+            _dismissedSubscriber.Subscribe(_ => OnDismissed()).AddTo(this);
         }
 
         private void OnDestroy()
@@ -100,41 +99,47 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            var willLevelUp = _scoreController.WillLevelUp();
-
-            if (!willLevelUp)
+            if (!_scoreController.WillLevelUp())
             {
                 return;
             }
 
             _sessionActive = true;
             _tippingTrailId = new TrailId(msg);
-            _trackedTrail = null;
-            _trackedFlyingTrail = null;
+            _trackedFlight = null;
             _lastTrailPosition = msg.WorldPosition;
 
-            _scoreTrailService.Tracker.TrackTrail(_tippingTrailId, OnTippingTrailSpawned);
+            WaitForTippingTrailAsync().Forget();
         }
 
-        private void OnRestoreComplete()
+        private async UniTaskVoid WaitForTippingTrailAsync()
         {
-            if (_orthoController != null)
+            var cts = this.GetCancellationTokenOnDestroy();
+
+            await UniTask.WaitUntil(
+                () => _scoreTrailService.Flights.Contains(_tippingTrailId),
+                cancellationToken: cts);
+
+            if (!_sessionActive)
             {
-                _orthoController.enabled = true;
+                return;
             }
 
-            _sessionActive = false;
-            _director.EndCinematic();
-            Navigation.TransitionTo(NavigationState.Game);
+            _trackedFlight = _scoreTrailService.Flights.Get(_tippingTrailId);
+            if (_trackedFlight == null)
+            {
+                return;
+            }
+
+            BeginCinematicWithTrail();
         }
 
-        private void OnTippingTrailSpawned(Transform trailTransform)
+        private void BeginCinematicWithTrail()
         {
-            _trackedTrail = trailTransform;
-            _trackedFlyingTrail = trailTransform.GetComponent<FlyingTrail>();
             _trailElapsed = 0f;
-            _trailOrigin = trailTransform.position;
-            _lastTrailPosition = trailTransform.position;
+            _realElapsed = 0f;
+            _trailOrigin = _trackedFlight.Transform.position;
+            _lastTrailPosition = _trailOrigin;
 
             if (_camera != null)
             {
@@ -142,43 +147,63 @@ namespace BalloonParty.Game.Cinematics
                 _trailTargetViewport = _camera.WorldToViewportPoint(worldTarget);
             }
 
-            _trackedFlyingTrail.DisableMoveTween();
-
             _director.BeginCinematic(CinematicState.LevelUpPanIn);
             _pauseService.Pause(PauseSource.Cinematic);
+            _levelAtCinematicStart = _scoreController.Level.Value;
+
+            _trackedFlight.Transform.GetComponent<FlyingTrail>().DisableMoveTween();
+            _trackedFlight.Pause();
 
             PreparePanIn();
-
-            _scoreTrailService.Tracker.ResumeTrail(_tippingTrailId);
-
-            _director.PlayScene(new CinematicScene(
-                onTick: PanInTick));
+            _director.PlayScene(new CinematicScene(onTick: PanInTick));
         }
 
         private void OnTrailArrived(ScoreTrailArrivedMessage msg)
         {
-            var isScenePlaying = _director.IsScenePlaying;
-            var matches = msg.ColorName == _tippingTrailId.Color
-                          && msg.Score == _tippingTrailId.Score
-                          && msg.Level == _tippingTrailId.Level;
-
-            if (!isScenePlaying)
+            if (!_director.IsScenePlaying)
             {
                 return;
             }
+
+            var matches = msg.ColorName == _tippingTrailId.Color
+                          && msg.Score == _tippingTrailId.Score
+                          && msg.Level == _tippingTrailId.Level;
 
             if (!matches)
             {
                 return;
             }
 
-            _trackedTrail = null;
-            _trackedFlyingTrail = null;
-            _scoreTrailService.Tracker.ClearTrackedTrail(_tippingTrailId);
+            _trackedFlight = null;
             KillTweens();
+            _scoreTrailService.Flights.CompleteAll();
             _director.CompleteScene();
             _director.EndCinematic();
+
+            // Projected tipping trail was wrong — level didn't actually change.
+            if (_scoreController.Level.Value == _levelAtCinematicStart)
+            {
+                _pauseService.Resume(PauseSource.Cinematic);
+                _sessionActive = false;
+                AnimateCameraRestore();
+                return;
+            }
+        }
+
+        private void OnDismissed()
+        {
+            _director.BeginCinematic(CinematicState.LevelUpRestore);
             _pauseService.Resume(PauseSource.Cinematic);
+            PrepareRestore();
+            _director.PlayScene(new CinematicScene(onEnd: OnRestoreComplete));
+        }
+
+        private void OnRestoreComplete()
+        {
+            RestoreCamera();
+            _sessionActive = false;
+            _director.EndCinematic();
+            Navigation.TransitionTo(NavigationState.Game);
         }
 
         private void PanInTick()
@@ -188,19 +213,31 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            _trailElapsed += Time.unscaledDeltaTime;
+            var dt = Time.unscaledDeltaTime;
+            _realElapsed += dt;
 
-            if (_trackedTrail != null)
+            var slowDownDuration = _slowDownCurve.Duration();
+            var curveT = Mathf.Clamp01(_realElapsed / slowDownDuration);
+            var speedFactor = _slowDownCurve.Evaluate(curveT);
+            _trailElapsed += dt * speedFactor;
+
+            if (_trackedFlight?.Transform != null)
             {
-                var scale = _trackedTrailScaleCurve.Evaluate(_trailElapsed);
-                _trackedTrail.localScale = Vector3.one * scale;
+                var progress = Mathf.Clamp01(_trailElapsed / _config.ScorePointTraceDuration);
+
+                _trackedFlight.Transform.localScale =
+                    Vector3.one * _trackedTrailScaleCurve.Evaluate(progress);
 
                 var target = _camera.ViewportToWorldPoint(_trailTargetViewport);
                 target.z = 0f;
-                var progress = Mathf.Clamp01(_trailElapsed / _config.ScorePointTraceDuration);
-                _trackedTrail.position = Vector3.Lerp(_trailOrigin, target, progress);
+                _trackedFlight.Transform.position = Vector3.Lerp(_trailOrigin, target, progress);
+                _lastTrailPosition = _trackedFlight.Transform.position;
 
-                _lastTrailPosition = _trackedTrail.position;
+                if (progress >= 1f)
+                {
+                    _trackedFlight.Complete();
+                    return;
+                }
             }
 
             var panTarget = Vector3.Lerp(_basePosition, _lastTrailPosition, _cameraPanWeight);
@@ -209,7 +246,7 @@ namespace BalloonParty.Game.Cinematics
             _camera.transform.position = Vector3.Lerp(
                 _camera.transform.position,
                 panTarget,
-                _cameraFollowSpeed * Time.unscaledDeltaTime);
+                _cameraFollowSpeed * dt);
         }
 
         private void CaptureBaseState()
@@ -218,11 +255,64 @@ namespace BalloonParty.Game.Cinematics
             {
                 _baseOrthoSize = _camera.orthographicSize;
                 _basePosition = _camera.transform.position;
+                _hasBaseState = true;
+            }
+        }
+
+        private void RestoreCamera()
+        {
+            if (_camera != null)
+            {
+                _camera.transform.position = _basePosition;
+                _camera.orthographicSize = _baseOrthoSize;
+            }
+
+            if (_orthoController != null)
+            {
+                _orthoController.enabled = true;
+            }
+        }
+
+        private void AnimateCameraRestore()
+        {
+            KillTweens();
+
+            var duration = _restoreCurve.Duration();
+
+            if (_camera != null)
+            {
+                var moveTween = _camera.transform.DOMove(_basePosition, duration)
+                    .SetEase(Ease.InOutQuad)
+                    .SetUpdate(true);
+
+                var sizeTween = DOTween.To(
+                        () => _camera.orthographicSize,
+                        x => _camera.orthographicSize = x,
+                        _baseOrthoSize,
+                        duration)
+                    .SetEase(Ease.InOutQuad)
+                    .SetUpdate(true);
+
+                var sequence = DOTween.Sequence().SetUpdate(true);
+                sequence.Join(moveTween);
+                sequence.Join(sizeTween);
+                sequence.OnComplete(() => RestoreCamera());
+
+                _zoomTween = sequence;
+            }
+            else
+            {
+                RestoreCamera();
             }
         }
 
         private void PreparePanIn()
         {
+            if (_hasBaseState)
+            {
+                RestoreCamera();
+            }
+
             KillTweens();
 
             if (_orthoController != null)
@@ -233,19 +323,6 @@ namespace BalloonParty.Game.Cinematics
             CaptureBaseState();
 
             var slowDownDuration = _slowDownCurve.Duration();
-            var elapsed = 0f;
-
-            _timeScaleTween = DOTween.To(
-                    () => elapsed,
-                    x =>
-                    {
-                        elapsed = x;
-                        Time.timeScale = _slowDownCurve.Evaluate(x);
-                    },
-                    slowDownDuration,
-                    slowDownDuration)
-                .SetEase(Ease.Linear)
-                .SetUpdate(true);
 
             if (_camera != null)
             {
@@ -298,6 +375,10 @@ namespace BalloonParty.Game.Cinematics
                 sequence.Join(sizeTween);
 
                 _zoomTween = sequence;
+            }
+            else
+            {
+                _director.CompleteScene();
             }
         }
     }

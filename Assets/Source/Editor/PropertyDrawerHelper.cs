@@ -23,8 +23,10 @@ namespace BalloonParty.Editor
         public static float GetCommonFieldsHeight(SerializedProperty property, HashSet<string> excluded)
         {
             var total = 0f;
-            ForEachCommonChild(property, excluded, child =>
-                total += EditorGUI.GetPropertyHeight(child, true) + Spacing);
+            ForEachCommonChild(property,
+                excluded,
+                child =>
+                    total += EditorGUI.GetPropertyHeight(child, true) + Spacing);
             return total;
         }
 

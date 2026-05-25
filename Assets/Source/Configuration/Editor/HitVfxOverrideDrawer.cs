@@ -46,8 +46,14 @@ namespace BalloonParty.Configuration.Editor
             return PropertyDrawerHelper.LineHeight + PropertyDrawerHelper.Spacing;
         }
 
-        protected override float DrawSpecialFields(Rect position, float y, SerializedProperty property) => y;
+        protected override float DrawSpecialFields(Rect position, float y, SerializedProperty property)
+        {
+            return y;
+        }
 
-        protected override float GetSpecialFieldsHeight(SerializedProperty property) => 0f;
+        protected override float GetSpecialFieldsHeight(SerializedProperty property)
+        {
+            return 0f;
+        }
     }
 }

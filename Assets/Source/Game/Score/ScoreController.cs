@@ -92,7 +92,6 @@ namespace BalloonParty.Game.Score
             return _config.PointsRequiredForLevel(Level.Value + 1);
         }
 
-
         /// <summary>
         ///     Uses projected (not confirmed) progress so the cinematic can
         ///     register before in-flight trails from other colors arrive.
@@ -174,7 +173,8 @@ namespace BalloonParty.Game.Score
                 return;
             }
 
-            using var resolvedPool = UnityEngine.Pool.ListPool<(string Color, int Points, int BaseProgress)>.Get(out var resolved);
+            using var resolvedPool =
+                UnityEngine.Pool.ListPool<(string Color, int Points, int BaseProgress)>.Get(out var resolved);
 
             var multiplier = 1;
             if (attributions.Count == 1)
@@ -183,7 +183,7 @@ namespace BalloonParty.Game.Score
             }
             else
             {
-                _streakTracker.Record(null, breaksStreak: true);
+                _streakTracker.Record(null, true);
             }
 
             foreach (var attribution in attributions)
@@ -230,7 +230,6 @@ namespace BalloonParty.Game.Score
                 }
             }
         }
-
 
         private void OnFocusChanged(bool hasFocus)
         {

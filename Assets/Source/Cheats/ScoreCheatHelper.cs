@@ -29,7 +29,11 @@ namespace BalloonParty.Cheats
 
             for (var i = 0; i < missing; i++)
             {
-                hitPublisher.Publish(new ActorHitMessage(fakeModel, Vector3.zero, Vector3.zero, HitOutcome.Pop, new DamageContext(1, DamageFlags.Normal, color.Name)));
+                hitPublisher.Publish(new ActorHitMessage(fakeModel,
+                    Vector3.zero,
+                    Vector3.zero,
+                    HitOutcome.Pop,
+                    new DamageContext(1, DamageFlags.Normal, color.Name)));
             }
         }
     }

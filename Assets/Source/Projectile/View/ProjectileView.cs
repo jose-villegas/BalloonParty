@@ -5,7 +5,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
-using BalloonParty.Shared.GameState;
+using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
@@ -34,6 +34,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
         [Inject] private ColorStreakTracker _streakTracker;
+        [Inject] private PauseService _pauseService;
 
         private IWriteableProjectileModel _model;
         private IDisposable _deflectedSubscription;
@@ -55,7 +56,7 @@ namespace BalloonParty.Projectile.View
 
         private void FixedUpdate()
         {
-            if (_model == null || !_model.IsFree || Cinematic.IsPlaying)
+            if (_model == null || !_model.IsFree || _pauseService.IsAnyPaused.Value)
             {
                 return;
             }
@@ -66,7 +67,7 @@ namespace BalloonParty.Projectile.View
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (_model == null || !_model.IsFree || Cinematic.IsPlaying)
+            if (_model == null || !_model.IsFree || _pauseService.IsAnyPaused.Value)
             {
                 return;
             }
@@ -263,7 +264,6 @@ namespace BalloonParty.Projectile.View
             _shieldShown = true;
             _projectileTrail?.Enable();
         }
-
 
         private bool TryGetHitBalloon(
             Collider2D other,

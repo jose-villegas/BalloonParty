@@ -55,9 +55,17 @@ builder.Register<PauseResumedGate>(Lifetime.Singleton)
 Then any `IReadyGate`-aware async flow will block until that source resumes, resolving
 **in the same frame** as `Resume()` — unlike `UniTask.WaitUntil` polling.
 
-## `Time.timeScale` is still permitted for visual effects
+## `Time.timeScale` usage
 
-The cinematic slow-motion tween (`Time.timeScale` → 0.3) in `LevelUpTrailEffect` is a
-**purely visual** effect and remains as-is. `PauseService` handles *logical* pause
-coordination; the two are independent.
+`Time.timeScale` is **not** used for cinematic slow-motion. The tipping trail is slowed via
+a curve-modulated progress rate in `LevelUpTrailEffect.PanInTick` — other trails fly at
+normal speed, unmodified by `Time.timeScale`.
+
+`Time.timeScale = 0` is used in two places:
+- **`LevelUpPopUp`** — freezes balloon animators and particles while the popup is visible.
+- **`LevelUpTrailEffect` restore phase** — gradually ramps `Time.timeScale` from 0 → 1 via
+  `_restoreCurve` after the popup is dismissed.
+
+`PauseService` handles *logical* pause coordination (projectile, trail spawning); `Time.timeScale`
+handles *visual* freeze. The two are independent.
 
