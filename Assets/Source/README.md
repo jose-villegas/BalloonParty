@@ -274,6 +274,7 @@ During a level-up cinematic:
 - **Trail spawning** is not explicitly gated — the projectile freeze prevents new pops, so no new trails are queued during the cinematic.
 - **Balloon animators/particles** are frozen via `Time.timeScale = 0` when the popup shows (visual freeze, separate from logical pause).
 - **Score trails** (non-tipping) are never paused — they fly at normal speed during the cinematic.
+- **Glow trails** — after the popup's appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrailsMessage` to drain each `ColorProgressBar` slider in sync, then spawns decorative `FlyingTrail` orbs in unscaled time from bars to the glow fill. These fly independently of `Time.timeScale` and `PauseService`.
 
 See `Shared/Pause/README.md` for full documentation.
 

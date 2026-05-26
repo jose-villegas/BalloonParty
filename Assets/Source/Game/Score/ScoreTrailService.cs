@@ -31,11 +31,6 @@ namespace BalloonParty.Game.Score
         internal TrailFlightRegistry<TrailId> Flights => _flights;
         internal FlyingTrail TrailPrefab => _trailPrefab;
 
-        internal ITrailTarget GetTarget(string colorName)
-        {
-            return _targets[colorName];
-        }
-
         [Inject]
         internal ScoreTrailService(
             IGameConfiguration config,
@@ -61,6 +56,11 @@ namespace BalloonParty.Game.Score
         public void Start()
         {
             _scoreSubscription = _scoredSubscriber.Subscribe(OnScorePoint);
+        }
+
+        internal ITrailTarget GetTarget(string colorName)
+        {
+            return _targets[colorName];
         }
 
         private void OnScorePoint(ScorePointMessage msg)

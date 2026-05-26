@@ -124,15 +124,16 @@ Two composable plain-C# helpers for trail orb services. Pick the level that matc
 
 ### `TrailSpawner`
 
-Spawn-and-forget: handles pool get → position → setup → return on arrival.
+Spawn-and-forget: handles pool get → position → setup → return on arrival. Accepts an optional `sortingOrder` to override the trail's sorting layer (used by glow trails at `3200`).
 
 ```csharp
 var spawner = new TrailSpawner(poolManager, "MyTrail", () => new MyPoolChannel(prefab));
 spawner.Spawn(from, to, duration, color, onArrived);
-spawner.SpawnUnscaled(from, to, duration);  // runs in unscaled time
+spawner.SpawnUnscaled(from, to, duration, color, onArrived);  // runs in unscaled time
+spawner.SpawnBurst(center, burstTo, target, burstDur, traceDur, color, onArrived);  // two-phase: scatter then trace
 ```
 
-Used by simple trail services (e.g. `ShieldTrailController`) that don't need identity or cinematic integration.
+Used by `ScoreTrailService` for score trail spawning, `ShieldTrailController` for shield trails, and `LevelUpPopUp` for glow trails.
 
 ### `TrailFlightRegistry<TId>`
 

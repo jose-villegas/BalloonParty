@@ -183,17 +183,6 @@ namespace BalloonParty.UI.Score
             }
         }
 
-        private void DismissFullyShownNotices()
-        {
-            for (var i = _activeNotices.Count - 1; i >= 0; i--)
-            {
-                if (_activeNotices[i].IsFullyShown)
-                {
-                    _activeNotices[i].Dismiss();
-                }
-            }
-        }
-
         public Vector3 Center
         {
             get
@@ -212,6 +201,17 @@ namespace BalloonParty.UI.Score
                 Random.Range(rect.yMin, rect.yMax),
                 0f);
             return rectTransform.TransformPoint(local);
+        }
+
+        private void DismissFullyShownNotices()
+        {
+            for (var i = _activeNotices.Count - 1; i >= 0; i--)
+            {
+                if (_activeNotices[i].IsFullyShown)
+                {
+                    _activeNotices[i].Dismiss();
+                }
+            }
         }
 
         private Vector2 WorldToAnchoredPosition(Vector3 worldPosition)

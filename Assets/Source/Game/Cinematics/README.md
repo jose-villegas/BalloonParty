@@ -29,9 +29,11 @@ The director does not know about level-ups, trails, or cameras. Producers define
 | **End trigger** | Tipping trail progress ≥ 1 → `Complete()` fires `onArrived` → `ScoreTrailArrivedMessage` |
 | **End** | `CompleteAll()` finishes stragglers, `EndCinematic()` → gate opens → popup shows |
 
-### Gate — Popup Wait
+### Gate — Popup Wait + Glow Trails
 
 `LevelUpLifetimeScope` registers `CinematicEndGate(CinematicState.LevelUpPanIn)` as `IReadyGate`. Popup waits until `Cinematic.Current != LevelUpPanIn`. When the gate opens, the popup sets `Time.timeScale = 0` to freeze balloons/particles.
+
+After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrailsMessage` — each `ColorProgressBar` drains its slider in sync — then spawns decorative `FlyingTrail` orbs from each bar to the glow fill in unscaled time. When all glow trails arrive, the level label updates. No cinematic state is active during this phase.
 
 ### Cinematic 2 — Restore (`CinematicState.LevelUpRestore`)
 
@@ -75,6 +77,7 @@ The director does not know about level-ups, trails, or cameras. Producers define
 | `Shared/Pool/FlightPhase.cs` | Enum: `Idle`, `InFlight`, `Paused` |
 | `Game/Score/ScoreTrailService.cs` | Trail spawning, flight registration |
 | `Game/Score/ScoreController.cs` | Score tracking, `CheckLevelUp`, `WillLevelUp` |
-| `UI/LevelUp/LevelUpPopUp.cs` | Popup display, dismiss, `Time.timeScale = 0` |
+| `UI/LevelUp/LevelUpPopUp.cs` | Popup display, dismiss, `Time.timeScale = 0`, glow trail spawning via `LevelUpGlowTrailsMessage` |
 | `UI/LevelUp/LevelUpLifetimeScope.cs` | DI: registers `CinematicEndGate(LevelUpPanIn)` as `IReadyGate` |
+| `Shared/Messages/LevelUpGlowTrailsMessage.cs` | Signal carrying trail-per-bar count and stagger delay for bar draining |
 | `Projectile/View/ProjectileView.cs` | Checks `IsAnyPaused` to freeze movement |
