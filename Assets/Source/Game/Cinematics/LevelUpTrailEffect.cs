@@ -51,7 +51,7 @@ namespace BalloonParty.Game.Cinematics
         private TrailFlight _trackedFlight;
         private float _trailElapsed;
         private Vector3 _trailOrigin;
-        private Vector3 _trailTargetViewport;
+        private Vector3 _trailTargetWorld;
         private Tween _zoomTween;
 
         private void Start()
@@ -140,11 +140,7 @@ namespace BalloonParty.Game.Cinematics
             _trailOrigin = _trackedFlight.Transform.position;
             _lastTrailPosition = _trailOrigin;
 
-            if (_camera != null)
-            {
-                var worldTarget = _scoreTrailService.GetTarget(_tippingTrailId.Color).Center;
-                _trailTargetViewport = _camera.WorldToViewportPoint(worldTarget);
-            }
+            _trailTargetWorld = _scoreTrailService.GetTarget(_tippingTrailId.Color).Center;
 
             _director.BeginCinematic(CinematicState.LevelUpPanIn);
             _pauseService.Pause(PauseSource.Cinematic);
@@ -217,7 +213,7 @@ namespace BalloonParty.Game.Cinematics
                 _trackedFlight.Transform.localScale =
                     Vector3.one * _trackedTrailScaleCurve.Evaluate(progress);
 
-                var target = _camera.ViewportToWorldPoint(_trailTargetViewport);
+                var target = _trailTargetWorld;
                 target.z = 0f;
                 _trackedFlight.Transform.position = Vector3.Lerp(_trailOrigin, target, progress);
                 _lastTrailPosition = _trackedFlight.Transform.position;
@@ -225,6 +221,18 @@ namespace BalloonParty.Game.Cinematics
                 if (progress >= 1f)
                 {
                     _trackedFlight.Complete();
+
+                    // Guard: if DOComplete found no active tweens the arrived
+                    // callback never fired, so force-end the scene here.
+                    if (_director.IsScenePlaying)
+                    {
+                        _trackedFlight = null;
+                        KillTweens();
+                        _scoreTrailService.Flights.CompleteAll();
+                        _director.CompleteScene();
+                        _director.EndCinematic();
+                    }
+
                     return;
                 }
             }
