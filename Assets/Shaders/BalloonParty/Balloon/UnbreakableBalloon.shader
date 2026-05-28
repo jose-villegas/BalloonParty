@@ -1,11 +1,12 @@
 Shader "BalloonParty/Balloon/UnbreakableBalloon"
 {
     // Chrome sprite shader for the Unbreakable balloon.
-    // Adds a vertical metallic gradient (top-light / bottom-dark) to give
-    // the flat sprite a chrome environment feel, a traveling specular rim
-    // that sweeps along the sprite edge, a periodic shine band, and a
-    // deflect flash. The sprite carries all panel/seam/lens art — the
-    // gradient respects each panel's own baked highlights.
+    // Grabs the scene behind the sprite and samples it with convex-mirror
+    // distortion (sphere-normal based) for realtime 2D reflections. All four
+    // quadrant sprites share a _SphereCenter (world pos via MPB) so the
+    // reflection and specular highlight are coherent across the composed
+    // sphere. Also adds a radial metallic gradient, a specular highlight,
+    // a traveling chrome rim, periodic shine, and deflect flash.
 
     Properties
     {
@@ -13,17 +14,37 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
         _Color ("Tint", Color) = (1, 1, 1, 1)
         [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
 
+        [Header(Reflection)]
+        _ReflectionStrength ("Strength",        Range(0, 1))   = 0.4
+        _ReflectionSpread   ("Spread",          Range(0.01, 0.3)) = 0.08
+        [HideInInspector] _SphereCenter ("Sphere Center", Vector) = (0, 0, 0, 0)
+        _SphereRadius ("Sphere Radius", Float) = 0.5
+
         [Header(Metallic Shading)]
-        _MetalCenterColor ("Center Tint",  Color)             = (1.05, 1.05, 1.1, 1)
-        _MetalEdgeColor   ("Edge Tint",    Color)             = (0.55, 0.55, 0.60, 1)
-        _MetalFalloff     ("Falloff",      Range(0.5, 4.0))   = 1.5
+        _MetalCenterColor   ("Center Tint",      Color)             = (0.88, 0.90, 0.95, 1)
+        _MetalEdgeColor     ("Edge Tint",        Color)             = (0.10, 0.10, 0.14, 1)
+        _MetalFalloff       ("Falloff",          Range(0.5, 4.0))   = 1.8
+        _MetalDetailStrength("Detail Strength",  Range(0.1, 1.0))   = 0.5
+
+        [Header(Specular Highlight)]
+        _SpecularPos       ("Position (sphere XY)", Vector)            = (-0.3, 0.35, 0, 0)
+        _SpecularSize      ("Size",                 Range(0.05, 0.8))  = 0.3
+        _SpecularIntensity ("Intensity",            Range(0, 3))       = 1.5
+        _SpecularSharpness ("Sharpness",            Range(1, 8))       = 3.5
+        _SpecularStretch   ("Aniso Stretch",        Range(1, 6))       = 2.5
+        _SpecularAngle     ("Aniso Angle (deg)",    Range(0, 180))     = 135
+        _SpecularColor     ("Color",                Color)             = (1, 1, 1, 1)
 
         [Header(Chrome Rim)]
-        _RimColor       ("Color",           Color)             = (0.85, 0.90, 1.0, 1.0)
-        _RimWidth       ("Edge Width",      Range(0.003, 0.06)) = 0.02
-        _RimIntensity   ("Intensity",       Range(0, 2))       = 1.0
-        _RimSweepSpeed  ("Sweep Speed",     Range(0.1, 3.0))   = 0.6
-        _RimSweepWidth  ("Sweep Arc",       Range(0.05, 0.5))  = 0.2
+        _RimColor       ("Color",           Color)             = (0.7, 0.75, 0.85, 1.0)
+        _RimWidth       ("Edge Width",      Range(0, 0.06))    = 0.02
+        _RimIntensity   ("Intensity",       Range(0, 2))       = 0.6
+
+        [Header(Rim Sweep)]
+        _RimSweepColor  ("Color",           Color)             = (0.95, 0.97, 1.0, 1.0)
+        _RimSweepIntensity("Intensity",     Range(0, 3))       = 1.2
+        _RimSweepSpeed  ("Speed",           Range(0.1, 3.0))   = 0.6
+        _RimSweepWidth  ("Arc Width",       Range(0.05, 0.5))  = 0.2
 
         [Header(Shine)]
         _ShineWidth    ("Width",    Range(0, 0.3))  = 0.08
@@ -57,6 +78,10 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
         ZWrite   Off
         Blend    SrcAlpha OneMinusSrcAlpha
 
+        // Capture everything rendered so far (background, other balloons).
+        // Named texture so all Unbreakable sprites share one grab per frame.
+        GrabPass { "_GrabTexture" }
+
         Pass
         {
             Name "Default"
@@ -80,9 +105,11 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
 
             struct Varyings
             {
-                float4 vertex : SV_POSITION;
-                fixed4 color  : COLOR;
-                float2 uv     : TEXCOORD0;
+                float4 vertex     : SV_POSITION;
+                fixed4 color      : COLOR;
+                float2 uv         : TEXCOORD0;
+                float4 grabPos    : TEXCOORD1;
+                float2 worldPos   : TEXCOORD2;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
@@ -90,6 +117,8 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             sampler2D _MainTex;
             float4    _MainTex_ST;
             float4    _MainTex_TexelSize;
+
+            sampler2D _GrabTexture;
 
             #ifdef UNITY_INSTANCING_ENABLED
                 UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
@@ -102,15 +131,35 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
 
             fixed4 _Color;
 
+            // Reflection
+            float  _ReflectionStrength;
+            float  _ReflectionSpread;
+            float4 _SphereCenter;
+            float  _SphereRadius;
+
             // Metallic shading
             fixed4 _MetalCenterColor;
             fixed4 _MetalEdgeColor;
             float  _MetalFalloff;
+            float  _MetalDetailStrength;
 
-            // Chrome rim
+            // Specular highlight
+            float4 _SpecularPos;
+            float  _SpecularSize;
+            float  _SpecularIntensity;
+            float  _SpecularSharpness;
+            float  _SpecularStretch;
+            float  _SpecularAngle;
+            fixed4 _SpecularColor;
+
+            // Chrome rim (static)
             fixed4 _RimColor;
             float  _RimWidth;
             float  _RimIntensity;
+
+            // Rim sweep (animated)
+            fixed4 _RimSweepColor;
+            float  _RimSweepIntensity;
             float  _RimSweepSpeed;
             float  _RimSweepWidth;
 
@@ -137,6 +186,13 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 OUT.vertex = UnityObjectToClipPos(IN.vertex);
                 OUT.uv     = IN.uv;
                 OUT.color  = IN.color * _Color * _RendererColor;
+
+                // World position for sphere-local calculations
+                OUT.worldPos = mul(unity_ObjectToWorld, IN.vertex).xy;
+
+                // Screen-space position for GrabPass sampling
+                OUT.grabPos = ComputeGrabScreenPos(OUT.vertex);
+
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
                 #endif
@@ -182,28 +238,21 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             }
 
             // ----------------------------------------------------------------
-            // Chrome rim: angular sweep that highlights different edge
-            // sections over time — simulates a light rotating around the
-            // metallic surface.
+            // Rim sweep: angular gradient that travels around the edge,
+            // simulating a light rotating around the metallic surface.
+            // Returns 0..1 gradient strength (like the diagonal shine).
             // ----------------------------------------------------------------
-            float ChromeRim(float2 uv, float edge, float time)
+            float RimSweep(float2 spherePos, float time)
             {
-                // Angle of this pixel relative to sprite center
-                float2 dir = uv - 0.5;
-                float angle = atan2(dir.y, dir.x); // -PI..PI
-                float normAngle = angle / (2.0 * UNITY_PI) + 0.5; // 0..1
+                float angle = atan2(spherePos.y, spherePos.x);
+                float normAngle = angle / (2.0 * UNITY_PI) + 0.5;
 
-                // Sweep position (0..1, wrapping)
                 float sweep = frac(time * _RimSweepSpeed);
 
-                // Distance from sweep center (wrapping around 0/1 boundary)
                 float dist = abs(normAngle - sweep);
                 dist = min(dist, 1.0 - dist);
 
-                // Smooth falloff within sweep arc
-                float highlight = smoothstep(_RimSweepWidth, 0.0, dist);
-
-                return edge * highlight * _RimIntensity;
+                return smoothstep(_RimSweepWidth, 0.0, dist);
             }
 
             // ----------------------------------------------------------------
@@ -221,14 +270,69 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 sprite.a *= spriteMask;
                 float alpha = sprite.a;
 
-                // ---- Metallic radial gradient (center bright, edges dark) ----
+                // Sphere-local position: pixel's offset from sphere center,
+                // normalized by radius. Consistent across all 4 rotated quadrants.
+                // Ranges from ~(-1,-1) to ~(1,1) across the full composed sphere.
+                float2 spherePos = (IN.worldPos - _SphereCenter.xy) / max(_SphereRadius, 0.001);
+                float  sphereDist = saturate(length(spherePos));
+
+                // ---- Metallic radial gradient (replaces sprite RGB) ----
+                // The sprite provides masking (alpha) and the bolt-pattern
+                // detail via its luminance. The gradient itself controls the
+                // full brightness range — bright silver at centre, dark at rim.
                 if (alpha > 0.01)
                 {
-                    float2 fromCenter = (spriteUV - 0.5) * 2.0;
-                    float dist = saturate(length(fromCenter));
-                    float grad = pow(dist, _MetalFalloff);
-                    fixed3 tint = lerp(_MetalCenterColor.rgb, _MetalEdgeColor.rgb, grad);
-                    sprite.rgb *= tint;
+                    float detail = dot(sprite.rgb, float3(0.299, 0.587, 0.114));
+                    float grad = pow(sphereDist, _MetalFalloff);
+                    fixed3 metallic = lerp(_MetalCenterColor.rgb, _MetalEdgeColor.rgb, grad);
+                    sprite.rgb = metallic * smoothstep(0.0, _MetalDetailStrength, detail);
+                }
+
+                // ---- Realtime reflection (convex mirror from GrabPass) ----
+                if (alpha > 0.01 && _ReflectionStrength > 0.001)
+                {
+                    float2 grabUV = IN.grabPos.xy / IN.grabPos.w;
+
+                    // Derive surface normal from sphere position.
+                    // nz approaches 0 at the rim → edges deflect more.
+                    float r2 = saturate(dot(spherePos, spherePos));
+                    float nz = sqrt(max(1.0 - r2, 0.0));
+
+                    // Offset grab UV by the tangent component of the normal,
+                    // scaled by spread. This compresses the scene into the
+                    // sphere like a real convex mirror.
+                    float2 reflUV = grabUV - spherePos * (1.0 - nz) * _ReflectionSpread;
+                    reflUV = saturate(reflUV);
+
+                    fixed3 reflected = tex2D(_GrabTexture, reflUV).rgb;
+
+                    // Fresnel blend: stronger at edges where a real metal
+                    // sphere reflects more of the environment
+                    float fresnel = pow(sphereDist, 1.5);
+                    float reflMask = lerp(0.3, 1.0, fresnel) * _ReflectionStrength;
+
+                    sprite.rgb = lerp(sprite.rgb, reflected, reflMask * alpha);
+                }
+
+                // ---- Specular highlight (anisotropic ellipse) ----
+                if (alpha > 0.01 && _SpecularIntensity > 0.001)
+                {
+                    float2 d = spherePos - _SpecularPos.xy;
+
+                    // Rotate into stretch-axis frame, scale one axis
+                    // to create an elliptical highlight (brushed metal).
+                    float rad = _SpecularAngle * (UNITY_PI / 180.0);
+                    float cs = cos(rad);
+                    float sn = sin(rad);
+                    float2 rotated = float2(
+                        d.x * cs + d.y * sn,
+                        -d.x * sn + d.y * cs);
+                    rotated.x *= _SpecularStretch;
+
+                    float specDist = length(rotated);
+                    float spec = saturate(1.0 - specDist / max(_SpecularSize, 0.001));
+                    spec = pow(spec, _SpecularSharpness) * _SpecularIntensity;
+                    sprite.rgb += _SpecularColor.rgb * spec * alpha;
                 }
 
                 // ---- Diagonal shine band (same as SpriteShineShadow) ----
@@ -245,12 +349,21 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                     sprite.rgb += alpha * shineStr * 0.5;
                 }
 
-                // ---- Chrome rim ----
-                if (alpha > 0.01)
+                // ---- Chrome rim (static + animated sweep) ----
+                if (alpha > 0.01 && _RimWidth > 0.0)
                 {
                     float edge = EdgeMask(spriteUV, _RimWidth);
-                    float rim  = ChromeRim(spriteUV, edge, time);
-                    sprite.rgb += _RimColor.rgb * rim * alpha;
+
+                    // Static rim — always visible, outlines the sphere edge
+                    sprite.rgb += _RimColor.rgb * edge * _RimIntensity * alpha;
+
+                    // Animated sweep — gradient highlight that rotates on
+                    // top of the static rim, using a separate color
+                    if (_RimSweepIntensity > 0.001)
+                    {
+                        float sweep = RimSweep(spherePos, time);
+                        sprite.rgb += _RimSweepColor.rgb * edge * sweep * _RimSweepIntensity * alpha;
+                    }
                 }
 
 

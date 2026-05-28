@@ -24,7 +24,6 @@ namespace BalloonParty.Balloon.Type
     {
         private static readonly int BubbleCountId = Shader.PropertyToID("_BubbleCount");
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
-        private static readonly int RotationId = Shader.PropertyToID("_Rotation");
 
         [SerializeField] private SpriteRenderer _renderer;
 
@@ -78,7 +77,7 @@ namespace BalloonParty.Balloon.Type
 
             _lastTime = currentTime;
             PushTime(currentTime);
-            PushRotation(_rotationAngle);
+            _renderer.transform.localRotation = Quaternion.Euler(0f, 0f, _rotationAngle * Mathf.Rad2Deg);
         }
 
         private void OnValidate()
@@ -105,7 +104,6 @@ namespace BalloonParty.Balloon.Type
                 return;
             }
 
-            _renderer.transform.localRotation = Quaternion.identity;
             _rotationAngle = Random.Range(0f, Mathf.PI * 2f);
             _rotationSpeedRad = Random.Range(5f, 12f) * Mathf.Deg2Rad
                                                       * (Random.value < 0.5f ? 1f : -1f);
@@ -140,18 +138,6 @@ namespace BalloonParty.Balloon.Type
 
             _renderer.GetPropertyBlock(_block);
             _block.SetFloat(BubbleCountId, count);
-            _renderer.SetPropertyBlock(_block);
-        }
-
-        private void PushRotation(float radians)
-        {
-            if (_renderer == null || _block == null)
-            {
-                return;
-            }
-
-            _renderer.GetPropertyBlock(_block);
-            _block.SetFloat(RotationId, radians);
             _renderer.SetPropertyBlock(_block);
         }
 

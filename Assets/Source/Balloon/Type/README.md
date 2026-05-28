@@ -12,7 +12,8 @@ Balloon types define hit capacity, color selection, and per-type Inspector confi
 | `ColorableBalloonVariant` | Abstract `MonoBehaviour` — picks a random color from `GamePalette` filtered by `_allowedColorsMask`; sets `TypeName` and `Color` on the model via `Initialize()` |
 | `SimpleBalloonVariant` | Extends `ColorableBalloonVariant` — one-hit colored balloon; no additional behavior |
 | `ToughBalloonVariant` | `MonoBehaviour` implementing both `IBalloonVariant` and `IBalloonViewBinding` — not colorable; sets only `TypeName` in `Initialize()`. On `Bind()` subscribes to `HitsRemaining` and animates `_DamageProgress` on the `BalloonParty/Balloon/ToughBalloon` shader via `MaterialPropertyBlock` using a DOTween tween |
-| `SoapBubbleClusterVariant` | `[ExecuteAlways]` `MonoBehaviour` implementing both `IBalloonVariant` and `IBalloonViewBinding` — not colorable. On `Bind()` randomises spawn rotation (via `_Rotation` MPB) and continuous rotation speed (5–12 °/s), subscribes to `HitsRemaining` and pushes `_BubbleCount` (clamped to `_maxBubbles`) to the `BalloonParty/Balloon/SoapBubbleCluster` shader. Drives `_TimeOffset` every frame via `Update()` using `EditorApplication.timeSinceStartup` in edit mode and `Time.time` in play mode; calls `SceneView.RepaintAll()` in edit mode to sustain animation. Inspector field `_previewBubbleCount` allows previewing each cluster state without Play mode |
+| `SoapBubbleClusterVariant` | `[ExecuteAlways]` `MonoBehaviour` implementing both `IBalloonVariant` and `IBalloonViewBinding` — not colorable. On `Bind()` randomises spawn rotation angle and continuous rotation speed (5–12 °/s) via `transform.localRotation`, subscribes to `HitsRemaining` and pushes `_BubbleCount` (clamped to `_maxBubbles`) to the `BalloonParty/Balloon/SoapBubbleCluster` shader. Drives `_TimeOffset` every frame via `Update()` using `EditorApplication.timeSinceStartup` in edit mode and `Time.time` in play mode; calls `SceneView.RepaintAll()` in edit mode to sustain animation. Inspector field `_previewBubbleCount` allows previewing each cluster state without Play mode |
+| `UnbreakableBalloonVariant` | `[ExecuteAlways]` `MonoBehaviour` implementing both `IBalloonVariant` and `IBalloonViewBinding` — not colorable. Pushes `_SphereCenter` (world position of this transform), `_SphereRadius`, and `_TimeOffset` to all quadrant `SpriteRenderer`s via `MaterialPropertyBlock` every `Update()`. The sphere is composed of 4 quarter-circle sprites rotated by −90°×n; this variant ensures all shader effects (metallic gradient, specular highlight, convex-mirror reflection, chrome rim) are coherent across the assembled sphere. `_SphereRadius` is auto-computed from the union of renderer bounds if left at zero |
 
 ## How it works
 
@@ -52,7 +53,8 @@ The shader properties are organised into labelled Inspector groups: **Damage**, 
 
 - **`_BubbleCount`** (1–5) — set on each `HitsRemaining` change. Controls which per-count layout is active: 5 = regular pentagon, 4 = square, 3 = equilateral triangle, 2 = horizontal pair, 1 = single centred bubble. The cluster shape changes discretely on each hit.
 - **`_TimeOffset`** — pushed every `Update()` frame as `Time.time * floatSpeed + instancePhase`. The shader uses this as its sole time input (does not use `_Time.y`, which is frozen in edit mode). Drives the cluster breathe oscillation, per-bubble micro-float, and iridescence hue drift.
-- **`_Rotation`** (radians) — accumulated each frame at a random per-instance speed set in `Bind()`. Applied to UV space inside the fragment shader before any SDF computation. The shadow offset and specular highlight are computed in the *unrotated* UV frame so they stay fixed in world space regardless of how much the cluster has spun.
+
+Rotation is applied at the transform level (`transform.localRotation` on the renderer) rather than in the shader. `Bind()` sets a random initial angle; `Update()` accumulates rotation at a random per-instance speed (5–12 °/s). The specular highlight and shadow are computed in world space by the shader, so they stay fixed regardless of how much the cluster has spun.
 
 Cluster animation layers (inside the shader, no C# involvement):
 - **Breathe** — slow sinusoidal scale of all bubble positions from the cluster centre; primary driver of junction seam interchange as inter-bubble distances oscillate
@@ -62,7 +64,20 @@ Cluster animation layers (inside the shader, no C# involvement):
 - **Specular** — fixed-direction highlight computed in unrotated UV; does not spin with the cluster
 - **Shadow** (`_SHADOW_ON`) — projects rim + seams only (no interior fill); direction fixed in unrotated UV space; `_ShadowFilmWidth` / `_ShadowSeamWidth` independently control rim/seam shadow thickness
 
-> **GPU instancing is disabled** on the Soap Cluster material — `_BubbleCount`, `_TimeOffset`, and `_Rotation` are set per-instance via `MaterialPropertyBlock`.
+> **GPU instancing is disabled** on the Soap Cluster material — `_BubbleCount` and `_TimeOffset` are set per-instance via `MaterialPropertyBlock`.
+
+## Unbreakable balloon shader
+
+The `BalloonParty/Balloon/UnbreakableBalloon` shader renders the chrome metallic sphere. The balloon is composed of 4 quarter-circle sprites rotated by −90°×n; all four share `_SphereCenter` (world position via MPB) so every effect is coherent across the assembled sphere.
+
+- **Metallic radial gradient** — replaces the sprite RGB with a `_MetalCenterColor` → `_MetalEdgeColor` gradient controlled by `pow(sphereDist, _MetalFalloff)`. The sprite's luminance is preserved as a detail mask (via `smoothstep` with `_MetalDetailStrength` threshold) so the bolt pattern stays visible while the gradient controls the full brightness range — bright silver at centre, near-black at the rim.
+- **Specular highlight** — `_SpecularPos` (sphere-local XY), `_SpecularSize`, `_SpecularSharpness`, `_SpecularIntensity`. Positioned off-centre (default upper-left) to give the eye a strong 3D depth cue. Uses an anisotropic elliptical distance field (`_SpecularStretch`, `_SpecularAngle`) to create a brushed-metal elongated highlight instead of a circular dot — the stretch axis is rotated by `_SpecularAngle` degrees before scaling, costing only a 2D rotation + one multiply per pixel.
+- **Convex-mirror reflection** — GrabPass captures the scene. Each pixel derives its sphere surface normal from `spherePos`; the surface tangent component offsets the grab UV by `spherePos * (1 − nz) * _ReflectionSpread`, compressing the surroundings into the sphere like a real convex mirror. Fresnel-weighted blend makes edges more reflective.
+- **Chrome rim** — two additive layers on the alpha-edge band (detected via 8-tap `EdgeMask`). The **static rim** (`_RimColor`, `_RimIntensity`) is always visible and outlines the sphere edge; `_RimWidth = 0` disables both layers. The **rim sweep** (`_RimSweepColor`, `_RimSweepIntensity`) is an angular gradient (like the diagonal shine) that rotates around the sphere at `_RimSweepSpeed`, rendered on top of the static rim with its own colour.
+- **Diagonal shine** — periodic bright band sweeping across the surface, same as other balloon shaders.
+- **Deflect flash** — `_DeflectFlash` (0–1) additive white overlay for hit feedback.
+
+> **GPU instancing is disabled** — GrabPass is inherently non-batchable and `_SphereCenter`, `_TimeOffset` are set per-instance via `MaterialPropertyBlock`.
 
 ## Interactions
 
@@ -72,4 +87,5 @@ Cluster animation layers (inside the shader, no C# involvement):
 - **GamePalette** — injected into `ColorableBalloonVariant` to resolve allowed color names
 - **PaletteColorMaskAttribute** — drives the Inspector bitmask drawer for color filtering
 - **`BalloonParty/Balloon/ToughBalloon` shader** — receives `_DamageProgress` and `_VoronoiSeed` per-instance via `MaterialPropertyBlock`
-- **`BalloonParty/Balloon/SoapBubbleCluster` shader** — receives `_BubbleCount`, `_TimeOffset`, and `_Rotation` per-instance via `MaterialPropertyBlock`
+- **`BalloonParty/Balloon/SoapBubbleCluster` shader** — receives `_BubbleCount` and `_TimeOffset` per-instance via `MaterialPropertyBlock`
+- **`BalloonParty/Balloon/UnbreakableBalloon` shader** — receives `_SphereCenter` and `_TimeOffset` per-instance via `MaterialPropertyBlock`; specular highlight, metallic gradient, and convex-mirror reflection are all sphere-coherent across the 4 quadrant sprites

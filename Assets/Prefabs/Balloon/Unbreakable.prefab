@@ -1006,12 +1006,12 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7282376468000004691}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 4584855958255757901}
+  m_Father: {fileID: 676214037225156561}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &6201558608195226465
 SpriteRenderer:
@@ -1224,14 +1224,69 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
+      propertyPath: _colorableRenderers.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: _spriteLayerRenderers.Array.size
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_spriteLayerRenderers.Array.data[0]'
+      value: 
+      objectReference: {fileID: 6201558608195226465}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_spriteLayerRenderers.Array.data[1]'
+      value: 
+      objectReference: {fileID: 812500219856785590}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[2]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 954725409122763289}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[3]'
       value: 
-      objectReference: {fileID: 0}
+      objectReference: {fileID: 6093182125113858484}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_spriteLayerRenderers.Array.data[4]'
+      value: 
+      objectReference: {fileID: 5277771306453227080}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_spriteLayerRenderers.Array.data[5]'
+      value: 
+      objectReference: {fileID: 4146674627186969373}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_spriteLayerRenderers.Array.data[6]'
+      value: 
+      objectReference: {fileID: 2659595865455549798}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_spriteLayerRenderers.Array.data[7]'
+      value: 
+      objectReference: {fileID: 8766507730496942851}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_spriteLayerRenderers.Array.data[8]'
+      value: 
+      objectReference: {fileID: 8874550716862331032}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_spriteLayerRenderers.Array.data[9]'
+      value: 
+      objectReference: {fileID: 9171789819661077459}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_spriteLayerRenderers.Array.data[10]'
+      value: 
+      objectReference: {fileID: 7665668140516453804}
     - target: {fileID: 8190022528988633400, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: m_IsActive
@@ -1242,11 +1297,12 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 6173351546761552298, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
     m_RemovedGameObjects:
     - {fileID: 9158998659647495082, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
     m_AddedGameObjects:
-    - targetCorrespondingSourceObject: {fileID: 8217776062739370819, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+    - targetCorrespondingSourceObject: {fileID: 4956682995811686111, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 9020143797399613070}
@@ -1270,7 +1326,11 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 6780969668136866136}
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5923847143892959990, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4148694959817573758}
   m_SourcePrefab: {fileID: 100100000, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
 --- !u!4 &676214037225156561 stripped
 Transform:
@@ -1278,9 +1338,33 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 5596789036533627150}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &4584855958255757901 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 8217776062739370819, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+--- !u!212 &812500219856785590 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5110843805831965112, guid: 85afc73ba92384dafa9d8a43874d2dd6,
     type: 3}
   m_PrefabInstance: {fileID: 5596789036533627150}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &2278384281188367352 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5923847143892959990, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5596789036533627150}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4148694959817573758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2278384281188367352}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b5b5525dea7ca4964abc5f5900e40034, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.Type.UnbreakableBalloonVariant
+  _renderers:
+  - {fileID: 8766507730496942851}
+  - {fileID: 8874550716862331032}
+  - {fileID: 9171789819661077459}
+  - {fileID: 7665668140516453804}
+  _sphereRadius: 0.37978214
