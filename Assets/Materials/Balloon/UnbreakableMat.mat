@@ -19,7 +19,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties: 
+  m_LockedProperties:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -99,11 +99,14 @@ Material:
     - _ShineSpeed: 0
     - _ShineWidth: 0
     - _SmoothnessTextureChannel: 0
+    - _SpecularAngle: 135
+    - _SpecularBend: -1
     - _SpecularHighlights: 1
-    - _SpecularIntensity: 2
+    - _SpecularIntensity: 3
     - _SpecularPower: 149
-    - _SpecularSharpness: 4.5
-    - _SpecularSize: 0.15
+    - _SpecularSharpness: 8
+    - _SpecularSize: 0.8
+    - _SpecularStretch: 6
     - _SphereRadius: 1.71
     - _SpriteScale: 0.75
     - _SrcBlend: 1

@@ -28,11 +28,12 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
 
         [Header(Specular Highlight)]
         _SpecularPos       ("Position (sphere XY)", Vector)            = (-0.3, 0.35, 0, 0)
-        _SpecularSize      ("Size",                 Range(0.05, 0.8))  = 0.3
+        _SpecularSize      ("Size",                 Range(0.05, 1.5))  = 0.45
         _SpecularIntensity ("Intensity",            Range(0, 3))       = 1.5
-        _SpecularSharpness ("Sharpness",            Range(1, 8))       = 3.5
-        _SpecularStretch   ("Aniso Stretch",        Range(1, 6))       = 2.5
+        _SpecularSharpness ("Sharpness",            Range(0.5, 8))     = 2.0
+        _SpecularStretch   ("Aniso Stretch",        Range(1, 10))      = 4.0
         _SpecularAngle     ("Aniso Angle (deg)",    Range(0, 180))     = 135
+        _SpecularBend      ("Aniso Bend",           Range(-3, 3))      = -1.0
         _SpecularColor     ("Color",                Color)             = (1, 1, 1, 1)
 
         [Header(Chrome Rim)]
@@ -150,6 +151,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             float  _SpecularSharpness;
             float  _SpecularStretch;
             float  _SpecularAngle;
+            float  _SpecularBend;
             fixed4 _SpecularColor;
 
             // Chrome rim (static)
@@ -314,24 +316,40 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                     sprite.rgb = lerp(sprite.rgb, reflected, reflMask * alpha);
                 }
 
-                // ---- Specular highlight (anisotropic ellipse) ----
+                // ---- Specular highlight (anisotropic curved streak) ----
                 if (alpha > 0.01 && _SpecularIntensity > 0.001)
                 {
                     float2 d = spherePos - _SpecularPos.xy;
 
-                    // Rotate into stretch-axis frame, scale one axis
-                    // to create an elliptical highlight (brushed metal).
+                    // Rotate into stretch-axis frame
                     float rad = _SpecularAngle * (UNITY_PI / 180.0);
                     float cs = cos(rad);
                     float sn = sin(rad);
-                    float2 rotated = float2(
-                        d.x * cs + d.y * sn,
-                        -d.x * sn + d.y * cs);
-                    rotated.x *= _SpecularStretch;
+                    float along = d.x * cs + d.y * sn;
+                    float across = -d.x * sn + d.y * cs;
 
-                    float specDist = length(rotated);
-                    float spec = saturate(1.0 - specDist / max(_SpecularSize, 0.001));
-                    spec = pow(spec, _SpecularSharpness) * _SpecularIntensity;
+                    // Circular-arc centerline: the streak follows an arc
+                    // whose curvature matches the sphere. Bend=0 is straight,
+                    // negative/positive curves toward/away from sphere center.
+                    // arcRadius = 1/bend; offset = R - sqrt(R²-along²)
+                    // This naturally wraps tighter at the ends.
+                    float curveCenter = 0.0;
+                    float absBend = abs(_SpecularBend);
+                    if (absBend > 0.01)
+                    {
+                        float R = 1.0 / absBend;
+                        float clamped = clamp(along, -R, R);
+                        curveCenter = sign(_SpecularBend) * (R - sqrt(max(R * R - clamped * clamped, 0.0)));
+                    }
+                    float perpDist = across - curveCenter;
+
+                    // Gaussian falloff: produces smooth elliptical highlights.
+                    // Stretch widens along-axis relative to across-axis.
+                    float sigmaAlong  = max(_SpecularSize, 0.001);
+                    float sigmaAcross = sigmaAlong / max(_SpecularStretch, 1.0);
+                    float g = exp(-0.5 * (along * along / (sigmaAlong * sigmaAlong)
+                                        + perpDist * perpDist / (sigmaAcross * sigmaAcross)));
+                    float spec = pow(g, _SpecularSharpness) * _SpecularIntensity;
                     sprite.rgb += _SpecularColor.rgb * spec * alpha;
                 }
 
