@@ -16,6 +16,9 @@ namespace BalloonParty.Balloon.Type
     /// compute metallic gradient, specular, reflection, and rim effects
     /// relative to the composed sphere rather than world origin.
     ///
+    /// Inner renderers receive the same sphere data so effects that depend
+    /// on sphere-local position stay coherent across both layers.
+    ///
     /// <c>[ExecuteAlways]</c> keeps the shader animation running in edit
     /// mode without entering Play mode.
     /// </summary>
@@ -27,9 +30,10 @@ namespace BalloonParty.Balloon.Type
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
 
         [SerializeField] private SpriteRenderer[] _renderers;
+        [SerializeField] private SpriteRenderer[] _innerRenderers;
 
         [Tooltip("Sphere radius in world units. If zero, computed from " +
-                 "the first renderer's bounds at Awake.")]
+                 "the outer renderers' bounds at Awake.")]
         [SerializeField] private float _sphereRadius;
 
         private MaterialPropertyBlock _block;
@@ -61,19 +65,8 @@ namespace BalloonParty.Balloon.Type
             var center = (Vector4)transform.position;
             var timeOffset = currentTime + _instancePhase;
 
-            foreach (var r in _renderers)
-            {
-                if (r == null)
-                {
-                    continue;
-                }
-
-                r.GetPropertyBlock(_block);
-                _block.SetVector(SphereCenterId, center);
-                _block.SetFloat(SphereRadiusId, _sphereRadius);
-                _block.SetFloat(TimeOffsetId, timeOffset);
-                r.SetPropertyBlock(_block);
-            }
+            PushPropertyBlock(_renderers, center, timeOffset);
+            PushPropertyBlock(_innerRenderers, center, timeOffset);
         }
 
         private void OnValidate()
@@ -92,6 +85,28 @@ namespace BalloonParty.Balloon.Type
         {
             _instancePhase = Random.value * 100f;
             ComputeRadiusIfNeeded();
+        }
+
+        private void PushPropertyBlock(SpriteRenderer[] renderers, Vector4 center, float timeOffset)
+        {
+            if (renderers == null)
+            {
+                return;
+            }
+
+            foreach (var r in renderers)
+            {
+                if (r == null)
+                {
+                    continue;
+                }
+
+                r.GetPropertyBlock(_block);
+                _block.SetVector(SphereCenterId, center);
+                _block.SetFloat(SphereRadiusId, _sphereRadius);
+                _block.SetFloat(TimeOffsetId, timeOffset);
+                r.SetPropertyBlock(_block);
+            }
         }
 
         private void ComputeRadiusIfNeeded()
@@ -121,4 +136,3 @@ namespace BalloonParty.Balloon.Type
         }
     }
 }
-

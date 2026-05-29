@@ -19,7 +19,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties:
+  m_LockedProperties: _ReflectionFresnel
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -87,27 +87,29 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _ReflectionDistortion: 2.16
-    - _ReflectionSpread: 0.01
-    - _ReflectionStrength: 0
-    - _RimIntensity: 0
-    - _RimSweepIntensity: 1.2
-    - _RimSweepSpeed: 0.1
-    - _RimSweepWidth: 0.405
-    - _RimWidth: 0.003
+    - _ReflectionFresnel: 3.5
+    - _ReflectionSpread: 0.6
+    - _ReflectionStrength: 0.8
+    - _RimIntensity: 0.35
+    - _RimSweepIntensity: 2
+    - _RimSweepSpeed: 0.5
+    - _RimSweepWidth: 0.25
+    - _RimWidth: 0
     - _ShadowSoftness: 0.02
-    - _ShineInterval: 0
-    - _ShineSpeed: 0
-    - _ShineWidth: 0
+    - _ShineInterval: 2
+    - _ShineSpeed: 0.3
+    - _ShineWidth: 0.3
     - _SmoothnessTextureChannel: 0
-    - _SpecularAngle: 135
-    - _SpecularBend: -1
+    - _SpecularAngle: 45
+    - _SpecularBend: -2.08
+    - _SpecularBendEdge: -6
     - _SpecularHighlights: 1
-    - _SpecularIntensity: 3
+    - _SpecularIntensity: 0.9
     - _SpecularPower: 149
     - _SpecularSharpness: 8
-    - _SpecularSize: 0.8
-    - _SpecularStretch: 6
-    - _SphereRadius: 1.71
+    - _SpecularSize: 0.93
+    - _SpecularStretch: 10
+    - _SphereRadius: 0.5
     - _SpriteScale: 0.75
     - _SrcBlend: 1
     - _Stencil: 0
@@ -130,12 +132,12 @@ Material:
     - _MetalLightDir: {r: 0.4, g: 0.6, b: 0, a: 0}
     - _MetalTopColor: {r: 1, g: 1, b: 1.05, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _RimColor: {r: 0, g: 0.3421054, b: 1, a: 1}
-    - _RimSweepColor: {r: 0.95, g: 0.97, b: 1, a: 1}
+    - _RimColor: {r: 0.7529413, g: 0.7529413, b: 0.7529413, a: 1}
+    - _RimSweepColor: {r: 0.5450981, g: 0, b: 0, a: 1}
     - _ShadowColor: {r: 0.8784314, g: 0.8784314, b: 0.8784314, a: 0.2509804}
     - _ShadowOffset: {r: 0.1, g: -0.1, b: 0, a: 0}
     - _SpecularColor: {r: 1, g: 0.97105914, b: 0.6367924, a: 1}
-    - _SpecularPos: {r: -0.4, g: 0.4, b: 0, a: 0}
+    - _SpecularPos: {r: -0.35, g: 0.35, b: 0, a: 0}
     - _SphereCenter: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

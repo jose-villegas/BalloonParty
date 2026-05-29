@@ -14,11 +14,14 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
         _Color ("Tint", Color) = (1, 1, 1, 1)
         [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
 
-        [Header(Reflection)]
-        _ReflectionStrength ("Strength",        Range(0, 1))   = 0.4
-        _ReflectionSpread   ("Spread",          Range(0.01, 0.3)) = 0.08
+        [Header(Sphere)]
         [HideInInspector] _SphereCenter ("Sphere Center", Vector) = (0, 0, 0, 0)
         _SphereRadius ("Sphere Radius", Float) = 0.5
+
+        [Header(Reflection)]
+        _ReflectionStrength ("Strength",        Range(0, 1))       = 0.4
+        _ReflectionSpread   ("Spread",          Range(0.01, 1.0))  = 0.15
+        _ReflectionFresnel  ("Fresnel Power",   Range(0.5, 5.0))   = 1.5
 
         [Header(Metallic Shading)]
         _MetalCenterColor   ("Center Tint",      Color)             = (0.88, 0.90, 0.95, 1)
@@ -132,11 +135,14 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
 
             fixed4 _Color;
 
+            // Sphere (shared)
+            float4 _SphereCenter;
+            float  _SphereRadius;
+
             // Reflection
             float  _ReflectionStrength;
             float  _ReflectionSpread;
-            float4 _SphereCenter;
-            float  _SphereRadius;
+            float  _ReflectionFresnel;
 
             // Metallic shading
             fixed4 _MetalCenterColor;
@@ -295,23 +301,20 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 {
                     float2 grabUV = IN.grabPos.xy / IN.grabPos.w;
 
-                    // Derive surface normal from sphere position.
-                    // nz approaches 0 at the rim → edges deflect more.
-                    float r2 = saturate(dot(spherePos, spherePos));
-                    float nz = sqrt(max(1.0 - r2, 0.0));
-
-                    // Offset grab UV by the tangent component of the normal,
-                    // scaled by spread. This compresses the scene into the
-                    // sphere like a real convex mirror.
-                    float2 reflUV = grabUV - spherePos * (1.0 - nz) * _ReflectionSpread;
+                    // Sample outward from pixel position along the sphere
+                    // normal direction. On a convex mirror each point
+                    // reflects what is to its side — center sees behind,
+                    // edges see sideways. Spread scales how far out we
+                    // reach into the surrounding scene.
+                    float2 reflUV = grabUV + spherePos * _ReflectionSpread;
                     reflUV = saturate(reflUV);
 
                     fixed3 reflected = tex2D(_GrabTexture, reflUV).rgb;
 
-                    // Fresnel blend: stronger at edges where a real metal
-                    // sphere reflects more of the environment
-                    float fresnel = pow(sphereDist, 1.5);
-                    float reflMask = lerp(0.3, 1.0, fresnel) * _ReflectionStrength;
+                    // Fresnel blend: edge-heavy by default (chrome reflects
+                    // more at glancing angles), tuneable via power slider
+                    float fresnel = pow(sphereDist, _ReflectionFresnel);
+                    float reflMask = lerp(0.15, 1.0, fresnel) * _ReflectionStrength;
 
                     sprite.rgb = lerp(sprite.rgb, reflected, reflMask * alpha);
                 }

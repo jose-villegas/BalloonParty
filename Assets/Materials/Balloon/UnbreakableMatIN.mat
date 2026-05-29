@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: UnbreakableMatIN
-  m_Shader: {fileID: 4800000, guid: 5c6481b42704640f08689c173af084ce, type: 3}
+  m_Shader: {fileID: 4800000, guid: 2ed08afa6f1404522b83dd1f177fd86e, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -87,10 +87,11 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _ReflectionDistortion: 2
-    - _ReflectionSpread: 0.15
-    - _ReflectionStrength: 0.35
+    - _ReflectionFresnel: 0.5
+    - _ReflectionSpread: 0.01
+    - _ReflectionStrength: 0
     - _RimIntensity: 1.73
-    - _RimSweepIntensity: 1.2
+    - _RimSweepIntensity: 0.86
     - _RimSweepSpeed: 2.51
     - _RimSweepWidth: 0.149
     - _RimWidth: 0.0422
@@ -99,11 +100,15 @@ Material:
     - _ShineSpeed: 0.8
     - _ShineWidth: 0.13
     - _SmoothnessTextureChannel: 0
+    - _SpecularAngle: 135
+    - _SpecularBend: 1.5
+    - _SpecularBendEdge: 0
     - _SpecularHighlights: 1
     - _SpecularIntensity: 0.9
     - _SpecularPower: 80
     - _SpecularSharpness: 3.5
     - _SpecularSize: 0.3
+    - _SpecularStretch: 2.5
     - _SphereRadius: 0.5
     - _SpriteScale: 0.75
     - _SrcBlend: 1
