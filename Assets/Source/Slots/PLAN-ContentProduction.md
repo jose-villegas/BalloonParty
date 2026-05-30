@@ -30,7 +30,7 @@ to read the grid, tune difficulty, or playtest spawn density.
 | **Simple** | `BalloonModel` | ✅ `Balloon.prefab` | ✅ | ✅ `Balloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_BalloonPop` | ✅ `BalloonsConfiguration` | Baseline; no blockers |
 | **Soap Cluster** | `BubbleClusterModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ⚠️ pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | Done; scores one point per damage to random palette colors with `BreaksStreak = true` |
 | **Tough** | `ToughBalloonModel` | ✅ `ToughBalloon.prefab` | ✅ | ✅ `ToughBalloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_ToughBalloonPop` | ✅ `BalloonsConfiguration` | No `IHasColor`; scores via `IHasScoreColor` with `Inherited` strategy (killer earns points in their color) |
-| **Unbreakable** | `UnbreakableBalloonModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect react | ❌ deflect hit, pierce-pop | ❌ add to `BalloonsConfiguration` | `IHasScoreColor` mode `Inherited` — scores in killer's color at hit time |
+| **Unbreakable** | `UnbreakableBalloonModel` | ✅ `Unbreakable.prefab` | ✅ procedural shader | ✅ `Unbreakable.controller` | ✅ StableIdle | ⚠️ deflect/pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | `IHasScoreColor` mode `Inherited` — scores in killer's color at hit time |
 | **Puff** | `PuffObstacleModel` | ⚠️ `StaticTest.prefab` | ⚠️ placeholder | ❌ | ❌ Idle float | — | ❌ `GridActorConfiguration` | Dandelion puff / soft cloud; traversable |
 | **Bush** | `BushObstacleModel` | ❌ | ❌ | ❌ | ❌ Idle sway | — | ❌ `GridActorConfiguration` | Park shrub; blocks paths, no hit reaction |
 | **Deflector** | `DeflectorActorModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect flash | ❌ bounce flash | ❌ `GridActorConfiguration` | Reflective surface; indestructible |
@@ -187,20 +187,41 @@ and stores no color state.
 - Do NOT implement `IHasScoreColor` with a non-zero mask — no visual color, no score color; `Inherited` mode covers the score side
 - Do NOT add `IHasWriteableColor` — paint cannot coat it
 
-- [ ] **Sprite** — distinct from all other balloon types; should read as "tough/permanent"
-      at a glance
-- [ ] **Prefab** — `Assets/Prefabs/Balloon/UnbreakableBalloon.prefab` with `BalloonView`
-      component; reference in `BalloonsConfiguration`
-- [ ] **Animator / Controller** — `UnbreakableBalloon.controller`
+- [x] **Sprite** — fully procedural shader (`UnbreakableBalloon.shader` + `UnbreakableBalloonRim.shader`); no sprite texture needed
+- [x] **Prefab** — `Assets/Prefabs/Balloon/Unbreakable.prefab` with `BalloonView`
+      component + `UnbreakableBalloonVariant`; reference in `BalloonsConfiguration`
+- [x] **Animator / Controller** — `Unbreakable.controller`
       - `StableIdle` — slow, heavy float (slower than Simple idle)
       - `UnstableIdle` — subtle wobble during balancer movement
       - `DeflectReact` — brief recoil/shake when hit (does NOT pop)
-- [ ] **VFX** — `PSVFX_UnbreakableDeflect` — spark/clank on deflect hit;
-      `PSVFX_UnbreakablePop` — pop VFX for when Piercing finally destroys it
-- [ ] **Config entry** — add to `BalloonsConfiguration`; `ScoreValue = 4` (suggested
-      starting point — tune in playtesting); weight = low; maxCount = 2–3
-- [ ] **Code — `IHasScore` on `UnbreakableBalloonModel`** — read `ScoreValue` from config
-- [ ] **Code — `IHasScoreColor` on `UnbreakableBalloonModel`** — `ResolveScoreAttribution` appends `(context.SourceColor, scoreValue)`; SO set to mask `0`, mode `Inherited`
+- [ ] **VFX** *(deferred — Phase 9)* — `PSVFX_UnbreakableDeflect` — spark/clank on deflect hit;
+      `PSVFX_UnbreakablePop` — pop VFX for when Piercing finally destroys it.
+      Not blocking; game plays correctly without them.
+- [x] **Config entry** — added to `BalloonsConfiguration`; `BalloonType.Unbreakable` wired in spawner
+- [x] **Code — `IHasScore` on `UnbreakableBalloonModel`** — reads `ScoreValue` from config
+- [x] **Code — `IHasScoreColor` on `UnbreakableBalloonModel`** — `ResolveScoreAttribution` appends `(context.SourceColorId, scoreValue)`; mode `Inherited`
+
+**Future idea (Phase 9) — Unbreakable Roam:**
+Before the normal balance pass runs, each Unbreakable balloon picks a random empty slot
+on the grid and teleports (or animates) to it. Then the standard balance algorithm
+resumes as normal, settling everything else around the Unbreakable's new position.
+
+This prevents Unbreakables from always drifting to the top of the grid (since they're
+never popped, they accumulate at the highest rows after repeated balance passes). The
+random repositioning reinforces the "autonomous robot" personality — it feels alive and
+unpredictable, occupying different columns each turn.
+
+Implementation sketch:
+- New interface `IPreBalanceRelocatable` — marker on models that opt into pre-balance
+  random relocation (only `UnbreakableBalloonModel` initially)
+- `BalloonBalancer.Balance()` gets a pre-pass: iterate all grid slots, collect actors
+  implementing `IPreBalanceRelocatable`, for each one pick a random slot from
+  `SlotGrid.AllEmptySlots()`, remove from current slot, place at new slot, and record
+  the move as a path segment for animation
+- The relocation animation plays first (or as part of the same batch); then the normal
+  balance loop runs and may move other actors that became unbalanced by the relocation
+- Config knob on `BalloonsConfiguration` entry: `bool RelocatesOnBalance` — so the
+  behaviour can be toggled per balloon type without code changes
 
 ---
 
@@ -326,7 +347,7 @@ procedural engine can be tested with real (even rough) assets as early as possib
 2. [x] Puff — simplest new actor; replaces placeholder
 3. [x] Bush — same pipeline as Puff, no hit reaction
 4. [x] Soap Cluster shader + C# Variant + model + prefab + config  ← done; pop VFX deferred to Phase 9
-5. [x] Unbreakable balloon                              ← prefab + controller done
+5. [x] Unbreakable balloon — shader + variant + model + prefab + controller + config  ← done; VFX deferred to Phase 9
 6. Deflector — first hitable grid actor             ← introduces Deflect VFX pipeline
 7. Absorber                                         ← danger actor; needs distinctive look
 8. Gatekeeper                                       ← most complex; needs N-state animator
