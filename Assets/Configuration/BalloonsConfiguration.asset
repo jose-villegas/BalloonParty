@@ -77,7 +77,15 @@ MonoBehaviour:
     _balloonType: 2
     _weight: 0.5
     _maxCount: 5
-    _nudgeOverrides: []
+    _nudgeOverrides:
+    - _appliesTo: 1
+      _distance: 0.05
+      _duration: 0.5
+      _falloff: 0
+    - _appliesTo: 2
+      _distance: 0.02
+      _duration: 0.25
+      _falloff: 0
     _hitVfxOverrides: []
     _hitsToPop: -1
     _scoreValue: 50

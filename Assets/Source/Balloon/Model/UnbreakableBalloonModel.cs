@@ -7,11 +7,12 @@ namespace BalloonParty.Balloon.Model
     internal class UnbreakableBalloonModel : BalloonModelBase, IHasScore, IHasScoreColor
     {
         public int ScoreValue { get; }
-        public override IReadOnlyList<NudgeOverride> NudgeOverrides => null;
+        public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
         internal UnbreakableBalloonModel(BalloonModelConfig config) : base(config)
         {
             ScoreValue = config.ScoreValue;
+            NudgeOverrides = config.NudgeOverrides;
         }
 
         public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
