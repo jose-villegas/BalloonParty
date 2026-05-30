@@ -21,7 +21,7 @@ namespace BalloonParty.Tests.Slots
             _config.SlotSeparation.Returns(new Vector2(1f, 0.85f));
             _config.SlotsOffset.Returns(new Vector2(2.5f, 4f));
 
-            _grid = new SlotGrid(_config);
+            _grid = new SlotGrid(_config, new BalancePathHolder());
         }
 
         [Test]
@@ -64,7 +64,7 @@ namespace BalloonParty.Tests.Slots
         {
             // 2 columns × 1 row = 2 total slots; requesting 5 should cap at 2.
             _config.SlotsSize.Returns(new Vector2Int(2, 1));
-            _grid = new SlotGrid(_config);
+            _grid = new SlotGrid(_config, new BalancePathHolder());
 
             _config.MinStaticActors.Returns(5);
             _config.MaxStaticActors.Returns(5);

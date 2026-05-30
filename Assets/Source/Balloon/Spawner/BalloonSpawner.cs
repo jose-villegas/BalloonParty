@@ -22,6 +22,7 @@ namespace BalloonParty.Balloon.Spawner
     internal class BalloonSpawner : IStartable, IGridSpawner
     {
         private readonly Dictionary<string, int> _activeCounts = new();
+        private readonly BalloonBalancer _balancer;
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly BalloonsConfiguration _balloonsConfig;
         private readonly GamePalette _palette;
@@ -52,6 +53,7 @@ namespace BalloonParty.Balloon.Spawner
             IObjectResolver resolver,
             PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
+            BalloonBalancer balancer,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
             ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
@@ -67,6 +69,7 @@ namespace BalloonParty.Balloon.Spawner
             _resolver = resolver;
             _poolManager = poolManager;
             _lineSubscriber = lineSubscriber;
+            _balancer = balancer;
             _balancePublisher = balancePublisher;
             _hitSubscriber = hitSubscriber;
             _itemActivatedSubscriber = itemActivatedSubscriber;
@@ -254,6 +257,7 @@ namespace BalloonParty.Balloon.Spawner
 
         private void SpawnLine()
         {
+            _balancer.Balance();
             SpawnLineInternal();
             PublishItemCheck();
             _balancePublisher.Publish(default);
@@ -275,6 +279,8 @@ namespace BalloonParty.Balloon.Spawner
 
         private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct)
         {
+            _balancer.Balance();
+
             for (var i = 0; i < lineCount; i++)
             {
                 SpawnLineInternal();

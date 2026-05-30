@@ -15,6 +15,7 @@ namespace BalloonParty.Balloon.Controller
 {
     internal class BalloonBalancer : IStartable
     {
+        private readonly BalancePathHolder _balancePathHolder;
         private readonly BalloonsConfiguration _balloonsConfig;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
@@ -25,10 +26,12 @@ namespace BalloonParty.Balloon.Controller
         internal BalloonBalancer(
             SlotGrid grid,
             BalloonsConfiguration balloonsConfig,
+            BalancePathHolder balancePathHolder,
             ISubscriber<BalanceBalloonsMessage> subscriber)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
+            _balancePathHolder = balancePathHolder;
             _subscriber = subscriber;
         }
 
@@ -56,7 +59,11 @@ namespace BalloonParty.Balloon.Controller
                 var currentScale = view.transform.localScale;
                 var tween = view.transform
                     .DOPath(path.ToArray(), _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
-                    .OnComplete(() => actor.IsStable.Value = true);
+                    .OnComplete(() =>
+                    {
+                        actor.IsStable.Value = true;
+                        _balancePathHolder.Release(actor);
+                    });
 
                 view.TweenTracker.Append(tween);
 
@@ -67,7 +74,7 @@ namespace BalloonParty.Balloon.Controller
             }
         }
 
-        private void Balance()
+        internal void Balance()
         {
             var paths = new Dictionary<IWriteableDynamicSlotActor, List<Vector3>>();
             var hasUnbalanced = true;
@@ -78,7 +85,7 @@ namespace BalloonParty.Balloon.Controller
 
                 for (var col = 0; col < _grid.Columns; col++)
                 {
-                    for (var row = _grid.Rows - 1; row >= 0; row--)
+                    for (var row = 1; row < _grid.Rows; row++)
                     {
                         if (_grid.IsEmpty(col, row))
                         {
@@ -105,6 +112,9 @@ namespace BalloonParty.Balloon.Controller
                         }
 
                         hasUnbalanced = true;
+
+                        _balancePathHolder.Reserve(dynamicActor, currentSlot);
+                        _balancePathHolder.Reserve(dynamicActor, nextSlot.Value);
 
                         var actorView = _grid.ViewAt(currentSlot);
                         _grid.Remove(currentSlot);

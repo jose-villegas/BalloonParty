@@ -25,7 +25,7 @@ namespace BalloonParty.Tests.Slots
             _config.SlotSeparation.Returns(new Vector2(1f, 0.85f));
             _config.SlotsOffset.Returns(new Vector2(2.5f, 4f));
 
-            _grid = new SlotGrid(_config);
+            _grid = new SlotGrid(_config, new BalancePathHolder());
         }
 
         [Test]

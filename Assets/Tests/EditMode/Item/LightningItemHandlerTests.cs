@@ -30,7 +30,7 @@ namespace BalloonParty.Tests.Item
             gameConfig.SlotSeparation.Returns(new Vector2(1f, 0.85f));
             gameConfig.SlotsOffset.Returns(new Vector2(2.5f, 4f));
 
-            _grid = new SlotGrid(gameConfig);
+            _grid = new SlotGrid(gameConfig, new BalancePathHolder());
 
             _itemConfig = ScriptableObject.CreateInstance<ItemConfiguration>();
             var lightningSettings = CreateItemSettings(ItemType.Lightning, damage: 1);

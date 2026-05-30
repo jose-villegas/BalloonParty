@@ -10,6 +10,7 @@ namespace BalloonParty.Slots.Grid
 {
     internal class SlotGrid
     {
+        private readonly BalancePathHolder _balancePathHolder;
         private readonly IGameConfiguration _config;
         private readonly Subject<SlotGridChangedEvent> _onChanged = new();
         private readonly IWriteableSlotActor[,] _slots;
@@ -19,9 +20,10 @@ namespace BalloonParty.Slots.Grid
         public int Columns => _slots.GetLength(0);
         public int Rows => _slots.GetLength(1);
 
-        public SlotGrid(IGameConfiguration config)
+        public SlotGrid(IGameConfiguration config, BalancePathHolder balancePathHolder)
         {
             _config = config;
+            _balancePathHolder = balancePathHolder;
             _slots = new IWriteableSlotActor[config.SlotsSize.x, config.SlotsSize.y];
             _views = new ISlotActorView[config.SlotsSize.x, config.SlotsSize.y];
         }
@@ -124,6 +126,13 @@ namespace BalloonParty.Slots.Grid
                     Debug.LogWarning(
                         $"SlotGrid.ComputePath: slot ({col},{row}) is not traversable. " +
                         "Path passes through it — rerouting not yet implemented (Phase 9).");
+                }
+
+                if (inBounds && _balancePathHolder.IsInTransit(col, row))
+                {
+                    Debug.LogWarning(
+                        $"SlotGrid.ComputePath: slot ({col},{row}) is in-transit from a balance move. " +
+                        "Path crosses a relocating balloon — rerouting not yet implemented (Phase 9).");
                 }
 
                 path.Add(IndexToWorldPosition(new Vector2Int(col, row)));

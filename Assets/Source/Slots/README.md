@@ -61,7 +61,7 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IPa
 
 | File / Folder | What it does |
 |---|---|
-| `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView` — core grid data structure (namespace `BalloonParty.Slots.Grid`) |
+| `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView`, `BalancePathHolder` — core grid data structure and balance transit tracking (namespace `BalloonParty.Slots.Grid`) |
 | `Actor/` | Core actor interfaces, identity enum, static actor implementation, and hit controller — `ISlotActor`, `IWriteableSlotActor`, `IDynamicSlotActor`, `IWriteableDynamicSlotActor`, `ISlotActorView`, `SlotActorKind`, `StaticActorModel`, `StaticActorView`, `StaticActorPoolChannel`, `StaticActorSettings`, `StaticActorSpawner`, `GridActorHitController` (namespace `BalloonParty.Slots.Actor`) |
 | `Actor/Archetype/` | Concrete grid actor models — `PuffObstacleModel`, `BushObstacleModel` (structural; no hit response), `DeflectorActorModel`, `AbsorberActorModel` (indestructible hitables), `GatekeeperActorModel` (durability-based column blocker), `GridActorView`, `GridActorPoolChannel`, `GridActorType` |
 | `Capabilities/` | Optional capability interfaces — `IHasColor`, `IPaintable`, `IHasScore`, `IHasScoreColor`, `IHasNudge`, `IHasItemSlot`, `IHitable`, `IHasDurability`, `IPassThrough`, `HitOutcome`, `DamageContext`, `DamageFlags`, `ScoreAttribution` (namespace `BalloonParty.Slots.Capabilities`) |
@@ -81,7 +81,13 @@ The grid is a two-dimensional space of slots arranged in a staggered pattern (od
 
 `IsTraversable(col, row)` returns true if the slot is empty or the occupant implements `IPassThrough` — used by `ComputePath` to build spawn animation waypoints.
 
-`ComputePath(source, target)` returns world-space waypoints along the straight-line grid path between two slot indices. Either endpoint may be outside grid bounds. Non-traversable in-bounds slots emit a warning; rerouting is deferred.
+`ComputePath(source, target)` returns world-space waypoints along the straight-line grid path between two slot indices. Either endpoint may be outside grid bounds. Non-traversable in-bounds slots and in-transit balance slots emit warnings; rerouting is deferred.
+
+## Balance Path Holder
+
+`BalancePathHolder` tracks grid slots that are in-transit due to balance animations. When the balancer relocates a balloon from slot A to slot B, both A and B are reserved as in-transit under that actor. This lets `ComputePath` warn when a spawn animation path crosses a slot that a balance animation is currently traversing — even if the grid data already reflects the post-balance state.
+
+Transit slots are tracked per-actor and released via `Release(actor)` when the balance animation's `OnComplete` fires. This means transit data persists across multiple balance passes — a second balance triggered after spawning does not erase transit from the first balance's still-running animations.
 
 ## Spawner Coordination
 
@@ -110,10 +116,10 @@ Spawners are injected as `IEnumerable<IGridSpawner>` via VContainer's collection
 
 ## Interactions
 
-- **BalloonSpawner** — calls `Place` for each new balloon; uses `ComputePath` for spawn animation waypoints; skips already-occupied slots in `PopulateInitialGrid`
+- **BalloonSpawner** — calls `Balance()` once before all line spawns so existing balloons consolidate upward first; then calls `Place` for each new balloon into remaining empty slots; uses `ComputePath` for spawn animation waypoints; publishes `BalanceBalloonsMessage` after spawning for a final settling pass
 - **StaticActorSpawner** — calls `Place` for each static actor at game start using `AllEmptySlots`
 - **BalloonController** — calls `Remove` when a balloon is popped; subscribes to `ActorHitMessage`
-- **BalloonBalancer** — reads occupancy to find gaps; skips `Static` actors (or actors that are not `IDynamicSlotActor`); calls `Remove` + `Place` to relocate dynamic actors; uses `ViewAt` to reach views for animation
+- **BalloonBalancer** — reads occupancy to find gaps; skips `Static` actors (or actors that are not `IDynamicSlotActor`); calls `Remove` + `Place` to relocate dynamic actors; uses `ViewAt` to reach views for animation. `Balance()` is `internal` for synchronous pre-spawn consolidation
 - **NudgeService** — uses `GetNeighbors` and `IndexToWorldPosition` to direct nudge animations; filters by `IHasNudge`
 - **PaintItemHandler** — uses `HexNeighborIndices`; casts `At()` result to `IPaintable` for painting
 - **IGameConfiguration** — provides `SlotsSize`, `SlotSeparation`, `SlotsOffset` for grid construction and position calculations

@@ -85,6 +85,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance(_scoreTrailPrefab);
             builder.RegisterInstance(new StaticActorSettings(_staticActorPrefab));
 
+            builder.Register<BalancePathHolder>(Lifetime.Singleton);
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.Register<PoolManager>(Lifetime.Singleton);
             builder.Register<PauseService>(Lifetime.Singleton);
@@ -92,7 +93,7 @@ namespace BalloonParty.Game
             builder.Register<ColorStreakTracker>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.RegisterComponentInHierarchy<SlotGridView>();
 
-            builder.RegisterEntryPoint<BalloonBalancer>();
+            builder.RegisterEntryPoint<BalloonBalancer>().AsSelf();
             builder.RegisterEntryPoint<NudgeService>();
             builder.RegisterEntryPoint<GridActorHitController>();
             builder.RegisterInstance<IReadyGate>(new NavigationReadyGate(NavigationState.Game));

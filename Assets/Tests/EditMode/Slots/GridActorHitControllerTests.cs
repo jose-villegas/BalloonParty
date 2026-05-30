@@ -25,7 +25,7 @@ namespace BalloonParty.Tests.Slots
             config.SlotSeparation.Returns(new Vector2(1f, 1f));
             config.SlotsOffset.Returns(Vector2.zero);
 
-            _grid = new SlotGrid(config);
+            _grid = new SlotGrid(config, new BalancePathHolder());
             _controller = new GridActorHitController(
                 Substitute.For<MessagePipe.ISubscriber<ActorHitMessage>>(),
                 _grid);
