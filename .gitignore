@@ -60,3 +60,7 @@ crashlytics-build.properties
 
 .idea
 UserSettings
+
+# Doxygen generated output (rebuilt by CI)
+Docs/doxygen/
+Docs/doxygen-default.css

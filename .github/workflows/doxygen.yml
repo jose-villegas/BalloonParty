@@ -1,0 +1,62 @@
+name: Deploy Doxygen to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'Assets/Source/**'
+      - 'Docs/diagrams/**'
+      - 'Docs/doxygen-custom.css'
+      - 'Docs/doxygen-header.html'
+      - 'Docs/doxygen-footer.html'
+      - 'Doxyfile'
+      - '.github/workflows/doxygen.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install Doxygen & Graphviz
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y doxygen graphviz
+
+      - name: Render Graphviz diagrams
+        run: |
+          cd Docs/diagrams
+          for f in *.dot; do
+            dot -Tsvg "$f" -o "${f%.dot}.svg"
+          done
+
+      - name: Generate Doxygen
+        run: doxygen Doxyfile
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: Docs/doxygen/html
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
