@@ -8,4 +8,6 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_grid_actor_expansion
 - @subpage plan_grid_actor_foundation
 - @subpage plan_content_production
+- @subpage plan_future_ideas
+
 

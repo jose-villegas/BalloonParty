@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: -8564703341843647150}
   - component: {fileID: 4547613607917452804}
   m_Layer: 0
-  m_Name: StaticTest
+  m_Name: Puff
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

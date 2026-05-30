@@ -157,23 +157,6 @@ Soap Cluster is translucent/iridescent, lets the projectile pass through.
       at the removed bubble's world position; `PSVFX_SoapClusterBurst` — larger multi-ring final pop.
       Not blocking; game plays correctly without them.
 
-**Future idea (Phase 9) — Cluster Merge:**
-Adjacent Soap Cluster balloons merge when nudged together or when proximity drops below a
-threshold. The merged cluster's `HitsRemaining` = sum of both (capped at 5); `_BubbleCount`
-transitions to the new count via a merge animation (two soap-film rings flowing into each
-other). One `IBalloonModel` survives; the other is returned to the pool. Scoring angle:
-merge triggers a bonus payout (`mergedHits × baseScore`), creating a risk/reward dynamic —
-letting clusters grow is tempting but reduces future individual scoring opportunities.
-Needs: neighbor query post-nudge, `ClusterMergeMessage`, merge VFX, and a `BubblePopController`
-that knows which bubble index was added/removed for the transition animation.
-
-**Future idea (Phase 9) — Cluster Merge:**
-Piercing item (Bomb, Laser) can pop it.
-
-**Art direction:** Heavier, more opaque than regular balloons — implies "this won't
-move easily". Could be metallic, stone-textured, or wrapped in thorns. Park theme
-suggests a **knotted/tied-off balloon** with thick rubber texture, or a **stone balloon**
-(floaty but clearly different weight class).
 
 **Scoring design — "inherits killer's color":**
 Destroying an Unbreakable costs an item — the opportunity cost justifies a high score
@@ -203,27 +186,6 @@ and stores no color state.
 - [x] **Code — `IHasScore` on `UnbreakableBalloonModel`** — reads `ScoreValue` from config
 - [x] **Code — `IHasScoreColor` on `UnbreakableBalloonModel`** — `ResolveScoreAttribution` appends `(context.SourceColorId, scoreValue)`; mode `Inherited`
 
-**Future idea (Phase 9) — Unbreakable Roam:**
-Before the normal balance pass runs, each Unbreakable balloon picks a random empty slot
-on the grid and teleports (or animates) to it. Then the standard balance algorithm
-resumes as normal, settling everything else around the Unbreakable's new position.
-
-This prevents Unbreakables from always drifting to the top of the grid (since they're
-never popped, they accumulate at the highest rows after repeated balance passes). The
-random repositioning reinforces the "autonomous robot" personality — it feels alive and
-unpredictable, occupying different columns each turn.
-
-Implementation sketch:
-- New interface `IPreBalanceRelocatable` — marker on models that opt into pre-balance
-  random relocation (only `UnbreakableBalloonModel` initially)
-- `BalloonBalancer.Balance()` gets a pre-pass: iterate all grid slots, collect actors
-  implementing `IPreBalanceRelocatable`, for each one pick a random slot from
-  `SlotGrid.AllEmptySlots()`, remove from current slot, place at new slot, and record
-  the move as a path segment for animation
-- The relocation animation plays first (or as part of the same batch); then the normal
-  balance loop runs and may move other actors that became unbalanced by the relocation
-- Config knob on `BalloonsConfiguration` entry: `bool RelocatesOnBalance` — so the
-  behaviour can be toggled per balloon type without code changes
 
 ---
 

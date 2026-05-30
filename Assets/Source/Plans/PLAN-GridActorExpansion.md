@@ -48,18 +48,6 @@ implement. They are the building blocks the procedural algorithm needs.
 | Tough | `ToughBalloonModel` | Deflect × N-1 → Pop | N | ❌ | Hard outer shell; not paintable |
 | Unbreakable | `UnbreakableBalloonModel` | Deflect always | ∞ | ❌ | Permanent obstacle; no `IHasDurability` |
 
-**Not yet designed — Phase 9 consideration:**
-- *Chain* — pops adjacent same-color balloons when destroyed; needs neighbor query at pop time
-- *Ghost* — `PassThrough` always (projectile travels through), pops after N passes
-- *Soap Cluster merge* — two adjacent Soap Cluster balloons merge into a single larger cluster
-  when nudged together or when their world positions come within a proximity threshold.
-  Merged cluster gets `HitsRemaining = sum of both` (capped at 5), `_BubbleCount` updates
-  accordingly, and the two separate `IBalloonModel` instances collapse into one (the higher
-  slot survives; the other is returned to the pool).
-  Scoring idea: merge awards bonus points (e.g. `mergedHits × baseScore`), creating a
-  risk/reward trade-off — letting clusters grow costs you future scoring opportunities but
-  yields a burst payout. Needs: neighbor query on nudge completion, a merge message/event,
-  and a merge VFX (two soap-film rings flowing into each other).
 
 ### Grid actor archetypes
 
@@ -91,40 +79,6 @@ and Bush must be separate model classes (`PuffObstacleModel`, `BushObstacleModel
 rather than a single class with a flag. The type IS the capability signal, consistent
 with the rest of the codebase.
 
-**Future extension — `IPassThrough` as a behaviour surface (Phase 9 candidate):**
-
-The current marker interface only answers "can I pass through?". Two natural extensions
-that the actor vocabulary will eventually need:
-
-*Density / passage resistance* — a Puff-like actor could expose a `float Density` (0–1)
-that the animation system uses to modulate travel speed. A thin mist barely slows the
-path; a dense cloud visibly delays it. The interface extension:
-```csharp
-public interface IPassThrough
-{
-    float Density { get; }  // 0 = no resistance, 1 = maximum slow
-}
-```
-The spawn animation driver reads `Density` and scales the DOTween duration multiplier
-for the segment that crosses the slot. No behaviour change to the grid or hit system —
-purely visual pacing.
-
-*Pass-through triggers* — when a balloon's spawn animation crosses a traversable slot,
-the occupant of that slot could react. A new capability interface covers this:
-```csharp
-public interface IOnPassThrough
-{
-    void OnActorPassedThrough(ISlotActor passing);
-}
-```
-Example uses: a **Recolorer** cloud that tints any balloon whose path arcs through it; a
-**PowerUp** cloud that assigns an item to the passing balloon; a **Curse** cloud that
-reduces `HitsRemaining` by 1 on pass. None of these require structural changes to the
-grid or the hit pipeline — `ComputePath` already returns a waypoint sequence, so the
-animation driver just needs to call `OnActorPassedThrough` as each waypoint is reached.
-
-Both extensions are additive — `IPassThrough` stays a marker today and gains members
-(or a companion interface) only when a concrete actor type demands it.
 
 **Rerouting note:** A `Bush` in any computed path currently causes `ComputePath`
 to emit a warning and proceed anyway (Phase 6 decision). Full rerouting — finding a
@@ -139,11 +93,6 @@ path around solid obstacles for both spawn and balance animations — is deferre
   balloons behind it. Pairing a Gatekeeper with Tough or Unbreakable balloons gives the
   procedural algorithm a way to gate difficulty without just increasing density.
 
-**Not yet designed — Phase 9 candidates:**
-- *Recolorer* — static; changes adjacent balloon colors each turn (undermines paint strategy)
-- *Mover* — dynamic; shuffles adjacent balloons to an adjacent empty slot each turn
-- *Spawner* — static; places a new balloon into an adjacent empty slot each turn (fills gaps)
-- *ShieldTower* — static; grants periodic shields to adjacent balloons
 
 ### Hit controller pattern for non-balloon actors
 
