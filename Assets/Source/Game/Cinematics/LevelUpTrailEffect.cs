@@ -1,3 +1,4 @@
+using System;
 using BalloonParty.Display;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
@@ -46,6 +47,7 @@ namespace BalloonParty.Game.Cinematics
         private Vector3 _lastTrailPosition;
         private float _realElapsed;
         private bool _sessionActive;
+        private IDisposable _sessionSubscription;
         private Tween _timeScaleTween;
         private TrailId _tippingTrailId;
         private TrailFlight _trackedFlight;
@@ -57,12 +59,11 @@ namespace BalloonParty.Game.Cinematics
         private void Start()
         {
             _scoredSubscriber.Subscribe(OnScorePoint).AddTo(this);
-            _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
-            _dismissedSubscriber.Subscribe(_ => OnDismissed()).AddTo(this);
         }
 
         private void OnDestroy()
         {
+            DisposeSessionSubscription();
             KillTweens();
 
             if (_director.IsCinematicActive)
@@ -148,6 +149,8 @@ namespace BalloonParty.Game.Cinematics
             _trackedFlight.Transform.GetComponent<FlyingTrail>().DisableMoveTween();
             _trackedFlight.Pause();
 
+            SubscribeForPanIn();
+
             PreparePanIn();
             _director.PlayScene(new CinematicScene(onTick: PanInTick));
         }
@@ -168,15 +171,12 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            _trackedFlight = null;
-            KillTweens();
-            _scoreTrailService.Flights.CompleteAll();
-            _director.CompleteScene();
-            _director.EndCinematic();
+            EndPanIn();
         }
 
         private void OnDismissed()
         {
+            DisposeSessionSubscription();
             _director.BeginCinematic(CinematicState.LevelUpRestore);
             _pauseService.Resume(PauseSource.Cinematic);
             PrepareRestore();
@@ -185,6 +185,7 @@ namespace BalloonParty.Game.Cinematics
 
         private void OnRestoreComplete()
         {
+            Time.timeScale = 1f;
             RestoreCamera();
             _sessionActive = false;
             _director.EndCinematic();
@@ -222,15 +223,9 @@ namespace BalloonParty.Game.Cinematics
                 {
                     _trackedFlight.Complete();
 
-                    // Guard: if DOComplete found no active tweens the arrived
-                    // callback never fired, so force-end the scene here.
                     if (_director.IsScenePlaying)
                     {
-                        _trackedFlight = null;
-                        KillTweens();
-                        _scoreTrailService.Flights.CompleteAll();
-                        _director.CompleteScene();
-                        _director.EndCinematic();
+                        EndPanIn();
                     }
 
                     return;
@@ -357,6 +352,35 @@ namespace BalloonParty.Game.Cinematics
             {
                 _director.CompleteScene();
             }
+        }
+
+        private void SubscribeForPanIn()
+        {
+            DisposeSessionSubscription();
+            _sessionSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
+        }
+
+        private void SubscribeForDismissed()
+        {
+            DisposeSessionSubscription();
+            _sessionSubscription = _dismissedSubscriber.Subscribe(_ => OnDismissed());
+        }
+
+        private void DisposeSessionSubscription()
+        {
+            _sessionSubscription?.Dispose();
+            _sessionSubscription = null;
+        }
+
+        private void EndPanIn()
+        {
+            DisposeSessionSubscription();
+            _trackedFlight = null;
+            KillTweens();
+            _scoreTrailService.Flights.CompleteAll();
+            _director.CompleteScene();
+            _director.EndCinematic();
+            SubscribeForDismissed();
         }
     }
 }
