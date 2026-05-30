@@ -137,10 +137,10 @@ Files</h2></td></tr>
 <tr class="memitem:FrameRateSettings_2Ecs" id="r_FrameRateSettings_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_frame_rate_settings_8cs.html">FrameRateSettings.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md326"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md333"></a>
 Diagnostics</h1>
 <p>Runtime diagnostic tools for performance monitoring and device configuration.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md327"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md334"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -150,7 +150,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">FrameRateSettings</span>  </td><td class="markdownTableBodyNone">MonoBehaviour that sets <span class="tt">Application.targetFrameRate</span> on <span class="tt">Awake</span>. Disables VSync (<span class="tt">vSyncCount = 0</span>) so the target takes effect. Three modes: <b>Default60</b> (fixed 60), <b>MatchDisplay</b> (reads native device refresh rate — 60/90/120 Hz), <b>Custom</b> (exposes a frame rate field, shown conditionally via <span class="tt">[ShowIf]</span>). Default mode is <span class="tt">MatchDisplay</span>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md328"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md335"></a>
 Usage</h1>
 <p>Add both components to a persistent GameObject in the scene. <span class="tt">FrameRateSettings</span> should run on the same object or earlier than any gameplay code — it only needs to execute once in <span class="tt">Awake()</span>.</p>
 <p>In the Editor, changing values in Play mode applies immediately via <span class="tt">OnValidate</span> (<span class="tt">FPSCounter</span> updates live; <span class="tt">FrameRateSettings</span> re-applies the target frame rate). </p>

@@ -1,4 +1,6 @@
-# BalloonParty — Architecture Diagram
+@page architecture BalloonParty — Architecture Diagrams
+
+# BalloonParty — Architecture Diagrams
 
 > Single-page map of systems, data flow, and scope hierarchy.
 > For style rules see `Assets/Source/README.md`. For per-feature details see each folder's `README.md`.

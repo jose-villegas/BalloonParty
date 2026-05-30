@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YcnS/1dTvxU5J0p8AU9atfL0Z5kHOmSYMh0p" crossorigin="anonymous"/>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"/>
-<title>BalloonParty: BalloonParty — Code Style Guide</title>
+<title>BalloonParty: BalloonParty</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="dynsections.js"></script>
 <script type="text/javascript" src="codefolding.js"></script>
@@ -121,608 +121,65 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('index.html',''
 </div>
 
 <div><div class="header">
-  <div class="headertitle"><div class="title"><a class="el" href="namespace_balloon_party.html">BalloonParty</a> — Code Style Guide </div></div>
+  <div class="headertitle"><div class="title"><a class="el" href="namespace_balloon_party.html">BalloonParty</a> </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md__r_e_a_d_m_e"></a></p>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md113"></a>
+BalloonParty</h1>
 <blockquote class="doxtable">
-<p>This document is the authoritative reference for architecture, code standards, and framework usage across <span class="tt">Assets/Source/</span>. All new code must conform to the rules defined here. </p>
+<p>A balloon-popping game built with Unity, VContainer, UniRx, MessagePipe, UniTask, and DOTween. </p>
 </blockquote>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md265"></a>
-Architecture — MVC</h1>
-<p>The codebase follows a strict MVC split enforced at the type level:</p>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md115"></a>
+Documentation</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Layer  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadNone">Rules  </th></tr>
+<th class="markdownTableHeadNone">Page  </th><th class="markdownTableHeadNone">Description  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>Model</b>  </td><td class="markdownTableBodyNone">Plain C# class  </td><td class="markdownTableBodyNone">Holds reactive state (<span class="tt">ReactiveProperty&lt;T&gt;</span>). No Unity dependencies, no <span class="tt">MonoBehaviour</span>.  </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="style_guide.html" title="BalloonParty — Code Style Guide">Code Style Guide</a>  </td><td class="markdownTableBodyNone">Architecture rules, code standards, and framework usage  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>View</b>  </td><td class="markdownTableBodyNone"><span class="tt">MonoBehaviour</span>  </td><td class="markdownTableBodyNone">The only layer that touches Unity APIs (transforms, renderers, UI, physics). Reads model state via UniRx subscriptions. Publishes input/events via MessagePipe.  </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="architecture.html" title="BalloonParty — Architecture Diagrams">Architecture Diagrams</a>  </td><td class="markdownTableBodyNone">Graphviz system maps, data flow, and scope hierarchy  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>Controller</b>  </td><td class="markdownTableBodyNone">Plain C# class  </td><td class="markdownTableBodyNone">Registered via <span class="tt">Register&lt;T&gt;</span> or <span class="tt">RegisterEntryPoint&lt;T&gt;</span>. Uses VContainer lifecycle interfaces (<span class="tt">IStartable</span>, <span class="tt">ITickable</span>, <span class="tt">IFixedTickable</span>) instead of Unity's <span class="tt">Start()</span> / <span class="tt">Update()</span>. No <span class="tt">MonoBehaviour</span>, no <span class="tt">transform</span>.  </td></tr>
+<td class="markdownTableBodyNone"><a class="el" href="plans.html" title="Plans">Plans</a>  </td><td class="markdownTableBodyNone">Working design plans and roadmaps for upcoming features  </td></tr>
 </table>
-<p>When a controller needs engine interaction, split into a thin <b>View</b> (MonoBehaviour) + <b>Controller</b> (plain C# class). Wire them via a child <span class="tt">LifetimeScope</span> on the view's GameObject.</p>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md267"></a>
-Stack</h1>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md117"></a>
+Architecture at a Glance</h2>
+<p><b>Pattern:</b> MVC — Model (plain C#, ReactiveProperty), View (MonoBehaviour, UniRx), Controller (IStartable/ITickable, VContainer DI)</p>
+<p><b>Stack:</b></p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">Library  </th><th class="markdownTableHeadNone">Role  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="https://vcontainer.hadashikick.jp/">VContainer</a>  </td><td class="markdownTableBodyNone">Dependency injection — <span class="tt">LifetimeScope</span>, <span class="tt">[Inject]</span>, <span class="tt">IStartable</span> / <span class="tt">ITickable</span>  </td></tr>
+<td class="markdownTableBodyNone">VContainer  </td><td class="markdownTableBodyNone">Dependency injection, lifetime scopes  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a href="https://github.com/neuecc/UniRx">UniRx</a>  </td><td class="markdownTableBodyNone">Reactive state — <span class="tt">ReactiveProperty&lt;T&gt;</span>, <span class="tt">Subject&lt;T&gt;</span>, <span class="tt">.Subscribe()</span>  </td></tr>
+<td class="markdownTableBodyNone">UniRx  </td><td class="markdownTableBodyNone">Reactive properties, subscriptions  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="https://github.com/Cysharp/MessagePipe">MessagePipe</a>  </td><td class="markdownTableBodyNone">Pub/sub messaging — <span class="tt">IPublisher&lt;T&gt;</span> / <span class="tt">ISubscriber&lt;T&gt;</span>  </td></tr>
+<td class="markdownTableBodyNone">MessagePipe  </td><td class="markdownTableBodyNone">Pub/sub messaging  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><a href="https://github.com/Cysharp/UniTask">UniTask</a>  </td><td class="markdownTableBodyNone">Async — <span class="tt">async UniTask</span>, <span class="tt">async UniTaskVoid</span>, <span class="tt">UniTask.Delay</span>, <span class="tt">UniTask.Yield</span>  </td></tr>
+<td class="markdownTableBodyNone">UniTask  </td><td class="markdownTableBodyNone">Async/await (replaces coroutines)  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><a href="http://dotween.demigiant.com/">DOTween</a>  </td><td class="markdownTableBodyNone">Tweening — animations, sequences, paths  </td></tr>
+<td class="markdownTableBodyNone">DOTween  </td><td class="markdownTableBodyNone">Tween animations  </td></tr>
 </table>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md269"></a>
-Dependency Injection — VContainer</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md270"></a>
-Scopes</h2>
-<p>Each self-contained feature or prefab owns its own child <span class="tt">LifetimeScope</span>. Child scopes inherit all parent registrations automatically.</p>
-<div class="fragment"><div class="line"><span class="comment">// GameLifetimeScope — composition root, runs at -5001</span></div>
-<div class="line">[DefaultExecutionOrder(-5001)]</div>
-<div class="line"><span class="keyword">public</span> <span class="keyword">class </span>GameLifetimeScope : LifetimeScope</div>
-<div class="line">{</div>
-<div class="line">    <span class="keyword">protected</span> <span class="keyword">override</span> <span class="keywordtype">void</span> Configure(IContainerBuilder builder)</div>
-<div class="line">    {</div>
-<div class="line">        builder.Register&lt;SlotGrid&gt;(Lifetime.Singleton);</div>
-<div class="line">        builder.RegisterInstance&lt;IGameConfiguration&gt;(_gameConfigSO);</div>
-<div class="line">        builder.RegisterEntryPoint&lt;BalloonBalancer&gt;();</div>
-<div class="line"> </div>
-<div class="line">        var options = builder.RegisterMessagePipe();</div>
-<div class="line">        builder.RegisterMessageBroker&lt;ActorHitMessage&gt;(options);</div>
-<div class="line">    }</div>
-<div class="line">}</div>
-</div><!-- fragment --><p><b>Current scope hierarchy:</b></p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Scope  </th><th class="markdownTableHeadNone">Base  </th><th class="markdownTableHeadNone">Lives on  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">LaunchLifetimeScope</span>  </td><td class="markdownTableBodyNone"><span class="tt">LifetimeScope</span>  </td><td class="markdownTableBodyNone">Launcher scene root  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">GameLifetimeScope</span>  </td><td class="markdownTableBodyNone"><span class="tt">LifetimeScope</span>  </td><td class="markdownTableBodyNone">Game scene root  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">ThrowerLifetimeScope</span>  </td><td class="markdownTableBodyNone"><span class="tt">LifetimeScope</span>  </td><td class="markdownTableBodyNone">Thrower GameObject  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">ScoreUILifetimeScope</span>  </td><td class="markdownTableBodyNone"><span class="tt">LifetimeScope</span>  </td><td class="markdownTableBodyNone">Score HUD canvas root  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">LevelUpLifetimeScope</span>  </td><td class="markdownTableBodyNone"><span class="tt">LifetimeScope</span>  </td><td class="markdownTableBodyNone">LevelUp popup root  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">ShieldUILifetimeScope</span>  </td><td class="markdownTableBodyNone"><span class="tt">LifetimeScope</span>  </td><td class="markdownTableBodyNone">Shield HUD root  </td></tr>
-</table>
-<blockquote class="doxtable">
-<p><b>Note:</b> Balloon and projectile prefabs no longer use child scopes. Their <span class="tt">[Inject]</span> fields are populated via <span class="tt">InjectingPoolChannel</span> (flat <span class="tt">IObjectResolver.InjectGameObject()</span> without container creation). <span class="tt">BalloonLifetimeScope</span>, <span class="tt">ProjectileLifetimeScope</span>, and <span class="tt">ItemViewScope</span> components remain on prefabs with <span class="tt">autoRun = false</span> — they can be removed from prefabs when convenient. </p>
-</blockquote>
-<p><b>Configuration assets registered in <span class="tt">GameLifetimeScope</span>:</b></p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Asset  </th><th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadNone">Injected as  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">GameConfiguration</span>  </td><td class="markdownTableBodyNone"><span class="tt">ScriptableObject</span>  </td><td class="markdownTableBodyNone"><span class="tt">IGameConfiguration</span> (interface)  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">BalloonsConfiguration</span>  </td><td class="markdownTableBodyNone"><span class="tt">ScriptableObject</span>  </td><td class="markdownTableBodyNone"><span class="tt">BalloonsConfiguration</span> (concrete)  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">GamePalette</span>  </td><td class="markdownTableBodyNone"><span class="tt">ScriptableObject</span>  </td><td class="markdownTableBodyNone"><span class="tt">GamePalette</span> (concrete)  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">GameDisplayConfiguration</span>  </td><td class="markdownTableBodyNone"><span class="tt">ScriptableObject</span>  </td><td class="markdownTableBodyNone"><span class="tt">GameDisplayConfiguration</span> (concrete)  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">ItemConfiguration</span>  </td><td class="markdownTableBodyNone"><span class="tt">ScriptableObject</span>  </td><td class="markdownTableBodyNone"><span class="tt">ItemConfiguration</span> (concrete)  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">FlyingTrail</span>  </td><td class="markdownTableBodyNone">Prefab instance  </td><td class="markdownTableBodyNone"><span class="tt">FlyingTrail</span> (concrete)  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">PauseService</span>  </td><td class="markdownTableBodyNone">Singleton service  </td><td class="markdownTableBodyNone"><span class="tt">PauseService</span> (concrete)  </td></tr>
-</table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md271"></a>
-Instantiating prefabs with child scopes</h2>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Scenario  </th><th class="markdownTableHeadNone">Method  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Prefab has a <span class="tt">LifetimeScope</span> with local registrations  </td><td class="markdownTableBodyNone"><span class="tt">parentScope.CreateChildFromPrefab(prefab)</span>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">Prefab has no <span class="tt">LifetimeScope</span>; single component needs injection  </td><td class="markdownTableBodyNone"><span class="tt">resolver.Instantiate(prefab)</span>  </td></tr>
-</table>
-<p>Never use plain <span class="tt">Object.Instantiate</span> for prefabs with a <span class="tt">LifetimeScope</span> — the scope's <span class="tt">FindParent()</span> races with sibling <span class="tt">Awake()</span> calls and may fail.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md272"></a>
-Eager creation for <span class="tt">RegisterComponentOnNewGameObject</span></h2>
-<p>VContainer singletons are lazy — the GameObject is only created when resolved. Use <span class="tt">RegisterBuildCallback</span> to force creation at scope build time:</p>
-<div class="fragment"><div class="line">builder.RegisterBuildCallback(resolver =&gt; resolver.Resolve&lt;CheatConsoleView&gt;());</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md273"></a>
-Injection timing</h2>
-<p><span class="tt">[Inject]</span> runs during <span class="tt">Build()</span> — inside the scope's <span class="tt">Awake()</span> — <b>before</b> Unity calls <span class="tt">Awake()</span> on the target. Do not rely on <span class="tt">Awake()</span>-initialized fields inside an <span class="tt">[Inject]</span> method.</p>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md275"></a>
-Reactive Programming — UniRx</h1>
-<div class="fragment"><div class="line"><span class="comment">// Observe model state — auto-updates view on change</span></div>
-<div class="line">model.Color.Subscribe(c =&gt; _renderer.color = _config.BalloonColor(c)).AddTo(<span class="keyword">this</span>);</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Pooled views: use CompositeDisposable instead of AddTo(this)</span></div>
-<div class="line"><span class="comment">// AddTo(this) ties disposal to MonoBehaviour destruction, which never fires for pooled objects.</span></div>
-<div class="line"><span class="keyword">private</span> readonly CompositeDisposable _bindDisposables = <span class="keyword">new</span>();</div>
-<div class="line"> </div>
-<div class="line"><span class="keywordtype">void</span> Bind(IBalloonModel model)</div>
-<div class="line">{</div>
-<div class="line">    _bindDisposables.Clear();</div>
-<div class="line">    model.Color.Subscribe(UpdateColor).AddTo(_bindDisposables);</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line"><span class="keywordtype">void</span> OnDespawned() =&gt; _bindDisposables.Clear();</div>
-</div><!-- fragment --><hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md277"></a>
-Messaging — MessagePipe</h1>
-<p>Use MessagePipe for communication between systems that should not hold direct references to one another.</p>
-<div class="fragment"><div class="line"><span class="comment">// Publisher</span></div>
-<div class="line">[Inject] <span class="keyword">private</span> IPublisher&lt;ActorHitMessage&gt; _publisher;</div>
-<div class="line">_publisher.Publish(<span class="keyword">new</span> ActorHitMessage(actor, worldPos, direction));</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Subscriber</span></div>
-<div class="line">[Inject] <span class="keyword">private</span> ISubscriber&lt;ActorHitMessage&gt; _subscriber;</div>
-<div class="line">_subscriber.Subscribe(msg =&gt; OnHit(msg)).AddTo(_disposable);</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md278"></a>
-Message design rules</h2>
+<p><b>Key Systems:</b></p>
 <ul>
-<li><b>Carry relevant data.</b> If a subscriber needs the source object (model, position, etc.), include it in the message struct rather than forcing the subscriber to inject the producer.</li>
-<li><b>Prefer decoupling over direct injection</b> between unrelated systems. A controller should not inject a UI component; instead publish a message that the UI subscribes to independently.</li>
-<li><b>Empty structs are fine</b> for pure signals where no data is needed.</li>
-<li><b>Messages always carry the read-only model interface</b> — never the writable one. Subscribers that need write access downcast explicitly at their own call site.</li>
+<li><b>SlotGrid</b> — 2D grid of actor slots with interface-based occupants</li>
+<li><b>BalloonSpawner</b> — Staged spawning coordinated by <span class="tt">GridSpawnerCoordinator</span></li>
+<li><b>BalloonBalancer</b> — Consolidates grid gaps, transit-aware via <span class="tt">BalancePathHolder</span></li>
+<li><b>ScoreController</b> — Streak tracking, trail orchestration, level-up detection</li>
+<li><b>CinematicDirector</b> — Camera pan-in/restore sequences during level-up</li>
+<li><b>NudgeService</b> — Visual knockback with per-type overrides via <span class="tt">NudgeOverrideResolver</span></li>
+<li><b>PoolManager</b> — <a class="el" href="_effect_pool_channel_8cs.html#aef19bab18b9814edeef255c43e4f6bbc">Object</a> pooling with <span class="tt">PoolChannel&lt;T&gt;</span> and <span class="tt">CompositeDisposable</span> lifecycle</li>
 </ul>
 <hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md280"></a>
-Async — UniTask</h1>
-<p>All async work uses UniTask. No <span class="tt">StartCoroutine</span> / <span class="tt">IEnumerator</span> in new code.</p>
-<div class="fragment"><div class="line"><span class="comment">// Fire-and-forget (MonoBehaviour)</span></div>
-<div class="line"><span class="keyword">private</span> async UniTaskVoid DoSomethingAsync()</div>
-<div class="line">{</div>
-<div class="line">    await UniTask.Delay(500, cancellationToken: destroyCancellationToken);</div>
-<div class="line">    await UniTask.WaitUntil(() =&gt; _ready, cancellationToken: destroyCancellationToken);</div>
-<div class="line">    await UniTask.Yield(cancellationToken: destroyCancellationToken);</div>
-<div class="line">}</div>
-<div class="line">SomeAsync().Forget(); <span class="comment">// required at call site</span></div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Fire-and-forget (plain C# class — manual CancellationTokenSource)</span></div>
-<div class="line"><span class="keyword">private</span> readonly CancellationTokenSource _cts = <span class="keyword">new</span>();</div>
-<div class="line">SpawnAsync(_cts.Token).Forget();</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Paused-game delays (Time.timeScale = 0)</span></div>
-<div class="line">await UniTask.Delay(1000, ignoreTimeScale: <span class="keyword">true</span>, cancellationToken: destroyCancellationToken);</div>
-</div><!-- fragment --><p><b>Cancellation:</b></p><ul>
-<li>MonoBehaviours: use <span class="tt">destroyCancellationToken</span> — auto-cancels on destroy.</li>
-<li>Plain C# classes: use a <span class="tt">CancellationTokenSource</span> with manually controlled lifetime.</li>
-<li>Child components of pooled objects: <span class="tt">destroyCancellationToken</span> fires on actual destruction only (not on pool deactivation), so it is safe to use on pool-child MonoBehaviours.</li>
-</ul>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md282"></a>
-Navigation State</h1>
-<p>App-wide navigation is tracked via a static <span class="tt"><a class="el" href="_level_up_trail_effect_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a></span> class (in <span class="tt">Shared/GameState/</span>) holding a <span class="tt">ReactiveProperty&lt;NavigationState&gt;</span>. Any system can observe or transition the current state without DI wiring across scene boundaries.</p>
-<div class="fragment"><div class="line"><span class="keyword">using </span><a class="code hl_namespace" href="namespace_balloon_party_1_1_shared_1_1_game_state.html">BalloonParty.Shared.GameState</a>;</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Observe</span></div>
-<div class="line"><a class="code hl_typedef" href="_level_up_trail_effect_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a>.Current.Where(s =&gt; s == NavigationState.Game).Subscribe(...);</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Transition</span></div>
-<div class="line"><a class="code hl_typedef" href="_level_up_trail_effect_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a>.TransitionTo(NavigationState.LevelUp);</div>
-<div class="ttc" id="a_level_up_trail_effect_8cs_html_af53eecbc68a3351b9ae14d787d8c03fd"><div class="ttname"><a href="_level_up_trail_effect_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a></div><div class="ttdeci">BalloonParty.Shared.GameState.Navigation Navigation</div><div class="ttdef"><b>Definition</b> LevelUpTrailEffect.cs:16</div></div>
-<div class="ttc" id="anamespace_balloon_party_1_1_shared_1_1_game_state_html"><div class="ttname"><a href="namespace_balloon_party_1_1_shared_1_1_game_state.html">BalloonParty.Shared.GameState</a></div><div class="ttdef"><b>Definition</b> Cinematic.cs:5</div></div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md283"></a>
-States</h2>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">State  </th><th class="markdownTableHeadNone">Meaning  </th><th class="markdownTableHeadNone">Set by  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">Launch</span>  </td><td class="markdownTableBodyNone">App startup, Launcher UI visible  </td><td class="markdownTableBodyNone">Default (initial value)  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">Game</span>  </td><td class="markdownTableBodyNone">Active gameplay, thrower and balloons active  </td><td class="markdownTableBodyNone"><span class="tt">NavigationTrigger</span> on the Launch play button  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">LevelUp</span>  </td><td class="markdownTableBodyNone">Level-up popup visible, game paused  </td><td class="markdownTableBodyNone"><span class="tt">ScoreController</span> on level threshold  </td></tr>
-</table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md284"></a>
-Scene preloading flow</h2>
-<ol type="1">
-<li><b>Launcher <span class="tt">Start</span></b> — <span class="tt">SceneTransition</span> loads the Game scene additively with rendering suppressed (layer-based camera isolation + <span class="tt">SuppressRendering</span>). VContainer resolves, pools pre-warm asynchronously.</li>
-<li><b>Player taps Play</b> — <span class="tt">NavigationTrigger.Transition()</span> sets state to <span class="tt">Game</span>. <span class="tt">SceneTransition.Load()</span> restores rendering and unloads the Launcher.</li>
-<li><b><span class="tt">GridSpawnerCoordinator</span></b> — waits on <span class="tt">NavigationReadyGate(Game)</span> (<span class="tt">IReadyGate</span>), then runs all <span class="tt">IGridSpawner</span> implementations in <span class="tt">SpawnStage</span> order: <span class="tt">StaticActors(0)</span> → <span class="tt">DynamicActors(50)</span> → <span class="tt">BalloonActors(100)</span>. Spawners within the same stage run in parallel via <span class="tt">UniTask.WhenAll</span>.</li>
-<li><b><span class="tt">ThrowerController</span></b> — observes state reactively; plays entrance animation on <span class="tt">Game</span>, blocks input during <span class="tt">LevelUp</span>.</li>
-</ol>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md285"></a>
-Editor standalone play</h2>
-<p><span class="tt">EditorNavigationBootstrap</span> (editor-only) auto-transitions to <span class="tt">Game</span> when playing a scene directly, but only if the scene is the active scene (inert during additive preloading).</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md286"></a>
-Cinematic State</h1>
-<p>A static <span class="tt">Cinematic</span> class (in <span class="tt">Shared/GameState/</span>) tracks whether a cinematic sequence is playing. Mirrors the <span class="tt"><a class="el" href="_level_up_trail_effect_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a></span> pattern — static reactive property, no DI required. Services that need to pause/resume work during cinematics implement <span class="tt">ICinematicAware</span> and register with <span class="tt">Cinematic</span>.</p>
-<div class="fragment"><div class="line"><span class="keyword">using </span><a class="code hl_namespace" href="namespace_balloon_party_1_1_shared_1_1_game_state.html">BalloonParty.Shared.GameState</a>;</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Query</span></div>
-<div class="line"><span class="keywordflow">if</span> (Cinematic.IsPlaying) <span class="keywordflow">return</span>;</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Observe</span></div>
-<div class="line">Cinematic.Current.Where(s =&gt; s == CinematicState.None).Subscribe(...);</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Control (from the cinematic owner)</span></div>
-<div class="line">Cinematic.Begin(CinematicState.LevelUpPanIn);</div>
-<div class="line">Cinematic.End();</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md287"></a>
-ICinematicAware</h2>
-<p>Services that should react to cinematic state changes implement <span class="tt">ICinematicAware</span>:</p>
-<div class="fragment"><div class="line"><span class="keyword">internal</span> <span class="keyword">class </span>MyService : ICinematicAware</div>
-<div class="line">{</div>
-<div class="line">    <span class="keyword">public</span> <span class="keywordtype">void</span> Start() =&gt; Cinematic.Register(<span class="keyword">this</span>);</div>
-<div class="line">    <span class="keyword">public</span> <span class="keywordtype">void</span> Dispose() =&gt; Cinematic.Unregister(<span class="keyword">this</span>);</div>
-<div class="line"> </div>
-<div class="line">    <span class="keyword">public</span> <span class="keywordtype">void</span> OnCinematicBegin(CinematicState state) { <span class="comment">/* pause work */</span> }</div>
-<div class="line">    <span class="keyword">public</span> <span class="keywordtype">void</span> OnCinematicEnd() { <span class="comment">/* resume work */</span> }</div>
-<div class="line">}</div>
-</div><!-- fragment --><p><span class="tt">Cinematic.Begin</span> / <span class="tt">End</span> call all registered listeners synchronously, so the cinematic owner can immediately follow up (e.g., resume a specific trail).</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md288"></a>
-States</h2>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">State  </th><th class="markdownTableHeadNone">Meaning  </th><th class="markdownTableHeadNone">Set by  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">None</span>  </td><td class="markdownTableBodyNone">No cinematic active  </td><td class="markdownTableBodyNone">Default; <span class="tt">CinematicDirector.EndCinematic</span>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">LevelUpPanIn</span>  </td><td class="markdownTableBodyNone">Pan-in phase — camera tracks tipping trail, which slows via curve-modulated progress  </td><td class="markdownTableBodyNone"><span class="tt">CinematicDirector.BeginCinematic</span> (called by <span class="tt">LevelUpTrailEffect</span> at trail spawn)  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">LevelUpRestore</span>  </td><td class="markdownTableBodyNone">Restore phase — tweens timeScale and camera back to base  </td><td class="markdownTableBodyNone"><span class="tt">CinematicDirector.BeginCinematic</span> (called by <span class="tt">LevelUpTrailEffect</span> on popup dismiss)  </td></tr>
-</table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md289"></a>
-Pause Integration</h2>
-<p><span class="tt">PauseService</span> (in <span class="tt">Shared/Pause/</span>) provides logical pause coordination independently of <span class="tt">Time.timeScale</span>. It is a singleton registered in <span class="tt">GameLifetimeScope</span>.</p>
-<div class="fragment"><div class="line"><span class="keyword">using </span><a class="code hl_namespace" href="namespace_balloon_party_1_1_shared_1_1_pause.html">BalloonParty.Shared.Pause</a>;</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Signal</span></div>
-<div class="line">_pauseService.Pause(<a class="code hl_enumeration" href="namespace_balloon_party_1_1_shared_1_1_pause.html#ab006bd98ba69f3aaa2ba396e176136b5">PauseSource</a>.Cinematic);</div>
-<div class="line">_pauseService.Resume(<a class="code hl_enumeration" href="namespace_balloon_party_1_1_shared_1_1_pause.html#ab006bd98ba69f3aaa2ba396e176136b5">PauseSource</a>.Cinematic);</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Query</span></div>
-<div class="line"><span class="keywordflow">if</span> (_pauseService.IsAnyPaused.Value) <span class="keywordflow">return</span>;</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// React via MessagePipe</span></div>
-<div class="line">_resumedSubscriber.Subscribe(msg =&gt; { <span class="keywordflow">if</span> (msg.Source == <a class="code hl_enumeration" href="namespace_balloon_party_1_1_shared_1_1_pause.html#ab006bd98ba69f3aaa2ba396e176136b5">PauseSource</a>.Cinematic) ResumeWork(); });</div>
-<div class="ttc" id="anamespace_balloon_party_1_1_shared_1_1_pause_html"><div class="ttname"><a href="namespace_balloon_party_1_1_shared_1_1_pause.html">BalloonParty.Shared.Pause</a></div><div class="ttdef"><b>Definition</b> PausedMessage.cs:2</div></div>
-<div class="ttc" id="anamespace_balloon_party_1_1_shared_1_1_pause_html_ab006bd98ba69f3aaa2ba396e176136b5"><div class="ttname"><a href="namespace_balloon_party_1_1_shared_1_1_pause.html#ab006bd98ba69f3aaa2ba396e176136b5">BalloonParty.Shared.Pause.PauseSource</a></div><div class="ttdeci">PauseSource</div><div class="ttdef"><b>Definition</b> PauseSource.cs:4</div></div>
-</div><!-- fragment --><p>During a level-up cinematic:</p><ul>
-<li><b>Projectile</b> checks <span class="tt">PauseService.IsAnyPaused</span> in <span class="tt">FixedUpdate</span>/<span class="tt">OnTriggerEnter2D</span> to freeze movement.</li>
-<li><b>Trail spawning</b> is not explicitly gated — the projectile freeze prevents new pops, so no new trails are queued during the cinematic.</li>
-<li><b>Balloon animators/particles</b> are frozen via <span class="tt">Time.timeScale = 0</span> when the popup shows (visual freeze, separate from logical pause).</li>
-<li><b>Score trails</b> (non-tipping) are never paused — they fly at normal speed during the cinematic.</li>
-<li><b>Glow trails</b> — after the popup's appear animation finishes, <span class="tt">LevelUpPopUp</span> publishes <span class="tt">LevelUpGlowTrailsMessage</span> to drain each <span class="tt">ColorProgressBar</span> slider in sync, then spawns decorative <span class="tt">FlyingTrail</span> orbs in unscaled time from bars to the glow fill. These fly independently of <span class="tt">Time.timeScale</span> and <span class="tt">PauseService</span>.</li>
-</ul>
-<p>See <span class="tt"><a class="el" href="_shared_2_pause_2_r_e_a_d_m_e_8md.html">Shared/Pause/README.md</a></span> for full documentation.</p>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md291"></a>
-Object Pooling</h1>
-<p>All pooling goes through <span class="tt">PoolManager</span> (singleton) and <span class="tt">PoolChannel&lt;TItem&gt;</span>. See <span class="tt"><a class="el" href="_shared_2_pool_2_r_e_a_d_m_e_8md.html">Shared/Pool/README.md</a></span> for full documentation.</p>
-<p>Key rules:</p><ul>
-<li><b>The consumer that calls <span class="tt">Get()</span> is responsible for calling <span class="tt">Return()</span></b> — items never self-return.</li>
-<li>Items signal completion via a callback passed into their <span class="tt">Play()</span> or <span class="tt">Setup()</span> call; the consumer bundles <span class="tt">Return()</span> into that callback.</li>
-<li>For effect VFX use <span class="tt">EffectView</span> / <span class="tt">EffectPoolChannel</span>. For particle-only effects use <span class="tt">PoolableParticle</span> / <span class="tt">ParticlePoolChannel</span>.</li>
-<li>Pooled <span class="tt">MonoBehaviour</span>s use <span class="tt">CompositeDisposable</span> instead of <span class="tt">AddTo(this)</span> for subscriptions — cleared on <span class="tt">OnDespawned()</span>.</li>
-<li><span class="tt">OnDespawned()</span> must call <span class="tt">DOTween.Kill(transform)</span> and <span class="tt">tweenTracker.Kill()</span> to clean up any in-flight tweens before the instance is reused.</li>
-</ul>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md293"></a>
-Configuration — Single Source of Truth</h1>
-<p>Game data is split across focused ScriptableObjects, each registered as a singleton in <span class="tt">GameLifetimeScope</span> and injected wherever needed.</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Asset  </th><th class="markdownTableHeadNone">Interface / Type  </th><th class="markdownTableHeadNone">What it holds  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">GameConfiguration</span>  </td><td class="markdownTableBodyNone"><span class="tt">IGameConfiguration</span>  </td><td class="markdownTableBodyNone">Projectile settings, slot dimensions, timing values, prediction trace params, score trail timing, score points scatter delay, points formula  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">BalloonsConfiguration</span>  </td><td class="markdownTableBodyNone"><span class="tt">BalloonsConfiguration</span>  </td><td class="markdownTableBodyNone">Balloon prefab entries (weight, cap, nudge overrides, pop VFX), spawn line counts, animation range, balance delay, global nudge defaults  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">GridActorConfiguration</span>  </td><td class="markdownTableBodyNone"><span class="tt">GridActorConfiguration</span>  </td><td class="markdownTableBodyNone">Grid actor prefab entries (weight, max-count cap, <span class="tt">HitsToPop</span> for Gatekeeper) — read by procedural grid spawner (Phase 8.3)  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">GamePalette</span>  </td><td class="markdownTableBodyNone"><span class="tt">GamePalette</span>  </td><td class="markdownTableBodyNone">Named color entries — the single source for all balloon colors  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">GameDisplayConfiguration</span>  </td><td class="markdownTableBodyNone"><span class="tt">GameDisplayConfiguration</span>  </td><td class="markdownTableBodyNone">Aspect-ratio → orthographic-size lookup for camera sizing  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">ItemConfiguration</span>  </td><td class="markdownTableBodyNone"><span class="tt">ItemConfiguration</span>  </td><td class="markdownTableBodyNone">Per-item tuning — one <span class="tt">ItemSettings</span> entry per <span class="tt">ItemType</span>: activation frequency, weight, max cap, physics params, effect prefab, damage (damaging types only), paint flight curves/duration/arc/scale  </td></tr>
-</table>
-<p>Rules:</p><ul>
-<li><b>Never hardcode</b> values that exist in a configuration asset.</li>
-<li><b>Never duplicate</b> configuration data via <span class="tt">[SerializeField]</span> on individual systems. If a system needs a value, it injects the relevant configuration object.</li>
-<li><span class="tt">IGameConfiguration</span> is the read-only interface for <span class="tt">GameConfiguration</span>; all other SOs are injected by their concrete type.</li>
-<li>New configuration fields are added to the appropriate asset type. If a new domain of settings grows large enough to stand alone, extract it into its own ScriptableObject rather than bloating an existing one.</li>
-</ul>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md295"></a>
-Animation</h1>
-<p>All tween animations must reproduce the authored values <b>exactly</b>:</p>
-<ol type="1">
-<li>Read the target tween values from <span class="tt">IGameConfiguration</span> — never hardcode durations or distances.</li>
-<li>Match the ease type. If no <span class="tt">SetEase</span> is specified, DOTween's default (<span class="tt">InOutQuad</span>) applies — do not add eases that weren't there.</li>
-<li><span class="tt">Time.timeScale = 0</span> freezes DOTween and physics. Animators that must play while paused need <span class="tt">updateMode = AnimatorUpdateMode.UnscaledTime</span>. UniTask delays that must resolve during pause need <span class="tt">ignoreTimeScale: true</span>.</li>
-</ol>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md297"></a>
-Unity Project Settings</h1>
-<p><b>Never edit project settings files (<span class="tt">TagManager.asset</span>, <span class="tt">ProjectSettings/*.asset</span>) outside the Unity Editor.</b> These files contain internal IDs and cross-references that Unity manages. All changes to sorting layers, tags, and physics layers must be made through the Unity Editor's Project Settings window.</p>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md299"></a>
-Code Quality Constraints</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md300"></a>
-Comments</h2>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md119"></a>
+Quick Links</h2>
 <ul>
-<li><b>Only comment the <em>why***, never the *what</em> or <em>how</em>. If the code needs a comment to explain what it does, rename or refactor instead.</b></li>
-<li><b>**No redundant comments</b> — avoid <span class="tt">// inject dependencies</span>, <span class="tt">// constructor</span>, <span class="tt">// update position</span>.</li>
-<li><b>No block comment headers</b> (e.g. <span class="tt">// ====== BalloonModel ======</span>).</li>
-<li>XML doc comments (<span class="tt">/// &lt;summary&gt;</span>) only on public API surfaces that are non-obvious to a consumer.</li>
+<li><b>Namespaces</b> — Browse by namespace in the sidebar</li>
+<li><b>Classes</b> — Full class list with inheritance diagrams</li>
+<li><b>Files</b> — Source file browser with per-folder READMEs </li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md301"></a>
-Naming &amp; Readability</h2>
-<ul>
-<li>Code must be <b>self-explanatory through naming, namespaces, and context</b>.</li>
-<li>Prefer longer, descriptive names over short ambiguous ones (<span class="tt">FindOptimalEmptySlot</span> &gt; <span class="tt">GetSlot</span>).</li>
-<li>Namespaces must reflect folder structure (<span class="tt"><a class="el" href="namespace_balloon_party_1_1_balloon_1_1_model.html">BalloonParty.Balloon.Model</a></span>, <span class="tt"><a class="el" href="namespace_balloon_party_1_1_slots.html">BalloonParty.Slots</a></span>, etc.).</li>
-<li>Animator parameter names are cached as <span class="tt">private static readonly int Param = Animator.StringToHash("Param")</span> — never pass magic strings to <span class="tt">SetTrigger</span> / <span class="tt">SetBool</span>.</li>
-<li><p class="startli">Physics layer masks are cached as <span class="tt">private static readonly int Layer = LayerMask.NameToLayer("Name")</span> — never looked up per-frame. <b>Exception:</b> in <span class="tt">MonoBehaviour</span> subclasses, <span class="tt">NameToLayer</span> / <span class="tt">GetMask</span> cannot be called from a static field initializer (it runs in the static constructor, before the engine is ready). Use a lazy-init sentinel instead — initialize to <span class="tt">-1</span> in the field declaration and resolve once in <span class="tt">Awake</span>:</p>
-<div class="fragment"><div class="line"><span class="comment">// MonoBehaviour — lazy-init (only safe option)</span></div>
-<div class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keywordtype">int</span> BalloonsLayer = -1;</div>
-<div class="line"><span class="keyword">private</span> <span class="keywordtype">void</span> Awake()</div>
-<div class="line">{</div>
-<div class="line">    <span class="keywordflow">if</span> (BalloonsLayer == -1) BalloonsLayer = LayerMask.NameToLayer(<span class="stringliteral">&quot;Balloons&quot;</span>);</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line"><span class="comment">// Plain C# class — static readonly is fine, no MonoBehaviour static-constructor restriction</span></div>
-<div class="line"><span class="keyword">private</span> <span class="keyword">static</span> readonly <span class="keywordtype">int</span> BalloonsLayer = LayerMask.NameToLayer(<span class="stringliteral">&quot;Balloons&quot;</span>);</div>
-</div><!-- fragment --></li>
-</ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md302"></a>
-Visibility</h2>
-<ul>
-<li><b>Default to <span class="tt">private</span>.</b> Only increase visibility when there is a concrete consumer.</li>
-<li>Expose only intentional service methods as <span class="tt">public</span>. Nothing is <span class="tt">public</span> "just in case".</li>
-<li>Prefer <span class="tt">internal</span> over <span class="tt">public</span> when the consumer is within the same assembly but outside the class.</li>
-</ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md303"></a>
-Architecture &amp; Reuse</h2>
-<ul>
-<li><b>Before writing new code, check for existing methods</b> in the codebase that can be ported, extracted, or called directly.</li>
-<li><b>Identify commonalities early</b> — if two controllers share a pattern, extract it.</li>
-<li><b>Prefer generic implementations</b> over copy-paste specialisations.</li>
-<li><b>Extension methods</b> over utility classes where possible — keep them in <span class="tt">Shared/Extensions/</span>.</li>
-<li>Keep classes <b>small and focused</b>. If a class is growing beyond one clear responsibility, split it.</li>
-<li>Avoid <span class="tt">static</span> state; prefer injected singleton services via VContainer.</li>
-</ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md304"></a>
-Formatting</h2>
-<ul>
-<li><b>Allman brace style</b> — every opening brace on its own line.</li>
-<li><b>Braces are always required</b> for <span class="tt">if</span>, <span class="tt">else</span>, <span class="tt">for</span>, <span class="tt">foreach</span>, <span class="tt">while</span>, <span class="tt">using</span>, <span class="tt">lock</span>, and <span class="tt">fixed</span> — even single-line bodies.</li>
-</ul>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md306"></a>
-Member Ordering</h1>
-<p>Classes follow a strict top-to-bottom ordering across groups. Within a group, order by what reads most naturally — there is no alphabetical requirement.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md307"></a>
-Fields &amp; Properties</h2>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">#  </th><th class="markdownTableHeadNone">Group  </th><th class="markdownTableHeadNone">Example  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">1  </td><td class="markdownTableBodyNone"><b>Constants</b> (<span class="tt">const</span>)  </td><td class="markdownTableBodyNone"><span class="tt">private const float PickRadius = 0.25f;</span>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">2  </td><td class="markdownTableBodyNone"><b>Static readonly fields</b>  </td><td class="markdownTableBodyNone"><span class="tt">private static readonly Color DefaultColor = Color.white;</span>  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">3  </td><td class="markdownTableBodyNone"><b><span class="tt">[SerializeField]</span> fields</b>  </td><td class="markdownTableBodyNone"><span class="tt">[SerializeField] private SpriteRenderer _renderer;</span> — grouped by <span class="tt">[Header]</span> where useful  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">4  </td><td class="markdownTableBodyNone"><b><span class="tt">[Inject]</span> fields</b>  </td><td class="markdownTableBodyNone"><span class="tt">[Inject] private SlotGrid _grid;</span>  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">5  </td><td class="markdownTableBodyNone"><b>Readonly instance fields</b>  </td><td class="markdownTableBodyNone"><span class="tt">private readonly List&lt;Vector3&gt; _path = new();</span>  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">6  </td><td class="markdownTableBodyNone"><b>Mutable instance fields</b>  </td><td class="markdownTableBodyNone"><span class="tt">private bool _active;</span> — always last among fields  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">7  </td><td class="markdownTableBodyNone"><b>Auto-properties / expression-body properties</b>  </td><td class="markdownTableBodyNone"><span class="tt">public string Name =&gt; "...";</span>  </td></tr>
-</table>
-<p><b>Key rule:</b> Fields decorated with an attribute (<span class="tt">[SerializeField]</span>, <span class="tt">[Inject]</span>) group by attribute, not by readonly/mutable.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md308"></a>
-Methods</h2>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">#  </th><th class="markdownTableHeadNone">Group  </th><th class="markdownTableHeadNone">Notes  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">1  </td><td class="markdownTableBodyNone"><b>Constructors</b>  </td><td class="markdownTableBodyNone">Static constructors before instance constructors  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">2  </td><td class="markdownTableBodyNone"><b>Unity lifecycle</b>  </td><td class="markdownTableBodyNone"><span class="tt">Awake</span> → <span class="tt">OnEnable</span> → <span class="tt">Start</span> → <span class="tt">Update</span> → <span class="tt">FixedUpdate</span> → <span class="tt">LateUpdate</span> → <span class="tt">OnDisable</span> → <span class="tt">OnDestroy</span> → other callbacks  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">3  </td><td class="markdownTableBodyNone"><b><span class="tt">[Inject]</span> methods</b>  </td><td class="markdownTableBodyNone">Immediately after lifecycle; injection wiring only  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">4  </td><td class="markdownTableBodyNone"><b>Interface implementations</b>  </td><td class="markdownTableBodyNone"><span class="tt">IStartable.Start()</span>, <span class="tt">ITickable.Tick()</span>, <span class="tt">IDisposable.Dispose()</span>, <span class="tt">IPoolable</span>, etc.  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">5  </td><td class="markdownTableBodyNone"><b>Public methods</b>  </td><td class="markdownTableBodyNone"></td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone">6  </td><td class="markdownTableBodyNone"><b>Protected methods</b>  </td><td class="markdownTableBodyNone"></td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">7  </td><td class="markdownTableBodyNone"><b>Private methods</b>  </td><td class="markdownTableBodyNone">Helpers called only by one method may sit directly below their caller  </td></tr>
-</table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md309"></a>
-Canonical Example</h2>
-<div class="fragment"><div class="line"><span class="keyword">public</span> <span class="keyword">class </span>BalloonRemoverCheat : MonoBehaviour, ICheat</div>
-<div class="line">{</div>
-<div class="line">    <span class="comment">// 1. Constants</span></div>
-<div class="line">    <span class="keyword">private</span> <span class="keyword">const</span> <span class="keywordtype">float</span> PickRadius = 0.25f;</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">// 2. Static readonly fields</span></div>
-<div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> readonly <span class="keywordtype">int</span> CircleSegments = 32;</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">// 4. [Inject] fields</span></div>
-<div class="line">    [Inject] <span class="keyword">private</span> SlotGrid _grid;</div>
-<div class="line">    [Inject] <span class="keyword">private</span> IPublisher&lt;ActorHitMessage&gt; _hitPublisher;</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">// 5. Readonly instance fields</span></div>
-<div class="line">    <span class="keyword">private</span> readonly List&lt;Vector3&gt; _path = <span class="keyword">new</span>();</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">// 6. Mutable instance fields</span></div>
-<div class="line">    <span class="keyword">private</span> <span class="keywordtype">bool</span> _active;</div>
-<div class="line">    <span class="keyword">private</span> <span class="keywordtype">bool</span> _dragging;</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">// 7. Auto-properties</span></div>
-<div class="line">    <span class="keyword">public</span> <span class="keywordtype">string</span> Name =&gt; _active ? <span class="stringliteral">&quot;Remove Balloons  [ON]&quot;</span> : <span class="stringliteral">&quot;Remove Balloons&quot;</span>;</div>
-<div class="line">    <span class="keyword">public</span> <span class="keywordtype">string</span> Section =&gt; <span class="stringliteral">&quot;Grid&quot;</span>;</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">// Unity lifecycle</span></div>
-<div class="line">    <span class="keyword">private</span> <span class="keywordtype">void</span> Awake() { ... }</div>
-<div class="line">    <span class="keyword">private</span> <span class="keywordtype">void</span> Update() { ... }</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">// Interface implementations</span></div>
-<div class="line">    <span class="keyword">public</span> <span class="keywordtype">void</span> Execute() { ... }</div>
-<div class="line"> </div>
-<div class="line">    <span class="comment">// Private helpers</span></div>
-<div class="line">    <span class="keyword">private</span> HashSet&lt;Vector2Int&gt; CollectHitSlots() { ... }</div>
-<div class="line">    <span class="keyword">private</span> <span class="keywordtype">void</span> RemoveBalloonsAlongPath() { ... }</div>
-<div class="line">}</div>
-</div><!-- fragment --><hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md311"></a>
-Model Interface Pattern — Read/Write Separation</h1>
-<p>Every model exposes two interfaces to enforce read/write separation at the type level:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Type  </th><th class="markdownTableHeadNone">Purpose  </th><th class="markdownTableHeadNone">Typical consumer  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">IModel</span> (e.g. <span class="tt">IBalloonModel</span>)  </td><td class="markdownTableBodyNone"><b>Read-only</b> — <span class="tt">IReadOnlyReactiveProperty&lt;T&gt;</span> and read-only plain properties  </td><td class="markdownTableBodyNone">Views, score controllers, messages  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">IWriteableModel</span> (e.g. <span class="tt">IWriteableBalloonModel</span>)  </td><td class="markdownTableBodyNone"><b>Mutable</b> — extends <span class="tt">IModel</span>; re-declares reactive properties with <span class="tt">new</span> to expose <span class="tt">ReactiveProperty&lt;T&gt;</span>  </td><td class="markdownTableBodyNone">Controllers, spawners, any mutating code  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">Model</span> (e.g. <span class="tt">BalloonModel</span>)  </td><td class="markdownTableBodyNone"><b>Concrete class</b> — implements <span class="tt">IWriteableModel</span>  </td><td class="markdownTableBodyNone">Construction sites only  </td></tr>
-</table>
-<p>Rules:</p><ol type="1">
-<li><b>Use the narrowest interface.</b> Pass <span class="tt">IModel</span> unless mutation is required.</li>
-<li><b>Messages always carry the read-only interface.</b> If a subscriber needs write access, it downcasts explicitly.</li>
-<li><b>No view references on models.</b> Models must not hold back-references to views or <span class="tt">Transform</span>s. Reach the view via <span class="tt">SlotGrid.ViewAt(slotIndex)</span>.</li>
-</ol>
-<div class="fragment"><div class="line"><span class="keyword">public</span> <span class="keyword">interface </span>IBalloonModel</div>
-<div class="line">{</div>
-<div class="line">    IReadOnlyReactiveProperty&lt;string&gt; Color { <span class="keyword">get</span>; }</div>
-<div class="line">    IReadOnlyReactiveProperty&lt;Vector2Int&gt; SlotIndex { <span class="keyword">get</span>; }</div>
-<div class="line">    IReadOnlyReactiveProperty&lt;bool&gt; IsStable { <span class="keyword">get</span>; }</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">public</span> <span class="keyword">interface </span>IWriteableBalloonModel : IBalloonModel</div>
-<div class="line">{</div>
-<div class="line">    <span class="keyword">new</span> ReactiveProperty&lt;string&gt; Color { <span class="keyword">get</span>; }</div>
-<div class="line">    <span class="keyword">new</span> ReactiveProperty&lt;Vector2Int&gt; SlotIndex { <span class="keyword">get</span>; }</div>
-<div class="line">    <span class="keyword">new</span> ReactiveProperty&lt;bool&gt; IsStable { <span class="keyword">get</span>; }</div>
-<div class="line">}</div>
-<div class="line"> </div>
-<div class="line"><span class="keyword">public</span> <span class="keyword">class </span>BalloonModel : IWriteableBalloonModel</div>
-<div class="line">{</div>
-<div class="line">    <span class="keyword">public</span> ReactiveProperty&lt;string&gt; Color { <span class="keyword">get</span>; } = <span class="keyword">new</span>();</div>
-<div class="line">    <span class="keyword">public</span> ReactiveProperty&lt;Vector2Int&gt; SlotIndex { <span class="keyword">get</span>; } = <span class="keyword">new</span>();</div>
-<div class="line">    <span class="keyword">public</span> ReactiveProperty&lt;bool&gt; IsStable { <span class="keyword">get</span>; } = <span class="keyword">new</span>(<span class="keyword">true</span>);</div>
-<div class="line"> </div>
-<div class="line">    IReadOnlyReactiveProperty&lt;string&gt; IBalloonModel.Color =&gt; Color;</div>
-<div class="line">    IReadOnlyReactiveProperty&lt;Vector2Int&gt; IBalloonModel.SlotIndex =&gt; SlotIndex;</div>
-<div class="line">    IReadOnlyReactiveProperty&lt;bool&gt; IBalloonModel.IsStable =&gt; IsStable;</div>
-<div class="line">}</div>
-</div><!-- fragment --><hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md313"></a>
-UI Scope Architecture</h1>
-<p>Each self-contained UI panel or popup owns its own child <span class="tt">LifetimeScope</span>. Benefits: the popup resolves its dependencies from the game scope, keeps its registrations local, and can be opened in a standalone scene without the full game running.</p>
-<p><b>Rule:</b> Any UI element that is logically self-contained (a popup, a full-screen panel, a HUD section) gets its own <span class="tt">LifetimeScope</span>. Flat components that are always part of a larger panel stay registered in that panel's scope.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md314"></a>
-Dynamically instantiated prefab scopes</h2>
-<p>Prefabs carrying multiple MonoBehaviours that need injection (e.g. projectile, balloon) use <span class="tt">LifetimeScope.CreateChildFromPrefab()</span>. The spawner injects the parent <span class="tt">LifetimeScope</span> and calls <span class="tt">parentScope.CreateChildFromPrefab(prefab)</span> — this deactivates the prefab before <span class="tt">Instantiate</span>, sets the parent reference, then reactivates so <span class="tt">Awake()</span> → <span class="tt">Build()</span> runs with the correct parent.</p>
-<p><span class="tt">RegisterComponentInHierarchy</span> scope boundary: for scene-based scopes, Unity searches the <b>entire scene</b>. For prefab-based scopes created via <span class="tt">CreateChildFromPrefab</span>, the search is limited to <span class="tt">GetComponentsInChildren</span>. Always confirm the component exists in the expected search space.</p>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md316"></a>
-Cheat Console</h1>
-<p>A runtime debug console in <span class="tt">Cheats/</span>. Press <b>backtick (`)</b> to toggle. The entire system is wrapped in <span class="tt">#if UNITY_EDITOR || DEVELOPMENT_BUILD</span> and compiles out in release builds.</p>
-<p><b>Adding a cheat:</b></p><ol type="1">
-<li>Implement <span class="tt">ICheat</span> — provide <span class="tt">Name</span>, <span class="tt">Section</span>, and <span class="tt">Tags[]</span>.</li>
-<li>Inject whatever publishers or services it needs via the constructor.</li>
-<li>Register in <span class="tt">GameLifetimeScope</span>: <span class="tt">builder.Register&lt;YourCheat&gt;(Lifetime.Singleton).AsImplementedInterfaces()</span>.</li>
-</ol>
-<p><b>Cheat ownership rule:</b> All logic specific to a cheat lives in the cheat class. Game systems must not expose methods solely to serve cheats. Cheats drive behaviour through the same messages and public APIs that gameplay uses.</p>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md318"></a>
-Gizmos &amp; Editor Drawing</h1>
-<p>Two parallel drawing helpers provide identical method signatures and coordinate conventions across editor and runtime contexts:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Helper  </th><th class="markdownTableHeadNone">Location  </th><th class="markdownTableHeadNone">API  </th><th class="markdownTableHeadNone">Used by  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">SceneDrawingHelper</span>  </td><td class="markdownTableBodyNone"><span class="tt">Editor/</span>  </td><td class="markdownTableBodyNone"><span class="tt">Handles</span>  </td><td class="markdownTableBodyNone">Custom editors, <span class="tt">[InitializeOnLoad]</span> scene overlays  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">GizmoDrawingHelper</span>  </td><td class="markdownTableBodyNone"><span class="tt">Shared/Rendering/</span>  </td><td class="markdownTableBodyNone"><span class="tt">Gizmos</span>  </td><td class="markdownTableBodyNone">Any <span class="tt">MonoBehaviour.OnDrawGizmos</span> callback  </td></tr>
-</table>
-<p>Both expose <span class="tt">DrawWorldRect(center, width, height, outlineColor, fillColor)</span> and <span class="tt">DrawWorldRectFromLimits(top, right, bottom, left, outlineColor, fillColor)</span> using the clockwise <span class="tt">Vector4</span> convention (top → right → bottom → left).</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md319"></a>
-Build-stripping rules</h2>
-<p>All gizmo-related code must be guarded with <span class="tt">#if UNITY_EDITOR</span> to compile out in builds:</p>
-<ol type="1">
-<li><b><span class="tt">GizmoDrawingHelper</span> itself</b> is wrapped entirely in <span class="tt">#if UNITY_EDITOR</span> / <span class="tt">#endif</span>. It lives in the runtime assembly (<span class="tt">Shared/Rendering/</span>) so runtime MonoBehaviours can reference it, but it compiles out completely in builds.</li>
-<li><b>Consumer MonoBehaviours</b> must wrap gizmo-only fields (<span class="tt">static readonly</span> colors, <span class="tt">[Inject]</span> dependencies) <b>and</b> the <span class="tt">OnDrawGizmos</span> method in <span class="tt">#if UNITY_EDITOR</span>. <span class="tt">OnDrawGizmos</span> is stripped automatically in builds, but fields and <span class="tt">[Inject]</span> decorations are <b>not</b> — they remain in the build, cause DI resolution overhead, and hold references that would otherwise not exist.</li>
-</ol>
-<div class="fragment"><div class="line"><span class="keyword">public</span> <span class="keyword">class </span>SlotGridView : MonoBehaviour</div>
-<div class="line">{</div>
-<div class="line"><span class="preprocessor">#if UNITY_EDITOR</span></div>
-<div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> readonly Color EmptySlotColor = <span class="keyword">new</span>(1f, 1f, 1f, 0.2f);</div>
-<div class="line"> </div>
-<div class="line">    [Inject] <span class="keyword">private</span> <a class="code hl_interface" href="interface_balloon_party_1_1_shared_1_1_i_game_configuration.html">IGameConfiguration</a> _config;</div>
-<div class="line"> </div>
-<div class="line">    <span class="keyword">private</span> <span class="keywordtype">void</span> OnDrawGizmos()</div>
-<div class="line">    {</div>
-<div class="line">        <span class="comment">// draw using _config and EmptySlotColor</span></div>
-<div class="line">    }</div>
-<div class="line"><span class="preprocessor">#endif</span></div>
-<div class="line">}</div>
-<div class="ttc" id="ainterface_balloon_party_1_1_shared_1_1_i_game_configuration_html"><div class="ttname"><a href="interface_balloon_party_1_1_shared_1_1_i_game_configuration.html">BalloonParty.Shared.IGameConfiguration</a></div><div class="ttdef"><b>Definition</b> IGameConfiguration.cs:6</div></div>
-</div><!-- fragment --><p>This ensures:</p><ul>
-<li>No <span class="tt">[Inject]</span> resolution in builds for gizmo-only dependencies.</li>
-<li>No <span class="tt">static readonly</span> allocations for gizmo-only colors.</li>
-<li>The class compiles as an empty (or minimal) MonoBehaviour in release.</li>
-</ul>
-<p>Fields shared between gizmo drawing <b>and</b> runtime logic (e.g. <span class="tt">SlotGrid _grid</span> used by both gameplay and <span class="tt">OnDrawGizmos</span>) should <b>not</b> be guarded — they are needed regardless.</p>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md321"></a>
-Living Documentation</h1>
-<p>Each feature folder contains a <span class="tt">README.md</span> describing its gameplay purpose, how it works, and how it interacts with other systems.</p>
-<p><b>Keep them current.</b> Update a folder's README whenever:</p><ul>
-<li>A new mechanic is added or an existing one changes significantly.</li>
-<li>A system's responsibility shifts.</li>
-<li>Interactions with other systems are added, removed, or change in character.</li>
-</ul>
-<p><b>No implementation notes.</b> READMEs explain the current architecture as if it were always the intended design. They are written for a new developer reading the folder for the first time, not as a changelog.</p>
-<hr  />
-<h1 class="doxsection"><a class="anchor" id="autotoc_md323"></a>
-Enforcement Tooling</h1>
-<p>The style guide is enforced at multiple layers so violations are caught as early as possible:</p>
-<table class="markdownTable">
-<tr class="markdownTableHead">
-<th class="markdownTableHeadNone">Layer  </th><th class="markdownTableHeadNone">Tool  </th><th class="markdownTableHeadNone">What it enforces  </th></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>IDE (real-time)</b>  </td><td class="markdownTableBodyNone"><span class="tt">.editorconfig</span>  </td><td class="markdownTableBodyNone">Allman braces, required braces, naming conventions (<span class="tt">_camelCase</span> fields, <span class="tt">PascalCase</span> members, <span class="tt">I</span>-prefixed interfaces), block-scoped namespaces, <span class="tt">var</span> usage, accessibility modifiers  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>IDE (real-time)</b>  </td><td class="markdownTableBodyNone"><span class="tt">BalloonParty.sln.DotSettings</span>  </td><td class="markdownTableBodyNone">Rider/ReSharper-specific: member ordering warnings, modifier defaults, blank line rules, wrapping  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>Git (per commit)</b>  </td><td class="markdownTableBodyNone"><span class="tt">Tools/pre-commit</span>  </td><td class="markdownTableBodyNone">Runs <span class="tt">style_audit.py</span> on staged <span class="tt">.cs</span> files; blocks commit on violations  </td></tr>
-<tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>Manual / CI</b>  </td><td class="markdownTableBodyNone"><span class="tt">Tools/style_audit.py</span>  </td><td class="markdownTableBodyNone">Member ordering, block comment headers, redundant comments, <span class="tt">StartCoroutine</span> usage, magic strings (uncached animator/layer params), <span class="tt">AddTo(this)</span> in poolable classes, namespace mismatches, missing READMEs  </td></tr>
-</table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md324"></a>
-Quick reference</h2>
-<div class="fragment"><div class="line"># Full audit</div>
-<div class="line">python3 Tools/style_audit.py</div>
-<div class="line"> </div>
-<div class="line"># Single rule or file</div>
-<div class="line">python3 Tools/style_audit.py --rule braces</div>
-<div class="line">python3 Tools/style_audit.py --file BalloonView</div>
-<div class="line"> </div>
-<div class="line"># Auto-fix namespaces</div>
-<div class="line">python3 Tools/style_audit.py --fix</div>
-<div class="line"> </div>
-<div class="line"># Install pre-commit hook</div>
-<div class="line">cp Tools/pre-commit .git/hooks/pre-commit &amp;&amp; chmod +x .git/hooks/pre-commit</div>
-</div><!-- fragment --><hr  />
- </div></div><!-- PageDoc -->
+</div></div><!-- PageDoc -->
 <a href="doxygen_crawl.html"></a>
 </div><!-- contents -->
 </div><!-- doc-content -->

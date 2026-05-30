@@ -18,7 +18,7 @@ INPUT_ENCODING         = UTF-8
 FILE_PATTERNS          = *.cs *.md
 RECURSIVE              = YES
 EXCLUDE_PATTERNS       = */bin/* */obj/* */Library/*
-USE_MDFILE_AS_MAINPAGE = Assets/Source/README.md
+USE_MDFILE_AS_MAINPAGE = Assets/Source/mainpage.md
 IMAGE_PATH             = Docs/diagrams
 
 #---------------------------------------------------------------------------

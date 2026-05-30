@@ -144,10 +144,10 @@ Files</h2></td></tr>
 <tr class="memitem:ScoreUILifetimeScope_2Ecs" id="r_ScoreUILifetimeScope_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_score_u_i_lifetime_scope_8cs.html">ScoreUILifetimeScope.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md383"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md390"></a>
 UI/Score</h1>
 <p>Tracks and displays player progress toward the next level — one bar per balloon color, plus score and level counters.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md384"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md391"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -171,11 +171,11 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">LevelLabel</span>  </td><td class="markdownTableBodyNone">Binds level <span class="tt">TMP_Text</span> to <span class="tt">ScoreController.Level</span>; <span class="tt">_showNextLevel</span> toggle  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md385"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md392"></a>
 How it works</h1>
 <p>Four <span class="tt">ColorProgressBar</span> instances are placed in the scene under the Score UI Canvas — one per balloon color. <span class="tt">ScoreUILifetimeScope</span> injects them via <span class="tt">RegisterBuildCallback</span> so each bar resolves its <span class="tt">[Inject]</span> dependencies (palette, score controller, subscribers, pool manager, trail service) without singleton conflicts.</p>
 <p>Each bar identifies its color through a <span class="tt">[PaletteColorName]</span> string field, which renders in the Inspector as a popup dropdown with color swatch. On <span class="tt">Start()</span> the bar resolves its <span class="tt">PaletteEntry</span>, tints its graphics (preserving existing alpha), sets up the slider, and registers a target provider with <span class="tt">ScoreTrailService</span>.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md386"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md393"></a>
 Scoring flow</h2>
 <p>Scoring is deferred to trail arrival — points, persistent score, and level progress all update when a <span class="tt">ScoreTrailArrivedMessage</span> is received, not immediately on balloon pop. This synchronises the visual trail animation with the actual score state.</p>
 <ol type="1">
@@ -186,7 +186,7 @@ Scoring flow</h2>
 <li><b><span class="tt">ScoreController.OnTrailArrived</span></b> → increments <span class="tt">_persistentScore</span>, <span class="tt">_totalScore</span>, <span class="tt">_levelProgress</span>, and checks for level-up</li>
 <li><b><span class="tt">ColorProgressBar.OnTrailArrived</span></b> → advances the slider by 1, spawns a <b>point notice</b> ("+1") at the trail's arrival world position (converted to local anchored space via <span class="tt">WorldToAnchoredPosition</span>) using the <span class="tt">_pointNoticePrefab</span>, triggers "TrailHit" animator feedback</li>
 </ol>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md387"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md394"></a>
 Level-up reset flow</h2>
 <p>Bar reset is a two-phase process synchronised with the glow trail ceremony:</p>
 <ol type="1">
@@ -194,7 +194,7 @@ Level-up reset flow</h2>
 <li><b><span class="tt">LevelUpGlowTrailsMessage</span></b> → <span class="tt">DrainSliderAsync</span> gradually drains the slider to zero in sync with glow trail waves spawned by <span class="tt">LevelUpPopUp</span>.</li>
 <li><b><span class="tt">LevelUpDismissedMessage</span></b> → <span class="tt">OnDismissed</span> applies <span class="tt">_stashedMaxValue</span> as the new <span class="tt">maxValue</span> and resets the slider value to zero.</li>
 </ol>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md388"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md395"></a>
 Notices</h2>
 <p><span class="tt">ProgressNotice</span> is a pooled TMP popup with <span class="tt">ColorableRenderer</span>-based tinting. Two separate prefabs and pools are used:</p>
 <ul>
@@ -204,7 +204,7 @@ Notices</h2>
 <p><span class="tt">OnValidate()</span> provides editor-time color preview — it loads <span class="tt">GamePalette</span> via <span class="tt">AssetDatabase</span>, finds the matching entry, and tints <span class="tt">_graphicsToSetColor</span> while preserving each graphic's existing alpha.</p>
 <p>When the slider reaches its maximum, a completion particle plays and the bar enters its "Completed" animator state.</p>
 <p><span class="tt">ScoreCounterLabel</span> and <span class="tt">LevelLabel</span> are bound imperatively from <span class="tt">ScoreUILifetimeScope.Start()</span> — they receive the <span class="tt">ScoreController</span>'s reactive properties and subscribe with UniRx.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md389"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md396"></a>
 Interactions</h1>
 <ul>
 <li><b>ScoreController</b> — source of <span class="tt">ScorePointMessage</span>, <span class="tt">ScoreLevelUpMessage</span>, <span class="tt">TotalScore</span>, <span class="tt">Level</span>; score mutation deferred to <span class="tt">ScoreTrailArrivedMessage</span></li>

@@ -1,17 +1,17 @@
 var searchData=
 [
   ['wait_20glow_20trails_0',['Gate — Popup Wait + Glow Trails',['../dir_edc49c4a498859dd64a99e6d0526fd42.html#autotoc_md81',1,'']]],
-  ['warming_1',['Pre-warming',['../dir_4563255b505542449f783ad1a2c29c21.html#autotoc_md345',1,'']]],
-  ['was_20built_2',['was built',['../plan_grid_actor_expansion.html#autotoc_md193',1,'What was built'],['../plan_grid_actor_expansion.html#autotoc_md196',1,'What was built'],['../plan_grid_actor_expansion.html#autotoc_md199',1,'What was built']]],
+  ['warming_1',['Pre-warming',['../dir_4563255b505542449f783ad1a2c29c21.html#autotoc_md352',1,'']]],
+  ['was_20built_2',['was built',['../plan_grid_actor_expansion.html#autotoc_md200',1,'What was built'],['../plan_grid_actor_expansion.html#autotoc_md203',1,'What was built'],['../plan_grid_actor_expansion.html#autotoc_md206',1,'What was built']]],
   ['weight_3',['Weight',['../class_balloon_party_1_1_configuration_1_1_balloon_prefab_entry.html#a20ebcd80c21ee71d119bc10e2c53644c',1,'BalloonParty.Configuration.BalloonPrefabEntry.Weight'],['../class_balloon_party_1_1_configuration_1_1_grid_actor_prefab_entry.html#abfdb4e3329c2db554b55e79fa229db71',1,'BalloonParty.Configuration.GridActorPrefabEntry.Weight'],['../class_balloon_party_1_1_configuration_1_1_item_settings.html#a586ed394d84123030db8e5e86de8fd3c',1,'BalloonParty.Configuration.ItemSettings.Weight']]],
-  ['what_20goes_20away_4',['What goes away',['../plan_bubble_cluster_hit_feedback.html#autotoc_md130',1,'']]],
-  ['what_20was_20built_5',['What was built',['../plan_grid_actor_expansion.html#autotoc_md193',1,'What was built'],['../plan_grid_actor_expansion.html#autotoc_md196',1,'What was built'],['../plan_grid_actor_expansion.html#autotoc_md199',1,'What was built']]],
+  ['what_20goes_20away_4',['What goes away',['../plan_bubble_cluster_hit_feedback.html#autotoc_md137',1,'']]],
+  ['what_20was_20built_5',['What was built',['../plan_grid_actor_expansion.html#autotoc_md200',1,'What was built'],['../plan_grid_actor_expansion.html#autotoc_md203',1,'What was built'],['../plan_grid_actor_expansion.html#autotoc_md206',1,'What was built']]],
   ['when_20expanded_6',['Draw order when expanded',['../dir_14eca4e58e6d71e3a9859288c1bd2735.html#autotoc_md70',1,'']]],
-  ['why_20not_20time_20timescale_7',['Why not &lt;span class=&quot;tt&quot;&gt;Time.timeScale&lt;/span&gt;?',['../dir_ad441a6ad404e0649389646f68cd818d.html#autotoc_md330',1,'']]],
-  ['wiring_20requirements_8',['Wiring requirements',['../dir_d2ce5021a1fdaf4aa96dee72f926d288.html#autotoc_md376',1,'']]],
-  ['with_20child_20scopes_9',['Instantiating prefabs with child scopes',['../index.html#autotoc_md271',1,'']]],
-  ['work_20on_20a_20resume_10',['Gating async work on a resume',['../dir_ad441a6ad404e0649389646f68cd818d.html#autotoc_md335',1,'']]],
-  ['works_11',['works',['../dir_d57909491c41de786b31a87fb68068b4.html#autotoc_md39',1,'How it works'],['../dir_24817a301ba3256d5cc3ff5fb28dbe0b.html#autotoc_md58',1,'How it works'],['../dir_ee9ec390f3c9be61659f01f63f874ac8.html#autotoc_md261',1,'How it works'],['../dir_70b2fdaeef00df97adfe37c507676fd2.html#autotoc_md361',1,'How it works'],['../dir_2e9ebc40f25f7b5870f657153cc68747.html#autotoc_md368',1,'How it works'],['../dir_d2ce5021a1fdaf4aa96dee72f926d288.html#autotoc_md372',1,'How it works'],['../dir_a94ffabe24d9947a3182725fed46e8c9.html#autotoc_md385',1,'How it works'],['../dir_63cc5e5b50930afc607f3d2730669459.html#autotoc_md392',1,'How it works']]],
+  ['why_20not_20time_20timescale_7',['Why not &lt;span class=&quot;tt&quot;&gt;Time.timeScale&lt;/span&gt;?',['../dir_ad441a6ad404e0649389646f68cd818d.html#autotoc_md337',1,'']]],
+  ['wiring_20requirements_8',['Wiring requirements',['../dir_d2ce5021a1fdaf4aa96dee72f926d288.html#autotoc_md383',1,'']]],
+  ['with_20child_20scopes_9',['Instantiating prefabs with child scopes',['../style_guide.html#autotoc_md278',1,'']]],
+  ['work_20on_20a_20resume_10',['Gating async work on a resume',['../dir_ad441a6ad404e0649389646f68cd818d.html#autotoc_md342',1,'']]],
+  ['works_11',['works',['../dir_d57909491c41de786b31a87fb68068b4.html#autotoc_md39',1,'How it works'],['../dir_24817a301ba3256d5cc3ff5fb28dbe0b.html#autotoc_md58',1,'How it works'],['../dir_ee9ec390f3c9be61659f01f63f874ac8.html#autotoc_md268',1,'How it works'],['../dir_70b2fdaeef00df97adfe37c507676fd2.html#autotoc_md368',1,'How it works'],['../dir_2e9ebc40f25f7b5870f657153cc68747.html#autotoc_md375',1,'How it works'],['../dir_d2ce5021a1fdaf4aa96dee72f926d288.html#autotoc_md379',1,'How it works'],['../dir_a94ffabe24d9947a3182725fed46e8c9.html#autotoc_md392',1,'How it works'],['../dir_63cc5e5b50930afc607f3d2730669459.html#autotoc_md399',1,'How it works']]],
   ['worldposition_12',['WorldPosition',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_actor_hit_message.html#a10461f51367646eaee41eacbb4dc7250',1,'BalloonParty.Shared.Messages.ActorHitMessage.WorldPosition'],['../struct_balloon_party_1_1_shared_1_1_messages_1_1_score_point_message.html#a1651d250588e21d72b20d73d186c5bb2',1,'BalloonParty.Shared.Messages.ScorePointMessage.WorldPosition'],['../struct_balloon_party_1_1_shared_1_1_messages_1_1_score_trail_arrived_message.html#ac592a7d4ab3893c052d7054d75957c67',1,'BalloonParty.Shared.Messages.ScoreTrailArrivedMessage.WorldPosition']]],
-  ['write_20separation_13',['Model Interface Pattern — Read/Write Separation',['../index.html#autotoc_md311',1,'']]]
+  ['write_20separation_13',['Model Interface Pattern — Read/Write Separation',['../style_guide.html#autotoc_md318',1,'']]]
 ];

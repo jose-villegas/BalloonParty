@@ -140,14 +140,14 @@ Files</h2></td></tr>
 <tr class="memitem:ResumedMessage_2Ecs" id="r_ResumedMessage_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_resumed_message_8cs.html">ResumedMessage.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md329"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md336"></a>
 Pause</h1>
 <p>Broadcast architecture for pausing and resuming gameplay systems.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md330"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md337"></a>
 Why not <span class="tt">Time.timeScale</span>?</h1>
 <p><span class="tt">Time.timeScale</span> is a global scalar — every system must opt out individually (<span class="tt">SetUpdate(true)</span>, <span class="tt">ignoreTimeScale: true</span>, etc.). A missed annotation is a silent bug. It also conflates two distinct concerns: the <b>visual slow-motion</b> of a cinematic and the <b>logical freeze</b> of gameplay.</p>
 <p>This package separates those concerns.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md331"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md338"></a>
 Core types</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -163,15 +163,15 @@ Core types</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">PauseResumedGate</span>  </td><td class="markdownTableBodyNone"><span class="tt">IReadyGate</span> implementation that resolves reactively when a source resumes — no polling  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md332"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md339"></a>
 Usage</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md333"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md340"></a>
 Signalling a pause</h2>
 <div class="fragment"><div class="line"><span class="comment">// Inject PauseService, then:</span></div>
 <div class="line">_pauseService.Pause(PauseSource.Cinematic);   <span class="comment">// begin</span></div>
 <div class="line">_pauseService.Resume(PauseSource.Cinematic);  <span class="comment">// end</span></div>
 </div><!-- fragment --><p>Calls nest safely — a second <span class="tt">Pause</span> without a matching <span class="tt">Resume</span> won't broadcast twice.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md334"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md341"></a>
 Reacting to a pause</h2>
 <div class="fragment"><div class="line"><span class="comment">// Inject ISubscriber&lt;PausedMessage&gt; and ISubscriber&lt;ResumedMessage&gt;, then:</span></div>
 <div class="line">_resumedSubscriber.Subscribe(msg =&gt;</div>
@@ -179,7 +179,7 @@ Reacting to a pause</h2>
 <div class="line">    <span class="keywordflow">if</span> (msg.Source == PauseSource.Cinematic)</div>
 <div class="line">        ResumeWork();</div>
 <div class="line">}).AddTo(_disposable);</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md335"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md342"></a>
 Gating async work on a resume</h2>
 <p>Register <span class="tt">PauseResumedGate</span> as the <span class="tt">IReadyGate</span> for a scope:</p>
 <div class="fragment"><div class="line"><span class="comment">// In a LifetimeScope:</span></div>
@@ -187,7 +187,7 @@ Gating async work on a resume</h2>
 <div class="line">    .WithParameter(<span class="stringliteral">&quot;awaitedSource&quot;</span>, PauseSource.Cinematic)</div>
 <div class="line">    .As&lt;IReadyGate&gt;();</div>
 </div><!-- fragment --><p>Then any <span class="tt">IReadyGate</span>-aware async flow will block until that source resumes, resolving <b>in the same frame</b> as <span class="tt">Resume()</span> — unlike <span class="tt">UniTask.WaitUntil</span> polling.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md336"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md343"></a>
 <span class="tt">Time.timeScale</span> usage</h1>
 <p><span class="tt">Time.timeScale</span> is <b>not</b> used for cinematic slow-motion. The tipping trail is slowed via a curve-modulated progress rate in <span class="tt">LevelUpTrailEffect.PanInTick</span> — other trails fly at normal speed, unmodified by <span class="tt">Time.timeScale</span>.</p>
 <p><span class="tt">Time.timeScale = 0</span> is used in two places:</p><ul>

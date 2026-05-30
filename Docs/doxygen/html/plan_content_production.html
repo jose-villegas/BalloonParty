@@ -124,14 +124,14 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('plan_content_p
   <div class="headertitle"><div class="title">Content Production Plan — Pre-8.3 Assets </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md150"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md157"></a>
 Content Production Plan — Pre-8.3 Assets</h1>
 <blockquote class="doxtable">
 <p>Asset and content work required before Phase 8.3 (Procedural Placement) can run meaningfully in-game. The procedural engine selects actors by weight and places them into slots — it can only be tuned if the actors it places actually exist as playable, recognisable objects.</p>
 <p><b>This plan covers art, animation, VFX, prefabs, and config wiring for every actor and balloon archetype introduced in the Phase 8 code plan.</b> </p>
 </blockquote>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md152"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md159"></a>
 Context</h2>
 <p>The procedural algorithm (8.3) draws from two config lists:</p>
 <ul>
@@ -140,7 +140,7 @@ Context</h2>
 </ul>
 <p>Neither list is useful until the prefabs those entries reference actually exist with correct visuals, animations, and hit feedback. Placeholder grey boxes make it impossible to read the grid, tune difficulty, or playtest spawn density.</p>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md154"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md161"></a>
 Asset status overview</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -166,10 +166,10 @@ Asset status overview</h2>
 </table>
 <p><b>Legend:</b> ✅ exists and production-ready · ⚠️ placeholder exists · ❌ does not exist</p>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md156"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md163"></a>
 Shared infrastructure needed</h2>
 <p>These items are pre-requisites that unlock multiple actors at once.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md157"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md164"></a>
 <span class="tt">IHasScoreColor</span> — score attribution ✅ Complete</h3>
 <p><span class="tt">IHasScoreColor</span> is implemented on all balloon models. <span class="tt">ResolveScoreAttribution</span> is the single extension point — no config fields required. <span class="tt">ScoreController</span> calls it on every <span class="tt">Pop</span> or <span class="tt">PassThrough</span> hit and publishes all returned attributions as one scatter group.</p>
 <ul class="check">
@@ -185,7 +185,7 @@ Shared infrastructure needed</h2>
 <li class="checked"><span class="tt">BubbleClusterModel</span> — <span class="tt">BreaksStreak = true</span>; one attribution per damage point to random palette colors</li>
 </ul>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md159"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md166"></a>
 <span class="tt">GridActorConfiguration</span> ScriptableObject</h3>
 <p>A new SO holding <span class="tt">GridActorPrefabEntry[]</span> — the list the procedural spawner reads. Needs to be created, added to the scene's <span class="tt">GameLifetimeScope</span> bindings, and registered just like <span class="tt">BalloonsConfiguration</span> is today.</p>
 <p>Scope of work:</p><ul class="check">
@@ -198,15 +198,15 @@ Shared infrastructure needed</h2>
 <ul class="check">
 <li class="unchecked">Wire into <span class="tt">StaticActorSpawner</span> and eventually <span class="tt">GridSpawner</span></li>
 </ul>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md160"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md167"></a>
 <span class="tt">GridActorView</span> prefab root pattern</h3>
 <p>All five grid actors share the same <span class="tt">GridActorView</span> MonoBehaviour. Each actor gets its own prefab with the <span class="tt">GridActorView</span> component, its own sprite renderer, and its own animator. Pool key is derived from the prefab GameObject name.</p>
 <p>Prefab location: <span class="tt">Assets/Prefabs/Grid/</span></p>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md162"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md169"></a>
 Per-actor detail</h2>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md164"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md171"></a>
 Soap Cluster ✅ Done</h3>
 <p><b>What it is:</b> A cluster of iridescent soap bubbles that floats as a single balloon-type unit. Each projectile hit pops one bubble — the cluster visibly shrinks through distinct geometric layouts (5→pentagon, 4→square, 3→triangle, 2→pair, 1→single). When the last bubble pops, the cluster is destroyed. Uses a dedicated <span class="tt">BubbleClusterModel</span> (no color slot, no item slot, no score per pop) distinguished from Simple by <span class="tt">BalloonType.BubbleCluster</span> in the spawner and config. Projectiles pass through (no deflect); hit VFX per-entry override via the <span class="tt">HitVfxOverride[]</span> system on <span class="tt">BalloonPrefabEntry</span>.</p>
 <p><b>Art direction:</b> Cluster of iridescent soap bubbles. Thin rainbow-film rim per bubble, transparent interior, visible Plateau junction membranes between bubbles, soft specular highlight. Fully procedural — no sprites or textures required.</p>
@@ -319,7 +319,7 @@ move easily". Could be metallic, stone-textured, or wrapped in thorns. Park them
 <li>Config knob on <span class="tt">BalloonsConfiguration</span> entry: <span class="tt">bool RelocatesOnBalance</span> — so the behaviour can be toggled per balloon type without code changes</li>
 </ul>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md166"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md173"></a>
 Puff</h3>
 <p><b>What it is:</b> Traversable structural actor. Occupies a slot; balloon spawn paths arc through it freely. Not interactive. No hit reaction.</p>
 <p><b>Art direction:</b> Dandelion puff, tuft of cotton, wispy cloud of floating seed-heads. Semi-transparent. Gentle idle float animation. Feels soft and permeable.</p>
@@ -342,7 +342,7 @@ Puff</h3>
 <li class="unchecked"><b>Config entry</b> — add to <span class="tt">GridActorConfiguration</span> with high weight; no hit reaction needed</li>
 </ul>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md168"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md175"></a>
 Bush</h3>
 <p><b>What it is:</b> Non-traversable structural actor. Blocks balloon spawn-path computation; balloons must route around it. Projectiles pass through (no collider).</p>
 <p><b>Art direction:</b> Small park shrub — round, leafy, clearly solid-looking. Like something you'd walk around in a park but throw a ball over. Different enough from Puff that players immediately understand "this one is solid".</p>
@@ -363,7 +363,7 @@ Bush</h3>
 </ul>
 <p><b>Note:</b> Bush currently causes a <span class="tt">ComputePath</span> warning when a spawn path crosses it (Phase 9 will add full rerouting). Weight should be low in early difficulty levels to avoid blocking spawn columns before rerouting exists.</p>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md170"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md177"></a>
 Deflector</h3>
 <p><b>What it is:</b> Indestructible hitable. Always deflects the projectile. Creates predictable geometry — players can exploit bounce angles.</p>
 <p><b>Art direction:</b> Something visibly angled, shiny, reflective. Park theme could be: a <b>pinwheel</b> (angled vanes); a <b>reflective game paddle</b>; or a <b>butterfly wing</b> spread at an angle. The key read is "bouncy/reflective surface", not "wall".</p>
@@ -387,7 +387,7 @@ Deflector</h3>
 <li class="unchecked"><b>Config entry</b> — add to <span class="tt">GridActorConfiguration</span>; maxCount = 1–2 per grid</li>
 </ul>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md172"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md179"></a>
 Absorber</h3>
 <p><b>What it is:</b> Indestructible hitable. Absorbs the projectile on contact, ending the turn. A genuine danger zone — a column with an Absorber requires a different shot path.</p>
 <p><b>Art direction:</b> Something that consumes or swallows. Park theme could be: a <b>venus flytrap</b> (open, waiting to snap); a <b>whirlpool puddle</b> on the grass; or a <b>black hole soap bubble</b> that pulses. The key read is "danger — don't shoot here".</p>
@@ -414,7 +414,7 @@ Absorber</h3>
 <li class="unchecked"><b>Config entry</b> — add to <span class="tt">GridActorConfiguration</span>; gated behind difficulty level (see Phase 8.4); maxCount = 1 per grid to start</li>
 </ul>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md174"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md181"></a>
 Gatekeeper</h3>
 <p><b>What it is:</b> Destructible hitable. Deflects projectiles until <span class="tt">HitsRemaining</span> reaches zero, then pops. Visual degradation must make remaining hits readable at a glance.</p>
 <p><b>Art direction:</b> Something that blocks a column visually and clearly degrades. Park theme could be: a <b>thorn-covered log</b>; a <b>rickety wooden gate</b> with planks falling off; or a <b>mossy rock</b> that cracks. The key reads are "it blocks" and "it's
@@ -449,7 +449,7 @@ close to breaking".</p>
 <li class="unchecked"><b>Config entry</b> — add to <span class="tt">GridActorConfiguration</span> with <span class="tt">HitsToPop = 3</span> default; weight medium; maxCount = 1 per column</li>
 </ul>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md176"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md183"></a>
 Suggested production order</h2>
 <p>Work bottom-up by complexity. Items that unblock config wiring come first so the procedural engine can be tested with real (even rough) assets as early as possible.</p>
 <div class="fragment"><div class="line">1. [x] GridActorConfiguration SO + registration         ← code done; SO asset still needed in Unity</div>
@@ -461,7 +461,7 @@ Suggested production order</h2>
 <div class="line">7. Absorber                                         ← danger actor; needs distinctive look</div>
 <div class="line">8. Gatekeeper                                       ← most complex; needs N-state animator</div>
 </div><!-- fragment --><hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md178"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md185"></a>
 Asset folder conventions</h2>
 <div class="fragment"><div class="line">Assets/</div>
 <div class="line">├── Prefabs/</div>
@@ -491,7 +491,7 @@ Asset folder conventions</h2>
 <div class="line">    └── Grid/                        ← NEW folder for grid actor sprites</div>
 <div class="line">        └── (one sub-folder per actor)</div>
 </div><!-- fragment --><hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md180"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md187"></a>
 Open questions for art direction</h2>
 <ol type="1">
 <li><strike><b>Soap Cluster vs Unbreakable read</b></strike> — ✅ Resolved. Soap Cluster is iridescent/translucent, shrinks on hit, projectile passes through. Unbreakable is opaque/heavy, deflects all hits. Art directions are distinct by definition; confirm Unbreakable sprite before commission.</li>
@@ -515,7 +515,7 @@ Open questions for art direction</h2>
 <!-- start footer part -->
 <div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
   <ul>
-    <li class="navelem"><a href="plans.html">Plans</a></li>
+    <li class="navelem"><a href="index.html">BalloonParty</a></li><li class="navelem"><a href="plans.html">Plans</a></li>
     <li class="footer">Generated by <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.17.0 </li>
   </ul>
 </div>

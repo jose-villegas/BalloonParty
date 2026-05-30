@@ -138,13 +138,13 @@ Files</h2></td></tr>
 <tr class="memitem:NavigationSpawnGate_2Ecs" id="r_NavigationSpawnGate_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_navigation_spawn_gate_8cs.html">NavigationSpawnGate.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md355"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md362"></a>
 Slots</h1>
 <p>The grid that holds all actors in play. Actors are anything that can occupy a slot — balloons today, static obstacles and spawners in the future.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md356"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md363"></a>
 Actor abstraction</h1>
 <p>Every grid occupant is an <span class="tt">ISlotActor</span>. The grid never speaks directly in balloon types.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md357"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md364"></a>
 Core interfaces</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -162,7 +162,7 @@ Core interfaces</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">SlotActorKind</span>  </td><td class="markdownTableBodyNone">Enum — <span class="tt">Dynamic</span> (balancer can relocate, contributes weight) or <span class="tt">Static</span> (fixed, contributes weight, balancer skips)  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md358"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md365"></a>
 Capability interfaces</h2>
 <p>Optional traits actors can advertise to consumers:</p>
 <table class="markdownTable">
@@ -187,7 +187,7 @@ Capability interfaces</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">IPassThrough</span>  </td><td class="markdownTableBodyNone">Actor's slot can be crossed by animation paths (spawn entry, balance moves). Actors that do NOT implement this block traversal; rerouting is deferred to a future phase.  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md359"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md366"></a>
 Hit types</h2>
 <p><span class="tt">DamageContext</span> wraps damage with optional flags:</p>
 <table class="markdownTable">
@@ -220,7 +220,7 @@ Hit types</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">StaticActorModel</span>  </td><td class="markdownTableBodyNone">neither  </td><td class="markdownTableBodyNone">No collider — not part of the hit pipeline  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md360"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md367"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -236,7 +236,7 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">Spawner/</span>  </td><td class="markdownTableBodyNone">Spawner coordination — <span class="tt">IGridSpawner</span>, <span class="tt">SpawnStage</span>, <span class="tt">GridSpawnerCoordinator</span> (namespace <span class="tt"><a class="el" href="namespace_balloon_party_1_1_slots_1_1_spawner.html">BalloonParty.Slots.Spawner</a></span>)  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md361"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md368"></a>
 How it works</h1>
 <p>The grid is a two-dimensional space of slots arranged in a staggered pattern (odd rows offset by half a column). Each slot is either empty or occupied by an actor model and its view. The grid knows how to convert a slot coordinate into a world position, which slots are unbalanced (missing support from below), and what the best empty slot is for an actor to move into.</p>
 <p><span class="tt">OptimalNextEmptySlot</span> uses a recursive weight algorithm to decide between two candidate slots (directly above and diagonally above). The weight of a candidate = count of occupied slots in the tree above it. Higher weight = more support = preferred. On tie, the diagonal candidate wins (via <span class="tt">&gt;=</span> comparison).</p>
@@ -245,11 +245,11 @@ How it works</h1>
 <p><span class="tt">AllEmptySlots</span> yields every empty slot across the full grid — used by <span class="tt">StaticActorSpawner</span>.</p>
 <p><span class="tt">IsTraversable(col, row)</span> returns true if the slot is empty or the occupant implements <span class="tt">IPassThrough</span> — used by <span class="tt">ComputePath</span> to build spawn animation waypoints.</p>
 <p><span class="tt">ComputePath(source, target)</span> returns world-space waypoints along the straight-line grid path between two slot indices. Either endpoint may be outside grid bounds. Non-traversable in-bounds slots and in-transit balance slots emit warnings; rerouting is deferred.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md362"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md369"></a>
 Balance Path Holder</h1>
 <p><span class="tt">BalancePathHolder</span> tracks grid slots that are in-transit due to balance animations. When the balancer relocates a balloon from slot A to slot B, both A and B are reserved as in-transit under that actor. This lets <span class="tt">ComputePath</span> warn when a spawn animation path crosses a slot that a balance animation is currently traversing — even if the grid data already reflects the post-balance state.</p>
 <p>Transit slots are tracked per-actor and released via <span class="tt">Release(actor)</span> when the balance animation's <span class="tt">OnComplete</span> fires. This means transit data persists across multiple balance passes — a second balance triggered after spawning does not erase transit from the first balance's still-running animations.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md363"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md370"></a>
 Spawner Coordination</h1>
 <p><span class="tt">GridSpawnerCoordinator</span> owns the sequencing of all grid population. Individual spawners (<span class="tt">StaticActorSpawner</span>, <span class="tt">BalloonSpawner</span>) implement <span class="tt">IGridSpawner</span> and declare their priority via <span class="tt">SpawnStage</span>. The coordinator:</p>
 <ol type="1">
@@ -269,7 +269,7 @@ Spawner Coordination</h1>
 <div class="line">SpawnStage.BalloonActors (100) ──→  BalloonSpawner.SpawnAsync</div>
 </div><!-- fragment --><p>Spawners are injected as <span class="tt">IEnumerable&lt;IGridSpawner&gt;</span> via VContainer's collection injection — each registered with <span class="tt">.As&lt;IGridSpawner&gt;()</span> in <span class="tt">GameLifetimeScope</span>.</p>
 <p><span class="tt">StaticActorSpawner.Start()</span> registers the pool immediately (synchronous, runs at scene start before the gate opens). <span class="tt">BalloonSpawner.Start()</span> starts pre-warming pools asynchronously and stores the task; <span class="tt">SpawnAsync</span> awaits it before populating the grid — so pre-warm and navigation wait overlap rather than serialize.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md364"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md371"></a>
 Interactions</h1>
 <ul>
 <li><b>BalloonSpawner</b> — calls <span class="tt">Balance()</span> once before all line spawns so existing balloons consolidate upward first; then calls <span class="tt">Place</span> for each new balloon into remaining empty slots; uses <span class="tt">ComputePath</span> for spawn animation waypoints; publishes <span class="tt">BalanceBalloonsMessage</span> after spawning for a final settling pass</li>

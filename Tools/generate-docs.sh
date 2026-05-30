@@ -19,5 +19,11 @@ echo "  ✔ ${PAGE_COUNT} HTML pages generated"
 
 echo ""
 echo "✅ Documentation ready at: Docs/doxygen/html/index.html"
-echo "   Open with: open Docs/doxygen/html/index.html"
+
+# Open in default browser
+if command -v open &>/dev/null; then
+  open "$REPO_ROOT/Docs/doxygen/html/index.html"
+elif command -v xdg-open &>/dev/null; then
+  xdg-open "$REPO_ROOT/Docs/doxygen/html/index.html"
+fi
 

@@ -139,10 +139,10 @@ Files</h2></td></tr>
 <tr class="memitem:NudgeType_2Ecs" id="r_NudgeType_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_nudge_type_8cs.html">NudgeType.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md113"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md120"></a>
 Nudge</h1>
 <p>Elastic push-out/return animations for actors — triggered by projectile hits, tough-balloon deflections, and item shockwaves.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md114"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md121"></a>
 Folder structure</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -162,7 +162,7 @@ Folder structure</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">Editor/NudgeOverrideDrawer</span>  </td><td class="markdownTableBodyNone">Extends <span class="tt">AutoFieldPropertyDrawer</span> (in <span class="tt">Source/Editor/</span>) — auto-draws <span class="tt">_distance</span> and <span class="tt">_duration</span>; pins <span class="tt">_appliesTo</span> above the auto section via <span class="tt">DrawPinnedFields</span> using <span class="tt">EnumFlagsField</span>; conditionally draws <span class="tt">_falloff</span> only when the Shockwave flag is set. Overrides <span class="tt">BuildFoldoutLabel</span> to append the current <span class="tt">NudgeType</span> value to each array element header (e.g. <span class="tt">Element 0  [Deflect]</span>)  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md115"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md122"></a>
 Nudge types</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -174,7 +174,7 @@ Nudge types</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">Shockwave</span>  </td><td class="markdownTableBodyNone">Item handler (e.g. Bomb) publishes <span class="tt">NudgeMessage(Source=Shockwave, Actor=null)</span>  </td><td class="markdownTableBodyNone">All occupied grid slots, attenuated by distance  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md116"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md123"></a>
 Override resolution</h1>
 <p>Distance, duration, and falloff are resolved in priority order for each affected actor:</p>
 <ol type="1">
@@ -183,11 +183,11 @@ Override resolution</h1>
 <li><b>Global default</b> — <span class="tt">BalloonsConfiguration.NudgeDistance</span>, <span class="tt">NudgeDuration</span>, <span class="tt">NudgeFalloff</span></li>
 </ol>
 <p>Shockwave uses exponential distance falloff: <span class="tt">distance = baseDistance × exp(−falloff × d)</span>. A per-actor shockwave override skips the falloff entirely and uses its fixed <span class="tt">Distance</span>.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md117"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md124"></a>
 Stability tracking</h1>
 <p><span class="tt">BalloonView</span> owns stability during nudge. It holds a <span class="tt">_isNudging</span> flag. An actor is skipped if its model reports <span class="tt">IsStable = false</span> and <span class="tt">_isNudging</span> is not set — meaning some other system (spawning, balancing) caused the instability. If <span class="tt">_isNudging</span> is already set (mid-nudge interrupt), the nudge proceeds and kills the previous tween. On nudge start: <span class="tt">IsStable = false</span>, <span class="tt">_isNudging = true</span>. On nudge complete: <span class="tt">IsStable = true</span>, <span class="tt">_isNudging = false</span>.</p>
 <p>Any actor whose view implements <span class="tt">INudgeable</span> can be nudged — the interface decouples <span class="tt">NudgeService</span> from any specific view type. <span class="tt">BalloonView</span> is the primary implementor today. Static grid actors with dedicated nudge animations can add <span class="tt">INudgeable</span> to their views when needed.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md118"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md125"></a>
 Interactions</h1>
 <ul>
 <li><b>ActorHitMessage</b> — triggers automatic neighbor nudges for every hit on an <span class="tt">IHasNudge</span> actor</li>
