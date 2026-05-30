@@ -8,8 +8,8 @@ var dir_14eca4e58e6d71e3a9859288c1bd2735 =
     [ "PaintSplashViewEditor.cs", "_paint_splash_view_editor_8cs.html", "_paint_splash_view_editor_8cs" ],
     [ "PropertyDrawerHelper.cs", "_property_drawer_helper_8cs.html", "_property_drawer_helper_8cs" ],
     [ "SceneDrawingHelper.cs", "_scene_drawing_helper_8cs.html", "_scene_drawing_helper_8cs" ],
-    [ "ScriptReferenceRemap.cs", "_script_reference_remap_8cs.html", null ],
-    [ "ScriptSearchPopup.cs", "_script_search_popup_8cs.html", null ],
-    [ "SetMobileTextureSize.cs", "_set_mobile_texture_size_8cs.html", null ],
-    [ "TextureAuditWindow.cs", "_texture_audit_window_8cs.html", null ]
+    [ "ScriptReferenceRemap.cs", "_script_reference_remap_8cs.html", "_script_reference_remap_8cs" ],
+    [ "ScriptSearchPopup.cs", "_script_search_popup_8cs.html", "_script_search_popup_8cs" ],
+    [ "SetMobileTextureSize.cs", "_set_mobile_texture_size_8cs.html", "_set_mobile_texture_size_8cs" ],
+    [ "TextureAuditWindow.cs", "_texture_audit_window_8cs.html", "_texture_audit_window_8cs" ]
 ];

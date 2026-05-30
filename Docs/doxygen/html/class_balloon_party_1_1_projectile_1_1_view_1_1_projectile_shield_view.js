@@ -1,7 +1,31 @@
 var class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view =
 [
+    [ "Awake", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a1c5e559a70c6eb14b6ea0a592f87760e", null ],
     [ "Bind", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a4e40f5ee492772e00e8ac865a4c1ae12", null ],
+    [ "CurrentColor", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a801c608c5df75419e0630009f1c00b08", null ],
+    [ "OnDestroy", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a1f054e2a9ba3fe756904a96ea5c2615a", null ],
     [ "PlayBounceVfx", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a6c10cc8de2c00d4d5078d335ad009021", null ],
+    [ "PlayShieldChangeFx", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a9c782bc9347cfd050bab300a1d10f33f", null ],
     [ "Reset", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a8d328dcd833f2af5dee57d990a0a6dc7", null ],
-    [ "Show", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a7e860d6fe8d70bc5a20c52d41cd8e45a", null ]
+    [ "Show", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a7e860d6fe8d70bc5a20c52d41cd8e45a", null ],
+    [ "SpawnVfx", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#ad4deae457f272a12d035d7efbb51d0da", null ],
+    [ "SpawnVfxRotated", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a4f061e7dc6b2e6cfffc711c64c4260c5", null ],
+    [ "UpdateColor", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a49783f907a1ea9f50dfad0caf7d58b81", null ],
+    [ "UpdateShieldVisuals", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#ac81369763249108f22b319e4632c5eb4", null ],
+    [ "_alpha", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a4daa6bb1085b656891a6c2a5d8b50779", null ],
+    [ "_colorDuration", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a217c91a43cc7fca31280e5f2ed5a26a7", null ],
+    [ "_config", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a1f135bf93b98c9eadeb00b59fdac8d0d", null ],
+    [ "_currentColor", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a2094cf86bf2d54d8d1bed52dedffd59f", null ],
+    [ "_disposable", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#aa32410ee46822f78aa8669ff3cd07d7e", null ],
+    [ "_grid", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a3072074c4d85de78755f3c0f12a23ad1", null ],
+    [ "_model", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a11a78304f214e2c66dbeb1d838667966", null ],
+    [ "_palette", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a2b5e71d2d28aafe193be203dba7d77bc", null ],
+    [ "_poolManager", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#ad9304324d65e40220a4137985f17d8a9", null ],
+    [ "_previousShieldCount", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a30418e08725d70d2a96900c752b61c7d", null ],
+    [ "_scaleDuration", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a4ef779f94211bddf4ebffff8c31d1875", null ],
+    [ "_scaleIncrements", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a5dc501df939127106753b1ce5dc5896f", null ],
+    [ "_shieldBounceVfxPrefab", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a8cabaa4df99fae3549eb8f06d65229eb", null ],
+    [ "_shieldGainVfxPrefab", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#ace03e51834799f0be0faebc718125dbf", null ],
+    [ "_shieldLoseVfxPrefab", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#aab5e67e6157ca1fae0e448b7aac83c07", null ],
+    [ "_shields", "class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#ab29eba0d7ff923a572cb68262f1e0d9e", null ]
 ];

@@ -106,7 +106,7 @@ var sectionId = 'dynsection-0';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="class_balloon_party_1_1_balloon_1_1_model_1_1_balloon_model_base.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="673,-103.5 535.5,-103.5 535.5,-73 673,-73 673,-103.5"/>
 <text xml:space="preserve" text-anchor="start" x="543.5" y="-90" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="604.25" y="-78.75" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonModelBase</text>
@@ -125,7 +125,7 @@ var sectionId = 'dynsection-0';
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="class_balloon_party_1_1_balloon_1_1_model_1_1_balloon_model.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="846.5,-177.5 709,-177.5 709,-147 846.5,-147 846.5,-177.5"/>
 <text xml:space="preserve" text-anchor="start" x="717" y="-164" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="777.75" y="-152.75" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonModel</text>
@@ -144,7 +144,7 @@ var sectionId = 'dynsection-0';
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="class_balloon_party_1_1_balloon_1_1_model_1_1_bubble_cluster_model.html" target="_top" xlink:title="Model for BalloonType.BubbleCluster.">
 <polygon fill="white" stroke="#666666" points="846.5,-128.5 709,-128.5 709,-98 846.5,-98 846.5,-128.5"/>
 <text xml:space="preserve" text-anchor="start" x="717" y="-115" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="777.75" y="-103.75" font-family="Helvetica,sans-Serif" font-size="10.00">BubbleClusterModel</text>
@@ -163,7 +163,7 @@ var sectionId = 'dynsection-0';
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="class_balloon_party_1_1_balloon_1_1_model_1_1_tough_balloon_model.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="846.5,-79.5 709,-79.5 709,-49 846.5,-49 846.5,-79.5"/>
 <text xml:space="preserve" text-anchor="start" x="717" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="777.75" y="-54.75" font-family="Helvetica,sans-Serif" font-size="10.00">ToughBalloonModel</text>
@@ -182,7 +182,7 @@ var sectionId = 'dynsection-0';
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:title=" ">
+<g id="a_Node000008"><a xlink:href="class_balloon_party_1_1_balloon_1_1_model_1_1_unbreakable_balloon_model.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="846.5,-30.5 709,-30.5 709,0 846.5,0 846.5,-30.5"/>
 <text xml:space="preserve" text-anchor="start" x="717" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="777.75" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">UnbreakableBalloonModel</text>

@@ -164,34 +164,44 @@ Usage</h1>
 <div class="fragment"><div class="line"><span class="keyword">using </span><a class="code hl_namespace" href="namespace_balloon_party_1_1_editor_1_1_editor_u_i.html">BalloonParty.Editor.EditorUI</a>;</div>
 <div class="line"> </div>
 <div class="line"><span class="comment">// In your EditorWindow:</span></div>
-<div class="line"><span class="keyword">private</span> readonly SortState _sort = <span class="keyword">new</span>();</div>
+<div class="line"><span class="keyword">private</span> readonly <a class="code hl_class" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sort_state.html">SortState</a> _sort = <span class="keyword">new</span>();</div>
 <div class="line"><span class="keyword">private</span> <span class="keywordtype">bool</span> _selectAll;</div>
 <div class="line"><span class="keyword">private</span> <span class="keywordtype">string</span> _search = <span class="stringliteral">&quot;&quot;</span>;</div>
 <div class="line"><span class="keyword">private</span> MyFilter _filter;</div>
 <div class="line"> </div>
 <div class="line"><span class="keywordtype">void</span> OnGUI()</div>
 <div class="line">{</div>
-<div class="line">    _filter = SearchFilterToolbar.Draw(ref _search, _filter, filterLabels, OnRefresh);</div>
+<div class="line">    _filter = <a class="code hl_class" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_search_filter_toolbar.html">SearchFilterToolbar</a>.Draw(ref _search, _filter, filterLabels, OnRefresh);</div>
 <div class="line"> </div>
 <div class="line">    EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);</div>
-<div class="line">    _selectAll = SelectionTracker.DrawSelectAllToggle(_selectAll, filtered);</div>
-<div class="line">    SortableHeader.Draw(<span class="stringliteral">&quot;Name&quot;</span>, 0, 160, _sort);</div>
-<div class="line">    SortableHeader.Draw(<span class="stringliteral">&quot;Size&quot;</span>, 1, 80, _sort);</div>
+<div class="line">    _selectAll = <a class="code hl_class" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_selection_tracker.html">SelectionTracker</a>.DrawSelectAllToggle(_selectAll, filtered);</div>
+<div class="line">    <a class="code hl_class" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sortable_header.html">SortableHeader</a>.<a class="code hl_function" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sortable_header.html#ad8272f548c1087f23dd44c89b5b70584">Draw</a>(<span class="stringliteral">&quot;Name&quot;</span>, 0, 160, _sort);</div>
+<div class="line">    <a class="code hl_class" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sortable_header.html">SortableHeader</a>.<a class="code hl_function" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sortable_header.html#ad8272f548c1087f23dd44c89b5b70584">Draw</a>(<span class="stringliteral">&quot;Size&quot;</span>, 1, 80, _sort);</div>
 <div class="line">    EditorGUILayout.EndHorizontal();</div>
 <div class="line"> </div>
-<div class="line">    SortableHeader.ApplySort(filtered, _sort, MyCompare);</div>
+<div class="line">    <a class="code hl_class" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sortable_header.html">SortableHeader</a>.ApplySort(filtered, _sort, MyCompare);</div>
 <div class="line"> </div>
 <div class="line">    <span class="keywordflow">foreach</span> (var entry <span class="keywordflow">in</span> filtered)</div>
 <div class="line">    {</div>
-<div class="line">        StyledRow.BeginHighlightedRow(entry.NeedsAttention, warningColor);</div>
-<div class="line">        SelectionTracker.DrawRowToggle(entry);</div>
-<div class="line">        AssetLinkLabel.Draw(entry.Name, entry.Path);</div>
+<div class="line">        <a class="code hl_class" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_styled_row.html">StyledRow</a>.<a class="code hl_function" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_styled_row.html#ada9629247fcf3d97c92d4380745bd13a">BeginHighlightedRow</a>(entry.NeedsAttention, warningColor);</div>
+<div class="line">        <a class="code hl_class" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_selection_tracker.html">SelectionTracker</a>.<a class="code hl_function" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_selection_tracker.html#abf24067fbf118e931f5322c30c0b1c73">DrawRowToggle</a>(entry);</div>
+<div class="line">        <a class="code hl_class" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_asset_link_label.html">AssetLinkLabel</a>.<a class="code hl_function" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_asset_link_label.html#a93e2a033972c05c1afffc4944a5f809a">Draw</a>(entry.Name, entry.Path);</div>
 <div class="line">        EditorGUILayout.EndHorizontal();</div>
 <div class="line">    }</div>
 <div class="line"> </div>
-<div class="line">    SelectionTracker.DrawSelectionCount(allItems);</div>
-<div class="line">    var selected = SelectionTracker.GetSelected(allItems);</div>
+<div class="line">    <a class="code hl_class" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_selection_tracker.html">SelectionTracker</a>.DrawSelectionCount(allItems);</div>
+<div class="line">    var selected = <a class="code hl_class" href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_selection_tracker.html">SelectionTracker</a>.GetSelected(allItems);</div>
 <div class="line">}</div>
+<div class="ttc" id="aclass_balloon_party_1_1_editor_1_1_editor_u_i_1_1_asset_link_label_html"><div class="ttname"><a href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_asset_link_label.html">BalloonParty.Editor.EditorUI.AssetLinkLabel</a></div><div class="ttdoc">Draws a clickable label that pings and selects an asset in the Project view.</div><div class="ttdef"><b>Definition</b> AssetLinkLabel.cs:10</div></div>
+<div class="ttc" id="aclass_balloon_party_1_1_editor_1_1_editor_u_i_1_1_asset_link_label_html_a93e2a033972c05c1afffc4944a5f809a"><div class="ttname"><a href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_asset_link_label.html#a93e2a033972c05c1afffc4944a5f809a">BalloonParty.Editor.EditorUI.AssetLinkLabel.Draw</a></div><div class="ttdeci">static void Draw(string label, string assetPath, float width=160f)</div><div class="ttdef"><b>Definition</b> AssetLinkLabel.cs:11</div></div>
+<div class="ttc" id="aclass_balloon_party_1_1_editor_1_1_editor_u_i_1_1_search_filter_toolbar_html"><div class="ttname"><a href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_search_filter_toolbar.html">BalloonParty.Editor.EditorUI.SearchFilterToolbar</a></div><div class="ttdoc">Draws a toolbar row with a search field, an enum popup filter, and an optional refresh button.</div><div class="ttdef"><b>Definition</b> SearchFilterToolbar.cs:12</div></div>
+<div class="ttc" id="aclass_balloon_party_1_1_editor_1_1_editor_u_i_1_1_selection_tracker_html"><div class="ttname"><a href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_selection_tracker.html">BalloonParty.Editor.EditorUI.SelectionTracker</a></div><div class="ttdoc">Helpers for managing checkbox-based row selection in editor tables.</div><div class="ttdef"><b>Definition</b> SelectionTracker.cs:20</div></div>
+<div class="ttc" id="aclass_balloon_party_1_1_editor_1_1_editor_u_i_1_1_selection_tracker_html_abf24067fbf118e931f5322c30c0b1c73"><div class="ttname"><a href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_selection_tracker.html#abf24067fbf118e931f5322c30c0b1c73">BalloonParty.Editor.EditorUI.SelectionTracker.DrawRowToggle</a></div><div class="ttdeci">static void DrawRowToggle(ISelectable item)</div><div class="ttdoc">Draws a single row selection toggle for an item.</div><div class="ttdef"><b>Definition</b> SelectionTracker.cs:44</div></div>
+<div class="ttc" id="aclass_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sort_state_html"><div class="ttname"><a href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sort_state.html">BalloonParty.Editor.EditorUI.SortState</a></div><div class="ttdoc">Tracks which column is sorted and in which direction.</div><div class="ttdef"><b>Definition</b> SortableHeader.cs:12</div></div>
+<div class="ttc" id="aclass_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sortable_header_html"><div class="ttname"><a href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sortable_header.html">BalloonParty.Editor.EditorUI.SortableHeader</a></div><div class="ttdoc">Draws a toolbar button that toggles sort direction on click and sorts a list via a caller-supplied co...</div><div class="ttdef"><b>Definition</b> SortableHeader.cs:22</div></div>
+<div class="ttc" id="aclass_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sortable_header_html_ad8272f548c1087f23dd44c89b5b70584"><div class="ttname"><a href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sortable_header.html#ad8272f548c1087f23dd44c89b5b70584">BalloonParty.Editor.EditorUI.SortableHeader.Draw</a></div><div class="ttdeci">static void Draw(string label, int column, float width, SortState state)</div><div class="ttdoc">Draws a single sortable column header as a toolbar button.</div><div class="ttdef"><b>Definition</b> SortableHeader.cs:27</div></div>
+<div class="ttc" id="aclass_balloon_party_1_1_editor_1_1_editor_u_i_1_1_styled_row_html"><div class="ttname"><a href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_styled_row.html">BalloonParty.Editor.EditorUI.StyledRow</a></div><div class="ttdoc">Small drawing helpers for styled labels and highlighted rows.</div><div class="ttdef"><b>Definition</b> StyledRow.cs:10</div></div>
+<div class="ttc" id="aclass_balloon_party_1_1_editor_1_1_editor_u_i_1_1_styled_row_html_ada9629247fcf3d97c92d4380745bd13a"><div class="ttname"><a href="class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_styled_row.html#ada9629247fcf3d97c92d4380745bd13a">BalloonParty.Editor.EditorUI.StyledRow.BeginHighlightedRow</a></div><div class="ttdeci">static void BeginHighlightedRow(bool highlight, Color highlightColor)</div><div class="ttdoc">Begins a horizontal row with an optional background tint.</div><div class="ttdef"><b>Definition</b> StyledRow.cs:30</div></div>
 <div class="ttc" id="anamespace_balloon_party_1_1_editor_1_1_editor_u_i_html"><div class="ttname"><a href="namespace_balloon_party_1_1_editor_1_1_editor_u_i.html">BalloonParty.Editor.EditorUI</a></div><div class="ttdef"><b>Definition</b> AssetLinkLabel.cs:5</div></div>
 </div><!-- fragment --> </div></div><!-- contents -->
 </div><!-- doc-content -->

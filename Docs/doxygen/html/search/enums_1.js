@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['damageflags_0',['DamageFlags',['../namespace_balloon_party_1_1_slots_1_1_capabilities.html#af915a4f3df9f513ca2c08e1a87aff762',1,'BalloonParty::Slots::Capabilities']]]
+  ['cinematicstate_0',['CinematicState',['../namespace_balloon_party_1_1_shared_1_1_game_state.html#a215f59d6ae03f95cde0cf7bc71abdd3e',1,'BalloonParty::Shared::GameState']]]
 ];

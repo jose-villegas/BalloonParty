@@ -1,5 +1,7 @@
 <map id="BalloonParty.Configuration.Editor.PaletteColorNameDrawer" name="BalloonParty.Configuration.Editor.PaletteColorNameDrawer">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,213,120"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="53,5,165,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,44,111,80,107,78,107,48"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="43,117,250,158"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,118,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="81,48,134,116,129,117,79,53"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_config_asset_cache-1-g.html" title="Lazily finds and caches a ScriptableObject asset by type via AssetDatabase.FindAssets." alt="" coords="142,5,323,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="210,57,164,119,160,115,205,59"/>
 </map>

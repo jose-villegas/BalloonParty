@@ -6,6 +6,6 @@
 <area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="209,87,261,96,256,97,210,92"/>
 <area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor_view.html" title=" " alt="" coords="25,120,191,161"/>
 <area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="205,125,261,120,256,121,207,130"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="5,185,211,211"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_nudge_1_1_i_nudgeable.html" title="View&#45;side contract for actors that can play a nudge animation." alt="" coords="5,185,211,211"/>
 <area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="185,178,210,170,260,149,304,131,309,129,262,154,212,175,186,183"/>
 </map>

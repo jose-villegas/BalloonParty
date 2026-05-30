@@ -11,10 +11,10 @@
 <!-- Node0 -->
 <g id="Node000000" class="node">
 <title>Node0</title>
-<g id="a_Node000000"><a xlink:href="struct_balloon_party_1_1_shared_1_1_messages_1_1_spawn_balloon_line_message.html" target="_top" xlink:title=" ">
+<g id="a_Node000000"><a xlink:href="class_balloon_party_1_1_game_1_1_cinematics_1_1_cinematic_scene.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="154.75,-30.5 0,-30.5 0,0 154.75,0 154.75,-30.5"/>
-<text xml:space="preserve" text-anchor="start" x="8" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Messages.</text>
-<text xml:space="preserve" text-anchor="middle" x="77.38" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">SpawnBalloonLineMessage</text>
+<text xml:space="preserve" text-anchor="start" x="8" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Cinematics.</text>
+<text xml:space="preserve" text-anchor="middle" x="77.38" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">CinematicScene</text>
 </a>
 </g>
 </g>

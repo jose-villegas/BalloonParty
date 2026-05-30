@@ -2,7 +2,7 @@ var namespace_balloon_party =
 [
     [ "Balloon", "namespace_balloon_party_1_1_balloon.html", "namespace_balloon_party_1_1_balloon" ],
     [ "Configuration", "namespace_balloon_party_1_1_configuration.html", "namespace_balloon_party_1_1_configuration" ],
-    [ "Display", "namespace_balloon_party_1_1_display.html", null ],
+    [ "Display", "namespace_balloon_party_1_1_display.html", "namespace_balloon_party_1_1_display" ],
     [ "Editor", "namespace_balloon_party_1_1_editor.html", "namespace_balloon_party_1_1_editor" ],
     [ "Game", "namespace_balloon_party_1_1_game.html", "namespace_balloon_party_1_1_game" ],
     [ "Item", "namespace_balloon_party_1_1_item.html", "namespace_balloon_party_1_1_item" ],

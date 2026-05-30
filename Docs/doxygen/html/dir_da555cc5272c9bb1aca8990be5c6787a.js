@@ -10,5 +10,5 @@ var dir_da555cc5272c9bb1aca8990be5c6787a =
     [ "Rendering", "dir_f3dc499ad4b8b10510430f2112edaed8.html", "dir_f3dc499ad4b8b10510430f2112edaed8" ],
     [ "IEffect.cs", "_i_effect_8cs.html", "_i_effect_8cs" ],
     [ "IGameConfiguration.cs", "_i_game_configuration_8cs.html", "_i_game_configuration_8cs" ],
-    [ "IReadyGate.cs", "_i_ready_gate_8cs.html", null ]
+    [ "IReadyGate.cs", "_i_ready_gate_8cs.html", "_i_ready_gate_8cs" ]
 ];

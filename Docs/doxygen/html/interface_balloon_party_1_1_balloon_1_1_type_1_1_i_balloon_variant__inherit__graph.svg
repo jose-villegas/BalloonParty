@@ -89,7 +89,7 @@
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="class_balloon_party_1_1_balloon_1_1_type_1_1_unbreakable_balloon_variant.html" target="_top" xlink:title="Balloon variant for BalloonType.Unbreakable.">
 <polygon fill="white" stroke="#666666" points="301.25,-30.5 168.25,-30.5 168.25,0 301.25,0 301.25,-30.5"/>
 <text xml:space="preserve" text-anchor="start" x="176.25" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Type.</text>
 <text xml:space="preserve" text-anchor="middle" x="234.75" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">UnbreakableBalloonVariant</text>
@@ -108,7 +108,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="class_balloon_party_1_1_balloon_1_1_type_1_1_simple_balloon_variant.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="469.5,-177.5 337.25,-177.5 337.25,-147 469.5,-147 469.5,-177.5"/>
 <text xml:space="preserve" text-anchor="start" x="345.25" y="-164" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Type.</text>
 <text xml:space="preserve" text-anchor="middle" x="403.38" y="-152.75" font-family="Helvetica,sans-Serif" font-size="10.00">SimpleBalloonVariant</text>

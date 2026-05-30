@@ -131,10 +131,63 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:a36183ec74b58a1c8d1af194db51a59b2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a world-space axis-aligned rectangle defined by center, width and height.  <br /></td></tr>
 <tr class="memitem:a851404487fcda4d4af3a3f3436412131" id="r_a851404487fcda4d4af3a3f3436412131"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#a851404487fcda4d4af3a3f3436412131">DrawWorldRectFromLimits</a> (float top, float right, float bottom, float left, Color outlineColor, Color fillColor)</td></tr>
 <tr class="memdesc:a851404487fcda4d4af3a3f3436412131"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a world-space axis-aligned rectangle defined by explicit edge positions (top, right, bottom, left — clockwise from top, matching CSS / <code>Vector4</code> convention).  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-static-methods" class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:a6118475ee995a1db0f087e17809cd642" id="r_a6118475ee995a1db0f087e17809cd642"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#a6118475ee995a1db0f087e17809cd642">DrawWorldQuad</a> (Vector3 bl, Vector3 br, Vector3 tr, Vector3 tl, Color outlineColor, Color fillColor)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="namespace_balloon_party_1_1_shared.html">Shared</a> Scene-view drawing primitives used by custom editors that need to render world-space guides (rectangles, bounds, etc.) via Handles. </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a6118475ee995a1db0f087e17809cd642" name="a6118475ee995a1db0f087e17809cd642"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6118475ee995a1db0f087e17809cd642">&#9670;&#160;</a></span>DrawWorldQuad()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Editor.SceneDrawingHelper.DrawWorldQuad </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>bl</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>br</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>tr</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>tl</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>outlineColor</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>fillColor</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a36183ec74b58a1c8d1af194db51a59b2" name="a36183ec74b58a1c8d1af194db51a59b2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a36183ec74b58a1c8d1af194db51a59b2">&#9670;&#160;</a></span>DrawWorldRect()</h2>
 

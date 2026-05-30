@@ -1,7 +1,12 @@
 <map id="BalloonParty.UI.Score.ProgressNotice" name="BalloonParty.UI.Score.ProgressNotice">
-<area shape="rect" id="Node000001" title=" " alt="" coords="41,94,246,135"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,117,38"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,47,128,93,123,95,82,52"/>
-<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="140,5,312,46"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,56,164,96,161,91,195,59"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="633,50,839,90"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="52,5,164,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="179,15,373,20,491,27,610,40,653,49,647,49,609,45,491,32,373,25,179,20"/>
+<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_shared_1_1_rendering_1_1_colorable_renderer.html" title="Non&#45;generic MonoBehaviour base that implements IColorableRenderer." alt="" coords="260,50,465,90"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="179,30,262,48,258,50,179,35"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="276,115,449,156"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="463,115,630,88,636,88,464,121"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="481,68,636,70,630,71,481,73"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_shared_1_1_rendering_1_1_i_colorable_renderer.html" title=" " alt="" coords="5,59,211,100"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="226,73,262,73,257,75,227,78"/>
 </map>

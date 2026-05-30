@@ -134,9 +134,13 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('class_balloon_
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_item_1_1_paint_1_1_paint_splash_view__coll__graph.svg" width="524" height="230"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_item_1_1_paint_1_1_paint_splash_view__coll__graph.svg" width="100%" height="504"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-nested-classes" class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Classes</h2></td></tr>
+<tr class="memitem:BlobFlight" id="r_BlobFlight"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_item_1_1_paint_1_1_paint_splash_view_1_1_blob_flight.html">BlobFlight</a></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a6b83756bf9f4dfba32e0a64346ae5253" id="r_a6b83756bf9f4dfba32e0a64346ae5253"><td class="memItemLeft">override void&#160;</td><td class="memItemRight"><a class="el" href="#a6b83756bf9f4dfba32e0a64346ae5253">OnDespawned</a> ()</td></tr>
@@ -153,11 +157,177 @@ Protected Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a215eeda6230e7f35327b68e8572f0cc5" id="r_a215eeda6230e7f35327b68e8572f0cc5"><td class="memItemLeft">Action&#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_pool_1_1_effect_view.html#a215eeda6230e7f35327b68e8572f0cc5">OnComplete</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pac-methods" class="groupheader"><a id="pac-methods" name="pac-methods"></a>
+Package Functions</h2></td></tr>
+<tr class="memitem:a132ca823b3351dc11111747b315c9a0d" id="r_a132ca823b3351dc11111747b315c9a0d"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a132ca823b3351dc11111747b315c9a0d">PrepareDisplay</a> (List&lt;(Vector3 from, Vector3 to)&gt; flights, <a class="el" href="class_balloon_party_1_1_configuration_1_1_item_settings.html">ItemSettings</a> settings, <a class="el" href="class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html">PoolManager</a> poolManager, Action&lt; int &gt; onTargetHit)</td></tr>
+<tr class="memdesc:a132ca823b3351dc11111747b315c9a0d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sets up the paint blob flights before calling Play.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pac-static-methods" class="groupheader"><a id="pac-static-methods" name="pac-static-methods"></a>
+Static Package Functions</h2></td></tr>
+<tr class="memitem:a916544158697b1228dbbab13923fed72" id="r_a916544158697b1228dbbab13923fed72"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#a916544158697b1228dbbab13923fed72">ApplyBlobMaterial</a> (Renderer renderer, float timeOffset, <a class="el" href="struct_balloon_party_1_1_item_1_1_paint_1_1_blob_flight_snapshot.html">BlobFlightSnapshot</a> snapshot)</td></tr>
+<tr class="memdesc:a916544158697b1228dbbab13923fed72"><td class="mdescLeft">&#160;</td><td class="mdescRight">Applies BlobFlightSnapshot MPB values plus a time offset to a renderer.  <br /></td></tr>
+<tr class="memitem:a743e39b145ecb52fccedbf7605776f78" id="r_a743e39b145ecb52fccedbf7605776f78"><td class="memItemLeft">static <a class="el" href="struct_balloon_party_1_1_item_1_1_paint_1_1_blob_flight_snapshot.html">BlobFlightSnapshot</a>&#160;</td><td class="memItemRight"><a class="el" href="#a743e39b145ecb52fccedbf7605776f78">ComputeBlobFlight</a> (float progress, Vector3 from, Vector3 to, <a class="el" href="class_balloon_party_1_1_configuration_1_1_item_settings.html">ItemSettings</a> settings)</td></tr>
+<tr class="memdesc:a743e39b145ecb52fccedbf7605776f78"><td class="mdescLeft">&#160;</td><td class="mdescRight">Pure math — computes blob position, scale, and MPB values for a given progress along the flight arc.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a4e54199d901001a878fcb53fb12e4c42" id="r_a4e54199d901001a878fcb53fb12e4c42"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a4e54199d901001a878fcb53fb12e4c42">HideAllBlobs</a> ()</td></tr>
+<tr class="memitem:a7f39b33955c397c44854bd3ca94bbeda" id="r_a7f39b33955c397c44854bd3ca94bbeda"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a7f39b33955c397c44854bd3ca94bbeda">InitialiseBlobs</a> (Color tint)</td></tr>
+<tr class="memitem:ae4ad91bf71a9d6781e691f78fd815dbf" id="r_ae4ad91bf71a9d6781e691f78fd815dbf"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ae4ad91bf71a9d6781e691f78fd815dbf">PlaySplash</a> (Vector3 position)</td></tr>
+<tr class="memitem:a275685a955aa96f4cd987eab1727ae8e" id="r_a275685a955aa96f4cd987eab1727ae8e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a275685a955aa96f4cd987eab1727ae8e">TickFlights</a> (float delta)</td></tr>
+<tr class="memitem:ad56b76ef03582d717dcffb3f330155ba" id="r_ad56b76ef03582d717dcffb3f330155ba"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad56b76ef03582d717dcffb3f330155ba">Update</a> ()</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a7eb801d2235541c9a142bfbbaa426654" id="r_a7eb801d2235541c9a142bfbbaa426654"><td class="memItemLeft">List&lt; <a class="el" href="class_balloon_party_1_1_item_1_1_paint_1_1_paint_splash_view_1_1_blob_flight.html">BlobFlight</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a7eb801d2235541c9a142bfbbaa426654">_activeFlights</a></td></tr>
+<tr class="memitem:a444381861f6108b42d08eda33090e312" id="r_a444381861f6108b42d08eda33090e312"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_shared_1_1_rendering_1_1_colorable_renderer.html">ColorableRenderer</a>[]&#160;</td><td class="memItemRight"><a class="el" href="#a444381861f6108b42d08eda33090e312">_blobRenderers</a></td></tr>
+<tr class="memitem:a0d3fc7f4cf0aebed98655cd2ebe35d68" id="r_a0d3fc7f4cf0aebed98655cd2ebe35d68"><td class="memItemLeft">Color&#160;</td><td class="memItemRight"><a class="el" href="#a0d3fc7f4cf0aebed98655cd2ebe35d68">_color</a></td></tr>
+<tr class="memitem:a3bd7c911dbb5d7e69997d33aed926799" id="r_a3bd7c911dbb5d7e69997d33aed926799"><td class="memItemLeft">Action&lt; int &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a3bd7c911dbb5d7e69997d33aed926799">_onTargetHit</a></td></tr>
+<tr class="memitem:a74a2eb8741d38b9b6fc67d5c32d11d5b" id="r_a74a2eb8741d38b9b6fc67d5c32d11d5b"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a74a2eb8741d38b9b6fc67d5c32d11d5b">_playing</a></td></tr>
+<tr class="memitem:ab59b4f431218a83880dd8fcc39703682" id="r_ab59b4f431218a83880dd8fcc39703682"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html">PoolManager</a>&#160;</td><td class="memItemRight"><a class="el" href="#ab59b4f431218a83880dd8fcc39703682">_poolManager</a></td></tr>
+<tr class="memitem:adfd6c3fbe7893c3ff6eeca27983b21ae" id="r_adfd6c3fbe7893c3ff6eeca27983b21ae"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_configuration_1_1_item_settings.html">ItemSettings</a>&#160;</td><td class="memItemRight"><a class="el" href="#adfd6c3fbe7893c3ff6eeca27983b21ae">_settings</a></td></tr>
+<tr class="memitem:a5a9e3f0a945cc3c96a45dda253f97835" id="r_a5a9e3f0a945cc3c96a45dda253f97835"><td class="memItemLeft">ParticleSystem&#160;</td><td class="memItemRight"><a class="el" href="#a5a9e3f0a945cc3c96a45dda253f97835">_splashParticlePrefab</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-static-attribs" class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:adf2157e708613f7342788d288c60ef5c" id="r_adf2157e708613f7342788d288c60ef5c"><td class="memItemLeft">static readonly int&#160;</td><td class="memItemRight"><a class="el" href="#adf2157e708613f7342788d288c60ef5c">ShadowScaleId</a> = Shader.PropertyToID(&quot;_ShadowScale&quot;)</td></tr>
+<tr class="memitem:aa4a5dc775d784ac18728c1b8d0ff7586" id="r_aa4a5dc775d784ac18728c1b8d0ff7586"><td class="memItemLeft">static readonly int&#160;</td><td class="memItemRight"><a class="el" href="#aa4a5dc775d784ac18728c1b8d0ff7586">SpriteScaleId</a> = Shader.PropertyToID(&quot;_SpriteScale&quot;)</td></tr>
+<tr class="memitem:a7e0f427896f6feedea1bcd41ae365477" id="r_a7e0f427896f6feedea1bcd41ae365477"><td class="memItemLeft">static readonly int&#160;</td><td class="memItemRight"><a class="el" href="#a7e0f427896f6feedea1bcd41ae365477">TimeOffsetId</a> = Shader.PropertyToID(&quot;_TimeOffset&quot;)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Poolable paint-splash effect. </p>
 <p>Extends EffectView so it participates in the standard effect-pool pipeline via EffectPoolChannel. The prefab holds pre-placed ColorableRenderer children (one per potential neighbor — 6 for a hex grid) with the PaintBlob shader material. Splash particles are spawned as independent pooled instances via ParticlePoolChannel so they outlive the view's pool return. Call PrepareDisplay with target data before Play. </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a916544158697b1228dbbab13923fed72" name="a916544158697b1228dbbab13923fed72"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a916544158697b1228dbbab13923fed72">&#9670;&#160;</a></span>ApplyBlobMaterial()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Paint.PaintSplashView.ApplyBlobMaterial </td>
+          <td>(</td>
+          <td class="paramtype">Renderer</td>          <td class="paramname"><span class="paramname"><em>renderer</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>timeOffset</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_balloon_party_1_1_item_1_1_paint_1_1_blob_flight_snapshot.html">BlobFlightSnapshot</a></td>          <td class="paramname"><span class="paramname"><em>snapshot</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Applies BlobFlightSnapshot MPB values plus a time offset to a renderer. </p>
+<p><a class="el" href="namespace_balloon_party_1_1_shared.html">Shared</a> by runtime and editor preview. </p>
+
+</div>
+</div>
+<a id="a743e39b145ecb52fccedbf7605776f78" name="a743e39b145ecb52fccedbf7605776f78"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a743e39b145ecb52fccedbf7605776f78">&#9670;&#160;</a></span>ComputeBlobFlight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="struct_balloon_party_1_1_item_1_1_paint_1_1_blob_flight_snapshot.html">BlobFlightSnapshot</a> BalloonParty.Item.Paint.PaintSplashView.ComputeBlobFlight </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>progress</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>from</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>to</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_balloon_party_1_1_configuration_1_1_item_settings.html">ItemSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Pure math — computes blob position, scale, and MPB values for a given progress along the flight arc. </p>
+<p><a class="el" href="namespace_balloon_party_1_1_shared.html">Shared</a> by runtime and editor preview. </p>
+
+</div>
+</div>
+<a id="a4e54199d901001a878fcb53fb12e4c42" name="a4e54199d901001a878fcb53fb12e4c42"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4e54199d901001a878fcb53fb12e4c42">&#9670;&#160;</a></span>HideAllBlobs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Paint.PaintSplashView.HideAllBlobs </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7f39b33955c397c44854bd3ca94bbeda" name="a7f39b33955c397c44854bd3ca94bbeda"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7f39b33955c397c44854bd3ca94bbeda">&#9670;&#160;</a></span>InitialiseBlobs()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Paint.PaintSplashView.InitialiseBlobs </td>
+          <td>(</td>
+          <td class="paramtype">Color</td>          <td class="paramname"><span class="paramname"><em>tint</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac4df2fabf5b0f7b348a1d2385ba5395e" name="ac4df2fabf5b0f7b348a1d2385ba5395e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac4df2fabf5b0f7b348a1d2385ba5395e">&#9670;&#160;</a></span>InvokeComplete()</h2>
 
@@ -309,6 +479,73 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ae4ad91bf71a9d6781e691f78fd815dbf" name="ae4ad91bf71a9d6781e691f78fd815dbf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae4ad91bf71a9d6781e691f78fd815dbf">&#9670;&#160;</a></span>PlaySplash()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Paint.PaintSplashView.PlaySplash </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>position</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a132ca823b3351dc11111747b315c9a0d" name="a132ca823b3351dc11111747b315c9a0d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a132ca823b3351dc11111747b315c9a0d">&#9670;&#160;</a></span>PrepareDisplay()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Paint.PaintSplashView.PrepareDisplay </td>
+          <td>(</td>
+          <td class="paramtype">List&lt;(Vector3 from, Vector3 to)&gt;</td>          <td class="paramname"><span class="paramname"><em>flights</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_balloon_party_1_1_configuration_1_1_item_settings.html">ItemSettings</a></td>          <td class="paramname"><span class="paramname"><em>settings</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html">PoolManager</a></td>          <td class="paramname"><span class="paramname"><em>poolManager</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Action&lt; int &gt;</td>          <td class="paramname"><span class="paramname"><em>onTargetHit</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Sets up the paint blob flights before calling Play. </p>
+<p>Each entry is a (source, target) pair. <em>onTargetHit</em>  is invoked per blob arrival with the target index — use it to change the balloon's color at exactly the right moment. </p>
+
+</div>
+</div>
 <a id="afdf333754150b4aa44307842499db588" name="afdf333754150b4aa44307842499db588"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#afdf333754150b4aa44307842499db588">&#9670;&#160;</a></span>Stop()</h2>
 
@@ -336,7 +573,233 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a275685a955aa96f4cd987eab1727ae8e" name="a275685a955aa96f4cd987eab1727ae8e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a275685a955aa96f4cd987eab1727ae8e">&#9670;&#160;</a></span>TickFlights()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Paint.PaintSplashView.TickFlights </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>delta</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad56b76ef03582d717dcffb3f330155ba" name="ad56b76ef03582d717dcffb3f330155ba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad56b76ef03582d717dcffb3f330155ba">&#9670;&#160;</a></span>Update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Item.Paint.PaintSplashView.Update </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a7eb801d2235541c9a142bfbbaa426654" name="a7eb801d2235541c9a142bfbbaa426654"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eb801d2235541c9a142bfbbaa426654">&#9670;&#160;</a></span>_activeFlights</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">List&lt;<a class="el" href="class_balloon_party_1_1_item_1_1_paint_1_1_paint_splash_view_1_1_blob_flight.html">BlobFlight</a>&gt; BalloonParty.Item.Paint.PaintSplashView._activeFlights</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a444381861f6108b42d08eda33090e312" name="a444381861f6108b42d08eda33090e312"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a444381861f6108b42d08eda33090e312">&#9670;&#160;</a></span>_blobRenderers</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_shared_1_1_rendering_1_1_colorable_renderer.html">ColorableRenderer</a> [] BalloonParty.Item.Paint.PaintSplashView._blobRenderers</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0d3fc7f4cf0aebed98655cd2ebe35d68" name="a0d3fc7f4cf0aebed98655cd2ebe35d68"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d3fc7f4cf0aebed98655cd2ebe35d68">&#9670;&#160;</a></span>_color</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Color BalloonParty.Item.Paint.PaintSplashView._color</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3bd7c911dbb5d7e69997d33aed926799" name="a3bd7c911dbb5d7e69997d33aed926799"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3bd7c911dbb5d7e69997d33aed926799">&#9670;&#160;</a></span>_onTargetHit</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Action&lt;int&gt; BalloonParty.Item.Paint.PaintSplashView._onTargetHit</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a74a2eb8741d38b9b6fc67d5c32d11d5b" name="a74a2eb8741d38b9b6fc67d5c32d11d5b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74a2eb8741d38b9b6fc67d5c32d11d5b">&#9670;&#160;</a></span>_playing</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Item.Paint.PaintSplashView._playing</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab59b4f431218a83880dd8fcc39703682" name="ab59b4f431218a83880dd8fcc39703682"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab59b4f431218a83880dd8fcc39703682">&#9670;&#160;</a></span>_poolManager</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html">PoolManager</a> BalloonParty.Item.Paint.PaintSplashView._poolManager</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adfd6c3fbe7893c3ff6eeca27983b21ae" name="adfd6c3fbe7893c3ff6eeca27983b21ae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adfd6c3fbe7893c3ff6eeca27983b21ae">&#9670;&#160;</a></span>_settings</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_configuration_1_1_item_settings.html">ItemSettings</a> BalloonParty.Item.Paint.PaintSplashView._settings</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5a9e3f0a945cc3c96a45dda253f97835" name="a5a9e3f0a945cc3c96a45dda253f97835"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5a9e3f0a945cc3c96a45dda253f97835">&#9670;&#160;</a></span>_splashParticlePrefab</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ParticleSystem BalloonParty.Item.Paint.PaintSplashView._splashParticlePrefab</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a215eeda6230e7f35327b68e8572f0cc5" name="a215eeda6230e7f35327b68e8572f0cc5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a215eeda6230e7f35327b68e8572f0cc5">&#9670;&#160;</a></span>OnComplete</h2>
 
@@ -353,6 +816,72 @@ Protected Attributes</h2></td></tr>
   </td>
   <td class="mlabels-right">
 <span class="mlabels"><span class="mlabel protected">protected</span><span class="mlabel inherited">inherited</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adf2157e708613f7342788d288c60ef5c" name="adf2157e708613f7342788d288c60ef5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf2157e708613f7342788d288c60ef5c">&#9670;&#160;</a></span>ShadowScaleId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Item.Paint.PaintSplashView.ShadowScaleId = Shader.PropertyToID(&quot;_ShadowScale&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa4a5dc775d784ac18728c1b8d0ff7586" name="aa4a5dc775d784ac18728c1b8d0ff7586"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4a5dc775d784ac18728c1b8d0ff7586">&#9670;&#160;</a></span>SpriteScaleId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Item.Paint.PaintSplashView.SpriteScaleId = Shader.PropertyToID(&quot;_SpriteScale&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7e0f427896f6feedea1bcd41ae365477" name="a7e0f427896f6feedea1bcd41ae365477"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e0f427896f6feedea1bcd41ae365477">&#9670;&#160;</a></span>TimeOffsetId</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.Item.Paint.PaintSplashView.TimeOffsetId = Shader.PropertyToID(&quot;_TimeOffset&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">

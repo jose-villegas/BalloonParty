@@ -1,5 +1,8 @@
 <map id="BalloonParty.Thrower.ThrowerView" name="BalloonParty.Thrower.ThrowerView">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,229,105"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="61,5,173,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="119,45,119,80,115,77,115,48"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,192,229,218"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="56,5,167,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="115,46,119,192,114,191,110,48"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_prediction_1_1_prediction_trace_view.html" title=" " alt="" coords="133,80,293,121"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="139,38,191,79,186,81,139,44"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="187,132,130,194,127,190,181,133"/>
 </map>

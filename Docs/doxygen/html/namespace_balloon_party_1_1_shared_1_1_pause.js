@@ -1,6 +1,8 @@
 var namespace_balloon_party_1_1_shared_1_1_pause =
 [
     [ "PausedMessage", "struct_balloon_party_1_1_shared_1_1_pause_1_1_paused_message.html", "struct_balloon_party_1_1_shared_1_1_pause_1_1_paused_message" ],
+    [ "PauseResumedGate", "class_balloon_party_1_1_shared_1_1_pause_1_1_pause_resumed_gate.html", "class_balloon_party_1_1_shared_1_1_pause_1_1_pause_resumed_gate" ],
+    [ "PauseService", "class_balloon_party_1_1_shared_1_1_pause_1_1_pause_service.html", "class_balloon_party_1_1_shared_1_1_pause_1_1_pause_service" ],
     [ "ResumedMessage", "struct_balloon_party_1_1_shared_1_1_pause_1_1_resumed_message.html", "struct_balloon_party_1_1_shared_1_1_pause_1_1_resumed_message" ],
     [ "PauseSource", "namespace_balloon_party_1_1_shared_1_1_pause.html#ab006bd98ba69f3aaa2ba396e176136b5", [
       [ "Cinematic", "namespace_balloon_party_1_1_shared_1_1_pause.html#ab006bd98ba69f3aaa2ba396e176136b5a8fce77fd86da3af309c0ad415d8d7952", null ],

@@ -134,6 +134,15 @@ Public Member Functions</h2></td></tr>
 Properties</h2></td></tr>
 <tr class="memitem:a2c958b8f3fa4f52e622f048913a51b1f" id="r_a2c958b8f3fa4f52e622f048913a51b1f"><td class="memItemLeft">T&#160;</td><td class="memItemRight"><a class="el" href="#a2c958b8f3fa4f52e622f048913a51b1f">Value</a><code> [get]</code></td></tr>
 <tr class="memdesc:a2c958b8f3fa4f52e622f048913a51b1f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the cached asset, searching on first access.  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-static-methods" class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:afc3ecb99453930c3ab2cda4ed9c90e37" id="r_afc3ecb99453930c3ab2cda4ed9c90e37"><td class="memItemLeft">static T&#160;</td><td class="memItemRight"><a class="el" href="#afc3ecb99453930c3ab2cda4ed9c90e37">Find</a> ()</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:add42f5d69d434c8e4a840247ad053721" id="r_add42f5d69d434c8e4a840247ad053721"><td class="memItemLeft">T&#160;</td><td class="memItemRight"><a class="el" href="#add42f5d69d434c8e4a840247ad053721">_asset</a></td></tr>
+<tr class="memitem:a4add5dff23bd1d74ffd78e63dce51007" id="r_a4add5dff23bd1d74ffd78e63dce51007"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a4add5dff23bd1d74ffd78e63dce51007">_searched</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Lazily finds and caches a ScriptableObject asset by type via <code>AssetDatabase.FindAssets</code>. </p>
@@ -147,6 +156,31 @@ Properties</h2></td></tr>
 </dl>
 </div>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="afc3ecb99453930c3ab2cda4ed9c90e37" name="afc3ecb99453930c3ab2cda4ed9c90e37"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc3ecb99453930c3ab2cda4ed9c90e37">&#9670;&#160;</a></span>Find()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T BalloonParty.Editor.EditorUI.ConfigAssetCache&lt; T &gt;.Find </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac7e5ff0d87c1f8d2c5ea68b60001ffcb" name="ac7e5ff0d87c1f8d2c5ea68b60001ffcb"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac7e5ff0d87c1f8d2c5ea68b60001ffcb">&#9670;&#160;</a></span>Invalidate()</h2>
 
@@ -164,6 +198,51 @@ Properties</h2></td></tr>
 
 <p>Clears the cache so the next Value access re-searches. </p>
 <p>Call after creating or deleting config assets. </p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="add42f5d69d434c8e4a840247ad053721" name="add42f5d69d434c8e4a840247ad053721"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add42f5d69d434c8e4a840247ad053721">&#9670;&#160;</a></span>_asset</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">T BalloonParty.Editor.EditorUI.ConfigAssetCache&lt; T &gt;._asset</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4add5dff23bd1d74ffd78e63dce51007" name="a4add5dff23bd1d74ffd78e63dce51007"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4add5dff23bd1d74ffd78e63dce51007">&#9670;&#160;</a></span>_searched</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Editor.EditorUI.ConfigAssetCache&lt; T &gt;._searched</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

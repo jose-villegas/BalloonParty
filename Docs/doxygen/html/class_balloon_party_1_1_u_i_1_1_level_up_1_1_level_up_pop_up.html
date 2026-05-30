@@ -131,14 +131,81 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('class_balloon_
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_u_i_1_1_level_up_1_1_level_up_pop_up__coll__graph.svg" width="179" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_u_i_1_1_level_up_1_1_level_up_pop_up__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a8322f3465341f198bbbece1fbef725af" id="r_a8322f3465341f198bbbece1fbef725af"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8322f3465341f198bbbece1fbef725af">OnContinue</a> ()</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a84b50960ded82cd9f694dcb212def061" id="r_a84b50960ded82cd9f694dcb212def061"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_shared_1_1_pool_1_1_trail_spawner.html">TrailSpawner</a>&#160;</td><td class="memItemRight"><a class="el" href="#a84b50960ded82cd9f694dcb212def061">GetOrCreateSpawner</a> (string colorName)</td></tr>
+<tr class="memitem:a6ca783f301a27f4b8cc285c824ac75a4" id="r_a6ca783f301a27f4b8cc285c824ac75a4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6ca783f301a27f4b8cc285c824ac75a4">OnDestroy</a> ()</td></tr>
+<tr class="memitem:ae33534ef1db13a1f3642fa0af57c1257" id="r_ae33534ef1db13a1f3642fa0af57c1257"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ae33534ef1db13a1f3642fa0af57c1257">OnGlowTrailArrived</a> ()</td></tr>
+<tr class="memitem:a3566f7fd5a0b15480c5685337953bcb3" id="r_a3566f7fd5a0b15480c5685337953bcb3"><td class="memItemLeft">async UniTaskVoid&#160;</td><td class="memItemRight"><a class="el" href="#a3566f7fd5a0b15480c5685337953bcb3">ResumeAfterDelayAsync</a> ()</td></tr>
+<tr class="memitem:aed9f0c17b493f33c0f66480805281bc2" id="r_aed9f0c17b493f33c0f66480805281bc2"><td class="memItemLeft">async UniTaskVoid&#160;</td><td class="memItemRight"><a class="el" href="#aed9f0c17b493f33c0f66480805281bc2">ShowAfterGateAsync</a> (<a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_score_level_up_message.html">ScoreLevelUpMessage</a> msg)</td></tr>
+<tr class="memitem:a22ec8c0ea456e05a11de1c3707e573f0" id="r_a22ec8c0ea456e05a11de1c3707e573f0"><td class="memItemLeft">async UniTaskVoid&#160;</td><td class="memItemRight"><a class="el" href="#a22ec8c0ea456e05a11de1c3707e573f0">SpawnGlowTrailsAsync</a> ()</td></tr>
+<tr class="memitem:aad30bad42bd5f36f9dbeda6de796296e" id="r_aad30bad42bd5f36f9dbeda6de796296e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aad30bad42bd5f36f9dbeda6de796296e">Start</a> ()</td></tr>
+<tr class="memitem:a7d20a0b9fba46b695ddeb0367d01d5dc" id="r_a7d20a0b9fba46b695ddeb0367d01d5dc"><td class="memItemLeft">async UniTask&#160;</td><td class="memItemRight"><a class="el" href="#a7d20a0b9fba46b695ddeb0367d01d5dc">WaitForAnimatorStateAsync</a> (int stateHash)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:aeb430e081c8d211758ae4099f208b89c" id="r_aeb430e081c8d211758ae4099f208b89c"><td class="memItemLeft">Animator&#160;</td><td class="memItemRight"><a class="el" href="#aeb430e081c8d211758ae4099f208b89c">_animator</a></td></tr>
+<tr class="memitem:a1ef74525fbf3bb55c0e156d3a176f8aa" id="r_a1ef74525fbf3bb55c0e156d3a176f8aa"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a1ef74525fbf3bb55c0e156d3a176f8aa">_continueUnpauseDelay</a></td></tr>
+<tr class="memitem:a0bc107ad503b402d2a189bce50b1ccba" id="r_a0bc107ad503b402d2a189bce50b1ccba"><td class="memItemLeft">IPublisher&lt; <a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_level_up_dismissed_message.html">LevelUpDismissedMessage</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a0bc107ad503b402d2a189bce50b1ccba">_dismissedPublisher</a></td></tr>
+<tr class="memitem:a4d3518cc293607a000a42eb4b726b3f2" id="r_a4d3518cc293607a000a42eb4b726b3f2"><td class="memItemLeft">readonly CompositeDisposable&#160;</td><td class="memItemRight"><a class="el" href="#a4d3518cc293607a000a42eb4b726b3f2">_disposable</a> = new()</td></tr>
+<tr class="memitem:add080ab97077db7bc7174e8ea3528a6e" id="r_add080ab97077db7bc7174e8ea3528a6e"><td class="memItemLeft"><a class="el" href="interface_balloon_party_1_1_shared_1_1_i_ready_gate.html">IReadyGate</a>&#160;</td><td class="memItemRight"><a class="el" href="#add080ab97077db7bc7174e8ea3528a6e">_gate</a></td></tr>
+<tr class="memitem:a4398c4ebb67df86f05339466bcd18082" id="r_a4398c4ebb67df86f05339466bcd18082"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a4398c4ebb67df86f05339466bcd18082">_glowTargetRadiusMultiplier</a> = 0.8f</td></tr>
+<tr class="memitem:ad30a94b2155be754c8bf5c493d8e7ed0" id="r_ad30a94b2155be754c8bf5c493d8e7ed0"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#ad30a94b2155be754c8bf5c493d8e7ed0">_glowTrailArrivedCount</a></td></tr>
+<tr class="memitem:af2ecde6cc0c3e9a4ef640e123fc2c2c8" id="r_af2ecde6cc0c3e9a4ef640e123fc2c2c8"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#af2ecde6cc0c3e9a4ef640e123fc2c2c8">_glowTrailDuration</a> = 0.8f</td></tr>
+<tr class="memitem:ad2b89bde7c869eab30d5cd78b901fdc4" id="r_ad2b89bde7c869eab30d5cd78b901fdc4"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#ad2b89bde7c869eab30d5cd78b901fdc4">_glowTrailsPerBar</a> = 8</td></tr>
+<tr class="memitem:acb00479701c9c5d0920481b5e41ed97d" id="r_acb00479701c9c5d0920481b5e41ed97d"><td class="memItemLeft">IPublisher&lt; <a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_level_up_glow_trails_message.html">LevelUpGlowTrailsMessage</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#acb00479701c9c5d0920481b5e41ed97d">_glowTrailsPublisher</a></td></tr>
+<tr class="memitem:ae03e746dcfead5c445d55ed39528ff22" id="r_ae03e746dcfead5c445d55ed39528ff22"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#ae03e746dcfead5c445d55ed39528ff22">_glowTrailStaggerDelay</a> = 0.08f</td></tr>
+<tr class="memitem:a84e484d6d00248092e3a6d71f4fa74d5" id="r_a84e484d6d00248092e3a6d71f4fa74d5"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a84e484d6d00248092e3a6d71f4fa74d5">_glowTrailTotalCount</a></td></tr>
+<tr class="memitem:afbeedee91d50e9e1153d88abd5caa73b" id="r_afbeedee91d50e9e1153d88abd5caa73b"><td class="memItemLeft">Image&#160;</td><td class="memItemRight"><a class="el" href="#afbeedee91d50e9e1153d88abd5caa73b">_levelGlowFill</a></td></tr>
+<tr class="memitem:a54baa5dbf208ec9804590bcc066d74d7" id="r_a54baa5dbf208ec9804590bcc066d74d7"><td class="memItemLeft">TMP_Text&#160;</td><td class="memItemRight"><a class="el" href="#a54baa5dbf208ec9804590bcc066d74d7">_levelLabel</a></td></tr>
+<tr class="memitem:ac1de72f73c6274b44f936297f865b553" id="r_ac1de72f73c6274b44f936297f865b553"><td class="memItemLeft">ISubscriber&lt; <a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_score_level_up_message.html">ScoreLevelUpMessage</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ac1de72f73c6274b44f936297f865b553">_levelUpSubscriber</a></td></tr>
+<tr class="memitem:aae04b05ac21e2a3e5881df1ffb61c160" id="r_aae04b05ac21e2a3e5881df1ffb61c160"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_configuration_1_1_game_palette.html">GamePalette</a>&#160;</td><td class="memItemRight"><a class="el" href="#aae04b05ac21e2a3e5881df1ffb61c160">_palette</a></td></tr>
+<tr class="memitem:a2e832115b51b4e6e4a1b22dd12ed4e7a" id="r_a2e832115b51b4e6e4a1b22dd12ed4e7a"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_shared_1_1_pause_1_1_pause_service.html">PauseService</a>&#160;</td><td class="memItemRight"><a class="el" href="#a2e832115b51b4e6e4a1b22dd12ed4e7a">_pauseService</a></td></tr>
+<tr class="memitem:a26469d6cfb26ede059cffb0428a1c27a" id="r_a26469d6cfb26ede059cffb0428a1c27a"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a26469d6cfb26ede059cffb0428a1c27a">_pendingNewLevel</a></td></tr>
+<tr class="memitem:a7bbe5e5214c64467d27557a56852dc39" id="r_a7bbe5e5214c64467d27557a56852dc39"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html">PoolManager</a>&#160;</td><td class="memItemRight"><a class="el" href="#a7bbe5e5214c64467d27557a56852dc39">_poolManager</a></td></tr>
+<tr class="memitem:a14ddb444e70c2ce2d1cf2b54d60df448" id="r_a14ddb444e70c2ce2d1cf2b54d60df448"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_game_1_1_score_1_1_score_trail_service.html">ScoreTrailService</a>&#160;</td><td class="memItemRight"><a class="el" href="#a14ddb444e70c2ce2d1cf2b54d60df448">_scoreTrailService</a></td></tr>
+<tr class="memitem:a202618635dcfa0c14e89d05657997326" id="r_a202618635dcfa0c14e89d05657997326"><td class="memItemLeft">readonly Dictionary&lt; string, <a class="el" href="class_balloon_party_1_1_shared_1_1_pool_1_1_trail_spawner.html">TrailSpawner</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a202618635dcfa0c14e89d05657997326">_trailSpawners</a> = new()</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-static-attribs" class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a5ac46063fcdfb2c015b93fb8e22cacfb" id="r_a5ac46063fcdfb2c015b93fb8e22cacfb"><td class="memItemLeft">static readonly int&#160;</td><td class="memItemRight"><a class="el" href="#a5ac46063fcdfb2c015b93fb8e22cacfb">AppearState</a> = Animator.StringToHash(&quot;LeveUpAppear&quot;)</td></tr>
+<tr class="memitem:a8610962ca04f3b195c5f83820ca8c211" id="r_a8610962ca04f3b195c5f83820ca8c211"><td class="memItemLeft">static readonly int&#160;</td><td class="memItemRight"><a class="el" href="#a8610962ca04f3b195c5f83820ca8c211">AppearTrigger</a> = Animator.StringToHash(&quot;Appear&quot;)</td></tr>
+<tr class="memitem:ae832decc9fb3cbe00ba925ecf71f533c" id="r_ae832decc9fb3cbe00ba925ecf71f533c"><td class="memItemLeft">const int&#160;</td><td class="memItemRight"><a class="el" href="#ae832decc9fb3cbe00ba925ecf71f533c">GlowTrailSortingOrder</a> = 3200</td></tr>
+<tr class="memitem:ab05ca69b2a2ea675cf8b65caa9a040df" id="r_ab05ca69b2a2ea675cf8b65caa9a040df"><td class="memItemLeft">static readonly int&#160;</td><td class="memItemRight"><a class="el" href="#ab05ca69b2a2ea675cf8b65caa9a040df">HideTrigger</a> = Animator.StringToHash(&quot;Hide&quot;)</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a84b50960ded82cd9f694dcb212def061" name="a84b50960ded82cd9f694dcb212def061"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84b50960ded82cd9f694dcb212def061">&#9670;&#160;</a></span>GetOrCreateSpawner()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_shared_1_1_pool_1_1_trail_spawner.html">TrailSpawner</a> BalloonParty.UI.LevelUp.LevelUpPopUp.GetOrCreateSpawner </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>colorName</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a8322f3465341f198bbbece1fbef725af" name="a8322f3465341f198bbbece1fbef725af"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a8322f3465341f198bbbece1fbef725af">&#9670;&#160;</a></span>OnContinue()</h2>
 
@@ -152,6 +219,732 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6ca783f301a27f4b8cc285c824ac75a4" name="a6ca783f301a27f4b8cc285c824ac75a4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ca783f301a27f4b8cc285c824ac75a4">&#9670;&#160;</a></span>OnDestroy()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.LevelUp.LevelUpPopUp.OnDestroy </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae33534ef1db13a1f3642fa0af57c1257" name="ae33534ef1db13a1f3642fa0af57c1257"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae33534ef1db13a1f3642fa0af57c1257">&#9670;&#160;</a></span>OnGlowTrailArrived()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.LevelUp.LevelUpPopUp.OnGlowTrailArrived </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3566f7fd5a0b15480c5685337953bcb3" name="a3566f7fd5a0b15480c5685337953bcb3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3566f7fd5a0b15480c5685337953bcb3">&#9670;&#160;</a></span>ResumeAfterDelayAsync()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">async UniTaskVoid BalloonParty.UI.LevelUp.LevelUpPopUp.ResumeAfterDelayAsync </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aed9f0c17b493f33c0f66480805281bc2" name="aed9f0c17b493f33c0f66480805281bc2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aed9f0c17b493f33c0f66480805281bc2">&#9670;&#160;</a></span>ShowAfterGateAsync()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">async UniTaskVoid BalloonParty.UI.LevelUp.LevelUpPopUp.ShowAfterGateAsync </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_score_level_up_message.html">ScoreLevelUpMessage</a></td>          <td class="paramname"><span class="paramname"><em>msg</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a22ec8c0ea456e05a11de1c3707e573f0" name="a22ec8c0ea456e05a11de1c3707e573f0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a22ec8c0ea456e05a11de1c3707e573f0">&#9670;&#160;</a></span>SpawnGlowTrailsAsync()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">async UniTaskVoid BalloonParty.UI.LevelUp.LevelUpPopUp.SpawnGlowTrailsAsync </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad30bad42bd5f36f9dbeda6de796296e" name="aad30bad42bd5f36f9dbeda6de796296e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad30bad42bd5f36f9dbeda6de796296e">&#9670;&#160;</a></span>Start()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.LevelUp.LevelUpPopUp.Start </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7d20a0b9fba46b695ddeb0367d01d5dc" name="a7d20a0b9fba46b695ddeb0367d01d5dc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7d20a0b9fba46b695ddeb0367d01d5dc">&#9670;&#160;</a></span>WaitForAnimatorStateAsync()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">async UniTask BalloonParty.UI.LevelUp.LevelUpPopUp.WaitForAnimatorStateAsync </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>stateHash</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="aeb430e081c8d211758ae4099f208b89c" name="aeb430e081c8d211758ae4099f208b89c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb430e081c8d211758ae4099f208b89c">&#9670;&#160;</a></span>_animator</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Animator BalloonParty.UI.LevelUp.LevelUpPopUp._animator</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1ef74525fbf3bb55c0e156d3a176f8aa" name="a1ef74525fbf3bb55c0e156d3a176f8aa"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1ef74525fbf3bb55c0e156d3a176f8aa">&#9670;&#160;</a></span>_continueUnpauseDelay</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.LevelUp.LevelUpPopUp._continueUnpauseDelay</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0bc107ad503b402d2a189bce50b1ccba" name="a0bc107ad503b402d2a189bce50b1ccba"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0bc107ad503b402d2a189bce50b1ccba">&#9670;&#160;</a></span>_dismissedPublisher</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IPublisher&lt;<a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_level_up_dismissed_message.html">LevelUpDismissedMessage</a>&gt; BalloonParty.UI.LevelUp.LevelUpPopUp._dismissedPublisher</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4d3518cc293607a000a42eb4b726b3f2" name="a4d3518cc293607a000a42eb4b726b3f2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d3518cc293607a000a42eb4b726b3f2">&#9670;&#160;</a></span>_disposable</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly CompositeDisposable BalloonParty.UI.LevelUp.LevelUpPopUp._disposable = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="add080ab97077db7bc7174e8ea3528a6e" name="add080ab97077db7bc7174e8ea3528a6e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#add080ab97077db7bc7174e8ea3528a6e">&#9670;&#160;</a></span>_gate</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_balloon_party_1_1_shared_1_1_i_ready_gate.html">IReadyGate</a> BalloonParty.UI.LevelUp.LevelUpPopUp._gate</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4398c4ebb67df86f05339466bcd18082" name="a4398c4ebb67df86f05339466bcd18082"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4398c4ebb67df86f05339466bcd18082">&#9670;&#160;</a></span>_glowTargetRadiusMultiplier</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.LevelUp.LevelUpPopUp._glowTargetRadiusMultiplier = 0.8f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad30a94b2155be754c8bf5c493d8e7ed0" name="ad30a94b2155be754c8bf5c493d8e7ed0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad30a94b2155be754c8bf5c493d8e7ed0">&#9670;&#160;</a></span>_glowTrailArrivedCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.UI.LevelUp.LevelUpPopUp._glowTrailArrivedCount</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af2ecde6cc0c3e9a4ef640e123fc2c2c8" name="af2ecde6cc0c3e9a4ef640e123fc2c2c8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af2ecde6cc0c3e9a4ef640e123fc2c2c8">&#9670;&#160;</a></span>_glowTrailDuration</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.LevelUp.LevelUpPopUp._glowTrailDuration = 0.8f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad2b89bde7c869eab30d5cd78b901fdc4" name="ad2b89bde7c869eab30d5cd78b901fdc4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad2b89bde7c869eab30d5cd78b901fdc4">&#9670;&#160;</a></span>_glowTrailsPerBar</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.UI.LevelUp.LevelUpPopUp._glowTrailsPerBar = 8</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acb00479701c9c5d0920481b5e41ed97d" name="acb00479701c9c5d0920481b5e41ed97d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb00479701c9c5d0920481b5e41ed97d">&#9670;&#160;</a></span>_glowTrailsPublisher</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IPublisher&lt;<a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_level_up_glow_trails_message.html">LevelUpGlowTrailsMessage</a>&gt; BalloonParty.UI.LevelUp.LevelUpPopUp._glowTrailsPublisher</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae03e746dcfead5c445d55ed39528ff22" name="ae03e746dcfead5c445d55ed39528ff22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae03e746dcfead5c445d55ed39528ff22">&#9670;&#160;</a></span>_glowTrailStaggerDelay</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.UI.LevelUp.LevelUpPopUp._glowTrailStaggerDelay = 0.08f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a84e484d6d00248092e3a6d71f4fa74d5" name="a84e484d6d00248092e3a6d71f4fa74d5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a84e484d6d00248092e3a6d71f4fa74d5">&#9670;&#160;</a></span>_glowTrailTotalCount</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.UI.LevelUp.LevelUpPopUp._glowTrailTotalCount</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afbeedee91d50e9e1153d88abd5caa73b" name="afbeedee91d50e9e1153d88abd5caa73b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbeedee91d50e9e1153d88abd5caa73b">&#9670;&#160;</a></span>_levelGlowFill</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Image BalloonParty.UI.LevelUp.LevelUpPopUp._levelGlowFill</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a54baa5dbf208ec9804590bcc066d74d7" name="a54baa5dbf208ec9804590bcc066d74d7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a54baa5dbf208ec9804590bcc066d74d7">&#9670;&#160;</a></span>_levelLabel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">TMP_Text BalloonParty.UI.LevelUp.LevelUpPopUp._levelLabel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac1de72f73c6274b44f936297f865b553" name="ac1de72f73c6274b44f936297f865b553"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1de72f73c6274b44f936297f865b553">&#9670;&#160;</a></span>_levelUpSubscriber</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ISubscriber&lt;<a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_score_level_up_message.html">ScoreLevelUpMessage</a>&gt; BalloonParty.UI.LevelUp.LevelUpPopUp._levelUpSubscriber</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aae04b05ac21e2a3e5881df1ffb61c160" name="aae04b05ac21e2a3e5881df1ffb61c160"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aae04b05ac21e2a3e5881df1ffb61c160">&#9670;&#160;</a></span>_palette</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_configuration_1_1_game_palette.html">GamePalette</a> BalloonParty.UI.LevelUp.LevelUpPopUp._palette</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a2e832115b51b4e6e4a1b22dd12ed4e7a" name="a2e832115b51b4e6e4a1b22dd12ed4e7a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2e832115b51b4e6e4a1b22dd12ed4e7a">&#9670;&#160;</a></span>_pauseService</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_shared_1_1_pause_1_1_pause_service.html">PauseService</a> BalloonParty.UI.LevelUp.LevelUpPopUp._pauseService</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a26469d6cfb26ede059cffb0428a1c27a" name="a26469d6cfb26ede059cffb0428a1c27a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a26469d6cfb26ede059cffb0428a1c27a">&#9670;&#160;</a></span>_pendingNewLevel</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.UI.LevelUp.LevelUpPopUp._pendingNewLevel</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7bbe5e5214c64467d27557a56852dc39" name="a7bbe5e5214c64467d27557a56852dc39"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bbe5e5214c64467d27557a56852dc39">&#9670;&#160;</a></span>_poolManager</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html">PoolManager</a> BalloonParty.UI.LevelUp.LevelUpPopUp._poolManager</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a14ddb444e70c2ce2d1cf2b54d60df448" name="a14ddb444e70c2ce2d1cf2b54d60df448"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a14ddb444e70c2ce2d1cf2b54d60df448">&#9670;&#160;</a></span>_scoreTrailService</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_game_1_1_score_1_1_score_trail_service.html">ScoreTrailService</a> BalloonParty.UI.LevelUp.LevelUpPopUp._scoreTrailService</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a202618635dcfa0c14e89d05657997326" name="a202618635dcfa0c14e89d05657997326"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a202618635dcfa0c14e89d05657997326">&#9670;&#160;</a></span>_trailSpawners</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly Dictionary&lt;string, <a class="el" href="class_balloon_party_1_1_shared_1_1_pool_1_1_trail_spawner.html">TrailSpawner</a>&gt; BalloonParty.UI.LevelUp.LevelUpPopUp._trailSpawners = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5ac46063fcdfb2c015b93fb8e22cacfb" name="a5ac46063fcdfb2c015b93fb8e22cacfb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5ac46063fcdfb2c015b93fb8e22cacfb">&#9670;&#160;</a></span>AppearState</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.UI.LevelUp.LevelUpPopUp.AppearState = Animator.StringToHash(&quot;LeveUpAppear&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8610962ca04f3b195c5f83820ca8c211" name="a8610962ca04f3b195c5f83820ca8c211"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8610962ca04f3b195c5f83820ca8c211">&#9670;&#160;</a></span>AppearTrigger</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.UI.LevelUp.LevelUpPopUp.AppearTrigger = Animator.StringToHash(&quot;Appear&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae832decc9fb3cbe00ba925ecf71f533c" name="ae832decc9fb3cbe00ba925ecf71f533c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae832decc9fb3cbe00ba925ecf71f533c">&#9670;&#160;</a></span>GlowTrailSortingOrder</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.UI.LevelUp.LevelUpPopUp.GlowTrailSortingOrder = 3200</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab05ca69b2a2ea675cf8b65caa9a040df" name="ab05ca69b2a2ea675cf8b65caa9a040df"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab05ca69b2a2ea675cf8b65caa9a040df">&#9670;&#160;</a></span>HideTrigger</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly int BalloonParty.UI.LevelUp.LevelUpPopUp.HideTrigger = Animator.StringToHash(&quot;Hide&quot;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

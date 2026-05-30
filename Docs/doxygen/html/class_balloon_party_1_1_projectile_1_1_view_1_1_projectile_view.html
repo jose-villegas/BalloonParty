@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('class_balloon_
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_view__coll__graph.svg" width="318" height="140"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_view__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -139,8 +139,76 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aba7744178ab8e4fb284e3beb1ac15d43" id="r_aba7744178ab8e4fb284e3beb1ac15d43"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aba7744178ab8e4fb284e3beb1ac15d43">Bind</a> (<a class="el" href="interface_balloon_party_1_1_projectile_1_1_model_1_1_i_writeable_projectile_model.html">IWriteableProjectileModel</a> model)</td></tr>
 <tr class="memitem:a2173af4be817a6dd9125a08160115327" id="r_a2173af4be817a6dd9125a08160115327"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a2173af4be817a6dd9125a08160115327">OnDespawned</a> ()</td></tr>
 <tr class="memitem:a1875a21c90b2143bab57d9df9f5b7116" id="r_a1875a21c90b2143bab57d9df9f5b7116"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a1875a21c90b2143bab57d9df9f5b7116">OnSpawned</a> ()</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pac-methods" class="groupheader"><a id="pac-methods" name="pac-methods"></a>
+Package Functions</h2></td></tr>
+<tr class="memitem:a34d8b51f88dd0c9fcf2908515c954b5c" id="r_a34d8b51f88dd0c9fcf2908515c954b5c"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a34d8b51f88dd0c9fcf2908515c954b5c">OnAbsorb</a> (<a class="el" href="interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor.html">ISlotActor</a> actor, Vector3 worldPos)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a70e967469cd15e7236d023e96fc958b8" id="r_a70e967469cd15e7236d023e96fc958b8"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a70e967469cd15e7236d023e96fc958b8">Awake</a> ()</td></tr>
+<tr class="memitem:a8c3097f4ace540c8c900d4aa2d73e144" id="r_a8c3097f4ace540c8c900d4aa2d73e144"><td class="memItemLeft">Vector3&#160;</td><td class="memItemRight"><a class="el" href="#a8c3097f4ace540c8c900d4aa2d73e144">ClampToLimits</a> (Vector3 pos, out Vector3 reflect)</td></tr>
+<tr class="memitem:a1d8a43e888aa60dee5ef3f6bcad92b14" id="r_a1d8a43e888aa60dee5ef3f6bcad92b14"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a1d8a43e888aa60dee5ef3f6bcad92b14">DestroyProjectile</a> ()</td></tr>
+<tr class="memitem:aebcd4be014def02f359e157cf70a5666" id="r_aebcd4be014def02f359e157cf70a5666"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aebcd4be014def02f359e157cf70a5666">FixedUpdate</a> ()</td></tr>
+<tr class="memitem:ab7876f2f4498c4cd81afb6aa8c3adb0c" id="r_ab7876f2f4498c4cd81afb6aa8c3adb0c"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab7876f2f4498c4cd81afb6aa8c3adb0c">MoveAndBounce</a> ()</td></tr>
+<tr class="memitem:ad1a04ce2f8e0e84403375e9450d591db" id="r_ad1a04ce2f8e0e84403375e9450d591db"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad1a04ce2f8e0e84403375e9450d591db">OnBalloonDeflected</a> (<a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_balloon_deflected_message.html">BalloonDeflectedMessage</a> msg)</td></tr>
+<tr class="memitem:a5caf87b240379a56e268b19c40b3b336" id="r_a5caf87b240379a56e268b19c40b3b336"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a5caf87b240379a56e268b19c40b3b336">OnTriggerEnter2D</a> (Collider2D other)</td></tr>
+<tr class="memitem:a1b573c152919f3cbf7b8aae5c26d7fd1" id="r_a1b573c152919f3cbf7b8aae5c26d7fd1"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a1b573c152919f3cbf7b8aae5c26d7fd1">PlayBounceEffect</a> (Vector3 position)</td></tr>
+<tr class="memitem:af6c3655d354f34d7f8a649f6fe4210b3" id="r_af6c3655d354f34d7f8a649f6fe4210b3"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#af6c3655d354f34d7f8a649f6fe4210b3">RevealShieldOnFirstFreeFrame</a> ()</td></tr>
+<tr class="memitem:afc869b1ecea87922340a8b0629ab9790" id="r_afc869b1ecea87922340a8b0629ab9790"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#afc869b1ecea87922340a8b0629ab9790">TryGetHitBalloon</a> (Collider2D other, out <a class="el" href="class_balloon_party_1_1_balloon_1_1_view_1_1_balloon_view.html">BalloonView</a> balloonView, out <a class="el" href="interface_balloon_party_1_1_balloon_1_1_model_1_1_i_balloon_model.html">IBalloonModel</a> balloonModel)</td></tr>
+<tr class="memitem:ab184bcd257084e19d465b0affc72e8a9" id="r_ab184bcd257084e19d465b0affc72e8a9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab184bcd257084e19d465b0affc72e8a9">UpdateGlowColor</a> ()</td></tr>
+<tr class="memitem:af86c67dc110c54c4a1f4bceac167e4ee" id="r_af86c67dc110c54c4a1f4bceac167e4ee"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#af86c67dc110c54c4a1f4bceac167e4ee">UpdateProjectileColor</a> (string hitColor)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ab752cd6a65490e64c8201fa38d1c3560" id="r_ab752cd6a65490e64c8201fa38d1c3560"><td class="memItemLeft">IPublisher&lt; <a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_balance_balloons_message.html">BalanceBalloonsMessage</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ab752cd6a65490e64c8201fa38d1c3560">_balancePublisher</a></td></tr>
+<tr class="memitem:a7eabf5d6f184009999e2b948912aa186" id="r_a7eabf5d6f184009999e2b948912aa186"><td class="memItemLeft"><a class="el" href="interface_balloon_party_1_1_shared_1_1_i_game_configuration.html">IGameConfiguration</a>&#160;</td><td class="memItemRight"><a class="el" href="#a7eabf5d6f184009999e2b948912aa186">_config</a></td></tr>
+<tr class="memitem:a4ef99083a334dfbd137f7f6731b09a9c" id="r_a4ef99083a334dfbd137f7f6731b09a9c"><td class="memItemLeft">ISubscriber&lt; <a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_balloon_deflected_message.html">BalloonDeflectedMessage</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a4ef99083a334dfbd137f7f6731b09a9c">_deflectedSubscriber</a></td></tr>
+<tr class="memitem:ad889e55b700719ab4c715c9331c06c69" id="r_ad889e55b700719ab4c715c9331c06c69"><td class="memItemLeft">IDisposable&#160;</td><td class="memItemRight"><a class="el" href="#ad889e55b700719ab4c715c9331c06c69">_deflectedSubscription</a></td></tr>
+<tr class="memitem:af0bee02be07340fa158494bc1f18c05b" id="r_af0bee02be07340fa158494bc1f18c05b"><td class="memItemLeft">IPublisher&lt; <a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_projectile_destroyed_message.html">ProjectileDestroyedMessage</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#af0bee02be07340fa158494bc1f18c05b">_destroyedPublisher</a></td></tr>
+<tr class="memitem:a5e522fc5073a0392840cb24bc68982bf" id="r_a5e522fc5073a0392840cb24bc68982bf"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a5e522fc5073a0392840cb24bc68982bf">_glowAlpha</a> = 0.5f</td></tr>
+<tr class="memitem:a0ad0d70d069dd76363c663ddebb59c7d" id="r_a0ad0d70d069dd76363c663ddebb59c7d"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a0ad0d70d069dd76363c663ddebb59c7d">_glowColorDuration</a> = 0.2f</td></tr>
+<tr class="memitem:a085966d36836e01f35a082343e917465" id="r_a085966d36836e01f35a082343e917465"><td class="memItemLeft">SpriteRenderer&#160;</td><td class="memItemRight"><a class="el" href="#a085966d36836e01f35a082343e917465">_glowRenderer</a></td></tr>
+<tr class="memitem:a024de5131682e735b25f709548c3ca7f" id="r_a024de5131682e735b25f709548c3ca7f"><td class="memItemLeft">IPublisher&lt; <a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_actor_hit_message.html">ActorHitMessage</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a024de5131682e735b25f709548c3ca7f">_hitPublisher</a></td></tr>
+<tr class="memitem:a8689cb32bf296dd48c30cd1b2caaad8a" id="r_a8689cb32bf296dd48c30cd1b2caaad8a"><td class="memItemLeft"><a class="el" href="interface_balloon_party_1_1_projectile_1_1_model_1_1_i_writeable_projectile_model.html">IWriteableProjectileModel</a>&#160;</td><td class="memItemRight"><a class="el" href="#a8689cb32bf296dd48c30cd1b2caaad8a">_model</a></td></tr>
+<tr class="memitem:a1bc1a3d11bb509cb79a94ab23006a9ef" id="r_a1bc1a3d11bb509cb79a94ab23006a9ef"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_configuration_1_1_game_palette.html">GamePalette</a>&#160;</td><td class="memItemRight"><a class="el" href="#a1bc1a3d11bb509cb79a94ab23006a9ef">_palette</a></td></tr>
+<tr class="memitem:a9d65e2719509ce8abb79fe8dc9ef58a1" id="r_a9d65e2719509ce8abb79fe8dc9ef58a1"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_shared_1_1_pause_1_1_pause_service.html">PauseService</a>&#160;</td><td class="memItemRight"><a class="el" href="#a9d65e2719509ce8abb79fe8dc9ef58a1">_pauseService</a></td></tr>
+<tr class="memitem:ad5e7de5e18609cf14622e5325bf10438" id="r_ad5e7de5e18609cf14622e5325bf10438"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_trail.html">ProjectileTrail</a>&#160;</td><td class="memItemRight"><a class="el" href="#ad5e7de5e18609cf14622e5325bf10438">_projectileTrail</a></td></tr>
+<tr class="memitem:a8077a1467c260bafea735aac59958e22" id="r_a8077a1467c260bafea735aac59958e22"><td class="memItemLeft">IPublisher&lt; <a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_shield_gained_message.html">ShieldGainedMessage</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a8077a1467c260bafea735aac59958e22">_shieldGainedPublisher</a></td></tr>
+<tr class="memitem:a5560553c28d9cf41f07e2962a2d8c4e9" id="r_a5560553c28d9cf41f07e2962a2d8c4e9"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a5560553c28d9cf41f07e2962a2d8c4e9">_shieldShown</a></td></tr>
+<tr class="memitem:a1c5edfa17b9c7f1161eaa0d180c86791" id="r_a1c5edfa17b9c7f1161eaa0d180c86791"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html">ProjectileShieldView</a>&#160;</td><td class="memItemRight"><a class="el" href="#a1c5edfa17b9c7f1161eaa0d180c86791">_shieldView</a></td></tr>
+<tr class="memitem:a3ce6541438006d49551d9028d0cc29d6" id="r_a3ce6541438006d49551d9028d0cc29d6"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_game_1_1_score_1_1_color_streak_tracker.html">ColorStreakTracker</a>&#160;</td><td class="memItemRight"><a class="el" href="#a3ce6541438006d49551d9028d0cc29d6">_streakTracker</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-static-attribs" class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:a380f930191e7eade1b6441d6b1d9fa48" id="r_a380f930191e7eade1b6441d6b1d9fa48"><td class="memItemLeft">static int&#160;</td><td class="memItemRight"><a class="el" href="#a380f930191e7eade1b6441d6b1d9fa48">BalloonsLayer</a> = -1</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a70e967469cd15e7236d023e96fc958b8" name="a70e967469cd15e7236d023e96fc958b8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a70e967469cd15e7236d023e96fc958b8">&#9670;&#160;</a></span>Awake()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileView.Awake </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="aba7744178ab8e4fb284e3beb1ac15d43" name="aba7744178ab8e4fb284e3beb1ac15d43"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#aba7744178ab8e4fb284e3beb1ac15d43">&#9670;&#160;</a></span>Bind()</h2>
 
@@ -154,6 +222,164 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8c3097f4ace540c8c900d4aa2d73e144" name="a8c3097f4ace540c8c900d4aa2d73e144"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c3097f4ace540c8c900d4aa2d73e144">&#9670;&#160;</a></span>ClampToLimits()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector3 BalloonParty.Projectile.View.ProjectileView.ClampToLimits </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>pos</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out Vector3</td>          <td class="paramname"><span class="paramname"><em>reflect</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1d8a43e888aa60dee5ef3f6bcad92b14" name="a1d8a43e888aa60dee5ef3f6bcad92b14"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1d8a43e888aa60dee5ef3f6bcad92b14">&#9670;&#160;</a></span>DestroyProjectile()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileView.DestroyProjectile </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aebcd4be014def02f359e157cf70a5666" name="aebcd4be014def02f359e157cf70a5666"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aebcd4be014def02f359e157cf70a5666">&#9670;&#160;</a></span>FixedUpdate()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileView.FixedUpdate </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab7876f2f4498c4cd81afb6aa8c3adb0c" name="ab7876f2f4498c4cd81afb6aa8c3adb0c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab7876f2f4498c4cd81afb6aa8c3adb0c">&#9670;&#160;</a></span>MoveAndBounce()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileView.MoveAndBounce </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a34d8b51f88dd0c9fcf2908515c954b5c" name="a34d8b51f88dd0c9fcf2908515c954b5c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a34d8b51f88dd0c9fcf2908515c954b5c">&#9670;&#160;</a></span>OnAbsorb()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileView.OnAbsorb </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor.html">ISlotActor</a></td>          <td class="paramname"><span class="paramname"><em>actor</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>worldPos</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad1a04ce2f8e0e84403375e9450d591db" name="ad1a04ce2f8e0e84403375e9450d591db"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad1a04ce2f8e0e84403375e9450d591db">&#9670;&#160;</a></span>OnBalloonDeflected()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileView.OnBalloonDeflected </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_balloon_deflected_message.html">BalloonDeflectedMessage</a></td>          <td class="paramname"><span class="paramname"><em>msg</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>
@@ -193,6 +419,562 @@ Public Member Functions</h2></td></tr>
 </div><div class="memdoc">
 
 <p>Implements <a class="el" href="interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html#aaff387d23c235b99ac2db6e8830ec344">BalloonParty.Shared.Pool.IPoolable</a>.</p>
+
+</div>
+</div>
+<a id="a5caf87b240379a56e268b19c40b3b336" name="a5caf87b240379a56e268b19c40b3b336"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5caf87b240379a56e268b19c40b3b336">&#9670;&#160;</a></span>OnTriggerEnter2D()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileView.OnTriggerEnter2D </td>
+          <td>(</td>
+          <td class="paramtype">Collider2D</td>          <td class="paramname"><span class="paramname"><em>other</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1b573c152919f3cbf7b8aae5c26d7fd1" name="a1b573c152919f3cbf7b8aae5c26d7fd1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1b573c152919f3cbf7b8aae5c26d7fd1">&#9670;&#160;</a></span>PlayBounceEffect()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileView.PlayBounceEffect </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>position</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af6c3655d354f34d7f8a649f6fe4210b3" name="af6c3655d354f34d7f8a649f6fe4210b3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6c3655d354f34d7f8a649f6fe4210b3">&#9670;&#160;</a></span>RevealShieldOnFirstFreeFrame()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileView.RevealShieldOnFirstFreeFrame </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="afc869b1ecea87922340a8b0629ab9790" name="afc869b1ecea87922340a8b0629ab9790"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afc869b1ecea87922340a8b0629ab9790">&#9670;&#160;</a></span>TryGetHitBalloon()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Projectile.View.ProjectileView.TryGetHitBalloon </td>
+          <td>(</td>
+          <td class="paramtype">Collider2D</td>          <td class="paramname"><span class="paramname"><em>other</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out <a class="el" href="class_balloon_party_1_1_balloon_1_1_view_1_1_balloon_view.html">BalloonView</a></td>          <td class="paramname"><span class="paramname"><em>balloonView</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">out <a class="el" href="interface_balloon_party_1_1_balloon_1_1_model_1_1_i_balloon_model.html">IBalloonModel</a></td>          <td class="paramname"><span class="paramname"><em>balloonModel</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab184bcd257084e19d465b0affc72e8a9" name="ab184bcd257084e19d465b0affc72e8a9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab184bcd257084e19d465b0affc72e8a9">&#9670;&#160;</a></span>UpdateGlowColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileView.UpdateGlowColor </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af86c67dc110c54c4a1f4bceac167e4ee" name="af86c67dc110c54c4a1f4bceac167e4ee"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af86c67dc110c54c4a1f4bceac167e4ee">&#9670;&#160;</a></span>UpdateProjectileColor()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Projectile.View.ProjectileView.UpdateProjectileColor </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>hitColor</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="ab752cd6a65490e64c8201fa38d1c3560" name="ab752cd6a65490e64c8201fa38d1c3560"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab752cd6a65490e64c8201fa38d1c3560">&#9670;&#160;</a></span>_balancePublisher</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IPublisher&lt;<a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_balance_balloons_message.html">BalanceBalloonsMessage</a>&gt; BalloonParty.Projectile.View.ProjectileView._balancePublisher</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7eabf5d6f184009999e2b948912aa186" name="a7eabf5d6f184009999e2b948912aa186"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7eabf5d6f184009999e2b948912aa186">&#9670;&#160;</a></span>_config</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_balloon_party_1_1_shared_1_1_i_game_configuration.html">IGameConfiguration</a> BalloonParty.Projectile.View.ProjectileView._config</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a4ef99083a334dfbd137f7f6731b09a9c" name="a4ef99083a334dfbd137f7f6731b09a9c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4ef99083a334dfbd137f7f6731b09a9c">&#9670;&#160;</a></span>_deflectedSubscriber</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ISubscriber&lt;<a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_balloon_deflected_message.html">BalloonDeflectedMessage</a>&gt; BalloonParty.Projectile.View.ProjectileView._deflectedSubscriber</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad889e55b700719ab4c715c9331c06c69" name="ad889e55b700719ab4c715c9331c06c69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad889e55b700719ab4c715c9331c06c69">&#9670;&#160;</a></span>_deflectedSubscription</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IDisposable BalloonParty.Projectile.View.ProjectileView._deflectedSubscription</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af0bee02be07340fa158494bc1f18c05b" name="af0bee02be07340fa158494bc1f18c05b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af0bee02be07340fa158494bc1f18c05b">&#9670;&#160;</a></span>_destroyedPublisher</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IPublisher&lt;<a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_projectile_destroyed_message.html">ProjectileDestroyedMessage</a>&gt; BalloonParty.Projectile.View.ProjectileView._destroyedPublisher</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5e522fc5073a0392840cb24bc68982bf" name="a5e522fc5073a0392840cb24bc68982bf"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5e522fc5073a0392840cb24bc68982bf">&#9670;&#160;</a></span>_glowAlpha</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Projectile.View.ProjectileView._glowAlpha = 0.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a0ad0d70d069dd76363c663ddebb59c7d" name="a0ad0d70d069dd76363c663ddebb59c7d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0ad0d70d069dd76363c663ddebb59c7d">&#9670;&#160;</a></span>_glowColorDuration</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Projectile.View.ProjectileView._glowColorDuration = 0.2f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a085966d36836e01f35a082343e917465" name="a085966d36836e01f35a082343e917465"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a085966d36836e01f35a082343e917465">&#9670;&#160;</a></span>_glowRenderer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpriteRenderer BalloonParty.Projectile.View.ProjectileView._glowRenderer</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a024de5131682e735b25f709548c3ca7f" name="a024de5131682e735b25f709548c3ca7f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a024de5131682e735b25f709548c3ca7f">&#9670;&#160;</a></span>_hitPublisher</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IPublisher&lt;<a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_actor_hit_message.html">ActorHitMessage</a>&gt; BalloonParty.Projectile.View.ProjectileView._hitPublisher</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8689cb32bf296dd48c30cd1b2caaad8a" name="a8689cb32bf296dd48c30cd1b2caaad8a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8689cb32bf296dd48c30cd1b2caaad8a">&#9670;&#160;</a></span>_model</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="interface_balloon_party_1_1_projectile_1_1_model_1_1_i_writeable_projectile_model.html">IWriteableProjectileModel</a> BalloonParty.Projectile.View.ProjectileView._model</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1bc1a3d11bb509cb79a94ab23006a9ef" name="a1bc1a3d11bb509cb79a94ab23006a9ef"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bc1a3d11bb509cb79a94ab23006a9ef">&#9670;&#160;</a></span>_palette</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_configuration_1_1_game_palette.html">GamePalette</a> BalloonParty.Projectile.View.ProjectileView._palette</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9d65e2719509ce8abb79fe8dc9ef58a1" name="a9d65e2719509ce8abb79fe8dc9ef58a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9d65e2719509ce8abb79fe8dc9ef58a1">&#9670;&#160;</a></span>_pauseService</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_shared_1_1_pause_1_1_pause_service.html">PauseService</a> BalloonParty.Projectile.View.ProjectileView._pauseService</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad5e7de5e18609cf14622e5325bf10438" name="ad5e7de5e18609cf14622e5325bf10438"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad5e7de5e18609cf14622e5325bf10438">&#9670;&#160;</a></span>_projectileTrail</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_trail.html">ProjectileTrail</a> BalloonParty.Projectile.View.ProjectileView._projectileTrail</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8077a1467c260bafea735aac59958e22" name="a8077a1467c260bafea735aac59958e22"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8077a1467c260bafea735aac59958e22">&#9670;&#160;</a></span>_shieldGainedPublisher</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IPublisher&lt;<a class="el" href="struct_balloon_party_1_1_shared_1_1_messages_1_1_shield_gained_message.html">ShieldGainedMessage</a>&gt; BalloonParty.Projectile.View.ProjectileView._shieldGainedPublisher</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5560553c28d9cf41f07e2962a2d8c4e9" name="a5560553c28d9cf41f07e2962a2d8c4e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5560553c28d9cf41f07e2962a2d8c4e9">&#9670;&#160;</a></span>_shieldShown</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Projectile.View.ProjectileView._shieldShown</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1c5edfa17b9c7f1161eaa0d180c86791" name="a1c5edfa17b9c7f1161eaa0d180c86791"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1c5edfa17b9c7f1161eaa0d180c86791">&#9670;&#160;</a></span>_shieldView</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html">ProjectileShieldView</a> BalloonParty.Projectile.View.ProjectileView._shieldView</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a3ce6541438006d49551d9028d0cc29d6" name="a3ce6541438006d49551d9028d0cc29d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3ce6541438006d49551d9028d0cc29d6">&#9670;&#160;</a></span>_streakTracker</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_game_1_1_score_1_1_color_streak_tracker.html">ColorStreakTracker</a> BalloonParty.Projectile.View.ProjectileView._streakTracker</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a380f930191e7eade1b6441d6b1d9fa48" name="a380f930191e7eade1b6441d6b1d9fa48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a380f930191e7eade1b6441d6b1d9fa48">&#9670;&#160;</a></span>BalloonsLayer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Projectile.View.ProjectileView.BalloonsLayer = -1</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

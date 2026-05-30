@@ -1,5 +1,11 @@
 <map id="BalloonParty.UI.Shields.ShieldUILifetimeScope" name="BalloonParty.UI.Shields.ShieldUILifetimeScope">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,168,120"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="34,5,139,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,44,89,79,84,78,85,48"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,207,168,248"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="13,103,117,128"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="72,142,85,207,80,206,69,146"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_u_i_1_1_score_1_1_flying_trail.html" title=" " alt="" coords="142,95,330,136"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,146,114,209,111,204,194,145"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="98,13,209,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="176,48,220,95,215,95,175,53"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="232,5,405,46"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="292,56,256,97,252,93,288,59"/>
 </map>

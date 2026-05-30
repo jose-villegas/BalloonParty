@@ -50,7 +50,7 @@
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="interface_balloon_party_1_1_game_1_1_score_1_1_i_trail_target.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="232.12,-97 101.38,-97 101.38,-66.5 232.12,-66.5 232.12,-97"/>
 <text xml:space="preserve" text-anchor="start" x="109.38" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Game.Score.</text>
 <text xml:space="preserve" text-anchor="middle" x="166.75" y="-72.25" font-family="Helvetica,sans-Serif" font-size="10.00">ITrailTarget</text>

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['itemtype_0',['ItemType',['../namespace_balloon_party_1_1_configuration.html#a8244ac94bb67674405a9a4bfa0355303',1,'BalloonParty::Configuration']]]
+  ['gridactortype_0',['GridActorType',['../namespace_balloon_party_1_1_slots_1_1_actor_1_1_archetype.html#a88ec606a89830d8d05e349537cc52473',1,'BalloonParty::Slots::Actor::Archetype']]]
 ];

@@ -40,7 +40,7 @@
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:title=" ">
+<g id="a_Node000009"><a xlink:href="class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_absorber_actor_model.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="340.62,-79.5 188.88,-79.5 188.88,-49 340.62,-49 340.62,-79.5"/>
 <text xml:space="preserve" text-anchor="start" x="196.88" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
 <text xml:space="preserve" text-anchor="middle" x="264.75" y="-54.75" font-family="Helvetica,sans-Serif" font-size="10.00">Archetype.AbsorberActorModel</text>
@@ -59,7 +59,7 @@
 <!-- Node10 -->
 <g id="Node000010" class="node">
 <title>Node10</title>
-<g id="a_Node000010"><a xlink:title=" ">
+<g id="a_Node000010"><a xlink:href="class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_deflector_actor_model.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="341,-30.5 188.5,-30.5 188.5,0 341,0 341,-30.5"/>
 <text xml:space="preserve" text-anchor="start" x="196.5" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
 <text xml:space="preserve" text-anchor="middle" x="264.75" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">Archetype.DeflectorActorModel</text>
@@ -116,7 +116,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="class_balloon_party_1_1_balloon_1_1_model_1_1_balloon_model_base.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="695.5,-168.5 558,-168.5 558,-138 695.5,-138 695.5,-168.5"/>
 <text xml:space="preserve" text-anchor="start" x="566" y="-155" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="626.75" y="-143.75" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonModelBase</text>
@@ -135,7 +135,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="class_balloon_party_1_1_balloon_1_1_model_1_1_balloon_model.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="889.25,-193.5 751.75,-193.5 751.75,-163 889.25,-163 889.25,-193.5"/>
 <text xml:space="preserve" text-anchor="start" x="759.75" y="-180" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="820.5" y="-168.75" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonModel</text>
@@ -154,7 +154,7 @@
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="class_balloon_party_1_1_balloon_1_1_model_1_1_bubble_cluster_model.html" target="_top" xlink:title="Model for BalloonType.BubbleCluster.">
 <polygon fill="white" stroke="#666666" points="889.25,-144.5 751.75,-144.5 751.75,-114 889.25,-114 889.25,-144.5"/>
 <text xml:space="preserve" text-anchor="start" x="759.75" y="-131" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="820.5" y="-119.75" font-family="Helvetica,sans-Serif" font-size="10.00">BubbleClusterModel</text>
@@ -173,7 +173,7 @@
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="class_balloon_party_1_1_balloon_1_1_model_1_1_tough_balloon_model.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="889.25,-95.5 751.75,-95.5 751.75,-65 889.25,-65 889.25,-95.5"/>
 <text xml:space="preserve" text-anchor="start" x="759.75" y="-82" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="820.5" y="-70.75" font-family="Helvetica,sans-Serif" font-size="10.00">ToughBalloonModel</text>
@@ -192,7 +192,7 @@
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:title=" ">
+<g id="a_Node000008"><a xlink:href="class_balloon_party_1_1_balloon_1_1_model_1_1_unbreakable_balloon_model.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="889.25,-242.5 751.75,-242.5 751.75,-212 889.25,-212 889.25,-242.5"/>
 <text xml:space="preserve" text-anchor="start" x="759.75" y="-229" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="820.5" y="-217.75" font-family="Helvetica,sans-Serif" font-size="10.00">UnbreakableBalloonModel</text>
@@ -238,7 +238,7 @@
 <!-- Node12 -->
 <g id="Node000012" class="node">
 <title>Node12</title>
-<g id="a_Node000012"><a xlink:title=" ">
+<g id="a_Node000012"><a xlink:href="class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_gatekeeper_actor_model.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="902,-46.5 739,-46.5 739,-16 902,-16 902,-46.5"/>
 <text xml:space="preserve" text-anchor="start" x="747" y="-33" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
 <text xml:space="preserve" text-anchor="middle" x="820.5" y="-21.75" font-family="Helvetica,sans-Serif" font-size="10.00">Archetype.GatekeeperActorModel</text>

@@ -1,11 +1,23 @@
 <map id="BalloonParty.Item.Paint.PaintSplashView" name="BalloonParty.Item.Paint.PaintSplashView">
-<area shape="rect" id="Node000001" title="Poolable paint&#45;splash effect." alt="" coords="146,183,307,223"/>
-<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_effect_view.html" title="Abstract base for poolable effect MonoBehaviours." alt="" coords="140,94,312,135"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="228,148,229,184,224,181,224,152"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="5,13,117,38"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="98,44,191,92,187,95,98,49"/>
-<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="140,5,312,46"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="228,59,229,95,224,92,225,64"/>
-<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_shared_1_1_i_effect.html" title="Abstracts any visual effect that can be triggered at a world position and optionally tinted." alt="" coords="337,13,518,38"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="383,46,273,96,271,91,388,44"/>
+<area shape="rect" id="Node000001" title="Poolable paint&#45;splash effect." alt="" coords="973,140,1134,181"/>
+<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_effect_view.html" title="Abstract base for poolable effect MonoBehaviours." alt="" coords="276,136,449,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="464,157,657,160,836,160,975,161,970,162,836,166,657,166,465,162"/>
+<area shape="rect" id="Node000009" href="$class_balloon_party_1_1_configuration_1_1_item_settings.html" title=" " alt="" coords="657,111,836,151"/>
+<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="464,150,633,141,659,141,654,142,634,146,465,156"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="52,74,164,100"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="173,102,287,134,283,137,172,107"/>
+<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_shared_1_1_rendering_1_1_colorable_renderer.html" title="Non&#45;generic MonoBehaviour base that implements IColorableRenderer." alt="" coords="260,5,465,46"/>
+<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="178,68,278,45,273,48,180,73"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="22,132,194,173"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="209,151,279,154,274,156,210,157"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_shared_1_1_i_effect.html" title="Abstracts any visual effect that can be triggered at a world position and optionally tinted." alt="" coords="17,197,199,222"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="187,191,278,173,273,175,188,196"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="480,31,582,41,700,57,826,80,949,111,1015,140,1010,139,948,116,825,86,700,63,582,47,481,36"/>
+<area shape="rect" id="Node000007" href="$interface_balloon_party_1_1_shared_1_1_rendering_1_1_i_colorable_renderer.html" title=" " alt="" coords="5,5,211,46"/>
+<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="225,23,262,24,257,27,227,28"/>
+<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html" title=" " alt="" coords="660,225,833,266"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="848,245,898,240,948,228,991,205,1026,182,1031,180,994,210,950,232,899,245,848,251"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="851,138,975,153,970,153,851,144"/>
+<area shape="rect" id="Node000010" href="$class_balloon_party_1_1_nudge_1_1_nudge_override.html" title=" " alt="" coords="274,71,451,111"/>
+<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="467,99,660,121,654,122,467,104"/>
 </map>

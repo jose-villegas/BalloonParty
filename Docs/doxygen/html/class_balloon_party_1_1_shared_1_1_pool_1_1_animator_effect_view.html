@@ -152,11 +152,48 @@ Protected Member Functions</h2></td></tr>
 <tr class="heading"><td colspan="2"><h2 id="header-pro-attribs" class="groupheader"><a id="pro-attribs" name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
 <tr class="memitem:a215eeda6230e7f35327b68e8572f0cc5" id="r_a215eeda6230e7f35327b68e8572f0cc5"><td class="memItemLeft">Action&#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_pool_1_1_effect_view.html#a215eeda6230e7f35327b68e8572f0cc5">OnComplete</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:aeb694d26ffcb09cdeb136458818c480f" id="r_aeb694d26ffcb09cdeb136458818c480f"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aeb694d26ffcb09cdeb136458818c480f">Awake</a> ()</td></tr>
+<tr class="memitem:a6ecfa19ab3df5da00ecc1bbf229810be" id="r_a6ecfa19ab3df5da00ecc1bbf229810be"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a6ecfa19ab3df5da00ecc1bbf229810be">Update</a> ()</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a63c0add5758cd89d27295055a902c68f" id="r_a63c0add5758cd89d27295055a902c68f"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a63c0add5758cd89d27295055a902c68f">_animationLength</a></td></tr>
+<tr class="memitem:a79620953f7003edd94b87f8336c6d7b2" id="r_a79620953f7003edd94b87f8336c6d7b2"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a79620953f7003edd94b87f8336c6d7b2">_animationPlaying</a></td></tr>
+<tr class="memitem:ae2054da4d7e6ad112e4c9bee1daabcf2" id="r_ae2054da4d7e6ad112e4c9bee1daabcf2"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#ae2054da4d7e6ad112e4c9bee1daabcf2">_animationTimer</a></td></tr>
+<tr class="memitem:a631f8cacd17442532c78d9d22a04c3b7" id="r_a631f8cacd17442532c78d9d22a04c3b7"><td class="memItemLeft">Animator&#160;</td><td class="memItemRight"><a class="el" href="#a631f8cacd17442532c78d9d22a04c3b7">_animator</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Poolable effect driven by an Animator. </p>
 <p>Completion is detected when the first animation clip finishes playing (timer-based). Attach to prefab roots that use an Animator; pool via EffectPoolChannel. </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="aeb694d26ffcb09cdeb136458818c480f" name="aeb694d26ffcb09cdeb136458818c480f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aeb694d26ffcb09cdeb136458818c480f">&#9670;&#160;</a></span>Awake()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Shared.Pool.AnimatorEffectView.Awake </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac4df2fabf5b0f7b348a1d2385ba5395e" name="ac4df2fabf5b0f7b348a1d2385ba5395e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac4df2fabf5b0f7b348a1d2385ba5395e">&#9670;&#160;</a></span>InvokeComplete()</h2>
 
@@ -334,7 +371,120 @@ Protected Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="a6ecfa19ab3df5da00ecc1bbf229810be" name="a6ecfa19ab3df5da00ecc1bbf229810be"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6ecfa19ab3df5da00ecc1bbf229810be">&#9670;&#160;</a></span>Update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Shared.Pool.AnimatorEffectView.Update </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a63c0add5758cd89d27295055a902c68f" name="a63c0add5758cd89d27295055a902c68f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a63c0add5758cd89d27295055a902c68f">&#9670;&#160;</a></span>_animationLength</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.Pool.AnimatorEffectView._animationLength</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a79620953f7003edd94b87f8336c6d7b2" name="a79620953f7003edd94b87f8336c6d7b2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79620953f7003edd94b87f8336c6d7b2">&#9670;&#160;</a></span>_animationPlaying</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Shared.Pool.AnimatorEffectView._animationPlaying</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae2054da4d7e6ad112e4c9bee1daabcf2" name="ae2054da4d7e6ad112e4c9bee1daabcf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae2054da4d7e6ad112e4c9bee1daabcf2">&#9670;&#160;</a></span>_animationTimer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Shared.Pool.AnimatorEffectView._animationTimer</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a631f8cacd17442532c78d9d22a04c3b7" name="a631f8cacd17442532c78d9d22a04c3b7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a631f8cacd17442532c78d9d22a04c3b7">&#9670;&#160;</a></span>_animator</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Animator BalloonParty.Shared.Pool.AnimatorEffectView._animator</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a215eeda6230e7f35327b68e8572f0cc5" name="a215eeda6230e7f35327b68e8572f0cc5"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a215eeda6230e7f35327b68e8572f0cc5">&#9670;&#160;</a></span>OnComplete</h2>
 

@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['tough_0',['Tough',['../namespace_balloon_party_1_1_balloon_1_1_type.html#a17a93fed9c04e38825567a4f5cc4b60ea7f14a4d8653b66c662a9cd9abb6a9004',1,'BalloonParty::Balloon::Type']]]
+  ['removed_0',['Removed',['../namespace_balloon_party_1_1_slots_1_1_grid.html#a6efd918aa80f2918a2b989c8b0090a39a93f07b720ebf7d1246512569761a5804',1,'BalloonParty::Slots::Grid']]]
 ];

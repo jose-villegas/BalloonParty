@@ -1,5 +1,9 @@
 <map id="BalloonParty.Game.LaunchLifetimeScope" name="BalloonParty.Game.LaunchLifetimeScope">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,184,120"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="42,5,147,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,44,97,80,92,78,93,48"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="20,192,199,233"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,88,110,114"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,125,103,191,98,192,68,130"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_configuration_1_1_game_display_configuration.html" title=" " alt="" coords="134,80,312,121"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,131,131,194,128,190,189,133"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="164,5,282,31"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="224,44,225,81,220,79,221,49"/>
 </map>

@@ -1,9 +1,10 @@
 <map id="BalloonParty.Shared.Rendering.CompositeColorableRenderer" name="BalloonParty.Shared.Rendering.CompositeColorableRenderer">
-<area shape="rect" id="Node000001" title=" " alt="" coords="49,183,254,223"/>
-<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_shared_1_1_rendering_1_1_colorable_renderer.html" title="Non&#45;generic MonoBehaviour base that implements IColorableRenderer." alt="" coords="49,94,254,135"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="153,148,154,183,149,181,150,152"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="49,207,254,248"/>
+<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_shared_1_1_rendering_1_1_colorable_renderer.html" title="Non&#45;generic MonoBehaviour base that implements IColorableRenderer." alt="" coords="49,95,254,136"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="151,149,152,160,152,183,153,208,148,206,146,183,146,160,148,154"/>
+<area shape="poly" id="edge4_Node000001_Node000002" title=" " alt="" coords="154,150,154,208,149,206,150,153"/>
 <area shape="rect" id="Node000003" title=" " alt="" coords="5,13,117,38"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="85,47,134,93,129,94,84,52"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="85,47,134,94,129,96,84,52"/>
 <area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_shared_1_1_rendering_1_1_i_colorable_renderer.html" title=" " alt="" coords="141,5,346,46"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="214,55,174,96,171,92,210,58"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="214,55,174,97,170,93,210,59"/>
 </map>

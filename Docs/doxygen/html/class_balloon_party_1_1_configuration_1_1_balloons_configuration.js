@@ -1,6 +1,18 @@
 var class_balloon_party_1_1_configuration_1_1_balloons_configuration =
 [
     [ "PickRandom", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#ab48b6809a40b5d197c4fe4ec6dd6c5d9", null ],
+    [ "_balloonSpawnAnimationSpeedRange", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#a5292b076738883fe9b9aaa680fb266e4", null ],
+    [ "_candidateBuffer", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#a9ed7e27fb84ebb2a5cadc9ad356c14a1", null ],
+    [ "_defaultPopVfxPrefab", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#ac9caff24867ae84438f001679bd3be52", null ],
+    [ "_entries", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#a1843ab512fa4d13dd8687524b1f537b9", null ],
+    [ "_gameStartedBalloonLines", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#a52ba59181bb562bd655e763d28225441", null ],
+    [ "_newBalloonLinesTimeInterval", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#a7c191acc95cdc26f558a79265e023b54", null ],
+    [ "_newProjectileBalloonLines", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#a6c6d647210bdfb1688d45ab889a7d981", null ],
+    [ "_nudgeDistance", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#acc619e00cf0212dc4ad3f4269a1e3133", null ],
+    [ "_nudgeDuration", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#adde3ce42965fe7f9e476facbc480d89c", null ],
+    [ "_nudgeFalloff", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#a17d54d37584391f86277a3b4f24f3495", null ],
+    [ "_spawnEntryRowOffset", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#a7332c6e30ca937db879e1ecb43fe9d11", null ],
+    [ "_timeForBalloonsBalance", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#aa4788a2213efcb4eacd95fc75634b264", null ],
     [ "BalloonSpawnAnimationDurationRange", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#a4633eda81c1e351110d1fddb0455edbc", null ],
     [ "DefaultPopVfxPrefab", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#aef16fe178fbc9bfd619cc1c8bb41f438", null ],
     [ "Entries", "class_balloon_party_1_1_configuration_1_1_balloons_configuration.html#a5c06771b20c5328f51217ab0a5456e2c", null ],

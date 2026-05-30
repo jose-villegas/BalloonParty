@@ -144,8 +144,85 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:accae4db514541aaf2d84fdf08f38b8db" id="r_accae4db514541aaf2d84fdf08f38b8db"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#accae4db514541aaf2d84fdf08f38b8db">Setup</a> (Vector3 target, float duration, Action onCompleted, bool useUnscaledTime=false)</td></tr>
 <tr class="memitem:ac16b24d68e823be781ca0ea5f95b48d9" id="r_ac16b24d68e823be781ca0ea5f95b48d9"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ac16b24d68e823be781ca0ea5f95b48d9">SetupBurst</a> (Vector3 burstTo, Vector3 target, Color color, float burstDuration, float traceDuration, Action onCompleted, bool useUnscaledTime=false)</td></tr>
 <tr class="memdesc:ac16b24d68e823be781ca0ea5f95b48d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Two-phase flight: bloom out from current position to <em>burstTo</em> , then follow the normal curve to <em>target</em> .  <br /></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a8c0ce01705fee2916c03ff1ea8f4fb48" id="r_a8c0ce01705fee2916c03ff1ea8f4fb48"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a8c0ce01705fee2916c03ff1ea8f4fb48">Awake</a> ()</td></tr>
+<tr class="memitem:aa9045a1b0760e035f6a93aa3b9258403" id="r_aa9045a1b0760e035f6a93aa3b9258403"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#aa9045a1b0760e035f6a93aa3b9258403">BeginTraceFlight</a> (Vector3 target, float duration, bool useUnscaledTime)</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a7833aba7b17b61de69afe3cd53b478fe" id="r_a7833aba7b17b61de69afe3cd53b478fe"><td class="memItemLeft">AnimationCurve&#160;</td><td class="memItemRight"><a class="el" href="#a7833aba7b17b61de69afe3cd53b478fe">_moveCurve</a></td></tr>
+<tr class="memitem:a8393fd4d4b568afb3b6322bc813c7e93" id="r_a8393fd4d4b568afb3b6322bc813c7e93"><td class="memItemLeft">Tweener&#160;</td><td class="memItemRight"><a class="el" href="#a8393fd4d4b568afb3b6322bc813c7e93">_moveTween</a></td></tr>
+<tr class="memitem:a5af847f8b531de1df82b60bf1879762e" id="r_a5af847f8b531de1df82b60bf1879762e"><td class="memItemLeft">SpriteRenderer&#160;</td><td class="memItemRight"><a class="el" href="#a5af847f8b531de1df82b60bf1879762e">_renderer</a></td></tr>
+<tr class="memitem:ae23bd5df51e29d258c3df1dbde84f499" id="r_ae23bd5df51e29d258c3df1dbde84f499"><td class="memItemLeft">AnimationCurve&#160;</td><td class="memItemRight"><a class="el" href="#ae23bd5df51e29d258c3df1dbde84f499">_scaleCurve</a></td></tr>
+<tr class="memitem:addedda3700ec8fa1524a6a362cc2e121" id="r_addedda3700ec8fa1524a6a362cc2e121"><td class="memItemLeft">TrailRenderer&#160;</td><td class="memItemRight"><a class="el" href="#addedda3700ec8fa1524a6a362cc2e121">_trailRenderer</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-static-attribs" class="groupheader"><a id="pri-static-attribs" name="pri-static-attribs"></a>
+Static Private Attributes</h2></td></tr>
+<tr class="memitem:af6ddb3261b536419d5b74f4b36b75434" id="r_af6ddb3261b536419d5b74f4b36b75434"><td class="memItemLeft">const string&#160;</td><td class="memItemRight"><a class="el" href="#af6ddb3261b536419d5b74f4b36b75434">OverlaySortingLayer</a> = &quot;UI&quot;</td></tr>
+<tr class="memitem:acf06cb25e6b65e1eda7d211a94807042" id="r_acf06cb25e6b65e1eda7d211a94807042"><td class="memItemLeft">const int&#160;</td><td class="memItemRight"><a class="el" href="#acf06cb25e6b65e1eda7d211a94807042">OverlaySortingOrder</a> = 100</td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a8c0ce01705fee2916c03ff1ea8f4fb48" name="a8c0ce01705fee2916c03ff1ea8f4fb48"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8c0ce01705fee2916c03ff1ea8f4fb48">&#9670;&#160;</a></span>Awake()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.Score.FlyingTrail.Awake </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa9045a1b0760e035f6a93aa3b9258403" name="aa9045a1b0760e035f6a93aa3b9258403"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa9045a1b0760e035f6a93aa3b9258403">&#9670;&#160;</a></span>BeginTraceFlight()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.UI.Score.FlyingTrail.BeginTraceFlight </td>
+          <td>(</td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>target</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>duration</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">bool</td>          <td class="paramname"><span class="paramname"><em>useUnscaledTime</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ab8c60eb77236547f802d1ab4fe093709" name="ab8c60eb77236547f802d1ab4fe093709"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab8c60eb77236547f802d1ab4fe093709">&#9670;&#160;</a></span>DisableMoveTween()</h2>
 
@@ -331,6 +408,161 @@ Public Member Functions</h2></td></tr>
 
 <p>Two-phase flight: bloom out from current position to <em>burstTo</em> , then follow the normal curve to <em>target</em> . </p>
 <p>The scale tween spans the full journey so the orb shrinks continuously. </p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a7833aba7b17b61de69afe3cd53b478fe" name="a7833aba7b17b61de69afe3cd53b478fe"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7833aba7b17b61de69afe3cd53b478fe">&#9670;&#160;</a></span>_moveCurve</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">AnimationCurve BalloonParty.UI.Score.FlyingTrail._moveCurve</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a8393fd4d4b568afb3b6322bc813c7e93" name="a8393fd4d4b568afb3b6322bc813c7e93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8393fd4d4b568afb3b6322bc813c7e93">&#9670;&#160;</a></span>_moveTween</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Tweener BalloonParty.UI.Score.FlyingTrail._moveTween</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5af847f8b531de1df82b60bf1879762e" name="a5af847f8b531de1df82b60bf1879762e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5af847f8b531de1df82b60bf1879762e">&#9670;&#160;</a></span>_renderer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">SpriteRenderer BalloonParty.UI.Score.FlyingTrail._renderer</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ae23bd5df51e29d258c3df1dbde84f499" name="ae23bd5df51e29d258c3df1dbde84f499"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae23bd5df51e29d258c3df1dbde84f499">&#9670;&#160;</a></span>_scaleCurve</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">AnimationCurve BalloonParty.UI.Score.FlyingTrail._scaleCurve</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="addedda3700ec8fa1524a6a362cc2e121" name="addedda3700ec8fa1524a6a362cc2e121"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#addedda3700ec8fa1524a6a362cc2e121">&#9670;&#160;</a></span>_trailRenderer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">TrailRenderer BalloonParty.UI.Score.FlyingTrail._trailRenderer</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="af6ddb3261b536419d5b74f4b36b75434" name="af6ddb3261b536419d5b74f4b36b75434"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af6ddb3261b536419d5b74f4b36b75434">&#9670;&#160;</a></span>OverlaySortingLayer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const string BalloonParty.UI.Score.FlyingTrail.OverlaySortingLayer = &quot;UI&quot;</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acf06cb25e6b65e1eda7d211a94807042" name="acf06cb25e6b65e1eda7d211a94807042"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acf06cb25e6b65e1eda7d211a94807042">&#9670;&#160;</a></span>OverlaySortingOrder</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const int BalloonParty.UI.Score.FlyingTrail.OverlaySortingOrder = 100</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

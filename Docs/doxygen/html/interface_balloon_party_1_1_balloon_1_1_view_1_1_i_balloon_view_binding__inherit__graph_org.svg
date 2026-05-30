@@ -59,7 +59,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="class_balloon_party_1_1_balloon_1_1_type_1_1_unbreakable_balloon_variant.html" target="_top" xlink:title="Balloon variant for BalloonType.Unbreakable.">
 <polygon fill="white" stroke="#666666" points="300.5,-30.5 167.5,-30.5 167.5,0 300.5,0 300.5,-30.5"/>
 <text xml:space="preserve" text-anchor="start" x="175.5" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Type.</text>
 <text xml:space="preserve" text-anchor="middle" x="234" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">UnbreakableBalloonVariant</text>

@@ -2,5 +2,6 @@ var _gradient_texture_drawer_8cs =
 [
     [ "BalloonParty.Editor.GradientTextureDrawer.GradientStorage.AlphaKeyEntry", "class_balloon_party_1_1_editor_1_1_gradient_texture_drawer_1_1_gradient_storage_1_1_alpha_key_entry.html", "class_balloon_party_1_1_editor_1_1_gradient_texture_drawer_1_1_gradient_storage_1_1_alpha_key_entry" ],
     [ "BalloonParty.Editor.GradientTextureDrawer.GradientStorage.ColorKeyEntry", "class_balloon_party_1_1_editor_1_1_gradient_texture_drawer_1_1_gradient_storage_1_1_color_key_entry.html", "class_balloon_party_1_1_editor_1_1_gradient_texture_drawer_1_1_gradient_storage_1_1_color_key_entry" ],
+    [ "BalloonParty.Editor.GradientTextureDrawer.GradientStorage", "class_balloon_party_1_1_editor_1_1_gradient_texture_drawer_1_1_gradient_storage.html", "class_balloon_party_1_1_editor_1_1_gradient_texture_drawer_1_1_gradient_storage" ],
     [ "BalloonParty.Editor.GradientTextureDrawer", "class_balloon_party_1_1_editor_1_1_gradient_texture_drawer.html", "class_balloon_party_1_1_editor_1_1_gradient_texture_drawer" ]
 ];

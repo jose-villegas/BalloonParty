@@ -1,10 +1,9 @@
 var searchData=
 [
-  ['score_0',['Score',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_score_point_message.html#a68e1456bc50aec6e4cbb4dcae89c7c9c',1,'BalloonParty.Shared.Messages.ScorePointMessage.Score'],['../struct_balloon_party_1_1_shared_1_1_messages_1_1_score_trail_arrived_message.html#a2174c6689b3070ae5c9011584f814e4e',1,'BalloonParty.Shared.Messages.ScoreTrailArrivedMessage.Score']]],
-  ['slotindex_1',['SlotIndex',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_shield_gained_message.html#a928aaee892766c709a9e8580c56a8c64',1,'BalloonParty::Shared::Messages::ShieldGainedMessage']]],
-  ['snapshot_2',['Snapshot',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_transform_captured_message.html#a215ae166fefdd2e54cda153bf72da07a',1,'BalloonParty::Shared::Messages::TransformCapturedMessage']]],
-  ['source_3',['Source',['../struct_balloon_party_1_1_nudge_1_1_nudge_message.html#a4bdd061edc379de70e8c3d523dce2487',1,'BalloonParty.Nudge.NudgeMessage.Source'],['../struct_balloon_party_1_1_shared_1_1_messages_1_1_transform_captured_message.html#a80043ff2f7232d9f597fc8afc226120a',1,'BalloonParty.Shared.Messages.TransformCapturedMessage.Source']]],
-  ['sourcecolorid_4',['SourceColorId',['../struct_balloon_party_1_1_slots_1_1_capabilities_1_1_damage_context.html#adcc134f7d8299b549f22cdd93ebee44d',1,'BalloonParty::Slots::Capabilities::DamageContext']]],
-  ['spacing_5',['Spacing',['../class_balloon_party_1_1_editor_1_1_property_drawer_helper.html#ae1804a71039aaa65360eea87dd1211a4',1,'BalloonParty::Editor::PropertyDrawerHelper']]],
-  ['staggerdelay_6',['StaggerDelay',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_level_up_glow_trails_message.html#ab7741dced1b7bab96949e4c877673620',1,'BalloonParty::Shared::Messages::LevelUpGlowTrailsMessage']]]
+  ['name_0',['Name',['../class_balloon_party_1_1_editor_1_1_texture_audit_window_1_1_entry.html#ac9ba6cf914dd23be4d177ab53df44d72',1,'BalloonParty::Editor::TextureAuditWindow::Entry']]],
+  ['neighborcount_1',['NeighborCount',['../class_balloon_party_1_1_item_1_1_paint_1_1_paint_item_handler.html#a8ddae1b6eb09e525f5da82828d28b130',1,'BalloonParty::Item::Paint::PaintItemHandler']]],
+  ['newballoons_2',['NewBalloons',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_item_check_message.html#aca0dda3ecfd93984e0987d566142771d',1,'BalloonParty::Shared::Messages::ItemCheckMessage']]],
+  ['newlevel_3',['NewLevel',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_score_level_up_message.html#a96a74e90a4b1c08a1b09729a9be4779e',1,'BalloonParty::Shared::Messages::ScoreLevelUpMessage']]],
+  ['nextlevel_4',['NextLevel',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_score_point_message.html#ac6f7ad6e9c49e4242095fad499c4e772',1,'BalloonParty::Shared::Messages::ScorePointMessage']]],
+  ['nudgeoverrides_5',['NudgeOverrides',['../struct_balloon_party_1_1_balloon_1_1_model_1_1_balloon_model_config.html#a78cae6453ecf42fa44deb945a494e160',1,'BalloonParty::Balloon::Model::BalloonModelConfig']]]
 ];

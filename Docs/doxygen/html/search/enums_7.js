@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['slotactorkind_0',['SlotActorKind',['../namespace_balloon_party_1_1_slots_1_1_actor.html#adbab49aebf9c1f422de5a17b7033167e',1,'BalloonParty::Slots::Actor']]],
-  ['slotgridchangetype_1',['SlotGridChangeType',['../namespace_balloon_party_1_1_slots_1_1_grid.html#a6efd918aa80f2918a2b989c8b0090a39',1,'BalloonParty::Slots::Grid']]]
+  ['navigationstate_0',['NavigationState',['../namespace_balloon_party_1_1_shared_1_1_game_state.html#a59d8996d0c851ba4d4a00fb55277bbd6',1,'BalloonParty::Shared::GameState']]],
+  ['nudgetype_1',['NudgeType',['../namespace_balloon_party_1_1_nudge.html#a4d2e641b1da2f9eb813f7185abd74329',1,'BalloonParty::Nudge']]]
 ];

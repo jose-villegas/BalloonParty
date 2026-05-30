@@ -77,7 +77,7 @@
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="interface_balloon_party_1_1_nudge_1_1_i_nudgeable.html" target="_top" xlink:title="View&#45;side contract for actors that can play a nudge animation.">
 <polygon fill="white" stroke="#666666" points="154,-19.25 0,-19.25 0,0 154,0 154,-19.25"/>
 <text xml:space="preserve" text-anchor="middle" x="77" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Nudge.INudgeable</text>
 </a>

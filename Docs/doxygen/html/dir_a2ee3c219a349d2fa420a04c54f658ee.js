@@ -8,10 +8,10 @@ var dir_a2ee3c219a349d2fa420a04c54f658ee =
     [ "IBalloonItem.cs", "_i_balloon_item_8cs.html", "_i_balloon_item_8cs" ],
     [ "IItem.cs", "_i_item_8cs.html", "_i_item_8cs" ],
     [ "IItemView.cs", "_i_item_view_8cs.html", "_i_item_view_8cs" ],
-    [ "ItemActivator.cs", "_item_activator_8cs.html", null ],
-    [ "ItemAssigner.cs", "_item_assigner_8cs.html", null ],
+    [ "ItemActivator.cs", "_item_activator_8cs.html", "_item_activator_8cs" ],
+    [ "ItemAssigner.cs", "_item_assigner_8cs.html", "_item_assigner_8cs" ],
     [ "ItemDisplayService.cs", "_item_display_service_8cs.html", "_item_display_service_8cs" ],
-    [ "ItemVisualPoolChannel.cs", "_item_visual_pool_channel_8cs.html", null ],
+    [ "ItemVisualPoolChannel.cs", "_item_visual_pool_channel_8cs.html", "_item_visual_pool_channel_8cs" ],
     [ "ItemVisualView.cs", "_item_visual_view_8cs.html", "_item_visual_view_8cs" ],
     [ "ITransformCapture.cs", "_i_transform_capture_8cs.html", "_i_transform_capture_8cs" ],
     [ "LaserItemRotation.cs", "_laser_item_rotation_8cs.html", "_laser_item_rotation_8cs" ]

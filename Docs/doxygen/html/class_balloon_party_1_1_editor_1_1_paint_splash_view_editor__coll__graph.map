@@ -1,5 +1,16 @@
 <map id="BalloonParty.Editor.PaintSplashViewEditor" name="BalloonParty.Editor.PaintSplashViewEditor">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,170,120"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="25,5,150,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="89,44,90,79,85,78,86,48"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="969,87,1134,127"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="700,66,824,92"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="840,84,972,99,967,99,840,89"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_editor_1_1_effect_preview_1_1_effect_view_preview_player.html" title="Reusable editor preview player for Shared.Pool.EffectView subclasses." alt="" coords="653,116,871,157"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="886,128,945,122,972,121,966,122,946,127,887,133"/>
+<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_editor_animation_loop.html" title="Manages a play/pause/stop animation loop driven by EditorApplication.update." alt="" coords="342,5,510,46"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="505,49,630,92,654,102,690,116,685,115,652,107,628,98,504,54"/>
+<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_palette_color_picker.html" title="Reusable palette color picker and swatch drawing for editor UI." alt="" coords="342,161,510,202"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="525,167,629,153,655,152,650,152,629,158,525,172"/>
+<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_config_asset_cache-1-g.html" title="Lazily finds and caches a ScriptableObject asset by type via AssetDatabase.FindAssets." alt="" coords="5,127,187,167"/>
+<area shape="poly" id="edge6_Node000003_Node000006" title=" " alt="" coords="201,130,211,130,328,124,420,124,629,130,655,133,650,133,629,135,420,129,328,130,211,135,203,136"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="202,155,343,172,339,174,202,161"/>
+<area shape="rect" id="Node000007" href="$interface_balloon_party_1_1_editor_1_1_effect_preview_1_1_i_effect_preview_module.html" title="Pluggable preview module for EffectViewPreviewPlayer." alt="" coords="327,227,525,267"/>
+<area shape="poly" id="edge7_Node000003_Node000007" title=" " alt="" coords="533,220,628,191,715,158,720,157,630,197,534,225"/>
 </map>

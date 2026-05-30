@@ -1,5 +1,5 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$interface_balloon_party_1_1_item_1_1_i_item.html" title=" " alt="" coords="5,5,163,31"/>
-<area shape="rect" id="Node000001" href="$interface_balloon_party_1_1_item_1_1_i_balloon_item.html" title=" " alt="" coords="211,5,411,31"/>
-<area shape="poly" id="edge58_Node000000_Node000001" title=" " alt="" coords="178,16,213,18,207,18,178,21"/>
+<area shape="rect" id="Node000000" href="$interface_balloon_party_1_1_editor_1_1_editor_u_i_1_1_i_selectable.html" title="Interface for items that can be selected in a table row." alt="" coords="5,5,174,46"/>
+<area shape="rect" id="Node000001" href="$class_balloon_party_1_1_editor_1_1_texture_audit_window_1_1_entry.html" title=" " alt="" coords="222,5,399,46"/>
+<area shape="poly" id="edge73_Node000000_Node000001" title=" " alt="" coords="189,23,224,25,218,26,189,28"/>
 </map>

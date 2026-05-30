@@ -21,7 +21,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="class_balloon_party_1_1_balloon_1_1_type_1_1_simple_balloon_variant.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="170.88,-30.5 38.62,-30.5 38.62,0 170.88,0 170.88,-30.5"/>
 <text xml:space="preserve" text-anchor="start" x="46.62" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Type.</text>
 <text xml:space="preserve" text-anchor="middle" x="104.75" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">SimpleBalloonVariant</text>

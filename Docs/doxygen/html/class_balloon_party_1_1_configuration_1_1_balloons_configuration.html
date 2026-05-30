@@ -131,7 +131,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('class_balloon_
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_configuration_1_1_balloons_configuration__coll__graph.svg" width="190" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><div class="zoom"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_configuration_1_1_balloons_configuration__coll__graph.svg" width="100%" height="600"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
@@ -152,6 +152,21 @@ Properties</h2></td></tr>
 <tr class="memitem:a11ad05f20db11ed44a4cda6082ec4742" id="r_a11ad05f20db11ed44a4cda6082ec4742"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a11ad05f20db11ed44a4cda6082ec4742">NudgeFalloff</a><code> [get]</code></td></tr>
 <tr class="memitem:a5af31ec6b4461211f480ba7f0a5982ef" id="r_a5af31ec6b4461211f480ba7f0a5982ef"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a5af31ec6b4461211f480ba7f0a5982ef">SpawnEntryRowOffset</a><code> [get]</code></td></tr>
 <tr class="memitem:a6f4815cffba6051de4d6d749ab4f5b27" id="r_a6f4815cffba6051de4d6d749ab4f5b27"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a6f4815cffba6051de4d6d749ab4f5b27">TimeForBalloonsBalance</a><code> [get]</code></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:a5292b076738883fe9b9aaa680fb266e4" id="r_a5292b076738883fe9b9aaa680fb266e4"><td class="memItemLeft">Vector2&#160;</td><td class="memItemRight"><a class="el" href="#a5292b076738883fe9b9aaa680fb266e4">_balloonSpawnAnimationSpeedRange</a></td></tr>
+<tr class="memitem:a9ed7e27fb84ebb2a5cadc9ad356c14a1" id="r_a9ed7e27fb84ebb2a5cadc9ad356c14a1"><td class="memItemLeft">readonly List&lt; <a class="el" href="class_balloon_party_1_1_configuration_1_1_balloon_prefab_entry.html">BalloonPrefabEntry</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a9ed7e27fb84ebb2a5cadc9ad356c14a1">_candidateBuffer</a> = new()</td></tr>
+<tr class="memitem:ac9caff24867ae84438f001679bd3be52" id="r_ac9caff24867ae84438f001679bd3be52"><td class="memItemLeft">ParticleSystem&#160;</td><td class="memItemRight"><a class="el" href="#ac9caff24867ae84438f001679bd3be52">_defaultPopVfxPrefab</a></td></tr>
+<tr class="memitem:a1843ab512fa4d13dd8687524b1f537b9" id="r_a1843ab512fa4d13dd8687524b1f537b9"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_configuration_1_1_balloon_prefab_entry.html">BalloonPrefabEntry</a>[]&#160;</td><td class="memItemRight"><a class="el" href="#a1843ab512fa4d13dd8687524b1f537b9">_entries</a></td></tr>
+<tr class="memitem:a52ba59181bb562bd655e763d28225441" id="r_a52ba59181bb562bd655e763d28225441"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a52ba59181bb562bd655e763d28225441">_gameStartedBalloonLines</a></td></tr>
+<tr class="memitem:a7c191acc95cdc26f558a79265e023b54" id="r_a7c191acc95cdc26f558a79265e023b54"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a7c191acc95cdc26f558a79265e023b54">_newBalloonLinesTimeInterval</a></td></tr>
+<tr class="memitem:a6c6d647210bdfb1688d45ab889a7d981" id="r_a6c6d647210bdfb1688d45ab889a7d981"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a6c6d647210bdfb1688d45ab889a7d981">_newProjectileBalloonLines</a></td></tr>
+<tr class="memitem:acc619e00cf0212dc4ad3f4269a1e3133" id="r_acc619e00cf0212dc4ad3f4269a1e3133"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#acc619e00cf0212dc4ad3f4269a1e3133">_nudgeDistance</a> = 0.3f</td></tr>
+<tr class="memitem:adde3ce42965fe7f9e476facbc480d89c" id="r_adde3ce42965fe7f9e476facbc480d89c"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#adde3ce42965fe7f9e476facbc480d89c">_nudgeDuration</a> = 0.15f</td></tr>
+<tr class="memitem:a17d54d37584391f86277a3b4f24f3495" id="r_a17d54d37584391f86277a3b4f24f3495"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a17d54d37584391f86277a3b4f24f3495">_nudgeFalloff</a> = 1.5f</td></tr>
+<tr class="memitem:a7332c6e30ca937db879e1ecb43fe9d11" id="r_a7332c6e30ca937db879e1ecb43fe9d11"><td class="memItemLeft">int&#160;</td><td class="memItemRight"><a class="el" href="#a7332c6e30ca937db879e1ecb43fe9d11">_spawnEntryRowOffset</a> = 4</td></tr>
+<tr class="memitem:aa4788a2213efcb4eacd95fc75634b264" id="r_aa4788a2213efcb4eacd95fc75634b264"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#aa4788a2213efcb4eacd95fc75634b264">_timeForBalloonsBalance</a></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
 <a id="ab48b6809a40b5d197c4fe4ec6dd6c5d9" name="ab48b6809a40b5d197c4fe4ec6dd6c5d9"></a>
@@ -171,6 +186,271 @@ Properties</h2></td></tr>
 
 <p>Picks a random entry using weighted random selection, excluding entries that have reached their BalloonPrefabEntry.MaxCount limit. </p>
 <p>Returns null if all entries are at their limit. </p>
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a5292b076738883fe9b9aaa680fb266e4" name="a5292b076738883fe9b9aaa680fb266e4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5292b076738883fe9b9aaa680fb266e4">&#9670;&#160;</a></span>_balloonSpawnAnimationSpeedRange</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vector2 BalloonParty.Configuration.BalloonsConfiguration._balloonSpawnAnimationSpeedRange</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9ed7e27fb84ebb2a5cadc9ad356c14a1" name="a9ed7e27fb84ebb2a5cadc9ad356c14a1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9ed7e27fb84ebb2a5cadc9ad356c14a1">&#9670;&#160;</a></span>_candidateBuffer</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">readonly List&lt;<a class="el" href="class_balloon_party_1_1_configuration_1_1_balloon_prefab_entry.html">BalloonPrefabEntry</a>&gt; BalloonParty.Configuration.BalloonsConfiguration._candidateBuffer = new()</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ac9caff24867ae84438f001679bd3be52" name="ac9caff24867ae84438f001679bd3be52"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac9caff24867ae84438f001679bd3be52">&#9670;&#160;</a></span>_defaultPopVfxPrefab</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">ParticleSystem BalloonParty.Configuration.BalloonsConfiguration._defaultPopVfxPrefab</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a1843ab512fa4d13dd8687524b1f537b9" name="a1843ab512fa4d13dd8687524b1f537b9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1843ab512fa4d13dd8687524b1f537b9">&#9670;&#160;</a></span>_entries</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_configuration_1_1_balloon_prefab_entry.html">BalloonPrefabEntry</a> [] BalloonParty.Configuration.BalloonsConfiguration._entries</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a52ba59181bb562bd655e763d28225441" name="a52ba59181bb562bd655e763d28225441"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a52ba59181bb562bd655e763d28225441">&#9670;&#160;</a></span>_gameStartedBalloonLines</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.BalloonsConfiguration._gameStartedBalloonLines</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7c191acc95cdc26f558a79265e023b54" name="a7c191acc95cdc26f558a79265e023b54"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7c191acc95cdc26f558a79265e023b54">&#9670;&#160;</a></span>_newBalloonLinesTimeInterval</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.BalloonsConfiguration._newBalloonLinesTimeInterval</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a6c6d647210bdfb1688d45ab889a7d981" name="a6c6d647210bdfb1688d45ab889a7d981"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6c6d647210bdfb1688d45ab889a7d981">&#9670;&#160;</a></span>_newProjectileBalloonLines</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.BalloonsConfiguration._newProjectileBalloonLines</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="acc619e00cf0212dc4ad3f4269a1e3133" name="acc619e00cf0212dc4ad3f4269a1e3133"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc619e00cf0212dc4ad3f4269a1e3133">&#9670;&#160;</a></span>_nudgeDistance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.BalloonsConfiguration._nudgeDistance = 0.3f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="adde3ce42965fe7f9e476facbc480d89c" name="adde3ce42965fe7f9e476facbc480d89c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adde3ce42965fe7f9e476facbc480d89c">&#9670;&#160;</a></span>_nudgeDuration</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.BalloonsConfiguration._nudgeDuration = 0.15f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a17d54d37584391f86277a3b4f24f3495" name="a17d54d37584391f86277a3b4f24f3495"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a17d54d37584391f86277a3b4f24f3495">&#9670;&#160;</a></span>_nudgeFalloff</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.BalloonsConfiguration._nudgeFalloff = 1.5f</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7332c6e30ca937db879e1ecb43fe9d11" name="a7332c6e30ca937db879e1ecb43fe9d11"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7332c6e30ca937db879e1ecb43fe9d11">&#9670;&#160;</a></span>_spawnEntryRowOffset</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">int BalloonParty.Configuration.BalloonsConfiguration._spawnEntryRowOffset = 4</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa4788a2213efcb4eacd95fc75634b264" name="aa4788a2213efcb4eacd95fc75634b264"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa4788a2213efcb4eacd95fc75634b264">&#9670;&#160;</a></span>_timeForBalloonsBalance</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Configuration.BalloonsConfiguration._timeForBalloonsBalance</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

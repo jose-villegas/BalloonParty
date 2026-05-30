@@ -115,9 +115,10 @@ var NAVTREE =
       [ "Class Hierarchy", "hierarchy.html", "hierarchy" ],
       [ "Class Members", "functions.html", [
         [ "All", "functions.html", "functions_dup" ],
-        [ "Functions", "functions_func.html", null ],
-        [ "Variables", "functions_vars.html", null ],
-        [ "Properties", "functions_prop.html", null ]
+        [ "Functions", "functions_func.html", "functions_func" ],
+        [ "Variables", "functions_vars.html", "functions_vars" ],
+        [ "Enumerations", "functions_enum.html", null ],
+        [ "Properties", "functions_prop.html", "functions_prop" ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -134,11 +135,25 @@ var NAVTREEINDEX =
 [
 "_absorber_actor_model_8cs.html",
 "architecture.html#autotoc_md0",
-"class_balloon_party_1_1_configuration_1_1_grid_actor_prefab_entry.html#acd4a5c2ed8df1f2f5d8b2cbf1f4e3b95",
-"class_balloon_party_1_1_nudge_1_1_nudge_override.html#af3d539fd160975235c6050683295b043",
-"class_balloon_party_1_1_u_i_1_1_score_1_1_score_counter_label.html",
-"interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html",
-"plan_grid_actor_expansion.html#autotoc_md230"
+"class_balloon_party_1_1_balloon_1_1_spawner_1_1_balloon_pool_channel.html",
+"class_balloon_party_1_1_balloon_1_1_view_1_1_balloon_view.html#a580b2f1854bc10938a07bc378e5f8339",
+"class_balloon_party_1_1_configuration_1_1_editor_1_1_map_limits_scene_overlay.html#aae262f3763981f1d264c05e3b46f5b0e",
+"class_balloon_party_1_1_configuration_1_1_item_settings.html#ab813cca16551e9aa7984e96536bfe0b5",
+"class_balloon_party_1_1_editor_1_1_effect_preview_1_1_chain_lightning_preview_module.html#afb7b4e23fbd68ac99814ee8b704de5dd",
+"class_balloon_party_1_1_editor_1_1_script_search_popup.html#a94ae8f5624a931d1fe9e526fd20760f6",
+"class_balloon_party_1_1_game_1_1_game_lifetime_scope.html#a28f0caf50774cff0bf0e4c5b941600ef",
+"class_balloon_party_1_1_item_1_1_item_display_service.html#acf3e341f81fc0e9f3885336f74450d2d",
+"class_balloon_party_1_1_item_1_1_paint_1_1_paint_splash_view.html#a444381861f6108b42d08eda33090e312",
+"class_balloon_party_1_1_projectile_1_1_view_1_1_projectile_shield_view.html#a2094cf86bf2d54d8d1bed52dedffd59f",
+"class_balloon_party_1_1_shared_1_1_game_state_1_1_cinematic.html#a3b8e1de661b01fce33a046932924a76b",
+"class_balloon_party_1_1_shared_1_1_pool_1_1_particle_pool_channel.html#ad37663d2161666a4663a215a7d4f0646",
+"class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_grid_actor_pool_channel.html#a93e8c5d389ce866d7a1b874cb1ca7e49",
+"class_balloon_party_1_1_thrower_1_1_thrower_controller.html#a30735ba0f34d91dba7302e7526567f75",
+"class_balloon_party_1_1_u_i_1_1_score_1_1_flying_trail.html#aa9045a1b0760e035f6a93aa3b9258403",
+"class_balloon_party_1_1_u_i_1_1_shields_1_1_shield_trail_pool_channel.html#af9947fb47bbcf9ff54006a64d90c2131",
+"interface_balloon_party_1_1_nudge_1_1_i_nudgeable.html#ad3b74c05344a7f8ba091c13e19816d3f",
+"namespace_balloon_party_1_1_shared_1_1_pause.html#ab006bd98ba69f3aaa2ba396e176136b5a8fce77fd86da3af309c0ad415d8d7952",
+"struct_balloon_party_1_1_shared_1_1_messages_1_1_item_check_message.html#aca0dda3ecfd93984e0987d566142771d"
 ];
 
 const SYNCONMSG = 'click to disable panel synchronization';

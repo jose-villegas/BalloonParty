@@ -1,13 +1,19 @@
 var searchData=
 [
   ['gameconfiguration_0',['GameConfiguration',['../class_balloon_party_1_1_configuration_1_1_game_configuration.html',1,'BalloonParty::Configuration']]],
-  ['gamedisplayconfiguration_1',['GameDisplayConfiguration',['../class_balloon_party_1_1_configuration_1_1_game_display_configuration.html',1,'BalloonParty::Configuration']]],
-  ['gamedisplayconfigurationeditor_2',['GameDisplayConfigurationEditor',['../class_balloon_party_1_1_configuration_1_1_editor_1_1_game_display_configuration_editor.html',1,'BalloonParty::Configuration::Editor']]],
-  ['gamelifetimescope_3',['GameLifetimeScope',['../class_balloon_party_1_1_game_1_1_game_lifetime_scope.html',1,'BalloonParty::Game']]],
-  ['gamepalette_4',['GamePalette',['../class_balloon_party_1_1_configuration_1_1_game_palette.html',1,'BalloonParty::Configuration']]],
-  ['gradienttexturedrawer_5',['GradientTextureDrawer',['../class_balloon_party_1_1_editor_1_1_gradient_texture_drawer.html',1,'BalloonParty::Editor']]],
-  ['graphiccolorablerenderer_6',['GraphicColorableRenderer',['../class_balloon_party_1_1_u_i_1_1_score_1_1_graphic_colorable_renderer.html',1,'BalloonParty::UI::Score']]],
-  ['gridactorconfiguration_7',['GridActorConfiguration',['../class_balloon_party_1_1_configuration_1_1_grid_actor_configuration.html',1,'BalloonParty::Configuration']]],
-  ['gridactorprefabentry_8',['GridActorPrefabEntry',['../class_balloon_party_1_1_configuration_1_1_grid_actor_prefab_entry.html',1,'BalloonParty::Configuration']]],
-  ['gridactorview_9',['GridActorView',['../class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_grid_actor_view.html',1,'BalloonParty::Slots::Actor::Archetype']]]
+  ['gameconfigurationeditor_1',['GameConfigurationEditor',['../class_balloon_party_1_1_configuration_1_1_editor_1_1_game_configuration_editor.html',1,'BalloonParty::Configuration::Editor']]],
+  ['gamedisplayconfiguration_2',['GameDisplayConfiguration',['../class_balloon_party_1_1_configuration_1_1_game_display_configuration.html',1,'BalloonParty::Configuration']]],
+  ['gamedisplayconfigurationeditor_3',['GameDisplayConfigurationEditor',['../class_balloon_party_1_1_configuration_1_1_editor_1_1_game_display_configuration_editor.html',1,'BalloonParty::Configuration::Editor']]],
+  ['gamelifetimescope_4',['GameLifetimeScope',['../class_balloon_party_1_1_game_1_1_game_lifetime_scope.html',1,'BalloonParty::Game']]],
+  ['gamepalette_5',['GamePalette',['../class_balloon_party_1_1_configuration_1_1_game_palette.html',1,'BalloonParty::Configuration']]],
+  ['gatekeeperactormodel_6',['GatekeeperActorModel',['../class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_gatekeeper_actor_model.html',1,'BalloonParty::Slots::Actor::Archetype']]],
+  ['gradientstorage_7',['GradientStorage',['../class_balloon_party_1_1_editor_1_1_gradient_texture_drawer_1_1_gradient_storage.html',1,'BalloonParty::Editor::GradientTextureDrawer']]],
+  ['gradienttexturedrawer_8',['GradientTextureDrawer',['../class_balloon_party_1_1_editor_1_1_gradient_texture_drawer.html',1,'BalloonParty::Editor']]],
+  ['graphiccolorablerenderer_9',['GraphicColorableRenderer',['../class_balloon_party_1_1_u_i_1_1_score_1_1_graphic_colorable_renderer.html',1,'BalloonParty::UI::Score']]],
+  ['gridactorconfiguration_10',['GridActorConfiguration',['../class_balloon_party_1_1_configuration_1_1_grid_actor_configuration.html',1,'BalloonParty::Configuration']]],
+  ['gridactorhitcontroller_11',['GridActorHitController',['../class_balloon_party_1_1_slots_1_1_actor_1_1_grid_actor_hit_controller.html',1,'BalloonParty::Slots::Actor']]],
+  ['gridactorpoolchannel_12',['GridActorPoolChannel',['../class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_grid_actor_pool_channel.html',1,'BalloonParty::Slots::Actor::Archetype']]],
+  ['gridactorprefabentry_13',['GridActorPrefabEntry',['../class_balloon_party_1_1_configuration_1_1_grid_actor_prefab_entry.html',1,'BalloonParty::Configuration']]],
+  ['gridactorview_14',['GridActorView',['../class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_grid_actor_view.html',1,'BalloonParty::Slots::Actor::Archetype']]],
+  ['gridspawnercoordinator_15',['GridSpawnerCoordinator',['../class_balloon_party_1_1_slots_1_1_spawner_1_1_grid_spawner_coordinator.html',1,'BalloonParty::Slots::Spawner']]]
 ];

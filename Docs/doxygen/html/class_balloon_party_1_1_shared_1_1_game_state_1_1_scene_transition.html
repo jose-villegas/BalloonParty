@@ -134,17 +134,58 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('class_balloon_
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_shared_1_1_game_state_1_1_scene_transition__coll__graph.svg" width="188" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_shared_1_1_game_state_1_1_scene_transition__coll__graph.svg" width="358" height="163"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:a9fa2f09f742b94ed32f005d2c596ec41" id="r_a9fa2f09f742b94ed32f005d2c596ec41"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9fa2f09f742b94ed32f005d2c596ec41">Load</a> ()</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a32b376150acba6e947c2aafdfd0c40d2" id="r_a32b376150acba6e947c2aafdfd0c40d2"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a32b376150acba6e947c2aafdfd0c40d2">ActivatePreloadedScene</a> ()</td></tr>
+<tr class="memitem:a7bbefdfa511dc20419d9b7d5416c2202" id="r_a7bbefdfa511dc20419d9b7d5416c2202"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a7bbefdfa511dc20419d9b7d5416c2202">OnSceneLoaded</a> (Scene scene, LoadSceneMode mode)</td></tr>
+<tr class="memitem:ab25a030132d934e972a99ec50681754e" id="r_ab25a030132d934e972a99ec50681754e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab25a030132d934e972a99ec50681754e">Preload</a> ()</td></tr>
+<tr class="memitem:ad880c923fa595043608ab0add6a60fc0" id="r_ad880c923fa595043608ab0add6a60fc0"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ad880c923fa595043608ab0add6a60fc0">Start</a> ()</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
+Private Attributes</h2></td></tr>
+<tr class="memitem:ad7e4c88f7ddc2a505a34d38ca88f5d70" id="r_ad7e4c88f7ddc2a505a34d38ca88f5d70"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ad7e4c88f7ddc2a505a34d38ca88f5d70">_activating</a></td></tr>
+<tr class="memitem:a89b74a3ec291ff6d7ad5f9b3485390f4" id="r_a89b74a3ec291ff6d7ad5f9b3485390f4"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a89b74a3ec291ff6d7ad5f9b3485390f4">_preload</a></td></tr>
+<tr class="memitem:a28e682e642cc636cb98be283deda9196" id="r_a28e682e642cc636cb98be283deda9196"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a28e682e642cc636cb98be283deda9196">_preloadComplete</a></td></tr>
+<tr class="memitem:a770b39216b40a94d2b843ba45d16e86c" id="r_a770b39216b40a94d2b843ba45d16e86c"><td class="memItemLeft">Scene&#160;</td><td class="memItemRight"><a class="el" href="#a770b39216b40a94d2b843ba45d16e86c">_preloadedScene</a></td></tr>
+<tr class="memitem:aad01b3c057730c973d83292f367097f5" id="r_aad01b3c057730c973d83292f367097f5"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_shared_1_1_extensions_1_1_scene_rendering_handle.html">SceneRenderingHandle</a>&#160;</td><td class="memItemRight"><a class="el" href="#aad01b3c057730c973d83292f367097f5">_renderingHandle</a></td></tr>
+<tr class="memitem:aa2de7713a34a308afc24fa8ce499784f" id="r_aa2de7713a34a308afc24fa8ce499784f"><td class="memItemLeft">string&#160;</td><td class="memItemRight"><a class="el" href="#aa2de7713a34a308afc24fa8ce499784f">_sceneName</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>General-purpose scene transition component. </p>
 <p>Attach to any GameObject and wire Load to a Button's onClick event in the Inspector. When _preload is enabled the target scene is loaded additively on <code>Start</code> with rendering disabled so all game logic (DI, pool pre-warming) runs in the background. Load restores rendering and unloads the current scene. </p>
 </div><a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a32b376150acba6e947c2aafdfd0c40d2" name="a32b376150acba6e947c2aafdfd0c40d2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a32b376150acba6e947c2aafdfd0c40d2">&#9670;&#160;</a></span>ActivatePreloadedScene()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Shared.GameState.SceneTransition.ActivatePreloadedScene </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a9fa2f09f742b94ed32f005d2c596ec41" name="a9fa2f09f742b94ed32f005d2c596ec41"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a9fa2f09f742b94ed32f005d2c596ec41">&#9670;&#160;</a></span>Load()</h2>
 
@@ -158,6 +199,218 @@ Public Member Functions</h2></td></tr>
           <td></td>
         </tr>
       </table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a7bbefdfa511dc20419d9b7d5416c2202" name="a7bbefdfa511dc20419d9b7d5416c2202"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7bbefdfa511dc20419d9b7d5416c2202">&#9670;&#160;</a></span>OnSceneLoaded()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Shared.GameState.SceneTransition.OnSceneLoaded </td>
+          <td>(</td>
+          <td class="paramtype">Scene</td>          <td class="paramname"><span class="paramname"><em>scene</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">LoadSceneMode</td>          <td class="paramname"><span class="paramname"><em>mode</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ab25a030132d934e972a99ec50681754e" name="ab25a030132d934e972a99ec50681754e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab25a030132d934e972a99ec50681754e">&#9670;&#160;</a></span>Preload()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Shared.GameState.SceneTransition.Preload </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="ad880c923fa595043608ab0add6a60fc0" name="ad880c923fa595043608ab0add6a60fc0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad880c923fa595043608ab0add6a60fc0">&#9670;&#160;</a></span>Start()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Shared.GameState.SceneTransition.Start </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="ad7e4c88f7ddc2a505a34d38ca88f5d70" name="ad7e4c88f7ddc2a505a34d38ca88f5d70"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad7e4c88f7ddc2a505a34d38ca88f5d70">&#9670;&#160;</a></span>_activating</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Shared.GameState.SceneTransition._activating</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a89b74a3ec291ff6d7ad5f9b3485390f4" name="a89b74a3ec291ff6d7ad5f9b3485390f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89b74a3ec291ff6d7ad5f9b3485390f4">&#9670;&#160;</a></span>_preload</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Shared.GameState.SceneTransition._preload</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a28e682e642cc636cb98be283deda9196" name="a28e682e642cc636cb98be283deda9196"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a28e682e642cc636cb98be283deda9196">&#9670;&#160;</a></span>_preloadComplete</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Shared.GameState.SceneTransition._preloadComplete</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a770b39216b40a94d2b843ba45d16e86c" name="a770b39216b40a94d2b843ba45d16e86c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a770b39216b40a94d2b843ba45d16e86c">&#9670;&#160;</a></span>_preloadedScene</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Scene BalloonParty.Shared.GameState.SceneTransition._preloadedScene</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aad01b3c057730c973d83292f367097f5" name="aad01b3c057730c973d83292f367097f5"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aad01b3c057730c973d83292f367097f5">&#9670;&#160;</a></span>_renderingHandle</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_shared_1_1_extensions_1_1_scene_rendering_handle.html">SceneRenderingHandle</a> BalloonParty.Shared.GameState.SceneTransition._renderingHandle</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="aa2de7713a34a308afc24fa8ce499784f" name="aa2de7713a34a308afc24fa8ce499784f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aa2de7713a34a308afc24fa8ce499784f">&#9670;&#160;</a></span>_sceneName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string BalloonParty.Shared.GameState.SceneTransition._sceneName</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
 </div><div class="memdoc">
 
 </div>

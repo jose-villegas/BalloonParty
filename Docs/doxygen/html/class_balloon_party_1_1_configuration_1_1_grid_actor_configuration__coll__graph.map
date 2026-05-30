@@ -1,5 +1,18 @@
 <map id="BalloonParty.Configuration.GridActorConfiguration" name="BalloonParty.Configuration.GridActorConfiguration">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,184,120"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="36,5,153,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,44,97,80,92,78,93,48"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="1060,32,1238,72"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="810,11,928,37"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="943,29,1062,43,1057,43,943,34"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_configuration_1_1_grid_actor_prefab_entry.html" title=" " alt="" coords="780,61,958,102"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="973,72,1036,66,1062,65,1057,66,1036,71,974,77"/>
+<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_grid_actor_view.html" title=" " alt="" coords="512,61,681,102"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="696,79,782,81,777,82,697,84"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="5,7,117,33"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="132,9,207,4,297,4,394,11,489,31,558,60,553,60,488,36,393,17,297,9,207,9,133,14"/>
+<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_shared_1_1_animation_1_1_tween_tracker.html" title=" " alt="" coords="166,28,370,68"/>
+<area shape="poly" id="edge8_Node000008_Node000005" title=" " alt="" coords="131,27,168,33,163,35,133,32"/>
+<area shape="rect" id="Node000006" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="182,93,354,134"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="369,101,515,89,510,90,370,106"/>
+<area shape="rect" id="Node000007" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor_view.html" title=" " alt="" coords="186,158,351,199"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="353,151,523,103,528,102,355,156"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="386,57,515,72,509,73,386,63"/>
 </map>

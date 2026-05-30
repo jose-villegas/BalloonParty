@@ -27,9 +27,10 @@ IMAGE_PATH             = Docs/diagrams
 EXTENSION_MAPPING      = cs=csharp
 OPTIMIZE_OUTPUT_JAVA   = YES
 EXTRACT_ALL            = YES
-EXTRACT_PRIVATE        = NO
+EXTRACT_PRIVATE        = YES
 EXTRACT_STATIC         = YES
 EXTRACT_LOCAL_CLASSES  = YES
+EXTRACT_PACKAGE        = YES
 
 #---------------------------------------------------------------------------
 # Build

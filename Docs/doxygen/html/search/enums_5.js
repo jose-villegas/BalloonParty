@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['nudgetype_0',['NudgeType',['../namespace_balloon_party_1_1_nudge.html#a4d2e641b1da2f9eb813f7185abd74329',1,'BalloonParty::Nudge']]]
+  ['hitoutcome_0',['HitOutcome',['../namespace_balloon_party_1_1_slots_1_1_capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675',1,'BalloonParty::Slots::Capabilities']]]
 ];

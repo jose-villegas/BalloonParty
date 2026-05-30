@@ -59,7 +59,7 @@
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="class_balloon_party_1_1_balloon_1_1_model_1_1_balloon_model.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="145,-30.5 7.5,-30.5 7.5,0 145,0 145,-30.5"/>
 <text xml:space="preserve" text-anchor="start" x="15.5" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Model.</text>
 <text xml:space="preserve" text-anchor="middle" x="76.25" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonModel</text>

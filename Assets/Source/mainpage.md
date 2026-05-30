@@ -32,13 +32,13 @@
 
 **Key Systems:**
 
-- **SlotGrid** — 2D grid of actor slots with interface-based occupants
-- **BalloonSpawner** — Staged spawning coordinated by `GridSpawnerCoordinator`
-- **BalloonBalancer** — Consolidates grid gaps, transit-aware via `BalancePathHolder`
-- **ScoreController** — Streak tracking, trail orchestration, level-up detection
-- **CinematicDirector** — Camera pan-in/restore sequences during level-up
-- **NudgeService** — Visual knockback with per-type overrides via `NudgeOverrideResolver`
-- **PoolManager** — Object pooling with `PoolChannel<T>` and `CompositeDisposable` lifecycle
+- @ref BalloonParty::Slots::Grid::SlotGrid "SlotGrid" — 2D grid of actor slots with interface-based occupants
+- @ref BalloonParty::Balloon::Spawner::BalloonSpawner "BalloonSpawner" — Staged spawning coordinated by `GridSpawnerCoordinator`
+- @ref BalloonParty::Balloon::Controller::BalloonBalancer "BalloonBalancer" — Consolidates grid gaps, transit-aware via `BalancePathHolder`
+- @ref BalloonParty::Game::Score::ScoreController "ScoreController" — Streak tracking, trail orchestration, level-up detection
+- @ref BalloonParty::Game::Cinematics::CinematicDirector "CinematicDirector" — Camera pan-in/restore sequences during level-up
+- @ref BalloonParty::Nudge::NudgeService "NudgeService" — Visual knockback with per-type overrides via `NudgeOverrideResolver`
+- @ref BalloonParty::Shared::Pool::PoolManager "PoolManager" — Object pooling with `PoolChannel<T>` and `CompositeDisposable` lifecycle
 
 ---
 

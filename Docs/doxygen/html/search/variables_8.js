@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['newballoons_0',['NewBalloons',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_item_check_message.html#aca0dda3ecfd93984e0987d566142771d',1,'BalloonParty::Shared::Messages::ItemCheckMessage']]],
-  ['newlevel_1',['NewLevel',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_score_level_up_message.html#a96a74e90a4b1c08a1b09729a9be4779e',1,'BalloonParty::Shared::Messages::ScoreLevelUpMessage']]],
-  ['nextlevel_2',['NextLevel',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_score_point_message.html#ac6f7ad6e9c49e4242095fad499c4e772',1,'BalloonParty::Shared::Messages::ScorePointMessage']]]
+  ['hidetrigger_0',['HideTrigger',['../class_balloon_party_1_1_u_i_1_1_level_up_1_1_level_up_pop_up.html#ab05ca69b2a2ea675cf8b65caa9a040df',1,'BalloonParty::UI::LevelUp::LevelUpPopUp']]],
+  ['hitstopop_1',['HitsToPop',['../struct_balloon_party_1_1_balloon_1_1_model_1_1_balloon_model_config.html#a52801eccd8fd9941a056d5c0715f2b7b',1,'BalloonParty::Balloon::Model::BalloonModelConfig']]]
 ];

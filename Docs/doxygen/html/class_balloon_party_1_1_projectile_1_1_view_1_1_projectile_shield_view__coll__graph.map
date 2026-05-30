@@ -1,5 +1,28 @@
 <map id="BalloonParty.Projectile.View.ProjectileShieldView" name="BalloonParty.Projectile.View.ProjectileShieldView">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,177,120"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="35,5,147,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="93,44,94,80,88,78,89,48"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="890,146,1061,186"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="608,5,719,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="734,27,801,43,867,70,918,106,958,146,953,145,915,110,864,75,799,48,735,32"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_configuration_1_1_game_palette.html" title=" " alt="" coords="574,55,753,96"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="768,96,866,122,926,145,921,145,865,127,768,101"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="252,25,369,51"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="384,40,551,54,576,59,571,61,550,59,385,45"/>
+<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_configuration_1_1_palette_entry.html" title=" " alt="" coords="222,75,400,116"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="415,87,576,79,571,82,416,92"/>
+<area shape="rect" id="Node000006" href="$interface_balloon_party_1_1_shared_1_1_i_game_configuration.html" title=" " alt="" coords="220,143,401,184"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="416,160,425,160,646,158,866,160,892,162,887,163,866,165,646,163,425,165,418,165"/>
+<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_slots_1_1_grid_1_1_slot_grid.html" title=" " alt="" coords="584,191,743,232"/>
+<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="416,181,426,183,586,204,581,205,425,188,417,186"/>
+<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html" title=" " alt="" coords="577,256,750,297"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="764,255,815,241,865,224,905,205,939,188,944,186,907,210,867,229,816,246,765,260"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="758,197,865,183,892,181,887,182,866,188,759,203"/>
+<area shape="rect" id="Node000009" href="$class_balloon_party_1_1_slots_1_1_grid_1_1_balance_path_holder.html" title="Tracks grid slots that are currently in&#45;transit due to balance animations." alt="" coords="231,212,390,253"/>
+<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="405,239,477,240,550,236,589,232,584,233,551,241,477,246,406,244"/>
+<area shape="rect" id="Node000010" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_writeable_slot_actor.html" title=" " alt="" coords="228,278,393,318"/>
+<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="409,300,480,293,516,283,549,270,561,257,573,243,594,233,599,231,576,247,565,261,552,274,517,288,481,298,409,306"/>
+<area shape="rect" id="Node000011" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor.html" title=" " alt="" coords="5,278,171,318"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="186,296,230,297,225,299,187,301"/>
+<area shape="rect" id="Node000012" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor_view.html" title=" " alt="" coords="228,343,393,384"/>
+<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="409,371,445,369,482,362,518,349,549,329,557,319,560,310,561,289,561,266,564,255,572,243,587,234,592,231,576,247,569,257,566,267,566,289,566,311,561,322,552,332,520,354,484,367,446,374,409,376"/>
+<area shape="rect" id="Node000013" href="$interface_balloon_party_1_1_projectile_1_1_model_1_1_i_projectile_model.html" title=" " alt="" coords="586,322,741,362"/>
+<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="756,323,811,306,864,280,893,259,919,233,958,188,962,186,923,237,897,263,867,285,813,311,757,328"/>
 </map>

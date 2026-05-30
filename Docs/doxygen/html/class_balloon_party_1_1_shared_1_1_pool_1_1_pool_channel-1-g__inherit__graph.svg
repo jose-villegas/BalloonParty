@@ -68,7 +68,7 @@ var sectionId = 'dynsection-0';
 <!-- Node3 -->
 <g id="Node000003" class="node">
 <title>Node3</title>
-<g id="a_Node000003"><a xlink:title=" ">
+<g id="a_Node000003"><a xlink:href="class_balloon_party_1_1_item_1_1_item_visual_pool_channel.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="478.5,-324.5 336.5,-324.5 336.5,-294 478.5,-294 478.5,-324.5"/>
 <text xml:space="preserve" text-anchor="start" x="344.5" y="-311" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.ItemVisual</text>
 <text xml:space="preserve" text-anchor="middle" x="407.5" y="-299.75" font-family="Helvetica,sans-Serif" font-size="10.00">PoolChannel</text>
@@ -87,7 +87,7 @@ var sectionId = 'dynsection-0';
 <!-- Node4 -->
 <g id="Node000004" class="node">
 <title>Node4</title>
-<g id="a_Node000004"><a xlink:title=" ">
+<g id="a_Node000004"><a xlink:href="class_balloon_party_1_1_shared_1_1_pool_1_1_effect_pool_channel.html" target="_top" xlink:title="Creates EffectView instances from a prefab that already has a concrete EffectView subclass attached (...">
 <polygon fill="white" stroke="#666666" points="472.12,-275.5 342.88,-275.5 342.88,-245 472.12,-245 472.12,-275.5"/>
 <text xml:space="preserve" text-anchor="start" x="350.88" y="-262" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Pool.</text>
 <text xml:space="preserve" text-anchor="middle" x="407.5" y="-250.75" font-family="Helvetica,sans-Serif" font-size="10.00">EffectPoolChannel</text>
@@ -106,7 +106,7 @@ var sectionId = 'dynsection-0';
 <!-- Node5 -->
 <g id="Node000005" class="node">
 <title>Node5</title>
-<g id="a_Node000005"><a xlink:title=" ">
+<g id="a_Node000005"><a xlink:href="class_balloon_party_1_1_shared_1_1_pool_1_1_injecting_pool_channel-1-g.html" target="_top" xlink:title="Pool channel that instantiates prefabs and injects [Inject] fields from a parent IObjectResolver — wi...">
 <polygon fill="white" stroke="#666666" points="483.38,-226.5 331.62,-226.5 331.62,-196 483.38,-196 483.38,-226.5"/>
 <text xml:space="preserve" text-anchor="start" x="339.62" y="-213" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Pool.</text>
 <text xml:space="preserve" text-anchor="middle" x="407.5" y="-201.75" font-family="Helvetica,sans-Serif" font-size="10.00">InjectingPoolChannel&lt; TItem &gt;</text>
@@ -125,7 +125,7 @@ var sectionId = 'dynsection-0';
 <!-- Node10 -->
 <g id="Node000010" class="node">
 <title>Node10</title>
-<g id="a_Node000010"><a xlink:title=" ">
+<g id="a_Node000010"><a xlink:href="class_balloon_party_1_1_shared_1_1_pool_1_1_particle_pool_channel.html" target="_top" xlink:title="Pool channel for effects driven exclusively by a ParticleSystem.">
 <polygon fill="white" stroke="#666666" points="472.12,-177.5 342.88,-177.5 342.88,-147 472.12,-147 472.12,-177.5"/>
 <text xml:space="preserve" text-anchor="start" x="350.88" y="-164" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Shared.Pool.</text>
 <text xml:space="preserve" text-anchor="middle" x="407.5" y="-152.75" font-family="Helvetica,sans-Serif" font-size="10.00">ParticlePoolChannel</text>
@@ -144,7 +144,7 @@ var sectionId = 'dynsection-0';
 <!-- Node11 -->
 <g id="Node000011" class="node">
 <title>Node11</title>
-<g id="a_Node000011"><a xlink:title=" ">
+<g id="a_Node000011"><a xlink:href="class_balloon_party_1_1_u_i_1_1_score_1_1_progress_notice_pool_channel.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="484.5,-128.5 330.5,-128.5 330.5,-98 484.5,-98 484.5,-128.5"/>
 <text xml:space="preserve" text-anchor="start" x="338.5" y="-115" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Score.Progress</text>
 <text xml:space="preserve" text-anchor="middle" x="407.5" y="-103.75" font-family="Helvetica,sans-Serif" font-size="10.00">NoticePoolChannel</text>
@@ -163,7 +163,7 @@ var sectionId = 'dynsection-0';
 <!-- Node12 -->
 <g id="Node000012" class="node">
 <title>Node12</title>
-<g id="a_Node000012"><a xlink:title=" ">
+<g id="a_Node000012"><a xlink:href="class_balloon_party_1_1_u_i_1_1_score_1_1_score_trail_pool_channel.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="477.75,-79.5 337.25,-79.5 337.25,-49 477.75,-49 477.75,-79.5"/>
 <text xml:space="preserve" text-anchor="start" x="345.25" y="-66" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Score.Score</text>
 <text xml:space="preserve" text-anchor="middle" x="407.5" y="-54.75" font-family="Helvetica,sans-Serif" font-size="10.00">TrailPoolChannel</text>
@@ -182,7 +182,7 @@ var sectionId = 'dynsection-0';
 <!-- Node13 -->
 <g id="Node000013" class="node">
 <title>Node13</title>
-<g id="a_Node000013"><a xlink:title=" ">
+<g id="a_Node000013"><a xlink:href="class_balloon_party_1_1_u_i_1_1_shields_1_1_shield_trail_pool_channel.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="468.38,-30.5 346.62,-30.5 346.62,0 468.38,0 468.38,-30.5"/>
 <text xml:space="preserve" text-anchor="start" x="354.62" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.UI.Shields.</text>
 <text xml:space="preserve" text-anchor="middle" x="407.5" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">ShieldTrailPoolChannel</text>
@@ -220,7 +220,7 @@ var sectionId = 'dynsection-0';
 <!-- Node6 -->
 <g id="Node000006" class="node">
 <title>Node6</title>
-<g id="a_Node000006"><a xlink:title=" ">
+<g id="a_Node000006"><a xlink:href="class_balloon_party_1_1_balloon_1_1_spawner_1_1_balloon_pool_channel.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="674.88,-299.5 526.12,-299.5 526.12,-269 674.88,-269 674.88,-299.5"/>
 <text xml:space="preserve" text-anchor="start" x="534.12" y="-286" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Balloon.Spawner.</text>
 <text xml:space="preserve" text-anchor="middle" x="600.5" y="-274.75" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonPoolChannel</text>
@@ -239,7 +239,7 @@ var sectionId = 'dynsection-0';
 <!-- Node7 -->
 <g id="Node000007" class="node">
 <title>Node7</title>
-<g id="a_Node000007"><a xlink:title=" ">
+<g id="a_Node000007"><a xlink:href="class_balloon_party_1_1_projectile_1_1_projectile_pool_channel.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="658.75,-250.5 542.25,-250.5 542.25,-220 658.75,-220 658.75,-250.5"/>
 <text xml:space="preserve" text-anchor="start" x="550.25" y="-237" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Projectile.</text>
 <text xml:space="preserve" text-anchor="middle" x="600.5" y="-225.75" font-family="Helvetica,sans-Serif" font-size="10.00">ProjectilePoolChannel</text>
@@ -258,7 +258,7 @@ var sectionId = 'dynsection-0';
 <!-- Node8 -->
 <g id="Node000008" class="node">
 <title>Node8</title>
-<g id="a_Node000008"><a xlink:title=" ">
+<g id="a_Node000008"><a xlink:href="class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_grid_actor_pool_channel.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="680.5,-201.5 520.5,-201.5 520.5,-171 680.5,-171 680.5,-201.5"/>
 <text xml:space="preserve" text-anchor="start" x="528.5" y="-188" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
 <text xml:space="preserve" text-anchor="middle" x="600.5" y="-176.75" font-family="Helvetica,sans-Serif" font-size="10.00">Archetype.GridActorPoolChannel</text>
@@ -277,7 +277,7 @@ var sectionId = 'dynsection-0';
 <!-- Node9 -->
 <g id="Node000009" class="node">
 <title>Node9</title>
-<g id="a_Node000009"><a xlink:title=" ">
+<g id="a_Node000009"><a xlink:href="class_balloon_party_1_1_slots_1_1_actor_1_1_static_actor_pool_channel.html" target="_top" xlink:title=" ">
 <polygon fill="white" stroke="#666666" points="662.5,-152.5 538.5,-152.5 538.5,-122 662.5,-122 662.5,-152.5"/>
 <text xml:space="preserve" text-anchor="start" x="546.5" y="-139" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Slots.Actor.</text>
 <text xml:space="preserve" text-anchor="middle" x="600.5" y="-127.75" font-family="Helvetica,sans-Serif" font-size="10.00">StaticActorPoolChannel</text>
