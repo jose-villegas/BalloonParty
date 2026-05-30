@@ -44,7 +44,8 @@
 
 ## Quick Links
 
-- **Namespaces** — Browse by namespace in the sidebar
-- **Classes** — Full class list with inheritance diagrams
-- **Files** — Source file browser with per-folder READMEs
+- [Namespaces](namespaces.html) — Browse by namespace
+- [Classes](annotated.html) — Full class list with inheritance diagrams
+- [Class Hierarchy](hierarchy.html) — Graphical inheritance tree
+- [Files](files.html) — Source file browser with per-folder READMEs
 

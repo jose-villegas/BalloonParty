@@ -32,7 +32,12 @@ jobs:
       - name: Install Doxygen & Graphviz
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y doxygen graphviz
+          sudo apt-get install -y graphviz
+          # Install Doxygen 1.13.2 (latest stable binary) to avoid template mismatches
+          wget -q https://github.com/doxygen/doxygen/releases/download/Release_1_13_2/doxygen-1.13.2.linux.bin.tar.gz
+          tar xzf doxygen-1.13.2.linux.bin.tar.gz
+          sudo cp doxygen-1.13.2/bin/doxygen /usr/local/bin/doxygen
+          doxygen --version
 
       - name: Render Graphviz diagrams
         run: |
