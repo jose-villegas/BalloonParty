@@ -1,0 +1,37 @@
+digraph MVC {
+    rankdir=LR;
+    bgcolor="transparent";
+    node [fontname="Helvetica", fontsize=11, style="filled,rounded", shape=box];
+    edge [fontname="Helvetica", fontsize=9];
+
+    subgraph cluster_model {
+        label="Model Layer";
+        style="dashed"; color="#30363d"; fontcolor="#8b949e"; fontname="Helvetica";
+        Model [label="Model\n(Plain C#)", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+        ReactiveP [label="ReactiveProperty<T>", fillcolor="#1f3a5f", fontcolor="#58a6ff", shape=ellipse];
+    }
+
+    subgraph cluster_view {
+        label="View Layer";
+        style="dashed"; color="#30363d"; fontcolor="#8b949e"; fontname="Helvetica";
+        View [label="View\n(MonoBehaviour)", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+        UniRx [label="UniRx\nSubscriptions", fillcolor="#1a3a1a", fontcolor="#3fb950", shape=ellipse];
+    }
+
+    subgraph cluster_controller {
+        label="Controller Layer";
+        style="dashed"; color="#30363d"; fontcolor="#8b949e"; fontname="Helvetica";
+        Controller [label="Controller\n(Plain C# / IStartable)", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
+        VContainer [label="VContainer\nDI", fillcolor="#2d1f3d", fontcolor="#d2a8ff", shape=ellipse];
+    }
+
+    MessagePipe [label="MessagePipe\n(Pub/Sub)", fillcolor="#3d2a1a", fontcolor="#f78166", shape=hexagon];
+
+    Model -> View [label="ReactiveProperty\nsubscription", color="#58a6ff", fontcolor="#8b949e"];
+    Controller -> Model [label="mutates state", color="#d2a8ff", fontcolor="#8b949e"];
+    Controller -> View [label="via grid\nlookup", color="#d2a8ff", fontcolor="#8b949e", style=dashed];
+    View -> MessagePipe [label="publishes\nevents", color="#3fb950", fontcolor="#8b949e"];
+    MessagePipe -> Controller [label="subscribes", color="#f78166", fontcolor="#8b949e"];
+    MessagePipe -> View [label="subscribes", color="#f78166", fontcolor="#8b949e", style=dashed];
+}
+

@@ -39,7 +39,7 @@ Optional traits actors can advertise to consumers:
 
 | Type | Description |
 |---|---|
-| `DamageContext` | Readonly struct — `int Damage` + `DamageFlags Flags` + `string SourceColorId`. Default `Flags = DamageFlags.Normal`, `SourceColorId = ""`. `SourceColorId` carries the palette color name of the projectile or item responsible for the hit — used by `ToughBalloonModel` and `UnbreakableBalloonModel` when scattering score to random palette colors |
+| `DamageContext` | Readonly struct — `int Damage` + `DamageFlags Flags` + `string SourceColorId`. Default `Flags = DamageFlags.Normal`, `SourceColorId = ""`. `SourceColorId` carries the palette color name of the projectile or item responsible for the hit — used by `UnbreakableBalloonModel` for score attribution to the source color, and by `ToughBalloonModel` when scattering score to random palette colors |
 | `DamageFlags` | `[Flags]` enum — `Normal = 0`, `Piercing = 1 << 0`. `Piercing` bypasses `HitsRemaining` and forces `Pop` |
 
 Paintability is expressed purely through types: a `BalloonModel` implements `IPaintable`; a `ToughBalloonModel` does not — no runtime flag needed.
@@ -50,7 +50,7 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IPa
 |---|---|---|
 | `BalloonModel` (soft) | `IHasDurability`, `IHasScoreColor` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately. No score attribution when `HitsRemaining > 0` after hit |
 | `ToughBalloonModel` | `IHasDurability`, `IHasScoreColor` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. `Piercing` flag → `Pop` immediately. Score scattered to random palette colors on pop |
-| `UnbreakableBalloonModel` *(Phase 7.5)* | `IHitable`, `IHasScoreColor` | Always `Deflect`; no `HitsRemaining`. `Piercing` forces `Pop`. Score scattered to random palette colors on pop |
+| `UnbreakableBalloonModel` *(Phase 7.5)* | `IHitable`, `IHasScoreColor` | Always `Deflect`; no `HitsRemaining`. `Piercing` forces `Pop`. Score attributed to source (projectile) color on pop |
 | `BubbleClusterModel` | `IHasDurability`, `IHasScoreColor` | `PassThrough` on survival, `Pop` on death; decrements `HitsRemaining` (bubble count). Score scatters one entry per point of damage to random palette colors; `BreaksStreak = true` on all attributions |
 | `DeflectorActorModel` *(Phase 8.2b)* | `IHitable` only | Always `Deflect`; no `HitsRemaining`; not a balloon |
 | `AbsorberActorModel` *(Phase 8.2b)* | `IHitable` only | Always `Absorb`; kills the projectile |

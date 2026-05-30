@@ -25,7 +25,7 @@ The director does not know about level-ups, trails, or cameras. Producers define
 | **Trigger** | `ScorePointMessage` received, `WillLevelUp()` returns true (projected progress) |
 | **Setup** | Builds `TrailId(color, score, level)`, waits for it to register in `TrailFlightRegistry` |
 | **Begin** | `BeginCinematic(LevelUpPanIn)`, `Pause(Cinematic)` freezes projectile + gates trail spawns. Tipping trail's move tween killed, scale tween paused, position/scale driven manually by `PanInTick` |
-| **Tick** | `_slowDownCurve` modulates tipping trail speed (1.0 → 0.3). Other trails fly at normal `Time.timeScale` (unmodified). Camera pans toward tipping trail |
+| **Tick** | `_slowDownCurve` modulates tipping trail speed (1.0 → 0.3). Other trails fly at normal `Time.timeScale` (unmodified). Camera pans toward tipping trail, clamped so the trail always stays within the orthographic frustum |
 | **End trigger** | Tipping trail progress ≥ 1 → `Complete()` fires `onArrived` → `ScoreTrailArrivedMessage` |
 | **End** | `CompleteAll()` finishes stragglers, `EndCinematic()` → gate opens → popup shows |
 
