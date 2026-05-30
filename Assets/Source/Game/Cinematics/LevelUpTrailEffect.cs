@@ -240,10 +240,23 @@ namespace BalloonParty.Game.Cinematics
             var panTarget = Vector3.Lerp(_basePosition, _lastTrailPosition, _cameraPanWeight);
             panTarget.z = _basePosition.z;
 
-            _camera.transform.position = Vector3.Lerp(
+            var camPos = Vector3.Lerp(
                 _camera.transform.position,
                 panTarget,
                 _cameraFollowSpeed * dt);
+
+            // Keep the trail inside the orthographic frustum to avoid
+            // TrailRenderer "Screen position out of view frustum" errors.
+            var halfH = _camera.orthographicSize;
+            var halfW = halfH * _camera.aspect;
+            camPos.x = Mathf.Clamp(camPos.x,
+                _lastTrailPosition.x - halfW + 0.1f,
+                _lastTrailPosition.x + halfW - 0.1f);
+            camPos.y = Mathf.Clamp(camPos.y,
+                _lastTrailPosition.y - halfH + 0.1f,
+                _lastTrailPosition.y + halfH - 0.1f);
+
+            _camera.transform.position = camPos;
         }
 
         private void CaptureBaseState()

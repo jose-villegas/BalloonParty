@@ -51,12 +51,18 @@ namespace BalloonParty.Tests.Game
             var hitSubscriber = Substitute.For<ISubscriber<ActorHitMessage>>();
             var trailArrivedSubscriber = Substitute.For<ISubscriber<ScoreTrailArrivedMessage>>();
             var levelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
+            IMessageHandler<ScoreLevelUpMessage> levelUpHandler = null;
             levelUpSubscriber
-                .Subscribe(Arg.Any<IMessageHandler<ScoreLevelUpMessage>>(),
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ScoreLevelUpMessage>>(h => levelUpHandler = h),
                     Arg.Any<MessageHandlerFilter<ScoreLevelUpMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
             _scoredPublisher = Substitute.For<IPublisher<ScorePointMessage>>();
             _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
+
+            _levelUpPublisher
+                .When(p => p.Publish(Arg.Any<ScoreLevelUpMessage>()))
+                .Do(ci => levelUpHandler?.Handle(ci.Arg<ScoreLevelUpMessage>()));
 
             // Capture the IMessageHandler that ScoreController registers via the Subscribe extension method.
             // The extension wraps Action<T> in AnonymousMessageHandler and calls the interface method.
