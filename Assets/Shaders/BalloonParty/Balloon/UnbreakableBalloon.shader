@@ -19,9 +19,10 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
         _SphereRadius ("Sphere Radius", Float) = 0.5
 
         [Header(Reflection)]
-        _ReflectionStrength ("Strength",        Range(0, 1))       = 0.4
-        _ReflectionSpread   ("Spread",          Range(0.01, 1.0))  = 0.15
-        _ReflectionFresnel  ("Fresnel Power",   Range(0.5, 5.0))   = 1.5
+        _ReflectionStrength ("Strength",           Range(0, 1))       = 0.4
+        _ReflectionSize     ("Capture Size (radii)", Range(0.5, 5.0)) = 2.0
+        _ReflectionWrap     ("Sphere Wrap",        Range(0, 1))       = 0.5
+        _ReflectionFresnel  ("Fresnel Power",      Range(0.5, 5.0))   = 1.5
 
         [Header(Metallic Shading)]
         _MetalCenterColor   ("Center Tint",      Color)             = (0.88, 0.90, 0.95, 1)
@@ -141,7 +142,8 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
 
             // Reflection
             float  _ReflectionStrength;
-            float  _ReflectionSpread;
+            float  _ReflectionSize;
+            float  _ReflectionWrap;
             float  _ReflectionFresnel;
 
             // Metallic shading
@@ -299,22 +301,51 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 // ---- Realtime reflection (convex mirror from GrabPass) ----
                 if (alpha > 0.01 && _ReflectionStrength > 0.001)
                 {
-                    float2 grabUV = IN.grabPos.xy / IN.grabPos.w;
+                    // Project sphere center to grab UV
+                    float4 cClip = mul(UNITY_MATRIX_VP,
+                        float4(_SphereCenter.x, _SphereCenter.y, _SphereCenter.z, 1.0));
+                    float4 cGrab = ComputeGrabScreenPos(cClip);
+                    float2 centerUV = cGrab.xy / cGrab.w;
 
-                    // Sample outward from pixel position along the sphere
-                    // normal direction. On a convex mirror each point
-                    // reflects what is to its side — center sees behind,
-                    // edges see sideways. Spread scales how far out we
-                    // reach into the surrounding scene.
-                    float2 reflUV = grabUV + spherePos * _ReflectionSpread;
+                    // Compute screen-space half-size of the captured area
+                    // by projecting a point one capture-radius away in X and Y
+                    float captureW = _SphereRadius * _ReflectionSize;
+
+                    float4 exClip = mul(UNITY_MATRIX_VP,
+                        float4(_SphereCenter.x + captureW, _SphereCenter.y, _SphereCenter.z, 1.0));
+                    float4 exGrab = ComputeGrabScreenPos(exClip);
+                    float halfX = exGrab.x / exGrab.w - centerUV.x;
+
+                    float4 eyClip = mul(UNITY_MATRIX_VP,
+                        float4(_SphereCenter.x, _SphereCenter.y + captureW, _SphereCenter.z, 1.0));
+                    float4 eyGrab = ComputeGrabScreenPos(eyClip);
+                    float halfY = eyGrab.y / eyGrab.w - centerUV.y;
+
+                    // Sphere-wrap distortion: push sampling outward at
+                    // edges so more of the scene compresses into the rim
+                    // (convex-mirror effect). Wrap=0 is flat, Wrap=1 is
+                    // full sphere projection.
+                    float r = length(spherePos);
+                    float2 dir = spherePos / max(r, 0.001);
+                    float nz = sqrt(max(1.0 - min(r * r, 0.99), 0.0));
+                    float sphereR = r / max(nz, 0.1);
+                    float warpedR = lerp(r, saturate(sphereR), _ReflectionWrap);
+                    float2 samplePos = dir * warpedR;
+
+                    // Map onto the captured square region
+                    float2 reflUV = centerUV + samplePos * float2(halfX, halfY);
+
+                    // Fade where the sample leaves the visible screen
+                    float edgeMargin = 0.02;
+                    float2 edgeFade = smoothstep(0.0, edgeMargin, reflUV)
+                                    * smoothstep(0.0, edgeMargin, 1.0 - reflUV);
+                    float screenFade = edgeFade.x * edgeFade.y;
                     reflUV = saturate(reflUV);
 
                     fixed3 reflected = tex2D(_GrabTexture, reflUV).rgb;
 
-                    // Fresnel blend: edge-heavy by default (chrome reflects
-                    // more at glancing angles), tuneable via power slider
                     float fresnel = pow(sphereDist, _ReflectionFresnel);
-                    float reflMask = lerp(0.15, 1.0, fresnel) * _ReflectionStrength;
+                    float reflMask = lerp(0.15, 1.0, fresnel) * _ReflectionStrength * screenFade;
 
                     sprite.rgb = lerp(sprite.rgb, reflected, reflMask * alpha);
                 }

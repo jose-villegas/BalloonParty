@@ -117,20 +117,30 @@ def check_braces_required(path: Path, lines: list[str], result: AuditResult):
     control_re = re.compile(
         r"^\s*(if|else\s+if|else|for|foreach|while|using|lock|fixed)\s*(\(.*\))?\s*$"
     )
+    n = len(lines)
     for i, line in enumerate(lines, 1):
         stripped = line.rstrip()
-        if control_re.match(stripped):
-            # Next non-empty line should start with { or be on the same line
-            for j in range(i, min(i + 3, len(lines))):
-                next_line = lines[j].strip()
-                if not next_line:
-                    continue
-                if next_line.startswith("{") or next_line.startswith("//"):
-                    break
-                # It's a statement without braces
-                result.add(Violation(str(path), i, "braces-required",
-                    f"control statement without braces: {stripped.strip()}", fixable=True))
+        if not control_re.match(stripped):
+            continue
+
+        # Multi-line condition: skip forward until parens are balanced
+        paren_depth = stripped.count("(") - stripped.count(")")
+        scan = i  # 1-based index of the line *after* the current one
+        while paren_depth > 0 and scan < n:
+            paren_depth += lines[scan].count("(") - lines[scan].count(")")
+            scan += 1
+
+        # Next non-empty line after the (possibly multi-line) condition
+        for j in range(scan, min(scan + 3, n)):
+            next_line = lines[j].strip()
+            if not next_line:
+                continue
+            if next_line.startswith("{") or next_line.startswith("//"):
                 break
+            # It's a statement without braces
+            result.add(Violation(str(path), i, "braces-required",
+                f"control statement without braces: {stripped.strip()}", fixable=True))
+            break
 
 
 def check_allman_braces(path: Path, lines: list[str], result: AuditResult):
@@ -1033,8 +1043,15 @@ def fix_braces_required(path: Path, lines: list[str]) -> list[str]:
     i = 0
     while i < len(result_lines):
         if control_re.match(result_lines[i].rstrip()):
-            j = i + 1
-            while j < len(result_lines) and j < i + 4 and not result_lines[j].strip():
+            # Skip forward past multi-line conditions until parens are balanced
+            paren_depth = result_lines[i].count("(") - result_lines[i].count(")")
+            scan = i + 1
+            while paren_depth > 0 and scan < len(result_lines):
+                paren_depth += result_lines[scan].count("(") - result_lines[scan].count(")")
+                scan += 1
+
+            j = scan
+            while j < len(result_lines) and j < scan + 4 and not result_lines[j].strip():
                 j += 1
             if j < len(result_lines):
                 next_s = result_lines[j].strip()

@@ -16,7 +16,7 @@ Material:
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: -1
+  m_CustomRenderQueue: 5000
   stringTagMap: {}
   disabledShaderPasses: []
   m_LockedProperties: _ReflectionFresnel
@@ -79,7 +79,7 @@ Material:
     - _MetalBrighten: 0.334
     - _MetalDarken: 0.583
     - _MetalDetailStrength: 0.7
-    - _MetalFalloff: 2.15
+    - _MetalFalloff: 1.6
     - _MetalGradientCenter: 0.534
     - _MetalGradientSoftness: 0.1
     - _Metallic: 0
@@ -87,18 +87,20 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _ReflectionDistortion: 2.16
-    - _ReflectionFresnel: 3.5
-    - _ReflectionSpread: 0.6
+    - _ReflectionFresnel: 2.25
+    - _ReflectionSize: 2.68
+    - _ReflectionSpread: 1
     - _ReflectionStrength: 0.8
+    - _ReflectionWrap: 0.59
     - _RimIntensity: 0.35
     - _RimSweepIntensity: 2
     - _RimSweepSpeed: 0.5
     - _RimSweepWidth: 0.25
-    - _RimWidth: 0
+    - _RimWidth: 0.0125
     - _ShadowSoftness: 0.02
-    - _ShineInterval: 2
-    - _ShineSpeed: 0.3
-    - _ShineWidth: 0.3
+    - _ShineInterval: 10
+    - _ShineSpeed: 0
+    - _ShineWidth: 0.1
     - _SmoothnessTextureChannel: 0
     - _SpecularAngle: 45
     - _SpecularBend: -2.08

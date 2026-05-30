@@ -117,7 +117,9 @@ namespace BalloonParty.Slots.Grid
 
                 var inBounds = col >= 0 && col < Columns && row >= 0 && row < Rows;
 
-                if (inBounds && !IsTraversable(col, row))
+                if (inBounds && !IsEmpty(col, row)
+                              && _slots[col, row].Kind == SlotActorKind.Static
+                              && !IsTraversable(col, row))
                 {
                     Debug.LogWarning(
                         $"SlotGrid.ComputePath: slot ({col},{row}) is not traversable. " +
