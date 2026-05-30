@@ -1,0 +1,17 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,78,118,104"/>
+<area shape="rect" id="Node000001" href="$class_balloon_party_1_1_configuration_1_1_editor_1_1_palette_color_mask_drawer.html" title=" " alt="" coords="167,5,372,46"/>
+<area shape="poly" id="edge93_Node000000_Node000001" title=" " alt="" coords="118,71,204,45,200,49,121,75"/>
+<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_configuration_1_1_editor_1_1_palette_color_name_drawer.html" title=" " alt="" coords="166,71,373,111"/>
+<area shape="poly" id="edge94_Node000000_Node000002" title=" " alt="" coords="132,89,168,90,163,92,134,93"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_editor_1_1_auto_field_property_drawer.html" title="Base class for property drawers that want common fields drawn automatically via serialized&#45;property r..." alt="" coords="189,136,350,177"/>
+<area shape="poly" id="edge95_Node000000_Node000003" title=" " alt="" coords="119,106,204,134,200,137,119,112"/>
+<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_configuration_1_1_editor_1_1_balloon_prefab_entry_drawer.html" title=" " alt="" coords="421,37,633,78"/>
+<area shape="poly" id="edge96_Node000003_Node000004" title=" " alt="" coords="356,127,372,121,396,105,420,89,453,78,448,80,422,93,398,109,374,125,359,132"/>
+<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_configuration_1_1_editor_1_1_hit_vfx_override_drawer.html" title=" " alt="" coords="434,103,620,143"/>
+<area shape="poly" id="edge97_Node000003_Node000005" title=" " alt="" coords="365,141,436,134,431,136,366,147"/>
+<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_configuration_1_1_editor_1_1_item_settings_drawer.html" title=" " alt="" coords="438,168,616,209"/>
+<area shape="poly" id="edge98_Node000003_Node000006" title=" " alt="" coords="365,166,440,177,435,178,366,171"/>
+<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_nudge_1_1_editor_1_1_nudge_override_drawer.html" title=" " alt="" coords="439,233,615,274"/>
+<area shape="poly" id="edge99_Node000003_Node000007" title=" " alt="" coords="331,181,422,218,459,233,454,232,420,223,330,186"/>
+</map>

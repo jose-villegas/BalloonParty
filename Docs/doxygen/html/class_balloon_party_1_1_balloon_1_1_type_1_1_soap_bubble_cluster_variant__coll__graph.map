@@ -1,0 +1,9 @@
+<map id="BalloonParty.Balloon.Type.SoapBubbleClusterVariant" name="BalloonParty.Balloon.Type.SoapBubbleClusterVariant">
+<area shape="rect" id="Node000001" title="Balloon variant for BalloonType.BubbleCluster." alt="" coords="230,55,406,96"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="38,5,149,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="162,33,238,53,233,56,162,38"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_balloon_1_1_type_1_1_i_balloon_variant.html" title=" " alt="" coords="5,55,182,96"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="196,73,232,75,226,76,197,78"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_balloon_1_1_view_1_1_i_balloon_view_binding.html" title="Implemented by MonoBehaviours on a balloon prefab that need to react to model binding." alt="" coords="6,120,181,161"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="179,113,243,97,248,96,181,118"/>
+</map>

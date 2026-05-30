@@ -1,0 +1,11 @@
+<map id="BalloonParty.Shared.Pool.AnimatorEffectView" name="BalloonParty.Shared.Pool.AnimatorEffectView">
+<area shape="rect" id="Node000001" title="Poolable effect driven by an Animator." alt="" coords="140,183,312,223"/>
+<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_effect_view.html" title="Abstract base for poolable effect MonoBehaviours." alt="" coords="140,94,312,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="228,148,229,184,224,181,224,152"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,13,117,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="98,44,191,92,187,95,98,49"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="140,5,312,46"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="228,59,229,95,224,92,225,64"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_shared_1_1_i_effect.html" title="Abstracts any visual effect that can be triggered at a world position and optionally tinted." alt="" coords="337,13,518,38"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="383,46,273,96,271,91,388,44"/>
+</map>

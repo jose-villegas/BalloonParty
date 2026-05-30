@@ -1,0 +1,13 @@
+<map id="BalloonParty.Balloon.Type.IBalloonVariant" name="BalloonParty.Balloon.Type.IBalloonVariant">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,104,182,145"/>
+<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_balloon_1_1_type_1_1_colorable_balloon_variant.html" title=" " alt="" coords="230,5,406,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="148,94,229,57,262,45,258,48,231,61,151,99"/>
+<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_balloon_1_1_type_1_1_soap_bubble_cluster_variant.html" title="Balloon variant for BalloonType.BubbleCluster." alt="" coords="230,71,406,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="196,107,232,103,227,105,198,112"/>
+<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_balloon_1_1_type_1_1_tough_balloon_variant.html" title=" " alt="" coords="230,136,406,177"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="197,136,232,143,227,144,197,142"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="230,201,407,242"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="151,149,231,186,263,201,258,201,229,191,150,154"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="455,5,631,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="422,23,457,25,452,26,423,28"/>
+</map>

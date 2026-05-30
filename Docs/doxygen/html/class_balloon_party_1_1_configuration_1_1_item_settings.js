@@ -1,0 +1,26 @@
+var class_balloon_party_1_1_configuration_1_1_item_settings =
+[
+    [ "ActivationEffectPrefab", "class_balloon_party_1_1_configuration_1_1_item_settings.html#ae65a4e63a5d7f6564bb9fbf546d5d674", null ],
+    [ "BombRadius", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a2c960e10d6a396ebd27a066640c0e1bb", null ],
+    [ "Damage", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a230bf870c4efd7bfeb3f2f210a7617ac", null ],
+    [ "Flags", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a78ef8c0cd8352dd4f90ba43afb2bdd2d", null ],
+    [ "LaserCircleCastRadius", "class_balloon_party_1_1_configuration_1_1_item_settings.html#abee66f4c62d6ef78222a8a15dd24c4b7", null ],
+    [ "LaserRaycastDistance", "class_balloon_party_1_1_configuration_1_1_item_settings.html#ae8808dd304f9b0418cc977963c18cd44", null ],
+    [ "LightningFractalDecay", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a36b705562569e57502ab397d31463025", null ],
+    [ "LightningGlowSubdivisions", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a896f3e3b5b66cf5e1e361bada54001c1", null ],
+    [ "LightningJumpTime", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a7ebe8a532a5f5d07aa1d74d41f34f9e3", null ],
+    [ "LightningRandomness", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a1aa6ec32a522ea7a2742a19a531f5bc3", null ],
+    [ "LightningSegmentsMultiplier", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a4abebfab3abc4462ecf6c516e084dafc", null ],
+    [ "MaximumAllowed", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a8ea19f2a621ba2cab92dd4e1a4eb8bb2", null ],
+    [ "NudgeOverrides", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a6443c13e68ef251d62c9ec58c252d842", null ],
+    [ "PaintBlobArcCurve", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a5301354b6eecb980a74cf27596622312", null ],
+    [ "PaintBlobFlightDuration", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a41f025455bf482954c5cdfc580082bc2", null ],
+    [ "PaintBlobScaleCurve", "class_balloon_party_1_1_configuration_1_1_item_settings.html#ad3b8708ea621ec554e4d67c7e14900e1", null ],
+    [ "PaintBlobShadowScaleCurve", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a60a9474b806c637cf77d09919b2701e6", null ],
+    [ "PaintBlobSpinSpeed", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a7e1d461dfedb3113f8f0ee3d61787a5c", null ],
+    [ "PaintBlobSpriteScaleCurve", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a78ac329941fc9b3b8b6b42f095ef11a5", null ],
+    [ "TurnCheckEvery", "class_balloon_party_1_1_configuration_1_1_item_settings.html#aba9b031773ba97b9bc77d8ebdb735018", null ],
+    [ "Type", "class_balloon_party_1_1_configuration_1_1_item_settings.html#abbe5713d4418e8a10366d1f75a051d0f", null ],
+    [ "VisualPrefab", "class_balloon_party_1_1_configuration_1_1_item_settings.html#abf15b1cff37f3d5f7dd49412d78b976c", null ],
+    [ "Weight", "class_balloon_party_1_1_configuration_1_1_item_settings.html#a586ed394d84123030db8e5e86de8fd3c", null ]
+];

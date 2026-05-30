@@ -1,0 +1,17 @@
+<map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
+<area shape="rect" id="Node000000" title=" " alt="" coords="5,209,110,234"/>
+<area shape="rect" id="Node000001" href="$class_balloon_party_1_1_game_1_1_game_lifetime_scope.html" title=" " alt="" coords="158,5,375,46"/>
+<area shape="poly" id="edge81_Node000000_Node000001" title=" " alt="" coords="66,193,99,125,124,88,156,57,180,44,176,49,159,61,128,92,103,128,71,195"/>
+<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_game_1_1_launch_lifetime_scope.html" title=" " alt="" coords="177,71,356,111"/>
+<area shape="poly" id="edge82_Node000000_Node000002" title=" " alt="" coords="76,195,111,157,156,122,185,110,181,114,159,127,115,161,81,198"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_projectile_1_1_projectile_lifetime_scope.html" title=" " alt="" coords="187,136,346,177"/>
+<area shape="poly" id="edge83_Node000000_Node000003" title=" " alt="" coords="112,202,157,187,199,175,195,179,158,192,116,206"/>
+<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_thrower_1_1_thrower_lifetime_scope.html" title=" " alt="" coords="169,201,364,242"/>
+<area shape="poly" id="edge84_Node000000_Node000004" title=" " alt="" coords="124,219,171,220,167,223,127,224"/>
+<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_u_i_1_1_level_up_1_1_level_up_lifetime_scope.html" title=" " alt="" coords="183,267,350,307"/>
+<area shape="poly" id="edge85_Node000000_Node000005" title=" " alt="" coords="113,237,158,251,200,265,195,267,157,256,115,242"/>
+<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_u_i_1_1_score_1_1_score_u_i_lifetime_scope.html" title=" " alt="" coords="173,332,360,373"/>
+<area shape="poly" id="edge86_Node000000_Node000006" title=" " alt="" coords="78,244,115,282,159,317,186,331,180,332,156,321,111,286,78,249"/>
+<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_u_i_1_1_shields_1_1_shield_u_i_lifetime_scope.html" title=" " alt="" coords="185,397,348,438"/>
+<area shape="poly" id="edge87_Node000000_Node000007" title=" " alt="" coords="69,246,103,315,128,351,159,382,188,400,182,400,156,386,124,355,99,318,67,251"/>
+</map>

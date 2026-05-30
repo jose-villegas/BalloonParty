@@ -1,0 +1,7 @@
+<map id="BalloonParty.Item.LaserItemRotation" name="BalloonParty.Item.LaserItemRotation">
+<area shape="rect" id="Node000001" title=" " alt="" coords="55,94,240,135"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,117,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="85,47,131,93,126,95,83,52"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="140,5,331,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="207,56,169,96,166,91,202,58"/>
+</map>

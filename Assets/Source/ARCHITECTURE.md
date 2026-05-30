@@ -5,212 +5,70 @@
 
 ---
 
+## MVC Pattern
+
+@image html mvc_architecture.svg "Model–View–Controller with MessagePipe"
+
+---
+
 ## Scope Hierarchy
 
-```
-GameLifetimeScope (composition root, -5001)
-│
-├── ThrowerLifetimeScope          → ThrowerController, ThrowerView, PredictionTraceView
-│
-├── ScoreUILifetimeScope          → ColorProgressBar[], ScoreCounterLabel, LevelLabel
-│
-├── LevelUpLifetimeScope          → LevelUpPopUp
-│
-├── ShieldUILifetimeScope         → ShieldCounterLabel[], ShieldCounterAnimation,
-│                                    ShieldTrailController (entry point)
-│
-└── (Pooled prefabs — no child scope, injected via InjectingPoolChannel)
-     ├── BalloonView + BalloonController
-     └── ProjectileView
-```
+@image html scope_hierarchy.svg "VContainer Scope Hierarchy"
+
+---
+
+## Turn Pipeline
+
+@image html turn_pipeline.svg "Turn Pipeline — Hit → Balance → Spawn → Post-Balance"
+
+---
+
+## Balance Flow
+
+@image html balance_flow.svg "Balance Algorithm — Per-Actor Transit Tracking"
 
 ---
 
 ## System Map
 
-```
-┌─────────────────────────────────────────────────────────────────────────┐
-│                        GameLifetimeScope                                 │
-│                                                                         │
-│  ┌──────────────┐   ┌──────────────┐   ┌──────────────────────────┐   │
-│  │ SlotGrid     │   │PoolManager   │   │ Configuration SOs        │   │
-│  │ (shared      │   │(singleton)   │   │ IGameConfiguration       │   │
-│  │  grid state) │   │              │   │ BalloonsConfiguration    │   │
-│  └──────┬───────┘   └──────┬───────┘   │ GamePalette             │   │
-│         │                   │           │ GameDisplayConfiguration │   │
-│         │                   │           │ ItemConfiguration        │   │
-│         │                   │           └──────────────────────────┘   │
-│  ┌──────┴───────────────────┴──────────────────────────────────────┐   │
-│  │                     Entry Points (IStartable)                    │   │
-│  │                                                                  │   │
-  │  BalloonSpawner ─── BalloonBalancer ─── NudgeService            │   │
-  │  GridSpawnerCoordinator (waits IReadyGate, sequences IGridSpawner) │  │
-  │  ThrowerController                                               │   │
-  │  ScoreController ─── ScoreTrailService                           │   │
-  │  CinematicDirector                                               │   │
-  │  ItemAssigner                                                    │   │
-│  └──────────────────────────────────────────────────────────────────┘   │
-└─────────────────────────────────────────────────────────────────────────┘
-```
+@image html spawner_coordination.svg "Spawner Coordination — Staged GridSpawner Pipeline"
 
 ---
 
 ## Message Flow
 
-```
-ActorHitMessage
-  ProjectileView / ItemHandlers / Cheats
-    → BalloonController     (pop/deflect logic — filters IBalloonModel)
-    → ScoreController       (score computation, streak — filters IHasColor+IHasScore)
-    → NudgeService          (visual knockback — filters IHasNudge)
-    → ItemActivator         (item activation trigger — filters IBalloonModel)
-
-ScorePointMessage  (one per point × streak)
-  ScoreController
-    → ScoreTrailService     (spawns FlyingTrail orbs)
-    → ColorProgressBar      (streak notice display)
-    → LevelUpTrailEffect    (cinematic detection)
-
-ScoreTrailArrivedMessage
-  ScoreTrailService
-    → ScoreController       (confirm progress, check level-up)
-    → ColorProgressBar      (bar fill + hit feedback)
-    → LevelUpTrailEffect    (tipping trail arrival → end scene)
-
-ScoreLevelUpMessage
-  ScoreController
-    → LevelUpPopUp          (awaits CinematicEndGate(LevelUpPanIn), then Time.timeScale = 0, show popup)
-    → ColorProgressBar      (reset bar)
-
-LevelUpDismissedMessage
-  LevelUpPopUp
-    → LevelUpTrailEffect    (restore camera, resume trails)
-
-ShieldGainedMessage
-  ShieldItemHandler
-    → ShieldTrailController (spawn shield trail orb)
-
-ProjectileDestroyedMessage
-  ProjectileView
-    → ThrowerController     (reload)
-    → BalloonSpawner        (spawn new lines)
-```
+@image html message_flow.svg "MessagePipe Pub/Sub Flow"
 
 ---
 
 ## Score & Cinematic Pipeline
 
-```
-Balloon Pop
-    │
-    ▼
-ScoreController.OnActorHit
-    │  streak tracking (consecutive same-color multiplier)
-    │  publishes N × ScorePointMessage (score × streak)
-    │
-    ▼
-ScoreTrailService                    LevelUpTrailEffect
-    │  spawns FlyingTrail orbs           │  detects WillLevelUp (all projected ≥ required)
-    │  per-color TrailSpawner            │  calls Tracker.TrackTrail(tippingId)
-    │  TrailTracker<TrailId>             │
-    │         │                          │
-    │         ▼                          ▼
-    │  Trail in-flight ◄──── CinematicDirector.PlayScene(PanInTick)
-    │         │                    BeginCinematic(LevelUpPanIn)
-    │         │                    slow-mo, zoom, camera pan
-    │         ▼
-    │  Trail arrives
-    │         │
-    ▼         ▼
-ScoreController.OnTrailArrived          LevelUpTrailEffect.OnTrailArrived
-    │  confirms _levelProgress               CompleteScene → EndCinematic
-    │  CheckLevelUp → ScoreLevelUpMessage    (CinematicState → None)
-    │  Navigation → LevelUp                  ↓ gate opens
-    │                                    CinematicEndGate(LevelUpPanIn) unblocks
-    ▼
-LevelUpPopUp.ShowAfterGateAsync
-    │  Time.timeScale = 0
-    │  show popup (camera still zoomed/panned)
-    │
-    ▼ (player taps Continue)
-LevelUpDismissedMessage
-    │
-    ▼
-LevelUpTrailEffect (dismissed handler)
-    │  BeginCinematic(LevelUpRestore)
-    │  PrepareRestore — tweens timeScale → 1, camera → base (unscaled)
-    │
-    ▼
-OnRestoreComplete
-    │  EndCinematic → resumes paused trails
-    │  _sessionActive = false
-    └→ Navigation.Game
-```
+@image html cinematic_flow.svg "Score & Cinematic Pipeline"
 
 ---
 
 ## Trail Utility Composition
 
-```
-TrailSpawner (Shared/Pool/)
-├── Owns: PoolManager reference, pool key, channel factory
-├── Spawn(from, to, duration, color?, onArrived?)
-└── SpawnUnscaled(...)
+@image html trail_composition.svg "Trail Utility Composition"
 
-TrailTracker<TId> (Shared/Pool/)
-├── Register / Unregister
-├── TrackTrail (forward + retroactive)
-├── PauseWhere / ResumeTrail / ResumeAll
-└── IsTracked / GetTrailTransform / ClearTrackedTrail
+---
 
-ScoreTrailService
-├── Composes: per-color TrailSpawner + TrailTracker<TrailId>
-├── ICinematicAware (OnCinematicEnd → ResumeAll)
-└── Exposes: Tracker property, PauseTrailsAbove(threshold)
+## Item Activation
 
-ShieldTrailController
-├── Composes: single TrailSpawner
-└── Fire-and-forget (no tracking, no cinematic)
-```
+@image html item_activation.svg "Item Activation Pipeline"
 
 ---
 
 ## Static State
 
-```
-Navigation (Shared/GameState/)
-├── Current: ReactiveProperty<NavigationState>
-├── States: Launch → Game → LevelUp
-└── TransitionTo(state)
-
-Cinematic (Shared/GameState/)
-├── Current: ReactiveProperty<CinematicState>
-├── States: None, LevelUpPanIn, LevelUpRestore
-├── IsPlaying: bool
-├── Begin(state) / End()
-└── ICinematicAware listeners (Register/Unregister)
-```
+@image html static_state.svg "Static State — Navigation & Cinematic"
 
 
 ## Slot Actor Abstraction
 
 `SlotGrid` owns two parallel 2D arrays — `IWriteableSlotActor[,]` (model side) and `ISlotActorView[,]` (view side). Every grid occupant is referred to through these interfaces rather than balloon-specific types.
 
-```
-ISlotActor (read-only)
-├── SlotIndex: IReadOnlyReactiveProperty<Vector2Int>
-├── IsStable:  IReadOnlyReactiveProperty<bool>
-└── Kind:      SlotActorKind (Dynamic | Static)
-
-IWriteableSlotActor : ISlotActor
-├── SlotIndex: ReactiveProperty<Vector2Int>   (new, writable)
-└── IsStable:  ReactiveProperty<bool>          (new, writable)
-
-ISlotActorView
-├── transform:   Transform
-├── TweenTracker: TweenTracker
-└── ActorKind:   SlotActorKind
-```
+@image html actor_hierarchy.svg "Slot Actor Interface Hierarchy"
 
 **Capability interfaces** — optional traits subscribers cast for at their call site:
 

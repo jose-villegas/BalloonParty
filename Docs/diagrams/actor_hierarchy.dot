@@ -1,0 +1,41 @@
+digraph ActorHierarchy {
+    rankdir=BT;
+    bgcolor="transparent";
+    node [fontname="Helvetica", fontsize=10, style="filled,rounded", shape=box];
+    edge [color="#30363d", arrowhead=empty];
+
+    // Core actor interfaces
+    ISlotActor [label="ISlotActor\n─────────\nSlotIndex\nKind", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+    IWriteableSlotActor [label="IWriteableSlotActor\n─────────\nSlotIndex {set}", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+    IDynamicSlotActor [label="IDynamicSlotActor\n─────────\nIsStable (readonly)", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
+    IWriteableDynamic [label="IWriteableDynamic\nSlotActor\n─────────\nIsStable {set}", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
+    ISlotActorView [label="ISlotActorView\n─────────\ntransform\nTweenTracker\nActorKind", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+
+    // Balloon model hierarchy
+    IBalloonModel [label="IBalloonModel\n─────────\nTypeName", fillcolor="#3d2a1a", fontcolor="#f78166"];
+    IWriteableBalloon [label="IWriteableBalloonModel", fillcolor="#3d2a1a", fontcolor="#f78166"];
+    BalloonModelBase [label="«abstract»\nBalloonModelBase\n─────────\nEvaluateHit()\nNudgeOverrides", fillcolor="#3d1a1a", fontcolor="#f78166", style="filled,rounded,bold"];
+
+    // Concrete models
+    BalloonModel [label="BalloonModel\n─────────\nIPaintable\nIHasDurability\nIHasItemSlot", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    ToughBalloonModel [label="ToughBalloonModel\n─────────\nIHasDurability\nDeflect on survival", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    UnbreakableBalloonModel [label="UnbreakableBalloonModel\n─────────\nIHitable only\nAlways Deflect", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    BubbleClusterModel [label="BubbleClusterModel\n─────────\nIHasDurability\nPassThrough", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+
+    // Inheritance edges
+    IWriteableSlotActor -> ISlotActor;
+    IDynamicSlotActor -> ISlotActor;
+    IWriteableDynamic -> IDynamicSlotActor;
+    IWriteableDynamic -> IWriteableSlotActor;
+
+    IBalloonModel -> IDynamicSlotActor [style=bold, color="#f78166"];
+    IWriteableBalloon -> IBalloonModel;
+    IWriteableBalloon -> IWriteableDynamic;
+
+    BalloonModelBase -> IWriteableBalloon [style=dashed, label="implements", fontcolor="#8b949e", fontsize=8];
+    BalloonModel -> BalloonModelBase;
+    ToughBalloonModel -> BalloonModelBase;
+    UnbreakableBalloonModel -> BalloonModelBase;
+    BubbleClusterModel -> BalloonModelBase;
+}
+

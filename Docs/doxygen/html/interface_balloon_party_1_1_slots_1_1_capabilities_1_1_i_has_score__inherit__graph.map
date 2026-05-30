@@ -1,0 +1,9 @@
+<map id="BalloonParty.Slots.Capabilities.IHasScore" name="BalloonParty.Slots.Capabilities.IHasScore">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,71,209,111"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="257,5,440,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="198,64,273,45,268,48,200,69"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="257,71,440,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="224,88,259,90,254,92,225,94"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="257,136,440,177"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="199,113,273,135,268,136,199,118"/>
+</map>

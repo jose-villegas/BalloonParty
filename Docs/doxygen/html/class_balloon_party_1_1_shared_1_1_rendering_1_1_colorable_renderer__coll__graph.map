@@ -1,0 +1,7 @@
+<map id="BalloonParty.Shared.Rendering.ColorableRenderer" name="BalloonParty.Shared.Rendering.ColorableRenderer">
+<area shape="rect" id="Node000001" title="Non&#45;generic MonoBehaviour base that implements IColorableRenderer." alt="" coords="49,94,254,135"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,117,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="86,47,134,93,129,94,84,52"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_shared_1_1_rendering_1_1_i_colorable_renderer.html" title=" " alt="" coords="141,5,346,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="214,56,174,96,171,91,209,58"/>
+</map>

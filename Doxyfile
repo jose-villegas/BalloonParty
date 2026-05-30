@@ -1,0 +1,125 @@
+# Doxyfile — BalloonParty Project Documentation
+# Generated for Doxygen 1.17.0
+
+#---------------------------------------------------------------------------
+# Project
+#---------------------------------------------------------------------------
+PROJECT_NAME           = "BalloonParty"
+PROJECT_NUMBER         = ""
+PROJECT_BRIEF          = "A balloon-popping game built with Unity, VContainer, UniRx, MessagePipe, UniTask, and DOTween"
+PROJECT_LOGO           =
+OUTPUT_DIRECTORY       = Docs/doxygen
+
+#---------------------------------------------------------------------------
+# Input
+#---------------------------------------------------------------------------
+INPUT                  = Assets/Source
+INPUT_ENCODING         = UTF-8
+FILE_PATTERNS          = *.cs *.md
+RECURSIVE              = YES
+EXCLUDE_PATTERNS       = */bin/* */obj/* */Library/*
+USE_MDFILE_AS_MAINPAGE = Assets/Source/README.md
+IMAGE_PATH             = Docs/diagrams
+
+#---------------------------------------------------------------------------
+# Source parsing
+#---------------------------------------------------------------------------
+EXTENSION_MAPPING      = cs=csharp
+OPTIMIZE_OUTPUT_JAVA   = YES
+EXTRACT_ALL            = YES
+EXTRACT_PRIVATE        = NO
+EXTRACT_STATIC         = YES
+EXTRACT_LOCAL_CLASSES  = YES
+
+#---------------------------------------------------------------------------
+# Build
+#---------------------------------------------------------------------------
+HIDE_UNDOC_MEMBERS     = NO
+HIDE_UNDOC_CLASSES     = NO
+BRIEF_MEMBER_DESC      = YES
+REPEAT_BRIEF           = YES
+ALWAYS_DETAILED_SEC    = NO
+INLINE_INHERITED_MEMB  = YES
+FULL_PATH_NAMES        = YES
+STRIP_FROM_PATH        = Assets/Source
+SHORT_NAMES            = NO
+JAVADOC_AUTOBRIEF      = YES
+MARKDOWN_SUPPORT       = YES
+AUTOLINK_SUPPORT       = YES
+BUILTIN_STL_SUPPORT    = NO
+IDL_PROPERTY_SUPPORT   = YES
+SORT_MEMBER_DOCS       = YES
+SORT_BRIEF_DOCS        = YES
+SORT_MEMBERS_CTORS_1ST = YES
+SORT_GROUP_NAMES       = YES
+GENERATE_TODOLIST      = YES
+GENERATE_TESTLIST      = YES
+GENERATE_BUGLIST       = YES
+GENERATE_DEPRECATEDLIST = YES
+SHOW_USED_FILES        = YES
+SHOW_FILES             = YES
+SHOW_NAMESPACES        = YES
+
+#---------------------------------------------------------------------------
+# Warnings
+#---------------------------------------------------------------------------
+QUIET                  = YES
+WARNINGS               = YES
+WARN_IF_UNDOCUMENTED   = NO
+WARN_IF_DOC_ERROR      = YES
+WARN_NO_PARAMDOC       = NO
+
+#---------------------------------------------------------------------------
+# HTML Output
+#---------------------------------------------------------------------------
+GENERATE_HTML          = YES
+HTML_OUTPUT            = html
+HTML_FILE_EXTENSION    = .html
+HTML_HEADER            = Docs/doxygen-header.html
+HTML_FOOTER            = Docs/doxygen-footer.html
+HTML_EXTRA_STYLESHEET  = Docs/doxygen-custom.css
+HTML_COLORSTYLE        = DARK
+HTML_COLORSTYLE_HUE    = 209
+HTML_COLORSTYLE_SAT    = 180
+HTML_COLORSTYLE_GAMMA  = 113
+HTML_DYNAMIC_SECTIONS  = YES
+HTML_INDEX_NUM_ENTRIES = 100
+GENERATE_TREEVIEW      = YES
+TREEVIEW_WIDTH         = 280
+ENUM_VALUES_PER_LINE   = 4
+EXT_LINKS_IN_WINDOW    = NO
+SEARCHENGINE           = YES
+SERVER_BASED_SEARCH    = NO
+DISABLE_INDEX          = NO
+GENERATE_TREEVIEW      = YES
+
+#---------------------------------------------------------------------------
+# LaTeX / RTF / XML / Man — all off
+#---------------------------------------------------------------------------
+GENERATE_LATEX         = NO
+GENERATE_RTF           = NO
+GENERATE_XML           = NO
+GENERATE_MAN           = NO
+GENERATE_DOCBOOK       = NO
+
+#---------------------------------------------------------------------------
+# Graphs (Graphviz)
+#---------------------------------------------------------------------------
+HAVE_DOT               = YES
+DOT_NUM_THREADS        = 4
+CLASS_GRAPH            = YES
+COLLABORATION_GRAPH    = YES
+GROUP_GRAPHS           = YES
+INCLUDE_GRAPH          = YES
+INCLUDED_BY_GRAPH      = YES
+CALL_GRAPH             = NO
+CALLER_GRAPH           = NO
+GRAPHICAL_HIERARCHY    = YES
+DIRECTORY_GRAPH        = YES
+DOT_IMAGE_FORMAT       = svg
+INTERACTIVE_SVG        = YES
+DOT_GRAPH_MAX_NODES    = 100
+MAX_DOT_GRAPH_DEPTH    = 0
+
+
+

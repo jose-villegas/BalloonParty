@@ -1,0 +1,23 @@
+<map id="BalloonParty.Balloon.Model.IBalloonModel" name="BalloonParty.Balloon.Model.IBalloonModel">
+<area shape="rect" id="Node000001" title=" " alt="" coords="470,104,653,145"/>
+<area shape="rect" id="Node000006" href="$interface_balloon_party_1_1_balloon_1_1_model_1_1_i_writeable_balloon_model.html" title=" " alt="" coords="701,104,885,145"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="668,122,703,124,698,125,669,127"/>
+<area shape="rect" id="Node000002" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_dynamic_slot_actor.html" title=" " alt="" coords="238,39,403,79"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="412,81,486,103,481,104,412,86"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor.html" title=" " alt="" coords="5,39,171,79"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="185,56,240,58,235,60,187,62"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_hitable.html" title=" " alt="" coords="219,104,422,145"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="437,122,472,124,467,125,438,127"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_has_nudge.html" title=" " alt="" coords="219,169,422,210"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="412,162,481,146,486,145,413,167"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="933,104,1116,145"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="900,122,935,124,929,125,900,127"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="1164,5,1347,46"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="1081,94,1163,57,1193,47,1198,46,1165,61,1082,99"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="1164,71,1347,111"/>
+<area shape="poly" id="edge8_Node000007_Node000009" title=" " alt="" coords="1131,106,1161,105,1166,104,1132,112"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="1164,136,1347,177"/>
+<area shape="poly" id="edge9_Node000007_Node000010" title=" " alt="" coords="1131,136,1166,144,1161,144,1131,142"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="1164,201,1347,242"/>
+<area shape="poly" id="edge10_Node000007_Node000011" title=" " alt="" coords="1082,149,1165,186,1198,201,1193,200,1163,191,1081,154"/>
+</map>

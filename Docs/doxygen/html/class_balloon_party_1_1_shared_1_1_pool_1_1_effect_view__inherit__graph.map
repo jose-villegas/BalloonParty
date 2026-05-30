@@ -1,0 +1,17 @@
+<map id="BalloonParty.Shared.Pool.EffectView" name="BalloonParty.Shared.Pool.EffectView">
+<area shape="rect" id="Node000001" title="Abstract base for poolable effect MonoBehaviours." alt="" coords="235,104,407,145"/>
+<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html" title="Poolable chain&#45;lightning effect." alt="" coords="455,5,638,46"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="374,94,454,57,489,45,484,47,456,61,376,99"/>
+<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_item_1_1_paint_1_1_paint_splash_view.html" title="Poolable paint&#45;splash effect." alt="" coords="466,71,627,111"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="422,107,468,102,463,104,423,112"/>
+<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_animator_effect_view.html" title="Poolable effect driven by an Animator." alt="" coords="460,136,633,177"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="422,136,463,144,458,144,422,141"/>
+<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_particle_effect_view.html" title="Poolable effect driven by a ParticleSystem." alt="" coords="460,201,633,242"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="377,149,456,186,489,201,484,200,454,191,376,155"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="40,54,152,80"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="164,82,241,102,236,104,164,87"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="10,104,182,145"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="197,122,237,123,232,125,198,127"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_shared_1_1_i_effect.html" title="Abstracts any visual effect that can be triggered at a world position and optionally tinted." alt="" coords="5,169,187,194"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="163,162,241,144,236,146,165,167"/>
+</map>

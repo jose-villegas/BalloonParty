@@ -1,0 +1,77 @@
+digraph MessageFlow {
+    rankdir=LR;
+    bgcolor="transparent";
+    node [fontname="Helvetica", fontsize=9, style="filled,rounded", shape=box];
+    edge [fontname="Helvetica", fontsize=7];
+
+    // Publishers (left)
+    subgraph cluster_pub {
+        label="Publishers"; style="dashed"; color="#30363d"; fontcolor="#8b949e"; fontname="Helvetica";
+        ProjectileView [label="ProjectileView", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+        BalloonController [label="BalloonController", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+        BalloonSpawner [label="BalloonSpawner", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+        ScoreController [label="ScoreController", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+        ItemActivator [label="ItemActivator", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+        LevelUpPopUp [label="LevelUpPopUp", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+        ThrowerCtrl [label="ThrowerController", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+    }
+
+    // Messages (center)
+    subgraph cluster_msg {
+        label="Messages"; style="dashed"; color="#30363d"; fontcolor="#8b949e"; fontname="Helvetica";
+        node [shape=hexagon, fillcolor="#3d2a1a", fontcolor="#f78166"];
+        ActorHit [label="ActorHit\nMessage"];
+        BalanceBalloons [label="Balance\nBalloonsMsg"];
+        ProjDestroyed [label="Projectile\nDestroyedMsg"];
+        ScorePoint [label="ScorePoint\nMessage"];
+        LevelUp [label="ScoreLevel\nUpMessage"];
+        TrailArrived [label="ScoreTrail\nArrivedMsg"];
+        ItemCheck [label="ItemCheck\nMessage"];
+        ItemActivated [label="ItemActivated\nMessage"];
+        Deflected [label="BalloonDeflected\nMessage"];
+        Dismissed [label="LevelUp\nDismissedMsg"];
+        ProjLoaded [label="Projectile\nLoadedMsg"];
+    }
+
+    // Subscribers (right)
+    subgraph cluster_sub {
+        label="Subscribers"; style="dashed"; color="#30363d"; fontcolor="#8b949e"; fontname="Helvetica";
+        BalloonCtrl2 [label="BalloonController", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+        ScoreCtrl2 [label="ScoreController", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+        NudgeService [label="NudgeService", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+        BalloonBalancer [label="BalloonBalancer", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+        BalloonSpawner2 [label="BalloonSpawner", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+        ItemAssigner [label="ItemAssigner", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+        TrailEffect [label="LevelUpTrailEffect", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+        ColorBar [label="ColorProgressBar", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+        TrailService [label="ScoreTrailService", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+    }
+
+    // Edges
+    ProjectileView -> ActorHit;
+    ProjectileView -> ProjDestroyed;
+    ProjectileView -> BalanceBalloons;
+    BalloonController -> Deflected;
+    BalloonSpawner -> BalanceBalloons;
+    BalloonSpawner -> ItemCheck;
+    ScoreController -> ScorePoint;
+    ScoreController -> LevelUp;
+    ItemActivator -> ItemActivated;
+    LevelUpPopUp -> Dismissed;
+    ThrowerCtrl -> ProjLoaded;
+
+    ActorHit -> BalloonCtrl2;
+    ActorHit -> ScoreCtrl2;
+    ActorHit -> NudgeService;
+    ActorHit -> ItemActivator;
+    BalanceBalloons -> BalloonBalancer;
+    ProjDestroyed -> BalloonSpawner2;
+    ScorePoint -> TrailService;
+    ScorePoint -> ColorBar;
+    ScorePoint -> TrailEffect;
+    LevelUp -> ColorBar;
+    ItemCheck -> ItemAssigner;
+    ItemActivated -> BalloonCtrl2;
+    Dismissed -> TrailEffect;
+}
+

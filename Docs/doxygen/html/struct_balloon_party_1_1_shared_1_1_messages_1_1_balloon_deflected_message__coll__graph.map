@@ -1,0 +1,13 @@
+<map id="BalloonParty.Shared.Messages.BalloonDeflectedMessage" name="BalloonParty.Shared.Messages.BalloonDeflectedMessage">
+<area shape="rect" id="Node000001" title=" " alt="" coords="755,71,961,111"/>
+<area shape="rect" id="Node000002" href="$interface_balloon_party_1_1_balloon_1_1_model_1_1_i_balloon_model.html" title=" " alt="" coords="473,71,656,111"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="672,88,757,91,752,91,672,94"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_dynamic_slot_actor.html" title=" " alt="" coords="239,5,404,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="414,48,489,70,483,70,414,53"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor.html" title=" " alt="" coords="5,5,171,46"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="185,23,241,25,236,27,187,28"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_hitable.html" title=" " alt="" coords="220,71,423,111"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="439,88,475,91,469,91,439,94"/>
+<area shape="rect" id="Node000006" href="$interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_has_nudge.html" title=" " alt="" coords="220,136,423,177"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="414,129,483,112,489,112,415,134"/>
+</map>

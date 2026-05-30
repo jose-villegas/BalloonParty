@@ -1,0 +1,7 @@
+<map id="BalloonParty.Slots.Capabilities.IPassThrough" name="BalloonParty.Slots.Capabilities.IPassThrough">
+<area shape="rect" id="Node000001" title="Marks an actor whose grid slot can be visually crossed by other actors&#39; animation paths." alt="" coords="5,39,209,79"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="257,5,452,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,41,259,38,254,39,225,46"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="272,71,437,111"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="224,72,274,80,269,80,224,77"/>
+</map>

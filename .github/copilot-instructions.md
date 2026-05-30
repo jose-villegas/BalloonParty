@@ -59,6 +59,12 @@ VContainer (DI), UniRx (reactive), MessagePipe (pub/sub), UniTask (async), DOTwe
 - Update when mechanics change
 - Written for new developers, not as changelog
 
+### Plans
+- All design plans and roadmaps live in `Assets/Source/Plans/`
+- File naming: `PLAN-<FeatureName>.md`
+- Each plan file starts with a Doxygen `@page` directive
+- Register new plans in `Plans/Plans.md` via `@subpage`
+
 ### Gizmos & Editor Drawing
 - `GizmoDrawingHelper` (`Shared/Rendering/`) — Gizmos API for `OnDrawGizmos`
 - `SceneDrawingHelper` (`Editor/`) — Handles API for `SceneView.duringSceneGui`

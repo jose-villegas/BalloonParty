@@ -1,0 +1,5 @@
+<map id="BalloonParty.Projectile.Model.IWriteableProjectileModel" name="BalloonParty.Projectile.Model.IWriteableProjectileModel">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,94,213,135"/>
+<area shape="rect" id="Node000002" href="$interface_balloon_party_1_1_projectile_1_1_model_1_1_i_projectile_model.html" title=" " alt="" coords="31,5,187,46"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="111,60,111,95,107,93,107,64"/>
+</map>

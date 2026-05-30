@@ -1,0 +1,28 @@
+<map id="BalloonParty.Slots.Capabilities.IHitable" name="BalloonParty.Slots.Capabilities.IHitable">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,195,209,235"/>
+<area shape="rect" id="Node000002" href="$interface_balloon_party_1_1_balloon_1_1_model_1_1_i_balloon_model.html" title=" " alt="" coords="267,107,450,147"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="181,187,300,146,296,150,183,192"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="257,223,460,263"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="224,225,259,231,254,232,224,231"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="257,288,460,329"/>
+<area shape="poly" id="edge9_Node000001_Node000010" title=" " alt="" coords="172,239,258,273,295,287,289,287,256,277,171,244"/>
+<area shape="rect" id="Node000011" href="$interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_has_durability.html" title=" " alt="" coords="739,169,943,210"/>
+<area shape="poly" id="edge10_Node000001_Node000011" title=" " alt="" coords="224,208,740,191,739,196,225,214"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_balloon_1_1_model_1_1_i_writeable_balloon_model.html" title=" " alt="" coords="508,107,691,147"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="465,124,510,126,505,128,466,130"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="749,104,933,145"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="707,123,752,125,746,126,707,128"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="1008,71,1191,111"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="948,108,1010,102,1004,103,948,113"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="1008,136,1191,177"/>
+<area shape="poly" id="edge5_Node000004_Node000006" title=" " alt="" coords="948,135,1010,145,1004,145,948,140"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="1008,201,1191,242"/>
+<area shape="poly" id="edge6_Node000004_Node000007" title=" " alt="" coords="927,148,944,155,968,171,992,186,1025,201,1019,201,989,191,965,175,941,160,927,153"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="1008,5,1191,46"/>
+<area shape="poly" id="edge7_Node000004_Node000008" title=" " alt="" coords="899,95,990,57,1024,47,1029,46,992,61,900,100"/>
+<area shape="poly" id="edge11_Node000011_Node000005" title=" " alt="" coords="927,161,941,154,965,138,989,122,1019,113,1024,111,992,127,968,142,944,159,928,166"/>
+<area shape="poly" id="edge12_Node000011_Node000006" title=" " alt="" coords="958,172,1010,168,1005,169,958,177"/>
+<area shape="poly" id="edge13_Node000011_Node000007" title=" " alt="" coords="958,201,1010,210,1005,210,958,207"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="991,267,1208,307"/>
+<area shape="poly" id="edge14_Node000011_Node000012" title=" " alt="" coords="902,214,992,251,1030,267,1025,266,990,256,901,219"/>
+</map>

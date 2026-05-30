@@ -1,0 +1,7 @@
+<map id="BalloonParty.UI.Score.ColorProgressBar" name="BalloonParty.UI.Score.ColorProgressBar">
+<area shape="rect" id="Node000001" title=" " alt="" coords="52,94,236,135"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,117,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,47,128,93,123,95,82,52"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="140,5,315,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,56,164,96,161,91,195,59"/>
+</map>

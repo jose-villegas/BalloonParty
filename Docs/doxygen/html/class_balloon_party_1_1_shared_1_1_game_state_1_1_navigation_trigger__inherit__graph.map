@@ -1,0 +1,5 @@
+<map id="BalloonParty.Shared.GameState.NavigationTrigger" name="BalloonParty.Shared.GameState.NavigationTrigger">
+<area shape="rect" id="Node000001" title="Triggers a navigation state transition." alt="" coords="5,79,183,120"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="38,5,150,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="96,44,97,80,91,78,92,48"/>
+</map>

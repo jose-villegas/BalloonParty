@@ -1,0 +1,9 @@
+<map id="BalloonParty.Shared.Pool.PoolableParticle" name="BalloonParty.Shared.Pool.PoolableParticle">
+<area shape="rect" id="Node000001" title=" " alt="" coords="140,94,312,135"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,13,117,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="99,44,191,92,187,95,97,49"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="140,5,312,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="228,60,229,95,224,92,224,64"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_shared_1_1_i_effect.html" title="Abstracts any visual effect that can be triggered at a world position and optionally tinted." alt="" coords="337,13,518,38"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="388,45,273,96,271,91,383,46"/>
+</map>

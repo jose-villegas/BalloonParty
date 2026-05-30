@@ -1,0 +1,18 @@
+var namespace_balloon_party_1_1_shared_1_1_messages =
+[
+    [ "ActorHitMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_actor_hit_message.html", "struct_balloon_party_1_1_shared_1_1_messages_1_1_actor_hit_message" ],
+    [ "BalanceBalloonsMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_balance_balloons_message.html", null ],
+    [ "BalloonDeflectedMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_balloon_deflected_message.html", "struct_balloon_party_1_1_shared_1_1_messages_1_1_balloon_deflected_message" ],
+    [ "ItemActivatedMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_item_activated_message.html", "struct_balloon_party_1_1_shared_1_1_messages_1_1_item_activated_message" ],
+    [ "ItemCheckMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_item_check_message.html", "struct_balloon_party_1_1_shared_1_1_messages_1_1_item_check_message" ],
+    [ "LevelUpDismissedMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_level_up_dismissed_message.html", null ],
+    [ "LevelUpGlowTrailsMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_level_up_glow_trails_message.html", "struct_balloon_party_1_1_shared_1_1_messages_1_1_level_up_glow_trails_message" ],
+    [ "ProjectileDestroyedMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_projectile_destroyed_message.html", null ],
+    [ "ProjectileLoadedMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_projectile_loaded_message.html", "struct_balloon_party_1_1_shared_1_1_messages_1_1_projectile_loaded_message" ],
+    [ "ScoreLevelUpMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_score_level_up_message.html", "struct_balloon_party_1_1_shared_1_1_messages_1_1_score_level_up_message" ],
+    [ "ScorePointMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_score_point_message.html", "struct_balloon_party_1_1_shared_1_1_messages_1_1_score_point_message" ],
+    [ "ScoreTrailArrivedMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_score_trail_arrived_message.html", "struct_balloon_party_1_1_shared_1_1_messages_1_1_score_trail_arrived_message" ],
+    [ "ShieldGainedMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_shield_gained_message.html", "struct_balloon_party_1_1_shared_1_1_messages_1_1_shield_gained_message" ],
+    [ "SpawnBalloonLineMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_spawn_balloon_line_message.html", "struct_balloon_party_1_1_shared_1_1_messages_1_1_spawn_balloon_line_message" ],
+    [ "TransformCapturedMessage", "struct_balloon_party_1_1_shared_1_1_messages_1_1_transform_captured_message.html", "struct_balloon_party_1_1_shared_1_1_messages_1_1_transform_captured_message" ]
+];

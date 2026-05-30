@@ -1,0 +1,28 @@
+var searchData=
+[
+  ['map_0',['System Map',['../md__a_r_c_h_i_t_e_c_t_u_r_e.html#autotoc_md10',1,'']]],
+  ['mapping_1',['Folder → Namespace Mapping',['../md__a_r_c_h_i_t_e_c_t_u_r_e.html#autotoc_md23',1,'']]],
+  ['maxcount_2',['MaxCount',['../class_balloon_party_1_1_configuration_1_1_balloon_prefab_entry.html#aa6a4949ebae463f3cad0af8ee413f7a9',1,'BalloonParty.Configuration.BalloonPrefabEntry.MaxCount'],['../class_balloon_party_1_1_configuration_1_1_grid_actor_prefab_entry.html#a86380d0a28ba3ea3702c8c035a200939',1,'BalloonParty.Configuration.GridActorPrefabEntry.MaxCount']]],
+  ['maximumallowed_3',['MaximumAllowed',['../class_balloon_party_1_1_configuration_1_1_item_settings.html#a8ea19f2a621ba2cab92dd4e1a4eb8bb2',1,'BalloonParty::Configuration::ItemSettings']]],
+  ['maxstaticactors_4',['MaxStaticActors',['../class_balloon_party_1_1_configuration_1_1_game_configuration.html#a9a85659f9be3595082379b970d719ee8',1,'BalloonParty.Configuration.GameConfiguration.MaxStaticActors'],['../interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#a4507f46bb20fd4decb29cbef1d66dfc2',1,'BalloonParty.Shared.IGameConfiguration.MaxStaticActors']]],
+  ['member_20ordering_5',['Member Ordering',['../index.html#autotoc_md306',1,'']]],
+  ['menu_20tools_6',['Context menu tools',['../dir_14eca4e58e6d71e3a9859288c1bd2735.html#autotoc_md76',1,'']]],
+  ['message_20design_20rules_7',['Message design rules',['../index.html#autotoc_md278',1,'']]],
+  ['message_20flow_8',['Message Flow',['../md__a_r_c_h_i_t_e_c_t_u_r_e.html#autotoc_md12',1,'']]],
+  ['messagepipe_9',['Messaging — MessagePipe',['../index.html#autotoc_md277',1,'']]],
+  ['messages_10',['Messages',['../dir_da555cc5272c9bb1aca8990be5c6787a.html#autotoc_md354',1,'']]],
+  ['messaging_20—_20messagepipe_11',['Messaging — MessagePipe',['../index.html#autotoc_md277',1,'']]],
+  ['methods_12',['Methods',['../index.html#autotoc_md308',1,'']]],
+  ['methods_13',['New methods',['../plan_bubble_cluster_hit_feedback.html#autotoc_md133',1,'']]],
+  ['migrates_20to_20iballoonhithandler_14',['&lt;span class=&quot;tt&quot;&gt;LaserItemRotation&lt;/span&gt; — migrates to &lt;span class=&quot;tt&quot;&gt;IBalloonHitHandler&lt;/span&gt;',['../plan_bubble_cluster_hit_feedback.html#autotoc_md145',1,'']]],
+  ['migration_15',['✅ Phase 8.1b — DamageContext API Migration',['../plan_grid_actor_expansion.html#autotoc_md198',1,'']]],
+  ['migration_20path_16',['Migration path',['../plan_grid_actor_expansion.html#autotoc_md225',1,'']]],
+  ['minstaticactors_17',['MinStaticActors',['../class_balloon_party_1_1_configuration_1_1_game_configuration.html#ab060543c6567878e7460105aac562feb',1,'BalloonParty.Configuration.GameConfiguration.MinStaticActors'],['../interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#a85fb2874e6d73baaf257e1772171d96f',1,'BalloonParty.Shared.IGameConfiguration.MinStaticActors']]],
+  ['mirror_20of_20shader_20bubble_20layouts_18',['C# mirror of shader bubble layouts',['../plan_bubble_cluster_hit_feedback.html#autotoc_md140',1,'']]],
+  ['mobility_20axis_3a_20slotactorkind_19',['Mobility axis: &lt;span class=&quot;tt&quot;&gt;SlotActorKind&lt;/span&gt;',['../plan_grid_actor_foundation.html#autotoc_md238',1,'']]],
+  ['model_20',['Model',['../class_balloon_party_1_1_balloon_1_1_view_1_1_balloon_view.html#a0761ff60f9163e14f05883d0f4ae7d26',1,'BalloonParty.Balloon.View.BalloonView.Model'],['../struct_balloon_party_1_1_shared_1_1_messages_1_1_projectile_loaded_message.html#af305a03533683b446b16637a0a847df7',1,'BalloonParty.Shared.Messages.ProjectileLoadedMessage.Model']]],
+  ['model_20interface_20pattern_20—_20read_20write_20separation_21',['Model Interface Pattern — Read/Write Separation',['../index.html#autotoc_md311',1,'']]],
+  ['multiplier_22',['Streak Multiplier',['../dir_204ee19a44ce2b73fabb9e8ca0de6c50.html#autotoc_md93',1,'']]],
+  ['mvc_23',['Architecture — MVC',['../index.html#autotoc_md265',1,'']]],
+  ['mvc_20pattern_24',['MVC Pattern',['../md__a_r_c_h_i_t_e_c_t_u_r_e.html#autotoc_md2',1,'']]]
+];

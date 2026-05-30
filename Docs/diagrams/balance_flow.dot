@@ -1,0 +1,35 @@
+digraph BalanceFlow {
+    rankdir=TB;
+    bgcolor="transparent";
+    node [fontname="Helvetica", fontsize=10, style="filled,rounded", shape=box];
+    edge [fontname="Helvetica", fontsize=8];
+
+    Balance [label="Balance()", fillcolor="#1f3a5f", fontcolor="#58a6ff", shape=hexagon];
+
+    Scan [label="Scan grid\nbottom → top\n(row 1 to Rows)", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    CheckEmpty [label="Skip empty?", fillcolor="#2a2a2a", fontcolor="#c9d1d9", shape=diamond];
+    CheckUnbal [label="IsUnbalanced?", fillcolor="#2a2a2a", fontcolor="#c9d1d9", shape=diamond];
+    CheckDynamic [label="IWriteableDynamic\nSlotActor?", fillcolor="#2a2a2a", fontcolor="#c9d1d9", shape=diamond];
+    FindSlot [label="OptimalNextEmptySlot\n(weight algorithm)", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
+    Reserve [label="BalancePathHolder\nReserve(actor, src)\nReserve(actor, dst)", fillcolor="#3d2a1a", fontcolor="#f78166"];
+    Move [label="Remove(src)\nPlace(actor, view, dst)\nIsStable = false", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+    RecordPath [label="Record target\nworld position\nin paths dict", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    Loop [label="hasUnbalanced?\nrepeat", fillcolor="#2a2a2a", fontcolor="#c9d1d9", shape=diamond];
+    Animate [label="AnimatePaths()\nDOPath(CatmullRom)\nOnComplete → Release(actor)", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+
+    Balance -> Scan;
+    Scan -> CheckEmpty;
+    CheckEmpty -> CheckUnbal [label="no", fontcolor="#3fb950", color="#3fb950"];
+    CheckEmpty -> Scan [label="yes (next)", fontcolor="#8b949e", color="#30363d", style=dashed];
+    CheckUnbal -> CheckDynamic [label="yes", fontcolor="#3fb950", color="#3fb950"];
+    CheckUnbal -> Scan [label="no (next)", fontcolor="#8b949e", color="#30363d", style=dashed];
+    CheckDynamic -> FindSlot [label="yes", fontcolor="#3fb950", color="#3fb950"];
+    CheckDynamic -> Scan [label="no (skip)", fontcolor="#8b949e", color="#30363d", style=dashed];
+    FindSlot -> Reserve;
+    Reserve -> Move;
+    Move -> RecordPath;
+    RecordPath -> Loop;
+    Loop -> Scan [label="yes", fontcolor="#f78166", color="#f78166"];
+    Loop -> Animate [label="no", fontcolor="#3fb950", color="#3fb950"];
+}
+

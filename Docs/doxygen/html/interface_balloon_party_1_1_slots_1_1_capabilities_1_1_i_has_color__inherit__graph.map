@@ -1,0 +1,12 @@
+<map id="BalloonParty.Slots.Capabilities.IHasColor" name="BalloonParty.Slots.Capabilities.IHasColor">
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,39,209,79"/>
+<area shape="rect" id="Node000002" href="$interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_has_item_slot.html" title="Declares that an actor can host an item." alt="" coords="257,8,460,49"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="224,42,259,40,253,41,225,47"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_paintable.html" title="Declares that an actor&#39;s color identity can be overwritten." alt="" coords="508,71,711,111"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="224,64,509,82,506,87,224,69"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_balloon_1_1_model_1_1_i_has_writeable_item_slot.html" title=" " alt="" coords="518,5,701,46"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="475,24,520,26,515,27,476,30"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="759,39,943,79"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="717,38,762,46,756,46,717,43"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="727,73,756,71,762,71,727,78"/>
+</map>

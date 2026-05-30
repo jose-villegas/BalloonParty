@@ -1,0 +1,13 @@
+<map id="BalloonParty.Editor.AutoFieldPropertyDrawer" name="BalloonParty.Editor.AutoFieldPropertyDrawer">
+<area shape="rect" id="Node000001" title="Base class for property drawers that want common fields drawn automatically via serialized&#45;property r..." alt="" coords="166,104,327,145"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_configuration_1_1_editor_1_1_balloon_prefab_entry_drawer.html" title=" " alt="" coords="375,5,587,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="296,94,374,57,411,45,406,48,376,61,298,99"/>
+<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_configuration_1_1_editor_1_1_hit_vfx_override_drawer.html" title=" " alt="" coords="388,71,574,111"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="342,108,390,104,385,105,343,113"/>
+<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_configuration_1_1_editor_1_1_item_settings_drawer.html" title=" " alt="" coords="392,136,570,177"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="342,135,394,144,389,144,342,140"/>
+<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_nudge_1_1_editor_1_1_nudge_override_drawer.html" title=" " alt="" coords="393,201,569,242"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="299,149,376,186,411,201,406,201,374,191,298,155"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,112,118,137"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="132,122,168,123,163,125,134,127"/>
+</map>
