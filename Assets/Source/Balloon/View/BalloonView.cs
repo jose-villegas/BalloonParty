@@ -31,6 +31,7 @@ namespace BalloonParty.Balloon.View
         [SerializeField] private TweenTracker _tweenTracker;
         [SerializeField] private ItemDisplayService _itemService;
 
+
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private BalloonsConfiguration _balloonsConfig;
@@ -275,6 +276,7 @@ namespace BalloonParty.Balloon.View
                 effect.Play(transform.position, () => _poolManager.Return(key, effect));
             }
         }
+
 
         private void ApplySortingOrder(Vector2Int slotIndex)
         {

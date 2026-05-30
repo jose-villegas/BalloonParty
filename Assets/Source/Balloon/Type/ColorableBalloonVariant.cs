@@ -13,6 +13,7 @@ namespace BalloonParty.Balloon.Type
 
         [Inject] private GamePalette _palette;
 
+
         public virtual void Initialize(IWriteableBalloonModel model)
         {
             if (model is IPaintable colorable)
