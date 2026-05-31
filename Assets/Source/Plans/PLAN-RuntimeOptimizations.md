@@ -56,7 +56,7 @@ list, or use the NativeArray overload.
 
 ---
 
-### H-4 — `ScoreController.OnTrailArrived()` LINQ `.Sum()` every arrival
+### ~~H-4 — `ScoreController.OnTrailArrived()` LINQ `.Sum()` every arrival~~ ✅ Done
 
 **File:** `Game/Score/ScoreController.cs` · `OnTrailArrived()`
 
@@ -181,7 +181,7 @@ Allocates a new `List` and uses a closure-based `Sort` on every activation.
 
 ---
 
-### M-9 — `ScoreController.CheckLevelUp()` `Keys.ToArray()`
+### ~~M-9 — `ScoreController.CheckLevelUp()` `Keys.ToArray()`~~ ✅ Done
 
 **File:** `Game/Score/ScoreController.cs` · `CheckLevelUp()`
 

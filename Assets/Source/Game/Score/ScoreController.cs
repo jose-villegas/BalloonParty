@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
@@ -30,6 +29,7 @@ namespace BalloonParty.Game.Score
         private readonly ColorStreakTracker _streakTracker;
         private readonly ReactiveProperty<int> _totalScore = new(0);
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
+        private readonly List<string> _colorKeys = new();
         private IDisposable _subscription;
         private IDisposable _trailSubscription;
 
@@ -66,14 +66,18 @@ namespace BalloonParty.Game.Score
         {
             _level.Value = PlayerPrefs.GetInt(LevelKey, 1);
 
+            var initialTotal = 0;
             foreach (var color in _palette.Colors)
             {
-                _persistentScore[color.Name] = PlayerPrefs.GetInt(color.Name, 0);
+                _colorKeys.Add(color.Name);
+                var saved = PlayerPrefs.GetInt(color.Name, 0);
+                _persistentScore[color.Name] = saved;
                 _levelProgress[color.Name] = PlayerPrefs.GetInt(color.Name + ProgressSuffix, 0);
                 _projectedProgress[color.Name] = _levelProgress[color.Name];
+                initialTotal += saved;
             }
 
-            _totalScore.Value = _persistentScore.Values.Sum();
+            _totalScore.Value = initialTotal;
 
             _subscription = _hitSubscriber.Subscribe(OnActorHit);
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
@@ -134,7 +138,7 @@ namespace BalloonParty.Game.Score
 
             _level.Value++;
 
-            foreach (var key in _levelProgress.Keys.ToArray())
+            foreach (var key in _colorKeys)
             {
                 _levelProgress[key] = 0;
                 _projectedProgress[key] = 0;
@@ -247,7 +251,7 @@ namespace BalloonParty.Game.Score
             }
 
             _persistentScore[msg.ColorName]++;
-            _totalScore.Value = _persistentScore.Values.Sum();
+            _totalScore.Value++;
 
             var previous = _levelProgress[msg.ColorName];
             _levelProgress[msg.ColorName] = Math.Max(previous, msg.Score);
