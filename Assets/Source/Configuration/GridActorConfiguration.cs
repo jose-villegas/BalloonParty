@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Slots.Actor.Archetype;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -8,9 +9,13 @@ namespace BalloonParty.Configuration
     {
         [SerializeField] private GridActorPrefabEntry[] _entries;
 
+        [Header("Puff Cloud")]
+        [SerializeField] private PuffCloudView _puffCloudPrefab;
+
         private readonly List<GridActorPrefabEntry> _candidateBuffer = new();
 
         public GridActorPrefabEntry[] Entries => _entries;
+        internal PuffCloudView PuffCloudPrefab => _puffCloudPrefab;
 
         /// <summary>
         /// Picks a random entry using weighted random selection, excluding entries that have

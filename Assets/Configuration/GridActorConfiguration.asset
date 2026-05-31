@@ -12,4 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a259a397e88b4974b763f98ff0b06e4d, type: 3}
   m_Name: GridActorConfiguration
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.GridActorConfiguration
-  _entries: []
+  _entries:
+  - _prefab: {fileID: 2123238835872810376, guid: 59ad6982d81514c65a28e527032efa50,
+      type: 3}
+    _actorType: 0
+    _weight: 3
+    _maxCount: 10
+    _hitsToPop: -1

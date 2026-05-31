@@ -775,13 +775,13 @@ displacement fields were added). Re-serialize after confirming tuning in-editor.
 
 **Goal:** Adjacent Puff slots merge into a single visual cloud.
 
-- [ ] Implement `PuffClusterRegistry` with hex-adjacency flood-fill
+- [x] Implement `PuffClusterRegistry` with hex-adjacency flood-fill
       (uses `SlotGrid.HexNeighborIndices`)
-- [ ] Implement `PuffCluster` model (slot list, world bounds)
-- [ ] `PuffCloudViewController` spawns/resizes `PuffCloudView` per cluster
-- [ ] Density RT resize with UV-offset copy on cluster growth
-- [ ] Cluster split on Puff removal → old view returned, new views spawned
-- [ ] Add `ClusterId` to `PuffObstacleModel`
+- [x] Implement `PuffCluster` model (slot list, world bounds)
+- [x] `PuffCloudViewController` spawns/resizes `PuffCloudView` per cluster
+- [x] Density RT resize with UV-offset copy on cluster growth
+- [x] Cluster split on Puff removal → old view returned, new views spawned
+- [x] Add `ClusterId` to `PuffObstacleModel`
 
 **Exit criteria:** Placing two adjacent Puffs produces one continuous cloud. Removing
 one splits the visual correctly.

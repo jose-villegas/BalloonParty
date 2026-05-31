@@ -3,11 +3,10 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    // Traversable by spawn and balance animation paths — balloons arc through freely.
-    // No collider; not part of the hit pipeline.
     internal class PuffObstacleModel : IWriteableSlotActor, IPassThrough
     {
         public Vector2Int SlotIndex { get; private set; }
+        public int ClusterId { get; internal set; }
 
         Vector2Int IWriteableSlotActor.SlotIndex
         {

@@ -301,6 +301,12 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7368155962941665963, guid: 5009292be55fb4a12afec084df651435,
+        type: 3}
+      propertyPath: _puffCloudSettings
+      value: 
+      objectReference: {fileID: 11400000, guid: ad969212547fb4aa28442e6f190431fc,
+        type: 2}
     - target: {fileID: 8121256251203489458, guid: 5009292be55fb4a12afec084df651435,
         type: 3}
       propertyPath: m_Name
@@ -950,6 +956,6 @@ SceneRoots:
   - {fileID: 3826009426338545574}
   - {fileID: 860825355249607939}
   - {fileID: 300998763}
-  - {fileID: 834494875442057147}
   - {fileID: 943109115}
   - {fileID: 1268736600786072820}
+  - {fileID: 834494875442057147}

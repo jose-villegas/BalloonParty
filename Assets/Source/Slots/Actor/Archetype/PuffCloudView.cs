@@ -1,6 +1,8 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using BalloonParty.Configuration;
+using BalloonParty.Shared.Pool;
 using UnityEngine;
 
 namespace BalloonParty.Slots.Actor.Archetype
@@ -13,11 +15,12 @@ namespace BalloonParty.Slots.Actor.Archetype
     /// each frame.
     ///
     /// <c>[ExecuteAlways]</c> keeps the cloud animation running in edit mode.
-    /// P1/P2 uses <c>[SerializeField]</c> fields for visual tuning; these will
-    /// migrate to a <c>PuffCloudSettings</c> ScriptableObject in P3.
+    /// Supports both standalone mode (serialized fields) and configured mode
+    /// (driven by <see cref="PuffCloudViewController"/> with a
+    /// <see cref="PuffCloudSettings"/> SO).
     /// </summary>
     [ExecuteAlways]
-    internal class PuffCloudView : MonoBehaviour
+    internal class PuffCloudView : MonoBehaviour, IPoolable
     {
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
         private static readonly int SlotCentersWorldId = Shader.PropertyToID("_SlotCentersWorld");
@@ -49,30 +52,20 @@ namespace BalloonParty.Slots.Actor.Archetype
         [Tooltip("Spatial blur rate per diffusion tick. Higher = faster spread from neighbors.")]
         [SerializeField] [Range(0f, 1f)] private float _diffusionRate = 0.3f;
 
-        [Tooltip("Speed at which density trends back toward 1.0 (equilibrium). Keep low — spatial flow should dominate.")]
+        [Tooltip("Speed at which density trends back toward 1.0 (equilibrium).")]
         [SerializeField] [Range(0f, 0.5f)] private float _reformSpeed = 0.05f;
 
-        [Tooltip("Seconds between diffusion blit passes. Lower = smoother but more GPU work.")]
+        [Tooltip("Seconds between diffusion blit passes.")]
         [SerializeField] [Range(0.016f, 0.2f)] private float _diffusionTickInterval = 0.05f;
 
         [Header("Wind")]
-        [Tooltip("Wind advection speed. Higher = faster directional reform from disturbance wake.")]
         [SerializeField] [Range(0f, 5f)] private float _windSpeed = 1.0f;
-
-        [Tooltip("How quickly the wind direction responds to new disturbances.")]
         [SerializeField] [Range(0.5f, 20f)] private float _windSmoothing = 6.0f;
-
-        [Tooltip("How fast the wind direction decays after disturbance stops.")]
         [SerializeField] [Range(0.5f, 10f)] private float _windDecay = 2.0f;
-
-        [Tooltip("How strongly high-density neighbors push into low-density regions.")]
         [SerializeField] [Range(0f, 1f)] private float _pressureStrength = 0.4f;
 
         [Header("Displacement")]
-        [Tooltip("How much the stamp pushes cloud noise coordinates aside.")]
         [SerializeField] [Range(0f, 1f)] private float _displaceAmount = 0.3f;
-
-        [Tooltip("How fast displacement decays back to zero. Higher = cloud snaps back sooner.")]
         [SerializeField] [Range(0f, 5f)] private float _displaceDecay = 1.5f;
 
         [Header("Debug")]
@@ -97,8 +90,16 @@ namespace BalloonParty.Slots.Actor.Archetype
         private Vector2 _windTarget;
         private Vector2 _windCurrent;
 
+        private bool _configured;
+        private int _slotCount;
+        private Rect _worldBounds;
+        private int _densityWidth;
+        private int _densityHeight;
+
         private RenderTexture DensityRead => _readFromA ? _densityA : _densityB;
         private RenderTexture DensityWrite => _readFromA ? _densityB : _densityA;
+
+        internal SpriteRenderer Renderer => _renderer;
 
         private void Awake()
         {
@@ -108,8 +109,11 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         private void OnEnable()
         {
-            InitDensityField();
-            PushSlotCenters();
+            if (!_configured)
+            {
+                InitDensityField(_texelsPerSlot, _texelsPerSlot);
+                PushSlotCentersDefault();
+            }
         }
 
         private void OnDisable()
@@ -149,13 +153,85 @@ namespace BalloonParty.Slots.Actor.Archetype
         private void OnValidate()
         {
             EnsureBlock();
-            PushSlotCenters();
+            if (!_configured)
+            {
+                PushSlotCentersDefault();
+            }
         }
 
         private void OnDestroy()
         {
             DestroyMaterial(ref _diffusionMaterial);
             DestroyMaterial(ref _stampMaterial);
+        }
+
+        public void OnSpawned()
+        {
+            _instancePhase = Random.value * 100f;
+            _windCurrent = Vector2.zero;
+            _windTarget = Vector2.zero;
+        }
+
+        public void OnDespawned()
+        {
+            _configured = false;
+            _slotCount = 0;
+            ReleaseDensityField();
+        }
+
+        /// <summary>
+        /// Configures the cloud view to render a cluster spanning the given
+        /// slot world positions and bounding box. Called by
+        /// <see cref="PuffCloudViewController"/> when a cluster is created or resized.
+        /// </summary>
+        internal void Configure(Vector3[] slotWorldPositions, Rect worldBounds, PuffCloudSettings settings)
+        {
+            _configured = true;
+
+            ApplySettings(settings);
+
+            var oldBounds = _worldBounds;
+            _worldBounds = worldBounds;
+            _slotCount = Mathf.Min(slotWorldPositions.Length, _slotCenters.Length);
+
+            for (var i = 0; i < _slotCount; i++)
+            {
+                var pos = slotWorldPositions[i];
+                _slotCenters[i] = new Vector4(pos.x, pos.y, 0f, 0f);
+            }
+
+            // Position and scale the quad to cover world bounds + padding
+            var padding = settings.Padding;
+            var center = worldBounds.center;
+            transform.position = new Vector3(center.x, center.y, transform.position.z);
+
+            var scaleX = worldBounds.width + padding * 2f;
+            var scaleY = worldBounds.height + padding * 2f;
+            transform.localScale = new Vector3(scaleX, scaleY, 1f);
+
+            // Compute density RT resolution based on bounds
+            var slotsWide = Mathf.Max(1, Mathf.CeilToInt(worldBounds.width));
+            var slotsTall = Mathf.Max(1, Mathf.CeilToInt(worldBounds.height));
+            var newWidth = slotsWide * _texelsPerSlot;
+            var newHeight = slotsTall * _texelsPerSlot;
+
+            if (_densityInitialized && settings.PreserveDensityOnResize
+                                    && _densityWidth == newWidth && _densityHeight == newHeight)
+            {
+                // Same size — no resize needed
+            }
+            else if (_densityInitialized && settings.PreserveDensityOnResize
+                                         && (_densityWidth != newWidth || _densityHeight != newHeight))
+            {
+                ResizeDensityField(newWidth, newHeight, oldBounds, worldBounds);
+            }
+            else
+            {
+                ReleaseDensityField();
+                InitDensityField(newWidth, newHeight);
+            }
+
+            PushSlotCentersConfigured();
         }
 
         /// <summary>
@@ -181,7 +257,6 @@ namespace BalloonParty.Slots.Actor.Archetype
             _stampMaterial.SetVector(StampDirectionId, new Vector4(direction.x, direction.y, 0f, 0f));
             _stampMaterial.SetFloat(DisplaceAmountId, _displaceAmount);
 
-            // Wind flows opposite to disturbance — density reforms from behind
             if (direction.sqrMagnitude > 0.001f)
             {
                 _windTarget = -direction;
@@ -189,6 +264,41 @@ namespace BalloonParty.Slots.Actor.Archetype
 
             Graphics.Blit(DensityRead, DensityWrite, _stampMaterial);
             _readFromA = !_readFromA;
+        }
+
+        /// <summary>
+        /// Returns the cluster world bounds used for density UV mapping.
+        /// Falls back to renderer bounds in unconfigured (standalone) mode.
+        /// </summary>
+        internal Rect GetWorldBounds()
+        {
+            if (_configured)
+            {
+                return _worldBounds;
+            }
+
+            if (_renderer != null)
+            {
+                var b = _renderer.bounds;
+                return new Rect(b.min.x, b.min.y, b.size.x, b.size.y);
+            }
+
+            return new Rect(transform.position.x - 0.5f, transform.position.y - 0.5f, 1f, 1f);
+        }
+
+        private void ApplySettings(PuffCloudSettings settings)
+        {
+            _animationSpeed = settings.AnimationSpeed;
+            _texelsPerSlot = settings.TexelsPerSlot;
+            _diffusionRate = settings.DiffusionRate;
+            _reformSpeed = settings.ReformSpeed;
+            _diffusionTickInterval = settings.DiffusionTickInterval;
+            _windSpeed = settings.WindSpeed;
+            _windSmoothing = settings.WindSmoothing;
+            _windDecay = settings.WindDecay;
+            _pressureStrength = settings.PressureStrength;
+            _displaceAmount = settings.DisplaceAmount;
+            _displaceDecay = settings.DisplaceDecay;
         }
 
         private void EnsureBlock()
@@ -204,16 +314,17 @@ namespace BalloonParty.Slots.Actor.Archetype
             }
         }
 
-        private void InitDensityField()
+        private void InitDensityField(int width, int height)
         {
             if (_densityInitialized)
             {
                 return;
             }
 
-            var res = Mathf.Max(4, _texelsPerSlot);
-            _densityA = CreateDensityRT(res, res);
-            _densityB = CreateDensityRT(res, res);
+            _densityWidth = Mathf.Max(4, width);
+            _densityHeight = Mathf.Max(4, height);
+            _densityA = CreateDensityRT(_densityWidth, _densityHeight);
+            _densityB = CreateDensityRT(_densityWidth, _densityHeight);
 
             ClearToEquilibrium(_densityA);
             ClearToEquilibrium(_densityB);
@@ -221,6 +332,38 @@ namespace BalloonParty.Slots.Actor.Archetype
             _readFromA = true;
             _densityInitialized = true;
             _diffusionTimer = 0f;
+        }
+
+        private void ResizeDensityField(int newWidth, int newHeight, Rect oldBounds, Rect newBounds)
+        {
+            var newA = CreateDensityRT(newWidth, newHeight);
+            var newB = CreateDensityRT(newWidth, newHeight);
+
+            ClearToEquilibrium(newA);
+            ClearToEquilibrium(newB);
+
+            // Blit old content into new RT at the correct UV sub-rect
+            if (_densityA != null && oldBounds.width > 0.001f && oldBounds.height > 0.001f)
+            {
+                var offsetX = (oldBounds.xMin - newBounds.xMin) / newBounds.width;
+                var offsetY = (oldBounds.yMin - newBounds.yMin) / newBounds.height;
+                var scaleX = oldBounds.width / newBounds.width;
+                var scaleY = oldBounds.height / newBounds.height;
+
+                var scale = new Vector2(scaleX, scaleY);
+                var offset = new Vector2(offsetX, offsetY);
+
+                Graphics.Blit(DensityRead, newA, scale, offset);
+            }
+
+            ReleaseRT(ref _densityA);
+            ReleaseRT(ref _densityB);
+
+            _densityA = newA;
+            _densityB = newB;
+            _readFromA = true;
+            _densityWidth = newWidth;
+            _densityHeight = newHeight;
         }
 
         private void ReleaseDensityField()
@@ -316,7 +459,6 @@ namespace BalloonParty.Slots.Actor.Archetype
             _diffusionMaterial.SetFloat(ReformSpeedId, _reformSpeed);
             _diffusionMaterial.SetFloat(DeltaTimeId, _diffusionTimer);
 
-            // Smooth wind toward target, then decay target toward zero
             _windCurrent = Vector2.Lerp(_windCurrent, _windTarget, _windSmoothing * _diffusionTimer);
             _windTarget = Vector2.Lerp(_windTarget, Vector2.zero, _windDecay * _diffusionTimer);
 
@@ -354,12 +496,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             _renderer.SetPropertyBlock(_block);
         }
 
-        /// <summary>
-        /// Pushes slot center positions to the shader. In P1/P2 there is a single
-        /// slot — the world position of this transform. P3 will pass multiple
-        /// centers for merged clusters.
-        /// </summary>
-        private void PushSlotCenters()
+        private void PushSlotCentersDefault()
         {
             EnsureBlock();
 
@@ -377,8 +514,30 @@ namespace BalloonParty.Slots.Actor.Archetype
             _renderer.SetPropertyBlock(_block);
         }
 
+        private void PushSlotCentersConfigured()
+        {
+            EnsureBlock();
+
+            if (_renderer == null || _block == null)
+            {
+                return;
+            }
+
+            _renderer.GetPropertyBlock(_block);
+            _block.SetVectorArray(SlotCentersWorldId, _slotCenters);
+            _block.SetInt(SlotCountId, _slotCount);
+            _renderer.SetPropertyBlock(_block);
+        }
+
         private Vector2 WorldToDensityUV(Vector3 worldPos)
         {
+            if (_configured)
+            {
+                return new Vector2(
+                    (worldPos.x - _worldBounds.xMin) / _worldBounds.width,
+                    (worldPos.y - _worldBounds.yMin) / _worldBounds.height);
+            }
+
             if (_renderer == null)
             {
                 return new Vector2(0.5f, 0.5f);
@@ -392,14 +551,20 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         private float WorldRadiusToDensityUV(float worldRadius)
         {
+            if (_configured)
+            {
+                var avgSize = (_worldBounds.width + _worldBounds.height) * 0.5f;
+                return avgSize > 0.001f ? worldRadius / avgSize : 0.1f;
+            }
+
             if (_renderer == null)
             {
                 return 0.1f;
             }
 
             var bounds = _renderer.bounds;
-            var avgSize = (bounds.size.x + bounds.size.y) * 0.5f;
-            return avgSize > 0.001f ? worldRadius / avgSize : 0.1f;
+            var avg = (bounds.size.x + bounds.size.y) * 0.5f;
+            return avg > 0.001f ? worldRadius / avg : 0.1f;
         }
 
         private void HandleDebugClick()

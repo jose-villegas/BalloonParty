@@ -22,6 +22,7 @@ using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
+using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Spawner;
 using BalloonParty.Thrower;
 using BalloonParty.UI.Score;
@@ -43,9 +44,9 @@ namespace BalloonParty.Game
         [SerializeField] private GamePalette _gamePalette;
         [SerializeField] private BalloonsConfiguration _balloonsConfiguration;
         [SerializeField] private GridActorConfiguration _gridActorConfiguration;
+        [SerializeField] private PuffCloudSettings _puffCloudSettings;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
-        [SerializeField] private StaticActorView _staticActorPrefab;
 
         protected override void Awake()
         {
@@ -81,9 +82,9 @@ namespace BalloonParty.Game
             builder.RegisterInstance(_gamePalette);
             builder.RegisterInstance(_balloonsConfiguration);
             builder.RegisterInstance(_gridActorConfiguration);
+            builder.RegisterInstance(_puffCloudSettings);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
-            builder.RegisterInstance(new StaticActorSettings(_staticActorPrefab));
 
             builder.Register<BalancePathHolder>(Lifetime.Singleton);
             builder.Register<SlotGrid>(Lifetime.Singleton);
@@ -99,6 +100,8 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IReadyGate>(new NavigationReadyGate(NavigationState.Game));
             builder.RegisterEntryPoint<GridSpawnerCoordinator>();
             builder.RegisterEntryPoint<StaticActorSpawner>().As<IGridSpawner>();
+            builder.RegisterEntryPoint<PuffClusterRegistry>().AsSelf();
+            builder.RegisterEntryPoint<PuffCloudViewController>();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf();
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();

@@ -30,7 +30,7 @@ namespace BalloonParty.Tests.Slots
             _config.MinStaticActors.Returns(3);
             _config.MaxStaticActors.Returns(3);
 
-            var spawner = new StaticActorSpawner(_grid, _config, () => null);
+            var spawner = new StaticActorSpawner(_grid, _config);
             spawner.Start();
             spawner.SpawnStaticActors();
 
@@ -43,7 +43,7 @@ namespace BalloonParty.Tests.Slots
             _config.MinStaticActors.Returns(3);
             _config.MaxStaticActors.Returns(3);
 
-            var spawner = new StaticActorSpawner(_grid, _config, () => null);
+            var spawner = new StaticActorSpawner(_grid, _config);
             spawner.Start();
             spawner.SpawnStaticActors();
 
@@ -69,7 +69,7 @@ namespace BalloonParty.Tests.Slots
             _config.MinStaticActors.Returns(5);
             _config.MaxStaticActors.Returns(5);
 
-            var spawner = new StaticActorSpawner(_grid, _config, () => null);
+            var spawner = new StaticActorSpawner(_grid, _config);
 
             Assert.DoesNotThrow(() =>
             {
