@@ -16,6 +16,7 @@ MonoBehaviour:
   - _prefab: {fileID: 2123238835872810376, guid: 59ad6982d81514c65a28e527032efa50,
       type: 3}
     _actorType: 0
+    _placementMode: 1
     _weight: 3
     _maxCount: 10
     _hitsToPop: -1

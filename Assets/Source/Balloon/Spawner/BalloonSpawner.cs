@@ -6,6 +6,7 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Spawner;
@@ -203,7 +204,7 @@ namespace BalloonParty.Balloon.Spawner
 
         private void SpawnBalloon(Vector2Int slot)
         {
-            var entry = _balloonsConfig.PickRandom(_activeCounts);
+            var entry = _balloonsConfig.Entries.PickRandom(_activeCounts);
             if (entry == null)
             {
                 Debug.LogWarning(

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Extensions;
 using NUnit.Framework;
 using UnityEngine;
 
@@ -41,7 +42,7 @@ namespace BalloonParty.Tests.Configuration
 
             var activeCounts = new Dictionary<string, int> { ["A"] = 1, ["B"] = 1 };
 
-            Assert.IsNull(_config.PickRandom(activeCounts));
+            Assert.IsNull(_config.Entries.PickRandom(activeCounts));
         }
 
         [Test]
@@ -52,7 +53,7 @@ namespace BalloonParty.Tests.Configuration
 
             var activeCounts = new Dictionary<string, int> { ["Unlimited"] = 999 };
 
-            Assert.IsNotNull(_config.PickRandom(activeCounts));
+            Assert.IsNotNull(_config.Entries.PickRandom(activeCounts));
         }
 
         [Test]
@@ -61,7 +62,7 @@ namespace BalloonParty.Tests.Configuration
             var entry = CreateEntry("Only", weight: 1f, maxCount: 0);
             SetEntries(entry);
 
-            var result = _config.PickRandom(new Dictionary<string, int>());
+            var result = _config.Entries.PickRandom(new Dictionary<string, int>());
 
             Assert.AreSame(entry, result);
         }
@@ -74,7 +75,7 @@ namespace BalloonParty.Tests.Configuration
             SetEntries(capped, available);
 
             var activeCounts = new Dictionary<string, int> { ["Capped"] = 1 };
-            var result = _config.PickRandom(activeCounts);
+            var result = _config.Entries.PickRandom(activeCounts);
 
             Assert.AreSame(available, result);
         }

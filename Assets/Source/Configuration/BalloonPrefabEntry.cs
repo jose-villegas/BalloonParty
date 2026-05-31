@@ -8,7 +8,7 @@ using UnityEngine;
 namespace BalloonParty.Configuration
 {
     [Serializable]
-    public class BalloonPrefabEntry
+    public class BalloonPrefabEntry : IWeightedEntry
     {
         [SerializeField] private BalloonView _prefab;
         [SerializeField] private BalloonType _balloonType;

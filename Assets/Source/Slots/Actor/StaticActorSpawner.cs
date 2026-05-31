@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Grid;
@@ -41,10 +42,11 @@ namespace BalloonParty.Slots.Actor
         }
 
         // Bypasses pool and MonoBehaviour infrastructure — used in tests.
-        internal StaticActorSpawner(SlotGrid grid, IGameConfiguration config)
+        internal StaticActorSpawner(SlotGrid grid, IGameConfiguration config, GridActorConfiguration gridActorConfig)
         {
             _grid = grid;
             _config = config;
+            _gridActorConfig = gridActorConfig;
         }
 
         public void Start()
@@ -69,7 +71,7 @@ namespace BalloonParty.Slots.Actor
 
             while (remaining > 0 && emptySlots.Count > 0)
             {
-                var entry = _gridActorConfig.PickRandom(_activeCounts);
+                var entry = _gridActorConfig.Entries.PickRandom(_activeCounts);
                 if (entry == null)
                 {
                     break;

@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -29,7 +28,6 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _nudgeDuration = 0.15f;
         [SerializeField] private float _nudgeFalloff = 1.5f;
 
-        private readonly List<BalloonPrefabEntry> _candidateBuffer = new();
 
         public BalloonPrefabEntry[] Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
@@ -42,46 +40,5 @@ namespace BalloonParty.Configuration
         public float NudgeDistance => _nudgeDistance;
         public float NudgeDuration => _nudgeDuration;
         public float NudgeFalloff => _nudgeFalloff;
-
-        /// <summary>
-        /// Picks a random entry using weighted random selection, excluding entries that have
-        /// reached their <see cref="BalloonPrefabEntry.MaxCount"/> limit.
-        /// Returns null if all entries are at their limit.
-        /// </summary>
-        public BalloonPrefabEntry PickRandom(IReadOnlyDictionary<string, int> activeCounts)
-        {
-            _candidateBuffer.Clear();
-            var totalWeight = 0f;
-
-            foreach (var e in _entries)
-            {
-                if (e.MaxCount != 0 && activeCounts.GetValueOrDefault(e.PoolKey) >= e.MaxCount)
-                {
-                    continue;
-                }
-
-                _candidateBuffer.Add(e);
-                totalWeight += e.Weight;
-            }
-
-            if (_candidateBuffer.Count == 0)
-            {
-                return null;
-            }
-
-            var roll = Random.Range(0f, totalWeight);
-            var cumulative = 0f;
-
-            foreach (var entry in _candidateBuffer)
-            {
-                cumulative += entry.Weight;
-                if (roll < cumulative)
-                {
-                    return entry;
-                }
-            }
-
-            return _candidateBuffer[0];
-        }
     }
 }

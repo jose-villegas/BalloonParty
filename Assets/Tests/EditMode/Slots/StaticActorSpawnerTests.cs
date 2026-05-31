@@ -1,5 +1,8 @@
+using System.Reflection;
+using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor;
+using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Grid;
 using NSubstitute;
 using NUnit.Framework;
@@ -12,6 +15,7 @@ namespace BalloonParty.Tests.Slots
     {
         private IGameConfiguration _config;
         private SlotGrid _grid;
+        private GridActorConfiguration _gridActorConfig;
 
         [SetUp]
         public void SetUp()
@@ -22,6 +26,13 @@ namespace BalloonParty.Tests.Slots
             _config.SlotsOffset.Returns(new Vector2(2.5f, 4f));
 
             _grid = new SlotGrid(_config, new BalancePathHolder());
+            _gridActorConfig = CreateGridActorConfig();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            Object.DestroyImmediate(_gridActorConfig);
         }
 
         [Test]
@@ -30,8 +41,7 @@ namespace BalloonParty.Tests.Slots
             _config.MinStaticActors.Returns(3);
             _config.MaxStaticActors.Returns(3);
 
-            var spawner = new StaticActorSpawner(_grid, _config);
-            spawner.Start();
+            var spawner = new StaticActorSpawner(_grid, _config, _gridActorConfig);
             spawner.SpawnStaticActors();
 
             Assert.AreEqual(3, CountActorsInGrid());
@@ -43,8 +53,7 @@ namespace BalloonParty.Tests.Slots
             _config.MinStaticActors.Returns(3);
             _config.MaxStaticActors.Returns(3);
 
-            var spawner = new StaticActorSpawner(_grid, _config);
-            spawner.Start();
+            var spawner = new StaticActorSpawner(_grid, _config, _gridActorConfig);
             spawner.SpawnStaticActors();
 
             for (var col = 0; col < _grid.Columns; col++)
@@ -62,20 +71,15 @@ namespace BalloonParty.Tests.Slots
         [Test]
         public void Spawn_DoesNotExceedAvailableSlots()
         {
-            // 2 columns × 1 row = 2 total slots; requesting 5 should cap at 2.
             _config.SlotsSize.Returns(new Vector2Int(2, 1));
             _grid = new SlotGrid(_config, new BalancePathHolder());
 
             _config.MinStaticActors.Returns(5);
             _config.MaxStaticActors.Returns(5);
 
-            var spawner = new StaticActorSpawner(_grid, _config);
+            var spawner = new StaticActorSpawner(_grid, _config, _gridActorConfig);
 
-            Assert.DoesNotThrow(() =>
-            {
-                spawner.Start();
-                spawner.SpawnStaticActors();
-            });
+            Assert.DoesNotThrow(() => spawner.SpawnStaticActors());
             Assert.AreEqual(2, CountActorsInGrid());
         }
 
@@ -96,6 +100,23 @@ namespace BalloonParty.Tests.Slots
 
             return count;
         }
+
+        private static GridActorConfiguration CreateGridActorConfig()
+        {
+            var config = ScriptableObject.CreateInstance<GridActorConfiguration>();
+            var entry = new GridActorPrefabEntry();
+            SetField(entry, "_actorType", GridActorType.Puff);
+            SetField(entry, "_weight", 1f);
+            SetField(entry, "_maxCount", 0);
+            SetField(config, "_entries", new[] { entry });
+            return config;
+        }
+
+        private static void SetField(object target, string fieldName, object value)
+        {
+            target.GetType()
+                .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance)!
+                .SetValue(target, value);
+        }
     }
 }
-

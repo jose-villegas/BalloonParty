@@ -6,7 +6,7 @@ using UnityEngine;
 namespace BalloonParty.Configuration
 {
     [Serializable]
-    public class GridActorPrefabEntry
+    public class GridActorPrefabEntry : IWeightedEntry
     {
         [SerializeField] private GridActorView _prefab;
         [SerializeField] private GridActorType _actorType;

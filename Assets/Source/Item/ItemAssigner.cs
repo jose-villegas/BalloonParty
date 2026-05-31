@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
@@ -42,45 +44,38 @@ namespace BalloonParty.Item
             var turns = msg.TurnCount;
             var items = _itemConfig.Items;
 
-            var available = items
+            var candidates = items
                 .Where(x => x.TurnCheckEvery > 0 && turns % x.TurnCheckEvery == 0)
-                .Where(item => CountBalloonsWithItem(item.Type) < item.MaximumAllowed);
-
-            var candidates = available.ToArray();
+                .ToArray();
 
             if (candidates.Length == 0)
             {
                 return;
             }
 
-            var sumOfProbabilities = candidates.Sum(x => x.Weight);
-            var probabilityCheck = Random.Range(0f, sumOfProbabilities);
-            var shift = 0f;
-
-            foreach (var candidate in candidates)
+            var activeCounts = new Dictionary<string, int>();
+            foreach (var c in candidates)
             {
-                if (probabilityCheck <= candidate.Weight + shift)
-                {
-                    if (candidate.Type != ItemType.None)
-                    {
-                        var eligible = msg.NewBalloons
-                            .OfType<IHasWriteableItemSlot>()
-                            .ToList();
-
-                        if (eligible.Count == 0)
-                        {
-                            break;
-                        }
-
-                        var indexOf = Random.Range(0, eligible.Count);
-                        eligible[indexOf].Item.Value = candidate.Type;
-                    }
-
-                    break;
-                }
-
-                shift += candidate.Weight;
+                activeCounts[c.Type.ToString()] = CountBalloonsWithItem(c.Type);
             }
+
+            var picked = candidates.PickRandom(activeCounts);
+            if (picked == null || picked.Type == ItemType.None)
+            {
+                return;
+            }
+
+            var eligible = msg.NewBalloons
+                .OfType<IHasWriteableItemSlot>()
+                .ToList();
+
+            if (eligible.Count == 0)
+            {
+                return;
+            }
+
+            var indexOf = Random.Range(0, eligible.Count);
+            eligible[indexOf].Item.Value = picked.Type;
         }
 
         private int CountBalloonsWithItem(ItemType type)

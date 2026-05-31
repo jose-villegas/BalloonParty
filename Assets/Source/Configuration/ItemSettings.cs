@@ -7,7 +7,7 @@ using UnityEngine;
 namespace BalloonParty.Configuration
 {
     [Serializable]
-    public class ItemSettings
+    public class ItemSettings : IWeightedEntry
     {
         [SerializeField] private ItemType _type;
         [SerializeField] private int _turnCheckEvery;
@@ -50,6 +50,8 @@ namespace BalloonParty.Configuration
         public int TurnCheckEvery => _turnCheckEvery;
         public float Weight => _weight;
         public int MaximumAllowed => _maximumAllowed;
+        int IWeightedEntry.MaxCount => _maximumAllowed;
+        string IWeightedEntry.PoolKey => _type.ToString();
         public GameObject VisualPrefab => _visualPrefab;
         public EffectView ActivationEffectPrefab => _activationEffectPrefab;
         public int Damage => _damage;

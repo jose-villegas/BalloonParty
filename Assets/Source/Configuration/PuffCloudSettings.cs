@@ -5,6 +5,7 @@ namespace BalloonParty.Configuration
     [CreateAssetMenu(menuName = "Configuration/Puff Cloud Settings", fileName = "PuffCloudSettings")]
     internal class PuffCloudSettings : ScriptableObject
     {
+
         [Header("Animation")]
         [Tooltip("Noise scroll speed multiplier. Drives _TimeOffset on the shader.")]
         [SerializeField] private float _animationSpeed = 0.8f;
