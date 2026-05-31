@@ -157,11 +157,14 @@ Shader "BalloonParty/Grid/PuffCloud"
             // Three-octave Simplex noise blend.
             // Weights: base 0.50, detail 0.30, fine 0.20.
             // Returns [0, 1] (remapped from raw [-1, 1] per octave).
-            float CloudNoise(float2 wp, float t)
+            // clusterSeed offsets the noise origin so each cluster has a
+            // unique pattern while remaining continuous within itself.
+            float CloudNoise(float2 wp, float t, float clusterSeed)
             {
-                float2 pBase   = wp * _BaseScale   * _NoiseScale + _ScrollSpeedBase.xy   * t;
-                float2 pDetail = wp * _DetailScale  * _NoiseScale + _ScrollSpeedDetail.xy * t;
-                float2 pFine   = wp * _FineScale    * _NoiseScale + _ScrollSpeedFine.xy   * t;
+                float2 seedOffset = float2(clusterSeed * 73.37, clusterSeed * 41.13);
+                float2 pBase   = (wp + seedOffset) * _BaseScale   * _NoiseScale + _ScrollSpeedBase.xy   * t;
+                float2 pDetail = (wp + seedOffset) * _DetailScale  * _NoiseScale + _ScrollSpeedDetail.xy * t;
+                float2 pFine   = (wp + seedOffset) * _FineScale    * _NoiseScale + _ScrollSpeedFine.xy   * t;
 
                 float n  = SimplexNoise2D(pBase)   * 0.50;
                 n       += SimplexNoise2D(pDetail) * 0.30;
@@ -170,14 +173,21 @@ Shader "BalloonParty/Grid/PuffCloud"
                 return n * 0.5 + 0.5;
             }
 
-            // Distance-to-nearest-slot-center falloff.
-            // Returns 0 far from any slot, 1 at/near a slot center.
-            float SlotFalloff(float2 wp)
+            // Distance-to-nearest-slot-center falloff and cluster identity.
+            // Returns falloff (0 far from any slot, 1 at/near a slot center).
+            // Also outputs the nearest slot's .z seed for per-cluster variation.
+            float SlotFalloff(float2 wp, out float clusterSeed)
             {
                 float minDist = 999.0;
+                clusterSeed = 0.0;
                 for (int i = 0; i < _SlotCount; i++)
                 {
-                    minDist = min(minDist, length(wp - _SlotCentersWorld[i].xy));
+                    float d = length(wp - _SlotCentersWorld[i].xy);
+                    if (d < minDist)
+                    {
+                        minDist = d;
+                        clusterSeed = _SlotCentersWorld[i].z;
+                    }
                 }
                 return smoothstep(_SlotRadius + _BorderSoftness, _SlotRadius, minDist);
             }
@@ -187,13 +197,13 @@ Shader "BalloonParty/Grid/PuffCloud"
             // Treats the noise height field as a bump map — the gradient
             // gives the XY slope, and the Z component is derived from
             // _NormalStrength to control perceived depth.
-            fixed3 CloudLighting(float2 wp, float t, float cloud)
+            fixed3 CloudLighting(float2 wp, float t, float cloud, float clusterSeed)
             {
                 float eps = _NormalEpsilon;
-                float nR = CloudNoise(wp + float2( eps, 0.0), t);
-                float nL = CloudNoise(wp + float2(-eps, 0.0), t);
-                float nU = CloudNoise(wp + float2(0.0,  eps), t);
-                float nD = CloudNoise(wp + float2(0.0, -eps), t);
+                float nR = CloudNoise(wp + float2( eps, 0.0), t, clusterSeed);
+                float nL = CloudNoise(wp + float2(-eps, 0.0), t, clusterSeed);
+                float nU = CloudNoise(wp + float2(0.0,  eps), t, clusterSeed);
+                float nD = CloudNoise(wp + float2(0.0, -eps), t, clusterSeed);
 
                 float dX = (nR - nL) * _NormalStrength;
                 float dY = (nU - nD) * _NormalStrength;
@@ -242,38 +252,40 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float disturbance = saturate(displaceLen / (_DisplaceWorldScale * 0.5 + 0.001));
                 #endif
 
+                // Boundary falloff — occupancy mask via slot centers (use original position)
+                float clusterSeed;
+                float borderFade = SlotFalloff(wpOrig, clusterSeed);
+
                 // Noise-based cloud shape — crossfade between displaced and
                 // undisturbed noise so reformation reveals fresh noise instead
                 // of rubber-banding stretched noise back to rest.
                 #ifdef _DENSITY_ON
                 float2 wpDisp = wpOrig + displace;
-                float noiseOrig = CloudNoise(wpOrig, t);
-                float noiseDisp = CloudNoise(wpDisp, t);
+                float noiseOrig = CloudNoise(wpOrig, t, clusterSeed);
+                float noiseDisp = CloudNoise(wpDisp, t, clusterSeed);
                 float cloudOrig = smoothstep(_EdgeLow, _EdgeHigh, noiseOrig);
                 float cloudDisp = smoothstep(_EdgeLow, _EdgeHigh, noiseDisp);
                 float cloud = lerp(cloudOrig, cloudDisp, disturbance);
                 cloud *= density;
-                // Use blended position for lighting and falloff
                 wp = lerp(wpOrig, wpDisp, disturbance);
                 #else
-                float noiseValue = CloudNoise(wp, t);
+                float noiseValue = CloudNoise(wp, t, clusterSeed);
                 float cloud = smoothstep(_EdgeLow, _EdgeHigh, noiseValue);
                 #endif
 
-                // Boundary falloff — occupancy mask via slot centers (use original position)
-                float borderFade = SlotFalloff(wpOrig);
                 cloud *= borderFade;
 
                 // Early discard fully transparent pixels
                 #ifdef _SHADOW_ON
                 // Compute shadow before discarding so shadow-only pixels survive
                 float2 shadowWp = wpOrig - float2(_ShadowOffsetX, _ShadowOffsetY);
-                float  shadowNoise = CloudNoise(shadowWp, t);
+                float  shadowSeed;
+                float  shadowNoise = CloudNoise(shadowWp, t, clusterSeed);
                 float  shadowCloud = smoothstep(_EdgeLow, _EdgeHigh, shadowNoise);
                 #ifdef _DENSITY_ON
                 shadowCloud *= density;
                 #endif
-                float  shadowFade  = SlotFalloff(shadowWp);
+                float  shadowFade  = SlotFalloff(shadowWp, shadowSeed);
                 shadowCloud *= shadowFade;
 
                 float shadowAlpha = shadowCloud * _ShadowColor.a * IN.color.a;
@@ -289,7 +301,7 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                 // Compose main cloud with shadow behind
                 float mainAlpha = cloud * _CloudColor.a * IN.color.a;
-                fixed3 lighting = CloudLighting(wp, t, cloud);
+                fixed3 lighting = CloudLighting(wp, t, cloud, clusterSeed);
                 fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 
                 fixed  combinedA   = mainAlpha + shadowAlpha * (1.0 - mainAlpha);
@@ -302,7 +314,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 if (cloud < 0.001) discard;
 
                 float mainAlpha = cloud * _CloudColor.a * IN.color.a;
-                fixed3 lighting = CloudLighting(wp, t, cloud);
+                fixed3 lighting = CloudLighting(wp, t, cloud, clusterSeed);
                 fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 
                 return fixed4(mainRgb, mainAlpha);

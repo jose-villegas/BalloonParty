@@ -87,10 +87,12 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         /// <summary>
         /// Configures the cloud view with all Puff slot positions across every
-        /// cluster. The quad is sized to the combined bounding box. Called by
+        /// cluster. Each entry carries world position in .xy and a per-cluster
+        /// noise seed in .z so adjacent clusters look distinct. The quad is
+        /// sized to the combined bounding box. Called by
         /// <see cref="PuffCloudViewController"/> whenever any cluster changes.
         /// </summary>
-        internal void Configure(Vector3[] allSlotPositions, Rect combinedBounds, PuffCloudSettings settings)
+        internal void Configure(Vector4[] allSlotPositions, Rect combinedBounds, PuffCloudSettings settings)
         {
             _configured = true;
             _animationSpeed = settings.AnimationSpeed;
@@ -98,8 +100,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
             for (var i = 0; i < _slotCount; i++)
             {
-                var pos = allSlotPositions[i];
-                _slotCenters[i] = new Vector4(pos.x, pos.y, 0f, 0f);
+                _slotCenters[i] = allSlotPositions[i];
             }
 
             var padding = settings.Padding;

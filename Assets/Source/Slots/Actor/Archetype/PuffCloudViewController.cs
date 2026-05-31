@@ -86,16 +86,19 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return;
             }
 
-            var allPositions = new List<Vector3>();
+            var allPositions = new List<Vector4>();
             var min = new Vector2(float.MaxValue, float.MaxValue);
             var max = new Vector2(float.MinValue, float.MinValue);
 
             foreach (var cluster in clusters.Values)
             {
+                // Deterministic seed from cluster ID — gives each cluster a unique noise pattern
+                var seed = (cluster.ClusterId * 0.7123f) % 1f;
+
                 foreach (var slot in cluster.Slots)
                 {
                     var pos = _grid.IndexToWorldPosition(slot);
-                    allPositions.Add(pos);
+                    allPositions.Add(new Vector4(pos.x, pos.y, seed, 0f));
                     min.x = Mathf.Min(min.x, pos.x);
                     min.y = Mathf.Min(min.y, pos.y);
                     max.x = Mathf.Max(max.x, pos.x);
