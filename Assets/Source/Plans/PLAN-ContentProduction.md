@@ -33,7 +33,7 @@ to read the grid, tune difficulty, or playtest spawn density.
 | **Soap Cluster** | `BubbleClusterModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ⚠️ pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | Done; scores one point per damage to random palette colors with `BreaksStreak = true` |
 | **Tough** | `ToughBalloonModel` | ✅ `ToughBalloon.prefab` | ✅ | ✅ `ToughBalloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_ToughBalloonPop` | ✅ `BalloonsConfiguration` | No `IHasColor`; scores via `IHasScoreColor` with `Inherited` strategy (killer earns points in their color) |
 | **Unbreakable** | `UnbreakableBalloonModel` | ✅ `Unbreakable.prefab` | ✅ procedural shader | ✅ `Unbreakable.controller` | ✅ StableIdle | ⚠️ deflect/pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | `IHasScoreColor` mode `Inherited` — scores in killer's color at hit time |
-| **Puff** | `PuffObstacleModel` | ⚠️ `StaticTest.prefab` | ⚠️ placeholder | ❌ | ❌ Idle float | — | ❌ `GridActorConfiguration` | Dandelion puff / soft cloud; traversable |
+| **Puff** | `PuffObstacleModel` | ✅ `Puff.prefab` | ⚠️ placeholder | ❌ | ❌ Idle float | — | ❌ `GridActorConfiguration` | Dandelion puff / soft cloud; traversable |
 | **Bush** | `BushObstacleModel` | ❌ | ❌ | ❌ | ❌ Idle sway | — | ❌ `GridActorConfiguration` | Park shrub; blocks paths, no hit reaction |
 | **Deflector** | `DeflectorActorModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect flash | ❌ bounce flash | ❌ `GridActorConfiguration` | Reflective surface; indestructible |
 | **Absorber** | `AbsorberActorModel` | ❌ | ❌ | ❌ | ❌ Idle pulse, Absorb | ❌ absorb burst | ❌ `GridActorConfiguration` | Hazard; ends the turn on contact |
@@ -201,8 +201,8 @@ Semi-transparent. Gentle idle float animation. Feels soft and permeable.
       idle float cycle (3–4 frames is enough)
 - [ ] **Material/Shader** — soft additive or alpha-blended sprite; slight glow or bloom
       to read as "passable air"
-- [ ] **Prefab** — `Assets/Prefabs/Grid/Puff.prefab` with `GridActorView` component;
-      rename/replace `StaticTest.prefab` once art is finalised
+- [ ] **Prefab** — `Assets/Prefabs/Grid/Puff.prefab` already exists with `GridActorView`
+      component; add PuffCloud material once art is finalised
 - [ ] **Animator / Controller** — `Puff.controller`
       - `Idle` — gentle up-down float with light scale breathe (looping)
 - [ ] **Config entry** — add to `GridActorConfiguration` with high weight; no hit reaction
@@ -330,8 +330,7 @@ Assets/
 │   │   ├── ToughBalloon.prefab          ← Tough
 │   │   └── UnbreakableBalloon.prefab    ← NEW
 │   └── Grid/
-│       ├── StaticTest.prefab        ← retire once Puff is ready
-│       ├── Puff.prefab              ← NEW
+│       ├── Puff.prefab              ← exists
 │       ├── Bush.prefab              ← NEW
 │       ├── Deflector.prefab         ← NEW
 │       ├── Absorber.prefab          ← NEW

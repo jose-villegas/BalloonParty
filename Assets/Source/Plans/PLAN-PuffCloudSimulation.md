@@ -140,7 +140,12 @@ cluster. It still gets the cloud shader and density RT, just at minimum size.
 A fragment shader on a dynamically-sized quad. Renders in the same sorting layer as
 other grid actors.
 
-**Noise layer stack (3 octaves):**
+**Noise layer stack (3 octaves, world-space sampling):**
+
+Noise is sampled in **world space**, not UV space. The vertex shader passes the
+fragment's world position; the noise functions use `worldPos * noiseScale`. This
+ensures the cloud pattern is spatially stable — scaling the quad for merged clusters
+(P3) or repositioning it for cloud drift does not distort or swim the noise.
 
 | Octave | Scale | Scroll speed | Weight | Purpose |
 |--------|-------|-------------|--------|---------|
@@ -160,33 +165,40 @@ float cloud = smoothstep(_EdgeLow, _EdgeHigh, noiseValue) * density;
 Where `_EdgeLow` / `_EdgeHigh` control how much noise is visible (acts as a density
 threshold — lower values = puffier cloud, higher = wispier).
 
-**Boundary falloff:**
-The quad extends beyond the cluster bounds by `_Padding`. Because the grid is hexagonal,
-merged clusters are rarely rectangular — a simple AABB falloff would leave hard edges
-on staggered-row boundaries. Instead, the shader receives an array of slot center
-positions (in UV space) and computes falloff as the minimum distance to the nearest
-slot center, scaled by the slot radius:
+**Boundary falloff & occupancy mask:**
+The quad is scaled via `transform.localScale` to cover the cluster's axis-aligned
+bounding box (all member slot positions + padding). Because the bounding box may
+contain empty slots (e.g. an L-shaped cluster), the shader uses the slot center
+array as both a boundary falloff AND an occupancy mask — pixels far from any
+occupied slot center get zero cloud coverage, regardless of their position within
+the quad.
+
+Because the grid is hexagonal, merged clusters are rarely rectangular — the
+slot-center distance approach naturally produces organic, hex-shaped cloud
+boundaries that follow the staggered grid layout. For large clusters the slot
+center array is small (max ~10–15 entries) — well within uniform buffer limits.
 ```hlsl
 float minDist = 999.0;
 for (int i = 0; i < _SlotCount; i++)
-    minDist = min(minDist, length(uv - _SlotCenters[i]));
+    minDist = min(minDist, length(worldPos.xy - _SlotCentersWorld[i].xy));
 float borderFade = smoothstep(_SlotRadius + _BorderSoftness, _SlotRadius, minDist);
 cloud *= borderFade;
 ```
-This naturally produces organic, hex-shaped cloud boundaries that follow the staggered
-grid layout. For large clusters the slot center array is small (max ~10–15 entries) —
-well within uniform buffer limits.
+Note: slot centers are passed in **world space** (not UV space) so the falloff
+calculation is independent of quad scale. `_SlotRadius` is half the slot separation
+(~0.5 world units) plus visual padding.
 
 **Properties (via MaterialPropertyBlock per cloud instance):**
 - `_DensityTex` — the density RenderTexture (ping-pong pair, current read buffer)
 - `_TimeOffset` — driven by C# each frame (same pattern as SoapBubbleCluster)
-- `_SlotCenters` — `Vector4[]` array of slot center positions in UV space (up to 16)
+- `_SlotCentersWorld` — `Vector4[]` array of occupied slot center positions in world
+  space (up to 16); doubles as occupancy mask — only areas near these centers render
 - `_SlotCount` — number of active slot entries
-- `_SlotRadius` — per-slot cloud radius in UV space (derived from slot separation)
+- `_SlotRadius` — per-slot cloud radius in world units (half slot separation + padding)
 - `_CloudColor` — base tint (white with low alpha for translucent cloud)
 - `_EdgeLow` / `_EdgeHigh` — noise threshold window
 - `_NoiseScale` — global noise frequency multiplier
-- `_BorderSoftness` — edge fade distance
+- `_BorderSoftness` — edge fade distance in world units
 - `_Padding` — extra quad extent beyond cluster bounds
 
 **Shadow pass:** Optional, same pattern as SoapBubbleCluster `_SHADOW_ON` toggle.
@@ -443,11 +455,12 @@ integration with the existing grid system — no changes to `SlotGrid` are neede
 **Goal:** A single Puff slot renders as an animated procedural cloud on a quad.
 No density field, no disturbance, no merging. Pure visual investigation.
 
-- [ ] Write `BalloonParty/Grid/PuffCloud` shader (3-octave Simplex noise, edge
+- [x] Write `BalloonParty/Grid/PuffCloud` shader (3-octave Simplex noise, edge
       threshold, border falloff, color tint, `_TimeOffset`)
-- [ ] Create `PuffCloudView` MonoBehaviour — drives `_TimeOffset` via MPB, sizes
+- [x] Create `PuffCloudView` MonoBehaviour — drives `_TimeOffset` via MPB, sizes
       quad to single slot dimensions
-- [ ] Create `PuffCloudSettings` SO with noise + visual parameters
+- [x] Create `PuffCloudSettings` SO with noise + visual parameters
+      → P1 uses `[SerializeField]` on `PuffCloudView` per G10; SO deferred to P3
 - [ ] Wire into a test prefab and validate in-editor at game scale
 - [ ] Tune noise parameters until the cloud reads as "soft wispy cloud" at ~0.85×0.85
       world-unit slot size
@@ -460,37 +473,36 @@ No density field, no disturbance, no merging. Pure visual investigation.
 The following gaps were identified by walking through the implementation path against
 the existing codebase. Each must be resolved before or during P1 work.
 
-**G1 — Renderer type: SpriteRenderer vs MeshRenderer**
+**G1 — Renderer type: SpriteRenderer with scale**
 
 All existing procedural shaders (`SoapBubbleCluster`, `ToughBalloon`, `UnbreakableBalloon`)
-are sprite-based — they use `SpriteRenderer` on a quad with no assigned sprite, and the
-shader's vertex input is `appdata_t` with `TEXCOORD0` in [0,1] UV space. This works
-because `SpriteRenderer` provides a default quad mesh when no sprite is assigned.
+use `SpriteRenderer` on a quad with no assigned sprite. The PuffCloud shader follows
+the same pattern.
 
-For P1 (single-slot cloud), `SpriteRenderer` works fine — the cloud shader runs on the
-same default quad, and `_SpriteScale` controls content inset. This is the path of least
-resistance and matches the existing shader conventions (GPU instancing buffer for
-`_RendererColor`, etc.).
+For merged clusters (P3), the `SpriteRenderer`'s `transform.localScale` is set to
+cover the cluster's axis-aligned bounding box (union of all member slot positions +
+padding). The shader receives the occupied slot centers as a uniform array and uses
+them for two purposes:
 
-However, P3 (merging) requires a **dynamically-sized quad** that spans multiple slots.
-`SpriteRenderer` does not support arbitrary mesh sizing — you'd need `transform.localScale`
-to stretch it, which distorts UV coordinates and noise sampling. Options:
+1. **Boundary falloff** — cloud opacity fades based on distance to the nearest
+   occupied slot center (already in the plan's §2 design).
+2. **Occupancy mask** — pixels far from any slot center are discarded, so empty slots
+   within the bounding box show no cloud. This handles irregular cluster shapes
+   naturally (e.g. an L-shaped cluster spanning 3 columns and 2 rows only renders
+   cloud around the occupied slots, not the empty ones).
 
-- **A) SpriteRenderer + scale compensation in shader:** Scale the GO's transform to
-  cover the cluster bounds, pass the scale as a uniform, and divide UVs by it in the
-  shader to un-distort noise. Simple but fragile — noise sampling would need to be in
-  world space, not UV space.
-- **B) MeshRenderer + runtime quad mesh:** Use `MeshRenderer` + `MeshFilter` with a
-  procedurally generated quad mesh whose vertex positions are set to the cluster bounds.
-  UVs map cleanly to the cloud region. Requires breaking from the `SpriteRenderer` +
-  `_RendererColor` instancing pattern used by all other shaders.
-- **C) SpriteRenderer for P1, migrate to MeshRenderer in P3:** Start with
-  `SpriteRenderer` for the prototype (matches existing patterns), then switch to
-  `MeshRenderer` when merging demands it. Shader stays compatible with both — the
-  vertex/fragment core is the same; only the instancing buffer changes.
+The noise must sample in **world space** (see G3) so that scaling the quad does not
+distort or stretch the cloud pattern. The vertex shader passes world position to the
+fragment; noise functions use `worldPos * scale`, not UV. UV space is only used for
+density RT sampling (P2+) and boundary falloff.
 
-**Decision needed before P1 implementation.** Option C is recommended — keeps P1
-simple, defers the renderer migration to P3 where it's actually needed.
+This means no MeshRenderer migration is needed — `SpriteRenderer` + scale works for
+both single-slot (P1) and merged clusters (P3). The slot-center array is the sole
+mechanism that controls cloud shape within the scaled quad.
+
+**P1 simplification:** With a single slot, `localScale = Vector3.one` (default quad
+covers one slot). The slot-center array has one entry at `(0.5, 0.5)` in UV space.
+No scaling logic needed in P1.
 
 **G2 — Simplex noise: no existing implementation in the shader codebase**
 
@@ -546,19 +558,16 @@ In P1 there is no `PuffClusterRegistry` yet (that's P3). Someone needs to create
 **Decision needed.** Option B is recommended for P1 — component on the Puff prefab,
 no extra spawning logic. Migrate to standalone pooled GO in P3.
 
-**G5 — Prefab: new `Puff.prefab` or modify `StaticTest.prefab`?**
+**G5 — Prefab: `Puff.prefab` already exists**
 
-`StaticActorSpawner` currently uses `_staticActorPrefab` (serialized on
-`GameLifetimeScope` as a `StaticActorView` reference pointing to `StaticTest.prefab`).
-The spawner hard-codes `new PuffObstacleModel()` — it only spawns Puffs, never Bushes.
+`Assets/Prefabs/Grid/Puff.prefab` is already in the project (`StaticTest.prefab` has
+been retired). `StaticActorSpawner` uses `_staticActorPrefab` (serialized on
+`GameLifetimeScope` as a `StaticActorView` reference). This reference should already
+point to `Puff.prefab`.
 
-For P1, the simplest path is:
-1. Create `Puff.prefab` in `Assets/Prefabs/Grid/` with `StaticActorView` (or
-   `GridActorView`) + `SpriteRenderer` (no sprite, procedural material) +
-   `PuffCloudView` component
-2. Swap the `_staticActorPrefab` reference on `GameLifetimeScope` to point to
-   `Puff.prefab`
-3. Retire `StaticTest.prefab`
+For P1, add a `PuffCloudView` component to `Puff.prefab` alongside the existing
+`StaticActorView`. The `SpriteRenderer` on the prefab gets the PuffCloud material
+(no sprite assigned — procedural quad). No spawner changes needed.
 
 **Note:** The spawner uses `StaticActorView`, not `GridActorView`. Both are nearly
 identical (`IPoolable` + `ISlotActorView` + `TweenTracker`). Decide whether to keep
@@ -616,30 +625,23 @@ against these real dimensions.
 actual measurements. P1 tuning pass must validate cloud size against neighboring
 balloons.
 
-**G10 — P1 scope: `PuffCloudSettings` SO vs hardcoded shader properties**
+**G10 — P1 scope: `[SerializeField]` fields, not SO**
 
-Creating a full `PuffCloudSettings` ScriptableObject, registering it in
-`GameLifetimeScope`, and injecting it into `PuffCloudView` is significant wiring for a
-prototype phase. For P1, the noise and visual parameters can live as `[SerializeField]`
-fields directly on `PuffCloudView` — the SO extraction happens in P3 when multiple
-views need shared config.
+~~Decision needed.~~ Resolved: P1 uses `[SerializeField]` fields directly on
+`PuffCloudView` for all noise and visual parameters. This avoids premature config
+infrastructure (SO creation, `GameLifetimeScope` registration, VContainer injection)
+during pure visual investigation. Extract to `PuffCloudSettings` SO in P3 when
+multiple views need shared config.
 
-**Decision needed.** Recommend `[SerializeField]` on `PuffCloudView` for P1, extract
-to SO in P3. This avoids premature config infrastructure during pure visual
-investigation.
+**G11 — Boundary falloff: same mechanism in P1 and P3**
 
-**G11 — Boundary falloff in P1: single slot simplification**
+The slot-center-array falloff works identically for single-slot (P1) and merged
+clusters (P3) — the only difference is the array length. In P1, the array has one
+entry at the quad center. The shader loop runs once and produces a radial falloff
+from that single center. No special-case code path needed.
 
-The plan's boundary falloff design (slot center array in shader) is for merged clusters
-(P3). In P1 there is only one slot, so the falloff simplifies to a single radial
-distance from the quad center:
-```hlsl
-float dist = length(uv - 0.5);
-float borderFade = smoothstep(_FalloffOuter, _FalloffInner, dist);
-```
-
-The slot-center-array approach is P3 scope. P1 shader should use the simple radial
-falloff and note that it will be replaced in P3.
+This means the shader's boundary falloff code is **write-once** — P1 implements the
+full slot-center-array loop, P3 just passes more entries and scales the quad.
 
 **G12 — Shader folder location**
 
