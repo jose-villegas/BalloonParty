@@ -15,6 +15,8 @@ namespace BalloonParty.Shared.Disturbance
     /// </summary>
     internal class DisturbanceFieldService : IStartable, ITickable, IDisposable
     {
+        private const int MaxStampsPerBatch = 16;
+
         private static readonly int DiffusionRateId = Shader.PropertyToID("_DiffusionRate");
         private static readonly int ReformSpeedId = Shader.PropertyToID("_ReformSpeed");
         private static readonly int DeltaTimeId = Shader.PropertyToID("_DeltaTime");
@@ -22,11 +24,12 @@ namespace BalloonParty.Shared.Disturbance
         private static readonly int WindSpeedId = Shader.PropertyToID("_WindSpeed");
         private static readonly int PressureStrId = Shader.PropertyToID("_PressureStr");
         private static readonly int DisplaceDecayId = Shader.PropertyToID("_DisplaceDecay");
-        private static readonly int StampCenterId = Shader.PropertyToID("_StampCenter");
-        private static readonly int StampRadiusId = Shader.PropertyToID("_StampRadius");
-        private static readonly int StampStrengthId = Shader.PropertyToID("_StampStrength");
-        private static readonly int StampDirectionId = Shader.PropertyToID("_StampDirection");
         private static readonly int DisplaceAmountId = Shader.PropertyToID("_DisplaceAmount");
+        private static readonly int StampCountId = Shader.PropertyToID("_StampCount");
+        private static readonly int StampCentersId = Shader.PropertyToID("_StampCenters");
+        private static readonly int StampRadiiId = Shader.PropertyToID("_StampRadii");
+        private static readonly int StampStrengthsId = Shader.PropertyToID("_StampStrengths");
+        private static readonly int StampDirectionsId = Shader.PropertyToID("_StampDirections");
 
         [Inject] private readonly DisturbanceFieldSettings _settings;
         [Inject] private readonly GameDisplayConfiguration _displayConfig;
@@ -35,11 +38,17 @@ namespace BalloonParty.Shared.Disturbance
         private RenderTexture _fieldB;
         private bool _readFromA = true;
         private Material _diffusionMaterial;
-        private Material _stampMaterial;
+        private Material _batchedStampMaterial;
         private float _diffusionTimer;
         private Vector2 _windTarget;
         private Vector2 _windCurrent;
         private readonly List<LerpStamp> _activeStamps = new();
+
+        private readonly List<PendingStamp> _pendingStamps = new();
+        private readonly Vector4[] _batchCenters = new Vector4[MaxStampsPerBatch];
+        private readonly float[] _batchRadii = new float[MaxStampsPerBatch];
+        private readonly float[] _batchStrengths = new float[MaxStampsPerBatch];
+        private readonly Vector4[] _batchDirections = new Vector4[MaxStampsPerBatch];
 
         private Rect _fieldBounds;
         private int _fieldWidth;
@@ -56,14 +65,25 @@ namespace BalloonParty.Shared.Disturbance
             ComputeFieldBounds();
             CreateFieldRTs();
             EnsureDiffusionMaterial();
-            EnsureStampMaterial();
+            EnsureBatchedStampMaterial();
         }
 
         void ITickable.Tick()
         {
             var dt = Time.deltaTime;
-            TickLerpStamps(dt);
-            TickDiffusion(dt);
+            _diffusionTimer += dt;
+
+            if (_diffusionTimer >= _settings.DiffusionTickInterval)
+            {
+                TickLerpStamps(_diffusionTimer);
+            }
+
+            FlushPendingStamps();
+
+            if (_diffusionTimer >= _settings.DiffusionTickInterval)
+            {
+                TickDiffusion();
+            }
         }
 
         void IDisposable.Dispose()
@@ -71,7 +91,7 @@ namespace BalloonParty.Shared.Disturbance
             ReleaseRT(ref _fieldA);
             ReleaseRT(ref _fieldB);
             DestroyMaterial(ref _diffusionMaterial);
-            DestroyMaterial(ref _stampMaterial);
+            DestroyMaterial(ref _batchedStampMaterial);
         }
 
         /// <summary>
@@ -80,7 +100,12 @@ namespace BalloonParty.Shared.Disturbance
         /// </summary>
         internal void Stamp(Vector3 worldPosition, float radius, float strength, Vector2 direction)
         {
-            if (_fieldA == null || _stampMaterial == null)
+            if (_fieldA == null || _batchedStampMaterial == null)
+            {
+                return;
+            }
+
+            if (strength < _settings.MinStampStrength)
             {
                 return;
             }
@@ -88,19 +113,18 @@ namespace BalloonParty.Shared.Disturbance
             var uv = WorldToFieldUV(worldPosition);
             var radiusUV = WorldRadiusToFieldUV(radius);
 
-            _stampMaterial.SetVector(StampCenterId, new Vector4(uv.x, uv.y, 0f, 0f));
-            _stampMaterial.SetFloat(StampRadiusId, radiusUV);
-            _stampMaterial.SetFloat(StampStrengthId, strength);
-            _stampMaterial.SetVector(StampDirectionId, new Vector4(direction.x, direction.y, 0f, 0f));
-            _stampMaterial.SetFloat(DisplaceAmountId, _settings.DisplaceAmount);
-
             if (direction.sqrMagnitude > 0.001f)
             {
                 _windTarget = -direction;
             }
 
-            Graphics.Blit(FieldTexture, FieldWrite, _stampMaterial);
-            _readFromA = !_readFromA;
+            _pendingStamps.Add(new PendingStamp
+            {
+                CenterUV = uv,
+                RadiusUV = radiusUV,
+                Strength = strength,
+                Direction = direction
+            });
         }
 
         /// <summary>
@@ -114,6 +138,11 @@ namespace BalloonParty.Shared.Disturbance
             {
                 Stamp(worldPosition, radius, strength, direction);
                 return;
+            }
+
+            if (_activeStamps.Count >= _settings.MaxLerpStamps)
+            {
+                _activeStamps.RemoveAt(0);
             }
 
             _activeStamps.Add(new LerpStamp
@@ -141,6 +170,42 @@ namespace BalloonParty.Shared.Disturbance
             return avgSize > 0.001f ? worldRadius / avgSize : 0.1f;
         }
 
+        private void FlushPendingStamps()
+        {
+            if (_pendingStamps.Count == 0)
+            {
+                return;
+            }
+
+            var offset = 0;
+            while (offset < _pendingStamps.Count)
+            {
+                var count = Mathf.Min(MaxStampsPerBatch, _pendingStamps.Count - offset);
+                for (var i = 0; i < count; i++)
+                {
+                    var s = _pendingStamps[offset + i];
+                    _batchCenters[i] = new Vector4(s.CenterUV.x, s.CenterUV.y, 0f, 0f);
+                    _batchRadii[i] = s.RadiusUV;
+                    _batchStrengths[i] = s.Strength;
+                    _batchDirections[i] = new Vector4(s.Direction.x, s.Direction.y, 0f, 0f);
+                }
+
+                _batchedStampMaterial.SetInt(StampCountId, count);
+                _batchedStampMaterial.SetVectorArray(StampCentersId, _batchCenters);
+                _batchedStampMaterial.SetFloatArray(StampRadiiId, _batchRadii);
+                _batchedStampMaterial.SetFloatArray(StampStrengthsId, _batchStrengths);
+                _batchedStampMaterial.SetVectorArray(StampDirectionsId, _batchDirections);
+                _batchedStampMaterial.SetFloat(DisplaceAmountId, _settings.DisplaceAmount);
+
+                Graphics.Blit(FieldTexture, FieldWrite, _batchedStampMaterial);
+                _readFromA = !_readFromA;
+
+                offset += count;
+            }
+
+            _pendingStamps.Clear();
+        }
+
         private void ComputeFieldBounds()
         {
             var halfWidth = _displayConfig.ReferenceWorldWidth * 0.5f;
@@ -160,14 +225,8 @@ namespace BalloonParty.Shared.Disturbance
             _readFromA = true;
         }
 
-        private void TickDiffusion(float dt)
+        private void TickDiffusion()
         {
-            _diffusionTimer += dt;
-            if (_diffusionTimer < _settings.DiffusionTickInterval)
-            {
-                return;
-            }
-
             if (_diffusionMaterial == null)
             {
                 return;
@@ -197,31 +256,31 @@ namespace BalloonParty.Shared.Disturbance
                 return;
             }
 
-            var shader = Shader.Find("Hidden/BalloonParty/Grid/PuffCloudDiffusion");
+            var shader = Shader.Find("Hidden/BalloonParty/Grid/DisturbanceDiffusion");
             if (shader == null)
             {
-                Debug.LogError("DisturbanceFieldService: PuffCloudDiffusion shader not found.");
+                Debug.LogError("DisturbanceFieldService: DisturbanceDiffusion shader not found.");
                 return;
             }
 
             _diffusionMaterial = new Material(shader) { hideFlags = HideFlags.HideAndDontSave };
         }
 
-        private void EnsureStampMaterial()
+        private void EnsureBatchedStampMaterial()
         {
-            if (_stampMaterial != null)
+            if (_batchedStampMaterial != null)
             {
                 return;
             }
 
-            var shader = Shader.Find("Hidden/BalloonParty/Grid/PuffCloudStamp");
+            var shader = Shader.Find("Hidden/BalloonParty/Grid/DisturbanceStampBatched");
             if (shader == null)
             {
-                Debug.LogError("DisturbanceFieldService: PuffCloudStamp shader not found.");
+                Debug.LogError("DisturbanceFieldService: DisturbanceStampBatched shader not found.");
                 return;
             }
 
-            _stampMaterial = new Material(shader) { hideFlags = HideFlags.HideAndDontSave };
+            _batchedStampMaterial = new Material(shader) { hideFlags = HideFlags.HideAndDontSave };
         }
 
         private static RenderTexture CreateRT(int width, int height)
@@ -285,6 +344,14 @@ namespace BalloonParty.Shared.Disturbance
                     _activeStamps.RemoveAt(i);
                 }
             }
+        }
+
+        private struct PendingStamp
+        {
+            public Vector2 CenterUV;
+            public float RadiusUV;
+            public float Strength;
+            public Vector2 Direction;
         }
 
         private struct LerpStamp

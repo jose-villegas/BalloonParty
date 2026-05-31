@@ -1,4 +1,4 @@
-Shader "Hidden/BalloonParty/Grid/PuffCloudStamp"
+Shader "Hidden/BalloonParty/Grid/DisturbanceStamp"
 {
     // ── Disturbance stamp pass ───────────────────────────────────────────
     // Packed RT: R=density, G=displacement X (0.5=zero), B=displacement Y.

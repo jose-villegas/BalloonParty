@@ -1,4 +1,4 @@
-Shader "Hidden/BalloonParty/Grid/PuffCloudDiffusion"
+Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
 {
     // ── Density + displacement diffusion pass ────────────────────────────
     // Processes a packed RT where:
@@ -120,3 +120,4 @@ Shader "Hidden/BalloonParty/Grid/PuffCloudDiffusion"
         }
     }
 }
+

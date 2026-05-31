@@ -63,6 +63,13 @@ namespace BalloonParty.Configuration
         [SerializeField] [Range(0f, 1f)] private float _displaceAmount = 0.3f;
         [SerializeField] [Range(0f, 5f)] private float _displaceDecay = 1.5f;
 
+        [Header("Performance")]
+        [Tooltip("Minimum strength for a stamp to be processed. Below this the stamp is discarded.")]
+        [SerializeField] [Range(0f, 0.1f)] private float _minStampStrength = 0.01f;
+
+        [Tooltip("Maximum number of lerp stamps active at once. Oldest are evicted when full.")]
+        [SerializeField] [Range(4, 64)] private int _maxLerpStamps = 32;
+
         [Header("Stamp Profiles")]
         [SerializeField] private StampProfile[] _stampProfiles = new[]
         {
@@ -84,6 +91,8 @@ namespace BalloonParty.Configuration
         public float PressureStrength => _pressureStrength;
         public float DisplaceAmount => _displaceAmount;
         public float DisplaceDecay => _displaceDecay;
+        public float MinStampStrength => _minStampStrength;
+        public int MaxLerpStamps => _maxLerpStamps;
 
         /// <summary>
         /// Returns the first <see cref="StampProfile"/> whose

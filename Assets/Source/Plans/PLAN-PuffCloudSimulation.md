@@ -732,8 +732,8 @@ sets the wind target for directional reform.
 
 | File | Role |
 |---|---|
-| `Shaders/BalloonParty/Grid/PuffCloudDiffusion.shader` | Diffusion + advection + pressure + displacement decay blit |
-| `Shaders/BalloonParty/Grid/PuffCloudStamp.shader` | Density subtraction + displacement push + directional wake |
+| `Shaders/BalloonParty/Grid/DisturbanceDiffusion.shader` | Diffusion + advection + pressure + displacement decay blit |
+| `Shaders/BalloonParty/Grid/DisturbanceStamp.shader` | Density subtraction + displacement push + directional wake |
 | `Shaders/BalloonParty/Grid/PuffCloud.shader` | Added `_DENSITY_ON`, `_DensityTex`, displacement crossfade, lighting |
 | `Source/Slots/Actor/Archetype/PuffCloudView.cs` | Density RT ping-pong, stamp API, diffusion tick, wind state, debug drag |
 | `Shaders/BalloonParty/Grid/PuffCloud_Shadertoy.glsl` | Standalone Shadertoy port for external testing |
@@ -1133,7 +1133,7 @@ one more SO is consistent with existing patterns.
 
 **G34 — Stamp and diffusion shaders: reuse or modify?**
 
-The existing `PuffCloudStamp.shader` and `PuffCloudDiffusion.shader` work on UV-space
+The existing `DisturbanceStamp.shader` and `DisturbanceDiffusion.shader` work on UV-space
 coordinates. They are agnostic to RT size — the stamp center and radius are passed in
 UV space. The service converts world coords to field UVs before setting material
 properties, same as `PuffCloudView` did with `WorldToDensityUV()`.
@@ -1175,8 +1175,8 @@ The `PuffCloud.shader` samples from it. Per-cluster density RTs are removed from
 | `Shared/Disturbance/` | Does not exist yet — create this folder |
 | `Slots/Actor/Archetype/PuffCloudView.cs` | Current density RT owner — most code being removed. Read `TickDiffusion()`, `StampDisturbance()`, `InitDensityField()` to understand what moves to the service |
 | `Shaders/BalloonParty/Grid/PuffCloud.shader` | Lines 229–254: `_DENSITY_ON` block — replace `tex2D(_DensityTex, IN.texcoord)` with screen-space UV sampling |
-| `Shaders/BalloonParty/Grid/PuffCloudDiffusion.shader` | Diffusion blit — reused as-is by the service |
-| `Shaders/BalloonParty/Grid/PuffCloudStamp.shader` | Stamp blit — reused as-is by the service |
+| `Shaders/BalloonParty/Grid/DisturbanceDiffusion.shader` | Diffusion blit — reused as-is by the service |
+| `Shaders/BalloonParty/Grid/DisturbanceStamp.shader` | Stamp blit — reused as-is by the service |
 | `Configuration/PuffCloudSettings.cs` | Has `ProjectileRadius`, `ProjectileStrength`, and diffusion/wind fields the service will read |
 | `Projectile/View/ProjectileView.cs` | `MoveAndBounce()` at line 211 — add `Stamp()` call after position update. `DestroyProjectile()` and `OnDespawned()` — no clear needed (shared field persists) |
 | `Display/OrthogonalSizeCameraController.cs` | Camera sizing — `GameDisplayConfiguration` has `_referenceWorldWidth=10`, `_referenceWorldHeight=16`. Service derives RT bounds from these. |
@@ -1195,7 +1195,7 @@ The `PuffCloud.shader` samples from it. Per-cluster density RTs are removed from
 
 **What NOT to change:**
 - `PuffClusterRegistry`, `PuffCluster`, `PuffCloudViewController` — untouched
-- `PuffCloudStamp.shader`, `PuffCloudDiffusion.shader` — reused as-is
+- `DisturbanceStamp.shader`, `DisturbanceDiffusion.shader` — reused as-is
 - Noise, slot falloff, lighting, shadow in `PuffCloud.shader` — untouched
 - `GridActorConfiguration`, `StaticActorSpawner`, `ClusterSlotSelectionStrategy` — untouched
 
