@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -19,6 +20,8 @@ namespace BalloonParty.Balloon.Controller
         private readonly BalloonsConfiguration _balloonsConfig;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
+        private readonly DisturbanceFieldService _disturbanceField;
+        private readonly DisturbanceFieldSettings _disturbanceSettings;
 
         private bool _balanceRequested;
 
@@ -27,12 +30,16 @@ namespace BalloonParty.Balloon.Controller
             SlotGrid grid,
             BalloonsConfiguration balloonsConfig,
             BalancePathHolder balancePathHolder,
-            ISubscriber<BalanceBalloonsMessage> subscriber)
+            ISubscriber<BalanceBalloonsMessage> subscriber,
+            DisturbanceFieldService disturbanceField,
+            DisturbanceFieldSettings disturbanceSettings)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
             _balancePathHolder = balancePathHolder;
             _subscriber = subscriber;
+            _disturbanceField = disturbanceField;
+            _disturbanceSettings = disturbanceSettings;
         }
 
         public void Start()
@@ -57,8 +64,20 @@ namespace BalloonParty.Balloon.Controller
                 view.transform.DOKill();
 
                 var currentScale = view.transform.localScale;
-                var tween = view.transform
+                var viewTransform = view.transform;
+                var lastPos = viewTransform.position;
+
+                var tween = viewTransform
                     .DOPath(path.ToArray(), _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
+                    .OnUpdate(() =>
+                    {
+                        var pos = viewTransform.position;
+                        var delta = pos - lastPos;
+                        var dir = new Vector2(delta.x, delta.y).normalized;
+                        _disturbanceField.Stamp(pos, _disturbanceSettings.BalloonRadius,
+                            _disturbanceSettings.BalloonStrength, dir);
+                        lastPos = pos;
+                    })
                     .OnComplete(() =>
                     {
                         actor.IsStable.Value = true;

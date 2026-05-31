@@ -6,6 +6,7 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
@@ -40,6 +41,8 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IObjectResolver _resolver;
         private readonly PoolManager _poolManager;
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
+        private readonly DisturbanceFieldService _disturbanceField;
+        private readonly DisturbanceFieldSettings _disturbanceSettings;
 
         private int _turnCount;
         private UniTask _prewarmTask;
@@ -62,7 +65,9 @@ namespace BalloonParty.Balloon.Spawner
             IPublisher<ItemCheckMessage> itemCheckPublisher,
             IPublisher<TransformCapturedMessage> transformCapturedPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
-            IPublisher<NudgeMessage> nudgePublisher)
+            IPublisher<NudgeMessage> nudgePublisher,
+            DisturbanceFieldService disturbanceField,
+            DisturbanceFieldSettings disturbanceSettings)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
@@ -79,6 +84,8 @@ namespace BalloonParty.Balloon.Spawner
             _transformCapturedPublisher = transformCapturedPublisher;
             _deflectedPublisher = deflectedPublisher;
             _nudgePublisher = nudgePublisher;
+            _disturbanceField = disturbanceField;
+            _disturbanceSettings = disturbanceSettings;
         }
 
         public void Start()
@@ -135,7 +142,19 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            view.transform.DOPath(waypoints, duration, PathType.CatmullRom)
+            var viewTransform = view.transform;
+            var lastPos = viewTransform.position;
+
+            viewTransform.DOPath(waypoints, duration, PathType.CatmullRom)
+                .OnUpdate(() =>
+                {
+                    var pos = viewTransform.position;
+                    var delta = pos - lastPos;
+                    var dir = new Vector2(delta.x, delta.y).normalized;
+                    _disturbanceField.Stamp(pos, _disturbanceSettings.BalloonRadius,
+                        _disturbanceSettings.BalloonStrength, dir);
+                    lastPos = pos;
+                })
                 .OnComplete(() => model.IsStable.Value = true);
 
             view.transform.DOScale(Vector3.one, duration);
@@ -247,7 +266,9 @@ namespace BalloonParty.Balloon.Spawner
                 _deflectedPublisher,
                 _nudgePublisher,
                 _grid,
-                _poolManager);
+                _poolManager,
+                _disturbanceField,
+                _disturbanceSettings);
             controller.Start();
 
             _grid.Place(model, view, slot);

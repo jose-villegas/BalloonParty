@@ -37,7 +37,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private ColorStreakTracker _streakTracker;
         [Inject] private PauseService _pauseService;
         [Inject] private DisturbanceFieldService _disturbanceField;
-        [Inject] private PuffCloudSettings _puffCloudSettings;
+        [Inject] private DisturbanceFieldSettings _disturbanceSettings;
 
         private IWriteableProjectileModel _model;
         private IDisposable _deflectedSubscription;
@@ -236,8 +236,8 @@ namespace BalloonParty.Projectile.View
 
             _disturbanceField.Stamp(
                 pos,
-                _puffCloudSettings.ProjectileRadius,
-                _puffCloudSettings.ProjectileStrength,
+                _disturbanceSettings.ProjectileRadius,
+                _disturbanceSettings.ProjectileStrength,
                 _model.Direction);
         }
 

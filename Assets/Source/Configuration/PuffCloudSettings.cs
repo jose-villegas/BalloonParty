@@ -25,24 +25,10 @@ namespace BalloonParty.Configuration
         [Tooltip("Sorting order offset for cloud renderers.")]
         [SerializeField] private int _sortingOrderOffset;
 
-        [Header("Disturbance")]
-        [SerializeField] private float _projectileRadius = 0.3f;
-        [SerializeField] private float _projectileStrength = 0.8f;
-        [SerializeField] private float _balloonRadius = 0.5f;
-        [SerializeField] private float _balloonStrength = 0.4f;
-        [SerializeField] private float _popBurstRadius = 0.8f;
-        [SerializeField] private float _popBurstStrength = 1.0f;
-
         public PuffCloudView CloudPrefab => _cloudPrefab;
         public float AnimationSpeed => _animationSpeed;
         public float Padding => _padding;
         public int SortingLayerId => _sortingLayerId;
         public int SortingOrderOffset => _sortingOrderOffset;
-        public float ProjectileRadius => _projectileRadius;
-        public float ProjectileStrength => _projectileStrength;
-        public float BalloonRadius => _balloonRadius;
-        public float BalloonStrength => _balloonStrength;
-        public float PopBurstRadius => _popBurstRadius;
-        public float PopBurstStrength => _popBurstStrength;
     }
 }

@@ -22,3 +22,9 @@ MonoBehaviour:
   _pressureStrength: 0.9
   _displaceAmount: 0.9
   _displaceDecay: 0.3
+  _projectileRadius: 0.3
+  _projectileStrength: 0.8
+  _balloonRadius: 0.5
+  _balloonStrength: 0.4
+  _popBurstRadius: 0.8
+  _popBurstStrength: 1

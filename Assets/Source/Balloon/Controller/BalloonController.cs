@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -25,6 +26,8 @@ namespace BalloonParty.Balloon.Controller
         private readonly PoolManager _poolManager;
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly BalloonView _view;
+        private readonly DisturbanceFieldService _disturbanceField;
+        private readonly DisturbanceFieldSettings _disturbanceSettings;
 
         private IDisposable _hitSubscription;
         private IDisposable _itemActivatedSubscription;
@@ -41,7 +44,9 @@ namespace BalloonParty.Balloon.Controller
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
             IPublisher<NudgeMessage> nudgePublisher,
             SlotGrid grid,
-            PoolManager poolManager)
+            PoolManager poolManager,
+            DisturbanceFieldService disturbanceField,
+            DisturbanceFieldSettings disturbanceSettings)
         {
             _model = model;
             _view = view;
@@ -55,6 +60,8 @@ namespace BalloonParty.Balloon.Controller
             _nudgePublisher = nudgePublisher;
             _grid = grid;
             _poolManager = poolManager;
+            _disturbanceField = disturbanceField;
+            _disturbanceSettings = disturbanceSettings;
         }
 
         public void Start()
@@ -117,6 +124,10 @@ namespace BalloonParty.Balloon.Controller
         {
             _hitSubscription?.Dispose();
             _hitSubscription = null;
+
+            var popWorldPos = _view.transform.position;
+            _disturbanceField.Stamp(popWorldPos, _disturbanceSettings.PopBurstRadius,
+                _disturbanceSettings.PopBurstStrength, UnityEngine.Vector2.zero);
 
             _view.PlayHitVfxForOutcome(HitOutcome.Pop);
             _grid.Remove(_model.SlotIndex.Value);
