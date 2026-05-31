@@ -256,10 +256,10 @@ namespace BalloonParty.Shared.Disturbance
                 return;
             }
 
-            var shader = Shader.Find("Hidden/BalloonParty/Grid/DisturbanceDiffusion");
+            var shader = _settings.DiffusionShader;
             if (shader == null)
             {
-                Debug.LogError("DisturbanceFieldService: DisturbanceDiffusion shader not found.");
+                Debug.LogError("DisturbanceFieldService: DiffusionShader not assigned on DisturbanceFieldSettings.");
                 return;
             }
 
@@ -273,10 +273,10 @@ namespace BalloonParty.Shared.Disturbance
                 return;
             }
 
-            var shader = Shader.Find("Hidden/BalloonParty/Grid/DisturbanceStampBatched");
+            var shader = _settings.StampBatchedShader;
             if (shader == null)
             {
-                Debug.LogError("DisturbanceFieldService: DisturbanceStampBatched shader not found.");
+                Debug.LogError("DisturbanceFieldService: StampBatchedShader not assigned on DisturbanceFieldSettings.");
                 return;
             }
 
@@ -285,7 +285,11 @@ namespace BalloonParty.Shared.Disturbance
 
         private static RenderTexture CreateRT(int width, int height)
         {
-            var rt = new RenderTexture(width, height, 0, RenderTextureFormat.ARGBHalf)
+            var format = SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGBHalf)
+                ? RenderTextureFormat.ARGBHalf
+                : RenderTextureFormat.ARGB32;
+
+            var rt = new RenderTexture(width, height, 0, format)
             {
                 filterMode = FilterMode.Bilinear,
                 wrapMode = TextureWrapMode.Clamp

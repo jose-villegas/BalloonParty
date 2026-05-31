@@ -70,6 +70,13 @@ namespace BalloonParty.Configuration
         [Tooltip("Maximum number of lerp stamps active at once. Oldest are evicted when full.")]
         [SerializeField] [Range(4, 64)] private int _maxLerpStamps = 32;
 
+        [Header("Shaders")]
+        [Tooltip("Diffusion blit shader. Must be assigned — Shader.Find strips Hidden shaders from builds.")]
+        [SerializeField] private Shader _diffusionShader;
+
+        [Tooltip("Batched stamp blit shader. Must be assigned — Shader.Find strips Hidden shaders from builds.")]
+        [SerializeField] private Shader _stampBatchedShader;
+
         [Header("Stamp Profiles")]
         [SerializeField] private StampProfile[] _stampProfiles = new[]
         {
@@ -93,6 +100,8 @@ namespace BalloonParty.Configuration
         public float DisplaceDecay => _displaceDecay;
         public float MinStampStrength => _minStampStrength;
         public int MaxLerpStamps => _maxLerpStamps;
+        public Shader DiffusionShader => _diffusionShader;
+        public Shader StampBatchedShader => _stampBatchedShader;
 
         /// <summary>
         /// Returns the first <see cref="StampProfile"/> whose

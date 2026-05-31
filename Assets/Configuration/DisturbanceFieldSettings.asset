@@ -24,6 +24,8 @@ MonoBehaviour:
   _displaceDecay: 0.3
   _minStampStrength: 0.001
   _maxLerpStamps: 32
+  _diffusionShader: {fileID: 4800000, guid: 30d35fca4d5647ab807a2488bff5f3d3, type: 3}
+  _stampBatchedShader: {fileID: 4800000, guid: 5bd738ff089e4b9cbf7a953485bb7b13, type: 3}
   _stampProfiles:
   - Sources: 1
     Radius: 0.3
