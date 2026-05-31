@@ -28,7 +28,7 @@ MonoBehaviour:
   _stampBatchedShader: {fileID: 4800000, guid: 38f3ac576d314dfd871931c9d00cd8da, type: 3}
   _stampProfiles:
   - Sources: 1
-    Radius: 0.3
+    Radius: 0.35
     Strength: 0.8
     Duration: 0
   - Sources: 2
@@ -45,9 +45,9 @@ MonoBehaviour:
     Duration: 0.3
   - Sources: 16
     Radius: 0.8
-    Strength: 1
-    Duration: 0.2
+    Strength: 5
+    Duration: 0
   - Sources: 32
-    Radius: 0.6
-    Strength: 0.9
+    Radius: 0.9
+    Strength: 1
     Duration: 0.2

@@ -2,7 +2,6 @@
 using UnityEditor;
 #endif
 using BalloonParty.Configuration;
-using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
 
@@ -11,9 +10,11 @@ namespace BalloonParty.Slots.Actor.Archetype
     /// <summary>
     /// Drives the <c>BalloonParty/Grid/PuffCloud</c> shader on a
     /// <see cref="SpriteRenderer"/> quad with no assigned sprite.
-    /// Pushes <c>_TimeOffset</c>, slot-center data, and the shared
-    /// disturbance field reference via <see cref="MaterialPropertyBlock"/>
-    /// each frame.
+    /// Pushes <c>_TimeOffset</c> and slot-center data via
+    /// <see cref="MaterialPropertyBlock"/> each frame. The shared disturbance
+    /// field (<c>_DisturbanceTex</c>, <c>_FieldBoundsMin</c>,
+    /// <c>_FieldBoundsSize</c>) is set as global shader properties by
+    /// <see cref="BalloonParty.Shared.Disturbance.DisturbanceFieldService"/>.
     ///
     /// <c>[ExecuteAlways]</c> keeps the cloud animation running in edit mode.
     /// Supports both standalone mode (serialized fields) and configured mode
@@ -26,9 +27,6 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
         private static readonly int SlotCentersWorldId = Shader.PropertyToID("_SlotCentersWorld");
         private static readonly int SlotCountId = Shader.PropertyToID("_SlotCount");
-        private static readonly int DisturbanceTexId = Shader.PropertyToID("_DisturbanceTex");
-        private static readonly int FieldBoundsMinId = Shader.PropertyToID("_FieldBoundsMin");
-        private static readonly int FieldBoundsSizeId = Shader.PropertyToID("_FieldBoundsSize");
 
         [SerializeField] private SpriteRenderer _renderer;
 
@@ -43,8 +41,6 @@ namespace BalloonParty.Slots.Actor.Archetype
         private bool _configured;
         private int _slotCount;
         private Rect _worldBounds;
-
-        private DisturbanceFieldService _disturbanceField;
 
         internal SpriteRenderer Renderer => _renderer;
 
@@ -66,6 +62,11 @@ namespace BalloonParty.Slots.Actor.Archetype
         {
             EnsureBlock();
 
+            if (_renderer == null || _block == null)
+            {
+                return;
+            }
+
             var currentTime = Time.time;
 #if UNITY_EDITOR
             if (!Application.isPlaying)
@@ -75,8 +76,9 @@ namespace BalloonParty.Slots.Actor.Archetype
             }
 #endif
 
-            PushTime(currentTime);
-            PushDisturbanceField();
+            _renderer.GetPropertyBlock(_block);
+            _block.SetFloat(TimeOffsetId, (currentTime * _animationSpeed) + _instancePhase);
+            _renderer.SetPropertyBlock(_block);
         }
 
         private void OnValidate()
@@ -97,16 +99,6 @@ namespace BalloonParty.Slots.Actor.Archetype
         {
             _configured = false;
             _slotCount = 0;
-        }
-
-        /// <summary>
-        /// Provides the shared disturbance field service reference so the
-        /// view can push the field texture and bounds to the shader each frame.
-        /// Called by <see cref="PuffCloudViewController"/> after spawning.
-        /// </summary>
-        internal void SetDisturbanceField(DisturbanceFieldService field)
-        {
-            _disturbanceField = field;
         }
 
         /// <summary>
@@ -171,40 +163,6 @@ namespace BalloonParty.Slots.Actor.Archetype
             {
                 _block = new MaterialPropertyBlock();
             }
-        }
-
-        private void PushDisturbanceField()
-        {
-            if (_renderer == null || _block == null || _disturbanceField == null)
-            {
-                return;
-            }
-
-            var fieldTex = _disturbanceField.FieldTexture;
-            if (fieldTex == null)
-            {
-                return;
-            }
-
-            _renderer.GetPropertyBlock(_block);
-            _block.SetTexture(DisturbanceTexId, fieldTex);
-            var boundsMin = _disturbanceField.FieldBoundsMin;
-            var boundsSize = _disturbanceField.FieldBoundsSize;
-            _block.SetVector(FieldBoundsMinId, new Vector4(boundsMin.x, boundsMin.y, 0f, 0f));
-            _block.SetVector(FieldBoundsSizeId, new Vector4(boundsSize.x, boundsSize.y, 0f, 0f));
-            _renderer.SetPropertyBlock(_block);
-        }
-
-        private void PushTime(float currentTime)
-        {
-            if (_renderer == null || _block == null)
-            {
-                return;
-            }
-
-            _renderer.GetPropertyBlock(_block);
-            _block.SetFloat(TimeOffsetId, (currentTime * _animationSpeed) + _instancePhase);
-            _renderer.SetPropertyBlock(_block);
         }
 
         private void PushSlotCentersDefault()

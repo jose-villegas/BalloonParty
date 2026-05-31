@@ -30,6 +30,10 @@ namespace BalloonParty.Shared.Disturbance
         private static readonly int StampStrengthsId = Shader.PropertyToID("_StampStrengths");
         private static readonly int StampDirectionsId = Shader.PropertyToID("_StampDirections");
 
+        private static readonly int GlobalDisturbanceTexId = Shader.PropertyToID("_DisturbanceTex");
+        private static readonly int GlobalFieldBoundsMinId = Shader.PropertyToID("_FieldBoundsMin");
+        private static readonly int GlobalFieldBoundsSizeId = Shader.PropertyToID("_FieldBoundsSize");
+
         private readonly DisturbanceFieldSettings _settings;
         private readonly GameDisplayConfiguration _displayConfig;
         private readonly List<LerpStamp> _activeStamps = new();
@@ -71,6 +75,8 @@ namespace BalloonParty.Shared.Disturbance
             CreateFieldRTs();
             EnsureDiffusionMaterial();
             EnsureBatchedStampMaterial();
+            PushGlobalBounds();
+            PushGlobalTexture();
         }
 
         void ITickable.Tick()
@@ -197,6 +203,7 @@ namespace BalloonParty.Shared.Disturbance
 
                 Graphics.Blit(FieldTexture, FieldWrite, _batchedStampMaterial);
                 _readFromA = !_readFromA;
+                PushGlobalTexture();
 
                 offset += count;
             }
@@ -248,6 +255,22 @@ namespace BalloonParty.Shared.Disturbance
             Graphics.Blit(FieldTexture, FieldWrite, _diffusionMaterial);
             _readFromA = !_readFromA;
             _diffusionTimer = 0f;
+            PushGlobalTexture();
+        }
+
+        private void PushGlobalBounds()
+        {
+            Shader.SetGlobalVector(GlobalFieldBoundsMinId, new Vector4(_fieldBounds.xMin, _fieldBounds.yMin, 0f, 0f));
+            Shader.SetGlobalVector(GlobalFieldBoundsSizeId, new Vector4(_fieldBounds.width, _fieldBounds.height, 0f, 0f));
+        }
+
+        private void PushGlobalTexture()
+        {
+            var tex = FieldTexture;
+            if (tex != null)
+            {
+                Shader.SetGlobalTexture(GlobalDisturbanceTexId, tex);
+            }
         }
 
         private void EnsureDiffusionMaterial()

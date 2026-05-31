@@ -6,7 +6,7 @@ Shared screen-space disturbance field that any game system can stamp into. Puff 
 
 | File | What it does |
 |---|---|
-| `DisturbanceFieldService` | Plain C# `IStartable` + `ITickable` + `IDisposable` — owns a camera-sized `ARGBHalf` RT pair (density in R, displacement XY in GB). Runs one diffusion blit per tick (spatial blur + reform toward equilibrium + wind advection + pressure fill + displacement decay). Exposes `Stamp()` for instant stamps and `Stamp()` for lerp stamps that ramp up over multiple frames. Pending stamps are batched (up to 16 per blit pass) via `DisturbanceStampBatched.shader`. Registered as a singleton in `GameLifetimeScope` |
+| `DisturbanceFieldService` | Plain C# `IStartable` + `ITickable` + `IDisposable` — owns a camera-sized `ARGBHalf` RT pair (density in R, displacement XY in GB). Runs one diffusion blit per tick (spatial blur + reform toward equilibrium + wind advection + pressure fill + displacement decay). Exposes `Stamp()` for instant and lerp stamps. Pending stamps are batched (up to 16 per blit pass) via `DisturbanceStampBatched.shader`. Pushes `_DisturbanceTex`, `_FieldBoundsMin`, `_FieldBoundsSize` as global shader properties each tick so all consumers (cloud views, future effects) read the field without per-instance setup. Registered as a singleton in `GameLifetimeScope` |
 
 ## How it works
 
@@ -55,7 +55,7 @@ All tuning lives on `DisturbanceFieldSettings` SO (in `Configuration/`). See `Co
 
 ## Interactions
 
-- **`PuffCloudView`** — receives the service via `SetDisturbanceField()` and pushes `FieldTexture`, `FieldBoundsMin`, `FieldBoundsSize` to the `PuffCloud.shader` via `MaterialPropertyBlock` each frame
+- **`PuffCloudView`** — reads `_DisturbanceTex`, `_FieldBoundsMin`, `_FieldBoundsSize` from global shader properties (set by the service each tick). Only pushes `_TimeOffset` per-instance via `MaterialPropertyBlock`. No direct reference to the service
 - **`GameLifetimeScope`** — registers the service as singleton with `AsImplementedInterfaces().AsSelf()`
 - **`GameDisplayConfiguration`** — provides orthographic size for RT bounds computation
 - **`DisturbanceFieldSettings`** — provides all tuning knobs and shader references

@@ -8,6 +8,9 @@ Shader "BalloonParty/Grid/PuffCloud"
     //
     // GPU instancing DISABLED — per-instance _TimeOffset driven via MaterialPropertyBlock.
     //
+    // _DisturbanceTex, _FieldBoundsMin, _FieldBoundsSize are GLOBAL shader
+    // properties set by DisturbanceFieldService — NOT in the Properties block.
+    //
     // Reference dimensions: SlotSeparation = (1.0, 0.85).
     // ───────────────────────────────────────────────────────────────────────
     Properties
@@ -42,9 +45,6 @@ Shader "BalloonParty/Grid/PuffCloud"
 
         [Header(Density)]
         [Toggle(_DENSITY_ON)] _EnableDensity ("Enable Density RT", Float) = 0
-        _DisturbanceTex     ("Disturbance Texture", 2D)                 = "white" {}
-        _FieldBoundsMin     ("Field Bounds Min",    Vector)             = (-5, -8, 0, 0)
-        _FieldBoundsSize    ("Field Bounds Size",   Vector)             = (10, 16, 0, 0)
         _DisplaceWorldScale ("Displace World Scale", Range(0, 2))      = 0.5
 
         [Header(Animation)]
@@ -134,6 +134,8 @@ Shader "BalloonParty/Grid/PuffCloud"
             float  _NormalStrength;
             float  _NormalEpsilon;
 
+            // Global shader properties — set once by DisturbanceFieldService,
+            // not declared in Properties block so material defaults don't mask them.
             #ifdef _DENSITY_ON
             sampler2D _DisturbanceTex;
             float2    _FieldBoundsMin;
