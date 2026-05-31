@@ -42,7 +42,9 @@ Shader "BalloonParty/Grid/PuffCloud"
 
         [Header(Density)]
         [Toggle(_DENSITY_ON)] _EnableDensity ("Enable Density RT", Float) = 0
-        _DensityTex         ("Density Texture",    2D)                 = "white" {}
+        _DisturbanceTex     ("Disturbance Texture", 2D)                 = "white" {}
+        _FieldBoundsMin     ("Field Bounds Min",    Vector)             = (-5, -8, 0, 0)
+        _FieldBoundsSize    ("Field Bounds Size",   Vector)             = (10, 16, 0, 0)
         _DisplaceWorldScale ("Displace World Scale", Range(0, 2))      = 0.5
 
         [Header(Animation)]
@@ -133,7 +135,9 @@ Shader "BalloonParty/Grid/PuffCloud"
             float  _NormalEpsilon;
 
             #ifdef _DENSITY_ON
-            sampler2D _DensityTex;
+            sampler2D _DisturbanceTex;
+            float2    _FieldBoundsMin;
+            float2    _FieldBoundsSize;
             float     _DisplaceWorldScale;
             #endif
 
@@ -227,7 +231,8 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                 // Density field + displacement (P2+)
                 #ifdef _DENSITY_ON
-                float3 field = tex2D(_DensityTex, IN.texcoord).rgb;
+                float2 fieldUV = (IN.worldPos - _FieldBoundsMin) / _FieldBoundsSize;
+                float3 field = tex2D(_DisturbanceTex, fieldUV).rgb;
                 float density = field.r;
                 float2 displace = (field.gb - 0.5) * 2.0 * _DisplaceWorldScale;
                 float displaceLen = length(displace);

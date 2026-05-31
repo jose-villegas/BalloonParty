@@ -17,6 +17,7 @@ using BalloonParty.Item.Shield;
 using BalloonParty.Nudge;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
@@ -45,6 +46,7 @@ namespace BalloonParty.Game
         [SerializeField] private BalloonsConfiguration _balloonsConfiguration;
         [SerializeField] private GridActorConfiguration _gridActorConfiguration;
         [SerializeField] private PuffCloudSettings _puffCloudSettings;
+        [SerializeField] private DisturbanceFieldSettings _disturbanceFieldSettings;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
 
@@ -83,6 +85,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance(_balloonsConfiguration);
             builder.RegisterInstance(_gridActorConfiguration);
             builder.RegisterInstance(_puffCloudSettings);
+            builder.RegisterInstance(_disturbanceFieldSettings);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
 
@@ -102,6 +105,8 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<StaticActorSpawner>().As<IGridSpawner>();
             builder.RegisterEntryPoint<PuffClusterRegistry>().AsSelf();
             builder.RegisterEntryPoint<PuffCloudViewController>();
+            builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
+                .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf();
             builder.RegisterEntryPoint<ScoreController>().AsSelf();
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();
@@ -128,6 +133,11 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces()
                 .AsSelf();
             builder.RegisterBuildCallback(resolver => resolver.Resolve<BalloonRemoverCheat>());
+
+            builder.RegisterComponentOnNewGameObject<DisturbanceStampCheat>(Lifetime.Singleton, "DisturbanceStampCheat")
+                .AsImplementedInterfaces()
+                .AsSelf();
+            builder.RegisterBuildCallback(resolver => resolver.Resolve<DisturbanceStampCheat>());
 
             builder.RegisterComponentOnNewGameObject<CheatConsoleView>(Lifetime.Singleton, "CheatConsole");
             builder.RegisterBuildCallback(resolver => resolver.Resolve<CheatConsoleView>());

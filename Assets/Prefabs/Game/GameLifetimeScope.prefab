@@ -59,6 +59,8 @@ MonoBehaviour:
   _gridActorConfiguration: {fileID: 11400000, guid: ba75d46a7ad4943169a55f7c0bc2fb95,
     type: 2}
   _puffCloudSettings: {fileID: 11400000, guid: ad969212547fb4aa28442e6f190431fc, type: 2}
+  _disturbanceFieldSettings: {fileID: 11400000, guid: 07be6148b095f45018867507725bccd8,
+    type: 2}
   _projectilePrefab: {fileID: 7317932863533360661, guid: 514e1ddc348a5498aa3edae2404ff130,
     type: 3}
   _scoreTrailPrefab: {fileID: 1429749022553535108, guid: 17e678e81b22a4d3481d8307861019b8,

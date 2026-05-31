@@ -863,30 +863,356 @@ one splits the visual correctly. ✅
 
 ---
 
-### Phase P4 — Projectile Disturbance Integration
+### Phase P4 — Shared Disturbance Field & Projectile Integration
 
-**Goal:** The projectile disturbs clouds as it flies through them.
+**Goal:** Replace per-cluster density RTs with a single screen-space disturbance field
+service. Any system (projectile, balloons, items) stamps into the shared field.
+The cloud shader samples from it. Other future effects can also consume it.
 
-- [ ] `PuffCloudView` polls projectile position each frame
-- [ ] Stamps disturbance when projectile overlaps cloud bounds
-- [ ] Disturbance radius and strength driven by `PuffCloudSettings`
-- [ ] The projectile trail is visible through the cloud gap
-- [ ] Cloud reforms after the projectile passes
+- [ ] Create `DisturbanceFieldService` — owns a camera-sized RT pair, runs diffusion
+- [ ] Migrate `PuffCloudView` to sample from the shared RT instead of per-cluster RTs
+- [ ] `ProjectileView` stamps the shared field each `FixedUpdate` while flying
+- [ ] Cloud reforms after the projectile passes (diffusion handles this)
+- [ ] Projectile trail visible through the cloud gap
 
 **Exit criteria:** Shooting through a cloud creates a visible wake that reforms.
+The disturbance field is a standalone service usable by any future consumer.
+
+#### P4 — Architecture
+
+**Core idea:** One screen-space `RenderTexture` pair (density + displacement) that
+maps 1:1 to the camera's orthographic viewport. Any game system stamps into it by
+calling `DisturbanceFieldService.Stamp(worldPos, radius, strength, direction)`.
+The cloud shader (and any future effect) samples from the RT using a simple
+world-to-screen-UV transform.
+
+```
+DisturbanceFieldService (new, plain C#, IStartable + ITickable + IDisposable)
+    ├── Owns RT pair (_fieldA, _fieldB) — ARGBHalf, camera-sized
+    ├── Runs diffusion blit each tick (reform + blur + displacement decay)
+    ├── Stamp(worldPos, radius, strength, direction) — public API
+    ├── Exposes FieldTexture (current read RT) for shader sampling
+    ├── Exposes WorldToFieldUV(worldPos) for coordinate conversion
+    └── Computes RT bounds from camera orthographic size + aspect ratio
+
+PuffCloudView (modified)
+    ├── Removes per-cluster density RT pair (_densityA, _densityB)
+    ├── Removes stamp material, diffusion material, diffusion tick
+    ├── Removes StampDisturbance(), TickDiffusion(), density resize logic
+    ├── Samples _DisturbanceTex (global) in the shader via MPB
+    └── Pushes field UV bounds so shader can map world→field UV
+
+ProjectileView (modified)
+    ├── Injects DisturbanceFieldService
+    ├── Calls Stamp() at end of MoveAndBounce()
+    └── No knowledge of clouds — stamps the shared field
+
+BalloonView / SpawnAnimation (future P5)
+    ├── Injects DisturbanceFieldService
+    ├── Calls Stamp() each frame during path animation
+    └── Same API — different radius/strength
+
+BombItemHandler (future)
+    ├── Calls Stamp() with large radius on detonation
+    └── Single burst stamp — no per-frame tracking
+
+PuffCloud.shader (modified)
+    ├── Replaces _DensityTex (per-cluster UV) with _DisturbanceTex (screen UV)
+    ├── Converts world position to field UV using _FieldBoundsMin/_FieldBoundsSize
+    ├── Samples density + displacement from the shared field
+    └── Rest of shader unchanged (noise, falloff, lighting)
+```
+
+#### P4 — Implementation Gaps & Decisions
+
+**G22 — RT sizing: camera-derived world bounds**
+
+The RT maps to the camera's orthographic viewport. The service reads `Camera.main`
+(or injects the camera reference) to compute world-space bounds:
+
+```
+halfHeight = camera.orthographicSize
+halfWidth  = halfHeight * camera.aspect
+fieldBounds = Rect(cam.x - halfWidth, cam.y - halfHeight, halfWidth*2, halfHeight*2)
+```
+
+RT resolution: `referenceWorldWidth * texelsPerUnit` × `referenceWorldHeight * texelsPerUnit`.
+With `texelsPerUnit = 8`, a 10×16 world → 80×128 RT. This is tiny and covers the
+entire play area. A single RT replaces all per-cluster RTs.
+
+The texels-per-unit is configurable on `PuffCloudSettings` (or a new
+`DisturbanceFieldSettings` SO if the service becomes broadly used).
+
+**G23 — World-to-field UV mapping**
+
+Any world position converts to field UV:
+
+```csharp
+float2 uv = (worldPos.xy - fieldBounds.min) / fieldBounds.size
+```
+
+This is a simple linear transform. The service exposes `WorldToFieldUV(Vector3)` for
+C# callers (stamp positioning). The shader receives `_FieldBoundsMin` (float2) and
+`_FieldBoundsSize` (float2) as global shader properties so every shader can compute
+the UV without per-material setup.
+
+Since the camera is static (no panning), the bounds are computed once on `Start()`
+and only recomputed if the camera moves or resizes (which it doesn't during gameplay).
+
+**G24 — Stamp API: participants stamp themselves**
+
+The service exposes one method:
+
+```csharp
+internal void Stamp(Vector3 worldPosition, float radius, float strength, Vector2 direction)
+```
+
+- `worldPosition` — where in the world the disturbance occurs
+- `radius` — world-space radius of the disturbance
+- `strength` — 0–1 intensity (how much density to subtract)
+- `direction` — velocity direction for directional wake shape
+
+The service converts world position/radius to field UV space internally, sets stamp
+material properties, and blits. Callers don't need to know about UVs or RTs.
+
+Each caller decides when and how often to stamp:
+- **Projectile** — every `FixedUpdate` in `MoveAndBounce()`, after position update
+- **Balloon spawn/balance** — every frame during DOTween `OnUpdate`, while path
+  crosses the field bounds (future P5)
+- **Bomb** — single stamp on detonation (future)
+- **Pop** — single stamp at pop position (future P5)
+
+**G25 — Diffusion: service runs it, not the view**
+
+The diffusion pass (blur + reform + wind advection + displacement decay) moves from
+`PuffCloudView.TickDiffusion()` to `DisturbanceFieldService.Tick()`. The service
+runs one diffusion blit per tick on the single shared RT — replacing N per-cluster
+diffusion blits with one.
+
+Wind state (direction, smoothing, decay) also moves to the service. This means all
+clouds share wind state — which is correct for a screen-space field. The wind is a
+global atmospheric effect, not per-cluster.
+
+The diffusion tick interval is configurable (same `_diffusionTickInterval` as before).
+
+**G26 — PuffCloudView simplification**
+
+`PuffCloudView` sheds significant complexity:
+
+**Removed:**
+- `_densityA`, `_densityB` RT pair and ping-pong logic
+- `_diffusionMaterial`, `_stampMaterial` and their creation/destruction
+- `_diffusionTimer`, `_readFromA`, `_densityInitialized`
+- `_windTarget`, `_windCurrent`, `_windSpeed`, `_windSmoothing`, `_windDecay`,
+  `_pressureStrength`
+- `InitDensityField()`, `ResizeDensityField()`, `ReleaseDensityField()`
+- `TickDiffusion()`, `PushDensityTexture()`, `StampDisturbance()`
+- `EnsureDiffusionMaterial()`, `EnsureStampMaterial()`
+- `WorldToDensityUV()`, `WorldRadiusToDensityUV()`
+- `HandleDebugClick()` and debug stamp fields
+
+**Retained:**
+- Noise animation (`_TimeOffset` via MPB)
+- Slot-center array + falloff (`_SlotCentersWorld`, `_SlotCount`)
+- `Configure()` for cluster positioning/scaling
+- `SpriteRenderer` + `MaterialPropertyBlock`
+
+**Added:**
+- Receives `DisturbanceFieldService.FieldTexture` reference and pushes it as
+  `_DisturbanceTex` via MPB each frame
+- Pushes `_FieldBoundsMin` and `_FieldBoundsSize` via MPB so the shader can compute
+  field UVs from world position
+
+**G27 — Shader changes: screen-space UV sampling**
+
+The `PuffCloud.shader` fragment shader currently samples density like this:
+```hlsl
+float3 field = tex2D(_DensityTex, IN.texcoord).rgb;  // per-cluster UV
+```
+
+This changes to:
+```hlsl
+float2 fieldUV = (IN.worldPos - _FieldBoundsMin) / _FieldBoundsSize;
+float3 field = tex2D(_DisturbanceTex, fieldUV).rgb;   // screen-space UV
+```
+
+`IN.worldPos` is already computed in the vertex shader (from P1). The field UV
+is a simple linear remap. Everything else (noise, falloff, lighting, shadow)
+stays unchanged.
+
+Edge case: fragments outside the field bounds (clouds at screen edge) produce
+UVs outside [0,1]. The RT uses `WrapMode.Clamp`, so edge texels are sampled —
+which will be equilibrium (1.0, 0.5, 0.5) since no stamps occur off-screen.
+This is correct behaviour.
+
+**G28 — Per-cluster density fields: backward compatibility**
+
+The per-cluster density fields served two purposes:
+1. **Disturbance stamping** — replaced by the shared field
+2. **Density initialization on cluster creation** — the cluster started at full
+   density and the diffusion pass maintained it
+
+With the shared field, new clouds instantly sample from whatever the field contains
+at their location — which is equilibrium (full density) if nothing has disturbed
+that area. This is the same visual result. No special initialization needed.
+
+Cluster resize (adding/removing slots) no longer needs RT reallocation — the field
+is always screen-sized. This eliminates `ResizeDensityField()` and the
+`PreserveDensityOnResize` setting entirely.
+
+**G29 — Debug stamping: moves to service**
+
+The debug click-to-stamp functionality moves from `PuffCloudView` to the service.
+The service can expose a `DebugStampAtScreenPosition()` method, or a simple
+MonoBehaviour debug tool can call `Stamp()` directly.
+
+**G30 — Performance comparison**
+
+| Metric | Before (per-cluster) | After (shared field) |
+|---|---|---|
+| RT count | 2 per cluster (6–10 total) | 2 total |
+| Diffusion blits/frame | 1 per cluster (3–5) | 1 total |
+| Stamp blits/frame | 1 per overlapping cluster per source | 1 per source |
+| Material instances | 2 per view (stamp + diffusion) | 2 total (on service) |
+| Memory | 80 KB (10 × 8 KB) | ~160 KB (2 × 80×128 ARGBHalf) |
+| Shader complexity | Per-cluster UV mapping | Screen UV mapping (simpler) |
+| CPU overhead | Per-cluster bounds checks | None (stamp is global) |
+
+Total GPU cost drops from ~5 diffusion blits + N stamp blits per frame to
+1 diffusion blit + N stamp blits per frame. Memory is comparable. The main win
+is architectural simplicity — no per-cluster RT lifecycle, no resize logic, no
+bounds-check-before-stamp.
+
+**G31 — Future consumers**
+
+The shared field enables effects beyond clouds:
+- **Heat haze / refraction** — a post-process shader samples `_DisturbanceTex`
+  displacement to distort the screen image near disturbance points
+- **Grass/foliage sway** — ground-plane vegetation bends away from disturbances
+- **Particle emission** — spawn particles at high-disturbance regions
+- **Water ripples** — if water tiles are added, they sample the same field
+
+All these consumers just sample `_DisturbanceTex` with `WorldToFieldUV` — no
+additional stamping infrastructure needed.
+
+**G32 — Service location and registration**
+
+`DisturbanceFieldService` is a plain C# class (not MonoBehaviour) registered in
+`GameLifetimeScope`:
+
+```
+builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
+       .AsImplementedInterfaces().AsSelf();
+```
+
+It implements `IStartable` (create RTs, compute bounds), `ITickable` (diffusion),
+and `IDisposable` (release RTs).
+
+It lives in `Shared/` (not `Slots/`) because it's game-wide infrastructure, not
+specific to the Puff cloud feature. Namespace: `BalloonParty.Shared.Disturbance`.
+
+Config fields (`texelsPerUnit`, `diffusionRate`, `reformSpeed`, `diffusionTickInterval`,
+`windSpeed`, `windSmoothing`, `windDecay`, `pressureStrength`, `displaceDecay`) can
+stay on `PuffCloudSettings` for now (the service injects it), or be extracted to a
+dedicated `DisturbanceFieldSettings` SO if/when other consumers need independent
+tuning. For P4, reuse `PuffCloudSettings` to avoid premature extraction.
+
+**G33 — ProjectileView changes**
+
+Minimal:
+- Inject `DisturbanceFieldService`
+- At end of `MoveAndBounce()`, after `transform.position = pos`:
+  `_disturbanceField.Stamp(pos, _settings.ProjectileRadius, _settings.ProjectileStrength, _model.Direction)`
+- The settings values come from `PuffCloudSettings` (already has `ProjectileRadius`
+  and `ProjectileStrength` fields). Inject `PuffCloudSettings` into `ProjectileView`,
+  or pass radius/strength via `ProjectileModel` fields set at launch time.
+
+Preferred: inject `PuffCloudSettings` directly — it's a singleton SO, cheap to inject.
+`ProjectileView` already injects `IGameConfiguration` and `GamePalette`, so injecting
+one more SO is consistent with existing patterns.
+
+**G34 — Stamp and diffusion shaders: reuse or modify?**
+
+The existing `PuffCloudStamp.shader` and `PuffCloudDiffusion.shader` work on UV-space
+coordinates. They are agnostic to RT size — the stamp center and radius are passed in
+UV space. The service converts world coords to field UVs before setting material
+properties, same as `PuffCloudView` did with `WorldToDensityUV()`.
+
+**No shader changes needed for stamp/diffusion.** Only the main `PuffCloud.shader`
+changes (G27).
+
+#### P4 — Recommended Implementation Order
+
+1. Create `DisturbanceFieldService` in `Shared/Disturbance/` **(G22, G25, G32)**
+   - RT pair creation (camera-derived bounds)
+   - `Stamp()` API with world→UV conversion
+   - Diffusion tick (move logic from `PuffCloudView.TickDiffusion()`)
+   - `FieldTexture` and bounds properties
+2. Register in `GameLifetimeScope`
+3. Modify `PuffCloud.shader` — replace per-cluster `_DensityTex` sampling with
+   screen-space `_DisturbanceTex` + `_FieldBoundsMin/_FieldBoundsSize` **(G27)**
+4. Simplify `PuffCloudView` — remove all density RT, stamp, diffusion, wind code;
+   push `_DisturbanceTex` + field bounds via MPB each frame **(G26)**
+5. Inject `DisturbanceFieldService` into `ProjectileView`, stamp in
+   `MoveAndBounce()` **(G33)**
+6. Test: fire projectile through a cloud → visible wake
+7. Tune `ProjectileRadius` and `ProjectileStrength` on `PuffCloudSettings`
+8. Add debug stamp tool (optional) **(G29)**
+
+#### P4 — Quick Context Recovery
+
+> **Read this first when starting a P4 implementation session.**
+
+**What P4 does:** Creates a shared screen-space `DisturbanceFieldService` that owns
+one camera-sized RT pair (density + displacement). Any game system stamps into it.
+The `PuffCloud.shader` samples from it. Per-cluster density RTs are removed from
+`PuffCloudView`.
+
+**Files to read before starting (in order):**
+
+| File | Why |
+|---|---|
+| `Shared/Disturbance/` | Does not exist yet — create this folder |
+| `Slots/Actor/Archetype/PuffCloudView.cs` | Current density RT owner — most code being removed. Read `TickDiffusion()`, `StampDisturbance()`, `InitDensityField()` to understand what moves to the service |
+| `Shaders/BalloonParty/Grid/PuffCloud.shader` | Lines 229–254: `_DENSITY_ON` block — replace `tex2D(_DensityTex, IN.texcoord)` with screen-space UV sampling |
+| `Shaders/BalloonParty/Grid/PuffCloudDiffusion.shader` | Diffusion blit — reused as-is by the service |
+| `Shaders/BalloonParty/Grid/PuffCloudStamp.shader` | Stamp blit — reused as-is by the service |
+| `Configuration/PuffCloudSettings.cs` | Has `ProjectileRadius`, `ProjectileStrength`, and diffusion/wind fields the service will read |
+| `Projectile/View/ProjectileView.cs` | `MoveAndBounce()` at line 211 — add `Stamp()` call after position update. `DestroyProjectile()` and `OnDespawned()` — no clear needed (shared field persists) |
+| `Display/OrthogonalSizeCameraController.cs` | Camera sizing — `GameDisplayConfiguration` has `_referenceWorldWidth=10`, `_referenceWorldHeight=16`. Service derives RT bounds from these. |
+| `Game/GameLifetimeScope.cs` | Lines 103–104: register service here, near `PuffClusterRegistry` and `PuffCloudViewController` |
+
+**Key architectural rules:**
+- Service is plain C# (`IStartable` + `ITickable` + `IDisposable`), NOT MonoBehaviour
+- Service namespace: `BalloonParty.Shared.Disturbance`
+- RT format: `ARGBHalf` (R=density, GB=displacement XY), equilibrium=(1, 0.5, 0.5)
+- RT resolution: `referenceWorldWidth * texelsPerUnit` × `referenceWorldHeight * texelsPerUnit`
+- Stamp/diffusion shaders unchanged — service sets UV-space properties, same as view did
+- `PuffCloudView` becomes thinner: only noise animation + slot falloff + MPB pushes
+- `ProjectileView` injects `DisturbanceFieldService` + `PuffCloudSettings` directly
+- The `_DENSITY_ON` shader keyword stays but its sampling changes from per-cluster UV
+  (`IN.texcoord`) to screen-space UV (`(worldPos - _FieldBoundsMin) / _FieldBoundsSize`)
+
+**What NOT to change:**
+- `PuffClusterRegistry`, `PuffCluster`, `PuffCloudViewController` — untouched
+- `PuffCloudStamp.shader`, `PuffCloudDiffusion.shader` — reused as-is
+- Noise, slot falloff, lighting, shadow in `PuffCloud.shader` — untouched
+- `GridActorConfiguration`, `StaticActorSpawner`, `ClusterSlotSelectionStrategy` — untouched
 
 ---
 
-### Phase P5 — Animation Disturbance Integration
+### Phase P5 — Animation & Item Disturbance Integration
 
-**Goal:** Balloon spawn and balance animations disturb clouds they pass through.
+**Goal:** Balloon spawn animations, balance animations, pops, and item effects
+stamp the shared disturbance field.
 
-- [ ] Hook into spawn animation path — stamp disturbance at balloon position each
-      frame while the balloon crosses a cloud's bounds
-- [ ] Hook into balance animation path — same approach
-- [ ] Balloon pop near a cloud → burst stamp (large radius, high strength)
-- [ ] Disturbance intensity scales with balloon speed (fast spawn animation = bigger
-      disturbance than slow balance drift)
+- [ ] Spawn animation — `BalloonView` or spawn controller injects
+  `DisturbanceFieldService`, calls `Stamp()` each frame during DOTween path
+- [ ] Balance animation — same approach during balance DOPath
+- [ ] Balloon pop — single burst `Stamp()` at pop position with
+  `PopBurstRadius` / `PopBurstStrength` from `PuffCloudSettings`
+- [ ] Bomb item — single large-radius `Stamp()` on detonation
+- [ ] Disturbance intensity scales with animation speed (fast spawn = bigger stamp)
 
 **Exit criteria:** Spawning a balloon through a Puff cloud visibly parts the cloud
 along the spawn path. A pop adjacent to a cloud creates a visible shockwave.
@@ -900,12 +1226,13 @@ along the spawn path. A pop adjacent to a cloud creates a visible shockwave.
 - [ ] Shadow pass (optional `_SHADOW_ON` toggle)
 - [ ] Color tinting from `GamePalette` (clouds could subtly tint to match the level's
       palette mood)
-- [ ] Density RT resolution scaling based on device tier (`QualitySettings`)
+- [ ] Disturbance field resolution scaling based on device tier (`QualitySettings`)
 - [ ] Diffusion tick rate optimization (skip frames on low-end)
 - [ ] Profile on target devices; ensure < 0.5ms total for all active clouds
-- [ ] Edge case: cloud at grid boundary — clamp quad and density UVs
+- [ ] Edge case: cloud at grid boundary — clamp quad
 - [ ] Edge case: all Puffs in a cluster removed in one frame (balance pass removes
       support) — graceful cleanup
+- [ ] Extract `DisturbanceFieldSettings` SO if other consumers need independent tuning
 
 ---
 
@@ -918,25 +1245,19 @@ along the spawn path. A pop adjacent to a cloud creates a visible shockwave.
 2. **~~Density RT format~~** — Resolved. Uses `ARGBHalf` — R = density,
    GB = displacement XY. See P2 implementation notes.
 
-3. **Disturbance source priority** — If a projectile and a spawn animation disturb
-   the same cloud in the same frame, should stamps accumulate or should only the
-   strongest apply? Accumulation is simpler and probably looks fine.
+3. **~~Disturbance source priority~~** — Resolved. Stamps accumulate naturally —
+   the stamp shader is subtractive, so multiple stamps in one frame just deepen
+   the hole. No priority logic needed.
 
-4. **Cloud sorting order** — Should clouds render behind or in front of balloons
-   that occupy adjacent (non-Puff) slots? Behind is more natural (clouds are
-   background atmosphere). But in front could create a cool fog-of-war effect where
-   balloons are partially obscured. Resolve during P1 visual investigation.
+4. **~~Cloud sorting order~~** — Resolved. Clouds render on a dedicated sorting layer
+   above balloons (configurable via `PuffCloudSettings` `[SortingLayer]` dropdown).
 
-5. **Maximum cluster size** — Should there be a cap on how many Puff slots can merge?
-   Very large clusters (6+ slots) may need density RT resolution scaling. The
-   `texelsPerSlot` approach handles this naturally, but the RT could exceed reasonable
-   sizes if an entire row is Puffs. Consider a max-RT-size clamp (e.g. 256×256).
+5. **~~Maximum cluster size~~** — Resolved. `MaxPerCluster` on `GridActorPrefabEntry`
+   caps individual cluster growth during placement (default 3).
 
-6. **`IOnPassThrough` timing** — The interface in `PLAN-FutureIdeas §5.5` is
-   described as future work. Should Puff cloud disturbance be the forcing function
-   that implements it, or should disturbance remain view-side polling? Polling is
-   simpler for Phase P4–P5; `IOnPassThrough` is cleaner long-term. Could implement
-   polling first, migrate to `IOnPassThrough` later.
+6. **~~`IOnPassThrough` timing~~** — Resolved. P4 uses a shared
+   `DisturbanceFieldService` — participants (projectile, balloons, items) stamp
+   directly. No polling or `IOnPassThrough` needed for disturbance.
 
 7. **Cloud during Puff placement animation** — When a new Puff is spawned, should
    the cloud fade in or appear instantly? A fade-in (density starts at 0, reforms

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Grid;
 using UniRx;
@@ -24,6 +25,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         private readonly PuffCloudSettings _settings;
         private readonly PoolManager _poolManager;
         private readonly IObjectResolver _resolver;
+        private readonly DisturbanceFieldService _disturbanceField;
         private readonly Dictionary<int, PuffCloudView> _activeViews = new();
         private readonly CompositeDisposable _disposables = new();
 
@@ -33,13 +35,15 @@ namespace BalloonParty.Slots.Actor.Archetype
             SlotGrid grid,
             PuffCloudSettings settings,
             PoolManager poolManager,
-            IObjectResolver resolver)
+            IObjectResolver resolver,
+            DisturbanceFieldService disturbanceField)
         {
             _registry = registry;
             _grid = grid;
             _settings = settings;
             _poolManager = poolManager;
             _resolver = resolver;
+            _disturbanceField = disturbanceField;
         }
 
         public void Start()
@@ -85,6 +89,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         private void SpawnView(PuffCluster cluster)
         {
             var view = _poolManager.Get<PuffCloudView>(PoolKey);
+            view.SetDisturbanceField(_disturbanceField);
             ConfigureView(view, cluster);
             _activeViews[cluster.ClusterId] = view;
         }

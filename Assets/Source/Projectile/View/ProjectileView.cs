@@ -5,6 +5,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
@@ -35,6 +36,8 @@ namespace BalloonParty.Projectile.View
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
         [Inject] private ColorStreakTracker _streakTracker;
         [Inject] private PauseService _pauseService;
+        [Inject] private DisturbanceFieldService _disturbanceField;
+        [Inject] private PuffCloudSettings _puffCloudSettings;
 
         private IWriteableProjectileModel _model;
         private IDisposable _deflectedSubscription;
@@ -230,6 +233,12 @@ namespace BalloonParty.Projectile.View
 
             transform.position = pos;
             transform.up = _model.Direction;
+
+            _disturbanceField.Stamp(
+                pos,
+                _puffCloudSettings.ProjectileRadius,
+                _puffCloudSettings.ProjectileStrength,
+                _model.Direction);
         }
 
         private void OnBalloonDeflected(BalloonDeflectedMessage msg)
