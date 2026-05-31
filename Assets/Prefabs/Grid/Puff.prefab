@@ -73,14 +73,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Slots.Actor.Archetype.PuffCloudView
   _renderer: {fileID: 5744512781299209796}
-  _animationSpeed: 0.8
+  _animationSpeed: 5
   _texelsPerSlot: 32
   _diffusionRate: 0.15
   _reformSpeed: 0.4
   _diffusionTickInterval: 0.05
-  _debugClickToStamp: 0
-  _debugStampRadius: 0.15
-  _debugStampStrength: 0.8
+  _windSpeed: 0.5
+  _windSmoothing: 2
+  _windDecay: 1
+  _pressureStrength: 0.9
+  _displaceAmount: 0.9
+  _displaceDecay: 0.3
+  _debugClickToStamp: 1
+  _debugStampRadius: 0.3
+  _debugStampStrength: 1.5
 --- !u!1 &6832182601084603710
 GameObject:
   m_ObjectHideFlags: 0
