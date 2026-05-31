@@ -22,14 +22,16 @@ MonoBehaviour:
   _pressureStrength: 0.9
   _displaceAmount: 0.9
   _displaceDecay: 0.3
+  _minStampStrength: 0.001
+  _maxLerpStamps: 32
   _stampProfiles:
   - Sources: 1
     Radius: 0.3
     Strength: 0.8
     Duration: 0
   - Sources: 2
-    Radius: 0.5
-    Strength: 0.004
+    Radius: 0.3
+    Strength: 0.005
     Duration: 0.1
   - Sources: 4
     Radius: 1.25
