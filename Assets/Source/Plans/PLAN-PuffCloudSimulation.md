@@ -661,10 +661,10 @@ include in `Assets/Shaders/BalloonParty/Noise/`).
 **Goal:** Add the density RenderTexture, diffusion pass, and manual disturbance
 stamping. Validate that the disturb→reform cycle looks convincing.
 
-- [ ] Implement density RT ping-pong pair on `PuffCloudView`
-- [ ] Write diffusion blit shader (blur + reform-toward-1.0)
-- [ ] Write stamp blit shader (subtractive radial + directional wake)
-- [ ] Add debug input: click on cloud → stamp disturbance at click position
+- [x] Implement density RT ping-pong pair on `PuffCloudView`
+- [x] Write diffusion blit shader (blur + reform-toward-1.0)
+- [x] Write stamp blit shader (subtractive radial + directional wake)
+- [x] Add debug input: click on cloud → stamp disturbance at click position
 - [ ] Tune `DiffusionRate`, `ReformSpeed`, stamp radius/strength
 - [ ] Validate density preservation across frames (no drift toward 0 or NaN)
 

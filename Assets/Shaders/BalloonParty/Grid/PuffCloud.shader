@@ -32,6 +32,10 @@ Shader "BalloonParty/Grid/PuffCloud"
         _BorderSoftness     ("Border Softness",    Range(0, 0.5))      = 0.15
         _SlotRadius         ("Slot Radius",        Float)              = 0.45
 
+        [Header(Density)]
+        [Toggle(_DENSITY_ON)] _EnableDensity ("Enable Density RT", Float) = 0
+        _DensityTex         ("Density Texture",    2D)                 = "white" {}
+
         [Header(Animation)]
         _TimeOffset         ("Time Offset",        Float)              = 0.0
 
@@ -65,6 +69,7 @@ Shader "BalloonParty/Grid/PuffCloud"
             #pragma fragment frag
             #pragma target 3.0
             #pragma shader_feature _SHADOW_ON
+            #pragma shader_feature _DENSITY_ON
             #pragma multi_compile_instancing
             #include "UnityCG.cginc"
             #include "Assets/Shaders/BalloonParty/Noise/SimplexNoise2D.cginc"
@@ -113,6 +118,10 @@ Shader "BalloonParty/Grid/PuffCloud"
             float  _BorderSoftness;
             float  _SlotRadius;
             float  _TimeOffset;
+
+            #ifdef _DENSITY_ON
+            sampler2D _DensityTex;
+            #endif
 
             // Slot center positions in world space — set via MaterialPropertyBlock.
             float4 _SlotCentersWorld[MAX_SLOTS];
@@ -180,6 +189,12 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float noiseValue = CloudNoise(wp, t);
                 float cloud = smoothstep(_EdgeLow, _EdgeHigh, noiseValue);
 
+                // Density field masking (P2+)
+                #ifdef _DENSITY_ON
+                float density = tex2D(_DensityTex, IN.texcoord).r;
+                cloud *= density;
+                #endif
+
                 // Boundary falloff — occupancy mask via slot centers
                 float borderFade = SlotFalloff(wp);
                 cloud *= borderFade;
@@ -190,6 +205,9 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float2 shadowWp = wp - float2(_ShadowOffsetX, _ShadowOffsetY);
                 float  shadowNoise = CloudNoise(shadowWp, t);
                 float  shadowCloud = smoothstep(_EdgeLow, _EdgeHigh, shadowNoise);
+                #ifdef _DENSITY_ON
+                shadowCloud *= tex2D(_DensityTex, IN.texcoord).r;
+                #endif
                 float  shadowFade  = SlotFalloff(shadowWp);
                 shadowCloud *= shadowFade;
 
