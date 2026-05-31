@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
-using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Grid;
 using UniRx;
 using UnityEngine;
@@ -11,34 +10,30 @@ using VContainer.Unity;
 namespace BalloonParty.Slots.Actor.Archetype
 {
     /// <summary>
-    /// Manages the lifecycle of <see cref="PuffCloudView"/> instances based on
-    /// cluster events from <see cref="PuffClusterRegistry"/>. One pooled cloud
-    /// view per cluster.
+    /// Manages a single <see cref="PuffCloudView"/> instance that renders all
+    /// Puff clusters in one draw call. On any cluster change, collects every
+    /// slot position from every cluster and reconfigures the view.
     /// </summary>
     internal class PuffCloudViewController : IStartable, IDisposable
     {
-        internal const string PoolKey = "PuffCloud";
-
         private readonly PuffClusterRegistry _registry;
         private readonly SlotGrid _grid;
         private readonly PuffCloudSettings _settings;
-        private readonly PoolManager _poolManager;
         private readonly IObjectResolver _resolver;
-        private readonly Dictionary<int, PuffCloudView> _activeViews = new();
         private readonly CompositeDisposable _disposables = new();
+
+        private PuffCloudView _view;
 
         [Inject]
         internal PuffCloudViewController(
             PuffClusterRegistry registry,
             SlotGrid grid,
             PuffCloudSettings settings,
-            PoolManager poolManager,
             IObjectResolver resolver)
         {
             _registry = registry;
             _grid = grid;
             _settings = settings;
-            _poolManager = poolManager;
             _resolver = resolver;
         }
 
@@ -52,81 +47,68 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return;
             }
 
-            _poolManager.Register(PoolKey, new PuffCloudPoolChannel(_resolver, _settings.CloudPrefab));
+            _view = _resolver.Instantiate(_settings.CloudPrefab);
+
+            if (_view.Renderer != null)
+            {
+                _view.Renderer.sortingLayerID = _settings.SortingLayerId;
+                _view.Renderer.sortingOrder = _settings.SortingOrderOffset;
+                _view.Renderer.enabled = false;
+            }
 
             _registry.OnClusterChanged
-                .Subscribe(OnClusterChanged)
+                .Subscribe(_ => Reconfigure())
                 .AddTo(_disposables);
         }
 
         public void Dispose()
         {
             _disposables.Dispose();
-        }
 
-        private void OnClusterChanged(PuffClusterChangedEvent evt)
-        {
-            switch (evt.ChangeType)
+            if (_view != null)
             {
-                case PuffClusterChangeType.Created:
-                    SpawnView(evt.Cluster);
-                    break;
-
-                case PuffClusterChangeType.Resized:
-                    ReconfigureView(evt.Cluster);
-                    break;
-
-                case PuffClusterChangeType.Removed:
-                    ReturnView(evt.ClusterId);
-                    break;
+                UnityEngine.Object.Destroy(_view.gameObject);
+                _view = null;
             }
         }
 
-        private void SpawnView(PuffCluster cluster)
+        private void Reconfigure()
         {
-            var view = _poolManager.Get<PuffCloudView>(PoolKey);
-            ConfigureView(view, cluster);
-            _activeViews[cluster.ClusterId] = view;
-        }
-
-        private void ReconfigureView(PuffCluster cluster)
-        {
-            if (!_activeViews.TryGetValue(cluster.ClusterId, out var view))
-            {
-                SpawnView(cluster);
-                return;
-            }
-
-            ConfigureView(view, cluster);
-        }
-
-        private void ReturnView(int clusterId)
-        {
-            if (!_activeViews.TryGetValue(clusterId, out var view))
+            if (_view == null)
             {
                 return;
             }
 
-            _activeViews.Remove(clusterId);
-            _poolManager.Return(PoolKey, view);
-        }
-
-        private void ConfigureView(PuffCloudView view, PuffCluster cluster)
-        {
-            var slots = cluster.Slots;
-            var positions = new Vector3[slots.Count];
-            for (var i = 0; i < slots.Count; i++)
+            var clusters = _registry.Clusters;
+            if (clusters.Count == 0)
             {
-                positions[i] = _grid.IndexToWorldPosition(slots[i]);
+                _view.Clear();
+                return;
             }
 
-            view.Configure(positions, cluster.WorldBounds, _settings);
+            var allPositions = new List<Vector3>();
+            var min = new Vector2(float.MaxValue, float.MaxValue);
+            var max = new Vector2(float.MinValue, float.MinValue);
 
-            if (view.Renderer != null)
+            foreach (var cluster in clusters.Values)
             {
-                view.Renderer.sortingLayerID = _settings.SortingLayerId;
-                view.Renderer.sortingOrder = _settings.SortingOrderOffset;
+                foreach (var slot in cluster.Slots)
+                {
+                    var pos = _grid.IndexToWorldPosition(slot);
+                    allPositions.Add(pos);
+                    min.x = Mathf.Min(min.x, pos.x);
+                    min.y = Mathf.Min(min.y, pos.y);
+                    max.x = Mathf.Max(max.x, pos.x);
+                    max.y = Mathf.Max(max.y, pos.y);
+                }
             }
+
+            const float halfSlotPadding = 0.5f;
+            min -= Vector2.one * halfSlotPadding;
+            max += Vector2.one * halfSlotPadding;
+            var combinedBounds = Rect.MinMaxRect(min.x, min.y, max.x, max.y);
+
+            _view.Configure(allPositions.ToArray(), combinedBounds, _settings);
         }
     }
 }
