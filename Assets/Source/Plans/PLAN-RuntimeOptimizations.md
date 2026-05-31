@@ -32,7 +32,7 @@ from `OptimalNextEmptySlot` → `BalloonBalancer.Balance()` on every rebalance.
 
 ---
 
-### H-2 — `Camera.main` in `ThrowerController.Tick()`
+### ~~H-2 — `Camera.main` in `ThrowerController.Tick()`~~ ✅ Done
 
 **File:** `Thrower/ThrowerController.cs` · `UpdateDirection()`
 
@@ -43,7 +43,7 @@ every frame inside `UpdateDirection()` → `Tick()`.
 
 ---
 
-### H-3 — `PredictionTraceView.SetTrace()` allocates every frame
+### ~~H-3 — `PredictionTraceView.SetTrace()` allocates every frame~~ ✅ Done
 
 **File:** `Prediction/PredictionTraceView.cs` · `SetTrace(List<Vector3>)`
 

@@ -34,6 +34,7 @@ namespace BalloonParty.Thrower
         private float _loadElapsed;
         private float _loadDuration;
         private PredictionTraceCalculator _traceCalculator;
+        private Camera _camera;
 
         private string ProjectilePoolKey => _settings.ProjectilePrefab.name;
 
@@ -58,6 +59,7 @@ namespace BalloonParty.Thrower
 
         public void Start()
         {
+            _camera = Camera.main;
             _traceCalculator = new PredictionTraceCalculator(_config);
 
             _poolManager.Register(ProjectilePoolKey,
@@ -79,7 +81,6 @@ namespace BalloonParty.Thrower
             {
                 return;
             }
-            // ...existing code...
 
             UpdateDirection();
             _view.RotateTo(_direction);
@@ -154,13 +155,12 @@ namespace BalloonParty.Thrower
                 return;
             }
 
-            var cam = Camera.main;
-            if (cam == null)
+            if (_camera == null)
             {
                 return;
             }
 
-            var screenPos = cam.WorldToScreenPoint(_view.Position);
+            var screenPos = _camera.WorldToScreenPoint(_view.Position);
             var rawDir = (Input.mousePosition - screenPos).normalized;
             rawDir.z = 0f;
             _direction = rawDir;

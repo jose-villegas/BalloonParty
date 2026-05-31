@@ -7,6 +7,7 @@ namespace BalloonParty.Prediction
     public class PredictionTraceView : MonoBehaviour
     {
         private LineRenderer _lineRenderer;
+        private Vector3[] _positionBuffer = new Vector3[0];
 
         private void Awake()
         {
@@ -21,8 +22,14 @@ namespace BalloonParty.Prediction
                 return;
             }
 
+            if (_positionBuffer.Length < points.Count)
+            {
+                _positionBuffer = new Vector3[points.Count];
+            }
+
+            points.CopyTo(_positionBuffer);
             _lineRenderer.positionCount = points.Count;
-            _lineRenderer.SetPositions(points.ToArray());
+            _lineRenderer.SetPositions(_positionBuffer);
         }
 
         public void Clear()
