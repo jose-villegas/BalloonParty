@@ -8,11 +8,19 @@ namespace BalloonParty.Slots.Actor
     /// Selects slots that favor hex-adjacency, encouraging cluster formation.
     /// Picks a random seed slot, then greedily expands into hex neighbors
     /// from the available set. When no more neighbors are available, picks
-    /// a new random seed (possibly forming multiple small clusters).
+    /// a new seed biased toward the opposite side of the grid from existing
+    /// clusters — producing spatially distributed, facing clusters.
     /// </summary>
     internal class ClusterSlotSelectionStrategy : ISlotSelectionStrategy
     {
-        public List<Vector2Int> SelectSlots(IReadOnlyList<Vector2Int> emptySlots, int count)
+        /// <summary>
+        /// How many of the farthest candidates to consider when picking the
+        /// next cluster seed. A small pool adds variety while still biasing
+        /// toward the opposite side.
+        /// </summary>
+        private const int FarthestCandidatePool = 3;
+
+        public List<Vector2Int> SelectSlots(IReadOnlyList<Vector2Int> emptySlots, int count, int maxPerCluster = 0)
         {
             if (emptySlots.Count == 0 || count <= 0)
             {
@@ -22,20 +30,32 @@ namespace BalloonParty.Slots.Actor
             var available = new HashSet<Vector2Int>(emptySlots);
             var result = new List<Vector2Int>(count);
             var frontier = new List<Vector2Int>();
+            var clusterCentroids = new List<Vector2>();
+            var currentClusterSlots = new List<Vector2Int>();
 
             while (result.Count < count && available.Count > 0)
             {
+                // Cap reached for the current cluster — force a new seed
+                if (maxPerCluster > 0 && currentClusterSlots.Count >= maxPerCluster)
+                {
+                    frontier.Clear();
+                }
+
                 if (frontier.Count == 0)
                 {
-                    // Pick a new random seed from remaining available slots
-                    var seed = PickRandom(available);
+                    FinishCurrentCluster(currentClusterSlots, clusterCentroids);
+
+                    var seed = clusterCentroids.Count == 0
+                        ? PickRandom(available)
+                        : PickFarthestSeed(available, clusterCentroids);
+
                     available.Remove(seed);
                     result.Add(seed);
+                    currentClusterSlots.Add(seed);
                     AddNeighborsToFrontier(seed, available, frontier);
                     continue;
                 }
 
-                // Pick a random frontier slot (biases toward compact clusters)
                 var idx = Random.Range(0, frontier.Count);
                 var next = frontier[idx];
                 frontier[idx] = frontier[^1];
@@ -48,10 +68,81 @@ namespace BalloonParty.Slots.Actor
 
                 available.Remove(next);
                 result.Add(next);
+                currentClusterSlots.Add(next);
                 AddNeighborsToFrontier(next, available, frontier);
             }
 
             return result;
+        }
+
+        private static void FinishCurrentCluster(
+            List<Vector2Int> currentClusterSlots,
+            List<Vector2> clusterCentroids)
+        {
+            if (currentClusterSlots.Count > 0)
+            {
+                var centroid = Vector2.zero;
+                foreach (var s in currentClusterSlots)
+                {
+                    centroid += new Vector2(s.x, s.y);
+                }
+
+                centroid /= currentClusterSlots.Count;
+                clusterCentroids.Add(centroid);
+                currentClusterSlots.Clear();
+            }
+        }
+
+        /// <summary>
+        /// Picks a seed slot that maximises the minimum distance to all
+        /// existing cluster centroids — pushing new clusters to the
+        /// opposite side of the grid.
+        /// </summary>
+        private static Vector2Int PickFarthestSeed(
+            HashSet<Vector2Int> available,
+            List<Vector2> centroids)
+        {
+            var best = new List<(Vector2Int slot, float minDist)>();
+
+            foreach (var candidate in available)
+            {
+                var pos = new Vector2(candidate.x, candidate.y);
+                var minDist = float.MaxValue;
+                foreach (var c in centroids)
+                {
+                    var d = (pos - c).sqrMagnitude;
+                    if (d < minDist)
+                    {
+                        minDist = d;
+                    }
+                }
+
+                InsertSorted(best, candidate, minDist);
+            }
+
+            var poolSize = Mathf.Min(FarthestCandidatePool, best.Count);
+            return best[Random.Range(0, poolSize)].slot;
+        }
+
+        private static void InsertSorted(
+            List<(Vector2Int slot, float minDist)> list,
+            Vector2Int slot,
+            float minDist)
+        {
+            var entry = (slot, minDist);
+
+            if (list.Count < FarthestCandidatePool)
+            {
+                list.Add(entry);
+                list.Sort((a, b) => b.minDist.CompareTo(a.minDist));
+                return;
+            }
+
+            if (minDist > list[^1].minDist)
+            {
+                list[^1] = entry;
+                list.Sort((a, b) => b.minDist.CompareTo(a.minDist));
+            }
         }
 
         private static void AddNeighborsToFrontier(
@@ -82,7 +173,6 @@ namespace BalloonParty.Slots.Actor
                 i++;
             }
 
-            // Fallback — shouldn't reach here
             foreach (var item in set)
             {
                 return item;

@@ -75,7 +75,7 @@ namespace BalloonParty.Slots.Actor
                 }
 
                 var strategy = GetStrategy(entry.PlacementMode);
-                var selected = strategy.SelectSlots(emptySlots, count);
+                var selected = strategy.SelectSlots(emptySlots, count, entry.MaxPerCluster);
 
                 foreach (var slot in selected)
                 {

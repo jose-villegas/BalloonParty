@@ -9,7 +9,7 @@ namespace BalloonParty.Slots.Actor
     /// </summary>
     internal class RandomSlotSelectionStrategy : ISlotSelectionStrategy
     {
-        public List<Vector2Int> SelectSlots(IReadOnlyList<Vector2Int> emptySlots, int count)
+        public List<Vector2Int> SelectSlots(IReadOnlyList<Vector2Int> emptySlots, int count, int maxPerCluster = 0)
         {
             var candidates = new List<Vector2Int>(emptySlots);
             Shuffle(candidates);

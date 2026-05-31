@@ -19,6 +19,9 @@ namespace BalloonParty.Configuration
         [Tooltip("Maximum number allowed on the grid at once. 0 = no limit.")]
         [SerializeField] private int _maxCount;
 
+        [Tooltip("Maximum slots per individual cluster. 0 = no limit. Only used with Cluster placement.")]
+        [SerializeField] private int _maxPerCluster = 3;
+
         [Tooltip("For Gatekeeper: how many hits before the actor is removed.")]
         [SerializeField] private int _hitsToPop = 1;
 
@@ -28,6 +31,7 @@ namespace BalloonParty.Configuration
         public float Weight => _weight;
         public int MinCount => _minCount;
         public int MaxCount => _maxCount;
+        public int MaxPerCluster => _maxPerCluster;
         public int HitsToPop => _hitsToPop;
 
         /// <summary>Derived from the prefab's GameObject name — no manual key needed.</summary>

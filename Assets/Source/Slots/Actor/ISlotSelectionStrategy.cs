@@ -16,8 +16,12 @@ namespace BalloonParty.Slots.Actor
         /// </summary>
         /// <param name="emptySlots">All currently empty slots on the grid.</param>
         /// <param name="count">How many slots to select.</param>
+        /// <param name="maxPerCluster">
+        /// Maximum slots per individual cluster. 0 = no limit.
+        /// Only meaningful for cluster-based strategies.
+        /// </param>
         /// <returns>Selected slot positions (may be fewer than <paramref name="count"/> if not enough valid candidates).</returns>
-        List<Vector2Int> SelectSlots(IReadOnlyList<Vector2Int> emptySlots, int count);
+        List<Vector2Int> SelectSlots(IReadOnlyList<Vector2Int> emptySlots, int count, int maxPerCluster = 0);
     }
 }
 
