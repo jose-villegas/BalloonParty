@@ -54,7 +54,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         [Tooltip("When enabled, clicking on the cloud stamps a test disturbance.")]
         [SerializeField] private bool _debugClickToStamp;
 
-        [SerializeField] [Range(0.05f, 0.5f)] private float _debugStampRadius = 0.15f;
+        [SerializeField] [Range(0.01f, 0.3f)] private float _debugStampRadius = 0.05f;
         [SerializeField] [Range(0.1f, 1.5f)] private float _debugStampStrength = 0.8f;
 
         private readonly Vector4[] _slotCenters = new Vector4[16];

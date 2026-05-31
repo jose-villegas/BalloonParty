@@ -64,15 +64,21 @@ Shader "Hidden/BalloonParty/Grid/PuffCloudStamp"
                 float dist = length(uv - _StampCenter.xy);
                 float falloff = smoothstep(_StampRadius, 0.0, dist);
 
-                // Directional wake — elongate in the travel direction
+                // Directional wake — narrow trail behind the travel direction
                 float2 dir = _StampDirection.xy;
                 float dirLen = length(dir);
                 if (dirLen > 0.001)
                 {
+                    float2 dirNorm = dir / dirLen;
                     float2 toCenter = uv - _StampCenter.xy;
-                    float along = dot(toCenter, dir / dirLen);
-                    float wake = smoothstep(_StampRadius * 1.5, 0.0, abs(along))
-                               * step(0.0, along);
+                    float along = dot(toCenter, dirNorm);
+                    float perpDist = length(toCenter - along * dirNorm);
+
+                    // Trail extends behind the object (opposite to travel)
+                    float wakeAlong = smoothstep(_StampRadius * 2.5, 0.0, -along)
+                                    * step(along, 0.0);
+                    float wakePerp = smoothstep(_StampRadius * 0.6, 0.0, perpDist);
+                    float wake = wakeAlong * wakePerp;
                     falloff = max(falloff, wake * 0.5);
                 }
 
