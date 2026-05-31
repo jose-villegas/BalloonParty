@@ -455,6 +455,203 @@ No density field, no disturbance, no merging. Pure visual investigation.
 **Exit criteria:** A single procedural cloud that looks good at game scale, runs at
 < 0.1ms on target hardware.
 
+#### P1 — Implementation Gaps & Decisions
+
+The following gaps were identified by walking through the implementation path against
+the existing codebase. Each must be resolved before or during P1 work.
+
+**G1 — Renderer type: SpriteRenderer vs MeshRenderer**
+
+All existing procedural shaders (`SoapBubbleCluster`, `ToughBalloon`, `UnbreakableBalloon`)
+are sprite-based — they use `SpriteRenderer` on a quad with no assigned sprite, and the
+shader's vertex input is `appdata_t` with `TEXCOORD0` in [0,1] UV space. This works
+because `SpriteRenderer` provides a default quad mesh when no sprite is assigned.
+
+For P1 (single-slot cloud), `SpriteRenderer` works fine — the cloud shader runs on the
+same default quad, and `_SpriteScale` controls content inset. This is the path of least
+resistance and matches the existing shader conventions (GPU instancing buffer for
+`_RendererColor`, etc.).
+
+However, P3 (merging) requires a **dynamically-sized quad** that spans multiple slots.
+`SpriteRenderer` does not support arbitrary mesh sizing — you'd need `transform.localScale`
+to stretch it, which distorts UV coordinates and noise sampling. Options:
+
+- **A) SpriteRenderer + scale compensation in shader:** Scale the GO's transform to
+  cover the cluster bounds, pass the scale as a uniform, and divide UVs by it in the
+  shader to un-distort noise. Simple but fragile — noise sampling would need to be in
+  world space, not UV space.
+- **B) MeshRenderer + runtime quad mesh:** Use `MeshRenderer` + `MeshFilter` with a
+  procedurally generated quad mesh whose vertex positions are set to the cluster bounds.
+  UVs map cleanly to the cloud region. Requires breaking from the `SpriteRenderer` +
+  `_RendererColor` instancing pattern used by all other shaders.
+- **C) SpriteRenderer for P1, migrate to MeshRenderer in P3:** Start with
+  `SpriteRenderer` for the prototype (matches existing patterns), then switch to
+  `MeshRenderer` when merging demands it. Shader stays compatible with both — the
+  vertex/fragment core is the same; only the instancing buffer changes.
+
+**Decision needed before P1 implementation.** Option C is recommended — keeps P1
+simple, defers the renderer migration to P3 where it's actually needed.
+
+**G2 — Simplex noise: no existing implementation in the shader codebase**
+
+The project has no Simplex/Perlin noise function in any shader or `.cginc` include.
+`ToughBalloon.shader` uses a simple value-noise hash (`GrainHash` / `GrainNoise`) but
+that produces grid-aligned artifacts at the scales needed for cloud shapes.
+
+A 2D Simplex noise function must be written (or a well-known public-domain
+implementation adapted). This is ~40 lines of HLSL. It should live in a shared
+`.cginc` include file (`Shaders/BalloonParty/Noise/SimplexNoise2D.cginc`) so future
+shaders can reuse it.
+
+**Action:** Write `SimplexNoise2D.cginc` as part of P1. The PuffCloud shader
+`#include`s it.
+
+**G3 — World-space vs UV-space noise sampling**
+
+The plan says noise uses "different UV scaling and scroll direction". But UV space is
+local to the quad — if the quad moves (or if P3 resizes it), the noise pattern shifts
+relative to the world, creating visible swimming.
+
+Cloud noise should sample in **world space**: the vertex shader passes world position
+to the fragment shader, and noise functions use `worldPos * noiseScale + scrollOffset`
+instead of `uv * noiseScale`. This guarantees:
+- The noise pattern is spatially stable (cloud doesn't swim when the quad is
+  repositioned)
+- Merged clusters (P3) share a continuous noise field regardless of quad bounds
+- Moving clouds (future vertical drift) reveal new noise rather than sliding existing
+  noise
+
+**Action:** Shader `v2f` struct needs a `float2 worldPos : TEXCOORD1` output. The
+fragment shader samples noise using `worldPos`, not `texcoord`. UV-space is still used
+for boundary falloff and density RT sampling.
+
+**G4 — `PuffCloudView` ownership: who spawns it?**
+
+In P1 there is no `PuffClusterRegistry` yet (that's P3). Someone needs to create the
+`PuffCloudView` when a Puff is spawned. Options:
+
+- **A) `StaticActorSpawner` creates it alongside the `GridActorView`:** After placing
+  the model, spawn a `PuffCloudView` from a pool and position it at the slot. This
+  couples the spawner to the cloud view.
+- **B) `PuffCloudView` is a component on the `StaticActorView`/`GridActorView` prefab
+  itself:** The cloud visual lives on the same GameObject as the grid occupancy marker.
+  Simplest for P1 — no extra spawning logic. The existing `StaticActorSpawner` already
+  positions the view at the slot. The downside: P3 merging requires a separate pooled
+  GO, so this component would need to be migrated off the per-slot prefab.
+- **C) Standalone controller (`PuffCloudSpawner : IStartable`):** Subscribes to
+  `SlotGrid.OnChanged`, spawns a `PuffCloudView` per Puff. This is basically a
+  simplified P3 `PuffClusterRegistry` that creates one view per slot (no merging).
+  Cleanest architecturally but more code for P1.
+
+**Decision needed.** Option B is recommended for P1 — component on the Puff prefab,
+no extra spawning logic. Migrate to standalone pooled GO in P3.
+
+**G5 — Prefab: new `Puff.prefab` or modify `StaticTest.prefab`?**
+
+`StaticActorSpawner` currently uses `_staticActorPrefab` (serialized on
+`GameLifetimeScope` as a `StaticActorView` reference pointing to `StaticTest.prefab`).
+The spawner hard-codes `new PuffObstacleModel()` — it only spawns Puffs, never Bushes.
+
+For P1, the simplest path is:
+1. Create `Puff.prefab` in `Assets/Prefabs/Grid/` with `StaticActorView` (or
+   `GridActorView`) + `SpriteRenderer` (no sprite, procedural material) +
+   `PuffCloudView` component
+2. Swap the `_staticActorPrefab` reference on `GameLifetimeScope` to point to
+   `Puff.prefab`
+3. Retire `StaticTest.prefab`
+
+**Note:** The spawner uses `StaticActorView`, not `GridActorView`. Both are nearly
+identical (`IPoolable` + `ISlotActorView` + `TweenTracker`). Decide whether to keep
+using `StaticActorView` or switch to `GridActorView` — they're functionally
+interchangeable.
+
+**G6 — `_TimeOffset` driving pattern: `[ExecuteAlways]` needed?**
+
+`SoapBubbleClusterVariant` uses `[ExecuteAlways]` + manual delta time tracking +
+`EditorApplication.timeSinceStartup` so the animation runs in edit mode. `PuffCloudView`
+needs the same pattern if we want to see the cloud animate in the Scene view without
+entering Play mode.
+
+**Action:** `PuffCloudView` should follow the `SoapBubbleClusterVariant` pattern:
+- `[ExecuteAlways]` attribute
+- `Update()` computes `_TimeOffset` from either `Time.time` (play) or
+  `EditorApplication.timeSinceStartup` (edit)
+- Guard editor-only code with `#if UNITY_EDITOR`
+- `SceneView.RepaintAll()` in edit mode to keep the animation live
+
+**G7 — GPU instancing must be disabled**
+
+Per the shader README: "Materials using `MaterialPropertyBlock` for per-instance shader
+properties must have GPU instancing **disabled**". `PuffCloudView` drives `_TimeOffset`
+via MPB, so the cloud material must have instancing off. Document this in the shader
+file header.
+
+**G8 — Sorting order integration**
+
+The plan mentions `SortingLayer: string = "Grid"` in `PuffCloudSettings`, but the
+existing codebase uses `SortingHelper.SlotBaseSortingOrder` for per-slot ordering and
+`_baseSortingLayer` on `BalloonView`. Clouds should render **behind** balloons in the
+same slot region.
+
+For P1 (single-slot, component on prefab), the cloud's `SpriteRenderer` can use the
+same sorting layer as other grid actors but with a lower `sortingOrder`. The exact
+value depends on whether the Puff prefab has one renderer (cloud only — no sprite for
+the puff itself since it IS the cloud) or multiple.
+
+**Action:** P1 prefab has a single `SpriteRenderer` for the cloud. Sorting order is
+set relative to the slot position via `SortingHelper.SlotBaseSortingOrder` with an
+offset that places it behind balloons. This is handled in `StaticActorSpawner` or in
+the view's `OnSpawned()`.
+
+**G9 — Slot dimensions at game scale**
+
+From `SlotGridTests`: `SlotSeparation = (1.0, 0.85)`. The cloud quad needs to be
+sized to cover one slot with padding. At `_SpriteScale = 0.8` (matching
+`SoapBubbleCluster`), the effective cloud radius is ~0.4 world units — which may be
+too small for a wispy cloud effect. May need `_SpriteScale = 0.6` or lower (larger
+content area) to let cloud edges extend further. Padding parameter needs tuning
+against these real dimensions.
+
+**Action:** Document `SlotSeparation` in the shader header so tuning is grounded in
+actual measurements. P1 tuning pass must validate cloud size against neighboring
+balloons.
+
+**G10 — P1 scope: `PuffCloudSettings` SO vs hardcoded shader properties**
+
+Creating a full `PuffCloudSettings` ScriptableObject, registering it in
+`GameLifetimeScope`, and injecting it into `PuffCloudView` is significant wiring for a
+prototype phase. For P1, the noise and visual parameters can live as `[SerializeField]`
+fields directly on `PuffCloudView` — the SO extraction happens in P3 when multiple
+views need shared config.
+
+**Decision needed.** Recommend `[SerializeField]` on `PuffCloudView` for P1, extract
+to SO in P3. This avoids premature config infrastructure during pure visual
+investigation.
+
+**G11 — Boundary falloff in P1: single slot simplification**
+
+The plan's boundary falloff design (slot center array in shader) is for merged clusters
+(P3). In P1 there is only one slot, so the falloff simplifies to a single radial
+distance from the quad center:
+```hlsl
+float dist = length(uv - 0.5);
+float borderFade = smoothstep(_FalloffOuter, _FalloffInner, dist);
+```
+
+The slot-center-array approach is P3 scope. P1 shader should use the simple radial
+falloff and note that it will be replaced in P3.
+
+**G12 — Shader folder location**
+
+Existing shaders live under `Assets/Shaders/BalloonParty/Balloon/`. The plan says
+`BalloonParty/Grid/PuffCloud` — this implies a new folder
+`Assets/Shaders/BalloonParty/Grid/`. This is consistent with the prefab folder
+structure (`Assets/Prefabs/Grid/`).
+
+**Action:** Create `Assets/Shaders/BalloonParty/Grid/` folder. Add
+`PuffCloud.shader` and the shared `Noise/SimplexNoise2D.cginc` (or put the noise
+include in `Assets/Shaders/BalloonParty/Noise/`).
+
 ---
 
 ### Phase P2 — Density Field & Disturbance
