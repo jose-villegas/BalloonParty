@@ -16,6 +16,8 @@ namespace BalloonParty.Slots.Grid
         private readonly IWriteableSlotActor[,] _slots;
         private readonly ISlotActorView[,] _views;
 
+        private readonly Dictionary<int, int> _weightMemo = new();
+
         public IObservable<SlotGridChangedEvent> OnChanged => _onChanged;
         public int Columns => _slots.GetLength(0);
         public int Rows => _slots.GetLength(1);
@@ -164,37 +166,35 @@ namespace BalloonParty.Slots.Grid
                 return null;
             }
 
-            var candidates = new[]
-            {
-                new Vector2Int(col, row - 1),
-                new Vector2Int(col + (row % 2 == 0 ? -1 : 1), row - 1)
-            };
+            // Memo is only valid for the current grid state — clear on each call.
+            _weightMemo.Clear();
 
             var bestWeight = 0;
-            var bestIndex = -1;
+            var bestCol = -1;
+            var candidateShift = row % 2 == 0 ? -1 : 1;
+            var targetRow = row - 1;
 
-            for (var k = 0; k < candidates.Length; k++)
+            if (IsEmpty(col, targetRow))
             {
-                var candidate = candidates[k];
-                if (candidate.x < 0 || candidate.x >= Columns)
+                var w = CalculateWeight(col, targetRow);
+                if (w >= bestWeight)
                 {
-                    continue;
-                }
-
-                if (!IsEmpty(candidate.x, candidate.y))
-                {
-                    continue;
-                }
-
-                var weight = CalculateWeight(candidate.x, candidate.y);
-                if (weight >= bestWeight)
-                {
-                    bestWeight = weight;
-                    bestIndex = k;
+                    bestWeight = w;
+                    bestCol = col;
                 }
             }
 
-            return bestIndex >= 0 ? candidates[bestIndex] : null;
+            var shiftedCol = col + candidateShift;
+            if (shiftedCol >= 0 && shiftedCol < Columns && IsEmpty(shiftedCol, targetRow))
+            {
+                var w = CalculateWeight(shiftedCol, targetRow);
+                if (w >= bestWeight)
+                {
+                    bestCol = shiftedCol;
+                }
+            }
+
+            return bestCol >= 0 ? new Vector2Int(bestCol, targetRow) : null;
         }
 
         public IEnumerable<Vector2Int> BottomEmptySlotPerColumn()
@@ -271,14 +271,25 @@ namespace BalloonParty.Slots.Grid
 
         private int CalculateWeight(int col, int row)
         {
-            if (row == 0)
+            var key = col * Rows + row;
+            if (_weightMemo.TryGetValue(key, out var cached))
             {
-                return IsEmpty(col, row) ? 0 : 1;
+                return cached;
             }
 
-            var weight = IsEmpty(col, row) ? 0 : 1;
-            weight += CalculateWeight(col, row - 1);
-            weight += CalculateWeight(col + (row % 2 == 0 ? -1 : 1), row - 1);
+            int weight;
+            if (row == 0)
+            {
+                weight = IsEmpty(col, row) ? 0 : 1;
+            }
+            else
+            {
+                weight = IsEmpty(col, row) ? 0 : 1;
+                weight += CalculateWeight(col, row - 1);
+                weight += CalculateWeight(col + (row % 2 == 0 ? -1 : 1), row - 1);
+            }
+
+            _weightMemo[key] = weight;
             return weight;
         }
 

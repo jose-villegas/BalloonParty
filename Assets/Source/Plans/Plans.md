@@ -9,6 +9,7 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_grid_actor_foundation
 - @subpage plan_content_production
 - @subpage plan_puff_cloud_simulation
+- @subpage plan_runtime_optimizations
 - @subpage plan_future_ideas
 
 
