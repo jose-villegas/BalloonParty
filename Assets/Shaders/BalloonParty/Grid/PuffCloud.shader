@@ -228,35 +228,45 @@ Shader "BalloonParty/Grid/PuffCloud"
                 UNITY_SETUP_INSTANCE_ID(IN);
 
                 float2 wp = IN.worldPos;
+                float2 wpOrig = wp;
                 float  t  = _TimeOffset;
 
                 // Density field + displacement (P2+)
                 #ifdef _DENSITY_ON
                 float3 field = tex2D(_DensityTex, IN.texcoord).rgb;
                 float density = field.r;
-                // Displacement is 0.5-biased: subtract 0.5 to get signed offset
                 float2 displace = (field.gb - 0.5) * 2.0 * _DisplaceWorldScale;
-                // Offset noise coordinates — the cloud visibly warps
-                wp += displace;
+                float displaceLen = length(displace);
+                // How disturbed this texel is — 1.0 at full displacement, 0.0 at rest
+                float disturbance = saturate(displaceLen / (_DisplaceWorldScale * 0.5 + 0.001));
                 #endif
 
-                // Noise-based cloud shape
+                // Noise-based cloud shape — crossfade between displaced and
+                // undisturbed noise so reformation reveals fresh noise instead
+                // of rubber-banding stretched noise back to rest.
+                #ifdef _DENSITY_ON
+                float2 wpDisp = wpOrig + displace;
+                float noiseOrig = CloudNoise(wpOrig, t);
+                float noiseDisp = CloudNoise(wpDisp, t);
+                float cloudOrig = smoothstep(_EdgeLow, _EdgeHigh, noiseOrig);
+                float cloudDisp = smoothstep(_EdgeLow, _EdgeHigh, noiseDisp);
+                float cloud = lerp(cloudOrig, cloudDisp, disturbance);
+                cloud *= density;
+                // Use blended position for lighting and falloff
+                wp = lerp(wpOrig, wpDisp, disturbance);
+                #else
                 float noiseValue = CloudNoise(wp, t);
                 float cloud = smoothstep(_EdgeLow, _EdgeHigh, noiseValue);
-
-                // Density opacity masking
-                #ifdef _DENSITY_ON
-                cloud *= density;
                 #endif
 
-                // Boundary falloff — occupancy mask via slot centers
-                float borderFade = SlotFalloff(wp);
+                // Boundary falloff — occupancy mask via slot centers (use original position)
+                float borderFade = SlotFalloff(wpOrig);
                 cloud *= borderFade;
 
                 // Early discard fully transparent pixels
                 #ifdef _SHADOW_ON
                 // Compute shadow before discarding so shadow-only pixels survive
-                float2 shadowWp = wp - float2(_ShadowOffsetX, _ShadowOffsetY);
+                float2 shadowWp = wpOrig - float2(_ShadowOffsetX, _ShadowOffsetY);
                 float  shadowNoise = CloudNoise(shadowWp, t);
                 float  shadowCloud = smoothstep(_EdgeLow, _EdgeHigh, shadowNoise);
                 #ifdef _DENSITY_ON

@@ -56,11 +56,14 @@ namespace BalloonParty.Slots.Actor.Archetype
         [SerializeField] [Range(0.016f, 0.2f)] private float _diffusionTickInterval = 0.05f;
 
         [Header("Wind")]
-        [Tooltip("Direction density flows in UV space. Controls which side holes fill from.")]
-        [SerializeField] private Vector2 _windDirection = new(0.3f, 0.1f);
-
-        [Tooltip("Wind advection speed. Higher = faster directional fill.")]
+        [Tooltip("Wind advection speed. Higher = faster directional reform from disturbance wake.")]
         [SerializeField] [Range(0f, 5f)] private float _windSpeed = 1.0f;
+
+        [Tooltip("How quickly the wind direction responds to new disturbances.")]
+        [SerializeField] [Range(0.5f, 20f)] private float _windSmoothing = 6.0f;
+
+        [Tooltip("How fast the wind direction decays after disturbance stops.")]
+        [SerializeField] [Range(0.5f, 10f)] private float _windDecay = 2.0f;
 
         [Tooltip("How strongly high-density neighbors push into low-density regions.")]
         [SerializeField] [Range(0f, 1f)] private float _pressureStrength = 0.4f;
@@ -91,6 +94,8 @@ namespace BalloonParty.Slots.Actor.Archetype
         private float _diffusionTimer;
         private bool _densityInitialized;
         private Vector3 _debugLastMouseWorld;
+        private Vector2 _windTarget;
+        private Vector2 _windCurrent;
 
         private RenderTexture DensityRead => _readFromA ? _densityA : _densityB;
         private RenderTexture DensityWrite => _readFromA ? _densityB : _densityA;
@@ -175,6 +180,12 @@ namespace BalloonParty.Slots.Actor.Archetype
             _stampMaterial.SetFloat(StampStrengthId, strength);
             _stampMaterial.SetVector(StampDirectionId, new Vector4(direction.x, direction.y, 0f, 0f));
             _stampMaterial.SetFloat(DisplaceAmountId, _displaceAmount);
+
+            // Wind flows opposite to disturbance — density reforms from behind
+            if (direction.sqrMagnitude > 0.001f)
+            {
+                _windTarget = -direction;
+            }
 
             Graphics.Blit(DensityRead, DensityWrite, _stampMaterial);
             _readFromA = !_readFromA;
@@ -304,7 +315,12 @@ namespace BalloonParty.Slots.Actor.Archetype
             _diffusionMaterial.SetFloat(DiffusionRateId, _diffusionRate);
             _diffusionMaterial.SetFloat(ReformSpeedId, _reformSpeed);
             _diffusionMaterial.SetFloat(DeltaTimeId, _diffusionTimer);
-            _diffusionMaterial.SetVector(WindDirId, new Vector4(_windDirection.x, _windDirection.y, 0f, 0f));
+
+            // Smooth wind toward target, then decay target toward zero
+            _windCurrent = Vector2.Lerp(_windCurrent, _windTarget, _windSmoothing * _diffusionTimer);
+            _windTarget = Vector2.Lerp(_windTarget, Vector2.zero, _windDecay * _diffusionTimer);
+
+            _diffusionMaterial.SetVector(WindDirId, new Vector4(_windCurrent.x, _windCurrent.y, 0f, 0f));
             _diffusionMaterial.SetFloat(WindSpeedId, _windSpeed);
             _diffusionMaterial.SetFloat(PressureStrId, _pressureStrength);
             _diffusionMaterial.SetFloat(DisplaceDecayId, _displaceDecay);
