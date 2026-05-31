@@ -671,6 +671,104 @@ stamping. Validate that the disturb→reform cycle looks convincing.
 **Exit criteria:** Clicking on the cloud creates a visible hole that smoothly
 reforms over 1–2 seconds. The cloud remains stable over long sessions.
 
+#### P2 — Implementation Notes (Completed)
+
+The following describes what was actually built, which diverges from the original P2
+description in several ways. Reference this for accurate context in future sessions.
+
+**RT format — packed density + displacement (not R8)**
+
+The density RenderTexture uses `ARGBHalf` (not the originally planned `R8`):
+- **R** = density (1.0 = full cloud, 0.0 = cleared)
+- **G** = displacement X (0.5 = zero, biased ±0.5 range)
+- **B** = displacement Y (0.5 = zero, biased ±0.5 range)
+
+Equilibrium clear color: `(1.0, 0.5, 0.5, 1.0)`.
+
+**Displacement field — cloud deformation, not just opacity**
+
+The stamp shader writes displacement vectors alongside density subtraction. The cloud
+shader reads displacement and offsets noise sampling coordinates, visibly warping the
+cloud shape around disturbances. Direction comes from the drag/projectile velocity.
+
+**Crossfade reformation — no stretching artifacts**
+
+The cloud shader computes noise at BOTH the original and displaced positions, then
+crossfades between them based on `disturbance` intensity (displacement magnitude).
+As displacement decays, the cloud smoothly reveals undisturbed noise rather than
+rubber-banding stretched noise back to rest. The boundary falloff uses the original
+(undisplaced) world position so edges stay anchored.
+
+**Diffusion shader — advection + pressure + displacement decay**
+
+Three forces drive the field each tick:
+1. **Advection** — semi-Lagrangian wind shifts sample origin (direction from last
+   disturbance, opposite to drag, smoothed + decaying)
+2. **Pressure** — `max(neighbor density) - current density` pushes high→low, filling
+   holes from edges directionally
+3. **Displacement decay** — GB channels lerp toward 0.5 at `_DisplaceDecay` rate
+   (faster than density reform so shape snaps back before opacity returns)
+
+**Wind direction — dynamic from disturbance**
+
+Wind is not a static ambient value. It is set to `-direction` on each stamp (opposite
+to the drag/projectile velocity), smoothed via `_windSmoothing`, and decays toward
+zero via `_windDecay`. This makes the reform flow from behind the moving object.
+
+**Pseudo-normal lighting**
+
+The cloud shader derives pseudo-normals from the noise gradient via 4-tap central
+differences, then applies half-Lambert directional lighting with configurable light
+direction, highlight color, and shadow tint. This gives volume/depth to the flat cloud.
+
+**Debug drag interaction**
+
+`HandleDebugClick` uses `Input.GetMouseButton(0)` (continuous hold, not single click).
+Tracks previous mouse world position to compute drag direction each frame. Direction
+is passed to `StampDisturbance` which both stamps the density/displacement field AND
+sets the wind target for directional reform.
+
+**Files created/modified in P2:**
+
+| File | Role |
+|---|---|
+| `Shaders/BalloonParty/Grid/PuffCloudDiffusion.shader` | Diffusion + advection + pressure + displacement decay blit |
+| `Shaders/BalloonParty/Grid/PuffCloudStamp.shader` | Density subtraction + displacement push + directional wake |
+| `Shaders/BalloonParty/Grid/PuffCloud.shader` | Added `_DENSITY_ON`, `_DensityTex`, displacement crossfade, lighting |
+| `Source/Slots/Actor/Archetype/PuffCloudView.cs` | Density RT ping-pong, stamp API, diffusion tick, wind state, debug drag |
+| `Shaders/BalloonParty/Grid/PuffCloud_Shadertoy.glsl` | Standalone Shadertoy port for external testing |
+
+**Current `PuffCloudView` SerializeField inventory (P2 state):**
+
+```
+[Header("Animation")]
+_animationSpeed: float = 0.8
+
+[Header("Density Field")]
+_texelsPerSlot: int = 32
+_diffusionRate: float = 0.3  (was 0.15 on prefab — prefab may be stale)
+_reformSpeed: float = 0.05   (was 0.4 on prefab — prefab may be stale)
+_diffusionTickInterval: float = 0.05
+
+[Header("Wind")]
+_windSpeed: float = 1.0
+_windSmoothing: float = 6.0
+_windDecay: float = 2.0
+_pressureStrength: float = 0.4
+
+[Header("Displacement")]
+_displaceAmount: float = 0.3
+_displaceDecay: float = 1.5
+
+[Header("Debug")]
+_debugClickToStamp: bool
+_debugStampRadius: float = 0.05
+_debugStampStrength: float = 0.8
+```
+
+**Note:** The serialized values on `Puff.prefab` may be stale (from before wind/
+displacement fields were added). Re-serialize after confirming tuning in-editor.
+
 ---
 
 ### Phase P3 — Adjacency Merging
