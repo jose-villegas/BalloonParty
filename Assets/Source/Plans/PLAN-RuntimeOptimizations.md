@@ -69,7 +69,7 @@ each arrival, subtract and re-add on level-up resets. Remove the LINQ `Sum()`.
 
 ---
 
-### H-5 — `SlotGrid.HexNeighborIndices()` allocates `Vector2Int[6]` every call
+### ~~H-5 — `SlotGrid.HexNeighborIndices()` allocates `Vector2Int[6]` every call~~ ✅ Done
 
 **File:** `Slots/Grid/SlotGrid.cs` · `HexNeighborIndices(int, int)`
 

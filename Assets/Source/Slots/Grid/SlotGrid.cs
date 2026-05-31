@@ -17,6 +17,7 @@ namespace BalloonParty.Slots.Grid
         private readonly ISlotActorView[,] _views;
 
         private readonly Dictionary<int, int> _weightMemo = new();
+        private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
 
         public IObservable<SlotGridChangedEvent> OnChanged => _onChanged;
         public int Columns => _slots.GetLength(0);
@@ -243,11 +244,22 @@ namespace BalloonParty.Slots.Grid
             };
         }
 
+        public static void HexNeighborIndices(int col, int row, Vector2Int[] buffer)
+        {
+            var shiftedCol = col + (row % 2 == 0 ? -1 : 1);
+            buffer[0] = new Vector2Int(col - 1, row);
+            buffer[1] = new Vector2Int(col + 1, row);
+            buffer[2] = new Vector2Int(col, row - 1);
+            buffer[3] = new Vector2Int(shiftedCol, row - 1);
+            buffer[4] = new Vector2Int(col, row + 1);
+            buffer[5] = new Vector2Int(shiftedCol, row + 1);
+        }
+
         public List<IWriteableSlotActor> GetNeighbors(int col, int row)
         {
             var neighbors = new List<IWriteableSlotActor>();
-
-            foreach (var idx in HexNeighborIndices(col, row))
+            HexNeighborIndices(col, row, _neighborBuffer);
+            foreach (var idx in _neighborBuffer)
             {
                 TryAddNeighbor(neighbors, idx.x, idx.y);
             }

@@ -20,6 +20,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         private readonly Dictionary<int, PuffCluster> _clusters = new();
         private readonly Dictionary<Vector2Int, int> _slotToCluster = new();
         private readonly CompositeDisposable _disposables = new();
+        private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
 
         private int _nextClusterId = 1;
 
@@ -102,9 +103,9 @@ namespace BalloonParty.Slots.Actor.Archetype
         private void OnPuffPlaced(Vector2Int slot)
         {
             var neighborClusterIds = new HashSet<int>();
-            var neighbors = SlotGrid.HexNeighborIndices(slot.x, slot.y);
+            SlotGrid.HexNeighborIndices(slot.x, slot.y, _neighborBuffer);
 
-            foreach (var neighbor in neighbors)
+            foreach (var neighbor in _neighborBuffer)
             {
                 if (_slotToCluster.TryGetValue(neighbor, out var neighborClusterId))
                 {
@@ -263,7 +264,8 @@ namespace BalloonParty.Slots.Actor.Archetype
                 var current = queue.Dequeue();
                 component.Add(current);
 
-                foreach (var neighbor in SlotGrid.HexNeighborIndices(current.x, current.y))
+                SlotGrid.HexNeighborIndices(current.x, current.y, _neighborBuffer);
+                foreach (var neighbor in _neighborBuffer)
                 {
                     if (visited.Contains(neighbor))
                     {
