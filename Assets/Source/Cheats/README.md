@@ -38,3 +38,4 @@ That's all. The console picks it up automatically.
 | Remove Balloons | Spawning | Draw across balloons to remove them and trigger a balance pass |
 | Trigger Level Up | Score | Fills all color bars to the current threshold and immediately triggers the level-up ceremony |
 | Near Level Up | Score | Fills all color bars to one point below the threshold — pop one balloon of each color to complete the level naturally |
+| Stamp Disturbance | Grid | Toggle on, then mouse-drag to stamp disturbances into the shared disturbance field. Uses `DisturbanceFieldService.Stamp()` at the mouse world position with drag direction |

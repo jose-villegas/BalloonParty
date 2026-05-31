@@ -32,4 +32,4 @@ Scene-placed child scopes (`ScoreUILifetimeScope`, `LevelUpLifetimeScope`, `Shie
 - **Cinematics** — cinematic director and level-up trail effect (see `Cinematics/README.md`)
 - **ThrowerController** — the player-facing launcher; reloads after each projectile death
 - **SlotGrid** — the shared grid state all systems read and write
-- **GameLifetimeScope config** — `GameConfiguration`, `BalloonsConfiguration`, `GridActorConfiguration`, `GamePalette`, `GameDisplayConfiguration`, `ItemConfiguration` all registered here as singletons; `FlyingTrail` prefab registered as instance
+- **GameLifetimeScope config** — `GameConfiguration`, `BalloonsConfiguration`, `GridActorConfiguration`, `GamePalette`, `GameDisplayConfiguration`, `ItemConfiguration`, `DisturbanceFieldSettings` all registered here as singletons; `FlyingTrail` prefab registered as instance

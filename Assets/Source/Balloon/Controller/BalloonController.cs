@@ -128,7 +128,7 @@ namespace BalloonParty.Balloon.Controller
 
             var popWorldPos = _view.transform.position;
             var popStamp = _disturbanceSettings.GetProfile(StampSource.BalloonPop);
-            _disturbanceField.StampOverDuration(popWorldPos, popStamp.Radius,
+            _disturbanceField.Stamp(popWorldPos, popStamp.Radius,
                 popStamp.Strength, Vector2.zero, popStamp.Duration);
 
             _view.PlayHitVfxForOutcome(HitOutcome.Pop);

@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using UnityEngine;
-using VContainer;
 using VContainer.Unity;
 
 namespace BalloonParty.Shared.Disturbance
@@ -31,8 +30,14 @@ namespace BalloonParty.Shared.Disturbance
         private static readonly int StampStrengthsId = Shader.PropertyToID("_StampStrengths");
         private static readonly int StampDirectionsId = Shader.PropertyToID("_StampDirections");
 
-        [Inject] private readonly DisturbanceFieldSettings _settings;
-        [Inject] private readonly GameDisplayConfiguration _displayConfig;
+        private readonly DisturbanceFieldSettings _settings;
+        private readonly GameDisplayConfiguration _displayConfig;
+        private readonly List<LerpStamp> _activeStamps = new();
+        private readonly List<PendingStamp> _pendingStamps = new();
+        private readonly Vector4[] _batchCenters = new Vector4[MaxStampsPerBatch];
+        private readonly float[] _batchRadii = new float[MaxStampsPerBatch];
+        private readonly float[] _batchStrengths = new float[MaxStampsPerBatch];
+        private readonly Vector4[] _batchDirections = new Vector4[MaxStampsPerBatch];
 
         private RenderTexture _fieldA;
         private RenderTexture _fieldB;
@@ -42,17 +47,17 @@ namespace BalloonParty.Shared.Disturbance
         private float _diffusionTimer;
         private Vector2 _windTarget;
         private Vector2 _windCurrent;
-        private readonly List<LerpStamp> _activeStamps = new();
-
-        private readonly List<PendingStamp> _pendingStamps = new();
-        private readonly Vector4[] _batchCenters = new Vector4[MaxStampsPerBatch];
-        private readonly float[] _batchRadii = new float[MaxStampsPerBatch];
-        private readonly float[] _batchStrengths = new float[MaxStampsPerBatch];
-        private readonly Vector4[] _batchDirections = new Vector4[MaxStampsPerBatch];
-
         private Rect _fieldBounds;
         private int _fieldWidth;
         private int _fieldHeight;
+
+        internal DisturbanceFieldService(
+            DisturbanceFieldSettings settings,
+            GameDisplayConfiguration displayConfig)
+        {
+            _settings = settings;
+            _displayConfig = displayConfig;
+        }
 
         internal RenderTexture FieldTexture => _readFromA ? _fieldA : _fieldB;
         private RenderTexture FieldWrite => _readFromA ? _fieldB : _fieldA;
@@ -97,9 +102,32 @@ namespace BalloonParty.Shared.Disturbance
         /// <summary>
         /// Stamps a disturbance at the given world position. The field will
         /// show a density hole that reforms over time via diffusion.
+        /// When <paramref name="duration"/> is greater than zero the stamp
+        /// ramps up over that many seconds, spreading the effect across
+        /// multiple frames for a smooth shockwave instead of a single-frame pop.
         /// </summary>
-        internal void Stamp(Vector3 worldPosition, float radius, float strength, Vector2 direction)
+        internal void Stamp(Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration = 0f)
         {
+            if (duration > 0f)
+            {
+                if (_activeStamps.Count >= _settings.MaxLerpStamps)
+                {
+                    _activeStamps.RemoveAt(0);
+                }
+
+                _activeStamps.Add(new LerpStamp
+                {
+                    Position = worldPosition,
+                    Radius = radius,
+                    Strength = strength,
+                    Direction = direction,
+                    Duration = duration,
+                    Elapsed = 0f,
+                    LastT = 0f
+                });
+                return;
+            }
+
             if (_fieldA == null || _batchedStampMaterial == null)
             {
                 return;
@@ -124,36 +152,6 @@ namespace BalloonParty.Shared.Disturbance
                 RadiusUV = radiusUV,
                 Strength = strength,
                 Direction = direction
-            });
-        }
-
-        /// <summary>
-        /// Stamps a disturbance that ramps up over <paramref name="duration"/>
-        /// seconds, spreading the effect across multiple frames for a smooth
-        /// shockwave instead of a single-frame pop.
-        /// </summary>
-        internal void StampOverDuration(Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration)
-        {
-            if (duration <= 0f)
-            {
-                Stamp(worldPosition, radius, strength, direction);
-                return;
-            }
-
-            if (_activeStamps.Count >= _settings.MaxLerpStamps)
-            {
-                _activeStamps.RemoveAt(0);
-            }
-
-            _activeStamps.Add(new LerpStamp
-            {
-                Position = worldPosition,
-                Radius = radius,
-                Strength = strength,
-                Direction = direction,
-                Duration = duration,
-                Elapsed = 0f,
-                LastT = 0f
             });
         }
 
@@ -208,12 +206,15 @@ namespace BalloonParty.Shared.Disturbance
 
         private void ComputeFieldBounds()
         {
-            var halfWidth = _displayConfig.ReferenceWorldWidth * 0.5f;
-            var halfHeight = _displayConfig.ReferenceWorldHeight * 0.5f;
-            _fieldBounds = new Rect(-halfWidth, -halfHeight, halfWidth * 2f, halfHeight * 2f);
+            var orthoSize = _displayConfig.GetOrthogonalSize();
+            var aspect = (float)Screen.width / Screen.height;
+            var worldHeight = orthoSize * 2f;
+            var worldWidth = worldHeight * aspect;
 
-            _fieldWidth = Mathf.Max(4, Mathf.RoundToInt(_displayConfig.ReferenceWorldWidth * _settings.TexelsPerUnit));
-            _fieldHeight = Mathf.Max(4, Mathf.RoundToInt(_displayConfig.ReferenceWorldHeight * _settings.TexelsPerUnit));
+            _fieldBounds = new Rect(-worldWidth * 0.5f, -worldHeight * 0.5f, worldWidth, worldHeight);
+
+            _fieldWidth = Mathf.Max(4, Mathf.RoundToInt(worldWidth * _settings.TexelsPerUnit));
+            _fieldHeight = Mathf.Max(4, Mathf.RoundToInt(worldHeight * _settings.TexelsPerUnit));
         }
 
         private void CreateFieldRTs()

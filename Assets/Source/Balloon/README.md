@@ -71,3 +71,4 @@ When nudge or balance interrupts a spawning balloon, `transform.DOKill()` kills 
 - **Item system** — balloons are one host for the game-wide item system (in `Item/`). `BalloonView` calls `ItemDisplayService.Bind()`/`Unbind()` to connect item visuals; the item system itself has no knowledge of balloons
 - **BalloonsConfiguration** — balloon prefab entries, spawn animation timing, balance timing, nudge defaults, pop VFX
 - **GamePalette** — resolves color name → `UnityEngine.Color` for renderer tinting
+- **DisturbanceFieldService** — `BalloonController` stamps on pop (`BalloonPop` profile), `BalloonBalancer` stamps during balance path (`BalloonPath` profile), `BalloonSpawner` stamps during spawn path (`BalloonPath` profile) — all via `Stamp()` using `StampProfile` from `DisturbanceFieldSettings`. Creates visible disturbances in Puff clouds

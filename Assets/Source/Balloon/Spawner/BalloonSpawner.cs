@@ -155,7 +155,7 @@ namespace BalloonParty.Balloon.Spawner
                     var dir = new Vector2(delta.x, delta.y).normalized;
                     var rawScale = viewTransform.localScale.x;
                     var scale = rawScale * rawScale;
-                    _disturbanceField.StampOverDuration(pos, spawnStamp.Radius * scale,
+                    _disturbanceField.Stamp(pos, spawnStamp.Radius * scale,
                         spawnStamp.Strength * scale, dir, spawnStamp.Duration);
                     lastPos = pos;
                 })

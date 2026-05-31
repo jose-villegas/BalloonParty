@@ -59,4 +59,3 @@ namespace BalloonParty.Configuration.Editor
         }
     }
 }
-

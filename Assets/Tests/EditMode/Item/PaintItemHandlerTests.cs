@@ -23,6 +23,7 @@ namespace BalloonParty.Tests.Item
         private ItemConfiguration _itemConfig;
         private PaintItemHandler _handler;
         private DisturbanceFieldSettings _disturbanceSettings;
+        private GameDisplayConfiguration _displayConfig;
 
         [SetUp]
         public void SetUp()
@@ -47,13 +48,14 @@ namespace BalloonParty.Tests.Item
             SetField(_itemConfig, "_items", new List<ItemSettings> { paintSettings });
 
             _disturbanceSettings = ScriptableObject.CreateInstance<DisturbanceFieldSettings>();
+            _displayConfig = ScriptableObject.CreateInstance<GameDisplayConfiguration>();
 
             _handler = new PaintItemHandler(
                 _palette,
                 _itemConfig,
                 _grid,
                 new PoolManager(),
-                new DisturbanceFieldService(),
+                new DisturbanceFieldService(_disturbanceSettings, _displayConfig),
                 _disturbanceSettings);
         }
 
@@ -63,6 +65,7 @@ namespace BalloonParty.Tests.Item
             Object.DestroyImmediate(_palette);
             Object.DestroyImmediate(_itemConfig);
             Object.DestroyImmediate(_disturbanceSettings);
+            Object.DestroyImmediate(_displayConfig);
         }
 
         [Test]

@@ -80,7 +80,7 @@ namespace BalloonParty.Item.Bomb
             SpawnVisual(settings);
 
             var stamp = _disturbanceSettings.GetProfile(StampSource.Bomb);
-            _disturbanceField.StampOverDuration(_worldPosition, stamp.Radius,
+            _disturbanceField.Stamp(_worldPosition, stamp.Radius,
                 stamp.Strength, Vector2.zero, stamp.Duration);
 
             return UniTask.CompletedTask;

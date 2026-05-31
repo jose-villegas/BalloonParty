@@ -36,3 +36,4 @@ After the final line in each spawn batch, the spawner publishes `ItemCheckMessag
 - **SpawnBalloonLineMessage** — triggers a single-line spawn (used by `SceneTransition` at game start and by cheats)
 - **ProjectileDestroyedMessage** — triggers multi-line spawning after each turn
 - **BalloonsConfiguration** — `Entries`, `GameStartedBalloonLines`, `NewProjectileBalloonLines`, `NewBalloonLinesTimeInterval`, `BalloonSpawnAnimationDurationRange`
+- **DisturbanceFieldService** — stamps `Stamp()` along each spawn path using the `BalloonPath` stamp profile from `DisturbanceFieldSettings`; creates visible wakes through Puff clouds during spawn animations

@@ -162,7 +162,7 @@ namespace BalloonParty.Item.Laser
             for (var i = 0; i <= steps; i++)
             {
                 var pos = (Vector2)_worldPosition + direction * (step * i);
-                _disturbanceField.StampOverDuration(pos, stamp.Radius,
+                _disturbanceField.Stamp(pos, stamp.Radius,
                     stamp.Strength, direction, stamp.Duration);
             }
         }

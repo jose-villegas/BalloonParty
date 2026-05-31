@@ -235,7 +235,7 @@ namespace BalloonParty.Projectile.View
             transform.up = _model.Direction;
 
             var stamp = _disturbanceSettings.GetProfile(StampSource.Projectile);
-            _disturbanceField.StampOverDuration(
+            _disturbanceField.Stamp(
                 pos,
                 stamp.Radius,
                 stamp.Strength,

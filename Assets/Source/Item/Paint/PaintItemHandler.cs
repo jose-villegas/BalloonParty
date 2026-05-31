@@ -101,7 +101,7 @@ namespace BalloonParty.Item.Paint
 
                     var neighborPos = _grid.IndexToWorldPosition(neighborIndices[i]);
                     var dir = ((Vector2)(neighborPos - _worldPosition)).normalized;
-                    _disturbanceField.StampOverDuration(neighborPos, stamp.Radius,
+                    _disturbanceField.Stamp(neighborPos, stamp.Radius,
                         stamp.Strength, dir, stamp.Duration);
                 }
 
@@ -138,7 +138,7 @@ namespace BalloonParty.Item.Paint
                 {
                     var splashPos = _grid.IndexToWorldPosition(neighborIndices[index]);
                     var dir = ((Vector2)(splashPos - _worldPosition)).normalized;
-                    _disturbanceField.StampOverDuration(splashPos, stamp.Radius,
+                    _disturbanceField.Stamp(splashPos, stamp.Radius,
                         stamp.Strength, dir, stamp.Duration);
                 }
             }

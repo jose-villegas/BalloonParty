@@ -62,3 +62,4 @@ All VFX are spawned via `ParticlePoolChannel` as world-space orphans — they ar
 - **ProjectileDestroyedMessage** — published on death to signal the thrower to reload
 - **PoolManager** — provides `ParticlePoolChannel` for VFX and `ProjectilePoolChannel` for projectile lifecycle
 - **IGameConfiguration** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `NudgeDistance`, `NudgeDuration`
+- **DisturbanceFieldService** — `ProjectileView` injects the shared disturbance field and calls `Stamp()` in `MoveAndBounce()` after position update, using the `Projectile` stamp profile from `DisturbanceFieldSettings`. Creates visible wakes through Puff clouds

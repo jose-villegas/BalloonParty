@@ -863,20 +863,20 @@ one splits the visual correctly. ✅
 
 ---
 
-### Phase P4 — Shared Disturbance Field & Projectile Integration
+### Phase P4 — Shared Disturbance Field & Projectile Integration ✅
 
 **Goal:** Replace per-cluster density RTs with a single screen-space disturbance field
 service. Any system (projectile, balloons, items) stamps into the shared field.
 The cloud shader samples from it. Other future effects can also consume it.
 
-- [ ] Create `DisturbanceFieldService` — owns a camera-sized RT pair, runs diffusion
-- [ ] Migrate `PuffCloudView` to sample from the shared RT instead of per-cluster RTs
-- [ ] `ProjectileView` stamps the shared field each `FixedUpdate` while flying
-- [ ] Cloud reforms after the projectile passes (diffusion handles this)
-- [ ] Projectile trail visible through the cloud gap
+- [x] Create `DisturbanceFieldService` — owns a camera-sized RT pair, runs diffusion
+- [x] Migrate `PuffCloudView` to sample from the shared RT instead of per-cluster RTs
+- [x] `ProjectileView` stamps the shared field each `FixedUpdate` while flying
+- [x] Cloud reforms after the projectile passes (diffusion handles this)
+- [x] Projectile trail visible through the cloud gap
 
 **Exit criteria:** Shooting through a cloud creates a visible wake that reforms.
-The disturbance field is a standalone service usable by any future consumer.
+The disturbance field is a standalone service usable by any future consumer. ✅
 
 #### P4 — Architecture
 
@@ -891,9 +891,10 @@ DisturbanceFieldService (new, plain C#, IStartable + ITickable + IDisposable)
     ├── Owns RT pair (_fieldA, _fieldB) — ARGBHalf, camera-sized
     ├── Runs diffusion blit each tick (reform + blur + displacement decay)
     ├── Stamp(worldPos, radius, strength, direction) — public API
+    ├── Stamp(worldPos, radius, strength, direction, duration) — unified stamp API
     ├── Exposes FieldTexture (current read RT) for shader sampling
     ├── Exposes WorldToFieldUV(worldPos) for coordinate conversion
-    └── Computes RT bounds from camera orthographic size + aspect ratio
+    └── Computes RT bounds from GameDisplayConfiguration orthographic size + aspect ratio
 
 PuffCloudView (modified)
     ├── Removes per-cluster density RT pair (_densityA, _densityB)
@@ -903,18 +904,36 @@ PuffCloudView (modified)
     └── Pushes field UV bounds so shader can map world→field UV
 
 ProjectileView (modified)
-    ├── Injects DisturbanceFieldService
+    ├── Injects DisturbanceFieldService + DisturbanceFieldSettings
     ├── Calls Stamp() at end of MoveAndBounce()
     └── No knowledge of clouds — stamps the shared field
 
-BalloonView / SpawnAnimation (future P5)
+BalloonSpawner (modified — P5)
     ├── Injects DisturbanceFieldService
-    ├── Calls Stamp() each frame during path animation
-    └── Same API — different radius/strength
+    ├── Calls Stamp() each frame during spawn path animation
+    └── Uses StampProfile from DisturbanceFieldSettings (BalloonPath source)
 
-BombItemHandler (future)
+BalloonBalancer (modified — P5)
+    ├── Injects DisturbanceFieldService
+    ├── Calls Stamp() during balance animation path
+    └── Uses StampProfile from DisturbanceFieldSettings (BalloonPath source)
+
+BalloonController (modified — P5)
+    ├── Injects DisturbanceFieldService
+    ├── Calls Stamp() on balloon pop
+    └── Uses StampProfile from DisturbanceFieldSettings (BalloonPop source)
+
+BombItemHandler (modified — P5)
     ├── Calls Stamp() with large radius on detonation
-    └── Single burst stamp — no per-frame tracking
+    └── Uses StampProfile from DisturbanceFieldSettings (Bomb source)
+
+LaserItemHandler (modified — P5)
+    ├── Calls Stamp() along each beam segment
+    └── Uses StampProfile from DisturbanceFieldSettings (Laser source)
+
+PaintItemHandler (modified — P5)
+    ├── Calls Stamp() on neighbor hits and splash landing
+    └── Uses StampProfile from DisturbanceFieldSettings (Paint source)
 
 PuffCloud.shader (modified)
     ├── Replaces _DensityTex (per-cluster UV) with _DisturbanceTex (screen UV)
@@ -1199,23 +1218,117 @@ The `PuffCloud.shader` samples from it. Per-cluster density RTs are removed from
 - Noise, slot falloff, lighting, shadow in `PuffCloud.shader` — untouched
 - `GridActorConfiguration`, `StaticActorSpawner`, `ClusterSlotSelectionStrategy` — untouched
 
+#### P4 — Implementation Notes (Completed)
+
+**What was built — divergences from original plan:**
+
+1. **`DisturbanceFieldSettings` SO extracted immediately (not deferred to P6).**
+   The service injects `DisturbanceFieldSettings` directly, not `PuffCloudSettings`.
+   All diffusion/wind/displacement/performance fields live on the dedicated SO. This
+   was the right call — the service has no knowledge of clouds.
+
+2. **Constructor injection, not `[Inject]` field injection.** The service uses
+   constructor injection for `DisturbanceFieldSettings` and `GameDisplayConfiguration`
+   (not `[Inject]` on fields), consistent with the project style guide preference.
+
+3. **Unified `Stamp()` API with optional `duration` parameter.** A single method
+   handles both instant stamps (`duration = 0`, the default) and lerp stamps
+   (`duration > 0`, which ramp strength over multiple frames). All consumers pass
+   `StampProfile.Duration` as the last argument. When duration is zero the stamp
+   is queued for immediate flush; when positive a `LerpStamp` is added that ticks
+   each diffusion pass.
+
+4. **Batched stamp shader (`DisturbanceStampBatched.shader`) replaces single-stamp
+   shader in the service.** Processes up to 16 stamps per blit pass via uniform arrays
+   (`_StampCenters[]`, `_StampRadii[]`, etc.). The original `DisturbanceStamp.shader`
+   remains for reference but is unused by the service.
+
+5. **`StampProfile` + `StampSource` system added to `DisturbanceFieldSettings`.**
+   Per-source radius/strength/duration tuning via a `[Flags]` enum and serialized
+   profile array. Consumers call `_settings.GetProfile(StampSource.X)`. This was
+   built alongside P4 rather than deferred to P5, since the settings SO was already
+   extracted.
+
+6. **`DisturbanceStampCheat` added to `Cheats/`.** MonoBehaviour cheat for debug
+   stamping — toggle on, mouse-drag to stamp. Uses `Stamp()` directly (not
+   `Stamp()`).
+
+7. **`StampProfileDrawer` added to `Configuration/Editor/`.** Custom `PropertyDrawer`
+   for `StampProfile` — foldout with `StampSource` flags label.
+
+8. **Camera bounds from `GameDisplayConfiguration`, not `Camera.main`.** The service
+   injects `GameDisplayConfiguration` and calls `GetOrthogonalSize()` + `Screen.width/
+   height` to compute field bounds. No camera reference needed.
+
+**Files created/modified in P4:**
+
+| File | Role |
+|---|---|
+| `Shared/Disturbance/DisturbanceFieldService.cs` | Shared screen-space disturbance field — RT pair, stamp API, diffusion tick, lerp stamps |
+| `Configuration/DisturbanceFieldSettings.cs` | SO with all field tuning + `StampProfile[]` + shader references |
+| `Configuration/Editor/StampProfileDrawer.cs` | Custom drawer for `StampProfile` |
+| `Cheats/DisturbanceStampCheat.cs` | Debug click-to-stamp cheat |
+| `Shaders/BalloonParty/Grid/DisturbanceStampBatched.shader` | Batched stamp blit (up to 16 per pass) |
+| `Shaders/BalloonParty/Grid/PuffCloud.shader` | Changed `_DensityTex` → `_DisturbanceTex` + screen UV |
+| `Slots/Actor/Archetype/PuffCloudView.cs` | Simplified — removed all density RT/stamp/diffusion code; pushes shared field via MPB |
+| `Projectile/View/ProjectileView.cs` | Injects `DisturbanceFieldService` + `DisturbanceFieldSettings`; stamps in `MoveAndBounce()` |
+| `Game/GameLifetimeScope.cs` | Registers `DisturbanceFieldService` as singleton |
+
 ---
 
-### Phase P5 — Animation & Item Disturbance Integration
+### Phase P5 — Animation & Item Disturbance Integration ✅
 
 **Goal:** Balloon spawn animations, balance animations, pops, and item effects
 stamp the shared disturbance field.
 
-- [ ] Spawn animation — `BalloonView` or spawn controller injects
-  `DisturbanceFieldService`, calls `Stamp()` each frame during DOTween path
-- [ ] Balance animation — same approach during balance DOPath
-- [ ] Balloon pop — single burst `Stamp()` at pop position with
-  `PopBurstRadius` / `PopBurstStrength` from `PuffCloudSettings`
-- [ ] Bomb item — single large-radius `Stamp()` on detonation
-- [ ] Disturbance intensity scales with animation speed (fast spawn = bigger stamp)
+- [x] Spawn animation — `BalloonSpawner` injects `DisturbanceFieldService`, calls
+  `Stamp()` each frame during DOTween spawn path
+- [x] Balance animation — `BalloonBalancer` injects `DisturbanceFieldService`, calls
+  `Stamp()` during balance DOPath
+- [x] Balloon pop — `BalloonController` calls `Stamp()` at pop position
+  with `BalloonPop` stamp profile from `DisturbanceFieldSettings`
+- [x] Bomb item — `BombItemHandler` calls `Stamp()` with `Bomb` profile
+- [x] Laser item — `LaserItemHandler` calls `Stamp()` along beam segments
+  with `Laser` profile
+- [x] Paint item — `PaintItemHandler` calls `Stamp()` on neighbor hits and
+  splash landing with `Paint` profile
+- [x] Disturbance intensity scales via per-source `StampProfile` on `DisturbanceFieldSettings`
 
 **Exit criteria:** Spawning a balloon through a Puff cloud visibly parts the cloud
-along the spawn path. A pop adjacent to a cloud creates a visible shockwave.
+along the spawn path. A pop adjacent to a cloud creates a visible shockwave. ✅
+
+#### P5 — Implementation Notes
+
+**`StampProfile` system — per-source tuning**
+
+Rather than separate radius/strength fields per source, all disturbance sources are
+configured via `StampProfile[]` on `DisturbanceFieldSettings`. Each `StampProfile` has:
+- `Sources` — `[Flags] StampSource` enum (Projectile, BalloonPath, BalloonPop, Bomb,
+  Laser, Paint)
+- `Radius` / `Strength` — per-source tuning
+- `Duration` — ramp-up duration for `Stamp()` (0 = instant)
+
+Consumers call `_disturbanceSettings.GetProfile(StampSource.X)` to get their profile
+and pass it to `Stamp()`. Multiple sources can share a profile by setting
+multiple flags.
+
+**Lerp stamps — gradual ramp-up**
+
+`Stamp()` accepts an optional `duration` parameter. When `duration > 0`, the service
+internally tracks a `LerpStamp` struct that ramps from 0 to full strength over that
+many seconds. Each tick, the delta strength since the last frame is stamped, spreading
+the effect across multiple frames for a smooth shockwave instead of a single-frame pop.
+
+**Files modified in P5:**
+
+| File | Change |
+|---|---|
+| `Balloon/Spawner/BalloonSpawner.cs` | Injects `DisturbanceFieldService` + `DisturbanceFieldSettings`; calls `Stamp()` in spawn path `OnUpdate` |
+| `Balloon/Controller/BalloonBalancer.cs` | Injects `DisturbanceFieldService` + `DisturbanceFieldSettings`; calls `Stamp()` in balance path `OnUpdate` |
+| `Balloon/Controller/BalloonController.cs` | Injects `DisturbanceFieldService` + `DisturbanceFieldSettings`; calls `Stamp()` on pop |
+| `Item/Bomb/BombItemHandler.cs` | Injects `DisturbanceFieldService` + `DisturbanceFieldSettings`; stamps on detonation |
+| `Item/Laser/LaserItemHandler.cs` | Injects `DisturbanceFieldService` + `DisturbanceFieldSettings`; stamps along beam segments |
+| `Item/Paint/PaintItemHandler.cs` | Injects `DisturbanceFieldService` + `DisturbanceFieldSettings`; stamps on neighbor hits and splash |
 
 ---
 
@@ -1232,7 +1345,8 @@ along the spawn path. A pop adjacent to a cloud creates a visible shockwave.
 - [ ] Edge case: cloud at grid boundary — clamp quad
 - [ ] Edge case: all Puffs in a cluster removed in one frame (balance pass removes
       support) — graceful cleanup
-- [ ] Extract `DisturbanceFieldSettings` SO if other consumers need independent tuning
+- [x] Extract `DisturbanceFieldSettings` SO — extracted during P4; consumers inject it
+      independently of `PuffCloudSettings`
 
 ---
 
@@ -1255,9 +1369,10 @@ along the spawn path. A pop adjacent to a cloud creates a visible shockwave.
 5. **~~Maximum cluster size~~** — Resolved. `MaxPerCluster` on `GridActorPrefabEntry`
    caps individual cluster growth during placement (default 3).
 
-6. **~~`IOnPassThrough` timing~~** — Resolved. P4 uses a shared
+6. **~~`IOnPassThrough` timing~~** — Resolved. P4/P5 use a shared
    `DisturbanceFieldService` — participants (projectile, balloons, items) stamp
-   directly. No polling or `IOnPassThrough` needed for disturbance.
+   directly via `Stamp()`. No polling or `IOnPassThrough` needed for
+   disturbance. Each source uses a `StampProfile` from `DisturbanceFieldSettings`.
 
 7. **Cloud during Puff placement animation** — When a new Puff is spawned, should
    the cloud fade in or appear instantly? A fade-in (density starts at 0, reforms

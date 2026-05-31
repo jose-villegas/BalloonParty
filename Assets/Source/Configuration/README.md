@@ -15,6 +15,7 @@ All game data is split across focused ScriptableObjects. Each is registered as a
 | `GameDisplayConfiguration` | Aspect-ratio → orthographic-size lookup for camera sizing |
 | `ItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, damage, and type-specific effect params |
 | `PuffCloudSettings` | Puff cloud visual tuning — noise animation speed, density field resolution/timing, wind, displacement, visual padding, sorting layer/order, disturbance radii/strengths, and the `CloudPrefab` reference. Injected into `PuffCloudViewController`. |
+| `DisturbanceFieldSettings` | Shared disturbance field tuning — RT resolution (`TexelsPerUnit`), diffusion rate/reform speed/tick interval, wind speed/smoothing/decay, pressure, displacement amount/decay, performance thresholds (`MinStampStrength`, `MaxLerpStamps`), shader references (`DiffusionShader`, `StampBatchedShader`), and per-source `StampProfile[]` with `StampSource` flags. Injected into `DisturbanceFieldService` and all disturbance consumers |
 
 ### Data types
 
@@ -28,6 +29,8 @@ All game data is split across focused ScriptableObjects. Each is registered as a
 | `ItemType` | Enum — `None`, `Shield`, `Bomb`, `Laser`, `Lightning` |
 | `PaletteColorMaskAttribute` | `PropertyAttribute` that marks an `int` field as a bitmask over `GamePalette.Colors` — rendered in the Inspector as per-color checkboxes via `PaletteColorMaskDrawer` |
 | `PaletteColorNameAttribute` | `PropertyAttribute` that marks a `string` field as a palette color name — rendered in the Inspector as a popup dropdown with color swatch via `PaletteColorNameDrawer` |
+| `StampProfile` | Serializable struct in `DisturbanceFieldSettings` — `StampSource` flags, `Radius`, `Strength`, `Duration`. Defines per-source disturbance parameters |
+| `StampSource` | `[Flags]` enum — `Projectile`, `BalloonPath`, `BalloonPop`, `Bomb`, `Laser`, `Paint`. Identifies which game system a `StampProfile` applies to |
 
 ### Editor
 
@@ -40,6 +43,7 @@ All custom `PropertyDrawer` implementations in this folder extend `AutoFieldProp
 | `GameDisplayConfigurationDrawer` | Custom `PropertyDrawer` for `GameDisplayConfiguration` — inline aspect-ratio / orthographic-size pair editing |
 | `PaletteColorMaskDrawer` | Custom `PropertyDrawer` for `PaletteColorMaskAttribute` — renders a bitmask int as labeled checkboxes matching the current `GamePalette` entries |
 | `PaletteColorNameDrawer` | Custom `PropertyDrawer` for `PaletteColorNameAttribute` — renders a string field as a popup listing all `GamePalette` color names with a color swatch beside the selected entry. Loads the palette lazily via `AssetDatabase.FindAssets("t:GamePalette")` |
+| `StampProfileDrawer` | Custom `PropertyDrawer` for `StampProfile` — foldout header shows `StampSource` flags label; expanded view shows Sources, Radius, Strength, Duration fields |
 
 ## Design rules
 
