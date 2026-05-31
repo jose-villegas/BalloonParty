@@ -43,6 +43,7 @@ Shader "BalloonParty/Grid/PuffCloud"
         [Header(Density)]
         [Toggle(_DENSITY_ON)] _EnableDensity ("Enable Density RT", Float) = 0
         _DensityTex         ("Density Texture",    2D)                 = "white" {}
+        _DisplaceWorldScale ("Displace World Scale", Range(0, 2))      = 0.5
 
         [Header(Animation)]
         _TimeOffset         ("Time Offset",        Float)              = 0.0
@@ -136,6 +137,7 @@ Shader "BalloonParty/Grid/PuffCloud"
 
             #ifdef _DENSITY_ON
             sampler2D _DensityTex;
+            float     _DisplaceWorldScale;
             #endif
 
             // Slot center positions in world space — set via MaterialPropertyBlock.
@@ -228,13 +230,22 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float2 wp = IN.worldPos;
                 float  t  = _TimeOffset;
 
+                // Density field + displacement (P2+)
+                #ifdef _DENSITY_ON
+                float3 field = tex2D(_DensityTex, IN.texcoord).rgb;
+                float density = field.r;
+                // Displacement is 0.5-biased: subtract 0.5 to get signed offset
+                float2 displace = (field.gb - 0.5) * 2.0 * _DisplaceWorldScale;
+                // Offset noise coordinates — the cloud visibly warps
+                wp += displace;
+                #endif
+
                 // Noise-based cloud shape
                 float noiseValue = CloudNoise(wp, t);
                 float cloud = smoothstep(_EdgeLow, _EdgeHigh, noiseValue);
 
-                // Density field masking (P2+)
+                // Density opacity masking
                 #ifdef _DENSITY_ON
-                float density = tex2D(_DensityTex, IN.texcoord).r;
                 cloud *= density;
                 #endif
 
@@ -249,7 +260,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float  shadowNoise = CloudNoise(shadowWp, t);
                 float  shadowCloud = smoothstep(_EdgeLow, _EdgeHigh, shadowNoise);
                 #ifdef _DENSITY_ON
-                shadowCloud *= tex2D(_DensityTex, IN.texcoord).r;
+                shadowCloud *= density;
                 #endif
                 float  shadowFade  = SlotFalloff(shadowWp);
                 shadowCloud *= shadowFade;

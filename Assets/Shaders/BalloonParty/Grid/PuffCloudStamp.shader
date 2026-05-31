@@ -1,19 +1,24 @@
 Shader "Hidden/BalloonParty/Grid/PuffCloudStamp"
 {
     // ── Disturbance stamp pass ───────────────────────────────────────────
-    // Subtracts a radial falloff from the density field at _StampCenter.
-    // An optional directional wake elongates the stamp along _StampDirection,
-    // producing a teardrop-shaped hole that trails behind a moving object.
+    // Packed RT: R=density, G=displacement X (0.5=zero), B=displacement Y.
     //
-    // Used by PuffCloudView when a disturbance event occurs.
+    // On stamp:
+    //   - Density is subtracted (radial falloff) — creates an opacity hole
+    //   - Displacement is pushed in the stamp direction — the noise
+    //     sampling coordinates warp, visibly deforming the cloud shape
+    //
+    // _StampDirection comes from the drag/projectile velocity and controls
+    // which way cloud matter gets pushed aside.
     // ─────────────────────────────────────────────────────────────────────
     Properties
     {
-        _MainTex        ("Density (read)", 2D)    = "white" {}
-        _StampCenter    ("Stamp Center UV", Vector) = (0.5, 0.5, 0, 0)
-        _StampRadius    ("Stamp Radius UV", Float)  = 0.1
-        _StampStrength  ("Stamp Strength",  Float)  = 0.8
-        _StampDirection ("Stamp Direction", Vector) = (0, 0, 0, 0)
+        _MainTex         ("Field (read)",     2D)     = "white" {}
+        _StampCenter     ("Stamp Center UV",  Vector) = (0.5, 0.5, 0, 0)
+        _StampRadius     ("Stamp Radius UV",  Float)  = 0.1
+        _StampStrength   ("Stamp Strength",   Float)  = 0.8
+        _StampDirection  ("Stamp Direction",  Vector) = (0, 0, 0, 0)
+        _DisplaceAmount  ("Displace Amount",  Float)  = 0.3
     }
 
     SubShader
@@ -34,6 +39,7 @@ Shader "Hidden/BalloonParty/Grid/PuffCloudStamp"
             float     _StampRadius;
             float     _StampStrength;
             float4    _StampDirection;
+            float     _DisplaceAmount;
 
             struct appdata
             {
@@ -58,35 +64,51 @@ Shader "Hidden/BalloonParty/Grid/PuffCloudStamp"
             fixed4 frag(v2f i) : SV_Target
             {
                 float2 uv = i.uv;
-                float current = tex2D(_MainTex, uv).r;
+                float3 current = tex2D(_MainTex, uv).rgb;
 
-                // Radial falloff from stamp center
-                float dist = length(uv - _StampCenter.xy);
+                float2 toPixel = uv - _StampCenter.xy;
+                float dist = length(toPixel);
+
+                // Radial falloff
                 float falloff = smoothstep(_StampRadius, 0.0, dist);
 
-                // Directional wake — narrow trail behind the travel direction
+                // Directional wake trail
                 float2 dir = _StampDirection.xy;
                 float dirLen = length(dir);
                 if (dirLen > 0.001)
                 {
                     float2 dirNorm = dir / dirLen;
-                    float2 toCenter = uv - _StampCenter.xy;
-                    float along = dot(toCenter, dirNorm);
-                    float perpDist = length(toCenter - along * dirNorm);
-
-                    // Trail extends behind the object (opposite to travel)
+                    float along = dot(toPixel, dirNorm);
+                    float perpDist = length(toPixel - along * dirNorm);
                     float wakeAlong = smoothstep(_StampRadius * 2.5, 0.0, -along)
                                     * step(along, 0.0);
                     float wakePerp = smoothstep(_StampRadius * 0.6, 0.0, perpDist);
-                    float wake = wakeAlong * wakePerp;
-                    falloff = max(falloff, wake * 0.5);
+                    falloff = max(falloff, wakeAlong * wakePerp * 0.5);
                 }
 
-                float result = max(0.0, current - falloff * _StampStrength);
-                return fixed4(result, 0.0, 0.0, 1.0);
+                // Density subtraction
+                float density = max(0.0, current.r - falloff * _StampStrength);
+
+                // Displacement — push cloud matter away from the disturbance.
+                // The noise lookup offsets toward the stamp center so the
+                // cloud visually expands outward (inverse warp).
+                float2 pushDir;
+                if (dirLen > 0.001)
+                {
+                    pushDir = -(dir / dirLen);
+                }
+                else
+                {
+                    pushDir = (dist > 0.001) ? -(toPixel / dist) : float2(0, 0);
+                }
+
+                // Encode displacement as 0.5-biased: 0.5 = no offset
+                float2 displace = current.gb;
+                displace += pushDir * falloff * _DisplaceAmount;
+
+                return fixed4(density, saturate(displace), 1.0);
             }
             ENDCG
         }
     }
 }
-

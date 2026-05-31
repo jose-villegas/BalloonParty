@@ -26,10 +26,15 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static readonly int DiffusionRateId = Shader.PropertyToID("_DiffusionRate");
         private static readonly int ReformSpeedId = Shader.PropertyToID("_ReformSpeed");
         private static readonly int DeltaTimeId = Shader.PropertyToID("_DeltaTime");
+        private static readonly int WindDirId = Shader.PropertyToID("_WindDir");
+        private static readonly int WindSpeedId = Shader.PropertyToID("_WindSpeed");
+        private static readonly int PressureStrId = Shader.PropertyToID("_PressureStr");
         private static readonly int StampCenterId = Shader.PropertyToID("_StampCenter");
         private static readonly int StampRadiusId = Shader.PropertyToID("_StampRadius");
         private static readonly int StampStrengthId = Shader.PropertyToID("_StampStrength");
         private static readonly int StampDirectionId = Shader.PropertyToID("_StampDirection");
+        private static readonly int DisplaceAmountId = Shader.PropertyToID("_DisplaceAmount");
+        private static readonly int DisplaceDecayId = Shader.PropertyToID("_DisplaceDecay");
 
         [SerializeField] private SpriteRenderer _renderer;
 
@@ -41,14 +46,31 @@ namespace BalloonParty.Slots.Actor.Archetype
         [Tooltip("Resolution per slot axis. Single-slot cloud = texelsPerSlot x texelsPerSlot.")]
         [SerializeField] private int _texelsPerSlot = 32;
 
-        [Tooltip("Spatial blur rate per diffusion tick.")]
-        [SerializeField] [Range(0f, 1f)] private float _diffusionRate = 0.15f;
+        [Tooltip("Spatial blur rate per diffusion tick. Higher = faster spread from neighbors.")]
+        [SerializeField] [Range(0f, 1f)] private float _diffusionRate = 0.3f;
 
-        [Tooltip("Speed at which density trends back toward 1.0 (equilibrium).")]
-        [SerializeField] [Range(0f, 2f)] private float _reformSpeed = 0.4f;
+        [Tooltip("Speed at which density trends back toward 1.0 (equilibrium). Keep low — spatial flow should dominate.")]
+        [SerializeField] [Range(0f, 0.5f)] private float _reformSpeed = 0.05f;
 
         [Tooltip("Seconds between diffusion blit passes. Lower = smoother but more GPU work.")]
         [SerializeField] [Range(0.016f, 0.2f)] private float _diffusionTickInterval = 0.05f;
+
+        [Header("Wind")]
+        [Tooltip("Direction density flows in UV space. Controls which side holes fill from.")]
+        [SerializeField] private Vector2 _windDirection = new(0.3f, 0.1f);
+
+        [Tooltip("Wind advection speed. Higher = faster directional fill.")]
+        [SerializeField] [Range(0f, 5f)] private float _windSpeed = 1.0f;
+
+        [Tooltip("How strongly high-density neighbors push into low-density regions.")]
+        [SerializeField] [Range(0f, 1f)] private float _pressureStrength = 0.4f;
+
+        [Header("Displacement")]
+        [Tooltip("How much the stamp pushes cloud noise coordinates aside.")]
+        [SerializeField] [Range(0f, 1f)] private float _displaceAmount = 0.3f;
+
+        [Tooltip("How fast displacement decays back to zero. Higher = cloud snaps back sooner.")]
+        [SerializeField] [Range(0f, 5f)] private float _displaceDecay = 1.5f;
 
         [Header("Debug")]
         [Tooltip("When enabled, clicking on the cloud stamps a test disturbance.")]
@@ -152,6 +174,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             _stampMaterial.SetFloat(StampRadiusId, radiusUV);
             _stampMaterial.SetFloat(StampStrengthId, strength);
             _stampMaterial.SetVector(StampDirectionId, new Vector4(direction.x, direction.y, 0f, 0f));
+            _stampMaterial.SetFloat(DisplaceAmountId, _displaceAmount);
 
             Graphics.Blit(DensityRead, DensityWrite, _stampMaterial);
             _readFromA = !_readFromA;
@@ -181,8 +204,8 @@ namespace BalloonParty.Slots.Actor.Archetype
             _densityA = CreateDensityRT(res, res);
             _densityB = CreateDensityRT(res, res);
 
-            ClearToWhite(_densityA);
-            ClearToWhite(_densityB);
+            ClearToEquilibrium(_densityA);
+            ClearToEquilibrium(_densityB);
 
             _readFromA = true;
             _densityInitialized = true;
@@ -198,7 +221,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         private static RenderTexture CreateDensityRT(int width, int height)
         {
-            var rt = new RenderTexture(width, height, 0, RenderTextureFormat.R8)
+            var rt = new RenderTexture(width, height, 0, RenderTextureFormat.ARGBHalf)
             {
                 filterMode = FilterMode.Bilinear,
                 wrapMode = TextureWrapMode.Clamp
@@ -207,11 +230,11 @@ namespace BalloonParty.Slots.Actor.Archetype
             return rt;
         }
 
-        private static void ClearToWhite(RenderTexture rt)
+        private static void ClearToEquilibrium(RenderTexture rt)
         {
             var prev = RenderTexture.active;
             RenderTexture.active = rt;
-            GL.Clear(false, true, Color.white);
+            GL.Clear(false, true, new Color(1f, 0.5f, 0.5f, 1f));
             RenderTexture.active = prev;
         }
 
@@ -281,6 +304,10 @@ namespace BalloonParty.Slots.Actor.Archetype
             _diffusionMaterial.SetFloat(DiffusionRateId, _diffusionRate);
             _diffusionMaterial.SetFloat(ReformSpeedId, _reformSpeed);
             _diffusionMaterial.SetFloat(DeltaTimeId, _diffusionTimer);
+            _diffusionMaterial.SetVector(WindDirId, new Vector4(_windDirection.x, _windDirection.y, 0f, 0f));
+            _diffusionMaterial.SetFloat(WindSpeedId, _windSpeed);
+            _diffusionMaterial.SetFloat(PressureStrId, _pressureStrength);
+            _diffusionMaterial.SetFloat(DisplaceDecayId, _displaceDecay);
 
             Graphics.Blit(DensityRead, DensityWrite, _diffusionMaterial);
             _readFromA = !_readFromA;
