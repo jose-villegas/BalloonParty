@@ -103,16 +103,24 @@ namespace BalloonParty.Slots.Grid
 
         public Vector3[] ComputePath(Vector2Int source, Vector2Int target)
         {
+            var path = new List<Vector3>();
+            ComputePath(source, target, path);
+            return path.ToArray();
+        }
+
+        public void ComputePath(Vector2Int source, Vector2Int target, List<Vector3> results)
+        {
+            results.Clear();
+
             var colDelta = target.x - source.x;
             var rowDelta = target.y - source.y;
             var steps = Mathf.Max(Mathf.Abs(colDelta), Mathf.Abs(rowDelta));
 
             if (steps == 0)
             {
-                return new[] { IndexToWorldPosition(target) };
+                results.Add(IndexToWorldPosition(target));
+                return;
             }
-
-            var path = new List<Vector3>(steps + 1);
 
             for (var i = 0; i <= steps; i++)
             {
@@ -138,10 +146,8 @@ namespace BalloonParty.Slots.Grid
                         "Path crosses a relocating balloon — rerouting not yet implemented (Phase 9).");
                 }
 
-                path.Add(IndexToWorldPosition(new Vector2Int(col, row)));
+                results.Add(IndexToWorldPosition(new Vector2Int(col, row)));
             }
-
-            return path.ToArray();
         }
 
         public bool IsUnbalanced(int col, int row)

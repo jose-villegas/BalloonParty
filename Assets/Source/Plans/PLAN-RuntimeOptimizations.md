@@ -83,7 +83,7 @@ thread-local / field-level buffer.
 
 ---
 
-### H-6 — `SlotGrid.ComputePath()` list + `.ToArray()` per spawn
+### ~~H-6 — `SlotGrid.ComputePath()` list + `.ToArray()` per spawn~~ ✅ Done
 
 **File:** `Slots/Grid/SlotGrid.cs` · `ComputePath(Vector2Int, Vector2Int)`
 
