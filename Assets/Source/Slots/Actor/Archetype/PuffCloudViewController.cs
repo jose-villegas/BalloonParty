@@ -120,7 +120,6 @@ namespace BalloonParty.Slots.Actor.Archetype
                 positions[i] = _grid.IndexToWorldPosition(slots[i]);
             }
 
-
             view.Configure(positions, cluster.WorldBounds, _settings);
 
             if (view.Renderer != null)

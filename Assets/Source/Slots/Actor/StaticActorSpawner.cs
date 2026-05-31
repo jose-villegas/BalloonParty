@@ -14,6 +14,8 @@ namespace BalloonParty.Slots.Actor
 {
     internal class StaticActorSpawner : IStartable, IGridSpawner
     {
+        private static readonly Dictionary<SlotPlacementMode, ISlotSelectionStrategy> StrategyCache = new();
+
         private readonly SlotGrid _grid;
         private readonly PoolManager _poolManager;
         private readonly IObjectResolver _resolver;
@@ -113,8 +115,6 @@ namespace BalloonParty.Slots.Actor
 
             _poolsRegistered = true;
         }
-
-        private static readonly Dictionary<SlotPlacementMode, ISlotSelectionStrategy> StrategyCache = new();
 
         private static ISlotSelectionStrategy GetStrategy(SlotPlacementMode mode)
         {

@@ -14,13 +14,15 @@ All game data is split across focused ScriptableObjects. Each is registered as a
 | `GamePalette` | Array of `PaletteEntry` (name + `Color`) — the single source for all balloon colors; injected into `BalloonView`, `ColorableBalloonType`, `ScoreController`, `ColorProgressBar`, `ScoreTrailService`, `ItemDisplayService`, and anywhere a color name must be resolved to a `UnityEngine.Color` |
 | `GameDisplayConfiguration` | Aspect-ratio → orthographic-size lookup for camera sizing |
 | `ItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, damage, and type-specific effect params |
+| `PuffCloudSettings` | Puff cloud visual tuning — noise animation speed, density field resolution/timing, wind, displacement, visual padding, sorting layer/order, disturbance radii/strengths, and the `CloudPrefab` reference. Injected into `PuffCloudViewController`. |
 
 ### Data types
 
 | File | What it does |
 |---|---|
 | `BalloonPrefabEntry` | Serializable entry in `BalloonsConfiguration` — holds a `BalloonView` prefab reference, spawn weight, optional max-count cap, `HitsToPop` (how many hits before popping; -1 = unbreakable), `ScoreValue` (points awarded on pop), per-type `NudgeOverride[]`, and optional pop VFX override. `BalloonType` drives which model class is created (`Simple` → `BalloonModel`, `Tough` → `ToughBalloonModel`). Item eligibility is determined by whether the model implements `IHasWriteableItemSlot` — not a flag. Pool key is derived from the prefab's GameObject name. |
-| `GridActorPrefabEntry` | Serializable entry in `GridActorConfiguration` — holds a `GridActorView` prefab reference, `GridActorType`, spawn weight, optional max-count cap, and `HitsToPop` (relevant only for `Gatekeeper`). Pool key is derived from the prefab's GameObject name. |
+| `GridActorPrefabEntry` | Serializable entry in `GridActorConfiguration` — holds a `GridActorView` prefab reference, `GridActorType`, spawn weight, `MinCount`, optional `MaxCount` cap, `MaxPerCluster` (caps individual cluster size for `Cluster` placement mode), `SlotPlacementMode` (`Random` or `Cluster`), and `HitsToPop` (relevant only for `Gatekeeper`). Implements `IWeightedEntry`. Pool key is derived from the prefab's GameObject name. |
+| `IWeightedEntry` | Shared interface for weighted random selection — `Weight`, `MaxCount`, `PoolKey`. Implemented by `BalloonPrefabEntry`, `GridActorPrefabEntry`, and `ItemSettings`. |
 | `ItemSettings` | Per-item tuning data for `ItemConfiguration` — common fields (type, frequency, weight, cap, visuals, `Damage`) plus type-specific fields (bomb radius, laser cast params, lightning timing). `Damage` controls how many hit-points a single activation removes from each affected balloon; defaults to 1 |
 | `PaletteEntry` | Serializable name + `Color` pair used in `GamePalette` |
 | `ItemType` | Enum — `None`, `Shield`, `Bomb`, `Laser`, `Lightning` |

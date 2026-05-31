@@ -23,7 +23,7 @@ TagManager:
   - Limits
   - Projectile
   - Balloons
-  - 
+  - Grid
   - 
   - 
   - 
@@ -51,14 +51,17 @@ TagManager:
   - name: Balloons
     uniqueID: 1928968643
     locked: 0
-  - name: ScoreTrail
-    uniqueID: 4279732189
-    locked: 0
   - name: Projectile
     uniqueID: 147337309
     locked: 0
   - name: PowerUps
     uniqueID: 1618840163
+    locked: 0
+  - name: PuffCloud
+    uniqueID: 969957701
+    locked: 0
+  - name: ScoreTrail
+    uniqueID: 4279732189
     locked: 0
   - name: Sky
     uniqueID: 4225986225

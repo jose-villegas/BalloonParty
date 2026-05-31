@@ -820,12 +820,16 @@ one splits the visual correctly. ✅
 
 4. **`ISlotSelectionStrategy` — new interface for slot placement logic.**
    - `RandomSlotSelectionStrategy` — shuffles and picks (default for most actors).
-   - `ClusterSlotSelectionStrategy` — greedy hex-neighbor expansion from random seeds.
+   - `ClusterSlotSelectionStrategy` — greedy hex-neighbor expansion. Each cluster
+     is capped at `MaxPerCluster` slots. New seeds are biased toward the opposite
+     side of the grid from existing cluster centroids, producing spatially
+     distributed, facing clusters.
    - `SlotPlacementMode` enum on `GridActorPrefabEntry` — selectable in Inspector.
    - Strategies are lazily cached in a static dictionary.
 
-5. **`GridActorPrefabEntry` — gains `MinCount`, `SlotPlacementMode`, implements
-   `IWeightedEntry`.**
+5. **`GridActorPrefabEntry` — gains `MinCount`, `MaxPerCluster`, `SlotPlacementMode`,
+   implements `IWeightedEntry`.** `MaxPerCluster` caps individual cluster size for
+   the `Cluster` placement strategy (default 3).
 
 6. **`IWeightedEntry` + `WeightedPickExtensions.PickRandom<T>()` — new shared
    weighted random selection.** Replaces duplicate logic in `BalloonsConfiguration`,
@@ -852,7 +856,8 @@ one splits the visual correctly. ✅
 - `Puff.prefab` — `GridActorView` + `TweenTracker` only (no visuals)
 - `PuffCloud.prefab` — `SpriteRenderer` + `PuffCloudView` (with sprite + PuffCloud
   material assigned). Referenced by `PuffCloudSettings.CloudPrefab`.
-- `PuffCloudSettings.asset` — has tuned values from P2 prefab.
+- `PuffCloudSettings.asset` — has tuned values from P2 prefab. Sorting layer
+  configured via `[SortingLayer]` dropdown.
 - `GridActorConfiguration.asset` — Puff entry with `MinCount`/`MaxCount`,
   `PlacementMode = Cluster`, `GridActorType = Puff`.
 

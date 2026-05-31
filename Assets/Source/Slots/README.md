@@ -56,14 +56,15 @@ Paintability is expressed purely through types: a `BalloonModel` implements `IPa
 | `AbsorberActorModel` *(Phase 8.2b)* | `IHitable` only | Always `Absorb`; kills the projectile |
 | `GatekeeperActorModel` *(Phase 8.2c)* | `IHasDurability` | `Deflect` on survival, `Pop` on death; decrements `HitsRemaining`. Blocks a column until destroyed. |
 | `StaticActorModel` | neither | No collider — not part of the hit pipeline |
+| `PuffObstacleModel` | neither | Structural obstacle; `IPassThrough` — animation paths can cross it. Gains `ClusterId` linking to a visual `PuffCluster`. |
 
 ## Contents
 
 | File / Folder | What it does |
 |---|---|
 | `Grid/` | `SlotGrid`, `SlotGridChangedEvent`, `SlotGridView`, `BalancePathHolder` — core grid data structure and balance transit tracking (namespace `BalloonParty.Slots.Grid`) |
-| `Actor/` | Core actor interfaces, identity enum, static actor implementation, and hit controller — `ISlotActor`, `IWriteableSlotActor`, `IDynamicSlotActor`, `IWriteableDynamicSlotActor`, `ISlotActorView`, `SlotActorKind`, `StaticActorModel`, `StaticActorView`, `StaticActorPoolChannel`, `StaticActorSettings`, `StaticActorSpawner`, `GridActorHitController` (namespace `BalloonParty.Slots.Actor`) |
-| `Actor/Archetype/` | Concrete grid actor models — `PuffObstacleModel`, `BushObstacleModel` (structural; no hit response), `DeflectorActorModel`, `AbsorberActorModel` (indestructible hitables), `GatekeeperActorModel` (durability-based column blocker), `GridActorView`, `GridActorPoolChannel`, `GridActorType`, `PuffCloudView` (drives the `PuffCloud` shader — procedural cloud visual for Puff slots) |
+| `Actor/` | Core actor interfaces, spawner, hit controller, and slot selection strategies — `ISlotActor`, `IWriteableSlotActor`, `IDynamicSlotActor`, `IWriteableDynamicSlotActor`, `ISlotActorView`, `SlotActorKind`, `StaticActorModel`, `StaticActorSpawner`, `GridActorHitController`, `ISlotSelectionStrategy`, `RandomSlotSelectionStrategy`, `ClusterSlotSelectionStrategy`, `SlotPlacementMode` (namespace `BalloonParty.Slots.Actor`) |
+| `Actor/Archetype/` | Concrete grid actor models and the Puff cloud visual system — see [Archetype README](Actor/Archetype/README.md) (namespace `BalloonParty.Slots.Actor.Archetype`) |
 | `Capabilities/` | Optional capability interfaces — `IHasColor`, `IPaintable`, `IHasScore`, `IHasScoreColor`, `IHasNudge`, `IHasItemSlot`, `IHitable`, `IHasDurability`, `IPassThrough`, `HitOutcome`, `DamageContext`, `DamageFlags`, `ScoreAttribution` (namespace `BalloonParty.Slots.Capabilities`) |
 | `Spawner/` | Spawner coordination — `IGridSpawner`, `SpawnStage`, `GridSpawnerCoordinator` (namespace `BalloonParty.Slots.Spawner`) |
 
@@ -117,9 +118,19 @@ Spawners are injected as `IEnumerable<IGridSpawner>` via VContainer's collection
 ## Interactions
 
 - **BalloonSpawner** — calls `Balance()` once before all line spawns so existing balloons consolidate upward first; then calls `Place` for each new balloon into remaining empty slots; uses `ComputePath` for spawn animation waypoints; publishes `BalanceBalloonsMessage` after spawning for a final settling pass
-- **StaticActorSpawner** — calls `Place` for each static actor at game start using `AllEmptySlots`
+- **StaticActorSpawner** — iterates `GridActorConfiguration.Entries`, picks a random count per entry (between `MinCount` and `MaxCount`), selects slots via the entry's `ISlotSelectionStrategy`, and calls `Place` per slot
 - **BalloonController** — calls `Remove` when a balloon is popped; subscribes to `ActorHitMessage`
 - **BalloonBalancer** — reads occupancy to find gaps; skips `Static` actors (or actors that are not `IDynamicSlotActor`); calls `Remove` + `Place` to relocate dynamic actors; uses `ViewAt` to reach views for animation. `Balance()` is `internal` for synchronous pre-spawn consolidation
 - **NudgeService** — uses `GetNeighbors` and `IndexToWorldPosition` to direct nudge animations; filters by `IHasNudge`
 - **PaintItemHandler** — uses `HexNeighborIndices`; casts `At()` result to `IPaintable` for painting
 - **IGameConfiguration** — provides `SlotsSize`, `SlotSeparation`, `SlotsOffset` for grid construction and position calculations
+
+## Slot Selection Strategies
+
+`ISlotSelectionStrategy` abstracts how `StaticActorSpawner` picks which empty slots an actor type should occupy. Each `GridActorPrefabEntry` declares a `SlotPlacementMode` enum that maps to a strategy. Strategies are lazily cached — one instance per mode.
+
+| Strategy | Mode | Behaviour |
+|---|---|---|
+| `RandomSlotSelectionStrategy` | `Random` | Shuffles all empty slots and picks the first N. Default for actor types with no spatial preference. |
+| `ClusterSlotSelectionStrategy` | `Cluster` | Seeds a cluster at a random slot, then greedily expands into hex neighbors. Each cluster is capped at `MaxPerCluster` slots (from `GridActorPrefabEntry`). When a cluster is full or has no more neighbors, the next seed is biased toward the opposite side of the grid — maximising the minimum distance to all previous cluster centroids. Produces multiple small, spatially distributed clusters. |
+

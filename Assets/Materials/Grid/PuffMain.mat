@@ -67,26 +67,26 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _BaseScale: 3
-    - _BorderSoftness: 0.5
+    - _BaseScale: 1
+    - _BorderSoftness: 0.4
     - _BumpScale: 1
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
-    - _DetailScale: 8
+    - _DetailScale: 1.75
     - _DisplaceWorldScale: 0.5
     - _DstBlend: 0
-    - _EdgeHigh: 0.3
+    - _EdgeHigh: 0.5
     - _EdgeLow: 0.6
     - _EnableDensity: 1
     - _EnableShadow: 1
-    - _FineScale: 12
+    - _FineScale: 3
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _LightIntensity: 0.65
     - _Metallic: 0
     - _Mode: 0
-    - _NoiseScale: 0.35
+    - _NoiseScale: 1.2
     - _NormalEpsilon: 0.05
     - _NormalStrength: 2.5
     - _OcclusionStrength: 1
@@ -94,7 +94,7 @@ Material:
     - _ShadowOffsetX: 0.15
     - _ShadowOffsetY: -0.15
     - _ShadowSoftness: 0.1
-    - _SlotRadius: 0.22
+    - _SlotRadius: 0.25
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpriteScale: 1

@@ -182,4 +182,3 @@ namespace BalloonParty.Slots.Actor
         }
     }
 }
-

@@ -84,4 +84,3 @@ namespace BalloonParty.Configuration
         public bool PreserveDensityOnResize => _preserveDensityOnResize;
     }
 }
-

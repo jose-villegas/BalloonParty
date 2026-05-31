@@ -20,4 +20,5 @@ MonoBehaviour:
     _weight: 50
     _minCount: 5
     _maxCount: 15
+    _maxPerCluster: 6
     _hitsToPop: -1

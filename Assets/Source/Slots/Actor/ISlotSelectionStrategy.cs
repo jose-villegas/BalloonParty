@@ -24,4 +24,3 @@ namespace BalloonParty.Slots.Actor
         List<Vector2Int> SelectSlots(IReadOnlyList<Vector2Int> emptySlots, int count, int maxPerCluster = 0);
     }
 }
-

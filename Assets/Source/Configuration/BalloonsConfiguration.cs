@@ -28,7 +28,6 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _nudgeDuration = 0.15f;
         [SerializeField] private float _nudgeFalloff = 1.5f;
 
-
         public BalloonPrefabEntry[] Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
         public int GameStartedBalloonLines => _gameStartedBalloonLines;

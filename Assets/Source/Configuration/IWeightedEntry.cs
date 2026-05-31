@@ -12,4 +12,3 @@ namespace BalloonParty.Configuration
         string PoolKey { get; }
     }
 }
-

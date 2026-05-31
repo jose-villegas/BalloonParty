@@ -26,8 +26,8 @@ MonoBehaviour:
   _displaceAmount: 0.9
   _displaceDecay: 0.3
   _padding: 0.3
-  _sortingLayerName: Default
-  _sortingOrderOffset: -1
+  _sortingLayerId: 969957701
+  _sortingOrderOffset: 0
   _projectileRadius: 0.3
   _projectileStrength: 0.8
   _balloonRadius: 0.5

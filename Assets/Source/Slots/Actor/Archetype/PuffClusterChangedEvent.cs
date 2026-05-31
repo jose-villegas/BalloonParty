@@ -21,4 +21,3 @@ namespace BalloonParty.Slots.Actor.Archetype
         Removed
     }
 }
-

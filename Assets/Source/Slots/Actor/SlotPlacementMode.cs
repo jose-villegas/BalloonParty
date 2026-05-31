@@ -6,4 +6,3 @@ namespace BalloonParty.Slots.Actor
         Cluster = 1
     }
 }
-

@@ -28,7 +28,6 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _scorePointsScatterDelay = 0.08f;
         [SerializeField] private float _scorePointBurstDuration = 0.12f;
 
-
         public float ProjectileSpeed => _projectileSpeed;
         public float ProjectileLoadDuration => _projectileLoadDuration;
         public Vector4 LimitsClockwise => _limitsClockwise;
