@@ -4,6 +4,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Item.Paint;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -21,6 +22,7 @@ namespace BalloonParty.Tests.Item
         private GamePalette _palette;
         private ItemConfiguration _itemConfig;
         private PaintItemHandler _handler;
+        private DisturbanceFieldSettings _disturbanceSettings;
 
         [SetUp]
         public void SetUp()
@@ -44,11 +46,15 @@ namespace BalloonParty.Tests.Item
             var paintSettings = CreateItemSettings(ItemType.Paint);
             SetField(_itemConfig, "_items", new List<ItemSettings> { paintSettings });
 
+            _disturbanceSettings = ScriptableObject.CreateInstance<DisturbanceFieldSettings>();
+
             _handler = new PaintItemHandler(
                 _palette,
                 _itemConfig,
                 _grid,
-                new PoolManager());
+                new PoolManager(),
+                new DisturbanceFieldService(),
+                _disturbanceSettings);
         }
 
         [TearDown]
@@ -56,6 +62,7 @@ namespace BalloonParty.Tests.Item
         {
             Object.DestroyImmediate(_palette);
             Object.DestroyImmediate(_itemConfig);
+            Object.DestroyImmediate(_disturbanceSettings);
         }
 
         [Test]

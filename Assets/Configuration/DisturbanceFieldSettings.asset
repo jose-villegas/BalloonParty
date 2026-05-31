@@ -22,9 +22,28 @@ MonoBehaviour:
   _pressureStrength: 0.9
   _displaceAmount: 0.9
   _displaceDecay: 0.3
-  _projectileRadius: 0.3
-  _projectileStrength: 0.8
-  _balloonRadius: 0.5
-  _balloonStrength: 0.4
-  _popBurstRadius: 0.8
-  _popBurstStrength: 1
+  _stampProfiles:
+  - Sources: 1
+    Radius: 0.3
+    Strength: 0.8
+    Duration: 0
+  - Sources: 2
+    Radius: 0.5
+    Strength: 0.004
+    Duration: 0.1
+  - Sources: 4
+    Radius: 1.25
+    Strength: 1.5
+    Duration: 0.2
+  - Sources: 8
+    Radius: 3
+    Strength: 2
+    Duration: 0.3
+  - Sources: 16
+    Radius: 0.4
+    Strength: 0.6
+    Duration: 0.2
+  - Sources: 32
+    Radius: 0.6
+    Strength: 0.5
+    Duration: 0.2

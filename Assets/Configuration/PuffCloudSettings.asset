@@ -15,23 +15,6 @@ MonoBehaviour:
   _cloudPrefab: {fileID: 6650345493731609934, guid: f0ed15161b2304f9283bebc5da3a0a22,
     type: 3}
   _animationSpeed: 5
-  _texelsPerSlot: 32
-  _diffusionRate: 0.15
-  _reformSpeed: 0.4
-  _diffusionTickInterval: 0.05
-  _windSpeed: 0.5
-  _windSmoothing: 2
-  _windDecay: 1
-  _pressureStrength: 0.9
-  _displaceAmount: 0.9
-  _displaceDecay: 0.3
   _padding: 0.3
   _sortingLayerId: 969957701
   _sortingOrderOffset: 0
-  _projectileRadius: 0.3
-  _projectileStrength: 0.8
-  _balloonRadius: 0.5
-  _balloonStrength: 0.4
-  _popBurstRadius: 0.8
-  _popBurstStrength: 1
-  _preserveDensityOnResize: 1

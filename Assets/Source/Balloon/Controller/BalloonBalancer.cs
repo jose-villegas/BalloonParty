@@ -66,6 +66,7 @@ namespace BalloonParty.Balloon.Controller
                 var currentScale = view.transform.localScale;
                 var viewTransform = view.transform;
                 var lastPos = viewTransform.position;
+                var balanceStamp = _disturbanceSettings.GetProfile(StampSource.BalloonPath);
 
                 var tween = viewTransform
                     .DOPath(path.ToArray(), _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
@@ -74,8 +75,10 @@ namespace BalloonParty.Balloon.Controller
                         var pos = viewTransform.position;
                         var delta = pos - lastPos;
                         var dir = new Vector2(delta.x, delta.y).normalized;
-                        _disturbanceField.Stamp(pos, _disturbanceSettings.BalloonRadius,
-                            _disturbanceSettings.BalloonStrength, dir);
+                        var rawScale = viewTransform.localScale.x;
+                        var scale = rawScale * rawScale;
+                        _disturbanceField.StampOverDuration(pos, balanceStamp.Radius * scale,
+                            balanceStamp.Strength * scale, dir, balanceStamp.Duration);
                         lastPos = pos;
                     })
                     .OnComplete(() =>

@@ -1,10 +1,44 @@
+using System;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
 {
+    [Flags]
+    internal enum StampSource
+    {
+        Projectile    = 1 << 0,
+        BalloonPath  = 1 << 1,
+        BalloonPop    = 1 << 2,
+        Bomb          = 1 << 3,
+        Laser         = 1 << 4,
+        Paint         = 1 << 5,
+    }
+
+    [Serializable]
+    internal struct StampProfile
+    {
+        [Tooltip("Which sources use this profile. Flag multiple to share settings.")]
+        public StampSource Sources;
+
+        public float Radius;
+        public float Strength;
+
+        [Tooltip("Duration over which the stamp ramps up. 0 = instant.")]
+        [Range(0f, 0.5f)]
+        public float Duration;
+    }
+
     [CreateAssetMenu(menuName = "Configuration/Disturbance Field Settings", fileName = "DisturbanceFieldSettings")]
     internal class DisturbanceFieldSettings : ScriptableObject
     {
+        private static readonly StampProfile DefaultProfile = new()
+        {
+            Sources = 0,
+            Radius = 0.3f,
+            Strength = 0.5f,
+            Duration = 0f
+        };
+
         [Header("Resolution")]
         [Tooltip("Texels per world unit for the shared disturbance RT.")]
         [SerializeField] private int _texelsPerUnit = 8;
@@ -29,17 +63,16 @@ namespace BalloonParty.Configuration
         [SerializeField] [Range(0f, 1f)] private float _displaceAmount = 0.3f;
         [SerializeField] [Range(0f, 5f)] private float _displaceDecay = 1.5f;
 
-        [Header("Stamp — Projectile")]
-        [SerializeField] private float _projectileRadius = 0.3f;
-        [SerializeField] private float _projectileStrength = 0.8f;
-
-        [Header("Stamp — Balloon")]
-        [SerializeField] private float _balloonRadius = 0.5f;
-        [SerializeField] private float _balloonStrength = 0.4f;
-
-        [Header("Stamp — Pop Burst")]
-        [SerializeField] private float _popBurstRadius = 0.8f;
-        [SerializeField] private float _popBurstStrength = 1.0f;
+        [Header("Stamp Profiles")]
+        [SerializeField] private StampProfile[] _stampProfiles = new[]
+        {
+            new StampProfile { Sources = StampSource.Projectile,   Radius = 0.3f, Strength = 0.8f, Duration = 0f },
+            new StampProfile { Sources = StampSource.BalloonPath, Radius = 0.5f, Strength = 0.4f, Duration = 0f },
+            new StampProfile { Sources = StampSource.BalloonPop,   Radius = 0.8f, Strength = 1.0f, Duration = 0.15f },
+            new StampProfile { Sources = StampSource.Bomb,         Radius = 1.2f, Strength = 1.0f, Duration = 0.2f },
+            new StampProfile { Sources = StampSource.Laser,        Radius = 0.4f, Strength = 0.6f, Duration = 0.1f },
+            new StampProfile { Sources = StampSource.Paint,        Radius = 0.6f, Strength = 0.5f, Duration = 0.1f },
+        };
 
         public int TexelsPerUnit => _texelsPerUnit;
         public float DiffusionRate => _diffusionRate;
@@ -51,12 +84,24 @@ namespace BalloonParty.Configuration
         public float PressureStrength => _pressureStrength;
         public float DisplaceAmount => _displaceAmount;
         public float DisplaceDecay => _displaceDecay;
-        public float ProjectileRadius => _projectileRadius;
-        public float ProjectileStrength => _projectileStrength;
-        public float BalloonRadius => _balloonRadius;
-        public float BalloonStrength => _balloonStrength;
-        public float PopBurstRadius => _popBurstRadius;
-        public float PopBurstStrength => _popBurstStrength;
+
+        /// <summary>
+        /// Returns the first <see cref="StampProfile"/> whose
+        /// <see cref="StampProfile.Sources"/> flags contain
+        /// <paramref name="source"/>. Falls back to a default profile
+        /// if no match is found.
+        /// </summary>
+        internal StampProfile GetProfile(StampSource source)
+        {
+            foreach (var profile in _stampProfiles)
+            {
+                if ((profile.Sources & source) != 0)
+                {
+                    return profile;
+                }
+            }
+
+            return DefaultProfile;
+        }
     }
 }
-

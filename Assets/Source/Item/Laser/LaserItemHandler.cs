@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -25,6 +26,8 @@ namespace BalloonParty.Item.Laser
         private readonly ItemConfiguration _itemConfig;
         private readonly List<RaycastHit2D> _castResults = new(4);
         private readonly PoolManager _poolManager;
+        private readonly DisturbanceFieldService _disturbanceField;
+        private readonly DisturbanceFieldSettings _disturbanceSettings;
 
         private readonly Dictionary<ISlotActor, Quaternion> _capturedRotations = new();
 
@@ -39,13 +42,17 @@ namespace BalloonParty.Item.Laser
             ItemConfiguration itemConfig,
             IPublisher<ActorHitMessage> hitPublisher,
             ISubscriber<TransformCapturedMessage> transformCapturedSubscriber,
-            PoolManager poolManager)
+            PoolManager poolManager,
+            DisturbanceFieldService disturbanceField,
+            DisturbanceFieldSettings disturbanceSettings)
         {
             _palette = palette;
             _itemConfig = itemConfig;
             _hitPublisher = hitPublisher;
             _transformCapturedSubscriber = transformCapturedSubscriber;
             _poolManager = poolManager;
+            _disturbanceField = disturbanceField;
+            _disturbanceSettings = disturbanceSettings;
 
             _balloonFilter = new ContactFilter2D();
             _balloonFilter.SetLayerMask(BalloonsLayer);
@@ -72,6 +79,7 @@ namespace BalloonParty.Item.Laser
 
             CastCross(settings, laserRotation);
             SpawnVisual(settings, laserRotation);
+            StampCross(settings, laserRotation);
 
             return UniTask.CompletedTask;
         }
@@ -128,6 +136,34 @@ namespace BalloonParty.Item.Laser
                     Vector3.zero,
                     balloonView.Model.EvaluateHit(context),
                     context));
+            }
+        }
+
+        private void StampCross(ItemSettings settings, Quaternion laserRotation)
+        {
+            var stamp = _disturbanceSettings.GetProfile(StampSource.Laser);
+            var distance = settings.LaserRaycastDistance;
+            var step = stamp.Radius * 1.5f;
+            var steps = Mathf.Max(1, Mathf.CeilToInt(distance / step));
+
+            var right = (Vector2)(laserRotation * Vector3.right);
+            var left = (Vector2)(laserRotation * Vector3.left);
+            var up = (Vector2)(laserRotation * Vector3.up);
+            var down = (Vector2)(laserRotation * Vector3.down);
+
+            StampArm(right, steps, step, stamp);
+            StampArm(left, steps, step, stamp);
+            StampArm(up, steps, step, stamp);
+            StampArm(down, steps, step, stamp);
+        }
+
+        private void StampArm(Vector2 direction, int steps, float step, StampProfile stamp)
+        {
+            for (var i = 0; i <= steps; i++)
+            {
+                var pos = (Vector2)_worldPosition + direction * (step * i);
+                _disturbanceField.StampOverDuration(pos, stamp.Radius,
+                    stamp.Strength, direction, stamp.Duration);
             }
         }
 

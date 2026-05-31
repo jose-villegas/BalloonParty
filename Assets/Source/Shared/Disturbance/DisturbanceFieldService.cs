@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BalloonParty.Configuration;
 using UnityEngine;
 using VContainer;
@@ -38,6 +39,7 @@ namespace BalloonParty.Shared.Disturbance
         private float _diffusionTimer;
         private Vector2 _windTarget;
         private Vector2 _windCurrent;
+        private readonly List<LerpStamp> _activeStamps = new();
 
         private Rect _fieldBounds;
         private int _fieldWidth;
@@ -59,7 +61,9 @@ namespace BalloonParty.Shared.Disturbance
 
         void ITickable.Tick()
         {
-            TickDiffusion(Time.deltaTime);
+            var dt = Time.deltaTime;
+            TickLerpStamps(dt);
+            TickDiffusion(dt);
         }
 
         void IDisposable.Dispose()
@@ -97,6 +101,31 @@ namespace BalloonParty.Shared.Disturbance
 
             Graphics.Blit(FieldTexture, FieldWrite, _stampMaterial);
             _readFromA = !_readFromA;
+        }
+
+        /// <summary>
+        /// Stamps a disturbance that ramps up over <paramref name="duration"/>
+        /// seconds, spreading the effect across multiple frames for a smooth
+        /// shockwave instead of a single-frame pop.
+        /// </summary>
+        internal void StampOverDuration(Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration)
+        {
+            if (duration <= 0f)
+            {
+                Stamp(worldPosition, radius, strength, direction);
+                return;
+            }
+
+            _activeStamps.Add(new LerpStamp
+            {
+                Position = worldPosition,
+                Radius = radius,
+                Strength = strength,
+                Direction = direction,
+                Duration = duration,
+                Elapsed = 0f,
+                LastT = 0f
+            });
         }
 
         internal Vector2 WorldToFieldUV(Vector3 worldPos)
@@ -232,6 +261,41 @@ namespace BalloonParty.Shared.Disturbance
                 mat = null;
             }
         }
+
+        private void TickLerpStamps(float dt)
+        {
+            for (var i = _activeStamps.Count - 1; i >= 0; i--)
+            {
+                var s = _activeStamps[i];
+                s.Elapsed += dt;
+                var t = Mathf.Clamp01(s.Elapsed / s.Duration);
+
+                var delta = t - s.LastT;
+                s.LastT = t;
+                _activeStamps[i] = s;
+
+                if (delta > 0.0001f)
+                {
+                    var radiusNow = Mathf.Lerp(s.Radius * 0.3f, s.Radius, t);
+                    Stamp(s.Position, radiusNow, s.Strength * delta, s.Direction);
+                }
+
+                if (t >= 1f)
+                {
+                    _activeStamps.RemoveAt(i);
+                }
+            }
+        }
+
+        private struct LerpStamp
+        {
+            public Vector3 Position;
+            public float Radius;
+            public float Strength;
+            public Vector2 Direction;
+            public float Duration;
+            public float Elapsed;
+            public float LastT;
+        }
     }
 }
-

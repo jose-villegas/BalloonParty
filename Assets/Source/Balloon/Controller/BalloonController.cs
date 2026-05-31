@@ -9,6 +9,7 @@ using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
+using UnityEngine;
 
 namespace BalloonParty.Balloon.Controller
 {
@@ -126,8 +127,9 @@ namespace BalloonParty.Balloon.Controller
             _hitSubscription = null;
 
             var popWorldPos = _view.transform.position;
-            _disturbanceField.Stamp(popWorldPos, _disturbanceSettings.PopBurstRadius,
-                _disturbanceSettings.PopBurstStrength, UnityEngine.Vector2.zero);
+            var popStamp = _disturbanceSettings.GetProfile(StampSource.BalloonPop);
+            _disturbanceField.StampOverDuration(popWorldPos, popStamp.Radius,
+                popStamp.Strength, Vector2.zero, popStamp.Duration);
 
             _view.PlayHitVfxForOutcome(HitOutcome.Pop);
             _grid.Remove(_model.SlotIndex.Value);

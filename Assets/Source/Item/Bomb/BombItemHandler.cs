@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -25,6 +26,8 @@ namespace BalloonParty.Item.Bomb
         private readonly ItemConfiguration _itemConfig;
         private readonly List<Collider2D> _overlapResults = new(8);
         private readonly PoolManager _poolManager;
+        private readonly DisturbanceFieldService _disturbanceField;
+        private readonly DisturbanceFieldSettings _disturbanceSettings;
 
         private IBalloonModel _balloon;
         private Vector3 _worldPosition;
@@ -37,13 +40,17 @@ namespace BalloonParty.Item.Bomb
             ItemConfiguration itemConfig,
             IPublisher<ActorHitMessage> hitPublisher,
             IPublisher<NudgeMessage> nudgePublisher,
-            PoolManager poolManager)
+            PoolManager poolManager,
+            DisturbanceFieldService disturbanceField,
+            DisturbanceFieldSettings disturbanceSettings)
         {
             _palette = palette;
             _itemConfig = itemConfig;
             _hitPublisher = hitPublisher;
             _nudgePublisher = nudgePublisher;
             _poolManager = poolManager;
+            _disturbanceField = disturbanceField;
+            _disturbanceSettings = disturbanceSettings;
 
             _balloonFilter = new ContactFilter2D();
             _balloonFilter.SetLayerMask(BalloonsLayer);
@@ -71,6 +78,10 @@ namespace BalloonParty.Item.Bomb
             var sourceColorId = (_balloon as IHasColor)?.Color.Value ?? "";
             BlastBalloons(settings.BombRadius, new DamageContext(settings.Damage, settings.Flags, sourceColorId));
             SpawnVisual(settings);
+
+            var stamp = _disturbanceSettings.GetProfile(StampSource.Bomb);
+            _disturbanceField.StampOverDuration(_worldPosition, stamp.Radius,
+                stamp.Strength, Vector2.zero, stamp.Duration);
 
             return UniTask.CompletedTask;
         }

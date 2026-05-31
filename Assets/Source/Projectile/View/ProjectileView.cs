@@ -234,11 +234,13 @@ namespace BalloonParty.Projectile.View
             transform.position = pos;
             transform.up = _model.Direction;
 
-            _disturbanceField.Stamp(
+            var stamp = _disturbanceSettings.GetProfile(StampSource.Projectile);
+            _disturbanceField.StampOverDuration(
                 pos,
-                _disturbanceSettings.ProjectileRadius,
-                _disturbanceSettings.ProjectileStrength,
-                _model.Direction);
+                stamp.Radius,
+                stamp.Strength,
+                _model.Direction,
+                stamp.Duration);
         }
 
         private void OnBalloonDeflected(BalloonDeflectedMessage msg)

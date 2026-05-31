@@ -145,14 +145,18 @@ namespace BalloonParty.Balloon.Spawner
             var viewTransform = view.transform;
             var lastPos = viewTransform.position;
 
+            var spawnStamp = _disturbanceSettings.GetProfile(StampSource.BalloonPath);
+
             viewTransform.DOPath(waypoints, duration, PathType.CatmullRom)
                 .OnUpdate(() =>
                 {
                     var pos = viewTransform.position;
                     var delta = pos - lastPos;
                     var dir = new Vector2(delta.x, delta.y).normalized;
-                    _disturbanceField.Stamp(pos, _disturbanceSettings.BalloonRadius,
-                        _disturbanceSettings.BalloonStrength, dir);
+                    var rawScale = viewTransform.localScale.x;
+                    var scale = rawScale * rawScale;
+                    _disturbanceField.StampOverDuration(pos, spawnStamp.Radius * scale,
+                        spawnStamp.Strength * scale, dir, spawnStamp.Duration);
                     lastPos = pos;
                 })
                 .OnComplete(() => model.IsStable.Value = true);

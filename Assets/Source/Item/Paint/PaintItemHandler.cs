@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -23,6 +24,8 @@ namespace BalloonParty.Item.Paint
         private readonly ItemConfiguration _itemConfig;
         private readonly SlotGrid _grid;
         private readonly PoolManager _poolManager;
+        private readonly DisturbanceFieldService _disturbanceField;
+        private readonly DisturbanceFieldSettings _disturbanceSettings;
 
         private IBalloonModel _balloon;
         private Vector3 _worldPosition;
@@ -34,12 +37,16 @@ namespace BalloonParty.Item.Paint
             GamePalette palette,
             ItemConfiguration itemConfig,
             SlotGrid grid,
-            PoolManager poolManager)
+            PoolManager poolManager,
+            DisturbanceFieldService disturbanceField,
+            DisturbanceFieldSettings disturbanceSettings)
         {
             _palette = palette;
             _itemConfig = itemConfig;
             _grid = grid;
             _poolManager = poolManager;
+            _disturbanceField = disturbanceField;
+            _disturbanceSettings = disturbanceSettings;
         }
 
         public void Setup(IBalloonModel balloon, Vector3 worldPosition)
@@ -81,14 +88,21 @@ namespace BalloonParty.Item.Paint
                 }
             }
 
+            var stamp = _disturbanceSettings.GetProfile(StampSource.Paint);
+
             if (settings.ActivationEffectPrefab == null)
             {
-                foreach (var colorable in paintTargets)
+                for (var i = 0; i < NeighborCount; i++)
                 {
-                    if (colorable != null)
+                    if (paintTargets[i] != null)
                     {
-                        colorable.Color.Value = paintColor;
+                        paintTargets[i].Color.Value = paintColor;
                     }
+
+                    var neighborPos = _grid.IndexToWorldPosition(neighborIndices[i]);
+                    var dir = ((Vector2)(neighborPos - _worldPosition)).normalized;
+                    _disturbanceField.StampOverDuration(neighborPos, stamp.Radius,
+                        stamp.Strength, dir, stamp.Duration);
                 }
 
                 return UniTask.CompletedTask;
@@ -118,6 +132,14 @@ namespace BalloonParty.Item.Paint
                 if (index < NeighborCount && paintTargets[index] != null)
                 {
                     paintTargets[index].Color.Value = paintColor;
+                }
+
+                if (index < NeighborCount)
+                {
+                    var splashPos = _grid.IndexToWorldPosition(neighborIndices[index]);
+                    var dir = ((Vector2)(splashPos - _worldPosition)).normalized;
+                    _disturbanceField.StampOverDuration(splashPos, stamp.Radius,
+                        stamp.Strength, dir, stamp.Duration);
                 }
             }
         }
