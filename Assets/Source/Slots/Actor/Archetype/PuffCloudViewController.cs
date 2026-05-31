@@ -22,7 +22,6 @@ namespace BalloonParty.Slots.Actor.Archetype
         private readonly PuffClusterRegistry _registry;
         private readonly SlotGrid _grid;
         private readonly PuffCloudSettings _settings;
-        private readonly GridActorConfiguration _gridActorConfig;
         private readonly PoolManager _poolManager;
         private readonly IObjectResolver _resolver;
         private readonly Dictionary<int, PuffCloudView> _activeViews = new();
@@ -33,21 +32,19 @@ namespace BalloonParty.Slots.Actor.Archetype
             PuffClusterRegistry registry,
             SlotGrid grid,
             PuffCloudSettings settings,
-            GridActorConfiguration gridActorConfig,
             PoolManager poolManager,
             IObjectResolver resolver)
         {
             _registry = registry;
             _grid = grid;
             _settings = settings;
-            _gridActorConfig = gridActorConfig;
             _poolManager = poolManager;
             _resolver = resolver;
         }
 
         public void Start()
         {
-            _poolManager.Register(PoolKey, new PuffCloudPoolChannel(_resolver, _gridActorConfig.PuffCloudPrefab));
+            _poolManager.Register(PoolKey, new PuffCloudPoolChannel(_resolver, _settings.CloudPrefab));
 
             _registry.OnClusterChanged
                 .Subscribe(OnClusterChanged)

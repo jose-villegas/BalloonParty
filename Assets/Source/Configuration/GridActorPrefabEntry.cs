@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 using UnityEngine;
 
@@ -9,6 +10,7 @@ namespace BalloonParty.Configuration
     {
         [SerializeField] private GridActorView _prefab;
         [SerializeField] private GridActorType _actorType;
+        [SerializeField] private SlotPlacementMode _placementMode;
         [SerializeField] private float _weight = 1f;
 
         [Tooltip("Maximum number of this actor type allowed on the grid at once. 0 = no limit.")]
@@ -19,6 +21,7 @@ namespace BalloonParty.Configuration
 
         public GridActorView Prefab => _prefab;
         public GridActorType ActorType => _actorType;
+        public SlotPlacementMode PlacementMode => _placementMode;
         public float Weight => _weight;
         public int MaxCount => _maxCount;
         public int HitsToPop => _hitsToPop;

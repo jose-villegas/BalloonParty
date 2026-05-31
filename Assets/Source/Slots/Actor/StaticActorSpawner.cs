@@ -54,20 +54,20 @@ namespace BalloonParty.Slots.Actor
 
         public UniTask SpawnAsync(CancellationToken ct)
         {
-            //SpawnStaticActors();
+            SpawnStaticActors();
             return UniTask.CompletedTask;
         }
 
         internal void SpawnStaticActors()
         {
-            var slots = new List<Vector2Int>(_grid.AllEmptySlots());
-            var count = Mathf.Min(
+            var emptySlots = new List<Vector2Int>(_grid.AllEmptySlots());
+            var totalCount = Mathf.Min(
                 Random.Range(_config.MinStaticActors, _config.MaxStaticActors + 1),
-                slots.Count);
+                emptySlots.Count);
 
-            Shuffle(slots);
+            var remaining = totalCount;
 
-            for (var i = 0; i < count; i++)
+            while (remaining > 0 && emptySlots.Count > 0)
             {
                 var entry = _gridActorConfig.PickRandom(_activeCounts);
                 if (entry == null)
@@ -75,17 +75,26 @@ namespace BalloonParty.Slots.Actor
                     break;
                 }
 
-                var model = CreateModel(entry.ActorType);
-                GridActorView view = null;
+                var strategy = GetStrategy(entry.PlacementMode);
+                var selected = strategy.SelectSlots(emptySlots, remaining);
 
-                if (_poolsRegistered)
+                foreach (var slot in selected)
                 {
-                    view = _poolManager.Get<GridActorView>(entry.PoolKey);
-                    view.transform.position = _grid.IndexToWorldPosition(slots[i]);
+                    var model = CreateModel(entry.ActorType);
+                    GridActorView view = null;
+
+                    if (_poolsRegistered)
+                    {
+                        view = _poolManager.Get<GridActorView>(entry.PoolKey);
+                        view.transform.position = _grid.IndexToWorldPosition(slot);
+                    }
+
+                    _grid.Place(model, view, slot);
+                    emptySlots.Remove(slot);
+                    remaining--;
                 }
 
-                _grid.Place(model, view, slots[i]);
-                _activeCounts[entry.PoolKey] = _activeCounts.GetValueOrDefault(entry.PoolKey) + 1;
+                _activeCounts[entry.PoolKey] = _activeCounts.GetValueOrDefault(entry.PoolKey) + selected.Count;
             }
         }
 
@@ -109,6 +118,25 @@ namespace BalloonParty.Slots.Actor
             _poolsRegistered = true;
         }
 
+        private static readonly Dictionary<SlotPlacementMode, ISlotSelectionStrategy> StrategyCache = new();
+
+        private static ISlotSelectionStrategy GetStrategy(SlotPlacementMode mode)
+        {
+            if (StrategyCache.TryGetValue(mode, out var cached))
+            {
+                return cached;
+            }
+
+            ISlotSelectionStrategy strategy = mode switch
+            {
+                SlotPlacementMode.Cluster => new ClusterSlotSelectionStrategy(),
+                _ => new RandomSlotSelectionStrategy()
+            };
+
+            StrategyCache[mode] = strategy;
+            return strategy;
+        }
+
         private static IWriteableSlotActor CreateModel(GridActorType actorType)
         {
             return actorType switch
@@ -116,15 +144,6 @@ namespace BalloonParty.Slots.Actor
                 GridActorType.Puff => new PuffObstacleModel(),
                 _ => throw new System.Exception("Unknown actor type: " + actorType)
             };
-        }
-
-        private static void Shuffle<T>(List<T> list)
-        {
-            for (var i = list.Count - 1; i > 0; i--)
-            {
-                var j = Random.Range(0, i + 1);
-                (list[i], list[j]) = (list[j], list[i]);
-            }
         }
     }
 }
