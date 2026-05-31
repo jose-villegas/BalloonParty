@@ -32,6 +32,14 @@ Shader "BalloonParty/Grid/PuffCloud"
         _BorderSoftness     ("Border Softness",    Range(0, 0.5))      = 0.15
         _SlotRadius         ("Slot Radius",        Float)              = 0.45
 
+        [Header(Lighting)]
+        _LightDir           ("Light Direction",    Vector)             = (-0.4, 0.7, 0, 0)
+        _LightColor         ("Highlight Color",    Color)              = (1, 1, 0.95, 1)
+        _AmbientColor       ("Shadow Tint",        Color)              = (0.55, 0.58, 0.7, 1)
+        _LightIntensity     ("Light Intensity",    Range(0, 1))        = 0.45
+        _NormalStrength     ("Normal Strength",    Range(0, 3))        = 1.2
+        _NormalEpsilon      ("Normal Sample Offset",Range(0.001, 0.05))= 0.012
+
         [Header(Density)]
         [Toggle(_DENSITY_ON)] _EnableDensity ("Enable Density RT", Float) = 0
         _DensityTex         ("Density Texture",    2D)                 = "white" {}
@@ -119,6 +127,13 @@ Shader "BalloonParty/Grid/PuffCloud"
             float  _SlotRadius;
             float  _TimeOffset;
 
+            float4 _LightDir;
+            fixed4 _LightColor;
+            fixed4 _AmbientColor;
+            float  _LightIntensity;
+            float  _NormalStrength;
+            float  _NormalEpsilon;
+
             #ifdef _DENSITY_ON
             sampler2D _DensityTex;
             #endif
@@ -160,6 +175,34 @@ Shader "BalloonParty/Grid/PuffCloud"
                     minDist = min(minDist, length(wp - _SlotCentersWorld[i].xy));
                 }
                 return smoothstep(_SlotRadius + _BorderSoftness, _SlotRadius, minDist);
+            }
+
+            // Derive a pseudo-normal from the noise gradient via central
+            // differences, then apply half-Lambert directional lighting.
+            // Treats the noise height field as a bump map — the gradient
+            // gives the XY slope, and the Z component is derived from
+            // _NormalStrength to control perceived depth.
+            fixed3 CloudLighting(float2 wp, float t, float cloud)
+            {
+                float eps = _NormalEpsilon;
+                float nR = CloudNoise(wp + float2( eps, 0.0), t);
+                float nL = CloudNoise(wp + float2(-eps, 0.0), t);
+                float nU = CloudNoise(wp + float2(0.0,  eps), t);
+                float nD = CloudNoise(wp + float2(0.0, -eps), t);
+
+                float dX = (nR - nL) * _NormalStrength;
+                float dY = (nU - nD) * _NormalStrength;
+
+                float3 normal = normalize(float3(-dX, -dY, 1.0));
+
+                float2 ld = normalize(_LightDir.xy);
+                float3 lightVec = normalize(float3(ld, 0.6));
+
+                float NdotL = dot(normal, lightVec);
+                float halfLambert = NdotL * 0.5 + 0.5;
+
+                fixed3 lit = lerp(_AmbientColor.rgb, _LightColor.rgb, halfLambert);
+                return lerp(fixed3(1, 1, 1), lit, _LightIntensity);
             }
 
             v2f vert(appdata_t IN)
@@ -224,7 +267,8 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                 // Compose main cloud with shadow behind
                 float mainAlpha = cloud * _CloudColor.a * IN.color.a;
-                fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb;
+                fixed3 lighting = CloudLighting(wp, t, cloud);
+                fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 
                 fixed  combinedA   = mainAlpha + shadowAlpha * (1.0 - mainAlpha);
                 fixed3 combinedRGB = combinedA > 0.0001
@@ -236,7 +280,8 @@ Shader "BalloonParty/Grid/PuffCloud"
                 if (cloud < 0.001) discard;
 
                 float mainAlpha = cloud * _CloudColor.a * IN.color.a;
-                fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb;
+                fixed3 lighting = CloudLighting(wp, t, cloud);
+                fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 
                 return fixed4(mainRgb, mainAlpha);
                 #endif
