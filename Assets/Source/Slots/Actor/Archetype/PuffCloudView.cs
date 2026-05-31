@@ -68,6 +68,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         private Material _stampMaterial;
         private float _diffusionTimer;
         private bool _densityInitialized;
+        private Vector3 _debugLastMouseWorld;
 
         private RenderTexture DensityRead => _readFromA ? _densityA : _densityB;
         private RenderTexture DensityWrite => _readFromA ? _densityB : _densityA;
@@ -365,8 +366,9 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return;
             }
 
-            if (!Input.GetMouseButtonDown(0))
+            if (!Input.GetMouseButton(0))
             {
+                _debugLastMouseWorld = Vector3.zero;
                 return;
             }
 
@@ -381,10 +383,20 @@ namespace BalloonParty.Slots.Actor.Archetype
 
             if (_renderer == null || !_renderer.bounds.Contains(mouseWorld))
             {
+                _debugLastMouseWorld = mouseWorld;
                 return;
             }
 
-            StampDisturbance(mouseWorld, _debugStampRadius, _debugStampStrength, Vector2.zero);
+            var direction = Vector2.zero;
+            if (_debugLastMouseWorld != Vector3.zero)
+            {
+                var delta = mouseWorld - _debugLastMouseWorld;
+                direction = new Vector2(delta.x, delta.y);
+            }
+
+            _debugLastMouseWorld = mouseWorld;
+
+            StampDisturbance(mouseWorld, _debugStampRadius, _debugStampStrength, direction.normalized);
         }
 
         private static void DestroyMaterial(ref Material mat)
