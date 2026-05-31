@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0a0a7702d424cf1b0c402a1f8e61e26, type: 3}
   m_Name: PuffCloudSettings
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.PuffCloudSettings
-  _prefab: {fileID: 6650345493731609934, guid: 59ad6982d81514c65a28e527032efa50, type: 3}
-  _slotPrefab: {fileID: 0}
+  _cloudPrefab: {fileID: 6650345493731609934, guid: f0ed15161b2304f9283bebc5da3a0a22,
+    type: 3}
   _animationSpeed: 5
   _texelsPerSlot: 32
   _diffusionRate: 0.15

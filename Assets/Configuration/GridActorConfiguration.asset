@@ -17,6 +17,7 @@ MonoBehaviour:
       type: 3}
     _actorType: 0
     _placementMode: 1
-    _weight: 3
-    _maxCount: 10
+    _weight: 50
+    _minCount: 5
+    _maxCount: 15
     _hitsToPop: -1

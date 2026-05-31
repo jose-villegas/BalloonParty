@@ -13,7 +13,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         public int ClusterId { get; }
         public IReadOnlyList<Vector2Int> Slots => _slots;
-        public Rect WorldBounds { get; private set; }
+        public Rect WorldBounds { get; internal set; }
 
         internal PuffCluster(int clusterId)
         {

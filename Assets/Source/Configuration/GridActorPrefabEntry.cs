@@ -13,7 +13,10 @@ namespace BalloonParty.Configuration
         [SerializeField] private SlotPlacementMode _placementMode;
         [SerializeField] private float _weight = 1f;
 
-        [Tooltip("Maximum number of this actor type allowed on the grid at once. 0 = no limit.")]
+        [Tooltip("Minimum number to spawn.")]
+        [SerializeField] private int _minCount;
+
+        [Tooltip("Maximum number allowed on the grid at once. 0 = no limit.")]
         [SerializeField] private int _maxCount;
 
         [Tooltip("For Gatekeeper: how many hits before the actor is removed.")]
@@ -23,6 +26,7 @@ namespace BalloonParty.Configuration
         public GridActorType ActorType => _actorType;
         public SlotPlacementMode PlacementMode => _placementMode;
         public float Weight => _weight;
+        public int MinCount => _minCount;
         public int MaxCount => _maxCount;
         public int HitsToPop => _hitsToPop;
 

@@ -301,8 +301,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         private void RecalculateBounds(PuffCluster cluster)
         {
-            var bounds = ComputeWorldBounds(cluster.Slots);
-            cluster.SetSlots(cluster.Slots, bounds);
+            cluster.WorldBounds = ComputeWorldBounds(cluster.Slots);
         }
 
         private void AssignClusterIdToModel(Vector2Int slot, int clusterId)

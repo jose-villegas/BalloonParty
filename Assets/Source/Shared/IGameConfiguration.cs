@@ -22,8 +22,6 @@ namespace BalloonParty.Shared
         float ScorePointsScatterDelay { get; }
         float ScorePointBurstDuration { get; }
 
-        int MinStaticActors { get; }
-        int MaxStaticActors { get; }
 
         int PointsRequiredForLevel(int level);
     }

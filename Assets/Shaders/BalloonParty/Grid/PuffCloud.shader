@@ -79,7 +79,6 @@ Shader "BalloonParty/Grid/PuffCloud"
             #pragma target 3.0
             #pragma shader_feature _SHADOW_ON
             #pragma shader_feature _DENSITY_ON
-            #pragma multi_compile_instancing
             #include "UnityCG.cginc"
             #include "Assets/Shaders/BalloonParty/Noise/SimplexNoise2D.cginc"
 
@@ -91,7 +90,6 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float4 vertex   : POSITION;
                 float4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct v2f
@@ -100,7 +98,6 @@ Shader "BalloonParty/Grid/PuffCloud"
                 fixed4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
                 float2 worldPos : TEXCOORD1;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             #ifdef UNITY_INSTANCING_ENABLED
@@ -210,8 +207,6 @@ Shader "BalloonParty/Grid/PuffCloud"
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
-                UNITY_SETUP_INSTANCE_ID(IN);
-                UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
 
                 OUT.vertex   = UnityObjectToClipPos(IN.vertex);
                 OUT.texcoord = IN.texcoord;
@@ -225,7 +220,6 @@ Shader "BalloonParty/Grid/PuffCloud"
 
             fixed4 frag(v2f IN) : SV_Target
             {
-                UNITY_SETUP_INSTANCE_ID(IN);
 
                 float2 wp = IN.worldPos;
                 float2 wpOrig = wp;

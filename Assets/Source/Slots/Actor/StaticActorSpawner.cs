@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Grid;
@@ -17,11 +15,9 @@ namespace BalloonParty.Slots.Actor
     internal class StaticActorSpawner : IStartable, IGridSpawner
     {
         private readonly SlotGrid _grid;
-        private readonly IGameConfiguration _config;
         private readonly PoolManager _poolManager;
         private readonly IObjectResolver _resolver;
         private readonly GridActorConfiguration _gridActorConfig;
-        private readonly Dictionary<string, int> _activeCounts = new();
         private bool _poolsRegistered;
 
         public SpawnStage SpawnPriority => SpawnStage.StaticActors;
@@ -29,23 +25,20 @@ namespace BalloonParty.Slots.Actor
         [Inject]
         internal StaticActorSpawner(
             SlotGrid grid,
-            IGameConfiguration config,
             PoolManager poolManager,
             IObjectResolver resolver,
             GridActorConfiguration gridActorConfig)
         {
             _grid = grid;
-            _config = config;
             _poolManager = poolManager;
             _resolver = resolver;
             _gridActorConfig = gridActorConfig;
         }
 
         // Bypasses pool and MonoBehaviour infrastructure — used in tests.
-        internal StaticActorSpawner(SlotGrid grid, IGameConfiguration config, GridActorConfiguration gridActorConfig)
+        internal StaticActorSpawner(SlotGrid grid, GridActorConfiguration gridActorConfig)
         {
             _grid = grid;
-            _config = config;
             _gridActorConfig = gridActorConfig;
         }
 
@@ -63,22 +56,26 @@ namespace BalloonParty.Slots.Actor
         internal void SpawnStaticActors()
         {
             var emptySlots = new List<Vector2Int>(_grid.AllEmptySlots());
-            var totalCount = Mathf.Min(
-                Random.Range(_config.MinStaticActors, _config.MaxStaticActors + 1),
-                emptySlots.Count);
 
-            var remaining = totalCount;
-
-            while (remaining > 0 && emptySlots.Count > 0)
+            foreach (var entry in _gridActorConfig.Entries)
             {
-                var entry = _gridActorConfig.Entries.PickRandom(_activeCounts);
-                if (entry == null)
+                if (emptySlots.Count == 0)
                 {
                     break;
                 }
 
+                var max = entry.MaxCount > 0 ? entry.MaxCount : emptySlots.Count;
+                var count = Mathf.Min(
+                    Random.Range(entry.MinCount, max + 1),
+                    emptySlots.Count);
+
+                if (count <= 0)
+                {
+                    continue;
+                }
+
                 var strategy = GetStrategy(entry.PlacementMode);
-                var selected = strategy.SelectSlots(emptySlots, remaining);
+                var selected = strategy.SelectSlots(emptySlots, count);
 
                 foreach (var slot in selected)
                 {
@@ -93,10 +90,7 @@ namespace BalloonParty.Slots.Actor
 
                     _grid.Place(model, view, slot);
                     emptySlots.Remove(slot);
-                    remaining--;
                 }
-
-                _activeCounts[entry.PoolKey] = _activeCounts.GetValueOrDefault(entry.PoolKey) + selected.Count;
             }
         }
 

@@ -396,7 +396,7 @@ PuffCloudSettings (ScriptableObject)
 │   ├── CloudColor: Color         = (1, 1, 1, 0.6)
 │   ├── BorderSoftness: float     = 0.15
 │   ├── Padding: float            = 0.3
-│   └── SortingLayer: string      = "Grid"
+│   └── SortingLayer: int         (layer ID, Inspector dropdown)
 └── Merging
     └── PreserveDensityOnResize: bool = true
 ```
@@ -771,7 +771,7 @@ displacement fields were added). Re-serialize after confirming tuning in-editor.
 
 ---
 
-### Phase P3 — Adjacency Merging
+### Phase P3 — Adjacency Merging ✅
 
 **Goal:** Adjacent Puff slots merge into a single visual cloud.
 
@@ -784,123 +784,77 @@ displacement fields were added). Re-serialize after confirming tuning in-editor.
 - [x] Add `ClusterId` to `PuffObstacleModel`
 
 **Exit criteria:** Placing two adjacent Puffs produces one continuous cloud. Removing
-one splits the visual correctly.
+one splits the visual correctly. ✅
 
-#### P3 — Implementation Gaps & Decisions
+#### P3 — Implementation Notes
 
-**G13 — `PuffCloudView` migration from prefab component to pooled standalone**
+**What was built:**
 
-Currently `PuffCloudView` is a component on the Puff prefab (per P1 decision B/G4).
-P3 needs one `PuffCloudView` per *cluster*, not per slot. The view must migrate to a
-separate pooled GameObject spawned by a controller. The per-slot prefab becomes
-invisible (grid occupancy only).
+| File | Role |
+|---|---|
+| `Configuration/PuffCloudSettings.cs` | SO with all tuning knobs. `CloudPrefab` field for the pooled cloud view prefab. |
+| `Slots/Actor/Archetype/PuffCluster.cs` | Model — slot list, world bounds, cluster ID |
+| `Slots/Actor/Archetype/PuffClusterChangedEvent.cs` | Event struct (Created/Resized/Removed) |
+| `Slots/Actor/Archetype/PuffClusterRegistry.cs` | `IStartable` + `IDisposable` — subscribes `SlotGrid.OnChanged`, flood-fills hex adjacency, publishes cluster events. Calls `RebuildAll()` on `Start()`. |
+| `Slots/Actor/Archetype/PuffCloudViewController.cs` | `IStartable` — manages pooled `PuffCloudView` lifecycle per cluster. Gets cloud prefab from `PuffCloudSettings.CloudPrefab`. |
+| `Slots/Actor/Archetype/PuffCloudPoolChannel.cs` | Pool channel for `PuffCloudView` prefabs |
+| `PuffCloudView.cs` | Added `IPoolable`, `Configure()` API, density RT resize, `OnSpawned`/`OnDespawned` |
+| `PuffObstacleModel.cs` | Added `ClusterId` property |
 
-- New prefab: `PuffCloud.prefab` — `SpriteRenderer` + `PuffCloudView` (no grid actor)
-- New pool channel: `PuffCloudPoolChannel` (extends `InjectingPoolChannel<PuffCloudView>`)
-- The existing `Puff.prefab` keeps `GridActorView` for grid occupancy but the child
-  `Cloud` GameObject with `SpriteRenderer` + `PuffCloudView` is removed (or disabled)
-- `StaticActorSpawner` continues to place `PuffObstacleModel` + `GridActorView` per
-  slot — no changes needed
+**Architecture changes made during P3 (diverging from original plan):**
 
-**G14 — `PuffCloudView` needs public API for cluster configuration**
+1. **`StaticActorSettings` / `StaticActorView` / `StaticActorPoolChannel` — deleted.**
+   The spawner now uses `GridActorView` and `GridActorPoolChannel` directly. The Puff
+   slot prefab is found from `GridActorConfiguration.Entries` (the entry with
+   `GridActorType.Puff`).
 
-Currently hardcoded to a single slot (`PushSlotCenters` writes one entry at
-`transform.position`). P3 needs:
+2. **`PuffCloudViewSettings` — deleted.** The cloud prefab lives on `PuffCloudSettings`
+   as `CloudPrefab`. No separate settings wrapper needed.
 
-- `Configure(Vector3[] slotWorldPositions, Rect worldBounds)` — public method called
-  by the controller. Sets the slot-center array, positions the quad at bounds center,
-  scales `transform.localScale` to cover bounds + padding, resizes density RT
-- Density RT resolution: `(slotsWide * _texelsPerSlot, slotsTall * _texelsPerSlot)`
-  where slotsWide/slotsTall are derived from the bounding box grid span
-- `WorldToDensityUV` / `WorldRadiusToDensityUV` must use the configured bounds, not
-  `_renderer.bounds` (renderer bounds depend on sprite size × scale which may differ)
+3. **`StaticActorSpawner` — refactored to be generic per actor type.**
+   - No longer depends on `IGameConfiguration` for `MinStaticActors`/`MaxStaticActors`.
+   - Spawn counts come from per-entry `MinCount`/`MaxCount` on `GridActorPrefabEntry`.
+   - Iterates `GridActorConfiguration.Entries`, picks count per entry, uses
+     `ISlotSelectionStrategy` per entry's `SlotPlacementMode`.
+   - `CreateModel(GridActorType)` switch creates the appropriate model per type.
 
-**G15 — Density RT resize with content preservation**
+4. **`ISlotSelectionStrategy` — new interface for slot placement logic.**
+   - `RandomSlotSelectionStrategy` — shuffles and picks (default for most actors).
+   - `ClusterSlotSelectionStrategy` — greedy hex-neighbor expansion from random seeds.
+   - `SlotPlacementMode` enum on `GridActorPrefabEntry` — selectable in Inspector.
+   - Strategies are lazily cached in a static dictionary.
 
-When a cluster grows (new Puff placed adjacent), the density RT must be reallocated at
-a larger size. Existing density data should be blit-copied at the correct UV offset so
-active disturbance holes aren't lost.
+5. **`GridActorPrefabEntry` — gains `MinCount`, `SlotPlacementMode`, implements
+   `IWeightedEntry`.**
 
-- `ResizeDensityField(int newWidth, int newHeight, Rect oldBounds, Rect newBounds)`
-  — allocates new RT pair, blits old content into new at the correct UV sub-rect,
-  clears newly exposed region to equilibrium `(1.0, 0.5, 0.5)`
-- If resize is too complex for a first pass, an acceptable fallback: clear to
-  equilibrium on resize (brief flash to full density). Mark as nice-to-have.
+6. **`IWeightedEntry` + `WeightedPickExtensions.PickRandom<T>()` — new shared
+   weighted random selection.** Replaces duplicate logic in `BalloonsConfiguration`,
+   `GridActorConfiguration`, and `ItemAssigner`. Both `BalloonPrefabEntry` and
+   `GridActorPrefabEntry` implement `IWeightedEntry`. `ItemSettings` uses explicit
+   interface implementation mapping `MaximumAllowed` → `MaxCount` and
+   `Type.ToString()` → `PoolKey`.
 
-**G16 — `PuffClusterRegistry` subscription pattern**
+7. **`MinStaticActors` / `MaxStaticActors` removed from `IGameConfiguration` and
+   `GameConfiguration`.** Spawn counts are fully per-entry now.
 
-The registry is a plain C# `IStartable` registered in `GameLifetimeScope`:
-```
-builder.RegisterEntryPoint<PuffClusterRegistry>();
-```
+8. **GPU instancing removed from PuffCloud shader.** Per G7, MPB-driven properties
+   require instancing disabled.
 
-It injects `SlotGrid` and subscribes to `SlotGrid.OnChanged` (an
-`IObservable<SlotGridChangedEvent>`) in its `Start()`. On each event, it checks
-whether the affected slot (`SlotGrid.At(index)`) is a `PuffObstacleModel` and
-recomputes adjacency via flood-fill using `SlotGrid.HexNeighborIndices(col, row)`.
+9. **`Puff.prefab` — Cloud child removed.** The prefab now only has `GridActorView` +
+   `TweenTracker` (invisible grid occupancy marker). The cloud visual is entirely
+   managed by the pooled `PuffCloud.prefab`.
 
-Bounds check: indices from `HexNeighborIndices` may be out of grid bounds. Guard with
-`col >= 0 && col < Columns && row >= 0 && row < Rows` before accessing `At()`.
+10. **`PuffCloud.prefab` — new standalone prefab.** `SpriteRenderer` (with sprite +
+    PuffCloud material) + `PuffCloudView` component. Referenced by
+    `PuffCloudSettings.CloudPrefab`. Pooled by `PuffCloudPoolChannel`.
 
-**G17 — Cluster change notification**
-
-The registry exposes:
-```csharp
-internal IObservable<PuffClusterChangedEvent> OnClusterChanged { get; }
-```
-
-Event types:
-- `Created` — new cluster formed (single Puff placed, or two existing clusters merged)
-- `Resized` — existing cluster gained/lost a slot but didn't split
-- `Removed` — cluster has no remaining slots
-- `Split` — one cluster became two (Puff removed that was bridging)
-
-The `PuffCloudViewController` subscribes and manages the view lifecycle accordingly.
-
-**G18 — `[SerializeField]` → `PuffCloudSettings` SO extraction**
-
-Multiple `PuffCloudView` instances sharing a pool need shared config. Extract all
-tuning fields from `PuffCloudView` to a `PuffCloudSettings` ScriptableObject:
-
-- Register in `GameLifetimeScope`: `builder.RegisterInstance(_puffCloudSettings);`
-- Serialized field on `GameLifetimeScope`: `[SerializeField] PuffCloudSettings _puffCloudSettings`
-- `PuffCloudViewController` injects the SO and passes values to views on `Configure()`
-- `PuffCloudView` receives config via a struct/interface rather than `[SerializeField]`
-
-**G19 — Sorting order for merged clusters**
-
-A merged cluster spans multiple slot positions. Its sorting order should be based on
-the *lowest* (highest row index = most negative Y) slot in the cluster so it renders
-behind balloons in the same row region. Use `SortingHelper.SlotBaseSortingOrder` with
-the bottom-most slot index, offset by -1 to sit behind balloon actors at that row.
-
-**G20 — Quad sizing for merged clusters**
-
-The `SpriteRenderer.transform.localScale` must cover the cluster's world bounds +
-padding. The world bounds come from `SlotGrid.IndexToWorldPosition` for all member
-slots. The AABB is expanded by `_SlotRadius` on each side (matching the shader's
-boundary falloff). The shader's slot-center falloff handles masking irregular shapes
-within the oversized quad — no per-pixel clipping needed.
-
-**G21 — `StaticActorSpawner` unchanged**
-
-`StaticActorSpawner` continues to spawn `PuffObstacleModel` + `GridActorView` per
-slot. No changes needed. The `PuffClusterRegistry` observes `SlotGrid.OnChanged` and
-reacts independently. The per-slot `GridActorView` in `Puff.prefab` becomes invisible
-once the `Cloud` child is removed — it serves only as the grid occupancy marker.
-
-#### P3 — Recommended Implementation Order
-
-1. Create `PuffCloudSettings` SO + extract fields from `PuffCloudView` **(G18)**
-2. Create `PuffCluster` model class (slot list, world bounds, cluster ID)
-3. Create `PuffClusterChangedEvent` **(G17)**
-4. Create `PuffClusterRegistry` (`IStartable`, flood-fill, publishes events) **(G16)**
-5. Add `Configure(...)` API to `PuffCloudView` **(G14)** + density RT resize **(G15)**
-6. Create cloud view prefab + `PuffCloudPoolChannel` **(G13)**
-7. Create `PuffCloudViewController` (`IStartable`, subscribes registry, manages pool)
-8. Add `ClusterId` to `PuffObstacleModel`
-9. Handle sorting **(G19)** and quad sizing **(G20)**
-10. Remove/disable `Cloud` child from `Puff.prefab` **(G21)**
+**Prefab state:**
+- `Puff.prefab` — `GridActorView` + `TweenTracker` only (no visuals)
+- `PuffCloud.prefab` — `SpriteRenderer` + `PuffCloudView` (with sprite + PuffCloud
+  material assigned). Referenced by `PuffCloudSettings.CloudPrefab`.
+- `PuffCloudSettings.asset` — has tuned values from P2 prefab.
+- `GridActorConfiguration.asset` — Puff entry with `MinCount`/`MaxCount`,
+  `PlacementMode = Cluster`, `GridActorType = Puff`.
 
 ---
 
@@ -956,10 +910,8 @@ along the spawn path. A pop adjacent to a cloud creates a visible shockwave.
    `SlotGrid.HexNeighborIndices` (6 neighbors per slot with row-parity stagger).
    No 4-connected vs 8-connected decision needed.
 
-2. **Density RT format** — `RenderTextureFormat.R8` (8-bit single channel) is
-   sufficient and minimal. But if we later want directional density (velocity field
-   for more advanced fluid effects), `RG16` gives two channels. Start with R8;
-   upgrade if needed.
+2. **~~Density RT format~~** — Resolved. Uses `ARGBHalf` — R = density,
+   GB = displacement XY. See P2 implementation notes.
 
 3. **Disturbance source priority** — If a projectile and a spawn animation disturb
    the same cloud in the same frame, should stamps accumulate or should only the
@@ -1029,9 +981,6 @@ over the session.
   knob: faster drift at higher levels creates a more dynamic, harder-to-read grid
 - Pairs well with `IOnPassThrough` triggers — a drifting Puff cloud that tints or
   buffs balloons it passes through would create emergent gameplay patterns
-
-
-
 
 
 

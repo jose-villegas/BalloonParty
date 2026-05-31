@@ -22,7 +22,6 @@ namespace BalloonParty.Slots.Actor.Archetype
         private readonly PuffClusterRegistry _registry;
         private readonly SlotGrid _grid;
         private readonly PuffCloudSettings _settings;
-        private readonly GridActorConfiguration _gridActorConfig;
         private readonly PoolManager _poolManager;
         private readonly IObjectResolver _resolver;
         private readonly Dictionary<int, PuffCloudView> _activeViews = new();
@@ -33,30 +32,27 @@ namespace BalloonParty.Slots.Actor.Archetype
             PuffClusterRegistry registry,
             SlotGrid grid,
             PuffCloudSettings settings,
-            GridActorConfiguration gridActorConfig,
             PoolManager poolManager,
             IObjectResolver resolver)
         {
             _registry = registry;
             _grid = grid;
             _settings = settings;
-            _gridActorConfig = gridActorConfig;
             _poolManager = poolManager;
             _resolver = resolver;
         }
 
         public void Start()
         {
-            var cloudPrefab = FindCloudPrefab();
-            if (cloudPrefab == null)
+            if (_settings.CloudPrefab == null)
             {
                 Debug.LogError(
-                    "PuffCloudViewController: No PuffCloudView found on any Puff entry in GridActorConfiguration. " +
+                    "PuffCloudViewController: CloudPrefab is not assigned on PuffCloudSettings. " +
                     "Cloud views will not spawn.");
                 return;
             }
 
-            _poolManager.Register(PoolKey, new PuffCloudPoolChannel(_resolver, cloudPrefab));
+            _poolManager.Register(PoolKey, new PuffCloudPoolChannel(_resolver, _settings.CloudPrefab));
 
             _registry.OnClusterChanged
                 .Subscribe(OnClusterChanged)
@@ -124,33 +120,14 @@ namespace BalloonParty.Slots.Actor.Archetype
                 positions[i] = _grid.IndexToWorldPosition(slots[i]);
             }
 
+
             view.Configure(positions, cluster.WorldBounds, _settings);
 
             if (view.Renderer != null)
             {
-                view.Renderer.sortingLayerName = _settings.SortingLayerName;
+                view.Renderer.sortingLayerID = _settings.SortingLayerId;
                 view.Renderer.sortingOrder = _settings.SortingOrderOffset;
             }
         }
-
-        private PuffCloudView FindCloudPrefab()
-        {
-            foreach (var entry in _gridActorConfig.Entries)
-            {
-                if (entry.ActorType != GridActorType.Puff || entry.Prefab == null)
-                {
-                    continue;
-                }
-
-                var cloudView = entry.Prefab.GetComponentInChildren<PuffCloudView>(true);
-                if (cloudView != null)
-                {
-                    return cloudView;
-                }
-            }
-
-            return null;
-        }
     }
 }
-

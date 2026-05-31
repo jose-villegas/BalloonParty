@@ -1,3 +1,5 @@
+using BalloonParty.Slots.Actor.Archetype;
+using NaughtyAttributes;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -5,6 +7,8 @@ namespace BalloonParty.Configuration
     [CreateAssetMenu(menuName = "Configuration/Puff Cloud Settings", fileName = "PuffCloudSettings")]
     internal class PuffCloudSettings : ScriptableObject
     {
+        [Header("Prefab")]
+        [SerializeField] private PuffCloudView _cloudPrefab;
 
         [Header("Animation")]
         [Tooltip("Noise scroll speed multiplier. Drives _TimeOffset on the shader.")]
@@ -38,10 +42,11 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _padding = 0.3f;
 
         [Tooltip("Sorting layer for cloud renderers.")]
-        [SerializeField] private string _sortingLayerName = "Default";
+        [SortingLayer]
+        [SerializeField] private int _sortingLayerId;
 
-        [Tooltip("Sorting order offset (relative to slot base order) to place clouds behind balloons.")]
-        [SerializeField] private int _sortingOrderOffset = -1;
+        [Tooltip("Sorting order offset for cloud renderers.")]
+        [SerializeField] private int _sortingOrderOffset;
 
         [Header("Disturbance")]
         [SerializeField] private float _projectileRadius = 0.3f;
@@ -55,6 +60,7 @@ namespace BalloonParty.Configuration
         [Tooltip("Whether to preserve existing density data when a cluster resizes.")]
         [SerializeField] private bool _preserveDensityOnResize = true;
 
+        public PuffCloudView CloudPrefab => _cloudPrefab;
         public float AnimationSpeed => _animationSpeed;
         public int TexelsPerSlot => _texelsPerSlot;
         public float DiffusionRate => _diffusionRate;
@@ -67,7 +73,7 @@ namespace BalloonParty.Configuration
         public float DisplaceAmount => _displaceAmount;
         public float DisplaceDecay => _displaceDecay;
         public float Padding => _padding;
-        public string SortingLayerName => _sortingLayerName;
+        public int SortingLayerId => _sortingLayerId;
         public int SortingOrderOffset => _sortingOrderOffset;
         public float ProjectileRadius => _projectileRadius;
         public float ProjectileStrength => _projectileStrength;
