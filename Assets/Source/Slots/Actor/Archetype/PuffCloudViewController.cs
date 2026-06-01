@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Slots.Grid;
 using UniRx;
@@ -21,6 +20,9 @@ namespace BalloonParty.Slots.Actor.Archetype
         private readonly PuffCloudSettings _settings;
         private readonly IObjectResolver _resolver;
         private readonly CompositeDisposable _disposables = new();
+
+        // Shader cap is 16 slots; matches the array size in PuffCloudView.
+        private readonly Vector4[] _positionsBuffer = new Vector4[16];
 
         private PuffCloudView _view;
 
@@ -86,19 +88,23 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return;
             }
 
-            var allPositions = new List<Vector4>();
+            var count = 0;
             var min = new Vector2(float.MaxValue, float.MaxValue);
             var max = new Vector2(float.MinValue, float.MinValue);
 
             foreach (var cluster in clusters.Values)
             {
-                // Deterministic seed from cluster ID — gives each cluster a unique noise pattern
                 var seed = (cluster.ClusterId * 0.7123f) % 1f;
 
                 foreach (var slot in cluster.Slots)
                 {
+                    if (count >= _positionsBuffer.Length)
+                    {
+                        break;
+                    }
+
                     var pos = _grid.IndexToWorldPosition(slot);
-                    allPositions.Add(new Vector4(pos.x, pos.y, seed, 0f));
+                    _positionsBuffer[count++] = new Vector4(pos.x, pos.y, seed, 0f);
                     min.x = Mathf.Min(min.x, pos.x);
                     min.y = Mathf.Min(min.y, pos.y);
                     max.x = Mathf.Max(max.x, pos.x);
@@ -111,7 +117,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             max += Vector2.one * halfSlotPadding;
             var combinedBounds = Rect.MinMaxRect(min.x, min.y, max.x, max.y);
 
-            _view.Configure(allPositions.ToArray(), combinedBounds, _settings);
+            _view.Configure(_positionsBuffer, count, combinedBounds, _settings);
         }
     }
 }

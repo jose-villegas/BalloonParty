@@ -264,13 +264,18 @@ namespace BalloonParty.Slots.Grid
         public List<IWriteableSlotActor> GetNeighbors(int col, int row)
         {
             var neighbors = new List<IWriteableSlotActor>();
+            GetNeighbors(col, row, neighbors);
+            return neighbors;
+        }
+
+        public void GetNeighbors(int col, int row, List<IWriteableSlotActor> results)
+        {
+            results.Clear();
             HexNeighborIndices(col, row, _neighborBuffer);
             foreach (var idx in _neighborBuffer)
             {
-                TryAddNeighbor(neighbors, idx.x, idx.y);
+                TryAddNeighbor(results, idx.x, idx.y);
             }
-
-            return neighbors;
         }
 
         public Vector3 IndexToWorldPosition(Vector2Int index)

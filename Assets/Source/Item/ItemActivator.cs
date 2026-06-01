@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
@@ -19,6 +18,8 @@ namespace BalloonParty.Item
         private readonly IPublisher<ItemActivatedMessage> _itemActivatedPublisher;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
 
+        private Dictionary<ItemType, IBalloonItem> _handlerMap;
+
         [Inject]
         public ItemActivator(
             IEnumerable<IBalloonItem> handlers,
@@ -32,6 +33,12 @@ namespace BalloonParty.Item
 
         public void Start()
         {
+            _handlerMap = new Dictionary<ItemType, IBalloonItem>();
+            foreach (var h in _handlers)
+            {
+                _handlerMap[h.Type] = h;
+            }
+
             _hitSubscriber.Subscribe(OnActorHit);
         }
 
@@ -47,8 +54,7 @@ namespace BalloonParty.Item
                 return;
             }
 
-            var handler = _handlers.FirstOrDefault(h => h.Type == itemSlot.Item.Value);
-            if (handler == null)
+            if (!_handlerMap.TryGetValue(itemSlot.Item.Value, out var handler))
             {
                 Debug.LogError(
                     $"ItemActivator.OnActorHit: no handler registered for item type " +

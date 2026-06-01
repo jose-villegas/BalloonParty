@@ -25,6 +25,7 @@ namespace BalloonParty.Item.Bomb
         private readonly IPublisher<NudgeMessage> _nudgePublisher;
         private readonly ItemConfiguration _itemConfig;
         private readonly List<Collider2D> _overlapResults = new(8);
+        private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly DisturbanceFieldSettings _disturbanceSettings;
@@ -89,7 +90,7 @@ namespace BalloonParty.Item.Bomb
         private void BlastBalloons(float radius, DamageContext context)
         {
             var bombSlot = _balloon.SlotIndex.Value;
-            var neighborIndices = new HashSet<Vector2Int>(SlotGrid.HexNeighborIndices(bombSlot.x, bombSlot.y));
+            SlotGrid.HexNeighborIndices(bombSlot.x, bombSlot.y, _neighborBuffer);
 
             // Direct hex neighbors always receive piercing damage — the blast core
             // guarantees a kill regardless of HitsRemaining or Deflect logic.
@@ -105,16 +106,23 @@ namespace BalloonParty.Item.Bomb
                     continue;
                 }
 
-                // Skip the bomb balloon itself — it is already being handled by the
-                // normal hit pipeline that triggered this activation.
                 if (balloonView.Model == _balloon)
                 {
                     continue;
                 }
 
-                var hitContext = neighborIndices.Contains(balloonView.Model.SlotIndex.Value)
-                    ? piercingContext
-                    : context;
+                var modelSlot = balloonView.Model.SlotIndex.Value;
+                var isNeighbor = false;
+                for (var n = 0; n < 6; n++)
+                {
+                    if (_neighborBuffer[n] == modelSlot)
+                    {
+                        isNeighbor = true;
+                        break;
+                    }
+                }
+
+                var hitContext = isNeighbor ? piercingContext : context;
 
                 _hitPublisher.Publish(new ActorHitMessage(balloonView.Model,
                     balloonView.transform.position,

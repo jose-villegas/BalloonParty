@@ -16,6 +16,7 @@ namespace BalloonParty.Nudge
         private readonly ISubscriber<NudgeMessage> _nudgeSubscriber;
         private readonly NudgeOverrideResolver _resolver;
         private readonly SlotGrid _grid;
+        private readonly List<IWriteableSlotActor> _neighborBuffer = new();
 
         [Inject]
         internal NudgeService(
@@ -56,9 +57,9 @@ namespace BalloonParty.Nudge
 
             var hitSlot = msg.Actor.SlotIndex;
             var hitSlotPos = _grid.IndexToWorldPosition(hitSlot);
-            var neighbors = _grid.GetNeighbors(hitSlot.x, hitSlot.y);
+            _grid.GetNeighbors(hitSlot.x, hitSlot.y, _neighborBuffer);
 
-            foreach (var neighbor in neighbors)
+            foreach (var neighbor in _neighborBuffer)
             {
                 if (neighbor is not IHasNudge nudgeable)
                 {

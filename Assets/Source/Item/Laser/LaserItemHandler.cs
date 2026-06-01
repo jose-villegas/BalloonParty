@@ -25,6 +25,7 @@ namespace BalloonParty.Item.Laser
         private readonly ISubscriber<TransformCapturedMessage> _transformCapturedSubscriber;
         private readonly ItemConfiguration _itemConfig;
         private readonly List<RaycastHit2D> _castResults = new(4);
+        private readonly HashSet<IBalloonModel> _hitModels = new();
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly DisturbanceFieldSettings _disturbanceSettings;
@@ -96,12 +97,12 @@ namespace BalloonParty.Item.Laser
             var up = laserRotation * Vector3.up;
             var down = laserRotation * Vector3.down;
 
-            var hitModels = new HashSet<IBalloonModel>();
+            _hitModels.Clear();
 
-            CastDirection(right, radius, distance, context, hitModels);
-            CastDirection(left, radius, distance, context, hitModels);
-            CastDirection(up, radius, distance, context, hitModels);
-            CastDirection(down, radius, distance, context, hitModels);
+            CastDirection(right, radius, distance, context, _hitModels);
+            CastDirection(left, radius, distance, context, _hitModels);
+            CastDirection(up, radius, distance, context, _hitModels);
+            CastDirection(down, radius, distance, context, _hitModels);
         }
 
         private void CastDirection(

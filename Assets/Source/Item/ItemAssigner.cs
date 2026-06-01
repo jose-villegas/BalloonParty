@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Extensions;
@@ -17,6 +16,10 @@ namespace BalloonParty.Item
         private readonly ISubscriber<ItemCheckMessage> _checkSubscriber;
         private readonly ItemConfiguration _itemConfig;
         private readonly SlotGrid _grid;
+
+        private readonly List<ItemSettings> _candidateBuffer = new();
+        private readonly List<IHasWriteableItemSlot> _eligibleBuffer = new();
+        private readonly Dictionary<string, int> _activeCountsBuffer = new();
 
         [Inject]
         internal ItemAssigner(
@@ -44,38 +47,49 @@ namespace BalloonParty.Item
             var turns = msg.TurnCount;
             var items = _itemConfig.Items;
 
-            var candidates = items
-                .Where(x => x.TurnCheckEvery > 0 && turns % x.TurnCheckEvery == 0)
-                .ToArray();
+            _candidateBuffer.Clear();
+            for (var i = 0; i < items.Count; i++)
+            {
+                var x = items[i];
+                if (x.TurnCheckEvery > 0 && turns % x.TurnCheckEvery == 0)
+                {
+                    _candidateBuffer.Add(x);
+                }
+            }
 
-            if (candidates.Length == 0)
+            if (_candidateBuffer.Count == 0)
             {
                 return;
             }
 
-            var activeCounts = new Dictionary<string, int>();
-            foreach (var c in candidates)
+            _activeCountsBuffer.Clear();
+            foreach (var c in _candidateBuffer)
             {
-                activeCounts[c.Type.ToString()] = CountBalloonsWithItem(c.Type);
+                _activeCountsBuffer[c.Type.ToString()] = CountBalloonsWithItem(c.Type);
             }
 
-            var picked = candidates.PickRandom(activeCounts);
+            var picked = _candidateBuffer.PickRandom(_activeCountsBuffer);
             if (picked == null || picked.Type == ItemType.None)
             {
                 return;
             }
 
-            var eligible = msg.NewBalloons
-                .OfType<IHasWriteableItemSlot>()
-                .ToList();
+            _eligibleBuffer.Clear();
+            for (var i = 0; i < msg.NewBalloons.Count; i++)
+            {
+                if (msg.NewBalloons[i] is IHasWriteableItemSlot slot)
+                {
+                    _eligibleBuffer.Add(slot);
+                }
+            }
 
-            if (eligible.Count == 0)
+            if (_eligibleBuffer.Count == 0)
             {
                 return;
             }
 
-            var indexOf = Random.Range(0, eligible.Count);
-            eligible[indexOf].Item.Value = picked.Type;
+            var indexOf = Random.Range(0, _eligibleBuffer.Count);
+            _eligibleBuffer[indexOf].Item.Value = picked.Type;
         }
 
         private int CountBalloonsWithItem(ItemType type)

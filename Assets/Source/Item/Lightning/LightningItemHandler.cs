@@ -19,10 +19,22 @@ namespace BalloonParty.Item.Lightning
     /// </summary>
     internal class LightningItemHandler : IBalloonItem
     {
+        private sealed class ByDistanceComparer : IComparer<(IBalloonModel model, Vector3 worldPos)>
+        {
+            internal Vector3 Origin;
+
+            public int Compare((IBalloonModel model, Vector3 worldPos) a, (IBalloonModel model, Vector3 worldPos) b)
+                => Vector3.Distance(Origin, a.worldPos).CompareTo(Vector3.Distance(Origin, b.worldPos));
+        }
+
         private readonly IPublisher<ActorHitMessage> _hitPublisher;
         private readonly ItemConfiguration _itemConfig;
         private readonly PoolManager _poolManager;
         private readonly SlotGrid _grid;
+
+        private readonly List<(IBalloonModel model, Vector3 worldPos)> _targetsBuffer = new();
+        private readonly List<Vector3> _positionsBuffer = new();
+        private readonly ByDistanceComparer _distanceComparer = new();
 
         private IBalloonModel _balloon;
         private Vector3 _worldPosition;
@@ -51,9 +63,9 @@ namespace BalloonParty.Item.Lightning
         public UniTask Activate()
         {
             var settings = _itemConfig[ItemType.Lightning];
-            var targets = CollectSortedTargets();
+            CollectSortedTargets(_targetsBuffer);
 
-            if (targets.Count == 0)
+            if (_targetsBuffer.Count == 0)
             {
                 return UniTask.CompletedTask;
             }
@@ -63,7 +75,7 @@ namespace BalloonParty.Item.Lightning
 
             if (settings.ActivationEffectPrefab == null)
             {
-                foreach (var (model, pos) in targets)
+                foreach (var (model, pos) in _targetsBuffer)
                 {
                     _hitPublisher.Publish(new ActorHitMessage(model,
                         pos,
@@ -75,10 +87,11 @@ namespace BalloonParty.Item.Lightning
                 return UniTask.CompletedTask;
             }
 
-            var positions = new List<Vector3>(targets.Count + 1) { _worldPosition };
-            foreach (var (_, pos) in targets)
+            _positionsBuffer.Clear();
+            _positionsBuffer.Add(_worldPosition);
+            foreach (var (_, pos) in _targetsBuffer)
             {
-                positions.Add(pos);
+                _positionsBuffer.Add(pos);
             }
 
             var key = settings.ActivationEffectPrefab.name;
@@ -86,8 +99,9 @@ namespace BalloonParty.Item.Lightning
                 () => new EffectPoolChannel(settings.ActivationEffectPrefab));
 
             var view = (ChainLightningView)effect;
+            var targets = _targetsBuffer;
 
-            view.PrepareDisplay(positions, settings, OnJump);
+            view.PrepareDisplay(_positionsBuffer, settings, OnJump);
             view.Play(Vector3.zero, Color.white, () => _poolManager.Return(key, effect));
 
             return UniTask.CompletedTask;
@@ -108,13 +122,13 @@ namespace BalloonParty.Item.Lightning
             }
         }
 
-        private List<(IBalloonModel model, Vector3 worldPos)> CollectSortedTargets()
+        private void CollectSortedTargets(List<(IBalloonModel model, Vector3 worldPos)> result)
         {
-            var result = new List<(IBalloonModel, Vector3)>();
+            result.Clear();
 
             if (_balloon is not IHasColor sourceColor)
             {
-                return result;
+                return;
             }
 
             var color = sourceColor.Color.Value;
@@ -148,11 +162,8 @@ namespace BalloonParty.Item.Lightning
                 }
             }
 
-            result.Sort((a, b) =>
-                Vector3.Distance(_worldPosition, a.Item2)
-                    .CompareTo(Vector3.Distance(_worldPosition, b.Item2)));
-
-            return result;
+            _distanceComparer.Origin = _worldPosition;
+            result.Sort(_distanceComparer);
         }
     }
 }

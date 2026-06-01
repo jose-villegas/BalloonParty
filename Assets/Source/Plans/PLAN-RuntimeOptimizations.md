@@ -97,76 +97,19 @@ Return count instead of a new array, or return `IReadOnlyList<Vector3>`.
 
 ## 🟡 Medium Impact
 
-### M-1 — `ItemAssigner.OnItemCheck()` LINQ chains
+### ~~M-1 — `ItemAssigner.OnItemCheck()` LINQ chains~~ ✅ Done
 
-**File:** `Item/ItemAssigner.cs` · `OnItemCheck()`
+### ~~M-2 — `ItemActivator.OnActorHit()` LINQ `.FirstOrDefault()`~~ ✅ Done
 
-Two LINQ chains (`.Where().ToArray()` and `.OfType<>().ToList()`) allocate on
-every turn.
+### ~~M-3 — `BombItemHandler.BlastBalloons()` `new HashSet<Vector2Int>`~~ ✅ Done
 
-**Fix:** Replace with `for` loops and a reusable `List<T>` field.
+### ~~M-4 — `LaserItemHandler.CastCross()` `new HashSet<IBalloonModel>`~~ ✅ Done
 
----
+### ~~M-5 — `SlotGrid.GetNeighbors()` allocates a `new List`~~ ✅ Done
 
-### M-2 — `ItemActivator.OnActorHit()` LINQ `.FirstOrDefault()`
+### ~~M-6 — `PuffCloudViewController.Reconfigure()` `new List<Vector4>` + `.ToArray()`~~ ✅ Done
 
-**File:** `Item/ItemActivator.cs` · `OnActorHit()`
-
-`_handlers.FirstOrDefault(h => h.Type == ...)` iterates the handler collection
-(which may be a deferred `IEnumerable` from VContainer).
-
-**Fix:** Cache a `Dictionary<ItemType, IBalloonItem>` in `Start()`.
-
----
-
-### M-3 — `BombItemHandler.BlastBalloons()` `new HashSet<Vector2Int>`
-
-**File:** `Item/Bomb/BombItemHandler.cs` · `BlastBalloons()`
-
-Creates a `new HashSet<Vector2Int>(...)` on every bomb blast.
-
-**Fix:** Use a reusable `HashSet<Vector2Int>` field; clear before each blast.
-
----
-
-### M-4 — `LaserItemHandler.CastCross()` `new HashSet<IBalloonModel>`
-
-**File:** `Item/Laser/LaserItemHandler.cs` · `CastCross()`
-
-Creates a new `HashSet` per laser activation.
-
-**Fix:** Use a reusable field; clear before use.
-
----
-
-### M-5 — `SlotGrid.GetNeighbors()` allocates a `new List`
-
-**File:** `Slots/Grid/SlotGrid.cs` · `GetNeighbors(int, int)`
-
-Called from `NudgeService.OnActorHit` on every balloon hit that has nudge.
-
-**Fix:** Accept a caller-supplied list or return via `Span<T>`.
-
----
-
-### M-6 — `PuffCloudViewController.Reconfigure()` `new List<Vector4>` + `.ToArray()`
-
-**File:** `Slots/Actor/Archetype/PuffCloudViewController.cs` · `Reconfigure()`
-
-Allocates a new list and converts to array on every cluster change.
-
-**Fix:** Use a pre-allocated `Vector4[]` buffer (max 16 slots already enforced
-by the shader).
-
----
-
-### M-7 — `LightningItemHandler.CollectSortedTargets()` allocations
-
-**File:** `Item/Lightning/LightningItemHandler.cs` · `CollectSortedTargets()`
-
-Allocates a new `List` and uses a closure-based `Sort` on every activation.
-
-**Fix:** Cache the list as a field; use a static `IComparer<T>`.
+### ~~M-7 — `LightningItemHandler.CollectSortedTargets()` allocations~~ ✅ Done
 
 ---
 
