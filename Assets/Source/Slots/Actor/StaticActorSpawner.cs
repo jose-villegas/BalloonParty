@@ -91,7 +91,13 @@ namespace BalloonParty.Slots.Actor
                     }
 
                     _grid.Place(model, view, slot);
-                    emptySlots.Remove(slot);
+
+                    var idx = emptySlots.IndexOf(slot);
+                    if (idx >= 0)
+                    {
+                        emptySlots[idx] = emptySlots[emptySlots.Count - 1];
+                        emptySlots.RemoveAt(emptySlots.Count - 1);
+                    }
                 }
             }
         }

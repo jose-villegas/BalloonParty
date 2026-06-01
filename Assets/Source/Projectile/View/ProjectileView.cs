@@ -289,7 +289,8 @@ namespace BalloonParty.Projectile.View
                 return false;
             }
 
-            balloonView = other.GetComponentInParent<BalloonView>();
+            balloonView = other.GetComponent<BalloonView>();
+
             if (balloonView == null)
             {
                 return false;

@@ -223,7 +223,7 @@ namespace BalloonParty.Balloon.Spawner
             if (_newlySpawnedBalloons.Count > 0)
             {
                 _itemCheckPublisher.Publish(
-                    new ItemCheckMessage(_newlySpawnedBalloons.ToArray(), _turnCount));
+                    new ItemCheckMessage(_newlySpawnedBalloons, _turnCount));
                 _newlySpawnedBalloons.Clear();
             }
         }

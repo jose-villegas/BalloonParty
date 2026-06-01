@@ -36,10 +36,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         internal void AddSlot(Vector2Int slot)
         {
-            if (!_slots.Contains(slot))
-            {
-                _slots.Add(slot);
-            }
+            _slots.Add(slot);
         }
     }
 }
