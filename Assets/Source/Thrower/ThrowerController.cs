@@ -59,7 +59,6 @@ namespace BalloonParty.Thrower
 
         public void Start()
         {
-            _camera = Camera.main;
             _traceCalculator = new PredictionTraceCalculator(_config);
 
             _poolManager.Register(ProjectilePoolKey,
@@ -155,6 +154,7 @@ namespace BalloonParty.Thrower
                 return;
             }
 
+            _camera ??= Camera.main;
             if (_camera == null)
             {
                 return;
