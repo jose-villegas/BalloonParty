@@ -38,6 +38,7 @@ to read the grid, tune difficulty, or playtest spawn density.
 | **Deflector** | `DeflectorActorModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect flash | ❌ bounce flash | ❌ `GridActorConfiguration` | Reflective surface; indestructible |
 | **Absorber** | `AbsorberActorModel` | ❌ | ❌ | ❌ | ❌ Idle pulse, Absorb | ❌ absorb burst | ❌ `GridActorConfiguration` | Hazard; ends the turn on contact |
 | **Gatekeeper** | `GatekeeperActorModel` | ❌ | ❌ | ❌ | ❌ Idle, Hit crack, Break | ❌ hit dust, break burst | ❌ `GridActorConfiguration` | Degrades visually as `HitsRemaining` drops |
+| **Spider Web** | `SpiderWebObstacleModel` | ❌ | ❌ | ❌ | ❌ Idle sway, Hit tear, Break | — | ❌ `GridActorConfiguration` | Traversable + degradable; disappears after N hits. See `PLAN-SpiderWeb.md` |
 
 **Legend:** ✅ exists and production-ready · ⚠️ placeholder exists · ❌ does not exist
 

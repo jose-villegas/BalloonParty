@@ -81,7 +81,9 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 133 tests
+## Current Coverage — 183 tests
+
+> Last updated: **June 2, 2026**
 
 ### `SlotGridTests` — 42 tests
 
@@ -298,6 +300,105 @@ Tests the paint item's neighbor color conversion — paintability filter, same-c
 | Skips non-paintable neighbors | 1 | `IHasWriteableColor` interface check missing — tough balloons get painted |
 | Empty color → no action | 1 | Null/empty guard missing |
 | No neighbors → no crash | 1 | Out-of-bounds on corner slot |
+
+### `BubbleClusterModelTests` — 8 tests
+
+Tests `BubbleClusterModel.ResolveScoreAttribution` loop logic, `breaksStreak` flag, empty palette guard, and inherited `EvaluateHit` outcome.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Implements `IHasDurability` | 1 | Interface conformance — spawner and durability subscription depend on it |
+| Implements `IHasScoreColor` | 1 | Interface conformance — `ScoreController` won't call `ResolveScoreAttribution` |
+| Survive → `PassThrough` | 1 | Inherited template method returns wrong outcome |
+| Killing blow → `Pop` | 1 | Boundary mishandled |
+| Attribution count = `HitsRemaining + 1` | 1 | Off-by-one in loop bound |
+| All attributions have `BreaksStreak` | 1 | Missing flag changes streak multiplier behaviour |
+| Each attribution scores 1 point | 1 | Wrong point value |
+| Empty palette → no attributions | 1 | Missing guard causes `IndexOutOfRange` |
+
+### `ColorStreakTrackerTests` — 7 tests
+
+Tests the streak state machine — consecutive same-color tracking, reset on color change, `breaksStreak` flag.
+
+| Area | Tests | What could break |
+|---|---|---|
+| First pop → returns 1 | 1 | Off-by-one initialization |
+| Consecutive same color → increments | 1 | Missing increment |
+| Different color → resets to 1 | 1 | Missing reset branch |
+| `breaksStreak` → resets and returns 1 | 1 | `breaksStreak` flag ignored |
+| After break, same color starts fresh | 1 | State not fully reset |
+| `GetStreak` matching color | 1 | Wrong comparison |
+| `GetStreak` non-matching → 0 | 1 | Returns stale streak for wrong color |
+
+### `WeightedPickTests` — 4 tests
+
+Tests `WeightedPickExtensions.PickRandom` weighted selection with max-count capping. Uses deterministic single-candidate scenarios.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Single entry → always returned | 1 | Edge case in cumulative sum |
+| All at max → `null` | 1 | Missing null guard upstream |
+| Capped excluded, uncapped selected | 1 | Cap filtering skips wrong entry |
+| `MaxCount = 0` → never capped | 1 | Wrong zero-check excludes unlimited entries |
+
+### `ClusterSlotSelectionStrategyTests` — 8 tests
+
+Tests the greedy hex-neighbor cluster expansion algorithm — structural invariants (count, membership, adjacency, cluster cap). Non-deterministic slot positions are not asserted.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Empty slots → empty result | 1 | Missing guard |
+| Count zero → empty result | 1 | Missing guard |
+| Single slot → returns it | 1 | Edge case |
+| Result ≤ requested count | 1 | Off-by-one overrun |
+| Result ≤ available slots | 1 | Exceeds available set |
+| All results from available set | 1 | Selects phantom slots |
+| `maxPerCluster` enforced | 1 | Cap logic bypassed |
+| Slots within cluster are hex-adjacent | 1 | Greedy expansion selects non-adjacent |
+
+### `PauseServiceTests` — 8 tests
+
+Tests reference-counted pause/resume with nested source tracking and MessagePipe publishing.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Initial state not paused | 1 | Wrong default |
+| Pause → `IsAnyPaused` true | 1 | State not set |
+| Pause → publishes `PausedMessage` | 1 | Message not published |
+| Resume → `IsAnyPaused` false | 1 | State not cleared |
+| Resume → publishes `ResumedMessage` | 1 | Message not published |
+| Nested same source → stays paused until all resumed | 1 | Reference count wrong |
+| Resume without pause → no-op | 1 | Negative count or crash |
+| Multiple sources, one resumed → still paused | 1 | Cross-source interference |
+
+### `VectorMathHelperTests` — 3 tests
+
+Tests pure math: centroid computation and bounding radius.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Centroid returns arithmetic mean | 1 | Division or summation error |
+| Bounding radius returns max distance | 1 | Wrong comparator |
+| All same point → radius zero | 1 | Edge case |
+
+### `PathHelperTests` — 12 tests
+
+Tests Catmull-Rom path generation, array sampling, prefix sum, and midpoint displacement.
+
+| Area | Tests | What could break |
+|---|---|---|
+| CatmullRom starts at first waypoint | 1 | First control point offset |
+| CatmullRom ends at last waypoint | 1 | Last control point offset |
+| Single point → single result | 1 | Edge case |
+| Two points → correct subdivision count | 1 | Formula off-by-one |
+| CatmullRomLoop closes to first waypoint | 1 | Loop not closed |
+| SampleAt integer index → exact value | 1 | Index mapping error |
+| SampleAt fractional → interpolates | 1 | Lerp factor wrong |
+| SampleAt beyond bounds → clamps | 1 | Missing clamp |
+| PrefixSum correct cumulative values | 1 | Accumulation error |
+| PrefixSum first element is zero | 1 | Off-by-one in result |
+| MidpointDisplacement preserves endpoints | 1 | Endpoints overwritten |
+| MidpointDisplacement count ≤ 2 → only endpoints | 1 | Missing early return |
 
 
 ---
