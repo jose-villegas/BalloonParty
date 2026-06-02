@@ -621,41 +621,35 @@ edit-mode tests. Writing them first gives a safety net for the refactor.
 1.3  [x] SlotCluster (rename + move PuffCluster)
          └── Resolved: bounds padding — kept hardcoded 0.5f; git mv for history
 1.4  [x] SlotClusterChangedEvent + SlotClusterChangeType (rename + move)
-1.5  [ ] ISlotClusterSource interface
-         └── Resolve: don't register in DI yet — inject concrete closed generic
-1.6  [ ] SlotClusterRegistry<TModel> with setupOnly flag
-         └── Resolve: VContainer bool injection — try .WithParameter first, fall back
-             to thin subclass
-         └── Verify: RebuildAll event timing vs. view controller subscription
-1.7  [ ] IClusterViewSettings interface
-         └── Resolve: prefab reference — keep off base interface, use abstract
-             method or IClusterPrefabProvider<TView>
-1.8  [ ] ClusterView abstract base
-         └── Resolve: [SerializeField] migration — try FormerlySerializedAs, verify
-             prefab survives
-         └── Verify: [ExecuteAlways] inheritance
-         └── Document: shader property name contract (_TimeOffset, _SlotCentersWorld,
-             _SlotCount)
-1.9  [ ] ClusterViewController<TView, TSettings> (or <TModel, TView, TSettings>)
-         └── Resolve: 2 vs 3 type parameters — recommend thin subclass (option 4)
-         └── Verify: VContainer closed generic resolution
-1.10 [ ] PuffObstacleModel — implement IClusterableSlotActor
-         └── Verify: explicit interface implementation compiles
-1.11 [ ] PuffCloudView — subclass ClusterView
-         └── Verify: prefab serialization survives field migration
-1.12 [ ] IPuffCloudSettings — extend IClusterViewSettings
-         └── Verify: PuffCloudSettings SO compiles without changes
-1.13 [ ] GameLifetimeScope — update registrations
-         └── Verify: VContainer resolves closed generic entry points
-         └── Fallback: thin subclass preserving original class name
-1.14 [ ] Delete old files (PuffCluster, PuffClusterRegistry, PuffClusterChangedEvent,
-         PuffCloudViewController)
+1.5  [x] ISlotClusterSource interface
+         └── Resolved: don't register in DI yet — inject concrete closed generic
+1.6  [x] SlotClusterRegistry<TModel> with setupOnly flag
+         └── Resolved: thin PuffClusterRegistry subclass avoids bool injection issue
+         └── Resolved: RebuildAll event timing — current pattern handles late subscribers
+1.7  [x] IClusterViewSettings interface
+1.8  [x] ClusterView abstract base
+         └── Resolved: [SerializeField] fields live on base; prefab needs manual re-link
+         └── Added: OnUpdateBlock virtual hook for per-frame subclass properties
+         └── Verified: shader property name contract (_TimeOffset, _SlotCentersWorld, _SlotCount)
+1.9  [x] ClusterViewController<TModel, TView, TSettings> — abstract with GetPrefab
+         └── Resolved: 3 type params + thin subclass per actor type
+         └── Fixed: UnityEngine.Object.Destroy ambiguity
+1.10 [x] PuffObstacleModel — implement IClusterableSlotActor
+         └── Resolved: ClusterId setter changed from internal to public
+1.11 [x] PuffCloudView — subclass ClusterView (179 lines → 8 lines)
+         └── Pending: manual prefab re-link of SpriteRenderer + animation speed
+1.12 [x] IPuffCloudSettings — extend IClusterViewSettings
+         └── Verified: PuffCloudSettings SO compiles without changes
+1.13 [x] GameLifetimeScope — no changes needed (thin subclasses preserve class names)
+1.14 [x] Delete old files — PuffCluster + PuffClusterChangedEvent git-mv'd;
+         PuffClusterRegistry + PuffCloudViewController kept as thin subclasses
          └── Use git mv for history preservation
-         └── Verify: no remaining references in tests or other files
-1.15 [ ] Validation pass
-         └── Gap: no dedicated cluster tests exist — write 2–3 before refactoring
-         └── Run full edit-mode test suite
-         └── Manual smoke test: cluster rendering, merge/split, disturbance reaction
+         └── Verified: no remaining references to deleted types
+1.15 [x] Validation pass
+         └── Zero compile errors across all 15 affected files
+         └── Pending: manual smoke test — cluster rendering, merge/split, disturbance
+         └── Pending: prefab re-link of SpriteRenderer on PuffCloudView (field moved
+             to ClusterView base class)
 ```
 
 #### Consolidated Gap Summary

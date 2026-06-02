@@ -1,14 +1,10 @@
 using BalloonParty.Slots.Actor.Archetype;
+using BalloonParty.Slots.Actor.Cluster;
 
 namespace BalloonParty.Configuration
 {
-    internal interface IPuffCloudSettings
+    internal interface IPuffCloudSettings : IClusterViewSettings
     {
         PuffCloudView CloudPrefab { get; }
-        float AnimationSpeed { get; }
-        float Padding { get; }
-        int SortingLayerId { get; }
-        int SortingOrderOffset { get; }
     }
 }
-
