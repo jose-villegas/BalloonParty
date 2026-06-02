@@ -422,6 +422,53 @@ Example uses: a **Recolorer** cloud that tints any balloon whose path arcs throu
 it; a **PowerUp** cloud that assigns an item; a **Curse** cloud that reduces
 `HitsRemaining` by 1 on pass.
 
+**Conditional pass-through — phase-gated + maturity timer** — instead of Puffs being
+traversable at all times, gate traversability on two conditions:
+
+1. **Phase-gated:** Puffs allow pass-through only during the **balance phase** (and
+   post-spawn balance). During the hit phase and spawn animation, they block
+   traversal. This means freshly-spawned balloons arc *around* Puffs while
+   existing balloons consolidate *through* them — the player can read which paths
+   the balancer will use because they coincide with the clouds.
+2. **Maturity timer:** Each Puff starts in a **solid** state and becomes
+   **permeable** after a configurable duration (e.g. 2–4 turns or N seconds of
+   game time). Before maturing, the Puff blocks all traversal regardless of
+   phase. After maturing, the phase-gated rule above applies.
+
+Model sketch:
+```csharp
+public interface IPassThrough
+{
+    bool IsCurrentlyTraversable { get; }
+}
+```
+
+`PuffObstacleModel` would track maturity internally:
+```csharp
+internal class PuffObstacleModel : IWriteableSlotActor, IPassThrough
+{
+    private int _turnsAlive;
+    private readonly int _maturityThreshold;  // from config
+
+    public bool IsMature => _turnsAlive >= _maturityThreshold;
+
+    // Phase-gated: only traversable when mature AND during balance
+    public bool IsCurrentlyTraversable => IsMature && _inBalancePhase;
+
+    internal void OnTurnEnd() => _turnsAlive++;
+}
+```
+
+`SlotGrid.IsTraversable` would call `IsCurrentlyTraversable` instead of just
+checking for the marker interface. The balance phase flag could be set via a
+shared `TurnPhaseTracker` service or a simple bool toggled by `BalloonBalancer`
+before/after its pass.
+
+Visual feedback: immature Puffs render denser/more opaque (shader `_Density`
+parameter driven from `IsMature`), so the player can see they're currently
+solid. On maturity transition, the cloud lightens over ~0.5 s via the existing
+diffusion reform rate.
+
 Both extensions are additive — `IPassThrough` stays a marker today and gains members
 (or a companion interface) only when a concrete actor type demands it.
 
@@ -474,6 +521,101 @@ As the game progresses, Puff clouds could drift vertically through the grid — 
 
 ---
 
+## 8 — Timed Release: Balloon Pass-Through Delay
+
+> Balloons that land beneath a Puff cloud rest visibly on the support for a
+> configurable beat, then float up through the traversable slots on the next
+> balance pass. The delay makes the interaction readable — "the balloon is resting
+> under the cloud" — before it naturally pushes through.
+
+### 8.1 Current Behaviour
+
+1. Pop happens → `BalanceBalloonsMessage` fires → `BalloonBalancer.Balance()` runs
+   (next frame)
+2. Balancer scans for `IsUnbalanced` → moves balloons toward row 0
+3. Puff slots block movement because `IsEmpty` returns false → balloon stops below
+   the cloud
+
+### 8.2 Proposed Flow
+
+1. Pop happens → balance runs as before
+2. Balloon finds a Puff above it → can't move through (Puff is occupied) → **stays
+   put for now**
+3. After N seconds (configurable delay), the balloon is marked as *ready to pass
+   through*
+4. On the next balance pass, the balancer checks `IsTraversable` for `IPassThrough`
+   slots and allows routing through them — but **only for balloons whose delay has
+   elapsed**
+5. Balloon animates **through** the cloud, stamping the disturbance field as it goes
+   (the cloud reacts to the balloon passing through it)
+
+### 8.3 Model Sketch
+
+Each balloon model tracks how long it has been waiting beneath a blocking
+`IPassThrough` slot:
+
+```csharp
+internal interface ITimedRelease
+{
+    bool IsReadyToPassThrough { get; }
+    void BeginWait();
+    void ResetWait();
+}
+```
+
+`BalloonBalancer` sets `BeginWait()` when a balloon is blocked by a traversable slot
+and calls `ResetWait()` when the balloon moves freely. On subsequent balance passes,
+balloons with `IsReadyToPassThrough == true` are allowed to route through
+`IPassThrough` slots.
+
+**Config knob** (on `IBalloonsConfiguration` or a dedicated `IPassThroughSettings`):
+- `float PassThroughDelay` — seconds a balloon must wait before it can traverse
+  (e.g. 1.0–2.0 s)
+
+### 8.4 Balancer Changes
+
+- `OptimalNextEmptySlot` gains a traversability check: when evaluating upward paths,
+  if the next slot implements `IPassThrough` and the moving balloon's
+  `IsReadyToPassThrough` is true, treat the slot as passable
+- Path computation may need to chain through multiple consecutive Puff slots (a
+  balloon floating up through a tall cloud)
+- `IsUnbalanced` must account for balloons that are *temporarily* stable (waiting
+  under a cloud) vs. *permanently* stable
+
+### 8.5 Visual Feedback
+
+- **Waiting state:** subtle idle bob or squash animation on the resting balloon so
+  the player reads it as "about to move"
+- **Transit animation:** balloon floats upward through the cloud; each frame the
+  balloon's world position stamps the disturbance field, creating a visible parting
+  effect in the cloud density
+- **Cloud reaction:** the disturbance dissipates via the existing diffusion reform
+  rate — the cloud naturally closes behind the balloon
+
+### 8.6 Relationship to Existing Pass-Through Ideas
+
+This complements the **phase-gated + maturity timer** concept in section 5.5:
+- **Maturity timer** (§ 5.5) gates when the *Puff itself* becomes permeable
+- **Timed release** (this section) gates when the *balloon* is ready to pass through
+
+Both can coexist: a Puff must first mature before any balloon can traverse it, and
+even then the balloon must wait its own delay before floating through. The two timers
+create a layered pacing system — the cloud opens up, then the balloon pushes through.
+
+### 8.7 Open Questions
+
+1. **Delay scaling** — should `PassThroughDelay` decrease at higher difficulty
+   (faster pace) or increase (harder grid)?
+2. **Per-balloon-type override** — should some balloon types (e.g. Tough) have a
+   longer delay, reinforcing their heavy/sluggish personality?
+3. **Multiple balloons queued** — if several balloons are waiting under the same
+   cloud, do they all release simultaneously or stagger? Stagger feels more
+   readable but adds complexity to the balancer.
+4. **Interaction with Unbreakable Roam** (§ 5.2) — an Unbreakable that roams into a
+   slot below a Puff should respect the same delay, or should roam bypass it?
+
+---
+
 ## Open Questions
 
 1. **Pity system scope** — should pity tracking be global (across all spawn types) or
@@ -499,3 +641,8 @@ As the game progresses, Puff clouds could drift vertically through the grid — 
 7. **Vertical drift interval** — how many turns between drift steps? Too fast feels
    chaotic; too slow is imperceptible. Suggested range: every 3–6 turns at base
    difficulty, scaling to every 1–2 turns at max.
+
+8. **Puff maturity threshold** — how many turns before a Puff becomes permeable?
+   Too short and the blocking phase is imperceptible; too long and it feels like a
+   permanent wall. Suggested range: 2–4 turns. Should this scale with difficulty?
+
