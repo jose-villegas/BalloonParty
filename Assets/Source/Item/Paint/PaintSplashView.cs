@@ -119,7 +119,7 @@ namespace BalloonParty.Item.Paint
         ///     balloon's color at exactly the right moment.
         /// </summary>
         internal void PrepareDisplay(
-            List<(Vector3 from, Vector3 to)> flights,
+            IReadOnlyList<(Vector3 from, Vector3 to)> flights,
             ItemSettings settings,
             PoolManager poolManager,
             Action<int> onTargetHit)

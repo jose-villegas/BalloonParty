@@ -285,7 +285,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             return component;
         }
 
-        private PuffCluster CreateCluster(List<Vector2Int> slots)
+        private PuffCluster CreateCluster(IReadOnlyList<Vector2Int> slots)
         {
             var id = _nextClusterId++;
             var bounds = ComputeWorldBounds(slots);

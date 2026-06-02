@@ -176,7 +176,7 @@ namespace BalloonParty.Cheats
             return hit;
         }
 
-        private static void DrawThickPath(List<Vector3> path, Color color, float halfWidth)
+        private static void DrawThickPath(IReadOnlyList<Vector3> path, Color color, float halfWidth)
         {
             GL.Begin(GL.TRIANGLES);
             GL.Color(color);

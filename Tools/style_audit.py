@@ -974,6 +974,158 @@ def check_config_asset_cache(path: Path, lines: list[str], result: AuditResult):
                 break
 
 
+def check_mutable_collection_param(path: Path, lines: list[str], result: AuditResult):
+    """Flag method parameters using mutable collection types when never mutated.
+
+    If a parameter is declared as a mutable collection (List<T>, Dictionary<K,V>,
+    HashSet<T>, IList<T>, ICollection<T>, IDictionary<K,V>) but the method body
+    never calls mutating methods on it, it should use the read-only equivalent.
+    Only checks actual method/constructor parameters, not field declarations.
+    """
+    # Mutable type pattern → (read-only suggestion, type-specific mutators)
+    _COLLECTION_TYPES: list[tuple[re.Pattern, str, tuple[str, ...]]] = [
+        (
+            re.compile(r'\bList<[^>]+>\s+(\w+)'),
+            'IReadOnlyList<T>',
+            ('.Add(', '.AddRange(', '.Remove(', '.RemoveAt(', '.RemoveAll(',
+             '.Insert(', '.InsertRange(', '.Clear(', '.Sort(', '.Reverse(',
+             '.CopyTo(', '.RemoveRange(', '.TrimExcess('),
+        ),
+        (
+            re.compile(r'\bIList<[^>]+>\s+(\w+)'),
+            'IReadOnlyList<T>',
+            ('.Add(', '.Remove(', '.RemoveAt(', '.Insert(', '.Clear('),
+        ),
+        (
+            re.compile(r'\bDictionary<[^>]+>\s+(\w+)'),
+            'IReadOnlyDictionary<K,V>',
+            ('.Add(', '.TryAdd(', '.Remove(', '.Clear('),
+        ),
+        (
+            re.compile(r'\bIDictionary<[^>]+>\s+(\w+)'),
+            'IReadOnlyDictionary<K,V>',
+            ('.Add(', '.TryAdd(', '.Remove(', '.Clear('),
+        ),
+        (
+            re.compile(r'\bHashSet<[^>]+>\s+(\w+)'),
+            'IReadOnlySet<T>',
+            ('.Add(', '.Remove(', '.Clear(', '.UnionWith(', '.IntersectWith(',
+             '.ExceptWith(', '.SymmetricExceptWith(', '.RemoveWhere(', '.TrimExcess('),
+        ),
+        (
+            re.compile(r'\bICollection<[^>]+>\s+(\w+)'),
+            'IReadOnlyCollection<T>',
+            ('.Add(', '.Remove(', '.Clear('),
+        ),
+    ]
+
+    # Method/constructor signature pattern — must have an access modifier or known keyword
+    method_sig_re = re.compile(
+        r'^\s*(?:public|private|protected|internal|static|override|virtual|abstract|async|sealed|new|extern|\s)*'
+        r'(?:[\w<>\[\],.?\s]+)\s+\w+\s*(?:<[^>]*>)?\s*\('
+    )
+
+    n = len(lines)
+    i = 0
+    while i < n:
+        stripped = lines[i].strip()
+
+        # Skip non-method lines
+        if stripped.startswith('//') or stripped.startswith('*') or stripped.startswith('['):
+            i += 1
+            continue
+
+        # Must look like a method signature line (has parens, not a field or property)
+        if '(' not in stripped or stripped.endswith(';'):
+            i += 1
+            continue
+
+        # Must match method/constructor signature pattern
+        if not method_sig_re.match(stripped):
+            if not re.match(r'^\s*(?:public|private|protected|internal)\s+\w+\s*\(', stripped):
+                i += 1
+                continue
+
+        # Extract only the parameter portion (inside the parens) to avoid matching return types
+        sig_end = i
+        depth = lines[i].count('(') - lines[i].count(')')
+        sig_text = lines[i]
+        while depth > 0 and sig_end + 1 < n:
+            sig_end += 1
+            sig_text += lines[sig_end]
+            depth += lines[sig_end].count('(') - lines[sig_end].count(')')
+
+        paren_start = sig_text.index('(')
+        params_text = sig_text[paren_start:]
+
+        # Collect all mutable collection parameter names and their metadata
+        # Each entry: (line_index, param_name, readonly_suggestion, mutators)
+        all_params: list[tuple[int, str, str, tuple[str, ...]]] = []
+        for param_re, suggestion, mutators in _COLLECTION_TYPES:
+            for m in param_re.finditer(params_text):
+                match_pos = paren_start + m.start()
+                chars_so_far = 0
+                param_line_idx = i
+                for li in range(i, sig_end + 1):
+                    chars_so_far += len(lines[li])
+                    if match_pos < chars_so_far:
+                        param_line_idx = li
+                        break
+                all_params.append((param_line_idx, m.group(1), suggestion, mutators))
+
+        if not all_params:
+            i = sig_end + 1
+            continue
+
+        # Find the opening brace of the method body
+        body_start = sig_end + 1
+        while body_start < n and not lines[body_start].strip().startswith('{'):
+            if lines[body_start].strip().startswith('=>'):
+                break
+            body_start += 1
+
+        if body_start >= n:
+            i = body_start
+            continue
+
+        # Walk to the matching closing brace to delimit the body
+        brace_depth = 0
+        body_end = body_start
+        for j in range(body_start, n):
+            brace_depth += lines[j].count('{') - lines[j].count('}')
+            if brace_depth <= 0 and j > body_start:
+                body_end = j
+                break
+        else:
+            body_end = n - 1
+
+        body_text = ''.join(lines[body_start:body_end + 1])
+
+        for param_line, param_name, suggestion, mutators in all_params:
+            mutated = False
+            for mut in mutators:
+                if f'{param_name}{mut}' in body_text:
+                    mutated = True
+                    break
+            # Indexed assignment: param[...] = (but not ==)
+            if not mutated and re.search(rf'\b{re.escape(param_name)}\s*\[[^\]]*\]\s*=[^=]', body_text):
+                mutated = True
+            # Tuple swap: (param[...], ...) = ...
+            if not mutated and re.search(rf'\({re.escape(param_name)}\s*\[', body_text):
+                mutated = True
+            # .Contains() requires the concrete type or IReadOnlySet (not in .NET Standard 2.1)
+            # so skip HashSet/ICollection params that use Contains — no clean read-only alternative.
+            if not mutated and suggestion in ('IReadOnlySet<T>', 'IReadOnlyCollection<T>'):
+                if f'{param_name}.Contains(' in body_text:
+                    continue
+
+            if not mutated:
+                result.add(Violation(str(path), param_line + 1, "mutable-param",
+                    f"'{param_name}' is never mutated — use {suggestion}"))
+
+        i = body_end + 1
+
+
 # ─── Rule registry ───────────────────────────────────────────────────────────
 
 RULES: dict[str, callable] = {
@@ -997,6 +1149,7 @@ RULES: dict[str, callable] = {
     "blank-lines":       check_multiple_blank_lines,
     "trailing-newlines": check_trailing_newlines,
     "config-asset-cache": check_config_asset_cache,
+    "mutable-param":     check_mutable_collection_param,
 }
 
 # Rules that don't operate on individual files

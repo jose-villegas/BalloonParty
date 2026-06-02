@@ -27,7 +27,7 @@ namespace BalloonParty.Item.Lightning
         private Action<int> _onTargetHit;
         private float _randomness;
         private float _segmentsMultiplier;
-        private List<Vector3> _targetPositions;
+        private IReadOnlyList<Vector3> _targetPositions;
 
         public override void OnSpawned()
         {
@@ -72,7 +72,7 @@ namespace BalloonParty.Item.Lightning
         ///     <paramref name="onTargetHit" /> is invoked per jump (index 0 = first target).
         /// </summary>
         public void PrepareDisplay(
-            List<Vector3> targetPositions,
+            IReadOnlyList<Vector3> targetPositions,
             ItemSettings settings,
             Action<int> onTargetHit)
         {
@@ -122,7 +122,7 @@ namespace BalloonParty.Item.Lightning
         ///     Returns per-renderer position buffers and cumulative offset array.
         /// </summary>
         internal static (Vector3[][] lineBuffers, int[] cumOffsets) BuildBoltBuffers(
-            List<Vector3> positions,
+            IReadOnlyList<Vector3> positions,
             int rendererCount,
             float segmentsMultiplier,
             float randomness,
@@ -166,7 +166,7 @@ namespace BalloonParty.Item.Lightning
         ///     Also returns interpolated diameters that match each path sample.
         /// </summary>
         internal static (Vector3[] positions, float[] diameters) BuildGlowPath(
-            List<Vector3> targetPositions,
+            IReadOnlyList<Vector3> targetPositions,
             int subdivisions)
         {
             var (centroids, rawDiameters) = ComputeStageCentroids(targetPositions);
@@ -187,7 +187,7 @@ namespace BalloonParty.Item.Lightning
         ///     Stage <c>s</c> (1-indexed) covers <c>targetPositions[0..s]</c>.
         /// </summary>
         private static (List<Vector3> centroids, float[] diameters) ComputeStageCentroids(
-            List<Vector3> targetPositions)
+            IReadOnlyList<Vector3> targetPositions)
         {
             var stageCount = targetPositions.Count - 1;
             var centroids = new List<Vector3>(stageCount);

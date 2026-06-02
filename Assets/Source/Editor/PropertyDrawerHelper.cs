@@ -20,7 +20,7 @@ namespace BalloonParty.Editor
         ///     using each field's actual <see cref="EditorGUI.GetPropertyHeight"/> so that
         ///     variable-height drawers (e.g. <c>[PaletteColorMask]</c>) are measured correctly.
         /// </summary>
-        public static float GetCommonFieldsHeight(SerializedProperty property, HashSet<string> excluded)
+        public static float GetCommonFieldsHeight(SerializedProperty property, IReadOnlySet<string> excluded)
         {
             var total = 0f;
             ForEachCommonChild(property,
@@ -36,7 +36,7 @@ namespace BalloonParty.Editor
         ///     Use <see cref="GetCommonFieldsHeight"/> for height calculation when any field
         ///     may have a variable-height drawer.
         /// </summary>
-        public static int CountCommonFields(SerializedProperty property, HashSet<string> excluded)
+        public static int CountCommonFields(SerializedProperty property, IReadOnlySet<string> excluded)
         {
             var count = 0;
             ForEachCommonChild(property, excluded, _ => count++);
@@ -53,7 +53,7 @@ namespace BalloonParty.Editor
             Rect position,
             float y,
             SerializedProperty property,
-            HashSet<string> excluded)
+            IReadOnlySet<string> excluded)
         {
             ForEachCommonChild(property, excluded, DrawField);
             return y;
@@ -116,7 +116,7 @@ namespace BalloonParty.Editor
         /// </summary>
         public static void ForEachCommonChild(
             SerializedProperty root,
-            HashSet<string> excluded,
+            IReadOnlySet<string> excluded,
             System.Action<SerializedProperty> visit)
         {
             var iter = root.Copy();

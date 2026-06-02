@@ -44,7 +44,7 @@ namespace BalloonParty.Thrower
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
 
-        public void SetTrace(List<Vector3> points)
+        public void SetTrace(IReadOnlyList<Vector3> points)
         {
             if (_traceView == null)
             {

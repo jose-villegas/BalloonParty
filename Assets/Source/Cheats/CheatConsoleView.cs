@@ -88,7 +88,7 @@ namespace BalloonParty.Cheats
             GUILayout.EndArea();
         }
 
-        private List<ICheat> ApplyFilters(List<ICheat> cheats)
+        private List<ICheat> ApplyFilters(IReadOnlyList<ICheat> cheats)
         {
             var result = cheats.AsEnumerable();
 
@@ -169,7 +169,7 @@ namespace BalloonParty.Cheats
             GUILayout.EndHorizontal();
         }
 
-        private void DrawSection(string title, List<ICheat> cheats)
+        private void DrawSection(string title, IReadOnlyList<ICheat> cheats)
         {
             GUILayout.Label($"— {title} —");
             foreach (var cheat in cheats)
@@ -178,7 +178,7 @@ namespace BalloonParty.Cheats
             }
         }
 
-        private void DrawTagFilters(List<ICheat> cheats)
+        private void DrawTagFilters(IReadOnlyList<ICheat> cheats)
         {
             var allTags = cheats.SelectMany(c => c.Tags).Distinct().OrderBy(t => t).ToList();
             if (allTags.Count == 0)

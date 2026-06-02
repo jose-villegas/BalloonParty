@@ -99,8 +99,8 @@ namespace BalloonParty.Slots.Actor
         /// opposite side of the grid.
         /// </summary>
         private static Vector2Int PickFarthestSeed(
-            HashSet<Vector2Int> available,
-            List<Vector2> centroids)
+            IReadOnlyCollection<Vector2Int> available,
+            IReadOnlyList<Vector2> centroids)
         {
             var best = new List<(Vector2Int slot, float minDist)>();
 
@@ -159,7 +159,7 @@ namespace BalloonParty.Slots.Actor
             }
         }
 
-        private static Vector2Int PickRandom(HashSet<Vector2Int> set)
+        private static Vector2Int PickRandom(IReadOnlyCollection<Vector2Int> set)
         {
             var idx = Random.Range(0, set.Count);
             var i = 0;

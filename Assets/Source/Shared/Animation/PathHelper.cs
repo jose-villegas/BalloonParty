@@ -14,7 +14,7 @@ namespace BalloonParty.Shared.Animation
         ///     <paramref name="pointCount" /> entries of <paramref name="waypoints" />.
         /// </summary>
         internal static Vector3[] CatmullRomPath(
-            List<Vector3> waypoints,
+            IReadOnlyList<Vector3> waypoints,
             int pointCount,
             int subdivisions = 6)
         {
@@ -53,7 +53,7 @@ namespace BalloonParty.Shared.Animation
         ///     The last point connects back to the first.
         /// </summary>
         internal static Vector3[] CatmullRomLoop(
-            List<Vector3> waypoints,
+            IReadOnlyList<Vector3> waypoints,
             int pointCount,
             int subdivisions = 6)
         {
