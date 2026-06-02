@@ -922,28 +922,45 @@ def check_repeated_accessor(path: Path, lines: list[str], result: AuditResult):
 
 
 def check_config_asset_cache(path: Path, lines: list[str], result: AuditResult):
-    """Editor code must use ConfigAssetCache<T> instead of inline FindAssets+LoadAssetAtPath for config SOs.
+    """All code must use ConfigAssetCache<T> instead of inline FindAssets+LoadAssetAtPath for config SOs.
 
-    Flags FindAssets("t:TypeName") followed by LoadAssetAtPath in the same
-    method scope — the telltale sign of a manual config-SO lookup that should
-    use ConfigAssetCache<T>.  Standalone FindAssets calls iterating many assets
+    Applies to editor files and to #if UNITY_EDITOR blocks in runtime files.
+    Flags FindAssets("t:TypeName") followed by LoadAssetAtPath within a short
+    window — the telltale sign of a manual config-SO lookup that should use
+    ConfigAssetCache<T>.  Standalone FindAssets calls iterating many assets
     (e.g. t:Texture2D) are intentionally excluded.
     """
-    if not is_in_editor(path):
-        return
     if path.name == "ConfigAssetCache.cs":
         return
+
+    in_editor = is_in_editor(path)
 
     find_re = re.compile(r'AssetDatabase\.FindAssets\s*\(\s*["\$].*t:')
     load_re = re.compile(r'AssetDatabase\.LoadAssetAtPath\s*<')
 
-    # Two-pass: first collect FindAssets lines, then check if a LoadAssetAtPath
-    # appears within a short window after it (same method heuristic).
+    # Track whether we're inside a #if UNITY_EDITOR block for runtime files.
+    editor_depth = 0
+    if in_editor:
+        editor_depth = 1  # entire file is editor code
+
     WINDOW = 15
     find_lines: list[int] = []
     load_lines: set[int] = set()
 
     for i, line in enumerate(lines):
+        stripped = line.strip()
+
+        if not in_editor:
+            if stripped == "#if UNITY_EDITOR":
+                editor_depth += 1
+            elif stripped in ("#endif", "#else") and editor_depth > 0:
+                editor_depth = max(0, editor_depth - 1)
+            elif stripped.startswith("#elif") and editor_depth > 0:
+                editor_depth = max(0, editor_depth - 1)
+
+        if editor_depth <= 0 and not in_editor:
+            continue
+
         if find_re.search(line):
             find_lines.append(i)
         if load_re.search(line):
