@@ -1007,16 +1007,12 @@ def check_mutable_collection_param(path: Path, lines: list[str], result: AuditRe
             ('.Add(', '.TryAdd(', '.Remove(', '.Clear('),
         ),
         (
-            re.compile(r'\bHashSet<[^>]+>\s+(\w+)'),
-            'IReadOnlySet<T>',
-            ('.Add(', '.Remove(', '.Clear(', '.UnionWith(', '.IntersectWith(',
-             '.ExceptWith(', '.SymmetricExceptWith(', '.RemoveWhere(', '.TrimExcess('),
-        ),
-        (
             re.compile(r'\bICollection<[^>]+>\s+(\w+)'),
             'IReadOnlyCollection<T>',
             ('.Add(', '.Remove(', '.Clear('),
         ),
+        # HashSet<T> is excluded — no IReadOnlySet<T> in Unity's .NET profile,
+        # and IReadOnlyCollection<T> lacks .Contains() (O(1) → O(n) regression).
     ]
 
     # Method/constructor signature pattern — must have an access modifier or known keyword
@@ -1113,9 +1109,8 @@ def check_mutable_collection_param(path: Path, lines: list[str], result: AuditRe
             # Tuple swap: (param[...], ...) = ...
             if not mutated and re.search(rf'\({re.escape(param_name)}\s*\[', body_text):
                 mutated = True
-            # .Contains() requires the concrete type or IReadOnlySet (not in .NET Standard 2.1)
-            # so skip HashSet/ICollection params that use Contains — no clean read-only alternative.
-            if not mutated and suggestion in ('IReadOnlySet<T>', 'IReadOnlyCollection<T>'):
+            # IReadOnlyCollection lacks .Contains() — skip ICollection params that use it.
+            if not mutated and suggestion == 'IReadOnlyCollection<T>':
                 if f'{param_name}.Contains(' in body_text:
                     continue
 
