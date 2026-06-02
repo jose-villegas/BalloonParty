@@ -615,12 +615,12 @@ edit-mode tests. Writing them first gives a safety net for the refactor.
 #### Task Checklist
 
 ```
-1.1  [ ] Create Slots/Actor/Cluster/ folder + namespace
-1.2  [ ] IClusterableSlotActor interface
-         └── Resolve: setter visibility (public on internal type — go with it)
-1.3  [ ] SlotCluster (rename + move PuffCluster)
-         └── Resolve: bounds padding — keep hardcoded 0.5f for now
-1.4  [ ] SlotClusterChangedEvent + SlotClusterChangeType (rename + move)
+1.1  [x] Create Slots/Actor/Cluster/ folder + namespace
+1.2  [x] IClusterableSlotActor interface
+         └── Resolved: public set on internal interface — matches IWriteableSlotActor pattern
+1.3  [x] SlotCluster (rename + move PuffCluster)
+         └── Resolved: bounds padding — kept hardcoded 0.5f; git mv for history
+1.4  [x] SlotClusterChangedEvent + SlotClusterChangeType (rename + move)
 1.5  [ ] ISlotClusterSource interface
          └── Resolve: don't register in DI yet — inject concrete closed generic
 1.6  [ ] SlotClusterRegistry<TModel> with setupOnly flag

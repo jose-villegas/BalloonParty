@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace BalloonParty.Slots.Actor.Archetype
+namespace BalloonParty.Slots.Actor.Cluster
 {
     /// <summary>
-    /// Represents a group of hex-adjacent <see cref="PuffObstacleModel"/> slots
-    /// that share a single cloud visual.
+    /// A group of hex-adjacent <see cref="IClusterableSlotActor"/> slots that share
+    /// a single merged visual (cloud, bush, etc.).
     /// </summary>
-    internal class PuffCluster
+    internal class SlotCluster
     {
         private readonly List<Vector2Int> _slots = new();
 
@@ -15,12 +15,12 @@ namespace BalloonParty.Slots.Actor.Archetype
         public IReadOnlyList<Vector2Int> Slots => _slots;
         public Rect WorldBounds { get; internal set; }
 
-        internal PuffCluster(int clusterId)
+        internal SlotCluster(int clusterId)
         {
             ClusterId = clusterId;
         }
 
-        internal PuffCluster(int clusterId, IEnumerable<Vector2Int> slots, Rect worldBounds)
+        internal SlotCluster(int clusterId, IEnumerable<Vector2Int> slots, Rect worldBounds)
         {
             ClusterId = clusterId;
             _slots.AddRange(slots);

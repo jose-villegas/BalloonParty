@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Slots.Actor.Cluster;
 using BalloonParty.Slots.Grid;
 using UniRx;
 using UnityEngine;
@@ -16,16 +17,16 @@ namespace BalloonParty.Slots.Actor.Archetype
     internal class PuffClusterRegistry : IStartable, IDisposable
     {
         private readonly SlotGrid _grid;
-        private readonly Subject<PuffClusterChangedEvent> _onClusterChanged = new();
-        private readonly Dictionary<int, PuffCluster> _clusters = new();
+        private readonly Subject<SlotClusterChangedEvent> _onClusterChanged = new();
+        private readonly Dictionary<int, SlotCluster> _clusters = new();
         private readonly Dictionary<Vector2Int, int> _slotToCluster = new();
         private readonly CompositeDisposable _disposables = new();
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
 
         private int _nextClusterId = 1;
 
-        internal IObservable<PuffClusterChangedEvent> OnClusterChanged => _onClusterChanged;
-        internal IReadOnlyDictionary<int, PuffCluster> Clusters => _clusters;
+        internal IObservable<SlotClusterChangedEvent> OnClusterChanged => _onClusterChanged;
+        internal IReadOnlyDictionary<int, SlotCluster> Clusters => _clusters;
 
         [Inject]
         internal PuffClusterRegistry(SlotGrid grid)
@@ -52,7 +53,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         /// Returns the cluster that contains the given slot, or null if the slot
         /// is not part of any Puff cluster.
         /// </summary>
-        internal PuffCluster GetClusterForSlot(Vector2Int slot)
+        internal SlotCluster GetClusterForSlot(Vector2Int slot)
         {
             if (_slotToCluster.TryGetValue(slot, out var id))
             {
@@ -66,7 +67,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         /// Checks whether a world-space position overlaps any cluster bounds.
         /// Returns the first matching cluster, or null.
         /// </summary>
-        internal PuffCluster GetClusterAtWorldPosition(Vector3 worldPos)
+        internal SlotCluster GetClusterAtWorldPosition(Vector3 worldPos)
         {
             var point = new Vector2(worldPos.x, worldPos.y);
             foreach (var cluster in _clusters.Values)
@@ -117,8 +118,8 @@ namespace BalloonParty.Slots.Actor.Archetype
             {
                 // No adjacent Puff clusters — create a new single-slot cluster
                 var cluster = CreateCluster(new List<Vector2Int> { slot });
-                _onClusterChanged.OnNext(new PuffClusterChangedEvent(
-                    cluster.ClusterId, PuffClusterChangeType.Created, cluster));
+                _onClusterChanged.OnNext(new SlotClusterChangedEvent(
+                    cluster.ClusterId, SlotClusterChangeType.Created, cluster));
             }
             else if (neighborClusterIds.Count == 1)
             {
@@ -133,8 +134,8 @@ namespace BalloonParty.Slots.Actor.Archetype
                 _slotToCluster[slot] = existingId;
                 RecalculateBounds(cluster);
 
-                _onClusterChanged.OnNext(new PuffClusterChangedEvent(
-                    cluster.ClusterId, PuffClusterChangeType.Resized, cluster));
+                _onClusterChanged.OnNext(new SlotClusterChangedEvent(
+                    cluster.ClusterId, SlotClusterChangeType.Resized, cluster));
             }
             else
             {
@@ -153,13 +154,13 @@ namespace BalloonParty.Slots.Actor.Archetype
                     }
 
                     _clusters.Remove(clusterId);
-                    _onClusterChanged.OnNext(new PuffClusterChangedEvent(
-                        clusterId, PuffClusterChangeType.Removed, oldCluster));
+                    _onClusterChanged.OnNext(new SlotClusterChangedEvent(
+                        clusterId, SlotClusterChangeType.Removed, oldCluster));
                 }
 
                 var newCluster = CreateCluster(mergedSlots);
-                _onClusterChanged.OnNext(new PuffClusterChangedEvent(
-                    newCluster.ClusterId, PuffClusterChangeType.Created, newCluster));
+                _onClusterChanged.OnNext(new SlotClusterChangedEvent(
+                    newCluster.ClusterId, SlotClusterChangeType.Created, newCluster));
             }
         }
 
@@ -187,8 +188,8 @@ namespace BalloonParty.Slots.Actor.Archetype
             }
 
             _clusters.Remove(clusterId);
-            _onClusterChanged.OnNext(new PuffClusterChangedEvent(
-                clusterId, PuffClusterChangeType.Removed, oldCluster));
+            _onClusterChanged.OnNext(new SlotClusterChangedEvent(
+                clusterId, SlotClusterChangeType.Removed, oldCluster));
 
             if (remainingSlots.Count == 0)
             {
@@ -206,8 +207,8 @@ namespace BalloonParty.Slots.Actor.Archetype
 
                 var component = FloodFill(remaining, remainingSlots, visited);
                 var newCluster = CreateCluster(component);
-                _onClusterChanged.OnNext(new PuffClusterChangedEvent(
-                    newCluster.ClusterId, PuffClusterChangeType.Created, newCluster));
+                _onClusterChanged.OnNext(new SlotClusterChangedEvent(
+                    newCluster.ClusterId, SlotClusterChangeType.Created, newCluster));
             }
         }
 
@@ -244,8 +245,8 @@ namespace BalloonParty.Slots.Actor.Archetype
 
                 var component = FloodFill(puff, allPuffs, visited);
                 var cluster = CreateCluster(component);
-                _onClusterChanged.OnNext(new PuffClusterChangedEvent(
-                    cluster.ClusterId, PuffClusterChangeType.Created, cluster));
+                _onClusterChanged.OnNext(new SlotClusterChangedEvent(
+                    cluster.ClusterId, SlotClusterChangeType.Created, cluster));
             }
         }
 
@@ -285,11 +286,11 @@ namespace BalloonParty.Slots.Actor.Archetype
             return component;
         }
 
-        private PuffCluster CreateCluster(IReadOnlyList<Vector2Int> slots)
+        private SlotCluster CreateCluster(IReadOnlyList<Vector2Int> slots)
         {
             var id = _nextClusterId++;
             var bounds = ComputeWorldBounds(slots);
-            var cluster = new PuffCluster(id, slots, bounds);
+            var cluster = new SlotCluster(id, slots, bounds);
 
             _clusters[id] = cluster;
             foreach (var slot in slots)
@@ -301,7 +302,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             return cluster;
         }
 
-        private void RecalculateBounds(PuffCluster cluster)
+        private void RecalculateBounds(SlotCluster cluster)
         {
             cluster.WorldBounds = ComputeWorldBounds(cluster.Slots);
         }
