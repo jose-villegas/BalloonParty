@@ -427,6 +427,53 @@ Both extensions are additive — `IPassThrough` stays a marker today and gains m
 
 ---
 
+## 6 — Puff Cloud Polish & Performance
+
+Items deferred from the completed Puff Cloud Simulation implementation.
+
+### 6.1 Visual Polish
+
+- **Shadow pass** — `_SHADOW_ON` toggle already exists in the shader but is tuning-incomplete; needs art-direction pass for shadow offset, softness, and fill width per scene context
+- **Cloud fade-in on Puff spawn** — when a new Puff slot is placed, the cloud density should start at 0 and reform to 1.0 over ~0.5s, reusing the existing diffusion reform mechanic instead of appearing instantly
+- **Cloud dissolve on Puff removal** — when a Puff slot is removed, the cloud should drain to 0 over ~0.5s (invert the reform trend for that cluster region) rather than vanishing immediately; mirrors the fade-in and feels organic
+
+### 6.2 Performance & Device Scaling
+
+- **Disturbance field resolution scaling** — scale `TexelsPerUnit` down based on `QualitySettings.GetQualityLevel()` (e.g. half resolution on `Low`, full on `High`); avoids a fixed RT size that may be too large for low-end devices
+- **Diffusion tick rate throttle** — skip diffusion ticks on low-end when the frame budget is tight; `DiffusionTickInterval` is already configurable, but an adaptive version would watch `Time.deltaTime` against a budget threshold and extend the interval dynamically
+- **Target: < 0.5 ms total** for all active cloud blits + diffusion tick on target mobile devices; profile with Unity's GPU profiler before shipping
+
+### 6.3 Edge Cases
+
+- **Cloud at grid boundary** — quad placement at extreme column/row positions can push cloud geometry outside the camera frustum; clamp the world-space quad to the field bounds
+- **All Puffs removed in one frame** — if a balance pass removes support from every slot in a cluster simultaneously, `PuffClusterRegistry` publishes `Removed` and the view is returned to pool; verify the registry handles this atomically (no intermediate `Resized` event with zero slots)
+
+---
+
+## 7 — Vertical Cloud Drift
+
+> Captured for when the feature is prioritised. Pairs well with the difficulty scaling system (Phase 8.4).
+
+As the game progresses, Puff clouds could drift vertically through the grid — slowly migrating upward row by row. This makes the sky feel alive and gives the grid a sense of weather that evolves over a session.
+
+**Concept:**
+- On a configurable interval (every N turns, or tied to `DifficultyService` level transitions), each Puff slot relocates one row upward (or downward)
+- `PuffClusterRegistry` handles the grid-level move: `SlotGrid.Remove` old slot, `SlotGrid.Place` at new slot — same pattern as `BalloonBalancer` relocations
+- `PuffCloudView` animates the quad position lerp; density RT is preserved across the move so disturbance state carries over
+- Puffs that drift off the top are removed; new Puffs can spawn at the bottom to replace them, creating a conveyor-belt effect
+
+**Why it works with the current architecture:**
+- `PuffClusterRegistry` recomputes adjacency on every `SlotGridChangedEvent` — a Puff moving one row naturally triggers cluster merge/split without extra code
+- The density RT resize/copy logic handles cluster shape changes
+- `IPassThrough` traversability is per-slot, not per-cloud, so moving a Puff correctly updates path computation
+
+**Gameplay angle:**
+- Clouds drifting through the grid change which columns have structural support (Puffs occupy slots) and which are visually distinct
+- Faster drift at higher levels creates a more dynamic, harder-to-read grid — a natural difficulty knob
+- Pairs well with `IOnPassThrough` triggers (see section 5.5) — a drifting cloud that tints or buffs balloons it passes through would create emergent gameplay
+
+---
+
 ## Open Questions
 
 1. **Pity system scope** — should pity tracking be global (across all spawn types) or
@@ -445,4 +492,10 @@ Both extensions are additive — `IPassThrough` stays a marker today and gains m
    cheap; the Monte Carlo simulation is not. Define acceptable frame budget or
    confirm editor-only usage.
 
+6. **Cloud fade timing** — what duration feels natural for the Puff cloud fade-in
+   (on spawn) and dissolve (on removal)? Suggested starting point: 0.3–0.5 s,
+   driven by the existing diffusion reform rate. Needs playtesting.
 
+7. **Vertical drift interval** — how many turns between drift steps? Too fast feels
+   chaotic; too slow is imperceptible. Suggested range: every 3–6 turns at base
+   difficulty, scaling to every 1–2 turns at max.

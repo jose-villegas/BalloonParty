@@ -45,8 +45,9 @@ digraph DisturbanceField {
         style=filled;
         fillcolor="#f0f0f0";
 
-        Pending   [label="_pendingStamps\nList<PendingStamp>"];
-        LerpQ     [label="_activeStamps\nList<LerpStamp>"];
+        StampEntry [label="Stamp(pos, radius, strength,\ndirection, duration)", shape=ellipse];
+        Pending   [label="_pendingStamps\nList<PendingStamp>\n(duration == 0)"];
+        LerpQ     [label="_activeStamps\nList<LerpStamp>\n(duration > 0)"];
         Flush     [label="FlushPendingStamps()\nbatch up to 16 per blit", shape=ellipse];
         TickDiff  [label="TickDiffusion()\ndiffuse + reform + wind", shape=ellipse];
         TickLerp  [label="TickLerpStamps()\nramp strength over duration", shape=ellipse];
@@ -62,9 +63,11 @@ digraph DisturbanceField {
         StampShader [label="StampBatchedShader\n(≤16 stamps/blit)", shape=ellipse, fillcolor="#ffe8cc"];
         DiffShader  [label="DiffusionShader\n(blur+reform+wind)", shape=ellipse, fillcolor="#ffe8cc"];
 
-        Pending -> Flush;
+        StampEntry -> Pending  [label="duration == 0"];
+        StampEntry -> LerpQ    [label="duration > 0"];
         LerpQ   -> TickLerp;
-        TickLerp -> Pending [label="generates\ninstant stamps"];
+        TickLerp -> StampEntry [label="generates\ninstant stamps\n(delta slice)"];
+        Pending -> Flush;
         Flush   -> StampShader;
         TickDiff -> DiffShader;
         StampShader -> FieldA [label="blit write"];
@@ -88,16 +91,16 @@ digraph DisturbanceField {
         Future    [label="Future effects\n(any shader sampling\n_DisturbanceTex)", style=dashed];
     }
 
-    Settings -> Pending [lhead=cluster_service, label="tuning knobs\n+ shader refs"];
-    Display  -> Pending [lhead=cluster_service, label="ortho size\nfor RT bounds"];
+    Settings -> StampEntry [lhead=cluster_service, label="tuning knobs\n+ shader refs"];
+    Display  -> StampEntry [lhead=cluster_service, label="ortho size\nfor RT bounds"];
 
-    ProjView  -> Pending [label="Stamp()"];
-    BallSpawn -> Pending [label="Stamp()"];
-    BallBal   -> Pending [label="Stamp()"];
-    BallCtrl  -> Pending [label="Stamp()"];
-    BombH     -> Pending [label="Stamp()"];
-    LaserH    -> Pending [label="Stamp()"];
-    PaintH    -> LerpQ   [label="Stamp(duration>0)"];
+    ProjView  -> StampEntry [label="Stamp(…, stamp.Duration)"];
+    BallSpawn -> StampEntry [label="Stamp(…, stamp.Duration)"];
+    BallBal   -> StampEntry [label="Stamp(…, stamp.Duration)"];
+    BallCtrl  -> StampEntry [label="Stamp(…, stamp.Duration)"];
+    BombH     -> StampEntry [label="Stamp(…, stamp.Duration)"];
+    LaserH    -> StampEntry [label="Stamp(…, stamp.Duration)"];
+    PaintH    -> StampEntry [label="Stamp(…, stamp.Duration)"];
 
     FieldA -> Globals [label="PushGlobalTexture()"];
     FieldB -> Globals [label="PushGlobalTexture()"];
@@ -149,16 +152,16 @@ All instant stamps queued during a frame are flushed in batches of up to 16 per 
 
 | System | When it stamps | `StampSource` | Notes |
 |---|---|---|---|
-| `ProjectileView` | Each `FixedUpdate` in `MoveAndBounce()` | `Projectile` | Creates visible wakes through Puff clouds |
+| `ProjectileView` | Each `FixedUpdate` in `MoveAndBounce()` | `Projectile` | Continuous wake through Puff clouds; `Duration` from config typically 0 for a sharp per-frame stamp |
 | `BalloonSpawner` | Each frame during spawn path DOTween `OnUpdate` | `BalloonPath` | Spawn animations disturb clouds they pass through |
 | `BalloonBalancer` | Each frame during balance path DOTween `OnUpdate` | `BalloonPath` | Balance animations disturb clouds |
-| `BalloonController` | On balloon pop | `BalloonPop` | Pop burst shockwave |
-| `BombItemHandler` | On detonation | `Bomb` | Large-radius burst |
+| `BalloonController` | On balloon pop | `BalloonPop` | Pop burst shockwave; `Duration > 0` creates an expanding shockwave shape |
+| `BombItemHandler` | On detonation | `Bomb` | Large-radius burst; `Duration > 0` for smooth shockwave spread |
 | `LaserItemHandler` | Along each beam segment | `Laser` | Linear disturbance along beams |
 | `PaintItemHandler` | On neighbor hit and splash landing | `Paint` | Splash disturbances |
 | `DisturbanceStampCheat` | Mouse drag (debug only) | — | Direct `Stamp()` call for testing |
 
-All consumers read their radius/strength/duration from `DisturbanceFieldSettings.GetProfile(StampSource)`.
+All callers pass `stamp.Duration` directly from their `StampProfile` via `DisturbanceFieldSettings.GetProfile(StampSource)`. Whether a given stamp becomes a lerp stamp or an instant stamp is purely a config decision — set `Duration > 0` in the SO to get an expanding shockwave, leave it at 0 for a sharp single-frame stamp.
 
 ## Configuration
 

@@ -2,87 +2,28 @@
 
 # BalloonParty — Architecture Diagrams
 
-> Single-page map of systems, data flow, and scope hierarchy.
-> For style rules see `Assets/Source/README.md`. For per-feature details see each folder's `README.md`.
+> Visual system maps, data flow diagrams, and scope hierarchy references.
+> Each sub-page includes the diagram and guidance on how the system works and how to extend it.
+> For code style rules see @ref style_guide. For per-feature details see each folder's `README.md`.
 
 ---
 
-## MVC Pattern
+## Diagrams
 
-@image html mvc_architecture.svg "Model–View–Controller with MessagePipe"
-
----
-
-## Scope Hierarchy
-
-@image html scope_hierarchy.svg "VContainer Scope Hierarchy"
-
----
-
-## Turn Pipeline
-
-@image html turn_pipeline.svg "Turn Pipeline — Hit → Balance → Spawn → Post-Balance"
-
----
-
-## Balance Flow
-
-@image html balance_flow.svg "Balance Algorithm — Per-Actor Transit Tracking"
-
----
-
-## System Map
-
-@image html spawner_coordination.svg "Spawner Coordination — Staged GridSpawner Pipeline"
-
----
-
-## Message Flow
-
-@image html message_flow.svg "MessagePipe Pub/Sub Flow"
-
----
-
-## Score & Cinematic Pipeline
-
-@image html cinematic_flow.svg "Score & Cinematic Pipeline"
-
----
-
-## Trail Utility Composition
-
-@image html trail_composition.svg "Trail Utility Composition"
-
----
-
-## Item Activation
-
-@image html item_activation.svg "Item Activation Pipeline"
-
----
-
-## Static State
-
-@image html static_state.svg "Static State — Navigation & Cinematic"
-
-
-## Slot Actor Abstraction
-
-`SlotGrid` owns two parallel 2D arrays — `IWriteableSlotActor[,]` (model side) and `ISlotActorView[,]` (view side). Every grid occupant is referred to through these interfaces rather than balloon-specific types.
-
-@image html actor_hierarchy.svg "Slot Actor Interface Hierarchy"
-
-**Capability interfaces** — optional traits subscribers cast for at their call site:
-
-| Interface | Meaning | Implemented by |
-|---|---|---|
-| `IHasColor` | Read-only color | `IBalloonModel` (all balloon types) |
-| `IHasWriteableColor` | Paintable — writable color | `BalloonModel` only (not `ToughBalloonModel`) |
-| `IHasScore` | Awards score on pop | `IBalloonModel` (all balloon types) |
-| `IHasNudge` | Participates in nudge system | `IBalloonModel` (all balloon types) |
-| `IPassThrough` | Slot can be crossed by animation paths | `StaticActorModel` |
-
-Subscribers that previously cast to `IBalloonModel` now cast to the narrowest capability interface needed (`IHasColor`, `IHasScore`, `IHasNudge`). `BalloonController` is the only subscriber that still casts to `IBalloonModel` — it needs `EvaluateHit()` which is balloon-specific. See `Slots/README.md` for full detail.
+| Page | What it covers |
+|------|----------------|
+| @subpage arch_mvc "MVC Pattern" | Layer separation, data flow rules, when to split View vs Controller |
+| @subpage arch_scope_hierarchy "Scope Hierarchy" | VContainer scope tree, where to register new services, child scope rules |
+| @subpage arch_turn_pipeline "Turn Pipeline" | Hit → Balance → Spawn → Post-Balance sequence and extension points |
+| @subpage arch_balance_flow "Balance Flow" | Balance algorithm, transit slot tracking, `BalancePathHolder` |
+| @subpage arch_spawner_coordination "Spawner Coordination" | Staged grid spawner pipeline, how to add a new spawner |
+| @subpage arch_message_flow "Message Flow" | All pub/sub connections, when to use MessagePipe vs direct injection |
+| @subpage arch_score_cinematic "Score & Cinematic Pipeline" | Attribution → trails → cinematic intercept → level-up |
+| @subpage arch_trail_composition "Trail Utility Composition" | `TrailFlightRegistry`, forward/retroactive interception, cinematic pause |
+| @subpage arch_item_activation "Item Activation Pipeline" | Activation handoff, pool-return coordination, adding new item types |
+| @subpage arch_static_state "Static State" | `Navigation` and `Cinematic` — cross-scene singleton state |
+| @subpage arch_slot_actor "Slot Actor Abstraction" | Interface hierarchy, capability casting, adding new actor types |
+| @subpage disturbance_field "Disturbance Field Service" | Screen-space RT field, stamp API, lerp vs instant routing, consumers |
 
 ---
 
@@ -108,4 +49,3 @@ Subscribers that previously cast to `IBalloonModel` now cast to the narrowest ca
 | `Display/` | `BalloonParty.Display` | Camera + rendering |
 | `Prediction/` | `BalloonParty.Prediction` | Trajectory math |
 | `Cheats/` | `BalloonParty.Cheats` | Dev-only |
-
