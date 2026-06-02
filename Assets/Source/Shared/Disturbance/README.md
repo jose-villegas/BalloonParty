@@ -1,4 +1,6 @@
-# Disturbance
+@page disturbance_field Disturbance Field Service
+
+# Disturbance Field Service
 
 Shared screen-space disturbance field that any game system can stamp into. Puff cloud shaders and future effects sample from it.
 
@@ -7,6 +9,103 @@ Shared screen-space disturbance field that any game system can stamp into. Puff 
 | File | What it does |
 |---|---|
 | `DisturbanceFieldService` | Plain C# `IStartable` + `ITickable` + `IDisposable` — owns a camera-sized `ARGBHalf` RT pair (density in R, displacement XY in GB). Runs one diffusion blit per tick (spatial blur + reform toward equilibrium + wind advection + pressure fill + displacement decay). Exposes `Stamp()` for instant and lerp stamps. Pending stamps are batched (up to 16 per blit pass) via `DisturbanceStampBatched.shader`. Pushes `_DisturbanceTex`, `_FieldBoundsMin`, `_FieldBoundsSize` as global shader properties each tick so all consumers (cloud views, future effects) read the field without per-instance setup. Registered as a singleton in `GameLifetimeScope` |
+
+## Architecture
+
+@dot
+digraph DisturbanceField {
+    rankdir=LR;
+    compound=true;
+    node [shape=box, fontname="Helvetica", fontsize=10, style=filled, fillcolor=white];
+    edge [fontname="Helvetica", fontsize=9];
+
+    subgraph cluster_config {
+        label="Configuration";
+        style=filled;
+        fillcolor="#f5f5dc";
+        Settings  [label="DisturbanceFieldSettings\n(ScriptableObject)"];
+        Display   [label="GameDisplayConfiguration\n(ScriptableObject)"];
+    }
+
+    subgraph cluster_callers {
+        label="Stamp Callers";
+        style=filled;
+        fillcolor="#dce8f5";
+        ProjView  [label="ProjectileView\n(FixedUpdate)"];
+        BallSpawn [label="BalloonSpawner\n(spawn path OnUpdate)"];
+        BallBal   [label="BalloonBalancer\n(balance path OnUpdate)"];
+        BallCtrl  [label="BalloonController\n(on pop)"];
+        BombH     [label="BombItemHandler\n(on detonation)"];
+        LaserH    [label="LaserItemHandler\n(per beam segment)"];
+        PaintH    [label="PaintItemHandler\n(splash landing)"];
+    }
+
+    subgraph cluster_service {
+        label="DisturbanceFieldService  (IStartable / ITickable / IDisposable)";
+        style=filled;
+        fillcolor="#f0f0f0";
+
+        Pending   [label="_pendingStamps\nList<PendingStamp>"];
+        LerpQ     [label="_activeStamps\nList<LerpStamp>"];
+        Flush     [label="FlushPendingStamps()\nbatch up to 16 per blit", shape=ellipse];
+        TickDiff  [label="TickDiffusion()\ndiffuse + reform + wind", shape=ellipse];
+        TickLerp  [label="TickLerpStamps()\nramp strength over duration", shape=ellipse];
+
+        subgraph cluster_rt {
+            label="RT Ping-pong (ARGBHalf)";
+            style=filled;
+            fillcolor="#e8e8e8";
+            FieldA [label="_fieldA\nR=density  G=dispX  B=dispY"];
+            FieldB [label="_fieldB\nR=density  G=dispX  B=dispY"];
+        }
+
+        StampShader [label="StampBatchedShader\n(≤16 stamps/blit)", shape=ellipse, fillcolor="#ffe8cc"];
+        DiffShader  [label="DiffusionShader\n(blur+reform+wind)", shape=ellipse, fillcolor="#ffe8cc"];
+
+        Pending -> Flush;
+        LerpQ   -> TickLerp;
+        TickLerp -> Pending [label="generates\ninstant stamps"];
+        Flush   -> StampShader;
+        TickDiff -> DiffShader;
+        StampShader -> FieldA [label="blit write"];
+        StampShader -> FieldB [label="blit write"];
+        DiffShader  -> FieldA [label="blit write"];
+        DiffShader  -> FieldB [label="blit write"];
+    }
+
+    subgraph cluster_globals {
+        label="Global Shader Properties (set each tick)";
+        style=filled;
+        fillcolor="#e8f5dc";
+        Globals [label="_DisturbanceTex\n_FieldBoundsMin\n_FieldBoundsSize"];
+    }
+
+    subgraph cluster_consumers {
+        label="Consumers";
+        style=filled;
+        fillcolor="#f5dce8";
+        PuffCloud [label="PuffCloudView\n(samples field per slot)"];
+        Future    [label="Future effects\n(any shader sampling\n_DisturbanceTex)", style=dashed];
+    }
+
+    Settings -> Pending [lhead=cluster_service, label="tuning knobs\n+ shader refs"];
+    Display  -> Pending [lhead=cluster_service, label="ortho size\nfor RT bounds"];
+
+    ProjView  -> Pending [label="Stamp()"];
+    BallSpawn -> Pending [label="Stamp()"];
+    BallBal   -> Pending [label="Stamp()"];
+    BallCtrl  -> Pending [label="Stamp()"];
+    BombH     -> Pending [label="Stamp()"];
+    LaserH    -> Pending [label="Stamp()"];
+    PaintH    -> LerpQ   [label="Stamp(duration>0)"];
+
+    FieldA -> Globals [label="PushGlobalTexture()"];
+    FieldB -> Globals [label="PushGlobalTexture()"];
+
+    Globals -> PuffCloud;
+    Globals -> Future;
+}
+@enddot
 
 ## How it works
 
@@ -33,6 +132,18 @@ Runs at a configurable interval (`DiffusionTickInterval`). Each tick:
 4. Density trends back toward 1.0 (reform)
 
 Wind direction is set dynamically from stamp directions (opposite to the disturbance velocity), smoothed and decaying — so the reform flows from behind the moving object.
+
+### Lerp stamp lifecycle
+
+When `Stamp()` is called with `duration > 0`, a `LerpStamp` is queued instead of flushed immediately. Each tick, `TickLerpStamps` advances all active lerp stamps by `dt`, computes the normalized progress `t ∈ [0,1]`, and calls `Stamp()` with `strength * delta` (only the new progress delta since last tick). The stamp radius also expands from `0.3×` to `1.0×` of the configured radius as `t` increases — this creates an expanding shockwave shape rather than a flat-radius pop. When `t >= 1`, the stamp is removed. The pool is capped at `MaxLerpStamps` to bound memory; oldest stamps are evicted when the cap is exceeded.
+
+### Batched flush
+
+All instant stamps queued during a frame are flushed in batches of up to 16 per blit pass. Pre-allocated `Vector4[]` and `float[]` arrays (`_batchCenters`, `_batchRadii`, `_batchStrengths`, `_batchDirections`) avoid per-frame allocation. The shader receives the batch count via `_StampCount` and loops internally — one blit for up to 16 stamps regardless of order.
+
+### World → UV conversion
+
+`WorldToFieldUV` maps world-space positions to UV coordinates using the field bounds rect computed at `Start()` from `GameDisplayConfiguration.GetOrthogonalSize()`. The field covers the full screen-space orthographic viewport. `WorldRadiusToFieldUV` normalises radius against the average of bounds width and height so a world-unit radius is consistent regardless of aspect ratio.
 
 ## Consumers
 

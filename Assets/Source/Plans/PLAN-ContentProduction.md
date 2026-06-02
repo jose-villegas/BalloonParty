@@ -33,7 +33,7 @@ to read the grid, tune difficulty, or playtest spawn density.
 | **Soap Cluster** | `BubbleClusterModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ⚠️ pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | Done; scores one point per damage to random palette colors with `BreaksStreak = true` |
 | **Tough** | `ToughBalloonModel` | ✅ `ToughBalloon.prefab` | ✅ | ✅ `ToughBalloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_ToughBalloonPop` | ✅ `BalloonsConfiguration` | No `IHasColor`; scores via `IHasScoreColor` with `Inherited` strategy (killer earns points in their color) |
 | **Unbreakable** | `UnbreakableBalloonModel` | ✅ `Unbreakable.prefab` | ✅ procedural shader | ✅ `Unbreakable.controller` | ✅ StableIdle | ⚠️ deflect/pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | `IHasScoreColor` mode `Inherited` — scores in killer's color at hit time |
-| **Puff** | `PuffObstacleModel` | ✅ `Puff.prefab` | ⚠️ placeholder | ❌ | ❌ Idle float | — | ❌ `GridActorConfiguration` | Dandelion puff / soft cloud; traversable |
+| **Puff** | `PuffObstacleModel` | ✅ `Puff.prefab` (invisible marker) + `PuffCloud.prefab` | ✅ procedural shader (`PuffCloud.shader`) | n/a — invisible marker; cloud is shader-driven | n/a — cluster cloud animates via shader | ✅ disturbance/reform via `DisturbanceFieldService` | ⚠️ code ready; SO asset still needed in Unity | Traversable cloud cluster; full MVC system done (model + registry + view + controller) |
 | **Bush** | `BushObstacleModel` | ❌ | ❌ | ❌ | ❌ Idle sway | — | ❌ `GridActorConfiguration` | Park shrub; blocks paths, no hit reaction |
 | **Deflector** | `DeflectorActorModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect flash | ❌ bounce flash | ❌ `GridActorConfiguration` | Reflective surface; indestructible |
 | **Absorber** | `AbsorberActorModel` | ❌ | ❌ | ❌ | ❌ Idle pulse, Absorb | ❌ absorb burst | ❌ `GridActorConfiguration` | Hazard; ends the turn on contact |
@@ -210,6 +210,48 @@ Semi-transparent. Gentle idle float animation. Feels soft and permeable.
 
 ---
 
+### Puff ✅ Done
+
+**What it is:** Traversable structural obstacle. Occupies one or more grid slots; balloon spawn paths arc through freely. Not interactive — no hit reaction, no projectile collider. Adjacent Puff slots merge into a single continuous procedural cloud body.
+
+**Art direction:** Soft, wispy cloud of floating seed-heads. Fully procedural — no sprite or texture required. The `PuffCloud.shader` generates a 3-octave Simplex noise cloud in world space with slot-center boundary falloff. Shadow and displacement channels give it depth and interaction with moving objects.
+
+**Visual system — `BalloonParty/Grid/PuffCloud`** (complete):
+- 3-octave world-space Simplex noise with animated time offset (`_TimeOffset` driven per-instance by `PuffCloudView`)
+- Slot-center boundary falloff — shape follows the union of all cluster member slot positions
+- Optional density masking (`_DENSITY_ON`) — the per-cluster `DisturbanceFieldService`-derived RT punches holes that reform over time
+- Displacement crossfade for wind-driven warp
+- Pseudo-normal lighting from a configurable light direction
+- Optional shadow (`_SHADOW_ON`) — offset soft shadow below the cloud body
+- Up to 16 slot centers uploaded via `_SlotCentersWorld` (Vector4 array) and `_SlotCount` per `MaterialPropertyBlock` — zero per-instance material allocations
+
+**C# — Cluster System** (complete):
+- `PuffObstacleModel` — `IWriteableSlotActor` + `IPassThrough`; gains `ClusterId` on placement
+- `PuffCluster` — plain C# model: list of `Vector2Int` slot indices + world-space AABB
+- `PuffClusterRegistry` — `IStartable` + `IDisposable`; subscribes to `SlotGrid.OnChanged`; flood-fills hex adjacency via `SlotGrid.HexNeighborIndices`; handles cluster creation, merge (new Puff bridges two clusters), split (removed Puff was bridging), and resize; publishes `PuffClusterChangedEvent`
+- `PuffCloudView` — `MonoBehaviour` + `IPoolable` + `[ExecuteAlways]`; drives shader via `MaterialPropertyBlock`; pushes `_TimeOffset` each frame; calls `DisturbanceFieldService.Stamp()` for projectile/spawn disturbances
+- `PuffCloudViewController` — `IStartable`; subscribes to `PuffClusterRegistry.OnClusterChanged`; manages pooled `PuffCloudView` lifecycle (spawn on `Created`, reconfigure on `Resized`, return on `Removed`)
+
+**Prefabs** (complete):
+- `Puff.prefab` — `GridActorView` + `TweenTracker`; invisible grid occupancy marker (no renderer)
+- `PuffCloud.prefab` — `SpriteRenderer` (no sprite assigned; quad driven by shader) + `PuffCloudView`; pooled by `PuffCloudPoolChannel`; referenced by `PuffCloudSettings.CloudPrefab`
+
+**Configuration** (complete in code; pending Unity asset):
+- `PuffCloudSettings` — noise speed, density field resolution/timing, wind, displacement, padding, sorting layer/order, disturbance radii/strengths, `CloudPrefab` reference
+- [x] `GridActorConfiguration.cs` — code exists; `GridActorPrefabEntry` for Puff with `SlotPlacementMode.Cluster`
+- [ ] `GridActorConfiguration` SO asset — still needs to be created in Unity and wired into `GameLifetimeScope`
+
+- [x] **Shader** — `Shaders/BalloonParty/Grid/PuffCloud.shader` + `DisturbanceDiffusion.shader` + `DisturbanceStampBatched.shader`
+- [x] **C# Model** — `PuffObstacleModel.cs` — `IWriteableSlotActor` + `IPassThrough`
+- [x] **C# Cluster Model** — `PuffCluster.cs`, `PuffClusterRegistry.cs`, `PuffClusterChangedEvent.cs`
+- [x] **C# View** — `PuffCloudView.cs`
+- [x] **C# Controller** — `PuffCloudViewController.cs`
+- [x] **Pool** — `GridActorPoolChannel`, `PuffCloudPoolChannel` (implicit via `PuffCloudSettings.CloudPrefab`)
+- [x] **Prefabs** — `Puff.prefab` (marker) + `PuffCloud.prefab` (cloud visual)
+- [ ] **GridActorConfiguration SO asset** *(pending Unity editor)* — create the asset, add Puff entry, wire into `GameLifetimeScope`
+
+---
+
 ### Bush
 
 **What it is:** Non-traversable structural actor. Blocks balloon spawn-path computation;
@@ -308,7 +350,7 @@ procedural engine can be tested with real (even rough) assets as early as possib
 
 ```
 1. [x] GridActorConfiguration SO + registration         ← code done; SO asset still needed in Unity
-2. [x] Puff — simplest new actor; replaces placeholder
+2. [x] Puff — full MVC cloud system done; SO asset wiring pending Unity editor
 3. [x] Bush — same pipeline as Puff, no hit reaction
 4. [x] Soap Cluster shader + C# Variant + model + prefab + config  ← done; pop VFX deferred to Phase 9
 5. [x] Unbreakable balloon — shader + variant + model + prefab + controller + config  ← done; VFX deferred to Phase 9
