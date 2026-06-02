@@ -12,7 +12,7 @@ namespace BalloonParty.Cheats
     internal class NearLevelUpCheat : ICheat
     {
         private readonly IGameConfiguration _config;
-        private readonly GamePalette _palette;
+        private readonly IGamePalette _palette;
         private readonly IPublisher<ActorHitMessage> _hitPublisher;
         private readonly ScoreController _scoreController;
 
@@ -22,7 +22,7 @@ namespace BalloonParty.Cheats
 
         public NearLevelUpCheat(
             IGameConfiguration config,
-            GamePalette palette,
+            IGamePalette palette,
             ScoreController scoreController,
             IPublisher<ActorHitMessage> hitPublisher)
         {

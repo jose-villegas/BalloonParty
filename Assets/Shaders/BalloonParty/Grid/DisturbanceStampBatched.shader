@@ -1,8 +1,11 @@
 Shader "Hidden/BalloonParty/Grid/DisturbanceStampBatched"
 {
-    // Processes up to 16 stamps in a single blit to avoid per-stamp RT
+    // Processes up to 32 stamps in a single blit to avoid per-stamp RT
     // ping-pong overhead. Each stamp has a center, radius, strength, and
     // direction packed into uniform arrays.
+    // Used as a standalone fallback when stamps arrive without a diffusion
+    // tick. The combined path (_STAMPS_ON in DisturbanceDiffusion) is
+    // preferred when both run in the same frame.
     Properties
     {
         _MainTex        ("Field (read)",    2D)    = "white" {}
@@ -23,7 +26,7 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceStampBatched"
             #pragma fragment frag
             #include "UnityCG.cginc"
 
-            #define MAX_STAMPS 16
+            #define MAX_STAMPS 32
 
             sampler2D _MainTex;
             float     _DisplaceAmount;

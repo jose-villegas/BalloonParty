@@ -26,7 +26,7 @@ namespace BalloonParty.Projectile.View
         [SerializeField] private ParticleSystem _shieldLoseVfxPrefab;
         [SerializeField] private ParticleSystem _shieldBounceVfxPrefab;
 
-        [Inject] private GamePalette _palette;
+        [Inject] private IGamePalette _palette;
         [Inject] private IGameConfiguration _config;
         [Inject] private PoolManager _poolManager;
         [Inject] private SlotGrid _grid;

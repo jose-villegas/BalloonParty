@@ -79,13 +79,13 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ResumedMessage>(options);
 
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);
-            builder.RegisterInstance(_displayConfiguration);
-            builder.RegisterInstance(_itemConfiguration);
-            builder.RegisterInstance(_gamePalette);
-            builder.RegisterInstance(_balloonsConfiguration);
-            builder.RegisterInstance(_gridActorConfiguration);
-            builder.RegisterInstance(_puffCloudSettings);
-            builder.RegisterInstance(_disturbanceFieldSettings);
+            builder.RegisterInstance<IGameDisplayConfiguration>(_displayConfiguration);
+            builder.RegisterInstance<IItemConfiguration>(_itemConfiguration);
+            builder.RegisterInstance<IGamePalette>(_gamePalette);
+            builder.RegisterInstance<IBalloonsConfiguration>(_balloonsConfiguration);
+            builder.RegisterInstance<IGridActorConfiguration>(_gridActorConfiguration);
+            builder.RegisterInstance<IPuffCloudSettings>(_puffCloudSettings);
+            builder.RegisterInstance<IDisturbanceFieldSettings>(_disturbanceFieldSettings);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
 

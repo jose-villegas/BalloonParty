@@ -6,9 +6,9 @@ namespace BalloonParty.Nudge
 {
     internal class NudgeOverrideResolver
     {
-        private readonly BalloonsConfiguration _config;
+        private readonly IBalloonsConfiguration _config;
 
-        public NudgeOverrideResolver(BalloonsConfiguration config)
+        public NudgeOverrideResolver(IBalloonsConfiguration config)
         {
             _config = config;
         }

@@ -1,7 +1,8 @@
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEngine;
 
-namespace BalloonParty.Editor.EditorUI
+namespace BalloonParty.Shared
 {
     /// <summary>
     ///     Lazily finds and caches a <see cref="ScriptableObject"/> asset by type
@@ -56,3 +57,5 @@ namespace BalloonParty.Editor.EditorUI
         }
     }
 }
+#endif
+

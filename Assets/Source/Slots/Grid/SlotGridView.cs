@@ -16,7 +16,7 @@ namespace BalloonParty.Slots.Grid
 
         [Inject] private SlotGrid _grid;
         [Inject] private IGameConfiguration _config;
-        [Inject] private BalloonsConfiguration _balloonsConfig;
+        [Inject] private IBalloonsConfiguration _balloonsConfig;
 
         private float _cachedRadius;
 
@@ -57,7 +57,7 @@ namespace BalloonParty.Slots.Grid
 
         private float ResolveBalloonRadius()
         {
-            if (_balloonsConfig != null && _balloonsConfig.Entries.Length > 0)
+            if (_balloonsConfig != null && _balloonsConfig.Entries.Count > 0)
             {
                 var prefab = _balloonsConfig.Entries[0].Prefab;
                 if (prefab != null)

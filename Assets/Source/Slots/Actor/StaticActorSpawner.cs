@@ -19,7 +19,7 @@ namespace BalloonParty.Slots.Actor
         private readonly SlotGrid _grid;
         private readonly PoolManager _poolManager;
         private readonly IObjectResolver _resolver;
-        private readonly GridActorConfiguration _gridActorConfig;
+        private readonly IGridActorConfiguration _gridActorConfig;
         private bool _poolsRegistered;
 
         public SpawnStage SpawnPriority => SpawnStage.StaticActors;
@@ -29,7 +29,7 @@ namespace BalloonParty.Slots.Actor
             SlotGrid grid,
             PoolManager poolManager,
             IObjectResolver resolver,
-            GridActorConfiguration gridActorConfig)
+            IGridActorConfiguration gridActorConfig)
         {
             _grid = grid;
             _poolManager = poolManager;
@@ -38,7 +38,7 @@ namespace BalloonParty.Slots.Actor
         }
 
         // Bypasses pool and MonoBehaviour infrastructure — used in tests.
-        internal StaticActorSpawner(SlotGrid grid, GridActorConfiguration gridActorConfig)
+        internal StaticActorSpawner(SlotGrid grid, IGridActorConfiguration gridActorConfig)
         {
             _grid = grid;
             _gridActorConfig = gridActorConfig;

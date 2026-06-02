@@ -20,15 +20,15 @@ namespace BalloonParty.Item.Laser
         private static readonly int BalloonsLayer = LayerMask.GetMask("Balloons");
 
         private readonly ContactFilter2D _balloonFilter;
-        private readonly GamePalette _palette;
+        private readonly IGamePalette _palette;
         private readonly IPublisher<ActorHitMessage> _hitPublisher;
         private readonly ISubscriber<TransformCapturedMessage> _transformCapturedSubscriber;
-        private readonly ItemConfiguration _itemConfig;
+        private readonly IItemConfiguration _itemConfig;
         private readonly List<RaycastHit2D> _castResults = new(4);
         private readonly HashSet<IBalloonModel> _hitModels = new();
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly DisturbanceFieldSettings _disturbanceSettings;
+        private readonly IDisturbanceFieldSettings _disturbanceSettings;
 
         private readonly Dictionary<ISlotActor, Quaternion> _capturedRotations = new();
 
@@ -39,13 +39,13 @@ namespace BalloonParty.Item.Laser
 
         [Inject]
         internal LaserItemHandler(
-            GamePalette palette,
-            ItemConfiguration itemConfig,
+            IGamePalette palette,
+            IItemConfiguration itemConfig,
             IPublisher<ActorHitMessage> hitPublisher,
             ISubscriber<TransformCapturedMessage> transformCapturedSubscriber,
             PoolManager poolManager,
             DisturbanceFieldService disturbanceField,
-            DisturbanceFieldSettings disturbanceSettings)
+            IDisturbanceFieldSettings disturbanceSettings)
         {
             _palette = palette;
             _itemConfig = itemConfig;

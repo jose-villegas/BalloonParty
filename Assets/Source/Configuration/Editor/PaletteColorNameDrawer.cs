@@ -1,5 +1,6 @@
 using System.Linq;
 using BalloonParty.Editor.EditorUI;
+using BalloonParty.Shared;
 using UnityEditor;
 using UnityEngine;
 
@@ -69,7 +70,7 @@ namespace BalloonParty.Configuration.Editor
                 property.stringValue = _paletteNames[newIndex];
             }
 
-            if (newIndex >= 0 && newIndex < palette.Colors.Length)
+            if (newIndex >= 0 && newIndex < palette.Colors.Count)
             {
                 PaletteColorPicker.DrawSwatch(swatchRect, palette.Colors[newIndex].Color);
             }

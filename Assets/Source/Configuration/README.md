@@ -6,16 +6,16 @@ All game data is split across focused ScriptableObjects. Each is registered as a
 
 ### ScriptableObjects
 
-| Asset | What it holds |
-|---|---|
-| `GameConfiguration` | Implements `IGameConfiguration` — projectile settings, slot grid dimensions, prediction trace params, score trail timing, score points scatter delay, points-per-level formula |
-| `BalloonsConfiguration` | Balloon-specific configuration — `BalloonPrefabEntry[]` entries with per-type weight/cap/nudge/VFX, default pop VFX, spawn line counts, spawn animation range, balance delay, global nudge defaults |
-| `GridActorConfiguration` | Grid actor configuration — `GridActorPrefabEntry[]` entries with per-type weight, max-count cap, and `HitsToPop` for destructible actors (Gatekeeper). Used by the procedural `GridSpawner` (Phase 8.3) and `StaticActorSpawner` |
-| `GamePalette` | Array of `PaletteEntry` (name + `Color`) — the single source for all balloon colors; injected into `BalloonView`, `ColorableBalloonType`, `ScoreController`, `ColorProgressBar`, `ScoreTrailService`, `ItemDisplayService`, and anywhere a color name must be resolved to a `UnityEngine.Color` |
-| `GameDisplayConfiguration` | Aspect-ratio → orthographic-size lookup for camera sizing |
-| `ItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, damage, and type-specific effect params |
-| `PuffCloudSettings` | Puff cloud visual tuning — noise animation speed, density field resolution/timing, wind, displacement, visual padding, sorting layer/order, disturbance radii/strengths, and the `CloudPrefab` reference. Injected into `PuffCloudViewController`. |
-| `DisturbanceFieldSettings` | Shared disturbance field tuning — RT resolution (`TexelsPerUnit`), diffusion rate/reform speed/tick interval, wind speed/smoothing/decay, pressure, displacement amount/decay, performance thresholds (`MinStampStrength`, `MaxLerpStamps`), shader references (`DiffusionShader`, `StampBatchedShader`), and per-source `StampProfile[]` with `StampSource` flags. Injected into `DisturbanceFieldService` and all disturbance consumers |
+| Asset | Interface | What it holds |
+|---|---|---|
+| `GameConfiguration` | `IGameConfiguration` (in `Shared/`) | Projectile settings, slot grid dimensions, prediction trace params, score trail timing, score points scatter delay, points-per-level formula |
+| `BalloonsConfiguration` | `IBalloonsConfiguration` | Balloon-specific configuration — `BalloonPrefabEntry` entries with per-type weight/cap/nudge/VFX, default pop VFX, spawn line counts, spawn animation range, balance delay, global nudge defaults |
+| `GridActorConfiguration` | `IGridActorConfiguration` | Grid actor entries with per-type weight, max-count cap, and `HitsToPop` for destructible actors (Gatekeeper). Used by `StaticActorSpawner` and the procedural `GridSpawner` (Phase 8.3) |
+| `GamePalette` | `IGamePalette` | Array of `PaletteEntry` (name + `Color`) — the single source for all balloon colors; `GetColor(name)` resolves name → `UnityEngine.Color` |
+| `GameDisplayConfiguration` | `IGameDisplayConfiguration` | Reference world dimensions and `GetOrthogonalSize()` for camera sizing |
+| `ItemConfiguration` | `IItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, damage, and type-specific effect params |
+| `PuffCloudSettings` | `IPuffCloudSettings` | Puff cloud visual tuning — noise animation speed, visual padding, sorting layer/order, and the `CloudPrefab` reference |
+| `DisturbanceFieldSettings` | `IDisturbanceFieldSettings` | Shared disturbance field tuning — RT resolution (`TexelsPerUnit`), diffusion rate/reform speed/tick interval, wind speed/smoothing/decay, pressure, displacement amount/decay, performance thresholds, shader references, and per-source `StampProfile[]` with `StampSource` flags |
 
 ### Data types
 
@@ -42,13 +42,16 @@ All custom `PropertyDrawer` implementations in this folder extend `AutoFieldProp
 | `ItemSettingsDrawer` | Extends `AutoFieldPropertyDrawer` — auto-draws common fields (including `Damage`); manually handles type-specific sections (Bomb, Laser, Lightning, Paint) with section headers. Paint section includes: Blob Flight Duration, Blob Arc Curve, Blob Scale Curve, Blob Shadow Scale Curve, Blob Sprite Scale Curve, Blob Spin Speed. `_damage` is drawn only for damaging types (hidden for Paint and Shield); overrides `BuildFoldoutLabel` to append `[ItemType]` to the header |
 | `GameDisplayConfigurationDrawer` | Custom `PropertyDrawer` for `GameDisplayConfiguration` — inline aspect-ratio / orthographic-size pair editing |
 | `PaletteColorMaskDrawer` | Custom `PropertyDrawer` for `PaletteColorMaskAttribute` — renders a bitmask int as labeled checkboxes matching the current `GamePalette` entries |
-| `PaletteColorNameDrawer` | Custom `PropertyDrawer` for `PaletteColorNameAttribute` — renders a string field as a popup listing all `GamePalette` color names with a color swatch beside the selected entry. Loads the palette lazily via `AssetDatabase.FindAssets("t:GamePalette")` |
+| `PaletteColorNameDrawer` | Custom `PropertyDrawer` for `PaletteColorNameAttribute` — renders a string field as a popup listing all `GamePalette` color names with a color swatch beside the selected entry. Uses `ConfigAssetCache<GamePalette>` for lazy-cached palette lookup |
 | `StampProfileDrawer` | Custom `PropertyDrawer` for `StampProfile` — foldout header shows `StampSource` flags label; expanded view shows Sources, Radius, Strength, Duration fields |
 
 ## Design rules
 
 - **Never hardcode** values that exist in a configuration asset.
 - **Never duplicate** configuration data via `[SerializeField]` on individual systems. If a system needs a value, it injects the relevant configuration object.
+- **Always inject the read-only interface**, not the concrete SO type. Every configuration SO has a corresponding `I`-prefixed interface (`IBalloonsConfiguration`, `IGamePalette`, etc.) that exposes only read-only properties. `GameLifetimeScope` registers each SO via `RegisterInstance<IInterface>(so)`. This prevents accidental mutation of SO fields at runtime and decouples consumers from the SO class.
 - New configuration fields are added to the appropriate asset type. When a domain of settings grows large enough to stand alone, extract it into its own ScriptableObject rather than bloating an existing one.
-- `IGameConfiguration` (in `Shared/`) is the read-only interface for `GameConfiguration`; all other SOs are injected by their concrete type.
+- `IGameConfiguration` lives in `Shared/` (not `Configuration/`) because it is consumed by assemblies that do not reference the `Configuration` namespace. All other configuration interfaces live alongside their SO in `Configuration/`.
 - New common fields added to `ItemSettings` or `BalloonPrefabEntry` appear in the Inspector automatically — no drawer changes required. Only fields that need custom layout (variable height, conditional visibility, custom controls) must be added to the drawer's `ExcludedFields` set.
+- Collection properties on interfaces use `IReadOnlyList<T>` to prevent element assignment and mutation of the collection structure. The backing `T[]` or `List<T>` in the SO satisfies this implicitly.
+- **Editor config lookups** must use `ConfigAssetCache<T>` (in `Shared/`) instead of inline `AssetDatabase.FindAssets` + `LoadAssetAtPath`. This caches the result after the first lookup and avoids repeated asset-database queries. The class is guarded by `#if UNITY_EDITOR` so it compiles away in builds, but is available to both runtime `OnValidate` blocks and editor code. The `config-asset-cache` audit rule enforces this in editor code.

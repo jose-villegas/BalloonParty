@@ -29,7 +29,7 @@ namespace BalloonParty.Configuration
     }
 
     [CreateAssetMenu(menuName = "Configuration/Disturbance Field Settings", fileName = "DisturbanceFieldSettings")]
-    internal class DisturbanceFieldSettings : ScriptableObject
+    internal class DisturbanceFieldSettings : ScriptableObject, IDisturbanceFieldSettings
     {
         private static readonly StampProfile DefaultProfile = new()
         {
@@ -109,7 +109,7 @@ namespace BalloonParty.Configuration
         /// <paramref name="source"/>. Falls back to a default profile
         /// if no match is found.
         /// </summary>
-        internal StampProfile GetProfile(StampSource source)
+        StampProfile IDisturbanceFieldSettings.GetProfile(StampSource source)
         {
             foreach (var profile in _stampProfiles)
             {

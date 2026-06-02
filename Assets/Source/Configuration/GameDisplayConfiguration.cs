@@ -3,7 +3,7 @@ using UnityEngine;
 namespace BalloonParty.Configuration
 {
     [CreateAssetMenu(menuName = "Configuration/Display Configuration", fileName = "DisplayConfiguration")]
-    public class GameDisplayConfiguration : ScriptableObject
+    public class GameDisplayConfiguration : ScriptableObject, IGameDisplayConfiguration
     {
         [SerializeField] private float _referenceWorldWidth = 10f;
         [SerializeField] private float _referenceWorldHeight = 16f;

@@ -9,7 +9,7 @@ namespace BalloonParty.Display
         [SerializeField] private Camera _camera;
         [SerializeField] private bool _continuous;
 
-        [Inject] private GameDisplayConfiguration _displayConfig;
+        [Inject] private IGameDisplayConfiguration _displayConfig;
 
         private void Start()
         {

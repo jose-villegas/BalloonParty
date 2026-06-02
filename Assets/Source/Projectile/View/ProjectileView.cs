@@ -27,7 +27,7 @@ namespace BalloonParty.Projectile.View
         [SerializeField] [Range(0f, 1f)] private float _glowAlpha = 0.5f;
         [SerializeField] private float _glowColorDuration = 0.2f;
 
-        [Inject] private GamePalette _palette;
+        [Inject] private IGamePalette _palette;
         [Inject] private IGameConfiguration _config;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IPublisher<ActorHitMessage> _hitPublisher;
@@ -37,7 +37,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private ColorStreakTracker _streakTracker;
         [Inject] private PauseService _pauseService;
         [Inject] private DisturbanceFieldService _disturbanceField;
-        [Inject] private DisturbanceFieldSettings _disturbanceSettings;
+        [Inject] private IDisturbanceFieldSettings _disturbanceSettings;
 
         private IWriteableProjectileModel _model;
         private IDisposable _deflectedSubscription;

@@ -73,11 +73,14 @@ public class GameLifetimeScope : LifetimeScope
 
 | Asset | Type | Injected as |
 |---|---|---|
-| `GameConfiguration` | `ScriptableObject` | `IGameConfiguration` (interface) |
-| `BalloonsConfiguration` | `ScriptableObject` | `BalloonsConfiguration` (concrete) |
-| `GamePalette` | `ScriptableObject` | `GamePalette` (concrete) |
-| `GameDisplayConfiguration` | `ScriptableObject` | `GameDisplayConfiguration` (concrete) |
-| `ItemConfiguration` | `ScriptableObject` | `ItemConfiguration` (concrete) |
+| `GameConfiguration` | `ScriptableObject` | `IGameConfiguration` |
+| `BalloonsConfiguration` | `ScriptableObject` | `IBalloonsConfiguration` |
+| `GamePalette` | `ScriptableObject` | `IGamePalette` |
+| `GameDisplayConfiguration` | `ScriptableObject` | `IGameDisplayConfiguration` |
+| `ItemConfiguration` | `ScriptableObject` | `IItemConfiguration` |
+| `GridActorConfiguration` | `ScriptableObject` | `IGridActorConfiguration` |
+| `PuffCloudSettings` | `ScriptableObject` | `IPuffCloudSettings` |
+| `DisturbanceFieldSettings` | `ScriptableObject` | `IDisturbanceFieldSettings` |
 | `FlyingTrail` | Prefab instance | `FlyingTrail` (concrete) |
 | `PauseService` | Singleton service | `PauseService` (concrete) |
 
@@ -297,22 +300,26 @@ Key rules:
 
 ## Configuration — Single Source of Truth
 
-Game data is split across focused ScriptableObjects, each registered as a singleton in `GameLifetimeScope` and injected wherever needed.
+Game data is split across focused ScriptableObjects, each registered as a singleton in `GameLifetimeScope` and injected via a read-only interface.
 
-| Asset | Interface / Type | What it holds |
+| Asset | Interface | What it holds |
 |---|---|---|
 | `GameConfiguration` | `IGameConfiguration` | Projectile settings, slot dimensions, timing values, prediction trace params, score trail timing, score points scatter delay, points formula |
-| `BalloonsConfiguration` | `BalloonsConfiguration` | Balloon prefab entries (weight, cap, nudge overrides, pop VFX), spawn line counts, animation range, balance delay, global nudge defaults |
-| `GridActorConfiguration` | `GridActorConfiguration` | Grid actor prefab entries (weight, max-count cap, `HitsToPop` for Gatekeeper) — read by procedural grid spawner (Phase 8.3) |
-| `GamePalette` | `GamePalette` | Named color entries — the single source for all balloon colors |
-| `GameDisplayConfiguration` | `GameDisplayConfiguration` | Aspect-ratio → orthographic-size lookup for camera sizing |
-| `ItemConfiguration` | `ItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, physics params, effect prefab, damage (damaging types only), paint flight curves/duration/arc/scale |
+| `BalloonsConfiguration` | `IBalloonsConfiguration` | Balloon prefab entries (weight, cap, nudge overrides, pop VFX), spawn line counts, animation range, balance delay, global nudge defaults |
+| `GridActorConfiguration` | `IGridActorConfiguration` | Grid actor prefab entries (weight, max-count cap, `HitsToPop` for Gatekeeper) — read by procedural grid spawner (Phase 8.3) |
+| `GamePalette` | `IGamePalette` | Named color entries — the single source for all balloon colors; `GetColor(name)` resolves to `UnityEngine.Color` |
+| `GameDisplayConfiguration` | `IGameDisplayConfiguration` | Reference world dimensions and `GetOrthogonalSize()` for camera sizing |
+| `ItemConfiguration` | `IItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, damage, type-specific params |
+| `PuffCloudSettings` | `IPuffCloudSettings` | Puff cloud visual tuning — noise animation speed, visual padding, sorting, `CloudPrefab` reference |
+| `DisturbanceFieldSettings` | `IDisturbanceFieldSettings` | Disturbance field tuning — RT resolution, diffusion, wind, displacement, performance thresholds, shader references, `StampProfile[]` |
 
 Rules:
 - **Never hardcode** values that exist in a configuration asset.
-- **Never duplicate** configuration data via `[SerializeField]` on individual systems. If a system needs a value, it injects the relevant configuration object.
-- `IGameConfiguration` is the read-only interface for `GameConfiguration`; all other SOs are injected by their concrete type.
+- **Never duplicate** configuration data via `[SerializeField]` on individual systems. If a system needs a value, it injects the relevant configuration interface.
+- **Always inject the read-only interface**, not the concrete SO type. Every SO implements an `I`-prefixed interface exposing only read-only properties. This prevents accidental mutation of SO fields at runtime.
+- `IGameConfiguration` lives in `Shared/` (consumed by assemblies outside `Configuration`). All other interfaces live in `Configuration/` alongside their SO.
 - New configuration fields are added to the appropriate asset type. If a new domain of settings grows large enough to stand alone, extract it into its own ScriptableObject rather than bloating an existing one.
+- Collection properties on interfaces use `IReadOnlyList<T>` to prevent element assignment.
 
 ---
 

@@ -20,15 +20,15 @@ namespace BalloonParty.Item.Bomb
         private static readonly int BalloonsLayer = LayerMask.GetMask("Balloons");
 
         private readonly ContactFilter2D _balloonFilter;
-        private readonly GamePalette _palette;
+        private readonly IGamePalette _palette;
         private readonly IPublisher<ActorHitMessage> _hitPublisher;
         private readonly IPublisher<NudgeMessage> _nudgePublisher;
-        private readonly ItemConfiguration _itemConfig;
+        private readonly IItemConfiguration _itemConfig;
         private readonly List<Collider2D> _overlapResults = new(8);
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly DisturbanceFieldSettings _disturbanceSettings;
+        private readonly IDisturbanceFieldSettings _disturbanceSettings;
 
         private IBalloonModel _balloon;
         private Vector3 _worldPosition;
@@ -37,13 +37,13 @@ namespace BalloonParty.Item.Bomb
 
         [Inject]
         public BombItemHandler(
-            GamePalette palette,
-            ItemConfiguration itemConfig,
+            IGamePalette palette,
+            IItemConfiguration itemConfig,
             IPublisher<ActorHitMessage> hitPublisher,
             IPublisher<NudgeMessage> nudgePublisher,
             PoolManager poolManager,
             DisturbanceFieldService disturbanceField,
-            DisturbanceFieldSettings disturbanceSettings)
+            IDisturbanceFieldSettings disturbanceSettings)
         {
             _palette = palette;
             _itemConfig = itemConfig;

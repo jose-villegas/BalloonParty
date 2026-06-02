@@ -26,8 +26,8 @@ namespace BalloonParty.Balloon.Spawner
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly BalloonBalancer _balancer;
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
-        private readonly BalloonsConfiguration _balloonsConfig;
-        private readonly GamePalette _palette;
+        private readonly IBalloonsConfiguration _balloonsConfig;
+        private readonly IGamePalette _palette;
         private readonly CancellationTokenSource _cts = new();
         private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
@@ -42,7 +42,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly PoolManager _poolManager;
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly DisturbanceFieldSettings _disturbanceSettings;
+        private readonly IDisturbanceFieldSettings _disturbanceSettings;
 
         private int _turnCount;
         private UniTask _prewarmTask;
@@ -53,8 +53,8 @@ namespace BalloonParty.Balloon.Spawner
         [Inject]
         internal BalloonSpawner(
             SlotGrid grid,
-            BalloonsConfiguration balloonsConfig,
-            GamePalette palette,
+            IBalloonsConfiguration balloonsConfig,
+            IGamePalette palette,
             IObjectResolver resolver,
             PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
@@ -68,7 +68,7 @@ namespace BalloonParty.Balloon.Spawner
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
             IPublisher<NudgeMessage> nudgePublisher,
             DisturbanceFieldService disturbanceField,
-            DisturbanceFieldSettings disturbanceSettings)
+            IDisturbanceFieldSettings disturbanceSettings)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;

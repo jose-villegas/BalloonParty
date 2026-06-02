@@ -11,7 +11,7 @@ namespace BalloonParty.Balloon.Type
     {
         [SerializeField] [PaletteColorMask] private int _allowedColorsMask = ~0;
 
-        [Inject] private GamePalette _palette;
+        [Inject] private IGamePalette _palette;
 
         public virtual void Initialize(IWriteableBalloonModel model)
         {
@@ -26,19 +26,19 @@ namespace BalloonParty.Balloon.Type
             if (_palette == null)
             {
                 throw new InvalidOperationException(
-                    $"{GetType().Name}.PickColor: GamePalette is null — DI not configured.");
+                    $"{GetType().Name}.PickColor: IGamePalette is null — DI not configured.");
             }
 
-            if (_palette.Colors == null || _palette.Colors.Length == 0)
+            if (_palette.Colors == null || _palette.Colors.Count == 0)
             {
                 throw new InvalidOperationException(
-                    $"{GetType().Name}.PickColor: GamePalette has no colors configured.");
+                    $"{GetType().Name}.PickColor: IGamePalette has no colors configured.");
             }
 
             var colors = _palette.Colors;
             var count = 0;
 
-            for (var i = 0; i < colors.Length; i++)
+            for (var i = 0; i < colors.Count; i++)
             {
                 if ((_allowedColorsMask & (1 << i)) != 0)
                 {
@@ -56,7 +56,7 @@ namespace BalloonParty.Balloon.Type
             var pick = UnityEngine.Random.Range(0, count);
             var current = 0;
 
-            for (var i = 0; i < colors.Length; i++)
+            for (var i = 0; i < colors.Count; i++)
             {
                 if ((_allowedColorsMask & (1 << i)) == 0)
                 {

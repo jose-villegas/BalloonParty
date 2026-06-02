@@ -28,7 +28,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly BalloonView _view;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly DisturbanceFieldSettings _disturbanceSettings;
+        private readonly IDisturbanceFieldSettings _disturbanceSettings;
 
         private IDisposable _hitSubscription;
         private IDisposable _itemActivatedSubscription;
@@ -47,7 +47,7 @@ namespace BalloonParty.Balloon.Controller
             SlotGrid grid,
             PoolManager poolManager,
             DisturbanceFieldService disturbanceField,
-            DisturbanceFieldSettings disturbanceSettings)
+            IDisturbanceFieldSettings disturbanceSettings)
         {
             _model = model;
             _view = view;

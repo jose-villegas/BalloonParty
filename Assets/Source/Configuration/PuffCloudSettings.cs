@@ -5,7 +5,7 @@ using UnityEngine;
 namespace BalloonParty.Configuration
 {
     [CreateAssetMenu(menuName = "Configuration/Puff Cloud Settings", fileName = "PuffCloudSettings")]
-    internal class PuffCloudSettings : ScriptableObject
+    internal class PuffCloudSettings : ScriptableObject, IPuffCloudSettings
     {
         [Header("Prefab")]
         [SerializeField] private PuffCloudView _cloudPrefab;

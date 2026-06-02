@@ -48,9 +48,16 @@ digraph DisturbanceField {
         StampEntry [label="Stamp(pos, radius, strength,\ndirection, duration)", shape=ellipse];
         Pending   [label="_pendingStamps\nList<PendingStamp>\n(duration == 0)"];
         LerpQ     [label="_activeStamps\nList<LerpStamp>\n(duration > 0)"];
-        Flush     [label="FlushPendingStamps()\nbatch up to 16 per blit", shape=ellipse];
-        TickDiff  [label="TickDiffusion()\ndiffuse + reform + wind", shape=ellipse];
         TickLerp  [label="TickLerpStamps()\nramp strength over duration", shape=ellipse];
+
+        subgraph cluster_paths {
+            label="Tick Routing (at most 1 blit per frame)";
+            style=filled;
+            fillcolor="#e0e8f0";
+            Combined  [label="TickCombinedPass()\ndiffusion + stamps\nin one blit", shape=ellipse];
+            StampOnly [label="FlushPendingStamps()\nstamp-only blit\n(no diffusion due)", shape=ellipse];
+            DiffOnly  [label="TickDiffusion()\ndiffusion-only blit\n(no stamps)", shape=ellipse];
+        }
 
         subgraph cluster_rt {
             label="RT Ping-pong (ARGBHalf)";
@@ -60,20 +67,22 @@ digraph DisturbanceField {
             FieldB [label="_fieldB\nR=density  G=dispX  B=dispY"];
         }
 
-        StampShader [label="StampBatchedShader\n(≤16 stamps/blit)", shape=ellipse, fillcolor="#ffe8cc"];
-        DiffShader  [label="DiffusionShader\n(blur+reform+wind)", shape=ellipse, fillcolor="#ffe8cc"];
+        DiffShader  [label="DiffusionShader\n(_STAMPS_ON keyword\nfor combined pass)", shape=ellipse, fillcolor="#ffe8cc"];
+        StampShader [label="StampBatchedShader\n(fallback: stamps\nwithout diffusion)", shape=ellipse, fillcolor="#ffe8cc"];
 
         StampEntry -> Pending  [label="duration == 0"];
         StampEntry -> LerpQ    [label="duration > 0"];
         LerpQ   -> TickLerp;
         TickLerp -> StampEntry [label="generates\ninstant stamps\n(delta slice)"];
-        Pending -> Flush;
-        Flush   -> StampShader;
-        TickDiff -> DiffShader;
-        StampShader -> FieldA [label="blit write"];
-        StampShader -> FieldB [label="blit write"];
+        Pending -> Combined   [label="stamps + diffusion\ndue this frame"];
+        Pending -> StampOnly  [label="stamps only\n(diffusion not due)"];
+        Combined  -> DiffShader  [label="_STAMPS_ON"];
+        StampOnly -> StampShader;
+        DiffOnly  -> DiffShader  [label="no keyword"];
         DiffShader  -> FieldA [label="blit write"];
         DiffShader  -> FieldB [label="blit write"];
+        StampShader -> FieldA [label="blit write"];
+        StampShader -> FieldB [label="blit write"];
     }
 
     subgraph cluster_globals {
@@ -140,9 +149,24 @@ Wind direction is set dynamically from stamp directions (opposite to the disturb
 
 When `Stamp()` is called with `duration > 0`, a `LerpStamp` is queued instead of flushed immediately. Each tick, `TickLerpStamps` advances all active lerp stamps by `dt`, computes the normalized progress `t ∈ [0,1]`, and calls `Stamp()` with `strength * delta` (only the new progress delta since last tick). The stamp radius also expands from `0.3×` to `1.0×` of the configured radius as `t` increases — this creates an expanding shockwave shape rather than a flat-radius pop. When `t >= 1`, the stamp is removed. The pool is capped at `MaxLerpStamps` to bound memory; oldest stamps are evicted when the cap is exceeded.
 
-### Batched flush
+### Combined pass
 
-All instant stamps queued during a frame are flushed in batches of up to 16 per blit pass. Pre-allocated `Vector4[]` and `float[]` arrays (`_batchCenters`, `_batchRadii`, `_batchStrengths`, `_batchDirections`) avoid per-frame allocation. The shader receives the batch count via `_StampCount` and loops internally — one blit for up to 16 stamps regardless of order.
+When a diffusion tick and pending stamps coincide in the same frame (the common case during gameplay), both operations are folded into **a single blit** via the `_STAMPS_ON` shader keyword on the diffusion shader. The diffusion fragment shader runs its normal 3×3 blur + reform + wind pipeline, then applies the stamp loop on top of the result — all in one draw call.
+
+Three routing paths handle every frame:
+
+| Condition | Path | Blits |
+|---|---|---|
+| Diffusion due + stamps pending (≤ 32) | `TickCombinedPass` | **1** |
+| Stamps pending, no diffusion | `FlushPendingStamps` | 1 per batch of 32 |
+| Diffusion due, no stamps | `TickDiffusion` | 1 |
+| Neither | (skip) | 0 |
+
+When stamps exceed 32 in a frame (extremely rare — e.g. simultaneous bomb + laser + paint), the overflow is flushed as standalone stamp blits before the diffusion blit.
+
+### Batched flush (stamp-only path)
+
+On frames where stamps arrive but diffusion is not due, all instant stamps are flushed via the standalone `DisturbanceStampBatched` shader in batches of up to 32. Pre-allocated `Vector4[]` and `float[]` arrays (`_batchCenters`, `_batchRadii`, `_batchStrengths`, `_batchDirections`) avoid per-frame allocation. The shader receives the batch count via `_StampCount` and loops internally.
 
 ### World → UV conversion
 

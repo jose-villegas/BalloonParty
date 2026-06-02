@@ -33,10 +33,10 @@ namespace BalloonParty.Balloon.View
 
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
-        [Inject] private BalloonsConfiguration _balloonsConfig;
-        [Inject] private GamePalette _palette;
+        [Inject] private IBalloonsConfiguration _balloonsConfig;
+        [Inject] private IGamePalette _palette;
         [Inject] private IGameConfiguration _config;
-        [Inject] private ItemConfiguration _itemConfig;
+        [Inject] private IItemConfiguration _itemConfig;
         [Inject] private PoolManager _poolManager;
 
         private readonly CompositeDisposable _bindDisposables = new();
@@ -224,7 +224,7 @@ namespace BalloonParty.Balloon.View
             if (defaultPrefab == null)
             {
                 Debug.LogWarning(
-                    "BalloonView.PlayHitVfxForOutcome: DefaultPopVfxPrefab is null in BalloonsConfiguration.",
+                    "BalloonView.PlayHitVfxForOutcome: DefaultPopVfxPrefab is null in IBalloonsConfiguration.",
                     this);
                 return;
             }

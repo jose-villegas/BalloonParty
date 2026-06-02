@@ -13,7 +13,7 @@ namespace BalloonParty.Game
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterInstance(_displayConfiguration);
+            builder.RegisterInstance<IGameDisplayConfiguration>(_displayConfiguration);
             builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
         }
     }

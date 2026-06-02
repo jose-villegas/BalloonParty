@@ -1,8 +1,7 @@
-using System.Reflection;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
+using NSubstitute;
 using NUnit.Framework;
-using UnityEngine;
 
 namespace BalloonParty.Tests.Nudge
 {
@@ -10,23 +9,16 @@ namespace BalloonParty.Tests.Nudge
     public class NudgeOverrideResolverTests
     {
         private NudgeOverrideResolver _resolver;
-        private BalloonsConfiguration _balloonsConfig;
 
         [SetUp]
         public void SetUp()
         {
-            _balloonsConfig = ScriptableObject.CreateInstance<BalloonsConfiguration>();
-            SetField(_balloonsConfig, "_nudgeDistance", 0.3f);
-            SetField(_balloonsConfig, "_nudgeDuration", 0.15f);
-            SetField(_balloonsConfig, "_nudgeFalloff", 1.5f);
+            var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
+            balloonsConfig.NudgeDistance.Returns(0.3f);
+            balloonsConfig.NudgeDuration.Returns(0.15f);
+            balloonsConfig.NudgeFalloff.Returns(1.5f);
 
-            _resolver = new NudgeOverrideResolver(_balloonsConfig);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            Object.DestroyImmediate(_balloonsConfig);
+            _resolver = new NudgeOverrideResolver(balloonsConfig);
         }
 
         [Test]
@@ -122,13 +114,6 @@ namespace BalloonParty.Tests.Nudge
             var result = _resolver.ResolveDistance(overrides, null, NudgeType.Deflect);
 
             Assert.AreEqual(0.3f, result, 0.001f);
-        }
-
-        private static void SetField(object target, string fieldName, object value)
-        {
-            target.GetType()
-                .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance)!
-                .SetValue(target, value);
         }
     }
 }

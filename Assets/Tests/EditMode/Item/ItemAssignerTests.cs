@@ -19,7 +19,7 @@ namespace BalloonParty.Tests.Item
     public class ItemAssignerTests
     {
         private SlotGrid _grid;
-        private ItemConfiguration _itemConfig;
+        private IItemConfiguration _itemConfig;
         private IMessageHandler<ItemCheckMessage> _handler;
 
         [SetUp]
@@ -32,7 +32,8 @@ namespace BalloonParty.Tests.Item
 
             _grid = new SlotGrid(gameConfig, new BalancePathHolder());
 
-            _itemConfig = ScriptableObject.CreateInstance<ItemConfiguration>();
+            _itemConfig = Substitute.For<IItemConfiguration>();
+            _itemConfig.Items.Returns(new List<ItemSettings>());
 
             var subscriber = Substitute.For<ISubscriber<ItemCheckMessage>>();
             subscriber
@@ -43,12 +44,6 @@ namespace BalloonParty.Tests.Item
 
             var assigner = new ItemAssigner(_itemConfig, _grid, subscriber);
             assigner.Start();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            UnityEngine.Object.DestroyImmediate(_itemConfig);
         }
 
         [Test]
@@ -119,7 +114,7 @@ namespace BalloonParty.Tests.Item
 
         private void SetItems(params ItemSettings[] items)
         {
-            SetField(_itemConfig, "_items", new List<ItemSettings>(items));
+            _itemConfig.Items.Returns(new List<ItemSettings>(items));
         }
 
         private static ItemSettings CreateItemSettings(
@@ -144,4 +139,3 @@ namespace BalloonParty.Tests.Item
         }
     }
 }
-

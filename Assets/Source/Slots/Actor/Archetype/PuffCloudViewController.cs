@@ -17,7 +17,7 @@ namespace BalloonParty.Slots.Actor.Archetype
     {
         private readonly PuffClusterRegistry _registry;
         private readonly SlotGrid _grid;
-        private readonly PuffCloudSettings _settings;
+        private readonly IPuffCloudSettings _settings;
         private readonly IObjectResolver _resolver;
         private readonly CompositeDisposable _disposables = new();
 
@@ -30,7 +30,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         internal PuffCloudViewController(
             PuffClusterRegistry registry,
             SlotGrid grid,
-            PuffCloudSettings settings,
+            IPuffCloudSettings settings,
             IObjectResolver resolver)
         {
             _registry = registry;
@@ -44,7 +44,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             if (_settings.CloudPrefab == null)
             {
                 Debug.LogError(
-                    "PuffCloudViewController: CloudPrefab is not assigned on PuffCloudSettings. " +
+                    "PuffCloudViewController: CloudPrefab is not assigned on IPuffCloudSettings. " +
                     "Cloud views will not spawn.");
                 return;
             }

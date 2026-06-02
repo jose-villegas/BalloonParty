@@ -20,12 +20,12 @@ namespace BalloonParty.Item.Paint
     {
         private const int NeighborCount = 6;
 
-        private readonly GamePalette _palette;
-        private readonly ItemConfiguration _itemConfig;
+        private readonly IGamePalette _palette;
+        private readonly IItemConfiguration _itemConfig;
         private readonly SlotGrid _grid;
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly DisturbanceFieldSettings _disturbanceSettings;
+        private readonly IDisturbanceFieldSettings _disturbanceSettings;
 
         private IBalloonModel _balloon;
         private Vector3 _worldPosition;
@@ -34,12 +34,12 @@ namespace BalloonParty.Item.Paint
 
         [Inject]
         public PaintItemHandler(
-            GamePalette palette,
-            ItemConfiguration itemConfig,
+            IGamePalette palette,
+            IItemConfiguration itemConfig,
             SlotGrid grid,
             PoolManager poolManager,
             DisturbanceFieldService disturbanceField,
-            DisturbanceFieldSettings disturbanceSettings)
+            IDisturbanceFieldSettings disturbanceSettings)
         {
             _palette = palette;
             _itemConfig = itemConfig;

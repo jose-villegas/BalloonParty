@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Configuration;
-using BalloonParty.Editor.EditorUI;
+using BalloonParty.Shared;
 using BalloonParty.Item.Paint;
 using BalloonParty.Shared.Rendering;
 using UnityEditor;

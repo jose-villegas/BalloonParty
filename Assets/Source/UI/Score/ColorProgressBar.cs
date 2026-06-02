@@ -31,7 +31,7 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ProgressNotice _pointNoticePrefab;
         [SerializeField] private ProgressNotice _streakNoticePrefab;
 
-        [Inject] private GamePalette _palette;
+        [Inject] private IGamePalette _palette;
         [Inject] private IGameConfiguration _config;
         [Inject] private ISubscriber<ScorePointMessage> _scoredSubscriber;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
@@ -50,6 +50,10 @@ namespace BalloonParty.UI.Score
         private int _stashedMaxValue;
         private string _streakNoticePoolKey;
 
+#if UNITY_EDITOR
+        private static readonly ConfigAssetCache<GamePalette> PaletteCache = new();
+#endif
+
         private void OnValidate()
         {
 #if UNITY_EDITOR
@@ -58,15 +62,21 @@ namespace BalloonParty.UI.Score
                 return;
             }
 
-            var guids = UnityEditor.AssetDatabase.FindAssets("t:GamePalette");
-            if (guids.Length == 0)
+            var palette = PaletteCache.Value;
+            if (palette == null)
             {
                 return;
             }
 
-            var path = UnityEditor.AssetDatabase.GUIDToAssetPath(guids[0]);
-            var palette = UnityEditor.AssetDatabase.LoadAssetAtPath<GamePalette>(path);
-            var entry = System.Array.Find(palette.Colors, c => c.Name == _colorName);
+            PaletteEntry entry = null;
+            foreach (var c in palette.Colors)
+            {
+                if (c.Name == _colorName)
+                {
+                    entry = c;
+                    break;
+                }
+            }
             if (entry == null)
             {
                 return;

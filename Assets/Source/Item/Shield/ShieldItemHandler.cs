@@ -14,10 +14,10 @@ namespace BalloonParty.Item.Shield
 {
     internal class ShieldItemHandler : IBalloonItem, IStartable
     {
-        private readonly GamePalette _palette;
+        private readonly IGamePalette _palette;
         private readonly IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
-        private readonly ItemConfiguration _itemConfig;
+        private readonly IItemConfiguration _itemConfig;
         private readonly PoolManager _poolManager;
 
         private IWriteableProjectileModel _activeProjectile;
@@ -28,8 +28,8 @@ namespace BalloonParty.Item.Shield
 
         [Inject]
         internal ShieldItemHandler(
-            GamePalette palette,
-            ItemConfiguration itemConfig,
+            IGamePalette palette,
+            IItemConfiguration itemConfig,
             PoolManager poolManager,
             IPublisher<ShieldGainedMessage> shieldGainedPublisher,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber)

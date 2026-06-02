@@ -46,7 +46,9 @@ VContainer (DI), UniRx (reactive), MessagePipe (pub/sub), UniTask (async), DOTwe
 ### Configuration
 - Never hardcode values from config assets
 - Never duplicate config via `[SerializeField]` — inject the config SO
-- Assets: `IGameConfiguration`, `BalloonsConfiguration`, `GamePalette`, `GameDisplayConfiguration`, `ItemConfiguration`
+- Always inject the read-only interface, not the concrete SO type
+- Assets: `IGameConfiguration`, `IBalloonsConfiguration`, `IGamePalette`, `IGameDisplayConfiguration`, `IItemConfiguration`, `IDisturbanceFieldSettings`, `IPuffCloudSettings`
+- Editor config lookups: use `ConfigAssetCache<T>` (`Shared/`) — never inline `FindAssets` + `LoadAssetAtPath`
 
 ### ColorableRenderer
 - `ColorableRenderer` — abstract MonoBehaviour base for `SetColor(Color)`

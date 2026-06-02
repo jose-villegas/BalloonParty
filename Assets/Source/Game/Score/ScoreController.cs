@@ -22,7 +22,7 @@ namespace BalloonParty.Game.Score
         private readonly ReactiveProperty<int> _level = new(1);
         private readonly Dictionary<string, int> _levelProgress = new();
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
-        private readonly GamePalette _palette;
+        private readonly IGamePalette _palette;
         private readonly Dictionary<string, int> _persistentScore = new();
         private readonly Dictionary<string, int> _projectedProgress = new();
         private readonly IPublisher<ScorePointMessage> _scoredPublisher;
@@ -42,7 +42,7 @@ namespace BalloonParty.Game.Score
             IPublisher<ScorePointMessage> scoredPublisher,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
             IGameConfiguration config,
-            GamePalette palette,
+            IGamePalette palette,
             ColorStreakTracker streakTracker)
         {
             _hitSubscriber = hitSubscriber;

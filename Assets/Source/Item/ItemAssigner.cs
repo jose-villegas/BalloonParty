@@ -14,7 +14,7 @@ namespace BalloonParty.Item
     internal class ItemAssigner : IStartable
     {
         private readonly ISubscriber<ItemCheckMessage> _checkSubscriber;
-        private readonly ItemConfiguration _itemConfig;
+        private readonly IItemConfiguration _itemConfig;
         private readonly SlotGrid _grid;
 
         private readonly List<ItemSettings> _candidateBuffer = new();
@@ -23,7 +23,7 @@ namespace BalloonParty.Item
 
         [Inject]
         internal ItemAssigner(
-            ItemConfiguration itemConfig,
+            IItemConfiguration itemConfig,
             SlotGrid grid,
             ISubscriber<ItemCheckMessage> checkSubscriber)
         {

@@ -17,22 +17,22 @@ namespace BalloonParty.Balloon.Controller
     internal class BalloonBalancer : IStartable
     {
         private readonly BalancePathHolder _balancePathHolder;
-        private readonly BalloonsConfiguration _balloonsConfig;
+        private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly DisturbanceFieldSettings _disturbanceSettings;
+        private readonly IDisturbanceFieldSettings _disturbanceSettings;
 
         private bool _balanceRequested;
 
         [Inject]
         internal BalloonBalancer(
             SlotGrid grid,
-            BalloonsConfiguration balloonsConfig,
+            IBalloonsConfiguration balloonsConfig,
             BalancePathHolder balancePathHolder,
             ISubscriber<BalanceBalloonsMessage> subscriber,
             DisturbanceFieldService disturbanceField,
-            DisturbanceFieldSettings disturbanceSettings)
+            IDisturbanceFieldSettings disturbanceSettings)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;

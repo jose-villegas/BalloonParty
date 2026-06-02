@@ -22,7 +22,7 @@ namespace BalloonParty.Tests.Game
         private const string Blue = "Blue";
 
         private IGameConfiguration _config;
-        private GamePalette _palette;
+        private IGamePalette _palette;
         private IPublisher<ScorePointMessage> _scoredPublisher;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private ScoreController _controller;
@@ -44,9 +44,9 @@ namespace BalloonParty.Tests.Game
             _config = Substitute.For<IGameConfiguration>();
             _config.PointsRequiredForLevel(Arg.Any<int>()).Returns(10);
 
-            _palette = ScriptableObject.CreateInstance<GamePalette>();
-            var colors = new[] { CreatePaletteEntry(Red), CreatePaletteEntry(Blue) };
-            SetField(_palette, "_colors", colors);
+            _palette = Substitute.For<IGamePalette>();
+            var colors = new List<PaletteEntry> { CreatePaletteEntry(Red), CreatePaletteEntry(Blue) };
+            _palette.Colors.Returns(colors);
 
             var hitSubscriber = Substitute.For<ISubscriber<ActorHitMessage>>();
             var trailArrivedSubscriber = Substitute.For<ISubscriber<ScoreTrailArrivedMessage>>();
@@ -103,8 +103,6 @@ namespace BalloonParty.Tests.Game
             PlayerPrefs.DeleteKey(Red + ".Progress");
             PlayerPrefs.DeleteKey(Blue + ".Progress");
             PlayerPrefs.Save();
-
-            UnityEngine.Object.DestroyImmediate(_palette);
         }
 
 

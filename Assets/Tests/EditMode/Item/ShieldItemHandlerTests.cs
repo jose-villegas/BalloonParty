@@ -17,7 +17,6 @@ namespace BalloonParty.Tests.Item
     [TestFixture]
     public class ShieldItemHandlerTests
     {
-        private ItemConfiguration _itemConfig;
         private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         private ShieldItemHandler _handler;
         private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
@@ -25,9 +24,10 @@ namespace BalloonParty.Tests.Item
         [SetUp]
         public void SetUp()
         {
-            _itemConfig = ScriptableObject.CreateInstance<ItemConfiguration>();
+            var itemConfig = Substitute.For<IItemConfiguration>();
             var shieldSettings = CreateItemSettings(ItemType.Shield);
-            SetField(_itemConfig, "_items", new List<ItemSettings> { shieldSettings });
+            itemConfig[ItemType.Shield].Returns(shieldSettings);
+            itemConfig.Items.Returns(new List<ItemSettings> { shieldSettings });
 
             _shieldGainedPublisher = Substitute.For<IPublisher<ShieldGainedMessage>>();
 
@@ -38,23 +38,17 @@ namespace BalloonParty.Tests.Item
                     Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            var palette = ScriptableObject.CreateInstance<GamePalette>();
-            SetField(palette, "_colors", Array.Empty<PaletteEntry>());
+            var palette = Substitute.For<IGamePalette>();
+            palette.Colors.Returns(new List<PaletteEntry>());
 
             _handler = new ShieldItemHandler(
                 palette,
-                _itemConfig,
+                itemConfig,
                 new PoolManager(),
                 _shieldGainedPublisher,
                 loadedSubscriber);
 
             _handler.Start();
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            UnityEngine.Object.DestroyImmediate(_itemConfig);
         }
 
         [Test]
@@ -122,5 +116,3 @@ namespace BalloonParty.Tests.Item
         }
     }
 }
-
-

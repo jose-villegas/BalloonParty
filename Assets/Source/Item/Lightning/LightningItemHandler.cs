@@ -28,7 +28,7 @@ namespace BalloonParty.Item.Lightning
         }
 
         private readonly IPublisher<ActorHitMessage> _hitPublisher;
-        private readonly ItemConfiguration _itemConfig;
+        private readonly IItemConfiguration _itemConfig;
         private readonly PoolManager _poolManager;
         private readonly SlotGrid _grid;
 
@@ -43,7 +43,7 @@ namespace BalloonParty.Item.Lightning
 
         [Inject]
         public LightningItemHandler(
-            ItemConfiguration itemConfig,
+            IItemConfiguration itemConfig,
             IPublisher<ActorHitMessage> hitPublisher,
             SlotGrid grid,
             PoolManager poolManager)

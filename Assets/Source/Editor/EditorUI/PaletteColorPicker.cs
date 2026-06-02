@@ -1,5 +1,6 @@
 using System.Linq;
 using BalloonParty.Configuration;
+using BalloonParty.Shared;
 using UnityEditor;
 using UnityEngine;
 
@@ -29,12 +30,12 @@ namespace BalloonParty.Editor.EditorUI
             {
                 var palette = Palette;
 
-                if (palette == null || palette.Colors.Length == 0)
+                if (palette == null || palette.Colors.Count == 0)
                 {
                     return Color.white;
                 }
 
-                var index = Mathf.Clamp(_selectedIndex, 0, palette.Colors.Length - 1);
+                var index = Mathf.Clamp(_selectedIndex, 0, palette.Colors.Count - 1);
                 return palette.Colors[index].Color;
             }
         }
@@ -47,7 +48,7 @@ namespace BalloonParty.Editor.EditorUI
         {
             var palette = Palette;
 
-            if (palette == null || palette.Colors.Length == 0)
+            if (palette == null || palette.Colors.Count == 0)
             {
                 EditorGUILayout.HelpBox("No GamePalette asset found.", MessageType.Warning);
                 return false;
@@ -86,7 +87,7 @@ namespace BalloonParty.Editor.EditorUI
 
         private void EnsureOptions(GamePalette palette)
         {
-            if (_names != null && _names.Length == palette.Colors.Length)
+            if (_names != null && _names.Length == palette.Colors.Count)
             {
                 return;
             }

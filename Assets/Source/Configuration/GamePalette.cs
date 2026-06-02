@@ -1,26 +1,28 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
 {
     [CreateAssetMenu(menuName = "Configuration/Game Palette", fileName = "GamePalette")]
-    public class GamePalette : ScriptableObject
+    public class GamePalette : ScriptableObject, IGamePalette
     {
         [SerializeField] private PaletteEntry[] _colors;
 
-        public PaletteEntry[] Colors => _colors;
+        public IReadOnlyList<PaletteEntry> Colors => _colors;
 
         public Color GetColor(string colorName)
         {
-            var entry = _colors.FirstOrDefault(c => c.Name == colorName);
-            if (entry == null)
+            foreach (var c in _colors)
             {
-                throw new ArgumentException(
-                    $"GamePalette.GetColor: no palette entry found for color \"{colorName}\".");
+                if (c.Name == colorName)
+                {
+                    return c.Color;
+                }
             }
 
-            return entry.Color;
+            throw new ArgumentException(
+                $"GamePalette.GetColor: no palette entry found for color \"{colorName}\".");
         }
     }
 }

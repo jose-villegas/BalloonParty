@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
 {
     [CreateAssetMenu(menuName = "Configuration/Balloons Configuration", fileName = "BalloonsConfiguration")]
-    public class BalloonsConfiguration : ScriptableObject
+    public class BalloonsConfiguration : ScriptableObject, IBalloonsConfiguration
     {
         [SerializeField] private BalloonPrefabEntry[] _entries;
 
@@ -28,7 +29,7 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _nudgeDuration = 0.15f;
         [SerializeField] private float _nudgeFalloff = 1.5f;
 
-        public BalloonPrefabEntry[] Entries => _entries;
+        public IReadOnlyList<BalloonPrefabEntry> Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
         public int GameStartedBalloonLines => _gameStartedBalloonLines;
         public int NewProjectileBalloonLines => _newProjectileBalloonLines;

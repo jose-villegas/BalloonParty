@@ -42,7 +42,7 @@ namespace BalloonParty.UI.LevelUp
         [Inject] private IPublisher<LevelUpGlowTrailsMessage> _glowTrailsPublisher;
         [Inject] private IReadyGate _gate;
         [Inject] private PauseService _pauseService;
-        [Inject] private GamePalette _palette;
+        [Inject] private IGamePalette _palette;
         [Inject] private PoolManager _poolManager;
         [Inject] private ScoreTrailService _scoreTrailService;
 
@@ -91,7 +91,7 @@ namespace BalloonParty.UI.LevelUp
 
             _pendingNewLevel = msg.NewLevel;
             _glowTrailArrivedCount = 0;
-            _glowTrailTotalCount = _palette.Colors.Length * _glowTrailsPerBar;
+            _glowTrailTotalCount = _palette.Colors.Count * _glowTrailsPerBar;
 
             _glowTrailsPublisher.Publish(
                 new LevelUpGlowTrailsMessage(_glowTrailsPerBar, _glowTrailStaggerDelay));

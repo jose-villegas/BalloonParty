@@ -921,6 +921,42 @@ def check_repeated_accessor(path: Path, lines: list[str], result: AuditResult):
                     f"{count} arguments read from '{prefix}' — consider passing the object directly"))
 
 
+def check_config_asset_cache(path: Path, lines: list[str], result: AuditResult):
+    """Editor code must use ConfigAssetCache<T> instead of inline FindAssets+LoadAssetAtPath for config SOs.
+
+    Flags FindAssets("t:TypeName") followed by LoadAssetAtPath in the same
+    method scope — the telltale sign of a manual config-SO lookup that should
+    use ConfigAssetCache<T>.  Standalone FindAssets calls iterating many assets
+    (e.g. t:Texture2D) are intentionally excluded.
+    """
+    if not is_in_editor(path):
+        return
+    if path.name == "ConfigAssetCache.cs":
+        return
+
+    find_re = re.compile(r'AssetDatabase\.FindAssets\s*\(\s*["\$].*t:')
+    load_re = re.compile(r'AssetDatabase\.LoadAssetAtPath\s*<')
+
+    # Two-pass: first collect FindAssets lines, then check if a LoadAssetAtPath
+    # appears within a short window after it (same method heuristic).
+    WINDOW = 15
+    find_lines: list[int] = []
+    load_lines: set[int] = set()
+
+    for i, line in enumerate(lines):
+        if find_re.search(line):
+            find_lines.append(i)
+        if load_re.search(line):
+            load_lines.add(i)
+
+    for fi in find_lines:
+        for j in range(fi + 1, min(fi + WINDOW, len(lines))):
+            if j in load_lines:
+                result.add(Violation(str(path), fi + 1, "config-asset-cache",
+                    "use ConfigAssetCache<T> instead of inline FindAssets + LoadAssetAtPath"))
+                break
+
+
 # ─── Rule registry ───────────────────────────────────────────────────────────
 
 RULES: dict[str, callable] = {
@@ -943,6 +979,7 @@ RULES: dict[str, callable] = {
     "non-capturing-lambda": check_non_capturing_lambda,
     "blank-lines":       check_multiple_blank_lines,
     "trailing-newlines": check_trailing_newlines,
+    "config-asset-cache": check_config_asset_cache,
 }
 
 # Rules that don't operate on individual files

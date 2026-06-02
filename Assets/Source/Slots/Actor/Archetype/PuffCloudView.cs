@@ -92,7 +92,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         /// sized to the combined bounding box. Called by
         /// <see cref="PuffCloudViewController"/> whenever any cluster changes.
         /// </summary>
-        internal void Configure(Vector4[] allSlotPositions, int count, Rect combinedBounds, PuffCloudSettings settings)
+        internal void Configure(Vector4[] allSlotPositions, int count, Rect combinedBounds, IPuffCloudSettings settings)
         {
             _configured = true;
             _animationSpeed = settings.AnimationSpeed;

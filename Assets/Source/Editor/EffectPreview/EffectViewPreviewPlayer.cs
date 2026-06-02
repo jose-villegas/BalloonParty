@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Configuration;
 using BalloonParty.Editor.EditorUI;
+using BalloonParty.Shared;
 using UnityEditor;
 using UnityEngine;
 

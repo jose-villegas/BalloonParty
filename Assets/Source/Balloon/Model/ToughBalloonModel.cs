@@ -9,13 +9,13 @@ namespace BalloonParty.Balloon.Model
 {
     internal class ToughBalloonModel : BalloonModelBase, IHasDurability, IHasScore, IHasScoreColor
     {
-        private readonly GamePalette _palette;
+        private readonly IGamePalette _palette;
         public int ScoreValue { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
-        internal ToughBalloonModel(BalloonModelConfig config, GamePalette palette = null) : base(config)
+        internal ToughBalloonModel(BalloonModelConfig config, IGamePalette palette = null) : base(config)
         {
             _palette = palette;
             ScoreValue = config.ScoreValue;
@@ -25,14 +25,14 @@ namespace BalloonParty.Balloon.Model
         public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
         {
             var colors = _palette.Colors;
-            if (colors == null || colors.Length == 0)
+            if (colors == null || colors.Count == 0)
             {
                 return;
             }
 
             for (var i = 0; i < ScoreValue; i++)
             {
-                var colorId = colors[Random.Range(0, colors.Length)].Name;
+                var colorId = colors[Random.Range(0, colors.Count)].Name;
                 results.Add(new ScoreAttribution(colorId, 1, true));
             }
         }

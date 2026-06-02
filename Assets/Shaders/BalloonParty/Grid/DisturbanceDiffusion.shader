@@ -13,6 +13,9 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
     //
     // Displacement decays faster than density so the cloud snaps back
     // to shape before fully reforming in opacity.
+    //
+    // When _STAMPS_ON is enabled, pending stamps are applied after
+    // diffusion in the same pass — eliminating a separate stamp blit.
     // ─────────────────────────────────────────────────────────────────────
     Properties
     {
@@ -24,6 +27,8 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
         _WindDir          ("Wind Direction",     Vector)      = (0.3, 0.1, 0, 0)
         _WindSpeed        ("Wind Speed",         Float)       = 1.0
         _PressureStr      ("Pressure Strength",  Range(0, 1)) = 0.4
+        _DisplaceAmount   ("Displace Amount",    Float)       = 0.3
+        _StampCount       ("Stamp Count",        Int)         = 0
     }
 
     SubShader
@@ -37,7 +42,10 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
             CGPROGRAM
             #pragma vertex   vert
             #pragma fragment frag
+            #pragma multi_compile _ _STAMPS_ON
             #include "UnityCG.cginc"
+
+            #define MAX_STAMPS 32
 
             sampler2D _MainTex;
             float4    _MainTex_TexelSize;
@@ -48,6 +56,15 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
             float4    _WindDir;
             float     _WindSpeed;
             float     _PressureStr;
+
+            #if _STAMPS_ON
+            float     _DisplaceAmount;
+            int       _StampCount;
+            float4    _StampCenters[MAX_STAMPS];
+            float     _StampRadii[MAX_STAMPS];
+            float     _StampStrengths[MAX_STAMPS];
+            float4    _StampDirections[MAX_STAMPS];
+            #endif
 
             struct appdata
             {
@@ -113,6 +130,51 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
                 //   displacement → 0.5 (faster, so shape snaps back before opacity)
                 result.r = lerp(result.r, 1.0, _ReformSpeed * _DeltaTime);
                 result.gb = lerp(result.gb, float2(0.5, 0.5), _DisplaceDecay * _DeltaTime);
+
+                #if _STAMPS_ON
+                float density = result.r;
+                float2 displace = result.gb;
+
+                for (int s = 0; s < _StampCount; s++)
+                {
+                    float2 center = _StampCenters[s].xy;
+                    float  radius = _StampRadii[s];
+                    float  strength = _StampStrengths[s];
+                    float2 dir = _StampDirections[s].xy;
+
+                    float2 toPixel = uv - center;
+                    float dist = length(toPixel);
+
+                    float falloff = smoothstep(radius, 0.0, dist);
+
+                    float dirLen = length(dir);
+                    if (dirLen > 0.001)
+                    {
+                        float2 dirNorm = dir / dirLen;
+                        float along = dot(toPixel, dirNorm);
+                        float perpDist = length(toPixel - along * dirNorm);
+                        float wakeAlong = smoothstep(radius * 2.5, 0.0, -along)
+                                        * step(along, 0.0);
+                        float wakePerp = smoothstep(radius * 0.6, 0.0, perpDist);
+                        falloff = max(falloff, wakeAlong * wakePerp * 0.5);
+                    }
+
+                    density = max(0.0, density - falloff * strength);
+
+                    float2 pushDir;
+                    if (dirLen > 0.001)
+                    {
+                        pushDir = -(dir / dirLen);
+                    }
+                    else
+                    {
+                        pushDir = (dist > 0.001) ? -(toPixel / dist) : float2(0, 0);
+                    }
+                    displace += pushDir * falloff * _DisplaceAmount;
+                }
+
+                result = float3(density, saturate(displace));
+                #endif
 
                 return fixed4(saturate(result), 1.0);
             }

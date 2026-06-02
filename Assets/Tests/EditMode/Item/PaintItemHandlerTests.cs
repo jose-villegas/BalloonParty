@@ -19,11 +19,7 @@ namespace BalloonParty.Tests.Item
     public class PaintItemHandlerTests
     {
         private SlotGrid _grid;
-        private GamePalette _palette;
-        private ItemConfiguration _itemConfig;
         private PaintItemHandler _handler;
-        private DisturbanceFieldSettings _disturbanceSettings;
-        private GameDisplayConfiguration _displayConfig;
 
         [SetUp]
         public void SetUp()
@@ -35,37 +31,29 @@ namespace BalloonParty.Tests.Item
 
             _grid = new SlotGrid(gameConfig, new BalancePathHolder());
 
-            _palette = ScriptableObject.CreateInstance<GamePalette>();
-            var colors = new[]
+            var palette = Substitute.For<IGamePalette>();
+            var colors = new List<PaletteEntry>
             {
                 CreatePaletteEntry("Red", Color.red),
                 CreatePaletteEntry("Blue", Color.blue)
             };
-            SetField(_palette, "_colors", colors);
+            palette.Colors.Returns(colors);
 
-            _itemConfig = ScriptableObject.CreateInstance<ItemConfiguration>();
+            var itemConfig = Substitute.For<IItemConfiguration>();
             var paintSettings = CreateItemSettings(ItemType.Paint);
-            SetField(_itemConfig, "_items", new List<ItemSettings> { paintSettings });
+            itemConfig[ItemType.Paint].Returns(paintSettings);
+            itemConfig.Items.Returns(new List<ItemSettings> { paintSettings });
 
-            _disturbanceSettings = ScriptableObject.CreateInstance<DisturbanceFieldSettings>();
-            _displayConfig = ScriptableObject.CreateInstance<GameDisplayConfiguration>();
+            var disturbanceSettings = Substitute.For<IDisturbanceFieldSettings>();
+            var displayConfig = Substitute.For<IGameDisplayConfiguration>();
 
             _handler = new PaintItemHandler(
-                _palette,
-                _itemConfig,
+                palette,
+                itemConfig,
                 _grid,
                 new PoolManager(),
-                new DisturbanceFieldService(_disturbanceSettings, _displayConfig),
-                _disturbanceSettings);
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            Object.DestroyImmediate(_palette);
-            Object.DestroyImmediate(_itemConfig);
-            Object.DestroyImmediate(_disturbanceSettings);
-            Object.DestroyImmediate(_displayConfig);
+                new DisturbanceFieldService(disturbanceSettings, displayConfig),
+                disturbanceSettings);
         }
 
         [Test]
@@ -165,4 +153,3 @@ namespace BalloonParty.Tests.Item
         }
     }
 }
-

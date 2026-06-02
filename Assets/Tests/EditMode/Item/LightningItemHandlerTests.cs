@@ -18,7 +18,6 @@ namespace BalloonParty.Tests.Item
     public class LightningItemHandlerTests
     {
         private SlotGrid _grid;
-        private ItemConfiguration _itemConfig;
         private IPublisher<ActorHitMessage> _hitPublisher;
         private LightningItemHandler _handler;
 
@@ -32,23 +31,18 @@ namespace BalloonParty.Tests.Item
 
             _grid = new SlotGrid(gameConfig, new BalancePathHolder());
 
-            _itemConfig = ScriptableObject.CreateInstance<ItemConfiguration>();
+            var itemConfig = Substitute.For<IItemConfiguration>();
             var lightningSettings = CreateItemSettings(ItemType.Lightning, damage: 1);
-            SetField(_itemConfig, "_items", new List<ItemSettings> { lightningSettings });
+            itemConfig[ItemType.Lightning].Returns(lightningSettings);
+            itemConfig.Items.Returns(new List<ItemSettings> { lightningSettings });
 
             _hitPublisher = Substitute.For<IPublisher<ActorHitMessage>>();
 
             _handler = new LightningItemHandler(
-                _itemConfig,
+                itemConfig,
                 _hitPublisher,
                 _grid,
                 new PoolManager());
-        }
-
-        [TearDown]
-        public void TearDown()
-        {
-            Object.DestroyImmediate(_itemConfig);
         }
 
         [Test]
@@ -130,4 +124,3 @@ namespace BalloonParty.Tests.Item
         }
     }
 }
-
