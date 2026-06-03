@@ -2045,6 +2045,13 @@ private static IWriteableSlotActor CreateModel(GridActorType actorType)
 
 ---
 
+### Phase 3.5 — Shader Visual Tuning (current)
+
+> Full plan extracted to **PLAN-Bush-Shader-Tuning.md** for focused iteration.
+> See @ref plan_bush_shader_tuning.
+
+---
+
 ### Phase 4 — Disturbance + VFX
 
 **Goal:** Bush reacts to projectile fly-overs via disturbance field stamps and a
@@ -2118,15 +2125,17 @@ adds zero unnecessary runtime cost.
 
 | Decision | Resolution |
 |---|---|
-| Art direction | Procedural shader — top-down cartoony, fully opaque, SDF-based |
+| Art direction | Procedural shader — top-down cartoony, fully opaque, sub-circle canopy |
+| Rendering model | Overlapping opaque circles with depth ordering + inner shadow (not SDF smooth-min blobs, not noise) |
 | Cluster system | Generic `SlotClusterRegistry<TModel>` shared with Puff |
+| Gap fill | `BushViewController` injects midpoint circles between adjacent slots (`.w` = radius scale) |
 | Palette tinting | Not applicable — terrain uses fixed colours |
-| Ground shadow | `_SHADOW_ON` default on |
-| Visual variants | Seed-driven subtle variation; all clusters read as one ground layer |
+| Ground shadow | `_SHADOW_ON` default on; uses simplified slot-centre SDF |
+| Visual variants | Seed-driven density spectrum: fluffy (dense circles, no branches) ↔ thin (spread, branches visible) |
 | VFX trigger | Disturbance stamps continuously during overlap; particle burst once on exit |
-| Disturbance expression | Leaf noise warp + edge wobble (no transparency holes — stays opaque) |
+| Disturbance expression | World-space displacement of circle evaluation position |
 | Spawn pathing | Balloons spawn below or above Bushes; never route through |
-| Lifecycle | `setupOnly = true` — registry does no work after initial build |
+| Lifecycle | `setupOnly = false` — registry subscribes to grid changes to catch async spawner |
 | Rerouting | Ships without it; low weight + max count limits `ComputePath` warnings |
 | DI wiring | Thin concrete subclass fallback if VContainer generics are awkward |
 

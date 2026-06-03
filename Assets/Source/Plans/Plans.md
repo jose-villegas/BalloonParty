@@ -10,6 +10,7 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_test_gap
 - @subpage plan_bush
 - @subpage plan_bush_implementation
+- @subpage plan_bush_shader_tuning
 - @subpage plan_spider_web
 - @subpage plan_content_production
 - @subpage plan_runtime_optimizations

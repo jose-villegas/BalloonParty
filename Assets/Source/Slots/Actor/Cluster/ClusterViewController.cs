@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BalloonParty.Slots.Grid;
 using UniRx;
 using UnityEngine;
@@ -12,7 +13,9 @@ namespace BalloonParty.Slots.Actor.Cluster
     /// instance rendering all clusters of <typeparamref name="TModel"/> actors.
     /// On any cluster change, collects every slot position across every cluster
     /// and reconfigures the view in one call.
-    /// Subclasses must implement <see cref="GetPrefab"/> to provide the typed prefab.
+    /// Subclasses must implement <see cref="GetPrefab"/> to provide the typed prefab
+    /// and may override <see cref="PopulatePositions"/> to inject extra positions
+    /// (e.g. gap-fill circles between adjacent slots).
     /// </summary>
     internal abstract class ClusterViewController<TModel, TView, TSettings> : IStartable, IDisposable
         where TModel : class, IClusterableSlotActor
@@ -80,6 +83,35 @@ namespace BalloonParty.Slots.Actor.Cluster
             }
         }
 
+        /// <summary>
+        /// Fills <paramref name="buffer"/> with <c>(x, y, seed, radiusScale)</c>
+        /// entries for every position the cluster renderer should cover.
+        /// Override to inject additional positions (gap fills, etc.).
+        /// </summary>
+        protected virtual int PopulatePositions(
+            Vector4[] buffer,
+            IReadOnlyDictionary<int, SlotCluster> clusters,
+            SlotGrid grid)
+        {
+            var count = 0;
+            foreach (var cluster in clusters.Values)
+            {
+                var seed = (cluster.ClusterId * 0.7123f) % 1f;
+                foreach (var slot in cluster.Slots)
+                {
+                    if (count >= buffer.Length)
+                    {
+                        break;
+                    }
+
+                    var pos = grid.IndexToWorldPosition(slot);
+                    buffer[count++] = new Vector4(pos.x, pos.y, seed, 1f);
+                }
+            }
+
+            return count;
+        }
+
         private void Reconfigure()
         {
             if (_view == null)
@@ -94,28 +126,21 @@ namespace BalloonParty.Slots.Actor.Cluster
                 return;
             }
 
-            var count = 0;
+            var count = PopulatePositions(_positionsBuffer, clusters, _grid);
+            if (count == 0)
+            {
+                _view.Clear();
+                return;
+            }
+
             var min = new Vector2(float.MaxValue, float.MaxValue);
             var max = new Vector2(float.MinValue, float.MinValue);
-
-            foreach (var cluster in clusters.Values)
+            for (var i = 0; i < count; i++)
             {
-                var seed = (cluster.ClusterId * 0.7123f) % 1f;
-
-                foreach (var slot in cluster.Slots)
-                {
-                    if (count >= _positionsBuffer.Length)
-                    {
-                        break;
-                    }
-
-                    var pos = _grid.IndexToWorldPosition(slot);
-                    _positionsBuffer[count++] = new Vector4(pos.x, pos.y, seed, 0f);
-                    min.x = Mathf.Min(min.x, pos.x);
-                    min.y = Mathf.Min(min.y, pos.y);
-                    max.x = Mathf.Max(max.x, pos.x);
-                    max.y = Mathf.Max(max.y, pos.y);
-                }
+                min.x = Mathf.Min(min.x, _positionsBuffer[i].x);
+                min.y = Mathf.Min(min.y, _positionsBuffer[i].y);
+                max.x = Mathf.Max(max.x, _positionsBuffer[i].x);
+                max.y = Mathf.Max(max.y, _positionsBuffer[i].y);
             }
 
             const float halfSlotPadding = 0.5f;

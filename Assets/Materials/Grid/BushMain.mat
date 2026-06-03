@@ -12,7 +12,7 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _DISTURBANCE_ON
+  - _CENTER_SHADOW_ON
   - _LIGHTING_ON
   - _SHADOW_ON
   m_InvalidKeywords:
@@ -73,32 +73,36 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _AAWidth: 0.0164
+    - _AAWidth: 0.03
     - _BaseScale: 1
     - _BorderSoftness: 0.4
+    - _BottomDarken: 0.8
     - _BumpScale: 1
-    - _CenterShadowDarkness: 0.525
+    - _CenterShadowDarkness: 0.659
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DetailScale: 1.75
-    - _DisplaceWorldScale: 1.2
+    - _DisplaceWorldScale: 1.43
     - _DstBlend: 0
-    - _EdgeDisturbanceScale: 1
+    - _EdgeDisturbanceScale: 0.55
     - _EdgeHigh: 0.5
     - _EdgeLow: 0.6
-    - _EdgeNoiseAmount: 0.075
-    - _EdgeNoiseFreq: 4
-    - _EnableCenterShadow: 0
+    - _EdgeNoiseAmount: 0.13
+    - _EdgeNoiseFreq: 3.86
+    - _EnableCenterShadow: 1
     - _EnableDensity: 1
-    - _EnableDisturbance: 1
+    - _EnableDisturbance: 0
     - _EnableLighting: 1
     - _EnableShadow: 1
     - _FineScale: 3
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
-    - _LeafNoiseFreq: 6
-    - _LightIntensity: 0.65
+    - _LayerOffset: 0.06
+    - _LayerShrink: 0.05
+    - _LeafNoiseAmount: 0.15
+    - _LeafNoiseFreq: 1.41
+    - _LightIntensity: 0.612
     - _Metallic: 0
     - _Mode: 0
     - _NoiseScale: 1.2
@@ -106,33 +110,33 @@ Material:
     - _NormalStrength: 2.5
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _RadiusJitter: 0.051
+    - _RadiusJitter: 0.077
     - _RimIntensity: 0.764
-    - _RimWidth: 0.046
-    - _ShadowOffsetX: 0.15
-    - _ShadowOffsetY: -0.15
+    - _RimWidth: 0.059
+    - _ShadowOffsetX: 0.05
+    - _ShadowOffsetY: -0.05
     - _ShadowSoftness: 0.1
-    - _SlotRadius: 0.25
-    - _SminK: 0.114
+    - _SlotRadius: 0.34
+    - _SminK: 0.05
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpriteScale: 1
     - _SrcBlend: 1
     - _TimeOffset: 0
     - _UVSec: 0
-    - _WindAmount: 0.0683
-    - _WindSpeed: 0.52
+    - _WindAmount: 0.0323
+    - _WindSpeed: 0.4
     - _ZWrite: 1
     m_Colors:
     - _AmbientColor: {r: 0.34117648, g: 0.627451, b: 0.7176471, a: 1}
-    - _BaseColor: {r: 0.18, g: 0.45, b: 0.12, a: 1}
+    - _BaseColor: {r: 0.20754403, g: 0.8490566, b: 0.06808474, a: 1}
     - _CloudColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 0.9607844, g: 0.9607844, b: 0.9607844, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FieldBoundsMin: {r: -5, g: -8, b: 0, a: 0}
     - _FieldBoundsSize: {r: 10, g: 16, b: 0, a: 0}
     - _LeafVariationColor: {r: 0.25, g: 0.55, b: 0.15, a: 1}
-    - _LightColor: {r: 0.9607844, g: 0.9607844, b: 0.9607844, a: 1}
+    - _LightColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _LightDir: {r: 1, g: -1, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _ScrollSpeedBase: {r: 0.03, g: 0.02, b: 0, a: 0}

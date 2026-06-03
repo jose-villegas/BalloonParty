@@ -27,7 +27,7 @@ MonoBehaviour:
     _actorType: 1
     _placementMode: 1
     _weight: 50
-    _minCount: 2
-    _maxCount: 5
-    _maxPerCluster: 3
+    _minCount: 3
+    _maxCount: 10
+    _maxPerCluster: 4
     _hitsToPop: -1

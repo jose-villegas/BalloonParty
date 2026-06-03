@@ -1,13 +1,16 @@
 Shader "BalloonParty/Grid/Bush"
 {
     // Procedural top-down cartoony bush on a SpriteRenderer quad.
-    // SDF-based shape with smooth-minimum merging across slot centers.
-    // Multi-octave Simplex noise for organic leaf detail + edge bumps.
+    // Each slot spawns overlapping leaf-clump circles arranged in a branch
+    // pattern. Circles are painted back-to-front (painter's algorithm) so
+    // upper circles fully occlude lower ones — no venn-diagram blending.
+    // Inner shadow creases darken where an upper circle overlaps a lower one.
+    // Brown branch capsules show through gaps in the leaf canopy.
     //
-    // GPU instancing DISABLED — per-instance _TimeOffset driven via MaterialPropertyBlock.
+    // GPU instancing DISABLED — _TimeOffset driven via MaterialPropertyBlock.
     //
     // _DisturbanceTex, _FieldBoundsMin, _FieldBoundsSize are GLOBAL shader
-    // properties set by DisturbanceFieldService — NOT in the Properties block.
+    // properties set by DisturbanceFieldService.
     //
     // MPB contract: _SlotCentersWorld, _SlotCount, _TimeOffset — set by ClusterView.
     Properties
@@ -17,32 +20,35 @@ Shader "BalloonParty/Grid/Bush"
         [Header(Shape)]
         _SlotRadius         ("Slot Radius",          Float)              = 0.40
         _RadiusJitter       ("Radius Jitter",        Range(0, 0.15))     = 0.06
-        _EdgeNoiseFreq      ("Edge Noise Frequency", Float)              = 4.0
-        _EdgeNoiseAmount    ("Edge Noise Amount",    Range(0, 0.2))      = 0.08
-        _SminK              ("Smooth Min K",         Range(0.05, 0.5))   = 0.20
         _AAWidth            ("AA Edge Width",        Range(0.001, 0.03)) = 0.008
 
+        [Header(Canopy)]
+        _BranchSpread       ("Branch Spread",        Range(0.1, 0.8))    = 0.45
+        _SubCircleSize      ("Circle Size",          Range(0.2, 0.9))    = 0.55
+        _SubCircleSizeVar   ("Size Variation",       Range(0, 0.5))      = 0.30
+
         [Header(Surface)]
-        _BaseColor          ("Base Color",           Color)              = (0.18, 0.45, 0.12, 1.0)
-        _LeafVariationColor ("Leaf Variation Color", Color)              = (0.25, 0.55, 0.15, 1.0)
-        _LeafNoiseFreq      ("Leaf Noise Frequency", Float)              = 6.0
+        _BaseColor          ("Base Color (deep)",    Color)              = (0.14, 0.40, 0.10, 1.0)
+        _TopColor           ("Top Color (bright)",   Color)              = (0.35, 0.65, 0.20, 1.0)
+        _CreaseWidth        ("Crease Width",         Range(0.01, 0.12))  = 0.05
+        _CreaseDarken       ("Crease Darken",        Range(0.3, 1.0))    = 0.65
 
-        [Header(Lighting)]
-        [Toggle(_LIGHTING_ON)] _EnableLighting ("Enable Lighting", Float) = 1
-        _LightDir           ("Light Direction",      Vector)             = (-0.4, 0.7, 0, 0)
-        _LightColor         ("Highlight Color",      Color)              = (1, 1, 0.9, 1)
-        _AmbientColor       ("Shadow Tint",          Color)              = (0.08, 0.22, 0.05, 1)
-        _LightIntensity     ("Light Intensity",      Range(0, 1))        = 0.50
-        _NormalStrength     ("Normal Strength",       Range(0, 3))        = 1.5
-        _NormalEpsilon      ("Normal Sample Offset",  Range(0.001, 0.05))= 0.015
+        [Header(Dome Shading)]
+        _HighlightColor     ("Highlight Color",      Color)              = (0.55, 0.80, 0.35, 0.45)
+        _HighlightSize      ("Highlight Size",       Range(0.1, 0.7))    = 0.35
+        _EdgeShade          ("Edge Shade",           Range(0.5, 1.0))    = 0.75
 
-        [Header(Rim)]
-        _RimWidth           ("Rim Width",            Range(0, 0.15))     = 0.04
-        _RimIntensity       ("Rim Intensity",        Range(0, 1))        = 0.35
+        [Header(Branches)]
+        _BranchThickness    ("Branch Thickness",     Range(0.005, 0.05)) = 0.018
+        _BranchColor        ("Branch Color",         Color)              = (0.35, 0.22, 0.10, 1.0)
+
+        [Header(Scallop)]
+        _ScallopDepth       ("Scallop Depth",        Range(0, 0.04))     = 0.015
+        _ScallopSize        ("Scallop Size",         Range(0.005, 0.06)) = 0.025
 
         [Header(Wind)]
         _WindSpeed          ("Wind Speed",           Range(0, 2))        = 0.4
-        _WindAmount         ("Wind Amount",          Range(0, 0.1))      = 0.02
+        _WindAmount         ("Wind Amount",          Range(0, 0.05))     = 0.015
 
         [Header(Animation)]
         _TimeOffset         ("Time Offset",          Float)              = 0.0
@@ -54,14 +60,9 @@ Shader "BalloonParty/Grid/Bush"
         _ShadowOffsetY      ("Shadow Offset Y",     Range(-0.15, 0.15)) = -0.04
         _ShadowSoftness     ("Shadow Softness",      Range(0, 0.10))     = 0.04
 
-        [Header(Center Shadow)]
-        [Toggle(_CENTER_SHADOW_ON)] _EnableCenterShadow ("Enable Center Shadow", Float) = 0
-        _CenterShadowDarkness ("Center Shadow Darkness", Range(0.3, 1.0)) = 0.75
-
         [Header(Disturbance)]
         [Toggle(_DISTURBANCE_ON)] _EnableDisturbance ("Enable Disturbance", Float) = 0
         _DisplaceWorldScale  ("Displace World Scale",  Range(0, 2))      = 0.3
-        _EdgeDisturbanceScale("Edge Disturbance Scale", Range(0, 3))     = 1.5
     }
 
     SubShader
@@ -86,13 +87,13 @@ Shader "BalloonParty/Grid/Bush"
             #pragma fragment frag
             #pragma target 3.0
             #pragma shader_feature _SHADOW_ON
-            #pragma shader_feature _CENTER_SHADOW_ON
             #pragma shader_feature _DISTURBANCE_ON
-            #pragma shader_feature _LIGHTING_ON
             #include "UnityCG.cginc"
             #include "Assets/Shaders/BalloonParty/Noise/SimplexNoise2D.cginc"
 
-            #define MAX_SLOTS 8
+            #define MAX_SLOTS     16
+            #define SUB_CIRCLES    5
+            #define SCALLOP_COUNT  5
 
             struct appdata_t
             {
@@ -109,7 +110,6 @@ Shader "BalloonParty/Grid/Bush"
                 float2 worldPos : TEXCOORD1;
             };
 
-            // ── Instancing boilerplate (SpriteRenderer color tint) ──
             #ifdef UNITY_INSTANCING_ENABLED
                 UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
                     UNITY_DEFINE_INSTANCED_PROP(fixed4, unity_SpriteRendererColorArray)
@@ -119,33 +119,34 @@ Shader "BalloonParty/Grid/Bush"
                 fixed4 _RendererColor;
             #endif
 
-            // ── Uniform declarations ──
+            // ── Uniforms ──
             float  _SlotRadius;
             float  _RadiusJitter;
-            float  _EdgeNoiseFreq;
-            float  _EdgeNoiseAmount;
-            float  _SminK;
             float  _AAWidth;
 
+            float  _BranchSpread;
+            float  _SubCircleSize;
+            float  _SubCircleSizeVar;
+
             fixed4 _BaseColor;
-            fixed4 _LeafVariationColor;
-            float  _LeafNoiseFreq;
+            fixed4 _TopColor;
+            float  _CreaseWidth;
+            float  _CreaseDarken;
 
-            float4 _LightDir;
-            fixed4 _LightColor;
-            fixed4 _AmbientColor;
-            float  _LightIntensity;
-            float  _NormalStrength;
-            float  _NormalEpsilon;
+            fixed4 _HighlightColor;
+            float  _HighlightSize;
+            float  _EdgeShade;
 
-            float  _RimWidth;
-            float  _RimIntensity;
+            float  _BranchThickness;
+            fixed4 _BranchColor;
+
+            float  _ScallopDepth;
+            float  _ScallopSize;
 
             float  _WindSpeed;
             float  _WindAmount;
             float  _TimeOffset;
 
-            // MPB contract — set by ClusterView base class
             float4 _SlotCentersWorld[MAX_SLOTS];
             int    _SlotCount;
 
@@ -156,69 +157,83 @@ Shader "BalloonParty/Grid/Bush"
             float  _ShadowSoftness;
             #endif
 
-            #ifdef _CENTER_SHADOW_ON
-            float _CenterShadowDarkness;
-            #endif
-
             #ifdef _DISTURBANCE_ON
             sampler2D _DisturbanceTex;
             float2    _FieldBoundsMin;
             float2    _FieldBoundsSize;
             float     _DisplaceWorldScale;
-            float     _EdgeDisturbanceScale;
             #endif
 
-            // ── Helper: polynomial smooth-minimum ──
-            float smin(float a, float b, float k)
+            // ── Sub-circle generator ──
+            // idx 0 = centre, 1-4 = branches at ~90° with hash variation.
+            void SubCircle(float2 slotCenter, float baseRadius, float hash, int idx,
+                           out float2 center, out float radius)
             {
-                float h = saturate(0.5 + 0.5 * (b - a) / k);
-                return lerp(b, a, h) - k * h * (1.0 - h);
+                if (idx == 0)
+                {
+                    center = slotCenter;
+                    radius = baseRadius * _SubCircleSize;
+                    return;
+                }
+
+                float fi = (float)idx;
+                float angle = hash * 6.283185 + (fi - 1.0) * 1.5708
+                            + (frac(hash * fi * 17.3) - 0.5) * 0.7;
+                float spread = baseRadius * _BranchSpread
+                             * (0.8 + frac(hash * fi * 13.7) * 0.4);
+                float sizeVar = 1.0 - frac(hash * fi * 23.1) * _SubCircleSizeVar;
+
+                center = slotCenter + float2(cos(angle), sin(angle)) * spread;
+                radius = baseRadius * _SubCircleSize * sizeVar;
             }
 
-            // ── 2.2: Per-slot circle SDF with smooth-minimum merging ──
-            // Returns minimum SDF distance (negative = inside).
-            // Outputs nearest slot's seed (.z) for per-slot variation.
-            float BushSDF(float2 wp, out float slotSeed)
+            // ── Scalloped circle SDF ──
+            // Subtracts small notch circles around the rim for bumpy leaf edges.
+            float ScallopedCircleSDF(float2 wp, float2 center, float radius, float hash)
+            {
+                float d = length(wp - center) - radius;
+
+                for (int s = 0; s < SCALLOP_COUNT; s++)
+                {
+                    float fs = (float)s;
+                    float angle = hash * 6.283185 + fs * (6.283185 / (float)SCALLOP_COUNT)
+                                + frac(hash * fs * 31.7) * 0.6;
+                    float2 notchPos = center + float2(cos(angle), sin(angle))
+                                    * (radius - _ScallopDepth * 0.3);
+                    float notchDist = length(wp - notchPos) - _ScallopSize;
+                    // Subtract notch: where notchDist < 0, push d positive (outside)
+                    d = max(d, -notchDist);
+                }
+
+                return d;
+            }
+
+            // ── Branch capsule SDF (line segment with thickness) ──
+            float CapsuleSDF(float2 wp, float2 a, float2 b, float thickness)
+            {
+                float2 pa = wp - a;
+                float2 ba = b - a;
+                float h = saturate(dot(pa, ba) / dot(ba, ba));
+                return length(pa - ba * h) - thickness;
+            }
+
+            // ── Simplified base SDF (slot centres only) for shadow ──
+            float BaseSDF(float2 wp)
             {
                 float d = 999.0;
-                slotSeed = 0.0;
-                float minRawDist = 999.0;
-
                 for (int i = 0; i < _SlotCount; i++)
                 {
-                    float2 center = _SlotCentersWorld[i].xy;
-                    float seed = _SlotCentersWorld[i].z;
-
-                    float hash = frac(sin(dot(center, float2(127.1, 311.7))) * 43758.5453);
-                    float radius = _SlotRadius + (hash - 0.5) * 2.0 * _RadiusJitter;
-
-                    float dist = length(wp - center) - radius;
-                    d = smin(d, dist, _SminK);
-
-                    float rawDist = length(wp - center);
-                    if (rawDist < minRawDist)
-                    {
-                        minRawDist = rawDist;
-                        slotSeed = seed;
-                    }
+                    float2 c = _SlotCentersWorld[i].xy;
+                    float rs = _SlotCentersWorld[i].w > 0.001
+                             ? _SlotCentersWorld[i].w : 1.0;
+                    float h = frac(sin(dot(c, float2(127.1, 311.7))) * 43758.5453);
+                    float r = (_SlotRadius * rs) + (h - 0.5) * 2.0 * _RadiusJitter;
+                    d = min(d, length(wp - c) - r);
                 }
                 return d;
             }
 
-            // ── 2.3: Edge noise (2-octave, per-slot seed offset) ──
-            float EdgeNoise(float2 wp, float t, float slotSeed)
-            {
-                float2 seedOffset = float2(slotSeed * 61.7, slotSeed * 37.3);
-                float2 p1 = (wp + seedOffset) * _EdgeNoiseFreq;
-                float2 p2 = (wp + seedOffset) * _EdgeNoiseFreq * 2.17;
-
-                float n  = SimplexNoise2D(p1 + float2(t * 0.1, 0.0)) * 0.65;
-                n       += SimplexNoise2D(p2 + float2(0.0, t * 0.15)) * 0.35;
-
-                return n;
-            }
-
-            // ── 2.10: Wind displacement (1-octave, low frequency) ──
+            // ── Wind ──
             float2 WindDisplace(float2 wp, float t)
             {
                 float2 windP = wp * 0.5 + float2(t * _WindSpeed, t * _WindSpeed * 0.7);
@@ -226,61 +241,14 @@ Shader "BalloonParty/Grid/Bush"
                 return float2(windN, windN * 0.6) * _WindAmount;
             }
 
-            // ── 2.5: Leaf noise (3-octave, world-space) — colour modulation ──
-            float LeafNoise(float2 wp, float t, float slotSeed)
-            {
-                float2 seedOff = float2(slotSeed * 91.3, slotSeed * 53.7);
-                float2 p = (wp + seedOff) * _LeafNoiseFreq;
-
-                float n  = SimplexNoise2D(p + float2(t * 0.02, t * 0.01)) * 0.50;
-                n       += SimplexNoise2D(p * 2.13 + float2(-t * 0.03, t * 0.02)) * 0.30;
-                n       += SimplexNoise2D(p * 4.37 + float2(t * 0.01, -t * 0.04)) * 0.20;
-
-                return n * 0.5 + 0.5;
-            }
-
-            // ── 2.6: Leaf noise lite (1-octave) — used for lighting gradient only ──
-            float LeafNoiseLite(float2 wp, float t, float slotSeed)
-            {
-                float2 seedOff = float2(slotSeed * 91.3, slotSeed * 53.7);
-                float2 p = (wp + seedOff) * _LeafNoiseFreq;
-                return SimplexNoise2D(p + float2(t * 0.02, t * 0.01)) * 0.5 + 0.5;
-            }
-
-            // ── 2.6: Pseudo-lighting (half-Lambert from noise gradient) ──
-            fixed3 BushLighting(float2 wp, float t, float slotSeed)
-            {
-                float eps = _NormalEpsilon;
-                float nR = LeafNoiseLite(wp + float2( eps, 0), t, slotSeed);
-                float nL = LeafNoiseLite(wp + float2(-eps, 0), t, slotSeed);
-                float nU = LeafNoiseLite(wp + float2(0,  eps), t, slotSeed);
-                float nD = LeafNoiseLite(wp + float2(0, -eps), t, slotSeed);
-
-                float dX = (nR - nL) * _NormalStrength;
-                float dY = (nU - nD) * _NormalStrength;
-                float3 normal = normalize(float3(-dX, -dY, 1.0));
-
-                float2 ld = normalize(_LightDir.xy);
-                float3 lightVec = normalize(float3(ld, 0.6));
-                float NdotL = dot(normal, lightVec);
-                float halfLambert = NdotL * 0.5 + 0.5;
-
-                fixed3 lit = lerp(_AmbientColor.rgb, _LightColor.rgb, halfLambert);
-                return lerp(fixed3(1, 1, 1), lit, _LightIntensity);
-            }
-
             // ── Vertex shader ──
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
-
                 OUT.vertex   = UnityObjectToClipPos(IN.vertex);
                 OUT.texcoord = IN.texcoord;
                 OUT.color    = IN.color * _RendererColor;
-
-                float4 worldVert = mul(unity_ObjectToWorld, IN.vertex);
-                OUT.worldPos = worldVert.xy;
-
+                OUT.worldPos = mul(unity_ObjectToWorld, IN.vertex).xy;
                 return OUT;
             }
 
@@ -290,95 +258,144 @@ Shader "BalloonParty/Grid/Bush"
                 float2 wp = IN.worldPos;
                 float  t  = _TimeOffset;
 
-                // ── Step 1: Wind displacement ──
-                float2 wpAnim = wp + WindDisplace(wp, t);
+                // ── Wind + disturbance ──
+                float2 wpEval = wp + WindDisplace(wp, t);
 
-                // ── Step 2: SDF shape (uses static wp — shape stays anchored) ──
-                float slotSeed;
-                float d = BushSDF(wp, slotSeed);
-
-                // ── Step 3: Edge noise (uses static wp — stable silhouette) ──
-                float edgeN = EdgeNoise(wp, t, slotSeed);
-                float edgeAmount = _EdgeNoiseAmount;
-
-                // ── Step 4: Disturbance ──
                 #ifdef _DISTURBANCE_ON
-                float2 fieldUV = (wp - _FieldBoundsMin) / _FieldBoundsSize;
-                float3 field = tex2D(_DisturbanceTex, fieldUV).rgb;
-                float2 displace = (field.gb - 0.5) * 2.0 * _DisplaceWorldScale;
-                float displaceLen = length(displace);
-                float disturbance = saturate(displaceLen / (_DisplaceWorldScale * 0.5 + 0.001));
-
-                // Warp leaf noise sampling coords
-                wpAnim += displace;
-
-                // Amplify edge noise near disturbance
-                edgeAmount *= (1.0 + disturbance * _EdgeDisturbanceScale);
+                float2 fieldUV  = (wp - _FieldBoundsMin) / _FieldBoundsSize;
+                float2 displace = (tex2D(_DisturbanceTex, fieldUV).gb - 0.5)
+                                * 2.0 * _DisplaceWorldScale;
+                wpEval += displace;
                 #endif
 
-                d -= edgeN * edgeAmount;
+                // ── Pass 1: branch skeleton (behind leaves) ──
+                float branchDist = 999.0;
+                for (int bi = 0; bi < _SlotCount; bi++)
+                {
+                    float radiusScale = _SlotCentersWorld[bi].w > 0.001
+                                      ? _SlotCentersWorld[bi].w : 1.0;
+                    // Skip gap fills for branches
+                    if (radiusScale < 0.99) continue;
 
-                // ── Step 5: Alpha clip with AA ──
-                float alpha = 1.0 - smoothstep(-_AAWidth, 0.0, d);
+                    float2 slotCenter = _SlotCentersWorld[bi].xy;
+                    float hash = frac(sin(dot(slotCenter, float2(127.1, 311.7)))
+                               * 43758.5453);
+                    float baseRadius = (_SlotRadius * radiusScale)
+                                     + (hash - 0.5) * 2.0 * _RadiusJitter;
 
-                // ── Shadow computation (needs to happen before early discard) ──
+                    // 3 branch capsules matching sub-circle directions
+                    for (int bc = 1; bc < SUB_CIRCLES; bc++)
+                    {
+                        float2 tipCenter;
+                        float  tipRadius;
+                        SubCircle(slotCenter, baseRadius, hash, bc, tipCenter, tipRadius);
+                        float bd = CapsuleSDF(wpEval, slotCenter, tipCenter, _BranchThickness);
+                        branchDist = min(branchDist, bd);
+                    }
+                }
+                bool insideBranch = branchDist < 0.0;
+
+                // ── Pass 2: leaf circles — painter's algorithm (back to front) ──
+                // Depth order: centre circle (idx 0) is deepest, branch circles
+                // (idx 1-3) sit on top. Within each slot, paint back to front.
+                // Across slots, all circles at the same depth index are painted
+                // together — gives consistent layering.
+                bool  anyCovered = false;
+                fixed3 leafColor = fixed3(0, 0, 0);
+                float leafAlphaDist = 999.0;
+                bool  wasLeafCovered = false;
+
+                // Paint depth layers 0 (deepest) through SUB_CIRCLES-1 (topmost)
+                for (int depth = 0; depth < SUB_CIRCLES; depth++)
+                {
+                    for (int si = 0; si < _SlotCount; si++)
+                    {
+                        float2 slotCenter = _SlotCentersWorld[si].xy;
+                        float radiusScale = _SlotCentersWorld[si].w > 0.001
+                                          ? _SlotCentersWorld[si].w : 1.0;
+
+                        // Gap fills only have depth 0 (centre circle)
+                        if (depth > 0 && radiusScale < 0.99) continue;
+
+                        float hash = frac(sin(dot(slotCenter, float2(127.1, 311.7)))
+                                   * 43758.5453);
+                        float baseRadius = (_SlotRadius * radiusScale)
+                                         + (hash - 0.5) * 2.0 * _RadiusJitter;
+
+                        float2 cc;
+                        float  cr;
+                        SubCircle(slotCenter, baseRadius, hash, depth, cc, cr);
+
+                        float d = ScallopedCircleSDF(wpEval, cc, cr, hash + depth * 0.37);
+                        leafAlphaDist = min(leafAlphaDist, d);
+
+                        if (d < 0.0)
+                        {
+                            // Depth-based colour: deeper = darker, top = brighter
+                            float depthT = (float)depth / (float)(SUB_CIRCLES - 1);
+                            fixed3 circleColor = lerp(_BaseColor.rgb, _TopColor.rgb, depthT);
+
+                            // Per-circle dome shading: radial gradient from bright
+                            // center to dark edge sells each clump as a 3D dome
+                            float rawDist = length(wpEval - cc);
+                            float edgeT = saturate(rawDist / max(cr, 0.001));
+                            float radial = smoothstep(1.0, 0.3, edgeT);
+                            circleColor *= lerp(_EdgeShade, 1.0, radial);
+
+                            // Highlight spot near center
+                            float hlT = smoothstep(_HighlightSize, 0.0, edgeT);
+                            circleColor = lerp(circleColor, _HighlightColor.rgb,
+                                               hlT * _HighlightColor.a);
+
+                            // Inner shadow crease: darken near the edge of this
+                            // circle where it overlaps an already-covered area
+                            if (wasLeafCovered)
+                            {
+                                float crease = smoothstep(0.0, _CreaseWidth, -d);
+                                circleColor *= lerp(_CreaseDarken, 1.0, crease);
+                            }
+
+                            // Painter's overwrite — upper circles fully cover lower
+                            leafColor = circleColor;
+                            anyCovered = true;
+                            wasLeafCovered = true;
+                        }
+                    }
+                }
+
+                float alpha = 1.0 - smoothstep(-_AAWidth, 0.0, leafAlphaDist);
+
+                // If no leaf covers this pixel, check branch
+                if (!anyCovered && insideBranch)
+                {
+                    leafColor = _BranchColor.rgb;
+                    alpha = 1.0 - smoothstep(-_AAWidth, 0.0, branchDist);
+                    anyCovered = true;
+                }
+
+                // ── Shadow ──
                 #ifdef _SHADOW_ON
                 float2 shadowWp = wp - float2(_ShadowOffsetX, _ShadowOffsetY);
-                float shadowSeed;
-                float shadowD = BushSDF(shadowWp, shadowSeed);
-                float shadowEdgeN = EdgeNoise(shadowWp, t, shadowSeed);
-                float shadowEdgeAmount = _EdgeNoiseAmount;
-                #ifdef _DISTURBANCE_ON
-                shadowEdgeAmount *= (1.0 + disturbance * _EdgeDisturbanceScale);
-                #endif
-                shadowD -= shadowEdgeN * shadowEdgeAmount;
+                float shadowD = BaseSDF(shadowWp);
                 float shadowAlpha = (1.0 - smoothstep(-_ShadowSoftness, 0.0, shadowD))
                                   * _ShadowColor.a * IN.color.a;
 
                 if (alpha < 0.001 && shadowAlpha < 0.001) discard;
-
-                // Shadow-only pixel — main body absent
-                if (alpha < 0.001)
-                {
-                    return fixed4(_ShadowColor.rgb, shadowAlpha);
-                }
+                if (alpha < 0.001) return fixed4(_ShadowColor.rgb, shadowAlpha);
                 #else
                 if (alpha < 0.001) discard;
                 #endif
 
-                // ── Step 6: Leaf colour modulation (expensive — after early discard) ──
-                float leafN = LeafNoise(wpAnim, t, slotSeed);
-                fixed3 surfaceColor = lerp(_BaseColor.rgb, _LeafVariationColor.rgb, leafN);
-
-                // ── Step 7: Pseudo-lighting ──
-                #ifdef _LIGHTING_ON
-                fixed3 lighting = BushLighting(wpAnim, t, slotSeed);
-                surfaceColor *= lighting;
-                #endif
-
-                // ── Step 8: Edge highlight rim ──
-                float rim = smoothstep(_RimWidth, 0.0, abs(d));
-                surfaceColor = lerp(surfaceColor, _LightColor.rgb, rim * _RimIntensity);
-
-                // ── Step 9: Centre shadow ──
-                #ifdef _CENTER_SHADOW_ON
-                float centerDist = 999.0;
-                for (int i = 0; i < _SlotCount; i++)
-                {
-                    centerDist = min(centerDist, length(wp - _SlotCentersWorld[i].xy));
-                }
-                float centerFade = 1.0 - smoothstep(_SlotRadius * 0.3, _SlotRadius * 0.8, centerDist);
-                surfaceColor *= lerp(1.0, _CenterShadowDarkness, centerFade);
-                #endif
-
-                // ── Step 10: Final composition ──
-                fixed3 mainRgb = surfaceColor * IN.color.rgb;
-                float mainAlpha = alpha * IN.color.a;
+                // ── Final composition ──
+                fixed3 mainRgb   = leafColor * IN.color.rgb;
+                float  mainAlpha = alpha * IN.color.a;
 
                 #ifdef _SHADOW_ON
                 fixed  combinedA   = mainAlpha + shadowAlpha * (1.0 - mainAlpha);
                 fixed3 combinedRGB = combinedA > 0.0001
-                    ? (mainRgb * mainAlpha + _ShadowColor.rgb * shadowAlpha * (1.0 - mainAlpha)) / combinedA
+                    ? (mainRgb * mainAlpha
+                       + _ShadowColor.rgb * shadowAlpha * (1.0 - mainAlpha))
+                      / combinedA
                     : mainRgb;
                 return fixed4(combinedRGB, combinedA);
                 #else
@@ -389,4 +406,3 @@ Shader "BalloonParty/Grid/Bush"
         }
     }
 }
-
