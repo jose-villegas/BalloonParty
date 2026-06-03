@@ -1,11 +1,12 @@
 Shader "BalloonParty/Grid/Bush"
 {
     // Procedural top-down cartoony bush on a SpriteRenderer quad.
-    // Each slot spawns overlapping leaf-clump circles arranged in a branch
-    // pattern. Circles are painted back-to-front (painter's algorithm) so
-    // upper circles fully occlude lower ones — no venn-diagram blending.
-    // Inner shadow creases darken where an upper circle overlaps a lower one.
-    // Brown branch capsules show through gaps in the leaf canopy.
+    // Leaf clumps are placed in a Douady-Couder phyllotaxis spiral (golden
+    // angle ≈ 137.5°) per slot. Each leaf is a circle-cut bilateral lens
+    // (simplified Gielis via CSG) pointing radially outward. Painted
+    // back-to-front (painter's algorithm) — outer/lower leaves first,
+    // inner/top leaves last. Inner shadow creases, self-shadow, per-leaf
+    // dome shading, central vein, and optional branches.
     //
     // GPU instancing DISABLED — _TimeOffset driven via MaterialPropertyBlock.
     //
@@ -23,28 +24,41 @@ Shader "BalloonParty/Grid/Bush"
         _AAWidth            ("AA Edge Width",        Range(0.001, 0.03)) = 0.008
 
         [Header(Canopy)]
-        _BranchSpread       ("Branch Spread",        Range(0.1, 0.8))    = 0.45
-        _SubCircleSize      ("Circle Size",          Range(0.2, 0.9))    = 0.55
+        _BranchSpread       ("Spiral Spread",        Range(0.1, 0.8))    = 0.55
+        _SubCircleSize      ("Leaf Size",            Range(0.15, 0.7))   = 0.30
         _SubCircleSizeVar   ("Size Variation",       Range(0, 0.5))      = 0.30
+        _LeafPointiness     ("Leaf Pointiness",      Range(0.0, 2.0))    = 0.7
 
         [Header(Surface)]
         _BaseColor          ("Base Color (deep)",    Color)              = (0.14, 0.40, 0.10, 1.0)
         _TopColor           ("Top Color (bright)",   Color)              = (0.35, 0.65, 0.20, 1.0)
-        _CreaseWidth        ("Crease Width",         Range(0.01, 0.12))  = 0.05
-        _CreaseDarken       ("Crease Darken",        Range(0.3, 1.0))    = 0.65
+        _CreaseWidth        ("Crease Width",         Range(0.01, 0.12))  = 0.07
+        _CreaseDarken       ("Crease Darken",        Range(0.3, 1.0))    = 0.50
 
         [Header(Dome Shading)]
         _HighlightColor     ("Highlight Color",      Color)              = (0.55, 0.80, 0.35, 0.45)
-        _HighlightSize      ("Highlight Size",       Range(0.1, 0.7))    = 0.35
-        _EdgeShade          ("Edge Shade",           Range(0.5, 1.0))    = 0.75
+        _HighlightSize      ("Highlight Size",       Range(0.1, 0.7))    = 0.30
+        _EdgeShade          ("Edge Shade",           Range(0.5, 1.0))    = 0.68
+
+        [Header(Inner Detail)]
+        _RosetteCount       ("Rosette Lobes",        Range(3, 12))       = 7
+        _RosetteStrength    ("Rosette Strength",     Range(0, 0.5))      = 0.35
+        _GrainScale         ("Grain Scale",          Range(10, 100))     = 40
+        _GrainStrength      ("Grain Strength",       Range(0, 0.3))      = 0.15
+
+        [Header(Leaf Vein)]
+        _VeinWidth          ("Vein Width",           Range(0.01, 0.15))  = 0.06
+        _VeinDarken         ("Vein Darken",          Range(0.5, 1.0))    = 0.72
 
         [Header(Branches)]
-        _BranchThickness    ("Branch Thickness",     Range(0.005, 0.05)) = 0.018
+        _BranchThickness    ("Branch Thickness",     Range(0.005, 0.05)) = 0.014
         _BranchColor        ("Branch Color",         Color)              = (0.35, 0.22, 0.10, 1.0)
 
-        [Header(Scallop)]
-        _ScallopDepth       ("Scallop Depth",        Range(0, 0.04))     = 0.015
-        _ScallopSize        ("Scallop Size",         Range(0.005, 0.06)) = 0.025
+        [Header(Self Shadow)]
+        _LeafShadowStrength ("Shadow Strength",      Range(0, 0.6))      = 0.35
+        _LeafShadowSoftness ("Shadow Softness",      Range(0.01, 0.15))  = 0.05
+        _LeafShadowOffsetX  ("Shadow Offset X",      Range(-0.06, 0.06)) = 0.02
+        _LeafShadowOffsetY  ("Shadow Offset Y",      Range(-0.06, 0.06)) = -0.03
 
         [Header(Wind)]
         _WindSpeed          ("Wind Speed",           Range(0, 2))        = 0.4
@@ -91,9 +105,11 @@ Shader "BalloonParty/Grid/Bush"
             #include "UnityCG.cginc"
             #include "Assets/Shaders/BalloonParty/Noise/SimplexNoise2D.cginc"
 
-            #define MAX_SLOTS     16
-            #define SUB_CIRCLES    5
-            #define SCALLOP_COUNT  5
+            #define MAX_SLOTS      16
+            #define LEAF_COUNT     16
+            #define BRANCH_COUNT    5
+            #define GOLDEN_ANGLE    2.39996323
+            #define MAX_BRANCHES   (MAX_SLOTS * BRANCH_COUNT)
 
             struct appdata_t
             {
@@ -127,6 +143,7 @@ Shader "BalloonParty/Grid/Bush"
             float  _BranchSpread;
             float  _SubCircleSize;
             float  _SubCircleSizeVar;
+            float  _LeafPointiness;
 
             fixed4 _BaseColor;
             fixed4 _TopColor;
@@ -137,11 +154,21 @@ Shader "BalloonParty/Grid/Bush"
             float  _HighlightSize;
             float  _EdgeShade;
 
+            float  _RosetteCount;
+            float  _RosetteStrength;
+            float  _GrainScale;
+            float  _GrainStrength;
+
+            float  _VeinWidth;
+            float  _VeinDarken;
+
             float  _BranchThickness;
             fixed4 _BranchColor;
 
-            float  _ScallopDepth;
-            float  _ScallopSize;
+            float  _LeafShadowStrength;
+            float  _LeafShadowSoftness;
+            float  _LeafShadowOffsetX;
+            float  _LeafShadowOffsetY;
 
             float  _WindSpeed;
             float  _WindAmount;
@@ -149,6 +176,9 @@ Shader "BalloonParty/Grid/Bush"
 
             float4 _SlotCentersWorld[MAX_SLOTS];
             int    _SlotCount;
+
+            float4 _BranchSegments[MAX_BRANCHES];
+            int    _BranchCount;
 
             #ifdef _SHADOW_ON
             fixed4 _ShadowColor;
@@ -164,51 +194,65 @@ Shader "BalloonParty/Grid/Bush"
             float     _DisplaceWorldScale;
             #endif
 
-            // ── Sub-circle generator ──
-            // idx 0 = centre, 1-4 = branches at ~90° with hash variation.
-            void SubCircle(float2 slotCenter, float baseRadius, float hash, int idx,
-                           out float2 center, out float radius)
+            // ── Phyllotaxis leaf generator (Douady-Couder golden-angle spiral) ──
+            // depth 0 = outermost leaf (painted first / underneath)
+            // depth LEAF_COUNT-1 = centre leaf (painted last / on top)
+            void PhyllotaxisLeaf(float2 slotCenter, float baseRadius, float hash,
+                                  int depth,
+                                  out float2 center, out float radius,
+                                  out float2 leafDir)
             {
-                if (idx == 0)
-                {
-                    center = slotCenter;
-                    radius = baseRadius * _SubCircleSize;
-                    return;
-                }
+                // Reverse: depth 0 → highest phyllotaxis index (outermost)
+                int n = LEAF_COUNT - 1 - depth;
+                float fn = (float)n;
 
-                float fi = (float)idx;
-                float angle = hash * 6.283185 + (fi - 1.0) * 1.5708
-                            + (frac(hash * fi * 17.3) - 0.5) * 0.7;
-                float spread = baseRadius * _BranchSpread
-                             * (0.8 + frac(hash * fi * 13.7) * 0.4);
-                float sizeVar = 1.0 - frac(hash * fi * 23.1) * _SubCircleSizeVar;
+                // Golden-angle spiral placement
+                float angle = fn * GOLDEN_ANGLE + hash * 6.283185;
+                leafDir = float2(cos(angle), sin(angle));
 
-                center = slotCenter + float2(cos(angle), sin(angle)) * spread;
-                radius = baseRadius * _SubCircleSize * sizeVar;
+                // Douady-Couder distance: ∝ √n, normalized to slot radius
+                float maxR = sqrt((float)(LEAF_COUNT - 1) + 0.5);
+                float dist = baseRadius * _BranchSpread * sqrt(fn + 0.5) / maxR;
+
+                // Outer leaves (low depth) larger, inner leaves (high depth) smaller
+                float depthT = (float)depth / (float)(LEAF_COUNT - 1);
+                float sizeBase = lerp(1.0, 0.65, depthT);
+                float sizeHash = 0.85 + frac(hash * (fn + 1.0) * 23.1) * _SubCircleSizeVar;
+
+                radius = baseRadius * _SubCircleSize * sizeBase * sizeHash;
+                center = slotCenter + leafDir * dist;
             }
 
-            // ── Scalloped circle SDF ──
-            // Subtracts small notch circles around the rim for bumpy leaf edges.
-            float ScallopedCircleSDF(float2 wp, float2 center, float radius, float hash)
+            // ── Leaf-shaped SDF (circle-cut bilateral lens) ──
+            // Two equal circles offset perpendicular to the leaf axis.
+            // Their intersection (max of SDFs) forms a bilaterally
+            // symmetric lens with pointed tips — a simplified Gielis
+            // superformula realised via CSG circle cuts.
+            //   pointiness 0 = circle, 0.7 = natural leaf, 2.0 = needle
+            float LeafSDF(float2 wp, float2 center, float radius,
+                          float2 leafDir, float pointiness)
             {
-                float d = length(wp - center) - radius;
+                float2 local = wp - center;
+                float2 tang = float2(-leafDir.y, leafDir.x);
+                float u = dot(local, leafDir);
+                float v = dot(local, tang);
 
-                for (int s = 0; s < SCALLOP_COUNT; s++)
-                {
-                    float fs = (float)s;
-                    float angle = hash * 6.283185 + fs * (6.283185 / (float)SCALLOP_COUNT)
-                                + frac(hash * fs * 31.7) * 0.6;
-                    float2 notchPos = center + float2(cos(angle), sin(angle))
-                                    * (radius - _ScallopDepth * 0.3);
-                    float notchDist = length(wp - notchPos) - _ScallopSize;
-                    // Subtract notch: where notchDist < 0, push d positive (outside)
-                    d = max(d, -notchDist);
-                }
+                float d = pointiness * radius;
+                float R = radius + d;
 
-                return d;
+                float d1 = length(float2(u, v - d)) - R;
+                float d2 = length(float2(u, v + d)) - R;
+
+                return max(d1, d2);
             }
 
-            // ── Branch capsule SDF (line segment with thickness) ──
+            // ── Raw leaf distance (for dome shading — ignores pointiness) ──
+            float LeafCenterDist(float2 wp, float2 center, float radius)
+            {
+                return length(wp - center) / max(radius, 0.001);
+            }
+
+            // ── Branch capsule SDF ──
             float CapsuleSDF(float2 wp, float2 a, float2 b, float thickness)
             {
                 float2 pa = wp - a;
@@ -217,18 +261,40 @@ Shader "BalloonParty/Grid/Bush"
                 return length(pa - ba * h) - thickness;
             }
 
-            // ── Simplified base SDF (slot centres only) for shadow ──
-            float BaseSDF(float2 wp)
+            // ── Canopy silhouette SDF (leaf shapes) for ground shadow ──
+            float CanopySDF(float2 wp)
             {
                 float d = 999.0;
-                for (int i = 0; i < _SlotCount; i++)
+                for (int depth = 0; depth < LEAF_COUNT; depth++)
                 {
-                    float2 c = _SlotCentersWorld[i].xy;
-                    float rs = _SlotCentersWorld[i].w > 0.001
-                             ? _SlotCentersWorld[i].w : 1.0;
-                    float h = frac(sin(dot(c, float2(127.1, 311.7))) * 43758.5453);
-                    float r = (_SlotRadius * rs) + (h - 0.5) * 2.0 * _RadiusJitter;
-                    d = min(d, length(wp - c) - r);
+                    for (int i = 0; i < _SlotCount; i++)
+                    {
+                        float radiusScale = _SlotCentersWorld[i].w > 0.001
+                                          ? _SlotCentersWorld[i].w : 1.0;
+                        if (depth > 0 && radiusScale < 0.99) continue;
+
+                        float2 sc = _SlotCentersWorld[i].xy;
+                        float h = frac(sin(dot(sc, float2(127.1, 311.7)))
+                                 * 43758.5453);
+                        float br = (_SlotRadius * radiusScale)
+                                 + (h - 0.5) * 2.0 * _RadiusJitter;
+
+                        float2 cc, ld;
+                        float  cr;
+                        if (radiusScale < 0.99)
+                        {
+                            cc = sc;
+                            cr = br * _SubCircleSize;
+                            ld = float2(0, 1);
+                        }
+                        else
+                        {
+                            PhyllotaxisLeaf(sc, br, h, depth, cc, cr, ld);
+                        }
+
+                        float pt = radiusScale < 0.99 ? 0.0 : _LeafPointiness;
+                        d = min(d, LeafSDF(wp, cc, cr, ld, pt));
+                    }
                 }
                 return d;
             }
@@ -269,44 +335,24 @@ Shader "BalloonParty/Grid/Bush"
                 #endif
 
                 // ── Pass 1: branch skeleton (behind leaves) ──
+                // Capsule endpoints are prebaked on the CPU — just evaluate SDF
                 float branchDist = 999.0;
-                for (int bi = 0; bi < _SlotCount; bi++)
+                for (int bi = 0; bi < _BranchCount; bi++)
                 {
-                    float radiusScale = _SlotCentersWorld[bi].w > 0.001
-                                      ? _SlotCentersWorld[bi].w : 1.0;
-                    // Skip gap fills for branches
-                    if (radiusScale < 0.99) continue;
-
-                    float2 slotCenter = _SlotCentersWorld[bi].xy;
-                    float hash = frac(sin(dot(slotCenter, float2(127.1, 311.7)))
-                               * 43758.5453);
-                    float baseRadius = (_SlotRadius * radiusScale)
-                                     + (hash - 0.5) * 2.0 * _RadiusJitter;
-
-                    // 3 branch capsules matching sub-circle directions
-                    for (int bc = 1; bc < SUB_CIRCLES; bc++)
-                    {
-                        float2 tipCenter;
-                        float  tipRadius;
-                        SubCircle(slotCenter, baseRadius, hash, bc, tipCenter, tipRadius);
-                        float bd = CapsuleSDF(wpEval, slotCenter, tipCenter, _BranchThickness);
-                        branchDist = min(branchDist, bd);
-                    }
+                    float4 seg = _BranchSegments[bi];
+                    float bd = CapsuleSDF(wpEval, seg.xy, seg.zw, _BranchThickness);
+                    branchDist = min(branchDist, bd);
                 }
                 bool insideBranch = branchDist < 0.0;
 
-                // ── Pass 2: leaf circles — painter's algorithm (back to front) ──
-                // Depth order: centre circle (idx 0) is deepest, branch circles
-                // (idx 1-3) sit on top. Within each slot, paint back to front.
-                // Across slots, all circles at the same depth index are painted
-                // together — gives consistent layering.
-                bool  anyCovered = false;
-                fixed3 leafColor = fixed3(0, 0, 0);
-                float leafAlphaDist = 999.0;
-                bool  wasLeafCovered = false;
+                // ── Pass 2: leaf clumps — painter's algorithm (back to front) ──
+                // depth 0 = outermost (painted first), LEAF_COUNT-1 = centre (last)
+                bool   anyCovered = false;
+                fixed3 leafColor  = fixed3(0, 0, 0);
+                float  leafAlphaDist = 999.0;
+                bool   wasLeafCovered = false;
 
-                // Paint depth layers 0 (deepest) through SUB_CIRCLES-1 (topmost)
-                for (int depth = 0; depth < SUB_CIRCLES; depth++)
+                for (int depth = 0; depth < LEAF_COUNT; depth++)
                 {
                     for (int si = 0; si < _SlotCount; si++)
                     {
@@ -314,7 +360,7 @@ Shader "BalloonParty/Grid/Bush"
                         float radiusScale = _SlotCentersWorld[si].w > 0.001
                                           ? _SlotCentersWorld[si].w : 1.0;
 
-                        // Gap fills only have depth 0 (centre circle)
+                        // Gap fills: only one round leaf at centre
                         if (depth > 0 && radiusScale < 0.99) continue;
 
                         float hash = frac(sin(dot(slotCenter, float2(127.1, 311.7)))
@@ -322,40 +368,130 @@ Shader "BalloonParty/Grid/Bush"
                         float baseRadius = (_SlotRadius * radiusScale)
                                          + (hash - 0.5) * 2.0 * _RadiusJitter;
 
-                        float2 cc;
+                        float2 cc, leafDir;
                         float  cr;
-                        SubCircle(slotCenter, baseRadius, hash, depth, cc, cr);
 
-                        float d = ScallopedCircleSDF(wpEval, cc, cr, hash + depth * 0.37);
+                        if (radiusScale < 0.99)
+                        {
+                            // Gap fill: simple circle at slot centre
+                            cc = slotCenter;
+                            cr = baseRadius * _SubCircleSize;
+                            leafDir = float2(0, 1);
+                        }
+                        else
+                        {
+                            PhyllotaxisLeaf(slotCenter, baseRadius, hash, depth,
+                                            cc, cr, leafDir);
+                        }
+
+                        // Leaf SDF (limaçon for real slots, circle for gaps)
+                        float pointiness = radiusScale < 0.99
+                                         ? 0.0 : _LeafPointiness;
+                        float d = LeafSDF(wpEval, cc, cr, leafDir, pointiness);
                         leafAlphaDist = min(leafAlphaDist, d);
 
                         if (d < 0.0)
                         {
-                            // Depth-based colour: deeper = darker, top = brighter
-                            float depthT = (float)depth / (float)(SUB_CIRCLES - 1);
-                            fixed3 circleColor = lerp(_BaseColor.rgb, _TopColor.rgb, depthT);
+                            // Depth-based colour
+                            float depthT = (float)depth / (float)(LEAF_COUNT - 1);
+                            fixed3 circleColor = lerp(_BaseColor.rgb, _TopColor.rgb,
+                                                      depthT);
 
-                            // Per-circle dome shading: radial gradient from bright
-                            // center to dark edge sells each clump as a 3D dome
-                            float rawDist = length(wpEval - cc);
-                            float edgeT = saturate(rawDist / max(cr, 0.001));
+                            // Per-leaf dome shading
+                            float edgeT = LeafCenterDist(wpEval, cc, cr);
                             float radial = smoothstep(1.0, 0.3, edgeT);
                             circleColor *= lerp(_EdgeShade, 1.0, radial);
 
-                            // Highlight spot near center
+                            // Highlight spot
                             float hlT = smoothstep(_HighlightSize, 0.0, edgeT);
                             circleColor = lerp(circleColor, _HighlightColor.rgb,
                                                hlT * _HighlightColor.a);
 
-                            // Inner shadow crease: darken near the edge of this
-                            // circle where it overlaps an already-covered area
+                            float2 localP = wpEval - cc;
+
+                            // Stem attachment — shift rosette/vein origin
+                            // to leaf base (closest point to branch)
+                            float2 rosetteP = localP;
+                            float stemAxisT = 0.5;
+                            if (radiusScale >= 0.99)
+                            {
+                                float halfLen = cr
+                                    * sqrt(1.0 + 2.0 * _LeafPointiness);
+                                rosetteP = localP + leafDir * halfLen;
+                                stemAxisT = saturate(
+                                    (dot(localP, leafDir) + halfLen)
+                                    / max(2.0 * halfLen, 0.001));
+                            }
+
+                            // Rosette petal pattern — lobes radiate from
+                            // stem point like real leaf venation
+                            float angle = atan2(rosetteP.y, rosetteP.x);
+                            float petal = sin(angle * _RosetteCount
+                                            + hash * 6.283185) * 0.5 + 0.5;
+                            petal = petal * 0.7
+                                  + (sin(angle * _RosetteCount * 2.0
+                                        + hash * 3.14159) * 0.5 + 0.5) * 0.3;
+                            float petalMask = smoothstep(0.0, 0.35, edgeT)
+                                            * smoothstep(0.95, 0.55, edgeT);
+                            circleColor *= lerp(1.0, 0.75 + petal * 0.5,
+                                                _RosetteStrength * petalMask);
+
+                            // World-space grain — tiny hash-based variation that
+                            // reads as individual leaf texture at close zoom
+                            float2 grainCell = floor(wpEval * _GrainScale);
+                            float grain = frac(sin(dot(grainCell,
+                                              float2(127.1, 311.7))) * 43758.5453);
+                            circleColor *= lerp(1.0, 0.8 + grain * 0.4,
+                                                _GrainStrength);
+
+                            // Central vein — midrib from stem to tip, tapers
+                            if (radiusScale >= 0.99)
+                            {
+                                float2 tang = float2(-leafDir.y, leafDir.x);
+                                float vDist = abs(dot(localP, tang))
+                                            / max(cr, 0.001);
+                                float taperW = _VeinWidth
+                                    * lerp(1.5, 0.3, stemAxisT);
+                                float vLine = 1.0 - smoothstep(
+                                    taperW * 0.4, taperW, vDist);
+                                float vMask = smoothstep(0.02, 0.15, stemAxisT)
+                                            * smoothstep(0.98, 0.7, stemAxisT);
+                                circleColor *= lerp(1.0, _VeinDarken,
+                                                    vLine * vMask);
+                            }
+
+                            // Self-shadow — all upper leaves in the same slot
+                            // darken this leaf where they would sit on top
+                            if (radiusScale >= 0.99)
+                            {
+                                float selfSh = 0.0;
+                                float2 shPos = wpEval
+                                    + float2(_LeafShadowOffsetX,
+                                             _LeafShadowOffsetY);
+                                for (int sd = depth + 1; sd < LEAF_COUNT; sd++)
+                                {
+                                    float2 ucc, udir;
+                                    float  ucr;
+                                    PhyllotaxisLeaf(slotCenter, baseRadius,
+                                                    hash, sd, ucc, ucr, udir);
+                                    float usd = LeafSDF(shPos, ucc, ucr,
+                                                        udir, _LeafPointiness);
+                                    float st = 1.0 - smoothstep(
+                                        -_LeafShadowSoftness,
+                                         _LeafShadowSoftness, usd);
+                                    selfSh = max(selfSh, st);
+                                }
+                                circleColor *= 1.0 - selfSh
+                                             * _LeafShadowStrength;
+                            }
+
+                            // Inner shadow crease at overlaps
                             if (wasLeafCovered)
                             {
                                 float crease = smoothstep(0.0, _CreaseWidth, -d);
                                 circleColor *= lerp(_CreaseDarken, 1.0, crease);
                             }
 
-                            // Painter's overwrite — upper circles fully cover lower
                             leafColor = circleColor;
                             anyCovered = true;
                             wasLeafCovered = true;
@@ -365,7 +501,7 @@ Shader "BalloonParty/Grid/Bush"
 
                 float alpha = 1.0 - smoothstep(-_AAWidth, 0.0, leafAlphaDist);
 
-                // If no leaf covers this pixel, check branch
+                // Branches show through leaf gaps
                 if (!anyCovered && insideBranch)
                 {
                     leafColor = _BranchColor.rgb;
@@ -376,7 +512,7 @@ Shader "BalloonParty/Grid/Bush"
                 // ── Shadow ──
                 #ifdef _SHADOW_ON
                 float2 shadowWp = wp - float2(_ShadowOffsetX, _ShadowOffsetY);
-                float shadowD = BaseSDF(shadowWp);
+                float shadowD = CanopySDF(shadowWp);
                 float shadowAlpha = (1.0 - smoothstep(-_ShadowSoftness, 0.0, shadowD))
                                   * _ShadowColor.a * IN.color.a;
 

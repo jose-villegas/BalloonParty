@@ -1,6 +1,7 @@
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BalloonParty.Slots.Actor.Cluster
@@ -36,6 +37,8 @@ namespace BalloonParty.Slots.Actor.Cluster
         private int _slotCount;
 
         internal SpriteRenderer Renderer => _renderer;
+        protected IReadOnlyList<Vector4> SlotCentersBuffer => _slotCenters;
+        protected int SlotCount => _slotCount;
 
         private void Awake()
         {

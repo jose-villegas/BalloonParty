@@ -16,6 +16,7 @@ Types and utilities used across multiple features.
 | `Diagnostics/` | Debug utilities — `FPSCounter`, `FrameRateSettings` |
 | `IGameConfiguration` | Read-only interface for core game data — projectile settings, slot grid dimensions, prediction trace params, score trail timing, points formula |
 | `IEffect` | Interface for poolable visual effects — `Play(position, tint)`, `Play(position, rotation, tint)`, `Stop()` |
+| `MathUtils` | General-purpose math constants and pure functions not covered by `Mathf` — `GoldenAngle`, `TwoPi`, `Frac` |
 
 ## Messages
 

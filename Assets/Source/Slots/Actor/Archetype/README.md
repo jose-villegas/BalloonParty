@@ -20,7 +20,25 @@ Concrete grid actor models and the Puff cloud visual system.
 | `GridActorView` | `MonoBehaviour` view for grid actors — `IPoolable` + `ISlotActorView` + `TweenTracker`. Invisible for Puff slots (cloud visual is separate). |
 | `GridActorPoolChannel` | Pool channel for `GridActorView` prefabs |
 
-## Puff Cloud System
+## Bush System
+
+The Bush system renders procedural GPU-driven bushes over groups of adjacent Bush slots. Follows the same cluster MVC pattern as the Puff cloud system.
+
+### View Layer
+
+| File | What it does |
+|---|---|
+| `BushView` | `ClusterView` subclass. Prebakes branch capsule endpoints on the CPU from material properties (`_SlotRadius`, `_RadiusJitter`, `_BranchSpread`) and slot centres. Pushes `_BranchSegments` (Vector4[]) and `_BranchCount` via `MaterialPropertyBlock` so the fragment shader only evaluates `CapsuleSDF` — no per-pixel `PhyllotaxisLeaf`. |
+| `BushViewController` | `ClusterViewController` subclass. Adds gap-fill circles at midpoints between adjacent bush slots for continuous coverage. |
+| `BushClusterRegistry` | `SlotClusterRegistry<BushObstacleModel>`. Subscribes to grid changes (no `setupOnly`) because spawner places actors async after `Start()`. |
+
+### Configuration
+
+`BushSettings` (ScriptableObject in `Configuration/`) — `IBushSettings`. Holds prefab reference, animation speed, padding, sorting layer/order.
+
+### Shaders
+
+`Assets/Shaders/BalloonParty/Grid/Bush.shader` — procedural top-down cartoony bush canopy. See `Plans/PLAN-Bush-Shader-Tuning.md` for full visual tuning plan.
 
 The Puff cloud system renders procedural GPU-driven clouds over groups of adjacent Puff slots. Multiple Puff slots that are hex-adjacent merge into a single continuous cloud body. The system follows MVC:
 
