@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4547613607917452804}
   - component: {fileID: 2123238835872810376}
   m_Layer: 11
-  m_Name: Bush
+  m_Name: BushSlot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

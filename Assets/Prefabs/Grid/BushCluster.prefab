@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6229166482837351647}
   - component: {fileID: 4547613607917452804}
   - component: {fileID: 2123238835872810376}
+  - component: {fileID: 7334517438051085876}
   m_Layer: 11
   m_Name: BushCluster
   m_TagString: Untagged
@@ -59,6 +60,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Slots.Actor.Archetype.GridActorView
   _tweenTracker: {fileID: 4547613607917452804}
+--- !u!114 &7334517438051085876
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4831884990336057849}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c529d0f0b180245518711ff66d7a00f6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Slots.Actor.Archetype.BushView
+  _renderer: {fileID: 5744512781299209796}
+  _animationSpeed: 0.8
 --- !u!1 &6832182601084603710
 GameObject:
   m_ObjectHideFlags: 0
@@ -70,7 +85,7 @@ GameObject:
   - component: {fileID: 7294432996185071414}
   - component: {fileID: 5744512781299209796}
   m_Layer: 11
-  m_Name: Cloud
+  m_Name: Bush
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

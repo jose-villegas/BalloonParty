@@ -74,19 +74,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Slots.Actor.Archetype.PuffCloudView
   _renderer: {fileID: 5744512781299209796}
   _animationSpeed: 3
-  _texelsPerSlot: 32
-  _diffusionRate: 0.15
-  _reformSpeed: 0.4
-  _diffusionTickInterval: 0.05
-  _windSpeed: 0.5
-  _windSmoothing: 2
-  _windDecay: 1
-  _pressureStrength: 0.9
-  _displaceAmount: 0.9
-  _displaceDecay: 0.3
-  _debugClickToStamp: 1
-  _debugStampRadius: 0.3
-  _debugStampStrength: 1.5
 --- !u!1 &6832182601084603710
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,8 +151,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 969957701
-  m_SortingLayer: 2
+  m_SortingLayerID: -1044048485
+  m_SortingLayer: 4
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: e0e76c0f65a08ad48bac3fd1f99c4440, type: 3}

@@ -46,6 +46,7 @@ namespace BalloonParty.Game
         [SerializeField] private BalloonsConfiguration _balloonsConfiguration;
         [SerializeField] private GridActorConfiguration _gridActorConfiguration;
         [SerializeField] private PuffCloudSettings _puffCloudSettings;
+        [SerializeField] private BushSettings _bushSettings;
         [SerializeField] private DisturbanceFieldSettings _disturbanceFieldSettings;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
@@ -85,6 +86,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IBalloonsConfiguration>(_balloonsConfiguration);
             builder.RegisterInstance<IGridActorConfiguration>(_gridActorConfiguration);
             builder.RegisterInstance<IPuffCloudSettings>(_puffCloudSettings);
+            builder.RegisterInstance<IBushSettings>(_bushSettings);
             builder.RegisterInstance<IDisturbanceFieldSettings>(_disturbanceFieldSettings);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
@@ -105,6 +107,8 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<StaticActorSpawner>().As<IGridSpawner>();
             builder.RegisterEntryPoint<PuffClusterRegistry>().AsSelf();
             builder.RegisterEntryPoint<PuffCloudViewController>();
+            builder.RegisterEntryPoint<BushClusterRegistry>().AsSelf();
+            builder.RegisterEntryPoint<BushViewController>();
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf();

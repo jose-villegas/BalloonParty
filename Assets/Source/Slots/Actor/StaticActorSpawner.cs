@@ -144,6 +144,7 @@ namespace BalloonParty.Slots.Actor
             return actorType switch
             {
                 GridActorType.Puff => new PuffObstacleModel(),
+                GridActorType.Bush => new BushObstacleModel(),
                 _ => throw new System.Exception("Unknown actor type: " + actorType)
             };
         }

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GridActorConfiguration
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.GridActorConfiguration
   _entries:
-  - _prefab: {fileID: 2123238835872810376, guid: 59ad6982d81514c65a28e527032efa50,
+  - _prefab: {fileID: 2123238835872810376, guid: ee8e831da83464ecb96aac4cec18f061,
       type: 3}
     _actorType: 0
     _placementMode: 1
@@ -21,4 +21,13 @@ MonoBehaviour:
     _minCount: 5
     _maxCount: 15
     _maxPerCluster: 6
+    _hitsToPop: -1
+  - _prefab: {fileID: 2123238835872810376, guid: a68d053c153d94233b9c08567522493d,
+      type: 3}
+    _actorType: 1
+    _placementMode: 1
+    _weight: 50
+    _minCount: 2
+    _maxCount: 5
+    _maxPerCluster: 3
     _hitsToPop: -1
