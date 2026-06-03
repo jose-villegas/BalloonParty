@@ -5,14 +5,15 @@ using VContainer;
 namespace BalloonParty.Slots.Actor.Archetype
 {
     /// <summary>
-    /// Bush-specific cluster registry. Uses <c>setupOnly: true</c> because bush
-    /// slots never change after initial placement — the registry builds once at
-    /// startup and does no further work.
+    /// Bush-specific cluster registry. Subscribes to grid changes so it can
+    /// discover bush actors placed asynchronously by <c>GridSpawnerCoordinator</c>
+    /// after <c>Start()</c>. The subscription is effectively dormant after initial
+    /// placement because bush slots never change at runtime.
     /// </summary>
     internal class BushClusterRegistry : SlotClusterRegistry<BushObstacleModel>
     {
         [Inject]
-        internal BushClusterRegistry(SlotGrid grid) : base(grid, setupOnly: true)
+        internal BushClusterRegistry(SlotGrid grid) : base(grid)
         {
         }
     }
