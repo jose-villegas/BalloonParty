@@ -646,3 +646,285 @@ create a layered pacing system — the cloud opens up, then the balloon pushes t
    Too short and the blocking phase is imperceptible; too long and it feels like a
    permanent wall. Suggested range: 2–4 turns. Should this scale with difficulty?
 
+---
+
+## 9 — Quality Settings System
+
+> A runtime quality tier system that adapts rendering fidelity, VFX density, and
+> simulation resolution to the target device. The game currently ships at one fixed
+> quality level with no device-adaptive scaling.
+
+### 9.1 Architecture
+
+```
+IQualityProfile (interface)
+├── QualityTier Tier { get; }            // Low, Medium, High
+├── ShaderQuality Shaders { get; }
+├── VfxQuality Vfx { get; }
+├── DisturbanceQuality Disturbance { get; }
+├── AnimationQuality Animation { get; }
+└── PoolQuality Pool { get; }
+
+QualityProfileSettings : ScriptableObject, IQualityProfile
+└── One SO per tier in Assets/ScriptableObjects/Quality/
+
+QualityService : IStartable
+├── Detects device capability at startup
+├── Selects a QualityProfile
+├── Exposes IQualityProfile for injection
+└── Applies global settings (shader keywords, RT resolution, etc.)
+```
+
+`QualityService` runs once at startup. Consumers inject `IQualityProfile` (read-only)
+and branch on tier or read specific values. No per-frame cost — all decisions are made
+at init time.
+
+### 9.2 Parameter Inventory
+
+Every tuneable parameter in the current codebase that is a candidate for quality
+binding, grouped by system.
+
+#### Shader Keywords (GPU cost)
+
+| Shader | Keyword | High | Low | Impact |
+|---|---|---|---|---|
+| PuffCloud | `_SHADOW_ON` | ON | OFF | Removes shadow pass — saves 3 Simplex calls/frag |
+| PuffCloud | `_DENSITY_ON` | ON | ON | Disturbance reaction — cheap (1 tex2D), keep on all tiers |
+| Bush (planned) | `_SHADOW_ON` | ON | OFF | Same as Puff |
+| Bush (planned) | `_LIGHTING_ON` | ON | OFF | Removes lighting gradient — saves 4 Simplex calls/frag |
+| Bush (planned) | `_DISTURBANCE_ON` | ON | ON | Cheap — keep on all tiers |
+| Bush (planned) | `_CENTER_SHADOW_ON` | OFF | OFF | Optional polish — off by default all tiers |
+| SoapBubbleCluster | `_SHADOW_ON` | ON | OFF | Shadow under soap cluster |
+| PaintBlob | `_SHADOW_ON` | ON | OFF | Shadow under paint splat |
+
+**Implementation:** `QualityService.Start()` iterates all affected materials and calls
+`material.EnableKeyword()` / `material.DisableKeyword()`. Alternatively, views read
+`IQualityProfile.Shaders` in their setup and toggle locally.
+
+#### Disturbance Field (GPU + memory)
+
+| Parameter | Setting | High | Medium | Low | Source |
+|---|---|---|---|---|---|
+| `TexelsPerUnit` | RT resolution | 8 | 6 | 4 | `IDisturbanceFieldSettings` |
+| `DiffusionTickInterval` | Blit frequency | 0.05s | 0.066s | 0.10s | `IDisturbanceFieldSettings` |
+| `MaxLerpStamps` | Concurrent stamps | 32 | 16 | 8 | `IDisturbanceFieldSettings` |
+
+**Impact:** Halving `TexelsPerUnit` (8→4) reduces the RT from ~48×72 to ~24×36
+texels — 4× fewer pixels in the diffusion blit. `DiffusionTickInterval` at 0.10s runs
+the blit 10×/sec instead of 20×/sec — halves GPU blit work.
+
+**Implementation:** `DisturbanceFieldService` already reads these from
+`IDisturbanceFieldSettings`. Option A: have `QualityService` modify the SO values at
+startup (mutates shared asset — fragile). Option B: create a `QualityAwareDisturbanceSettings`
+wrapper that reads the base SO and overrides values based on tier. Option B is cleaner.
+
+#### Unbreakable Balloon GrabPass (GPU — single highest-cost operation)
+
+The `UnbreakableBalloon.shader` uses a **named `GrabPass { "_GrabTexture" }`** to
+capture the framebuffer for realtime convex-mirror reflections. Key facts:
+
+- **One grab per frame** — named GrabPass is shared by all Unbreakable instances, so
+  count doesn't matter. But even one grab is expensive.
+- **Cost: ~0.3–1.0 ms on mobile** — forces a tile flush + full-screen copy on TBDR
+  GPUs (all mobile). This is likely the single most expensive rendering operation in
+  the game.
+- **Each Unbreakable = 4 quadrant SpriteRenderers** + inner renderers, all sharing
+  `_SphereCenter` via MPB from `UnbreakableBalloonVariant.Update()`.
+- **Unbreakables don't reflect each other** — the named GrabPass fires once before any
+  Unbreakable draws, so `_GrabTexture` contains the scene *without* any Unbreakables.
+  All instances read the same pre-Unbreakable snapshot.
+
+**Quality tier options:**
+
+| Setting | High | Medium | Low |
+|---|---|---|---|
+| GrabPass frequency | Every frame | Every 2nd frame | Disabled |
+| Reflection content | Includes other Unbreakables (1-frame stale) | Same | Static metallic |
+| Reflection fallback | N/A | Reuse last `_reflectionRT` | Flat metallic gradient |
+
+**Implementation — `CommandBuffer`-based capture (`ReflectionCaptureService`):**
+
+Replace the in-shader `GrabPass` with a C#-managed `CommandBuffer` blit into a
+persistent `RenderTexture`. This gives full control over capture timing and frequency,
+and as a bonus **fixes the self-reflection limitation**.
+
+```
+Current (GrabPass):
+  1. Background, balloons, grid actors render
+  2. GrabPass fires → captures framebuffer (no Unbreakables in it)
+  3. Unbreakable A renders (reads _GrabTexture — sees scene only)
+  4. Unbreakable B renders (reads _GrabTexture — sees scene only, NOT A)
+
+Proposed (CommandBuffer):
+  1. Everything renders — including Unbreakables (using previous frame's _reflectionRT)
+  2. CommandBuffer blit → _reflectionRT (now contains scene + all Unbreakables)
+  3. Shader.SetGlobalTexture("_GrabTexture", _reflectionRT)
+
+  Next frame:
+  1. Everything renders — Unbreakables read _reflectionRT from last frame
+     → each Unbreakable now sees OTHER Unbreakables in its reflection (1 frame stale)
+  2. CommandBuffer blit → _reflectionRT (refreshed)
+```
+
+At 60 fps the 1-frame staleness is invisible. Racing games use the same trick for
+car-to-car reflections.
+
+**Key architectural steps:**
+
+1. **Remove** `GrabPass { "_GrabTexture" }` from `UnbreakableBalloon.shader`
+2. **Add** `#pragma shader_feature _REFLECTION_ON` — gates the entire reflection
+   code path (sample + distortion). When off, the shader skips to pure metallic.
+3. **Create `ReflectionCaptureService : IStartable, IDisposable`** — owns a persistent
+   `RenderTexture _reflectionRT`, attaches a `CommandBuffer` to the camera at
+   `CameraEvent.BeforeForwardAlpha` (or appropriate event so all Unbreakables have
+   rendered before the next frame's capture reads it)
+4. **Render order:** Unbreakables must draw in a sorting layer/order that places them
+   *after* all other Transparent objects, so the capture (which happens after them)
+   includes their pixels. Their current sorting order likely already does this since
+   they're balloons in the grid, but verify.
+5. **Every-other-frame:** `ReflectionCaptureService` checks `Time.frameCount % 2`
+   (or a configurable skip count from `IQualityProfile`) and only blits on capture
+   frames. On skip frames, `_reflectionRT` retains the previous content.
+6. **Set globally:** `Shader.SetGlobalTexture("_GrabTexture", _reflectionRT)` — the
+   shader reads the same sampler name, no shader code changes needed for the sample.
+
+**Disabled reflection (Low tier):**
+`ReflectionCaptureService` does not create the RT or attach the CommandBuffer.
+Material has `_REFLECTION_ON` disabled. Shader renders pure metallic gradient +
+specular — still reads as chrome, just no environment reflection. Zero GPU cost from
+capture.
+
+**Visual improvement — self-reflection:**
+This is not just a performance optimization. The CommandBuffer approach fixes a
+visible limitation: multiple Unbreakables on screen will now reflect each other
+(1 frame stale). The current GrabPass approach makes each Unbreakable look like it
+exists in isolation — the scene behind it is reflected but other chrome balloons are
+invisible. With the proposed approach, a cluster of Unbreakables will show subtle
+chrome reflections of their neighbors, selling the metallic material much better.
+
+**Estimated savings:**
+- Every-other-frame: **~0.15–0.5 ms** per skipped frame
+- Disabled: **~0.3–1.0 ms** every frame — the biggest single GPU win available
+
+**Estimated visual gain:**
+- Unbreakable-to-Unbreakable reflections — noticeable when 2+ are adjacent
+
+#### Particle VFX (GPU fill rate + CPU simulation)
+
+| Parameter | High | Low | Impact |
+|---|---|---|---|
+| Pop VFX particle count | Default (burst count from prefab) | 50% of default | Fewer particles per pop |
+| Pop VFX lifetime | Default | 70% of default | Shorter particles = less overdraw |
+| Trail VFX emission rate | Default | 50% | Less trail density |
+| Simultaneous VFX cap | No cap | Max 4 active particle systems | Evict oldest when full |
+
+**Current VFX prefabs (10):**
+- Balloon: `PSVFX_BalloonPop`, `PSVFX_ToughBalloonPop`, `PSVFX_SoapClusterPop`
+- Items: `PSVFX_BombRange`, `PSVFX_PaintSplash`, `PSVFX_PaintFlyDrip`, `PSVFX_ShieldGainPU`
+- Shield: `PSVFX_ShieldGain`, `PSVFX_ShieldBounce`, `PSVFX_ShieldLose`
+
+**Implementation:** VFX pool channels already exist. A `QualityAwareParticleScaler`
+could modify `ParticleSystem.main.maxParticles` and `startLifetime` on spawn. Or:
+create Low/High prefab variants and swap via `IQualityProfile` — more work but
+art-directable.
+
+#### Projectile Trail (GPU fill rate)
+
+| Parameter | High | Low | Impact |
+|---|---|---|---|
+| `TrailRenderer` time | Default | 50% | Shorter trail = less overdraw |
+| `TrailRenderer` width curve | Default | Narrower | Less fill |
+
+**Files:** `ProjectileTrail.cs`, `FlyingTrail.cs`, `LevelUpTrailEffect.cs`
+
+**Implementation:** Read `IQualityProfile` in trail setup and scale
+`_trailRenderer.time` and width.
+
+#### Procedural Shader Octave Count
+
+| Shader | Parameter | High | Low |
+|---|---|---|---|
+| PuffCloud | Noise octaves | 3 | 2 |
+| Bush (planned) | LeafNoise octaves | 3 | 2 |
+
+**Implementation option A — runtime uniforms:** Add `_OctaveCount` int property to
+the shader and branch in the noise function:
+```hlsl
+if (_OctaveCount >= 3) n += SimplexNoise2D(pFine) * 0.20;
+```
+Branching on a uniform is well-predicted on mobile GPUs — minimal cost.
+
+**Implementation option B — shader variants:** `#pragma multi_compile OCTAVES_2 OCTAVES_3`.
+Compiles two variants, no runtime branching, but increases shader memory.
+
+**Recommendation:** option A for simplicity. The branch is uniform (same for all
+fragments in a draw call), so the GPU doesn't pay warp-divergence cost.
+
+#### Animation Quality
+
+| Parameter | High | Low | Impact |
+|---|---|---|---|
+| Balance animation speed | 1.0× | 1.5× (faster settle) | Less time animating = fewer DOTween ticks |
+| Nudge animation damping | Full physics | Faster settle, less bounce | Less jitter computation |
+| Score trail curve resolution | Default | Fewer waypoints | Less Bezier evaluation |
+
+These are minor CPU savings — only relevant if profiling shows DOTween overhead.
+Low priority.
+
+#### Pool Sizes
+
+| Pool | High | Low | Impact |
+|---|---|---|---|
+| Balloon pool initial capacity | Current | Same | No change — pool grows on demand |
+| Particle pool max reuse | No cap | Cap at 8 | Limits peak VFX memory |
+| Score trail pool | Current | Smaller | Less memory |
+
+Pool sizes mainly affect memory, not frame time. Low priority for quality tiers.
+
+### 9.3 Suggested Tier Thresholds
+
+| Tier | Target devices | Selection heuristic |
+|---|---|---|
+| **High** | iPhone 11+, flagship Android (2020+) | `SystemInfo.graphicsMemorySize >= 3072` AND `SystemInfo.processorCount >= 6` |
+| **Medium** | iPhone 8–10, mid-range Android | Default fallback |
+| **Low** | iPhone 7, budget Android (< 3 GB RAM) | `SystemInfo.graphicsMemorySize < 2048` OR `SystemInfo.processorFrequency < 1800` |
+
+Alternative: use `Application.targetFrameRate` and monitor `Time.deltaTime` over the
+first 5 seconds — if the device can't hold 60 fps during the intro, drop to Low.
+
+### 9.4 Implementation Priorities
+
+| Priority | System | Savings | Effort |
+|---|---|---|---|
+| **P0** | GrabPass frequency / disable (`_REFLECTION_ON`) | ~0.3–1.0 ms — single biggest GPU win | Medium — CommandBuffer replacement |
+| **P0** | Shader keywords (`_SHADOW_ON`, `_LIGHTING_ON`) | ~30–50% GPU per cluster shader | Low — toggle keywords on material |
+| **P1** | Disturbance RT resolution (`TexelsPerUnit`) | ~75% blit cost reduction (8→4) | Low — wrapper around settings |
+| **P1** | Disturbance tick interval | ~50% blit frequency | Low — same wrapper |
+| **P2** | Particle count/lifetime scaling | Reduces fill rate spikes on pop | Medium — scaler on pool spawn |
+| **P2** | Noise octave count (uniform branch) | ~15% per cluster shader | Low — add uniform + branch |
+| **P3** | Trail length/width scaling | Minor fill reduction | Low — read profile in trail setup |
+| **P3** | Animation speed scaling | Minor CPU | Low — multiply durations |
+| **P4** | Pool size caps | Memory only | Low |
+
+### 9.5 Open Questions
+
+1. **When to detect tier** — at app startup (once) or dynamically (adaptive)? Adaptive
+   is more complex but handles thermal throttling. Start with startup detection; add
+   adaptive downgrade later if needed.
+
+2. **Per-shader vs. global keywords** — should `_SHADOW_ON` be toggled globally (all
+   shadows off on Low) or per-shader (Puff keeps shadows, Bush doesn't)? Global is
+   simpler; per-shader gives more art control.
+
+3. **User-facing settings** — should the player be able to choose quality tier
+   manually (Settings menu)? Recommended: yes, with an "Auto" default that uses
+   device detection.
+
+4. **Disturbance field disable** — on extremely low-end, should the entire disturbance
+   system be disabled (no RT, no blits, no stamps)? This saves the most GPU but
+   removes all cloud/bush reactions. Needs a `_DENSITY_ON` / `_DISTURBANCE_ON`
+   keyword disable path that renders clusters without any reaction.
+
+5. **Testing matrix** — which devices define the Low/Medium/High boundaries?
+   Need a concrete test device list before shipping quality tiers.
+

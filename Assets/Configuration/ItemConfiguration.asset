@@ -397,7 +397,7 @@ MonoBehaviour:
     _paintBlobSpinSpeed: 720
   - _type: 1
     _turnCheckEvery: 1
-    _weight: 15
+    _weight: 25
     _maximumAllowed: 3
     _visualPrefab: {fileID: 8514083812438296857, guid: f951c5e126eee4e2da2094bbdc729ced,
       type: 3}
@@ -523,7 +523,7 @@ MonoBehaviour:
     _paintBlobSpinSpeed: 720
   - _type: 5
     _turnCheckEvery: 1
-    _weight: 12
+    _weight: 20
     _maximumAllowed: 3
     _visualPrefab: {fileID: 5155374104672875301, guid: caddd14ec47634b779cdad172791812c,
       type: 3}

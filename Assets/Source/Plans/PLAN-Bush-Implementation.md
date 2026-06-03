@@ -709,25 +709,1025 @@ ground shadow, wind sway, and disturbance field integration.
 - `_RadiusJitter` varies circle radius per slot via position hash
 - Edge noise phase offset per slot seed
 
-**Tasks:**
+---
+
+#### Task Details
+
+##### 2.1 — Shader file scaffold
+
+Create `Assets/Shaders/BalloonParty/Grid/Bush.shader` with the basic structure
+mirroring PuffCloud.shader conventions:
+
+```hlsl
+Shader "BalloonParty/Grid/Bush"
+{
+    Properties
+    {
+        // Shape
+        _SlotRadius         ("Slot Radius",         Float)              = 0.40
+        _RadiusJitter       ("Radius Jitter",       Range(0, 0.15))     = 0.06
+        _EdgeNoiseFreq      ("Edge Noise Frequency",Float)              = 4.0
+        _EdgeNoiseAmount    ("Edge Noise Amount",   Range(0, 0.2))      = 0.08
+
+        // Surface
+        _BaseColor          ("Base Color",          Color)              = (0.18, 0.45, 0.12, 1.0)
+        _LeafVariationColor ("Leaf Variation Color",Color)              = (0.25, 0.55, 0.15, 1.0)
+        _LeafNoiseFreq      ("Leaf Noise Frequency",Float)              = 6.0
+
+        // Lighting
+        _LightDir           ("Light Direction",     Vector)             = (-0.4, 0.7, 0, 0)
+        _LightColor         ("Highlight Color",     Color)              = (1, 1, 0.9, 1)
+        _AmbientColor       ("Shadow Tint",         Color)              = (0.08, 0.22, 0.05, 1)
+        _LightIntensity     ("Light Intensity",     Range(0, 1))        = 0.50
+        _NormalStrength     ("Normal Strength",     Range(0, 3))        = 1.5
+        _NormalEpsilon      ("Normal Sample Offset",Range(0.001, 0.05))= 0.015
+
+        // Rim
+        _RimWidth           ("Rim Width",           Range(0, 0.15))     = 0.04
+        _RimIntensity       ("Rim Intensity",       Range(0, 1))        = 0.35
+
+        // Animation
+        _WindSpeed           ("Wind Speed",          Range(0, 2))        = 0.4
+        _WindAmount          ("Wind Amount",         Range(0, 0.1))      = 0.02
+        _TimeOffset          ("Time Offset",         Float)              = 0.0
+
+        // Shadow
+        [Toggle(_SHADOW_ON)] _EnableShadow ("Enable Shadow", Float) = 1
+        _ShadowColor         ("Shadow Color",        Color)              = (0.04, 0.04, 0.08, 0.45)
+        _ShadowOffsetX       ("Shadow Offset X",     Range(-0.15, 0.15)) = 0.03
+        _ShadowOffsetY       ("Shadow Offset Y",     Range(-0.15, 0.15)) = -0.04
+        _ShadowSoftness      ("Shadow Softness",     Range(0, 0.10))     = 0.04
+
+        // Centre Shadow
+        [Toggle(_CENTER_SHADOW_ON)] _EnableCenterShadow ("Enable Center Shadow", Float) = 0
+
+        // Disturbance
+        [Toggle(_DISTURBANCE_ON)] _EnableDisturbance ("Enable Disturbance", Float) = 0
+        _DisplaceWorldScale  ("Displace World Scale", Range(0, 2))       = 0.3
+        _EdgeDisturbanceScale("Edge Disturbance Scale", Range(0, 3))     = 1.5
+    }
+
+    SubShader
+    {
+        Tags { "Queue"="Transparent" "RenderType"="TransparentCutout"
+               "IgnoreProjector"="True" "PreviewType"="Plane" }
+        Cull Off   Lighting Off   ZWrite Off
+        Blend SrcAlpha OneMinusSrcAlpha
+        // ...
+    }
+}
+```
+
+**Key structural decisions:**
+
+- **Render queue:** `Transparent` queue like PuffCloud, NOT `Geometry`. Even though the
+  bush body is fully opaque, the SDF boundary and ground shadow need alpha blending for
+  soft antialiased edges. The alpha clip gives a hard interior but the edge pixels need
+  sub-pixel blending to avoid jaggies.
+- **`ZWrite Off`:** Same as PuffCloud — both are 2D overlays on a SpriteRenderer quad.
+- **`#define MAX_SLOTS 16`:** Same cap as PuffCloud, matching `ClusterView._slotCenters`.
+- **Includes:** `UnityCG.cginc` + `SimplexNoise2D.cginc` (same path as PuffCloud).
+- **Shader keywords:** `_SHADOW_ON`, `_CENTER_SHADOW_ON`, `_DISTURBANCE_ON` — three
+  `shader_feature` pragmas.
+- **MPB contract:** Must declare `_SlotCentersWorld[MAX_SLOTS]`, `_SlotCount`,
+  `_TimeOffset` — matches `ClusterView` base class (Phase 1, task 1.8).
+
+**Gap — render order vs. Puff:** Both Bush and Puff use `Queue=Transparent`. Sorting
+order is controlled by C# (`SortingLayerId`, `SortingOrderOffset` from settings).
+Bush should render *below* Puff (bush is ground-level, cloud is above). This is a
+Phase 3 config concern (set `SortingOrderOffset` lower on `IBushSettings`), but the
+shader must not assume any particular sort order. **Document as a Phase 3 tuning note.**
+
+**Gap — vertex struct:** PuffCloud passes `worldPos` as `TEXCOORD1`. Bush needs the
+same (world-space noise sampling). Should also pass `texcoord` for potential future
+UV-based effects. Identical `appdata_t` / `v2f` structs — copy from PuffCloud.
+
+**Gap — `_RendererColor` instancing block:** PuffCloud includes the Unity sprite
+instancing boilerplate (`UNITY_INSTANCING_BUFFER_START` etc.). Bush should include the
+same block for consistency, even though GPU instancing is disabled via MPB. Without it,
+the SpriteRenderer's color tint won't apply. **Copy verbatim from PuffCloud.**
+
+##### 2.2 — Per-slot circle SDF + smooth-minimum merging
+
+The core shape primitive. Each slot center defines a circle SDF; adjacent slots merge
+via polynomial smooth-minimum.
+
+```hlsl
+// Polynomial smooth-min (k controls blend radius)
+float smin(float a, float b, float k)
+{
+    float h = saturate(0.5 + 0.5 * (b - a) / k);
+    return lerp(b, a, h) - k * h * (1.0 - h);
+}
+
+// Returns the minimum SDF distance to any slot circle,
+// with smooth merging between adjacent slots.
+// Also outputs the nearest slot's seed (.z) for per-slot variation.
+float BushSDF(float2 wp, out float slotSeed)
+{
+    float d = 999.0;
+    slotSeed = 0.0;
+    float minRawDist = 999.0;
+
+    for (int i = 0; i < _SlotCount; i++)
+    {
+        float2 center = _SlotCentersWorld[i].xy;
+        float seed = _SlotCentersWorld[i].z;
+
+        // Per-slot radius jitter from position hash
+        float hash = frac(sin(dot(center, float2(127.1, 311.7))) * 43758.5453);
+        float radius = _SlotRadius + (hash - 0.5) * 2.0 * _RadiusJitter;
+
+        float dist = length(wp - center) - radius;
+        d = smin(d, dist, _SminK);
+
+        // Track nearest slot for seed
+        float rawDist = length(wp - center);
+        if (rawDist < minRawDist)
+        {
+            minRawDist = rawDist;
+            slotSeed = seed;
+        }
+    }
+    return d;
+}
+```
+
+**Property:** `_SminK` — smooth-min blend radius. Controls how aggressively adjacent
+slot circles merge. Suggested range 0.1–0.4 world units. At the reference slot
+separation of (1.0, 0.85), a value of ~0.2 gives a gentle organic merge without
+losing the individual circle shapes.
+
+**Gap — `_SminK` not in the Properties block yet.** Add it:
+```
+_SminK ("Smooth Min K", Range(0.05, 0.5)) = 0.20
+```
+
+**Gap — seed tracking during smin:** The `smin` operation blends distances from
+multiple slots, so the concept of "nearest slot" becomes ambiguous in the blend region.
+The seed selection uses raw (unsmoothed) distance — nearest center wins. This means the
+seed can pop discontinuously at the midpoint between two slots. For Bush this is
+acceptable because the seed only drives subtle noise phase offsets, not colour. If it
+causes visible seams in the leaf noise, consider blending seeds by inverse distance.
+**Test during tuning (Phase 5).**
+
+**Gap — loop unrolling / performance:** The SDF loop runs `_SlotCount` iterations per
+fragment, each calling `smin`. For 16 slots this is 16 iterations × 2 noise samples
+(the slot falloff + noise) — expensive on mobile. PuffCloud has the same O(N) loop for
+`SlotFalloff`. Both shaders share the same worst case. If performance is an issue, the
+fix is reducing `MAX_SLOTS` or spatially partitioning — not a Phase 2 concern.
+
+**Gap — SDF sign convention:** `dist < 0` means inside the shape, `dist > 0` means
+outside. The alpha clip (task 2.4) discards pixels where `dist > 0`. Make sure all
+consumers agree on this convention. PuffCloud uses a `smoothstep` falloff (not an SDF)
+so there's no precedent to conflict with — Bush is the first true SDF shape.
+
+##### 2.3 — Edge noise distortion with per-slot phase offset + radius jitter
+
+Apply 2-octave Simplex noise to the SDF boundary to create organic leaf bumps:
+
+```hlsl
+float EdgeNoise(float2 wp, float t, float slotSeed)
+{
+    float2 seedOffset = float2(slotSeed * 61.7, slotSeed * 37.3);
+    float2 p1 = (wp + seedOffset) * _EdgeNoiseFreq;
+    float2 p2 = (wp + seedOffset) * _EdgeNoiseFreq * 2.17;
+
+    float n  = SimplexNoise2D(p1 + float2(t * 0.1, 0.0)) * 0.65;
+    n       += SimplexNoise2D(p2 + float2(0.0, t * 0.15)) * 0.35;
+
+    return n;  // [-1, 1] range
+}
+```
+
+The edge noise modulates the SDF distance before the alpha clip:
+```hlsl
+float d = BushSDF(wp, slotSeed);
+float edgeN = EdgeNoise(wp, t, slotSeed);
+d -= edgeN * _EdgeNoiseAmount;  // push boundary in/out
+```
+
+**Per-slot phase offset:** `slotSeed * 61.7` and `slotSeed * 37.3` shift the noise
+sampling origin per slot, so adjacent slots don't share the exact same bump pattern
+even when their circles merge. The seed comes from `_SlotCentersWorld[i].z`, set by
+`ClusterViewController.Reconfigure` as `(clusterId * 0.7123) % 1`.
+
+**Gap — edge noise interacting with smin blend:** In the merge region between two
+slots, the SDF is blended but the edge noise uses only the *nearest* slot's seed.
+This can create a visible noise pattern boundary at the merge seam. Options:
+1. Accept it — the merge region is small and the noise is subtle.
+2. Blend edge noise from both nearest slots weighted by proximity — expensive (two
+   extra noise samples per fragment in the blend region).
+
+**Recommendation:** option 1 for now. The smin blend radius is small enough that the
+seam should be hidden. Revisit in Phase 5 tuning.
+
+**Gap — edge noise frequency vs. slot radius:** At `_SlotRadius = 0.40` and
+`_EdgeNoiseFreq = 4.0`, one noise period spans ~0.25 world units — about 60% of the
+radius. This should produce 3–4 bumps per circle edge. Too many bumps look busy; too
+few look like a blob. **Tune in Phase 5.**
+
+##### 2.4 — Alpha clip at SDF boundary
+
+Hard alpha clip at `d = 0` with a thin antialiased edge:
+
+```hlsl
+float alpha = 1.0 - smoothstep(-_AAWidth, 0.0, d);
+if (alpha < 0.001) discard;
+```
+
+**Property:** `_AAWidth` — antialiasing transition width. Suggested value 0.005–0.015
+world units (1–3 pixels at game resolution). Smaller = sharper, larger = softer.
+
+**Gap — `_AAWidth` not in Properties block.** Add:
+```
+_AAWidth ("AA Edge Width", Range(0.001, 0.03)) = 0.008
+```
+
+**Why smoothstep, not hard clip?** A raw `clip(d)` produces aliased 1-pixel staircase
+edges. The smoothstep transition over a thin band gives sub-pixel antialiasing without
+requiring MSAA. PuffCloud already uses smoothstep for its noise-based edges — same
+approach, different domain.
+
+**Gap — alpha vs. opaque body:** The plan says Bush is "fully opaque inside, transparent
+outside." The smoothstep transition creates a thin semi-transparent edge band. Interior
+pixels have `alpha = 1.0`. This is correct — the edge blending handles the cutout
+antialiasing while the body reads as solid. Verify that `ZWrite Off` + `Blend SrcAlpha
+OneMinusSrcAlpha` produces the expected result (the semi-transparent edge should blend
+with whatever is behind it — the game background).
+
+##### 2.5 — Leaf noise colour modulation (world-space, multi-octave)
+
+Interior surface detail — 3-octave Simplex noise in world space modulating between
+`_BaseColor` and `_LeafVariationColor`:
+
+```hlsl
+float LeafNoise(float2 wp, float t, float slotSeed)
+{
+    float2 seedOff = float2(slotSeed * 91.3, slotSeed * 53.7);
+    float2 p = (wp + seedOff) * _LeafNoiseFreq;
+
+    float n  = SimplexNoise2D(p + float2(t * 0.02, t * 0.01)) * 0.50;
+    n       += SimplexNoise2D(p * 2.13 + float2(-t * 0.03, t * 0.02)) * 0.30;
+    n       += SimplexNoise2D(p * 4.37 + float2(t * 0.01, -t * 0.04)) * 0.20;
+
+    return n * 0.5 + 0.5;  // remap to [0, 1]
+}
+```
+
+Colour mixing:
+```hlsl
+float leafN = LeafNoise(wp, t, slotSeed);
+fixed3 surfaceColor = lerp(_BaseColor.rgb, _LeafVariationColor.rgb, leafN);
+```
+
+**Gap — noise call count:** By this point the fragment shader has:
+- `BushSDF`: 0 noise calls (pure math)
+- `EdgeNoise`: 2 Simplex calls
+- `LeafNoise`: 3 Simplex calls
+- Total so far: 5 per fragment
+
+Adding lighting (task 2.6) will add 4 more (central differences on LeafNoise). Total:
+~9 Simplex calls per fragment. PuffCloud uses 3 (CloudNoise) + 4 (lighting) = 7. Bush
+is ~30% more expensive. On mobile, each SimplexNoise2D call involves a permute + 3
+gradient evaluations.
+
+**Mitigation:** reduce LeafNoise to 2 octaves if profiling shows a problem. The third
+octave (4.37× frequency) adds fine detail that may not be visible at game scale
+(~0.9 world units per slot × ~100 pixels across). **Profile in Phase 5.**
+
+**Gap — wind sway on leaf noise (task 2.10 dependency):** The time-based scroll
+offsets in LeafNoise already produce gentle drift. Wind sway (task 2.10) adds an
+additional UV displacement. Need to decide: does wind affect leaf noise sampling
+coordinates, or is it a separate post-process displacement? If it affects sampling
+coords, the leaf pattern shifts with the wind — looks like leaves rustling. If it's a
+post-process, the leaf pattern stays fixed and the geometry wobbles — looks like the
+whole bush swaying. **Recommend: affect sampling coords** for the leaf-rustle look.
+Wind sway in task 2.10 will displace `wp` before passing it to `LeafNoise`.
+
+##### 2.6 — Pseudo-lighting (half-Lambert from noise gradient)
+
+Same technique as PuffCloud — derive a pseudo-normal from the leaf noise gradient via
+central differences, then apply half-Lambert lighting:
+
+```hlsl
+fixed3 BushLighting(float2 wp, float t, float slotSeed)
+{
+    float eps = _NormalEpsilon;
+    float nR = LeafNoise(wp + float2( eps, 0), t, slotSeed);
+    float nL = LeafNoise(wp + float2(-eps, 0), t, slotSeed);
+    float nU = LeafNoise(wp + float2(0,  eps), t, slotSeed);
+    float nD = LeafNoise(wp + float2(0, -eps), t, slotSeed);
+
+    float dX = (nR - nL) * _NormalStrength;
+    float dY = (nU - nD) * _NormalStrength;
+    float3 normal = normalize(float3(-dX, -dY, 1.0));
+
+    float2 ld = normalize(_LightDir.xy);
+    float3 lightVec = normalize(float3(ld, 0.6));
+    float NdotL = dot(normal, lightVec);
+    float halfLambert = NdotL * 0.5 + 0.5;
+
+    fixed3 lit = lerp(_AmbientColor.rgb, _LightColor.rgb, halfLambert);
+    return lerp(fixed3(1,1,1), lit, _LightIntensity);
+}
+```
+
+This is nearly identical to PuffCloud's `CloudLighting`. The only difference is it
+calls `LeafNoise` instead of `CloudNoise` for the gradient samples.
+
+**Gap — 4 extra LeafNoise calls:** Each `LeafNoise` call is 3 Simplex evaluations
+(if we keep 3 octaves). The lighting gradient needs 4 calls = 12 extra Simplex
+evaluations, bringing the total to ~5 + 12 = **17 Simplex calls per fragment**. This
+is expensive.
+
+**Mitigation options:**
+1. Use a simplified 1-octave `LeafNoiseFast(wp)` for the gradient samples — the
+   lighting doesn't need fine detail, just the broad slope. Reduces to 4 Simplex calls
+   for lighting instead of 12.
+2. Compute the gradient from the already-evaluated `LeafNoise` at the fragment center
+   using screen-space derivatives (`ddx`/`ddy`). This is free (GPU computes derivatives
+   in hardware) but gives screen-resolution gradients, not world-resolution — may be
+   too noisy at certain zoom levels.
+3. Skip the gradient and use a fixed normal — flat lighting, no depth perception. Loses
+   the cartoony volume.
+
+**Recommendation:** option 1. Create `LeafNoiseLite(wp, t, slotSeed)` that uses only
+the base octave (1 Simplex call). Total cost: 5 (shape + leaf) + 4 (lighting) =
+**9 Simplex calls** — same as PuffCloud.
+
+**Gap — shared lighting code with PuffCloud:** The lighting function is identical
+except for which noise function it calls. If both shaders live in the same `Grid/`
+folder, consider extracting the half-Lambert + normal derivation into a shared
+`.cginc` include. For now, duplicating is fine — the function is 15 lines. **Note for
+future cleanup.**
+
+##### 2.7 — Edge highlight rim
+
+A bright rim along the SDF boundary adds visual definition (reads as leaf edges
+catching light):
+
+```hlsl
+float rim = smoothstep(_RimWidth, 0.0, abs(d));  // 1 at edge, 0 away
+fixed3 finalColor = lerp(surfaceColor * lighting, _LightColor.rgb, rim * _RimIntensity);
+```
+
+`d` is the SDF distance (negative inside, positive outside). `abs(d)` is the unsigned
+distance to the boundary. `_RimWidth` controls how deep the rim penetrates inward.
+
+**Gap — rim on merged edges:** When two slots merge via smin, the internal boundary
+between them has `d < 0` (well inside the shape). There is no SDF edge there — the rim
+only appears on the outer perimeter. This is correct and desired — we don't want a
+bright line between merged slots.
+
+**Gap — rim vs. edge noise interaction:** Edge noise pushes the SDF boundary in/out,
+which shifts where the rim appears. The rim naturally follows the noisy edge — good,
+it makes the rim look organic. No issue.
+
+**No new properties needed** — `_RimWidth` and `_RimIntensity` are already planned in
+the Properties block (task 2.1).
+
+##### 2.8 — Centre shadow (optional keyword `_CENTER_SHADOW_ON`)
+
+Darkens the centre of each slot circle to add perceived volume (like the bush is
+denser / self-shadowing at its middle):
+
+```hlsl
+#ifdef _CENTER_SHADOW_ON
+float centerDist = 999.0;
+for (int i = 0; i < _SlotCount; i++)
+{
+    centerDist = min(centerDist, length(wp - _SlotCentersWorld[i].xy));
+}
+float centerFade = 1.0 - smoothstep(_SlotRadius * 0.3, _SlotRadius * 0.8, centerDist);
+surfaceColor *= lerp(1.0, _CenterShadowDarkness, centerFade);
+#endif
+```
+
+**Property:** `_CenterShadowDarkness` — how dark the centre gets. Range 0.5–0.9.
+Add to Properties block:
+```
+_CenterShadowDarkness ("Center Shadow Darkness", Range(0.3, 1.0)) = 0.75
+```
+
+**Gap — centre shadow in merge region:** When two slots merge, the midpoint between
+them could receive centre shadow from *both* slots (the `min` distance may be large
+there, so no shadow). This is actually correct — the merge region is far from both
+centers so it won't be darkened. Only the core of each individual slot gets the
+darkening. **Good behaviour — no fix needed.**
+
+**Gap — interaction with lighting:** Centre shadow multiplies `surfaceColor` before
+lighting is applied. This means the darkening affects the normal-derived lighting as
+a base colour change (darker base → darker lit result). Alternatively, apply it after
+lighting as a post-multiply. Difference is subtle — **test both during tuning.**
+
+##### 2.9 — Ground shadow (`_SHADOW_ON`)
+
+A larger, offset, softer version of the bush SDF rendered behind the main body.
+Same architectural pattern as PuffCloud's shadow pass:
+
+```hlsl
+#ifdef _SHADOW_ON
+float2 shadowWp = wp - float2(_ShadowOffsetX, _ShadowOffsetY);
+float shadowSeed;
+float shadowD = BushSDF(shadowWp, shadowSeed);
+shadowD -= EdgeNoise(shadowWp, t, shadowSeed) * _EdgeNoiseAmount;
+
+float shadowAlpha = (1.0 - smoothstep(-_ShadowSoftness, 0.0, shadowD))
+                  * _ShadowColor.a * IN.color.a;
+
+// Compose: shadow behind, main body in front
+if (alpha < 0.001 && shadowAlpha < 0.001) discard;
+
+if (alpha < 0.001)
+{
+    return fixed4(_ShadowColor.rgb, shadowAlpha);
+}
+
+// Main body + shadow composite (same as PuffCloud)
+fixed combinedA = alpha + shadowAlpha * (1.0 - alpha);
+fixed3 combinedRGB = (mainRgb * alpha + _ShadowColor.rgb * shadowAlpha * (1.0 - alpha))
+                   / max(combinedA, 0.0001);
+return fixed4(combinedRGB, combinedA);
+#endif
+```
+
+**Gap — shadow SDF recalculation cost:** The shadow pass calls `BushSDF` + `EdgeNoise`
+a second time at the offset position. This doubles the SDF + edge noise cost
+(2 Simplex calls extra). Total per fragment with shadow:
+- Main body: SDF (0) + edge (2) + leaf (3) + lighting (4) + shadow SDF (0) + shadow
+  edge (2) = **11 Simplex calls** (using LeafNoiseLite for lighting).
+- Acceptable — PuffCloud shadow does the same (CloudNoise × 2 = 6 Simplex).
+
+**Gap — shadow softness vs. AA width:** The shadow uses `_ShadowSoftness` for its edge
+transition. The main body uses `_AAWidth`. Make sure `_ShadowSoftness > _AAWidth` so
+the shadow is visibly softer than the body edge. Default values: `_ShadowSoftness = 0.04`,
+`_AAWidth = 0.008`. **Good defaults — 5× softer.**
+
+**Gap — shadow shape matching body shape:** The shadow SDF recomputes edge noise at
+the offset position, so the shadow silhouette matches the noisy body edge (offset by
+the shadow offset). This is correct — the shadow looks like the bush's cast shadow.
+If we wanted a simpler shadow (smooth circle, no edge noise), we'd skip `EdgeNoise`
+in the shadow pass. **Keep edge noise in shadow** for visual consistency.
+
+##### 2.10 — Wind sway animation
+
+Low-frequency noise displacement on the world-space sampling coordinate. Produces a
+gentle swaying motion as if wind is rustling the leaves:
+
+```hlsl
+float2 WindDisplace(float2 wp, float t)
+{
+    float2 windP = wp * 0.5 + float2(t * _WindSpeed, t * _WindSpeed * 0.7);
+    float windN = SimplexNoise2D(windP);
+    return float2(windN, windN * 0.6) * _WindAmount;
+}
+```
+
+Apply before all noise sampling:
+```hlsl
+float2 wpAnim = wp + WindDisplace(wp, t);
+// Use wpAnim for EdgeNoise, LeafNoise, BushLighting
+// Use wp (original) for BushSDF — the shape boundary stays fixed
+```
+
+**Key design choice:** wind displaces the *noise sampling coordinates* (leaf pattern
+shifts), NOT the SDF boundary. The bush shape stays anchored to the grid; only the
+surface texture moves. This looks like leaves rustling in place rather than the whole
+bush sliding.
+
+**Gap — wind on edge noise?** If wind displaces `wpAnim` and we use `wpAnim` for
+`EdgeNoise`, the edge bumps will sway too — the silhouette wiggles slightly. This
+could be a nice effect (bush edges rippling in wind) or distracting. **Control via a
+toggle or by using `wp` (not `wpAnim`) for EdgeNoise.**
+
+**Recommendation:** use `wp` for EdgeNoise (stable silhouette) and `wpAnim` for
+LeafNoise (rustling interior). Let Phase 5 tuning decide if edge sway should be
+added.
+
+**Gap — 1 extra Simplex call for wind.** Total becomes: 11 + 1 = **12 Simplex calls**
+per fragment (with shadow, without disturbance). Acceptable.
+
+##### 2.11 — Disturbance field integration (`_DISTURBANCE_ON`)
+
+When a projectile flies over the bush, the disturbance field is stamped. The shader
+reads the global `_DisturbanceTex` and reacts — but differently from Puff:
+
+**Bush disturbance expression (opaque — no density holes):**
+1. **Leaf noise warp:** Disturbance displacement offsets the leaf noise sampling
+   coordinate, making the leaf pattern visibly shift/warp at the stamp point.
+2. **Edge boundary wobble:** Disturbance modulates `_EdgeNoiseAmount`, making the edge
+   bumps more pronounced (bush edges shiver).
+3. **No alpha/density reduction:** Unlike Puff clouds which dissolve under disturbance,
+   Bush stays fully opaque — the shape doesn't change, only the surface reacts.
+
+```hlsl
+#ifdef _DISTURBANCE_ON
+float2 fieldUV = (wp - _FieldBoundsMin) / _FieldBoundsSize;
+float3 field = tex2D(_DisturbanceTex, fieldUV).rgb;
+float2 displace = (field.gb - 0.5) * 2.0 * _DisplaceWorldScale;
+float displaceLen = length(displace);
+float disturbance = saturate(displaceLen / (_DisplaceWorldScale * 0.5 + 0.001));
+
+// Warp leaf noise sampling
+wpAnim += displace;
+
+// Amplify edge noise near disturbance
+float edgeAmplified = _EdgeNoiseAmount * (1.0 + disturbance * _EdgeDisturbanceScale);
+d -= edgeN * edgeAmplified;  // replaces the normal edge noise application
+#endif
+```
+
+**Gap — density channel (field.r):** PuffCloud uses `field.r` (density) to dissolve
+the cloud. Bush ignores density — it's always opaque. But `field.r` is still being
+written by `DisturbanceFieldService` for all stamps. Bush simply doesn't read it.
+**No issue — just don't sample `density`.**
+
+**Gap — disturbance on shadow:** Should the shadow react to disturbance? PuffCloud
+applies `density` to the shadow. For Bush, since there's no density effect, the shadow
+should probably wobble its edge with the main body. This means the shadow pass should
+use the same amplified `edgeAmplified` value. **Apply `_EdgeDisturbanceScale` to the
+shadow pass too.**
+
+**Gap — `_FieldBoundsMin` / `_FieldBoundsSize` availability:** These are global shader
+properties set by `DisturbanceFieldService`. They're available to any shader regardless
+of material. The `_DISTURBANCE_ON` keyword gates the code path — when disabled, the
+globals aren't sampled, so there's no dependency on `DisturbanceFieldService` being
+active. **No issue.**
+
+**Gap — disturbance + wind interaction:** Both wind and disturbance offset `wpAnim`.
+Wind is gentle and continuous; disturbance is localized and transient. They stack
+additively, which should look natural — wind rustles normally, then a projectile causes
+a stronger local warp that settles back via the disturbance diffusion. **No issue.**
+
+##### 2.12 — Create material asset
+
+Create `Assets/Materials/Grid/Bush.mat`:
+- Shader: `BalloonParty/Grid/Bush`
+- Enable `_SHADOW_ON` (default)
+- Enable `_DISTURBANCE_ON` (default)
+- Leave `_CENTER_SHADOW_ON` off (optional, enable during tuning)
+- Set colour palette: deep green `_BaseColor`, lighter green `_LeafVariationColor`
+- All other properties at shader defaults
+
+**This is a manual Unity step** — create the material asset in the editor and assign
+the shader. Can't be done via code.
+
+**Gap — material not assigned to anything yet.** The material lives as an asset but
+won't be visible until Phase 3 creates the `Bush.prefab` with a `SpriteRenderer` that
+references this material. **Phase 3 dependency — note only.**
+
+---
+
+#### Task Checklist
 
 ```
-2.1  [ ] Shader file scaffold — Properties, vertex, SimplexNoise2D include
+2.1  [ ] Shader file scaffold
+         └── Properties block with all parameters (incl. _SminK, _AAWidth,
+             _CenterShadowDarkness — caught in gap review)
+         └── SubShader tags, blend mode, includes
+         └── appdata_t / v2f structs, vertex shader
+         └── MPB contract: _SlotCentersWorld, _SlotCount, _TimeOffset
+         └── _RendererColor instancing boilerplate
+         └── #define MAX_SLOTS 8 (bush clusters are small; saves register pressure)
+         └── shader_feature pragmas: _SHADOW_ON, _CENTER_SHADOW_ON,
+             _DISTURBANCE_ON, _LIGHTING_ON
+         └── Structure frag() for early discard before expensive work
 2.2  [ ] Per-slot circle SDF + smooth-minimum merging
-2.3  [ ] Edge noise distortion with per-slot phase offset + radius jitter
+         └── smin helper function
+         └── BushSDF function with per-slot radius jitter
+         └── Add _SminK property
+2.3  [ ] Edge noise distortion
+         └── EdgeNoise function (2-octave, per-slot seed offset)
+         └── Modulate SDF distance by edge noise
 2.4  [ ] Alpha clip at SDF boundary
-2.5  [ ] Leaf noise colour modulation (world-space, multi-octave)
-2.6  [ ] Pseudo-lighting (half-Lambert from noise gradient)
+         └── smoothstep AA transition
+         └── Add _AAWidth property
+         └── discard fully transparent pixels
+2.5  [ ] Leaf noise colour modulation
+         └── LeafNoise function (3-octave or 2-octave, world-space)
+         └── LeafNoiseLite (1-octave, for lighting gradient)
+         └── lerp _BaseColor ↔ _LeafVariationColor
+2.6  [ ] Pseudo-lighting (_LIGHTING_ON keyword-guarded)
+         └── Central differences on LeafNoiseLite → pseudo-normal
+         └── Half-Lambert with _LightDir, _LightColor, _AmbientColor
+         └── Guarded by #ifdef _LIGHTING_ON — flat fallback when off
 2.7  [ ] Edge highlight rim
-2.8  [ ] Centre shadow (optional keyword)
+         └── smoothstep on abs(SDF distance)
+         └── Blend with _LightColor at _RimIntensity
+2.8  [ ] Centre shadow (_CENTER_SHADOW_ON)
+         └── Per-slot center distance → darkening
+         └── Add _CenterShadowDarkness property
 2.9  [ ] Ground shadow (_SHADOW_ON)
+         └── Offset SDF + edge noise at shadow position
+         └── Shadow alpha with _ShadowSoftness
+         └── Composite shadow behind main body
 2.10 [ ] Wind sway animation
-2.11 [ ] Disturbance field integration (_DISTURBANCE_ON) — leaf warp + edge wobble
-2.12 [ ] Create material asset with _SHADOW_ON + _DISTURBANCE_ON enabled
+         └── WindDisplace function (1-octave, low freq)
+         └── Apply to leaf noise coords, NOT SDF coords
+2.11 [ ] Disturbance field integration (_DISTURBANCE_ON)
+         └── Sample _DisturbanceTex globals
+         └── Warp leaf noise coords with displacement
+         └── Amplify edge noise with _EdgeDisturbanceScale
+         └── Apply to shadow pass too
+2.12 [ ] Create material asset
+         └── Manual Unity step — set shader, enable keywords, set palette
 ```
+
+#### Mobile Performance Analysis
+
+This is a mobile game targeting 60 fps (16.6 ms frame budget). The GPU budget for
+*all* procedural cluster rendering (Puff + Bush + disturbance blits) should be
+**< 0.5 ms** (per the existing target in PLAN-FutureIdeas § 6.2). This section
+audits the Bush shader's cost and proposes mitigations.
+
+##### Reference numbers
+
+| Parameter | Value |
+|---|---|
+| Grid size | 6 columns × 10 rows = 60 slots |
+| Slot separation | (1.0, 0.85) world units |
+| Max bush slots (typical) | 3–6 (low spawn weight, max count capped) |
+| Max bush slots (worst case) | 16 (shader array cap) |
+| Quad coverage at 3 slots | ~2.5 × 2.0 world units ≈ 5 world-space sq units |
+| Quad coverage at 16 slots | ~7 × 9 world units ≈ 63 world-space sq units (full grid) |
+| Screen resolution (target low-end) | ~750 × 1334 (iPhone 8 / budget Android) |
+| Pixels per world unit (approx.) | ~120–150 px (depends on camera orthographic size) |
+| Fragments per bush quad (3 slots) | ~90k pixels (before discard) |
+| Fragments per bush quad (16 slots) | ~500k+ pixels (before discard — most of screen) |
+
+##### Simplex noise cost per fragment
+
+Each `SimplexNoise2D` call involves a permutation hash + 3 gradient evaluations +
+3 dot products. On low-end mobile GPUs (Adreno 505, Mali-G52) this is roughly
+**4–6 ALU cycles**. The cost scales linearly with call count.
+
+**Bush shader call count breakdown (worst case — shadow ON, disturbance ON):**
+
+| Stage | Simplex calls | Notes |
+|---|---|---|
+| BushSDF | 0 | Pure distance math, no noise |
+| EdgeNoise (main body) | 2 | 2-octave |
+| LeafNoise (colour) | 3 | 3-octave (or 2 if reduced) |
+| LeafNoiseLite × 4 (lighting gradient) | 4 | 1-octave × 4 central differences |
+| WindDisplace | 1 | 1-octave, low freq |
+| EdgeNoise (shadow body) | 2 | Shadow pass recomputes at offset pos |
+| **Total** | **12** | |
+
+**PuffCloud comparison:** PuffCloud uses 3 (CloudNoise) + 4 (CloudLighting gradient)
+= **7 Simplex calls** per fragment in its worst case (shadow + density ON).
+
+**Bush is ~70% more expensive per fragment than Puff.** However, Bush quads are
+typically smaller (3–6 slots vs. Puff's potentially larger clusters), so total
+fragment throughput may be similar.
+
+##### Cost estimates
+
+| Scenario | Fragments | Simplex calls | Estimated GPU time (Adreno 505) |
+|---|---|---|---|
+| 3-slot bush, shadow ON | ~90k (40% discarded → ~54k shaded) | 54k × 12 = 648k | ~0.10–0.15 ms |
+| 6-slot bush, shadow ON | ~160k (45% discarded → ~88k shaded) | 88k × 12 = 1.06M | ~0.15–0.25 ms |
+| 16-slot bush (worst case) | ~500k (60% discarded → ~200k shaded) | 200k × 12 = 2.4M | ~0.35–0.50 ms |
+| Puff (6 slots, density ON) | ~160k (50% discarded → ~80k shaded) | 80k × 7 = 560k | ~0.08–0.15 ms |
+| **Bush + Puff combined** (typical) | ~142k shaded | ~1.6M calls | **~0.25–0.40 ms** |
+
+The typical case (3–6 bush slots + Puff) fits within the 0.5 ms budget. The worst
+case (16 bush slots) alone approaches the budget limit.
+
+##### Overdraw concern — quad covers transparent area
+
+Both PuffCloud and Bush render on a single SpriteRenderer quad sized to cover all
+slot positions + padding. The quad is rectangular but the actual shape (cloud/bush)
+is irregular. Fragments outside the shape are discarded, but the GPU still invokes
+the fragment shader for them — on mobile GPUs without early-Z for transparent objects,
+**every fragment in the quad runs the full shader before `discard`**.
+
+For Bush, the SDF computation (`BushSDF` — 0 noise calls, just a distance loop) and
+the `discard` happen early in the fragment shader, before the expensive LeafNoise
+and lighting calls. Structuring the shader to **early-out before expensive work**
+is critical:
+
+```hlsl
+// Compute SDF + edge noise first (cheap: 2 Simplex calls)
+float d = BushSDF(wp, slotSeed);
+float edgeN = EdgeNoise(wp, t, slotSeed);
+d -= edgeN * _EdgeNoiseAmount;
+float alpha = 1.0 - smoothstep(-_AAWidth, 0.0, d);
+
+// EARLY DISCARD — skip all expensive work for outside-shape fragments
+if (alpha < 0.001) discard;
+
+// Only shaded fragments reach here:
+float leafN = LeafNoise(wp, t, slotSeed);
+fixed3 lighting = BushLighting(wp, t, slotSeed);
+// ...
+```
+
+**Gap — `discard` on mobile GPUs:** On tile-based architectures (all mobile GPUs —
+Adreno, Mali, Apple), `discard` prevents early-Z optimization for the *entire draw
+call*, not just the discarded fragments. This means the quad's pixels can't use
+hidden-surface removal and must all be shaded. However, since we already use
+`ZWrite Off` + `Blend SrcAlpha OneMinusSrcAlpha` (transparent pipeline), early-Z is
+already disabled. The `discard` doesn't make things *worse* — it just prevents the
+fragment from writing to the framebuffer. The real savings come from the early-out
+branching *within* the shader.
+
+**Gap — branching efficiency on mobile:** Mobile GPUs execute fragments in warps/waves
+(typically 16–64 fragments). If *any* fragment in a warp is inside the shape, the
+entire warp executes the full shader. The early `discard` only helps warps that are
+*entirely* outside the shape (which is most of them in the padded quad corners). For
+warps straddling the edge, all fragments pay the full cost regardless. This is
+unavoidable with procedural SDF shapes.
+
+##### Mitigation strategies
+
+**M1 — Reduce LeafNoise to 2 octaves (save 1 Simplex/fragment):**
+Drop the fine octave (4.37× frequency). At game scale (~0.4 world units per slot
+radius × ~120 px/unit ≈ 48 pixels across), the fine detail is barely perceptible.
+Saves ~54k–200k Simplex evaluations per frame.
+**Total: 12 → 11 calls.** Small win.
+
+**M2 — Skip lighting on low-end devices (save 4 Simplex/fragment):**
+Add a `_LIGHTING_ON` shader keyword. On low-quality settings, disable it — the bush
+renders as flat-shaded LeafNoise colour without the pseudo-normal gradient. This is
+the single largest cost reduction.
+**Total: 12 → 7 calls** (shadow ON) or **5 calls** (shadow OFF).
+
+**M3 — Skip shadow on low-end (save 2 Simplex/fragment):**
+`_SHADOW_ON` is already a keyword. Disabling it on low-quality settings removes the
+shadow pass entirely. Combined with M2:
+**Total: 5 calls.**
+
+**M4 — Reduce MAX_SLOTS for bush (save loop iterations):**
+Bush clusters are typically 1–4 slots. The SDF loop runs `_SlotCount` iterations, not
+`MAX_SLOTS`, so the shader already adapts. But reducing `MAX_SLOTS` from 16 to 8 in
+the Bush shader (separate from PuffCloud's 16) reduces register pressure and helps
+the compiler optimize. The C# `ClusterView` already caps at 16 — the shader can
+clamp independently.
+```hlsl
+#define MAX_SLOTS 8
+```
+If a bush cluster exceeds 8 slots, the extra slots are ignored — acceptable since the
+spawner caps bush count anyway.
+
+**M5 — Split shadow into a separate pass (reduce overdraw):**
+Currently the shadow is composited in the same fragment shader as the body, meaning
+every fragment computes *both* SDF evaluations (body + shadow). An alternative: render
+the shadow in a separate pass with a simpler shader (SDF only, no leaf noise, no
+lighting). This reduces fragment cost for shadow-only pixels but adds a second draw
+call.
+
+On mobile, **draw calls are expensive** (CPU-side state changes). A second pass for
+each bush cluster adds 1 draw call per cluster. With 1–3 bush clusters, this is 1–3
+extra draw calls — negligible on modern mobile. But the current single-pass approach
+is already the same pattern PuffCloud uses successfully, so only split if profiling
+shows the shadow path is the bottleneck.
+
+**Recommendation:** don't split — keep single pass like PuffCloud.
+
+**M6 — LOD: distance-based simplification:**
+Not applicable — the game is a fixed-camera 2D game with no zoom. All bushes are
+always at the same screen scale.
+
+##### Recommended quality tiers
+
+| Setting | High (default) | Low |
+|---|---|---|
+| LeafNoise octaves | 3 | 2 |
+| `_LIGHTING_ON` | ON | OFF |
+| `_SHADOW_ON` | ON | OFF |
+| `_DISTURBANCE_ON` | ON | ON (cheap — just a tex2D + add) |
+| `_CENTER_SHADOW_ON` | OFF | OFF |
+| Simplex calls/frag | 12 | 5 |
+| Estimated cost (3 slots) | ~0.15 ms | ~0.05 ms |
+
+Tier selection can be driven by `QualitySettings.GetQualityLevel()` or a device
+capability check at startup. This requires the C# side to toggle material keywords —
+add a `MaterialKeywordSetter` or do it in `BushView.OnConfigured()`.
+
+**Gap — no quality tier system exists yet.** The project has `FrameRateSettings` but
+no GPU quality tier. Implementing per-shader quality keywords is a small addition:
+```csharp
+if (QualitySettings.GetQualityLevel() == 0)
+{
+    material.DisableKeyword("_LIGHTING_ON");
+    material.DisableKeyword("_SHADOW_ON");
+}
+```
+This is a Phase 5 task — for Phase 2, ship with high quality defaults and profile.
+
+##### Summary
+
+| Concern | Risk | Status |
+|---|---|---|
+| Simplex calls per fragment (12) | Medium | Acceptable for typical 3–6 slot clusters; mitigate with M2/M3 on low-end |
+| Overdraw on transparent quad | Medium | Early discard before expensive work; unavoidable on TBDR without opaque Z |
+| 16-slot worst case approaching 0.5 ms | Low | Spawner caps bush count; unlikely in practice |
+| Combined Bush + Puff cost | Low | ~0.25–0.40 ms typical; within 0.5 ms budget |
+| No quality tier system | Medium | Ship high quality; add keyword toggle in Phase 5 if profiling demands it |
+| SDF loop (up to 16 iterations) | Low | Reduce MAX_SLOTS to 8 for bush; loop is ALU-only (no texture/noise) |
+
+**Bottom line:** The Bush shader is ~70% more expensive per fragment than PuffCloud,
+but bush clusters are smaller and fewer. The combined Puff + Bush cost stays within
+the 0.5 ms GPU budget for typical configurations. The main insurance policy is the
+`_LIGHTING_ON` keyword (M2) — toggling it off saves 4 Simplex calls and cuts the
+cost nearly in half. Ship with all features ON, profile on target devices in Phase 5,
+and toggle keywords if needed.
+
+---
+
+#### Consolidated Gap Summary — Phase 2
+
+| # | Gap | Risk | Recommendation |
+|---|---|---|---|
+| S1 | Render order Bush vs Puff — both use Transparent queue | Low | Control via `SortingOrderOffset` in Phase 3 config |
+| S2 | `_SminK` property missing from initial Properties block | Low | Add to Properties in task 2.1 |
+| S3 | Seed discontinuity at smin merge boundary | Low | Accept — seed drives subtle noise offset; test in Phase 5 |
+| S4 | Edge noise seam at merge region (different seeds) | Low | Accept — smin blend region is narrow; revisit if visible |
+| S5 | `_AAWidth` property missing from initial Properties block | Low | Add to Properties in task 2.1 |
+| S6 | `_CenterShadowDarkness` property missing from initial Properties block | Low | Add to Properties in task 2.1 |
+| S7 | 17 Simplex calls per fragment (3-octave LeafNoise + lighting gradient) | Medium | Use LeafNoiseLite (1-octave) for lighting gradient — reduces to 12 |
+| S8 | Wind on edge noise — should silhouette sway? | Low | Use static `wp` for edge noise; test edge sway in Phase 5 |
+| S9 | Shadow edge should react to disturbance wobble | Low | Apply `_EdgeDisturbanceScale` in shadow pass too |
+| S10 | Material asset not used until Phase 3 prefab exists | None | Expected — note only |
+| S11 | Shared lighting code duplicated from PuffCloud | Low | Accept for now; extract to .cginc if a third cluster type appears |
+| S12 | LeafNoise octave count may be invisible at game scale | Low | Test 2 vs 3 octaves in Phase 5; default to 3, fallback to 2 |
+| S13 | No quality tier system exists — can't toggle keywords per device | Medium | Ship high quality; add keyword toggle in Phase 5 if profiling demands |
+| S14 | `_LIGHTING_ON` keyword not in task 2.1 Properties/pragmas | Low | Add `shader_feature _LIGHTING_ON`; guard lighting code path |
+| S15 | `discard` on TBDR — early-out branching saves cost, but warp straddling limits benefit | Medium | Structure shader to discard before expensive work (SDF + edge = 2 calls before discard) |
+| S16 | MAX_SLOTS 16 wastes register pressure for bush | Low | Use `#define MAX_SLOTS 8` in Bush.shader |
+| S17 | Combined Puff + Bush approaching 0.5 ms budget on low-end | Medium | M2 + M3 (disable lighting + shadow) brings bush to 5 calls — safe fallback |
 
 **Exit criteria:** Shader renders a visually distinct, cartoony top-down bush in the
 scene view with edit-mode animation. Clearly differentiated from Puff at a glance.
+
+---
+
+#### Phase 2 — Quick Reference (Session Recovery)
+
+> Read this section cold to resume implementation. Everything below is resolved —
+> no decisions remain.
+
+**File:** `Assets/Shaders/BalloonParty/Grid/Bush.shader`
+
+**Reference shader:** `Assets/Shaders/BalloonParty/Grid/PuffCloud.shader` (328 lines)
+— copy its scaffold (SubShader tags, blend mode, instancing block, vertex shader,
+`MAX_SLOTS`, `_SlotCentersWorld`/`_SlotCount`/`_TimeOffset` MPB contract) then
+replace the fragment logic.
+
+**Include:** `Assets/Shaders/BalloonParty/Noise/SimplexNoise2D.cginc`
+— `float SimplexNoise2D(float2 p)` returns `[-1, 1]`.
+
+**Render config:** `Queue=Transparent`, `Blend SrcAlpha OneMinusSrcAlpha`,
+`ZWrite Off`, `Cull Off`. Same as PuffCloud.
+
+**Keywords (4 `shader_feature` pragmas):**
+`_SHADOW_ON`, `_CENTER_SHADOW_ON`, `_DISTURBANCE_ON`, `_LIGHTING_ON`
+
+**`#define MAX_SLOTS 8`** (not 16 — bush clusters are small).
+
+**Disturbance globals** (set by `DisturbanceFieldService`, NOT in Properties):
+`sampler2D _DisturbanceTex`, `float2 _FieldBoundsMin`, `float2 _FieldBoundsSize`
+
+##### Properties (all in one block)
+
+```
+// Shape
+_SlotRadius          Float    0.40
+_RadiusJitter        Range    0–0.15       0.06
+_EdgeNoiseFreq       Float    4.0
+_EdgeNoiseAmount     Range    0–0.2        0.08
+_SminK               Range    0.05–0.5     0.20
+_AAWidth             Range    0.001–0.03   0.008
+
+// Surface
+_BaseColor           Color    (0.18, 0.45, 0.12, 1)
+_LeafVariationColor  Color    (0.25, 0.55, 0.15, 1)
+_LeafNoiseFreq       Float    6.0
+
+// Lighting
+_LightDir            Vector   (-0.4, 0.7, 0, 0)
+_LightColor          Color    (1, 1, 0.9, 1)
+_AmbientColor        Color    (0.08, 0.22, 0.05, 1)
+_LightIntensity      Range    0–1          0.50
+_NormalStrength      Range    0–3          1.5
+_NormalEpsilon       Range    0.001–0.05   0.015
+
+// Rim
+_RimWidth            Range    0–0.15       0.04
+_RimIntensity        Range    0–1          0.35
+
+// Wind
+_WindSpeed           Range    0–2          0.4
+_WindAmount          Range    0–0.1        0.02
+
+// Animation
+_TimeOffset          Float    0.0
+
+// Shadow (_SHADOW_ON)
+_ShadowColor         Color    (0.04, 0.04, 0.08, 0.45)
+_ShadowOffsetX       Range    -0.15–0.15   0.03
+_ShadowOffsetY       Range    -0.15–0.15  -0.04
+_ShadowSoftness      Range    0–0.10       0.04
+
+// Center Shadow (_CENTER_SHADOW_ON)
+_CenterShadowDarkness Range   0.3–1.0      0.75
+
+// Disturbance (_DISTURBANCE_ON)
+_DisplaceWorldScale   Range   0–2          0.3
+_EdgeDisturbanceScale Range   0–3          1.5
+```
+
+##### Fragment shader data flow
+
+```
+wp = worldPos (from vertex)
+t  = _TimeOffset
+
+1. WIND        wpAnim = wp + WindDisplace(wp, t)           ← 1 Simplex
+2. SDF         d = BushSDF(wp, slotSeed)                   ← 0 Simplex (pure math)
+3. EDGE NOISE  edgeN = EdgeNoise(wp, t, slotSeed)          ← 2 Simplex (static wp, not wpAnim)
+               d -= edgeN * _EdgeNoiseAmount
+4. DISTURBANCE if _DISTURBANCE_ON:
+                 fieldUV = (wp - _FieldBoundsMin) / _FieldBoundsSize
+                 displace = (tex2D(_DisturbanceTex, fieldUV).gb - 0.5) * 2 * _DisplaceWorldScale
+                 disturbance = saturate(length(displace) / ...)
+                 wpAnim += displace                         ← warp leaf noise
+                 d -= edgeN * (_EdgeNoiseAmount * disturbance * _EdgeDisturbanceScale)  ← edge wobble
+5. CLIP        alpha = 1 - smoothstep(-_AAWidth, 0, d)
+               if alpha < 0.001: discard                   ← EARLY OUT before expensive work
+6. LEAF COLOR  leafN = LeafNoise(wpAnim, t, slotSeed)      ← 3 Simplex (or 2 on low)
+               color = lerp(_BaseColor, _LeafVariationColor, leafN)
+7. LIGHTING    if _LIGHTING_ON:
+                 lit = BushLighting(wpAnim, t, slotSeed)   ← 4× LeafNoiseLite = 4 Simplex
+                 color *= lit
+8. RIM         rim = smoothstep(_RimWidth, 0, abs(d))
+               color = lerp(color, _LightColor, rim * _RimIntensity)
+9. CENTER      if _CENTER_SHADOW_ON:
+                 centerFade = per-slot center distance
+                 color *= lerp(1, _CenterShadowDarkness, centerFade)
+10. SHADOW     if _SHADOW_ON:
+                 shadowD = BushSDF(wp - shadowOffset) + EdgeNoise  ← 2 Simplex
+                 composite shadow behind body
+11. OUTPUT     return fixed4(color, alpha)
+```
+
+**Total Simplex calls: 12** (shadow ON, lighting ON, disturbance ON, 3-octave leaf).
+**Early discard at step 5** — fragments outside the SDF skip steps 6–10.
+
+##### Key functions (signatures)
+
+```hlsl
+float smin(float a, float b, float k)
+// Polynomial smooth-min. k = _SminK.
+
+float BushSDF(float2 wp, out float slotSeed)
+// Loop _SlotCount slots. Per-slot: hash → radius jitter, distance - radius.
+// smin across all. Track nearest seed via raw distance.
+
+float EdgeNoise(float2 wp, float t, float slotSeed)
+// 2-octave Simplex. seedOffset = slotSeed * (61.7, 37.3). Returns [-1,1].
+
+float2 WindDisplace(float2 wp, float t)
+// 1-octave Simplex at 0.5× freq. Returns displacement * _WindAmount.
+
+float LeafNoise(float2 wp, float t, float slotSeed)
+// 3-octave Simplex (or 2). seedOffset = slotSeed * (91.3, 53.7). Returns [0,1].
+
+float LeafNoiseLite(float2 wp, float t, float slotSeed)
+// 1-octave only. Same seed. For lighting gradient only.
+
+fixed3 BushLighting(float2 wp, float t, float slotSeed)
+// Central differences on LeafNoiseLite → pseudo-normal → half-Lambert.
+// Same pattern as PuffCloud's CloudLighting (lines 200-221 of PuffCloud.shader).
+```
+
+##### PuffCloud.shader line references (copy from)
+
+| What | Lines |
+|---|---|
+| SubShader tags + blend | 61–75 |
+| `#define MAX_SLOTS`, appdata, v2f | 88–103 |
+| Instancing block (`_RendererColor`) | 105–112 |
+| `_SlotCentersWorld` / `_SlotCount` | 147–148 |
+| `SlotFalloff` (→ adapt to `BushSDF`) | 179–193 |
+| `CloudLighting` (→ adapt to `BushLighting`) | 200–221 |
+| Vertex shader | 223–235 |
+| Disturbance sampling | 245–253 |
+| Shadow composite | 279–312 |
+
+##### Performance budget
+
+- Target: **< 0.5 ms combined** Puff + Bush on mobile
+- Typical (3–6 bush slots): **~0.15–0.25 ms**
+- Worst (16 slots): **~0.35–0.50 ms**
+- Fallback: disable `_LIGHTING_ON` → 12 → 7 calls; disable `_SHADOW_ON` → 7 → 5
+
+##### Material asset
+
+`Assets/Materials/Grid/Bush.mat` — manual Unity step.
+Shader: `BalloonParty/Grid/Bush`. Enable `_SHADOW_ON` + `_DISTURBANCE_ON` +
+`_LIGHTING_ON`. Leave `_CENTER_SHADOW_ON` off. Set green palette.
 
 ---
 
