@@ -1282,7 +1282,7 @@ references this material. **Phase 3 dependency — note only.**
 #### Task Checklist
 
 ```
-2.1  [ ] Shader file scaffold
+2.1  [x] Shader file scaffold
          └── Properties block with all parameters (incl. _SminK, _AAWidth,
              _CenterShadowDarkness — caught in gap review)
          └── SubShader tags, blend mode, includes
@@ -1293,39 +1293,41 @@ references this material. **Phase 3 dependency — note only.**
          └── shader_feature pragmas: _SHADOW_ON, _CENTER_SHADOW_ON,
              _DISTURBANCE_ON, _LIGHTING_ON
          └── Structure frag() for early discard before expensive work
-2.2  [ ] Per-slot circle SDF + smooth-minimum merging
+2.2  [x] Per-slot circle SDF + smooth-minimum merging
          └── smin helper function
          └── BushSDF function with per-slot radius jitter
          └── Add _SminK property
-2.3  [ ] Edge noise distortion
+2.3  [x] Edge noise distortion
          └── EdgeNoise function (2-octave, per-slot seed offset)
          └── Modulate SDF distance by edge noise
-2.4  [ ] Alpha clip at SDF boundary
+2.4  [x] Alpha clip at SDF boundary
          └── smoothstep AA transition
          └── Add _AAWidth property
          └── discard fully transparent pixels
-2.5  [ ] Leaf noise colour modulation
-         └── LeafNoise function (3-octave or 2-octave, world-space)
+2.5  [x] Leaf noise colour modulation
+         └── LeafNoise function (3-octave, world-space)
          └── LeafNoiseLite (1-octave, for lighting gradient)
          └── lerp _BaseColor ↔ _LeafVariationColor
-2.6  [ ] Pseudo-lighting (_LIGHTING_ON keyword-guarded)
+2.6  [x] Pseudo-lighting (_LIGHTING_ON keyword-guarded)
          └── Central differences on LeafNoiseLite → pseudo-normal
          └── Half-Lambert with _LightDir, _LightColor, _AmbientColor
          └── Guarded by #ifdef _LIGHTING_ON — flat fallback when off
-2.7  [ ] Edge highlight rim
+2.7  [x] Edge highlight rim
          └── smoothstep on abs(SDF distance)
          └── Blend with _LightColor at _RimIntensity
-2.8  [ ] Centre shadow (_CENTER_SHADOW_ON)
+2.8  [x] Centre shadow (_CENTER_SHADOW_ON)
          └── Per-slot center distance → darkening
          └── Add _CenterShadowDarkness property
-2.9  [ ] Ground shadow (_SHADOW_ON)
+2.9  [x] Ground shadow (_SHADOW_ON)
          └── Offset SDF + edge noise at shadow position
          └── Shadow alpha with _ShadowSoftness
          └── Composite shadow behind main body
-2.10 [ ] Wind sway animation
+         └── Disturbance edge wobble applied to shadow pass
+2.10 [x] Wind sway animation
          └── WindDisplace function (1-octave, low freq)
          └── Apply to leaf noise coords, NOT SDF coords
-2.11 [ ] Disturbance field integration (_DISTURBANCE_ON)
+         └── Static wp for EdgeNoise (stable silhouette)
+2.11 [x] Disturbance field integration (_DISTURBANCE_ON)
          └── Sample _DisturbanceTex globals
          └── Warp leaf noise coords with displacement
          └── Amplify edge noise with _EdgeDisturbanceScale
@@ -1769,6 +1771,277 @@ register in DI.
 
 **Exit criteria:** Bushes appear in-game with the procedural shader. Adjacent slots
 merge visually. Wind sway animates. Registry does no work after initial setup.
+
+---
+
+#### Phase 2 — Implementation Notes
+
+##### Verified against plan — no deviations
+
+All shader functions, properties, and data flow match the plan's Quick Reference
+(§ Phase 2 — Quick Reference). The following plan gaps were addressed:
+
+| Gap | Resolution |
+|---|---|
+| S2 `_SminK` missing | Added to Properties block |
+| S5 `_AAWidth` missing | Added to Properties block |
+| S6 `_CenterShadowDarkness` missing | Added to Properties block |
+| S7 17 Simplex calls | `LeafNoiseLite` (1-octave) used for lighting — 12 total |
+| S8 Wind on edge noise | Static `wp` used for EdgeNoise (stable silhouette) |
+| S9 Shadow disturbance | `_EdgeDisturbanceScale` applied to shadow pass |
+| S14 `_LIGHTING_ON` missing | Added as `shader_feature` pragma |
+| S16 MAX_SLOTS 16 | Set to `#define MAX_SLOTS 8` |
+
+##### Minor difference from PuffCloud scaffold
+
+PuffCloud vertex shader multiplies `IN.color * _Color * _RendererColor`. Bush omits
+`_Color` (no tint property — bush uses `_BaseColor` + `_LeafVariationColor` for
+colour). The `IN.color` tint from `SpriteRenderer.color` still applies via
+`IN.color.rgb` in the final composition (step 10).
+
+##### Remaining Phase 2 task
+
+2.12 — **Create material asset** (`Assets/Materials/Grid/Bush.mat`) — manual Unity
+step. Shader: `BalloonParty/Grid/Bush`. Enable `_SHADOW_ON` + `_DISTURBANCE_ON` +
+`_LIGHTING_ON`. Leave `_CENTER_SHADOW_ON` off. Set green palette to defaults.
+
+---
+
+#### Phase 3 — Quick Reference (Session Recovery)
+
+> Read this section cold to resume Phase 3 implementation. All decisions below
+> are resolved — no open questions.
+
+##### What exists already
+
+| File | Path | Contents |
+|---|---|---|
+| `BushObstacleModel.cs` | `Assets/Source/Slots/Actor/Archetype/` | 22 lines. Implements `IWriteableSlotActor`. Has `SlotIndex`, `Kind => Static`. **Missing:** `ClusterId`, `IClusterableSlotActor` |
+| `GridActorType.cs` | same folder | Enum — `Bush = 1` already present |
+| `StaticActorSpawner.cs` | `Assets/Source/Slots/Actor/` | `CreateModel` switch — only has `Puff` case; `_` throws. **Add Bush case** |
+| `GameLifetimeScope.cs` | `Assets/Source/Game/` | 148 lines. Puff registrations at lines 106–107. **Add Bush registrations after them** |
+| `Bush.shader` | `Assets/Shaders/BalloonParty/Grid/` | 393 lines. Phase 2 complete. All features working |
+| `ClusterView.cs` | `Assets/Source/Slots/Actor/Cluster/` | 190 lines. Abstract base. `OnConfigured(MPB)`, `OnUpdateBlock(MPB)` virtual hooks |
+| `ClusterViewController.cs` | same folder | 131 lines. Abstract generic. 3 type params: `TModel, TView, TSettings`. Abstract `GetPrefab(TSettings)` |
+| `SlotClusterRegistry.cs` | same folder | 342 lines. Generic. `setupOnly` constructor flag |
+| `IClusterViewSettings.cs` | same folder | `AnimationSpeed`, `Padding`, `SortingLayerId`, `SortingOrderOffset` |
+| `IClusterableSlotActor.cs` | same folder | `IWriteableSlotActor` + `int ClusterId { get; set; }` |
+
+##### Reference implementations (Puff — copy pattern exactly)
+
+**PuffObstacleModel.cs** (21 lines):
+```csharp
+internal class PuffObstacleModel : IClusterableSlotActor, IPassThrough
+{
+    public Vector2Int SlotIndex { get; private set; }
+    public int ClusterId { get; set; }
+    Vector2Int IWriteableSlotActor.SlotIndex { get => SlotIndex; set => SlotIndex = value; }
+    public SlotActorKind Kind => SlotActorKind.Static;
+}
+```
+
+**PuffCloudView.cs** (15 lines):
+```csharp
+internal class PuffCloudView : ClusterView { }
+```
+
+**IPuffCloudSettings.cs** (11 lines):
+```csharp
+internal interface IPuffCloudSettings : IClusterViewSettings
+{
+    PuffCloudView CloudPrefab { get; }
+}
+```
+
+**PuffCloudSettings.cs** (35 lines):
+```csharp
+[CreateAssetMenu(menuName = "Configuration/Puff Cloud Settings", fileName = "PuffCloudSettings")]
+internal class PuffCloudSettings : ScriptableObject, IPuffCloudSettings
+{
+    [SerializeField] private PuffCloudView _cloudPrefab;
+    [SerializeField] private float _animationSpeed = 0.8f;
+    [SerializeField] private float _padding = 0.3f;
+    [SortingLayer] [SerializeField] private int _sortingLayerId;
+    [SerializeField] private int _sortingOrderOffset;
+    // Properties...
+}
+```
+
+**PuffClusterRegistry.cs** (21 lines):
+```csharp
+internal class PuffClusterRegistry : SlotClusterRegistry<PuffObstacleModel>
+{
+    [Inject]
+    internal PuffClusterRegistry(SlotGrid grid) : base(grid) { }
+}
+```
+
+**PuffCloudViewController.cs** (31 lines):
+```csharp
+internal class PuffCloudViewController
+    : ClusterViewController<PuffObstacleModel, PuffCloudView, IPuffCloudSettings>
+{
+    [Inject]
+    internal PuffCloudViewController(
+        PuffClusterRegistry registry, SlotGrid grid,
+        IPuffCloudSettings settings, IObjectResolver resolver)
+        : base(registry, grid, settings, resolver) { }
+
+    protected override PuffCloudView GetPrefab(IPuffCloudSettings settings)
+        => settings.CloudPrefab;
+}
+```
+
+**GameLifetimeScope registration (Puff, lines 106–107):**
+```csharp
+builder.RegisterEntryPoint<PuffClusterRegistry>().AsSelf();
+builder.RegisterEntryPoint<PuffCloudViewController>();
+```
+
+**StaticActorSpawner.CreateModel (line 142–148):**
+```csharp
+private static IWriteableSlotActor CreateModel(GridActorType actorType)
+{
+    return actorType switch
+    {
+        GridActorType.Puff => new PuffObstacleModel(),
+        _ => throw new System.Exception("Unknown actor type: " + actorType)
+    };
+}
+```
+
+##### Task-by-task implementation guide
+
+**3.1 — BushObstacleModel** — add `IClusterableSlotActor`
+- File: `Assets/Source/Slots/Actor/Archetype/BushObstacleModel.cs`
+- Add `using BalloonParty.Slots.Actor.Cluster;`
+- Change declaration to `IClusterableSlotActor` (replaces `IWriteableSlotActor`)
+- Add `public int ClusterId { get; set; }`
+- Bush is NOT `IPassThrough` (projectiles don't pass through bushes in hit terms,
+  but they fly over — disturbance is Phase 4)
+
+**3.2 — IBushSettings** — new file
+- File: `Assets/Source/Configuration/IBushSettings.cs`
+- Namespace: `BalloonParty.Configuration`
+- Extends `IClusterViewSettings`
+- Properties: `BushView BushPrefab { get; }` (typed prefab)
+- Phase 4 will add: `float StampRadius { get; }`, `float StampStrength { get; }`
+  — don't add yet unless convenient
+
+**3.3 — BushSettings** — new SO
+- File: `Assets/Source/Configuration/BushSettings.cs`
+- `[CreateAssetMenu(menuName = "Configuration/Bush Settings", fileName = "BushSettings")]`
+- Mirror `PuffCloudSettings` structure: prefab, animationSpeed, padding,
+  sortingLayerId, sortingOrderOffset
+- Set lower `_sortingOrderOffset` default than Puff so Bush renders below clouds
+
+**3.4 — BushView** — new view
+- File: `Assets/Source/Slots/Actor/Archetype/BushView.cs`
+- Subclass `ClusterView`
+- Override `OnConfigured(MaterialPropertyBlock block)` to push Bush-specific
+  shader properties: none needed yet (all Bush properties are on the material,
+  not MPB-driven). Leave empty body like `PuffCloudView`, or pre-wire slot
+  radius push if the shader needs it per-cluster.
+- **Note:** Bush shader reads `_SlotRadius` from the material, NOT from MPB.
+  No need to push it via `OnConfigured` unless we want per-cluster radius
+  variation (we don't — it's a global material setting).
+
+**3.5 — Bush.prefab** — manual Unity step
+- Create prefab: empty GameObject + `SpriteRenderer` (no sprite assigned) +
+  `BushView` component
+- Assign Bush material (`Assets/Materials/Grid/Bush.mat`) to SpriteRenderer
+- Drag SpriteRenderer ref into BushView's `_renderer` field
+
+**3.6 — BushSettings SO asset** — manual Unity step
+- Create: `Assets/Configuration/BushSettings.asset` via Create menu
+- Assign `Bush.prefab` to `_bushPrefab`
+- Set `_animationSpeed` = 0.8, `_padding` = 0.5 (bush SDF extends further than
+  cloud noise), `_sortingOrderOffset` lower than Puff
+
+**3.7 — GameLifetimeScope** — register Bush services
+- Add `[SerializeField] private BushSettings _bushSettings;`
+- Add after Puff registrations:
+  ```csharp
+  builder.RegisterInstance<IBushSettings>(_bushSettings);
+  builder.RegisterEntryPoint<BushClusterRegistry>().AsSelf();
+  builder.RegisterEntryPoint<BushViewController>();
+  ```
+- **New thin subclasses needed** (like Puff pattern):
+
+  **BushClusterRegistry.cs** (`Slots/Actor/Archetype/`):
+  ```csharp
+  internal class BushClusterRegistry : SlotClusterRegistry<BushObstacleModel>
+  {
+      [Inject]
+      internal BushClusterRegistry(SlotGrid grid) : base(grid, setupOnly: true) { }
+  }
+  ```
+  Note: `setupOnly: true` — Bush slots never change after initial placement.
+
+  **BushViewController.cs** (`Slots/Actor/Archetype/`):
+  ```csharp
+  internal class BushViewController
+      : ClusterViewController<BushObstacleModel, BushView, IBushSettings>
+  {
+      [Inject]
+      internal BushViewController(
+          BushClusterRegistry registry, SlotGrid grid,
+          IBushSettings settings, IObjectResolver resolver)
+          : base(registry, grid, settings, resolver) { }
+
+      protected override BushView GetPrefab(IBushSettings settings)
+          => settings.BushPrefab;
+  }
+  ```
+
+**3.8 — StaticActorSpawner** — add Bush case
+- In `CreateModel` switch:
+  ```csharp
+  GridActorType.Bush => new BushObstacleModel(),
+  ```
+
+**3.9 — GridActorConfiguration SO** — manual Unity step
+- Add a Bush entry in the Inspector: ActorType=Bush, PlacementMode=Cluster,
+  assign Bush GridActorView prefab, set weight/min/max/maxPerCluster
+
+**3.10 — Validation** — manual play-mode test
+
+##### Files to create (code, 5 files)
+
+| # | File | Lines (est.) |
+|---|---|---|
+| 1 | `Assets/Source/Configuration/IBushSettings.cs` | ~11 |
+| 2 | `Assets/Source/Configuration/BushSettings.cs` | ~35 |
+| 3 | `Assets/Source/Slots/Actor/Archetype/BushView.cs` | ~12 |
+| 4 | `Assets/Source/Slots/Actor/Archetype/BushClusterRegistry.cs` | ~16 |
+| 5 | `Assets/Source/Slots/Actor/Archetype/BushViewController.cs` | ~25 |
+
+##### Files to modify (code, 3 files)
+
+| # | File | Change |
+|---|---|---|
+| 1 | `BushObstacleModel.cs` | Add `IClusterableSlotActor`, `ClusterId` |
+| 2 | `StaticActorSpawner.cs` | Add `Bush` case in `CreateModel` switch |
+| 3 | `GameLifetimeScope.cs` | Add `_bushSettings` field + 3 registration lines |
+
+##### Manual Unity steps (4 steps, after all code)
+
+1. Create `Assets/Materials/Grid/Bush.mat` — shader `BalloonParty/Grid/Bush`,
+   enable `_SHADOW_ON` + `_DISTURBANCE_ON` + `_LIGHTING_ON`
+2. Create `Bush.prefab` — SpriteRenderer (no sprite) + BushView + material
+3. Create `BushSettings.asset` — assign prefab, set animation/padding/sorting
+4. Add Bush entry to `GridActorConfiguration` SO in Inspector
+5. Drag `BushSettings` asset into `GameLifetimeScope`'s `_bushSettings` field
+
+##### Known gaps for Phase 3
+
+| # | Gap | Resolution |
+|---|---|---|
+| P3-G1 | Bush needs `GridActorView` on the spawner prefab (separate from `BushView` cluster prefab) | Bush spawner prefab is a basic `GridActorView` (invisible placeholder); `BushView` is the cluster renderer prefab on `IBushSettings` |
+| P3-G2 | `setupOnly=true` requires constructor param — VContainer can't inject bare `bool` | Thin `BushClusterRegistry` subclass passes `setupOnly: true` explicitly |
+| P3-G3 | Sorting order: Bush below Puff | Set lower `_sortingOrderOffset` on `BushSettings` asset |
+| P3-G4 | Bush padding larger than Puff (SDF extends beyond slot centers) | `_padding = 0.5` on `BushSettings` (Puff uses 0.3) |
+| P3-G5 | Tests — `StructuralActorTests.cs` already has Bush model tests (lines 36–55) | Existing tests create `BushObstacleModel()` — verify they still compile after adding `IClusterableSlotActor` |
 
 ---
 
