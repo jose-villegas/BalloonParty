@@ -4,7 +4,8 @@
     "references": [
         "BalloonParty.Runtime",
         "NaughtyAttributes.Core",
-        "NaughtyAttributes.Editor"
+        "NaughtyAttributes.Editor",
+        "Unity.2D.Sprite.Editor"
     ],
     "includePlatforms": [
         "Editor"
@@ -18,4 +19,3 @@
     "versionDefines": [],
     "noEngineReferences": false
 }
-

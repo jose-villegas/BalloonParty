@@ -824,9 +824,9 @@ internal sealed class BushBakerWindow : EditorWindow
 #### Phase 1 task checklist
 
 ```
-B1  [ ] BushLeafBaker.cs — renders one leaf to Texture2D
-B2  [ ] LeafAtlasPacker.cs — packs N variants into atlas + Sprite[]
-B3  [ ] BushBakerWindow.cs — EditorWindow with preview + export
+B1  [x] BushLeafBaker.cs — renders one leaf to Texture2D
+B2  [x] LeafAtlasPacker.cs — packs N variants into atlas + Sprite[]
+B3  [x] BushBakerWindow.cs — EditorWindow with preview + export
 ```
 
 #### Dependencies
