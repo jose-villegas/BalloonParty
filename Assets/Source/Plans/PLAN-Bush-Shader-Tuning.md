@@ -45,29 +45,32 @@ coverage accumulation. Upper leaves fully occlude lower ones.
 2. **Radial dome gradient** — each leaf is brighter at centre, darker at edge
    (`_EdgeShade`). Sells each clump as a 3D dome.
 
-3. **Highlight spot** — `_HighlightColor` blended near the leaf centre
-   (`_HighlightSize` controls radius). Simulates top-down light.
+3. **Highlight spot** — `_HighlightColor` blended as a fake specular.
+   For real leaves, computed in the leaf's local coordinate frame — elliptical
+   to match the lens shape, and shifted along the leaf axis by
+   `_HighlightOffset` to simulate light direction. Gap fills keep a circular
+   highlight. `_HighlightSize` controls radius.
 
-4. **Rosette petal pattern** — `sin(angle × _RosetteCount)` (two harmonics)
-   creates angular sub-lobes visible in the mid-radius zone. Makes each leaf
-   look like a cluster of smaller leaves. Zero extra SDF cost.
+4. **Lateral veins (secondary venation)** — pinnate fishbone pattern branching
+   from the midrib toward the leaf edge, curving toward the tip. Uses a
+   diagonal stripe field `stemAxisT × _LateralVeinCount − |perpDist| ×
+   _LateralVeinAngle` with `frac` to create repeating vein lines. Each vein
+   tapers thinner toward the leaf edge and fades near the base, tip, and
+   midrib. Darkened with `_VeinDarken` (shared with midrib). Skipped for gap
+   fills. Zero extra SDF cost.
 
-5. **World-space grain** — `frac(sin(dot(floor(wp × _GrainScale), ...)))` adds
-   tiny hash-based colour variation. Reads as individual leaf texture at close
-   zoom. Zero extra SDF cost.
-
-6. **Central vein (midrib)** — dark line along each leaf's radial axis
+5. **Central vein (midrib)** — dark line along each leaf's radial axis
    (`_VeinWidth`, `_VeinDarken`). Computed from the tangent perpendicular to
    `leafDir`. Masked to fade near centre and edge. Skipped for gap fills.
    Zero extra SDF cost.
 
-7. **Self-shadow** — for each covered leaf at depth D, checks all higher depth
+6. **Self-shadow** — for each covered leaf at depth D, checks all higher depth
    layers (D+1 … LEAF_COUNT−1) within the same slot. If an upper leaf's SDF
    (evaluated at a shadow-offset position) is near zero, darkens the current
    leaf (`_LeafShadowStrength`, `_LeafShadowSoftness`, offset XY). Average
    cost ~8 extra `PhyllotaxisLeaf` + `LeafSDF` per covered leaf.
 
-8. **Inner shadow crease** — when an upper leaf overlaps an already-covered
+7. **Inner shadow crease** — when an upper leaf overlaps an already-covered
    pixel, a dark band near the upper leaf's edge is applied
    (`_CreaseWidth`, `_CreaseDarken`). Sells depth between layers.
 
@@ -134,16 +137,14 @@ global `_DisturbanceTex`.
 | `_CreaseDarken` | Range(0.3, 1.0) | 0.50 | How dark the crease gets |
 | **Dome Shading** ||||
 | `_HighlightColor` | Color | (0.55, 0.80, 0.35, 0.45) | Bright spot colour + intensity (alpha) |
-| `_HighlightSize` | Range(0.1, 0.7) | 0.30 | How large the bright centre spot is |
+| `_HighlightSize` | Range(0.1, 0.7) | 0.30 | How large the bright specular spot is |
+| `_HighlightOffset` | Range(-0.5, 0.5) | 0.15 | Shift specular along leaf axis (+ = toward tip) |
 | `_EdgeShade` | Range(0.5, 1.0) | 0.68 | Edge-to-centre darkness (lower = darker edges) |
-| **Inner Detail** ||||
-| `_RosetteCount` | Range(3, 12) | 7 | Angular sub-lobe count per leaf |
-| `_RosetteStrength` | Range(0, 0.5) | 0.35 | How pronounced the rosette petals are |
-| `_GrainScale` | Range(10, 100) | 40 | World-space frequency of micro-texture |
-| `_GrainStrength` | Range(0, 0.3) | 0.15 | Micro-texture colour intensity |
 | **Leaf Vein** ||||
 | `_VeinWidth` | Range(0.01, 0.15) | 0.06 | Midrib line thickness (normalized to leaf radius) |
-| `_VeinDarken` | Range(0.5, 1.0) | 0.72 | How dark the vein line is |
+| `_VeinDarken` | Range(0.5, 1.0) | 0.72 | How dark the vein lines are (midrib + lateral) |
+| `_LateralVeinCount` | Range(3, 12) | 6 | Number of lateral vein pairs along the midrib |
+| `_LateralVeinAngle` | Range(0.3, 3.0) | 1.2 | Slope of lateral veins (higher = more angled toward tip) |
 | **Branches** ||||
 | `_BranchThickness` | Range(0.005, 0.05) | 0.014 | Branch capsule half-width |
 | `_BranchColor` | Color | (0.35, 0.22, 0.10) | Branch colour |
@@ -185,20 +186,31 @@ global `_DisturbanceTex`.
 
 | Pass | Work | Typical count |
 |---|---|---|
+| Early bounds | `dot` per slot (squared distance, no sqrt) | 16 |
 | Wind | 1 simplex noise | 1 |
-| Branches | `CapsuleSDF` per prebaked segment (no PhyllotaxisLeaf) | ~25 |
-| Leaf SDF | `LeafSDF` per depth × slot (gap fills skip depth > 0) | ~93 |
+| Precomputation | hash + radius + reach per slot (once, not per depth) | 8 |
+| Per-slot spatial skip | `dot` per (depth × slot) — skips PhyllotaxisLeaf + LeafSDF for far slots | ~50% skipped |
+| Leaf SDF | `LeafSDF` per depth × slot (gap fills skip depth > 0) | ~45-50 |
 | Dome shading | per covered leaf: radial gradient + highlight | ~3-5 |
-| Rosette | per covered leaf: 1 `atan2` + 2 `sin` | ~3-5 |
-| Grain | per covered leaf: 1 `frac(sin(dot))` hash | ~3-5 |
+| Lateral veins | per covered real leaf: 1 `frac` + 2 `smoothstep` | ~3-5 |
 | Vein | per covered real leaf: tangent dot + smoothstep | ~3-5 |
-| Self-shadow | per covered real leaf: all upper depths × (`PhyllotaxisLeaf` + `LeafSDF`) | ~30 |
-| Shadow | `CanopySDF`: `LeafSDF` per depth × slot (same as leaf pass, no shading) | ~93 |
-| **Total sqrt ops** | | **~130** |
+| Self-shadow | per covered real leaf: circle check (not full LeafSDF) × SELF_SHADOW_LAYERS (4) | ~16 |
+| Branches | CapsuleSDF — **deferred**, only when no leaf covers pixel | ~0 (leaf-covered) / ~25 (gaps) |
+| Shadow | `CanopySDF`: slot-outer loop with per-slot distance skip | ~12-18 |
+| **Total SDF evals** | | **~90-110** |
 
-Branch endpoints prebaked on CPU — saves ~250 trig/sqrt ops per fragment
-versus in-shader computation at the new count. The remaining CapsuleSDF loop
-is ~8 ops per branch (dot, saturate, length).
+### Optimizations applied (Iteration 8)
+
+| # | Optimization | Savings |
+|---|---|---|
+| O1 | **Deferred branches** — branch CapsuleSDF loop only runs when `!anyCovered`. ~80% of bush fragments are leaf-covered, skipping ~25 CapsuleSDF calls. | ~20 SDF/frag avg |
+| O2 | **Per-slot precomputation** — hash, baseRadius, reach computed once per slot instead of per (depth × slot). Eliminates ~75 redundant `sin()` calls. | ~75 sin() |
+| O3 | **Per-slot spatial skip** — squared distance check skips PhyllotaxisLeaf + LeafSDF for far slots. Saves ~40-60% of SDF evaluations depending on cluster layout. | ~40 SDF/frag avg |
+| O4 | **Circle self-shadow** — uses `length(p - center) - radius` instead of full `LeafSDF` for self-shadow checks. Sufficient for soft darkening effect. | ~50% cheaper per check |
+| O5 | **CanopySDF slot-outer loop** — hash computed once per slot. Per-slot distance skip culls far slots. Fewer iterations than depth-outer ordering. | ~75% fewer hash calls |
+| O6 | **Squared distance bounds** — early bounds check uses `dot` instead of `length`, avoiding 16 `sqrt` calls. | 16 sqrt |
+| O7 | **Compile-time constant** — `PHYLLO_MAX_R` replaces `sqrt(LEAF_COUNT - 0.5)` computed every `PhyllotaxisLeaf` call. | minor |
+| O8 | **Merged conditionals** — highlight, veins, self-shadow under one `if (!isGapFill)` branch instead of three. Less divergence. | minor |
 
 ---
 
@@ -247,15 +259,17 @@ Removed scalloping — leaf shapes provide edge variety.
 **Problem:** Inner detail still too flat — each leaf was a smooth gradient blob.
 Needed more visual density within each leaf clump.
 
-### Iteration 6 — Rosette + grain inner detail (current)
+### Iteration 6 — Rosette + grain inner detail (historical)
 
 Added angular rosette petal pattern (two harmonics of `sin(angle × N)`) for
 sub-lobe structure within each leaf. Added world-space hash grain for micro-
 texture. Both are pure colour modulation — zero extra SDF evaluations.
 
-**Status:** Superseded by Iteration 7.
+**Problem:** The narrow circle-cut leaf shape clips most radial lobes — only
+1–2 highlights visible per leaf, reading as random blobs rather than structured
+detail. Replaced by lateral veins in Iteration 8.
 
-### Iteration 7 — Dense canopy + branch prebake + vein + self-shadow + circle-cut leaf (current)
+### Iteration 7 — Dense canopy + branch prebake + vein + self-shadow + circle-cut leaf (historical)
 
 Doubled leaf count (8 → 16) and increased branches (3 → 5) to match a dense
 top-down tree canopy reference. Branch capsule endpoints prebaked on CPU
@@ -270,6 +284,31 @@ genuinely pointy leaf tips with bilateral symmetry. Inspired by Gielis
 superformula research. Tuned defaults: smaller leaves (0.30), wider spread
 (0.55), stronger rosettes (0.35, 7 lobes), deeper creases (0.50), thinner
 branches (0.014). Shared math constants moved to `MathUtils`.
+
+**Status:** Superseded by Iteration 8.
+
+### Iteration 8 — Lateral veins + optimization pass (current)
+
+Replaced the angular rosette petal pattern with **lateral veins** (pinnate
+venation). Removed world-space grain. Made highlight leaf-shape-aware and
+positionable via `_HighlightOffset`.
+
+**Optimization pass** — reduced per-fragment cost from ~165 to ~90-110 SDF
+evaluations:
+- **Deferred branches**: CapsuleSDF loop only runs for uncovered pixels (~20%
+  of bush fragments). Saves ~25 SDF/frag on average.
+- **Per-slot precomputation**: hash + baseRadius + reach computed once per slot
+  (not per depth × slot). Eliminates ~75 redundant `sin()` calls.
+- **Per-slot spatial skip**: squared distance culls far slots, skipping ~40-60%
+  of PhyllotaxisLeaf + LeafSDF evaluations.
+- **Circle self-shadow**: `length(p - center) - radius` replaces full `LeafSDF`
+  for self-shadow checks. Sufficient for the soft darkening effect.
+- **CanopySDF restructured**: slot-outer loop computes hash once per slot and
+  adds per-slot distance culling.
+- **Squared distance bounds**: early bounds check uses `dot` instead of
+  `length`, avoiding 16 `sqrt` calls.
+- **Merged conditionals**: highlight, veins, self-shadow under one
+  `if (!isGapFill)` branch instead of three separate checks.
 
 **Status:** Active iteration. Evaluating visual result at game scale.
 
@@ -440,7 +479,7 @@ T10 [ ] Branch offloading — mask texture (Option B/C, if needed after profilin
 
 - Bush canopy reads as **layered, opaque leaf clumps** with visible inner detail.
 - **Inner shadows** darken at overlap seams, selling depth between layers.
-- **Rosette + grain** provide small-scale leaf texture within each clump.
+- **Lateral veins** provide small-scale leaf texture within each clump.
 - **Branches** peek through on thinner variants; fully hidden on fluffy ones.
 - **Leaf shapes** are elongated and varied — not uniform circles.
 - **Visual variety** from cluster to cluster (density spectrum).

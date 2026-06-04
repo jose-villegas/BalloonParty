@@ -38,17 +38,15 @@ Shader "BalloonParty/Grid/Bush"
         [Header(Dome Shading)]
         _HighlightColor     ("Highlight Color",      Color)              = (0.55, 0.80, 0.35, 0.45)
         _HighlightSize      ("Highlight Size",       Range(0.1, 0.7))    = 0.30
+        _HighlightOffset    ("Highlight Offset",     Range(-0.5, 0.5))   = 0.15
         _EdgeShade          ("Edge Shade",           Range(0.5, 1.0))    = 0.68
 
-        [Header(Inner Detail)]
-        _RosetteCount       ("Rosette Lobes",        Range(3, 12))       = 7
-        _RosetteStrength    ("Rosette Strength",     Range(0, 0.5))      = 0.35
-        _GrainScale         ("Grain Scale",          Range(10, 100))     = 40
-        _GrainStrength      ("Grain Strength",       Range(0, 0.3))      = 0.15
 
         [Header(Leaf Vein)]
         _VeinWidth          ("Vein Width",           Range(0.01, 0.15))  = 0.06
         _VeinDarken         ("Vein Darken",          Range(0.5, 1.0))    = 0.72
+        _LateralVeinCount   ("Lateral Vein Count",   Range(3, 12))       = 6
+        _LateralVeinAngle   ("Lateral Vein Angle",   Range(0.3, 3.0))    = 1.2
 
         [Header(Branches)]
         _BranchThickness    ("Branch Thickness",     Range(0.005, 0.05)) = 0.014
@@ -110,6 +108,9 @@ Shader "BalloonParty/Grid/Bush"
             #define BRANCH_COUNT    5
             #define GOLDEN_ANGLE    2.39996323
             #define MAX_BRANCHES   (MAX_SLOTS * BRANCH_COUNT)
+            #define SHADOW_DEPTH_LAYERS  4
+            #define SELF_SHADOW_LAYERS   4
+            #define PHYLLO_MAX_R   3.93700394
 
             struct appdata_t
             {
@@ -152,12 +153,11 @@ Shader "BalloonParty/Grid/Bush"
 
             fixed4 _HighlightColor;
             float  _HighlightSize;
+            float  _HighlightOffset;
             float  _EdgeShade;
 
-            float  _RosetteCount;
-            float  _RosetteStrength;
-            float  _GrainScale;
-            float  _GrainStrength;
+            float  _LateralVeinCount;
+            float  _LateralVeinAngle;
 
             float  _VeinWidth;
             float  _VeinDarken;
@@ -211,8 +211,7 @@ Shader "BalloonParty/Grid/Bush"
                 leafDir = float2(cos(angle), sin(angle));
 
                 // Douady-Couder distance: ∝ √n, normalized to slot radius
-                float maxR = sqrt((float)(LEAF_COUNT - 1) + 0.5);
-                float dist = baseRadius * _BranchSpread * sqrt(fn + 0.5) / maxR;
+                float dist = baseRadius * _BranchSpread * sqrt(fn + 0.5) / PHYLLO_MAX_R;
 
                 // Outer leaves (low depth) larger, inner leaves (high depth) smaller
                 float depthT = (float)depth / (float)(LEAF_COUNT - 1);
@@ -220,7 +219,11 @@ Shader "BalloonParty/Grid/Bush"
                 float sizeHash = 0.85 + frac(hash * (fn + 1.0) * 23.1) * _SubCircleSizeVar;
 
                 radius = baseRadius * _SubCircleSize * sizeBase * sizeHash;
-                center = slotCenter + leafDir * dist;
+
+                // Offset so the leaf BASE sits at the spiral position
+                // (branch tip) and the leaf grows outward
+                float halfLen = radius * sqrt(1.0 + 2.0 * _LeafPointiness);
+                center = slotCenter + leafDir * (dist + halfLen);
             }
 
             // ── Leaf-shaped SDF (circle-cut bilateral lens) ──
@@ -261,27 +264,39 @@ Shader "BalloonParty/Grid/Bush"
                 return length(pa - ba * h) - thickness;
             }
 
-            // ── Canopy silhouette SDF (leaf shapes) for ground shadow ──
+            // ── Canopy silhouette SDF for ground shadow ──
+            // Slot-outer loop: hash computed once per slot, distance
+            // check skips far slots before any PhyllotaxisLeaf work
             float CanopySDF(float2 wp)
             {
                 float d = 999.0;
-                for (int depth = 0; depth < LEAF_COUNT; depth++)
-                {
-                    for (int i = 0; i < _SlotCount; i++)
-                    {
-                        float radiusScale = _SlotCentersWorld[i].w > 0.001
-                                          ? _SlotCentersWorld[i].w : 1.0;
-                        if (depth > 0 && radiusScale < 0.99) continue;
+                float maxSubR = _SubCircleSize * (0.85 + _SubCircleSizeVar);
+                float ptSqrt = sqrt(1.0 + 2.0 * _LeafPointiness);
+                float reachF = _BranchSpread
+                             + maxSubR * (ptSqrt + 1.0 + _LeafPointiness);
 
-                        float2 sc = _SlotCentersWorld[i].xy;
-                        float h = frac(sin(dot(sc, float2(127.1, 311.7)))
-                                 * 43758.5453);
-                        float br = (_SlotRadius * radiusScale)
-                                 + (h - 0.5) * 2.0 * _RadiusJitter;
+                for (int i = 0; i < _SlotCount; i++)
+                {
+                    float2 sc = _SlotCentersWorld[i].xy;
+                    float rs = _SlotCentersWorld[i].w > 0.001
+                             ? _SlotCentersWorld[i].w : 1.0;
+                    float h = frac(sin(dot(sc, float2(127.1, 311.7)))
+                             * 43758.5453);
+                    float br = (_SlotRadius * rs)
+                             + (h - 0.5) * 2.0 * _RadiusJitter;
+
+                    float reach = br * reachF;
+                    float2 diff = wp - sc;
+                    if (dot(diff, diff) > reach * reach) continue;
+
+                    bool isGap = rs < 0.99;
+                    for (int depth = 0; depth < SHADOW_DEPTH_LAYERS; depth++)
+                    {
+                        if (depth > 0 && isGap) continue;
 
                         float2 cc, ld;
                         float  cr;
-                        if (radiusScale < 0.99)
+                        if (isGap)
                         {
                             cc = sc;
                             cr = br * _SubCircleSize;
@@ -292,7 +307,7 @@ Shader "BalloonParty/Grid/Bush"
                             PhyllotaxisLeaf(sc, br, h, depth, cc, cr, ld);
                         }
 
-                        float pt = radiusScale < 0.99 ? 0.0 : _LeafPointiness;
+                        float pt = isGap ? 0.0 : _LeafPointiness;
                         d = min(d, LeafSDF(wp, cc, cr, ld, pt));
                     }
                 }
@@ -322,6 +337,19 @@ Shader "BalloonParty/Grid/Bush"
             fixed4 frag(v2f IN) : SV_Target
             {
                 float2 wp = IN.worldPos;
+
+                // ── Early bounds check (squared distance — avoids sqrt) ──
+                float maxReach = _SlotRadius * (1.0 + _BranchSpread)
+                               * (1.0 + _LeafPointiness) + 0.2;
+                float maxReachSq = maxReach * maxReach;
+                float closestSlotSq = 999.0;
+                for (int ei = 0; ei < _SlotCount; ei++)
+                {
+                    float2 dv = wp - _SlotCentersWorld[ei].xy;
+                    closestSlotSq = min(closestSlotSq, dot(dv, dv));
+                }
+                if (closestSlotSq > maxReachSq) discard;
+
                 float  t  = _TimeOffset;
 
                 // ── Wind + disturbance ──
@@ -334,18 +362,36 @@ Shader "BalloonParty/Grid/Bush"
                 wpEval += displace;
                 #endif
 
-                // ── Pass 1: branch skeleton (behind leaves) ──
-                // Capsule endpoints are prebaked on the CPU — just evaluate SDF
-                float branchDist = 999.0;
-                for (int bi = 0; bi < _BranchCount; bi++)
-                {
-                    float4 seg = _BranchSegments[bi];
-                    float bd = CapsuleSDF(wpEval, seg.xy, seg.zw, _BranchThickness);
-                    branchDist = min(branchDist, bd);
-                }
-                bool insideBranch = branchDist < 0.0;
+                // ── Per-slot precomputation ──
+                // Hash and base radius are invariant across depth
+                // layers. Precomputing avoids redundant sin() calls
+                // in the main loop. Squared reach enables per-slot
+                // early skip that avoids PhyllotaxisLeaf + LeafSDF.
+                float slotHash[MAX_SLOTS];
+                float slotBaseR[MAX_SLOTS];
+                float slotReachSq[MAX_SLOTS];
 
-                // ── Pass 2: leaf clumps — painter's algorithm (back to front) ──
+                float maxSubR = _SubCircleSize
+                              * (0.85 + _SubCircleSizeVar);
+                float ptSqrt = sqrt(1.0 + 2.0 * _LeafPointiness);
+                float reachFactor = _BranchSpread
+                    + maxSubR * (ptSqrt + 1.0 + _LeafPointiness);
+
+                for (int pi = 0; pi < _SlotCount; pi++)
+                {
+                    float2 sc = _SlotCentersWorld[pi].xy;
+                    float rs = _SlotCentersWorld[pi].w > 0.001
+                             ? _SlotCentersWorld[pi].w : 1.0;
+                    slotHash[pi] = frac(sin(dot(sc,
+                        float2(127.1, 311.7))) * 43758.5453);
+                    slotBaseR[pi] = (_SlotRadius * rs)
+                        + (slotHash[pi] - 0.5) * 2.0 * _RadiusJitter;
+                    float reach = slotBaseR[pi] * reachFactor
+                                + _AAWidth;
+                    slotReachSq[pi] = reach * reach;
+                }
+
+                // ── Leaf clumps — painter's algorithm (back to front) ──
                 // depth 0 = outermost (painted first), LEAF_COUNT-1 = centre (last)
                 bool   anyCovered = false;
                 fixed3 leafColor  = fixed3(0, 0, 0);
@@ -357,21 +403,22 @@ Shader "BalloonParty/Grid/Bush"
                     for (int si = 0; si < _SlotCount; si++)
                     {
                         float2 slotCenter = _SlotCentersWorld[si].xy;
-                        float radiusScale = _SlotCentersWorld[si].w > 0.001
-                                          ? _SlotCentersWorld[si].w : 1.0;
+                        bool isGapFill = _SlotCentersWorld[si].w > 0.001
+                                      && _SlotCentersWorld[si].w < 0.99;
 
-                        // Gap fills: only one round leaf at centre
-                        if (depth > 0 && radiusScale < 0.99) continue;
+                        if (depth > 0 && isGapFill) continue;
 
-                        float hash = frac(sin(dot(slotCenter, float2(127.1, 311.7)))
-                                   * 43758.5453);
-                        float baseRadius = (_SlotRadius * radiusScale)
-                                         + (hash - 0.5) * 2.0 * _RadiusJitter;
+                        // Per-slot spatial skip
+                        float2 diff = wpEval - slotCenter;
+                        if (dot(diff, diff) > slotReachSq[si]) continue;
+
+                        float hash = slotHash[si];
+                        float baseRadius = slotBaseR[si];
 
                         float2 cc, leafDir;
                         float  cr;
 
-                        if (radiusScale < 0.99)
+                        if (isGapFill)
                         {
                             // Gap fill: simple circle at slot centre
                             cc = slotCenter;
@@ -384,8 +431,8 @@ Shader "BalloonParty/Grid/Bush"
                                             cc, cr, leafDir);
                         }
 
-                        // Leaf SDF (limaçon for real slots, circle for gaps)
-                        float pointiness = radiusScale < 0.99
+                        // Leaf SDF (lens for real slots, circle for gaps)
+                        float pointiness = isGapFill
                                          ? 0.0 : _LeafPointiness;
                         float d = LeafSDF(wpEval, cc, cr, leafDir, pointiness);
                         leafAlphaDist = min(leafAlphaDist, d);
@@ -397,59 +444,40 @@ Shader "BalloonParty/Grid/Bush"
                             fixed3 circleColor = lerp(_BaseColor.rgb, _TopColor.rgb,
                                                       depthT);
 
-                            // Per-leaf dome shading
+                            // Per-leaf dome shading (circular — sells dome shape)
                             float edgeT = LeafCenterDist(wpEval, cc, cr);
                             float radial = smoothstep(1.0, 0.3, edgeT);
                             circleColor *= lerp(_EdgeShade, 1.0, radial);
 
-                            // Highlight spot
-                            float hlT = smoothstep(_HighlightSize, 0.0, edgeT);
-                            circleColor = lerp(circleColor, _HighlightColor.rgb,
-                                               hlT * _HighlightColor.a);
-
                             float2 localP = wpEval - cc;
 
-                            // Stem attachment — shift rosette/vein origin
-                            // to leaf base (closest point to branch)
-                            float2 rosetteP = localP;
-                            float stemAxisT = 0.5;
-                            if (radiusScale >= 0.99)
+                            // Leaf-local frame (shared by highlight and veins)
+                            float2 tang = float2(-leafDir.y, leafDir.x);
+                            float halfLen = cr
+                                * sqrt(1.0 + 2.0 * pointiness);
+                            float stemAxisT = saturate(
+                                (dot(localP, leafDir) + halfLen)
+                                / max(2.0 * halfLen, 0.001));
+
+                            // Highlight — fake specular positioned along
+                            // leaf axis, elliptical to match leaf shape
+                            if (!isGapFill)
                             {
-                                float halfLen = cr
-                                    * sqrt(1.0 + 2.0 * _LeafPointiness);
-                                rosetteP = localP + leafDir * halfLen;
-                                stemAxisT = saturate(
-                                    (dot(localP, leafDir) + halfLen)
-                                    / max(2.0 * halfLen, 0.001));
-                            }
+                                float axial = dot(localP, leafDir);
+                                float perp = dot(localP, tang);
+                                float hlDist = length(float2(
+                                    (axial - _HighlightOffset * halfLen)
+                                        / max(halfLen, 0.001),
+                                    perp / max(cr, 0.001)));
+                                float hlT = smoothstep(
+                                    _HighlightSize, 0.0, hlDist);
+                                circleColor = lerp(circleColor,
+                                    _HighlightColor.rgb,
+                                    hlT * _HighlightColor.a);
 
-                            // Rosette petal pattern — lobes radiate from
-                            // stem point like real leaf venation
-                            float angle = atan2(rosetteP.y, rosetteP.x);
-                            float petal = sin(angle * _RosetteCount
-                                            + hash * 6.283185) * 0.5 + 0.5;
-                            petal = petal * 0.7
-                                  + (sin(angle * _RosetteCount * 2.0
-                                        + hash * 3.14159) * 0.5 + 0.5) * 0.3;
-                            float petalMask = smoothstep(0.0, 0.35, edgeT)
-                                            * smoothstep(0.95, 0.55, edgeT);
-                            circleColor *= lerp(1.0, 0.75 + petal * 0.5,
-                                                _RosetteStrength * petalMask);
-
-                            // World-space grain — tiny hash-based variation that
-                            // reads as individual leaf texture at close zoom
-                            float2 grainCell = floor(wpEval * _GrainScale);
-                            float grain = frac(sin(dot(grainCell,
-                                              float2(127.1, 311.7))) * 43758.5453);
-                            circleColor *= lerp(1.0, 0.8 + grain * 0.4,
-                                                _GrainStrength);
-
-                            // Central vein — midrib from stem to tip, tapers
-                            if (radiusScale >= 0.99)
-                            {
-                                float2 tang = float2(-leafDir.y, leafDir.x);
-                                float vDist = abs(dot(localP, tang))
-                                            / max(cr, 0.001);
+                                // Midrib — central vein from stem to tip
+                                float perpNorm = perp / max(cr, 0.001);
+                                float vDist = abs(perpNorm);
                                 float taperW = _VeinWidth
                                     * lerp(1.5, 0.3, stemAxisT);
                                 float vLine = 1.0 - smoothstep(
@@ -458,24 +486,37 @@ Shader "BalloonParty/Grid/Bush"
                                             * smoothstep(0.98, 0.7, stemAxisT);
                                 circleColor *= lerp(1.0, _VeinDarken,
                                                     vLine * vMask);
-                            }
 
-                            // Self-shadow — all upper leaves in the same slot
-                            // darken this leaf where they would sit on top
-                            if (radiusScale >= 0.99)
-                            {
+                                // Lateral veins — pinnate fishbone pattern
+                                float veinField = stemAxisT * _LateralVeinCount
+                                    - abs(perpNorm) * _LateralVeinAngle;
+                                float veinFrac = frac(veinField);
+                                float veinD = min(veinFrac, 1.0 - veinFrac);
+                                float lateralW = _VeinWidth
+                                    * lerp(1.0, 0.2, abs(perpNorm));
+                                float latLine = 1.0 - smoothstep(
+                                    lateralW * 0.3, lateralW, veinD);
+                                float latMask = smoothstep(0.05, 0.2, stemAxisT)
+                                    * smoothstep(0.98, 0.75, stemAxisT)
+                                    * smoothstep(0.02, 0.12, abs(perpNorm));
+                                circleColor *= lerp(1.0, _VeinDarken,
+                                                    latLine * latMask);
+
+                                // Self-shadow — circle check (cheaper than
+                                // full LeafSDF, sufficient for soft darkening)
                                 float selfSh = 0.0;
                                 float2 shPos = wpEval
                                     + float2(_LeafShadowOffsetX,
                                              _LeafShadowOffsetY);
-                                for (int sd = depth + 1; sd < LEAF_COUNT; sd++)
+                                int maxSd = min(depth + SELF_SHADOW_LAYERS,
+                                                LEAF_COUNT);
+                                for (int sd = depth + 1; sd < maxSd; sd++)
                                 {
                                     float2 ucc, udir;
                                     float  ucr;
                                     PhyllotaxisLeaf(slotCenter, baseRadius,
                                                     hash, sd, ucc, ucr, udir);
-                                    float usd = LeafSDF(shPos, ucc, ucr,
-                                                        udir, _LeafPointiness);
+                                    float usd = length(shPos - ucc) - ucr;
                                     float st = 1.0 - smoothstep(
                                         -_LeafShadowSoftness,
                                          _LeafShadowSoftness, usd);
@@ -483,6 +524,14 @@ Shader "BalloonParty/Grid/Bush"
                                 }
                                 circleColor *= 1.0 - selfSh
                                              * _LeafShadowStrength;
+                            }
+                            else
+                            {
+                                float hlT = smoothstep(
+                                    _HighlightSize, 0.0, edgeT);
+                                circleColor = lerp(circleColor,
+                                    _HighlightColor.rgb,
+                                    hlT * _HighlightColor.a);
                             }
 
                             // Inner shadow crease at overlaps
@@ -501,12 +550,25 @@ Shader "BalloonParty/Grid/Bush"
 
                 float alpha = 1.0 - smoothstep(-_AAWidth, 0.0, leafAlphaDist);
 
-                // Branches show through leaf gaps
-                if (!anyCovered && insideBranch)
+                // ── Branch skeleton (deferred — only evaluated when
+                //    no leaf covers the pixel) ──
+                if (!anyCovered)
                 {
-                    leafColor = _BranchColor.rgb;
-                    alpha = 1.0 - smoothstep(-_AAWidth, 0.0, branchDist);
-                    anyCovered = true;
+                    float branchDist = 999.0;
+                    for (int bi = 0; bi < _BranchCount; bi++)
+                    {
+                        float4 seg = _BranchSegments[bi];
+                        branchDist = min(branchDist,
+                            CapsuleSDF(wpEval, seg.xy, seg.zw,
+                                       _BranchThickness));
+                    }
+                    if (branchDist < 0.0)
+                    {
+                        leafColor = _BranchColor.rgb;
+                        alpha = 1.0 - smoothstep(-_AAWidth, 0.0,
+                                                  branchDist);
+                        anyCovered = true;
+                    }
                 }
 
                 // ── Shadow ──
