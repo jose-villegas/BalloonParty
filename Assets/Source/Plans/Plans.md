@@ -11,6 +11,8 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_bush
 - @subpage plan_bush_implementation
 - @subpage plan_bush_shader_tuning
+- @subpage plan_bush_sprite_baking
+- @subpage plan_bush_research
 - @subpage plan_spider_web
 - @subpage plan_content_production
 - @subpage plan_runtime_optimizations
