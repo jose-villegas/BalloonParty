@@ -27,6 +27,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         public void OnDespawned()
         {
             DOTween.Kill(transform);
+            DOTween.Kill("BushRuffle_" + transform.GetInstanceID());
             transform.localRotation = Quaternion.identity;
             transform.localScale = Vector3.one;
             transform.localPosition = Vector3.zero;

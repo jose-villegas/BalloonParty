@@ -23,6 +23,10 @@ namespace BalloonParty.Slots.Actor.Archetype
         private readonly PoolManager _poolManager;
         private readonly IBushSettings _settings;
 
+        private BushView _bushView;
+
+        internal BushView View => _bushView;
+
         [Inject]
         internal BushViewController(
             BushClusterRegistry registry,
@@ -43,6 +47,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         protected override void OnViewCreated(BushView view)
         {
+            _bushView = view;
             view.SetSettings(_settings);
 
             if (view.LeafPrefab != null)

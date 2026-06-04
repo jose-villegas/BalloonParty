@@ -45,6 +45,15 @@ namespace BalloonParty.Configuration
         [Header("Ruffle")]
         [SerializeField] private int _ruffleLeafCount = 6;
         [SerializeField] private float _ruffleRadius = 1.5f;
+        [SerializeField] private float _ruffleRotationAmplitude = 15f;
+        [SerializeField] private float _ruffleScaleAmplitude = 0.1f;
+        [SerializeField] private float _rufflePositionAmplitude = 0.04f;
+        [SerializeField] private float _ruffleDuration = 0.4f;
+        [SerializeField] private float _ruffleStaggerPerUnit = 0.15f;
+
+        [Header("Wind")]
+        [SerializeField] private float _windAmplitude = 3f;
+        [SerializeField] private float _windPeriod = 2f;
 
         public BushView BushPrefab => _bushPrefab;
         public float AnimationSpeed => _animationSpeed;
@@ -59,5 +68,12 @@ namespace BalloonParty.Configuration
         public float LeafSpriteSize => _leafSpriteSize;
         public int RuffleLeafCount => _ruffleLeafCount;
         public float RuffleRadius => _ruffleRadius;
+        public float RuffleRotationAmplitude => _ruffleRotationAmplitude;
+        public float RuffleScaleAmplitude => _ruffleScaleAmplitude;
+        public float RufflePositionAmplitude => _rufflePositionAmplitude;
+        public float RuffleDuration => _ruffleDuration;
+        public float RuffleStaggerPerUnit => _ruffleStaggerPerUnit;
+        public float WindAmplitude => _windAmplitude;
+        public float WindPeriod => _windPeriod;
     }
 }

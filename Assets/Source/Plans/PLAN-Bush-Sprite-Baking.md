@@ -1343,10 +1343,10 @@ near the bush, leaves shake, bounce, and settle in a radial wave pattern.
 #### Phase 4 task checklist
 
 ```
-B11 [ ] BushRuffleController.cs — ITickable, projectile detection
-B12 [ ] Per-leaf DOTween sequences — rotation, scale, position punch
-B13 [ ] Stagger system — distance-based delay for wave effect
-B14 [ ] Ambient wind — continuous gentle oscillation
+B11 [x] BushRuffleController.cs — ITickable, projectile detection
+B12 [x] Per-leaf DOTween sequences — rotation, scale, position punch
+B13 [x] Stagger system — distance-based delay for wave effect
+B14 [x] Ambient wind — continuous gentle oscillation
 ```
 
 #### Dependencies

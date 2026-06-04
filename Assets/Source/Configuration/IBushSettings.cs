@@ -15,5 +15,12 @@ namespace BalloonParty.Configuration
         float LeafSpriteSize { get; }
         int RuffleLeafCount { get; }
         float RuffleRadius { get; }
+        float RuffleRotationAmplitude { get; }
+        float RuffleScaleAmplitude { get; }
+        float RufflePositionAmplitude { get; }
+        float RuffleDuration { get; }
+        float RuffleStaggerPerUnit { get; }
+        float WindAmplitude { get; }
+        float WindPeriod { get; }
     }
 }

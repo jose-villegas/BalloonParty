@@ -62,7 +62,6 @@ namespace BalloonParty.Slots.Actor.Archetype
             }
 
             UpdateCanopyScales();
-            UpdateLeafTransforms();
         }
 
         internal void ClearSprites()
@@ -128,7 +127,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             }
 
             UpdateCanopyScales();
-            UpdateLeafTransforms();
+            ApplyLeafTransforms();
         }
 
         private void SpawnCanopySprite(
@@ -201,7 +200,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             }
         }
 
-        private void UpdateLeafTransforms()
+        private void ApplyLeafTransforms()
         {
             var slotRadius = _settings.SlotRadius;
             var branchSpread = _settings.BranchSpread;
