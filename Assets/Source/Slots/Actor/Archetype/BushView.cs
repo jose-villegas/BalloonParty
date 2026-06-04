@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Actor.Cluster;
+using DG.Tweening;
 using UnityEngine;
 using MathUtils = BalloonParty.Shared.MathUtils;
 
@@ -66,6 +67,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             }
 
             UpdateCanopyScales();
+            UpdateLeafTransformsLive();
         }
 
         internal void ClearSprites()
@@ -201,6 +203,58 @@ namespace BalloonParty.Slots.Actor.Archetype
                 var fitScale = _settings.CanopyDiameter / Mathf.Max(spriteWorldWidth, 0.01f);
                 var gapScale = i < _canopyGapScales.Count ? _canopyGapScales[i] : 1f;
                 sr.transform.localScale = Vector3.one * (fitScale * gapScale);
+            }
+        }
+
+        private void UpdateLeafTransformsLive()
+        {
+            var slotRadius = _settings.SlotRadius;
+            var branchSpread = _settings.BranchSpread;
+            var leafSize = _settings.LeafSpriteSize;
+
+            for (var i = 0; i < _leafSprites.Count; i++)
+            {
+                var leaf = _leafSprites[i];
+                if (leaf == null)
+                {
+                    continue;
+                }
+
+                var ruffleId = "BushRuffle_" + leaf.transform.GetInstanceID();
+                var hasRuffle = DOTween.IsTweening(ruffleId);
+
+                var slotIdx = i / Mathf.Max(1, _settings.RuffleLeafCount);
+                if (slotIdx >= SlotCount)
+                {
+                    continue;
+                }
+
+                var slot = SlotCentersBuffer[slotIdx];
+                var center = new Vector2(slot.x, slot.y);
+                var radiusScale = slot.w > 0.001f ? slot.w : 1f;
+                var baseRadius = slotRadius * radiusScale;
+
+                // Only update position if no ruffle punch is active
+                if (!hasRuffle)
+                {
+                    var leafPos = PhyllotaxisCenter(center, baseRadius,
+                        MathUtils.Frac(Mathf.Sin(center.x * 127.1f + center.y * 311.7f) * 43758.5453f),
+                        leaf.PhyllotaxisIndex, branchSpread);
+                    leaf.transform.position = new Vector3(leafPos.x, leafPos.y, 0f);
+                }
+
+                // Scale can always be updated — ruffle scale punch is additive
+                if (leaf.TryGetComponent<SpriteRenderer>(out var sr) && sr.sprite != null)
+                {
+                    var spriteWorldWidth = sr.sprite.bounds.size.x;
+                    var depthT = leaf.PhyllotaxisIndex / Mathf.Max(1f, _settings.RuffleLeafCount - 1f);
+                    var sizeVariation = Mathf.Lerp(1f, 0.7f, depthT);
+                    var fitScale = leafSize / Mathf.Max(spriteWorldWidth, 0.01f) * sizeVariation;
+                    if (!hasRuffle)
+                    {
+                        leaf.transform.localScale = Vector3.one * fitScale;
+                    }
+                }
             }
         }
 

@@ -16,17 +16,33 @@ namespace BalloonParty.Editor.Bush
         private const string ShaderName = "BalloonParty/Grid/BushBake";
         private const int BakeLayer = 31;
         private const int MaxSlots = 16;
-        private const float SlotRadius = 0.4f;
         private const float HexSpacingX = 0.7f;
         private const float HexSpacingY = 0.6f;
 
         private static readonly int SlotCentersWorldId = Shader.PropertyToID("_SlotCentersWorld");
         private static readonly int SlotCountId = Shader.PropertyToID("_SlotCount");
         private static readonly int SlotRadiusId = Shader.PropertyToID("_SlotRadius");
+        private static readonly int RadiusJitterId = Shader.PropertyToID("_RadiusJitter");
+        private static readonly int BranchSpreadId = Shader.PropertyToID("_BranchSpread");
+        private static readonly int SubCircleSizeId = Shader.PropertyToID("_SubCircleSize");
+        private static readonly int SubCircleSizeVarId = Shader.PropertyToID("_SubCircleSizeVar");
         private static readonly int GielisMId = Shader.PropertyToID("_GielisM");
         private static readonly int GielisN1Id = Shader.PropertyToID("_GielisN1");
         private static readonly int GielisN2Id = Shader.PropertyToID("_GielisN2");
         private static readonly int GielisN3Id = Shader.PropertyToID("_GielisN3");
+        private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+        private static readonly int TopColorId = Shader.PropertyToID("_TopColor");
+        private static readonly int EdgeShadeId = Shader.PropertyToID("_EdgeShade");
+        private static readonly int VeinWidthId = Shader.PropertyToID("_VeinWidth");
+        private static readonly int VeinDarkenId = Shader.PropertyToID("_VeinDarken");
+        private static readonly int SSSAbsorptionId = Shader.PropertyToID("_SSSAbsorption");
+        private static readonly int SSSStrengthId = Shader.PropertyToID("_SSSStrength");
+        private static readonly int SSSColorId = Shader.PropertyToID("_SSSColor");
+        private static readonly int LeafShadowStrengthId = Shader.PropertyToID("_LeafShadowStrength");
+        private static readonly int ShadowSamplesId = Shader.PropertyToID("_ShadowSamples");
+        private static readonly int AOMulId = Shader.PropertyToID("_AOMul");
+        private static readonly int HueJitterId = Shader.PropertyToID("_HueJitter");
+        private static readonly int EdgeBrowningWidthId = Shader.PropertyToID("_EdgeBrowningWidth");
 
         /// <summary>
         /// Bakes a single canopy variant with a deterministic seed controlling
@@ -42,14 +58,14 @@ namespace BalloonParty.Editor.Bush
             }
 
             var slotPositions = GenerateSlotPositions(settings.SlotCount, seed);
-            var bounds = ComputeBounds(slotPositions, settings.SlotCount);
+            var bounds = ComputeBounds(slotPositions, settings.SlotCount, settings.SlotRadius);
 
             var rt = RenderTexture.GetTemporary(
                 settings.Resolution, settings.Resolution, 0, RenderTextureFormat.ARGB32);
             rt.filterMode = FilterMode.Bilinear;
 
             var material = new Material(shader);
-            ConfigureMaterial(material, seed);
+            ConfigureMaterial(material, settings, seed);
 
             var mpb = new MaterialPropertyBlock();
             mpb.SetVectorArray(SlotCentersWorldId, slotPositions);
@@ -157,7 +173,7 @@ namespace BalloonParty.Editor.Bush
             return positions;
         }
 
-        private static Rect ComputeBounds(Vector4[] positions, int count)
+        private static Rect ComputeBounds(Vector4[] positions, int count, float slotRadius)
         {
             var min = new Vector2(float.MaxValue, float.MaxValue);
             var max = new Vector2(float.MinValue, float.MinValue);
@@ -169,22 +185,45 @@ namespace BalloonParty.Editor.Bush
                 max = Vector2.Max(max, p);
             }
 
-            var padding = SlotRadius * 2f;
+            var padding = slotRadius * 2f;
             min -= Vector2.one * padding;
             max += Vector2.one * padding;
 
             return Rect.MinMaxRect(min.x, min.y, max.x, max.y);
         }
 
-        private static void ConfigureMaterial(Material material, uint seed)
+        private static void ConfigureMaterial(Material material, BushCanopyBakeSettings settings, uint seed)
         {
             var hash = (seed % 10007u) / 10007f;
 
-            material.SetFloat(SlotRadiusId, SlotRadius);
-            material.SetFloat(GielisMId, 2f + (hash - 0.5f) * 0.4f);
-            material.SetFloat(GielisN1Id, 1f + hash * 0.2f);
-            material.SetFloat(GielisN2Id, 1.5f + (hash * 3.7f % 1f) * 0.2f - 0.1f);
-            material.SetFloat(GielisN3Id, 1.5f + (hash * 5.3f % 1f) * 0.2f - 0.1f);
+            material.SetFloat(SlotRadiusId, settings.SlotRadius);
+            material.SetFloat(RadiusJitterId, settings.RadiusJitter);
+            material.SetFloat(BranchSpreadId, settings.BranchSpread);
+            material.SetFloat(SubCircleSizeId, settings.SubCircleSize);
+            material.SetFloat(SubCircleSizeVarId, settings.SubCircleSizeVar);
+
+            material.SetFloat(GielisMId, settings.GielisM + (hash - 0.5f) * 0.4f);
+            material.SetFloat(GielisN1Id, settings.GielisN1 + hash * 0.2f);
+            material.SetFloat(GielisN2Id, settings.GielisN2 + (hash * 3.7f % 1f) * 0.2f - 0.1f);
+            material.SetFloat(GielisN3Id, settings.GielisN3 + (hash * 5.3f % 1f) * 0.2f - 0.1f);
+
+            material.SetColor(BaseColorId, settings.BaseColor);
+            material.SetColor(TopColorId, settings.TopColor);
+            material.SetFloat(EdgeShadeId, settings.EdgeShade);
+
+            material.SetFloat(VeinWidthId, settings.VeinWidth);
+            material.SetFloat(VeinDarkenId, settings.VeinDarken);
+
+            material.SetFloat(SSSAbsorptionId, settings.SSSAbsorption);
+            material.SetFloat(SSSStrengthId, settings.SSSStrength);
+            material.SetColor(SSSColorId, settings.SSSColor);
+
+            material.SetFloat(LeafShadowStrengthId, settings.LeafShadowStrength);
+            material.SetInt(ShadowSamplesId, settings.ShadowSamples);
+            material.SetFloat(AOMulId, settings.AOMul);
+
+            material.SetFloat(HueJitterId, settings.HueJitter);
+            material.SetFloat(EdgeBrowningWidthId, settings.EdgeBrowningWidth);
         }
 
         private static GameObject CreateBakeCamera(Rect bounds, RenderTexture rt)

@@ -24,8 +24,6 @@ namespace BalloonParty.Editor.Bush
         private static readonly int HighlightOffsetId = Shader.PropertyToID("_HighlightOffset");
         private static readonly int VeinWidthId = Shader.PropertyToID("_VeinWidth");
         private static readonly int VeinDarkenId = Shader.PropertyToID("_VeinDarken");
-        private static readonly int LateralVeinCountId = Shader.PropertyToID("_LateralVeinCount");
-        private static readonly int LateralVeinAngleId = Shader.PropertyToID("_LateralVeinAngle");
         private static readonly int SSSStrengthId = Shader.PropertyToID("_SSSStrength");
         private static readonly int SSSAbsorptionId = Shader.PropertyToID("_SSSAbsorption");
         private static readonly int SSSColorId = Shader.PropertyToID("_SSSColor");
@@ -103,8 +101,6 @@ namespace BalloonParty.Editor.Bush
 
             material.SetFloat(VeinWidthId, settings.VeinWidth);
             material.SetFloat(VeinDarkenId, settings.VeinDarken);
-            material.SetFloat(LateralVeinCountId, settings.LateralVeinCount);
-            material.SetFloat(LateralVeinAngleId, settings.LateralVeinAngle);
 
             material.SetFloat(SSSStrengthId, settings.SSSStrength);
             material.SetFloat(SSSAbsorptionId, settings.SSSAbsorption);
@@ -115,6 +111,7 @@ namespace BalloonParty.Editor.Bush
             material.SetColor(BrowningColorId, settings.BrowningColor);
         }
 
+
         private static Texture2D BakeVeinTexture(BushLeafBakeSettings settings, uint seed)
         {
             if (settings.VeinSources <= 0)
@@ -124,7 +121,6 @@ namespace BalloonParty.Editor.Bush
 
             var veinSettings = new LeafVenationSimulator.SimulationSettings
             {
-                // Match the shader's UV space: wp / (radius * 1.2) * 0.5 + 0.5
                 LeafSize = new Vector2(settings.LeafRadius * 2.4f, settings.LeafRadius * 2.4f),
                 KillDistance = 0.03f,
                 AttractionDistance = 0.1f,
