@@ -15,6 +15,7 @@ shader (`Bush.shader`) with standard sprite rendering.
 | `BushCanopyBakeSettings` | Serializable settings for canopy baking — resolution, slot count, variant count. |
 | `BushLeafBaker` | Renders a single Gielis leaf into a `Texture2D` using `BushBakeLeaf.shader` via a temporary offscreen camera. Applies per-variant parameter jitter and venation. |
 | `LeafAtlasPacker` | Bakes N leaf variants, packs them into a square grid atlas, saves as PNG, and configures sprite slicing via `ISpriteEditorDataProvider`. |
+| `BushCanopyBaker` | Renders a full multi-slot canopy into a `Texture2D` using `BushBake.shader`. Generates hex-grid slot positions from a seed, pushes them via MPB (same `_SlotCentersWorld`/`_SlotCount` contract as `ClusterView`). Supports variant batching and PNG export with sprite import configuration. |
 | `BushBakerWindow` | `EditorWindow` accessible via **Tools > Bush Baker**. Provides sliders for all Gielis and shading parameters, preview grid, and export buttons for leaf atlas and canopy variants. |
 
 ## Shaders (in `Assets/Shaders/BalloonParty/Grid/`)

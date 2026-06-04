@@ -25,11 +25,22 @@ namespace BalloonParty.Configuration
         [Tooltip("Sorting order offset for bush renderers — lower than Puff so bushes render below clouds.")]
         [SerializeField] private int _sortingOrderOffset = -1;
 
+        [Header("Baked Assets")]
+        [SerializeField] private Sprite[] _canopyVariants;
+        [SerializeField] private Sprite[] _leafAtlasSprites;
+
+        [Header("Ruffle")]
+        [SerializeField] private int _ruffleLeafCount = 6;
+        [SerializeField] private float _ruffleRadius = 1.5f;
+
         public BushView BushPrefab => _bushPrefab;
         public float AnimationSpeed => _animationSpeed;
         public float Padding => _padding;
         public int SortingLayerId => _sortingLayerId;
         public int SortingOrderOffset => _sortingOrderOffset;
+        public Sprite[] CanopyVariants => _canopyVariants;
+        public Sprite[] LeafAtlasSprites => _leafAtlasSprites;
+        public int RuffleLeafCount => _ruffleLeafCount;
+        public float RuffleRadius => _ruffleRadius;
     }
 }
-

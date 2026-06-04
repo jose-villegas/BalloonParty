@@ -13,6 +13,7 @@ namespace BalloonParty.Editor.Bush
         [SerializeField] private string _outputFolder = "Assets/Art/Bush/Baked";
 
         private Texture2D[] _leafPreviews;
+        private Texture2D[] _canopyPreviews;
         private Vector2 _scrollPosition;
 
         [MenuItem("Tools/Bush Baker")]
@@ -23,7 +24,8 @@ namespace BalloonParty.Editor.Bush
 
         private void OnDisable()
         {
-            DestroyPreviews();
+            DestroyLeafPreviews();
+            DestroyCanopyPreviews();
         }
 
         private void OnGUI()
@@ -89,19 +91,32 @@ namespace BalloonParty.Editor.Bush
 
         private void DrawCanopySection()
         {
-            EditorGUILayout.LabelField("Canopy (Phase 2)", EditorStyles.boldLabel);
-            GUI.enabled = false;
+            EditorGUILayout.LabelField("Canopy", EditorStyles.boldLabel);
+
             _canopySettings.Resolution = EditorGUILayout.IntPopup(
                 "Resolution", _canopySettings.Resolution,
                 new[] { "128", "256", "512" },
                 new[] { 128, 256, 512 });
             _canopySettings.SlotCount = EditorGUILayout.IntSlider("Slot Count", _canopySettings.SlotCount, 1, 5);
             _canopySettings.CanopyVariants = EditorGUILayout.IntSlider("Variants", _canopySettings.CanopyVariants, 1, 8);
-            GUI.enabled = true;
 
-            EditorGUILayout.HelpBox(
-                "Canopy baking will be implemented in Phase 2.",
-                MessageType.Info);
+            EditorGUILayout.Space(8);
+
+            EditorGUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("Preview Canopies", GUILayout.Height(28)))
+            {
+                GenerateCanopyPreviews();
+            }
+
+            if (GUILayout.Button("Export Canopy Variants", GUILayout.Height(28)))
+            {
+                ExportCanopyVariants();
+            }
+
+            EditorGUILayout.EndHorizontal();
+
+            DrawCanopyPreviewGrid();
         }
 
         private void DrawLeafPreviewGrid()
@@ -144,9 +159,50 @@ namespace BalloonParty.Editor.Bush
             }
         }
 
+        private void DrawCanopyPreviewGrid()
+        {
+            if (_canopyPreviews == null || _canopyPreviews.Length == 0)
+            {
+                return;
+            }
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("Canopy Preview", EditorStyles.miniLabel);
+
+            var totalWidth = EditorGUIUtility.currentViewWidth - 20f;
+            var cellSize = PreviewCellSize * 1.5f;
+            var cols = Mathf.Max(1, Mathf.FloorToInt(totalWidth / (cellSize + PreviewPadding)));
+
+            var startRect = GUILayoutUtility.GetRect(
+                totalWidth,
+                Mathf.CeilToInt((float)_canopyPreviews.Length / cols) * (cellSize + PreviewPadding));
+
+            for (var i = 0; i < _canopyPreviews.Length; i++)
+            {
+                if (_canopyPreviews[i] == null)
+                {
+                    continue;
+                }
+
+                var col = i % cols;
+                var row = i / cols;
+                var rect = new Rect(
+                    startRect.x + col * (cellSize + PreviewPadding),
+                    startRect.y + row * (cellSize + PreviewPadding),
+                    cellSize,
+                    cellSize);
+
+                EditorGUI.DrawPreviewTexture(rect, _canopyPreviews[i], null, ScaleMode.ScaleToFit);
+                EditorGUI.DropShadowLabel(
+                    new Rect(rect.x, rect.yMax - 16, rect.width, 16),
+                    $"Canopy #{i}",
+                    EditorStyles.miniLabel);
+            }
+        }
+
         private void GenerateLeafPreviews()
         {
-            DestroyPreviews();
+            DestroyLeafPreviews();
 
             var count = Mathf.Max(1, _leafSettings.LeafVariants);
             _leafPreviews = new Texture2D[count];
@@ -171,7 +227,43 @@ namespace BalloonParty.Editor.Bush
             }
         }
 
-        private void DestroyPreviews()
+        private void GenerateCanopyPreviews()
+        {
+            DestroyCanopyPreviews();
+
+            var count = Mathf.Max(1, _canopySettings.CanopyVariants);
+            _canopyPreviews = BushCanopyBaker.BakeVariants(_canopySettings, count);
+
+            Repaint();
+        }
+
+        private void ExportCanopyVariants()
+        {
+            DestroyCanopyPreviews();
+
+            var count = Mathf.Max(1, _canopySettings.CanopyVariants);
+            var variants = BushCanopyBaker.BakeVariants(_canopySettings, count);
+            var paths = BushCanopyBaker.ExportVariants(variants, _outputFolder);
+
+            foreach (var tex in variants)
+            {
+                if (tex != null)
+                {
+                    DestroyImmediate(tex);
+                }
+            }
+
+            if (paths.Length > 0 && paths[0] != null)
+            {
+                var asset = AssetDatabase.LoadAssetAtPath<Texture2D>(paths[0]);
+                if (asset != null)
+                {
+                    EditorGUIUtility.PingObject(asset);
+                }
+            }
+        }
+
+        private void DestroyLeafPreviews()
         {
             if (_leafPreviews == null)
             {
@@ -187,6 +279,24 @@ namespace BalloonParty.Editor.Bush
             }
 
             _leafPreviews = null;
+        }
+
+        private void DestroyCanopyPreviews()
+        {
+            if (_canopyPreviews == null)
+            {
+                return;
+            }
+
+            foreach (var tex in _canopyPreviews)
+            {
+                if (tex != null)
+                {
+                    DestroyImmediate(tex);
+                }
+            }
+
+            _canopyPreviews = null;
         }
     }
 }

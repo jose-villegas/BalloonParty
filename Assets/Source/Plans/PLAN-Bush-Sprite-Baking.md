@@ -949,9 +949,9 @@ canopy variants and leaf atlas sprites. Drag-and-drop from exported assets.
 #### Phase 2 task checklist
 
 ```
-B4  [ ] BushCanopyBaker.cs — renders full canopy to Texture2D
-B5  [ ] Variant system — N seeds → N canopy textures
-B6  [ ] IBushSettings + BushSettings — baked asset references + ruffle config
+B4  [x] BushCanopyBaker.cs — renders full canopy to Texture2D
+B5  [x] Variant system — N seeds → N canopy textures
+B6  [x] IBushSettings + BushSettings — baked asset references + ruffle config
 ```
 
 #### Dependencies
