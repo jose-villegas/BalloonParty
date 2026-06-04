@@ -18,11 +18,12 @@ shader (`Bush.shader`) with standard sprite rendering.
 | `BushCanopyBaker` | Renders a full multi-slot canopy into a `Texture2D` using `BushBake.shader`. Generates hex-grid slot positions from a seed, pushes them via MPB (same `_SlotCentersWorld`/`_SlotCount` contract as `ClusterView`). Supports variant batching and PNG export with sprite import configuration. |
 | `BushBakerWindow` | `EditorWindow` accessible via **Tools > Bush Baker**. Provides sliders for all Gielis and shading parameters, preview grid, and export buttons for leaf atlas and canopy variants. |
 
-## Shaders (in `Assets/Shaders/BalloonParty/Grid/`)
+## Shaders (in `Assets/Shaders/BalloonParty/Grid/Editor/`)
 
 | Shader | Purpose |
 |---|---|
 | `GielisSDF.cginc` | Shared include — Gielis superformula SDF, hue rotation, Poisson shadow jitter. |
+| `Bush.shader` | Original real-time SDF shader — preserved for reference, no longer used at runtime. |
 | `BushBake.shader` | Full canopy baker — all slots, all 16 depth layers, SSS, full-depth shadow, AO, colour variation. |
 | `BushBakeLeaf.shader` | Single leaf baker — one Gielis leaf with full shading pipeline for atlas packing. |
 

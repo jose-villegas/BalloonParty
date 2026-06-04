@@ -80,7 +80,7 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
             #pragma fragment frag
             #pragma target 3.5
             #include "UnityCG.cginc"
-            #include "Assets/Shaders/BalloonParty/Grid/GielisSDF.cginc"
+            #include "Assets/Shaders/BalloonParty/Grid/Editor/GielisSDF.cginc"
 
             struct appdata_t
             {

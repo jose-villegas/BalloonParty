@@ -1458,8 +1458,8 @@ Visual side-by-side check:
 #### Phase 5 task checklist
 
 ```
-B15 [ ] Move Bush.shader + BushBake.shader to editor-only path
-B16 [ ] BushView.OnConfigured → ConfigureSprites bridge
+B15 [x] Move Bush.shader + BushBake.shader to editor-only path
+B16 [x] BushView.OnConfigured → ConfigureSprites bridge
 B17 [ ] Full validation: single-slot, multi-slot, gap-fill, ruffle, wind, pool
 B18 [ ] Side-by-side Puff comparison + sorting validation
 ```

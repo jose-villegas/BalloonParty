@@ -108,7 +108,7 @@ Shader "BalloonParty/Grid/BushBake"
             #pragma target 3.5
             #pragma shader_feature _SHADOW_ON
             #include "UnityCG.cginc"
-            #include "Assets/Shaders/BalloonParty/Grid/GielisSDF.cginc"
+            #include "Assets/Shaders/BalloonParty/Grid/Editor/GielisSDF.cginc"
 
             #define MAX_SLOTS      16
             #define LEAF_COUNT     16

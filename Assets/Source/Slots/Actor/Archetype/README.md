@@ -22,23 +22,36 @@ Concrete grid actor models and the Puff cloud visual system.
 
 ## Bush System
 
-The Bush system renders procedural GPU-driven bushes over groups of adjacent Bush slots. Follows the same cluster MVC pattern as the Puff cloud system.
+The Bush system renders baked sprite bushes over groups of adjacent Bush slots.
+Each slot gets a baked canopy sprite (dense centre) and individual leaf sprites
+around the outer ring that animate independently. Follows the same cluster MVC
+pattern as the Puff cloud system.
 
 ### View Layer
 
 | File | What it does |
 |---|---|
-| `BushView` | `ClusterView` subclass. Prebakes branch capsule endpoints on the CPU from material properties (`_SlotRadius`, `_RadiusJitter`, `_BranchSpread`) and slot centres. Pushes `_BranchSegments` (Vector4[]) and `_BranchCount` via `MaterialPropertyBlock` so the fragment shader only evaluates `CapsuleSDF` — no per-pixel `PhyllotaxisLeaf`. |
-| `BushViewController` | `ClusterViewController` subclass. Adds gap-fill circles at midpoints between adjacent bush slots for continuous coverage. |
+| `BushView` | `ClusterView` subclass. Spawns per-slot baked canopy `SpriteRenderer` children and pooled `LeafSpriteView` instances at phyllotaxis positions. Scales are driven by `IBushSettings` (canopy diameter, leaf size, slot radius, branch spread). Canopy scales update in `LateUpdate` for live SO tuning; leaf transforms are set once on configure to avoid fighting DOTween. |
+| `LeafSpriteView` | `MonoBehaviour` + `IPoolable`. Holds ruffle state (`PhyllotaxisIndex`, `DepthFactor`, `LeafDirection`, `BaseRotation`). `OnDespawned` kills all tweens (wind + ruffle). |
+| `LeafSpritePoolChannel` | Pool channel for `LeafSpriteView` prefabs. |
+| `BushViewController` | `ClusterViewController` subclass. Adds gap-fill circles at midpoints between adjacent bush slots. Wires `IBushSettings` and the leaf sprite pool into the view via `OnViewCreated`. |
+| `BushRuffleController` | `IStartable` + `ITickable`. Tracks the active projectile via `ProjectileLoadedMessage`. Each tick checks leaf proximity — within `RuffleRadius` triggers DOTween punch sequences (rotation, scale, position) with distance-based stagger. Also starts ambient wind oscillation (infinite yoyo rotation) on each leaf. |
 | `BushClusterRegistry` | `SlotClusterRegistry<BushObstacleModel>`. Subscribes to grid changes (no `setupOnly`) because spawner places actors async after `Start()`. |
 
 ### Configuration
 
-`BushSettings` (ScriptableObject in `Configuration/`) — `IBushSettings`. Holds prefab reference, animation speed, padding, sorting layer/order.
+`BushSettings` (ScriptableObject in `Configuration/`) — `IBushSettings`. Holds:
+- **Prefab** — `BushView` prefab reference
+- **Shape** — slot radius, branch spread (phyllotaxis spiral tightness)
+- **Baked Assets** — canopy variant sprites, leaf atlas sprites, canopy diameter, leaf sprite size
+- **Ruffle** — leaf count, radius, rotation/scale/position amplitude, duration, stagger
+- **Wind** — amplitude, period
 
-### Shaders
+### Baking
 
-`Assets/Shaders/BalloonParty/Grid/Bush.shader` — procedural top-down cartoony bush canopy. See `Plans/PLAN-Bush-Shader-Tuning.md` for full visual tuning plan.
+Baked assets are generated via **Tools > Bush Baker** (editor window). The bake
+shaders and venation simulator live in `Assets/Source/Editor/Bush/` and
+`Assets/Shaders/BalloonParty/Grid/Editor/`. See `Editor/Bush/README.md`.
 
 The Puff cloud system renders procedural GPU-driven clouds over groups of adjacent Puff slots. Multiple Puff slots that are hex-adjacent merge into a single continuous cloud body. The system follows MVC:
 
