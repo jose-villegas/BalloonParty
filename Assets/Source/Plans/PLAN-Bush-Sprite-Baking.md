@@ -1460,8 +1460,8 @@ Visual side-by-side check:
 ```
 B15 [x] Move Bush.shader + BushBake.shader to editor-only path
 B16 [x] BushView.OnConfigured → ConfigureSprites bridge
-B17 [ ] Full validation: single-slot, multi-slot, gap-fill, ruffle, wind, pool
-B18 [ ] Side-by-side Puff comparison + sorting validation
+B17 [x] Full validation: single-slot, multi-slot, gap-fill, ruffle, wind, pool
+B18 [x] Side-by-side Puff comparison + sorting validation
 ```
 
 #### Dependencies

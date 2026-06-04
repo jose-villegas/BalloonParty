@@ -304,6 +304,39 @@ Shader "BalloonParty/Grid/BushBake"
                     slotReachSq[pi] = reach * reach;
                 }
 
+                // ── Branch capsules — rendered beneath leaves ──
+                bool   branchHit = false;
+                fixed3 branchColor = fixed3(0.28, 0.18, 0.08);
+
+                for (int bi = 0; bi < _SlotCount; bi++)
+                {
+                    float2 bsc = _SlotCentersWorld[bi].xy;
+                    float  brs = _SlotCentersWorld[bi].w > 0.001
+                              ? _SlotCentersWorld[bi].w : 1.0;
+                    if (brs < 0.99) continue;
+
+                    float bh = slotHash[bi];
+                    float bbr = slotBaseR[bi];
+
+                    for (int bd = 0; bd < 5; bd++)
+                    {
+                        float2 tipC, tipDir;
+                        float  tipR;
+                        PhyllotaxisLeaf(bsc, bbr, bh, bd, tipC, tipR, tipDir);
+
+                        // Capsule SDF from slot centre to leaf tip
+                        float2 pa = wp - bsc;
+                        float2 ba = tipC - bsc;
+                        float  t = saturate(dot(pa, ba) / max(dot(ba, ba), 0.0001));
+                        float  capDist = length(pa - ba * t) - lerp(0.018, 0.008, t);
+
+                        if (capDist < 0.0)
+                        {
+                            branchHit = true;
+                        }
+                    }
+                }
+
                 // ── Painter's algorithm — back to front ──
                 bool   anyCovered = false;
                 fixed3 leafColor  = fixed3(0, 0, 0);
@@ -408,16 +441,21 @@ Shader "BalloonParty/Grid/BushBake"
                                             * smoothstep(0.98, 0.7, stemAxisT);
                                 circleColor *= lerp(1.0, _VeinDarken, vLine * vMask);
 
-                                // ── Lateral veins ──
-                                float veinField = stemAxisT * _LateralVeinCount
-                                    - abs(perpNorm) * _LateralVeinAngle;
+                                // ── Lateral veins — curved, bounded by leaf shape ──
+                                float leafHalfW = cr * GielisRadius(
+                                    1.5708, mL, n1L, n2L, n3L);
+                                float perpRel = abs(perpNorm) / max(
+                                    leafHalfW / max(cr, 0.001) * lerp(0.3, 1.0, stemAxisT), 0.001);
+                                float veinParam = stemAxisT + perpRel * perpRel * 0.3;
+                                float veinField = veinParam * _LateralVeinCount;
                                 float veinFrac = frac(veinField);
                                 float veinD = min(veinFrac, 1.0 - veinFrac);
-                                float lateralW = _VeinWidth * lerp(1.0, 0.2, abs(perpNorm));
+                                float lateralW = _VeinWidth * lerp(0.8, 0.15, perpRel);
                                 float latLine = 1.0 - smoothstep(lateralW * 0.3, lateralW, veinD);
-                                float latMask = smoothstep(0.05, 0.2, stemAxisT)
+                                float latMask = smoothstep(0.05, 0.15, stemAxisT)
                                     * smoothstep(0.98, 0.75, stemAxisT)
-                                    * smoothstep(0.02, 0.12, abs(perpNorm));
+                                    * smoothstep(0.03, 0.15, perpRel)
+                                    * smoothstep(1.0, 0.7, perpRel);
                                 circleColor *= lerp(1.0, _VeinDarken, latLine * latMask);
 
                                 // ── Full-depth self-shadow with multi-sample penumbra ──
@@ -552,6 +590,19 @@ Shader "BalloonParty/Grid/BushBake"
                 }
 
                 float alpha = 1.0 - smoothstep(-_AAWidth, 0.0, leafAlphaDist);
+
+                // ── Branch contribution — visible where leaves don't cover ──
+                if (branchHit && !anyCovered)
+                {
+                    leafColor = branchColor;
+                    alpha = 1.0;
+                    anyCovered = true;
+                }
+                else if (branchHit && anyCovered)
+                {
+                    // Branch darkens the leaf slightly where it's beneath
+                    leafColor *= 0.92;
+                }
 
                 // ── Ground shadow — full Gielis ──
                 #ifdef _SHADOW_ON

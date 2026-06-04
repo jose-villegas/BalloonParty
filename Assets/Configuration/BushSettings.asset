@@ -33,5 +33,12 @@ MonoBehaviour:
   - {fileID: -1758962843, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
   _canopyDiameter: 1.5
   _leafSpriteSize: 0.15
-  _ruffleLeafCount: 6
-  _ruffleRadius: 1
+  _ruffleLeafCount: 16
+  _ruffleRadius: 2
+  _ruffleRotationAmplitude: 30
+  _ruffleScaleAmplitude: 0.6
+  _rufflePositionAmplitude: 0.7
+  _ruffleDuration: 1
+  _ruffleStaggerPerUnit: 0.35
+  _windAmplitude: 200
+  _windPeriod: 50

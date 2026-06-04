@@ -8,13 +8,13 @@ namespace BalloonParty.Editor.Bush
         private const float PreviewCellSize = 80f;
         private const float PreviewPadding = 4f;
 
-        [SerializeField] private BushLeafBakeSettings _leafSettings = new();
-        [SerializeField] private BushCanopyBakeSettings _canopySettings = new();
-        [SerializeField] private string _outputFolder = "Assets/Art/Bush/Baked";
-
         private Texture2D[] _leafPreviews;
         private Texture2D[] _canopyPreviews;
+        private Texture2D _livePreview;
         private Vector2 _scrollPosition;
+        private int _lastSettingsHash;
+
+        private BushBakerState State => BushBakerState.instance;
 
         [MenuItem("Tools/Bush Baker")]
         private static void Open()
@@ -26,10 +26,13 @@ namespace BalloonParty.Editor.Bush
         {
             DestroyLeafPreviews();
             DestroyCanopyPreviews();
+            DestroyLivePreview();
         }
 
         private void OnGUI()
         {
+            EditorGUI.BeginChangeCheck();
+
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
 
             DrawLeafSection();
@@ -37,44 +40,75 @@ namespace BalloonParty.Editor.Bush
             DrawCanopySection();
 
             EditorGUILayout.EndScrollView();
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                State.Save();
+            }
+
+            if (State.AutoPreview)
+            {
+                CheckAutoPreview();
+            }
         }
 
         private void DrawLeafSection()
         {
             EditorGUILayout.LabelField("Leaf Atlas", EditorStyles.boldLabel);
 
-            _leafSettings.Resolution = EditorGUILayout.IntPopup(
-                "Resolution", _leafSettings.Resolution,
+            State.LeafSettings.Resolution = EditorGUILayout.IntPopup(
+                "Resolution", State.LeafSettings.Resolution,
                 new[] { "32", "64", "128", "256" },
                 new[] { 32, 64, 128, 256 });
-
-            _leafSettings.LeafRadius = EditorGUILayout.Slider("Leaf Radius", _leafSettings.LeafRadius, 0.1f, 1f);
-            _leafSettings.LeafVariants = EditorGUILayout.IntSlider("Variants", _leafSettings.LeafVariants, 1, 16);
+            State.LeafSettings.LeafRadius = EditorGUILayout.Slider("Leaf Radius", State.LeafSettings.LeafRadius, 0.1f, 1f);
+            State.LeafSettings.LeafVariants = EditorGUILayout.IntSlider("Variants", State.LeafSettings.LeafVariants, 1, 16);
 
             EditorGUILayout.Space(4);
             EditorGUILayout.LabelField("Gielis Superformula", EditorStyles.miniLabel);
-            _leafSettings.GielisM = EditorGUILayout.Slider("Lobe Count (m)", _leafSettings.GielisM, 0f, 6f);
-            _leafSettings.GielisN1 = EditorGUILayout.Slider("Curvature (n1)", _leafSettings.GielisN1, 0.1f, 4f);
-            _leafSettings.GielisN2 = EditorGUILayout.Slider("Lateral (n2)", _leafSettings.GielisN2, 0.1f, 4f);
-            _leafSettings.GielisN3 = EditorGUILayout.Slider("Lateral (n3)", _leafSettings.GielisN3, 0.1f, 4f);
+            State.LeafSettings.GielisM = EditorGUILayout.Slider("Lobe Count (m)", State.LeafSettings.GielisM, 0f, 6f);
+            State.LeafSettings.GielisN1 = EditorGUILayout.Slider("Curvature (n1)", State.LeafSettings.GielisN1, 0.1f, 4f);
+            State.LeafSettings.GielisN2 = EditorGUILayout.Slider("Lateral (n2)", State.LeafSettings.GielisN2, 0.1f, 4f);
+            State.LeafSettings.GielisN3 = EditorGUILayout.Slider("Lateral (n3)", State.LeafSettings.GielisN3, 0.1f, 4f);
 
             EditorGUILayout.Space(4);
-            EditorGUILayout.LabelField("Shading", EditorStyles.miniLabel);
-            _leafSettings.SSSStrength = EditorGUILayout.Slider("SSS Strength", _leafSettings.SSSStrength, 0f, 1f);
-            _leafSettings.SSSAbsorption = EditorGUILayout.Slider("SSS Absorption", _leafSettings.SSSAbsorption, 0.5f, 10f);
-            _leafSettings.SSSColor = EditorGUILayout.ColorField("SSS Color", _leafSettings.SSSColor);
-            _leafSettings.HueJitter = EditorGUILayout.Slider("Hue Jitter (°)", _leafSettings.HueJitter, 0f, 30f);
-            _leafSettings.EdgeBrowningWidth = EditorGUILayout.Slider("Edge Browning", _leafSettings.EdgeBrowningWidth, 0.01f, 0.5f);
+            EditorGUILayout.LabelField("Surface & Shading", EditorStyles.miniLabel);
+            State.LeafSettings.BaseColor = EditorGUILayout.ColorField("Base Color", State.LeafSettings.BaseColor);
+            State.LeafSettings.EdgeShade = EditorGUILayout.Slider("Edge Shade", State.LeafSettings.EdgeShade, 0.4f, 1f);
+            State.LeafSettings.HighlightColor = EditorGUILayout.ColorField("Highlight Color", State.LeafSettings.HighlightColor);
+            State.LeafSettings.HighlightSize = EditorGUILayout.Slider("Highlight Size", State.LeafSettings.HighlightSize, 0.05f, 0.7f);
+            State.LeafSettings.HighlightOffset = EditorGUILayout.Slider("Highlight Offset", State.LeafSettings.HighlightOffset, -0.5f, 0.5f);
 
             EditorGUILayout.Space(4);
-            EditorGUILayout.LabelField("Venation", EditorStyles.miniLabel);
-            _leafSettings.VeinSources = EditorGUILayout.IntSlider("Vein Sources", _leafSettings.VeinSources, 0, 300);
+            EditorGUILayout.LabelField("Veins", EditorStyles.miniLabel);
+            State.LeafSettings.VeinWidth = EditorGUILayout.Slider("Vein Width", State.LeafSettings.VeinWidth, 0.01f, 0.15f);
+            State.LeafSettings.VeinDarken = EditorGUILayout.Slider("Vein Darken", State.LeafSettings.VeinDarken, 0.5f, 1f);
+            State.LeafSettings.LateralVeinCount = EditorGUILayout.IntSlider("Lateral Count", State.LeafSettings.LateralVeinCount, 3, 12);
+            State.LeafSettings.LateralVeinAngle = EditorGUILayout.Slider("Lateral Angle", State.LeafSettings.LateralVeinAngle, 0.3f, 3f);
+            State.LeafSettings.VeinSources = EditorGUILayout.IntSlider("Runions Sources", State.LeafSettings.VeinSources, 0, 300);
+            State.LeafSettings.VeinTexStrength = EditorGUILayout.Slider("Runions Strength", State.LeafSettings.VeinTexStrength, 0f, 1f);
+
+            EditorGUILayout.Space(4);
+            EditorGUILayout.LabelField("SSS", EditorStyles.miniLabel);
+            State.LeafSettings.SSSStrength = EditorGUILayout.Slider("SSS Strength", State.LeafSettings.SSSStrength, 0f, 1f);
+            State.LeafSettings.SSSAbsorption = EditorGUILayout.Slider("SSS Absorption", State.LeafSettings.SSSAbsorption, 0.5f, 10f);
+            State.LeafSettings.SSSColor = EditorGUILayout.ColorField("SSS Color", State.LeafSettings.SSSColor);
+
+            EditorGUILayout.Space(4);
+            EditorGUILayout.LabelField("Colour Variation", EditorStyles.miniLabel);
+            State.LeafSettings.HueJitter = EditorGUILayout.Slider("Hue Jitter (°)", State.LeafSettings.HueJitter, 0f, 30f);
+            State.LeafSettings.EdgeBrowningWidth = EditorGUILayout.Slider("Edge Browning", State.LeafSettings.EdgeBrowningWidth, 0.01f, 0.5f);
+            State.LeafSettings.BrowningColor = EditorGUILayout.ColorField("Browning Color", State.LeafSettings.BrowningColor);
+
+            EditorGUILayout.Space(8);
+
+            State.AutoPreview = EditorGUILayout.Toggle("Live Preview", State.AutoPreview);
+            DrawLivePreview();
 
             EditorGUILayout.Space(8);
 
             EditorGUILayout.BeginHorizontal();
 
-            if (GUILayout.Button("Preview Leaves", GUILayout.Height(28)))
+            if (GUILayout.Button("Preview All Variants", GUILayout.Height(28)))
             {
                 GenerateLeafPreviews();
             }
@@ -89,16 +123,71 @@ namespace BalloonParty.Editor.Bush
             DrawLeafPreviewGrid();
         }
 
+        private void DrawLivePreview()
+        {
+            if (_livePreview == null)
+            {
+                return;
+            }
+
+            var previewSize = Mathf.Min(160f, EditorGUIUtility.currentViewWidth - 40f);
+            var rect = GUILayoutUtility.GetRect(previewSize, previewSize);
+            rect.width = previewSize;
+            EditorGUI.DrawTextureTransparent(rect, _livePreview, ScaleMode.ScaleToFit);
+        }
+
+        private void CheckAutoPreview()
+        {
+            var hash = ComputeSettingsHash();
+            if (hash == _lastSettingsHash)
+            {
+                return;
+            }
+
+            _lastSettingsHash = hash;
+            DestroyLivePreview();
+            _livePreview = BushLeafBaker.BakeLeaf(State.LeafSettings, 0, 42);
+            Repaint();
+        }
+
+        private int ComputeSettingsHash()
+        {
+            unchecked
+            {
+                var h = 17;
+                h = h * 31 + State.LeafSettings.Resolution.GetHashCode();
+                h = h * 31 + State.LeafSettings.LeafRadius.GetHashCode();
+                h = h * 31 + State.LeafSettings.GielisM.GetHashCode();
+                h = h * 31 + State.LeafSettings.GielisN1.GetHashCode();
+                h = h * 31 + State.LeafSettings.GielisN2.GetHashCode();
+                h = h * 31 + State.LeafSettings.GielisN3.GetHashCode();
+                h = h * 31 + State.LeafSettings.BaseColor.GetHashCode();
+                h = h * 31 + State.LeafSettings.EdgeShade.GetHashCode();
+                h = h * 31 + State.LeafSettings.HighlightSize.GetHashCode();
+                h = h * 31 + State.LeafSettings.VeinWidth.GetHashCode();
+                h = h * 31 + State.LeafSettings.VeinDarken.GetHashCode();
+                h = h * 31 + State.LeafSettings.LateralVeinCount.GetHashCode();
+                h = h * 31 + State.LeafSettings.LateralVeinAngle.GetHashCode();
+                h = h * 31 + State.LeafSettings.VeinSources.GetHashCode();
+                h = h * 31 + State.LeafSettings.VeinTexStrength.GetHashCode();
+                h = h * 31 + State.LeafSettings.SSSStrength.GetHashCode();
+                h = h * 31 + State.LeafSettings.SSSAbsorption.GetHashCode();
+                h = h * 31 + State.LeafSettings.HueJitter.GetHashCode();
+                h = h * 31 + State.LeafSettings.EdgeBrowningWidth.GetHashCode();
+                return h;
+            }
+        }
+
         private void DrawCanopySection()
         {
             EditorGUILayout.LabelField("Canopy", EditorStyles.boldLabel);
 
-            _canopySettings.Resolution = EditorGUILayout.IntPopup(
-                "Resolution", _canopySettings.Resolution,
+            State.CanopySettings.Resolution = EditorGUILayout.IntPopup(
+                "Resolution", State.CanopySettings.Resolution,
                 new[] { "128", "256", "512" },
                 new[] { 128, 256, 512 });
-            _canopySettings.SlotCount = EditorGUILayout.IntSlider("Slot Count", _canopySettings.SlotCount, 1, 5);
-            _canopySettings.CanopyVariants = EditorGUILayout.IntSlider("Variants", _canopySettings.CanopyVariants, 1, 8);
+            State.CanopySettings.SlotCount = EditorGUILayout.IntSlider("Slot Count", State.CanopySettings.SlotCount, 1, 5);
+            State.CanopySettings.CanopyVariants = EditorGUILayout.IntSlider("Variants", State.CanopySettings.CanopyVariants, 1, 8);
 
             EditorGUILayout.Space(8);
 
@@ -204,13 +293,13 @@ namespace BalloonParty.Editor.Bush
         {
             DestroyLeafPreviews();
 
-            var count = Mathf.Max(1, _leafSettings.LeafVariants);
+            var count = Mathf.Max(1, State.LeafSettings.LeafVariants);
             _leafPreviews = new Texture2D[count];
 
             for (var i = 0; i < count; i++)
             {
                 var seed = (uint)(i * 7919 + 31);
-                _leafPreviews[i] = BushLeafBaker.BakeLeaf(_leafSettings, i, seed);
+                _leafPreviews[i] = BushLeafBaker.BakeLeaf(State.LeafSettings, i, seed);
             }
 
             Repaint();
@@ -218,8 +307,8 @@ namespace BalloonParty.Editor.Bush
 
         private void ExportLeafAtlas()
         {
-            var path = $"{_outputFolder}/LeafAtlas.png";
-            var result = LeafAtlasPacker.Pack(_leafSettings, path);
+            var path = $"{State.OutputFolder}/LeafAtlas.png";
+            var result = LeafAtlasPacker.Pack(State.LeafSettings, path);
 
             if (result.Atlas != null)
             {
@@ -231,8 +320,8 @@ namespace BalloonParty.Editor.Bush
         {
             DestroyCanopyPreviews();
 
-            var count = Mathf.Max(1, _canopySettings.CanopyVariants);
-            _canopyPreviews = BushCanopyBaker.BakeVariants(_canopySettings, count);
+            var count = Mathf.Max(1, State.CanopySettings.CanopyVariants);
+            _canopyPreviews = BushCanopyBaker.BakeVariants(State.CanopySettings, count);
 
             Repaint();
         }
@@ -241,9 +330,9 @@ namespace BalloonParty.Editor.Bush
         {
             DestroyCanopyPreviews();
 
-            var count = Mathf.Max(1, _canopySettings.CanopyVariants);
-            var variants = BushCanopyBaker.BakeVariants(_canopySettings, count);
-            var paths = BushCanopyBaker.ExportVariants(variants, _outputFolder);
+            var count = Mathf.Max(1, State.CanopySettings.CanopyVariants);
+            var variants = BushCanopyBaker.BakeVariants(State.CanopySettings, count);
+            var paths = BushCanopyBaker.ExportVariants(variants, State.OutputFolder);
 
             foreach (var tex in variants)
             {
@@ -298,6 +387,14 @@ namespace BalloonParty.Editor.Bush
 
             _canopyPreviews = null;
         }
+
+        private void DestroyLivePreview()
+        {
+            if (_livePreview != null)
+            {
+                DestroyImmediate(_livePreview);
+                _livePreview = null;
+            }
+        }
     }
 }
-

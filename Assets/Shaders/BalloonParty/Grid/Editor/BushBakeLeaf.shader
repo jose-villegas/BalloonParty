@@ -194,26 +194,42 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                             * smoothstep(0.98, 0.7, stemAxisT);
                 color *= lerp(1.0, _VeinDarken, vLine * vMask);
 
-                // ── Lateral veins ──
-                float veinField = stemAxisT * _LateralVeinCount
-                    - abs(perpNorm) * _LateralVeinAngle;
+                // ── Lateral veins — curved, bounded by leaf shape ──
+                // Find the leaf's actual width at this axial position by
+                // evaluating the Gielis boundary at the angle to the edge.
+                float edgeAngle = atan2(1.0, 0.0); // +90° (leaf tip)
+                float leafHalfWidth = radius * GielisRadius(
+                    1.5708, _GielisM, _GielisN1, _GielisN2, _GielisN3);
+
+                // Normalise perpendicular distance relative to actual leaf width
+                float perpRelative = abs(perp) / max(leafHalfWidth * lerp(0.3, 1.0, stemAxisT), 0.001);
+
+                // Curved vein model: each lateral follows a quadratic from midrib
+                // curving toward the leaf tip as it moves outward.
+                float veinParam = stemAxisT + perpRelative * perpRelative * 0.3;
+                float veinField = veinParam * _LateralVeinCount;
                 float veinFrac = frac(veinField);
                 float veinD = min(veinFrac, 1.0 - veinFrac);
-                float lateralW = _VeinWidth * lerp(1.0, 0.2, abs(perpNorm));
+
+                // Vein width tapers from midrib to edge
+                float lateralW = _VeinWidth * lerp(0.8, 0.15, perpRelative);
                 float latLine = 1.0 - smoothstep(lateralW * 0.3, lateralW, veinD);
-                float latMask = smoothstep(0.05, 0.2, stemAxisT)
+
+                // Only visible between midrib and leaf edge, fading at boundaries
+                float latMask = smoothstep(0.05, 0.15, stemAxisT)
                     * smoothstep(0.98, 0.75, stemAxisT)
-                    * smoothstep(0.02, 0.12, abs(perpNorm));
+                    * smoothstep(0.03, 0.15, perpRelative)
+                    * smoothstep(1.0, 0.7, perpRelative);
                 color *= lerp(1.0, _VeinDarken, latLine * latMask);
 
                 // ── Baked vein texture overlay ──
                 if (_VeinTexStrength > 0.001)
                 {
-                    float2 veinUV = float2(
-                        perpNorm * 0.5 + 0.5,
-                        stemAxisT);
+                    // Map world position to [0,1] UV matching the rasteriser's
+                    // coordinate system: x ∈ [-radius, radius] → U, y ∈ [-radius, radius] → V
+                    float2 veinUV = wp / (radius * 1.2) * 0.5 + 0.5;
                     fixed4 veinSample = tex2D(_VeinTex, veinUV);
-                    color *= lerp(1.0, veinSample.r, _VeinTexStrength * veinSample.a);
+                    color *= lerp(1.0, _VeinDarken, _VeinTexStrength * veinSample.a);
                 }
 
                 // ── Hue shift ──

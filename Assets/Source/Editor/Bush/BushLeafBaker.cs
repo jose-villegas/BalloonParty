@@ -18,11 +18,20 @@ namespace BalloonParty.Editor.Bush
         private static readonly int GielisN2Id = Shader.PropertyToID("_GielisN2");
         private static readonly int GielisN3Id = Shader.PropertyToID("_GielisN3");
         private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
+        private static readonly int EdgeShadeId = Shader.PropertyToID("_EdgeShade");
+        private static readonly int HighlightColorId = Shader.PropertyToID("_HighlightColor");
+        private static readonly int HighlightSizeId = Shader.PropertyToID("_HighlightSize");
+        private static readonly int HighlightOffsetId = Shader.PropertyToID("_HighlightOffset");
+        private static readonly int VeinWidthId = Shader.PropertyToID("_VeinWidth");
+        private static readonly int VeinDarkenId = Shader.PropertyToID("_VeinDarken");
+        private static readonly int LateralVeinCountId = Shader.PropertyToID("_LateralVeinCount");
+        private static readonly int LateralVeinAngleId = Shader.PropertyToID("_LateralVeinAngle");
         private static readonly int SSSStrengthId = Shader.PropertyToID("_SSSStrength");
         private static readonly int SSSAbsorptionId = Shader.PropertyToID("_SSSAbsorption");
         private static readonly int SSSColorId = Shader.PropertyToID("_SSSColor");
         private static readonly int HueShiftId = Shader.PropertyToID("_HueShift");
         private static readonly int EdgeBrowningWidthId = Shader.PropertyToID("_EdgeBrowningWidth");
+        private static readonly int BrowningColorId = Shader.PropertyToID("_BrowningColor");
         private static readonly int VeinTexId = Shader.PropertyToID("_VeinTex");
         private static readonly int VeinTexStrengthId = Shader.PropertyToID("_VeinTexStrength");
 
@@ -52,7 +61,7 @@ namespace BalloonParty.Editor.Bush
             if (veinTex != null)
             {
                 material.SetTexture(VeinTexId, veinTex);
-                material.SetFloat(VeinTexStrengthId, 0.6f);
+                material.SetFloat(VeinTexStrengthId, settings.VeinTexStrength);
             }
 
             var cameraGo = CreateBakeCamera(settings.LeafRadius, rt);
@@ -86,13 +95,24 @@ namespace BalloonParty.Editor.Bush
             material.SetFloat(GielisN2Id, settings.GielisN2 + (hash * 13.37f % 1f) * 0.2f - 0.1f);
             material.SetFloat(GielisN3Id, settings.GielisN3 + (hash * 23.71f % 1f) * 0.2f - 0.1f);
 
-            material.SetColor(BaseColorId, new Color(0.25f, 0.55f, 0.15f, 1f));
+            material.SetColor(BaseColorId, settings.BaseColor);
+            material.SetFloat(EdgeShadeId, settings.EdgeShade);
+            material.SetColor(HighlightColorId, settings.HighlightColor);
+            material.SetFloat(HighlightSizeId, settings.HighlightSize);
+            material.SetFloat(HighlightOffsetId, settings.HighlightOffset);
+
+            material.SetFloat(VeinWidthId, settings.VeinWidth);
+            material.SetFloat(VeinDarkenId, settings.VeinDarken);
+            material.SetFloat(LateralVeinCountId, settings.LateralVeinCount);
+            material.SetFloat(LateralVeinAngleId, settings.LateralVeinAngle);
+
             material.SetFloat(SSSStrengthId, settings.SSSStrength);
             material.SetFloat(SSSAbsorptionId, settings.SSSAbsorption);
             material.SetColor(SSSColorId, settings.SSSColor);
 
             material.SetFloat(HueShiftId, (hash - 0.5f) * 2f * settings.HueJitter / 360f);
             material.SetFloat(EdgeBrowningWidthId, settings.EdgeBrowningWidth);
+            material.SetColor(BrowningColorId, settings.BrowningColor);
         }
 
         private static Texture2D BakeVeinTexture(BushLeafBakeSettings settings, uint seed)
@@ -104,12 +124,13 @@ namespace BalloonParty.Editor.Bush
 
             var veinSettings = new LeafVenationSimulator.SimulationSettings
             {
-                LeafSize = new Vector2(settings.LeafRadius * 2f, settings.LeafRadius * 2.4f),
-                KillDistance = 0.02f,
-                AttractionDistance = 0.08f,
+                // Match the shader's UV space: wp / (radius * 1.2) * 0.5 + 0.5
+                LeafSize = new Vector2(settings.LeafRadius * 2.4f, settings.LeafRadius * 2.4f),
+                KillDistance = 0.03f,
+                AttractionDistance = 0.1f,
                 SourceCount = settings.VeinSources,
-                MaxIterations = 100,
-                StepSize = 0.012f,
+                MaxIterations = 120,
+                StepSize = 0.015f,
                 Seed = seed
             };
 

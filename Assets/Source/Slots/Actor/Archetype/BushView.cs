@@ -41,8 +41,12 @@ namespace BalloonParty.Slots.Actor.Archetype
         {
             transform.localScale = Vector3.one;
 
+            // Fully disable the base SpriteRenderer — the sprite-based view
+            // uses child objects, not the legacy SDF quad.
             if (Renderer != null)
             {
+                Renderer.sharedMaterial = null;
+                Renderer.sprite = null;
                 Renderer.enabled = false;
             }
 
