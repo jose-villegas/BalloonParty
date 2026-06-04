@@ -39,9 +39,6 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         protected override void OnConfigured(MaterialPropertyBlock block)
         {
-            // The base class scales the transform to the cluster bounding box
-            // for the SDF quad. Sprite-based rendering uses world-positioned
-            // children, so reset to unit scale to avoid inflating them.
             transform.localScale = Vector3.one;
 
             if (Renderer != null)
@@ -57,9 +54,9 @@ namespace BalloonParty.Slots.Actor.Archetype
             ConfigureSprites(SlotCentersBuffer, SlotCount, _settings);
         }
 
-        protected override void OnUpdateBlock(MaterialPropertyBlock block)
+        private void LateUpdate()
         {
-            if (_settings == null)
+            if (_settings == null || SlotCount == 0)
             {
                 return;
             }
