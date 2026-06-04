@@ -9,6 +9,10 @@ namespace BalloonParty.Configuration
         BushView BushPrefab { get; }
         Sprite[] CanopyVariants { get; }
         Sprite[] LeafAtlasSprites { get; }
+        float SlotRadius { get; }
+        float BranchSpread { get; }
+        float CanopyDiameter { get; }
+        float LeafSpriteSize { get; }
         int RuffleLeafCount { get; }
         float RuffleRadius { get; }
     }

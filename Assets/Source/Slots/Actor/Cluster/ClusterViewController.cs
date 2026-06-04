@@ -67,6 +67,8 @@ namespace BalloonParty.Slots.Actor.Cluster
                 _view.Renderer.enabled = false;
             }
 
+            OnViewCreated(_view);
+
             _registry.OnClusterChanged
                 .Subscribe(_ => Reconfigure())
                 .AddTo(_disposables);
@@ -81,6 +83,14 @@ namespace BalloonParty.Slots.Actor.Cluster
                 UnityEngine.Object.Destroy(_view.gameObject);
                 _view = null;
             }
+        }
+
+        /// <summary>
+        /// Called once after the view is instantiated and its renderer is
+        /// configured. Override to wire subclass-specific dependencies.
+        /// </summary>
+        protected virtual void OnViewCreated(TView view)
+        {
         }
 
         /// <summary>
@@ -152,4 +162,3 @@ namespace BalloonParty.Slots.Actor.Cluster
         }
     }
 }
-

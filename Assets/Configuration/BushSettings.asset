@@ -18,3 +18,16 @@ MonoBehaviour:
   _padding: 0.5
   _sortingLayerId: -1044048485
   _sortingOrderOffset: 0
+  _canopyVariants:
+  - {fileID: 21300000, guid: 59e76bd6551314136a053cc760bcc791, type: 3}
+  - {fileID: 21300000, guid: 8491405d6c4f74eed9b5c31a266087d3, type: 3}
+  - {fileID: 21300000, guid: 5130e8b103d724715a776e2a2bbaa6c3, type: 3}
+  - {fileID: 21300000, guid: 83df591284de743229eb4a0506d48c81, type: 3}
+  - {fileID: 21300000, guid: 65e5b3d82ab6946a1a4e5cd66084a539, type: 3}
+  - {fileID: 21300000, guid: 49b2382345e7f4cc9833160de05320d3, type: 3}
+  - {fileID: 21300000, guid: 475b725c38c3148dc83847a53a2ddeb7, type: 3}
+  - {fileID: 21300000, guid: 0b27ecb728d5f44b6823712c9a4e6a23, type: 3}
+  _leafAtlasSprites:
+  - {fileID: -1758962843, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  _ruffleLeafCount: 6
+  _ruffleRadius: 1.5

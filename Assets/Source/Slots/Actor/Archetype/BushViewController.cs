@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Actor.Cluster;
 using BalloonParty.Slots.Grid;
 using UnityEngine;
@@ -10,26 +11,47 @@ namespace BalloonParty.Slots.Actor.Archetype
     /// <summary>
     /// Bush-specific cluster view controller. Adds gap-fill circles at midpoints
     /// between adjacent bush slots so the rendered shape spans the gaps
-    /// for a more continuous, natural coverage.
+    /// for a more continuous, natural coverage. Wires the leaf sprite pool and
+    /// baked asset settings into the view.
     /// </summary>
     internal class BushViewController
         : ClusterViewController<BushObstacleModel, BushView, IBushSettings>
     {
         private const float GapRadiusScale = 0.65f;
+        private const string LeafPoolKey = "LeafSprite";
+
+        private readonly PoolManager _poolManager;
+        private readonly IBushSettings _settings;
 
         [Inject]
         internal BushViewController(
             BushClusterRegistry registry,
             SlotGrid grid,
             IBushSettings settings,
-            IObjectResolver resolver)
+            IObjectResolver resolver,
+            PoolManager poolManager)
             : base(registry, grid, settings, resolver)
         {
+            _settings = settings;
+            _poolManager = poolManager;
         }
 
         protected override BushView GetPrefab(IBushSettings settings)
         {
             return settings.BushPrefab;
+        }
+
+        protected override void OnViewCreated(BushView view)
+        {
+            view.SetSettings(_settings);
+
+            if (view.LeafPrefab != null)
+            {
+                _poolManager.GetOrRegister<LeafSpriteView>(
+                    LeafPoolKey,
+                    () => new LeafSpritePoolChannel(view.LeafPrefab));
+                view.SetLeafPool(_poolManager.GetChannel<LeafSpriteView>(LeafPoolKey));
+            }
         }
 
         protected override int PopulatePositions(

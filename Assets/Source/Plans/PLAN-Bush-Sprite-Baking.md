@@ -1170,10 +1170,10 @@ visual should roughly match the SDF shader output.
 #### Phase 3 task checklist
 
 ```
-B7  [ ] LeafSpriteView.cs — MonoBehaviour + IPoolable + ruffle state
-B8  [ ] LeafSpritePoolChannel.cs — pool channel for leaf prefab
-B9  [ ] BushView.cs rewrite — manages canopy + leaf sprites per slot
-B10 [ ] Phyllotaxis placement — reuse PhyllotaxisCenter for leaf positions
+B7  [x] LeafSpriteView.cs — MonoBehaviour + IPoolable + ruffle state
+B8  [x] LeafSpritePoolChannel.cs — pool channel for leaf prefab
+B9  [x] BushView.cs rewrite — manages canopy + leaf sprites per slot
+B10 [x] Phyllotaxis placement — reuse PhyllotaxisCenter for leaf positions
 ```
 
 #### Dependencies
