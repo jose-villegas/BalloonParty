@@ -151,11 +151,22 @@ namespace BalloonParty.Editor.Bush
                     State.LeafSettings.LateralCurvature = EditorGUILayout.Slider("Curvature", State.LeafSettings.LateralCurvature, 0f, 1f);
 
                     EditorGUILayout.Space(4);
-                    EditorGUILayout.LabelField("Sub-veins (Fractal)", EditorStyles.miniLabel);
+                    EditorGUILayout.LabelField("Venules", EditorStyles.miniLabel);
                     State.LeafSettings.LateralSubCount = EditorGUILayout.IntSlider("Per Lateral", State.LeafSettings.LateralSubCount, 0, 4);
                     State.LeafSettings.LateralSubChance = EditorGUILayout.Slider("Survival Chance", State.LeafSettings.LateralSubChance, 0f, 1f);
                     PropertyDrawerHelper.DrawMinMaxSliderLayout("Length", ref State.LeafSettings.LateralSubLength, 0.05f, 1f);
                     State.LeafSettings.SubVeinCurvature = EditorGUILayout.Slider("Curvature", State.LeafSettings.SubVeinCurvature, 0f, 1f);
+
+                    EditorGUILayout.Space(4);
+                    EditorGUILayout.LabelField("Reticulate", EditorStyles.miniLabel);
+                    State.LeafSettings.ReticulateEnabled = EditorGUILayout.Toggle("Enabled", State.LeafSettings.ReticulateEnabled);
+                    using (new EditorGUI.DisabledScope(!State.LeafSettings.ReticulateEnabled))
+                    {
+                        State.LeafSettings.ReticulateDensity = EditorGUILayout.Slider("Density", State.LeafSettings.ReticulateDensity, 5f, 60f);
+                        State.LeafSettings.ReticulateWidth = EditorGUILayout.Slider("Width", State.LeafSettings.ReticulateWidth, 0.01f, 0.5f);
+                        State.LeafSettings.ReticulateOpacity = EditorGUILayout.Slider("Opacity", State.LeafSettings.ReticulateOpacity, 0f, 1f);
+                        State.LeafSettings.ReticulateAngle = EditorGUILayout.Slider("Angle (°)", State.LeafSettings.ReticulateAngle, 10f, 80f);
+                    }
                 }
 
                 EditorGUI.indentLevel--;
@@ -267,6 +278,11 @@ namespace BalloonParty.Editor.Bush
                 h = h * 31 + State.LeafSettings.LateralSubLength.GetHashCode();
                 h = h * 31 + State.LeafSettings.LateralCurvature.GetHashCode();
                 h = h * 31 + State.LeafSettings.SubVeinCurvature.GetHashCode();
+                h = h * 31 + State.LeafSettings.ReticulateEnabled.GetHashCode();
+                h = h * 31 + State.LeafSettings.ReticulateDensity.GetHashCode();
+                h = h * 31 + State.LeafSettings.ReticulateWidth.GetHashCode();
+                h = h * 31 + State.LeafSettings.ReticulateOpacity.GetHashCode();
+                h = h * 31 + State.LeafSettings.ReticulateAngle.GetHashCode();
                 return h;
             }
         }

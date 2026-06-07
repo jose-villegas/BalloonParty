@@ -34,6 +34,12 @@ namespace BalloonParty.Editor.Bush
         [SerializeField] internal float LateralCurvature = 0.3f;
         [SerializeField] internal float SubVeinCurvature = 0.2f;
 
+        [SerializeField] internal bool ReticulateEnabled = true;
+        [SerializeField] internal float ReticulateDensity = 25f;
+        [SerializeField] internal float ReticulateWidth = 0.15f;
+        [SerializeField] internal float ReticulateOpacity = 0.12f;
+        [SerializeField] internal float ReticulateAngle = 40f;
+
         private static Gradient DefaultMidribGradient()
         {
             var gradient = new Gradient();

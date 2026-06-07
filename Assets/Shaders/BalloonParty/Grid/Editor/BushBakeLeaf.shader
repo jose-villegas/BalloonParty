@@ -43,6 +43,13 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
         _LateralCurvature   ("Lateral Curvature",    Range(0.0, 1.0))    = 0.3
         _SubVeinCurvature   ("Sub-vein Curvature",   Range(0.0, 1.0))    = 0.2
         _VeinSeed           ("Vein Seed",            Float)              = 0
+
+        [Header(Reticulate)]
+        _ReticulateEnabled  ("Reticulate Enabled",   Float)              = 1.0
+        _ReticulateDensity  ("Reticulate Density",   Range(5.0, 60.0))   = 25.0
+        _ReticulateWidth    ("Reticulate Width",     Range(0.01, 0.5))   = 0.15
+        _ReticulateOpacity  ("Reticulate Opacity",   Range(0.0, 1.0))    = 0.12
+        _ReticulateAngle    ("Reticulate Angle (rad)", Float)            = 0.7
     }
 
     SubShader
@@ -118,6 +125,12 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
             float  _SubVeinCurvature;
             float  _VeinSeed;
 
+            float  _ReticulateEnabled;
+            float  _ReticulateDensity;
+            float  _ReticulateWidth;
+            float  _ReticulateOpacity;
+            float  _ReticulateAngle;
+
             // Deterministic hash for vein randomisation, seeded per variant
             float VeinHash(int a, int b, int c)
             {
@@ -125,14 +138,13 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
             }
 
             // Renders a single vein ray and returns the blended colour.
-            // fadeInAmount: 0 = no origin fade (emerges from parent), 1 = full fade-in
-            // sdfDist: fragment's signed distance to leaf edge (negative = inside)
-            // curvature: shape-adaptive bend strength for this vein level
+            // Also accumulates veinPresence for reticulate suppression.
             fixed3 ApplyVein(fixed3 col, float2 leafLocal, float2 origin,
                              float2 dir, float2 perp, float veinWidth,
                              float fadeLen, sampler2D gradTex, float fadeInAmount,
                              float radius, float gM, float gN1, float gN2, float gN3,
-                             float sdfDist, float curvature)
+                             float sdfDist, float curvature,
+                             inout float veinPresence)
             {
                 float2 toFrag = leafLocal - origin;
                 float along = dot(toFrag, dir);
@@ -166,7 +178,14 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                     float perpDist = dot(toFrag, perp) - curveOffset;
                     float latT = saturate(perpDist / max(taperW, 0.0001) * 0.5 + 0.5);
                     fixed4 g = tex2D(gradTex, float2(latT, 0.5));
-                    col = lerp(col, g.rgb, g.a * fade);
+                    float contribution = g.a * fade;
+                    col = lerp(col, g.rgb, contribution);
+
+                    // Accumulate vein presence with a soft halo around the vein
+                    float haloWidth = veinWidth * 3.0;
+                    float proxDist = abs(perpDist) / max(haloWidth, 0.0001);
+                    float proximity = (1.0 - saturate(proxDist)) * fade;
+                    veinPresence = max(veinPresence, proximity);
                 }
                 return col;
             }
@@ -202,6 +221,9 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                 float radial = smoothstep(1.0, 0.3, edgeT);
                 color *= lerp(_EdgeShade, 1.0, radial);
 
+                // ── Vein presence tracker for reticulate suppression ──
+                float veinPresence = 0;
+
                 // ── Midrib — gradient-driven vein across its width ──
                 // Gradient maps left-to-right: 0% = left edge, 50% = centre, 100% = right edge
                 if (_MidribEnabled > 0.5)
@@ -215,6 +237,10 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
 
                     fixed4 grad = tex2D(_MidribGradient, float2(veinT, 0.5));
                     color = lerp(color, grad.rgb, grad.a);
+
+                    // Midrib presence: soft halo at 2x width
+                    float midribProx = 1.0 - saturate(abs(v) / max(_MidribWidth * 2.0, 0.0001));
+                    veinPresence = max(veinPresence, midribProx);
 
                     // ── Lateral veins — mirrored pairs branching from the midrib ──
                     int count = (int)_LateralCount;
@@ -249,13 +275,13 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                             color = ApplyVein(color, leafLocal, veinOrigin,
                                               leftDir, leftPerp, _LateralWidth,
                                               fadeLenL, _MidribGradient, 0,
-                                              radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _LateralCurvature);
+                                              radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _LateralCurvature, veinPresence);
 
                             // Primary right lateral
                             color = ApplyVein(color, leafLocal, veinOrigin,
                                               rightDir, rightPerp, _LateralWidth,
                                               fadeLenR, _MidribGradient, 0,
-                                              radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _LateralCurvature);
+                                              radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _LateralCurvature, veinPresence);
 
                             // ── Sub-veins branching from this lateral pair ──
                             // Compute sub-vein directions from this lateral's angle
@@ -312,14 +338,14 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                                     color = ApplyVein(color, leafLocal, subOriginL,
                                                       subLL_dir, subLL_perp, subWidth,
                                                       subFadeLL, _MidribGradient, 1,
-                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature);
+                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature, veinPresence);
                                 }
                                 if (VeinHash(i, j, 2) < _LateralSubChance)
                                 {
                                     color = ApplyVein(color, leafLocal, subOriginL,
                                                       subLR_dir, subLR_perp, subWidth,
                                                       subFadeLR, _MidribGradient, 1,
-                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature);
+                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature, veinPresence);
                                 }
 
                                 // Right lateral → two sub-veins (each side of parent)
@@ -328,18 +354,61 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                                     color = ApplyVein(color, leafLocal, subOriginR,
                                                       subRL_dir, subRL_perp, subWidth,
                                                       subFadeRL, _MidribGradient, 1,
-                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature);
+                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature, veinPresence);
                                 }
                                 if (VeinHash(i, j, 3) < _LateralSubChance)
                                 {
                                     color = ApplyVein(color, leafLocal, subOriginR,
                                                       subRR_dir, subRR_perp, subWidth,
                                                       subFadeRR, _MidribGradient, 1,
-                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature);
+                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature, veinPresence);
                                 }
                             }
                         }
                     }
+                }
+
+                // ── Reticulate venation — fine net pattern between veins ──
+                if (_ReticulateEnabled > 0.5)
+                {
+                    float2 leafLocal2 = wp - center;
+
+                    // Organic distortion: offset coordinates with cheap noise
+                    float nx = sin(leafLocal2.x * 31.7 + leafLocal2.y * 17.3) * 0.3
+                             + sin(leafLocal2.y * 23.1 - leafLocal2.x * 11.9) * 0.2;
+                    float ny = sin(leafLocal2.y * 29.3 + leafLocal2.x * 13.7) * 0.3
+                             + sin(leafLocal2.x * 19.7 - leafLocal2.y * 7.1) * 0.2;
+                    float2 distorted = leafLocal2 + float2(nx, ny) / _ReticulateDensity;
+
+                    // Two sets of parallel lines at ±angle create a mesh
+                    float rSa, rCa;
+                    sincos(_ReticulateAngle, rSa, rCa);
+                    float2 retDir1 = float2(rCa, rSa);
+                    float2 retDir2 = float2(rCa, -rSa);
+
+                    float proj1 = dot(distorted, retDir1) * _ReticulateDensity;
+                    float proj2 = dot(distorted, retDir2) * _ReticulateDensity;
+
+                    // Distance to nearest line in each set (0 = on line, 0.5 = between)
+                    float d1 = abs(frac(proj1) - 0.5) * 2.0;
+                    float d2 = abs(frac(proj2) - 0.5) * 2.0;
+
+                    // Thin lines with noise-varied width for irregularity
+                    float widthVar = 1.0 + sin(proj1 * 3.7 + proj2 * 2.3) * 0.3;
+                    float w = _ReticulateWidth * widthVar;
+                    float line1 = 1.0 - smoothstep(0.0, w, d1);
+                    float line2 = 1.0 - smoothstep(0.0, w, d2);
+
+                    // Combine both sets: union of lines
+                    float net = max(line1, line2);
+
+                    // Fade near leaf edge and suppress near existing veins
+                    float edgeFade = smoothstep(0.0, -0.06, d);
+                    float veinSuppress = 1.0 - veinPresence;
+
+                    // Apply as darkening, respecting vein zones
+                    float darken = 1.0 - net * _ReticulateOpacity * edgeFade * veinSuppress;
+                    color *= darken;
                 }
 
                 // ── Hue shift ──

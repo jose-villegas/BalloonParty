@@ -37,6 +37,11 @@ namespace BalloonParty.Editor.Bush
         private static readonly int LateralCurvatureId = Shader.PropertyToID("_LateralCurvature");
         private static readonly int SubVeinCurvatureId = Shader.PropertyToID("_SubVeinCurvature");
         private static readonly int VeinSeedId = Shader.PropertyToID("_VeinSeed");
+        private static readonly int ReticulateEnabledId = Shader.PropertyToID("_ReticulateEnabled");
+        private static readonly int ReticulateDensityId = Shader.PropertyToID("_ReticulateDensity");
+        private static readonly int ReticulateWidthId = Shader.PropertyToID("_ReticulateWidth");
+        private static readonly int ReticulateOpacityId = Shader.PropertyToID("_ReticulateOpacity");
+        private static readonly int ReticulateAngleId = Shader.PropertyToID("_ReticulateAngle");
 
         private const int GradientResolution = 64;
 
@@ -117,6 +122,12 @@ namespace BalloonParty.Editor.Bush
             material.SetFloat(LateralCurvatureId, settings.LateralCurvature);
             material.SetFloat(SubVeinCurvatureId, settings.SubVeinCurvature);
             material.SetFloat(VeinSeedId, hash * 1000f);
+
+            material.SetFloat(ReticulateEnabledId, settings.ReticulateEnabled ? 1f : 0f);
+            material.SetFloat(ReticulateDensityId, settings.ReticulateDensity);
+            material.SetFloat(ReticulateWidthId, settings.ReticulateWidth);
+            material.SetFloat(ReticulateOpacityId, settings.ReticulateOpacity);
+            material.SetFloat(ReticulateAngleId, settings.ReticulateAngle * Mathf.Deg2Rad);
         }
 
         private static GameObject CreateBakeCamera(float leafRadius, RenderTexture rt)
