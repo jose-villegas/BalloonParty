@@ -224,144 +224,160 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                 // ── Vein presence tracker for reticulate suppression ──
                 float veinPresence = 0;
 
-                // ── Midrib — gradient-driven vein across its width ──
-                // Gradient maps left-to-right: 0% = left edge, 50% = centre, 100% = right edge
+                // ── Midrib system — adapts to lobe count ──
+                // m<2.5: single vertical midrib (pinnate); m≥2.5: one midrib per lobe (palmate)
                 if (_MidribEnabled > 0.5)
                 {
                     float2 leafLocal = wp - center;
-                    float2 tang = float2(-leafDir.y, leafDir.x);
-                    float v = dot(leafLocal, tang);
+                    int numMidribs = _GielisM < 2.5 ? 1 : (int)floor(_GielisM);
 
-                    // Signed distance mapped to [0,1] across the full vein width
-                    float veinT = saturate(v / max(_MidribWidth, 0.0001) * 0.5 + 0.5);
-
-                    fixed4 grad = tex2D(_MidribGradient, float2(veinT, 0.5));
-                    color = lerp(color, grad.rgb, grad.a);
-
-                    // Midrib presence: soft halo at 2x width
-                    float midribProx = 1.0 - saturate(abs(v) / max(_MidribWidth * 2.0, 0.0001));
-                    veinPresence = max(veinPresence, midribProx);
-
-                    // ── Lateral veins — mirrored pairs branching from the midrib ──
-                    int count = (int)_LateralCount;
-                    int subCount = (int)_LateralSubCount;
-                    if (count > 0)
+                    [loop] for (int mr = 0; mr < 6; mr++)
                     {
-                        float subWidth = _LateralWidth * 0.5;
+                        if (mr >= numMidribs) break;
 
-                        for (int i = 0; i < 8; i++)
+                        // Midrib direction: for single midrib, point up; for multi, radiate equally
+                        float midribAngle = numMidribs == 1 ? 0.0 : (float(mr) * 6.28318 / float(numMidribs));
+                        float2 md = float2(sin(midribAngle), cos(midribAngle));
+                        float2 mt = float2(-md.y, md.x); // perpendicular to midrib
+
+                        float v = dot(leafLocal, mt);
+
+                        // For multi-midrib, only render where fragment is on this lobe's side
+                        float alongMidrib = dot(leafLocal, md);
+                        if (numMidribs > 1 && alongMidrib < -_MidribWidth) continue;
+
+                        // Signed distance mapped to [0,1] across the full vein width
+                        float veinT = saturate(v / max(_MidribWidth, 0.0001) * 0.5 + 0.5);
+
+                        fixed4 grad = tex2D(_MidribGradient, float2(veinT, 0.5));
+                        color = lerp(color, grad.rgb, grad.a);
+
+                        // Midrib presence: soft halo at 2x width
+                        float midribProx = 1.0 - saturate(abs(v) / max(_MidribWidth * 2.0, 0.0001));
+                        if (numMidribs > 1) midribProx *= saturate(alongMidrib / (_MidribWidth * 2.0));
+                        veinPresence = max(veinPresence, midribProx);
+
+                        // ── Lateral veins — mirrored pairs branching from this midrib ──
+                        int count = (int)_LateralCount;
+                        int subCount = (int)_LateralSubCount;
+                        if (count > 0)
                         {
-                            if (i >= count) break;
+                            float subWidth = _LateralWidth * 0.5;
 
-                            float t = (float(i) + 1.0) / (float(count) + 1.0);
-                            float originU = lerp(radius * _LateralStart, radius * 0.8, t);
-                            float2 veinOrigin = leafDir * originU;
-
-                            // Per-lateral randomised angle
-                            float angle = lerp(_LateralAngleMin, _LateralAngleMax, VeinHash(i, 0, 23));
-                            float sa, ca;
-                            sincos(angle, sa, ca);
-                            float2 leftDir  = float2(-sa, ca);
-                            float2 rightDir = float2( sa, ca);
-                            float2 leftPerp  = float2(-ca, -sa);
-                            float2 rightPerp = float2(-ca,  sa);
-
-                            // Per-lateral randomised length, biased by position
-                            float baseBias = 1.0 - t;
-                            float fadeLenL = radius * lerp(_LateralLengthMin, _LateralLengthMax, VeinHash(i, 0, 7) * baseBias);
-                            float fadeLenR = radius * lerp(_LateralLengthMin, _LateralLengthMax, VeinHash(i, 0, 11) * baseBias);
-
-                            // Primary left lateral
-                            color = ApplyVein(color, leafLocal, veinOrigin,
-                                              leftDir, leftPerp, _LateralWidth,
-                                              fadeLenL, _MidribGradient, 0,
-                                              radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _LateralCurvature, veinPresence);
-
-                            // Primary right lateral
-                            color = ApplyVein(color, leafLocal, veinOrigin,
-                                              rightDir, rightPerp, _LateralWidth,
-                                              fadeLenR, _MidribGradient, 0,
-                                              radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _LateralCurvature, veinPresence);
-
-                            // ── Sub-veins branching from this lateral pair ──
-                            // Compute sub-vein directions from this lateral's angle
-                            float subSa, subCa;
-                            sincos(angle, subSa, subCa);
-
-                            float2 subLL_dir  = float2(subCa * leftDir.x - subSa * leftDir.y,
-                                                       subSa * leftDir.x + subCa * leftDir.y);
-                            float2 subLR_dir  = float2(subCa * leftDir.x + subSa * leftDir.y,
-                                                      -subSa * leftDir.x + subCa * leftDir.y);
-                            float2 subLL_perp = float2(-subLL_dir.y, subLL_dir.x);
-                            float2 subLR_perp = float2(-subLR_dir.y, subLR_dir.x);
-
-                            float2 subRL_dir  = float2(subCa * rightDir.x - subSa * rightDir.y,
-                                                       subSa * rightDir.x + subCa * rightDir.y);
-                            float2 subRR_dir  = float2(subCa * rightDir.x + subSa * rightDir.y,
-                                                      -subSa * rightDir.x + subCa * rightDir.y);
-                            float2 subRL_perp = float2(-subRL_dir.y, subRL_dir.x);
-                            float2 subRR_perp = float2(-subRR_dir.y, subRR_dir.x);
-
-                            for (int j = 0; j < 4; j++)
+                            [loop] for (int i = 0; i < 8; i++)
                             {
-                                if (j >= subCount) break;
+                                if (i >= count) break;
 
-                                float stL = (float(j) + 1.0) / (float(subCount) + 1.0);
-                                float subAlongDistL = fadeLenL * stL * 0.8;
-                                float subAlongDistR = fadeLenR * stL * 0.8;
+                                float t = (float(i) + 1.0) / (float(count) + 1.0);
+                                float originU = lerp(radius * _LateralStart, radius * 0.8, t);
+                                float2 veinOrigin = md * originU;
 
-                                // Offset sub-vein origins along the curved parent lateral
-                                float2 straightL = veinOrigin + leftDir * subAlongDistL;
-                                float thetaL = atan2(straightL.x, straightL.y);
-                                float bndL = radius * GielisRadius(thetaL, _GielisM, _GielisN1, _GielisN2, _GielisN3);
-                                float2 toBndL = float2(sin(thetaL), cos(thetaL)) * bndL - straightL;
-                                float curveOffL = dot(toBndL, leftPerp) * _LateralCurvature * stL * 0.8;
-                                float2 subOriginL = straightL + leftPerp * curveOffL;
+                                // Per-lateral randomised angle
+                                float angle = lerp(_LateralAngleMin, _LateralAngleMax, VeinHash(i + mr * 8, 0, 23));
+                                float sa, ca;
+                                sincos(angle, sa, ca);
+                                // Rotate md by ±angle for left/right laterals
+                                float2 leftDir  = float2(ca * md.x - sa * md.y, sa * md.x + ca * md.y);
+                                float2 rightDir = float2(ca * md.x + sa * md.y, -sa * md.x + ca * md.y);
+                                float2 leftPerp  = float2(-leftDir.y, leftDir.x);
+                                float2 rightPerp = float2(-rightDir.y, rightDir.x);
 
-                                float2 straightR = veinOrigin + rightDir * subAlongDistR;
-                                float thetaR = atan2(straightR.x, straightR.y);
-                                float bndR = radius * GielisRadius(thetaR, _GielisM, _GielisN1, _GielisN2, _GielisN3);
-                                float2 toBndR = float2(sin(thetaR), cos(thetaR)) * bndR - straightR;
-                                float curveOffR = dot(toBndR, rightPerp) * _LateralCurvature * stL * 0.8;
-                                float2 subOriginR = straightR + rightPerp * curveOffR;
+                                // Per-lateral randomised length, biased by position
+                                float baseBias = 1.0 - t;
+                                float fadeLenL = radius * lerp(_LateralLengthMin, _LateralLengthMax, VeinHash(i + mr * 8, 0, 7) * baseBias);
+                                float fadeLenR = radius * lerp(_LateralLengthMin, _LateralLengthMax, VeinHash(i + mr * 8, 0, 11) * baseBias);
 
-                                // Per-sub-vein randomised length, biased by position along parent
-                                float subBias = 1.0 - stL;
-                                float subFadeLL = radius * lerp(_LateralSubLengthMin, _LateralSubLengthMax, VeinHash(i, j, 9) * subBias);
-                                float subFadeLR = radius * lerp(_LateralSubLengthMin, _LateralSubLengthMax, VeinHash(i, j, 13) * subBias);
-                                float subFadeRL = radius * lerp(_LateralSubLengthMin, _LateralSubLengthMax, VeinHash(i, j, 17) * subBias);
-                                float subFadeRR = radius * lerp(_LateralSubLengthMin, _LateralSubLengthMax, VeinHash(i, j, 21) * subBias);
+                                // Primary left lateral
+                                color = ApplyVein(color, leafLocal, veinOrigin,
+                                                  leftDir, leftPerp, _LateralWidth,
+                                                  fadeLenL, _MidribGradient, 0,
+                                                  radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _LateralCurvature, veinPresence);
 
-                                // Left lateral → two sub-veins (each side of parent)
-                                if (VeinHash(i, j, 0) < _LateralSubChance)
+                                // Primary right lateral
+                                color = ApplyVein(color, leafLocal, veinOrigin,
+                                                  rightDir, rightPerp, _LateralWidth,
+                                                  fadeLenR, _MidribGradient, 0,
+                                                  radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _LateralCurvature, veinPresence);
+
+                                // ── Venules branching from this lateral pair ──
+                                float subSa, subCa;
+                                sincos(angle, subSa, subCa);
+
+                                float2 subLL_dir  = float2(subCa * leftDir.x - subSa * leftDir.y,
+                                                           subSa * leftDir.x + subCa * leftDir.y);
+                                float2 subLR_dir  = float2(subCa * leftDir.x + subSa * leftDir.y,
+                                                          -subSa * leftDir.x + subCa * leftDir.y);
+                                float2 subLL_perp = float2(-subLL_dir.y, subLL_dir.x);
+                                float2 subLR_perp = float2(-subLR_dir.y, subLR_dir.x);
+
+                                float2 subRL_dir  = float2(subCa * rightDir.x - subSa * rightDir.y,
+                                                           subSa * rightDir.x + subCa * rightDir.y);
+                                float2 subRR_dir  = float2(subCa * rightDir.x + subSa * rightDir.y,
+                                                          -subSa * rightDir.x + subCa * rightDir.y);
+                                float2 subRL_perp = float2(-subRL_dir.y, subRL_dir.x);
+                                float2 subRR_perp = float2(-subRR_dir.y, subRR_dir.x);
+
+                                [loop] for (int j = 0; j < 4; j++)
                                 {
-                                    color = ApplyVein(color, leafLocal, subOriginL,
-                                                      subLL_dir, subLL_perp, subWidth,
-                                                      subFadeLL, _MidribGradient, 1,
-                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature, veinPresence);
-                                }
-                                if (VeinHash(i, j, 2) < _LateralSubChance)
-                                {
-                                    color = ApplyVein(color, leafLocal, subOriginL,
-                                                      subLR_dir, subLR_perp, subWidth,
-                                                      subFadeLR, _MidribGradient, 1,
-                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature, veinPresence);
-                                }
+                                    if (j >= subCount) break;
 
-                                // Right lateral → two sub-veins (each side of parent)
-                                if (VeinHash(i, j, 1) < _LateralSubChance)
-                                {
-                                    color = ApplyVein(color, leafLocal, subOriginR,
-                                                      subRL_dir, subRL_perp, subWidth,
-                                                      subFadeRL, _MidribGradient, 1,
-                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature, veinPresence);
-                                }
-                                if (VeinHash(i, j, 3) < _LateralSubChance)
-                                {
-                                    color = ApplyVein(color, leafLocal, subOriginR,
-                                                      subRR_dir, subRR_perp, subWidth,
-                                                      subFadeRR, _MidribGradient, 1,
-                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature, veinPresence);
+                                    float stL = (float(j) + 1.0) / (float(subCount) + 1.0);
+                                    float subAlongDistL = fadeLenL * stL * 0.8;
+                                    float subAlongDistR = fadeLenR * stL * 0.8;
+
+                                    // Offset sub-vein origins along the curved parent lateral
+                                    float2 straightL = veinOrigin + leftDir * subAlongDistL;
+                                    float thetaL = atan2(straightL.x, straightL.y);
+                                    float bndL = radius * GielisRadius(thetaL, _GielisM, _GielisN1, _GielisN2, _GielisN3);
+                                    float2 toBndL = float2(sin(thetaL), cos(thetaL)) * bndL - straightL;
+                                    float curveOffL = dot(toBndL, leftPerp) * _LateralCurvature * stL * 0.8;
+                                    float2 subOriginL = straightL + leftPerp * curveOffL;
+
+                                    float2 straightR = veinOrigin + rightDir * subAlongDistR;
+                                    float thetaR = atan2(straightR.x, straightR.y);
+                                    float bndR = radius * GielisRadius(thetaR, _GielisM, _GielisN1, _GielisN2, _GielisN3);
+                                    float2 toBndR = float2(sin(thetaR), cos(thetaR)) * bndR - straightR;
+                                    float curveOffR = dot(toBndR, rightPerp) * _LateralCurvature * stL * 0.8;
+                                    float2 subOriginR = straightR + rightPerp * curveOffR;
+
+                                    // Per-sub-vein randomised length, biased by position along parent
+                                    float subBias = 1.0 - stL;
+                                    float subFadeLL = radius * lerp(_LateralSubLengthMin, _LateralSubLengthMax, VeinHash(i + mr * 8, j, 9) * subBias);
+                                    float subFadeLR = radius * lerp(_LateralSubLengthMin, _LateralSubLengthMax, VeinHash(i + mr * 8, j, 13) * subBias);
+                                    float subFadeRL = radius * lerp(_LateralSubLengthMin, _LateralSubLengthMax, VeinHash(i + mr * 8, j, 17) * subBias);
+                                    float subFadeRR = radius * lerp(_LateralSubLengthMin, _LateralSubLengthMax, VeinHash(i + mr * 8, j, 21) * subBias);
+
+                                    // Left lateral → two sub-veins (each side of parent)
+                                    if (VeinHash(i + mr * 8, j, 0) < _LateralSubChance)
+                                    {
+                                        color = ApplyVein(color, leafLocal, subOriginL,
+                                                          subLL_dir, subLL_perp, subWidth,
+                                                          subFadeLL, _MidribGradient, 1,
+                                                          radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature, veinPresence);
+                                    }
+                                    if (VeinHash(i + mr * 8, j, 2) < _LateralSubChance)
+                                    {
+                                        color = ApplyVein(color, leafLocal, subOriginL,
+                                                          subLR_dir, subLR_perp, subWidth,
+                                                          subFadeLR, _MidribGradient, 1,
+                                                          radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature, veinPresence);
+                                    }
+
+                                    // Right lateral → two sub-veins (each side of parent)
+                                    if (VeinHash(i + mr * 8, j, 1) < _LateralSubChance)
+                                    {
+                                        color = ApplyVein(color, leafLocal, subOriginR,
+                                                          subRL_dir, subRL_perp, subWidth,
+                                                          subFadeRL, _MidribGradient, 1,
+                                                          radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature, veinPresence);
+                                    }
+                                    if (VeinHash(i + mr * 8, j, 3) < _LateralSubChance)
+                                    {
+                                        color = ApplyVein(color, leafLocal, subOriginR,
+                                                          subRR_dir, subRR_perp, subWidth,
+                                                          subFadeRR, _MidribGradient, 1,
+                                                          radius, _GielisM, _GielisN1, _GielisN2, _GielisN3, d, _SubVeinCurvature, veinPresence);
+                                    }
                                 }
                             }
                         }
