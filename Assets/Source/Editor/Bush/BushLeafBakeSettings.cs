@@ -31,7 +31,8 @@ namespace BalloonParty.Editor.Bush
         [SerializeField] internal int LateralSubCount = 2;
         [SerializeField] internal float LateralSubChance = 0.7f;
         [SerializeField] internal Vector2 LateralSubLength = new(0.15f, 0.4f);
-        [SerializeField] internal float VeinCurvature = 0.3f;
+        [SerializeField] internal float LateralCurvature = 0.3f;
+        [SerializeField] internal float SubVeinCurvature = 0.2f;
 
         private static Gradient DefaultMidribGradient()
         {

@@ -143,14 +143,19 @@ veins into a RenderTexture that is read back to Texture2D for atlas packing.
    changing Gielis jitter, hue shift, and vein variation per click
 9. ✅ **Shared MinMaxSlider** — reusable `PropertyDrawerHelper.DrawMinMaxSlider`
    (rect-based) and `DrawMinMaxSliderLayout` (layout-based) in `Source/Editor/`
-10. ✅ **Curved veins** — parabolic curvature bends laterals and sub-veins
-    toward the leaf tip, matching natural pinnate venation
+10. ✅ **Curved veins** — shape-adaptive curvature bends laterals and sub-veins
+    to follow the actual Gielis boundary contour
     - Curvature parameter (0 = straight, 1 = max bend)
-    - Bend direction computed automatically from the vein's angle relative
-      to the leaf axis — left laterals curve left-toward-tip, right laterals
-      curve right-toward-tip
-    - Offset scales with `progress²` for a smooth parabolic arc
+    - At each point along the vein, samples the Gielis boundary at the
+      vein's straight-line polar angle and offsets toward it
+    - Adapts automatically when the shape changes (different seeds,
+      different Gielis parameters) — veins follow the leaf contour
     - Applies to both primary laterals and recursive sub-veins
+11. ✅ **Unified vein seed** — `_VeinSeed` uniform derived from the variant
+    hash feeds into `VeinHash()`, so randomising the preview seed also
+    reshuffles vein angles, lengths, and sub-vein survival patterns
+12. ✅ **Clickable variant grid** — variant thumbnails in a HelpBox; clicking
+    any variant displays it in the live preview box with a `►` selection marker
 
 ### Leaf feature backlog (add one at a time)
 
@@ -162,7 +167,9 @@ veins into a RenderTexture that is read back to Texture2D for atlas packing.
 The shader uses an offscreen camera rendering a quad with the Gielis SDF
 material into a RenderTexture, then reads back to Texture2D. The leaf is
 centred at origin pointing up (+Y). Per-variant Gielis jitter and hue shift
-are applied via a hash derived from the seed and variant index.
+are applied via a hash derived from the seed and variant index. The same
+hash (scaled) is passed as `_VeinSeed` so vein randomisation is coupled
+to the variant identity.
 
 The midrib gradient is baked from Unity's `Gradient` to a 64×1 RGBA texture
 at bake time, passed as `_MidribGradient`. Lateral veins reuse the same
@@ -176,12 +183,15 @@ The Bush Baker window (`Tools > Bush Baker`) has:
 - **Live preview box** (right, fills remaining space) — rect-based layout
   that occupies all horizontal space right of the properties column,
   matching its full height. Texture is centred and aspect-fitted inside
-  a HelpBox-style container.
+  a HelpBox-style container. 🎲 button in top-right corner randomises
+  the preview seed.
 - **Buttons** — "Preview All Variants" and "Export Leaf Atlas"
-- **Variant grid** — thumbnails of all baked variants
+- **Variant grid** — thumbnails in a HelpBox container; clickable to
+  display the selected variant in the live preview. Selection is cleared
+  when parameters change and auto-preview re-bakes.
 
 Live preview auto-updates on any parameter change via a settings hash that
-includes all fields plus gradient colour/alpha keys.
+includes all fields, gradient colour/alpha keys, and the preview seed.
 
 ### Session context for Phase 1
 
@@ -189,8 +199,10 @@ When continuing leaf baking work, read:
 - `Assets/Source/Editor/Bush/BushBakerWindow.cs` — editor window
 - `Assets/Source/Editor/Bush/BushLeafBaker.cs` — bake pipeline
 - `Assets/Source/Editor/Bush/BushLeafBakeSettings.cs` — settings
+- `Assets/Source/Editor/Bush/BushBakerState.cs` — persisted editor state
 - `Assets/Shaders/BalloonParty/Grid/Editor/BushBakeLeaf.shader` — the shader
 - `Assets/Shaders/BalloonParty/Grid/Editor/GielisSDF.cginc` — Gielis math
+- `Assets/Source/Editor/PropertyDrawerHelper.cs` — shared MinMaxSlider
 - `.github/copilot-instructions.md` — project coding conventions
 
 

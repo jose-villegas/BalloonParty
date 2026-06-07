@@ -148,15 +148,14 @@ namespace BalloonParty.Editor.Bush
                     State.LeafSettings.LateralWidthRatio = EditorGUILayout.Slider("Width Ratio", State.LeafSettings.LateralWidthRatio, 0.1f, 1f);
                     PropertyDrawerHelper.DrawMinMaxSliderLayout("Length", ref State.LeafSettings.LateralLength, 0.1f, 1.5f);
                     State.LeafSettings.LateralStart = EditorGUILayout.Slider("Start", State.LeafSettings.LateralStart, -1f, 0.5f);
+                    State.LeafSettings.LateralCurvature = EditorGUILayout.Slider("Curvature", State.LeafSettings.LateralCurvature, 0f, 1f);
 
                     EditorGUILayout.Space(4);
                     EditorGUILayout.LabelField("Sub-veins (Fractal)", EditorStyles.miniLabel);
                     State.LeafSettings.LateralSubCount = EditorGUILayout.IntSlider("Per Lateral", State.LeafSettings.LateralSubCount, 0, 4);
                     State.LeafSettings.LateralSubChance = EditorGUILayout.Slider("Survival Chance", State.LeafSettings.LateralSubChance, 0f, 1f);
                     PropertyDrawerHelper.DrawMinMaxSliderLayout("Length", ref State.LeafSettings.LateralSubLength, 0.05f, 1f);
-
-                    EditorGUILayout.Space(4);
-                    State.LeafSettings.VeinCurvature = EditorGUILayout.Slider("Curvature", State.LeafSettings.VeinCurvature, 0f, 1f);
+                    State.LeafSettings.SubVeinCurvature = EditorGUILayout.Slider("Curvature", State.LeafSettings.SubVeinCurvature, 0f, 1f);
                 }
 
                 EditorGUI.indentLevel--;
@@ -266,7 +265,8 @@ namespace BalloonParty.Editor.Bush
                 h = h * 31 + State.LeafSettings.LateralSubCount.GetHashCode();
                 h = h * 31 + State.LeafSettings.LateralSubChance.GetHashCode();
                 h = h * 31 + State.LeafSettings.LateralSubLength.GetHashCode();
-                h = h * 31 + State.LeafSettings.VeinCurvature.GetHashCode();
+                h = h * 31 + State.LeafSettings.LateralCurvature.GetHashCode();
+                h = h * 31 + State.LeafSettings.SubVeinCurvature.GetHashCode();
                 return h;
             }
         }
