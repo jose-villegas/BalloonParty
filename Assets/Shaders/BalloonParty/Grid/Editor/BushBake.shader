@@ -47,6 +47,8 @@ Shader "BalloonParty/Grid/BushBake"
         [Header(Leaf Vein)]
         _VeinWidth          ("Vein Width",           Range(0.01, 0.15))  = 0.06
         _VeinDarken         ("Vein Darken",          Range(0.5, 1.0))    = 0.72
+        _VeinDepth          ("Vein Depth",           Range(1, 4))        = 2
+        _VeinCount          ("Vein Count",           Range(3, 12))       = 6
 
         [Header(Subsurface Scattering)]
         _SSSAbsorption      ("SSS Absorption",       Range(0.5, 10))     = 3.0
@@ -107,6 +109,7 @@ Shader "BalloonParty/Grid/BushBake"
             #pragma shader_feature _SHADOW_ON
             #include "UnityCG.cginc"
             #include "Assets/Shaders/BalloonParty/Grid/Editor/GielisSDF.cginc"
+            #include "Assets/Shaders/BalloonParty/Grid/Editor/LeafVeins.cginc"
 
             #define MAX_SLOTS      16
             #define LEAF_COUNT     16
@@ -155,6 +158,8 @@ Shader "BalloonParty/Grid/BushBake"
 
             float  _VeinWidth;
             float  _VeinDarken;
+            int    _VeinDepth;
+            float  _VeinCount;
 
             float  _SSSAbsorption;
             float  _SSSStrength;
@@ -423,19 +428,18 @@ Shader "BalloonParty/Grid/BushBake"
                                 float perp  = dot(localP, tang);
                                 float hlDist = length(float2(
                                     (axial - _HighlightOffset * halfLen) / max(halfLen, 0.001),
-                                    perp / max(cr, 0.001)));
+                                    perp / max(halfLen * 0.5, 0.001)));
                                 float hlT = smoothstep(_HighlightSize, 0.0, hlDist);
                                 circleColor = lerp(circleColor, _HighlightColor.rgb,
                                     hlT * _HighlightColor.a);
 
-                                // ── Midrib ──
-                                float perpNorm = perp / max(cr, 0.001);
-                                float vDist = abs(perpNorm);
-                                float taperW = _VeinWidth * lerp(1.5, 0.3, stemAxisT);
-                                float vLine = 1.0 - smoothstep(taperW * 0.4, taperW, vDist);
-                                float vMask = smoothstep(0.0, 0.05, stemAxisT)
-                                            * smoothstep(1.0, 0.9, stemAxisT);
-                                circleColor *= lerp(1.0, _VeinDarken, vLine * vMask);
+                                // ── Fractal veins ──
+                                float leafHalfW = cr * GielisRadius(
+                                    1.5708, mL, n1L, n2L, n3L);
+                                circleColor *= FractalVeins(
+                                    axial, perp, halfLen, leafHalfW,
+                                    _VeinWidth, _VeinDarken,
+                                    _VeinDepth, _VeinCount);
 
 
                                 // ── Full-depth self-shadow with multi-sample penumbra ──

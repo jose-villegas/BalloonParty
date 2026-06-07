@@ -27,6 +27,8 @@ namespace BalloonParty.Editor.Bush
 
         [SerializeField] internal float VeinWidth = 0.06f;
         [SerializeField] internal float VeinDarken = 0.72f;
+        [SerializeField] internal int VeinDepth = 2;
+        [SerializeField] internal int VeinCount = 6;
 
         [SerializeField] internal float SSSAbsorption = 3f;
         [SerializeField] internal float SSSStrength = 0.25f;

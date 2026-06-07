@@ -35,6 +35,8 @@ namespace BalloonParty.Editor.Bush
         private static readonly int EdgeShadeId = Shader.PropertyToID("_EdgeShade");
         private static readonly int VeinWidthId = Shader.PropertyToID("_VeinWidth");
         private static readonly int VeinDarkenId = Shader.PropertyToID("_VeinDarken");
+        private static readonly int VeinDepthId = Shader.PropertyToID("_VeinDepth");
+        private static readonly int VeinCountId = Shader.PropertyToID("_VeinCount");
         private static readonly int SSSAbsorptionId = Shader.PropertyToID("_SSSAbsorption");
         private static readonly int SSSStrengthId = Shader.PropertyToID("_SSSStrength");
         private static readonly int SSSColorId = Shader.PropertyToID("_SSSColor");
@@ -213,6 +215,8 @@ namespace BalloonParty.Editor.Bush
 
             material.SetFloat(VeinWidthId, settings.VeinWidth);
             material.SetFloat(VeinDarkenId, settings.VeinDarken);
+            material.SetInt(VeinDepthId, settings.VeinDepth);
+            material.SetFloat(VeinCountId, settings.VeinCount);
 
             material.SetFloat(SSSAbsorptionId, settings.SSSAbsorption);
             material.SetFloat(SSSStrengthId, settings.SSSStrength);

@@ -8,6 +8,40 @@
 
 ---
 
+## Current Phase — Shape Only (Leaf Focus)
+
+The leaf baker has been stripped to **shape + flat shading only**. All rendering
+features (veins, SSS, highlights, browning, Runions venation) have been removed.
+The canopy baker is disabled in the editor window. We will add features back one
+at a time, validating each in isolation.
+
+### What works now
+
+| Component | Status |
+|---|---|
+| `BushBakeLeaf.shader` | Gielis SDF shape, dome shading (radial edge darken), hue jitter, AA alpha |
+| `BushLeafBaker.cs` | Bakes single leaf variants with per-variant Gielis jitter |
+| `BushBakerWindow.cs` | Leaf-only UI: shape params, base color, edge shade, hue jitter, live preview, export |
+| `GielisSDF.cginc` | Shared Gielis superformula + HueRotate + JitterGielisParams |
+| `LeafAtlasPacker.cs` | Packs leaf variants into atlas |
+
+### Feature roadmap (add one at a time)
+
+1. **Midrib** — single dark line along `perp = 0`, tapering base→tip
+2. **Lateral veins** — diagonal lines from midrib (fractal depth control)
+3. **Highlight** — specular-like dome highlight
+4. **SSS** — edge glow / transmittance
+5. **Edge browning** — colour variation at leaf boundary
+6. **Canopy baker** — re-enable once leaf features are solid
+
+### Canopy baker (parked)
+
+`BushBake.shader` and `BushCanopyBaker.cs` still exist and compile but are not
+exposed in the editor window. They will be re-enabled after the leaf rendering
+pipeline is validated.
+
+---
+
 ## Motivation
 
 The procedural SDF approach (`Bush.shader`, ~600 lines, ~90-110 SDF evals per

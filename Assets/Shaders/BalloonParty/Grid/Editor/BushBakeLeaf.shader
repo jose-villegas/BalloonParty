@@ -2,15 +2,6 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
 {
     // Offline single-leaf baker — renders one Gielis leaf into a
     // RenderTexture for atlas packing. NOT used at runtime.
-    //
-    // Renders a single leaf at the origin with full shading:
-    //   • Gielis superformula shape
-    //   • SSS edge glow
-    //   • Dome shading + specular highlight
-    //   • Midrib + lateral veins
-    //   • Hue jitter + edge browning
-    //
-    // No slot positions needed — the leaf is centred at (0,0) facing up.
     Properties
     {
         [HideInInspector] _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
@@ -27,33 +18,10 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
 
         [Header(Surface)]
         _BaseColor          ("Base Color",           Color)              = (0.25, 0.55, 0.15, 1.0)
-        _CreaseWidth        ("Crease Width",         Range(0.01, 0.12))  = 0.07
-        _CreaseDarken       ("Crease Darken",        Range(0.3, 1.0))    = 0.50
-
-        [Header(Dome Shading)]
-        _HighlightColor     ("Highlight Color",      Color)              = (0.55, 0.80, 0.35, 0.45)
-        _HighlightSize      ("Highlight Size",       Range(0.1, 0.7))    = 0.30
-        _HighlightOffset    ("Highlight Offset",     Range(-0.5, 0.5))   = 0.15
         _EdgeShade          ("Edge Shade",           Range(0.5, 1.0))    = 0.68
-
-        [Header(Leaf Vein)]
-        _VeinWidth          ("Vein Width",           Range(0.01, 0.15))  = 0.06
-        _VeinDarken         ("Vein Darken",          Range(0.5, 1.0))    = 0.72
-
-        [Header(Subsurface Scattering)]
-        _SSSAbsorption      ("SSS Absorption",       Range(0.5, 10))     = 3.0
-        _SSSStrength        ("SSS Strength",         Range(0, 1))        = 0.25
-        _SSSColor           ("SSS Color",            Color)              = (0.6, 0.8, 0.2, 1.0)
-        _LightDir           ("Light Direction",      Vector)             = (0.3, 0.7, 0, 0)
 
         [Header(Colour Variation)]
         _HueShift           ("Hue Shift (radians)",  Range(-0.2, 0.2))   = 0.0
-        _BrowningColor      ("Browning Color",       Color)              = (0.40, 0.28, 0.12, 1.0)
-        _EdgeBrowningWidth  ("Edge Browning Width",  Range(0.01, 0.5))   = 0.15
-
-        [Header(Vein Texture)]
-        _VeinTex            ("Vein Texture (opt)",   2D)                 = "white" {}
-        _VeinTexStrength    ("Vein Tex Strength",    Range(0, 1))        = 0.0
     }
 
     SubShader
@@ -106,29 +74,9 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
             float  _GielisN3;
 
             fixed4 _BaseColor;
-            float  _CreaseWidth;
-            float  _CreaseDarken;
-
-            fixed4 _HighlightColor;
-            float  _HighlightSize;
-            float  _HighlightOffset;
             float  _EdgeShade;
 
-            float  _VeinWidth;
-            float  _VeinDarken;
-
-            float  _SSSAbsorption;
-            float  _SSSStrength;
-            fixed4 _SSSColor;
-            float4 _LightDir;
-
             float  _HueShift;
-            fixed4 _BrowningColor;
-            float  _EdgeBrowningWidth;
-
-            sampler2D _VeinTex;
-            float  _VeinTexStrength;
-
 
             v2f vert(appdata_t IN)
             {
@@ -156,56 +104,13 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
 
                 fixed3 color = _BaseColor.rgb;
 
-                // ── Dome shading ──
+                // ── Dome shading — simple radial darkening at edges ──
                 float edgeT = length(wp - center) / max(radius, 0.001);
                 float radial = smoothstep(1.0, 0.3, edgeT);
                 color *= lerp(_EdgeShade, 1.0, radial);
 
-                // ── Leaf-local frame ──
-                float2 tang = float2(-leafDir.y, leafDir.x);
-                float halfLen = radius * GielisRadius(0.0, _GielisM, _GielisN1, _GielisN2, _GielisN3);
-                float axial = dot(wp, leafDir);
-                float perp  = dot(wp, tang);
-                float stemAxisT = saturate((axial + halfLen) / max(2.0 * halfLen, 0.001));
-
-                // ── SSS ──
-                float thickness = saturate(-d / (radius * 0.5));
-                float transmittance = exp(-thickness * _SSSAbsorption);
-                float backLight = max(0, dot(-leafDir, _LightDir.xy));
-                color = lerp(color, _SSSColor.rgb,
-                    transmittance * _SSSStrength * (0.3 + backLight * 0.7));
-
-                // ── Highlight ──
-                float hlDist = length(float2(
-                    (axial - _HighlightOffset * halfLen) / max(halfLen, 0.001),
-                    perp / max(radius, 0.001)));
-                float hlT = smoothstep(_HighlightSize, 0.0, hlDist);
-                color = lerp(color, _HighlightColor.rgb, hlT * _HighlightColor.a);
-
-                // ── Midrib ──
-                float perpNorm = perp / max(radius, 0.001);
-                float vDist = abs(perpNorm);
-                float taperW = _VeinWidth * lerp(1.5, 0.3, stemAxisT);
-                float vLine = 1.0 - smoothstep(taperW * 0.4, taperW, vDist);
-                float vMask = smoothstep(0.02, 0.15, stemAxisT)
-                            * smoothstep(0.98, 0.7, stemAxisT);
-                color *= lerp(1.0, _VeinDarken, vLine * vMask);
-
-
-                // ── Baked vein texture overlay ──
-                if (_VeinTexStrength > 0.001)
-                {
-                    float2 veinUV = wp / (radius * 1.2) * 0.5 + 0.5;
-                    fixed4 veinSample = tex2D(_VeinTex, veinUV);
-                    color *= lerp(1.0, _VeinDarken, _VeinTexStrength * veinSample.a);
-                }
-
                 // ── Hue shift ──
                 color = HueRotate(color, _HueShift);
-
-                // ── Edge browning ──
-                float edgeBrown = smoothstep(0.0, _EdgeBrowningWidth, -d / max(radius, 0.001));
-                color = lerp(_BrowningColor.rgb, color, edgeBrown);
 
                 // ── Alpha + premultiplied output ──
                 float alpha = 1.0 - smoothstep(-_AAWidth, 0.0, d);
@@ -218,4 +123,3 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
         }
     }
 }
-
