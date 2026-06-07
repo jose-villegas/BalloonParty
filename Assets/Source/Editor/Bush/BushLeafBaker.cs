@@ -67,7 +67,7 @@ namespace BalloonParty.Editor.Bush
             material.SetColor(BaseColorId, settings.BaseColor);
             material.SetFloat(EdgeShadeId, settings.EdgeShade);
 
-            material.SetFloat(HueShiftId, (hash - 0.5f) * 2f * settings.HueJitter / 360f);
+            material.SetFloat(HueShiftId, (hash - 0.5f) * 2f * settings.HueJitter * Mathf.Deg2Rad);
         }
 
         private static GameObject CreateBakeCamera(float leafRadius, RenderTexture rt)
@@ -138,3 +138,4 @@ namespace BalloonParty.Editor.Bush
         }
     }
 }
+

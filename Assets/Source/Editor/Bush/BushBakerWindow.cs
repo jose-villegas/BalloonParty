@@ -32,22 +32,22 @@ namespace BalloonParty.Editor.Bush
 
         private void OnGUI()
         {
-            EditorGUI.BeginChangeCheck();
-
             _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+
+            EditorGUI.BeginChangeCheck();
 
             DrawSharedSettings();
             EditorGUILayout.Space(16);
             DrawLeafSection();
-
-            EditorGUILayout.EndScrollView();
 
             if (EditorGUI.EndChangeCheck())
             {
                 State.Save();
             }
 
-            if (State.AutoPreview)
+            EditorGUILayout.EndScrollView();
+
+            if (State.AutoPreview && Event.current.type == EventType.Repaint)
             {
                 CheckAutoPreview();
             }
@@ -131,7 +131,7 @@ namespace BalloonParty.Editor.Bush
                 EditorGUI.indentLevel++;
                 State.LeafSettings.BaseColor = EditorGUILayout.ColorField("Base Color", State.LeafSettings.BaseColor);
                 State.LeafSettings.EdgeShade = EditorGUILayout.Slider("Edge Shade", State.LeafSettings.EdgeShade, 0.4f, 1f);
-                State.LeafSettings.HueJitter = EditorGUILayout.Slider("Hue Jitter (°)", State.LeafSettings.HueJitter, 0f, 30f);
+                State.LeafSettings.HueJitter = EditorGUILayout.Slider("Hue Jitter (°)", State.LeafSettings.HueJitter, 0f, 180f);
                 EditorGUI.indentLevel--;
             }
         }
