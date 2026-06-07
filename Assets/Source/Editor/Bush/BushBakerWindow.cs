@@ -7,7 +7,8 @@ namespace BalloonParty.Editor.Bush
     {
         private const float PreviewCellSize = 80f;
         private const float PreviewPadding = 4f;
-        private const float LivePreviewSize = 220f;
+        private const float PreviewBoxMinSize = 120f;
+        private const float PreviewBoxPadding = 6f;
         private const float PropertiesMinWidth = 280f;
         private const float PropertiesMaxWidth = 420f;
 
@@ -72,15 +73,7 @@ namespace BalloonParty.Editor.Bush
 
             EditorGUI.indentLevel++;
 
-            EditorGUILayout.BeginHorizontal();
-
-            EditorGUILayout.BeginVertical(GUILayout.MinWidth(PropertiesMinWidth), GUILayout.MaxWidth(PropertiesMaxWidth));
-            DrawLeafProperties();
-            EditorGUILayout.EndVertical();
-
-            DrawLeafLivePreview();
-
-            EditorGUILayout.EndHorizontal();
+            DrawPropertiesAndPreview();
 
             EditorGUILayout.Space(8);
 
@@ -134,21 +127,74 @@ namespace BalloonParty.Editor.Bush
                 State.LeafSettings.HueJitter = EditorGUILayout.Slider("Hue Jitter (°)", State.LeafSettings.HueJitter, 0f, 180f);
                 EditorGUI.indentLevel--;
             }
+
+            State.LeafMidribFoldout = EditorGUILayout.Foldout(State.LeafMidribFoldout, "Midrib", true);
+            if (State.LeafMidribFoldout)
+            {
+                EditorGUI.indentLevel++;
+                State.LeafSettings.MidribEnabled = EditorGUILayout.Toggle("Enabled", State.LeafSettings.MidribEnabled);
+
+                using (new EditorGUI.DisabledScope(!State.LeafSettings.MidribEnabled))
+                {
+                    State.LeafSettings.MidribWidth = EditorGUILayout.Slider("Width", State.LeafSettings.MidribWidth, 0.001f, 0.2f);
+                    State.LeafSettings.MidribGradient = EditorGUILayout.GradientField("Gradient", State.LeafSettings.MidribGradient);
+                }
+
+                EditorGUI.indentLevel--;
+            }
         }
 
-        private void DrawLeafLivePreview()
+        private void DrawPropertiesAndPreview()
         {
-            EditorGUILayout.BeginVertical(GUILayout.Width(LivePreviewSize + 8f), GUILayout.ExpandWidth(false));
+            // Measure the properties column height with a throw-away layout pass
+            EditorGUILayout.BeginVertical(GUILayout.MinWidth(PropertiesMinWidth), GUILayout.MaxWidth(PropertiesMaxWidth));
+            DrawLeafProperties();
+            EditorGUILayout.EndVertical();
+
+            // Capture the rect the properties column just occupied
+            var propsRect = GUILayoutUtility.GetLastRect();
+
+            // Preview fills everything to the right of the properties column
+            var previewX = propsRect.xMax + PreviewBoxPadding;
+            var viewWidth = EditorGUIUtility.currentViewWidth - 20f;
+            var previewWidth = viewWidth - previewX;
+
+            if (previewWidth < PreviewBoxMinSize)
+            {
+                return;
+            }
+
+            var previewHeight = Mathf.Max(propsRect.height, PreviewBoxMinSize);
+            var boxRect = new Rect(previewX, propsRect.y, previewWidth, previewHeight);
+
+            GUI.Box(boxRect, GUIContent.none, EditorStyles.helpBox);
+
+            var labelRect = new Rect(boxRect.x, boxRect.y + 2f, boxRect.width, EditorGUIUtility.singleLineHeight);
+            EditorGUI.LabelField(labelRect, "Preview", EditorStyles.centeredGreyMiniLabel);
 
             if (_leafLivePreview != null)
             {
-                EditorGUILayout.LabelField("Preview", EditorStyles.centeredGreyMiniLabel);
-                var rect = GUILayoutUtility.GetRect(LivePreviewSize, LivePreviewSize);
-                rect.width = LivePreviewSize;
-                EditorGUI.DrawTextureTransparent(rect, _leafLivePreview, ScaleMode.ScaleToFit);
-            }
+                var inner = PadRect(boxRect, PreviewBoxPadding);
+                inner.y += EditorGUIUtility.singleLineHeight;
+                inner.height -= EditorGUIUtility.singleLineHeight;
 
-            EditorGUILayout.EndVertical();
+                var size = Mathf.Min(inner.width, inner.height);
+                var centred = new Rect(
+                    inner.x + (inner.width - size) * 0.5f,
+                    inner.y + (inner.height - size) * 0.5f,
+                    size, size);
+
+                EditorGUI.DrawTextureTransparent(centred, _leafLivePreview, ScaleMode.ScaleToFit);
+            }
+        }
+
+        private static Rect PadRect(Rect rect, float padding)
+        {
+            return new Rect(
+                rect.x + padding,
+                rect.y + padding,
+                rect.width - padding * 2f,
+                rect.height - padding * 2f);
         }
 
         private void CheckAutoPreview()
@@ -177,6 +223,35 @@ namespace BalloonParty.Editor.Bush
                 h = h * 31 + State.LeafSettings.BaseColor.GetHashCode();
                 h = h * 31 + State.LeafSettings.EdgeShade.GetHashCode();
                 h = h * 31 + State.LeafSettings.HueJitter.GetHashCode();
+                h = h * 31 + State.LeafSettings.MidribEnabled.GetHashCode();
+                h = h * 31 + State.LeafSettings.MidribWidth.GetHashCode();
+                h = h * 31 + GradientHash(State.LeafSettings.MidribGradient);
+                return h;
+            }
+        }
+
+        private static int GradientHash(Gradient gradient)
+        {
+            if (gradient == null)
+            {
+                return 0;
+            }
+
+            unchecked
+            {
+                var h = 17;
+                foreach (var key in gradient.colorKeys)
+                {
+                    h = h * 31 + key.color.GetHashCode();
+                    h = h * 31 + key.time.GetHashCode();
+                }
+
+                foreach (var key in gradient.alphaKeys)
+                {
+                    h = h * 31 + key.alpha.GetHashCode();
+                    h = h * 31 + key.time.GetHashCode();
+                }
+
                 return h;
             }
         }

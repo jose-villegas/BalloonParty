@@ -20,6 +20,11 @@ namespace BalloonParty.Editor.Bush
         private static readonly int BaseColorId = Shader.PropertyToID("_BaseColor");
         private static readonly int EdgeShadeId = Shader.PropertyToID("_EdgeShade");
         private static readonly int HueShiftId = Shader.PropertyToID("_HueShift");
+        private static readonly int MidribEnabledId = Shader.PropertyToID("_MidribEnabled");
+        private static readonly int MidribWidthId = Shader.PropertyToID("_MidribWidth");
+        private static readonly int MidribGradientId = Shader.PropertyToID("_MidribGradient");
+
+        private const int GradientResolution = 64;
 
         internal static Texture2D BakeLeaf(BushLeafBakeSettings settings, int variantIndex, uint seed)
         {
@@ -38,6 +43,13 @@ namespace BalloonParty.Editor.Bush
             var material = new Material(shader);
             ConfigureMaterial(material, settings, hash);
 
+            Texture2D gradientTex = null;
+            if (settings.MidribEnabled)
+            {
+                gradientTex = BakeGradientTexture(settings.MidribGradient);
+                material.SetTexture(MidribGradientId, gradientTex);
+            }
+
             var cameraGo = CreateBakeCamera(settings.LeafRadius, rt);
             var quadGo = CreateBakeQuad(material, settings.LeafRadius);
 
@@ -47,6 +59,11 @@ namespace BalloonParty.Editor.Bush
 
             Object.DestroyImmediate(quadGo);
             Object.DestroyImmediate(cameraGo);
+            if (gradientTex != null)
+            {
+                Object.DestroyImmediate(gradientTex);
+            }
+
             Object.DestroyImmediate(material);
             RenderTexture.ReleaseTemporary(rt);
 
@@ -68,6 +85,9 @@ namespace BalloonParty.Editor.Bush
             material.SetFloat(EdgeShadeId, settings.EdgeShade);
 
             material.SetFloat(HueShiftId, (hash - 0.5f) * 2f * settings.HueJitter * Mathf.Deg2Rad);
+
+            material.SetFloat(MidribEnabledId, settings.MidribEnabled ? 1f : 0f);
+            material.SetFloat(MidribWidthId, settings.MidribWidth);
         }
 
         private static GameObject CreateBakeCamera(float leafRadius, RenderTexture rt)
@@ -135,6 +155,25 @@ namespace BalloonParty.Editor.Bush
         {
             var combined = seed * 7919u + (uint)variantIndex * 4637u + 31u;
             return (combined % 10007u) / 10007f;
+        }
+
+        private static Texture2D BakeGradientTexture(Gradient gradient)
+        {
+            var tex = new Texture2D(GradientResolution, 1, TextureFormat.RGBA32, false)
+            {
+                wrapMode = TextureWrapMode.Clamp,
+                filterMode = FilterMode.Bilinear
+            };
+
+            var pixels = new Color[GradientResolution];
+            for (var i = 0; i < GradientResolution; i++)
+            {
+                pixels[i] = gradient.Evaluate(i / (float)(GradientResolution - 1));
+            }
+
+            tex.SetPixels(pixels);
+            tex.Apply();
+            return tex;
         }
     }
 }

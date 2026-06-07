@@ -22,6 +22,11 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
 
         [Header(Colour Variation)]
         _HueShift           ("Hue Shift (radians)",  Range(-0.2, 0.2))   = 0.0
+
+        [Header(Midrib)]
+        _MidribEnabled      ("Midrib Enabled",       Float)              = 1.0
+        _MidribWidth        ("Midrib Width",         Range(0.001, 0.2))  = 0.04
+        _MidribGradient     ("Midrib Gradient",      2D)                 = "white" {}
     }
 
     SubShader
@@ -78,6 +83,10 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
 
             float  _HueShift;
 
+            float  _MidribEnabled;
+            float  _MidribWidth;
+            sampler2D _MidribGradient;
+
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
@@ -108,6 +117,21 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                 float edgeT = length(wp - center) / max(radius, 0.001);
                 float radial = smoothstep(1.0, 0.3, edgeT);
                 color *= lerp(_EdgeShade, 1.0, radial);
+
+                // ── Midrib — gradient-driven vein across its width ──
+                // Gradient maps left-to-right: 0% = left edge, 50% = centre, 100% = right edge
+                if (_MidribEnabled > 0.5)
+                {
+                    float2 leafLocal = wp - center;
+                    float2 tang = float2(-leafDir.y, leafDir.x);
+                    float v = dot(leafLocal, tang);
+
+                    // Signed distance mapped to [0,1] across the full vein width
+                    float veinT = saturate(v / max(_MidribWidth, 0.0001) * 0.5 + 0.5);
+
+                    fixed4 grad = tex2D(_MidribGradient, float2(veinT, 0.5));
+                    color = lerp(color, grad.rgb, grad.a);
+                }
 
                 // ── Hue shift ──
                 color = HueRotate(color, _HueShift);

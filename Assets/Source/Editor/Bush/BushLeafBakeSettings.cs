@@ -18,5 +18,28 @@ namespace BalloonParty.Editor.Bush
         [SerializeField] internal Color BaseColor = new(0.25f, 0.55f, 0.15f, 1f);
         [SerializeField] internal float EdgeShade = 0.68f;
         [SerializeField] internal float HueJitter = 10f;
+
+        [SerializeField] internal bool MidribEnabled = true;
+        [SerializeField] internal float MidribWidth = 0.04f;
+        [SerializeField] internal Gradient MidribGradient = DefaultMidribGradient();
+
+        private static Gradient DefaultMidribGradient()
+        {
+            var gradient = new Gradient();
+            gradient.SetKeys(
+                new[]
+                {
+                    new GradientColorKey(new Color(0.10f, 0.28f, 0.05f), 0f),
+                    new GradientColorKey(new Color(0.18f, 0.42f, 0.10f), 0.35f),
+                    new GradientColorKey(new Color(0.25f, 0.55f, 0.15f), 1f)
+                },
+                new[]
+                {
+                    new GradientAlphaKey(0.85f, 0f),
+                    new GradientAlphaKey(0.4f, 0.3f),
+                    new GradientAlphaKey(0f, 1f)
+                });
+            return gradient;
+        }
     }
 }
