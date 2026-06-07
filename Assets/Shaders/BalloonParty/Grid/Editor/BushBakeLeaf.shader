@@ -40,6 +40,8 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
         _LateralSubChance   ("Sub-vein Chance",      Float)              = 0.7
         _LateralSubLengthMin("Sub-vein Length Min",  Float)              = 0.15
         _LateralSubLengthMax("Sub-vein Length Max",  Float)              = 0.4
+        _VeinCurvature      ("Vein Curvature",       Range(0.0, 1.0))    = 0.3
+        _VeinSeed           ("Vein Seed",            Float)              = 0
     }
 
     SubShader
@@ -111,18 +113,21 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
             float  _LateralSubChance;
             float  _LateralSubLengthMin;
             float  _LateralSubLengthMax;
+            float  _VeinCurvature;
+            float  _VeinSeed;
 
-            // Deterministic hash for sub-vein survival
+            // Deterministic hash for vein randomisation, seeded per variant
             float VeinHash(int a, int b, int c)
             {
-                return frac(sin(float(a * 127 + b * 311 + c * 593)) * 43758.5453);
+                return frac(sin(float(a * 127 + b * 311 + c * 593) + _VeinSeed) * 43758.5453);
             }
 
             // Renders a single vein ray and returns the blended colour.
             // fadeInAmount: 0 = no origin fade (emerges from parent), 1 = full fade-in
             fixed3 ApplyVein(fixed3 col, float2 leafLocal, float2 origin,
                              float2 dir, float2 perp, float veinWidth,
-                             float fadeLen, sampler2D gradTex, float fadeInAmount)
+                             float fadeLen, sampler2D gradTex, float fadeInAmount,
+                             float radius, float gM, float gN1, float gN2, float gN3)
             {
                 float2 toFrag = leafLocal - origin;
                 float along = dot(toFrag, dir);
@@ -140,7 +145,16 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                     float taper = originTaper * lerp(1.0, 0.4, progress);
                     float taperW = veinWidth * taper;
 
-                    float perpDist = dot(toFrag, perp);
+                    // Shape-adaptive curvature: sample the Gielis boundary at
+                    // the vein's straight-line position and offset toward it.
+                    float2 straightPos = origin + dir * along;
+                    float theta = atan2(straightPos.x, straightPos.y);
+                    float boundary = radius * GielisRadius(theta, gM, gN1, gN2, gN3);
+                    float2 boundaryPt = float2(sin(theta), cos(theta)) * boundary;
+                    float2 toBoundary = boundaryPt - straightPos;
+                    float curveOffset = dot(toBoundary, perp) * _VeinCurvature * progress;
+
+                    float perpDist = dot(toFrag, perp) - curveOffset;
                     float latT = saturate(perpDist / max(taperW, 0.0001) * 0.5 + 0.5);
                     fixed4 g = tex2D(gradTex, float2(latT, 0.5));
                     col = lerp(col, g.rgb, g.a * fade);
@@ -225,12 +239,14 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                             // Primary left lateral
                             color = ApplyVein(color, leafLocal, veinOrigin,
                                               leftDir, leftPerp, _LateralWidth,
-                                              fadeLenL, _MidribGradient, 0);
+                                              fadeLenL, _MidribGradient, 0,
+                                              radius, _GielisM, _GielisN1, _GielisN2, _GielisN3);
 
                             // Primary right lateral
                             color = ApplyVein(color, leafLocal, veinOrigin,
                                               rightDir, rightPerp, _LateralWidth,
-                                              fadeLenR, _MidribGradient, 0);
+                                              fadeLenR, _MidribGradient, 0,
+                                              radius, _GielisM, _GielisN1, _GielisN2, _GielisN3);
 
                             // ── Sub-veins branching from this lateral pair ──
                             // Compute sub-vein directions from this lateral's angle
@@ -273,13 +289,15 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                                 {
                                     color = ApplyVein(color, leafLocal, subOriginL,
                                                       subLL_dir, subLL_perp, subWidth,
-                                                      subFadeLL, _MidribGradient, 1);
+                                                      subFadeLL, _MidribGradient, 1,
+                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3);
                                 }
                                 if (VeinHash(i, j, 2) < _LateralSubChance)
                                 {
                                     color = ApplyVein(color, leafLocal, subOriginL,
                                                       subLR_dir, subLR_perp, subWidth,
-                                                      subFadeLR, _MidribGradient, 1);
+                                                      subFadeLR, _MidribGradient, 1,
+                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3);
                                 }
 
                                 // Right lateral → two sub-veins (each side of parent)
@@ -287,13 +305,15 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                                 {
                                     color = ApplyVein(color, leafLocal, subOriginR,
                                                       subRL_dir, subRL_perp, subWidth,
-                                                      subFadeRL, _MidribGradient, 1);
+                                                      subFadeRL, _MidribGradient, 1,
+                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3);
                                 }
                                 if (VeinHash(i, j, 3) < _LateralSubChance)
                                 {
                                     color = ApplyVein(color, leafLocal, subOriginR,
                                                       subRR_dir, subRR_perp, subWidth,
-                                                      subFadeRR, _MidribGradient, 1);
+                                                      subFadeRR, _MidribGradient, 1,
+                                                      radius, _GielisM, _GielisN1, _GielisN2, _GielisN3);
                                 }
                             }
                         }

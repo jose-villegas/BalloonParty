@@ -34,6 +34,8 @@ namespace BalloonParty.Editor.Bush
         private static readonly int LateralSubChanceId = Shader.PropertyToID("_LateralSubChance");
         private static readonly int LateralSubLengthMinId = Shader.PropertyToID("_LateralSubLengthMin");
         private static readonly int LateralSubLengthMaxId = Shader.PropertyToID("_LateralSubLengthMax");
+        private static readonly int VeinCurvatureId = Shader.PropertyToID("_VeinCurvature");
+        private static readonly int VeinSeedId = Shader.PropertyToID("_VeinSeed");
 
         private const int GradientResolution = 64;
 
@@ -111,6 +113,8 @@ namespace BalloonParty.Editor.Bush
             material.SetFloat(LateralSubChanceId, settings.LateralSubChance);
             material.SetFloat(LateralSubLengthMinId, settings.LateralSubLength.x);
             material.SetFloat(LateralSubLengthMaxId, settings.LateralSubLength.y);
+            material.SetFloat(VeinCurvatureId, settings.VeinCurvature);
+            material.SetFloat(VeinSeedId, hash * 1000f);
         }
 
         private static GameObject CreateBakeCamera(float leafRadius, RenderTexture rt)

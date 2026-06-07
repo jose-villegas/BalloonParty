@@ -121,7 +121,7 @@ veins into a RenderTexture that is read back to Texture2D for atlas packing.
    - Gradient baked to a 64×1 texture, sampled in the shader
 6. ✅ **Lateral veins** — mirrored pairs branching diagonally from the midrib
    - Count: number of vein pairs (0–8)
-   - Angle: diagonal angle from the midrib axis (degrees)
+   - Angle: min/max range (degrees), randomised per lateral via deterministic hash
    - Width Ratio: lateral width as fraction of midrib width
    - Start: where along the midrib the first pair originates (-1 to 0.5)
    - Length: min/max range, randomised per vein via deterministic hash;
@@ -139,8 +139,18 @@ veins into a RenderTexture that is read back to Texture2D for atlas packing.
    - Half-width of parent, smooth fade-in at origin for seamless blending
    - Each vein (left/right lateral, each sub-vein direction) gets an
      independent random length via unique hash seeds
-8. ✅ **Shared MinMaxSlider** — reusable `PropertyDrawerHelper.DrawMinMaxSlider`
+8. ✅ **Preview seed** — 🎲 button in preview box randomises the seed,
+   changing Gielis jitter, hue shift, and vein variation per click
+9. ✅ **Shared MinMaxSlider** — reusable `PropertyDrawerHelper.DrawMinMaxSlider`
    (rect-based) and `DrawMinMaxSliderLayout` (layout-based) in `Source/Editor/`
+10. ✅ **Curved veins** — parabolic curvature bends laterals and sub-veins
+    toward the leaf tip, matching natural pinnate venation
+    - Curvature parameter (0 = straight, 1 = max bend)
+    - Bend direction computed automatically from the vein's angle relative
+      to the leaf axis — left laterals curve left-toward-tip, right laterals
+      curve right-toward-tip
+    - Offset scales with `progress²` for a smooth parabolic arc
+    - Applies to both primary laterals and recursive sub-veins
 
 ### Leaf feature backlog (add one at a time)
 

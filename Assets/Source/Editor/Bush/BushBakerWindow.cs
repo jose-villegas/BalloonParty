@@ -14,6 +14,8 @@ namespace BalloonParty.Editor.Bush
 
         private Texture2D[] _leafPreviews;
         private Texture2D _leafLivePreview;
+        private bool _livePreviewOwned = true;
+        private int _selectedVariant = -1;
         private Vector2 _scrollPosition;
         private int _lastLeafHash;
 
@@ -152,6 +154,9 @@ namespace BalloonParty.Editor.Bush
                     State.LeafSettings.LateralSubCount = EditorGUILayout.IntSlider("Per Lateral", State.LeafSettings.LateralSubCount, 0, 4);
                     State.LeafSettings.LateralSubChance = EditorGUILayout.Slider("Survival Chance", State.LeafSettings.LateralSubChance, 0f, 1f);
                     PropertyDrawerHelper.DrawMinMaxSliderLayout("Length", ref State.LeafSettings.LateralSubLength, 0.05f, 1f);
+
+                    EditorGUILayout.Space(4);
+                    State.LeafSettings.VeinCurvature = EditorGUILayout.Slider("Curvature", State.LeafSettings.VeinCurvature, 0f, 1f);
                 }
 
                 EditorGUI.indentLevel--;
@@ -227,8 +232,10 @@ namespace BalloonParty.Editor.Bush
             if (leafHash != _lastLeafHash)
             {
                 _lastLeafHash = leafHash;
+                _selectedVariant = -1;
                 DestroyLeafLivePreview();
                 _leafLivePreview = BushLeafBaker.BakeLeaf(State.LeafSettings, 0, State.PreviewSeed);
+                _livePreviewOwned = true;
                 Repaint();
             }
         }
@@ -259,6 +266,7 @@ namespace BalloonParty.Editor.Bush
                 h = h * 31 + State.LeafSettings.LateralSubCount.GetHashCode();
                 h = h * 31 + State.LeafSettings.LateralSubChance.GetHashCode();
                 h = h * 31 + State.LeafSettings.LateralSubLength.GetHashCode();
+                h = h * 31 + State.LeafSettings.VeinCurvature.GetHashCode();
                 return h;
             }
         }
@@ -297,14 +305,17 @@ namespace BalloonParty.Editor.Bush
             }
 
             EditorGUILayout.Space(8);
+
+            EditorGUILayout.BeginVertical(EditorStyles.helpBox);
             EditorGUILayout.LabelField("All Variants", EditorStyles.miniLabel);
 
-            var totalWidth = EditorGUIUtility.currentViewWidth - 20f;
+            var totalWidth = EditorGUIUtility.currentViewWidth - 36f;
             var cols = Mathf.Max(1, Mathf.FloorToInt(totalWidth / (PreviewCellSize + PreviewPadding)));
+            var rows = Mathf.CeilToInt((float)_leafPreviews.Length / cols);
 
             var startRect = GUILayoutUtility.GetRect(
                 totalWidth,
-                Mathf.CeilToInt((float)_leafPreviews.Length / cols) * (PreviewCellSize + PreviewPadding));
+                rows * (PreviewCellSize + PreviewPadding));
 
             for (var i = 0; i < _leafPreviews.Length; i++)
             {
@@ -322,11 +333,24 @@ namespace BalloonParty.Editor.Bush
                     PreviewCellSize);
 
                 EditorGUI.DrawPreviewTexture(rect, _leafPreviews[i], null, ScaleMode.ScaleToFit);
+
+                var labelText = _selectedVariant == i ? $"► #{i}" : $"#{i}";
                 EditorGUI.DropShadowLabel(
                     new Rect(rect.x, rect.yMax - 16, rect.width, 16),
-                    $"#{i}",
+                    labelText,
                     EditorStyles.miniLabel);
+
+                if (GUI.Button(rect, GUIContent.none, GUIStyle.none))
+                {
+                    _selectedVariant = i;
+                    DestroyLeafLivePreview();
+                    _leafLivePreview = _leafPreviews[i];
+                    _livePreviewOwned = false;
+                    Repaint();
+                }
             }
+
+            EditorGUILayout.EndVertical();
         }
 
         private void GenerateLeafPreviews()
@@ -363,6 +387,14 @@ namespace BalloonParty.Editor.Bush
                 return;
             }
 
+            if (!_livePreviewOwned)
+            {
+                _leafLivePreview = null;
+                _livePreviewOwned = true;
+            }
+
+            _selectedVariant = -1;
+
             foreach (var tex in _leafPreviews)
             {
                 if (tex != null)
@@ -376,11 +408,13 @@ namespace BalloonParty.Editor.Bush
 
         private void DestroyLeafLivePreview()
         {
-            if (_leafLivePreview != null)
+            if (_leafLivePreview != null && _livePreviewOwned)
             {
                 DestroyImmediate(_leafLivePreview);
-                _leafLivePreview = null;
             }
+
+            _leafLivePreview = null;
+            _livePreviewOwned = true;
         }
     }
 }
