@@ -227,33 +227,36 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                 float inPetiole = 0;
                 float petioleAlpha = 0;
                 float2 petioleBasePoint = float2(0, 0);
+                float petioleCurrentWidth = 0;
                 if (_PetioleEnabled > 0.5)
                 {
-                    // Find the leaf boundary at the bottom (angle π → direction (0, -1))
                     float bottomR = radius * GielisRadius(3.14159, _GielisM, _GielisN1, _GielisN2, _GielisN3);
                     petioleBasePoint = float2(0, -bottomR);
                     float petioleEnd = -bottomR - _PetioleLength;
 
-                    // Fragment is in petiole region if below the leaf base
+                    // Overlap a small amount into the leaf so the stem blends under the midrib
+                    float overlap = _MidribWidth * 2.0;
                     float py = wp.y;
-                    if (py < -bottomR + _AAWidth && py > petioleEnd - _AAWidth)
+
+                    if (py < -bottomR + overlap && py > petioleEnd - _AAWidth)
                     {
-                        // Progress along petiole: 0 at leaf base, 1 at tip
                         float progress = saturate((-bottomR - py) / max(_PetioleLength, 0.001));
 
-                        // Tapered width: full at base, narrows toward tip
-                        float currentWidth = _PetioleWidth * lerp(1.0, 1.0 - _PetioleTaper, progress);
+                        // Tapered width
+                        petioleCurrentWidth = _PetioleWidth * lerp(1.0, 1.0 - _PetioleTaper, progress);
 
-                        // Perpendicular distance from petiole centre line
                         float px = abs(wp.x);
-                        float petioleDist = px - currentWidth;
+                        float petioleDist = px - petioleCurrentWidth;
 
                         if (petioleDist < _AAWidth)
                         {
                             inPetiole = 1;
                             petioleAlpha = 1.0 - smoothstep(-_AAWidth, 0.0, petioleDist);
-                            // Smooth join at the leaf base
+                            // Fade at the tip
                             petioleAlpha *= smoothstep(petioleEnd, petioleEnd + _AAWidth * 2.0, py);
+                            // Fade in the overlap zone inside the leaf
+                            float insideLeaf = saturate((py - (-bottomR)) / max(overlap, 0.001));
+                            petioleAlpha *= 1.0 - insideLeaf * insideLeaf;
                         }
                     }
                 }
@@ -263,10 +266,15 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
 
                 fixed3 color = _BaseColor.rgb;
 
-                // ── Dome shading — simple radial darkening at edges ──
+                // ── Dome shading — radial darkening at edges ──
+                // Reduced along midrib axis so veins stay bright to the leaf base
                 float edgeT = length(wp - center) / max(radius, 0.001);
                 float radial = smoothstep(1.0, 0.3, edgeT);
-                color *= lerp(_EdgeShade, 1.0, radial);
+                float shade = lerp(_EdgeShade, 1.0, radial);
+                // Lighten near the midrib center line so it stays strong at the base
+                float midribProximity = saturate(1.0 - abs(wp.x) / max(_MidribWidth * 4.0, 0.001));
+                shade = lerp(shade, 1.0, midribProximity * 0.5);
+                color *= shade;
 
                 // ── Vein presence tracker for reticulate suppression ──
                 float veinPresence = 0;
@@ -480,12 +488,19 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                 // ── Alpha + premultiplied output ──
                 float leafAlpha = inLeaf ? (1.0 - smoothstep(-_AAWidth, 0.0, d)) : 0.0;
 
-                // Petiole: use midrib gradient centre colour, darkened slightly
+                // Petiole: use same gradient cross-section as midrib for seamless blend
                 if (inPetiole > 0.5)
                 {
-                    fixed4 petioleGrad = tex2D(_MidribGradient, float2(0.5, 0.5));
-                    fixed3 petioleColor = petioleGrad.rgb * 0.85;
-                    // Blend petiole under the leaf where they overlap
+                    // Sample gradient across petiole width (same as midrib)
+                    float petioleT = saturate(wp.x / max(petioleCurrentWidth, 0.0001) * 0.5 + 0.5);
+                    fixed4 pGrad = tex2D(_MidribGradient, float2(petioleT, 0.5));
+
+                    // Darken along length — strongest at base, deeper toward tip
+                    float petioleProgress = saturate((-petioleBasePoint.y - wp.y) / max(_PetioleLength, 0.001));
+                    float stemDarken = lerp(0.92, 0.75, petioleProgress);
+                    fixed3 petioleColor = pGrad.rgb * stemDarken;
+
+                    // Full opacity where petiole is present
                     float petioleContrib = petioleAlpha * (1.0 - leafAlpha);
                     color = color * leafAlpha + petioleColor * petioleContrib;
                     leafAlpha = saturate(leafAlpha + petioleContrib);

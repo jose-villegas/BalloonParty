@@ -15,10 +15,10 @@
 |---|---|---|
 | **0** | Cluster infrastructure (shared with Puff) | ✅ Done |
 | **1** | Leaf baking — Gielis SDF + vein system | 🔨 **Current** |
-| **2** | Skeleton generation + `DrawMeshInstanced` rendering | ⬜ Next |
+| **2** | Skeleton generation + branch & leaf `DrawMeshInstanced` rendering | ⬜ Next |
 | **3** | Wind animation (idle) | ⬜ Planned |
 | **4** | Rattle (disturbed state) | ⬜ Planned |
-| **5** | Visual polish (branches, shadows, sorting) | ⬜ Planned |
+| **5** | Visual polish (shadows, sorting, bark texture) | ⬜ Planned |
 
 ---
 
@@ -63,11 +63,14 @@ BushSkeletonAnimator (ITickable)
     ▼
 BushView : ClusterView
     │  OnConfigured: generates skeleton data per slot
-    │  LateUpdate: calls Graphics.DrawMeshInstanced(quadMesh, leafMaterial, matrices)
-    │  One draw call renders ALL leaves in the cluster
+    │  LateUpdate: calls Graphics.DrawMeshInstanced twice:
+    │    1. Branch quads (unit tapered quad × branch matrices)
+    │    2. Leaf quads (unit quad × leaf matrices)
+    │  Two draw calls render ALL branches + leaves in the cluster
     │
     ▼
-No per-leaf GameObjects. No Transform hierarchy. Pure math → GPU instancing.
+No per-leaf or per-branch GameObjects. No Transform hierarchy.
+Pure math → GPU instancing.
 ```
 
 ---
@@ -99,9 +102,9 @@ that is read back to Texture2D for atlas packing.
 
 | File | Location | Role |
 |---|---|---|
-| `BushBakeLeaf.shader` | `Shaders/.../Editor/` | Gielis SDF, dome shading, hue jitter, AA alpha, palmate midribs, lateral veins, venules, reticulate |
-| `BushLeafBaker.cs` | `Source/Editor/Bush/` | Offscreen camera bake pipeline, gradient texture baking |
-| `BushLeafBakeSettings.cs` | `Source/Editor/Bush/` | All bake parameters (shape, surface, midrib, laterals, venules, reticulate) |
+| `BushBakeLeaf.shader` | `Shaders/.../Editor/` | Gielis SDF, dome shading, hue jitter, AA alpha, palmate midribs, lateral veins, venules, reticulate, petiole |
+| `BushLeafBaker.cs` | `Source/Editor/Bush/` | Offscreen camera bake pipeline, gradient texture baking, camera sizing for petiole |
+| `BushLeafBakeSettings.cs` | `Source/Editor/Bush/` | All bake parameters (shape, surface, midrib, laterals, venules, reticulate, petiole) |
 | `BushBakerWindow.cs` | `Source/Editor/Bush/` | Editor window: properties panel + live preview box, export |
 | `BushBakerState.cs` | `Source/Editor/Bush/` | Persisted editor state (foldouts, settings, output path, preview seed) |
 | `LeafAtlasPacker.cs` | `Source/Editor/Bush/` | Packs leaf variants into sprite atlas |
@@ -112,7 +115,9 @@ that is read back to Texture2D for atlas packing.
 
 1. ✅ **Gielis SDF shape** — superformula boundary with per-variant jitter
    on m, n1, n2, n3 via seed-driven hash
-2. ✅ **Dome shading** — radial darkening at edges, controllable via Edge Shade
+2. ✅ **Dome shading** — radial darkening at edges, controllable via Edge Shade;
+   reduced along midrib axis so the central vein stays bright at the leaf
+   base, creating a natural connection to the petiole
 3. ✅ **Hue jitter** — per-variant hue rotation in degrees
 4. ✅ **AA alpha** — smoothstep anti-aliased edge with configurable width
 5. ✅ **Palmate midrib** — gradient-driven central vein(s) adapting to lobe count
@@ -155,14 +160,21 @@ that is read back to Texture2D for atlas packing.
     - Suppressed near all veins via `veinPresence` tracker
     - Fades near leaf edge via SDF distance
     - Controls: Enabled, Density (5–60), Width, Opacity, Angle (°)
-11. ✅ **Unified vein seed** — `_VeinSeed` uniform derived from the variant
+11. ✅ **Petiole** — leaf stem extending from the bottommost Gielis boundary
+    - Samples `GielisRadius(π)` to find the leaf base point
+    - Overlaps slightly into the leaf (2× midrib width) for seamless blending
+    - Uses midrib gradient cross-section for colour; darkens toward tip
+    - Tapered width: configurable -1 to 1 (flared to pointed)
+    - Length, Width, Taper controls in a dedicated Petiole foldout
+    - Bake camera auto-expands to fit the petiole when enabled
+12. ✅ **Unified vein seed** — `_VeinSeed` uniform derived from the variant
     hash feeds into `VeinHash()`, so randomising the preview seed also
     reshuffles vein angles, lengths, and venule survival patterns
-12. ✅ **Preview seed** — 🎲 button in preview box randomises the seed,
+13. ✅ **Preview seed** — 🎲 button in preview box randomises the seed,
     changing shape, hue, and full vein hierarchy per click
-13. ✅ **Clickable variant grid** — variant thumbnails in a HelpBox; clicking
+14. ✅ **Clickable variant grid** — variant thumbnails in a HelpBox; clicking
     any variant displays it in the live preview box with a `►` selection marker
-14. ✅ **Shared MinMaxSlider** — reusable `PropertyDrawerHelper.DrawMinMaxSlider`
+15. ✅ **Shared MinMaxSlider** — reusable `PropertyDrawerHelper.DrawMinMaxSlider`
     (rect-based) and `DrawMinMaxSliderLayout` (layout-based) in `Source/Editor/`
 
 ### Leaf feature backlog (add one at a time)
@@ -180,19 +192,20 @@ hash (scaled) is passed as `_VeinSeed` so vein randomisation is coupled
 to the variant identity.
 
 The midrib gradient is baked from Unity's `Gradient` to a 64×1 RGBA texture
-at bake time, passed as `_MidribGradient`. All vein levels reuse the same
-texture. Cleaned up after each bake.
+at bake time, passed as `_MidribGradient`. All vein levels and the petiole
+reuse the same texture. Cleaned up after each bake.
 
-All loops in the shader use `[loop]` attributes to prevent Metal from
-attempting to unroll the triply-nested vein hierarchy (6 midribs × 8
-laterals × 4 venules). Up to 64 variants supported.
+When petiole is enabled, the bake camera ortho size and quad scale expand
+to fit the stem below the leaf. All loops in the shader use `[loop]`
+attributes to prevent Metal from attempting to unroll the triply-nested
+vein hierarchy (6 midribs × 8 laterals × 4 venules). Up to 64 variants.
 
 ### Editor window layout
 
 The Bush Baker window (`Tools > Bush Baker`) has:
 - **Properties panel** (left, 280–420px) with foldable sections:
   Gielis Superformula, Surface, Midrib (including Lateral Veins,
-  Venules, and Reticulate sub-sections)
+  Venules, and Reticulate sub-sections), Petiole
 - **Live preview box** (right, fills remaining space) — rect-based layout
   that occupies all horizontal space right of the properties column,
   matching its full height. Texture is centred and aspect-fitted inside
@@ -221,7 +234,7 @@ When continuing leaf baking work, read:
 
 ---
 
-## Phase 2 — Skeleton + DrawMeshInstanced Rendering
+## Phase 2 — Skeleton + Branch & Leaf Rendering
 
 ### Branch structure (plain C# data)
 
@@ -232,7 +245,8 @@ internal struct BranchNode
     internal Vector2 LocalOffset;       // offset from parent tip
     internal float Length;
     internal float BaseAngle;           // rest angle relative to parent
-    internal float Width;               // visual thickness (for branch rendering)
+    internal float BaseWidth;           // width at the branch base
+    internal float TipWidth;            // width at the branch tip (taper)
     internal int Depth;                 // 0 = trunk, 1 = primary, 2 = secondary
     internal int FirstLeafIndex;        // index into leaf array (-1 if none)
     internal int LeafCount;
@@ -258,7 +272,115 @@ internal struct LeafInstance
 - **Leaves** — 2-3 per terminal branch, small fan arrangement
 - **Randomisation** — seed-driven jitter on angles, lengths, counts
 
-### Rendering via DrawMeshInstanced
+### Branch rendering — procedural mesh per cluster
+
+Each branch segment is a **tapered quad** (trapezoid) connecting the parent
+tip to the child tip. The four vertices are placed at perpendicular offsets
+from the branch line using `BaseWidth` at the base and `TipWidth` at the tip.
+All branch quads for a cluster are combined into a **single procedural mesh**,
+rebuilt only on skeleton generation (not per frame).
+
+```
+          TipWidth
+       ┌────────────┐  ← branch tip (toward leaves)
+      ╱              ╲
+     ╱                ╲    ← tapered quad (2 triangles)
+    ╱                  ╲
+   └────────────────────┘  ← branch base (toward parent)
+          BaseWidth
+```
+
+#### Mesh structure
+
+```csharp
+// Per branch segment: 4 vertices, 2 triangles (6 indices)
+// Vertices in local branch space, transformed to world during generation:
+//   v0 = base - perpendicular × baseWidth/2
+//   v1 = base + perpendicular × baseWidth/2
+//   v2 = tip  + perpendicular × tipWidth/2
+//   v3 = tip  - perpendicular × tipWidth/2
+//
+// UVs: v along branch length (0=base, 1=tip), u across width (0,1)
+// Vertex color: brown tint with slight per-branch variation
+```
+
+- **One `Mesh`** per cluster — all branch segments baked in
+- **One draw call** via `MeshFilter` + `MeshRenderer` on the `BushView`
+- **Rebuilt on generation only** — vertex positions are in world space
+  at generation time; animation transforms the mesh via per-vertex
+  bone-like indices stored in UV2 (branch index) so the animator can
+  rewrite vertex positions each frame
+
+#### Animation-time vertex update
+
+During wind/rattle (Phases 3-4), branch angles change each frame. Two
+strategies, pick one during implementation:
+
+1. **Matrix approach** — store branch index in UV2, use
+   `Mesh.vertices` rewrite each frame from the animator's computed
+   branch world matrices. ~4 vertices × ~8 branches = ~32 vertex
+   writes per bush. Cheap enough for mobile.
+
+2. **Transform approach** — render branches via `DrawMeshInstanced`
+   with a unit tapered-quad mesh and one `Matrix4x4` per branch
+   segment. Avoids vertex rewrite but needs a branch material with
+   instancing. Slightly more draw calls if branch and leaf materials
+   differ (2 per cluster instead of 1).
+
+Recommendation: **option 2** (`DrawMeshInstanced` with unit branch quad)
+keeps the same pattern as leaves, avoids CPU vertex manipulation, and
+scales cleanly. The extra draw call (branches + leaves = 2 per cluster)
+is negligible.
+
+#### Unit branch quad mesh
+
+A shared unit quad with built-in taper, scaled per branch via its
+`Matrix4x4`:
+
+```csharp
+// Unit branch quad: height = 1 (along local Y), width tapers from
+// BaseWidth at y=0 to TipWidth at y=1. Since width varies per branch,
+// encode taper as a uniform or use two draws (base-heavy vs tip-heavy).
+//
+// Simpler: use a unit rectangle (1×1) and let the matrix handle
+// width + length. Taper is applied by scaling x differently at
+// base vs tip — requires a 2-bone or shader-driven approach.
+```
+
+Practical solution: **generate a shared tapered quad mesh at startup**
+with a configurable taper ratio. Since all branches share a similar
+taper profile (controlled by depth), 2-3 mesh variants (trunk, primary,
+secondary) suffice.
+
+```csharp
+// BranchQuadFactory — creates a unit tapered quad mesh
+internal static Mesh CreateBranchQuad(float tipWidthRatio)
+{
+    // tipWidthRatio: 0 = pointed, 1 = rectangle
+    // height = 1 along Y, base width = 1, tip width = tipWidthRatio
+    // 4 verts, 2 tris
+}
+```
+
+#### Branch material
+
+- Simple unlit shader: solid colour from vertex color, optional subtle
+  bark texture
+- GPU instancing **enabled** — no MPB needed, colour comes from
+  vertex colour baked into the mesh or instancing buffer
+- Same sorting layer as leaves, but lower sorting order so branches
+  render behind leaves
+
+#### Branch visual parameters (in `IBushSettings`)
+
+```csharp
+float BranchTrunkWidth { get; }         // world-space width of the trunk
+float BranchTaperRatio { get; }         // tip/base width ratio (0.3–0.7)
+Color BranchColor { get; }              // base bark colour
+float BranchColorVariation { get; }     // per-branch hue/value jitter
+```
+
+### Leaf rendering via DrawMeshInstanced
 
 ```csharp
 // In BushView.LateUpdate or a dedicated render callback:
@@ -277,18 +399,35 @@ Graphics.DrawMeshInstanced(
 - **Per-instance color** for hue variation via instancing buffer
 - Skeleton hierarchy exists only as index relationships in the `BranchNode[]`
 
+### Draw call budget (updated)
+
+| Element | Method | Calls per cluster |
+|---|---|---|
+| Branches | `DrawMeshInstanced` (unit branch quads) | 1 |
+| Leaves | `DrawMeshInstanced` (unit leaf quads) | 1 |
+| **Total** | | **2** |
+
 ### Matrix computation (per frame)
 
 ```
 For each branch (depth-first, parent before children):
     branchWorldMatrix = parentWorldMatrix × TRS(offset, currentAngle, 1)
+    branchRenderMatrix = branchWorldMatrix × TRS(0, 0, (length, width, 1))
+    branchMatrices[branchIndex] = branchRenderMatrix
 
     For each leaf on this branch:
         leafWorldMatrix = branchWorldMatrix × TRS(leafOffset, leafAngle, leafScale)
-        matrices[leafIndex] = leafWorldMatrix
+        leafMatrices[leafIndex] = leafWorldMatrix
 ```
 
 ~12-18 matrix multiplies per bush. Trivially cheap.
+
+### Render order & sorting
+
+- Branches render **behind** leaves within the same sorting layer
+- Branch sorting order = base offset (from cluster slot)
+- Leaf sorting order = base offset + depth within the branch
+- Both use the sorting layer from `IBushSettings.SortingLayerId`
 
 ### Session context for Phase 2
 
@@ -349,10 +488,10 @@ No DOTween needed — simple spring physics in the animator tick.
 
 ## Phase 5 — Visual Polish
 
-- **Branch lines** — optional thin quads via `DrawMeshInstanced`
 - **Ground shadow** — simple dark ellipse sprite under root
-- **Sorting** — leaf matrix order controls painter's algorithm
+- **Sorting refinement** — leaf matrix order controls painter's algorithm
 - **Leaf overlap** — randomise sort within tip clusters
+- **Branch texture** — optional bark texture on branch material
 
 ---
 
@@ -360,8 +499,8 @@ No DOTween needed — simple spring physics in the animator tick.
 
 | Metric | Per bush | Per cluster (4 slots) | 3 clusters |
 |---|---|---|---|
-| GameObjects | 0 leaves | 0 leaves | 0 leaves |
-| Draw calls | 1 | 1 | 3 |
+| GameObjects | 0 leaves, 0 branches | 0 leaves, 0 branches | 0 |
+| Draw calls | 2 (branches + leaves) | 2 | 6 |
 | Matrices | ~15 | ~60 | ~180 |
 | Per-frame math | ~15 sin + mul | ~60 sin + mul | ~180 sin + mul |
 
@@ -370,8 +509,9 @@ Comparison with previous approaches:
 | | SDF shader | SpriteRenderer/leaf | DrawMeshInstanced |
 |---|---|---|---|
 | Fragment cost | ~100 SDF evals | 1 tex fetch | 1 tex fetch |
-| Draw calls/cluster | 1 (heavy) | ~8-12 | **1** |
+| Draw calls/cluster | 1 (heavy) | ~8-12 | **2** |
 | Leaf GameObjects | 0 | ~24-45 | **0** |
+| Branch GameObjects | 0 | N/A | **0** |
 | Animation | SDF warp | DOTween tweens | **Pure math** |
 
 ---
