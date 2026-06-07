@@ -30,13 +30,16 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
 
         [Header(Lateral Veins)]
         _LateralCount       ("Lateral Pair Count",   Float)              = 4
-        _LateralAngle       ("Lateral Angle (rad)",  Float)              = 0.785
+        _LateralAngleMin    ("Lateral Angle Min (rad)", Float)             = 0.698
+        _LateralAngleMax    ("Lateral Angle Max (rad)", Float)             = 1.047
         _LateralWidth       ("Lateral Width",        Float)              = 0.024
         _LateralStart       ("Lateral Start",        Float)              = -0.6
-        _LateralLength      ("Lateral Length",       Float)              = 0.7
+        _LateralLengthMin   ("Lateral Length Min",   Float)              = 0.4
+        _LateralLengthMax   ("Lateral Length Max",   Float)              = 0.8
         _LateralSubCount    ("Sub-vein Count",       Float)              = 2
         _LateralSubChance   ("Sub-vein Chance",      Float)              = 0.7
-        _LateralSubLength   ("Sub-vein Length",      Float)              = 0.35
+        _LateralSubLengthMin("Sub-vein Length Min",  Float)              = 0.15
+        _LateralSubLengthMax("Sub-vein Length Max",  Float)              = 0.4
     }
 
     SubShader
@@ -98,13 +101,16 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
             sampler2D _MidribGradient;
 
             float  _LateralCount;
-            float  _LateralAngle;
+            float  _LateralAngleMin;
+            float  _LateralAngleMax;
             float  _LateralWidth;
             float  _LateralStart;
-            float  _LateralLength;
+            float  _LateralLengthMin;
+            float  _LateralLengthMax;
             float  _LateralSubCount;
             float  _LateralSubChance;
-            float  _LateralSubLength;
+            float  _LateralSubLengthMin;
+            float  _LateralSubLengthMax;
 
             // Deterministic hash for sub-vein survival
             float VeinHash(int a, int b, int c)
@@ -113,20 +119,30 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
             }
 
             // Renders a single vein ray and returns the blended colour.
-            // dir = vein direction, perp = perpendicular across width,
-            // origin = vein origin in leaf-local space.
+            // fadeInAmount: 0 = no origin fade (emerges from parent), 1 = full fade-in
             fixed3 ApplyVein(fixed3 col, float2 leafLocal, float2 origin,
                              float2 dir, float2 perp, float veinWidth,
-                             float fadeLen, sampler2D gradTex)
+                             float fadeLen, sampler2D gradTex, float fadeInAmount)
             {
                 float2 toFrag = leafLocal - origin;
                 float along = dot(toFrag, dir);
                 if (along > 0)
                 {
+                    float progress = along / max(fadeLen, 0.001);
+
+                    // Fade in at origin (lerp between instant and smooth based on fadeInAmount)
+                    float fadeIn  = lerp(1.0, smoothstep(0.0, 0.15, progress), fadeInAmount);
+                    float fadeOut = 1.0 - smoothstep(0.8, 1.0, progress);
+                    float fade = fadeIn * fadeOut;
+
+                    // Taper width: narrow at tip, optionally at origin
+                    float originTaper = lerp(1.0, fadeIn, fadeInAmount);
+                    float taper = originTaper * lerp(1.0, 0.4, progress);
+                    float taperW = veinWidth * taper;
+
                     float perpDist = dot(toFrag, perp);
-                    float latT = saturate(perpDist / max(veinWidth, 0.0001) * 0.5 + 0.5);
+                    float latT = saturate(perpDist / max(taperW, 0.0001) * 0.5 + 0.5);
                     fixed4 g = tex2D(gradTex, float2(latT, 0.5));
-                    float fade = 1.0 - saturate(along / max(fadeLen, 0.001));
                     col = lerp(col, g.rgb, g.a * fade);
                 }
                 return col;
@@ -182,37 +198,7 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                     int subCount = (int)_LateralSubCount;
                     if (count > 0)
                     {
-                        float sa, ca;
-                        sincos(_LateralAngle, sa, ca);
-                        float2 leftDir  = float2(-sa, ca);
-                        float2 rightDir = float2( sa, ca);
-                        float2 leftPerp  = float2(-ca, -sa);
-                        float2 rightPerp = float2(-ca,  sa);
-
-                        float fadeLen = radius * _LateralLength;
                         float subWidth = _LateralWidth * 0.5;
-                        float subFadeLen = radius * _LateralSubLength;
-
-                        // Sub-vein directions relative to each parent lateral
-                        // Rotate parent dir by ±angle to get two sub-directions
-                        float subSa, subCa;
-                        sincos(_LateralAngle, subSa, subCa);
-
-                        // For left parent lateral: rotate leftDir by ±angle
-                        float2 subLL_dir  = float2(subCa * leftDir.x - subSa * leftDir.y,
-                                                   subSa * leftDir.x + subCa * leftDir.y);
-                        float2 subLR_dir  = float2(subCa * leftDir.x + subSa * leftDir.y,
-                                                  -subSa * leftDir.x + subCa * leftDir.y);
-                        float2 subLL_perp = float2(-subLL_dir.y, subLL_dir.x);
-                        float2 subLR_perp = float2(-subLR_dir.y, subLR_dir.x);
-
-                        // For right parent lateral: rotate rightDir by ±angle
-                        float2 subRL_dir  = float2(subCa * rightDir.x - subSa * rightDir.y,
-                                                   subSa * rightDir.x + subCa * rightDir.y);
-                        float2 subRR_dir  = float2(subCa * rightDir.x + subSa * rightDir.y,
-                                                  -subSa * rightDir.x + subCa * rightDir.y);
-                        float2 subRL_perp = float2(-subRL_dir.y, subRL_dir.x);
-                        float2 subRR_perp = float2(-subRR_dir.y, subRR_dir.x);
 
                         for (int i = 0; i < 8; i++)
                         {
@@ -222,38 +208,78 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                             float originU = lerp(radius * _LateralStart, radius * 0.8, t);
                             float2 veinOrigin = leafDir * originU;
 
+                            // Per-lateral randomised angle
+                            float angle = lerp(_LateralAngleMin, _LateralAngleMax, VeinHash(i, 0, 23));
+                            float sa, ca;
+                            sincos(angle, sa, ca);
+                            float2 leftDir  = float2(-sa, ca);
+                            float2 rightDir = float2( sa, ca);
+                            float2 leftPerp  = float2(-ca, -sa);
+                            float2 rightPerp = float2(-ca,  sa);
+
+                            // Per-lateral randomised length, biased by position
+                            float baseBias = 1.0 - t;
+                            float fadeLenL = radius * lerp(_LateralLengthMin, _LateralLengthMax, VeinHash(i, 0, 7) * baseBias);
+                            float fadeLenR = radius * lerp(_LateralLengthMin, _LateralLengthMax, VeinHash(i, 0, 11) * baseBias);
+
                             // Primary left lateral
                             color = ApplyVein(color, leafLocal, veinOrigin,
                                               leftDir, leftPerp, _LateralWidth,
-                                              fadeLen, _MidribGradient);
+                                              fadeLenL, _MidribGradient, 0);
 
                             // Primary right lateral
                             color = ApplyVein(color, leafLocal, veinOrigin,
                                               rightDir, rightPerp, _LateralWidth,
-                                              fadeLen, _MidribGradient);
+                                              fadeLenR, _MidribGradient, 0);
 
                             // ── Sub-veins branching from this lateral pair ──
+                            // Compute sub-vein directions from this lateral's angle
+                            float subSa, subCa;
+                            sincos(angle, subSa, subCa);
+
+                            float2 subLL_dir  = float2(subCa * leftDir.x - subSa * leftDir.y,
+                                                       subSa * leftDir.x + subCa * leftDir.y);
+                            float2 subLR_dir  = float2(subCa * leftDir.x + subSa * leftDir.y,
+                                                      -subSa * leftDir.x + subCa * leftDir.y);
+                            float2 subLL_perp = float2(-subLL_dir.y, subLL_dir.x);
+                            float2 subLR_perp = float2(-subLR_dir.y, subLR_dir.x);
+
+                            float2 subRL_dir  = float2(subCa * rightDir.x - subSa * rightDir.y,
+                                                       subSa * rightDir.x + subCa * rightDir.y);
+                            float2 subRR_dir  = float2(subCa * rightDir.x + subSa * rightDir.y,
+                                                      -subSa * rightDir.x + subCa * rightDir.y);
+                            float2 subRL_perp = float2(-subRL_dir.y, subRL_dir.x);
+                            float2 subRR_perp = float2(-subRR_dir.y, subRR_dir.x);
+
                             for (int j = 0; j < 4; j++)
                             {
                                 if (j >= subCount) break;
 
-                                float st = (float(j) + 1.0) / (float(subCount) + 1.0);
-                                float subAlongDist = fadeLen * st * 0.8;
-                                float2 subOriginL = veinOrigin + leftDir * subAlongDist;
-                                float2 subOriginR = veinOrigin + rightDir * subAlongDist;
+                                float stL = (float(j) + 1.0) / (float(subCount) + 1.0);
+                                float subAlongDistL = fadeLenL * stL * 0.8;
+                                float subAlongDistR = fadeLenR * stL * 0.8;
+                                float2 subOriginL = veinOrigin + leftDir * subAlongDistL;
+                                float2 subOriginR = veinOrigin + rightDir * subAlongDistR;
+
+                                // Per-sub-vein randomised length, biased by position along parent
+                                float subBias = 1.0 - stL;
+                                float subFadeLL = radius * lerp(_LateralSubLengthMin, _LateralSubLengthMax, VeinHash(i, j, 9) * subBias);
+                                float subFadeLR = radius * lerp(_LateralSubLengthMin, _LateralSubLengthMax, VeinHash(i, j, 13) * subBias);
+                                float subFadeRL = radius * lerp(_LateralSubLengthMin, _LateralSubLengthMax, VeinHash(i, j, 17) * subBias);
+                                float subFadeRR = radius * lerp(_LateralSubLengthMin, _LateralSubLengthMax, VeinHash(i, j, 21) * subBias);
 
                                 // Left lateral → two sub-veins (each side of parent)
                                 if (VeinHash(i, j, 0) < _LateralSubChance)
                                 {
                                     color = ApplyVein(color, leafLocal, subOriginL,
                                                       subLL_dir, subLL_perp, subWidth,
-                                                      subFadeLen, _MidribGradient);
+                                                      subFadeLL, _MidribGradient, 1);
                                 }
                                 if (VeinHash(i, j, 2) < _LateralSubChance)
                                 {
                                     color = ApplyVein(color, leafLocal, subOriginL,
                                                       subLR_dir, subLR_perp, subWidth,
-                                                      subFadeLen, _MidribGradient);
+                                                      subFadeLR, _MidribGradient, 1);
                                 }
 
                                 // Right lateral → two sub-veins (each side of parent)
@@ -261,13 +287,13 @@ Shader "BalloonParty/Grid/BushBakeLeaf"
                                 {
                                     color = ApplyVein(color, leafLocal, subOriginR,
                                                       subRL_dir, subRL_perp, subWidth,
-                                                      subFadeLen, _MidribGradient);
+                                                      subFadeRL, _MidribGradient, 1);
                                 }
                                 if (VeinHash(i, j, 3) < _LateralSubChance)
                                 {
                                     color = ApplyVein(color, leafLocal, subOriginR,
                                                       subRR_dir, subRR_perp, subWidth,
-                                                      subFadeLen, _MidribGradient);
+                                                      subFadeRR, _MidribGradient, 1);
                                 }
                             }
                         }

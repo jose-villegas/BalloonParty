@@ -110,6 +110,57 @@ namespace BalloonParty.Editor
         }
 
         /// <summary>
+        ///     Draws a min/max slider with float fields on each side, matching Unity's
+        ///     standard control alignment. Rect-based version for <see cref="PropertyDrawer"/>.
+        /// </summary>
+        public static void DrawMinMaxSlider(
+            Rect rect, string label, ref float lo, ref float hi, float min, float max)
+        {
+            var labelRect = new Rect(rect.x, rect.y, EditorGUIUtility.labelWidth, rect.height);
+            EditorGUI.LabelField(labelRect, label);
+
+            var fieldW = EditorGUIUtility.fieldWidth;
+            var controlX = rect.x + EditorGUIUtility.labelWidth + 2f;
+
+            var loRect = new Rect(controlX, rect.y, fieldW, rect.height);
+            var hiRect = new Rect(rect.xMax - fieldW, rect.y, fieldW, rect.height);
+            var sliderRect = new Rect(
+                loRect.xMax + 4f, rect.y + 2f,
+                hiRect.x - loRect.xMax - 8f, rect.height - 4f);
+
+            var prevIndent = EditorGUI.indentLevel;
+            EditorGUI.indentLevel = 0;
+
+            lo = RoundCentesimal(EditorGUI.FloatField(loRect, lo));
+            EditorGUI.MinMaxSlider(sliderRect, ref lo, ref hi, min, max);
+            hi = RoundCentesimal(EditorGUI.FloatField(hiRect, hi));
+
+            EditorGUI.indentLevel = prevIndent;
+
+            lo = Mathf.Clamp(lo, min, hi);
+            hi = Mathf.Clamp(hi, lo, max);
+        }
+
+        /// <summary>
+        ///     Draws a min/max slider with float fields on each side, matching Unity's
+        ///     standard control alignment. Layout version for <see cref="EditorWindow"/>.
+        /// </summary>
+        public static void DrawMinMaxSliderLayout(
+            string label, ref Vector2 range, float min, float max)
+        {
+            var rect = EditorGUILayout.GetControlRect();
+            var lo = range.x;
+            var hi = range.y;
+            DrawMinMaxSlider(rect, label, ref lo, ref hi, min, max);
+            range = new Vector2(lo, hi);
+        }
+
+        private static float RoundCentesimal(float value)
+        {
+            return Mathf.Round(value * 100f) / 100f;
+        }
+
+        /// <summary>
         ///     Visits every direct serialized child of <paramref name="root"/> whose
         ///     <c>name</c> is NOT present in <paramref name="excluded"/>,
         ///     passing a safe <c>Copy()</c> to <paramref name="visit"/>.

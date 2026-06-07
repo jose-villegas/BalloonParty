@@ -24,13 +24,16 @@ namespace BalloonParty.Editor.Bush
         private static readonly int MidribWidthId = Shader.PropertyToID("_MidribWidth");
         private static readonly int MidribGradientId = Shader.PropertyToID("_MidribGradient");
         private static readonly int LateralCountId = Shader.PropertyToID("_LateralCount");
-        private static readonly int LateralAngleId = Shader.PropertyToID("_LateralAngle");
+        private static readonly int LateralAngleMinId = Shader.PropertyToID("_LateralAngleMin");
+        private static readonly int LateralAngleMaxId = Shader.PropertyToID("_LateralAngleMax");
         private static readonly int LateralWidthId = Shader.PropertyToID("_LateralWidth");
         private static readonly int LateralStartId = Shader.PropertyToID("_LateralStart");
-        private static readonly int LateralLengthId = Shader.PropertyToID("_LateralLength");
+        private static readonly int LateralLengthMinId = Shader.PropertyToID("_LateralLengthMin");
+        private static readonly int LateralLengthMaxId = Shader.PropertyToID("_LateralLengthMax");
         private static readonly int LateralSubCountId = Shader.PropertyToID("_LateralSubCount");
         private static readonly int LateralSubChanceId = Shader.PropertyToID("_LateralSubChance");
-        private static readonly int LateralSubLengthId = Shader.PropertyToID("_LateralSubLength");
+        private static readonly int LateralSubLengthMinId = Shader.PropertyToID("_LateralSubLengthMin");
+        private static readonly int LateralSubLengthMaxId = Shader.PropertyToID("_LateralSubLengthMax");
 
         private const int GradientResolution = 64;
 
@@ -98,13 +101,16 @@ namespace BalloonParty.Editor.Bush
             material.SetFloat(MidribWidthId, settings.MidribWidth);
 
             material.SetFloat(LateralCountId, settings.LateralCount);
-            material.SetFloat(LateralAngleId, settings.LateralAngle * Mathf.Deg2Rad);
+            material.SetFloat(LateralAngleMinId, settings.LateralAngle.x * Mathf.Deg2Rad);
+            material.SetFloat(LateralAngleMaxId, settings.LateralAngle.y * Mathf.Deg2Rad);
             material.SetFloat(LateralWidthId, settings.MidribWidth * settings.LateralWidthRatio);
             material.SetFloat(LateralStartId, settings.LateralStart);
-            material.SetFloat(LateralLengthId, settings.LateralLength);
+            material.SetFloat(LateralLengthMinId, settings.LateralLength.x);
+            material.SetFloat(LateralLengthMaxId, settings.LateralLength.y);
             material.SetFloat(LateralSubCountId, settings.LateralSubCount);
             material.SetFloat(LateralSubChanceId, settings.LateralSubChance);
-            material.SetFloat(LateralSubLengthId, settings.LateralSubLength);
+            material.SetFloat(LateralSubLengthMinId, settings.LateralSubLength.x);
+            material.SetFloat(LateralSubLengthMaxId, settings.LateralSubLength.y);
         }
 
         private static GameObject CreateBakeCamera(float leafRadius, RenderTexture rt)

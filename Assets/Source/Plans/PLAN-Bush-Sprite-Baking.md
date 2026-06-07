@@ -124,10 +124,23 @@ veins into a RenderTexture that is read back to Texture2D for atlas packing.
    - Angle: diagonal angle from the midrib axis (degrees)
    - Width Ratio: lateral width as fraction of midrib width
    - Start: where along the midrib the first pair originates (-1 to 0.5)
+   - Length: min/max range, randomised per vein via deterministic hash;
+     biased by position — veins near the base are longer, near the tip shorter
    - Reuses the midrib gradient for cross-section profile
    - Each lateral is a ray from its origin on the midrib; only the forward
      side renders (no backward bleed)
-   - Linear fade toward vein tips (70% of radius) for natural tapering
+   - Smooth fade-out toward tips; primary laterals emerge from midrib at
+     full strength (no fade-in seam)
+7. ✅ **Recursive sub-veins** — fractal branching from lateral veins
+   - Per Lateral count (0–4), Survival Chance (0–1) via deterministic hash
+   - Length: min/max range, randomised per sub-vein; biased by position
+     along parent lateral — earlier sub-veins are longer
+   - Sub-veins branch in both directions (±angle from parent lateral)
+   - Half-width of parent, smooth fade-in at origin for seamless blending
+   - Each vein (left/right lateral, each sub-vein direction) gets an
+     independent random length via unique hash seeds
+8. ✅ **Shared MinMaxSlider** — reusable `PropertyDrawerHelper.DrawMinMaxSlider`
+   (rect-based) and `DrawMinMaxSliderLayout` (layout-based) in `Source/Editor/`
 
 ### Leaf feature backlog (add one at a time)
 

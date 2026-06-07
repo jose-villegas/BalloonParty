@@ -9,6 +9,7 @@ namespace BalloonParty.Editor.Bush
         [SerializeField] internal BushLeafBakeSettings LeafSettings = new();
         [SerializeField] internal string OutputFolder = "Assets/Art/Bush/Baked";
         [SerializeField] internal bool AutoPreview = true;
+        [SerializeField] internal uint PreviewSeed = 42;
 
         [SerializeField] internal bool LeafFoldout = true;
         [SerializeField] internal bool LeafShapeFoldout = true;

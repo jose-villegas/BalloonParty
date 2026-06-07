@@ -142,16 +142,16 @@ namespace BalloonParty.Editor.Bush
                     EditorGUILayout.Space(4);
                     EditorGUILayout.LabelField("Lateral Veins", EditorStyles.miniLabel);
                     State.LeafSettings.LateralCount = EditorGUILayout.IntSlider("Pairs", State.LeafSettings.LateralCount, 0, 8);
-                    State.LeafSettings.LateralAngle = EditorGUILayout.Slider("Angle (°)", State.LeafSettings.LateralAngle, 10f, 80f);
+                    PropertyDrawerHelper.DrawMinMaxSliderLayout("Angle (°)", ref State.LeafSettings.LateralAngle, 10f, 80f);
                     State.LeafSettings.LateralWidthRatio = EditorGUILayout.Slider("Width Ratio", State.LeafSettings.LateralWidthRatio, 0.1f, 1f);
-                    State.LeafSettings.LateralLength = EditorGUILayout.Slider("Length", State.LeafSettings.LateralLength, 0.1f, 1.5f);
+                    PropertyDrawerHelper.DrawMinMaxSliderLayout("Length", ref State.LeafSettings.LateralLength, 0.1f, 1.5f);
                     State.LeafSettings.LateralStart = EditorGUILayout.Slider("Start", State.LeafSettings.LateralStart, -1f, 0.5f);
 
                     EditorGUILayout.Space(4);
                     EditorGUILayout.LabelField("Sub-veins (Fractal)", EditorStyles.miniLabel);
                     State.LeafSettings.LateralSubCount = EditorGUILayout.IntSlider("Per Lateral", State.LeafSettings.LateralSubCount, 0, 4);
                     State.LeafSettings.LateralSubChance = EditorGUILayout.Slider("Survival Chance", State.LeafSettings.LateralSubChance, 0f, 1f);
-                    State.LeafSettings.LateralSubLength = EditorGUILayout.Slider("Length", State.LeafSettings.LateralSubLength, 0.05f, 1f);
+                    PropertyDrawerHelper.DrawMinMaxSliderLayout("Length", ref State.LeafSettings.LateralSubLength, 0.05f, 1f);
                 }
 
                 EditorGUI.indentLevel--;
@@ -183,8 +183,17 @@ namespace BalloonParty.Editor.Bush
 
             GUI.Box(boxRect, GUIContent.none, EditorStyles.helpBox);
 
-            var labelRect = new Rect(boxRect.x, boxRect.y + 2f, boxRect.width, EditorGUIUtility.singleLineHeight);
+            var labelRect = new Rect(boxRect.x, boxRect.y + 2f, boxRect.width - 28f, EditorGUIUtility.singleLineHeight);
             EditorGUI.LabelField(labelRect, "Preview", EditorStyles.centeredGreyMiniLabel);
+
+            var diceRect = new Rect(boxRect.xMax - 26f, boxRect.y + 2f, 24f, EditorGUIUtility.singleLineHeight);
+            if (GUI.Button(diceRect, "🎲", EditorStyles.miniButton))
+            {
+                State.PreviewSeed = (uint)Random.Range(1, int.MaxValue);
+                State.Save();
+                _lastLeafHash = 0;
+                Repaint();
+            }
 
             if (_leafLivePreview != null)
             {
@@ -202,6 +211,7 @@ namespace BalloonParty.Editor.Bush
             }
         }
 
+
         private static Rect PadRect(Rect rect, float padding)
         {
             return new Rect(
@@ -218,7 +228,7 @@ namespace BalloonParty.Editor.Bush
             {
                 _lastLeafHash = leafHash;
                 DestroyLeafLivePreview();
-                _leafLivePreview = BushLeafBaker.BakeLeaf(State.LeafSettings, 0, 42);
+                _leafLivePreview = BushLeafBaker.BakeLeaf(State.LeafSettings, 0, State.PreviewSeed);
                 Repaint();
             }
         }
@@ -228,6 +238,7 @@ namespace BalloonParty.Editor.Bush
             unchecked
             {
                 var h = 17;
+                h = h * 31 + State.PreviewSeed.GetHashCode();
                 h = h * 31 + State.LeafSettings.Resolution.GetHashCode();
                 h = h * 31 + State.LeafSettings.LeafRadius.GetHashCode();
                 h = h * 31 + State.LeafSettings.GielisM.GetHashCode();
