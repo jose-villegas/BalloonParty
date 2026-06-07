@@ -15,6 +15,7 @@ namespace BalloonParty.Editor.Bush
         [SerializeField] internal bool LeafShapeFoldout = true;
         [SerializeField] internal bool LeafSurfaceFoldout = true;
         [SerializeField] internal bool LeafMidribFoldout = true;
+        [SerializeField] internal bool LeafPetioleFoldout = true;
 
         internal void Save()
         {

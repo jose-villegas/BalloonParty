@@ -105,7 +105,7 @@ namespace BalloonParty.Editor.Bush
                 new[] { "32", "64", "128", "256" },
                 new[] { 32, 64, 128, 256 });
             State.LeafSettings.LeafRadius = EditorGUILayout.Slider("Leaf Radius", State.LeafSettings.LeafRadius, 0.1f, 1f);
-            State.LeafSettings.LeafVariants = EditorGUILayout.IntSlider("Variants", State.LeafSettings.LeafVariants, 1, 16);
+            State.LeafSettings.LeafVariants = EditorGUILayout.IntSlider("Variants", State.LeafSettings.LeafVariants, 1, 64);
 
             EditorGUILayout.Space(4);
 
@@ -167,6 +167,22 @@ namespace BalloonParty.Editor.Bush
                         State.LeafSettings.ReticulateOpacity = EditorGUILayout.Slider("Opacity", State.LeafSettings.ReticulateOpacity, 0f, 1f);
                         State.LeafSettings.ReticulateAngle = EditorGUILayout.Slider("Angle (°)", State.LeafSettings.ReticulateAngle, 10f, 80f);
                     }
+                }
+
+                EditorGUI.indentLevel--;
+            }
+
+            State.LeafPetioleFoldout = EditorGUILayout.Foldout(State.LeafPetioleFoldout, "Petiole", true);
+            if (State.LeafPetioleFoldout)
+            {
+                EditorGUI.indentLevel++;
+                State.LeafSettings.PetioleEnabled = EditorGUILayout.Toggle("Enabled", State.LeafSettings.PetioleEnabled);
+
+                using (new EditorGUI.DisabledScope(!State.LeafSettings.PetioleEnabled))
+                {
+                    State.LeafSettings.PetioleLength = EditorGUILayout.Slider("Length", State.LeafSettings.PetioleLength, 0.01f, 0.5f);
+                    State.LeafSettings.PetioleWidth = EditorGUILayout.Slider("Width", State.LeafSettings.PetioleWidth, 0.002f, 0.05f);
+                    State.LeafSettings.PetioleTaper = EditorGUILayout.Slider("Taper", State.LeafSettings.PetioleTaper, -1f, 1f);
                 }
 
                 EditorGUI.indentLevel--;
@@ -283,6 +299,10 @@ namespace BalloonParty.Editor.Bush
                 h = h * 31 + State.LeafSettings.ReticulateWidth.GetHashCode();
                 h = h * 31 + State.LeafSettings.ReticulateOpacity.GetHashCode();
                 h = h * 31 + State.LeafSettings.ReticulateAngle.GetHashCode();
+                h = h * 31 + State.LeafSettings.PetioleEnabled.GetHashCode();
+                h = h * 31 + State.LeafSettings.PetioleLength.GetHashCode();
+                h = h * 31 + State.LeafSettings.PetioleWidth.GetHashCode();
+                h = h * 31 + State.LeafSettings.PetioleTaper.GetHashCode();
                 return h;
             }
         }

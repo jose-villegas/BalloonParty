@@ -40,6 +40,11 @@ namespace BalloonParty.Editor.Bush
         [SerializeField] internal float ReticulateOpacity = 0.12f;
         [SerializeField] internal float ReticulateAngle = 40f;
 
+        [SerializeField] internal bool PetioleEnabled;
+        [SerializeField] internal float PetioleLength = 0.15f;
+        [SerializeField] internal float PetioleWidth = 0.015f;
+        [SerializeField] internal float PetioleTaper = 0.5f;
+
         private static Gradient DefaultMidribGradient()
         {
             var gradient = new Gradient();

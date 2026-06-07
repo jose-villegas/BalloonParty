@@ -91,20 +91,21 @@ Shared cluster system extracted from Puff. All files exist and work.
 ## Phase 1 — Leaf Baking 🔨 Current
 
 Procedural Gielis leaf sprites baked offline via an editor window. The shader
-renders shape, surface shading, a gradient-driven midrib, and diagonal lateral
-veins into a RenderTexture that is read back to Texture2D for atlas packing.
+renders shape, surface shading, a gradient-driven midrib (adapting to lobe
+count), lateral veins, venules, and reticulate fill into a RenderTexture
+that is read back to Texture2D for atlas packing.
 
 ### What exists now
 
 | File | Location | Role |
 |---|---|---|
-| `BushBakeLeaf.shader` | `Shaders/.../Editor/` | Gielis SDF, dome shading, hue jitter, AA alpha, midrib + lateral veins |
+| `BushBakeLeaf.shader` | `Shaders/.../Editor/` | Gielis SDF, dome shading, hue jitter, AA alpha, palmate midribs, lateral veins, venules, reticulate |
 | `BushLeafBaker.cs` | `Source/Editor/Bush/` | Offscreen camera bake pipeline, gradient texture baking |
-| `BushLeafBakeSettings.cs` | `Source/Editor/Bush/` | All bake parameters (shape, surface, midrib, laterals) |
+| `BushLeafBakeSettings.cs` | `Source/Editor/Bush/` | All bake parameters (shape, surface, midrib, laterals, venules, reticulate) |
 | `BushBakerWindow.cs` | `Source/Editor/Bush/` | Editor window: properties panel + live preview box, export |
-| `BushBakerState.cs` | `Source/Editor/Bush/` | Persisted editor state (foldouts, settings, output path) |
+| `BushBakerState.cs` | `Source/Editor/Bush/` | Persisted editor state (foldouts, settings, output path, preview seed) |
 | `LeafAtlasPacker.cs` | `Source/Editor/Bush/` | Packs leaf variants into sprite atlas |
-| `GielisSDF.cginc` | `Shaders/.../Editor/` | Gielis superformula, HueRotate, JitterGielisParams |
+| `GielisSDF.cginc` | `Shaders/.../Editor/` | Gielis superformula, GielisRadius, HueRotate, JitterGielisParams |
 | `LeafVeins.cginc` | `Shaders/.../Editor/` | Fractal vein system (unused — superseded by shader-inline veins) |
 
 ### Implemented leaf features
@@ -114,48 +115,55 @@ veins into a RenderTexture that is read back to Texture2D for atlas packing.
 2. ✅ **Dome shading** — radial darkening at edges, controllable via Edge Shade
 3. ✅ **Hue jitter** — per-variant hue rotation in degrees
 4. ✅ **AA alpha** — smoothstep anti-aliased edge with configurable width
-5. ✅ **Midrib** — gradient-driven central vein across its width
-   - Width parameter controls vein thickness
-   - Gradient maps left-to-right across the vein (0% = left edge, 50% = centre,
-     100% = right edge); colour defines tint, alpha defines blend strength
+5. ✅ **Palmate midrib** — gradient-driven central vein(s) adapting to lobe count
+   - m < 2.5: single vertical midrib (pinnate venation)
+   - m ≥ 2.5: `floor(m)` midribs radiate from centre (palmate venation)
+   - Each midrib direction aligns with its Gielis lobe axis
+   - Multi-midrib mode clips each midrib to its forward side
+   - Width parameter, gradient cross-section profile
    - Gradient baked to a 64×1 texture, sampled in the shader
-6. ✅ **Lateral veins** — mirrored pairs branching diagonally from the midrib
-   - Count: number of vein pairs (0–8)
-   - Angle: min/max range (degrees), randomised per lateral via deterministic hash
+6. ✅ **Lateral veins** — mirrored pairs branching from each midrib
+   - Count: number of vein pairs per midrib (0–8)
+   - Angle: min/max range (degrees), randomised per lateral
    - Width Ratio: lateral width as fraction of midrib width
    - Start: where along the midrib the first pair originates (-1 to 0.5)
-   - Length: min/max range, randomised per vein via deterministic hash;
-     biased by position — veins near the base are longer, near the tip shorter
-   - Reuses the midrib gradient for cross-section profile
-   - Each lateral is a ray from its origin on the midrib; only the forward
-     side renders (no backward bleed)
-   - Smooth fade-out toward tips; primary laterals emerge from midrib at
-     full strength (no fade-in seam)
-7. ✅ **Recursive sub-veins** — fractal branching from lateral veins
+   - Length: min/max range, randomised per vein; biased by position —
+     veins near the base are longer, near the tip shorter
+   - Curvature: shape-adaptive bend follows Gielis boundary contour
+     (separate from venule curvature); samples boundary at vein position
+   - Lateral directions computed relative to their parent midrib direction
+   - Smooth fade-out toward tips + fade near leaf edge via SDF distance
+   - Primary laterals emerge from midrib at full strength (no fade-in seam)
+7. ✅ **Venules** — recursive fractal branching from lateral veins
    - Per Lateral count (0–4), Survival Chance (0–1) via deterministic hash
-   - Length: min/max range, randomised per sub-vein; biased by position
-     along parent lateral — earlier sub-veins are longer
+   - Length: min/max range, randomised per venule; biased by position
    - Sub-veins branch in both directions (±angle from parent lateral)
    - Half-width of parent, smooth fade-in at origin for seamless blending
-   - Each vein (left/right lateral, each sub-vein direction) gets an
-     independent random length via unique hash seeds
-8. ✅ **Preview seed** — 🎲 button in preview box randomises the seed,
-   changing Gielis jitter, hue shift, and vein variation per click
-9. ✅ **Shared MinMaxSlider** — reusable `PropertyDrawerHelper.DrawMinMaxSlider`
-   (rect-based) and `DrawMinMaxSliderLayout` (layout-based) in `Source/Editor/`
-10. ✅ **Curved veins** — shape-adaptive curvature bends laterals and sub-veins
-    to follow the actual Gielis boundary contour
-    - Curvature parameter (0 = straight, 1 = max bend)
-    - At each point along the vein, samples the Gielis boundary at the
-      vein's straight-line polar angle and offsets toward it
-    - Adapts automatically when the shape changes (different seeds,
-      different Gielis parameters) — veins follow the leaf contour
-    - Applies to both primary laterals and recursive sub-veins
+   - Origins placed on the **curved** parent lateral (not the straight ray)
+   - Curvature: independent from lateral curvature, also shape-adaptive
+   - Each venule gets an independent random length via unique hash seeds
+8. ✅ **Edge fade** — all veins (laterals + venules) fade out when close to
+   the leaf boundary, regardless of their configured length; uses SDF
+   distance with `smoothstep(0, -0.04, sdfDist)`
+9. ✅ **Vein presence tracking** — `inout float veinPresence` accumulates
+   proximity to midrib + all laterals + all venules during rendering;
+   each vein contributes a soft halo (3× base width) for reticulate suppression
+10. ✅ **Reticulate venation** — fine net-like mesh filling spaces between veins
+    - Two sets of parallel lines at ±angle create a diamond mesh
+    - Organic distortion via cheap sine noise breaks grid regularity
+    - Line width varies along each line for hand-drawn feel
+    - Suppressed near all veins via `veinPresence` tracker
+    - Fades near leaf edge via SDF distance
+    - Controls: Enabled, Density (5–60), Width, Opacity, Angle (°)
 11. ✅ **Unified vein seed** — `_VeinSeed` uniform derived from the variant
     hash feeds into `VeinHash()`, so randomising the preview seed also
-    reshuffles vein angles, lengths, and sub-vein survival patterns
-12. ✅ **Clickable variant grid** — variant thumbnails in a HelpBox; clicking
+    reshuffles vein angles, lengths, and venule survival patterns
+12. ✅ **Preview seed** — 🎲 button in preview box randomises the seed,
+    changing shape, hue, and full vein hierarchy per click
+13. ✅ **Clickable variant grid** — variant thumbnails in a HelpBox; clicking
     any variant displays it in the live preview box with a `►` selection marker
+14. ✅ **Shared MinMaxSlider** — reusable `PropertyDrawerHelper.DrawMinMaxSlider`
+    (rect-based) and `DrawMinMaxSliderLayout` (layout-based) in `Source/Editor/`
 
 ### Leaf feature backlog (add one at a time)
 
@@ -172,14 +180,19 @@ hash (scaled) is passed as `_VeinSeed` so vein randomisation is coupled
 to the variant identity.
 
 The midrib gradient is baked from Unity's `Gradient` to a 64×1 RGBA texture
-at bake time, passed as `_MidribGradient`. Lateral veins reuse the same
-texture. Both are cleaned up after each bake.
+at bake time, passed as `_MidribGradient`. All vein levels reuse the same
+texture. Cleaned up after each bake.
+
+All loops in the shader use `[loop]` attributes to prevent Metal from
+attempting to unroll the triply-nested vein hierarchy (6 midribs × 8
+laterals × 4 venules). Up to 64 variants supported.
 
 ### Editor window layout
 
 The Bush Baker window (`Tools > Bush Baker`) has:
 - **Properties panel** (left, 280–420px) with foldable sections:
-  Gielis Superformula, Surface, Midrib (including Lateral Veins sub-section)
+  Gielis Superformula, Surface, Midrib (including Lateral Veins,
+  Venules, and Reticulate sub-sections)
 - **Live preview box** (right, fills remaining space) — rect-based layout
   that occupies all horizontal space right of the properties column,
   matching its full height. Texture is centred and aspect-fitted inside

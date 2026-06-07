@@ -42,6 +42,10 @@ namespace BalloonParty.Editor.Bush
         private static readonly int ReticulateWidthId = Shader.PropertyToID("_ReticulateWidth");
         private static readonly int ReticulateOpacityId = Shader.PropertyToID("_ReticulateOpacity");
         private static readonly int ReticulateAngleId = Shader.PropertyToID("_ReticulateAngle");
+        private static readonly int PetioleEnabledId = Shader.PropertyToID("_PetioleEnabled");
+        private static readonly int PetioleLengthId = Shader.PropertyToID("_PetioleLength");
+        private static readonly int PetioleWidthId = Shader.PropertyToID("_PetioleWidth");
+        private static readonly int PetioleTaperId = Shader.PropertyToID("_PetioleTaper");
 
         private const int GradientResolution = 64;
 
@@ -69,8 +73,14 @@ namespace BalloonParty.Editor.Bush
                 material.SetTexture(MidribGradientId, gradientTex);
             }
 
-            var cameraGo = CreateBakeCamera(settings.LeafRadius, rt);
-            var quadGo = CreateBakeQuad(material, settings.LeafRadius);
+            var viewRadius = settings.LeafRadius * 1.3f;
+            if (settings.PetioleEnabled)
+            {
+                viewRadius = Mathf.Max(viewRadius, settings.LeafRadius + settings.PetioleLength + 0.02f);
+            }
+
+            var cameraGo = CreateBakeCamera(viewRadius, rt);
+            var quadGo = CreateBakeQuad(material, viewRadius);
 
             cameraGo.GetComponent<Camera>().Render();
 
@@ -128,9 +138,14 @@ namespace BalloonParty.Editor.Bush
             material.SetFloat(ReticulateWidthId, settings.ReticulateWidth);
             material.SetFloat(ReticulateOpacityId, settings.ReticulateOpacity);
             material.SetFloat(ReticulateAngleId, settings.ReticulateAngle * Mathf.Deg2Rad);
+
+            material.SetFloat(PetioleEnabledId, settings.PetioleEnabled ? 1f : 0f);
+            material.SetFloat(PetioleLengthId, settings.PetioleLength);
+            material.SetFloat(PetioleWidthId, settings.PetioleWidth);
+            material.SetFloat(PetioleTaperId, settings.PetioleTaper);
         }
 
-        private static GameObject CreateBakeCamera(float leafRadius, RenderTexture rt)
+        private static GameObject CreateBakeCamera(float viewRadius, RenderTexture rt)
         {
             var go = new GameObject("_BakeCamera")
             {
@@ -139,7 +154,7 @@ namespace BalloonParty.Editor.Bush
 
             var cam = go.AddComponent<Camera>();
             cam.orthographic = true;
-            cam.orthographicSize = leafRadius * 1.3f;
+            cam.orthographicSize = viewRadius;
             cam.nearClipPlane = -1f;
             cam.farClipPlane = 1f;
             cam.clearFlags = CameraClearFlags.SolidColor;
@@ -153,14 +168,14 @@ namespace BalloonParty.Editor.Bush
             return go;
         }
 
-        private static GameObject CreateBakeQuad(Material material, float leafRadius)
+        private static GameObject CreateBakeQuad(Material material, float viewRadius)
         {
             var go = GameObject.CreatePrimitive(PrimitiveType.Quad);
             go.name = "_BakeQuad";
             go.hideFlags = HideFlags.HideAndDontSave;
             go.layer = BakeLayer;
 
-            var scale = leafRadius * 2.8f;
+            var scale = viewRadius * 2.2f;
             go.transform.localScale = new Vector3(scale, scale, 1f);
             go.transform.position = Vector3.zero;
 
