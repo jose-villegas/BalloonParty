@@ -138,6 +138,20 @@ namespace BalloonParty.Editor.Bush
                 {
                     State.LeafSettings.MidribWidth = EditorGUILayout.Slider("Width", State.LeafSettings.MidribWidth, 0.001f, 0.2f);
                     State.LeafSettings.MidribGradient = EditorGUILayout.GradientField("Gradient", State.LeafSettings.MidribGradient);
+
+                    EditorGUILayout.Space(4);
+                    EditorGUILayout.LabelField("Lateral Veins", EditorStyles.miniLabel);
+                    State.LeafSettings.LateralCount = EditorGUILayout.IntSlider("Pairs", State.LeafSettings.LateralCount, 0, 8);
+                    State.LeafSettings.LateralAngle = EditorGUILayout.Slider("Angle (°)", State.LeafSettings.LateralAngle, 10f, 80f);
+                    State.LeafSettings.LateralWidthRatio = EditorGUILayout.Slider("Width Ratio", State.LeafSettings.LateralWidthRatio, 0.1f, 1f);
+                    State.LeafSettings.LateralLength = EditorGUILayout.Slider("Length", State.LeafSettings.LateralLength, 0.1f, 1.5f);
+                    State.LeafSettings.LateralStart = EditorGUILayout.Slider("Start", State.LeafSettings.LateralStart, -1f, 0.5f);
+
+                    EditorGUILayout.Space(4);
+                    EditorGUILayout.LabelField("Sub-veins (Fractal)", EditorStyles.miniLabel);
+                    State.LeafSettings.LateralSubCount = EditorGUILayout.IntSlider("Per Lateral", State.LeafSettings.LateralSubCount, 0, 4);
+                    State.LeafSettings.LateralSubChance = EditorGUILayout.Slider("Survival Chance", State.LeafSettings.LateralSubChance, 0f, 1f);
+                    State.LeafSettings.LateralSubLength = EditorGUILayout.Slider("Length", State.LeafSettings.LateralSubLength, 0.05f, 1f);
                 }
 
                 EditorGUI.indentLevel--;
@@ -226,6 +240,14 @@ namespace BalloonParty.Editor.Bush
                 h = h * 31 + State.LeafSettings.MidribEnabled.GetHashCode();
                 h = h * 31 + State.LeafSettings.MidribWidth.GetHashCode();
                 h = h * 31 + GradientHash(State.LeafSettings.MidribGradient);
+                h = h * 31 + State.LeafSettings.LateralCount.GetHashCode();
+                h = h * 31 + State.LeafSettings.LateralAngle.GetHashCode();
+                h = h * 31 + State.LeafSettings.LateralWidthRatio.GetHashCode();
+                h = h * 31 + State.LeafSettings.LateralStart.GetHashCode();
+                h = h * 31 + State.LeafSettings.LateralLength.GetHashCode();
+                h = h * 31 + State.LeafSettings.LateralSubCount.GetHashCode();
+                h = h * 31 + State.LeafSettings.LateralSubChance.GetHashCode();
+                h = h * 31 + State.LeafSettings.LateralSubLength.GetHashCode();
                 return h;
             }
         }

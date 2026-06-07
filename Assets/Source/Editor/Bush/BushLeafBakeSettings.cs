@@ -23,6 +23,15 @@ namespace BalloonParty.Editor.Bush
         [SerializeField] internal float MidribWidth = 0.04f;
         [SerializeField] internal Gradient MidribGradient = DefaultMidribGradient();
 
+        [SerializeField] internal int LateralCount = 4;
+        [SerializeField] internal float LateralAngle = 45f;
+        [SerializeField] internal float LateralWidthRatio = 0.6f;
+        [SerializeField] internal float LateralStart = -0.6f;
+        [SerializeField] internal float LateralLength = 0.7f;
+        [SerializeField] internal int LateralSubCount = 2;
+        [SerializeField] internal float LateralSubChance = 0.7f;
+        [SerializeField] internal float LateralSubLength = 0.35f;
+
         private static Gradient DefaultMidribGradient()
         {
             var gradient = new Gradient();

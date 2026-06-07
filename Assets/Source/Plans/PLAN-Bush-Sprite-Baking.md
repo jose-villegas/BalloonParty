@@ -14,7 +14,7 @@
 | Phase | Description | Status |
 |---|---|---|
 | **0** | Cluster infrastructure (shared with Puff) | ✅ Done |
-| **1** | Leaf baking — Gielis SDF shape only | 🔨 **Current** |
+| **1** | Leaf baking — Gielis SDF + vein system | 🔨 **Current** |
 | **2** | Skeleton generation + `DrawMeshInstanced` rendering | ⬜ Next |
 | **3** | Wind animation (idle) | ⬜ Planned |
 | **4** | Rattle (disturbed state) | ⬜ Planned |
@@ -88,30 +88,77 @@ Shared cluster system extracted from Puff. All files exist and work.
 
 ---
 
-## Phase 1 — Leaf Baking (Shape Only) 🔨 Current
+## Phase 1 — Leaf Baking 🔨 Current
 
-The leaf baker produces baked Gielis leaf sprites. Currently stripped to
-**shape + flat shading**. Features will be added incrementally.
+Procedural Gielis leaf sprites baked offline via an editor window. The shader
+renders shape, surface shading, a gradient-driven midrib, and diagonal lateral
+veins into a RenderTexture that is read back to Texture2D for atlas packing.
 
 ### What exists now
 
-| File | Location | Status |
+| File | Location | Role |
 |---|---|---|
-| `BushBakeLeaf.shader` | `Shaders/.../Editor/` | Gielis SDF, dome shading, hue jitter, AA alpha |
-| `BushLeafBaker.cs` | `Source/Editor/Bush/` | Bakes single leaf variants with Gielis jitter |
-| `BushLeafBakeSettings.cs` | `Source/Editor/Bush/` | Resolution, radius, Gielis params, color, hue jitter |
-| `BushBakerWindow.cs` | `Source/Editor/Bush/` | Leaf-only UI, live preview, export |
-| `BushBakerState.cs` | `Source/Editor/Bush/` | Persisted editor state |
+| `BushBakeLeaf.shader` | `Shaders/.../Editor/` | Gielis SDF, dome shading, hue jitter, AA alpha, midrib + lateral veins |
+| `BushLeafBaker.cs` | `Source/Editor/Bush/` | Offscreen camera bake pipeline, gradient texture baking |
+| `BushLeafBakeSettings.cs` | `Source/Editor/Bush/` | All bake parameters (shape, surface, midrib, laterals) |
+| `BushBakerWindow.cs` | `Source/Editor/Bush/` | Editor window: properties panel + live preview box, export |
+| `BushBakerState.cs` | `Source/Editor/Bush/` | Persisted editor state (foldouts, settings, output path) |
 | `LeafAtlasPacker.cs` | `Source/Editor/Bush/` | Packs leaf variants into sprite atlas |
 | `GielisSDF.cginc` | `Shaders/.../Editor/` | Gielis superformula, HueRotate, JitterGielisParams |
-| `LeafVeins.cginc` | `Shaders/.../Editor/` | Fractal vein system (not yet included in shader) |
+| `LeafVeins.cginc` | `Shaders/.../Editor/` | Fractal vein system (unused — superseded by shader-inline veins) |
+
+### Implemented leaf features
+
+1. ✅ **Gielis SDF shape** — superformula boundary with per-variant jitter
+   on m, n1, n2, n3 via seed-driven hash
+2. ✅ **Dome shading** — radial darkening at edges, controllable via Edge Shade
+3. ✅ **Hue jitter** — per-variant hue rotation in degrees
+4. ✅ **AA alpha** — smoothstep anti-aliased edge with configurable width
+5. ✅ **Midrib** — gradient-driven central vein across its width
+   - Width parameter controls vein thickness
+   - Gradient maps left-to-right across the vein (0% = left edge, 50% = centre,
+     100% = right edge); colour defines tint, alpha defines blend strength
+   - Gradient baked to a 64×1 texture, sampled in the shader
+6. ✅ **Lateral veins** — mirrored pairs branching diagonally from the midrib
+   - Count: number of vein pairs (0–8)
+   - Angle: diagonal angle from the midrib axis (degrees)
+   - Width Ratio: lateral width as fraction of midrib width
+   - Start: where along the midrib the first pair originates (-1 to 0.5)
+   - Reuses the midrib gradient for cross-section profile
+   - Each lateral is a ray from its origin on the midrib; only the forward
+     side renders (no backward bleed)
+   - Linear fade toward vein tips (70% of radius) for natural tapering
 
 ### Leaf feature backlog (add one at a time)
 
-1. **Midrib** — dark line along `perp = 0`, tapering base→tip
-2. **Lateral veins** — diagonal lines branching from midrib
-3. **Highlight** — specular-like dome highlight
-4. **Edge darkening** — colour variation at leaf boundary
+1. **Highlight** — specular-like dome highlight
+2. **Edge darkening** — colour variation at leaf boundary
+
+### Bake pipeline
+
+The shader uses an offscreen camera rendering a quad with the Gielis SDF
+material into a RenderTexture, then reads back to Texture2D. The leaf is
+centred at origin pointing up (+Y). Per-variant Gielis jitter and hue shift
+are applied via a hash derived from the seed and variant index.
+
+The midrib gradient is baked from Unity's `Gradient` to a 64×1 RGBA texture
+at bake time, passed as `_MidribGradient`. Lateral veins reuse the same
+texture. Both are cleaned up after each bake.
+
+### Editor window layout
+
+The Bush Baker window (`Tools > Bush Baker`) has:
+- **Properties panel** (left, 280–420px) with foldable sections:
+  Gielis Superformula, Surface, Midrib (including Lateral Veins sub-section)
+- **Live preview box** (right, fills remaining space) — rect-based layout
+  that occupies all horizontal space right of the properties column,
+  matching its full height. Texture is centred and aspect-fitted inside
+  a HelpBox-style container.
+- **Buttons** — "Preview All Variants" and "Export Leaf Atlas"
+- **Variant grid** — thumbnails of all baked variants
+
+Live preview auto-updates on any parameter change via a settings hash that
+includes all fields plus gradient colour/alpha keys.
 
 ### Session context for Phase 1
 
@@ -123,10 +170,6 @@ When continuing leaf baking work, read:
 - `Assets/Shaders/BalloonParty/Grid/Editor/GielisSDF.cginc` — Gielis math
 - `.github/copilot-instructions.md` — project coding conventions
 
-The shader uses an offscreen camera rendering a quad with the Gielis SDF
-material into a RenderTexture, then reads back to Texture2D. The leaf is
-centred at origin pointing up (+Y). Per-variant Gielis jitter and hue shift
-are applied via a hash derived from the seed and variant index.
 
 ---
 
@@ -291,7 +334,7 @@ Comparison with previous approaches:
 
 | Asset | Reused for |
 |---|---|
-| Leaf baker (`BushBakeLeaf.shader`, `BushLeafBaker.cs`) | Baked leaf sprites |
+| Leaf baker (`BushBakeLeaf.shader`, `BushLeafBaker.cs`) | Baked leaf sprites with veins |
 | Gielis SDF (`GielisSDF.cginc`) | Leaf shape variety |
 | Cluster system (`ClusterView`, `ClusterViewController`) | Slot management |
 | `DisturbanceFieldService` | Rattle triggers |
@@ -303,7 +346,8 @@ Comparison with previous approaches:
 |---|---|
 | Canopy baker (`BushBake.shader`, deleted) | Skeleton replaces canopy |
 | Phyllotaxis layout | Branching tree replaces it |
-| Runions venation (`LeafVenationSimulator.cs`) | Shader-based veins |
+| Runions venation (`LeafVenationSimulator.cs`) | Shader-inline veins replace it |
+| `LeafVeins.cginc` | Superseded by inline midrib + lateral veins in `BushBakeLeaf.shader` |
 | Runtime SDF (`Bush.shader`) | Pivot away from SDF |
 | Per-leaf SpriteRenderer + LeafSpriteView | `DrawMeshInstanced` replaces |
 | DOTween wind (BushRuffleController) | Spring physics replaces |
