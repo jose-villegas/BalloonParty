@@ -109,6 +109,11 @@ namespace BalloonParty.Editor.Bush
                 GenerateBranchPreview();
             }
 
+            if (GUILayout.Button("Export Bush Variants", GUILayout.Height(28)))
+            {
+                ExportBushVariants();
+            }
+
             EditorGUILayout.EndHorizontal();
         }
 
@@ -148,6 +153,7 @@ namespace BalloonParty.Editor.Bush
                 EditorGUI.indentLevel++;
                 s.BranchColor = EditorGUILayout.ColorField("Color", s.BranchColor);
                 s.ColorVariation = EditorGUILayout.Slider("Color Variation", s.ColorVariation, 0f, 0.3f);
+                s.BushWorldSize = EditorGUILayout.Slider("Bush World Size", s.BushWorldSize, 0.3f, 2f);
                 EditorGUI.indentLevel--;
             }
 
@@ -233,6 +239,32 @@ namespace BalloonParty.Editor.Bush
             RebuildBranchDisplayTexture();
             _lastBranchHash = ComputeBranchSettingsHash();
             Repaint();
+        }
+
+        private void ExportBushVariants()
+        {
+            var variantCount = Mathf.Max(1, State.BranchSettings.Variants);
+            var leafVariants = Mathf.Max(1, State.LeafSettings.LeafVariants);
+            var bushWorldSize = State.BranchSettings.BushWorldSize;
+
+            Configuration.BushVariantData firstSo = null;
+
+            for (var i = 0; i < variantCount; i++)
+            {
+                var seed = (int)(i * 7919u + State.PreviewSeed);
+                var so = BushVariantExporter.Export(
+                    i, seed, State.BranchSettings, leafVariants, bushWorldSize, State.OutputFolder);
+
+                if (so != null && firstSo == null)
+                {
+                    firstSo = so;
+                }
+            }
+
+            if (firstSo != null)
+            {
+                EditorGUIUtility.PingObject(firstSo);
+            }
         }
 
         private void CheckBranchAutoPreview()

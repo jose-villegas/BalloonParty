@@ -1,0 +1,422 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 30f6154207abd458eb5b3e27a1302b01, type: 3}
+  m_Name: BushVariant_V00
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.BushVariantData
+  _branchMap: {fileID: 2800000, guid: 6a90555dc8055498eab93db0371aa1f6, type: 3}
+  _leafSlots:
+  - Position: {x: 0.22148436, y: -0.09492187}
+    BaseAngle: 1.2465582
+    Depth: 1
+    PhaseOffset: 5.807682
+    Scale: 0.13830858
+    SpriteVariant: 11
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.14414062, y: 0.15820312}
+    BaseAngle: 0.79644746
+    Depth: 1
+    PhaseOffset: 1.301067
+    Scale: 0.08454203
+    SpriteVariant: 46
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.119531244, y: 0.33398438}
+    BaseAngle: 0.5498532
+    Depth: 1
+    PhaseOffset: 3.1509364
+    Scale: 0.06831478
+    SpriteVariant: 43
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.087890625, y: 0.15820312}
+    BaseAngle: 2.1773355
+    Depth: 1
+    PhaseOffset: 5.0781817
+    Scale: 0.117758505
+    SpriteVariant: 1
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.12656249, y: 0.15820312}
+    BaseAngle: 2.1555417
+    Depth: 1
+    PhaseOffset: 3.734395
+    Scale: 0.14983921
+    SpriteVariant: 46
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.20742187, y: -0.17929687}
+    BaseAngle: -0.37394193
+    Depth: 1
+    PhaseOffset: 2.483749
+    Scale: 0.07656326
+    SpriteVariant: 8
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.1828125, y: 0.15820312}
+    BaseAngle: 1.4886287
+    Depth: 1
+    PhaseOffset: 3.3070443
+    Scale: 0.10636685
+    SpriteVariant: 62
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.123046875, y: -0.17578125}
+    BaseAngle: -1.2812129
+    Depth: 1
+    PhaseOffset: 2.8051295
+    Scale: 0.09313928
+    SpriteVariant: 11
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.003515625, y: -0.19687499}
+    BaseAngle: -1.3780019
+    Depth: 1
+    PhaseOffset: 0.16214894
+    Scale: 0.05750669
+    SpriteVariant: 47
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.059765622, y: -0.19687499}
+    BaseAngle: -3.0906563
+    Depth: 1
+    PhaseOffset: 3.8236868
+    Scale: 0.06260674
+    SpriteVariant: 25
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.031640623, y: 0.28476563}
+    BaseAngle: 1.7635907
+    Depth: 1
+    PhaseOffset: 3.1717255
+    Scale: 0.062156413
+    SpriteVariant: 4
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.059765622, y: 0.31992188}
+    BaseAngle: 0.63486034
+    Depth: 1
+    PhaseOffset: 2.2151742
+    Scale: 0.08262016
+    SpriteVariant: 47
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.32343748, y: -0.15820312}
+    BaseAngle: -0.38848302
+    Depth: 1
+    PhaseOffset: 4.140629
+    Scale: 0.13579163
+    SpriteVariant: 16
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.084374994, y: 0.22148436}
+    BaseAngle: 1.1720836
+    Depth: 1
+    PhaseOffset: 4.9892707
+    Scale: 0.10635155
+    SpriteVariant: 52
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.21445312, y: 0.21796875}
+    BaseAngle: 0.4337795
+    Depth: 1
+    PhaseOffset: 0.99307865
+    Scale: 0.062162954
+    SpriteVariant: 11
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.17578125, y: 0.05625}
+    BaseAngle: 2.6936505
+    Depth: 1
+    PhaseOffset: 3.7256656
+    Scale: 0.06771187
+    SpriteVariant: 39
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.13710937, y: -0.24960937}
+    BaseAngle: -1.8925469
+    Depth: 1
+    PhaseOffset: 3.8863585
+    Scale: 0.124103464
+    SpriteVariant: 51
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.119531244, y: 0.05625}
+    BaseAngle: 1.5120405
+    Depth: 1
+    PhaseOffset: 3.2008862
+    Scale: 0.08541699
+    SpriteVariant: 60
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.0140625, y: -0.25312498}
+    BaseAngle: -1.3780019
+    Depth: 1
+    PhaseOffset: 1.6033937
+    Scale: 0.08724344
+    SpriteVariant: 12
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.24257812, y: -0.2566406}
+    BaseAngle: -1.8052691
+    Depth: 1
+    PhaseOffset: 1.2510989
+    Scale: 0.13621499
+    SpriteVariant: 25
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.07734375, y: -0.2566406}
+    BaseAngle: -1.8034533
+    Depth: 1
+    PhaseOffset: 5.8961477
+    Scale: 0.14120632
+    SpriteVariant: 49
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.08085937, y: -0.23203124}
+    BaseAngle: -1.066749
+    Depth: 1
+    PhaseOffset: 3.5574224
+    Scale: 0.088495485
+    SpriteVariant: 7
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.225, y: 0.049218748}
+    BaseAngle: 0.7022569
+    Depth: 1
+    PhaseOffset: 2.9257333
+    Scale: 0.13573135
+    SpriteVariant: 32
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.19335938, y: -0.29179686}
+    BaseAngle: -2.2951593
+    Depth: 1
+    PhaseOffset: 6.223343
+    Scale: 0.06939377
+    SpriteVariant: 28
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.05625, y: -0.29179686}
+    BaseAngle: -0.38123366
+    Depth: 1
+    PhaseOffset: 3.997326
+    Scale: 0.0653067
+    SpriteVariant: 31
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.20390624, y: 0.10546875}
+    BaseAngle: 2.7007082
+    Depth: 1
+    PhaseOffset: 4.0962477
+    Scale: 0.097310476
+    SpriteVariant: 39
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.29179686, y: -0.21445312}
+    BaseAngle: -0.21739289
+    Depth: 1
+    PhaseOffset: 5.665225
+    Scale: 0.1101664
+    SpriteVariant: 36
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.18632811, y: 0}
+    BaseAngle: -2.1098719
+    Depth: 1
+    PhaseOffset: 2.1278203
+    Scale: 0.11397124
+    SpriteVariant: 51
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.16874999, y: 0.084374994}
+    BaseAngle: 0.5565255
+    Depth: 1
+    PhaseOffset: 3.8372767
+    Scale: 0.13514861
+    SpriteVariant: 38
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.010546874, y: 0.23906249}
+    BaseAngle: 1.3751738
+    Depth: 0.75686276
+    PhaseOffset: 2.8605206
+    Scale: 0.1370375
+    SpriteVariant: 58
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.038671874, y: -0.13007812}
+    BaseAngle: -1.1052725
+    Depth: 0.75686276
+    PhaseOffset: 0.8728968
+    Scale: 0.06197111
+    SpriteVariant: 55
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.087890625, y: 0.00703125}
+    BaseAngle: -0.09736557
+    Depth: 0.7254902
+    PhaseOffset: 4.7783904
+    Scale: 0.14080022
+    SpriteVariant: 52
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.119531244, y: 0.063281246}
+    BaseAngle: -2.629407
+    Depth: 0.59607846
+    PhaseOffset: 2.380936
+    Scale: 0.10488816
+    SpriteVariant: 41
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.1546875, y: -0.049218748}
+    BaseAngle: -1.1265848
+    Depth: 0.5882353
+    PhaseOffset: 5.9232316
+    Scale: 0.08879535
+    SpriteVariant: 48
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.16171874, y: 0.017578125}
+    BaseAngle: -0.26750517
+    Depth: 0.5882353
+    PhaseOffset: 2.2117224
+    Scale: 0.11291194
+    SpriteVariant: 31
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.021093749, y: 0.028125}
+    BaseAngle: 2.4558632
+    Depth: 0.47843137
+    PhaseOffset: 5.224304
+    Scale: 0.13135989
+    SpriteVariant: 56
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.003515625, y: -0.042187497}
+    BaseAngle: -1.320549
+    Depth: 0.47843137
+    PhaseOffset: 0.9038865
+    Scale: 0.13842574
+    SpriteVariant: 46
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.031640623, y: 0.00703125}
+    BaseAngle: 0.4201967
+    Depth: 0.3254902
+    PhaseOffset: 0.5469753
+    Scale: 0.09834359
+    SpriteVariant: 21
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.05625, y: 0.07382812}
+    BaseAngle: -3.0776405
+    Depth: 0.28627452
+    PhaseOffset: 5.5672526
+    Scale: 0.118703894
+    SpriteVariant: 13
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.00703125, y: 0.123046875}
+    BaseAngle: 2.9941554
+    Depth: 0.28627452
+    PhaseOffset: 0.9575787
+    Scale: 0.13883111
+    SpriteVariant: 22
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0, y: 0.1828125}
+    BaseAngle: 2.9941554
+    Depth: 0.28627452
+    PhaseOffset: 4.680447
+    Scale: 0.056791347
+    SpriteVariant: 7
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.0703125, y: -0.08085937}
+    BaseAngle: -1.6249306
+    Depth: 0.28627452
+    PhaseOffset: 0.09450858
+    Scale: 0.11606207
+    SpriteVariant: 40
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: -0.021093749, y: -0.13359375}
+    BaseAngle: -2.1390831
+    Depth: 0.28627452
+    PhaseOffset: 3.6474993
+    Scale: 0.12110387
+    SpriteVariant: 35
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.17226562, y: -0.12656249}
+    BaseAngle: -1.6606015
+    Depth: 0.28627452
+    PhaseOffset: 4.127698
+    Scale: 0.05163536
+    SpriteVariant: 11
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  - Position: {x: 0.11601562, y: -0.119531244}
+    BaseAngle: -1.6249306
+    Depth: 0.28627452
+    PhaseOffset: 1.5138854
+    Scale: 0.06709462
+    SpriteVariant: 34
+    Tint:
+      serializedVersion: 2
+      rgba: 4294967295
+  _boundsSize: {x: 0.9, y: 0.9}

@@ -22,10 +22,11 @@ namespace BalloonParty.Editor.Bush
         [SerializeField] internal Color BranchColor = new(0.35f, 0.22f, 0.10f, 1f);
         [SerializeField] internal float ColorVariation = 0.08f;
 
+        [SerializeField] internal float BushWorldSize = 0.9f;
+
         [SerializeField] internal float LeafDepthThreshold = 0.6f;
         [SerializeField] internal int MaxLeavesPerVariant = 16;
         [SerializeField] internal float LeafScale = 0.08f;
         [SerializeField] internal float LeafScaleVariation = 0.3f;
     }
 }
-
