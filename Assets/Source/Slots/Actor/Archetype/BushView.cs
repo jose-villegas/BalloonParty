@@ -16,10 +16,16 @@ namespace BalloonParty.Slots.Actor.Archetype
     {
         private static readonly int LeafTintId = Shader.PropertyToID("_LeafTint");
         private static readonly int UVRectId = Shader.PropertyToID("_UVRect");
+        private static readonly int LeafWindId = Shader.PropertyToID("_LeafWind");
         private static readonly int ShadowColorId = Shader.PropertyToID("_ShadowColor");
         private static readonly int ShadowOffsetId = Shader.PropertyToID("_ShadowOffset");
         private static readonly int ShadowSoftnessId = Shader.PropertyToID("_ShadowSoftness");
         private static readonly int SpriteScaleId = Shader.PropertyToID("_SpriteScale");
+        private static readonly int WindFrequencyId = Shader.PropertyToID("_WindFrequency");
+        private static readonly int WindAmplitudeId = Shader.PropertyToID("_WindAmplitude");
+        private static readonly int WindNoiseAmplitudeId = Shader.PropertyToID("_WindNoiseAmplitude");
+        private static readonly int WindScalePulseId = Shader.PropertyToID("_WindScalePulse");
+        private static readonly int PivotOffsetId = Shader.PropertyToID("_PivotOffset");
 
         private static bool? _supportsInstancing;
 
@@ -104,6 +110,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             {
                 _fallbackMpb.SetVector(LeafTintId, tier.Tints[i]);
                 _fallbackMpb.SetVector(UVRectId, tier.UVRects[i]);
+                _fallbackMpb.SetVector(LeafWindId, tier.Winds[i]);
                 Graphics.DrawMesh(leafMesh, tier.Matrices[i], material, layer, null, 0, _fallbackMpb);
             }
         }
@@ -216,6 +223,13 @@ namespace BalloonParty.Slots.Actor.Archetype
             mat.SetVector(ShadowOffsetId, _settings.LeafShadowOffset);
             mat.SetFloat(ShadowSoftnessId, _settings.LeafShadowSoftness);
             mat.SetFloat(SpriteScaleId, _settings.LeafSpriteScale);
+
+            var frequency = _settings.WindPeriod > 0f ? 1f / _settings.WindPeriod : 1f;
+            mat.SetFloat(WindFrequencyId, frequency);
+            mat.SetFloat(WindAmplitudeId, _settings.WindAmplitude);
+            mat.SetFloat(WindNoiseAmplitudeId, _settings.WindNoiseAmplitude);
+            mat.SetFloat(WindScalePulseId, _settings.WindScalePulse);
+            mat.SetFloat(PivotOffsetId, _settings.LeafPivotOffset);
             return mat;
         }
 
@@ -241,27 +255,20 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return tier;
             }
 
-            // The sprite center (Gielis shape center) sits at UV (0.5, 0.5), which maps
-            // to local y = 0.5 on the bottom-pivoted quad. The fixed 0.5 offset aligns the
-            // sprite center with the attachment point. PivotOffset fine-tunes from there:
-            //   0   → sprite center at attachment (default)
-            //  >0   → pivot moves toward leaf tip, leaf tucks onto branch
-            //  <0   → pivot moves toward petiole, leaf extends outward
             var tints = new Vector4[indices.Count];
             var uvRects = new Vector4[indices.Count];
+            var winds = new Vector4[indices.Count];
 
             for (var t = 0; t < indices.Count; t++)
             {
                 var slot = slots[indices[t]];
                 var leafWorldPos = worldPos + (slot.UVPosition - new Vector2(0.5f, 0.5f)) * bushWorldSize;
-                var angleDeg = slot.BaseAngle * Mathf.Rad2Deg - 90f;
-                var scale = slot.Scale * scaleCompensation;
-                var rot = Quaternion.Euler(0f, 0f, angleDeg);
-                var pivotShift = rot * new Vector3(0f, -(pivotOffset + 0.5f) * scale, 0f);
+
+                // Static translation-only matrix — rotation and scale handled by shader
                 tier.Matrices[t] = Matrix4x4.TRS(
-                    new Vector3(leafWorldPos.x, leafWorldPos.y, 0f) + pivotShift,
-                    rot,
-                    Vector3.one * scale);
+                    new Vector3(leafWorldPos.x, leafWorldPos.y, 0f),
+                    Quaternion.identity,
+                    Vector3.one);
 
                 var tint = (Color)slot.Tint;
                 tints[t] = new Vector4(tint.r, tint.g, tint.b, tint.a);
@@ -274,14 +281,23 @@ namespace BalloonParty.Slots.Actor.Archetype
                     rect.y / tex.height,
                     rect.width / tex.width,
                     rect.height / tex.height);
+
+                // Per-instance wind data: phase, depth, baseAngle, scale
+                winds[t] = new Vector4(
+                    slot.PhaseOffset,
+                    slot.Depth,
+                    slot.BaseAngle,
+                    slot.Scale * scaleCompensation);
             }
 
             tier.Tints = tints;
             tier.UVRects = uvRects;
+            tier.Winds = winds;
 
             tier.Props = new MaterialPropertyBlock();
             tier.Props.SetVectorArray(LeafTintId, tints);
             tier.Props.SetVectorArray(UVRectId, uvRects);
+            tier.Props.SetVectorArray(LeafWindId, winds);
             return tier;
         }
 
@@ -355,6 +371,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             internal int[] SlotIndices;
             internal Vector4[] Tints;
             internal Vector4[] UVRects;
+            internal Vector4[] Winds;
         }
 
         internal struct SlotRenderData

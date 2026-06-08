@@ -1011,67 +1011,50 @@ attachment dots are ON branches but NOT at endpoints.
 
 ---
 
-## Phase 3 — Wind Animation (Idle) ✅ Done
+## Phase 3 — Wind Animation (Idle) ✅ Done — GPU Vertex Shader
 
-Leaf-only animation. Branches are static. No DOTween.
+Leaf-only animation. Branches are static. No DOTween. No CPU matrix math.
 
-Each leaf **rotates around its attachment point** (the pivot extracted
-from the branch map). The rotation angle oscillates for wind sway.
+Wind animation runs **entirely on the GPU vertex shader**. Per-leaf rotation
+around the attachment pivot is computed from per-instance data (phase, depth,
+baseAngle, scale) and material-level wind uniforms. Matrices are static
+translation-only — set once at setup, never updated per frame.
 
 ### Implementation
 
-**`BushAnimator`** (`Assets/Source/Slots/Actor/Archetype/BushAnimator.cs`):
-- Plain C# `ITickable` registered as VContainer entry point
-- Injected with `IBushSettings` and `BushViewController`
-- Each `Tick()` iterates all slot render entries and updates leaf matrices
+**`BushLeaf.shader`** vertex shader:
+- Per-instance `_LeafWind` float4(phase, depth, baseAngle, scale)
+- Material uniforms: `_WindFrequency`, `_WindAmplitude`, `_WindNoiseAmplitude`,
+  `_WindScalePulse`, `_PivotOffset`
+- Sine oscillation + dual-sine organic noise (replaces CPU Perlin):
+  `sin(t*0.3 + phase*17.3) * sin(t*0.7 + phase*31.1)` — cheap, no texture
+- Pivot-based rotation: shift vertex to pivot (y = pivotOffset + 0.5),
+  rotate by animated angle, scale, then translate via static matrix
+- Shadow/highlight inverse rotation uses the GPU-computed cosA/sinA
 
-**Per-leaf rotation each frame:**
+**`BushView`** changes:
+- Matrices are static translation-only: `TRS(worldPos, identity, one)`
+- `_LeafWind` per-instance data set on `MaterialPropertyBlock`
+- Wind uniforms set on leaf material at creation time
+- No per-frame matrix updates — `LateUpdate` just draws
 
-```
-windRotation = sin(time × frequency + phaseOffset) × amplitude × depth
-             + (PerlinNoise(time × 0.3, phaseOffset) - 0.5) × 2 × noiseAmplitude × depth
-currentAngle = baseAngle - 90° + windRotation
-scale = leafScale × scaleCompensation × (1 + sin(time × frequency × 2 + phase) × scalePulse × depth)
-matrix = TRS(leafWorldPos, currentAngle, scale)
-```
-
-**Settings added to `IBushSettings` / `BushSettings`:**
-- `WindNoiseAmplitude` (default 1.5°) — slow organic Perlin drift layered on sine
-- `WindScalePulse` (default 0.03, range 0–0.1) — subtle scale flutter for liveness
-
-**BushView changes:**
-- `SlotRenderData` promoted to `internal struct` (was `private`)
-- Added `LeafSlots`, `WorldPos`, `ScaleCompensation` fields to `SlotRenderData`
-  so the animator can rebuild matrices without re-reading variant data
-- Added `SlotRenderEntries` property exposing the render list read-only
-- Leaf matrices are written by `BushAnimator.Tick()` each frame, then
-  consumed by `BushView.LateUpdate()` for `DrawMeshInstanced`
-
-**DI registration:**
-- `GameLifetimeScope`: `builder.RegisterEntryPoint<BushAnimator>()`
-
-### What exists now (Phase 3)
-
-| File | Location | Role |
-|---|---|---|
-| `BushAnimator.cs` | `Slots/Actor/Archetype/` | ITickable — per-leaf wind rotation + scale pulse |
+**`BushAnimator`** changes:
+- Wind loop removed entirely — empty `Tick()`
+- Kept as shell for Phase 4 rattle (damped spring state is CPU-only)
 
 ### Key design decisions
 
-1. **Tick before LateUpdate** — VContainer `ITickable.Tick()` runs during
-   Unity `Update`, then `BushView.LateUpdate()` draws the updated matrices.
-   No frame lag.
-2. **No allocations** — matrices are written in-place into the existing
-   `LeafMatrices[]` array. Zero GC per frame.
-3. **Static method for inner loop** — `AnimateSlotLeaves` is static to
-   make it clear it has no instance state and could be burst-compiled later.
-4. **Depth modulation** — leaves near the trunk (`depth ≈ 0`) barely move;
-   tip leaves (`depth ≈ 1`) get full amplitude. Creates natural hierarchy.
-5. **Phase desync** — each leaf's `PhaseOffset` (baked) prevents synchronised
-   oscillation across leaves. Combined with Perlin noise, motion looks organic.
-6. **Scale pulse at 2× frequency** — the flutter runs at double the sway
-   frequency so leaves "breathe" within each swing. Gated by `depth` so
-   only tip leaves flutter visibly.
+1. **GPU wind eliminates CPU Tick loop** — zero per-frame CPU cost for wind
+   on ~96 leaves. Matrices never change after setup.
+2. **Dual-sine noise replaces Perlin** — `sin(a)*sin(b)` at irrational
+   frequency ratios approximates organic drift without a texture lookup or
+   CPU `PerlinNoise`. Visually indistinguishable at leaf-sway amplitudes.
+3. **Phase 4 rattle stays CPU** — damped spring physics is sequential/stateful.
+   Rattle will add a `_RattleAngle` per-instance float updated by `BushAnimator`
+   only when a disturbance is active. Most frames it's 0.
+4. **Static matrices** — set once in `RebuildSlots`, uploaded every frame
+   by `DrawMeshInstanced` but never mutated. Future: could use a persistent
+   compute buffer to avoid re-upload entirely.
 
 ---
 

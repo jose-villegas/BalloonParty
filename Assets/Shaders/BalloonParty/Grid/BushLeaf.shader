@@ -17,6 +17,13 @@ Shader "BalloonParty/Grid/BushLeaf"
 
         [Header(Sprite)]
         _SpriteScale ("Scale", Range(0.3, 1.0)) = 0.75
+
+        [Header(Wind)]
+        _WindFrequency      ("Frequency",       Float)              = 0.5
+        _WindAmplitude      ("Amplitude (deg)",  Float)              = 3.0
+        _WindNoiseAmplitude ("Noise Amp (deg)",  Float)              = 1.5
+        _WindScalePulse     ("Scale Pulse",      Range(0, 0.1))     = 0.03
+        _PivotOffset        ("Pivot Offset",     Range(-0.5, 0.5))  = 0.0
     }
     SubShader
     {
@@ -42,10 +49,16 @@ Shader "BalloonParty/Grid/BushLeaf"
             float  _HighlightSize;
             float  _HighlightSoftness;
             float  _SpriteScale;
+            float  _WindFrequency;
+            float  _WindAmplitude;
+            float  _WindNoiseAmplitude;
+            float  _WindScalePulse;
+            float  _PivotOffset;
 
             UNITY_INSTANCING_BUFFER_START(Props)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _LeafTint)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _UVRect)
+                UNITY_DEFINE_INSTANCED_PROP(float4, _LeafWind)
             UNITY_INSTANCING_BUFFER_END(Props)
 
             struct appdata
@@ -71,25 +84,56 @@ Shader "BalloonParty/Grid/BushLeaf"
                 v2f o;
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_TRANSFER_INSTANCE_ID(v, o);
-                o.pos = UnityObjectToClipPos(v.vertex);
 
                 float4 rect = UNITY_ACCESS_INSTANCED_PROP(Props, _UVRect);
                 o.rawUV = v.uv;
                 o.uvRect = rect;
 
+                // Per-instance wind data: x=phase, y=depth, z=baseAngle (rad), w=scale
+                float4 wind = UNITY_ACCESS_INSTANCED_PROP(Props, _LeafWind);
+                float phase = wind.x;
+                float depth = wind.y;
+                float baseAngle = wind.z;
+                float leafScale = wind.w;
+
+                float t = _Time.y;
+
+                // Wind rotation: sine + dual-sine organic noise approximation
+                float sineRot = sin(t * _WindFrequency + phase) * _WindAmplitude * depth;
+                float noise = sin(t * 0.3 + phase * 17.3) * sin(t * 0.7 + phase * 31.1)
+                            * _WindNoiseAmplitude * depth;
+                float windDeg = sineRot + noise;
+
+                // Scale pulse
+                float scale = leafScale;
+                if (_WindScalePulse > 0.001)
+                {
+                    scale *= 1.0 + sin(t * _WindFrequency * 2.0 + phase) * _WindScalePulse * depth;
+                }
+
+                // Total rotation in radians
+                float totalAngle = baseAngle - 1.5707963 + windDeg * 0.0174533;
+                float cosA = cos(totalAngle);
+                float sinA = sin(totalAngle);
+
+                // Pivot-based rotation in local quad space
+                // Quad is bottom-pivoted (y: 0→1), pivot at y = pivotOffset + 0.5
+                float2 pivot = float2(0.0, _PivotOffset + 0.5);
+                float2 local = v.vertex.xy - pivot;
+                local *= scale;
+                float2 rotated = float2(
+                    cosA * local.x - sinA * local.y,
+                    sinA * local.x + cosA * local.y);
+
+                // Matrix encodes world position only (translation, no rotation/scale)
+                float4 worldPos = mul(UNITY_MATRIX_M, float4(rotated, 0.0, 1.0));
+                o.pos = mul(UNITY_MATRIX_VP, worldPos);
+
                 // Scale sprite inward from center to create margins for shadow
-                // Divides UV outward: sprite occupies the center, margins are transparent
                 float2 spriteUV = (v.uv - 0.5) / _SpriteScale + 0.5;
                 o.uv = rect.xy + spriteUV * rect.zw;
 
-                // Inverse-rotate shadow offset from world space into local UV space
-                // Use UNITY_MATRIX_M for correct per-instance matrix on all platforms
-                float cosA = UNITY_MATRIX_M[0].x;
-                float sinA = UNITY_MATRIX_M[1].x;
-                float len = sqrt(cosA * cosA + sinA * sinA);
-                cosA /= len;
-                sinA /= len;
-                // R(-θ) = [[cos, sin], [-sin, cos]], negated to correct direction
+                // Inverse-rotate shadow/highlight offsets using the animated rotation
                 o.localShadowOffset = -float2(
                      cosA * _ShadowOffset.x + sinA * _ShadowOffset.y,
                     -sinA * _ShadowOffset.x + cosA * _ShadowOffset.y);
