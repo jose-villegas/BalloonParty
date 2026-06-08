@@ -19,6 +19,14 @@ namespace BalloonParty.Editor.Bush
         private Vector2 _scrollPosition;
         private int _lastLeafHash;
 
+        private Texture2D _branchPreview;
+        private Texture2D _branchRawMap;
+        private int _lastBranchHash;
+        private bool _showRuntimePreview = true;
+
+        private readonly TexturePreviewBox _branchPreviewBox = new("Branch Preview");
+        private readonly TexturePreviewBox _leafPreviewBox = new("Leaf Preview");
+
         private BushBakerState State => BushBakerState.instance;
 
         [MenuItem("Tools/Bush Baker")]
@@ -31,6 +39,7 @@ namespace BalloonParty.Editor.Bush
         {
             DestroyLeafPreviews();
             DestroyLeafLivePreview();
+            DestroyBranchPreview();
         }
 
         private void OnGUI()
@@ -40,6 +49,8 @@ namespace BalloonParty.Editor.Bush
             EditorGUI.BeginChangeCheck();
 
             DrawSharedSettings();
+            EditorGUILayout.Space(16);
+            DrawBranchSection();
             EditorGUILayout.Space(16);
             DrawLeafSection();
 
@@ -53,6 +64,7 @@ namespace BalloonParty.Editor.Bush
             if (State.AutoPreview && Event.current.type == EventType.Repaint)
             {
                 CheckAutoPreview();
+                CheckBranchAutoPreview();
             }
         }
 
@@ -62,6 +74,250 @@ namespace BalloonParty.Editor.Bush
             EditorGUI.indentLevel++;
             State.AutoPreview = EditorGUILayout.Toggle("Live Preview", State.AutoPreview);
             EditorGUI.indentLevel--;
+        }
+
+        private void DrawBranchSection()
+        {
+            State.BranchFoldout = EditorGUILayout.Foldout(
+                State.BranchFoldout, "Branch Map", true, EditorStyles.foldoutHeader);
+
+            if (!State.BranchFoldout)
+            {
+                return;
+            }
+
+            EditorGUI.indentLevel++;
+
+            DrawBranchPropertiesAndPreview();
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.BeginHorizontal();
+
+            if (GUILayout.Button("Preview Branch Map", GUILayout.Height(28)))
+            {
+                GenerateBranchPreview();
+            }
+
+            EditorGUILayout.EndHorizontal();
+
+            EditorGUI.indentLevel--;
+        }
+
+        private void DrawBranchProperties()
+        {
+            var s = State.BranchSettings;
+
+            s.Resolution = EditorGUILayout.IntPopup(
+                "Resolution", s.Resolution,
+                new[] { "64", "128", "256", "512" },
+                new[] { 64, 128, 256, 512 });
+            s.Variants = EditorGUILayout.IntSlider("Variants", s.Variants, 1, 16);
+
+            EditorGUILayout.Space(4);
+
+            State.BranchShapeFoldout = EditorGUILayout.Foldout(
+                State.BranchShapeFoldout, "Fractal Shape", true);
+            if (State.BranchShapeFoldout)
+            {
+                EditorGUI.indentLevel++;
+                s.MaxDepth = EditorGUILayout.IntSlider("Max Depth", s.MaxDepth, 1, 6);
+                s.BranchesPerNode = EditorGUILayout.IntSlider("Branches Per Node", s.BranchesPerNode, 2, 5);
+                PropertyDrawerHelper.DrawMinMaxSliderLayout("Angle Spread (°)", ref s.AngleSpread, 5f, 90f);
+                PropertyDrawerHelper.DrawMinMaxSliderLayout("Length", ref s.LengthRange, 0.05f, 0.6f);
+                s.LengthDecay = EditorGUILayout.Slider("Length Decay", s.LengthDecay, 0.3f, 0.95f);
+                s.TrunkLength = EditorGUILayout.Slider("Trunk Length", s.TrunkLength, 0.02f, 0.3f);
+                s.BranchWidth = EditorGUILayout.Slider("Width", s.BranchWidth, 0.005f, 0.06f);
+                s.WidthDecay = EditorGUILayout.Slider("Width Decay", s.WidthDecay, 0.3f, 0.9f);
+                s.TipTaper = EditorGUILayout.Slider("Tip Taper", s.TipTaper, 0.1f, 0.9f);
+                EditorGUI.indentLevel--;
+            }
+
+            State.BranchVisualFoldout = EditorGUILayout.Foldout(
+                State.BranchVisualFoldout, "Visual", true);
+            if (State.BranchVisualFoldout)
+            {
+                EditorGUI.indentLevel++;
+                s.BranchColor = EditorGUILayout.ColorField("Color", s.BranchColor);
+                s.ColorVariation = EditorGUILayout.Slider("Color Variation", s.ColorVariation, 0f, 0.3f);
+                EditorGUI.indentLevel--;
+            }
+
+            State.BranchLeafFoldout = EditorGUILayout.Foldout(
+                State.BranchLeafFoldout, "Leaf Placement", true);
+            if (State.BranchLeafFoldout)
+            {
+                EditorGUI.indentLevel++;
+                s.LeafDepthThreshold = EditorGUILayout.Slider("Depth Threshold", s.LeafDepthThreshold, 0.1f, 1f);
+                s.MaxLeavesPerVariant = EditorGUILayout.IntSlider("Max Leaves", s.MaxLeavesPerVariant, 4, 32);
+                s.LeafScale = EditorGUILayout.Slider("Leaf Scale", s.LeafScale, 0.02f, 0.2f);
+                s.LeafScaleVariation = EditorGUILayout.Slider("Scale Variation", s.LeafScaleVariation, 0f, 0.8f);
+                EditorGUI.indentLevel--;
+            }
+        }
+
+        private void DrawBranchPropertiesAndPreview()
+        {
+            EditorGUILayout.BeginVertical(GUILayout.MinWidth(PropertiesMinWidth), GUILayout.MaxWidth(PropertiesMaxWidth));
+            DrawBranchProperties();
+            EditorGUILayout.EndVertical();
+
+            var propsRect = GUILayoutUtility.GetLastRect();
+
+            var previewX = propsRect.xMax + PreviewBoxPadding;
+            var viewWidth = EditorGUIUtility.currentViewWidth - 20f;
+            var previewWidth = viewWidth - previewX;
+
+            if (previewWidth < PreviewBoxMinSize)
+            {
+                return;
+            }
+
+            var previewHeight = Mathf.Max(propsRect.height, PreviewBoxMinSize);
+            var boxRect = new Rect(previewX, propsRect.y, previewWidth, previewHeight);
+
+            _branchPreviewBox.Draw(boxRect, _branchPreview, DrawBranchToolbarExtras);
+        }
+
+        private float DrawBranchToolbarExtras(Rect boxRect, float rightEdge)
+        {
+            var y = boxRect.y + 2f;
+
+            // Dice: randomise seed
+            rightEdge = TexturePreviewBox.DrawToolbarButton(rightEdge, y, "🎲", 26f, () =>
+            {
+                State.PreviewSeed = (uint)Random.Range(1, int.MaxValue);
+                State.Save();
+                _lastBranchHash = 0;
+                _lastLeafHash = 0;
+                Repaint();
+            });
+
+            // Map/Visual toggle
+            var toggleLabel = _showRuntimePreview ? "🌿" : "🗺";
+            rightEdge = TexturePreviewBox.DrawToolbarButton(rightEdge, y, toggleLabel, 28f, () =>
+            {
+                _showRuntimePreview = !_showRuntimePreview;
+                RebuildBranchDisplayTexture();
+                Repaint();
+            });
+
+            return rightEdge;
+        }
+
+        private void GenerateBranchPreview()
+        {
+            DestroyBranchPreview();
+            _branchRawMap = BushBranchBaker.Bake((int)State.PreviewSeed, State.BranchSettings);
+            RebuildBranchDisplayTexture();
+            _lastBranchHash = ComputeBranchSettingsHash();
+            Repaint();
+        }
+
+        private void CheckBranchAutoPreview()
+        {
+            if (!State.BranchFoldout)
+            {
+                return;
+            }
+
+            var hash = ComputeBranchSettingsHash();
+            if (hash != _lastBranchHash)
+            {
+                _lastBranchHash = hash;
+                DestroyBranchPreview();
+                _branchRawMap = BushBranchBaker.Bake((int)State.PreviewSeed, State.BranchSettings);
+                RebuildBranchDisplayTexture();
+                Repaint();
+            }
+        }
+
+        private void RebuildBranchDisplayTexture()
+        {
+            if (_branchPreview != null && _branchPreview != _branchRawMap)
+            {
+                DestroyImmediate(_branchPreview);
+            }
+
+            _branchPreview = null;
+
+            if (_branchRawMap == null)
+            {
+                return;
+            }
+
+            if (!_showRuntimePreview)
+            {
+                _branchPreview = _branchRawMap;
+                return;
+            }
+
+            // Build a runtime-style preview: apply branch color × depth shading
+            var pixels = _branchRawMap.GetPixels32();
+            var branchColor = State.BranchSettings.BranchColor;
+            var result = new Color32[pixels.Length];
+
+            for (var i = 0; i < pixels.Length; i++)
+            {
+                var p = pixels[i];
+                var alpha = p.a / 255f;
+                if (alpha < 0.01f)
+                {
+                    result[i] = new Color32(0, 0, 0, 0);
+                    continue;
+                }
+
+                // Same formula as BushBranch.shader: color * (0.6 + 0.4 * depth)
+                var shade = 0.6f + 0.4f * alpha;
+                var r = (byte)Mathf.Clamp(branchColor.r * shade * 255f, 0f, 255f);
+                var g = (byte)Mathf.Clamp(branchColor.g * shade * 255f, 0f, 255f);
+                var b = (byte)Mathf.Clamp(branchColor.b * shade * 255f, 0f, 255f);
+                var a = (byte)Mathf.Clamp(alpha * 255f, 0f, 255f);
+                result[i] = new Color32(r, g, b, a);
+            }
+
+            var res = _branchRawMap.width;
+            _branchPreview = new Texture2D(res, res, TextureFormat.RGBA32, false);
+            _branchPreview.SetPixels32(result);
+            _branchPreview.Apply();
+        }
+
+        private int ComputeBranchSettingsHash()
+        {
+            unchecked
+            {
+                var h = 17;
+                h = h * 31 + State.PreviewSeed.GetHashCode();
+                var s = State.BranchSettings;
+                h = h * 31 + s.Resolution.GetHashCode();
+                h = h * 31 + s.MaxDepth.GetHashCode();
+                h = h * 31 + s.BranchesPerNode.GetHashCode();
+                h = h * 31 + s.AngleSpread.GetHashCode();
+                h = h * 31 + s.LengthRange.GetHashCode();
+                h = h * 31 + s.LengthDecay.GetHashCode();
+                h = h * 31 + s.TrunkLength.GetHashCode();
+                h = h * 31 + s.BranchWidth.GetHashCode();
+                h = h * 31 + s.WidthDecay.GetHashCode();
+                h = h * 31 + s.TipTaper.GetHashCode();
+                h = h * 31 + s.BranchColor.GetHashCode();
+                h = h * 31 + s.ColorVariation.GetHashCode();
+                return h;
+            }
+        }
+
+        private void DestroyBranchPreview()
+        {
+            if (_branchPreview != null && _branchPreview != _branchRawMap)
+            {
+                DestroyImmediate(_branchPreview);
+            }
+
+            _branchPreview = null;
+
+            if (_branchRawMap != null)
+            {
+                DestroyImmediate(_branchRawMap);
+                _branchRawMap = null;
+            }
         }
 
         private void DrawLeafSection()
@@ -212,45 +468,25 @@ namespace BalloonParty.Editor.Bush
             var previewHeight = Mathf.Max(propsRect.height, PreviewBoxMinSize);
             var boxRect = new Rect(previewX, propsRect.y, previewWidth, previewHeight);
 
-            GUI.Box(boxRect, GUIContent.none, EditorStyles.helpBox);
+            _leafPreviewBox.Draw(boxRect, _leafLivePreview, DrawLeafToolbarExtras);
+        }
 
-            var labelRect = new Rect(boxRect.x, boxRect.y + 2f, boxRect.width - 28f, EditorGUIUtility.singleLineHeight);
-            EditorGUI.LabelField(labelRect, "Preview", EditorStyles.centeredGreyMiniLabel);
+        private float DrawLeafToolbarExtras(Rect boxRect, float rightEdge)
+        {
+            var y = boxRect.y + 2f;
 
-            var diceRect = new Rect(boxRect.xMax - 26f, boxRect.y + 2f, 24f, EditorGUIUtility.singleLineHeight);
-            if (GUI.Button(diceRect, "🎲", EditorStyles.miniButton))
+            // Dice: randomise seed
+            rightEdge = TexturePreviewBox.DrawToolbarButton(rightEdge, y, "🎲", 26f, () =>
             {
                 State.PreviewSeed = (uint)Random.Range(1, int.MaxValue);
                 State.Save();
                 _lastLeafHash = 0;
                 Repaint();
-            }
+            });
 
-            if (_leafLivePreview != null)
-            {
-                var inner = PadRect(boxRect, PreviewBoxPadding);
-                inner.y += EditorGUIUtility.singleLineHeight;
-                inner.height -= EditorGUIUtility.singleLineHeight;
-
-                var size = Mathf.Min(inner.width, inner.height);
-                var centred = new Rect(
-                    inner.x + (inner.width - size) * 0.5f,
-                    inner.y + (inner.height - size) * 0.5f,
-                    size, size);
-
-                EditorGUI.DrawTextureTransparent(centred, _leafLivePreview, ScaleMode.ScaleToFit);
-            }
+            return rightEdge;
         }
 
-
-        private static Rect PadRect(Rect rect, float padding)
-        {
-            return new Rect(
-                rect.x + padding,
-                rect.y + padding,
-                rect.width - padding * 2f,
-                rect.height - padding * 2f);
-        }
 
         private void CheckAutoPreview()
         {

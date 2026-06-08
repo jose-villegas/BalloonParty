@@ -2,10 +2,10 @@
 
 # Bush — 2D Skeletal Plant System
 
-> Procedural 2D plant skeletons with baked leaf sprites at branch tips.
-> Wind drives idle sway; disturbance triggers rattle. Rendered via
-> `Graphics.DrawMeshInstanced` for maximum batching — zero GameObjects for
-> leaves, one draw call per cluster.
+> Procedural 2D plants with baked branch map textures and leaf sprites.
+> Branches are a static textured quad; leaves rotate around their
+> attachment points for wind sway and rattle. Rendered via
+> `DrawMeshInstanced` — zero GameObjects, two draw calls per cluster.
 
 ---
 
@@ -14,9 +14,9 @@
 | Phase | Description | Status |
 |---|---|---|
 | **0** | Cluster infrastructure (shared with Puff) | ✅ Done |
-| **1** | Leaf baking — Gielis SDF + vein system | 🔨 **Current** |
-| **2** | Skeleton generation + branch & leaf `DrawMeshInstanced` rendering | ⬜ Next |
-| **3** | Wind animation (idle) | ⬜ Planned |
+| **1** | Leaf baking — Gielis SDF + vein system | ✅ Done |
+| **2** | Branch map baking + leaf extraction + rendering | 🔨 **Current** |
+| **3** | Wind animation (idle) | ⬜ Next |
 | **4** | Rattle (disturbed state) | ⬜ Planned |
 | **5** | Visual polish (shadows, sorting, bark texture) | ⬜ Planned |
 
@@ -24,53 +24,60 @@
 
 ## Core Idea
 
-A bush is a **2D branching tree** — not a single texture or SDF. Each branch
-is a mathematical node; leaves are instanced quads at tips. The skeleton is
-pure math (no GameObjects), rendered via `Graphics.DrawMeshInstanced`.
+A bush is a **2D branching shape** seen from top-down. Fractal branching
+math renders into a **branch map texture** at bake time in the editor.
+The texture serves dual purpose:
+
+1. **Branch visual** — the texture *is* the branch rendering at runtime
+   (one static textured quad per bush, no per-branch geometry, no animation)
+2. **Leaf placement source** — alpha channel encodes depth (0 = no
+   attachment, >0 = valid leaf point); RG encodes branch direction.
+   The baker extracts `LeafSlot[]` from the texture and serializes
+   them — zero runtime generation cost.
 
 ```
          Root (ground anchor)
            │
        ┌───┼───┐
-       │   │   │         ← primary branches (2-4)
+       │   │   │         ← baked into branch map texture (static quad)
       ┌┤  ┌┤  ┌┤
-      ││  ││  ││         ← secondary branches (optional)
-     🍃🍃 🍃🍃 🍃🍃       ← instanced leaf quads at tips
+      ││  ││  ││
+     🍃🍃 🍃🍃 🍃🍃       ← instanced leaf quads at extracted tips
 ```
 
-Animation is hierarchical matrix math:
-- Rotating a branch rotates all children naturally
-- Wind = sine + Perlin rotation per branch per frame
-- Rattle = decaying impulse propagated through the tree
-- Output = one `Matrix4x4[]` per cluster → one `DrawMeshInstanced` call
+**Only leaves animate.** Each leaf rotates around its attachment point
+(pivot) for wind idle sway and rattle. Branches stay still — from
+top-down, branch movement is barely perceptible and not worth the
+complexity. This eliminates all CPU/GPU animation sync concerns.
 
 ---
 
 ## Architecture
 
 ```
-BushSkeletonData (plain C# struct array)
-    │  Flat array of BranchNode structs — no GameObjects
-    │  Generated once from config + seed per bush slot
+Bush Baker (editor-only, bake time)
+    │  Fractal branching math → renders branch map texture
+    │  RG = branch direction, B = reserved, A = depth (0 = empty)
+    │  Extracts LeafSlot[] from texture (alpha > threshold at tips)
+    │  Serializes: branch map texture + LeafSlot[] → asset
     │
     ▼
-BushSkeletonAnimator (ITickable)
-    │  Each frame: walk the branch array, compute world matrices
-    │  Wind: sin(t) + perlin(t) per branch, amplitude × depth
-    │  Rattle: decaying angular impulse, blended with wind
-    │  Output: Matrix4x4[] for all leaves in the cluster
+BushView : ClusterView (runtime)
+    │  Loads pre-baked branch texture + pre-extracted LeafSlot[]
+    │  Branch quad: static SpriteRenderer with branch map (no animation)
+    │  Leaf quads: DrawMeshInstanced from LeafSlot[] matrices
+    │  Two draw calls per cluster. Zero runtime generation.
     │
     ▼
-BushView : ClusterView
-    │  OnConfigured: generates skeleton data per slot
-    │  LateUpdate: calls Graphics.DrawMeshInstanced twice:
-    │    1. Branch quads (unit tapered quad × branch matrices)
-    │    2. Leaf quads (unit quad × leaf matrices)
-    │  Two draw calls render ALL branches + leaves in the cluster
+BushAnimator (ITickable, runtime)
+    │  Flat loop over LeafSlot[] only:
+    │  Wind: rotation around pivot = sin(t + phase) × depth
+    │  Rattle: distance-from-impact × depth → damped spring rotation
+    │  Output: Matrix4x4[] for leaves (rotation around attachment point)
     │
     ▼
 No per-leaf or per-branch GameObjects. No Transform hierarchy.
-Pure math → GPU instancing.
+No runtime generation. Branches are static. Leaves are flat CPU math.
 ```
 
 ---
@@ -91,7 +98,7 @@ Shared cluster system extracted from Puff. All files exist and work.
 
 ---
 
-## Phase 1 — Leaf Baking 🔨 Current
+## Phase 1 — Leaf Baking ✅ Done
 
 Procedural Gielis leaf sprites baked offline via an editor window. The shader
 renders shape, surface shading, a gradient-driven midrib (adapting to lobe
@@ -234,256 +241,794 @@ When continuing leaf baking work, read:
 
 ---
 
-## Phase 2 — Skeleton + Branch & Leaf Rendering
+## Phase 2 — Branch Map Baking + Leaf Extraction + Rendering 🔨 Current
 
-### Branch structure (plain C# data)
+### Overview
+
+The Bush Baker (editor window, Phase 1 infrastructure) gains a second
+bake pass: fractal branching math renders a **branch map texture** where
+RG = branch direction, B = reserved, A = depth. The baker then extracts
+leaf attachment points from the texture and serializes both the texture
+and the `LeafSlot[]` array as assets. At runtime, branches are a static
+textured quad; leaves are `DrawMeshInstanced` with pivot-based rotation.
+
+---
+
+### Task Breakdown
+
+| # | Task | New files | Modified files | Status |
+|---|---|---|---|---|
+| 2.1 | Branch bake settings class | `BushBranchBakeSettings.cs` | `BushBakerState.cs` | ⬜ |
+| 2.2 | Fractal branch generator (CPU) | `BushBranchGenerator.cs` | — | ⬜ |
+| 2.3 | Branch bake shader | `BushBakeBranch.shader` | — | ⬜ |
+| 2.4 | Branch baker (offscreen pipeline) | `BushBranchBaker.cs` | — | ⬜ |
+| 2.5 | Leaf extractor from branch map | `BushLeafExtractor.cs` | — | ⬜ |
+| 2.6 | `BushVariantData` ScriptableObject | `BushVariantData.cs` | — | ⬜ |
+| 2.7 | Editor window: branch section + export | — | `BushBakerWindow.cs`, `BushBakerState.cs` | ⬜ |
+| 2.8 | Runtime branch shader | `BushBranch.shader` | — | ⬜ |
+| 2.9 | Runtime `BushView` refactor | — | `BushView.cs`, `BushViewController.cs` | ⬜ |
+| 2.10 | `IBushSettings` extension | — | `IBushSettings.cs`, concrete SO | ⬜ |
+| 2.11 | Integration test — bake + render | — | — | ⬜ |
+
+---
+
+### 2.1 — Branch Bake Settings
+
+**File:** `Assets/Source/Editor/Bush/BushBranchBakeSettings.cs`
 
 ```csharp
-internal struct BranchNode
+[Serializable]
+internal class BushBranchBakeSettings
 {
-    internal int ParentIndex;           // -1 for root
-    internal Vector2 LocalOffset;       // offset from parent tip
-    internal float Length;
-    internal float BaseAngle;           // rest angle relative to parent
-    internal float BaseWidth;           // width at the branch base
-    internal float TipWidth;            // width at the branch tip (taper)
-    internal int Depth;                 // 0 = trunk, 1 = primary, 2 = secondary
-    internal int FirstLeafIndex;        // index into leaf array (-1 if none)
-    internal int LeafCount;
-    internal float PhaseOffset;         // unique per branch, for wind desync
-}
+    [SerializeField] internal int Resolution = 256;
+    [SerializeField] internal int Variants = 4;
 
-internal struct LeafInstance
-{
-    internal int BranchIndex;           // which branch this leaf is attached to
-    internal Vector2 LocalOffset;       // offset from branch tip
-    internal float BaseAngle;           // rest angle relative to branch
-    internal float Scale;
-    internal int SpriteVariant;         // index into leaf atlas
-    internal Color32 Tint;              // per-leaf hue variation
-}
-```
+    // Fractal generation
+    [SerializeField] internal int MaxDepth = 4;
+    [SerializeField] internal int BranchesPerNode = 3;
+    [SerializeField] internal Vector2 AngleSpread = new(25f, 55f);
+    [SerializeField] internal Vector2 LengthRange = new(0.15f, 0.35f);
+    [SerializeField] internal float LengthDecay = 0.7f;
+    [SerializeField] internal float TrunkLength = 0.12f;
+    [SerializeField] internal float BranchWidth = 0.02f;
+    [SerializeField] internal float WidthDecay = 0.6f;
+    [SerializeField] internal float TipTaper = 0.3f;
 
-### Generation rules
+    // Visual
+    [SerializeField] internal Color BranchColor = new(0.35f, 0.22f, 0.10f, 1f);
+    [SerializeField] internal float ColorVariation = 0.08f;
 
-- **Trunk** — short, nearly vertical
-- **Primary branches** — 2-4, spread ±30°-60° from trunk
-- **Secondary branches** — 0-2 per primary (optional, depth budget)
-- **Leaves** — 2-3 per terminal branch, small fan arrangement
-- **Randomisation** — seed-driven jitter on angles, lengths, counts
-
-### Branch rendering — procedural mesh per cluster
-
-Each branch segment is a **tapered quad** (trapezoid) connecting the parent
-tip to the child tip. The four vertices are placed at perpendicular offsets
-from the branch line using `BaseWidth` at the base and `TipWidth` at the tip.
-All branch quads for a cluster are combined into a **single procedural mesh**,
-rebuilt only on skeleton generation (not per frame).
-
-```
-          TipWidth
-       ┌────────────┐  ← branch tip (toward leaves)
-      ╱              ╲
-     ╱                ╲    ← tapered quad (2 triangles)
-    ╱                  ╲
-   └────────────────────┘  ← branch base (toward parent)
-          BaseWidth
-```
-
-#### Mesh structure
-
-```csharp
-// Per branch segment: 4 vertices, 2 triangles (6 indices)
-// Vertices in local branch space, transformed to world during generation:
-//   v0 = base - perpendicular × baseWidth/2
-//   v1 = base + perpendicular × baseWidth/2
-//   v2 = tip  + perpendicular × tipWidth/2
-//   v3 = tip  - perpendicular × tipWidth/2
-//
-// UVs: v along branch length (0=base, 1=tip), u across width (0,1)
-// Vertex color: brown tint with slight per-branch variation
-```
-
-- **One `Mesh`** per cluster — all branch segments baked in
-- **One draw call** via `MeshFilter` + `MeshRenderer` on the `BushView`
-- **Rebuilt on generation only** — vertex positions are in world space
-  at generation time; animation transforms the mesh via per-vertex
-  bone-like indices stored in UV2 (branch index) so the animator can
-  rewrite vertex positions each frame
-
-#### Animation-time vertex update
-
-During wind/rattle (Phases 3-4), branch angles change each frame. Two
-strategies, pick one during implementation:
-
-1. **Matrix approach** — store branch index in UV2, use
-   `Mesh.vertices` rewrite each frame from the animator's computed
-   branch world matrices. ~4 vertices × ~8 branches = ~32 vertex
-   writes per bush. Cheap enough for mobile.
-
-2. **Transform approach** — render branches via `DrawMeshInstanced`
-   with a unit tapered-quad mesh and one `Matrix4x4` per branch
-   segment. Avoids vertex rewrite but needs a branch material with
-   instancing. Slightly more draw calls if branch and leaf materials
-   differ (2 per cluster instead of 1).
-
-Recommendation: **option 2** (`DrawMeshInstanced` with unit branch quad)
-keeps the same pattern as leaves, avoids CPU vertex manipulation, and
-scales cleanly. The extra draw call (branches + leaves = 2 per cluster)
-is negligible.
-
-#### Unit branch quad mesh
-
-A shared unit quad with built-in taper, scaled per branch via its
-`Matrix4x4`:
-
-```csharp
-// Unit branch quad: height = 1 (along local Y), width tapers from
-// BaseWidth at y=0 to TipWidth at y=1. Since width varies per branch,
-// encode taper as a uniform or use two draws (base-heavy vs tip-heavy).
-//
-// Simpler: use a unit rectangle (1×1) and let the matrix handle
-// width + length. Taper is applied by scaling x differently at
-// base vs tip — requires a 2-bone or shader-driven approach.
-```
-
-Practical solution: **generate a shared tapered quad mesh at startup**
-with a configurable taper ratio. Since all branches share a similar
-taper profile (controlled by depth), 2-3 mesh variants (trunk, primary,
-secondary) suffice.
-
-```csharp
-// BranchQuadFactory — creates a unit tapered quad mesh
-internal static Mesh CreateBranchQuad(float tipWidthRatio)
-{
-    // tipWidthRatio: 0 = pointed, 1 = rectangle
-    // height = 1 along Y, base width = 1, tip width = tipWidthRatio
-    // 4 verts, 2 tris
+    // Leaf extraction
+    [SerializeField] internal float LeafDepthThreshold = 0.6f;
+    [SerializeField] internal int MaxLeavesPerVariant = 12;
+    [SerializeField] internal float LeafScale = 0.08f;
+    [SerializeField] internal float LeafScaleVariation = 0.3f;
 }
 ```
 
-#### Branch material
+**Modify:** `BushBakerState.cs` — add:
+- `[SerializeField] internal BushBranchBakeSettings BranchSettings = new();`
+- `[SerializeField] internal bool BranchFoldout = true;`
+- `[SerializeField] internal bool BranchShapeFoldout = true;`
+- `[SerializeField] internal bool BranchVisualFoldout = true;`
+- `[SerializeField] internal bool BranchLeafFoldout = true;`
 
-- Simple unlit shader: solid colour from vertex color, optional subtle
-  bark texture
-- GPU instancing **enabled** — no MPB needed, colour comes from
-  vertex colour baked into the mesh or instancing buffer
-- Same sorting layer as leaves, but lower sorting order so branches
-  render behind leaves
+---
 
-#### Branch visual parameters (in `IBushSettings`)
+### 2.2 — Fractal Branch Generator
 
-```csharp
-float BranchTrunkWidth { get; }         // world-space width of the trunk
-float BranchTaperRatio { get; }         // tip/base width ratio (0.3–0.7)
-Color BranchColor { get; }              // base bark colour
-float BranchColorVariation { get; }     // per-branch hue/value jitter
-```
+**File:** `Assets/Source/Editor/Bush/BushBranchGenerator.cs`
 
-### Leaf rendering via DrawMeshInstanced
+Generates a flat list of branch segments via recursive fractal math.
+Output used by the bake shader (mesh vertices) and leaf extractor (tips).
 
 ```csharp
-// In BushView.LateUpdate or a dedicated render callback:
-Graphics.DrawMeshInstanced(
-    _quadMesh,           // shared unit quad
-    submeshIndex: 0,
-    _leafMaterial,       // shared leaf atlas material (GPU instancing enabled)
-    _leafMatrices,       // Matrix4x4[] — computed per frame by animator
-    _leafCount,
-    _leafMPB             // per-instance color via instancing buffer
-);
+internal static class BushBranchGenerator
+{
+    internal struct Segment
+    {
+        internal Vector2 Start;        // UV space 0–1
+        internal Vector2 End;          // UV space 0–1
+        internal float StartWidth;     // normalised
+        internal float EndWidth;       // normalised (tapered)
+        internal float Depth;          // normalised 0–1 (0=trunk, 1=tips)
+        internal float DirectionAngle; // radians
+    }
+
+    internal static List<Segment> Generate(int seed, BushBranchBakeSettings settings)
+    {
+        // Uses System.Random(seed) for determinism.
+        //
+        // Algorithm:
+        // 1. Root at (0.5, 0.1), pointing up
+        // 2. Grow trunk: short segment, full width
+        // 3. At trunk tip, spawn BranchesPerNode children:
+        //    angle = parentAngle ± random(AngleSpread.x, AngleSpread.y)
+        //    alternating sign for spreading
+        // 4. Each child: length from LengthRange × LengthDecay^depth
+        //    width = parentWidth × WidthDecay, tipWidth = width × TipTaper
+        // 5. Recurse until depth == MaxDepth
+        // 6. Clamp all positions to [0.02, 0.98] UV bounds
+        // 7. Return flat list sorted by depth (trunk first)
+    }
+}
 ```
 
-- **Zero GameObjects** for leaves — just a `Matrix4x4[]` array
-- **One draw call** per cluster (all leaves share the same atlas material)
-- **Per-instance color** for hue variation via instancing buffer
-- Skeleton hierarchy exists only as index relationships in the `BranchNode[]`
+**Key design decisions:**
+- All coordinates in **UV space (0–1)** — maps directly to texture pixels
+- Root at bottom-centre `(0.5, 0.1)` growing upward (top-down bush
+  viewed from above, root is the ground anchor at "south")
+- Random angle alternates ±: child 0 goes left, child 1 goes right,
+  child 2 centre-ish. Avoids one-sided bushes.
+- Segments that exit UV bounds are trimmed to the boundary
 
-### Draw call budget (updated)
+---
 
-| Element | Method | Calls per cluster |
-|---|---|---|
-| Branches | `DrawMeshInstanced` (unit branch quads) | 1 |
-| Leaves | `DrawMeshInstanced` (unit leaf quads) | 1 |
-| **Total** | | **2** |
+### 2.3 — Branch Bake Shader
 
-### Matrix computation (per frame)
+**File:** `Assets/Shaders/BalloonParty/Grid/Editor/BushBakeBranch.shader`
+
+Renders a procedural mesh (4 verts per segment) with vertex colors
+encoding direction and depth. Fragment applies edge AA.
+
+```hlsl
+Shader "Hidden/BalloonParty/Grid/BushBakeBranch"
+{
+    SubShader
+    {
+        Tags { "RenderType"="Transparent" "Queue"="Transparent" }
+        Blend SrcAlpha OneMinusSrcAlpha
+        ZWrite Off  Cull Off
+
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+
+            struct appdata
+            {
+                float4 vertex : POSITION;
+                float4 color : COLOR;   // RG=dir, B=0, A=depth
+                float2 uv : TEXCOORD0;  // x = across width (0–1)
+            };
+
+            struct v2f
+            {
+                float4 pos : SV_POSITION;
+                float4 color : COLOR;
+                float2 uv : TEXCOORD0;
+            };
+
+            v2f vert(appdata v)
+            {
+                v2f o;
+                o.pos = UnityObjectToClipPos(v.vertex);
+                o.color = v.color;
+                o.uv = v.uv;
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_Target
+            {
+                // AA: soft edge across stroke width
+                float edge = abs(i.uv.x - 0.5) * 2.0;
+                float aa = 1.0 - smoothstep(0.8, 1.0, edge);
+                return fixed4(i.color.rgb, i.color.a * aa);
+            }
+            ENDCG
+        }
+    }
+}
+```
+
+**Vertex data encoding (set by `BushBranchBaker.BuildSegmentMesh`):**
+- Position: quad corners of the tapered segment in UV/world space
+- Color.r: `cos(angle) * 0.5 + 0.5` (branch direction X)
+- Color.g: `sin(angle) * 0.5 + 0.5` (branch direction Y)
+- Color.b: `0` (reserved)
+- Color.a: normalised depth (0=trunk, 1=tip)
+- UV.x: 0 at left edge, 1 at right edge (drives AA)
+- UV.y: 0 at base, 1 at tip (unused for now)
+
+---
+
+### 2.4 — Branch Baker
+
+**File:** `Assets/Source/Editor/Bush/BushBranchBaker.cs`
+
+Follows `BushLeafBaker` pattern — offscreen camera + procedural mesh:
+
+```csharp
+internal static class BushBranchBaker
+{
+    private const string ShaderName = "Hidden/BalloonParty/Grid/BushBakeBranch";
+    private const int BakeLayer = 31;
+
+    internal static Texture2D Bake(int seed, BushBranchBakeSettings settings)
+    {
+        var segments = BushBranchGenerator.Generate(seed, settings);
+        var mesh = BuildSegmentMesh(segments);
+        var material = new Material(Shader.Find(ShaderName));
+
+        var rt = RenderTexture.GetTemporary(
+            settings.Resolution, settings.Resolution, 0, RenderTextureFormat.ARGB32);
+
+        var cameraGo = CreateBakeCamera(rt);
+        var meshGo = CreateMeshObject(mesh, material);
+
+        cameraGo.GetComponent<Camera>().Render();
+        var result = ReadbackTexture(rt, settings.Resolution);
+
+        // Cleanup
+        Object.DestroyImmediate(meshGo);
+        Object.DestroyImmediate(cameraGo);
+        Object.DestroyImmediate(mesh);
+        Object.DestroyImmediate(material);
+        RenderTexture.ReleaseTemporary(rt);
+
+        return result;
+    }
+}
+```
+
+**`BuildSegmentMesh` detail:**
+Per segment → 4 vertices forming a tapered quad:
+```
+    v2 ────── v3          (tip: EndWidth)
+     ╲          ╱
+      ╲        ╱
+       ╲      ╱
+    v0 ────── v1          (base: StartWidth)
+```
+- `perpendicular = rotate90(normalize(End - Start))`
+- `v0 = Start - perpendicular × StartWidth/2`
+- `v1 = Start + perpendicular × StartWidth/2`
+- `v2 = End - perpendicular × EndWidth/2`
+- `v3 = End + perpendicular × EndWidth/2`
+- Indices: `[0,2,1, 1,2,3]`
+- Vertex colors: all 4 get same `(dirR, dirG, 0, depth)`
+- UV.x: v0,v2 = 0; v1,v3 = 1
+
+**Camera setup:**
+- Ortho, size = 0.5 (total view height = 1.0 matches UV 0–1)
+- Position: `(0.5, 0.5, -1)` looking forward (+Z)
+- Clear: transparent black `(0,0,0,0)`
+- Culling mask: `1 << BakeLayer`
+
+---
+
+### 2.5 — Leaf Extractor
+
+**File:** `Assets/Source/Editor/Bush/BushLeafExtractor.cs`
+
+Reads the baked branch map texture, finds branch tips, returns leaf data:
+
+```csharp
+internal static class BushLeafExtractor
+{
+    internal static LeafSlotData[] Extract(
+        Texture2D branchMap,
+        int seed,
+        BushBranchBakeSettings branchSettings,
+        int leafVariantCount)
+    {
+        var pixels = branchMap.GetPixels32();
+        var res = branchMap.width;
+        var candidates = FindTipCandidates(pixels, res, branchSettings);
+        var filtered = SpatialFilter(candidates, branchSettings.MaxLeavesPerVariant, res);
+        return BuildLeafSlots(filtered, seed, branchSettings, leafVariantCount, res);
+    }
+}
+```
+
+**Tip detection (`FindTipCandidates`):**
+```
+For each pixel (x, y):
+    if alpha < threshold (LeafDepthThreshold × 255): skip
+    Decode direction: dirX = R/255 * 2 - 1, dirY = G/255 * 2 - 1
+    Sample 2–3 pixels ahead in (dirX, dirY) direction
+    If ahead.alpha < current.alpha × 0.7 OR ahead is empty:
+        → this pixel is a tip candidate
+    Score = alpha (deeper tips preferred)
+```
+
+**Spatial filtering (`SpatialFilter`):**
+```
+Sort candidates by score descending (deepest tips first)
+minDist = 1.0 / sqrt(MaxLeavesPerVariant) × 0.8  (in UV space)
+accepted = []
+For each candidate:
+    if no accepted leaf within minDist:
+        accept
+    if accepted.count >= MaxLeavesPerVariant: break
+```
+
+**Building leaf slots (`BuildLeafSlots`):**
+```
+For each accepted tip at (px, py):
+    position = ((px / res) - 0.5, (py / res) - 0.5) × bushWorldSize
+    angle = atan2(dirY, dirX)
+    depth = alpha / 255.0
+    phase = hash(seed, index)  // deterministic
+    scale = LeafScale × (1 + (hash - 0.5) × 2 × ScaleVariation)
+    variant = hash(seed, index + 1000) % leafVariantCount
+    tint = baseColor with hue shifted by hash × variation
+```
+
+---
+
+### 2.6 — BushVariantData ScriptableObject
+
+**File:** `Assets/Source/Configuration/BushVariantData.cs`
+(Runtime assembly — referenced at runtime by BushView)
+
+```csharp
+namespace BalloonParty.Configuration
+{
+    [CreateAssetMenu(menuName = "BalloonParty/Bush Variant Data")]
+    internal class BushVariantData : ScriptableObject
+    {
+        [SerializeField] private Texture2D _branchMap;
+        [SerializeField] private LeafSlotData[] _leafSlots;
+        [SerializeField] private Vector2 _boundsSize;
+
+        internal Texture2D BranchMap => _branchMap;
+        internal IReadOnlyList<LeafSlotData> LeafSlots => _leafSlots;
+        internal Vector2 BoundsSize => _boundsSize;
+
+#if UNITY_EDITOR
+        internal void SetBakeData(
+            Texture2D branchMap, LeafSlotData[] leafSlots, Vector2 boundsSize)
+        {
+            _branchMap = branchMap;
+            _leafSlots = leafSlots;
+            _boundsSize = boundsSize;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+#endif
+    }
+
+    [System.Serializable]
+    internal struct LeafSlotData
+    {
+        public Vector2 Position;      // local-space (centred at origin)
+        public float BaseAngle;       // radians
+        public float Depth;           // 0–1
+        public float PhaseOffset;     // wind desync
+        public float Scale;           // world-space leaf size
+        public int SpriteVariant;     // index into leaf atlas
+        public Color32 Tint;          // per-leaf hue variation
+    }
+}
+```
+
+---
+
+### 2.7 — Editor Window: Branch Section + Export
+
+**Modify:** `Assets/Source/Editor/Bush/BushBakerWindow.cs`
+
+Add `DrawBranchSection()` between `DrawSharedSettings()` and
+`DrawLeafSection()` in `OnGUI()`.
+
+**Branch section layout:**
+```
+▼ Branch Map
+  Resolution: [256]
+  Variants: [4]
+  ▼ Fractal Shape
+    Max Depth: [4]
+    Branches Per Node: [3]
+    Angle Spread: [25°–55°]    (MinMaxSlider)
+    Length: [0.15–0.35]        (MinMaxSlider)
+    Length Decay: [0.7]
+    Trunk Length: [0.12]
+    Width: [0.02]
+    Width Decay: [0.6]
+    Tip Taper: [0.3]
+  ▼ Visual
+    Color: [■]
+    Color Variation: [0.08]
+  ▼ Leaf Placement
+    Depth Threshold: [0.6]
+    Max Leaves: [12]
+    Leaf Scale: [0.08]
+    Scale Variation: [0.3]
+
+  [Preview Branch Map]  [Preview with Leaves]
+  (live preview box — same pattern as leaf)
+
+  [Export Bush Variant]
+```
+
+**Buttons:**
+- **"Preview Branch Map"** — `BushBranchBaker.Bake()` → display in preview
+- **"Preview with Leaves"** — bake + extract → overlay leaf positions as
+  coloured dots/sprites on the branch map preview
+- **"Export Bush Variant"** — full pipeline:
+  1. Bake branch map for each variant seed
+  2. Save each as `BranchMap_V{i}.png` in output folder
+  3. Configure texture importer (alpha is transparency, no mipmap)
+  4. Extract leaf slots per variant
+  5. Create/update `BushVariantData` SO per variant
+  6. Ping first SO in Project window
+
+**Auto-preview:** Same hash-check pattern as leaf preview. Recompute
+branch preview on any branch setting change.
+
+**Modify:** `BushBakerState.cs` — add foldout booleans and
+`BushBranchBakeSettings BranchSettings`.
+
+---
+
+### 2.8 — Runtime Branch Shader
+
+**File:** `Assets/Shaders/BalloonParty/Grid/BushBranch.shader`
+
+Static unlit alpha-test shader. Follows project GPU instancing pattern.
+
+```hlsl
+Shader "BalloonParty/Grid/BushBranch"
+{
+    Properties
+    {
+        _MainTex ("Branch Map", 2D) = "white" {}
+        _BranchColor ("Branch Color", Color) = (0.35, 0.22, 0.10, 1)
+        _AlphaCutoff ("Alpha Cutoff", Range(0,1)) = 0.01
+        _RendererColor ("Renderer Color", Color) = (1,1,1,1)
+    }
+    SubShader
+    {
+        Tags { "RenderType"="TransparentCutout" "Queue"="AlphaTest" }
+        Cull Off  ZWrite Off
+
+        Pass
+        {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #pragma multi_compile_instancing
+            #include "UnityCG.cginc"
+
+            sampler2D _MainTex;
+            fixed4 _BranchColor;
+            float _AlphaCutoff;
+
+            #ifdef UNITY_INSTANCING_ENABLED
+                UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
+                    UNITY_DEFINE_INSTANCED_PROP(fixed4, unity_SpriteRendererColorArray)
+                UNITY_INSTANCING_BUFFER_END(PerDrawSprite)
+                #define _RendererColor UNITY_ACCESS_INSTANCED_PROP(PerDrawSprite, unity_SpriteRendererColorArray)
+            #else
+                fixed4 _RendererColor;
+            #endif
+
+            struct appdata { float4 vertex : POSITION; float2 uv : TEXCOORD0; UNITY_VERTEX_INPUT_INSTANCE_ID };
+            struct v2f { float4 pos : SV_POSITION; float2 uv : TEXCOORD0; UNITY_VERTEX_INPUT_INSTANCE_ID };
+
+            v2f vert(appdata v)
+            {
+                v2f o;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_TRANSFER_INSTANCE_ID(v, o);
+                o.pos = UnityObjectToClipPos(v.vertex);
+                o.uv = v.uv;
+                return o;
+            }
+
+            fixed4 frag(v2f i) : SV_Target
+            {
+                UNITY_SETUP_INSTANCE_ID(i);
+                fixed4 map = tex2D(_MainTex, i.uv);
+                clip(map.a - _AlphaCutoff);
+                fixed3 col = _BranchColor.rgb * (0.6 + 0.4 * map.a);
+                return fixed4(col * _RendererColor.rgb, map.a);
+            }
+            ENDCG
+        }
+    }
+}
+```
+
+**Material:** `Assets/Materials/Bush/BushBranchMaterial.mat`
+- GPU instancing **enabled** (no MPB, static)
+- Register in `Assets/Shaders/BalloonParty/README.md`
+- Register in `Assets/Materials/README.md`
+
+---
+
+### 2.9 — Runtime BushView Refactor
+
+**Modify:** `Assets/Source/Slots/Actor/Archetype/BushView.cs`
+
+Remove entirely:
+- `_leafPrefab`, `_canopyRenderers`, `_leafSprites`, `_canopyGapScales`
+- `_leafPool`, `SetLeafPool()`, `ClearSprites()`
+- `SpawnCanopySprite()`, `SpawnLeafSprite()`
+- `UpdateCanopyScales()`, `UpdateLeafTransformsLive()`, `ApplyLeafTransforms()`
+- `PhyllotaxisCenter()`
+
+Replace with:
+```csharp
+internal class BushView : ClusterView
+{
+    [SerializeField] private SpriteRenderer _branchRenderer;
+
+    private BushVariantData _variantData;
+    private IBushSettings _settings;
+    private Matrix4x4[] _leafMatrices;
+    private int _leafCount;
+
+    internal BushVariantData VariantData => _variantData;
+    internal Matrix4x4[] LeafMatrices => _leafMatrices;
+    internal int LeafCount => _leafCount;
+
+    internal void SetVariantData(BushVariantData data, IBushSettings settings)
+    {
+        _variantData = data;
+        _settings = settings;
+    }
+
+    protected override void OnConfigured(MaterialPropertyBlock block)
+    {
+        // Disable legacy base renderer
+        if (Renderer != null)
+        {
+            Renderer.enabled = false;
+        }
+
+        ConfigureBranch();
+        ConfigureLeaves();
+    }
+
+    private void ConfigureBranch()
+    {
+        if (_branchRenderer == null || _variantData == null)
+        {
+            return;
+        }
+
+        _branchRenderer.enabled = true;
+        _branchRenderer.material = _settings.BranchMaterial;
+        _branchRenderer.material.mainTexture = _variantData.BranchMap;
+
+        // Size the branch quad to bush world size
+        var size = _settings.BushWorldSize;
+        _branchRenderer.transform.localScale = new Vector3(size, size, 1f);
+
+        _branchRenderer.sortingLayerID = _settings.SortingLayerId;
+        _branchRenderer.sortingOrder = _settings.SortingOrderOffset;
+    }
+
+    private void ConfigureLeaves()
+    {
+        if (_variantData == null)
+        {
+            return;
+        }
+
+        var slots = _variantData.LeafSlots;
+        _leafCount = slots.Count;
+        _leafMatrices = new Matrix4x4[_leafCount];
+
+        // Initial matrices at rest positions
+        var worldOffset = (Vector2)transform.position;
+        for (var i = 0; i < _leafCount; i++)
+        {
+            var slot = slots[i];
+            var worldPos = worldOffset + slot.Position;
+            _leafMatrices[i] = Matrix4x4.TRS(
+                new Vector3(worldPos.x, worldPos.y, 0f),
+                Quaternion.Euler(0f, 0f, slot.BaseAngle * Mathf.Rad2Deg),
+                Vector3.one * slot.Scale);
+        }
+    }
+
+    private void LateUpdate()
+    {
+        if (_leafCount == 0 || _settings == null)
+        {
+            return;
+        }
+
+        Graphics.DrawMeshInstanced(
+            _settings.LeafQuadMesh,
+            0,
+            _settings.LeafMaterial,
+            _leafMatrices,
+            _leafCount);
+    }
+}
+```
+
+**Modify:** `Assets/Source/Slots/Actor/Archetype/BushViewController.cs`
+
+Remove:
+- `PoolManager` injection and `LeafPoolKey`
+- `LeafSpritePoolChannel` creation in `OnViewCreated`
+- `view.SetLeafPool(...)` call
+
+Replace `OnViewCreated`:
+```csharp
+protected override void OnViewCreated(BushView view)
+{
+    _bushView = view;
+    // Pick variant by seed from cluster position
+    var variants = _settings.BushVariants;
+    if (variants != null && variants.Length > 0)
+    {
+        var hash = view.transform.position.GetHashCode();
+        var variant = variants[Mathf.Abs(hash) % variants.Length];
+        view.SetVariantData(variant, _settings);
+    }
+}
+```
+
+---
+
+### 2.10 — IBushSettings Extension
+
+**Modify:** `Assets/Source/Configuration/IBushSettings.cs`
+
+```csharp
+internal interface IBushSettings : IClusterViewSettings
+{
+    // --- Phase 2 (new) ---
+    BushVariantData[] BushVariants { get; }
+    Material BranchMaterial { get; }
+    Material LeafMaterial { get; }
+    Mesh LeafQuadMesh { get; }
+    float BushWorldSize { get; }
+
+    // --- Phase 1 (kept) ---
+    Sprite[] LeafAtlasSprites { get; }
+
+    // --- Phase 3 (kept for future) ---
+    float WindAmplitude { get; }
+    float WindPeriod { get; }
+
+    // --- Existing (kept) ---
+    BushView BushPrefab { get; }
+    float SlotRadius { get; }
+    int SortingLayerId { get; }
+    int SortingOrderOffset { get; }
+}
+```
+
+**Deprecate / remove** from interface (old approach):
+- `CanopyVariants`, `CanopyDiameter`, `BranchSpread`
+- `RuffleLeafCount`, `RuffleRadius`, `RuffleRotationAmplitude`
+- `RuffleScaleAmplitude`, `RufflePositionAmplitude`
+- `RuffleDuration`, `RuffleStaggerPerUnit`
+- `LeafSpriteSize`
+
+**Modify concrete SO** implementing `IBushSettings` — add serialized
+fields for new properties, remove deprecated ones.
+
+---
+
+### 2.11 — Integration Test
+
+Manual verification checklist:
+
+1. **Bake pipeline:**
+   - Open `Tools > Bush Baker` → Branch Map section visible
+   - Configure parameters, click "Preview Branch Map"
+   - ✓ Fractal branches visible with tapering and depth shading
+   - ✓ Changing seed produces different structures
+   - Click "Preview with Leaves"
+   - ✓ Leaf markers appear at branch tips, not at forks or trunk
+   - Click "Export Bush Variant"
+   - ✓ `BushVariantData` SO created in output folder
+   - ✓ Branch map PNG saved with correct alpha channel
+   - ✓ `LeafSlots` array populated in the SO
+
+2. **Runtime rendering:**
+   - Assign exported variant(s) to bush settings SO
+   - Enter Play mode with bush cluster on grid
+   - ✓ Branch map quad visible, correctly sized
+   - ✓ Leaves render via `DrawMeshInstanced` at tip positions
+   - ✓ Leaf sprites use correct atlas variants
+   - ✓ 2 draw calls per cluster (verify in Frame Debugger)
+   - ✓ No `LeafSpriteView` GameObjects in hierarchy
+   - ✓ No runtime allocation (Profiler: zero GC in BushView)
+
+3. **Edge cases:**
+   - ✓ Multiple clusters with different variants
+   - ✓ Single-slot cluster renders correctly
+   - ✓ Gap-fill midpoint slots still work (branch quad per slot)
+
+---
+
+### Implementation Order (recommended)
 
 ```
-For each branch (depth-first, parent before children):
-    branchWorldMatrix = parentWorldMatrix × TRS(offset, currentAngle, 1)
-    branchRenderMatrix = branchWorldMatrix × TRS(0, 0, (length, width, 1))
-    branchMatrices[branchIndex] = branchRenderMatrix
-
-    For each leaf on this branch:
-        leafWorldMatrix = branchWorldMatrix × TRS(leafOffset, leafAngle, leafScale)
-        leafMatrices[leafIndex] = leafWorldMatrix
+2.1  Settings class             ← quick, unblocks everything
+2.2  Generator                  ← pure math, testable with Debug.Log
+2.3  Bake shader                ← simple pass-through
+2.4  Baker pipeline             ← wires 2.2 + 2.3, produces texture
+2.7a Window preview button      ← see branch maps visually
+ ─── iterate on 2.2 parameters using preview ───
+2.5  Leaf extractor             ← reads texture from 2.4
+2.7b Window "with leaves"       ← visual feedback for extraction
+2.6  Variant SO                 ← data container
+2.7c Window export button       ← saves SO to disk
+ ─── bake pipeline complete ───
+2.8  Runtime shader             ← trivial, 10 min
+2.10 Settings extension         ← add variant refs to config
+2.9  BushView refactor          ← runtime rendering
+2.11 Integration test           ← end-to-end validation
 ```
 
-~12-18 matrix multiplies per bush. Trivially cheap.
-
-### Render order & sorting
-
-- Branches render **behind** leaves within the same sorting layer
-- Branch sorting order = base offset (from cluster slot)
-- Leaf sorting order = base offset + depth within the branch
-- Both use the sorting layer from `IBushSettings.SortingLayerId`
+---
 
 ### Session context for Phase 2
 
-When implementing skeleton + rendering, read:
-- `Assets/Source/Slots/Actor/Archetype/BushView.cs` — current view (refactor)
-- `Assets/Source/Slots/Actor/Cluster/ClusterView.cs` — base class
+When implementing Phase 2 tasks, read:
+- `Assets/Source/Editor/Bush/BushBakerWindow.cs` — editor window (extend)
+- `Assets/Source/Editor/Bush/BushLeafBaker.cs` — bake pipeline pattern
+- `Assets/Source/Editor/Bush/BushLeafBakeSettings.cs` — settings pattern
+- `Assets/Source/Editor/Bush/BushBakerState.cs` — persisted state (extend)
+- `Assets/Source/Editor/Bush/LeafAtlasPacker.cs` — export pipeline pattern
+- `Assets/Source/Slots/Actor/Archetype/BushView.cs` — runtime view (refactor)
 - `Assets/Source/Slots/Actor/Archetype/BushViewController.cs` — controller
-- `Assets/Source/Configuration/IBushSettings.cs` — settings interface
-- `Assets/Shaders/BalloonParty/README.md` — GPU instancing patterns
+- `Assets/Source/Slots/Actor/Cluster/ClusterView.cs` — base class
+- `Assets/Source/Configuration/IBushSettings.cs` — settings (extend)
+- `Assets/Shaders/BalloonParty/README.md` — shader conventions
 - `Assets/Materials/README.md` — instancing policy
+- `.github/copilot-instructions.md` — project coding conventions
 
-Key instancing rule: materials using `MaterialPropertyBlock` for per-instance
-properties must have GPU instancing **disabled**. For `DrawMeshInstanced`,
-use the instancing buffer for per-leaf color, not MPB.
+**Key conventions:**
+- Branch material: GPU instancing **enabled** (no MPB, static)
+- Leaf material: GPU instancing **enabled** (`DrawMeshInstanced` + buffer)
+- Editor-only code in `BalloonParty.Editor` namespace / assembly
+- `BushVariantData` + `LeafSlotData` in runtime assembly (`BalloonParty.Configuration`)
+- Allman braces, `internal` visibility, no `StartCoroutine`
+- Read-only collection interfaces for non-mutated parameters
 
 ---
 
 ## Phase 3 — Wind Animation (Idle)
 
-Procedural math in `BushSkeletonAnimator.Tick()`. No DOTween for wind.
+Leaf-only animation. Branches are static. No DOTween.
 
-### Per-branch angle each frame
+Each leaf **rotates around its attachment point** (the pivot extracted
+from the branch map). The rotation angle oscillates for wind sway.
+
+### Per-leaf rotation each frame (BushAnimator.Tick)
 
 ```
-windAngle = sin(time × frequency + phaseOffset) × amplitude × depthFactor
-          + Mathf.PerlinNoise(time × 0.3f, branchId) × noiseAmplitude
-currentAngle = baseAngle + windAngle
+windRotation = sin(time × frequency + phaseOffset) × amplitude × depth
+             + Mathf.PerlinNoise(time × 0.3f, phaseOffset) × noiseAmplitude × depth
+currentAngle = baseAngle + windRotation
+matrix = TRS(leaf.position, currentAngle, leaf.scale)
 ```
 
 - **Frequency** — global wind speed
-- **Phase offset** — unique per branch (prevents sync)
-- **Amplitude** — increases with depth: trunk barely moves, tips sway
-- **Perlin** — slow organic drift
-
-### Per-leaf flutter
-
-Each leaf adds on top of inherited branch motion:
-- Fast small rotation oscillation
-- Subtle scale pulse (0.95–1.05)
+- **Phase offset** — unique per leaf (prevents sync)
+- **Depth** — 0–1: leaves near trunk barely rotate, tip leaves sway most
+- **Perlin** — slow organic drift layered on top of sine
+- Optional subtle scale pulse (0.95–1.05) for flutter
 
 ---
 
 ## Phase 4 — Rattle (Disturbed State)
 
 Triggered by projectile proximity via `DisturbanceFieldService`.
+Leaf-only — branches stay static.
 
-1. Impact detected → find nearest branch
-2. Apply angular impulse to that branch
-3. Propagate to children with ×0.6 attenuation per depth
-4. Each branch has `rattleAngle` + `rattleVelocity` (damped spring)
-5. Spring physics per frame: `vel += -stiffness × angle - damping × vel`
-6. Blend: `finalAngle = baseAngle + windAngle + rattleAngle`
-7. Rattle decays to zero → pure wind resumes
+1. Impact detected → record impact position + initial strength
+2. Each leaf: `rattleStrength = falloff(dist to impact) × depth`
+3. Per-leaf damped spring: `vel += -stiffness × angle - damping × vel`
+4. Blend: `finalAngle = baseAngle + windRotation + rattleAngle`
+5. Spring decays to zero → pure wind resumes
 
-No DOTween needed — simple spring physics in the animator tick.
+Leaves near the impact and at higher depth rattle most. Leaves far
+away or near the root barely react. The rotation is always around
+the attachment point (pivot), so leaves shake in place naturally.
 
+No DOTween. No graph traversal. Simple spring physics per leaf.
 ---
 
 ## Phase 5 — Visual Polish
@@ -491,7 +1036,8 @@ No DOTween needed — simple spring physics in the animator tick.
 - **Ground shadow** — simple dark ellipse sprite under root
 - **Sorting refinement** — leaf matrix order controls painter's algorithm
 - **Leaf overlap** — randomise sort within tip clusters
-- **Branch texture** — optional bark texture on branch material
+- **Branch map variants** — multiple baked branch textures per bush type
+  for visual variety across clusters
 
 ---
 
@@ -500,19 +1046,22 @@ No DOTween needed — simple spring physics in the animator tick.
 | Metric | Per bush | Per cluster (4 slots) | 3 clusters |
 |---|---|---|---|
 | GameObjects | 0 leaves, 0 branches | 0 leaves, 0 branches | 0 |
-| Draw calls | 2 (branches + leaves) | 2 | 6 |
-| Matrices | ~15 | ~60 | ~180 |
-| Per-frame math | ~15 sin + mul | ~60 sin + mul | ~180 sin + mul |
+| Draw calls | 2 (static branch quad + leaf instanced) | 2 | 6 |
+| CPU matrices/frame | ~8 leaves only | ~32 leaves only | ~96 |
+| Branch CPU cost | 0 (static texture) | 0 | 0 |
+| Branch GPU cost | 1 tex fetch (static) | same | same |
+| Texture memory | ~256KB (256×256 RGBA) | ~256KB (shared) | ~768KB |
 
 Comparison with previous approaches:
 
-| | SDF shader | SpriteRenderer/leaf | DrawMeshInstanced |
+| | SDF shader | SpriteRenderer/leaf | Baked branch map |
 |---|---|---|---|
 | Fragment cost | ~100 SDF evals | 1 tex fetch | 1 tex fetch |
 | Draw calls/cluster | 1 (heavy) | ~8-12 | **2** |
 | Leaf GameObjects | 0 | ~24-45 | **0** |
-| Branch GameObjects | 0 | N/A | **0** |
-| Animation | SDF warp | DOTween tweens | **Pure math** |
+| Branch animation | SDF warp (GPU) | N/A | **None (static)** |
+| Leaf animation | N/A | DOTween tweens | **CPU pivot rotation** |
+| Runtime generation | per cluster | per cluster | **0** (pre-baked) |
 
 ---
 
@@ -524,6 +1073,8 @@ Comparison with previous approaches:
 |---|---|
 | Leaf baker (`BushBakeLeaf.shader`, `BushLeafBaker.cs`) | Baked leaf sprites with veins |
 | Gielis SDF (`GielisSDF.cginc`) | Leaf shape variety |
+| Baker window (`BushBakerWindow.cs`) | Extended with branch map baking |
+| Bake pipeline pattern (`BushLeafBaker.cs`) | Same offscreen-camera pattern for branch map |
 | Cluster system (`ClusterView`, `ClusterViewController`) | Slot management |
 | `DisturbanceFieldService` | Rattle triggers |
 | GPU instancing pattern | Leaf material |
@@ -539,4 +1090,3 @@ Comparison with previous approaches:
 | Runtime SDF (`Bush.shader`) | Pivot away from SDF |
 | Per-leaf SpriteRenderer + LeafSpriteView | `DrawMeshInstanced` replaces |
 | DOTween wind (BushRuffleController) | Spring physics replaces |
-
