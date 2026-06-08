@@ -7,18 +7,18 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BushMain
-  m_Shader: {fileID: 4800000, guid: 2a7b1c84e0ac3472780d8113220eb933, type: 3}
+  m_Name: LeafMain
+  m_Shader: {fileID: 4800000, guid: 88db2459e42a7419bbb9751473f2a6de, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _SHADOW_ON
+  m_ValidKeywords: []
   m_InvalidKeywords:
   - _CENTER_SHADOW_ON
   - _DENSITY_ON
   - _LIGHTING_ON
+  - _SHADOW_ON
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
@@ -173,6 +173,7 @@ Material:
     - _ScrollSpeedDetail: {r: 0.06, g: -0.04, b: 0, a: 0}
     - _ScrollSpeedFine: {r: -0.04, g: 0.08, b: 0, a: 0}
     - _ShadowColor: {r: 0, g: 0, b: 0, a: 0.47058824}
+    - _ShadowOffset: {r: 0.1, g: -0.1, b: 0, a: 0}
     - _TopColor: {r: 0.3, g: 0.6, b: 0.18, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

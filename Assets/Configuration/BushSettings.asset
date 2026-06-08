@@ -17,7 +17,7 @@ MonoBehaviour:
   _animationSpeed: 0.8
   _padding: 0.5
   _sortingLayerId: -1044048485
-  _sortingOrderOffset: 0
+  _sortingOrderOffset: 50
   _bushVariants:
   - {fileID: 11400000, guid: 42270e3038333429aae846decb14ad38, type: 2}
   - {fileID: 11400000, guid: 745bbe2ac66d145009f5875621e8350b, type: 2}
@@ -36,7 +36,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 0102c26a2e7c4482d8ea2119d2c33288, type: 2}
   - {fileID: 11400000, guid: e1026edfe5b294cfd9d21f3168353383, type: 2}
   _branchShader: {fileID: 4800000, guid: e6e471ce52d2648ceb0558c1856353df, type: 3}
-  _leafShader: {fileID: 4800000, guid: 88db2459e42a7419bbb9751473f2a6de, type: 3}
+  _leafMaterial: {fileID: 2100000, guid: 07bd2f8ccc97b408abee96710de6a460, type: 2}
   _bushWorldSize: 0.9
   _leafAtlasSprites:
   - {fileID: -1545996157, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
@@ -44,7 +44,9 @@ MonoBehaviour:
   _leafShadowOffset: {x: 0.1, y: -0.1}
   _leafShadowSoftness: 0.015
   _leafSpriteScale: 0.75
+  _leafPivotOffset: -0.35
+  _leafDepthSplit: 0.325
   _windAmplitude: 20
-  _windPeriod: 5
-  _windNoiseAmplitude: 1.5
-  _windScalePulse: 0.03
+  _windPeriod: 0.6
+  _windNoiseAmplitude: 0
+  _windScalePulse: 0

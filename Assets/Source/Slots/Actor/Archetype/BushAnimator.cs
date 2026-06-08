@@ -9,7 +9,8 @@ namespace BalloonParty.Slots.Actor.Archetype
     /// Drives idle wind animation on bush leaves. Each leaf rotates around its
     /// attachment point (pivot) using sine oscillation layered with Perlin noise.
     /// Depth modulates amplitude — tip leaves sway most, trunk leaves barely move.
-    /// Branches are static and not animated.
+    /// Branches are static and not animated. Animates both inner and outer leaf
+    /// tiers independently.
     /// </summary>
     internal class BushAnimator : ITickable
     {
@@ -42,35 +43,47 @@ namespace BalloonParty.Slots.Actor.Archetype
             var amplitude = _settings.WindAmplitude;
             var noiseAmplitude = _settings.WindNoiseAmplitude;
             var scalePulse = _settings.WindScalePulse;
+            var totalPivotOffset = _settings.LeafPivotOffset + 0.5f;
 
             for (var s = 0; s < entries.Count; s++)
             {
                 var entry = entries[s];
-                if (entry.LeafCount == 0 || entry.LeafSlots == null)
+                if (entry.LeafSlots == null)
                 {
                     continue;
                 }
 
-                AnimateSlotLeaves(entry, time, frequency, amplitude, noiseAmplitude, scalePulse);
+                AnimateLeafTier(
+                    entry.InnerLeaves, entry, time, frequency, amplitude, noiseAmplitude, scalePulse,
+                    totalPivotOffset);
+                AnimateLeafTier(
+                    entry.OuterLeaves, entry, time, frequency, amplitude, noiseAmplitude, scalePulse,
+                    totalPivotOffset);
             }
         }
 
-        private static void AnimateSlotLeaves(
+        private static void AnimateLeafTier(
+            BushView.LeafTier tier,
             BushView.SlotRenderData entry,
             float time,
             float frequency,
             float amplitude,
             float noiseAmplitude,
-            float scalePulse)
+            float scalePulse,
+            float totalPivotOffset)
         {
+            if (tier.Count == 0 || tier.SlotIndices == null)
+            {
+                return;
+            }
+
             var slots = entry.LeafSlots;
             var worldPos = entry.WorldPos;
             var scaleCompensation = entry.ScaleCompensation;
-            var pivotOffset = entry.PivotOffset;
 
-            for (var i = 0; i < entry.LeafCount; i++)
+            for (var t = 0; t < tier.Count; t++)
             {
-                var slot = slots[i];
+                var slot = slots[tier.SlotIndices[t]];
                 var depth = slot.Depth;
                 var phase = slot.PhaseOffset;
 
@@ -90,8 +103,8 @@ namespace BalloonParty.Slots.Actor.Archetype
 
                 var leafWorldPos = worldPos + slot.Position;
                 var rot = Quaternion.Euler(0f, 0f, angleDeg);
-                var pivotShift = rot * new Vector3(0f, -pivotOffset * scale, 0f);
-                entry.LeafMatrices[i] = Matrix4x4.TRS(
+                var pivotShift = rot * new Vector3(0f, -totalPivotOffset * scale, 0f);
+                tier.Matrices[t] = Matrix4x4.TRS(
                     new Vector3(leafWorldPos.x, leafWorldPos.y, 0f) + pivotShift,
                     rot,
                     Vector3.one * scale);
@@ -99,4 +112,3 @@ namespace BalloonParty.Slots.Actor.Archetype
         }
     }
 }
-

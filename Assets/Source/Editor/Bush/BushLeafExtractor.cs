@@ -4,9 +4,10 @@ using UnityEngine;
 namespace BalloonParty.Editor.Bush
 {
     /// <summary>
-    /// Extracts leaf attachment points from a baked branch map texture.
-    /// Finds branch tips (high depth pixels with no continuation ahead)
-    /// and returns positions, angles, and metadata for leaf placement.
+    /// Extracts leaf attachment points from branch generator segment endpoints.
+    /// Uses the fractal generator's precise UV positions directly — no pixel-based
+    /// detection. Terminal segments (whose End is not another segment's Start)
+    /// are the actual branch tips.
     /// </summary>
     internal static class BushLeafExtractor
     {
@@ -20,62 +21,83 @@ namespace BalloonParty.Editor.Bush
         }
 
         internal static List<LeafSlot> Extract(
+            int seed,
+            BushBranchBakeSettings branchSettings,
+            int leafVariantCount)
+        {
+            var segments = BushBranchGenerator.Generate(seed, branchSettings);
+            var tips = FindTerminalTips(segments, branchSettings.LeafDepthThreshold);
+            var filtered = SpatialFilter(tips, branchSettings.MaxLeavesPerVariant);
+            return BuildLeafSlots(filtered, seed, branchSettings, leafVariantCount);
+        }
+
+        /// <summary>
+        /// Kept for backward compatibility with callers that pass a branch map texture.
+        /// Ignores the texture and extracts from the generator directly.
+        /// </summary>
+        internal static List<LeafSlot> Extract(
             Texture2D branchMap,
             int seed,
             BushBranchBakeSettings branchSettings,
             int leafVariantCount)
         {
-            var pixels = branchMap.GetPixels32();
-            var res = branchMap.width;
-            var threshold = (byte)(branchSettings.LeafDepthThreshold * 255f);
-
-            var candidates = FindTipCandidates(pixels, res, threshold);
-            var filtered = SpatialFilter(candidates, branchSettings.MaxLeavesPerVariant, res);
-            return BuildLeafSlots(filtered, seed, branchSettings, leafVariantCount, res);
+            return Extract(seed, branchSettings, leafVariantCount);
         }
 
-        private static List<TipCandidate> FindTipCandidates(Color32[] pixels, int res, byte threshold)
+        private static List<TipCandidate> FindTerminalTips(
+            List<BushBranchGenerator.Segment> segments, float depthThreshold)
         {
-            var candidates = new List<TipCandidate>(256);
-
-            for (var y = 1; y < res - 1; y++)
+            // Collect all segment Start positions to identify non-terminal endpoints
+            var startPositions = new HashSet<Vector2Int>();
+            foreach (var seg in segments)
             {
-                for (var x = 1; x < res - 1; x++)
-                {
-                    var idx = y * res + x;
-                    var p = pixels[idx];
-
-                    if (p.a < threshold)
-                    {
-                        continue;
-                    }
-
-                    var dirX = p.r / 255f * 2f - 1f;
-                    var dirY = p.g / 255f * 2f - 1f;
-
-                    candidates.Add(new TipCandidate
-                    {
-                        X = x,
-                        Y = y,
-                        Depth = p.a / 255f,
-                        Angle = Mathf.Atan2(dirY, dirX),
-                        Score = p.a
-                    });
-                }
+                // Quantise to avoid floating-point mismatch
+                startPositions.Add(Quantise(seg.Start));
             }
 
-            return candidates;
+            var tips = new List<TipCandidate>(segments.Count);
+
+            foreach (var seg in segments)
+            {
+                if (seg.Depth < depthThreshold)
+                {
+                    continue;
+                }
+
+                // Terminal: this segment's End is not used as any other segment's Start
+                var endQ = Quantise(seg.End);
+                if (startPositions.Contains(endQ))
+                {
+                    continue;
+                }
+
+                tips.Add(new TipCandidate
+                {
+                    Position = seg.End,
+                    Depth = seg.Depth,
+                    Angle = seg.DirectionAngle,
+                    Score = seg.Depth
+                });
+            }
+
+            return tips;
+        }
+
+        private static Vector2Int Quantise(Vector2 v)
+        {
+            // Quantise to 1/4096 grid to avoid float comparison issues
+            return new Vector2Int(
+                Mathf.RoundToInt(v.x * 4096f),
+                Mathf.RoundToInt(v.y * 4096f));
         }
 
         private static List<TipCandidate> SpatialFilter(
-            List<TipCandidate> candidates, int maxCount, int res)
+            List<TipCandidate> candidates, int maxCount)
         {
             candidates.Sort((a, b) => b.Score.CompareTo(a.Score));
 
-            // Adaptive min distance: allows denser packing as max count increases
             var minDist = 1f / Mathf.Sqrt(maxCount) * 0.5f;
-            var minDistPixels = minDist * res;
-            var minDistSq = minDistPixels * minDistPixels;
+            var minDistSq = minDist * minDist;
 
             var accepted = new List<TipCandidate>(maxCount);
 
@@ -89,8 +111,8 @@ namespace BalloonParty.Editor.Bush
                 var tooClose = false;
                 foreach (var existing in accepted)
                 {
-                    var dx = candidate.X - existing.X;
-                    var dy = candidate.Y - existing.Y;
+                    var dx = candidate.Position.x - existing.Position.x;
+                    var dy = candidate.Position.y - existing.Position.y;
                     if (dx * dx + dy * dy < minDistSq)
                     {
                         tooClose = true;
@@ -111,11 +133,11 @@ namespace BalloonParty.Editor.Bush
             IReadOnlyList<TipCandidate> tips,
             int seed,
             BushBranchBakeSettings settings,
-            int leafVariantCount,
-            int resolution)
+            int leafVariantCount)
         {
             var rng = new System.Random(seed + 9973);
             var slots = new List<LeafSlot>(tips.Count);
+
             for (var i = 0; i < tips.Count; i++)
             {
                 var tip = tips[i];
@@ -126,7 +148,7 @@ namespace BalloonParty.Editor.Bush
 
                 slots.Add(new LeafSlot
                 {
-                    UVPosition = new Vector2(tip.X / (float)resolution, tip.Y / (float)resolution),
+                    UVPosition = tip.Position,
                     Angle = tip.Angle,
                     Depth = tip.Depth,
                     Scale = scale,
@@ -139,11 +161,10 @@ namespace BalloonParty.Editor.Bush
 
         private struct TipCandidate
         {
-            internal int X;
-            internal int Y;
+            internal Vector2 Position;
             internal float Depth;
             internal float Angle;
-            internal int Score;
+            internal float Score;
         }
     }
 }

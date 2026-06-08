@@ -34,7 +34,7 @@ Shader "BalloonParty/Grid/BushLeaf"
             float  _SpriteScale;
 
             UNITY_INSTANCING_BUFFER_START(Props)
-                UNITY_DEFINE_INSTANCED_PROP(fixed4, _LeafTint)
+                UNITY_DEFINE_INSTANCED_PROP(float4, _LeafTint)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _UVRect)
             UNITY_INSTANCING_BUFFER_END(Props)
 
@@ -72,9 +72,9 @@ Shader "BalloonParty/Grid/BushLeaf"
                 o.uv = rect.xy + spriteUV * rect.zw;
 
                 // Inverse-rotate shadow offset from world space into local UV space
-                // Negate to go from world→local (inverse of the instance rotation)
-                float cosA = unity_ObjectToWorld[0].x;
-                float sinA = unity_ObjectToWorld[1].x;
+                // Use UNITY_MATRIX_M for correct per-instance matrix on all platforms
+                float cosA = UNITY_MATRIX_M[0].x;
+                float sinA = UNITY_MATRIX_M[1].x;
                 float len = sqrt(cosA * cosA + sinA * sinA);
                 cosA /= len;
                 sinA /= len;
@@ -136,7 +136,7 @@ Shader "BalloonParty/Grid/BushLeaf"
                 fixed4 shadow = fixed4(_ShadowColor.rgb, _ShadowColor.a * shadowAlpha);
 
                 fixed4 col = tex2D(_MainTex, i.uv);
-                fixed4 tint = UNITY_ACCESS_INSTANCED_PROP(Props, _LeafTint);
+                float4 tint = UNITY_ACCESS_INSTANCED_PROP(Props, _LeafTint);
                 col *= tint;
                 col.a *= spriteMask;
 

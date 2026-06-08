@@ -9,7 +9,7 @@ namespace BalloonParty.Configuration
         BushView BushPrefab { get; }
         BushVariantData[] BushVariants { get; }
         Shader BranchShader { get; }
-        Shader LeafShader { get; }
+        Material LeafMaterial { get; }
         float BushWorldSize { get; }
         Sprite[] LeafAtlasSprites { get; }
         Color LeafShadowColor { get; }
@@ -17,6 +17,7 @@ namespace BalloonParty.Configuration
         float LeafShadowSoftness { get; }
         float LeafSpriteScale { get; }
         float LeafPivotOffset { get; }
+        float LeafDepthSplit { get; }
         float WindAmplitude { get; }
         float WindPeriod { get; }
         float WindNoiseAmplitude { get; }

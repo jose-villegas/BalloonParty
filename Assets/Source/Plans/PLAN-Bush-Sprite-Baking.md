@@ -942,12 +942,72 @@ vertices at `[-0.5, 0.5]`. Both are static shared meshes with
 8. **Branch shader is opaque** — `clip()` + alpha=1, no blending.
 
 **Next steps:**
-1. **Phase 4** — rattle (disturbed state via `DisturbanceFieldService`)
+1. **Fix leaf tip detection** — extractor places leaves at branch body/fork
+   positions, not actual endpoints. See investigation notes below.
+2. **Phase 4** — rattle (disturbed state via `DisturbanceFieldService`)
 
 **Open questions / things to tune:**
-- Leaf extractor tip detection may need tuning.
 - Whether `BushWorldSize` should be per-variant or global.
 - The B channel in branch map is reserved for future use.
+
+---
+
+### Leaf Attachment Investigation (June 8 2026)
+
+**Problem:** Leaves appear to float — not visually connected to branch tips.
+
+**Verified correct (via gizmo debug):**
+- **Coordinate chain** — attachment positions from the baked variant data
+  match the branch map rendering positions. Gizmo yellow dots land ON the
+  branches, confirming UV → local → world math is correct.
+- **Pivot math** — `TRS_pos = attachmentPos + rot * (0, -(pivotOffset+0.5)*scale, 0)`.
+  The pivot (at quad local `y = pivotOffset + 0.5`) always cancels back to
+  `attachmentPos` in world space. Verified algebraically and via gizmo overlay.
+  Changing `LeafPivotOffset` repositions the quad around a fixed pivot.
+- **Sprite scale** — shader centers at UV (0.5, 0.5); quad center at local
+  (0, 0.5); no lateral shift. Shadow uses same centering. All symmetric.
+- **Wind rotation** — `pivotShift` uses the animated `rot`, so the pivot
+  stays at `attachmentPos` even as the leaf swings. Verified algebraically.
+
+**Verified NOT the cause:**
+- Sprite scale (`_SpriteScale`) — symmetric centering, no X/Y drift
+- `scaleCompensation` (1/spriteScale) — uniform scaling from TRS origin
+- Shadow offset — operates in UV space, doesn't shift geometry
+- Texture coordinate conventions — `GetPixels32` bottom-left origin matches
+  quad UV (0,0) at bottom-left vertex and bake camera at (0.5, 0.5)
+
+**Root cause: tip detection quality.** The `FindTipCandidates` + `IsTip`
+check accepts branch body and fork pixels as valid tips. The `IsTip` method
+samples 2–3 pixels ahead and requires alpha to drop — but at forks, both
+branches have high alpha ahead, so forks pass the check. The gizmos confirm
+attachment dots are ON branches but NOT at endpoints.
+
+**Changes made during investigation:**
+- `IBushSettings` / `BushSettings`: `Shader LeafShader` → `Material LeafMaterial`
+  (prevents shader variant stripping in mobile builds)
+- `BushLeaf.shader`: `fixed4` → `float4` in instancing buffer (mobile UBO compat),
+  `unity_ObjectToWorld` → `UNITY_MATRIX_M` (per-instance matrix portability)
+- `BushView`: instancing fallback via per-leaf `DrawMesh` when
+  `SystemInfo.supportsInstancing` is false
+- `BushView`: depth-tiered rendering — inner leaves (queue 2999) behind
+  branches (queue 3000), outer leaves (queue 3001) in front. Configured
+  via `LeafDepthSplit` threshold.
+- `BushView`: `LeafPivotOffset` range changed to [-0.5, 0.5], default 0.
+  Sprite center (0.5, 0.5) = quad center aligned with attachment point.
+- `BushView`: debug gizmo (`_debugLeafPivots`) — yellow=attachment,
+  red=TRS origin, cyan=sprite center, white line=quad extent
+- `BushAnimator`: reads `LeafPivotOffset` from settings each frame for
+  live play-mode tuning
+- `BushLeafExtractor`: added `IsTip` ahead-check (samples 2–3 pixels in
+  branch direction, rejects if alpha stays high)
+- `BushLeaf.shader`: shadow wrap-around fix — `SampleShadowAlpha` masks
+  samples outside `[0,1]` raw UV bounds
+
+**Still open:**
+- Tip detection must be improved to find actual branch endpoints, not
+  branch body or fork pixels. Consider walking forward from the candidate
+  pixel along the direction until alpha drops to zero, then using THAT
+  position as the attachment point.
 
 ---
 
