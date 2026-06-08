@@ -78,8 +78,8 @@ Shader "BalloonParty/Grid/BushLeaf"
                 float len = sqrt(cosA * cosA + sinA * sinA);
                 cosA /= len;
                 sinA /= len;
-                // R(-θ) = [[cos, sin], [-sin, cos]]
-                o.localShadowOffset = float2(
+                // R(-θ) = [[cos, sin], [-sin, cos]], negated to correct direction
+                o.localShadowOffset = -float2(
                      cosA * _ShadowOffset.x + sinA * _ShadowOffset.y,
                     -sinA * _ShadowOffset.x + cosA * _ShadowOffset.y);
 

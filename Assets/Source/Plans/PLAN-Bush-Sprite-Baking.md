@@ -15,10 +15,10 @@
 |---|---|---|
 | **0** | Cluster infrastructure (shared with Puff) | ✅ Done |
 | **1** | Leaf baking — Gielis SDF + vein system | ✅ Done |
-| **2** | Branch map baking + leaf extraction + rendering | 🔨 **Current** |
+| **2** | Branch map baking + leaf extraction + rendering | ✅ Done |
 | **3** | Wind animation (idle) | ⬜ Next |
 | **4** | Rattle (disturbed state) | ⬜ Planned |
-| **5** | Visual polish (shadows, sorting, bark texture) | ⬜ Planned |
+| **5** | Visual polish (sorting, bark texture) | ⬜ Planned |
 
 ---
 
@@ -64,9 +64,11 @@ Bush Baker (editor-only, bake time)
     ▼
 BushView : ClusterView (runtime)
     │  Loads pre-baked branch texture + pre-extracted LeafSlot[]
-    │  Branch quad: static SpriteRenderer with branch map (no animation)
-    │  Leaf quads: DrawMeshInstanced from LeafSlot[] matrices
-    │  Two draw calls per cluster. Zero runtime generation.
+    │  Per-slot rendering: each slot picks its own variant by index
+    │  Branch quad: Graphics.DrawMesh (queue 3000, alpha-test, opaque)
+    │  Leaf quads: DrawMeshInstanced (queue 3001, alpha-blend + shadow)
+    │  Two draw calls per slot. Zero runtime generation.
+    │  Base ClusterView.Renderer (SpriteRenderer) is disabled.
     │
     ▼
 BushAnimator (ITickable, runtime)
@@ -238,7 +240,7 @@ When continuing leaf baking work, read:
 
 ---
 
-## Phase 2 — Branch Map Baking + Leaf Extraction + Rendering 🔨 Current
+## Phase 2 — Branch Map Baking + Leaf Extraction + Rendering ✅ Done
 
 ### Overview
 
@@ -266,7 +268,7 @@ textured quad; leaves are `DrawMeshInstanced` with pivot-based rotation.
 | 2.8b | Runtime leaf shader | `BushLeaf.shader` | — | ✅ Done |
 | 2.9 | Runtime `BushView` refactor | — | `BushView.cs`, `BushViewController.cs` | ✅ Done |
 | 2.10 | `IBushSettings` extension | — | `IBushSettings.cs`, `BushSettings.cs` | ✅ Done |
-| 2.11 | Integration test — bake + render | — | — | 🔨 Current |
+| 2.11 | Integration test — bake + render | — | — | ✅ Done |
 
 ---
 
@@ -1004,7 +1006,15 @@ Manual verification checklist:
 | `BushBranchGenerator.cs` | `Source/Editor/Bush/` | Recursive fractal → flat `Segment[]` in UV space |
 | `BushBakeBranch.shader` | `Shaders/.../Editor/` | Bake shader: vertex color pass-through + edge AA |
 | `BushBranchBaker.cs` | `Source/Editor/Bush/` | Offscreen camera pipeline: mesh from segments, render, readback |
-| `BushBranch.shader` | `Shaders/.../Grid/` | Runtime shader: static alpha-test, depth shading, GPU instancing |
+| `BushLeafExtractor.cs` | `Source/Editor/Bush/` | Tip detection + spatial filtering → `LeafSlot[]` |
+| `BushVariantExporter.cs` | `Source/Editor/Bush/` | Bake + extract + save PNG + create `BushVariantData` SO |
+| `BushVariantData.cs` | `Source/Configuration/` | Runtime SO: branch map texture + `LeafSlotData[]` |
+| `BushBranch.shader` | `Shaders/.../Grid/` | Runtime: opaque alpha-test, depth shading, GPU instancing |
+| `BushLeaf.shader` | `Shaders/.../Grid/` | Runtime: instanced alpha-blend, per-instance UV rect + tint, 9-tap drop shadow, sprite scale, rotation-independent shadow direction |
+| `BushView.cs` | `Slots/Actor/Archetype/` | Per-slot rendering via `Graphics.DrawMesh*`, variant cycling, leaf shadow config |
+| `BushViewController.cs` | `Slots/Actor/Archetype/` | Cluster controller, wires settings to view |
+| `IBushSettings.cs` | `Configuration/` | Interface: shaders, variants, shadow settings, sprite scale |
+| `BushSettings.cs` | `Configuration/` | Concrete SO with all tunable fields |
 | `TexturePreviewBox.cs` | `Source/Editor/` | Reusable preview component: background modes + extensible toolbar |
 
 ### Shared editor components created
@@ -1020,13 +1030,9 @@ Manual verification checklist:
 
 ### Session context for Phase 2
 
-**Current state (June 8 2026):** All Phase 2 tasks are complete except
-the final integration test (2.11). The full pipeline works end-to-end:
-bake → extract → export → runtime rendering. Current tuning items:
-
-- Leaf rotation and pivot positioning (petiole at attachment point)
-- Render queue ordering (branch behind leaves via `Graphics.DrawMesh`)
-- Branch shader is solid opaque with alpha-test (no transparency)
+**Current state (June 8 2026):** Phase 2 is complete. The full pipeline
+works end-to-end: bake → extract → export → runtime rendering with
+per-slot variants, leaf shadows, and correct render ordering.
 
 **Key decisions made during implementation:**
 1. **Top-down radial growth** — root at UV centre (0.5, 0.5), primary
@@ -1057,12 +1063,22 @@ bake → extract → export → runtime rendering. Current tuning items:
    queue 3001. The base `ClusterView.Renderer` (SpriteRenderer) is disabled.
 9. **Leaf quad is bottom-pivoted** — vertices at `y: [0, 1]` so the
    petiole (bottom) sits at the attachment point. Leaves rotate around
-   the attachment point naturally.
+   the attachment point naturally. Rotated -90° from `BaseAngle`.
+10. **Per-slot rendering** — `BushView` iterates `SlotCentersBuffer` and
+    renders one branch + one leaf batch per slot. Each slot cycles through
+    variants by index (`i % variants.Length`) for visual variety within
+    a cluster. Stored as `List<SlotRenderData>`.
+11. **Leaf drop shadows** — `BushLeaf.shader` implements per-leaf UV-offset
+    shadow following the `SpriteShadow.shader` pattern. 9-tap blur, Porter-
+    Duff "over" compositing. Shadow direction is world-space (inverse-
+    rotated in the vertex shader so it doesn't rotate with the leaf).
+    `_SpriteScale` shrinks the sprite within the quad to create margins
+    for the shadow; transform scale is compensated by `1 / spriteScale`.
+12. **Branch shader is opaque** — `TransparentCutout` with `clip()`, no
+    alpha blending. Output alpha = 1 for all visible pixels.
 
 **Next steps:**
-1. **2.11 Integration test** — verify branch behind leaves, leaf positions
-   correct, 2 draw calls per cluster in Frame Debugger
-2. **Phase 3** — wind animation (idle leaf sway)
+1. **Phase 3** — wind animation (idle leaf sway)
 
 **Key conventions:**
 - Branch material: GPU instancing **enabled** (no MPB, static)
@@ -1074,8 +1090,6 @@ bake → extract → export → runtime rendering. Current tuning items:
 - Shared editor helpers in `Assets/Source/Editor/` (not in Bush subfolder)
 
 **Open questions / things to tune:**
-- Branch density and spread need visual iteration once preview is running
-  in Unity. Parameters may need range adjustments after seeing results.
 - Leaf extractor tip detection heuristic may need tuning — the "look ahead
   in branch direction" approach depends on RG encoding being accurate at tips.
 - Whether `BushWorldSize` should come from `IBushSettings` or from the
@@ -1139,10 +1153,10 @@ No DOTween. No graph traversal. Simple spring physics per leaf.
 
 ## Performance Budget
 
-| Metric | Per bush | Per cluster (4 slots) | 3 clusters |
+| Metric | Per slot | Per cluster (4 slots) | 3 clusters |
 |---|---|---|---|
 | GameObjects | 0 leaves, 0 branches | 0 leaves, 0 branches | 0 |
-| Draw calls | 2 (static branch quad + leaf instanced) | 2 | 6 |
+| Draw calls | 2 (branch DrawMesh + leaf DrawMeshInstanced) | 8 | 24 |
 | CPU matrices/frame | ~8 leaves only | ~32 leaves only | ~96 |
 | Branch CPU cost | 0 (static texture) | 0 | 0 |
 | Branch GPU cost | 1 tex fetch (static) | same | same |

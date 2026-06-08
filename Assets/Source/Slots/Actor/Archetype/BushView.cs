@@ -87,8 +87,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             {
                 var center = SlotCentersBuffer[i];
                 var worldPos = new Vector2(center.x, center.y);
-                var hash = Mathf.Abs(worldPos.GetHashCode());
-                var variant = variants[hash % variants.Length];
+                var variant = variants[i % variants.Length];
 
                 var entry = new SlotRenderData();
                 ConfigureBranch(ref entry, worldPos, variant);
