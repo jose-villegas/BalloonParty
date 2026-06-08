@@ -26,6 +26,9 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static readonly int WindNoiseAmplitudeId = Shader.PropertyToID("_WindNoiseAmplitude");
         private static readonly int WindScalePulseId = Shader.PropertyToID("_WindScalePulse");
         private static readonly int PivotOffsetId = Shader.PropertyToID("_PivotOffset");
+        private static readonly int RattleAmplitudeId = Shader.PropertyToID("_RattleAmplitude");
+        private static readonly int RattleFrequencyId = Shader.PropertyToID("_RattleFrequency");
+        private const string RattleKeyword = "_RATTLE_ON";
 
         private static bool? _supportsInstancing;
 
@@ -230,6 +233,14 @@ namespace BalloonParty.Slots.Actor.Archetype
             mat.SetFloat(WindNoiseAmplitudeId, _settings.WindNoiseAmplitude);
             mat.SetFloat(WindScalePulseId, _settings.WindScalePulse);
             mat.SetFloat(PivotOffsetId, _settings.LeafPivotOffset);
+
+            if (_settings.RattleEnabled)
+            {
+                mat.EnableKeyword(RattleKeyword);
+                mat.SetFloat(RattleAmplitudeId, _settings.RattleAmplitude);
+                mat.SetFloat(RattleFrequencyId, _settings.RattleFrequency);
+            }
+
             return mat;
         }
 

@@ -44,6 +44,11 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _windNoiseAmplitude = 1.5f;
         [SerializeField] [Range(0f, 0.1f)] private float _windScalePulse = 0.03f;
 
+        [Header("Rattle")]
+        [SerializeField] private bool _rattleEnabled = true;
+        [SerializeField] private float _rattleAmplitude = 15f;
+        [SerializeField] private float _rattleFrequency = 12f;
+
         public BushView BushPrefab => _bushPrefab;
         public float AnimationSpeed => _animationSpeed;
         public float Padding => _padding;
@@ -64,5 +69,8 @@ namespace BalloonParty.Configuration
         public float WindPeriod => _windPeriod;
         public float WindNoiseAmplitude => _windNoiseAmplitude;
         public float WindScalePulse => _windScalePulse;
+        public bool RattleEnabled => _rattleEnabled;
+        public float RattleAmplitude => _rattleAmplitude;
+        public float RattleFrequency => _rattleFrequency;
     }
 }

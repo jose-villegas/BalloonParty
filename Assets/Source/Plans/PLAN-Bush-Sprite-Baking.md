@@ -17,7 +17,7 @@
 | **1** | Leaf baking — Gielis SDF + vein system | ✅ Done |
 | **2** | Branch map baking + leaf extraction + rendering | ✅ Done |
 | **3** | Wind animation (idle) | ✅ Done |
-| **4** | Rattle (disturbed state) | ⬜ Planned |
+| **4** | Rattle (disturbed state) | ✅ Done |
 | **5** | Visual polish (sorting, bark texture) | ⬜ Planned |
 
 ---
@@ -1058,22 +1058,45 @@ translation-only — set once at setup, never updated per frame.
 
 ---
 
-## Phase 4 — Rattle (Disturbed State)
+## Phase 4 — Rattle (Disturbed State) ✅ Done — GPU Vertex Shader
 
-Triggered by projectile proximity via `DisturbanceFieldService`.
-Leaf-only — branches stay static.
+Rattle runs entirely on the GPU by sampling the global disturbance field
+texture (`_DisturbanceTex`) in the vertex shader. Zero CPU cost — no
+`BushAnimator` needed at all. Both wind and rattle are pure shader features.
 
-1. Impact detected → record impact position + initial strength
-2. Each leaf: `rattleStrength = falloff(dist to impact) × depth`
-3. Per-leaf damped spring: `vel += -stiffness × angle - damping × vel`
-4. Blend: `finalAngle = baseAngle + windRotation + rattleAngle`
-5. Spring decays to zero → pure wind resumes
+### How it works
 
-Leaves near the impact and at higher depth rattle most. Leaves far
-away or near the root barely react. The rotation is always around
-the attachment point (pivot), so leaves shake in place naturally.
+The `DisturbanceFieldService` maintains a global render texture encoding
+density (R) and displacement direction (GB) at each world position. The
+leaf vertex shader samples this texture at the leaf's world position:
 
-No DOTween. No graph traversal. Simple spring physics per leaf.
+1. Compute leaf world position from the static translation matrix
+2. Convert to disturbance field UV: `(worldPos - _FieldBoundsMin) / _FieldBoundsSize`
+3. `tex2Dlod` sample (vertex shader) → displacement vector from GB channels
+4. Cross product of displacement with leaf direction → signed rattle angle
+5. Modulated by `_RattleAmplitude × depth` and a fast oscillation
+   `sin(t × _RattleFrequency + phase)` for visible shaking
+6. Added to wind angle before the pivot rotation
+
+### Why this works without CPU spring physics
+
+The disturbance field already handles the "spring decay" — stamps create
+displacement, diffusion spreads it, and reform attenuates it back to zero.
+The leaf shader just reads the current displacement magnitude as rattle
+strength. The temporal behavior (impact → shake → settle) comes from the
+field's own physics, not from per-leaf spring state.
+
+### Settings (`IBushSettings` / `BushSettings`)
+
+- `RattleEnabled` — bool, toggles `_RATTLE_ON` shader keyword
+- `RattleAmplitude` — max rotation in degrees at full displacement (default 15°)
+- `RattleFrequency` — oscillation speed during rattle (default 12 Hz)
+
+### `BushAnimator` removed
+
+With both wind and rattle on the GPU, `BushAnimator.cs` has been deleted.
+No CPU animation code exists for bushes. The DI registration in
+`GameLifetimeScope` has been removed.
 ---
 
 ## Phase 5 — Visual Polish

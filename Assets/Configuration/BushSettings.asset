@@ -113,3 +113,6 @@ MonoBehaviour:
   _windPeriod: 0.8
   _windNoiseAmplitude: 5
   _windScalePulse: 0.015
+  _rattleEnabled: 1
+  _rattleAmplitude: 90
+  _rattleFrequency: 15

@@ -24,6 +24,11 @@ Shader "BalloonParty/Grid/BushLeaf"
         _WindNoiseAmplitude ("Noise Amp (deg)",  Float)              = 1.5
         _WindScalePulse     ("Scale Pulse",      Range(0, 0.1))     = 0.03
         _PivotOffset        ("Pivot Offset",     Range(-0.5, 0.5))  = 0.0
+
+        [Header(Rattle)]
+        [Toggle(_RATTLE_ON)] _EnableRattle ("Enable Rattle", Float) = 0
+        _RattleAmplitude    ("Amplitude (deg)", Float)              = 15.0
+        _RattleFrequency    ("Oscillation Freq", Float)             = 12.0
     }
     SubShader
     {
@@ -38,6 +43,7 @@ Shader "BalloonParty/Grid/BushLeaf"
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_instancing
+            #pragma shader_feature _RATTLE_ON
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
@@ -54,6 +60,14 @@ Shader "BalloonParty/Grid/BushLeaf"
             float  _WindNoiseAmplitude;
             float  _WindScalePulse;
             float  _PivotOffset;
+
+            #ifdef _RATTLE_ON
+            sampler2D _DisturbanceTex;
+            float2    _FieldBoundsMin;
+            float2    _FieldBoundsSize;
+            float     _RattleAmplitude;
+            float     _RattleFrequency;
+            #endif
 
             UNITY_INSTANCING_BUFFER_START(Props)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _LeafTint)
@@ -104,6 +118,27 @@ Shader "BalloonParty/Grid/BushLeaf"
                             * _WindNoiseAmplitude * depth;
                 float windDeg = sineRot + noise;
 
+                // Rattle: sample disturbance field at leaf world position
+                float rattleDeg = 0.0;
+                #ifdef _RATTLE_ON
+                {
+                    float2 leafWorld = mul(UNITY_MATRIX_M, float4(0.0, 0.0, 0.0, 1.0)).xy;
+                    float2 fieldUV = (leafWorld - _FieldBoundsMin) / _FieldBoundsSize;
+                    float3 field = tex2Dlod(_DisturbanceTex, float4(fieldUV, 0.0, 0.0)).rgb;
+                    float2 displace = (field.gb - 0.5) * 2.0;
+                    float disturbance = length(displace);
+
+                    // Convert displacement to angular rattle with fast oscillation
+                    // Cross product with leaf direction gives signed rotation
+                    float2 leafDir = float2(cos(baseAngle), sin(baseAngle));
+                    float cross = displace.x * leafDir.y - displace.y * leafDir.x;
+                    float rattleSign = sign(cross + 0.0001);
+
+                    rattleDeg = disturbance * _RattleAmplitude * depth * rattleSign
+                              * (0.5 + 0.5 * sin(t * _RattleFrequency + phase * 3.7));
+                }
+                #endif
+
                 // Scale pulse
                 float scale = leafScale;
                 if (_WindScalePulse > 0.001)
@@ -111,8 +146,8 @@ Shader "BalloonParty/Grid/BushLeaf"
                     scale *= 1.0 + sin(t * _WindFrequency * 2.0 + phase) * _WindScalePulse * depth;
                 }
 
-                // Total rotation in radians
-                float totalAngle = baseAngle - 1.5707963 + windDeg * 0.0174533;
+                // Total rotation in radians (wind + rattle in degrees → radians)
+                float totalAngle = baseAngle - 1.5707963 + (windDeg + rattleDeg) * 0.0174533;
                 float cosA = cos(totalAngle);
                 float sinA = sin(totalAngle);
 

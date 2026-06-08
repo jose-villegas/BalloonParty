@@ -22,5 +22,8 @@ namespace BalloonParty.Configuration
         float WindPeriod { get; }
         float WindNoiseAmplitude { get; }
         float WindScalePulse { get; }
+        bool RattleEnabled { get; }
+        float RattleAmplitude { get; }
+        float RattleFrequency { get; }
     }
 }
