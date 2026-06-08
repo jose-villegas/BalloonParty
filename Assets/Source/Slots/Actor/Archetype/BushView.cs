@@ -28,6 +28,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static readonly int PivotOffsetId = Shader.PropertyToID("_PivotOffset");
         private static readonly int RattleAmplitudeId = Shader.PropertyToID("_RattleAmplitude");
         private static readonly int RattleFrequencyId = Shader.PropertyToID("_RattleFrequency");
+        private static readonly int RattleDampingId = Shader.PropertyToID("_RattleDamping");
         private const string RattleKeyword = "_RATTLE_ON";
 
         private static bool? _supportsInstancing;
@@ -239,6 +240,7 @@ namespace BalloonParty.Slots.Actor.Archetype
                 mat.EnableKeyword(RattleKeyword);
                 mat.SetFloat(RattleAmplitudeId, _settings.RattleAmplitude);
                 mat.SetFloat(RattleFrequencyId, _settings.RattleFrequency);
+                mat.SetFloat(RattleDampingId, _settings.RattleDamping);
             }
 
             return mat;

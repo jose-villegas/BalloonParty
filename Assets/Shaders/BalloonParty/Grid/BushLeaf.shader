@@ -29,6 +29,7 @@ Shader "BalloonParty/Grid/BushLeaf"
         [Toggle(_RATTLE_ON)] _EnableRattle ("Enable Rattle", Float) = 0
         _RattleAmplitude    ("Amplitude (deg)", Float)              = 15.0
         _RattleFrequency    ("Oscillation Freq", Float)             = 12.0
+        _RattleDamping      ("Damping",    Range(1, 10))            = 3.0
     }
     SubShader
     {
@@ -67,6 +68,7 @@ Shader "BalloonParty/Grid/BushLeaf"
             float2    _FieldBoundsSize;
             float     _RattleAmplitude;
             float     _RattleFrequency;
+            float     _RattleDamping;
             #endif
 
             UNITY_INSTANCING_BUFFER_START(Props)
@@ -127,6 +129,9 @@ Shader "BalloonParty/Grid/BushLeaf"
                     float3 field = tex2Dlod(_DisturbanceTex, float4(fieldUV, 0.0, 0.0)).rgb;
                     float2 displace = (field.gb - 0.5) * 2.0;
                     float disturbance = length(displace);
+
+                    // Power curve damping: low displacement decays faster
+                    disturbance = pow(disturbance, _RattleDamping);
 
                     // Convert displacement to angular rattle with fast oscillation
                     // Cross product with leaf direction gives signed rotation

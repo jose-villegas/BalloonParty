@@ -25,5 +25,6 @@ namespace BalloonParty.Configuration
         bool RattleEnabled { get; }
         float RattleAmplitude { get; }
         float RattleFrequency { get; }
+        float RattleDamping { get; }
     }
 }

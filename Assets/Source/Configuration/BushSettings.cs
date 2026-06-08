@@ -48,6 +48,7 @@ namespace BalloonParty.Configuration
         [SerializeField] private bool _rattleEnabled = true;
         [SerializeField] private float _rattleAmplitude = 15f;
         [SerializeField] private float _rattleFrequency = 12f;
+        [SerializeField] [Range(1f, 10f)] private float _rattleDamping = 3f;
 
         public BushView BushPrefab => _bushPrefab;
         public float AnimationSpeed => _animationSpeed;
@@ -72,5 +73,6 @@ namespace BalloonParty.Configuration
         public bool RattleEnabled => _rattleEnabled;
         public float RattleAmplitude => _rattleAmplitude;
         public float RattleFrequency => _rattleFrequency;
+        public float RattleDamping => _rattleDamping;
     }
 }
