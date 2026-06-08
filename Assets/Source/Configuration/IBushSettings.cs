@@ -12,6 +12,9 @@ namespace BalloonParty.Configuration
         Shader LeafShader { get; }
         float BushWorldSize { get; }
         Sprite[] LeafAtlasSprites { get; }
+        Color LeafShadowColor { get; }
+        Vector2 LeafShadowOffset { get; }
+        float LeafShadowSoftness { get; }
         float WindAmplitude { get; }
         float WindPeriod { get; }
     }

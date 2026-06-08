@@ -30,6 +30,11 @@ namespace BalloonParty.Configuration
         [Header("Leaf Atlas")]
         [SerializeField] private Sprite[] _leafAtlasSprites;
 
+        [Header("Leaf Shadow")]
+        [SerializeField] private Color _leafShadowColor = new(0.15f, 0.18f, 0.1f, 0.55f);
+        [SerializeField] private Vector2 _leafShadowOffset = new(0.04f, -0.06f);
+        [SerializeField] [Range(0f, 0.08f)] private float _leafShadowSoftness = 0.015f;
+
         [Header("Wind")]
         [SerializeField] private float _windAmplitude = 3f;
         [SerializeField] private float _windPeriod = 2f;
@@ -44,6 +49,9 @@ namespace BalloonParty.Configuration
         public Shader LeafShader => _leafShader;
         public float BushWorldSize => _bushWorldSize;
         public Sprite[] LeafAtlasSprites => _leafAtlasSprites;
+        public Color LeafShadowColor => _leafShadowColor;
+        public Vector2 LeafShadowOffset => _leafShadowOffset;
+        public float LeafShadowSoftness => _leafShadowSoftness;
         public float WindAmplitude => _windAmplitude;
         public float WindPeriod => _windPeriod;
     }
