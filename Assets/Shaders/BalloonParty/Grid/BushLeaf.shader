@@ -96,7 +96,9 @@ Shader "BalloonParty/Grid/BushLeaf"
                 // Scale same as sprite so shadow silhouette matches leaf shape
                 float2 scaled = (rawUV - 0.5) / _SpriteScale + 0.5;
                 float2 uv = RemapUV(scaled, rect);
-                return tex2D(_MainTex, uv).a;
+                // Mask out samples past the quad edge to prevent wrap-around
+                float2 inside = step(0.0, rawUV) * step(rawUV, 1.0);
+                return tex2D(_MainTex, uv).a * inside.x * inside.y;
             }
 
             fixed4 frag(v2f i) : SV_Target

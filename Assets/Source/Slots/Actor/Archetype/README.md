@@ -22,35 +22,34 @@ Concrete grid actor models and the Puff cloud visual system.
 
 ## Bush System
 
-The Bush system renders baked sprite bushes over groups of adjacent Bush slots.
-Each slot gets a baked canopy sprite (dense centre) and individual leaf sprites
-around the outer ring that animate independently. Follows the same cluster MVC
-pattern as the Puff cloud system.
+The Bush system renders baked 2D skeletal bushes over groups of adjacent Bush
+slots. Branch maps and leaf attachment points are baked offline via the Bush
+Baker editor window. At runtime, branches are a static textured quad per slot;
+leaves are `DrawMeshInstanced` quads that rotate around their attachment
+points for wind sway. Zero GameObjects per leaf, two draw calls per slot.
 
 ### View Layer
 
 | File | What it does |
 |---|---|
-| `BushView` | `ClusterView` subclass. Spawns per-slot baked canopy `SpriteRenderer` children and pooled `LeafSpriteView` instances at phyllotaxis positions. Scales are driven by `IBushSettings` (canopy diameter, leaf size, slot radius, branch spread). Canopy scales update in `LateUpdate` for live SO tuning; leaf transforms are set once on configure to avoid fighting DOTween. |
-| `LeafSpriteView` | `MonoBehaviour` + `IPoolable`. Holds ruffle state (`PhyllotaxisIndex`, `DepthFactor`, `LeafDirection`, `BaseRotation`). `OnDespawned` kills all tweens (wind + ruffle). |
-| `LeafSpritePoolChannel` | Pool channel for `LeafSpriteView` prefabs. |
-| `BushViewController` | `ClusterViewController` subclass. Adds gap-fill circles at midpoints between adjacent bush slots. Wires `IBushSettings` and the leaf sprite pool into the view via `OnViewCreated`. |
-| `BushRuffleController` | `IStartable` + `ITickable`. Tracks the active projectile via `ProjectileLoadedMessage`. Each tick checks leaf proximity — within `RuffleRadius` triggers DOTween punch sequences (rotation, scale, position) with distance-based stagger. Also starts ambient wind oscillation (infinite yoyo rotation) on each leaf. |
+| `BushView` | `ClusterView` subclass. Per-slot rendering via `Graphics.DrawMesh` (branch) and `DrawMeshInstanced` (leaves). Each slot picks a `BushVariantData` by cycling `i % variants.Length`. Disables the base `SpriteRenderer`. Leaf matrices are updated externally by `BushAnimator`. |
+| `BushViewController` | `ClusterViewController` subclass. Adds gap-fill circles at midpoints between adjacent bush slots. Wires `IBushSettings` into the view via `SetSettings()`. |
+| `BushAnimator` | `ITickable`. Drives idle wind animation on all bush leaves. Per-leaf pivot rotation using sine oscillation + Perlin noise, modulated by depth. Optional scale pulse for flutter. Zero allocations per frame. |
 | `BushClusterRegistry` | `SlotClusterRegistry<BushObstacleModel>`. Subscribes to grid changes (no `setupOnly`) because spawner places actors async after `Start()`. |
 
 ### Configuration
 
 `BushSettings` (ScriptableObject in `Configuration/`) — `IBushSettings`. Holds:
 - **Prefab** — `BushView` prefab reference
-- **Shape** — slot radius, branch spread (phyllotaxis spiral tightness)
-- **Baked Assets** — canopy variant sprites, leaf atlas sprites, canopy diameter, leaf sprite size
-- **Ruffle** — leaf count, radius, rotation/scale/position amplitude, duration, stagger
-- **Wind** — amplitude, period
+- **Branch Map** — `BushVariantData[]` variants, branch + leaf shaders, world size
+- **Leaf Atlas** — sprite array for atlas sub-rects
+- **Leaf Shadow** — shadow colour, offset, softness, sprite scale
+- **Wind** — amplitude, period, noise amplitude, scale pulse
 
 ### Baking
 
 Baked assets are generated via **Tools > Bush Baker** (editor window). The bake
-shaders and venation simulator live in `Assets/Source/Editor/Bush/` and
+shaders and pipeline live in `Assets/Source/Editor/Bush/` and
 `Assets/Shaders/BalloonParty/Grid/Editor/`. See `Editor/Bush/README.md`.
 
 The Puff cloud system renders procedural GPU-driven clouds over groups of adjacent Puff slots. Multiple Puff slots that are hex-adjacent merge into a single continuous cloud body. The system follows MVC:

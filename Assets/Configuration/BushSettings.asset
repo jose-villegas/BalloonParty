@@ -43,5 +43,8 @@ MonoBehaviour:
   _leafShadowColor: {r: 0.15, g: 0.18, b: 0.1, a: 0.55}
   _leafShadowOffset: {x: 0.1, y: -0.1}
   _leafShadowSoftness: 0.015
-  _windAmplitude: 200
-  _windPeriod: 50
+  _leafSpriteScale: 0.75
+  _windAmplitude: 20
+  _windPeriod: 5
+  _windNoiseAmplitude: 1.5
+  _windScalePulse: 0.03

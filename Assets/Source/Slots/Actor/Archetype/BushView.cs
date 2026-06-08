@@ -25,6 +25,8 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static Mesh _sharedBranchQuad;
         private IBushSettings _settings;
 
+        internal IReadOnlyList<SlotRenderData> SlotRenderEntries => _slotRenderData;
+
         internal void SetSettings(IBushSettings settings)
         {
             _settings = settings;
@@ -141,21 +143,26 @@ namespace BalloonParty.Slots.Actor.Archetype
             var slots = variant.LeafSlots;
             entry.LeafCount = slots.Count;
             entry.LeafMatrices = new Matrix4x4[entry.LeafCount];
+            entry.LeafSlots = slots;
+            entry.WorldPos = worldPos;
+            entry.ScaleCompensation = 1f / Mathf.Max(_settings.LeafSpriteScale, 0.3f);
+            entry.PivotOffset = _settings.LeafPivotOffset;
 
             var tints = new Vector4[entry.LeafCount];
             var uvRects = new Vector4[entry.LeafCount];
-
-            var scaleCompensation = 1f / Mathf.Max(_settings.LeafSpriteScale, 0.3f);
 
             for (var i = 0; i < entry.LeafCount; i++)
             {
                 var slot = slots[i];
                 var leafWorldPos = worldPos + slot.Position;
                 var angleDeg = slot.BaseAngle * Mathf.Rad2Deg - 90f;
+                var scale = slot.Scale * entry.ScaleCompensation;
+                var rot = Quaternion.Euler(0f, 0f, angleDeg);
+                var pivotShift = rot * new Vector3(0f, -entry.PivotOffset * scale, 0f);
                 entry.LeafMatrices[i] = Matrix4x4.TRS(
-                    new Vector3(leafWorldPos.x, leafWorldPos.y, 0f),
-                    Quaternion.Euler(0f, 0f, angleDeg),
-                    Vector3.one * (slot.Scale * scaleCompensation));
+                    new Vector3(leafWorldPos.x, leafWorldPos.y, 0f) + pivotShift,
+                    rot,
+                    Vector3.one * scale);
 
                 var tint = (Color)slot.Tint;
                 tints[i] = new Vector4(tint.r, tint.g, tint.b, tint.a);
@@ -177,6 +184,8 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         private static Mesh GetBranchQuadMesh()
         {
+            // ...existing code...
+
             if (_sharedBranchQuad != null)
             {
                 return _sharedBranchQuad;
@@ -237,7 +246,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             return _sharedLeafQuad;
         }
 
-        private struct SlotRenderData
+        internal struct SlotRenderData
         {
             internal Material BranchMaterial;
             internal Matrix4x4 BranchMatrix;
@@ -245,6 +254,10 @@ namespace BalloonParty.Slots.Actor.Archetype
             internal MaterialPropertyBlock LeafProps;
             internal Matrix4x4[] LeafMatrices;
             internal int LeafCount;
+            internal IReadOnlyList<LeafSlotData> LeafSlots;
+            internal Vector2 WorldPos;
+            internal float ScaleCompensation;
+            internal float PivotOffset;
         }
     }
 }
