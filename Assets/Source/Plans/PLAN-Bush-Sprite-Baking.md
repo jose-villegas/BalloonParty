@@ -210,14 +210,11 @@ vein hierarchy (6 midribs × 8 laterals × 4 venules). Up to 64 variants.
 ### Editor window layout
 
 The Bush Baker window (`Tools > Bush Baker`) has:
-- **Properties panel** (left, 280–420px) with foldable sections:
-  Gielis Superformula, Surface, Midrib (including Lateral Veins,
-  Venules, and Reticulate sub-sections), Petiole
-- **Live preview box** (right, fills remaining space) — rect-based layout
-  that occupies all horizontal space right of the properties column,
-  matching its full height. Texture is centred and aspect-fitted inside
-  a HelpBox-style container. 🎲 button in top-right corner randomises
-  the preview seed.
+- **Branch Map section** (first) — properties panel + `TexturePreviewBox`
+  with 🌿/🗺 toggle and 🎲 randomiser
+- **Leaf Atlas section** (second) — properties panel + `TexturePreviewBox`
+  with 🎲 randomiser
+- Both preview boxes support background mode cycling (▦/■/□)
 - **Buttons** — "Preview All Variants" and "Export Leaf Atlas"
 - **Variant grid** — thumbnails in a HelpBox container; clickable to
   display the selected variant in the live preview. Selection is cleared
@@ -258,14 +255,14 @@ textured quad; leaves are `DrawMeshInstanced` with pivot-based rotation.
 
 | # | Task | New files | Modified files | Status |
 |---|---|---|---|---|
-| 2.1 | Branch bake settings class | `BushBranchBakeSettings.cs` | `BushBakerState.cs` | ⬜ |
-| 2.2 | Fractal branch generator (CPU) | `BushBranchGenerator.cs` | — | ⬜ |
-| 2.3 | Branch bake shader | `BushBakeBranch.shader` | — | ⬜ |
-| 2.4 | Branch baker (offscreen pipeline) | `BushBranchBaker.cs` | — | ⬜ |
+| 2.1 | Branch bake settings class | `BushBranchBakeSettings.cs` | `BushBakerState.cs` | ✅ Done |
+| 2.2 | Fractal branch generator (CPU) | `BushBranchGenerator.cs` | — | ✅ Done |
+| 2.3 | Branch bake shader | `BushBakeBranch.shader` | — | ✅ Done |
+| 2.4 | Branch baker (offscreen pipeline) | `BushBranchBaker.cs` | — | ✅ Done |
 | 2.5 | Leaf extractor from branch map | `BushLeafExtractor.cs` | — | ⬜ |
 | 2.6 | `BushVariantData` ScriptableObject | `BushVariantData.cs` | — | ⬜ |
-| 2.7 | Editor window: branch section + export | — | `BushBakerWindow.cs`, `BushBakerState.cs` | ⬜ |
-| 2.8 | Runtime branch shader | `BushBranch.shader` | — | ⬜ |
+| 2.7 | Editor window: branch section + export | `TexturePreviewBox.cs` | `BushBakerWindow.cs`, `BushBakerState.cs` | ✅ Done (preview), ⬜ (export) |
+| 2.8 | Runtime branch shader | `BushBranch.shader` | — | ✅ Done |
 | 2.9 | Runtime `BushView` refactor | — | `BushView.cs`, `BushViewController.cs` | ⬜ |
 | 2.10 | `IBushSettings` extension | — | `IBushSettings.cs`, concrete SO | ⬜ |
 | 2.11 | Integration test — bake + render | — | — | ⬜ |
@@ -636,29 +633,36 @@ Add `DrawBranchSection()` between `DrawSharedSettings()` and
     Leaf Scale: [0.08]
     Scale Variation: [0.3]
 
-  [Preview Branch Map]  [Preview with Leaves]
-  (live preview box — same pattern as leaf)
+  [Preview Branch Map]
 
-  [Export Bush Variant]
+  ┌─────────────────────────────────────────────┐
+  │ Branch Preview          [🌿] [▦] [🎲]      │  ← TexturePreviewBox
+  │                                             │
+  │       (branch map preview, auto-updates)    │
+  │                                             │
+  └─────────────────────────────────────────────┘
 ```
 
-**Buttons:**
-- **"Preview Branch Map"** — `BushBranchBaker.Bake()` → display in preview
-- **"Preview with Leaves"** — bake + extract → overlay leaf positions as
-  coloured dots/sprites on the branch map preview
-- **"Export Bush Variant"** — full pipeline:
-  1. Bake branch map for each variant seed
-  2. Save each as `BranchMap_V{i}.png` in output folder
-  3. Configure texture importer (alpha is transparency, no mipmap)
-  4. Extract leaf slots per variant
-  5. Create/update `BushVariantData` SO per variant
-  6. Ping first SO in Project window
+**Preview toolbar buttons (via TexturePreviewBox):**
+- **▦ / ■ / □** — background mode cycle (checkerboard, black, white)
+- **🌿 / 🗺** — toggle runtime visual (brown depth-shaded) vs raw map (RG+A encoded)
+- **🎲** — randomise seed
 
-**Auto-preview:** Same hash-check pattern as leaf preview. Recompute
-branch preview on any branch setting change.
+**Runtime visual preview:** CPU-side pixel transform replicating the
+`BushBranch.shader` formula: `color × (0.6 + 0.4 × depth)`. Built from
+the raw map on toggle without re-baking.
 
-**Modify:** `BushBakerState.cs` — add foldout booleans and
-`BushBranchBakeSettings BranchSettings`.
+**Buttons (below preview):**
+- **"Preview Branch Map"** — force re-bake (also triggered by auto-preview)
+- **"Preview with Leaves"** — (TODO) bake + extract → overlay leaf positions
+- **"Export Bush Variant"** — (TODO) full export pipeline
+
+**Auto-preview:** Hash-check on every Repaint. Any branch setting or seed
+change triggers a re-bake. Raw map is cached; display texture rebuilds
+on mode toggle without re-baking.
+
+**Modify:** `BushBakerState.cs` — ✅ Done: foldout booleans and
+`BushBranchBakeSettings BranchSettings` added.
 
 ---
 
@@ -944,18 +948,18 @@ Manual verification checklist:
 ### Implementation Order (recommended)
 
 ```
-2.1  Settings class             ← quick, unblocks everything
-2.2  Generator                  ← pure math, testable with Debug.Log
-2.3  Bake shader                ← simple pass-through
-2.4  Baker pipeline             ← wires 2.2 + 2.3, produces texture
-2.7a Window preview button      ← see branch maps visually
+2.1  Settings class             ✅ Done
+2.2  Generator                  ✅ Done
+2.3  Bake shader                ✅ Done
+2.4  Baker pipeline             ✅ Done
+2.7a Window preview + toolbar   ✅ Done (TexturePreviewBox component)
+2.8  Runtime shader             ✅ Done
  ─── iterate on 2.2 parameters using preview ───
-2.5  Leaf extractor             ← reads texture from 2.4
+2.5  Leaf extractor             ← NEXT: reads texture from 2.4
 2.7b Window "with leaves"       ← visual feedback for extraction
 2.6  Variant SO                 ← data container
 2.7c Window export button       ← saves SO to disk
  ─── bake pipeline complete ───
-2.8  Runtime shader             ← trivial, 10 min
 2.10 Settings extension         ← add variant refs to config
 2.9  BushView refactor          ← runtime rendering
 2.11 Integration test           ← end-to-end validation
@@ -963,20 +967,45 @@ Manual verification checklist:
 
 ---
 
+### What exists now (Phase 2)
+
+| File | Location | Role |
+|---|---|---|
+| `BushBranchBakeSettings.cs` | `Source/Editor/Bush/` | All fractal generation + visual + extraction parameters |
+| `BushBranchGenerator.cs` | `Source/Editor/Bush/` | Recursive fractal → flat `Segment[]` in UV space |
+| `BushBakeBranch.shader` | `Shaders/.../Editor/` | Bake shader: vertex color pass-through + edge AA |
+| `BushBranchBaker.cs` | `Source/Editor/Bush/` | Offscreen camera pipeline: mesh from segments, render, readback |
+| `BushBranch.shader` | `Shaders/.../Grid/` | Runtime shader: static alpha-test, depth shading, GPU instancing |
+| `TexturePreviewBox.cs` | `Source/Editor/` | Reusable preview component: background modes + extensible toolbar |
+
+### Shared editor components created
+
+**`TexturePreviewBox`** (`Assets/Source/Editor/TexturePreviewBox.cs`):
+- Self-contained preview box with HelpBox container, title, toolbar
+- Background mode cycling: checkerboard → black → white
+- Extra toolbar buttons via `Func<Rect, float, float>` callback (right-to-left)
+- Static helper `DrawToolbarButton(rightEdge, y, label, width, onClick)`
+- Used by both branch preview (🌿/🗺 toggle + 🎲) and leaf preview (🎲)
+
+---
+
 ### Session context for Phase 2
 
 When implementing Phase 2 tasks, read:
-- `Assets/Source/Editor/Bush/BushBakerWindow.cs` — editor window (extend)
-- `Assets/Source/Editor/Bush/BushLeafBaker.cs` — bake pipeline pattern
-- `Assets/Source/Editor/Bush/BushLeafBakeSettings.cs` — settings pattern
-- `Assets/Source/Editor/Bush/BushBakerState.cs` — persisted state (extend)
+- `Assets/Source/Editor/Bush/BushBakerWindow.cs` — editor window
+- `Assets/Source/Editor/Bush/BushBranchBaker.cs` — branch bake pipeline
+- `Assets/Source/Editor/Bush/BushBranchGenerator.cs` — fractal generator
+- `Assets/Source/Editor/Bush/BushBranchBakeSettings.cs` — branch settings
+- `Assets/Source/Editor/Bush/BushBakerState.cs` — persisted state
+- `Assets/Source/Editor/Bush/BushLeafBaker.cs` — leaf bake pipeline (pattern)
 - `Assets/Source/Editor/Bush/LeafAtlasPacker.cs` — export pipeline pattern
+- `Assets/Source/Editor/TexturePreviewBox.cs` — reusable preview component
+- `Assets/Shaders/BalloonParty/Grid/Editor/BushBakeBranch.shader` — bake shader
+- `Assets/Shaders/BalloonParty/Grid/BushBranch.shader` — runtime shader
 - `Assets/Source/Slots/Actor/Archetype/BushView.cs` — runtime view (refactor)
 - `Assets/Source/Slots/Actor/Archetype/BushViewController.cs` — controller
 - `Assets/Source/Slots/Actor/Cluster/ClusterView.cs` — base class
 - `Assets/Source/Configuration/IBushSettings.cs` — settings (extend)
-- `Assets/Shaders/BalloonParty/README.md` — shader conventions
-- `Assets/Materials/README.md` — instancing policy
 - `.github/copilot-instructions.md` — project coding conventions
 
 **Key conventions:**
@@ -986,6 +1015,7 @@ When implementing Phase 2 tasks, read:
 - `BushVariantData` + `LeafSlotData` in runtime assembly (`BalloonParty.Configuration`)
 - Allman braces, `internal` visibility, no `StartCoroutine`
 - Read-only collection interfaces for non-mutated parameters
+- Shared editor helpers in `Assets/Source/Editor/` (not in Bush subfolder)
 
 ---
 
