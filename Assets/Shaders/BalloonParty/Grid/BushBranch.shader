@@ -9,7 +9,7 @@ Shader "BalloonParty/Grid/BushBranch"
     }
     SubShader
     {
-        Tags { "RenderType"="TransparentCutout" "Queue"="AlphaTest" }
+        Tags { "RenderType"="TransparentCutout" "Queue"="Transparent" }
         Cull Off
         ZWrite Off
 
@@ -65,7 +65,7 @@ Shader "BalloonParty/Grid/BushBranch"
                 clip(map.a - _AlphaCutoff);
                 // Depth shading: trunk (low alpha) darker, tips (high alpha) lighter
                 fixed3 col = _BranchColor.rgb * (0.6 + 0.4 * map.a);
-                return fixed4(col * _RendererColor.rgb, map.a);
+                return fixed4(col * _RendererColor.rgb, 1.0);
             }
             ENDCG
         }
