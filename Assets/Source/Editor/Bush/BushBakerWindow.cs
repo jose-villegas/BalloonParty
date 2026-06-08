@@ -12,6 +12,9 @@ namespace BalloonParty.Editor.Bush
         private const float PropertiesMinWidth = 280f;
         private const float PropertiesMaxWidth = 420f;
 
+        private readonly TexturePreviewBox _branchPreviewBox = new("Branch Preview");
+        private readonly TexturePreviewBox _leafPreviewBox = new("Leaf Preview");
+
         private Texture2D[] _leafPreviews;
         private Texture2D _leafLivePreview;
         private bool _livePreviewOwned = true;
@@ -23,9 +26,8 @@ namespace BalloonParty.Editor.Bush
         private Texture2D _branchRawMap;
         private int _lastBranchHash;
         private bool _showRuntimePreview = true;
-
-        private readonly TexturePreviewBox _branchPreviewBox = new("Branch Preview");
-        private readonly TexturePreviewBox _leafPreviewBox = new("Leaf Preview");
+        private bool _showLeafOverlay;
+        private System.Collections.Generic.List<BushLeafExtractor.LeafSlot> _extractedLeaves;
 
         private BushBakerState State => BushBakerState.instance;
 
@@ -182,32 +184,45 @@ namespace BalloonParty.Editor.Bush
         {
             var y = boxRect.y + 2f;
 
-            // Dice: randomise seed
-            rightEdge = TexturePreviewBox.DrawToolbarButton(rightEdge, y, "🎲", 26f, () =>
-            {
-                State.PreviewSeed = (uint)Random.Range(1, int.MaxValue);
-                State.Save();
-                _lastBranchHash = 0;
-                _lastLeafHash = 0;
-                Repaint();
-            });
+            rightEdge = TexturePreviewBox.DrawToolbarButton(rightEdge, y, "🎲", 26f, RandomiseBranchSeed);
 
-            // Map/Visual toggle
+            var leafLabel = _showLeafOverlay ? "🍃" : "╌";
+            rightEdge = TexturePreviewBox.DrawToolbarButton(rightEdge, y, leafLabel, 26f, ToggleLeafOverlay);
+
             var toggleLabel = _showRuntimePreview ? "🌿" : "🗺";
-            rightEdge = TexturePreviewBox.DrawToolbarButton(rightEdge, y, toggleLabel, 28f, () =>
-            {
-                _showRuntimePreview = !_showRuntimePreview;
-                RebuildBranchDisplayTexture();
-                Repaint();
-            });
+            rightEdge = TexturePreviewBox.DrawToolbarButton(rightEdge, y, toggleLabel, 28f, ToggleRuntimePreview);
 
             return rightEdge;
+        }
+
+        private void RandomiseBranchSeed()
+        {
+            State.PreviewSeed = (uint)Random.Range(1, int.MaxValue);
+            State.Save();
+            _lastBranchHash = 0;
+            _lastLeafHash = 0;
+            Repaint();
+        }
+
+        private void ToggleLeafOverlay()
+        {
+            _showLeafOverlay = !_showLeafOverlay;
+            RebuildBranchDisplayTexture();
+            Repaint();
+        }
+
+        private void ToggleRuntimePreview()
+        {
+            _showRuntimePreview = !_showRuntimePreview;
+            RebuildBranchDisplayTexture();
+            Repaint();
         }
 
         private void GenerateBranchPreview()
         {
             DestroyBranchPreview();
             _branchRawMap = BushBranchBaker.Bake((int)State.PreviewSeed, State.BranchSettings);
+            ExtractLeaves();
             RebuildBranchDisplayTexture();
             _lastBranchHash = ComputeBranchSettingsHash();
             Repaint();
@@ -226,9 +241,26 @@ namespace BalloonParty.Editor.Bush
                 _lastBranchHash = hash;
                 DestroyBranchPreview();
                 _branchRawMap = BushBranchBaker.Bake((int)State.PreviewSeed, State.BranchSettings);
+                ExtractLeaves();
                 RebuildBranchDisplayTexture();
                 Repaint();
             }
+        }
+
+        private void ExtractLeaves()
+        {
+            _extractedLeaves = null;
+
+            if (_branchRawMap == null)
+            {
+                return;
+            }
+
+            _extractedLeaves = BushLeafExtractor.Extract(
+                _branchRawMap,
+                (int)State.PreviewSeed,
+                State.BranchSettings,
+                Mathf.Max(1, State.LeafSettings.LeafVariants));
         }
 
         private void RebuildBranchDisplayTexture()
@@ -245,40 +277,103 @@ namespace BalloonParty.Editor.Bush
                 return;
             }
 
-            if (!_showRuntimePreview)
+            if (!_showRuntimePreview && !_showLeafOverlay)
             {
                 _branchPreview = _branchRawMap;
                 return;
             }
 
-            // Build a runtime-style preview: apply branch color × depth shading
             var pixels = _branchRawMap.GetPixels32();
             var branchColor = State.BranchSettings.BranchColor;
+            var res = _branchRawMap.width;
             var result = new Color32[pixels.Length];
 
-            for (var i = 0; i < pixels.Length; i++)
+            if (_showRuntimePreview)
             {
-                var p = pixels[i];
-                var alpha = p.a / 255f;
-                if (alpha < 0.01f)
+                for (var i = 0; i < pixels.Length; i++)
                 {
-                    result[i] = new Color32(0, 0, 0, 0);
-                    continue;
-                }
+                    var p = pixels[i];
+                    var alpha = p.a / 255f;
+                    if (alpha < 0.01f)
+                    {
+                        result[i] = new Color32(0, 0, 0, 0);
+                        continue;
+                    }
 
-                // Same formula as BushBranch.shader: color * (0.6 + 0.4 * depth)
-                var shade = 0.6f + 0.4f * alpha;
-                var r = (byte)Mathf.Clamp(branchColor.r * shade * 255f, 0f, 255f);
-                var g = (byte)Mathf.Clamp(branchColor.g * shade * 255f, 0f, 255f);
-                var b = (byte)Mathf.Clamp(branchColor.b * shade * 255f, 0f, 255f);
-                var a = (byte)Mathf.Clamp(alpha * 255f, 0f, 255f);
-                result[i] = new Color32(r, g, b, a);
+                    var shade = 0.6f + 0.4f * alpha;
+                    var r = (byte)Mathf.Clamp(branchColor.r * shade * 255f, 0f, 255f);
+                    var g = (byte)Mathf.Clamp(branchColor.g * shade * 255f, 0f, 255f);
+                    var b = (byte)Mathf.Clamp(branchColor.b * shade * 255f, 0f, 255f);
+                    var a = (byte)Mathf.Clamp(alpha * 255f, 0f, 255f);
+                    result[i] = new Color32(r, g, b, a);
+                }
+            }
+            else
+            {
+                System.Array.Copy(pixels, result, pixels.Length);
             }
 
-            var res = _branchRawMap.width;
+            if (_showLeafOverlay && _extractedLeaves != null)
+            {
+                StampLeafMarkers(result, res);
+            }
+
             _branchPreview = new Texture2D(res, res, TextureFormat.RGBA32, false);
             _branchPreview.SetPixels32(result);
             _branchPreview.Apply();
+        }
+
+        private void StampLeafMarkers(Color32[] pixels, int res)
+        {
+            // Draw a small green dot + direction line for each extracted leaf
+            var leafColor = new Color32(80, 200, 50, 255);
+            var dotRadius = Mathf.Max(2, res / 64);
+
+            foreach (var leaf in _extractedLeaves)
+            {
+                var cx = Mathf.RoundToInt(leaf.UVPosition.x * res);
+                var cy = Mathf.RoundToInt(leaf.UVPosition.y * res);
+
+                // Draw filled circle
+                for (var dy = -dotRadius; dy <= dotRadius; dy++)
+                {
+                    for (var dx = -dotRadius; dx <= dotRadius; dx++)
+                    {
+                        if (dx * dx + dy * dy > dotRadius * dotRadius)
+                        {
+                            continue;
+                        }
+
+                        var px = cx + dx;
+                        var py = cy + dy;
+
+                        if (px < 0 || px >= res || py < 0 || py >= res)
+                        {
+                            continue;
+                        }
+
+                        pixels[py * res + px] = leafColor;
+                    }
+                }
+
+                // Draw short direction line
+                var lineLen = dotRadius * 2;
+                var dirX = Mathf.Cos(leaf.Angle);
+                var dirY = Mathf.Sin(leaf.Angle);
+
+                for (var s = 0; s < lineLen; s++)
+                {
+                    var px = cx + Mathf.RoundToInt(dirX * s);
+                    var py = cy + Mathf.RoundToInt(dirY * s);
+
+                    if (px < 0 || px >= res || py < 0 || py >= res)
+                    {
+                        break;
+                    }
+
+                    pixels[py * res + px] = leafColor;
+                }
+            }
         }
 
         private int ComputeBranchSettingsHash()
@@ -300,6 +395,10 @@ namespace BalloonParty.Editor.Bush
                 h = h * 31 + s.TipTaper.GetHashCode();
                 h = h * 31 + s.BranchColor.GetHashCode();
                 h = h * 31 + s.ColorVariation.GetHashCode();
+                h = h * 31 + s.LeafDepthThreshold.GetHashCode();
+                h = h * 31 + s.MaxLeavesPerVariant.GetHashCode();
+                h = h * 31 + s.LeafScale.GetHashCode();
+                h = h * 31 + s.LeafScaleVariation.GetHashCode();
                 return h;
             }
         }
@@ -474,17 +573,16 @@ namespace BalloonParty.Editor.Bush
         private float DrawLeafToolbarExtras(Rect boxRect, float rightEdge)
         {
             var y = boxRect.y + 2f;
-
-            // Dice: randomise seed
-            rightEdge = TexturePreviewBox.DrawToolbarButton(rightEdge, y, "🎲", 26f, () =>
-            {
-                State.PreviewSeed = (uint)Random.Range(1, int.MaxValue);
-                State.Save();
-                _lastLeafHash = 0;
-                Repaint();
-            });
-
+            rightEdge = TexturePreviewBox.DrawToolbarButton(rightEdge, y, "🎲", 26f, RandomiseLeafSeed);
             return rightEdge;
+        }
+
+        private void RandomiseLeafSeed()
+        {
+            State.PreviewSeed = (uint)Random.Range(1, int.MaxValue);
+            State.Save();
+            _lastLeafHash = 0;
+            Repaint();
         }
 
 
