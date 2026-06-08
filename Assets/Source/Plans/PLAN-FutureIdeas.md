@@ -928,3 +928,72 @@ first 5 seconds — if the device can't hold 60 fps during the intro, drop to Lo
 5. **Testing matrix** — which devices define the Low/Medium/High boundaries?
    Need a concrete test device list before shipping quality tiers.
 
+---
+
+## 10 — Baked Noise Texture for Puff Clouds
+
+> Replace runtime Simplex noise evaluation in the PuffCloud shader with a
+> pre-baked tileable noise texture lookup.
+
+**Feasibility: ✅ Yes — High Confidence.**
+2D Simplex noise is deterministic and stateless. A single octave can be
+pre-sampled onto a tileable (wrapping) 512×512 R8 texture and fetched
+with a single `tex2D` instead of ~30 ALU ops per evaluation.
+
+**Current cost:** 15–24 Simplex evaluations per fragment (3 octaves ×
+main cloud + 4 lighting samples + shadow + density) = **450–720 ALU ops**
+just for noise. With baked texture: same number of `tex2D` fetches with
+high cache coherence — ~90% ALU reduction.
+
+**Implementation outline:**
+1. Editor tool: `NoiseTextureBaker` generates 512×512 R8 tileable Simplex
+   texture (4D torus mapping for seamless wrap, or large 2D + Repeat)
+2. Shader: replace `SimplexNoise2D(p)` → `tex2D(_NoiseTex, p).r * 2.0 - 1.0`;
+   keep three-octave structure, each octave samples at different UV scale
+3. Wire `_NoiseTex` on the PuffCloud material; verify visual parity
+4. Also benefits `DisturbanceStamp.shader` (same noise include)
+
+**Texture:** 512×512 R8 = 256 KB, Repeat wrap, Bilinear, no mipmaps.
+
+**Priority:** Medium — biggest GPU bottleneck on mobile. Do after bush
+Phase 4 (rattle). Pairs with section 11 below for a unified preload pass.
+
+---
+
+## 11 — Runtime Bush Baking at Preload
+
+> Move bush leaf atlas and branch map generation from editor-only export
+> to a runtime preload step. Textures generated on first load instead of
+> shipped as assets.
+
+**Feasibility: ✅ Yes — estimated ~30ms on mobile.**
+
+| Operation | Est. time |
+|---|---|
+| Branch generator (4 variants, CPU) | ~2ms |
+| Branch mesh build + render (4×) | ~8ms |
+| Leaf bake (8 variants × 64×64) | ~15ms |
+| Atlas readback | ~5ms |
+| Leaf extraction from segments (CPU) | ~1ms |
+| **Total** | **~30ms** |
+
+Well within a loading screen budget. Same shaders, same generator —
+output is deterministic for a given seed. Random seed per session gives
+infinite variety at zero storage cost.
+
+**What needs to change:**
+1. Move bake shaders from `Shaders/.../Editor/` to `Hidden/` runtime paths
+2. Extract `BushBranchGenerator`, `BushLeafExtractor`, bake settings from
+   editor assembly to runtime (generator + extractor are pure math, no
+   editor deps)
+3. Create runtime bakers (replace `AssetDatabase` calls, use `Object.Destroy`)
+4. `RuntimeLeafAtlasPacker`: render to `Texture2D` directly, compute UV rects
+   manually (no `Sprite` objects needed — `BushView` already uses raw `UVRect`)
+5. `BushBakeService` orchestrator: runs during preload, outputs variant data
+6. Keep editor bake pipeline intact for preview/iteration
+
+**Benefits:** ~1–2 MB build size reduction, infinite per-session variety,
+no export step for design iteration, single source of truth (settings SO).
+
+**Priority:** Low — current pipeline works. Best as polish after all bush
+phases complete. Combine with section 10 into a unified preload bake pass.

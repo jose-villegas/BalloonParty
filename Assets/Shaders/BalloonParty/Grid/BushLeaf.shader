@@ -9,6 +9,12 @@ Shader "BalloonParty/Grid/BushLeaf"
         _ShadowOffset   ("Offset",   Vector)          = (0.1, -0.1, 0, 0)
         _ShadowSoftness ("Softness", Range(0, 0.08))  = 0.015
 
+        [Header(Highlight)]
+        _HighlightColor    ("Color",     Color)          = (1, 1, 0.9, 0.4)
+        _HighlightOffset   ("Offset",    Vector)         = (-0.06, 0.08, 0, 0)
+        _HighlightSize     ("Size",      Range(0.01, 0.3)) = 0.1
+        _HighlightSoftness ("Softness",  Range(0.01, 0.3)) = 0.12
+
         [Header(Sprite)]
         _SpriteScale ("Scale", Range(0.3, 1.0)) = 0.75
     }
@@ -31,6 +37,10 @@ Shader "BalloonParty/Grid/BushLeaf"
             fixed4 _ShadowColor;
             float2 _ShadowOffset;
             float  _ShadowSoftness;
+            fixed4 _HighlightColor;
+            float2 _HighlightOffset;
+            float  _HighlightSize;
+            float  _HighlightSoftness;
             float  _SpriteScale;
 
             UNITY_INSTANCING_BUFFER_START(Props)
@@ -52,6 +62,7 @@ Shader "BalloonParty/Grid/BushLeaf"
                 float2 rawUV : TEXCOORD1;
                 float4 uvRect : TEXCOORD2;
                 float2 localShadowOffset : TEXCOORD3;
+                float2 localHighlightOffset : TEXCOORD4;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -82,6 +93,10 @@ Shader "BalloonParty/Grid/BushLeaf"
                 o.localShadowOffset = -float2(
                      cosA * _ShadowOffset.x + sinA * _ShadowOffset.y,
                     -sinA * _ShadowOffset.x + cosA * _ShadowOffset.y);
+
+                o.localHighlightOffset = -float2(
+                     cosA * _HighlightOffset.x + sinA * _HighlightOffset.y,
+                    -sinA * _HighlightOffset.x + cosA * _HighlightOffset.y);
 
                 return o;
             }
@@ -139,6 +154,13 @@ Shader "BalloonParty/Grid/BushLeaf"
                 float4 tint = UNITY_ACCESS_INSTANCED_PROP(Props, _LeafTint);
                 col *= tint;
                 col.a *= spriteMask;
+
+                // Specular highlight: radial falloff from offset center, masked to leaf shape
+                float2 hlCenter = spriteUV - 0.5 + i.localHighlightOffset / _SpriteScale;
+                float hlDist = length(hlCenter);
+                float hlFalloff = 1.0 - smoothstep(_HighlightSize, _HighlightSize + _HighlightSoftness, hlDist);
+                float hlMask = hlFalloff * col.a;
+                col.rgb = lerp(col.rgb, _HighlightColor.rgb, hlMask * _HighlightColor.a);
 
                 // Composite: shadow behind, leaf on top (Porter-Duff "over")
                 fixed3 rgb = col.rgb * col.a + shadow.rgb * shadow.a * (1.0 - col.a);

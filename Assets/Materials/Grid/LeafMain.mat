@@ -109,7 +109,8 @@ Material:
     - _GrainScale: 10
     - _GrainStrength: 0
     - _HighlightOffset: 0.4
-    - _HighlightSize: 0.7
+    - _HighlightSize: 0.03
+    - _HighlightSoftness: 0.3
     - _LateralVeinAngle: 1.5
     - _LateralVeinCount: 4
     - _LayerOffset: 0.016
@@ -139,7 +140,7 @@ Material:
     - _ScallopSize: 0.0349
     - _ShadowOffsetX: 0.05
     - _ShadowOffsetY: -0.05
-    - _ShadowSoftness: 0.025
+    - _ShadowSoftness: 0.0322
     - _SlotRadius: 0.45
     - _SminK: 0.274
     - _SmoothnessTextureChannel: 0
@@ -164,7 +165,8 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _FieldBoundsMin: {r: -5, g: -8, b: 0, a: 0}
     - _FieldBoundsSize: {r: 10, g: 16, b: 0, a: 0}
-    - _HighlightColor: {r: 0.37408856, g: 0.6603774, b: 0.252314, a: 1}
+    - _HighlightColor: {r: 0.81472254, g: 0.8773585, b: 0.63318795, a: 0.2509804}
+    - _HighlightOffset: {r: -0.08, g: 0.08, b: 0, a: 0}
     - _LeafVariationColor: {r: 0.25, g: 0.55, b: 0.15, a: 1}
     - _LightColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _LightDir: {r: 1, g: -1, b: 0, a: 0}

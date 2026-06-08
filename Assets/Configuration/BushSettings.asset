@@ -110,6 +110,6 @@ MonoBehaviour:
   _leafPivotOffset: -0.325
   _leafDepthSplit: 0.325
   _windAmplitude: 10
-  _windPeriod: 0.6
+  _windPeriod: 0.8
   _windNoiseAmplitude: 5
-  _windScalePulse: 0.03
+  _windScalePulse: 0.015
