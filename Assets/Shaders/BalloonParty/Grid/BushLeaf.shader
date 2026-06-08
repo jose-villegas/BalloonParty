@@ -44,7 +44,7 @@ Shader "BalloonParty/Grid/BushLeaf"
             #pragma vertex vert
             #pragma fragment frag
             #pragma multi_compile_instancing
-            #pragma shader_feature _RATTLE_ON
+            #pragma multi_compile _ _RATTLE_ON
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
