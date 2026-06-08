@@ -12,6 +12,8 @@ namespace BalloonParty.Editor.Bush
         private const float PropertiesMinWidth = 280f;
         private const float PropertiesMaxWidth = 420f;
 
+        private static readonly string[] TabLabels = { "Branch Map", "Leaf Atlas" };
+
         private readonly TexturePreviewBox _branchPreviewBox = new("Branch Preview");
         private readonly TexturePreviewBox _leafPreviewBox = new("Leaf Preview");
 
@@ -21,6 +23,7 @@ namespace BalloonParty.Editor.Bush
         private int _selectedVariant = -1;
         private Vector2 _scrollPosition;
         private int _lastLeafHash;
+        private int _activeTab;
 
         private Texture2D _branchPreview;
         private Texture2D _branchRawMap;
@@ -46,15 +49,24 @@ namespace BalloonParty.Editor.Bush
 
         private void OnGUI()
         {
-            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
-
             EditorGUI.BeginChangeCheck();
 
             DrawSharedSettings();
-            EditorGUILayout.Space(16);
-            DrawBranchSection();
-            EditorGUILayout.Space(16);
-            DrawLeafSection();
+            EditorGUILayout.Space(4);
+            _activeTab = GUILayout.Toolbar(_activeTab, TabLabels);
+            EditorGUILayout.Space(8);
+
+            _scrollPosition = EditorGUILayout.BeginScrollView(_scrollPosition);
+
+            switch (_activeTab)
+            {
+                case 0:
+                    DrawBranchSection();
+                    break;
+                case 1:
+                    DrawLeafSection();
+                    break;
+            }
 
             if (EditorGUI.EndChangeCheck())
             {
@@ -65,8 +77,15 @@ namespace BalloonParty.Editor.Bush
 
             if (State.AutoPreview && Event.current.type == EventType.Repaint)
             {
-                CheckAutoPreview();
-                CheckBranchAutoPreview();
+                switch (_activeTab)
+                {
+                    case 0:
+                        CheckBranchAutoPreview();
+                        break;
+                    case 1:
+                        CheckAutoPreview();
+                        break;
+                }
             }
         }
 
@@ -80,16 +99,6 @@ namespace BalloonParty.Editor.Bush
 
         private void DrawBranchSection()
         {
-            State.BranchFoldout = EditorGUILayout.Foldout(
-                State.BranchFoldout, "Branch Map", true, EditorStyles.foldoutHeader);
-
-            if (!State.BranchFoldout)
-            {
-                return;
-            }
-
-            EditorGUI.indentLevel++;
-
             DrawBranchPropertiesAndPreview();
 
             EditorGUILayout.Space(8);
@@ -101,8 +110,6 @@ namespace BalloonParty.Editor.Bush
             }
 
             EditorGUILayout.EndHorizontal();
-
-            EditorGUI.indentLevel--;
         }
 
         private void DrawBranchProperties()
@@ -150,7 +157,7 @@ namespace BalloonParty.Editor.Bush
             {
                 EditorGUI.indentLevel++;
                 s.LeafDepthThreshold = EditorGUILayout.Slider("Depth Threshold", s.LeafDepthThreshold, 0.1f, 1f);
-                s.MaxLeavesPerVariant = EditorGUILayout.IntSlider("Max Leaves", s.MaxLeavesPerVariant, 4, 32);
+                s.MaxLeavesPerVariant = EditorGUILayout.IntSlider("Max Leaves", s.MaxLeavesPerVariant, 4, 64);
                 s.LeafScale = EditorGUILayout.Slider("Leaf Scale", s.LeafScale, 0.02f, 0.2f);
                 s.LeafScaleVariation = EditorGUILayout.Slider("Scale Variation", s.LeafScaleVariation, 0f, 0.8f);
                 EditorGUI.indentLevel--;
@@ -230,11 +237,6 @@ namespace BalloonParty.Editor.Bush
 
         private void CheckBranchAutoPreview()
         {
-            if (!State.BranchFoldout)
-            {
-                return;
-            }
-
             var hash = ComputeBranchSettingsHash();
             if (hash != _lastBranchHash)
             {
@@ -421,15 +423,6 @@ namespace BalloonParty.Editor.Bush
 
         private void DrawLeafSection()
         {
-            State.LeafFoldout = EditorGUILayout.Foldout(State.LeafFoldout, "Leaf Atlas", true, EditorStyles.foldoutHeader);
-
-            if (!State.LeafFoldout)
-            {
-                return;
-            }
-
-            EditorGUI.indentLevel++;
-
             DrawPropertiesAndPreview();
 
             EditorGUILayout.Space(8);
@@ -449,8 +442,6 @@ namespace BalloonParty.Editor.Bush
             EditorGUILayout.EndHorizontal();
 
             DrawLeafPreviewGrid();
-
-            EditorGUI.indentLevel--;
         }
 
         private void DrawLeafProperties()
@@ -584,7 +575,6 @@ namespace BalloonParty.Editor.Bush
             _lastLeafHash = 0;
             Repaint();
         }
-
 
         private void CheckAutoPreview()
         {

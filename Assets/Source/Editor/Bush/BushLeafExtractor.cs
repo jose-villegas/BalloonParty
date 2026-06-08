@@ -36,7 +36,7 @@ namespace BalloonParty.Editor.Bush
 
         private static List<TipCandidate> FindTipCandidates(Color32[] pixels, int res, byte threshold)
         {
-            var candidates = new List<TipCandidate>(64);
+            var candidates = new List<TipCandidate>(256);
 
             for (var y = 1; y < res - 1; y++)
             {
@@ -52,31 +52,6 @@ namespace BalloonParty.Editor.Bush
 
                     var dirX = p.r / 255f * 2f - 1f;
                     var dirY = p.g / 255f * 2f - 1f;
-
-                    // Look 2-3 pixels ahead in the branch direction
-                    var isTip = true;
-                    for (var step = 2; step <= 3; step++)
-                    {
-                        var ax = x + Mathf.RoundToInt(dirX * step);
-                        var ay = y + Mathf.RoundToInt(dirY * step);
-
-                        if (ax < 0 || ax >= res || ay < 0 || ay >= res)
-                        {
-                            break;
-                        }
-
-                        var ahead = pixels[ay * res + ax];
-                        if (ahead.a >= p.a * 0.7f)
-                        {
-                            isTip = false;
-                            break;
-                        }
-                    }
-
-                    if (!isTip)
-                    {
-                        continue;
-                    }
 
                     candidates.Add(new TipCandidate
                     {
@@ -95,10 +70,10 @@ namespace BalloonParty.Editor.Bush
         private static List<TipCandidate> SpatialFilter(
             List<TipCandidate> candidates, int maxCount, int res)
         {
-            // Sort by score descending (deepest tips first)
             candidates.Sort((a, b) => b.Score.CompareTo(a.Score));
 
-            var minDist = 1f / Mathf.Sqrt(maxCount) * 0.7f;
+            // Adaptive min distance: allows denser packing as max count increases
+            var minDist = 1f / Mathf.Sqrt(maxCount) * 0.5f;
             var minDistPixels = minDist * res;
             var minDistSq = minDistPixels * minDistPixels;
 
