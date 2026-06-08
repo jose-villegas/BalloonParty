@@ -16,6 +16,10 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static Mesh _sharedBranchQuad;
         private static readonly int LeafTintId = Shader.PropertyToID("_LeafTint");
         private static readonly int UVRectId = Shader.PropertyToID("_UVRect");
+        private static readonly int ShadowColorId = Shader.PropertyToID("_ShadowColor");
+        private static readonly int ShadowOffsetId = Shader.PropertyToID("_ShadowOffset");
+        private static readonly int ShadowSoftnessId = Shader.PropertyToID("_ShadowSoftness");
+        private static readonly int SpriteScaleId = Shader.PropertyToID("_SpriteScale");
 
         private IBushSettings _settings;
         private readonly List<SlotRenderData> _slotRenderData = new();
@@ -129,6 +133,10 @@ namespace BalloonParty.Slots.Actor.Archetype
                 enableInstancing = true,
                 renderQueue = 3001
             };
+            entry.LeafMaterial.SetColor(ShadowColorId, _settings.LeafShadowColor);
+            entry.LeafMaterial.SetVector(ShadowOffsetId, _settings.LeafShadowOffset);
+            entry.LeafMaterial.SetFloat(ShadowSoftnessId, _settings.LeafShadowSoftness);
+            entry.LeafMaterial.SetFloat(SpriteScaleId, _settings.LeafSpriteScale);
 
             var slots = variant.LeafSlots;
             entry.LeafCount = slots.Count;
@@ -136,6 +144,8 @@ namespace BalloonParty.Slots.Actor.Archetype
 
             var tints = new Vector4[entry.LeafCount];
             var uvRects = new Vector4[entry.LeafCount];
+
+            var scaleCompensation = 1f / Mathf.Max(_settings.LeafSpriteScale, 0.3f);
 
             for (var i = 0; i < entry.LeafCount; i++)
             {
@@ -145,7 +155,7 @@ namespace BalloonParty.Slots.Actor.Archetype
                 entry.LeafMatrices[i] = Matrix4x4.TRS(
                     new Vector3(leafWorldPos.x, leafWorldPos.y, 0f),
                     Quaternion.Euler(0f, 0f, angleDeg),
-                    Vector3.one * slot.Scale);
+                    Vector3.one * (slot.Scale * scaleCompensation));
 
                 var tint = (Color)slot.Tint;
                 tints[i] = new Vector4(tint.r, tint.g, tint.b, tint.a);

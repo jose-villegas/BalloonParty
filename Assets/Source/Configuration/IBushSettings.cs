@@ -15,6 +15,7 @@ namespace BalloonParty.Configuration
         Color LeafShadowColor { get; }
         Vector2 LeafShadowOffset { get; }
         float LeafShadowSoftness { get; }
+        float LeafSpriteScale { get; }
         float WindAmplitude { get; }
         float WindPeriod { get; }
     }

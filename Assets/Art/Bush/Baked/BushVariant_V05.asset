@@ -509,4 +509,4 @@ MonoBehaviour:
     Tint:
       serializedVersion: 2
       rgba: 4294967295
-  _boundsSize: {x: 0.7, y: 0.7}
+  _boundsSize: {x: 0.5, y: 0.5}

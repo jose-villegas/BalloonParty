@@ -34,6 +34,7 @@ namespace BalloonParty.Configuration
         [SerializeField] private Color _leafShadowColor = new(0.15f, 0.18f, 0.1f, 0.55f);
         [SerializeField] private Vector2 _leafShadowOffset = new(0.04f, -0.06f);
         [SerializeField] [Range(0f, 0.08f)] private float _leafShadowSoftness = 0.015f;
+        [SerializeField] [Range(0.3f, 1f)] private float _leafSpriteScale = 0.75f;
 
         [Header("Wind")]
         [SerializeField] private float _windAmplitude = 3f;
@@ -52,6 +53,7 @@ namespace BalloonParty.Configuration
         public Color LeafShadowColor => _leafShadowColor;
         public Vector2 LeafShadowOffset => _leafShadowOffset;
         public float LeafShadowSoftness => _leafShadowSoftness;
+        public float LeafSpriteScale => _leafSpriteScale;
         public float WindAmplitude => _windAmplitude;
         public float WindPeriod => _windPeriod;
     }
