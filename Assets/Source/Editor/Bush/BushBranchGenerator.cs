@@ -5,8 +5,8 @@ namespace BalloonParty.Editor.Bush
 {
     /// <summary>
     /// Generates fractal branch segments in UV space (0–1) for baking into
-    /// a branch map texture. Uses recursive subdivision with deterministic
-    /// seeded randomisation.
+    /// a branch map texture. Produces a top-down radial structure: root at
+    /// centre, branches radiate outward in all directions.
     /// </summary>
     internal static class BushBranchGenerator
     {
@@ -25,21 +25,42 @@ namespace BalloonParty.Editor.Bush
             var segments = new List<Segment>(64);
             var rng = new System.Random(seed);
 
-            var rootPos = new Vector2(0.5f, 0.15f);
-            var trunkEnd = rootPos + Vector2.up * settings.TrunkLength;
+            var centre = new Vector2(0.5f, 0.5f);
 
-            segments.Add(new Segment
+            // Primary branches radiate from centre in evenly-spaced directions
+            // with randomised jitter for organic feel
+            var count = settings.BranchesPerNode;
+            var baseAngleStep = Mathf.PI * 2f / count;
+
+            // Small random rotation so the whole bush isn't axis-aligned
+            var globalRotation = (float)rng.NextDouble() * Mathf.PI * 2f;
+
+            for (var i = 0; i < count; i++)
             {
-                Start = rootPos,
-                End = trunkEnd,
-                StartWidth = settings.BranchWidth,
-                EndWidth = settings.BranchWidth * settings.WidthDecay,
-                Depth = 0f,
-                DirectionAngle = Mathf.PI * 0.5f
-            });
+                var baseAngle = globalRotation + i * baseAngleStep;
+                // Jitter the angle slightly for organic feel
+                var jitter = (float)(rng.NextDouble() - 0.5) * baseAngleStep * 0.4f;
+                var angle = baseAngle + jitter;
 
-            GrowBranches(segments, rng, trunkEnd, Mathf.PI * 0.5f,
-                settings.BranchWidth * settings.WidthDecay, 1, settings);
+                var dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                var length = Lerp(rng, settings.TrunkLength * 0.5f, settings.TrunkLength);
+                var end = centre + dir * length;
+
+                end = ClampUV(end);
+
+                segments.Add(new Segment
+                {
+                    Start = centre,
+                    End = end,
+                    StartWidth = settings.BranchWidth,
+                    EndWidth = settings.BranchWidth * settings.WidthDecay,
+                    Depth = 0f,
+                    DirectionAngle = angle
+                });
+
+                GrowBranches(segments, rng, end, angle,
+                    settings.BranchWidth * settings.WidthDecay, 1, settings);
+            }
 
             return segments;
         }
@@ -59,6 +80,12 @@ namespace BalloonParty.Editor.Bush
             }
 
             var count = settings.BranchesPerNode;
+            // Reduce child count at deeper levels for natural thinning
+            if (depth >= 3 && rng.NextDouble() < 0.3)
+            {
+                count = Mathf.Max(2, count - 1);
+            }
+
             var normalizedDepth = (float)depth / settings.MaxDepth;
 
             for (var i = 0; i < count; i++)
@@ -67,9 +94,8 @@ namespace BalloonParty.Editor.Bush
                 var spreadMax = settings.AngleSpread.y * Mathf.Deg2Rad;
                 var spread = Lerp(rng, spreadMin, spreadMax);
 
-                // Alternate sign: even indices go left, odd go right
+                // Alternate sign: even left, odd right; last gets small random offset
                 var sign = (i % 2 == 0) ? -1f : 1f;
-                // Centre branch (if odd count, last child) gets reduced spread
                 if (i == count - 1 && count % 2 == 1)
                 {
                     sign = (float)(rng.NextDouble() * 2.0 - 1.0) * 0.3f;
@@ -84,8 +110,7 @@ namespace BalloonParty.Editor.Bush
                 var dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
                 var end = origin + dir * length;
 
-                end.x = Mathf.Clamp(end.x, 0.03f, 0.97f);
-                end.y = Mathf.Clamp(end.y, 0.03f, 0.97f);
+                end = ClampUV(end);
 
                 var startWidth = parentWidth;
                 var endWidth = startWidth * settings.TipTaper;
@@ -103,6 +128,13 @@ namespace BalloonParty.Editor.Bush
                 var childWidth = startWidth * settings.WidthDecay;
                 GrowBranches(segments, rng, end, angle, childWidth, depth + 1, settings);
             }
+        }
+
+        private static Vector2 ClampUV(Vector2 v)
+        {
+            v.x = Mathf.Clamp(v.x, 0.03f, 0.97f);
+            v.y = Mathf.Clamp(v.y, 0.03f, 0.97f);
+            return v;
         }
 
         private static float Lerp(System.Random rng, float min, float max)

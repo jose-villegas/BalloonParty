@@ -27,9 +27,10 @@ namespace BalloonParty.Editor
             White = 2
         }
 
-        private static readonly string[] BgLabels = { "▦", "■", "□" };
         private const float ToolbarButtonWidth = 26f;
         private const float Padding = 6f;
+
+        private static readonly string[] BgLabels = { "▦", "■", "□" };
 
         private readonly string _title;
 

@@ -353,11 +353,14 @@ internal static class BushBranchGenerator
 
 **Key design decisions:**
 - All coordinates in **UV space (0–1)** — maps directly to texture pixels
-- Root at bottom-centre `(0.5, 0.1)` growing upward (top-down bush
-  viewed from above, root is the ground anchor at "south")
-- Random angle alternates ±: child 0 goes left, child 1 goes right,
-  child 2 centre-ish. Avoids one-sided bushes.
-- Segments that exit UV bounds are trimmed to the boundary
+- **Top-down radial growth:** root at centre `(0.5, 0.5)`, primary branches
+  radiate outward in 360° (evenly spaced + jitter), sub-branches fork from tips
+- This matches the top-down camera perspective — the bush is seen from above,
+  not from the side. Branches spread outward like a starburst.
+- Depth = distance from centre: trunk (low alpha) near middle, tips (high
+  alpha) near texture edges
+- Random global rotation per seed prevents axis-aligned patterns
+- Segments that exit UV bounds are clamped to `[0.03, 0.97]`
 
 ---
 
@@ -991,10 +994,35 @@ Manual verification checklist:
 
 ### Session context for Phase 2
 
-When implementing Phase 2 tasks, read:
+**Current state (June 8 2026):** Tasks 2.1–2.4, 2.7a, and 2.8 are
+complete. The Bush Baker window shows a live branch map preview with
+auto-update. The generator produces radial top-down fractal branching.
+Next task is 2.5 (leaf extractor).
+
+**Key decisions made during implementation:**
+1. **Top-down radial growth** — root at UV centre (0.5, 0.5), primary
+   branches radiate outward 360°. NOT side-view (trunk-at-bottom growing
+   up). This matches the game's top-down camera.
+2. **Branches are static** — no animation on branches, only leaves rotate
+   around their attachment pivot. Eliminates CPU/GPU sync complexity.
+3. **RG = direction, B = reserved, A = depth** — the branch map texture
+   encodes data for leaf extraction; at runtime the shader ignores RG
+   and just uses alpha for depth shading.
+4. **TexturePreviewBox** is a shared reusable component for any editor
+   preview (background modes + extensible toolbar via callback).
+5. **Runtime visual preview** is a CPU-side pixel transform matching the
+   shader formula, avoiding a second render pass. The raw map is cached;
+   toggling mode rebuilds the display texture without re-baking.
+6. **Bake pipeline** follows the same offscreen-camera pattern as the
+   existing leaf baker: procedural mesh → temp camera → ReadPixels.
+   The branch map uses a procedural mesh (4 verts/segment) with vertex
+   colors encoding the RG+A data, whereas the leaf baker uses a material
+   on a quad.
+
+**When resuming work, read these files:**
 - `Assets/Source/Editor/Bush/BushBakerWindow.cs` — editor window
 - `Assets/Source/Editor/Bush/BushBranchBaker.cs` — branch bake pipeline
-- `Assets/Source/Editor/Bush/BushBranchGenerator.cs` — fractal generator
+- `Assets/Source/Editor/Bush/BushBranchGenerator.cs` — fractal generator (radial)
 - `Assets/Source/Editor/Bush/BushBranchBakeSettings.cs` — branch settings
 - `Assets/Source/Editor/Bush/BushBakerState.cs` — persisted state
 - `Assets/Source/Editor/Bush/BushLeafBaker.cs` — leaf bake pipeline (pattern)
@@ -1002,11 +1030,23 @@ When implementing Phase 2 tasks, read:
 - `Assets/Source/Editor/TexturePreviewBox.cs` — reusable preview component
 - `Assets/Shaders/BalloonParty/Grid/Editor/BushBakeBranch.shader` — bake shader
 - `Assets/Shaders/BalloonParty/Grid/BushBranch.shader` — runtime shader
-- `Assets/Source/Slots/Actor/Archetype/BushView.cs` — runtime view (refactor)
+- `Assets/Source/Slots/Actor/Archetype/BushView.cs` — runtime view (to refactor)
 - `Assets/Source/Slots/Actor/Archetype/BushViewController.cs` — controller
 - `Assets/Source/Slots/Actor/Cluster/ClusterView.cs` — base class
-- `Assets/Source/Configuration/IBushSettings.cs` — settings (extend)
+- `Assets/Source/Configuration/IBushSettings.cs` — settings (to extend)
 - `.github/copilot-instructions.md` — project coding conventions
+
+**Next steps (in order):**
+1. **2.5 Leaf extractor** — scan baked texture for tip pixels (high alpha,
+   no higher-alpha ahead in direction), spatial filter, output `LeafSlotData[]`
+2. **2.7b "Preview with Leaves"** — overlay extracted leaf positions on branch
+   map in the preview box
+3. **2.6 BushVariantData SO** — runtime data container for branch map + leaf slots
+4. **2.7c Export button** — save PNG + create SO per variant
+5. **2.10 IBushSettings** — add `BushVariants[]`, `BranchMaterial`, `LeafMaterial`,
+   `LeafQuadMesh`, `BushWorldSize`
+6. **2.9 BushView refactor** — static branch SpriteRenderer + `DrawMeshInstanced`
+7. **2.11 Integration test** — verify in play mode
 
 **Key conventions:**
 - Branch material: GPU instancing **enabled** (no MPB, static)
@@ -1016,6 +1056,16 @@ When implementing Phase 2 tasks, read:
 - Allman braces, `internal` visibility, no `StartCoroutine`
 - Read-only collection interfaces for non-mutated parameters
 - Shared editor helpers in `Assets/Source/Editor/` (not in Bush subfolder)
+
+**Open questions / things to tune:**
+- Branch density and spread need visual iteration once preview is running
+  in Unity. Parameters may need range adjustments after seeing results.
+- Leaf extractor tip detection heuristic may need tuning — the "look ahead
+  in branch direction" approach depends on RG encoding being accurate at tips.
+- Whether `BushWorldSize` should come from `IBushSettings` or from the
+  `BushVariantData` SO (per-variant vs global).
+- The B channel is reserved — potential uses: branch thickness (for
+  variable-width rendering), branch type/age, or per-branch color variation.
 
 ---
 
