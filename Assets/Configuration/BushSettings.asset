@@ -40,13 +40,76 @@ MonoBehaviour:
   _bushWorldSize: 0.7
   _leafAtlasSprites:
   - {fileID: -1545996157, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 149218405, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 526347429, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 585126516, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 711782567, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 290584817, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 17377797, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 210712077, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 520638579, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 18397191, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1705468063, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 2077371537, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 921000577, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 9678778, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 307463737, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -170996541, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 1799329602, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 1112259013, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -30962432, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1310492989, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1628076003, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 806874154, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1773863137, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1187937572, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 547840735, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 1696077892, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 1510359942, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1738958703, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 440415596, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 807507471, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -631714478, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 327736007, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 1985921580, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1743744426, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1685789433, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 535724345, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -829205507, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 1955806465, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 1937126468, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1615094944, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -856917343, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -799418464, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1812905852, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -925506117, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 54665358, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1179307505, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 259908812, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 136602580, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 914649902, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1115501708, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1986587292, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 1391231256, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1279426274, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 397206522, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -907834242, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -677489836, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -376964710, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1625681913, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 81255210, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 502079528, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: 1527780689, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1962463540, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -1636731646, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
+  - {fileID: -830668641, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
   _leafShadowColor: {r: 0.15, g: 0.18, b: 0.1, a: 0.55}
   _leafShadowOffset: {x: 0.1, y: -0.1}
   _leafShadowSoftness: 0.015
   _leafSpriteScale: 0.75
-  _leafPivotOffset: -0.35
+  _leafPivotOffset: -0.325
   _leafDepthSplit: 0.325
-  _windAmplitude: 20
+  _windAmplitude: 10
   _windPeriod: 0.6
-  _windNoiseAmplitude: 0
-  _windScalePulse: 0
+  _windNoiseAmplitude: 5
+  _windScalePulse: 0.03

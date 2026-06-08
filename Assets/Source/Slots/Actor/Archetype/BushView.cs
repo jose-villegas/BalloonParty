@@ -123,6 +123,8 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return;
             }
 
+            var sprites = _settings.LeafAtlasSprites;
+
             for (var i = 0; i < SlotCount; i++)
             {
                 var center = SlotCentersBuffer[i];
@@ -131,7 +133,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
                 var entry = new SlotRenderData();
                 ConfigureBranch(ref entry, worldPos, variant);
-                ConfigureLeaves(ref entry, worldPos, variant);
+                ConfigureLeaves(ref entry, worldPos, variant, sprites, i);
                 _slotRenderData.Add(entry);
             }
         }
@@ -158,9 +160,9 @@ namespace BalloonParty.Slots.Actor.Archetype
         }
 
         private void ConfigureLeaves(
-            ref SlotRenderData entry, Vector2 worldPos, BushVariantData variant)
+            ref SlotRenderData entry, Vector2 worldPos, BushVariantData variant,
+            Sprite[] sprites, int slotIndex)
         {
-            var sprites = _settings.LeafAtlasSprites;
             if (_settings.LeafMaterial == null || sprites == null || sprites.Length == 0)
             {
                 return;
@@ -196,10 +198,10 @@ namespace BalloonParty.Slots.Actor.Archetype
 
             entry.InnerLeaves = BuildLeafTier(
                 innerIndices, slots, sprites, worldPos, entry.ScaleCompensation, entry.PivotOffset,
-                entry.BushWorldSize);
+                entry.BushWorldSize, slotIndex);
             entry.OuterLeaves = BuildLeafTier(
                 outerIndices, slots, sprites, worldPos, entry.ScaleCompensation, entry.PivotOffset,
-                entry.BushWorldSize);
+                entry.BushWorldSize, slotIndex);
         }
 
         private Material CreateLeafMaterial(Sprite[] sprites, int queue)
@@ -224,7 +226,8 @@ namespace BalloonParty.Slots.Actor.Archetype
             Vector2 worldPos,
             float scaleCompensation,
             float pivotOffset,
-            float bushWorldSize)
+            float bushWorldSize,
+            int slotIndex)
         {
             var tier = new LeafTier
             {
@@ -263,7 +266,7 @@ namespace BalloonParty.Slots.Actor.Archetype
                 var tint = (Color)slot.Tint;
                 tints[t] = new Vector4(tint.r, tint.g, tint.b, tint.a);
 
-                var spriteIndex = Mathf.Clamp(slot.SpriteVariant, 0, sprites.Length - 1);
+                var spriteIndex = slotIndex % sprites.Length;
                 var rect = sprites[spriteIndex].textureRect;
                 var tex = sprites[spriteIndex].texture;
                 uvRects[t] = new Vector4(
