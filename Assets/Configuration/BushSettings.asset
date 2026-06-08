@@ -38,6 +38,11 @@ MonoBehaviour:
   _branchShader: {fileID: 4800000, guid: e6e471ce52d2648ceb0558c1856353df, type: 3}
   _leafMaterial: {fileID: 2100000, guid: 07bd2f8ccc97b408abee96710de6a460, type: 2}
   _bushWorldSize: 0.7
+  _branchSpriteScale: 0.75
+  _branchShadowColor: {r: 0, g: 0, b: 0, a: 0.54901963}
+  _branchShadowOffset: {x: 0.1, y: -0.1}
+  _branchShadowSpread: 0.1
+  _branchShadowSoftness: 0.01
   _leafAtlasSprites:
   - {fileID: -1545996157, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
   - {fileID: 149218405, guid: da8ef16e42e72417ea6406092b0704af, type: 3}

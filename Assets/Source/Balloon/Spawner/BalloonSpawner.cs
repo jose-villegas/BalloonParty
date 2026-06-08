@@ -136,9 +136,12 @@ namespace BalloonParty.Balloon.Spawner
 
             var waypointCount = spawnPath.Count - 1;
 
-            if (waypointCount == 0)
+            if (waypointCount <= 1)
             {
-                model.IsStable.Value = true;
+                // Path too short for CatmullRom — place at target, scale in only
+                view.transform.position = spawnPath[spawnPath.Count - 1];
+                view.transform.DOScale(Vector3.one, duration * 0.5f)
+                    .OnComplete(() => model.IsStable.Value = true);
                 return;
             }
 
@@ -170,6 +173,43 @@ namespace BalloonParty.Balloon.Spawner
         private int? FindFirstEmptyRowFromTop(int col)
         {
             for (var row = 0; row < _grid.Rows; row++)
+            {
+                if (_grid.IsEmpty(col, row))
+                {
+                    return row;
+                }
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Finds the topmost empty row reachable from the spawn entry (bottom of grid).
+        /// Balloons enter from below and travel upward. A non-traversable static actor
+        /// (e.g. bush) blocks vertical passage — the balloon can only reach slots below
+        /// the lowest blocker. This causes balloons to accumulate under bushes.
+        /// </summary>
+        private int? FindFirstReachableEmptyRow(int col)
+        {
+            // Walk from bottom of grid upward — the first non-traversable blocker is
+            // the ceiling for this column. Balloons can't pass through it.
+            var ceilingRow = -1;
+            for (var row = _grid.Rows - 1; row >= 0; row--)
+            {
+                if (!_grid.IsEmpty(col, row) && !_grid.IsTraversable(col, row))
+                {
+                    ceilingRow = row;
+                    break;
+                }
+            }
+
+            if (ceilingRow < 0)
+            {
+                return FindFirstEmptyRowFromTop(col);
+            }
+
+            // Search for the topmost empty row below the blocker
+            for (var row = ceilingRow + 1; row < _grid.Rows; row++)
             {
                 if (_grid.IsEmpty(col, row))
                 {
@@ -296,7 +336,7 @@ namespace BalloonParty.Balloon.Spawner
         {
             for (var col = 0; col < _grid.Columns; col++)
             {
-                var firstEmptyRow = FindFirstEmptyRowFromTop(col);
+                var firstEmptyRow = FindFirstReachableEmptyRow(col);
                 if (!firstEmptyRow.HasValue)
                 {
                     continue;

@@ -29,6 +29,11 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static readonly int RattleAmplitudeId = Shader.PropertyToID("_RattleAmplitude");
         private static readonly int RattleFrequencyId = Shader.PropertyToID("_RattleFrequency");
         private static readonly int RattleDampingId = Shader.PropertyToID("_RattleDamping");
+        private static readonly int BranchSpriteScaleId = Shader.PropertyToID("_SpriteScale");
+        private static readonly int BranchShadowColorId = Shader.PropertyToID("_ShadowColor");
+        private static readonly int BranchShadowOffsetId = Shader.PropertyToID("_ShadowOffset");
+        private static readonly int BranchShadowSpreadId = Shader.PropertyToID("_ShadowSpread");
+        private static readonly int BranchShadowSoftnessId = Shader.PropertyToID("_ShadowSoftness");
         private const string RattleKeyword = "_RATTLE_ON";
 
         private static bool? _supportsInstancing;
@@ -157,13 +162,20 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return;
             }
 
+            var branchSpriteScale = Mathf.Max(_settings.BranchSpriteScale, 0.3f);
+
             entry.BranchMaterial = new Material(_settings.BranchShader)
             {
                 mainTexture = variant.BranchMap,
                 renderQueue = 3000
             };
+            entry.BranchMaterial.SetFloat(BranchSpriteScaleId, branchSpriteScale);
+            entry.BranchMaterial.SetColor(BranchShadowColorId, _settings.BranchShadowColor);
+            entry.BranchMaterial.SetVector(BranchShadowOffsetId, _settings.BranchShadowOffset);
+            entry.BranchMaterial.SetFloat(BranchShadowSpreadId, _settings.BranchShadowSpread);
+            entry.BranchMaterial.SetFloat(BranchShadowSoftnessId, _settings.BranchShadowSoftness);
 
-            var size = _settings.BushWorldSize;
+            var size = _settings.BushWorldSize / branchSpriteScale;
             entry.BranchMatrix = Matrix4x4.TRS(
                 new Vector3(worldPos.x, worldPos.y, 0f),
                 Quaternion.identity,
