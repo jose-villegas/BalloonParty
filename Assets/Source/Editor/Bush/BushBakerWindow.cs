@@ -152,6 +152,7 @@ namespace BalloonParty.Editor.Bush
             {
                 EditorGUI.indentLevel++;
                 s.BranchColor = EditorGUILayout.ColorField("Color", s.BranchColor);
+                s.BranchGradient = EditorGUILayout.GradientField("Width Gradient", s.BranchGradient);
                 s.ColorVariation = EditorGUILayout.Slider("Color Variation", s.ColorVariation, 0f, 0.3f);
                 s.BushWorldSize = EditorGUILayout.Slider("Bush World Size", s.BushWorldSize, 0.3f, 2f);
                 EditorGUI.indentLevel--;
@@ -319,6 +320,7 @@ namespace BalloonParty.Editor.Bush
 
             var pixels = _branchRawMap.GetPixels32();
             var branchColor = State.BranchSettings.BranchColor;
+            var gradient = State.BranchSettings.BranchGradient;
             var res = _branchRawMap.width;
             var result = new Color32[pixels.Length];
 
@@ -334,10 +336,15 @@ namespace BalloonParty.Editor.Bush
                         continue;
                     }
 
+                    var crossWidth = p.b / 255f;
+                    var gradCol = gradient != null
+                        ? gradient.Evaluate(crossWidth)
+                        : Color.white;
+
                     var shade = 0.6f + 0.4f * alpha;
-                    var r = (byte)Mathf.Clamp(branchColor.r * shade * 255f, 0f, 255f);
-                    var g = (byte)Mathf.Clamp(branchColor.g * shade * 255f, 0f, 255f);
-                    var b = (byte)Mathf.Clamp(branchColor.b * shade * 255f, 0f, 255f);
+                    var r = (byte)Mathf.Clamp(gradCol.r * branchColor.r * shade * 255f, 0f, 255f);
+                    var g = (byte)Mathf.Clamp(gradCol.g * branchColor.g * shade * 255f, 0f, 255f);
+                    var b = (byte)Mathf.Clamp(gradCol.b * branchColor.b * shade * 255f, 0f, 255f);
                     var a = (byte)Mathf.Clamp(alpha * 255f, 0f, 255f);
                     result[i] = new Color32(r, g, b, a);
                 }
@@ -429,6 +436,19 @@ namespace BalloonParty.Editor.Bush
                 h = h * 31 + s.TipTaper.GetHashCode();
                 h = h * 31 + s.BranchColor.GetHashCode();
                 h = h * 31 + s.ColorVariation.GetHashCode();
+                if (s.BranchGradient != null)
+                {
+                    foreach (var key in s.BranchGradient.colorKeys)
+                    {
+                        h = h * 31 + key.color.GetHashCode();
+                        h = h * 31 + key.time.GetHashCode();
+                    }
+                    foreach (var key in s.BranchGradient.alphaKeys)
+                    {
+                        h = h * 31 + key.alpha.GetHashCode();
+                        h = h * 31 + key.time.GetHashCode();
+                    }
+                }
                 h = h * 31 + s.LeafDepthThreshold.GetHashCode();
                 h = h * 31 + s.MaxLeavesPerVariant.GetHashCode();
                 h = h * 31 + s.LeafScale.GetHashCode();

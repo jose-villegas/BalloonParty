@@ -3,6 +3,7 @@ Shader "BalloonParty/Grid/BushBranch"
     Properties
     {
         _MainTex ("Branch Map", 2D) = "white" {}
+        _BranchGradient ("Branch Gradient", 2D) = "white" {}
         _BranchColor ("Branch Color", Color) = (0.35, 0.22, 0.10, 1)
         _AlphaCutoff ("Alpha Cutoff", Range(0, 1)) = 0.01
         _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
@@ -37,6 +38,7 @@ Shader "BalloonParty/Grid/BushBranch"
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
+            sampler2D _BranchGradient;
             fixed4 _BranchColor;
             float _AlphaCutoff;
             fixed4 _ShadowColor;
@@ -146,10 +148,11 @@ Shader "BalloonParty/Grid/BushBranch"
                     _AORadius - _AOSoftness, _AORadius, dist));
                 fixed4 ao = fixed4(_AOColor.rgb, aoAlpha);
 
-                // Branch content
+                // Branch content — gradient mapped across width (B channel)
                 fixed4 map = tex2D(_MainTex, i.uv);
                 float branchAlpha = step(_AlphaCutoff, map.a) * spriteMask;
-                fixed3 col = _BranchColor.rgb * (0.6 + 0.4 * map.a) * _RendererColor.rgb;
+                fixed3 gradCol = tex2D(_BranchGradient, float2(map.b, 0.5)).rgb;
+                fixed3 col = gradCol * _BranchColor.rgb * (0.6 + 0.4 * map.a) * _RendererColor.rgb;
 
                 // Composite: AO (bottom) ← shadow ← branch (top)
                 // 1. Shadow over AO

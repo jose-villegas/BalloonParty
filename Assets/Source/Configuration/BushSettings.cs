@@ -24,6 +24,7 @@ namespace BalloonParty.Configuration
         [Header("Branch Map")]
         [SerializeField] private BushVariantData[] _bushVariants;
         [SerializeField] private Shader _branchShader;
+        [SerializeField] [GradientUsage(false)] private Gradient _branchGradient = CreateDefaultBranchGradient();
         [SerializeField] private Material _leafMaterial;
         [SerializeField] private float _bushWorldSize = 0.9f;
 
@@ -69,6 +70,7 @@ namespace BalloonParty.Configuration
         public int SortingOrderOffset => _sortingOrderOffset;
         public BushVariantData[] BushVariants => _bushVariants;
         public Shader BranchShader => _branchShader;
+        public Gradient BranchGradient => _branchGradient;
         public Material LeafMaterial => _leafMaterial;
         public float BushWorldSize => _bushWorldSize;
         public float BranchSpriteScale => _branchSpriteScale;
@@ -94,5 +96,23 @@ namespace BalloonParty.Configuration
         public float RattleAmplitude => _rattleAmplitude;
         public float RattleFrequency => _rattleFrequency;
         public float RattleDamping => _rattleDamping;
+
+        private static Gradient CreateDefaultBranchGradient()
+        {
+            var g = new Gradient();
+            g.SetKeys(
+                new[]
+                {
+                    new GradientColorKey(new Color(0.25f, 0.15f, 0.08f), 0f),
+                    new GradientColorKey(new Color(0.40f, 0.26f, 0.14f), 0.5f),
+                    new GradientColorKey(new Color(0.25f, 0.15f, 0.08f), 1f)
+                },
+                new[]
+                {
+                    new GradientAlphaKey(1f, 0f),
+                    new GradientAlphaKey(1f, 1f)
+                });
+            return g;
+        }
     }
 }

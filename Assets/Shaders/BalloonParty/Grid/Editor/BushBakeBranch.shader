@@ -40,7 +40,8 @@ Shader "Hidden/BalloonParty/Grid/BushBakeBranch"
             {
                 float edge = abs(i.uv.x - 0.5) * 2.0;
                 float aa = 1.0 - smoothstep(0.8, 1.0, edge);
-                return fixed4(i.color.rgb, i.color.a * aa);
+                // RG = direction, B = cross-width position (0–1), A = depth
+                return fixed4(i.color.r, i.color.g, i.uv.x, i.color.a * aa);
             }
             ENDCG
         }

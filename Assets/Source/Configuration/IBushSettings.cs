@@ -9,6 +9,7 @@ namespace BalloonParty.Configuration
         BushView BushPrefab { get; }
         BushVariantData[] BushVariants { get; }
         Shader BranchShader { get; }
+        Gradient BranchGradient { get; }
         Material LeafMaterial { get; }
         float BushWorldSize { get; }
         float BranchSpriteScale { get; }

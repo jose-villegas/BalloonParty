@@ -30,6 +30,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static readonly int RattleFrequencyId = Shader.PropertyToID("_RattleFrequency");
         private static readonly int RattleDampingId = Shader.PropertyToID("_RattleDamping");
         private static readonly int BranchSpriteScaleId = Shader.PropertyToID("_SpriteScale");
+        private static readonly int BranchGradientId = Shader.PropertyToID("_BranchGradient");
         private static readonly int BranchShadowColorId = Shader.PropertyToID("_ShadowColor");
         private static readonly int BranchShadowOffsetId = Shader.PropertyToID("_ShadowOffset");
         private static readonly int BranchShadowSpreadId = Shader.PropertyToID("_ShadowSpread");
@@ -47,6 +48,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static Mesh _sharedBranchQuad;
         private IBushSettings _settings;
         private MaterialPropertyBlock _fallbackMpb;
+        private Texture2D _branchGradientTex;
 
         internal IReadOnlyList<SlotRenderData> SlotRenderEntries => _slotRenderData;
 
@@ -173,6 +175,7 @@ namespace BalloonParty.Slots.Actor.Archetype
                 renderQueue = 3000
             };
             entry.BranchMaterial.SetFloat(BranchSpriteScaleId, branchSpriteScale);
+            entry.BranchMaterial.SetTexture(BranchGradientId, GetBranchGradientTexture());
             entry.BranchMaterial.SetColor(BranchShadowColorId, _settings.BranchShadowColor);
             entry.BranchMaterial.SetVector(BranchShadowOffsetId, _settings.BranchShadowOffset);
             entry.BranchMaterial.SetFloat(BranchShadowSpreadId, _settings.BranchShadowSpread);
@@ -392,6 +395,33 @@ namespace BalloonParty.Slots.Actor.Archetype
             _sharedLeafQuad.UploadMeshData(true);
 
             return _sharedLeafQuad;
+        }
+
+        private const int GradientResolution = 64;
+
+        private Texture2D GetBranchGradientTexture()
+        {
+            if (_branchGradientTex != null)
+            {
+                return _branchGradientTex;
+            }
+
+            var gradient = _settings.BranchGradient;
+            _branchGradientTex = new Texture2D(GradientResolution, 1, TextureFormat.RGBA32, false)
+            {
+                wrapMode = TextureWrapMode.Clamp,
+                filterMode = FilterMode.Bilinear
+            };
+
+            var pixels = new Color[GradientResolution];
+            for (var i = 0; i < GradientResolution; i++)
+            {
+                pixels[i] = gradient.Evaluate(i / (float)(GradientResolution - 1));
+            }
+
+            _branchGradientTex.SetPixels(pixels);
+            _branchGradientTex.Apply();
+            return _branchGradientTex;
         }
 
         internal struct LeafTier

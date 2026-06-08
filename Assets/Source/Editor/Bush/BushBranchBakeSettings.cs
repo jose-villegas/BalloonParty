@@ -21,6 +21,7 @@ namespace BalloonParty.Editor.Bush
 
         [SerializeField] internal Color BranchColor = new(0.35f, 0.22f, 0.10f, 1f);
         [SerializeField] internal float ColorVariation = 0.08f;
+        [SerializeField] internal Gradient BranchGradient = CreateDefaultBranchGradient();
 
         [SerializeField] internal float BushWorldSize = 0.9f;
 
@@ -30,5 +31,23 @@ namespace BalloonParty.Editor.Bush
         [SerializeField] internal float LeafScaleVariation = 0.3f;
         [Range(0f, 1f)]
         [SerializeField] internal float LeafAttachmentBias = 0.85f;
+
+        private static Gradient CreateDefaultBranchGradient()
+        {
+            var g = new Gradient();
+            g.SetKeys(
+                new[]
+                {
+                    new GradientColorKey(new Color(0.25f, 0.15f, 0.08f), 0f),
+                    new GradientColorKey(new Color(0.40f, 0.26f, 0.14f), 0.5f),
+                    new GradientColorKey(new Color(0.25f, 0.15f, 0.08f), 1f)
+                },
+                new[]
+                {
+                    new GradientAlphaKey(1f, 0f),
+                    new GradientAlphaKey(1f, 1f)
+                });
+            return g;
+        }
     }
 }
