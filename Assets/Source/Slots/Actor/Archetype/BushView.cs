@@ -34,6 +34,9 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static readonly int BranchShadowOffsetId = Shader.PropertyToID("_ShadowOffset");
         private static readonly int BranchShadowSpreadId = Shader.PropertyToID("_ShadowSpread");
         private static readonly int BranchShadowSoftnessId = Shader.PropertyToID("_ShadowSoftness");
+        private static readonly int BranchAOColorId = Shader.PropertyToID("_AOColor");
+        private static readonly int BranchAORadiusId = Shader.PropertyToID("_AORadius");
+        private static readonly int BranchAOSoftnessId = Shader.PropertyToID("_AOSoftness");
         private const string RattleKeyword = "_RATTLE_ON";
 
         private static bool? _supportsInstancing;
@@ -174,6 +177,9 @@ namespace BalloonParty.Slots.Actor.Archetype
             entry.BranchMaterial.SetVector(BranchShadowOffsetId, _settings.BranchShadowOffset);
             entry.BranchMaterial.SetFloat(BranchShadowSpreadId, _settings.BranchShadowSpread);
             entry.BranchMaterial.SetFloat(BranchShadowSoftnessId, _settings.BranchShadowSoftness);
+            entry.BranchMaterial.SetColor(BranchAOColorId, _settings.BranchAOColor);
+            entry.BranchMaterial.SetFloat(BranchAORadiusId, _settings.BranchAORadius);
+            entry.BranchMaterial.SetFloat(BranchAOSoftnessId, _settings.BranchAOSoftness);
 
             var size = _settings.BushWorldSize / branchSpriteScale;
             entry.BranchMatrix = Matrix4x4.TRS(

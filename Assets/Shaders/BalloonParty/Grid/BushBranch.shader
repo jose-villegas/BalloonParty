@@ -13,6 +13,11 @@ Shader "BalloonParty/Grid/BushBranch"
         _ShadowSpread   ("Spread",   Range(0, 1))      = 0.15
         _ShadowSoftness ("Softness", Range(0, 0.08))   = 0.02
 
+        [Header(AO)]
+        _AOColor    ("Color",     Color)           = (0.02, 0.02, 0.06, 0.4)
+        _AORadius   ("Radius",    Range(0.05, 1))  = 0.45
+        _AOSoftness ("Softness",  Range(0.01, 1))  = 0.3
+
         [Header(Sprite)]
         _SpriteScale ("Scale", Range(0.3, 1.0)) = 0.85
     }
@@ -38,6 +43,9 @@ Shader "BalloonParty/Grid/BushBranch"
             float2 _ShadowOffset;
             float  _ShadowSpread;
             float  _ShadowSoftness;
+            fixed4 _AOColor;
+            float  _AORadius;
+            float  _AOSoftness;
             float  _SpriteScale;
 
             #ifdef UNITY_INSTANCING_ENABLED
@@ -132,14 +140,27 @@ Shader "BalloonParty/Grid/BushBranch"
 
                 fixed4 shadow = fixed4(_ShadowColor.rgb, _ShadowColor.a * shadowHit);
 
+                // AO blob — radial gradient centred at trunk, darkens ground
+                float dist = length(i.uv - 0.5) * 2.0;
+                fixed aoAlpha = _AOColor.a * (1.0 - smoothstep(
+                    _AORadius - _AOSoftness, _AORadius, dist));
+                fixed4 ao = fixed4(_AOColor.rgb, aoAlpha);
+
                 // Branch content
                 fixed4 map = tex2D(_MainTex, i.uv);
                 float branchAlpha = step(_AlphaCutoff, map.a) * spriteMask;
                 fixed3 col = _BranchColor.rgb * (0.6 + 0.4 * map.a) * _RendererColor.rgb;
 
-                // Composite: shadow behind branch (Porter-Duff "over")
-                fixed3 rgb = col * branchAlpha + shadow.rgb * shadow.a * (1.0 - branchAlpha);
-                fixed  a   = branchAlpha + shadow.a * (1.0 - branchAlpha);
+                // Composite: AO (bottom) ← shadow ← branch (top)
+                // 1. Shadow over AO
+                fixed3 base = ao.rgb * ao.a;
+                fixed  baseA = ao.a;
+                base = shadow.rgb * shadow.a + base * (1.0 - shadow.a);
+                baseA = shadow.a + baseA * (1.0 - shadow.a);
+
+                // 2. Branch over combined
+                fixed3 rgb = col * branchAlpha + base * (1.0 - branchAlpha);
+                fixed  a   = branchAlpha + baseA * (1.0 - branchAlpha);
                 return fixed4(rgb / max(a, 0.001), a);
             }
             ENDCG

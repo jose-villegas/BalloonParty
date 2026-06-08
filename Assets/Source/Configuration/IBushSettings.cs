@@ -16,6 +16,9 @@ namespace BalloonParty.Configuration
         Vector2 BranchShadowOffset { get; }
         float BranchShadowSpread { get; }
         float BranchShadowSoftness { get; }
+        Color BranchAOColor { get; }
+        float BranchAORadius { get; }
+        float BranchAOSoftness { get; }
         Sprite[] LeafAtlasSprites { get; }
         Color LeafShadowColor { get; }
         Vector2 LeafShadowOffset { get; }

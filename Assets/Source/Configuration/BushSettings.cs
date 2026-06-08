@@ -34,6 +34,11 @@ namespace BalloonParty.Configuration
         [SerializeField] [Range(0f, 1f)] private float _branchShadowSpread = 0.15f;
         [SerializeField] [Range(0f, 0.08f)] private float _branchShadowSoftness = 0.02f;
 
+        [Header("Branch AO")]
+        [SerializeField] private Color _branchAOColor = new(0.02f, 0.02f, 0.06f, 0.4f);
+        [SerializeField] [Range(0.05f, 1f)] private float _branchAORadius = 0.45f;
+        [SerializeField] [Range(0.01f, 1f)] private float _branchAOSoftness = 0.3f;
+
         [Header("Leaf Atlas")]
         [SerializeField] private Sprite[] _leafAtlasSprites;
 
@@ -71,6 +76,9 @@ namespace BalloonParty.Configuration
         public Vector2 BranchShadowOffset => _branchShadowOffset;
         public float BranchShadowSpread => _branchShadowSpread;
         public float BranchShadowSoftness => _branchShadowSoftness;
+        public Color BranchAOColor => _branchAOColor;
+        public float BranchAORadius => _branchAORadius;
+        public float BranchAOSoftness => _branchAOSoftness;
         public Sprite[] LeafAtlasSprites => _leafAtlasSprites;
         public Color LeafShadowColor => _leafShadowColor;
         public Vector2 LeafShadowOffset => _leafShadowOffset;
