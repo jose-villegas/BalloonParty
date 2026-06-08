@@ -18,6 +18,8 @@ Custom shaders for BalloonParty under `BalloonParty/` namespace.
 | `Hidden/BalloonParty/Grid/DisturbanceDiffusion` | `Grid/DisturbanceDiffusion.shader` | Density field diffusion blit — 3×3 Gaussian blur weighted toward equilibrium (1.0). `_DiffusionRate` controls spatial smoothing, `_ReformSpeed` × `_DeltaTime` controls temporal recovery. Used by `DisturbanceFieldService` in a ping-pong blit each diffusion tick |
 | `Hidden/BalloonParty/Grid/DisturbanceStamp` | `Grid/DisturbanceStamp.shader` | Disturbance stamp blit — subtracts a radial falloff from the density field at `_StampCenter`. Optional directional wake via `_StampDirection` elongates the stamp into a teardrop shape. Single-stamp version, kept for reference |
 | `Hidden/BalloonParty/Grid/DisturbanceStampBatched` | `Grid/DisturbanceStampBatched.shader` | Batched disturbance stamp blit — processes up to 16 stamps in a single blit via uniform arrays. Used by `DisturbanceFieldService.FlushPendingStamps()` |
+| `BalloonParty/Grid/BushBranch` | `Grid/BushBranch.shader` | `BushView` — unlit alpha-test branch map shader. Samples `_MainTex` (baked branch map), tints with `_BranchColor`, depth shading via alpha channel. Material created at runtime by `BushView` from `IBushSettings.BranchShader` + variant's `BranchMap` texture. GPU instancing **enabled** |
+| `BalloonParty/Grid/BushLeaf` | `Grid/BushLeaf.shader` | `BushView` — instanced unlit alpha-blend leaf shader for `DrawMeshInstanced`. Per-instance `_LeafTint` (color) and `_UVRect` (atlas sub-rect) via instancing buffer + `MaterialPropertyBlock`. Samples `_MainTex` (leaf atlas). Material created at runtime by `BushView` from `IBushSettings.LeafShader`. GPU instancing **enabled** |
 
 ## GPU instancing
 

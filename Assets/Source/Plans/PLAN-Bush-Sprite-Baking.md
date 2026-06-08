@@ -745,6 +745,27 @@ Shader "BalloonParty/Grid/BushBranch"
 
 ---
 
+### 2.8b — Runtime Leaf Shader
+
+**File:** `Assets/Shaders/BalloonParty/Grid/BushLeaf.shader`
+
+Instanced unlit alpha-blend shader for `DrawMeshInstanced` leaf rendering.
+Each leaf selects its sprite variant from the atlas via a per-instance UV
+rect, and receives a per-instance tint color.
+
+- **`_MainTex`** — leaf atlas texture (shared across all instances)
+- **`_UVRect`** — `float4(u, v, width, height)` per-instance, selects
+  the sprite's sub-rect in the atlas (computed from `Sprite.textureRect`)
+- **`_LeafTint`** — `fixed4` per-instance color from `LeafSlotData.Tint`
+- Alpha blend (`SrcAlpha OneMinusSrcAlpha`), `Cull Off`, `ZWrite Off`
+- GPU instancing **enabled** — per-instance properties declared in
+  `UNITY_INSTANCING_BUFFER` (not via MPB-only pattern)
+- `BushView` creates the material at runtime from `IBushSettings.LeafShader`
+  and sets `_MainTex` to the atlas sprite's texture. Per-instance arrays
+  are passed via `MaterialPropertyBlock` to `DrawMeshInstanced`.
+
+---
+
 ### 2.9 — Runtime BushView Refactor
 
 **Modify:** `Assets/Source/Slots/Actor/Archetype/BushView.cs`
@@ -883,9 +904,8 @@ internal interface IBushSettings : IClusterViewSettings
 {
     // --- Phase 2 (new) ---
     BushVariantData[] BushVariants { get; }
-    Material BranchMaterial { get; }
-    Material LeafMaterial { get; }
-    Mesh LeafQuadMesh { get; }
+    Shader BranchShader { get; }
+    Shader LeafShader { get; }
     float BushWorldSize { get; }
 
     // --- Phase 1 (kept) ---
@@ -902,6 +922,11 @@ internal interface IBushSettings : IClusterViewSettings
     int SortingOrderOffset { get; }
 }
 ```
+
+Materials and the leaf quad mesh are created internally by `BushView` at
+runtime — the settings only expose the shaders. Branch material is built
+from `BranchShader` + the variant's `BranchMap` texture. The leaf quad is
+a unit quad generated once (static, `UploadMeshData(true)`).
 
 **Deprecate / remove** from interface (old approach):
 - `CanopyVariants`, `CanopyDiameter`, `BranchSpread`
@@ -1043,8 +1068,8 @@ Next task is 2.5 (leaf extractor).
    map in the preview box
 3. **2.6 BushVariantData SO** — runtime data container for branch map + leaf slots
 4. **2.7c Export button** — save PNG + create SO per variant
-5. **2.10 IBushSettings** — add `BushVariants[]`, `BranchMaterial`, `LeafMaterial`,
-   `LeafQuadMesh`, `BushWorldSize`
+5. **2.10 IBushSettings** — add `BushVariants[]`, `BranchShader`, `LeafShader`,
+   `BushWorldSize`
 6. **2.9 BushView refactor** — static branch SpriteRenderer + `DrawMeshInstanced`
 7. **2.11 Integration test** — verify in play mode
 

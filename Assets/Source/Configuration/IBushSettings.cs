@@ -7,19 +7,11 @@ namespace BalloonParty.Configuration
     internal interface IBushSettings : IClusterViewSettings
     {
         BushView BushPrefab { get; }
-        Sprite[] CanopyVariants { get; }
+        BushVariantData[] BushVariants { get; }
+        Shader BranchShader { get; }
+        Shader LeafShader { get; }
+        float BushWorldSize { get; }
         Sprite[] LeafAtlasSprites { get; }
-        float SlotRadius { get; }
-        float BranchSpread { get; }
-        float CanopyDiameter { get; }
-        float LeafSpriteSize { get; }
-        int RuffleLeafCount { get; }
-        float RuffleRadius { get; }
-        float RuffleRotationAmplitude { get; }
-        float RuffleScaleAmplitude { get; }
-        float RufflePositionAmplitude { get; }
-        float RuffleDuration { get; }
-        float RuffleStaggerPerUnit { get; }
         float WindAmplitude { get; }
         float WindPeriod { get; }
     }

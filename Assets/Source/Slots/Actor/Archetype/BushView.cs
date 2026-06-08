@@ -1,320 +1,184 @@
-using System.Collections.Generic;
 using BalloonParty.Configuration;
-using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Actor.Cluster;
-using DG.Tweening;
 using UnityEngine;
-using MathUtils = BalloonParty.Shared.MathUtils;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
     /// <summary>
-    /// Cluster renderer for bush obstacles. Spawns baked canopy sprites and
-    /// pooled leaf sprites at phyllotaxis positions per slot.
+    /// Cluster renderer for bush obstacles. Renders a static branch quad from
+    /// a baked branch map texture and instanced leaf quads via DrawMeshInstanced
+    /// from pre-extracted <see cref="BushVariantData"/>.
     /// </summary>
     internal class BushView : ClusterView
     {
-        private const int LeafCount = 16;
+        [SerializeField] private SpriteRenderer _branchRenderer;
 
-        [SerializeField] private LeafSpriteView _leafPrefab;
+        private static Mesh _sharedLeafQuad;
+        private static readonly int LeafTintId = Shader.PropertyToID("_LeafTint");
+        private static readonly int UVRectId = Shader.PropertyToID("_UVRect");
 
-        private readonly List<SpriteRenderer> _canopyRenderers = new();
-        private readonly List<LeafSpriteView> _leafSprites = new();
-        private readonly List<float> _canopyGapScales = new();
-
-        private PoolChannel<LeafSpriteView> _leafPool;
         private IBushSettings _settings;
+        private BushVariantData _variantData;
+        private Material _branchMaterial;
+        private Material _leafMaterial;
+        private MaterialPropertyBlock _leafProps;
+        private Matrix4x4[] _leafMatrices;
+        private int _leafCount;
 
-        internal IReadOnlyList<LeafSpriteView> LeafSprites => _leafSprites;
-        internal LeafSpriteView LeafPrefab => _leafPrefab;
+        internal BushVariantData VariantData => _variantData;
+        internal Matrix4x4[] LeafMatrices => _leafMatrices;
+        internal int LeafCount => _leafCount;
 
         internal void SetSettings(IBushSettings settings)
         {
             _settings = settings;
         }
 
-        internal void SetLeafPool(PoolChannel<LeafSpriteView> pool)
+        internal void SetVariantData(BushVariantData data)
         {
-            _leafPool = pool;
+            _variantData = data;
         }
 
         protected override void OnConfigured(MaterialPropertyBlock block)
         {
             transform.localScale = Vector3.one;
 
-            // Fully disable the base SpriteRenderer — the sprite-based view
-            // uses child objects, not the legacy SDF quad.
             if (Renderer != null)
             {
-                Renderer.sharedMaterial = null;
-                Renderer.sprite = null;
                 Renderer.enabled = false;
             }
 
-            if (_settings == null)
-            {
-                return;
-            }
-
-            ConfigureSprites(SlotCentersBuffer, SlotCount, _settings);
+            ConfigureBranchQuad();
+            ConfigureLeafMatrices();
         }
 
         private void LateUpdate()
         {
-            if (_settings == null || SlotCount == 0)
+            if (_leafCount == 0 || _leafMaterial == null)
             {
                 return;
             }
 
-            UpdateCanopyScales();
-            UpdateLeafTransformsLive();
+            Graphics.DrawMeshInstanced(
+                GetLeafQuadMesh(),
+                0,
+                _leafMaterial,
+                _leafMatrices,
+                _leafCount,
+                _leafProps);
         }
 
-        internal void ClearSprites()
+        private void ConfigureBranchQuad()
         {
-            foreach (var leaf in _leafSprites)
+            if (_branchRenderer == null || _variantData == null || _settings == null)
             {
-                if (leaf != null && _leafPool != null)
-                {
-                    _leafPool.Return(leaf);
-                }
+                return;
             }
 
-            _leafSprites.Clear();
-
-            foreach (var canopy in _canopyRenderers)
+            if (_settings.BranchShader == null)
             {
-                if (canopy != null)
-                {
-                    canopy.enabled = false;
-                }
+                return;
             }
+
+            _branchMaterial = new Material(_settings.BranchShader)
+            {
+                mainTexture = _variantData.BranchMap
+            };
+
+            _branchRenderer.enabled = true;
+            _branchRenderer.sharedMaterial = _branchMaterial;
+
+            var size = _settings.BushWorldSize;
+            _branchRenderer.transform.localScale = new Vector3(size, size, 1f);
+            _branchRenderer.sortingLayerID = _settings.SortingLayerId;
+            _branchRenderer.sortingOrder = _settings.SortingOrderOffset;
         }
 
-        private void ConfigureSprites(
-            IReadOnlyList<Vector4> slots, int slotCount, IBushSettings settings)
+        private void ConfigureLeafMatrices()
         {
-            ClearSprites();
-            _canopyGapScales.Clear();
+            if (_variantData == null || _settings == null)
+            {
+                _leafCount = 0;
+                return;
+            }
 
-            var canopyVariants = settings.CanopyVariants;
-            var leafAtlas = settings.LeafAtlasSprites;
-            var ruffleLeafCount = settings.RuffleLeafCount;
-            var hasCanopyVariants = canopyVariants != null && canopyVariants.Length > 0;
-            var hasLeafAtlas = leafAtlas != null && leafAtlas.Length > 0;
+            var sprites = _settings.LeafAtlasSprites;
+            if (_settings.LeafShader == null || sprites == null || sprites.Length == 0)
+            {
+                _leafCount = 0;
+                return;
+            }
 
-            var canopyIdx = 0;
-            for (var i = 0; i < slotCount; i++)
+            _leafMaterial = new Material(_settings.LeafShader)
+            {
+                mainTexture = sprites[0].texture,
+                enableInstancing = true
+            };
+
+            var slots = _variantData.LeafSlots;
+            _leafCount = slots.Count;
+            _leafMatrices = new Matrix4x4[_leafCount];
+
+            var tints = new Vector4[_leafCount];
+            var uvRects = new Vector4[_leafCount];
+            var worldOffset = (Vector2)transform.position;
+
+            for (var i = 0; i < _leafCount; i++)
             {
                 var slot = slots[i];
-                var center = new Vector2(slot.x, slot.y);
-                var radiusScale = slot.w > 0.001f ? slot.w : 1f;
-                var isGap = radiusScale > 0.001f && radiusScale < 0.99f;
-                var hash = MathUtils.Frac(
-                    Mathf.Sin(center.x * 127.1f + center.y * 311.7f) * 43758.5453f);
+                var worldPos = worldOffset + slot.Position;
+                _leafMatrices[i] = Matrix4x4.TRS(
+                    new Vector3(worldPos.x, worldPos.y, 0f),
+                    Quaternion.Euler(0f, 0f, slot.BaseAngle * Mathf.Rad2Deg),
+                    Vector3.one * slot.Scale);
 
-                if (hasCanopyVariants)
-                {
-                    var variantIdx = Mathf.FloorToInt(hash * canopyVariants.Length) % canopyVariants.Length;
-                    SpawnCanopySprite(canopyIdx, center, canopyVariants[variantIdx], i);
-                    _canopyGapScales.Add(isGap ? radiusScale : 1f);
-                    canopyIdx++;
-                }
+                var tint = (Color)slot.Tint;
+                tints[i] = new Vector4(tint.r, tint.g, tint.b, tint.a);
 
-                if (isGap || !hasLeafAtlas || _leafPool == null)
-                {
-                    continue;
-                }
-
-                for (var d = 0; d < ruffleLeafCount; d++)
-                {
-                    SpawnLeafSprite(hash, d, leafAtlas, i);
-                }
+                var spriteIndex = Mathf.Clamp(slot.SpriteVariant, 0, sprites.Length - 1);
+                var rect = sprites[spriteIndex].textureRect;
+                var tex = sprites[spriteIndex].texture;
+                uvRects[i] = new Vector4(
+                    rect.x / tex.width,
+                    rect.y / tex.height,
+                    rect.width / tex.width,
+                    rect.height / tex.height);
             }
 
-            UpdateCanopyScales();
-            ApplyLeafTransforms();
+            _leafProps = new MaterialPropertyBlock();
+            _leafProps.SetVectorArray(LeafTintId, tints);
+            _leafProps.SetVectorArray(UVRectId, uvRects);
         }
 
-        private void SpawnCanopySprite(
-            int index, Vector2 center, Sprite sprite, int sortBase)
+        private static Mesh GetLeafQuadMesh()
         {
-            SpriteRenderer sr;
-            if (index < _canopyRenderers.Count)
+            if (_sharedLeafQuad != null)
             {
-                sr = _canopyRenderers[index];
-            }
-            else
-            {
-                var go = new GameObject($"Canopy_{index}");
-                go.transform.SetParent(transform, false);
-                sr = go.AddComponent<SpriteRenderer>();
-                _canopyRenderers.Add(sr);
+                return _sharedLeafQuad;
             }
 
-            sr.sprite = sprite;
-            sr.enabled = true;
-            sr.transform.position = new Vector3(center.x, center.y, 0f);
-
-            if (_settings != null)
+            _sharedLeafQuad = new Mesh
             {
-                sr.sortingLayerID = _settings.SortingLayerId;
-                sr.sortingOrder = _settings.SortingOrderOffset + sortBase * 10;
-            }
-        }
-
-        private void SpawnLeafSprite(
-            float hash, int depth, Sprite[] atlas, int sortBase)
-        {
-            var leaf = _leafPool.Get();
-            leaf.transform.SetParent(transform, false);
-
-            var n = LeafCount - 1 - depth;
-            var angle = n * MathUtils.GoldenAngle + hash * MathUtils.TwoPi;
-            var angleDeg = angle * Mathf.Rad2Deg;
-
-            leaf.PhyllotaxisIndex = depth;
-            leaf.DepthFactor = 1f - depth / Mathf.Max(1f, _settings.RuffleLeafCount - 1f);
-            leaf.LeafDirection = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-            leaf.BaseRotation = angleDeg;
-            leaf.transform.rotation = Quaternion.Euler(0f, 0f, angleDeg);
-
-            var spriteIdx = Mathf.FloorToInt(
-                MathUtils.Frac(hash * (depth + 1) * 23.1f) * atlas.Length) % atlas.Length;
-            var sprite = atlas[spriteIdx];
-
-            leaf.Configure(sprite, _settings.SortingLayerId,
-                _settings.SortingOrderOffset + sortBase * 10 + depth + 1);
-
-            _leafSprites.Add(leaf);
-        }
-
-        private void UpdateCanopyScales()
-        {
-            for (var i = 0; i < _canopyRenderers.Count; i++)
-            {
-                var sr = _canopyRenderers[i];
-                if (sr == null || sr.sprite == null)
+                name = "BushLeafQuad",
+                vertices = new[]
                 {
-                    continue;
-                }
-
-                var spriteWorldWidth = sr.sprite.bounds.size.x;
-                var fitScale = _settings.CanopyDiameter / Mathf.Max(spriteWorldWidth, 0.01f);
-                var gapScale = i < _canopyGapScales.Count ? _canopyGapScales[i] : 1f;
-                sr.transform.localScale = Vector3.one * (fitScale * gapScale);
-            }
-        }
-
-        private void UpdateLeafTransformsLive()
-        {
-            var slotRadius = _settings.SlotRadius;
-            var branchSpread = _settings.BranchSpread;
-            var leafSize = _settings.LeafSpriteSize;
-
-            for (var i = 0; i < _leafSprites.Count; i++)
-            {
-                var leaf = _leafSprites[i];
-                if (leaf == null)
+                    new Vector3(-0.5f, -0.5f, 0f),
+                    new Vector3(0.5f, -0.5f, 0f),
+                    new Vector3(0.5f, 0.5f, 0f),
+                    new Vector3(-0.5f, 0.5f, 0f)
+                },
+                uv = new[]
                 {
-                    continue;
-                }
+                    new Vector2(0f, 0f),
+                    new Vector2(1f, 0f),
+                    new Vector2(1f, 1f),
+                    new Vector2(0f, 1f)
+                },
+                triangles = new[] { 0, 1, 2, 0, 2, 3 }
+            };
+            _sharedLeafQuad.UploadMeshData(true);
 
-                var ruffleId = "BushRuffle_" + leaf.transform.GetInstanceID();
-                var hasRuffle = DOTween.IsTweening(ruffleId);
-
-                var slotIdx = i / Mathf.Max(1, _settings.RuffleLeafCount);
-                if (slotIdx >= SlotCount)
-                {
-                    continue;
-                }
-
-                var slot = SlotCentersBuffer[slotIdx];
-                var center = new Vector2(slot.x, slot.y);
-                var radiusScale = slot.w > 0.001f ? slot.w : 1f;
-                var baseRadius = slotRadius * radiusScale;
-
-                // Only update position if no ruffle punch is active
-                if (!hasRuffle)
-                {
-                    var leafPos = PhyllotaxisCenter(center, baseRadius,
-                        MathUtils.Frac(Mathf.Sin(center.x * 127.1f + center.y * 311.7f) * 43758.5453f),
-                        leaf.PhyllotaxisIndex, branchSpread);
-                    leaf.transform.position = new Vector3(leafPos.x, leafPos.y, 0f);
-                }
-
-                // Scale can always be updated — ruffle scale punch is additive
-                if (leaf.TryGetComponent<SpriteRenderer>(out var sr) && sr.sprite != null)
-                {
-                    var spriteWorldWidth = sr.sprite.bounds.size.x;
-                    var depthT = leaf.PhyllotaxisIndex / Mathf.Max(1f, _settings.RuffleLeafCount - 1f);
-                    var sizeVariation = Mathf.Lerp(1f, 0.7f, depthT);
-                    var fitScale = leafSize / Mathf.Max(spriteWorldWidth, 0.01f) * sizeVariation;
-                    if (!hasRuffle)
-                    {
-                        leaf.transform.localScale = Vector3.one * fitScale;
-                    }
-                }
-            }
-        }
-
-        private void ApplyLeafTransforms()
-        {
-            var slotRadius = _settings.SlotRadius;
-            var branchSpread = _settings.BranchSpread;
-            var leafSize = _settings.LeafSpriteSize;
-
-            for (var i = 0; i < _leafSprites.Count; i++)
-            {
-                var leaf = _leafSprites[i];
-                if (leaf == null)
-                {
-                    continue;
-                }
-
-                // Recompute position from the slot center stored on the parent
-                var slotIdx = i / Mathf.Max(1, _settings.RuffleLeafCount);
-                if (slotIdx >= SlotCount)
-                {
-                    continue;
-                }
-
-                var slot = SlotCentersBuffer[slotIdx];
-                var center = new Vector2(slot.x, slot.y);
-                var radiusScale = slot.w > 0.001f ? slot.w : 1f;
-                var baseRadius = slotRadius * radiusScale;
-
-                var leafPos = PhyllotaxisCenter(center, baseRadius,
-                    MathUtils.Frac(Mathf.Sin(center.x * 127.1f + center.y * 311.7f) * 43758.5453f),
-                    leaf.PhyllotaxisIndex, branchSpread);
-                leaf.transform.position = new Vector3(leafPos.x, leafPos.y, 0f);
-
-                // Recompute scale
-                if (leaf.TryGetComponent<SpriteRenderer>(out var sr) && sr.sprite != null)
-                {
-                    var spriteWorldWidth = sr.sprite.bounds.size.x;
-                    var depthT = leaf.PhyllotaxisIndex / Mathf.Max(1f, _settings.RuffleLeafCount - 1f);
-                    var sizeVariation = Mathf.Lerp(1f, 0.7f, depthT);
-                    var fitScale = leafSize / Mathf.Max(spriteWorldWidth, 0.01f) * sizeVariation;
-                    leaf.transform.localScale = Vector3.one * fitScale;
-                }
-            }
-        }
-
-        internal static Vector2 PhyllotaxisCenter(
-            Vector2 slotCenter, float baseRadius, float hash,
-            int depth, float branchSpread)
-        {
-            var n = LeafCount - 1 - depth;
-            var fn = (float)n;
-
-            var angle = fn * MathUtils.GoldenAngle + hash * MathUtils.TwoPi;
-            var dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
-
-            var maxR = Mathf.Sqrt(LeafCount - 1 + 0.5f);
-            var dist = baseRadius * branchSpread * Mathf.Sqrt(fn + 0.5f) / maxR;
-
-            return slotCenter + dir * dist;
+            return _sharedLeafQuad;
         }
     }
 }

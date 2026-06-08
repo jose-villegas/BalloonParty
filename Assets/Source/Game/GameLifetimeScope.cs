@@ -109,7 +109,6 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<PuffCloudViewController>();
             builder.RegisterEntryPoint<BushClusterRegistry>().AsSelf();
             builder.RegisterEntryPoint<BushViewController>().AsSelf();
-            builder.RegisterEntryPoint<BushRuffleController>();
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf();
