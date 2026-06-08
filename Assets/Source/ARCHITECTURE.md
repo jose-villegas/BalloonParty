@@ -24,6 +24,7 @@
 | @subpage arch_static_state "Static State" | `Navigation` and `Cinematic` — cross-scene singleton state |
 | @subpage arch_slot_actor "Slot Actor Abstraction" | Interface hierarchy, capability casting, adding new actor types |
 | @subpage disturbance_field "Disturbance Field Service" | Screen-space RT field, stamp API, lerp vs instant routing, consumers |
+| @subpage arch_bush_system "Bush System" | Bake pipeline, runtime rendering, GPU wind + rattle, disturbance field interaction |
 
 ---
 
@@ -36,6 +37,8 @@
 | `Thrower/` | `BalloonParty.Thrower` | Controller + View |
 | `Slots/Grid/` | `BalloonParty.Slots.Grid` | Model (grid state) |
 | `Slots/Actor/` | `BalloonParty.Slots.Actor` | Model (actor contracts + static actor) |
+| `Slots/Actor/Archetype/` | `BalloonParty.Slots.Actor.Archetype` | Concrete actors (Bush, Puff) + cluster views |
+| `Slots/Actor/Cluster/` | `BalloonParty.Slots.Actor.Cluster` | Shared cluster infrastructure |
 | `Slots/Capabilities/` | `BalloonParty.Slots.Capabilities` | Model (capability interfaces) |
 | `Slots/Spawner/` | `BalloonParty.Slots.Spawner` | Controller (spawn coordination) |
 | `Game/` | `BalloonParty.Game` | Composition root |

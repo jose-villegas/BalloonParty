@@ -25,26 +25,47 @@ Concrete grid actor models and the Puff cloud visual system.
 The Bush system renders baked 2D skeletal bushes over groups of adjacent Bush
 slots. Branch maps and leaf attachment points are baked offline via the Bush
 Baker editor window. At runtime, branches are a static textured quad per slot;
-leaves are `DrawMeshInstanced` quads that rotate around their attachment
-points for wind sway. Zero GameObjects per leaf, two draw calls per slot.
+leaves are `DrawMeshInstanced` quads with GPU-driven wind and rattle animation.
+Zero GameObjects per leaf, zero CPU animation cost, two draw calls per slot.
 
 ### View Layer
 
 | File | What it does |
 |---|---|
-| `BushView` | `ClusterView` subclass. Per-slot rendering via `Graphics.DrawMesh` (branch) and `DrawMeshInstanced` (leaves). Each slot picks a `BushVariantData` by cycling `i % variants.Length`. Disables the base `SpriteRenderer`. Leaf matrices are updated externally by `BushAnimator`. |
+| `BushView` | `ClusterView` subclass. Per-slot rendering via `Graphics.DrawMesh` (branch) and `DrawMeshInstanced` (leaves). Each slot picks a `BushVariantData` by cycling `i % variants.Length`. Leaf sprites cycle per slot via `slotIndex % sprites.Length`. Leaf matrices are **static** (translation-only, set once) — all animation runs on the GPU vertex shader. Disables the base `SpriteRenderer`. |
 | `BushViewController` | `ClusterViewController` subclass. Adds gap-fill circles at midpoints between adjacent bush slots. Wires `IBushSettings` into the view via `SetSettings()`. |
-| `BushAnimator` | `ITickable`. Drives idle wind animation on all bush leaves. Per-leaf pivot rotation using sine oscillation + Perlin noise, modulated by depth. Optional scale pulse for flutter. Zero allocations per frame. |
 | `BushClusterRegistry` | `SlotClusterRegistry<BushObstacleModel>`. Subscribes to grid changes (no `setupOnly`) because spawner places actors async after `Start()`. |
+
+### GPU Animation (BushLeaf.shader)
+
+All leaf animation runs in the **vertex shader** — no CPU-side `ITickable` or
+per-frame matrix updates:
+
+- **Wind idle** — per-instance sine oscillation + dual-sine organic noise,
+  modulated by leaf depth. Scale pulse at 2× frequency for flutter.
+- **Rattle** — samples the global `_DisturbanceTex` (from `DisturbanceFieldService`)
+  at the leaf's world position. Displacement vector is crossed with the leaf
+  direction for signed rotation, modulated by configurable damping power curve.
+  The disturbance field's own diffusion/reform handles the settle decay.
+- **Per-instance data** — `_LeafWind` float4 (phase, depth, baseAngle, scale)
+  packed into `MaterialPropertyBlock` at setup, never updated.
+
+### Disturbance Field Interaction
+
+Bush leaves react to the same disturbance field as Puff clouds. Any event that
+stamps the field (projectile wake, balloon pop, bomb detonation, paint splash)
+causes nearby leaves to rattle. The interaction is automatic — the shader reads
+global `_DisturbanceTex` without any C# wiring. Toggle via `_RATTLE_ON` keyword.
 
 ### Configuration
 
 `BushSettings` (ScriptableObject in `Configuration/`) — `IBushSettings`. Holds:
 - **Prefab** — `BushView` prefab reference
-- **Branch Map** — `BushVariantData[]` variants, branch + leaf shaders, world size
+- **Branch Map** — `BushVariantData[]` variants, branch shader, leaf material, world size
 - **Leaf Atlas** — sprite array for atlas sub-rects
 - **Leaf Shadow** — shadow colour, offset, softness, sprite scale
-- **Wind** — amplitude, period, noise amplitude, scale pulse
+- **Wind** — amplitude, period, noise amplitude, scale pulse, pivot offset
+- **Rattle** — enabled toggle, amplitude, frequency, damping
 
 ### Baking
 

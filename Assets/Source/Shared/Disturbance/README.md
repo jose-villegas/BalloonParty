@@ -97,6 +97,7 @@ digraph DisturbanceField {
         style=filled;
         fillcolor="#f5dce8";
         PuffCloud [label="PuffCloudView\n(samples field per slot)"];
+        BushLeaf  [label="BushLeaf.shader\n(vertex tex2Dlod\nper leaf, _RATTLE_ON)"];
         Future    [label="Future effects\n(any shader sampling\n_DisturbanceTex)", style=dashed];
     }
 
@@ -115,6 +116,7 @@ digraph DisturbanceField {
     FieldB -> Globals [label="PushGlobalTexture()"];
 
     Globals -> PuffCloud;
+    Globals -> BushLeaf;
     Globals -> Future;
 }
 @enddot
@@ -194,6 +196,7 @@ All tuning lives on `DisturbanceFieldSettings` SO (in `Configuration/`). See `Co
 ## Interactions
 
 - **`PuffCloudView`** — reads `_DisturbanceTex`, `_FieldBoundsMin`, `_FieldBoundsSize` from global shader properties (set by the service each tick). Only pushes `_TimeOffset` per-instance via `MaterialPropertyBlock`. No direct reference to the service
+- **`BushLeaf.shader`** — when `_RATTLE_ON` is enabled, the vertex shader samples `_DisturbanceTex` at each leaf's world position via `tex2Dlod`. Displacement vector is converted to angular rattle modulated by depth and a configurable damping curve. No C# wiring needed — reads the same global shader properties as PuffCloud
 - **`GameLifetimeScope`** — registers the service as singleton with `AsImplementedInterfaces().AsSelf()`
 - **`GameDisplayConfiguration`** — provides orthographic size for RT bounds computation
 - **`DisturbanceFieldSettings`** — provides all tuning knobs and shader references
