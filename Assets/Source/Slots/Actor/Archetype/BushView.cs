@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Slots.Actor.Cluster;
 using UnityEngine;
@@ -5,9 +6,9 @@ using UnityEngine;
 namespace BalloonParty.Slots.Actor.Archetype
 {
     /// <summary>
-    /// Cluster renderer for bush obstacles. Renders a static branch quad from
-    /// a baked branch map texture and instanced leaf quads via DrawMeshInstanced
-    /// from pre-extracted <see cref="BushVariantData"/>.
+    /// Cluster renderer for bush obstacles. Renders a branch quad and instanced
+    /// leaf quads per slot via <c>Graphics.DrawMesh</c> / <c>DrawMeshInstanced</c>.
+    /// Each slot picks its own <see cref="BushVariantData"/> by position hash.
     /// </summary>
     internal class BushView : ClusterView
     {
@@ -17,127 +18,132 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static readonly int UVRectId = Shader.PropertyToID("_UVRect");
 
         private IBushSettings _settings;
-        private BushVariantData _variantData;
-        private Material _branchMaterial;
-        private Material _leafMaterial;
-        private MaterialPropertyBlock _leafProps;
-        private Matrix4x4 _branchMatrix;
-        private Matrix4x4[] _leafMatrices;
-        private int _leafCount;
-
-        internal BushVariantData VariantData => _variantData;
-        internal Matrix4x4[] LeafMatrices => _leafMatrices;
-        internal int LeafCount => _leafCount;
+        private readonly List<SlotRenderData> _slotRenderData = new();
 
         internal void SetSettings(IBushSettings settings)
         {
             _settings = settings;
         }
 
-        internal void SetVariantData(BushVariantData data)
-        {
-            _variantData = data;
-        }
-
         protected override void OnConfigured(MaterialPropertyBlock block)
         {
-            transform.localScale = Vector3.one;
-
             if (Renderer != null)
             {
                 Renderer.enabled = false;
             }
 
-            ConfigureBranchQuad();
-            ConfigureLeafMatrices();
+            RebuildSlots();
         }
 
         private void LateUpdate()
         {
-            if (_branchMaterial != null)
-            {
-                Graphics.DrawMesh(
-                    GetBranchQuadMesh(),
-                    _branchMatrix,
-                    _branchMaterial,
-                    gameObject.layer);
-            }
+            var branchMesh = GetBranchQuadMesh();
+            var leafMesh = GetLeafQuadMesh();
 
-            if (_leafCount > 0 && _leafMaterial != null)
+            foreach (var slot in _slotRenderData)
             {
-                Graphics.DrawMeshInstanced(
-                    GetLeafQuadMesh(),
-                    0,
-                    _leafMaterial,
-                    _leafMatrices,
-                    _leafCount,
-                    _leafProps);
+                if (slot.BranchMaterial != null)
+                {
+                    Graphics.DrawMesh(
+                        branchMesh,
+                        slot.BranchMatrix,
+                        slot.BranchMaterial,
+                        gameObject.layer);
+                }
+
+                if (slot.LeafCount > 0 && slot.LeafMaterial != null)
+                {
+                    Graphics.DrawMeshInstanced(
+                        leafMesh,
+                        0,
+                        slot.LeafMaterial,
+                        slot.LeafMatrices,
+                        slot.LeafCount,
+                        slot.LeafProps);
+                }
             }
         }
 
-        private void ConfigureBranchQuad()
+        private void RebuildSlots()
         {
-            if (_variantData == null || _settings == null)
+            _slotRenderData.Clear();
+
+            if (_settings == null)
             {
                 return;
             }
 
-            if (_settings.BranchShader == null)
+            var variants = _settings.BushVariants;
+            if (variants == null || variants.Length == 0)
             {
                 return;
             }
 
-            var tex = _variantData.BranchMap;
-            _branchMaterial = new Material(_settings.BranchShader)
+            for (var i = 0; i < SlotCount; i++)
             {
-                mainTexture = tex,
+                var center = SlotCentersBuffer[i];
+                var worldPos = new Vector2(center.x, center.y);
+                var hash = Mathf.Abs(worldPos.GetHashCode());
+                var variant = variants[hash % variants.Length];
+
+                var entry = new SlotRenderData();
+                ConfigureBranch(ref entry, worldPos, variant);
+                ConfigureLeaves(ref entry, worldPos, variant);
+                _slotRenderData.Add(entry);
+            }
+        }
+
+        private void ConfigureBranch(
+            ref SlotRenderData entry, Vector2 worldPos, BushVariantData variant)
+        {
+            if (_settings.BranchShader == null || variant.BranchMap == null)
+            {
+                return;
+            }
+
+            entry.BranchMaterial = new Material(_settings.BranchShader)
+            {
+                mainTexture = variant.BranchMap,
                 renderQueue = 3000
             };
 
             var size = _settings.BushWorldSize;
-            _branchMatrix = Matrix4x4.TRS(
-                transform.position,
+            entry.BranchMatrix = Matrix4x4.TRS(
+                new Vector3(worldPos.x, worldPos.y, 0f),
                 Quaternion.identity,
                 new Vector3(size, size, 1f));
         }
 
-        private void ConfigureLeafMatrices()
+        private void ConfigureLeaves(
+            ref SlotRenderData entry, Vector2 worldPos, BushVariantData variant)
         {
-            if (_variantData == null || _settings == null)
-            {
-                _leafCount = 0;
-                return;
-            }
-
             var sprites = _settings.LeafAtlasSprites;
             if (_settings.LeafShader == null || sprites == null || sprites.Length == 0)
             {
-                _leafCount = 0;
                 return;
             }
 
-            _leafMaterial = new Material(_settings.LeafShader)
+            entry.LeafMaterial = new Material(_settings.LeafShader)
             {
                 mainTexture = sprites[0].texture,
                 enableInstancing = true,
                 renderQueue = 3001
             };
 
-            var slots = _variantData.LeafSlots;
-            _leafCount = slots.Count;
-            _leafMatrices = new Matrix4x4[_leafCount];
+            var slots = variant.LeafSlots;
+            entry.LeafCount = slots.Count;
+            entry.LeafMatrices = new Matrix4x4[entry.LeafCount];
 
-            var tints = new Vector4[_leafCount];
-            var uvRects = new Vector4[_leafCount];
-            var worldOffset = (Vector2)transform.position;
+            var tints = new Vector4[entry.LeafCount];
+            var uvRects = new Vector4[entry.LeafCount];
 
-            for (var i = 0; i < _leafCount; i++)
+            for (var i = 0; i < entry.LeafCount; i++)
             {
                 var slot = slots[i];
-                var worldPos = worldOffset + slot.Position;
+                var leafWorldPos = worldPos + slot.Position;
                 var angleDeg = slot.BaseAngle * Mathf.Rad2Deg - 90f;
-                _leafMatrices[i] = Matrix4x4.TRS(
-                    new Vector3(worldPos.x, worldPos.y, 0f),
+                entry.LeafMatrices[i] = Matrix4x4.TRS(
+                    new Vector3(leafWorldPos.x, leafWorldPos.y, 0f),
                     Quaternion.Euler(0f, 0f, angleDeg),
                     Vector3.one * slot.Scale);
 
@@ -154,9 +160,9 @@ namespace BalloonParty.Slots.Actor.Archetype
                     rect.height / tex.height);
             }
 
-            _leafProps = new MaterialPropertyBlock();
-            _leafProps.SetVectorArray(LeafTintId, tints);
-            _leafProps.SetVectorArray(UVRectId, uvRects);
+            entry.LeafProps = new MaterialPropertyBlock();
+            entry.LeafProps.SetVectorArray(LeafTintId, tints);
+            entry.LeafProps.SetVectorArray(UVRectId, uvRects);
         }
 
         private static Mesh GetBranchQuadMesh()
@@ -219,6 +225,16 @@ namespace BalloonParty.Slots.Actor.Archetype
             _sharedLeafQuad.UploadMeshData(true);
 
             return _sharedLeafQuad;
+        }
+
+        private struct SlotRenderData
+        {
+            internal Material BranchMaterial;
+            internal Matrix4x4 BranchMatrix;
+            internal Material LeafMaterial;
+            internal MaterialPropertyBlock LeafProps;
+            internal Matrix4x4[] LeafMatrices;
+            internal int LeafCount;
         }
     }
 }

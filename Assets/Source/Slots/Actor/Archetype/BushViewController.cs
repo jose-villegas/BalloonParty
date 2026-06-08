@@ -43,14 +43,6 @@ namespace BalloonParty.Slots.Actor.Archetype
         {
             _bushView = view;
             view.SetSettings(_settings);
-
-            var variants = _settings.BushVariants;
-            if (variants != null && variants.Length > 0)
-            {
-                var hash = view.transform.position.GetHashCode();
-                var variant = variants[Mathf.Abs(hash) % variants.Length];
-                view.SetVariantData(variant);
-            }
         }
 
         protected override int PopulatePositions(

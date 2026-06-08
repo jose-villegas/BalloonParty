@@ -259,13 +259,14 @@ textured quad; leaves are `DrawMeshInstanced` with pivot-based rotation.
 | 2.2 | Fractal branch generator (CPU) | `BushBranchGenerator.cs` | — | ✅ Done |
 | 2.3 | Branch bake shader | `BushBakeBranch.shader` | — | ✅ Done |
 | 2.4 | Branch baker (offscreen pipeline) | `BushBranchBaker.cs` | — | ✅ Done |
-| 2.5 | Leaf extractor from branch map | `BushLeafExtractor.cs` | — | ⬜ |
-| 2.6 | `BushVariantData` ScriptableObject | `BushVariantData.cs` | — | ⬜ |
-| 2.7 | Editor window: branch section + export | `TexturePreviewBox.cs` | `BushBakerWindow.cs`, `BushBakerState.cs` | ✅ Done (preview), ⬜ (export) |
+| 2.5 | Leaf extractor from branch map | `BushLeafExtractor.cs` | — | ✅ Done |
+| 2.6 | `BushVariantData` ScriptableObject | `BushVariantData.cs` | — | ✅ Done |
+| 2.7 | Editor window: branch section + export | `TexturePreviewBox.cs` | `BushBakerWindow.cs`, `BushBakerState.cs` | ✅ Done |
 | 2.8 | Runtime branch shader | `BushBranch.shader` | — | ✅ Done |
-| 2.9 | Runtime `BushView` refactor | — | `BushView.cs`, `BushViewController.cs` | ⬜ |
-| 2.10 | `IBushSettings` extension | — | `IBushSettings.cs`, concrete SO | ⬜ |
-| 2.11 | Integration test — bake + render | — | — | ⬜ |
+| 2.8b | Runtime leaf shader | `BushLeaf.shader` | — | ✅ Done |
+| 2.9 | Runtime `BushView` refactor | — | `BushView.cs`, `BushViewController.cs` | ✅ Done |
+| 2.10 | `IBushSettings` extension | — | `IBushSettings.cs`, `BushSettings.cs` | ✅ Done |
+| 2.11 | Integration test — bake + render | — | — | 🔨 Current |
 
 ---
 
@@ -1019,10 +1020,13 @@ Manual verification checklist:
 
 ### Session context for Phase 2
 
-**Current state (June 8 2026):** Tasks 2.1–2.4, 2.7a, and 2.8 are
-complete. The Bush Baker window shows a live branch map preview with
-auto-update. The generator produces radial top-down fractal branching.
-Next task is 2.5 (leaf extractor).
+**Current state (June 8 2026):** All Phase 2 tasks are complete except
+the final integration test (2.11). The full pipeline works end-to-end:
+bake → extract → export → runtime rendering. Current tuning items:
+
+- Leaf rotation and pivot positioning (petiole at attachment point)
+- Render queue ordering (branch behind leaves via `Graphics.DrawMesh`)
+- Branch shader is solid opaque with alpha-test (no transparency)
 
 **Key decisions made during implementation:**
 1. **Top-down radial growth** — root at UV centre (0.5, 0.5), primary
@@ -1043,35 +1047,22 @@ Next task is 2.5 (leaf extractor).
    The branch map uses a procedural mesh (4 verts/segment) with vertex
    colors encoding the RG+A data, whereas the leaf baker uses a material
    on a quad.
+7. **No serialized Material or Mesh assets** — `IBushSettings` exposes
+   `Shader BranchShader` and `Shader LeafShader` only. `BushView` creates
+   branch/leaf materials at runtime from the shader + variant texture.
+   The leaf quad mesh is a unit quad generated once (static lazy init).
+8. **Both branch and leaves use `Graphics.DrawMesh*`** — avoids
+   SpriteRenderer vs DrawMeshInstanced sorting conflicts. Branch uses
+   `Graphics.DrawMesh` at queue 3000, leaves use `DrawMeshInstanced` at
+   queue 3001. The base `ClusterView.Renderer` (SpriteRenderer) is disabled.
+9. **Leaf quad is bottom-pivoted** — vertices at `y: [0, 1]` so the
+   petiole (bottom) sits at the attachment point. Leaves rotate around
+   the attachment point naturally.
 
-**When resuming work, read these files:**
-- `Assets/Source/Editor/Bush/BushBakerWindow.cs` — editor window
-- `Assets/Source/Editor/Bush/BushBranchBaker.cs` — branch bake pipeline
-- `Assets/Source/Editor/Bush/BushBranchGenerator.cs` — fractal generator (radial)
-- `Assets/Source/Editor/Bush/BushBranchBakeSettings.cs` — branch settings
-- `Assets/Source/Editor/Bush/BushBakerState.cs` — persisted state
-- `Assets/Source/Editor/Bush/BushLeafBaker.cs` — leaf bake pipeline (pattern)
-- `Assets/Source/Editor/Bush/LeafAtlasPacker.cs` — export pipeline pattern
-- `Assets/Source/Editor/TexturePreviewBox.cs` — reusable preview component
-- `Assets/Shaders/BalloonParty/Grid/Editor/BushBakeBranch.shader` — bake shader
-- `Assets/Shaders/BalloonParty/Grid/BushBranch.shader` — runtime shader
-- `Assets/Source/Slots/Actor/Archetype/BushView.cs` — runtime view (to refactor)
-- `Assets/Source/Slots/Actor/Archetype/BushViewController.cs` — controller
-- `Assets/Source/Slots/Actor/Cluster/ClusterView.cs` — base class
-- `Assets/Source/Configuration/IBushSettings.cs` — settings (to extend)
-- `.github/copilot-instructions.md` — project coding conventions
-
-**Next steps (in order):**
-1. **2.5 Leaf extractor** — scan baked texture for tip pixels (high alpha,
-   no higher-alpha ahead in direction), spatial filter, output `LeafSlotData[]`
-2. **2.7b "Preview with Leaves"** — overlay extracted leaf positions on branch
-   map in the preview box
-3. **2.6 BushVariantData SO** — runtime data container for branch map + leaf slots
-4. **2.7c Export button** — save PNG + create SO per variant
-5. **2.10 IBushSettings** — add `BushVariants[]`, `BranchShader`, `LeafShader`,
-   `BushWorldSize`
-6. **2.9 BushView refactor** — static branch SpriteRenderer + `DrawMeshInstanced`
-7. **2.11 Integration test** — verify in play mode
+**Next steps:**
+1. **2.11 Integration test** — verify branch behind leaves, leaf positions
+   correct, 2 draw calls per cluster in Frame Debugger
+2. **Phase 3** — wind animation (idle leaf sway)
 
 **Key conventions:**
 - Branch material: GPU instancing **enabled** (no MPB, static)
