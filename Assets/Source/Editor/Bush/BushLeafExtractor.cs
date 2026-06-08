@@ -26,7 +26,7 @@ namespace BalloonParty.Editor.Bush
             int leafVariantCount)
         {
             var segments = BushBranchGenerator.Generate(seed, branchSettings);
-            var tips = FindTerminalTips(segments, branchSettings.LeafDepthThreshold);
+            var tips = FindTerminalTips(segments, branchSettings.LeafDepthThreshold, branchSettings.LeafAttachmentBias);
             var filtered = SpatialFilter(tips, branchSettings.MaxLeavesPerVariant);
             return BuildLeafSlots(filtered, seed, branchSettings, leafVariantCount);
         }
@@ -45,7 +45,7 @@ namespace BalloonParty.Editor.Bush
         }
 
         private static List<TipCandidate> FindTerminalTips(
-            List<BushBranchGenerator.Segment> segments, float depthThreshold)
+            List<BushBranchGenerator.Segment> segments, float depthThreshold, float attachBias)
         {
             // Collect all segment Start positions to identify non-terminal endpoints
             var startPositions = new HashSet<Vector2Int>();
@@ -71,9 +71,12 @@ namespace BalloonParty.Editor.Bush
                     continue;
                 }
 
+                // Place attachment near the tip end of the segment (85% toward End)
+                var attachPoint = Vector2.Lerp(seg.Start, seg.End, attachBias);
+
                 tips.Add(new TipCandidate
                 {
-                    Position = seg.End,
+                    Position = attachPoint,
                     Depth = seg.Depth,
                     Angle = seg.DirectionAngle,
                     Score = seg.Depth

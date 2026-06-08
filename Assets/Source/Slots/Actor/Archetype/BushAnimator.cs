@@ -80,6 +80,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             var slots = entry.LeafSlots;
             var worldPos = entry.WorldPos;
             var scaleCompensation = entry.ScaleCompensation;
+            var bushWorldSize = entry.BushWorldSize;
 
             for (var t = 0; t < tier.Count; t++)
             {
@@ -101,7 +102,7 @@ namespace BalloonParty.Slots.Actor.Archetype
                     scale *= pulse;
                 }
 
-                var leafWorldPos = worldPos + slot.Position;
+                var leafWorldPos = worldPos + (slot.UVPosition - new Vector2(0.5f, 0.5f)) * bushWorldSize;
                 var rot = Quaternion.Euler(0f, 0f, angleDeg);
                 var pivotShift = rot * new Vector3(0f, -totalPivotOffset * scale, 0f);
                 tier.Matrices[t] = Matrix4x4.TRS(

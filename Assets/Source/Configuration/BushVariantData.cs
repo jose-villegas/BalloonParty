@@ -15,6 +15,18 @@ namespace BalloonParty.Configuration
         [SerializeField] private LeafSlotData[] _leafSlots;
         [SerializeField] private Vector2 _boundsSize = Vector2.one;
 
+#if UNITY_EDITOR
+        [SerializeField] private Vector4[] _debugSegments;
+        [SerializeField] private float _debugBushWorldSize;
+
+        /// <summary>
+        /// Raw generator segment pairs as (start.x, start.y, end.x, end.y) in UV space.
+        /// Used only for editor gizmo overlay.
+        /// </summary>
+        internal IReadOnlyList<Vector4> DebugSegments => _debugSegments;
+        internal float DebugBushWorldSize => _debugBushWorldSize;
+#endif
+
         internal Texture2D BranchMap => _branchMap;
         internal IReadOnlyList<LeafSlotData> LeafSlots => _leafSlots;
         internal Vector2 BoundsSize => _boundsSize;
@@ -28,13 +40,21 @@ namespace BalloonParty.Configuration
             _boundsSize = boundsSize;
             UnityEditor.EditorUtility.SetDirty(this);
         }
+
+        internal void SetDebugData(Vector4[] segments, float bushWorldSize)
+        {
+            _debugSegments = segments;
+            _debugBushWorldSize = bushWorldSize;
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
 #endif
     }
 
     [Serializable]
     internal struct LeafSlotData
     {
-        [SerializeField] internal Vector2 Position;
+        /// <summary>UV-space position [0–1] on the branch map. Converted to world-space at runtime.</summary>
+        [SerializeField] internal Vector2 UVPosition;
         [SerializeField] internal float BaseAngle;
         [SerializeField] internal float Depth;
         [SerializeField] internal float PhaseOffset;

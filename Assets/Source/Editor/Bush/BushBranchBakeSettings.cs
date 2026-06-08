@@ -28,5 +28,7 @@ namespace BalloonParty.Editor.Bush
         [SerializeField] internal int MaxLeavesPerVariant = 16;
         [SerializeField] internal float LeafScale = 0.08f;
         [SerializeField] internal float LeafScaleVariation = 0.3f;
+        [Range(0f, 1f)]
+        [SerializeField] internal float LeafAttachmentBias = 0.85f;
     }
 }

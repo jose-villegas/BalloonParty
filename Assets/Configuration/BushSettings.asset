@@ -37,7 +37,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: e1026edfe5b294cfd9d21f3168353383, type: 2}
   _branchShader: {fileID: 4800000, guid: e6e471ce52d2648ceb0558c1856353df, type: 3}
   _leafMaterial: {fileID: 2100000, guid: 07bd2f8ccc97b408abee96710de6a460, type: 2}
-  _bushWorldSize: 0.9
+  _bushWorldSize: 0.7
   _leafAtlasSprites:
   - {fileID: -1545996157, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
   _leafShadowColor: {r: 0.15, g: 0.18, b: 0.1, a: 0.55}

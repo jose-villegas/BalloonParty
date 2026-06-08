@@ -39,9 +39,19 @@ namespace BalloonParty.Editor.Bush
             var slotData = BuildSlotData(leafSlots, bushWorldSize, seed);
             var boundsSize = new Vector2(bushWorldSize, bushWorldSize);
 
+            // Store raw generator segments for debug gizmo overlay
+            var segments = BushBranchGenerator.Generate(seed, branchSettings);
+            var debugSegments = new Vector4[segments.Count];
+            for (var s = 0; s < segments.Count; s++)
+            {
+                var seg = segments[s];
+                debugSegments[s] = new Vector4(seg.Start.x, seg.Start.y, seg.End.x, seg.End.y);
+            }
+
             var soPath = $"{outputFolder}/BushVariant_V{variantIndex:D2}.asset";
             var variantSo = LoadOrCreateAsset(soPath);
             variantSo.SetBakeData(importedTexture, slotData, boundsSize);
+            variantSo.SetDebugData(debugSegments, bushWorldSize);
             AssetDatabase.SaveAssets();
 
             Debug.Log($"[BushVariantExporter] Exported variant {variantIndex} → {soPath}");
@@ -59,13 +69,10 @@ namespace BalloonParty.Editor.Bush
             for (var i = 0; i < slots.Count; i++)
             {
                 var slot = slots[i];
-                var position = new Vector2(
-                    (slot.UVPosition.x - 0.5f) * bushWorldSize,
-                    (slot.UVPosition.y - 0.5f) * bushWorldSize);
 
                 result[i] = new LeafSlotData
                 {
-                    Position = position,
+                    UVPosition = slot.UVPosition,
                     BaseAngle = slot.Angle,
                     Depth = slot.Depth,
                     PhaseOffset = (float)rng.NextDouble() * Mathf.PI * 2f,

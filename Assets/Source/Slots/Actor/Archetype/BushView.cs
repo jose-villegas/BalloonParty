@@ -171,6 +171,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             entry.WorldPos = worldPos;
             entry.ScaleCompensation = 1f / Mathf.Max(_settings.LeafSpriteScale, 0.3f);
             entry.PivotOffset = _settings.LeafPivotOffset;
+            entry.BushWorldSize = _settings.BushWorldSize;
 
             var depthSplit = _settings.LeafDepthSplit;
 
@@ -194,9 +195,11 @@ namespace BalloonParty.Slots.Actor.Archetype
             entry.OuterLeafMaterial = CreateLeafMaterial(sprites, 3001);
 
             entry.InnerLeaves = BuildLeafTier(
-                innerIndices, slots, sprites, worldPos, entry.ScaleCompensation, entry.PivotOffset);
+                innerIndices, slots, sprites, worldPos, entry.ScaleCompensation, entry.PivotOffset,
+                entry.BushWorldSize);
             entry.OuterLeaves = BuildLeafTier(
-                outerIndices, slots, sprites, worldPos, entry.ScaleCompensation, entry.PivotOffset);
+                outerIndices, slots, sprites, worldPos, entry.ScaleCompensation, entry.PivotOffset,
+                entry.BushWorldSize);
         }
 
         private Material CreateLeafMaterial(Sprite[] sprites, int queue)
@@ -220,7 +223,8 @@ namespace BalloonParty.Slots.Actor.Archetype
             Sprite[] sprites,
             Vector2 worldPos,
             float scaleCompensation,
-            float pivotOffset)
+            float pivotOffset,
+            float bushWorldSize)
         {
             var tier = new LeafTier
             {
@@ -246,7 +250,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             for (var t = 0; t < indices.Count; t++)
             {
                 var slot = slots[indices[t]];
-                var leafWorldPos = worldPos + slot.Position;
+                var leafWorldPos = worldPos + (slot.UVPosition - new Vector2(0.5f, 0.5f)) * bushWorldSize;
                 var angleDeg = slot.BaseAngle * Mathf.Rad2Deg - 90f;
                 var scale = slot.Scale * scaleCompensation;
                 var rot = Quaternion.Euler(0f, 0f, angleDeg);
@@ -362,29 +366,82 @@ namespace BalloonParty.Slots.Actor.Archetype
             internal Vector2 WorldPos;
             internal float ScaleCompensation;
             internal float PivotOffset;
+            internal float BushWorldSize;
         }
 
 #if UNITY_EDITOR
         [SerializeField] private bool _debugLeafPivots;
+        [SerializeField] private bool _debugBranchSegments;
 
         private void OnDrawGizmos()
         {
-            if (!_debugLeafPivots || _settings == null || _slotRenderData.Count == 0)
+            if (_settings == null || _slotRenderData.Count == 0)
             {
                 return;
             }
 
-            var totalPivotOffset = _settings.LeafPivotOffset + 0.5f;
-
-            foreach (var entry in _slotRenderData)
+            if (_debugBranchSegments)
             {
-                if (entry.LeafSlots == null)
+                DrawBranchSegmentGizmos();
+            }
+
+            if (_debugLeafPivots)
+            {
+                var totalPivotOffset = _settings.LeafPivotOffset + 0.5f;
+
+                foreach (var entry in _slotRenderData)
+                {
+                    if (entry.LeafSlots == null)
+                    {
+                        continue;
+                    }
+
+                    DrawTierGizmos(entry, entry.InnerLeaves, totalPivotOffset);
+                    DrawTierGizmos(entry, entry.OuterLeaves, totalPivotOffset);
+                }
+            }
+        }
+
+        private void DrawBranchSegmentGizmos()
+        {
+            var variants = _settings.BushVariants;
+            if (variants == null || variants.Length == 0)
+            {
+                return;
+            }
+
+            for (var i = 0; i < _slotRenderData.Count; i++)
+            {
+                var entry = _slotRenderData[i];
+                var variant = variants[i % variants.Length];
+                var segments = variant.DebugSegments;
+                if (segments == null || segments.Count == 0)
                 {
                     continue;
                 }
 
-                DrawTierGizmos(entry, entry.InnerLeaves, totalPivotOffset);
-                DrawTierGizmos(entry, entry.OuterLeaves, totalPivotOffset);
+                var size = _settings.BushWorldSize;
+
+                foreach (var seg in segments)
+                {
+                    // Convert UV [0,1] → local → world
+                    var startWorld = new Vector3(
+                        entry.WorldPos.x + (seg.x - 0.5f) * size,
+                        entry.WorldPos.y + (seg.y - 0.5f) * size,
+                        0f);
+                    var endWorld = new Vector3(
+                        entry.WorldPos.x + (seg.z - 0.5f) * size,
+                        entry.WorldPos.y + (seg.w - 0.5f) * size,
+                        0f);
+
+                    // Green line = generator centerline
+                    Gizmos.color = Color.green;
+                    Gizmos.DrawLine(startWorld, endWorld);
+
+                    // Small magenta dot at segment endpoint (tip candidate)
+                    Gizmos.color = Color.magenta;
+                    Gizmos.DrawWireSphere(endWorld, 0.004f);
+                }
             }
         }
 
@@ -395,10 +452,13 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return;
             }
 
+            var bushWorldSize = entry.BushWorldSize;
+
             for (var t = 0; t < tier.Count; t++)
             {
                 var slot = entry.LeafSlots[tier.SlotIndices[t]];
-                var attachPos = (Vector3)(entry.WorldPos + slot.Position);
+                var attachPos = (Vector3)(entry.WorldPos
+                    + (slot.UVPosition - new Vector2(0.5f, 0.5f)) * bushWorldSize);
                 var angleDeg = slot.BaseAngle * Mathf.Rad2Deg - 90f;
                 var rot = Quaternion.Euler(0f, 0f, angleDeg);
                 var scale = slot.Scale * entry.ScaleCompensation;
