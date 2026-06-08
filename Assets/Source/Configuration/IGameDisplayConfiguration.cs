@@ -7,4 +7,3 @@ namespace BalloonParty.Configuration
         float GetOrthogonalSize();
     }
 }
-

@@ -10,4 +10,3 @@ namespace BalloonParty.Slots.Actor.Cluster
         int ClusterId { get; set; }
     }
 }
-

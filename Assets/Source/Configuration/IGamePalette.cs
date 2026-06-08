@@ -9,5 +9,3 @@ namespace BalloonParty.Configuration
         Color GetColor(string colorName);
     }
 }
-
-

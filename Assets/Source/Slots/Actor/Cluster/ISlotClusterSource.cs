@@ -17,4 +17,3 @@ namespace BalloonParty.Slots.Actor.Cluster
         SlotCluster GetClusterAtWorldPosition(Vector3 worldPos);
     }
 }
-

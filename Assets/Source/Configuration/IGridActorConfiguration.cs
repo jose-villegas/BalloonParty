@@ -7,4 +7,3 @@ namespace BalloonParty.Configuration
         IReadOnlyList<GridActorPrefabEntry> Entries { get; }
     }
 }
-

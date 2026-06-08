@@ -12,4 +12,3 @@ namespace BalloonParty.Slots.Actor.Cluster
         int SortingOrderOffset { get; }
     }
 }
-

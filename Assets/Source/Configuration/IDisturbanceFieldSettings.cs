@@ -21,4 +21,3 @@ namespace BalloonParty.Configuration
         StampProfile GetProfile(StampSource source);
     }
 }
-

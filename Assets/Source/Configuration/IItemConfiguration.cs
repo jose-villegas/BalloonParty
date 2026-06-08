@@ -8,4 +8,3 @@ namespace BalloonParty.Configuration
         ItemSettings this[ItemType type] { get; }
     }
 }
-

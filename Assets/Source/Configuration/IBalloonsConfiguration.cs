@@ -18,4 +18,3 @@ namespace BalloonParty.Configuration
         float NudgeFalloff { get; }
     }
 }
-

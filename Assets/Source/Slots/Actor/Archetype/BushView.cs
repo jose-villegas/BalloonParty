@@ -12,8 +12,6 @@ namespace BalloonParty.Slots.Actor.Archetype
     /// </summary>
     internal class BushView : ClusterView
     {
-        private static Mesh _sharedLeafQuad;
-        private static Mesh _sharedBranchQuad;
         private static readonly int LeafTintId = Shader.PropertyToID("_LeafTint");
         private static readonly int UVRectId = Shader.PropertyToID("_UVRect");
         private static readonly int ShadowColorId = Shader.PropertyToID("_ShadowColor");
@@ -21,8 +19,11 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static readonly int ShadowSoftnessId = Shader.PropertyToID("_ShadowSoftness");
         private static readonly int SpriteScaleId = Shader.PropertyToID("_SpriteScale");
 
-        private IBushSettings _settings;
         private readonly List<SlotRenderData> _slotRenderData = new();
+
+        private static Mesh _sharedLeafQuad;
+        private static Mesh _sharedBranchQuad;
+        private IBushSettings _settings;
 
         internal void SetSettings(IBushSettings settings)
         {
