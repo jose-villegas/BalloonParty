@@ -97,6 +97,8 @@ namespace BalloonParty.Game
             builder.Register<PoolManager>(Lifetime.Singleton);
             builder.Register<PauseService>(Lifetime.Singleton);
             builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
+            builder.Register<ImpactEventBus>(Lifetime.Singleton)
+                .AsImplementedInterfaces().AsSelf();
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);
             builder.Register<ColorStreakTracker>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.RegisterComponentInHierarchy<SlotGridView>();

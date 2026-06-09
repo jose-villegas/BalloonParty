@@ -40,6 +40,7 @@ namespace BalloonParty.Shared.Disturbance
 
         private readonly IDisturbanceFieldSettings _settings;
         private readonly IGameDisplayConfiguration _displayConfig;
+        private readonly ImpactEventBus _impactBus;
         private readonly List<LerpStamp> _activeStamps = new();
         private readonly List<PendingStamp> _pendingStamps = new();
         private readonly Vector4[] _batchCenters = new Vector4[MaxStampsPerBatch];
@@ -61,10 +62,12 @@ namespace BalloonParty.Shared.Disturbance
 
         internal DisturbanceFieldService(
             IDisturbanceFieldSettings settings,
-            IGameDisplayConfiguration displayConfig)
+            IGameDisplayConfiguration displayConfig,
+            ImpactEventBus impactBus)
         {
             _settings = settings;
             _displayConfig = displayConfig;
+            _impactBus = impactBus;
         }
 
         internal RenderTexture FieldTexture => _readFromA ? _fieldA : _fieldB;
@@ -129,6 +132,8 @@ namespace BalloonParty.Shared.Disturbance
         /// </summary>
         internal void Stamp(Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration = 0f)
         {
+            _impactBus.Report(worldPosition, radius);
+
             if (duration > 0f)
             {
                 if (_activeStamps.Count >= _settings.MaxLerpStamps)

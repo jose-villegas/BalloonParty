@@ -84,6 +84,7 @@ namespace BalloonParty.Item.Bomb
             _disturbanceField.Stamp(_worldPosition, stamp.Radius,
                 stamp.Strength, Vector2.zero, stamp.Duration);
 
+
             return UniTask.CompletedTask;
         }
 

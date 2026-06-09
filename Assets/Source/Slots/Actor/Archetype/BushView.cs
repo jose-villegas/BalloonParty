@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Projectile;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Actor.Cluster;
 using UnityEngine;
@@ -46,6 +47,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static bool? _supportsInstancing;
 
         [Inject] private ProjectilePositionProvider _projectileProvider;
+        [Inject] private ImpactEventBus _impactBus;
         [Inject] private PoolManager _poolManager;
 
         private readonly List<SlotRenderData> _slotRenderData = new();
@@ -115,6 +117,14 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return;
             }
 
+            var vfxPrefab = _settings.BushRustleVfx;
+            if (vfxPrefab == null)
+            {
+                return;
+            }
+
+            ProcessImpacts(vfxPrefab);
+
             if (!_projectileProvider.IsActive)
             {
                 if (_rustledSlots.Count > 0)
@@ -122,12 +132,6 @@ namespace BalloonParty.Slots.Actor.Archetype
                     _rustledSlots.Clear();
                 }
 
-                return;
-            }
-
-            var vfxPrefab = _settings.BushRustleVfx;
-            if (vfxPrefab == null)
-            {
                 return;
             }
 
@@ -151,14 +155,45 @@ namespace BalloonParty.Slots.Actor.Archetype
                 }
 
                 _rustledSlots.Add(i);
-
-                var poolKey = vfxPrefab.name;
-                var effect = _poolManager.GetOrRegister(poolKey,
-                    () => new ParticlePoolChannel(vfxPrefab.gameObject));
-                effect.Play(
-                    new Vector3(slotPos.x, slotPos.y, 0f),
-                    () => _poolManager.Return(poolKey, effect));
+                SpawnRustleVfx(vfxPrefab, slotPos);
             }
+        }
+
+        private void ProcessImpacts(ParticleSystem vfxPrefab)
+        {
+            var impacts = _impactBus.Pending;
+            if (impacts.Count == 0)
+            {
+                return;
+            }
+
+            for (var j = 0; j < impacts.Count; j++)
+            {
+                var impact = impacts[j];
+                var radiusSq = impact.Radius * impact.Radius;
+
+                for (var i = 0; i < _slotRenderData.Count; i++)
+                {
+                    var slotPos = _slotRenderData[i].WorldPos;
+                    var dx = impact.Position.x - slotPos.x;
+                    var dy = impact.Position.y - slotPos.y;
+
+                    if (dx * dx + dy * dy <= radiusSq)
+                    {
+                        SpawnRustleVfx(vfxPrefab, slotPos);
+                    }
+                }
+            }
+        }
+
+        private void SpawnRustleVfx(ParticleSystem vfxPrefab, Vector2 slotPos)
+        {
+            var poolKey = vfxPrefab.name;
+            var effect = _poolManager.GetOrRegister(poolKey,
+                () => new ParticlePoolChannel(vfxPrefab.gameObject));
+            effect.Play(
+                new Vector3(slotPos.x, slotPos.y, 0f),
+                () => _poolManager.Return(poolKey, effect));
         }
 
         private void DrawLeafTier(Mesh leafMesh, LeafTier tier, Material material, int layer)

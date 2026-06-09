@@ -5,7 +5,7 @@ namespace BalloonParty.Projectile
     /// <summary>
     /// Lightweight shared reference to the active projectile transform.
     /// Set by <c>ThrowerController</c> on load/reload, read by systems
-    /// that need the projectile's world position without direct coupling
+    /// that need the projectile's world position without direct coupling.
     /// </summary>
     internal class ProjectilePositionProvider
     {
@@ -33,4 +33,3 @@ namespace BalloonParty.Projectile
         }
     }
 }
-
