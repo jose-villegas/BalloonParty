@@ -244,17 +244,9 @@ namespace BalloonParty.Balloon.Spawner
 
         private void PopulateInitialGrid()
         {
-            for (var row = 0; row < _balloonsConfig.GameStartedBalloonLines; row++)
+            for (var i = 0; i < _balloonsConfig.GameStartedBalloonLines; i++)
             {
-                for (var col = 0; col < _grid.Columns; col++)
-                {
-                    if (!_grid.IsEmpty(col, row))
-                    {
-                        continue;
-                    }
-
-                    SpawnBalloon(new Vector2Int(col, row));
-                }
+                SpawnLineInternal();
             }
         }
 
