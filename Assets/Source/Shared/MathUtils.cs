@@ -18,5 +18,17 @@ namespace BalloonParty.Shared
         {
             return x - Mathf.Floor(x);
         }
+
+        internal static float SqrDistance2D(Vector2 a, Vector2 b)
+        {
+            var dx = a.x - b.x;
+            var dy = a.y - b.y;
+            return dx * dx + dy * dy;
+        }
+
+        internal static bool WithinRadius(Vector2 a, Vector2 b, float radius)
+        {
+            return SqrDistance2D(a, b) <= radius * radius;
+        }
     }
 }

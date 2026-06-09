@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -70,17 +71,16 @@ namespace BalloonParty.Item.Lightning
                 return UniTask.CompletedTask;
             }
 
-            var sourceColorId = (_balloon as IHasColor)?.Color.Value ?? "";
+            var sourceColorId = _balloon.GetColorId();
             var context = new DamageContext(settings.Damage, settings.Flags, sourceColorId);
 
             if (settings.ActivationEffectPrefab == null)
             {
                 foreach (var (model, pos) in _targetsBuffer)
                 {
-                    _hitPublisher.Publish(new ActorHitMessage(model,
+                    _hitPublisher.Publish(ActorHitMessage.From(model,
                         pos,
                         Vector3.zero,
-                        model.EvaluateHit(context),
                         context));
                 }
 
@@ -114,10 +114,9 @@ namespace BalloonParty.Item.Lightning
                 }
 
                 var (model, pos) = targets[index];
-                _hitPublisher.Publish(new ActorHitMessage(model,
+                _hitPublisher.Publish(ActorHitMessage.From(model,
                     pos,
                     Vector3.zero,
-                    model.EvaluateHit(context),
                     context));
             }
         }

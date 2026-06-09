@@ -3,6 +3,7 @@ using System.Linq;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
@@ -86,8 +87,7 @@ namespace BalloonParty.UI.Score
             {
                 if (g != null)
                 {
-                    var c = entry.Color;
-                    g.color = new Color(c.r, c.g, c.b, g.color.a);
+                    g.color = entry.Color.WithAlpha(g.color.a);
                 }
             }
 #endif
@@ -101,8 +101,7 @@ namespace BalloonParty.UI.Score
 
             foreach (var g in _graphicsToSetColor)
             {
-                var c = _colorConfig.Color;
-                g.color = new Color(c.r, c.g, c.b, g.color.a);
+                g.color = _colorConfig.Color.WithAlpha(g.color.a);
             }
 
             var required = _scoreController.GetRequiredPoints();

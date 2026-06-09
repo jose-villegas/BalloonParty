@@ -4,6 +4,7 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -28,7 +29,6 @@ namespace BalloonParty.Item.Bomb
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly IDisturbanceFieldSettings _disturbanceSettings;
 
         private IBalloonModel _balloon;
         private Vector3 _worldPosition;
@@ -42,8 +42,7 @@ namespace BalloonParty.Item.Bomb
             IPublisher<ActorHitMessage> hitPublisher,
             IPublisher<NudgeMessage> nudgePublisher,
             PoolManager poolManager,
-            DisturbanceFieldService disturbanceField,
-            IDisturbanceFieldSettings disturbanceSettings)
+            DisturbanceFieldService disturbanceField)
         {
             _palette = palette;
             _itemConfig = itemConfig;
@@ -51,7 +50,6 @@ namespace BalloonParty.Item.Bomb
             _nudgePublisher = nudgePublisher;
             _poolManager = poolManager;
             _disturbanceField = disturbanceField;
-            _disturbanceSettings = disturbanceSettings;
 
             _balloonFilter = new ContactFilter2D();
             _balloonFilter.SetLayerMask(BalloonsLayer);
@@ -76,13 +74,11 @@ namespace BalloonParty.Item.Bomb
                 NudgeType.Shockwave,
                 settings.NudgeOverrides));
 
-            var sourceColorId = (_balloon as IHasColor)?.Color.Value ?? "";
+            var sourceColorId = _balloon.GetColorId();
             BlastBalloons(settings.BombRadius, new DamageContext(settings.Damage, settings.Flags, sourceColorId));
             SpawnVisual(settings);
 
-            var stamp = _disturbanceSettings.GetProfile(StampSource.Bomb);
-            _disturbanceField.Stamp(_worldPosition, stamp.Radius,
-                stamp.Strength, Vector2.zero, stamp.Duration);
+            _disturbanceField.Stamp(StampSource.Bomb, _worldPosition, Vector2.zero);
 
 
             return UniTask.CompletedTask;
@@ -125,10 +121,9 @@ namespace BalloonParty.Item.Bomb
 
                 var hitContext = isNeighbor ? piercingContext : context;
 
-                _hitPublisher.Publish(new ActorHitMessage(balloonView.Model,
+                _hitPublisher.Publish(ActorHitMessage.From(balloonView.Model,
                     balloonView.transform.position,
                     Vector3.zero,
-                    balloonView.Model.EvaluateHit(hitContext),
                     hitContext));
             }
         }
@@ -143,7 +138,7 @@ namespace BalloonParty.Item.Bomb
             var key = settings.ActivationEffectPrefab.name;
             var effect = _poolManager.GetOrRegister(key, () => new EffectPoolChannel(settings.ActivationEffectPrefab));
 
-            var balloonColor = _palette.GetColor((_balloon as IHasColor)?.Color.Value);
+            var balloonColor = _palette.GetColor(_balloon.GetColorId());
             effect.Play(_worldPosition, balloonColor, () => _poolManager.Return(key, effect));
         }
     }

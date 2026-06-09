@@ -21,7 +21,6 @@ namespace BalloonParty.Balloon.Controller
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly IDisturbanceFieldSettings _disturbanceSettings;
 
         private bool _balanceRequested;
 
@@ -31,15 +30,13 @@ namespace BalloonParty.Balloon.Controller
             IBalloonsConfiguration balloonsConfig,
             BalancePathHolder balancePathHolder,
             ISubscriber<BalanceBalloonsMessage> subscriber,
-            DisturbanceFieldService disturbanceField,
-            IDisturbanceFieldSettings disturbanceSettings)
+            DisturbanceFieldService disturbanceField)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
             _balancePathHolder = balancePathHolder;
             _subscriber = subscriber;
             _disturbanceField = disturbanceField;
-            _disturbanceSettings = disturbanceSettings;
         }
 
         public void Start()
@@ -66,7 +63,7 @@ namespace BalloonParty.Balloon.Controller
                 var currentScale = view.transform.localScale;
                 var viewTransform = view.transform;
                 var lastPos = viewTransform.position;
-                var balanceStamp = _disturbanceSettings.GetProfile(StampSource.BalloonPath);
+                var balanceStamp = _disturbanceField.GetProfile(StampSource.BalloonPath);
 
                 var tween = viewTransform
                     .DOPath(path.ToArray(), _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)

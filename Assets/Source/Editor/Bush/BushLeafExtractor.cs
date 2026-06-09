@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Shared;
 using UnityEngine;
 
 namespace BalloonParty.Editor.Bush
@@ -114,9 +115,7 @@ namespace BalloonParty.Editor.Bush
                 var tooClose = false;
                 foreach (var existing in accepted)
                 {
-                    var dx = candidate.Position.x - existing.Position.x;
-                    var dy = candidate.Position.y - existing.Position.y;
-                    if (dx * dx + dy * dy < minDistSq)
+                    if (MathUtils.SqrDistance2D(candidate.Position, existing.Position) < minDistSq)
                     {
                         tooClose = true;
                         break;

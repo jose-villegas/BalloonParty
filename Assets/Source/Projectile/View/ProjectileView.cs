@@ -6,6 +6,7 @@ using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
@@ -37,7 +38,6 @@ namespace BalloonParty.Projectile.View
         [Inject] private ColorStreakTracker _streakTracker;
         [Inject] private PauseService _pauseService;
         [Inject] private DisturbanceFieldService _disturbanceField;
-        [Inject] private IDisturbanceFieldSettings _disturbanceSettings;
 
         private IWriteableProjectileModel _model;
         private IDisposable _deflectedSubscription;
@@ -234,13 +234,7 @@ namespace BalloonParty.Projectile.View
             transform.position = pos;
             transform.up = _model.Direction;
 
-            var stamp = _disturbanceSettings.GetProfile(StampSource.Projectile);
-            _disturbanceField.Stamp(
-                pos,
-                stamp.Radius,
-                stamp.Strength,
-                _model.Direction,
-                stamp.Duration);
+            _disturbanceField.Stamp(StampSource.Projectile, pos, _model.Direction);
         }
 
         private void OnBalloonDeflected(BalloonDeflectedMessage msg)
@@ -317,7 +311,7 @@ namespace BalloonParty.Projectile.View
             }
 
             var color = _palette.GetColor(_model.ColorName.Value);
-            _glowRenderer.DOColor(new Color(color.r, color.g, color.b, _glowAlpha), _glowColorDuration);
+            _glowRenderer.DOColor(color.WithAlpha(_glowAlpha), _glowColorDuration);
         }
     }
 }

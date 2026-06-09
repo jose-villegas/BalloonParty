@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -28,7 +29,6 @@ namespace BalloonParty.Item.Laser
         private readonly HashSet<IBalloonModel> _hitModels = new();
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly IDisturbanceFieldSettings _disturbanceSettings;
 
         private readonly Dictionary<ISlotActor, Quaternion> _capturedRotations = new();
 
@@ -44,8 +44,7 @@ namespace BalloonParty.Item.Laser
             IPublisher<ActorHitMessage> hitPublisher,
             ISubscriber<TransformCapturedMessage> transformCapturedSubscriber,
             PoolManager poolManager,
-            DisturbanceFieldService disturbanceField,
-            IDisturbanceFieldSettings disturbanceSettings)
+            DisturbanceFieldService disturbanceField)
         {
             _palette = palette;
             _itemConfig = itemConfig;
@@ -53,7 +52,6 @@ namespace BalloonParty.Item.Laser
             _transformCapturedSubscriber = transformCapturedSubscriber;
             _poolManager = poolManager;
             _disturbanceField = disturbanceField;
-            _disturbanceSettings = disturbanceSettings;
 
             _balloonFilter = new ContactFilter2D();
             _balloonFilter.SetLayerMask(BalloonsLayer);
@@ -90,7 +88,7 @@ namespace BalloonParty.Item.Laser
             var radius = settings.LaserCircleCastRadius;
             var distance = settings.LaserRaycastDistance;
             var context =
-                new DamageContext(settings.Damage, settings.Flags, (_balloon as IHasColor)?.Color.Value ?? "");
+                new DamageContext(settings.Damage, settings.Flags, _balloon.GetColorId());
 
             var right = laserRotation * Vector3.right;
             var left = laserRotation * Vector3.left;
@@ -132,19 +130,18 @@ namespace BalloonParty.Item.Laser
                     continue;
                 }
 
-                _hitPublisher.Publish(new ActorHitMessage(balloonView.Model,
+                _hitPublisher.Publish(ActorHitMessage.From(balloonView.Model,
                     balloonView.transform.position,
                     Vector3.zero,
-                    balloonView.Model.EvaluateHit(context),
                     context));
             }
         }
 
         private void StampCross(ItemSettings settings, Quaternion laserRotation)
         {
-            var stamp = _disturbanceSettings.GetProfile(StampSource.Laser);
             var distance = settings.LaserRaycastDistance;
-            var step = stamp.Radius * 1.5f;
+            var profile = _disturbanceField.GetProfile(StampSource.Laser);
+            var step = profile.Radius * 1.5f;
             var steps = Mathf.Max(1, Mathf.CeilToInt(distance / step));
 
             var right = (Vector2)(laserRotation * Vector3.right);
@@ -152,19 +149,18 @@ namespace BalloonParty.Item.Laser
             var up = (Vector2)(laserRotation * Vector3.up);
             var down = (Vector2)(laserRotation * Vector3.down);
 
-            StampArm(right, steps, step, stamp);
-            StampArm(left, steps, step, stamp);
-            StampArm(up, steps, step, stamp);
-            StampArm(down, steps, step, stamp);
+            StampArm(right, steps, step);
+            StampArm(left, steps, step);
+            StampArm(up, steps, step);
+            StampArm(down, steps, step);
         }
 
-        private void StampArm(Vector2 direction, int steps, float step, StampProfile stamp)
+        private void StampArm(Vector2 direction, int steps, float step)
         {
             for (var i = 0; i <= steps; i++)
             {
                 var pos = (Vector2)_worldPosition + direction * (step * i);
-                _disturbanceField.Stamp(pos, stamp.Radius,
-                    stamp.Strength, direction, stamp.Duration);
+                _disturbanceField.Stamp(StampSource.Laser, pos, direction);
             }
         }
 
@@ -178,7 +174,7 @@ namespace BalloonParty.Item.Laser
             var key = settings.ActivationEffectPrefab.name;
             var effect = _poolManager.GetOrRegister(key, () => new EffectPoolChannel(settings.ActivationEffectPrefab));
 
-            var balloonColor = _palette.GetColor((_balloon as IHasColor)?.Color.Value);
+            var balloonColor = _palette.GetColor(_balloon.GetColorId());
             effect.Play(_worldPosition, laserRotation, balloonColor, () => _poolManager.Return(key, effect));
         }
     }

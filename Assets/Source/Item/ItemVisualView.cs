@@ -1,5 +1,5 @@
 using BalloonParty.Configuration;
-using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
@@ -25,7 +25,7 @@ namespace BalloonParty.Item
         {
             foreach (var sr in _spritesToSetColor)
             {
-                sr.color = new Color(balloonColor.r, balloonColor.g, balloonColor.b, _spritesAlpha);
+                sr.color = balloonColor.WithAlpha(_spritesAlpha);
             }
         }
 

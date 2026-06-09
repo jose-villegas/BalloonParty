@@ -25,7 +25,6 @@ namespace BalloonParty.Item.Paint
         private readonly SlotGrid _grid;
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly IDisturbanceFieldSettings _disturbanceSettings;
 
         private IBalloonModel _balloon;
         private Vector3 _worldPosition;
@@ -38,15 +37,13 @@ namespace BalloonParty.Item.Paint
             IItemConfiguration itemConfig,
             SlotGrid grid,
             PoolManager poolManager,
-            DisturbanceFieldService disturbanceField,
-            IDisturbanceFieldSettings disturbanceSettings)
+            DisturbanceFieldService disturbanceField)
         {
             _palette = palette;
             _itemConfig = itemConfig;
             _grid = grid;
             _poolManager = poolManager;
             _disturbanceField = disturbanceField;
-            _disturbanceSettings = disturbanceSettings;
         }
 
         public void Setup(IBalloonModel balloon, Vector3 worldPosition)
@@ -88,8 +85,6 @@ namespace BalloonParty.Item.Paint
                 }
             }
 
-            var stamp = _disturbanceSettings.GetProfile(StampSource.Paint);
-
             if (settings.ActivationEffectPrefab == null)
             {
                 for (var i = 0; i < NeighborCount; i++)
@@ -101,8 +96,7 @@ namespace BalloonParty.Item.Paint
 
                     var neighborPos = _grid.IndexToWorldPosition(neighborIndices[i]);
                     var dir = ((Vector2)(neighborPos - _worldPosition)).normalized;
-                    _disturbanceField.Stamp(neighborPos, stamp.Radius,
-                        stamp.Strength, dir, stamp.Duration);
+                    _disturbanceField.Stamp(StampSource.Paint, neighborPos, dir);
                 }
 
                 return UniTask.CompletedTask;
@@ -138,8 +132,7 @@ namespace BalloonParty.Item.Paint
                 {
                     var splashPos = _grid.IndexToWorldPosition(neighborIndices[index]);
                     var dir = ((Vector2)(splashPos - _worldPosition)).normalized;
-                    _disturbanceField.Stamp(splashPos, stamp.Radius,
-                        stamp.Strength, dir, stamp.Duration);
+                    _disturbanceField.Stamp(StampSource.Paint, splashPos, dir);
                 }
             }
         }

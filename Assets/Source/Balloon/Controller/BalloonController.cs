@@ -28,7 +28,6 @@ namespace BalloonParty.Balloon.Controller
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly BalloonView _view;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly IDisturbanceFieldSettings _disturbanceSettings;
 
         private IDisposable _hitSubscription;
         private IDisposable _itemActivatedSubscription;
@@ -46,8 +45,7 @@ namespace BalloonParty.Balloon.Controller
             IPublisher<NudgeMessage> nudgePublisher,
             SlotGrid grid,
             PoolManager poolManager,
-            DisturbanceFieldService disturbanceField,
-            IDisturbanceFieldSettings disturbanceSettings)
+            DisturbanceFieldService disturbanceField)
         {
             _model = model;
             _view = view;
@@ -62,7 +60,6 @@ namespace BalloonParty.Balloon.Controller
             _grid = grid;
             _poolManager = poolManager;
             _disturbanceField = disturbanceField;
-            _disturbanceSettings = disturbanceSettings;
         }
 
         public void Start()
@@ -127,9 +124,7 @@ namespace BalloonParty.Balloon.Controller
             _hitSubscription = null;
 
             var popWorldPos = _view.transform.position;
-            var popStamp = _disturbanceSettings.GetProfile(StampSource.BalloonPop);
-            _disturbanceField.Stamp(popWorldPos, popStamp.Radius,
-                popStamp.Strength, Vector2.zero, popStamp.Duration);
+            _disturbanceField.Stamp(StampSource.BalloonPop, popWorldPos, Vector2.zero);
 
             _view.PlayHitVfxForOutcome(HitOutcome.Pop);
             _grid.Remove(_model.SlotIndex.Value);

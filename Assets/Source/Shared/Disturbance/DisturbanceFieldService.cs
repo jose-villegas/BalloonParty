@@ -124,6 +124,27 @@ namespace BalloonParty.Shared.Disturbance
         }
 
         /// <summary>
+        /// Exposes the stamp profile for a source so callers can read
+        /// profile values (e.g. Radius for step calculations) without
+        /// injecting <see cref="IDisturbanceFieldSettings"/> themselves.
+        /// </summary>
+        internal StampProfile GetProfile(StampSource source)
+        {
+            return _settings.GetProfile(source);
+        }
+
+        /// <summary>
+        /// Stamps using a pre-configured profile. Reads radius, strength, and
+        /// duration from <see cref="IDisturbanceFieldSettings"/> so callers don't
+        /// need to inject the settings themselves.
+        /// </summary>
+        internal void Stamp(StampSource source, Vector3 worldPosition, Vector2 direction)
+        {
+            var profile = _settings.GetProfile(source);
+            Stamp(worldPosition, profile.Radius, profile.Strength, direction, profile.Duration);
+        }
+
+        /// <summary>
         /// Stamps a disturbance at the given world position. The field will
         /// show a density hole that reforms over time via diffusion.
         /// When <paramref name="duration"/> is greater than zero the stamp

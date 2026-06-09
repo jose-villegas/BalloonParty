@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.Rendering;
 using BalloonParty.Slots.Actor.Cluster;
 using UnityEngine;
 using VContainer;
@@ -146,10 +148,8 @@ namespace BalloonParty.Slots.Actor.Archetype
                 }
 
                 var slotPos = _slotRenderData[i].WorldPos;
-                var dx = projectilePos.x - slotPos.x;
-                var dy = projectilePos.y - slotPos.y;
 
-                if (dx * dx + dy * dy > radiusSq)
+                if (!MathUtils.WithinRadius(projectilePos, slotPos, _settings.RustleProximityRadius))
                 {
                     continue;
                 }
@@ -170,15 +170,12 @@ namespace BalloonParty.Slots.Actor.Archetype
             for (var j = 0; j < impacts.Count; j++)
             {
                 var impact = impacts[j];
-                var radiusSq = impact.Radius * impact.Radius;
 
                 for (var i = 0; i < _slotRenderData.Count; i++)
                 {
                     var slotPos = _slotRenderData[i].WorldPos;
-                    var dx = impact.Position.x - slotPos.x;
-                    var dy = impact.Position.y - slotPos.y;
 
-                    if (dx * dx + dy * dy <= radiusSq)
+                    if (MathUtils.WithinRadius(impact.Position, slotPos, impact.Radius))
                     {
                         SpawnRustleVfx(vfxPrefab, slotPos);
                     }
@@ -188,12 +185,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         private void SpawnRustleVfx(ParticleSystem vfxPrefab, Vector2 slotPos)
         {
-            var poolKey = vfxPrefab.name;
-            var effect = _poolManager.GetOrRegister(poolKey,
-                () => new ParticlePoolChannel(vfxPrefab.gameObject));
-            effect.Play(
-                new Vector3(slotPos.x, slotPos.y, 0f),
-                () => _poolManager.Return(poolKey, effect));
+            _poolManager.PlayParticle(vfxPrefab, new Vector3(slotPos.x, slotPos.y, 0f));
         }
 
         private void DrawLeafTier(Mesh leafMesh, LeafTier tier, Material material, int layer)
@@ -272,7 +264,7 @@ namespace BalloonParty.Slots.Actor.Archetype
                 renderQueue = 3000
             };
             entry.BranchMaterial.SetFloat(BranchSpriteScaleId, branchSpriteScale);
-            entry.BranchMaterial.SetTexture(BranchGradientId, GetBranchGradientTexture());
+            entry.BranchMaterial.SetTexture(BranchGradientId, GetOrBakeGradientTexture());
             entry.BranchMaterial.SetColor(BranchShadowColorId, _settings.BranchShadowColor);
             entry.BranchMaterial.SetVector(BranchShadowOffsetId, _settings.BranchShadowOffset);
             entry.BranchMaterial.SetFloat(BranchShadowSpreadId, _settings.BranchShadowSpread);
@@ -434,90 +426,19 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         private static Mesh GetBranchQuadMesh()
         {
-            if (_sharedBranchQuad != null)
-            {
-                return _sharedBranchQuad;
-            }
-
-            _sharedBranchQuad = new Mesh
-            {
-                name = "BushBranchQuad",
-                vertices = new[]
-                {
-                    new Vector3(-0.5f, -0.5f, 0f),
-                    new Vector3(0.5f, -0.5f, 0f),
-                    new Vector3(0.5f, 0.5f, 0f),
-                    new Vector3(-0.5f, 0.5f, 0f)
-                },
-                uv = new[]
-                {
-                    new Vector2(0f, 0f),
-                    new Vector2(1f, 0f),
-                    new Vector2(1f, 1f),
-                    new Vector2(0f, 1f)
-                },
-                triangles = new[] { 0, 1, 2, 0, 2, 3 }
-            };
-            _sharedBranchQuad.UploadMeshData(true);
-
+            _sharedBranchQuad ??= MeshHelper.CreateQuad(QuadPivot.Center);
             return _sharedBranchQuad;
         }
 
         private static Mesh GetLeafQuadMesh()
         {
-            if (_sharedLeafQuad != null)
-            {
-                return _sharedLeafQuad;
-            }
-
-            _sharedLeafQuad = new Mesh
-            {
-                name = "BushLeafQuad",
-                vertices = new[]
-                {
-                    new Vector3(-0.5f, 0f, 0f),
-                    new Vector3(0.5f, 0f, 0f),
-                    new Vector3(0.5f, 1f, 0f),
-                    new Vector3(-0.5f, 1f, 0f)
-                },
-                uv = new[]
-                {
-                    new Vector2(0f, 0f),
-                    new Vector2(1f, 0f),
-                    new Vector2(1f, 1f),
-                    new Vector2(0f, 1f)
-                },
-                triangles = new[] { 0, 1, 2, 0, 2, 3 }
-            };
-            _sharedLeafQuad.UploadMeshData(true);
-
+            _sharedLeafQuad ??= MeshHelper.CreateQuad(QuadPivot.Bottom);
             return _sharedLeafQuad;
         }
 
-        private const int GradientResolution = 64;
-
-        private Texture2D GetBranchGradientTexture()
+        private Texture2D GetOrBakeGradientTexture()
         {
-            if (_branchGradientTex != null)
-            {
-                return _branchGradientTex;
-            }
-
-            var gradient = _settings.BranchGradient;
-            _branchGradientTex = new Texture2D(GradientResolution, 1, TextureFormat.RGBA32, false)
-            {
-                wrapMode = TextureWrapMode.Clamp,
-                filterMode = FilterMode.Bilinear
-            };
-
-            var pixels = new Color[GradientResolution];
-            for (var i = 0; i < GradientResolution; i++)
-            {
-                pixels[i] = gradient.Evaluate(i / (float)(GradientResolution - 1));
-            }
-
-            _branchGradientTex.SetPixels(pixels);
-            _branchGradientTex.Apply();
+            _branchGradientTex ??= GradientTextureHelper.Bake(_settings.BranchGradient);
             return _branchGradientTex;
         }
 

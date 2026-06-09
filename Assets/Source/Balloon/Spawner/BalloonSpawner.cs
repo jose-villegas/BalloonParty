@@ -42,7 +42,6 @@ namespace BalloonParty.Balloon.Spawner
         private readonly PoolManager _poolManager;
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly IDisturbanceFieldSettings _disturbanceSettings;
 
         private int _turnCount;
         private UniTask _prewarmTask;
@@ -67,8 +66,7 @@ namespace BalloonParty.Balloon.Spawner
             IPublisher<TransformCapturedMessage> transformCapturedPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
             IPublisher<NudgeMessage> nudgePublisher,
-            DisturbanceFieldService disturbanceField,
-            IDisturbanceFieldSettings disturbanceSettings)
+            DisturbanceFieldService disturbanceField)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
@@ -86,7 +84,6 @@ namespace BalloonParty.Balloon.Spawner
             _deflectedPublisher = deflectedPublisher;
             _nudgePublisher = nudgePublisher;
             _disturbanceField = disturbanceField;
-            _disturbanceSettings = disturbanceSettings;
         }
 
         public void Start()
@@ -151,7 +148,7 @@ namespace BalloonParty.Balloon.Spawner
             var viewTransform = view.transform;
             var lastPos = viewTransform.position;
 
-            var spawnStamp = _disturbanceSettings.GetProfile(StampSource.BalloonPath);
+            var spawnStamp = _disturbanceField.GetProfile(StampSource.BalloonPath);
 
             viewTransform.DOPath(waypoints, duration, PathType.CatmullRom)
                 .OnUpdate(() =>
@@ -306,8 +303,7 @@ namespace BalloonParty.Balloon.Spawner
                 _nudgePublisher,
                 _grid,
                 _poolManager,
-                _disturbanceField,
-                _disturbanceSettings);
+                _disturbanceField);
             controller.Start();
 
             _grid.Place(model, view, slot);

@@ -1,3 +1,4 @@
+using BalloonParty.Shared.Rendering;
 using UnityEngine;
 
 namespace BalloonParty.Editor.Bush
@@ -47,8 +48,6 @@ namespace BalloonParty.Editor.Bush
         private static readonly int PetioleWidthId = Shader.PropertyToID("_PetioleWidth");
         private static readonly int PetioleTaperId = Shader.PropertyToID("_PetioleTaper");
 
-        private const int GradientResolution = 64;
-
         internal static Texture2D BakeLeaf(BushLeafBakeSettings settings, int variantIndex, uint seed)
         {
             var shader = Shader.Find(ShaderName);
@@ -69,7 +68,7 @@ namespace BalloonParty.Editor.Bush
             Texture2D gradientTex = null;
             if (settings.MidribEnabled)
             {
-                gradientTex = BakeGradientTexture(settings.MidribGradient);
+                gradientTex = GradientTextureHelper.Bake(settings.MidribGradient);
                 material.SetTexture(MidribGradientId, gradientTex);
             }
 
@@ -210,25 +209,6 @@ namespace BalloonParty.Editor.Bush
         {
             var combined = seed * 7919u + (uint)variantIndex * 4637u + 31u;
             return (combined % 10007u) / 10007f;
-        }
-
-        private static Texture2D BakeGradientTexture(Gradient gradient)
-        {
-            var tex = new Texture2D(GradientResolution, 1, TextureFormat.RGBA32, false)
-            {
-                wrapMode = TextureWrapMode.Clamp,
-                filterMode = FilterMode.Bilinear
-            };
-
-            var pixels = new Color[GradientResolution];
-            for (var i = 0; i < GradientResolution; i++)
-            {
-                pixels[i] = gradient.Evaluate(i / (float)(GradientResolution - 1));
-            }
-
-            tex.SetPixels(pixels);
-            tex.Apply();
-            return tex;
         }
     }
 }

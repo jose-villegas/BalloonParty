@@ -234,12 +234,8 @@ namespace BalloonParty.Balloon.View
                 return;
             }
 
-            var defaultKey = defaultPrefab.name;
-            var defaultEffect =
-                _poolManager.GetOrRegister(defaultKey, () => new ParticlePoolChannel(defaultPrefab.gameObject));
-            defaultEffect.Play(transform.position,
-                _palette.GetColor(modelColor.Color.Value),
-                () => _poolManager.Return(defaultKey, defaultEffect));
+            _poolManager.PlayParticle(defaultPrefab, transform.position,
+                _palette.GetColor(modelColor.Color.Value));
         }
 
         private ParticleSystem FindHitVfxPrefab(HitOutcome outcome)
@@ -262,17 +258,14 @@ namespace BalloonParty.Balloon.View
 
         private void PlayHitEffect(ParticleSystem prefab)
         {
-            var key = prefab.name;
-            var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(prefab.gameObject));
             if (Model is IHasColor c && !string.IsNullOrEmpty(c.Color.Value))
             {
-                effect.Play(transform.position,
-                    _palette.GetColor(c.Color.Value),
-                    () => _poolManager.Return(key, effect));
+                _poolManager.PlayParticle(prefab, transform.position,
+                    _palette.GetColor(c.Color.Value));
             }
             else
             {
-                effect.Play(transform.position, () => _poolManager.Return(key, effect));
+                _poolManager.PlayParticle(prefab, transform.position);
             }
         }
 

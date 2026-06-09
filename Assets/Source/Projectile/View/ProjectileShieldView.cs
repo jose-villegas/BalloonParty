@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Grid;
 using DG.Tweening;
@@ -128,9 +129,7 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            var key = prefab.name;
-            var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(prefab.gameObject));
-            effect.Play(position, color, () => _poolManager.Return(key, effect));
+            _poolManager.PlayParticle(prefab, position, color);
         }
 
         private void SpawnVfxRotated(ParticleSystem prefab, Vector3 position, Quaternion rotation, Color color)
@@ -140,15 +139,13 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            var key = prefab.name;
-            var effect = _poolManager.GetOrRegister(key, () => new ParticlePoolChannel(prefab.gameObject));
-            effect.Play(position, rotation, color, () => _poolManager.Return(key, effect));
+            _poolManager.PlayParticle(prefab, position, rotation, color);
         }
 
         private void UpdateColor(string colorName)
         {
             _currentColor = _palette.GetColor(colorName);
-            var targetColor = new Color(_currentColor.r, _currentColor.g, _currentColor.b, _alpha);
+            var targetColor = _currentColor.WithAlpha(_alpha);
 
             foreach (var shield in _shields)
             {
