@@ -15,6 +15,7 @@ using BalloonParty.Item.Lightning;
 using BalloonParty.Item.Paint;
 using BalloonParty.Item.Shield;
 using BalloonParty.Nudge;
+using BalloonParty.Projectile;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
@@ -95,6 +96,7 @@ namespace BalloonParty.Game
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.Register<PoolManager>(Lifetime.Singleton);
             builder.Register<PauseService>(Lifetime.Singleton);
+            builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);
             builder.Register<ColorStreakTracker>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.RegisterComponentInHierarchy<SlotGridView>();

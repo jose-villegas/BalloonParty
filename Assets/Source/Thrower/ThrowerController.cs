@@ -26,6 +26,7 @@ namespace BalloonParty.Thrower
         private readonly PoolManager _poolManager;
         private readonly ThrowerSettings _settings;
         private readonly ThrowerView _view;
+        private readonly ProjectilePositionProvider _positionProvider;
 
         private IWriteableProjectileModel _activeProjectile;
         private ProjectileView _activeView;
@@ -46,7 +47,8 @@ namespace BalloonParty.Thrower
             IObjectResolver resolver,
             ThrowerSettings settings,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
-            IPublisher<ProjectileLoadedMessage> loadedPublisher)
+            IPublisher<ProjectileLoadedMessage> loadedPublisher,
+            ProjectilePositionProvider positionProvider)
         {
             _view = view;
             _config = config;
@@ -55,6 +57,7 @@ namespace BalloonParty.Thrower
             _settings = settings;
             _destroyedSubscriber = destroyedSubscriber;
             _loadedPublisher = loadedPublisher;
+            _positionProvider = positionProvider;
         }
 
         public void Start()
@@ -112,6 +115,7 @@ namespace BalloonParty.Thrower
             _activeProjectile.ShieldsRemaining.Value = _config.ProjectileStartingShields;
 
             _activeView.Bind(_activeProjectile);
+            _positionProvider.Set(_activeView.transform);
             _loadedPublisher.Publish(new ProjectileLoadedMessage(_activeProjectile));
 
             _loadElapsed = 0f;
@@ -120,6 +124,8 @@ namespace BalloonParty.Thrower
 
         private void Reload()
         {
+            _positionProvider.Clear();
+
             if (_activeView != null)
             {
                 _poolManager.Return(ProjectilePoolKey, _activeView);
@@ -144,6 +150,7 @@ namespace BalloonParty.Thrower
 
             _activeProjectile.IsFree = true;
             _activeProjectile.Direction = _direction;
+            _positionProvider.SetFree(true);
             _view.ClearTrace();
         }
 

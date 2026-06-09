@@ -35,5 +35,7 @@ namespace BalloonParty.Configuration
         float RattleAmplitude { get; }
         float RattleFrequency { get; }
         float RattleDamping { get; }
+        ParticleSystem BushRustleVfx { get; }
+        float RustleProximityRadius { get; }
     }
 }

@@ -63,6 +63,10 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _rattleFrequency = 12f;
         [SerializeField] [Range(1f, 10f)] private float _rattleDamping = 3f;
 
+        [Header("Rustle VFX")]
+        [SerializeField] private ParticleSystem _bushRustleVfx;
+        [SerializeField] [Range(0.1f, 2f)] private float _rustleProximityRadius = 0.5f;
+
         public BushView BushPrefab => _bushPrefab;
         public float AnimationSpeed => _animationSpeed;
         public float Padding => _padding;
@@ -96,6 +100,8 @@ namespace BalloonParty.Configuration
         public float RattleAmplitude => _rattleAmplitude;
         public float RattleFrequency => _rattleFrequency;
         public float RattleDamping => _rattleDamping;
+        public ParticleSystem BushRustleVfx => _bushRustleVfx;
+        public float RustleProximityRadius => _rustleProximityRadius;
 
         private static Gradient CreateDefaultBranchGradient()
         {

@@ -1,7 +1,10 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Projectile;
+using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Actor.Cluster;
 using UnityEngine;
+using VContainer;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
@@ -42,7 +45,11 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         private static bool? _supportsInstancing;
 
+        [Inject] private ProjectilePositionProvider _projectileProvider;
+        [Inject] private PoolManager _poolManager;
+
         private readonly List<SlotRenderData> _slotRenderData = new();
+        private readonly HashSet<int> _rustledSlots = new();
 
         private static Mesh _sharedLeafQuad;
         private static Mesh _sharedBranchQuad;
@@ -96,6 +103,61 @@ namespace BalloonParty.Slots.Actor.Archetype
                 }
 
                 DrawLeafTier(leafMesh, slot.OuterLeaves, slot.OuterLeafMaterial, layer);
+            }
+
+            CheckProjectileProximity();
+        }
+
+        private void CheckProjectileProximity()
+        {
+            if (_projectileProvider == null || _settings == null)
+            {
+                return;
+            }
+
+            if (!_projectileProvider.IsActive)
+            {
+                if (_rustledSlots.Count > 0)
+                {
+                    _rustledSlots.Clear();
+                }
+
+                return;
+            }
+
+            var vfxPrefab = _settings.BushRustleVfx;
+            if (vfxPrefab == null)
+            {
+                return;
+            }
+
+            var projectilePos = _projectileProvider.Position;
+            var radiusSq = _settings.RustleProximityRadius * _settings.RustleProximityRadius;
+
+            for (var i = 0; i < _slotRenderData.Count; i++)
+            {
+                if (_rustledSlots.Contains(i))
+                {
+                    continue;
+                }
+
+                var slotPos = _slotRenderData[i].WorldPos;
+                var dx = projectilePos.x - slotPos.x;
+                var dy = projectilePos.y - slotPos.y;
+
+                if (dx * dx + dy * dy > radiusSq)
+                {
+                    continue;
+                }
+
+                _rustledSlots.Add(i);
+
+                var poolKey = vfxPrefab.name;
+                var effect = _poolManager.GetOrRegister(poolKey,
+                    () => new ParticlePoolChannel(vfxPrefab.gameObject));
+                effect.Play(
+                    new Vector3(slotPos.x, slotPos.y, 0f),
+                    () => _poolManager.Return(poolKey, effect));
             }
         }
 
