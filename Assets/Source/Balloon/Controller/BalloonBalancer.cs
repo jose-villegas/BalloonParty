@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -62,22 +63,10 @@ namespace BalloonParty.Balloon.Controller
 
                 var currentScale = view.transform.localScale;
                 var viewTransform = view.transform;
-                var lastPos = viewTransform.position;
-                var balanceStamp = _disturbanceField.GetProfile(StampSource.BalloonPath);
 
                 var tween = viewTransform
                     .DOPath(path.ToArray(), _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
-                    .OnUpdate(() =>
-                    {
-                        var pos = viewTransform.position;
-                        var delta = pos - lastPos;
-                        var dir = new Vector2(delta.x, delta.y).normalized;
-                        var rawScale = viewTransform.localScale.x;
-                        var scale = rawScale * rawScale;
-                        _disturbanceField.Stamp(pos, balanceStamp.Radius * scale,
-                            balanceStamp.Strength * scale, dir, balanceStamp.Duration);
-                        lastPos = pos;
-                    })
+                    .StampDisturbanceAlongPath(viewTransform, _disturbanceField, StampSource.BalloonPath)
                     .OnComplete(() =>
                     {
                         actor.IsStable.Value = true;

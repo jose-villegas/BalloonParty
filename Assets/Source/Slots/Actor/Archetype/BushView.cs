@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using BalloonParty.Configuration;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
@@ -20,6 +21,8 @@ namespace BalloonParty.Slots.Actor.Archetype
     /// </summary>
     internal class BushView : ClusterView
     {
+        private const string RattleKeyword = "_RATTLE_ON";
+
         private static readonly int LeafTintId = Shader.PropertyToID("_LeafTint");
         private static readonly int UVRectId = Shader.PropertyToID("_UVRect");
         private static readonly int LeafWindId = Shader.PropertyToID("_LeafWind");
@@ -44,7 +47,6 @@ namespace BalloonParty.Slots.Actor.Archetype
         private static readonly int BranchAOColorId = Shader.PropertyToID("_AOColor");
         private static readonly int BranchAORadiusId = Shader.PropertyToID("_AORadius");
         private static readonly int BranchAOSoftnessId = Shader.PropertyToID("_AOSoftness");
-        private const string RattleKeyword = "_RATTLE_ON";
 
         private static bool? _supportsInstancing;
 
@@ -357,7 +359,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         }
 
         private static LeafTier BuildLeafTier(
-            List<int> indices,
+            IReadOnlyList<int> indices,
             IReadOnlyList<LeafSlotData> slots,
             Sprite[] sprites,
             Vector2 worldPos,

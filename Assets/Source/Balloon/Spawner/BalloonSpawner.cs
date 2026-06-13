@@ -42,10 +42,10 @@ namespace BalloonParty.Balloon.Spawner
         private readonly PoolManager _poolManager;
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly DisturbanceFieldService _disturbanceField;
+        private readonly List<Vector3> _spawnPathBuffer = new();
 
         private int _turnCount;
         private UniTask _prewarmTask;
-        private readonly List<Vector3> _spawnPathBuffer = new();
 
         public SpawnStage SpawnPriority => SpawnStage.BalloonActors;
 
@@ -146,22 +146,9 @@ namespace BalloonParty.Balloon.Spawner
             spawnPath.CopyTo(1, waypoints, 0, waypointCount);
 
             var viewTransform = view.transform;
-            var lastPos = viewTransform.position;
-
-            var spawnStamp = _disturbanceField.GetProfile(StampSource.BalloonPath);
 
             viewTransform.DOPath(waypoints, duration, PathType.CatmullRom)
-                .OnUpdate(() =>
-                {
-                    var pos = viewTransform.position;
-                    var delta = pos - lastPos;
-                    var dir = new Vector2(delta.x, delta.y).normalized;
-                    var rawScale = viewTransform.localScale.x;
-                    var scale = rawScale * rawScale;
-                    _disturbanceField.Stamp(pos, spawnStamp.Radius * scale,
-                        spawnStamp.Strength * scale, dir, spawnStamp.Duration);
-                    lastPos = pos;
-                })
+                .StampDisturbanceAlongPath(viewTransform, _disturbanceField, StampSource.BalloonPath)
                 .OnComplete(() => model.IsStable.Value = true);
 
             view.transform.DOScale(Vector3.one, duration);

@@ -46,7 +46,7 @@ namespace BalloonParty.Editor.Bush
             return result;
         }
 
-        private static Mesh BuildSegmentMesh(List<BushBranchGenerator.Segment> segments)
+        private static Mesh BuildSegmentMesh(IReadOnlyList<BushBranchGenerator.Segment> segments)
         {
             var vertCount = segments.Count * 4;
             var vertices = new Vector3[vertCount];

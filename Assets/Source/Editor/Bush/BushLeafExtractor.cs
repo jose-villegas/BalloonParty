@@ -46,7 +46,7 @@ namespace BalloonParty.Editor.Bush
         }
 
         private static List<TipCandidate> FindTerminalTips(
-            List<BushBranchGenerator.Segment> segments, float depthThreshold, float attachBias)
+            IReadOnlyList<BushBranchGenerator.Segment> segments, float depthThreshold, float attachBias)
         {
             // Collect all segment Start positions to identify non-terminal endpoints
             var startPositions = new HashSet<Vector2Int>();

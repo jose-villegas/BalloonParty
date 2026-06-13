@@ -59,7 +59,7 @@ namespace BalloonParty.Editor.Bush
         }
 
         private static LeafSlotData[] BuildSlotData(
-            System.Collections.Generic.List<BushLeafExtractor.LeafSlot> slots,
+            System.Collections.Generic.IReadOnlyList<BushLeafExtractor.LeafSlot> slots,
             float bushWorldSize,
             int seed)
         {

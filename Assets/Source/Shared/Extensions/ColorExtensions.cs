@@ -10,4 +10,3 @@ namespace BalloonParty.Shared.Extensions
         }
     }
 }
-

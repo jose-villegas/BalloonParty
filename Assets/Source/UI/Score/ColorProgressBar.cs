@@ -19,6 +19,9 @@ namespace BalloonParty.UI.Score
     {
         private static readonly int CompletedParam = Animator.StringToHash("Completed");
         private static readonly int TrailHitTrigger = Animator.StringToHash("TrailHit");
+#if UNITY_EDITOR
+        private static readonly ConfigAssetCache<GamePalette> PaletteCache = new();
+#endif
 
         [Header("Configuration")] [PaletteColorName] [SerializeField]
         private string _colorName;
@@ -50,10 +53,6 @@ namespace BalloonParty.UI.Score
         private string _pointNoticePoolKey;
         private int _stashedMaxValue;
         private string _streakNoticePoolKey;
-
-#if UNITY_EDITOR
-        private static readonly ConfigAssetCache<GamePalette> PaletteCache = new();
-#endif
 
         private void OnValidate()
         {
