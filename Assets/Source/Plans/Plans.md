@@ -11,6 +11,7 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_bush_sprite_baking
 - @subpage plan_spider_web
 - @subpage plan_content_production
+- @subpage plan_loss_condition_pacing
 - @subpage plan_future_ideas
 
 
