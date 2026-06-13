@@ -108,19 +108,39 @@ resolves by one of three modes, so a designer can say "ramp this up across the r
   - **Random** — pick within `[Min, Max]` (re-roll cadence is a knob — see decisions).
   - Weights may themselves be `RangedValue` (e.g. ramp the Tough weight up across a range).
 
-### Resolver
+### Resolver / mediator — single source of the live mix
 
-- **`DifficultyController`** (`IStartable`) subscribes to `ScoreLevelUpMessage` (+ at start).
-  On each level change it: (1) finds the active `LevelRange`, (2) resolves every parameter by
-  its mode, (3) pushes the resolved values to the consumers:
-  - spawn lines → `BalloonSpawner`
-  - balloon-type weights → balloon selection in the spawner
-  - item config → `ItemAssigner`
-  - grid-actor weights → the Phase 8.3 grid spawner (when it exists)
-  - allowed colors → palette filter + score + UI (**Part C**)
-- The existing `BalloonsConfiguration` / `ItemConfiguration` / `GridActorConfiguration`
-  become the **catalog** (prefabs, caps, base tuning); `LevelRangeConfiguration` decides the
-  **per-range mix** layered on top.
+The per-range parameters **replace** the weights that currently live in
+`BalloonsConfiguration` / `ItemConfiguration` / `GridActorConfiguration`. To avoid two
+sources of truth, one mediator owns the *resolved current-level parameters* and is the
+**only** thing the runtime systems read for the live mix:
+
+- **`LevelDifficultyResolver`** (`IStartable`, implements **`IActiveLevelParameters`**) —
+  subscribes to `ScoreLevelUpMessage` (+ resolves at start). On each level change it finds the
+  active `LevelRange`, resolves every `RangedValue` (fixed/linear/random), and caches the
+  result. It also **merges with the catalogs** — range weights drive selection while prefab
+  refs and caps still come from the base configs (the bridge function). Exposes read-only:
+  - `int SpawnLines` (or a per-turn resolve if `Random` cadence is per-turn)
+  - `PickBalloonType()` / `PickGridActor()` — weighted draws honoring catalog caps
+  - `ItemSpawnSettings Items`
+  - `IReadOnlyList<string> AllowedColors`
+- **Consumers pull, not pushed** — `BalloonSpawner`, `ItemAssigner`, the Phase 8.3 grid
+  spawner, `ScoreController`, and the color-bar UI inject `IActiveLevelParameters` and read the
+  live values at spawn / level time. The resolver doesn't reference its consumers — looser
+  coupling, and adding a consumer never touches the resolver.
+- **Base configs demote to catalogs** — `BalloonsConfiguration` etc. keep only what isn't
+  range-varied: prefab references, caps, and per-type base tuning (HP, VFX). **All weights,
+  spawn-line counts, item frequency, and color sets move to `LevelRangeConfiguration`** and are
+  resolved through the mediator — so *all* randomness/interpolation is authored in one config
+  and resolved in one service.
+
+```
+LevelRangeConfiguration (authored: weights, ranges, colors) ─┐
+BalloonsConfiguration / ItemConfiguration /                  ├─► LevelDifficultyResolver
+GridActorConfiguration / GamePalette (catalog: prefabs,caps) ─┘     : IActiveLevelParameters
+                                                                          ▲ pull
+        BalloonSpawner · ItemAssigner · GridSpawner · ScoreController · ColorBar UI
+```
 
 ### Design decisions to confirm
 
