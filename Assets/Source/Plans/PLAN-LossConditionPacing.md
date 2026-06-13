@@ -95,18 +95,23 @@ resolves by one of three modes, so a designer can say "ramp this up across the r
 
 - **`LevelRangeConfiguration`** (SO) — ordered, contiguous `LevelRange[]`; the last entry is
   open-ended. Injected via `GameLifetimeScope` like the other configs.
-- **`LevelRange`**:
-  - `FromLevel`, `ToLevel` (`ToLevel = ∞` for the tail)
-  - `RangedInt SpawnLines` — lines per turn
-  - `ColorSet AllowedColors` — active palette subset (see **Part C**)
-  - `WeightedSet<BalloonType> BalloonWeights` — Simple / Tough / Unbreakable / BubbleCluster mix
-  - `WeightedSet<GridActorType> GridActorWeights` — Puff / Bush / … density (consumed once 8.3 lands)
-  - `ItemSpawnSettings Items` — per-item frequency / weight / cap
-- **`RangedValue<T>`** (`RangedInt`, `RangedFloat`) = `{ Min, Max, Mode }`:
+- **`LevelRange`** holds two kinds of parameter:
+  - **Scalars** — `RangedValue`: `RangedInt SpawnLines` (lines per turn), item frequency,
+    deadline pressure, threshold tuning, etc. "How many / how much" — where fixed/linear/random
+    is meaningful.
+  - **Weighted sets** — *static per range*: `WeightedSet<BalloonType>` (Simple / Tough /
+    Unbreakable / BubbleCluster), `WeightedSet<GridActorType>` (Puff / Bush / … — consumed once
+    8.3 lands), per-item weights. **No `RangedValue` modes on weights** — a weight *is* a
+    distribution; the randomness is the per-spawn weighted draw, so a second random roll on the
+    weight itself would be redundant. Want the mix to evolve? Author a finer range.
+  - `ColorSet AllowedColors` — active palette subset (see **Part C**); changes only at a level
+    boundary.
+  - `FromLevel`, `ToLevel` (`ToLevel = ∞` for the tail).
+- **`RangedValue<T>`** (`RangedInt`, `RangedFloat`) = `{ Min, Max, Mode }`, resolved **once per
+  level** (no per-turn re-roll):
   - **Fixed** — constant `Min`.
   - **Linear** — lerp `Min→Max` by the level's position within the range (a ramp).
-  - **Random** — pick within `[Min, Max]` (re-roll cadence is a knob — see decisions).
-  - Weights may themselves be `RangedValue` (e.g. ramp the Tough weight up across a range).
+  - **Random** — pick within `[Min, Max]` once when the level begins; stable for that level.
 
 ### Resolver / mediator — single source of the live mix
 
@@ -120,8 +125,8 @@ sources of truth, one mediator owns the *resolved current-level parameters* and 
   active `LevelRange`, resolves every `RangedValue` (fixed/linear/random), and caches the
   result. It also **merges with the catalogs** — range weights drive selection while prefab
   refs and caps still come from the base configs (the bridge function). Exposes read-only:
-  - `int SpawnLines` (or a per-turn resolve if `Random` cadence is per-turn)
-  - `PickBalloonType()` / `PickGridActor()` — weighted draws honoring catalog caps
+  - `int SpawnLines` (resolved once for the level)
+  - `PickBalloonType()` / `PickGridActor()` — weighted draws from the range's static weighted sets, honoring catalog caps
   - `ItemSpawnSettings Items`
   - `IReadOnlyList<string> AllowedColors`
 - **Consumers pull, not pushed** — `BalloonSpawner`, `ItemAssigner`, the Phase 8.3 grid
@@ -142,14 +147,15 @@ GridActorConfiguration / GamePalette (catalog: prefabs,caps) ─┘     : IActiv
         BalloonSpawner · ItemAssigner · GridSpawner · ScoreController · ColorBar UI
 ```
 
-### Design decisions to confirm
+### Resolved decisions
 
-1. **Random re-roll cadence** — re-roll `Random` params per *level* (calmer, tunable) or per
-   *turn* (more variety within a level)? Recommend **per-level** default, per-param override.
-2. **Ranged vs static weights** — every weight as `RangedValue` is expressive but heavier to
-   author; could start static-per-range and add ranged weights when needed.
-3. **Range validation** — must be contiguous, non-overlapping, one open-ended tail; enforce
-   via editor `OnValidate` (auto-sort + gap/overlap warnings).
+1. ✅ **Resolution cadence** — **per level**. Params resolve once when a level begins (random
+   modes roll once, then stay fixed for the level); never re-rolled per turn.
+2. ✅ **Weights are static per range** — `RangedValue` modes apply only to *scalars* (spawn
+   lines, frequency, etc.). The per-spawn weighted draw is the randomness for the mix; evolve
+   the mix by authoring finer ranges.
+3. ⬜ **Range validation** (impl detail) — ranges must be contiguous, non-overlapping, one
+   open-ended tail; enforce via editor `OnValidate` (auto-sort + gap/overlap warnings).
 
 ---
 
@@ -171,9 +177,10 @@ fewer colors (e.g. 2 → 3); the open-ended tail uses all **4 forever**. This is
   during the early tutorial ramp; **4-color is the permanent baseline**, so most of the game
   runs the simple path.
 
-**Decision to confirm:** a new color is introduced at the **start of its range's first
-level**, its bar fades in at 0, and the level-up requirement expands to include it. (Cleanest
-rule; avoids mid-level set changes.)
+**✅ Resolved:** the color set changes **only at a level boundary** — never mid-level. A new
+color enters at the start of its range's first level, its bar fades in at 0, and the level-up
+requirement expands to include it. (Resolution is per-level anyway, so the set is stable for
+the whole level.)
 
 ---
 
