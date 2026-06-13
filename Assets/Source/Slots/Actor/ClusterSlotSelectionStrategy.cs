@@ -20,6 +20,10 @@ namespace BalloonParty.Slots.Actor
         /// </summary>
         private const int FarthestCandidatePool = 3;
 
+        // Reused scratch for hex-neighbor lookups. The selection runs on the main thread
+        // and fills-then-reads this synchronously, so a single shared buffer is safe.
+        private static readonly Vector2Int[] NeighborBuffer = new Vector2Int[6];
+
         public List<Vector2Int> SelectSlots(IReadOnlyList<Vector2Int> emptySlots, int count, int maxPerCluster = 0)
         {
             if (emptySlots.Count == 0 || count <= 0)
@@ -150,7 +154,8 @@ namespace BalloonParty.Slots.Actor
             HashSet<Vector2Int> available,
             List<Vector2Int> frontier)
         {
-            foreach (var neighbor in SlotGrid.HexNeighborIndices(slot.x, slot.y))
+            SlotGrid.HexNeighborIndices(slot.x, slot.y, NeighborBuffer);
+            foreach (var neighbor in NeighborBuffer)
             {
                 if (available.Contains(neighbor))
                 {

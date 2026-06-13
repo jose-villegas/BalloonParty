@@ -25,7 +25,7 @@ namespace BalloonParty.Item.Lightning
             internal Vector3 Origin;
 
             public int Compare((IBalloonModel model, Vector3 worldPos) a, (IBalloonModel model, Vector3 worldPos) b)
-                => Vector3.Distance(Origin, a.worldPos).CompareTo(Vector3.Distance(Origin, b.worldPos));
+                => (Origin - a.worldPos).sqrMagnitude.CompareTo((Origin - b.worldPos).sqrMagnitude);
         }
 
         private readonly IPublisher<ActorHitMessage> _hitPublisher;
