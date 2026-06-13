@@ -26,13 +26,21 @@ The Bush system renders baked 2D skeletal bushes over groups of adjacent Bush
 slots. Branch maps and leaf attachment points are baked offline via the Bush
 Baker editor window. At runtime, branches are a static textured quad per slot;
 leaves are `DrawMeshInstanced` quads with GPU-driven wind and rattle animation.
-Zero GameObjects per leaf, zero CPU animation cost, two draw calls per slot.
+Zero GameObjects per leaf, zero CPU animation cost. Every slot's leaves are merged
+into one instanced draw per depth tier (inner/outer), so a whole bush submits two
+leaf draws plus one branch draw per slot, with materials shared (two leaf
+materials; one branch material per variant).
 
 ### View Layer
 
 | File | What it does |
 |---|---|
-| `BushView` | `ClusterView` subclass. Per-slot rendering via `Graphics.DrawMesh` (branch) and `DrawMeshInstanced` (leaves). Each slot picks a `BushVariantData` by cycling `i % variants.Length`. Leaf sprites cycle per slot via `slotIndex % sprites.Length`. Leaf matrices are **static** (translation-only, set once) — all animation runs on the GPU vertex shader. Disables the base `SpriteRenderer`. |
+| `BushView` | `ClusterView` subclass — the renderer. On configure, wires its collaborators and asks the builder for render data; each frame submits the merged leaf batches (`DrawMeshInstanced`) and per-slot branch quads (`Graphics.DrawMesh`), falling back to per-leaf `DrawMesh` when instancing is unavailable. Disables the base `SpriteRenderer`. Owns the editor gizmos. |
+| `BushRenderDataBuilder` | Assembles `BushRenderData` from variant data + slot centers: per-slot branch material/matrix and leaf tiers, then merges every slot's leaves into ≤1023-instance batches. Each slot picks a `BushVariantData` by cycling `i % variants.Length`; leaf sprites cycle via `slotIndex % sprites.Length`. Leaf matrices are **static** (translation-only) — all animation runs on the GPU vertex shader. |
+| `BushMaterialSet` | Owns the bush's materials and their lifetime — two shared leaf materials (differ only by render queue) and one branch material per variant branch map — plus the baked branch gradient texture. Releases them on rebuild and runtime destroy. |
+| `BushRustleController` | Spawns rustle VFX when the projectile passes near a slot or a reported impact lands within a slot's radius. Driven each frame by `BushView`; injected with `ProjectilePositionProvider`, `ImpactEventBus`, and `PoolManager`. |
+| `BushRenderData` | Render-data value types — `LeafTier`, `LeafBatch`, `SlotRenderData`, and the `BushRenderData` container the builder produces and the view submits. |
+| `BushShaderProperties` | Cached `Shader.PropertyToID` ids and the `_RATTLE_ON` keyword, shared by the material set, builder, and view. |
 | `BushViewController` | `ClusterViewController` subclass. Adds gap-fill circles at midpoints between adjacent bush slots. Wires `IBushSettings` into the view via `SetSettings()`. |
 | `BushClusterRegistry` | `SlotClusterRegistry<BushObstacleModel>`. Subscribes to grid changes (no `setupOnly`) because spawner places actors async after `Start()`. |
 

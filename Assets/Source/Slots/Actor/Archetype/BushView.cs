@@ -1,9 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
 using BalloonParty.Configuration;
 using BalloonParty.Projectile;
 using BalloonParty.Shared;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.Slots.Actor.Cluster;
@@ -13,57 +10,33 @@ using VContainer;
 namespace BalloonParty.Slots.Actor.Archetype
 {
     /// <summary>
-    /// Cluster renderer for bush obstacles. Renders depth-tiered leaf quads and a
-    /// branch quad per slot via <c>Graphics.DrawMesh</c> / <c>DrawMeshInstanced</c>.
-    /// Inner leaves (low depth) render behind branches; outer leaves (high depth)
-    /// render in front — creating natural layering without per-fragment Z.
-    /// Falls back to per-leaf <c>DrawMesh</c> when GPU instancing is unavailable.
+    /// Cluster renderer for bush obstacles. Submits depth-tiered leaf and branch draws
+    /// each frame from data assembled by <see cref="BushRenderDataBuilder"/>, using
+    /// materials owned by <see cref="BushMaterialSet"/>; rustle VFX is delegated to
+    /// <see cref="BushRustleController"/>. Inner leaves (low depth) render behind
+    /// branches, outer leaves (high depth) in front, via render queue. Falls back to
+    /// per-leaf <c>DrawMesh</c> when GPU instancing is unavailable.
     /// </summary>
     internal class BushView : ClusterView
     {
-        private const string RattleKeyword = "_RATTLE_ON";
-
-        private static readonly int LeafTintId = Shader.PropertyToID("_LeafTint");
-        private static readonly int UVRectId = Shader.PropertyToID("_UVRect");
-        private static readonly int LeafWindId = Shader.PropertyToID("_LeafWind");
-        private static readonly int ShadowColorId = Shader.PropertyToID("_ShadowColor");
-        private static readonly int ShadowOffsetId = Shader.PropertyToID("_ShadowOffset");
-        private static readonly int ShadowSoftnessId = Shader.PropertyToID("_ShadowSoftness");
-        private static readonly int SpriteScaleId = Shader.PropertyToID("_SpriteScale");
-        private static readonly int WindFrequencyId = Shader.PropertyToID("_WindFrequency");
-        private static readonly int WindAmplitudeId = Shader.PropertyToID("_WindAmplitude");
-        private static readonly int WindNoiseAmplitudeId = Shader.PropertyToID("_WindNoiseAmplitude");
-        private static readonly int WindScalePulseId = Shader.PropertyToID("_WindScalePulse");
-        private static readonly int PivotOffsetId = Shader.PropertyToID("_PivotOffset");
-        private static readonly int RattleAmplitudeId = Shader.PropertyToID("_RattleAmplitude");
-        private static readonly int RattleFrequencyId = Shader.PropertyToID("_RattleFrequency");
-        private static readonly int RattleDampingId = Shader.PropertyToID("_RattleDamping");
-        private static readonly int BranchSpriteScaleId = Shader.PropertyToID("_SpriteScale");
-        private static readonly int BranchGradientId = Shader.PropertyToID("_BranchGradient");
-        private static readonly int BranchShadowColorId = Shader.PropertyToID("_ShadowColor");
-        private static readonly int BranchShadowOffsetId = Shader.PropertyToID("_ShadowOffset");
-        private static readonly int BranchShadowSpreadId = Shader.PropertyToID("_ShadowSpread");
-        private static readonly int BranchShadowSoftnessId = Shader.PropertyToID("_ShadowSoftness");
-        private static readonly int BranchAOColorId = Shader.PropertyToID("_AOColor");
-        private static readonly int BranchAORadiusId = Shader.PropertyToID("_AORadius");
-        private static readonly int BranchAOSoftnessId = Shader.PropertyToID("_AOSoftness");
-
-        private static bool? _supportsInstancing;
+#if UNITY_EDITOR
+        [SerializeField] private bool _debugLeafPivots;
+        [SerializeField] private bool _debugBranchSegments;
+#endif
 
         [Inject] private ProjectilePositionProvider _projectileProvider;
         [Inject] private ImpactEventBus _impactBus;
         [Inject] private PoolManager _poolManager;
 
-        private readonly List<SlotRenderData> _slotRenderData = new();
-        private readonly HashSet<int> _rustledSlots = new();
-
+        private static bool? _supportsInstancing;
         private static Mesh _sharedLeafQuad;
         private static Mesh _sharedBranchQuad;
         private IBushSettings _settings;
+        private BushMaterialSet _materials;
+        private BushRenderDataBuilder _builder;
+        private BushRustleController _rustle;
+        private BushRenderData _renderData;
         private MaterialPropertyBlock _fallbackMpb;
-        private Texture2D _branchGradientTex;
-
-        internal IReadOnlyList<SlotRenderData> SlotRenderEntries => _slotRenderData;
 
         private static bool SupportsInstancing
         {
@@ -86,344 +59,107 @@ namespace BalloonParty.Slots.Actor.Archetype
                 Renderer.enabled = false;
             }
 
-            RebuildSlots();
-        }
-
-        private void LateUpdate()
-        {
-            var branchMesh = GetBranchQuadMesh();
-            var leafMesh = GetLeafQuadMesh();
-            var layer = gameObject.layer;
-
-            foreach (var slot in _slotRenderData)
-            {
-                DrawLeafTier(leafMesh, slot.InnerLeaves, slot.InnerLeafMaterial, layer);
-
-                if (slot.BranchMaterial != null)
-                {
-                    Graphics.DrawMesh(
-                        branchMesh,
-                        slot.BranchMatrix,
-                        slot.BranchMaterial,
-                        layer);
-                }
-
-                DrawLeafTier(leafMesh, slot.OuterLeaves, slot.OuterLeafMaterial, layer);
-            }
-
-            CheckProjectileProximity();
-        }
-
-        private void CheckProjectileProximity()
-        {
-            if (_projectileProvider == null || _settings == null)
-            {
-                return;
-            }
-
-            var vfxPrefab = _settings.BushRustleVfx;
-            if (vfxPrefab == null)
-            {
-                return;
-            }
-
-            ProcessImpacts(vfxPrefab);
-
-            if (!_projectileProvider.IsActive)
-            {
-                if (_rustledSlots.Count > 0)
-                {
-                    _rustledSlots.Clear();
-                }
-
-                return;
-            }
-
-            var projectilePos = _projectileProvider.Position;
-            var radiusSq = _settings.RustleProximityRadius * _settings.RustleProximityRadius;
-
-            for (var i = 0; i < _slotRenderData.Count; i++)
-            {
-                if (_rustledSlots.Contains(i))
-                {
-                    continue;
-                }
-
-                var slotPos = _slotRenderData[i].WorldPos;
-
-                if (!MathUtils.WithinRadius(projectilePos, slotPos, _settings.RustleProximityRadius))
-                {
-                    continue;
-                }
-
-                _rustledSlots.Add(i);
-                SpawnRustleVfx(vfxPrefab, slotPos);
-            }
-        }
-
-        private void ProcessImpacts(ParticleSystem vfxPrefab)
-        {
-            var impacts = _impactBus.Pending;
-            if (impacts.Count == 0)
-            {
-                return;
-            }
-
-            for (var j = 0; j < impacts.Count; j++)
-            {
-                var impact = impacts[j];
-
-                for (var i = 0; i < _slotRenderData.Count; i++)
-                {
-                    var slotPos = _slotRenderData[i].WorldPos;
-
-                    if (MathUtils.WithinRadius(impact.Position, slotPos, impact.Radius))
-                    {
-                        SpawnRustleVfx(vfxPrefab, slotPos);
-                    }
-                }
-            }
-        }
-
-        private void SpawnRustleVfx(ParticleSystem vfxPrefab, Vector2 slotPos)
-        {
-            _poolManager.PlayParticle(vfxPrefab, new Vector3(slotPos.x, slotPos.y, 0f));
-        }
-
-        private void DrawLeafTier(Mesh leafMesh, LeafTier tier, Material material, int layer)
-        {
-            if (tier.Count <= 0 || material == null)
-            {
-                return;
-            }
-
-            if (SupportsInstancing)
-            {
-                Graphics.DrawMeshInstanced(
-                    leafMesh,
-                    0,
-                    material,
-                    tier.Matrices,
-                    tier.Count,
-                    tier.Props);
-                return;
-            }
-
-            _fallbackMpb ??= new MaterialPropertyBlock();
-
-            for (var i = 0; i < tier.Count; i++)
-            {
-                _fallbackMpb.SetVector(LeafTintId, tier.Tints[i]);
-                _fallbackMpb.SetVector(UVRectId, tier.UVRects[i]);
-                _fallbackMpb.SetVector(LeafWindId, tier.Winds[i]);
-                Graphics.DrawMesh(leafMesh, tier.Matrices[i], material, layer, null, 0, _fallbackMpb);
-            }
-        }
-
-        private void RebuildSlots()
-        {
-            _slotRenderData.Clear();
-
             if (_settings == null)
             {
                 return;
             }
 
-            var variants = _settings.BushVariants;
-            if (variants == null || variants.Length == 0)
+            EnsureComponents();
+            _materials.Release();
+            _materials.BuildLeafMaterials(_settings.LeafAtlasSprites);
+            _renderData = _builder.Build(SlotCentersBuffer, SlotCount);
+            _rustle.SetSlots(CollectSlotPositions());
+        }
+
+        private void LateUpdate()
+        {
+            if (_renderData == null)
             {
                 return;
             }
 
-            var sprites = _settings.LeafAtlasSprites;
+            var leafMesh = GetLeafQuadMesh();
+            var branchMesh = GetBranchQuadMesh();
+            var layer = gameObject.layer;
 
+            // Render queues (inner 2999 < branch 3000 < outer 3001) drive layering, so
+            // all slots' leaves merge into one instanced draw per tier rather than an
+            // inner+branch+outer triple per slot.
+            DrawLeafBatches(leafMesh, _renderData.InnerBatches, _materials.InnerLeaf, layer);
+
+            foreach (var slot in _renderData.Slots)
+            {
+                if (slot.BranchMaterial != null)
+                {
+                    Graphics.DrawMesh(branchMesh, slot.BranchMatrix, slot.BranchMaterial, layer);
+                }
+            }
+
+            DrawLeafBatches(leafMesh, _renderData.OuterBatches, _materials.OuterLeaf, layer);
+
+            _rustle.Tick();
+        }
+
+        private void OnDestroy()
+        {
+            // DestroyImmediate is illegal during edit-mode object destruction, so only
+            // clean up at runtime here; edit-mode rebuilds release via OnConfigured.
+            if (Application.isPlaying)
+            {
+                _materials?.Release();
+            }
+        }
+
+        private void EnsureComponents()
+        {
+            _materials ??= new BushMaterialSet(_settings);
+            _builder ??= new BushRenderDataBuilder(_settings, _materials);
+            _rustle ??= new BushRustleController(_projectileProvider, _impactBus, _poolManager, _settings);
+        }
+
+        private Vector2[] CollectSlotPositions()
+        {
+            var positions = new Vector2[SlotCount];
             for (var i = 0; i < SlotCount; i++)
             {
                 var center = SlotCentersBuffer[i];
-                var worldPos = new Vector2(center.x, center.y);
-                var variant = variants[i % variants.Length];
-
-                var entry = new SlotRenderData();
-                ConfigureBranch(ref entry, worldPos, variant);
-                ConfigureLeaves(ref entry, worldPos, variant, sprites, i);
-                _slotRenderData.Add(entry);
+                positions[i] = new Vector2(center.x, center.y);
             }
+
+            return positions;
         }
 
-        private void ConfigureBranch(
-            ref SlotRenderData entry, Vector2 worldPos, BushVariantData variant)
+        private void DrawLeafBatches(Mesh leafMesh, LeafBatch[] batches, Material material, int layer)
         {
-            if (_settings.BranchShader == null || variant.BranchMap == null)
+            if (material == null)
             {
                 return;
             }
 
-            var branchSpriteScale = Mathf.Max(_settings.BranchSpriteScale, 0.3f);
-
-            entry.BranchMaterial = new Material(_settings.BranchShader)
+            for (var b = 0; b < batches.Length; b++)
             {
-                mainTexture = variant.BranchMap,
-                renderQueue = 3000
-            };
-            entry.BranchMaterial.SetFloat(BranchSpriteScaleId, branchSpriteScale);
-            entry.BranchMaterial.SetTexture(BranchGradientId, GetOrBakeGradientTexture());
-            entry.BranchMaterial.SetColor(BranchShadowColorId, _settings.BranchShadowColor);
-            entry.BranchMaterial.SetVector(BranchShadowOffsetId, _settings.BranchShadowOffset);
-            entry.BranchMaterial.SetFloat(BranchShadowSpreadId, _settings.BranchShadowSpread);
-            entry.BranchMaterial.SetFloat(BranchShadowSoftnessId, _settings.BranchShadowSoftness);
-            entry.BranchMaterial.SetColor(BranchAOColorId, _settings.BranchAOColor);
-            entry.BranchMaterial.SetFloat(BranchAORadiusId, _settings.BranchAORadius);
-            entry.BranchMaterial.SetFloat(BranchAOSoftnessId, _settings.BranchAOSoftness);
-
-            var size = _settings.BushWorldSize / branchSpriteScale;
-            entry.BranchMatrix = Matrix4x4.TRS(
-                new Vector3(worldPos.x, worldPos.y, 0f),
-                Quaternion.identity,
-                new Vector3(size, size, 1f));
-        }
-
-        private void ConfigureLeaves(
-            ref SlotRenderData entry, Vector2 worldPos, BushVariantData variant,
-            Sprite[] sprites, int slotIndex)
-        {
-            if (_settings.LeafMaterial == null || sprites == null || sprites.Length == 0)
-            {
-                return;
-            }
-
-            var slots = variant.LeafSlots;
-            entry.LeafSlots = slots;
-            entry.WorldPos = worldPos;
-            entry.ScaleCompensation = 1f / Mathf.Max(_settings.LeafSpriteScale, 0.3f);
-            entry.PivotOffset = _settings.LeafPivotOffset;
-            entry.BushWorldSize = _settings.BushWorldSize;
-
-            var depthSplit = _settings.LeafDepthSplit;
-
-            // Partition leaves into inner (below branches) and outer (above branches)
-            var innerIndices = new List<int>();
-            var outerIndices = new List<int>();
-
-            for (var i = 0; i < slots.Count; i++)
-            {
-                if (slots[i].Depth < depthSplit)
+                var batch = batches[b];
+                if (batch.Count <= 0)
                 {
-                    innerIndices.Add(i);
+                    continue;
                 }
-                else
+
+                if (SupportsInstancing)
                 {
-                    outerIndices.Add(i);
+                    Graphics.DrawMeshInstanced(leafMesh, 0, material, batch.Matrices, batch.Count, batch.Props);
+                    continue;
+                }
+
+                _fallbackMpb ??= new MaterialPropertyBlock();
+
+                for (var i = 0; i < batch.Count; i++)
+                {
+                    _fallbackMpb.SetVector(BushShaderProperties.LeafTint, batch.Tints[i]);
+                    _fallbackMpb.SetVector(BushShaderProperties.UVRect, batch.UVRects[i]);
+                    _fallbackMpb.SetVector(BushShaderProperties.LeafWind, batch.Winds[i]);
+                    Graphics.DrawMesh(leafMesh, batch.Matrices[i], material, layer, null, 0, _fallbackMpb);
                 }
             }
-
-            entry.InnerLeafMaterial = CreateLeafMaterial(sprites, 2999);
-            entry.OuterLeafMaterial = CreateLeafMaterial(sprites, 3001);
-
-            entry.InnerLeaves = BuildLeafTier(
-                innerIndices, slots, sprites, worldPos, entry.ScaleCompensation, entry.PivotOffset,
-                entry.BushWorldSize, slotIndex);
-            entry.OuterLeaves = BuildLeafTier(
-                outerIndices, slots, sprites, worldPos, entry.ScaleCompensation, entry.PivotOffset,
-                entry.BushWorldSize, slotIndex);
-        }
-
-        private Material CreateLeafMaterial(Sprite[] sprites, int queue)
-        {
-            var mat = new Material(_settings.LeafMaterial)
-            {
-                mainTexture = sprites[0].texture,
-                enableInstancing = true,
-                renderQueue = queue
-            };
-            mat.SetColor(ShadowColorId, _settings.LeafShadowColor);
-            mat.SetVector(ShadowOffsetId, _settings.LeafShadowOffset);
-            mat.SetFloat(ShadowSoftnessId, _settings.LeafShadowSoftness);
-            mat.SetFloat(SpriteScaleId, _settings.LeafSpriteScale);
-
-            var frequency = _settings.WindPeriod > 0f ? 1f / _settings.WindPeriod : 1f;
-            mat.SetFloat(WindFrequencyId, frequency);
-            mat.SetFloat(WindAmplitudeId, _settings.WindAmplitude);
-            mat.SetFloat(WindNoiseAmplitudeId, _settings.WindNoiseAmplitude);
-            mat.SetFloat(WindScalePulseId, _settings.WindScalePulse);
-            mat.SetFloat(PivotOffsetId, _settings.LeafPivotOffset);
-
-            if (_settings.RattleEnabled)
-            {
-                mat.EnableKeyword(RattleKeyword);
-                mat.SetFloat(RattleAmplitudeId, _settings.RattleAmplitude);
-                mat.SetFloat(RattleFrequencyId, _settings.RattleFrequency);
-                mat.SetFloat(RattleDampingId, _settings.RattleDamping);
-            }
-
-            return mat;
-        }
-
-        private static LeafTier BuildLeafTier(
-            IReadOnlyList<int> indices,
-            IReadOnlyList<LeafSlotData> slots,
-            Sprite[] sprites,
-            Vector2 worldPos,
-            float scaleCompensation,
-            float pivotOffset,
-            float bushWorldSize,
-            int slotIndex)
-        {
-            var tier = new LeafTier
-            {
-                Count = indices.Count,
-                SlotIndices = indices.ToArray(),
-                Matrices = new Matrix4x4[indices.Count]
-            };
-
-            if (indices.Count == 0)
-            {
-                return tier;
-            }
-
-            var tints = new Vector4[indices.Count];
-            var uvRects = new Vector4[indices.Count];
-            var winds = new Vector4[indices.Count];
-
-            for (var t = 0; t < indices.Count; t++)
-            {
-                var slot = slots[indices[t]];
-                var leafWorldPos = worldPos + (slot.UVPosition - new Vector2(0.5f, 0.5f)) * bushWorldSize;
-
-                // Static translation-only matrix — rotation and scale handled by shader
-                tier.Matrices[t] = Matrix4x4.TRS(
-                    new Vector3(leafWorldPos.x, leafWorldPos.y, 0f),
-                    Quaternion.identity,
-                    Vector3.one);
-
-                var tint = (Color)slot.Tint;
-                tints[t] = new Vector4(tint.r, tint.g, tint.b, tint.a);
-
-                var spriteIndex = slotIndex % sprites.Length;
-                var rect = sprites[spriteIndex].textureRect;
-                var tex = sprites[spriteIndex].texture;
-                uvRects[t] = new Vector4(
-                    rect.x / tex.width,
-                    rect.y / tex.height,
-                    rect.width / tex.width,
-                    rect.height / tex.height);
-
-                // Per-instance wind data: phase, depth, baseAngle, scale
-                winds[t] = new Vector4(
-                    slot.PhaseOffset,
-                    slot.Depth,
-                    slot.BaseAngle,
-                    slot.Scale * scaleCompensation);
-            }
-
-            tier.Tints = tints;
-            tier.UVRects = uvRects;
-            tier.Winds = winds;
-
-            tier.Props = new MaterialPropertyBlock();
-            tier.Props.SetVectorArray(LeafTintId, tints);
-            tier.Props.SetVectorArray(UVRectId, uvRects);
-            tier.Props.SetVectorArray(LeafWindId, winds);
-            return tier;
         }
 
         private static Mesh GetBranchQuadMesh()
@@ -438,45 +174,10 @@ namespace BalloonParty.Slots.Actor.Archetype
             return _sharedLeafQuad;
         }
 
-        private Texture2D GetOrBakeGradientTexture()
-        {
-            _branchGradientTex ??= GradientTextureHelper.Bake(_settings.BranchGradient);
-            return _branchGradientTex;
-        }
-
-        internal struct LeafTier
-        {
-            internal Matrix4x4[] Matrices;
-            internal MaterialPropertyBlock Props;
-            internal int Count;
-            internal int[] SlotIndices;
-            internal Vector4[] Tints;
-            internal Vector4[] UVRects;
-            internal Vector4[] Winds;
-        }
-
-        internal struct SlotRenderData
-        {
-            internal Material BranchMaterial;
-            internal Matrix4x4 BranchMatrix;
-            internal Material InnerLeafMaterial;
-            internal Material OuterLeafMaterial;
-            internal LeafTier InnerLeaves;
-            internal LeafTier OuterLeaves;
-            internal IReadOnlyList<LeafSlotData> LeafSlots;
-            internal Vector2 WorldPos;
-            internal float ScaleCompensation;
-            internal float PivotOffset;
-            internal float BushWorldSize;
-        }
-
 #if UNITY_EDITOR
-        [SerializeField] private bool _debugLeafPivots;
-        [SerializeField] private bool _debugBranchSegments;
-
         private void OnDrawGizmos()
         {
-            if (_settings == null || _slotRenderData.Count == 0)
+            if (_settings == null || _renderData == null || _renderData.Slots.Count == 0)
             {
                 return;
             }
@@ -490,7 +191,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             {
                 var totalPivotOffset = _settings.LeafPivotOffset + 0.5f;
 
-                foreach (var entry in _slotRenderData)
+                foreach (var entry in _renderData.Slots)
                 {
                     if (entry.LeafSlots == null)
                     {
@@ -511,9 +212,9 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return;
             }
 
-            for (var i = 0; i < _slotRenderData.Count; i++)
+            for (var i = 0; i < _renderData.Slots.Count; i++)
             {
-                var entry = _slotRenderData[i];
+                var entry = _renderData.Slots[i];
                 var variant = variants[i % variants.Length];
                 var segments = variant.DebugSegments;
                 if (segments == null || segments.Count == 0)
