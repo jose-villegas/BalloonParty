@@ -94,7 +94,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
 
-            builder.Register<BalancePathHolder>(Lifetime.Singleton);
+            builder.Register<BalancePathHolder>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.Register<PoolManager>(Lifetime.Singleton);
             builder.Register<PauseService>(Lifetime.Singleton);
@@ -108,7 +108,7 @@ namespace BalloonParty.Game
             builder.Register<RunMeta>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.RegisterComponentInHierarchy<SlotGridView>();
 
-            builder.RegisterEntryPoint<BalloonBalancer>().AsSelf();
+            builder.RegisterEntryPoint<BalloonBalancer>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<NudgeService>();
             builder.RegisterEntryPoint<GridActorHitController>();
             builder.RegisterInstance<IReadyGate>(new NavigationReadyGate(NavigationState.Game));

@@ -81,7 +81,7 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 201 tests
+## Current Coverage — 206 tests
 
 > Last updated: **June 13, 2026**
 
@@ -432,6 +432,25 @@ Tests Catmull-Rom path generation, array sampling, prefix sum, and midpoint disp
 | MidpointDisplacement preserves endpoints | 1 | Endpoints overwritten |
 | MidpointDisplacement count ≤ 2 → only endpoints | 1 | Missing early return |
 
+### `BalloonBalancerTests` — 3 tests
+
+Tests the run-reset cancellation guard added so a balance scheduled before a restart is dropped (it would otherwise animate pooled actors against an emptied grid). The frame-deferred timing itself is a PlayMode concern; here the generation guard is exercised synchronously on an empty grid.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Current generation → balance runs | 1 | Guard rejects a valid scheduled balance |
+| Stale generation after reset → no balance | 1 | The reset race regresses — stale balance touches returned actors |
+| `ResetRun` bumps the generation | 1 | Pending balances never invalidated |
+
+### `BalancePathHolderTests` — 2 tests
+
+Tests `ResetRun` clearing in-transit state on a restart — killed balance tweens never fire their per-actor `Release`, so transit state must be dropped wholesale.
+
+| Area | Tests | What could break |
+|---|---|---|
+| `ResetRun` clears transit slots | 1 | Stale in-transit slots block spawn pathing next run |
+| `ResetRun` drops per-actor slot list | 1 | Reusing an actor after reset double-counts old slots |
+
 
 ---
 
@@ -443,7 +462,7 @@ These systems are not tested because they are either too coupled to Unity runtim
 |---|---|
 | `BombItemHandler` | `BlastBalloons` uses `Physics2D.OverlapCircle` — needs real colliders and physics simulation. Shockwave nudge publish is covered indirectly by NudgeService tests. |
 | `LaserItemHandler` | `CastCross` uses `Physics2D.CircleCast` — needs real colliders and physics simulation. |
-| `BalloonBalancer` | Scan+move loop depends on well-tested `IsUnbalanced`/`OptimalNextEmptySlot` + DOTween animation. Test if it changes. |
+| `BalloonBalancer` | Scan+move loop depends on well-tested `IsUnbalanced`/`OptimalNextEmptySlot` + DOTween animation — still deferred. The run-reset cancellation guard *is* covered (`BalloonBalancerTests`); the frame-deferred `.Forget()` timing is a PlayMode concern. |
 | `BalloonSpawner` | Heavy Unity/DI coupling (`PoolManager`, `IObjectResolver`, DOTween). Little pure logic beyond forwarding. |
 | `ProjectileModel` | Pure data bag — too simple to break |
 | `OrthogonalSizeCameraController` | Forwards config lookup to camera — simple delegation |

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Game.Run;
 using BalloonParty.Slots.Actor;
 using UnityEngine;
 
@@ -10,10 +11,20 @@ namespace BalloonParty.Slots.Grid
     ///     traversal conflicts with relocating balloons. Transit slots are
     ///     released per-actor when their animation completes.
     /// </summary>
-    internal class BalancePathHolder
+    internal class BalancePathHolder : IRunResettable
     {
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector2Int>> _actorSlots = new();
         private readonly HashSet<Vector2Int> _transitSlots = new();
+
+        public int ResetOrder => RunResetOrder.Board;
+
+        public void ResetRun()
+        {
+            // Killed balance tweens never fire their per-actor Release, so drop all transit
+            // state wholesale as part of board teardown.
+            _transitSlots.Clear();
+            _actorSlots.Clear();
+        }
 
         internal bool IsInTransit(Vector2Int slot)
         {

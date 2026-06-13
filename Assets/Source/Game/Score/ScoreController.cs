@@ -35,7 +35,7 @@ namespace BalloonParty.Game.Score
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
 
         // Score state has no teardown dependencies, so it resets after grid/gameplay state.
-        public int ResetOrder => 100;
+        public int ResetOrder => RunResetOrder.Score;
 
         public ScoreController(
             ISubscriber<ActorHitMessage> hitSubscriber,

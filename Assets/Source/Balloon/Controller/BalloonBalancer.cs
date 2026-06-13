@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Run;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -16,7 +17,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Balloon.Controller
 {
-    internal class BalloonBalancer : IStartable
+    internal class BalloonBalancer : IStartable, IRunResettable
     {
         private readonly BalancePathHolder _balancePathHolder;
         private readonly IBalloonsConfiguration _balloonsConfig;
@@ -26,6 +27,12 @@ namespace BalloonParty.Balloon.Controller
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
 
         private bool _balanceRequested;
+        private int _generation;
+
+        public int ResetOrder => RunResetOrder.Quiesce;
+
+        // Exposed for tests: a balance scheduled in a prior generation is stale after a reset.
+        internal int Generation => _generation;
 
         [Inject]
         internal BalloonBalancer(
@@ -45,6 +52,16 @@ namespace BalloonParty.Balloon.Controller
         public void Start()
         {
             _subscriber.Subscribe(_ => RequestBalance());
+        }
+
+        public void ResetRun()
+        {
+            // Bump the generation so any balance already scheduled this frame is dropped when
+            // its continuation runs — it would otherwise animate actors the board-clear has
+            // just returned to the pool, against an emptied grid.
+            _generation++;
+            _balanceRequested = false;
+            ReleasePaths();
         }
 
         private void AnimatePaths(Dictionary<IWriteableDynamicSlotActor, List<Vector3>> paths)
@@ -162,11 +179,24 @@ namespace BalloonParty.Balloon.Controller
             _paths.Clear();
         }
 
-        private async UniTaskVoid BalanceNextFrameAsync()
+        private async UniTaskVoid BalanceNextFrameAsync(int generation)
         {
             await UniTask.Yield();
+            RunScheduledBalance(generation);
+        }
+
+        // Runs the deferred balance unless a reset has since bumped the generation. Returns
+        // whether it actually balanced — the guard is the regression point for the reset race.
+        internal bool RunScheduledBalance(int generation)
+        {
+            if (generation != _generation)
+            {
+                return false;
+            }
+
             _balanceRequested = false;
             Balance();
+            return true;
         }
 
         private void RequestBalance()
@@ -177,7 +207,7 @@ namespace BalloonParty.Balloon.Controller
             }
 
             _balanceRequested = true;
-            BalanceNextFrameAsync().Forget();
+            BalanceNextFrameAsync(_generation).Forget();
         }
     }
 }
