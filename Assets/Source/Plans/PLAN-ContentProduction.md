@@ -17,7 +17,7 @@
 The procedural algorithm (8.3) draws from two config lists:
 
 - `BalloonsConfiguration.Entries` — already contains Simple and Tough entries
-- `GridActorConfiguration.Entries` — ✅ **code exists** (`GridActorConfiguration.cs` + registered in `GameLifetimeScope`); SO asset still needs to be created in Unity and wired into spawners
+- `GridActorConfiguration.Entries` — ✅ **code + asset exist** (`GridActorConfiguration.cs`, `Assets/Configuration/GridActorConfiguration.asset`, registered in `GameLifetimeScope`). Spawner consumption beyond the structural actors lands with the Phase 8.3 procedural engine.
 
 Neither list is useful until the prefabs those entries reference actually exist with
 correct visuals, animations, and hit feedback. Placeholder grey boxes make it impossible
@@ -33,8 +33,8 @@ to read the grid, tune difficulty, or playtest spawn density.
 | **Soap Cluster** | `BubbleClusterModel` (`BalloonType.BubbleCluster`) | ✅ `SoapCluster.prefab` | n/a — fully procedural shader | ✅ `SoapCluster.controller` | ✅ shader handles motion; Idle states wired | ⚠️ pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | Done; scores one point per damage to random palette colors with `BreaksStreak = true` |
 | **Tough** | `ToughBalloonModel` | ✅ `ToughBalloon.prefab` | ✅ | ✅ `ToughBalloon.controller` | ✅ Stable/Unstable Idle | ✅ `PSVFX_ToughBalloonPop` | ✅ `BalloonsConfiguration` | No `IHasColor`; scores via `IHasScoreColor` with `Inherited` strategy (killer earns points in their color) |
 | **Unbreakable** | `UnbreakableBalloonModel` | ✅ `Unbreakable.prefab` | ✅ procedural shader | ✅ `Unbreakable.controller` | ✅ StableIdle | ⚠️ deflect/pop VFX deferred (Phase 9) | ✅ `BalloonsConfiguration` | `IHasScoreColor` mode `Inherited` — scores in killer's color at hit time |
-| **Puff** | `PuffObstacleModel` | ✅ `Puff.prefab` (invisible marker) + `PuffCloud.prefab` | ✅ procedural shader (`PuffCloud.shader`) | n/a — invisible marker; cloud is shader-driven | n/a — cluster cloud animates via shader | ✅ disturbance/reform via `DisturbanceFieldService` | ⚠️ code ready; SO asset still needed in Unity | Traversable cloud cluster; full MVC system done (model + registry + view + controller) |
-| **Bush** | `BushObstacleModel` | ❌ | ❌ | ❌ | ❌ Idle sway | — | ❌ `GridActorConfiguration` | Park shrub; blocks paths, no hit reaction |
+| **Puff** | `PuffObstacleModel` | ✅ `Puff.prefab` (invisible marker) + `PuffCloud.prefab` | ✅ procedural shader (`PuffCloud.shader`) | n/a — invisible marker; cloud is shader-driven | n/a — cluster cloud animates via shader | ✅ disturbance/reform via `DisturbanceFieldService` | ✅ `GridActorConfiguration` (asset created & registered) | Traversable cloud cluster; full MVC system done (model + registry + view + controller) |
+| **Bush** | `BushObstacleModel` | ✅ `BushCluster` + `BushSlot` | ✅ baked variants (`Art/Bush/Baked/`) | n/a — shader-driven | ✅ GPU wind + rattle | ✅ `PSVFX_BushPassby` | ✅ `GridActorConfiguration` | **✅ Done via the baked skeletal pipeline — see `PLAN-Bush-Sprite-Baking.md`.** Supersedes the simple-sprite spec in the per-actor section below. |
 | **Deflector** | `DeflectorActorModel` | ❌ | ❌ | ❌ | ❌ Idle, Deflect flash | ❌ bounce flash | ❌ `GridActorConfiguration` | Reflective surface; indestructible |
 | **Absorber** | `AbsorberActorModel` | ❌ | ❌ | ❌ | ❌ Idle pulse, Absorb | ❌ absorb burst | ❌ `GridActorConfiguration` | Hazard; ends the turn on contact |
 | **Gatekeeper** | `GatekeeperActorModel` | ❌ | ❌ | ❌ | ❌ Idle, Hit crack, Break | ❌ hit dust, break burst | ❌ `GridActorConfiguration` | Degrades visually as `HitsRemaining` drops |
@@ -68,8 +68,8 @@ just like `BalloonsConfiguration` is today.
 Scope of work:
 - [x] Write `GridActorConfiguration.cs` (mirrors `BalloonsConfiguration` structure)
 - [x] Register in `GameLifetimeScope` with `builder.RegisterInstance`
-- [ ] Create the SO asset in `Assets/ScriptableObjects/` (or equivalent)
-- [ ] Wire into `StaticActorSpawner` and eventually `GridSpawner`
+- [x] Create the SO asset — `Assets/Configuration/GridActorConfiguration.asset`
+- [ ] Full consumption by the Phase 8.3 `GridSpawner` (structural actors already place via `StaticActorSpawner`)
 
 ### `GridActorView` prefab root pattern
 
@@ -190,27 +190,6 @@ and stores no color state.
 
 ---
 
-### Puff
-
-**What it is:** Traversable structural actor. Occupies a slot; balloon spawn paths arc
-through it freely. Not interactive. No hit reaction.
-
-**Art direction:** Dandelion puff, tuft of cotton, wispy cloud of floating seed-heads.
-Semi-transparent. Gentle idle float animation. Feels soft and permeable.
-
-- [ ] **Sprite** — semi-transparent dandelion puff or cotton wisp; multiple frames for
-      idle float cycle (3–4 frames is enough)
-- [ ] **Material/Shader** — soft additive or alpha-blended sprite; slight glow or bloom
-      to read as "passable air"
-- [ ] **Prefab** — `Assets/Prefabs/Grid/Puff.prefab` already exists with `GridActorView`
-      component; add PuffCloud material once art is finalised
-- [ ] **Animator / Controller** — `Puff.controller`
-      - `Idle` — gentle up-down float with light scale breathe (looping)
-- [ ] **Config entry** — add to `GridActorConfiguration` with high weight; no hit reaction
-      needed
-
----
-
 ### Puff ✅ Done
 
 **What it is:** Traversable structural obstacle. Occupies one or more grid slots; balloon spawn paths arc through freely. Not interactive — no hit reaction, no projectile collider. Adjacent Puff slots merge into a single continuous procedural cloud body.
@@ -237,10 +216,10 @@ Semi-transparent. Gentle idle float animation. Feels soft and permeable.
 - `Puff.prefab` — `GridActorView` + `TweenTracker`; invisible grid occupancy marker (no renderer)
 - `PuffCloud.prefab` — `SpriteRenderer` (no sprite assigned; quad driven by shader) + `PuffCloudView`; pooled by `PuffCloudPoolChannel`; referenced by `PuffCloudSettings.CloudPrefab`
 
-**Configuration** (complete in code; pending Unity asset):
+**Configuration** (complete):
 - `PuffCloudSettings` — noise speed, density field resolution/timing, wind, displacement, padding, sorting layer/order, disturbance radii/strengths, `CloudPrefab` reference
 - [x] `GridActorConfiguration.cs` — code exists; `GridActorPrefabEntry` for Puff with `SlotPlacementMode.Cluster`
-- [ ] `GridActorConfiguration` SO asset — still needs to be created in Unity and wired into `GameLifetimeScope`
+- [x] `GridActorConfiguration` SO asset — `Assets/Configuration/GridActorConfiguration.asset`, registered in `GameLifetimeScope`
 
 - [x] **Shader** — `Shaders/BalloonParty/Grid/PuffCloud.shader` + `DisturbanceDiffusion.shader` + `DisturbanceStampBatched.shader`
 - [x] **C# Model** — `PuffObstacleModel.cs` — `IWriteableSlotActor` + `IPassThrough`
@@ -249,28 +228,29 @@ Semi-transparent. Gentle idle float animation. Feels soft and permeable.
 - [x] **C# Controller** — `PuffCloudViewController.cs`
 - [x] **Pool** — `GridActorPoolChannel`, `PuffCloudPoolChannel` (implicit via `PuffCloudSettings.CloudPrefab`)
 - [x] **Prefabs** — `Puff.prefab` (marker) + `PuffCloud.prefab` (cloud visual)
-- [ ] **GridActorConfiguration SO asset** *(pending Unity editor)* — create the asset, add Puff entry, wire into `GameLifetimeScope`
+- [x] **GridActorConfiguration SO asset** — created at `Assets/Configuration/GridActorConfiguration.asset` and wired into `GameLifetimeScope`
 
 ---
 
-### Bush
+### Bush ✅ Done
 
 **What it is:** Non-traversable structural actor. Blocks balloon spawn-path computation;
 balloons must route around it. Projectiles pass through (no collider).
 
-**Art direction:** Small park shrub — round, leafy, clearly solid-looking. Like something
-you'd walk around in a park but throw a ball over. Different enough from Puff that players
-immediately understand "this one is solid".
+Implemented as a **baked 2D skeletal plant system** — not the simple sprite originally
+sketched here. See **`PLAN-Bush-Sprite-Baking.md`** for the full design (cluster
+infrastructure shared with Puff, offline-baked branch maps + leaf extraction, GPU wind +
+rattle driven by the disturbance field). Shipped assets:
 
-- [ ] **Sprite** — round leafy shrub; slightly above-ground root base; reads as solid
-- [ ] **Prefab** — `Assets/Prefabs/Grid/Bush.prefab` with `GridActorView` component
-- [ ] **Animator / Controller** — `Bush.controller`
-      - `Idle` — gentle leaf sway in breeze (very subtle; 2–3 frame loop)
-- [ ] **Config entry** — add to `GridActorConfiguration`
+- ✅ **Prefabs** — `Assets/Prefabs/Grid/Bush/BushCluster.prefab` + `BushSlot.prefab`
+- ✅ **Baked variants** — `Assets/Art/Bush/Baked/BushVariant_V*.asset`
+- ✅ **Settings** — `Assets/Configuration/BushSettings.asset` (`IBushSettings`)
+- ✅ **VFX** — `PSVFX_BushPassby`
+- ✅ **Config entry** — `GridActorConfiguration`
 
-**Note:** Bush currently causes a `ComputePath` warning when a spawn path crosses it
-(Phase 9 will add full rerouting). Weight should be low in early difficulty levels to
-avoid blocking spawn columns before rerouting exists.
+**Note:** Bush still causes a `ComputePath` warning when a spawn path crosses it
+(Phase 9 will add full rerouting). Keep weight low in early difficulty levels to avoid
+blocking spawn columns before rerouting exists.
 
 ---
 
@@ -350,14 +330,18 @@ Work bottom-up by complexity. Items that unblock config wiring come first so the
 procedural engine can be tested with real (even rough) assets as early as possible.
 
 ```
-1. [x] GridActorConfiguration SO + registration         ← code done; SO asset still needed in Unity
-2. [x] Puff — full MVC cloud system done; SO asset wiring pending Unity editor
-3. [x] Bush — same pipeline as Puff, no hit reaction
+1. [x] GridActorConfiguration SO + registration         ← code, asset, and registration all done
+2. [x] Puff — full MVC cloud system + config entry done
+3. [x] Bush — baked skeletal system (see PLAN-Bush-Sprite-Baking); done
 4. [x] Soap Cluster shader + C# Variant + model + prefab + config  ← done; pop VFX deferred to Phase 9
 5. [x] Unbreakable balloon — shader + variant + model + prefab + controller + config  ← done; VFX deferred to Phase 9
-6. Deflector — first hitable grid actor             ← introduces Deflect VFX pipeline
-7. Absorber                                         ← danger actor; needs distinctive look
-8. Gatekeeper                                       ← most complex; needs N-state animator
+6. [ ] Deflector — first hitable grid actor          ← REMAINING; introduces Deflect VFX pipeline
+7. [ ] Absorber                                      ← REMAINING; danger actor; needs distinctive look
+8. [ ] Gatekeeper                                    ← REMAINING; most complex; needs N-state animator
+
+These last three (Deflector / Absorber / Gatekeeper) are the **only content blocking
+Phase 8.3 procedural placement** — their models + hit routing already exist; what's
+missing is prefab/art/animator/VFX/config-entry for each.
 ```
 
 ---

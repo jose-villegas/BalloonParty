@@ -684,6 +684,6 @@ These are known design gaps to resolve during implementation:
 | 8.2a — Structural Actors (Puff + Bush) | ✅ Complete |
 | 8.2b — Indestructible Hitables (Deflector + Absorber) | ✅ Complete |
 | 8.2c — Gatekeeper + GridActorHitController | ✅ Complete |
-| 8.3 — Procedural Placement | **Blocked on content** — see `PLAN-ContentProduction.md` |
+| 8.3 — Procedural Placement | **Blocked on content** — Puff, Bush, and the `GridActorConfiguration` asset are done; remaining blocker is Deflector / Absorber / Gatekeeper art+prefabs+config. See `PLAN-ContentProduction.md` |
 | 8.4 — Difficulty + Levels | Blocked on 8.3 |
 | Phase 9 — Behavior-bound actors | Future (broadly defined) |
