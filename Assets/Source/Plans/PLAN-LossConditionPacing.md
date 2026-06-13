@@ -9,6 +9,31 @@
 
 ---
 
+## Orientation — start here
+
+**What this is:** a fail state (grid-encroachment loss) **plus** a level-range
+difficulty/pacing system that turns the endless sandbox into a run-based game.
+
+**Status:** design-complete, **not yet implemented** — this doc is the spec; no code exists.
+
+**Decisions already locked** (don't re-litigate):
+- Loss = **grid encroachment** — the board chokes up toward the thrower (balloons enter at
+  the bottom, fill upward; saturation pushes the front back down toward the entry).
+- Progression = **run-based** — loss resets level/score; only best-level/best-score persist.
+- Pacing is authored as **level ranges**; a **`LevelDifficultyResolver` (`IActiveLevelParameters`)**
+  is the single source the spawner/score/UI pull from; the existing configs demote to catalogs.
+- **Per-level** resolution (no per-turn re-rolls); **weights static per range** (modes apply to
+  scalars only); **allowed-color set changes only at level boundaries**.
+
+**Where to look, in order:** Part A (loss) → Part B (level-range config + resolver) →
+Part C (allowed colors) → Phasing. **Start implementing at Phase 1** (GameOver state +
+run-scoped save) — it has no dependencies.
+
+**External dependency:** the grid-actor per-range mix needs Phase 8.3 (procedural placement,
+see `PLAN-GridActorExpansion.md`); everything else uses mechanics that exist today.
+
+---
+
 ## Why now
 
 The loop works and there's plenty of content (4 balloon types, Puff, Bush), but the game
