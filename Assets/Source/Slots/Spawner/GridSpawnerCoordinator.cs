@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using BalloonParty.Game.Run;
 using BalloonParty.Shared;
 using Cysharp.Threading.Tasks;
 using VContainer;
@@ -9,7 +10,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Slots.Spawner
 {
-    internal class GridSpawnerCoordinator : IStartable, IDisposable
+    internal class GridSpawnerCoordinator : IStartable, IDisposable, IRunResettable
     {
         private readonly IReadOnlyList<IGridSpawner> _spawners;
         private readonly IReadyGate _gate;
@@ -31,6 +32,16 @@ namespace BalloonParty.Slots.Spawner
         {
             _cts.Cancel();
             _cts.Dispose();
+        }
+
+        public int ResetOrder => RunResetOrder.Respawn;
+
+        // Final reset stage: the board has been cleared and counters reset, so re-run every
+        // spawner to repopulate a fresh board. Skips the navigation gate — RestartRun has
+        // already put us back in Game.
+        public void ResetRun(int generation)
+        {
+            RunGroupsAsync(_cts.Token).Forget();
         }
 
         private async UniTaskVoid CoordinateAsync(CancellationToken ct)

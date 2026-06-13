@@ -81,7 +81,7 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 208 tests
+## Current Coverage — 209 tests
 
 > Last updated: **June 13, 2026**
 
@@ -312,15 +312,16 @@ Tests `ProjectileView.OnAbsorb` — the absorb path that kills the projectile on
 | `OnAbsorb` sets `model.IsFree = false` | 1 | Projectile keeps moving after absorption |
 | `OnAbsorb` publishes `ActorHitMessage` with `Absorb` outcome | 1 | Wrong outcome — hit routed as Pop or Deflect |
 
-### `GridSpawnerCoordinatorTests` — 3 tests
+### `GridSpawnerCoordinatorTests` — 4 tests
 
-Tests `GridSpawnerCoordinator` stage ordering and sequencing — isolated with an `ImmediateGate` to remove the `Navigation` static dependency.
+Tests `GridSpawnerCoordinator` stage ordering, sequencing, and run-reset re-spawn — isolated with an `ImmediateGate` to remove the `Navigation` static dependency.
 
 | Area | Tests | What could break |
 |---|---|---|
 | Spawners called in ascending `SpawnStage` order | 1 | Sort direction wrong — high-priority runs first |
 | Each stage awaits completion before the next starts | 1 | Stage sequence serialization broken |
 | Multiple spawners at the same stage all run | 1 | Same-stage spawner skipped |
+| `ResetRun` re-runs the spawners | 1 | Restart leaves an empty board — nothing repopulates |
 
 ### `PaintItemHandlerTests` — 5 tests
 

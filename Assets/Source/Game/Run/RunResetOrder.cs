@@ -3,8 +3,9 @@ namespace BalloonParty.Game.Run
     /// <summary>
     ///     Ordering for <see cref="IRunResettable.ResetOrder"/> — ascending, lower runs first.
     ///     A restart must quiesce in-flight async/tweens, then clear the board, then rebuild
-    ///     derived state, then reset counters, before run-level score. Implementations pick the
-    ///     stage they belong to so a new resettable never has to guess a magic number.
+    ///     derived state, then reset counters, then run-level score, and finally repopulate the
+    ///     fresh board. Implementations pick the stage they belong to so a new resettable never
+    ///     has to guess a magic number.
     /// </summary>
     internal static class RunResetOrder
     {
@@ -13,5 +14,6 @@ namespace BalloonParty.Game.Run
         public const int Derived = 40;
         public const int Counters = 60;
         public const int Score = 100;
+        public const int Respawn = 120;
     }
 }

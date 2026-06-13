@@ -1,11 +1,13 @@
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Grid;
 using BalloonParty.Slots.Spawner;
 using Cysharp.Threading.Tasks;
+using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -16,6 +18,7 @@ namespace BalloonParty.Slots.Actor
     {
         private static readonly Dictionary<SlotPlacementMode, ISlotSelectionStrategy> StrategyCache = new();
 
+        private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly SlotGrid _grid;
         private readonly PoolManager _poolManager;
         private readonly IObjectResolver _resolver;
@@ -29,12 +32,14 @@ namespace BalloonParty.Slots.Actor
             SlotGrid grid,
             PoolManager poolManager,
             IObjectResolver resolver,
-            IGridActorConfiguration gridActorConfig)
+            IGridActorConfiguration gridActorConfig,
+            ISubscriber<BoardClearMessage> boardClearSubscriber)
         {
             _grid = grid;
             _poolManager = poolManager;
             _resolver = resolver;
             _gridActorConfig = gridActorConfig;
+            _boardClearSubscriber = boardClearSubscriber;
         }
 
         // Bypasses pool and MonoBehaviour infrastructure — used in tests.
@@ -47,6 +52,7 @@ namespace BalloonParty.Slots.Actor
         public void Start()
         {
             RegisterPools();
+            _boardClearSubscriber?.Subscribe(OnBoardClear);
         }
 
         public UniTask SpawnAsync(CancellationToken ct)
@@ -102,6 +108,40 @@ namespace BalloonParty.Slots.Actor
             }
         }
 
+        private void OnBoardClear(BoardClearMessage _)
+        {
+            if (!_poolsRegistered)
+            {
+                return;
+            }
+
+            // StaticActorSpawner owns the Get(), so it owns the Return(). Removing each slot
+            // fires SlotGrid.OnChanged(Removed), which the cluster registries consume to dissolve
+            // their clusters incrementally — no explicit rebuild needed for the clear.
+            foreach (var entry in _gridActorConfig.Entries)
+            {
+                for (var col = 0; col < _grid.Columns; col++)
+                {
+                    for (var row = 0; row < _grid.Rows; row++)
+                    {
+                        var slot = new Vector2Int(col, row);
+                        var model = _grid.At(slot);
+                        if (model == null || !ModelMatches(model, entry.ActorType))
+                        {
+                            continue;
+                        }
+
+                        var view = _grid.ViewAt(slot) as GridActorView;
+                        _grid.Remove(slot);
+                        if (view != null)
+                        {
+                            _poolManager.Return(entry.PoolKey, view);
+                        }
+                    }
+                }
+            }
+        }
+
         private void RegisterPools()
         {
             if (_poolManager == null || _gridActorConfig == null)
@@ -146,6 +186,16 @@ namespace BalloonParty.Slots.Actor
                 GridActorType.Puff => new PuffObstacleModel(),
                 GridActorType.Bush => new BushObstacleModel(),
                 _ => throw new System.Exception("Unknown actor type: " + actorType)
+            };
+        }
+
+        private static bool ModelMatches(IWriteableSlotActor model, GridActorType actorType)
+        {
+            return actorType switch
+            {
+                GridActorType.Puff => model is PuffObstacleModel,
+                GridActorType.Bush => model is BushObstacleModel,
+                _ => false
             };
         }
     }

@@ -115,6 +115,31 @@ namespace BalloonParty.Tests.Slots
             Assert.That(called, Is.EquivalentTo(new[] { "a", "b" }),
                 "Both spawners at the same stage must run.");
         }
+
+        [Test]
+        public void GridSpawnerCoordinator_ResetRun_RerunsSpawners()
+        {
+            var callCount = 0;
+
+            var spawner = Substitute.For<IGridSpawner>();
+            spawner.SpawnPriority.Returns(SpawnStage.StaticActors);
+            spawner.SpawnAsync(Arg.Any<CancellationToken>()).Returns(_ =>
+            {
+                callCount++;
+                return UniTask.CompletedTask;
+            });
+
+            var coordinator = new GridSpawnerCoordinator(
+                new[] { spawner },
+                new ImmediateGate());
+
+            coordinator.Start();
+            Assert.AreEqual(1, callCount, "Initial spawn runs once.");
+
+            coordinator.ResetRun(2);
+
+            Assert.AreEqual(2, callCount, "Reset re-runs the spawners to repopulate the board.");
+        }
     }
 }
 

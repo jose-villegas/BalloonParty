@@ -113,7 +113,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<NudgeService>();
             builder.RegisterEntryPoint<GridActorHitController>();
             builder.RegisterInstance<IReadyGate>(new NavigationReadyGate(NavigationState.Game));
-            builder.RegisterEntryPoint<GridSpawnerCoordinator>();
+            builder.RegisterEntryPoint<GridSpawnerCoordinator>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<StaticActorSpawner>().As<IGridSpawner>();
             builder.RegisterEntryPoint<PuffClusterRegistry>().AsSelf();
             builder.RegisterEntryPoint<PuffCloudViewController>();
