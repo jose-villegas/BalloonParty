@@ -104,7 +104,9 @@ namespace BalloonParty.Balloon.Spawner
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
 
             // Begin prewarm immediately so pools are ready before SpawnAsync is called.
-            _prewarmTask = PrewarmAsync(_cts.Token);
+            // Preserve() so the task can be awaited again when SpawnAsync re-runs on a restart —
+            // a bare UniTask is single-await and re-awaiting the consumed prewarm would throw.
+            _prewarmTask = PrewarmAsync(_cts.Token).Preserve();
         }
 
         public async UniTask SpawnAsync(CancellationToken ct)
