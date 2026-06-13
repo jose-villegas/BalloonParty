@@ -16,6 +16,12 @@ namespace BalloonParty.UI.Score
         [SerializeField] private AnimationCurve _moveCurve;
 
         private Tweener _moveTween;
+        private Action _onCompleted;
+        private TweenCallback _fireCompletedCallback;
+        private TweenCallback _beginTraceCallback;
+        private Vector3 _burstTarget;
+        private float _burstTraceDuration;
+        private bool _burstUseUnscaledTime;
 
         private void Awake()
         {
@@ -23,6 +29,11 @@ namespace BalloonParty.UI.Score
             _renderer.sortingOrder = OverlaySortingOrder;
             _trailRenderer.sortingLayerName = OverlaySortingLayer;
             _trailRenderer.sortingOrder = OverlaySortingOrder;
+
+            // Cache the tween callbacks once so Setup/SetupBurst don't allocate a fresh
+            // closure per spawn. State they need is carried in fields, set per spawn.
+            _fireCompletedCallback = FireCompleted;
+            _beginTraceCallback = BeginTraceFromState;
         }
 
         public void OnSpawned()
@@ -32,6 +43,7 @@ namespace BalloonParty.UI.Score
         public void OnDespawned()
         {
             _moveTween = null;
+            _onCompleted = null;
             transform.DOKill();
             _renderer.sortingOrder = OverlaySortingOrder;
             _trailRenderer.sortingOrder = OverlaySortingOrder;
@@ -62,6 +74,7 @@ namespace BalloonParty.UI.Score
             bool useUnscaledTime = false)
         {
             _trailRenderer.Clear();
+            _onCompleted = onCompleted;
 
             _moveTween = transform.DOMove(target, duration);
             var scaleTween = transform.DOScale(Vector3.zero, duration);
@@ -74,7 +87,7 @@ namespace BalloonParty.UI.Score
                 scaleTween.SetUpdate(true);
             }
 
-            scaleTween.OnComplete(() => onCompleted?.Invoke());
+            scaleTween.OnComplete(_fireCompletedCallback);
         }
 
         /// <summary>
@@ -95,11 +108,15 @@ namespace BalloonParty.UI.Score
             _trailRenderer.startColor = color;
             _trailRenderer.Clear();
 
+            _onCompleted = onCompleted;
+            _burstTarget = target;
+            _burstTraceDuration = traceDuration;
+            _burstUseUnscaledTime = useUnscaledTime;
+
             var totalDuration = burstDuration + traceDuration;
             var scaleTween = transform.DOScale(Vector3.zero, totalDuration).SetEase(_scaleCurve);
 
-            _moveTween = transform.DOMove(burstTo, burstDuration)
-                .OnComplete(() => BeginTraceFlight(target, traceDuration, useUnscaledTime));
+            _moveTween = transform.DOMove(burstTo, burstDuration).OnComplete(_beginTraceCallback);
 
             if (useUnscaledTime)
             {
@@ -107,7 +124,7 @@ namespace BalloonParty.UI.Score
                 scaleTween.SetUpdate(true);
             }
 
-            scaleTween.OnComplete(() => onCompleted?.Invoke());
+            scaleTween.OnComplete(_fireCompletedCallback);
         }
 
         public void DisableMoveTween()
@@ -123,6 +140,18 @@ namespace BalloonParty.UI.Score
             {
                 _moveTween.SetUpdate(true);
             }
+        }
+
+        private void FireCompleted()
+        {
+            var callback = _onCompleted;
+            _onCompleted = null;
+            callback?.Invoke();
+        }
+
+        private void BeginTraceFromState()
+        {
+            BeginTraceFlight(_burstTarget, _burstTraceDuration, _burstUseUnscaledTime);
         }
     }
 }
