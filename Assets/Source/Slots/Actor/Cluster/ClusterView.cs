@@ -23,6 +23,7 @@ namespace BalloonParty.Slots.Actor.Cluster
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
         private static readonly int SlotCentersWorldId = Shader.PropertyToID("_SlotCentersWorld");
         private static readonly int SlotCountId = Shader.PropertyToID("_SlotCount");
+        private static readonly int AnimationSpeedId = Shader.PropertyToID("_AnimationSpeed");
 
         [SerializeField] private SpriteRenderer _renderer;
 
@@ -53,29 +54,37 @@ namespace BalloonParty.Slots.Actor.Cluster
             }
         }
 
+#if UNITY_EDITOR
+        // Edit-mode only. Built-in _Time is frozen when not playing, so drive animation
+        // previews here: force repaints (for DrawMesh-based views like BushView) and feed
+        // editor time to the property block (for SpriteRenderer-based views like clouds).
+        // At runtime the shader derives its own clock from _Time.y * _AnimationSpeed, so
+        // there is no per-frame property-block push — this method compiles out of builds.
         private void Update()
         {
-            EnsureBlock();
-
-            if (_renderer == null || _block == null)
+            if (Application.isPlaying)
             {
                 return;
             }
 
-            var currentTime = Time.time;
-#if UNITY_EDITOR
-            if (!Application.isPlaying)
+            SceneView.RepaintAll();
+            EnsureBlock();
+
+            if (_renderer == null || _block == null || !_renderer.enabled)
             {
-                currentTime = (float)EditorApplication.timeSinceStartup;
-                SceneView.RepaintAll();
+                return;
             }
-#endif
 
             _renderer.GetPropertyBlock(_block);
-            _block.SetFloat(TimeOffsetId, currentTime * _animationSpeed);
+            // Zero the shader's built-in _Time clock and drive purely from editor time:
+            // _Time advances under the forced repaints above, so leaving _AnimationSpeed
+            // non-zero here would stack the two clocks and animate at double speed.
+            _block.SetFloat(AnimationSpeedId, 0f);
+            _block.SetFloat(TimeOffsetId, (float)EditorApplication.timeSinceStartup * _animationSpeed);
             OnUpdateBlock(_block);
             _renderer.SetPropertyBlock(_block);
         }
+#endif
 
         private void OnValidate()
         {
@@ -134,8 +143,10 @@ namespace BalloonParty.Slots.Actor.Cluster
         }
 
         /// <summary>
-        /// Called every <see cref="Update"/> after the time offset is set.
-        /// Override to push per-frame subclass-specific shader properties.
+        /// Called during edit-mode animation preview after the time offset is set.
+        /// Runtime animation is shader-driven (<c>_Time</c>), so this is not invoked
+        /// per-frame in builds — push runtime per-frame properties from a subclass
+        /// <c>Update</c> / <c>LateUpdate</c> instead.
         /// </summary>
         protected virtual void OnUpdateBlock(MaterialPropertyBlock block)
         {
@@ -185,6 +196,12 @@ namespace BalloonParty.Slots.Actor.Cluster
             _renderer.GetPropertyBlock(_block);
             _block.SetVectorArray(SlotCentersWorldId, _slotCenters);
             _block.SetInt(SlotCountId, _slotCount);
+            // Pushed once here so the shader's runtime _Time.y * _AnimationSpeed clock
+            // needs no per-frame update.
+            _block.SetFloat(AnimationSpeedId, _animationSpeed);
+            // Cleared so a view reused from an edit-mode preview can't carry a stale
+            // offset into runtime, where the clock is purely _Time.y * _AnimationSpeed.
+            _block.SetFloat(TimeOffsetId, 0f);
             _renderer.SetPropertyBlock(_block);
         }
     }

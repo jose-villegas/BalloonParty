@@ -6,7 +6,8 @@ Shader "BalloonParty/Grid/PuffCloud"
     // Slot-center array drives boundary falloff and occupancy masking — works
     // identically for single-slot (P1, 1 entry) and merged clusters (P3, N entries).
     //
-    // GPU instancing DISABLED — per-instance _TimeOffset driven via MaterialPropertyBlock.
+    // Animation clock is shader-driven at runtime (_Time.y * _AnimationSpeed); C# only
+    // feeds _TimeOffset in edit mode, where built-in _Time is frozen.
     //
     // _DisturbanceTex, _FieldBoundsMin, _FieldBoundsSize are GLOBAL shader
     // properties set by DisturbanceFieldService — NOT in the Properties block.
@@ -48,6 +49,7 @@ Shader "BalloonParty/Grid/PuffCloud"
         _DisplaceWorldScale ("Displace World Scale", Range(0, 2))      = 0.5
 
         [Header(Animation)]
+        _AnimationSpeed     ("Animation Speed",    Float)              = 0.8
         _TimeOffset         ("Time Offset",        Float)              = 0.0
 
         [Header(Shadow)]
@@ -126,6 +128,7 @@ Shader "BalloonParty/Grid/PuffCloud"
             float  _BorderSoftness;
             float  _SlotRadius;
             float  _TimeOffset;
+            float  _AnimationSpeed;
 
             float4 _LightDir;
             fixed4 _LightColor;
@@ -239,7 +242,9 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                 float2 wp = IN.worldPos;
                 float2 wpOrig = wp;
-                float  t  = _TimeOffset;
+                // Runtime clock is shader-driven via built-in _Time (no per-frame push);
+                // _TimeOffset is only fed by C# in edit mode, where _Time is frozen.
+                float  t  = _Time.y * _AnimationSpeed + _TimeOffset;
 
                 // Density field + displacement (P2+)
                 #ifdef _DENSITY_ON
