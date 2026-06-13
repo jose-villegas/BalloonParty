@@ -7,6 +7,7 @@ using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Game.Cinematics;
+using BalloonParty.Game.Run;
 using BalloonParty.Game.Score;
 using BalloonParty.Item;
 using BalloonParty.Item.Bomb;
@@ -69,6 +70,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<NudgeMessage>(options);
             builder.RegisterMessageBroker<ScorePointMessage>(options);
             builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
+            builder.RegisterMessageBroker<GameOverMessage>(options);
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
             builder.RegisterMessageBroker<ItemCheckMessage>(options);
             builder.RegisterMessageBroker<ItemActivatedMessage>(options);
@@ -101,6 +103,9 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces().AsSelf();
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);
             builder.Register<ColorStreakTracker>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<INavigation, NavigationService>(Lifetime.Singleton);
+            builder.Register<ICinematicState, CinematicStateService>(Lifetime.Singleton);
+            builder.Register<RunMeta>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.RegisterComponentInHierarchy<SlotGridView>();
 
             builder.RegisterEntryPoint<BalloonBalancer>().AsSelf();
@@ -116,7 +121,8 @@ namespace BalloonParty.Game
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf();
-            builder.RegisterEntryPoint<ScoreController>().AsSelf();
+            builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>();
+            builder.Register<RunController>(Lifetime.Singleton).AsSelf();
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();
             builder.RegisterEntryPoint<ItemAssigner>();
             builder.RegisterEntryPoint<ItemActivator>();

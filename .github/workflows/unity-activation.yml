@@ -1,0 +1,31 @@
+name: Unity activation
+
+# One-time helper to obtain a Unity Personal license activation file for CI.
+# Run it manually (Actions tab > "Unity activation" > Run workflow), then:
+#   1. Download the "Manual Activation File" artifact (a .alf file).
+#   2. Go to https://license.unity3d.com/manual and upload the .alf.
+#   3. Download the resulting .ulf file.
+#   4. Repo > Settings > Secrets and variables > Actions > New repository secret:
+#      name UNITY_LICENSE, value = the full contents of the .ulf file.
+# After the secret exists, the Tests workflow can run. This workflow is not
+# needed again unless the license is revoked.
+
+on:
+  workflow_dispatch:
+
+jobs:
+  activation:
+    name: Request activation file
+    runs-on: ubuntu-latest
+    steps:
+      - name: Request manual activation file
+        id: request-activation
+        uses: game-ci/unity-request-activation-file@v2
+        with:
+          unityVersion: 6000.3.15f1
+
+      - name: Upload activation file
+        uses: actions/upload-artifact@v4
+        with:
+          name: Manual Activation File
+          path: ${{ steps.request-activation.outputs.filePath }}

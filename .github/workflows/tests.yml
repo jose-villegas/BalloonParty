@@ -1,0 +1,54 @@
+name: Tests
+
+# Runs the Unity EditMode test suite on every push and pull request.
+# A failed test step fails the job — GitHub shows a red check and emails the
+# commit author (default notification). Results are also published as a Check
+# annotation and uploaded as an artifact.
+#
+# To run only when code/assets change (skip docs-only pushes), add a paths
+# filter under `push:` / `pull_request:`, e.g.
+#   paths: ['Assets/**', 'Packages/**', 'ProjectSettings/**', '.github/workflows/tests.yml']
+
+on:
+  push:
+  pull_request:
+
+concurrency:
+  group: tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  editmode:
+    name: EditMode tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache Library
+        uses: actions/cache@v4
+        with:
+          path: Library
+          key: Library-${{ hashFiles('Assets/**', 'Packages/**', 'ProjectSettings/**') }}
+          restore-keys: |
+            Library-
+
+      - name: Run EditMode tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          # Unity Personal: full contents of the .ulf activation file.
+          # Mint it via the "Unity activation" workflow, then store as a repo secret.
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+        with:
+          # unityVersion is auto-detected from ProjectSettings/ProjectVersion.txt.
+          testMode: EditMode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: EditMode test results
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: editmode-test-results
+          path: artifacts
+          if-no-files-found: warn

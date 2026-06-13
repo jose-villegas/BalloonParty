@@ -7,7 +7,7 @@ Tracks per-color scoring, level progress, streak multipliers, and the visual tra
 | File | What it does |
 |---|---|
 | `TrailId` | Readonly struct — uniquely identifies a score trail by `(Color, Score, Level)`. Provides a convenience constructor from `ScorePointMessage`. Two colors can share the same numeric score within a level, and scores restart after level reset, so all three are needed for uniqueness |
-| `ScoreController` | `IStartable` — tracks per-color level progress (confirmed on trail arrival), projected progress (advanced immediately on pop). On balloon hit, casts actor to `IHasScoreColor` and calls `ResolveScoreAttribution(context, attributions)` — all returned `ScoreAttribution` entries are resolved and published together as one scatter group sharing `GroupSize`. On trail arrival, sets confirmed progress and checks for level-up via `ScoreLevelUpMessage` and `NavigationState.LevelUp` |
+| `ScoreController` | `IStartable` — tracks per-color level progress (confirmed on trail arrival), projected progress (advanced immediately on pop). On balloon hit, casts actor to `IHasScoreColor` and calls `ResolveScoreAttribution(context, attributions)` — all returned `ScoreAttribution` entries are resolved and published together as one scatter group sharing `GroupSize`. On trail arrival, sets confirmed progress and checks for level-up via `ScoreLevelUpMessage` and `NavigationState.LevelUp`. Run-scoped: level/score start at 1/0 every session (no cross-session persistence) and reset via `IRunResettable.ResetRun()` on restart (see `Game/Run/`) |
 | `ColorStreakTracker` | Plain C# singleton — single source of truth for the color streak. `Record(colorId, breaksStreak)` updates state and returns the multiplier to apply. `breaksStreak = true` resets the chain and returns 1 (attribution still scores, no bonus). Auto-resets on `ScoreLevelUpMessage`. Exposed as `GetStreak(colorName)` for UI consumers |
 | `ScoreTrailService` | `IStartable` + `ICinematicAware` — subscribes to `ScorePointMessage`; spawns one pooled `FlyingTrail` orb per message. Composes `TrailTracker<TrailId>` for flight tracking, cinematic pause/resume, and external interception. Uses `GroupIndex`/`GroupSize` for scatter positioning and stagger delay. `NextLevel` flag gates spawns during cinematics |
 
@@ -39,7 +39,7 @@ Each trail is identified by a `TrailId(Color, Score, Level)`:
 Two progress values exist per color:
 
 - **`_projectedProgress`** — advances immediately on balloon pop. Used by `WillLevelUp` and trail score assignment so multi-point balloons get unique, sequential trail identities.
-- **`_levelProgress`** — set to the arriving trail's score value on arrival (using `Math.Max` to prevent out-of-order decreases). Represents the highest confirmed progress for that color. Used for the level-up threshold check and persistent save state.
+- **`_levelProgress`** — set to the arriving trail's score value on arrival (using `Math.Max` to prevent out-of-order decreases). Represents the highest confirmed progress for that color. Used for the level-up threshold check.
 
 `WillLevelUp` checks `_projectedProgress` for **all** colors (not just the popping color). This ensures the cinematic registers even when multiple colors reach the threshold in close succession — their trails may still be in-flight but will confirm before the paused tipping trail arrives. `CheckLevelUp` uses `_levelProgress` (confirmed) for the final threshold check.
 

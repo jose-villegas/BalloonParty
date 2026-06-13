@@ -212,8 +212,10 @@ the whole level.)
 ## Phasing
 
 1. **`GameOver` state + run-scoped save** — new `NavigationState.GameOver`, freeze input,
-   placeholder "you lost" + restart; make `ScoreController` run-scoped (reset on loss, persist
-   best-level/best-score meta only). Foundation; bakes in the run-based decision.
+   placeholder "you lost" + **in-place restart**; make `ScoreController` run-scoped (reset via an
+   ordered `IRunResettable` harness, persist best-level/best-score meta only). Foundation; bakes
+   in the run-based decision. **See *Phase 1 — detailed breakdown* below** for the full task
+   list, testability seams, and test plan.
 2. **`BreachDetector` + deadline** — encroachment loss works; tune the deadline by hand.
 3. **Level-range config system** — `LevelRangeConfiguration` + `RangedValue` (fixed/linear/
    random) + `DifficultyController`. Start with the levers that work pre-8.3: spawn-lines and
@@ -225,6 +227,80 @@ the whole level.)
 6. **GameOver UI + meta** — score, best-level/best-score, restart flow.
 7. **Tuning playtest** — pop-rate vs. encroachment vs. level-threshold curve vs. the per-range
    sliders.
+
+---
+
+## Phase 1 — detailed breakdown
+
+Phase 1 delivers the `GameOver` state, the run-based save model, and an **in-place restart**,
+with the test scaffolding it implies (including the project's **first PlayMode tests**). The
+loss *trigger* is Phase 2 — Phase 1 exercises the flow with a `ForceGameOverCheat`. The loss
+*cinematic* is a tracked follow-on built after the state core lands.
+
+Lifecycle: **trigger → `RunController.EndRun()` → (loss cinematic) → GameOver screen →
+[Restart] → `RunController.RestartRun()` (clears board + `ResetRun()`) → `Game`**. Reset
+happens on *restart*, not on GameOver entry, so the screen can still show the final score.
+
+### Testability seams (build first)
+
+`RunController` must drive `Navigation.TransitionTo` and read `Cinematic.IsPlaying` — both
+**static** and unobservable to the test suite (the reason `GridSpawnerCoordinator` already
+routes around static `Navigation`). Two thin injectable seams make the whole run lifecycle
+unit-testable; substitute them with NSubstitute in tests:
+
+- **`INavigation`** — wraps `Navigation.TransitionTo` / `Navigation.Current`; concrete
+  `NavigationService` forwards to the static. Other call sites may keep using the static.
+- **`ICinematicState`** — exposes `IsPlaying`; concrete forwards to static `Cinematic`.
+
+### Block A — core state + run-scoped save (pure C#, headless-verifiable)
+
+| # | Task | Tests |
+|---|------|-------|
+| 1 | Add `GameOver` to `NavigationState`. Input-freeze is automatic — `ThrowerController` gates on `== Game`. | none (enum) |
+| 2 | `GameOverMessage` + MessagePipe broker registration in `GameLifetimeScope`. | — |
+| 3 | `RunMeta : IRunMeta` — best level/score, `RecordRun(level, score)`, PlayerPrefs `BestLevel`/`BestScore`, loaded once. | **new** `RunMetaTests`: max-keep (level + score independently), persist-and-reload, no-prefs defaults to 0 |
+| 4 | Run-scoped `ScoreController` — drop cross-session restore + run-state `Save()` and the quit/focus-loss hooks; add `ResetRun()`; implement `IRunResettable` (no `GameOverMessage` subscription — reset is restart-driven). | **rewrite** `ScoreControllerTests`: `Start_WithPersistedLevel_StartsAtOne`, `ResetRun_ClearsLevelScoreAndAllColorProgress`, `Save_DoesNotWriteRunState`; drop the vestigial `Level`/`{color}`/`.Progress` PlayerPrefs cleanup; audit existing cases for hidden reliance on restore |
+| 5 | `RunController` — `EndRun()` (gated on `ICinematicState.IsPlaying` / `LevelUp`: commit meta → publish `GameOverMessage` → `INavigation.TransitionTo(GameOver)`) and `RestartRun()` (invoke resettables → `TransitionTo(Game)`). | **new** `RunControllerTests`: records meta with final level/score, publishes once, transitions to `GameOver`, defers while cinematic playing, `RestartRun` transitions to `Game` and does **not** record meta |
+
+### Block B — in-place reset harness (built up front)
+
+| # | Task | Tests |
+|---|------|-------|
+| 6 | `IRunResettable` (with explicit `ResetOrder`) + ordered invocation in `RunController.RestartRun()`. Mirrors the `SpawnStage`-ordered `IGridSpawner` pattern. | **new** ordering test, mirroring `GridSpawnerCoordinatorTests` — fakes record call order, assert sequence |
+| 7 | **Balancer cancellation fix** — `BalloonBalancer.BalanceNextFrameAsync()` is `.Forget()` with **no CancellationToken**; add a CTS/epoch so a balance scheduled *before* a reset is dropped (else it animates pooled actors against an emptied grid). The one real correctness change in Phase 1. | **new** `Balance_AfterReset_IsNoOp` (synchronous guard); frame-deferred timing → PlayMode |
+| 8 | `SlotGrid.Clear()` (none exists today) + per-service `Reset()` implementing `IRunResettable`: spawner counters (`_activeCounts`/`_turnCount`/`_newlySpawnedBalloons`), `BalancePathHolder` (`_transitSlots`/`_actorSlots`), `SlotClusterRegistry.RebuildAll()`, `ProjectilePositionProvider.Clear()`, `PauseService` stack, `DisturbanceFieldService` stamps, `ScoreTrailService.CompleteAll()`. **Return every actor through its normal despawn path** (kills tweens, disposes per-instance subs) — never bypass with a central `Return()`. | EditMode for the pure-C# clears (`SlotGrid.Clear`, `BalancePathHolder.Reset`, `SlotClusterRegistry.RebuildAll`, `ProjectilePositionProvider.Clear`, add `PauseService.Reset` to existing `PauseServiceTests`); pooled-return + tween-kill → PlayMode; `DisturbanceFieldService` (RenderTexture-backed) → in-editor |
+| 9 | Re-trigger the initial grid spawn after a reset. | — |
+
+### Block C — trigger + UI (in-editor)
+
+| # | Task | Tests |
+|---|------|-------|
+| 10 | `ForceGameOverCheat` → `RunController.EndRun()` (mirrors `TriggerLevelUpCheat`). | thin forwarding — none |
+| 11 | Placeholder GameOver screen — final + best score, restart button via `NavigationTrigger` → `RestartRun()`, plus scene/prefab wiring. | in-editor (not `dotnet build`-verifiable) |
+| 12 | Docs — `Score`/`GameState`/`Cheats` READMEs; tick this phase. | — |
+
+### Follow-on (after Block A) — loss cinematic
+
+`GameOverLossEffect` mirroring `LevelUpTrailEffect`: a new `CinematicState` value, `BeginCinematic`
++ `PauseService.Pause(Cinematic)`, a camera push-in / slow-mo `Time.timeScale` curve via DOTween
+(`.SetUpdate(true)`), then `EndCinematic` → GameOver screen. Likely a `GameOverLifetimeScope` with
+a `CinematicEndGate`, mirroring `LevelUpLifetimeScope`. Self-contained; needs in-editor tuning.
+
+### Test strategy
+
+**EditMode** (NUnit + NSubstitute, mirrors source folders) covers all pure-C# logic: `RunMeta`,
+`ScoreController.ResetRun()`, `RunController` (via the seams), the `IRunResettable` ordering, the
+balancer cancel *guard*, and the synchronous service resets.
+
+**PlayMode** — *new for this repo* (add `Assets/Tests/PlayMode/BalloonParty.Tests.PlayMode.asmdef`).
+Covers the async/frame/pooling behavior EditMode cannot drive:
+- a balance scheduled before a reset is dropped (frame-deferred `.Forget()` path);
+- board-clear returns pooled actors through their despawn path — tweens killed, per-instance
+  subscriptions disposed, no pool leak;
+- end-to-end `EndRun → RestartRun` leaves a clean, replayable grid.
+
+**Manual in-editor** (documented checklist, not automated): cinematic feel, GameOver screen
+wiring, and the RenderTexture-backed `DisturbanceFieldService` reset.
 
 ---
 
@@ -245,5 +321,7 @@ the whole level.)
 
 1. ~~Runs vs. persistent progression~~ — **✅ Resolved: run-based** (see gating decision above).
 2. **Deadline row vs. spawn-saturation vs. both** for the loss trigger.
-3. **Restart flow** — full scene reload, or in-place grid reset + state clear?
+3. ~~Restart flow~~ — **✅ Resolved: in-place** grid reset + state clear, via an ordered
+   `IRunResettable` harness (scene reload rejected — avoids a visible reload). See *Phase 1 —
+   detailed breakdown*.
 4. **Meta on loss** — best level / best score is the baseline; currency/unlocks TBD.

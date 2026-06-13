@@ -81,9 +81,9 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 183 tests
+## Current Coverage — 201 tests
 
-> Last updated: **June 2, 2026**
+> Last updated: **June 13, 2026**
 
 ### `SlotGridTests` — 42 tests
 
@@ -117,9 +117,9 @@ Tests the trajectory bounce algorithm — pure math with wall reflection.
 | Max steps | 1 | Step exhaustion before wall hit |
 | Zig-zag | 1 | Multiple reflections chain correctly |
 
-### `ScoreControllerTests` — 22 tests
+### `ScoreControllerTests` — 26 tests
 
-Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` projected-progress check, and next-level trail renumbering — deferred scoring via trail arrival, multi-map accumulation with an all-colors threshold gate, consecutive same-color pop multiplier, projected vs confirmed progress, `ScorePointMessage` field correctness, and `IHitable`-based scoring with non-balloon actors.
+Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` projected-progress check, next-level trail renumbering, and the run-scoped lifecycle (no cross-session persistence; reset via `IRunResettable`) — deferred scoring via trail arrival, multi-map accumulation with an all-colors threshold gate, consecutive same-color pop multiplier, projected vs confirmed progress, `ScorePointMessage` field correctness, and `IHitable`-based scoring with non-balloon actors.
 
 | Area | Tests | What could break |
 |---|---|---|
@@ -145,6 +145,38 @@ Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` pro
 | `GroupIndex` sequential | 1 | Non-sequential indices break trail scatter delay order |
 | `IHitable` non-balloon actor — `Pop` outcome scores | 1 | Scoring pipeline too narrowly typed to `IBalloonModel` |
 | `Absorb` outcome — does not score | 1 | Absorb mis-routed as Pop |
+| Run starts at level 1, ignoring persisted level | 1 | Cross-session restore re-introduced — breaks run-based model |
+| `ResetRun` resets level to 1 | 1 | Stale level carries into the next run |
+| `ResetRun` clears score and all color progress | 1 | Stale progress carries into the next run |
+| Run state is not persisted | 1 | Run leaks to `PlayerPrefs` across sessions |
+
+### `RunControllerTests` — 9 tests
+
+Tests the run lifecycle — loss commit/announce/transition, the suppression gates, and ordered reset. Isolated from the static `Navigation` / `Cinematic` via the `INavigation` / `ICinematicState` seams (substituted with NSubstitute).
+
+| Area | Tests | What could break |
+|---|---|---|
+| `EndRun` records meta with final level/score | 1 | Snapshot reads the wrong source, or commit skipped |
+| `EndRun` publishes `GameOverMessage` once | 1 | Duplicate or missing loss announcement |
+| `EndRun` transitions to `GameOver` | 1 | Wrong target state |
+| `EndRun` suppressed while a cinematic plays | 1 | GameOver overlaps the level-up cinematic |
+| `EndRun` suppressed when not in `Game` | 1 | Loss fires from `LevelUp` / `Launch` |
+| `EndRun` suppressed when already `GameOver` | 1 | Re-entrant loss double-commits the meta |
+| `RestartRun` invokes resettables in ascending `ResetOrder` | 1 | Teardown order wrong — async/grid reset runs after score |
+| `RestartRun` transitions to `Game` | 1 | Stuck on the GameOver screen after restart |
+| `RestartRun` does not record meta | 1 | Best score inflated by a restart |
+
+### `RunMetaTests` — 5 tests
+
+Tests the persisted cross-run record — best level / best score max-keeping and `PlayerPrefs` round-trip. Cleans `BestLevel` / `BestScore` keys in `SetUp` and `TearDown`.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Higher level updates best level | 1 | Comparison wrong or not persisted |
+| Lower level keeps best level | 1 | A worse run overwrites the best |
+| Level and score tracked independently | 1 | One field clobbers the other |
+| Persists across instances | 1 | Not written, or not reloaded on construct |
+| No prefs → defaults to zero | 1 | Wrong default best on a fresh install |
 
 ### `BalloonModelTests` — 10 tests
 
@@ -417,6 +449,7 @@ These systems are not tested because they are either too coupled to Unity runtim
 | `OrthogonalSizeCameraController` | Forwards config lookup to camera — simple delegation |
 | `ThrowerView.RotateTo` | Single `AngleAxis` call — too simple |
 | `SceneTransition` / `Navigation` | Button handler wiring / static state machine — too simple |
+| `NavigationService` / `CinematicStateService` | Simple forwarders to the static `Navigation` / `Cinematic` — no logic to break. The lifecycle logic that consumes them is tested in `RunControllerTests` |
 | `PaintSplashView` | MonoBehaviour with `Update`-driven animation; visual correctness is a Play Mode concern. Core logic (target collection, paintability) tested via `PaintItemHandlerTests` |
 | `ScoreTrailService` | Trail spawning depends on `PoolManager` + DOTween flight. Trail arrival message is tested via `ScoreControllerTests` |
 | `TrailTracker<TId>` | `PauseWhere`, `ResumeAll`, and `TrackTrail` (retroactive path) call `DOPause`/`DOPlay`/`DOTween.TweensByTarget` — require live tweens. The forward `IsTracked` path is too simple (dict lookup + callback store). |

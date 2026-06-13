@@ -4,6 +4,7 @@ namespace BalloonParty.Shared.GameState
     {
         Launch,
         Game,
-        LevelUp
+        LevelUp,
+        GameOver
     }
 }

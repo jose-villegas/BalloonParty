@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Run;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -12,11 +13,8 @@ using VContainer.Unity;
 
 namespace BalloonParty.Game.Score
 {
-    internal class ScoreController : IStartable, IDisposable
+    internal class ScoreController : IStartable, IDisposable, IRunResettable, IRunScore
     {
-        private const string LevelKey = "Level";
-        private const string ProgressSuffix = ".Progress";
-
         private readonly IGameConfiguration _config;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ReactiveProperty<int> _level = new(1);
@@ -35,6 +33,9 @@ namespace BalloonParty.Game.Score
 
         public IReadOnlyReactiveProperty<int> Level => _level;
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
+
+        // Score state has no teardown dependencies, so it resets after grid/gameplay state.
+        public int ResetOrder => 100;
 
         public ScoreController(
             ISubscriber<ActorHitMessage> hitSubscriber,
@@ -56,34 +57,34 @@ namespace BalloonParty.Game.Score
 
         public void Dispose()
         {
-            Application.quitting -= Save;
-            Application.focusChanged -= OnFocusChanged;
             _subscription?.Dispose();
             _trailSubscription?.Dispose();
         }
 
         public void Start()
         {
-            _level.Value = PlayerPrefs.GetInt(LevelKey, 1);
-
-            var initialTotal = 0;
             foreach (var color in _palette.Colors)
             {
                 _colorKeys.Add(color.Name);
-                var saved = PlayerPrefs.GetInt(color.Name, 0);
-                _persistentScore[color.Name] = saved;
-                _levelProgress[color.Name] = PlayerPrefs.GetInt(color.Name + ProgressSuffix, 0);
-                _projectedProgress[color.Name] = _levelProgress[color.Name];
-                initialTotal += saved;
             }
 
-            _totalScore.Value = initialTotal;
+            ResetRun();
 
             _subscription = _hitSubscriber.Subscribe(OnActorHit);
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
+        }
 
-            Application.quitting += Save;
-            Application.focusChanged += OnFocusChanged;
+        public void ResetRun()
+        {
+            _level.Value = 1;
+            _totalScore.Value = 0;
+
+            foreach (var key in _colorKeys)
+            {
+                _persistentScore[key] = 0;
+                _levelProgress[key] = 0;
+                _projectedProgress[key] = 0;
+            }
         }
 
         public int GetProgress(string colorName)
@@ -235,14 +236,6 @@ namespace BalloonParty.Game.Score
             }
         }
 
-        private void OnFocusChanged(bool hasFocus)
-        {
-            if (!hasFocus)
-            {
-                Save();
-            }
-        }
-
         private void OnTrailArrived(ScoreTrailArrivedMessage msg)
         {
             if (!_persistentScore.ContainsKey(msg.ColorName))
@@ -258,18 +251,6 @@ namespace BalloonParty.Game.Score
             _projectedProgress[msg.ColorName] = Math.Max(_projectedProgress[msg.ColorName], msg.Score);
 
             CheckLevelUp();
-        }
-
-        private void Save()
-        {
-            foreach (var color in _palette.Colors)
-            {
-                PlayerPrefs.SetInt(color.Name, _persistentScore.GetValueOrDefault(color.Name));
-                PlayerPrefs.SetInt(color.Name + ProgressSuffix, _levelProgress.GetValueOrDefault(color.Name));
-            }
-
-            PlayerPrefs.SetInt(LevelKey, _level.Value);
-            PlayerPrefs.Save();
         }
     }
 }

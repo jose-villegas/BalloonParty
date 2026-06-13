@@ -33,13 +33,7 @@ namespace BalloonParty.Tests.Game
         [SetUp]
         public void SetUp()
         {
-            // Clean PlayerPrefs keys used by ScoreController to avoid cross-test pollution
-            PlayerPrefs.DeleteKey("Level");
-            PlayerPrefs.DeleteKey(Red);
-            PlayerPrefs.DeleteKey(Blue);
-            PlayerPrefs.DeleteKey(Red + ".Progress");
-            PlayerPrefs.DeleteKey(Blue + ".Progress");
-            PlayerPrefs.Save();
+            ClearScorePrefs();
 
             _config = Substitute.For<IGameConfiguration>();
             _config.PointsRequiredForLevel(Arg.Any<int>()).Returns(10);
@@ -48,6 +42,20 @@ namespace BalloonParty.Tests.Game
             var colors = new List<PaletteEntry> { CreatePaletteEntry(Red), CreatePaletteEntry(Blue) };
             _palette.Colors.Returns(colors);
 
+            _controller = BuildController();
+            _controller.Start();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _controller.Dispose();
+            Time.timeScale = 1f;
+            ClearScorePrefs();
+        }
+
+        private ScoreController BuildController()
+        {
             var hitSubscriber = Substitute.For<ISubscriber<ActorHitMessage>>();
             var trailArrivedSubscriber = Substitute.For<ISubscriber<ScoreTrailArrivedMessage>>();
             var levelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
@@ -79,7 +87,7 @@ namespace BalloonParty.Tests.Game
                 .Returns(Substitute.For<IDisposable>());
 
             _streakTracker = new ColorStreakTracker(levelUpSubscriber);
-            _controller = new ScoreController(
+            return new ScoreController(
                 hitSubscriber,
                 trailArrivedSubscriber,
                 _scoredPublisher,
@@ -87,16 +95,10 @@ namespace BalloonParty.Tests.Game
                 _config,
                 _palette,
                 _streakTracker);
-
-            _controller.Start();
         }
 
-        [TearDown]
-        public void TearDown()
+        private static void ClearScorePrefs()
         {
-            _controller.Dispose();
-            Time.timeScale = 1f;
-
             PlayerPrefs.DeleteKey("Level");
             PlayerPrefs.DeleteKey(Red);
             PlayerPrefs.DeleteKey(Blue);
@@ -374,6 +376,57 @@ namespace BalloonParty.Tests.Game
             _hitHandler.Handle(new ActorHitMessage(actor, Vector3.zero, Vector3.up, actor.EvaluateHit(new DamageContext(1)), new DamageContext(1)));
 
             _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointMessage>());
+        }
+
+        [Test]
+        public void Start_IgnoresPersistedLevel_StartsAtLevelOne()
+        {
+            PlayerPrefs.SetInt("Level", 5);
+            PlayerPrefs.Save();
+
+            var controller = BuildController();
+            controller.Start();
+
+            Assert.AreEqual(1, controller.Level.Value);
+            controller.Dispose();
+        }
+
+        [Test]
+        public void ResetRun_ResetsLevelToOne()
+        {
+            _config.PointsRequiredForLevel(2).Returns(1);
+            FireTrailArrived(Red, 1);
+            FireTrailArrived(Blue, 1);
+            Assert.AreEqual(2, _controller.Level.Value);
+
+            _controller.ResetRun();
+
+            Assert.AreEqual(1, _controller.Level.Value);
+        }
+
+        [Test]
+        public void ResetRun_ClearsScoreAndColorProgress()
+        {
+            FireTrailArrived(Red, 1);
+            FireTrailArrived(Red, 2);
+            Assert.AreEqual(2, _controller.TotalScore.Value);
+
+            _controller.ResetRun();
+
+            Assert.AreEqual(0, _controller.TotalScore.Value);
+            Assert.AreEqual(0, _controller.GetProgress(Red));
+            Assert.AreEqual(0, _controller.GetProgress(Blue));
+        }
+
+        [Test]
+        public void RunState_IsNotPersisted()
+        {
+            FireTrailArrived(Red, 3);
+
+            _controller.Dispose();
+
+            Assert.AreEqual(-1, PlayerPrefs.GetInt("Level", -1));
+            Assert.AreEqual(-1, PlayerPrefs.GetInt(Red, -1));
         }
 
         private void FireHit(IBalloonModel model, int damage)
