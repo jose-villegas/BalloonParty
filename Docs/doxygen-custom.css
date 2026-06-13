@@ -50,6 +50,15 @@ body {
   border-radius: var(--bp-radius-sm);
 }
 
+/* Doxygen builds treeview indentation by giving each .arrow a fixed 16px width
+   plus an inline per-level padding-left (navtree.js createIndent). That relies
+   on content-box sizing. The Bootstrap import above forces box-sizing:border-box
+   globally, which clamps the arrow to 16px — collapsing the indentation and
+   pushing the expand glyph underneath the label. Restore content-box for the tree. */
+#nav-tree .arrow {
+  box-sizing: content-box !important;
+}
+
 /* ── Title Area ────────────────────────────────────────── */
 #titlearea {
   background: linear-gradient(135deg, #161b22 0%, #0d1117 100%) !important;
