@@ -26,6 +26,8 @@ namespace BalloonParty.Game.Run
         private readonly IRunMeta _runMeta;
         private readonly IRunScore _score;
 
+        private int _generation = 1;
+
         public RunController(
             INavigation navigation,
             ICinematicState cinematic,
@@ -59,9 +61,11 @@ namespace BalloonParty.Game.Run
 
         public void RestartRun()
         {
+            _generation++;
+
             foreach (var resettable in _resettables)
             {
-                resettable.ResetRun();
+                resettable.ResetRun(_generation);
             }
 
             _navigation.TransitionTo(NavigationState.Game);

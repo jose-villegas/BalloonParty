@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Game.Run;
 using MessagePipe;
 using UniRx;
 using VContainer;
@@ -12,12 +13,14 @@ namespace BalloonParty.Shared.Pause
     ///     to <see cref="PausedMessage"/> / <see cref="ResumedMessage"/> through MessagePipe.
     ///     Reference-counted per source so nested pause calls don't prematurely resume.
     /// </summary>
-    internal class PauseService
+    internal class PauseService : IRunResettable
     {
         private readonly IPublisher<PausedMessage> _pausedPublisher;
         private readonly IPublisher<ResumedMessage> _resumedPublisher;
         private readonly Dictionary<PauseSource, int> _stack = new();
         private readonly ReactiveProperty<bool> _isAnyPaused = new(false);
+
+        public int ResetOrder => RunResetOrder.Counters;
 
         internal IReadOnlyReactiveProperty<bool> IsAnyPaused => _isAnyPaused;
 
@@ -28,6 +31,14 @@ namespace BalloonParty.Shared.Pause
         {
             _pausedPublisher = pausedPublisher;
             _resumedPublisher = resumedPublisher;
+        }
+
+        public void ResetRun(int generation)
+        {
+            // Drop all pause sources outright. The board teardown returns or kills the affected
+            // actors anyway; live systems gate on IsAnyPaused, so flipping it false is what matters.
+            _stack.Clear();
+            _isAnyPaused.Value = false;
         }
 
         internal bool IsPaused(PauseSource source)

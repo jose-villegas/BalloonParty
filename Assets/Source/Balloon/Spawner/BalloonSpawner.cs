@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Run;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
@@ -21,10 +22,11 @@ using VContainer.Unity;
 
 namespace BalloonParty.Balloon.Spawner
 {
-    internal class BalloonSpawner : IStartable, IGridSpawner
+    internal class BalloonSpawner : IStartable, IGridSpawner, IRunResettable
     {
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly BalloonBalancer _balancer;
+        private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly IGamePalette _palette;
@@ -45,9 +47,11 @@ namespace BalloonParty.Balloon.Spawner
         private readonly List<Vector3> _spawnPathBuffer = new();
 
         private int _turnCount;
+        private int _generation;
         private UniTask _prewarmTask;
 
         public SpawnStage SpawnPriority => SpawnStage.BalloonActors;
+        public int ResetOrder => RunResetOrder.Counters;
 
         [Inject]
         internal BalloonSpawner(
@@ -61,6 +65,7 @@ namespace BalloonParty.Balloon.Spawner
             IPublisher<BalanceBalloonsMessage> balancePublisher,
             ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
+            ISubscriber<BoardClearMessage> boardClearSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
             IPublisher<TransformCapturedMessage> transformCapturedPublisher,
@@ -78,6 +83,7 @@ namespace BalloonParty.Balloon.Spawner
             _balancePublisher = balancePublisher;
             _hitSubscriber = hitSubscriber;
             _itemActivatedSubscriber = itemActivatedSubscriber;
+            _boardClearSubscriber = boardClearSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
             _transformCapturedPublisher = transformCapturedPublisher;
@@ -105,6 +111,16 @@ namespace BalloonParty.Balloon.Spawner
         {
             await _prewarmTask;
             PopulateInitialGrid();
+            _newlySpawnedBalloons.Clear();
+        }
+
+        public void ResetRun(int generation)
+        {
+            // Adopt the new run's generation to drop any in-flight delayed line spawns, then clear
+            // counters. Active balloons have already returned themselves via the board-clear broadcast.
+            _generation = generation;
+            _activeCounts.Clear();
+            _turnCount = 0;
             _newlySpawnedBalloons.Clear();
         }
 
@@ -212,7 +228,7 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            SpawnLinesWithDelayAsync(_balloonsConfig.NewProjectileBalloonLines, _cts.Token).Forget();
+            SpawnLinesWithDelayAsync(_balloonsConfig.NewProjectileBalloonLines, _cts.Token, _generation).Forget();
         }
 
         private void OnSpawnLinesRequested(int lineCount)
@@ -223,7 +239,7 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            SpawnLinesWithDelayAsync(lineCount, _cts.Token).Forget();
+            SpawnLinesWithDelayAsync(lineCount, _cts.Token, _generation).Forget();
         }
 
         private void PopulateInitialGrid()
@@ -285,6 +301,7 @@ namespace BalloonParty.Balloon.Spawner
                 entry.HitVfxOverrides,
                 _hitSubscriber,
                 _itemActivatedSubscriber,
+                _boardClearSubscriber,
                 _transformCapturedPublisher,
                 _deflectedPublisher,
                 _nudgePublisher,
@@ -321,16 +338,26 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct)
+        private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct, int generation)
         {
             _balancer.Balance();
 
             for (var i = 0; i < lineCount; i++)
             {
+                if (generation != _generation)
+                {
+                    return;
+                }
+
                 SpawnLineInternal();
                 await UniTask.Delay(
                     (int)(_balloonsConfig.NewBalloonLinesTimeInterval * 1000),
                     cancellationToken: ct);
+            }
+
+            if (generation != _generation)
+            {
+                return;
             }
 
             PublishItemCheck();

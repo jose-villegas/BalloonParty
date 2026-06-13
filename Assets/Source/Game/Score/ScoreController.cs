@@ -68,23 +68,15 @@ namespace BalloonParty.Game.Score
                 _colorKeys.Add(color.Name);
             }
 
-            ResetRun();
+            ClearRunState();
 
             _subscription = _hitSubscriber.Subscribe(OnActorHit);
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
         }
 
-        public void ResetRun()
+        public void ResetRun(int generation)
         {
-            _level.Value = 1;
-            _totalScore.Value = 0;
-
-            foreach (var key in _colorKeys)
-            {
-                _persistentScore[key] = 0;
-                _levelProgress[key] = 0;
-                _projectedProgress[key] = 0;
-            }
+            ClearRunState();
         }
 
         public int GetProgress(string colorName)
@@ -114,6 +106,19 @@ namespace BalloonParty.Game.Score
             }
 
             return true;
+        }
+
+        private void ClearRunState()
+        {
+            _level.Value = 1;
+            _totalScore.Value = 0;
+
+            foreach (var key in _colorKeys)
+            {
+                _persistentScore[key] = 0;
+                _levelProgress[key] = 0;
+                _projectedProgress[key] = 0;
+            }
         }
 
         private bool AllColorsConfirmed(int required)

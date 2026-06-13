@@ -54,12 +54,12 @@ namespace BalloonParty.Balloon.Controller
             _subscriber.Subscribe(_ => RequestBalance());
         }
 
-        public void ResetRun()
+        public void ResetRun(int generation)
         {
-            // Bump the generation so any balance already scheduled this frame is dropped when
-            // its continuation runs — it would otherwise animate actors the board-clear has
+            // Adopt the new run's generation so any balance already scheduled this frame is dropped
+            // when its continuation runs — it would otherwise animate actors the board-clear has
             // just returned to the pool, against an emptied grid.
-            _generation++;
+            _generation = generation;
             _balanceRequested = false;
             ReleasePaths();
         }

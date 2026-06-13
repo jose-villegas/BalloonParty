@@ -71,6 +71,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ScorePointMessage>(options);
             builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
             builder.RegisterMessageBroker<GameOverMessage>(options);
+            builder.RegisterMessageBroker<BoardClearMessage>(options);
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
             builder.RegisterMessageBroker<ItemCheckMessage>(options);
             builder.RegisterMessageBroker<ItemActivatedMessage>(options);
@@ -97,7 +98,7 @@ namespace BalloonParty.Game
             builder.Register<BalancePathHolder>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.Register<PoolManager>(Lifetime.Singleton);
-            builder.Register<PauseService>(Lifetime.Singleton);
+            builder.Register<PauseService>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
             builder.Register<ImpactEventBus>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
@@ -120,9 +121,10 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BushViewController>().AsSelf();
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
-            builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf();
+            builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>();
             builder.Register<RunController>(Lifetime.Singleton).AsSelf();
+            builder.Register<BoardClearController>(Lifetime.Singleton).As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();
             builder.RegisterEntryPoint<ItemAssigner>();
             builder.RegisterEntryPoint<ItemActivator>();

@@ -399,7 +399,7 @@ namespace BalloonParty.Tests.Game
             FireTrailArrived(Blue, 1);
             Assert.AreEqual(2, _controller.Level.Value);
 
-            _controller.ResetRun();
+            _controller.ResetRun(2);
 
             Assert.AreEqual(1, _controller.Level.Value);
         }
@@ -411,7 +411,7 @@ namespace BalloonParty.Tests.Game
             FireTrailArrived(Red, 2);
             Assert.AreEqual(2, _controller.TotalScore.Value);
 
-            _controller.ResetRun();
+            _controller.ResetRun(2);
 
             Assert.AreEqual(0, _controller.TotalScore.Value);
             Assert.AreEqual(0, _controller.GetProgress(Red));

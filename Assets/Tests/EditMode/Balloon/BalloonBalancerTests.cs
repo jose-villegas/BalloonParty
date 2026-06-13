@@ -28,20 +28,19 @@ namespace BalloonParty.Tests.Balloon
             var balancer = CreateBalancer();
             var staleGeneration = balancer.Generation;
 
-            balancer.ResetRun();
+            balancer.ResetRun(staleGeneration + 1);
 
             Assert.IsFalse(balancer.RunScheduledBalance(staleGeneration));
         }
 
         [Test]
-        public void ResetRun_BumpsGeneration()
+        public void ResetRun_AdoptsTheGivenGeneration()
         {
             var balancer = CreateBalancer();
-            var before = balancer.Generation;
 
-            balancer.ResetRun();
+            balancer.ResetRun(7);
 
-            Assert.AreNotEqual(before, balancer.Generation);
+            Assert.AreEqual(7, balancer.Generation);
         }
 
         private static BalloonBalancer CreateBalancer()

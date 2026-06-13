@@ -81,7 +81,7 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 206 tests
+## Current Coverage — 208 tests
 
 > Last updated: **June 13, 2026**
 
@@ -150,7 +150,7 @@ Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` pro
 | `ResetRun` clears score and all color progress | 1 | Stale progress carries into the next run |
 | Run state is not persisted | 1 | Run leaks to `PlayerPrefs` across sessions |
 
-### `RunControllerTests` — 9 tests
+### `RunControllerTests` — 10 tests
 
 Tests the run lifecycle — loss commit/announce/transition, the suppression gates, and ordered reset. Isolated from the static `Navigation` / `Cinematic` via the `INavigation` / `ICinematicState` seams (substituted with NSubstitute).
 
@@ -163,6 +163,7 @@ Tests the run lifecycle — loss commit/announce/transition, the suppression gat
 | `EndRun` suppressed when not in `Game` | 1 | Loss fires from `LevelUp` / `Launch` |
 | `EndRun` suppressed when already `GameOver` | 1 | Re-entrant loss double-commits the meta |
 | `RestartRun` invokes resettables in ascending `ResetOrder` | 1 | Teardown order wrong — async/grid reset runs after score |
+| `RestartRun` passes one incrementing run number to all resettables | 1 | Per-service generation drift — stale async survives a reset |
 | `RestartRun` transitions to `Game` | 1 | Stuck on the GameOver screen after restart |
 | `RestartRun` does not record meta | 1 | Best score inflated by a restart |
 
@@ -388,7 +389,7 @@ Tests the greedy hex-neighbor cluster expansion algorithm — structural invaria
 | `maxPerCluster` enforced | 1 | Cap logic bypassed |
 | Slots within cluster are hex-adjacent | 1 | Greedy expansion selects non-adjacent |
 
-### `PauseServiceTests` — 8 tests
+### `PauseServiceTests` — 9 tests
 
 Tests reference-counted pause/resume with nested source tracking and MessagePipe publishing.
 
@@ -402,6 +403,7 @@ Tests reference-counted pause/resume with nested source tracking and MessagePipe
 | Nested same source → stays paused until all resumed | 1 | Reference count wrong |
 | Resume without pause → no-op | 1 | Negative count or crash |
 | Multiple sources, one resumed → still paused | 1 | Cross-source interference |
+| `ResetRun` clears all sources and unpauses | 1 | Stale pause survives a run restart, freezing the new run |
 
 ### `VectorMathHelperTests` — 3 tests
 

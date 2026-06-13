@@ -92,6 +92,19 @@ namespace BalloonParty.Tests.Shared
 
             Assert.IsTrue(_service.IsAnyPaused.Value);
         }
+
+        [Test]
+        public void ResetRun_ClearsAllSources_AndUnpauses()
+        {
+            _service.Pause(PauseSource.Cinematic);
+            _service.Pause(PauseSource.LevelUp);
+
+            _service.ResetRun(2);
+
+            Assert.IsFalse(_service.IsAnyPaused.Value);
+            Assert.IsFalse(_service.IsPaused(PauseSource.Cinematic));
+            Assert.IsFalse(_service.IsPaused(PauseSource.LevelUp));
+        }
     }
 }
 

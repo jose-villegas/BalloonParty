@@ -100,14 +100,29 @@ namespace BalloonParty.Tests.Game
         public void RestartRun_InvokesResettablesInAscendingOrder()
         {
             var order = new List<int>();
-            var first = new RecordingResettable(10, () => order.Add(10));
-            var second = new RecordingResettable(20, () => order.Add(20));
-            var third = new RecordingResettable(30, () => order.Add(30));
+            var first = new RecordingResettable(10, _ => order.Add(10));
+            var second = new RecordingResettable(20, _ => order.Add(20));
+            var third = new RecordingResettable(30, _ => order.Add(30));
 
             // Passed out of order — the controller must sort by ResetOrder.
             CreateController(second, third, first).RestartRun();
 
             Assert.AreEqual(new[] { 10, 20, 30 }, order.ToArray());
+        }
+
+        [Test]
+        public void RestartRun_PassesOneIncrementingGenerationToAllResettables()
+        {
+            var a = new RecordingResettable(10, _ => { });
+            var b = new RecordingResettable(20, _ => { });
+            var controller = CreateController(a, b);
+
+            controller.RestartRun();
+            var firstGeneration = a.LastGeneration;
+            Assert.AreEqual(firstGeneration, b.LastGeneration, "all resettables share one run number");
+
+            controller.RestartRun();
+            Assert.AreEqual(firstGeneration + 1, a.LastGeneration, "run number increments per restart");
         }
 
         [Test]
@@ -139,9 +154,9 @@ namespace BalloonParty.Tests.Game
 
         private sealed class RecordingResettable : IRunResettable
         {
-            private readonly Action _onReset;
+            private readonly Action<int> _onReset;
 
-            public RecordingResettable(int order, Action onReset)
+            public RecordingResettable(int order, Action<int> onReset)
             {
                 ResetOrder = order;
                 _onReset = onReset;
@@ -149,9 +164,12 @@ namespace BalloonParty.Tests.Game
 
             public int ResetOrder { get; }
 
-            public void ResetRun()
+            public int LastGeneration { get; private set; }
+
+            public void ResetRun(int generation)
             {
-                _onReset();
+                LastGeneration = generation;
+                _onReset(generation);
             }
         }
     }

@@ -18,7 +18,7 @@ namespace BalloonParty.Tests.Slots
             holder.Reserve(actor, slot);
             Assert.IsTrue(holder.IsInTransit(slot));
 
-            holder.ResetRun();
+            holder.ResetRun(2);
 
             Assert.IsFalse(holder.IsInTransit(slot));
         }
@@ -29,7 +29,7 @@ namespace BalloonParty.Tests.Slots
             var holder = new BalancePathHolder();
             var actor = Substitute.For<IWriteableDynamicSlotActor>();
             holder.Reserve(actor, new Vector2Int(0, 1));
-            holder.ResetRun();
+            holder.ResetRun(2);
 
             // After a full clear the same actor reserves cleanly — no stale slot list lingers.
             holder.Reserve(actor, new Vector2Int(2, 3));

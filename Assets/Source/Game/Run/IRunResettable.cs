@@ -10,6 +10,11 @@ namespace BalloonParty.Game.Run
     {
         int ResetOrder { get; }
 
-        void ResetRun();
+        /// <param name="generation">
+        ///     The new run's number — monotonically increasing, owned by <see cref="RunController"/>.
+        ///     Services with frame-deferred async (spawner, balancer) capture it at schedule time and
+        ///     compare against the latest to drop work belonging to a prior run; others can ignore it.
+        /// </param>
+        void ResetRun(int generation);
     }
 }

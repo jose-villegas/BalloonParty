@@ -18,7 +18,7 @@ namespace BalloonParty.Slots.Grid
 
         public int ResetOrder => RunResetOrder.Board;
 
-        public void ResetRun()
+        public void ResetRun(int generation)
         {
             // Killed balance tweens never fire their per-actor Release, so drop all transit
             // state wholesale as part of board teardown.

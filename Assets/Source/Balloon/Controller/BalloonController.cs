@@ -15,6 +15,7 @@ namespace BalloonParty.Balloon.Controller
 {
     internal class BalloonController
     {
+        private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly SlotGrid _grid;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
@@ -29,6 +30,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly BalloonView _view;
         private readonly DisturbanceFieldService _disturbanceField;
 
+        private IDisposable _boardClearSubscription;
         private IDisposable _hitSubscription;
         private IDisposable _itemActivatedSubscription;
 
@@ -40,6 +42,7 @@ namespace BalloonParty.Balloon.Controller
             HitVfxOverride[] hitVfxOverrides,
             ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
+            ISubscriber<BoardClearMessage> boardClearSubscriber,
             IPublisher<TransformCapturedMessage> transformCapturedPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
             IPublisher<NudgeMessage> nudgePublisher,
@@ -54,6 +57,7 @@ namespace BalloonParty.Balloon.Controller
             _hitVfxOverrides = hitVfxOverrides;
             _hitSubscriber = hitSubscriber;
             _itemActivatedSubscriber = itemActivatedSubscriber;
+            _boardClearSubscriber = boardClearSubscriber;
             _transformCapturedPublisher = transformCapturedPublisher;
             _deflectedPublisher = deflectedPublisher;
             _nudgePublisher = nudgePublisher;
@@ -69,6 +73,31 @@ namespace BalloonParty.Balloon.Controller
 
             _hitSubscription = _hitSubscriber.Subscribe(OnActorHit);
             _view.RegisterDisposeOnDespawn(_hitSubscription);
+
+            _boardClearSubscription = _boardClearSubscriber.Subscribe(OnBoardClear);
+            _view.RegisterDisposeOnDespawn(_boardClearSubscription);
+        }
+
+        private void OnBoardClear(BoardClearMessage _)
+        {
+            // Dispose our subscriptions first: returning the view triggers OnDespawned, which
+            // also disposes despawn-registered subs — clearing them here avoids re-entrant
+            // disposal while this very broadcast is still dispatching.
+            _hitSubscription?.Dispose();
+            _hitSubscription = null;
+            _itemActivatedSubscription?.Dispose();
+            _itemActivatedSubscription = null;
+            _boardClearSubscription?.Dispose();
+            _boardClearSubscription = null;
+
+            var slot = _model.SlotIndex.Value;
+            if (ReferenceEquals(_grid.At(slot), _model))
+            {
+                _grid.Remove(slot);
+            }
+
+            _onReturned?.Invoke();
+            _poolManager.Return(_poolKey, _view);
         }
 
         private void Deflect(ActorHitMessage msg)
