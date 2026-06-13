@@ -997,3 +997,77 @@ no export step for design iteration, single source of truth (settings SO).
 
 **Priority:** Low — current pipeline works. Best as polish after all bush
 phases complete. Combine with section 10 into a unified preload bake pass.
+
+---
+
+## 12 — Losing Conditions
+
+The game currently has **no fail state**: each turn `BalloonSpawner` adds lines,
+`BalloonBalancer` consolidates them, and the player chases per-color level-ups
+indefinitely. Picking a losing condition effectively picks the genre feel —
+survival-puzzle, score-attack with a clock, or run-based. The ideas below are
+grounded in systems that already exist.
+
+A shared property: **all of these reuse the `Navigation` state machine.** A
+`GameOver` state slots in beside `Launch` / `Game` / `LevelUp`, and the thrower
+already no-ops its `Tick` outside the `Game` state, so input-lockout on loss is
+essentially free.
+
+### 12.1 Grid encroachment — the natural fit (Puzzle Bobble lineage)
+
+Balloons advance toward the thrower; if any actor crosses a danger boundary on
+the thrower's side of the grid, the player loses.
+
+- **Why it fits:** the whole engine already exists — `BalloonSpawner` adds lines
+  each turn, `BalloonBalancer` consolidates rows, and the **post-spawn balance
+  phase** is a clean, already-present "end of turn" checkpoint for a fail check.
+  `SlotGrid` knows every occupied row/slot.
+- **Build surface:** a `BreachDetector` (`IStartable`) that, after the post-spawn
+  balance settles, checks whether any `ISlotActor` occupies the deadline row(s);
+  if so, transition `Navigation` to a new `GameOver` state (mirrors `LevelUp`
+  handling). One config value (`DeadlineRow`) + lines-per-turn from
+  `BalloonsConfiguration` is the whole difficulty curve.
+- **Tension knobs:** lines/turn, deadline depth, and — elegantly —
+  `UnbreakableBalloonModel` becomes the threat (only pops on `Piercing`, so it
+  deflects and clogs, pushing the front toward the deadline). Tough / Gatekeeper
+  accumulation does the same.
+
+**Recommended default** — most mechanically native, readable to the player, and
+reuses the turn pipeline almost entirely.
+
+### 12.2 Resource economy — make the existing Shield item matter
+
+- **Finite ammo / magazine.** Today the thrower reloads infinitely on
+  `ProjectileDestroyedMessage`. Cap reloads per level; the **Shield item** (which
+  already grants projectile shields) becomes the lifeline that extends a run. Run
+  dry before the level-up threshold → lose. Turns a currently-minor item into a
+  must-grab and makes every deflect (wasted shield) sting.
+- **Shield-only survival.** Keep infinite reloads but projectile shields are the
+  player's life — if a projectile dies with zero productive pops (all
+  deflects/absorbs), bleed a global life counter. Ties into the existing
+  `Deflect` / `Absorb` outcomes and `AbsorberActorModel`.
+
+### 12.3 Clock / turn pressure — score-attack flavor
+
+- **Turn limit per level.** `BalloonSpawner` already tracks `_turnCount`. Give
+  each level a throw budget; `ScoreController` already knows the level threshold
+  and per-color confirmed progress. Don't reach the next level in N throws →
+  lose. Because level-up needs **all** colors to meet threshold, a starved color
+  naturally creates the failure pressure without anything new.
+- **Combo decay variant.** Use `ColorStreakTracker` inversely — a "heat" bar that
+  drains over time and only refills on pops/streaks; hits zero → lose. Leans into
+  the streak system already built.
+
+### 12.4 Lockout / soft-lock (safety net, not a headline mechanic)
+
+- **Column lockout.** `GatekeeperActorModel` blocks a column until destroyed. If
+  every firing lane is blocked by Gatekeepers / Absorbers / Unbreakables so no
+  productive shot exists, declare loss. Niche, but a good backstop so a clogged
+  board doesn't simply stall.
+
+### 12.5 How these compose
+
+The strongest design usually pairs **one spatial pressure** (12.1) with **one
+economy or clock** (12.2 or 12.3): the grid creeps down while ammo/turns run out,
+so the player is squeezed from two directions. 12.4 is the safety net underneath
+either.
