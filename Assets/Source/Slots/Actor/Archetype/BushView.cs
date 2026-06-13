@@ -87,8 +87,12 @@ namespace BalloonParty.Slots.Actor.Archetype
             // inner+branch+outer triple per slot.
             DrawLeafBatches(leafMesh, _renderData.InnerBatches, _materials.InnerLeaf, layer);
 
-            foreach (var slot in _renderData.Slots)
+            // Index loop, not foreach: Slots is IReadOnlyList, whose foreach allocates a
+            // heap enumerator every frame; indexing does not.
+            var slots = _renderData.Slots;
+            for (var i = 0; i < slots.Count; i++)
             {
+                var slot = slots[i];
                 if (slot.BranchMaterial != null)
                 {
                     Graphics.DrawMesh(branchMesh, slot.BranchMatrix, slot.BranchMaterial, layer);
