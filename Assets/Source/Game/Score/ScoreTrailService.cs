@@ -77,18 +77,7 @@ namespace BalloonParty.Game.Score
             var center = msg.WorldPosition;
             var origin = ComputeScatterOrigin(center, msg.GroupIndex, msg.GroupSize);
 
-            // Only staggered trails (groupIndex > 0) need the async stagger delay. The
-            // first of a group — which is the cinematic's tipping trail — spawns
-            // synchronously, registering into Flights at the exact same moment the async
-            // path did for index 0 (it had no delay), so cinematic timing is unchanged.
-            if (msg.GroupIndex > 0)
-            {
-                SpawnTrailAsync(msg.ColorName, center, origin, id, msg.GroupIndex).Forget();
-            }
-            else
-            {
-                SpawnTrail(msg.ColorName, center, origin, id);
-            }
+            SpawnTrailAsync(msg.ColorName, center, origin, id, msg.GroupIndex).Forget();
         }
 
         internal void RegisterTarget(string colorName, ITrailTarget target, Color color)
