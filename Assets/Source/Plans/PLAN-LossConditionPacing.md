@@ -83,34 +83,96 @@ Two candidate triggers (pick one or combine):
 
 ---
 
-## Part B — Difficulty ramp / pacing
+## Part B — Per-level-range difficulty configuration
 
-Levers available **today** (no Phase 8.3 needed):
-- **Lines per turn** — scale `NewProjectileBalloonLines` up with level.
-- **Initial fill** — `GameStartedBalloonLines`.
-- **Level threshold** — `PointsRequiredForLevel` (already exponential; tune the curve).
-- **Type mix** — shift the Simple/Tough weight in `BalloonsConfiguration` toward Tough at
-  higher levels (more resistant board → more pressure).
-- *(Later, with 8.3:)* obstacle density + the hitable actors (Deflector/Absorber/Gatekeeper).
+Pacing is authored as **level ranges**. A range covers `[FromLevel, ToLevel]` and owns a
+set of tunable parameters; the **final range is open-ended** (applies forever — the steady
+"4 colors / settled difficulty" tail). Within a range, each parameter is a slider that
+resolves by one of three modes, so a designer can say "ramp this up across the range" or
+"keep it varied" without hand-authoring every level.
 
-**Implementation sketch:**
-- A `DifficultyConfiguration` SO (curve- or table-based per level): lines/turn, type
-  weights, deadline pressure. Injected via `GameLifetimeScope` like the other configs.
-- A small `DifficultyController` (`IStartable`) subscribing to `ScoreLevelUpMessage` →
-  pushes the level's values into the spawner (replaces the hardcoded
-  `NewProjectileBalloonLines` read with a difficulty-driven value).
+### Data model
+
+- **`LevelRangeConfiguration`** (SO) — ordered, contiguous `LevelRange[]`; the last entry is
+  open-ended. Injected via `GameLifetimeScope` like the other configs.
+- **`LevelRange`**:
+  - `FromLevel`, `ToLevel` (`ToLevel = ∞` for the tail)
+  - `RangedInt SpawnLines` — lines per turn
+  - `ColorSet AllowedColors` — active palette subset (see **Part C**)
+  - `WeightedSet<BalloonType> BalloonWeights` — Simple / Tough / Unbreakable / BubbleCluster mix
+  - `WeightedSet<GridActorType> GridActorWeights` — Puff / Bush / … density (consumed once 8.3 lands)
+  - `ItemSpawnSettings Items` — per-item frequency / weight / cap
+- **`RangedValue<T>`** (`RangedInt`, `RangedFloat`) = `{ Min, Max, Mode }`:
+  - **Fixed** — constant `Min`.
+  - **Linear** — lerp `Min→Max` by the level's position within the range (a ramp).
+  - **Random** — pick within `[Min, Max]` (re-roll cadence is a knob — see decisions).
+  - Weights may themselves be `RangedValue` (e.g. ramp the Tough weight up across a range).
+
+### Resolver
+
+- **`DifficultyController`** (`IStartable`) subscribes to `ScoreLevelUpMessage` (+ at start).
+  On each level change it: (1) finds the active `LevelRange`, (2) resolves every parameter by
+  its mode, (3) pushes the resolved values to the consumers:
+  - spawn lines → `BalloonSpawner`
+  - balloon-type weights → balloon selection in the spawner
+  - item config → `ItemAssigner`
+  - grid-actor weights → the Phase 8.3 grid spawner (when it exists)
+  - allowed colors → palette filter + score + UI (**Part C**)
+- The existing `BalloonsConfiguration` / `ItemConfiguration` / `GridActorConfiguration`
+  become the **catalog** (prefabs, caps, base tuning); `LevelRangeConfiguration` decides the
+  **per-range mix** layered on top.
+
+### Design decisions to confirm
+
+1. **Random re-roll cadence** — re-roll `Random` params per *level* (calmer, tunable) or per
+   *turn* (more variety within a level)? Recommend **per-level** default, per-param override.
+2. **Ranged vs static weights** — every weight as `RangedValue` is expressive but heavier to
+   author; could start static-per-range and add ranged weights when needed.
+3. **Range validation** — must be contiguous, non-overlapping, one open-ended tail; enforce
+   via editor `OnValidate` (auto-sort + gap/overlap warnings).
+
+---
+
+## Part C — Allowed colors (tutorialization)
+
+Each range declares its **active color set** (a subset of `GamePalette`). Early ranges use
+fewer colors (e.g. 2 → 3); the open-ended tail uses all **4 forever**. This is the most
+**cross-cutting** parameter — it reaches into four systems:
+
+- **Spawning** — `BalloonSpawner` must draw balloon colors only from the active set (today it
+  uses the full palette).
+- **Scoring / level-up** — `ScoreController` tracks per-color progress and requires **all**
+  colors at threshold to level up. It must restrict to the active set *and* handle the set
+  **growing at a range boundary**: a newly-introduced color's progress starts at 0 and joins
+  the level-up requirement from that level onward.
+- **UI** — `ColorProgressBar`s must reflect exactly the active colors (dynamic count: 2, then
+  3, then 4 bars) rather than a fixed layout.
+- **Steady state** — because it settles at 4 forever, the dynamic-count complexity only bites
+  during the early tutorial ramp; **4-color is the permanent baseline**, so most of the game
+  runs the simple path.
+
+**Decision to confirm:** a new color is introduced at the **start of its range's first
+level**, its bar fades in at 0, and the level-up requirement expands to include it. (Cleanest
+rule; avoids mid-level set changes.)
 
 ---
 
 ## Phasing
 
-1. **`GameOver` navigation state + minimal flow** — transition, freeze input, a placeholder
-   "you lost" + restart. Foundation; resolves the runs-vs-persistence decision in code.
-2. **`BreachDetector` + deadline check + `DifficultyConfiguration` (deadline only)** — loss
-   actually works; tune the deadline by hand.
-3. **Difficulty ramp** — `DifficultyController` scales lines/turn + type mix per level.
-4. **GameOver UI** — score, best, restart (and meta persistence per the decision above).
-5. **Tuning playtest** — balance pop-rate vs. encroachment vs. level-threshold curve.
+1. **`GameOver` state + run-scoped save** — new `NavigationState.GameOver`, freeze input,
+   placeholder "you lost" + restart; make `ScoreController` run-scoped (reset on loss, persist
+   best-level/best-score meta only). Foundation; bakes in the run-based decision.
+2. **`BreachDetector` + deadline** — encroachment loss works; tune the deadline by hand.
+3. **Level-range config system** — `LevelRangeConfiguration` + `RangedValue` (fixed/linear/
+   random) + `DifficultyController`. Start with the levers that work pre-8.3: spawn-lines and
+   balloon-type weights.
+4. **Allowed colors** — spawner color filter + `ScoreController`/level-up restriction to the
+   active set + dynamic `ColorProgressBar` count (handle the set growing at boundaries).
+5. **Per-range item & actor mix** — wire `ItemAssigner` to the range's item config now; wire
+   grid-actor weights when Phase 8.3's grid spawner lands.
+6. **GameOver UI + meta** — score, best-level/best-score, restart flow.
+7. **Tuning playtest** — pop-rate vs. encroachment vs. level-threshold curve vs. the per-range
+   sliders.
 
 ---
 
