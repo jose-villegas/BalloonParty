@@ -66,11 +66,13 @@ namespace BalloonParty.Item.Paint
             float timeOffset,
             BlobFlightSnapshot snapshot)
         {
-            var block = new MaterialPropertyBlock();
-            block.SetFloat(TimeOffsetId, timeOffset);
-            block.SetFloat(ShadowScaleId, snapshot.ShadowScale);
-            block.SetFloat(SpriteScaleId, snapshot.SpriteScale);
-            renderer.SetPropertyBlock(block);
+            // Reused scratch block — SetPropertyBlock copies the values out immediately,
+            // so one shared instance avoids a per-blob, per-frame allocation.
+            _blobBlock ??= new MaterialPropertyBlock();
+            _blobBlock.SetFloat(TimeOffsetId, timeOffset);
+            _blobBlock.SetFloat(ShadowScaleId, snapshot.ShadowScale);
+            _blobBlock.SetFloat(SpriteScaleId, snapshot.SpriteScale);
+            renderer.SetPropertyBlock(_blobBlock);
         }
 
         [Header("Blobs")]
@@ -80,6 +82,8 @@ namespace BalloonParty.Item.Paint
         [Header("Splash")]
         [Tooltip("Particle prefab spawned at each blob's target on arrival. Pooled independently.")]
         [SerializeField] private ParticleSystem _splashParticlePrefab;
+
+        private static MaterialPropertyBlock _blobBlock;
 
         private List<BlobFlight> _activeFlights;
         private Color _color;
