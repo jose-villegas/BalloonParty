@@ -10,6 +10,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
+using UnityEngine.Pool;
 using VContainer;
 using VContainer.Unity;
 
@@ -22,6 +23,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly SlotGrid _grid;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
         private readonly DisturbanceFieldService _disturbanceField;
+        private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
 
         private bool _balanceRequested;
 
@@ -84,7 +86,9 @@ namespace BalloonParty.Balloon.Controller
 
         internal void Balance()
         {
-            var paths = new Dictionary<IWriteableDynamicSlotActor, List<Vector3>>();
+            // Reuse the path dictionary and pool the per-actor lists across turns; only
+            // the DOPath waypoint arrays (built in AnimatePaths) must be freshly sized.
+            ReleasePaths();
             var hasUnbalanced = true;
 
             while (hasUnbalanced)
@@ -130,19 +134,32 @@ namespace BalloonParty.Balloon.Controller
                         dynamicActor.IsStable.Value = false;
 
                         var targetPosition = _grid.IndexToWorldPosition(nextSlot.Value);
-                        if (paths.TryGetValue(dynamicActor, out var path))
+                        if (_paths.TryGetValue(dynamicActor, out var path))
                         {
                             path.Add(targetPosition);
                         }
                         else
                         {
-                            paths[dynamicActor] = new List<Vector3> { targetPosition };
+                            var newPath = ListPool<Vector3>.Get();
+                            newPath.Add(targetPosition);
+                            _paths[dynamicActor] = newPath;
                         }
                     }
                 }
             }
 
-            AnimatePaths(paths);
+            AnimatePaths(_paths);
+            ReleasePaths();
+        }
+
+        private void ReleasePaths()
+        {
+            foreach (var path in _paths.Values)
+            {
+                ListPool<Vector3>.Release(path);
+            }
+
+            _paths.Clear();
         }
 
         private async UniTaskVoid BalanceNextFrameAsync()
