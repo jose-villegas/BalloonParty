@@ -29,10 +29,22 @@ namespace BalloonParty.UI.GameOver
         [Inject] private RunController _runController;
 
         private CanvasGroup _canvasGroup;
+        private string _finalLevelFormat;
+        private string _finalScoreFormat;
+        private string _bestLevelFormat;
+        private string _bestScoreFormat;
 
         private void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
+
+            // Capture each label's authored text (e.g. "Level: {0}") as a format template before we
+            // overwrite it, so repeated losses keep substituting into the original placeholder.
+            _finalLevelFormat = LabelFormat(_finalLevelLabel);
+            _finalScoreFormat = LabelFormat(_finalScoreLabel);
+            _bestLevelFormat = LabelFormat(_bestLevelLabel);
+            _bestScoreFormat = LabelFormat(_bestScoreLabel);
+
             SetVisible(false);
         }
 
@@ -55,10 +67,10 @@ namespace BalloonParty.UI.GameOver
 
         private void OnGameOver(GameOverMessage msg)
         {
-            SetText(_finalLevelLabel, msg.FinalLevel);
-            SetText(_finalScoreLabel, msg.FinalScore);
-            SetText(_bestLevelLabel, _runMeta.BestLevel.Value);
-            SetText(_bestScoreLabel, _runMeta.BestScore.Value);
+            SetValue(_finalLevelLabel, _finalLevelFormat, msg.FinalLevel);
+            SetValue(_finalScoreLabel, _finalScoreFormat, msg.FinalScore);
+            SetValue(_bestLevelLabel, _bestLevelFormat, _runMeta.BestLevel.Value);
+            SetValue(_bestScoreLabel, _bestScoreFormat, _runMeta.BestScore.Value);
             SetVisible(true);
         }
 
@@ -69,11 +81,17 @@ namespace BalloonParty.UI.GameOver
             _canvasGroup.blocksRaycasts = visible;
         }
 
-        private static void SetText(TMP_Text label, int value)
+        private static string LabelFormat(TMP_Text label)
+        {
+            // Fall back to a bare placeholder when the label has no authored text.
+            return label != null && !string.IsNullOrEmpty(label.text) ? label.text : "{0}";
+        }
+
+        private static void SetValue(TMP_Text label, string format, int value)
         {
             if (label != null)
             {
-                label.text = value.ToString("N0");
+                label.text = string.Format(format, value);
             }
         }
     }

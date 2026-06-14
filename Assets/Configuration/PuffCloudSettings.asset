@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.PuffCloudSettings
   _cloudPrefab: {fileID: 6650345493731609934, guid: f0ed15161b2304f9283bebc5da3a0a22,
     type: 3}
-  _animationSpeed: 5
+  _animationSpeed: 1.5
   _padding: 0.3
   _sortingLayerId: -1044048485
   _sortingOrderOffset: 100
