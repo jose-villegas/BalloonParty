@@ -339,24 +339,34 @@ The "settled grid" problem disappears: a blocked spawn is known **synchronously*
 up-to-date model. A `null` = that column can't accept a balloon = **1 blocked balloon = 1 HP**,
 known right there. No `WaitUntil` / board-settled signal needed.
 
-### Damage source
+### Damage source — the "rejected balloon" pop (visual feedback)
 
 Per turn, `SpawnLineInternal` tries one balloon per column and currently **silently skips** a column
-when `FindFirstReachableEmptyRow` returns `null`. Count those skips — that's the blocked count =
-damage for the turn. Initial `PopulateInitialGrid` fills an empty grid and won't block, so it deals
-no damage; only the **turn-driven** spawn paths apply it. Popping balloons to free space stops the
-bleed — that's the core tension (no popping → board saturates → HP drains → loss).
+when `FindFirstReachableEmptyRow` returns `null`. **Don't skip silently** — the would-be balloon must
+**appear at the entry, fail to go up, and pop at the line**, so the player sees *why* they took
+damage. Each rejected balloon = **1 HP**, applied **at the pop** (the bleed syncs with the visual).
+Initial `PopulateInitialGrid` fills an empty grid and never rejects; only the **turn-driven** paths
+do. Popping real balloons to free space stops the bleed — the core tension.
+
+**The rejected-balloon pop is a transient** — no grid slot, no `BalloonController`, all reuse:
+pick the would-be type/colour via the existing `Entries.PickRandom`, `PoolManager.Get<BalloonView>`
+it, position at the column entry, scale-in (reuse `AnimateSpawn`'s `DOScale`),
+`view.PlayHitVfxForOutcome(HitOutcome.Pop)` + `DisturbanceField.Stamp(BalloonPop, …)`, then `Return`
+to the pool. (`PlayHitVfxForOutcome` needs a colour — bind a minimal coloured model or call
+`PoolManager.PlayParticle(DefaultPopVfxPrefab, pos, colour)` directly.)
 
 ### Tasks
 
 | # | Task | Touches / creates |
 |---|------|-------------------|
-| 1 | **Max-HP config** — `PlayerMaxHitPoints` (int) on `IGameConfiguration` + `GameConfiguration`. (Phase 3 ranges can vary it later; a single field is enough now.) | edit `Shared/IGameConfiguration.cs`, `Configuration/GameConfiguration.cs`; set value on the SO asset (in-editor) |
-| 2 | **Blocked-spawn signal** — make `SpawnLineInternal` return the blocked count; the **turn** paths (`SpawnLine`, `SpawnLinesWithDelayAsync`) publish `SpawnBlockedMessage(int count)` when count > 0. `PopulateInitialGrid` ignores it. | **new** `Shared/Messages/SpawnBlockedMessage.cs` + broker; edit `Balloon/Spawner/BalloonSpawner.cs` |
-| 3 | **`PlayerHealthController`** (`IStartable`, `IRunResettable`, `IDisposable`) — holds `ReactiveProperty<int> Current` (init `Max` from config), exposes `Current` + `Max` (mirrors how `ScoreController` owns its reactive state). Subscribes to `SpawnBlockedMessage`; `Damage(count)` clamps at 0; **on crossing to 0 calls `RunController.EndRun()` once**. `ResetRun` → `Current = Max`. | **new** `Game/Health/PlayerHealthController.cs` (+ folder README); register in `GameLifetimeScope` `AsSelf().As<IRunResettable>()` |
-| 4 | **Hearts bar UI** — `HealthBarView` (MonoBehaviour) binds `Current`/`Max` and renders a horizontal row of hearts filled up to `Current`, empty beyond. Mirror the Score/Shield UI binding (reactive `Subscribe().AddTo(this)`). Prefab: heart sprites + horizontal layout (in-editor). | **new** `UI/Health/HealthBarView.cs` (+ scope or register in `GameLifetimeScope`); scene/prefab wiring done in-editor |
-| 5 | **Tests** — EditMode: `PlayerHealthControllerTests` — damage reduces `Current`; reaching 0 calls `EndRun` exactly once (drive `RunController` via `INavigation`/`ICinematicState` substitutes, as `RunControllerTests` does); `ResetRun` restores `Max`; overshoot clamps at 0. Spawner: `SpawnLineInternal` returns the right blocked count on a saturated real `SlotGrid`. PlayMode: saturate the board → HP drains to 0 → `GameOver`. | **new** `PlayerHealthControllerTests`; a spawner block-count test; a PlayMode case |
-| 6 | **Tuning** — `PlayerMaxHitPoints` value + lines-per-turn vs pop-rate vs HP drain. | config asset + playtest |
+| 1 | **Max-HP config** — `PlayerMaxHitPoints` (int) on `IGameConfiguration` + `GameConfiguration`. (Phase 3 ranges can vary it later; a single field is enough now.) | edit `Shared/IGameConfiguration.cs`, `Configuration/GameConfiguration.cs`; SO asset value |
+| 2 | **Rejected-balloon pop + blocked signal** — `SpawnLineInternal`, on a `null` column, spawns the **transient rejected balloon** (appear at entry → pop, all reuse — see *Damage source*); publishes `SpawnBlockedMessage` **at the pop**. `PopulateInitialGrid` doesn't reject. Stagger multiple rejects in a turn so the pops/shake don't stack ugly. | **new** `Shared/Messages/SpawnBlockedMessage.cs` + broker; edit `Balloon/Spawner/BalloonSpawner.cs` (maybe a small `RejectedBalloonEffect` helper) |
+| 3 | **`PlayerHealthController`** (`IStartable`, `IRunResettable`, `IDisposable`) — `ReactiveProperty<int> Current` (init `Max`), exposes `Current`+`Max` (mirrors `ScoreController`). Subscribe to `SpawnBlockedMessage`; `Damage(count)` clamps at 0; **`EndRun()` once on crossing to 0**; `ResetRun → Max`. | **new** `Game/Health/PlayerHealthController.cs` (+README); register `AsSelf().As<IRunResettable>()` |
+| 4 | **Camera shake (NEW — none exists)** — a `CameraShakeService`/component doing a DOTween `DOShakePosition` punch-and-restore on the gameplay camera, triggered on the reject pop (subscribe to `SpawnBlockedMessage`, or hook `ImpactEventBus`). **Must not fight the cinematic camera control** — skip or layer it while `Cinematic.IsPlaying`. Camera ref via `[SerializeField] Camera` like `LevelUpTrailEffect`. | **new** `Display/CameraShakeService.cs` (or component); register in `GameLifetimeScope` |
+| 5 | **Hearts bar UI** — `HealthBarView` binds `Current`/`Max` → a horizontal row of hearts filled up to `Current`, empty beyond. Mirror Score/Shield UI binding (`Subscribe().AddTo(this)`). Prefab: heart sprites + layout (in-editor). | **new** `UI/Health/HealthBarView.cs` (+ scope or register); scene/prefab wiring in-editor |
+| 6 | *(optional, deferred polish)* **Dramatic "danger" cinematic** — a brief beat on reject (or near-death) reusing `CinematicDirector` + a new `CinematicState` + `CinematicScene` (like `LevelUpTrailEffect`), optionally `PauseService.Pause(Cinematic)`. Build only after the core feel is right; the user flagged it as a "maybe". | new `CinematicState` value + small effect in `Game/Cinematics/` |
+| 7 | **Tests** — EditMode: `PlayerHealthControllerTests` (damage → 0 → `EndRun` once via `INavigation`/`ICinematicState` substitutes; `ResetRun → Max`; clamp). Spawner: reject published / block-count correct on a saturated real `SlotGrid`. PlayMode: saturate → HP to 0 → `GameOver`. | **new** `PlayerHealthControllerTests`; spawner test; PlayMode case |
+| 8 | **Tuning** — `PlayerMaxHitPoints`, reject-pop feel, shake intensity, lines-per-turn vs pop-rate vs HP drain. | config asset + playtest |
 
 ### Integration / safety
 
@@ -366,14 +376,19 @@ bleed — that's the core tension (no popping → board saturates → HP drains 
   a double-fire on the next blocked spawn).
 - **HP resets on restart** via `IRunResettable` (order `Counters`, before the `Respawn` stage) so a
   new run starts at full HP.
-- **No deadline row / danger line** — the hearts bar is the feedback. (A secondary instant-death
-  line could return later if tuning wants it, but it's out of scope here.)
+- **No deadline row / danger line** — the hearts bar + the reject pop are the feedback. (A secondary
+  instant-death line could return later if tuning wants it, but it's out of scope here.)
+- **Feedback layering** — the reject pop reuses `BalloonView`'s pop VFX + a disturbance stamp; the
+  camera shake is new (task 4) and must be a quick punch-and-restore that doesn't run while a
+  level-up (or the optional danger) cinematic is driving the camera. Cap/stagger when several
+  balloons are rejected in one turn so the screen doesn't get seasick.
 
 ### Decision (supersedes Open question #2)
 
 Loss trigger = **spawn-saturation damage to an HP pool**, **not** deadline-row and **not** instant.
-Damage is **per un-spawnable balloon** (one blocked balloon = 1 HP). Feedback = a filled/empty
-hearts bar.
+Damage is **per un-spawnable balloon** (1 blocked balloon = 1 HP). Feedback = the would-be balloon
+**appears and pops at the line** + **camera shake**, with a filled/empty **hearts bar** for HP; an
+optional dramatic cinematic is deferred polish.
 
 ---
 
