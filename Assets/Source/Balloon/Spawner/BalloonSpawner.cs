@@ -48,7 +48,7 @@ namespace BalloonParty.Balloon.Spawner
 
         private int _turnCount;
         private int _generation;
-        private UniTask _prewarmTask;
+        private bool _prewarmed;
 
         public SpawnStage SpawnPriority => SpawnStage.BalloonActors;
         public int ResetOrder => RunResetOrder.Counters;
@@ -104,14 +104,14 @@ namespace BalloonParty.Balloon.Spawner
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
 
             // Begin prewarm immediately so pools are ready before SpawnAsync is called.
-            // Preserve() so the task can be awaited again when SpawnAsync re-runs on a restart —
-            // a bare UniTask is single-await and re-awaiting the consumed prewarm would throw.
-            _prewarmTask = PrewarmAsync(_cts.Token).Preserve();
+            PrewarmThenFlagAsync(_cts.Token).Forget();
         }
 
         public async UniTask SpawnAsync(CancellationToken ct)
         {
-            await _prewarmTask;
+            // WaitUntil is re-awaitable (unlike a stored UniTask), so a restart re-spawn can wait on
+            // the same prewarm flag without an "await twice" error; once warm it returns immediately.
+            await UniTask.WaitUntil(() => _prewarmed, cancellationToken: ct);
             PopulateInitialGrid();
             _newlySpawnedBalloons.Clear();
         }
@@ -124,6 +124,12 @@ namespace BalloonParty.Balloon.Spawner
             _activeCounts.Clear();
             _turnCount = 0;
             _newlySpawnedBalloons.Clear();
+        }
+
+        private async UniTaskVoid PrewarmThenFlagAsync(CancellationToken ct)
+        {
+            await PrewarmAsync(ct);
+            _prewarmed = true;
         }
 
         private async UniTask PrewarmAsync(CancellationToken ct)

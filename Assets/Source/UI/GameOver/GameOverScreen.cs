@@ -29,21 +29,21 @@ namespace BalloonParty.UI.GameOver
         [Inject] private RunController _runController;
 
         private CanvasGroup _canvasGroup;
-        private string _finalLevelFormat;
-        private string _finalScoreFormat;
-        private string _bestLevelFormat;
-        private string _bestScoreFormat;
+        private FormattedLabel _finalLevel;
+        private FormattedLabel _finalScore;
+        private FormattedLabel _bestLevel;
+        private FormattedLabel _bestScore;
 
         private void Awake()
         {
             _canvasGroup = GetComponent<CanvasGroup>();
 
-            // Capture each label's authored text (e.g. "Level: {0}") as a format template before we
-            // overwrite it, so repeated losses keep substituting into the original placeholder.
-            _finalLevelFormat = LabelFormat(_finalLevelLabel);
-            _finalScoreFormat = LabelFormat(_finalScoreLabel);
-            _bestLevelFormat = LabelFormat(_bestLevelLabel);
-            _bestScoreFormat = LabelFormat(_bestScoreLabel);
+            // Wrap each label before its text is overwritten — FormattedLabel captures the authored
+            // text (e.g. "Level: {0}") as a template so repeated losses keep substituting cleanly.
+            _finalLevel = new FormattedLabel(_finalLevelLabel);
+            _finalScore = new FormattedLabel(_finalScoreLabel);
+            _bestLevel = new FormattedLabel(_bestLevelLabel);
+            _bestScore = new FormattedLabel(_bestScoreLabel);
 
             SetVisible(false);
         }
@@ -67,10 +67,10 @@ namespace BalloonParty.UI.GameOver
 
         private void OnGameOver(GameOverMessage msg)
         {
-            SetValue(_finalLevelLabel, _finalLevelFormat, msg.FinalLevel);
-            SetValue(_finalScoreLabel, _finalScoreFormat, msg.FinalScore);
-            SetValue(_bestLevelLabel, _bestLevelFormat, _runMeta.BestLevel.Value);
-            SetValue(_bestScoreLabel, _bestScoreFormat, _runMeta.BestScore.Value);
+            _finalLevel.Set(msg.FinalLevel);
+            _finalScore.Set(msg.FinalScore);
+            _bestLevel.Set(_runMeta.BestLevel.Value);
+            _bestScore.Set(_runMeta.BestScore.Value);
             SetVisible(true);
         }
 
@@ -79,20 +79,6 @@ namespace BalloonParty.UI.GameOver
             _canvasGroup.alpha = visible ? 1f : 0f;
             _canvasGroup.interactable = visible;
             _canvasGroup.blocksRaycasts = visible;
-        }
-
-        private static string LabelFormat(TMP_Text label)
-        {
-            // Fall back to a bare placeholder when the label has no authored text.
-            return label != null && !string.IsNullOrEmpty(label.text) ? label.text : "{0}";
-        }
-
-        private static void SetValue(TMP_Text label, string format, int value)
-        {
-            if (label != null)
-            {
-                label.text = string.Format(format, value);
-            }
         }
     }
 }
