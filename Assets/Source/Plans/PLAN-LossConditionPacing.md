@@ -83,6 +83,12 @@ back into a run. The launcher starts every session at level 1.
 
 ## Part A — Loss condition: grid encroachment
 
+> **⚠️ Superseded by the *Phase 2 — detailed breakdown*.** The encroachment framing still holds, but
+> the trigger is now **trigger #2 (spawn saturation) feeding a player HP pool** — not the instant
+> deadline-row of #1. Each un-spawnable balloon costs 1 HP; loss fires at 0 HP through
+> `RunController.EndRun`. The deadline-row option and its settle-wait are dropped. Read this section
+> for background; build from Phase 2.
+
 **Rule:** the grid chokes up toward the thrower; if balloons reach a deadline near the
 entry, the run ends.
 
@@ -316,74 +322,68 @@ wiring, and the RenderTexture-backed `DisturbanceFieldService` reset.
 
 ---
 
-## Phase 2 — detailed breakdown
+## Phase 2 — detailed breakdown (player health + spawn-saturation damage)
 
-**Status: not started.** Phase 2 makes the loss *real*: a `BreachDetector` watches the settled
-grid each turn and ends the run when balloons choke up to a deadline near the thrower. It plugs
-into the Phase 1 seam — on breach it calls **`RunController.EndRun()`**, which already commits the
-meta record, publishes `GameOverMessage`, gates against the level-up cinematic / non-`Game` state,
-and transitions to `GameOver`. `ForceGameOverCheat` stays as a manual trigger; `BreachDetector`
-becomes the automatic one. (No new state, save, or UI work — Phase 1 built all of that.)
+**Status: not started.** **Design pivot (decided):** loss is **not** immediate on encroachment.
+The player has **hit points**. When the board is so choked that an incoming balloon **can't spawn**,
+each un-spawnable balloon costs **1 HP**. At **0 HP** the run ends via `RunController.EndRun()` (the
+Phase 1 seam — commits meta, publishes `GameOverMessage`, gates against the cinematic / non-`Game`
+state, transitions to `GameOver`). A classic filled/empty **hearts bar** shows current HP. This
+**replaces** the earlier deadline-row trigger — there is no deadline row or danger line.
 
-### Grid orientation (grounding)
+### Why this is simpler than the deadline approach
 
-`SlotGrid` row **0 = top / far from thrower**; row **`Rows-1` = bottom / entry**
-(`IndexToWorldPosition` maps a higher row index to a lower world Y). Balloons enter at the bottom
-and pack **upward** toward row 0 (`BalloonBalancer`); as the board saturates, the filled front
-descends back toward the entry. So the **deadline is a high row index** near `Rows-1`, and
-`Rows = IGameConfiguration.SlotsSize.y`.
+The "settled grid" problem disappears: a blocked spawn is known **synchronously**.
+`BalloonBalancer.Balance()` updates the grid **model** immediately (only the *view* tweens lag), and
+`BalloonSpawner.SpawnLineInternal` then asks `FindFirstReachableEmptyRow(col)` against that
+up-to-date model. A `null` = that column can't accept a balloon = **1 blocked balloon = 1 HP**,
+known right there. No `WaitUntil` / board-settled signal needed.
 
-### The crux: there is no "board settled" signal (must create the wait)
+### Damage source
 
-`BalanceBalloonsMessage` is published **immediately after the balance tweens are *enqueued***
-(`BalloonSpawner.SpawnLine` / `SpawnLinesWithDelayAsync`), **not** after they finish — and balance
-+ spawn animate over `~IBalloonsConfiguration.TimeForBalloonsBalance`. Evaluating the breach at that
-message reads a mid-animation grid and false-triggers (see Risks → *Settle timing*). Each actor
-exposes `IsStable` (`ReactiveProperty<bool>` on `BalloonModelBase`): `false` while its spawn/balance
-tween runs, `true` on `OnComplete`. **Settle = every dynamic actor has `IsStable == true`.**
-
-**Recommended:** on `BalanceBalloonsMessage`, `BreachDetector` does
-`await UniTask.WaitUntil(() => AllDynamicActorsStable())`, then evaluates — no new message type
-needed. (Alternative: a dedicated `BoardSettledMessage` published by a tracker once the last actor
-stabilises; heavier — defer unless another consumer needs it.)
+Per turn, `SpawnLineInternal` tries one balloon per column and currently **silently skips** a column
+when `FindFirstReachableEmptyRow` returns `null`. Count those skips — that's the blocked count =
+damage for the turn. Initial `PopulateInitialGrid` fills an empty grid and won't block, so it deals
+no damage; only the **turn-driven** spawn paths apply it. Popping balloons to free space stops the
+bleed — that's the core tension (no popping → board saturates → HP drains → loss).
 
 ### Tasks
 
 | # | Task | Touches / creates |
 |---|------|-------------------|
-| 1 | **Deadline config** — add `BreachDeadlineRowsFromBottom` (int, grid-height-independent) to `IGameConfiguration` + `GameConfiguration`; absolute deadline = `Rows - rowsFromBottom`. Phase 3's `LevelRangeConfiguration` can vary it per range later; a single field is enough now. | edit `Shared/IGameConfiguration.cs`, `Configuration/GameConfiguration.cs`; set the value on the SO asset (in-editor) |
-| 2 | **`BreachDetector`** (`IStartable`, `IRunResettable`) — subscribe to `BalanceBalloonsMessage`; per turn, `await` settle, then if any actor occupies `row >= deadline` call `RunController.EndRun()`. **Generation guard** (mirror `BalloonBalancer`/`BalloonSpawner`) so a settle-check from a pre-restart turn is dropped; `ResetRun` at `RunResetOrder.Quiesce`. | **new** `Game/Run/BreachDetector.cs`; injects `SlotGrid`, `IGameConfiguration`, `ISubscriber<BalanceBalloonsMessage>`, `RunController`; register in `GameLifetimeScope` (`RegisterEntryPoint…AsSelf().As<IRunResettable>()`) |
-| 3 | **Settle + occupancy helpers** — `AllDynamicActorsStable()` (iterate grid, check `IsStable` on `IWriteableDynamicSlotActor`s) and `RowOccupied(row)` (`!IsEmpty(col,row)` across columns). | small helpers in `BreachDetector` (or `SlotGrid` if reused elsewhere) |
-| 4 | **Test trigger** — keep `ForceGameOverCheat`; optionally add a `FillToDeadlineCheat` (spawn lines until breach) to exercise `BreachDetector` in-editor without grinding. | optional new `Cheats/` cheat |
-| 5 | *(optional, secondary trigger)* **Spawn saturation** — `SpawnLineInternal` silently skips a column when `FindFirstReachableEmptyRow` returns null; expose "no column could place" and treat as a breach via `EndRun`. Organic, no magic row — but redundant if the deadline sits near the entry. Decide during tuning. | edit `Balloon/Spawner/BalloonSpawner.cs` |
-| 6 | **Deadline visual** — danger-line gizmo in `SlotGridView.OnDrawGizmos` at the deadline row's world Y (editor, for tuning); a runtime danger line is later polish. | edit `Slots/Grid/SlotGridView.cs` (`#if UNITY_EDITOR`) |
-| 7 | **Tests** — EditMode: breach-eval logic on a real `SlotGrid` with placed actors (actor at/below deadline → `EndRun`; above → none), driving `RunController` via the `INavigation`/`ICinematicState` substitutes (as `RunControllerTests` does). PlayMode: fill the board to the deadline → assert `GameOver` fires (extend the `RunRestartPlayModeTests` style). | **new** `BreachDetectorTests` (EditMode) + a PlayMode case |
-| 8 | **Tuning** — set `BreachDeadlineRowsFromBottom`, then playtest lines-per-turn vs pop-rate vs the level-threshold curve. | config asset + playtest |
+| 1 | **Max-HP config** — `PlayerMaxHitPoints` (int) on `IGameConfiguration` + `GameConfiguration`. (Phase 3 ranges can vary it later; a single field is enough now.) | edit `Shared/IGameConfiguration.cs`, `Configuration/GameConfiguration.cs`; set value on the SO asset (in-editor) |
+| 2 | **Blocked-spawn signal** — make `SpawnLineInternal` return the blocked count; the **turn** paths (`SpawnLine`, `SpawnLinesWithDelayAsync`) publish `SpawnBlockedMessage(int count)` when count > 0. `PopulateInitialGrid` ignores it. | **new** `Shared/Messages/SpawnBlockedMessage.cs` + broker; edit `Balloon/Spawner/BalloonSpawner.cs` |
+| 3 | **`PlayerHealthController`** (`IStartable`, `IRunResettable`, `IDisposable`) — holds `ReactiveProperty<int> Current` (init `Max` from config), exposes `Current` + `Max` (mirrors how `ScoreController` owns its reactive state). Subscribes to `SpawnBlockedMessage`; `Damage(count)` clamps at 0; **on crossing to 0 calls `RunController.EndRun()` once**. `ResetRun` → `Current = Max`. | **new** `Game/Health/PlayerHealthController.cs` (+ folder README); register in `GameLifetimeScope` `AsSelf().As<IRunResettable>()` |
+| 4 | **Hearts bar UI** — `HealthBarView` (MonoBehaviour) binds `Current`/`Max` and renders a horizontal row of hearts filled up to `Current`, empty beyond. Mirror the Score/Shield UI binding (reactive `Subscribe().AddTo(this)`). Prefab: heart sprites + horizontal layout (in-editor). | **new** `UI/Health/HealthBarView.cs` (+ scope or register in `GameLifetimeScope`); scene/prefab wiring done in-editor |
+| 5 | **Tests** — EditMode: `PlayerHealthControllerTests` — damage reduces `Current`; reaching 0 calls `EndRun` exactly once (drive `RunController` via `INavigation`/`ICinematicState` substitutes, as `RunControllerTests` does); `ResetRun` restores `Max`; overshoot clamps at 0. Spawner: `SpawnLineInternal` returns the right blocked count on a saturated real `SlotGrid`. PlayMode: saturate the board → HP drains to 0 → `GameOver`. | **new** `PlayerHealthControllerTests`; a spawner block-count test; a PlayMode case |
+| 6 | **Tuning** — `PlayerMaxHitPoints` value + lines-per-turn vs pop-rate vs HP drain. | config asset + playtest |
 
-### Settle-eval timing & safety
+### Integration / safety
 
-- **Evaluate only after settle** (task 2) — the `WaitUntil` avoids the mid-animation false trigger.
-- **Cinematic / restart safety** — `EndRun` already no-ops during the level-up cinematic and outside
-  `Game`; a deferred breach simply re-evaluates on the next settled turn. The generation guard drops
-  a settle-check whose turn predates a restart, so a stale breach can't fire `GameOver` right after
-  `RestartRun`.
-- **Initial spawn** — initial lines fill from the top; with the deadline near the bottom they
-  shouldn't trip it. Confirm during tuning rather than special-casing.
+- **Death → `EndRun` is the only loss trigger now.** Fire it once when `Current` crosses to 0;
+  `EndRun` already no-ops outside `Game` / during the level-up cinematic, so a blocked spawn that
+  lands during a cinematic just doesn't end the run (HP stays at 0; the GameOver-state gate prevents
+  a double-fire on the next blocked spawn).
+- **HP resets on restart** via `IRunResettable` (order `Counters`, before the `Respawn` stage) so a
+  new run starts at full HP.
+- **No deadline row / danger line** — the hearts bar is the feedback. (A secondary instant-death
+  line could return later if tuning wants it, but it's out of scope here.)
 
-### Decision to make (Open question #2)
+### Decision (supersedes Open question #2)
 
-**Recommended: deadline-row as the primary trigger** — readable, hand-tunable, and visualizable
-(the danger line). Treat **spawn-saturation as an optional safety net** (task 5), added only if
-tuning shows balloons can fully saturate without crossing the deadline. Don't build both up front.
+Loss trigger = **spawn-saturation damage to an HP pool**, **not** deadline-row and **not** instant.
+Damage is **per un-spawnable balloon** (one blocked balloon = 1 HP). Feedback = a filled/empty
+hearts bar.
 
 ---
 
 ## Risks & interactions
 
-- **Settle timing:** evaluate the breach only after the post-spawn balance finishes, or a
-  mid-flight balloon transiting a low row trips a false loss.
-- **Cinematic overlap:** GameOver and the level-up cinematic must be mutually exclusive
-  (gate the breach check during `LevelUp`).
+- ~~**Settle timing:**~~ N/A under the HP model — a blocked spawn is determined **synchronously**
+  against the grid *model* (the balancer updates the model before the view tweens), so there's no
+  mid-animation false trigger to guard against.
+- **Cinematic overlap:** GameOver and the level-up cinematic must be mutually exclusive — handled,
+  since loss goes through `RunController.EndRun`, which already no-ops during the cinematic.
 - ~~**Persistence:**~~ **Resolved in Phase 1** — `ScoreController` is run-scoped (no cross-session
   level/score save); only best-level/best-score persist via `IRunMeta`, and `ResetRun` clears run
   state on restart.
@@ -395,8 +395,9 @@ tuning shows balloons can fully saturate without crossing the deadline. Don't bu
 ## Open questions
 
 1. ~~Runs vs. persistent progression~~ — **✅ Resolved: run-based** (see gating decision above).
-2. **Deadline row vs. spawn-saturation vs. both** for the loss trigger — **recommendation in
-   *Phase 2 — detailed breakdown*: deadline-row primary, spawn-saturation as an optional safety net.**
+2. ~~Deadline row vs. spawn-saturation vs. both~~ — **✅ Resolved: spawn-saturation damage to a
+   player HP pool** (1 HP per un-spawnable balloon; loss at 0; hearts-bar UI). No deadline row. See
+   *Phase 2 — detailed breakdown*.
 3. ~~Restart flow~~ — **✅ Resolved: in-place** grid reset + state clear, via an ordered
    `IRunResettable` harness (scene reload rejected — avoids a visible reload). See *Phase 1 —
    detailed breakdown*.
