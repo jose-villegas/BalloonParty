@@ -61,7 +61,7 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ### Conventions
 
-- **All tests are EditMode** — pure C#, no Play Mode. They run in milliseconds.
+- **Most tests are EditMode** — pure C#, run in milliseconds. A small **PlayMode** suite (`Assets/Tests/PlayMode/`) covers behaviour EditMode can't drive — the async/pooling/scene paths (see the PlayMode section below). Reach for PlayMode only when a test genuinely needs the player loop or a live scene.
 - **Real objects over mocks** — use real `BalloonModel`, `SlotGrid`, etc. when the class is a plain C# type. Reserve NSubstitute for interfaces (`IGameConfiguration`, `IPublisher<T>`, `ISubscriber<T>`) and ScriptableObjects that need reflection setup.
 - **MessagePipe subscriber capture** — `ISubscriber<T>.Subscribe(Action<T>)` is an extension method that wraps the action in `AnonymousMessageHandler<T>` and calls the interface's `Subscribe(IMessageHandler<T>, ...)`. Capture the handler via NSubstitute:
   ```csharp
@@ -454,6 +454,18 @@ Tests `ResetRun` clearing in-transit state on a restart — killed balance tween
 | `ResetRun` clears transit slots | 1 | Stale in-transit slots block spawn pathing next run |
 | `ResetRun` drops per-actor slot list | 1 | Reusing an actor after reset double-counts old slots |
 
+
+---
+
+## PlayMode tests — 1 test
+
+`Assets/Tests/PlayMode/` (assembly `BalloonParty.Tests.PlayMode`). For behaviour EditMode can't exercise: the async/pooling/scene paths that only run under the player loop. Uses `[UnityTest]` coroutines; loads the real Game scene and resolves services from `GameLifetimeScope.Container`.
+
+### `RunRestartPlayModeTests` — 1 test
+
+| Area | Tests | What could break |
+|---|---|---|
+| Restart clears and repopulates the board | 1 | The clear → re-spawn loop leaks, throws, or leaves an empty board (caught the prewarm "await twice" regression — a stored single-await `UniTask` re-awaited when a restart re-spawn raced the initial prewarm) |
 
 ---
 
