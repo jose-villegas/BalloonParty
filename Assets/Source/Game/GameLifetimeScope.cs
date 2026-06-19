@@ -7,6 +7,7 @@ using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Game.Cinematics;
+using BalloonParty.Game.Health;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Score;
 using BalloonParty.Item;
@@ -29,6 +30,7 @@ using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Spawner;
 using BalloonParty.Thrower;
 using BalloonParty.UI.GameOver;
+using BalloonParty.UI.Health;
 using BalloonParty.UI.Score;
 using BalloonParty.Slots.Grid;
 using DG.Tweening;
@@ -72,6 +74,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ScorePointMessage>(options);
             builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
             builder.RegisterMessageBroker<GameOverMessage>(options);
+            builder.RegisterMessageBroker<SpawnBlockedMessage>(options);
             builder.RegisterMessageBroker<BoardClearMessage>(options);
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
             builder.RegisterMessageBroker<ItemCheckMessage>(options);
@@ -126,6 +129,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>();
             builder.Register<RunController>(Lifetime.Singleton).AsSelf();
             builder.Register<BoardClearController>(Lifetime.Singleton).As<IRunResettable>();
+            builder.RegisterEntryPoint<PlayerHealthController>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();
             builder.RegisterEntryPoint<ItemAssigner>();
             builder.RegisterEntryPoint<ItemActivator>();
@@ -137,10 +141,12 @@ namespace BalloonParty.Game
             builder.Register<PaintItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 
             builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
+            builder.RegisterComponentInHierarchy<CameraShakeService>();
 
             builder.RegisterEntryPoint<CinematicDirector>().AsSelf();
             builder.RegisterComponentInHierarchy<LevelUpTrailEffect>();
             builder.RegisterComponentInHierarchy<GameOverScreen>();
+            builder.RegisterComponentInHierarchy<HealthCounterLabel>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();

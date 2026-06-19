@@ -5,6 +5,7 @@ namespace BalloonParty.Shared
     public interface IGameConfiguration
     {
         int ProjectileStartingShields { get; }
+        int StartingHitPoints { get; }
         float ProjectileSpeed { get; }
         float ProjectileLoadDuration { get; }
         Vector4 LimitsClockwise { get; }

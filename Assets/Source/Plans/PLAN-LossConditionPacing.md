@@ -222,8 +222,9 @@ the whole level.)
    ordered `IRunResettable` harness, persist best-level/best-score meta only). Foundation; bakes
    in the run-based decision. **See *Phase 1 — detailed breakdown* below** for the full task
    list, testability seams, and test plan.
-2. **`BreachDetector` + deadline** — encroachment loss works; tune the deadline by hand.
-   **▶ Next — see *Phase 2 — detailed breakdown* below.**
+2. **Player HP + spawn-saturation damage** — loss works through an HP pool drained by rejected
+   balloons (superseded the deadline approach). **✅ Core implemented; scene/prefab wiring, art, and
+   feel tuning remain in-editor — see *Phase 2 — detailed breakdown* below.**
 3. **Level-range config system** — `LevelRangeConfiguration` + `RangedValue` (fixed/linear/
    random) + `DifficultyController`. Start with the levers that work pre-8.3: spawn-lines and
    balloon-type weights.
@@ -324,7 +325,20 @@ wiring, and the RenderTexture-backed `DisturbanceFieldService` reset.
 
 ## Phase 2 — detailed breakdown (player health + spawn-saturation damage)
 
-**Status: not started.** **Design pivot (decided):** loss is **not** immediate on encroachment.
+> **✅ Status: core implemented (tasks 1–5, 7), `dotnet build`- and style-audit-clean.** Where it
+> lives: `Shared/IGameConfiguration` + `Configuration/GameConfiguration` (`StartingHitPoints`, asset
+> set to 5); `Shared/Messages/SpawnBlockedMessage`; `Balloon/Spawner/BalloonSpawner` (rejected-balloon
+> transient pop on a saturated column → `SpawnBlockedMessage` at the pop, staggered, cleaned up in
+> `ResetRun`); `Game/Health/PlayerHealthController` (HP pool → `RunController.EndRun` at 0);
+> `Display/CameraShakeService`; `UI/Health/HealthCounterLabel` (numeric label, mirrors `ShieldCounterLabel`). EditMode
+> `PlayerHealthControllerTests` covers damage → 0 → `EndRun`-once, clamp, and `ResetRun`.
+> **Deferred / needs the editor:** scene + prefab wiring (`CameraShakeService` on the camera, the
+> hearts prefab + container, `HealthBarView` placement), the heart sprite art, reject-pop / shake
+> feel tuning (task 8), the PlayMode end-to-end (saturate → 0 HP → `GameOver`), and the optional
+> danger cinematic (task 6). The spawner reject-count assertion is PlayMode-only (async + pooling +
+> DOTween), so it isn't an EditMode test.
+
+**Design pivot (decided):** loss is **not** immediate on encroachment.
 The player has **hit points**. When the board is so choked that an incoming balloon **can't spawn**,
 each un-spawnable balloon costs **1 HP**. At **0 HP** the run ends via `RunController.EndRun()` (the
 Phase 1 seam — commits meta, publishes `GameOverMessage`, gates against the cinematic / non-`Game`
@@ -364,7 +378,7 @@ to the pool. (`PlayHitVfxForOutcome` needs a colour — bind a minimal coloured 
 | 2 | **Rejected-balloon pop + blocked signal** — `SpawnLineInternal`, on a `null` column, spawns the **transient rejected balloon** (appear at entry → pop, all reuse — see *Damage source*); publishes `SpawnBlockedMessage` **at the pop**. `PopulateInitialGrid` doesn't reject. Stagger multiple rejects in a turn so the pops/shake don't stack ugly. | **new** `Shared/Messages/SpawnBlockedMessage.cs` + broker; edit `Balloon/Spawner/BalloonSpawner.cs` (maybe a small `RejectedBalloonEffect` helper) |
 | 3 | **`PlayerHealthController`** (`IStartable`, `IRunResettable`, `IDisposable`) — `ReactiveProperty<int> Current` (init `StartingHitPoints`, clamped `[0, 999]`); exposes **`Current` only** (no max). Subscribe to `SpawnBlockedMessage`; `Damage(count)` clamps at 0; **`EndRun()` once on crossing to 0**; `ResetRun → StartingHitPoints`. | **new** `Game/Health/PlayerHealthController.cs` (+README); register `AsSelf().As<IRunResettable>()` |
 | 4 | **Camera shake (NEW — none exists)** — a `CameraShakeService`/component doing a DOTween `DOShakePosition` punch-and-restore on the gameplay camera, triggered on the reject pop (subscribe to `SpawnBlockedMessage`, or hook `ImpactEventBus`). **Must not fight the cinematic camera control** — skip or layer it while `Cinematic.IsPlaying`. Camera ref via `[SerializeField] Camera` like `LevelUpTrailEffect`. | **new** `Display/CameraShakeService.cs` (or component); register in `GameLifetimeScope` |
-| 5 | **Hearts bar UI** — `HealthBarView` binds **`Current`** → a horizontal row of `Current` hearts (**dynamic count; no fixed max / empty-heart backdrop**), hearts appearing/disappearing as HP changes. Mirror Score/Shield UI binding (`Subscribe().AddTo(this)`); pool or instantiate one heart per point. Prefab: heart sprite + layout (in-editor). | **new** `UI/Health/HealthBarView.cs` (+ scope or register); scene/prefab wiring in-editor |
+| 5 | **HP counter UI** — `HealthCounterLabel` binds **`Current`** → a numeric label (**no fixed max**), mirroring `ShieldCounterLabel`. *(Decided against a hearts row.)* `[Inject] Construct(PlayerHealthController)` → `Bind(Current)`. Place a TMP label in-scene. | **new** `UI/Health/HealthCounterLabel.cs` (registered via `RegisterComponentInHierarchy`); scene wiring in-editor |
 | 6 | *(optional, deferred polish)* **Dramatic "danger" cinematic** — a brief beat on reject (or near-death) reusing `CinematicDirector` + a new `CinematicState` + `CinematicScene` (like `LevelUpTrailEffect`), optionally `PauseService.Pause(Cinematic)`. Build only after the core feel is right; the user flagged it as a "maybe". | new `CinematicState` value + small effect in `Game/Cinematics/` |
 | 7 | **Tests** — EditMode: `PlayerHealthControllerTests` (damage → 0 → `EndRun` once via `INavigation`/`ICinematicState` substitutes; `ResetRun → Max`; clamp). Spawner: reject published / block-count correct on a saturated real `SlotGrid`. PlayMode: saturate → HP to 0 → `GameOver`. | **new** `PlayerHealthControllerTests`; spawner test; PlayMode case |
 | 8 | **Tuning** — `PlayerMaxHitPoints`, reject-pop feel, shake intensity, lines-per-turn vs pop-rate vs HP drain. | config asset + playtest |

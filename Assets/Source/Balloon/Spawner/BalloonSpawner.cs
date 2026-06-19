@@ -11,6 +11,7 @@ using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Spawner;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
@@ -24,6 +25,10 @@ namespace BalloonParty.Balloon.Spawner
 {
     internal class BalloonSpawner : IStartable, IGridSpawner, IRunResettable
     {
+        // Visual-only delay between the pops of several balloons rejected in the same line,
+        // so the feedback reads as a sequence of hits rather than one stacked flash.
+        private const float RejectStaggerSeconds = 0.08f;
+
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly BalloonBalancer _balancer;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
@@ -44,7 +49,9 @@ namespace BalloonParty.Balloon.Spawner
         private readonly PoolManager _poolManager;
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly DisturbanceFieldService _disturbanceField;
+        private readonly IPublisher<SpawnBlockedMessage> _spawnBlockedPublisher;
         private readonly List<Vector3> _spawnPathBuffer = new();
+        private readonly List<(string PoolKey, BalloonView View)> _activeRejects = new();
 
         private int _turnCount;
         private int _generation;
@@ -71,6 +78,7 @@ namespace BalloonParty.Balloon.Spawner
             IPublisher<TransformCapturedMessage> transformCapturedPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
             IPublisher<NudgeMessage> nudgePublisher,
+            IPublisher<SpawnBlockedMessage> spawnBlockedPublisher,
             DisturbanceFieldService disturbanceField)
         {
             _grid = grid;
@@ -89,6 +97,7 @@ namespace BalloonParty.Balloon.Spawner
             _transformCapturedPublisher = transformCapturedPublisher;
             _deflectedPublisher = deflectedPublisher;
             _nudgePublisher = nudgePublisher;
+            _spawnBlockedPublisher = spawnBlockedPublisher;
             _disturbanceField = disturbanceField;
         }
 
@@ -124,6 +133,15 @@ namespace BalloonParty.Balloon.Spawner
             _activeCounts.Clear();
             _turnCount = 0;
             _newlySpawnedBalloons.Clear();
+
+            // Reject transients aren't grid actors, so the board-clear broadcast can't reach them —
+            // return any mid-pop ones here (OnDespawned kills their tween).
+            foreach (var (poolKey, view) in _activeRejects)
+            {
+                _poolManager.Return(poolKey, view);
+            }
+
+            _activeRejects.Clear();
         }
 
         private async UniTaskVoid PrewarmThenFlagAsync(CancellationToken ct)
@@ -252,9 +270,10 @@ namespace BalloonParty.Balloon.Spawner
 
         private void PopulateInitialGrid()
         {
+            // The initial grid starts empty and is sized to fit, so it never rejects a balloon.
             for (var i = 0; i < _balloonsConfig.GameStartedBalloonLines; i++)
             {
-                SpawnLineInternal();
+                SpawnLineInternal(allowReject: false);
             }
         }
 
@@ -266,6 +285,20 @@ namespace BalloonParty.Balloon.Spawner
                     new ItemCheckMessage(_newlySpawnedBalloons, _turnCount));
                 _newlySpawnedBalloons.Clear();
             }
+        }
+
+        private IWriteableBalloonModel CreateModel(BalloonPrefabEntry entry)
+        {
+            var config = BalloonModelConfig.From(entry);
+
+            return entry.BalloonType switch
+            {
+                BalloonType.Simple => new BalloonModel(config),
+                BalloonType.BubbleCluster => new BubbleClusterModel(config, _palette),
+                BalloonType.Tough => new ToughBalloonModel(config, _palette),
+                BalloonType.Unbreakable => new UnbreakableBalloonModel(config),
+                _ => throw new System.ArgumentOutOfRangeException(nameof(entry.BalloonType), entry.BalloonType, null)
+            };
         }
 
         private void SpawnBalloon(Vector2Int slot)
@@ -288,16 +321,7 @@ namespace BalloonParty.Balloon.Spawner
             var view = _poolManager.Get<BalloonView>(poolKey);
             view.transform.position = _spawnPathBuffer[0];
 
-            var config = BalloonModelConfig.From(entry);
-
-            IWriteableBalloonModel model = entry.BalloonType switch
-            {
-                BalloonType.Simple => new BalloonModel(config),
-                BalloonType.BubbleCluster => new BubbleClusterModel(config, _palette),
-                BalloonType.Tough => new ToughBalloonModel(config, _palette),
-                BalloonType.Unbreakable => new UnbreakableBalloonModel(config),
-                _ => throw new System.ArgumentOutOfRangeException(nameof(entry.BalloonType), entry.BalloonType, null)
-            };
+            var model = CreateModel(entry);
 
             var variant = view.Variant;
             variant.Initialize(model);
@@ -327,23 +351,88 @@ namespace BalloonParty.Balloon.Spawner
         private void SpawnLine()
         {
             _balancer.Balance();
-            SpawnLineInternal();
+            SpawnLineInternal(allowReject: true);
             PublishItemCheck();
             _balancePublisher.Publish(default);
         }
 
-        private void SpawnLineInternal()
+        private void SpawnLineInternal(bool allowReject)
         {
+            var rejectIndex = 0;
+
             for (var col = 0; col < _grid.Columns; col++)
             {
                 var firstEmptyRow = FindFirstReachableEmptyRow(col);
-                if (!firstEmptyRow.HasValue)
+                if (firstEmptyRow.HasValue)
                 {
+                    SpawnBalloon(new Vector2Int(col, firstEmptyRow.Value));
                     continue;
                 }
 
-                SpawnBalloon(new Vector2Int(col, firstEmptyRow.Value));
+                if (allowReject)
+                {
+                    // The column can't accept a balloon — show the would-be balloon failing at
+                    // the entry line and cost the player one hit point (charged at the pop).
+                    PlayRejectedBalloonAsync(col, rejectIndex++, _generation).Forget();
+                }
             }
+        }
+
+        private async UniTaskVoid PlayRejectedBalloonAsync(int col, int staggerIndex, int generation)
+        {
+            if (staggerIndex > 0)
+            {
+                await UniTask.Delay(
+                    (int)(RejectStaggerSeconds * staggerIndex * 1000),
+                    cancellationToken: _cts.Token);
+
+                if (generation != _generation)
+                {
+                    return;
+                }
+            }
+
+            var linePosition = _grid.IndexToWorldPosition(new Vector2Int(col, _grid.Rows - 1));
+            var entry = _balloonsConfig.Entries.PickRandom(_activeCounts);
+
+            if (entry == null)
+            {
+                // No type available to visualize, but the column is still blocked — bleed anyway.
+                _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(col, linePosition));
+                return;
+            }
+
+            var entryPosition = _grid.IndexToWorldPosition(
+                new Vector2Int(col, _grid.Rows - 1 + _balloonsConfig.SpawnEntryRowOffset));
+
+            var view = _poolManager.Get<BalloonView>(entry.PoolKey);
+            var model = CreateModel(entry);
+            view.Variant.Initialize(model);
+            view.Bind(model);
+
+            view.transform.position = entryPosition;
+            view.transform.localScale = Vector3.zero;
+            _activeRejects.Add((entry.PoolKey, view));
+
+            var duration = Random.Range(
+                _balloonsConfig.BalloonSpawnAnimationDurationRange.x,
+                _balloonsConfig.BalloonSpawnAnimationDurationRange.y);
+
+            var sequence = DOTween.Sequence();
+            sequence.Join(view.transform.DOScale(Vector3.one, duration));
+            sequence.Join(view.transform.DOMove(linePosition, duration));
+            sequence.OnComplete(() => CompleteReject(col, entry.PoolKey, view, linePosition));
+            view.TweenTracker.Replace(sequence);
+        }
+
+        private void CompleteReject(int col, string poolKey, BalloonView view, Vector3 linePosition)
+        {
+            view.PlayHitVfxForOutcome(HitOutcome.Pop);
+            _disturbanceField.Stamp(StampSource.BalloonPop, linePosition, Vector2.zero);
+            _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(col, linePosition));
+
+            _activeRejects.Remove((poolKey, view));
+            _poolManager.Return(poolKey, view);
         }
 
         private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct, int generation)
@@ -357,7 +446,7 @@ namespace BalloonParty.Balloon.Spawner
                     return;
                 }
 
-                SpawnLineInternal();
+                SpawnLineInternal(allowReject: true);
                 await UniTask.Delay(
                     (int)(_balloonsConfig.NewBalloonLinesTimeInterval * 1000),
                     cancellationToken: ct);

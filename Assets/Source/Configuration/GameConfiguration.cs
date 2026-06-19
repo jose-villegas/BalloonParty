@@ -6,6 +6,9 @@ namespace BalloonParty.Configuration
     [CreateAssetMenu(menuName = "Configuration/Game Configuration", fileName = "GameConfiguration")]
     public class GameConfiguration : ScriptableObject, IGameConfiguration
     {
+        [Header("Run")]
+        [SerializeField] private int _startingHitPoints = 5;
+
         [Header("Projectile")]
         [SerializeField] private int _projectileStartingShields;
         [SerializeField] private float _projectileSpeed;
@@ -36,6 +39,7 @@ namespace BalloonParty.Configuration
         public Vector2 SlotsOffset => _slotsOffset;
         public Vector2Int SlotsSize => _slotsSize;
         public int ProjectileStartingShields => _projectileStartingShields;
+        public int StartingHitPoints => _startingHitPoints;
         public float PredictionTraceStep => _initialPredictionLength;
         public int PredictionTraceMaxBounces => _predictionTraceMaxBounces;
         public int PredictionTraceMaxSteps => _predictionTraceMaxSteps;
