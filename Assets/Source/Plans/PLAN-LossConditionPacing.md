@@ -456,8 +456,10 @@ chain — **BubbleCluster** drifts to the *nearest* gap (stays close), **Unbreak
 - **Per-type tuning** — Simple / Tough currently share the `ShoveNeighbour` default; give them their
   own `PressureResponse` (or a richer strategy) once the feel is tuned. BubbleCluster relocates to the
   nearest gap, Unbreakable to the farthest.
-- **PlayMode** — saturate a real board and confirm the grid fills (pressure relocations animate) before
-  HP drops.
+- **PlayMode** — `Tests/PlayMode/PressureLossPlayModeTests` floods the real Game scene with spawn lines
+  and asserts the board fills past half (pressure/re-home use every reachable+pushable slot) *before*
+  any HP is lost, then drains to 0 → `GameOver`; plus an initial-HP check. Compile-verified here; run in
+  the editor Test Runner to confirm it passes (and eyeball the reject feel).
 
 ## Risks & interactions
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using BalloonParty.Game;
 using BalloonParty.Game.Run;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
 using NUnit.Framework;
@@ -21,6 +22,15 @@ namespace BalloonParty.Tests.PlayMode
     public class RunRestartPlayModeTests
     {
         private const float TimeoutSeconds = 8f;
+
+        [SetUp]
+        public void ResetNavigation()
+        {
+            // PlayMode tests share static Navigation state (no domain reload). Start from Launch so
+            // the scene's EditorNavigationBootstrap promotes it to Game; otherwise a prior test that
+            // left GameOver keeps the spawn ReadyGate shut and no balloons appear.
+            Navigation.TransitionTo(NavigationState.Launch);
+        }
 
         [UnityTest]
         public IEnumerator Restart_ClearsAndRepopulatesBoard()
