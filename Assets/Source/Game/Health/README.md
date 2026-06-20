@@ -30,7 +30,11 @@ the HP drain syncs with the visual. Popping real balloons to free space is what 
 the core tension.
 
 `Current` exposes only the live count; the UI (`UI/Health/HealthCounterLabel`) shows it as a numeric
-label with no fixed maximum, mirroring `ShieldCounterLabel`. HP resets to full on restart via
+label with no fixed maximum, mirroring `ShieldCounterLabel`. The label is **not** self-injected —
+`HealthUILifetimeScope` (a child scope on the health UI hierarchy, like `ShieldUILifetimeScope`)
+gathers the labels and registers `HealthLabelBinder`, which binds them to `Current` at `Start`. This
+avoids the injection-timing trap where the parent scope (`[DefaultExecutionOrder(-5001)]`) injects a
+MonoBehaviour before its own `Awake` has resolved the TMP component. HP resets to full on restart via
 `IRunResettable` at the `Counters` stage, before the board is repopulated.
 
 ## Registration

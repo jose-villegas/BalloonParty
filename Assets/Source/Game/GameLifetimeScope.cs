@@ -30,7 +30,6 @@ using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Spawner;
 using BalloonParty.Thrower;
 using BalloonParty.UI.GameOver;
-using BalloonParty.UI.Health;
 using BalloonParty.UI.Score;
 using BalloonParty.Slots.Grid;
 using DG.Tweening;
@@ -147,7 +146,6 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<CinematicDirector>().AsSelf();
             builder.RegisterComponentInHierarchy<LevelUpTrailEffect>();
             builder.RegisterComponentInHierarchy<GameOverScreen>();
-            builder.RegisterComponentInHierarchy<HealthCounterLabel>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();

@@ -1,15 +1,14 @@
 using System;
-using BalloonParty.Game.Health;
 using TMPro;
 using UniRx;
 using UnityEngine;
-using VContainer;
 
 namespace BalloonParty.UI.Health
 {
     /// <summary>
     ///     Shows the player's current hit points as a numeric label (no fixed maximum), mirroring
-    ///     <c>ShieldCounterLabel</c>. Binds to <see cref="PlayerHealthController.Current"/> on inject.
+    ///     <c>ShieldCounterLabel</c>. Bound by <c>HealthLabelBinder</c> at <c>Start</c> (after
+    ///     <c>Awake</c> has resolved the label), not self-injected.
     /// </summary>
     [RequireComponent(typeof(TMP_Text))]
     internal class HealthCounterLabel : MonoBehaviour
@@ -26,12 +25,6 @@ namespace BalloonParty.UI.Health
         private void OnDestroy()
         {
             _subscription?.Dispose();
-        }
-
-        [Inject]
-        public void Construct(PlayerHealthController health)
-        {
-            Bind(health.Current);
         }
 
         public void Bind(IReadOnlyReactiveProperty<int> hitPoints)

@@ -390,6 +390,7 @@ GameObject:
   - component: {fileID: 2001491795486438519}
   - component: {fileID: 2165014951236117873}
   - component: {fileID: 3706290036136892784}
+  - component: {fileID: 953195253528003836}
   m_Layer: 5
   m_Name: Hearts
   m_TagString: Untagged
@@ -451,6 +452,22 @@ Canvas:
   m_SortingLayerID: -1446856603
   m_SortingOrder: 50
   m_TargetDisplay: 0
+--- !u!114 &953195253528003836
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6388529315384946133}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4a2659098fbf34982b9b9d1a10aaa788, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Health.HealthUILifetimeScope
+  parentReference:
+    TypeName: BalloonParty.Game.GameLifetimeScope
+  autoRun: 1
+  autoInjectGameObjects: []
 --- !u!1 &6456818997549116032
 GameObject:
   m_ObjectHideFlags: 0
