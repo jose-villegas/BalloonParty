@@ -632,7 +632,7 @@ PrefabInstance:
     - target: {fileID: 2001491795486438519, guid: 1cac211ac1e014e3e8798de9e6e21d14,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 25
+      value: 22.5
       objectReference: {fileID: 0}
     - target: {fileID: 2001491795486438519, guid: 1cac211ac1e014e3e8798de9e6e21d14,
         type: 3}
@@ -654,30 +654,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6140497797545895698, guid: 1cac211ac1e014e3e8798de9e6e21d14,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 1.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 6324653439922184362, guid: 1cac211ac1e014e3e8798de9e6e21d14,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -1.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6388529315384946133, guid: 1cac211ac1e014e3e8798de9e6e21d14,
         type: 3}
       propertyPath: m_Name
       value: Hearts
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588761106742813563, guid: 1cac211ac1e014e3e8798de9e6e21d14,
-        type: 3}
-      propertyPath: m_Color.b
-      value: 0.2784314
-      objectReference: {fileID: 0}
-    - target: {fileID: 8588761106742813563, guid: 1cac211ac1e014e3e8798de9e6e21d14,
-        type: 3}
-      propertyPath: m_Color.g
-      value: 0.3882353
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

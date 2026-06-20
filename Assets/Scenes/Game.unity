@@ -856,6 +856,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3540986420352662421, guid: 66f9708a0b9b044198e0f57d389d660f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1.69
+      objectReference: {fileID: 0}
+    - target: {fileID: 3540986420352662421, guid: 66f9708a0b9b044198e0f57d389d660f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1.57
+      objectReference: {fileID: 0}
     - target: {fileID: 3674475891066859161, guid: 66f9708a0b9b044198e0f57d389d660f,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -891,6 +901,21 @@ PrefabInstance:
       propertyPath: m_Name
       value: UICanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 4763898772089557142, guid: 66f9708a0b9b044198e0f57d389d660f,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4763898772089557142, guid: 66f9708a0b9b044198e0f57d389d660f,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4763898772089557142, guid: 66f9708a0b9b044198e0f57d389d660f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4813776363972236675, guid: 66f9708a0b9b044198e0f57d389d660f,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -1040,6 +1065,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6768921427153659445, guid: 66f9708a0b9b044198e0f57d389d660f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7428696338354854984, guid: 66f9708a0b9b044198e0f57d389d660f,
         type: 3}
@@ -1076,6 +1106,16 @@ PrefabInstance:
       propertyPath: m_Camera
       value: 
       objectReference: {fileID: 253765506}
+    - target: {fileID: 8435779947686444247, guid: 66f9708a0b9b044198e0f57d389d660f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8435779947686444247, guid: 66f9708a0b9b044198e0f57d389d660f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9110861847655513953, guid: 66f9708a0b9b044198e0f57d389d660f,
         type: 3}
       propertyPath: m_AnchorMax.y
