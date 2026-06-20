@@ -1,14 +1,10 @@
 using System;
-using System.Collections.Generic;
 using BalloonParty.Game.Health;
-using BalloonParty.Game.Run;
 using BalloonParty.Shared;
-using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
-using UniRx;
 
 namespace BalloonParty.Tests.Game
 {
@@ -20,10 +16,7 @@ namespace BalloonParty.Tests.Game
         private IGameConfiguration _config;
         private ISubscriber<SpawnBlockedMessage> _spawnBlockedSubscriber;
         private IMessageHandler<SpawnBlockedMessage> _spawnBlockedHandler;
-
-        private ReactiveProperty<NavigationState> _navState;
-        private INavigation _navigation;
-        private ICinematicState _cinematic;
+        private IPublisher<EndRunRequestedMessage> _endRunPublisher;
 
         private PlayerHealthController _controller;
 
@@ -40,14 +33,9 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<SpawnBlockedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            _navState = new ReactiveProperty<NavigationState>(NavigationState.Game);
-            _navigation = Substitute.For<INavigation>();
-            _navigation.Current.Returns(_navState);
+            _endRunPublisher = Substitute.For<IPublisher<EndRunRequestedMessage>>();
 
-            _cinematic = Substitute.For<ICinematicState>();
-            _cinematic.IsPlaying.Returns(false);
-
-            _controller = new PlayerHealthController(_config, _spawnBlockedSubscriber, BuildRunController());
+            _controller = BuildController();
             _controller.Start();
         }
 
@@ -72,7 +60,7 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ReachingZero_EndsRunExactlyOnce()
+        public void ReachingZero_RequestsEndRunExactlyOnce()
         {
             for (var i = 0; i < StartingHitPoints; i++)
             {
@@ -80,11 +68,11 @@ namespace BalloonParty.Tests.Game
             }
 
             Assert.AreEqual(0, _controller.Current.Value);
-            _navigation.Received(1).TransitionTo(NavigationState.GameOver);
+            _endRunPublisher.Received(1).Publish(Arg.Any<EndRunRequestedMessage>());
         }
 
         [Test]
-        public void BlockedSpawn_AtZero_DoesNotEndRunAgainOrUnderflow()
+        public void BlockedSpawn_AtZero_DoesNotRequestAgainOrUnderflow()
         {
             for (var i = 0; i < StartingHitPoints + 5; i++)
             {
@@ -92,7 +80,7 @@ namespace BalloonParty.Tests.Game
             }
 
             Assert.AreEqual(0, _controller.Current.Value, "HP clamps at zero");
-            _navigation.Received(1).TransitionTo(NavigationState.GameOver);
+            _endRunPublisher.Received(1).Publish(Arg.Any<EndRunRequestedMessage>());
         }
 
         [Test]
@@ -112,7 +100,7 @@ namespace BalloonParty.Tests.Game
             _controller.Dispose();
             _config.StartingHitPoints.Returns(5000);
 
-            _controller = new PlayerHealthController(_config, _spawnBlockedSubscriber, BuildRunController());
+            _controller = BuildController();
             _controller.Start();
 
             Assert.AreEqual(999, _controller.Current.Value);
@@ -123,23 +111,9 @@ namespace BalloonParty.Tests.Game
             _spawnBlockedHandler.Handle(new SpawnBlockedMessage(0, default));
         }
 
-        private RunController BuildRunController()
+        private PlayerHealthController BuildController()
         {
-            var runMeta = Substitute.For<IRunMeta>();
-
-            var score = Substitute.For<IRunScore>();
-            score.Level.Returns(new ReactiveProperty<int>(1));
-            score.TotalScore.Returns(new ReactiveProperty<int>(0));
-
-            var gameOverPublisher = Substitute.For<IPublisher<GameOverMessage>>();
-
-            return new RunController(
-                _navigation,
-                _cinematic,
-                runMeta,
-                score,
-                gameOverPublisher,
-                Array.Empty<IRunResettable>());
+            return new PlayerHealthController(_config, _spawnBlockedSubscriber, _endRunPublisher);
         }
     }
 }

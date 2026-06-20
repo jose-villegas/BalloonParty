@@ -12,8 +12,11 @@ namespace BalloonParty.Game.Health
     /// <summary>
     ///     The player's hit-point pool — the only loss trigger under the spawn-saturation model.
     ///     Each <see cref="SpawnBlockedMessage"/> (one un-spawnable balloon) costs one point;
-    ///     reaching zero ends the run through <see cref="RunController.EndRun"/>. HP starts/resets
-    ///     to <see cref="IGameConfiguration.StartingHitPoints"/> and is hard-capped at
+    ///     reaching zero publishes <see cref="EndRunRequestedMessage"/>, which <c>RunController</c>
+    ///     routes through its <c>EndRun</c> seam. (A message rather than a direct call keeps this
+    ///     controller out of the <c>IRunResettable</c> graph <c>RunController</c> resolves, which
+    ///     would otherwise be a DI cycle.) HP starts/resets to
+    ///     <see cref="IGameConfiguration.StartingHitPoints"/> and is hard-capped at
     ///     <see cref="MaxHitPoints"/> internally — the UI shows only the current count.
     /// </summary>
     internal class PlayerHealthController : IStartable, IRunResettable, IDisposable
@@ -22,7 +25,7 @@ namespace BalloonParty.Game.Health
 
         private readonly IGameConfiguration _config;
         private readonly ISubscriber<SpawnBlockedMessage> _spawnBlockedSubscriber;
-        private readonly RunController _runController;
+        private readonly IPublisher<EndRunRequestedMessage> _endRunPublisher;
         private readonly ReactiveProperty<int> _current = new();
 
         private IDisposable _subscription;
@@ -30,11 +33,11 @@ namespace BalloonParty.Game.Health
         public PlayerHealthController(
             IGameConfiguration config,
             ISubscriber<SpawnBlockedMessage> spawnBlockedSubscriber,
-            RunController runController)
+            IPublisher<EndRunRequestedMessage> endRunPublisher)
         {
             _config = config;
             _spawnBlockedSubscriber = spawnBlockedSubscriber;
-            _runController = runController;
+            _endRunPublisher = endRunPublisher;
         }
 
         public IReadOnlyReactiveProperty<int> Current => _current;
@@ -69,9 +72,9 @@ namespace BalloonParty.Game.Health
 
             if (_current.Value == 0)
             {
-                // EndRun no-ops outside Game / during a cinematic, and the GameOver state gate
-                // stops a later blocked spawn from firing a second time.
-                _runController.EndRun();
+                // RunController.EndRun no-ops outside Game / during a cinematic, and the GameOver
+                // state gate stops a later blocked spawn from ending the run a second time.
+                _endRunPublisher.Publish(default);
             }
         }
 

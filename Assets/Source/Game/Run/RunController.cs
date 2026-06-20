@@ -1,8 +1,10 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
+using VContainer.Unity;
 
 namespace BalloonParty.Game.Run
 {
@@ -14,18 +16,21 @@ namespace BalloonParty.Game.Run
     ///
     ///     A loss is suppressed unless the game is actively in <see cref="NavigationState.Game"/>
     ///     and no cinematic is playing — GameOver and the level-up cinematic must never overlap.
-    ///     During Phase 1 the only caller is a cheat; Phase 2's breach detector calls the same
-    ///     <see cref="EndRun"/> seam.
+    ///     Loss triggers call <see cref="EndRun"/> directly (the dev cheat) or raise an
+    ///     <see cref="EndRunRequestedMessage"/> (the player-HP pool, which can't depend on this
+    ///     controller without forming a DI cycle through the <see cref="IRunResettable"/> graph).
     /// </summary>
-    internal class RunController
+    internal class RunController : IStartable, IDisposable
     {
         private readonly ICinematicState _cinematic;
+        private readonly ISubscriber<EndRunRequestedMessage> _endRunSubscriber;
         private readonly IPublisher<GameOverMessage> _gameOverPublisher;
         private readonly INavigation _navigation;
         private readonly IReadOnlyList<IRunResettable> _resettables;
         private readonly IRunMeta _runMeta;
         private readonly IRunScore _score;
 
+        private IDisposable _subscription;
         private int _generation = 1;
 
         public RunController(
@@ -34,6 +39,7 @@ namespace BalloonParty.Game.Run
             IRunMeta runMeta,
             IRunScore score,
             IPublisher<GameOverMessage> gameOverPublisher,
+            ISubscriber<EndRunRequestedMessage> endRunSubscriber,
             IEnumerable<IRunResettable> resettables)
         {
             _navigation = navigation;
@@ -41,7 +47,18 @@ namespace BalloonParty.Game.Run
             _runMeta = runMeta;
             _score = score;
             _gameOverPublisher = gameOverPublisher;
+            _endRunSubscriber = endRunSubscriber;
             _resettables = resettables.OrderBy(r => r.ResetOrder).ToArray();
+        }
+
+        public void Start()
+        {
+            _subscription = _endRunSubscriber.Subscribe(_ => EndRun());
+        }
+
+        public void Dispose()
+        {
+            _subscription?.Dispose();
         }
 
         public void EndRun()

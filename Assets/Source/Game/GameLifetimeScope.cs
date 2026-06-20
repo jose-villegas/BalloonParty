@@ -75,6 +75,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
             builder.RegisterMessageBroker<GameOverMessage>(options);
             builder.RegisterMessageBroker<SpawnBlockedMessage>(options);
+            builder.RegisterMessageBroker<EndRunRequestedMessage>(options);
             builder.RegisterMessageBroker<BoardClearMessage>(options);
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
             builder.RegisterMessageBroker<ItemCheckMessage>(options);
@@ -127,7 +128,7 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>();
-            builder.Register<RunController>(Lifetime.Singleton).AsSelf();
+            builder.RegisterEntryPoint<RunController>().AsSelf();
             builder.Register<BoardClearController>(Lifetime.Singleton).As<IRunResettable>();
             builder.RegisterEntryPoint<PlayerHealthController>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();

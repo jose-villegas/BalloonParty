@@ -19,6 +19,8 @@ namespace BalloonParty.Tests.Game
         private IRunMeta _runMeta;
         private IRunScore _score;
         private IPublisher<GameOverMessage> _gameOverPublisher;
+        private ISubscriber<EndRunRequestedMessage> _endRunSubscriber;
+        private IMessageHandler<EndRunRequestedMessage> _endRunHandler;
 
         [SetUp]
         public void SetUp()
@@ -37,6 +39,13 @@ namespace BalloonParty.Tests.Game
             _score.TotalScore.Returns(new ReactiveProperty<int>(37));
 
             _gameOverPublisher = Substitute.For<IPublisher<GameOverMessage>>();
+
+            _endRunSubscriber = Substitute.For<ISubscriber<EndRunRequestedMessage>>();
+            _endRunSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<EndRunRequestedMessage>>(h => _endRunHandler = h),
+                    Arg.Any<MessageHandlerFilter<EndRunRequestedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
         }
 
         [Test]
@@ -97,6 +106,17 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void EndRunRequestedMessage_AfterStart_EndsTheRun()
+        {
+            var controller = CreateController();
+            controller.Start();
+
+            _endRunHandler.Handle(default);
+
+            _navigation.Received(1).TransitionTo(NavigationState.GameOver);
+        }
+
+        [Test]
         public void RestartRun_InvokesResettablesInAscendingOrder()
         {
             var order = new List<int>();
@@ -149,6 +169,7 @@ namespace BalloonParty.Tests.Game
                 _runMeta,
                 _score,
                 _gameOverPublisher,
+                _endRunSubscriber,
                 resettables);
         }
 

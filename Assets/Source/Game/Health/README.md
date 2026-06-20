@@ -8,7 +8,7 @@ one hit point; reaching zero ends the run.
 
 | File | What it does |
 |---|---|
-| `PlayerHealthController` | Plain C# entry point (`IStartable`, `IRunResettable`, `IDisposable`). Holds `ReactiveProperty<int> Current`, initialised and reset to `IGameConfiguration.StartingHitPoints` (clamped to a hard internal cap of 999 — never displayed). Subscribes to `SpawnBlockedMessage`; each message spends one point. When `Current` crosses to zero it calls `RunController.EndRun()` exactly once — the local zero-guard plus the `GameOver` state gate in `EndRun` prevent a second blocked spawn from firing it again |
+| `PlayerHealthController` | Plain C# entry point (`IStartable`, `IRunResettable`, `IDisposable`). Holds `ReactiveProperty<int> Current`, initialised and reset to `IGameConfiguration.StartingHitPoints` (clamped to a hard internal cap of 999 — never displayed). Subscribes to `SpawnBlockedMessage`; each message spends one point. When `Current` crosses to zero it publishes `EndRunRequestedMessage` exactly once (`RunController` routes it to `EndRun`) — the local zero-guard plus the `GameOver` state gate prevent a second blocked spawn from ending the run again. It publishes rather than calling `RunController` directly: as an `IRunResettable` it sits in the collection `RunController` resolves, so a direct dependency would be a DI cycle |
 
 ## How it works
 
@@ -16,7 +16,10 @@ one hit point; reaching zero ends the run.
 BalloonSpawner (column saturated) ──SpawnBlockedMessage──► PlayerHealthController.Damage(1)
                                                                   │  Current == 0
                                                                   ▼
-                                                          RunController.EndRun()
+                                                       EndRunRequestedMessage
+                                                                  │
+                                                                  ▼
+                                                       RunController.EndRun()
 ```
 
 A blocked spawn is known **synchronously**: `BalloonBalancer.Balance()` updates the grid model

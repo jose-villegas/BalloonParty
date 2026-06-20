@@ -329,7 +329,7 @@ wiring, and the RenderTexture-backed `DisturbanceFieldService` reset.
 > lives: `Shared/IGameConfiguration` + `Configuration/GameConfiguration` (`StartingHitPoints`, asset
 > set to 5); `Shared/Messages/SpawnBlockedMessage`; `Balloon/Spawner/BalloonSpawner` (rejected-balloon
 > transient pop on a saturated column → `SpawnBlockedMessage` at the pop, staggered, cleaned up in
-> `ResetRun`); `Game/Health/PlayerHealthController` (HP pool → `RunController.EndRun` at 0);
+> `ResetRun`); `Game/Health/PlayerHealthController` (HP pool → publishes `EndRunRequestedMessage` at 0, which `RunController` subscribes to and routes through `EndRun` — a message, not a direct call, to avoid a DI cycle since the controller is itself an `IRunResettable`);
 > `Display/CameraShakeService`; `UI/Health/HealthCounterLabel` (numeric label, mirrors `ShieldCounterLabel`). EditMode
 > `PlayerHealthControllerTests` covers damage → 0 → `EndRun`-once, clamp, and `ResetRun`.
 > **Deferred / needs the editor:** scene + prefab wiring (`CameraShakeService` on the camera, the

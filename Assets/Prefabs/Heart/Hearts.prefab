@@ -239,6 +239,7 @@ GameObject:
   - component: {fileID: 9216649711187032553}
   - component: {fileID: 7371500879150197213}
   - component: {fileID: 6466642037712658048}
+  - component: {fileID: 7230454692189635972}
   m_Layer: 5
   m_Name: Text
   m_TagString: Untagged
@@ -366,6 +367,18 @@ MonoBehaviour:
   m_hasFontAssetChanged: 0
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
+--- !u!114 &7230454692189635972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6175755903294292584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93c90c3dccfc4146b134d1b6d41627fc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Health.HealthCounterLabel
 --- !u!1 &6388529315384946133
 GameObject:
   m_ObjectHideFlags: 0
