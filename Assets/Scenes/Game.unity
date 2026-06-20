@@ -379,6 +379,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 1.75
       objectReference: {fileID: 0}
+    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: _gradient.key3.b
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: _gradient.key3.g
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: _gradient.key3.r
+      value: 0.2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []

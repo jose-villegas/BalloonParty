@@ -14,7 +14,8 @@
 **What this is:** a fail state (grid-encroachment loss) **plus** a level-range
 difficulty/pacing system that turns the endless sandbox into a run-based game.
 
-**Status:** design-complete, **not yet implemented** — this doc is the spec; no code exists.
+**Status:** Phases 1–2 + pressure balance + an early-warning effect are **implemented and committed**;
+Phases 3+ (level-range difficulty, allowed colors) are still spec only. See *Current state* below.
 
 **Decisions already locked** (don't re-litigate):
 - Loss = **grid encroachment** — the board chokes up toward the thrower (balloons enter at
@@ -31,6 +32,26 @@ run-scoped save) — it has no dependencies.
 
 **External dependency:** the grid-actor per-range mix needs Phase 8.3 (procedural placement,
 see `PLAN-GridActorExpansion.md`); everything else uses mechanics that exist today.
+
+---
+
+## Current state (session handoff)
+
+**Done & committed** (on `main`, latest `935e663`; `origin/main` is behind — nothing pushed):
+- **Phase 1** — `GameOver` state, run-scoped save, in-place restart. PlayMode-verified. (`Game/Run/`, `Shared/GameState/`, `UI/GameOver/`.)
+- **Phase 2** — player-HP loss from spawn saturation. `IGameConfiguration.StartingHitPoints`; `SpawnBlockedMessage`; rejected-balloon transient that pops **below the grid** (`Balloon/Spawner/RejectedBalloonEffect`); `Game/Health/PlayerHealthController` (publishes `EndRunRequestedMessage` at 0 HP, which `RunController` routes to `EndRun` — a message to avoid a DI cycle); `Display/CameraShakeService`; `UI/Health/HealthCounterLabel` (numeric, bound via `HealthUILifetimeScope` + a binder). See *Phase 2 — detailed breakdown*.
+- **Pressure balance** — a blocked balloon isn't lost until the board truly can't take it: `BalloonSpawner.TrySpawnForColumn` does own-entry → re-home to nearest open column → shove the nearest column pressure can open (`PressureCascade`, rays through puffs, relocates Unbreakable/BubbleCluster, starts above puff entries) → reject. See *Phase 2.5 — detailed breakdown*.
+- **Early-warning effect** — `Game/Danger/SpaceDanger` (0→1 `Level` from HP + free space) + `UI/Danger/DangerGradientView` (eased gradient tint + Y slide). See `Game/Danger/README.md`.
+
+**Verification reality:** all of the above is `dotnet build`- and `style_audit`-clean, and the pure logic is EditMode-tested (`PlayerHealthControllerTests`, `PressureCascadeTests`, `SpaceDangerTests`). PlayMode (`Tests/PlayMode/PressureLossPlayModeTests`, `RunRestartPlayModeTests`) and all visual/feel behaviour need the **in-editor Test Runner / playtest** — `dotnet` can't run them.
+
+**Next steps (pick up here):**
+1. **Tuning playtest** — `StartingHitPoints`, pressure feel, reject-pop feel, camera-shake intensity, the danger gradient + Y offset + `_lerpSpeed`, and lines-per-turn vs pop-rate.
+2. **In-editor wiring still open:** danger UI (`DangerUILifetimeScope` + a `DangerGradientView` with gradient/sprites/container) — confirm it's placed; optional loss/danger cinematic.
+3. **Confirm the puff-entry fix** in the screenshot scenario (balloon over a puff with headroom should pressure-open, not cost a heart).
+4. **Phase 3** — level-range difficulty (`LevelRangeConfiguration` + `RangedValue` + `LevelDifficultyResolver`/`IActiveLevelParameters`), then allowed-colors (Phase 4). These are still spec-only below.
+
+**Key gotchas (learned this session — see memory `loss-condition-pacing-plan` for detail):** DI cycle if a loss trigger that is an `IRunResettable` depends on `RunController` (use a message); MonoBehaviour `[Inject]` runs before its `Awake` under the parent scope (bind from a `Start` entry point, not self-inject); static `Navigation` leaks across PlayMode tests (reset to `Launch` in `[SetUp]`); headless `dotnet`/meta caveats; doubled-hex coords for straight rays.
 
 ---
 
@@ -223,8 +244,12 @@ the whole level.)
    in the run-based decision. **See *Phase 1 — detailed breakdown* below** for the full task
    list, testability seams, and test plan.
 2. **Player HP + spawn-saturation damage** — loss works through an HP pool drained by rejected
-   balloons (superseded the deadline approach). **✅ Core implemented; scene/prefab wiring, art, and
-   feel tuning remain in-editor — see *Phase 2 — detailed breakdown* below.**
+   balloons (superseded the deadline approach). **✅ Implemented; feel tuning remains in-editor — see
+   *Phase 2 — detailed breakdown* below.**
+2.5. **Pressure balance** — shove/redistribute balloons so a line fills every reachable+pushable slot
+   before any HP loss. **✅ Implemented — see *Phase 2.5 — detailed breakdown* below.**
+2.6. **Early-warning effect** — a 0→1 danger signal (HP + free space) driving an eased gradient tint +
+   Y slide. **✅ Implemented; gradient/sprite wiring in-editor — see `Game/Danger/README.md`.**
 3. **Level-range config system** — `LevelRangeConfiguration` + `RangedValue` (fixed/linear/
    random) + `DifficultyController`. Start with the levers that work pre-8.3: spawn-lines and
    balloon-type weights.
