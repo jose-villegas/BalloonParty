@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal abstract class BalloonModelBase : IWriteableBalloonModel
+    internal abstract class BalloonModelBase : IWriteableBalloonModel, IPressureMovable
     {
         public BalloonType TypeName { get; }
         public ReactiveProperty<int> HitsRemaining { get; }
@@ -18,6 +18,10 @@ namespace BalloonParty.Balloon.Model
         public abstract IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
         public SlotActorKind Kind => SlotActorKind.Dynamic;
+
+        // Default pressure personality: a shoved balloon steps one cell to a neighbour, passing the
+        // push along the chain. Unbreakable overrides this to vacate anywhere.
+        public virtual PressureResponse PushResponse => PressureResponse.ShoveNeighbour;
 
         IReadOnlyReactiveProperty<bool> IDynamicSlotActor.IsStable => IsStable;
         IReadOnlyReactiveProperty<Vector2Int> IDynamicSlotActor.SlotIndex => SlotIndex;

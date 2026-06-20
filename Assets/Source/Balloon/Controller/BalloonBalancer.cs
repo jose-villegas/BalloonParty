@@ -169,6 +169,56 @@ namespace BalloonParty.Balloon.Controller
             ReleasePaths();
         }
 
+        // Pressure balance: when a column's entry can't accept a balloon, try to shove its bottom
+        // occupant toward the nearest reachable gap so the new balloon can spawn instead of costing
+        // HP. Returns whether room was opened; the caller re-checks the column afterwards.
+        internal bool TryRelievePressure(int column)
+        {
+            var chain = ListPool<Vector2Int>.Get();
+            try
+            {
+                if (!PressureCascade.TryFindChain(_grid, column, chain))
+                {
+                    return false;
+                }
+
+                ReleasePaths();
+
+                // Shift from the empty end backwards so every destination is vacant when placed.
+                for (var i = chain.Count - 2; i >= 0; i--)
+                {
+                    var from = chain[i];
+                    var to = chain[i + 1];
+
+                    if (_grid.At(from) is not IWriteableDynamicSlotActor actor)
+                    {
+                        continue;
+                    }
+
+                    var view = _grid.ViewAt(from);
+
+                    _balancePathHolder.Reserve(actor, from);
+                    _balancePathHolder.Reserve(actor, to);
+
+                    _grid.Remove(from);
+                    _grid.Place(actor, view, to);
+                    actor.IsStable.Value = false;
+
+                    var path = ListPool<Vector3>.Get();
+                    path.Add(_grid.IndexToWorldPosition(to));
+                    _paths[actor] = path;
+                }
+
+                AnimatePaths(_paths);
+                ReleasePaths();
+                return true;
+            }
+            finally
+            {
+                ListPool<Vector2Int>.Release(chain);
+            }
+        }
+
         private void ReleasePaths()
         {
             foreach (var path in _paths.Values)

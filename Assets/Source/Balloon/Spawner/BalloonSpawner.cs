@@ -363,6 +363,14 @@ namespace BalloonParty.Balloon.Spawner
             for (var col = 0; col < _grid.Columns; col++)
             {
                 var firstEmptyRow = FindFirstReachableEmptyRow(col);
+
+                // Pressure balance: before costing HP, try to shove stable balloons aside to make
+                // room. Only on turn-driven spawns — the initial fill never saturates.
+                if (!firstEmptyRow.HasValue && allowReject && _balancer.TryRelievePressure(col))
+                {
+                    firstEmptyRow = FindFirstReachableEmptyRow(col);
+                }
+
                 if (firstEmptyRow.HasValue)
                 {
                     SpawnBalloon(new Vector2Int(col, firstEmptyRow.Value));
@@ -371,8 +379,8 @@ namespace BalloonParty.Balloon.Spawner
 
                 if (allowReject)
                 {
-                    // The column can't accept a balloon — show the would-be balloon failing at
-                    // the entry line and cost the player one hit point (charged at the pop).
+                    // Even pressure balance couldn't open the column — show the would-be balloon
+                    // failing at the entry line and cost the player one hit point (at the pop).
                     PlayRejectedBalloonAsync(col, rejectIndex++, _generation).Forget();
                 }
             }

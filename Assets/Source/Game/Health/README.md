@@ -24,10 +24,12 @@ BalloonSpawner (column saturated) ──SpawnBlockedMessage──► PlayerHealt
 
 A blocked spawn is known **synchronously**: `BalloonBalancer.Balance()` updates the grid model
 before any view tween, so when `BalloonSpawner.SpawnLineInternal` finds `FindFirstReachableEmptyRow`
-returns `null` for a column, that column genuinely can't accept a balloon. The spawner shows the
-would-be balloon popping at the entry line and publishes `SpawnBlockedMessage` **at the pop**, so
-the HP drain syncs with the visual. Popping real balloons to free space is what stops the bleed —
-the core tension.
+returns `null` for a column, that column genuinely can't accept a balloon. Before costing HP the
+spawner first asks `BalloonBalancer.TryRelievePressure` to **pressure-balance** — shove stable
+balloons aside to open the column (see `Plans/PLAN-LossConditionPacing.md` Phase 2.5). Only if that
+fails does the would-be balloon pop at the entry line and publish `SpawnBlockedMessage` **at the pop**,
+so the HP drain syncs with the visual. Popping real balloons to free space is what ultimately stops
+the bleed — the core tension.
 
 `Current` exposes only the live count; the UI (`UI/Health/HealthCounterLabel`) shows it as a numeric
 label with no fixed maximum, mirroring `ShieldCounterLabel`. The label is **not** self-injected —

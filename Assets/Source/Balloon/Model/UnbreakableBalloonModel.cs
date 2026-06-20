@@ -9,6 +9,10 @@ namespace BalloonParty.Balloon.Model
         public int ScoreValue { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
+        // Unbreakable doesn't shuffle along the chain — when shoved it barges clear, relocating to
+        // the farthest free slot.
+        public override PressureResponse PushResponse => PressureResponse.RelocateFarthest;
+
         internal UnbreakableBalloonModel(BalloonModelConfig config) : base(config)
         {
             ScoreValue = config.ScoreValue;

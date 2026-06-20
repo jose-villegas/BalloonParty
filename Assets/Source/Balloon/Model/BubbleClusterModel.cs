@@ -20,6 +20,10 @@ namespace BalloonParty.Balloon.Model
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
         public int ScoreValue { get; }
 
+        // A bubble cluster also gets out of the way when shoved, but it drifts to the nearest free
+        // slot rather than barging far off like Unbreakable.
+        public override PressureResponse PushResponse => PressureResponse.RelocateNearest;
+
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
         internal BubbleClusterModel(BalloonModelConfig config, IGamePalette palette) : base(config)

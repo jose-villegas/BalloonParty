@@ -407,6 +407,52 @@ dynamic count (no max displayed; hard-capped at 999); an optional dramatic cinem
 
 ---
 
+## Phase 2.5 — detailed breakdown (pressure balance — soften the HP bleed)
+
+**Status: core implemented (`dotnet build`- and audit-clean; EditMode `PressureCascadeTests`).** Phase 2
+alone is too harsh: because the grid packs *upward*, a column's entry blocks (and costs HP) the moment
+that *single* column is solid floor-to-ceiling — even while other columns still have room. Pressure
+balance redistributes balloons *across* columns (the sideways/down moves normal balance never makes) so
+HP only drops once the grid is genuinely full where it can be.
+
+**Concept (decided):** when an arriving balloon can't fit, it **shoves** the column's bottom occupant,
+and the shove propagates neighbour-to-neighbour — snake-like — until it reaches a free slot. A balloon
+can be displaced in **any** direction (a bottleneck can force it *down*); there's no per-direction rule.
+The per-type personality is the **push response**: a normal balloon steps one cell to a neighbour and
+passes the shove along; **relocating** balloons get out of the way to a free slot anywhere, ending the
+chain — **BubbleCluster** drifts to the *nearest* gap (stays close), **Unbreakable** barges to the
+*farthest* gap (clears right out). That's the custom behaviour the type seam exists for.
+
+### How it works
+- **`IPressureMovable` + `PressureResponse`** (`Slots/Capabilities/`) — `ShoveNeighbour` /
+  `RelocateNearest` / `RelocateFarthest`. `BalloonModelBase` defaults to `ShoveNeighbour`;
+  `BubbleClusterModel` overrides to `RelocateNearest`; `UnbreakableBalloonModel` to `RelocateFarthest`.
+  (Simple / Tough inherit the default — the seam to give them their own response later is here.)
+- **`PressureCascade.TryFindChain(grid, col, chain)`** (`Balloon/Controller/`, pure & unit-tested) —
+  BFS from the column's entry `(col, Rows-1)` through *shovable* neighbours (any direction) to the
+  nearest empty slot. A relocating actor reached by the chain short-circuits it: it vacates to its
+  preferred free slot (nearest or farthest), so a reachable relocator relieves pressure as long as the
+  board has any gap. Returns the shortest chain `[entry, …, destination]`; BFS keeps the squeeze local.
+  Static / pass-through occupants halt a branch — routing a shove *through* traversable obstacles is a
+  noted refinement, not yet built.
+- **`BalloonBalancer.TryRelievePressure(col)`** — runs the cascade; if a chain exists, shifts each
+  occupant into the next cell (from the empty end back, so every destination is vacant), reserves
+  transit, and animates via the existing `AnimatePaths`. Returns whether room was opened.
+- **`BalloonSpawner.SpawnLineInternal`** — on a blocked column (turn-driven spawns only), calls
+  `TryRelievePressure` and re-checks before falling through to the reject pop + HP loss. So the order is
+  now **balance → (blocked?) pressure balance → spawn, else reject + HP**.
+
+### Remaining (separate steps, as intended)
+- **Danger VFX** — a visual cue that pressure balance is happening / the board is near full. Deferred by
+  design; hook off `TryRelievePressure` success (or a new message) when built.
+- **Through-traversable routing** — let the cascade path cross pass-through actors to reach gaps behind
+  them.
+- **Per-type tuning** — Simple / Tough currently share the `ShoveNeighbour` default; give them their
+  own `PressureResponse` (or a richer strategy) once the feel is tuned. BubbleCluster relocates to the
+  nearest gap, Unbreakable to the farthest.
+- **PlayMode** — saturate a real board and confirm the grid fills (pressure relocations animate) before
+  HP drops.
+
 ## Risks & interactions
 
 - ~~**Settle timing:**~~ N/A under the HP model — a blocked spawn is determined **synchronously**
