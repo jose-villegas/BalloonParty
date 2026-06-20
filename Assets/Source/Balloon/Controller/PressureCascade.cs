@@ -40,8 +40,11 @@ namespace BalloonParty.Balloon.Controller
         {
             chain.Clear();
 
-            var start = new Vector2Int(startColumn, grid.Rows - 1);
-            if (grid.At(start) is not IPressureMovable)
+            // A rising balloon passes through puffs/empties and is stopped by the first non-traversable
+            // occupant — that lowest blocker is what must move, not the literal bottom cell (which may
+            // be a puff). Shoving it frees a slot the new balloon can still reach through the puffs below.
+            if (!TryFindLowestBlocker(grid, startColumn, out var start)
+                || grid.At(start) is not IPressureMovable)
             {
                 return false;
             }
@@ -97,6 +100,23 @@ namespace BalloonParty.Balloon.Controller
         // Rays from <paramref name="from"/> along one hex direction, passing through pass-through
         // occupants, and reports the first empty or shovable cell. Returns false if the ray leaves the
         // grid or meets a non-traversable blocker first.
+        // The first non-traversable occupant walking up from the entry — the cell a rising balloon
+        // would first hit. Puffs and empties are skipped, so a puff at the bottom isn't mistaken for it.
+        private static bool TryFindLowestBlocker(SlotGrid grid, int col, out Vector2Int blocker)
+        {
+            for (var row = grid.Rows - 1; row >= 0; row--)
+            {
+                if (!grid.IsEmpty(col, row) && !grid.IsTraversable(col, row))
+                {
+                    blocker = new Vector2Int(col, row);
+                    return true;
+                }
+            }
+
+            blocker = default;
+            return false;
+        }
+
         private static bool TryRayToShovableCell(
             SlotGrid grid,
             Vector2Int from,

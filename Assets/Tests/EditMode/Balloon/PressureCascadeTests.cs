@@ -143,6 +143,29 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void PuffAtEntry_ShovesTheBalloonAboveIt_NotTheUntouchablePuff()
+        {
+            var grid = NewGrid(3, 3);
+            Place(grid, PassThrough(), 0, 2);  // puff at the entry — a rising balloon passes through it
+            Place(grid, Movable(), 0, 1);      // the real lowest blocker, above the puff
+            Place(grid, Movable(), 0, 0);
+            Place(grid, Movable(), 1, 0);      // leaves (1,1) empty as a side gap for (0,1)
+
+            Assert.IsTrue(PressureCascade.TryFindChain(grid, 0, _chain),
+                "a puff at the entry must not stop pressure from shoving the balloon above it");
+            Assert.AreEqual(new Vector2Int(0, 1), _chain[0]);
+        }
+
+        [Test]
+        public void BushAtEntry_CannotBeRelieved()
+        {
+            var grid = NewGrid(3, 3);
+            Place(grid, Block(), 0, 2); // a non-traversable bush at the entry blocks the column outright
+
+            Assert.IsFalse(PressureCascade.TryFindChain(grid, 0, _chain));
+        }
+
+        [Test]
         public void RelocateNearest_PicksTheClosestGap()
         {
             var grid = NewGrid(3, 3);
