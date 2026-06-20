@@ -433,20 +433,26 @@ chain — **BubbleCluster** drifts to the *nearest* gap (stays close), **Unbreak
   nearest empty slot. A relocating actor reached by the chain short-circuits it: it vacates to its
   preferred free slot (nearest or farthest), so a reachable relocator relieves pressure as long as the
   board has any gap. Returns the shortest chain `[entry, …, destination]`; BFS keeps the squeeze local.
-  Static / pass-through occupants halt a branch — routing a shove *through* traversable obstacles is a
-  noted refinement, not yet built.
+  Each step **rays through `IPassThrough` occupants** (puff clouds) to the first empty/shovable cell
+  beyond them — using doubled hex coordinates (`xd = 2·col + row%2`) so the ray travels a true straight
+  line; a non-traversable static actor halts that ray. Chain cells may therefore be several apart.
 - **`BalloonBalancer.TryRelievePressure(col)`** — runs the cascade; if a chain exists, shifts each
   occupant into the next cell (from the empty end back, so every destination is vacant), reserves
   transit, and animates via the existing `AnimatePaths`. Returns whether room was opened.
-- **`BalloonSpawner.SpawnLineInternal`** — on a blocked column (turn-driven spawns only), calls
-  `TryRelievePressure` and re-checks before falling through to the reject pop + HP loss. So the order is
-  now **balance → (blocked?) pressure balance → spawn, else reject + HP**.
+- **`BalloonSpawner.TrySpawnForColumn`** — a blocked balloon doesn't stay locked to its column. On
+  turn-driven spawns the order is: **own-column entry → re-home to the nearest other column that can
+  still accept it (`TryFindNearestOpenColumn`; the line may over-fill a column) → shove open the nearest
+  column pressure *can* open, using gaps anywhere on the board (`TryPressureOpenNearestColumn`, which
+  runs `TryRelievePressure` per column outward) → reject + HP**. So a line fills every reachable *and*
+  pushable slot — including interior pockets that no column's entry reaches directly — before any
+  balloon is lost; HP only drops on genuine overflow.
+- **Reject pop is below the grid** — the would-be balloon rises from the entry to just beneath the
+  bottom row and bursts there (row `Rows` / `Rows+1` world positions), so it never overlaps the packed
+  board.
 
 ### Remaining (separate steps, as intended)
 - **Danger VFX** — a visual cue that pressure balance is happening / the board is near full. Deferred by
   design; hook off `TryRelievePressure` success (or a new message) when built.
-- **Through-traversable routing** — let the cascade path cross pass-through actors to reach gaps behind
-  them.
 - **Per-type tuning** — Simple / Tough currently share the `ShoveNeighbour` default; give them their
   own `PressureResponse` (or a richer strategy) once the feel is tuned. BubbleCluster relocates to the
   nearest gap, Unbreakable to the farthest.

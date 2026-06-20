@@ -117,6 +117,32 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void Shove_RoutesThroughAPassThroughObstacleToTheGapBeyond()
+        {
+            var grid = NewGrid(3, 3);
+            Place(grid, Movable(), 0, 2);      // entry
+            Place(grid, PassThrough(), 1, 2);  // a puff sits between the entry and the gap
+            Place(grid, Block(), 0, 1);        // the only other in-bounds direction is blocked
+            // (2,2) stays empty — reachable only by passing through (1,2)
+
+            Assert.IsTrue(PressureCascade.TryFindChain(grid, 0, _chain));
+            Assert.AreEqual(new Vector2Int(0, 2), _chain[0]);
+            Assert.AreEqual(new Vector2Int(2, 2), _chain[^1]); // landed past the puff, not on it
+        }
+
+        [Test]
+        public void Shove_IsHaltedByANonTraversableObstacle()
+        {
+            var grid = NewGrid(3, 3);
+            Place(grid, Movable(), 0, 2);
+            Place(grid, Block(), 1, 2); // a solid blocker, not a puff — the ray cannot pass it
+            Place(grid, Block(), 0, 1);
+            // (2,2) empty but unreachable: every direction from the entry is blocked or out of bounds
+
+            Assert.IsFalse(PressureCascade.TryFindChain(grid, 0, _chain));
+        }
+
+        [Test]
         public void RelocateNearest_PicksTheClosestGap()
         {
             var grid = NewGrid(3, 3);
@@ -206,6 +232,12 @@ namespace BalloonParty.Tests.Balloon
         private static IWriteableSlotActor Block()
         {
             return Substitute.For<IWriteableSlotActor>();
+        }
+
+        // A pass-through occupant (e.g. a puff cloud) — occupied, but a shove can ray straight through it.
+        private static IWriteableSlotActor PassThrough()
+        {
+            return Substitute.For<IWriteableSlotActor, IPassThrough>();
         }
 
         private static void Place(SlotGrid grid, IWriteableSlotActor actor, int col, int row)

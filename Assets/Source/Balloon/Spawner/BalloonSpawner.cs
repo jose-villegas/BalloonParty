@@ -1,8 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
-using BalloonParty.Balloon.Type;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Run;
@@ -11,7 +11,6 @@ using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Spawner;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
@@ -25,10 +24,6 @@ namespace BalloonParty.Balloon.Spawner
 {
     internal class BalloonSpawner : IStartable, IGridSpawner, IRunResettable
     {
-        // Visual-only delay between the pops of several balloons rejected in the same line,
-        // so the feedback reads as a sequence of hits rather than one stacked flash.
-        private const float RejectStaggerSeconds = 0.08f;
-
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly BalloonBalancer _balancer;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
@@ -49,9 +44,10 @@ namespace BalloonParty.Balloon.Spawner
         private readonly PoolManager _poolManager;
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly DisturbanceFieldService _disturbanceField;
-        private readonly IPublisher<SpawnBlockedMessage> _spawnBlockedPublisher;
+        private readonly RejectedBalloonEffect _rejectedBalloon;
         private readonly List<Vector3> _spawnPathBuffer = new();
-        private readonly List<(string PoolKey, BalloonView View)> _activeRejects = new();
+        private readonly Func<int, Vector2Int?> _resolveOpenEntry;
+        private readonly Func<int, Vector2Int?> _resolvePressureOpen;
 
         private int _turnCount;
         private int _generation;
@@ -78,7 +74,7 @@ namespace BalloonParty.Balloon.Spawner
             IPublisher<TransformCapturedMessage> transformCapturedPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
             IPublisher<NudgeMessage> nudgePublisher,
-            IPublisher<SpawnBlockedMessage> spawnBlockedPublisher,
+            RejectedBalloonEffect rejectedBalloon,
             DisturbanceFieldService disturbanceField)
         {
             _grid = grid;
@@ -97,8 +93,12 @@ namespace BalloonParty.Balloon.Spawner
             _transformCapturedPublisher = transformCapturedPublisher;
             _deflectedPublisher = deflectedPublisher;
             _nudgePublisher = nudgePublisher;
-            _spawnBlockedPublisher = spawnBlockedPublisher;
+            _rejectedBalloon = rejectedBalloon;
             _disturbanceField = disturbanceField;
+
+            // Cached so the nearest-column scan doesn't allocate a delegate per blocked column.
+            _resolveOpenEntry = ResolveOpenEntry;
+            _resolvePressureOpen = ResolvePressureOpen;
         }
 
         public void Start()
@@ -133,15 +133,6 @@ namespace BalloonParty.Balloon.Spawner
             _activeCounts.Clear();
             _turnCount = 0;
             _newlySpawnedBalloons.Clear();
-
-            // Reject transients aren't grid actors, so the board-clear broadcast can't reach them —
-            // return any mid-pop ones here (OnDespawned kills their tween).
-            foreach (var (poolKey, view) in _activeRejects)
-            {
-                _poolManager.Return(poolKey, view);
-            }
-
-            _activeRejects.Clear();
         }
 
         private async UniTaskVoid PrewarmThenFlagAsync(CancellationToken ct)
@@ -169,7 +160,7 @@ namespace BalloonParty.Balloon.Spawner
             model.IsStable.Value = false;
             view.transform.localScale = Vector3.zero;
 
-            var duration = Random.Range(
+            var duration = UnityEngine.Random.Range(
                 _balloonsConfig.BalloonSpawnAnimationDurationRange.x,
                 _balloonsConfig.BalloonSpawnAnimationDurationRange.y);
 
@@ -287,20 +278,6 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        private IWriteableBalloonModel CreateModel(BalloonPrefabEntry entry)
-        {
-            var config = BalloonModelConfig.From(entry);
-
-            return entry.BalloonType switch
-            {
-                BalloonType.Simple => new BalloonModel(config),
-                BalloonType.BubbleCluster => new BubbleClusterModel(config, _palette),
-                BalloonType.Tough => new ToughBalloonModel(config, _palette),
-                BalloonType.Unbreakable => new UnbreakableBalloonModel(config),
-                _ => throw new System.ArgumentOutOfRangeException(nameof(entry.BalloonType), entry.BalloonType, null)
-            };
-        }
-
         private void SpawnBalloon(Vector2Int slot)
         {
             var entry = _balloonsConfig.Entries.PickRandom(_activeCounts);
@@ -321,7 +298,7 @@ namespace BalloonParty.Balloon.Spawner
             var view = _poolManager.Get<BalloonView>(poolKey);
             view.transform.position = _spawnPathBuffer[0];
 
-            var model = CreateModel(entry);
+            var model = BalloonModelFactory.Create(entry, _palette);
 
             var variant = view.Variant;
             variant.Initialize(model);
@@ -362,85 +339,115 @@ namespace BalloonParty.Balloon.Spawner
 
             for (var col = 0; col < _grid.Columns; col++)
             {
-                var firstEmptyRow = FindFirstReachableEmptyRow(col);
-
-                // Pressure balance: before costing HP, try to shove stable balloons aside to make
-                // room. Only on turn-driven spawns — the initial fill never saturates.
-                if (!firstEmptyRow.HasValue && allowReject && _balancer.TryRelievePressure(col))
+                if (TrySpawnForColumn(col, allowReject))
                 {
-                    firstEmptyRow = FindFirstReachableEmptyRow(col);
-                }
-
-                if (firstEmptyRow.HasValue)
-                {
-                    SpawnBalloon(new Vector2Int(col, firstEmptyRow.Value));
                     continue;
                 }
 
                 if (allowReject)
                 {
-                    // Even pressure balance couldn't open the column — show the would-be balloon
-                    // failing at the entry line and cost the player one hit point (at the pop).
-                    PlayRejectedBalloonAsync(col, rejectIndex++, _generation).Forget();
+                    // No room anywhere and pressure couldn't open this column — pop the would-be
+                    // balloon below the grid and cost the player one hit point.
+                    _rejectedBalloon.Play(col, rejectIndex++, _activeCounts);
                 }
             }
         }
 
-        private async UniTaskVoid PlayRejectedBalloonAsync(int col, int staggerIndex, int generation)
+        /// <summary>
+        ///     Places this line's balloon for <paramref name="col"/>. It first takes its own column's
+        ///     entry; under pressure (turn-driven spawns) a blocked balloon then looks past its column
+        ///     — re-homing into the nearest other column that can still accept it, then shoving stable
+        ///     balloons aside to open the nearest column it can (using gaps anywhere on the board).
+        ///     Only when nothing frees a slot does it fail. Returns whether a balloon was spawned.
+        /// </summary>
+        private bool TrySpawnForColumn(int col, bool allowReject)
         {
-            if (staggerIndex > 0)
+            var ownRow = FindFirstReachableEmptyRow(col);
+            if (ownRow.HasValue)
             {
-                await UniTask.Delay(
-                    (int)(RejectStaggerSeconds * staggerIndex * 1000),
-                    cancellationToken: _cts.Token);
+                SpawnBalloon(new Vector2Int(col, ownRow.Value));
+                return true;
+            }
 
-                if (generation != _generation)
+            // The initial fill never saturates, so only turn spawns search beyond the column.
+            if (!allowReject)
+            {
+                return false;
+            }
+
+            if (TryNearestColumn(col, startDistance: 1, _resolveOpenEntry, out var rehome))
+            {
+                SpawnBalloon(rehome);
+                return true;
+            }
+
+            if (TryNearestColumn(col, startDistance: 0, _resolvePressureOpen, out var pressured))
+            {
+                SpawnBalloon(pressured);
+                return true;
+            }
+
+            return false;
+        }
+
+        // Scans columns nearest-first from <paramref name="fromCol"/> (left then right at each
+        // distance) and returns the first slot <paramref name="resolve"/> yields. startDistance 0
+        // includes the column itself; 1 skips it.
+        private bool TryNearestColumn(
+            int fromCol,
+            int startDistance,
+            Func<int, Vector2Int?> resolve,
+            out Vector2Int target)
+        {
+            for (var distance = startDistance; distance < _grid.Columns; distance++)
+            {
+                if (distance == 0)
                 {
-                    return;
+                    if (resolve(fromCol) is { } own)
+                    {
+                        target = own;
+                        return true;
+                    }
+
+                    continue;
+                }
+
+                var left = fromCol - distance;
+                if (left >= 0 && resolve(left) is { } leftHit)
+                {
+                    target = leftHit;
+                    return true;
+                }
+
+                var right = fromCol + distance;
+                if (right < _grid.Columns && resolve(right) is { } rightHit)
+                {
+                    target = rightHit;
+                    return true;
                 }
             }
 
-            var linePosition = _grid.IndexToWorldPosition(new Vector2Int(col, _grid.Rows - 1));
-            var entry = _balloonsConfig.Entries.PickRandom(_activeCounts);
-
-            if (entry == null)
-            {
-                // No type available to visualize, but the column is still blocked — bleed anyway.
-                _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(col, linePosition));
-                return;
-            }
-
-            var entryPosition = _grid.IndexToWorldPosition(
-                new Vector2Int(col, _grid.Rows - 1 + _balloonsConfig.SpawnEntryRowOffset));
-
-            var view = _poolManager.Get<BalloonView>(entry.PoolKey);
-            var model = CreateModel(entry);
-            view.Variant.Initialize(model);
-            view.Bind(model);
-
-            view.transform.position = entryPosition;
-            view.transform.localScale = Vector3.zero;
-            _activeRejects.Add((entry.PoolKey, view));
-
-            var duration = Random.Range(
-                _balloonsConfig.BalloonSpawnAnimationDurationRange.x,
-                _balloonsConfig.BalloonSpawnAnimationDurationRange.y);
-
-            var sequence = DOTween.Sequence();
-            sequence.Join(view.transform.DOScale(Vector3.one, duration));
-            sequence.Join(view.transform.DOMove(linePosition, duration));
-            sequence.OnComplete(() => CompleteReject(col, entry.PoolKey, view, linePosition));
-            view.TweenTracker.Replace(sequence);
+            target = default;
+            return false;
         }
 
-        private void CompleteReject(int col, string poolKey, BalloonView view, Vector3 linePosition)
+        // A column the new balloon can rise straight into.
+        private Vector2Int? ResolveOpenEntry(int col)
         {
-            view.PlayHitVfxForOutcome(HitOutcome.Pop);
-            _disturbanceField.Stamp(StampSource.BalloonPop, linePosition, Vector2.zero);
-            _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(col, linePosition));
+            var row = FindFirstReachableEmptyRow(col);
+            return row.HasValue ? new Vector2Int(col, row.Value) : null;
+        }
 
-            _activeRejects.Remove((poolKey, view));
-            _poolManager.Return(poolKey, view);
+        // A column pressure balance can shove open by pulling a balloon into a gap anywhere on the board.
+        private Vector2Int? ResolvePressureOpen(int col)
+        {
+            if (!_balancer.TryRelievePressure(col))
+            {
+                return null;
+            }
+
+            var row = FindFirstReachableEmptyRow(col);
+            return row.HasValue ? new Vector2Int(col, row.Value) : null;
         }
 
         private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct, int generation)
