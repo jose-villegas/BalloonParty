@@ -1,0 +1,39 @@
+# Danger
+
+The **early-warning signal** for running out of space — a single 0→1 value the UI maps onto a colour
+gradient so the player can feel the board getting dangerous before they actually lose a heart.
+
+## Contents
+
+| File | What it does |
+|---|---|
+| `SpaceDanger` | Plain C# entry point (`IStartable`, `IDisposable`). Exposes `IReadOnlyReactiveProperty<float> Level` and recomputes it whenever the grid (`SlotGrid.OnChanged`) or hit points (`PlayerHealthController.Current`) change. `Evaluate` is a pure, unit-tested function so the curve can be reasoned about in isolation |
+
+## The danger curve
+
+```
+overflow      = max(0, spawnPerTurn − availableSpace)   // balloons a turn couldn't place = hearts it'd cost
+Level         = hearts <= 0 ? 1 : clamp01(overflow / hearts)
+```
+
+- **0** — the board can still absorb the next turn's spawn; no warning.
+- **rising** — as free space shrinks, the would-be overflow grows; `Level` is the fraction of the heart
+  pool a single turn would burn.
+- **1** — a single turn could empty the heart pool (`overflow ≥ hearts`), or there are no hearts left.
+  The consumer shows the gradient's final colour.
+
+Two inputs are deliberately simple heuristics and double as tuning knobs:
+
+- **`availableSpace`** = the empty-slot count. Re-home + pressure balance fill nearly every empty, so
+  this approximates "how many balloons the board can still take" without re-deriving reachability.
+- **`spawnPerTurn`** = `NewProjectileBalloonLines × Columns`, the worst case a turn can throw at the board.
+
+## Consumers
+
+`UI/Danger/DangerGradientView` samples a `Gradient` at `Level` to tint sprites and, optionally, slides a
+container Transform on Y (`restY + offsetY × Level`) so the warning element can ease in as danger rises.
+It treats the bound `Level` as a *target* and eases a current value toward it each frame (frame-rate-
+independent, `_lerpSpeed`), so colour and offset glide to new values rather than snapping. `DangerGradientBinder`
+(in `DangerUILifetimeScope`, a child scope) binds the views to `SpaceDanger.Level` at `Start`. Author the
+gradient, assign the target sprites, and (optionally) set the container + Y offset in the inspector —
+nothing renders until those are wired.

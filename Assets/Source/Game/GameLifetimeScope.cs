@@ -7,6 +7,7 @@ using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Game.Cinematics;
+using BalloonParty.Game.Danger;
 using BalloonParty.Game.Health;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Score;
@@ -131,6 +132,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<RunController>().AsSelf();
             builder.Register<BoardClearController>(Lifetime.Singleton).As<IRunResettable>();
             builder.RegisterEntryPoint<PlayerHealthController>().AsSelf().As<IRunResettable>();
+            builder.RegisterEntryPoint<SpaceDanger>().AsSelf();
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();
             builder.RegisterEntryPoint<ItemAssigner>();
             builder.RegisterEntryPoint<ItemActivator>();
