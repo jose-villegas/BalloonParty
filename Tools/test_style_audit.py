@@ -226,6 +226,35 @@ namespace N
 }
 """, [7])
 
+# Comment/string stripping: a SetTrigger mentioned only in a comment must NOT flag.
+expect_lines("magic-strings: commented example is ignored", "magic-strings", """\
+namespace N
+{
+    internal class C
+    {
+        private void M()
+        {
+            // old: _animator.SetTrigger("Jump");
+            var x = 1;
+        }
+    }
+}
+""", [])
+
+# A brace inside a string initializer must not corrupt member-ordering's brace depth — without
+# the code-view the "}" would close the class early and the readonly-after-mutable goes unseen.
+expect_lines("member-ordering: brace in string doesn't corrupt depth", "member-ordering", """\
+namespace N
+{
+    internal class C
+    {
+        private readonly string _x = "}";
+        private bool _active;
+        private readonly int _y = 0;
+    }
+}
+""", [7])
+
 # ── severity model ────────────────────────────────────────────────────────────
 
 expect_severity("braces is an error", "braces", """\
@@ -285,6 +314,13 @@ expect_fix_clears("round-trip: redundant-comment fix clears its check",
 
 
 def _helper_tests():
+    # _code_view / _decommented preserve line count and blank the right things.
+    sample = ['class C\n', '{\n', '    /* a\n', '       b */\n',
+              '    var s = @"x{\n', '    y}";\n', '}\n']
+    _record("code_view preserves line count", len(A._code_view(sample)), len(sample))
+    _record("code_view blanks string quotes", '"' in "".join(A._code_view(sample)), False)
+    _record("decommented keeps string content", '"' in "".join(A._decommented(sample)), True)
+
     label = "strip: type name only in a comment/string is not 'referenced'"
     cleaned = A._strip_comments_and_strings(
         '// MentionedInComment\nvar s = "AlsoString";\nvar c = new RealUse<int>();\n')

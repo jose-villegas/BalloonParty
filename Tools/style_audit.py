@@ -164,26 +164,27 @@ _ALLMAN_METHOD_RE = re.compile(
     r"\s*(public|private|protected|internal|static|async|override|virtual|abstract|"
     r"sealed|void|[\w<>\[\],\s]+)\s+\w+\s*\(.*\)\s*\{$")
 _ALLMAN_INITIALISER_RE = re.compile(r"(=|new\s+\w+.*|new\(.*\))\s*\{$")
-_INTERP_BRACE_RE = re.compile(r'"\$?.*\{')
 
 
-def _allman_split(line: str):
+def _allman_split(line: str, code: str = None):
     """If `line` puts an opening brace on the same line in violation of Allman style, return
     (kind, indent, code_part) where kind is 'control' or 'method' and (indent, code_part) are
-    the pieces to split into; otherwise None."""
-    stripped = line.rstrip()
-    if stripped.strip() == "{" or "=>" in stripped or _INTERP_BRACE_RE.search(stripped):
+    the pieces to split into; otherwise None. Detection runs on `code` (a comment/string-blanked
+    view of the line) so braces or `=>` inside a string never trigger; the split pieces are
+    sliced from the original `line` to preserve its string content."""
+    src = (code if code is not None else line).rstrip()
+    if src.strip() == "{" or "=>" in src:
         return None
-    if not stripped.endswith("{") or _ALLMAN_INITIALISER_RE.search(stripped):
+    if not src.endswith("{") or _ALLMAN_INITIALISER_RE.search(src):
         return None
-    if _ALLMAN_KEYWORD_RE.search(stripped):
+    if _ALLMAN_KEYWORD_RE.search(src):
         kind = "control"
-    elif _ALLMAN_METHOD_RE.match(stripped):
+    elif _ALLMAN_METHOD_RE.match(src):
         kind = "method"
     else:
         return None
     indent = line[:len(line) - len(line.lstrip())]
-    return kind, indent, stripped[len(indent):].rstrip(" {").rstrip()
+    return kind, indent, line.rstrip()[len(indent):].rstrip(" {").rstrip()
 
 
 def _braceless_bodies(lines: list[str]):
@@ -210,7 +211,7 @@ def _braceless_bodies(lines: list[str]):
 
 def check_braces_required(path: Path, lines: list[str], result: AuditResult):
     """Braces required for if/else/for/foreach/while/using/lock/fixed."""
-    for ctrl, _ in _braceless_bodies(lines):
+    for ctrl, _ in _braceless_bodies(_code_view(lines)):
         result.add(Violation(str(path), ctrl + 1, "braces-required",
             f"control statement without braces: {lines[ctrl].strip()}", fixable=True))
 
@@ -218,8 +219,9 @@ def check_braces_required(path: Path, lines: list[str], result: AuditResult):
 def check_allman_braces(path: Path, lines: list[str], result: AuditResult):
     """Opening brace must be on its own line (Allman style).
     Exceptions: object/collection initialisers, lambdas, array init, auto-properties."""
+    code = _code_view(lines)
     for i, line in enumerate(lines, 1):
-        split = _allman_split(line)
+        split = _allman_split(line, code[i - 1])
         if split is None:
             continue
         kind = split[0]
@@ -261,7 +263,9 @@ def check_magic_strings(path: Path, lines: list[str], result: AuditResult):
     # SetTrigger("Foo"), SetBool("Foo"), etc.
     anim_re = re.compile(r'\.(SetTrigger|SetBool|SetFloat|SetInteger|GetBool|GetFloat|GetInteger)\s*\(\s*"')
     layer_re = re.compile(r'(LayerMask\.NameToLayer|LayerMask\.GetMask)\s*\(\s*"')
-    for i, line in enumerate(lines, 1):
+    # Strings are kept (the literal is the thing we detect) but comments are blanked, so a
+    # commented-out example like `// _animator.SetTrigger("Jump")` no longer false-matches.
+    for i, line in enumerate(_decommented(lines), 1):
         if anim_re.search(line):
             result.add(Violation(str(path), i, "magic-string-animator",
                 "animator param should use cached StringToHash int"))
@@ -322,7 +326,9 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
     brace_depth = 0
     class_brace_depth = 0
 
-    for i, line in enumerate(lines, 1):
+    # Scan a comment/string-blanked view so braces inside a string literal can't corrupt depth.
+    code = _code_view(lines)
+    for i, line in enumerate(code, 1):
         stripped = line.strip()
 
         brace_depth += stripped.count("{") - stripped.count("}")
@@ -345,7 +351,7 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
             continue
 
         # Check previous line for attributes that may span to this line
-        prev_stripped = lines[i - 2].strip() if i >= 2 else ""
+        prev_stripped = code[i - 2].strip() if i >= 2 else ""
         has_serialize_above = "[SerializeField]" in prev_stripped
         has_inject_above = "[Inject]" in prev_stripped
         has_header_above = "[Header" in prev_stripped
@@ -440,7 +446,10 @@ def check_method_ordering(path: Path, lines: list[str], result: AuditResult):
     last_group = 0
     last_life = -1
 
-    for i, raw in enumerate(lines, 1):
+    # Scan a comment/string-blanked view so braces/parens inside a string can't corrupt depth
+    # and a keyword inside a string can't look like a declaration.
+    code = _code_view(lines)
+    for i, raw in enumerate(code, 1):
         stripped = raw.strip()
         decl = type_decl.match(stripped)
         delta = stripped.count("{") - stripped.count("}")
@@ -478,7 +487,7 @@ def check_method_ordering(path: Path, lines: list[str], result: AuditResult):
             is_life = is_mono and name in LIFECYCLE_NAMES
             if not mods and not is_ctor and not is_life:
                 continue  # bare method call or unannotated member — don't guess
-            has_inject = i >= 2 and "[Inject]" in lines[i - 2]
+            has_inject = i >= 2 and "[Inject]" in code[i - 2]
             if is_ctor:
                 group = CTOR
             elif is_life:
@@ -679,13 +688,18 @@ def _internal_types() -> set[str]:
     return _INTERNAL_TYPES
 
 
-def _strip_comments_and_strings(text: str) -> str:
-    """Blank out comment bodies and string/char literals (each consumed char becomes a space)
-    so identifier scanning sees only real code. Adjacency of the remaining code chars — which the
-    type-usage checks rely on — is preserved. Handles //, /* */, "", verbatim @"", interpolated
-    $"", and '' with their escape forms."""
+def _blank(text: str, blank_strings: bool) -> str:
+    """Blank out comment bodies (always) and string/char literals (when `blank_strings`),
+    replacing each consumed char with a space but PRESERVING newlines and total length so the
+    result splits back into the same lines at the same offsets. Strings are always parsed (so a
+    `//` inside one is never mistaken for a comment); they are only blanked when asked. Handles
+    //, /* */, "", verbatim @"", interpolated $"", and '' with their escape forms."""
     out: list[str] = []
     i, n = 0, len(text)
+
+    def blank(ch: str) -> str:
+        return "\n" if ch == "\n" else " "
+
     while i < n:
         two = text[i:i + 2]
         if two == "//":
@@ -694,7 +708,7 @@ def _strip_comments_and_strings(text: str) -> str:
                 i += 1
         elif two == "/*":
             while i < n and text[i:i + 2] != "*/":
-                out.append(" ")
+                out.append(blank(text[i]))
                 i += 1
             for _ in range(min(2, n - i)):
                 out.append(" ")
@@ -703,34 +717,34 @@ def _strip_comments_and_strings(text: str) -> str:
             verbatim = False
             while text[i] in "@$":
                 verbatim = verbatim or text[i] == "@"
-                out.append(" ")
+                out.append(text[i] if not blank_strings else " ")
                 i += 1
-            out.append(" ")
-            i += 1  # opening quote
+            out.append(text[i] if not blank_strings else " ")  # opening quote
+            i += 1
             while i < n:
                 ch = text[i]
                 if verbatim and ch == '"' and text[i:i + 2] == '""':
-                    out.append("  ")
+                    out.append('""' if not blank_strings else "  ")
                     i += 2
                     continue
                 if not verbatim and ch == "\\":
-                    out.append("  ")
+                    out.append(text[i:i + 2] if not blank_strings else "  ")
                     i += 2
                     continue
-                out.append(" ")
+                out.append(ch if not blank_strings else blank(ch))
                 i += 1
                 if ch == '"':
                     break
         elif text[i] == "'":
-            out.append(" ")
+            out.append(text[i] if not blank_strings else " ")
             i += 1
             while i < n:
                 ch = text[i]
                 if ch == "\\":
-                    out.append("  ")
+                    out.append(text[i:i + 2] if not blank_strings else "  ")
                     i += 2
                     continue
-                out.append(" ")
+                out.append(ch if not blank_strings else " ")
                 i += 1
                 if ch == "'":
                     break
@@ -738,6 +752,24 @@ def _strip_comments_and_strings(text: str) -> str:
             out.append(text[i])
             i += 1
     return "".join(out)
+
+
+def _strip_comments_and_strings(text: str) -> str:
+    """Blank comments AND string/char literals. Used by identifier scanning."""
+    return _blank(text, blank_strings=True)
+
+
+def _code_view(lines: list[str]) -> list[str]:
+    """`lines` with comments and string/char literals blanked — same line count and offsets.
+    Feed this to structural checks (braces, ordering) so a brace/keyword inside a string or
+    comment can never false-match."""
+    return _blank("".join(lines), blank_strings=True).splitlines(keepends=True)
+
+
+def _decommented(lines: list[str]) -> list[str]:
+    """`lines` with only comments blanked (string literals kept). Feed this to checks that must
+    still see string literals (e.g. magic-strings) but ignore anything inside a comment."""
+    return _blank("".join(lines), blank_strings=False).splitlines(keepends=True)
 
 
 def _build_editor_referenced_names() -> set[str]:
@@ -1498,9 +1530,10 @@ def fix_redundant_comments(path: Path, lines: list[str]) -> list[str]:
 
 def fix_allman_braces(path: Path, lines: list[str]) -> list[str]:
     """Split a trailing { onto its own line (Allman brace style)."""
+    code = _code_view(lines)
     out = []
-    for line in lines:
-        split = _allman_split(line)
+    for i, line in enumerate(lines):
+        split = _allman_split(line, code[i])
         if split is None:
             out.append(line)
             continue
@@ -1514,7 +1547,7 @@ def fix_braces_required(path: Path, lines: list[str]) -> list[str]:
     """Wrap braceless control-flow bodies in { }. Insertions are applied bottom-up so
     earlier line indices stay valid."""
     out = list(lines)
-    for ctrl, body in reversed(list(_braceless_bodies(lines))):
+    for ctrl, body in reversed(list(_braceless_bodies(_code_view(lines)))):
         indent = lines[ctrl][:len(lines[ctrl]) - len(lines[ctrl].lstrip())]
         out.insert(body, indent + "{\n")
         out.insert(body + 2, indent + "}\n")
