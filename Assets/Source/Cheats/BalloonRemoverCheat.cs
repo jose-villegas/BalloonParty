@@ -217,8 +217,8 @@ namespace BalloonParty.Cheats
             {
                 var a0 = i * Mathf.PI * 2f / segments;
                 var a1 = (i + 1) * Mathf.PI * 2f / segments;
-                var dir0 = VectorMathExtensions.DirectionFromAngle(a0);
-                var dir1 = VectorMathExtensions.DirectionFromAngle(a1);
+                Vector3 dir0 = VectorMathExtensions.DirectionFromAngle(a0);
+                Vector3 dir1 = VectorMathExtensions.DirectionFromAngle(a1);
                 var p0 = center + dir0 * radius;
                 var p1 = center + dir1 * radius;
                 var out0 = center + dir0 * (radius + halfWidth);

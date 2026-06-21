@@ -105,7 +105,8 @@ namespace BalloonParty.Game.Score
 
             var radius = Mathf.Min(_config.SlotSeparation.x, _config.SlotSeparation.y) * 1.5f;
             var angle = 2f * Mathf.PI * index / count;
-            return center + VectorMathExtensions.DirectionFromAngle(angle) * radius;
+            Vector3 direction = VectorMathExtensions.DirectionFromAngle(angle);
+            return center + direction * radius;
         }
 
         private void SpawnTrail(string colorName, Vector3 center, Vector3 scatterOrigin, TrailId id)

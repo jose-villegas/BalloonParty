@@ -24,8 +24,9 @@ namespace BalloonParty.Shared.Extensions
 
         /// <summary>
         ///     Unit direction in the XY plane for <paramref name="radians" />. Multiply by a radius
-        ///     and add to a centre to place points on a circle. Returns a <see cref="Vector2" />,
-        ///     which promotes to <see cref="Vector3" /> (z = 0) for world-space callers.
+        ///     and add to a centre to place points on a circle. Returns <see cref="Vector2" />; for
+        ///     world-space callers assign it to a <c>Vector3</c> local first (a direct
+        ///     <c>Vector3 + Vector2</c> is ambiguous in Unity).
         /// </summary>
         public static Vector2 DirectionFromAngle(float radians)
         {

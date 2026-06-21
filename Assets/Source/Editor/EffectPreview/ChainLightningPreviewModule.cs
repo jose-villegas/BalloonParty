@@ -101,7 +101,8 @@ namespace BalloonParty.Editor.EffectPreview
                 for (var i = 0; i < _targetCount; i++)
                 {
                     var angle = 360f / _targetCount * i * Mathf.Deg2Rad;
-                    targets.Add(origin + VectorMathExtensions.DirectionFromAngle(angle) * 2f);
+                    Vector3 direction = VectorMathExtensions.DirectionFromAngle(angle);
+                    targets.Add(origin + direction * 2f);
                 }
             }
 
