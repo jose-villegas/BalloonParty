@@ -5,6 +5,7 @@ using BalloonParty.Projectile.Model;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
+using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using DG.Tweening;
@@ -22,6 +23,7 @@ namespace BalloonParty.Thrower
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
+        private readonly PauseService _pauseService;
         private readonly IObjectResolver _resolver;
         private readonly List<Vector3> _tracePoints = new();
         private readonly PoolManager _poolManager;
@@ -50,6 +52,7 @@ namespace BalloonParty.Thrower
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ProjectileLoadedMessage> loadedPublisher,
             ISubscriber<RunResetMessage> resetSubscriber,
+            PauseService pauseService,
             ProjectilePositionProvider positionProvider)
         {
             _view = view;
@@ -60,6 +63,7 @@ namespace BalloonParty.Thrower
             _destroyedSubscriber = destroyedSubscriber;
             _loadedPublisher = loadedPublisher;
             _resetSubscriber = resetSubscriber;
+            _pauseService = pauseService;
             _positionProvider = positionProvider;
         }
 
@@ -86,7 +90,9 @@ namespace BalloonParty.Thrower
 
         public void Tick()
         {
-            if (!_isMovable || Navigation.Current.Value != NavigationState.Game)
+            if (!_isMovable
+                || Navigation.Current.Value != NavigationState.Game
+                || _pauseService.IsAnyPaused.Value)
             {
                 return;
             }

@@ -8,6 +8,7 @@ using BalloonParty.Game.Run;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -38,10 +39,12 @@ namespace BalloonParty.Balloon.Spawner
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly IPublisher<SpawnBlockedMessage> _spawnBlockedPublisher;
         private readonly SlotGrid _grid;
+        private readonly PauseService _pauseService;
         private readonly CancellationTokenSource _cts = new();
         private readonly List<(string PoolKey, BalloonView View)> _active = new();
 
         private int _generation;
+        private bool _overflowPaused;
 
         public int ResetOrder => RunResetOrder.Counters;
 
@@ -52,7 +55,8 @@ namespace BalloonParty.Balloon.Spawner
             IGamePalette palette,
             PoolManager poolManager,
             DisturbanceFieldService disturbanceField,
-            IPublisher<SpawnBlockedMessage> spawnBlockedPublisher)
+            IPublisher<SpawnBlockedMessage> spawnBlockedPublisher,
+            PauseService pauseService)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
@@ -60,6 +64,7 @@ namespace BalloonParty.Balloon.Spawner
             _poolManager = poolManager;
             _disturbanceField = disturbanceField;
             _spawnBlockedPublisher = spawnBlockedPublisher;
+            _pauseService = pauseService;
         }
 
         public void Dispose()
@@ -80,6 +85,7 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             _active.Clear();
+            EndOverflowHold();
         }
 
         /// <summary>
@@ -133,6 +139,7 @@ namespace BalloonParty.Balloon.Spawner
             view.transform.position = appearPosition;
             view.transform.localScale = Vector3.zero;
             _active.Add((entry.PoolKey, view));
+            BeginOverflowHold();
 
             var duration = UnityEngine.Random.Range(
                 _balloonsConfig.BalloonSpawnAnimationDurationRange.x,
@@ -153,6 +160,36 @@ namespace BalloonParty.Balloon.Spawner
 
             _active.Remove((poolKey, view));
             _poolManager.Return(poolKey, view);
+
+            if (_active.Count == 0)
+            {
+                EndOverflowHold();
+            }
+        }
+
+        // Hold the thrower for the duration of a turn's overflow pops so the player can't fire into a
+        // board that's still resolving. Released when the last rejected balloon finishes — at which
+        // point the run has either survived (thrower re-enables) or ended (GameOver keeps it disabled).
+        private void BeginOverflowHold()
+        {
+            if (_overflowPaused)
+            {
+                return;
+            }
+
+            _pauseService.Pause(PauseSource.Overflow);
+            _overflowPaused = true;
+        }
+
+        private void EndOverflowHold()
+        {
+            if (!_overflowPaused)
+            {
+                return;
+            }
+
+            _pauseService.Resume(PauseSource.Overflow);
+            _overflowPaused = false;
         }
     }
 }

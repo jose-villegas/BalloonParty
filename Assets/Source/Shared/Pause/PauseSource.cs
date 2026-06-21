@@ -6,6 +6,12 @@ namespace BalloonParty.Shared.Pause
         Cinematic,
 
         /// <summary>A modal overlay has taken control of the screen (e.g. level-up popup).</summary>
-        LevelUp
+        LevelUp,
+
+        /// <summary>
+        ///     Rejected balloons are popping below the grid after a turn's spawn. Holds the thrower
+        ///     until the overflow finishes so the player can't fire into an unresolved board.
+        /// </summary>
+        Overflow
     }
 }
