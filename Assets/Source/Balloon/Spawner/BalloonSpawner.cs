@@ -6,7 +6,6 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Run;
-using BalloonParty.Nudge;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
@@ -26,23 +25,18 @@ namespace BalloonParty.Balloon.Spawner
     {
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly BalloonBalancer _balancer;
-        private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
+        private readonly BalloonControllerContext _controllerContext;
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly IGamePalette _palette;
         private readonly CancellationTokenSource _cts = new();
-        private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
-        private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
-        private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IPublisher<ItemCheckMessage> _itemCheckPublisher;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
         private readonly List<IBalloonModel> _newlySpawnedBalloons = new();
-        private readonly IPublisher<NudgeMessage> _nudgePublisher;
         private readonly IObjectResolver _resolver;
         private readonly PoolManager _poolManager;
-        private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly RejectedBalloonEffect _rejectedBalloon;
         private readonly List<Vector3> _spawnPathBuffer = new();
@@ -65,15 +59,10 @@ namespace BalloonParty.Balloon.Spawner
             PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
             BalloonBalancer balancer,
+            BalloonControllerContext controllerContext,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
-            ISubscriber<ActorHitMessage> hitSubscriber,
-            ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
-            ISubscriber<BoardClearMessage> boardClearSubscriber,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
-            IPublisher<TransformCapturedMessage> transformCapturedPublisher,
-            IPublisher<BalloonDeflectedMessage> deflectedPublisher,
-            IPublisher<NudgeMessage> nudgePublisher,
             RejectedBalloonEffect rejectedBalloon,
             DisturbanceFieldService disturbanceField)
         {
@@ -84,15 +73,10 @@ namespace BalloonParty.Balloon.Spawner
             _poolManager = poolManager;
             _lineSubscriber = lineSubscriber;
             _balancer = balancer;
+            _controllerContext = controllerContext;
             _balancePublisher = balancePublisher;
-            _hitSubscriber = hitSubscriber;
-            _itemActivatedSubscriber = itemActivatedSubscriber;
-            _boardClearSubscriber = boardClearSubscriber;
             _destroyedSubscriber = destroyedSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
-            _transformCapturedPublisher = transformCapturedPublisher;
-            _deflectedPublisher = deflectedPublisher;
-            _nudgePublisher = nudgePublisher;
             _rejectedBalloon = rejectedBalloon;
             _disturbanceField = disturbanceField;
 
@@ -308,15 +292,7 @@ namespace BalloonParty.Balloon.Spawner
                 poolKey,
                 () => _activeCounts[poolKey]--,
                 entry.HitVfxOverrides,
-                _hitSubscriber,
-                _itemActivatedSubscriber,
-                _boardClearSubscriber,
-                _transformCapturedPublisher,
-                _deflectedPublisher,
-                _nudgePublisher,
-                _grid,
-                _poolManager,
-                _disturbanceField);
+                _controllerContext);
             controller.Start();
 
             _grid.Place(model, view, slot);

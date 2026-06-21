@@ -131,6 +131,7 @@ namespace BalloonParty.Game
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
             builder.Register<RejectedBalloonEffect>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
+            builder.Register<BalloonControllerContext>(Lifetime.Singleton);
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>().As<IScoreQuery>();
             builder.RegisterEntryPoint<RunController>().AsSelf();

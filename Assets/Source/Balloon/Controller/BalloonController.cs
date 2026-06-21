@@ -40,30 +40,22 @@ namespace BalloonParty.Balloon.Controller
             string poolKey,
             Action onReturned,
             HitVfxOverride[] hitVfxOverrides,
-            ISubscriber<ActorHitMessage> hitSubscriber,
-            ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
-            ISubscriber<BoardClearMessage> boardClearSubscriber,
-            IPublisher<TransformCapturedMessage> transformCapturedPublisher,
-            IPublisher<BalloonDeflectedMessage> deflectedPublisher,
-            IPublisher<NudgeMessage> nudgePublisher,
-            SlotGrid grid,
-            PoolManager poolManager,
-            DisturbanceFieldService disturbanceField)
+            BalloonControllerContext context)
         {
             _model = model;
             _view = view;
             _poolKey = poolKey;
             _onReturned = onReturned;
             _hitVfxOverrides = hitVfxOverrides;
-            _hitSubscriber = hitSubscriber;
-            _itemActivatedSubscriber = itemActivatedSubscriber;
-            _boardClearSubscriber = boardClearSubscriber;
-            _transformCapturedPublisher = transformCapturedPublisher;
-            _deflectedPublisher = deflectedPublisher;
-            _nudgePublisher = nudgePublisher;
-            _grid = grid;
-            _poolManager = poolManager;
-            _disturbanceField = disturbanceField;
+            _hitSubscriber = context.HitSubscriber;
+            _itemActivatedSubscriber = context.ItemActivatedSubscriber;
+            _boardClearSubscriber = context.BoardClearSubscriber;
+            _transformCapturedPublisher = context.TransformCapturedPublisher;
+            _deflectedPublisher = context.DeflectedPublisher;
+            _nudgePublisher = context.NudgePublisher;
+            _grid = context.Grid;
+            _poolManager = context.PoolManager;
+            _disturbanceField = context.DisturbanceField;
         }
 
         public void Start()
