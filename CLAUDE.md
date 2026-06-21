@@ -83,10 +83,7 @@ python3 Tools/style_audit.py            # full scan
 python3 Tools/style_audit.py --file X   # one file
 python3 Tools/style_audit.py --fix      # auto-fix: braces, blank lines, comments, namespace
 ```
-Markdown plan edits don't trigger the audit. The audit should run fully clean; if a check
-fires on valid code, fix the check (it's `Tools/style_audit.py`), don't distort the code to
-appease it. The `public-visibility` check already skips types referenced from an Editor
-assembly, so cross-assembly `public` helpers don't trip it.
+Markdown plan edits don't trigger the audit.
 
 ## Workflow notes
 - The pre-commit hook (`Tools/pre-commit`) runs `style_audit.py` on staged `.cs` and blocks on violations.

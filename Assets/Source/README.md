@@ -617,11 +617,6 @@ python3 Tools/style_audit.py --fix
 cp Tools/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 ```
 
-The audit should run fully clean. If a check fires on genuinely-correct code, fix the check in
-`Tools/style_audit.py` rather than distorting the code to satisfy it. (For example,
-`public-visibility` skips any type whose name is referenced from an Editor assembly, since
-`public` is mandatory there — `internal` runtime types aren't visible across the asmdef.)
-
 ---
 
 
