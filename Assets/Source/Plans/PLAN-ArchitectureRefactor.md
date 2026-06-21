@@ -29,7 +29,8 @@ for the cinematic + the GPU/disturbance + item handlers):
 - **Tier 2 god-classes:** G1 (ProjectileHitResolver), G2 (CinematicCameraRig),
   G3 (BalloonControllerContext + BalloonPlacementResolver + BalloonFactory —
   spawner 479→257 LOC),
-  G4 **partial** (DisturbanceFieldCoordinates + LerpStampScheduler + GPU-tail dedup),
+  G4 **done** (DisturbanceFieldCoordinates + LerpStampScheduler + GPU-tail dedup, then
+  DisturbanceFieldResources — service 493→289 LOC),
   G5 (HexCoordinates + GridBalanceQuery), G6 **2/3** (ChainLightningGeometry;
   SlotClusterRegistry.OnActorPlaced decomposed).
 - **Tier 3 OCP/DIP:** OCP1 (ItemSettings → Bomb/Laser/Lightning/Paint sub-settings;
@@ -44,8 +45,6 @@ for the cinematic + the GPU/disturbance + item handlers):
   thrower overflow-hold feature (PauseSource.Overflow).
 
 **Remaining (all larger / playtest-dependent — none started):**
-- **G4 remainder** — `DisturbanceFieldResources` (the RT/material/double-buffer-swap
-  lifecycle). Deferred as the most intertwined, untested, GPU-runtime part.
 - **G6 remainder** — `ColorProgressBar` → `ProgressNoticePresenter` + rect helper.
   Deferred: untested view, and it's the file the reset fix touched (validate that first).
 - **Tier 4 leftover** — `ThrowerController` reads `Input`/`Camera.main`; move pointer
@@ -59,8 +58,9 @@ for the cinematic + the GPU/disturbance + item handlers):
   new/deleted files — edit them to make `dotnet build` see your changes; Unity regenerates.
 - Hand-author `.meta` files for new `.cs` (headless exception to [[prefer-unity-generated-meta]]).
 - `style_audit.py` `[REPORT]` findings are **non-blocking** (exit 0); the pre-existing
-  `DisturbanceFieldService`/`ImpactEventBus` "static-mutable-before-readonly" ones are
-  documented false positives — don't "fix" them.
+  `ImpactEventBus` "readonly-field-after-property/mutable" ones are documented false
+  positives — don't "fix" them. (G4 dissolved the old `DisturbanceFieldService` FP by
+  moving the keyword cache from static to instance state.)
 - Deleting a MonoBehaviour that's on a prefab orphans the component — the user must remove
   it in-editor first (that's how the dead scope was handled).
 
