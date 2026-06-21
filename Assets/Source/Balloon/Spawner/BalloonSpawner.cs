@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Controller;
@@ -39,9 +38,8 @@ namespace BalloonParty.Balloon.Spawner
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly RejectedBalloonEffect _rejectedBalloon;
+        private readonly BalloonPlacementResolver _placement;
         private readonly List<Vector3> _spawnPathBuffer = new();
-        private readonly Func<int, Vector2Int?> _resolveOpenEntry;
-        private readonly Func<int, Vector2Int?> _resolvePressureOpen;
 
         private int _turnCount;
         private int _generation;
@@ -64,6 +62,7 @@ namespace BalloonParty.Balloon.Spawner
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
             RejectedBalloonEffect rejectedBalloon,
+            BalloonPlacementResolver placement,
             DisturbanceFieldService disturbanceField)
         {
             _grid = grid;
@@ -78,11 +77,8 @@ namespace BalloonParty.Balloon.Spawner
             _destroyedSubscriber = destroyedSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
             _rejectedBalloon = rejectedBalloon;
+            _placement = placement;
             _disturbanceField = disturbanceField;
-
-            // Cached so the nearest-column scan doesn't allocate a delegate per blocked column.
-            _resolveOpenEntry = ResolveOpenEntry;
-            _resolvePressureOpen = ResolvePressureOpen;
         }
 
         public void Start()
@@ -169,56 +165,6 @@ namespace BalloonParty.Balloon.Spawner
                 .OnComplete(() => model.IsStable.Value = true);
 
             view.transform.DOScale(Vector3.one, duration);
-        }
-
-        private int? FindFirstEmptyRowFromTop(int col)
-        {
-            for (var row = 0; row < _grid.Rows; row++)
-            {
-                if (_grid.IsEmpty(col, row))
-                {
-                    return row;
-                }
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Finds the topmost empty row reachable from the spawn entry (bottom of grid).
-        /// Balloons enter from below and travel upward. A non-traversable static actor
-        /// (e.g. bush) blocks vertical passage — the balloon can only reach slots below
-        /// the lowest blocker. This causes balloons to accumulate under bushes.
-        /// </summary>
-        private int? FindFirstReachableEmptyRow(int col)
-        {
-            // Walk from bottom of grid upward — the first non-traversable blocker is
-            // the ceiling for this column. Balloons can't pass through it.
-            var ceilingRow = -1;
-            for (var row = _grid.Rows - 1; row >= 0; row--)
-            {
-                if (!_grid.IsEmpty(col, row) && !_grid.IsTraversable(col, row))
-                {
-                    ceilingRow = row;
-                    break;
-                }
-            }
-
-            if (ceilingRow < 0)
-            {
-                return FindFirstEmptyRowFromTop(col);
-            }
-
-            // Search for the topmost empty row below the blocker
-            for (var row = ceilingRow + 1; row < _grid.Rows; row++)
-            {
-                if (_grid.IsEmpty(col, row))
-                {
-                    return row;
-                }
-            }
-
-            return null;
         }
 
         private void OnProjectileDestroyed()
@@ -315,8 +261,10 @@ namespace BalloonParty.Balloon.Spawner
 
             for (var col = 0; col < _grid.Columns; col++)
             {
-                if (TrySpawnForColumn(col, allowReject))
+                var slot = _placement.Resolve(col, allowReject);
+                if (slot.HasValue)
                 {
+                    SpawnBalloon(slot.Value);
                     continue;
                 }
 
@@ -327,103 +275,6 @@ namespace BalloonParty.Balloon.Spawner
                     _rejectedBalloon.Play(col, rejectIndex++, _activeCounts);
                 }
             }
-        }
-
-        /// <summary>
-        ///     Places this line's balloon for <paramref name="col"/>. It first takes its own column's
-        ///     entry; under pressure (turn-driven spawns) a blocked balloon then looks past its column
-        ///     — re-homing into the nearest other column that can still accept it, then shoving stable
-        ///     balloons aside to open the nearest column it can (using gaps anywhere on the board).
-        ///     Only when nothing frees a slot does it fail. Returns whether a balloon was spawned.
-        /// </summary>
-        private bool TrySpawnForColumn(int col, bool allowReject)
-        {
-            var ownRow = FindFirstReachableEmptyRow(col);
-            if (ownRow.HasValue)
-            {
-                SpawnBalloon(new Vector2Int(col, ownRow.Value));
-                return true;
-            }
-
-            // The initial fill never saturates, so only turn spawns search beyond the column.
-            if (!allowReject)
-            {
-                return false;
-            }
-
-            if (TryNearestColumn(col, startDistance: 1, _resolveOpenEntry, out var rehome))
-            {
-                SpawnBalloon(rehome);
-                return true;
-            }
-
-            if (TryNearestColumn(col, startDistance: 0, _resolvePressureOpen, out var pressured))
-            {
-                SpawnBalloon(pressured);
-                return true;
-            }
-
-            return false;
-        }
-
-        // Scans columns nearest-first from <paramref name="fromCol"/> (left then right at each
-        // distance) and returns the first slot <paramref name="resolve"/> yields. startDistance 0
-        // includes the column itself; 1 skips it.
-        private bool TryNearestColumn(
-            int fromCol,
-            int startDistance,
-            Func<int, Vector2Int?> resolve,
-            out Vector2Int target)
-        {
-            for (var distance = startDistance; distance < _grid.Columns; distance++)
-            {
-                if (distance == 0)
-                {
-                    if (resolve(fromCol) is { } own)
-                    {
-                        target = own;
-                        return true;
-                    }
-
-                    continue;
-                }
-
-                var left = fromCol - distance;
-                if (left >= 0 && resolve(left) is { } leftHit)
-                {
-                    target = leftHit;
-                    return true;
-                }
-
-                var right = fromCol + distance;
-                if (right < _grid.Columns && resolve(right) is { } rightHit)
-                {
-                    target = rightHit;
-                    return true;
-                }
-            }
-
-            target = default;
-            return false;
-        }
-
-        // A column the new balloon can rise straight into.
-        private Vector2Int? ResolveOpenEntry(int col)
-        {
-            var row = FindFirstReachableEmptyRow(col);
-            return row.HasValue ? new Vector2Int(col, row.Value) : null;
-        }
-
-        // A column pressure balance can shove open by pulling a balloon into a gap anywhere on the board.
-        private Vector2Int? ResolvePressureOpen(int col)
-        {
-            if (!_balancer.TryRelievePressure(col))
-            {
-                return null;
-            }
-
-            var row = FindFirstReachableEmptyRow(col);
-            return row.HasValue ? new Vector2Int(col, row.Value) : null;
         }
 
         private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct, int generation)
