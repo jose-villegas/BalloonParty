@@ -41,13 +41,15 @@ namespace BalloonParty.Shared.Disturbance
         private readonly IDisturbanceFieldSettings _settings;
         private readonly IGameDisplayConfiguration _displayConfig;
         private readonly ImpactEventBus _impactBus;
-        private readonly List<LerpStamp> _activeStamps = new();
         private readonly List<PendingStamp> _pendingStamps = new();
         private readonly Vector4[] _batchCenters = new Vector4[MaxStampsPerBatch];
         private readonly float[] _batchRadii = new float[MaxStampsPerBatch];
         private readonly float[] _batchStrengths = new float[MaxStampsPerBatch];
         private readonly Vector4[] _batchDirections = new Vector4[MaxStampsPerBatch];
 
+        private DisturbanceFieldCoordinates _coords;
+        private LerpStampScheduler _lerpScheduler;
+        private Action<Vector3, float, float, Vector2> _emitInstantStamp;
         private RenderTexture _fieldA;
         private RenderTexture _fieldB;
         private bool _readFromA = true;
@@ -56,9 +58,6 @@ namespace BalloonParty.Shared.Disturbance
         private float _diffusionTimer;
         private Vector2 _windTarget;
         private Vector2 _windCurrent;
-        private Rect _fieldBounds;
-        private int _fieldWidth;
-        private int _fieldHeight;
 
         internal DisturbanceFieldService(
             IDisturbanceFieldSettings settings,
@@ -73,12 +72,15 @@ namespace BalloonParty.Shared.Disturbance
         internal RenderTexture FieldTexture => _readFromA ? _fieldA : _fieldB;
         private RenderTexture FieldWrite => _readFromA ? _fieldB : _fieldA;
 
-        internal Vector2 FieldBoundsMin => _fieldBounds.min;
-        internal Vector2 FieldBoundsSize => _fieldBounds.size;
+        internal Vector2 FieldBoundsMin => _coords.Bounds.min;
+        internal Vector2 FieldBoundsSize => _coords.Bounds.size;
 
         void IStartable.Start()
         {
-            ComputeFieldBounds();
+            _coords = new DisturbanceFieldCoordinates(_displayConfig, _settings.TexelsPerUnit);
+            _lerpScheduler = new LerpStampScheduler(_settings.MaxLerpStamps);
+            _emitInstantStamp = (pos, radius, strength, dir) => Stamp(pos, radius, strength, dir);
+
             CreateFieldRTs();
             EnsureDiffusionMaterial();
             EnsureBatchedStampMaterial();
@@ -95,7 +97,7 @@ namespace BalloonParty.Shared.Disturbance
 
             if (diffusionDue)
             {
-                TickLerpStamps(_diffusionTimer);
+                _lerpScheduler.Tick(_diffusionTimer, _emitInstantStamp);
             }
 
             var hasStamps = _pendingStamps.Count > 0;
@@ -157,21 +159,7 @@ namespace BalloonParty.Shared.Disturbance
 
             if (duration > 0f)
             {
-                if (_activeStamps.Count >= _settings.MaxLerpStamps)
-                {
-                    _activeStamps.RemoveAt(0);
-                }
-
-                _activeStamps.Add(new LerpStamp
-                {
-                    Position = worldPosition,
-                    Radius = radius,
-                    Strength = strength,
-                    Direction = direction,
-                    Duration = duration,
-                    Elapsed = 0f,
-                    LastT = 0f
-                });
+                _lerpScheduler.Add(worldPosition, radius, strength, direction, duration);
                 return;
             }
 
@@ -185,8 +173,8 @@ namespace BalloonParty.Shared.Disturbance
                 return;
             }
 
-            var uv = WorldToFieldUV(worldPosition);
-            var radiusUV = WorldRadiusToFieldUV(radius);
+            var uv = _coords.WorldToUV(worldPosition);
+            var radiusUV = _coords.WorldRadiusToUV(radius);
 
             if (direction.sqrMagnitude > 0.001f)
             {
@@ -202,19 +190,6 @@ namespace BalloonParty.Shared.Disturbance
             });
         }
 
-        internal Vector2 WorldToFieldUV(Vector3 worldPos)
-        {
-            return new Vector2(
-                (worldPos.x - _fieldBounds.xMin) / _fieldBounds.width,
-                (worldPos.y - _fieldBounds.yMin) / _fieldBounds.height);
-        }
-
-        private float WorldRadiusToFieldUV(float worldRadius)
-        {
-            var avgSize = (_fieldBounds.width + _fieldBounds.height) * 0.5f;
-            return avgSize > 0.001f ? worldRadius / avgSize : 0.1f;
-        }
-
         private void FlushPendingStamps()
         {
             if (_pendingStamps.Count == 0)
@@ -228,16 +203,8 @@ namespace BalloonParty.Shared.Disturbance
                 var count = Mathf.Min(MaxStampsPerBatch, _pendingStamps.Count - offset);
                 FillBatchArrays(offset, count);
 
-                _batchedStampMaterial.SetInt(StampCountId, count);
-                _batchedStampMaterial.SetVectorArray(StampCentersId, _batchCenters);
-                _batchedStampMaterial.SetFloatArray(StampRadiiId, _batchRadii);
-                _batchedStampMaterial.SetFloatArray(StampStrengthsId, _batchStrengths);
-                _batchedStampMaterial.SetVectorArray(StampDirectionsId, _batchDirections);
-                _batchedStampMaterial.SetFloat(DisplaceAmountId, _settings.DisplaceAmount);
-
-                Graphics.Blit(FieldTexture, FieldWrite, _batchedStampMaterial);
-                _readFromA = !_readFromA;
-                PushGlobalTexture();
+                UploadStampArrays(_batchedStampMaterial, count);
+                BlitAndSwap(_batchedStampMaterial);
 
                 offset += count;
             }
@@ -245,23 +212,10 @@ namespace BalloonParty.Shared.Disturbance
             _pendingStamps.Clear();
         }
 
-        private void ComputeFieldBounds()
-        {
-            var orthoSize = _displayConfig.GetOrthogonalSize();
-            var aspect = (float)Screen.width / Screen.height;
-            var worldHeight = orthoSize * 2f;
-            var worldWidth = worldHeight * aspect;
-
-            _fieldBounds = new Rect(-worldWidth * 0.5f, -worldHeight * 0.5f, worldWidth, worldHeight);
-
-            _fieldWidth = Mathf.Max(4, Mathf.RoundToInt(worldWidth * _settings.TexelsPerUnit));
-            _fieldHeight = Mathf.Max(4, Mathf.RoundToInt(worldHeight * _settings.TexelsPerUnit));
-        }
-
         private void CreateFieldRTs()
         {
-            _fieldA = CreateRT(_fieldWidth, _fieldHeight);
-            _fieldB = CreateRT(_fieldWidth, _fieldHeight);
+            _fieldA = CreateRT(_coords.Width, _coords.Height);
+            _fieldB = CreateRT(_coords.Width, _coords.Height);
             ClearToEquilibrium(_fieldA);
             ClearToEquilibrium(_fieldB);
             _readFromA = true;
@@ -277,10 +231,8 @@ namespace BalloonParty.Shared.Disturbance
             SetDiffusionUniforms();
             SetStampsKeyword(_diffusionMaterial, false);
 
-            Graphics.Blit(FieldTexture, FieldWrite, _diffusionMaterial);
-            _readFromA = !_readFromA;
+            BlitAndSwap(_diffusionMaterial);
             _diffusionTimer = 0f;
-            PushGlobalTexture();
         }
 
         private void TickCombinedPass()
@@ -295,18 +247,28 @@ namespace BalloonParty.Shared.Disturbance
             var count = _pendingStamps.Count;
             FillBatchArrays(0, count);
 
-            _diffusionMaterial.SetInt(StampCountId, count);
-            _diffusionMaterial.SetVectorArray(StampCentersId, _batchCenters);
-            _diffusionMaterial.SetFloatArray(StampRadiiId, _batchRadii);
-            _diffusionMaterial.SetFloatArray(StampStrengthsId, _batchStrengths);
-            _diffusionMaterial.SetVectorArray(StampDirectionsId, _batchDirections);
-            _diffusionMaterial.SetFloat(DisplaceAmountId, _settings.DisplaceAmount);
+            UploadStampArrays(_diffusionMaterial, count);
             SetStampsKeyword(_diffusionMaterial, true);
 
-            Graphics.Blit(FieldTexture, FieldWrite, _diffusionMaterial);
-            _readFromA = !_readFromA;
+            BlitAndSwap(_diffusionMaterial);
             _diffusionTimer = 0f;
             _pendingStamps.Clear();
+        }
+
+        private void UploadStampArrays(Material material, int count)
+        {
+            material.SetInt(StampCountId, count);
+            material.SetVectorArray(StampCentersId, _batchCenters);
+            material.SetFloatArray(StampRadiiId, _batchRadii);
+            material.SetFloatArray(StampStrengthsId, _batchStrengths);
+            material.SetVectorArray(StampDirectionsId, _batchDirections);
+            material.SetFloat(DisplaceAmountId, _settings.DisplaceAmount);
+        }
+
+        private void BlitAndSwap(Material material)
+        {
+            Graphics.Blit(FieldTexture, FieldWrite, material);
+            _readFromA = !_readFromA;
             PushGlobalTexture();
         }
 
@@ -357,8 +319,9 @@ namespace BalloonParty.Shared.Disturbance
 
         private void PushGlobalBounds()
         {
-            Shader.SetGlobalVector(GlobalFieldBoundsMinId, new Vector4(_fieldBounds.xMin, _fieldBounds.yMin, 0f, 0f));
-            Shader.SetGlobalVector(GlobalFieldBoundsSizeId, new Vector4(_fieldBounds.width, _fieldBounds.height, 0f, 0f));
+            var bounds = _coords.Bounds;
+            Shader.SetGlobalVector(GlobalFieldBoundsMinId, new Vector4(bounds.xMin, bounds.yMin, 0f, 0f));
+            Shader.SetGlobalVector(GlobalFieldBoundsSizeId, new Vector4(bounds.width, bounds.height, 0f, 0f));
         }
 
         private void PushGlobalTexture()
@@ -446,48 +409,12 @@ namespace BalloonParty.Shared.Disturbance
             }
         }
 
-        private void TickLerpStamps(float dt)
-        {
-            for (var i = _activeStamps.Count - 1; i >= 0; i--)
-            {
-                var s = _activeStamps[i];
-                s.Elapsed += dt;
-                var t = Mathf.Clamp01(s.Elapsed / s.Duration);
-
-                var delta = t - s.LastT;
-                s.LastT = t;
-                _activeStamps[i] = s;
-
-                if (delta > 0.0001f)
-                {
-                    var radiusNow = Mathf.Lerp(s.Radius * 0.3f, s.Radius, t);
-                    Stamp(s.Position, radiusNow, s.Strength * delta, s.Direction);
-                }
-
-                if (t >= 1f)
-                {
-                    _activeStamps.RemoveAt(i);
-                }
-            }
-        }
-
         private struct PendingStamp
         {
             public Vector2 CenterUV;
             public float RadiusUV;
             public float Strength;
             public Vector2 Direction;
-        }
-
-        private struct LerpStamp
-        {
-            public Vector3 Position;
-            public float Radius;
-            public float Strength;
-            public Vector2 Direction;
-            public float Duration;
-            public float Elapsed;
-            public float LastT;
         }
     }
 }
