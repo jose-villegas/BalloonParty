@@ -7,7 +7,7 @@ namespace BalloonParty.Editor.EffectPreview
 {
     /// <summary>
     ///     Editor-only grid position utilities. Delegates hex math to
-    ///     <see cref="SlotGrid.IndexToWorldPosition(Vector2Int,Vector2,Vector2)" />
+    ///     <see cref="HexCoordinates.IndexToWorldPosition(Vector2Int,Vector2,Vector2)" />
     ///     and adds editor-specific helpers like random position generation.
     /// </summary>
     internal static class EditorGridHelper
@@ -47,7 +47,7 @@ namespace BalloonParty.Editor.EffectPreview
             var result = new List<Vector3>(pick);
             for (var i = 0; i < pick; i++)
             {
-                result.Add(SlotGrid.IndexToWorldPosition(indices[i], sep, offset));
+                result.Add(HexCoordinates.IndexToWorldPosition(indices[i], sep, offset));
             }
 
             result.Sort((a, b) =>

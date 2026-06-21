@@ -69,7 +69,7 @@ namespace BalloonParty.Slots.Actor.Archetype
                 var seed = (cluster.ClusterId * 0.7123f) % 1f;
                 foreach (var slot in cluster.Slots)
                 {
-                    SlotGrid.HexNeighborIndices(slot.x, slot.y, neighborBuffer);
+                    HexCoordinates.HexNeighborIndices(slot.x, slot.y, neighborBuffer);
                     foreach (var neighbor in neighborBuffer)
                     {
                         if (!slotSet.Contains(neighbor))

@@ -89,7 +89,7 @@ namespace BalloonParty.Tests.Slots
         [Test]
         public void HexNeighborIndices_EvenRow_ShiftsLeft()
         {
-            var indices = SlotGrid.HexNeighborIndices(2, 2);
+            var indices = HexCoordinates.HexNeighborIndices(2, 2);
 
             Assert.Contains(new Vector2Int(1, 2), indices);
             Assert.Contains(new Vector2Int(3, 2), indices);
@@ -102,7 +102,7 @@ namespace BalloonParty.Tests.Slots
         [Test]
         public void HexNeighborIndices_OddRow_ShiftsRight()
         {
-            var indices = SlotGrid.HexNeighborIndices(2, 3);
+            var indices = HexCoordinates.HexNeighborIndices(2, 3);
 
             Assert.Contains(new Vector2Int(1, 3), indices);
             Assert.Contains(new Vector2Int(3, 3), indices);

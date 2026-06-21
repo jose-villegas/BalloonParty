@@ -140,7 +140,7 @@ namespace BalloonParty.Tests.Slots
 
                 foreach (var slot in cluster)
                 {
-                    var neighbors = SlotGrid.HexNeighborIndices(slot.x, slot.y);
+                    var neighbors = HexCoordinates.HexNeighborIndices(slot.x, slot.y);
                     var hasAdjacentInCluster = cluster.Any(other =>
                         other != slot && neighbors.Contains(other));
 
@@ -171,7 +171,7 @@ namespace BalloonParty.Tests.Slots
                     var current = queue.Dequeue();
                     cluster.Add(current);
 
-                    foreach (var neighbor in SlotGrid.HexNeighborIndices(current.x, current.y))
+                    foreach (var neighbor in HexCoordinates.HexNeighborIndices(current.x, current.y))
                     {
                         if (remaining.Remove(neighbor))
                         {

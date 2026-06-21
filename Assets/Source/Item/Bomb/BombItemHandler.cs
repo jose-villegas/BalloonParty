@@ -86,7 +86,7 @@ namespace BalloonParty.Item.Bomb
         private void BlastBalloons(float radius, DamageContext context)
         {
             var bombSlot = _balloon.SlotIndex.Value;
-            SlotGrid.HexNeighborIndices(bombSlot.x, bombSlot.y, _neighborBuffer);
+            HexCoordinates.HexNeighborIndices(bombSlot.x, bombSlot.y, _neighborBuffer);
 
             // Direct hex neighbors always receive piercing damage — the blast core
             // guarantees a kill regardless of HitsRemaining or Deflect logic.

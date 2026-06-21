@@ -102,7 +102,7 @@ namespace BalloonParty.Slots.Actor.Cluster
         private void OnActorPlaced(Vector2Int slot)
         {
             var neighborClusterIds = new HashSet<int>();
-            SlotGrid.HexNeighborIndices(slot.x, slot.y, _neighborBuffer);
+            HexCoordinates.HexNeighborIndices(slot.x, slot.y, _neighborBuffer);
 
             foreach (var neighbor in _neighborBuffer)
             {
@@ -257,7 +257,7 @@ namespace BalloonParty.Slots.Actor.Cluster
                 var current = queue.Dequeue();
                 component.Add(current);
 
-                SlotGrid.HexNeighborIndices(current.x, current.y, _neighborBuffer);
+                HexCoordinates.HexNeighborIndices(current.x, current.y, _neighborBuffer);
                 foreach (var neighbor in _neighborBuffer)
                 {
                     if (visited.Contains(neighbor))

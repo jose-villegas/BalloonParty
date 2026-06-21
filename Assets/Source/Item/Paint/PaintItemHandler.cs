@@ -68,7 +68,7 @@ namespace BalloonParty.Item.Paint
             }
 
             var slot = _balloon.SlotIndex.Value;
-            var neighborIndices = SlotGrid.HexNeighborIndices(slot.x, slot.y);
+            var neighborIndices = HexCoordinates.HexNeighborIndices(slot.x, slot.y);
             var tint = _palette.GetColor(paintColor);
 
             // Build a paint target per neighbor index — null when slot is empty or non-paintable.

@@ -154,7 +154,7 @@ namespace BalloonParty.Slots.Actor
             HashSet<Vector2Int> available,
             List<Vector2Int> frontier)
         {
-            SlotGrid.HexNeighborIndices(slot.x, slot.y, NeighborBuffer);
+            HexCoordinates.HexNeighborIndices(slot.x, slot.y, NeighborBuffer);
             foreach (var neighbor in NeighborBuffer)
             {
                 if (available.Contains(neighbor))
