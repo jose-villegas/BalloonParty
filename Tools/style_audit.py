@@ -491,6 +491,30 @@ def _internal_types() -> set[str]:
     return _INTERNAL_TYPES
 
 
+def _build_editor_referenced_names() -> set[str]:
+    """Identifiers that appear in Editor-assembly files. A runtime `public` type whose name
+    shows up here is genuinely consumed cross-assembly, so `internal` would not compile."""
+    names: set[str] = set()
+    token = re.compile(r"\b[A-Za-z_]\w*\b")
+    for path in cs_files(SOURCE_ROOT):
+        if not is_in_editor(path):
+            continue
+        with open(path, encoding="utf-8-sig") as f:
+            for line in f:
+                names.update(token.findall(line))
+    return names
+
+
+_EDITOR_REFERENCED_NAMES: set[str] | None = None
+
+
+def _editor_referenced_names() -> set[str]:
+    global _EDITOR_REFERENCED_NAMES
+    if _EDITOR_REFERENCED_NAMES is None:
+        _EDITOR_REFERENCED_NAMES = _build_editor_referenced_names()
+    return _EDITOR_REFERENCED_NAMES
+
+
 def check_public_visibility(path: Path, lines: list[str], result: AuditResult):
     """Flag public classes/structs that could potentially be internal.
 
@@ -501,6 +525,7 @@ def check_public_visibility(path: Path, lines: list[str], result: AuditResult):
     - Types implementing known public interfaces
     - Attribute subclasses
     - [Serializable] types (exposed in public SOs)
+    - Types referenced from an Editor assembly (genuinely cross-assembly)
     """
     if is_in_editor(path):
         return
@@ -527,6 +552,10 @@ def check_public_visibility(path: Path, lines: list[str], result: AuditResult):
 
         # Skip all transitive MonoBehaviour / ScriptableObject / LifetimeScope subtypes
         if type_name in _mono_subtypes():
+            continue
+
+        # Skip types genuinely referenced from an Editor assembly — there `public` is required
+        if type_name in _editor_referenced_names():
             continue
 
         # Check inheritance on the same line for remaining known bases
@@ -1314,40 +1343,6 @@ def run_fix(result: AuditResult):
 
 # ─── Main ────────────────────────────────────────────────────────────────────
 
-SUPPRESS_RE = re.compile(r"//\s*style-audit:\s*ignore\b([^:\n]*)")
-
-
-def _suppressed_rules(lines: list[str], lineno: int):
-    """Rules suppressed for a 1-based line via an inline directive on that line or the one
-    above: `// style-audit: ignore <rule>[ <rule>...][: reason]`. Bare `ignore` suppresses
-    every rule on the line. Returns "ALL", a set of rule names, or None."""
-    rules: set[str] = set()
-    found = False
-    for ln in (lineno, lineno - 1):
-        if not (1 <= ln <= len(lines)):
-            continue
-        m = SUPPRESS_RE.search(lines[ln - 1])
-        if not m:
-            continue
-        found = True
-        tokens = [t for t in re.split(r"[,\s]+", m.group(1).strip()) if t]
-        if not tokens:
-            return "ALL"
-        rules.update(tokens)
-    return rules if found else None
-
-
-def _apply_suppressions(result: AuditResult, lines: list[str], start: int):
-    """Drop violations added since index `start` that carry a matching inline directive."""
-    kept = result.violations[:start]
-    for v in result.violations[start:]:
-        suppressed = _suppressed_rules(lines, v.line)
-        if suppressed == "ALL" or (suppressed and v.rule in suppressed):
-            continue
-        kept.append(v)
-    result.violations = kept
-
-
 def run_audit(rule_filter: Optional[str] = None, file_filter: Optional[str] = None) -> AuditResult:
     result = AuditResult()
 
@@ -1358,12 +1353,10 @@ def run_audit(rule_filter: Optional[str] = None, file_filter: Optional[str] = No
 
         lines = read_lines(path)
 
-        start = len(result.violations)
         for name, check_fn in RULES.items():
             if rule_filter and rule_filter != name:
                 continue
             check_fn(path, lines, result)
-        _apply_suppressions(result, lines, start)
 
     # Meta rules
     if not file_filter:

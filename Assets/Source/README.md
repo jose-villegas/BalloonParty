@@ -617,21 +617,10 @@ python3 Tools/style_audit.py --fix
 cp Tools/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 ```
 
-### Suppressing a false positive
-
-When the audit flags genuinely-correct code it can't reason about (the classic case: a `public`
-type that exists only because another assembly references it), annotate the site instead of
-distorting the code:
-
-```csharp
-public sealed class ConfigAssetCache<T> // style-audit: ignore public-visibility: referenced by the Editor assembly
-```
-
-The directive is `// style-audit: ignore <rule>[ <rule>...][: reason]`, placed on the flagged
-line or the line directly above it. Naming the rule keeps the suppression narrow (other rules on
-that line still fire); a bare `ignore` with no rule names suppresses everything on the line, so
-prefer naming the rule and recording why. Suppress only true false positives — never to silence a
-real finding.
+The audit should run fully clean. If a check fires on genuinely-correct code, fix the check in
+`Tools/style_audit.py` rather than distorting the code to satisfy it. (For example,
+`public-visibility` skips any type whose name is referenced from an Editor assembly, since
+`public` is mandatory there — `internal` runtime types aren't visible across the asmdef.)
 
 ---
 

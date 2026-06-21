@@ -83,14 +83,10 @@ python3 Tools/style_audit.py            # full scan
 python3 Tools/style_audit.py --file X   # one file
 python3 Tools/style_audit.py --fix      # auto-fix: braces, blank lines, comments, namespace
 ```
-Markdown plan edits don't trigger the audit. For a genuine false positive the tool can't
-auto-detect (e.g. a `public` type referenced cross-assembly), suppress it at the site with an
-inline directive — never "fix" valid code to appease the linter:
-```csharp
-public sealed class Foo // style-audit: ignore public-visibility: referenced by the Editor assembly
-```
-Put `// style-audit: ignore <rule>[ <rule>...]: reason` on the flagged line or the line above
-(bare `ignore` with no rule names suppresses all rules on that line — prefer naming the rule).
+Markdown plan edits don't trigger the audit. The audit should run fully clean; if a check
+fires on valid code, fix the check (it's `Tools/style_audit.py`), don't distort the code to
+appease it. The `public-visibility` check already skips types referenced from an Editor
+assembly, so cross-assembly `public` helpers don't trip it.
 
 ## Workflow notes
 - The pre-commit hook (`Tools/pre-commit`) runs `style_audit.py` on staged `.cs` and blocks on violations.

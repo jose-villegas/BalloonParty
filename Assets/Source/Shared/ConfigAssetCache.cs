@@ -9,7 +9,7 @@ namespace BalloonParty.Shared
     ///     via <c>AssetDatabase.FindAssets</c>. Thread-safe for editor use.
     ///     One instance per config type — store as a <c>static readonly</c> or instance field.
     /// </summary>
-    public sealed class ConfigAssetCache<T> // style-audit: ignore public-visibility: referenced by the Editor assembly
+    public sealed class ConfigAssetCache<T>
         where T : ScriptableObject
     {
         private T _asset;
