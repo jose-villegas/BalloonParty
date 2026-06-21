@@ -109,67 +109,81 @@ namespace BalloonParty.Balloon.Controller
             // Reuse the path dictionary and pool the per-actor lists across turns; only
             // the DOPath waypoint arrays (built in AnimatePaths) must be freshly sized.
             ReleasePaths();
-            var hasUnbalanced = true;
 
-            while (hasUnbalanced)
+            while (BalanceOnePass())
             {
-                hasUnbalanced = false;
-
-                for (var col = 0; col < _grid.Columns; col++)
-                {
-                    for (var row = 1; row < _grid.Rows; row++)
-                    {
-                        if (_grid.IsEmpty(col, row))
-                        {
-                            continue;
-                        }
-
-                        if (!_balanceQuery.IsUnbalanced(col, row))
-                        {
-                            continue;
-                        }
-
-                        var currentSlot = new Vector2Int(col, row);
-                        var actor = _grid.At(currentSlot);
-
-                        if (actor is not IWriteableDynamicSlotActor dynamicActor)
-                        {
-                            continue;
-                        }
-
-                        var nextSlot = _balanceQuery.OptimalNextEmptySlot(col, row);
-                        if (!nextSlot.HasValue)
-                        {
-                            continue;
-                        }
-
-                        hasUnbalanced = true;
-
-                        _balancePathHolder.Reserve(dynamicActor, currentSlot);
-                        _balancePathHolder.Reserve(dynamicActor, nextSlot.Value);
-
-                        var actorView = _grid.ViewAt(currentSlot);
-                        _grid.Remove(currentSlot);
-                        _grid.Place(dynamicActor, actorView, nextSlot.Value);
-                        dynamicActor.IsStable.Value = false;
-
-                        var targetPosition = _grid.IndexToWorldPosition(nextSlot.Value);
-                        if (_paths.TryGetValue(dynamicActor, out var path))
-                        {
-                            path.Add(targetPosition);
-                        }
-                        else
-                        {
-                            var newPath = ListPool<Vector3>.Get();
-                            newPath.Add(targetPosition);
-                            _paths[dynamicActor] = newPath;
-                        }
-                    }
-                }
             }
 
             AnimatePaths(_paths);
             ReleasePaths();
+        }
+
+        // One sweep over the grid; returns whether any actor was shifted, so Balance keeps
+        // sweeping until the board settles.
+        private bool BalanceOnePass()
+        {
+            var moved = false;
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 1; row < _grid.Rows; row++)
+                {
+                    moved |= TryBalanceSlot(col, row);
+                }
+            }
+
+            return moved;
+        }
+
+        // Shifts the actor at (col, row) toward its optimal empty slot when it is unbalanced and
+        // movable, recording the move for animation. Returns whether a move happened.
+        private bool TryBalanceSlot(int col, int row)
+        {
+            if (_grid.IsEmpty(col, row))
+            {
+                return false;
+            }
+
+            if (!_balanceQuery.IsUnbalanced(col, row))
+            {
+                return false;
+            }
+
+            var currentSlot = new Vector2Int(col, row);
+            if (_grid.At(currentSlot) is not IWriteableDynamicSlotActor dynamicActor)
+            {
+                return false;
+            }
+
+            var nextSlot = _balanceQuery.OptimalNextEmptySlot(col, row);
+            if (!nextSlot.HasValue)
+            {
+                return false;
+            }
+
+            _balancePathHolder.Reserve(dynamicActor, currentSlot);
+            _balancePathHolder.Reserve(dynamicActor, nextSlot.Value);
+
+            var actorView = _grid.ViewAt(currentSlot);
+            _grid.Remove(currentSlot);
+            _grid.Place(dynamicActor, actorView, nextSlot.Value);
+            dynamicActor.IsStable.Value = false;
+
+            RecordPath(dynamicActor, _grid.IndexToWorldPosition(nextSlot.Value));
+            return true;
+        }
+
+        private void RecordPath(IWriteableDynamicSlotActor actor, Vector3 targetPosition)
+        {
+            if (_paths.TryGetValue(actor, out var path))
+            {
+                path.Add(targetPosition);
+            }
+            else
+            {
+                var newPath = ListPool<Vector3>.Get();
+                newPath.Add(targetPosition);
+                _paths[actor] = newPath;
+            }
         }
 
         // Pressure balance: when a column's entry can't accept a balloon, try to shove its bottom
