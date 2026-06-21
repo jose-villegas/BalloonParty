@@ -137,6 +137,10 @@ Two candidate triggers (pick one or combine):
 
 ## Part B — Per-level-range difficulty configuration
 
+> **Status: not started (Phase 3).** This + Part C are the spec. The current read-sites the resolver must
+> slot between were verified this session — see memory `phase3-level-pacing` for the grounding map (which
+> config owns spawn-lines / balloon weights / items / grid actors / colours today, and who reads them).
+
 Pacing is authored as **level ranges**. A range covers `[FromLevel, ToLevel]` and owns a
 set of tunable parameters; the **final range is open-ended** (applies forever — the steady
 "4 colors / settled difficulty" tail). Within a range, each parameter is a slider that
