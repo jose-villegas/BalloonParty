@@ -71,7 +71,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             for (var i = 0; i < _slotPositions.Count; i++)
             {
                 var slotPos = _slotPositions[i];
-                var withinRange = MathUtils.WithinRadius(projectilePos, slotPos, _settings.RustleProximityRadius);
+                var withinRange = projectilePos.WithinRadius(slotPos, _settings.RustleProximityRadius);
 
                 if (!withinRange)
                 {
@@ -104,7 +104,7 @@ namespace BalloonParty.Slots.Actor.Archetype
                 {
                     var slotPos = _slotPositions[i];
 
-                    if (MathUtils.WithinRadius(impact.Position, slotPos, impact.Radius))
+                    if (impact.Position.WithinRadius(slotPos, impact.Radius))
                     {
                         SpawnRustleVfx(vfxPrefab, slotPos);
                     }

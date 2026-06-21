@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Animation;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -196,10 +197,10 @@ namespace BalloonParty.Item.Lightning
             for (var stage = 1; stage <= stageCount; stage++)
             {
                 var count = stage + 1;
-                var centroid = VectorMathHelper.Centroid(targetPositions, count);
+                var centroid = targetPositions.Centroid(count);
                 centroids.Add(centroid);
 
-                var radius = VectorMathHelper.BoundingRadius(targetPositions, count, centroid);
+                var radius = targetPositions.BoundingRadius(count, centroid);
                 diameters[stage - 1] = (radius + 1f) * 2f;
             }
 
