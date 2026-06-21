@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
@@ -68,15 +67,7 @@ namespace BalloonParty.UI.Score
                 return;
             }
 
-            PaletteEntry entry = null;
-            foreach (var c in palette.Colors)
-            {
-                if (c.Name == _colorName)
-                {
-                    entry = c;
-                    break;
-                }
-            }
+            var entry = palette.GetEntry(_colorName);
             if (entry == null)
             {
                 return;
@@ -94,7 +85,7 @@ namespace BalloonParty.UI.Score
 
         private void Start()
         {
-            _colorConfig = _palette.Colors.First(c => c.Name == _colorName);
+            _colorConfig = _palette.GetEntry(_colorName);
             _pointNoticePoolKey = $"PointNotice_{_colorConfig.Name}";
             _streakNoticePoolKey = $"StreakNotice_{_colorConfig.Name}";
 

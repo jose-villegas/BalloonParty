@@ -63,10 +63,7 @@ namespace BalloonParty.Game.Score
 
         public void Start()
         {
-            foreach (var color in _palette.Colors)
-            {
-                _colorKeys.Add(color.Name);
-            }
+            _colorKeys.AddRange(_palette.ColorNames);
 
             ClearRunState();
 
