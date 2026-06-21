@@ -123,27 +123,35 @@ namespace BalloonParty.Balloon.Spawner
         {
             for (var distance = startDistance; distance < _grid.Columns; distance++)
             {
-                if (distance == 0)
-                {
-                    if (TryColumn(fromCol, resolve, out target))
-                    {
-                        return true;
-                    }
-
-                    continue;
-                }
-
-                var left = fromCol - distance;
-                if (left >= 0 && TryColumn(left, resolve, out target))
+                if (TryAtDistance(fromCol, distance, resolve, out target))
                 {
                     return true;
                 }
+            }
 
-                var right = fromCol + distance;
-                if (right < _grid.Columns && TryColumn(right, resolve, out target))
-                {
-                    return true;
-                }
+            target = default;
+            return false;
+        }
+
+        // Checks the column(s) `distance` away from `fromCol`: just `fromCol` at distance 0,
+        // otherwise the left then right neighbour (skipping off-grid sides).
+        private bool TryAtDistance(int fromCol, int distance, Func<int, Vector2Int?> resolve, out Vector2Int target)
+        {
+            if (distance == 0)
+            {
+                return TryColumn(fromCol, resolve, out target);
+            }
+
+            var left = fromCol - distance;
+            if (left >= 0 && TryColumn(left, resolve, out target))
+            {
+                return true;
+            }
+
+            var right = fromCol + distance;
+            if (right < _grid.Columns && TryColumn(right, resolve, out target))
+            {
+                return true;
             }
 
             target = default;
