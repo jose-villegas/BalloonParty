@@ -41,9 +41,7 @@ namespace BalloonParty.Game.Cinematics
         [Inject] private ScoreTrailService _scoreTrailService;
         [Inject] private PauseService _pauseService;
 
-        private float _baseOrthoSize;
-        private Vector3 _basePosition;
-        private bool _hasBaseState;
+        private CinematicCameraRig _cameraRig;
         private Vector3 _lastTrailPosition;
         private float _realElapsed;
         private bool _sessionActive;
@@ -54,7 +52,12 @@ namespace BalloonParty.Game.Cinematics
         private float _trailElapsed;
         private Vector3 _trailOrigin;
         private Vector3 _trailTargetWorld;
-        private Tween _zoomTween;
+
+        private void Awake()
+        {
+            _cameraRig = new CinematicCameraRig(
+                _camera, _orthoController, _zoomAmount, _cameraPanWeight, _cameraFollowSpeed);
+        }
 
         private void Start()
         {
@@ -76,10 +79,7 @@ namespace BalloonParty.Game.Cinematics
                 _pauseService.Resume(PauseSource.Cinematic);
             }
 
-            if (_orthoController != null)
-            {
-                _orthoController.enabled = true;
-            }
+            _cameraRig?.EnableOrtho(true);
 
             Time.timeScale = 1f;
         }
@@ -87,9 +87,8 @@ namespace BalloonParty.Game.Cinematics
         private void KillTweens()
         {
             _timeScaleTween?.Kill();
-            _zoomTween?.Kill();
             _timeScaleTween = null;
-            _zoomTween = null;
+            _cameraRig?.KillTween();
         }
 
         private void OnScorePoint(ScorePointMessage msg)
@@ -186,7 +185,7 @@ namespace BalloonParty.Game.Cinematics
         private void OnRestoreComplete()
         {
             Time.timeScale = 1f;
-            RestoreCamera();
+            _cameraRig.Restore();
             _sessionActive = false;
             _director.EndCinematic();
             Navigation.TransitionTo(NavigationState.Game);
@@ -194,7 +193,7 @@ namespace BalloonParty.Game.Cinematics
 
         private void PanInTick()
         {
-            if (_camera == null)
+            if (!_cameraRig.HasCamera)
             {
                 return;
             }
@@ -202,110 +201,55 @@ namespace BalloonParty.Game.Cinematics
             var dt = Time.unscaledDeltaTime;
             _realElapsed += dt;
 
-            var slowDownDuration = _slowDownCurve.Duration();
-            var curveT = Mathf.Clamp01(_realElapsed / slowDownDuration);
+            var curveT = Mathf.Clamp01(_realElapsed / _slowDownCurve.Duration());
             var speedFactor = _slowDownCurve.Evaluate(curveT);
             _trailElapsed += dt * speedFactor;
 
-            if (_trackedFlight?.Transform != null)
+            if (AdvanceTrackedTrail())
             {
-                var progress = Mathf.Clamp01(_trailElapsed / _config.ScorePointTraceDuration);
-
-                _trackedFlight.Transform.localScale =
-                    Vector3.one * _trackedTrailScaleCurve.Evaluate(progress);
-
-                var target = _trailTargetWorld;
-                target.z = 0f;
-                _trackedFlight.Transform.position = Vector3.Lerp(_trailOrigin, target, progress);
-                _lastTrailPosition = _trackedFlight.Transform.position;
-
-                if (progress >= 1f)
-                {
-                    _trackedFlight.Complete();
-
-                    if (_director.IsScenePlaying)
-                    {
-                        EndPanIn();
-                    }
-
-                    return;
-                }
+                return;
             }
 
-            var panTarget = Vector3.Lerp(_basePosition, _lastTrailPosition, _cameraPanWeight);
-            panTarget.z = _basePosition.z;
-
-            var camPos = Vector3.Lerp(
-                _camera.transform.position,
-                panTarget,
-                _cameraFollowSpeed * dt);
-
-            // Keep the trail inside the orthographic frustum to avoid
-            // TrailRenderer "Screen position out of view frustum" errors.
-            var halfH = _camera.orthographicSize;
-            var halfW = halfH * _camera.aspect;
-            camPos.x = Mathf.Clamp(camPos.x,
-                _lastTrailPosition.x - halfW + 0.1f,
-                _lastTrailPosition.x + halfW - 0.1f);
-            camPos.y = Mathf.Clamp(camPos.y,
-                _lastTrailPosition.y - halfH + 0.1f,
-                _lastTrailPosition.y + halfH - 0.1f);
-
-            _camera.transform.position = camPos;
+            _cameraRig.FollowTrail(_lastTrailPosition, dt);
         }
 
-        private void CaptureBaseState()
+        // Moves the tracked trail toward its target. Returns true once it has arrived (so the
+        // caller skips the camera follow this tick), having ended the pan-in if still playing.
+        private bool AdvanceTrackedTrail()
         {
-            if (_camera != null)
+            if (_trackedFlight?.Transform == null)
             {
-                _baseOrthoSize = _camera.orthographicSize;
-                _basePosition = _camera.transform.position;
-                _hasBaseState = true;
-            }
-        }
-
-        private void RestoreCamera()
-        {
-            if (_camera != null)
-            {
-                _camera.transform.position = _basePosition;
-                _camera.orthographicSize = _baseOrthoSize;
+                return false;
             }
 
-            if (_orthoController != null)
+            var progress = Mathf.Clamp01(_trailElapsed / _config.ScorePointTraceDuration);
+
+            _trackedFlight.Transform.localScale = Vector3.one * _trackedTrailScaleCurve.Evaluate(progress);
+
+            var target = _trailTargetWorld;
+            target.z = 0f;
+            _trackedFlight.Transform.position = Vector3.Lerp(_trailOrigin, target, progress);
+            _lastTrailPosition = _trackedFlight.Transform.position;
+
+            if (progress < 1f)
             {
-                _orthoController.enabled = true;
+                return false;
             }
+
+            _trackedFlight.Complete();
+            if (_director.IsScenePlaying)
+            {
+                EndPanIn();
+            }
+
+            return true;
         }
 
         private void PreparePanIn()
         {
-            if (_hasBaseState)
-            {
-                RestoreCamera();
-            }
-
-            KillTweens();
-
-            if (_orthoController != null)
-            {
-                _orthoController.enabled = false;
-            }
-
-            CaptureBaseState();
-
-            var slowDownDuration = _slowDownCurve.Duration();
-
-            if (_camera != null)
-            {
-                _zoomTween = DOTween.To(
-                        () => _camera.orthographicSize,
-                        x => _camera.orthographicSize = x,
-                        _baseOrthoSize - _zoomAmount,
-                        slowDownDuration)
-                    .SetEase(Ease.OutQuad)
-                    .SetUpdate(true);
-            }
+            _timeScaleTween?.Kill();
+            _timeScaleTween = null;
+            _cameraRig.PreparePanIn(_slowDownCurve.Duration());
         }
 
         private void PrepareRestore()
@@ -328,25 +272,9 @@ namespace BalloonParty.Game.Cinematics
                 .SetUpdate(true)
                 .OnComplete(() => _director.CompleteScene());
 
-            if (_camera != null)
+            if (_cameraRig.HasCamera)
             {
-                var moveTween = _camera.transform.DOMove(_basePosition, restoreDuration)
-                    .SetEase(Ease.InOutQuad)
-                    .SetUpdate(true);
-
-                var sizeTween = DOTween.To(
-                        () => _camera.orthographicSize,
-                        x => _camera.orthographicSize = x,
-                        _baseOrthoSize,
-                        restoreDuration)
-                    .SetEase(Ease.InOutQuad)
-                    .SetUpdate(true);
-
-                var sequence = DOTween.Sequence().SetUpdate(true);
-                sequence.Join(moveTween);
-                sequence.Join(sizeTween);
-
-                _zoomTween = sequence;
+                _cameraRig.PrepareRestore(restoreDuration);
             }
             else
             {
