@@ -40,14 +40,16 @@ for the cinematic + the GPU/disturbance + item handlers):
   OCP3 (IChainEffect/ISplashEffect guarded casts), DIP1 (IPlayerHealth/IDangerLevel/
   IScoreQuery/IColorStreak read interfaces).
 - **Tier 4:** ScoreController→INavigation, TrailSpawner merge, ToughBalloon SurviveOutcome,
-  MathUtils+VectorMathHelper→VectorMathExtensions, dead ProjectileLifetimeScope removed.
+  MathUtils+VectorMathHelper→VectorMathExtensions, dead ProjectileLifetimeScope removed,
+  ThrowerController input→view (Input/Camera moved into ThrowerView as
+  IsAiming/FireReleased/TryGetAimDirection).
 - **Not from this plan (same session):** game-over reset fixes (RunResetMessage →
   ColorProgressBar + thrower reload; see [[suspect-areas-colorbars-gameover]]) and the
   thrower overflow-hold feature (PauseSource.Overflow).
 
-**Remaining (playtest-dependent — none started):**
-- **Tier 4 leftover** — `ThrowerController` reads `Input`/`Camera.main`; move pointer
-  polling + screen→world into `ThrowerView`. Untested input → needs a playtest.
+**Remaining: none — all plan items complete.** The whole PLAN is done; what's left is the
+standing caveat that GPU/UI/input changes (G4, G6, ThrowerController) carry no automated
+coverage and rely on the user's in-editor playtest.
 
 **Session gotchas for whoever picks this up:**
 - There is **no Unity runtime here** — `dotnet build` compiles C# (not shaders) and can't

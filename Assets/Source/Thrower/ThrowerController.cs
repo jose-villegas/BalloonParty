@@ -38,7 +38,6 @@ namespace BalloonParty.Thrower
         private float _loadElapsed;
         private float _loadDuration;
         private PredictionTraceCalculator _traceCalculator;
-        private Camera _camera;
 
         private string ProjectilePoolKey => _settings.ProjectilePrefab.name;
 
@@ -156,7 +155,7 @@ namespace BalloonParty.Thrower
                 return;
             }
 
-            if (!Input.GetMouseButtonUp(0))
+            if (!_view.FireReleased)
             {
                 return;
             }
@@ -169,21 +168,15 @@ namespace BalloonParty.Thrower
 
         private void UpdateDirection()
         {
-            if (!Input.GetMouseButton(0))
+            if (!_view.IsAiming)
             {
                 return;
             }
 
-            _camera ??= Camera.main;
-            if (_camera == null)
+            if (_view.TryGetAimDirection(out var direction))
             {
-                return;
+                _direction = direction;
             }
-
-            var screenPos = _camera.WorldToScreenPoint(_view.Position);
-            var rawDir = (Input.mousePosition - screenPos).normalized;
-            rawDir.z = 0f;
-            _direction = rawDir;
         }
 
         private void UpdateLoadedProjectilePosition()
@@ -211,7 +204,7 @@ namespace BalloonParty.Thrower
 
         private void UpdatePredictionTrace()
         {
-            if (_activeProjectile == null || _activeProjectile.IsFree || !Input.GetMouseButton(0))
+            if (_activeProjectile == null || _activeProjectile.IsFree || !_view.IsAiming)
             {
                 _view.ClearTrace();
                 return;
