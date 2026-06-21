@@ -2,7 +2,6 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Extensions;
-using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -14,11 +13,10 @@ namespace BalloonParty.Item.Shield
 {
     internal class ShieldItemHandler : IBalloonItem, IStartable
     {
-        private readonly IGamePalette _palette;
+        private readonly ItemEffectPlayer _effectPlayer;
         private readonly IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private readonly IItemConfiguration _itemConfig;
-        private readonly PoolManager _poolManager;
 
         private IWriteableProjectileModel _activeProjectile;
         private IBalloonModel _balloon;
@@ -28,17 +26,15 @@ namespace BalloonParty.Item.Shield
 
         [Inject]
         internal ShieldItemHandler(
-            IGamePalette palette,
             IItemConfiguration itemConfig,
-            PoolManager poolManager,
             IPublisher<ShieldGainedMessage> shieldGainedPublisher,
-            ISubscriber<ProjectileLoadedMessage> loadedSubscriber)
+            ISubscriber<ProjectileLoadedMessage> loadedSubscriber,
+            ItemEffectPlayer effectPlayer)
         {
-            _palette = palette;
             _itemConfig = itemConfig;
-            _poolManager = poolManager;
             _shieldGainedPublisher = shieldGainedPublisher;
             _loadedSubscriber = loadedSubscriber;
+            _effectPlayer = effectPlayer;
         }
 
         public void Start()
@@ -54,7 +50,7 @@ namespace BalloonParty.Item.Shield
             }
 
             _shieldGainedPublisher.Publish(new ShieldGainedMessage(_balloon.SlotIndex.Value));
-            PlayVfx();
+            _effectPlayer.Play(_itemConfig[ItemType.Shield], _worldPosition, _balloon.GetColorId());
             return UniTask.CompletedTask;
         }
 
@@ -62,21 +58,6 @@ namespace BalloonParty.Item.Shield
         {
             _balloon = balloon;
             _worldPosition = worldPosition;
-        }
-
-        private void PlayVfx()
-        {
-            var settings = _itemConfig[ItemType.Shield];
-            if (settings.ActivationEffectPrefab == null)
-            {
-                return;
-            }
-
-            var key = settings.ActivationEffectPrefab.name;
-            var effect = _poolManager.GetOrRegister(key, () => new SimplePoolChannel<EffectView>(settings.ActivationEffectPrefab));
-
-            var balloonColor = _palette.GetColor(_balloon.GetColorId());
-            effect.Play(_worldPosition, balloonColor, () => _poolManager.Return(key, effect));
         }
     }
 }

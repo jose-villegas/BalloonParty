@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Item;
 using BalloonParty.Item.Shield;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
@@ -42,11 +43,10 @@ namespace BalloonParty.Tests.Item
             palette.Colors.Returns(new List<PaletteEntry>());
 
             _handler = new ShieldItemHandler(
-                palette,
                 itemConfig,
-                new PoolManager(),
                 _shieldGainedPublisher,
-                loadedSubscriber);
+                loadedSubscriber,
+                new ItemEffectPlayer(new PoolManager(), palette));
 
             _handler.Start();
         }

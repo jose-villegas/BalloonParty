@@ -4,7 +4,6 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
-using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
@@ -18,16 +17,13 @@ namespace BalloonParty.Item.Laser
 {
     internal class LaserItemHandler : IBalloonItem, IStartable
     {
-        private static readonly int BalloonsLayer = LayerMask.GetMask("Balloons");
-
-        private readonly ContactFilter2D _balloonFilter;
-        private readonly IGamePalette _palette;
+        private readonly ItemEffectPlayer _effectPlayer;
+        private readonly BalloonOverlapQuery _overlap;
         private readonly IPublisher<ActorHitMessage> _hitPublisher;
         private readonly ISubscriber<TransformCapturedMessage> _transformCapturedSubscriber;
         private readonly IItemConfiguration _itemConfig;
         private readonly List<RaycastHit2D> _castResults = new(4);
         private readonly HashSet<IBalloonModel> _hitModels = new();
-        private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
 
         private readonly Dictionary<ISlotActor, Quaternion> _capturedRotations = new();
@@ -39,23 +35,19 @@ namespace BalloonParty.Item.Laser
 
         [Inject]
         internal LaserItemHandler(
-            IGamePalette palette,
             IItemConfiguration itemConfig,
             IPublisher<ActorHitMessage> hitPublisher,
             ISubscriber<TransformCapturedMessage> transformCapturedSubscriber,
-            PoolManager poolManager,
+            ItemEffectPlayer effectPlayer,
+            BalloonOverlapQuery overlap,
             DisturbanceFieldService disturbanceField)
         {
-            _palette = palette;
             _itemConfig = itemConfig;
             _hitPublisher = hitPublisher;
             _transformCapturedSubscriber = transformCapturedSubscriber;
-            _poolManager = poolManager;
+            _effectPlayer = effectPlayer;
+            _overlap = overlap;
             _disturbanceField = disturbanceField;
-
-            _balloonFilter = new ContactFilter2D();
-            _balloonFilter.SetLayerMask(BalloonsLayer);
-            _balloonFilter.useTriggers = true;
         }
 
         public void Start()
@@ -77,7 +69,7 @@ namespace BalloonParty.Item.Laser
             _capturedRotations.Remove(_balloon);
 
             CastCross(settings, laserRotation);
-            SpawnVisual(settings, laserRotation);
+            _effectPlayer.Play(settings, _worldPosition, laserRotation, _balloon.GetColorId());
             StampCross(settings, laserRotation);
 
             return UniTask.CompletedTask;
@@ -110,27 +102,21 @@ namespace BalloonParty.Item.Laser
             DamageContext context,
             HashSet<IBalloonModel> hitModels)
         {
-            var count = Physics2D.CircleCast(_worldPosition, radius, direction, _balloonFilter, _castResults, distance);
+            var count = Physics2D.CircleCast(_worldPosition, radius, direction, _overlap.Filter, _castResults, distance);
 
             for (var i = 0; i < count; i++)
             {
-                var balloonView = _castResults[i].collider.GetComponentInParent<BalloonView>();
-                if (balloonView == null || balloonView.Model == null)
+                if (!_overlap.TryResolveBalloon(_castResults[i].collider, _balloon, out var balloonView, out var model))
                 {
                     continue;
                 }
 
-                if (balloonView.Model == _balloon)
+                if (!hitModels.Add(model))
                 {
                     continue;
                 }
 
-                if (!hitModels.Add(balloonView.Model))
-                {
-                    continue;
-                }
-
-                _hitPublisher.Publish(ActorHitMessage.From(balloonView.Model,
+                _hitPublisher.Publish(ActorHitMessage.From(model,
                     balloonView.transform.position,
                     Vector3.zero,
                     context));
@@ -162,20 +148,6 @@ namespace BalloonParty.Item.Laser
                 var pos = (Vector2)_worldPosition + direction * (step * i);
                 _disturbanceField.Stamp(StampSource.Laser, pos, direction);
             }
-        }
-
-        private void SpawnVisual(ItemSettings settings, Quaternion laserRotation)
-        {
-            if (settings.ActivationEffectPrefab == null)
-            {
-                return;
-            }
-
-            var key = settings.ActivationEffectPrefab.name;
-            var effect = _poolManager.GetOrRegister(key, () => new SimplePoolChannel<EffectView>(settings.ActivationEffectPrefab));
-
-            var balloonColor = _palette.GetColor(_balloon.GetColorId());
-            effect.Play(_worldPosition, laserRotation, balloonColor, () => _poolManager.Return(key, effect));
         }
     }
 }

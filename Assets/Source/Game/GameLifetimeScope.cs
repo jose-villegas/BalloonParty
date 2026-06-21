@@ -141,6 +141,9 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ItemAssigner>();
             builder.RegisterEntryPoint<ItemActivator>();
 
+            builder.Register<ItemEffectPlayer>(Lifetime.Singleton);
+            builder.Register<BalloonOverlapQuery>(Lifetime.Singleton);
+
             builder.Register<ShieldItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<BombItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();

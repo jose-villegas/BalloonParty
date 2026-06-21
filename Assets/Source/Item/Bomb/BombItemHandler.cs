@@ -5,7 +5,6 @@ using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
-using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -18,16 +17,13 @@ namespace BalloonParty.Item.Bomb
 {
     internal class BombItemHandler : IBalloonItem
     {
-        private static readonly int BalloonsLayer = LayerMask.GetMask("Balloons");
-
-        private readonly ContactFilter2D _balloonFilter;
-        private readonly IGamePalette _palette;
+        private readonly ItemEffectPlayer _effectPlayer;
+        private readonly BalloonOverlapQuery _overlap;
         private readonly IPublisher<ActorHitMessage> _hitPublisher;
         private readonly IPublisher<NudgeMessage> _nudgePublisher;
         private readonly IItemConfiguration _itemConfig;
         private readonly List<Collider2D> _overlapResults = new(8);
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
-        private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
 
         private IBalloonModel _balloon;
@@ -37,23 +33,19 @@ namespace BalloonParty.Item.Bomb
 
         [Inject]
         public BombItemHandler(
-            IGamePalette palette,
             IItemConfiguration itemConfig,
             IPublisher<ActorHitMessage> hitPublisher,
             IPublisher<NudgeMessage> nudgePublisher,
-            PoolManager poolManager,
+            ItemEffectPlayer effectPlayer,
+            BalloonOverlapQuery overlap,
             DisturbanceFieldService disturbanceField)
         {
-            _palette = palette;
             _itemConfig = itemConfig;
             _hitPublisher = hitPublisher;
             _nudgePublisher = nudgePublisher;
-            _poolManager = poolManager;
+            _effectPlayer = effectPlayer;
+            _overlap = overlap;
             _disturbanceField = disturbanceField;
-
-            _balloonFilter = new ContactFilter2D();
-            _balloonFilter.SetLayerMask(BalloonsLayer);
-            _balloonFilter.useTriggers = true;
         }
 
         public void Setup(IBalloonModel balloon, Vector3 worldPosition)
@@ -76,7 +68,7 @@ namespace BalloonParty.Item.Bomb
 
             var sourceColorId = _balloon.GetColorId();
             BlastBalloons(settings.BombRadius, new DamageContext(settings.Damage, settings.Flags, sourceColorId));
-            SpawnVisual(settings);
+            _effectPlayer.Play(settings, _worldPosition, sourceColorId);
 
             _disturbanceField.Stamp(StampSource.Bomb, _worldPosition, Vector2.zero);
 
@@ -92,22 +84,16 @@ namespace BalloonParty.Item.Bomb
             // guarantees a kill regardless of HitsRemaining or Deflect logic.
             var piercingContext = new DamageContext(context.Damage, DamageFlags.Piercing, context.SourceColorId);
 
-            var count = Physics2D.OverlapCircle(_worldPosition, radius, _balloonFilter, _overlapResults);
+            var count = Physics2D.OverlapCircle(_worldPosition, radius, _overlap.Filter, _overlapResults);
 
             for (var i = 0; i < count; i++)
             {
-                var balloonView = _overlapResults[i].GetComponentInParent<BalloonView>();
-                if (balloonView == null || balloonView.Model == null)
+                if (!_overlap.TryResolveBalloon(_overlapResults[i], _balloon, out var balloonView, out var model))
                 {
                     continue;
                 }
 
-                if (balloonView.Model == _balloon)
-                {
-                    continue;
-                }
-
-                var modelSlot = balloonView.Model.SlotIndex.Value;
+                var modelSlot = model.SlotIndex.Value;
                 var isNeighbor = false;
                 for (var n = 0; n < 6; n++)
                 {
@@ -120,25 +106,11 @@ namespace BalloonParty.Item.Bomb
 
                 var hitContext = isNeighbor ? piercingContext : context;
 
-                _hitPublisher.Publish(ActorHitMessage.From(balloonView.Model,
+                _hitPublisher.Publish(ActorHitMessage.From(model,
                     balloonView.transform.position,
                     Vector3.zero,
                     hitContext));
             }
-        }
-
-        private void SpawnVisual(ItemSettings settings)
-        {
-            if (settings.ActivationEffectPrefab == null)
-            {
-                return;
-            }
-
-            var key = settings.ActivationEffectPrefab.name;
-            var effect = _poolManager.GetOrRegister(key, () => new SimplePoolChannel<EffectView>(settings.ActivationEffectPrefab));
-
-            var balloonColor = _palette.GetColor(_balloon.GetColorId());
-            effect.Play(_worldPosition, balloonColor, () => _poolManager.Return(key, effect));
         }
     }
 }
