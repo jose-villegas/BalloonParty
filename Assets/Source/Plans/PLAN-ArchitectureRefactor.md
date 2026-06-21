@@ -16,6 +16,58 @@
 
 ---
 
+## Progress (last updated 2026-06-21)
+
+Worked in `git log` order; each item is one or more commits on `main`
+(`git log --oneline --grep refactor` / `--grep fix` to find them).
+
+**Done & committed** (all `dotnet build` + `style_audit` clean; editor-play sanity-checked
+for the cinematic + the GPU/disturbance + item handlers):
+- **Tier 1:** R1 (SimplePoolChannel), R2 (WallLimits), R3 (ReactivePropertyBinder +
+  ReactiveCounterLabel, grouped under `UI/Binding`), R4 (ItemEffectPlayer +
+  BalloonOverlapQuery), R5 (palette GetEntry/ColorNames).
+- **Tier 2 god-classes:** G1 (ProjectileHitResolver), G2 (CinematicCameraRig),
+  G4 **partial** (DisturbanceFieldCoordinates + LerpStampScheduler + GPU-tail dedup),
+  G5 (HexCoordinates + GridBalanceQuery), G6 **2/3** (ChainLightningGeometry;
+  SlotClusterRegistry.OnActorPlaced decomposed).
+- **Tier 3 OCP/DIP:** OCP2 (StaticActorSpawner factory map + IGridActorModel),
+  OCP3 (IChainEffect/ISplashEffect guarded casts), DIP1 (IPlayerHealth/IDangerLevel/
+  IScoreQuery/IColorStreak read interfaces).
+- **Tier 4:** ScoreController→INavigation, TrailSpawner merge, ToughBalloon SurviveOutcome,
+  MathUtils+VectorMathHelper→VectorMathExtensions, dead ProjectileLifetimeScope removed.
+- **Not from this plan (same session):** game-over reset fixes (RunResetMessage →
+  ColorProgressBar + thrower reload; see [[suspect-areas-colorbars-gameover]]) and the
+  thrower overflow-hold feature (PauseSource.Overflow).
+
+**Remaining (all larger / playtest-dependent — none started):**
+- **OCP1** + the rest of **R4's intent** — split the `ItemSettings` god-config into
+  per-item typed settings. Biggest config restructure; touches all 5 item handlers +
+  the SO + asset. Needs a playtest.
+- **G3** — split `BalloonSpawner` into `BalloonFactory` + `BalloonPlacementResolver`
+  (+ collapse the 13-arg `BalloonController` ctor into a context object). **No test
+  coverage** → needs a playtest.
+- **G4 remainder** — `DisturbanceFieldResources` (the RT/material/double-buffer-swap
+  lifecycle). Deferred as the most intertwined, untested, GPU-runtime part.
+- **G6 remainder** — `ColorProgressBar` → `ProgressNoticePresenter` + rect helper.
+  Deferred: untested view, and it's the file the reset fix touched (validate that first).
+- **Tier 4 leftover** — `ThrowerController` reads `Input`/`Camera.main`; move pointer
+  polling + screen→world into `ThrowerView`. Untested input → needs a playtest.
+
+**Session gotchas for whoever picks this up:**
+- There is **no Unity runtime here** — `dotnet build` compiles C# (not shaders) and can't
+  run EditMode tests. Verification = build + `style_audit.py` + reasoning; behaviour/visual
+  changes need the user's in-editor pass. Call that boundary out per change.
+- The per-assembly `.csproj` files are **git-ignored, IDE-generated, and lag** behind
+  new/deleted files — edit them to make `dotnet build` see your changes; Unity regenerates.
+- Hand-author `.meta` files for new `.cs` (headless exception to [[prefer-unity-generated-meta]]).
+- `style_audit.py` `[REPORT]` findings are **non-blocking** (exit 0); the pre-existing
+  `DisturbanceFieldService`/`ImpactEventBus` "static-mutable-before-readonly" ones are
+  documented false positives — don't "fix" them.
+- Deleting a MonoBehaviour that's on a prefab orphans the component — the user must remove
+  it in-editor first (that's how the dead scope was handled).
+
+---
+
 ## How to use this plan
 
 Work top-down — tiers are ordered by leverage-per-risk. Each item is independently
