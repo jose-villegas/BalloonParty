@@ -13,7 +13,7 @@ namespace BalloonParty.UI.Health
     {
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterBoundViews<HealthCounterLabel, PlayerHealthController, int>(this, health => health.Current);
+            builder.RegisterBoundViews<HealthCounterLabel, IPlayerHealth, int>(this, health => health.Current);
         }
     }
 }

@@ -14,7 +14,7 @@ namespace BalloonParty.UI.Danger
     {
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterBoundViews<DangerGradientView, SpaceDanger, float>(this, danger => danger.Level);
+            builder.RegisterBoundViews<DangerGradientView, IDangerLevel, float>(this, danger => danger.Level);
         }
     }
 }

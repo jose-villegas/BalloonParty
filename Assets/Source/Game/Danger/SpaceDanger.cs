@@ -20,15 +20,15 @@ namespace BalloonParty.Game.Danger
     ///     can still take (re-home + pressure fill nearly every empty), and <c>spawnPerTurn</c> is the
     ///     worst case <c>NewProjectileBalloonLines × Columns</c>. Both are tuning knobs.
     /// </summary>
-    internal class SpaceDanger : IStartable, IDisposable
+    internal class SpaceDanger : IStartable, IDisposable, IDangerLevel
     {
         private readonly SlotGrid _grid;
-        private readonly PlayerHealthController _health;
+        private readonly IPlayerHealth _health;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly ReactiveProperty<float> _level = new(0f);
         private readonly CompositeDisposable _subscriptions = new();
 
-        public SpaceDanger(SlotGrid grid, PlayerHealthController health, IBalloonsConfiguration balloonsConfig)
+        public SpaceDanger(SlotGrid grid, IPlayerHealth health, IBalloonsConfiguration balloonsConfig)
         {
             _grid = grid;
             _health = health;

@@ -4,7 +4,7 @@ using MessagePipe;
 
 namespace BalloonParty.Game.Score
 {
-    internal class ColorStreakTracker : IDisposable
+    internal class ColorStreakTracker : IColorStreak, IDisposable
     {
         private readonly IDisposable _subscription;
 

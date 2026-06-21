@@ -19,7 +19,7 @@ namespace BalloonParty.Game.Health
     ///     <see cref="IGameConfiguration.StartingHitPoints"/> and is hard-capped at
     ///     <see cref="MaxHitPoints"/> internally — the UI shows only the current count.
     /// </summary>
-    internal class PlayerHealthController : IStartable, IRunResettable, IDisposable
+    internal class PlayerHealthController : IStartable, IRunResettable, IDisposable, IPlayerHealth
     {
         private const int MaxHitPoints = 999;
 

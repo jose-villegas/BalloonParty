@@ -43,8 +43,8 @@ namespace BalloonParty.UI.Score
         [Inject] private ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         [Inject] private ISubscriber<RunResetMessage> _resetSubscriber;
         [Inject] private PoolManager _poolManager;
-        [Inject] private ScoreController _scoreController;
-        [Inject] private ColorStreakTracker _streakTracker;
+        [Inject] private IScoreQuery _scoreController;
+        [Inject] private IColorStreak _streakTracker;
         [Inject] private ScoreTrailService _scoreTrailService;
 
         private readonly List<ProgressNotice> _activeNotices = new();

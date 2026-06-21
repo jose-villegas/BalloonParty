@@ -13,7 +13,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Game.Score
 {
-    internal class ScoreController : IStartable, IDisposable, IRunResettable, IRunScore
+    internal class ScoreController : IStartable, IDisposable, IRunResettable, IRunScore, IScoreQuery
     {
         private readonly IGameConfiguration _config;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
