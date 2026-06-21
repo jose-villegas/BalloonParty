@@ -27,9 +27,9 @@ namespace BalloonParty.Item.Paint
     ///     potential neighbor — 6 for a hex grid) with the PaintBlob shader material.
     ///     Splash particles are spawned as independent pooled instances via
     ///     <see cref="ParticlePoolChannel" /> so they outlive the view's pool return.
-    ///     Call <see cref="PrepareDisplay" /> with target data before <see cref="Play" />.
+    ///     Call <see cref="ISplashEffect.PrepareDisplay" /> with target data before <see cref="Play" />.
     /// </summary>
-    public class PaintSplashView : EffectView
+    public class PaintSplashView : EffectView, ISplashEffect
     {
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
         private static readonly int ShadowScaleId = Shader.PropertyToID("_ShadowScale");
@@ -122,7 +122,7 @@ namespace BalloonParty.Item.Paint
         ///     invoked per blob arrival with the target index — use it to change the
         ///     balloon's color at exactly the right moment.
         /// </summary>
-        internal void PrepareDisplay(
+        void ISplashEffect.PrepareDisplay(
             IReadOnlyList<(Vector3 from, Vector3 to)> flights,
             ItemSettings settings,
             PoolManager poolManager,

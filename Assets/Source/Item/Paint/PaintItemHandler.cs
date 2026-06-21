@@ -114,10 +114,17 @@ namespace BalloonParty.Item.Paint
             var effect = _poolManager.GetOrRegister(key,
                 () => new SimplePoolChannel<EffectView>(settings.ActivationEffectPrefab));
 
-            var view = (PaintSplashView)effect;
+            if (effect is not ISplashEffect splash)
+            {
+                Debug.LogError(
+                    $"PaintItemHandler: pooled effect for \"{key}\" is not an ISplashEffect — " +
+                    "check the prefab's EffectView component.");
+                _poolManager.Return(key, effect);
+                return UniTask.CompletedTask;
+            }
 
-            view.PrepareDisplay(flights, settings, _poolManager, OnSplash);
-            view.Play(_worldPosition, tint, () => _poolManager.Return(key, effect));
+            splash.PrepareDisplay(flights, settings, _poolManager, OnSplash);
+            effect.Play(_worldPosition, tint, () => _poolManager.Return(key, effect));
 
             return UniTask.CompletedTask;
 

@@ -98,11 +98,19 @@ namespace BalloonParty.Item.Lightning
             var effect = _poolManager.GetOrRegister(key,
                 () => new SimplePoolChannel<EffectView>(settings.ActivationEffectPrefab));
 
-            var view = (ChainLightningView)effect;
+            if (effect is not IChainEffect chain)
+            {
+                Debug.LogError(
+                    $"LightningItemHandler: pooled effect for \"{key}\" is not an IChainEffect — " +
+                    "check the prefab's EffectView component.");
+                _poolManager.Return(key, effect);
+                return UniTask.CompletedTask;
+            }
+
             var targets = _targetsBuffer;
 
-            view.PrepareDisplay(_positionsBuffer, settings, OnJump);
-            view.Play(Vector3.zero, Color.white, () => _poolManager.Return(key, effect));
+            chain.PrepareDisplay(_positionsBuffer, settings, OnJump);
+            effect.Play(Vector3.zero, Color.white, () => _poolManager.Return(key, effect));
 
             return UniTask.CompletedTask;
 

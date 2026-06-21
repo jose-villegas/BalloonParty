@@ -16,7 +16,7 @@ namespace BalloonParty.Item.Lightning
     ///     Visual parameters are serialized on the prefab. Call
     ///     <see cref="PrepareDisplay" /> with target data before <see cref="Play" />.
     /// </summary>
-    public class ChainLightningView : EffectView
+    public class ChainLightningView : EffectView, IChainEffect
     {
         [SerializeField] private LineRenderer[] _lineRenderers;
         [SerializeField] private SpriteRenderer _glowRenderer;
