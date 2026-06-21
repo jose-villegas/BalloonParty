@@ -9,28 +9,19 @@ namespace BalloonParty.Configuration.Editor
     public class ItemSettingsDrawer : AutoFieldPropertyDrawer
     {
         /// <summary>
-        ///     Fields that belong to a specific item type and must NOT be drawn
-        ///     in the shared common section. Add new type-specific field names here
-        ///     when they are introduced; everything else is drawn automatically.
+        ///     Fields that must NOT be drawn in the shared common section. These are the
+        ///     per-type sub-settings containers (drawn explicitly per active type in
+        ///     <see cref="DrawSpecialFields"/>) plus the shared <c>_damage</c> value, which is
+        ///     surfaced under each type's section. Add new container field names here when a new
+        ///     item type's sub-settings struct is introduced; everything else draws automatically.
         /// </summary>
         protected override HashSet<string> ExcludedFields { get; } = new()
         {
             "_damage",
-            "_bombRadius",
-            "_nudgeOverrides",
-            "_laserRaycastDistance",
-            "_laserCircleCastRadius",
-            "_lightningSegmentsMultiplier",
-            "_lightningRandomness",
-            "_lightningJumpTime",
-            "_lightningGlowSubdivisions",
-            "_lightningFractalDecay",
-            "_paintBlobFlightDuration",
-            "_paintBlobArcCurve",
-            "_paintBlobScaleCurve",
-            "_paintBlobShadowScaleCurve",
-            "_paintBlobSpriteScaleCurve",
-            "_paintBlobSpinSpeed"
+            "_bomb",
+            "_laser",
+            "_lightning",
+            "_paint"
         };
 
         protected override GUIContent BuildFoldoutLabel(GUIContent label, SerializedProperty property)
@@ -46,10 +37,11 @@ namespace BalloonParty.Configuration.Editor
             switch (itemType)
             {
                 case ItemType.Bomb:
+                    var bomb = property.FindPropertyRelative("_bomb");
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Bomb");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_damage", "Damage");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_bombRadius", "Bomb Radius");
-                    var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, bomb, "_bombRadius", "Bomb Radius");
+                    var nudgeOverrides = bomb?.FindPropertyRelative("_nudgeOverrides");
                     if (nudgeOverrides != null)
                     {
                         var h = EditorGUI.GetPropertyHeight(nudgeOverrides, true);
@@ -64,76 +56,79 @@ namespace BalloonParty.Configuration.Editor
                     break;
 
                 case ItemType.Laser:
+                    var laser = property.FindPropertyRelative("_laser");
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Laser");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_damage", "Damage");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
-                        property,
+                        laser,
                         "_laserRaycastDistance",
                         "Raycast Distance");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
-                        property,
+                        laser,
                         "_laserCircleCastRadius",
                         "Circle Cast Radius");
                     break;
 
                 case ItemType.Lightning:
+                    var lightning = property.FindPropertyRelative("_lightning");
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Lightning");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_damage", "Damage");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
-                        property,
+                        lightning,
                         "_lightningSegmentsMultiplier",
                         "Segments Multiplier");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
-                        property,
+                        lightning,
                         "_lightningRandomness",
                         "Randomness");
-                    y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_lightningJumpTime", "Jump Time");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, lightning, "_lightningJumpTime", "Jump Time");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
-                        property,
+                        lightning,
                         "_lightningGlowSubdivisions",
                         "Glow Subdivisions");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
-                        property,
+                        lightning,
                         "_lightningFractalDecay",
                         "Fractal Decay");
                     break;
 
                 case ItemType.Paint:
+                    var paint = property.FindPropertyRelative("_paint");
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Paint");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
-                        property,
+                        paint,
                         "_paintBlobFlightDuration",
                         "Blob Flight Duration");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
-                        property,
+                        paint,
                         "_paintBlobArcCurve",
                         "Blob Arc Curve");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
-                        property,
+                        paint,
                         "_paintBlobScaleCurve",
                         "Blob Scale Curve");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
-                        property,
+                        paint,
                         "_paintBlobShadowScaleCurve",
                         "Blob Shadow Scale Curve");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
-                        property,
+                        paint,
                         "_paintBlobSpriteScaleCurve",
                         "Blob Sprite Scale Curve");
                     y = PropertyDrawerHelper.DrawNamedField(position,
                         y,
-                        property,
+                        paint,
                         "_paintBlobSpinSpeed",
                         "Blob Spin Speed");
                     break;
@@ -150,7 +145,8 @@ namespace BalloonParty.Configuration.Editor
             switch (itemType)
             {
                 case ItemType.Bomb:
-                    var nudgeOverrides = property.FindPropertyRelative("_nudgeOverrides");
+                    var bomb = property.FindPropertyRelative("_bomb");
+                    var nudgeOverrides = bomb?.FindPropertyRelative("_nudgeOverrides");
                     var nudgeHeight = nudgeOverrides != null
                         ? EditorGUI.GetPropertyHeight(nudgeOverrides, true) + PropertyDrawerHelper.Spacing
                         : 0f;
