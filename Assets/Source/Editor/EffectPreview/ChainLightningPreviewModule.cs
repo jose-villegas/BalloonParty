@@ -113,14 +113,14 @@ namespace BalloonParty.Editor.EffectPreview
 
             var rendererCount = _lineRenderers != null ? _lineRenderers.Length : 0;
 
-            (_lineBuffers, _cumOffsets) = ChainLightningView.BuildBoltBuffers(
+            (_lineBuffers, _cumOffsets) = ChainLightningGeometry.BuildBoltBuffers(
                 targets,
                 rendererCount,
                 segMul,
                 randomness,
                 fractalDecay);
 
-            (_glowPath, _glowDiameters) = ChainLightningView.BuildGlowPath(targets, _glowSubdivisions);
+            (_glowPath, _glowDiameters) = ChainLightningGeometry.BuildGlowPath(targets, _glowSubdivisions);
 
             _elapsed = 0f;
             _currentJump = 0;
