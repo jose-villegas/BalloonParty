@@ -27,6 +27,7 @@ for the cinematic + the GPU/disturbance + item handlers):
   ReactiveCounterLabel, grouped under `UI/Binding`), R4 (ItemEffectPlayer +
   BalloonOverlapQuery), R5 (palette GetEntry/ColorNames).
 - **Tier 2 god-classes:** G1 (ProjectileHitResolver), G2 (CinematicCameraRig),
+  G3 **part 1** (BalloonControllerContext — 14-arg ctor collapsed),
   G4 **partial** (DisturbanceFieldCoordinates + LerpStampScheduler + GPU-tail dedup),
   G5 (HexCoordinates + GridBalanceQuery), G6 **2/3** (ChainLightningGeometry;
   SlotClusterRegistry.OnActorPlaced decomposed).
@@ -41,11 +42,15 @@ for the cinematic + the GPU/disturbance + item handlers):
 
 **Remaining (all larger / playtest-dependent — none started):**
 - **OCP1** + the rest of **R4's intent** — split the `ItemSettings` god-config into
-  per-item typed settings. Biggest config restructure; touches all 5 item handlers +
-  the SO + asset. Needs a playtest.
-- **G3** — split `BalloonSpawner` into `BalloonFactory` + `BalloonPlacementResolver`
-  (+ collapse the 13-arg `BalloonController` ctor into a context object). **No test
-  coverage** → needs a playtest.
+  per-item typed settings. **Blocked on editor work:** changing the SO layout orphans
+  the designer-tuned values in `ItemConfiguration.asset` (damage/radii/curves), which
+  Unity can't auto-migrate — the asset must be re-authored in the editor. Don't attempt
+  headless. Biggest config restructure; touches all 5 item handlers + the SO + asset.
+- **G3 remainder** — the ctor collapse landed (part 1). Still to do: extract
+  `BalloonFactory` (SpawnBalloon/AnimateSpawn/controller assembly) and
+  `BalloonPlacementResolver` (the column/pressure search). Both are coupled to the
+  spawner's `_activeCounts`/path buffers and the class has **no test coverage** → needs
+  a playtest.
 - **G4 remainder** — `DisturbanceFieldResources` (the RT/material/double-buffer-swap
   lifecycle). Deferred as the most intertwined, untested, GPU-runtime part.
 - **G6 remainder** — `ColorProgressBar` → `ProgressNoticePresenter` + rect helper.
