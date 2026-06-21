@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
@@ -47,12 +46,9 @@ namespace BalloonParty.UI.Score
         [Inject] private IColorStreak _streakTracker;
         [Inject] private ScoreTrailService _scoreTrailService;
 
-        private readonly List<ProgressNotice> _activeNotices = new();
-
+        private ProgressNoticePresenter _notices;
         private PaletteEntry _colorConfig;
-        private string _pointNoticePoolKey;
         private int _stashedMaxValue;
-        private string _streakNoticePoolKey;
 
         private void OnValidate()
         {
@@ -87,8 +83,13 @@ namespace BalloonParty.UI.Score
         private void Start()
         {
             _colorConfig = _palette.GetEntry(_colorName);
-            _pointNoticePoolKey = $"PointNotice_{_colorConfig.Name}";
-            _streakNoticePoolKey = $"StreakNotice_{_colorConfig.Name}";
+            _notices = new ProgressNoticePresenter(
+                _poolManager,
+                _pointNoticePrefab,
+                _streakNoticePrefab,
+                transform,
+                _colorConfig.Name,
+                _colorConfig.Color);
 
             foreach (var g in _graphicsToSetColor)
             {
@@ -120,8 +121,8 @@ namespace BalloonParty.UI.Score
 
             if (streak > 1)
             {
-                DismissFullyShownNotices();
-                SpawnStreakNotice(streak);
+                _notices.DismissFullyShownNotices();
+                _notices.SpawnStreakNotice(streak);
             }
         }
 
@@ -136,7 +137,7 @@ namespace BalloonParty.UI.Score
             _progressSlider.maxValue = _scoreController.GetRequiredPoints();
             _progressSlider.value = _scoreController.GetProgress(_colorConfig.Name);
             ClearCompletionVfx();
-            DismissAllNotices();
+            _notices.DismissAllNotices();
         }
 
         private void ClearCompletionVfx()
@@ -187,7 +188,8 @@ namespace BalloonParty.UI.Score
             _animator.SetTrigger(TrailHitTrigger);
             _progressSlider.value = Mathf.Min(_progressSlider.value + 1, _progressSlider.maxValue);
 
-            SpawnPointNotice(WorldToAnchoredPosition(msg.WorldPosition));
+            var anchored = RectAnchorMath.WorldToAnchoredPosition((RectTransform)transform, msg.WorldPosition);
+            _notices.SpawnPointNotice(anchored);
 
             if (_progressSlider.value >= _progressSlider.maxValue)
             {
@@ -197,83 +199,11 @@ namespace BalloonParty.UI.Score
             }
         }
 
-        public Vector3 Center
-        {
-            get
-            {
-                var rectTransform = (RectTransform)transform;
-                return rectTransform.TransformPoint(rectTransform.rect.center);
-            }
-        }
+        public Vector3 Center => RectAnchorMath.Center((RectTransform)transform);
 
         public Vector3 RandomPosition()
         {
-            var rectTransform = (RectTransform)transform;
-            var rect = rectTransform.rect;
-            var local = new Vector3(
-                Random.Range(rect.xMin, rect.xMax),
-                Random.Range(rect.yMin, rect.yMax),
-                0f);
-            return rectTransform.TransformPoint(local);
-        }
-
-        private void DismissFullyShownNotices()
-        {
-            for (var i = _activeNotices.Count - 1; i >= 0; i--)
-            {
-                if (_activeNotices[i].IsFullyShown)
-                {
-                    _activeNotices[i].Dismiss();
-                }
-            }
-        }
-
-        private void DismissAllNotices()
-        {
-            for (var i = _activeNotices.Count - 1; i >= 0; i--)
-            {
-                _activeNotices[i].Dismiss();
-            }
-        }
-
-        private Vector2 WorldToAnchoredPosition(Vector3 worldPosition)
-        {
-            var rectTransform = (RectTransform)transform;
-            var screenPoint = RectTransformUtility.WorldToScreenPoint(null, worldPosition);
-            RectTransformUtility.ScreenPointToLocalPointInRectangle(
-                rectTransform,
-                screenPoint,
-                null,
-                out var localPoint);
-            return localPoint;
-        }
-
-        private void SpawnStreakNotice(int streak)
-        {
-            var notice = _poolManager.GetOrRegister(_streakNoticePoolKey,
-                () => new SimplePoolChannel<ProgressNotice>(_streakNoticePrefab));
-
-            notice.SetParent(transform);
-            notice.SetAnchoredPosition(Vector2.zero);
-            _activeNotices.Add(notice);
-            notice.Show(streak,
-                () =>
-                {
-                    _activeNotices.Remove(notice);
-                    _poolManager.Return(_streakNoticePoolKey, notice);
-                },
-                _colorConfig.Color);
-        }
-
-        private void SpawnPointNotice(Vector2 anchoredPosition)
-        {
-            var notice = _poolManager.GetOrRegister(_pointNoticePoolKey,
-                () => new SimplePoolChannel<ProgressNotice>(_pointNoticePrefab));
-
-            notice.SetParent(transform);
-            notice.SetAnchoredPosition(anchoredPosition);
-            notice.Show(1,
-                () => _poolManager.Return(_pointNoticePoolKey, notice));
+            return RectAnchorMath.RandomPosition((RectTransform)transform);
         }
     }
 }

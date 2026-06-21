@@ -31,7 +31,8 @@ for the cinematic + the GPU/disturbance + item handlers):
   spawner 479→257 LOC),
   G4 **done** (DisturbanceFieldCoordinates + LerpStampScheduler + GPU-tail dedup, then
   DisturbanceFieldResources — service 493→289 LOC),
-  G5 (HexCoordinates + GridBalanceQuery), G6 **2/3** (ChainLightningGeometry;
+  G5 (HexCoordinates + GridBalanceQuery), G6 **done** (ChainLightningGeometry;
+  ColorProgressBar → ProgressNoticePresenter + RectAnchorMath, view 279→209 LOC;
   SlotClusterRegistry.OnActorPlaced decomposed).
 - **Tier 3 OCP/DIP:** OCP1 (ItemSettings → Bomb/Laser/Lightning/Paint sub-settings;
   ItemConfiguration.asset migrated losslessly via scripted group-and-indent),
@@ -44,9 +45,7 @@ for the cinematic + the GPU/disturbance + item handlers):
   ColorProgressBar + thrower reload; see [[suspect-areas-colorbars-gameover]]) and the
   thrower overflow-hold feature (PauseSource.Overflow).
 
-**Remaining (all larger / playtest-dependent — none started):**
-- **G6 remainder** — `ColorProgressBar` → `ProgressNoticePresenter` + rect helper.
-  Deferred: untested view, and it's the file the reset fix touched (validate that first).
+**Remaining (playtest-dependent — none started):**
 - **Tier 4 leftover** — `ThrowerController` reads `Input`/`Camera.main`; move pointer
   polling + screen→world into `ThrowerView`. Untested input → needs a playtest.
 

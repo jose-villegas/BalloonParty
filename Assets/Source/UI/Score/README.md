@@ -7,9 +7,11 @@ Tracks and displays player progress toward the next level — one bar per balloo
 | File | What it does |
 |---|---|
 | `ScoreUILifetimeScope` | VContainer child scope on the Score UI Canvas root; injects all scene-placed `ColorProgressBar` instances via `RegisterBuildCallback`; binds `ScoreCounterLabel` and `LevelLabel` in `Start()` |
-| `ColorProgressBar` | Per-color progress slider placed directly in the scene. Listens for `ScorePointMessage` (streak counting on `GroupIndex == 0`), `ScoreTrailArrivedMessage` (slider advancement, point notice spawning, trail-hit feedback), `ScoreLevelUpMessage` (stash new max, reset completion state), `LevelUpGlowTrailsMessage` (drain slider in sync with glow trail waves), and `LevelUpDismissedMessage` (apply stashed max, reset slider to zero). Registers an `ITrailTarget` provider with `ScoreTrailService` for randomised trail destinations. Uses `[PaletteColorName]` to select its color from `GamePalette` in the Inspector |
+| `ColorProgressBar` | Per-color progress slider placed directly in the scene. Listens for `ScorePointMessage` (streak counting on `GroupIndex == 0`), `ScoreTrailArrivedMessage` (slider advancement, point notice spawning, trail-hit feedback), `ScoreLevelUpMessage` (stash new max, reset completion state), `LevelUpGlowTrailsMessage` (drain slider in sync with glow trail waves), and `LevelUpDismissedMessage` (apply stashed max, reset slider to zero). Registers an `ITrailTarget` provider with `ScoreTrailService` for randomised trail destinations. Delegates notice spawning/dismissal to `ProgressNoticePresenter` and rect-position math to `RectAnchorMath`. Uses `[PaletteColorName]` to select its color from `GamePalette` in the Inspector |
+| `ProgressNoticePresenter` | Plain C# helper owning a bar's notice lifecycle: the two `SimplePoolChannel<ProgressNotice>` pools, the tracked-streak-notice list, and `SpawnPointNotice`/`SpawnStreakNotice`/`DismissFullyShownNotices`/`DismissAllNotices`. Constructed by `ColorProgressBar` in `Start()` |
+| `RectAnchorMath` | Static `RectTransform` position math (`UI/` root, no Score knowledge): `Center`, `RandomPosition` (for `ITrailTarget`), and `WorldToAnchoredPosition` (world → local anchored, for placing pooled notices) |
 | `ProgressNotice` | Pooled floating TMP popup at the bar. Uses `ColorableRenderer` for tinting. Label scale driven by `AnimationCurve`; `_labelOffsetXCurve` compensates for scale-induced horizontal drift; dismisses via `ScoreDisappear` animation when replaced. Two prefab variants: streak notices ("x3") shown immediately on hit, and point notices ("+1") shown on trail arrival |
-| `SimplePoolChannel<ProgressNotice>` | separate per-color pools keyed by `StreakNotice_{colorName}` and `PointNotice_{colorName}` |
+| `SimplePoolChannel<ProgressNotice>` | separate per-color pools keyed by `StreakNotice_{colorName}` and `PointNotice_{colorName}` (owned by `ProgressNoticePresenter`) |
 | `GraphicColorableRenderer` | `ColorableRenderer<Graphic>` — enables `ColorableRenderer`-based tinting for UI `Graphic` components |
 | `FlyingTrail` | Pooled orb that flies from balloon world position → bar position via DOTween. Supports single-phase (`Setup`) and two-phase burst (`SetupBurst`) flight modes. `SetSortingOrder` overrides the default UI sorting order for glow trails |
 | `SimplePoolChannel<FlyingTrail>` | per-color pool keyed by `ScoreTrail_{colorName}` |
@@ -45,7 +47,7 @@ Bar reset is a two-phase process synchronised with the glow trail ceremony:
 
 `ProgressNotice` is a pooled TMP popup with `ColorableRenderer`-based tinting. Two separate prefabs and pools are used:
 
-- **Streak notices** (`_streakNoticePrefab`, pool key `StreakNotice_{color}`) — shown immediately on balloon hit at bar centre, tinted with the bar's color. Tracked in `_activeNotices` for dismiss-on-replace
+- **Streak notices** (`_streakNoticePrefab`, pool key `StreakNotice_{color}`) — shown immediately on balloon hit at bar centre, tinted with the bar's color. Tracked by `ProgressNoticePresenter` for dismiss-on-replace
 - **Point notices** (`_pointNoticePrefab`, pool key `PointNotice_{color}`) — shown on trail arrival at the trail's world-space landing position (converted to local anchored coordinates). Untracked (returned to pool on animation complete)
 
 `OnValidate()` provides editor-time color preview — it loads `GamePalette` via `AssetDatabase`, finds the matching entry, and tints `_graphicsToSetColor` while preserving each graphic's existing alpha.
