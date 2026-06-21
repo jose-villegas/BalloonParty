@@ -101,61 +101,72 @@ namespace BalloonParty.Slots.Actor.Cluster
 
         private void OnActorPlaced(Vector2Int slot)
         {
-            var neighborClusterIds = new HashSet<int>();
             HexCoordinates.HexNeighborIndices(slot.x, slot.y, _neighborBuffer);
 
+            var neighborClusterIds = new HashSet<int>();
+            var firstNeighborId = 0;
             foreach (var neighbor in _neighborBuffer)
             {
-                if (_slotToCluster.TryGetValue(neighbor, out var neighborClusterId))
+                if (_slotToCluster.TryGetValue(neighbor, out var id) && neighborClusterIds.Add(id))
                 {
-                    neighborClusterIds.Add(neighborClusterId);
+                    firstNeighborId = id;
                 }
             }
 
-            if (neighborClusterIds.Count == 0)
+            switch (neighborClusterIds.Count)
             {
-                var cluster = CreateCluster(new List<Vector2Int> { slot });
-                _onClusterChanged.OnNext(new SlotClusterChangedEvent(
-                    cluster.ClusterId, SlotClusterChangeType.Created, cluster));
+                case 0:
+                    CreateSingletonCluster(slot);
+                    break;
+                case 1:
+                    GrowCluster(firstNeighborId, slot);
+                    break;
+                default:
+                    MergeClusters(neighborClusterIds, slot);
+                    break;
             }
-            else if (neighborClusterIds.Count == 1)
+        }
+
+        private void CreateSingletonCluster(Vector2Int slot)
+        {
+            var cluster = CreateCluster(new List<Vector2Int> { slot });
+            _onClusterChanged.OnNext(new SlotClusterChangedEvent(
+                cluster.ClusterId, SlotClusterChangeType.Created, cluster));
+        }
+
+        private void GrowCluster(int clusterId, Vector2Int slot)
+        {
+            var cluster = _clusters[clusterId];
+            cluster.AddSlot(slot);
+            _slotToCluster[slot] = clusterId;
+            RecalculateBounds(cluster);
+
+            _onClusterChanged.OnNext(new SlotClusterChangedEvent(
+                cluster.ClusterId, SlotClusterChangeType.Resized, cluster));
+        }
+
+        private void MergeClusters(HashSet<int> clusterIds, Vector2Int slot)
+        {
+            var mergedSlots = new List<Vector2Int> { slot };
+
+            foreach (var clusterId in clusterIds)
             {
-                var enumerator = neighborClusterIds.GetEnumerator();
-                enumerator.MoveNext();
-                var existingId = enumerator.Current;
-                enumerator.Dispose();
+                var oldCluster = _clusters[clusterId];
+                mergedSlots.AddRange(oldCluster.Slots);
 
-                var cluster = _clusters[existingId];
-                cluster.AddSlot(slot);
-                _slotToCluster[slot] = existingId;
-                RecalculateBounds(cluster);
-
-                _onClusterChanged.OnNext(new SlotClusterChangedEvent(
-                    cluster.ClusterId, SlotClusterChangeType.Resized, cluster));
-            }
-            else
-            {
-                var mergedSlots = new List<Vector2Int> { slot };
-
-                foreach (var clusterId in neighborClusterIds)
+                foreach (var s in oldCluster.Slots)
                 {
-                    var oldCluster = _clusters[clusterId];
-                    mergedSlots.AddRange(oldCluster.Slots);
-
-                    foreach (var s in oldCluster.Slots)
-                    {
-                        _slotToCluster.Remove(s);
-                    }
-
-                    _clusters.Remove(clusterId);
-                    _onClusterChanged.OnNext(new SlotClusterChangedEvent(
-                        clusterId, SlotClusterChangeType.Removed, oldCluster));
+                    _slotToCluster.Remove(s);
                 }
 
-                var newCluster = CreateCluster(mergedSlots);
+                _clusters.Remove(clusterId);
                 _onClusterChanged.OnNext(new SlotClusterChangedEvent(
-                    newCluster.ClusterId, SlotClusterChangeType.Created, newCluster));
+                    clusterId, SlotClusterChangeType.Removed, oldCluster));
             }
+
+            var newCluster = CreateCluster(mergedSlots);
+            _onClusterChanged.OnNext(new SlotClusterChangedEvent(
+                newCluster.ClusterId, SlotClusterChangeType.Created, newCluster));
         }
 
         private void OnActorRemoved(Vector2Int slot)
