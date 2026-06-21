@@ -152,51 +152,57 @@ namespace BalloonParty.Editor.EffectPreview
 
             _elapsed -= _jumpTime;
 
-            if (!_retracting)
+            return _retracting ? AdvanceRetract() : AdvanceForward();
+        }
+
+        // Reveals the next jump; on reaching the last, flips into retraction. Returns true to keep ticking.
+        private bool AdvanceForward()
+        {
+            _currentJump++;
+
+            if (_currentJump >= _jumpCount)
             {
-                _currentJump++;
+                _retracting = true;
+                _currentJump = _jumpCount - 1;
+                ApplyRenderers(_cumOffsets[_currentJump]);
 
-                if (_currentJump >= _jumpCount)
-                {
-                    _retracting = true;
-                    _currentJump = _jumpCount - 1;
-                    ApplyRenderers(_cumOffsets[_currentJump]);
+                var stage = _currentJump - 1;
+                _glowFromIdx = Mathf.Min((_jumpCount - 1) * _glowSubdivisions, GlowMaxIdx);
+                _glowToIdx = stage >= 0 ? Mathf.Min(stage * _glowSubdivisions, GlowMaxIdx) : 0f;
+                return true;
+            }
 
-                    var stage = _currentJump - 1;
-                    _glowFromIdx = Mathf.Min((_jumpCount - 1) * _glowSubdivisions, GlowMaxIdx);
-                    _glowToIdx = stage >= 0 ? Mathf.Min(stage * _glowSubdivisions, GlowMaxIdx) : 0f;
-                    return true;
-                }
+            ApplyRenderers(_cumOffsets[_currentJump + 1]);
 
-                ApplyRenderers(_cumOffsets[_currentJump + 1]);
+            _glowFromIdx = Mathf.Min((_currentJump - 1) * _glowSubdivisions, GlowMaxIdx);
+            _glowToIdx = Mathf.Min(_currentJump * _glowSubdivisions, GlowMaxIdx);
+            return true;
+        }
 
-                _glowFromIdx = Mathf.Min((_currentJump - 1) * _glowSubdivisions, GlowMaxIdx);
-                _glowToIdx = Mathf.Min(_currentJump * _glowSubdivisions, GlowMaxIdx);
+        // Removes the last jump; when the chain is fully retracted, finishes. Returns false when done.
+        private bool AdvanceRetract()
+        {
+            _currentJump--;
+
+            if (_currentJump < 0)
+            {
+                ClearRenderers();
+                _finished = true;
+                return false;
+            }
+
+            var count = _cumOffsets[_currentJump];
+            if (count > 0)
+            {
+                ApplyRenderers(count);
+
+                var stage = _currentJump - 1;
+                _glowFromIdx = _glowToIdx;
+                _glowToIdx = stage >= 0 ? Mathf.Min(stage * _glowSubdivisions, GlowMaxIdx) : 0f;
             }
             else
             {
-                _currentJump--;
-
-                if (_currentJump < 0)
-                {
-                    ClearRenderers();
-                    _finished = true;
-                    return false;
-                }
-
-                var count = _cumOffsets[_currentJump];
-                if (count > 0)
-                {
-                    ApplyRenderers(count);
-
-                    var stage = _currentJump - 1;
-                    _glowFromIdx = _glowToIdx;
-                    _glowToIdx = stage >= 0 ? Mathf.Min(stage * _glowSubdivisions, GlowMaxIdx) : 0f;
-                }
-                else
-                {
-                    ClearRenderers();
-                }
+                ClearRenderers();
             }
 
             return true;

@@ -176,7 +176,7 @@ namespace BalloonParty.Game.Score
         /// call as one scatter group. Every message shares the same <c>GroupSize</c> so the UI can
         /// fan them out together regardless of how many colours are involved.
         /// </summary>
-        private void PublishAttributionGroup(IList<ScoreAttribution> attributions, Vector3 worldPosition)
+        private void PublishAttributionGroup(IReadOnlyList<ScoreAttribution> attributions, Vector3 worldPosition)
         {
             if (attributions.Count == 0)
             {
@@ -200,7 +200,7 @@ namespace BalloonParty.Game.Score
 
         // A single same-colour break extends the streak (and earns its multiplier); a mixed group
         // breaks it. Returns the points multiplier to apply.
-        private int RecordStreakMultiplier(IList<ScoreAttribution> attributions)
+        private int RecordStreakMultiplier(IReadOnlyList<ScoreAttribution> attributions)
         {
             if (attributions.Count == 1)
             {
@@ -214,7 +214,7 @@ namespace BalloonParty.Game.Score
         // Projects each scorable attribution's points onto its colour, recording (colour, points,
         // base-progress) for publishing.
         private void ResolveAttributions(
-            IList<ScoreAttribution> attributions, int multiplier,
+            IReadOnlyList<ScoreAttribution> attributions, int multiplier,
             List<(string Color, int Points, int BaseProgress)> resolved)
         {
             foreach (var attribution in attributions)
@@ -232,7 +232,7 @@ namespace BalloonParty.Game.Score
             }
         }
 
-        private static int SumPoints(List<(string Color, int Points, int BaseProgress)> resolved)
+        private static int SumPoints(IReadOnlyList<(string Color, int Points, int BaseProgress)> resolved)
         {
             var total = 0;
             foreach (var (_, pts, _) in resolved)
@@ -246,7 +246,7 @@ namespace BalloonParty.Game.Score
         // Emits one ScorePointMessage per point, carrying the group size/index so the bars can
         // animate the burst, and flagging the point that tips into the next level.
         private void PublishPoints(
-            List<(string Color, int Points, int BaseProgress)> resolved, int groupSize, Vector3 worldPosition)
+            IReadOnlyList<(string Color, int Points, int BaseProgress)> resolved, int groupSize, Vector3 worldPosition)
         {
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
             var groupIndex = 0;

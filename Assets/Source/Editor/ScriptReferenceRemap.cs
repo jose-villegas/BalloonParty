@@ -79,22 +79,7 @@ namespace BalloonParty.Editor
                 while ((idx = text.IndexOf(token, idx, StringComparison.Ordinal)) >= 0)
                 {
                     var guidStart = idx + token.Length;
-                    var guidEnd = text.IndexOf(',', guidStart);
-                    if (guidEnd > guidStart)
-                    {
-                        var guid = text.Substring(guidStart, guidEnd - guidStart).Trim();
-                        var scriptPath = AssetDatabase.GUIDToAssetPath(guid);
-
-                        if (string.IsNullOrEmpty(scriptPath) ||
-                            AssetDatabase.LoadAssetAtPath<MonoScript>(scriptPath) == null)
-                        {
-                            if (!broken.Contains(guid))
-                            {
-                                broken.Add(guid);
-                            }
-                        }
-                    }
-
+                    AddIfBrokenGuid(text, guidStart, broken);
                     idx = guidStart;
                 }
             }
@@ -104,6 +89,30 @@ namespace BalloonParty.Editor
             }
 
             return broken;
+        }
+
+        // Parses the guid starting at <paramref name="guidStart"/> and adds it to
+        // <paramref name="broken"/> if it resolves to no loadable MonoScript.
+        private static void AddIfBrokenGuid(string text, int guidStart, List<string> broken)
+        {
+            var guidEnd = text.IndexOf(',', guidStart);
+            if (guidEnd <= guidStart)
+            {
+                return;
+            }
+
+            var guid = text.Substring(guidStart, guidEnd - guidStart).Trim();
+            var scriptPath = AssetDatabase.GUIDToAssetPath(guid);
+            if (!string.IsNullOrEmpty(scriptPath)
+                && AssetDatabase.LoadAssetAtPath<MonoScript>(scriptPath) != null)
+            {
+                return;
+            }
+
+            if (!broken.Contains(guid))
+            {
+                broken.Add(guid);
+            }
         }
 
         private static void ReplaceGuid(string assetPath, string oldGuid, string newGuid, string newName)

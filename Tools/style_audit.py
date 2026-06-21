@@ -511,7 +511,7 @@ def check_method_ordering(path: Path, lines: list[str], result: AuditResult):
         last_group = max(last_group, group)
 
 
-_COMPLEXITY_THRESHOLD = 15  # SonarSource default; calibrated against the codebase
+_COMPLEXITY_THRESHOLD = 10  # stricter than SonarSource's 15; the codebase is kept at/under this
 
 _CC_NEST_KW = re.compile(r"^(if|for|foreach|while|switch|catch|do)\b")
 _CC_FLAT_KW = re.compile(r"^\}?\s*(else\s+if|else|finally)\b")
