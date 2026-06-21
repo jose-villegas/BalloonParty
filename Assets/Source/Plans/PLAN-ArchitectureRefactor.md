@@ -31,7 +31,9 @@ for the cinematic + the GPU/disturbance + item handlers):
   G4 **partial** (DisturbanceFieldCoordinates + LerpStampScheduler + GPU-tail dedup),
   G5 (HexCoordinates + GridBalanceQuery), G6 **2/3** (ChainLightningGeometry;
   SlotClusterRegistry.OnActorPlaced decomposed).
-- **Tier 3 OCP/DIP:** OCP2 (StaticActorSpawner factory map + IGridActorModel),
+- **Tier 3 OCP/DIP:** OCP1 (ItemSettings → Bomb/Laser/Lightning/Paint sub-settings;
+  ItemConfiguration.asset migrated losslessly via scripted group-and-indent),
+  OCP2 (StaticActorSpawner factory map + IGridActorModel),
   OCP3 (IChainEffect/ISplashEffect guarded casts), DIP1 (IPlayerHealth/IDangerLevel/
   IScoreQuery/IColorStreak read interfaces).
 - **Tier 4:** ScoreController→INavigation, TrailSpawner merge, ToughBalloon SurviveOutcome,
@@ -41,11 +43,6 @@ for the cinematic + the GPU/disturbance + item handlers):
   thrower overflow-hold feature (PauseSource.Overflow).
 
 **Remaining (all larger / playtest-dependent — none started):**
-- **OCP1** + the rest of **R4's intent** — split the `ItemSettings` god-config into
-  per-item typed settings. **Blocked on editor work:** changing the SO layout orphans
-  the designer-tuned values in `ItemConfiguration.asset` (damage/radii/curves), which
-  Unity can't auto-migrate — the asset must be re-authored in the editor. Don't attempt
-  headless. Biggest config restructure; touches all 5 item handlers + the SO + asset.
 - **G3 remainder** — the ctor collapse landed (part 1). Still to do: extract
   `BalloonFactory` (SpawnBalloon/AnimateSpawn/controller assembly) and
   `BalloonPlacementResolver` (the column/pressure search). Both are coupled to the
