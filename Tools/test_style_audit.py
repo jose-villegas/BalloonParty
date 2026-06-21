@@ -289,6 +289,26 @@ namespace N
 }
 """, [], internal={"Dummy"}, mono=set(), editor_names={"Shared"})
 
+# ── cognitive complexity ──────────────────────────────────────────────────────
+
+
+def _cc_tests():
+    # while(+1) > for(+1+1) > if(+1+2): nested breaks accrue the nesting depth.
+    body = [
+        "while (a)\n", "{\n",
+        "    for (var i = 0; i < n; i++)\n", "    {\n",
+        "        if (x)\n", "        {\n",
+        "            Do();\n",
+        "        }\n", "    }\n", "}\n",
+    ]
+    _record("cognitive score: nested while>for>if == 6", A._cognitive_score(body), 6)
+    # flat sequence of three ifs: +1 each, no nesting term.
+    flat = ["if (a)\n", "{\n", "}\n", "if (b)\n", "{\n", "}\n", "if (c)\n", "{\n", "}\n"]
+    _record("cognitive score: three flat ifs == 3", A._cognitive_score(flat), 3)
+    # boolean operators add one each.
+    _record("cognitive score: && and || count", A._cognitive_score(["if (a && b || c)\n", "{\n", "}\n"]), 3)
+
+
 # ── fixers (shared predicates: fix output must pass the matching check) ────────
 
 expect_fix_output("fix braces: wraps a braceless if", A.fix_braces_required,
@@ -314,6 +334,7 @@ expect_fix_clears("round-trip: redundant-comment fix clears its check",
 
 
 def _helper_tests():
+    _cc_tests()
     # _code_view / _decommented preserve line count and blank the right things.
     sample = ['class C\n', '{\n', '    /* a\n', '       b */\n',
               '    var s = @"x{\n', '    y}";\n', '}\n']

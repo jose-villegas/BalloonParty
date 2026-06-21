@@ -50,6 +50,7 @@ WARNING_RULES: set[str] = {
     "mutable-param",
     "repeated-accessor",
     "method-ordering",
+    "cognitive-complexity",
 }
 
 
@@ -508,6 +509,117 @@ def check_method_ordering(path: Path, lines: list[str], result: AuditResult):
             result.add(Violation(str(path), i, "method-ordering",
                 f"{names[group]} '{name}' after {names[last_group]}"))
         last_group = max(last_group, group)
+
+
+_COMPLEXITY_THRESHOLD = 15  # SonarSource default; calibrated against the codebase
+
+_CC_NEST_KW = re.compile(r"^(if|for|foreach|while|switch|catch|do)\b")
+_CC_FLAT_KW = re.compile(r"^\}?\s*(else\s+if|else|finally)\b")
+_CC_BOOL_OP = re.compile(r"&&|\|\|")
+_CC_CONTROL = re.compile(
+    r"^\s*(if|else|for|foreach|while|switch|using|lock|fixed|catch|do|return|yield|throw)\b")
+
+
+def _cognitive_score(body: list[str]) -> int:
+    """Approximate SonarSource Cognitive Complexity for a method's (code-view) body lines:
+    +1 for each flow break (if/for/foreach/while/switch/catch/do), plus the current nesting
+    depth for nested ones; +1 (no nesting term) for else/else-if/finally; +1 per &&/|| token.
+    Nesting is tracked via the brace stack, relying on the repo's enforced Allman braces.
+    Not scored (approximation, no AST): ternaries, lambda nesting, recursion."""
+    score = nesting = pending = 0
+    stack: list[bool] = []
+    for line in body:
+        s = line.strip()
+        if _CC_FLAT_KW.match(s):
+            score += 1
+            pending += 1
+        elif _CC_NEST_KW.match(s):
+            score += 1 + nesting
+            pending += 1
+        score += len(_CC_BOOL_OP.findall(s))
+        for ch in s:
+            if ch == "{":
+                stack.append(pending > 0)
+                if pending > 0:
+                    nesting += 1
+                    pending -= 1
+            elif ch == "}":
+                if stack and stack.pop():
+                    nesting = max(0, nesting - 1)
+    return score
+
+
+def _method_complexities(lines: list[str]):
+    """Yield (name, line_no, score) for each braced method body in the file."""
+    code = _code_view(lines)
+    type_decl = re.compile(
+        r"(?:public|internal|private|protected)?\s*"
+        r"(?:abstract\s+|sealed\s+|static\s+|partial\s+|readonly\s+|ref\s+)*"
+        r"(?:class|struct|interface|enum|record)\s+(\w+)")
+    n = len(code)
+    out = []
+    i = 0
+    in_class = False
+    class_depth = 0
+    brace = 0
+    while i < n:
+        s = code[i].strip()
+        if type_decl.match(s):
+            in_class = True
+            class_depth = brace
+            brace += s.count("{") - s.count("}")
+            i += 1
+            continue
+
+        sig = None
+        if in_class and brace == class_depth + 1 and "(" in s and not _CC_CONTROL.match(s):
+            iface = _IFACE_IMPL_RE.match(s)
+            if iface:
+                sig = iface
+            else:
+                method = _METHOD_RE.match(s)
+                # require a real modifier so calls/initialisers aren't mistaken for declarations
+                if method and (method.group("mods") or "").strip():
+                    sig = method
+        if sig is not None:
+            depth = 0
+            started = False
+            body: list[str] = []
+            j = i
+            while j < n:
+                ls = code[j].strip()
+                if not started and "=>" in ls and ls.rstrip().endswith(";"):
+                    break  # expression-bodied — no braced body to score
+                for ch in ls:
+                    if ch == "{":
+                        depth += 1
+                        started = True
+                    elif ch == "}":
+                        depth -= 1
+                if started and j > i:
+                    body.append(code[j])
+                if started and depth == 0:
+                    break
+                j += 1
+            if started:
+                out.append((sig.group("name"), i + 1, _cognitive_score(body)))
+                brace = class_depth + 1
+                i = j + 1
+                continue
+
+        brace += s.count("{") - s.count("}")
+        if brace <= class_depth:
+            in_class = False
+        i += 1
+    return out
+
+
+def check_cognitive_complexity(path: Path, lines: list[str], result: AuditResult):
+    """Flag methods whose approximate cognitive complexity is high enough to hurt readability."""
+    for name, line, score in _method_complexities(lines):
+        if score > _COMPLEXITY_THRESHOLD:
+            result.add(Violation(str(path), line, "cognitive-complexity",
+                f"method '{name}' is hard to read (cognitive complexity ~{score} > {_COMPLEXITY_THRESHOLD})"))
 
 
 def check_dotween_kill_poolable(path: Path, lines: list[str], result: AuditResult):
@@ -1459,6 +1571,7 @@ RULES: dict[str, callable] = {
     "instantiate":       check_object_instantiate,
     "member-ordering":   check_member_ordering,
     "method-ordering":   check_method_ordering,
+    "cognitive-complexity": check_cognitive_complexity,
     "dotween-poolable":  check_dotween_kill_poolable,
     "inject-on-field":   check_inject_on_field,
     "public-visibility": check_public_visibility,
