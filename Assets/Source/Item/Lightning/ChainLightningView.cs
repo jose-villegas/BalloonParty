@@ -134,18 +134,23 @@ namespace BalloonParty.Item.Lightning
                 _fractalDecay);
 
             var (glowPath, glowDia) = ChainLightningGeometry.BuildGlowPath(_targetPositions, _glowSubdivisions);
-            var hasGlow = _glowRenderer != null && glowPath.Length > 0;
-            var maxPathIdx = (float)(glowPath.Length - 1);
 
-            float GlowIdx(int stage)
+            var playback = new BoltPlayback
             {
-                return Mathf.Min(stage * _glowSubdivisions, maxPathIdx);
-            }
+                Ct = ct,
+                LineBuffers = lineBuffers,
+                CumOffsets = cumOffsets,
+                RendererCount = rendererCount,
+                HasGlow = _glowRenderer != null && glowPath.Length > 0,
+                GlowPath = glowPath,
+                GlowDia = glowDia,
+                GlowSubdivisions = _glowSubdivisions
+            };
 
             // Forward: reveal jumps 0 → jumpCount-1
             for (var i = 0; i < jumpCount; i++)
             {
-                if (await StepJump(i + 1, i > 0 ? i - 1 : -1, i, true))
+                if (await StepJump(playback, i + 1, i > 0 ? i - 1 : -1, i, true))
                 {
                     return;
                 }
@@ -154,50 +159,70 @@ namespace BalloonParty.Item.Lightning
             // Retraction: remove jumps jumpCount-1 → 0
             for (var i = jumpCount - 1; i >= 0; i--)
             {
-                if (await StepJump(i, i >= 1 ? i : -1, i >= 1 ? i - 1 : -1, false))
+                if (await StepJump(playback, i, i >= 1 ? i : -1, i >= 1 ? i - 1 : -1, false))
                 {
                     return;
                 }
             }
 
             InvokeComplete();
-            return;
+        }
 
-            async UniTask<bool> StepJump(int lineStage, int glowFrom, int glowTo, bool forward)
+        // Reveals (or retracts) one jump: updates the line renderers, fires the hit callback on
+        // the way out, then animates the glow. Returns true if cancelled mid-step.
+        private async UniTask<bool> StepJump(BoltPlayback p, int lineStage, int glowFrom, int glowTo, bool forward)
+        {
+            if (p.Ct.IsCancellationRequested)
             {
-                if (ct.IsCancellationRequested)
-                {
-                    return true;
-                }
-
-                ApplyLineRenderers(lineBuffers, cumOffsets[lineStage], rendererCount);
-
-                if (forward)
-                {
-                    _onTargetHit?.Invoke(lineStage - 1);
-                }
-
-                if (hasGlow && glowFrom >= 0 && glowTo >= 0)
-                {
-                    return await AnimateGlowSegment(
-                        glowPath,
-                        glowDia,
-                        GlowIdx(glowFrom),
-                        GlowIdx(glowTo),
-                        ct);
-                }
-
-                if (hasGlow && forward)
-                {
-                    SetGlowFromPath(glowPath, glowDia, 0f);
-                }
-                else if (hasGlow)
-                {
-                    DisableGlow();
-                }
-
-                return await WaitJump(ct);
+                return true;
             }
+
+            ApplyLineRenderers(p.LineBuffers, p.CumOffsets[lineStage], p.RendererCount);
+
+            if (forward)
+            {
+                _onTargetHit?.Invoke(lineStage - 1);
+            }
+
+            return await StepGlow(p, glowFrom, glowTo, forward);
+        }
+
+        private async UniTask<bool> StepGlow(BoltPlayback p, int glowFrom, int glowTo, bool forward)
+        {
+            if (p.HasGlow && glowFrom >= 0 && glowTo >= 0)
+            {
+                return await AnimateGlowSegment(p.GlowPath, p.GlowDia, GlowIdx(p, glowFrom), GlowIdx(p, glowTo), p.Ct);
+            }
+
+            if (p.HasGlow && forward)
+            {
+                SetGlowFromPath(p.GlowPath, p.GlowDia, 0f);
+            }
+            else if (p.HasGlow)
+            {
+                DisableGlow();
+            }
+
+            return await WaitJump(p.Ct);
+        }
+
+        private static float GlowIdx(BoltPlayback p, int stage)
+        {
+            return Mathf.Min(stage * p.GlowSubdivisions, p.GlowPath.Length - 1);
+        }
+
+        // Snapshot of the per-play buffers + glow state, so the jump steps read it without a
+        // tangle of captured locals.
+        private struct BoltPlayback
+        {
+            public CancellationToken Ct;
+            public Vector3[][] LineBuffers;
+            public int[] CumOffsets;
+            public int RendererCount;
+            public bool HasGlow;
+            public Vector3[] GlowPath;
+            public float[] GlowDia;
+            public int GlowSubdivisions;
         }
 
         private void ApplyLineRenderers(Vector3[][] lineBuffers, int pointCount, int rendererCount)
