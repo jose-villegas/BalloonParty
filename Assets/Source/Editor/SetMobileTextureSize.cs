@@ -72,51 +72,64 @@ namespace BalloonParty.Editor
             }
 
             var count = 0;
-
             foreach (var guid in guids)
             {
-                var path = AssetDatabase.GUIDToAssetPath(guid);
-                var importer = AssetImporter.GetAtPath(path) as TextureImporter;
-
-                if (importer == null)
+                if (ApplyToTexture(guid, maxSize))
                 {
-                    continue;
-                }
-
-                var modified = false;
-
-                foreach (var platform in MobilePlatforms)
-                {
-                    var settings = importer.GetPlatformTextureSettings(platform);
-
-                    if (maxSize < 0)
-                    {
-                        // Reset: disable the override so it falls back to default
-                        if (settings.overridden)
-                        {
-                            settings.overridden = false;
-                            importer.SetPlatformTextureSettings(settings);
-                            modified = true;
-                        }
-                    }
-                    else
-                    {
-                        settings.overridden = true;
-                        settings.maxTextureSize = maxSize;
-                        importer.SetPlatformTextureSettings(settings);
-                        modified = true;
-                    }
-                }
-
-                if (modified)
-                {
-                    importer.SaveAndReimport();
                     count++;
                 }
             }
 
             var action = maxSize < 0 ? "Reset to default" : $"Set mobile max size to {maxSize}";
             Debug.Log($"[SetMobileTextureSize] {action} on {count} texture(s).");
+        }
+
+        // Applies the max-size override to every mobile platform of one texture; returns whether
+        // anything changed (so it gets re-imported and counted).
+        private static bool ApplyToTexture(string guid, int maxSize)
+        {
+            var path = AssetDatabase.GUIDToAssetPath(guid);
+            if (AssetImporter.GetAtPath(path) is not TextureImporter importer)
+            {
+                return false;
+            }
+
+            var modified = false;
+            foreach (var platform in MobilePlatforms)
+            {
+                modified |= ApplyPlatformSetting(importer, platform, maxSize);
+            }
+
+            if (modified)
+            {
+                importer.SaveAndReimport();
+            }
+
+            return modified;
+        }
+
+        // A negative maxSize clears the override (back to default); otherwise it sets the cap.
+        // Returns whether the platform's settings changed.
+        private static bool ApplyPlatformSetting(TextureImporter importer, string platform, int maxSize)
+        {
+            var settings = importer.GetPlatformTextureSettings(platform);
+
+            if (maxSize < 0)
+            {
+                if (!settings.overridden)
+                {
+                    return false;
+                }
+
+                settings.overridden = false;
+                importer.SetPlatformTextureSettings(settings);
+                return true;
+            }
+
+            settings.overridden = true;
+            settings.maxTextureSize = maxSize;
+            importer.SetPlatformTextureSettings(settings);
+            return true;
         }
     }
 }

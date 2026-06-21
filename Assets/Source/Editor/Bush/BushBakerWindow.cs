@@ -374,46 +374,52 @@ namespace BalloonParty.Editor.Bush
             {
                 var cx = Mathf.RoundToInt(leaf.UVPosition.x * res);
                 var cy = Mathf.RoundToInt(leaf.UVPosition.y * res);
+                DrawLeafDot(pixels, res, cx, cy, dotRadius, leafColor);
+                DrawLeafDirection(pixels, res, cx, cy, leaf.Angle, dotRadius * 2, leafColor);
+            }
+        }
 
-                // Draw filled circle
-                for (var dy = -dotRadius; dy <= dotRadius; dy++)
+        private static void DrawLeafDot(Color32[] pixels, int res, int cx, int cy, int dotRadius, Color32 color)
+        {
+            for (var dy = -dotRadius; dy <= dotRadius; dy++)
+            {
+                for (var dx = -dotRadius; dx <= dotRadius; dx++)
                 {
-                    for (var dx = -dotRadius; dx <= dotRadius; dx++)
+                    if (dx * dx + dy * dy > dotRadius * dotRadius)
                     {
-                        if (dx * dx + dy * dy > dotRadius * dotRadius)
-                        {
-                            continue;
-                        }
-
-                        var px = cx + dx;
-                        var py = cy + dy;
-
-                        if (px < 0 || px >= res || py < 0 || py >= res)
-                        {
-                            continue;
-                        }
-
-                        pixels[py * res + px] = leafColor;
+                        continue;
                     }
-                }
 
-                // Draw short direction line
-                var lineLen = dotRadius * 2;
-                var dirX = Mathf.Cos(leaf.Angle);
-                var dirY = Mathf.Sin(leaf.Angle);
-
-                for (var s = 0; s < lineLen; s++)
-                {
-                    var px = cx + Mathf.RoundToInt(dirX * s);
-                    var py = cy + Mathf.RoundToInt(dirY * s);
+                    var px = cx + dx;
+                    var py = cy + dy;
 
                     if (px < 0 || px >= res || py < 0 || py >= res)
                     {
-                        break;
+                        continue;
                     }
 
-                    pixels[py * res + px] = leafColor;
+                    pixels[py * res + px] = color;
                 }
+            }
+        }
+
+        private static void DrawLeafDirection(
+            Color32[] pixels, int res, int cx, int cy, float angle, int lineLen, Color32 color)
+        {
+            var dirX = Mathf.Cos(angle);
+            var dirY = Mathf.Sin(angle);
+
+            for (var s = 0; s < lineLen; s++)
+            {
+                var px = cx + Mathf.RoundToInt(dirX * s);
+                var py = cy + Mathf.RoundToInt(dirY * s);
+
+                if (px < 0 || px >= res || py < 0 || py >= res)
+                {
+                    break;
+                }
+
+                pixels[py * res + px] = color;
             }
         }
 
