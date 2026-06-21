@@ -326,28 +326,7 @@ namespace BalloonParty.Editor.Bush
 
             if (_showRuntimePreview)
             {
-                for (var i = 0; i < pixels.Length; i++)
-                {
-                    var p = pixels[i];
-                    var alpha = p.a / 255f;
-                    if (alpha < 0.01f)
-                    {
-                        result[i] = new Color32(0, 0, 0, 0);
-                        continue;
-                    }
-
-                    var crossWidth = p.b / 255f;
-                    var gradCol = gradient != null
-                        ? gradient.Evaluate(crossWidth)
-                        : Color.white;
-
-                    var shade = 0.6f + 0.4f * alpha;
-                    var r = (byte)Mathf.Clamp(gradCol.r * branchColor.r * shade * 255f, 0f, 255f);
-                    var g = (byte)Mathf.Clamp(gradCol.g * branchColor.g * shade * 255f, 0f, 255f);
-                    var b = (byte)Mathf.Clamp(gradCol.b * branchColor.b * shade * 255f, 0f, 255f);
-                    var a = (byte)Mathf.Clamp(alpha * 255f, 0f, 255f);
-                    result[i] = new Color32(r, g, b, a);
-                }
+                ShadeRuntimePreview(pixels, result, branchColor, gradient);
             }
             else
             {
@@ -362,6 +341,35 @@ namespace BalloonParty.Editor.Bush
             _branchPreview = new Texture2D(res, res, TextureFormat.RGBA32, false);
             _branchPreview.SetPixels32(result);
             _branchPreview.Apply();
+        }
+
+        // Tints each branch pixel by its cross-width gradient and alpha shade; transparent pixels
+        // stay clear. Writes into <paramref name="result"/> parallel to <paramref name="pixels"/>.
+        private static void ShadeRuntimePreview(
+            Color32[] pixels, Color32[] result, Color branchColor, Gradient gradient)
+        {
+            for (var i = 0; i < pixels.Length; i++)
+            {
+                var p = pixels[i];
+                var alpha = p.a / 255f;
+                if (alpha < 0.01f)
+                {
+                    result[i] = new Color32(0, 0, 0, 0);
+                    continue;
+                }
+
+                var crossWidth = p.b / 255f;
+                var gradCol = gradient != null
+                    ? gradient.Evaluate(crossWidth)
+                    : Color.white;
+
+                var shade = 0.6f + 0.4f * alpha;
+                var r = (byte)Mathf.Clamp(gradCol.r * branchColor.r * shade * 255f, 0f, 255f);
+                var g = (byte)Mathf.Clamp(gradCol.g * branchColor.g * shade * 255f, 0f, 255f);
+                var b = (byte)Mathf.Clamp(gradCol.b * branchColor.b * shade * 255f, 0f, 255f);
+                var a = (byte)Mathf.Clamp(alpha * 255f, 0f, 255f);
+                result[i] = new Color32(r, g, b, a);
+            }
         }
 
         private void StampLeafMarkers(Color32[] pixels, int res)
@@ -393,7 +401,7 @@ namespace BalloonParty.Editor.Bush
                     var px = cx + dx;
                     var py = cy + dy;
 
-                    if (px < 0 || px >= res || py < 0 || py >= res)
+                    if (!InBounds(px, py, res))
                     {
                         continue;
                     }
@@ -414,13 +422,18 @@ namespace BalloonParty.Editor.Bush
                 var px = cx + Mathf.RoundToInt(dirX * s);
                 var py = cy + Mathf.RoundToInt(dirY * s);
 
-                if (px < 0 || px >= res || py < 0 || py >= res)
+                if (!InBounds(px, py, res))
                 {
                     break;
                 }
 
                 pixels[py * res + px] = color;
             }
+        }
+
+        private static bool InBounds(int px, int py, int res)
+        {
+            return px >= 0 && px < res && py >= 0 && py < res;
         }
 
         private int ComputeBranchSettingsHash()

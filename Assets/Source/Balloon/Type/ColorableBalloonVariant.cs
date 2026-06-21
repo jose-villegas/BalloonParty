@@ -35,10 +35,21 @@ namespace BalloonParty.Balloon.Type
                     $"{GetType().Name}.PickColor: IGamePalette has no colors configured.");
             }
 
-            var colors = _palette.Colors;
-            var count = 0;
+            var allowedCount = CountAllowedColors();
+            if (allowedCount == 0)
+            {
+                Debug.LogError(
+                    $"{GetType().Name}.PickColor: allowed-colors mask excludes all palette colors.");
+                return null;
+            }
 
-            for (var i = 0; i < colors.Count; i++)
+            return NthAllowedColor(UnityEngine.Random.Range(0, allowedCount));
+        }
+
+        private int CountAllowedColors()
+        {
+            var count = 0;
+            for (var i = 0; i < _palette.Colors.Count; i++)
             {
                 if ((_allowedColorsMask & (1 << i)) != 0)
                 {
@@ -46,26 +57,22 @@ namespace BalloonParty.Balloon.Type
                 }
             }
 
-            if (count == 0)
-            {
-                Debug.LogError(
-                    $"{GetType().Name}.PickColor: allowed-colors mask excludes all palette colors.");
-                return null;
-            }
+            return count;
+        }
 
-            var pick = UnityEngine.Random.Range(0, count);
+        private string NthAllowedColor(int target)
+        {
             var current = 0;
-
-            for (var i = 0; i < colors.Count; i++)
+            for (var i = 0; i < _palette.Colors.Count; i++)
             {
                 if ((_allowedColorsMask & (1 << i)) == 0)
                 {
                     continue;
                 }
 
-                if (current == pick)
+                if (current == target)
                 {
-                    return colors[i].Name;
+                    return _palette.Colors[i].Name;
                 }
 
                 current++;
