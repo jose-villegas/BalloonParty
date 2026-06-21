@@ -24,6 +24,7 @@ namespace BalloonParty.Game.Score
         private readonly Dictionary<string, int> _persistentScore = new();
         private readonly Dictionary<string, int> _projectedProgress = new();
         private readonly IPublisher<ScorePointMessage> _scoredPublisher;
+        private readonly INavigation _navigation;
         private readonly ColorStreakTracker _streakTracker;
         private readonly ReactiveProperty<int> _totalScore = new(0);
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
@@ -44,6 +45,7 @@ namespace BalloonParty.Game.Score
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
             IGameConfiguration config,
             IGamePalette palette,
+            INavigation navigation,
             ColorStreakTracker streakTracker)
         {
             _hitSubscriber = hitSubscriber;
@@ -52,6 +54,7 @@ namespace BalloonParty.Game.Score
             _levelUpPublisher = levelUpPublisher;
             _config = config;
             _palette = palette;
+            _navigation = navigation;
             _streakTracker = streakTracker;
         }
 
@@ -148,7 +151,7 @@ namespace BalloonParty.Game.Score
             }
 
             _levelUpPublisher.Publish(new ScoreLevelUpMessage(_level.Value));
-            Navigation.TransitionTo(NavigationState.LevelUp);
+            _navigation.TransitionTo(NavigationState.LevelUp);
         }
 
         private void OnActorHit(ActorHitMessage msg)

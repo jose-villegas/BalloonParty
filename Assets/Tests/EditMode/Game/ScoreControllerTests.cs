@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
@@ -26,6 +27,7 @@ namespace BalloonParty.Tests.Game
         private IPublisher<ScorePointMessage> _scoredPublisher;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private ScoreController _controller;
+        private INavigation _navigation;
         private ColorStreakTracker _streakTracker;
         private IMessageHandler<ActorHitMessage> _hitHandler;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
@@ -42,6 +44,8 @@ namespace BalloonParty.Tests.Game
             var colors = new List<PaletteEntry> { CreatePaletteEntry(Red), CreatePaletteEntry(Blue) };
             _palette.Colors.Returns(colors);
             _palette.ColorNames.Returns(new[] { Red, Blue });
+
+            _navigation = Substitute.For<INavigation>();
 
             _controller = BuildController();
             _controller.Start();
@@ -95,6 +99,7 @@ namespace BalloonParty.Tests.Game
                 _levelUpPublisher,
                 _config,
                 _palette,
+                _navigation,
                 _streakTracker);
         }
 
@@ -153,6 +158,7 @@ namespace BalloonParty.Tests.Game
             _levelUpPublisher.Received(1).Publish(
                 Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
             Assert.AreEqual(2, _controller.Level.Value);
+            _navigation.Received(1).TransitionTo(NavigationState.LevelUp);
         }
 
         [Test]
