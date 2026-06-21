@@ -18,6 +18,14 @@ namespace BalloonParty.Slots.Actor
     {
         private static readonly Dictionary<SlotPlacementMode, ISlotSelectionStrategy> StrategyCache = new();
 
+        // One registration line per actor type — the model self-reports its GridActorType, so adding a
+        // type means adding the model + an entry here, never editing a switch.
+        private static readonly Dictionary<GridActorType, System.Func<IWriteableSlotActor>> ModelFactories = new()
+        {
+            { GridActorType.Puff, () => new PuffObstacleModel() },
+            { GridActorType.Bush, () => new BushObstacleModel() }
+        };
+
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly SlotGrid _grid;
         private readonly PoolManager _poolManager;
@@ -181,22 +189,17 @@ namespace BalloonParty.Slots.Actor
 
         private static IWriteableSlotActor CreateModel(GridActorType actorType)
         {
-            return actorType switch
+            if (ModelFactories.TryGetValue(actorType, out var factory))
             {
-                GridActorType.Puff => new PuffObstacleModel(),
-                GridActorType.Bush => new BushObstacleModel(),
-                _ => throw new System.Exception("Unknown actor type: " + actorType)
-            };
+                return factory();
+            }
+
+            throw new System.Exception("Unknown actor type: " + actorType);
         }
 
         private static bool ModelMatches(IWriteableSlotActor model, GridActorType actorType)
         {
-            return actorType switch
-            {
-                GridActorType.Puff => model is PuffObstacleModel,
-                GridActorType.Bush => model is BushObstacleModel,
-                _ => false
-            };
+            return model is IGridActorModel actor && actor.ActorType == actorType;
         }
     }
 }

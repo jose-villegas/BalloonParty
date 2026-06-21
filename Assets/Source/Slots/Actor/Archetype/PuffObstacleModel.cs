@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    internal class PuffObstacleModel : IClusterableSlotActor, IPassThrough
+    internal class PuffObstacleModel : IClusterableSlotActor, IPassThrough, IGridActorModel
     {
         public Vector2Int SlotIndex { get; private set; }
         public int ClusterId { get; set; }
@@ -15,6 +15,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             set => SlotIndex = value;
         }
 
+        public GridActorType ActorType => GridActorType.Puff;
         public SlotActorKind Kind => SlotActorKind.Static;
     }
 }
