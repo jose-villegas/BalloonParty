@@ -45,8 +45,8 @@ namespace BalloonParty.Editor.EffectPreview
             }
         }
 
-        private float FlightDuration => (_ctx?.Settings ?? PreStartSettings)?.PaintBlobFlightDuration ?? 0.35f;
-        private float SpinSpeed => _ctx?.Settings?.PaintBlobSpinSpeed ?? 720f;
+        private float FlightDuration => (_ctx?.Settings ?? PreStartSettings)?.Paint.FlightDuration ?? 0.35f;
+        private float SpinSpeed => _ctx?.Settings?.Paint.SpinSpeed ?? 720f;
 
         internal PaintSplashPreviewModule(PaintSplashView view)
         {
@@ -105,7 +105,7 @@ namespace BalloonParty.Editor.EffectPreview
                 blob.gameObject.SetActive(true);
                 blob.transform.position = origin;
                 blob.transform.localScale = Vector3.one *
-                                            (context.Settings?.PaintBlobScaleCurve?.Evaluate(0f) ?? 1f);
+                                            (context.Settings?.Paint.ScaleCurve?.Evaluate(0f) ?? 1f);
                 blob.transform.rotation = Quaternion.identity;
 
                 blob.SetColor(context.Tint);

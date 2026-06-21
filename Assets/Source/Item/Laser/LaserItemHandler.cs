@@ -77,8 +77,8 @@ namespace BalloonParty.Item.Laser
 
         private void CastCross(ItemSettings settings, Quaternion laserRotation)
         {
-            var radius = settings.LaserCircleCastRadius;
-            var distance = settings.LaserRaycastDistance;
+            var radius = settings.Laser.CircleCastRadius;
+            var distance = settings.Laser.RaycastDistance;
             var context =
                 new DamageContext(settings.Damage, settings.Flags, _balloon.GetColorId());
 
@@ -125,7 +125,7 @@ namespace BalloonParty.Item.Laser
 
         private void StampCross(ItemSettings settings, Quaternion laserRotation)
         {
-            var distance = settings.LaserRaycastDistance;
+            var distance = settings.Laser.RaycastDistance;
             var profile = _disturbanceField.GetProfile(StampSource.Laser);
             var step = profile.Radius * 1.5f;
             var steps = Mathf.Max(1, Mathf.CeilToInt(distance / step));

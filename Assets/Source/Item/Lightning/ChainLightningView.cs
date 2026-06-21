@@ -77,11 +77,11 @@ namespace BalloonParty.Item.Lightning
             Action<int> onTargetHit)
         {
             _targetPositions = targetPositions;
-            _segmentsMultiplier = settings.LightningSegmentsMultiplier;
-            _randomness = settings.LightningRandomness;
-            _jumpTime = settings.LightningJumpTime;
-            _glowSubdivisions = settings.LightningGlowSubdivisions;
-            _fractalDecay = settings.LightningFractalDecay;
+            _segmentsMultiplier = settings.Lightning.SegmentsMultiplier;
+            _randomness = settings.Lightning.Randomness;
+            _jumpTime = settings.Lightning.JumpTime;
+            _glowSubdivisions = settings.Lightning.GlowSubdivisions;
+            _fractalDecay = settings.Lightning.FractalDecay;
             _onTargetHit = onTargetHit;
         }
 

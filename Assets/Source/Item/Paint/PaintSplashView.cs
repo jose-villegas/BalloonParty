@@ -46,14 +46,14 @@ namespace BalloonParty.Item.Paint
             ItemSettings settings)
         {
             var pos = Vector3.Lerp(from, to, progress);
-            pos.y += settings.PaintBlobArcCurve.Evaluate(progress);
+            pos.y += settings.Paint.ArcCurve.Evaluate(progress);
 
             return new BlobFlightSnapshot
             {
                 Position = pos,
-                Scale = settings.PaintBlobScaleCurve.Evaluate(progress),
-                ShadowScale = settings.PaintBlobShadowScaleCurve?.Evaluate(progress) ?? 1f,
-                SpriteScale = settings.PaintBlobSpriteScaleCurve?.Evaluate(progress) ?? 1f
+                Scale = settings.Paint.ScaleCurve.Evaluate(progress),
+                ShadowScale = settings.Paint.ShadowScaleCurve?.Evaluate(progress) ?? 1f,
+                SpriteScale = settings.Paint.SpriteScaleCurve?.Evaluate(progress) ?? 1f
             };
         }
 
@@ -184,7 +184,7 @@ namespace BalloonParty.Item.Paint
                 var blob = flight.Blob;
                 blob.gameObject.SetActive(true);
                 blob.transform.position = flight.From;
-                blob.transform.localScale = Vector3.one * _settings.PaintBlobScaleCurve.Evaluate(0f);
+                blob.transform.localScale = Vector3.one * _settings.Paint.ScaleCurve.Evaluate(0f);
                 blob.transform.rotation = Quaternion.identity;
 
                 blob.SetColor(tint);
@@ -212,7 +212,7 @@ namespace BalloonParty.Item.Paint
         private void TickFlights(float delta)
         {
             var allLanded = true;
-            var flightDuration = Mathf.Max(_settings.PaintBlobFlightDuration, 0.01f);
+            var flightDuration = Mathf.Max(_settings.Paint.FlightDuration, 0.01f);
 
             foreach (var flight in _activeFlights)
             {
@@ -245,7 +245,7 @@ namespace BalloonParty.Item.Paint
                     ApplyBlobMaterial(flight.BlobRenderer, flight.TimeOffset, snapshot);
                 }
 
-                flight.Blob.transform.Rotate(0f, 0f, -_settings.PaintBlobSpinSpeed * delta);
+                flight.Blob.transform.Rotate(0f, 0f, -_settings.Paint.SpinSpeed * delta);
             }
 
             if (allLanded)

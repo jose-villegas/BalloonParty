@@ -59,7 +59,7 @@ namespace BalloonParty.Editor.EffectPreview
 
             var settings = PreStartSettings;
             EditorGUILayout.LabelField("Jump Time",
-                $"{settings?.LightningJumpTime ?? 0.15f:F2}s  (from ItemConfiguration)");
+                $"{settings?.Lightning.JumpTime ?? 0.15f:F2}s  (from ItemConfiguration)");
         }
 
         private ItemSettings PreStartSettings
@@ -77,11 +77,11 @@ namespace BalloonParty.Editor.EffectPreview
             _glowRenderer = (SpriteRenderer)GlowRendererField.GetValue(_view);
 
             var settings = context.Settings;
-            var segMul = settings?.LightningSegmentsMultiplier ?? 3f;
-            var randomness = settings?.LightningRandomness ?? 0.2f;
-            _jumpTime = settings?.LightningJumpTime ?? 0.15f;
-            _glowSubdivisions = settings?.LightningGlowSubdivisions ?? 4;
-            var fractalDecay = settings?.LightningFractalDecay ?? 0.55f;
+            var segMul = settings?.Lightning.SegmentsMultiplier ?? 3f;
+            var randomness = settings?.Lightning.Randomness ?? 0.2f;
+            _jumpTime = settings?.Lightning.JumpTime ?? 0.15f;
+            _glowSubdivisions = settings?.Lightning.GlowSubdivisions ?? 4;
+            var fractalDecay = settings?.Lightning.FractalDecay ?? 0.55f;
 
             var origin = _view.transform.position;
 

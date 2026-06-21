@@ -64,10 +64,10 @@ namespace BalloonParty.Item.Bomb
                 null,
                 _worldPosition,
                 NudgeType.Shockwave,
-                settings.NudgeOverrides));
+                settings.Bomb.NudgeOverrides));
 
             var sourceColorId = _balloon.GetColorId();
-            BlastBalloons(settings.BombRadius, new DamageContext(settings.Damage, settings.Flags, sourceColorId));
+            BlastBalloons(settings.Bomb.Radius, new DamageContext(settings.Damage, settings.Flags, sourceColorId));
             _effectPlayer.Play(settings, _worldPosition, sourceColorId);
 
             _disturbanceField.Stamp(StampSource.Bomb, _worldPosition, Vector2.zero);
