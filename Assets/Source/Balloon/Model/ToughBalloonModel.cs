@@ -15,6 +15,9 @@ namespace BalloonParty.Balloon.Model
 
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
+        // A tough balloon that survives a hit deflects the shot instead of letting it pass through.
+        protected override HitOutcome SurviveOutcome => HitOutcome.Deflect;
+
         internal ToughBalloonModel(BalloonModelConfig config, IGamePalette palette = null) : base(config)
         {
             _palette = palette;
@@ -35,13 +38,6 @@ namespace BalloonParty.Balloon.Model
                 var colorId = colors[Random.Range(0, colors.Count)].Name;
                 results.Add(new ScoreAttribution(colorId, 1, true));
             }
-        }
-
-        protected override HitOutcome EvaluateNormalHit(DamageContext context)
-        {
-            var survives = HitsRemaining.Value - context.Damage > 0;
-            HitsRemaining.Value -= context.Damage;
-            return survives ? HitOutcome.Deflect : HitOutcome.Pop;
         }
     }
 }

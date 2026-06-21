@@ -23,6 +23,10 @@ namespace BalloonParty.Balloon.Model
         // push along the chain. Unbreakable overrides this to vacate anywhere.
         public virtual PressureResponse PushResponse => PressureResponse.ShoveNeighbour;
 
+        // What a non-fatal normal hit yields: a plain balloon lets the shot pass through, a tough one
+        // deflects it. The fatal (Pop) branch is shared and stays in EvaluateNormalHit.
+        protected virtual HitOutcome SurviveOutcome => HitOutcome.PassThrough;
+
         IReadOnlyReactiveProperty<bool> IDynamicSlotActor.IsStable => IsStable;
         IReadOnlyReactiveProperty<Vector2Int> IDynamicSlotActor.SlotIndex => SlotIndex;
 
@@ -51,11 +55,11 @@ namespace BalloonParty.Balloon.Model
             return EvaluateNormalHit(context);
         }
 
-        protected virtual HitOutcome EvaluateNormalHit(DamageContext context)
+        protected HitOutcome EvaluateNormalHit(DamageContext context)
         {
             var survives = HitsRemaining.Value - context.Damage > 0;
             HitsRemaining.Value -= context.Damage;
-            return survives ? HitOutcome.PassThrough : HitOutcome.Pop;
+            return survives ? SurviveOutcome : HitOutcome.Pop;
         }
     }
 }
