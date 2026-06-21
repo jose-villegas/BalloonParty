@@ -597,23 +597,26 @@ The style guide is enforced at multiple layers so violations are caught as early
 |---|---|---|
 | **IDE (real-time)** | `.editorconfig` | Allman braces, required braces, naming conventions (`_camelCase` fields, `PascalCase` members, `I`-prefixed interfaces), block-scoped namespaces, `var` usage, accessibility modifiers |
 | **IDE (real-time)** | `BalloonParty.sln.DotSettings` | Rider/ReSharper-specific: member ordering warnings, modifier defaults, blank line rules, wrapping |
-| **Git (per commit)** | `Tools/pre-commit` | Runs `style_audit.py` on staged `.cs` files; blocks commit on violations |
-| **Manual / CI** | `Tools/style_audit.py` | Member ordering, block comment headers, redundant comments, `StartCoroutine` usage, magic strings (uncached animator/layer params), `AddTo(this)` in poolable classes, namespace mismatches, missing READMEs |
+| **Git (per commit)** | `Tools/pre-commit` | Runs `style_audit.py` on staged `.cs` files; blocks commit when any **error** is found (relies on the auditor's exit code) |
+| **CI (per PR/push)** | `.github/workflows/style-audit.yml` | Runs the linter self-tests then the full audit — pure Python, no Unity license. Fails on errors; warnings are printed for review |
+| **Manual / CI** | `Tools/style_audit.py` | Field & method ordering, block/redundant comments, `StartCoroutine`/`IEnumerator`, magic strings (uncached animator/layer params), `AddTo(this)` in poolable classes, namespace mismatches, missing READMEs, and advisory checks (public-visibility, large/non-capturing lambdas, mutable params) |
+
+**Severity & exit code.** Findings are `[ERROR]` (hard rules — fail the run, exit 1, block commits/CI) or `[WARN]` (advisory/heuristic — printed but non-blocking). `--strict` promotes warnings to errors. The exit code is the contract: the hook and CI never parse stdout.
 
 ### Quick reference
 
 ```bash
-# Full audit
+# Full audit / single rule / single file
 python3 Tools/style_audit.py
-
-# Single rule or file
-python3 Tools/style_audit.py --rule braces
+python3 Tools/style_audit.py --rule method-ordering
 python3 Tools/style_audit.py --file BalloonView
 
-# Auto-fix namespaces
-python3 Tools/style_audit.py --fix
+python3 Tools/style_audit.py --fix       # auto-fix safe issues (braces, comments, namespace, blank lines)
+python3 Tools/style_audit.py --strict    # treat warnings as errors
 
-# Install pre-commit hook
+python3 Tools/test_style_audit.py        # linter's own fixture tests
+
+# Install pre-commit hook (or: git config core.hooksPath Tools)
 cp Tools/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
 ```
 

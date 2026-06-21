@@ -86,6 +86,6 @@ python3 Tools/style_audit.py --fix      # auto-fix: braces, blank lines, comment
 Markdown plan edits don't trigger the audit.
 
 ## Workflow notes
-- The pre-commit hook (`Tools/pre-commit`) runs `style_audit.py` on staged `.cs` and blocks on violations.
+- The pre-commit hook (`Tools/pre-commit`) runs `style_audit.py` on staged `.cs` and blocks on `[ERROR]` findings (advisory `[WARN]` ones don't block; `--strict` promotes them). CI runs the same audit + `Tools/test_style_audit.py`. Fix the check, not the code, if it misfires.
 - This repo commits directly to `main` (single-developer history). Commit only when asked.
 - Project status, optimization findings, and known-fragile areas (e.g. the level-up cinematic trail path) live in Claude's memory index, not here — check it for current state.

@@ -1,6 +1,7 @@
 #!/bin/zsh
 # BalloonParty pre-commit hook — runs style audit on staged .cs files.
 # Install: cp Tools/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+# (or once: git config core.hooksPath Tools, to track the hook in-repo)
 
 STAGED=$(git diff --cached --name-only --diff-filter=ACM | grep '\.cs$' | grep '^Assets/Source/' || true)
 
@@ -12,8 +13,10 @@ echo "🎈 Running style audit on staged files..."
 
 FAILED=0
 for FILE in $STAGED; do
-    OUTPUT=$(python3 Tools/style_audit.py --file "$FILE" 2>&1 | grep -E '^\s+\d+')
-    if [ -n "$OUTPUT" ]; then
+    # The auditor exits non-zero only on errors (warnings are advisory); show its
+    # report just for the files that fail so a clean commit stays quiet.
+    OUTPUT=$(python3 Tools/style_audit.py --file "$FILE" 2>&1)
+    if [ $? -ne 0 ]; then
         echo "\n❌ $FILE"
         echo "$OUTPUT"
         FAILED=1
@@ -21,7 +24,7 @@ for FILE in $STAGED; do
 done
 
 if [ $FAILED -eq 1 ]; then
-    echo "\n⛔ Style violations found. Fix them or commit with --no-verify to skip."
+    echo "\n⛔ Style errors found. Fix them or commit with --no-verify to skip."
     exit 1
 fi
 

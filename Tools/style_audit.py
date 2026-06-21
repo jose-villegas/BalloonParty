@@ -9,10 +9,16 @@ Usage:
     python3 Tools/style_audit.py --fix             # auto-fix safe issues
     python3 Tools/style_audit.py --rule braces     # run only one rule
     python3 Tools/style_audit.py --file Foo.cs     # audit one file
+    python3 Tools/style_audit.py --strict          # treat warnings as errors
 
-Rules are categorised:
-    [REPORT]  — flagged for manual review
-    [FIXABLE] — can be auto-corrected with --fix
+Severity:
+    [ERROR] — a hard rule violation; fails the run (exit 1) and blocks commits/CI.
+    [WARN]  — an advisory/heuristic finding; printed but does not fail the run
+              unless --strict is passed.
+Either may be auto-fixable (shown with " (--fix)"); run with --fix to apply.
+
+Exit code is 0 when no errors remain (and no warnings under --strict), 1 otherwise —
+so the pre-commit hook and CI rely on the exit code, not on parsing stdout.
 """
 
 from __future__ import annotations
@@ -20,6 +26,7 @@ from __future__ import annotations
 import argparse
 import os
 import re
+import sys
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Optional
@@ -34,6 +41,18 @@ FEATURE_FOLDERS_DEPTH = 1  # immediate children of Source/
 
 # ─── Data types ──────────────────────────────────────────────────────────────
 
+# Heuristic/advisory rules: surfaced for review but do not fail the run unless --strict.
+# Everything else is a hard rule (error) that blocks commits and CI.
+WARNING_RULES: set[str] = {
+    "public-visibility",
+    "large-lambda",
+    "non-capturing-lambda",
+    "mutable-param",
+    "repeated-accessor",
+    "method-ordering",
+}
+
+
 @dataclass
 class Violation:
     file: str
@@ -41,11 +60,15 @@ class Violation:
     rule: str
     message: str
     fixable: bool = False
+    severity: str = "error"  # set from WARNING_RULES in AuditResult.add
+
+    def tag(self) -> str:
+        sev = "WARN" if self.severity == "warning" else "ERROR"
+        return f"[{sev}]" + (" (--fix)" if self.fixable else "")
 
     def __str__(self):
-        tag = "[FIXABLE]" if self.fixable else "[REPORT]"
         rel = os.path.relpath(self.file, SOURCE_ROOT)
-        return f"  {tag} {rel}:{self.line}  ({self.rule}) {self.message}"
+        return f"  {self.tag()} {rel}:{self.line}  ({self.rule}) {self.message}"
 
 
 @dataclass
@@ -53,15 +76,25 @@ class AuditResult:
     violations: list[Violation] = field(default_factory=list)
 
     def add(self, v: Violation):
+        v.severity = "warning" if v.rule in WARNING_RULES else "error"
         self.violations.append(v)
+
+    def errors(self) -> list[Violation]:
+        return [v for v in self.violations if v.severity == "error"]
+
+    def warnings(self) -> list[Violation]:
+        return [v for v in self.violations if v.severity == "warning"]
 
     def summary(self) -> str:
         by_rule: dict[str, int] = {}
         for v in self.violations:
             by_rule[v.rule] = by_rule.get(v.rule, 0) + 1
-        lines = [f"\n{'='*60}", f"  Total violations: {len(self.violations)}", f"{'='*60}"]
+        lines = [f"\n{'='*60}",
+                 f"  {len(self.errors())} error(s), {len(self.warnings())} warning(s)",
+                 f"{'='*60}"]
         for rule, count in sorted(by_rule.items(), key=lambda x: -x[1]):
-            lines.append(f"    {rule:40s}  {count}")
+            sev = "warn " if rule in WARNING_RULES else "error"
+            lines.append(f"    [{sev}] {rule:36s}  {count}")
         return "\n".join(lines)
 
 
@@ -332,6 +365,120 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
         last_group = group
 
 
+LIFECYCLE_ORDER = {
+    "Awake": 0, "OnEnable": 1, "Start": 2, "Update": 3, "FixedUpdate": 4,
+    "LateUpdate": 5, "OnDisable": 6, "OnDestroy": 7,
+}
+# "Reset" is intentionally excluded — a public Reset() is far more often a custom method than
+# Unity's editor-only callback, and treating it as lifecycle produced false positives.
+LIFECYCLE_NAMES = set(LIFECYCLE_ORDER) | {
+    "OnApplicationPause", "OnApplicationQuit", "OnApplicationFocus",
+    "OnValidate", "OnGUI", "OnDrawGizmos", "OnDrawGizmosSelected",
+    "OnCollisionEnter2D", "OnCollisionExit2D", "OnCollisionStay2D",
+    "OnTriggerEnter2D", "OnTriggerExit2D", "OnTriggerStay2D",
+    "OnBecameVisible", "OnBecameInvisible", "OnParticleCollision", "OnMouseDown",
+}
+
+_METHOD_RE = re.compile(
+    r"^\s*"
+    r"(?P<mods>(?:public|private|protected|internal|static|virtual|override|sealed|"
+    r"abstract|async|extern|unsafe|new|partial|readonly)\s+)*"
+    r"(?:[\w<>\[\],.\?]+\s+)?"                     # optional return type
+    r"(?P<name>[A-Za-z_]\w*)\s*(?:<[^>()]*>)?\s*\("
+)
+_IFACE_IMPL_RE = re.compile(
+    r"^\s*[\w<>\[\],.\?]+\s+I[A-Z]\w*\.(?P<name>\w+)\s*(?:<[^>()]*>)?\s*\("
+)
+
+
+def check_method_ordering(path: Path, lines: list[str], result: AuditResult):
+    """Method ordering within a class: constructor → Unity lifecycle → [Inject] → interface
+    impl → other methods, plus Unity lifecycle in call order (Awake before Start before
+    Update …). The README also lists public → protected → private, but the codebase groups
+    methods by cohesion rather than visibility tier (and the guide allows "within a group,
+    order by what reads most naturally"), so that sub-ordering is intentionally not enforced —
+    it produced only noise. Implicit interface impls can't be told from public methods without
+    semantic analysis, so only explicit `IFoo.Bar()` impls count as interface methods (a
+    deliberate under-flag). Lifecycle names only count inside MonoBehaviour subtypes."""
+    CTOR, LIFECYCLE, INJECT, IFACE, METHOD = 1, 2, 3, 4, 5
+    names = {CTOR: "constructor", LIFECYCLE: "Unity lifecycle", INJECT: "[Inject] method",
+             IFACE: "interface impl", METHOD: "method"}
+    type_decl = re.compile(
+        r"(?:public|internal|private|protected)?\s*"
+        r"(?:abstract\s+|sealed\s+|static\s+|partial\s+|readonly\s+|ref\s+)*"
+        r"(?:class|struct|interface|enum|record)\s+(\w+)")
+    control = re.compile(r"(if|for|foreach|while|switch|using|lock|fixed|catch|do|return|yield)\b")
+
+    lifecycle_types = _lifecycle_types()
+    brace_depth = 0
+    in_class = False
+    class_brace_depth = 0
+    is_mono = False
+    class_name = ""
+    last_group = 0
+    last_life = -1
+
+    for i, raw in enumerate(lines, 1):
+        stripped = raw.strip()
+        decl = type_decl.match(stripped)
+        delta = stripped.count("{") - stripped.count("}")
+
+        if decl:
+            in_class = True
+            class_name = decl.group(1)
+            is_mono = class_name in lifecycle_types
+            class_brace_depth = brace_depth
+            last_group = 0
+            last_life = -1
+            brace_depth += delta
+            continue
+
+        brace_depth += delta
+
+        if not in_class or brace_depth != class_brace_depth + 1:
+            continue
+        if "(" not in stripped or control.match(stripped):
+            continue
+
+        group = None
+        name = None
+
+        iface = _IFACE_IMPL_RE.match(stripped)
+        if iface:
+            group, name = IFACE, iface.group("name")
+        else:
+            m = _METHOD_RE.match(stripped)
+            if not m:
+                continue
+            name = m.group("name")
+            mods = (m.group("mods") or "").strip()
+            is_ctor = name == class_name
+            is_life = is_mono and name in LIFECYCLE_NAMES
+            if not mods and not is_ctor and not is_life:
+                continue  # bare method call or unannotated member — don't guess
+            has_inject = i >= 2 and "[Inject]" in lines[i - 2]
+            if is_ctor:
+                group = CTOR
+            elif is_life:
+                group = LIFECYCLE
+            elif has_inject:
+                group = INJECT
+            else:
+                group = METHOD  # public/protected/private/internal — not sub-ordered
+
+        if group == LIFECYCLE and name in LIFECYCLE_ORDER:
+            rank = LIFECYCLE_ORDER[name]
+            if rank < last_life:
+                result.add(Violation(str(path), i, "method-ordering",
+                    f"Unity lifecycle '{name}' out of call order"))
+            last_life = max(last_life, rank)
+
+        if group < last_group:
+            result.add(Violation(str(path), i, "method-ordering",
+                f"{names[group]} '{name}' after {names[last_group]}"))
+        last_group = max(last_group, group)
+
+
 def check_dotween_kill_poolable(path: Path, lines: list[str], result: AuditResult):
     """IPoolable classes using DOTween must kill tweens in OnDespawned."""
     full_text = "".join(lines)
@@ -426,8 +573,8 @@ def check_missing_readmes(result: AuditResult):
                     f"feature folder '{child.name}/' has no README.md"))
 
 
-def _build_monobehaviour_subtypes() -> set[str]:
-    """Walk the inheritance graph to find all types that transitively derive from MonoBehaviour."""
+def _build_parent_map() -> dict[str, str]:
+    """Map each declared class/struct to its first base type (one file-walk, shared by callers)."""
     parent_map: dict[str, str] = {}
     for path in cs_files(SOURCE_ROOT):
         with open(path, encoding="utf-8-sig") as f:
@@ -439,31 +586,50 @@ def _build_monobehaviour_subtypes() -> set[str]:
                 )
                 if m and m.group(1) != m.group(2):
                     parent_map[m.group(1)] = m.group(2)
+    return parent_map
 
-    unity_bases = {"MonoBehaviour", "ScriptableObject", "LifetimeScope",
-                   "Editor", "PropertyDrawer"}
+
+_PARENT_MAP: dict[str, str] | None = None
+
+
+def _subtypes_of(bases: set[str]) -> set[str]:
+    """All declared types transitively deriving from any of `bases`."""
+    global _PARENT_MAP
+    if _PARENT_MAP is None:
+        _PARENT_MAP = _build_parent_map()
     result = set()
-    for cls in parent_map:
-        cur = cls
-        seen = {cur}
-        while cur in parent_map:
-            cur = parent_map[cur]
+    for cls in _PARENT_MAP:
+        cur, seen = cls, {cls}
+        while cur in _PARENT_MAP:
+            cur = _PARENT_MAP[cur]
             if cur in seen:
                 break
             seen.add(cur)
-        if cur in unity_bases:
+        if cur in bases:
             result.add(cls)
     return result
 
 
 _MONO_SUBTYPES: set[str] | None = None
+_LIFECYCLE_TYPES: set[str] | None = None
 
 
 def _mono_subtypes() -> set[str]:
+    """Types that need to be public for Unity/VContainer (incl. Editor/PropertyDrawer)."""
     global _MONO_SUBTYPES
     if _MONO_SUBTYPES is None:
-        _MONO_SUBTYPES = _build_monobehaviour_subtypes()
+        _MONO_SUBTYPES = _subtypes_of(
+            {"MonoBehaviour", "ScriptableObject", "LifetimeScope", "Editor", "PropertyDrawer"})
     return _MONO_SUBTYPES
+
+
+def _lifecycle_types() -> set[str]:
+    """Types that actually own the Unity message lifecycle (Awake/Start/Update/…). Excludes
+    Editor/PropertyDrawer, whose OnGUI/OnInspectorGUI overrides are not lifecycle callbacks."""
+    global _LIFECYCLE_TYPES
+    if _LIFECYCLE_TYPES is None:
+        _LIFECYCLE_TYPES = _subtypes_of({"MonoBehaviour", "ScriptableObject", "LifetimeScope"})
+    return _LIFECYCLE_TYPES
 
 
 def _build_internal_types() -> set[str]:
@@ -1238,6 +1404,7 @@ RULES: dict[str, callable] = {
     "addto-poolable":    check_addto_this_in_poolable,
     "instantiate":       check_object_instantiate,
     "member-ordering":   check_member_ordering,
+    "method-ordering":   check_method_ordering,
     "dotween-poolable":  check_dotween_kill_poolable,
     "inject-on-field":   check_inject_on_field,
     "public-visibility": check_public_visibility,
@@ -1443,24 +1610,7 @@ def run_audit(rule_filter: Optional[str] = None, file_filter: Optional[str] = No
     return result
 
 
-def main():
-    parser = argparse.ArgumentParser(description="BalloonParty Code Style Auditor")
-    parser.add_argument("--fix", action="store_true",
-                        help="Auto-fix safe issues (allman braces, braces-required, "
-                             "block/redundant comments, blank lines, namespace)")
-    parser.add_argument("--rule", type=str, default=None,
-                        help=f"Run only one rule. Available: {', '.join(sorted(list(RULES) + list(META_RULES)))}")
-    parser.add_argument("--file", type=str, default=None, help="Audit only files matching this substring")
-    args = parser.parse_args()
-
-    print(f"Scanning {SOURCE_ROOT} ...")
-    result = run_audit(rule_filter=args.rule, file_filter=args.file)
-
-    if not result.violations:
-        print("\n  ✅  No violations found!")
-        return
-
-    # Print violations grouped by file
+def _print_report(result: AuditResult):
     by_file: dict[str, list[Violation]] = {}
     for v in result.violations:
         by_file.setdefault(v.file, []).append(v)
@@ -1469,14 +1619,41 @@ def main():
         rel = os.path.relpath(fpath, SOURCE_ROOT)
         print(f"\n{rel}")
         for v in sorted(by_file[fpath], key=lambda v: v.line):
-            tag = "[FIXABLE]" if v.fixable else "[REPORT]"
-            print(f"  {v.line:4d}  {tag:10s}  {v.rule:25s}  {v.message}")
+            print(f"  {v.line:4d}  {v.tag():14s}  {v.rule:25s}  {v.message}")
 
     print(result.summary())
 
-    if args.fix:
+
+def main():
+    parser = argparse.ArgumentParser(description="BalloonParty Code Style Auditor")
+    parser.add_argument("--fix", action="store_true",
+                        help="Auto-fix safe issues (allman braces, braces-required, "
+                             "block/redundant comments, blank lines, namespace)")
+    parser.add_argument("--strict", action="store_true",
+                        help="Treat warnings as errors (fail the run on any finding)")
+    parser.add_argument("--rule", type=str, default=None,
+                        help=f"Run only one rule. Available: {', '.join(sorted(list(RULES) + list(META_RULES)))}")
+    parser.add_argument("--file", type=str, default=None, help="Audit only files matching this substring")
+    args = parser.parse_args()
+
+    print(f"Scanning {SOURCE_ROOT} ...")
+    result = run_audit(rule_filter=args.rule, file_filter=args.file)
+
+    if args.fix and any(v.fixable for v in result.violations):
         print("\nApplying auto-fixes...")
         run_fix(result)
+        # Re-audit so the report and exit code reflect what actually remains.
+        result = run_audit(rule_filter=args.rule, file_filter=args.file)
+
+    if not result.violations:
+        print("\n  ✅  No violations found!")
+        return
+
+    _print_report(result)
+
+    blocking = result.errors() or (args.strict and result.warnings())
+    if blocking:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

@@ -1,0 +1,40 @@
+name: Style Audit
+
+on:
+  pull_request:
+    paths:
+      - 'Assets/Source/**/*.cs'
+      - 'Tools/style_audit.py'
+      - 'Tools/test_style_audit.py'
+      - '.github/workflows/style-audit.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'Assets/Source/**/*.cs'
+      - 'Tools/style_audit.py'
+      - 'Tools/test_style_audit.py'
+      - '.github/workflows/style-audit.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # The auditor and its self-tests are pure Python — no Unity license required.
+      - name: Linter self-tests
+        run: python3 Tools/test_style_audit.py
+
+      # Fails the job on errors only; advisory warnings are printed for review.
+      - name: Style audit
+        run: python3 Tools/style_audit.py
