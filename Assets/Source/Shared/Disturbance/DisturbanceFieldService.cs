@@ -7,11 +7,9 @@ using VContainer.Unity;
 namespace BalloonParty.Shared.Disturbance
 {
     /// <summary>
-    /// Owns a single screen-space RT pair (density + displacement) that any
-    /// game system can stamp into. Runs one diffusion blit per tick to reform
-    /// the field toward equilibrium. The cloud shader (and any future effect)
-    /// samples from <see cref="FieldTexture"/>. The GPU resources (RT pair,
-    /// materials, keyword) live in <see cref="DisturbanceFieldResources"/>.
+    /// Screen-space disturbance field any system can stamp into; runs one diffusion blit per
+    /// tick to reform it toward equilibrium. Drives the simulation only — GPU resources live in
+    /// <see cref="DisturbanceFieldResources"/>. Consumers sample <see cref="FieldTexture"/>.
     /// </summary>
     internal class DisturbanceFieldService : IStartable, ITickable, IDisposable
     {
@@ -111,21 +109,13 @@ namespace BalloonParty.Shared.Disturbance
             _resources.Dispose();
         }
 
-        /// <summary>
-        /// Exposes the stamp profile for a source so callers can read
-        /// profile values (e.g. Radius for step calculations) without
-        /// injecting <see cref="IDisturbanceFieldSettings"/> themselves.
-        /// </summary>
+        /// <summary>Profile for a source, so callers needn't inject <see cref="IDisturbanceFieldSettings"/>.</summary>
         internal StampProfile GetProfile(StampSource source)
         {
             return _settings.GetProfile(source);
         }
 
-        /// <summary>
-        /// Stamps using a pre-configured profile. Reads radius, strength, and
-        /// duration from <see cref="IDisturbanceFieldSettings"/> so callers don't
-        /// need to inject the settings themselves.
-        /// </summary>
+        /// <summary>Stamps using the source's configured profile (radius/strength/duration).</summary>
         internal void Stamp(StampSource source, Vector3 worldPosition, Vector2 direction)
         {
             var profile = _settings.GetProfile(source);
@@ -133,11 +123,9 @@ namespace BalloonParty.Shared.Disturbance
         }
 
         /// <summary>
-        /// Stamps a disturbance at the given world position. The field will
-        /// show a density hole that reforms over time via diffusion.
-        /// When <paramref name="duration"/> is greater than zero the stamp
-        /// ramps up over that many seconds, spreading the effect across
-        /// multiple frames for a smooth shockwave instead of a single-frame pop.
+        /// Stamps a disturbance at a world position; the field dents then reforms via diffusion.
+        /// A positive <paramref name="duration"/> ramps the stamp over time for a smooth shockwave
+        /// instead of a single-frame pop.
         /// </summary>
         internal void Stamp(Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration = 0f)
         {

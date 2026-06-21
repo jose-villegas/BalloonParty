@@ -24,10 +24,8 @@ namespace BalloonParty.Thrower
 
         public Quaternion Rotation => transform.rotation;
 
-        /// <summary>True while the player is holding the aim pointer down.</summary>
         public bool IsAiming => Input.GetMouseButton(0);
 
-        /// <summary>True on the single frame the aim pointer is released (the fire trigger).</summary>
         public bool FireReleased => Input.GetMouseButtonUp(0);
 
         private void Awake()
@@ -52,9 +50,8 @@ namespace BalloonParty.Thrower
         }
 
         /// <summary>
-        ///     Computes the normalised aim direction from the thrower toward the pointer, in world
-        ///     XY. Returns false (and leaves <paramref name="direction"/> at zero) when no camera is
-        ///     available, so the controller can keep its previous direction.
+        ///     Aim direction from the thrower toward the pointer. Returns false when no camera is
+        ///     available, so the controller keeps its previous direction.
         /// </summary>
         public bool TryGetAimDirection(out Vector3 direction)
         {

@@ -5,11 +5,8 @@ using UnityEngine.Rendering;
 namespace BalloonParty.Shared.Disturbance
 {
     /// <summary>
-    ///     Owns the disturbance field's GPU resources: the ping-pong RenderTexture pair (read/write
-    ///     swapped on each blit), the diffusion + batched-stamp materials, and the <c>_STAMPS_ON</c>
-    ///     keyword. After every blit it publishes the current read texture as the global
-    ///     <c>_DisturbanceTex</c> so sampling shaders pick it up. The service drives the simulation and
-    ///     sets per-pass uniforms; this just holds, blits, and flips the buffers.
+    ///     Holds the disturbance field's GPU resources and the blit-and-swap, kept apart from
+    ///     <see cref="DisturbanceFieldService"/> so the service owns only the simulation.
     /// </summary>
     internal class DisturbanceFieldResources
     {
@@ -51,7 +48,6 @@ namespace BalloonParty.Shared.Disturbance
             PushGlobalTexture();
         }
 
-        /// <summary>Blits read→write through <paramref name="material"/>, swaps, and republishes the texture.</summary>
         public void BlitAndSwap(Material material)
         {
             Graphics.Blit(FieldTexture, FieldWrite, material);

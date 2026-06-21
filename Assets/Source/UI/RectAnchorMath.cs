@@ -3,9 +3,8 @@ using UnityEngine;
 namespace BalloonParty.UI
 {
     /// <summary>
-    ///     Pure <see cref="RectTransform"/> position math: the rect's world-space center, a random
-    ///     world point inside it, and world→anchored conversion for placing pooled UI children.
-    ///     No feature knowledge — usable by any RectTransform-backed view.
+    ///     Stateless <see cref="RectTransform"/> position math, with no feature knowledge so any
+    ///     RectTransform-backed view can reuse it.
     /// </summary>
     internal static class RectAnchorMath
     {

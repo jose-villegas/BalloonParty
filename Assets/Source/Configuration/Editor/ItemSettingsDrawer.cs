@@ -9,11 +9,8 @@ namespace BalloonParty.Configuration.Editor
     public class ItemSettingsDrawer : AutoFieldPropertyDrawer
     {
         /// <summary>
-        ///     Fields that must NOT be drawn in the shared common section. These are the
-        ///     per-type sub-settings containers (drawn explicitly per active type in
-        ///     <see cref="DrawSpecialFields"/>) plus the shared <c>_damage</c> value, which is
-        ///     surfaced under each type's section. Add new container field names here when a new
-        ///     item type's sub-settings struct is introduced; everything else draws automatically.
+        ///     Skipped by the auto common-field pass: the per-type sub-settings containers and the
+        ///     shared <c>_damage</c>, both drawn per active type in <see cref="DrawSpecialFields"/>.
         /// </summary>
         protected override HashSet<string> ExcludedFields { get; } = new()
         {
