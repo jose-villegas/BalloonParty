@@ -16,7 +16,7 @@ The full-screen level-up ceremony that plays when all color bars complete.
 1. **Pan-in ends** — `LevelUpTrailEffect` calls `EndCinematic()` after the tipping trail arrives, setting `CinematicState` to `None`.
 2. **Gate opens** — `CinematicEndGate(LevelUpPanIn)` unblocks: `Cinematic.Current != LevelUpPanIn` is now true.
 3. **Popup shows** — `LevelUpPopUp.ShowAfterGateAsync` sets `Time.timeScale = 0f`, triggers the `"Appear"` animator, and waits for the appear animation to finish. The level label initially shows the old level.
-4. **Glow trails** — After the appear animation completes, `LevelUpPopUp` publishes `LevelUpGlowTrailsMessage` (triggers `ColorProgressBar.DrainSliderAsync` to drain each bar in sync), then spawns decorative `FlyingTrail` orbs from each bar's random position to random offsets around the glow fill centre. Trails fly in unscaled time (`SpawnUnscaled`), staggered across waves (`_glowTrailsPerBar` waves × palette color count). As each trail arrives, `_levelGlowFill.fillAmount` advances proportionally; once all trails arrive, the level label updates to the new level.
+4. **Glow trails** — After the appear animation completes, `LevelUpPopUp` publishes `LevelUpGlowTrailsMessage` (triggers `ColorProgressBar.DrainSliderAsync` to drain each bar in sync), then spawns decorative `FlyingTrail` orbs from each bar's random position to random offsets around the glow fill centre. Trails fly in unscaled time (`Spawn(..., useUnscaledTime: true)`), staggered across waves (`_glowTrailsPerBar` waves × palette color count). As each trail arrives, `_levelGlowFill.fillAmount` advances proportionally; once all trails arrive, the level label updates to the new level.
 5. **Player taps Continue** — `OnContinue()` triggers `"Hide"`, publishes `LevelUpDismissedMessage`, and starts `ResumeAfterDelayAsync` (a configurable settle delay).
 6. **Bar reset** — Each `ColorProgressBar` receives `LevelUpDismissedMessage` and applies the stashed new max value, resetting progress to zero.
 7. **Restore cinematic** — `LevelUpTrailEffect` receives `LevelUpDismissedMessage` and starts `CinematicState.LevelUpRestore` — tweens `Time.timeScale` back to 1 and camera back to its base position/size.
@@ -26,7 +26,7 @@ The Animator's `updateMode` is set to `UnscaledTime` in `Start()`, so animations
 
 ### Glow trail spawning
 
-`LevelUpPopUp` owns a per-color dictionary of `TrailSpawner` instances (pool key `GlowTrail_{colorName}`, sorting order 3200). For each wave, it iterates every palette color, reads the bar's position via `_scoreTrailService.GetTarget(colorName).RandomPosition()`, picks a random offset within `_glowTargetRadiusMultiplier` of the glow fill radius, and calls `SpawnUnscaled`. Arrival increments `_glowTrailArrivedCount` and fills the glow proportionally. Trails reuse the same `SimplePoolChannel<FlyingTrail>` factory as score trails but are pooled under separate keys.
+`LevelUpPopUp` owns a per-color dictionary of `TrailSpawner` instances (pool key `GlowTrail_{colorName}`, sorting order 3200). For each wave, it iterates every palette color, reads the bar's position via `_scoreTrailService.GetTarget(colorName).RandomPosition()`, picks a random offset within `_glowTargetRadiusMultiplier` of the glow fill radius, and calls `Spawn` with `useUnscaledTime: true`. Arrival increments `_glowTrailArrivedCount` and fills the glow proportionally. Trails reuse the same `SimplePoolChannel<FlyingTrail>` factory as score trails but are pooled under separate keys.
 
 ### Gate pattern
 

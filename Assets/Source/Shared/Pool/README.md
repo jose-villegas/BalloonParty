@@ -132,7 +132,7 @@ Spawn-and-forget: handles pool get → position → setup → return on arrival.
 ```csharp
 var spawner = new TrailSpawner(poolManager, "MyTrail", () => new MyPoolChannel(prefab));
 spawner.Spawn(from, to, duration, color, onArrived);
-spawner.SpawnUnscaled(from, to, duration, color, onArrived);  // runs in unscaled time
+spawner.Spawn(from, to, duration, color, onArrived, useUnscaledTime: true);  // unscaled time
 spawner.SpawnBurst(center, burstTo, target, burstDur, traceDur, color, onArrived);  // two-phase: scatter then trace
 ```
 

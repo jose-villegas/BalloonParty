@@ -118,8 +118,8 @@ namespace BalloonParty.UI.LevelUp
                     var offset = Random.insideUnitCircle * glowRadius;
                     var destination = glowCenter + new Vector3(offset.x, offset.y, 0f);
 
-                    spawner.SpawnUnscaled(target.RandomPosition(), destination,
-                        _glowTrailDuration, entry.Color, OnGlowTrailArrived);
+                    spawner.Spawn(target.RandomPosition(), destination,
+                        _glowTrailDuration, entry.Color, OnGlowTrailArrived, useUnscaledTime: true);
                 }
 
                 if (i < _glowTrailsPerBar - 1)

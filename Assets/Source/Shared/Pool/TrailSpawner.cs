@@ -56,45 +56,13 @@ namespace BalloonParty.Shared.Pool
             return trail.transform;
         }
 
-        internal Transform Spawn(Vector3 from, Vector3 to, float duration, Color? color = null, Action onArrived = null)
-        {
-            var trail = _poolManager.GetOrRegister(_poolKey, _channelFactory);
-
-            trail.transform.position = from;
-            trail.transform.localScale = Vector3.one;
-            ApplySortingOrder(trail);
-
-            if (color.HasValue)
-            {
-                trail.Setup(to,
-                    color.Value,
-                    duration,
-                    () =>
-                    {
-                        onArrived?.Invoke();
-                        _poolManager.Return(_poolKey, trail);
-                    });
-            }
-            else
-            {
-                trail.Setup(to,
-                    duration,
-                    () =>
-                    {
-                        onArrived?.Invoke();
-                        _poolManager.Return(_poolKey, trail);
-                    });
-            }
-
-            return trail.transform;
-        }
-
-        internal Transform SpawnUnscaled(
+        internal Transform Spawn(
             Vector3 from,
             Vector3 to,
             float duration,
             Color? color = null,
-            Action onArrived = null)
+            Action onArrived = null,
+            bool useUnscaledTime = false)
         {
             var trail = _poolManager.GetOrRegister(_poolKey, _channelFactory);
 
@@ -102,28 +70,19 @@ namespace BalloonParty.Shared.Pool
             trail.transform.localScale = Vector3.one;
             ApplySortingOrder(trail);
 
+            void OnArrived()
+            {
+                onArrived?.Invoke();
+                _poolManager.Return(_poolKey, trail);
+            }
+
             if (color.HasValue)
             {
-                trail.Setup(to,
-                    color.Value,
-                    duration,
-                    () =>
-                    {
-                        onArrived?.Invoke();
-                        _poolManager.Return(_poolKey, trail);
-                    },
-                    true);
+                trail.Setup(to, color.Value, duration, OnArrived, useUnscaledTime);
             }
             else
             {
-                trail.Setup(to,
-                    duration,
-                    () =>
-                    {
-                        onArrived?.Invoke();
-                        _poolManager.Return(_poolKey, trail);
-                    },
-                    true);
+                trail.Setup(to, duration, OnArrived, useUnscaledTime);
             }
 
             return trail.transform;
