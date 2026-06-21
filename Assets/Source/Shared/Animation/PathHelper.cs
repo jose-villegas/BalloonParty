@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Shared.Extensions;
 using UnityEngine;
 
 namespace BalloonParty.Shared.Animation
@@ -190,7 +191,7 @@ namespace BalloonParty.Shared.Animation
             }
 
             var dir = (end - start).normalized;
-            var perp = new Vector3(-dir.y, dir.x, 0f);
+            var perp = dir.PerpendicularXY();
 
             Subdivide(buffer, offset, 0, count - 1, displacement, decay, perp);
         }

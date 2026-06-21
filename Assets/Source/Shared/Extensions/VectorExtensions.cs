@@ -13,5 +13,11 @@ namespace BalloonParty.Shared.Extensions
         {
             return new Vector2(v.x, y);
         }
+
+        /// <summary>The 90° counter-clockwise perpendicular in the XY plane (z zeroed).</summary>
+        internal static Vector3 PerpendicularXY(this Vector3 v)
+        {
+            return new Vector3(-v.y, v.x, 0f);
+        }
     }
 }

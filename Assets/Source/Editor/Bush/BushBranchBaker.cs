@@ -58,7 +58,7 @@ namespace BalloonParty.Editor.Bush
             {
                 var seg = segments[i];
                 var dir = (seg.End - seg.Start).normalized;
-                var perp = new Vector2(-dir.y, dir.x);
+                var perp = Vector2.Perpendicular(dir);
 
                 var halfStart = seg.StartWidth * 0.5f;
                 var halfEnd = seg.EndWidth * 0.5f;
