@@ -13,11 +13,12 @@ namespace BalloonParty.UI.Danger
     ///     edge stays anchored (bottom expands up, top expands down). The bound level is a target eased
     ///     toward each frame, so tint, growth and translation glide instead of snapping.
     ///
-    ///     A dumb view: <c>DangerGradientBinder</c> binds it to <c>SpaceDanger.Level</c> at <c>Start</c>.
-    ///     Growing sprites must use a Sliced/Tiled draw mode for <c>SpriteRenderer.size</c> to apply, and
-    ///     are assumed to have a centred pivot (hence the half-growth recentre).
+    ///     A dumb view: a <see cref="ReactivePropertyBinder{TView,TValue}" /> binds it to
+    ///     <c>SpaceDanger.Level</c> at <c>Start</c>. Growing sprites must use a Sliced/Tiled draw mode for
+    ///     <c>SpriteRenderer.size</c> to apply, and are assumed to have a centred pivot (hence the
+    ///     half-growth recentre).
     /// </summary>
-    internal class DangerGradientView : MonoBehaviour
+    internal class DangerGradientView : MonoBehaviour, IReactiveBindable<float>
     {
         private const float SettleEpsilon = 0.001f;
 
