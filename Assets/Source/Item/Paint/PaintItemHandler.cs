@@ -71,34 +71,11 @@ namespace BalloonParty.Item.Paint
             var neighborIndices = HexCoordinates.HexNeighborIndices(slot.x, slot.y);
             var tint = _palette.GetColor(paintColor);
 
-            // Build a paint target per neighbor index — null when slot is empty or non-paintable.
-            var paintTargets = new IPaintable[NeighborCount];
-
-            for (var i = 0; i < NeighborCount; i++)
-            {
-                var idx = neighborIndices[i];
-                var actor = _grid.IsEmpty(idx.x, idx.y) ? null : _grid.At(idx);
-
-                if (actor is IPaintable colorable && colorable.Color.Value != paintColor)
-                {
-                    paintTargets[i] = colorable;
-                }
-            }
+            var paintTargets = BuildPaintTargets(neighborIndices, paintColor);
 
             if (settings.ActivationEffectPrefab == null)
             {
-                for (var i = 0; i < NeighborCount; i++)
-                {
-                    if (paintTargets[i] != null)
-                    {
-                        paintTargets[i].Color.Value = paintColor;
-                    }
-
-                    var neighborPos = _grid.IndexToWorldPosition(neighborIndices[i]);
-                    var dir = ((Vector2)(neighborPos - _worldPosition)).normalized;
-                    _disturbanceField.Stamp(StampSource.Paint, neighborPos, dir);
-                }
-
+                PaintImmediate(paintColor, neighborIndices, paintTargets);
                 return UniTask.CompletedTask;
             }
 
@@ -141,6 +118,41 @@ namespace BalloonParty.Item.Paint
                     var dir = ((Vector2)(splashPos - _worldPosition)).normalized;
                     _disturbanceField.Stamp(StampSource.Paint, splashPos, dir);
                 }
+            }
+        }
+
+        // One paint target per neighbour index — null where the slot is empty, non-paintable, or
+        // already the paint colour.
+        private IPaintable[] BuildPaintTargets(Vector2Int[] neighborIndices, string paintColor)
+        {
+            var targets = new IPaintable[NeighborCount];
+            for (var i = 0; i < NeighborCount; i++)
+            {
+                var idx = neighborIndices[i];
+                var actor = _grid.IsEmpty(idx.x, idx.y) ? null : _grid.At(idx);
+
+                if (actor is IPaintable colorable && colorable.Color.Value != paintColor)
+                {
+                    targets[i] = colorable;
+                }
+            }
+
+            return targets;
+        }
+
+        // No activation effect: recolour the targets and stamp the disturbance field immediately.
+        private void PaintImmediate(string paintColor, Vector2Int[] neighborIndices, IPaintable[] paintTargets)
+        {
+            for (var i = 0; i < NeighborCount; i++)
+            {
+                if (paintTargets[i] != null)
+                {
+                    paintTargets[i].Color.Value = paintColor;
+                }
+
+                var neighborPos = _grid.IndexToWorldPosition(neighborIndices[i]);
+                var dir = ((Vector2)(neighborPos - _worldPosition)).normalized;
+                _disturbanceField.Stamp(StampSource.Paint, neighborPos, dir);
             }
         }
     }
