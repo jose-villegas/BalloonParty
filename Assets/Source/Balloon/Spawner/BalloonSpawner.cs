@@ -452,28 +452,38 @@ namespace BalloonParty.Balloon.Spawner
 
         private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct, int generation)
         {
-            _balancer.Balance();
-
-            for (var i = 0; i < lineCount; i++)
+            // Bracket the whole multi-line sequence so the overflow hold (thrower lock) spans the gaps
+            // between lines and only releases once every line's pops are done.
+            _rejectedBalloon.BeginSpawnSequence();
+            try
             {
+                _balancer.Balance();
+
+                for (var i = 0; i < lineCount; i++)
+                {
+                    if (generation != _generation)
+                    {
+                        return;
+                    }
+
+                    SpawnLineInternal(allowReject: true);
+                    await UniTask.Delay(
+                        (int)(_balloonsConfig.NewBalloonLinesTimeInterval * 1000),
+                        cancellationToken: ct);
+                }
+
                 if (generation != _generation)
                 {
                     return;
                 }
 
-                SpawnLineInternal(allowReject: true);
-                await UniTask.Delay(
-                    (int)(_balloonsConfig.NewBalloonLinesTimeInterval * 1000),
-                    cancellationToken: ct);
+                PublishItemCheck();
+                _balancePublisher.Publish(default);
             }
-
-            if (generation != _generation)
+            finally
             {
-                return;
+                _rejectedBalloon.EndSpawnSequence();
             }
-
-            PublishItemCheck();
-            _balancePublisher.Publish(default);
         }
     }
 }

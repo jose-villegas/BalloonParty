@@ -45,6 +45,7 @@ namespace BalloonParty.Balloon.Spawner
 
         private int _generation;
         private bool _overflowPaused;
+        private int _sequenceDepth;
 
         public int ResetOrder => RunResetOrder.Counters;
 
@@ -85,7 +86,8 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             _active.Clear();
-            EndOverflowHold();
+            _sequenceDepth = 0;
+            TryReleaseOverflowHold();
         }
 
         /// <summary>
@@ -161,15 +163,33 @@ namespace BalloonParty.Balloon.Spawner
             _active.Remove((poolKey, view));
             _poolManager.Return(poolKey, view);
 
-            if (_active.Count == 0)
+            TryReleaseOverflowHold();
+        }
+
+        /// <summary>
+        ///     Brackets a turn's whole spawn sequence (which may spawn several lines with delays between
+        ///     them). The overflow hold can't release until the sequence is over <em>and</em> no pops
+        ///     remain, so the thrower stays locked across the gaps between lines.
+        /// </summary>
+        public void BeginSpawnSequence()
+        {
+            _sequenceDepth++;
+        }
+
+        public void EndSpawnSequence()
+        {
+            if (_sequenceDepth > 0)
             {
-                EndOverflowHold();
+                _sequenceDepth--;
             }
+
+            TryReleaseOverflowHold();
         }
 
         // Hold the thrower for the duration of a turn's overflow pops so the player can't fire into a
-        // board that's still resolving. Released when the last rejected balloon finishes — at which
-        // point the run has either survived (thrower re-enables) or ended (GameOver keeps it disabled).
+        // board that's still resolving. Engaged on the first rejected balloon; released only once the
+        // spawn sequence is done and every pop has finished — at which point the run has either survived
+        // (thrower re-enables) or ended (GameOver keeps it disabled).
         private void BeginOverflowHold()
         {
             if (_overflowPaused)
@@ -181,9 +201,9 @@ namespace BalloonParty.Balloon.Spawner
             _overflowPaused = true;
         }
 
-        private void EndOverflowHold()
+        private void TryReleaseOverflowHold()
         {
-            if (!_overflowPaused)
+            if (!_overflowPaused || _active.Count > 0 || _sequenceDepth > 0)
             {
                 return;
             }
