@@ -274,7 +274,7 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
 
         brace_depth += stripped.count("{") - stripped.count("}")
 
-        if re.match(r"(public|internal|private|protected)?\s*(abstract\s+|sealed\s+|static\s+|partial\s+)*(class|struct)\s+", stripped):
+        if re.match(r"(public|internal|private|protected)?\s*(abstract\s+|sealed\s+|static\s+|partial\s+|readonly\s+|ref\s+)*(class|struct|interface|enum|record)\s+", stripped):
             in_class = True
             last_group = 0
             class_brace_depth = brace_depth
@@ -1314,6 +1314,40 @@ def run_fix(result: AuditResult):
 
 # ─── Main ────────────────────────────────────────────────────────────────────
 
+SUPPRESS_RE = re.compile(r"//\s*style-audit:\s*ignore\b([^:\n]*)")
+
+
+def _suppressed_rules(lines: list[str], lineno: int):
+    """Rules suppressed for a 1-based line via an inline directive on that line or the one
+    above: `// style-audit: ignore <rule>[ <rule>...][: reason]`. Bare `ignore` suppresses
+    every rule on the line. Returns "ALL", a set of rule names, or None."""
+    rules: set[str] = set()
+    found = False
+    for ln in (lineno, lineno - 1):
+        if not (1 <= ln <= len(lines)):
+            continue
+        m = SUPPRESS_RE.search(lines[ln - 1])
+        if not m:
+            continue
+        found = True
+        tokens = [t for t in re.split(r"[,\s]+", m.group(1).strip()) if t]
+        if not tokens:
+            return "ALL"
+        rules.update(tokens)
+    return rules if found else None
+
+
+def _apply_suppressions(result: AuditResult, lines: list[str], start: int):
+    """Drop violations added since index `start` that carry a matching inline directive."""
+    kept = result.violations[:start]
+    for v in result.violations[start:]:
+        suppressed = _suppressed_rules(lines, v.line)
+        if suppressed == "ALL" or (suppressed and v.rule in suppressed):
+            continue
+        kept.append(v)
+    result.violations = kept
+
+
 def run_audit(rule_filter: Optional[str] = None, file_filter: Optional[str] = None) -> AuditResult:
     result = AuditResult()
 
@@ -1324,10 +1358,12 @@ def run_audit(rule_filter: Optional[str] = None, file_filter: Optional[str] = No
 
         lines = read_lines(path)
 
+        start = len(result.violations)
         for name, check_fn in RULES.items():
             if rule_filter and rule_filter != name:
                 continue
             check_fn(path, lines, result)
+        _apply_suppressions(result, lines, start)
 
     # Meta rules
     if not file_filter:
