@@ -1,6 +1,6 @@
 using UniRx;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.Binding
 {
     /// <summary>
     ///     A view that binds itself to a reactive source of <typeparamref name="T" />. Bound once after

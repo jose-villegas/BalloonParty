@@ -1,4 +1,5 @@
 using BalloonParty.Game.Health;
+using BalloonParty.UI.Binding;
 using VContainer;
 using VContainer.Unity;
 

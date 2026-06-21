@@ -4,7 +4,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.Binding
 {
     internal static class ReactiveBinderRegistration
     {

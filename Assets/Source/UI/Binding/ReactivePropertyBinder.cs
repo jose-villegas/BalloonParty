@@ -1,7 +1,7 @@
 using UniRx;
 using VContainer.Unity;
 
-namespace BalloonParty.UI
+namespace BalloonParty.UI.Binding
 {
     /// <summary>
     ///     Binds every view in <paramref name="views" /> to a single reactive source at
