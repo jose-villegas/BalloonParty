@@ -105,7 +105,7 @@ MonoBehaviour:
   _topContainer: {fileID: 8977503054063933539}
   _topContainerOffsetY: 1.5
   _bottomContainer: {fileID: 6499154915055494154}
-  _bottomContainerOffsetY: -1.5
+  _bottomContainerOffsetY: -0.75
   _lerpSpeed: 2.5
 --- !u!1 &3334617146321481222
 GameObject:

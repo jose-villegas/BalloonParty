@@ -21,6 +21,7 @@ namespace BalloonParty.Thrower
         private readonly IGameConfiguration _config;
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private readonly ISubscriber<RunResetMessage> _resetSubscriber;
         private readonly IObjectResolver _resolver;
         private readonly List<Vector3> _tracePoints = new();
         private readonly PoolManager _poolManager;
@@ -48,6 +49,7 @@ namespace BalloonParty.Thrower
             ThrowerSettings settings,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ProjectileLoadedMessage> loadedPublisher,
+            ISubscriber<RunResetMessage> resetSubscriber,
             ProjectilePositionProvider positionProvider)
         {
             _view = view;
@@ -57,6 +59,7 @@ namespace BalloonParty.Thrower
             _settings = settings;
             _destroyedSubscriber = destroyedSubscriber;
             _loadedPublisher = loadedPublisher;
+            _resetSubscriber = resetSubscriber;
             _positionProvider = positionProvider;
         }
 
@@ -70,6 +73,10 @@ namespace BalloonParty.Thrower
             _poolManager.Prewarm(ProjectilePoolKey, 2);
 
             _destroyedSubscriber.Subscribe(_ => Reload());
+
+            // A restart resets every other system; swap the carried-over projectile for a fresh one
+            // so its shield count (and position) start from the configured default.
+            _resetSubscriber.Subscribe(_ => Reload());
 
             Navigation.Current
                 .Where(state => state == NavigationState.Game)
