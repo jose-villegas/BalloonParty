@@ -18,12 +18,6 @@ namespace BalloonParty.Cheats
         public string Section => "Grid";
         public IReadOnlyList<string> Tags => new[] { "cloud", "disturbance", "grid" };
 
-        public void Execute()
-        {
-            _active = !_active;
-            _lastMouseWorld = Vector3.zero;
-        }
-
         private void Update()
         {
             if (!_active || _field == null)
@@ -55,6 +49,12 @@ namespace BalloonParty.Cheats
             _lastMouseWorld = world;
 
             _field.Stamp(world, 0.3f, 0.8f, direction);
+        }
+
+        public void Execute()
+        {
+            _active = !_active;
+            _lastMouseWorld = Vector3.zero;
         }
 
         private static Vector3? MouseWorldPosition()

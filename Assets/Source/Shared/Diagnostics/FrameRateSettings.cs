@@ -24,6 +24,16 @@ namespace BalloonParty.Shared.Diagnostics
             Apply();
         }
 
+#if UNITY_EDITOR
+        private void OnValidate()
+        {
+            if (Application.isPlaying)
+            {
+                Apply();
+            }
+        }
+#endif
+
         private void Apply()
         {
             QualitySettings.vSyncCount = 0;
@@ -42,15 +52,5 @@ namespace BalloonParty.Shared.Diagnostics
             var hz = (int)Mathf.Round((float)Screen.currentResolution.refreshRateRatio.value);
             return hz > 0 ? hz : 60;
         }
-
-#if UNITY_EDITOR
-        private void OnValidate()
-        {
-            if (Application.isPlaying)
-            {
-                Apply();
-            }
-        }
-#endif
     }
 }

@@ -35,46 +35,6 @@ namespace BalloonParty.Item.Paint
         private static readonly int ShadowScaleId = Shader.PropertyToID("_ShadowScale");
         private static readonly int SpriteScaleId = Shader.PropertyToID("_SpriteScale");
 
-        /// <summary>
-        ///     Pure math — computes blob position, scale, and MPB values for a given
-        ///     progress along the flight arc. Shared by runtime and editor preview.
-        /// </summary>
-        internal static BlobFlightSnapshot ComputeBlobFlight(
-            float progress,
-            Vector3 from,
-            Vector3 to,
-            ItemSettings settings)
-        {
-            var pos = Vector3.Lerp(from, to, progress);
-            pos.y += settings.Paint.ArcCurve.Evaluate(progress);
-
-            return new BlobFlightSnapshot
-            {
-                Position = pos,
-                Scale = settings.Paint.ScaleCurve.Evaluate(progress),
-                ShadowScale = settings.Paint.ShadowScaleCurve?.Evaluate(progress) ?? 1f,
-                SpriteScale = settings.Paint.SpriteScaleCurve?.Evaluate(progress) ?? 1f
-            };
-        }
-
-        /// <summary>
-        ///     Applies <see cref="BlobFlightSnapshot" /> MPB values plus a time offset
-        ///     to a renderer. Shared by runtime and editor preview.
-        /// </summary>
-        internal static void ApplyBlobMaterial(
-            Renderer renderer,
-            float timeOffset,
-            BlobFlightSnapshot snapshot)
-        {
-            // Reused scratch block — SetPropertyBlock copies the values out immediately,
-            // so one shared instance avoids a per-blob, per-frame allocation.
-            _blobBlock ??= new MaterialPropertyBlock();
-            _blobBlock.SetFloat(TimeOffsetId, timeOffset);
-            _blobBlock.SetFloat(ShadowScaleId, snapshot.ShadowScale);
-            _blobBlock.SetFloat(SpriteScaleId, snapshot.SpriteScale);
-            renderer.SetPropertyBlock(_blobBlock);
-        }
-
         [Header("Blobs")]
         [Tooltip("Pre-placed blob ColorableRenderers — one per possible neighbor (6 for hex grid).")]
         [SerializeField] private ColorableRenderer[] _blobRenderers;
@@ -100,20 +60,6 @@ namespace BalloonParty.Item.Paint
             }
 
             TickFlights(Time.deltaTime);
-        }
-
-        public override void OnSpawned()
-        {
-            base.OnSpawned();
-            HideAllBlobs();
-        }
-
-        public override void OnDespawned()
-        {
-            _playing = false;
-            _activeFlights = null;
-            HideAllBlobs();
-            base.OnDespawned();
         }
 
         /// <summary>
@@ -155,6 +101,20 @@ namespace BalloonParty.Item.Paint
                     Index = i
                 });
             }
+        }
+
+        public override void OnSpawned()
+        {
+            base.OnSpawned();
+            HideAllBlobs();
+        }
+
+        public override void OnDespawned()
+        {
+            _playing = false;
+            _activeFlights = null;
+            HideAllBlobs();
+            base.OnDespawned();
         }
 
         /// <summary>
@@ -269,6 +229,46 @@ namespace BalloonParty.Item.Paint
                     blob.gameObject.SetActive(false);
                 }
             }
+        }
+
+        /// <summary>
+        ///     Pure math — computes blob position, scale, and MPB values for a given
+        ///     progress along the flight arc. Shared by runtime and editor preview.
+        /// </summary>
+        internal static BlobFlightSnapshot ComputeBlobFlight(
+            float progress,
+            Vector3 from,
+            Vector3 to,
+            ItemSettings settings)
+        {
+            var pos = Vector3.Lerp(from, to, progress);
+            pos.y += settings.Paint.ArcCurve.Evaluate(progress);
+
+            return new BlobFlightSnapshot
+            {
+                Position = pos,
+                Scale = settings.Paint.ScaleCurve.Evaluate(progress),
+                ShadowScale = settings.Paint.ShadowScaleCurve?.Evaluate(progress) ?? 1f,
+                SpriteScale = settings.Paint.SpriteScaleCurve?.Evaluate(progress) ?? 1f
+            };
+        }
+
+        /// <summary>
+        ///     Applies <see cref="BlobFlightSnapshot" /> MPB values plus a time offset
+        ///     to a renderer. Shared by runtime and editor preview.
+        /// </summary>
+        internal static void ApplyBlobMaterial(
+            Renderer renderer,
+            float timeOffset,
+            BlobFlightSnapshot snapshot)
+        {
+            // Reused scratch block — SetPropertyBlock copies the values out immediately,
+            // so one shared instance avoids a per-blob, per-frame allocation.
+            _blobBlock ??= new MaterialPropertyBlock();
+            _blobBlock.SetFloat(TimeOffsetId, timeOffset);
+            _blobBlock.SetFloat(ShadowScaleId, snapshot.ShadowScale);
+            _blobBlock.SetFloat(SpriteScaleId, snapshot.SpriteScale);
+            renderer.SetPropertyBlock(_blobBlock);
         }
 
         private class BlobFlight

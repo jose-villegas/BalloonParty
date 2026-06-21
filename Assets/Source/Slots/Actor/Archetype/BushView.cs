@@ -47,30 +47,6 @@ namespace BalloonParty.Slots.Actor.Archetype
             }
         }
 
-        internal void SetSettings(IBushSettings settings)
-        {
-            _settings = settings;
-        }
-
-        protected override void OnConfigured(MaterialPropertyBlock block)
-        {
-            if (Renderer != null)
-            {
-                Renderer.enabled = false;
-            }
-
-            if (_settings == null)
-            {
-                return;
-            }
-
-            EnsureComponents();
-            _materials.Release();
-            _materials.BuildLeafMaterials(_settings.LeafAtlasSprites);
-            _renderData = _builder.Build(SlotCentersBuffer, SlotCount);
-            _rustle.SetSlots(CollectSlotPositions());
-        }
-
         private void LateUpdate()
         {
             if (_renderData == null)
@@ -112,6 +88,30 @@ namespace BalloonParty.Slots.Actor.Archetype
             {
                 _materials?.Release();
             }
+        }
+
+        internal void SetSettings(IBushSettings settings)
+        {
+            _settings = settings;
+        }
+
+        protected override void OnConfigured(MaterialPropertyBlock block)
+        {
+            if (Renderer != null)
+            {
+                Renderer.enabled = false;
+            }
+
+            if (_settings == null)
+            {
+                return;
+            }
+
+            EnsureComponents();
+            _materials.Release();
+            _materials.BuildLeafMaterials(_settings.LeafAtlasSprites);
+            _renderData = _builder.Build(SlotCentersBuffer, SlotCount);
+            _rustle.SetSlots(CollectSlotPositions());
         }
 
         private void EnsureComponents()

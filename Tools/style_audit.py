@@ -369,11 +369,13 @@ LIFECYCLE_ORDER = {
     "Awake": 0, "OnEnable": 1, "Start": 2, "Update": 3, "FixedUpdate": 4,
     "LateUpdate": 5, "OnDisable": 6, "OnDestroy": 7,
 }
-# "Reset" is intentionally excluded — a public Reset() is far more often a custom method than
-# Unity's editor-only callback, and treating it as lifecycle produced false positives.
+# Excluded on purpose:
+#   "Reset" — a public Reset() is far more often a custom method than Unity's editor callback.
+#   OnDrawGizmos / OnDrawGizmosSelected — editor-only debug draws, idiomatically grouped with
+#     their private gizmo helpers at the end of the file; ordering them is noise, not value.
 LIFECYCLE_NAMES = set(LIFECYCLE_ORDER) | {
     "OnApplicationPause", "OnApplicationQuit", "OnApplicationFocus",
-    "OnValidate", "OnGUI", "OnDrawGizmos", "OnDrawGizmosSelected",
+    "OnValidate", "OnGUI",
     "OnCollisionEnter2D", "OnCollisionExit2D", "OnCollisionStay2D",
     "OnTriggerEnter2D", "OnTriggerExit2D", "OnTriggerStay2D",
     "OnBecameVisible", "OnBecameInvisible", "OnParticleCollision", "OnMouseDown",
