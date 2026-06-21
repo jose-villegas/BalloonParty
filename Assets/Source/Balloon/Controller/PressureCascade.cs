@@ -72,25 +72,41 @@ namespace BalloonParty.Balloon.Controller
                     return true;
                 }
 
-                foreach (var direction in DoubledDirections)
+                if (TryShoveToEmptyNeighbour(grid, current, start, parents, visited, queue, chain))
                 {
-                    if (!TryRayToShovableCell(grid, current, direction, out var next))
-                    {
-                        continue;
-                    }
+                    return true;
+                }
+            }
 
-                    if (grid.IsEmpty(next.x, next.y))
-                    {
-                        BuildChain(parents, start, current, chain);
-                        chain.Add(next);
-                        return true;
-                    }
+            return false;
+        }
 
-                    if (visited.Add(next))
-                    {
-                        parents[next] = current;
-                        queue.Enqueue(next);
-                    }
+        // Rays out in each hex direction from <paramref name="current"/>. If a ray reaches an empty
+        // cell, finalises the chain into it and returns true; otherwise enqueues newly-reached
+        // shovable cells for the BFS to continue from.
+        private static bool TryShoveToEmptyNeighbour(
+            SlotGrid grid, Vector2Int current, Vector2Int start,
+            Dictionary<Vector2Int, Vector2Int> parents, HashSet<Vector2Int> visited,
+            Queue<Vector2Int> queue, List<Vector2Int> chain)
+        {
+            foreach (var direction in DoubledDirections)
+            {
+                if (!TryRayToShovableCell(grid, current, direction, out var next))
+                {
+                    continue;
+                }
+
+                if (grid.IsEmpty(next.x, next.y))
+                {
+                    BuildChain(parents, start, current, chain);
+                    chain.Add(next);
+                    return true;
+                }
+
+                if (visited.Add(next))
+                {
+                    parents[next] = current;
+                    queue.Enqueue(next);
                 }
             }
 
