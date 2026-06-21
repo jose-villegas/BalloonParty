@@ -73,6 +73,16 @@ namespace BalloonParty.Slots.Grid
             return _views[index.x, index.y] as T;
         }
 
+        public bool InBounds(int col, int row)
+        {
+            return col >= 0 && col < Columns && row >= 0 && row < Rows;
+        }
+
+        public bool InBounds(Vector2Int slot)
+        {
+            return InBounds(slot.x, slot.y);
+        }
+
         public bool IsEmpty(int col, int row)
         {
             return col < 0 || col >= Columns
@@ -136,8 +146,7 @@ namespace BalloonParty.Slots.Grid
         // balloons isn't implemented yet (Phase 9), so warn when the line crosses one.
         private void WarnIfPathBlocked(int col, int row)
         {
-            var inBounds = col >= 0 && col < Columns && row >= 0 && row < Rows;
-            if (!inBounds)
+            if (!InBounds(col, row))
             {
                 return;
             }

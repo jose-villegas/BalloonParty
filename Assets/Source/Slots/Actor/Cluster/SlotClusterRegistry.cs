@@ -312,12 +312,9 @@ namespace BalloonParty.Slots.Actor.Cluster
 
         private void AssignClusterIdToModel(Vector2Int slot, int clusterId)
         {
-            if (slot.x >= 0 && slot.x < _grid.Columns && slot.y >= 0 && slot.y < _grid.Rows)
+            if (_grid.InBounds(slot) && _grid.At(slot) is TModel actor)
             {
-                if (_grid.At(slot) is TModel actor)
-                {
-                    actor.ClusterId = clusterId;
-                }
+                actor.ClusterId = clusterId;
             }
         }
 
