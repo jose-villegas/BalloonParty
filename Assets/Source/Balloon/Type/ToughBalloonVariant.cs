@@ -1,5 +1,6 @@
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Capabilities;
 using DG.Tweening;
 using UniRx;
@@ -44,8 +45,9 @@ namespace BalloonParty.Balloon.Type
             _damageTween?.Kill();
             _currentDamageProgress = 0f;
 
-            SetFloat(DamageProgressId, 0f);
-            SetVector(VoronoiSeedId, new Vector4(Random.Range(-999f, 999f), Random.Range(-999f, 999f)));
+            _renderer.SetFloatAndApply(_block, DamageProgressId, 0f);
+            _renderer.SetVectorAndApply(_block, VoronoiSeedId,
+                new Vector4(Random.Range(-999f, 999f), Random.Range(-999f, 999f)));
 
             var maxHits = durable.HitsRemaining.Value;
 
@@ -55,20 +57,6 @@ namespace BalloonParty.Balloon.Type
         }
 
         public void Initialize(IWriteableBalloonModel model) { }
-
-        private void SetFloat(int id, float value)
-        {
-            _renderer.GetPropertyBlock(_block);
-            _block.SetFloat(id, value);
-            _renderer.SetPropertyBlock(_block);
-        }
-
-        private void SetVector(int id, Vector4 value)
-        {
-            _renderer.GetPropertyBlock(_block);
-            _block.SetVector(id, value);
-            _renderer.SetPropertyBlock(_block);
-        }
 
         private void ApplyDamageProgress(int hits, int maxHits)
         {
@@ -87,7 +75,7 @@ namespace BalloonParty.Balloon.Type
                     progress =>
                     {
                         _currentDamageProgress = progress;
-                        SetFloat(DamageProgressId, progress);
+                        _renderer.SetFloatAndApply(_block, DamageProgressId, progress);
                     })
                 .SetEase(Ease.OutCubic)
                 .SetLink(gameObject);

@@ -1,3 +1,4 @@
+using BalloonParty.Shared.Extensions;
 using UnityEngine;
 
 namespace BalloonParty.Item.Paint
@@ -20,9 +21,7 @@ namespace BalloonParty.Item.Paint
             var spriteRenderer = GetComponent<SpriteRenderer>();
             var block = new MaterialPropertyBlock();
 
-            spriteRenderer.GetPropertyBlock(block);
-            block.SetFloat(TimeOffsetId, Random.value * _timeOffsetRange);
-            spriteRenderer.SetPropertyBlock(block);
+            spriteRenderer.SetFloatAndApply(block, TimeOffsetId, Random.value * _timeOffsetRange);
         }
     }
 }

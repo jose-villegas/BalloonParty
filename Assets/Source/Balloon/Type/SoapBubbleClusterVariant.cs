@@ -3,6 +3,7 @@ using UnityEditor;
 #endif
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Capabilities;
 using UniRx;
 using UnityEngine;
@@ -137,9 +138,7 @@ namespace BalloonParty.Balloon.Type
                 return;
             }
 
-            _renderer.GetPropertyBlock(_block);
-            _block.SetFloat(BubbleCountId, count);
-            _renderer.SetPropertyBlock(_block);
+            _renderer.SetFloatAndApply(_block, BubbleCountId, count);
         }
 
         private void PushTime(float currentTime)
