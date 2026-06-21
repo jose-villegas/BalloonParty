@@ -19,6 +19,7 @@ using BalloonParty.Item.Paint;
 using BalloonParty.Item.Shield;
 using BalloonParty.Nudge;
 using BalloonParty.Projectile;
+using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.View;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
@@ -109,6 +110,7 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces().AsSelf();
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);
             builder.Register<ColorStreakTracker>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<ProjectileHitResolver>(Lifetime.Singleton);
             builder.Register<INavigation, NavigationService>(Lifetime.Singleton);
             builder.Register<ICinematicState, CinematicStateService>(Lifetime.Singleton);
             builder.Register<RunMeta>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();

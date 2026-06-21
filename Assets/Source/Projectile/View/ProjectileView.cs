@@ -2,7 +2,7 @@ using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
-using BalloonParty.Game.Score;
+using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
@@ -10,8 +10,6 @@ using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Slots.Actor;
-using BalloonParty.Slots.Capabilities;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
@@ -31,11 +29,9 @@ namespace BalloonParty.Projectile.View
         [Inject] private IGamePalette _palette;
         [Inject] private IGameConfiguration _config;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
-        [Inject] private IPublisher<ActorHitMessage> _hitPublisher;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
-        [Inject] private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
-        [Inject] private ColorStreakTracker _streakTracker;
+        [Inject] private ProjectileHitResolver _hitResolver;
         [Inject] private PauseService _pauseService;
         [Inject] private DisturbanceFieldService _disturbanceField;
 
@@ -80,36 +76,14 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            _model.LastHitBalloon = balloonModel;
-
-            var damageContext = new DamageContext(1, DamageFlags.Normal, _model.ColorName.Value);
-            var outcome = balloonModel.EvaluateHit(damageContext);
-
-            if (outcome == HitOutcome.Absorb)
+            switch (_hitResolver.Resolve(_model, balloonModel, balloonView.transform.position))
             {
-                OnAbsorb(balloonModel, balloonView.transform.position);
-                return;
-            }
-
-            if (outcome == HitOutcome.Pop && balloonModel is IHasColor colorable &&
-                !string.IsNullOrEmpty(colorable.Color.Value))
-            {
-                UpdateProjectileColor(colorable.Color.Value);
-            }
-
-            _hitPublisher.Publish(new ActorHitMessage(balloonModel,
-                balloonView.transform.position,
-                _model.Direction,
-                outcome,
-                damageContext));
-
-            // ScoreController processes the message synchronously above — tracker is already updated.
-            if (outcome == HitOutcome.Pop && balloonModel is IHasColor &&
-                _streakTracker.CurrentStreak >= 2 &&
-                _streakTracker.LastColor == _model.ColorName.Value)
-            {
-                _model.ShieldsRemaining.Value++;
-                _shieldGainedPublisher.Publish(new ShieldGainedMessage(_model.LastHitBalloon.SlotIndex.Value));
+                case ProjectileHitVisual.Recolored:
+                    UpdateGlowColor();
+                    break;
+                case ProjectileHitVisual.Destroyed:
+                    DestroyProjectile();
+                    break;
             }
         }
 
@@ -151,25 +125,6 @@ namespace BalloonParty.Projectile.View
 
             _deflectedSubscription?.Dispose();
             _deflectedSubscription = _deflectedSubscriber.Subscribe(OnBalloonDeflected);
-        }
-
-        private void UpdateProjectileColor(string hitColor)
-        {
-            if (_model.ColorName.Value == hitColor)
-            {
-                return;
-            }
-
-            _model.ColorName.Value = hitColor;
-            UpdateGlowColor();
-        }
-
-        // Separated so the absorb terminal path is testable without physics.
-        internal void OnAbsorb(ISlotActor actor, Vector3 worldPos)
-        {
-            _hitPublisher.Publish(new ActorHitMessage(actor, worldPos, _model.Direction, HitOutcome.Absorb));
-            _model.IsFree = false;
-            DestroyProjectile();
         }
 
         private void DestroyProjectile()
