@@ -8,7 +8,8 @@ Shared screen-space disturbance field that any game system can stamp into. Puff 
 
 | File | What it does |
 |---|---|
-| `DisturbanceFieldService` | Plain C# `IStartable` + `ITickable` + `IDisposable` — owns a camera-sized `ARGBHalf` RT pair (density in R, displacement XY in GB). Runs one diffusion blit per tick (spatial blur + reform toward equilibrium + wind advection + pressure fill + displacement decay). Exposes `Stamp()` for instant and lerp stamps. Pending stamps are batched (up to 16 per blit pass) via `DisturbanceStampBatched.shader`. Pushes `_DisturbanceTex`, `_FieldBoundsMin`, `_FieldBoundsSize` as global shader properties each tick so all consumers (cloud views, future effects) read the field without per-instance setup. Registered as a singleton in `GameLifetimeScope` |
+| `DisturbanceFieldService` | Plain C# `IStartable` + `ITickable` + `IDisposable` — drives the simulation. Runs one diffusion blit per tick (spatial blur + reform toward equilibrium + wind advection + pressure fill + displacement decay), sets per-pass shader uniforms, and batches pending stamps (up to 32 per blit pass) via `DisturbanceStampBatched.shader`. Exposes `Stamp()` for instant and lerp stamps. Pushes `_FieldBoundsMin`, `_FieldBoundsSize` as global shader properties so all consumers (cloud views, future effects) read the field without per-instance setup. Delegates all GPU resource ownership to `DisturbanceFieldResources`. Registered as a singleton in `GameLifetimeScope` |
+| `DisturbanceFieldResources` | Plain C# — owns the GPU resources: the camera-sized `ARGBHalf` RT pair (density in R, displacement XY in GB) that ping-pongs as read/write, the diffusion + batched-stamp materials, and the `_STAMPS_ON` keyword. `BlitAndSwap()` blits read→write through a material, flips the buffers, and republishes the read texture as the global `_DisturbanceTex`. The service owns the shader-param IDs and per-pass uniforms; this just holds, blits, and flips. |
 
 ## Architecture
 
