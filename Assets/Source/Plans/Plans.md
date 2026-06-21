@@ -13,6 +13,7 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_content_production
 - @subpage plan_loss_condition_pacing
 - @subpage plan_future_ideas
+- @subpage plan_architecture_refactor
 
 
 
