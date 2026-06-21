@@ -113,53 +113,57 @@ namespace BalloonParty.Nudge
             {
                 for (var row = 0; row < _grid.Rows; row++)
                 {
-                    if (_grid.IsEmpty(col, row))
-                    {
-                        continue;
-                    }
-
-                    var slot = new Vector2Int(col, row);
-                    var model = _grid.At(slot);
-
-                    if (model == null)
-                    {
-                        continue;
-                    }
-
-                    IReadOnlyList<NudgeOverride> actorOverrides = null;
-                    if (model is IHasNudge nudgeable)
-                    {
-                        actorOverrides = nudgeable.NudgeOverrides;
-                    }
-
-                    // Per-actor shockwave override takes priority over publisher attenuation
-                    var actorOverride = NudgeOverrideResolver.FindOverride(actorOverrides, NudgeType.Shockwave);
-                    float distance;
-                    float duration;
-
-                    if (actorOverride != null)
-                    {
-                        distance = actorOverride.Distance;
-                        duration = actorOverride.Duration;
-                    }
-                    else
-                    {
-                        var balloonPos = _grid.IndexToWorldPosition(slot);
-                        var d = Vector3.Distance(msg.Origin, balloonPos);
-
-                        // Exponential falloff: closer balloons get a stronger push
-                        distance = baseDistance * Mathf.Exp(-falloff * d);
-                        duration = baseDuration;
-                    }
-
-                    if (distance < 0.001f)
-                    {
-                        continue;
-                    }
-
-                    NudgeActor(slot, msg.Origin, distance, duration);
+                    ApplyShockwaveToSlot(new Vector2Int(col, row), msg, baseDistance, baseDuration, falloff);
                 }
             }
+        }
+
+        private void ApplyShockwaveToSlot(
+            Vector2Int slot, NudgeMessage msg, float baseDistance, float baseDuration, float falloff)
+        {
+            if (_grid.IsEmpty(slot.x, slot.y))
+            {
+                return;
+            }
+
+            var model = _grid.At(slot);
+            if (model == null)
+            {
+                return;
+            }
+
+            IReadOnlyList<NudgeOverride> actorOverrides = null;
+            if (model is IHasNudge nudgeable)
+            {
+                actorOverrides = nudgeable.NudgeOverrides;
+            }
+
+            // Per-actor shockwave override takes priority over publisher attenuation
+            var actorOverride = NudgeOverrideResolver.FindOverride(actorOverrides, NudgeType.Shockwave);
+            float distance;
+            float duration;
+
+            if (actorOverride != null)
+            {
+                distance = actorOverride.Distance;
+                duration = actorOverride.Duration;
+            }
+            else
+            {
+                var balloonPos = _grid.IndexToWorldPosition(slot);
+                var d = Vector3.Distance(msg.Origin, balloonPos);
+
+                // Exponential falloff: closer balloons get a stronger push
+                distance = baseDistance * Mathf.Exp(-falloff * d);
+                duration = baseDuration;
+            }
+
+            if (distance < 0.001f)
+            {
+                return;
+            }
+
+            NudgeActor(slot, msg.Origin, distance, duration);
         }
     }
 }
