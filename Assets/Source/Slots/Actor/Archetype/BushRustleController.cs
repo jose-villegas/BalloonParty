@@ -70,20 +70,21 @@ namespace BalloonParty.Slots.Actor.Archetype
 
             for (var i = 0; i < _slotPositions.Count; i++)
             {
-                if (_rustledSlots.Contains(i))
-                {
-                    continue;
-                }
-
                 var slotPos = _slotPositions[i];
+                var withinRange = MathUtils.WithinRadius(projectilePos, slotPos, _settings.RustleProximityRadius);
 
-                if (!MathUtils.WithinRadius(projectilePos, slotPos, _settings.RustleProximityRadius))
+                if (!withinRange)
                 {
+                    // Left the bush — re-arm it so a later pass (e.g. after a bounce) rustles again.
+                    _rustledSlots.Remove(i);
                     continue;
                 }
 
-                _rustledSlots.Add(i);
-                SpawnRustleVfx(vfxPrefab, slotPos);
+                // Rustle once per entry: HashSet.Add is true only on the rising edge into the radius.
+                if (_rustledSlots.Add(i))
+                {
+                    SpawnRustleVfx(vfxPrefab, slotPos);
+                }
             }
         }
 
