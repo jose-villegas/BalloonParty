@@ -4,6 +4,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using BalloonParty.Item.Lightning;
 using BalloonParty.Shared.Animation;
+using BalloonParty.Shared.Extensions;
 using UnityEditor;
 using UnityEngine;
 
@@ -100,7 +101,7 @@ namespace BalloonParty.Editor.EffectPreview
                 for (var i = 0; i < _targetCount; i++)
                 {
                     var angle = 360f / _targetCount * i * Mathf.Deg2Rad;
-                    targets.Add(origin + (new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * 2f));
+                    targets.Add(origin + VectorMathExtensions.DirectionFromAngle(angle) * 2f);
                 }
             }
 

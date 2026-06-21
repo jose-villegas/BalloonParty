@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Shared.Extensions;
 using UnityEngine;
 
 namespace BalloonParty.Editor.Bush
@@ -42,7 +43,7 @@ namespace BalloonParty.Editor.Bush
                 var jitter = (float)(rng.NextDouble() - 0.5) * baseAngleStep * 0.4f;
                 var angle = baseAngle + jitter;
 
-                var dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                var dir = VectorMathExtensions.DirectionFromAngle(angle);
                 var length = Lerp(rng, settings.TrunkLength * 0.5f, settings.TrunkLength);
                 var end = centre + dir * length;
 
@@ -107,7 +108,7 @@ namespace BalloonParty.Editor.Bush
                 var lengthMax = settings.LengthRange.y;
                 var length = Lerp(rng, lengthMin, lengthMax) * Mathf.Pow(settings.LengthDecay, depth - 1);
 
-                var dir = new Vector2(Mathf.Cos(angle), Mathf.Sin(angle));
+                var dir = VectorMathExtensions.DirectionFromAngle(angle);
                 var end = origin + dir * length;
 
                 end = ClampUV(end);

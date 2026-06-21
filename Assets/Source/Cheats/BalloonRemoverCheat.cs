@@ -217,10 +217,12 @@ namespace BalloonParty.Cheats
             {
                 var a0 = i * Mathf.PI * 2f / segments;
                 var a1 = (i + 1) * Mathf.PI * 2f / segments;
-                var p0 = center + (new Vector3(Mathf.Cos(a0), Mathf.Sin(a0)) * radius);
-                var p1 = center + (new Vector3(Mathf.Cos(a1), Mathf.Sin(a1)) * radius);
-                var out0 = center + (new Vector3(Mathf.Cos(a0), Mathf.Sin(a0)) * (radius + halfWidth));
-                var out1 = center + (new Vector3(Mathf.Cos(a1), Mathf.Sin(a1)) * (radius + halfWidth));
+                var dir0 = VectorMathExtensions.DirectionFromAngle(a0);
+                var dir1 = VectorMathExtensions.DirectionFromAngle(a1);
+                var p0 = center + dir0 * radius;
+                var p1 = center + dir1 * radius;
+                var out0 = center + dir0 * (radius + halfWidth);
+                var out1 = center + dir1 * (radius + halfWidth);
 
                 GL.Vertex(p0);
                 GL.Vertex(out0);

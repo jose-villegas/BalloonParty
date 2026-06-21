@@ -3,6 +3,7 @@ using System.Reflection;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using BalloonParty.Item.Paint;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Rendering;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -99,7 +100,7 @@ namespace BalloonParty.Editor.EffectPreview
                 }
 
                 var angle = 360f / count * i * Mathf.Deg2Rad;
-                var direction = new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f);
+                Vector3 direction = VectorMathExtensions.DirectionFromAngle(angle);
                 var destination = origin + (direction * radius);
 
                 blob.gameObject.SetActive(true);

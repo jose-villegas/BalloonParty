@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
 using BalloonParty.UI.Score;
@@ -104,7 +105,7 @@ namespace BalloonParty.Game.Score
 
             var radius = Mathf.Min(_config.SlotSeparation.x, _config.SlotSeparation.y) * 1.5f;
             var angle = 2f * Mathf.PI * index / count;
-            return center + (new Vector3(Mathf.Cos(angle), Mathf.Sin(angle), 0f) * radius);
+            return center + VectorMathExtensions.DirectionFromAngle(angle) * radius;
         }
 
         private void SpawnTrail(string colorName, Vector3 center, Vector3 scatterOrigin, TrailId id)

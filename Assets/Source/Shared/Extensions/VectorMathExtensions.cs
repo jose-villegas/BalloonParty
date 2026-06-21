@@ -22,6 +22,16 @@ namespace BalloonParty.Shared.Extensions
             return ((Vector2)a).SqrDistance2D(b);
         }
 
+        /// <summary>
+        ///     Unit direction in the XY plane for <paramref name="radians" />. Multiply by a radius
+        ///     and add to a centre to place points on a circle. Returns a <see cref="Vector2" />,
+        ///     which promotes to <see cref="Vector3" /> (z = 0) for world-space callers.
+        /// </summary>
+        public static Vector2 DirectionFromAngle(float radians)
+        {
+            return new Vector2(Mathf.Cos(radians), Mathf.Sin(radians));
+        }
+
         public static bool WithinRadius(this Vector2 a, Vector2 b, float radius)
         {
             return a.SqrDistance2D(b) <= radius * radius;
