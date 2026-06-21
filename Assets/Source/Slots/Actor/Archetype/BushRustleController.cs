@@ -66,14 +66,17 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return;
             }
 
-            var projectilePos = _projectileProvider.Position;
+            UpdateRustleProximity(_projectileProvider.Position, vfxPrefab);
+        }
 
+        // Rustles each slot the projectile newly enters and re-arms slots it leaves.
+        private void UpdateRustleProximity(Vector3 projectilePos, ParticleSystem vfxPrefab)
+        {
             for (var i = 0; i < _slotPositions.Count; i++)
             {
                 var slotPos = _slotPositions[i];
-                var withinRange = projectilePos.WithinRadius(slotPos, _settings.RustleProximityRadius);
 
-                if (!withinRange)
+                if (!projectilePos.WithinRadius(slotPos, _settings.RustleProximityRadius))
                 {
                     // Left the bush — re-arm it so a later pass (e.g. after a bounce) rustles again.
                     _rustledSlots.Remove(i);

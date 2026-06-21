@@ -31,52 +31,76 @@ namespace BalloonParty.Slots.Actor
                 return new List<Vector2Int>();
             }
 
-            var available = new HashSet<Vector2Int>(emptySlots);
-            var result = new List<Vector2Int>(count);
-            var frontier = new List<Vector2Int>();
-            var clusterCentroids = new List<Vector2>();
-            var currentClusterSlots = new List<Vector2Int>();
+            var fill = new ClusterFill
+            {
+                Available = new HashSet<Vector2Int>(emptySlots),
+                Result = new List<Vector2Int>(count)
+            };
 
-            while (result.Count < count && available.Count > 0)
+            while (fill.Result.Count < count && fill.Available.Count > 0)
             {
                 // Cap reached for the current cluster — force a new seed
-                if (maxPerCluster > 0 && currentClusterSlots.Count >= maxPerCluster)
+                if (maxPerCluster > 0 && fill.CurrentClusterSlots.Count >= maxPerCluster)
                 {
-                    frontier.Clear();
+                    fill.Frontier.Clear();
                 }
 
-                if (frontier.Count == 0)
+                if (fill.Frontier.Count == 0)
                 {
-                    FinishCurrentCluster(currentClusterSlots, clusterCentroids);
-
-                    var seed = clusterCentroids.Count == 0
-                        ? PickRandom(available)
-                        : PickFarthestSeed(available, clusterCentroids);
-
-                    available.Remove(seed);
-                    result.Add(seed);
-                    currentClusterSlots.Add(seed);
-                    AddNeighborsToFrontier(seed, available, frontier);
+                    SeedNewCluster(fill);
                     continue;
                 }
 
-                var idx = Random.Range(0, frontier.Count);
-                var next = frontier[idx];
-                frontier[idx] = frontier[^1];
-                frontier.RemoveAt(frontier.Count - 1);
-
-                if (!available.Contains(next))
-                {
-                    continue;
-                }
-
-                available.Remove(next);
-                result.Add(next);
-                currentClusterSlots.Add(next);
-                AddNeighborsToFrontier(next, available, frontier);
+                GrowCluster(fill);
             }
 
-            return result;
+            return fill.Result;
+        }
+
+        // Starts a fresh cluster: closes the current one, picks a seed far from existing clusters,
+        // and primes the frontier with its neighbours.
+        private void SeedNewCluster(ClusterFill fill)
+        {
+            FinishCurrentCluster(fill.CurrentClusterSlots, fill.ClusterCentroids);
+
+            var seed = fill.ClusterCentroids.Count == 0
+                ? PickRandom(fill.Available)
+                : PickFarthestSeed(fill.Available, fill.ClusterCentroids);
+
+            fill.Available.Remove(seed);
+            fill.Result.Add(seed);
+            fill.CurrentClusterSlots.Add(seed);
+            AddNeighborsToFrontier(seed, fill.Available, fill.Frontier);
+        }
+
+        // Consumes one frontier slot (swap-removed), claiming it if still available and extending
+        // the frontier from it.
+        private void GrowCluster(ClusterFill fill)
+        {
+            var idx = Random.Range(0, fill.Frontier.Count);
+            var next = fill.Frontier[idx];
+            fill.Frontier[idx] = fill.Frontier[^1];
+            fill.Frontier.RemoveAt(fill.Frontier.Count - 1);
+
+            if (!fill.Available.Contains(next))
+            {
+                return;
+            }
+
+            fill.Available.Remove(next);
+            fill.Result.Add(next);
+            fill.CurrentClusterSlots.Add(next);
+            AddNeighborsToFrontier(next, fill.Available, fill.Frontier);
+        }
+
+        // Mutable working set for one SelectSlots run, passed between the seed/grow steps.
+        private sealed class ClusterFill
+        {
+            public readonly List<Vector2Int> Frontier = new();
+            public readonly List<Vector2> ClusterCentroids = new();
+            public readonly List<Vector2Int> CurrentClusterSlots = new();
+            public HashSet<Vector2Int> Available;
+            public List<Vector2Int> Result;
         }
 
         private static void FinishCurrentCluster(

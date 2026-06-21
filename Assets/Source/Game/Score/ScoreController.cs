@@ -186,16 +186,37 @@ namespace BalloonParty.Game.Score
             using var resolvedPool =
                 UnityEngine.Pool.ListPool<(string Color, int Points, int BaseProgress)>.Get(out var resolved);
 
-            var multiplier = 1;
-            if (attributions.Count == 1)
+            var multiplier = RecordStreakMultiplier(attributions);
+            ResolveAttributions(attributions, multiplier, resolved);
+
+            var groupSize = SumPoints(resolved);
+            if (groupSize <= 0)
             {
-                multiplier = _streakTracker.Record(attributions[0].ColorId, attributions[0].BreaksStreak);
-            }
-            else
-            {
-                _streakTracker.Record(null, true);
+                return;
             }
 
+            PublishPoints(resolved, groupSize, worldPosition);
+        }
+
+        // A single same-colour break extends the streak (and earns its multiplier); a mixed group
+        // breaks it. Returns the points multiplier to apply.
+        private int RecordStreakMultiplier(IList<ScoreAttribution> attributions)
+        {
+            if (attributions.Count == 1)
+            {
+                return _streakTracker.Record(attributions[0].ColorId, attributions[0].BreaksStreak);
+            }
+
+            _streakTracker.Record(null, true);
+            return 1;
+        }
+
+        // Projects each scorable attribution's points onto its colour, recording (colour, points,
+        // base-progress) for publishing.
+        private void ResolveAttributions(
+            IList<ScoreAttribution> attributions, int multiplier,
+            List<(string Color, int Points, int BaseProgress)> resolved)
+        {
             foreach (var attribution in attributions)
             {
                 var color = attribution.ColorId;
@@ -209,18 +230,24 @@ namespace BalloonParty.Game.Score
                 _projectedProgress[color] = baseProgress + pts;
                 resolved.Add((color, pts, baseProgress));
             }
+        }
 
-            var groupSize = 0;
+        private static int SumPoints(List<(string Color, int Points, int BaseProgress)> resolved)
+        {
+            var total = 0;
             foreach (var (_, pts, _) in resolved)
             {
-                groupSize += pts;
+                total += pts;
             }
 
-            if (groupSize <= 0)
-            {
-                return;
-            }
+            return total;
+        }
 
+        // Emits one ScorePointMessage per point, carrying the group size/index so the bars can
+        // animate the burst, and flagging the point that tips into the next level.
+        private void PublishPoints(
+            List<(string Color, int Points, int BaseProgress)> resolved, int groupSize, Vector3 worldPosition)
+        {
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
             var groupIndex = 0;
             foreach (var (color, points, baseProgress) in resolved)
