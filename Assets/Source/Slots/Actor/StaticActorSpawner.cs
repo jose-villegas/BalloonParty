@@ -128,25 +128,34 @@ namespace BalloonParty.Slots.Actor
             // their clusters incrementally — no explicit rebuild needed for the clear.
             foreach (var entry in _gridActorConfig.Entries)
             {
-                for (var col = 0; col < _grid.Columns; col++)
-                {
-                    for (var row = 0; row < _grid.Rows; row++)
-                    {
-                        var slot = new Vector2Int(col, row);
-                        var model = _grid.At(slot);
-                        if (model == null || !ModelMatches(model, entry.ActorType))
-                        {
-                            continue;
-                        }
+                ReturnActorsForEntry(entry);
+            }
+        }
 
-                        var view = _grid.ViewAt(slot) as GridActorView;
-                        _grid.Remove(slot);
-                        if (view != null)
-                        {
-                            _poolManager.Return(entry.PoolKey, view);
-                        }
-                    }
+        private void ReturnActorsForEntry(GridActorPrefabEntry entry)
+        {
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    ReturnActorAt(new Vector2Int(col, row), entry);
                 }
+            }
+        }
+
+        private void ReturnActorAt(Vector2Int slot, GridActorPrefabEntry entry)
+        {
+            var model = _grid.At(slot);
+            if (model == null || !ModelMatches(model, entry.ActorType))
+            {
+                return;
+            }
+
+            var view = _grid.ViewAt(slot) as GridActorView;
+            _grid.Remove(slot);
+            if (view != null)
+            {
+                _poolManager.Return(entry.PoolKey, view);
             }
         }
 
