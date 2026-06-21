@@ -1451,6 +1451,16 @@ def check_mutable_collection_param(path: Path, lines: list[str], result: AuditRe
         # and IReadOnlyCollection<T> lacks .Contains() (O(1) → O(n) regression).
     ]
 
+    # Receiver methods that don't mutate. A param used as the receiver of anything ELSE
+    # (e.g. a mutating extension like SwapRemoveAt) can't be proven read-only, so we don't flag it.
+    readonly_methods = {
+        "Count", "Contains", "ContainsKey", "ContainsValue", "IndexOf", "LastIndexOf",
+        "GetEnumerator", "ToArray", "ToList", "BinarySearch", "Find", "FindIndex",
+        "FindLast", "FindLastIndex", "FindAll", "Exists", "TrueForAll", "ConvertAll",
+        "AsReadOnly", "TryGetValue", "GetValueOrDefault", "Equals", "GetHashCode",
+        "GetType", "ToString", "Any", "All", "First", "FirstOrDefault", "Where", "Select",
+    }
+
     # Method/constructor signature pattern — must have an access modifier or known keyword
     method_sig_re = re.compile(
         r'^\s*(?:public|private|protected|internal|static|override|virtual|abstract|async|sealed|new|extern|\s)*'
@@ -1545,6 +1555,12 @@ def check_mutable_collection_param(path: Path, lines: list[str], result: AuditRe
             # Tuple swap: (param[...], ...) = ...
             if not mutated and re.search(rf'\({re.escape(param_name)}\s*\[', body_text):
                 mutated = True
+            # Receiver of a non-read-only method/extension call (e.g. list.SwapRemoveAt(...)).
+            if not mutated:
+                for call in re.finditer(rf'\b{re.escape(param_name)}\.(\w+)\s*\(', body_text):
+                    if call.group(1) not in readonly_methods:
+                        mutated = True
+                        break
             # IReadOnlyCollection lacks .Contains() — skip ICollection params that use it.
             if not mutated and suggestion == 'IReadOnlyCollection<T>':
                 if f'{param_name}.Contains(' in body_text:

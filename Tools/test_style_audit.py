@@ -289,6 +289,37 @@ namespace N
 }
 """, [], internal={"Dummy"}, mono=set(), editor_names={"Shared"})
 
+# ── mutable-param ──────────────────────────────────────────────────────────────
+
+# A param mutated only through a (mutating) extension method must NOT be told to become
+# read-only — the extension requires the concrete List<T>.
+expect_lines("mutable-param: mutating extension receiver is not flagged", "mutable-param", """\
+namespace N
+{
+    internal class C
+    {
+        private void M(List<int> items)
+        {
+            items.SwapRemoveAt(0);
+        }
+    }
+}
+""", [])
+
+expect_lines("mutable-param: read-only param is flagged", "mutable-param", """\
+namespace N
+{
+    internal class C
+    {
+        private bool M(List<int> items)
+        {
+            return items.Contains(5);
+        }
+    }
+}
+""", [5])
+
+
 # ── cognitive complexity ──────────────────────────────────────────────────────
 
 

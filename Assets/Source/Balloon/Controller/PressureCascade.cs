@@ -177,7 +177,6 @@ namespace BalloonParty.Balloon.Controller
             }
         }
 
-
         private static bool TryRelocationTarget(
             SlotGrid grid,
             Vector2Int from,
