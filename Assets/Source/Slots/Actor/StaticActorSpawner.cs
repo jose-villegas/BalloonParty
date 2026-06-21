@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Actor.Archetype;
@@ -118,8 +119,7 @@ namespace BalloonParty.Slots.Actor
             var idx = emptySlots.IndexOf(slot);
             if (idx >= 0)
             {
-                emptySlots[idx] = emptySlots[emptySlots.Count - 1];
-                emptySlots.RemoveAt(emptySlots.Count - 1);
+                emptySlots.SwapRemoveAt(idx);
             }
         }
 

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Grid;
 using UnityEngine;
 
@@ -79,8 +80,7 @@ namespace BalloonParty.Slots.Actor
         {
             var idx = Random.Range(0, fill.Frontier.Count);
             var next = fill.Frontier[idx];
-            fill.Frontier[idx] = fill.Frontier[^1];
-            fill.Frontier.RemoveAt(fill.Frontier.Count - 1);
+            fill.Frontier.SwapRemoveAt(idx);
 
             if (!fill.Available.Contains(next))
             {
