@@ -164,38 +164,6 @@ namespace BalloonParty.Projectile.View
             UpdateGlowColor();
         }
 
-        private Vector3 ClampToLimits(Vector3 pos, out Vector3 reflect)
-        {
-            reflect = Vector3.zero;
-            var limits = _config.LimitsClockwise;
-
-            if (pos.y > limits.x)
-            {
-                reflect += Vector3.down;
-                pos.y = limits.x;
-            }
-
-            if (pos.x > limits.y)
-            {
-                reflect += Vector3.left;
-                pos.x = limits.y;
-            }
-
-            if (pos.y < limits.z)
-            {
-                reflect += Vector3.up;
-                pos.y = limits.z;
-            }
-
-            if (pos.x < limits.w)
-            {
-                reflect += Vector3.right;
-                pos.x = limits.w;
-            }
-
-            return pos;
-        }
-
         // Separated so the absorb terminal path is testable without physics.
         internal void OnAbsorb(ISlotActor actor, Vector3 worldPos)
         {
@@ -215,7 +183,7 @@ namespace BalloonParty.Projectile.View
         {
             var pos = transform.position;
             pos += _model.Direction * (_model.Speed * Time.fixedDeltaTime);
-            pos = ClampToLimits(pos, out var reflect);
+            pos = new WallLimits(_config.LimitsClockwise).Clamp(pos, out var reflect);
 
             if (reflect != Vector3.zero)
             {

@@ -26,7 +26,7 @@ namespace BalloonParty.Prediction
             results.Clear();
             results.Add(origin);
 
-            var limits = _config.LimitsClockwise;
+            var walls = new WallLimits(_config.LimitsClockwise);
             var stepsLeft = _config.PredictionTraceMaxSteps;
             var maxBounces = _config.PredictionTraceMaxBounces;
 
@@ -36,24 +36,24 @@ namespace BalloonParty.Prediction
                 var extended = origin + (direction * shift);
                 var reflect = Vector3.zero;
 
-                if (extended.x > limits.y)
+                if (extended.x > walls.Right)
                 {
                     reflect += Vector3.left;
-                    shift = (limits.y - origin.x) / direction.x;
+                    shift = (walls.Right - origin.x) / direction.x;
                     extended = origin + (direction * shift);
                 }
 
-                if (extended.x < limits.w)
+                if (extended.x < walls.Left)
                 {
                     reflect += Vector3.right;
-                    shift = (limits.w - origin.x) / direction.x;
+                    shift = (walls.Left - origin.x) / direction.x;
                     extended = origin + (direction * shift);
                 }
 
-                if (extended.y > limits.x)
+                if (extended.y > walls.Top)
                 {
                     reflect += Vector3.down;
-                    shift = (limits.x - origin.y) / direction.y;
+                    shift = (walls.Top - origin.y) / direction.y;
                     extended = origin + (direction * shift);
                     maxBounces = 0;
                 }
