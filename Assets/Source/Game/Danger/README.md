@@ -30,10 +30,14 @@ Two inputs are deliberately simple heuristics and double as tuning knobs:
 
 ## Consumers
 
-`UI/Danger/DangerGradientView` samples a `Gradient` at `Level` to tint sprites and, optionally, slides a
-container Transform on Y (`restY + offsetY × Level`) so the warning element can ease in as danger rises.
-It treats the bound `Level` as a *target* and eases a current value toward it each frame (frame-rate-
-independent, `_lerpSpeed`), so colour and offset glide to new values rather than snapping. `DangerGradientBinder`
+`UI/Danger/DangerGradientView` samples a `Gradient` at `Level` to tint sprites and grows the **top/bottom
+gradient sprites** toward the centre — simulating the gradient creeping over the scenario. Each side has
+its own height increase (`SpriteRenderer.size.y += increase × Level`, so those sprites need a Sliced/Tiled
+draw mode) and is recentred by **half** the growth (centred pivot assumed) so its outer edge stays put:
+the bottom expands up, the top expands down. On top of that it slides a top and a bottom container by a
+**custom per-side Y offset** (`restY + offsetY × Level`, sign per the inspector value). It treats the bound
+`Level` as a *target* and eases a current value toward it each frame (frame-rate-independent, `_lerpSpeed`),
+so tint, growth and translation glide rather than snapping. `DangerGradientBinder`
 (in `DangerUILifetimeScope`, a child scope) binds the views to `SpaceDanger.Level` at `Start`. Author the
 gradient, assign the target sprites, and (optionally) set the container + Y offset in the inspector —
 nothing renders until those are wired.

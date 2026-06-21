@@ -119,6 +119,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!212 &82323591 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8432700413076448777, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+    type: 3}
+  m_PrefabInstance: {fileID: 860825355249607939}
+  m_PrefabAsset: {fileID: 0}
 --- !u!20 &253765506 stripped
 Camera:
   m_CorrespondingSourceObject: {fileID: 9161632677401763229, guid: 45a679b1438e74a72a716351daa7ff29,
@@ -193,6 +199,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &617315209 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 566276964987894874, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+    type: 3}
+  m_PrefabInstance: {fileID: 860825355249607939}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &943109113
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,6 +255,12 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &1161859947 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5364007782103199421, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+    type: 3}
+  m_PrefabInstance: {fileID: 860825355249607939}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &834494875442057147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -394,6 +412,51 @@ PrefabInstance:
       propertyPath: _gradient.key3.r
       value: 0.2
       objectReference: {fileID: 0}
+    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: _topSizeIncrease
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: _bottomSizeIncrease
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: _topContainerOffsetY
+      value: 1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: _bottomContainerOffsetY
+      value: -1.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: _topGradients.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: _bottomGradients.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: '_topGradients.Array.data[0]'
+      value: 
+      objectReference: {fileID: 617315209}
+    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: '_bottomGradients.Array.data[0]'
+      value: 
+      objectReference: {fileID: 1161859947}
+    - target: {fileID: 7046068143476676169, guid: b87d2a91b2e8044649b32c3a684fd6d9,
+        type: 3}
+      propertyPath: '_bottomGradients.Array.data[1]'
+      value: 
+      objectReference: {fileID: 82323591}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
