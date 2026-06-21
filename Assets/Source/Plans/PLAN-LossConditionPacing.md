@@ -323,12 +323,42 @@ unit-testable; substitute them with NSubstitute in tests:
 | 11 | Placeholder GameOver screen — final + best score, restart button via `NavigationTrigger` → `RestartRun()`, plus scene/prefab wiring. | in-editor (not `dotnet build`-verifiable) |
 | 12 | Docs — `Score`/`GameState`/`Cheats` READMEs; tick this phase. | — |
 
-### Follow-on (after Block A) — loss cinematic
+### Deferred cinematics (loss + danger) — handoff & build recipe
 
-`GameOverLossEffect` mirroring `LevelUpTrailEffect`: a new `CinematicState` value, `BeginCinematic`
-+ `PauseService.Pause(Cinematic)`, a camera push-in / slow-mo `Time.timeScale` curve via DOTween
-(`.SetUpdate(true)`), then `EndCinematic` → GameOver screen. Likely a `GameOverLifetimeScope` with
-a `CinematicEndGate`, mirroring `LevelUpLifetimeScope`. Self-contained; needs in-editor tuning.
+**Status: not started.** Two cinematics are deferred. Read `Game/Cinematics/README.md` first — it documents
+the **producer → director → scene** system in full; this section is the loss/danger-specific plan on top.
+
+**The system in one breath:** a producer MonoBehaviour (e.g. `LevelUpTrailEffect`) builds a
+`CinematicScene` (value object of `OnBegin/OnTick/OnLateTick/OnEnd` actions) and hands it to the injected
+`CinematicDirector`. `director.BeginCinematic(state)` flips the static `Cinematic.Begin(state)` (which
+notifies all `ICinematicAware` services) and `director.PlayScene(scene)` runs the callbacks; the director
+ticks the active scene each frame (`ITickable`/`ILateTickable`). `director.EndCinematic()` → `Cinematic.End()`.
+A `CinematicEndGate(state)` registered as `IReadyGate` lets UI/flow wait for the cinematic to finish.
+`CinematicState` (in `Shared/GameState/`) is the enum — **add new values there** (`None/LevelUpPanIn/LevelUpRestore` today).
+
+**A. Loss cinematic — `GameOverLossEffect`** (mirrors `LevelUpTrailEffect`):
+- New `CinematicState.GameOverLoss` (+ maybe `GameOverRestore`).
+- Hook point: `RunController.EndRun()` currently snapshots meta → publishes `GameOverMessage` →
+  `INavigation.TransitionTo(GameOver)` synchronously. For a cinematic, the effect should subscribe to
+  `GameOverMessage` (or `RunController` raises a "begin loss" beat) → `BeginCinematic(GameOverLoss)` +
+  `PauseService.Pause(PauseSource.Cinematic)` → camera push-in / slow-mo `Time.timeScale` curve via DOTween
+  `.SetUpdate(true)` → `EndCinematic()` → reveal the GameOver screen. **Gate the GameOver screen** behind a
+  `CinematicEndGate(GameOverLoss)` registered as `IReadyGate` in a `GameOverLifetimeScope` (mirror
+  `LevelUpLifetimeScope`), so the screen waits for the cinematic. Camera ref via `[SerializeField] Camera`
+  (Android `Camera.main` fragility — see README). `EndRun` already no-ops during a level-up cinematic, so
+  the two never overlap.
+- ⚠️ `Time.timeScale`/pause: the GameOver screen + restart must run in **unscaled** time (the level-up
+  popup uses `AnimatorUpdateMode.UnscaledTime`); restart (`RunController.RestartRun`) must restore
+  `Time.timeScale = 1` and `Resume(Cinematic)`.
+
+**B. Danger cinematic** (optional polish, user flagged as "maybe"): a brief beat on a reject / near-death,
+reusing the same director + a new `CinematicState.Danger`. It can read the existing `SpaceDanger.Level`
+(early-warning signal already built) to trigger near a threshold rather than re-deriving danger. Keep it
+short and **don't** `Pause` the whole game for it unless desired; if it drives the camera it must coordinate
+with `CameraShakeService` (which already skips while `Cinematic.IsPlaying`).
+
+**Decisions still open for a fresh session:** exact beats/curves (tuning), whether the danger cinematic
+pauses, and whether loss needs a separate restore cinematic. Self-contained work; needs in-editor tuning.
 
 ### Test strategy
 
