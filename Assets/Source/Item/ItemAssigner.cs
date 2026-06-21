@@ -44,19 +44,7 @@ namespace BalloonParty.Item
                 return;
             }
 
-            var turns = msg.TurnCount;
-            var items = _itemConfig.Items;
-
-            _candidateBuffer.Clear();
-            for (var i = 0; i < items.Count; i++)
-            {
-                var x = items[i];
-                if (x.TurnCheckEvery > 0 && turns % x.TurnCheckEvery == 0)
-                {
-                    _candidateBuffer.Add(x);
-                }
-            }
-
+            CollectCandidates(msg.TurnCount);
             if (_candidateBuffer.Count == 0)
             {
                 return;
@@ -74,15 +62,7 @@ namespace BalloonParty.Item
                 return;
             }
 
-            _eligibleBuffer.Clear();
-            for (var i = 0; i < msg.NewBalloons.Count; i++)
-            {
-                if (msg.NewBalloons[i] is IHasWriteableItemSlot slot)
-                {
-                    _eligibleBuffer.Add(slot);
-                }
-            }
-
+            CollectEligibleSlots(msg.NewBalloons);
             if (_eligibleBuffer.Count == 0)
             {
                 return;
@@ -90,6 +70,34 @@ namespace BalloonParty.Item
 
             var indexOf = Random.Range(0, _eligibleBuffer.Count);
             _eligibleBuffer[indexOf].Item.Value = picked.Type;
+        }
+
+        // Items whose turn-check interval lands on this turn become drop candidates.
+        private void CollectCandidates(int turns)
+        {
+            _candidateBuffer.Clear();
+            var items = _itemConfig.Items;
+            for (var i = 0; i < items.Count; i++)
+            {
+                var item = items[i];
+                if (item.TurnCheckEvery > 0 && turns % item.TurnCheckEvery == 0)
+                {
+                    _candidateBuffer.Add(item);
+                }
+            }
+        }
+
+        // Newly-spawned balloons that can actually carry an item.
+        private void CollectEligibleSlots(IReadOnlyList<IBalloonModel> newBalloons)
+        {
+            _eligibleBuffer.Clear();
+            for (var i = 0; i < newBalloons.Count; i++)
+            {
+                if (newBalloons[i] is IHasWriteableItemSlot slot)
+                {
+                    _eligibleBuffer.Add(slot);
+                }
+            }
         }
 
         private int CountBalloonsWithItem(ItemType type)

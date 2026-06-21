@@ -127,25 +127,35 @@ namespace BalloonParty.Slots.Grid
                 var col = Mathf.RoundToInt(Mathf.Lerp(source.x, target.x, t));
                 var row = Mathf.RoundToInt(Mathf.Lerp(source.y, target.y, t));
 
-                var inBounds = col >= 0 && col < Columns && row >= 0 && row < Rows;
-
-                if (inBounds && !IsEmpty(col, row)
-                              && _slots[col, row].Kind == SlotActorKind.Static
-                              && !IsTraversable(col, row))
-                {
-                    Debug.LogWarning(
-                        $"SlotGrid.ComputePath: slot ({col},{row}) is not traversable. " +
-                        "Path passes through it — rerouting not yet implemented (Phase 9).");
-                }
-
-                if (inBounds && _balancePathHolder.IsInTransit(col, row))
-                {
-                    Debug.LogWarning(
-                        $"SlotGrid.ComputePath: slot ({col},{row}) is in-transit from a balance move. " +
-                        "Path crosses a relocating balloon — rerouting not yet implemented (Phase 9).");
-                }
-
+                WarnIfPathBlocked(col, row);
                 results.Add(IndexToWorldPosition(new Vector2Int(col, row)));
+            }
+        }
+
+        // Diagnostics only: the path is laid straight through; rerouting around blockers/relocating
+        // balloons isn't implemented yet (Phase 9), so warn when the line crosses one.
+        private void WarnIfPathBlocked(int col, int row)
+        {
+            var inBounds = col >= 0 && col < Columns && row >= 0 && row < Rows;
+            if (!inBounds)
+            {
+                return;
+            }
+
+            if (!IsEmpty(col, row)
+                && _slots[col, row].Kind == SlotActorKind.Static
+                && !IsTraversable(col, row))
+            {
+                Debug.LogWarning(
+                    $"SlotGrid.ComputePath: slot ({col},{row}) is not traversable. " +
+                    "Path passes through it — rerouting not yet implemented (Phase 9).");
+            }
+
+            if (_balancePathHolder.IsInTransit(col, row))
+            {
+                Debug.LogWarning(
+                    $"SlotGrid.ComputePath: slot ({col},{row}) is in-transit from a balance move. " +
+                    "Path crosses a relocating balloon — rerouting not yet implemented (Phase 9).");
             }
         }
 
