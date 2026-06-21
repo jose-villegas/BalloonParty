@@ -145,83 +145,103 @@ def check_namespace(path: Path, lines: list[str], result: AuditResult):
         f"no namespace declaration; expected '{expected}'"))
 
 
+# ─── Shared rule logic ──────────────────────────────────────────────────────
+# These predicates are used by BOTH the check_* and fix_* functions so detection lives in
+# exactly one place — a check and its auto-fix can never drift apart.
+
+_BRACES_CONTROL_RE = re.compile(
+    r"^\s*(if|else\s+if|else|for|foreach|while|using|lock|fixed)\s*(\(.*\))?\s*$")
+_BLOCK_COMMENT_HEADER_RE = re.compile(r"^\s*//\s*[=\-*#]{4,}")
+_REDUNDANT_COMMENT_RE = re.compile(
+    r"^\s*//\s*(inject\s+depend|constructor|update\s+position|set\s+color|"
+    r"get\s+component|initialize|cleanup|dispose|destructor|"
+    r"fields|properties|methods|private\s+methods|public\s+methods)\s*$",
+    re.I)
+_ALLMAN_KEYWORD_RE = re.compile(
+    r"(if|else|for|foreach|while|using|lock|fixed|class|struct|enum|interface|"
+    r"namespace|switch|try|catch|finally|do)\b.*\{$")
+_ALLMAN_METHOD_RE = re.compile(
+    r"\s*(public|private|protected|internal|static|async|override|virtual|abstract|"
+    r"sealed|void|[\w<>\[\],\s]+)\s+\w+\s*\(.*\)\s*\{$")
+_ALLMAN_INITIALISER_RE = re.compile(r"(=|new\s+\w+.*|new\(.*\))\s*\{$")
+_INTERP_BRACE_RE = re.compile(r'"\$?.*\{')
+
+
+def _allman_split(line: str):
+    """If `line` puts an opening brace on the same line in violation of Allman style, return
+    (kind, indent, code_part) where kind is 'control' or 'method' and (indent, code_part) are
+    the pieces to split into; otherwise None."""
+    stripped = line.rstrip()
+    if stripped.strip() == "{" or "=>" in stripped or _INTERP_BRACE_RE.search(stripped):
+        return None
+    if not stripped.endswith("{") or _ALLMAN_INITIALISER_RE.search(stripped):
+        return None
+    if _ALLMAN_KEYWORD_RE.search(stripped):
+        kind = "control"
+    elif _ALLMAN_METHOD_RE.match(stripped):
+        kind = "method"
+    else:
+        return None
+    indent = line[:len(line) - len(line.lstrip())]
+    return kind, indent, stripped[len(indent):].rstrip(" {").rstrip()
+
+
+def _braceless_bodies(lines: list[str]):
+    """Yield (control_idx, body_idx) 0-based for each control statement whose body has no
+    braces. body_idx is the first non-blank line after the (possibly multi-line) condition."""
+    n = len(lines)
+    i = 0
+    while i < n:
+        if _BRACES_CONTROL_RE.match(lines[i].rstrip()):
+            paren_depth = lines[i].count("(") - lines[i].count(")")
+            scan = i + 1
+            while paren_depth > 0 and scan < n:
+                paren_depth += lines[scan].count("(") - lines[scan].count(")")
+                scan += 1
+            j = scan
+            while j < n and not lines[j].strip():
+                j += 1
+            if j < n:
+                nxt = lines[j].strip()
+                if not nxt.startswith("{") and not nxt.startswith("//"):
+                    yield i, j
+        i += 1
+
+
 def check_braces_required(path: Path, lines: list[str], result: AuditResult):
     """Braces required for if/else/for/foreach/while/using/lock/fixed."""
-    control_re = re.compile(
-        r"^\s*(if|else\s+if|else|for|foreach|while|using|lock|fixed)\s*(\(.*\))?\s*$"
-    )
-    n = len(lines)
-    for i, line in enumerate(lines, 1):
-        stripped = line.rstrip()
-        if not control_re.match(stripped):
-            continue
-
-        # Multi-line condition: skip forward until parens are balanced
-        paren_depth = stripped.count("(") - stripped.count(")")
-        scan = i  # 1-based index of the line *after* the current one
-        while paren_depth > 0 and scan < n:
-            paren_depth += lines[scan].count("(") - lines[scan].count(")")
-            scan += 1
-
-        # Next non-empty line after the (possibly multi-line) condition
-        for j in range(scan, min(scan + 3, n)):
-            next_line = lines[j].strip()
-            if not next_line:
-                continue
-            if next_line.startswith("{") or next_line.startswith("//"):
-                break
-            # It's a statement without braces
-            result.add(Violation(str(path), i, "braces-required",
-                f"control statement without braces: {stripped.strip()}", fixable=True))
-            break
+    for ctrl, _ in _braceless_bodies(lines):
+        result.add(Violation(str(path), ctrl + 1, "braces-required",
+            f"control statement without braces: {lines[ctrl].strip()}", fixable=True))
 
 
 def check_allman_braces(path: Path, lines: list[str], result: AuditResult):
     """Opening brace must be on its own line (Allman style).
     Exceptions: object/collection initialisers, lambdas, array init, auto-properties."""
     for i, line in enumerate(lines, 1):
-        stripped = line.rstrip()
-        # Skip lines that are ONLY a brace
-        if stripped.strip() == "{":
+        split = _allman_split(line)
+        if split is None:
             continue
-        # Skip string interpolation, attributes, lambdas, arrow functions
-        if "=>" in stripped:
-            continue
-        if re.search(r'"\$?.*\{', stripped):
-            continue
-        # Detect: ) { or keyword {  at end of line (but not initialiser = new Foo {)
-        if stripped.endswith("{") and not re.search(r"(=|new\s+\w+.*|new\(.*\))\s*\{$", stripped):
-            # Could be control flow or method signature with brace on same line
-            if re.search(r"(if|else|for|foreach|while|using|lock|fixed|class|struct|enum|interface|namespace|switch|try|catch|finally|do)\b.*\{$", stripped):
-                result.add(Violation(str(path), i, "allman-braces",
-                    f"opening brace on same line: {stripped.strip()[:80]}", fixable=True))
-            elif re.match(r"\s*(public|private|protected|internal|static|async|override|virtual|abstract|sealed|void|[\w<>\[\],\s]+)\s+\w+\s*\(.*\)\s*\{$", stripped):
-                result.add(Violation(str(path), i, "allman-braces",
-                    f"method brace on same line: {stripped.strip()[:80]}", fixable=True))
+        kind = split[0]
+        label = "opening brace on same line" if kind == "control" else "method brace on same line"
+        result.add(Violation(str(path), i, "allman-braces",
+            f"{label}: {line.rstrip().strip()[:80]}", fixable=True))
 
 
 def check_block_comment_headers(path: Path, lines: list[str], result: AuditResult):
     """No block comment headers like // ====== or // ------."""
-    header_re = re.compile(r"^\s*//\s*[=\-*#]{4,}")
     for i, line in enumerate(lines, 1):
-        if header_re.match(line):
+        if _BLOCK_COMMENT_HEADER_RE.match(line):
             result.add(Violation(str(path), i, "block-comment-header",
                 f"block comment header: {line.strip()[:60]}", fixable=True))
 
 
 def check_redundant_comments(path: Path, lines: list[str], result: AuditResult):
-    """Flag common redundant comment patterns."""
-    patterns = [
-        (re.compile(r"^\s*//\s*(inject\s+depend|constructor|update\s+position|set\s+color|"
-                     r"get\s+component|initialize|cleanup|dispose|destructor|"
-                     r"fields|properties|methods|private\s+methods|public\s+methods)\s*$", re.I),
-         "redundant comment"),
-    ]
+    """Flag common redundant comment patterns (// constructor, // fields, …)."""
     for i, line in enumerate(lines, 1):
-        for pat, desc in patterns:
-            if pat.match(line):
-                result.add(Violation(str(path), i, "redundant-comment",
-                    f"{desc}: {line.strip()[:60]}", fixable=True))
+        if _REDUNDANT_COMMENT_RE.match(line):
+            result.add(Violation(str(path), i, "redundant-comment",
+                f"redundant comment: {line.strip()[:60]}", fixable=True))
 
 
 def check_start_coroutine(path: Path, lines: list[str], result: AuditResult):
@@ -1468,77 +1488,37 @@ def fix_trailing_newlines(path: Path, lines: list[str]) -> list[str]:
 
 def fix_block_comment_headers(path: Path, lines: list[str]) -> list[str]:
     """Remove block comment header lines (// ====, // ----, etc.)."""
-    header_re = re.compile(r"^\s*//\s*[=\-*#]{4,}")
-    return [line for line in lines if not header_re.match(line)]
+    return [line for line in lines if not _BLOCK_COMMENT_HEADER_RE.match(line)]
 
 
 def fix_redundant_comments(path: Path, lines: list[str]) -> list[str]:
     """Remove redundant comment lines (// constructor, // fields, etc.)."""
-    pat = re.compile(
-        r"^\s*//\s*(inject\s+depend|constructor|update\s+position|set\s+color|"
-        r"get\s+component|initialize|cleanup|dispose|destructor|"
-        r"fields|properties|methods|private\s+methods|public\s+methods)\s*$",
-        re.I,
-    )
-    return [line for line in lines if not pat.match(line)]
+    return [line for line in lines if not _REDUNDANT_COMMENT_RE.match(line)]
 
 
 def fix_allman_braces(path: Path, lines: list[str]) -> list[str]:
-    """Split trailing { onto its own line (Allman brace style)."""
+    """Split a trailing { onto its own line (Allman brace style)."""
     out = []
     for line in lines:
-        stripped = line.rstrip()
-        # Apply the same exclusions as the checker
-        if stripped.strip() == "{":
+        split = _allman_split(line)
+        if split is None:
             out.append(line)
             continue
-        if "=>" in stripped:
-            out.append(line)
-            continue
-        if re.search(r'"\$?.*\{', stripped):
-            out.append(line)
-            continue
-        if stripped.endswith("{") and not re.search(r"(=|new\s+\w+.*|new\(.*\))\s*\{$", stripped):
-            indent = len(line) - len(line.lstrip())
-            indent_str = line[:indent]
-            code_part = stripped[indent:].rstrip(" {").rstrip()
-            out.append(indent_str + code_part + "\n")
-            out.append(indent_str + "{\n")
-        else:
-            out.append(line)
+        _, indent, code_part = split
+        out.append(indent + code_part + "\n")
+        out.append(indent + "{\n")
     return out
 
 
 def fix_braces_required(path: Path, lines: list[str]) -> list[str]:
-    """Wrap braceless control-flow bodies in { }."""
-    control_re = re.compile(
-        r"^\s*(if|else\s+if|else|for|foreach|while|using|lock|fixed)\s*(\(.*\))?\s*$"
-    )
-    result_lines = list(lines)
-    i = 0
-    while i < len(result_lines):
-        if control_re.match(result_lines[i].rstrip()):
-            # Skip forward past multi-line conditions until parens are balanced
-            paren_depth = result_lines[i].count("(") - result_lines[i].count(")")
-            scan = i + 1
-            while paren_depth > 0 and scan < len(result_lines):
-                paren_depth += result_lines[scan].count("(") - result_lines[scan].count(")")
-                scan += 1
-
-            j = scan
-            while j < len(result_lines) and j < scan + 4 and not result_lines[j].strip():
-                j += 1
-            if j < len(result_lines):
-                next_s = result_lines[j].strip()
-                if not next_s.startswith("{") and not next_s.startswith("//"):
-                    ctrl_indent = len(result_lines[i]) - len(result_lines[i].lstrip())
-                    ctrl_indent_str = result_lines[i][:ctrl_indent]
-                    result_lines.insert(j, ctrl_indent_str + "{\n")
-                    result_lines.insert(j + 2, ctrl_indent_str + "}\n")
-                    i = j + 3
-                    continue
-        i += 1
-    return result_lines
+    """Wrap braceless control-flow bodies in { }. Insertions are applied bottom-up so
+    earlier line indices stay valid."""
+    out = list(lines)
+    for ctrl, body in reversed(list(_braceless_bodies(lines))):
+        indent = lines[ctrl][:len(lines[ctrl]) - len(lines[ctrl].lstrip())]
+        out.insert(body, indent + "{\n")
+        out.insert(body + 2, indent + "}\n")
+    return out
 
 
 # Ordered pipeline: each entry is (violation-rule-name, fixer-function).

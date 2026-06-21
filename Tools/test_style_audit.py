@@ -54,6 +54,20 @@ def _record(label, got, want):
         print(f"          got={got}  want={want}")
 
 
+def expect_fix_output(label, fixfn, snippet, want):
+    fixed = "".join(fixfn(A.SOURCE_ROOT / "Foo/Bar.cs", snippet.splitlines(keepends=True)))
+    _record(label, fixed, want)
+
+
+def expect_fix_clears(label, fixfn, rule, snippet):
+    # Round-trip: a fixer's output must pass the matching check — the strongest guard that
+    # detection and fix share one predicate and can't drift.
+    fixed = fixfn(A.SOURCE_ROOT / "Foo/Bar.cs", snippet.splitlines(keepends=True))
+    res = A.AuditResult()
+    A.RULES[rule](A.SOURCE_ROOT / "Foo/Bar.cs", fixed, res)
+    _record(label, [v.line for v in res.violations], [])
+
+
 # ── member-ordering ───────────────────────────────────────────────────────────
 
 # Regression: a nested `readonly struct` must NOT be read as a readonly field after a property.
@@ -245,6 +259,27 @@ namespace N
     }
 }
 """, [], internal={"Dummy"}, mono=set(), editor_names={"Shared"})
+
+# ── fixers (shared predicates: fix output must pass the matching check) ────────
+
+expect_fix_output("fix braces: wraps a braceless if", A.fix_braces_required,
+                  "if (x)\n    Foo();\n",
+                  "if (x)\n{\n    Foo();\n}\n")
+
+expect_fix_clears("round-trip: braces fix clears braces check", A.fix_braces_required, "braces",
+                  "if (x)\n    Foo();\n")
+
+expect_fix_clears("round-trip: allman fix clears allman check", A.fix_allman_braces, "allman",
+                  "internal class C {\n}\n")
+
+expect_fix_clears("round-trip: block-comment fix clears its check",
+                  A.fix_block_comment_headers, "block-comments",
+                  "// ======== Section ========\nvar x = 1;\n")
+
+expect_fix_clears("round-trip: redundant-comment fix clears its check",
+                  A.fix_redundant_comments, "redundant-comments",
+                  "// constructor\npublic C() { }\n")
+
 
 # ── cross-assembly helpers ────────────────────────────────────────────────────
 
