@@ -125,9 +125,8 @@ namespace BalloonParty.Balloon.Spawner
             {
                 if (distance == 0)
                 {
-                    if (resolve(fromCol) is { } own)
+                    if (TryColumn(fromCol, resolve, out target))
                     {
-                        target = own;
                         return true;
                     }
 
@@ -135,18 +134,28 @@ namespace BalloonParty.Balloon.Spawner
                 }
 
                 var left = fromCol - distance;
-                if (left >= 0 && resolve(left) is { } leftHit)
+                if (left >= 0 && TryColumn(left, resolve, out target))
                 {
-                    target = leftHit;
                     return true;
                 }
 
                 var right = fromCol + distance;
-                if (right < _grid.Columns && resolve(right) is { } rightHit)
+                if (right < _grid.Columns && TryColumn(right, resolve, out target))
                 {
-                    target = rightHit;
                     return true;
                 }
+            }
+
+            target = default;
+            return false;
+        }
+
+        private static bool TryColumn(int col, Func<int, Vector2Int?> resolve, out Vector2Int target)
+        {
+            if (resolve(col) is { } hit)
+            {
+                target = hit;
+                return true;
             }
 
             target = default;

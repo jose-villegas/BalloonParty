@@ -95,24 +95,31 @@ namespace BalloonParty.Slots.Actor
 
                 foreach (var slot in selected)
                 {
-                    var model = CreateModel(entry.ActorType);
-                    GridActorView view = null;
-
-                    if (_poolsRegistered)
-                    {
-                        view = _poolManager.Get<GridActorView>(entry.PoolKey);
-                        view.transform.position = _grid.IndexToWorldPosition(slot);
-                    }
-
-                    _grid.Place(model, view, slot);
-
-                    var idx = emptySlots.IndexOf(slot);
-                    if (idx >= 0)
-                    {
-                        emptySlots[idx] = emptySlots[emptySlots.Count - 1];
-                        emptySlots.RemoveAt(emptySlots.Count - 1);
-                    }
+                    PlaceActor(entry, slot, emptySlots);
                 }
+            }
+        }
+
+        // Spawns one actor of `entry` at `slot` (pulling a pooled view when pools are ready) and
+        // swap-removes the slot from `emptySlots` so it isn't reused this pass.
+        private void PlaceActor(GridActorPrefabEntry entry, Vector2Int slot, List<Vector2Int> emptySlots)
+        {
+            var model = CreateModel(entry.ActorType);
+            GridActorView view = null;
+
+            if (_poolsRegistered)
+            {
+                view = _poolManager.Get<GridActorView>(entry.PoolKey);
+                view.transform.position = _grid.IndexToWorldPosition(slot);
+            }
+
+            _grid.Place(model, view, slot);
+
+            var idx = emptySlots.IndexOf(slot);
+            if (idx >= 0)
+            {
+                emptySlots[idx] = emptySlots[emptySlots.Count - 1];
+                emptySlots.RemoveAt(emptySlots.Count - 1);
             }
         }
 
