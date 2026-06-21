@@ -49,12 +49,13 @@ namespace BalloonParty.Tests.Balloon
             config.SlotsSize.Returns(new Vector2Int(3, 3));
             var pathHolder = new BalancePathHolder();
             var grid = new SlotGrid(config, pathHolder);
+            var balanceQuery = new GridBalanceQuery(grid);
             var balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             var subscriber = Substitute.For<ISubscriber<BalanceBalloonsMessage>>();
 
             // DisturbanceField is only dereferenced when animating a non-empty balance, so an
             // empty-grid balancer can omit it.
-            return new BalloonBalancer(grid, balloonsConfig, pathHolder, subscriber, null);
+            return new BalloonBalancer(grid, balanceQuery, balloonsConfig, pathHolder, subscriber, null);
         }
     }
 }

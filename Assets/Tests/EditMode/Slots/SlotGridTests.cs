@@ -16,6 +16,7 @@ namespace BalloonParty.Tests.Slots
     {
         private IGameConfiguration _config;
         private SlotGrid _grid;
+        private GridBalanceQuery _balanceQuery;
 
         [SetUp]
         public void SetUp()
@@ -26,6 +27,7 @@ namespace BalloonParty.Tests.Slots
             _config.SlotsOffset.Returns(new Vector2(2.5f, 4f));
 
             _grid = new SlotGrid(_config, new BalancePathHolder());
+            _balanceQuery = new GridBalanceQuery(_grid);
         }
 
         [Test]
@@ -146,7 +148,7 @@ namespace BalloonParty.Tests.Slots
             PlaceAt(1, 1);
             PlaceAt(2, 2);
 
-            Assert.IsFalse(_grid.IsUnbalanced(2, 2));
+            Assert.IsFalse(_balanceQuery.IsUnbalanced(2, 2));
         }
 
         [Test]
@@ -154,7 +156,7 @@ namespace BalloonParty.Tests.Slots
         {
             PlaceAt(2, 1);
 
-            Assert.IsTrue(_grid.IsUnbalanced(2, 1));
+            Assert.IsTrue(_balanceQuery.IsUnbalanced(2, 1));
         }
 
         [Test]
@@ -164,7 +166,7 @@ namespace BalloonParty.Tests.Slots
             PlaceAt(2, 1);
             PlaceAt(2, 2);
 
-            Assert.IsTrue(_grid.IsUnbalanced(2, 2));
+            Assert.IsTrue(_balanceQuery.IsUnbalanced(2, 2));
         }
 
         [Test]
@@ -172,14 +174,14 @@ namespace BalloonParty.Tests.Slots
         {
             PlaceAt(0, 0);
 
-            Assert.IsFalse(_grid.IsUnbalanced(0, 0));
+            Assert.IsFalse(_balanceQuery.IsUnbalanced(0, 0));
         }
 
         [Test]
         public void OptimalNextEmptySlot_BothCandidatesEmpty_EqualWeight_ReturnsDiagonal()
         {
             // >= comparison means the diagonal candidate wins on tie
-            var result = _grid.OptimalNextEmptySlot(2, 2);
+            var result = _balanceQuery.OptimalNextEmptySlot(2, 2);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(new Vector2Int(1, 1), result.Value);
@@ -191,14 +193,14 @@ namespace BalloonParty.Tests.Slots
             PlaceAt(2, 1);
             PlaceAt(1, 1);
 
-            Assert.IsNull(_grid.OptimalNextEmptySlot(2, 2));
+            Assert.IsNull(_balanceQuery.OptimalNextEmptySlot(2, 2));
         }
 
         [Test]
         public void OptimalNextEmptySlot_DiagonalOutOfBounds_ReturnsDirect()
         {
             // Col 0, even row: diagonal candidate is -1, out of bounds
-            var result = _grid.OptimalNextEmptySlot(0, 2);
+            var result = _balanceQuery.OptimalNextEmptySlot(0, 2);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(new Vector2Int(0, 1), result.Value);
@@ -211,7 +213,7 @@ namespace BalloonParty.Tests.Slots
             PlaceAt(2, 0);
             PlaceAt(3, 0);
 
-            var result = _grid.OptimalNextEmptySlot(2, 2);
+            var result = _balanceQuery.OptimalNextEmptySlot(2, 2);
 
             Assert.IsNotNull(result);
             Assert.AreEqual(new Vector2Int(2, 1), result.Value);
@@ -220,7 +222,7 @@ namespace BalloonParty.Tests.Slots
         [Test]
         public void OptimalNextEmptySlot_Row0_ReturnsNull()
         {
-            Assert.IsNull(_grid.OptimalNextEmptySlot(2, 0));
+            Assert.IsNull(_balanceQuery.OptimalNextEmptySlot(2, 0));
         }
 
         [Test]
@@ -361,7 +363,7 @@ namespace BalloonParty.Tests.Slots
             PlaceAt(3, 0);
             PlaceAt(2, 1);
 
-            Assert.IsFalse(_grid.IsUnbalanced(2, 1));
+            Assert.IsFalse(_balanceQuery.IsUnbalanced(2, 1));
         }
 
         [Test]
@@ -373,7 +375,7 @@ namespace BalloonParty.Tests.Slots
             PlaceAt(2, 1);
             PlaceAt(2, 2);
 
-            Assert.IsFalse(_grid.IsUnbalanced(2, 2));
+            Assert.IsFalse(_balanceQuery.IsUnbalanced(2, 2));
         }
 
         [Test]
@@ -384,7 +386,7 @@ namespace BalloonParty.Tests.Slots
             _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 1));
             PlaceAt(2, 2);
 
-            Assert.IsFalse(_grid.IsUnbalanced(2, 2));
+            Assert.IsFalse(_balanceQuery.IsUnbalanced(2, 2));
         }
 
 
@@ -395,7 +397,7 @@ namespace BalloonParty.Tests.Slots
             _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 0));
             PlaceAt(0, 1);
 
-            Assert.IsFalse(_grid.IsUnbalanced(0, 1));
+            Assert.IsFalse(_balanceQuery.IsUnbalanced(0, 1));
         }
 
         [Test]
@@ -406,7 +408,7 @@ namespace BalloonParty.Tests.Slots
             _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 0));
             PlaceAt(1, 1);
 
-            Assert.IsTrue(_grid.IsUnbalanced(1, 1));
+            Assert.IsTrue(_balanceQuery.IsUnbalanced(1, 1));
         }
 
         [Test]
@@ -417,7 +419,7 @@ namespace BalloonParty.Tests.Slots
             _grid.Place(new StaticActorModel(), null, new Vector2Int(1, 0));
             PlaceAt(2, 1);
 
-            Assert.IsTrue(_grid.IsUnbalanced(2, 1));
+            Assert.IsTrue(_balanceQuery.IsUnbalanced(2, 1));
         }
 
         [Test]
@@ -428,7 +430,7 @@ namespace BalloonParty.Tests.Slots
             PlaceAt(0, 1);
             PlaceAt(0, 2);
 
-            Assert.IsFalse(_grid.IsUnbalanced(0, 2));
+            Assert.IsFalse(_balanceQuery.IsUnbalanced(0, 2));
         }
 
         [Test]
@@ -438,7 +440,7 @@ namespace BalloonParty.Tests.Slots
             PlaceAt(0, 0);
             PlaceAt(0, 1);
 
-            Assert.IsTrue(_grid.IsUnbalanced(0, 1));
+            Assert.IsTrue(_balanceQuery.IsUnbalanced(0, 1));
         }
 
         [Test]
@@ -449,7 +451,7 @@ namespace BalloonParty.Tests.Slots
             PlaceAt(5, 0);
             PlaceAt(5, 1);
 
-            Assert.IsFalse(_grid.IsUnbalanced(5, 1));
+            Assert.IsFalse(_balanceQuery.IsUnbalanced(5, 1));
         }
 
         [Test]
@@ -459,7 +461,7 @@ namespace BalloonParty.Tests.Slots
             PlaceAt(5, 1);
             PlaceAt(5, 2);
 
-            Assert.IsTrue(_grid.IsUnbalanced(5, 2));
+            Assert.IsTrue(_balanceQuery.IsUnbalanced(5, 2));
         }
 
         private static BalloonModel CreateModel()

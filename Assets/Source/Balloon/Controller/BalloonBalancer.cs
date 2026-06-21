@@ -22,6 +22,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly BalancePathHolder _balancePathHolder;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly SlotGrid _grid;
+        private readonly GridBalanceQuery _balanceQuery;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
@@ -37,12 +38,14 @@ namespace BalloonParty.Balloon.Controller
         [Inject]
         internal BalloonBalancer(
             SlotGrid grid,
+            GridBalanceQuery balanceQuery,
             IBalloonsConfiguration balloonsConfig,
             BalancePathHolder balancePathHolder,
             ISubscriber<BalanceBalloonsMessage> subscriber,
             DisturbanceFieldService disturbanceField)
         {
             _grid = grid;
+            _balanceQuery = balanceQuery;
             _balloonsConfig = balloonsConfig;
             _balancePathHolder = balancePathHolder;
             _subscriber = subscriber;
@@ -121,7 +124,7 @@ namespace BalloonParty.Balloon.Controller
                             continue;
                         }
 
-                        if (!_grid.IsUnbalanced(col, row))
+                        if (!_balanceQuery.IsUnbalanced(col, row))
                         {
                             continue;
                         }
@@ -134,7 +137,7 @@ namespace BalloonParty.Balloon.Controller
                             continue;
                         }
 
-                        var nextSlot = _grid.OptimalNextEmptySlot(col, row);
+                        var nextSlot = _balanceQuery.OptimalNextEmptySlot(col, row);
                         if (!nextSlot.HasValue)
                         {
                             continue;
