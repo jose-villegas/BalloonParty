@@ -27,7 +27,8 @@ for the cinematic + the GPU/disturbance + item handlers):
   ReactiveCounterLabel, grouped under `UI/Binding`), R4 (ItemEffectPlayer +
   BalloonOverlapQuery), R5 (palette GetEntry/ColorNames).
 - **Tier 2 god-classes:** G1 (ProjectileHitResolver), G2 (CinematicCameraRig),
-  G3 **part 1** (BalloonControllerContext — 14-arg ctor collapsed),
+  G3 (BalloonControllerContext + BalloonPlacementResolver + BalloonFactory —
+  spawner 479→257 LOC),
   G4 **partial** (DisturbanceFieldCoordinates + LerpStampScheduler + GPU-tail dedup),
   G5 (HexCoordinates + GridBalanceQuery), G6 **2/3** (ChainLightningGeometry;
   SlotClusterRegistry.OnActorPlaced decomposed).
@@ -43,11 +44,6 @@ for the cinematic + the GPU/disturbance + item handlers):
   thrower overflow-hold feature (PauseSource.Overflow).
 
 **Remaining (all larger / playtest-dependent — none started):**
-- **G3 remainder** — the ctor collapse landed (part 1). Still to do: extract
-  `BalloonFactory` (SpawnBalloon/AnimateSpawn/controller assembly) and
-  `BalloonPlacementResolver` (the column/pressure search). Both are coupled to the
-  spawner's `_activeCounts`/path buffers and the class has **no test coverage** → needs
-  a playtest.
 - **G4 remainder** — `DisturbanceFieldResources` (the RT/material/double-buffer-swap
   lifecycle). Deferred as the most intertwined, untested, GPU-runtime part.
 - **G6 remainder** — `ColorProgressBar` → `ProgressNoticePresenter` + rect helper.
