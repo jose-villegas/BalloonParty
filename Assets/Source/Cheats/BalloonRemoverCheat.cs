@@ -161,19 +161,27 @@ namespace BalloonParty.Cheats
                     }
 
                     var balloonWorld = _grid.IndexToWorldPosition(new Vector2Int(col, row));
-
-                    foreach (var point in _path)
+                    if (PathHits(balloonWorld))
                     {
-                        if (Vector2.Distance(point, balloonWorld) <= PickRadius)
-                        {
-                            hit.Add(new Vector2Int(col, row));
-                            break;
-                        }
+                        hit.Add(new Vector2Int(col, row));
                     }
                 }
             }
 
             return hit;
+        }
+
+        private bool PathHits(Vector3 balloonWorld)
+        {
+            foreach (var point in _path)
+            {
+                if (Vector2.Distance(point, balloonWorld) <= PickRadius)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private static void DrawThickPath(IReadOnlyList<Vector3> path, Color color, float halfWidth)

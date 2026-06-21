@@ -152,7 +152,7 @@ namespace BalloonParty.Balloon.Controller
                 var row = yd;
                 var col = (xd - (yd & 1)) / 2;
 
-                if (col < 0 || col >= grid.Columns || row < 0 || row >= grid.Rows)
+                if (!InBounds(grid, col, row))
                 {
                     return false;
                 }
@@ -175,6 +175,11 @@ namespace BalloonParty.Balloon.Controller
                     return false;
                 }
             }
+        }
+
+        private static bool InBounds(SlotGrid grid, int col, int row)
+        {
+            return col >= 0 && col < grid.Columns && row >= 0 && row < grid.Rows;
         }
 
         private static bool TryRelocationTarget(
