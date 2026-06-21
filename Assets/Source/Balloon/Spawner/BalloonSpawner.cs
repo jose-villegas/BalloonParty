@@ -2,17 +2,14 @@ using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
-using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Run;
-using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Spawner;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
-using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
@@ -24,10 +21,9 @@ namespace BalloonParty.Balloon.Spawner
     {
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly BalloonBalancer _balancer;
-        private readonly BalloonControllerContext _controllerContext;
+        private readonly BalloonFactory _factory;
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly IBalloonsConfiguration _balloonsConfig;
-        private readonly IGamePalette _palette;
         private readonly CancellationTokenSource _cts = new();
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
@@ -36,7 +32,6 @@ namespace BalloonParty.Balloon.Spawner
         private readonly List<IBalloonModel> _newlySpawnedBalloons = new();
         private readonly IObjectResolver _resolver;
         private readonly PoolManager _poolManager;
-        private readonly DisturbanceFieldService _disturbanceField;
         private readonly RejectedBalloonEffect _rejectedBalloon;
         private readonly BalloonPlacementResolver _placement;
         private readonly List<Vector3> _spawnPathBuffer = new();
@@ -52,33 +47,29 @@ namespace BalloonParty.Balloon.Spawner
         internal BalloonSpawner(
             SlotGrid grid,
             IBalloonsConfiguration balloonsConfig,
-            IGamePalette palette,
             IObjectResolver resolver,
             PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
             BalloonBalancer balancer,
-            BalloonControllerContext controllerContext,
+            BalloonFactory factory,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
             RejectedBalloonEffect rejectedBalloon,
-            BalloonPlacementResolver placement,
-            DisturbanceFieldService disturbanceField)
+            BalloonPlacementResolver placement)
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
-            _palette = palette;
             _resolver = resolver;
             _poolManager = poolManager;
             _lineSubscriber = lineSubscriber;
             _balancer = balancer;
-            _controllerContext = controllerContext;
+            _factory = factory;
             _balancePublisher = balancePublisher;
             _destroyedSubscriber = destroyedSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
             _rejectedBalloon = rejectedBalloon;
             _placement = placement;
-            _disturbanceField = disturbanceField;
         }
 
         public void Start()
@@ -133,38 +124,6 @@ namespace BalloonParty.Balloon.Spawner
 
                 await _poolManager.PrewarmAsync(entry.PoolKey, count, ct);
             }
-        }
-
-        private void AnimateSpawn(BalloonView view, List<Vector3> spawnPath, IWriteableBalloonModel model)
-        {
-            model.IsStable.Value = false;
-            view.transform.localScale = Vector3.zero;
-
-            var duration = UnityEngine.Random.Range(
-                _balloonsConfig.BalloonSpawnAnimationDurationRange.x,
-                _balloonsConfig.BalloonSpawnAnimationDurationRange.y);
-
-            var waypointCount = spawnPath.Count - 1;
-
-            if (waypointCount <= 1)
-            {
-                // Path too short for CatmullRom — place at target, scale in only
-                view.transform.position = spawnPath[spawnPath.Count - 1];
-                view.transform.DOScale(Vector3.one, duration * 0.5f)
-                    .OnComplete(() => model.IsStable.Value = true);
-                return;
-            }
-
-            var waypoints = new Vector3[waypointCount];
-            spawnPath.CopyTo(1, waypoints, 0, waypointCount);
-
-            var viewTransform = view.transform;
-
-            viewTransform.DOPath(waypoints, duration, PathType.CatmullRom)
-                .StampDisturbanceAlongPath(viewTransform, _disturbanceField, StampSource.BalloonPath)
-                .OnComplete(() => model.IsStable.Value = true);
-
-            view.transform.DOScale(Vector3.one, duration);
         }
 
         private void OnProjectileDestroyed()
@@ -225,25 +184,7 @@ namespace BalloonParty.Balloon.Spawner
 
             _activeCounts[poolKey] = _activeCounts.GetValueOrDefault(poolKey) + 1;
 
-            var view = _poolManager.Get<BalloonView>(poolKey);
-            view.transform.position = _spawnPathBuffer[0];
-
-            var model = BalloonModelFactory.Create(entry, _palette);
-
-            var variant = view.Variant;
-            variant.Initialize(model);
-
-            var controller = new BalloonController(model,
-                view,
-                poolKey,
-                () => _activeCounts[poolKey]--,
-                entry.HitVfxOverrides,
-                _controllerContext);
-            controller.Start();
-
-            _grid.Place(model, view, slot);
-            AnimateSpawn(view, _spawnPathBuffer, model);
-
+            var model = _factory.Create(entry, slot, _spawnPathBuffer, () => _activeCounts[poolKey]--);
             _newlySpawnedBalloons.Add(model);
         }
 
