@@ -19,6 +19,7 @@ namespace BalloonParty.Tests.Game
         private IRunMeta _runMeta;
         private IRunScore _score;
         private IPublisher<GameOverMessage> _gameOverPublisher;
+        private IPublisher<RunResetMessage> _resetPublisher;
         private ISubscriber<EndRunRequestedMessage> _endRunSubscriber;
         private IMessageHandler<EndRunRequestedMessage> _endRunHandler;
 
@@ -39,6 +40,7 @@ namespace BalloonParty.Tests.Game
             _score.TotalScore.Returns(new ReactiveProperty<int>(37));
 
             _gameOverPublisher = Substitute.For<IPublisher<GameOverMessage>>();
+            _resetPublisher = Substitute.For<IPublisher<RunResetMessage>>();
 
             _endRunSubscriber = Substitute.For<ISubscriber<EndRunRequestedMessage>>();
             _endRunSubscriber
@@ -154,6 +156,14 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void RestartRun_PublishesRunReset()
+        {
+            CreateController().RestartRun();
+
+            _resetPublisher.Received(1).Publish(Arg.Any<RunResetMessage>());
+        }
+
+        [Test]
         public void RestartRun_DoesNotRecordMeta()
         {
             CreateController().RestartRun();
@@ -169,6 +179,7 @@ namespace BalloonParty.Tests.Game
                 _runMeta,
                 _score,
                 _gameOverPublisher,
+                _resetPublisher,
                 _endRunSubscriber,
                 resettables);
         }

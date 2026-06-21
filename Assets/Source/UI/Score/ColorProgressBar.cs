@@ -41,6 +41,7 @@ namespace BalloonParty.UI.Score
         [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         [Inject] private ISubscriber<LevelUpGlowTrailsMessage> _glowTrailsSubscriber;
         [Inject] private ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
+        [Inject] private ISubscriber<RunResetMessage> _resetSubscriber;
         [Inject] private PoolManager _poolManager;
         [Inject] private ScoreController _scoreController;
         [Inject] private ColorStreakTracker _streakTracker;
@@ -105,6 +106,7 @@ namespace BalloonParty.UI.Score
             _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
             _glowTrailsSubscriber.Subscribe(OnGlowTrails).AddTo(this);
             _dismissedSubscriber.Subscribe(_ => OnDismissed()).AddTo(this);
+            _resetSubscriber.Subscribe(_ => OnRunReset()).AddTo(this);
         }
 
         private void OnScorePoint(ScorePointMessage msg)
@@ -126,7 +128,19 @@ namespace BalloonParty.UI.Score
         private void OnLevelUp(ScoreLevelUpMessage msg)
         {
             _stashedMaxValue = _config.PointsRequiredForLevel(msg.NewLevel + 1);
+            ClearCompletionVfx();
+        }
 
+        private void OnRunReset()
+        {
+            _progressSlider.maxValue = _scoreController.GetRequiredPoints();
+            _progressSlider.value = _scoreController.GetProgress(_colorConfig.Name);
+            ClearCompletionVfx();
+            DismissAllNotices();
+        }
+
+        private void ClearCompletionVfx()
+        {
             _completionParticleSystem.Stop();
             _completionParticleSystem.gameObject.SetActive(false);
             _animator.SetBool(CompletedParam, false);
@@ -141,6 +155,7 @@ namespace BalloonParty.UI.Score
         {
             _progressSlider.maxValue = _stashedMaxValue;
             _progressSlider.value = 0;
+            ClearCompletionVfx();
         }
 
         private async UniTaskVoid DrainSliderAsync(int steps, float staggerDelay)
@@ -210,6 +225,14 @@ namespace BalloonParty.UI.Score
                 {
                     _activeNotices[i].Dismiss();
                 }
+            }
+        }
+
+        private void DismissAllNotices()
+        {
+            for (var i = _activeNotices.Count - 1; i >= 0; i--)
+            {
+                _activeNotices[i].Dismiss();
             }
         }
 

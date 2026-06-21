@@ -77,6 +77,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<GameOverMessage>(options);
             builder.RegisterMessageBroker<SpawnBlockedMessage>(options);
             builder.RegisterMessageBroker<EndRunRequestedMessage>(options);
+            builder.RegisterMessageBroker<RunResetMessage>(options);
             builder.RegisterMessageBroker<BoardClearMessage>(options);
             builder.RegisterMessageBroker<ProjectileLoadedMessage>(options);
             builder.RegisterMessageBroker<ItemCheckMessage>(options);

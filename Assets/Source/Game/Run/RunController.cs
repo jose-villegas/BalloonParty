@@ -25,6 +25,7 @@ namespace BalloonParty.Game.Run
         private readonly ICinematicState _cinematic;
         private readonly ISubscriber<EndRunRequestedMessage> _endRunSubscriber;
         private readonly IPublisher<GameOverMessage> _gameOverPublisher;
+        private readonly IPublisher<RunResetMessage> _resetPublisher;
         private readonly INavigation _navigation;
         private readonly IReadOnlyList<IRunResettable> _resettables;
         private readonly IRunMeta _runMeta;
@@ -39,6 +40,7 @@ namespace BalloonParty.Game.Run
             IRunMeta runMeta,
             IRunScore score,
             IPublisher<GameOverMessage> gameOverPublisher,
+            IPublisher<RunResetMessage> resetPublisher,
             ISubscriber<EndRunRequestedMessage> endRunSubscriber,
             IEnumerable<IRunResettable> resettables)
         {
@@ -47,6 +49,7 @@ namespace BalloonParty.Game.Run
             _runMeta = runMeta;
             _score = score;
             _gameOverPublisher = gameOverPublisher;
+            _resetPublisher = resetPublisher;
             _endRunSubscriber = endRunSubscriber;
             _resettables = resettables.OrderBy(r => r.ResetOrder).ToArray();
         }
@@ -84,6 +87,10 @@ namespace BalloonParty.Game.Run
             {
                 resettable.ResetRun(_generation);
             }
+
+            // Views that can't reset reactively (progress bars) or live outside the reset graph's
+            // scope (the thrower's projectile) reset off this signal.
+            _resetPublisher.Publish(default);
 
             _navigation.TransitionTo(NavigationState.Game);
         }
