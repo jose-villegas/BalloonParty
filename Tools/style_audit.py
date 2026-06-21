@@ -491,17 +491,92 @@ def _internal_types() -> set[str]:
     return _INTERNAL_TYPES
 
 
+def _strip_comments_and_strings(text: str) -> str:
+    """Blank out comment bodies and string/char literals (each consumed char becomes a space)
+    so identifier scanning sees only real code. Adjacency of the remaining code chars — which the
+    type-usage checks rely on — is preserved. Handles //, /* */, "", verbatim @"", interpolated
+    $"", and '' with their escape forms."""
+    out: list[str] = []
+    i, n = 0, len(text)
+    while i < n:
+        two = text[i:i + 2]
+        if two == "//":
+            while i < n and text[i] != "\n":
+                out.append(" ")
+                i += 1
+        elif two == "/*":
+            while i < n and text[i:i + 2] != "*/":
+                out.append(" ")
+                i += 1
+            for _ in range(min(2, n - i)):
+                out.append(" ")
+                i += 1
+        elif text[i] == '"' or two in ("@\"", "$\"") or text[i:i + 3] in ("$@\"", "@$\""):
+            verbatim = False
+            while text[i] in "@$":
+                verbatim = verbatim or text[i] == "@"
+                out.append(" ")
+                i += 1
+            out.append(" ")
+            i += 1  # opening quote
+            while i < n:
+                ch = text[i]
+                if verbatim and ch == '"' and text[i:i + 2] == '""':
+                    out.append("  ")
+                    i += 2
+                    continue
+                if not verbatim and ch == "\\":
+                    out.append("  ")
+                    i += 2
+                    continue
+                out.append(" ")
+                i += 1
+                if ch == '"':
+                    break
+        elif text[i] == "'":
+            out.append(" ")
+            i += 1
+            while i < n:
+                ch = text[i]
+                if ch == "\\":
+                    out.append("  ")
+                    i += 2
+                    continue
+                out.append(" ")
+                i += 1
+                if ch == "'":
+                    break
+        else:
+            out.append(text[i])
+            i += 1
+    return "".join(out)
+
+
 def _build_editor_referenced_names() -> set[str]:
-    """Identifiers that appear in Editor-assembly files. A runtime `public` type whose name
-    shows up here is genuinely consumed cross-assembly, so `internal` would not compile."""
+    """Type names referenced from Editor-assembly files (so a runtime `public` type used there
+    can't be made `internal`). Comments and string/char literals are stripped first, and a name
+    only counts in a type-usage position — PascalCase, not a `.member` access, and not a method
+    call (`new Foo(` excepted) — so a same-named local, comment, or string can't make a type
+    look referenced."""
     names: set[str] = set()
-    token = re.compile(r"\b[A-Za-z_]\w*\b")
+    ident = re.compile(r"[A-Za-z_]\w*")
+    new_before = re.compile(r"\bnew\s+$")
     for path in cs_files(SOURCE_ROOT):
         if not is_in_editor(path):
             continue
         with open(path, encoding="utf-8-sig") as f:
-            for line in f:
-                names.update(token.findall(line))
+            text = _strip_comments_and_strings(f.read())
+        for m in ident.finditer(text):
+            tok = m.group()
+            if not tok[0].isupper():
+                continue
+            start, end = m.start(), m.end()
+            if start > 0 and text[start - 1] == ".":
+                continue
+            if (end < len(text) and text[end] == "("
+                    and not new_before.search(text[max(0, start - 12):start])):
+                continue
+            names.add(tok)
     return names
 
 
