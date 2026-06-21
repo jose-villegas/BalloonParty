@@ -91,7 +91,7 @@ namespace BalloonParty.Game.Score
                 _spawners[colorName] = new TrailSpawner(
                     _poolManager,
                     poolKey,
-                    () => new ScoreTrailPoolChannel(_trailPrefab));
+                    () => new SimplePoolChannel<FlyingTrail>(_trailPrefab));
             }
         }
 

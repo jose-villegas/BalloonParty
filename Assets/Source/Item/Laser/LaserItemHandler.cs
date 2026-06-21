@@ -172,7 +172,7 @@ namespace BalloonParty.Item.Laser
             }
 
             var key = settings.ActivationEffectPrefab.name;
-            var effect = _poolManager.GetOrRegister(key, () => new EffectPoolChannel(settings.ActivationEffectPrefab));
+            var effect = _poolManager.GetOrRegister(key, () => new SimplePoolChannel<EffectView>(settings.ActivationEffectPrefab));
 
             var balloonColor = _palette.GetColor(_balloon.GetColorId());
             effect.Play(_worldPosition, laserRotation, balloonColor, () => _poolManager.Return(key, effect));

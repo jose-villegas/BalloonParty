@@ -92,7 +92,7 @@ namespace BalloonParty.Item
 
             var key = settings.VisualPrefab.name;
             _activePoolKey = key;
-            _activeView = _poolManager.GetOrRegister(key, () => new ItemVisualPoolChannel(settings.VisualPrefab));
+            _activeView = _poolManager.GetOrRegister(key, () => new SimplePoolChannel<ItemVisualView>(settings.VisualPrefab));
             _activeCapture = _activeView.GetComponentInChildren<ITransformCapture>();
 
             _activeView.transform.SetParent(transform, false);

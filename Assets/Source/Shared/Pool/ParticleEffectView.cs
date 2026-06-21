@@ -6,7 +6,7 @@ namespace BalloonParty.Shared.Pool
     /// <summary>
     ///     Poolable effect driven by a <see cref="ParticleSystem" />. Completion is
     ///     detected automatically when the particle system finishes. Attach to prefab
-    ///     roots that use a ParticleSystem; pool via <see cref="EffectPoolChannel" />.
+    ///     roots that use a ParticleSystem; pool via <see cref="SimplePoolChannel{TItem}" />.
     /// </summary>
     public class ParticleEffectView : EffectView
     {

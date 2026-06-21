@@ -96,7 +96,7 @@ namespace BalloonParty.Item.Lightning
 
             var key = settings.ActivationEffectPrefab.name;
             var effect = _poolManager.GetOrRegister(key,
-                () => new EffectPoolChannel(settings.ActivationEffectPrefab));
+                () => new SimplePoolChannel<EffectView>(settings.ActivationEffectPrefab));
 
             var view = (ChainLightningView)effect;
             var targets = _targetsBuffer;

@@ -10,7 +10,7 @@ Displays the projectile's remaining shields, animates state changes, and spawns 
 | `ShieldCounterLabel` | Shows the shield count; resets to "--" during balance passes |
 | `ShieldCounterAnimation` | Drives Animator triggers (`Ready`, `Lost`, `Gain`, `Waiting`) based on `ShieldsRemaining` changes |
 | `ShieldTrailController` | Plain C# `IStartable` — subscribes to `ShieldGainedMessage`; composes a `TrailSpawner` to spawn `FlyingTrail` orbs from balloon slot position to the shield HUD target |
-| `ShieldTrailPoolChannel` | `PoolChannel<FlyingTrail>` — pool keyed by `ShieldTrail` |
+| `SimplePoolChannel<FlyingTrail>` | shield-trail pool keyed by `ShieldTrail` |
 
 ## How it works
 

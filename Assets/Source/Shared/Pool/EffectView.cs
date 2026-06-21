@@ -7,7 +7,7 @@ namespace BalloonParty.Shared.Pool
     ///     Abstract base for poolable effect MonoBehaviours. Subclass with
     ///     <see cref="ParticleEffectView" /> (ParticleSystem) or
     ///     <see cref="AnimatorEffectView" /> (Animator). Pool via
-    ///     <see cref="EffectPoolChannel" />.
+    ///     <see cref="SimplePoolChannel{TItem}" />.
     /// </summary>
     public abstract class EffectView : MonoBehaviour, IPoolable, IEffect
     {

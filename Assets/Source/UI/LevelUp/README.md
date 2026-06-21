@@ -26,7 +26,7 @@ The Animator's `updateMode` is set to `UnscaledTime` in `Start()`, so animations
 
 ### Glow trail spawning
 
-`LevelUpPopUp` owns a per-color dictionary of `TrailSpawner` instances (pool key `GlowTrail_{colorName}`, sorting order 3200). For each wave, it iterates every palette color, reads the bar's position via `_scoreTrailService.GetTarget(colorName).RandomPosition()`, picks a random offset within `_glowTargetRadiusMultiplier` of the glow fill radius, and calls `SpawnUnscaled`. Arrival increments `_glowTrailArrivedCount` and fills the glow proportionally. Trails reuse the same `ScoreTrailPoolChannel` factory as score trails but are pooled under separate keys.
+`LevelUpPopUp` owns a per-color dictionary of `TrailSpawner` instances (pool key `GlowTrail_{colorName}`, sorting order 3200). For each wave, it iterates every palette color, reads the bar's position via `_scoreTrailService.GetTarget(colorName).RandomPosition()`, picks a random offset within `_glowTargetRadiusMultiplier` of the glow fill radius, and calls `SpawnUnscaled`. Arrival increments `_glowTrailArrivedCount` and fills the glow proportionally. Trails reuse the same `SimplePoolChannel<FlyingTrail>` factory as score trails but are pooled under separate keys.
 
 ### Gate pattern
 

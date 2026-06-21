@@ -9,10 +9,10 @@ Tracks and displays player progress toward the next level — one bar per balloo
 | `ScoreUILifetimeScope` | VContainer child scope on the Score UI Canvas root; injects all scene-placed `ColorProgressBar` instances via `RegisterBuildCallback`; binds `ScoreCounterLabel` and `LevelLabel` in `Start()` |
 | `ColorProgressBar` | Per-color progress slider placed directly in the scene. Listens for `ScorePointMessage` (streak counting on `GroupIndex == 0`), `ScoreTrailArrivedMessage` (slider advancement, point notice spawning, trail-hit feedback), `ScoreLevelUpMessage` (stash new max, reset completion state), `LevelUpGlowTrailsMessage` (drain slider in sync with glow trail waves), and `LevelUpDismissedMessage` (apply stashed max, reset slider to zero). Registers an `ITrailTarget` provider with `ScoreTrailService` for randomised trail destinations. Uses `[PaletteColorName]` to select its color from `GamePalette` in the Inspector |
 | `ProgressNotice` | Pooled floating TMP popup at the bar. Uses `ColorableRenderer` for tinting. Label scale driven by `AnimationCurve`; `_labelOffsetXCurve` compensates for scale-induced horizontal drift; dismisses via `ScoreDisappear` animation when replaced. Two prefab variants: streak notices ("x3") shown immediately on hit, and point notices ("+1") shown on trail arrival |
-| `ProgressNoticePoolChannel` | `PoolChannel<ProgressNotice>` — separate per-color pools keyed by `StreakNotice_{colorName}` and `PointNotice_{colorName}` |
+| `SimplePoolChannel<ProgressNotice>` | separate per-color pools keyed by `StreakNotice_{colorName}` and `PointNotice_{colorName}` |
 | `GraphicColorableRenderer` | `ColorableRenderer<Graphic>` — enables `ColorableRenderer`-based tinting for UI `Graphic` components |
 | `FlyingTrail` | Pooled orb that flies from balloon world position → bar position via DOTween. Supports single-phase (`Setup`) and two-phase burst (`SetupBurst`) flight modes. `SetSortingOrder` overrides the default UI sorting order for glow trails |
-| `ScoreTrailPoolChannel` | `PoolChannel<FlyingTrail>` — per-color pool keyed by `ScoreTrail_{colorName}` |
+| `SimplePoolChannel<FlyingTrail>` | per-color pool keyed by `ScoreTrail_{colorName}` |
 | `ScoreCounterLabel` | Binds total-score `TMP_Text` to `ScoreController.TotalScore` |
 | `LevelLabel` | Binds level `TMP_Text` to `ScoreController.Level`; `_showNextLevel` toggle |
 

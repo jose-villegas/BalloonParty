@@ -11,7 +11,7 @@ namespace BalloonParty.Item.Lightning
 {
     /// <summary>
     ///     Poolable chain-lightning effect. Extends <see cref="EffectView" /> so it
-    ///     participates in the standard effect-pool pipeline via <see cref="EffectPoolChannel" />.
+    ///     participates in the standard effect-pool pipeline via <see cref="SimplePoolChannel{TItem}" />.
     ///     Visual parameters are serialized on the prefab. Call
     ///     <see cref="PrepareDisplay" /> with target data before <see cref="Play" />.
     /// </summary>

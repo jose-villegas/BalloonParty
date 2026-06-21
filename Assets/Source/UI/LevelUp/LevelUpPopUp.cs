@@ -152,7 +152,7 @@ namespace BalloonParty.UI.LevelUp
             var key = $"GlowTrail_{colorName}";
             spawner = new TrailSpawner(
                 _poolManager, key,
-                () => new ScoreTrailPoolChannel(_scoreTrailService.TrailPrefab),
+                () => new SimplePoolChannel<FlyingTrail>(_scoreTrailService.TrailPrefab),
                 GlowTrailSortingOrder);
             _trailSpawners[colorName] = spawner;
             return spawner;

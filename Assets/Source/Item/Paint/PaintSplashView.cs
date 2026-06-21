@@ -22,7 +22,7 @@ namespace BalloonParty.Item.Paint
 
     /// <summary>
     ///     Poolable paint-splash effect. Extends <see cref="EffectView" /> so it
-    ///     participates in the standard effect-pool pipeline via <see cref="EffectPoolChannel" />.
+    ///     participates in the standard effect-pool pipeline via <see cref="SimplePoolChannel{TItem}" />.
     ///     The prefab holds pre-placed <see cref="ColorableRenderer" /> children (one per
     ///     potential neighbor — 6 for a hex grid) with the PaintBlob shader material.
     ///     Splash particles are spawned as independent pooled instances via

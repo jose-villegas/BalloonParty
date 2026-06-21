@@ -7,7 +7,7 @@ namespace BalloonParty.Shared.Pool
     ///     Poolable effect driven by an <see cref="Animator" />. Completion is
     ///     detected when the first animation clip finishes playing (timer-based).
     ///     Attach to prefab roots that use an Animator; pool via
-    ///     <see cref="EffectPoolChannel" />.
+    ///     <see cref="SimplePoolChannel{TItem}" />.
     /// </summary>
     public class AnimatorEffectView : EffectView
     {

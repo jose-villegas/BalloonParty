@@ -6,7 +6,7 @@ namespace BalloonParty.Shared.Pool
     /// <summary>
     ///     Pool channel for effects driven exclusively by a <see cref="ParticleSystem" />.
     ///     For effects that may use an <see cref="Animator" /> instead, use
-    ///     <see cref="EffectPoolChannel" />.
+    ///     <see cref="SimplePoolChannel{TItem}" />.
     /// </summary>
     internal class ParticlePoolChannel : PoolChannel<PoolableParticle>
     {

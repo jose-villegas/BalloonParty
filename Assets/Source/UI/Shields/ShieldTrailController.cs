@@ -52,7 +52,7 @@ namespace BalloonParty.UI.Shields
             _spawner = new TrailSpawner(
                 _poolManager,
                 TrailPoolKey,
-                () => new ShieldTrailPoolChannel(_prefab));
+                () => new SimplePoolChannel<FlyingTrail>(_prefab));
 
             _subscription = _shieldGainedSubscriber.Subscribe(msg =>
             {

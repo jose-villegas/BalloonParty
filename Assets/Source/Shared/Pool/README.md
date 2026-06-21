@@ -16,7 +16,7 @@ Effects (VFX that need to `Play` and `Stop`) have their own hierarchy, separate 
 - **`EffectView`** — abstract `MonoBehaviour` implementing `IPoolable` + `IEffect`. Holds an `Action onComplete` callback. Subclasses implement `Play()` and `Stop()`.
 - **`ParticleEffectView`** — `EffectView` subclass for particle effects. Stops and clears the particle in `OnSpawned()` (prevents stale color from Play-on-Awake). Detects completion via `!_particle.IsAlive()` in `Update()`.
 - **`AnimatorEffectView`** — `EffectView` subclass for animator-driven effects. Timer-based completion against the first clip's length.
-- **`EffectPoolChannel`** — `PoolChannel<EffectView>` that takes an `EffectView` prefab directly. No auto-detection — the prefab must already have the correct `EffectView` subclass attached.
+- Effect views are pooled via the generic **`SimplePoolChannel<EffectView>`** (see below) — the prefab must already have the correct `EffectView` subclass attached.
 
 ## Particle Pooling (simple effects)
 
@@ -46,6 +46,12 @@ For prefabs that have `[Inject]` fields but don't need their own VContainer chil
 - **`InjectingPoolChannel<TItem>`** — generic `PoolChannel<TItem>` that takes an `IObjectResolver` and a prefab. `Create()` calls `resolver.Instantiate(prefab, container)` — VContainer's built-in extension that deactivates the prefab, clones, injects all `[Inject]` fields from the parent container, and reactivates. Much faster than `CreateChildFromPrefab` because it skips container creation, `Configure()`, and `RegisterComponentInHierarchy` traversals. Any `LifetimeScope` components on the prefab should have `autoRun` disabled in the Inspector.
 - **`BalloonPoolChannel`** and **`ProjectilePoolChannel`** extend `InjectingPoolChannel<T>` as thin type aliases.
 
+## Simple Pool Channel (no injection)
+
+For prefabs that need **no** VContainer injection — the common case for effects, trails, and HUD notices:
+
+- **`SimplePoolChannel<TItem>`** — generic `PoolChannel<TItem>` whose `Create()` instantiates the prefab under the container, deactivates it, and returns the `TItem` component. Two constructors: one takes the `TItem` component prefab directly, the other takes a `GameObject` prefab and resolves the component via `GetComponent<TItem>()`. This single channel replaces the former per-type `EffectPoolChannel`, `ItemVisualPoolChannel`, `ScoreTrailPoolChannel`, `ShieldTrailPoolChannel`, and `ProgressNoticePoolChannel` shells.
+
 ## Channels
 
 | Channel | Key | Item | Creates via |
@@ -54,10 +60,7 @@ For prefabs that have `[Inject]` fields but don't need their own VContainer chil
 | `BalloonPoolChannel` | prefab name | `BalloonView` | `InjectingPoolChannel` |
 | `ProjectilePoolChannel` | prefab name | `ProjectileView` | `InjectingPoolChannel` |
 | `ParticlePoolChannel` | prefab name (e.g. `"PopVfx"`) | `PoolableParticle` | `Object.Instantiate` + `AddComponent<PoolableParticle>` |
-| `EffectPoolChannel` | prefab name | `EffectView` (subclass) | `Object.Instantiate` |
-| `ItemVisualPoolChannel` | prefab name | `ItemVisualView` | `Object.Instantiate` |
-| `ScoreTrailPoolChannel` | `ScoreTrail_{color}` | `FlyingTrail` | `Object.Instantiate` |
-| `ProgressNoticePoolChannel` | `StreakNotice_{color}`, `PointNotice_{color}` | `ProgressNotice` | `Object.Instantiate` |
+| `SimplePoolChannel<T>` | (varies — prefab name, `ScoreTrail_{color}`, `StreakNotice_{color}`, …) | any non-injected `IPoolable` (`EffectView`, `ItemVisualView`, `FlyingTrail`, `ProgressNotice`) | `Object.Instantiate` (+ `GetComponent<T>` for the `GameObject` overload) |
 
 ## Usage
 
@@ -77,7 +80,7 @@ var particle = _poolManager.GetOrRegister(prefab.name, () => new ParticlePoolCha
 particle.Play(pos, color, () => _poolManager.Return(prefab.name, particle));
 
 // === Lazy registration + get — EffectView ===
-var effect = _poolManager.GetOrRegister(prefab.name, () => new EffectPoolChannel(effectPrefab));
+var effect = _poolManager.GetOrRegister(prefab.name, () => new SimplePoolChannel<EffectView>(effectPrefab));
 effect.Play(pos, tint, () => _poolManager.Return(prefab.name, effect));
 ```
 

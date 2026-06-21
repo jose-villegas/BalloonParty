@@ -48,7 +48,7 @@ namespace BalloonParty.Shared.Extensions
             Color tint)
         {
             var key = prefab.name;
-            var effect = pool.GetOrRegister(key, () => new EffectPoolChannel(prefab));
+            var effect = pool.GetOrRegister(key, () => new SimplePoolChannel<EffectView>(prefab));
             effect.Play(position, tint, () => pool.Return(key, effect));
             return effect;
         }
@@ -61,7 +61,7 @@ namespace BalloonParty.Shared.Extensions
             Color tint)
         {
             var key = prefab.name;
-            var effect = pool.GetOrRegister(key, () => new EffectPoolChannel(prefab));
+            var effect = pool.GetOrRegister(key, () => new SimplePoolChannel<EffectView>(prefab));
             effect.Play(position, rotation, tint, () => pool.Return(key, effect));
             return effect;
         }

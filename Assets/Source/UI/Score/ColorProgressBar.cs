@@ -237,7 +237,7 @@ namespace BalloonParty.UI.Score
         private void SpawnStreakNotice(int streak)
         {
             var notice = _poolManager.GetOrRegister(_streakNoticePoolKey,
-                () => new ProgressNoticePoolChannel(_streakNoticePrefab));
+                () => new SimplePoolChannel<ProgressNotice>(_streakNoticePrefab));
 
             notice.SetParent(transform);
             notice.SetAnchoredPosition(Vector2.zero);
@@ -254,7 +254,7 @@ namespace BalloonParty.UI.Score
         private void SpawnPointNotice(Vector2 anchoredPosition)
         {
             var notice = _poolManager.GetOrRegister(_pointNoticePoolKey,
-                () => new ProgressNoticePoolChannel(_pointNoticePrefab));
+                () => new SimplePoolChannel<ProgressNotice>(_pointNoticePrefab));
 
             notice.SetParent(transform);
             notice.SetAnchoredPosition(anchoredPosition);

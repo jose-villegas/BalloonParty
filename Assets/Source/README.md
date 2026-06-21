@@ -292,7 +292,7 @@ All pooling goes through `PoolManager` (singleton) and `PoolChannel<TItem>`. See
 Key rules:
 - **The consumer that calls `Get()` is responsible for calling `Return()`** — items never self-return.
 - Items signal completion via a callback passed into their `Play()` or `Setup()` call; the consumer bundles `Return()` into that callback.
-- For effect VFX use `EffectView` / `EffectPoolChannel`. For particle-only effects use `PoolableParticle` / `ParticlePoolChannel`.
+- For effect VFX use `EffectView` / `SimplePoolChannel<EffectView>`. For particle-only effects use `PoolableParticle` / `ParticlePoolChannel`.
 - Pooled `MonoBehaviour`s use `CompositeDisposable` instead of `AddTo(this)` for subscriptions — cleared on `OnDespawned()`.
 - `OnDespawned()` must call `DOTween.Kill(transform)` and `tweenTracker.Kill()` to clean up any in-flight tweens before the instance is reused.
 
