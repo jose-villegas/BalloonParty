@@ -64,5 +64,30 @@ namespace BalloonParty.Tests.Shared
             Assert.IsTrue(a.WithinRadius(new Vector2(3f, 4f), 5f));
             Assert.IsFalse(a.WithinRadius(new Vector2(3f, 4f), 4.99f));
         }
+
+        [Test]
+        public void DirectionFromAngle_CardinalAngles()
+        {
+            var east = VectorMathExtensions.DirectionFromAngle(0f);
+            Assert.AreEqual(1f, east.x, 0.001f);
+            Assert.AreEqual(0f, east.y, 0.001f);
+
+            var north = VectorMathExtensions.DirectionFromAngle(Mathf.PI / 2f);
+            Assert.AreEqual(0f, north.x, 0.001f);
+            Assert.AreEqual(1f, north.y, 0.001f);
+
+            var west = VectorMathExtensions.DirectionFromAngle(Mathf.PI);
+            Assert.AreEqual(-1f, west.x, 0.001f);
+            Assert.AreEqual(0f, west.y, 0.001f);
+        }
+
+        [Test]
+        public void DirectionFromAngle_IsUnitLength()
+        {
+            for (var a = 0f; a < Mathf.PI * 2f; a += 0.37f)
+            {
+                Assert.AreEqual(1f, VectorMathExtensions.DirectionFromAngle(a).magnitude, 0.001f);
+            }
+        }
     }
 }

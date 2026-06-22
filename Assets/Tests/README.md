@@ -81,11 +81,11 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 209 tests
+## Current Coverage — 271 tests
 
-> Last updated: **June 13, 2026**
+> Last updated: **June 22, 2026**
 
-### `SlotGridTests` — 42 tests
+### `SlotGridTests` — 44 tests
 
 Tests the core grid data structure — the most complex pure-logic class in the codebase.
 
@@ -103,6 +103,7 @@ Tests the core grid data structure — the most complex pure-logic class in the 
 | IsTraversable | 3 | Empty slot, `IPassThrough` actor, blocking actor |
 | ComputePath | 5 | Vertical path length, last waypoint, passthrough intermediate, out-of-bounds source, same source+target |
 | AllEmptySlots | 2 | Empty grid returns all, partial fill excludes occupied |
+| InBounds | 2 | In-grid true (incl. `Vector2Int` overload); off each edge false — shared by PressureCascade and SlotClusterRegistry |
 
 ### `PredictionTraceCalculatorTests` — 7 tests
 
@@ -117,7 +118,7 @@ Tests the trajectory bounce algorithm — pure math with wall reflection.
 | Max steps | 1 | Step exhaustion before wall hit |
 | Zig-zag | 1 | Multiple reflections chain correctly |
 
-### `ScoreControllerTests` — 26 tests
+### `ScoreControllerTests` — 25 tests
 
 Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` projected-progress check, next-level trail renumbering, and the run-scoped lifecycle (no cross-session persistence; reset via `IRunResettable`) — deferred scoring via trail arrival, multi-map accumulation with an all-colors threshold gate, consecutive same-color pop multiplier, projected vs confirmed progress, `ScorePointMessage` field correctness, and `IHitable`-based scoring with non-balloon actors.
 
@@ -150,7 +151,7 @@ Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` pro
 | `ResetRun` clears score and all color progress | 1 | Stale progress carries into the next run |
 | Run state is not persisted | 1 | Run leaks to `PlayerPrefs` across sessions |
 
-### `RunControllerTests` — 10 tests
+### `RunControllerTests` — 12 tests
 
 Tests the run lifecycle — loss commit/announce/transition, the suppression gates, and ordered reset. Isolated from the static `Navigation` / `Cinematic` via the `INavigation` / `ICinematicState` seams (substituted with NSubstitute).
 
@@ -179,7 +180,7 @@ Tests the persisted cross-run record — best level / best score max-keeping and
 | Persists across instances | 1 | Not written, or not reloaded on construct |
 | No prefs → defaults to zero | 1 | Wrong default best on a fresh install |
 
-### `BalloonModelTests` — 10 tests
+### `BalloonModelTests` — 11 tests
 
 Tests `EvaluateHit` outcomes and `IHasDurability` / `IDynamicSlotActor` / `IHitable` interface conformance.
 
@@ -302,15 +303,15 @@ Tests the shield item's projectile shield increment and message publishing.
 | No active projectile → no crash | 1 | Null guard missing |
 | ShieldGainedMessage published with correct slot | 1 | Wrong slot index in message |
 
-### `ProjectileViewAbsorbTests` — 3 tests
+### `ProjectileHitResolverTests` — 3 tests
 
-Tests `ProjectileView.OnAbsorb` — the absorb path that kills the projectile on contact with an absorbing actor.
+Tests `ProjectileHitResolver.Resolve` — the absorb path that kills the projectile on contact with an absorbing actor.
 
 | Area | Tests | What could break |
 |---|---|---|
-| `OnAbsorb` publishes `ProjectileDestroyedMessage` | 1 | Projectile death not signalled — thrower never reloads |
-| `OnAbsorb` sets `model.IsFree = false` | 1 | Projectile keeps moving after absorption |
-| `OnAbsorb` publishes `ActorHitMessage` with `Absorb` outcome | 1 | Wrong outcome — hit routed as Pop or Deflect |
+| Absorbing balloon → publishes `ProjectileDestroyedMessage` | 1 | Projectile death not signalled — thrower never reloads |
+| Absorbing balloon → sets `model.IsFree = false` | 1 | Projectile keeps moving after absorption |
+| Absorbing balloon → publishes `ActorHitMessage` with `Absorb` outcome | 1 | Wrong outcome — hit routed as Pop or Deflect |
 
 ### `GridSpawnerCoordinatorTests` — 4 tests
 
@@ -323,7 +324,7 @@ Tests `GridSpawnerCoordinator` stage ordering, sequencing, and run-reset re-spaw
 | Multiple spawners at the same stage all run | 1 | Same-stage spawner skipped |
 | `ResetRun` re-runs the spawners | 1 | Restart leaves an empty board — nothing repopulates |
 
-### `PaintItemHandlerTests` — 5 tests
+### `PaintItemHandlerTests` — 4 tests
 
 Tests the paint item's neighbor color conversion — paintability filter, same-color skip, empty-color guard.
 
@@ -406,15 +407,18 @@ Tests reference-counted pause/resume with nested source tracking and MessagePipe
 | Multiple sources, one resumed → still paused | 1 | Cross-source interference |
 | `ResetRun` clears all sources and unpauses | 1 | Stale pause survives a run restart, freezing the new run |
 
-### `VectorMathHelperTests` — 3 tests
+### `VectorMathExtensionsTests` — 6 tests
 
-Tests pure math: centroid computation and bounding radius.
+Tests pure math: centroid, bounding radius, 2D proximity, and angle→direction.
 
 | Area | Tests | What could break |
 |---|---|---|
 | Centroid returns arithmetic mean | 1 | Division or summation error |
 | Bounding radius returns max distance | 1 | Wrong comparator |
 | All same point → radius zero | 1 | Edge case |
+| `WithinRadius` inside/outside | 1 | `<=` vs `<` boundary, squared-distance error |
+| `DirectionFromAngle` cardinal angles | 1 | Cos/Sin swapped or sign flipped |
+| `DirectionFromAngle` is unit length | 1 | Non-normalised result skews placement/scaling |
 
 ### `PathHelperTests` — 12 tests
 
@@ -454,10 +458,53 @@ Tests `ResetRun` clearing in-transit state on a restart — killed balance tween
 | `ResetRun` clears transit slots | 1 | Stale in-transit slots block spawn pathing next run |
 | `ResetRun` drops per-actor slot list | 1 | Reusing an actor after reset double-counts old slots |
 
+### `PressureCascadeTests` — 17 tests
+
+Tests the pressure-balance shove search (`TryFindChain` / `TryRayToShovableCell`) — the snake-like BFS that relieves a blocked column by shoving occupants toward the nearest reachable gap, including pass-through routing and relocator short-circuits.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Entry occupied by immovable / empty column not blocked | 2 | Wrong "needs relief" precondition |
+| Side-hop and multi-hop routing to nearest gap | 2+ | BFS picks a non-shortest or unreachable chain |
+| Pass-through (puff) traversal, ray bounds | several | Ray miscounts cells / `InBounds` regression |
+| Full grid / blocked-neighbour dead-ends → false | 2+ | Reports relief where none exists |
+| Relocator (RelocateNearest/Farthest) short-circuit | several | Relocator not vacating, or chain not terminating |
+
+### `UnbreakableBalloonModelTests` — 6 tests
+
+`EvaluateHit` for the Unbreakable model: deflects all damage without `Piercing`, pops only with the `Piercing` flag; interface conformance (`IHitable`, not `IHasDurability`).
+
+### `HitableActorTests` — 5 tests
+
+Capability contracts on minimal hand-written stubs: a deflector returns `Deflect`, an absorber returns `Absorb`; neither is `IHasDurability` / `IBalloonModel`.
+
+### `GatekeeperActorTests` — 2 tests
+
+Gatekeeper durability: survives → `Deflect` and decrements hits; killing blow → `Pop` with `HitsRemaining == 0`.
+
+### `StructuralActorTests` — 6 tests
+
+Static obstacle contracts: `PuffObstacleModel` is `Static` + `IPassThrough` + not `IHitable`; `BushObstacleModel` is `Static`, not pass-through, not hitable.
+
+### `GridActorHitControllerTests` — 3 tests
+
+Routing of `ActorHitMessage` for grid actors: balloon models ignored; a Gatekeeper is removed from the grid when its hits reach zero; a deflector is never removed.
+
+### `PlayerHealthControllerTests` — 6 tests
+
+HP loss model: starts at configured hit points; a blocked spawn costs one HP; reaching zero requests `EndRun` exactly once; a blocked spawn at zero doesn't underflow or re-request.
+
+### `SpaceDangerTests` — 5 tests
+
+Danger-level scaling from overflow vs remaining hearts: none → safe; partial → scales; overflow ≥ hearts (or zero hearts) → clamps to max danger.
+
+### `ListExtensionsTests` — 3 tests
+
+`List<T>.SwapRemoveAt` — moves the last element into the removed slot (order not preserved); last-index just removes; single element empties.
 
 ---
 
-## PlayMode tests — 1 test
+## PlayMode tests — 3 tests
 
 `Assets/Tests/PlayMode/` (assembly `BalloonParty.Tests.PlayMode`). For behaviour EditMode can't exercise: the async/pooling/scene paths that only run under the player loop. Uses `[UnityTest]` coroutines; loads the real Game scene and resolves services from `GameLifetimeScope.Container`.
 
@@ -466,6 +513,15 @@ Tests `ResetRun` clearing in-transit state on a restart — killed balance tween
 | Area | Tests | What could break |
 |---|---|---|
 | Restart clears and repopulates the board | 1 | The clear → re-spawn loop leaks, throws, or leaves an empty board (caught the prewarm "await twice" regression — a stored single-await `UniTask` re-awaited when a restart re-spawn raced the initial prewarm) |
+
+### `PressureLossPlayModeTests` — 2 tests
+
+Drives the spawn-saturation loss loop in the real Game scene — the pressure-balance / reject / HP path EditMode can't exercise.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Initial load → health at configured hit points | 1 | HP not initialised from config in a live scene |
+| Saturation fills the board then drains HP to GameOver | 1 | Reject→HP→loss loop stalls, never reaches GameOver, or over-drains |
 
 ---
 

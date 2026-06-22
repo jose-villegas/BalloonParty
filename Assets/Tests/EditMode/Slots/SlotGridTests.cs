@@ -142,6 +142,23 @@ namespace BalloonParty.Tests.Slots
         }
 
         [Test]
+        public void InBounds_InsideGrid_ReturnsTrue()
+        {
+            Assert.IsTrue(_grid.InBounds(0, 0));
+            Assert.IsTrue(_grid.InBounds(_grid.Columns - 1, _grid.Rows - 1));
+            Assert.IsTrue(_grid.InBounds(new Vector2Int(2, 1)));
+        }
+
+        [Test]
+        public void InBounds_OffEachEdge_ReturnsFalse()
+        {
+            Assert.IsFalse(_grid.InBounds(-1, 0));
+            Assert.IsFalse(_grid.InBounds(0, -1));
+            Assert.IsFalse(_grid.InBounds(_grid.Columns, 0));
+            Assert.IsFalse(_grid.InBounds(0, _grid.Rows));
+        }
+
+        [Test]
         public void IsUnbalanced_BothSupportsPresent_ReturnsFalse()
         {
             PlaceAt(2, 1);
