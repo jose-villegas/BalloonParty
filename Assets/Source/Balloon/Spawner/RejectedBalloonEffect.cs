@@ -27,17 +27,8 @@ namespace BalloonParty.Balloon.Spawner
     /// </summary>
     internal sealed class RejectedBalloonEffect : ITickable, IRunResettable
     {
-        // Visual-only appearance delay between columns rejected in the same line, so a line reads as a
-        // sweep rather than one flash. Linger = how long a balloon sits before it's eligible to pop.
-        // PopInterval spaces the bursts so the pile drains one balloon at a time. Sharpness drives the
-        // ease for both the rise-in and the slide-up compaction. (All tunable; consts for now.)
-        private const float StaggerSeconds = 0.08f;
-        private const float LingerSeconds = 0.6f;
-        private const float PopIntervalSeconds = 0.15f;
-        private const float MoveSharpness = 10f;
-        private const float ArrivalEpsilonSqr = 0.0004f;
-
         private readonly IBalloonsConfiguration _balloonsConfig;
+        private readonly IOverflowSettings _settings;
         private readonly IGamePalette _palette;
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
@@ -56,6 +47,7 @@ namespace BalloonParty.Balloon.Spawner
         internal RejectedBalloonEffect(
             SlotGrid grid,
             IBalloonsConfiguration balloonsConfig,
+            IOverflowSettings settings,
             IGamePalette palette,
             PoolManager poolManager,
             DisturbanceFieldService disturbanceField,
@@ -64,6 +56,7 @@ namespace BalloonParty.Balloon.Spawner
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
+            _settings = settings;
             _palette = palette;
             _poolManager = poolManager;
             _disturbanceField = disturbanceField;
@@ -102,7 +95,7 @@ namespace BalloonParty.Balloon.Spawner
             if (ready != null && _popCooldown <= 0f)
             {
                 Pop(ready);
-                _popCooldown = PopIntervalSeconds;
+                _popCooldown = _settings.PopIntervalSeconds;
             }
         }
 
@@ -142,7 +135,7 @@ namespace BalloonParty.Balloon.Spawner
             view.transform.position = RowPosition(col, rowOffset + 1);
             view.transform.localScale = Vector3.zero;
 
-            queue.Add(new OverflowBalloon(entry.PoolKey, view, col, staggerIndex * StaggerSeconds));
+            queue.Add(new OverflowBalloon(entry.PoolKey, view, col, staggerIndex * _settings.AppearStaggerSeconds));
             BeginOverflowHold();
         }
 
@@ -178,16 +171,15 @@ namespace BalloonParty.Balloon.Spawner
 
             var transform = balloon.View.transform;
             var target = RowPosition(col, rowOffset);
-            var t = 1f - Mathf.Exp(-MoveSharpness * delta);
+            var t = 1f - Mathf.Exp(-_settings.MoveSharpness * delta);
             transform.position = Vector3.Lerp(transform.position, target, t);
             transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, t);
 
-            if (!balloon.Arrived
-                && (target - transform.position).sqrMagnitude <= ArrivalEpsilonSqr)
+            if (!balloon.Arrived && transform.position.WithinRadius(target, _settings.ArrivalRadius))
             {
                 transform.position = target;
                 balloon.Arrived = true;
-                balloon.LingerRemaining = LingerSeconds;
+                balloon.LingerRemaining = _settings.LingerSeconds;
             }
 
             if (!balloon.Arrived)

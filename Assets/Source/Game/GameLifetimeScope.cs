@@ -50,6 +50,7 @@ namespace BalloonParty.Game
         [SerializeField] private ItemConfiguration _itemConfiguration;
         [SerializeField] private GamePalette _gamePalette;
         [SerializeField] private BalloonsConfiguration _balloonsConfiguration;
+        [SerializeField] private OverflowSettings _overflowSettings;
         [SerializeField] private GridActorConfiguration _gridActorConfiguration;
         [SerializeField] private PuffCloudSettings _puffCloudSettings;
         [SerializeField] private BushSettings _bushSettings;
@@ -95,6 +96,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IItemConfiguration>(_itemConfiguration);
             builder.RegisterInstance<IGamePalette>(_gamePalette);
             builder.RegisterInstance<IBalloonsConfiguration>(_balloonsConfiguration);
+            builder.RegisterInstance<IOverflowSettings>(_overflowSettings);
             builder.RegisterInstance<IGridActorConfiguration>(_gridActorConfiguration);
             builder.RegisterInstance<IPuffCloudSettings>(_puffCloudSettings);
             builder.RegisterInstance<IBushSettings>(_bushSettings);

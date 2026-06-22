@@ -56,6 +56,7 @@ MonoBehaviour:
   _gamePalette: {fileID: 11400000, guid: 5000030a039a46e8807ca639499df679, type: 2}
   _balloonsConfiguration: {fileID: 11400000, guid: 61708d778c4e342aa9841e216cc88726,
     type: 2}
+  _overflowSettings: {fileID: 11400000, guid: 6fa00979c801434884f4c3076de25e53, type: 2}
   _gridActorConfiguration: {fileID: 11400000, guid: ba75d46a7ad4943169a55f7c0bc2fb95,
     type: 2}
   _puffCloudSettings: {fileID: 11400000, guid: ad969212547fb4aa28442e6f190431fc, type: 2}

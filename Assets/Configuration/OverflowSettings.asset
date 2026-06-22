@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aa5c4c46e9ed430cb50bb65d4350d694, type: 3}
+  m_Name: OverflowSettings
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.OverflowSettings
+  _appearStaggerSeconds: 0.08
+  _lingerSeconds: 0.6
+  _popIntervalSeconds: 0.15
+  _moveSharpness: 10
+  _arrivalRadius: 0.02
