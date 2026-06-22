@@ -7,7 +7,7 @@ Responsible for introducing balloons into the grid — both at game start and du
 | File | What it does |
 |---|---|
 | `BalloonSpawner` | `IStartable` + `IGridSpawner` — creates and places balloons, manages per-type pool registration and active-count caps, and decides where each line's balloon goes. `SpawnPriority` is `SpawnStage.BalloonActors` (100). `Start()` registers pools and kicks off pre-warm asynchronously; `SpawnAsync()` awaits the pre-warm then populates the initial grid |
-| `RejectedBalloonEffect` | The feedback when a balloon can't be placed: a pooled would-be balloon rises from the entry, pops just below the grid, and publishes `SpawnBlockedMessage` at the pop (costing one hit point). `IRunResettable` — returns any mid-pop transients on restart (they have no grid slot, so the board-clear broadcast can't reach them) |
+| `RejectedBalloonEffect` | The feedback when a balloon can't be placed: a pooled would-be balloon rises into the **overflow rows below the grid** and lingers there as a visible pile, then pops after a short linger — publishing `SpawnBlockedMessage` **at the pop** (costing one hit point; the linger-then-burst is the drama beat). Pops are **serialized** (one balloon per interval, front-most first) so no two burst at once and the hearts drain in a sequence. `ITickable` runs the pile as a **per-column queue** — a balloon's target row is its index in the column, so when one pops the balloons below slide up to fill the gap. `IRunResettable` returns any transients on restart (they have no grid slot, so the board-clear broadcast can't reach them). Engages a `PauseService.Pause(Overflow)` thrower-lock for the duration of the pile |
 | `BalloonPoolChannel` | `InjectingPoolChannel<BalloonView>` — creates balloon instances via `IObjectResolver.Instantiate()`, injecting all `[Inject]` fields from the parent container without creating child scopes |
 
 ## Behaviour
@@ -36,7 +36,7 @@ A blocked column isn't lost immediately. `TrySpawnForColumn` resolves a slot in 
 1. **Own column** — `FindFirstReachableEmptyRow` (the topmost slot reachable by rising from the entry).
 2. **Re-home** — the nearest *other* column the balloon can rise straight into (`ResolveOpenEntry`); a line may over-fill a column.
 3. **Pressure-open** — the nearest column `BalloonBalancer.TryRelievePressure` can shove open by pulling a balloon into a gap *anywhere* on the board (`ResolvePressureOpen`), including interior pockets no entry reaches directly.
-4. **Reject** — only when nothing frees a slot: `RejectedBalloonEffect.Play` pops the would-be balloon below the grid and costs a hit point.
+4. **Reject** — only when nothing frees a slot: `RejectedBalloonEffect.Play` queues the would-be balloon into the overflow pile below the grid; it lingers, then pops and costs a hit point at the pop.
 
 The initial grid fill never saturates, so it skips steps 2–4 (passes `allowReject: false`).
 

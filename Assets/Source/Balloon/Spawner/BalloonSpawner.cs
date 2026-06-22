@@ -211,8 +211,8 @@ namespace BalloonParty.Balloon.Spawner
 
                 if (allowReject)
                 {
-                    // No room anywhere and pressure couldn't open this column — pop the would-be
-                    // balloon below the grid and cost the player one hit point.
+                    // No room anywhere and pressure couldn't open this column — queue an overflow
+                    // balloon below the grid (the effect stacks/compacts rows itself).
                     _rejectedBalloon.Play(col, rejectIndex++, _activeCounts);
                 }
             }
