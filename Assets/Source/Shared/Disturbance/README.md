@@ -24,101 +24,141 @@ digraph DisturbanceField {
         label="Configuration";
         style=filled;
         fillcolor="#f5f5dc";
-        Settings  [label="DisturbanceFieldSettings\n(ScriptableObject)"];
-        Display   [label="GameDisplayConfiguration\n(ScriptableObject)"];
+        Settings [label="DisturbanceFieldSettings
+(ScriptableObject)"];
+        Display  [label="GameDisplayConfiguration
+(ScriptableObject)"];
     }
 
     subgraph cluster_callers {
         label="Stamp Callers";
         style=filled;
         fillcolor="#dce8f5";
-        ProjView  [label="ProjectileView\n(FixedUpdate)"];
-        BallSpawn [label="BalloonSpawner\n(spawn path OnUpdate)"];
-        BallBal   [label="BalloonBalancer\n(balance path OnUpdate)"];
-        BallCtrl  [label="BalloonController\n(on pop)"];
-        BombH     [label="BombItemHandler\n(on detonation)"];
-        LaserH    [label="LaserItemHandler\n(per beam segment)"];
-        PaintH    [label="PaintItemHandler\n(splash landing)"];
+        ProjView  [label="ProjectileView"];
+        BallSpawn [label="BalloonSpawner"];
+        BallBal   [label="BalloonBalancer"];
+        BallCtrl  [label="BalloonController"];
+        BombH     [label="BombItemHandler"];
+        LaserH    [label="LaserItemHandler"];
+        PaintH    [label="PaintItemHandler"];
     }
 
     subgraph cluster_service {
-        label="DisturbanceFieldService  (IStartable / ITickable / IDisposable)";
+        label="DisturbanceFieldService  (IStartable / ITickable / IDisposable) — drives the simulation";
         style=filled;
         fillcolor="#f0f0f0";
 
-        StampEntry [label="Stamp(pos, radius, strength,\ndirection, duration)", shape=ellipse];
-        Pending   [label="_pendingStamps\nList<PendingStamp>\n(duration == 0)"];
-        LerpQ     [label="_activeStamps\nList<LerpStamp>\n(duration > 0)"];
-        TickLerp  [label="TickLerpStamps()\nramp strength over duration", shape=ellipse];
+        StampEntry [label="Stamp(pos, radius, strength,
+direction, duration)", shape=ellipse];
+        Pending    [label="_pendingStamps
+List<PendingStamp>"];
+        Uniforms   [label="SetDiffusionUniforms()
+wind / reform / displace", shape=ellipse];
 
         subgraph cluster_paths {
             label="Tick Routing (at most 1 blit per frame)";
             style=filled;
             fillcolor="#e0e8f0";
-            Combined  [label="TickCombinedPass()\ndiffusion + stamps\nin one blit", shape=ellipse];
-            StampOnly [label="FlushPendingStamps()\nstamp-only blit\n(no diffusion due)", shape=ellipse];
-            DiffOnly  [label="TickDiffusion()\ndiffusion-only blit\n(no stamps)", shape=ellipse];
+            Combined  [label="TickCombinedPass()
+diffusion + stamps", shape=ellipse];
+            StampOnly [label="FlushPendingStamps()
+stamp-only", shape=ellipse];
+            DiffOnly  [label="TickDiffusion()
+diffusion-only", shape=ellipse];
         }
+    }
 
-        subgraph cluster_rt {
-            label="RT Ping-pong (ARGBHalf)";
-            style=filled;
-            fillcolor="#e8e8e8";
-            FieldA [label="_fieldA\nR=density  G=dispX  B=dispY"];
-            FieldB [label="_fieldB\nR=density  G=dispX  B=dispY"];
-        }
+    subgraph cluster_helpers {
+        label="Extracted collaborators";
+        style=filled;
+        fillcolor="#e8f0e0";
+        Lerp   [label="LerpStampScheduler
+(_lerpScheduler)
+ramps duration > 0 stamps
+over several frames"];
+        Coords [label="DisturbanceFieldCoordinates
+(_coords)
+WorldToUV, Bounds,
+Width x Height"];
+    }
 
-        DiffShader  [label="DiffusionShader\n(_STAMPS_ON keyword\nfor combined pass)", shape=ellipse, fillcolor="#ffe8cc"];
-        StampShader [label="StampBatchedShader\n(fallback: stamps\nwithout diffusion)", shape=ellipse, fillcolor="#ffe8cc"];
+    subgraph cluster_resources {
+        label="DisturbanceFieldResources  (_resources) — owns the GPU state";
+        style=filled;
+        fillcolor="#e8e8e8";
 
-        StampEntry -> Pending  [label="duration == 0"];
-        StampEntry -> LerpQ    [label="duration > 0"];
-        LerpQ   -> TickLerp;
-        TickLerp -> StampEntry [label="generates\ninstant stamps\n(delta slice)"];
-        Pending -> Combined   [label="stamps + diffusion\ndue this frame"];
-        Pending -> StampOnly  [label="stamps only\n(diffusion not due)"];
-        Combined  -> DiffShader  [label="_STAMPS_ON"];
-        StampOnly -> StampShader;
-        DiffOnly  -> DiffShader  [label="no keyword"];
-        DiffShader  -> FieldA [label="blit write"];
-        DiffShader  -> FieldB [label="blit write"];
-        StampShader -> FieldA [label="blit write"];
-        StampShader -> FieldB [label="blit write"];
+        BlitSwap [label="BlitAndSwap(material)
+Graphics.Blit read->write,
+flip, republish texture", shape=ellipse];
+        DiffMat  [label="diffusion material
+(_STAMPS_ON keyword)", fillcolor="#ffe8cc"];
+        StampMat [label="batched-stamp material", fillcolor="#ffe8cc"];
+        FieldA   [label="_fieldA
+R=density G=dispX B=dispY"];
+        FieldB   [label="_fieldB
+R=density G=dispX B=dispY"];
+        PushTex  [label="_DisturbanceTex
+(global, set each blit)", shape=ellipse];
     }
 
     subgraph cluster_globals {
-        label="Global Shader Properties (set each tick)";
+        label="Global Shader Properties";
         style=filled;
         fillcolor="#e8f5dc";
-        Globals [label="_DisturbanceTex\n_FieldBoundsMin\n_FieldBoundsSize"];
+        Bounds [label="_FieldBoundsMin
+_FieldBoundsSize
+(PushGlobalBounds)"];
     }
 
     subgraph cluster_consumers {
         label="Consumers";
         style=filled;
         fillcolor="#f5dce8";
-        PuffCloud [label="PuffCloudView\n(samples field per slot)"];
-        BushLeaf  [label="BushLeaf.shader\n(vertex tex2Dlod\nper leaf, _RATTLE_ON)"];
-        Future    [label="Future effects\n(any shader sampling\n_DisturbanceTex)", style=dashed];
+        PuffCloud [label="PuffCloudView"];
+        BushLeaf  [label="BushLeaf.shader
+(_RATTLE_ON)"];
+        Future    [label="Future effects
+sampling _DisturbanceTex", style=dashed];
     }
 
-    Settings -> StampEntry [lhead=cluster_service, label="tuning knobs\n+ shader refs"];
-    Display  -> StampEntry [lhead=cluster_service, label="ortho size\nfor RT bounds"];
+    Settings -> StampEntry [lhead=cluster_service, label="tuning + shader refs"];
+    Display  -> Coords     [label="ortho size -> RT bounds"];
 
-    ProjView  -> StampEntry [label="Stamp(…, stamp.Duration)"];
-    BallSpawn -> StampEntry [label="Stamp(…, stamp.Duration)"];
-    BallBal   -> StampEntry [label="Stamp(…, stamp.Duration)"];
-    BallCtrl  -> StampEntry [label="Stamp(…, stamp.Duration)"];
-    BombH     -> StampEntry [label="Stamp(…, stamp.Duration)"];
-    LaserH    -> StampEntry [label="Stamp(…, stamp.Duration)"];
-    PaintH    -> StampEntry [label="Stamp(…, stamp.Duration)"];
+    ProjView  -> StampEntry;
+    BallSpawn -> StampEntry;
+    BallBal   -> StampEntry;
+    BallCtrl  -> StampEntry;
+    BombH     -> StampEntry;
+    LaserH    -> StampEntry;
+    PaintH    -> StampEntry;
 
-    FieldA -> Globals [label="PushGlobalTexture()"];
-    FieldB -> Globals [label="PushGlobalTexture()"];
+    StampEntry -> Pending [label="duration == 0"];
+    StampEntry -> Lerp    [label="duration > 0"];
+    Lerp -> StampEntry    [label="emits instant
+stamps (delta slice)"];
+    StampEntry -> Coords  [label="WorldToUV", style=dashed];
 
-    Globals -> PuffCloud;
-    Globals -> BushLeaf;
-    Globals -> Future;
+    Pending  -> Combined;
+    Pending  -> StampOnly;
+    Uniforms -> Combined [style=dashed];
+    Uniforms -> DiffOnly [style=dashed];
+
+    Combined  -> BlitSwap [label="material = diffusion (_STAMPS_ON)"];
+    StampOnly -> BlitSwap [label="material = stamp"];
+    DiffOnly  -> BlitSwap [label="material = diffusion"];
+
+    BlitSwap -> FieldA [label="read -> write"];
+    BlitSwap -> FieldB [label="swap"];
+    BlitSwap -> PushTex;
+    DiffMat  -> BlitSwap [style=invis];
+    StampMat -> BlitSwap [style=invis];
+
+    Coords -> Bounds [label="PushGlobalBounds()"];
+
+    PushTex -> PuffCloud;
+    PushTex -> BushLeaf;
+    PushTex -> Future;
+    Bounds  -> PuffCloud [style=dashed];
 }
 @enddot
 
@@ -150,7 +190,7 @@ Wind direction is set dynamically from stamp directions (opposite to the disturb
 
 ### Lerp stamp lifecycle
 
-When `Stamp()` is called with `duration > 0`, a `LerpStamp` is queued instead of flushed immediately. Each tick, `TickLerpStamps` advances all active lerp stamps by `dt`, computes the normalized progress `t ∈ [0,1]`, and calls `Stamp()` with `strength * delta` (only the new progress delta since last tick). The stamp radius also expands from `0.3×` to `1.0×` of the configured radius as `t` increases — this creates an expanding shockwave shape rather than a flat-radius pop. When `t >= 1`, the stamp is removed. The pool is capped at `MaxLerpStamps` to bound memory; oldest stamps are evicted when the cap is exceeded.
+When `Stamp()` is called with `duration > 0`, the stamp is queued on `LerpStampScheduler` (`_lerpScheduler`) instead of flushed immediately. Each tick the scheduler advances all active lerp stamps by `dt`, computes the normalized progress `t ∈ [0,1]`, and emits an instant `Stamp()` with `strength * delta` (only the new progress delta since last tick). The stamp radius also expands from `0.3×` to `1.0×` of the configured radius as `t` increases — this creates an expanding shockwave shape rather than a flat-radius pop. When `t >= 1`, the stamp is removed. The pool is capped at `MaxLerpStamps` to bound memory; oldest stamps are evicted when the cap is exceeded.
 
 ### Combined pass
 
