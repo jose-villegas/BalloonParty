@@ -15,7 +15,8 @@ namespace BalloonParty.Game.Run
     ///     returns to play.
     ///
     ///     A loss is suppressed unless the game is actively in <see cref="NavigationState.Game"/>
-    ///     and no cinematic is playing — GameOver and the level-up cinematic must never overlap.
+    ///     and no loss-blocking cinematic is playing — GameOver and the level-up cinematic must never
+    ///     overlap (the heart-drain cinematic is not loss-blocking, so a 0-HP loss fires during it).
     ///     Loss triggers call <see cref="EndRun"/> directly (the dev cheat) or raise an
     ///     <see cref="EndRunRequestedMessage"/> (the player-HP pool, which can't depend on this
     ///     controller without forming a DI cycle through the <see cref="IRunResettable"/> graph).
@@ -66,7 +67,7 @@ namespace BalloonParty.Game.Run
 
         public void EndRun()
         {
-            if (_cinematic.IsPlaying || _navigation.Current.Value != NavigationState.Game)
+            if (_cinematic.BlocksLoss || _navigation.Current.Value != NavigationState.Game)
             {
                 return;
             }

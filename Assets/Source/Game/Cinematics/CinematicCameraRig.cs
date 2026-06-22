@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using BalloonParty.Display;
+using BalloonParty.Shared.Extensions;
 using DG.Tweening;
 using UnityEngine;
 
@@ -96,16 +98,26 @@ namespace BalloonParty.Game.Cinematics
             var panTarget = Vector3.Lerp(_basePosition, trailPosition, _panWeight);
             panTarget.z = _basePosition.z;
 
-            var camPos = Vector3.Lerp(_camera.transform.position, panTarget, _followSpeed * dt);
-
             // Keep the trail inside the orthographic frustum to avoid
             // TrailRenderer "Screen position out of view frustum" errors.
-            var halfH = _camera.orthographicSize;
-            var halfW = halfH * _camera.aspect;
-            camPos.x = Mathf.Clamp(camPos.x, trailPosition.x - halfW + FrustumPadding, trailPosition.x + halfW - FrustumPadding);
-            camPos.y = Mathf.Clamp(camPos.y, trailPosition.y - halfH + FrustumPadding, trailPosition.y + halfH - FrustumPadding);
+            FrameToBox(panTarget, trailPosition, trailPosition, trailPosition, dt);
+        }
 
-            _camera.transform.position = camPos;
+        // Like FollowTrail but for several trails at once: pans toward their centroid and clamps so the
+        // whole bounding box stays in frustum (if the spread is wider than the view, just centres on it).
+        public void FollowPoints(IReadOnlyList<Vector3> points, int count, float dt)
+        {
+            if (_camera == null || count <= 0)
+            {
+                return;
+            }
+
+            var center = points.Centroid(count);
+            var bounds = points.Bounds(count);
+            var panTarget = Vector3.Lerp(_basePosition, center, _panWeight);
+            panTarget.z = _basePosition.z;
+
+            FrameToBox(panTarget, center, bounds.min, bounds.max, dt);
         }
 
         public void Restore()
@@ -131,6 +143,18 @@ namespace BalloonParty.Game.Cinematics
             {
                 _orthoController.enabled = enabled;
             }
+        }
+
+        // Eases the camera toward panTarget, then clamps each axis so the box [min,max] stays in frustum
+        // (centring on the box if it's wider than the view). A single tracked point passes it as min=max.
+        private void FrameToBox(Vector3 panTarget, Vector3 center, Vector3 min, Vector3 max, float dt)
+        {
+            var camPos = Vector3.Lerp(_camera.transform.position, panTarget, _followSpeed * dt);
+            var halfH = _camera.orthographicSize;
+            var halfW = halfH * _camera.aspect;
+            camPos.x = VectorMathExtensions.ClampToWindow(camPos.x, min.x, max.x, halfW, FrustumPadding, center.x);
+            camPos.y = VectorMathExtensions.ClampToWindow(camPos.y, min.y, max.y, halfH, FrustumPadding, center.y);
+            _camera.transform.position = camPos;
         }
 
         private void CaptureBaseState()

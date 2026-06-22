@@ -66,11 +66,13 @@ After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrails
 
 | File | Role |
 |---|---|
-| `LevelUpTrailEffect.cs` | Cinematic orchestrator (MonoBehaviour, View layer) |
+| `LevelUpTrailEffect.cs` | Level-up cinematic orchestrator (MonoBehaviour, View layer) |
+| `HeartTrailCinematicEffect.cs` | Overflow heart-drain orchestrator (MonoBehaviour): on the first overflow pop, slow-mo ramps and the camera follows the centroid of all in-flight heart trails (`HeartTrailTracker` + `CinematicCameraRig.FollowPoints`) until the pile drains or the run ends. Uses `CinematicState.HeartDrain` (non-loss-blocking, so the 0-HP game-over still fires) |
 | `CinematicDirector.cs` | Scene/state lifecycle (plain C#, Controller layer) |
+| `CinematicCameraRig.cs` | Cinematic camera (zoom/pan/restore). `FollowTrail` tracks one point; `FollowPoints` tracks the centroid + bounding-box of several |
 | `CinematicScene.cs` | Callback value object |
 | `Shared/GameState/Cinematic.cs` | Static reactive state + `ICinematicAware` listeners |
-| `Shared/GameState/CinematicState.cs` | Enum: `None`, `LevelUpPanIn`, `LevelUpRestore` |
+| `Shared/GameState/CinematicState.cs` | Enum: `None`, `LevelUpPanIn`, `LevelUpRestore`, `HeartDrain`. `ICinematicState.BlocksLoss` is true only for the level-up states — `HeartDrain` lets the 0-HP game-over fire while it plays |
 | `Shared/GameState/CinematicEndGate.cs` | `IReadyGate` — waits for cinematic state change |
 | `Shared/Pool/TrailFlight.cs` | Per-trail flight controller (Pause/Resume/Complete/Speed) |
 | `Shared/Pool/TrailFlightRegistry.cs` | Registry with bulk operations (snapshot-safe `CompleteAll`) |

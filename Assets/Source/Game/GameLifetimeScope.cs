@@ -142,6 +142,7 @@ namespace BalloonParty.Game
             builder.Register<BoardClearController>(Lifetime.Singleton).As<IRunResettable>();
             builder.RegisterEntryPoint<PlayerHealthController>().AsSelf().As<IRunResettable>().As<IPlayerHealth>();
             builder.RegisterEntryPoint<SpaceDanger>().AsSelf().As<IDangerLevel>();
+            builder.Register<HeartTrailTracker>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();
             builder.RegisterEntryPoint<ItemAssigner>();
             builder.RegisterEntryPoint<ItemActivator>();
@@ -160,6 +161,7 @@ namespace BalloonParty.Game
 
             builder.RegisterEntryPoint<CinematicDirector>().AsSelf();
             builder.RegisterComponentInHierarchy<LevelUpTrailEffect>();
+            builder.RegisterComponentInHierarchy<HeartTrailCinematicEffect>();
             builder.RegisterComponentInHierarchy<GameOverScreen>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

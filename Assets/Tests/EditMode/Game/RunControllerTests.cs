@@ -32,6 +32,7 @@ namespace BalloonParty.Tests.Game
 
             _cinematic = Substitute.For<ICinematicState>();
             _cinematic.IsPlaying.Returns(false);
+            _cinematic.BlocksLoss.Returns(false);
 
             _runMeta = Substitute.For<IRunMeta>();
 
@@ -76,9 +77,9 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void EndRun_WhileCinematicPlaying_DoesNothing()
+        public void EndRun_WhileLossBlockingCinematic_DoesNothing()
         {
-            _cinematic.IsPlaying.Returns(true);
+            _cinematic.BlocksLoss.Returns(true);
 
             CreateController().EndRun();
 

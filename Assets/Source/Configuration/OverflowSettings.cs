@@ -22,10 +22,15 @@ namespace BalloonParty.Configuration
         [Tooltip("How close to its target row counts as arrived.")]
         [SerializeField] private float _arrivalRadius = 0.02f;
 
+        [Header("Heart trail")]
+        [Tooltip("Flight time of the heart trail from the health UI to an overflow pop.")]
+        [SerializeField] private float _heartTrailDuration = 0.5f;
+
         public float AppearStaggerSeconds => _appearStaggerSeconds;
         public float LingerSeconds => _lingerSeconds;
         public float PopIntervalSeconds => _popIntervalSeconds;
         public float MoveSharpness => _moveSharpness;
         public float ArrivalRadius => _arrivalRadius;
+        public float HeartTrailDuration => _heartTrailDuration;
     }
 }

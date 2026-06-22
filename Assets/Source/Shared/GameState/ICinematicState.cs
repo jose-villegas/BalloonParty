@@ -7,5 +7,12 @@ namespace BalloonParty.Shared.GameState
     internal interface ICinematicState
     {
         bool IsPlaying { get; }
+
+        /// <summary>
+        ///     True only while a cinematic that must not be interrupted by a loss is playing (the
+        ///     level-up states). The heart-drain cinematic is <em>not</em> loss-blocking — game-over
+        ///     fires at 0 HP even while it runs.
+        /// </summary>
+        bool BlocksLoss { get; }
     }
 }

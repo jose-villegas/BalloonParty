@@ -11,5 +11,6 @@ namespace BalloonParty.Configuration
         float PopIntervalSeconds { get; }
         float MoveSharpness { get; }
         float ArrivalRadius { get; }
+        float HeartTrailDuration { get; }
     }
 }

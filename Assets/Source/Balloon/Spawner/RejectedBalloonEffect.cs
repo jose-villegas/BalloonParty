@@ -43,6 +43,10 @@ namespace BalloonParty.Balloon.Spawner
 
         public int ResetOrder => RunResetOrder.Counters;
 
+        // True while the overflow pile is resolving (the thrower-lock is held): pops still pending.
+        // The heart-drain cinematic uses this + an empty trail set to know the drain has finished.
+        internal bool IsOverflowActive => _overflowPaused;
+
         [Inject]
         internal RejectedBalloonEffect(
             SlotGrid grid,

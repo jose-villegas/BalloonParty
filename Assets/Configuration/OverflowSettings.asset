@@ -17,3 +17,4 @@ MonoBehaviour:
   _popIntervalSeconds: 0.15
   _moveSharpness: 10
   _arrivalRadius: 0.02
+  _heartTrailDuration: 0.5

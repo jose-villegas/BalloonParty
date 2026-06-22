@@ -4,8 +4,9 @@ using UnityEngine;
 namespace BalloonParty.Shared.Extensions
 {
     /// <summary>
-    ///     Stateless geometry helpers as extension methods: 2D proximity tests on <see cref="Vector2" />
-    ///     and point-set operations on a <see cref="Vector3" /> list.
+    ///     Stateless geometry helpers as extension methods: 2D proximity tests on <see cref="Vector2" />,
+    ///     point-set operations on a <see cref="Vector3" /> list, and a 1D framing clamp for fitting a
+    ///     span inside a view window.
     /// </summary>
     internal static class VectorMathExtensions
     {
@@ -74,6 +75,34 @@ namespace BalloonParty.Shared.Extensions
             }
 
             return maxDist;
+        }
+
+        /// <summary>
+        ///     The axis-aligned bounding box of the first <paramref name="count" /> entries.
+        ///     <paramref name="count" /> must be at least 1.
+        /// </summary>
+        public static Bounds Bounds(this IReadOnlyList<Vector3> points, int count)
+        {
+            var bounds = new Bounds(points[0], Vector3.zero);
+            for (var i = 1; i < count; i++)
+            {
+                bounds.Encapsulate(points[i]);
+            }
+
+            return bounds;
+        }
+
+        /// <summary>
+        ///     Clamps <paramref name="value" /> so the span <c>[min,max]</c> stays inside a window of
+        ///     half-width <paramref name="halfExtent" /> (shrunk by <paramref name="padding" />) centred on
+        ///     it — the move that keeps a tracked region within the camera frustum. If the span is wider
+        ///     than the window the clamp bounds would cross, so it falls back to <paramref name="fallback" />.
+        /// </summary>
+        public static float ClampToWindow(float value, float min, float max, float halfExtent, float padding, float fallback)
+        {
+            var lo = max - halfExtent + padding;
+            var hi = min + halfExtent - padding;
+            return lo > hi ? fallback : Mathf.Clamp(value, lo, hi);
         }
     }
 }
