@@ -57,6 +57,12 @@ namespace BalloonParty.Shared.Disturbance
             _settings = settings;
             _displayConfig = displayConfig;
             _impactBus = impactBus;
+
+            // Construct the CPU-side collaborators here so Stamp() is safe before Start(): the lerp
+            // queue accepts stamps, and _resources reports not-ready (so the blit path early-returns)
+            // until Start() does the GPU Initialize().
+            _lerpScheduler = new LerpStampScheduler(_settings.MaxLerpStamps);
+            _resources = new DisturbanceFieldResources(_settings);
         }
 
         internal RenderTexture FieldTexture => _resources.FieldTexture;
@@ -67,10 +73,8 @@ namespace BalloonParty.Shared.Disturbance
         void IStartable.Start()
         {
             _coords = new DisturbanceFieldCoordinates(_displayConfig, _settings.TexelsPerUnit);
-            _lerpScheduler = new LerpStampScheduler(_settings.MaxLerpStamps);
             _emitInstantStamp = (pos, radius, strength, dir) => Stamp(pos, radius, strength, dir);
 
-            _resources = new DisturbanceFieldResources(_settings);
             _resources.Initialize(_coords.Width, _coords.Height);
             PushGlobalBounds();
         }
