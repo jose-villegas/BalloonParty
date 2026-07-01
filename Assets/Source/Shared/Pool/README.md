@@ -135,7 +135,10 @@ var spawner = new TrailSpawner(poolManager, "MyTrail", () => new MyPoolChannel(p
 spawner.Spawn(from, to, duration, color, onArrived);
 spawner.Spawn(from, to, duration, color, onArrived, useUnscaledTime: true);  // unscaled time
 spawner.SpawnBurst(center, burstTo, target, burstDur, traceDur, color, onArrived);  // two-phase: scatter then trace
+spawner.SpawnFollow(from, () => balloon.position, speed, arriveRadius, onArrived);  // homes on a moving target
 ```
+
+`SpawnFollow` (backed by `FlyingTrail.SetupFollow`) chases a live-updating target each frame instead of tweening to a fixed point — used by `HeartTrailController` so an overflow heart lands on its balloon even while the pile compacts up under it.
 
 Used by `ScoreTrailService` for score trail spawning, `ShieldTrailController` for shield trails, `HeartTrailController` for overflow heart trails, and `LevelUpPopUp` for glow trails.
 

@@ -67,7 +67,7 @@ After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrails
 | File | Role |
 |---|---|
 | `LevelUpTrailEffect.cs` | Level-up cinematic orchestrator (MonoBehaviour, View layer) |
-| `HeartTrailCinematicEffect.cs` | Overflow heart-drain orchestrator (MonoBehaviour): on the first overflow pop, slow-mo ramps and the camera follows the centroid of all in-flight heart trails (`HeartTrailTracker` + `CinematicCameraRig.FollowPoints`) until the pile drains or the run ends. Uses `CinematicState.HeartDrain` (non-loss-blocking, so the 0-HP game-over still fires) |
+| `HeartTrailCinematicEffect.cs` | Overflow heart-drain orchestrator (MonoBehaviour): on the first `OverflowHeartRequestedMessage` (the first heart launching toward the pile), slow-mo ramps and the camera follows the centroid of all in-flight heart trails (`HeartTrailTracker` + `CinematicCameraRig.FollowPoints`) until the pile drains or the run ends. Uses `CinematicState.HeartDrain` (non-loss-blocking, so the 0-HP game-over still fires) |
 | `CinematicDirector.cs` | Scene/state lifecycle (plain C#, Controller layer) |
 | `CinematicCameraRig.cs` | Cinematic camera (zoom/pan/restore). `FollowTrail` tracks one point; `FollowPoints` tracks the centroid + bounding-box of several |
 | `CinematicScene.cs` | Callback value object |

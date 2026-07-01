@@ -77,6 +77,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
             builder.RegisterMessageBroker<GameOverMessage>(options);
             builder.RegisterMessageBroker<SpawnBlockedMessage>(options);
+            builder.RegisterMessageBroker<OverflowHeartRequestedMessage>(options);
             builder.RegisterMessageBroker<EndRunRequestedMessage>(options);
             builder.RegisterMessageBroker<RunResetMessage>(options);
             builder.RegisterMessageBroker<BoardClearMessage>(options);

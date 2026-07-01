@@ -17,11 +17,39 @@ namespace BalloonParty.UI.Score
 
         private Tweener _moveTween;
 
+        private Func<Vector3> _followTarget;
+        private Action _followArrived;
+        private float _followSpeed;
+        private float _arriveRadiusSqr;
+        private bool _followUnscaled;
+        private bool _following;
+
         private void Awake()
         {
             _renderer.sortingLayerName = OverlaySortingLayer;
             _trailRenderer.sortingLayerName = OverlaySortingLayer;
             ApplySortingOrder(OverlaySortingOrder);
+        }
+
+        private void Update()
+        {
+            if (!_following)
+            {
+                return;
+            }
+
+            var target = _followTarget();
+            var dt = _followUnscaled ? Time.unscaledDeltaTime : Time.deltaTime;
+            var next = Vector3.MoveTowards(transform.position, target, _followSpeed * dt);
+            transform.position = next;
+
+            if ((next - target).sqrMagnitude <= _arriveRadiusSqr)
+            {
+                _following = false;
+                var arrived = _followArrived;
+                _followArrived = null;
+                arrived?.Invoke();
+            }
         }
 
         public void OnSpawned()
@@ -31,6 +59,9 @@ namespace BalloonParty.UI.Score
         public void OnDespawned()
         {
             _moveTween = null;
+            _following = false;
+            _followTarget = null;
+            _followArrived = null;
             transform.DOKill();
             ApplySortingOrder(OverlaySortingOrder);
         }
@@ -92,6 +123,28 @@ namespace BalloonParty.UI.Score
             _moveTween = transform.DOMove(burstTo, burstDuration)
                 .SetUpdate(useUnscaledTime)
                 .OnComplete(() => TraceTo(target, traceDuration, useUnscaledTime));
+        }
+
+        /// <summary>
+        /// Homes on a live-updating target rather than a fixed point: each frame it moves toward
+        /// <paramref name="targetProvider"/>() at <paramref name="speed"/>, firing <paramref name="onArrived"/>
+        /// once it lands within <paramref name="arriveRadius"/>. Lets a trail chase a moving object (an
+        /// overflow balloon still sliding as the pile compacts) and pop it exactly on contact.
+        /// </summary>
+        public void SetupFollow(
+            Func<Vector3> targetProvider,
+            float speed,
+            float arriveRadius,
+            Action onArrived,
+            bool useUnscaledTime = false)
+        {
+            _trailRenderer.Clear();
+            _followTarget = targetProvider;
+            _followArrived = onArrived;
+            _followSpeed = speed;
+            _arriveRadiusSqr = arriveRadius * arriveRadius;
+            _followUnscaled = useUnscaledTime;
+            _following = true;
         }
 
         public void DisableMoveTween()

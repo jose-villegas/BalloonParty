@@ -41,7 +41,7 @@ namespace BalloonParty.Game.Cinematics
         [Inject] private OrthogonalSizeCameraController _orthoController;
         [Inject] private HeartTrailTracker _tracker;
         [Inject] private RejectedBalloonEffect _overflow;
-        [Inject] private ISubscriber<SpawnBlockedMessage> _blockedSubscriber;
+        [Inject] private ISubscriber<OverflowHeartRequestedMessage> _heartRequestedSubscriber;
 
         private readonly List<Vector3> _trailPositions = new();
 
@@ -58,7 +58,7 @@ namespace BalloonParty.Game.Cinematics
 
         private void Start()
         {
-            _subscription = _blockedSubscriber.Subscribe(_ => OnOverflowPop());
+            _subscription = _heartRequestedSubscriber.Subscribe(_ => OnFirstHeart());
         }
 
         private void OnDestroy()
@@ -75,10 +75,10 @@ namespace BalloonParty.Game.Cinematics
             Time.timeScale = 1f;
         }
 
-        private void OnOverflowPop()
+        private void OnFirstHeart()
         {
-            // Begin on the first pop of an overflow burst — not while already running or during another
-            // cinematic, and only in active play.
+            // Begin when the first heart of an overflow burst launches — not while already running or
+            // during another cinematic, and only in active play.
             if (_active || Cinematic.IsPlaying || Navigation.Current.Value != NavigationState.Game)
             {
                 return;

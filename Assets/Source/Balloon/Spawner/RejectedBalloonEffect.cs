@@ -19,11 +19,13 @@ namespace BalloonParty.Balloon.Spawner
 {
     /// <summary>
     ///     Feedback for balloons that couldn't spawn: each rises from below the grid into the overflow
-    ///     rows and lingers there as a visible pile, then pops after a short linger — and the hit point
-    ///     is charged at that pop (the linger-then-burst is the drama beat). The pile is a per-column
-    ///     queue — a balloon's target row is its index in the
-    ///     column, so when one pops the balloons below it slide up to fill the gap. Transients are pooled
-    ///     <see cref="BalloonView"/>s with no grid slot, so <see cref="ResetRun"/> returns them itself.
+    ///     rows and lingers there as a visible pile. Draining is heart-driven — when a balloon is ready a
+    ///     heart trail is requested toward it (<see cref="OverflowHeartRequestedMessage"/>), and the
+    ///     balloon only pops (charging the hit point) once that heart lands via <see cref="OnHeartArrived"/>.
+    ///     The pile is a per-column queue whose target row is the live list index, so when one pops the
+    ///     balloons below slide up to fill the gap; in-flight hearts home on the balloon's live position
+    ///     (<see cref="TryGetLivePosition"/>), so they still land on it as it compacts. Transients are
+    ///     pooled <see cref="BalloonView"/>s with no grid slot, so <see cref="ResetRun"/> returns them itself.
     /// </summary>
     internal sealed class RejectedBalloonEffect : ITickable, IRunResettable
     {
@@ -33,17 +35,19 @@ namespace BalloonParty.Balloon.Spawner
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly IPublisher<SpawnBlockedMessage> _spawnBlockedPublisher;
+        private readonly IPublisher<OverflowHeartRequestedMessage> _heartRequestPublisher;
         private readonly SlotGrid _grid;
         private readonly PauseService _pauseService;
         private readonly Dictionary<int, List<OverflowBalloon>> _columns = new();
 
         private bool _overflowPaused;
         private int _sequenceDepth;
-        private float _popCooldown;
+        private int _nextId;
+        private float _launchCooldown;
 
         public int ResetOrder => RunResetOrder.Counters;
 
-        // True while the overflow pile is resolving (the thrower-lock is held): pops still pending.
+        // True while the overflow pile is resolving (the thrower-lock is held): balloons still pending.
         // The heart-drain cinematic uses this + an empty trail set to know the drain has finished.
         internal bool IsOverflowActive => _overflowPaused;
 
@@ -56,6 +60,7 @@ namespace BalloonParty.Balloon.Spawner
             PoolManager poolManager,
             DisturbanceFieldService disturbanceField,
             IPublisher<SpawnBlockedMessage> spawnBlockedPublisher,
+            IPublisher<OverflowHeartRequestedMessage> heartRequestPublisher,
             PauseService pauseService)
         {
             _grid = grid;
@@ -65,6 +70,7 @@ namespace BalloonParty.Balloon.Spawner
             _poolManager = poolManager;
             _disturbanceField = disturbanceField;
             _spawnBlockedPublisher = spawnBlockedPublisher;
+            _heartRequestPublisher = heartRequestPublisher;
             _pauseService = pauseService;
         }
 
@@ -76,30 +82,33 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            _popCooldown -= delta;
+            _launchCooldown -= delta;
 
-            // Advance everyone, then pop at most one balloon per interval — the front-most (topmost)
-            // ready one — so the pile bursts one after another, never several at once.
-            OverflowBalloon ready = null;
-            var readyRow = int.MaxValue;
+            // Advance everyone, then request at most one heart per interval — for the front-most (topmost)
+            // ready balloon that hasn't launched yet — so the pile drains front-first, one at a time, and
+            // the rest compact up behind it.
+            OverflowBalloon candidate = null;
+            var candidateRow = int.MaxValue;
 
             foreach (var column in _columns)
             {
                 var queue = column.Value;
                 for (var row = 0; row < queue.Count; row++)
                 {
-                    if (Advance(column.Key, row, queue[row], delta) && row < readyRow)
+                    var balloon = queue[row];
+                    var ready = Advance(column.Key, row, balloon, delta);
+                    if (ready && !balloon.Launched && row < candidateRow)
                     {
-                        ready = queue[row];
-                        readyRow = row;
+                        candidate = balloon;
+                        candidateRow = row;
                     }
                 }
             }
 
-            if (ready != null && _popCooldown <= 0f)
+            if (candidate != null && _launchCooldown <= 0f)
             {
-                Pop(ready);
-                _popCooldown = _settings.PopIntervalSeconds;
+                LaunchHeart(candidate);
+                _launchCooldown = _settings.PopIntervalSeconds;
             }
         }
 
@@ -107,15 +116,15 @@ namespace BalloonParty.Balloon.Spawner
         {
             ReturnAll();
             _sequenceDepth = 0;
-            _popCooldown = 0f;
+            _launchCooldown = 0f;
             TryReleaseOverflowHold();
         }
 
         /// <summary>
-        ///     Queues the reject feedback for a blocked column: a would-be balloon enters at the next
-        ///     free overflow row below the grid, lingers, and costs one hit point when it pops. <paramref
-        ///     name="staggerIndex"/> delays its appearance so a line sweeps; <paramref name="activeCounts"/>
-        ///     is read (not owned) so the would-be balloon honours the same per-type caps as a real spawn.
+        ///     Queues the reject feedback for a blocked column: a would-be balloon enters at the next free
+        ///     overflow row below the grid and lingers there. <paramref name="staggerIndex"/> delays its
+        ///     appearance so a line sweeps; <paramref name="activeCounts"/> is read (not owned) so the
+        ///     would-be balloon honours the same per-type caps as a real spawn.
         /// </summary>
         public void Play(int col, int staggerIndex, IReadOnlyDictionary<string, int> activeCounts)
         {
@@ -139,8 +148,52 @@ namespace BalloonParty.Balloon.Spawner
             view.transform.position = RowPosition(col, rowOffset + 1);
             view.transform.localScale = Vector3.zero;
 
-            queue.Add(new OverflowBalloon(entry.PoolKey, view, col, staggerIndex * _settings.AppearStaggerSeconds));
+            queue.Add(new OverflowBalloon(entry.PoolKey, view, col, _nextId++, staggerIndex * _settings.AppearStaggerSeconds));
             BeginOverflowHold();
+        }
+
+        /// <summary>
+        ///     Pops the overflow balloon a landed heart trail was flying to (matched by id) — the drama
+        ///     beat: the hit point is charged here, at the pop, not when the balloon first went ready.
+        ///     A no-op if the balloon is already gone (e.g. the run reset out from under an in-flight heart).
+        /// </summary>
+        public void OnHeartArrived(int requestId)
+        {
+            foreach (var column in _columns)
+            {
+                var queue = column.Value;
+                for (var i = 0; i < queue.Count; i++)
+                {
+                    if (queue[i].Id == requestId)
+                    {
+                        Pop(queue[i]);
+                        return;
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        ///     The current world position of the overflow balloon with <paramref name="requestId"/>, so an
+        ///     in-flight heart trail can home on it as the pile compacts. False once the balloon is gone.
+        /// </summary>
+        public bool TryGetLivePosition(int requestId, out Vector3 position)
+        {
+            foreach (var column in _columns)
+            {
+                var queue = column.Value;
+                for (var i = 0; i < queue.Count; i++)
+                {
+                    if (queue[i].Id == requestId)
+                    {
+                        position = queue[i].View.transform.position;
+                        return true;
+                    }
+                }
+            }
+
+            position = default;
+            return false;
         }
 
         /// <summary>
@@ -163,8 +216,9 @@ namespace BalloonParty.Balloon.Spawner
             TryReleaseOverflowHold();
         }
 
-        // Eases one balloon toward its current row (= its index, so compaction is automatic) and runs its
-        // arrive→linger clock. Returns true once it's eligible to pop (the Tick spaces the actual pops).
+        // Eases one balloon toward its current row (= its live index, so it compacts up when a balloon
+        // ahead pops) and runs its arrive→linger clock. Returns true once it's ready for its heart (the
+        // Tick spaces the actual requests); in-flight hearts track the moving balloon, so compaction is safe.
         private bool Advance(int col, int rowOffset, OverflowBalloon balloon, float delta)
         {
             if (balloon.AppearDelay > 0f)
@@ -195,6 +249,13 @@ namespace BalloonParty.Balloon.Spawner
             return balloon.LingerRemaining <= 0f;
         }
 
+        private void LaunchHeart(OverflowBalloon balloon)
+        {
+            balloon.Launched = true;
+            _heartRequestPublisher.Publish(
+                new OverflowHeartRequestedMessage(balloon.Id, balloon.View.transform.position));
+        }
+
         private void Pop(OverflowBalloon balloon)
         {
             var position = balloon.View.transform.position;
@@ -202,7 +263,7 @@ namespace BalloonParty.Balloon.Spawner
             balloon.View.PlayHitVfxForOutcome(HitOutcome.Pop);
             _disturbanceField.Stamp(StampSource.BalloonPop, position, Vector2.zero);
 
-            // Charge the hit point at the pop, not on arrival — the linger-then-burst is the drama beat.
+            // Charge the hit point at the pop, not on arrival into the pile — the heart landing is the beat.
             _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(balloon.Column, position));
 
             QueueFor(balloon.Column).Remove(balloon);
@@ -281,20 +342,23 @@ namespace BalloonParty.Balloon.Spawner
 
         private sealed class OverflowBalloon
         {
-            public OverflowBalloon(string poolKey, BalloonView view, int column, float appearDelay)
+            public OverflowBalloon(string poolKey, BalloonView view, int column, int id, float appearDelay)
             {
                 PoolKey = poolKey;
                 View = view;
                 Column = column;
+                Id = id;
                 AppearDelay = appearDelay;
             }
 
             public string PoolKey { get; }
             public BalloonView View { get; }
             public int Column { get; }
+            public int Id { get; }
             public float AppearDelay { get; set; }
             public bool Arrived { get; set; }
             public float LingerRemaining { get; set; }
+            public bool Launched { get; set; }
         }
     }
 }

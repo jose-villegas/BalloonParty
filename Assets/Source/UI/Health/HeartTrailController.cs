@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Health;
 using BalloonParty.Shared.Messages;
@@ -12,21 +13,24 @@ using VContainer.Unity;
 namespace BalloonParty.UI.Health
 {
     /// <summary>
-    ///     Flies a heart trail from the health UI to each overflow pop — the visual of a hit point
-    ///     being spent on a balloon that couldn't fit. Triggered by <see cref="SpawnBlockedMessage"/>,
-    ///     the same signal that charges the HP, whose <c>Position</c> is the pop's world point. Mirrors
-    ///     <c>ShieldTrailController</c> (reversed: UI → world). The heart-trail cinematic follows these.
+    ///     Flies a heart trail from the health UI to a ready overflow balloon — the visual of a hit point
+    ///     being spent. Triggered by <see cref="OverflowHeartRequestedMessage"/>, whose
+    ///     <c>TargetPosition</c> is the balloon's frozen resting spot; when the trail lands it calls
+    ///     <see cref="RejectedBalloonEffect.OnHeartArrived"/> to pop that exact balloon (which is what
+    ///     charges the HP). Mirrors <c>ShieldTrailController</c> (reversed: UI → world). The heart-trail
+    ///     cinematic follows these.
     /// </summary>
     internal sealed class HeartTrailController : IStartable, IDisposable
     {
         private const string TrailPoolKey = "HeartTrail";
 
         private readonly IOverflowSettings _settings;
-        private readonly ISubscriber<SpawnBlockedMessage> _blockedSubscriber;
+        private readonly ISubscriber<OverflowHeartRequestedMessage> _heartRequestedSubscriber;
         private readonly PoolManager _poolManager;
         private readonly FlyingTrail _prefab;
         private readonly TrailEndpointRegistry _endpoints;
         private readonly HeartTrailTracker _tracker;
+        private readonly RejectedBalloonEffect _overflow;
 
         private IDisposable _subscription;
         private TrailSpawner _spawner;
@@ -34,18 +38,20 @@ namespace BalloonParty.UI.Health
         [Inject]
         internal HeartTrailController(
             IOverflowSettings settings,
-            ISubscriber<SpawnBlockedMessage> blockedSubscriber,
+            ISubscriber<OverflowHeartRequestedMessage> heartRequestedSubscriber,
             PoolManager poolManager,
             FlyingTrail prefab,
             TrailEndpointRegistry endpoints,
-            HeartTrailTracker tracker)
+            HeartTrailTracker tracker,
+            RejectedBalloonEffect overflow)
         {
             _settings = settings;
-            _blockedSubscriber = blockedSubscriber;
+            _heartRequestedSubscriber = heartRequestedSubscriber;
             _poolManager = poolManager;
             _prefab = prefab;
             _endpoints = endpoints;
             _tracker = tracker;
+            _overflow = overflow;
         }
 
         public void Dispose()
@@ -56,23 +62,35 @@ namespace BalloonParty.UI.Health
         public void Start()
         {
             _spawner = new TrailSpawner(_poolManager, TrailPoolKey, _prefab);
-
-            _subscription = _blockedSubscriber.Subscribe(OnBlocked);
+            _subscription = _heartRequestedSubscriber.Subscribe(OnHeartRequested);
         }
 
-        private void OnBlocked(SpawnBlockedMessage msg)
+        private void OnHeartRequested(OverflowHeartRequestedMessage msg)
         {
             if (!_endpoints.TryGet(TrailEndpointKeys.Heart, out var source))
             {
                 return;
             }
 
+            var from = source.Center;
+            var requestId = msg.RequestId;
+            var fallback = msg.TargetPosition;
+
+            // Pace the flight over HeartTrailDuration for the initial distance; MoveTowards then homes on
+            // the balloon's live position so it lands on it even as the pile compacts up.
+            var speed = Vector3.Distance(from, fallback) / Mathf.Max(_settings.HeartTrailDuration, Mathf.Epsilon);
+
             Transform trail = null;
-            trail = _spawner.Spawn(
-                source.Center,
-                msg.Position,
-                _settings.HeartTrailDuration,
-                onArrived: () => _tracker.Remove(trail));
+            trail = _spawner.SpawnFollow(
+                from,
+                () => _overflow.TryGetLivePosition(requestId, out var live) ? live : fallback,
+                speed,
+                _settings.ArrivalRadius,
+                onArrived: () =>
+                {
+                    _overflow.OnHeartArrived(requestId);
+                    _tracker.Remove(trail);
+                });
             _tracker.Add(trail);
         }
     }

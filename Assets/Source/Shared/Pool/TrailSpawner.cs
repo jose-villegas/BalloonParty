@@ -62,6 +62,32 @@ namespace BalloonParty.Shared.Pool
             return trail.transform;
         }
 
+        // Spawns a trail that homes on a live-updating target (see FlyingTrail.SetupFollow) and returns to
+        // the pool on arrival. Used to chase a moving object rather than fly to a fixed point.
+        internal Transform SpawnFollow(
+            Vector3 from,
+            Func<Vector3> targetProvider,
+            float speed,
+            float arriveRadius,
+            Action onArrived = null,
+            bool useUnscaledTime = false)
+        {
+            var trail = _poolManager.GetOrRegister(_poolKey, _channelFactory);
+            trail.transform.position = from;
+            trail.transform.localScale = Vector3.one;
+            ApplySortingOrder(trail);
+            trail.SetupFollow(targetProvider,
+                speed,
+                arriveRadius,
+                () =>
+                {
+                    onArrived?.Invoke();
+                    _poolManager.Return(_poolKey, trail);
+                },
+                useUnscaledTime);
+            return trail.transform;
+        }
+
         internal Transform Spawn(
             Vector3 from,
             Vector3 to,
