@@ -20,7 +20,7 @@ namespace BalloonParty.UI.Shields
         private readonly PoolManager _poolManager;
         private readonly ISubscriber<ShieldGainedMessage> _shieldGainedSubscriber;
         private readonly SlotGrid _slotGrid;
-        private readonly Func<Vector3> _targetProvider;
+        private readonly TrailEndpointRegistry _endpoints;
 
         private IDisposable _subscription;
         private TrailSpawner _spawner;
@@ -32,14 +32,14 @@ namespace BalloonParty.UI.Shields
             PoolManager poolManager,
             SlotGrid slotGrid,
             FlyingTrail prefab,
-            Func<Vector3> targetProvider)
+            TrailEndpointRegistry endpoints)
         {
             _config = config;
             _shieldGainedSubscriber = shieldGainedSubscriber;
             _poolManager = poolManager;
             _slotGrid = slotGrid;
             _prefab = prefab;
-            _targetProvider = targetProvider;
+            _endpoints = endpoints;
         }
 
         public void Dispose()
@@ -49,16 +49,19 @@ namespace BalloonParty.UI.Shields
 
         public void Start()
         {
-            _spawner = new TrailSpawner(
-                _poolManager,
-                TrailPoolKey,
-                () => new SimplePoolChannel<FlyingTrail>(_prefab));
+            _spawner = new TrailSpawner(_poolManager, TrailPoolKey, _prefab);
+            _subscription = _shieldGainedSubscriber.Subscribe(OnShieldGained);
+        }
 
-            _subscription = _shieldGainedSubscriber.Subscribe(msg =>
+        private void OnShieldGained(ShieldGainedMessage msg)
+        {
+            if (!_endpoints.TryGet(TrailEndpointKeys.Shield, out var target))
             {
-                var fromWorldPosition = _slotGrid.IndexToWorldPosition(msg.SlotIndex);
-                _spawner.Spawn(fromWorldPosition, _targetProvider(), _config.ShieldTrailDuration);
-            });
+                return;
+            }
+
+            var fromWorldPosition = _slotGrid.IndexToWorldPosition(msg.SlotIndex);
+            _spawner.Spawn(fromWorldPosition, target.Center, _config.ShieldTrailDuration);
         }
     }
 }

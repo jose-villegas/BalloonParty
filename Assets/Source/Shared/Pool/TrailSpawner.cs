@@ -28,6 +28,12 @@ namespace BalloonParty.Shared.Pool
             _sortingOrder = sortingOrder;
         }
 
+        // Convenience for the common case: pool the prefab through a SimplePoolChannel (no injection).
+        internal TrailSpawner(PoolManager poolManager, string poolKey, FlyingTrail prefab, int sortingOrder = -1)
+            : this(poolManager, poolKey, () => new SimplePoolChannel<FlyingTrail>(prefab), sortingOrder)
+        {
+        }
+
         internal Transform SpawnBurst(
             Vector3 center,
             Vector3 burstTo,

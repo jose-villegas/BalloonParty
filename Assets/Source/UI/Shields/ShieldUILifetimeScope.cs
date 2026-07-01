@@ -1,4 +1,4 @@
-using System;
+using BalloonParty.Shared.Pool;
 using BalloonParty.UI.Score;
 using UnityEngine;
 using VContainer;
@@ -18,8 +18,9 @@ namespace BalloonParty.UI.Shields
             builder.RegisterComponentInHierarchy<ShieldCounterAnimation>();
 
             builder.RegisterInstance(_trailPrefab);
-            builder.RegisterInstance<Func<Vector3>>(() => _trailTarget.position);
             builder.RegisterEntryPoint<ShieldTrailController>();
+            builder.RegisterBuildCallback(resolver => resolver.Resolve<TrailEndpointRegistry>()
+                .Register(TrailEndpointKeys.Shield, new TransformTrailEndpoint(_trailTarget)));
         }
     }
 }

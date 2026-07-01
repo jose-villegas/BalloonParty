@@ -13,7 +13,7 @@ using VContainer;
 
 namespace BalloonParty.UI.Score
 {
-    public class ColorProgressBar : MonoBehaviour, ITrailTarget
+    public class ColorProgressBar : MonoBehaviour, ITrailEndpoint
     {
         private static readonly int CompletedParam = Animator.StringToHash("Completed");
         private static readonly int TrailHitTrigger = Animator.StringToHash("TrailHit");

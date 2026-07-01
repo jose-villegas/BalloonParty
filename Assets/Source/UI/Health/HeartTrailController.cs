@@ -25,7 +25,7 @@ namespace BalloonParty.UI.Health
         private readonly ISubscriber<SpawnBlockedMessage> _blockedSubscriber;
         private readonly PoolManager _poolManager;
         private readonly FlyingTrail _prefab;
-        private readonly Func<Vector3> _sourceProvider;
+        private readonly TrailEndpointRegistry _endpoints;
         private readonly HeartTrailTracker _tracker;
 
         private IDisposable _subscription;
@@ -37,14 +37,14 @@ namespace BalloonParty.UI.Health
             ISubscriber<SpawnBlockedMessage> blockedSubscriber,
             PoolManager poolManager,
             FlyingTrail prefab,
-            Func<Vector3> sourceProvider,
+            TrailEndpointRegistry endpoints,
             HeartTrailTracker tracker)
         {
             _settings = settings;
             _blockedSubscriber = blockedSubscriber;
             _poolManager = poolManager;
             _prefab = prefab;
-            _sourceProvider = sourceProvider;
+            _endpoints = endpoints;
             _tracker = tracker;
         }
 
@@ -55,19 +55,21 @@ namespace BalloonParty.UI.Health
 
         public void Start()
         {
-            _spawner = new TrailSpawner(
-                _poolManager,
-                TrailPoolKey,
-                () => new SimplePoolChannel<FlyingTrail>(_prefab));
+            _spawner = new TrailSpawner(_poolManager, TrailPoolKey, _prefab);
 
             _subscription = _blockedSubscriber.Subscribe(OnBlocked);
         }
 
         private void OnBlocked(SpawnBlockedMessage msg)
         {
+            if (!_endpoints.TryGet(TrailEndpointKeys.Heart, out var source))
+            {
+                return;
+            }
+
             Transform trail = null;
             trail = _spawner.Spawn(
-                _sourceProvider(),
+                source.Center,
                 msg.Position,
                 _settings.HeartTrailDuration,
                 onArrived: () => _tracker.Remove(trail));

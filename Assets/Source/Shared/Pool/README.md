@@ -123,20 +123,32 @@ await _poolManager.PrewarmAllAsync(counts, ct);
 
 ## Trail Utilities
 
-Two composable plain-C# helpers for trail orb services. Pick the level that matches your feature's complexity:
+Composable plain-C# helpers for trail orb services. Pick the level that matches your feature's complexity:
 
 ### `TrailSpawner`
 
 Spawn-and-forget: handles pool get → position → setup → return on arrival. Accepts an optional `sortingOrder` to override the trail's sorting layer (used by glow trails at `3200`).
 
 ```csharp
-var spawner = new TrailSpawner(poolManager, "MyTrail", () => new MyPoolChannel(prefab));
+var spawner = new TrailSpawner(poolManager, "MyTrail", prefab);                       // common case: pools via SimplePoolChannel
+var spawner = new TrailSpawner(poolManager, "MyTrail", () => new MyPoolChannel(prefab)); // custom channel (e.g. injected prefabs)
 spawner.Spawn(from, to, duration, color, onArrived);
 spawner.Spawn(from, to, duration, color, onArrived, useUnscaledTime: true);  // unscaled time
 spawner.SpawnBurst(center, burstTo, target, burstDur, traceDur, color, onArrived);  // two-phase: scatter then trace
 ```
 
-Used by `ScoreTrailService` for score trail spawning, `ShieldTrailController` for shield trails, and `LevelUpPopUp` for glow trails.
+Used by `ScoreTrailService` for score trail spawning, `ShieldTrailController` for shield trails, `HeartTrailController` for overflow heart trails, and `LevelUpPopUp` for glow trails.
+
+### `TrailEndpointRegistry` + `ITrailEndpoint`
+
+The fixed anchor a trail flies **to** or **from**, resolved by key instead of each feature wiring its own position provider. A view registers under a key; a controller resolves it when spawning:
+
+```csharp
+registry.Register(TrailEndpointKeys.Heart, new TransformTrailEndpoint(anchor));  // scope build / view Start
+if (registry.TryGet(TrailEndpointKeys.Heart, out var e)) { spawner.Spawn(e.Center, popPos, dur); }
+```
+
+`ITrailEndpoint` exposes `Center` and `RandomPosition()` — point anchors return `Center` for both; an area (a progress bar) spreads arrivals. Implementations: `TransformTrailEndpoint` (wraps a fixed anchor `Transform`; used for shield target / heart source) and `ColorProgressBar` (registers per palette-colour name via `ScoreTrailService.RegisterTarget`). The registry is a `GameLifetimeScope` singleton so child UI scopes resolve the same instance; registrations are long-lived (not reset per run). Well-known single-anchor keys live in `TrailEndpointKeys`; score endpoints key on colour name.
 
 ### `TrailFlightRegistry<TId>`
 

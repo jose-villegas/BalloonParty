@@ -108,6 +108,7 @@ namespace BalloonParty.Game
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.Register<GridBalanceQuery>(Lifetime.Singleton);
             builder.Register<PoolManager>(Lifetime.Singleton);
+            builder.Register<TrailEndpointRegistry>(Lifetime.Singleton);
             builder.Register<PauseService>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.Register<ProjectilePositionProvider>(Lifetime.Singleton);
             builder.Register<ImpactEventBus>(Lifetime.Singleton)

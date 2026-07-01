@@ -24,7 +24,7 @@ namespace BalloonParty.Game.Score
         private readonly PoolManager _poolManager;
         private readonly ISubscriber<ScorePointMessage> _scoredSubscriber;
         private readonly Dictionary<string, TrailSpawner> _spawners = new();
-        private readonly Dictionary<string, ITrailTarget> _targets = new();
+        private readonly TrailEndpointRegistry _endpoints;
         private readonly FlyingTrail _trailPrefab;
 
         private IDisposable _scoreSubscription;
@@ -38,12 +38,14 @@ namespace BalloonParty.Game.Score
             ISubscriber<ScorePointMessage> scoredSubscriber,
             IPublisher<ScoreTrailArrivedMessage> arrivedPublisher,
             PoolManager poolManager,
+            TrailEndpointRegistry endpoints,
             FlyingTrail trailPrefab)
         {
             _config = config;
             _scoredSubscriber = scoredSubscriber;
             _arrivedPublisher = arrivedPublisher;
             _poolManager = poolManager;
+            _endpoints = endpoints;
             _trailPrefab = trailPrefab;
         }
 
@@ -59,14 +61,14 @@ namespace BalloonParty.Game.Score
             _scoreSubscription = _scoredSubscriber.Subscribe(OnScorePoint);
         }
 
-        internal ITrailTarget GetTarget(string colorName)
+        internal ITrailEndpoint GetTarget(string colorName)
         {
-            return _targets[colorName];
+            return _endpoints.TryGet(colorName, out var endpoint) ? endpoint : null;
         }
 
         private void OnScorePoint(ScorePointMessage msg)
         {
-            if (!_targets.ContainsKey(msg.ColorName))
+            if (!_endpoints.TryGet(msg.ColorName, out _))
             {
                 Debug.LogWarning(
                     $"ScoreTrailService: no target provider registered for " +
@@ -81,18 +83,14 @@ namespace BalloonParty.Game.Score
             SpawnTrailAsync(msg.ColorName, center, origin, id, msg.GroupIndex).Forget();
         }
 
-        internal void RegisterTarget(string colorName, ITrailTarget target, Color color)
+        internal void RegisterTarget(string colorName, ITrailEndpoint target, Color color)
         {
-            _targets[colorName] = target;
+            _endpoints.Register(colorName, target);
             _colorLookup[colorName] = color;
 
             if (!_spawners.ContainsKey(colorName))
             {
-                var poolKey = $"ScoreTrail_{colorName}";
-                _spawners[colorName] = new TrailSpawner(
-                    _poolManager,
-                    poolKey,
-                    () => new SimplePoolChannel<FlyingTrail>(_trailPrefab));
+                _spawners[colorName] = new TrailSpawner(_poolManager, $"ScoreTrail_{colorName}", _trailPrefab);
             }
         }
 
@@ -111,7 +109,7 @@ namespace BalloonParty.Game.Score
 
         private void SpawnTrail(string colorName, Vector3 center, Vector3 scatterOrigin, TrailId id)
         {
-            var target = _targets[colorName].RandomPosition();
+            var target = _endpoints.TryGet(colorName, out var endpoint) ? endpoint.RandomPosition() : Vector3.zero;
             var color = _colorLookup.TryGetValue(colorName, out var c) ? c : Color.white;
             var spawner = _spawners[colorName];
             var hasBurst = scatterOrigin != center;

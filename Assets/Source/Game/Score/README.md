@@ -73,4 +73,4 @@ When the cinematic begins, all next-level in-flight trails are paused — any tr
 - **`ScoreTrailArrivedMessage`** — published by `ScoreTrailService` on trail arrival (carries `Level`), consumed by `ScoreController`, `ColorProgressBar`, and `LevelUpTrailEffect`
 - **`ScoreLevelUpMessage`** — published by `ScoreController` on level-up, consumed by `ColorProgressBar`, `LevelUpPopUp`, and `ColorStreakTracker` (auto-reset)
 - **`Cinematics/`** — `LevelUpTrailEffect` uses `TrackTrail` to intercept the tipping trail at spawn, `PauseTrailsAbove` for selective pause, and `ResumeTrail` / `ClearTrackedTrail` for lifecycle management
-- **`ColorProgressBar`** — registers target providers via `ScoreTrailService.RegisterTarget`; reads progress from `ScoreController`; reads streak via `ColorStreakTracker.GetStreak` for streak notice display
+- **`ColorProgressBar`** — registers itself as its colour's `ITrailEndpoint` via `ScoreTrailService.RegisterTarget` (forwarded to the shared `TrailEndpointRegistry` in `Shared/Pool`); reads progress from `ScoreController`; reads streak via `ColorStreakTracker.GetStreak` for streak notice display
