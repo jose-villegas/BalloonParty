@@ -17,9 +17,9 @@ namespace BalloonParty.UI.Score
         [SerializeField] private SpriteRenderer _renderer;
         [SerializeField] private TrailRenderer _trailRenderer;
 
-        // Per-TrailMotion style (curves + colour), indexed by the enum's ordinal (O(1)). Index 0
-        // (Default) holds the base curves; a motion with a null curve — or one past the end of the array —
-        // falls back to Default, then to a linear ease. Colour falls back to the caller's / prefab colour.
+        // Per-TrailMotion style (Move ease + Scale factor + colour), indexed by the enum's ordinal (O(1)).
+        // Index 0 (Default) holds the base curves; a motion with a null curve — or one past the end of the
+        // array — falls back to Default, then to a linear 0→1. Colour falls back to the caller's / prefab colour.
         [EnumIndexed(typeof(TrailMotion))]
         [SerializeField] private MotionStyle[] _motions;
 
@@ -28,12 +28,14 @@ namespace BalloonParty.UI.Score
         private Func<Vector3> _followTarget;
         private Action _followArrived;
         private AnimationCurve _followCurve;
+        private AnimationCurve _followScaleCurve;
         private Vector3 _followStart;
         private float _followDuration;
         private float _followElapsed;
         private bool _followUnscaled;
         private bool _following;
         private Color _defaultColor;
+        private Vector3 _defaultScale;
 
         private void Awake()
         {
@@ -41,6 +43,7 @@ namespace BalloonParty.UI.Score
             _trailRenderer.sortingLayerName = OverlaySortingLayer;
             ApplySortingOrder(OverlaySortingOrder);
             _defaultColor = _renderer.color;
+            _defaultScale = transform.localScale;
         }
 
         private void Update()
@@ -57,6 +60,7 @@ namespace BalloonParty.UI.Score
             // Curve-eased progress from the launch point to the target's *current* position, so the trail
             // follows the balloon as the pile compacts yet still lands on it exactly at t = 1.
             transform.position = Vector3.LerpUnclamped(_followStart, _followTarget(), _followCurve.Evaluate(t));
+            transform.localScale = _defaultScale * _followScaleCurve.Evaluate(t);
 
             if (t >= 1f)
             {
@@ -81,6 +85,7 @@ namespace BalloonParty.UI.Score
             _followTarget = null;
             _followArrived = null;
             _followCurve = null;
+            _followScaleCurve = null;
             transform.DOKill();
             ApplySortingOrder(OverlaySortingOrder);
         }
@@ -123,16 +128,13 @@ namespace BalloonParty.UI.Score
             _trailRenderer.Clear();
 
             TraceTo(target, duration, useUnscaledTime, motion);
-            transform.DOScale(Vector3.zero, duration)
-                .SetEase(ScaleCurveFor(motion))
-                .SetUpdate(useUnscaledTime)
-                .OnComplete(() => onCompleted?.Invoke());
+            ScaleOverFlight(duration, useUnscaledTime, motion, onCompleted);
         }
 
         /// <summary>
         /// Two-phase flight: bloom out from current position to <paramref name="burstTo"/>,
         /// then follow the normal curve to <paramref name="target"/>.
-        /// The scale tween spans the full journey so the orb shrinks continuously.
+        /// The scale factor spans the full journey so the orb sizes continuously.
         /// </summary>
         public void SetupBurst(
             Vector3 burstTo,
@@ -148,10 +150,7 @@ namespace BalloonParty.UI.Score
             _trailRenderer.Clear();
 
             var totalDuration = burstDuration + traceDuration;
-            transform.DOScale(Vector3.zero, totalDuration)
-                .SetEase(ScaleCurveFor(motion))
-                .SetUpdate(useUnscaledTime)
-                .OnComplete(() => onCompleted?.Invoke());
+            ScaleOverFlight(totalDuration, useUnscaledTime, motion, onCompleted);
 
             _moveTween = transform.DOMove(burstTo, burstDuration)
                 .SetUpdate(useUnscaledTime)
@@ -177,11 +176,13 @@ namespace BalloonParty.UI.Score
             _followTarget = targetProvider;
             _followArrived = onArrived;
             _followCurve = MoveCurveFor(motion);
+            _followScaleCurve = ScaleCurveFor(motion);
             _followStart = transform.position;
             _followDuration = Mathf.Max(duration, Mathf.Epsilon);
             _followElapsed = 0f;
             _followUnscaled = useUnscaledTime;
             _following = true;
+            transform.localScale = _defaultScale * _followScaleCurve.Evaluate(0f);
         }
 
         public void DisableMoveTween()
@@ -194,6 +195,20 @@ namespace BalloonParty.UI.Score
         private void TraceTo(Vector3 target, float duration, bool useUnscaledTime, TrailMotion motion)
         {
             _moveTween = transform.DOMove(target, duration).SetEase(MoveCurveFor(motion)).SetUpdate(useUnscaledTime);
+        }
+
+        // Drives uniform scale as an absolute factor of the prefab's base scale over the flight: the Scale
+        // curve maps normalized time → multiplier (1 = authored size, 0 = gone), so it can shrink, grow, or
+        // hold. Owns the completion callback (fires when the flight's duration elapses).
+        private void ScaleOverFlight(float duration, bool useUnscaledTime, TrailMotion motion, Action onCompleted)
+        {
+            var curve = ScaleCurveFor(motion);
+            transform.localScale = _defaultScale * curve.Evaluate(0f);
+            DOTween.To(() => 0f, t => transform.localScale = _defaultScale * curve.Evaluate(t), 1f, duration)
+                .SetEase(Ease.Linear)
+                .SetTarget(transform)
+                .SetUpdate(useUnscaledTime)
+                .OnComplete(() => onCompleted?.Invoke());
         }
 
         private AnimationCurve MoveCurveFor(TrailMotion motion)
@@ -260,8 +275,13 @@ namespace BalloonParty.UI.Score
         [Serializable]
         private struct MotionStyle
         {
+            // Easing of the flight path over normalized time (0,0 → 1,1 = constant speed).
             public AnimationCurve Move;
+
+            // Size as an absolute factor of the prefab's base scale over normalized time: 1 = authored
+            // size, 0 = gone, 2 = double. A flat 1 holds constant; 1→0 shrinks; 0→1 grows in.
             public AnimationCurve Scale;
+
             public bool OverrideColor;
 
             // AllowNesting lets NaughtyAttributes evaluate ShowIf inside this nested (array-element) struct.
