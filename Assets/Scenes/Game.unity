@@ -462,6 +462,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: Cinema
       objectReference: {fileID: 0}
+    - target: {fileID: 3651980406199645597, guid: ade915b8c23e34fe892d0c5d7e0e2ce2,
+        type: 3}
+      propertyPath: _camera
+      value: 
+      objectReference: {fileID: 253765506}
+    - target: {fileID: 3651980406199645597, guid: ade915b8c23e34fe892d0c5d7e0e2ce2,
+        type: 3}
+      propertyPath: _zoomAmount
+      value: 0.15
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -855,16 +865,6 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 3540986420352662421, guid: 66f9708a0b9b044198e0f57d389d660f,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: -1.9835997
-      objectReference: {fileID: 0}
-    - target: {fileID: 3540986420352662421, guid: 66f9708a0b9b044198e0f57d389d660f,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 1.5699997
       objectReference: {fileID: 0}
     - target: {fileID: 3674475891066859161, guid: 66f9708a0b9b044198e0f57d389d660f,
         type: 3}

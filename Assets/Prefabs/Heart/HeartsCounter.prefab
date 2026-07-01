@@ -315,6 +315,9 @@ MonoBehaviour:
     TypeName: BalloonParty.Game.GameLifetimeScope
   autoRun: 1
   autoInjectGameObjects: []
+  _heartTrailPrefab: {fileID: 1429749022553535108, guid: 3eeb30d253a6243ebb0fdbac1928a952,
+    type: 3}
+  _heartTrailSource: {fileID: 6324653439922184362}
 --- !u!1 &6614950008327001570
 GameObject:
   m_ObjectHideFlags: 0
@@ -354,6 +357,16 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2001491795486438519}
     m_Modifications:
+    - target: {fileID: 3642579814404597438, guid: 2c563005d7d1b4e52a9635aaffdcbe82,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: -1.9835997
+      objectReference: {fileID: 0}
+    - target: {fileID: 3642579814404597438, guid: 2c563005d7d1b4e52a9635aaffdcbe82,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 1.5699997
+      objectReference: {fileID: 0}
     - target: {fileID: 5851352524941424225, guid: 2c563005d7d1b4e52a9635aaffdcbe82,
         type: 3}
       propertyPath: m_LocalPosition.x
