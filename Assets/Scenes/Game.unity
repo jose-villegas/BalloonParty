@@ -467,11 +467,6 @@ PrefabInstance:
       propertyPath: _camera
       value: 
       objectReference: {fileID: 253765506}
-    - target: {fileID: 3651980406199645597, guid: ade915b8c23e34fe892d0c5d7e0e2ce2,
-        type: 3}
-      propertyPath: _zoomAmount
-      value: 0.15
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
