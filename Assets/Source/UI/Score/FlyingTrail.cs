@@ -20,9 +20,8 @@ namespace BalloonParty.UI.Score
         private void Awake()
         {
             _renderer.sortingLayerName = OverlaySortingLayer;
-            _renderer.sortingOrder = OverlaySortingOrder;
             _trailRenderer.sortingLayerName = OverlaySortingLayer;
-            _trailRenderer.sortingOrder = OverlaySortingOrder;
+            ApplySortingOrder(OverlaySortingOrder);
         }
 
         public void OnSpawned()
@@ -33,14 +32,12 @@ namespace BalloonParty.UI.Score
         {
             _moveTween = null;
             transform.DOKill();
-            _renderer.sortingOrder = OverlaySortingOrder;
-            _trailRenderer.sortingOrder = OverlaySortingOrder;
+            ApplySortingOrder(OverlaySortingOrder);
         }
 
         public void SetSortingOrder(int order)
         {
-            _renderer.sortingOrder = order;
-            _trailRenderer.sortingOrder = order;
+            ApplySortingOrder(order);
         }
 
         public void Setup(
@@ -50,8 +47,7 @@ namespace BalloonParty.UI.Score
             Action onCompleted,
             bool useUnscaledTime = false)
         {
-            _renderer.color = color;
-            _trailRenderer.startColor = color;
+            ApplyColor(color);
             Setup(target, duration, onCompleted, useUnscaledTime);
         }
 
@@ -63,18 +59,11 @@ namespace BalloonParty.UI.Score
         {
             _trailRenderer.Clear();
 
-            _moveTween = transform.DOMove(target, duration);
-            var scaleTween = transform.DOScale(Vector3.zero, duration);
-            scaleTween.SetEase(_scaleCurve);
-            _moveTween.SetEase(_moveCurve);
-
-            if (useUnscaledTime)
-            {
-                _moveTween.SetUpdate(true);
-                scaleTween.SetUpdate(true);
-            }
-
-            scaleTween.OnComplete(() => onCompleted?.Invoke());
+            TraceTo(target, duration, useUnscaledTime);
+            transform.DOScale(Vector3.zero, duration)
+                .SetEase(_scaleCurve)
+                .SetUpdate(useUnscaledTime)
+                .OnComplete(() => onCompleted?.Invoke());
         }
 
         /// <summary>
@@ -91,23 +80,18 @@ namespace BalloonParty.UI.Score
             Action onCompleted,
             bool useUnscaledTime = false)
         {
-            _renderer.color = color;
-            _trailRenderer.startColor = color;
+            ApplyColor(color);
             _trailRenderer.Clear();
 
             var totalDuration = burstDuration + traceDuration;
-            var scaleTween = transform.DOScale(Vector3.zero, totalDuration).SetEase(_scaleCurve);
+            transform.DOScale(Vector3.zero, totalDuration)
+                .SetEase(_scaleCurve)
+                .SetUpdate(useUnscaledTime)
+                .OnComplete(() => onCompleted?.Invoke());
 
             _moveTween = transform.DOMove(burstTo, burstDuration)
-                .OnComplete(() => BeginTraceFlight(target, traceDuration, useUnscaledTime));
-
-            if (useUnscaledTime)
-            {
-                _moveTween.SetUpdate(true);
-                scaleTween.SetUpdate(true);
-            }
-
-            scaleTween.OnComplete(() => onCompleted?.Invoke());
+                .SetUpdate(useUnscaledTime)
+                .OnComplete(() => TraceTo(target, traceDuration, useUnscaledTime));
         }
 
         public void DisableMoveTween()
@@ -116,13 +100,22 @@ namespace BalloonParty.UI.Score
             _moveTween = null;
         }
 
-        private void BeginTraceFlight(Vector3 target, float duration, bool useUnscaledTime)
+        // The curved flight to a target that both the plain flight and the burst's second leg share.
+        private void TraceTo(Vector3 target, float duration, bool useUnscaledTime)
         {
-            _moveTween = transform.DOMove(target, duration).SetEase(_moveCurve);
-            if (useUnscaledTime)
-            {
-                _moveTween.SetUpdate(true);
-            }
+            _moveTween = transform.DOMove(target, duration).SetEase(_moveCurve).SetUpdate(useUnscaledTime);
+        }
+
+        private void ApplyColor(Color color)
+        {
+            _renderer.color = color;
+            _trailRenderer.startColor = color;
+        }
+
+        private void ApplySortingOrder(int order)
+        {
+            _renderer.sortingOrder = order;
+            _trailRenderer.sortingOrder = order;
         }
     }
 }
