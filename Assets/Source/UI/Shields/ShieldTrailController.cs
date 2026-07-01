@@ -19,16 +19,19 @@ namespace BalloonParty.UI.Shields
         private readonly FlyingTrail _prefab;
         private readonly PoolManager _poolManager;
         private readonly ISubscriber<ShieldGainedMessage> _shieldGainedSubscriber;
+        private readonly ISubscriber<ShieldLostMessage> _shieldLostSubscriber;
         private readonly SlotGrid _slotGrid;
         private readonly TrailEndpointRegistry _endpoints;
 
-        private IDisposable _subscription;
+        private IDisposable _gainedSubscription;
+        private IDisposable _lostSubscription;
         private TrailSpawner _spawner;
 
         [Inject]
         internal ShieldTrailController(
             IGameConfiguration config,
             ISubscriber<ShieldGainedMessage> shieldGainedSubscriber,
+            ISubscriber<ShieldLostMessage> shieldLostSubscriber,
             PoolManager poolManager,
             SlotGrid slotGrid,
             FlyingTrail prefab,
@@ -36,6 +39,7 @@ namespace BalloonParty.UI.Shields
         {
             _config = config;
             _shieldGainedSubscriber = shieldGainedSubscriber;
+            _shieldLostSubscriber = shieldLostSubscriber;
             _poolManager = poolManager;
             _slotGrid = slotGrid;
             _prefab = prefab;
@@ -44,15 +48,18 @@ namespace BalloonParty.UI.Shields
 
         public void Dispose()
         {
-            _subscription?.Dispose();
+            _gainedSubscription?.Dispose();
+            _lostSubscription?.Dispose();
         }
 
         public void Start()
         {
             _spawner = new TrailSpawner(_poolManager, TrailPoolKey, _prefab);
-            _subscription = _shieldGainedSubscriber.Subscribe(OnShieldGained);
+            _gainedSubscription = _shieldGainedSubscriber.Subscribe(OnShieldGained);
+            _lostSubscription = _shieldLostSubscriber.Subscribe(OnShieldLost);
         }
 
+        // Shield gained: a trail flies from the balloon that granted it up to the shield HUD.
         private void OnShieldGained(ShieldGainedMessage msg)
         {
             if (!_endpoints.TryGet(TrailEndpointKeys.Shield, out var target))
@@ -62,6 +69,17 @@ namespace BalloonParty.UI.Shields
 
             var fromWorldPosition = _slotGrid.IndexToWorldPosition(msg.SlotIndex);
             _spawner.Spawn(fromWorldPosition, target.Center, _config.ShieldTrailDuration);
+        }
+
+        // Shield lost: the reverse — a trail flies from the HUD down to the wall bounce that spent it.
+        private void OnShieldLost(ShieldLostMessage msg)
+        {
+            if (!_endpoints.TryGet(TrailEndpointKeys.Shield, out var source))
+            {
+                return;
+            }
+
+            _spawner.Spawn(source.Center, msg.Position, _config.ShieldTrailDuration);
         }
     }
 }

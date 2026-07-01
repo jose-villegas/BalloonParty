@@ -30,6 +30,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private IGameConfiguration _config;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
+        [Inject] private IPublisher<ShieldLostMessage> _shieldLostPublisher;
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
         [Inject] private ProjectileHitResolver _hitResolver;
         [Inject] private PauseService _pauseService;
@@ -151,6 +152,9 @@ namespace BalloonParty.Projectile.View
                     return;
                 }
 
+                // A shield actually absorbed this bounce (none left would have destroyed it above), so
+                // fly a shield trail to the bounce point.
+                _shieldLostPublisher.Publish(new ShieldLostMessage(pos));
                 _model.Direction = Vector2.Reflect(_model.Direction, reflect.normalized);
             }
 
