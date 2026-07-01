@@ -76,16 +76,13 @@ namespace BalloonParty.UI.Health
             var requestId = msg.RequestId;
             var fallback = msg.TargetPosition;
 
-            // Pace the flight over HeartTrailDuration for the initial distance; MoveTowards then homes on
-            // the balloon's live position so it lands on it even as the pile compacts up.
-            var speed = Vector3.Distance(from, fallback) / Mathf.Max(_settings.HeartTrailDuration, Mathf.Epsilon);
-
+            // Eases over HeartTrailDuration along the trail's move curve while homing on the balloon's live
+            // position, so it lands on it even as the pile compacts up.
             Transform trail = null;
             trail = _spawner.SpawnFollow(
                 from,
                 () => _overflow.TryGetLivePosition(requestId, out var live) ? live : fallback,
-                speed,
-                _settings.ArrivalRadius,
+                _settings.HeartTrailDuration,
                 onArrived: () =>
                 {
                     _overflow.OnHeartArrived(requestId);

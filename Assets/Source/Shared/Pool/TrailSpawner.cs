@@ -42,7 +42,8 @@ namespace BalloonParty.Shared.Pool
             float traceDuration,
             Color color,
             Action onArrived = null,
-            bool useUnscaledTime = false)
+            bool useUnscaledTime = false,
+            TrailMotion motion = TrailMotion.Default)
         {
             var trail = _poolManager.GetOrRegister(_poolKey, _channelFactory);
             trail.transform.position = center;
@@ -58,7 +59,8 @@ namespace BalloonParty.Shared.Pool
                     onArrived?.Invoke();
                     _poolManager.Return(_poolKey, trail);
                 },
-                useUnscaledTime);
+                useUnscaledTime,
+                motion);
             return trail.transform;
         }
 
@@ -67,24 +69,24 @@ namespace BalloonParty.Shared.Pool
         internal Transform SpawnFollow(
             Vector3 from,
             Func<Vector3> targetProvider,
-            float speed,
-            float arriveRadius,
+            float duration,
             Action onArrived = null,
-            bool useUnscaledTime = false)
+            bool useUnscaledTime = false,
+            TrailMotion motion = TrailMotion.Default)
         {
             var trail = _poolManager.GetOrRegister(_poolKey, _channelFactory);
             trail.transform.position = from;
             trail.transform.localScale = Vector3.one;
             ApplySortingOrder(trail);
             trail.SetupFollow(targetProvider,
-                speed,
-                arriveRadius,
+                duration,
                 () =>
                 {
                     onArrived?.Invoke();
                     _poolManager.Return(_poolKey, trail);
                 },
-                useUnscaledTime);
+                useUnscaledTime,
+                motion);
             return trail.transform;
         }
 
@@ -94,7 +96,8 @@ namespace BalloonParty.Shared.Pool
             float duration,
             Color? color = null,
             Action onArrived = null,
-            bool useUnscaledTime = false)
+            bool useUnscaledTime = false,
+            TrailMotion motion = TrailMotion.Default)
         {
             var trail = _poolManager.GetOrRegister(_poolKey, _channelFactory);
 
@@ -110,11 +113,11 @@ namespace BalloonParty.Shared.Pool
 
             if (color.HasValue)
             {
-                trail.Setup(to, color.Value, duration, OnArrived, useUnscaledTime);
+                trail.Setup(to, color.Value, duration, OnArrived, useUnscaledTime, motion);
             }
             else
             {
-                trail.Setup(to, duration, OnArrived, useUnscaledTime);
+                trail.Setup(to, duration, OnArrived, useUnscaledTime, motion);
             }
 
             return trail.transform;

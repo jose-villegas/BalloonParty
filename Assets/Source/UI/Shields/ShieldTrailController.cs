@@ -79,7 +79,7 @@ namespace BalloonParty.UI.Shields
                 return;
             }
 
-            _spawner.Spawn(source.Center, msg.Position, _config.ShieldTrailDuration);
+            _spawner.Spawn(source.Center, msg.Position, _config.ShieldTrailDuration, motion: TrailMotion.Return);
         }
     }
 }
