@@ -98,13 +98,15 @@ namespace BalloonParty.Game.Cinematics
             var panTarget = Vector3.Lerp(_basePosition, trailPosition, _panWeight);
             panTarget.z = _basePosition.z;
 
-            // Keep the trail inside the orthographic frustum to avoid
-            // TrailRenderer "Screen position out of view frustum" errors.
-            FrameToBox(panTarget, trailPosition, trailPosition, trailPosition, dt);
+            // Hard-clamp after easing so the single tracked trail can never leave the frustum (a
+            // TrailRenderer "Screen position out of view frustum" error); acceptable here because one
+            // point never widens the box past the view, so the clamp only nudges, never snaps.
+            FrameToBox(panTarget, trailPosition, trailPosition, trailPosition, dt, clampBeforeEase: false);
         }
 
-        // Like FollowTrail but for several trails at once: pans toward their centroid and clamps so the
-        // whole bounding box stays in frustum (if the spread is wider than the view, just centres on it).
+        // Like FollowTrail but for several trails at once: pans toward their centroid, framing the whole
+        // bounding box (centring on it if the spread is wider than the view). Clamps the target *before*
+        // easing toward it, so a newly-spawned far trail slides the focus in smoothly instead of snapping.
         public void FollowPoints(IReadOnlyList<Vector3> points, int count, float dt)
         {
             if (_camera == null || count <= 0)
@@ -117,7 +119,7 @@ namespace BalloonParty.Game.Cinematics
             var panTarget = Vector3.Lerp(_basePosition, center, _panWeight);
             panTarget.z = _basePosition.z;
 
-            FrameToBox(panTarget, center, bounds.min, bounds.max, dt);
+            FrameToBox(panTarget, center, bounds.min, bounds.max, dt, clampBeforeEase: true);
         }
 
         public void Restore()
@@ -145,13 +147,28 @@ namespace BalloonParty.Game.Cinematics
             }
         }
 
-        // Eases the camera toward panTarget, then clamps each axis so the box [min,max] stays in frustum
-        // (centring on the box if it's wider than the view). A single tracked point passes it as min=max.
-        private void FrameToBox(Vector3 panTarget, Vector3 center, Vector3 min, Vector3 max, float dt)
+        // Moves the camera toward panTarget while framing the box [min,max] in the frustum (centring on
+        // the box if it's wider than the view). A single tracked point passes it as min=max.
+        //
+        // clampBeforeEase chooses how the frustum constraint composes with the follow ease:
+        //  - false: ease first, then clamp the result — a hard constraint the box can never violate, but
+        //    it snaps when the box jumps (fine for one point that can't outgrow the view).
+        //  - true: clamp the target first, then ease toward it — the camera only ever moves by one lerp
+        //    step, so a far new point slides the focus in smoothly instead of snapping.
+        private void FrameToBox(Vector3 panTarget, Vector3 center, Vector3 min, Vector3 max, float dt, bool clampBeforeEase)
         {
-            var camPos = Vector3.Lerp(_camera.transform.position, panTarget, _followSpeed * dt);
             var halfH = _camera.orthographicSize;
             var halfW = halfH * _camera.aspect;
+
+            if (clampBeforeEase)
+            {
+                panTarget.x = VectorMathExtensions.ClampToWindow(panTarget.x, min.x, max.x, halfW, FrustumPadding, center.x);
+                panTarget.y = VectorMathExtensions.ClampToWindow(panTarget.y, min.y, max.y, halfH, FrustumPadding, center.y);
+                _camera.transform.position = Vector3.Lerp(_camera.transform.position, panTarget, _followSpeed * dt);
+                return;
+            }
+
+            var camPos = Vector3.Lerp(_camera.transform.position, panTarget, _followSpeed * dt);
             camPos.x = VectorMathExtensions.ClampToWindow(camPos.x, min.x, max.x, halfW, FrustumPadding, center.x);
             camPos.y = VectorMathExtensions.ClampToWindow(camPos.y, min.y, max.y, halfH, FrustumPadding, center.y);
             _camera.transform.position = camPos;
