@@ -42,6 +42,7 @@ namespace BalloonParty.UI.LevelUp
         [Inject] private IPublisher<LevelUpGlowTrailsMessage> _glowTrailsPublisher;
         [Inject] private IReadyGate _gate;
         [Inject] private PauseService _pauseService;
+        [Inject] private TimeScaleService _timeScaleService;
         [Inject] private IGamePalette _palette;
         [Inject] private PoolManager _poolManager;
         [Inject] private ScoreTrailService _scoreTrailService;
@@ -80,7 +81,7 @@ namespace BalloonParty.UI.LevelUp
 
             await _gate.WaitAsync(destroyCancellationToken);
 
-            Time.timeScale = 0f;
+            _timeScaleService.Claim(TimeScaleSource.LevelUpPopup, 0f);
 
             _levelLabel.text = (msg.NewLevel - 1).ToString("N0");
             _levelGlowFill.fillAmount = 0f;
@@ -162,7 +163,10 @@ namespace BalloonParty.UI.LevelUp
                 true,
                 cancellationToken: destroyCancellationToken);
 
+            // Publish first: the restore cinematic claims its ramp (starting at the frozen 0) before
+            // the popup's freeze is released, so the hand-back never flashes full speed.
             _dismissedPublisher.Publish(new LevelUpDismissedMessage());
+            _timeScaleService.Release(TimeScaleSource.LevelUpPopup);
             _pauseService.Resume(PauseSource.LevelUp);
         }
 

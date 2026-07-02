@@ -50,7 +50,7 @@ After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrails
 |---|---|
 | Projectile | `PauseService.IsAnyPaused` in `FixedUpdate`/`OnTriggerEnter2D` |
 | Trail spawning | Not gated — projectile is frozen so no new pops occur; scatter-delayed trails from the triggering pop complete before the popup |
-| Balloon animators/particles | `Time.timeScale = 0` when popup shows |
+| Balloon animators/particles | popup claims `TimeScaleSource.LevelUpPopup` = 0 via `TimeScaleService` |
 | Popup UI | `AnimatorUpdateMode.UnscaledTime` + `ignoreTimeScale` delays |
 | Score trails (non-tipping) | Never paused — fly at normal speed during cinematic |
 

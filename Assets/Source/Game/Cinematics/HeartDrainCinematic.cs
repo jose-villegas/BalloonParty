@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Health;
 using BalloonParty.Shared.GameState;
+using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
 using VContainer;
@@ -23,6 +24,7 @@ namespace BalloonParty.Game.Cinematics
     {
         private readonly CinematicDirector _director;
         private readonly CinematicCameraRig _rig;
+        private readonly TimeScaleService _timeScale;
         private readonly ICinematicsSettings _settings;
         private readonly HeartTrailTracker _tracker;
         private readonly RejectedBalloonEffect _overflow;
@@ -35,6 +37,7 @@ namespace BalloonParty.Game.Cinematics
         internal HeartDrainCinematic(
             CinematicDirector director,
             CinematicCameraRig rig,
+            TimeScaleService timeScale,
             ICinematicsSettings settings,
             HeartTrailTracker tracker,
             RejectedBalloonEffect overflow,
@@ -42,6 +45,7 @@ namespace BalloonParty.Game.Cinematics
         {
             _director = director;
             _rig = rig;
+            _timeScale = timeScale;
             _settings = settings;
             _tracker = tracker;
             _overflow = overflow;
@@ -50,7 +54,7 @@ namespace BalloonParty.Game.Cinematics
 
         public void Start()
         {
-            _cinematic = new CameraRigCinematic(_director, _rig, _settings, new CameraRigCinematicConfig
+            _cinematic = new CameraRigCinematic(_director, _rig, _timeScale, _settings, new CameraRigCinematicConfig
             {
                 PanInState = CinematicState.HeartDrain,
                 RestoreState = CinematicState.HeartDrainRestore,

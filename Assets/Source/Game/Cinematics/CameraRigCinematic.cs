@@ -1,5 +1,6 @@
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Extensions;
+using BalloonParty.Shared.Pause;
 using DG.Tweening;
 using UnityEngine;
 
@@ -18,6 +19,7 @@ namespace BalloonParty.Game.Cinematics
     {
         private readonly CinematicDirector _director;
         private readonly CinematicCameraRig _rig;
+        private readonly TimeScaleService _timeScale;
         private readonly CameraRigCinematicConfig _config;
         private readonly CameraRigCinematicSettings _panInSegment;
         private readonly CameraRigCinematicSettings _restoreSegment;
@@ -30,11 +32,13 @@ namespace BalloonParty.Game.Cinematics
         public CameraRigCinematic(
             CinematicDirector director,
             CinematicCameraRig rig,
+            TimeScaleService timeScale,
             ICinematicsSettings settings,
             CameraRigCinematicConfig config)
         {
             _director = director;
             _rig = rig;
+            _timeScale = timeScale;
             _config = config;
             _panInSegment = settings.EntryOf(config.PanInState).Rig;
             _restoreSegment = settings.EntryOf(config.RestoreState).Rig;
@@ -74,6 +78,7 @@ namespace BalloonParty.Game.Cinematics
 
             _panInRunning = false;
             KillTimeScaleTween();
+            _timeScale.Release(TimeScaleSource.Cinematic);
             _rig.KillTween();
             _director.CompleteScene();
             _director.EndCinematic();
@@ -113,7 +118,7 @@ namespace BalloonParty.Game.Cinematics
             }
 
             _rig.EnableOrtho(true);
-            Time.timeScale = 1f;
+            _timeScale.Release(TimeScaleSource.Cinematic);
         }
 
         private void PanInTick()
@@ -125,7 +130,7 @@ namespace BalloonParty.Game.Cinematics
             var curveValue = curve.Evaluate(Mathf.Clamp01(_realElapsed / curve.Duration()));
             if (_config.DrivesTimeScale)
             {
-                Time.timeScale = curveValue;
+                _timeScale.Claim(TimeScaleSource.Cinematic, curveValue);
             }
 
             _config.OnPanInTick?.Invoke(dt, curveValue);
@@ -170,7 +175,7 @@ namespace BalloonParty.Game.Cinematics
                         x =>
                         {
                             elapsed = x;
-                            Time.timeScale = restoreCurve.Evaluate(x);
+                            _timeScale.Claim(TimeScaleSource.Cinematic, restoreCurve.Evaluate(x));
                         },
                         restoreSeconds,
                         restoreSeconds)
@@ -182,7 +187,11 @@ namespace BalloonParty.Game.Cinematics
             {
                 // Tween from the CURRENT timeScale, so an early end (e.g. game-over during the pan-in
                 // ramp) doesn't snap speed down before ramping back up.
-                _timeScaleTween = DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, restoreSeconds)
+                _timeScaleTween = DOTween.To(
+                        () => Time.timeScale,
+                        x => _timeScale.Claim(TimeScaleSource.Cinematic, x),
+                        1f,
+                        restoreSeconds)
                     .SetEase(Ease.InOutQuad)
                     .SetUpdate(true)
                     .OnComplete(() => _director.CompleteScene());
@@ -198,7 +207,7 @@ namespace BalloonParty.Game.Cinematics
 
         private void OnRestoreComplete()
         {
-            Time.timeScale = 1f;
+            _timeScale.Release(TimeScaleSource.Cinematic);
             _rig.Restore();
             _restoreRunning = false;
             _director.EndCinematic();

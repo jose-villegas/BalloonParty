@@ -259,6 +259,19 @@ def check_start_coroutine(path: Path, lines: list[str], result: AuditResult):
                 "IEnumerator method — use async UniTask instead"))
 
 
+def check_time_scale_writes(path: Path, lines: list[str], result: AuditResult):
+    """Time.timeScale is written only by TimeScaleService — everyone else claims/releases
+    through it, so the lowest active claim wins and restores can't be forgotten."""
+    if path.name == "TimeScaleService.cs":
+        return
+    pattern = re.compile(r"Time\.timeScale\s*(?:[+\-*/]=|=(?!=))")
+    for i, line in enumerate(lines, 1):
+        code = line.split("//")[0]
+        if pattern.search(code):
+            result.add(Violation(str(path), i, "timescale-writes",
+                "direct Time.timeScale write — Claim/Release through TimeScaleService instead"))
+
+
 def check_magic_strings(path: Path, lines: list[str], result: AuditResult):
     """Animator params and physics layers must be cached, not passed as magic strings."""
     # SetTrigger("Foo"), SetBool("Foo"), etc.
@@ -1582,6 +1595,7 @@ RULES: dict[str, callable] = {
     "block-comments":    check_block_comment_headers,
     "redundant-comments":check_redundant_comments,
     "coroutines":        check_start_coroutine,
+    "timescale-writes":  check_time_scale_writes,
     "magic-strings":     check_magic_strings,
     "addto-poolable":    check_addto_this_in_poolable,
     "instantiate":       check_object_instantiate,

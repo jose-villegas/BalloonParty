@@ -29,6 +29,7 @@ namespace BalloonParty.Game.Cinematics
     {
         private readonly CinematicDirector _director;
         private readonly CinematicCameraRig _rig;
+        private readonly TimeScaleService _timeScale;
         private readonly ICinematicsSettings _settings;
         private readonly IGameConfiguration _config;
         private readonly ISubscriber<ScorePointMessage> _scoredSubscriber;
@@ -55,6 +56,7 @@ namespace BalloonParty.Game.Cinematics
         internal LevelUpCinematic(
             CinematicDirector director,
             CinematicCameraRig rig,
+            TimeScaleService timeScale,
             ICinematicsSettings settings,
             IGameConfiguration config,
             ISubscriber<ScorePointMessage> scoredSubscriber,
@@ -66,6 +68,7 @@ namespace BalloonParty.Game.Cinematics
         {
             _director = director;
             _rig = rig;
+            _timeScale = timeScale;
             _settings = settings;
             _config = config;
             _scoredSubscriber = scoredSubscriber;
@@ -79,7 +82,7 @@ namespace BalloonParty.Game.Cinematics
         public void Start()
         {
             _trackedTrailSettings = _settings.EntryOf(CinematicState.LevelUpPanIn).TrackedTrail;
-            _cinematic = new CameraRigCinematic(_director, _rig, _settings, new CameraRigCinematicConfig
+            _cinematic = new CameraRigCinematic(_director, _rig, _timeScale, _settings, new CameraRigCinematicConfig
             {
                 PanInState = CinematicState.LevelUpPanIn,
                 RestoreState = CinematicState.LevelUpRestore,

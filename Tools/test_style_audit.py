@@ -394,10 +394,71 @@ def _helper_tests():
              (False, False, True))
 
 
+# --- timescale-writes ---------------------------------------------------------
+expect_lines("timescale: direct assignment flagged", "timescale-writes", """\
+namespace BalloonParty.X
+{
+    internal class C
+    {
+        private void F()
+        {
+            Time.timeScale = 0f;
+        }
+    }
+}
+""", [7])
+
+expect_lines("timescale: lambda setter flagged", "timescale-writes", """\
+namespace BalloonParty.X
+{
+    internal class C
+    {
+        private void F()
+        {
+            DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, 0.4f);
+        }
+    }
+}
+""", [7])
+
+expect_lines("timescale: reads and comparisons allowed", "timescale-writes", """\
+namespace BalloonParty.X
+{
+    internal class C
+    {
+        private void F()
+        {
+            var t = Time.timeScale;
+            if (Time.timeScale == 0f)
+            {
+                return;
+            }
+        }
+    }
+}
+""", [])
+
+expect_lines("timescale: TimeScaleService itself exempt", "timescale-writes", """\
+namespace BalloonParty.Shared.Pause
+{
+    internal sealed class TimeScaleService
+    {
+        private void Apply()
+        {
+            Time.timeScale = 1f;
+        }
+    }
+}
+""", [], path="Shared/Pause/TimeScaleService.cs")
+
+
 def main():
     print("style_audit tests\n")
     _helper_tests()
     print(f"\n  {_results['pass']} passed, {_results['fail']} failed")
+
+
+
     sys.exit(1 if _results["fail"] else 0)
 
 

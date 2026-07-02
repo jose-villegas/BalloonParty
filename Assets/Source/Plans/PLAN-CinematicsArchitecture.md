@@ -75,11 +75,19 @@ intercept/puppeteering ported verbatim into the tick hook (pan-in leaves timeSca
 the curve modulates the trail; gameplay paused), restore samples its curve from the
 popup's frozen 0, `OnEnded` hands back `NavigationState.Game`. Both cinematics are now
 runner parameterizations; no cinematic MonoBehaviours remain except the camera view.
-**In-editor pending (blocking): remove the now-missing `LevelUpTrailEffect` component
-from `Cinema.prefab`** (if the prefab is now empty it can be deleted outright) — then a
-**full level-up playtest** (pan-in follow, popup gate, glow trails, restore, back to
-play): this is the known-fragile path. Remaining: Phase 5 (TimeScaleService + audit ban)
-and Phase 6 (camera-effect composer, deferred).
+The component was removed from `Cinema.prefab` and the full level-up playtested. — **DONE.**
+
+**Phase 5 implemented 2026-07-02:** `TimeScaleService` (+ `TimeScaleSource`, in
+`Shared/Pause/` beside `PauseService`): claim/release per source, lowest active claim
+wins, no claims = 1, `IRunResettable` clears. Writers migrated: `CameraRigCinematic`
+claims `Cinematic` (pan-in ramp + both restore forms, released on end/abort/EndPanIn) and
+`LevelUpPopUp` claims `LevelUpPopup` = 0 (released on dismiss *after* publishing the
+dismissed message, so the restore's claim is already active — no full-speed flash).
+**Enforcement live:** `style_audit.py` rule `timescale-writes` (`[ERROR]`) bans direct
+`Time.timeScale` writes outside `TimeScaleService` (reads/comparisons allowed), with four
+`test_style_audit.py` cases. **In-editor pending:** playtest level-up (popup freeze →
+restore ramp) + heart-drain slow-mo. Remaining: Phase 6 (camera-effect composer,
+deferred until a second camera effect exists).
 
 **Decisions already locked** (from the loss/pacing work — don't re-litigate):
 - Heart-drain is non-loss-blocking (game-over fires through it) and non-shake-blocking.

@@ -16,6 +16,7 @@ This package separates those concerns.
 | `PausedMessage` | Published via MessagePipe when a source transitions from unpaused → paused |
 | `ResumedMessage` | Published via MessagePipe when a source transitions from paused → unpaused |
 | `PauseService` | Singleton coordinator. Reference-counted per source, drives the broadcast |
+| `TimeScaleService` / `TimeScaleSource` | The only legal writer of `Time.timeScale` (audit-enforced): claim/release, lowest active claim wins, run-reset clears |
 | `PauseResumedGate` | `IReadyGate` implementation that resolves reactively when a source resumes — no polling |
 
 ## Usage
@@ -55,17 +56,31 @@ builder.Register<PauseResumedGate>(Lifetime.Singleton)
 Then any `IReadyGate`-aware async flow will block until that source resumes, resolving
 **in the same frame** as `Resume()` — unlike `UniTask.WaitUntil` polling.
 
-## `Time.timeScale` usage
+## `TimeScaleService` — the only writer of `Time.timeScale`
 
-`Time.timeScale` is **not** used for cinematic slow-motion. The tipping trail is slowed via
-a curve-modulated progress rate in `LevelUpTrailEffect.PanInTick` — other trails fly at
-normal speed, unmodified by `Time.timeScale`.
+Direct `Time.timeScale` writes are **banned by a style-audit rule** (`timescale-writes`,
+`[ERROR]`) everywhere except `TimeScaleService`. Callers claim a value under their
+`TimeScaleSource` and release it when done:
 
-`Time.timeScale = 0` is used in two places:
-- **`LevelUpPopUp`** — freezes balloon animators and particles while the popup is visible.
-- **`LevelUpTrailEffect` restore phase** — gradually ramps `Time.timeScale` from 0 → 1 via
-  `_restoreCurve` after the popup is dismissed.
+```csharp
+_timeScaleService.Claim(TimeScaleSource.LevelUpPopup, 0f);   // freeze while the popup shows
+_timeScaleService.Release(TimeScaleSource.LevelUpPopup);     // falls back to the next claim, or 1
+```
 
-`PauseService` handles *logical* pause coordination (projectile, trail spawning); `Time.timeScale`
-handles *visual* freeze. The two are independent.
+The **lowest active claim wins** (the popup's 0 beats a cinematic's slow-mo ramp) and no
+claims means normal speed — so restores are automatic and the "who forgot to set it back
+to 1" bug class is gone. `IRunResettable` clears all claims on restart.
+
+Current claimants:
+- **`CameraRigCinematic`** (`TimeScaleSource.Cinematic`) — per-tick slow-mo ramp of a
+  timeScale-driving pan-in segment, and both restore forms (tween-from-current /
+  curve-sampled). Note the level-up **pan-in** does not claim at all: its tipping trail is
+  slowed via a curve-modulated progress rate, other trails fly at normal speed.
+- **`LevelUpPopUp`** (`TimeScaleSource.LevelUpPopup`) — freezes balloon animators and
+  particles at 0 while visible; releases on dismiss *after* publishing
+  `LevelUpDismissedMessage`, so the restore cinematic's claim is already in place and the
+  hand-back never flashes full speed.
+
+`PauseService` handles *logical* pause coordination (projectile, trail spawning);
+`TimeScaleService` handles *visual* time warping. The two are independent.
 
