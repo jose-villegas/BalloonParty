@@ -14,8 +14,9 @@
 **What this is:** a fail state (grid-encroachment loss) **plus** a level-range
 difficulty/pacing system that turns the endless sandbox into a run-based game.
 
-**Status:** Phases 1–2 + pressure balance + an early-warning effect are **implemented and committed**;
-Phases 3+ (level-range difficulty, allowed colors) are still spec only. See *Current state* below.
+**Status:** Phases 1–2 + pressure balance + the early-warning effect + the **danger (heart-drain)
+cinematic** are **implemented, committed and playtested**; Phases 3+ (level-range difficulty,
+allowed colors) are still spec only — Phase 3 is the recommended next move. See *Current state* below.
 
 **Decisions already locked** (don't re-litigate):
 - Loss = **grid encroachment** — the board chokes up toward the thrower (balloons enter at
@@ -37,7 +38,7 @@ see `PLAN-GridActorExpansion.md`); everything else uses mechanics that exist tod
 
 ## Current state (session handoff)
 
-**Done & committed** (on `main`, latest `935e663`; `origin/main` is behind — nothing pushed):
+**Done & committed** (on `main`, latest `3171f799`, 2026-07-02):
 - **Phase 1** — `GameOver` state, run-scoped save, in-place restart. PlayMode-verified. (`Game/Run/`, `Shared/GameState/`, `UI/GameOver/`.)
 - **Phase 2** — player-HP loss from spawn saturation. `IGameConfiguration.StartingHitPoints`; `SpawnBlockedMessage`; rejected-balloon transient that pops **below the grid** (`Balloon/Spawner/RejectedBalloonEffect`); `Game/Health/PlayerHealthController` (publishes `EndRunRequestedMessage` at 0 HP, which `RunController` routes to `EndRun` — a message to avoid a DI cycle); `Display/CameraShakeService`; `UI/Health/HealthCounterLabel` (numeric, bound via `HealthUILifetimeScope` + a binder). See *Phase 2 — detailed breakdown*.
 - **Pressure balance** — a blocked balloon isn't lost until the board truly can't take it: `BalloonSpawner.TrySpawnForColumn` does own-entry → re-home to nearest open column → shove the nearest column pressure can open (`PressureCascade`, rays through puffs, relocates Unbreakable/BubbleCluster, starts above puff entries) → reject. See *Phase 2.5 — detailed breakdown*.
@@ -45,11 +46,24 @@ see `PLAN-GridActorExpansion.md`); everything else uses mechanics that exist tod
 
 **Verification reality:** all of the above is `dotnet build`- and `style_audit`-clean, and the pure logic is EditMode-tested (`PlayerHealthControllerTests`, `PressureCascadeTests`, `SpaceDangerTests`). PlayMode (`Tests/PlayMode/PressureLossPlayModeTests`, `RunRestartPlayModeTests`) and all visual/feel behaviour need the **in-editor Test Runner / playtest** — `dotnet` can't run them.
 
+**Phase 2 evolved past the original spec (2026-07-02, all committed + playtested):** the reject
+pile is a lingering per-column queue drained by **heart trails** — `RejectedBalloonEffect`
+publishes `OverflowHeartRequestedMessage` per ready balloon (serialized), the HP charge +
+camera shake fire **at the heart's launch** (`SpawnBlockedMessage` moved there), the balloon
+pops when its live-tracked heart lands (`OnHeartArrived`), and the **heart-drain cinematic**
+(slow-mo + camera following the landing heart) plays over the drain. That cinematic drove a
+full architecture pass — see `PLAN-CinematicsArchitecture.md` (settings SO, `CameraRigCinematic`
+runner, `TimeScaleService`, traits) — which also makes the deferred **loss cinematic** cheap:
+two states + two settings entries + a small producer over the runner.
+
 **Next steps (pick up here):**
-1. **Tuning playtest** — `StartingHitPoints`, pressure feel, reject-pop feel, camera-shake intensity, the danger gradient + Y offset + `_lerpSpeed`, and lines-per-turn vs pop-rate.
-2. **In-editor wiring still open:** danger UI (`DangerUILifetimeScope` + a `DangerGradientView` with gradient/sprites/container) — confirm it's placed; optional loss/danger cinematic.
-3. **Confirm the puff-entry fix** in the screenshot scenario (balloon over a puff with headroom should pressure-open, not cost a heart).
-4. **Phase 3** — level-range difficulty (`LevelRangeConfiguration` + `RangedValue` + `LevelDifficultyResolver`/`IActiveLevelParameters`), then allowed-colors (Phase 4). These are still spec-only below.
+1. **Phase 3** — level-range difficulty (`LevelRangeConfiguration` + `RangedValue` +
+   `LevelDifficultyResolver`/`IActiveLevelParameters`), then allowed-colors (Phase 4). Spec-only
+   below; memory `phase3-level-pacing` holds the locked decisions and verified read-sites.
+2. **Loss cinematic** (`GameOverLoss` beat) — build as a runner parameterization per
+   `PLAN-CinematicsArchitecture.md` guidance; do NOT write a MonoBehaviour.
+3. **Ongoing tuning** — `StartingHitPoints`, lines-per-turn vs pop-rate, danger gradient feel;
+   the cinematic/shake/overflow feel has been playtested through 2026-07-02.
 
 **Key gotchas (learned this session — see memory `loss-condition-pacing-plan` for detail):** DI cycle if a loss trigger that is an `IRunResettable` depends on `RunController` (use a message); MonoBehaviour `[Inject]` runs before its `Awake` under the parent scope (bind from a `Start` entry point, not self-inject); static `Navigation` leaks across PlayMode tests (reset to `Launch` in `[SetUp]`); headless `dotnet`/meta caveats; doubled-hex coords for straight rays.
 
