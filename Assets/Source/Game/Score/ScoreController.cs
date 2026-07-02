@@ -16,7 +16,6 @@ namespace BalloonParty.Game.Score
     internal class ScoreController : IStartable, IDisposable, IRunResettable, IRunScore, IScoreQuery
     {
         private readonly IGameConfiguration _config;
-        private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ReactiveProperty<int> _level = new(1);
         private readonly Dictionary<string, int> _levelProgress = new();
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
@@ -29,7 +28,6 @@ namespace BalloonParty.Game.Score
         private readonly ReactiveProperty<int> _totalScore = new(0);
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly List<string> _colorKeys = new();
-        private IDisposable _subscription;
         private IDisposable _trailSubscription;
 
         public IReadOnlyReactiveProperty<int> Level => _level;
@@ -39,7 +37,6 @@ namespace BalloonParty.Game.Score
         public int ResetOrder => RunResetOrder.Score;
 
         public ScoreController(
-            ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
             IPublisher<ScorePointMessage> scoredPublisher,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
@@ -48,7 +45,6 @@ namespace BalloonParty.Game.Score
             INavigation navigation,
             ColorStreakTracker streakTracker)
         {
-            _hitSubscriber = hitSubscriber;
             _trailArrivedSubscriber = trailArrivedSubscriber;
             _scoredPublisher = scoredPublisher;
             _levelUpPublisher = levelUpPublisher;
@@ -60,7 +56,6 @@ namespace BalloonParty.Game.Score
 
         public void Dispose()
         {
-            _subscription?.Dispose();
             _trailSubscription?.Dispose();
         }
 
@@ -70,7 +65,6 @@ namespace BalloonParty.Game.Score
 
             ClearRunState();
 
-            _subscription = _hitSubscriber.Subscribe(OnActorHit);
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
         }
 
@@ -154,7 +148,9 @@ namespace BalloonParty.Game.Score
             _navigation.TransitionTo(NavigationState.LevelUp);
         }
 
-        private void OnActorHit(ActorHitMessage msg)
+        // Invoked by HitPipeline as the first dispatch stage (not bus-subscribed) so the streak
+        // tracker is guaranteed current when Dispatch returns. Internal for direct test invocation.
+        internal void OnActorHit(ActorHitMessage msg)
         {
             if (msg.Outcome != HitOutcome.Pop && msg.Outcome != HitOutcome.PassThrough)
             {

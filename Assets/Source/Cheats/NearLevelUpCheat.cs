@@ -5,7 +5,6 @@ using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
-using MessagePipe;
 
 namespace BalloonParty.Cheats
 {
@@ -13,7 +12,7 @@ namespace BalloonParty.Cheats
     {
         private readonly IGameConfiguration _config;
         private readonly IGamePalette _palette;
-        private readonly IPublisher<ActorHitMessage> _hitPublisher;
+        private readonly IHitDispatcher _hitDispatcher;
         private readonly ScoreController _scoreController;
 
         public string Name => "Near Level Up";
@@ -24,12 +23,12 @@ namespace BalloonParty.Cheats
             IGameConfiguration config,
             IGamePalette palette,
             ScoreController scoreController,
-            IPublisher<ActorHitMessage> hitPublisher)
+            IHitDispatcher hitDispatcher)
         {
             _config = config;
             _palette = palette;
             _scoreController = scoreController;
-            _hitPublisher = hitPublisher;
+            _hitDispatcher = hitDispatcher;
         }
 
         public void Execute()
@@ -37,7 +36,7 @@ namespace BalloonParty.Cheats
             var oneBeforeRequired = _config.PointsRequiredForLevel(_scoreController.Level.Value + 1) - 3;
             foreach (var color in _palette.Colors)
             {
-                ScoreCheatHelper.FillColor(color, oneBeforeRequired, _scoreController, _hitPublisher);
+                ScoreCheatHelper.FillColor(color, oneBeforeRequired, _scoreController, _hitDispatcher);
             }
         }
     }

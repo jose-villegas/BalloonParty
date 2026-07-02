@@ -19,7 +19,7 @@ namespace BalloonParty.Item.Laser
     {
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly BalloonOverlapQuery _overlap;
-        private readonly IPublisher<ActorHitMessage> _hitPublisher;
+        private readonly IHitDispatcher _hitDispatcher;
         private readonly ISubscriber<TransformCapturedMessage> _transformCapturedSubscriber;
         private readonly IItemConfiguration _itemConfig;
         private readonly List<RaycastHit2D> _castResults = new(4);
@@ -35,14 +35,14 @@ namespace BalloonParty.Item.Laser
         [Inject]
         internal LaserItemHandler(
             IItemConfiguration itemConfig,
-            IPublisher<ActorHitMessage> hitPublisher,
+            IHitDispatcher hitDispatcher,
             ISubscriber<TransformCapturedMessage> transformCapturedSubscriber,
             ItemEffectPlayer effectPlayer,
             BalloonOverlapQuery overlap,
             DisturbanceFieldService disturbanceField)
         {
             _itemConfig = itemConfig;
-            _hitPublisher = hitPublisher;
+            _hitDispatcher = hitDispatcher;
             _transformCapturedSubscriber = transformCapturedSubscriber;
             _effectPlayer = effectPlayer;
             _overlap = overlap;
@@ -111,7 +111,7 @@ namespace BalloonParty.Item.Laser
                     continue;
                 }
 
-                _hitPublisher.Publish(ActorHitMessage.From(model,
+                _hitDispatcher.Dispatch(ActorHitMessage.From(model,
                     balloonView.transform.position,
                     Vector3.zero,
                     context));

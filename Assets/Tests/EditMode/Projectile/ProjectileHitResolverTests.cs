@@ -15,7 +15,7 @@ namespace BalloonParty.Tests.Projectile
     [TestFixture]
     public class ProjectileHitResolverTests
     {
-        private IPublisher<ActorHitMessage> _hitPublisher;
+        private IHitDispatcher _hitDispatcher;
         private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         private ColorStreakTracker _streakTracker;
         private ProjectileHitResolver _resolver;
@@ -24,7 +24,7 @@ namespace BalloonParty.Tests.Projectile
         [SetUp]
         public void SetUp()
         {
-            _hitPublisher = Substitute.For<IPublisher<ActorHitMessage>>();
+            _hitDispatcher = Substitute.For<IHitDispatcher>();
             _shieldGainedPublisher = Substitute.For<IPublisher<ShieldGainedMessage>>();
 
             var levelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
@@ -35,7 +35,7 @@ namespace BalloonParty.Tests.Projectile
                 .Returns(Substitute.For<IDisposable>());
             _streakTracker = new ColorStreakTracker(levelUpSubscriber);
 
-            _resolver = new ProjectileHitResolver(_hitPublisher, _shieldGainedPublisher, _streakTracker);
+            _resolver = new ProjectileHitResolver(_hitDispatcher, _shieldGainedPublisher, _streakTracker);
             _projectile = new ProjectileModel { IsFree = true };
         }
 
@@ -56,13 +56,13 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Resolve_AbsorbingBalloon_PublishesActorHitWithAbsorbOutcome()
+        public void Resolve_AbsorbingBalloon_DispatchesActorHitWithAbsorbOutcome()
         {
             var balloon = AbsorbingBalloon();
 
             _resolver.Resolve(_projectile, balloon, Vector3.zero);
 
-            _hitPublisher.Received(1).Publish(Arg.Is<ActorHitMessage>(m =>
+            _hitDispatcher.Received(1).Dispatch(Arg.Is<ActorHitMessage>(m =>
                 m.Actor == balloon && m.Outcome == HitOutcome.Absorb));
         }
 

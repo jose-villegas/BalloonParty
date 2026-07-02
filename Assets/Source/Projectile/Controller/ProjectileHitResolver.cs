@@ -16,16 +16,16 @@ namespace BalloonParty.Projectile.Controller
     /// </summary>
     internal class ProjectileHitResolver
     {
-        private readonly IPublisher<ActorHitMessage> _hitPublisher;
+        private readonly IHitDispatcher _hitDispatcher;
         private readonly IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         private readonly ColorStreakTracker _streakTracker;
 
         public ProjectileHitResolver(
-            IPublisher<ActorHitMessage> hitPublisher,
+            IHitDispatcher hitDispatcher,
             IPublisher<ShieldGainedMessage> shieldGainedPublisher,
             ColorStreakTracker streakTracker)
         {
-            _hitPublisher = hitPublisher;
+            _hitDispatcher = hitDispatcher;
             _shieldGainedPublisher = shieldGainedPublisher;
             _streakTracker = streakTracker;
         }
@@ -42,7 +42,7 @@ namespace BalloonParty.Projectile.Controller
 
             if (outcome == HitOutcome.Absorb)
             {
-                _hitPublisher.Publish(new ActorHitMessage(
+                _hitDispatcher.Dispatch(new ActorHitMessage(
                     balloon, balloonWorldPosition, projectile.Direction, HitOutcome.Absorb));
                 projectile.IsFree = false;
                 return ProjectileHitVisual.Destroyed;
@@ -57,10 +57,11 @@ namespace BalloonParty.Projectile.Controller
                 recolored = true;
             }
 
-            _hitPublisher.Publish(new ActorHitMessage(
+            _hitDispatcher.Dispatch(new ActorHitMessage(
                 balloon, balloonWorldPosition, projectile.Direction, outcome, damageContext));
 
-            // ScoreController handled the message synchronously above, so the tracker is current.
+            // Dispatch guarantees the score/streak stage ran before returning, so the tracker
+            // is current — a structural contract of IHitDispatcher, not a subscription-order accident.
             if (outcome == HitOutcome.Pop && balloon is IHasColor &&
                 _streakTracker.CurrentStreak >= 2 &&
                 _streakTracker.LastColor == projectile.ColorName.Value)

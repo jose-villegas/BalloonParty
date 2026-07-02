@@ -144,6 +144,7 @@ namespace BalloonParty.Game
             builder.Register<BalloonFactory>(Lifetime.Singleton);
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>().As<IScoreQuery>();
+            builder.Register<HitPipeline>(Lifetime.Singleton).As<IHitDispatcher>();
             builder.RegisterEntryPoint<RunController>().AsSelf();
             builder.Register<BoardClearController>(Lifetime.Singleton).As<IRunResettable>();
             builder.RegisterEntryPoint<PlayerHealthController>().AsSelf().As<IRunResettable>().As<IPlayerHealth>();

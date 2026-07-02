@@ -29,7 +29,6 @@ namespace BalloonParty.Tests.Game
         private ScoreController _controller;
         private INavigation _navigation;
         private ColorStreakTracker _streakTracker;
-        private IMessageHandler<ActorHitMessage> _hitHandler;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
 
         [SetUp]
@@ -61,7 +60,6 @@ namespace BalloonParty.Tests.Game
 
         private ScoreController BuildController()
         {
-            var hitSubscriber = Substitute.For<ISubscriber<ActorHitMessage>>();
             var trailArrivedSubscriber = Substitute.For<ISubscriber<ScoreTrailArrivedMessage>>();
             var levelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
             IMessageHandler<ScoreLevelUpMessage> levelUpHandler = null;
@@ -79,12 +77,6 @@ namespace BalloonParty.Tests.Game
 
             // Capture the IMessageHandler that ScoreController registers via the Subscribe extension method.
             // The extension wraps Action<T> in AnonymousMessageHandler and calls the interface method.
-            hitSubscriber
-                .Subscribe(
-                    Arg.Do<IMessageHandler<ActorHitMessage>>(h => _hitHandler = h),
-                    Arg.Any<MessageHandlerFilter<ActorHitMessage>[]>())
-                .Returns(Substitute.For<IDisposable>());
-
             trailArrivedSubscriber
                 .Subscribe(
                     Arg.Do<IMessageHandler<ScoreTrailArrivedMessage>>(h => _trailArrivedHandler = h),
@@ -93,7 +85,6 @@ namespace BalloonParty.Tests.Game
 
             _streakTracker = new ColorStreakTracker(levelUpSubscriber);
             return new ScoreController(
-                hitSubscriber,
                 trailArrivedSubscriber,
                 _scoredPublisher,
                 _levelUpPublisher,
@@ -380,7 +371,7 @@ namespace BalloonParty.Tests.Game
         public void OnActorHit_AbsorbOutcome_DoesNotScore()
         {
             var actor = new AbsorbingActor("Red");
-            _hitHandler.Handle(new ActorHitMessage(actor, Vector3.zero, Vector3.up, actor.EvaluateHit(new DamageContext(1)), new DamageContext(1)));
+            _controller.OnActorHit(new ActorHitMessage(actor, Vector3.zero, Vector3.up, actor.EvaluateHit(new DamageContext(1)), new DamageContext(1)));
 
             _scoredPublisher.DidNotReceive().Publish(Arg.Any<ScorePointMessage>());
         }
@@ -436,10 +427,12 @@ namespace BalloonParty.Tests.Game
             Assert.AreEqual(-1, PlayerPrefs.GetInt(Red, -1));
         }
 
+        // OnActorHit is invoked directly — ScoreController is a HitPipeline stage, not a
+        // bus subscriber.
         private void FireHit(IBalloonModel model, int damage)
         {
             var outcome = model.EvaluateHit(new DamageContext(damage));
-            _hitHandler.Handle(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, new DamageContext(damage)));
+            _controller.OnActorHit(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, new DamageContext(damage)));
         }
 
         private void FirePop(string color, int scoreValue = 1)

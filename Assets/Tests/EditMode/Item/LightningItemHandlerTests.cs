@@ -38,7 +38,7 @@ namespace BalloonParty.Tests.Item
         }
 
         private SlotGrid _grid;
-        private IPublisher<ActorHitMessage> _hitPublisher;
+        private IHitDispatcher _hitDispatcher;
         private LightningItemHandler _handler;
 
         [SetUp]
@@ -56,11 +56,11 @@ namespace BalloonParty.Tests.Item
             itemConfig[ItemType.Lightning].Returns(lightningSettings);
             itemConfig.Items.Returns(new List<ItemSettings> { lightningSettings });
 
-            _hitPublisher = Substitute.For<IPublisher<ActorHitMessage>>();
+            _hitDispatcher = Substitute.For<IHitDispatcher>();
 
             _handler = new LightningItemHandler(
                 itemConfig,
-                _hitPublisher,
+                _hitDispatcher,
                 _grid,
                 new PoolManager());
         }
@@ -90,7 +90,7 @@ namespace BalloonParty.Tests.Item
 
             _handler.Activate(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
 
-            _hitPublisher.DidNotReceive().Publish(Arg.Any<ActorHitMessage>());
+            _hitDispatcher.DidNotReceive().Dispatch(Arg.Any<ActorHitMessage>());
         }
 
         [Test]
@@ -102,7 +102,7 @@ namespace BalloonParty.Tests.Item
 
             _handler.Activate(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
 
-            _hitPublisher.Received(2).Publish(Arg.Any<ActorHitMessage>());
+            _hitDispatcher.Received(2).Dispatch(Arg.Any<ActorHitMessage>());
         }
 
         [Test]
@@ -113,8 +113,8 @@ namespace BalloonParty.Tests.Item
 
             _handler.Activate(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
 
-            _hitPublisher.Received(1).Publish(Arg.Any<ActorHitMessage>());
-            _hitPublisher.DidNotReceive().Publish(
+            _hitDispatcher.Received(1).Dispatch(Arg.Any<ActorHitMessage>());
+            _hitDispatcher.DidNotReceive().Dispatch(
                 Arg.Is<ActorHitMessage>(m => ReferenceEquals(m.Actor, source)));
         }
 
@@ -126,7 +126,7 @@ namespace BalloonParty.Tests.Item
 
             _handler.Activate(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
 
-            _hitPublisher.Received(1).Publish(
+            _hitDispatcher.Received(1).Dispatch(
                 Arg.Is<ActorHitMessage>(m => m.Context.Damage == 1));
         }
 
@@ -140,11 +140,11 @@ namespace BalloonParty.Tests.Item
             itemConfig[ItemType.Lightning].Returns(settings);
 
             var published = new List<ActorHitMessage>();
-            var publisher = Substitute.For<IPublisher<ActorHitMessage>>();
-            publisher.When(p => p.Publish(Arg.Any<ActorHitMessage>()))
+            var dispatcher = Substitute.For<IHitDispatcher>();
+            dispatcher.When(d => d.Dispatch(Arg.Any<ActorHitMessage>()))
                 .Do(ci => published.Add(ci.Arg<ActorHitMessage>()));
 
-            var handler = new LightningItemHandler(itemConfig, publisher, _grid, new PoolManager());
+            var handler = new LightningItemHandler(itemConfig, dispatcher, _grid, new PoolManager());
 
             var sourceA = PlaceBalloon(0, 0, "Red");
             var target1 = PlaceBalloon(1, 0, "Red");

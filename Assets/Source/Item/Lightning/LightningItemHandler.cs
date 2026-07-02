@@ -28,7 +28,7 @@ namespace BalloonParty.Item.Lightning
                 => (Origin - a.worldPos).sqrMagnitude.CompareTo((Origin - b.worldPos).sqrMagnitude);
         }
 
-        private readonly IPublisher<ActorHitMessage> _hitPublisher;
+        private readonly IHitDispatcher _hitDispatcher;
         private readonly IItemConfiguration _itemConfig;
         private readonly PoolManager _poolManager;
         private readonly SlotGrid _grid;
@@ -42,12 +42,12 @@ namespace BalloonParty.Item.Lightning
         [Inject]
         public LightningItemHandler(
             IItemConfiguration itemConfig,
-            IPublisher<ActorHitMessage> hitPublisher,
+            IHitDispatcher hitDispatcher,
             SlotGrid grid,
             PoolManager poolManager)
         {
             _itemConfig = itemConfig;
-            _hitPublisher = hitPublisher;
+            _hitDispatcher = hitDispatcher;
             _grid = grid;
             _poolManager = poolManager;
         }
@@ -74,7 +74,7 @@ namespace BalloonParty.Item.Lightning
             {
                 foreach (var (model, pos) in targets)
                 {
-                    _hitPublisher.Publish(ActorHitMessage.From(model,
+                    _hitDispatcher.Dispatch(ActorHitMessage.From(model,
                         pos,
                         Vector3.zero,
                         context));
@@ -115,7 +115,7 @@ namespace BalloonParty.Item.Lightning
                 }
 
                 var (model, pos) = targets[index];
-                _hitPublisher.Publish(ActorHitMessage.From(model,
+                _hitDispatcher.Dispatch(ActorHitMessage.From(model,
                     pos,
                     Vector3.zero,
                     context));

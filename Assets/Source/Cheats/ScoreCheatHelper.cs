@@ -5,7 +5,6 @@ using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
-using MessagePipe;
 using UnityEngine;
 
 namespace BalloonParty.Cheats
@@ -16,7 +15,7 @@ namespace BalloonParty.Cheats
             PaletteEntry color,
             int target,
             ScoreController scoreController,
-            IPublisher<ActorHitMessage> hitPublisher)
+            IHitDispatcher hitDispatcher)
         {
             var missing = target - scoreController.GetProgress(color.Name);
             if (missing <= 0)
@@ -29,7 +28,7 @@ namespace BalloonParty.Cheats
 
             for (var i = 0; i < missing; i++)
             {
-                hitPublisher.Publish(new ActorHitMessage(fakeModel,
+                hitDispatcher.Dispatch(new ActorHitMessage(fakeModel,
                     Vector3.zero,
                     Vector3.zero,
                     HitOutcome.Pop,

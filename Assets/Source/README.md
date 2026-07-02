@@ -137,13 +137,19 @@ Use MessagePipe for communication between systems that should not hold direct re
 
 ```csharp
 // Publisher
-[Inject] private IPublisher<ActorHitMessage> _publisher;
-_publisher.Publish(new ActorHitMessage(actor, worldPos, direction));
+[Inject] private IPublisher<BalanceBalloonsMessage> _publisher;
+_publisher.Publish(new BalanceBalloonsMessage());
 
 // Subscriber
 [Inject] private ISubscriber<ActorHitMessage> _subscriber;
 _subscriber.Subscribe(msg => OnHit(msg)).AddTo(_disposable);
 ```
+
+> **Exception — `ActorHitMessage` is never published directly.** Producers route hits
+> through `IHitDispatcher` (`Game/HitPipeline`), which runs the order-dependent stages
+> (score/streak recording) synchronously before broadcasting to the bus. Subscribing to
+> `ActorHitMessage` is fine for order-independent observers; publishing it raw skips
+> scoring.
 
 ### Message design rules
 
@@ -436,7 +442,7 @@ public class BalloonRemoverCheat : MonoBehaviour, ICheat
 
     // 4. [Inject] fields
     [Inject] private SlotGrid _grid;
-    [Inject] private IPublisher<ActorHitMessage> _hitPublisher;
+    [Inject] private IHitDispatcher _hitDispatcher;
 
     // 5. Readonly instance fields
     private readonly List<Vector3> _path = new();

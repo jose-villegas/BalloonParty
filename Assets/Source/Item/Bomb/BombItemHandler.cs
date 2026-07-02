@@ -19,7 +19,7 @@ namespace BalloonParty.Item.Bomb
     {
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly BalloonOverlapQuery _overlap;
-        private readonly IPublisher<ActorHitMessage> _hitPublisher;
+        private readonly IHitDispatcher _hitDispatcher;
         private readonly IPublisher<NudgeMessage> _nudgePublisher;
         private readonly IItemConfiguration _itemConfig;
         private readonly List<Collider2D> _overlapResults = new(8);
@@ -31,14 +31,14 @@ namespace BalloonParty.Item.Bomb
         [Inject]
         public BombItemHandler(
             IItemConfiguration itemConfig,
-            IPublisher<ActorHitMessage> hitPublisher,
+            IHitDispatcher hitDispatcher,
             IPublisher<NudgeMessage> nudgePublisher,
             ItemEffectPlayer effectPlayer,
             BalloonOverlapQuery overlap,
             DisturbanceFieldService disturbanceField)
         {
             _itemConfig = itemConfig;
-            _hitPublisher = hitPublisher;
+            _hitDispatcher = hitDispatcher;
             _nudgePublisher = nudgePublisher;
             _effectPlayer = effectPlayer;
             _overlap = overlap;
@@ -100,7 +100,7 @@ namespace BalloonParty.Item.Bomb
 
                 var hitContext = isNeighbor ? piercingContext : context;
 
-                _hitPublisher.Publish(ActorHitMessage.From(model,
+                _hitDispatcher.Dispatch(ActorHitMessage.From(model,
                     balloonView.transform.position,
                     Vector3.zero,
                     hitContext));
