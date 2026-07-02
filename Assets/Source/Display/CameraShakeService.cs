@@ -9,9 +9,13 @@ using VContainer;
 namespace BalloonParty.Display
 {
     /// <summary>
-    ///     Punches the gameplay camera on every <see cref="SpawnBlockedMessage"/> (a rejected
-    ///     balloon), then restores it. Skipped while a cinematic is driving the camera so the two
-    ///     never fight; the anchor is captured per-burst so overlapping shakes don't drift.
+    ///     Punches the gameplay camera on every <see cref="SpawnBlockedMessage"/> (a heart launched
+    ///     for a rejected balloon). The shake is an <em>additive offset</em>, applied as a per-frame
+    ///     delta in <c>LateUpdate</c> — it composes with whatever else drives the camera (the
+    ///     heart-drain pan just absorbs it) instead of fighting over the absolute position, so every
+    ///     launch punches, not only the first. Runs unscaled so the drain's slow-mo can't stretch it;
+    ///     skipped only while a level-up cinematic owns the camera
+    ///     (<see cref="ICinematicState.BlocksShake"/>).
     /// </summary>
     internal class CameraShakeService : MonoBehaviour
     {
@@ -22,8 +26,9 @@ namespace BalloonParty.Display
 
         [Inject] private ICinematicState _cinematic;
 
-        private Vector3 _anchor;
-        private bool _isShaking;
+        private Vector3 _offset;
+        private Vector3 _applied;
+        private Tween _shakeTween;
         private IDisposable _subscription;
 
         private void Awake()
@@ -34,14 +39,23 @@ namespace BalloonParty.Display
             }
         }
 
+        private void LateUpdate()
+        {
+            // Apply only the change since last frame, after every other camera writer has run — adding a
+            // delta composes with the pan/follow, where writing an absolute position would override it.
+            var delta = _offset - _applied;
+            if (delta != Vector3.zero && _camera != null)
+            {
+                _camera.transform.position += delta;
+            }
+
+            _applied = _offset;
+        }
+
         private void OnDestroy()
         {
             _subscription?.Dispose();
-
-            if (_camera != null)
-            {
-                _camera.transform.DOKill();
-            }
+            _shakeTween?.Kill();
         }
 
         [Inject]
@@ -52,27 +66,18 @@ namespace BalloonParty.Display
 
         private void Shake()
         {
-            if (_camera == null || _cinematic.IsPlaying)
+            if (_camera == null || _cinematic.BlocksShake)
             {
                 return;
             }
 
-            var cameraTransform = _camera.transform;
-
-            if (!_isShaking)
-            {
-                _anchor = cameraTransform.position;
-                _isShaking = true;
-            }
-
-            cameraTransform.DOKill();
-            cameraTransform.position = _anchor;
-            cameraTransform.DOShakePosition(_duration, _strength, _vibrato)
-                .OnComplete(() =>
-                {
-                    cameraTransform.position = _anchor;
-                    _isShaking = false;
-                });
+            // Restart around zero on every launch; LateUpdate's delta removes any residual offset from a
+            // killed mid-flight shake, so back-to-back launches each land a full punch.
+            _shakeTween?.Kill();
+            _offset = Vector3.zero;
+            _shakeTween = DOTween.Shake(() => _offset, v => _offset = v, _duration, _strength, _vibrato)
+                .SetUpdate(true)
+                .OnComplete(() => _offset = Vector3.zero);
         }
     }
 }

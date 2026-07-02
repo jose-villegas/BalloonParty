@@ -21,9 +21,9 @@ namespace BalloonParty.Game.Cinematics
     ///     and pans/zooms the camera to follow the centroid of all in-flight heart trails. Ends when the
     ///     overflow has fully drained or the run is over (extra pops after 0 HP don't extend it).
     ///
-    ///     Uses <see cref="CinematicState.HeartDrain"/>, which is <em>not</em> loss-blocking — so the
-    ///     0-HP game-over fires through <c>RunController.EndRun</c> even while this plays — yet still sets
-    ///     <c>Cinematic.IsPlaying</c> so <c>CameraShakeService</c> stands down and doesn't fight the pan.
+    ///     Uses <see cref="CinematicState.HeartDrain"/>, which is neither loss-blocking (the 0-HP
+    ///     game-over fires through <c>RunController.EndRun</c> even while this plays) nor shake-blocking
+    ///     (each heart launch punches the camera through the pan; the follow lerp absorbs it).
     /// </summary>
     internal class HeartTrailCinematicEffect : MonoBehaviour
     {

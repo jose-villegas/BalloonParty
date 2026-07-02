@@ -7,5 +7,9 @@ namespace BalloonParty.Shared.GameState
         public bool BlocksLoss => Cinematic.Current.Value
             is CinematicState.LevelUpPanIn
             or CinematicState.LevelUpRestore;
+
+        public bool BlocksShake => Cinematic.Current.Value
+            is CinematicState.LevelUpPanIn
+            or CinematicState.LevelUpRestore;
     }
 }

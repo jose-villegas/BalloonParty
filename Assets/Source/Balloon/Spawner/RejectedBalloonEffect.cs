@@ -20,8 +20,9 @@ namespace BalloonParty.Balloon.Spawner
     /// <summary>
     ///     Feedback for balloons that couldn't spawn: each rises from below the grid into the overflow
     ///     rows and lingers there as a visible pile. Draining is heart-driven — when a balloon is ready a
-    ///     heart trail is requested toward it (<see cref="OverflowHeartRequestedMessage"/>), and the
-    ///     balloon only pops (charging the hit point) once that heart lands via <see cref="OnHeartArrived"/>.
+    ///     heart trail is requested toward it (<see cref="OverflowHeartRequestedMessage"/>) and the hit
+    ///     point + camera shake are charged right then, at the launch; the balloon itself only pops (the
+    ///     visual burst) once that heart lands via <see cref="OnHeartArrived"/>.
     ///     The pile is a per-column queue whose target row is the live list index, so when one pops the
     ///     balloons below slide up to fill the gap; in-flight hearts home on the balloon's live position
     ///     (<see cref="TryGetLivePosition"/>), so they still land on it as it compacts. Transients are
@@ -252,19 +253,24 @@ namespace BalloonParty.Balloon.Spawner
         private void LaunchHeart(OverflowBalloon balloon)
         {
             balloon.Launched = true;
-            _heartRequestPublisher.Publish(
-                new OverflowHeartRequestedMessage(balloon.Id, balloon.View.transform.position));
+            var position = balloon.View.transform.position;
+
+            // The heart request goes out first so the trail (and the drain cinematic) exists while the
+            // run is still in Game; the charge follows immediately — the hit point and camera shake land
+            // the moment the heart leaves the UI, not when it arrives. A 0-HP game-over triggered here
+            // simply ends the cinematic early (extra hearts past 0 don't count).
+            _heartRequestPublisher.Publish(new OverflowHeartRequestedMessage(balloon.Id, position));
+            _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(balloon.Column, position));
         }
 
+        // Purely the visual burst — the hit point and shake were already charged when the heart launched
+        // (see LaunchHeart); the landing just resolves the balloon it paid for.
         private void Pop(OverflowBalloon balloon)
         {
             var position = balloon.View.transform.position;
 
             balloon.View.PlayHitVfxForOutcome(HitOutcome.Pop);
             _disturbanceField.Stamp(StampSource.BalloonPop, position, Vector2.zero);
-
-            // Charge the hit point at the pop, not on arrival into the pile — the heart landing is the beat.
-            _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(balloon.Column, position));
 
             QueueFor(balloon.Column).Remove(balloon);
             _poolManager.Return(balloon.PoolKey, balloon.View);

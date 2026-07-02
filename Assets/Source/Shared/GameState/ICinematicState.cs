@@ -14,5 +14,12 @@ namespace BalloonParty.Shared.GameState
         ///     fires at 0 HP even while it runs.
         /// </summary>
         bool BlocksLoss { get; }
+
+        /// <summary>
+        ///     True only while a cinematic hard-owns the camera and the shake must stand down (the
+        ///     level-up states). The heart-drain cinematic pans too, but its shakes are part of the
+        ///     drama — they fire per heart launch and the follow lerp absorbs them.
+        /// </summary>
+        bool BlocksShake { get; }
     }
 }
