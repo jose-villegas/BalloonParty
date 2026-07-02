@@ -39,7 +39,8 @@ namespace BalloonParty.Game.Cinematics
 
         private readonly List<Vector3> _trailPositions = new();
 
-        private CameraRigCinematicSettings _settings;
+        private CameraRigCinematicSettings _drainSegment;
+        private CameraRigCinematicSettings _restoreSegment;
         private CinematicCameraRig _rig;
         private IDisposable _subscription;
         private Tween _timeScaleTween;
@@ -50,9 +51,10 @@ namespace BalloonParty.Game.Cinematics
         {
             // Injection precedes Awake here: GameLifetimeScope's execution order (-5001) builds the
             // container before any other component wakes.
-            _settings = _cinematicsSettings.HeartDrain;
+            _drainSegment = _cinematicsSettings.EntryOf(CinematicState.HeartDrain).Rig;
+            _restoreSegment = _cinematicsSettings.EntryOf(CinematicState.HeartDrainRestore).Rig;
             _rig = new CinematicCameraRig(
-                _camera, _orthoController, _settings.ZoomAmount, _settings.PanWeight, _settings.FollowSpeed);
+                _camera, _orthoController, _drainSegment.ZoomAmount, _drainSegment.PanWeight, _drainSegment.FollowSpeed);
         }
 
         private void Start()
@@ -88,7 +90,7 @@ namespace BalloonParty.Game.Cinematics
             KillTimeScaleTween();
 
             _director.BeginCinematic(CinematicState.HeartDrain);
-            _rig.PreparePanIn(_settings.SlowDownCurve.Duration());
+            _rig.PreparePanIn(_drainSegment.TimeScaleCurve.Duration());
             _director.PlayScene(new CinematicScene(onTick: DrainTick));
         }
 
@@ -97,8 +99,8 @@ namespace BalloonParty.Game.Cinematics
             var dt = Time.unscaledDeltaTime;
             _realElapsed += dt;
 
-            var curveT = Mathf.Clamp01(_realElapsed / _settings.SlowDownCurve.Duration());
-            Time.timeScale = _settings.SlowDownCurve.Evaluate(curveT);
+            var curveT = Mathf.Clamp01(_realElapsed / _drainSegment.TimeScaleCurve.Duration());
+            Time.timeScale = _drainSegment.TimeScaleCurve.Evaluate(curveT);
 
             if (_rig.HasCamera)
             {
@@ -133,14 +135,20 @@ namespace BalloonParty.Game.Cinematics
         {
             KillTimeScaleTween();
 
-            _timeScaleTween = DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, _settings.RestoreSeconds)
+            // The restore is its own state (a restore is just another camera-rig segment); its curve's
+            // last key is the segment duration. Tween from the CURRENT timeScale rather than sampling the
+            // curve, so an early end (game-over mid-ramp) doesn't snap speed down before ramping up.
+            _director.BeginCinematic(CinematicState.HeartDrainRestore);
+            var restoreSeconds = _restoreSegment.TimeScaleCurve.Duration();
+
+            _timeScaleTween = DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, restoreSeconds)
                 .SetEase(Ease.InOutQuad)
                 .SetUpdate(true)
                 .OnComplete(() => _director.CompleteScene());
 
             if (_rig.HasCamera)
             {
-                _rig.PrepareRestore(_settings.RestoreSeconds);
+                _rig.PrepareRestore(restoreSeconds);
             }
 
             _director.PlayScene(new CinematicScene(onEnd: OnRestoreComplete));

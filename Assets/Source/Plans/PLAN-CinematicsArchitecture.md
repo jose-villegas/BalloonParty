@@ -30,18 +30,21 @@ four observations (all verified against the code):
 4. The camera shake wants to be a composable **camera effect** (it already became additive
    this session), not an ad-hoc service with a hard-coded cinematic gate.
 
-**Status:** Phases 1 + 2 **implemented 2026-07-02**, merged per review: traits live in the
-settings SO, not a code table — `CinematicsSettings` (+ `ICinematicsSettings`,
-`CameraRigCinematicSettings`) is the single setup point holding per-state traits (an
-`[EnumIndexed]` array whose field initializers are the canonical declarations) and each
-cinematic's rig tuning; `ICinematicState.Has(trait)` reads through it;
-`RunController`/`CameraShakeService` migrated; both producers stripped of serialized
-tuning (they keep only the `Camera` ref); the asset is authored from the recovered-values
-table below. **In-editor pending:** wire `CinematicsSettings.asset` into the
-`GameLifetimeScope` field (NRE on `Has` without it) and delete the now-orphaned tuning
-overrides on `Cinema.prefab`; playtest both cinematics. Phases 3+ not started. The
-level-up cinematic trail path is a **known-fragile area** (see memory index) — it
-converts last.
+**Status:** Phases 1 + 2 **implemented 2026-07-02**, revised three times in review to the
+final shape: (a) traits live in the settings SO, not a code table; (b) tuning is
+enum-indexed, not named fields; (c) **fully per-state uniform segments** — one
+`[EnumIndexed(typeof(CinematicState))] CinematicStateEntry[]` where each entry composes
+`Traits` + a uniform `CameraRigCinematicSettings` segment (TimeScaleCurve/Zoom/Pan/Follow;
+the curve's last key is the duration) + `TrackedTrailSettings`. Restores are ordinary
+segments (`RestoreCurve`/`RestoreSeconds` deleted); `CinematicState.HeartDrainRestore`
+added and the heart-drain producer flips to it. `ICinematicState.Has(trait)` reads
+through the SO; `RunController`/`CameraShakeService` migrated; both producers stripped of
+serialized tuning (they keep only the `Camera` ref); the field initializers AND the asset
+carry the recovered authored values, so a fresh instance equals the shipped asset
+(asserted by `CinematicsSettingsTests`). `GameLifetimeScope` wiring done. **In-editor
+pending:** the now-orphaned tuning overrides on `Cinema.prefab` drop off on next save;
+playtest both cinematics. Phases 3+ not started. The level-up cinematic trail path is a
+**known-fragile area** (see memory index) — it converts last.
 
 **Decisions already locked** (from the loss/pacing work — don't re-litigate):
 - Heart-drain is non-loss-blocking (game-over fires through it) and non-shake-blocking.
@@ -115,21 +118,38 @@ Repo-standard config: one `CinematicsSettings` ScriptableObject + `ICinematicsSe
 read-only interface, registered in `GameLifetimeScope` like the other nine configs.
 
 ```csharp
-[Serializable]
-internal class CameraRigCinematicSettings   // one reusable block
-{
-    ZoomAmount, PanWeight, FollowSpeed,      // the trio duplicated today (0.5 / 0.7 / 5)
-    SlowDownCurve,                           // fast → slowest ramp
-    RestoreCurve or RestoreSeconds           // see open question 1
-}
-
 CinematicsSettings : ScriptableObject, ICinematicsSettings
 {
-    CameraRigCinematicSettings LevelUp;      // + level-up extras: tracked-trail scale curve
-    CameraRigCinematicSettings HeartDrain;
-    // future: GameOverLoss
+    [EnumIndexed(typeof(CinematicState))] CinematicStateEntry[] _states;   // ONE registry, per state
+}
+
+CinematicStateEntry            // everything one state declares, composed from uniform blocks
+{
+    CinematicTraits Traits;                      // behaviour (BlocksLoss/BlocksShake)
+    CameraRigCinematicSettings Rig;              // the uniform SEGMENT: TimeScaleCurve (its last key IS
+                                                 // the segment duration) + ZoomAmount + PanWeight
+                                                 // + FollowSpeed
+    TrackedTrailSettings TrackedTrail;           // capability block: any trail-tracking segment can use
+                                                 // it (level-up's tipping-trail 4× pulse today)
 }
 ```
+
+**The generalization (third review revision, final):** a *restore is not special-cased* —
+it's just another segment whose curve ramps timeScale back to 1 with zoom/pan at 0 (target
+= base framing). So `RestoreCurve`/`RestoreSeconds` dissolved; `LevelUpRestore` is simply
+another entry, and the heart-drain's hidden restore got its own state
+(`CinematicState.HeartDrainRestore`, appended to preserve serialized indices — the
+producer now flips to it via `BeginCinematic` when the drain ends). Every state has the
+same structure; durations are consistent because they all come from the curve's last key
+(`FollowSpeed` stays a *speed* — tracking responsiveness has no endpoint, so no duration
+field is needed anywhere). Consumers read `EntryOf(state)`; adding a cinematic = enum
+value(s) + entry initializer(s).
+
+Nuance carried forward to the Part-C runner: the heart-drain restore tweens timeScale
+**from wherever it currently is** to 1 over the segment's duration (sampling the curve
+directly would snap speed down first when the drain ends early, e.g. game-over during the
+first ramp). The runner's restore segments should ease from-current toward the curve's end
+value rather than sample absolutely.
 
 Repeating *values* across entries is fine (explicitly accepted) — consistency comes from
 the shared **type**, and each cinematic stays independently tunable. Scene objects keep
@@ -279,10 +299,10 @@ the service the only legal writer). Each phase updates `Game/Cinematics/README.m
 
 ## Open questions (decide before the relevant phase)
 
-1. **Restore spec** (Phase 2): level-up restores via a *curve* (`_restoreCurve`, 0.3→1
-   with its own duration), heart-drain via a plain tween over `_restoreSeconds`. Unify on
-   a curve (heart-drain's becomes `EaseInOut(0, 0.3, 0.4, 1)`) or keep both fields in the
-   settings block? Leaning: unify on curve — one concept, and the SO makes it authorable.
+1. ~~**Restore spec**~~ **RESOLVED (Part B, third revision):** restores are ordinary
+   per-state segments — one `TimeScaleCurve` everywhere, duration = its last key. The
+   heart-drain restore reads only the curve's duration/end for now (tween-from-current,
+   see the nuance note in Part B); the Part-C runner standardizes ease-from-current.
 2. **`CinematicEndGate`** (Phase 1): keep keyed by state (works today) or re-key by trait
    (`GatesUI`)? Leaning: keep by state until a second gated UI exists.
 3. **Static `Cinematic` vs DI** (any phase): the static reactive state + `ICinematicAware`

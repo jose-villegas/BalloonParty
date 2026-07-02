@@ -6,62 +6,91 @@ using UnityEngine;
 namespace BalloonParty.Configuration
 {
     /// <summary>
-    ///     Every cinematic is declared and tuned here: <see cref="_traits" /> holds one
-    ///     <see cref="CinematicTraits" /> entry per <see cref="CinematicState" /> (indexed by the enum's
-    ///     ordinal, drawn with the enum names), and each camera-rig cinematic gets its own
-    ///     <see cref="CameraRigCinematicSettings" /> block. The field initializers ARE the canonical
-    ///     declarations — a fresh instance carries them, the asset starts from them, and the EditMode
-    ///     test asserts them, so a new state without a declaration fails CI.
+    ///     Every cinematic state is declared and tuned here, in one entry per
+    ///     <see cref="CinematicState" /> (indexed by the enum's ordinal, drawn with the enum names):
+    ///     behavioural traits + the uniform camera-rig segment it plays + capability blocks. States are
+    ///     the generalization — a restore is not special-cased, it's just another segment whose curve
+    ///     ramps timeScale back to 1. The field initializers ARE the canonical declarations — they carry
+    ///     the authored values recovered off <c>Cinema.prefab</c>, a fresh instance equals the shipped
+    ///     asset, and the EditMode test asserts them, so a new state without a declaration fails CI.
     /// </summary>
     [CreateAssetMenu(menuName = "Configuration/Cinematics Settings", fileName = "CinematicsSettings")]
     internal class CinematicsSettings : ScriptableObject, ICinematicsSettings
     {
-        [Tooltip("Behavioural traits per cinematic state — the declaration, not derived anywhere else.")]
+        [Tooltip("Traits + camera-rig segment + capability blocks, one entry per cinematic state.")]
         [EnumIndexed(typeof(CinematicState))]
-        [SerializeField] private CinematicTraits[] _traits =
+        [SerializeField] private CinematicStateEntry[] _states =
         {
-            CinematicTraits.None,                                       // None
-            CinematicTraits.BlocksLoss | CinematicTraits.BlocksShake,   // LevelUpPanIn
-            CinematicTraits.BlocksLoss | CinematicTraits.BlocksShake,   // LevelUpRestore
-            CinematicTraits.None,                                       // HeartDrain
+            // None — no cinematic; entry unused.
+            new(),
+
+            // LevelUpPanIn — slow-mo dips to half speed and self-recovers over 3 s while the camera
+            // zooms hard onto the tipping trail, which pulses to 4× mid-flight.
+            new(
+                CinematicTraits.BlocksLoss | CinematicTraits.BlocksShake,
+                new CameraRigCinematicSettings(
+                    new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(1.5f, 0.5f), new Keyframe(3f, 1f)),
+                    zoomAmount: 2f,
+                    panWeight: 0.6f,
+                    followSpeed: 0.7f),
+                new TrackedTrailSettings(
+                    new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(0.5f, 4f), new Keyframe(1f, 1f)))),
+
+            // LevelUpRestore — ramps from the popup's frozen 0 back to full over 3 s, camera returning
+            // to base framing (zoom/pan 0).
+            new(
+                CinematicTraits.BlocksLoss | CinematicTraits.BlocksShake,
+                new CameraRigCinematicSettings(
+                    new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(3f, 1f)),
+                    zoomAmount: 0f,
+                    panWeight: 0f,
+                    followSpeed: 0.7f),
+                new TrackedTrailSettings()),
+
+            // HeartDrain — quick ramp to 0.3 while the camera follows the heart trails' centroid.
+            new(
+                CinematicTraits.None,
+                new CameraRigCinematicSettings(
+                    new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(0.6f, 0.3f)),
+                    zoomAmount: 0.15f,
+                    panWeight: 0.1f,
+                    followSpeed: 2f),
+                new TrackedTrailSettings()),
+
+            // HeartDrainRestore — back to full speed over 0.85 s, camera returning to base framing.
+            new(
+                CinematicTraits.None,
+                new CameraRigCinematicSettings(
+                    new AnimationCurve(new Keyframe(0f, 0.3f), new Keyframe(0.85f, 1f)),
+                    zoomAmount: 0f,
+                    panWeight: 0f,
+                    followSpeed: 2f),
+                new TrackedTrailSettings()),
         };
-
-        [Header("Level-up")]
-        [SerializeField] private CameraRigCinematicSettings _levelUp = new();
-
-        [Tooltip("Scale of the tipping trail over its manual flight during the pan-in.")]
-        [SerializeField] private AnimationCurve _trackedTrailScaleCurve = AnimationCurve.EaseInOut(0f, 2f, 1f, 1f);
-
-        [Header("Heart drain")]
-        [SerializeField] private CameraRigCinematicSettings _heartDrain = new();
-
-        public CameraRigCinematicSettings LevelUp => _levelUp;
-        public CameraRigCinematicSettings HeartDrain => _heartDrain;
-        public AnimationCurve LevelUpTrackedTrailScaleCurve => _trackedTrailScaleCurve;
 
         private void OnValidate()
         {
 #if UNITY_EDITOR
-            // Keep the traits array in lock-step with the enum so an asset saved before a new state
-            // self-heals on open (new entries default to None — the test still enforces intent).
+            // Keep the array in lock-step with the enum so an asset saved before a new state self-heals
+            // on open (new entries default to trait-less — the test still enforces intent).
             var states = Enum.GetValues(typeof(CinematicState)).Length;
-            if (_traits == null || _traits.Length != states)
+            if (_states == null || _states.Length != states)
             {
-                Array.Resize(ref _traits, states);
+                Array.Resize(ref _states, states);
             }
 #endif
         }
 
-        public CinematicTraits TraitsOf(CinematicState state)
+        public CinematicStateEntry EntryOf(CinematicState state)
         {
             var index = (int)state;
-            if (_traits == null || index < 0 || index >= _traits.Length)
+            if (_states == null || index < 0 || index >= _states.Length)
             {
                 throw new ArgumentOutOfRangeException(
-                    nameof(state), state, "Cinematic state has no traits declared — extend CinematicsSettings._traits.");
+                    nameof(state), state, "Cinematic state has no entry declared — extend CinematicsSettings._states.");
             }
 
-            return _traits[index];
+            return _states[index];
         }
     }
 }

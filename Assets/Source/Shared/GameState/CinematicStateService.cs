@@ -15,7 +15,7 @@ namespace BalloonParty.Shared.GameState
 
         public bool Has(CinematicTraits trait)
         {
-            return (_settings.TraitsOf(Cinematic.Current.Value) & trait) != 0;
+            return (_settings.EntryOf(Cinematic.Current.Value).Traits & trait) != 0;
         }
     }
 }

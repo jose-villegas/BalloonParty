@@ -34,7 +34,9 @@ namespace BalloonParty.Game.Cinematics
         [Inject] private ScoreTrailService _scoreTrailService;
         [Inject] private PauseService _pauseService;
 
-        private CameraRigCinematicSettings _settings;
+        private CameraRigCinematicSettings _panInSegment;
+        private CameraRigCinematicSettings _restoreSegment;
+        private TrackedTrailSettings _trackedTrailSettings;
         private CinematicCameraRig _cameraRig;
         private Vector3 _lastTrailPosition;
         private float _realElapsed;
@@ -51,9 +53,12 @@ namespace BalloonParty.Game.Cinematics
         {
             // Injection precedes Awake here: GameLifetimeScope's execution order (-5001) builds the
             // container before any other component wakes.
-            _settings = _cinematicsSettings.LevelUp;
+            var panIn = _cinematicsSettings.EntryOf(CinematicState.LevelUpPanIn);
+            _panInSegment = panIn.Rig;
+            _restoreSegment = _cinematicsSettings.EntryOf(CinematicState.LevelUpRestore).Rig;
+            _trackedTrailSettings = panIn.TrackedTrail;
             _cameraRig = new CinematicCameraRig(
-                _camera, _orthoController, _settings.ZoomAmount, _settings.PanWeight, _settings.FollowSpeed);
+                _camera, _orthoController, _panInSegment.ZoomAmount, _panInSegment.PanWeight, _panInSegment.FollowSpeed);
         }
 
         private void Start()
@@ -198,8 +203,8 @@ namespace BalloonParty.Game.Cinematics
             var dt = Time.unscaledDeltaTime;
             _realElapsed += dt;
 
-            var curveT = Mathf.Clamp01(_realElapsed / _settings.SlowDownCurve.Duration());
-            var speedFactor = _settings.SlowDownCurve.Evaluate(curveT);
+            var curveT = Mathf.Clamp01(_realElapsed / _panInSegment.TimeScaleCurve.Duration());
+            var speedFactor = _panInSegment.TimeScaleCurve.Evaluate(curveT);
             _trailElapsed += dt * speedFactor;
 
             if (AdvanceTrackedTrail())
@@ -221,7 +226,7 @@ namespace BalloonParty.Game.Cinematics
 
             var progress = Mathf.Clamp01(_trailElapsed / _config.ScorePointTraceDuration);
 
-            _trackedFlight.Transform.localScale = Vector3.one * _cinematicsSettings.LevelUpTrackedTrailScaleCurve.Evaluate(progress);
+            _trackedFlight.Transform.localScale = Vector3.one * _trackedTrailSettings.ScaleCurve.Evaluate(progress);
 
             var target = _trailTargetWorld;
             target.z = 0f;
@@ -246,14 +251,14 @@ namespace BalloonParty.Game.Cinematics
         {
             _timeScaleTween?.Kill();
             _timeScaleTween = null;
-            _cameraRig.PreparePanIn(_settings.SlowDownCurve.Duration());
+            _cameraRig.PreparePanIn(_panInSegment.TimeScaleCurve.Duration());
         }
 
         private void PrepareRestore()
         {
             KillTweens();
 
-            var restoreDuration = _settings.RestoreCurve.Duration();
+            var restoreDuration = _restoreSegment.TimeScaleCurve.Duration();
             var elapsed = 0f;
 
             _timeScaleTween = DOTween.To(
@@ -261,7 +266,7 @@ namespace BalloonParty.Game.Cinematics
                     x =>
                     {
                         elapsed = x;
-                        Time.timeScale = _settings.RestoreCurve.Evaluate(x);
+                        Time.timeScale = _restoreSegment.TimeScaleCurve.Evaluate(x);
                     },
                     restoreDuration,
                     restoreDuration)

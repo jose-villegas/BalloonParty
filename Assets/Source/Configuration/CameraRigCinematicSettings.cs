@@ -4,38 +4,45 @@ using UnityEngine;
 namespace BalloonParty.Configuration
 {
     /// <summary>
-    ///     The tuning block one camera-rig cinematic flies with (zoom/pan/follow + slow-mo ramp +
-    ///     restore) — one instance per cinematic in <see cref="CinematicsSettings" />, so each stays
-    ///     independently tunable while sharing the same shape. Level-up restores via
-    ///     <see cref="RestoreCurve" /> (from the popup's frozen 0), the heart-drain via a plain tween
-    ///     over <see cref="RestoreSeconds" /> — unification is the Part-C runner's business.
+    ///     One camera-rig segment — the uniform shape every cinematic state plays: a
+    ///     <see cref="TimeScaleCurve" /> (whose last key is also the segment's duration) plus how the
+    ///     camera frames it. A slow-mo pan-in and a restore are the same structure — the restore's curve
+    ///     just ramps back to 1 with zoom/pan at 0 (target = base framing).
     /// </summary>
     [Serializable]
     internal class CameraRigCinematicSettings
     {
-        [Tooltip("How much the orthographic size shrinks during the pan-in.")]
-        [SerializeField] private float _zoomAmount = 0.5f;
+        [Tooltip("Time.timeScale over the segment's real time; the last key doubles as the segment duration.")]
+        [SerializeField] private AnimationCurve _timeScaleCurve = AnimationCurve.EaseInOut(0f, 1f, 0.6f, 0.3f);
+
+        [Tooltip("How much the orthographic size shrinks during the segment (0 = base framing).")]
+        [SerializeField] private float _zoomAmount;
 
         [Tooltip("0 = camera stays at its base position, 1 = fully centres on the focus.")]
-        [SerializeField] private float _panWeight = 0.7f;
+        [SerializeField] private float _panWeight;
 
-        [Tooltip("Lerp sharpness of the camera easing toward the pan target (higher = snappier).")]
+        [Tooltip("Lerp sharpness of the camera easing toward the segment's target (higher = snappier).")]
         [SerializeField] private float _followSpeed = 5f;
 
-        [Tooltip("Time.timeScale over the cinematic's real-time ramp (fast → slowest).")]
-        [SerializeField] private AnimationCurve _slowDownCurve = AnimationCurve.EaseInOut(0f, 1f, 0.6f, 0.3f);
+        public CameraRigCinematicSettings()
+        {
+        }
 
-        [Tooltip("Time.timeScale over the restore ramp — used by cinematics that restore along a curve.")]
-        [SerializeField] private AnimationCurve _restoreCurve = AnimationCurve.EaseInOut(0f, 0.3f, 0.4f, 1f);
+        public CameraRigCinematicSettings(
+            AnimationCurve timeScaleCurve,
+            float zoomAmount,
+            float panWeight,
+            float followSpeed)
+        {
+            _timeScaleCurve = timeScaleCurve;
+            _zoomAmount = zoomAmount;
+            _panWeight = panWeight;
+            _followSpeed = followSpeed;
+        }
 
-        [Tooltip("Restore tween length — used by cinematics that tween timeScale back from wherever it is.")]
-        [SerializeField] private float _restoreSeconds = 0.4f;
-
+        public AnimationCurve TimeScaleCurve => _timeScaleCurve;
         public float ZoomAmount => _zoomAmount;
         public float PanWeight => _panWeight;
         public float FollowSpeed => _followSpeed;
-        public AnimationCurve SlowDownCurve => _slowDownCurve;
-        public AnimationCurve RestoreCurve => _restoreCurve;
-        public float RestoreSeconds => _restoreSeconds;
     }
 }
