@@ -10,7 +10,11 @@ namespace BalloonParty.Slots.Actor
     /// Picks a random seed slot, then greedily expands into hex neighbors
     /// from the available set. When no more neighbors are available, picks
     /// a new seed biased toward the opposite side of the grid from existing
-    /// clusters — producing spatially distributed, facing clusters.
+    /// clusters — producing spatially distributed, facing clusters. Closed
+    /// clusters quarantine their neighboring slots, so separately-seeded
+    /// clusters can never touch — without this, adjacent clusters would merge
+    /// on the board (SlotClusterRegistry joins touching same-type actors) and
+    /// silently exceed maxPerCluster.
     /// </summary>
     internal class ClusterSlotSelectionStrategy : ISlotSelectionStrategy
     {
@@ -62,7 +66,7 @@ namespace BalloonParty.Slots.Actor
         // and primes the frontier with its neighbours.
         private void SeedNewCluster(ClusterFill fill)
         {
-            FinishCurrentCluster(fill.CurrentClusterSlots, fill.ClusterCentroids);
+            FinishCurrentCluster(fill);
 
             var seed = fill.ClusterCentroids.Count == 0
                 ? PickRandom(fill.Available)
@@ -103,22 +107,30 @@ namespace BalloonParty.Slots.Actor
             public List<Vector2Int> Result;
         }
 
-        private static void FinishCurrentCluster(
-            List<Vector2Int> currentClusterSlots,
-            List<Vector2> clusterCentroids)
+        private static void FinishCurrentCluster(ClusterFill fill)
         {
-            if (currentClusterSlots.Count > 0)
+            if (fill.CurrentClusterSlots.Count == 0)
             {
-                var centroid = Vector2.zero;
-                foreach (var s in currentClusterSlots)
-                {
-                    centroid += new Vector2(s.x, s.y);
-                }
-
-                centroid /= currentClusterSlots.Count;
-                clusterCentroids.Add(centroid);
-                currentClusterSlots.Clear();
+                return;
             }
+
+            var centroid = Vector2.zero;
+            foreach (var s in fill.CurrentClusterSlots)
+            {
+                centroid += new Vector2(s.x, s.y);
+
+                // Quarantine the closed cluster: removing its neighbors from the available set
+                // guarantees no later seed or growth can touch it and merge past maxPerCluster.
+                HexCoordinates.HexNeighborIndices(s.x, s.y, NeighborBuffer);
+                foreach (var neighbor in NeighborBuffer)
+                {
+                    fill.Available.Remove(neighbor);
+                }
+            }
+
+            centroid /= fill.CurrentClusterSlots.Count;
+            fill.ClusterCentroids.Add(centroid);
+            fill.CurrentClusterSlots.Clear();
         }
 
         /// <summary>
