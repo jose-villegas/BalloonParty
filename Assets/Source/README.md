@@ -66,6 +66,9 @@ public class GameLifetimeScope : LifetimeScope
 | `ScoreUILifetimeScope` | `LifetimeScope` | Score HUD canvas root |
 | `LevelUpLifetimeScope` | `LifetimeScope` | LevelUp popup root |
 | `ShieldUILifetimeScope` | `LifetimeScope` | Shield HUD root |
+| `HealthUILifetimeScope` | `LifetimeScope` | Hearts HUD root |
+| `DangerUILifetimeScope` | `LifetimeScope` | Danger overlay root |
+| `GameOverLifetimeScope` | `LifetimeScope` | Game-over screen root |
 
 > **Note:** Balloon and projectile prefabs no longer use child scopes. Their `[Inject]` fields are populated via `InjectingPoolChannel` (flat `IObjectResolver.InjectGameObject()` without container creation). `BalloonLifetimeScope`, `ProjectileLifetimeScope`, and `ItemViewScope` components remain on prefabs with `autoRun = false` — they can be removed from prefabs when convenient.
 
@@ -253,8 +256,8 @@ internal class MyService : ICinematicAware
 | State | Meaning | Set by |
 |---|---|---|
 | `None` | No cinematic active | Default; `CinematicDirector.EndCinematic` |
-| `LevelUpPanIn` | Pan-in phase — camera tracks tipping trail, which slows via curve-modulated progress | `CinematicDirector.BeginCinematic` (called by `LevelUpTrailEffect` at trail spawn) |
-| `LevelUpRestore` | Restore phase — tweens timeScale and camera back to base | `CinematicDirector.BeginCinematic` (called by `LevelUpTrailEffect` on popup dismiss) |
+| `LevelUpPanIn` | Pan-in phase — camera tracks tipping trail, which slows via curve-modulated progress | `CinematicDirector.BeginCinematic` (via `LevelUpCinematic` at trail spawn) |
+| `LevelUpRestore` | Restore phase — tweens timeScale and camera back to base | `CinematicDirector.BeginCinematic` (via `LevelUpCinematic` on popup dismiss) |
 
 ### Pause Integration
 

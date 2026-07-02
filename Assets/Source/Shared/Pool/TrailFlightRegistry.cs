@@ -50,17 +50,6 @@ namespace BalloonParty.Shared.Pool
             }
         }
 
-        internal void PauseWhere(Func<TId, bool> predicate)
-        {
-            foreach (var kvp in _flights)
-            {
-                if (predicate(kvp.Key))
-                {
-                    kvp.Value.Pause();
-                }
-            }
-        }
-
         internal void ResumeAll()
         {
             foreach (var flight in _flights.Values)
@@ -85,31 +74,6 @@ namespace BalloonParty.Shared.Pool
             }
         }
 
-        internal void CompleteWhere(Func<TId, bool> predicate)
-        {
-            var toComplete = new List<TrailFlight>();
-            var toRemove = new List<TId>();
-
-            foreach (var kvp in _flights)
-            {
-                if (predicate(kvp.Key))
-                {
-                    toComplete.Add(kvp.Value);
-                    toRemove.Add(kvp.Key);
-                }
-            }
-
-            foreach (var id in toRemove)
-            {
-                _flights.Remove(id);
-            }
-
-            foreach (var flight in toComplete)
-            {
-                flight.Complete();
-            }
-        }
-
         internal void StopAll()
         {
             foreach (var flight in _flights.Values)
@@ -125,17 +89,6 @@ namespace BalloonParty.Shared.Pool
             foreach (var flight in _flights.Values)
             {
                 flight.SetSpeed(speed);
-            }
-        }
-
-        internal void SetSpeedWhere(float speed, Func<TId, bool> predicate)
-        {
-            foreach (var kvp in _flights)
-            {
-                if (predicate(kvp.Key))
-                {
-                    kvp.Value.SetSpeed(speed);
-                }
             }
         }
     }

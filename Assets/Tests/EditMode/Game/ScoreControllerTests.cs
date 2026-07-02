@@ -300,36 +300,36 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ScorePoint_BelowThreshold_NextLevelFalse()
+        public void ScorePoint_BelowThreshold_StaysCurrentLevel()
         {
             _config.PointsRequiredForLevel(2).Returns(5);
 
             FirePop(Red);
 
             _scoredPublisher.Received(1).Publish(
-                Arg.Is<ScorePointMessage>(m => !m.NextLevel && m.Level == 1 && m.Score == 1));
+                Arg.Is<ScorePointMessage>(m => m.Level == 1 && m.Score == 1));
         }
 
         [Test]
-        public void ScorePoint_AtThreshold_NotNextLevel()
+        public void ScorePoint_AtThreshold_StaysCurrentLevel()
         {
-            // rawScore == required → rawScore > required is false → not next level
+            // rawScore == required → rawScore > required is false → not renumbered
             _config.PointsRequiredForLevel(2).Returns(1);
 
             FirePop(Red);
 
             _scoredPublisher.Received(1).Publish(
-                Arg.Is<ScorePointMessage>(m => !m.NextLevel && m.Level == 1 && m.Score == 1));
+                Arg.Is<ScorePointMessage>(m => m.Level == 1 && m.Score == 1));
         }
 
         [Test]
-        public void ScorePoint_AboveThreshold_NextLevelTrueAndScoreRenumbered()
+        public void ScorePoint_AboveThreshold_RenumberedIntoNextLevel()
         {
             // threshold = 3, scoreValue = 4, streak = 1 → publishes 4 messages:
-            // i=0: rawScore=1 → Score=1, Level=1, NextLevel=false
-            // i=1: rawScore=2 → Score=2, Level=1, NextLevel=false
-            // i=2: rawScore=3 → Score=3, Level=1, NextLevel=false  (tipping point, 3 > 3 is false)
-            // i=3: rawScore=4 → Score=1, Level=2, NextLevel=true   (renumbered: 4 - 3 = 1)
+            // i=0: rawScore=1 → Score=1, Level=1
+            // i=1: rawScore=2 → Score=2, Level=1
+            // i=2: rawScore=3 → Score=3, Level=1  (tipping point, 3 > 3 is false)
+            // i=3: rawScore=4 → Score=1, Level=2  (renumbered: 4 - 3 = 1)
             _config.PointsRequiredForLevel(2).Returns(3);
 
             var model = new BalloonModel(new BalloonModelConfig(scoreValue: 4));
@@ -338,9 +338,9 @@ namespace BalloonParty.Tests.Game
             FireHit(model, 1);
 
             _scoredPublisher.Received(3).Publish(
-                Arg.Is<ScorePointMessage>(m => !m.NextLevel && m.Level == 1));
+                Arg.Is<ScorePointMessage>(m => m.Level == 1));
             _scoredPublisher.Received(1).Publish(
-                Arg.Is<ScorePointMessage>(m => m.NextLevel && m.Level == 2 && m.Score == 1));
+                Arg.Is<ScorePointMessage>(m => m.Level == 2 && m.Score == 1));
         }
 
         [Test]

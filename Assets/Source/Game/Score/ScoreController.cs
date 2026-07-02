@@ -93,7 +93,7 @@ namespace BalloonParty.Game.Score
         ///     Uses projected (not confirmed) progress so the cinematic can
         ///     register before in-flight trails from other colors arrive.
         /// </summary>
-        internal bool WillLevelUp()
+        public bool WillLevelUp()
         {
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
 
@@ -244,7 +244,8 @@ namespace BalloonParty.Game.Score
         }
 
         // Emits one ScorePointMessage per point, carrying the group size/index so the bars can
-        // animate the burst, and flagging the point that tips into the next level.
+        // animate the burst. Points past the level threshold are renumbered into the next level
+        // so post-level-up arrivals represent their position in the new level's progress.
         private void PublishPoints(
             IReadOnlyList<(string Color, int Points, int BaseProgress)> resolved, int groupSize, Vector3 worldPosition)
         {
@@ -261,7 +262,6 @@ namespace BalloonParty.Game.Score
                         worldPosition,
                         nextLevel ? rawScore - required : rawScore,
                         nextLevel ? _level.Value + 1 : _level.Value,
-                        nextLevel,
                         groupSize,
                         groupIndex));
                 }

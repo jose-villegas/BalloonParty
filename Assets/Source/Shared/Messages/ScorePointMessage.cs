@@ -8,7 +8,6 @@ namespace BalloonParty.Shared.Messages
         public readonly Vector3 WorldPosition;
         public readonly int Score;
         public readonly int Level;
-        public readonly bool NextLevel;
         public readonly int GroupSize;
         public readonly int GroupIndex;
 
@@ -17,7 +16,6 @@ namespace BalloonParty.Shared.Messages
             Vector3 worldPosition,
             int score,
             int level,
-            bool nextLevel,
             int groupSize,
             int groupIndex)
         {
@@ -25,7 +23,6 @@ namespace BalloonParty.Shared.Messages
             WorldPosition = worldPosition;
             Score = score;
             Level = level;
-            NextLevel = nextLevel;
             GroupSize = groupSize;
             GroupIndex = groupIndex;
         }

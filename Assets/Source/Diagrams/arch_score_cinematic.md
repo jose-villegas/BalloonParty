@@ -29,8 +29,9 @@ is true at publish time it awaits the tipping trail's registration in
 `TrailFlightRegistry`, then intercepts it: the move tween is killed and the trail is
 puppeted manually along the pan-in segment's `TimeScaleCurve` while the camera pans in
 and gameplay pauses (`PauseSource.Cinematic`). `Time.timeScale` stays untouched during
-the pan-in — other trails fly at normal speed. Next-level trails spawned after the tip
-resolve after the popup is dismissed.
+the pan-in — other trails fly at normal speed. When the tipping trail arrives, the
+pan-in ends with `Flights.CompleteAll()`, instantly confirming every remaining
+in-flight trail before the popup opens.
 
 ## Guidance
 
@@ -39,11 +40,12 @@ Implement `IHasScoreColor` on the model — `ResolveScoreAttribution` appends
 `ScoreAttribution(colorId, points, breaksStreak)` entries. `ScoreController` calls it
 automatically on any `Pop` or `PassThrough` hit. No changes to `ScoreController` needed.
 
-**Understanding `NextLevel` trails:**
+**Understanding next-level trails:**
 When a multi-point pop straddles a level boundary, points above the threshold are
-published with `NextLevel = true` and a renumbered `Score` (starting from 1 in the
-new level). These trails are paused during the cinematic. After the popup dismisses,
-`ScoreTrailService` resumes them — they fly to the reset progress bars.
+published with a renumbered `Score` (starting from 1) and `Level + 1`. These trails
+fly normally during the cinematic; when the tipping trail arrives, `LevelUpCinematic`
+completes every remaining in-flight trail (including next-level ones) via
+`Flights.CompleteAll()`, so all progress is confirmed before the popup opens.
 
 **Why projected progress leads confirmed progress:**
 Without the projection, a multi-point balloon would assign the same `TrailId` to

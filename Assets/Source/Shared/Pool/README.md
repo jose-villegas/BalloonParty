@@ -188,13 +188,11 @@ if (registry.TryGet(id, out var f)) { /* use f */ }
 registry.PauseAll();
 registry.ResumeAll();
 registry.CompleteAll();
-registry.CompleteWhere(id => id.Level < threshold);
 registry.StopAll();
 
 // Speed control:
 registry.SetSpeedAll(0.5f);
-registry.SetSpeedWhere(0.3f, id => id == tippingId);
 ```
 
-Used by `ScoreTrailService` for trail identity tracking and cinematic integration with `LevelUpTrailEffect`.
+Used by `ScoreTrailService` for trail identity tracking and cinematic integration with `LevelUpCinematic`.
 

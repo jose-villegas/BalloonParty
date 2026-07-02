@@ -9,7 +9,7 @@ Tracks per-color scoring, level progress, streak multipliers, and the visual tra
 | `TrailId` | Readonly struct — uniquely identifies a score trail by `(Color, Score, Level)`. Provides a convenience constructor from `ScorePointMessage`. Two colors can share the same numeric score within a level, and scores restart after level reset, so all three are needed for uniqueness |
 | `ScoreController` | `IStartable` — tracks per-color level progress (confirmed on trail arrival), projected progress (advanced immediately on pop). On balloon hit, casts actor to `IHasScoreColor` and calls `ResolveScoreAttribution(context, attributions)` — all returned `ScoreAttribution` entries are resolved and published together as one scatter group sharing `GroupSize`. On trail arrival, sets confirmed progress and checks for level-up via `ScoreLevelUpMessage` and `NavigationState.LevelUp`. Run-scoped: level/score start at 1/0 every session (no cross-session persistence) and reset via `IRunResettable.ResetRun()` on restart (see `Game/Run/`) |
 | `ColorStreakTracker` | Plain C# singleton — single source of truth for the color streak. `Record(colorId, breaksStreak)` updates state and returns the multiplier to apply. `breaksStreak = true` resets the chain and returns 1 (attribution still scores, no bonus). Auto-resets on `ScoreLevelUpMessage`. Exposed as `GetStreak(colorName)` for UI consumers |
-| `ScoreTrailService` | `IStartable` + `ICinematicAware` — subscribes to `ScorePointMessage`; spawns one pooled `FlyingTrail` orb per message. Composes `TrailTracker<TrailId>` for flight tracking, cinematic pause/resume, and external interception. Uses `GroupIndex`/`GroupSize` for scatter positioning and stagger delay. `NextLevel` flag gates spawns during cinematics |
+| `ScoreTrailService` | `IStartable` + `IDisposable` — subscribes to `ScorePointMessage`; spawns one pooled `FlyingTrail` orb per message, unconditionally. Composes `TrailFlightRegistry<TrailId>` (exposed as `Flights`) so the cinematic can look up, pause, and complete in-flight trails by id. Uses `GroupIndex`/`GroupSize` for scatter positioning and stagger delay |
 
 ## Streak Multiplier
 
@@ -45,32 +45,29 @@ Two progress values exist per color:
 
 ## Next-Level Trail Renumbering
 
-When a multi-point balloon pop produces points that exceed the level-up threshold, `ScoreController` tags each post-tipping point as next-level in its `ScorePointMessage`. For example, if `requiredPoints = 10` and a pop creates raw scores `[9, 10, 11, 12]`:
+When a multi-point balloon pop produces points that exceed the level-up threshold, `ScoreController` renumbers each post-tipping point into the next level. For example, if `requiredPoints = 10` and a pop creates raw scores `[9, 10, 11, 12]`:
 
-- Score 9 → `ScorePointMessage(Score=9, Level=1, NextLevel=false)` — current level
-- Score 10 → `ScorePointMessage(Score=10, Level=1, NextLevel=false)` — tipping trail, tracked by cinematic
-- Score 11 → `ScorePointMessage(Score=1, Level=2, NextLevel=true)` — next level, renumbered
-- Score 12 → `ScorePointMessage(Score=2, Level=2, NextLevel=true)` — next level, renumbered
+- Score 9 → `ScorePointMessage(Score=9, Level=1)` — current level
+- Score 10 → `ScorePointMessage(Score=10, Level=1)` — tipping trail, tracked by the cinematic
+- Score 11 → `ScorePointMessage(Score=1, Level=2)` — next level, renumbered
+- Score 12 → `ScorePointMessage(Score=2, Level=2)` — next level, renumbered
 
 After the level-up resets progress to 0, these next-level trails arrive with scores that correctly represent their position in the new level's progress.
 
-## Selective Pause
+## Spawn & Cinematic Interception
 
-When the cinematic begins, all next-level in-flight trails are paused — any trail (regardless of color) with `Level > tippingLevel`. Pre-tipping trails (any color, current level) keep flying so their progress bar arrivals complete naturally. `PauseTrailsAbove(TrailId threshold)` handles already in-flight trails. New trail spawns are gated by the `NextLevel` flag on each `ScorePointMessage`; current-level trails spawn freely even during the cinematic so that `CheckLevelUp` can confirm progress for every color.
+`ScoreTrailService` spawns one trail per `ScorePointMessage`, unconditionally — nothing gates spawning during cinematics. Multi-point pops use `GroupIndex` for stagger delay: the first point (index 0) spawns immediately, subsequent points are delayed by `GroupIndex × ScorePointsScatterDelay`. Each flight registers in the `TrailFlightRegistry<TrailId>` (exposed as `Flights`) on spawn and unregisters on arrival.
 
-## Spawn & Tracking
+The level-up cinematic (`LevelUpCinematic` in `Game/Cinematics/`) intercepts through that registry rather than through this service:
 
-`ScoreTrailService` spawns trails directly from each `ScorePointMessage`. Multi-point pops use `GroupIndex` for stagger delay — the first point (index 0) spawns immediately, subsequent points are delayed by `GroupIndex × ScorePointsScatterDelay`. Next-level trails are gated by `Cinematic.IsPlaying && NextLevel`.
-
-`TrackTrail` supports both forward and retroactive registration:
-- **Forward** — if tracking is registered before the trail spawns (e.g., for `groupIndex > 0` trails that are delayed), the trail is paused at spawn and the callback fires.
-- **Retroactive** — if the trail already spawned (e.g., `groupIndex == 0` where subscription ordering causes the trail to spawn before `LevelUpTrailEffect` processes the message), the trail is paused and its tweens are switched to unscaled time via `DOTween.TweensByTarget`, then the callback fires.
-
+1. On a `ScorePointMessage` where `ScoreController.WillLevelUp()` is true, it records `new TrailId(msg)` as the tipping trail and waits (`UniTask.WaitUntil`) for that id to appear in `Flights` — this covers delayed `groupIndex > 0` spawns as well as already-registered ones.
+2. It then pauses that single flight (`FlyingTrail.DisableMoveTween()` + `TrailFlight.Pause()`) and puppets its position/scale along the pan-in curve while the camera follows. All other in-flight trails keep flying at normal speed so their progress-bar arrivals confirm naturally.
+3. When the tipping trail reaches its bar (or its matching `ScoreTrailArrivedMessage` lands first), the cinematic calls `Flights.CompleteAll()` — every remaining in-flight trail (including renumbered next-level ones) completes instantly so all progress is confirmed before the popup opens.
 
 ## Interactions
 
-- **`ScorePointMessage`** — published by `ScoreController` on pop (one per point × streak, carries pre-computed `Score`, `Level`, `NextLevel`), consumed by `ScoreTrailService`, `ColorProgressBar`, and `LevelUpTrailEffect`
-- **`ScoreTrailArrivedMessage`** — published by `ScoreTrailService` on trail arrival (carries `Level`), consumed by `ScoreController`, `ColorProgressBar`, and `LevelUpTrailEffect`
+- **`ScorePointMessage`** — published by `ScoreController` on pop (one per point × streak, carries pre-computed `Score`, `Level`, `GroupSize`/`GroupIndex`), consumed by `ScoreTrailService`, `ColorProgressBar`, and `LevelUpCinematic`
+- **`ScoreTrailArrivedMessage`** — published by `ScoreTrailService` on trail arrival (carries `Level`), consumed by `ScoreController`, `ColorProgressBar`, and `LevelUpCinematic`
 - **`ScoreLevelUpMessage`** — published by `ScoreController` on level-up, consumed by `ColorProgressBar`, `LevelUpPopUp`, and `ColorStreakTracker` (auto-reset)
-- **`Cinematics/`** — `LevelUpTrailEffect` uses `TrackTrail` to intercept the tipping trail at spawn, `PauseTrailsAbove` for selective pause, and `ResumeTrail` / `ClearTrackedTrail` for lifecycle management
+- **`Cinematics/`** — `LevelUpCinematic` intercepts the tipping trail via `ScoreTrailService.Flights` (see Spawn & Cinematic Interception above) and reads the tipping bar's world position via `ScoreTrailService.GetTarget`
 - **`ColorProgressBar`** — registers itself as its colour's `ITrailEndpoint` via `ScoreTrailService.RegisterTarget` (forwarded to the shared `TrailEndpointRegistry` in `Shared/Pool`); reads progress from `ScoreController`; reads streak via `ColorStreakTracker.GetStreak` for streak notice display

@@ -139,9 +139,9 @@ Tests the scoring pipeline, level-up logic, streak multiplier, `WillLevelUp` pro
 | Streak resets on level-up | 1 | Missing reset in CheckLevelUp |
 | `WillLevelUp` — all colors projected | 1 | Wrong dictionary or comparator on projected map |
 | `WillLevelUp` — one color short | 1 | Returns true prematurely |
-| `ScorePointMessage` below threshold | 1 | Wrong `Level` or spurious `NextLevel` flag |
+| `ScorePointMessage` below threshold | 1 | Wrong `Level` or spurious renumbering |
 | `ScorePointMessage` at tipping point | 1 | Off-by-one — `>` vs `>=` makes tipping point next-level |
-| `ScorePointMessage` above threshold renumbered | 1 | Score not renumbered, level not incremented, or flag missing |
+| `ScorePointMessage` above threshold renumbered | 1 | Score not renumbered or level not incremented |
 | `GroupSize` equals points published | 1 | Wrong group size breaks stagger timing in `ScoreTrailService` |
 | `GroupIndex` sequential | 1 | Non-sequential indices break trail scatter delay order |
 | `IHitable` non-balloon actor — `Pop` outcome scores | 1 | Scoring pipeline too narrowly typed to `IBalloonModel` |
