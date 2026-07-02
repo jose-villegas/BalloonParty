@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 9005570582913282314}
   - component: {fileID: 8572197533499886978}
   - component: {fileID: 8512367537215613866}
+  - component: {fileID: 6166827907043377765}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -124,3 +125,16 @@ MonoBehaviour:
   _duration: 0.25
   _strength: 0.18
   _vibrato: 14
+--- !u!114 &6166827907043377765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4370083120234301038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2d107963b9143be864470aa5a8e9ecf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Game.Cinematics.CinematicCameraView
+  _camera: {fileID: 9161632677401763229}

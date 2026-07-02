@@ -41,9 +41,21 @@ added and the heart-drain producer flips to it. `ICinematicState.Has(trait)` rea
 through the SO; `RunController`/`CameraShakeService` migrated; both producers stripped of
 serialized tuning (they keep only the `Camera` ref); the field initializers AND the asset
 carry the recovered authored values, so a fresh instance equals the shipped asset
-(asserted by `CinematicsSettingsTests`). `GameLifetimeScope` wiring done. **In-editor
-pending:** the now-orphaned tuning overrides on `Cinema.prefab` drop off on next save;
-playtest both cinematics. Phases 3+ not started. The level-up cinematic trail path is a
+(asserted by `CinematicsSettingsTests`). `GameLifetimeScope` wiring done; Phases 1+2
+playtested green.
+
+**Phase 3a implemented 2026-07-02:** one DI-owned `CinematicCameraRig`
+(`Register<CinematicCameraRig>(Lifetime.Singleton)`) fed by a thin `CinematicCameraView`
+(`RegisterComponentInHierarchy`; lazy `Camera.main` fallback since the rig is constructed
+at container build, before Awake). The rig's ctor tuning is gone — `PreparePanIn(segment)`
+and the unified `Frame(focus, segment, dt)` take the active state's
+`CameraRigCinematicSettings` per call; `FollowTrail`/`FollowPoints` collapsed into `Frame`
+over `ICinematicFocus` (`PointFocus` = level-up tipping trail, hard-clamp; `HeartTrailFocus`
+= tracker centroid+bounds, pre-clamp — clamp order auto-selected by min==max). Producers
+lost their serialized `Camera` refs. **In-editor pending (blocking): add a
+`CinematicCameraView` component to the Game scene (on the camera) and wire `_camera`** —
+`RegisterComponentInHierarchy` fails at container build without it; then playtest both
+cinematics. Phases 3b+ not started. The level-up cinematic trail path is a
 **known-fragile area** (see memory index) — it converts last.
 
 **Decisions already locked** (from the loss/pacing work — don't re-litigate):

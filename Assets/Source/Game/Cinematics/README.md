@@ -69,7 +69,9 @@ After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrails
 | `LevelUpTrailEffect.cs` | Level-up cinematic orchestrator (MonoBehaviour, View layer) |
 | `HeartTrailCinematicEffect.cs` | Overflow heart-drain orchestrator (MonoBehaviour): on the first `OverflowHeartRequestedMessage` (the first heart launching toward the pile), slow-mo ramps and the camera follows the centroid of all in-flight heart trails (`HeartTrailTracker` + `CinematicCameraRig.FollowPoints`) until the pile drains or the run ends. Uses `CinematicState.HeartDrain` (neither loss-blocking — the 0-HP game-over still fires — nor shake-blocking: each heart launch punches the camera through the pan, unscaled so slow-mo can't stretch it) |
 | `CinematicDirector.cs` | Scene/state lifecycle (plain C#, Controller layer) |
-| `CinematicCameraRig.cs` | Cinematic camera (zoom/pan/restore). `FollowTrail` tracks one point; `FollowPoints` tracks the centroid + bounding-box of several |
+| `CinematicCameraRig.cs` | The **one shared** cinematic camera driver (DI singleton): `PreparePanIn(segment)` / `Frame(focus, segment, dt)` / `PrepareRestore` / `Restore`. Tuning comes per call from the active state's segment; the focus supplies what to frame |
+| `CinematicCameraView.cs` | Thin scene View holding the `Camera` the rig drives (lazy `Camera.main` fallback) — replaces the per-producer serialized camera refs and their per-scene prefab overrides |
+| `ICinematicFocus.cs` + `PointFocus` / `HeartTrailFocus` | What the camera frames each tick: one live point (level-up tipping trail — hard-clamped in frustum) or the heart trails' centroid + bounding box (pre-clamped so new far trails slide in) |
 | `CinematicScene.cs` | Callback value object |
 | `Shared/GameState/Cinematic.cs` | Static reactive state + `ICinematicAware` listeners |
 | `Shared/GameState/CinematicState.cs` | Enum: `None`, `LevelUpPanIn`, `LevelUpRestore`, `HeartDrain` — identity only; behaviour lives in the traits table |

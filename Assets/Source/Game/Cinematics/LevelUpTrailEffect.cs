@@ -1,6 +1,5 @@
 using System;
 using BalloonParty.Configuration;
-using BalloonParty.Display;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
@@ -21,15 +20,13 @@ namespace BalloonParty.Game.Cinematics
 {
     internal class LevelUpTrailEffect : MonoBehaviour
     {
-        [SerializeField] private Camera _camera;
-
         [Inject] private CinematicDirector _director;
+        [Inject] private CinematicCameraRig _cameraRig;
         [Inject] private ICinematicsSettings _cinematicsSettings;
         [Inject] private IGameConfiguration _config;
         [Inject] private ISubscriber<ScorePointMessage> _scoredSubscriber;
         [Inject] private ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
-        [Inject] private OrthogonalSizeCameraController _orthoController;
         [Inject] private ScoreController _scoreController;
         [Inject] private ScoreTrailService _scoreTrailService;
         [Inject] private PauseService _pauseService;
@@ -37,7 +34,7 @@ namespace BalloonParty.Game.Cinematics
         private CameraRigCinematicSettings _panInSegment;
         private CameraRigCinematicSettings _restoreSegment;
         private TrackedTrailSettings _trackedTrailSettings;
-        private CinematicCameraRig _cameraRig;
+        private PointFocus _focus;
         private Vector3 _lastTrailPosition;
         private float _realElapsed;
         private bool _sessionActive;
@@ -57,8 +54,7 @@ namespace BalloonParty.Game.Cinematics
             _panInSegment = panIn.Rig;
             _restoreSegment = _cinematicsSettings.EntryOf(CinematicState.LevelUpRestore).Rig;
             _trackedTrailSettings = panIn.TrackedTrail;
-            _cameraRig = new CinematicCameraRig(
-                _camera, _orthoController, _panInSegment.ZoomAmount, _panInSegment.PanWeight, _panInSegment.FollowSpeed);
+            _focus = new PointFocus(() => _lastTrailPosition);
         }
 
         private void Start()
@@ -212,7 +208,7 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            _cameraRig.FollowTrail(_lastTrailPosition, dt);
+            _cameraRig.Frame(_focus, _panInSegment, dt);
         }
 
         // Moves the tracked trail toward its target. Returns true once it has arrived (so the
@@ -251,7 +247,7 @@ namespace BalloonParty.Game.Cinematics
         {
             _timeScaleTween?.Kill();
             _timeScaleTween = null;
-            _cameraRig.PreparePanIn(_panInSegment.TimeScaleCurve.Duration());
+            _cameraRig.PreparePanIn(_panInSegment);
         }
 
         private void PrepareRestore()

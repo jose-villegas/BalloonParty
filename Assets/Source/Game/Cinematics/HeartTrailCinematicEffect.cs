@@ -1,8 +1,6 @@
 using System;
-using System.Collections.Generic;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
-using BalloonParty.Display;
 using BalloonParty.Game.Health;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
@@ -28,20 +26,16 @@ namespace BalloonParty.Game.Cinematics
     /// </summary>
     internal class HeartTrailCinematicEffect : MonoBehaviour
     {
-        [SerializeField] private Camera _camera;
-
         [Inject] private CinematicDirector _director;
-        [Inject] private OrthogonalSizeCameraController _orthoController;
+        [Inject] private CinematicCameraRig _rig;
         [Inject] private HeartTrailTracker _tracker;
         [Inject] private RejectedBalloonEffect _overflow;
         [Inject] private ISubscriber<OverflowHeartRequestedMessage> _heartRequestedSubscriber;
         [Inject] private ICinematicsSettings _cinematicsSettings;
 
-        private readonly List<Vector3> _trailPositions = new();
-
         private CameraRigCinematicSettings _drainSegment;
         private CameraRigCinematicSettings _restoreSegment;
-        private CinematicCameraRig _rig;
+        private HeartTrailFocus _focus;
         private IDisposable _subscription;
         private Tween _timeScaleTween;
         private bool _active;
@@ -53,8 +47,7 @@ namespace BalloonParty.Game.Cinematics
             // container before any other component wakes.
             _drainSegment = _cinematicsSettings.EntryOf(CinematicState.HeartDrain).Rig;
             _restoreSegment = _cinematicsSettings.EntryOf(CinematicState.HeartDrainRestore).Rig;
-            _rig = new CinematicCameraRig(
-                _camera, _orthoController, _drainSegment.ZoomAmount, _drainSegment.PanWeight, _drainSegment.FollowSpeed);
+            _focus = new HeartTrailFocus(_tracker);
         }
 
         private void Start()
@@ -90,7 +83,7 @@ namespace BalloonParty.Game.Cinematics
             KillTimeScaleTween();
 
             _director.BeginCinematic(CinematicState.HeartDrain);
-            _rig.PreparePanIn(_drainSegment.TimeScaleCurve.Duration());
+            _rig.PreparePanIn(_drainSegment);
             _director.PlayScene(new CinematicScene(onTick: DrainTick));
         }
 
@@ -102,20 +95,7 @@ namespace BalloonParty.Game.Cinematics
             var curveT = Mathf.Clamp01(_realElapsed / _drainSegment.TimeScaleCurve.Duration());
             Time.timeScale = _drainSegment.TimeScaleCurve.Evaluate(curveT);
 
-            if (_rig.HasCamera)
-            {
-                _trailPositions.Clear();
-                var active = _tracker.Active;
-                for (var i = 0; i < active.Count; i++)
-                {
-                    if (active[i] != null)
-                    {
-                        _trailPositions.Add(active[i].position);
-                    }
-                }
-
-                _rig.FollowPoints(_trailPositions, _trailPositions.Count, dt);
-            }
+            _rig.Frame(_focus, _drainSegment, dt);
 
             if (ShouldEnd())
             {

@@ -163,6 +163,8 @@ namespace BalloonParty.Game
 
             builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
             builder.RegisterComponentInHierarchy<CameraShakeService>();
+            builder.RegisterComponentInHierarchy<CinematicCameraView>();
+            builder.Register<CinematicCameraRig>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<CinematicDirector>().AsSelf();
             builder.RegisterComponentInHierarchy<LevelUpTrailEffect>();

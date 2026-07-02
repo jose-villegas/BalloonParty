@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Shared.Extensions;
 using DG.Tweening;
@@ -7,10 +7,12 @@ using UnityEngine;
 namespace BalloonParty.Game.Cinematics
 {
     /// <summary>
-    ///     Owns the level-up cinematic camera: captures the gameplay framing, zooms in and pans to follow
-    ///     the tipping trail while keeping it inside the orthographic frustum, then tweens everything back
-    ///     on restore. The <see cref="OrthogonalSizeCameraController" /> is disabled for the duration so it
-    ///     doesn't fight these moves. All tweens run in unscaled time (the game is paused during pan-in).
+    ///     The one cinematic camera driver, shared by every camera-rig cinematic (DI singleton fed by
+    ///     <see cref="CinematicCameraView" />): captures the gameplay framing, zooms/pans per the active
+    ///     segment's <see cref="CameraRigCinematicSettings" /> while keeping the
+    ///     <see cref="ICinematicFocus" /> inside the orthographic frustum, then tweens everything back on
+    ///     restore. The <see cref="OrthogonalSizeCameraController" /> is disabled for the duration so it
+    ///     doesn't fight these moves. All tweens run in unscaled time (segments warp Time.timeScale).
     /// </summary>
     internal class CinematicCameraRig
     {
@@ -18,32 +20,21 @@ namespace BalloonParty.Game.Cinematics
 
         private readonly Camera _camera;
         private readonly OrthogonalSizeCameraController _orthoController;
-        private readonly float _zoomAmount;
-        private readonly float _panWeight;
-        private readonly float _followSpeed;
 
         private float _baseOrthoSize;
         private Vector3 _basePosition;
         private bool _hasBaseState;
         private Tween _tween;
 
-        public CinematicCameraRig(
-            Camera camera,
-            OrthogonalSizeCameraController orthoController,
-            float zoomAmount,
-            float panWeight,
-            float followSpeed)
+        public CinematicCameraRig(CinematicCameraView view, OrthogonalSizeCameraController orthoController)
         {
-            _camera = camera;
+            _camera = view != null ? view.Camera : null;
             _orthoController = orthoController;
-            _zoomAmount = zoomAmount;
-            _panWeight = panWeight;
-            _followSpeed = followSpeed;
         }
 
         public bool HasCamera => _camera != null;
 
-        public void PreparePanIn(float zoomDuration)
+        public void PreparePanIn(CameraRigCinematicSettings segment)
         {
             if (_hasBaseState)
             {
@@ -59,8 +50,8 @@ namespace BalloonParty.Game.Cinematics
                 _tween = DOTween.To(
                         () => _camera.orthographicSize,
                         x => _camera.orthographicSize = x,
-                        _baseOrthoSize - _zoomAmount,
-                        zoomDuration)
+                        _baseOrthoSize - segment.ZoomAmount,
+                        segment.TimeScaleCurve.Duration())
                     .SetEase(Ease.OutQuad)
                     .SetUpdate(true);
             }
@@ -88,38 +79,38 @@ namespace BalloonParty.Game.Cinematics
             _tween = DOTween.Sequence().SetUpdate(true).Join(moveTween).Join(sizeTween);
         }
 
-        public void FollowTrail(Vector3 trailPosition, float dt)
+        /// <summary>
+        ///     Pans toward the focus per the segment's pan weight / follow speed, keeping the focus box in
+        ///     frustum. A single-point focus (min == max) is hard-clamped after easing — it can never
+        ///     outgrow the view and must never leave it; a spread is clamped before easing, so a far new
+        ///     point slides the framing in smoothly instead of snapping.
+        /// </summary>
+        public void Frame(ICinematicFocus focus, CameraRigCinematicSettings segment, float dt)
         {
-            if (_camera == null)
+            if (_camera == null || !focus.TryGetFocus(out var center, out var min, out var max))
             {
                 return;
             }
 
-            var panTarget = Vector3.Lerp(_basePosition, trailPosition, _panWeight);
+            var panTarget = Vector3.Lerp(_basePosition, center, segment.PanWeight);
             panTarget.z = _basePosition.z;
 
-            // Hard-clamp after easing so the single tracked trail can never leave the frustum (a
-            // TrailRenderer "Screen position out of view frustum" error); acceptable here because one
-            // point never widens the box past the view, so the clamp only nudges, never snaps.
-            FrameToBox(panTarget, trailPosition, trailPosition, trailPosition, dt, clampBeforeEase: false);
-        }
+            var halfH = _camera.orthographicSize;
+            var halfW = halfH * _camera.aspect;
+            var isSpread = (max - min).sqrMagnitude > Mathf.Epsilon;
 
-        // Like FollowTrail but for several trails at once: pans toward their centroid, framing the whole
-        // bounding box (centring on it if the spread is wider than the view). Clamps the target *before*
-        // easing toward it, so a newly-spawned far trail slides the focus in smoothly instead of snapping.
-        public void FollowPoints(IReadOnlyList<Vector3> points, int count, float dt)
-        {
-            if (_camera == null || count <= 0)
+            if (isSpread)
             {
+                panTarget.x = VectorMathExtensions.ClampToWindow(panTarget.x, min.x, max.x, halfW, FrustumPadding, center.x);
+                panTarget.y = VectorMathExtensions.ClampToWindow(panTarget.y, min.y, max.y, halfH, FrustumPadding, center.y);
+                _camera.transform.position = Vector3.Lerp(_camera.transform.position, panTarget, segment.FollowSpeed * dt);
                 return;
             }
 
-            var center = points.Centroid(count);
-            var bounds = points.Bounds(count);
-            var panTarget = Vector3.Lerp(_basePosition, center, _panWeight);
-            panTarget.z = _basePosition.z;
-
-            FrameToBox(panTarget, center, bounds.min, bounds.max, dt, clampBeforeEase: true);
+            var camPos = Vector3.Lerp(_camera.transform.position, panTarget, segment.FollowSpeed * dt);
+            camPos.x = VectorMathExtensions.ClampToWindow(camPos.x, min.x, max.x, halfW, FrustumPadding, center.x);
+            camPos.y = VectorMathExtensions.ClampToWindow(camPos.y, min.y, max.y, halfH, FrustumPadding, center.y);
+            _camera.transform.position = camPos;
         }
 
         public void Restore()
@@ -145,33 +136,6 @@ namespace BalloonParty.Game.Cinematics
             {
                 _orthoController.enabled = enabled;
             }
-        }
-
-        // Moves the camera toward panTarget while framing the box [min,max] in the frustum (centring on
-        // the box if it's wider than the view). A single tracked point passes it as min=max.
-        //
-        // clampBeforeEase chooses how the frustum constraint composes with the follow ease:
-        //  - false: ease first, then clamp the result — a hard constraint the box can never violate, but
-        //    it snaps when the box jumps (fine for one point that can't outgrow the view).
-        //  - true: clamp the target first, then ease toward it — the camera only ever moves by one lerp
-        //    step, so a far new point slides the focus in smoothly instead of snapping.
-        private void FrameToBox(Vector3 panTarget, Vector3 center, Vector3 min, Vector3 max, float dt, bool clampBeforeEase)
-        {
-            var halfH = _camera.orthographicSize;
-            var halfW = halfH * _camera.aspect;
-
-            if (clampBeforeEase)
-            {
-                panTarget.x = VectorMathExtensions.ClampToWindow(panTarget.x, min.x, max.x, halfW, FrustumPadding, center.x);
-                panTarget.y = VectorMathExtensions.ClampToWindow(panTarget.y, min.y, max.y, halfH, FrustumPadding, center.y);
-                _camera.transform.position = Vector3.Lerp(_camera.transform.position, panTarget, _followSpeed * dt);
-                return;
-            }
-
-            var camPos = Vector3.Lerp(_camera.transform.position, panTarget, _followSpeed * dt);
-            camPos.x = VectorMathExtensions.ClampToWindow(camPos.x, min.x, max.x, halfW, FrustumPadding, center.x);
-            camPos.y = VectorMathExtensions.ClampToWindow(camPos.y, min.y, max.y, halfH, FrustumPadding, center.y);
-            _camera.transform.position = camPos;
         }
 
         private void CaptureBaseState()
