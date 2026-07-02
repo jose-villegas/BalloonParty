@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using UnityEngine;
@@ -100,6 +101,8 @@ namespace BalloonParty.Item
             }
         }
 
+        // Counts by the same capability eligibility uses, so any actor type that can carry an
+        // item is included — counting a concrete model type here would silently break the cap.
         private int CountBalloonsWithItem(ItemType type)
         {
             var count = 0;
@@ -113,8 +116,7 @@ namespace BalloonParty.Item
                         continue;
                     }
 
-                    var model = _grid.ActorAt<BalloonModel>(new Vector2Int(col, row));
-                    if (model != null && model.Item.Value == type)
+                    if (_grid.At(new Vector2Int(col, row)) is IHasItemSlot host && host.Item.Value == type)
                     {
                         count++;
                     }

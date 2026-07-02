@@ -22,6 +22,17 @@ current tree. Naming note: the cinematics refactor renamed `LevelUpTrailEffect` 
 `LevelUpCinematic` and moved the timeScale tween into `CameraRigCinematic`; this plan
 uses the current names.
 
+**Status:** Phases 0 + 1 **implemented 2026-07-02** — docs truthed up (Score README,
+scope table, Shared message rows, plus stale `LevelUpTrailEffect`/`NextLevel` references
+in the LevelUp README, Game README, Pool README, Tests README, and
+`arch_score_cinematic`), dead trail API deleted (`PauseWhere`/`CompleteWhere`/
+`SetSpeedWhere`, `ScorePointMessage.NextLevel` + its three EditMode tests reworked), and
+all six Phase 1 fixes applied (1a capability count via `_grid.At(...) is IHasItemSlot`;
+1b/1c `IDisposable` + CTS on `BalloonSpawner`/`ItemActivator`; 1d message list copy;
+1e `IScoreQuery.WillLevelUp`; 1f instance registries). All three assemblies compile,
+style audit clean. EditMode tests need an in-editor run to confirm (no headless runner).
+Phases 2+ not started.
+
 **Key fact discovered during the audit:** the project runs on the **Built-in Render
 Pipeline**, not URP (`GraphicsSettings.asset` → `m_CustomRenderPipeline: {fileID: 0}`).
 Batching is sprite dynamic batching; `MaterialPropertyBlock`s break it per-renderer;

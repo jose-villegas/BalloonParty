@@ -35,7 +35,7 @@ namespace BalloonParty.Game.Cinematics
         private readonly ISubscriber<ScorePointMessage> _scoredSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
-        private readonly ScoreController _scoreController;
+        private readonly IScoreQuery _scoreQuery;
         private readonly ScoreTrailService _scoreTrailService;
         private readonly PauseService _pauseService;
         private readonly CancellationTokenSource _cts = new();
@@ -62,7 +62,7 @@ namespace BalloonParty.Game.Cinematics
             ISubscriber<ScorePointMessage> scoredSubscriber,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
-            ScoreController scoreController,
+            IScoreQuery scoreQuery,
             ScoreTrailService scoreTrailService,
             PauseService pauseService)
         {
@@ -74,7 +74,7 @@ namespace BalloonParty.Game.Cinematics
             _scoredSubscriber = scoredSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
             _trailArrivedSubscriber = trailArrivedSubscriber;
-            _scoreController = scoreController;
+            _scoreQuery = scoreQuery;
             _scoreTrailService = scoreTrailService;
             _pauseService = pauseService;
         }
@@ -117,7 +117,7 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            if (!_scoreController.WillLevelUp())
+            if (!_scoreQuery.WillLevelUp())
             {
                 return;
             }

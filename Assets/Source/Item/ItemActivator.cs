@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Messages;
@@ -12,8 +13,9 @@ using VContainer.Unity;
 
 namespace BalloonParty.Item
 {
-    internal class ItemActivator : IStartable
+    internal class ItemActivator : IStartable, IDisposable
     {
+        private readonly CancellationTokenSource _cts = new();
         private readonly IEnumerable<IBalloonItem> _handlers;
         private readonly IPublisher<ItemActivatedMessage> _itemActivatedPublisher;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
@@ -40,6 +42,12 @@ namespace BalloonParty.Item
             }
 
             _hitSubscriber.Subscribe(OnActorHit);
+        }
+
+        public void Dispose()
+        {
+            _cts.Cancel();
+            _cts.Dispose();
         }
 
         private void OnActorHit(ActorHitMessage msg)
@@ -71,7 +79,7 @@ namespace BalloonParty.Item
             {
                 // Yield one frame so all synchronous ActorHitMessage subscribers
                 // (e.g. BalloonController capturing item rotation) finish first.
-                await UniTask.Yield();
+                await UniTask.Yield(_cts.Token);
 
                 handler.Setup(balloon, worldPosition);
                 await handler.Activate();

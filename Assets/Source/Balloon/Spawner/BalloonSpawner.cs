@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Controller;
@@ -17,7 +18,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Balloon.Spawner
 {
-    internal class BalloonSpawner : IStartable, IGridSpawner, IRunResettable
+    internal class BalloonSpawner : IStartable, IGridSpawner, IRunResettable, IDisposable
     {
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly BalloonBalancer _balancer;
@@ -106,6 +107,14 @@ namespace BalloonParty.Balloon.Spawner
             _newlySpawnedBalloons.Clear();
         }
 
+        public void Dispose()
+        {
+            // The generation guard only covers run resets — scope teardown must cancel in-flight
+            // delayed line spawns so they don't touch disposed pools and publishers.
+            _cts.Cancel();
+            _cts.Dispose();
+        }
+
         private async UniTaskVoid PrewarmThenFlagAsync(CancellationToken ct)
         {
             await PrewarmAsync(ct);
@@ -161,8 +170,10 @@ namespace BalloonParty.Balloon.Spawner
         {
             if (_newlySpawnedBalloons.Count > 0)
             {
+                // Copy — the live buffer is cleared right away, so a subscriber that defers past
+                // this frame would otherwise observe an empty (or repurposed) list.
                 _itemCheckPublisher.Publish(
-                    new ItemCheckMessage(_newlySpawnedBalloons, _turnCount));
+                    new ItemCheckMessage(new List<IBalloonModel>(_newlySpawnedBalloons), _turnCount));
                 _newlySpawnedBalloons.Clear();
             }
         }

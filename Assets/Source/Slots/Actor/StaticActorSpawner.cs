@@ -17,11 +17,11 @@ namespace BalloonParty.Slots.Actor
 {
     internal class StaticActorSpawner : IStartable, IGridSpawner
     {
-        private static readonly Dictionary<SlotPlacementMode, ISlotSelectionStrategy> StrategyCache = new();
+        private readonly Dictionary<SlotPlacementMode, ISlotSelectionStrategy> _strategyCache = new();
 
         // One registration line per actor type — the model self-reports its GridActorType, so adding a
         // type means adding the model + an entry here, never editing a switch.
-        private static readonly Dictionary<GridActorType, System.Func<IWriteableSlotActor>> ModelFactories = new()
+        private readonly Dictionary<GridActorType, System.Func<IWriteableSlotActor>> _modelFactories = new()
         {
             { GridActorType.Puff, () => new PuffObstacleModel() },
             { GridActorType.Bush, () => new BushObstacleModel() }
@@ -186,9 +186,9 @@ namespace BalloonParty.Slots.Actor
             _poolsRegistered = true;
         }
 
-        private static ISlotSelectionStrategy GetStrategy(SlotPlacementMode mode)
+        private ISlotSelectionStrategy GetStrategy(SlotPlacementMode mode)
         {
-            if (StrategyCache.TryGetValue(mode, out var cached))
+            if (_strategyCache.TryGetValue(mode, out var cached))
             {
                 return cached;
             }
@@ -199,13 +199,13 @@ namespace BalloonParty.Slots.Actor
                 _ => new RandomSlotSelectionStrategy()
             };
 
-            StrategyCache[mode] = strategy;
+            _strategyCache[mode] = strategy;
             return strategy;
         }
 
-        private static IWriteableSlotActor CreateModel(GridActorType actorType)
+        private IWriteableSlotActor CreateModel(GridActorType actorType)
         {
-            if (ModelFactories.TryGetValue(actorType, out var factory))
+            if (_modelFactories.TryGetValue(actorType, out var factory))
             {
                 return factory();
             }
