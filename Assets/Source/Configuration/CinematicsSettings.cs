@@ -47,7 +47,7 @@ namespace BalloonParty.Configuration
                     followSpeed: 0.7f),
                 new TrackedTrailSettings()),
 
-            // HeartDrain — quick ramp to 0.3 while the camera follows the heart trails' centroid.
+            // HeartDrain — quick ramp to 0.3 while the camera follows the landing heart trail.
             new(
                 CinematicTraits.None,
                 new CameraRigCinematicSettings(

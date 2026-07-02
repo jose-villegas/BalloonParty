@@ -14,7 +14,7 @@ namespace BalloonParty.Game.Cinematics
     /// <summary>
     ///     The overflow heart-drain cinematic, as a plain C# trigger over the shared
     ///     <see cref="CameraRigCinematic"/> runner: begins when the first heart trail launches from the
-    ///     UI, follows the in-flight hearts' centroid in slow-mo, and ends when the pile has fully
+    ///     UI, follows the heart about to land (framing the rest) in slow-mo, and ends when the pile has fully
     ///     drained or the run is over (extra hearts past 0 HP don't extend it). Uses
     ///     <see cref="CinematicState.HeartDrain"/>/<see cref="CinematicState.HeartDrainRestore"/>,
     ///     which are neither loss-blocking (the 0-HP game-over fires through) nor shake-blocking (each

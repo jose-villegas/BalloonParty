@@ -6,9 +6,12 @@ using UnityEngine;
 namespace BalloonParty.Game.Cinematics
 {
     /// <summary>
-    ///     An <see cref="ICinematicFocus" /> over the in-flight heart trails: centroid + bounding box of
-    ///     <see cref="HeartTrailTracker.Active" />, refreshed each query into a reused buffer. Empty set
-    ///     → no focus (the rig holds position while the next heart launches).
+    ///     An <see cref="ICinematicFocus" /> over the in-flight heart trails: the focus centre is the
+    ///     <em>oldest</em> heart — the one about to land and pop, which is the beat the camera must not
+    ///     lose — while the bounding box still spans every trail so the rig keeps the rest in frame when
+    ///     it can. A plain centroid drifts back up toward the UI with every new launch (and once the
+    ///     UI-to-pile box outgrows the view, the frustum clamp centres on it), pushing the pops off
+    ///     frame. Empty set → no focus (the rig holds position while the next heart launches).
     /// </summary>
     internal sealed class HeartTrailFocus : ICinematicFocus
     {
@@ -38,7 +41,8 @@ namespace BalloonParty.Game.Cinematics
                 return false;
             }
 
-            center = _positions.Centroid(_positions.Count);
+            // The tracker preserves launch order, so [0] is the heart closest to landing.
+            center = _positions[0];
             var bounds = _positions.Bounds(_positions.Count);
             min = bounds.min;
             max = bounds.max;
