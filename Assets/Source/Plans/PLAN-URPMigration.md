@@ -46,7 +46,7 @@ From @ref plan_audit_remediation Phase 5, independently worthwhile:
 
 1. **5a — bake shadow/blur into sprite textures.** Retires the entire
    `Sprite/SpriteShadow`, `SpriteBlur`, `SpriteShadowComposite`, `SpriteShine`,
-   `SpriteShineShadow` family (5 shaders + ~14 materials) → those renderers move to
+   `SpriteShineShadow` family (5 shaders + 28 materials) → those renderers move to
    stock sprite shaders, which URP converts automatically.
 2. **5b — replace the `GrabPass` reflection with a prebaked texture.** Removes the only
    hard pipeline dependency in the project.
@@ -74,27 +74,45 @@ Shader Graph):
 | `Balloon/UnbreakableBalloonRim.shader` | Straightforward unlit port. |
 | `Balloon/ToughBalloon.shader` | Straightforward unlit port. |
 | `Balloon/SoapBubbleCluster.shader` | Port; pairs with variant-clock fix 5f. |
-| `Grid/BushBranch.shader`, `Grid/BushLeaf.shader` | Used with `DrawMeshInstanced` — port must keep GPU instancing (`UNITY_INSTANCING_BUFFER` blocks) working; the `_RendererColor` instancing caveat from the bush work applies. Test instanced batches explicitly. |
+| `Grid/BushLeaf.shader` | Drawn via `Graphics.DrawMeshInstanced` (`BushView.cs:153`, non-instanced fallback `:164`) with a real `UNITY_INSTANCING_BUFFER` (`_LeafTint/_UVRect/_LeafWind`, shader `:74-78`) — port must keep GPU instancing working. Test instanced batches explicitly. |
+| `Grid/BushBranch.shader` | **Not instanced** — drawn per-slot via plain `Graphics.DrawMesh` (`BushView.cs:74`); its only instancing block is boilerplate sprite `_RendererColor`. Straightforward port. |
 | `Grid/PuffCloud.shader` | Prefer doing remediation 5c (noise → texture) as part of the port rather than porting 21 octaves/px verbatim. |
-| `Grid/DisturbanceDiffusion/Stamp/StampBatched.shader` | Offscreen blit shaders; likely near-verbatim ports (unlit, no lighting, no camera coupling). |
+| `Grid/DisturbanceDiffusion.shader`, `Grid/DisturbanceStampBatched.shader` | Offscreen blit shaders (`ZTest Always/Cull Off/ZWrite Off`, no camera matrices); near-verbatim ports. |
+| `Grid/DisturbanceStamp.shader` | **Dead code** — no asset references its GUID; `DisturbanceFieldSettings` wires only `_diffusionShader` + `_stampBatchedShader` (`DisturbanceFieldSettings.cs:75-78`). Delete instead of porting. |
 | `Paint/PaintBlob.shader` | Straightforward port. |
 | `Sprite/*` (5 shaders) | Retired by prerequisite 5a; if any survive, port the survivors only. |
-| `Grid/Editor/Bush*.shader` (4) | Editor-only bake shaders drawing to RTs; verify the bake tool still renders correctly under URP (bake via camera vs blit — check `Editor/Bush` pipeline). |
-| `Plugins/UIRays/Rays.shader` | Third-party — check upstream for a URP variant; otherwise port or replace the effect. |
+| `Grid/Editor/Bush*.shader` (4) | The bake shaders are trivial unlit, **but the bake tool will break**: `BushBranchBaker.cs:36` and `BushLeafBaker.cs:84` call `Camera.Render()`, which is unsupported under scriptable render pipelines. Replace with `RenderPipeline.SubmitRenderRequest` / `UniversalRenderPipeline.SingleCameraRequest` (or a blit-based bake). |
+| `Plugins/UIRays/Rays.shader` | Third-party, **in use** (`GameOverRays.mat` → GameOver popup, `LevelUpRays.mat` → LevelUp popup) — check upstream for a URP variant; otherwise port or replace the effect. |
+
+Legacy stock-shader materials (not in the table above, easy to miss): **23 materials
+use built-in `Mobile/Particles/Additive` / `Alpha Blended`** (all particle-system,
+line-renderer, and several trail materials — `HeartTrail.mat`, `BeamShine`, lightning
+lines, `TrailMaterial_ScoreTrail`/`_Prediction`, …) plus `Laser/Beam.mat` on
+`Sprites/Default`. Built-in unlit shaders generally keep rendering under URP, but the
+render-pipeline converter does not touch them and "generally" is not a guarantee —
+sweep them as an explicit Phase 3 line item (verify or swap to URP particle/sprite
+equivalents).
 
 Other touchpoints:
-- **TextMesh Pro** ships URP shader variants — swap materials, no work.
-- **Sorting layers / SpriteRenderers / SortingGroup** — unchanged semantics under the 2D
-  Renderer.
-- **MPB usage** (`BushView`, variants, trails): still functional under URP, but excludes
-  those renderers from the SRP Batcher; the 2D Renderer's sprite batching has its own
-  rules — re-verify batch counts in Frame Debugger after migration, don't assume.
+- **TextMesh Pro** ships URP shader variants (`TMP_SDF-URP Lit/Unlit.shadergraph`
+  present in the project) — swap materials, no work.
+- **Sorting layers / SpriteRenderers** — unchanged semantics under the 2D Renderer.
+- **MPB usage** (`BushView`, balloon variants): still functional under URP, but
+  excludes those renderers from the SRP Batcher; the 2D Renderer's sprite batching has
+  its own rules — re-verify batch counts in Frame Debugger after migration, don't
+  assume. (Remediation 5f removes most per-frame MPB traffic beforehand.)
+- **Animator-driven material properties** — `ToughStableIdle.anim` animates
+  `material._SphereWarp`/`_CrackThreshold`, which instantiates materials at runtime;
+  re-verify the Tough balloon's visuals and batching under URP explicitly (also
+  flagged in remediation 5e — may be redesigned before migration).
 - **`DOTween`, UniRx, physics, UI Canvas** — no pipeline coupling.
-- **Camera** — single ortho camera; convert to `UniversalAdditionalCameraData` (automatic
-  via render pipeline converter). `CameraShakeService` manipulates the transform only —
-  unaffected. `SceneTransition`'s rendering suppression (layer-based culling +
-  `SuppressRendering`) must be re-verified — culling-mask behaviour is identical, but
-  test the launcher→game preload flow early.
+- **Camera** — one enabled ortho camera per scene (two coexist during the
+  launcher→game preload; the suppressed one is *disabled*, not layer-culled); convert
+  via the render pipeline converter (`UniversalAdditionalCameraData`).
+  `CameraShakeService` manipulates the transform only — unaffected.
+  `SceneExtensions.SuppressRendering` (`:15-41`) just toggles
+  `Camera/Canvas/AudioListener/EventSystem.enabled` — fully pipeline-agnostic; still
+  test the preload flow early as a smoke check.
 
 ## Migration phases
 
