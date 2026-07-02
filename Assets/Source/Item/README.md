@@ -8,8 +8,8 @@ Items are game-wide collectible effects — Bomb, Laser, Lightning, Paint, and S
 
 | File | What it does |
 |---|---|
-| `IItem` | Base interface — `ItemType Type`, `UniTask Activate()` |
-| `IBalloonItem` | Balloon-hosted activation adapter — `Setup(IBalloonModel, Vector3)` called before `Activate()` |
+| `IItem` | Base interface — `ItemType Type` |
+| `IBalloonItem` | Balloon-hosted activation adapter — `UniTask Activate(IBalloonModel, Vector3)`. Handlers are singletons and activations can overlap (AoE items trigger several in one frame; chain/splash effects resolve over time), so all per-activation state lives in locals captured by the activation, never in handler fields |
 | `IItemView` | Contract for per-type visual components — `Type`, `Activate(Color)`, `Deactivate()`, `ApplySortingOrder(int)` |
 | `ItemDisplayService` | MonoBehaviour on the item container — bridges an external data source (e.g. a model's `Item` reactive property) to the active visual's lifecycle via `SimplePoolChannel<ItemVisualView>`. Subscribes to both item type and color name changes — recolors the active visual immediately when the host's color changes |
 | `ItemViewScope` | Reusable `LifetimeScope` — registers `ItemDisplayService` and injects all `ItemVisualView` children via `RegisterBuildCallback`. Custom `FindParent()` walks the transform hierarchy so it parents to whatever ancestor scope hosts it |
@@ -27,7 +27,7 @@ Items are game-wide collectible effects — Bomb, Laser, Lightning, Paint, and S
 
 | File | What it does |
 |---|---|
-| `ItemActivator` | `IStartable` — subscribes to `ActorHitMessage`; when the hit actor is a balloon carrying an item, finds the matching `IBalloonItem` handler by type, calls `Setup` + `await Activate()`, then publishes `ItemActivatedMessage`. Yields one frame before activation to let all synchronous `ActorHitMessage` subscribers finish first |
+| `ItemActivator` | `IStartable` + `IDisposable` — subscribes to `ActorHitMessage`; when the hit actor is a balloon carrying an item, finds the matching `IBalloonItem` handler by type, calls `await Activate(balloon, worldPos)`, then publishes `ItemActivatedMessage`. Yields one frame before activation (cancelled on scope teardown) to let all synchronous `ActorHitMessage` subscribers finish first |
 | `Bomb/BombItemHandler` | Area explosion — `Physics2D.OverlapCircleAll` at balloon position; destroys balloons in radius; nudges survivors with exponential distance falloff. Passes `ItemSettings.Damage` into each `ActorHitMessage`. Stamps `DisturbanceFieldService.Stamp()` on detonation with `Bomb` profile |
 | `Laser/LaserItemHandler` | Cross beam — 4× `Physics2D.CircleCastAll` in rotated directions; reads captured rotation from `ItemRotationCapturedMessage`. Passes `ItemSettings.Damage` into each `ActorHitMessage`. Stamps `DisturbanceFieldService.Stamp()` along beam segments with `Laser` profile |
 | `Lightning/LightningItemHandler` | Chain lightning — queries `SlotGrid` for all same-color balloons, sorts by distance, spawns `ChainLightningView` via `SimplePoolChannel<EffectView>`, passes `ItemSettings` directly to `PrepareDisplay`, hits each target sequentially with async delay. Passes `ItemSettings.Damage` into each `ActorHitMessage` |
@@ -73,7 +73,7 @@ Balloon (root)         ← BalloonLifetimeScope
 
 1. `ProjectileView.OnTriggerEnter2D` publishes `ActorHitMessage` for the hit balloon (always `Damage = 1`)
 2. `BalloonController` receives it, calls `_view.Hide()` (disables collider and renderers), and waits for `ItemActivatedMessage` before returning to pool
-3. `ItemActivator` receives the same `ActorHitMessage`, yields one frame, then calls `Setup(balloon, worldPos)` + `await Activate()` on the matching handler
+3. `ItemActivator` receives the same `ActorHitMessage`, yields one frame, then calls `await Activate(balloon, worldPos)` on the matching handler
 4. The handler runs its effect (may be async, e.g. lightning), publishing `ActorHitMessage` for each secondary balloon with `Damage = settings.Damage`
 5. `ItemActivator` publishes `ItemActivatedMessage` — `BalloonController` receives it and returns the item balloon to pool
 

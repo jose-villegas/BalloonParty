@@ -19,7 +19,12 @@ namespace BalloonParty.Shared.Pool
                 if (_root == null)
                 {
                     var go = new GameObject("[Pool]");
-                    Object.DontDestroyOnLoad(go);
+                    // DontDestroyOnLoad throws outside play mode (EditMode tests, editor tooling).
+                    if (Application.isPlaying)
+                    {
+                        Object.DontDestroyOnLoad(go);
+                    }
+
                     _root = go.transform;
                 }
 

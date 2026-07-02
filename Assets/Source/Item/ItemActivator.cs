@@ -81,8 +81,7 @@ namespace BalloonParty.Item
                 // (e.g. BalloonController capturing item rotation) finish first.
                 await UniTask.Yield(_cts.Token);
 
-                handler.Setup(balloon, worldPosition);
-                await handler.Activate();
+                await handler.Activate(balloon, worldPosition);
                 _itemActivatedPublisher.Publish(new ItemActivatedMessage(balloon));
             }
             catch (OperationCanceledException)

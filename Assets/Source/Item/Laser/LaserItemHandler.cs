@@ -26,10 +26,9 @@ namespace BalloonParty.Item.Laser
         private readonly HashSet<IBalloonModel> _hitModels = new();
         private readonly DisturbanceFieldService _disturbanceField;
 
+        // Legitimately cross-activation: rotations arrive via TransformCapturedMessage before the
+        // activation reaches this handler, keyed per balloon and consumed once on activation.
         private readonly Dictionary<ISlotActor, Quaternion> _capturedRotations = new();
-
-        private IBalloonModel _balloon;
-        private Vector3 _worldPosition;
 
         public ItemType Type => ItemType.Laser;
 
@@ -55,32 +54,26 @@ namespace BalloonParty.Item.Laser
             _transformCapturedSubscriber.Subscribe(msg => _capturedRotations[msg.Source] = msg.Snapshot.Rotation);
         }
 
-        public void Setup(IBalloonModel balloon, Vector3 worldPosition)
-        {
-            _balloon = balloon;
-            _worldPosition = worldPosition;
-        }
-
-        public UniTask Activate()
+        public UniTask Activate(IBalloonModel balloon, Vector3 worldPosition)
         {
             var settings = _itemConfig[ItemType.Laser];
 
-            _capturedRotations.TryGetValue(_balloon, out var laserRotation);
-            _capturedRotations.Remove(_balloon);
+            _capturedRotations.TryGetValue(balloon, out var laserRotation);
+            _capturedRotations.Remove(balloon);
 
-            CastCross(settings, laserRotation);
-            _effectPlayer.Play(settings, _worldPosition, laserRotation, _balloon.GetColorId());
-            StampCross(settings, laserRotation);
+            CastCross(balloon, worldPosition, settings, laserRotation);
+            _effectPlayer.Play(settings, worldPosition, laserRotation, balloon.GetColorId());
+            StampCross(worldPosition, settings, laserRotation);
 
             return UniTask.CompletedTask;
         }
 
-        private void CastCross(ItemSettings settings, Quaternion laserRotation)
+        private void CastCross(IBalloonModel balloon, Vector3 worldPosition, ItemSettings settings, Quaternion laserRotation)
         {
             var radius = settings.Laser.CircleCastRadius;
             var distance = settings.Laser.RaycastDistance;
             var context =
-                new DamageContext(settings.Damage, settings.Flags, _balloon.GetColorId());
+                new DamageContext(settings.Damage, settings.Flags, balloon.GetColorId());
 
             var right = laserRotation * Vector3.right;
             var left = laserRotation * Vector3.left;
@@ -89,24 +82,26 @@ namespace BalloonParty.Item.Laser
 
             _hitModels.Clear();
 
-            CastDirection(right, radius, distance, context, _hitModels);
-            CastDirection(left, radius, distance, context, _hitModels);
-            CastDirection(up, radius, distance, context, _hitModels);
-            CastDirection(down, radius, distance, context, _hitModels);
+            CastDirection(balloon, worldPosition, right, radius, distance, context, _hitModels);
+            CastDirection(balloon, worldPosition, left, radius, distance, context, _hitModels);
+            CastDirection(balloon, worldPosition, up, radius, distance, context, _hitModels);
+            CastDirection(balloon, worldPosition, down, radius, distance, context, _hitModels);
         }
 
         private void CastDirection(
+            IBalloonModel balloon,
+            Vector3 worldPosition,
             Vector2 direction,
             float radius,
             float distance,
             DamageContext context,
             HashSet<IBalloonModel> hitModels)
         {
-            var count = Physics2D.CircleCast(_worldPosition, radius, direction, _overlap.Filter, _castResults, distance);
+            var count = Physics2D.CircleCast(worldPosition, radius, direction, _overlap.Filter, _castResults, distance);
 
             for (var i = 0; i < count; i++)
             {
-                if (!_overlap.TryResolveBalloon(_castResults[i].collider, _balloon, out var balloonView, out var model))
+                if (!_overlap.TryResolveBalloon(_castResults[i].collider, balloon, out var balloonView, out var model))
                 {
                     continue;
                 }
@@ -123,7 +118,7 @@ namespace BalloonParty.Item.Laser
             }
         }
 
-        private void StampCross(ItemSettings settings, Quaternion laserRotation)
+        private void StampCross(Vector3 worldPosition, ItemSettings settings, Quaternion laserRotation)
         {
             var distance = settings.Laser.RaycastDistance;
             var profile = _disturbanceField.GetProfile(StampSource.Laser);
@@ -135,17 +130,17 @@ namespace BalloonParty.Item.Laser
             var up = (Vector2)(laserRotation * Vector3.up);
             var down = (Vector2)(laserRotation * Vector3.down);
 
-            StampArm(right, steps, step);
-            StampArm(left, steps, step);
-            StampArm(up, steps, step);
-            StampArm(down, steps, step);
+            StampArm(worldPosition, right, steps, step);
+            StampArm(worldPosition, left, steps, step);
+            StampArm(worldPosition, up, steps, step);
+            StampArm(worldPosition, down, steps, step);
         }
 
-        private void StampArm(Vector2 direction, int steps, float step)
+        private void StampArm(Vector3 worldPosition, Vector2 direction, int steps, float step)
         {
             for (var i = 0; i <= steps; i++)
             {
-                var pos = (Vector2)_worldPosition + direction * (step * i);
+                var pos = (Vector2)worldPosition + direction * (step * i);
                 _disturbanceField.Stamp(StampSource.Laser, pos, direction);
             }
         }

@@ -59,8 +59,7 @@ namespace BalloonParty.Tests.Item
             SimulateProjectileLoaded(projectile);
 
             var balloon = CreateBalloon(new Vector2Int(2, 3));
-            _handler.Setup(balloon, Vector3.zero);
-            _handler.Activate();
+            _handler.Activate(balloon, Vector3.zero);
 
             Assert.AreEqual(2, projectile.ShieldsRemaining.Value);
         }
@@ -69,9 +68,8 @@ namespace BalloonParty.Tests.Item
         public void Activate_WithoutProjectile_DoesNotThrow()
         {
             var balloon = CreateBalloon(new Vector2Int(0, 0));
-            _handler.Setup(balloon, Vector3.zero);
 
-            Assert.DoesNotThrow(() => _handler.Activate());
+            Assert.DoesNotThrow(() => _handler.Activate(balloon, Vector3.zero));
         }
 
         [Test]
@@ -79,8 +77,7 @@ namespace BalloonParty.Tests.Item
         {
             var slot = new Vector2Int(3, 5);
             var balloon = CreateBalloon(slot);
-            _handler.Setup(balloon, Vector3.zero);
-            _handler.Activate();
+            _handler.Activate(balloon, Vector3.zero);
 
             _shieldGainedPublisher.Received(1).Publish(
                 Arg.Is<ShieldGainedMessage>(m => m.SlotIndex == slot));

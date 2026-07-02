@@ -61,8 +61,7 @@ namespace BalloonParty.Tests.Item
             var source = PlaceBalloon(2, 2, "Red");
             var neighbor = PlaceBalloon(1, 2, "Blue");
 
-            _handler.Setup(source, Vector3.zero);
-            _handler.Activate();
+            _handler.Activate(source, Vector3.zero);
 
             Assert.AreEqual("Red", neighbor.Color.Value);
         }
@@ -73,8 +72,7 @@ namespace BalloonParty.Tests.Item
             var source = PlaceBalloon(2, 2, "Red");
             var sameColor = PlaceBalloon(1, 2, "Red");
 
-            _handler.Setup(source, Vector3.zero);
-            _handler.Activate();
+            _handler.Activate(source, Vector3.zero);
 
             Assert.AreEqual("Red", sameColor.Color.Value);
         }
@@ -85,8 +83,7 @@ namespace BalloonParty.Tests.Item
             var source = PlaceBalloon(2, 2, "Red");
             var tough = PlaceToughBalloon(1, 2);
 
-            _handler.Setup(source, Vector3.zero);
-            _handler.Activate();
+            _handler.Activate(source, Vector3.zero);
 
             Assert.IsFalse(tough is IPaintable);
         }        [Test]
@@ -95,8 +92,7 @@ namespace BalloonParty.Tests.Item
             var source = PlaceBalloon(2, 2, "");
             var neighbor = PlaceBalloon(1, 2, "Blue");
 
-            _handler.Setup(source, Vector3.zero);
-            _handler.Activate();
+            _handler.Activate(source, Vector3.zero);
 
             Assert.AreEqual("Blue", neighbor.Color.Value);
         }
@@ -106,9 +102,7 @@ namespace BalloonParty.Tests.Item
         {
             var source = PlaceBalloon(0, 0, "Red");
 
-            _handler.Setup(source, Vector3.zero);
-
-            Assert.DoesNotThrow(() => _handler.Activate());
+            Assert.DoesNotThrow(() => _handler.Activate(source, Vector3.zero));
         }
 
         private BalloonModel PlaceBalloon(int col, int row, string color)

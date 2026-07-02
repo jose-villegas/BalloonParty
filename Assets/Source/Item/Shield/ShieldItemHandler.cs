@@ -19,8 +19,6 @@ namespace BalloonParty.Item.Shield
         private readonly IItemConfiguration _itemConfig;
 
         private IWriteableProjectileModel _activeProjectile;
-        private IBalloonModel _balloon;
-        private Vector3 _worldPosition;
 
         public ItemType Type => ItemType.Shield;
 
@@ -42,22 +40,16 @@ namespace BalloonParty.Item.Shield
             _loadedSubscriber.Subscribe(msg => _activeProjectile = (IWriteableProjectileModel)msg.Model);
         }
 
-        public UniTask Activate()
+        public UniTask Activate(IBalloonModel balloon, Vector3 worldPosition)
         {
             if (_activeProjectile != null)
             {
                 _activeProjectile.ShieldsRemaining.Value++;
             }
 
-            _shieldGainedPublisher.Publish(new ShieldGainedMessage(_balloon.SlotIndex.Value));
-            _effectPlayer.Play(_itemConfig[ItemType.Shield], _worldPosition, _balloon.GetColorId());
+            _shieldGainedPublisher.Publish(new ShieldGainedMessage(balloon.SlotIndex.Value));
+            _effectPlayer.Play(_itemConfig[ItemType.Shield], worldPosition, balloon.GetColorId());
             return UniTask.CompletedTask;
-        }
-
-        public void Setup(IBalloonModel balloon, Vector3 worldPosition)
-        {
-            _balloon = balloon;
-            _worldPosition = worldPosition;
         }
     }
 }

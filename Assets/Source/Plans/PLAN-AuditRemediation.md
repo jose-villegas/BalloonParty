@@ -29,9 +29,14 @@ in the LevelUp README, Game README, Pool README, Tests README, and
 `SetSpeedWhere`, `ScorePointMessage.NextLevel` + its three EditMode tests reworked), and
 all six Phase 1 fixes applied (1a capability count via `_grid.At(...) is IHasItemSlot`;
 1b/1c `IDisposable` + CTS on `BalloonSpawner`/`ItemActivator`; 1d message list copy;
-1e `IScoreQuery.WillLevelUp`; 1f instance registries). All three assemblies compile,
-style audit clean. EditMode tests need an in-editor run to confirm (no headless runner).
-Phases 2+ not started.
+1e `IScoreQuery.WillLevelUp`; 1f instance registries). EditMode suite confirmed green
+in-editor. **Phase 2 implemented 2026-07-02**: `Setup`+`Activate()` collapsed into
+`IBalloonItem.Activate(balloon, worldPosition)` across all five handlers; Lightning's
+target/position buffers and Paint's splash state are per-activation locals captured by
+the deferred callbacks; Laser's cross-activation `_capturedRotations` kept by design;
+`ShieldItemHandlerTests`/`LightningItemHandlerTests` (which had appeared since the
+review) and Paint/Bomb tests ported, plus a new `Activate_OverlappingChains_KeepIndependentTargets`
+regression test driving two chains through a fake `IChainEffect`. Phases 3+ not started.
 
 **Key fact discovered during the audit:** the project runs on the **Built-in Render
 Pipeline**, not URP (`GraphicsSettings.asset` → `m_CustomRenderPipeline: {fileID: 0}`).

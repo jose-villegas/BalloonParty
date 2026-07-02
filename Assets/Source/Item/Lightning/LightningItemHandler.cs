@@ -33,12 +33,9 @@ namespace BalloonParty.Item.Lightning
         private readonly PoolManager _poolManager;
         private readonly SlotGrid _grid;
 
-        private readonly List<(IBalloonModel model, Vector3 worldPos)> _targetsBuffer = new();
-        private readonly List<Vector3> _positionsBuffer = new();
+        // Shared across activations is safe here only because it is set and consumed
+        // synchronously inside one CollectSortedTargets call.
         private readonly ByDistanceComparer _distanceComparer = new();
-
-        private IBalloonModel _balloon;
-        private Vector3 _worldPosition;
 
         public ItemType Type => ItemType.Lightning;
 
@@ -55,28 +52,27 @@ namespace BalloonParty.Item.Lightning
             _poolManager = poolManager;
         }
 
-        public void Setup(IBalloonModel balloon, Vector3 worldPosition)
-        {
-            _balloon = balloon;
-            _worldPosition = worldPosition;
-        }
-
-        public UniTask Activate()
+        public UniTask Activate(IBalloonModel balloon, Vector3 worldPosition)
         {
             var settings = _itemConfig[ItemType.Lightning];
-            CollectSortedTargets(_targetsBuffer);
 
-            if (_targetsBuffer.Count == 0)
+            // Per-activation lists, not shared buffers: the chain view keeps the positions
+            // reference and OnJump reads the targets for seconds after this method returns,
+            // so a second activation mid-chain must not touch either.
+            var targets = new List<(IBalloonModel model, Vector3 worldPos)>();
+            CollectSortedTargets(balloon, worldPosition, targets);
+
+            if (targets.Count == 0)
             {
                 return UniTask.CompletedTask;
             }
 
-            var sourceColorId = _balloon.GetColorId();
+            var sourceColorId = balloon.GetColorId();
             var context = new DamageContext(settings.Damage, settings.Flags, sourceColorId);
 
             if (settings.ActivationEffectPrefab == null)
             {
-                foreach (var (model, pos) in _targetsBuffer)
+                foreach (var (model, pos) in targets)
                 {
                     _hitPublisher.Publish(ActorHitMessage.From(model,
                         pos,
@@ -87,11 +83,10 @@ namespace BalloonParty.Item.Lightning
                 return UniTask.CompletedTask;
             }
 
-            _positionsBuffer.Clear();
-            _positionsBuffer.Add(_worldPosition);
-            foreach (var (_, pos) in _targetsBuffer)
+            var positions = new List<Vector3>(targets.Count + 1) { worldPosition };
+            foreach (var (_, pos) in targets)
             {
-                _positionsBuffer.Add(pos);
+                positions.Add(pos);
             }
 
             var key = settings.ActivationEffectPrefab.name;
@@ -107,9 +102,7 @@ namespace BalloonParty.Item.Lightning
                 return UniTask.CompletedTask;
             }
 
-            var targets = _targetsBuffer;
-
-            chain.PrepareDisplay(_positionsBuffer, settings, OnJump);
+            chain.PrepareDisplay(positions, settings, OnJump);
             effect.Play(Vector3.zero, Color.white, () => _poolManager.Return(key, effect));
 
             return UniTask.CompletedTask;
@@ -129,11 +122,12 @@ namespace BalloonParty.Item.Lightning
             }
         }
 
-        private void CollectSortedTargets(List<(IBalloonModel model, Vector3 worldPos)> result)
+        private void CollectSortedTargets(
+            IBalloonModel balloon, Vector3 origin, List<(IBalloonModel model, Vector3 worldPos)> result)
         {
             result.Clear();
 
-            if (_balloon is not IHasColor sourceColor)
+            if (balloon is not IHasColor sourceColor)
             {
                 return;
             }
@@ -155,7 +149,7 @@ namespace BalloonParty.Item.Lightning
                         continue;
                     }
 
-                    if (ReferenceEquals(model, _balloon))
+                    if (ReferenceEquals(model, balloon))
                     {
                         continue;
                     }
@@ -169,7 +163,7 @@ namespace BalloonParty.Item.Lightning
                 }
             }
 
-            _distanceComparer.Origin = _worldPosition;
+            _distanceComparer.Origin = origin;
             result.Sort(_distanceComparer);
         }
     }

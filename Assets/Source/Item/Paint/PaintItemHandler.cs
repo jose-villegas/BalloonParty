@@ -26,9 +26,6 @@ namespace BalloonParty.Item.Paint
         private readonly PoolManager _poolManager;
         private readonly DisturbanceFieldService _disturbanceField;
 
-        private IBalloonModel _balloon;
-        private Vector3 _worldPosition;
-
         public ItemType Type => ItemType.Paint;
 
         [Inject]
@@ -46,16 +43,10 @@ namespace BalloonParty.Item.Paint
             _disturbanceField = disturbanceField;
         }
 
-        public void Setup(IBalloonModel balloon, Vector3 worldPosition)
-        {
-            _balloon = balloon;
-            _worldPosition = worldPosition;
-        }
-
-        public UniTask Activate()
+        public UniTask Activate(IBalloonModel balloon, Vector3 worldPosition)
         {
             var settings = _itemConfig[ItemType.Paint];
-            if (_balloon is not IHasColor sourceColor)
+            if (balloon is not IHasColor sourceColor)
             {
                 return UniTask.CompletedTask;
             }
@@ -67,7 +58,7 @@ namespace BalloonParty.Item.Paint
                 return UniTask.CompletedTask;
             }
 
-            var slot = _balloon.SlotIndex.Value;
+            var slot = balloon.SlotIndex.Value;
             var neighborIndices = HexCoordinates.HexNeighborIndices(slot.x, slot.y);
             var tint = _palette.GetColor(paintColor);
 
@@ -75,7 +66,7 @@ namespace BalloonParty.Item.Paint
 
             if (settings.ActivationEffectPrefab == null)
             {
-                PaintImmediate(paintColor, neighborIndices, paintTargets);
+                PaintImmediate(worldPosition, paintColor, neighborIndices, paintTargets);
                 return UniTask.CompletedTask;
             }
 
@@ -84,7 +75,7 @@ namespace BalloonParty.Item.Paint
 
             for (var i = 0; i < NeighborCount; i++)
             {
-                flights.Add((_worldPosition, _grid.IndexToWorldPosition(neighborIndices[i])));
+                flights.Add((worldPosition, _grid.IndexToWorldPosition(neighborIndices[i])));
             }
 
             var key = settings.ActivationEffectPrefab.name;
@@ -101,10 +92,12 @@ namespace BalloonParty.Item.Paint
             }
 
             splash.PrepareDisplay(flights, settings, _poolManager, OnSplash);
-            effect.Play(_worldPosition, tint, () => _poolManager.Return(key, effect));
+            effect.Play(worldPosition, tint, () => _poolManager.Return(key, effect));
 
             return UniTask.CompletedTask;
 
+            // Captures only this activation's locals — splashes land over time and a second
+            // Paint activation may run in between, so no handler field may be read here.
             void OnSplash(int index)
             {
                 if (index < NeighborCount && paintTargets[index] != null)
@@ -115,7 +108,7 @@ namespace BalloonParty.Item.Paint
                 if (index < NeighborCount)
                 {
                     var splashPos = _grid.IndexToWorldPosition(neighborIndices[index]);
-                    var dir = ((Vector2)(splashPos - _worldPosition)).normalized;
+                    var dir = ((Vector2)(splashPos - worldPosition)).normalized;
                     _disturbanceField.Stamp(StampSource.Paint, splashPos, dir);
                 }
             }
@@ -141,7 +134,8 @@ namespace BalloonParty.Item.Paint
         }
 
         // No activation effect: recolour the targets and stamp the disturbance field immediately.
-        private void PaintImmediate(string paintColor, Vector2Int[] neighborIndices, IPaintable[] paintTargets)
+        private void PaintImmediate(
+            Vector3 worldPosition, string paintColor, Vector2Int[] neighborIndices, IPaintable[] paintTargets)
         {
             for (var i = 0; i < NeighborCount; i++)
             {
@@ -151,7 +145,7 @@ namespace BalloonParty.Item.Paint
                 }
 
                 var neighborPos = _grid.IndexToWorldPosition(neighborIndices[i]);
-                var dir = ((Vector2)(neighborPos - _worldPosition)).normalized;
+                var dir = ((Vector2)(neighborPos - worldPosition)).normalized;
                 _disturbanceField.Stamp(StampSource.Paint, neighborPos, dir);
             }
         }

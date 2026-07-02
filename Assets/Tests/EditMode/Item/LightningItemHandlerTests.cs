@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
@@ -17,6 +19,24 @@ namespace BalloonParty.Tests.Item
     [TestFixture]
     public class LightningItemHandlerTests
     {
+        // Stands in for the chain-lightning view: records the per-jump callback so tests can
+        // fire jumps after later activations have run, mimicking a chain resolving over time.
+        private sealed class FakeChainEffect : EffectView, IChainEffect
+        {
+            internal static readonly List<FakeChainEffect> Prepared = new();
+
+            internal Action<int> OnTargetHit;
+
+            public void PrepareDisplay(
+                IReadOnlyList<Vector3> targetPositions, ItemSettings settings, Action<int> onTargetHit)
+            {
+                OnTargetHit = onTargetHit;
+                Prepared.Add(this);
+            }
+
+            public override void Play(Vector3 position, Color tint, Action onComplete = null) { }
+        }
+
         private SlotGrid _grid;
         private IPublisher<ActorHitMessage> _hitPublisher;
         private LightningItemHandler _handler;
@@ -45,14 +65,30 @@ namespace BalloonParty.Tests.Item
                 new PoolManager());
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            FakeChainEffect.Prepared.Clear();
+            foreach (var fake in UnityEngine.Object.FindObjectsByType<FakeChainEffect>(
+                         FindObjectsInactive.Include, FindObjectsSortMode.None))
+            {
+                UnityEngine.Object.DestroyImmediate(fake.gameObject);
+            }
+
+            var poolRoot = GameObject.Find("[Pool]");
+            if (poolRoot != null)
+            {
+                UnityEngine.Object.DestroyImmediate(poolRoot);
+            }
+        }
+
         [Test]
         public void Activate_NoSameColorBalloons_PublishesNoHits()
         {
             var source = PlaceBalloon(0, 0, "Red");
             PlaceBalloon(1, 0, "Blue");
 
-            _handler.Setup(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
-            _handler.Activate();
+            _handler.Activate(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
 
             _hitPublisher.DidNotReceive().Publish(Arg.Any<ActorHitMessage>());
         }
@@ -64,8 +100,7 @@ namespace BalloonParty.Tests.Item
             PlaceBalloon(1, 0, "Red");
             PlaceBalloon(2, 0, "Red");
 
-            _handler.Setup(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
-            _handler.Activate();
+            _handler.Activate(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
 
             _hitPublisher.Received(2).Publish(Arg.Any<ActorHitMessage>());
         }
@@ -76,8 +111,7 @@ namespace BalloonParty.Tests.Item
             var source = PlaceBalloon(0, 0, "Red");
             PlaceBalloon(1, 0, "Red");
 
-            _handler.Setup(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
-            _handler.Activate();
+            _handler.Activate(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
 
             _hitPublisher.Received(1).Publish(Arg.Any<ActorHitMessage>());
             _hitPublisher.DidNotReceive().Publish(
@@ -90,11 +124,46 @@ namespace BalloonParty.Tests.Item
             var source = PlaceBalloon(0, 0, "Red");
             PlaceBalloon(1, 0, "Red");
 
-            _handler.Setup(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
-            _handler.Activate();
+            _handler.Activate(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
 
             _hitPublisher.Received(1).Publish(
                 Arg.Is<ActorHitMessage>(m => m.Context.Damage == 1));
+        }
+
+        [Test]
+        public void Activate_OverlappingChains_KeepIndependentTargets()
+        {
+            var prefab = new GameObject("FakeChain").AddComponent<FakeChainEffect>();
+            var settings = CreateItemSettings(ItemType.Lightning, damage: 1);
+            SetField(settings, "_activationEffectPrefab", (EffectView)prefab);
+            var itemConfig = Substitute.For<IItemConfiguration>();
+            itemConfig[ItemType.Lightning].Returns(settings);
+
+            var published = new List<ActorHitMessage>();
+            var publisher = Substitute.For<IPublisher<ActorHitMessage>>();
+            publisher.When(p => p.Publish(Arg.Any<ActorHitMessage>()))
+                .Do(ci => published.Add(ci.Arg<ActorHitMessage>()));
+
+            var handler = new LightningItemHandler(itemConfig, publisher, _grid, new PoolManager());
+
+            var sourceA = PlaceBalloon(0, 0, "Red");
+            var target1 = PlaceBalloon(1, 0, "Red");
+            var target2 = PlaceBalloon(2, 0, "Red");
+            var sourceB = PlaceBalloon(5, 9, "Red");
+
+            handler.Activate(sourceA, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
+            handler.Activate(sourceB, _grid.IndexToWorldPosition(new Vector2Int(5, 9)));
+
+            // Chain A's jumps land after B's activation collected its own targets — they must
+            // still hit A's targets (t1, t2, B), never A itself via B's refreshed list.
+            var chainA = FakeChainEffect.Prepared[0];
+            for (var i = 0; i < 3; i++)
+            {
+                chainA.OnTargetHit(i);
+            }
+
+            var hitActors = published.Select(m => m.Actor).ToList();
+            CollectionAssert.AreEquivalent(new object[] { target1, target2, sourceB }, hitActors);
         }
 
         private BalloonModel PlaceBalloon(int col, int row, string color)

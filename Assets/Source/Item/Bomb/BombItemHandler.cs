@@ -26,9 +26,6 @@ namespace BalloonParty.Item.Bomb
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
         private readonly DisturbanceFieldService _disturbanceField;
 
-        private IBalloonModel _balloon;
-        private Vector3 _worldPosition;
-
         public ItemType Type => ItemType.Bomb;
 
         [Inject]
@@ -48,13 +45,7 @@ namespace BalloonParty.Item.Bomb
             _disturbanceField = disturbanceField;
         }
 
-        public void Setup(IBalloonModel balloon, Vector3 worldPosition)
-        {
-            _balloon = balloon;
-            _worldPosition = worldPosition;
-        }
-
-        public UniTask Activate()
+        public UniTask Activate(IBalloonModel balloon, Vector3 worldPosition)
         {
             var settings = _itemConfig[ItemType.Bomb];
 
@@ -62,33 +53,36 @@ namespace BalloonParty.Item.Bomb
             // marked unstable by the blast's neighbor nudges.
             _nudgePublisher.Publish(new NudgeMessage(
                 null,
-                _worldPosition,
+                worldPosition,
                 NudgeType.Shockwave,
                 settings.Bomb.NudgeOverrides));
 
-            var sourceColorId = _balloon.GetColorId();
-            BlastBalloons(settings.Bomb.Radius, new DamageContext(settings.Damage, settings.Flags, sourceColorId));
-            _effectPlayer.Play(settings, _worldPosition, sourceColorId);
+            var sourceColorId = balloon.GetColorId();
+            BlastBalloons(balloon,
+                worldPosition,
+                settings.Bomb.Radius,
+                new DamageContext(settings.Damage, settings.Flags, sourceColorId));
+            _effectPlayer.Play(settings, worldPosition, sourceColorId);
 
-            _disturbanceField.Stamp(StampSource.Bomb, _worldPosition, Vector2.zero);
+            _disturbanceField.Stamp(StampSource.Bomb, worldPosition, Vector2.zero);
 
             return UniTask.CompletedTask;
         }
 
-        private void BlastBalloons(float radius, DamageContext context)
+        private void BlastBalloons(IBalloonModel balloon, Vector3 worldPosition, float radius, DamageContext context)
         {
-            var bombSlot = _balloon.SlotIndex.Value;
+            var bombSlot = balloon.SlotIndex.Value;
             HexCoordinates.HexNeighborIndices(bombSlot.x, bombSlot.y, _neighborBuffer);
 
             // Direct hex neighbors always receive piercing damage — the blast core
             // guarantees a kill regardless of HitsRemaining or Deflect logic.
             var piercingContext = new DamageContext(context.Damage, DamageFlags.Piercing, context.SourceColorId);
 
-            var count = Physics2D.OverlapCircle(_worldPosition, radius, _overlap.Filter, _overlapResults);
+            var count = Physics2D.OverlapCircle(worldPosition, radius, _overlap.Filter, _overlapResults);
 
             for (var i = 0; i < count; i++)
             {
-                if (!_overlap.TryResolveBalloon(_overlapResults[i], _balloon, out var balloonView, out var model))
+                if (!_overlap.TryResolveBalloon(_overlapResults[i], balloon, out var balloonView, out var model))
                 {
                     continue;
                 }
