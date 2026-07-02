@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Spawner;
+using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Game.Health;
 using BalloonParty.Shared.Extensions;
@@ -27,24 +28,18 @@ namespace BalloonParty.Game.Cinematics
     /// </summary>
     internal class HeartTrailCinematicEffect : MonoBehaviour
     {
-        [Header("Slow Motion")]
-        [SerializeField] private AnimationCurve _slowDownCurve = AnimationCurve.EaseInOut(0f, 1f, 0.6f, 0.3f);
-        [SerializeField] private float _restoreSeconds = 0.4f;
-
-        [Header("Camera")]
         [SerializeField] private Camera _camera;
-        [SerializeField] private float _zoomAmount = 0.5f;
-        [SerializeField] private float _panWeight = 0.7f;
-        [SerializeField] private float _followSpeed = 5f;
 
         [Inject] private CinematicDirector _director;
         [Inject] private OrthogonalSizeCameraController _orthoController;
         [Inject] private HeartTrailTracker _tracker;
         [Inject] private RejectedBalloonEffect _overflow;
         [Inject] private ISubscriber<OverflowHeartRequestedMessage> _heartRequestedSubscriber;
+        [Inject] private ICinematicsSettings _cinematicsSettings;
 
         private readonly List<Vector3> _trailPositions = new();
 
+        private CameraRigCinematicSettings _settings;
         private CinematicCameraRig _rig;
         private IDisposable _subscription;
         private Tween _timeScaleTween;
@@ -53,7 +48,11 @@ namespace BalloonParty.Game.Cinematics
 
         private void Awake()
         {
-            _rig = new CinematicCameraRig(_camera, _orthoController, _zoomAmount, _panWeight, _followSpeed);
+            // Injection precedes Awake here: GameLifetimeScope's execution order (-5001) builds the
+            // container before any other component wakes.
+            _settings = _cinematicsSettings.HeartDrain;
+            _rig = new CinematicCameraRig(
+                _camera, _orthoController, _settings.ZoomAmount, _settings.PanWeight, _settings.FollowSpeed);
         }
 
         private void Start()
@@ -89,7 +88,7 @@ namespace BalloonParty.Game.Cinematics
             KillTimeScaleTween();
 
             _director.BeginCinematic(CinematicState.HeartDrain);
-            _rig.PreparePanIn(_slowDownCurve.Duration());
+            _rig.PreparePanIn(_settings.SlowDownCurve.Duration());
             _director.PlayScene(new CinematicScene(onTick: DrainTick));
         }
 
@@ -98,8 +97,8 @@ namespace BalloonParty.Game.Cinematics
             var dt = Time.unscaledDeltaTime;
             _realElapsed += dt;
 
-            var curveT = Mathf.Clamp01(_realElapsed / _slowDownCurve.Duration());
-            Time.timeScale = _slowDownCurve.Evaluate(curveT);
+            var curveT = Mathf.Clamp01(_realElapsed / _settings.SlowDownCurve.Duration());
+            Time.timeScale = _settings.SlowDownCurve.Evaluate(curveT);
 
             if (_rig.HasCamera)
             {
@@ -134,14 +133,14 @@ namespace BalloonParty.Game.Cinematics
         {
             KillTimeScaleTween();
 
-            _timeScaleTween = DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, _restoreSeconds)
+            _timeScaleTween = DOTween.To(() => Time.timeScale, x => Time.timeScale = x, 1f, _settings.RestoreSeconds)
                 .SetEase(Ease.InOutQuad)
                 .SetUpdate(true)
                 .OnComplete(() => _director.CompleteScene());
 
             if (_rig.HasCamera)
             {
-                _rig.PrepareRestore(_restoreSeconds);
+                _rig.PrepareRestore(_settings.RestoreSeconds);
             }
 
             _director.PlayScene(new CinematicScene(onEnd: OnRestoreComplete));

@@ -67,7 +67,7 @@ namespace BalloonParty.Game.Run
 
         public void EndRun()
         {
-            if (_cinematic.BlocksLoss || _navigation.Current.Value != NavigationState.Game)
+            if (_cinematic.Has(CinematicTraits.BlocksLoss) || _navigation.Current.Value != NavigationState.Game)
             {
                 return;
             }

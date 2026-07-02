@@ -72,7 +72,9 @@ After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrails
 | `CinematicCameraRig.cs` | Cinematic camera (zoom/pan/restore). `FollowTrail` tracks one point; `FollowPoints` tracks the centroid + bounding-box of several |
 | `CinematicScene.cs` | Callback value object |
 | `Shared/GameState/Cinematic.cs` | Static reactive state + `ICinematicAware` listeners |
-| `Shared/GameState/CinematicState.cs` | Enum: `None`, `LevelUpPanIn`, `LevelUpRestore`, `HeartDrain`. `ICinematicState.BlocksLoss` and `BlocksShake` are true only for the level-up states — `HeartDrain` lets the 0-HP game-over fire and the camera shake punch through while it plays |
+| `Shared/GameState/CinematicState.cs` | Enum: `None`, `LevelUpPanIn`, `LevelUpRestore`, `HeartDrain` — identity only; behaviour lives in the traits table |
+| `Shared/GameState/CinematicTraits.cs` | `[Flags]` behavioural traits (`BlocksLoss`, `BlocksShake`); consumers query `ICinematicState.Has(trait)`. Level-up states declare both; `HeartDrain` declares none, so the 0-HP game-over fires and the camera shake punches through while it plays |
+| `Configuration/CinematicsSettings.cs` (SO + `ICinematicsSettings`) | **The single setup point for cinematics**: per-state traits (an `[EnumIndexed]` array — the field initializers are the canonical declarations) and each camera-rig cinematic's tuning block (`CameraRigCinematicSettings`: zoom/pan/follow + slow-mo/restore curves). Producers keep only their scene `Camera` reference. Unmapped states throw; `CinematicsSettingsTests` walks the enum so a new state without a declaration fails CI |
 | `Shared/GameState/CinematicEndGate.cs` | `IReadyGate` — waits for cinematic state change |
 | `Shared/Pool/TrailFlight.cs` | Per-trail flight controller (Pause/Resume/Complete/Speed) |
 | `Shared/Pool/TrailFlightRegistry.cs` | Registry with bulk operations (snapshot-safe `CompleteAll`) |

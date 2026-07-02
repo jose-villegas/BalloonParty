@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Configuration;
 using BalloonParty.Display;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
@@ -20,18 +21,10 @@ namespace BalloonParty.Game.Cinematics
 {
     internal class LevelUpTrailEffect : MonoBehaviour
     {
-        [Header("Slow Motion")]
-        [SerializeField] private AnimationCurve _slowDownCurve = AnimationCurve.EaseInOut(0f, 1f, 0.15f, 0.3f);
-        [SerializeField] private AnimationCurve _restoreCurve = AnimationCurve.EaseInOut(0f, 0.3f, 0.35f, 1f);
-
-        [Header("Camera")]
         [SerializeField] private Camera _camera;
-        [SerializeField] private float _zoomAmount = 0.5f;
-        [SerializeField] private float _cameraPanWeight = 0.7f;
-        [SerializeField] private float _cameraFollowSpeed = 5f;
-        [SerializeField] private AnimationCurve _trackedTrailScaleCurve = AnimationCurve.EaseInOut(0f, 2f, 1f, 1f);
 
         [Inject] private CinematicDirector _director;
+        [Inject] private ICinematicsSettings _cinematicsSettings;
         [Inject] private IGameConfiguration _config;
         [Inject] private ISubscriber<ScorePointMessage> _scoredSubscriber;
         [Inject] private ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
@@ -41,6 +34,7 @@ namespace BalloonParty.Game.Cinematics
         [Inject] private ScoreTrailService _scoreTrailService;
         [Inject] private PauseService _pauseService;
 
+        private CameraRigCinematicSettings _settings;
         private CinematicCameraRig _cameraRig;
         private Vector3 _lastTrailPosition;
         private float _realElapsed;
@@ -55,8 +49,11 @@ namespace BalloonParty.Game.Cinematics
 
         private void Awake()
         {
+            // Injection precedes Awake here: GameLifetimeScope's execution order (-5001) builds the
+            // container before any other component wakes.
+            _settings = _cinematicsSettings.LevelUp;
             _cameraRig = new CinematicCameraRig(
-                _camera, _orthoController, _zoomAmount, _cameraPanWeight, _cameraFollowSpeed);
+                _camera, _orthoController, _settings.ZoomAmount, _settings.PanWeight, _settings.FollowSpeed);
         }
 
         private void Start()
@@ -201,8 +198,8 @@ namespace BalloonParty.Game.Cinematics
             var dt = Time.unscaledDeltaTime;
             _realElapsed += dt;
 
-            var curveT = Mathf.Clamp01(_realElapsed / _slowDownCurve.Duration());
-            var speedFactor = _slowDownCurve.Evaluate(curveT);
+            var curveT = Mathf.Clamp01(_realElapsed / _settings.SlowDownCurve.Duration());
+            var speedFactor = _settings.SlowDownCurve.Evaluate(curveT);
             _trailElapsed += dt * speedFactor;
 
             if (AdvanceTrackedTrail())
@@ -224,7 +221,7 @@ namespace BalloonParty.Game.Cinematics
 
             var progress = Mathf.Clamp01(_trailElapsed / _config.ScorePointTraceDuration);
 
-            _trackedFlight.Transform.localScale = Vector3.one * _trackedTrailScaleCurve.Evaluate(progress);
+            _trackedFlight.Transform.localScale = Vector3.one * _cinematicsSettings.LevelUpTrackedTrailScaleCurve.Evaluate(progress);
 
             var target = _trailTargetWorld;
             target.z = 0f;
@@ -249,14 +246,14 @@ namespace BalloonParty.Game.Cinematics
         {
             _timeScaleTween?.Kill();
             _timeScaleTween = null;
-            _cameraRig.PreparePanIn(_slowDownCurve.Duration());
+            _cameraRig.PreparePanIn(_settings.SlowDownCurve.Duration());
         }
 
         private void PrepareRestore()
         {
             KillTweens();
 
-            var restoreDuration = _restoreCurve.Duration();
+            var restoreDuration = _settings.RestoreCurve.Duration();
             var elapsed = 0f;
 
             _timeScaleTween = DOTween.To(
@@ -264,7 +261,7 @@ namespace BalloonParty.Game.Cinematics
                     x =>
                     {
                         elapsed = x;
-                        Time.timeScale = _restoreCurve.Evaluate(x);
+                        Time.timeScale = _settings.RestoreCurve.Evaluate(x);
                     },
                     restoreDuration,
                     restoreDuration)

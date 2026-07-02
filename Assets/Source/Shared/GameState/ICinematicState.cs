@@ -1,25 +1,16 @@
 namespace BalloonParty.Shared.GameState
 {
     /// <summary>
-    ///     Injectable seam over the static <see cref="Cinematic"/> playing flag, so the
-    ///     run lifecycle can gate against an in-progress cinematic under test.
+    ///     Injectable seam over the static <see cref="Cinematic"/> state, so consumers can gate on an
+    ///     in-progress cinematic under test. Behaviour questions go through <see cref="Has"/> — the
+    ///     current cinematic's <see cref="CinematicTraits"/> are declared once per state in
+    ///     <c>Configuration/CinematicsSettings</c>, so consumers never enumerate states.
     /// </summary>
     internal interface ICinematicState
     {
         bool IsPlaying { get; }
 
-        /// <summary>
-        ///     True only while a cinematic that must not be interrupted by a loss is playing (the
-        ///     level-up states). The heart-drain cinematic is <em>not</em> loss-blocking — game-over
-        ///     fires at 0 HP even while it runs.
-        /// </summary>
-        bool BlocksLoss { get; }
-
-        /// <summary>
-        ///     True only while a cinematic hard-owns the camera and the shake must stand down (the
-        ///     level-up states). The heart-drain cinematic pans too, but its shakes are part of the
-        ///     drama — they fire per heart launch and the follow lerp absorbs them.
-        /// </summary>
-        bool BlocksShake { get; }
+        /// <summary>True while the current cinematic declares <paramref name="trait"/>.</summary>
+        bool Has(CinematicTraits trait);
     }
 }

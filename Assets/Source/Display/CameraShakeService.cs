@@ -14,8 +14,8 @@ namespace BalloonParty.Display
     ///     delta in <c>LateUpdate</c> — it composes with whatever else drives the camera (the
     ///     heart-drain pan just absorbs it) instead of fighting over the absolute position, so every
     ///     launch punches, not only the first. Runs unscaled so the drain's slow-mo can't stretch it;
-    ///     skipped only while a level-up cinematic owns the camera
-    ///     (<see cref="ICinematicState.BlocksShake"/>).
+    ///     skipped only while the current cinematic declares <see cref="CinematicTraits.BlocksShake"/>
+    ///     (the level-up states).
     /// </summary>
     internal class CameraShakeService : MonoBehaviour
     {
@@ -66,7 +66,7 @@ namespace BalloonParty.Display
 
         private void Shake()
         {
-            if (_camera == null || _cinematic.BlocksShake)
+            if (_camera == null || _cinematic.Has(CinematicTraits.BlocksShake))
             {
                 return;
             }
