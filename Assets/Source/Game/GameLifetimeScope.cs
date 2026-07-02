@@ -167,7 +167,7 @@ namespace BalloonParty.Game
             builder.Register<CinematicCameraRig>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<CinematicDirector>().AsSelf();
-            builder.RegisterComponentInHierarchy<LevelUpTrailEffect>();
+            builder.RegisterEntryPoint<LevelUpCinematic>();
             builder.RegisterEntryPoint<HeartDrainCinematic>();
             builder.RegisterComponentInHierarchy<GameOverScreen>();
 

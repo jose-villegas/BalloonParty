@@ -63,11 +63,23 @@ to 1 + rig restore); owns begin/end pairing and `Abort()` teardown.
 `CinematicDirector.TryBeginCinematic` centralizes the drop-while-busy policy.
 `HeartTrailCinematicEffect` (MonoBehaviour) is **deleted**, replaced by
 `HeartDrainCinematic` — a plain C# `IStartable` entry point that is just trigger + focus +
-end condition over the runner. **In-editor pending: remove the now-missing
-`HeartTrailCinematicEffect` component from `Cinema.prefab`** (script deleted); playtest
-the heart-drain. Phase 3c (level-up onto the runner — needs a split-phase mode, a
-no-timeScale pan-in variant, and a curve-evaluated restore-from-0) not started; the
-level-up trail path is the **known-fragile area** (see memory index) — it converts last.
+end condition over the runner. The missing component was removed from `Cinema.prefab` and the heart-drain playtested. —
+**DONE.**
+
+**Phase 3c implemented 2026-07-02:** the runner grew a `CameraRigCinematicConfig`
+(`DrivesTimeScale`, `RestoreEvaluatesCurve`, `OnPanInTick(dt, curveValue)` hook, `OnEnded`,
+nullable `EndCondition`) and the split-phase API (`TryBegin` … `EndPanIn` … external gate …
+`TryBeginRestore`; `IsPanInRunning`). `LevelUpTrailEffect` (MonoBehaviour) is **deleted**,
+replaced by plain-C# `LevelUpCinematic` (`RegisterEntryPoint`): the tipping-trail
+intercept/puppeteering ported verbatim into the tick hook (pan-in leaves timeScale alone —
+the curve modulates the trail; gameplay paused), restore samples its curve from the
+popup's frozen 0, `OnEnded` hands back `NavigationState.Game`. Both cinematics are now
+runner parameterizations; no cinematic MonoBehaviours remain except the camera view.
+**In-editor pending (blocking): remove the now-missing `LevelUpTrailEffect` component
+from `Cinema.prefab`** (if the prefab is now empty it can be deleted outright) — then a
+**full level-up playtest** (pan-in follow, popup gate, glow trails, restore, back to
+play): this is the known-fragile path. Remaining: Phase 5 (TimeScaleService + audit ban)
+and Phase 6 (camera-effect composer, deferred).
 
 **Decisions already locked** (from the loss/pacing work — don't re-litigate):
 - Heart-drain is non-loss-blocking (game-over fires through it) and non-shake-blocking.

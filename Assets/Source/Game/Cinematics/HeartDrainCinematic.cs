@@ -50,14 +50,13 @@ namespace BalloonParty.Game.Cinematics
 
         public void Start()
         {
-            _cinematic = new CameraRigCinematic(
-                _director,
-                _rig,
-                _settings,
-                CinematicState.HeartDrain,
-                CinematicState.HeartDrainRestore,
-                new HeartTrailFocus(_tracker),
-                ShouldEnd);
+            _cinematic = new CameraRigCinematic(_director, _rig, _settings, new CameraRigCinematicConfig
+            {
+                PanInState = CinematicState.HeartDrain,
+                RestoreState = CinematicState.HeartDrainRestore,
+                Focus = new HeartTrailFocus(_tracker),
+                EndCondition = ShouldEnd,
+            });
 
             _subscription = _heartRequestedSubscriber.Subscribe(_ => OnFirstHeart());
         }
