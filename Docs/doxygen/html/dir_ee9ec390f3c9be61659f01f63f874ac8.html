@@ -124,24 +124,25 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('dir_ee9ec390f3
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-subdirs" class="groupheader"><a id="subdirs" name="subdirs"></a>
 Directories</h2></td></tr>
+<tr class="memitem:Controller" id="r_Controller"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_b176905ad996c1e1ce33152c0e724b3a.html">Controller</a></td></tr>
 <tr class="memitem:Model" id="r_Model"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_64e0bae83bb9b62d804b07d2a4fcc1e2.html">Model</a></td></tr>
 <tr class="memitem:View" id="r_View"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_e6741528c47022722a76ca35ab4f2e3b.html">View</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-files" class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
-<tr class="memitem:ProjectileLifetimeScope_2Ecs" id="r_ProjectileLifetimeScope_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_projectile_lifetime_scope_8cs.html">ProjectileLifetimeScope.cs</a></td></tr>
 <tr class="memitem:ProjectilePoolChannel_2Ecs" id="r_ProjectilePoolChannel_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_projectile_pool_channel_8cs.html">ProjectilePoolChannel.cs</a></td></tr>
+<tr class="memitem:ProjectilePositionProvider_2Ecs" id="r_ProjectilePositionProvider_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_projectile_position_provider_8cs.html">ProjectilePositionProvider.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md263"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md622"></a>
 Projectile</h1>
 <p>The projectile is the ball fired by the thrower. It travels in a straight line, bounces off walls, and pops balloons on contact.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md264"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md623"></a>
 Gameplay</h1>
 <p>Each shot starts loaded on the thrower. When fired it moves freely across the screen, reflecting off the top, left, and right boundaries. Each bounce costs one shield. When shields are exhausted the projectile is destroyed, the grid rebalances, and the thrower reloads.</p>
 <p>On contact with a balloon the projectile absorbs that balloon's color. Consecutive hits of the same color increment the pop-count. From the second consecutive same-color hit onward (count ≥ 2), each hit grants the projectile an additional shield — the counter is not reset, so a long same-color streak continues awarding shields on every hit. Neighboring balloons nudge outward from the impact point using slot-based positions (logical grid positions, not visual transform positions) to ensure consistent nudge direction regardless of in-progress animations.</p>
 <p>When a hit returns <span class="tt">HitOutcome.Absorb</span>, <span class="tt">ProjectileView.OnAbsorb</span> is called — it publishes <span class="tt">ActorHitMessage(Absorb)</span>, sets <span class="tt">model.IsFree = false</span>, and calls <span class="tt">DestroyProjectile()</span>. Unbreakable balloons may return <span class="tt">Absorb</span> from <span class="tt">EvaluateHit</span> to absorb the projectile without being destroyed themselves.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md265"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md624"></a>
 Turn-based flow</h1>
 <p>The game follows a turn-based animation pipeline:</p>
 <ol type="1">
@@ -150,7 +151,7 @@ Turn-based flow</h1>
 <li><b>Spawn + balance</b> — <span class="tt">BalloonSpawner</span> spawns new lines, then publishes <span class="tt">BalanceBalloonsMessage</span> after all lines are placed.</li>
 </ol>
 <p>Balance was intentionally moved to post-death because mid-flight rebalancing caused animation conflicts — competing tweens, double-occupation visuals, and stale balance paths.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md266"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md625"></a>
 Pooling</h1>
 <p>The projectile is <b>pooled, not destroyed</b>. A single instance is created via <span class="tt">ProjectilePoolChannel</span> on first load and reused across turns. On death the projectile publishes messages but does not self-destruct — <span class="tt">ThrowerController</span> returns it to the pool and immediately re-gets it.</p>
 <ul>
@@ -164,11 +165,11 @@ Pooling</h1>
 </ul>
 <p><span class="tt">ProjectileView</span> calls <span class="tt">Enable()</span> on the first <span class="tt">FixedUpdate</span> frame where <span class="tt">IsFree</span> is true (fired) and <span class="tt">Disable()</span> on death and despawn.</p>
 <p>Shield orbs are hidden until the projectile is fired. <span class="tt">ProjectileShieldView</span> starts inactive on <span class="tt">Awake()</span> and is shown via <span class="tt">Show()</span> on the first <span class="tt">FixedUpdate</span> frame where <span class="tt">IsFree</span> is true.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md267"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md626"></a>
 Shield Visuals</h1>
 <p>The projectile carries N shield orbs (<span class="tt">SpriteRenderer</span> children) managed by <span class="tt">ProjectileShieldView</span>. Each orb represents one remaining shield and is slightly larger than the previous one. On load all orbs start at zero scale and scale up to match the starting shield count. When a shield is lost (wall bounce) the topmost visible orb scales to zero and <span class="tt">PSVFX_ShieldLose</span> plays. When a shield is gained (2 same-color pops) a new orb scales up and <span class="tt">PSVFX_ShieldGain</span> plays. Shield orbs tint to the current balloon color via DOTween color lerp. Wall bounces also spawn <span class="tt">PSVFX_ShieldBounce</span> at the impact point.</p>
 <p>All VFX are spawned via <span class="tt">ParticlePoolChannel</span> as world-space orphans — they are not children of the projectile and survive recycling independently.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md268"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md627"></a>
 How it works</h1>
 <ul>
 <li><b><span class="tt">ProjectileLifetimeScope</span></b> — <span class="tt">LifetimeScope</span> on the projectile prefab root. Registers <span class="tt">ProjectileView</span> and <span class="tt">ProjectileShieldView</span> via <span class="tt">RegisterComponentInHierarchy</span>. Has <span class="tt">autoRun</span> disabled — injection is handled by <span class="tt">InjectingPoolChannel</span>.</li>
@@ -176,11 +177,11 @@ How it works</h1>
 <li><b><span class="tt">IProjectileModel</span></b> — read-only interface exposing <span class="tt">IReadOnlyReactiveProperty&lt;string&gt; ColorName</span>, <span class="tt">IReadOnlyReactiveProperty&lt;int&gt; ShieldsRemaining</span>, and read-only plain properties (<span class="tt">Direction</span>, <span class="tt">Speed</span>, <span class="tt">IsFree</span>, <span class="tt">ColorPopCount</span>, <span class="tt">LastHitBalloon</span>). Used by shield UI and views that only observe state.</li>
 <li><b><span class="tt">IWriteableProjectileModel</span></b> — mutable interface extending <span class="tt">IProjectileModel</span>; re-declares reactive properties as <span class="tt">ReactiveProperty&lt;T&gt;</span> (via <span class="tt">new</span> keyword) and adds setters. Used by <span class="tt">ProjectileView</span>, <span class="tt">ThrowerController</span>, and cheats that mutate state.</li>
 <li><b><span class="tt">ProjectileModel</span></b> — concrete class implementing <span class="tt">IWriteableProjectileModel</span>. Only referenced at creation sites (<span class="tt">ThrowerController.LoadProjectile</span>).</li>
-<li><b><span class="tt">ProjectileView</span></b> — MonoBehaviour implementing <span class="tt">IPoolable</span>. Drives manual movement in <span class="tt">FixedUpdate</span>, checks bounds against <span class="tt">IGameConfiguration.LimitsClockwise</span>, reflects direction and clamps position on bounce. Handles <span class="tt">OnTriggerEnter2D</span> — resolves the <span class="tt">BalloonView</span> from the collider, tracks absorbed color, triggers shield gain on 2 consecutive same-color pops, calls <span class="tt">hitable.EvaluateHit(new DamageContext(1))</span> to get the pre-computed outcome, and publishes <span class="tt">ActorHitMessage</span> with that outcome embedded. <span class="tt">Absorb</span> outcomes route to <span class="tt">OnAbsorb</span> (internal method — publishes the hit message then calls <span class="tt">DestroyProjectile</span>). Publishes <span class="tt">ProjectileDestroyedMessage</span> and <span class="tt">BalanceBalloonsMessage</span> when shields reach zero. Neighbor nudging is handled by <span class="tt">BalloonNudgeHandler</span> on the balloon side.</li>
+<li><b><span class="tt">ProjectileView</span></b> — MonoBehaviour implementing <span class="tt">IPoolable</span>. Drives manual movement in <span class="tt">FixedUpdate</span>, checks bounds against <span class="tt">IGameConfiguration.LimitsClockwise</span>, reflects direction and clamps position on bounce. Handles <span class="tt">OnTriggerEnter2D</span> — resolves the <span class="tt">BalloonView</span> via <span class="tt">GetComponent&lt;BalloonView&gt;()</span> on the collider (O(1) when the collider lives on the same GameObject as <span class="tt">BalloonView</span>), tracks absorbed color, triggers shield gain on 2 consecutive same-color pops, calls <span class="tt">hitable.EvaluateHit(new DamageContext(1))</span> to get the pre-computed outcome, and publishes <span class="tt">ActorHitMessage</span> with that outcome embedded. <span class="tt">Absorb</span> outcomes route to <span class="tt">OnAbsorb</span> (internal method — publishes the hit message then calls <span class="tt">DestroyProjectile</span>). Publishes <span class="tt">ProjectileDestroyedMessage</span> and <span class="tt">BalanceBalloonsMessage</span> when shields reach zero. Neighbor nudging is handled by <span class="tt">BalloonNudgeHandler</span> on the balloon side.</li>
 <li><b><span class="tt">ProjectileTrail</span></b> — child MonoBehaviour on the trail GameObject. <span class="tt">Enable()</span>/<span class="tt">Disable()</span> manage <span class="tt">TrailRenderer</span> emitting state using <span class="tt">async UniTaskVoid</span> with <span class="tt">destroyCancellationToken</span>. Not <span class="tt">IPoolable</span> — lifecycle follows the pooled projectile parent.</li>
 <li><b><span class="tt">ProjectileShieldView</span></b> — MonoBehaviour on the projectile prefab. Subscribes to <span class="tt">ShieldsRemaining</span> and <span class="tt">ColorName</span> via UniRx. Scales shield orb sprites, tints them to the current color, and spawns gain/lose/bounce VFX via <span class="tt">ParticlePoolChannel</span>.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md269"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md628"></a>
 Interactions</h1>
 <ul>
 <li><b>ThrowerController</b> — gets/returns projectile via <span class="tt">PoolManager</span> + <span class="tt">ProjectilePoolChannel</span>; binds to a fresh <span class="tt">ProjectileModel</span>; reloads on <span class="tt">ProjectileDestroyedMessage</span></li>
@@ -189,7 +190,8 @@ Interactions</h1>
 <li><b>BalanceBalloonsMessage</b> — published on projectile death so the grid rebalances</li>
 <li><b>ProjectileDestroyedMessage</b> — published on death to signal the thrower to reload</li>
 <li><b>PoolManager</b> — provides <span class="tt">ParticlePoolChannel</span> for VFX and <span class="tt">ProjectilePoolChannel</span> for projectile lifecycle</li>
-<li><b>IGameConfiguration</b> — provides <span class="tt">LimitsClockwise</span>, <span class="tt">ProjectileSpeed</span>, <span class="tt">ProjectileStartingShields</span>, <span class="tt">NudgeDistance</span>, <span class="tt">NudgeDuration</span> </li>
+<li><b>IGameConfiguration</b> — provides <span class="tt">LimitsClockwise</span>, <span class="tt">ProjectileSpeed</span>, <span class="tt">ProjectileStartingShields</span>, <span class="tt">NudgeDistance</span>, <span class="tt">NudgeDuration</span></li>
+<li><b>DisturbanceFieldService</b> — <span class="tt">ProjectileView</span> injects the shared disturbance field and calls <span class="tt">Stamp()</span> in <span class="tt">MoveAndBounce()</span> after position update, using the <span class="tt">Projectile</span> stamp profile from <span class="tt">DisturbanceFieldSettings</span>. Creates visible wakes through Puff clouds </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->

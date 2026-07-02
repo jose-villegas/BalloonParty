@@ -8,30 +8,36 @@
 <area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="391,129,466,110,461,113,394,134"/>
 <area shape="rect" id="Node000010" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_writeable_dynamic_slot_actor.html" title=" " alt="" coords="448,136,633,177"/>
 <area shape="poly" id="edge9_Node000002_Node000010" title=" " alt="" coords="398,154,450,155,445,157,400,159"/>
-<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_balloon_1_1_model_1_1_i_writeable_balloon_model.html" title=" " alt="" coords="697,104,881,145"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="647,103,699,111,694,113,648,108"/>
-<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_balloon_1_1_model_1_1_balloon_model_base.html" title=" " alt="" coords="929,104,1112,145"/>
-<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="895,122,931,124,926,125,896,127"/>
-<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_balloon_1_1_model_1_1_balloon_model.html" title=" " alt="" coords="1160,5,1343,46"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1076,94,1159,57,1194,46,1189,48,1161,61,1078,99"/>
-<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_balloon_1_1_model_1_1_bubble_cluster_model.html" title="Model for BalloonType.BubbleCluster." alt="" coords="1160,71,1343,111"/>
-<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="1127,106,1162,104,1157,105,1128,112"/>
-<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_balloon_1_1_model_1_1_tough_balloon_model.html" title=" " alt="" coords="1160,136,1343,177"/>
-<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="1127,136,1162,143,1157,144,1127,142"/>
-<area shape="rect" id="Node000009" href="$class_balloon_party_1_1_balloon_1_1_model_1_1_unbreakable_balloon_model.html" title=" " alt="" coords="1160,201,1343,242"/>
-<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="1078,149,1161,186,1194,201,1189,201,1159,191,1078,154"/>
-<area shape="poly" id="edge10_Node000010_Node000004" title=" " alt="" coords="648,140,699,135,694,137,650,145"/>
-<area shape="poly" id="edge17_Node000011_Node000010" title=" " alt="" coords="325,285,371,235,399,209,431,187,459,176,455,179,433,192,403,214,375,239,329,289"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_balloon_1_1_model_1_1_i_writeable_balloon_model.html" title=" " alt="" coords="706,104,890,145"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="648,102,708,112,703,113,649,107"/>
+<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_balloon_1_1_model_1_1_balloon_model_base.html" title=" " alt="" coords="947,104,1130,145"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="905,122,949,124,944,125,906,127"/>
+<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_balloon_1_1_model_1_1_balloon_model.html" title=" " alt="" coords="1178,5,1361,46"/>
+<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="1094,94,1177,57,1212,46,1207,48,1179,61,1096,99"/>
+<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_balloon_1_1_model_1_1_bubble_cluster_model.html" title="Model for BalloonType.BubbleCluster." alt="" coords="1178,71,1361,111"/>
+<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="1145,106,1180,104,1175,105,1146,112"/>
+<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_balloon_1_1_model_1_1_tough_balloon_model.html" title=" " alt="" coords="1178,136,1361,177"/>
+<area shape="poly" id="edge7_Node000005_Node000008" title=" " alt="" coords="1145,136,1180,143,1175,144,1145,142"/>
+<area shape="rect" id="Node000009" href="$class_balloon_party_1_1_balloon_1_1_model_1_1_unbreakable_balloon_model.html" title=" " alt="" coords="1178,201,1361,242"/>
+<area shape="poly" id="edge8_Node000005_Node000009" title=" " alt="" coords="1096,149,1179,186,1212,201,1207,201,1177,191,1096,154"/>
+<area shape="poly" id="edge10_Node000010_Node000004" title=" " alt="" coords="648,140,708,135,703,137,650,145"/>
+<area shape="poly" id="edge21_Node000011_Node000010" title=" " alt="" coords="325,285,371,235,399,209,431,187,459,176,455,179,433,192,403,214,375,239,329,289"/>
 <area shape="rect" id="Node000012" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_absorber_actor_model.html" title=" " alt="" coords="440,201,642,242"/>
 <area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="353,289,431,253,469,241,464,244,433,257,355,294"/>
-<area shape="rect" id="Node000013" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_bush_obstacle_model.html" title=" " alt="" coords="440,267,641,307"/>
-<area shape="poly" id="edge13_Node000011_Node000013" title=" " alt="" coords="398,303,442,299,437,301,400,308"/>
-<area shape="rect" id="Node000014" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_deflector_actor_model.html" title=" " alt="" coords="439,332,642,373"/>
-<area shape="poly" id="edge14_Node000011_Node000014" title=" " alt="" coords="399,330,441,338,436,339,400,335"/>
-<area shape="rect" id="Node000015" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_gatekeeper_actor_model.html" title=" " alt="" coords="432,397,649,438"/>
+<area shape="rect" id="Node000013" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_deflector_actor_model.html" title=" " alt="" coords="439,267,642,307"/>
+<area shape="poly" id="edge13_Node000011_Node000013" title=" " alt="" coords="398,303,441,300,436,302,400,308"/>
+<area shape="rect" id="Node000014" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_gatekeeper_actor_model.html" title=" " alt="" coords="432,332,649,373"/>
+<area shape="poly" id="edge14_Node000011_Node000014" title=" " alt="" coords="399,330,434,337,429,338,399,335"/>
+<area shape="rect" id="Node000015" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_i_grid_actor_model.html" title="A static grid actor that knows its own GridActorType, so the spawner can match and return it without ..." alt="" coords="452,397,630,438"/>
 <area shape="poly" id="edge15_Node000011_Node000015" title=" " alt="" coords="353,344,433,382,469,397,463,397,431,387,353,350"/>
-<area shape="rect" id="Node000016" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_puff_obstacle_model.html" title=" " alt="" coords="443,463,638,503"/>
-<area shape="poly" id="edge16_Node000011_Node000016" title=" " alt="" coords="328,349,374,400,403,426,433,447,460,462,455,462,431,452,399,430,371,404,326,354"/>
-<area shape="rect" id="Node000017" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_static_actor_model.html" title=" " alt="" coords="458,528,623,569"/>
-<area shape="poly" id="edge18_Node000011_Node000017" title=" " alt="" coords="317,351,337,390,362,433,395,476,434,513,460,530,455,529,430,517,391,480,358,436,332,392,315,356"/>
+<area shape="rect" id="Node000018" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_cluster_1_1_i_clusterable_slot_actor.html" title="A slot actor that can participate in adjacency&#45;based cluster grouping." alt="" coords="446,463,636,503"/>
+<area shape="poly" id="edge18_Node000011_Node000018" title=" " alt="" coords="328,349,374,400,403,426,433,447,460,462,455,462,431,452,399,430,371,404,326,354"/>
+<area shape="rect" id="Node000019" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_static_actor_model.html" title=" " alt="" coords="458,528,623,569"/>
+<area shape="poly" id="edge22_Node000011_Node000019" title=" " alt="" coords="317,351,337,390,362,433,395,476,434,513,460,530,455,529,430,517,391,480,358,436,332,392,315,356"/>
+<area shape="rect" id="Node000016" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_bush_obstacle_model.html" title=" " alt="" coords="697,463,899,503"/>
+<area shape="poly" id="edge16_Node000015_Node000016" title=" " alt="" coords="638,440,718,462,712,462,638,445"/>
+<area shape="rect" id="Node000017" href="$class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_puff_obstacle_model.html" title=" " alt="" coords="700,397,896,438"/>
+<area shape="poly" id="edge17_Node000015_Node000017" title=" " alt="" coords="645,415,702,417,697,418,646,420"/>
+<area shape="poly" id="edge19_Node000018_Node000016" title=" " alt="" coords="651,480,699,483,694,483,652,486"/>
+<area shape="poly" id="edge20_Node000018_Node000017" title=" " alt="" coords="638,456,712,439,718,438,639,461"/>
 </map>

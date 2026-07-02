@@ -128,21 +128,21 @@ Files</h2></td></tr>
 <tr class="memitem:PredictionTraceView_2Ecs" id="r_PredictionTraceView_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_prediction_trace_view_8cs.html">PredictionTraceView.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md257"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md616"></a>
 Prediction</h1>
 <p>Prediction trace system — draws a dotted line showing the projectile's predicted trajectory while the player is aiming.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md258"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md617"></a>
 Architecture</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md259"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md618"></a>
 PredictionTraceCalculator</h2>
 <p>Pure C# class (no MonoBehaviour) that takes an origin, direction, and reusable <span class="tt">List&lt;Vector3&gt;</span>, then fills it with world-space trace points by stepping forward and reflecting off walls. Bounces off left, right, and top limits (from <span class="tt">LimitsClockwise</span>). A top-wall hit terminates further bounces.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md260"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md619"></a>
 PredictionTraceView</h2>
 <p>MonoBehaviour with a <span class="tt">LineRenderer</span>. Call <span class="tt">SetTrace(points)</span> to update or <span class="tt">Clear()</span> to hide. Attach to the Thrower prefab alongside a <span class="tt">LineRenderer</span>.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md261"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md620"></a>
 Integration</h2>
 <p><span class="tt">ThrowerController</span> owns a <span class="tt">PredictionTraceCalculator</span> and finds a <span class="tt">PredictionTraceView</span> via <span class="tt">GetComponentInChildren</span>. During <span class="tt">Update</span>, while the player holds the mouse button and the projectile hasn't been fired, it calculates the trace and pushes it to the view. On fire or release, the line is cleared.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md262"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md621"></a>
 Unity Setup</h1>
 <ol type="1">
 <li>Add a child GameObject to the Thrower prefab</li>

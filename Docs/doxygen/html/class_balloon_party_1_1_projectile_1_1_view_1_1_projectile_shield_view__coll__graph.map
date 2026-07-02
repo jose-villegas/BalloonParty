@@ -1,28 +1,26 @@
 <map id="BalloonParty.Projectile.View.ProjectileShieldView" name="BalloonParty.Projectile.View.ProjectileShieldView">
-<area shape="rect" id="Node000001" title=" " alt="" coords="890,146,1061,186"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="608,5,719,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="734,27,801,43,867,70,918,106,958,146,953,145,915,110,864,75,799,48,735,32"/>
-<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_configuration_1_1_game_palette.html" title=" " alt="" coords="574,55,753,96"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="768,96,866,122,926,145,921,145,865,127,768,101"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="252,25,369,51"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="384,40,551,54,576,59,571,61,550,59,385,45"/>
-<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_configuration_1_1_palette_entry.html" title=" " alt="" coords="222,75,400,116"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="415,87,576,79,571,82,416,92"/>
-<area shape="rect" id="Node000006" href="$interface_balloon_party_1_1_shared_1_1_i_game_configuration.html" title=" " alt="" coords="220,143,401,184"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="416,160,425,160,646,158,866,160,892,162,887,163,866,165,646,163,425,165,418,165"/>
-<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_slots_1_1_grid_1_1_slot_grid.html" title=" " alt="" coords="584,191,743,232"/>
-<area shape="poly" id="edge9_Node000008_Node000006" title=" " alt="" coords="416,181,426,183,586,204,581,205,425,188,417,186"/>
-<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html" title=" " alt="" coords="577,256,750,297"/>
-<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="764,255,815,241,865,224,905,205,939,188,944,186,907,210,867,229,816,246,765,260"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="758,197,865,183,892,181,887,182,866,188,759,203"/>
-<area shape="rect" id="Node000009" href="$class_balloon_party_1_1_slots_1_1_grid_1_1_balance_path_holder.html" title="Tracks grid slots that are currently in&#45;transit due to balance animations." alt="" coords="231,212,390,253"/>
-<area shape="poly" id="edge8_Node000008_Node000009" title=" " alt="" coords="405,239,477,240,550,236,589,232,584,233,551,241,477,246,406,244"/>
-<area shape="rect" id="Node000010" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_writeable_slot_actor.html" title=" " alt="" coords="228,278,393,318"/>
-<area shape="poly" id="edge10_Node000008_Node000010" title=" " alt="" coords="409,300,480,293,516,283,549,270,561,257,573,243,594,233,599,231,576,247,565,261,552,274,517,288,481,298,409,306"/>
-<area shape="rect" id="Node000011" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor.html" title=" " alt="" coords="5,278,171,318"/>
-<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="186,296,230,297,225,299,187,301"/>
-<area shape="rect" id="Node000012" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor_view.html" title=" " alt="" coords="228,343,393,384"/>
-<area shape="poly" id="edge12_Node000008_Node000012" title=" " alt="" coords="409,371,445,369,482,362,518,349,549,329,557,319,560,310,561,289,561,266,564,255,572,243,587,234,592,231,576,247,569,257,566,267,566,289,566,311,561,322,552,332,520,354,484,367,446,374,409,376"/>
-<area shape="rect" id="Node000013" href="$interface_balloon_party_1_1_projectile_1_1_model_1_1_i_projectile_model.html" title=" " alt="" coords="586,322,741,362"/>
-<area shape="poly" id="edge13_Node000001_Node000013" title=" " alt="" coords="756,323,811,306,864,280,893,259,919,233,958,188,962,186,923,237,897,263,867,285,813,311,757,328"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="917,146,1088,186"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="635,5,746,31"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="761,27,828,43,894,70,945,106,985,146,980,145,942,110,891,75,826,48,762,32"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_configuration_1_1_i_game_palette.html" title=" " alt="" coords="601,55,780,96"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="795,96,893,122,953,145,948,145,892,127,795,101"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_shared_1_1_i_game_configuration.html" title=" " alt="" coords="247,132,428,173"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="444,151,893,160,919,163,914,163,893,165,444,157"/>
+<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_slots_1_1_grid_1_1_slot_grid.html" title=" " alt="" coords="611,191,770,232"/>
+<area shape="poly" id="edge8_Node000006_Node000004" title=" " alt="" coords="420,175,453,183,534,195,613,206,608,206,533,201,452,188,420,180"/>
+<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html" title=" " alt="" coords="604,256,777,297"/>
+<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="791,255,842,241,892,224,932,205,966,188,971,186,934,210,894,229,843,246,792,260"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="785,197,892,183,919,181,914,182,893,188,786,203"/>
+<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_slots_1_1_grid_1_1_balance_path_holder.html" title="Tracks grid slots that are currently in&#45;transit due to balance animations." alt="" coords="258,207,417,248"/>
+<area shape="poly" id="edge6_Node000006_Node000007" title=" " alt="" coords="433,236,504,239,577,236,616,232,611,233,578,241,504,245,433,242"/>
+<area shape="rect" id="Node000008" href="$interface_balloon_party_1_1_game_1_1_run_1_1_i_run_resettable.html" title="Implemented by services holding per&#45;run state that must be cleared when a run restarts." alt="" coords="5,207,198,248"/>
+<area shape="poly" id="edge7_Node000007_Node000008" title=" " alt="" coords="213,225,260,227,255,228,214,230"/>
+<area shape="rect" id="Node000009" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_writeable_slot_actor.html" title=" " alt="" coords="255,272,420,313"/>
+<area shape="poly" id="edge9_Node000006_Node000009" title=" " alt="" coords="435,297,507,290,542,281,576,268,588,257,600,243,621,233,626,232,603,247,592,260,579,273,544,286,508,295,436,302"/>
+<area shape="rect" id="Node000010" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor.html" title=" " alt="" coords="19,272,184,313"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="199,290,257,292,252,294,200,295"/>
+<area shape="rect" id="Node000011" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor_view.html" title=" " alt="" coords="255,338,420,378"/>
+<area shape="poly" id="edge11_Node000006_Node000011" title=" " alt="" coords="436,366,473,364,510,357,545,344,576,324,583,316,587,307,588,287,588,265,599,243,614,234,619,231,603,247,593,266,593,287,592,308,588,318,579,329,547,349,511,362,473,369,436,371"/>
+<area shape="rect" id="Node000012" href="$interface_balloon_party_1_1_projectile_1_1_model_1_1_i_projectile_model.html" title=" " alt="" coords="613,322,768,362"/>
+<area shape="poly" id="edge12_Node000001_Node000012" title=" " alt="" coords="783,323,838,306,891,280,920,259,946,233,985,188,989,186,950,237,924,263,894,285,840,311,784,328"/>
 </map>

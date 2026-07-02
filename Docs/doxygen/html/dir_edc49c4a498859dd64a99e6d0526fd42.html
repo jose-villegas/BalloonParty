@@ -130,15 +130,23 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('dir_edc49c4a49
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-files" class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
+<tr class="memitem:CameraRigCinematic_2Ecs" id="r_CameraRigCinematic_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_camera_rig_cinematic_8cs.html">CameraRigCinematic.cs</a></td></tr>
+<tr class="memitem:CameraRigCinematicConfig_2Ecs" id="r_CameraRigCinematicConfig_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_camera_rig_cinematic_config_8cs.html">CameraRigCinematicConfig.cs</a></td></tr>
+<tr class="memitem:CinematicCameraRig_2Ecs" id="r_CinematicCameraRig_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_cinematic_camera_rig_8cs.html">CinematicCameraRig.cs</a></td></tr>
+<tr class="memitem:CinematicCameraView_2Ecs" id="r_CinematicCameraView_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_cinematic_camera_view_8cs.html">CinematicCameraView.cs</a></td></tr>
 <tr class="memitem:CinematicDirector_2Ecs" id="r_CinematicDirector_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_cinematic_director_8cs.html">CinematicDirector.cs</a></td></tr>
 <tr class="memitem:CinematicScene_2Ecs" id="r_CinematicScene_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_cinematic_scene_8cs.html">CinematicScene.cs</a></td></tr>
-<tr class="memitem:LevelUpTrailEffect_2Ecs" id="r_LevelUpTrailEffect_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_level_up_trail_effect_8cs.html">LevelUpTrailEffect.cs</a></td></tr>
+<tr class="memitem:HeartDrainCinematic_2Ecs" id="r_HeartDrainCinematic_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_heart_drain_cinematic_8cs.html">HeartDrainCinematic.cs</a></td></tr>
+<tr class="memitem:HeartTrailFocus_2Ecs" id="r_HeartTrailFocus_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_heart_trail_focus_8cs.html">HeartTrailFocus.cs</a></td></tr>
+<tr class="memitem:ICinematicFocus_2Ecs" id="r_ICinematicFocus_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_i_cinematic_focus_8cs.html">ICinematicFocus.cs</a></td></tr>
+<tr class="memitem:LevelUpCinematic_2Ecs" id="r_LevelUpCinematic_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_level_up_cinematic_8cs.html">LevelUpCinematic.cs</a></td></tr>
+<tr class="memitem:PointFocus_2Ecs" id="r_PointFocus_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_point_focus_8cs.html">PointFocus.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md77"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md108"></a>
 Cinematics</h1>
 <p>Orchestrates cinematic sequences during gameplay — trail slow-motion, camera zoom/pan, and restore transitions.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md78"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md109"></a>
 Architecture</h1>
 <p>The system follows a <b>producer → director → scene</b> pattern:</p>
 <table class="markdownTable">
@@ -149,13 +157,15 @@ Architecture</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>Scene</b> (<span class="tt">CinematicScene</span>)  </td><td class="markdownTableBodyNone">Plain C# (sealed)  </td><td class="markdownTableBodyNone">Value object holding <span class="tt">OnBegin</span>, <span class="tt">OnTick</span>, <span class="tt">OnLateTick</span>, <span class="tt">OnEnd</span> callbacks  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>Producer</b> (<span class="tt">LevelUpTrailEffect</span>)  </td><td class="markdownTableBodyNone"><span class="tt">MonoBehaviour</span>  </td><td class="markdownTableBodyNone">Detects level-up conditions, creates scenes, signals the director  </td></tr>
+<td class="markdownTableBodyNone"><b>Runner</b> (<span class="tt">CameraRigCinematic</span>)  </td><td class="markdownTableBodyNone">Plain C#  </td><td class="markdownTableBodyNone">The reusable pan-in → restore shape; owns begin/end pairing and teardown  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Producer</b> (<span class="tt">LevelUpCinematic</span>, <span class="tt">HeartDrainCinematic</span>)  </td><td class="markdownTableBodyNone">Plain C# <span class="tt">IStartable</span>  </td><td class="markdownTableBodyNone">Detects its trigger, hands the runner a config (states, focus, end condition, hooks)  </td></tr>
 </table>
 <p>The director does not know about level-ups, trails, or cameras. Producers define all domain-specific behaviour via scene callbacks.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md79"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md110"></a>
 Level-Up Trail Flow</h1>
-<p><span class="tt">LevelUpTrailEffect</span> produces <b>two cinematics</b> per level-up, separated by the level-up popup.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md80"></a>
+<p><span class="tt">LevelUpCinematic</span> produces <b>two cinematics</b> per level-up, separated by the level-up popup (the runner's split-phase form: <span class="tt">TryBegin</span> … <span class="tt">EndPanIn</span> … gate … <span class="tt">TryBeginRestore</span>).</p>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md111"></a>
 Cinematic 1 — Pan-In (<span class="tt">CinematicState.LevelUpPanIn</span>)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -173,11 +183,11 @@ Cinematic 1 — Pan-In (<span class="tt">CinematicState.LevelUpPanIn</span>)</h2
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>End</b>  </td><td class="markdownTableBodyNone"><span class="tt">CompleteAll()</span> finishes stragglers, <span class="tt">EndCinematic()</span> → gate opens → popup shows  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md81"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md112"></a>
 Gate — Popup Wait + Glow Trails</h2>
 <p><span class="tt">LevelUpLifetimeScope</span> registers <span class="tt">CinematicEndGate(CinematicState.LevelUpPanIn)</span> as <span class="tt">IReadyGate</span>. Popup waits until <span class="tt">Cinematic.Current != LevelUpPanIn</span>. When the gate opens, the popup sets <span class="tt">Time.timeScale = 0</span> to freeze balloons/particles.</p>
 <p>After the appear animation finishes, <span class="tt">LevelUpPopUp</span> publishes <span class="tt">LevelUpGlowTrailsMessage</span> — each <span class="tt">ColorProgressBar</span> drains its slider in sync — then spawns decorative <span class="tt">FlyingTrail</span> orbs from each bar to the glow fill in unscaled time. When all glow trails arrive, the level label updates. No cinematic state is active during this phase.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md82"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md113"></a>
 Cinematic 2 — Restore (<span class="tt">CinematicState.LevelUpRestore</span>)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -185,11 +195,11 @@ Cinematic 2 — Restore (<span class="tt">CinematicState.LevelUpRestore</span>)<
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Trigger</b>  </td><td class="markdownTableBodyNone"><span class="tt">LevelUpDismissedMessage</span> (player pressed Continue)  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>Prepare</b>  </td><td class="markdownTableBodyNone"><span class="tt">BeginCinematic(LevelUpRestore)</span>, <span class="tt">Resume(Cinematic)</span>, ramp <span class="tt">Time.timeScale</span> via <span class="tt">_restoreCurve</span> (0.3 → 1.0), camera tweens back to base  </td></tr>
+<td class="markdownTableBodyNone"><b>Prepare</b>  </td><td class="markdownTableBodyNone"><span class="tt">TryBeginRestore()</span> → <span class="tt">BeginCinematic(LevelUpRestore)</span>, <span class="tt">Resume(Cinematic)</span>, <span class="tt">Time.timeScale</span> sampled from the restore segment's curve (popup's frozen 0 → 1), camera tweens back to base  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>End</b>  </td><td class="markdownTableBodyNone"><span class="tt">OnRestoreComplete</span> → <span class="tt">RestoreCamera()</span> enforces exact base values, <span class="tt">EndCinematic()</span>, <span class="tt">NavigationState.Game</span>  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md83"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md114"></a>
 Pause Integration</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -199,52 +209,66 @@ Pause Integration</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Trail spawning  </td><td class="markdownTableBodyNone">Not gated — projectile is frozen so no new pops occur; scatter-delayed trails from the triggering pop complete before the popup  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone">Balloon animators/particles  </td><td class="markdownTableBodyNone"><span class="tt">Time.timeScale = 0</span> when popup shows  </td></tr>
+<td class="markdownTableBodyNone">Balloon animators/particles  </td><td class="markdownTableBodyNone">popup claims <span class="tt">TimeScaleSource.LevelUpPopup</span> = 0 via <span class="tt">TimeScaleService</span>  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Popup UI  </td><td class="markdownTableBodyNone"><span class="tt">AnimatorUpdateMode.UnscaledTime</span> + <span class="tt">ignoreTimeScale</span> delays  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Score trails (non-tipping)  </td><td class="markdownTableBodyNone">Never paused — fly at normal speed during cinematic  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md84"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md115"></a>
 Trail Identity</h2>
 <p><span class="tt">TrailId(Color, Score, Level)</span> — color needed because <span class="tt">_projectedProgress</span> is per-color; level prevents post-reset collisions when progress restarts.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md85"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md116"></a>
 Camera Reference</h1>
-<p><span class="tt">LevelUpTrailEffect</span> holds the camera as <span class="tt">[SerializeField]</span> — avoids <span class="tt">Camera.main</span> fragility on Android.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md86"></a>
+<p><span class="tt">CinematicCameraView</span> (on the Main Camera) is the single scene holder of the camera the shared rig drives — serialized reference with a lazy <span class="tt">Camera.main</span> fallback (avoids <span class="tt">Camera.main</span> fragility on Android when wired).</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md117"></a>
 Files</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File  </th><th class="markdownTableHeadNone">Role  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_level_up_trail_effect_8cs.html">LevelUpTrailEffect.cs</a></span>  </td><td class="markdownTableBodyNone">Cinematic orchestrator (MonoBehaviour, View layer)  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_level_up_cinematic_8cs.html">LevelUpCinematic.cs</a></span>  </td><td class="markdownTableBodyNone">Level-up producer (plain C# <span class="tt">IStartable</span>): intercepts the tipping trail and puppets it along the pan-in curve (gameplay paused — timeScale untouched), split phases around the popup gate, restore samples its curve from the popup's frozen 0  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_cinematic_director_8cs.html">CinematicDirector.cs</a></span>  </td><td class="markdownTableBodyNone">Scene/state lifecycle (plain C#, Controller layer)  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_camera_rig_cinematic_8cs.html">CameraRigCinematic.cs</a></span>  </td><td class="markdownTableBodyNone"><b>The reusable camera-rig cinematic runner</b> (plain C#): pan-in segment (per-tick timeScale drive + <span class="tt">Frame(focus, segment, dt)</span>) until an end condition, then a restore segment (timeScale eased to 1 from wherever it is + camera back to base). Owns begin/end pairing and teardown (<span class="tt">Abort</span>), guards concurrency via <span class="tt">CinematicDirector.TryBeginCinematic</span>. A producer = this + a trigger + a focus + an end condition  </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_heart_drain_cinematic_8cs.html">HeartDrainCinematic.cs</a></span>  </td><td class="markdownTableBodyNone">Overflow heart-drain producer (plain C# <span class="tt">IStartable</span>): on the first <span class="tt">OverflowHeartRequestedMessage</span>, runs the runner with <span class="tt">HeartDrain</span>/<span class="tt">HeartDrainRestore</span>, a <span class="tt">HeartTrailFocus</span>, and "pile drained or run over" as the end condition. Neither loss-blocking (the 0-HP game-over still fires) nor shake-blocking (each heart launch punches the camera through the pan, unscaled so slow-mo can't stretch it)  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_cinematic_director_8cs.html">CinematicDirector.cs</a></span>  </td><td class="markdownTableBodyNone">Scene/state lifecycle (plain C#, Controller layer). <span class="tt">TryBeginCinematic</span> is the concurrency policy in one place (drop while busy); <span class="tt">BeginCinematic</span> switches state mid-cinematic (restore phases)  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_cinematic_camera_rig_8cs.html">CinematicCameraRig.cs</a></span>  </td><td class="markdownTableBodyNone">The <b>one shared</b> cinematic camera driver (DI singleton): <span class="tt">PreparePanIn(segment)</span> / <span class="tt">Frame(focus, segment, dt)</span> / <span class="tt">PrepareRestore</span> / <span class="tt">Restore</span>. Tuning comes per call from the active state's segment; the focus supplies what to frame  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_cinematic_camera_view_8cs.html">CinematicCameraView.cs</a></span>  </td><td class="markdownTableBodyNone">Thin scene View holding the <span class="tt">Camera</span> the rig drives (lazy <span class="tt">Camera.main</span> fallback) — replaces the per-producer serialized camera refs and their per-scene prefab overrides  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_i_cinematic_focus_8cs.html">ICinematicFocus.cs</a></span> + <span class="tt">PointFocus</span> / <span class="tt">HeartTrailFocus</span>  </td><td class="markdownTableBodyNone">What the camera frames each tick: one live point (level-up tipping trail — hard-clamped in frustum) or the heart trails' centroid + bounding box (pre-clamped so new far trails slide in)  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_cinematic_scene_8cs.html">CinematicScene.cs</a></span>  </td><td class="markdownTableBodyNone">Callback value object  </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_cinematic_8cs.html">Shared/GameState/Cinematic.cs</a></span>  </td><td class="markdownTableBodyNone">Static reactive state + <span class="tt">ICinematicAware</span> listeners  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_cinematic_state_8cs.html">Shared/GameState/CinematicState.cs</a></span>  </td><td class="markdownTableBodyNone">Enum: <span class="tt">None</span>, <span class="tt">LevelUpPanIn</span>, <span class="tt">LevelUpRestore</span>  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_cinematic_state_8cs.html">Shared/GameState/CinematicState.cs</a></span>  </td><td class="markdownTableBodyNone">Enum: <span class="tt">None</span>, <span class="tt">LevelUpPanIn</span>, <span class="tt">LevelUpRestore</span>, <span class="tt">HeartDrain</span>, <span class="tt">HeartDrainRestore</span> — identity only; behaviour and tuning live in <span class="tt">CinematicsSettings</span>  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_cinematic_traits_8cs.html">Shared/GameState/CinematicTraits.cs</a></span>  </td><td class="markdownTableBodyNone"><span class="tt">[Flags]</span> behavioural traits (<span class="tt">BlocksLoss</span>, <span class="tt">BlocksShake</span>); consumers query <span class="tt">ICinematicState.Has(trait)</span>. Level-up states declare both; <span class="tt">HeartDrain</span> declares none, so the 0-HP game-over fires and the camera shake punches through while it plays  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_cinematics_settings_8cs.html">Configuration/CinematicsSettings.cs</a></span> (SO + <span class="tt">ICinematicsSettings</span>)  </td><td class="markdownTableBodyNone"><b>The single setup point for cinematics</b>: one <span class="tt">CinematicStateEntry</span> per <span class="tt">CinematicState</span> (<span class="tt">[EnumIndexed]</span> drawn), composing <span class="tt">Traits</span> + a <b>uniform camera-rig segment</b> (<span class="tt">CameraRigCinematicSettings</span>: <span class="tt">TimeScaleCurve</span> — whose last key is the segment duration — + zoom/pan/followSpeed) + capability blocks (<span class="tt">TrackedTrailSettings</span>). Restores are ordinary segments (curve ramps back to 1, zoom/pan 0), so there are no special restore fields; the heart-drain's restore is its own state (<span class="tt">HeartDrainRestore</span>). Field initializers carry the authored values, so a fresh instance equals the shipped asset. Producers keep only their scene <span class="tt">Camera</span> reference. Unmapped states throw; <span class="tt">CinematicsSettingsTests</span> walks the enum so a missing declaration fails CI  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_cinematic_end_gate_8cs.html">Shared/GameState/CinematicEndGate.cs</a></span>  </td><td class="markdownTableBodyNone"><span class="tt">IReadyGate</span> — waits for cinematic state change  </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_trail_flight_8cs.html">Shared/Pool/TrailFlight.cs</a></span>  </td><td class="markdownTableBodyNone">Per-trail flight controller (Pause/Resume/Complete/Speed)  </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_trail_flight_registry_8cs.html">Shared/Pool/TrailFlightRegistry.cs</a></span>  </td><td class="markdownTableBodyNone">Registry with bulk operations (snapshot-safe <span class="tt">CompleteAll</span>)  </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_flight_phase_8cs.html">Shared/Pool/FlightPhase.cs</a></span>  </td><td class="markdownTableBodyNone">Enum: <span class="tt">Idle</span>, <span class="tt">InFlight</span>, <span class="tt">Paused</span>  </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_score_trail_service_8cs.html">Game/Score/ScoreTrailService.cs</a></span>  </td><td class="markdownTableBodyNone">Trail spawning, flight registration  </td></tr>
-<tr class="markdownTableRowOdd">
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_score_controller_8cs.html">Game/Score/ScoreController.cs</a></span>  </td><td class="markdownTableBodyNone">Score tracking, <span class="tt">CheckLevelUp</span>, <span class="tt">WillLevelUp</span>  </td></tr>
-<tr class="markdownTableRowEven">
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_level_up_pop_up_8cs.html">UI/LevelUp/LevelUpPopUp.cs</a></span>  </td><td class="markdownTableBodyNone">Popup display, dismiss, <span class="tt">Time.timeScale = 0</span>, glow trail spawning via <span class="tt">LevelUpGlowTrailsMessage</span>  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_level_up_lifetime_scope_8cs.html">UI/LevelUp/LevelUpLifetimeScope.cs</a></span>  </td><td class="markdownTableBodyNone">DI: registers <span class="tt">CinematicEndGate(LevelUpPanIn)</span> as <span class="tt">IReadyGate</span>  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_level_up_glow_trails_message_8cs.html">Shared/Messages/LevelUpGlowTrailsMessage.cs</a></span>  </td><td class="markdownTableBodyNone">Signal carrying trail-per-bar count and stagger delay for bar draining  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_level_up_lifetime_scope_8cs.html">UI/LevelUp/LevelUpLifetimeScope.cs</a></span>  </td><td class="markdownTableBodyNone">DI: registers <span class="tt">CinematicEndGate(LevelUpPanIn)</span> as <span class="tt">IReadyGate</span>  </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_level_up_glow_trails_message_8cs.html">Shared/Messages/LevelUpGlowTrailsMessage.cs</a></span>  </td><td class="markdownTableBodyNone">Signal carrying trail-per-bar count and stagger delay for bar draining  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_projectile_view_8cs.html">Projectile/View/ProjectileView.cs</a></span>  </td><td class="markdownTableBodyNone">Checks <span class="tt">IsAnyPaused</span> to freeze movement  </td></tr>
 </table>
 </div></div><!-- contents -->

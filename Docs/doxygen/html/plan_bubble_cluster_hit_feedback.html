@@ -121,14 +121,14 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('plan_bubble_cl
   <div class="headertitle"><div class="title">Bubble Cluster Hit Feedback </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md126"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md189"></a>
 Bubble Cluster Hit Feedback</h1>
 <blockquote class="doxtable">
 <p>Two visual improvements for the Soap Cluster + a structural cleanup of how balloon view components communicate hit and pop context.</p>
 <p><b>No changes until this plan is actioned.</b> </p>
 </blockquote>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md128"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md191"></a>
 Goals</h2>
 <ol type="1">
 <li><b>VFX position</b> — passthrough and pop VFX spawn at the position of the bubble that was actually hit, not the cluster centre.</li>
@@ -136,13 +136,13 @@ Goals</h2>
 <li><b>Structural cleanup</b> — replace the <span class="tt">ITransformCapture</span> / <span class="tt">ItemDisplayService._activeCapture</span> workaround with a unified, well-timed mechanism that also serves goals 1 and 2.</li>
 </ol>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md130"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md193"></a>
 Root cause of the existing laser rotation bug</h2>
 <p><span class="tt">ItemDisplayService._activeCapture</span> was introduced because <span class="tt">BalloonView</span> tried to cache <span class="tt">ITransformCapture</span> at <span class="tt">Bind()</span> time — before <span class="tt">ItemAssigner</span> had ever parented the item visual. The cached value was always <span class="tt">null</span>, so <span class="tt">TransformCapturedMessage</span> was never published, and <span class="tt">LaserItemHandler</span> always used <span class="tt">default(Quaternion)</span>.</p>
 <p>The fix was to move caching to <span class="tt">ItemDisplayService.OnItemChanged()</span>. This works but is a band-aid: <span class="tt">BalloonView</span> still exposes a <span class="tt">TransformCapture</span> property that delegates to the service, and the service holds a separate <span class="tt">ITransformCapture</span> reference alongside its item visual reference.</p>
 <p>The plan below removes the root cause entirely.</p>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md132"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md195"></a>
 New interface — <span class="tt">IBalloonHitHandler</span></h2>
 <p>Single interface, two lifecycle moments, owned by <span class="tt">Balloon/View/</span>:</p>
 <div class="fragment"><div class="line"><span class="keyword">namespace </span><a class="code hl_namespace" href="namespace_balloon_party_1_1_balloon_1_1_view.html">BalloonParty.Balloon.View</a></div>
@@ -166,12 +166,12 @@ New interface — <span class="tt">IBalloonHitHandler</span></h2>
 <div class="ttc" id="anamespace_balloon_party_1_1_balloon_1_1_view_html"><div class="ttname"><a href="namespace_balloon_party_1_1_balloon_1_1_view.html">BalloonParty.Balloon.View</a></div><div class="ttdef"><b>Definition</b> BalloonView.cs:20</div></div>
 </div><!-- fragment --><p>Implementors return <span class="tt">null</span> from any method they don't use.</p>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md134"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md197"></a>
 Discovery and caching</h2>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md135"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md198"></a>
 Root components — cache at <span class="tt">Bind()</span> time</h3>
 <p><span class="tt">SoapBubbleClusterVariant</span> lives on the balloon prefab root and is always present. <span class="tt">BalloonView.Bind()</span> collects <span class="tt">IBalloonHitHandler[]</span> via <span class="tt">GetComponentsInChildren</span> once.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md136"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md199"></a>
 Item visual components — register via <span class="tt">ItemDisplayService</span></h3>
 <p><span class="tt">LaserItemRotation</span> is parented <b>after</b> <span class="tt">Bind()</span> fires. <span class="tt">ItemDisplayService</span> already owns that lifecycle:</p>
 <div class="fragment"><div class="line">ItemDisplayService.OnItemChanged()</div>
@@ -184,7 +184,7 @@ Item visual components — register via <span class="tt">ItemDisplayService</spa
 <div class="line">  → _activeHandler = null</div>
 <div class="line">  → return visual to pool as today</div>
 </div><!-- fragment --><p><span class="tt">BalloonView</span> holds a <span class="tt">List&lt;IBalloonHitHandler&gt;</span>. <span class="tt">Bind()</span> populates static handlers; <span class="tt">ItemDisplayService</span> adds/removes dynamic ones. No scanning at runtime, no GC at hit time.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md137"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md200"></a>
 What goes away</h3>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -201,9 +201,9 @@ What goes away</h3>
 <td class="markdownTableBodyNone"><span class="tt">BalloonView.TransformCapture</span> property  </td><td class="markdownTableBodyNone">Removed  </td></tr>
 </table>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md139"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md202"></a>
 <span class="tt">BalloonView</span> changes</h2>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md140"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md203"></a>
 New methods</h3>
 <div class="fragment"><div class="line"><span class="comment">// Called by BalloonController for every hit outcome.</span></div>
 <div class="line"><span class="comment">// Dispatches to handlers, resolves VFX position, plays VFX.</span></div>
@@ -212,12 +212,12 @@ New methods</h3>
 <div class="line"><span class="comment">// Called by BalloonController just before Pop() removes from grid.</span></div>
 <div class="line"><span class="comment">// Returns the first non-null snapshot from registered handlers.</span></div>
 <div class="line"><span class="keyword">public</span> TransformSnapshot? PrePop()</div>
-</div><!-- fragment --><h3 class="doxsection"><a class="anchor" id="autotoc_md141"></a>
+</div><!-- fragment --><h3 class="doxsection"><a class="anchor" id="autotoc_md204"></a>
 Removed</h3>
 <ul>
 <li><span class="tt">TransformCapture</span> property</li>
 </ul>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md142"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md205"></a>
 Internal</h3>
 <div class="fragment"><div class="line"><span class="keyword">private</span> readonly List&lt;IBalloonHitHandler&gt; _hitHandlers = <span class="keyword">new</span>();</div>
 <div class="line"> </div>
@@ -227,7 +227,7 @@ Internal</h3>
 <div class="line">pos = first non-null from handler.GetVfxWorldPosition(outcome, hits) ?? transform.position</div>
 <div class="line">PlayHitVfxAtPosition(outcome, pos)   ← existing pool/color logic, just uses resolved pos</div>
 </div><!-- fragment --><hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md144"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md207"></a>
 <span class="tt">BalloonController</span> changes</h2>
 <div class="fragment"><div class="line"><span class="comment">// PassThrough case — was:</span></div>
 <div class="line">_view.PlayHitVfxForOutcome(HitOutcome.PassThrough);</div>
@@ -242,9 +242,9 @@ Internal</h3>
 <div class="line">_view.OnActorHit(HitOutcome.Pop, 0, msg.ProjectileDirection);</div>
 </div><!-- fragment --><p><span class="tt">msg.ProjectileDirection</span> is already in <span class="tt">ActorHitMessage</span> — no new data needed. <span class="tt">_model.HitsRemaining.Value</span> is the post-hit value, which is what the math requires.</p>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md146"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md209"></a>
 <span class="tt">SoapBubbleClusterVariant</span> — implements <span class="tt">IBalloonHitHandler</span></h2>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md147"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md210"></a>
 C# mirror of shader bubble layouts</h3>
 <p>The shader <span class="tt">kLayout1..kLayout5</span> arrays are pure constants. Mirror them in C#:</p>
 <div class="fragment"><div class="line"><span class="keyword">private</span> <span class="keyword">static</span> readonly Vector2[][] BubbleLayouts =</div>
@@ -260,7 +260,7 @@ C# mirror of shader bubble layouts</h3>
 <div class="line">            <span class="keyword">new</span> Vector2(-0.178f, 0.058f) },                       <span class="comment">// count 5 — pentagon</span></div>
 <div class="line">};</div>
 </div><!-- fragment --><p>These never change independently of the shader — any layout edit touches both files.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md148"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md211"></a>
 <span class="tt">GetVfxWorldPosition</span></h3>
 <div class="fragment"><div class="line">oldCount = hitsRemainingAfterHit + 1        // layout that was displayed during the hit</div>
 <div class="line">removedIndex = hitsRemainingAfterHit        // bubble index that was removed</div>
@@ -272,7 +272,7 @@ C# mirror of shader bubble layouts</h3>
 <div class="line">worldScale = _renderer.bounds.size.x        // world width of the rendered quad</div>
 <div class="line">return transform.position + (Vector3)(rotated * worldScale)</div>
 </div><!-- fragment --><p><b>Approximation accuracy:</b> breathe offset <span class="tt">±0.007 wu</span> and micro-float <span class="tt">±0.018 wu</span> are both below bubble radius <span class="tt">≈ 0.15 wu</span>. Canonical layout + current rotation is sufficient for VFX placement.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md149"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md212"></a>
 <span class="tt">OnHit</span> — spin impulse</h3>
 <div class="fragment"><div class="line">offset = hitWorldPos - transform.position          // lever arm</div>
 <div class="line">torqueZ = offset.x * dir.y − offset.y * dir.x     // 2D cross product z-component</div>
@@ -282,11 +282,11 @@ C# mirror of shader bubble layouts</h3>
 <blockquote class="doxtable">
 <p><b>Note:</b> <span class="tt">BalloonController</span> should call <span class="tt">GetVfxWorldPosition</span> once and pass the resolved position to <span class="tt">OnHit</span> rather than recomputing it. The method order inside <span class="tt">BalloonView.OnActorHit</span> handles this naturally. </p>
 </blockquote>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md150"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md213"></a>
 <span class="tt">OnPrePop</span></h3>
 <div class="fragment"><div class="line"><span class="keyword">public</span> TransformSnapshot? OnPrePop() =&gt; <span class="keyword">null</span>; <span class="comment">// cluster has no state to export</span></div>
 </div><!-- fragment --><hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md152"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md215"></a>
 <span class="tt">LaserItemRotation</span> — migrates to <span class="tt">IBalloonHitHandler</span></h2>
 <div class="fragment"><div class="line"><span class="keyword">public</span> <span class="keyword">class </span>LaserItemRotation : MonoBehaviour, IBalloonHitHandler</div>
 <div class="line">{</div>
@@ -308,7 +308,7 @@ C# mirror of shader bubble layouts</h3>
 <div class="line">}</div>
 </div><!-- fragment --><p><span class="tt">ITransformCapture</span> and <span class="tt">CaptureSnapshot()</span> are deleted from this class.</p>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md154"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md217"></a>
 File summary</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -329,7 +329,7 @@ File summary</h2>
 <td class="markdownTableBodyNone"><span class="tt"><a class="el" href="_i_transform_capture_8cs.html">Item/ITransformCapture.cs</a></span>  </td><td class="markdownTableBodyNone"><b>Delete</b> — <span class="tt">TransformSnapshot</span> struct moves to <span class="tt">Balloon/View/</span> or stays in <span class="tt">Item/</span> as a plain struct  </td></tr>
 </table>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md156"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md219"></a>
 Open questions</h2>
 <ol type="1">
 <li><b><span class="tt">TransformSnapshot</span> location</b> — currently in <span class="tt"><a class="el" href="_i_transform_capture_8cs.html">Item/ITransformCapture.cs</a></span>. After deleting <span class="tt">ITransformCapture</span>, does it move to <span class="tt">Balloon/View/</span>, stay in <span class="tt">Item/</span>, or move to <span class="tt">Shared/</span>? It is referenced by <span class="tt">TransformCapturedMessage</span> (in <span class="tt">Shared/Messages/</span>) and <span class="tt">LaserItemHandler</span> (in <span class="tt">Item/Laser/</span>). Staying in <span class="tt">Item/</span> as a standalone struct is simplest.</li>

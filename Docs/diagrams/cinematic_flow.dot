@@ -7,31 +7,30 @@ digraph Cinematic {
     // Trigger
     ScorePoint [label="ScorePointMessage\n+\nWillLevelUp() = true", fillcolor="#3d2a1a", fontcolor="#f78166", shape=ellipse];
 
-    // Pan-In
-    WaitTrail [label="Wait for tipping trail\nin TrailFlightRegistry", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
-    BeginPanIn [label="BeginCinematic(LevelUpPanIn)\nPause(Cinematic)", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
-    PanInTick [label="PanInTick\n─────────\nSlowDownCurve modulates\ntrail speed (1.0→0.3)\nCamera pans toward trail\n(frustum-clamped)", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
-    TrailComplete [label="Trail progress ≥ 1\nComplete()\nCompleteAll()", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
-    EndPanIn [label="EndCinematic()", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    // Pan-In (runner split phase 1)
+    WaitTrail [label="LevelUpCinematic waits for the\ntipping trail in TrailFlightRegistry", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    BeginPanIn [label="runner.TryBegin()\n→ TryBeginCinematic(LevelUpPanIn)\nPause(Cinematic)\ntipping trail intercepted (move tween killed)", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+    PanInTick [label="PanInTick (runner + hook)\n─────────\nsegment TimeScaleCurve modulates the\ntipping trail's speed (timeScale untouched —\ngameplay is paused; other trails fly normally)\nrig.Frame(PointFocus, segment) pans the camera\n(frustum-clamped)", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+    TrailComplete [label="Trail progress ≥ 1 → Complete()\nFlights.CompleteAll()", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+    EndPanIn [label="runner.EndPanIn()\nEndCinematic() — camera stays zoomed", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
 
     // Gate
-    Popup [label="Level-Up Popup\nTime.timeScale = 0\n─────────\nGlow trails drain bars\nOrbs fly to fill", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+    Popup [label="Level-Up Popup\nTimeScaleService.Claim(LevelUpPopup, 0)\n─────────\nGlow trails drain bars\nOrbs fly to fill", fillcolor="#1a3a1a", fontcolor="#3fb950"];
 
-    // Restore
-    Dismiss [label="LevelUpDismissedMessage\n(player pressed Continue)", fillcolor="#3d2a1a", fontcolor="#f78166", shape=ellipse];
-    BeginRestore [label="BeginCinematic(LevelUpRestore)\nResume(Cinematic)", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
-    RestoreTick [label="Ramp Time.timeScale 0→1\nCamera tweens to base", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
-    Done [label="EndCinematic()\nNavigationState.Game", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    // Restore (runner split phase 2)
+    Dismiss [label="LevelUpDismissedMessage\n(published BEFORE the popup\nreleases its freeze claim)", fillcolor="#3d2a1a", fontcolor="#f78166", shape=ellipse];
+    BeginRestore [label="runner.TryBeginRestore()\n→ TryBeginCinematic(LevelUpRestore)\nResume(Cinematic)", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
+    RestoreTick [label="Claim(Cinematic, restore curve 0→1)\nCamera tweens to base framing", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
+    Done [label="Release(Cinematic) → timeScale 1\nEndCinematic()\nNavigationState.Game", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
 
     ScorePoint -> WaitTrail [color="#f78166"];
     WaitTrail -> BeginPanIn [color="#58a6ff"];
     BeginPanIn -> PanInTick [color="#58a6ff"];
-    PanInTick -> TrailComplete [label="progress ≥ 1", color="#58a6ff", fontcolor="#8b949e"];
+    PanInTick -> TrailComplete [label="progress ≥ 1\nor arrival message", color="#58a6ff", fontcolor="#8b949e"];
     TrailComplete -> EndPanIn [color="#30363d"];
-    EndPanIn -> Popup [label="gate opens", color="#3fb950", fontcolor="#8b949e"];
+    EndPanIn -> Popup [label="CinematicEndGate opens", color="#3fb950", fontcolor="#8b949e"];
     Popup -> Dismiss [color="#f78166"];
     Dismiss -> BeginRestore [color="#d2a8ff"];
     BeginRestore -> RestoreTick [color="#d2a8ff"];
     RestoreTick -> Done [color="#30363d"];
 }
-

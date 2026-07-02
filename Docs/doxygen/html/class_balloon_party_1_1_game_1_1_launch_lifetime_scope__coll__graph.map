@@ -1,9 +1,11 @@
 <map id="BalloonParty.Game.LaunchLifetimeScope" name="BalloonParty.Game.LaunchLifetimeScope">
-<area shape="rect" id="Node000001" title=" " alt="" coords="20,192,199,233"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="5,88,110,114"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,125,103,191,98,192,68,130"/>
-<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_configuration_1_1_game_display_configuration.html" title=" " alt="" coords="134,80,312,121"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,131,131,194,128,190,189,133"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="164,5,282,31"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="224,44,225,81,220,79,221,49"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="20,207,199,248"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="5,103,110,128"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="71,140,103,206,98,207,68,145"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_configuration_1_1_game_display_configuration.html" title=" " alt="" coords="134,95,312,136"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="194,146,131,209,128,205,189,148"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="78,13,195,38"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="159,47,206,94,201,95,158,52"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_configuration_1_1_i_game_display_configuration.html" title=" " alt="" coords="219,5,400,46"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="282,55,244,97,240,93,278,59"/>
 </map>

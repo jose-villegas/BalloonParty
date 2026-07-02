@@ -130,27 +130,32 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('dir_67368aa1e6
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-files" class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
+<tr class="memitem:BalloonFactory_2Ecs" id="r_BalloonFactory_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_balloon_factory_8cs.html">BalloonFactory.cs</a></td></tr>
+<tr class="memitem:BalloonPlacementResolver_2Ecs" id="r_BalloonPlacementResolver_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_balloon_placement_resolver_8cs.html">BalloonPlacementResolver.cs</a></td></tr>
 <tr class="memitem:BalloonPoolChannel_2Ecs" id="r_BalloonPoolChannel_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_balloon_pool_channel_8cs.html">BalloonPoolChannel.cs</a></td></tr>
 <tr class="memitem:BalloonSpawner_2Ecs" id="r_BalloonSpawner_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_balloon_spawner_8cs.html">BalloonSpawner.cs</a></td></tr>
+<tr class="memitem:RejectedBalloonEffect_2Ecs" id="r_RejectedBalloonEffect_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_rejected_balloon_effect_8cs.html">RejectedBalloonEffect.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md33"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md14"></a>
 Balloon/Spawner</h1>
 <p>Responsible for introducing balloons into the grid — both at game start and during play.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md34"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md15"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File  </th><th class="markdownTableHeadNone">What it does  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">BalloonSpawner</span>  </td><td class="markdownTableBodyNone"><span class="tt">IStartable</span> + <span class="tt">IGridSpawner</span> — creates and places balloons, manages per-type pool registration and active-count caps. <span class="tt">SpawnPriority</span> is <span class="tt">SpawnStage.BalloonActors</span> (100). <span class="tt">Start()</span> registers pools and kicks off pre-warm asynchronously; <span class="tt">SpawnAsync()</span> awaits the pre-warm then populates the initial grid  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">BalloonSpawner</span>  </td><td class="markdownTableBodyNone"><span class="tt">IStartable</span> + <span class="tt">IGridSpawner</span> — creates and places balloons, manages per-type pool registration and active-count caps, and decides where each line's balloon goes. <span class="tt">SpawnPriority</span> is <span class="tt">SpawnStage.BalloonActors</span> (100). <span class="tt">Start()</span> registers pools and kicks off pre-warm asynchronously; <span class="tt">SpawnAsync()</span> awaits the pre-warm then populates the initial grid  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">RejectedBalloonEffect</span>  </td><td class="markdownTableBodyNone">The feedback when a balloon can't be placed: a pooled would-be balloon rises into the <b>overflow rows below the grid</b> and lingers as a visible pile. Draining is <b>heart-driven</b> — when a balloon is ready it publishes <span class="tt">OverflowHeartRequestedMessage</span> <b>and <span class="tt">SpawnBlockedMessage</span> right behind it</b>, so the hit point and camera shake land the moment the heart launches from the UI; the balloon itself only <b>pops when that heart lands</b> (<span class="tt">OnHeartArrived</span>) — the landing is purely the visual burst. Requests are <b>serialized</b> (one per interval, front-most first) so hearts drain in sequence. <span class="tt">ITickable</span> runs the pile as a <b>per-column queue</b> — a balloon's target row is its live index, so when one pops the balloons below slide up (compact) to fill the gap; the in-flight heart <b>homes on the balloon's live position</b> (<span class="tt">TryGetLivePosition</span>) so it still lands on it as it compacts. <span class="tt">IRunResettable</span> returns any transients on restart (they have no grid slot, so the board-clear broadcast can't reach them). Engages a <span class="tt">PauseService.Pause(Overflow)</span> thrower-lock for the duration of the pile. Timing/motion (linger, request interval, stagger, ease, arrival radius) come from <span class="tt">Configuration/OverflowSettings</span> (<span class="tt">IOverflowSettings</span>)  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">BalloonPoolChannel</span>  </td><td class="markdownTableBodyNone"><span class="tt">InjectingPoolChannel&lt;BalloonView&gt;</span> — creates balloon instances via <span class="tt">IObjectResolver.Instantiate()</span>, injecting all <span class="tt">[Inject]</span> fields from the parent container without creating child scopes  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md35"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md16"></a>
 Behaviour</h1>
-<p><span class="tt">BalloonSpawner</span> implements <span class="tt">IGridSpawner</span> with <span class="tt">SpawnPriority = SpawnStage.BalloonActors</span>. <span class="tt">GridSpawnerCoordinator</span> calls <span class="tt">SpawnAsync()</span> after the <a class="el" href="_level_up_trail_effect_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a> gate opens and all lower-priority spawners (e.g. <span class="tt">StaticActorSpawner</span>) have completed. <span class="tt">SpawnAsync</span> awaits the pre-warm task started in <span class="tt">Start()</span> — so pool pre-warming and the navigation/static-actor wait overlap rather than serialize.</p>
-<p>At game start <span class="tt">BalloonSpawner</span> spawns the initial grid rows from <span class="tt">BalloonsConfiguration.GameStartedBalloonLines</span>. For each empty slot it picks a balloon type via weighted random selection from <span class="tt">BalloonsConfiguration.Entries</span>, respecting each entry's <span class="tt">MaxCount</span> cap. All model configuration — <span class="tt">TypeName</span>, <span class="tt">ScoreValue</span>, <span class="tt">HitsToPop</span>, and <span class="tt">NudgeOverrides</span> — is bundled into a <span class="tt">BalloonModelConfig</span> struct and passed to the model constructor. The model class is chosen from <span class="tt">entry.BalloonType</span>:</p>
+<p><span class="tt">BalloonSpawner</span> implements <span class="tt">IGridSpawner</span> with <span class="tt">SpawnPriority = SpawnStage.BalloonActors</span>. <span class="tt">GridSpawnerCoordinator</span> calls <span class="tt">SpawnAsync()</span> after the <a class="el" href="_level_up_cinematic_8cs.html#af53eecbc68a3351b9ae14d787d8c03fd">Navigation</a> gate opens and all lower-priority spawners (e.g. <span class="tt">StaticActorSpawner</span>) have completed. <span class="tt">SpawnAsync</span> awaits the pre-warm task started in <span class="tt">Start()</span> — so pool pre-warming and the navigation/static-actor wait overlap rather than serialize.</p>
+<p>At game start <span class="tt">BalloonSpawner</span> spawns the initial grid rows from <span class="tt">BalloonsConfiguration.GameStartedBalloonLines</span>. For each empty slot it picks a balloon type via weighted random selection from <span class="tt">BalloonsConfiguration.Entries</span>, respecting each entry's <span class="tt">MaxCount</span> cap. All model configuration — <span class="tt">TypeName</span>, <span class="tt">ScoreValue</span>, <span class="tt">HitsToPop</span>, and <span class="tt">NudgeOverrides</span> — is bundled into a <span class="tt">BalloonModelConfig</span> struct and passed to the model constructor. <span class="tt">BalloonModelFactory.Create</span> (in <span class="tt">Balloon/Model/</span>) picks the model class from <span class="tt">entry.BalloonType</span> — shared with <span class="tt">RejectedBalloonEffect</span> so the switch lives in one place:</p>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone"><span class="tt">BalloonType</span>  </th><th class="markdownTableHeadNone">Model class  </th><th class="markdownTableHeadNone">Notes  </th></tr>
@@ -166,7 +171,17 @@ Behaviour</h1>
 <p>The variant's <span class="tt">Initialize(model)</span> handles color (for colorable types). Spawn animation follows the path returned by <span class="tt">SlotGrid.ComputePath</span>, driving a <span class="tt">DOPath(CatmullRom)</span> from the entry-row offset down to the target slot.</p>
 <p>After each projectile death (starting from the second turn) the spawner fires <span class="tt">BalloonsConfiguration.NewProjectileBalloonLines</span> new lines with <span class="tt">BalloonsConfiguration.NewBalloonLinesTimeInterval</span> delay between lines. Multi-line spawning uses <span class="tt">async UniTaskVoid</span> with a <span class="tt">CancellationTokenSource</span>, avoiding any coroutine runner dependency. The first projectile death is skipped because game-start lines are seeded separately — <span class="tt">SceneTransition</span> publishes <span class="tt">SpawnBalloonLineMessage</span> on scene load.</p>
 <p>After the final line in each spawn batch, the spawner publishes <span class="tt">ItemCheckMessage</span> (so <span class="tt">ItemAssigner</span> can assign items to newly spawned balloons) and <span class="tt">BalanceBalloonsMessage</span> (so <span class="tt">BalloonBalancer</span> settles the grid).</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md36"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md17"></a>
+Placement under pressure (turn spawns)</h2>
+<p>A blocked column isn't lost immediately. <span class="tt">TrySpawnForColumn</span> resolves a slot in order, scanning columns nearest-first (<span class="tt">TryNearestColumn</span>):</p>
+<ol type="1">
+<li><b>Own column</b> — <span class="tt">FindFirstReachableEmptyRow</span> (the topmost slot reachable by rising from the entry).</li>
+<li><b>Re-home</b> — the nearest <em>other</em> column the balloon can rise straight into (<span class="tt">ResolveOpenEntry</span>); a line may over-fill a column.</li>
+<li><b>Pressure-open</b> — the nearest column <span class="tt">BalloonBalancer.TryRelievePressure</span> can shove open by pulling a balloon into a gap <em>anywhere</em> on the board (<span class="tt">ResolvePressureOpen</span>), including interior pockets no entry reaches directly.</li>
+<li><b>Reject</b> — only when nothing frees a slot: <span class="tt">RejectedBalloonEffect.Play</span> queues the would-be balloon into the overflow pile below the grid; it lingers, then a heart trail is sent to it — the hit point is charged at the launch, and the balloon pops when the heart lands.</li>
+</ol>
+<p>The initial grid fill never saturates, so it skips steps 2–4 (passes <span class="tt">allowReject: false</span>).</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md18"></a>
 Interactions</h1>
 <ul>
 <li><b>SlotGrid</b> — queried for empty slots; all placed balloons registered here</li>
@@ -174,7 +189,8 @@ Interactions</h1>
 <li><b>ItemAssigner</b> — notified via <span class="tt">ItemCheckMessage</span> carrying the list of newly spawned balloon models</li>
 <li><b>SpawnBalloonLineMessage</b> — triggers a single-line spawn (used by <span class="tt">SceneTransition</span> at game start and by cheats)</li>
 <li><b>ProjectileDestroyedMessage</b> — triggers multi-line spawning after each turn</li>
-<li><b>BalloonsConfiguration</b> — <span class="tt">Entries</span>, <span class="tt">GameStartedBalloonLines</span>, <span class="tt">NewProjectileBalloonLines</span>, <span class="tt">NewBalloonLinesTimeInterval</span>, <span class="tt">BalloonSpawnAnimationDurationRange</span> </li>
+<li><b>BalloonsConfiguration</b> — <span class="tt">Entries</span>, <span class="tt">GameStartedBalloonLines</span>, <span class="tt">NewProjectileBalloonLines</span>, <span class="tt">NewBalloonLinesTimeInterval</span>, <span class="tt">BalloonSpawnAnimationDurationRange</span></li>
+<li><b>DisturbanceFieldService</b> — stamps <span class="tt">Stamp()</span> along each spawn path using the <span class="tt">BalloonPath</span> stamp profile from <span class="tt">DisturbanceFieldSettings</span>; creates visible wakes through Puff clouds during spawn animations </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->

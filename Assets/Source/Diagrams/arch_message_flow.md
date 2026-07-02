@@ -16,7 +16,7 @@ publishers know nothing about subscribers; subscribers know nothing about publis
   the pre-computed `HitOutcome` so every subscriber reads the same result without
   re-evaluating the hit
 - `ScoreController` → `ScorePointMessage` → (`ScoreTrailService`, `ColorProgressBar`,
-  `LevelUpTrailEffect`) — one message per point per streak multiplier; carries full
+  `LevelUpCinematic`) — one message per point per streak multiplier; carries full
   trail identity for deduplication
 - `BalloonSpawner` / `ProjectileView` → `BalanceBalloonsMessage` → `BalloonBalancer`
   — pure signal; no data needed

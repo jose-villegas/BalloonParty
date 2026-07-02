@@ -1,5 +1,5 @@
 var searchData=
 [
-  ['idle_0',['Idle',['../namespace_balloon_party_1_1_shared_1_1_pool.html#a85ad373a8cb2fda2f8c1c544019bff48ae599161956d626eda4cb0a5ffb85271c',1,'BalloonParty::Shared::Pool']]],
-  ['inflight_1',['InFlight',['../namespace_balloon_party_1_1_shared_1_1_pool.html#a85ad373a8cb2fda2f8c1c544019bff48a9a8ef3d35e07f686bc286c696a5f7f60',1,'BalloonParty::Shared::Pool']]]
+  ['heartdrain_0',['HeartDrain',['../namespace_balloon_party_1_1_shared_1_1_game_state.html#a215f59d6ae03f95cde0cf7bc71abdd3ea7b549c39b6c31bcfbcc0dfda6224863b',1,'BalloonParty::Shared::GameState']]],
+  ['heartdrainrestore_1',['HeartDrainRestore',['../namespace_balloon_party_1_1_shared_1_1_game_state.html#a215f59d6ae03f95cde0cf7bc71abdd3ea3ee82ab8ac31133a3785e0599d698a1a',1,'BalloonParty::Shared::GameState']]]
 ];

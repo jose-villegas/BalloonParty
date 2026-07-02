@@ -135,16 +135,18 @@ Files</h2></td></tr>
 <tr class="memitem:PauseService_2Ecs" id="r_PauseService_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_pause_service_8cs.html">PauseService.cs</a></td></tr>
 <tr class="memitem:PauseSource_2Ecs" id="r_PauseSource_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_pause_source_8cs.html">PauseSource.cs</a></td></tr>
 <tr class="memitem:ResumedMessage_2Ecs" id="r_ResumedMessage_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_resumed_message_8cs.html">ResumedMessage.cs</a></td></tr>
+<tr class="memitem:TimeScaleService_2Ecs" id="r_TimeScaleService_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_time_scale_service_8cs.html">TimeScaleService.cs</a></td></tr>
+<tr class="memitem:TimeScaleSource_2Ecs" id="r_TimeScaleSource_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_time_scale_source_8cs.html">TimeScaleSource.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md336"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md709"></a>
 Pause</h1>
 <p>Broadcast architecture for pausing and resuming gameplay systems.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md337"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md710"></a>
 Why not <span class="tt">Time.timeScale</span>?</h1>
 <p><span class="tt">Time.timeScale</span> is a global scalar — every system must opt out individually (<span class="tt">SetUpdate(true)</span>, <span class="tt">ignoreTimeScale: true</span>, etc.). A missed annotation is a silent bug. It also conflates two distinct concerns: the <b>visual slow-motion</b> of a cinematic and the <b>logical freeze</b> of gameplay.</p>
 <p>This package separates those concerns.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md338"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md711"></a>
 Core types</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -158,17 +160,19 @@ Core types</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">PauseService</span>  </td><td class="markdownTableBodyNone">Singleton coordinator. Reference-counted per source, drives the broadcast  </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">TimeScaleService</span> / <span class="tt">TimeScaleSource</span>  </td><td class="markdownTableBodyNone">The only legal writer of <span class="tt">Time.timeScale</span> (audit-enforced): claim/release, lowest active claim wins, run-reset clears  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">PauseResumedGate</span>  </td><td class="markdownTableBodyNone"><span class="tt">IReadyGate</span> implementation that resolves reactively when a source resumes — no polling  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md339"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md712"></a>
 Usage</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md340"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md713"></a>
 Signalling a pause</h2>
 <div class="fragment"><div class="line"><span class="comment">// Inject PauseService, then:</span></div>
 <div class="line">_pauseService.Pause(PauseSource.Cinematic);   <span class="comment">// begin</span></div>
 <div class="line">_pauseService.Resume(PauseSource.Cinematic);  <span class="comment">// end</span></div>
 </div><!-- fragment --><p>Calls nest safely — a second <span class="tt">Pause</span> without a matching <span class="tt">Resume</span> won't broadcast twice.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md341"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md714"></a>
 Reacting to a pause</h2>
 <div class="fragment"><div class="line"><span class="comment">// Inject ISubscriber&lt;PausedMessage&gt; and ISubscriber&lt;ResumedMessage&gt;, then:</span></div>
 <div class="line">_resumedSubscriber.Subscribe(msg =&gt;</div>
@@ -176,7 +180,7 @@ Reacting to a pause</h2>
 <div class="line">    <span class="keywordflow">if</span> (msg.Source == PauseSource.Cinematic)</div>
 <div class="line">        ResumeWork();</div>
 <div class="line">}).AddTo(_disposable);</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md342"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md715"></a>
 Gating async work on a resume</h2>
 <p>Register <span class="tt">PauseResumedGate</span> as the <span class="tt">IReadyGate</span> for a scope:</p>
 <div class="fragment"><div class="line"><span class="comment">// In a LifetimeScope:</span></div>
@@ -184,14 +188,18 @@ Gating async work on a resume</h2>
 <div class="line">    .WithParameter(<span class="stringliteral">&quot;awaitedSource&quot;</span>, PauseSource.Cinematic)</div>
 <div class="line">    .As&lt;IReadyGate&gt;();</div>
 </div><!-- fragment --><p>Then any <span class="tt">IReadyGate</span>-aware async flow will block until that source resumes, resolving <b>in the same frame</b> as <span class="tt">Resume()</span> — unlike <span class="tt">UniTask.WaitUntil</span> polling.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md343"></a>
-<span class="tt">Time.timeScale</span> usage</h1>
-<p><span class="tt">Time.timeScale</span> is <b>not</b> used for cinematic slow-motion. The tipping trail is slowed via a curve-modulated progress rate in <span class="tt">LevelUpTrailEffect.PanInTick</span> — other trails fly at normal speed, unmodified by <span class="tt">Time.timeScale</span>.</p>
-<p><span class="tt">Time.timeScale = 0</span> is used in two places:</p><ul>
-<li><b><span class="tt">LevelUpPopUp</span></b> — freezes balloon animators and particles while the popup is visible.</li>
-<li><b><span class="tt">LevelUpTrailEffect</span> restore phase</b> — gradually ramps <span class="tt">Time.timeScale</span> from 0 → 1 via <span class="tt">_restoreCurve</span> after the popup is dismissed.</li>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md716"></a>
+<span class="tt">TimeScaleService</span> — the only writer of <span class="tt">Time.timeScale</span></h1>
+<p>Direct <span class="tt">Time.timeScale</span> writes are <b>banned by a style-audit rule</b> (<span class="tt">timescale-writes</span>, <span class="tt">[ERROR]</span>) everywhere except <span class="tt">TimeScaleService</span>. Callers claim a value under their <span class="tt">TimeScaleSource</span> and release it when done:</p>
+<div class="fragment"><div class="line">_timeScaleService.Claim(TimeScaleSource.LevelUpPopup, 0f);   <span class="comment">// freeze while the popup shows</span></div>
+<div class="line">_timeScaleService.Release(TimeScaleSource.LevelUpPopup);     <span class="comment">// falls back to the next claim, or 1</span></div>
+</div><!-- fragment --><p>The <b>lowest active claim wins</b> (the popup's 0 beats a cinematic's slow-mo ramp) and no claims means normal speed — so restores are automatic and the "who forgot to set it back
+to 1" bug class is gone. <span class="tt">IRunResettable</span> clears all claims on restart.</p>
+<p>Current claimants:</p><ul>
+<li><b><span class="tt">CameraRigCinematic</span></b> (<span class="tt">TimeScaleSource.Cinematic</span>) — per-tick slow-mo ramp of a timeScale-driving pan-in segment, and both restore forms (tween-from-current / curve-sampled). Note the level-up <b>pan-in</b> does not claim at all: its tipping trail is slowed via a curve-modulated progress rate, other trails fly at normal speed.</li>
+<li><b><span class="tt">LevelUpPopUp</span></b> (<span class="tt">TimeScaleSource.LevelUpPopup</span>) — freezes balloon animators and particles at 0 while visible; releases on dismiss <em>after</em> publishing <span class="tt">LevelUpDismissedMessage</span>, so the restore cinematic's claim is already in place and the hand-back never flashes full speed.</li>
 </ul>
-<p><span class="tt">PauseService</span> handles <em>logical</em> pause coordination (projectile, trail spawning); <span class="tt">Time.timeScale</span> handles <em>visual</em> freeze. The two are independent. </p>
+<p><span class="tt">PauseService</span> handles <em>logical</em> pause coordination (projectile, trail spawning); <span class="tt">TimeScaleService</span> handles <em>visual</em> time warping. The two are independent. </p>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">

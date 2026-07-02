@@ -2,6 +2,6 @@
 <area shape="rect" id="Node000001" title=" " alt="" coords="52,94,236,135"/>
 <area shape="rect" id="Node000002" title=" " alt="" coords="5,13,117,38"/>
 <area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,47,128,93,123,95,82,52"/>
-<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_game_1_1_score_1_1_i_trail_target.html" title=" " alt="" coords="140,5,315,46"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="200,56,164,96,161,91,195,59"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_trail_endpoint.html" title="A named anchor a trail flies to or from — a fixed point in the world or UI that a trail controller re..." alt="" coords="140,5,312,46"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="199,56,164,96,161,91,195,59"/>
 </map>

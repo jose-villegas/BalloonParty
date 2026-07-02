@@ -5,8 +5,11 @@ var namespace_balloon_party_1_1_u_i_1_1_score =
     [ "GraphicColorableRenderer", "class_balloon_party_1_1_u_i_1_1_score_1_1_graphic_colorable_renderer.html", "class_balloon_party_1_1_u_i_1_1_score_1_1_graphic_colorable_renderer" ],
     [ "LevelLabel", "class_balloon_party_1_1_u_i_1_1_score_1_1_level_label.html", "class_balloon_party_1_1_u_i_1_1_score_1_1_level_label" ],
     [ "ProgressNotice", "class_balloon_party_1_1_u_i_1_1_score_1_1_progress_notice.html", "class_balloon_party_1_1_u_i_1_1_score_1_1_progress_notice" ],
-    [ "ProgressNoticePoolChannel", "class_balloon_party_1_1_u_i_1_1_score_1_1_progress_notice_pool_channel.html", "class_balloon_party_1_1_u_i_1_1_score_1_1_progress_notice_pool_channel" ],
+    [ "ProgressNoticePresenter", "class_balloon_party_1_1_u_i_1_1_score_1_1_progress_notice_presenter.html", "class_balloon_party_1_1_u_i_1_1_score_1_1_progress_notice_presenter" ],
     [ "ScoreCounterLabel", "class_balloon_party_1_1_u_i_1_1_score_1_1_score_counter_label.html", "class_balloon_party_1_1_u_i_1_1_score_1_1_score_counter_label" ],
-    [ "ScoreTrailPoolChannel", "class_balloon_party_1_1_u_i_1_1_score_1_1_score_trail_pool_channel.html", "class_balloon_party_1_1_u_i_1_1_score_1_1_score_trail_pool_channel" ],
-    [ "ScoreUILifetimeScope", "class_balloon_party_1_1_u_i_1_1_score_1_1_score_u_i_lifetime_scope.html", "class_balloon_party_1_1_u_i_1_1_score_1_1_score_u_i_lifetime_scope" ]
+    [ "ScoreUILifetimeScope", "class_balloon_party_1_1_u_i_1_1_score_1_1_score_u_i_lifetime_scope.html", "class_balloon_party_1_1_u_i_1_1_score_1_1_score_u_i_lifetime_scope" ],
+    [ "TrailMotion", "namespace_balloon_party_1_1_u_i_1_1_score.html#a86f03547512dfa6ce827879a999ee3db", [
+      [ "Default", "namespace_balloon_party_1_1_u_i_1_1_score.html#a86f03547512dfa6ce827879a999ee3dba7a1920d61156abc05a60135aefe8bc67", null ],
+      [ "Return", "namespace_balloon_party_1_1_u_i_1_1_score.html#a86f03547512dfa6ce827879a999ee3dba988fd738de9c6d177440c5dcf69e73ce", null ]
+    ] ]
 ];

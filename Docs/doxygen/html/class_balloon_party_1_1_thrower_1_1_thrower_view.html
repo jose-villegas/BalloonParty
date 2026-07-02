@@ -139,10 +139,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:aeb9bb306a9008afa887304e5c7a18068" id="r_aeb9bb306a9008afa887304e5c7a18068"><td class="memItemLeft">Tween&#160;</td><td class="memItemRight"><a class="el" href="#aeb9bb306a9008afa887304e5c7a18068">AnimateEntrance</a> ()</td></tr>
 <tr class="memitem:ab1c9bf4855c4b5e7eb1a334146f0f97c" id="r_ab1c9bf4855c4b5e7eb1a334146f0f97c"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#ab1c9bf4855c4b5e7eb1a334146f0f97c">ClearTrace</a> ()</td></tr>
 <tr class="memitem:a4074e0974fdb1ecf40217144fed4296e" id="r_a4074e0974fdb1ecf40217144fed4296e"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a4074e0974fdb1ecf40217144fed4296e">RotateTo</a> (Vector3 direction)</td></tr>
-<tr class="memitem:a9c3a9fd3c0864668cb24540e93e81650" id="r_a9c3a9fd3c0864668cb24540e93e81650"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a9c3a9fd3c0864668cb24540e93e81650">SetTrace</a> (List&lt; Vector3 &gt; points)</td></tr>
+<tr class="memitem:a61ce5833aa6eb8a2fef0e005e89e7768" id="r_a61ce5833aa6eb8a2fef0e005e89e7768"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#a61ce5833aa6eb8a2fef0e005e89e7768">SetTrace</a> (IReadOnlyList&lt; Vector3 &gt; points)</td></tr>
+<tr class="memitem:ab27071de0d29ceb729bff20fec8604b0" id="r_ab27071de0d29ceb729bff20fec8604b0"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#ab27071de0d29ceb729bff20fec8604b0">TryGetAimDirection</a> (out Vector3 direction)</td></tr>
+<tr class="memdesc:ab27071de0d29ceb729bff20fec8604b0"><td class="mdescLeft">&#160;</td><td class="mdescRight">Aim direction from the thrower toward the pointer.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-properties" class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
+<tr class="memitem:a80d421e02cb1f4e4e14735115834dc08" id="r_a80d421e02cb1f4e4e14735115834dc08"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a80d421e02cb1f4e4e14735115834dc08">FireReleased</a><code> [get]</code></td></tr>
+<tr class="memitem:a5064c4510d1ba49499eac42299bf0ef6" id="r_a5064c4510d1ba49499eac42299bf0ef6"><td class="memItemLeft">bool&#160;</td><td class="memItemRight"><a class="el" href="#a5064c4510d1ba49499eac42299bf0ef6">IsAiming</a><code> [get]</code></td></tr>
 <tr class="memitem:a785848dbacf4e55d775ba58a1095ac9e" id="r_a785848dbacf4e55d775ba58a1095ac9e"><td class="memItemLeft">Vector3&#160;</td><td class="memItemRight"><a class="el" href="#a785848dbacf4e55d775ba58a1095ac9e">Position</a><code> [get, set]</code></td></tr>
 <tr class="memitem:a655b71fa5aece9e4917d8efc150c2cd6" id="r_a655b71fa5aece9e4917d8efc150c2cd6"><td class="memItemLeft">Quaternion&#160;</td><td class="memItemRight"><a class="el" href="#a655b71fa5aece9e4917d8efc150c2cd6">Rotation</a><code> [get]</code></td></tr>
 <tr class="memitem:a41a8fb15854959710d39be40e07a3958" id="r_a41a8fb15854959710d39be40e07a3958"><td class="memItemLeft">Vector3&#160;</td><td class="memItemRight"><a class="el" href="#a41a8fb15854959710d39be40e07a3958">SpawnPointPosition</a><code> [get]</code></td></tr>
@@ -153,6 +157,7 @@ Private Member Functions</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:ae80b62d359efd40be729f6189df1b82e" id="r_ae80b62d359efd40be729f6189df1b82e"><td class="memItemLeft">Camera&#160;</td><td class="memItemRight"><a class="el" href="#ae80b62d359efd40be729f6189df1b82e">_camera</a></td></tr>
 <tr class="memitem:a091aba8c60cc0e6ee5ae8ba47c54c82b" id="r_a091aba8c60cc0e6ee5ae8ba47c54c82b"><td class="memItemLeft">float&#160;</td><td class="memItemRight"><a class="el" href="#a091aba8c60cc0e6ee5ae8ba47c54c82b">_entranceDuration</a> = 1f</td></tr>
 <tr class="memitem:aeba0f875e9e035950f58db230126fe82" id="r_aeba0f875e9e035950f58db230126fe82"><td class="memItemLeft">Vector3&#160;</td><td class="memItemRight"><a class="el" href="#aeba0f875e9e035950f58db230126fe82">_entranceOffset</a> = new(0f, 0.5f, 0f)</td></tr>
 <tr class="memitem:af97ec5c443d16c17e17123a2517dbc17" id="r_af97ec5c443d16c17e17123a2517dbc17"><td class="memItemLeft">Transform&#160;</td><td class="memItemRight"><a class="el" href="#af97ec5c443d16c17e17123a2517dbc17">_projectileSpawnPoint</a></td></tr>
@@ -235,8 +240,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a id="a9c3a9fd3c0864668cb24540e93e81650" name="a9c3a9fd3c0864668cb24540e93e81650"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a9c3a9fd3c0864668cb24540e93e81650">&#9670;&#160;</a></span>SetTrace()</h2>
+<a id="a61ce5833aa6eb8a2fef0e005e89e7768" name="a61ce5833aa6eb8a2fef0e005e89e7768"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61ce5833aa6eb8a2fef0e005e89e7768">&#9670;&#160;</a></span>SetTrace()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -244,7 +249,7 @@ Private Attributes</h2></td></tr>
         <tr>
           <td class="memname">void BalloonParty.Thrower.ThrowerView.SetTrace </td>
           <td>(</td>
-          <td class="paramtype">List&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>points</em></span></td><td>)</td>
+          <td class="paramtype">IReadOnlyList&lt; Vector3 &gt;</td>          <td class="paramname"><span class="paramname"><em>points</em></span></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -252,7 +257,49 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
+<a id="ab27071de0d29ceb729bff20fec8604b0" name="ab27071de0d29ceb729bff20fec8604b0"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab27071de0d29ceb729bff20fec8604b0">&#9670;&#160;</a></span>TryGetAimDirection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Thrower.ThrowerView.TryGetAimDirection </td>
+          <td>(</td>
+          <td class="paramtype">out Vector3</td>          <td class="paramname"><span class="paramname"><em>direction</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Aim direction from the thrower toward the pointer. </p>
+<p>Returns false when no camera is available, so the controller keeps its previous direction. </p>
+
+</div>
+</div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="ae80b62d359efd40be729f6189df1b82e" name="ae80b62d359efd40be729f6189df1b82e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae80b62d359efd40be729f6189df1b82e">&#9670;&#160;</a></span>_camera</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Camera BalloonParty.Thrower.ThrowerView._camera</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a091aba8c60cc0e6ee5ae8ba47c54c82b" name="a091aba8c60cc0e6ee5ae8ba47c54c82b"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a091aba8c60cc0e6ee5ae8ba47c54c82b">&#9670;&#160;</a></span>_entranceDuration</h2>
 
@@ -342,6 +389,50 @@ Private Attributes</h2></td></tr>
 </div>
 </div>
 <a name="doc-property-members" id="doc-property-members"></a><h2 id="header-doc-property-members" class="groupheader">Property Documentation</h2>
+<a id="a80d421e02cb1f4e4e14735115834dc08" name="a80d421e02cb1f4e4e14735115834dc08"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a80d421e02cb1f4e4e14735115834dc08">&#9670;&#160;</a></span>FireReleased</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Thrower.ThrowerView.FireReleased</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a5064c4510d1ba49499eac42299bf0ef6" name="a5064c4510d1ba49499eac42299bf0ef6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5064c4510d1ba49499eac42299bf0ef6">&#9670;&#160;</a></span>IsAiming</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BalloonParty.Thrower.ThrowerView.IsAiming</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="a785848dbacf4e55d775ba58a1095ac9e" name="a785848dbacf4e55d775ba58a1095ac9e"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a785848dbacf4e55d775ba58a1095ac9e">&#9670;&#160;</a></span>Position</h2>
 

@@ -23,9 +23,9 @@
 <g id="Node000001" class="node">
 <title>Node1</title>
 <g id="a_Node000001"><a xlink:title="Poolable paint&#45;splash effect.">
-<polygon fill="#999999" stroke="#666666" points="226.25,-30.5 105.25,-30.5 105.25,0 226.25,0 226.25,-30.5"/>
-<text xml:space="preserve" text-anchor="start" x="113.25" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Paint.</text>
-<text xml:space="preserve" text-anchor="middle" x="165.75" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">PaintSplashView</text>
+<polygon fill="#999999" stroke="#666666" points="297.25,-30.5 176.25,-30.5 176.25,0 297.25,0 297.25,-30.5"/>
+<text xml:space="preserve" text-anchor="start" x="184.25" y="-17" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Paint.</text>
+<text xml:space="preserve" text-anchor="middle" x="236.75" y="-5.75" font-family="Helvetica,sans-Serif" font-size="10.00">PaintSplashView</text>
 </a>
 </g>
 </g>
@@ -43,8 +43,8 @@
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node2&#45;&gt;Node1</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M165.75,-54.81C165.75,-46.64 165.75,-37.91 165.75,-30.83"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="162.25,-54.6 165.75,-64.6 169.25,-54.6 162.25,-54.6"/>
+<path fill="none" stroke="#63b8ff" d="M190.28,-58.46C200.35,-49.32 211.73,-38.98 220.7,-30.83"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="188.03,-55.78 182.98,-65.1 192.74,-60.96 188.03,-55.78"/>
 </a>
 </g>
 </g>
@@ -100,6 +100,25 @@
 <g id="a_edge4_Node000002_Node000005"><a xlink:title=" ">
 <path fill="none" stroke="#63b8ff" d="M285.09,-133.72C260.2,-123.09 225.59,-108.31 200.04,-97.4"/>
 <polygon fill="#63b8ff" stroke="#63b8ff" points="283.47,-136.84 294.04,-137.55 286.22,-130.4 283.47,-136.84"/>
+</a>
+</g>
+</g>
+<!-- Node6 -->
+<g id="Node000006" class="node">
+<title>Node6</title>
+<g id="a_Node000006"><a xlink:href="interface_balloon_party_1_1_item_1_1_paint_1_1_i_splash_effect.html" target="_top" xlink:title="A pooled effect that can be prepared with paint&#45;blob flights before playing.">
+<polygon fill="white" stroke="#666666" points="369.25,-97 248.25,-97 248.25,-66.5 369.25,-66.5 369.25,-97"/>
+<text xml:space="preserve" text-anchor="start" x="256.25" y="-83.5" font-family="Helvetica,sans-Serif" font-size="10.00">BalloonParty.Item.Paint.</text>
+<text xml:space="preserve" text-anchor="middle" x="308.75" y="-72.25" font-family="Helvetica,sans-Serif" font-size="10.00">ISplashEffect</text>
+</a>
+</g>
+</g>
+<!-- Node6&#45;&gt;Node1 -->
+<g id="edge5_Node000001_Node000006" class="edge">
+<title>Node6&#45;&gt;Node1</title>
+<g id="a_edge5_Node000001_Node000006"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M283.87,-58.46C273.66,-49.32 262.13,-38.98 253.02,-30.83"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="281.5,-61.04 291.28,-65.1 286.17,-55.82 281.5,-61.04"/>
 </a>
 </g>
 </g>

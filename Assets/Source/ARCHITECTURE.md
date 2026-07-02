@@ -18,6 +18,7 @@
 | @subpage arch_balance_flow "Balance Flow" | Balance algorithm, transit slot tracking, `BalancePathHolder` |
 | @subpage arch_spawner_coordination "Spawner Coordination" | Staged grid spawner pipeline, how to add a new spawner |
 | @subpage arch_message_flow "Message Flow" | All pub/sub connections, when to use MessagePipe vs direct injection |
+| @subpage arch_cinematics_architecture "Cinematics Architecture" | Settings SO → producers → runner → rig/director/TimeScaleService, traits, interplay |
 | @subpage arch_score_cinematic "Score & Cinematic Pipeline" | Attribution → trails → cinematic intercept → level-up |
 | @subpage arch_trail_composition "Trail Utility Composition" | `TrailFlightRegistry`, forward/retroactive interception, cinematic pause |
 | @subpage arch_item_activation "Item Activation Pipeline" | Activation handoff, pool-return coordination, adding new item types |

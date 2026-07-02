@@ -2,8 +2,6 @@ var interface_balloon_party_1_1_shared_1_1_i_game_configuration =
 [
     [ "PointsRequiredForLevel", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#a3dd75e4a13ae640148e6ee5e4c2f4fe9", null ],
     [ "LimitsClockwise", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#aba0bd306f2aeba0fb68495717fa16311", null ],
-    [ "MaxStaticActors", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#a4507f46bb20fd4decb29cbef1d66dfc2", null ],
-    [ "MinStaticActors", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#a85fb2874e6d73baaf257e1772171d96f", null ],
     [ "PredictionTraceMaxBounces", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#a25bfd3d0bf114515f81f8de71a1253ab", null ],
     [ "PredictionTraceMaxSteps", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#a0953d03a17ef5ab726d096868bc5a471", null ],
     [ "PredictionTraceStep", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#adb87dd8920c466022411df052d324d70", null ],
@@ -16,5 +14,6 @@ var interface_balloon_party_1_1_shared_1_1_i_game_configuration =
     [ "ShieldTrailDuration", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#a307f165ecd51ab8b5faa1609381fa7e1", null ],
     [ "SlotSeparation", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#afd1e154fcad2371f6f9aad692ecea8e6", null ],
     [ "SlotsOffset", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#a59765a14101d93eb459200497e53fdca", null ],
-    [ "SlotsSize", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#a5bdbf002867b5dc3e1a6f1f7606b0b75", null ]
+    [ "SlotsSize", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#a5bdbf002867b5dc3e1a6f1f7606b0b75", null ],
+    [ "StartingHitPoints", "interface_balloon_party_1_1_shared_1_1_i_game_configuration.html#afc084d88f747a6e78f4de3441fc52be2", null ]
 ];

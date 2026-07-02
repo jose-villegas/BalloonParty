@@ -27,6 +27,8 @@ digraph StaticState {
         CinNone [label="None", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
         CinPanIn [label="LevelUpPanIn", fillcolor="#3d2a1a", fontcolor="#f78166"];
         CinRestore [label="LevelUpRestore", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
+        CinDrain [label="HeartDrain", fillcolor="#3d2a1a", fontcolor="#f78166"];
+        CinDrainRestore [label="HeartDrainRestore", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
         CinAPI [label="Begin(state) / End()\nIsPlaying: bool", fillcolor="#2a2a2a", fontcolor="#c9d1d9", shape=hexagon];
         CinAware [label="ICinematicAware\nRegister / Unregister\nOnCinematicEnd()", fillcolor="#1a3a1a", fontcolor="#3fb950", shape=ellipse];
 
@@ -37,7 +39,7 @@ digraph StaticState {
     }
 
     // Consumers
-    Consumers [label="Subscribers\n─────────\nScoreTrailService\nLevelUpTrailEffect\nBalloonSpawner\nThrowerController", fillcolor="#2a2a2a", fontcolor="#8b949e"];
+    Consumers [label="Subscribers\n─────────\nScoreTrailService\nLevelUpCinematic / HeartDrainCinematic\nRunController / CameraShakeService\n(traits via ICinematicState.Has)\nBalloonSpawner\nThrowerController", fillcolor="#2a2a2a", fontcolor="#8b949e"];
 
     NavCurrent -> Consumers [label="subscribe", color="#58a6ff", fontcolor="#8b949e", style=dashed];
     CinCurrent -> Consumers [label="subscribe", color="#58a6ff", fontcolor="#8b949e", style=dashed];

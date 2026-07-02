@@ -16,7 +16,7 @@ scope can resolve from.
   MessagePipe brokers, and entry points
   - `ThrowerLifetimeScope` — thrower prefab; registers `ThrowerController` and wires the view
   - `ScoreUILifetimeScope` — score HUD canvas; registers `ColorProgressBar` array and `ScoreTrailService`
-  - `LevelUpLifetimeScope` — level-up popup; registers `LevelUpPopUp`, `LevelUpTrailEffect`, `CinematicDirector`
+  - `LevelUpLifetimeScope` — level-up popup; registers `LevelUpPopUp` and the `CinematicEndGate` ready-gate (the cinematic producers and `CinematicDirector` live in `GameLifetimeScope`)
   - `ShieldUILifetimeScope` — shield HUD; registers `ShieldCounterLabel` and `ShieldCounterAnimation`
 
 **Pooled prefabs (balloons, projectiles)** do not use child scopes. Their `[Inject]`

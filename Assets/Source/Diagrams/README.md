@@ -21,6 +21,7 @@ features compose across the whole game.
 | `arch_spawner_coordination` | `GridSpawnerCoordinator` staging of `IGridSpawner` runs |
 | `arch_slot_actor` | Slot grid actor model and archetype rendering |
 | `arch_item_activation` | Item activation frequency, weighting, and handler dispatch |
+| `arch_cinematics_architecture` | The cinematics pipeline: settings SO, producers, runner, traits, TimeScaleService |
 | `arch_score_cinematic` | Score thresholds driving the level-up cinematic |
 | `arch_trail_composition` | Score / glow / flying trail composition during level-up |
 | `arch_bush_system` | Bush cluster generation, baking, and instanced rendering |

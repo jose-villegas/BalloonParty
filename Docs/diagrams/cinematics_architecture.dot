@@ -1,0 +1,85 @@
+digraph CinematicsArchitecture {
+    rankdir=TB;
+    bgcolor="transparent";
+    compound=true;
+    node [fontname="Helvetica", fontsize=10, style="filled,rounded", shape=box];
+    edge [fontname="Helvetica", fontsize=8];
+
+    // ── Triggers (messages) ──
+    ScorePoint [label="ScorePointMessage\n+ WillLevelUp()", fillcolor="#3d2a1a", fontcolor="#f78166", shape=ellipse];
+    HeartRequested [label="OverflowHeartRequestedMessage\n(RejectedBalloonEffect,\none per ready overflow balloon)", fillcolor="#3d2a1a", fontcolor="#f78166", shape=ellipse];
+    Dismissed [label="LevelUpDismissedMessage", fillcolor="#3d2a1a", fontcolor="#f78166", shape=ellipse];
+
+    // ── Configuration ──
+    subgraph cluster_config {
+        label="Configuration (single setup point)"; style="dashed"; color="#30363d"; fontcolor="#8b949e"; fontname="Helvetica";
+        Settings [label="CinematicsSettings (SO)\n─────────\n[EnumIndexed] one CinematicStateEntry\nper CinematicState:\nTraits + Rig segment + TrackedTrail\n─────────\nRig segment = TimeScaleCurve (last key = duration)\n+ zoom / pan / followSpeed\nrestores are ordinary segments", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+    }
+
+    // ── Producers ──
+    subgraph cluster_producers {
+        label="Producers (plain C# IStartable — trigger + focus + end condition)"; style="dashed"; color="#30363d"; fontcolor="#8b949e"; fontname="Helvetica";
+        LevelUp [label="LevelUpCinematic\n─────────\nsplit phases around the popup gate\nDrivesTimeScale = false (puppets the\ntipping trail via the curve instead)\nRestoreEvaluatesCurve (ramp from frozen 0)\nfocus: PointFocus(tipping trail)", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
+        HeartDrain [label="HeartDrainCinematic\n─────────\ncontinuous pan-in → restore\ndrives timeScale (slow-mo ramp)\nend: pile drained ∨ game over\nfocus: HeartTrailFocus(tracker)", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
+    }
+
+    // ── Runner ──
+    Runner [label="CameraRigCinematic (runner)\n─────────\nTryBegin → PanInTick (timeScale claim + Frame + hook)\n→ end condition → restore segment → EndCinematic\nsplit form: EndPanIn … gate … TryBeginRestore\nowns begin/end pairing + Abort() teardown", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+
+    // ── Services the runner drives ──
+    subgraph cluster_services {
+        label="Shared services"; style="dashed"; color="#30363d"; fontcolor="#8b949e"; fontname="Helvetica";
+        Director [label="CinematicDirector\n─────────\nTryBeginCinematic (drop while busy)\nPlayScene / CompleteScene / EndCinematic\nticks the active CinematicScene", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+        Rig [label="CinematicCameraRig (DI singleton)\n─────────\nPreparePanIn(segment) / Frame(focus, segment, dt)\nPrepareRestore / Restore\ndisables OrthogonalSizeCameraController", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+        TimeScale [label="TimeScaleService\n─────────\nClaim(source, value) / Release(source)\nlowest active claim wins; none = 1\nONLY legal Time.timeScale writer\n(style-audit rule: timescale-writes)", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+    }
+
+    CameraView [label="CinematicCameraView\n(thin scene View → Camera)", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+
+    // ── State + trait consumers ──
+    CinematicState [label="Cinematic.Current\n(static ReactiveProperty<CinematicState>)\nNone / LevelUpPanIn / LevelUpRestore /\nHeartDrain / HeartDrainRestore", fillcolor="#2a2a2a", fontcolor="#c9d1d9", shape=ellipse];
+
+    subgraph cluster_traits {
+        label="Trait consumers — ICinematicState.Has(trait)"; style="dashed"; color="#30363d"; fontcolor="#8b949e"; fontname="Helvetica";
+        RunController [label="RunController\nEndRun gated on BlocksLoss\n(level-up blocks; heart-drain lets\nthe 0-HP game-over fire through)", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+        Shake [label="CameraShakeService\nstands down on BlocksShake\n(additive offset — composes with\nthe pan during the heart-drain)", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+        Gate [label="CinematicEndGate (IReadyGate)\nholds the popup until\nLevelUpPanIn ends", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    }
+
+    // ── Interplay ──
+    Popup [label="LevelUpPopUp\n─────────\nclaims LevelUpPopup = 0 (freeze)\nreleases AFTER publishing dismissed\n(restore's claim already active)", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+    Pause [label="PauseService\nPause/Resume(Cinematic)\n(logical freeze — projectile,\ntrail spawning)", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+    Tracker [label="HeartTrailTracker\n(live heart trail transforms,\nfed by UI HeartTrailController)", fillcolor="#2a2a2a", fontcolor="#c9d1d9"];
+
+    // Triggers → producers
+    ScorePoint -> LevelUp [color="#f78166"];
+    HeartRequested -> HeartDrain [color="#f78166"];
+    Dismissed -> LevelUp [label="TryBeginRestore", color="#f78166", fontcolor="#8b949e"];
+
+    // Config → runner + traits
+    Settings -> Runner [label="EntryOf(state).Rig", color="#3fb950", fontcolor="#8b949e"];
+    Settings -> CinematicState [label="EntryOf(state).Traits\n(via CinematicStateService)", color="#3fb950", fontcolor="#8b949e", style=dashed];
+
+    // Producers → runner
+    LevelUp -> Runner [label="config", color="#d2a8ff", fontcolor="#8b949e"];
+    HeartDrain -> Runner [label="config", color="#d2a8ff", fontcolor="#8b949e"];
+    LevelUp -> Pause [label="Pause / Resume", color="#30363d"];
+    Tracker -> HeartDrain [label="focus + end condition", color="#30363d"];
+
+    // Runner → services
+    Runner -> Director [label="TryBegin / PlayScene", color="#58a6ff", fontcolor="#8b949e"];
+    Runner -> Rig [label="PreparePanIn / Frame / Restore", color="#58a6ff", fontcolor="#8b949e"];
+    Runner -> TimeScale [label="Claim / Release (Cinematic)", color="#58a6ff", fontcolor="#8b949e"];
+    Director -> CinematicState [label="Begin / End", color="#30363d"];
+    Rig -> CameraView [label="Camera", color="#30363d"];
+
+    // State → trait consumers
+    CinematicState -> RunController [color="#30363d"];
+    CinematicState -> Shake [color="#30363d"];
+    CinematicState -> Gate [color="#30363d"];
+
+    // Popup interplay
+    Gate -> Popup [label="gate opens", color="#3fb950", fontcolor="#8b949e"];
+    Popup -> TimeScale [label="Claim / Release (LevelUpPopup)", color="#3fb950", fontcolor="#8b949e"];
+    Popup -> Dismissed [color="#30363d"];
+}

@@ -1,8 +1,12 @@
 <map id="BalloonParty.UI.Shields.ShieldCounterAnimation" name="BalloonParty.UI.Shields.ShieldCounterAnimation">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,192,168,233"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="26,5,137,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="84,46,89,192,83,192,79,47"/>
-<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_u_i_1_1_shields_1_1_shield_counter_label.html" title=" " alt="" coords="103,80,265,121"/>
-<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="109,38,161,79,156,81,109,44"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="159,132,106,194,102,190,154,133"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="5,297,168,338"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="10,13,121,38"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="70,53,88,296,82,296,65,55"/>
+<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_u_i_1_1_reactive_counter_label.html" title="Shows an int reactive value as a thousands&#45;separated label, with a &quot;&#45;&#45;&quot; placeholder until bound and o..." alt="" coords="103,95,270,136"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="94,45,162,94,157,96,94,50"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_u_i_1_1_shields_1_1_shield_counter_label.html" title="The loaded projectile&#39;s remaining&#45;shields counter." alt="" coords="104,185,266,226"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="160,237,106,299,102,295,155,238"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="187,149,188,186,183,184,185,154"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_u_i_1_1_binding_1_1_i_reactive_bindable-1-g.html" title="A view that binds itself to a reactive source of T ." alt="" coords="145,5,308,46"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="213,58,198,96,193,94,210,62"/>
 </map>

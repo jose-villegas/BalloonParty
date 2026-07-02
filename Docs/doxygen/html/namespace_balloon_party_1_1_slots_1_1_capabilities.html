@@ -137,6 +137,8 @@ Classes</h2></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Declares that an actor's color identity can be overwritten.  <a href="interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_paintable.html#details">More...</a><br /></td></tr>
 <tr class="memitem:IPassThrough" id="r_IPassThrough"><td class="memItemLeft">interface &#160;</td><td class="memItemRight"><a class="el" href="interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_pass_through.html">IPassThrough</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Marks an actor whose grid slot can be visually crossed by other actors' animation paths.  <a href="interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_pass_through.html#details">More...</a><br /></td></tr>
+<tr class="memitem:IPressureMovable" id="r_IPressureMovable"><td class="memItemLeft">interface &#160;</td><td class="memItemRight"><a class="el" href="interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_pressure_movable.html">IPressureMovable</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">A dynamic actor that pressure balancing may relocate to make room for an incoming balloon.  <a href="interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_pressure_movable.html#details">More...</a><br /></td></tr>
 <tr class="memitem:ScoreAttribution" id="r_ScoreAttribution"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_balloon_party_1_1_slots_1_1_capabilities_1_1_score_attribution.html">ScoreAttribution</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">One entry per color bar that should receive points on actor destruction.  <a href="struct_balloon_party_1_1_slots_1_1_capabilities_1_1_score_attribution.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
@@ -155,6 +157,11 @@ Enumerations</h2></td></tr>
 , <a class="el" href="#aa3168d8dae75a73e4dd43b5f53db4675ab1c94ca2fbc3e78fc30069c8d0f01680">All</a> = Deflect | PassThrough | Pop | Absorb
 <br />
  }</td></tr>
+<tr class="memitem:ac1d521bee5fff8ee83685d6d74a1068b" id="r_ac1d521bee5fff8ee83685d6d74a1068b"><td class="memItemLeft">enum &#160;</td><td class="memItemRight"><a class="el" href="#ac1d521bee5fff8ee83685d6d74a1068b">PressureResponse</a> { <a class="el" href="#ac1d521bee5fff8ee83685d6d74a1068ba01b9f8c4397d72b89710b5e7501eeed3">ShoveNeighbour</a>
+, <a class="el" href="#ac1d521bee5fff8ee83685d6d74a1068ba35b200be82032da694532939f9455391">RelocateNearest</a>
+, <a class="el" href="#ac1d521bee5fff8ee83685d6d74a1068bab45a250cc9aa404d55c358be677b84dc">RelocateFarthest</a>
+ }</td></tr>
+<tr class="memdesc:ac1d521bee5fff8ee83685d6d74a1068b"><td class="mdescLeft">&#160;</td><td class="mdescRight">How a balloon reacts when a pressure-balance push reaches it.  <a href="#ac1d521bee5fff8ee83685d6d74a1068b">More...</a><br /></td></tr>
 </table>
 <a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
 <a id="af915a4f3df9f513ca2c08e1a87aff762" name="af915a4f3df9f513ca2c08e1a87aff762"></a>
@@ -193,6 +200,31 @@ Enumerations</h2></td></tr>
 <tr><td class="fieldname"><a id="aa3168d8dae75a73e4dd43b5f53db4675a0ae61bd0474e04c9f1195d4baa0213a0" name="aa3168d8dae75a73e4dd43b5f53db4675a0ae61bd0474e04c9f1195d4baa0213a0"></a>Pop&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="aa3168d8dae75a73e4dd43b5f53db4675a6428bf61b19c9f6c90d034777a20ca77" name="aa3168d8dae75a73e4dd43b5f53db4675a6428bf61b19c9f6c90d034777a20ca77"></a>Absorb&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="aa3168d8dae75a73e4dd43b5f53db4675ab1c94ca2fbc3e78fc30069c8d0f01680" name="aa3168d8dae75a73e4dd43b5f53db4675ab1c94ca2fbc3e78fc30069c8d0f01680"></a>All&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="ac1d521bee5fff8ee83685d6d74a1068b" name="ac1d521bee5fff8ee83685d6d74a1068b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac1d521bee5fff8ee83685d6d74a1068b">&#9670;&#160;</a></span>PressureResponse</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#ac1d521bee5fff8ee83685d6d74a1068b">BalloonParty.Slots.Capabilities.PressureResponse</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>How a balloon reacts when a pressure-balance push reaches it. </p>
+<p>The cascade is a chain of shoves between neighbours; this decides whether a balloon passes the shove along by stepping one cell, or gets out of the way entirely — and if so, where it heads. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ac1d521bee5fff8ee83685d6d74a1068ba01b9f8c4397d72b89710b5e7501eeed3" name="ac1d521bee5fff8ee83685d6d74a1068ba01b9f8c4397d72b89710b5e7501eeed3"></a>ShoveNeighbour&#160;</td><td class="fielddoc"><p>Displaces one cell to a neighbour, continuing the chain (the default balloon). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ac1d521bee5fff8ee83685d6d74a1068ba35b200be82032da694532939f9455391" name="ac1d521bee5fff8ee83685d6d74a1068ba35b200be82032da694532939f9455391"></a>RelocateNearest&#160;</td><td class="fielddoc"><p>Vacates to the nearest free slot, ending the chain — stays close (BubbleCluster). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ac1d521bee5fff8ee83685d6d74a1068bab45a250cc9aa404d55c358be677b84dc" name="ac1d521bee5fff8ee83685d6d74a1068bab45a250cc9aa404d55c358be677b84dc"></a>RelocateFarthest&#160;</td><td class="fielddoc"><p>Vacates to the farthest free slot, ending the chain — clears right out (Unbreakable). </p>
+</td></tr>
 </table>
 
 </div>

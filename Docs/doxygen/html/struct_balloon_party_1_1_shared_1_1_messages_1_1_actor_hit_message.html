@@ -132,6 +132,11 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('struct_balloon
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ac1b9c4056203409ecf1957edb5bed8e4" id="r_ac1b9c4056203409ecf1957edb5bed8e4"><td class="memItemLeft">&#160;</td><td class="memItemRight"><a class="el" href="#ac1b9c4056203409ecf1957edb5bed8e4">ActorHitMessage</a> (<a class="el" href="interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor.html">ISlotActor</a> actor, Vector3 worldPosition, Vector3 projectileDirection, <a class="el" href="namespace_balloon_party_1_1_slots_1_1_capabilities.html#aa3168d8dae75a73e4dd43b5f53db4675">HitOutcome</a> outcome, <a class="el" href="struct_balloon_party_1_1_slots_1_1_capabilities_1_1_damage_context.html">DamageContext</a> context=default)</td></tr>
 </table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pub-static-methods" class="groupheader"><a id="pub-static-methods" name="pub-static-methods"></a>
+Static Public Member Functions</h2></td></tr>
+<tr class="memitem:a0aa269ff62131f09d555a98d633db416" id="r_a0aa269ff62131f09d555a98d633db416"><td class="memItemLeft">static <a class="el" href="#ac1b9c4056203409ecf1957edb5bed8e4">ActorHitMessage</a>&#160;</td><td class="memItemRight"><a class="el" href="#a0aa269ff62131f09d555a98d633db416">From</a> (<a class="el" href="interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_hitable.html">IHitable</a> actor, Vector3 worldPosition, Vector3 projectileDirection, <a class="el" href="struct_balloon_party_1_1_slots_1_1_capabilities_1_1_damage_context.html">DamageContext</a> context)</td></tr>
+<tr class="memdesc:a0aa269ff62131f09d555a98d633db416"><td class="mdescLeft">&#160;</td><td class="mdescRight">Creates a message by evaluating the hit on the actor.  <br /></td></tr>
+</table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-attribs" class="groupheader"><a id="pub-attribs" name="pub-attribs"></a>
 Public Attributes</h2></td></tr>
 <tr class="memitem:a9fa849f2071ad466902eb53d19f80df4" id="r_a9fa849f2071ad466902eb53d19f80df4"><td class="memItemLeft">readonly <a class="el" href="interface_balloon_party_1_1_slots_1_1_actor_1_1_i_slot_actor.html">ISlotActor</a>&#160;</td><td class="memItemRight"><a class="el" href="#a9fa849f2071ad466902eb53d19f80df4">Actor</a></td></tr>
@@ -174,6 +179,49 @@ Public Attributes</h2></td></tr>
         </tr>
       </table>
 </div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a0aa269ff62131f09d555a98d633db416" name="a0aa269ff62131f09d555a98d633db416"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0aa269ff62131f09d555a98d633db416">&#9670;&#160;</a></span>From()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="#ac1b9c4056203409ecf1957edb5bed8e4">ActorHitMessage</a> BalloonParty.Shared.Messages.ActorHitMessage.From </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="interface_balloon_party_1_1_slots_1_1_capabilities_1_1_i_hitable.html">IHitable</a></td>          <td class="paramname"><span class="paramname"><em>actor</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>worldPosition</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Vector3</td>          <td class="paramname"><span class="paramname"><em>projectileDirection</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="struct_balloon_party_1_1_slots_1_1_capabilities_1_1_damage_context.html">DamageContext</a></td>          <td class="paramname"><span class="paramname"><em>context</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Creates a message by evaluating the hit on the actor. </p>
+<p>Combines the common <code>EvaluateHit</code> + construct pattern into one call. </p>
 
 </div>
 </div>

@@ -125,6 +125,9 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('dir_c33286056d
 <tr class="heading"><td colspan="2"><h2 id="header-subdirs" class="groupheader"><a id="subdirs" name="subdirs"></a>
 Directories</h2></td></tr>
 <tr class="memitem:Cinematics" id="r_Cinematics"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_edc49c4a498859dd64a99e6d0526fd42.html">Cinematics</a></td></tr>
+<tr class="memitem:Danger" id="r_Danger"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_ea8901c9b65b82ddfefe553bb5e6f778.html">Danger</a></td></tr>
+<tr class="memitem:Health" id="r_Health"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_42b345f2f3a58052820f618a9de5aac3.html">Health</a></td></tr>
+<tr class="memitem:Run" id="r_Run"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_a922d0da53072a69a8c84216d9a53ba4.html">Run</a></td></tr>
 <tr class="memitem:Score" id="r_Score"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_204ee19a44ce2b73fabb9e8ca0de6c50.html">Score</a></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-files" class="groupheader"><a id="files" name="files"></a>
@@ -133,10 +136,10 @@ Files</h2></td></tr>
 <tr class="memitem:LaunchLifetimeScope_2Ecs" id="r_LaunchLifetimeScope_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_launch_lifetime_scope_8cs.html">LaunchLifetimeScope.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md87"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md126"></a>
 Game</h1>
 <p>The entry point that starts and runs the game.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md88"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md127"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -150,14 +153,14 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">Cinematics/</span>  </td><td class="markdownTableBodyNone">Cinematic director, scene definitions, and the level-up trail effect — see <span class="tt"><a class="el" href="_game_2_cinematics_2_r_e_a_d_m_e_8md.html">Cinematics/README.md</a></span>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md89"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md128"></a>
 Architecture</h1>
 <p><span class="tt">GameLifetimeScope</span> is the sole composition root. All systems — spawner, balancer, nudge, thrower, score, score trails, cinematics, items — are wired here and inherit into child scopes automatically.</p>
 <p>Scene-placed child scopes (<span class="tt">ScoreUILifetimeScope</span>, <span class="tt">LevelUpLifetimeScope</span>, <span class="tt">ShieldUILifetimeScope</span>, <span class="tt">ThrowerLifetimeScope</span>) extend <span class="tt">LifetimeScope</span> directly. Parent scope is wired via VContainer's <span class="tt">parentReference</span> field in the Inspector.</p>
 <p><b>Pooled prefabs (balloons, projectiles)</b> no longer use child scopes. Their <span class="tt">[Inject]</span> fields are populated via <span class="tt">InjectingPoolChannel</span>, which calls <span class="tt">IObjectResolver.InjectGameObject()</span> from the parent container — skipping container creation entirely. <span class="tt">BalloonLifetimeScope</span>, <span class="tt">ProjectileLifetimeScope</span>, and <span class="tt">ItemViewScope</span> components remain on prefabs with <span class="tt">autoRun = false</span>.</p>
 <p><span class="tt">ScoreController</span> subscribes to <span class="tt">ActorHitMessage</span> and <span class="tt">ScoreTrailArrivedMessage</span>. On a qualifying hit (<span class="tt">Pop</span> or <span class="tt">PassThrough</span>), it casts the actor to <span class="tt">IHasScoreColor</span> and calls <span class="tt">ResolveScoreAttribution(msg.Context, attributions)</span> — the actor appends one <span class="tt">ScoreAttribution(colorId, points, breaksStreak)</span> per color bar it contributes to. <span class="tt">BalloonModel</span> appends a single entry for its own color when <span class="tt">HitsRemaining</span> reaches zero; <span class="tt">ToughBalloonModel</span> scatters score to random palette colors on pop; <span class="tt">UnbreakableBalloonModel</span> attributes score to the source (projectile) color on pop; <span class="tt">BubbleClusterModel</span> scatters one entry per point of damage to random palette colors with <span class="tt">BreaksStreak = true</span> (no streak bonus, streak resets). All attributions from one <span class="tt">ResolveScoreAttribution</span> call are published as one scatter group sharing a single <span class="tt">GroupSize</span> so trails fan out together. For each attribution <span class="tt">ScoreController</span> publishes one <span class="tt">ScorePointMessage</span> per individual point × streak multiplier, each carrying a pre-computed <span class="tt">Score</span>, <span class="tt">Level</span>, and <span class="tt">NextLevel</span> flag — including next-level renumbering for points that exceed the level-up threshold. Score mutation is deferred to trail arrival: when <span class="tt">ScoreTrailArrivedMessage</span> is received, it increments per-color <span class="tt">_persistentScore</span> and <span class="tt">_totalScore</span>, then sets <span class="tt">_levelProgress</span> to the trail's score value. When all colors' confirmed progress meets the level threshold, it increments the level, resets progress, and publishes <span class="tt">ScoreLevelUpMessage</span>. Saves to <span class="tt">PlayerPrefs</span> on quit and focus-lost.</p>
 <p><span class="tt">ScoreTrailService</span> is a plain C# <span class="tt">IStartable</span> + <span class="tt">IDisposable</span>. It subscribes to <span class="tt">ScorePointMessage</span> and spawns one pooled <span class="tt">FlyingTrail</span> orb per message. Each trail is keyed by <span class="tt">TrailId(Color, Score, Level)</span> taken directly from the message. Multi-point pops produce staggered trails using <span class="tt">GroupIndex</span>/<span class="tt">GroupSize</span> for scatter positioning and delay. All in-flight trails are tracked via a <span class="tt">TrailFlightRegistry&lt;TrailId&gt;</span>, exposed as <span class="tt">Flights</span> for cinematic integration (e.g. <span class="tt">LevelUpTrailEffect</span> looks up the tipping trail). Each <span class="tt">ColorProgressBar</span> registers a <span class="tt">Func&lt;Vector3&gt;</span> target provider and receives <span class="tt">ScoreTrailArrivedMessage</span> on arrival for feedback.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md90"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md129"></a>
 Interactions</h1>
 <ul>
 <li><b>BalloonSpawner</b> — spawns initial and subsequent balloon lines</li>
@@ -167,7 +170,7 @@ Interactions</h1>
 <li><b>Cinematics</b> — cinematic director and level-up trail effect (see <span class="tt"><a class="el" href="_game_2_cinematics_2_r_e_a_d_m_e_8md.html">Cinematics/README.md</a></span>)</li>
 <li><b>ThrowerController</b> — the player-facing launcher; reloads after each projectile death</li>
 <li><b>SlotGrid</b> — the shared grid state all systems read and write</li>
-<li><b>GameLifetimeScope config</b> — <span class="tt">GameConfiguration</span>, <span class="tt">BalloonsConfiguration</span>, <span class="tt">GridActorConfiguration</span>, <span class="tt">GamePalette</span>, <span class="tt">GameDisplayConfiguration</span>, <span class="tt">ItemConfiguration</span> all registered here as singletons; <span class="tt">FlyingTrail</span> prefab registered as instance </li>
+<li><b>GameLifetimeScope config</b> — <span class="tt">GameConfiguration</span>, <span class="tt">BalloonsConfiguration</span>, <span class="tt">GridActorConfiguration</span>, <span class="tt">GamePalette</span>, <span class="tt">GameDisplayConfiguration</span>, <span class="tt">ItemConfiguration</span>, <span class="tt">DisturbanceFieldSettings</span> all registered here as singletons; <span class="tt">FlyingTrail</span> prefab registered as instance </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->

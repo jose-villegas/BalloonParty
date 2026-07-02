@@ -1,52 +1,51 @@
 <map id="BalloonParty.UI.Score.ColorProgressBar" name="BalloonParty.UI.Score.ColorProgressBar">
-<area shape="rect" id="Node000001" title=" " alt="" coords="1062,325,1247,365"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="52,64,164,90"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="157,57,234,37,260,36,285,37,402,34,506,24,598,12,685,4,768,5,810,11,853,20,897,35,942,55,990,82,1040,115,1065,137,1087,163,1120,221,1141,279,1152,325,1147,323,1136,280,1115,224,1083,166,1061,140,1037,119,987,86,940,60,895,40,852,26,809,16,768,10,685,9,599,17,506,29,403,39,285,42,260,41,235,42,160,61"/>
-<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_u_i_1_1_score_1_1_progress_notice.html" title=" " alt="" coords="682,175,887,216"/>
-<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="178,63,279,54,340,53,404,56,470,63,536,77,600,98,660,128,668,136,673,145,676,153,684,160,706,174,701,175,680,164,672,156,668,147,664,139,656,132,598,103,534,82,469,68,403,61,339,58,280,59,181,68"/>
-<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_shared_1_1_rendering_1_1_colorable_renderer.html" title="Non&#45;generic MonoBehaviour base that implements IColorableRenderer." alt="" coords="309,118,514,159"/>
-<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="178,89,310,116,306,119,180,93"/>
-<area shape="rect" id="Node000019" href="$class_balloon_party_1_1_u_i_1_1_score_1_1_flying_trail.html" title=" " alt="" coords="317,358,506,399"/>
-<area shape="poly" id="edge29_Node000019_Node000002" title=" " alt="" coords="177,86,212,104,246,141,262,177,272,217,287,265,293,289,295,308,298,325,311,343,327,357,322,358,307,347,294,327,289,309,288,290,282,267,267,218,257,179,241,144,209,108,179,91"/>
-<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_game_1_1_score_1_1_i_trail_target.html" title=" " alt="" coords="698,110,872,151"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="886,116,925,116,965,121,1004,132,1040,149,1063,167,1083,188,1115,236,1137,284,1150,325,1145,323,1132,286,1110,239,1079,191,1059,171,1037,154,1002,137,964,127,925,122,888,121"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="902,196,972,208,1007,218,1040,232,1071,251,1099,276,1141,325,1136,324,1095,279,1068,256,1037,237,1005,223,971,213,903,201"/>
-<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="22,202,194,243"/>
-<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="209,216,683,197,680,202,211,221"/>
-<area shape="poly" id="edge30_Node000019_Node000005" title=" " alt="" coords="196,246,244,268,287,299,295,311,299,322,302,333,310,343,331,357,325,358,307,347,298,335,294,324,291,313,283,303,242,273,198,251"/>
-<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="529,154,684,179,679,181,530,159"/>
-<area shape="rect" id="Node000007" href="$interface_balloon_party_1_1_shared_1_1_rendering_1_1_i_colorable_renderer.html" title=" " alt="" coords="5,118,211,159"/>
-<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="225,136,310,136,306,140,228,140"/>
-<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_configuration_1_1_game_palette.html" title=" " alt="" coords="322,589,500,629"/>
-<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="504,582,537,573,636,551,714,538,791,521,886,489,930,470,963,452,1037,408,1115,367,1119,364,1040,413,966,457,933,475,888,494,792,526,715,543,637,557,539,578,506,587"/>
-<area shape="rect" id="Node000013" href="$class_balloon_party_1_1_game_1_1_score_1_1_score_controller.html" title=" " alt="" coords="698,687,872,728"/>
-<area shape="poly" id="edge18_Node000013_Node000008" title=" " alt="" coords="451,636,493,662,539,683,578,693,619,700,700,709,695,710,619,706,577,698,537,688,490,667,451,641"/>
-<area shape="rect" id="Node000009" title=" " alt="" coords="49,391,167,416"/>
-<area shape="poly" id="edge10_Node000008_Node000009" title=" " alt="" coords="131,425,207,499,257,539,310,575,335,587,330,589,307,579,253,544,204,503,131,431"/>
-<area shape="rect" id="Node000010" href="$class_balloon_party_1_1_configuration_1_1_palette_entry.html" title=" " alt="" coords="19,289,197,329"/>
-<area shape="poly" id="edge31_Node000001_Node000010" title=" " alt="" coords="211,289,308,278,443,276,634,279,888,286,964,296,1039,312,1081,323,1076,324,1038,317,963,301,887,292,634,284,443,281,309,284,214,294"/>
-<area shape="poly" id="edge11_Node000008_Node000010" title=" " alt="" coords="161,335,189,354,213,376,240,414,256,447,269,482,287,525,296,553,301,564,310,575,327,588,322,588,307,579,296,567,291,555,282,527,264,484,251,449,236,417,209,380,186,358,163,340"/>
-<area shape="rect" id="Node000011" href="$interface_balloon_party_1_1_shared_1_1_i_game_configuration.html" title=" " alt="" coords="321,767,502,808"/>
-<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="506,813,516,819,524,827,528,836,532,843,539,849,570,860,596,861,658,849,777,828,826,817,871,803,912,785,953,759,993,724,1036,678,1064,639,1087,596,1106,551,1121,507,1140,425,1150,368,1153,364,1145,426,1126,508,1111,553,1092,599,1069,642,1040,681,997,728,956,764,915,790,873,808,828,822,778,833,658,854,597,867,569,865,537,854,528,847,523,838,519,830,512,823,505,818"/>
-<area shape="poly" id="edge17_Node000013_Node000011" title=" " alt="" coords="517,788,587,783,657,769,707,750,749,729,754,727,710,755,659,774,588,788,518,793"/>
-<area shape="rect" id="Node000017" href="$class_balloon_party_1_1_game_1_1_score_1_1_score_trail_service.html" title=" " alt="" coords="698,417,872,457"/>
-<area shape="poly" id="edge25_Node000017_Node000011" title=" " alt="" coords="442,754,536,660,597,609,656,557,680,527,756,459,760,456,684,531,660,560,601,613,540,664,445,758"/>
-<area shape="rect" id="Node000012" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html" title=" " alt="" coords="325,293,498,333"/>
-<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="512,310,658,313,876,323,1064,337,1059,339,876,329,658,318,514,315"/>
-<area shape="poly" id="edge27_Node000017_Node000012" title=" " alt="" coords="512,331,597,350,659,368,708,390,753,416,747,416,706,395,657,373,595,355,513,336"/>
-<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="885,680,965,647,1003,624,1036,597,1060,569,1081,539,1113,473,1135,412,1147,368,1151,364,1140,413,1118,475,1086,541,1065,573,1040,600,1006,629,967,652,887,685"/>
-<area shape="rect" id="Node000014" title=" " alt="" coords="373,539,450,564"/>
-<area shape="poly" id="edge15_Node000013_Node000014" title=" " alt="" coords="465,554,558,572,610,587,659,606,690,624,719,645,766,687,760,687,716,649,687,629,657,611,608,592,557,577,466,560"/>
-<area shape="poly" id="edge23_Node000017_Node000014" title=" " alt="" coords="464,541,556,524,657,496,704,476,749,457,744,459,706,481,659,501,557,529,466,546"/>
-<area shape="rect" id="Node000015" title=" " alt="" coords="63,717,153,743"/>
-<area shape="poly" id="edge16_Node000013_Node000015" title=" " alt="" coords="168,726,697,708,696,713,169,731"/>
-<area shape="rect" id="Node000016" href="$class_balloon_party_1_1_game_1_1_score_1_1_color_streak_tracker.html" title=" " alt="" coords="324,833,498,873"/>
-<area shape="poly" id="edge20_Node000016_Node000015" title=" " alt="" coords="151,747,310,817,346,832,340,832,308,822,150,753"/>
-<area shape="poly" id="edge24_Node000017_Node000015" title=" " alt="" coords="118,702,143,648,183,580,209,546,238,513,271,484,307,460,338,448,380,440,483,430,596,428,699,432,695,434,596,434,483,436,380,445,340,453,310,465,274,488,242,517,213,549,188,583,148,650,122,704"/>
-<area shape="poly" id="edge21_Node000001_Node000016" title=" " alt="" coords="499,875,557,888,625,899,698,905,774,906,849,897,920,876,953,861,983,842,1011,819,1036,791,1071,737,1099,678,1119,615,1133,554,1148,442,1152,368,1155,364,1153,443,1138,555,1124,617,1104,679,1076,740,1040,794,1015,823,986,846,955,866,922,881,850,902,774,911,698,911,624,904,556,893,498,880"/>
-<area shape="poly" id="edge19_Node000013_Node000016" title=" " alt="" coords="514,848,586,838,622,828,657,815,689,796,719,773,764,730,769,727,723,777,692,800,659,820,624,833,587,843,514,854"/>
-<area shape="poly" id="edge22_Node000001_Node000017" title=" " alt="" coords="884,410,1072,365,1067,367,885,415"/>
-<area shape="rect" id="Node000018" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_trail_flight_registry-1-g.html" title="Central registry for all in&#45;flight trails." alt="" coords="325,474,498,515"/>
-<area shape="poly" id="edge26_Node000017_Node000018" title=" " alt="" coords="512,491,584,486,657,476,733,457,728,459,659,481,585,492,514,496"/>
-<area shape="poly" id="edge28_Node000017_Node000019" title=" " alt="" coords="520,393,700,422,695,424,521,398"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="1345,366,1529,407"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="52,119,164,145"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="133,108,174,75,229,41,293,14,327,6,361,3,1080,3,1157,9,1188,18,1216,31,1267,69,1323,125,1347,154,1368,186,1401,254,1422,318,1434,367,1429,364,1417,319,1396,256,1363,189,1343,157,1319,128,1264,73,1213,36,1186,23,1156,15,1080,8,361,8,328,11,294,19,231,46,177,80,137,111"/>
+<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_u_i_1_1_score_1_1_progress_notice.html" title=" " alt="" coords="633,130,839,171"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="178,131,609,143,635,145,630,147,609,148,179,136"/>
+<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_shared_1_1_rendering_1_1_colorable_renderer.html" title="Non&#45;generic MonoBehaviour base that implements IColorableRenderer." alt="" coords="260,164,465,204"/>
+<area shape="poly" id="edge7_Node000006_Node000002" title=" " alt="" coords="178,144,262,162,258,165,180,149"/>
+<area shape="rect" id="Node000018" href="$class_balloon_party_1_1_u_i_1_1_score_1_1_flying_trail.html" title=" " alt="" coords="642,497,830,538"/>
+<area shape="poly" id="edge22_Node000018_Node000002" title=" " alt="" coords="177,138,197,147,213,160,228,181,239,203,247,246,243,289,233,332,225,373,222,414,226,433,233,453,245,471,262,490,306,521,356,543,409,555,464,560,519,559,572,553,666,538,661,539,573,559,520,564,464,565,408,560,354,548,303,526,258,494,240,475,228,455,220,435,217,414,219,373,228,331,238,288,242,246,234,204,224,184,209,163,195,151,179,143"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_trail_endpoint.html" title="A named anchor a trail flies to or from — a fixed point in the world or UI that a trail controller re..." alt="" coords="992,432,1164,472"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="1179,431,1347,403,1342,404,1180,436"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="808,123,862,111,924,105,993,105,1135,117,1257,137,1299,148,1322,158,1348,180,1370,206,1402,264,1423,321,1434,367,1430,365,1418,322,1397,266,1365,209,1344,183,1320,162,1297,153,1256,142,1135,122,992,111,924,111,863,116,810,128"/>
+<area shape="rect" id="Node000020" href="$class_balloon_party_1_1_u_i_1_1_score_1_1_progress_notice_presenter.html" title="Owns a progress bar&#39;s floating notices, split out of ColorProgressBar to keep the view lean." alt="" coords="976,160,1181,200"/>
+<area shape="poly" id="edge27_Node000020_Node000004" title=" " alt="" coords="854,158,978,170,973,172,855,163"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="276,282,449,323"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="428,274,686,170,682,173,430,278"/>
+<area shape="poly" id="edge23_Node000018_Node000005" title=" " alt="" coords="423,328,516,379,566,413,611,450,623,468,635,483,655,497,650,496,632,487,619,471,607,454,562,417,514,384,423,333"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="480,176,609,166,635,165,630,167,610,171,482,181"/>
+<area shape="rect" id="Node000007" href="$interface_balloon_party_1_1_shared_1_1_rendering_1_1_i_colorable_renderer.html" title=" " alt="" coords="5,173,211,214"/>
+<area shape="poly" id="edge8_Node000006_Node000007" title=" " alt="" coords="225,187,262,186,257,189,228,191"/>
+<area shape="rect" id="Node000008" href="$interface_balloon_party_1_1_configuration_1_1_i_game_palette.html" title=" " alt="" coords="989,497,1168,538"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="1182,497,1251,479,1320,455,1367,431,1405,408,1410,406,1369,436,1322,460,1252,484,1183,502"/>
+<area shape="rect" id="Node000009" href="$interface_balloon_party_1_1_shared_1_1_i_game_configuration.html" title=" " alt="" coords="645,305,827,346"/>
+<area shape="poly" id="edge10_Node000001_Node000009" title=" " alt="" coords="841,300,862,297,907,295,952,297,1057,307,1138,319,1322,356,1356,366,1351,366,1320,361,1137,325,1056,313,951,303,907,300,863,303,843,305"/>
+<area shape="rect" id="Node000013" href="$class_balloon_party_1_1_game_1_1_score_1_1_score_trail_service.html" title=" " alt="" coords="991,366,1166,407"/>
+<area shape="poly" id="edge17_Node000013_Node000009" title=" " alt="" coords="792,350,827,363,863,374,928,383,993,389,988,390,927,389,862,379,826,368,792,355"/>
+<area shape="rect" id="Node000010" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html" title=" " alt="" coords="650,228,822,268"/>
+<area shape="poly" id="edge11_Node000001_Node000010" title=" " alt="" coords="837,244,1000,250,1092,260,1182,275,1253,295,1322,326,1401,366,1395,366,1320,330,1252,300,1180,280,1091,265,1000,256,838,249"/>
+<area shape="poly" id="edge19_Node000013_Node000010" title=" " alt="" coords="800,272,977,346,1024,366,1018,366,975,350,799,277"/>
+<area shape="poly" id="edge26_Node000020_Node000010" title=" " alt="" coords="837,225,978,199,973,201,839,230"/>
+<area shape="rect" id="Node000011" href="$interface_balloon_party_1_1_game_1_1_score_1_1_i_score_query.html" title="Read&#45;only queries into per&#45;colour level progress, for HUD bars that display it without driving the sc..." alt="" coords="991,562,1166,603"/>
+<area shape="poly" id="edge12_Node000001_Node000011" title=" " alt="" coords="1180,569,1251,551,1287,537,1320,519,1353,494,1381,463,1422,409,1426,406,1385,467,1356,498,1322,524,1289,542,1253,556,1181,574"/>
+<area shape="rect" id="Node000012" href="$interface_balloon_party_1_1_game_1_1_score_1_1_i_color_streak.html" title="Read&#45;only access to the current same&#45;colour pop streak, for HUD feedback." alt="" coords="991,628,1166,668"/>
+<area shape="poly" id="edge13_Node000001_Node000012" title=" " alt="" coords="1180,641,1252,625,1287,611,1319,592,1342,572,1361,549,1393,497,1415,447,1428,409,1433,406,1420,449,1398,500,1366,552,1346,575,1323,596,1290,616,1254,630,1181,647"/>
+<area shape="poly" id="edge14_Node000001_Node000013" title=" " alt="" coords="1181,384,1347,386,1342,387,1181,389"/>
+<area shape="rect" id="Node000014" title=" " alt="" coords="697,447,775,473"/>
+<area shape="poly" id="edge15_Node000013_Node000014" title=" " alt="" coords="789,461,868,458,910,450,950,438,962,428,974,418,1000,409,1005,407,977,422,966,433,953,442,911,456,868,463,790,466"/>
+<area shape="rect" id="Node000015" title=" " alt="" coords="691,562,781,588"/>
+<area shape="poly" id="edge16_Node000013_Node000015" title=" " alt="" coords="796,575,835,573,876,565,916,550,950,526,959,514,963,501,962,475,960,447,964,433,974,418,988,409,993,406,978,422,969,435,966,448,967,475,968,502,964,516,954,530,918,555,878,570,836,578,797,581"/>
+<area shape="rect" id="Node000016" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_trail_flight_registry-1-g.html" title="Central registry for all in&#45;flight trails." alt="" coords="650,382,822,423"/>
+<area shape="poly" id="edge18_Node000013_Node000016" title=" " alt="" coords="827,424,889,431,951,427,975,418,1009,408,1014,407,977,422,952,432,889,436,827,429"/>
+<area shape="rect" id="Node000017" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_trail_endpoint_registry.html" title="Maps a key to the ITrailEndpoint registered under it." alt="" coords="650,612,822,652"/>
+<area shape="poly" id="edge20_Node000013_Node000017" title=" " alt="" coords="837,638,868,635,898,628,926,616,950,597,964,576,969,555,968,534,963,512,958,489,956,466,960,442,974,418,988,408,993,406,978,422,965,444,961,466,963,488,968,511,973,533,975,556,969,578,954,601,928,620,900,633,869,640,837,644"/>
+<area shape="poly" id="edge21_Node000013_Node000018" title=" " alt="" coords="845,522,901,512,927,501,950,486,960,471,962,455,963,437,974,418,990,409,995,406,978,422,968,438,967,455,965,473,954,490,929,506,902,517,846,527"/>
+<area shape="rect" id="Node000019" href="$struct_balloon_party_1_1_u_i_1_1_score_1_1_flying_trail_1_1_motion_style.html" title=" " alt="" coords="268,440,457,480"/>
+<area shape="poly" id="edge24_Node000018_Node000019" title=" " alt="" coords="472,474,644,502,639,504,472,479"/>
+<area shape="poly" id="edge25_Node000001_Node000020" title=" " alt="" coords="1197,184,1262,199,1293,211,1323,227,1360,258,1390,296,1413,334,1429,367,1424,365,1409,336,1386,299,1356,262,1319,232,1291,216,1260,204,1197,189"/>
+<area shape="rect" id="Node000021" href="$class_balloon_party_1_1_configuration_1_1_palette_entry.html" title=" " alt="" coords="989,693,1168,734"/>
+<area shape="poly" id="edge28_Node000001_Node000021" title=" " alt="" coords="1183,712,1218,708,1254,699,1289,685,1319,665,1348,637,1371,604,1389,568,1404,531,1423,460,1432,409,1436,406,1428,461,1409,532,1394,570,1375,606,1352,640,1323,669,1291,689,1256,704,1219,713,1183,718"/>
 </map>

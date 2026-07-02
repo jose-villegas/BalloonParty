@@ -121,23 +121,23 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('plan_content_p
   <div class="headertitle"><div class="title">Content Production Plan — Pre-8.3 Assets </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md157"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md310"></a>
 Content Production Plan — Pre-8.3 Assets</h1>
 <blockquote class="doxtable">
 <p>Asset and content work required before Phase 8.3 (Procedural Placement) can run meaningfully in-game. The procedural engine selects actors by weight and places them into slots — it can only be tuned if the actors it places actually exist as playable, recognisable objects.</p>
 <p><b>This plan covers art, animation, VFX, prefabs, and config wiring for every actor and balloon archetype introduced in the Phase 8 code plan.</b> </p>
 </blockquote>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md159"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md312"></a>
 Context</h2>
 <p>The procedural algorithm (8.3) draws from two config lists:</p>
 <ul>
 <li><span class="tt">BalloonsConfiguration.Entries</span> — already contains Simple and Tough entries</li>
-<li><span class="tt">GridActorConfiguration.Entries</span> — ✅ <b>code exists</b> (<span class="tt"><a class="el" href="_grid_actor_configuration_8cs.html">GridActorConfiguration.cs</a></span> + registered in <span class="tt">GameLifetimeScope</span>); SO asset still needs to be created in Unity and wired into spawners</li>
+<li><span class="tt">GridActorConfiguration.Entries</span> — ✅ <b>code + asset exist</b> (<span class="tt"><a class="el" href="_grid_actor_configuration_8cs.html">GridActorConfiguration.cs</a></span>, <span class="tt">Assets/Configuration/GridActorConfiguration.asset</span>, registered in <span class="tt">GameLifetimeScope</span>). Spawner consumption beyond the structural actors lands with the Phase 8.3 procedural engine.</li>
 </ul>
 <p>Neither list is useful until the prefabs those entries reference actually exist with correct visuals, animations, and hit feedback. Placeholder grey boxes make it impossible to read the grid, tune difficulty, or playtest spawn density.</p>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md161"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md314"></a>
 Asset status overview</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -151,22 +151,24 @@ Asset status overview</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>Unbreakable</b>  </td><td class="markdownTableBodyNone"><span class="tt">UnbreakableBalloonModel</span>  </td><td class="markdownTableBodyNone">✅ <span class="tt">Unbreakable.prefab</span>  </td><td class="markdownTableBodyNone">✅ procedural shader  </td><td class="markdownTableBodyNone">✅ <span class="tt">Unbreakable.controller</span>  </td><td class="markdownTableBodyNone">✅ StableIdle  </td><td class="markdownTableBodyNone">⚠️ deflect/pop VFX deferred (Phase 9)  </td><td class="markdownTableBodyNone">✅ <span class="tt">BalloonsConfiguration</span>  </td><td class="markdownTableBodyNone"><span class="tt">IHasScoreColor</span> mode <span class="tt">Inherited</span> — scores in killer's color at hit time  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><b>Puff</b>  </td><td class="markdownTableBodyNone"><span class="tt">PuffObstacleModel</span>  </td><td class="markdownTableBodyNone">⚠️ <span class="tt">StaticTest.prefab</span>  </td><td class="markdownTableBodyNone">⚠️ placeholder  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌ Idle float  </td><td class="markdownTableBodyNone">—  </td><td class="markdownTableBodyNone">❌ <span class="tt">GridActorConfiguration</span>  </td><td class="markdownTableBodyNone">Dandelion puff / soft cloud; traversable  </td></tr>
+<td class="markdownTableBodyNone"><b>Puff</b>  </td><td class="markdownTableBodyNone"><span class="tt">PuffObstacleModel</span>  </td><td class="markdownTableBodyNone">✅ <span class="tt">Puff.prefab</span> (invisible marker) + <span class="tt">PuffCloud.prefab</span>  </td><td class="markdownTableBodyNone">✅ procedural shader (<span class="tt">PuffCloud.shader</span>)  </td><td class="markdownTableBodyNone">n/a — invisible marker; cloud is shader-driven  </td><td class="markdownTableBodyNone">n/a — cluster cloud animates via shader  </td><td class="markdownTableBodyNone">✅ disturbance/reform via <span class="tt">DisturbanceFieldService</span>  </td><td class="markdownTableBodyNone">✅ <span class="tt">GridActorConfiguration</span> (asset created &amp; registered)  </td><td class="markdownTableBodyNone">Traversable cloud cluster; full MVC system done (model + registry + view + controller)  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><b>Bush</b>  </td><td class="markdownTableBodyNone"><span class="tt">BushObstacleModel</span>  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌ Idle sway  </td><td class="markdownTableBodyNone">—  </td><td class="markdownTableBodyNone">❌ <span class="tt">GridActorConfiguration</span>  </td><td class="markdownTableBodyNone">Park shrub; blocks paths, no hit reaction  </td></tr>
+<td class="markdownTableBodyNone"><b>Bush</b>  </td><td class="markdownTableBodyNone"><span class="tt">BushObstacleModel</span>  </td><td class="markdownTableBodyNone">✅ <span class="tt">BushCluster</span> + <span class="tt">BushSlot</span>  </td><td class="markdownTableBodyNone">✅ baked variants (<span class="tt">Art/Bush/Baked/</span>)  </td><td class="markdownTableBodyNone">n/a — shader-driven  </td><td class="markdownTableBodyNone">✅ GPU wind + rattle  </td><td class="markdownTableBodyNone">✅ <span class="tt">PSVFX_BushPassby</span>  </td><td class="markdownTableBodyNone">✅ <span class="tt">GridActorConfiguration</span>  </td><td class="markdownTableBodyNone"><b>✅ Done via the baked skeletal pipeline — see <span class="tt"><a class="el" href="_p_l_a_n-_bush-_sprite-_baking_8md.html">PLAN-Bush-Sprite-Baking.md</a></span>.</b> Supersedes the simple-sprite spec in the per-actor section below.  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Deflector</b>  </td><td class="markdownTableBodyNone"><span class="tt">DeflectorActorModel</span>  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌ Idle, Deflect flash  </td><td class="markdownTableBodyNone">❌ bounce flash  </td><td class="markdownTableBodyNone">❌ <span class="tt">GridActorConfiguration</span>  </td><td class="markdownTableBodyNone">Reflective surface; indestructible  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><b>Absorber</b>  </td><td class="markdownTableBodyNone"><span class="tt">AbsorberActorModel</span>  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌ Idle pulse, Absorb  </td><td class="markdownTableBodyNone">❌ absorb burst  </td><td class="markdownTableBodyNone">❌ <span class="tt">GridActorConfiguration</span>  </td><td class="markdownTableBodyNone">Hazard; ends the turn on contact  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Gatekeeper</b>  </td><td class="markdownTableBodyNone"><span class="tt">GatekeeperActorModel</span>  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌ Idle, Hit crack, Break  </td><td class="markdownTableBodyNone">❌ hit dust, break burst  </td><td class="markdownTableBodyNone">❌ <span class="tt">GridActorConfiguration</span>  </td><td class="markdownTableBodyNone">Degrades visually as <span class="tt">HitsRemaining</span> drops  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><b>Spider Web</b>  </td><td class="markdownTableBodyNone"><span class="tt">SpiderWebObstacleModel</span>  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌  </td><td class="markdownTableBodyNone">❌ Idle sway, Hit tear, Break  </td><td class="markdownTableBodyNone">—  </td><td class="markdownTableBodyNone">❌ <span class="tt">GridActorConfiguration</span>  </td><td class="markdownTableBodyNone">Traversable + degradable; disappears after N hits. See <span class="tt"><a class="el" href="_p_l_a_n-_spider_web_8md.html">PLAN-SpiderWeb.md</a></span>  </td></tr>
 </table>
 <p><b>Legend:</b> ✅ exists and production-ready · ⚠️ placeholder exists · ❌ does not exist</p>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md163"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md316"></a>
 Shared infrastructure needed</h2>
 <p>These items are pre-requisites that unlock multiple actors at once.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md164"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md317"></a>
 <span class="tt">IHasScoreColor</span> — score attribution ✅ Complete</h3>
 <p><span class="tt">IHasScoreColor</span> is implemented on all balloon models. <span class="tt">ResolveScoreAttribution</span> is the single extension point — no config fields required. <span class="tt">ScoreController</span> calls it on every <span class="tt">Pop</span> or <span class="tt">PassThrough</span> hit and publishes all returned attributions as one scatter group.</p>
 <ul class="check">
@@ -182,7 +184,7 @@ Shared infrastructure needed</h2>
 <li class="checked"><span class="tt">BubbleClusterModel</span> — <span class="tt">BreaksStreak = true</span>; one attribution per damage point to random palette colors</li>
 </ul>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md166"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md319"></a>
 <span class="tt">GridActorConfiguration</span> ScriptableObject</h3>
 <p>A new SO holding <span class="tt">GridActorPrefabEntry[]</span> — the list the procedural spawner reads. Needs to be created, added to the scene's <span class="tt">GameLifetimeScope</span> bindings, and registered just like <span class="tt">BalloonsConfiguration</span> is today.</p>
 <p>Scope of work:</p><ul class="check">
@@ -190,20 +192,20 @@ Shared infrastructure needed</h2>
 </ul>
 <ul class="check">
 <li class="checked">Register in <span class="tt">GameLifetimeScope</span> with <span class="tt">builder.RegisterInstance</span></li>
-<li class="unchecked">Create the SO asset in <span class="tt">Assets/ScriptableObjects/</span> (or equivalent)</li>
 </ul>
 <ul class="check">
-<li class="unchecked">Wire into <span class="tt">StaticActorSpawner</span> and eventually <span class="tt">GridSpawner</span></li>
+<li class="checked">Create the SO asset — <span class="tt">Assets/Configuration/GridActorConfiguration.asset</span></li>
+<li class="unchecked">Full consumption by the Phase 8.3 <span class="tt">GridSpawner</span> (structural actors already place via <span class="tt">StaticActorSpawner</span>)</li>
 </ul>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md167"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md320"></a>
 <span class="tt">GridActorView</span> prefab root pattern</h3>
 <p>All five grid actors share the same <span class="tt">GridActorView</span> MonoBehaviour. Each actor gets its own prefab with the <span class="tt">GridActorView</span> component, its own sprite renderer, and its own animator. Pool key is derived from the prefab GameObject name.</p>
 <p>Prefab location: <span class="tt">Assets/Prefabs/Grid/</span></p>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md169"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md322"></a>
 Per-actor detail</h2>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md171"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md324"></a>
 Soap Cluster ✅ Done</h3>
 <p><b>What it is:</b> A cluster of iridescent soap bubbles that floats as a single balloon-type unit. Each projectile hit pops one bubble — the cluster visibly shrinks through distinct geometric layouts (5→pentagon, 4→square, 3→triangle, 2→pair, 1→single). When the last bubble pops, the cluster is destroyed. Uses a dedicated <span class="tt">BubbleClusterModel</span> (no color slot, no item slot, no score per pop) distinguished from Simple by <span class="tt">BalloonType.BubbleCluster</span> in the spawner and config. Projectiles pass through (no deflect); hit VFX per-entry override via the <span class="tt">HitVfxOverride[]</span> system on <span class="tt">BalloonPrefabEntry</span>.</p>
 <p><b>Art direction:</b> Cluster of iridescent soap bubbles. Thin rainbow-film rim per bubble, transparent interior, visible Plateau junction membranes between bubbles, soft specular highlight. Fully procedural — no sprites or textures required.</p>
@@ -273,10 +275,6 @@ Soap Cluster ✅ Done</h3>
 <li class="checked"><b>Config entry</b> — <span class="tt">BubbleCluster</span> entry added to <span class="tt">BalloonsConfiguration</span> with <span class="tt">HitsToPop = 5</span></li>
 <li class="unchecked"><b>Pop VFX</b> <em>(deferred — Phase 9)</em> — <span class="tt">PSVFX_SoapBubblePop</span> — iridescent soap-film ring + mist burst at the removed bubble's world position; <span class="tt">PSVFX_SoapClusterBurst</span> — larger multi-ring final pop. Not blocking; game plays correctly without them.</li>
 </ul>
-<p><b>Future idea (Phase 9) — Cluster Merge:</b> Adjacent Soap Cluster balloons merge when nudged together or when proximity drops below a threshold. The merged cluster's <span class="tt">HitsRemaining</span> = sum of both (capped at 5); <span class="tt">_BubbleCount</span> transitions to the new count via a merge animation (two soap-film rings flowing into each other). One <span class="tt">IBalloonModel</span> survives; the other is returned to the pool. Scoring angle: merge triggers a bonus payout (<span class="tt">mergedHits × baseScore</span>), creating a risk/reward dynamic — letting clusters grow is tempting but reduces future individual scoring opportunities. Needs: neighbor query post-nudge, <span class="tt">ClusterMergeMessage</span>, merge VFX, and a <span class="tt">BubblePopController</span> that knows which bubble index was added/removed for the transition animation.</p>
-<p><b>Future idea (Phase 9) — Cluster Merge:</b> Piercing item (Bomb, Laser) can pop it.</p>
-<p><b>Art direction:</b> Heavier, more opaque than regular balloons — implies "this won't
-move easily". Could be metallic, stone-textured, or wrapped in thorns. Park theme suggests a <b>knotted/tied-off balloon</b> with thick rubber texture, or a <b>stone balloon</b> (floaty but clearly different weight class).</p>
 <p><b>Scoring design — "inherits killer's color":</b> Destroying an Unbreakable costs an item — the opportunity cost justifies a high score reward (3–5× base). The Unbreakable has no inherent color, but the item that delivers the Piercing damage does. Score is attributed to the color of that item's host balloon, making the payoff emotionally legible: "I spent my Red Bomb, I earned Red points."</p>
 <p>Implemented via <span class="tt">IHasScoreColor</span>. <span class="tt">ResolveScoreAttribution</span> appends a single <span class="tt">ScoreAttribution(context.SourceColor, scoreValue)</span> — reading the killer's color directly from <span class="tt">DamageContext</span> at the moment of destruction. The model caches nothing and stores no color state.</p>
 <ul>
@@ -307,60 +305,79 @@ move easily". Could be metallic, stone-textured, or wrapped in thorns. Park them
 <ul class="check">
 <li class="checked"><b>Code — <span class="tt">IHasScoreColor</span> on <span class="tt">UnbreakableBalloonModel</span></b> — <span class="tt">ResolveScoreAttribution</span> appends <span class="tt">(context.SourceColorId, scoreValue)</span>; mode <span class="tt">Inherited</span></li>
 </ul>
-<p><b>Future idea (Phase 9) — Unbreakable Roam:</b> Before the normal balance pass runs, each Unbreakable balloon picks a random empty slot on the grid and teleports (or animates) to it. Then the standard balance algorithm resumes as normal, settling everything else around the Unbreakable's new position.</p>
-<p>This prevents Unbreakables from always drifting to the top of the grid (since they're never popped, they accumulate at the highest rows after repeated balance passes). The random repositioning reinforces the "autonomous robot" personality — it feels alive and unpredictable, occupying different columns each turn.</p>
-<p>Implementation sketch:</p><ul>
-<li>New interface <span class="tt">IPreBalanceRelocatable</span> — marker on models that opt into pre-balance random relocation (only <span class="tt">UnbreakableBalloonModel</span> initially)</li>
-<li><span class="tt">BalloonBalancer.Balance()</span> gets a pre-pass: iterate all grid slots, collect actors implementing <span class="tt">IPreBalanceRelocatable</span>, for each one pick a random slot from <span class="tt">SlotGrid.AllEmptySlots()</span>, remove from current slot, place at new slot, and record the move as a path segment for animation</li>
-<li>The relocation animation plays first (or as part of the same batch); then the normal balance loop runs and may move other actors that became unbalanced by the relocation</li>
-<li>Config knob on <span class="tt">BalloonsConfiguration</span> entry: <span class="tt">bool RelocatesOnBalance</span> — so the behaviour can be toggled per balloon type without code changes</li>
+<hr  />
+<h3 class="doxsection"><a class="anchor" id="autotoc_md326"></a>
+Puff ✅ Done</h3>
+<p><b>What it is:</b> Traversable structural obstacle. Occupies one or more grid slots; balloon spawn paths arc through freely. Not interactive — no hit reaction, no projectile collider. Adjacent Puff slots merge into a single continuous procedural cloud body.</p>
+<p><b>Art direction:</b> Soft, wispy cloud of floating seed-heads. Fully procedural — no sprite or texture required. The <span class="tt">PuffCloud.shader</span> generates a 3-octave Simplex noise cloud in world space with slot-center boundary falloff. Shadow and displacement channels give it depth and interaction with moving objects.</p>
+<p><b>Visual system — <span class="tt">BalloonParty/Grid/PuffCloud</span></b> (complete):</p><ul>
+<li>3-octave world-space Simplex noise with animated time offset (<span class="tt">_TimeOffset</span> driven per-instance by <span class="tt">PuffCloudView</span>)</li>
+<li>Slot-center boundary falloff — shape follows the union of all cluster member slot positions</li>
+<li>Optional density masking (<span class="tt">_DENSITY_ON</span>) — the per-cluster <span class="tt">DisturbanceFieldService</span>-derived RT punches holes that reform over time</li>
+<li>Displacement crossfade for wind-driven warp</li>
+<li>Pseudo-normal lighting from a configurable light direction</li>
+<li>Optional shadow (<span class="tt">_SHADOW_ON</span>) — offset soft shadow below the cloud body</li>
+<li>Up to 16 slot centers uploaded via <span class="tt">_SlotCentersWorld</span> (Vector4 array) and <span class="tt">_SlotCount</span> per <span class="tt">MaterialPropertyBlock</span> — zero per-instance material allocations</li>
+</ul>
+<p><b>C# — Cluster System</b> (complete):</p><ul>
+<li><span class="tt">PuffObstacleModel</span> — <span class="tt">IWriteableSlotActor</span> + <span class="tt">IPassThrough</span>; gains <span class="tt">ClusterId</span> on placement</li>
+<li><span class="tt">PuffCluster</span> — plain C# model: list of <span class="tt">Vector2Int</span> slot indices + world-space AABB</li>
+<li><span class="tt">PuffClusterRegistry</span> — <span class="tt">IStartable</span> + <span class="tt">IDisposable</span>; subscribes to <span class="tt">SlotGrid.OnChanged</span>; flood-fills hex adjacency via <span class="tt">SlotGrid.HexNeighborIndices</span>; handles cluster creation, merge (new Puff bridges two clusters), split (removed Puff was bridging), and resize; publishes <span class="tt">PuffClusterChangedEvent</span></li>
+<li><span class="tt">PuffCloudView</span> — <span class="tt">MonoBehaviour</span> + <span class="tt">IPoolable</span> + <span class="tt">[ExecuteAlways]</span>; drives shader via <span class="tt">MaterialPropertyBlock</span>; pushes <span class="tt">_TimeOffset</span> each frame; calls <span class="tt">DisturbanceFieldService.Stamp()</span> for projectile/spawn disturbances</li>
+<li><span class="tt">PuffCloudViewController</span> — <span class="tt">IStartable</span>; subscribes to <span class="tt">PuffClusterRegistry.OnClusterChanged</span>; manages pooled <span class="tt">PuffCloudView</span> lifecycle (spawn on <span class="tt">Created</span>, reconfigure on <span class="tt">Resized</span>, return on <span class="tt">Removed</span>)</li>
+</ul>
+<p><b>Prefabs</b> (complete):</p><ul>
+<li><span class="tt">Puff.prefab</span> — <span class="tt">GridActorView</span> + <span class="tt">TweenTracker</span>; invisible grid occupancy marker (no renderer)</li>
+<li><span class="tt">PuffCloud.prefab</span> — <span class="tt">SpriteRenderer</span> (no sprite assigned; quad driven by shader) + <span class="tt">PuffCloudView</span>; pooled by <span class="tt">PuffCloudPoolChannel</span>; referenced by <span class="tt">PuffCloudSettings.CloudPrefab</span></li>
+</ul>
+<p><b>Configuration</b> (complete):</p><ul>
+<li><span class="tt">PuffCloudSettings</span> — noise speed, density field resolution/timing, wind, displacement, padding, sorting layer/order, disturbance radii/strengths, <span class="tt">CloudPrefab</span> reference</li>
+</ul>
+<ul class="check">
+<li class="checked"><span class="tt"><a class="el" href="_grid_actor_configuration_8cs.html">GridActorConfiguration.cs</a></span> — code exists; <span class="tt">GridActorPrefabEntry</span> for Puff with <span class="tt">SlotPlacementMode.Cluster</span></li>
+</ul>
+<ul class="check">
+<li class="checked"><span class="tt">GridActorConfiguration</span> SO asset — <span class="tt">Assets/Configuration/GridActorConfiguration.asset</span>, registered in <span class="tt">GameLifetimeScope</span></li>
+</ul>
+<ul class="check">
+<li class="checked"><b>Shader</b> — <span class="tt">Shaders/BalloonParty/Grid/PuffCloud.shader</span> + <span class="tt">DisturbanceDiffusion.shader</span> + <span class="tt">DisturbanceStampBatched.shader</span></li>
+</ul>
+<ul class="check">
+<li class="checked"><b>C# Model</b> — <span class="tt"><a class="el" href="_puff_obstacle_model_8cs.html">PuffObstacleModel.cs</a></span> — <span class="tt">IWriteableSlotActor</span> + <span class="tt">IPassThrough</span></li>
+</ul>
+<ul class="check">
+<li class="checked"><b>C# Cluster Model</b> — <span class="tt">PuffCluster.cs</span>, <span class="tt"><a class="el" href="_puff_cluster_registry_8cs.html">PuffClusterRegistry.cs</a></span>, <span class="tt">PuffClusterChangedEvent.cs</span></li>
+</ul>
+<ul class="check">
+<li class="checked"><b>C# View</b> — <span class="tt"><a class="el" href="_puff_cloud_view_8cs.html">PuffCloudView.cs</a></span></li>
+</ul>
+<ul class="check">
+<li class="checked"><b>C# Controller</b> — <span class="tt"><a class="el" href="_puff_cloud_view_controller_8cs.html">PuffCloudViewController.cs</a></span></li>
+</ul>
+<ul class="check">
+<li class="checked"><b>Pool</b> — <span class="tt">GridActorPoolChannel</span>, <span class="tt">PuffCloudPoolChannel</span> (implicit via <span class="tt">PuffCloudSettings.CloudPrefab</span>)</li>
+</ul>
+<ul class="check">
+<li class="checked"><b>Prefabs</b> — <span class="tt">Puff.prefab</span> (marker) + <span class="tt">PuffCloud.prefab</span> (cloud visual)</li>
+</ul>
+<ul class="check">
+<li class="checked"><b>GridActorConfiguration SO asset</b> — created at <span class="tt">Assets/Configuration/GridActorConfiguration.asset</span> and wired into <span class="tt">GameLifetimeScope</span></li>
 </ul>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md173"></a>
-Puff</h3>
-<p><b>What it is:</b> Traversable structural actor. Occupies a slot; balloon spawn paths arc through it freely. Not interactive. No hit reaction.</p>
-<p><b>Art direction:</b> Dandelion puff, tuft of cotton, wispy cloud of floating seed-heads. Semi-transparent. Gentle idle float animation. Feels soft and permeable.</p>
-<ul class="check">
-<li class="unchecked"><b>Sprite</b> — semi-transparent dandelion puff or cotton wisp; multiple frames for idle float cycle (3–4 frames is enough)</li>
-</ul>
-<ul class="check">
-<li class="unchecked"><b>Material/Shader</b> — soft additive or alpha-blended sprite; slight glow or bloom to read as "passable air"</li>
-</ul>
-<ul class="check">
-<li class="unchecked"><b>Prefab</b> — <span class="tt">Assets/Prefabs/Grid/Puff.prefab</span> with <span class="tt">GridActorView</span> component; rename/replace <span class="tt">StaticTest.prefab</span> once art is finalised</li>
-</ul>
-<ul class="check">
-<li class="unchecked"><b>Animator / Controller</b> — <span class="tt">Puff.controller</span><ul>
-<li><span class="tt">Idle</span> — gentle up-down float with light scale breathe (looping)</li>
-</ul>
-</li>
-</ul>
-<ul class="check">
-<li class="unchecked"><b>Config entry</b> — add to <span class="tt">GridActorConfiguration</span> with high weight; no hit reaction needed</li>
-</ul>
-<hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md175"></a>
-Bush</h3>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md328"></a>
+Bush ✅ Done</h3>
 <p><b>What it is:</b> Non-traversable structural actor. Blocks balloon spawn-path computation; balloons must route around it. Projectiles pass through (no collider).</p>
-<p><b>Art direction:</b> Small park shrub — round, leafy, clearly solid-looking. Like something you'd walk around in a park but throw a ball over. Different enough from Puff that players immediately understand "this one is solid".</p>
-<ul class="check">
-<li class="unchecked"><b>Sprite</b> — round leafy shrub; slightly above-ground root base; reads as solid</li>
+<p>Implemented as a <b>baked 2D skeletal plant system</b> — not the simple sprite originally sketched here. See <b><span class="tt"><a class="el" href="_p_l_a_n-_bush-_sprite-_baking_8md.html">PLAN-Bush-Sprite-Baking.md</a></span></b> for the full design (cluster infrastructure shared with Puff, offline-baked branch maps + leaf extraction, GPU wind + rattle driven by the disturbance field). Shipped assets:</p>
+<ul>
+<li>✅ <b>Prefabs</b> — <span class="tt">Assets/Prefabs/Grid/Bush/BushCluster.prefab</span> + <span class="tt">BushSlot.prefab</span></li>
+<li>✅ <b>Baked variants</b> — <span class="tt">Assets/Art/Bush/Baked/BushVariant_V*.asset</span></li>
+<li>✅ <b>Settings</b> — <span class="tt">Assets/Configuration/BushSettings.asset</span> (<span class="tt">IBushSettings</span>)</li>
+<li>✅ <b>VFX</b> — <span class="tt">PSVFX_BushPassby</span></li>
+<li>✅ <b>Config entry</b> — <span class="tt">GridActorConfiguration</span></li>
 </ul>
-<ul class="check">
-<li class="unchecked"><b>Prefab</b> — <span class="tt">Assets/Prefabs/Grid/Bush.prefab</span> with <span class="tt">GridActorView</span> component</li>
-</ul>
-<ul class="check">
-<li class="unchecked"><b>Animator / Controller</b> — <span class="tt">Bush.controller</span><ul>
-<li><span class="tt">Idle</span> — gentle leaf sway in breeze (very subtle; 2–3 frame loop)</li>
-</ul>
-</li>
-</ul>
-<ul class="check">
-<li class="unchecked"><b>Config entry</b> — add to <span class="tt">GridActorConfiguration</span></li>
-</ul>
-<p><b>Note:</b> Bush currently causes a <span class="tt">ComputePath</span> warning when a spawn path crosses it (Phase 9 will add full rerouting). Weight should be low in early difficulty levels to avoid blocking spawn columns before rerouting exists.</p>
+<p><b>Note:</b> Bush still causes a <span class="tt">ComputePath</span> warning when a spawn path crosses it (Phase 9 will add full rerouting). Keep weight low in early difficulty levels to avoid blocking spawn columns before rerouting exists.</p>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md177"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md330"></a>
 Deflector</h3>
 <p><b>What it is:</b> Indestructible hitable. Always deflects the projectile. Creates predictable geometry — players can exploit bounce angles.</p>
 <p><b>Art direction:</b> Something visibly angled, shiny, reflective. Park theme could be: a <b>pinwheel</b> (angled vanes); a <b>reflective game paddle</b>; or a <b>butterfly wing</b> spread at an angle. The key read is "bouncy/reflective surface", not "wall".</p>
@@ -384,7 +401,7 @@ Deflector</h3>
 <li class="unchecked"><b>Config entry</b> — add to <span class="tt">GridActorConfiguration</span>; maxCount = 1–2 per grid</li>
 </ul>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md179"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md332"></a>
 Absorber</h3>
 <p><b>What it is:</b> Indestructible hitable. Absorbs the projectile on contact, ending the turn. A genuine danger zone — a column with an Absorber requires a different shot path.</p>
 <p><b>Art direction:</b> Something that consumes or swallows. Park theme could be: a <b>venus flytrap</b> (open, waiting to snap); a <b>whirlpool puddle</b> on the grass; or a <b>black hole soap bubble</b> that pulses. The key read is "danger — don't shoot here".</p>
@@ -411,7 +428,7 @@ Absorber</h3>
 <li class="unchecked"><b>Config entry</b> — add to <span class="tt">GridActorConfiguration</span>; gated behind difficulty level (see Phase 8.4); maxCount = 1 per grid to start</li>
 </ul>
 <hr  />
-<h3 class="doxsection"><a class="anchor" id="autotoc_md181"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md334"></a>
 Gatekeeper</h3>
 <p><b>What it is:</b> Destructible hitable. Deflects projectiles until <span class="tt">HitsRemaining</span> reaches zero, then pops. Visual degradation must make remaining hits readable at a glance.</p>
 <p><b>Art direction:</b> Something that blocks a column visually and clearly degrades. Park theme could be: a <b>thorn-covered log</b>; a <b>rickety wooden gate</b> with planks falling off; or a <b>mossy rock</b> that cracks. The key reads are "it blocks" and "it's
@@ -446,19 +463,23 @@ close to breaking".</p>
 <li class="unchecked"><b>Config entry</b> — add to <span class="tt">GridActorConfiguration</span> with <span class="tt">HitsToPop = 3</span> default; weight medium; maxCount = 1 per column</li>
 </ul>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md183"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md336"></a>
 Suggested production order</h2>
 <p>Work bottom-up by complexity. Items that unblock config wiring come first so the procedural engine can be tested with real (even rough) assets as early as possible.</p>
-<div class="fragment"><div class="line">1. [x] GridActorConfiguration SO + registration         ← code done; SO asset still needed in Unity</div>
-<div class="line">2. [x] Puff — simplest new actor; replaces placeholder</div>
-<div class="line">3. [x] Bush — same pipeline as Puff, no hit reaction</div>
+<div class="fragment"><div class="line">1. [x] GridActorConfiguration SO + registration         ← code, asset, and registration all done</div>
+<div class="line">2. [x] Puff — full MVC cloud system + config entry done</div>
+<div class="line">3. [x] Bush — baked skeletal system (see PLAN-Bush-Sprite-Baking); done</div>
 <div class="line">4. [x] Soap Cluster shader + C# Variant + model + prefab + config  ← done; pop VFX deferred to Phase 9</div>
 <div class="line">5. [x] Unbreakable balloon — shader + variant + model + prefab + controller + config  ← done; VFX deferred to Phase 9</div>
-<div class="line">6. Deflector — first hitable grid actor             ← introduces Deflect VFX pipeline</div>
-<div class="line">7. Absorber                                         ← danger actor; needs distinctive look</div>
-<div class="line">8. Gatekeeper                                       ← most complex; needs N-state animator</div>
+<div class="line">6. [ ] Deflector — first hitable grid actor          ← REMAINING; introduces Deflect VFX pipeline</div>
+<div class="line">7. [ ] Absorber                                      ← REMAINING; danger actor; needs distinctive look</div>
+<div class="line">8. [ ] Gatekeeper                                    ← REMAINING; most complex; needs N-state animator</div>
+<div class="line"> </div>
+<div class="line">These last three (Deflector / Absorber / Gatekeeper) are the **only content blocking</div>
+<div class="line">Phase 8.3 procedural placement** — their models + hit routing already exist; what&#39;s</div>
+<div class="line">missing is prefab/art/animator/VFX/config-entry for each.</div>
 </div><!-- fragment --><hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md185"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md338"></a>
 Asset folder conventions</h2>
 <div class="fragment"><div class="line">Assets/</div>
 <div class="line">├── Prefabs/</div>
@@ -468,8 +489,7 @@ Asset folder conventions</h2>
 <div class="line">│   │   ├── ToughBalloon.prefab          ← Tough</div>
 <div class="line">│   │   └── UnbreakableBalloon.prefab    ← NEW</div>
 <div class="line">│   └── Grid/</div>
-<div class="line">│       ├── StaticTest.prefab        ← retire once Puff is ready</div>
-<div class="line">│       ├── Puff.prefab              ← NEW</div>
+<div class="line">│       ├── Puff.prefab              ← exists</div>
 <div class="line">│       ├── Bush.prefab              ← NEW</div>
 <div class="line">│       ├── Deflector.prefab         ← NEW</div>
 <div class="line">│       ├── Absorber.prefab          ← NEW</div>
@@ -488,7 +508,7 @@ Asset folder conventions</h2>
 <div class="line">    └── Grid/                        ← NEW folder for grid actor sprites</div>
 <div class="line">        └── (one sub-folder per actor)</div>
 </div><!-- fragment --><hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md187"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md340"></a>
 Open questions for art direction</h2>
 <ol type="1">
 <li><strike><b>Soap Cluster vs Unbreakable read</b></strike> — ✅ Resolved. Soap Cluster is iridescent/translucent, shrinks on hit, projectile passes through. Unbreakable is opaque/heavy, deflects all hits. Art directions are distinct by definition; confirm Unbreakable sprite before commission.</li>

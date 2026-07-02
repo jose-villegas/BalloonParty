@@ -1,11 +1,23 @@
 var searchData=
 [
   ['a_0',['a',['../class_balloon_party_1_1_editor_1_1_gradient_texture_drawer_1_1_gradient_storage_1_1_alpha_key_entry.html#a32b5b785acac09feaed9ceabeed21869',1,'BalloonParty::Editor::GradientTextureDrawer::GradientStorage::AlphaKeyEntry']]],
-  ['actor_1',['Actor',['../struct_balloon_party_1_1_nudge_1_1_nudge_message.html#abe6ffdcd42bdaca78cacc65c1596b2ab',1,'BalloonParty.Nudge.NudgeMessage.Actor'],['../struct_balloon_party_1_1_shared_1_1_messages_1_1_actor_hit_message.html#a9fa849f2071ad466902eb53d19f80df4',1,'BalloonParty.Shared.Messages.ActorHitMessage.Actor']]],
-  ['alphakeys_2',['alphaKeys',['../class_balloon_party_1_1_editor_1_1_gradient_texture_drawer_1_1_gradient_storage.html#aaaaae3fc8056df6a9bceeed957b9a753',1,'BalloonParty::Editor::GradientTextureDrawer::GradientStorage']]],
-  ['androidmax_3',['AndroidMax',['../class_balloon_party_1_1_editor_1_1_texture_audit_window_1_1_entry.html#a948fa4fe1b66701aed557b48542359ee',1,'BalloonParty::Editor::TextureAuditWindow::Entry']]],
-  ['androidoverridden_4',['AndroidOverridden',['../class_balloon_party_1_1_editor_1_1_texture_audit_window_1_1_entry.html#adb20ddd661d286a28f72bfbd501a4532',1,'BalloonParty::Editor::TextureAuditWindow::Entry']]],
-  ['appearstate_5',['AppearState',['../class_balloon_party_1_1_u_i_1_1_level_up_1_1_level_up_pop_up.html#a5ac46063fcdfb2c015b93fb8e22cacfb',1,'BalloonParty::UI::LevelUp::LevelUpPopUp']]],
-  ['appeartrigger_6',['AppearTrigger',['../class_balloon_party_1_1_u_i_1_1_level_up_1_1_level_up_pop_up.html#a8610962ca04f3b195c5f83820ca8c211',1,'BalloonParty::UI::LevelUp::LevelUpPopUp']]],
-  ['ascending_7',['Ascending',['../class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sort_state.html#a4b935bbf32035a51ffc83ce46e104762',1,'BalloonParty::Editor::EditorUI::SortState']]]
+  ['aawidthid_1',['AAWidthId',['../class_balloon_party_1_1_editor_1_1_bush_1_1_bush_leaf_baker.html#a4ef38ed0dbf4ed1cab8c731b7037eb80',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
+  ['actor_2',['Actor',['../struct_balloon_party_1_1_nudge_1_1_nudge_message.html#abe6ffdcd42bdaca78cacc65c1596b2ab',1,'BalloonParty.Nudge.NudgeMessage.Actor'],['../struct_balloon_party_1_1_shared_1_1_messages_1_1_actor_hit_message.html#a9fa849f2071ad466902eb53d19f80df4',1,'BalloonParty.Shared.Messages.ActorHitMessage.Actor']]],
+  ['alphakeys_3',['alphaKeys',['../class_balloon_party_1_1_editor_1_1_gradient_texture_drawer_1_1_gradient_storage.html#aaaaae3fc8056df6a9bceeed957b9a753',1,'BalloonParty::Editor::GradientTextureDrawer::GradientStorage']]],
+  ['androidmax_4',['AndroidMax',['../class_balloon_party_1_1_editor_1_1_texture_audit_window_1_1_entry.html#a948fa4fe1b66701aed557b48542359ee',1,'BalloonParty::Editor::TextureAuditWindow::Entry']]],
+  ['androidoverridden_5',['AndroidOverridden',['../class_balloon_party_1_1_editor_1_1_texture_audit_window_1_1_entry.html#adb20ddd661d286a28f72bfbd501a4532',1,'BalloonParty::Editor::TextureAuditWindow::Entry']]],
+  ['angle_6',['Angle',['../struct_balloon_party_1_1_editor_1_1_bush_1_1_bush_leaf_extractor_1_1_leaf_slot.html#aad09d7387dbf690733fba74250b7e36c',1,'BalloonParty.Editor.Bush.BushLeafExtractor.LeafSlot.Angle'],['../struct_balloon_party_1_1_editor_1_1_bush_1_1_bush_leaf_extractor_1_1_tip_candidate.html#aaf17f8b89e720a766c16403339df9c9c',1,'BalloonParty.Editor.Bush.BushLeafExtractor.TipCandidate.Angle']]],
+  ['anglespread_7',['AngleSpread',['../class_balloon_party_1_1_editor_1_1_bush_1_1_bush_branch_bake_settings.html#a6dadaf15fce9a5549859a0dfad5e806a',1,'BalloonParty::Editor::Bush::BushBranchBakeSettings']]],
+  ['animationspeedid_8',['AnimationSpeedId',['../class_balloon_party_1_1_slots_1_1_actor_1_1_cluster_1_1_cluster_view.html#ac0c75ea6aa4457b5a406de20340b8274',1,'BalloonParty::Slots::Actor::Cluster::ClusterView']]],
+  ['aocolor_9',['AOColor',['../class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_bush_shader_properties.html#a391725082be512d3fc87c5d1c689865f',1,'BalloonParty::Slots::Actor::Archetype::BushShaderProperties']]],
+  ['aoradius_10',['AORadius',['../class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_bush_shader_properties.html#ac71caa55b977d4bcef8e6d96e400e375',1,'BalloonParty::Slots::Actor::Archetype::BushShaderProperties']]],
+  ['aosoftness_11',['AOSoftness',['../class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_bush_shader_properties.html#a4aafec7c871580fffc4ae97534ecb1fd',1,'BalloonParty::Slots::Actor::Archetype::BushShaderProperties']]],
+  ['appearstate_12',['AppearState',['../class_balloon_party_1_1_u_i_1_1_level_up_1_1_level_up_pop_up.html#a5ac46063fcdfb2c015b93fb8e22cacfb',1,'BalloonParty::UI::LevelUp::LevelUpPopUp']]],
+  ['appeartrigger_13',['AppearTrigger',['../class_balloon_party_1_1_u_i_1_1_level_up_1_1_level_up_pop_up.html#a8610962ca04f3b195c5f83820ca8c211',1,'BalloonParty::UI::LevelUp::LevelUpPopUp']]],
+  ['ascending_14',['Ascending',['../class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_sort_state.html#a4b935bbf32035a51ffc83ce46e104762',1,'BalloonParty::Editor::EditorUI::SortState']]],
+  ['assetpath_15',['AssetPath',['../struct_balloon_party_1_1_editor_1_1_bush_1_1_leaf_atlas_packer_1_1_pack_result.html#a7f116c7e82e695ed2d73519db64980c3',1,'BalloonParty::Editor::Bush::LeafAtlasPacker::PackResult']]],
+  ['atlas_16',['Atlas',['../struct_balloon_party_1_1_editor_1_1_bush_1_1_leaf_atlas_packer_1_1_pack_result.html#a391b76159756fee96264faafd7ea9699',1,'BalloonParty::Editor::Bush::LeafAtlasPacker::PackResult']]],
+  ['attractiondistance_17',['AttractionDistance',['../struct_balloon_party_1_1_editor_1_1_bush_1_1_leaf_venation_simulator_1_1_simulation_settings.html#af9e5581615ec211ef0157edea1a7eb78',1,'BalloonParty::Editor::Bush::LeafVenationSimulator::SimulationSettings']]],
+  ['autopreview_18',['AutoPreview',['../class_balloon_party_1_1_editor_1_1_bush_1_1_bush_baker_state.html#ae17251ec0e6381b56e0f6a2b78d1c683',1,'BalloonParty::Editor::Bush::BushBakerState']]],
+  ['available_19',['Available',['../class_balloon_party_1_1_slots_1_1_actor_1_1_cluster_slot_selection_strategy_1_1_cluster_fill.html#a113df627728c6b68def95ec481c7f961',1,'BalloonParty::Slots::Actor::ClusterSlotSelectionStrategy::ClusterFill']]]
 ];

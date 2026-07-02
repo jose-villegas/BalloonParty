@@ -42,7 +42,7 @@ digraph MessageFlow {
         BalloonBalancer [label="BalloonBalancer", fillcolor="#1a3a1a", fontcolor="#3fb950"];
         BalloonSpawner2 [label="BalloonSpawner", fillcolor="#1a3a1a", fontcolor="#3fb950"];
         ItemAssigner [label="ItemAssigner", fillcolor="#1a3a1a", fontcolor="#3fb950"];
-        TrailEffect [label="LevelUpTrailEffect", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+        TrailEffect [label="LevelUpCinematic", fillcolor="#1a3a1a", fontcolor="#3fb950"];
         ColorBar [label="ColorProgressBar", fillcolor="#1a3a1a", fontcolor="#3fb950"];
         TrailService [label="ScoreTrailService", fillcolor="#1a3a1a", fontcolor="#3fb950"];
     }

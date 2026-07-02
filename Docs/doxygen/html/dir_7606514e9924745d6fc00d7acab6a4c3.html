@@ -126,7 +126,10 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('dir_7606514e99
 Files</h2></td></tr>
 <tr class="memitem:BalloonRemoverCheat_2Ecs" id="r_BalloonRemoverCheat_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_balloon_remover_cheat_8cs.html">BalloonRemoverCheat.cs</a></td></tr>
 <tr class="memitem:CheatConsoleView_2Ecs" id="r_CheatConsoleView_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_cheat_console_view_8cs.html">CheatConsoleView.cs</a></td></tr>
+<tr class="memitem:DisturbanceStampCheat_2Ecs" id="r_DisturbanceStampCheat_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_disturbance_stamp_cheat_8cs.html">DisturbanceStampCheat.cs</a></td></tr>
 <tr class="memitem:FireProjectileCheat_2Ecs" id="r_FireProjectileCheat_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_fire_projectile_cheat_8cs.html">FireProjectileCheat.cs</a></td></tr>
+<tr class="memitem:ForceGameOverCheat_2Ecs" id="r_ForceGameOverCheat_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_force_game_over_cheat_8cs.html">ForceGameOverCheat.cs</a></td></tr>
+<tr class="memitem:ForceRestartCheat_2Ecs" id="r_ForceRestartCheat_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_force_restart_cheat_8cs.html">ForceRestartCheat.cs</a></td></tr>
 <tr class="memitem:ICheat_2Ecs" id="r_ICheat_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_i_cheat_8cs.html">ICheat.cs</a></td></tr>
 <tr class="memitem:NearLevelUpCheat_2Ecs" id="r_NearLevelUpCheat_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_near_level_up_cheat_8cs.html">NearLevelUpCheat.cs</a></td></tr>
 <tr class="memitem:ScoreCheatHelper_2Ecs" id="r_ScoreCheatHelper_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_score_cheat_helper_8cs.html">ScoreCheatHelper.cs</a></td></tr>
@@ -134,17 +137,17 @@ Files</h2></td></tr>
 <tr class="memitem:TriggerLevelUpCheat_2Ecs" id="r_TriggerLevelUpCheat_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_trigger_level_up_cheat_8cs.html">TriggerLevelUpCheat.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md44"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md26"></a>
 Cheats</h1>
 <p>Runtime cheat console for testing and debugging without modifying game state manually.</p>
 <p>Press <b>backtick (`)</b> in Play Mode to toggle the console window. The console GameObject is created automatically at runtime — no scene setup required. The console discovers all registered cheats automatically and organises them by section and tag.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md45"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md27"></a>
 Build visibility</h1>
 <p>The entire <span class="tt">Cheats/</span> system — console, <span class="tt">ICheat</span>, and all cheat implementations — is wrapped in <span class="tt">#if UNITY_EDITOR || DEVELOPMENT_BUILD</span>. It compiles out completely in release builds. Registration in <span class="tt">GameLifetimeScope</span> is guarded by the same directive.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md46"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md28"></a>
 VContainer registration</h1>
 <p><span class="tt">CheatConsoleView</span> and <span class="tt">BalloonRemoverCheat</span> are MonoBehaviours created via <span class="tt">RegisterComponentOnNewGameObject</span>. VContainer singletons are <b>lazy</b> — the GameObject is only created when resolved. Both require <span class="tt">RegisterBuildCallback(resolver =&gt; resolver.Resolve&lt;T&gt;())</span> to force eager creation at scope build time.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md47"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md29"></a>
 Adding a new cheat</h1>
 <ol type="1">
 <li>Create a class implementing <span class="tt">ICheat</span> — give it a <span class="tt">Name</span>, a <span class="tt">Section</span>, and one or more <span class="tt">Tags</span>.</li>
@@ -152,7 +155,7 @@ Adding a new cheat</h1>
 <li>Register it in <span class="tt">GameLifetimeScope</span>: <div class="fragment"><div class="line">builder.Register&lt;YourCheat&gt;(Lifetime.Singleton).AsImplementedInterfaces();</div>
 </div><!-- fragment --> That's all. The console picks it up automatically.</li>
 </ol>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md48"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md30"></a>
 Console features</h1>
 <ul>
 <li><b>Search</b> — filters cheats by name as you type</li>
@@ -160,7 +163,7 @@ Console features</h1>
 <li><b>Sections</b> — cheats are grouped by their <span class="tt">Section</span> property</li>
 <li><b>Favorites</b> — click ☆ next to any cheat to pin it to the top of the list</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md49"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md31"></a>
 Current cheats</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -175,6 +178,8 @@ Current cheats</h1>
 <td class="markdownTableBodyNone">Trigger Level Up  </td><td class="markdownTableBodyNone">Score  </td><td class="markdownTableBodyNone">Fills all color bars to the current threshold and immediately triggers the level-up ceremony  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">Near Level Up  </td><td class="markdownTableBodyNone">Score  </td><td class="markdownTableBodyNone">Fills all color bars to one point below the threshold — pop one balloon of each color to complete the level naturally  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone">Stamp Disturbance  </td><td class="markdownTableBodyNone">Grid  </td><td class="markdownTableBodyNone">Toggle on, then mouse-drag to stamp disturbances into the shared disturbance field. Uses <span class="tt">DisturbanceFieldService.Stamp()</span> at the mouse world position with drag direction  </td></tr>
 </table>
 </div></div><!-- contents -->
 </div><!-- doc-content -->

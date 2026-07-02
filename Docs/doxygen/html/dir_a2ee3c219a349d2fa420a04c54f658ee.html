@@ -132,24 +132,25 @@ Directories</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-files" class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
+<tr class="memitem:BalloonOverlapQuery_2Ecs" id="r_BalloonOverlapQuery_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_balloon_overlap_query_8cs.html">BalloonOverlapQuery.cs</a></td></tr>
 <tr class="memitem:IBalloonItem_2Ecs" id="r_IBalloonItem_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_i_balloon_item_8cs.html">IBalloonItem.cs</a></td></tr>
 <tr class="memitem:IItem_2Ecs" id="r_IItem_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_i_item_8cs.html">IItem.cs</a></td></tr>
 <tr class="memitem:IItemView_2Ecs" id="r_IItemView_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_i_item_view_8cs.html">IItemView.cs</a></td></tr>
 <tr class="memitem:ItemActivator_2Ecs" id="r_ItemActivator_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_item_activator_8cs.html">ItemActivator.cs</a></td></tr>
 <tr class="memitem:ItemAssigner_2Ecs" id="r_ItemAssigner_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_item_assigner_8cs.html">ItemAssigner.cs</a></td></tr>
 <tr class="memitem:ItemDisplayService_2Ecs" id="r_ItemDisplayService_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_item_display_service_8cs.html">ItemDisplayService.cs</a></td></tr>
-<tr class="memitem:ItemVisualPoolChannel_2Ecs" id="r_ItemVisualPoolChannel_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_item_visual_pool_channel_8cs.html">ItemVisualPoolChannel.cs</a></td></tr>
+<tr class="memitem:ItemEffectPlayer_2Ecs" id="r_ItemEffectPlayer_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_item_effect_player_8cs.html">ItemEffectPlayer.cs</a></td></tr>
 <tr class="memitem:ItemVisualView_2Ecs" id="r_ItemVisualView_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_item_visual_view_8cs.html">ItemVisualView.cs</a></td></tr>
 <tr class="memitem:ITransformCapture_2Ecs" id="r_ITransformCapture_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_i_transform_capture_8cs.html">ITransformCapture.cs</a></td></tr>
 <tr class="memitem:LaserItemRotation_2Ecs" id="r_LaserItemRotation_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_laser_item_rotation_8cs.html">LaserItemRotation.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md100"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md144"></a>
 Item</h1>
 <p>Items are game-wide collectible effects — Bomb, Laser, Lightning, Paint, and Shield. They can appear in different contexts throughout the game: on balloons, in UI previews, in reward screens, or anywhere else an item needs to be displayed or activated. The item system is intentionally <b>context-independent</b> — it knows how to display and activate items, but does not know or care what is hosting them.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md101"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md145"></a>
 Contents</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md102"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md146"></a>
 Display</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -161,17 +162,17 @@ Display</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">IItemView</span>  </td><td class="markdownTableBodyNone">Contract for per-type visual components — <span class="tt">Type</span>, <span class="tt">Activate(Color)</span>, <span class="tt">Deactivate()</span>, <span class="tt">ApplySortingOrder(int)</span>  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">ItemDisplayService</span>  </td><td class="markdownTableBodyNone">MonoBehaviour on the item container — bridges an external data source (e.g. a model's <span class="tt">Item</span> reactive property) to the active visual's lifecycle via <span class="tt">ItemVisualPoolChannel</span>. Subscribes to both item type and color name changes — recolors the active visual immediately when the host's color changes  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">ItemDisplayService</span>  </td><td class="markdownTableBodyNone">MonoBehaviour on the item container — bridges an external data source (e.g. a model's <span class="tt">Item</span> reactive property) to the active visual's lifecycle via <span class="tt">SimplePoolChannel&lt;ItemVisualView&gt;</span>. Subscribes to both item type and color name changes — recolors the active visual immediately when the host's color changes  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">ItemViewScope</span>  </td><td class="markdownTableBodyNone">Reusable <span class="tt">LifetimeScope</span> — registers <span class="tt">ItemDisplayService</span> and injects all <span class="tt">ItemVisualView</span> children via <span class="tt">RegisterBuildCallback</span>. Custom <span class="tt">FindParent()</span> walks the transform hierarchy so it parents to whatever ancestor scope hosts it  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">ItemVisualView</span>  </td><td class="markdownTableBodyNone">MonoBehaviour on each item type's visual (PU_Bomb, PU_Laser, etc.) — implements <span class="tt">IItemView</span> and <span class="tt">IPoolable</span>; <span class="tt">Activate(color)</span> shows and colors, <span class="tt">SetColor(color)</span> recolors without toggling visibility, <span class="tt">Deactivate()</span> hides. Sorting managed via <span class="tt">ApplySortingOrder(int)</span>  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">ItemVisualPoolChannel</span>  </td><td class="markdownTableBodyNone"><span class="tt">PoolChannel&lt;ItemVisualView&gt;</span> — one channel per visual prefab, keyed by prefab name. Managed by <span class="tt">ItemDisplayService</span> via <span class="tt">PoolManager.GetOrRegister()</span>  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">SimplePoolChannel&lt;ItemVisualView&gt;</span>  </td><td class="markdownTableBodyNone"><span class="tt">PoolChannel&lt;ItemVisualView&gt;</span> — one channel per visual prefab, keyed by prefab name. Managed by <span class="tt">ItemDisplayService</span> via <span class="tt">PoolManager.GetOrRegister()</span>  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">LaserItemRotation</span>  </td><td class="markdownTableBodyNone">MonoBehaviour on the laser body child — continuous Z-axis rotation at <span class="tt">_rotationSpeed</span>; resets angle and stops on <span class="tt">OnEnable</span> or <span class="tt">Stop()</span>  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md103"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md147"></a>
 Assignment</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -179,7 +180,7 @@ Assignment</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">ItemAssigner</span>  </td><td class="markdownTableBodyNone"><span class="tt">IStartable</span> — subscribes to <span class="tt">ItemCheckMessage</span>; picks a random newly-spawned balloon that implements <span class="tt">IHasWriteableItemSlot</span> and assigns an item based on turn frequency, weight, and per-type max-cap rules. Balloons that do not implement <span class="tt">IHasWriteableItemSlot</span> (e.g. <span class="tt">ToughBalloonModel</span>) are excluded from selection entirely  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md104"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md148"></a>
 Activation</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -187,30 +188,30 @@ Activation</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">ItemActivator</span>  </td><td class="markdownTableBodyNone"><span class="tt">IStartable</span> — subscribes to <span class="tt">ActorHitMessage</span>; when the hit actor is a balloon carrying an item, finds the matching <span class="tt">IBalloonItem</span> handler by type, calls <span class="tt">Setup</span> + <span class="tt">await Activate()</span>, then publishes <span class="tt">ItemActivatedMessage</span>. Yields one frame before activation to let all synchronous <span class="tt">ActorHitMessage</span> subscribers finish first  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">Bomb/BombItemHandler</span>  </td><td class="markdownTableBodyNone">Area explosion — <span class="tt">Physics2D.OverlapCircleAll</span> at balloon position; destroys balloons in radius; nudges survivors with exponential distance falloff. Passes <span class="tt">ItemSettings.Damage</span> into each <span class="tt">ActorHitMessage</span>  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">Bomb/BombItemHandler</span>  </td><td class="markdownTableBodyNone">Area explosion — <span class="tt">Physics2D.OverlapCircleAll</span> at balloon position; destroys balloons in radius; nudges survivors with exponential distance falloff. Passes <span class="tt">ItemSettings.Damage</span> into each <span class="tt">ActorHitMessage</span>. Stamps <span class="tt">DisturbanceFieldService.Stamp()</span> on detonation with <span class="tt">Bomb</span> profile  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">Laser/LaserItemHandler</span>  </td><td class="markdownTableBodyNone">Cross beam — 4× <span class="tt">Physics2D.CircleCastAll</span> in rotated directions; reads captured rotation from <span class="tt">ItemRotationCapturedMessage</span>. Passes <span class="tt">ItemSettings.Damage</span> into each <span class="tt">ActorHitMessage</span>  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">Laser/LaserItemHandler</span>  </td><td class="markdownTableBodyNone">Cross beam — 4× <span class="tt">Physics2D.CircleCastAll</span> in rotated directions; reads captured rotation from <span class="tt">ItemRotationCapturedMessage</span>. Passes <span class="tt">ItemSettings.Damage</span> into each <span class="tt">ActorHitMessage</span>. Stamps <span class="tt">DisturbanceFieldService.Stamp()</span> along beam segments with <span class="tt">Laser</span> profile  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">Lightning/LightningItemHandler</span>  </td><td class="markdownTableBodyNone">Chain lightning — queries <span class="tt">SlotGrid</span> for all same-color balloons, sorts by distance, spawns <span class="tt">ChainLightningView</span> via <span class="tt">EffectPoolChannel</span>, passes <span class="tt">ItemSettings</span> directly to <span class="tt">PrepareDisplay</span>, hits each target sequentially with async delay. Passes <span class="tt">ItemSettings.Damage</span> into each <span class="tt">ActorHitMessage</span>  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">Lightning/LightningItemHandler</span>  </td><td class="markdownTableBodyNone">Chain lightning — queries <span class="tt">SlotGrid</span> for all same-color balloons, sorts by distance, spawns <span class="tt">ChainLightningView</span> via <span class="tt">SimplePoolChannel&lt;EffectView&gt;</span>, passes <span class="tt">ItemSettings</span> directly to <span class="tt">PrepareDisplay</span>, hits each target sequentially with async delay. Passes <span class="tt">ItemSettings.Damage</span> into each <span class="tt">ActorHitMessage</span>  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">Lightning/ChainLightningView</span>  </td><td class="markdownTableBodyNone"><span class="tt">EffectView</span> subclass for chain lightning — multiple <span class="tt">LineRenderer</span>s + a <span class="tt">SpriteRenderer</span> glow. <span class="tt">PrepareDisplay(positions, settings, onTargetHit)</span> accepts <span class="tt">ItemSettings</span> directly; <span class="tt">Play()</span> starts <span class="tt">async UniTaskVoid</span> that grows forward jump-by-jump then retracts. Bolt segments use fractal <b>midpoint displacement</b> (<span class="tt">PathHelper.MidpointDisplacement</span>) with configurable <span class="tt">FractalDecay</span> for realistic jagged electricity. Glow follows a smooth <b>Catmull-Rom path</b> through per-jump centroids (<span class="tt">BuildGlowPath</span>), animated per-frame during each jump delay. <span class="tt">BuildBoltBuffers</span>, <span class="tt">BuildGlowPath</span>, and <span class="tt">FillSegment</span> are <span class="tt">internal static</span> — shared with editor preview (single source of truth). Uses <span class="tt">VectorMathHelper.Centroid</span>/<span class="tt">BoundingRadius</span> and <span class="tt">PathHelper.SampleAt</span>/<span class="tt">ResampleLinear</span>/<span class="tt">PrefixSum</span> for math  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">Shield/ShieldItemHandler</span>  </td><td class="markdownTableBodyNone">Shield grant — increments <span class="tt">ShieldsRemaining</span> on the active projectile; spawns <span class="tt">PSVFX_ShieldGainPU</span> at the balloon's grid position. Does not deal damage  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">Paint/PaintItemHandler</span>  </td><td class="markdownTableBodyNone">Splatoon-style color spread — computes all 6 hex neighbor positions via <span class="tt">SlotGrid.HexNeighborIndices</span>, launches paint blob arcs toward each via <span class="tt">PaintSplashView</span>, and changes paintable (<span class="tt">IPaintable</span>) different-color neighbors to the popped balloon's color on blob arrival  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">Paint/PaintItemHandler</span>  </td><td class="markdownTableBodyNone">Splatoon-style color spread — computes all 6 hex neighbor positions via <span class="tt">SlotGrid.HexNeighborIndices</span>, launches paint blob arcs toward each via <span class="tt">PaintSplashView</span>, and changes paintable (<span class="tt">IPaintable</span>) different-color neighbors to the popped balloon's color on blob arrival. Stamps <span class="tt">DisturbanceFieldService.Stamp()</span> on neighbor hits and splash landing with <span class="tt">Paint</span> profile  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">Paint/PaintSplashView</span>  </td><td class="markdownTableBodyNone"><span class="tt">EffectView</span> subclass — animates <span class="tt">ColorableRenderer</span> blobs along arc paths; spawns fire-and-forget splash particles via <span class="tt">ParticlePoolChannel</span> on landing. <span class="tt">PrepareDisplay</span> takes <span class="tt">ItemSettings</span> directly. <span class="tt">ComputeBlobFlight</span> and <span class="tt">ApplyBlobMaterial</span> are <span class="tt">internal static</span> — shared with editor preview (single source of truth for position, scale, and MPB math). Returns <span class="tt">BlobFlightSnapshot</span> struct. Blobs spin during flight at <span class="tt">PaintBlobSpinSpeed</span>. Each blob gets a unique <span class="tt">sortingOrder</span> to prevent transparent sprite flickering. Renderer is found via <span class="tt">GetComponentInChildren&lt;Renderer&gt;()</span> to support <span class="tt">CompositeColorableRenderer</span> hierarchies  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">Paint/PaintBlobRenderer</span>  </td><td class="markdownTableBodyNone">MonoBehaviour on each blob child — assigns a random <span class="tt">_TimeOffset</span> to the PaintBlob shader via <span class="tt">MaterialPropertyBlock</span> so each blob's animation phase differs. GPU instancing is disabled on <span class="tt">PaintBlob</span> and <span class="tt">PaintFlyingBlob</span> materials because <span class="tt">_TimeOffset</span> is set per-instance via MPB (see <span class="tt">Assets/Shaders/BalloonParty/README.md</span>)  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md105"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md149"></a>
 Architecture</h1>
 <p>The item display system is designed around a <b>reusable scope pattern</b>. <span class="tt">ItemViewScope</span> + <span class="tt">ItemDisplayService</span> + <span class="tt">ItemVisualView</span> children form a self-contained unit that can be dropped onto any prefab or GameObject hierarchy. The scope inherits all parent registrations automatically through VContainer's scope hierarchy — no manual wiring needed.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md106"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md150"></a>
 Design principle: items are not balloons</h2>
 <p>The <span class="tt">Item/</span> folder has no dependency on <span class="tt">Balloon/</span>. <span class="tt">ItemDisplayService.Bind()</span> accepts individual reactive properties — it does not know whether the caller is a balloon, a UI panel, or a reward screen. Future contexts (shop previews, inventory, tutorial highlights) can host items by adding <span class="tt">ItemViewScope</span> to their prefab and calling <span class="tt">Bind()</span> with appropriate reactive properties.</p>
 <p><span class="tt">IBalloonItem</span> exists only as a thin adapter for the balloon-hosted activation flow. It is the balloon system's way of interacting with items, not the item system's knowledge of balloons.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md107"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md151"></a>
 Scope hierarchy example (balloon prefab)</h2>
 <div class="fragment"><div class="line">Balloon (root)         ← BalloonLifetimeScope</div>
 <div class="line">  └── Item             ← ItemViewScope, ItemDisplayService</div>
@@ -219,7 +220,7 @@ Scope hierarchy example (balloon prefab)</h2>
 <div class="line">       ├── PU_Lightning← ItemVisualView (Type = Lightning)</div>
 <div class="line">       └── PU_Shield   ← ItemVisualView (Type = Shield)</div>
 </div><!-- fragment --><p><span class="tt">ItemViewScope</span> extends <span class="tt">LifetimeScope</span> directly with a custom <span class="tt">FindParent()</span> that walks the transform hierarchy, not <span class="tt">FindFirstObjectByType</span> — so each pooled balloon's scope parents to its own balloon's root scope rather than a random one.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md108"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md152"></a>
 Display flow</h2>
 <ol type="1">
 <li>A host (e.g. <span class="tt">BalloonView.Bind()</span>) calls <span class="tt">ItemDisplayService.Bind(item, colorName, slotIndex, config, poolManager, itemConfig, sortingOffset)</span></li>
@@ -229,7 +230,7 @@ Display flow</h2>
 <li>When <span class="tt">Unbind()</span> is called or the item changes back to None, the active visual is returned to its pool via <span class="tt">PoolManager.Return()</span></li>
 <li>Sorting order updates flow through <span class="tt">ItemDisplayService</span> → <span class="tt">ItemVisualView.ApplySortingOrder()</span> on the active instance</li>
 </ol>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md109"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md153"></a>
 Activation flow</h2>
 <ol type="1">
 <li><span class="tt">ProjectileView.OnTriggerEnter2D</span> publishes <span class="tt">ActorHitMessage</span> for the hit balloon (always <span class="tt">Damage = 1</span>)</li>
@@ -238,7 +239,7 @@ Activation flow</h2>
 <li>The handler runs its effect (may be async, e.g. lightning), publishing <span class="tt">ActorHitMessage</span> for each secondary balloon with <span class="tt">Damage = settings.Damage</span></li>
 <li><span class="tt">ItemActivator</span> publishes <span class="tt">ItemActivatedMessage</span> — <span class="tt">BalloonController</span> receives it and returns the item balloon to pool</li>
 </ol>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md110"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md154"></a>
 Item types</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -254,21 +255,21 @@ Item types</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><b>Shield</b>  </td><td class="markdownTableBodyNone">Shield icon, tinted to host color  </td><td class="markdownTableBodyNone">Grants the active projectile +1 bounce shield  </td><td class="markdownTableBodyNone">N/A — no damage dealt  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md111"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md155"></a>
 Damage</h1>
 <p>Each damaging item reads <span class="tt">ItemSettings.Damage</span> (configured per item in <span class="tt">ItemConfiguration</span>) and passes it as the <span class="tt">Damage</span> field of <span class="tt">ActorHitMessage</span>. The outcome is pre-computed by calling <span class="tt">EvaluateHit(new DamageContext(damage))</span> on the hit actor before publishing — <span class="tt">BalloonController</span> reads <span class="tt">msg.Outcome</span> and routes accordingly. Setting <span class="tt">Damage = 1</span> (the default) reproduces normal one-hit behaviour. Setting it higher on Bomb, for example, allows a single blast to pop tough balloons that would otherwise survive.</p>
 <p>Non-damaging items (Paint, Shield) do not use the <span class="tt">Damage</span> field — the <span class="tt">ItemSettingsDrawer</span> hides it for those types.</p>
 <blockquote class="doxtable">
-<p><b>Unbreakable balloons</b> — <span class="tt">UnbreakableBalloonModel</span> (Phase 7.5) will always return <span class="tt">Deflect</span> from <span class="tt">EvaluateHit</span> regardless of damage. Until that model exists, <span class="tt">BalloonPrefabEntry.HitsToPop = -1</span> is a broken path. </p>
+<p><b>Unbreakable balloons</b> — <span class="tt">UnbreakableBalloonModel</span> always returns <span class="tt">Deflect</span> from <span class="tt">EvaluateHit</span> regardless of damage. Only <span class="tt">DamageFlags.Piercing</span> (e.g. Bomb, Laser) forces a <span class="tt">Pop</span>. </p>
 </blockquote>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md112"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md156"></a>
 Interactions</h1>
 <ul>
 <li><b>Any host view</b> — calls <span class="tt">ItemDisplayService.Bind()</span>/<span class="tt">Unbind()</span> to connect/disconnect item display</li>
 <li><b>BalloonController</b> — defers balloon pool return until <span class="tt">ItemActivatedMessage</span> arrives; captures laser rotation and publishes <span class="tt">ItemRotationCapturedMessage</span>; routes on <span class="tt">msg.Outcome</span> switch (<span class="tt">PassThrough</span>/<span class="tt">Deflect</span>/<span class="tt">Pop</span>)</li>
 <li><b>ItemActivator</b> — central orchestrator; routes activation to the correct handler after yielding one frame</li>
 <li><b>SlotGrid</b> — <span class="tt">LightningItemHandler</span> queries all balloons of a given color; <span class="tt">ShieldItemHandler</span> resolves the balloon's grid-center world position</li>
-<li><b>PoolManager</b> — item visual lifecycle via <span class="tt">ItemVisualPoolChannel</span>; activation effect lifecycle via <span class="tt">EffectPoolChannel</span></li>
+<li><b>PoolManager</b> — item visual lifecycle via <span class="tt">SimplePoolChannel&lt;ItemVisualView&gt;</span>; activation effect lifecycle via <span class="tt">SimplePoolChannel&lt;EffectView&gt;</span></li>
 <li><b>IEffect / EffectView</b> — <span class="tt">ChainLightningView</span> extends <span class="tt">EffectView</span>; all item activation effects that need async Play/Stop extend <span class="tt">EffectView</span> | <b>IGameConfiguration / ItemConfiguration</b> — color lookup, item settings (radius, nudge values, laser cast params, lightning timing/segments/randomness/glow subdivisions/fractal decay, paint flight duration/arc curve/scale curve/shadow scale curve/sprite scale curve/spin speed, damage) |</li>
 <li><b>SlotGrid</b> — <span class="tt">LightningItemHandler</span> queries all balloons of a given color; <span class="tt">ShieldItemHandler</span> resolves the balloon's grid-center world position; <span class="tt">PaintItemHandler</span> uses <span class="tt">HexNeighborIndices</span> and <span class="tt">IndexToWorldPosition</span> for neighbor targeting</li>
 <li><b>ColorableRenderer</b> — <span class="tt">PaintSplashView</span> uses <span class="tt">ColorableRenderer[]</span> for blobs so they participate in the standard color pipeline </li>

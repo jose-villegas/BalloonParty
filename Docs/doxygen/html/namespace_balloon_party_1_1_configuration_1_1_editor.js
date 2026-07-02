@@ -7,5 +7,6 @@ var namespace_balloon_party_1_1_configuration_1_1_editor =
     [ "ItemSettingsDrawer", "class_balloon_party_1_1_configuration_1_1_editor_1_1_item_settings_drawer.html", "class_balloon_party_1_1_configuration_1_1_editor_1_1_item_settings_drawer" ],
     [ "MapLimitsSceneOverlay", "class_balloon_party_1_1_configuration_1_1_editor_1_1_map_limits_scene_overlay.html", "class_balloon_party_1_1_configuration_1_1_editor_1_1_map_limits_scene_overlay" ],
     [ "PaletteColorMaskDrawer", "class_balloon_party_1_1_configuration_1_1_editor_1_1_palette_color_mask_drawer.html", "class_balloon_party_1_1_configuration_1_1_editor_1_1_palette_color_mask_drawer" ],
-    [ "PaletteColorNameDrawer", "class_balloon_party_1_1_configuration_1_1_editor_1_1_palette_color_name_drawer.html", "class_balloon_party_1_1_configuration_1_1_editor_1_1_palette_color_name_drawer" ]
+    [ "PaletteColorNameDrawer", "class_balloon_party_1_1_configuration_1_1_editor_1_1_palette_color_name_drawer.html", "class_balloon_party_1_1_configuration_1_1_editor_1_1_palette_color_name_drawer" ],
+    [ "StampProfileDrawer", "class_balloon_party_1_1_configuration_1_1_editor_1_1_stamp_profile_drawer.html", "class_balloon_party_1_1_configuration_1_1_editor_1_1_stamp_profile_drawer" ]
 ];

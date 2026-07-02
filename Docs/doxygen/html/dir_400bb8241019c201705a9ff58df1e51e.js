@@ -1,7 +1,6 @@
 var dir_400bb8241019c201705a9ff58df1e51e =
 [
     [ "AssetLinkLabel.cs", "_asset_link_label_8cs.html", "_asset_link_label_8cs" ],
-    [ "ConfigAssetCache.cs", "_config_asset_cache_8cs.html", "_config_asset_cache_8cs" ],
     [ "EditorAnimationLoop.cs", "_editor_animation_loop_8cs.html", "_editor_animation_loop_8cs" ],
     [ "PaletteColorPicker.cs", "_palette_color_picker_8cs.html", "_palette_color_picker_8cs" ],
     [ "SearchFilterToolbar.cs", "_search_filter_toolbar_8cs.html", "_search_filter_toolbar_8cs" ],

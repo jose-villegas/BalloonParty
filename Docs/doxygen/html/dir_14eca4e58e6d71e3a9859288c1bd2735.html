@@ -124,6 +124,7 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('dir_14eca4e58e
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-subdirs" class="groupheader"><a id="subdirs" name="subdirs"></a>
 Directories</h2></td></tr>
+<tr class="memitem:Bush" id="r_Bush"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_9e23b832c5e6fc3322b84ffc6893a8b1.html">Bush</a></td></tr>
 <tr class="memitem:EditorUI" id="r_EditorUI"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_400bb8241019c201705a9ff58df1e51e.html">EditorUI</a></td></tr>
 <tr class="memitem:EffectPreview" id="r_EffectPreview"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_850a1660364bbf2b54e41f711a55a89c.html">EffectPreview</a></td></tr>
 </table><table class="memberdecls">
@@ -131,6 +132,8 @@ Directories</h2></td></tr>
 Files</h2></td></tr>
 <tr class="memitem:AutoFieldPropertyDrawer_2Ecs" id="r_AutoFieldPropertyDrawer_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_auto_field_property_drawer_8cs.html">AutoFieldPropertyDrawer.cs</a></td></tr>
 <tr class="memitem:ChainLightningViewEditor_2Ecs" id="r_ChainLightningViewEditor_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_chain_lightning_view_editor_8cs.html">ChainLightningViewEditor.cs</a></td></tr>
+<tr class="memitem:ColorableBalloonVariantEditor_2Ecs" id="r_ColorableBalloonVariantEditor_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_colorable_balloon_variant_editor_8cs.html">ColorableBalloonVariantEditor.cs</a></td></tr>
+<tr class="memitem:EnumIndexedDrawer_2Ecs" id="r_EnumIndexedDrawer_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_enum_indexed_drawer_8cs.html">EnumIndexedDrawer.cs</a></td></tr>
 <tr class="memitem:GradientTextureDrawer_2Ecs" id="r_GradientTextureDrawer_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_gradient_texture_drawer_8cs.html">GradientTextureDrawer.cs</a></td></tr>
 <tr class="memitem:PaintSplashViewEditor_2Ecs" id="r_PaintSplashViewEditor_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_paint_splash_view_editor_8cs.html">PaintSplashViewEditor.cs</a></td></tr>
 <tr class="memitem:PropertyDrawerHelper_2Ecs" id="r_PropertyDrawerHelper_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_property_drawer_helper_8cs.html">PropertyDrawerHelper.cs</a></td></tr>
@@ -139,12 +142,13 @@ Files</h2></td></tr>
 <tr class="memitem:ScriptSearchPopup_2Ecs" id="r_ScriptSearchPopup_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_script_search_popup_8cs.html">ScriptSearchPopup.cs</a></td></tr>
 <tr class="memitem:SetMobileTextureSize_2Ecs" id="r_SetMobileTextureSize_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_set_mobile_texture_size_8cs.html">SetMobileTextureSize.cs</a></td></tr>
 <tr class="memitem:TextureAuditWindow_2Ecs" id="r_TextureAuditWindow_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_texture_audit_window_8cs.html">TextureAuditWindow.cs</a></td></tr>
+<tr class="memitem:TexturePreviewBox_2Ecs" id="r_TexturePreviewBox_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_texture_preview_box_8cs.html">TexturePreviewBox.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md67"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md98"></a>
 Editor</h1>
 <p>Shared editor tooling used across all <span class="tt">PropertyDrawer</span> implementations in the project. Nothing in this folder is referenced at runtime — it compiles only in Editor builds.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md68"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md99"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -156,15 +160,17 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">AutoFieldPropertyDrawer</span>  </td><td class="markdownTableBodyNone">Abstract base class for <span class="tt">PropertyDrawer</span>s that want common fields rendered automatically. Seals <span class="tt">GetPropertyHeight</span> and <span class="tt">OnGUI</span> and exposes four override points  </td></tr>
 <tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">EnumIndexedDrawer</span>  </td><td class="markdownTableBodyNone">Drawer for <span class="tt">[EnumIndexed(typeof(SomeEnum))]</span> (attribute in <span class="tt">Shared/</span>) — for an array indexed by an enum's ordinal, labels each element with the enum value's name ("Default", "Return", …) instead of "Element 0, 1, …". Reads the element index from the property path and relabels the default field draw  </td></tr>
+<tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">ScriptReferenceRemap</span>  </td><td class="markdownTableBodyNone"><span class="tt">internal static</span> — context menu tool for remapping script GUIDs in prefab/scene files after class renames. Available from Inspector component "⋮" menu and Project window right-click on <span class="tt">.cs</span> files  </td></tr>
-<tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">ScriptSearchPopup</span>  </td><td class="markdownTableBodyNone"><span class="tt">internal sealed EditorWindow</span> — searchable popup for picking a <span class="tt">MonoScript</span>, similar to Unity's "Add Component" search. Used by <span class="tt">ScriptReferenceRemap</span>  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">EditorUI/</span>  </td><td class="markdownTableBodyNone">Reusable UI building blocks for editor windows — <span class="tt">SortableHeader</span> (sortable column with ▲/▼), <span class="tt">SelectionTracker</span> (<span class="tt">ISelectable</span> + toggle-all + per-row checkbox + count + get-selected), <span class="tt">AssetLinkLabel</span> (clickable ping-to-select), <span class="tt">StyledRow</span> (bold label + highlighted row), <span class="tt">SearchFilterToolbar</span> (search + enum filter + refresh). See <span class="tt"><a class="el" href="_editor_2_editor_u_i_2_r_e_a_d_m_e_8md.html">EditorUI/README.md</a></span>  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">ScriptSearchPopup</span>  </td><td class="markdownTableBodyNone"><span class="tt">internal sealed EditorWindow</span> — searchable popup for picking a <span class="tt">MonoScript</span>, similar to Unity's "Add Component" search. Used by <span class="tt">ScriptReferenceRemap</span>  </td></tr>
 <tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">EditorUI/</span>  </td><td class="markdownTableBodyNone">Reusable UI building blocks for editor windows — <span class="tt">SortableHeader</span> (sortable column with ▲/▼), <span class="tt">SelectionTracker</span> (<span class="tt">ISelectable</span> + toggle-all + per-row checkbox + count + get-selected), <span class="tt">AssetLinkLabel</span> (clickable ping-to-select), <span class="tt">StyledRow</span> (bold label + highlighted row), <span class="tt">SearchFilterToolbar</span> (search + enum filter + refresh). See <span class="tt"><a class="el" href="_editor_2_editor_u_i_2_r_e_a_d_m_e_8md.html">EditorUI/README.md</a></span>  </td></tr>
+<tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">EffectPreview/</span>  </td><td class="markdownTableBodyNone">Reusable editor-time preview system for <span class="tt">EffectView</span> subclasses — <span class="tt">IEffectPreviewModule</span> (interface for pluggable rendering logic), <span class="tt">EffectViewPreviewPlayer</span> (animation loop, color picker, config caches, inspector GUI), <span class="tt">EditorGridHelper</span> (slot grid position math without a runtime <span class="tt">SlotGrid</span>), <span class="tt">PaintSplashPreviewModule</span> (blob flight preview), <span class="tt">ChainLightningPreviewModule</span> (line renderer bolt preview). See <span class="tt"><a class="el" href="_editor_2_effect_preview_2_r_e_a_d_m_e_8md.html">EffectPreview/README.md</a></span>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md69"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md100"></a>
 AutoFieldPropertyDrawer</h1>
 <p>Subclasses declare one required property and up to three optional overrides:</p>
 <table class="markdownTable">
@@ -179,19 +185,19 @@ AutoFieldPropertyDrawer</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">BuildFoldoutLabel</span>  </td><td class="markdownTableBodyNone">No  </td><td class="markdownTableBodyNone">Override to append contextual text to the foldout header (e.g. <span class="tt">Element 0  [Deflect]</span>, <span class="tt">Element 2  [Bomb]</span>)  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md70"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md101"></a>
 Draw order when expanded</h2>
 <div class="fragment"><div class="line">1. Foldout header        ← BuildFoldoutLabel</div>
 <div class="line">2. Pinned fields         ← DrawPinnedFields   (default: nothing)</div>
 <div class="line">3. Auto common fields    ← DrawCommonFields via PropertyDrawerHelper</div>
 <div class="line">4. Special fields        ← DrawSpecialFields</div>
-</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md71"></a>
+</div><!-- fragment --><h2 class="doxsection"><a class="anchor" id="autotoc_md102"></a>
 Adding new fields to a type</h2>
 <ul>
 <li><b>New common field</b> — add it to the data class. It appears in the Inspector automatically with a nicified name derived from the field name. No drawer changes needed.</li>
 <li><b>New field needing custom layout</b> — add its serialized name to <span class="tt">ExcludedFields</span> and handle it in <span class="tt">DrawPinnedFields</span> or <span class="tt">DrawSpecialFields</span> (with the matching height method).</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md72"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md103"></a>
 Current drawers using this base</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -203,7 +209,7 @@ Current drawers using this base</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">NudgeOverrideDrawer</span>  </td><td class="markdownTableBodyNone"><span class="tt">Nudge/Editor/</span>  </td><td class="markdownTableBodyNone"><span class="tt">BuildFoldoutLabel</span> appends <span class="tt">[NudgeType]</span>; <span class="tt">_appliesTo</span> pinned to top via <span class="tt">DrawPinnedFields</span> using <span class="tt">EnumFlagsField</span>; <span class="tt">_falloff</span> conditional on Shockwave flag  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md73"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md104"></a>
 Standalone drawers</h1>
 <p>These drawers extend <span class="tt">PropertyDrawer</span> directly and handle their own rendering without the auto-field pattern:</p>
 <table class="markdownTable">
@@ -216,7 +222,7 @@ Standalone drawers</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">PaletteColorNameDrawer</span>  </td><td class="markdownTableBodyNone"><span class="tt">Configuration/Editor/</span>  </td><td class="markdownTableBodyNone">Renders a <span class="tt">string</span> field as a popup of <span class="tt">GamePalette</span> color names with a color swatch  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md74"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md105"></a>
 Custom editors</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -228,7 +234,7 @@ Custom editors</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">GameConfigurationEditor</span>  </td><td class="markdownTableBodyNone"><span class="tt">GameConfiguration</span>  </td><td class="markdownTableBodyNone">Adds a "Show Limits In Scene" toggle below the default inspector that controls <span class="tt">MapLimitsSceneOverlay</span>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md75"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md106"></a>
 Scene overlays</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -236,7 +242,7 @@ Scene overlays</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">MapLimitsSceneOverlay</span>  </td><td class="markdownTableBodyNone"><span class="tt">[InitializeOnLoad]</span> static class — draws the <span class="tt">GameConfiguration.LimitsClockwise</span> map boundary as an orange rectangle with edge-value labels in the Scene view. Active in both edit and play mode regardless of inspector selection. Uses <span class="tt">ConfigAssetCache&lt;GameConfiguration&gt;</span> to locate the asset. Toggle persisted via <span class="tt">EditorPrefs</span> and controllable from the <span class="tt">GameConfigurationEditor</span> inspector  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md76"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md107"></a>
 Context menu tools</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">

@@ -124,16 +124,26 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('dir_53ff6e473d
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-subdirs" class="groupheader"><a id="subdirs" name="subdirs"></a>
 Directories</h2></td></tr>
+<tr class="memitem:Binding" id="r_Binding"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_a2fa71ae67099e80bf9505400e79082c.html">Binding</a></td></tr>
+<tr class="memitem:Danger" id="r_Danger"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_e704b1c5c79caef2daaf89d0e1463a9e.html">Danger</a></td></tr>
+<tr class="memitem:GameOver" id="r_GameOver"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_b9166310bb0e1328aeeabf4398682117.html">GameOver</a></td></tr>
+<tr class="memitem:Health" id="r_Health"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_6ed0fc3629482bb72b8a7cfe07a0fcf0.html">Health</a></td></tr>
 <tr class="memitem:LevelUp" id="r_LevelUp"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_d2ce5021a1fdaf4aa96dee72f926d288.html">LevelUp</a></td></tr>
 <tr class="memitem:Score" id="r_Score"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_a94ffabe24d9947a3182725fed46e8c9.html">Score</a></td></tr>
 <tr class="memitem:Shields" id="r_Shields"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_63cc5e5b50930afc607f3d2730669459.html">Shields</a></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-files" class="groupheader"><a id="files" name="files"></a>
+Files</h2></td></tr>
+<tr class="memitem:FormattedLabel_2Ecs" id="r_FormattedLabel_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_formatted_label_8cs.html">FormattedLabel.cs</a></td></tr>
+<tr class="memitem:ReactiveCounterLabel_2Ecs" id="r_ReactiveCounterLabel_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_reactive_counter_label_8cs.html">ReactiveCounterLabel.cs</a></td></tr>
+<tr class="memitem:RectAnchorMath_2Ecs" id="r_RectAnchorMath_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_rect_anchor_math_8cs.html">RectAnchorMath.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md385"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md780"></a>
 UI</h1>
 <p>All HUD and menu elements. Each sub-folder owns one distinct player-facing feature.</p>
 <p>Each self-contained UI section has its own VContainer child scope, inheriting all game services from <span class="tt">GameLifetimeScope</span> while keeping its registrations local.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md386"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md781"></a>
 Scopes</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -145,7 +155,7 @@ Scopes</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">ShieldUILifetimeScope</span>  </td><td class="markdownTableBodyNone">Shield HUD root  </td><td class="markdownTableBodyNone"><span class="tt">ShieldCounterLabel[]</span>, <span class="tt">ShieldCounterAnimation</span>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md387"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md782"></a>
 Feature folders</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -157,10 +167,10 @@ Feature folders</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">Shields/</span>  </td><td class="markdownTableBodyNone">Shield counter label and bounce animation  </td><td class="markdownTableBodyNone"><span class="tt">ShieldUILifetimeScope</span> (child of <span class="tt">GameLifetimeScope</span>)  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md388"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md783"></a>
 Game start</h1>
 <p>Scene loading is handled by <span class="tt">SceneTransition</span> (in <span class="tt">Shared/</span>) — a MonoBehaviour wired directly to the start button's <span class="tt">onClick</span> in the Inspector. No dedicated start-screen component is needed.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md389"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md784"></a>
 Interactions</h1>
 <ul>
 <li><b>ScoreController</b> — all score UI subscribes to its <span class="tt">TotalScore</span> / <span class="tt">Level</span> reactive properties and <span class="tt">ScorePointMessage</span> / <span class="tt">ScoreLevelUpMessage</span> events; <span class="tt">ColorProgressBar</span> reads the current streak via <span class="tt">GetStreak</span> for displaying streak notices</li>

@@ -14,13 +14,13 @@ any of those concerns leaking into `FlyingTrail` itself.
 currently in flight by their `TrailId`. `Register(id, callback)` can be called:
 - **Before** the trail spawns (forward registration) — the callback fires when the
   trail is spawned, which immediately pauses the trail
-- **After** the trail is already in flight (retroactive) — `TrackTrail` detects the
+- **After** the trail is already in flight (retroactive) — `LevelUpCinematic` awaits the
   trail in `_flights`, switches its DOTween tweens to unscaled time, and fires the
   callback immediately
 
-`ScoreTrailService` exposes `TrackTrail(id, callback)`, `PauseTrailsAbove(threshold)`,
-`ResumeTrail(id)`, and `ClearTrackedTrail(id)` — the cinematic's vocabulary for
-manipulating in-flight trails.
+`ScoreTrailService` exposes `Flights` (a `TrailFlightRegistry<TrailId>`: `Contains` /
+`Get` / `CompleteAll`); each `TrailFlight` handle exposes `Pause` / `Resume` /
+`Complete` / `Speed` — the cinematic's vocabulary for manipulating in-flight trails.
 
 **`FlyingTrail`** — knows nothing about cinematics, pause state, or `TrailId`. It just
 flies from A to B on a path and calls `OnComplete`. All interception happens by
@@ -31,10 +31,12 @@ externally switching its tweens to `UpdateType.Manual` and advancing them with
 
 **Adding a new trail consumer (e.g. a new cinematic that intercepts a trail type):**
 1. Subscribe to the relevant `ScorePointMessage` variant
-2. Call `ScoreTrailService.TrackTrail(id, callback)` — works whether the trail has
+2. Await `Flights.Contains(id)` then `Flights.Get(id)` — works whether the trail has
    spawned yet or not
-3. In the callback, do your cinematic work; call `ResumeTrail(id)` when done
-4. Call `ClearTrackedTrail(id)` in your cleanup path to prevent stale registrations
+3. Drive the `TrailFlight` handle (`Pause` / `Resume` / `Complete`); use
+   `Flights.CompleteAll()` to flush stragglers when your sequence ends
+4. Registrations clear on arrival (`Unregister` in the arrival callback) — kill any
+   handle you hold in your cleanup path
 
 **Why `TrailId` uses `(Color, Score, Level)` not just an int:**
 - Two colors can produce the same numeric score simultaneously in a single turn

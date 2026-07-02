@@ -1,6 +1,8 @@
 var namespace_balloon_party_1_1_slots_1_1_grid =
 [
     [ "BalancePathHolder", "class_balloon_party_1_1_slots_1_1_grid_1_1_balance_path_holder.html", "class_balloon_party_1_1_slots_1_1_grid_1_1_balance_path_holder" ],
+    [ "GridBalanceQuery", "class_balloon_party_1_1_slots_1_1_grid_1_1_grid_balance_query.html", "class_balloon_party_1_1_slots_1_1_grid_1_1_grid_balance_query" ],
+    [ "HexCoordinates", "class_balloon_party_1_1_slots_1_1_grid_1_1_hex_coordinates.html", "class_balloon_party_1_1_slots_1_1_grid_1_1_hex_coordinates" ],
     [ "SlotGrid", "class_balloon_party_1_1_slots_1_1_grid_1_1_slot_grid.html", "class_balloon_party_1_1_slots_1_1_grid_1_1_slot_grid" ],
     [ "SlotGridChangedEvent", "struct_balloon_party_1_1_slots_1_1_grid_1_1_slot_grid_changed_event.html", "struct_balloon_party_1_1_slots_1_1_grid_1_1_slot_grid_changed_event" ],
     [ "SlotGridView", "class_balloon_party_1_1_slots_1_1_grid_1_1_slot_grid_view.html", null ],

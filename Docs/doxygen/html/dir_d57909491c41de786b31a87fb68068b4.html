@@ -139,10 +139,10 @@ Files</h2></td></tr>
 <tr class="memitem:UnbreakableBalloonVariant_2Ecs" id="r_UnbreakableBalloonVariant_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_unbreakable_balloon_variant_8cs.html">UnbreakableBalloonVariant.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md37"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md19"></a>
 Balloon/Type</h1>
 <p>Balloon types define hit capacity, color selection, and per-type Inspector configuration.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md38"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md20"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -164,7 +164,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">UnbreakableBalloonVariant</span>  </td><td class="markdownTableBodyNone"><span class="tt">[ExecuteAlways]</span> <span class="tt">MonoBehaviour</span> implementing both <span class="tt">IBalloonVariant</span> and <span class="tt">IBalloonViewBinding</span> — not colorable. Pushes <span class="tt">_SphereCenter</span> (world position of this transform), <span class="tt">_SphereRadius</span>, and <span class="tt">_TimeOffset</span> to all quadrant <span class="tt">SpriteRenderer</span>s via <span class="tt">MaterialPropertyBlock</span> every <span class="tt">Update()</span>. The sphere is composed of 4 quarter-circle sprites rotated by −90°×n; this variant ensures all shader effects (metallic gradient, specular highlight, convex-mirror reflection, chrome rim) are coherent across the assembled sphere. <span class="tt">_SphereRadius</span> is auto-computed from the union of renderer bounds if left at zero  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md39"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md21"></a>
 How it works</h1>
 <p>During spawning, <span class="tt">BalloonSpawner</span> writes <span class="tt">HitsRemaining</span> directly onto the model from <span class="tt">BalloonPrefabEntry</span> before calling <span class="tt">IBalloonVariant.Initialize(model)</span>. <span class="tt">Initialize()</span> is then responsible only for type-specific data: <span class="tt">TypeName</span> and (for colored types) <span class="tt">Color</span>. This keeps per-type balance values centralized in the configuration asset rather than scattered across MonoBehaviours. Item eligibility is not a flag — it is determined structurally: <span class="tt">BalloonModel</span> implements <span class="tt">IHasWriteableItemSlot</span>; <span class="tt">ToughBalloonModel</span>, <span class="tt">UnbreakableBalloonModel</span>, and <span class="tt">BubbleClusterModel</span> do not. <span class="tt">SoapBubbleClusterVariant</span> initializes a <span class="tt">BubbleClusterModel</span> with <span class="tt">HitsToPop = 5</span> — each surviving hit maps to one fewer visible bubble rather than a damage-progress float.</p>
 <p>Then <span class="tt">BalloonView.Bind(model)</span> calls <span class="tt">Bind()</span> on all <span class="tt">IBalloonViewBinding</span> components found on the same GameObject. <span class="tt">ToughBalloonVariant</span> uses this to subscribe to <span class="tt">HitsRemaining</span> and drive shader damage visuals.</p>
@@ -176,7 +176,7 @@ How it works</h1>
 <li><b><span class="tt">PassThrough</span></b> — balloon survived; projectile continues (Bubble Cluster pass-through). Plays the pass-through VFX.</li>
 <li><b><span class="tt">Absorb</span></b> — projectile destroyed by actor (handled upstream in <span class="tt">ProjectileView</span>)</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md40"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md22"></a>
 Tough balloon shader</h1>
 <p><span class="tt">ToughBalloonVariant</span> drives the <span class="tt">BalloonParty/Balloon/ToughBalloon</span> shader via <span class="tt">MaterialPropertyBlock</span> (no material instance allocation — safe for pooled objects):</p>
 <ul>
@@ -193,7 +193,7 @@ Tough balloon shader</h1>
 <li><b>Voronoi cracks</b> — spherically projected crack lines grow from invisible hairlines to full splits; both cell density (<span class="tt">_VoronoiScale + _VoronoiScaleDamageBoost</span>) and edge warp (<span class="tt">_SphereWarp + _SphereWarpDamageBoost</span>) accelerate quadratically with <span class="tt">dmgVis²</span> for a dramatic late-stage surface collapse</li>
 </ul>
 <p>The shader properties are organised into labelled Inspector groups: <b>Damage</b>, <b>Surface</b>, <b>Rim</b>, <b>Cracks / Base</b>, <b>Cracks / Sphere Projection</b>, and <b>Cracks / Instance</b> (seed hidden at runtime).</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md41"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md23"></a>
 Soap Cluster shader</h1>
 <p><span class="tt">SoapBubbleClusterVariant</span> drives the <span class="tt">BalloonParty/Balloon/SoapBubbleCluster</span> shader via <span class="tt">MaterialPropertyBlock</span>. The shader is fully procedural — no sprite or texture required.</p>
 <ul>
@@ -212,7 +212,7 @@ Soap Cluster shader</h1>
 <blockquote class="doxtable">
 <p><b>GPU instancing is disabled</b> on the Soap Cluster material — <span class="tt">_BubbleCount</span> and <span class="tt">_TimeOffset</span> are set per-instance via <span class="tt">MaterialPropertyBlock</span>. </p>
 </blockquote>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md42"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md24"></a>
 Unbreakable balloon shader</h1>
 <p>The <span class="tt">BalloonParty/Balloon/UnbreakableBalloon</span> shader renders the chrome metallic sphere. The balloon is composed of 4 quarter-circle sprites rotated by −90°×n; all four share <span class="tt">_SphereCenter</span> (world position via MPB) so every effect is coherent across the assembled sphere.</p>
 <ul>
@@ -226,7 +226,7 @@ Unbreakable balloon shader</h1>
 <blockquote class="doxtable">
 <p><b>GPU instancing is disabled</b> — GrabPass is inherently non-batchable and <span class="tt">_SphereCenter</span>, <span class="tt">_TimeOffset</span> are set per-instance via <span class="tt">MaterialPropertyBlock</span>. </p>
 </blockquote>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md43"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md25"></a>
 Interactions</h1>
 <ul>
 <li><b>BalloonSpawner</b> — writes <span class="tt">HitsRemaining</span> from <span class="tt">BalloonPrefabEntry</span> before calling <span class="tt">Initialize()</span>; model class is chosen from <span class="tt">BalloonType</span>: <span class="tt">Simple</span> → <span class="tt">BalloonModel</span>, <span class="tt">BubbleCluster</span> → <span class="tt">BubbleClusterModel</span>, <span class="tt">Tough</span> → <span class="tt">ToughBalloonModel</span>, <span class="tt">Unbreakable</span> → <span class="tt">UnbreakableBalloonModel</span></li>

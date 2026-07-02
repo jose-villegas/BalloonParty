@@ -18,5 +18,6 @@ var class_balloon_party_1_1_balloon_1_1_type_1_1_soap_bubble_cluster_variant =
     [ "_rotationAngle", "class_balloon_party_1_1_balloon_1_1_type_1_1_soap_bubble_cluster_variant.html#a82d1f3318f110b8c36464d9f76e829c4", null ],
     [ "_rotationSpeedRad", "class_balloon_party_1_1_balloon_1_1_type_1_1_soap_bubble_cluster_variant.html#a85f3460412cb502358037bef10e455fd", null ],
     [ "BubbleCountId", "class_balloon_party_1_1_balloon_1_1_type_1_1_soap_bubble_cluster_variant.html#a0e93eed383ac8926b130895cadd8b7a5", null ],
+    [ "RotationId", "class_balloon_party_1_1_balloon_1_1_type_1_1_soap_bubble_cluster_variant.html#abf6dd8ae382cc77b3a4590c8b6a85123", null ],
     [ "TimeOffsetId", "class_balloon_party_1_1_balloon_1_1_type_1_1_soap_bubble_cluster_variant.html#a44bbf03c6228c05f77a8d5cf5354bad7", null ]
 ];

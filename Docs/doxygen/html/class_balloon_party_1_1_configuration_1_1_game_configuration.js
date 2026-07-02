@@ -3,8 +3,6 @@ var class_balloon_party_1_1_configuration_1_1_game_configuration =
     [ "PointsRequiredForLevel", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a15222020f10255344ddb5d5b63529d84", null ],
     [ "_initialPredictionLength", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a8f77a21c670a55e18d0f6a444e3cf947", null ],
     [ "_limitsClockwise", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a610d21d477ea6f6f60b147e8334239fb", null ],
-    [ "_maxStaticActors", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a26c360678b000d83274494de38c14517", null ],
-    [ "_minStaticActors", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#ab6d34ed2018b3f703b2204382abc3e95", null ],
     [ "_predictionTraceMaxBounces", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#ac3ff31378aebd9e229b8e04e63149d27", null ],
     [ "_predictionTraceMaxSteps", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#af3fa63e3e7b5a8270ca51f50c019b66f", null ],
     [ "_projectileLoadDuration", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a986c4812d531d3f2aae84213acdea6a4", null ],
@@ -17,9 +15,8 @@ var class_balloon_party_1_1_configuration_1_1_game_configuration =
     [ "_slotSeparation", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a76fcaf6aba3efa976de9537104dedebb", null ],
     [ "_slotsOffset", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a7d740b2c0d3da258cf9d850e409ad399", null ],
     [ "_slotsSize", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a5db5af84c76b3ecfe723accbe11be4ae", null ],
+    [ "_startingHitPoints", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a277be89d748d7bb0a36523de733b5138", null ],
     [ "LimitsClockwise", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#afb1bbd382f53347c7a587de55a84ed4c", null ],
-    [ "MaxStaticActors", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a9a85659f9be3595082379b970d719ee8", null ],
-    [ "MinStaticActors", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#ab060543c6567878e7460105aac562feb", null ],
     [ "PredictionTraceMaxBounces", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a2720538b7f6ce51fb7e2e11b3610c3a3", null ],
     [ "PredictionTraceMaxSteps", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a82067f23897129e1634b6b131d79e5dc", null ],
     [ "PredictionTraceStep", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a342194e756752a0de5911504760caa31", null ],
@@ -32,5 +29,6 @@ var class_balloon_party_1_1_configuration_1_1_game_configuration =
     [ "ShieldTrailDuration", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#ad39761ca01cb69f5cfad3594d06f471b", null ],
     [ "SlotSeparation", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a0052ec3479e829521e3f4b65288b53a4", null ],
     [ "SlotsOffset", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a03f4982ad2a9fd2d0503cd2fe814117c", null ],
-    [ "SlotsSize", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a9eb8b4fbb613810ad312e0867326391f", null ]
+    [ "SlotsSize", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a9eb8b4fbb613810ad312e0867326391f", null ],
+    [ "StartingHitPoints", "class_balloon_party_1_1_configuration_1_1_game_configuration.html#a17b202ffb71b2f620259b2bf9c1d3514", null ]
 ];

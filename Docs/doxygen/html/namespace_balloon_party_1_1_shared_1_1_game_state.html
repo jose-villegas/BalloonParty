@@ -127,13 +127,19 @@ Classes</h2></td></tr>
 <tr class="memitem:Cinematic" id="r_Cinematic"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_game_state_1_1_cinematic.html">Cinematic</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Tracks whether a cinematic sequence is playing.  <a href="class_balloon_party_1_1_shared_1_1_game_state_1_1_cinematic.html#details">More...</a><br /></td></tr>
 <tr class="memitem:CinematicEndGate" id="r_CinematicEndGate"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_game_state_1_1_cinematic_end_gate.html">CinematicEndGate</a></td></tr>
+<tr class="memitem:CinematicStateService" id="r_CinematicStateService"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_game_state_1_1_cinematic_state_service.html">CinematicStateService</a></td></tr>
 <tr class="memitem:EditorNavigationBootstrap" id="r_EditorNavigationBootstrap"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_game_state_1_1_editor_navigation_bootstrap.html">EditorNavigationBootstrap</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Editor-only bootstrap that transitions to _targetState on Awake if the current navigation state is still NavigationState.Launch.  <a href="class_balloon_party_1_1_shared_1_1_game_state_1_1_editor_navigation_bootstrap.html#details">More...</a><br /></td></tr>
 <tr class="memitem:ICinematicAware" id="r_ICinematicAware"><td class="memItemLeft">interface &#160;</td><td class="memItemRight"><a class="el" href="interface_balloon_party_1_1_shared_1_1_game_state_1_1_i_cinematic_aware.html">ICinematicAware</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Implemented by services that should pause/resume work when a cinematic begins or ends.  <a href="interface_balloon_party_1_1_shared_1_1_game_state_1_1_i_cinematic_aware.html#details">More...</a><br /></td></tr>
+<tr class="memitem:ICinematicState" id="r_ICinematicState"><td class="memItemLeft">interface &#160;</td><td class="memItemRight"><a class="el" href="interface_balloon_party_1_1_shared_1_1_game_state_1_1_i_cinematic_state.html">ICinematicState</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Injectable seam over the static Cinematic state, so consumers can gate on an in-progress cinematic under test.  <a href="interface_balloon_party_1_1_shared_1_1_game_state_1_1_i_cinematic_state.html#details">More...</a><br /></td></tr>
+<tr class="memitem:INavigation" id="r_INavigation"><td class="memItemLeft">interface &#160;</td><td class="memItemRight"><a class="el" href="interface_balloon_party_1_1_shared_1_1_game_state_1_1_i_navigation.html">INavigation</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Injectable seam over the static Navigation so run-lifecycle logic can be unit-tested without reaching into global state.  <a href="interface_balloon_party_1_1_shared_1_1_game_state_1_1_i_navigation.html#details">More...</a><br /></td></tr>
 <tr class="memitem:Navigation" id="r_Navigation"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_game_state_1_1_navigation.html">Navigation</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">App-wide navigation state.  <a href="class_balloon_party_1_1_shared_1_1_game_state_1_1_navigation.html#details">More...</a><br /></td></tr>
 <tr class="memitem:NavigationReadyGate" id="r_NavigationReadyGate"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_game_state_1_1_navigation_ready_gate.html">NavigationReadyGate</a></td></tr>
+<tr class="memitem:NavigationService" id="r_NavigationService"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_game_state_1_1_navigation_service.html">NavigationService</a></td></tr>
 <tr class="memitem:NavigationTrigger" id="r_NavigationTrigger"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_game_state_1_1_navigation_trigger.html">NavigationTrigger</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Triggers a navigation state transition.  <a href="class_balloon_party_1_1_shared_1_1_game_state_1_1_navigation_trigger.html#details">More...</a><br /></td></tr>
 <tr class="memitem:SceneTransition" id="r_SceneTransition"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_game_state_1_1_scene_transition.html">SceneTransition</a></td></tr>
@@ -141,13 +147,24 @@ Classes</h2></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
-<tr class="memitem:a215f59d6ae03f95cde0cf7bc71abdd3e" id="r_a215f59d6ae03f95cde0cf7bc71abdd3e"><td class="memItemLeft">enum &#160;</td><td class="memItemRight"><a class="el" href="#a215f59d6ae03f95cde0cf7bc71abdd3e">CinematicState</a> { <a class="el" href="#a215f59d6ae03f95cde0cf7bc71abdd3ea6adf97f83acf6453d4a6a4b1070f3754">None</a>
+<tr class="memitem:a215f59d6ae03f95cde0cf7bc71abdd3e" id="r_a215f59d6ae03f95cde0cf7bc71abdd3e"><td class="memItemLeft">enum &#160;</td><td class="memItemRight"><a class="el" href="#a215f59d6ae03f95cde0cf7bc71abdd3e">CinematicState</a> { <br />
+&#160;&#160;<a class="el" href="#a215f59d6ae03f95cde0cf7bc71abdd3ea6adf97f83acf6453d4a6a4b1070f3754">None</a>
 , <a class="el" href="#a215f59d6ae03f95cde0cf7bc71abdd3eafeb99ddec54cc3a8e58d0e97475cedd7">LevelUpPanIn</a>
 , <a class="el" href="#a215f59d6ae03f95cde0cf7bc71abdd3eaf7769c7fe081c5867f62cda158cf9624">LevelUpRestore</a>
+, <a class="el" href="#a215f59d6ae03f95cde0cf7bc71abdd3ea7b549c39b6c31bcfbcc0dfda6224863b">HeartDrain</a>
+, <br />
+&#160;&#160;<a class="el" href="#a215f59d6ae03f95cde0cf7bc71abdd3ea3ee82ab8ac31133a3785e0599d698a1a">HeartDrainRestore</a>
+<br />
  }</td></tr>
+<tr class="memitem:aadf066414424aff953d1b79f327952bb" id="r_aadf066414424aff953d1b79f327952bb"><td class="memItemLeft">enum &#160;</td><td class="memItemRight"><a class="el" href="#aadf066414424aff953d1b79f327952bb">CinematicTraits</a> { <a class="el" href="#aadf066414424aff953d1b79f327952bba6adf97f83acf6453d4a6a4b1070f3754">None</a> = 0
+, <a class="el" href="#aadf066414424aff953d1b79f327952bba955a262bbc89bf25f301e65edc2e16d6">BlocksLoss</a> = 1 &lt;&lt; 0
+, <a class="el" href="#aadf066414424aff953d1b79f327952bba32f2360b90157759ead1be1a7ea2333a">BlocksShake</a> = 1 &lt;&lt; 1
+ }</td></tr>
+<tr class="memdesc:aadf066414424aff953d1b79f327952bb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Behavioural traits a cinematic declares (per state, in <code>CinematicsSettings</code>) and consumers query through ICinematicState.Has — instead of one boolean property per trait on the service, pattern-matched per state.  <a href="#aadf066414424aff953d1b79f327952bb">More...</a><br /></td></tr>
 <tr class="memitem:a59d8996d0c851ba4d4a00fb55277bbd6" id="r_a59d8996d0c851ba4d4a00fb55277bbd6"><td class="memItemLeft">enum &#160;</td><td class="memItemRight"><a class="el" href="#a59d8996d0c851ba4d4a00fb55277bbd6">NavigationState</a> { <a class="el" href="#a59d8996d0c851ba4d4a00fb55277bbd6a9506f0fd0f7f1b07960b15b4c9e68d1a">Launch</a>
 , <a class="el" href="#a59d8996d0c851ba4d4a00fb55277bbd6a63d72051e901c069f8aa1b32aa0c43bb">Game</a>
 , <a class="el" href="#a59d8996d0c851ba4d4a00fb55277bbd6ae7c8e9e1f90eadea8b03762d9e9215c7">LevelUp</a>
+, <a class="el" href="#a59d8996d0c851ba4d4a00fb55277bbd6a8f347bc7cebca9fa6d97e70c6bc29eb3">GameOver</a>
  }</td></tr>
 </table>
 <a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
@@ -174,6 +191,41 @@ Enumerations</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a215f59d6ae03f95cde0cf7bc71abdd3ea6adf97f83acf6453d4a6a4b1070f3754" name="a215f59d6ae03f95cde0cf7bc71abdd3ea6adf97f83acf6453d4a6a4b1070f3754"></a>None&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a215f59d6ae03f95cde0cf7bc71abdd3eafeb99ddec54cc3a8e58d0e97475cedd7" name="a215f59d6ae03f95cde0cf7bc71abdd3eafeb99ddec54cc3a8e58d0e97475cedd7"></a>LevelUpPanIn&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a215f59d6ae03f95cde0cf7bc71abdd3eaf7769c7fe081c5867f62cda158cf9624" name="a215f59d6ae03f95cde0cf7bc71abdd3eaf7769c7fe081c5867f62cda158cf9624"></a>LevelUpRestore&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a215f59d6ae03f95cde0cf7bc71abdd3ea7b549c39b6c31bcfbcc0dfda6224863b" name="a215f59d6ae03f95cde0cf7bc71abdd3ea7b549c39b6c31bcfbcc0dfda6224863b"></a>HeartDrain&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a215f59d6ae03f95cde0cf7bc71abdd3ea3ee82ab8ac31133a3785e0599d698a1a" name="a215f59d6ae03f95cde0cf7bc71abdd3ea3ee82ab8ac31133a3785e0599d698a1a"></a>HeartDrainRestore&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+</div>
+</div>
+<a id="aadf066414424aff953d1b79f327952bb" name="aadf066414424aff953d1b79f327952bb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aadf066414424aff953d1b79f327952bb">&#9670;&#160;</a></span>CinematicTraits</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#aadf066414424aff953d1b79f327952bb">BalloonParty.Shared.GameState.CinematicTraits</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel package">package</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Behavioural traits a cinematic declares (per state, in <code>CinematicsSettings</code>) and consumers query through ICinematicState.Has — instead of one boolean property per trait on the service, pattern-matched per state. </p>
+<p>Adding a cinematic means declaring its traits in one settings entry; consumers never change. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="aadf066414424aff953d1b79f327952bba6adf97f83acf6453d4a6a4b1070f3754" name="aadf066414424aff953d1b79f327952bba6adf97f83acf6453d4a6a4b1070f3754"></a>None&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="aadf066414424aff953d1b79f327952bba955a262bbc89bf25f301e65edc2e16d6" name="aadf066414424aff953d1b79f327952bba955a262bbc89bf25f301e65edc2e16d6"></a>BlocksLoss&#160;</td><td class="fielddoc"><p>The 0-HP game-over must wait for the cinematic to finish (level-up). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="aadf066414424aff953d1b79f327952bba32f2360b90157759ead1be1a7ea2333a" name="aadf066414424aff953d1b79f327952bba32f2360b90157759ead1be1a7ea2333a"></a>BlocksShake&#160;</td><td class="fielddoc"><p>The cinematic hard-owns the camera, so the additive shake stands down (level-up). </p>
+<p>The heart-drain pans too, but its shakes are part of the drama. </p>
+</td></tr>
 </table>
 
 </div>
@@ -201,6 +253,7 @@ Enumerations</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="a59d8996d0c851ba4d4a00fb55277bbd6a9506f0fd0f7f1b07960b15b4c9e68d1a" name="a59d8996d0c851ba4d4a00fb55277bbd6a9506f0fd0f7f1b07960b15b4c9e68d1a"></a>Launch&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a59d8996d0c851ba4d4a00fb55277bbd6a63d72051e901c069f8aa1b32aa0c43bb" name="a59d8996d0c851ba4d4a00fb55277bbd6a63d72051e901c069f8aa1b32aa0c43bb"></a>Game&#160;</td><td class="fielddoc"></td></tr>
 <tr><td class="fieldname"><a id="a59d8996d0c851ba4d4a00fb55277bbd6ae7c8e9e1f90eadea8b03762d9e9215c7" name="a59d8996d0c851ba4d4a00fb55277bbd6ae7c8e9e1f90eadea8b03762d9e9215c7"></a>LevelUp&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a59d8996d0c851ba4d4a00fb55277bbd6a8f347bc7cebca9fa6d97e70c6bc29eb3" name="a59d8996d0c851ba4d4a00fb55277bbd6a8f347bc7cebca9fa6d97e70c6bc29eb3"></a>GameOver&#160;</td><td class="fielddoc"></td></tr>
 </table>
 
 </div>

@@ -130,10 +130,10 @@ Files</h2></td></tr>
 <tr class="memitem:ThrowerView_2Ecs" id="r_ThrowerView_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_thrower_view_8cs.html">ThrowerView.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md372"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md763"></a>
 Thrower</h1>
 <p>The thrower is the player-controlled launcher at the bottom of the screen. It aims at the balloon grid and fires projectiles.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md373"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md764"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -141,20 +141,20 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">ThrowerController</span>  </td><td class="markdownTableBodyNone">Plain C# class (<span class="tt">IStartable</span>, <span class="tt">ITickable</span>) — aiming, loading, firing, prediction trace, and reload logic  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">ThrowerView</span>  </td><td class="markdownTableBodyNone">MonoBehaviour — owns the thrower's transform, rotation, entrance animation, and prediction trace display  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">ThrowerView</span>  </td><td class="markdownTableBodyNone">MonoBehaviour — owns the thrower's transform, rotation, entrance animation, prediction trace display, and pointer input (<span class="tt">IsAiming</span>, <span class="tt">FireReleased</span>, <span class="tt">TryGetAimDirection</span> — the only place that touches <span class="tt">Input</span>/<span class="tt">Camera</span>)  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">ThrowerLifetimeScope</span>  </td><td class="markdownTableBodyNone">Child <span class="tt">LifetimeScope</span> on the Thrower GameObject — registers <span class="tt">ThrowerView</span> and <span class="tt">ThrowerController</span>  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">ThrowerSettings</span>  </td><td class="markdownTableBodyNone">Holds the <span class="tt">ProjectileLifetimeScope</span> prefab reference for pool creation  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md374"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md765"></a>
 Gameplay</h1>
 <p>The player holds the mouse button to aim — the thrower rotates to face the cursor. Releasing the mouse fires the loaded projectile. Once the projectile is destroyed (shields depleted), the thrower automatically reloads and is ready for the next shot.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md375"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md766"></a>
 How it works</h1>
-<p><span class="tt">ThrowerController</span> is a plain C# class registered as an entry point in <span class="tt">ThrowerLifetimeScope</span>. It delegates all visual operations to <span class="tt">ThrowerView</span>. On start it registers the projectile pool and pre-warms two instances. It subscribes reactively to <span class="tt">Navigation.State</span> — when the state becomes <span class="tt">Game</span> (via <span class="tt">NavigationTrigger</span> on the Launch button), it plays the entrance animation. After the entrance animation completes, input is enabled.</p>
+<p><span class="tt">ThrowerController</span> is a plain C# class registered as an entry point in <span class="tt">ThrowerLifetimeScope</span>. It delegates all visual operations <em>and pointer input</em> to <span class="tt">ThrowerView</span>, keeping the controller free of Unity engine APIs. On start it registers the projectile pool and pre-warms two instances. It subscribes reactively to <span class="tt">Navigation.State</span> — when the state becomes <span class="tt">Game</span> (via <span class="tt">NavigationTrigger</span> on the Launch button), it plays the entrance animation. After the entrance animation completes, input is enabled.</p>
 <p>Each frame (<span class="tt">Tick</span>), only when navigation state is <span class="tt">Game</span> and the entrance animation is complete, the controller:</p><ul>
-<li>Updates its aim direction from the mouse cursor position</li>
+<li>Updates its aim direction from the view's pointer read (<span class="tt">_view.IsAiming</span> / <span class="tt">TryGetAimDirection</span>)</li>
 <li>Tells the view to rotate to match that direction</li>
 <li>Eases the loaded projectile into the spawn point position using <span class="tt">Ease.OutBack</span></li>
 <li>Updates the prediction trace line while the mouse button is held</li>
@@ -162,7 +162,7 @@ How it works</h1>
 </ul>
 <p>During <span class="tt">LevelUp</span> state, <span class="tt">Tick</span> is a no-op — the thrower cannot aim or fire while the level-up popup is visible.</p>
 <p>When a <span class="tt">ProjectileDestroyedMessage</span> arrives, <span class="tt">ThrowerController</span> returns the old projectile to the pool and loads a new one immediately. The projectile prefab carries a <span class="tt">ProjectileLifetimeScope</span>, so instantiation uses <span class="tt">parentScope.CreateChildFromPrefab()</span> — this wires the parent scope before activation, ensuring all injected dependencies resolve correctly. The pool key is derived from the prefab's name.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md376"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md767"></a>
 Interactions</h1>
 <ul>
 <li><b>LifetimeScope</b> — the parent scope; used to call <span class="tt">CreateChildFromPrefab</span> for projectile instantiation</li>

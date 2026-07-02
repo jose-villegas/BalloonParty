@@ -130,11 +130,17 @@ Classes</h2></td></tr>
 <tr class="memitem:PauseService" id="r_PauseService"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_pause_1_1_pause_service.html">PauseService</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Central coordinator for gameplay pause states.  <a href="class_balloon_party_1_1_shared_1_1_pause_1_1_pause_service.html#details">More...</a><br /></td></tr>
 <tr class="memitem:ResumedMessage" id="r_ResumedMessage"><td class="memItemLeft">struct &#160;</td><td class="memItemRight"><a class="el" href="struct_balloon_party_1_1_shared_1_1_pause_1_1_resumed_message.html">ResumedMessage</a></td></tr>
+<tr class="memitem:TimeScaleService" id="r_TimeScaleService"><td class="memItemLeft">class &#160;</td><td class="memItemRight"><a class="el" href="class_balloon_party_1_1_shared_1_1_pause_1_1_time_scale_service.html">TimeScaleService</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">The only legal writer of <code>Time.timeScale</code> (a style-audit rule bans writes elsewhere).  <a href="class_balloon_party_1_1_shared_1_1_pause_1_1_time_scale_service.html#details">More...</a><br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-enum-members" class="groupheader"><a id="enum-members" name="enum-members"></a>
 Enumerations</h2></td></tr>
 <tr class="memitem:ab006bd98ba69f3aaa2ba396e176136b5" id="r_ab006bd98ba69f3aaa2ba396e176136b5"><td class="memItemLeft">enum &#160;</td><td class="memItemRight"><a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5">PauseSource</a> { <a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5a8fce77fd86da3af309c0ad415d8d7952">Cinematic</a>
 , <a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5ae7c8e9e1f90eadea8b03762d9e9215c7">LevelUp</a>
+, <a class="el" href="#ab006bd98ba69f3aaa2ba396e176136b5a129e8109f319870e328cc7a1d5b5cae3">Overflow</a>
+ }</td></tr>
+<tr class="memitem:acc1e7c1eb619c5c323a6c18c9a586b9a" id="r_acc1e7c1eb619c5c323a6c18c9a586b9a"><td class="memItemLeft">enum &#160;</td><td class="memItemRight"><a class="el" href="#acc1e7c1eb619c5c323a6c18c9a586b9a">TimeScaleSource</a> { <a class="el" href="#acc1e7c1eb619c5c323a6c18c9a586b9aa8fce77fd86da3af309c0ad415d8d7952">Cinematic</a>
+, <a class="el" href="#acc1e7c1eb619c5c323a6c18c9a586b9aa57b2961727ffd3016002bf911ebf9224">LevelUpPopup</a>
  }</td></tr>
 </table>
 <a name="doc-enum-members" id="doc-enum-members"></a><h2 id="header-doc-enum-members" class="groupheader">Enumeration Type Documentation</h2>
@@ -153,6 +159,29 @@ Enumerations</h2></td></tr>
 <tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="ab006bd98ba69f3aaa2ba396e176136b5a8fce77fd86da3af309c0ad415d8d7952" name="ab006bd98ba69f3aaa2ba396e176136b5a8fce77fd86da3af309c0ad415d8d7952"></a>Cinematic&#160;</td><td class="fielddoc"><p>Cinematic sequence is playing (e.g. level-up trail pan-in). </p>
 </td></tr>
 <tr><td class="fieldname"><a id="ab006bd98ba69f3aaa2ba396e176136b5ae7c8e9e1f90eadea8b03762d9e9215c7" name="ab006bd98ba69f3aaa2ba396e176136b5ae7c8e9e1f90eadea8b03762d9e9215c7"></a>LevelUp&#160;</td><td class="fielddoc"><p>A modal overlay has taken control of the screen (e.g. level-up popup). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="ab006bd98ba69f3aaa2ba396e176136b5a129e8109f319870e328cc7a1d5b5cae3" name="ab006bd98ba69f3aaa2ba396e176136b5a129e8109f319870e328cc7a1d5b5cae3"></a>Overflow&#160;</td><td class="fielddoc"><p>Rejected balloons are popping below the grid after a turn's spawn. </p>
+<p>Holds the thrower until the overflow finishes so the player can't fire into an unresolved board. </p>
+</td></tr>
+</table>
+
+</div>
+</div>
+<a id="acc1e7c1eb619c5c323a6c18c9a586b9a" name="acc1e7c1eb619c5c323a6c18c9a586b9a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acc1e7c1eb619c5c323a6c18c9a586b9a">&#9670;&#160;</a></span>TimeScaleSource</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#acc1e7c1eb619c5c323a6c18c9a586b9a">BalloonParty.Shared.Pause.TimeScaleSource</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<table class="fieldtable">
+<tr><th colspan="2">Enumerator</th></tr><tr><td class="fieldname"><a id="acc1e7c1eb619c5c323a6c18c9a586b9aa8fce77fd86da3af309c0ad415d8d7952" name="acc1e7c1eb619c5c323a6c18c9a586b9aa8fce77fd86da3af309c0ad415d8d7952"></a>Cinematic&#160;</td><td class="fielddoc"><p>A camera-rig cinematic segment is warping time (slow-mo ramp / restore). </p>
+</td></tr>
+<tr><td class="fieldname"><a id="acc1e7c1eb619c5c323a6c18c9a586b9aa57b2961727ffd3016002bf911ebf9224" name="acc1e7c1eb619c5c323a6c18c9a586b9aa57b2961727ffd3016002bf911ebf9224"></a>LevelUpPopup&#160;</td><td class="fielddoc"><p>The level-up popup freezes the world (0) while it is on screen. </p>
 </td></tr>
 </table>
 

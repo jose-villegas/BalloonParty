@@ -134,10 +134,10 @@ Files</h2></td></tr>
 <tr class="memitem:LevelUpPopUp_2Ecs" id="r_LevelUpPopUp_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_level_up_pop_up_8cs.html">LevelUpPopUp.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md377"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md772"></a>
 UI/LevelUp</h1>
 <p>The full-screen level-up ceremony that plays when all color bars complete.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md378"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md773"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -147,36 +147,36 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">LevelUpPopUp</span>  </td><td class="markdownTableBodyNone">Waits for the pan-in cinematic to end (via <span class="tt">IReadyGate</span>), freezes time, shows the popup, spawns glow trails from each <span class="tt">ColorProgressBar</span> to the glow fill, and publishes <span class="tt">LevelUpDismissedMessage</span> on Continue  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md379"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md774"></a>
 How it works</h1>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md380"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md775"></a>
 Sequence</h2>
 <ol type="1">
 <li><b>Pan-in ends</b> — <span class="tt">LevelUpTrailEffect</span> calls <span class="tt">EndCinematic()</span> after the tipping trail arrives, setting <span class="tt">CinematicState</span> to <span class="tt">None</span>.</li>
 <li><b>Gate opens</b> — <span class="tt">CinematicEndGate(LevelUpPanIn)</span> unblocks: <span class="tt">Cinematic.Current != LevelUpPanIn</span> is now true.</li>
 <li><b>Popup shows</b> — <span class="tt">LevelUpPopUp.ShowAfterGateAsync</span> sets <span class="tt">Time.timeScale = 0f</span>, triggers the <span class="tt">"Appear"</span> animator, and waits for the appear animation to finish. The level label initially shows the old level.</li>
-<li><b>Glow trails</b> — After the appear animation completes, <span class="tt">LevelUpPopUp</span> publishes <span class="tt">LevelUpGlowTrailsMessage</span> (triggers <span class="tt">ColorProgressBar.DrainSliderAsync</span> to drain each bar in sync), then spawns decorative <span class="tt">FlyingTrail</span> orbs from each bar's random position to random offsets around the glow fill centre. Trails fly in unscaled time (<span class="tt">SpawnUnscaled</span>), staggered across waves (<span class="tt">_glowTrailsPerBar</span> waves × palette color count). As each trail arrives, <span class="tt">_levelGlowFill.fillAmount</span> advances proportionally; once all trails arrive, the level label updates to the new level.</li>
+<li><b>Glow trails</b> — After the appear animation completes, <span class="tt">LevelUpPopUp</span> publishes <span class="tt">LevelUpGlowTrailsMessage</span> (triggers <span class="tt">ColorProgressBar.DrainSliderAsync</span> to drain each bar in sync), then spawns decorative <span class="tt">FlyingTrail</span> orbs from each bar's random position to random offsets around the glow fill centre. Trails fly in unscaled time (<span class="tt">Spawn(..., useUnscaledTime: true)</span>), staggered across waves (<span class="tt">_glowTrailsPerBar</span> waves × palette color count). As each trail arrives, <span class="tt">_levelGlowFill.fillAmount</span> advances proportionally; once all trails arrive, the level label updates to the new level.</li>
 <li><b>Player taps Continue</b> — <span class="tt">OnContinue()</span> triggers <span class="tt">"Hide"</span>, publishes <span class="tt">LevelUpDismissedMessage</span>, and starts <span class="tt">ResumeAfterDelayAsync</span> (a configurable settle delay).</li>
 <li><b>Bar reset</b> — Each <span class="tt">ColorProgressBar</span> receives <span class="tt">LevelUpDismissedMessage</span> and applies the stashed new max value, resetting progress to zero.</li>
 <li><b>Restore cinematic</b> — <span class="tt">LevelUpTrailEffect</span> receives <span class="tt">LevelUpDismissedMessage</span> and starts <span class="tt">CinematicState.LevelUpRestore</span> — tweens <span class="tt">Time.timeScale</span> back to 1 and camera back to its base position/size.</li>
 <li><b>Navigate</b> — once restore completes, <span class="tt">LevelUpTrailEffect</span> calls <span class="tt">Navigation.TransitionTo(Game)</span>.</li>
 </ol>
 <p>The Animator's <span class="tt">updateMode</span> is set to <span class="tt">UnscaledTime</span> in <span class="tt">Start()</span>, so animations play even while the game is paused.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md381"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md776"></a>
 Glow trail spawning</h2>
-<p><span class="tt">LevelUpPopUp</span> owns a per-color dictionary of <span class="tt">TrailSpawner</span> instances (pool key <span class="tt">GlowTrail_{colorName}</span>, sorting order 3200). For each wave, it iterates every palette color, reads the bar's position via <span class="tt">_scoreTrailService.GetTarget(colorName).RandomPosition()</span>, picks a random offset within <span class="tt">_glowTargetRadiusMultiplier</span> of the glow fill radius, and calls <span class="tt">SpawnUnscaled</span>. Arrival increments <span class="tt">_glowTrailArrivedCount</span> and fills the glow proportionally. Trails reuse the same <span class="tt">ScoreTrailPoolChannel</span> factory as score trails but are pooled under separate keys.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md382"></a>
+<p><span class="tt">LevelUpPopUp</span> owns a per-color dictionary of <span class="tt">TrailSpawner</span> instances (pool key <span class="tt">GlowTrail_{colorName}</span>, sorting order 3200). For each wave, it iterates every palette color, reads the bar's position via <span class="tt">_scoreTrailService.GetTarget(colorName).RandomPosition()</span>, picks a random offset within <span class="tt">_glowTargetRadiusMultiplier</span> of the glow fill radius, and calls <span class="tt">Spawn</span> with <span class="tt">useUnscaledTime: true</span>. Arrival increments <span class="tt">_glowTrailArrivedCount</span> and fills the glow proportionally. Trails reuse the same <span class="tt">SimplePoolChannel&lt;FlyingTrail&gt;</span> factory as score trails but are pooled under separate keys.</p>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md777"></a>
 Gate pattern</h2>
 <p><span class="tt">LevelUpLifetimeScope</span> registers <span class="tt">new CinematicEndGate(CinematicState.LevelUpPanIn)</span> as <span class="tt">IReadyGate</span>. This mirrors how <span class="tt">GameLifetimeScope</span> registers <span class="tt">NavigationReadyGate(NavigationState.Game)</span> — both use <span class="tt">UniTask.WaitUntil</span> on a reactive property, just on different state machines.</p>
 <div class="fragment"><div class="line">CinematicEndGate(LevelUpPanIn) → opens when Cinematic.Current != LevelUpPanIn</div>
 <div class="line">NavigationReadyGate(Game)      → opens when Navigation.Current == Game</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md383"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md778"></a>
 Wiring requirements</h1>
 <ul>
 <li>The popup GameObject must be <b>active</b> in the scene at all times — visibility is controlled by CanvasGroup alpha (animated by the <span class="tt">LevelUp</span> animator), not by <span class="tt">SetActive</span>. If the object is disabled, <span class="tt">Start()</span> never runs and <span class="tt">ScoreLevelUpMessage</span> is never subscribed.</li>
 <li>Registered in <span class="tt">LevelUpLifetimeScope</span> via <span class="tt">RegisterComponentInHierarchy&lt;LevelUpPopUp&gt;()</span>.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md384"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md779"></a>
 Interactions</h1>
 <ul>
 <li><b><span class="tt">ScoreController</span></b> — publishes <span class="tt">ScoreLevelUpMessage</span> (triggers <span class="tt">ShowAfterGateAsync</span>) and transitions navigation to <span class="tt">LevelUp</span></li>

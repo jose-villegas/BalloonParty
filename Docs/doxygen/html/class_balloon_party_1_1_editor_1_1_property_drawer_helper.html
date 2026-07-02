@@ -131,6 +131,10 @@ Static Public Member Functions</h2></td></tr>
 <tr class="memdesc:ad6bf981d8d10ba3dfba4bea7ca1eb454"><td class="mdescLeft">&#160;</td><td class="mdescRight">Returns the number of direct serialized children of <em>property</em>  whose names are NOT in <em>excluded</em> .  <br /></td></tr>
 <tr class="memitem:ab8b272c9c430e9ec21c2f8913405e6ec" id="r_ab8b272c9c430e9ec21c2f8913405e6ec"><td class="memItemLeft">static float&#160;</td><td class="memItemRight"><a class="el" href="#ab8b272c9c430e9ec21c2f8913405e6ec">DrawCommonFields</a> (Rect position, float y, SerializedProperty property, HashSet&lt; string &gt; excluded)</td></tr>
 <tr class="memdesc:ab8b272c9c430e9ec21c2f8913405e6ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws every direct serialized child of <em>property</em>  whose name is NOT in <em>excluded</em> , in declaration order, using ObjectNames.NicifyVariableName for the display label.  <br /></td></tr>
+<tr class="memitem:a3768c6e23d4929ee151043e8198c92d9" id="r_a3768c6e23d4929ee151043e8198c92d9"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#a3768c6e23d4929ee151043e8198c92d9">DrawMinMaxSlider</a> (Rect rect, string label, ref float lo, ref float hi, float min, float max)</td></tr>
+<tr class="memdesc:a3768c6e23d4929ee151043e8198c92d9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a min/max slider with float fields on each side, matching Unity's standard control alignment.  <br /></td></tr>
+<tr class="memitem:aec72b74fe5b039cc177b6cf85be8c701" id="r_aec72b74fe5b039cc177b6cf85be8c701"><td class="memItemLeft">static void&#160;</td><td class="memItemRight"><a class="el" href="#aec72b74fe5b039cc177b6cf85be8c701">DrawMinMaxSliderLayout</a> (string label, ref Vector2 range, float min, float max)</td></tr>
+<tr class="memdesc:aec72b74fe5b039cc177b6cf85be8c701"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a min/max slider with float fields on each side, matching Unity's standard control alignment.  <br /></td></tr>
 <tr class="memitem:ada7dd22677d6e119faaf59afb7cdd5d2" id="r_ada7dd22677d6e119faaf59afb7cdd5d2"><td class="memItemLeft">static float&#160;</td><td class="memItemRight"><a class="el" href="#ada7dd22677d6e119faaf59afb7cdd5d2">DrawNamedField</a> (Rect position, float y, SerializedProperty parent, string fieldName, string displayName)</td></tr>
 <tr class="memdesc:ada7dd22677d6e119faaf59afb7cdd5d2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Draws a single field located by <em>fieldName</em>  on <em>parent</em>  using an explicit <em>displayName</em> .  <br /></td></tr>
 <tr class="memitem:a1a12e2cde254fcccd7485385c09b4af3" id="r_a1a12e2cde254fcccd7485385c09b4af3"><td class="memItemLeft">static float&#160;</td><td class="memItemRight"><a class="el" href="#a1a12e2cde254fcccd7485385c09b4af3">DrawSectionHeader</a> (Rect position, float y, string title)</td></tr>
@@ -144,6 +148,10 @@ Static Public Member Functions</h2></td></tr>
 Static Public Attributes</h2></td></tr>
 <tr class="memitem:acb913bd0b45b89693bff43e04774bf61" id="r_acb913bd0b45b89693bff43e04774bf61"><td class="memItemLeft">const float&#160;</td><td class="memItemRight"><a class="el" href="#acb913bd0b45b89693bff43e04774bf61">LineHeight</a> = 20f</td></tr>
 <tr class="memitem:ae1804a71039aaa65360eea87dd1211a4" id="r_ae1804a71039aaa65360eea87dd1211a4"><td class="memItemLeft">const float&#160;</td><td class="memItemRight"><a class="el" href="#ae1804a71039aaa65360eea87dd1211a4">Spacing</a> = 2f</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-static-methods" class="groupheader"><a id="pri-static-methods" name="pri-static-methods"></a>
+Static Private Member Functions</h2></td></tr>
+<tr class="memitem:ad3ee923e35a3a9e83cd8025ef6181c35" id="r_ad3ee923e35a3a9e83cd8025ef6181c35"><td class="memItemLeft">static float&#160;</td><td class="memItemRight"><a class="el" href="#ad3ee923e35a3a9e83cd8025ef6181c35">RoundCentesimal</a> (float value)</td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="namespace_balloon_party_1_1_shared.html">Shared</a> drawing utilities for custom PropertyDrawers across the project. </p>
@@ -220,6 +228,100 @@ Static Public Attributes</h2></td></tr>
 
 <p>Draws every direct serialized child of <em>property</em>  whose name is NOT in <em>excluded</em> , in declaration order, using ObjectNames.NicifyVariableName for the display label. </p>
 <p>Returns the updated Y position after the last drawn field. </p>
+
+</div>
+</div>
+<a id="a3768c6e23d4929ee151043e8198c92d9" name="a3768c6e23d4929ee151043e8198c92d9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a3768c6e23d4929ee151043e8198c92d9">&#9670;&#160;</a></span>DrawMinMaxSlider()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Editor.PropertyDrawerHelper.DrawMinMaxSlider </td>
+          <td>(</td>
+          <td class="paramtype">Rect</td>          <td class="paramname"><span class="paramname"><em>rect</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>label</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref float</td>          <td class="paramname"><span class="paramname"><em>lo</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref float</td>          <td class="paramname"><span class="paramname"><em>hi</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>min</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>max</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Draws a min/max slider with float fields on each side, matching Unity's standard control alignment. </p>
+<p>Rect-based version for PropertyDrawer. </p>
+
+</div>
+</div>
+<a id="aec72b74fe5b039cc177b6cf85be8c701" name="aec72b74fe5b039cc177b6cf85be8c701"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aec72b74fe5b039cc177b6cf85be8c701">&#9670;&#160;</a></span>DrawMinMaxSliderLayout()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Editor.PropertyDrawerHelper.DrawMinMaxSliderLayout </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>label</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">ref Vector2</td>          <td class="paramname"><span class="paramname"><em>range</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>min</em></span>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>max</em></span>&#160;)</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Draws a min/max slider with float fields on each side, matching Unity's standard control alignment. </p>
+<p>Layout version for EditorWindow. </p>
 
 </div>
 </div>
@@ -371,6 +473,31 @@ Static Public Attributes</h2></td></tr>
 
 <p>Returns the total pixel height required to draw all direct serialized children of <em>property</em>  whose names are NOT in <em>excluded</em> , using each field's actual EditorGUI.GetPropertyHeight so that variable-height drawers (e.g. </p>
 <p><code>[PaletteColorMask]</code>) are measured correctly. </p>
+
+</div>
+</div>
+<a id="ad3ee923e35a3a9e83cd8025ef6181c35" name="ad3ee923e35a3a9e83cd8025ef6181c35"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad3ee923e35a3a9e83cd8025ef6181c35">&#9670;&#160;</a></span>RoundCentesimal()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">float BalloonParty.Editor.PropertyDrawerHelper.RoundCentesimal </td>
+          <td>(</td>
+          <td class="paramtype">float</td>          <td class="paramname"><span class="paramname"><em>value</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel static">static</span><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
 
 </div>
 </div>

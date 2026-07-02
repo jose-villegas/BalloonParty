@@ -3,6 +3,7 @@ var files_dup =
     [ "Balloon", "dir_59cb1e44261553b0d152593e70166eca.html", "dir_59cb1e44261553b0d152593e70166eca" ],
     [ "Cheats", "dir_7606514e9924745d6fc00d7acab6a4c3.html", "dir_7606514e9924745d6fc00d7acab6a4c3" ],
     [ "Configuration", "dir_64387ea9bbe6fc952e4d6bb8dd3c13de.html", "dir_64387ea9bbe6fc952e4d6bb8dd3c13de" ],
+    [ "Diagrams", "dir_424c225eedf7a0d5c0e47257e26a7934.html", null ],
     [ "Display", "dir_24817a301ba3256d5cc3ff5fb28dbe0b.html", "dir_24817a301ba3256d5cc3ff5fb28dbe0b" ],
     [ "Editor", "dir_14eca4e58e6d71e3a9859288c1bd2735.html", "dir_14eca4e58e6d71e3a9859288c1bd2735" ],
     [ "Game", "dir_c33286056d2acf479cd8641ef845fec1.html", "dir_c33286056d2acf479cd8641ef845fec1" ],

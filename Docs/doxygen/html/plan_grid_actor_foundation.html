@@ -121,15 +121,15 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('plan_grid_acto
   <div class="headertitle"><div class="title">Grid Actor System — Foundation Reference (Phases 1–7.5) </div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md242"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md473"></a>
 Grid Actor System — Foundation Reference (Phases 1–7.5)</h1>
 <blockquote class="doxtable">
 <p>Compact record of completed phases. Working plan for Phase 8+ is in <span class="tt"><a class="el" href="_p_l_a_n-_grid_actor_expansion_8md.html">PLAN-GridActorExpansion.md</a></span>. </p>
 </blockquote>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md244"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md475"></a>
 Key Design Decisions — Summary</h2>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md245"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md476"></a>
 Mobility axis: <span class="tt">SlotActorKind</span></h3>
 <ul>
 <li><span class="tt">Static</span> — fixed, balancer skips, always stable</li>
@@ -139,7 +139,7 @@ Mobility axis: <span class="tt">SlotActorKind</span></h3>
 <div class="line">IDynamicSlotActor           — new IReadOnlyReactiveProperty&lt;Vector2Int&gt; SlotIndex; IsStable (read-only)</div>
 <div class="line">IWriteableDynamicSlotActor  — new ReactiveProperty&lt;Vector2Int&gt; SlotIndex; IsStable (mutable)</div>
 <div class="line">IWriteableSlotActor         — plain Vector2Int SlotIndex with setter (statics only)</div>
-</div><!-- fragment --><h3 class="doxsection"><a class="anchor" id="autotoc_md246"></a>
+</div><!-- fragment --><h3 class="doxsection"><a class="anchor" id="autotoc_md477"></a>
 Durability axis: <span class="tt">IHitable</span> + <span class="tt">IHasDurability</span></h3>
 <ul>
 <li><span class="tt">IHitable</span> — declares projectile response (<span class="tt">EvaluateHit → HitOutcome</span>)</li>
@@ -147,21 +147,21 @@ Durability axis: <span class="tt">IHitable</span> + <span class="tt">IHasDurabil
 <li>Actors without <span class="tt">IHitable</span> have no collider — no convention-based fallback</li>
 </ul>
 <div class="fragment"><div class="line">HitOutcome: Deflect | PassThrough | Pop | Absorb</div>
-</div><!-- fragment --><h3 class="doxsection"><a class="anchor" id="autotoc_md247"></a>
+</div><!-- fragment --><h3 class="doxsection"><a class="anchor" id="autotoc_md478"></a>
 Item slot axis: <span class="tt">IHasItemSlot</span></h3>
 <ul>
 <li><span class="tt">IHasItemSlot : IHasColor</span> — presence IS the capability; absence = cannot hold items</li>
 <li><span class="tt">IHasWriteableItemSlot : IHasItemSlot</span> — <span class="tt">ReactiveProperty&lt;ItemType&gt; Item</span></li>
 <li><span class="tt">BalloonModel</span> opts in; <span class="tt">ToughBalloonModel</span> does not</li>
 </ul>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md248"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md479"></a>
 Spawner type selection</h3>
 <p><span class="tt">BalloonSpawner</span> switches on <span class="tt">entry.BalloonType</span> (<span class="tt">Simple → BalloonModel</span>, <span class="tt">Tough → ToughBalloonModel</span>). <span class="tt">IsPaintable</span> / <span class="tt">CanHoldItem</span> removed from config.</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md249"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md480"></a>
 Capability interfaces in <span class="tt">Slots/</span></h3>
 <p><span class="tt">IHasColor</span>, <span class="tt">IHasWriteableColor</span>, <span class="tt">IHasScore</span>, <span class="tt">IHasNudge</span>, <span class="tt">IHasItemSlot</span>, <span class="tt">IHitable</span>, <span class="tt">IHasDurability</span>, <span class="tt">IPassThrough</span>, <span class="tt">SlotActorKind</span>, <span class="tt">HitOutcome</span></p>
 <hr  />
-<h2 class="doxsection"><a class="anchor" id="autotoc_md251"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md482"></a>
 Phase Status</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -185,11 +185,11 @@ Phase Status</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">8+ — Expansion  </td><td class="markdownTableBodyNone">→ <span class="tt"><a class="el" href="_p_l_a_n-_grid_actor_expansion_8md.html">PLAN-GridActorExpansion.md</a></span>  </td></tr>
 </table>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md252"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md483"></a>
 Phase 7 — key changes</h3>
 <p><span class="tt">IHitable</span>, <span class="tt">IHasDurability</span>, <span class="tt">IDynamicSlotActor</span>, <span class="tt">BalloonModelBase</span>, <span class="tt">BalloonModelConfig</span>, <span class="tt">HitOutcome.PassThrough</span> + <span class="tt">Absorb</span>, <span class="tt">BalloonController</span> switched to <span class="tt">msg.Outcome</span>, <span class="tt">BalloonBalancer</span> + <span class="tt">NudgeService</span> cast to <span class="tt">IDynamicSlotActor</span>.</p>
 <p>Deferred: <span class="tt">UnbreakableBalloonModel</span>, <span class="tt">Absorb</span> routing in <span class="tt">ProjectileView</span>. Both delivered in Phase 8.1 (see expansion plan).</p>
-<h3 class="doxsection"><a class="anchor" id="autotoc_md253"></a>
+<h3 class="doxsection"><a class="anchor" id="autotoc_md484"></a>
 Phase 7.5 — key changes</h3>
 <p><span class="tt">IHasItemSlot</span>/<span class="tt">IHasWriteableItemSlot</span>; <span class="tt">Item</span>/<span class="tt">CanHoldItem</span> removed from <span class="tt">BalloonModelBase</span>; reactive <span class="tt">SlotIndex</span> on <span class="tt">IDynamicSlotActor</span>; <span class="tt">BalloonSpawner</span> type switch; all consumers updated; <span class="tt">ItemSlotTests</span> passing.</p>
 <p><span class="tt">ScoreValue</span> + <span class="tt">NudgeOverrides</span> remain on <span class="tt">BalloonModelBase</span> — moved when the first non-scoring or non-nudgeable actor demands it (tracked in expansion plan). </p>

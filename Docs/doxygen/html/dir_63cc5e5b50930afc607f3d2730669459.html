@@ -133,35 +133,39 @@ Files</h2></td></tr>
 <tr class="memitem:ShieldCounterAnimation_2Ecs" id="r_ShieldCounterAnimation_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_shield_counter_animation_8cs.html">ShieldCounterAnimation.cs</a></td></tr>
 <tr class="memitem:ShieldCounterLabel_2Ecs" id="r_ShieldCounterLabel_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_shield_counter_label_8cs.html">ShieldCounterLabel.cs</a></td></tr>
 <tr class="memitem:ShieldTrailController_2Ecs" id="r_ShieldTrailController_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_shield_trail_controller_8cs.html">ShieldTrailController.cs</a></td></tr>
-<tr class="memitem:ShieldTrailPoolChannel_2Ecs" id="r_ShieldTrailPoolChannel_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_shield_trail_pool_channel_8cs.html">ShieldTrailPoolChannel.cs</a></td></tr>
 <tr class="memitem:ShieldUILifetimeScope_2Ecs" id="r_ShieldUILifetimeScope_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_shield_u_i_lifetime_scope_8cs.html">ShieldUILifetimeScope.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md397"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md792"></a>
 UI/Shields</h1>
 <p>Displays the projectile's remaining shields, animates state changes, and spawns visual trails when shields are gained.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md398"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md793"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File  </th><th class="markdownTableHeadNone">What it does  </th></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">ShieldUILifetimeScope</span>  </td><td class="markdownTableBodyNone">VContainer child scope on the shield HUD root; registers <span class="tt">ShieldCounterLabel[]</span>, <span class="tt">ShieldCounterAnimation</span>, trail prefab, target provider, and <span class="tt">ShieldTrailController</span> entry point  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">ShieldUILifetimeScope</span>  </td><td class="markdownTableBodyNone">VContainer child scope on the shield HUD root; registers <span class="tt">ShieldCounterLabel[]</span>, <span class="tt">ShieldCounterAnimation</span>, trail prefab, the HUD anchor as the <span class="tt">Shield</span> trail endpoint, and <span class="tt">ShieldTrailController</span> entry point  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">ShieldCounterLabel</span>  </td><td class="markdownTableBodyNone">Shows the shield count; resets to "--" during balance passes  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">ShieldCounterAnimation</span>  </td><td class="markdownTableBodyNone">Drives Animator triggers (<span class="tt">Ready</span>, <span class="tt">Lost</span>, <span class="tt">Gain</span>, <span class="tt">Waiting</span>) based on <span class="tt">ShieldsRemaining</span> changes  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">ShieldTrailController</span>  </td><td class="markdownTableBodyNone">Plain C# <span class="tt">IStartable</span> — subscribes to <span class="tt">ShieldGainedMessage</span>; composes a <span class="tt">TrailSpawner</span> to spawn <span class="tt">FlyingTrail</span> orbs from balloon slot position to the shield HUD target  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">ShieldTrailController</span>  </td><td class="markdownTableBodyNone">Plain C# <span class="tt">IStartable</span> — subscribes to <span class="tt">ShieldGainedMessage</span> (balloon → HUD) and <span class="tt">ShieldLostMessage</span> (HUD → wall bounce); composes a <span class="tt">TrailSpawner</span> to fly <span class="tt">FlyingTrail</span> orbs between the balloon/bounce point and the shield HUD endpoint  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">ShieldTrailPoolChannel</span>  </td><td class="markdownTableBodyNone"><span class="tt">PoolChannel&lt;FlyingTrail&gt;</span> — pool keyed by <span class="tt">ShieldTrail</span>  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">SimplePoolChannel&lt;FlyingTrail&gt;</span>  </td><td class="markdownTableBodyNone">shield-trail pool keyed by <span class="tt">ShieldTrail</span>  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md399"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md794"></a>
 How it works</h1>
 <p><span class="tt">ShieldCounterLabel</span> shows the starting shield count when a <span class="tt">ProjectileLoadedMessage</span> arrives and resets to "--" while the grid is balancing (indicated by <span class="tt">BalanceBalloonsMessage</span>).</p>
 <p><span class="tt">ShieldCounterAnimation</span> drives an Animator with three triggers: <span class="tt">"Ready"</span> on load, <span class="tt">"Lost"</span> when <span class="tt">ShieldsRemaining</span> decrements, <span class="tt">"Gain"</span> if shields are ever restored, and <span class="tt">"Waiting"</span> during a balance pass. It binds directly to a <span class="tt">ProjectileModel.ShieldsRemaining</span> reactive property — <span class="tt">ThrowerController</span> calls <span class="tt">BindProjectile(model)</span> after each reload so the animation always tracks the live projectile.</p>
-<p><span class="tt">ShieldTrailController</span> is a plain C# <span class="tt">IStartable</span> + <span class="tt">IDisposable</span> registered as an entry point in <span class="tt">ShieldUILifetimeScope</span>. It listens for <span class="tt">ShieldGainedMessage</span> (published by <span class="tt">ShieldItemHandler</span> when a shield item is activated). It resolves the balloon's world position from the slot index via <span class="tt">SlotGrid.IndexToWorldPosition</span>, then uses a composed <span class="tt">TrailSpawner</span> to spawn a <span class="tt">FlyingTrail</span> orb that tweens from that position to the target transform (registered in the scope as a <span class="tt">Func&lt;Vector3&gt;</span>). The trail duration is read from <span class="tt">IGameConfiguration.ShieldTrailDuration</span>. The spawner handles pool return on completion.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md400"></a>
+<p><span class="tt">ShieldTrailController</span> is a plain C# <span class="tt">IStartable</span> + <span class="tt">IDisposable</span> registered as an entry point in <span class="tt">ShieldUILifetimeScope</span>. It flies shield orbs in both directions between a world point and the <span class="tt">Shield</span> trail endpoint (the HUD anchor, resolved from the shared <span class="tt">TrailEndpointRegistry</span> — see <span class="tt">Shared/Pool</span>), reusing one composed <span class="tt">TrailSpawner</span>:</p>
+<ul>
+<li><b><span class="tt">ShieldGainedMessage</span></b> (published by <span class="tt">ShieldItemHandler</span> when a shield item is activated): resolves the granting balloon's world position from its slot index via <span class="tt">SlotGrid.IndexToWorldPosition</span> and flies an orb <em>up to</em> the HUD.</li>
+<li><b><span class="tt">ShieldLostMessage</span></b> (published by <span class="tt">ProjectileView</span> when a wall bounce spends a shield — i.e. <span class="tt">ShieldsRemaining</span> stays <span class="tt">&gt;= 0</span> after the decrement; below that the projectile is destroyed instead): flies an orb <em>from</em> the HUD down to the bounce point carried in the message.</li>
+</ul>
+<p>Both use <span class="tt">IGameConfiguration.ShieldTrailDuration</span>; the spawner handles pool return on completion.</p>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md795"></a>
 Interactions</h1>
 <ul>
 <li><b>ThrowerController</b> — calls <span class="tt">ShieldCounterAnimation.BindProjectile()</span> on each reload</li>

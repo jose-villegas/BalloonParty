@@ -23,11 +23,14 @@ orb per message.
 after visual feedback has landed.
 
 **Cinematic intercept:**
-`LevelUpTrailEffect` subscribes to `ScorePointMessage`. When `WillLevelUp` is true at
-publish time, the tipping trail is registered via `TrackTrail`. On registration the
-trail's tweens switch to unscaled time, the camera pan-in begins, and gameplay pauses
-(`PauseSource.Cinematic`). Next-level trails spawned after the tip are paused until the
-popup is dismissed.
+`LevelUpCinematic` (a plain C# producer over the `CameraRigCinematic` runner — see
+@ref arch_cinematics_architecture) subscribes to `ScorePointMessage`. When `WillLevelUp`
+is true at publish time it awaits the tipping trail's registration in
+`TrailFlightRegistry`, then intercepts it: the move tween is killed and the trail is
+puppeted manually along the pan-in segment's `TimeScaleCurve` while the camera pans in
+and gameplay pauses (`PauseSource.Cinematic`). `Time.timeScale` stays untouched during
+the pan-in — other trails fly at normal speed. Next-level trails spawned after the tip
+resolve after the popup is dismissed.
 
 ## Guidance
 

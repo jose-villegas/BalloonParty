@@ -1,21 +1,21 @@
 var class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view =
 [
+    [ "BoltPlayback", "struct_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view_1_1_bolt_playback.html", "struct_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view_1_1_bolt_playback" ],
     [ "AnimateGlowSegment", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a4fb0d6e7228842d4e4ac06101c6d1cd9", null ],
     [ "ApplyLineRenderers", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#ae17d0bb2cea90e6733e3f496f43ad692", null ],
-    [ "BuildBoltBuffers", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#ae031bcbb46b121d6e0721acc899ec484", null ],
-    [ "BuildGlowPath", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#aa9122852d6e8691945992d068287f472", null ],
     [ "ClearRenderers", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a2adbc29c0259d313a81fae0eaeab2212", null ],
-    [ "ComputeStageCentroids", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#aafea55c2c7e81a42ccf41aa180ad54a5", null ],
     [ "DisableGlow", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#ade2f6f0250c301e2541145c99ead45d3", null ],
-    [ "FillSegment", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#aa5c2476d6f8e9c7e4ddbbc4a6d5a11a4", null ],
+    [ "GlowIdx", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a67e79de5466e0cfb4b71153f0b67ebb4", null ],
     [ "InvokeComplete", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#ac4df2fabf5b0f7b348a1d2385ba5395e", null ],
     [ "OnDespawned", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#acb87601994825d2c2fa8d93bbb6a58ce", null ],
     [ "OnSpawned", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#afa7e8d38e5e7131727f7dcb6f158feca", null ],
     [ "Play", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a3e230a42542fa25adfa0d3537ee1d5e6", null ],
     [ "Play", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#ad9d3043cdeeeed208f06c51c152292a8", null ],
     [ "PlayAsync", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a655262c7ac3ba52cc2e5bf4e52fa4824", null ],
-    [ "PrepareDisplay", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a1decf4517cde27c007e3b0a552967836", null ],
+    [ "PrepareDisplay", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a1a583bfd77ad0c3c2568987fc29937c5", null ],
     [ "SetGlowFromPath", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#ab1c45d48b03b2f457286cc3267af86f8", null ],
+    [ "StepGlow", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a65dc5f096b2c962df99a3979f57184ae", null ],
+    [ "StepJump", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a3df1e95a282808d7cb13a9a20a646566", null ],
     [ "Stop", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#afdf333754150b4aa44307842499db588", null ],
     [ "WaitJump", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a235db3f628088660bc1eb1a33ab069e3", null ],
     [ "_cts", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a465842fdaf2373b13e16db6f69826b8b", null ],
@@ -27,9 +27,6 @@ var class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view =
     [ "_onTargetHit", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#ae809673ed1cea66f4dd45583fbfd7bc2", null ],
     [ "_randomness", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#acec566d554e0e349a90e666cd42673cd", null ],
     [ "_segmentsMultiplier", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#aababafba5b38b7b286d52dbc539dc30c", null ],
-    [ "_targetPositions", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a2263f9c9d342ecdab3d07a28f5950c1b", null ],
-    [ "centroids", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a6f64ca8f5bc17953579c9e5775a8c020", null ],
-    [ "lineBuffers", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a5bac07b7e0f90036e3b196dd015f20c8", null ],
-    [ "OnComplete", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a215eeda6230e7f35327b68e8572f0cc5", null ],
-    [ "positions", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#aa5aaa79f51a3981b3ef4b295271344c2", null ]
+    [ "_targetPositions", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a93847c13da4437ee06f7450ee986bdda", null ],
+    [ "OnComplete", "class_balloon_party_1_1_item_1_1_lightning_1_1_chain_lightning_view.html#a215eeda6230e7f35327b68e8572f0cc5", null ]
 ];

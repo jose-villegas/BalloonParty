@@ -1,5 +1,9 @@
 <map id="BalloonParty.UI.Shields.ShieldCounterLabel" name="BalloonParty.UI.Shields.ShieldCounterLabel">
-<area shape="rect" id="Node000001" title=" " alt="" coords="5,79,168,120"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="31,5,142,31"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="88,44,89,79,84,78,85,48"/>
+<area shape="rect" id="Node000001" title="The loaded projectile&#39;s remaining&#45;shields counter." alt="" coords="60,183,222,223"/>
+<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_u_i_1_1_reactive_counter_label.html" title="Shows an int reactive value as a thousands&#45;separated label, with a &quot;&#45;&#45;&quot; placeholder until bound and o..." alt="" coords="57,94,225,135"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="143,148,143,183,139,181,139,152"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,13,117,38"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="83,47,126,93,121,95,82,53"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_u_i_1_1_binding_1_1_i_reactive_bindable-1-g.html" title="A view that binds itself to a reactive source of T ." alt="" coords="141,5,304,46"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="196,56,161,95,158,92,192,59"/>
 </map>

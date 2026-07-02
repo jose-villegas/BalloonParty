@@ -1,3 +1,52 @@
 <map id="Graphical Class Hierarchy" name="Graphical Class Hierarchy">
-<area shape="rect" id="Node000000" href="$class_balloon_party_1_1_editor_1_1_editor_u_i_1_1_search_filter_toolbar.html" title="Draws a toolbar row with a search field, an enum popup filter, and an optional refresh button." alt="" coords="5,5,174,46"/>
+<area shape="rect" id="Node000000" href="$interface_balloon_party_1_1_configuration_1_1_i_balloons_configuration.html" title=" " alt="" coords="244,5,422,46"/>
+<area shape="rect" id="Node000001" href="$class_balloon_party_1_1_configuration_1_1_balloons_configuration.html" title=" " alt="" coords="472,5,650,46"/>
+<area shape="poly" id="edge83_Node000000_Node000001" title=" " alt="" coords="437,23,474,24,469,27,439,28"/>
+<area shape="rect" id="Node000010" href="$interface_balloon_party_1_1_configuration_1_1_i_cinematics_settings.html" title="The single setup point for cinematics: one composed entry per CinematicState (traits + camera&#45;rig seg..." alt="" coords="244,71,422,111"/>
+<area shape="rect" id="Node000009" href="$class_balloon_party_1_1_configuration_1_1_cinematics_settings.html" title="Every cinematic state is declared and tuned here, in one entry per CinematicState (indexed by the enu..." alt="" coords="472,71,650,111"/>
+<area shape="poly" id="edge84_Node000010_Node000009" title=" " alt="" coords="437,89,474,90,469,92,439,93"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_slots_1_1_actor_1_1_cluster_1_1_i_cluster_view_settings.html" title="Shared visual configuration for cluster&#45;based renderers (clouds, bushes, etc.)." alt="" coords="5,169,195,210"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_configuration_1_1_i_bush_settings.html" title=" " alt="" coords="244,136,422,177"/>
+<area shape="poly" id="edge85_Node000005_Node000004" title=" " alt="" coords="208,172,246,167,242,171,212,176"/>
+<area shape="rect" id="Node000006" href="$interface_balloon_party_1_1_configuration_1_1_i_puff_cloud_settings.html" title=" " alt="" coords="244,201,422,242"/>
+<area shape="poly" id="edge87_Node000005_Node000006" title=" " alt="" coords="209,202,246,208,242,211,211,207"/>
+<area shape="rect" id="Node000003" href="$class_balloon_party_1_1_configuration_1_1_bush_settings.html" title=" " alt="" coords="472,136,650,177"/>
+<area shape="poly" id="edge86_Node000004_Node000003" title=" " alt="" coords="437,154,474,155,469,158,439,159"/>
+<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_configuration_1_1_puff_cloud_settings.html" title=" " alt="" coords="472,201,650,242"/>
+<area shape="poly" id="edge88_Node000006_Node000007" title=" " alt="" coords="437,219,474,220,469,223,439,224"/>
+<area shape="rect" id="Node000012" href="$interface_balloon_party_1_1_configuration_1_1_i_disturbance_field_settings.html" title=" " alt="" coords="244,267,422,307"/>
+<area shape="rect" id="Node000011" href="$class_balloon_party_1_1_configuration_1_1_disturbance_field_settings.html" title=" " alt="" coords="472,267,650,307"/>
+<area shape="poly" id="edge89_Node000012_Node000011" title=" " alt="" coords="437,285,474,286,469,288,439,289"/>
+<area shape="rect" id="Node000014" href="$interface_balloon_party_1_1_shared_1_1_i_game_configuration.html" title=" " alt="" coords="243,397,424,438"/>
+<area shape="rect" id="Node000013" href="$class_balloon_party_1_1_configuration_1_1_game_configuration.html" title=" " alt="" coords="472,397,650,438"/>
+<area shape="poly" id="edge90_Node000014_Node000013" title=" " alt="" coords="439,415,474,417,469,419,440,420"/>
+<area shape="rect" id="Node000016" href="$interface_balloon_party_1_1_configuration_1_1_i_game_display_configuration.html" title=" " alt="" coords="243,463,424,503"/>
+<area shape="rect" id="Node000015" href="$class_balloon_party_1_1_configuration_1_1_game_display_configuration.html" title=" " alt="" coords="472,463,650,503"/>
+<area shape="poly" id="edge91_Node000016_Node000015" title=" " alt="" coords="439,480,474,482,469,484,440,486"/>
+<area shape="rect" id="Node000018" href="$interface_balloon_party_1_1_configuration_1_1_i_game_palette.html" title=" " alt="" coords="244,528,422,569"/>
+<area shape="rect" id="Node000017" href="$class_balloon_party_1_1_configuration_1_1_game_palette.html" title=" " alt="" coords="472,528,650,569"/>
+<area shape="poly" id="edge92_Node000018_Node000017" title=" " alt="" coords="438,546,474,548,469,549,439,551"/>
+<area shape="rect" id="Node000020" href="$interface_balloon_party_1_1_configuration_1_1_i_grid_actor_configuration.html" title=" " alt="" coords="244,593,422,634"/>
+<area shape="rect" id="Node000019" href="$class_balloon_party_1_1_configuration_1_1_grid_actor_configuration.html" title=" " alt="" coords="472,593,650,634"/>
+<area shape="poly" id="edge93_Node000020_Node000019" title=" " alt="" coords="438,611,474,613,469,614,438,616"/>
+<area shape="rect" id="Node000022" href="$interface_balloon_party_1_1_configuration_1_1_i_item_configuration.html" title=" " alt="" coords="244,659,422,699"/>
+<area shape="rect" id="Node000021" href="$class_balloon_party_1_1_configuration_1_1_item_configuration.html" title=" " alt="" coords="472,659,650,699"/>
+<area shape="poly" id="edge94_Node000022_Node000021" title=" " alt="" coords="438,676,474,679,469,679,438,682"/>
+<area shape="rect" id="Node000024" href="$interface_balloon_party_1_1_configuration_1_1_i_overflow_settings.html" title="Tuning for the overflow pile below the grid (rejected balloons) — see Balloon/Spawner/RejectedBalloon..." alt="" coords="244,724,422,765"/>
+<area shape="rect" id="Node000023" href="$class_balloon_party_1_1_configuration_1_1_overflow_settings.html" title=" " alt="" coords="472,724,650,765"/>
+<area shape="poly" id="edge95_Node000024_Node000023" title=" " alt="" coords="438,742,474,744,469,744,438,747"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="275,344,392,369"/>
+<area shape="poly" id="edge96_Node000002_Node000001" title=" " alt="" coords="402,334,422,317,442,284,449,252,449,221,445,189,441,157,440,125,449,91,470,57,488,45,484,49,474,61,454,93,446,125,446,157,450,188,454,220,455,253,447,286,426,321,406,338"/>
+<area shape="poly" id="edge99_Node000002_Node000009" title=" " alt="" coords="400,334,422,317,438,293,445,269,445,221,443,197,445,173,453,148,470,123,488,110,485,114,474,126,458,150,450,174,449,197,450,221,450,270,443,295,426,321,404,338"/>
+<area shape="poly" id="edge97_Node000002_Node000003" title=" " alt="" coords="398,335,422,317,434,301,441,286,445,254,450,221,457,205,470,188,490,175,486,179,474,192,462,207,455,223,450,254,446,287,439,304,426,321,401,339"/>
+<area shape="poly" id="edge107_Node000002_Node000007" title=" " alt="" coords="392,335,422,317,437,301,446,286,454,269,470,253,495,241,490,244,474,257,459,273,450,288,442,304,426,321,395,339"/>
+<area shape="poly" id="edge100_Node000002_Node000011" title=" " alt="" coords="391,336,494,306,490,310,394,341"/>
+<area shape="poly" id="edge101_Node000002_Node000013" title=" " alt="" coords="398,371,486,396,481,398,399,376"/>
+<area shape="poly" id="edge102_Node000002_Node000015" title=" " alt="" coords="406,373,426,384,442,400,451,416,459,432,474,448,495,462,490,462,470,452,454,435,446,419,438,403,422,388,407,378"/>
+<area shape="poly" id="edge103_Node000002_Node000017" title=" " alt="" coords="406,370,426,384,439,400,447,417,451,450,455,482,462,497,474,513,491,528,485,527,470,517,457,500,450,483,446,450,441,418,435,403,422,388,406,376"/>
+<area shape="poly" id="edge104_Node000002_Node000019" title=" " alt="" coords="406,370,426,384,443,409,451,434,453,458,451,483,449,507,451,531,458,554,474,579,489,593,484,592,470,582,453,557,445,531,444,507,446,482,448,458,446,435,439,411,422,388,407,375"/>
+<area shape="poly" id="edge105_Node000002_Node000021" title=" " alt="" coords="406,369,426,384,448,417,456,451,456,483,451,515,447,547,446,579,454,611,474,644,488,659,483,657,470,647,449,613,441,580,441,547,446,515,451,483,451,451,443,420,422,387,406,374"/>
+<area shape="poly" id="edge106_Node000002_Node000023" title=" " alt="" coords="406,369,426,384,441,405,452,426,461,467,459,508,452,548,444,588,442,628,450,668,460,688,474,709,488,724,483,723,470,713,455,691,445,670,436,628,439,587,446,547,454,507,456,468,447,428,437,408,422,388,406,374"/>
+<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_configuration_1_1_bush_variant_data.html" title="Pre&#45;baked bush variant: branch map texture + leaf attachment points." alt="" coords="472,332,650,373"/>
+<area shape="poly" id="edge98_Node000002_Node000008" title=" " alt="" coords="407,353,474,353,469,355,409,358"/>
 </map>

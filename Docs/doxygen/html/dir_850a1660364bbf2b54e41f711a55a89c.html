@@ -138,10 +138,10 @@ Files</h2></td></tr>
 <tr class="memitem:PaintSplashPreviewModule_2Ecs" id="r_PaintSplashPreviewModule_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_paint_splash_preview_module_8cs.html">PaintSplashPreviewModule.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md62"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md93"></a>
 EffectPreview</h1>
 <p>Reusable editor-time preview system for <span class="tt">EffectView</span> subclasses. Lets designers play effect animations inside the Inspector (prefab edit mode or scene) without entering Play mode.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md63"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md94"></a>
 Architecture</h1>
 <p>The system follows a <b>player + module</b> composition pattern:</p>
 <div class="fragment"><div class="line">EffectViewPreviewPlayer          ← owns animation loop, color picker, config caches</div>
@@ -159,7 +159,7 @@ Architecture</h1>
 <li>Per-frame tick logic (moving blobs, updating line renderers)</li>
 <li>Cleanup (hiding objects, destroying temporaries)</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md64"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md95"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -177,7 +177,7 @@ Contents</h1>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">ChainLightningPreviewModule</span>  </td><td class="markdownTableBodyNone">Module for <span class="tt">ChainLightningView</span> — generates random grid positions as targets, delegates bolt buffer building to <span class="tt">ChainLightningView.BuildBoltBuffers</span> (with configurable <span class="tt">fractalDecay</span>), builds a smooth glow path via <span class="tt">ChainLightningView.BuildGlowPath</span>, interpolates glow position every tick using <span class="tt">PathHelper.SampleAt</span>, animates forward growth + retraction via delta-time state machine  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md65"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md96"></a>
 Adding a new effect preview</h1>
 <ol type="1">
 <li>Create a class implementing <span class="tt">IEffectPreviewModule</span></li>
@@ -210,7 +210,7 @@ Adding a new effect preview</h1>
 <div class="line">        base.OnDisable();</div>
 <div class="line">    }</div>
 <div class="line">}</div>
-</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md66"></a>
+</div><!-- fragment --><h1 class="doxsection"><a class="anchor" id="autotoc_md97"></a>
 Design notes</h1>
 <ul>
 <li><b>Single source of truth</b> — preview modules reuse runtime math wherever possible. <span class="tt">PaintSplashPreviewModule</span> calls <span class="tt">PaintSplashView.ComputeBlobFlight</span> and <span class="tt">ApplyBlobMaterial</span> for position/scale/MPB computation. <span class="tt">ChainLightningPreviewModule</span> calls <span class="tt">ChainLightningView.BuildBoltBuffers</span>, <span class="tt">BuildGlowPath</span>, and uses <span class="tt">PathHelper.SampleAt</span> for per-tick glow interpolation along the smooth centroid path. <span class="tt">EditorGridHelper</span> delegates to <span class="tt">SlotGrid.IndexToWorldPosition(index, separation, offset)</span>. Only editor-specific behavior (particle simulation, prefab-stage instantiation, delta-time state machine vs async) lives in the modules</li>

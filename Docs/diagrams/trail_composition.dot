@@ -9,7 +9,7 @@ digraph TrailComposition {
         label="Shared/Pool/"; style="dashed"; color="#30363d"; fontcolor="#8b949e"; fontname="Helvetica";
 
         TrailSpawner [label="TrailSpawner\n─────────\nPoolManager ref\npool key + channel factory\nSpawn(from, to, dur, color?)\nSpawnUnscaled(...)", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
-        TrailTracker [label="TrailTracker<TId>\n─────────\nRegister / Unregister\nTrackTrail (forward+retroactive)\nPauseWhere / ResumeTrail\nResumeAll\nIsTracked / GetTransform", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
+        TrailTracker [label="TrailFlightRegistry<TId>\n─────────\nRegister / Unregister\nContains / Get\nCompleteAll (snapshot-safe)\nper-flight: Pause / Resume /\nComplete / Speed", fillcolor="#1f3a5f", fontcolor="#58a6ff"];
     }
 
     // Score trail

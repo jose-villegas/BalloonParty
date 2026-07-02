@@ -135,13 +135,13 @@ Files</h2></td></tr>
 <tr class="memitem:NavigationSpawnGate_2Ecs" id="r_NavigationSpawnGate_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_navigation_spawn_gate_8cs.html">NavigationSpawnGate.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md362"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md752"></a>
 Slots</h1>
 <p>The grid that holds all actors in play. Actors are anything that can occupy a slot — balloons today, static obstacles and spawners in the future.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md363"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md753"></a>
 Actor abstraction</h1>
 <p>Every grid occupant is an <span class="tt">ISlotActor</span>. The grid never speaks directly in balloon types.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md364"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md754"></a>
 Core interfaces</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -159,7 +159,7 @@ Core interfaces</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">SlotActorKind</span>  </td><td class="markdownTableBodyNone">Enum — <span class="tt">Dynamic</span> (balancer can relocate, contributes weight) or <span class="tt">Static</span> (fixed, contributes weight, balancer skips)  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md365"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md755"></a>
 Capability interfaces</h2>
 <p>Optional traits actors can advertise to consumers:</p>
 <table class="markdownTable">
@@ -184,7 +184,7 @@ Capability interfaces</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">IPassThrough</span>  </td><td class="markdownTableBodyNone">Actor's slot can be crossed by animation paths (spawn entry, balance moves). Actors that do NOT implement this block traversal; rerouting is deferred to a future phase.  </td></tr>
 </table>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md366"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md756"></a>
 Hit types</h2>
 <p><span class="tt">DamageContext</span> wraps damage with optional flags:</p>
 <table class="markdownTable">
@@ -216,8 +216,10 @@ Hit types</h2>
 <td class="markdownTableBodyNone"><span class="tt">GatekeeperActorModel</span> <em>(Phase 8.2c)</em>  </td><td class="markdownTableBodyNone"><span class="tt">IHasDurability</span>  </td><td class="markdownTableBodyNone"><span class="tt">Deflect</span> on survival, <span class="tt">Pop</span> on death; decrements <span class="tt">HitsRemaining</span>. Blocks a column until destroyed.  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">StaticActorModel</span>  </td><td class="markdownTableBodyNone">neither  </td><td class="markdownTableBodyNone">No collider — not part of the hit pipeline  </td></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">PuffObstacleModel</span>  </td><td class="markdownTableBodyNone">neither  </td><td class="markdownTableBodyNone">Structural obstacle; <span class="tt">IPassThrough</span> — animation paths can cross it. Gains <span class="tt">ClusterId</span> linking to a visual <span class="tt">PuffCluster</span>.  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md367"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md757"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -225,15 +227,15 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">Grid/</span>  </td><td class="markdownTableBodyNone"><span class="tt">SlotGrid</span>, <span class="tt">SlotGridChangedEvent</span>, <span class="tt">SlotGridView</span>, <span class="tt">BalancePathHolder</span> — core grid data structure and balance transit tracking (namespace <span class="tt"><a class="el" href="namespace_balloon_party_1_1_slots_1_1_grid.html">BalloonParty.Slots.Grid</a></span>)  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">Actor/</span>  </td><td class="markdownTableBodyNone">Core actor interfaces, identity enum, static actor implementation, and hit controller — <span class="tt">ISlotActor</span>, <span class="tt">IWriteableSlotActor</span>, <span class="tt">IDynamicSlotActor</span>, <span class="tt">IWriteableDynamicSlotActor</span>, <span class="tt">ISlotActorView</span>, <span class="tt">SlotActorKind</span>, <span class="tt">StaticActorModel</span>, <span class="tt">StaticActorView</span>, <span class="tt">StaticActorPoolChannel</span>, <span class="tt">StaticActorSettings</span>, <span class="tt">StaticActorSpawner</span>, <span class="tt">GridActorHitController</span> (namespace <span class="tt"><a class="el" href="namespace_balloon_party_1_1_slots_1_1_actor.html">BalloonParty.Slots.Actor</a></span>)  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">Actor/</span>  </td><td class="markdownTableBodyNone">Core actor interfaces, spawner, hit controller, and slot selection strategies — <span class="tt">ISlotActor</span>, <span class="tt">IWriteableSlotActor</span>, <span class="tt">IDynamicSlotActor</span>, <span class="tt">IWriteableDynamicSlotActor</span>, <span class="tt">ISlotActorView</span>, <span class="tt">SlotActorKind</span>, <span class="tt">StaticActorModel</span>, <span class="tt">StaticActorSpawner</span>, <span class="tt">GridActorHitController</span>, <span class="tt">ISlotSelectionStrategy</span>, <span class="tt">RandomSlotSelectionStrategy</span>, <span class="tt">ClusterSlotSelectionStrategy</span>, <span class="tt">SlotPlacementMode</span> (namespace <span class="tt"><a class="el" href="namespace_balloon_party_1_1_slots_1_1_actor.html">BalloonParty.Slots.Actor</a></span>)  </td></tr>
 <tr class="markdownTableRowOdd">
-<td class="markdownTableBodyNone"><span class="tt">Actor/Archetype/</span>  </td><td class="markdownTableBodyNone">Concrete grid actor models — <span class="tt">PuffObstacleModel</span>, <span class="tt">BushObstacleModel</span> (structural; no hit response), <span class="tt">DeflectorActorModel</span>, <span class="tt">AbsorberActorModel</span> (indestructible hitables), <span class="tt">GatekeeperActorModel</span> (durability-based column blocker), <span class="tt">GridActorView</span>, <span class="tt">GridActorPoolChannel</span>, <span class="tt">GridActorType</span>  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">Actor/Archetype/</span>  </td><td class="markdownTableBodyNone">Concrete grid actor models and the Puff cloud visual system — see <a class="el" href="dir_090f4d360156985698b13e6152fae7c3.html" title="/Users/jose.villegas/Projects/BalloonParty/Assets/Source/Slots/Actor/Archetype/README.md">Archetype README</a> (namespace <span class="tt"><a class="el" href="namespace_balloon_party_1_1_slots_1_1_actor_1_1_archetype.html">BalloonParty.Slots.Actor.Archetype</a></span>)  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">Capabilities/</span>  </td><td class="markdownTableBodyNone">Optional capability interfaces — <span class="tt">IHasColor</span>, <span class="tt">IPaintable</span>, <span class="tt">IHasScore</span>, <span class="tt">IHasScoreColor</span>, <span class="tt">IHasNudge</span>, <span class="tt">IHasItemSlot</span>, <span class="tt">IHitable</span>, <span class="tt">IHasDurability</span>, <span class="tt">IPassThrough</span>, <span class="tt">HitOutcome</span>, <span class="tt">DamageContext</span>, <span class="tt">DamageFlags</span>, <span class="tt">ScoreAttribution</span> (namespace <span class="tt"><a class="el" href="namespace_balloon_party_1_1_slots_1_1_capabilities.html">BalloonParty.Slots.Capabilities</a></span>)  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">Spawner/</span>  </td><td class="markdownTableBodyNone">Spawner coordination — <span class="tt">IGridSpawner</span>, <span class="tt">SpawnStage</span>, <span class="tt">GridSpawnerCoordinator</span> (namespace <span class="tt"><a class="el" href="namespace_balloon_party_1_1_slots_1_1_spawner.html">BalloonParty.Slots.Spawner</a></span>)  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md368"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md758"></a>
 How it works</h1>
 <p>The grid is a two-dimensional space of slots arranged in a staggered pattern (odd rows offset by half a column). Each slot is either empty or occupied by an actor model and its view. The grid knows how to convert a slot coordinate into a world position, which slots are unbalanced (missing support from below), and what the best empty slot is for an actor to move into.</p>
 <p><span class="tt">OptimalNextEmptySlot</span> uses a recursive weight algorithm to decide between two candidate slots (directly above and diagonally above). The weight of a candidate = count of occupied slots in the tree above it. Higher weight = more support = preferred. On tie, the diagonal candidate wins (via <span class="tt">&gt;=</span> comparison).</p>
@@ -242,11 +244,11 @@ How it works</h1>
 <p><span class="tt">AllEmptySlots</span> yields every empty slot across the full grid — used by <span class="tt">StaticActorSpawner</span>.</p>
 <p><span class="tt">IsTraversable(col, row)</span> returns true if the slot is empty or the occupant implements <span class="tt">IPassThrough</span> — used by <span class="tt">ComputePath</span> to build spawn animation waypoints.</p>
 <p><span class="tt">ComputePath(source, target)</span> returns world-space waypoints along the straight-line grid path between two slot indices. Either endpoint may be outside grid bounds. Non-traversable in-bounds slots and in-transit balance slots emit warnings; rerouting is deferred.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md369"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md759"></a>
 Balance Path Holder</h1>
 <p><span class="tt">BalancePathHolder</span> tracks grid slots that are in-transit due to balance animations. When the balancer relocates a balloon from slot A to slot B, both A and B are reserved as in-transit under that actor. This lets <span class="tt">ComputePath</span> warn when a spawn animation path crosses a slot that a balance animation is currently traversing — even if the grid data already reflects the post-balance state.</p>
 <p>Transit slots are tracked per-actor and released via <span class="tt">Release(actor)</span> when the balance animation's <span class="tt">OnComplete</span> fires. This means transit data persists across multiple balance passes — a second balance triggered after spawning does not erase transit from the first balance's still-running animations.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md370"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md760"></a>
 Spawner Coordination</h1>
 <p><span class="tt">GridSpawnerCoordinator</span> owns the sequencing of all grid population. Individual spawners (<span class="tt">StaticActorSpawner</span>, <span class="tt">BalloonSpawner</span>) implement <span class="tt">IGridSpawner</span> and declare their priority via <span class="tt">SpawnStage</span>. The coordinator:</p>
 <ol type="1">
@@ -266,17 +268,28 @@ Spawner Coordination</h1>
 <div class="line">SpawnStage.BalloonActors (100) ──→  BalloonSpawner.SpawnAsync</div>
 </div><!-- fragment --><p>Spawners are injected as <span class="tt">IEnumerable&lt;IGridSpawner&gt;</span> via VContainer's collection injection — each registered with <span class="tt">.As&lt;IGridSpawner&gt;()</span> in <span class="tt">GameLifetimeScope</span>.</p>
 <p><span class="tt">StaticActorSpawner.Start()</span> registers the pool immediately (synchronous, runs at scene start before the gate opens). <span class="tt">BalloonSpawner.Start()</span> starts pre-warming pools asynchronously and stores the task; <span class="tt">SpawnAsync</span> awaits it before populating the grid — so pre-warm and navigation wait overlap rather than serialize.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md371"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md761"></a>
 Interactions</h1>
 <ul>
 <li><b>BalloonSpawner</b> — calls <span class="tt">Balance()</span> once before all line spawns so existing balloons consolidate upward first; then calls <span class="tt">Place</span> for each new balloon into remaining empty slots; uses <span class="tt">ComputePath</span> for spawn animation waypoints; publishes <span class="tt">BalanceBalloonsMessage</span> after spawning for a final settling pass</li>
-<li><b>StaticActorSpawner</b> — calls <span class="tt">Place</span> for each static actor at game start using <span class="tt">AllEmptySlots</span></li>
+<li><b>StaticActorSpawner</b> — iterates <span class="tt">GridActorConfiguration.Entries</span>, picks a random count per entry (between <span class="tt">MinCount</span> and <span class="tt">MaxCount</span>), selects slots via the entry's <span class="tt">ISlotSelectionStrategy</span>, and calls <span class="tt">Place</span> per slot</li>
 <li><b>BalloonController</b> — calls <span class="tt">Remove</span> when a balloon is popped; subscribes to <span class="tt">ActorHitMessage</span></li>
 <li><b>BalloonBalancer</b> — reads occupancy to find gaps; skips <span class="tt">Static</span> actors (or actors that are not <span class="tt">IDynamicSlotActor</span>); calls <span class="tt">Remove</span> + <span class="tt">Place</span> to relocate dynamic actors; uses <span class="tt">ViewAt</span> to reach views for animation. <span class="tt">Balance()</span> is <span class="tt">internal</span> for synchronous pre-spawn consolidation</li>
 <li><b>NudgeService</b> — uses <span class="tt">GetNeighbors</span> and <span class="tt">IndexToWorldPosition</span> to direct nudge animations; filters by <span class="tt">IHasNudge</span></li>
 <li><b>PaintItemHandler</b> — uses <span class="tt">HexNeighborIndices</span>; casts <span class="tt">At()</span> result to <span class="tt">IPaintable</span> for painting</li>
-<li><b>IGameConfiguration</b> — provides <span class="tt">SlotsSize</span>, <span class="tt">SlotSeparation</span>, <span class="tt">SlotsOffset</span> for grid construction and position calculations </li>
+<li><b>IGameConfiguration</b> — provides <span class="tt">SlotsSize</span>, <span class="tt">SlotSeparation</span>, <span class="tt">SlotsOffset</span> for grid construction and position calculations</li>
 </ul>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md762"></a>
+Slot Selection Strategies</h1>
+<p><span class="tt">ISlotSelectionStrategy</span> abstracts how <span class="tt">StaticActorSpawner</span> picks which empty slots an actor type should occupy. Each <span class="tt">GridActorPrefabEntry</span> declares a <span class="tt">SlotPlacementMode</span> enum that maps to a strategy. Strategies are lazily cached — one instance per mode.</p>
+<table class="markdownTable">
+<tr class="markdownTableHead">
+<th class="markdownTableHeadNone">Strategy  </th><th class="markdownTableHeadNone">Mode  </th><th class="markdownTableHeadNone">Behaviour  </th></tr>
+<tr class="markdownTableRowOdd">
+<td class="markdownTableBodyNone"><span class="tt">RandomSlotSelectionStrategy</span>  </td><td class="markdownTableBodyNone"><span class="tt">Random</span>  </td><td class="markdownTableBodyNone">Shuffles all empty slots and picks the first N. Default for actor types with no spatial preference.  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">ClusterSlotSelectionStrategy</span>  </td><td class="markdownTableBodyNone"><span class="tt">Cluster</span>  </td><td class="markdownTableBodyNone">Seeds a cluster at a random slot, then greedily expands into hex neighbors. Each cluster is capped at <span class="tt">MaxPerCluster</span> slots (from <span class="tt">GridActorPrefabEntry</span>). When a cluster is full or has no more neighbors, the next seed is biased toward the opposite side of the grid — maximising the minimum distance to all previous cluster centroids. Produces multiple small, spatially distributed clusters.  </td></tr>
+</table>
 </div></div><!-- contents -->
 </div><!-- doc-content -->
 <div id="page-nav" class="page-nav-panel">

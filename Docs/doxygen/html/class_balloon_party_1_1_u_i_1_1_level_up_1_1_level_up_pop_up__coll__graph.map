@@ -1,33 +1,38 @@
 <map id="BalloonParty.UI.LevelUp.LevelUpPopUp" name="BalloonParty.UI.LevelUp.LevelUpPopUp">
-<area shape="rect" id="Node000001" title=" " alt="" coords="929,120,1096,161"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="36,240,147,265"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,225,153,159,187,125,226,96,270,72,310,55,347,45,382,39,552,27,653,14,733,4,771,3,812,8,856,20,906,40,934,56,960,77,998,120,993,119,956,80,931,60,904,44,854,25,811,14,771,9,733,9,653,19,553,33,383,44,348,50,312,60,273,77,228,100,190,129,157,163,110,228"/>
-<area shape="rect" id="Node000014" href="$class_balloon_party_1_1_u_i_1_1_score_1_1_flying_trail.html" title=" " alt="" coords="227,530,415,570"/>
-<area shape="poly" id="edge15_Node000014_Node000002" title=" " alt="" coords="100,278,118,330,143,393,180,458,203,488,229,515,248,529,242,529,225,519,199,492,175,461,138,395,113,331,99,283"/>
-<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_shared_1_1_i_ready_gate.html" title="Blocks a caller until some external condition allows it to proceed." alt="" coords="552,42,765,68"/>
-<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="780,66,843,78,905,93,971,119,966,120,904,98,842,83,781,72"/>
-<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_shared_1_1_pause_1_1_pause_service.html" title="Central coordinator for gameplay pause states." alt="" coords="567,92,750,133"/>
-<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="765,118,931,133,926,135,766,124"/>
-<area shape="rect" id="Node000005" href="$class_balloon_party_1_1_configuration_1_1_game_palette.html" title=" " alt="" coords="569,158,748,198"/>
-<area shape="poly" id="edge4_Node000001_Node000005" title=" " alt="" coords="762,170,904,157,931,156,926,157,905,162,764,175"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="262,110,380,136"/>
-<area shape="poly" id="edge5_Node000005_Node000006" title=" " alt="" coords="395,129,529,149,572,158,566,160,528,154,396,135"/>
-<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_configuration_1_1_palette_entry.html" title=" " alt="" coords="232,160,410,201"/>
-<area shape="poly" id="edge6_Node000005_Node000007" title=" " alt="" coords="425,177,571,177,567,180,427,182"/>
-<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html" title=" " alt="" coords="235,228,407,269"/>
-<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="422,252,584,251,675,244,764,230,820,216,875,198,971,161,966,163,877,203,822,221,765,236,676,249,584,256,424,257"/>
-<area shape="rect" id="Node000009" href="$class_balloon_party_1_1_game_1_1_score_1_1_score_trail_service.html" title=" " alt="" coords="571,346,746,386"/>
-<area shape="poly" id="edge13_Node000009_Node000008" title=" " alt="" coords="399,272,529,317,603,345,598,345,527,322,399,277"/>
-<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="759,346,833,323,870,306,903,286,935,256,962,222,999,163,1003,160,967,225,939,260,906,290,872,311,835,328,761,352"/>
-<area shape="rect" id="Node000010" title=" " alt="" coords="282,300,360,325"/>
-<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="375,318,573,351,568,353,375,324"/>
-<area shape="rect" id="Node000011" title=" " alt="" coords="276,349,366,375"/>
-<area shape="poly" id="edge10_Node000009_Node000011" title=" " alt="" coords="382,360,573,364,568,366,382,365"/>
-<area shape="rect" id="Node000012" href="$interface_balloon_party_1_1_shared_1_1_i_game_configuration.html" title=" " alt="" coords="230,399,412,440"/>
-<area shape="poly" id="edge11_Node000009_Node000012" title=" " alt="" coords="427,405,528,390,573,384,568,386,529,396,428,410"/>
-<area shape="rect" id="Node000013" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_trail_flight_registry-1-g.html" title="Central registry for all in&#45;flight trails." alt="" coords="235,464,407,505"/>
-<area shape="poly" id="edge12_Node000009_Node000013" title=" " alt="" coords="422,463,475,449,527,432,578,409,621,388,626,386,580,414,529,437,476,454,423,468"/>
-<area shape="poly" id="edge14_Node000009_Node000014" title=" " alt="" coords="429,527,479,511,527,488,561,464,592,437,639,388,644,386,596,441,564,469,530,493,481,515,431,532"/>
-<area shape="rect" id="Node000015" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="5,530,178,570"/>
-<area shape="poly" id="edge16_Node000014_Node000015" title=" " alt="" coords="193,547,229,550,224,550,193,553"/>
+<area shape="rect" id="Node000001" title=" " alt="" coords="1009,285,1177,326"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="44,51,155,77"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="167,45,297,20,380,10,470,4,564,4,660,12,755,30,845,60,887,81,925,108,961,139,994,171,1046,234,1081,285,1076,284,1042,237,990,174,958,143,922,112,884,86,843,65,754,35,659,17,564,9,470,9,380,15,298,25,169,49"/>
+<area shape="rect" id="Node000015" href="$class_balloon_party_1_1_u_i_1_1_score_1_1_flying_trail.html" title=" " alt="" coords="305,292,493,332"/>
+<area shape="poly" id="edge17_Node000015_Node000002" title=" " alt="" coords="118,86,151,128,194,179,246,231,304,276,328,291,323,291,301,281,242,235,190,182,147,132,118,92"/>
+<area shape="rect" id="Node000003" href="$interface_balloon_party_1_1_shared_1_1_i_ready_gate.html" title="Blocks a caller until some external condition allows it to proceed." alt="" coords="632,292,844,318"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="859,303,1011,305,1006,306,860,308"/>
+<area shape="rect" id="Node000004" href="$class_balloon_party_1_1_shared_1_1_pause_1_1_pause_service.html" title="Central coordinator for gameplay pause states." alt="" coords="646,408,830,448"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="845,414,915,399,984,376,1029,352,1065,327,1070,325,1032,356,986,381,916,405,846,419"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_game_1_1_run_1_1_i_run_resettable.html" title="Implemented by services holding per&#45;run state that must be cleared when a run restarts." alt="" coords="303,472,495,512"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="510,487,559,481,607,471,631,459,663,449,668,448,633,464,609,476,560,486,510,492"/>
+<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_shared_1_1_pause_1_1_time_scale_service.html" title="The only legal writer of Time.timeScale (a style&#45;audit rule bans writes elsewhere)." alt="" coords="646,342,830,383"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="510,470,567,455,606,438,614,428,618,417,621,406,630,394,649,384,654,382,634,398,626,408,623,419,619,430,610,442,569,460,511,475"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="845,351,985,331,1016,327,1021,326,986,336,846,356"/>
+<area shape="rect" id="Node000007" href="$interface_balloon_party_1_1_configuration_1_1_i_game_palette.html" title=" " alt="" coords="649,473,827,514"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="842,484,915,468,950,455,984,438,1016,413,1042,382,1079,327,1084,324,1047,385,1019,416,987,442,953,460,916,474,843,490"/>
+<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html" title=" " alt="" coords="313,45,485,86"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="500,66,555,71,609,81,719,110,804,140,885,178,987,231,1029,256,1067,285,1062,284,1026,261,984,236,883,183,802,145,718,115,607,86,554,77,501,71"/>
+<area shape="rect" id="Node000009" href="$class_balloon_party_1_1_game_1_1_score_1_1_score_trail_service.html" title=" " alt="" coords="651,228,825,268"/>
+<area shape="poly" id="edge14_Node000009_Node000008" title=" " alt="" coords="475,89,496,96,554,117,609,144,669,185,717,227,712,227,665,190,607,149,552,122,494,101,476,94"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="841,255,986,276,1016,284,1010,284,985,281,841,260"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="360,422,438,447"/>
+<area shape="poly" id="edge10_Node000009_Node000010" title=" " alt="" coords="452,419,494,407,529,398,556,393,581,384,606,364,616,343,617,322,618,300,630,278,648,267,653,265,634,282,623,302,622,322,622,344,610,367,584,389,558,398,530,403,496,412,453,424"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="354,111,444,137"/>
+<area shape="poly" id="edge11_Node000009_Node000011" title=" " alt="" coords="459,133,532,151,609,176,660,200,706,227,701,227,658,204,607,181,531,156,460,138"/>
+<area shape="rect" id="Node000012" href="$interface_balloon_party_1_1_shared_1_1_i_game_configuration.html" title=" " alt="" coords="308,161,490,202"/>
+<area shape="poly" id="edge12_Node000009_Node000012" title=" " alt="" coords="505,199,653,230,648,232,505,205"/>
+<area shape="rect" id="Node000013" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_trail_flight_registry-1-g.html" title="Central registry for all in&#45;flight trails." alt="" coords="313,226,485,267"/>
+<area shape="poly" id="edge13_Node000009_Node000013" title=" " alt="" coords="500,244,653,247,648,248,501,250"/>
+<area shape="rect" id="Node000014" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_trail_endpoint_registry.html" title="Maps a key to the ITrailEndpoint registered under it." alt="" coords="313,357,485,398"/>
+<area shape="poly" id="edge15_Node000009_Node000014" title=" " alt="" coords="500,363,555,346,582,334,606,318,614,309,618,299,621,288,630,278,648,269,653,267,634,282,626,291,623,301,619,312,610,322,585,338,557,351,501,368"/>
+<area shape="poly" id="edge16_Node000009_Node000015" title=" " alt="" coords="508,292,607,274,653,267,648,268,609,279,509,297"/>
+<area shape="rect" id="Node000016" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="13,325,186,366"/>
+<area shape="poly" id="edge18_Node000015_Node000016" title=" " alt="" coords="201,331,307,321,302,324,202,336"/>
+<area shape="rect" id="Node000017" href="$struct_balloon_party_1_1_u_i_1_1_score_1_1_flying_trail_1_1_motion_style.html" title=" " alt="" coords="5,260,194,300"/>
+<area shape="poly" id="edge19_Node000015_Node000017" title=" " alt="" coords="209,289,306,300,302,303,210,294"/>
 </map>

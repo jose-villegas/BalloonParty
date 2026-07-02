@@ -20,8 +20,8 @@
 </g>
 <g id="clust3" class="cluster">
 <title>cluster_sub</title>
-<polygon fill="none" stroke="#30363d" stroke-dasharray="5,2" points="311.5,-97 311.5,-604 418.5,-604 418.5,-97 311.5,-97"/>
-<text xml:space="preserve" text-anchor="middle" x="365" y="-586.7" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#8b949e">Subscribers</text>
+<polygon fill="none" stroke="#30363d" stroke-dasharray="5,2" points="311.5,-97 311.5,-604 419.25,-604 419.25,-97 311.5,-97"/>
+<text xml:space="preserve" text-anchor="middle" x="365.38" y="-586.7" font-family="Helvetica,sans-Serif" font-size="14.00" fill="#8b949e">Subscribers</text>
 </g>
 <!-- ProjectileView -->
 <g id="node1" class="node">
@@ -210,104 +210,104 @@
 <!-- BalloonCtrl2 -->
 <g id="node19" class="node">
 <title>BalloonCtrl2</title>
-<path fill="#1a3a1a" stroke="black" d="M397,-411C397,-411 333,-411 333,-411 327,-411 321,-405 321,-399 321,-399 321,-387 321,-387 321,-381 327,-375 333,-375 333,-375 397,-375 397,-375 403,-375 409,-381 409,-387 409,-387 409,-399 409,-399 409,-405 403,-411 397,-411"/>
-<text xml:space="preserve" text-anchor="middle" x="365" y="-389.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">BalloonController</text>
+<path fill="#1a3a1a" stroke="black" d="M397.38,-411C397.38,-411 333.38,-411 333.38,-411 327.38,-411 321.38,-405 321.38,-399 321.38,-399 321.38,-387 321.38,-387 321.38,-381 327.38,-375 333.38,-375 333.38,-375 397.38,-375 397.38,-375 403.38,-375 409.38,-381 409.38,-387 409.38,-387 409.38,-399 409.38,-399 409.38,-405 403.38,-411 397.38,-411"/>
+<text xml:space="preserve" text-anchor="middle" x="365.38" y="-389.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">BalloonController</text>
 </g>
 <!-- ActorHit&#45;&gt;BalloonCtrl2 -->
 <g id="edge12" class="edge">
 <title>ActorHit&#45;&gt;BalloonCtrl2</title>
-<path fill="none" stroke="black" d="M248.78,-298.22C263.43,-303.12 279.76,-310.66 291.5,-322 306.96,-336.92 296.69,-350.45 311.5,-366 311.98,-366.5 312.47,-366.99 312.96,-367.47"/>
-<polygon fill="black" stroke="black" points="310.63,-370.09 320.59,-373.7 315.06,-364.66 310.63,-370.09"/>
+<path fill="none" stroke="black" d="M248.78,-298.22C263.43,-303.12 279.76,-310.66 291.5,-322 306.96,-336.92 296.66,-350.47 311.5,-366 311.97,-366.49 312.45,-366.97 312.94,-367.45"/>
+<polygon fill="black" stroke="black" points="310.45,-369.93 320.4,-373.55 314.87,-364.51 310.45,-369.93"/>
 </g>
 <!-- ScoreCtrl2 -->
 <g id="node20" class="node">
 <title>ScoreCtrl2</title>
-<path fill="#1a3a1a" stroke="black" d="M393.25,-303C393.25,-303 336.75,-303 336.75,-303 330.75,-303 324.75,-297 324.75,-291 324.75,-291 324.75,-279 324.75,-279 324.75,-273 330.75,-267 336.75,-267 336.75,-267 393.25,-267 393.25,-267 399.25,-267 405.25,-273 405.25,-279 405.25,-279 405.25,-291 405.25,-291 405.25,-297 399.25,-303 393.25,-303"/>
-<text xml:space="preserve" text-anchor="middle" x="365" y="-281.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">ScoreController</text>
+<path fill="#1a3a1a" stroke="black" d="M393.63,-303C393.63,-303 337.13,-303 337.13,-303 331.13,-303 325.13,-297 325.13,-291 325.13,-291 325.13,-279 325.13,-279 325.13,-273 331.13,-267 337.13,-267 337.13,-267 393.63,-267 393.63,-267 399.63,-267 405.63,-273 405.63,-279 405.63,-279 405.63,-291 405.63,-291 405.63,-297 399.63,-303 393.63,-303"/>
+<text xml:space="preserve" text-anchor="middle" x="365.38" y="-281.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">ScoreController</text>
 </g>
 <!-- ActorHit&#45;&gt;ScoreCtrl2 -->
 <g id="edge13" class="edge">
 <title>ActorHit&#45;&gt;ScoreCtrl2</title>
-<path fill="none" stroke="black" d="M255.7,-288.61C273.51,-288.01 294.46,-287.32 313.17,-286.69"/>
-<polygon fill="black" stroke="black" points="313.08,-290.2 322.96,-286.37 312.85,-283.2 313.08,-290.2"/>
+<path fill="none" stroke="black" d="M255.8,-288.61C273.66,-288.01 294.67,-287.32 313.42,-286.69"/>
+<polygon fill="black" stroke="black" points="313.36,-290.2 323.24,-286.37 313.13,-283.2 313.36,-290.2"/>
 </g>
 <!-- NudgeService -->
 <g id="node21" class="node">
 <title>NudgeService</title>
-<path fill="#1a3a1a" stroke="black" d="M390.25,-357C390.25,-357 339.75,-357 339.75,-357 333.75,-357 327.75,-351 327.75,-345 327.75,-345 327.75,-333 327.75,-333 327.75,-327 333.75,-321 339.75,-321 339.75,-321 390.25,-321 390.25,-321 396.25,-321 402.25,-327 402.25,-333 402.25,-333 402.25,-345 402.25,-345 402.25,-351 396.25,-357 390.25,-357"/>
-<text xml:space="preserve" text-anchor="middle" x="365" y="-335.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">NudgeService</text>
+<path fill="#1a3a1a" stroke="black" d="M390.63,-357C390.63,-357 340.13,-357 340.13,-357 334.13,-357 328.13,-351 328.13,-345 328.13,-345 328.13,-333 328.13,-333 328.13,-327 334.13,-321 340.13,-321 340.13,-321 390.63,-321 390.63,-321 396.63,-321 402.63,-327 402.63,-333 402.63,-333 402.63,-345 402.63,-345 402.63,-351 396.63,-357 390.63,-357"/>
+<text xml:space="preserve" text-anchor="middle" x="365.38" y="-335.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">NudgeService</text>
 </g>
 <!-- ActorHit&#45;&gt;NudgeService -->
 <g id="edge14" class="edge">
 <title>ActorHit&#45;&gt;NudgeService</title>
-<path fill="none" stroke="black" d="M246.45,-300.63C266.91,-307.31 293.64,-316.03 316.44,-323.48"/>
-<polygon fill="black" stroke="black" points="315.24,-326.77 325.83,-326.54 317.41,-320.11 315.24,-326.77"/>
+<path fill="none" stroke="black" d="M246.53,-300.63C267.11,-307.33 294.03,-316.1 316.94,-323.56"/>
+<polygon fill="black" stroke="black" points="315.79,-326.86 326.39,-326.63 317.96,-320.21 315.79,-326.86"/>
 </g>
 <!-- BalloonBalancer -->
 <g id="node22" class="node">
 <title>BalloonBalancer</title>
-<path fill="#1a3a1a" stroke="black" d="M395.13,-195C395.13,-195 334.88,-195 334.88,-195 328.88,-195 322.88,-189 322.88,-183 322.88,-183 322.88,-171 322.88,-171 322.88,-165 328.88,-159 334.88,-159 334.88,-159 395.13,-159 395.13,-159 401.13,-159 407.13,-165 407.13,-171 407.13,-171 407.13,-183 407.13,-183 407.13,-189 401.13,-195 395.13,-195"/>
-<text xml:space="preserve" text-anchor="middle" x="365" y="-173.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">BalloonBalancer</text>
+<path fill="#1a3a1a" stroke="black" d="M395.5,-195C395.5,-195 335.25,-195 335.25,-195 329.25,-195 323.25,-189 323.25,-183 323.25,-183 323.25,-171 323.25,-171 323.25,-165 329.25,-159 335.25,-159 335.25,-159 395.5,-159 395.5,-159 401.5,-159 407.5,-165 407.5,-171 407.5,-171 407.5,-183 407.5,-183 407.5,-189 401.5,-195 395.5,-195"/>
+<text xml:space="preserve" text-anchor="middle" x="365.38" y="-173.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">BalloonBalancer</text>
 </g>
 <!-- BalanceBalloons&#45;&gt;BalloonBalancer -->
 <g id="edge16" class="edge">
 <title>BalanceBalloons&#45;&gt;BalloonBalancer</title>
-<path fill="none" stroke="black" d="M264.28,-168.36C279.35,-169.67 295.91,-171.1 311.14,-172.42"/>
-<polygon fill="black" stroke="black" points="310.7,-175.9 320.96,-173.27 311.3,-168.92 310.7,-175.9"/>
+<path fill="none" stroke="black" d="M264.41,-168.36C279.65,-169.68 296.42,-171.13 311.79,-172.46"/>
+<polygon fill="black" stroke="black" points="311.46,-175.94 321.72,-173.32 312.06,-168.97 311.46,-175.94"/>
 </g>
 <!-- BalloonSpawner2 -->
 <g id="node23" class="node">
 <title>BalloonSpawner2</title>
-<path fill="#1a3a1a" stroke="black" d="M395.13,-141C395.13,-141 334.88,-141 334.88,-141 328.88,-141 322.88,-135 322.88,-129 322.88,-129 322.88,-117 322.88,-117 322.88,-111 328.88,-105 334.88,-105 334.88,-105 395.13,-105 395.13,-105 401.13,-105 407.13,-111 407.13,-117 407.13,-117 407.13,-129 407.13,-129 407.13,-135 401.13,-141 395.13,-141"/>
-<text xml:space="preserve" text-anchor="middle" x="365" y="-119.33" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">BalloonSpawner</text>
+<path fill="#1a3a1a" stroke="black" d="M395.5,-141C395.5,-141 335.25,-141 335.25,-141 329.25,-141 323.25,-135 323.25,-129 323.25,-129 323.25,-117 323.25,-117 323.25,-111 329.25,-105 335.25,-105 335.25,-105 395.5,-105 395.5,-105 401.5,-105 407.5,-111 407.5,-117 407.5,-117 407.5,-129 407.5,-129 407.5,-135 401.5,-141 395.5,-141"/>
+<text xml:space="preserve" text-anchor="middle" x="365.38" y="-119.33" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">BalloonSpawner</text>
 </g>
 <!-- ProjDestroyed&#45;&gt;BalloonSpawner2 -->
 <g id="edge17" class="edge">
 <title>ProjDestroyed&#45;&gt;BalloonSpawner2</title>
-<path fill="none" stroke="black" d="M264.7,-108.45C279.75,-110.65 296.26,-113.07 311.41,-115.29"/>
-<polygon fill="black" stroke="black" points="310.8,-118.74 321.2,-116.73 311.81,-111.81 310.8,-118.74"/>
+<path fill="none" stroke="black" d="M264.83,-108.45C279.92,-110.65 296.46,-113.07 311.66,-115.29"/>
+<polygon fill="black" stroke="black" points="311.07,-118.74 321.47,-116.73 312.08,-111.82 311.07,-118.74"/>
 </g>
 <!-- TrailEffect -->
 <g id="node25" class="node">
 <title>TrailEffect</title>
-<path fill="#1a3a1a" stroke="black" d="M398.5,-573C398.5,-573 331.5,-573 331.5,-573 325.5,-573 319.5,-567 319.5,-561 319.5,-561 319.5,-549 319.5,-549 319.5,-543 325.5,-537 331.5,-537 331.5,-537 398.5,-537 398.5,-537 404.5,-537 410.5,-543 410.5,-549 410.5,-549 410.5,-561 410.5,-561 410.5,-567 404.5,-573 398.5,-573"/>
-<text xml:space="preserve" text-anchor="middle" x="365" y="-551.33" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">LevelUpTrailEffect</text>
+<path fill="#1a3a1a" stroke="black" d="M399.25,-573C399.25,-573 331.5,-573 331.5,-573 325.5,-573 319.5,-567 319.5,-561 319.5,-561 319.5,-549 319.5,-549 319.5,-543 325.5,-537 331.5,-537 331.5,-537 399.25,-537 399.25,-537 405.25,-537 411.25,-543 411.25,-549 411.25,-549 411.25,-561 411.25,-561 411.25,-567 405.25,-573 399.25,-573"/>
+<text xml:space="preserve" text-anchor="middle" x="365.38" y="-551.33" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">LevelUpCinematic</text>
 </g>
 <!-- ScorePoint&#45;&gt;TrailEffect -->
 <g id="edge20" class="edge">
 <title>ScorePoint&#45;&gt;TrailEffect</title>
-<path fill="none" stroke="black" d="M258.92,-545.9C274.43,-547.24 291.98,-548.76 308.24,-550.17"/>
-<polygon fill="black" stroke="black" points="307.48,-553.62 317.74,-550.99 308.08,-546.64 307.48,-553.62"/>
+<path fill="none" stroke="black" d="M259.03,-545.9C274.36,-547.22 291.68,-548.72 307.79,-550.11"/>
+<polygon fill="black" stroke="black" points="307.48,-553.6 317.75,-550.97 308.09,-546.62 307.48,-553.6"/>
 </g>
 <!-- ColorBar -->
 <g id="node26" class="node">
 <title>ColorBar</title>
-<path fill="#1a3a1a" stroke="black" d="M397.75,-465C397.75,-465 332.25,-465 332.25,-465 326.25,-465 320.25,-459 320.25,-453 320.25,-453 320.25,-441 320.25,-441 320.25,-435 326.25,-429 332.25,-429 332.25,-429 397.75,-429 397.75,-429 403.75,-429 409.75,-435 409.75,-441 409.75,-441 409.75,-453 409.75,-453 409.75,-459 403.75,-465 397.75,-465"/>
-<text xml:space="preserve" text-anchor="middle" x="365" y="-443.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">ColorProgressBar</text>
+<path fill="#1a3a1a" stroke="black" d="M398.13,-465C398.13,-465 332.63,-465 332.63,-465 326.63,-465 320.63,-459 320.63,-453 320.63,-453 320.63,-441 320.63,-441 320.63,-435 326.63,-429 332.63,-429 332.63,-429 398.13,-429 398.13,-429 404.13,-429 410.13,-435 410.13,-441 410.13,-441 410.13,-453 410.13,-453 410.13,-459 404.13,-465 398.13,-465"/>
+<text xml:space="preserve" text-anchor="middle" x="365.38" y="-443.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">ColorProgressBar</text>
 </g>
 <!-- ScorePoint&#45;&gt;ColorBar -->
 <g id="edge19" class="edge">
 <title>ScorePoint&#45;&gt;ColorBar</title>
-<path fill="none" stroke="black" d="M251.9,-532.07C265.53,-527.11 280.29,-519.98 291.5,-510 305.18,-497.83 298.36,-486.73 311.5,-474 312.11,-473.41 312.73,-472.83 313.37,-472.26"/>
-<polygon fill="black" stroke="black" points="315.28,-475.21 321.09,-466.35 311.02,-469.66 315.28,-475.21"/>
+<path fill="none" stroke="black" d="M251.9,-532.07C265.53,-527.11 280.29,-519.98 291.5,-510 305.18,-497.83 298.34,-486.71 311.5,-474 312.12,-473.41 312.74,-472.83 313.38,-472.26"/>
+<polygon fill="black" stroke="black" points="315.34,-475.17 321.16,-466.32 311.09,-469.61 315.34,-475.17"/>
 </g>
 <!-- TrailService -->
 <g id="node27" class="node">
 <title>TrailService</title>
-<path fill="#1a3a1a" stroke="black" d="M397.38,-519C397.38,-519 332.63,-519 332.63,-519 326.63,-519 320.63,-513 320.63,-507 320.63,-507 320.63,-495 320.63,-495 320.63,-489 326.63,-483 332.63,-483 332.63,-483 397.38,-483 397.38,-483 403.38,-483 409.38,-489 409.38,-495 409.38,-495 409.38,-507 409.38,-507 409.38,-513 403.38,-519 397.38,-519"/>
-<text xml:space="preserve" text-anchor="middle" x="365" y="-497.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">ScoreTrailService</text>
+<path fill="#1a3a1a" stroke="black" d="M397.75,-519C397.75,-519 333,-519 333,-519 327,-519 321,-513 321,-507 321,-507 321,-495 321,-495 321,-489 327,-483 333,-483 333,-483 397.75,-483 397.75,-483 403.75,-483 409.75,-489 409.75,-495 409.75,-495 409.75,-507 409.75,-507 409.75,-513 403.75,-519 397.75,-519"/>
+<text xml:space="preserve" text-anchor="middle" x="365.38" y="-497.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">ScoreTrailService</text>
 </g>
 <!-- ScorePoint&#45;&gt;TrailService -->
 <g id="edge18" class="edge">
 <title>ScorePoint&#45;&gt;TrailService</title>
-<path fill="none" stroke="black" d="M251.76,-531.65C269.19,-526.89 290.19,-521.16 309.29,-515.94"/>
-<polygon fill="black" stroke="black" points="310.09,-519.35 318.82,-513.34 308.25,-512.6 310.09,-519.35"/>
+<path fill="none" stroke="black" d="M251.85,-531.65C269.33,-526.89 290.38,-521.16 309.53,-515.94"/>
+<polygon fill="black" stroke="black" points="310.36,-519.34 319.08,-513.34 308.52,-512.59 310.36,-519.34"/>
 </g>
 <!-- LevelUp&#45;&gt;ColorBar -->
 <g id="edge21" class="edge">
 <title>LevelUp&#45;&gt;ColorBar</title>
-<path fill="none" stroke="black" d="M256.1,-470C272.46,-466.51 291.41,-462.47 308.83,-458.76"/>
-<polygon fill="black" stroke="black" points="309.48,-462.2 318.53,-456.69 308.02,-455.35 309.48,-462.2"/>
+<path fill="none" stroke="black" d="M256.2,-470C272.6,-466.51 291.61,-462.47 309.07,-458.76"/>
+<polygon fill="black" stroke="black" points="309.74,-462.2 318.8,-456.69 308.29,-455.35 309.74,-462.2"/>
 </g>
 <!-- TrailArrived -->
 <g id="node13" class="node">
@@ -319,26 +319,26 @@
 <!-- ItemAssigner -->
 <g id="node24" class="node">
 <title>ItemAssigner</title>
-<path fill="#1a3a1a" stroke="black" d="M387.63,-249C387.63,-249 342.38,-249 342.38,-249 336.38,-249 330.38,-243 330.38,-237 330.38,-237 330.38,-225 330.38,-225 330.38,-219 336.38,-213 342.38,-213 342.38,-213 387.63,-213 387.63,-213 393.63,-213 399.63,-219 399.63,-225 399.63,-225 399.63,-237 399.63,-237 399.63,-243 393.63,-249 387.63,-249"/>
-<text xml:space="preserve" text-anchor="middle" x="365" y="-227.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">ItemAssigner</text>
+<path fill="#1a3a1a" stroke="black" d="M388,-249C388,-249 342.75,-249 342.75,-249 336.75,-249 330.75,-243 330.75,-237 330.75,-237 330.75,-225 330.75,-225 330.75,-219 336.75,-213 342.75,-213 342.75,-213 388,-213 388,-213 394,-213 400,-219 400,-225 400,-225 400,-237 400,-237 400,-243 394,-249 388,-249"/>
+<text xml:space="preserve" text-anchor="middle" x="365.38" y="-227.32" font-family="Helvetica,sans-Serif" font-size="9.00" fill="#3fb950">ItemAssigner</text>
 </g>
 <!-- ItemCheck&#45;&gt;ItemAssigner -->
 <g id="edge22" class="edge">
 <title>ItemCheck&#45;&gt;ItemAssigner</title>
-<path fill="none" stroke="black" d="M260.56,-228.24C279.14,-228.74 300.45,-229.31 318.88,-229.8"/>
-<polygon fill="black" stroke="black" points="318.62,-233.29 328.71,-230.06 318.81,-226.29 318.62,-233.29"/>
+<path fill="none" stroke="black" d="M260.67,-228.24C279.31,-228.74 300.67,-229.31 319.15,-229.8"/>
+<polygon fill="black" stroke="black" points="318.92,-233.29 329.01,-230.06 319.1,-226.3 318.92,-233.29"/>
 </g>
 <!-- ItemActivated&#45;&gt;BalloonCtrl2 -->
 <g id="edge23" class="edge">
 <title>ItemActivated&#45;&gt;BalloonCtrl2</title>
-<path fill="none" stroke="black" d="M261.79,-408.66C276.98,-406.33 293.89,-403.74 309.51,-401.35"/>
-<polygon fill="black" stroke="black" points="309.76,-404.85 319.11,-399.88 308.7,-397.93 309.76,-404.85"/>
+<path fill="none" stroke="black" d="M261.91,-408.66C277.21,-406.32 294.24,-403.72 309.96,-401.32"/>
+<polygon fill="black" stroke="black" points="310.27,-404.81 319.63,-399.84 309.22,-397.89 310.27,-404.81"/>
 </g>
 <!-- Dismissed&#45;&gt;TrailEffect -->
 <g id="edge24" class="edge">
 <title>Dismissed&#45;&gt;TrailEffect</title>
-<path fill="none" stroke="black" d="M256.1,-590.94C272.4,-585.51 291.28,-579.22 308.64,-573.44"/>
-<polygon fill="black" stroke="black" points="309.4,-576.87 317.78,-570.39 307.19,-570.23 309.4,-576.87"/>
+<path fill="none" stroke="black" d="M256.2,-590.94C272.47,-585.53 291.3,-579.28 308.65,-573.52"/>
+<polygon fill="black" stroke="black" points="309.4,-576.95 317.78,-570.48 307.19,-570.31 309.4,-576.95"/>
 </g>
 </g>
 </svg>

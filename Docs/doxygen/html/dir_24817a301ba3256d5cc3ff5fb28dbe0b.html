@@ -124,21 +124,24 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('dir_24817a301b
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-files" class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
+<tr class="memitem:CameraShakeService_2Ecs" id="r_CameraShakeService_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_camera_shake_service_8cs.html">CameraShakeService.cs</a></td></tr>
 <tr class="memitem:OrthogonalSizeCameraController_2Ecs" id="r_OrthogonalSizeCameraController_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_orthogonal_size_camera_controller_8cs.html">OrthogonalSizeCameraController.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md56"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md80"></a>
 Display</h1>
 <p>Camera and screen-adaptation logic.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md57"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md81"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
 <th class="markdownTableHeadNone">File  </th><th class="markdownTableHeadNone">What it provides  </th></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">OrthogonalSizeCameraController</span>  </td><td class="markdownTableBodyNone">MonoBehaviour — sets the camera's orthographic size based on the device's aspect ratio. Reads <span class="tt">GameDisplayConfiguration</span> (injected) which maps aspect ratios to optimal orthographic sizes. Has a serialized <span class="tt">Camera</span> reference to avoid <span class="tt">Camera.main</span> lookup issues during additive scene loading. When <span class="tt">_continuous</span> is enabled, updates every <span class="tt">LateUpdate</span> to react to resolution or orientation changes; otherwise applies once on <span class="tt">Start</span>  </td></tr>
+<tr class="markdownTableRowEven">
+<td class="markdownTableBodyNone"><span class="tt">CameraShakeService</span>  </td><td class="markdownTableBodyNone">MonoBehaviour — punches the gameplay camera (<span class="tt">DOShakePosition</span>) on every <span class="tt">SpawnBlockedMessage</span> (a rejected balloon), then restores it. Captures the rest position once per burst so overlapping shakes don't drift, and <b>skips entirely while <span class="tt">ICinematicState.IsPlaying</span></b> so it never fights the level-up cinematic's camera control. Serialized <span class="tt">Camera</span> reference plus inspector-tunable duration / strength / vibrato. Registered via <span class="tt">RegisterComponentInHierarchy&lt;CameraShakeService&gt;()</span>; place it on the camera GameObject  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md58"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md82"></a>
 How it works</h1>
 <p><span class="tt">GameDisplayConfiguration</span> (in <span class="tt">Configuration/</span>) holds a list of aspect-ratio → orthographic-size pairs. The controller rounds the current screen ratio, finds the closest match, and applies the corresponding size. This ensures the play field is framed correctly across different devices without letterboxing or clipping.</p>
 <p>The controller is registered via <span class="tt">RegisterComponentInHierarchy&lt;OrthogonalSizeCameraController&gt;()</span> in <span class="tt">GameLifetimeScope</span> and <span class="tt">LaunchLifetimeScope</span>. Place it on the camera GameObject in each scene with the camera reference wired in the Inspector. </p>

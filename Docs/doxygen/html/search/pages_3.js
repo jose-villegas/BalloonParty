@@ -1,5 +1,25 @@
 var searchData=
 [
-  ['3_20—_20procedural_20placement_20engine_0',['Phase 8.3 — Procedural Placement Engine',['../plan_grid_actor_expansion.html#autotoc_md230',1,'']]],
-  ['3_20assets_1',['3 Assets',['../plan_content_production.html',1,'Content Production Plan — Pre-8.3 Assets'],['../plan_content_production.html#autotoc_md157',1,'Content Production Plan — Pre-8.3 Assets']]]
+  ['3_20—_20branch_20bake_20shader_0',['2.3 — Branch Bake Shader',['../plan_bush_sprite_baking.html#autotoc_md247',1,'']]],
+  ['3_20—_20custom_20level_20editor_1',['3 — Custom Level Editor',['../plan_future_ideas.html#autotoc_md356',1,'']]],
+  ['3_20—_20logic_20gc_20hot_20paths_20m_2',['Phase 3 — Logic/GC hot paths (M)',['../plan_audit_remediation.html#autotoc_md180',1,'']]],
+  ['3_20—_20procedural_20placement_20engine_3',['Phase 8.3 — Procedural Placement Engine',['../plan_grid_actor_expansion.html#autotoc_md461',1,'']]],
+  ['3_20—_20valuable_20harder_20to_20assert_4',['Tier 3 — valuable, harder to assert',['../plan_playmode_coverage.html#autotoc_md538',1,'']]],
+  ['3_20—_20wind_20animation_20idle_20✅_20done_20—_20gpu_20vertex_20shader_5',['Phase 3 — Wind Animation (Idle) ✅ Done — GPU Vertex Shader',['../plan_bush_sprite_baking.html#autotoc_md276',1,'']]],
+  ['3_201_20level_20sequence_20model_6',['3.1 Level Sequence Model',['../plan_future_ideas.html#autotoc_md357',1,'']]],
+  ['3_202_20leveldefinition_20scriptableobject_7',['3.2 &lt;span class=&quot;tt&quot;&gt;LevelDefinition&lt;/span&gt; ScriptableObject',['../plan_future_ideas.html#autotoc_md358',1,'']]],
+  ['3_203_20custom_20level_20editor_20window_20unity_20editor_8',['3.3 Custom Level Editor Window (Unity Editor)',['../plan_future_ideas.html#autotoc_md359',1,'']]],
+  ['3_204_20level_20sequence_20integration_9',['3.4 Level Sequence Integration',['../plan_future_ideas.html#autotoc_md360',1,'']]],
+  ['3_20assets_10',['3 Assets',['../plan_content_production.html',1,'Content Production Plan — Pre-8.3 Assets'],['../plan_content_production.html#autotoc_md310',1,'Content Production Plan — Pre-8.3 Assets']]],
+  ['3_20clock_20turn_20pressure_20—_20score_20attack_20flavor_11',['12.3 Clock / turn pressure — score-attack flavor',['../plan_future_ideas.html#autotoc_md416',1,'']]],
+  ['3_20color_20streak_20balancing_12',['2.3 Color Streak Balancing',['../plan_future_ideas.html#autotoc_md353',1,'']]],
+  ['3_20custom_20level_20editor_20window_20unity_20editor_13',['3.3 Custom Level Editor Window (Unity Editor)',['../plan_future_ideas.html#autotoc_md359',1,'']]],
+  ['3_20deflector_20bounce_20vfx_14',['1.3 Deflector Bounce VFX',['../plan_future_ideas.html#autotoc_md346',1,'']]],
+  ['3_20edge_20cases_15',['6.3 Edge Cases',['../plan_future_ideas.html#autotoc_md379',1,'']]],
+  ['3_20gradient_20to_20texture_20baking_20—_20shared_20helper_16',['3. Gradient-to-Texture Baking — Shared Helper',['../md__plans_2_r_e_f_a_c_t_o_r-_helpers-_extensions-_audit.html#autotoc_md599',1,'']]],
+  ['3_20model_20sketch_17',['8.3 Model Sketch',['../plan_future_ideas.html#autotoc_md386',1,'']]],
+  ['3_20new_20balloon_20archetypes_20from_20plan_20gridactorexpansion_18',['5.3 New Balloon Archetypes &lt;em&gt;(from PLAN-GridActorExpansion)&lt;/em&gt;',['../plan_future_ideas.html#autotoc_md372',1,'']]],
+  ['3_20pacing_20—_20suggested_20actor_20introduction_20order_19',['4.3 Pacing — Suggested Actor Introduction Order',['../plan_future_ideas.html#autotoc_md365',1,'']]],
+  ['3_20suggested_20tier_20thresholds_20',['9.3 Suggested Tier Thresholds',['../plan_future_ideas.html#autotoc_md405',1,'']]],
+  ['3_20tests_21',['Current PlayMode coverage (3 tests)',['../plan_playmode_coverage.html#autotoc_md532',1,'']]]
 ];

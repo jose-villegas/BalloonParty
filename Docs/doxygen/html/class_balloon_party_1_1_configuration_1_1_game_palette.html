@@ -125,28 +125,89 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('class_balloon_
 <div id="dynsection-0-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-0-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_configuration_1_1_game_palette__inherit__graph.svg" width="190" height="126"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_configuration_1_1_game_palette__inherit__graph.svg" width="331" height="140"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <div id="dynsection-1" onclick="return dynsection.toggleVisibility(this)" class="dynheader closed" style="cursor:pointer;"><span class="dynarrow"><span class="arrowhead closed"></span></span>Collaboration diagram for BalloonParty.Configuration.GamePalette:</div>
 <div id="dynsection-1-summary" class="dynsummary" style="display:block;">
 </div>
 <div id="dynsection-1-content" class="dyncontent" style="display:none;">
-<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_configuration_1_1_game_palette__coll__graph.svg" width="331" height="163"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
+<div class="center"><iframe scrolling="no" loading="lazy" frameborder="0" src="class_balloon_party_1_1_configuration_1_1_game_palette__coll__graph.svg" width="466" height="167"><p><b>This browser is not able to show SVG: try Firefox, Chrome, Safari, or Opera instead.</b></p></iframe></div>
 <center><span class="legend">[<a target="top" href="graph_legend.html">legend</a>]</span></center></div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pub-methods" class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:ad026b36eec7d80b550c6d8d9a30338a0" id="r_ad026b36eec7d80b550c6d8d9a30338a0"><td class="memItemLeft">Color&#160;</td><td class="memItemRight"><a class="el" href="#ad026b36eec7d80b550c6d8d9a30338a0">GetColor</a> (string colorName)</td></tr>
+<tr class="memitem:a49a56578a89becd89e7aa96f9f90252c" id="r_a49a56578a89becd89e7aa96f9f90252c"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_configuration_1_1_palette_entry.html">PaletteEntry</a>&#160;</td><td class="memItemRight"><a class="el" href="#a49a56578a89becd89e7aa96f9f90252c">GetEntry</a> (string colorName)</td></tr>
+<tr class="memdesc:a49a56578a89becd89e7aa96f9f90252c"><td class="mdescLeft">&#160;</td><td class="mdescRight">The entry for <em>colorName</em> , or <code>null</code> if none matches.  <br /></td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-properties" class="groupheader"><a id="properties" name="properties"></a>
 Properties</h2></td></tr>
-<tr class="memitem:a4d0a948afa65e83508313cfcd4397349" id="r_a4d0a948afa65e83508313cfcd4397349"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_configuration_1_1_palette_entry.html">PaletteEntry</a>[]&#160;</td><td class="memItemRight"><a class="el" href="#a4d0a948afa65e83508313cfcd4397349">Colors</a><code> [get]</code></td></tr>
+<tr class="memitem:ab0fe0cd65a57640e346dc33b1fff0cae" id="r_ab0fe0cd65a57640e346dc33b1fff0cae"><td class="memItemLeft">IReadOnlyList&lt; string &gt;&#160;</td><td class="memItemRight"><a class="el" href="#ab0fe0cd65a57640e346dc33b1fff0cae">ColorNames</a><code> [get]</code></td></tr>
+<tr class="memitem:a8fc660c50e44a8e3e7fdbfd4ac7b7470" id="r_a8fc660c50e44a8e3e7fdbfd4ac7b7470"><td class="memItemLeft">IReadOnlyList&lt; <a class="el" href="class_balloon_party_1_1_configuration_1_1_palette_entry.html">PaletteEntry</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a8fc660c50e44a8e3e7fdbfd4ac7b7470">Colors</a><code> [get]</code></td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 id="header-pri-methods" class="groupheader"><a id="pri-methods" name="pri-methods"></a>
+Private Member Functions</h2></td></tr>
+<tr class="memitem:a751644c04f0e3ba7c80d4e4ee10dab59" id="r_a751644c04f0e3ba7c80d4e4ee10dab59"><td class="memItemLeft">Dictionary&lt; string, <a class="el" href="class_balloon_party_1_1_configuration_1_1_palette_entry.html">PaletteEntry</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a751644c04f0e3ba7c80d4e4ee10dab59">BuildLookup</a> ()</td></tr>
+<tr class="memitem:a9f31dd263d0a215c5dfe0e592f8cdeae" id="r_a9f31dd263d0a215c5dfe0e592f8cdeae"><td class="memItemLeft">string[]&#160;</td><td class="memItemRight"><a class="el" href="#a9f31dd263d0a215c5dfe0e592f8cdeae">BuildNames</a> ()</td></tr>
+<tr class="memitem:adf3c88fce2abd369cd5bf6f700e588f4" id="r_adf3c88fce2abd369cd5bf6f700e588f4"><td class="memItemLeft">void&#160;</td><td class="memItemRight"><a class="el" href="#adf3c88fce2abd369cd5bf6f700e588f4">OnEnable</a> ()</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 id="header-pri-attribs" class="groupheader"><a id="pri-attribs" name="pri-attribs"></a>
 Private Attributes</h2></td></tr>
+<tr class="memitem:a469982d7dc2c1a98f4cb7d73aef3dbf2" id="r_a469982d7dc2c1a98f4cb7d73aef3dbf2"><td class="memItemLeft">Dictionary&lt; string, <a class="el" href="class_balloon_party_1_1_configuration_1_1_palette_entry.html">PaletteEntry</a> &gt;&#160;</td><td class="memItemRight"><a class="el" href="#a469982d7dc2c1a98f4cb7d73aef3dbf2">_byName</a></td></tr>
 <tr class="memitem:ac2f9d78b7e398bb2040144e998fc51ba" id="r_ac2f9d78b7e398bb2040144e998fc51ba"><td class="memItemLeft"><a class="el" href="class_balloon_party_1_1_configuration_1_1_palette_entry.html">PaletteEntry</a>[]&#160;</td><td class="memItemRight"><a class="el" href="#ac2f9d78b7e398bb2040144e998fc51ba">_colors</a></td></tr>
+<tr class="memitem:af7ab65755ac9931bb91dd2edd352a49e" id="r_af7ab65755ac9931bb91dd2edd352a49e"><td class="memItemLeft">string[]&#160;</td><td class="memItemRight"><a class="el" href="#af7ab65755ac9931bb91dd2edd352a49e">_names</a></td></tr>
 </table>
 <a name="doc-func-members" id="doc-func-members"></a><h2 id="header-doc-func-members" class="groupheader">Member Function Documentation</h2>
+<a id="a751644c04f0e3ba7c80d4e4ee10dab59" name="a751644c04f0e3ba7c80d4e4ee10dab59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a751644c04f0e3ba7c80d4e4ee10dab59">&#9670;&#160;</a></span>BuildLookup()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Dictionary&lt; string, <a class="el" href="class_balloon_party_1_1_configuration_1_1_palette_entry.html">PaletteEntry</a> &gt; BalloonParty.Configuration.GamePalette.BuildLookup </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a id="a9f31dd263d0a215c5dfe0e592f8cdeae" name="a9f31dd263d0a215c5dfe0e592f8cdeae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9f31dd263d0a215c5dfe0e592f8cdeae">&#9670;&#160;</a></span>BuildNames()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">string[] BalloonParty.Configuration.GamePalette.BuildNames </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ad026b36eec7d80b550c6d8d9a30338a0" name="ad026b36eec7d80b550c6d8d9a30338a0"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ad026b36eec7d80b550c6d8d9a30338a0">&#9670;&#160;</a></span>GetColor()</h2>
 
@@ -162,9 +223,80 @@ Private Attributes</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
+<p>Implements <a class="el" href="interface_balloon_party_1_1_configuration_1_1_i_game_palette.html#a705d6b3f306d5c5463e63f593a8e4efa">BalloonParty.Configuration.IGamePalette</a>.</p>
+
+</div>
+</div>
+<a id="a49a56578a89becd89e7aa96f9f90252c" name="a49a56578a89becd89e7aa96f9f90252c"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a49a56578a89becd89e7aa96f9f90252c">&#9670;&#160;</a></span>GetEntry()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname"><a class="el" href="class_balloon_party_1_1_configuration_1_1_palette_entry.html">PaletteEntry</a> BalloonParty.Configuration.GamePalette.GetEntry </td>
+          <td>(</td>
+          <td class="paramtype">string</td>          <td class="paramname"><span class="paramname"><em>colorName</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>The entry for <em>colorName</em> , or <code>null</code> if none matches. </p>
+<p>Use when a missing color is a valid case (e.g. editor validation); GetColor throws. </p>
+
+<p>Implements <a class="el" href="interface_balloon_party_1_1_configuration_1_1_i_game_palette.html#a8ef1c291df8bd76417a1bd3f520cb74d">BalloonParty.Configuration.IGamePalette</a>.</p>
+
+</div>
+</div>
+<a id="adf3c88fce2abd369cd5bf6f700e588f4" name="adf3c88fce2abd369cd5bf6f700e588f4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adf3c88fce2abd369cd5bf6f700e588f4">&#9670;&#160;</a></span>OnEnable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BalloonParty.Configuration.GamePalette.OnEnable </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"><em></em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
 </div>
 </div>
 <a name="doc-variable-members" id="doc-variable-members"></a><h2 id="header-doc-variable-members" class="groupheader">Member Data Documentation</h2>
+<a id="a469982d7dc2c1a98f4cb7d73aef3dbf2" name="a469982d7dc2c1a98f4cb7d73aef3dbf2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a469982d7dc2c1a98f4cb7d73aef3dbf2">&#9670;&#160;</a></span>_byName</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Dictionary&lt;string, <a class="el" href="class_balloon_party_1_1_configuration_1_1_palette_entry.html">PaletteEntry</a>&gt; BalloonParty.Configuration.GamePalette._byName</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
 <a id="ac2f9d78b7e398bb2040144e998fc51ba" name="ac2f9d78b7e398bb2040144e998fc51ba"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ac2f9d78b7e398bb2040144e998fc51ba">&#9670;&#160;</a></span>_colors</h2>
 
@@ -187,9 +319,8 @@ Private Attributes</h2></td></tr>
 
 </div>
 </div>
-<a name="doc-property-members" id="doc-property-members"></a><h2 id="header-doc-property-members" class="groupheader">Property Documentation</h2>
-<a id="a4d0a948afa65e83508313cfcd4397349" name="a4d0a948afa65e83508313cfcd4397349"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a4d0a948afa65e83508313cfcd4397349">&#9670;&#160;</a></span>Colors</h2>
+<a id="af7ab65755ac9931bb91dd2edd352a49e" name="af7ab65755ac9931bb91dd2edd352a49e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af7ab65755ac9931bb91dd2edd352a49e">&#9670;&#160;</a></span>_names</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -198,7 +329,30 @@ Private Attributes</h2></td></tr>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="class_balloon_party_1_1_configuration_1_1_palette_entry.html">PaletteEntry</a> [] BalloonParty.Configuration.GamePalette.Colors</td>
+          <td class="memname">string [] BalloonParty.Configuration.GamePalette._names</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel private">private</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+</div>
+</div>
+<a name="doc-property-members" id="doc-property-members"></a><h2 id="header-doc-property-members" class="groupheader">Property Documentation</h2>
+<a id="ab0fe0cd65a57640e346dc33b1fff0cae" name="ab0fe0cd65a57640e346dc33b1fff0cae"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab0fe0cd65a57640e346dc33b1fff0cae">&#9670;&#160;</a></span>ColorNames</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;string&gt; BalloonParty.Configuration.GamePalette.ColorNames</td>
         </tr>
       </table>
   </td>
@@ -207,6 +361,32 @@ Private Attributes</h2></td></tr>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p>Implements <a class="el" href="interface_balloon_party_1_1_configuration_1_1_i_game_palette.html#afd55082f9d9080bf806ad9ff930ad3be">BalloonParty.Configuration.IGamePalette</a>.</p>
+
+</div>
+</div>
+<a id="a8fc660c50e44a8e3e7fdbfd4ac7b7470" name="a8fc660c50e44a8e3e7fdbfd4ac7b7470"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a8fc660c50e44a8e3e7fdbfd4ac7b7470">&#9670;&#160;</a></span>Colors</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">IReadOnlyList&lt;<a class="el" href="class_balloon_party_1_1_configuration_1_1_palette_entry.html">PaletteEntry</a>&gt; BalloonParty.Configuration.GamePalette.Colors</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel get">get</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Implements <a class="el" href="interface_balloon_party_1_1_configuration_1_1_i_game_palette.html#a6e1f5dd4e549a42ae28dad228da431b4">BalloonParty.Configuration.IGamePalette</a>.</p>
 
 </div>
 </div>

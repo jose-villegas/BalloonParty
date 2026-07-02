@@ -1,23 +1,35 @@
 <map id="BalloonParty.Item.Paint.PaintSplashView" name="BalloonParty.Item.Paint.PaintSplashView">
-<area shape="rect" id="Node000001" title="Poolable paint&#45;splash effect." alt="" coords="973,140,1134,181"/>
-<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_effect_view.html" title="Abstract base for poolable effect MonoBehaviours." alt="" coords="276,136,449,177"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="464,157,657,160,836,160,975,161,970,162,836,166,657,166,465,162"/>
-<area shape="rect" id="Node000009" href="$class_balloon_party_1_1_configuration_1_1_item_settings.html" title=" " alt="" coords="657,111,836,151"/>
-<area shape="poly" id="edge10_Node000009_Node000002" title=" " alt="" coords="464,150,633,141,659,141,654,142,634,146,465,156"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="52,74,164,100"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="173,102,287,134,283,137,172,107"/>
-<area shape="rect" id="Node000006" href="$class_balloon_party_1_1_shared_1_1_rendering_1_1_colorable_renderer.html" title="Non&#45;generic MonoBehaviour base that implements IColorableRenderer." alt="" coords="260,5,465,46"/>
-<area shape="poly" id="edge6_Node000006_Node000003" title=" " alt="" coords="178,68,278,45,273,48,180,73"/>
-<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="22,132,194,173"/>
-<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="209,151,279,154,274,156,210,157"/>
-<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_shared_1_1_i_effect.html" title="Abstracts any visual effect that can be triggered at a world position and optionally tinted." alt="" coords="17,197,199,222"/>
-<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="187,191,278,173,273,175,188,196"/>
-<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="480,31,582,41,700,57,826,80,949,111,1015,140,1010,139,948,116,825,86,700,63,582,47,481,36"/>
-<area shape="rect" id="Node000007" href="$interface_balloon_party_1_1_shared_1_1_rendering_1_1_i_colorable_renderer.html" title=" " alt="" coords="5,5,211,46"/>
-<area shape="poly" id="edge7_Node000006_Node000007" title=" " alt="" coords="225,23,262,24,257,27,227,28"/>
-<area shape="rect" id="Node000008" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html" title=" " alt="" coords="660,225,833,266"/>
-<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="848,245,898,240,948,228,991,205,1026,182,1031,180,994,210,950,232,899,245,848,251"/>
-<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="851,138,975,153,970,153,851,144"/>
-<area shape="rect" id="Node000010" href="$class_balloon_party_1_1_nudge_1_1_nudge_override.html" title=" " alt="" coords="274,71,451,111"/>
-<area shape="poly" id="edge11_Node000009_Node000010" title=" " alt="" coords="467,99,660,121,654,122,467,104"/>
+<area shape="rect" id="Node000001" title="Poolable paint&#45;splash effect." alt="" coords="1077,412,1239,453"/>
+<area shape="rect" id="Node000002" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_effect_view.html" title="Abstract base for poolable effect MonoBehaviours." alt="" coords="381,339,554,379"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="569,363,792,382,1054,411,1079,417,1074,417,1053,416,791,387,569,368"/>
+<area shape="rect" id="Node000010" href="$class_balloon_party_1_1_configuration_1_1_item_settings.html" title=" " alt="" coords="762,201,940,242"/>
+<area shape="poly" id="edge12_Node000010_Node000002" title=" " alt="" coords="568,345,652,327,737,298,785,271,824,244,829,241,788,275,739,303,654,332,570,350"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="52,396,164,421"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="178,396,382,369,379,373,180,401"/>
+<area shape="rect" id="Node000007" href="$class_balloon_party_1_1_shared_1_1_rendering_1_1_colorable_renderer.html" title="Non&#45;generic MonoBehaviour base that implements IColorableRenderer." alt="" coords="365,412,570,453"/>
+<area shape="poly" id="edge7_Node000007_Node000003" title=" " alt="" coords="179,410,366,424,362,427,180,416"/>
+<area shape="rect" id="Node000004" href="$interface_balloon_party_1_1_shared_1_1_pool_1_1_i_poolable.html" title=" " alt="" coords="22,281,194,322"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="209,315,383,344,379,347,210,320"/>
+<area shape="rect" id="Node000005" href="$interface_balloon_party_1_1_shared_1_1_i_effect.html" title="Abstracts any visual effect that can be triggered at a world position and optionally tinted." alt="" coords="17,346,199,372"/>
+<area shape="poly" id="edge4_Node000002_Node000005" title=" " alt="" coords="213,356,383,357,379,361,214,362"/>
+<area shape="rect" id="Node000006" href="$interface_balloon_party_1_1_item_1_1_paint_1_1_i_splash_effect.html" title="A pooled effect that can be prepared with paint&#45;blob flights before playing." alt="" coords="770,480,932,521"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="947,476,1074,451,1079,450,948,482"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="586,430,1079,431,1075,434,586,435"/>
+<area shape="rect" id="Node000008" href="$interface_balloon_party_1_1_shared_1_1_rendering_1_1_i_colorable_renderer.html" title=" " alt="" coords="5,445,211,486"/>
+<area shape="poly" id="edge8_Node000007_Node000008" title=" " alt="" coords="225,452,366,441,362,443,226,457"/>
+<area shape="rect" id="Node000009" href="$class_balloon_party_1_1_shared_1_1_pool_1_1_pool_manager.html" title=" " alt="" coords="765,545,937,586"/>
+<area shape="poly" id="edge9_Node000001_Node000009" title=" " alt="" coords="952,539,1002,522,1052,501,1094,477,1129,454,1134,452,1097,481,1055,506,1004,527,953,544"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="899,248,1055,351,1133,412,1128,411,1052,356,898,253"/>
+<area shape="rect" id="Node000011" href="$interface_balloon_party_1_1_configuration_1_1_i_weighted_entry.html" title="Common contract for weighted prefab entries that support max&#45;count limits." alt="" coords="378,71,556,111"/>
+<area shape="poly" id="edge11_Node000010_Node000011" title=" " alt="" coords="571,98,655,114,739,141,788,168,829,201,824,201,785,173,737,145,654,119,572,103"/>
+<area shape="rect" id="Node000012" href="$class_balloon_party_1_1_configuration_1_1_bomb_settings.html" title=" " alt="" coords="378,136,556,177"/>
+<area shape="poly" id="edge13_Node000010_Node000012" title=" " alt="" coords="572,165,738,191,773,200,768,201,738,196,573,171"/>
+<area shape="rect" id="Node000013" href="$class_balloon_party_1_1_nudge_1_1_nudge_override.html" title=" " alt="" coords="19,136,197,177"/>
+<area shape="poly" id="edge14_Node000012_Node000013" title=" " alt="" coords="211,154,380,155,376,158,213,159"/>
+<area shape="rect" id="Node000014" href="$class_balloon_party_1_1_configuration_1_1_laser_settings.html" title=" " alt="" coords="378,201,556,242"/>
+<area shape="poly" id="edge15_Node000010_Node000014" title=" " alt="" coords="572,219,764,221,759,223,573,224"/>
+<area shape="rect" id="Node000015" href="$class_balloon_party_1_1_configuration_1_1_lightning_settings.html" title=" " alt="" coords="378,267,556,307"/>
+<area shape="poly" id="edge16_Node000010_Node000015" title=" " alt="" coords="572,273,738,247,774,242,769,243,738,253,573,278"/>
+<area shape="rect" id="Node000016" href="$class_balloon_party_1_1_configuration_1_1_paint_settings.html" title=" " alt="" coords="378,5,556,46"/>
+<area shape="poly" id="edge17_Node000010_Node000016" title=" " alt="" coords="572,40,657,64,699,81,739,102,770,124,797,151,838,202,833,201,793,154,766,129,737,107,697,86,655,69,572,45"/>
 </map>

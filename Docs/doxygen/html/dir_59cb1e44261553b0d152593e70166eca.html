@@ -131,10 +131,10 @@ Directories</h2></td></tr>
 <tr class="memitem:View" id="r_View"><td class="memItemLeft"><span class="iconfolder"><div class="folder-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="dir_3b325fd31330afee9baefa515a12872f.html">View</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md24"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md5"></a>
 Balloon</h1>
 <p>Represents balloons in the game — their state, appearance, spawning, and destruction.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md25"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md6"></a>
 Folder structure</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -153,10 +153,10 @@ Folder structure</h1>
 <td class="markdownTableBodyNone"><span class="tt">BalloonLifetimeScope</span>  </td><td class="markdownTableBodyNone">Legacy scope on balloon prefabs — <span class="tt">autoRun</span> disabled in Inspector; injection handled by <span class="tt">InjectingPoolChannel</span>  </td></tr>
 </table>
 <p><span class="tt">View/</span> also contains <span class="tt">SpriteColorableRenderer</span> (<span class="tt">ColorableRenderer&lt;SpriteRenderer&gt;</span> — sets <span class="tt">renderer.color</span>) and <span class="tt">ParticleColorableRenderer</span> (<span class="tt">ColorableRenderer&lt;ParticleSystem&gt;</span> — sets <span class="tt">startColor</span> and immediately recolors live particles via <span class="tt">Clear</span>+<span class="tt">Play</span>).</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md26"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md7"></a>
 Rendering and GPU instancing</h2>
 <p>Balloon materials (<span class="tt">BalloonMaterial</span>, <span class="tt">SpecularBalloonBlur</span>, etc.) have GPU instancing enabled. Per-balloon color is applied via <span class="tt">SpriteRenderer.color</span>, which Unity streams to the shader as <span class="tt">unity_SpriteRendererColorArray</span> in the instancing buffer. All 6 custom shaders follow the <span class="tt">UnitySprites.cginc</span> pattern with a <span class="tt">_RendererColor</span> fallback for non-SpriteRenderer components. Balloon sprites are packed into <span class="tt">Balloons.spriteatlas</span> for draw call reduction. See <span class="tt">Assets/Shaders/BalloonParty/README.md</span> for the instancing policy and <span class="tt">Assets/Sprites/README.md</span> for atlas groupings.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md27"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md8"></a>
 Behaviour</h1>
 <p>A balloon knows its type, how many hits it can absorb, where it sits in the grid, whether it has settled into position, and whether it carries an item. <span class="tt">BalloonModel</span> additionally knows its color (<span class="tt">IPaintable</span>). When any reactive property changes, the view updates automatically via UniRx subscriptions.</p>
 <p><span class="tt">BalloonController</span> receives <span class="tt">ActorHitMessage</span>s filtered by identity (<span class="tt">msg.Actor is IBalloonModel &amp;&amp; ReferenceEquals</span>) and routes on the pre-computed <span class="tt">msg.Outcome</span>:</p>
@@ -168,10 +168,10 @@ Behaviour</h1>
 </ul>
 <p><span class="tt">EvaluateHit</span> on <span class="tt">BalloonModelBase</span> is <b>state-mutating</b> — it decrements <span class="tt">HitsRemaining</span> (or zeroes it for <span class="tt">Piercing</span>) and returns the outcome in a single call. <span class="tt">ProjectileView</span> calls it once and embeds the outcome in <span class="tt">ActorHitMessage</span>; <span class="tt">BalloonController</span> reads <span class="tt">msg.Outcome</span> without calling <span class="tt">EvaluateHit</span> again.</p>
 <p>Neighbor nudges for every hit are handled independently by <span class="tt">NudgeService</span> in <span class="tt">Nudge/</span>, which subscribes to <span class="tt">ActorHitMessage</span> (filtering by <span class="tt">IHasNudge</span>) and dispatches push-out → return animations to all 6 grid neighbors that also implement <span class="tt">IHasNudge</span>.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md28"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md9"></a>
 Pooling</h2>
 <p>Balloon views are pooled via <span class="tt">PoolManager</span> / <span class="tt">BalloonPoolChannel</span>. A <span class="tt">CompositeDisposable</span> replaces <span class="tt">AddTo(this)</span> for reactive subscriptions — cleared on each <span class="tt">Bind()</span> and <span class="tt">OnDespawned()</span>. External subscribers (e.g. <span class="tt">BalloonController</span>'s hit subscription) register via <span class="tt">RegisterDisposeOnDespawn()</span> so they're cleaned up on pool return. <span class="tt">IBalloonViewBinding</span> components (e.g. <span class="tt">ToughBalloonType</span>) receive the same <span class="tt">CompositeDisposable</span> so their subscriptions are cleared automatically in the same lifecycle.</p>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md29"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md10"></a>
 Animation phases (turn-based)</h2>
 <p>Balloon animations are organized into sequential, non-overlapping phases per turn:</p>
 <ol type="1">
@@ -180,7 +180,7 @@ Animation phases (turn-based)</h2>
 <li><b>Spawn phase</b> — new balloon lines spawn with a delay between each line. Spawn uses standalone <span class="tt">DOMove</span> + <span class="tt">DOScale</span> tweens (not tracked). <span class="tt">ComputePath</span> consults the <span class="tt">BalancePathHolder</span> to detect traversal conflicts with still-animating balance moves.</li>
 <li><b>Post-spawn balance</b> — a <span class="tt">BalanceBalloonsMessage</span> triggers a deferred balance pass (next frame) to settle any newly created gaps.</li>
 </ol>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md30"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md11"></a>
 Tween composition</h2>
 <p>A <span class="tt">TweenTracker</span> component on each balloon view manages position tween sequencing:</p>
 <ul>
@@ -188,10 +188,10 @@ Tween composition</h2>
 <li><b>Balance</b> calls <span class="tt">tracker.Append(tween)</span> — if a nudge is still playing, the balance path chains after it. If the tracker is idle, starts a new sequence.</li>
 <li><b>Despawn</b> calls <span class="tt">tracker.Kill()</span> + <span class="tt">transform.DOKill()</span> — cleans up everything.</li>
 </ul>
-<h2 class="doxsection"><a class="anchor" id="autotoc_md31"></a>
+<h2 class="doxsection"><a class="anchor" id="autotoc_md12"></a>
 Scale recovery</h2>
 <p>When nudge or balance interrupts a spawning balloon, <span class="tt">transform.DOKill()</span> kills the standalone scale tween mid-animation. Both nudge and balance capture the current scale beforehand and create a parallel <span class="tt">DOScale(Vector3.one, duration)</span> if the balloon hasn't reached full size — so the balloon smoothly finishes scaling alongside its movement.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md32"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md13"></a>
 Interactions</h1>
 <ul>
 <li><b>SlotGrid</b> — balloons occupy positions in it; stores models and views in parallel arrays. Spawner places, controller removes, balancer relocates. <span class="tt">_grid.ViewAt(slotIndex)</span> reaches views from models.</li>
@@ -203,7 +203,8 @@ Interactions</h1>
 <li><b>TweenTracker</b> — generic <span class="tt">MonoBehaviour</span> in <span class="tt">Shared/</span> that manages tween sequencing (append, replace, kill)</li>
 <li><b>Item system</b> — balloons are one host for the game-wide item system (in <span class="tt">Item/</span>). <span class="tt">BalloonView</span> calls <span class="tt">ItemDisplayService.Bind()</span>/<span class="tt">Unbind()</span> to connect item visuals; the item system itself has no knowledge of balloons</li>
 <li><b>BalloonsConfiguration</b> — balloon prefab entries, spawn animation timing, balance timing, nudge defaults, pop VFX</li>
-<li><b>GamePalette</b> — resolves color name → <span class="tt">UnityEngine.Color</span> for renderer tinting </li>
+<li><b>GamePalette</b> — resolves color name → <span class="tt">UnityEngine.Color</span> for renderer tinting</li>
+<li><b>DisturbanceFieldService</b> — <span class="tt">BalloonController</span> stamps on pop (<span class="tt">BalloonPop</span> profile), <span class="tt">BalloonBalancer</span> stamps during balance path (<span class="tt">BalloonPath</span> profile), <span class="tt">BalloonSpawner</span> stamps during spawn path (<span class="tt">BalloonPath</span> profile) — all via <span class="tt">Stamp()</span> using <span class="tt">StampProfile</span> from <span class="tt">DisturbanceFieldSettings</span>. Creates visible disturbances in Puff clouds </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->

@@ -131,16 +131,17 @@ document.addEventListener('DOMContentLoaded',() => { initNavTree('dir_204ee19a44
 <tr class="heading"><td colspan="2"><h2 id="header-files" class="groupheader"><a id="files" name="files"></a>
 Files</h2></td></tr>
 <tr class="memitem:ColorStreakTracker_2Ecs" id="r_ColorStreakTracker_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_color_streak_tracker_8cs.html">ColorStreakTracker.cs</a></td></tr>
-<tr class="memitem:ITrailTarget_2Ecs" id="r_ITrailTarget_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_i_trail_target_8cs.html">ITrailTarget.cs</a></td></tr>
+<tr class="memitem:IColorStreak_2Ecs" id="r_IColorStreak_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_i_color_streak_8cs.html">IColorStreak.cs</a></td></tr>
+<tr class="memitem:IScoreQuery_2Ecs" id="r_IScoreQuery_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_i_score_query_8cs.html">IScoreQuery.cs</a></td></tr>
 <tr class="memitem:ScoreController_2Ecs" id="r_ScoreController_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_score_controller_8cs.html">ScoreController.cs</a></td></tr>
 <tr class="memitem:ScoreTrailService_2Ecs" id="r_ScoreTrailService_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_score_trail_service_8cs.html">ScoreTrailService.cs</a></td></tr>
 <tr class="memitem:TrailId_2Ecs" id="r_TrailId_2Ecs"><td class="memItemLeft"><span class="icondoc"><div class="doc-icon"></div></span>&#160;</td><td class="memItemRight"><a class="el" href="_trail_id_8cs.html">TrailId.cs</a></td></tr>
 </table>
 <a name="details" id="details"></a><h2 id="header-details" class="groupheader">Detailed Description</h2>
-<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md91"></a>
+<div class="textblock"><h1 class="doxsection"><a class="anchor" id="autotoc_md135"></a>
 Score</h1>
 <p>Tracks per-color scoring, level progress, streak multipliers, and the visual trail orbs that fly from popped balloons to the progress bars.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md92"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md136"></a>
 Contents</h1>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -148,13 +149,13 @@ Contents</h1>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">TrailId</span>  </td><td class="markdownTableBodyNone">Readonly struct — uniquely identifies a score trail by <span class="tt">(Color, Score, Level)</span>. Provides a convenience constructor from <span class="tt">ScorePointMessage</span>. Two colors can share the same numeric score within a level, and scores restart after level reset, so all three are needed for uniqueness  </td></tr>
 <tr class="markdownTableRowEven">
-<td class="markdownTableBodyNone"><span class="tt">ScoreController</span>  </td><td class="markdownTableBodyNone"><span class="tt">IStartable</span> — tracks per-color level progress (confirmed on trail arrival), projected progress (advanced immediately on pop). On balloon hit, casts actor to <span class="tt">IHasScoreColor</span> and calls <span class="tt">ResolveScoreAttribution(context, attributions)</span> — all returned <span class="tt">ScoreAttribution</span> entries are resolved and published together as one scatter group sharing <span class="tt">GroupSize</span>. On trail arrival, sets confirmed progress and checks for level-up via <span class="tt">ScoreLevelUpMessage</span> and <span class="tt">NavigationState.LevelUp</span>  </td></tr>
+<td class="markdownTableBodyNone"><span class="tt">ScoreController</span>  </td><td class="markdownTableBodyNone"><span class="tt">IStartable</span> — tracks per-color level progress (confirmed on trail arrival), projected progress (advanced immediately on pop). On balloon hit, casts actor to <span class="tt">IHasScoreColor</span> and calls <span class="tt">ResolveScoreAttribution(context, attributions)</span> — all returned <span class="tt">ScoreAttribution</span> entries are resolved and published together as one scatter group sharing <span class="tt">GroupSize</span>. On trail arrival, sets confirmed progress and checks for level-up via <span class="tt">ScoreLevelUpMessage</span> and <span class="tt">NavigationState.LevelUp</span>. Run-scoped: level/score start at 1/0 every session (no cross-session persistence) and reset via <span class="tt">IRunResettable.ResetRun()</span> on restart (see <span class="tt">Game/Run/</span>)  </td></tr>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone"><span class="tt">ColorStreakTracker</span>  </td><td class="markdownTableBodyNone">Plain C# singleton — single source of truth for the color streak. <span class="tt">Record(colorId, breaksStreak)</span> updates state and returns the multiplier to apply. <span class="tt">breaksStreak = true</span> resets the chain and returns 1 (attribution still scores, no bonus). Auto-resets on <span class="tt">ScoreLevelUpMessage</span>. Exposed as <span class="tt">GetStreak(colorName)</span> for UI consumers  </td></tr>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone"><span class="tt">ScoreTrailService</span>  </td><td class="markdownTableBodyNone"><span class="tt">IStartable</span> + <span class="tt">ICinematicAware</span> — subscribes to <span class="tt">ScorePointMessage</span>; spawns one pooled <span class="tt">FlyingTrail</span> orb per message. Composes <span class="tt">TrailTracker&lt;TrailId&gt;</span> for flight tracking, cinematic pause/resume, and external interception. Uses <span class="tt">GroupIndex</span>/<span class="tt">GroupSize</span> for scatter positioning and stagger delay. <span class="tt">NextLevel</span> flag gates spawns during cinematics  </td></tr>
 </table>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md93"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md137"></a>
 Streak Multiplier</h1>
 <p><span class="tt">ColorStreakTracker</span> tracks the current color streak — consecutive pops of the same color:</p>
 <ul>
@@ -167,7 +168,7 @@ Streak Multiplier</h1>
 </ul>
 <p>The balloon's <span class="tt">ScoreValue</span> is multiplied by the current streak before publishing <span class="tt">ScorePointMessage</span>s. More trails spawn, filling the progress bar faster.</p>
 <p><span class="tt">GetStreak(string colorName)</span> on <span class="tt">ColorStreakTracker</span> exposes the current streak for a color so views can display a streak notice.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md94"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md138"></a>
 Trail Identity</h1>
 <p>Each trail is identified by a <span class="tt">TrailId(Color, Score, Level)</span>:</p>
 <ul>
@@ -175,15 +176,15 @@ Trail Identity</h1>
 <li><b>Score</b> — the level progress value this trail represents (1-based within the level). <span class="tt">ScoreController</span> advances a per-color <span class="tt">_projectedProgress</span> counter on every pop, so each trail from a multi-point balloon gets a unique sequential score.</li>
 <li><b>Level</b> — the level the trail was spawned during. After level-up, progress resets to 0 and scores restart from 1. Level prevents post-reset collisions with any in-flight trails from the previous level.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md95"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md139"></a>
 Projected vs Confirmed Progress</h1>
 <p>Two progress values exist per color:</p>
 <ul>
 <li><b><span class="tt">_projectedProgress</span></b> — advances immediately on balloon pop. Used by <span class="tt">WillLevelUp</span> and trail score assignment so multi-point balloons get unique, sequential trail identities.</li>
-<li><b><span class="tt">_levelProgress</span></b> — set to the arriving trail's score value on arrival (using <span class="tt">Math.Max</span> to prevent out-of-order decreases). Represents the highest confirmed progress for that color. Used for the level-up threshold check and persistent save state.</li>
+<li><b><span class="tt">_levelProgress</span></b> — set to the arriving trail's score value on arrival (using <span class="tt">Math.Max</span> to prevent out-of-order decreases). Represents the highest confirmed progress for that color. Used for the level-up threshold check.</li>
 </ul>
 <p><span class="tt">WillLevelUp</span> checks <span class="tt">_projectedProgress</span> for <b>all</b> colors (not just the popping color). This ensures the cinematic registers even when multiple colors reach the threshold in close succession — their trails may still be in-flight but will confirm before the paused tipping trail arrives. <span class="tt">CheckLevelUp</span> uses <span class="tt">_levelProgress</span> (confirmed) for the final threshold check.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md96"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md140"></a>
 Next-Level Trail Renumbering</h1>
 <p>When a multi-point balloon pop produces points that exceed the level-up threshold, <span class="tt">ScoreController</span> tags each post-tipping point as next-level in its <span class="tt">ScorePointMessage</span>. For example, if <span class="tt">requiredPoints = 10</span> and a pop creates raw scores <span class="tt">[9, 10, 11, 12]</span>:</p>
 <ul>
@@ -193,24 +194,24 @@ Next-Level Trail Renumbering</h1>
 <li>Score 12 → <span class="tt">ScorePointMessage(Score=2, Level=2, NextLevel=true)</span> — next level, renumbered</li>
 </ul>
 <p>After the level-up resets progress to 0, these next-level trails arrive with scores that correctly represent their position in the new level's progress.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md97"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md141"></a>
 Selective Pause</h1>
 <p>When the cinematic begins, all next-level in-flight trails are paused — any trail (regardless of color) with <span class="tt">Level &gt; tippingLevel</span>. Pre-tipping trails (any color, current level) keep flying so their progress bar arrivals complete naturally. <span class="tt">PauseTrailsAbove(TrailId threshold)</span> handles already in-flight trails. New trail spawns are gated by the <span class="tt">NextLevel</span> flag on each <span class="tt">ScorePointMessage</span>; current-level trails spawn freely even during the cinematic so that <span class="tt">CheckLevelUp</span> can confirm progress for every color.</p>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md98"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md142"></a>
 Spawn &amp; Tracking</h1>
 <p><span class="tt">ScoreTrailService</span> spawns trails directly from each <span class="tt">ScorePointMessage</span>. Multi-point pops use <span class="tt">GroupIndex</span> for stagger delay — the first point (index 0) spawns immediately, subsequent points are delayed by <span class="tt">GroupIndex × ScorePointsScatterDelay</span>. Next-level trails are gated by <span class="tt">Cinematic.IsPlaying &amp;&amp; NextLevel</span>.</p>
 <p><span class="tt">TrackTrail</span> supports both forward and retroactive registration:</p><ul>
 <li><b>Forward</b> — if tracking is registered before the trail spawns (e.g., for <span class="tt">groupIndex &gt; 0</span> trails that are delayed), the trail is paused at spawn and the callback fires.</li>
 <li><b>Retroactive</b> — if the trail already spawned (e.g., <span class="tt">groupIndex == 0</span> where subscription ordering causes the trail to spawn before <span class="tt">LevelUpTrailEffect</span> processes the message), the trail is paused and its tweens are switched to unscaled time via <span class="tt">DOTween.TweensByTarget</span>, then the callback fires.</li>
 </ul>
-<h1 class="doxsection"><a class="anchor" id="autotoc_md99"></a>
+<h1 class="doxsection"><a class="anchor" id="autotoc_md143"></a>
 Interactions</h1>
 <ul>
 <li><b><span class="tt">ScorePointMessage</span></b> — published by <span class="tt">ScoreController</span> on pop (one per point × streak, carries pre-computed <span class="tt">Score</span>, <span class="tt">Level</span>, <span class="tt">NextLevel</span>), consumed by <span class="tt">ScoreTrailService</span>, <span class="tt">ColorProgressBar</span>, and <span class="tt">LevelUpTrailEffect</span></li>
 <li><b><span class="tt">ScoreTrailArrivedMessage</span></b> — published by <span class="tt">ScoreTrailService</span> on trail arrival (carries <span class="tt">Level</span>), consumed by <span class="tt">ScoreController</span>, <span class="tt">ColorProgressBar</span>, and <span class="tt">LevelUpTrailEffect</span></li>
 <li><b><span class="tt">ScoreLevelUpMessage</span></b> — published by <span class="tt">ScoreController</span> on level-up, consumed by <span class="tt">ColorProgressBar</span>, <span class="tt">LevelUpPopUp</span>, and <span class="tt">ColorStreakTracker</span> (auto-reset)</li>
 <li><b><span class="tt">Cinematics/</span></b> — <span class="tt">LevelUpTrailEffect</span> uses <span class="tt">TrackTrail</span> to intercept the tipping trail at spawn, <span class="tt">PauseTrailsAbove</span> for selective pause, and <span class="tt">ResumeTrail</span> / <span class="tt">ClearTrackedTrail</span> for lifecycle management</li>
-<li><b><span class="tt">ColorProgressBar</span></b> — registers target providers via <span class="tt">ScoreTrailService.RegisterTarget</span>; reads progress from <span class="tt">ScoreController</span>; reads streak via <span class="tt">ColorStreakTracker.GetStreak</span> for streak notice display </li>
+<li><b><span class="tt">ColorProgressBar</span></b> — registers itself as its colour's <span class="tt">ITrailEndpoint</span> via <span class="tt">ScoreTrailService.RegisterTarget</span> (forwarded to the shared <span class="tt">TrailEndpointRegistry</span> in <span class="tt">Shared/Pool</span>); reads progress from <span class="tt">ScoreController</span>; reads streak via <span class="tt">ColorStreakTracker.GetStreak</span> for streak notice display </li>
 </ul>
 </div></div><!-- contents -->
 </div><!-- doc-content -->

@@ -1,9 +1,23 @@
 var searchData=
 [
-  ['name_0',['Name',['../class_balloon_party_1_1_editor_1_1_texture_audit_window_1_1_entry.html#ac9ba6cf914dd23be4d177ab53df44d72',1,'BalloonParty::Editor::TextureAuditWindow::Entry']]],
-  ['neighborcount_1',['NeighborCount',['../class_balloon_party_1_1_item_1_1_paint_1_1_paint_item_handler.html#a8ddae1b6eb09e525f5da82828d28b130',1,'BalloonParty::Item::Paint::PaintItemHandler']]],
-  ['newballoons_2',['NewBalloons',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_item_check_message.html#aca0dda3ecfd93984e0987d566142771d',1,'BalloonParty::Shared::Messages::ItemCheckMessage']]],
-  ['newlevel_3',['NewLevel',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_score_level_up_message.html#a96a74e90a4b1c08a1b09729a9be4779e',1,'BalloonParty::Shared::Messages::ScoreLevelUpMessage']]],
-  ['nextlevel_4',['NextLevel',['../struct_balloon_party_1_1_shared_1_1_messages_1_1_score_point_message.html#ac6f7ad6e9c49e4242095fad499c4e772',1,'BalloonParty::Shared::Messages::ScorePointMessage']]],
-  ['nudgeoverrides_5',['NudgeOverrides',['../struct_balloon_party_1_1_balloon_1_1_model_1_1_balloon_model_config.html#a78cae6453ecf42fa44deb945a494e160',1,'BalloonParty::Balloon::Model::BalloonModelConfig']]]
+  ['matrices_0',['Matrices',['../struct_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_leaf_tier.html#a01e79d84b3c276536319a91326e2221f',1,'BalloonParty.Slots.Actor.Archetype.LeafTier.Matrices'],['../struct_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_leaf_batch.html#af9125094ba2ae2841b69e017ba4b195c',1,'BalloonParty.Slots.Actor.Archetype.LeafBatch.Matrices']]],
+  ['maxboundaryattempts_1',['MaxBoundaryAttempts',['../class_balloon_party_1_1_editor_1_1_bush_1_1_leaf_venation_simulator.html#a6b581f80fb11fb6efe369a974361bd9f',1,'BalloonParty::Editor::Bush::LeafVenationSimulator']]],
+  ['maxbranchdepth_2',['MaxBranchDepth',['../class_balloon_party_1_1_editor_1_1_bush_1_1_leaf_venation_simulator.html#af5ed1a79d297dc45112d5fc19f46452c',1,'BalloonParty::Editor::Bush::LeafVenationSimulator']]],
+  ['maxdepth_3',['MaxDepth',['../class_balloon_party_1_1_editor_1_1_bush_1_1_bush_branch_bake_settings.html#a5f0cb27d0df9f8cfe7c6a8c268938dd2',1,'BalloonParty::Editor::Bush::BushBranchBakeSettings']]],
+  ['maxhitpoints_4',['MaxHitPoints',['../class_balloon_party_1_1_game_1_1_health_1_1_player_health_controller.html#aa6b17d398d9cb064b59cc2d3412ae8ea',1,'BalloonParty::Game::Health::PlayerHealthController']]],
+  ['maxinstancesperbatch_5',['MaxInstancesPerBatch',['../class_balloon_party_1_1_slots_1_1_actor_1_1_archetype_1_1_bush_render_data_builder.html#a984c76f39e95827b1e5b1a571572aab5',1,'BalloonParty::Slots::Actor::Archetype::BushRenderDataBuilder']]],
+  ['maxiterations_6',['MaxIterations',['../struct_balloon_party_1_1_editor_1_1_bush_1_1_leaf_venation_simulator_1_1_simulation_settings.html#acdd1331f3ebae4381e72bdf8aa4600bb',1,'BalloonParty::Editor::Bush::LeafVenationSimulator::SimulationSettings']]],
+  ['maxleavespervariant_7',['MaxLeavesPerVariant',['../class_balloon_party_1_1_editor_1_1_bush_1_1_bush_branch_bake_settings.html#ab6f0c5364e27b690c12ecabdd2f4643d',1,'BalloonParty::Editor::Bush::BushBranchBakeSettings']]],
+  ['maxstampsperbatch_8',['MaxStampsPerBatch',['../class_balloon_party_1_1_shared_1_1_disturbance_1_1_disturbance_field_service.html#a2c1de7a750c4e921ddfbf6c5e4a019a5',1,'BalloonParty::Shared::Disturbance::DisturbanceFieldService']]],
+  ['maxvisible_9',['MaxVisible',['../class_balloon_party_1_1_editor_1_1_script_search_popup.html#ab9cd2f9f6a6302ab8383549dc56deb33',1,'BalloonParty::Editor::ScriptSearchPopup']]],
+  ['midribenabled_10',['MidribEnabled',['../class_balloon_party_1_1_editor_1_1_bush_1_1_bush_leaf_bake_settings.html#a2df1dc66aac4f8e3fc2e92119fe0fa8c',1,'BalloonParty::Editor::Bush::BushLeafBakeSettings']]],
+  ['midribenabledid_11',['MidribEnabledId',['../class_balloon_party_1_1_editor_1_1_bush_1_1_bush_leaf_baker.html#a8b1c793041802e9e6be73a18465099bd',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
+  ['midribgradient_12',['MidribGradient',['../class_balloon_party_1_1_editor_1_1_bush_1_1_bush_leaf_bake_settings.html#aaa86b36e68b1284df73779c6c6a9f6f4',1,'BalloonParty::Editor::Bush::BushLeafBakeSettings']]],
+  ['midribgradientid_13',['MidribGradientId',['../class_balloon_party_1_1_editor_1_1_bush_1_1_bush_leaf_baker.html#a24b11bd70f8b02a8c33c18b1d9c72d72',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
+  ['midribwidth_14',['MidribWidth',['../class_balloon_party_1_1_editor_1_1_bush_1_1_bush_leaf_bake_settings.html#a86594c97d251a45892c20efd37ff4894',1,'BalloonParty::Editor::Bush::BushLeafBakeSettings']]],
+  ['midribwidthid_15',['MidribWidthId',['../class_balloon_party_1_1_editor_1_1_bush_1_1_bush_leaf_baker.html#a967343597ad57c52bce891622e875b87',1,'BalloonParty::Editor::Bush::BushLeafBaker']]],
+  ['mobileplatforms_16',['MobilePlatforms',['../class_balloon_party_1_1_editor_1_1_set_mobile_texture_size.html#a023c325e80b6e7385754fbe7e8a99218',1,'BalloonParty.Editor.SetMobileTextureSize.MobilePlatforms'],['../class_balloon_party_1_1_editor_1_1_texture_audit_window.html#adc7eb25fe2c441beef5dc6c8724f79c7',1,'BalloonParty.Editor.TextureAuditWindow.MobilePlatforms']]],
+  ['mode_17',['mode',['../class_balloon_party_1_1_editor_1_1_gradient_texture_drawer_1_1_gradient_storage.html#a525adf49f85c605b6f0d3af8bbc9c1a0',1,'BalloonParty::Editor::GradientTextureDrawer::GradientStorage']]],
+  ['modelfactories_18',['ModelFactories',['../class_balloon_party_1_1_slots_1_1_actor_1_1_static_actor_spawner.html#a71e9c1f519b620cde6ecea17c75966f8',1,'BalloonParty::Slots::Actor::StaticActorSpawner']]],
+  ['move_19',['Move',['../struct_balloon_party_1_1_u_i_1_1_score_1_1_flying_trail_1_1_motion_style.html#a526b4fbe4e8d1c740123af9fca74b221',1,'BalloonParty::UI::Score::FlyingTrail::MotionStyle']]]
 ];
