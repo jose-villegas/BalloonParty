@@ -81,9 +81,9 @@ Based on [JUnit best practices](https://junit.org/junit4/faq.html#best):
 
 ---
 
-## Current Coverage — 271 tests
+## Current Coverage — 294 tests
 
-> Last updated: **June 22, 2026**
+> Last updated: **July 2, 2026**
 
 ### `SlotGridTests` — 44 tests
 
@@ -160,7 +160,7 @@ Tests the run lifecycle — loss commit/announce/transition, the suppression gat
 | `EndRun` records meta with final level/score | 1 | Snapshot reads the wrong source, or commit skipped |
 | `EndRun` publishes `GameOverMessage` once | 1 | Duplicate or missing loss announcement |
 | `EndRun` transitions to `GameOver` | 1 | Wrong target state |
-| `EndRun` suppressed while a cinematic plays | 1 | GameOver overlaps the level-up cinematic |
+| `EndRun` suppressed while a **loss-blocking** cinematic plays (`ICinematicState.Has(BlocksLoss)`) | 1 | GameOver overlaps the level-up cinematic — while the heart-drain must let it through |
 | `EndRun` suppressed when not in `Game` | 1 | Loss fires from `LevelUp` / `Launch` |
 | `EndRun` suppressed when already `GameOver` | 1 | Re-entrant loss double-commits the meta |
 | `RestartRun` invokes resettables in ascending `ResetOrder` | 1 | Teardown order wrong — async/grid reset runs after score |
@@ -407,9 +407,9 @@ Tests reference-counted pause/resume with nested source tracking and MessagePipe
 | Multiple sources, one resumed → still paused | 1 | Cross-source interference |
 | `ResetRun` clears all sources and unpauses | 1 | Stale pause survives a run restart, freezing the new run |
 
-### `VectorMathExtensionsTests` — 6 tests
+### `VectorMathExtensionsTests` — 12 tests
 
-Tests pure math: centroid, bounding radius, 2D proximity, and angle→direction.
+Tests pure math: centroid, bounding radius/box, 2D proximity, angle→direction, and the 1D framing clamp the cinematic camera uses.
 
 | Area | Tests | What could break |
 |---|---|---|
@@ -419,6 +419,12 @@ Tests pure math: centroid, bounding radius, 2D proximity, and angle→direction.
 | `WithinRadius` inside/outside | 1 | `<=` vs `<` boundary, squared-distance error |
 | `DirectionFromAngle` cardinal angles | 1 | Cos/Sin swapped or sign flipped |
 | `DirectionFromAngle` is unit length | 1 | Non-normalised result skews placement/scaling |
+| `Bounds` spans min/max of all points | 1 | Encapsulate misses a point — camera cuts a trail off frame |
+| `Bounds` single point is degenerate | 1 | Edge case the rig relies on (min == max → point focus) |
+| `ClampToWindow` inside → unchanged | 1 | Over-eager clamp fights the pan |
+| `ClampToWindow` outside → clamped to keep span visible | 1 | Wrong lo/hi math loses the tracked object |
+| `ClampToWindow` padding tightens window | 1 | Padding sign flipped |
+| `ClampToWindow` span wider than window → fallback | 1 | Crossed clamp bounds return garbage instead of the fallback centre |
 
 ### `PathHelperTests` — 12 tests
 
@@ -498,15 +504,57 @@ HP loss model: starts at configured hit points; a blocked spawn costs one HP; re
 
 Danger-level scaling from overflow vs remaining hearts: none → safe; partial → scales; overflow ≥ hearts (or zero hearts) → clamps to max danger.
 
+### `CinematicsSettingsTests` — 5 tests
+
+Tests the per-state cinematic declarations on a fresh `CinematicsSettings` instance — the field initializers ARE the canonical declarations, so a fresh instance must equal the shipped asset.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Every `CinematicState` has a declared entry | 1 | A new state ships without traits/tuning and silently behaves trait-less — `EntryOf` throws, this walks the enum |
+| Level-up states declare `BlocksLoss \| BlocksShake` | 1 | Game-over fires mid-level-up, or the shake fights the pan-in |
+| Heart-drain states + `None` declare no traits | 1 | The 0-HP game-over gets blocked by its own loss cinematic |
+| Defaults carry the authored rig values | 1 | Code defaults drift from the shipped tuning (zoom/pan/follow/durations) |
+| Level-up tracked trail pulses to 4× mid-flight | 1 | The authored scale pulse lost in a settings migration |
+
+### `TimeScaleServiceTests` — 9 tests
+
+Tests the claim/release time-scale owner — the only legal `Time.timeScale` writer (audit-enforced). Restores `timeScale = 1` in teardown.
+
+| Area | Tests | What could break |
+|---|---|---|
+| Claim applies its value | 1 | Claims don't reach `Time.timeScale` |
+| Lowest active claim wins | 1 | The popup's freeze loses to a cinematic's slow-mo |
+| Release falls back to the next claim | 1 | Releasing the popup snaps to 1 instead of the restore ramp |
+| Releasing the last claim restores 1 | 1 | The "forgot to set it back" bug class returns |
+| Re-claiming a source replaces its value | 1 | Per-tick curve claims accumulate instead of replacing |
+| Claim above 1 can't exceed normal speed | 1 | A bad curve fast-forwards the game |
+| Negative claim clamps to zero | 1 | Negative timeScale (reverses physics) |
+| Release without claim is a no-op | 1 | Spurious release throws or disturbs other claims |
+| `ResetRun` clears all claims | 1 | A stale freeze survives a run restart |
+
+### `HeartTrailFocusTests` — 5 tests
+
+Tests the heart-drain camera focus contract: centre on the **oldest** in-flight heart (the one about to land and pop) while the bounds span every trail. Uses real `GameObject`s (destroyed in teardown).
+
+| Area | Tests | What could break |
+|---|---|---|
+| No trails → no focus | 1 | Rig frames garbage while waiting for the next launch |
+| Centre is the oldest trail, not the centroid | 1 | The centroid regression returns — new launches drag the camera off the pop |
+| Bounds span all trails | 1 | Newer trails cut off frame when they'd fit |
+| Oldest arriving hands focus to the next | 1 | Focus sticks to a landed heart |
+| Destroyed-but-tracked trail skipped | 1 | Pooled teardown race throws or zeroes the focus |
+
 ### `ListExtensionsTests` — 3 tests
 
 `List<T>.SwapRemoveAt` — moves the last element into the removed slot (order not preserved); last-index just removes; single element empties.
 
 ---
 
-## PlayMode tests — 3 tests
+## PlayMode tests — 5 tests
 
-`Assets/Tests/PlayMode/` (assembly `BalloonParty.Tests.PlayMode`). For behaviour EditMode can't exercise: the async/pooling/scene paths that only run under the player loop. Uses `[UnityTest]` coroutines; loads the real Game scene and resolves services from `GameLifetimeScope.Container`.
+`Assets/Tests/PlayMode/` (assembly `BalloonParty.Tests.PlayMode`). For behaviour EditMode can't exercise: the async/pooling/scene paths that only run under the player loop. Uses `[UnityTest]` coroutines.
+
+All fixtures derive from **`PlayModeGameTest`** — the shared base that loads the real Game scene, resolves services from `GameLifetimeScope.Container`, and waits on conditions with a timeout. Its `[SetUp]` resets the static `Navigation` to `Launch` (PlayMode shares static state — no domain reload between tests; a test ending in `GameOver` would otherwise leave the spawn gate shut for the next one).
 
 ### `RunRestartPlayModeTests` — 1 test
 
@@ -522,6 +570,18 @@ Drives the spawn-saturation loss loop in the real Game scene — the pressure-ba
 |---|---|---|
 | Initial load → health at configured hit points | 1 | HP not initialised from config in a live scene |
 | Saturation fills the board then drains HP to GameOver | 1 | Reject→HP→loss loop stalls, never reaches GameOver, or over-drains |
+
+### `DisturbanceFieldPlayModeTests` — 1 test
+
+| Area | Tests | What could break |
+|---|---|---|
+| Stamps + ticks publish the global texture without error | 1 | The "Stamp before Start" class of bug — a stamp arriving before the field initialises throws or corrupts the texture |
+
+### `BombActivationPlayModeTests` — 1 test
+
+| Area | Tests | What could break |
+|---|---|---|
+| Bomb activation pops neighbouring balloons | 1 | `Physics2D.OverlapCircle` path (real colliders) — radius, layer mask, or hit routing regress. Settles the board first (overflow hold released + no `BalancePathHolder` in-transit slots): the grid registers a balloon at its slot while its collider is still flying there, so a blast during transit overlaps nothing |
 
 ---
 
@@ -539,11 +599,14 @@ These systems are not tested because they are either too coupled to Unity runtim
 | `OrthogonalSizeCameraController` | Forwards config lookup to camera — simple delegation |
 | `ThrowerView.RotateTo` | Single `AngleAxis` call — too simple |
 | `SceneTransition` / `Navigation` | Button handler wiring / static state machine — too simple |
-| `NavigationService` / `CinematicStateService` | Simple forwarders to the static `Navigation` / `Cinematic` — no logic to break. The lifecycle logic that consumes them is tested in `RunControllerTests` |
+| `NavigationService` / `CinematicStateService` | Thin forwarders to the static `Navigation` / `Cinematic` (`Has` is one table lookup, and the table itself is tested in `CinematicsSettingsTests`). The lifecycle logic that consumes them is tested in `RunControllerTests` |
 | `PaintSplashView` | MonoBehaviour with `Update`-driven animation; visual correctness is a Play Mode concern. Core logic (target collection, paintability) tested via `PaintItemHandlerTests` |
 | `ScoreTrailService` | Trail spawning depends on `PoolManager` + DOTween flight. Trail arrival message is tested via `ScoreControllerTests` |
-| `TrailTracker<TId>` | `PauseWhere`, `ResumeAll`, and `TrackTrail` (retroactive path) call `DOPause`/`DOPlay`/`DOTween.TweensByTarget` — require live tweens. The forward `IsTracked` path is too simple (dict lookup + callback store). |
-| `CinematicDirector` / `LevelUpTrailEffect` | Orchestration across DOTween, unscaled time, camera, and `ScoreTrailService` — all runtime concerns. Covered indirectly via `ScoreControllerTests` |
+| `TrailFlightRegistry<TId>` / `TrailFlight` | Pause/Resume/Complete drive live DOTween tweens. The registry's dict bookkeeping is too simple; the flight control paths are exercised by the level-up cinematic at runtime |
+| `CinematicDirector` / `CameraRigCinematic` / producers (`LevelUpCinematic`, `HeartDrainCinematic`) | Orchestration across DOTween, unscaled time, the camera rig, and scene ticking — runtime concerns. The pieces with pure logic ARE tested: traits/tuning (`CinematicsSettingsTests`), time claims (`TimeScaleServiceTests`), focus (`HeartTrailFocusTests`), framing math (`VectorMathExtensionsTests`), loss gating (`RunControllerTests`) |
+| `CinematicCameraRig` / `CameraShakeService` | Drive a live `Camera` + DOTween (shake is an additive offset applied in `LateUpdate`) — visual correctness is a playtest concern; the clamp math is tested via `ClampToWindow` |
+| `FlyingTrail` (motions, follow mode) / `TrailSpawner` | MonoBehaviour + pooling + DOTween/Update-driven flight — PlayMode candidates if they regress |
+| `RejectedBalloonEffect` | Pool-heavy overflow pile choreography; the end-to-end reject→heart→HP→loss loop is covered by `PressureLossPlayModeTests` |
 | `PoolChannel.Prewarm` / `PrewarmAsync` | Requires MonoBehaviour instantiation (`Create()` returns `Component`). Straightforward push-to-stack logic |
 | Views in general | Bind→Subscribe→SetValue chains are tested by UniRx; visual correctness is a Play Mode concern |
 

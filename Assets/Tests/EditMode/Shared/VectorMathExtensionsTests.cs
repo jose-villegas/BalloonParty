@@ -89,5 +89,67 @@ namespace BalloonParty.Tests.Shared
                 Assert.AreEqual(1f, VectorMathExtensions.DirectionFromAngle(a).magnitude, 0.001f);
             }
         }
+
+        [Test]
+        public void Bounds_SpansMinAndMaxOfAllPoints()
+        {
+            var points = new List<Vector3>
+            {
+                new(1f, 5f, 0f),
+                new(-2f, 3f, 0f),
+                new(4f, -1f, 0f)
+            };
+
+            var bounds = points.Bounds(3);
+
+            Assert.AreEqual(new Vector3(-2f, -1f, 0f), bounds.min);
+            Assert.AreEqual(new Vector3(4f, 5f, 0f), bounds.max);
+        }
+
+        [Test]
+        public void Bounds_SinglePoint_IsDegenerate()
+        {
+            var points = new List<Vector3> { new(2f, 3f, 0f) };
+
+            var bounds = points.Bounds(1);
+
+            Assert.AreEqual(bounds.min, bounds.max);
+            Assert.AreEqual(new Vector3(2f, 3f, 0f), bounds.center);
+        }
+
+        [Test]
+        public void ClampToWindow_ValueInsideWindow_Unchanged()
+        {
+            // Span [4,6] in a half-extent-5 window with 0 padding → window is [1, 9].
+            var clamped = VectorMathExtensions.ClampToWindow(5f, 4f, 6f, 5f, 0f, 99f);
+
+            Assert.AreEqual(5f, clamped, 0.001f);
+        }
+
+        [Test]
+        public void ClampToWindow_ValueOutside_ClampedSoSpanStaysVisible()
+        {
+            // Camera at 20 must come back to 9 to keep [4,6] inside its half-extent-5 view.
+            var clamped = VectorMathExtensions.ClampToWindow(20f, 4f, 6f, 5f, 0f, 99f);
+
+            Assert.AreEqual(9f, clamped, 0.001f);
+        }
+
+        [Test]
+        public void ClampToWindow_PaddingTightensTheWindow()
+        {
+            var clamped = VectorMathExtensions.ClampToWindow(20f, 4f, 6f, 5f, 1f, 99f);
+
+            Assert.AreEqual(8f, clamped, 0.001f);
+        }
+
+        [Test]
+        public void ClampToWindow_SpanWiderThanWindow_ReturnsFallback()
+        {
+            // Span [0,20] can't fit a half-extent-5 window — the clamp bounds cross, use the fallback.
+            var clamped = VectorMathExtensions.ClampToWindow(5f, 0f, 20f, 5f, 0f, 10f);
+
+            Assert.AreEqual(10f, clamped, 0.001f);
+        }
     }
 }
