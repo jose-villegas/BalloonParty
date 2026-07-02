@@ -243,25 +243,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &2086805358 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4370083120234301038, guid: 45a679b1438e74a72a716351daa7ff29,
-    type: 3}
-  m_PrefabInstance: {fileID: 7918599745940459811}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2086805363
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2086805358}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d2d107963b9143be864470aa5a8e9ecf, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Game.Cinematics.CinematicCameraView
-  _camera: {fileID: 0}
 --- !u!1001 &834494875442057147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -486,7 +467,8 @@ PrefabInstance:
       propertyPath: _camera
       value: 
       objectReference: {fileID: 253765506}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 3651980406199645597, guid: ade915b8c23e34fe892d0c5d7e0e2ce2, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1201,11 +1183,7 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 4370083120234301038, guid: 45a679b1438e74a72a716351daa7ff29,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2086805363}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 45a679b1438e74a72a716351daa7ff29, type: 3}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:

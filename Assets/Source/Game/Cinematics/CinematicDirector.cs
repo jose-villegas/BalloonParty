@@ -27,6 +27,22 @@ namespace BalloonParty.Game.Cinematics
             Cinematic.Begin(state);
         }
 
+        /// <summary>
+        ///     Begins only when no cinematic is active — the concurrency policy (drop when busy) in one
+        ///     place, instead of each producer re-implementing an <c>IsPlaying</c> guard. Use
+        ///     <see cref="BeginCinematic"/> for mid-cinematic state switches (e.g. a restore phase).
+        /// </summary>
+        internal bool TryBeginCinematic(CinematicState state)
+        {
+            if (_cinematicActive || Cinematic.IsPlaying)
+            {
+                return false;
+            }
+
+            BeginCinematic(state);
+            return true;
+        }
+
         internal void CompleteScene()
         {
             var scene = _currentScene;

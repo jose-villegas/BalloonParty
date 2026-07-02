@@ -168,7 +168,7 @@ namespace BalloonParty.Game
 
             builder.RegisterEntryPoint<CinematicDirector>().AsSelf();
             builder.RegisterComponentInHierarchy<LevelUpTrailEffect>();
-            builder.RegisterComponentInHierarchy<HeartTrailCinematicEffect>();
+            builder.RegisterEntryPoint<HeartDrainCinematic>();
             builder.RegisterComponentInHierarchy<GameOverScreen>();
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

@@ -55,8 +55,19 @@ over `ICinematicFocus` (`PointFocus` = level-up tipping trail, hard-clamp; `Hear
 lost their serialized `Camera` refs. **In-editor pending (blocking): add a
 `CinematicCameraView` component to the Game scene (on the camera) and wire `_camera`** —
 `RegisterComponentInHierarchy` fails at container build without it; then playtest both
-cinematics. Phases 3b+ not started. The level-up cinematic trail path is a
-**known-fragile area** (see memory index) — it converts last.
+cinematics. — **DONE, playtested.**
+
+**Phase 3b + 4 implemented 2026-07-02:** `CameraRigCinematic` runner (plain C#) — pan-in
+segment (timeScale drive + `Frame`) → end condition → restore segment (tween-from-current
+to 1 + rig restore); owns begin/end pairing and `Abort()` teardown.
+`CinematicDirector.TryBeginCinematic` centralizes the drop-while-busy policy.
+`HeartTrailCinematicEffect` (MonoBehaviour) is **deleted**, replaced by
+`HeartDrainCinematic` — a plain C# `IStartable` entry point that is just trigger + focus +
+end condition over the runner. **In-editor pending: remove the now-missing
+`HeartTrailCinematicEffect` component from `Cinema.prefab`** (script deleted); playtest
+the heart-drain. Phase 3c (level-up onto the runner — needs a split-phase mode, a
+no-timeScale pan-in variant, and a curve-evaluated restore-from-0) not started; the
+level-up trail path is the **known-fragile area** (see memory index) — it converts last.
 
 **Decisions already locked** (from the loss/pacing work — don't re-litigate):
 - Heart-drain is non-loss-blocking (game-over fires through it) and non-shake-blocking.
