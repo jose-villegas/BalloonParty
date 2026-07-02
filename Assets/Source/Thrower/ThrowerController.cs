@@ -31,6 +31,9 @@ namespace BalloonParty.Thrower
         private readonly ThrowerView _view;
         private readonly ProjectilePositionProvider _positionProvider;
 
+        // Object.name allocates a fresh string per access; Reload() hits this twice per shot.
+        private readonly string _projectilePoolKey;
+
         private IWriteableProjectileModel _activeProjectile;
         private ProjectileView _activeView;
         private Vector3 _direction = Vector3.up;
@@ -38,8 +41,6 @@ namespace BalloonParty.Thrower
         private float _loadElapsed;
         private float _loadDuration;
         private PredictionTraceCalculator _traceCalculator;
-
-        private string ProjectilePoolKey => _settings.ProjectilePrefab.name;
 
         [Inject]
         internal ThrowerController(
@@ -64,16 +65,17 @@ namespace BalloonParty.Thrower
             _resetSubscriber = resetSubscriber;
             _pauseService = pauseService;
             _positionProvider = positionProvider;
+            _projectilePoolKey = settings.ProjectilePrefab.name;
         }
 
         public void Start()
         {
             _traceCalculator = new PredictionTraceCalculator(_config);
 
-            _poolManager.Register(ProjectilePoolKey,
+            _poolManager.Register(_projectilePoolKey,
                 new ProjectilePoolChannel(_resolver, _settings.ProjectilePrefab));
 
-            _poolManager.Prewarm(ProjectilePoolKey, 2);
+            _poolManager.Prewarm(_projectilePoolKey, 2);
 
             _destroyedSubscriber.Subscribe(_ => Reload());
 
@@ -114,7 +116,7 @@ namespace BalloonParty.Thrower
 
         private void LoadProjectile()
         {
-            _activeView = _poolManager.Get<ProjectileView>(ProjectilePoolKey);
+            _activeView = _poolManager.Get<ProjectileView>(_projectilePoolKey);
             _activeView.transform.position = _view.Position;
             _activeView.transform.rotation = _view.Rotation;
 
@@ -140,7 +142,7 @@ namespace BalloonParty.Thrower
 
             if (_activeView != null)
             {
-                _poolManager.Return(ProjectilePoolKey, _activeView);
+                _poolManager.Return(_projectilePoolKey, _activeView);
             }
 
             _activeProjectile = null;

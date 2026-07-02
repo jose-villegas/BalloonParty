@@ -36,7 +36,14 @@ target/position buffers and Paint's splash state are per-activation locals captu
 the deferred callbacks; Laser's cross-activation `_capturedRotations` kept by design;
 `ShieldItemHandlerTests`/`LightningItemHandlerTests` (which had appeared since the
 review) and Paint/Bomb tests ported, plus a new `Activate_OverlappingChains_KeepIndependentTargets`
-regression test driving two chains through a fake `IChainEffect`. Phases 3+ not started.
+regression test driving two chains through a fake `IChainEffect`. **Phase 3 implemented
+2026-07-03** except 3c: 3a (pool-key cache + `IsRegistered` on `PoolManager`, cached
+self-return delegates on `PoolableParticle`/`EffectView` — the pop-VFX path is now
+allocation-free per call), 3b (loop-based `FindOverride` + combined `Resolve(out,out)`;
+the split `Resolve*` wrappers remain for their tests), 3d (static reused BFS collections
+in `PressureCascade`), 3e (all four). 3c was re-scoped to pair with 5e (see the 3c entry
+— it needs the central balloon-motion ticker, not a batch patch). Profiler verification
+of a multi-pop + bomb turn still pending in-editor. Phases 4+ not started.
 
 **Key fact discovered during the audit:** the project runs on the **Built-in Render
 Pipeline**, not URP (`GraphicsSettings.asset` → `m_CustomRenderPipeline: {fileID: 0}`).
@@ -187,15 +194,20 @@ are localized; none touch the fragile trail-identity path.
 - **3c — Nudge tween storm** (`Balloon/View/BalloonView.cs:172–184`). Sequence + two
   `DOMove` tweeners + `OnComplete` closure (+ conditional `DOScale`) per nudged
   neighbor; `Assets/Resources/DOTweenSettings.asset` has `defaultRecyclable: 0`.
-  **Fix: replace the nudge with a manual eased lerp** (it's a simple out-and-back;
-  `FlyingTrail.SetupFollow` demonstrates the pattern). The `SetRecyclable(true)`
-  alternative does **not** work as written: the nudge sequence is not fire-and-forget —
-  `BalloonView.Nudge` stores it via `TweenTracker.Replace(sequence)` (`:179`), and
-  `TweenTracker` retains `_active` past completion and later `Kill()`s it — exactly the
-  stale-recycled-ref hazard. Recycling would require `TweenTracker` to clear its ref on
-  completion first. (Other stored-tween holders, for reference: `FlyingTrail._moveTween`,
-  `CameraShakeService._shakeTween`, `CinematicCameraRig._tween`,
-  `CameraRigCinematic._timeScaleTween` — keep all non-recyclable.)
+  **Re-scoped after implementation attempt (2026-07-03): this is a motion-system
+  change, not a batch GC patch — execute it together with 5e.** Two constraints found:
+  (1) `SetRecyclable(true)` does not work — the nudge sequence is stored via
+  `TweenTracker.Replace(sequence)` (`:179`) and `TweenTracker` retains `_active` past
+  completion and later `Kill()`s it (stale-recycled-ref hazard); other stored-tween
+  holders (`FlyingTrail._moveTween`, `CameraShakeService._shakeTween`,
+  `CinematicCameraRig._tween`, `CameraRigCinematic._timeScaleTween`) must also stay
+  non-recyclable. (2) A manual lerp needs new arbitration: today `transform.DOKill()` +
+  `TweenTracker.Kill()` (called by `BalloonBalancer.cs:83` before balance moves and by
+  `OnDespawned`) implicitly cancel a running nudge — a manual lerp escapes both, so the
+  balancer/despawn paths need explicit cancellation, and the driver must be a single
+  central `ITickable` calling view setters (a per-view `Update` would add the standing
+  per-balloon cost that 5e exists to remove). Design it as one central balloon-motion
+  ticker that owns both the nudge out-and-back and 5e's idle bob.
 - **3d — `PressureCascade.TryFindChain`** (`Balloon/Controller/PressureCascade.cs:52–54`).
   Fresh `Dictionary` + `HashSet` + `Queue` per call. Call path:
   `BalloonSpawner.SpawnLineInternal` → `BalloonPlacementResolver.Resolve` → on

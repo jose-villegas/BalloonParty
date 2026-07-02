@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using BalloonParty.Game.Run;
 using MessagePipe;
 using UniRx;
@@ -70,8 +69,21 @@ namespace BalloonParty.Shared.Pause
             if (count == 1)
             {
                 _resumedPublisher.Publish(new ResumedMessage(source));
-                _isAnyPaused.Value = _stack.Values.Any(v => v > 0);
+                _isAnyPaused.Value = AnyPaused();
             }
+        }
+
+        private bool AnyPaused()
+        {
+            foreach (var count in _stack.Values)
+            {
+                if (count > 0)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }

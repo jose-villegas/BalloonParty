@@ -7,6 +7,11 @@ namespace BalloonParty.Shared.Pool
     {
         private Action _onComplete;
         private ParticleSystem _particle;
+        private PoolManager _pool;
+        private string _poolKey;
+        private Action _selfReturn;
+
+        internal Action ReturnToPool => _selfReturn;
 
         private void Awake()
         {
@@ -35,6 +40,15 @@ namespace BalloonParty.Shared.Pool
         {
             _onComplete = null;
             _particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+        }
+
+        // The delegate is created once per pooled instance and survives despawns, so repeat
+        // plays reuse it instead of allocating a completion closure per call.
+        internal void BindPool(PoolManager pool, string key)
+        {
+            _pool = pool;
+            _poolKey = key;
+            _selfReturn ??= () => _pool.Return(_poolKey, this);
         }
 
         public void Play(Vector3 position, Action onComplete = null)

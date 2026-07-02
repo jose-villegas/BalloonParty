@@ -10,6 +10,7 @@ namespace BalloonParty.Shared.Pool
     internal class PoolManager
     {
         private readonly Dictionary<string, IPoolChannel> _channels = new();
+        private readonly Dictionary<Object, string> _prefabKeys = new();
         private Transform _root;
 
         private Transform Root
@@ -59,6 +60,26 @@ namespace BalloonParty.Shared.Pool
             where TItem : Component, IPoolable
         {
             return GetChannel<TItem>(key).Get();
+        }
+
+        public bool IsRegistered(string key)
+        {
+            return _channels.ContainsKey(key);
+        }
+
+        /// <summary>
+        ///     Cached pool key for a prefab. <c>Object.name</c> allocates a fresh managed string
+        ///     on every access, so hot paths (per-pop VFX) must resolve keys through this instead.
+        /// </summary>
+        public string KeyFor(Object prefab)
+        {
+            if (!_prefabKeys.TryGetValue(prefab, out var key))
+            {
+                key = prefab.name;
+                _prefabKeys[prefab] = key;
+            }
+
+            return key;
         }
 
         public void Return<TItem>(string key, TItem item)

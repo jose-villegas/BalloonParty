@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using BalloonParty.Configuration;
 
 namespace BalloonParty.Nudge
@@ -11,6 +10,20 @@ namespace BalloonParty.Nudge
         public NudgeOverrideResolver(IBalloonsConfiguration config)
         {
             _config = config;
+        }
+
+        // Resolves both values in one pass over the override lists — the per-hit neighbor loop
+        // calls this once per nudged balloon, so the split Resolve* pair would walk each list twice.
+        public void Resolve(
+            IReadOnlyList<NudgeOverride> balloonOverrides,
+            IReadOnlyList<NudgeOverride> publisherOverrides,
+            NudgeType source,
+            out float distance,
+            out float duration)
+        {
+            var entry = FindOverride(balloonOverrides, source) ?? FindOverride(publisherOverrides, source);
+            distance = entry?.Distance ?? _config.NudgeDistance;
+            duration = entry?.Duration ?? _config.NudgeDuration;
         }
 
         public float ResolveDistance(
@@ -59,9 +72,24 @@ namespace BalloonParty.Nudge
             return entry != null ? entry.Falloff : _config.NudgeFalloff;
         }
 
+        // Plain loop with a mask test — FirstOrDefault allocates a closure, a delegate, and an
+        // enumerator per call, and this runs several times per projectile hit.
         internal static NudgeOverride FindOverride(IReadOnlyList<NudgeOverride> overrides, NudgeType source)
         {
-            return overrides?.FirstOrDefault(o => o.AppliesTo.HasFlag(source));
+            if (overrides == null)
+            {
+                return null;
+            }
+
+            for (var i = 0; i < overrides.Count; i++)
+            {
+                if ((overrides[i].AppliesTo & source) == source)
+                {
+                    return overrides[i];
+                }
+            }
+
+            return null;
         }
     }
 }

@@ -36,6 +36,13 @@ namespace BalloonParty.Balloon.Controller
             new(1, 1), new(-1, 1)
         };
 
+        // Reused across calls, cleared at entry — the BFS is synchronous and main-thread-only,
+        // and placement can run it once per blocked column per spawn line, exactly during the
+        // overflow crunch where per-call allocations would hitch.
+        private static readonly Dictionary<Vector2Int, Vector2Int> Parents = new();
+        private static readonly HashSet<Vector2Int> Visited = new();
+        private static readonly Queue<Vector2Int> SearchQueue = new();
+
         internal static bool TryFindChain(SlotGrid grid, int startColumn, List<Vector2Int> chain)
         {
             chain.Clear();
@@ -49,14 +56,15 @@ namespace BalloonParty.Balloon.Controller
                 return false;
             }
 
-            var parents = new Dictionary<Vector2Int, Vector2Int>();
-            var visited = new HashSet<Vector2Int> { start };
-            var queue = new Queue<Vector2Int>();
-            queue.Enqueue(start);
+            Parents.Clear();
+            Visited.Clear();
+            SearchQueue.Clear();
+            Visited.Add(start);
+            SearchQueue.Enqueue(start);
 
-            while (queue.Count > 0)
+            while (SearchQueue.Count > 0)
             {
-                var current = queue.Dequeue();
+                var current = SearchQueue.Dequeue();
                 if (grid.At(current) is not IPressureMovable mover)
                 {
                     continue;
@@ -67,12 +75,12 @@ namespace BalloonParty.Balloon.Controller
                 if (mover.PushResponse != PressureResponse.ShoveNeighbour
                     && TryRelocationTarget(grid, current, mover.PushResponse, out var destination))
                 {
-                    BuildChain(parents, start, current, chain);
+                    BuildChain(Parents, start, current, chain);
                     chain.Add(destination);
                     return true;
                 }
 
-                if (TryShoveToEmptyNeighbour(grid, current, start, parents, visited, queue, chain))
+                if (TryShoveToEmptyNeighbour(grid, current, start, Parents, Visited, SearchQueue, chain))
                 {
                     return true;
                 }

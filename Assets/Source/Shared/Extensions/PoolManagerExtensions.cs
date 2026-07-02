@@ -10,9 +10,8 @@ namespace BalloonParty.Shared.Extensions
             ParticleSystem prefab,
             Vector3 position)
         {
-            var key = prefab.name;
-            var effect = pool.GetOrRegister(key, () => new ParticlePoolChannel(prefab.gameObject));
-            effect.Play(position, () => pool.Return(key, effect));
+            var effect = GetPooledParticle(pool, prefab);
+            effect.Play(position, effect.ReturnToPool);
             return effect;
         }
 
@@ -22,9 +21,8 @@ namespace BalloonParty.Shared.Extensions
             Vector3 position,
             Color tint)
         {
-            var key = prefab.name;
-            var effect = pool.GetOrRegister(key, () => new ParticlePoolChannel(prefab.gameObject));
-            effect.Play(position, tint, () => pool.Return(key, effect));
+            var effect = GetPooledParticle(pool, prefab);
+            effect.Play(position, tint, effect.ReturnToPool);
             return effect;
         }
 
@@ -35,9 +33,8 @@ namespace BalloonParty.Shared.Extensions
             Quaternion rotation,
             Color tint)
         {
-            var key = prefab.name;
-            var effect = pool.GetOrRegister(key, () => new ParticlePoolChannel(prefab.gameObject));
-            effect.Play(position, rotation, tint, () => pool.Return(key, effect));
+            var effect = GetPooledParticle(pool, prefab);
+            effect.Play(position, rotation, tint, effect.ReturnToPool);
             return effect;
         }
 
@@ -47,9 +44,8 @@ namespace BalloonParty.Shared.Extensions
             Vector3 position,
             Color tint)
         {
-            var key = prefab.name;
-            var effect = pool.GetOrRegister(key, () => new SimplePoolChannel<EffectView>(prefab));
-            effect.Play(position, tint, () => pool.Return(key, effect));
+            var effect = GetPooledEffect(pool, prefab);
+            effect.Play(position, tint, effect.ReturnToPool);
             return effect;
         }
 
@@ -60,9 +56,37 @@ namespace BalloonParty.Shared.Extensions
             Quaternion rotation,
             Color tint)
         {
-            var key = prefab.name;
-            var effect = pool.GetOrRegister(key, () => new SimplePoolChannel<EffectView>(prefab));
-            effect.Play(position, rotation, tint, () => pool.Return(key, effect));
+            var effect = GetPooledEffect(pool, prefab);
+            effect.Play(position, rotation, tint, effect.ReturnToPool);
+            return effect;
+        }
+
+        // These run on every balloon pop: the key comes from PoolManager's prefab-key cache
+        // (Object.name allocates a fresh string per access) and registration is checked
+        // explicitly (GetOrRegister's factory closure allocates even when already registered).
+        private static PoolableParticle GetPooledParticle(PoolManager pool, ParticleSystem prefab)
+        {
+            var key = pool.KeyFor(prefab);
+            if (!pool.IsRegistered(key))
+            {
+                pool.Register(key, new ParticlePoolChannel(prefab.gameObject));
+            }
+
+            var effect = pool.Get<PoolableParticle>(key);
+            effect.BindPool(pool, key);
+            return effect;
+        }
+
+        private static EffectView GetPooledEffect(PoolManager pool, EffectView prefab)
+        {
+            var key = pool.KeyFor(prefab);
+            if (!pool.IsRegistered(key))
+            {
+                pool.Register(key, new SimplePoolChannel<EffectView>(prefab));
+            }
+
+            var effect = pool.Get<EffectView>(key);
+            effect.BindPool(pool, key);
             return effect;
         }
     }

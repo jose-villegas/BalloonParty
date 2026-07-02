@@ -19,6 +19,10 @@ namespace BalloonParty.Shared.Diagnostics
         private float _worstDelta;
         private int _worstFps;
         private GUIStyle _style;
+        private GUIContent _labelContent;
+        private Vector2 _labelSize;
+        private int _labelFps = int.MinValue;
+        private int _labelWorst = int.MinValue;
 
         private void Update()
         {
@@ -57,10 +61,19 @@ namespace BalloonParty.Shared.Diagnostics
                     ? _warnColor
                     : _badColor;
 
-            var text = $"{_currentFps} FPS (low {_worstFps})";
-            var size = _style.CalcSize(new GUIContent(text));
-            var rect = new Rect(8, 8, size.x + 4, size.y);
-            GUI.Label(rect, text, _style);
+            // Rebuild the label only when the sampled values change (every UpdateInterval) —
+            // per-OnGUI string + GUIContent allocs would pollute the GC profiles this overlay
+            // is used to read.
+            if (_labelFps != _currentFps || _labelWorst != _worstFps)
+            {
+                _labelFps = _currentFps;
+                _labelWorst = _worstFps;
+                _labelContent = new GUIContent($"{_currentFps} FPS (low {_worstFps})");
+                _labelSize = _style.CalcSize(_labelContent);
+            }
+
+            var rect = new Rect(8, 8, _labelSize.x + 4, _labelSize.y);
+            GUI.Label(rect, _labelContent, _style);
         }
     }
 }

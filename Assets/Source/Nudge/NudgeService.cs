@@ -67,8 +67,7 @@ namespace BalloonParty.Nudge
                 }
 
                 var slot = neighbor.SlotIndex;
-                var distance = _resolver.ResolveDistance(nudgeable.NudgeOverrides, null, NudgeType.Neighbor);
-                var duration = _resolver.ResolveDuration(nudgeable.NudgeOverrides, null, NudgeType.Neighbor);
+                _resolver.Resolve(nudgeable.NudgeOverrides, null, NudgeType.Neighbor, out var distance, out var duration);
                 NudgeActor(slot, hitSlotPos, distance, duration);
             }
         }
@@ -98,15 +97,13 @@ namespace BalloonParty.Nudge
             }
 
             var slot = slotActor.SlotIndex;
-            var distance = _resolver.ResolveDistance(msg.Actor.NudgeOverrides, msg.Overrides, msg.Source);
-            var duration = _resolver.ResolveDuration(msg.Actor.NudgeOverrides, msg.Overrides, msg.Source);
+            _resolver.Resolve(msg.Actor.NudgeOverrides, msg.Overrides, msg.Source, out var distance, out var duration);
             NudgeActor(slot, msg.Origin, distance, duration);
         }
 
         private void HandleShockwave(NudgeMessage msg)
         {
-            var baseDistance = _resolver.ResolveDistance(null, msg.Overrides, NudgeType.Shockwave);
-            var baseDuration = _resolver.ResolveDuration(null, msg.Overrides, NudgeType.Shockwave);
+            _resolver.Resolve(null, msg.Overrides, NudgeType.Shockwave, out var baseDistance, out var baseDuration);
             var falloff = _resolver.ResolveFalloff(msg.Overrides, NudgeType.Shockwave);
 
             for (var col = 0; col < _grid.Columns; col++)
