@@ -138,7 +138,11 @@ Shader "BalloonParty/Sprite/SpriteShadow"
 
             inline fixed SampleAlpha(float2 uv)
             {
-                return tex2D(_MainTex, uv).a;
+                // Out-of-bounds taps must read as transparent: with clamp wrap the sampler
+                // returns the edge pixel instead, smearing streaks wherever opaque pixels
+                // touch the texture edge.
+                float2 inBounds = step(0.0, uv) * step(uv, 1.0);
+                return tex2D(_MainTex, uv).a * inBounds.x * inBounds.y;
             }
 
             // 9-tap box blur centred on shadowUV.

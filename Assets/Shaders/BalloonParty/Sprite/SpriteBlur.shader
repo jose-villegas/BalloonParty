@@ -96,6 +96,16 @@ Shader "BalloonParty/Sprite/Blur"
                 return (uv - margin) / _SpriteScale;
             }
 
+            // Out-of-bounds taps must read as transparent: with clamp wrap the sampler
+            // returns the edge pixel instead, smearing streaks wherever content touches
+            // the texture edge — and ScaleUV's margin puts even the centre tap outside
+            // [0,1] there.
+            half4 SampleClamped(float2 uv)
+            {
+                float2 inBounds = step(0.0, uv) * step(uv, 1.0);
+                return tex2D(_MainTex, uv) * inBounds.x * inBounds.y;
+            }
+
             // 9-tap uniform box blur in texel space.
             // half4 accumulation — fixed is 8-bit on many mobile GPUs and loses
             // precision when summing 9 samples.
@@ -104,15 +114,15 @@ Shader "BalloonParty/Sprite/Blur"
                 float2 o = _MainTex_TexelSize.xy * _BlurAmount;
 
                 half4 col = half4(0, 0, 0, 0);
-                col += tex2D(_MainTex, tc + float2(-o.x, -o.y));
-                col += tex2D(_MainTex, tc + float2(   0, -o.y));
-                col += tex2D(_MainTex, tc + float2( o.x, -o.y));
-                col += tex2D(_MainTex, tc + float2(-o.x,    0));
-                col += tex2D(_MainTex, tc                     );
-                col += tex2D(_MainTex, tc + float2( o.x,    0));
-                col += tex2D(_MainTex, tc + float2(-o.x,  o.y));
-                col += tex2D(_MainTex, tc + float2(   0,  o.y));
-                col += tex2D(_MainTex, tc + float2( o.x,  o.y));
+                col += SampleClamped(tc + float2(-o.x, -o.y));
+                col += SampleClamped(tc + float2(   0, -o.y));
+                col += SampleClamped(tc + float2( o.x, -o.y));
+                col += SampleClamped(tc + float2(-o.x,    0));
+                col += SampleClamped(tc                     );
+                col += SampleClamped(tc + float2( o.x,    0));
+                col += SampleClamped(tc + float2(-o.x,  o.y));
+                col += SampleClamped(tc + float2(   0,  o.y));
+                col += SampleClamped(tc + float2( o.x,  o.y));
                 return col / 9.0;
             }
 
