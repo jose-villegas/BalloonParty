@@ -71,6 +71,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _AnimationSpeed: 0.8
     - _BaseScale: 1
     - _BorderSoftness: 0.4
     - _BumpScale: 1
@@ -80,7 +81,7 @@ Material:
     - _DisplaceWorldScale: 0.5
     - _DstBlend: 0
     - _EdgeHigh: 0.5
-    - _EdgeLow: 0.6
+    - _EdgeLow: 0.8
     - _EnableDensity: 1
     - _EnableShadow: 1
     - _FineScale: 3

@@ -162,18 +162,35 @@ Shader "BalloonParty/Grid/PuffCloud"
             // Returns [0, 1] (remapped from raw [-1, 1] per octave).
             // clusterSeed offsets the noise origin so each cluster has a
             // unique pattern while remaining continuous within itself.
-            float CloudNoise(float2 wp, float t, float clusterSeed)
+            float CloudNoise(float2 wp, float t, float clusterSeed, out float lowFrequency)
             {
                 float2 seedOffset = float2(clusterSeed * 73.37, clusterSeed * 41.13);
                 float2 pBase   = (wp + seedOffset) * _BaseScale   * _NoiseScale + _ScrollSpeedBase.xy   * t;
                 float2 pDetail = (wp + seedOffset) * _DetailScale  * _NoiseScale + _ScrollSpeedDetail.xy * t;
                 float2 pFine   = (wp + seedOffset) * _FineScale    * _NoiseScale + _ScrollSpeedFine.xy   * t;
 
+                float nLow  = SimplexNoise2D(pBase)   * 0.50;
+                nLow       += SimplexNoise2D(pDetail) * 0.30;
+                float n     = nLow + SimplexNoise2D(pFine) * 0.20;
+
+                // Base+detail partial, renormalized to [0,1] — the lighting normal derives from
+                // this via screen-space derivatives, where the fine octave would only sparkle.
+                lowFrequency = nLow / 0.8 * 0.5 + 0.5;
+                return n * 0.5 + 0.5;
+            }
+
+            // Two-octave variant for the shadow: its soft threshold blurs away the fine octave
+            // anyway, so skip it. Renormalized to the same [0,1] range.
+            float CloudNoiseSoft(float2 wp, float t, float clusterSeed)
+            {
+                float2 seedOffset = float2(clusterSeed * 73.37, clusterSeed * 41.13);
+                float2 pBase   = (wp + seedOffset) * _BaseScale   * _NoiseScale + _ScrollSpeedBase.xy   * t;
+                float2 pDetail = (wp + seedOffset) * _DetailScale  * _NoiseScale + _ScrollSpeedDetail.xy * t;
+
                 float n  = SimplexNoise2D(pBase)   * 0.50;
                 n       += SimplexNoise2D(pDetail) * 0.30;
-                n       += SimplexNoise2D(pFine)   * 0.20;
 
-                return n * 0.5 + 0.5;
+                return n / 0.8 * 0.5 + 0.5;
             }
 
             // Distance-to-nearest-slot-center falloff and cluster identity.
@@ -195,21 +212,16 @@ Shader "BalloonParty/Grid/PuffCloud"
                 return smoothstep(_SlotRadius + _BorderSoftness, _SlotRadius, minDist);
             }
 
-            // Derive a pseudo-normal from the noise gradient via central
-            // differences, then apply half-Lambert directional lighting.
-            // Treats the noise height field as a bump map — the gradient
-            // gives the XY slope, and the Z component is derived from
-            // _NormalStrength to control perceived depth.
-            fixed3 CloudLighting(float2 wp, float t, float cloud, float clusterSeed)
+            // Derive a pseudo-normal from the low-frequency noise gradient and apply
+            // half-Lambert directional lighting. The gradient comes from screen-space
+            // derivatives of a value the density pass already computed — the GPU provides
+            // ddx/ddy nearly free, replacing four extra noise evaluations per pixel. The
+            // 2·epsilon factor keeps the authored _NormalEpsilon/_NormalStrength scaling of
+            // the central differences this replaces.
+            fixed3 CloudLighting(float2 worldGradient)
             {
-                float eps = _NormalEpsilon;
-                float nR = CloudNoise(wp + float2( eps, 0.0), t, clusterSeed);
-                float nL = CloudNoise(wp + float2(-eps, 0.0), t, clusterSeed);
-                float nU = CloudNoise(wp + float2(0.0,  eps), t, clusterSeed);
-                float nD = CloudNoise(wp + float2(0.0, -eps), t, clusterSeed);
-
-                float dX = (nR - nL) * _NormalStrength;
-                float dY = (nU - nD) * _NormalStrength;
+                float dX = worldGradient.x * 2.0 * _NormalEpsilon * _NormalStrength;
+                float dY = worldGradient.y * 2.0 * _NormalEpsilon * _NormalStrength;
 
                 float3 normal = normalize(float3(-dX, -dY, 1.0));
 
@@ -240,8 +252,7 @@ Shader "BalloonParty/Grid/PuffCloud"
             fixed4 frag(v2f IN) : SV_Target
             {
 
-                float2 wp = IN.worldPos;
-                float2 wpOrig = wp;
+                float2 wpOrig = IN.worldPos;
                 // Runtime clock is shader-driven via built-in _Time (no per-frame push);
                 // _TimeOffset is only fed by C# in edit mode, where _Time is frozen.
                 float  t  = _Time.y * _AnimationSpeed + _TimeOffset;
@@ -261,21 +272,34 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float clusterSeed;
                 float borderFade = SlotFalloff(wpOrig, clusterSeed);
 
+                float lowOrig;
+                float noiseOrig = CloudNoise(wpOrig, t, clusterSeed, lowOrig);
+
+                // Lighting gradient — computed before any divergent control flow (early
+                // returns, the disturbance branch), where screen-space derivatives would be
+                // undefined. Pixel world size assumes the camera never rotates (it doesn't).
+                float2 pixelWorld = max(float2(abs(ddx(wpOrig.x)), abs(ddy(wpOrig.y))), 1e-5);
+                float2 lightGradient = float2(ddx(lowOrig), ddy(lowOrig)) / pixelWorld;
+
                 // Noise-based cloud shape — crossfade between displaced and
                 // undisturbed noise so reformation reveals fresh noise instead
-                // of rubber-banding stretched noise back to rest.
+                // of rubber-banding stretched noise back to rest. The displaced
+                // evaluation only runs where the field is actually disturbed —
+                // almost everywhere, almost always, it isn't.
                 #ifdef _DENSITY_ON
-                float2 wpDisp = wpOrig + displace;
-                float noiseOrig = CloudNoise(wpOrig, t, clusterSeed);
-                float noiseDisp = CloudNoise(wpDisp, t, clusterSeed);
                 float cloudOrig = smoothstep(_EdgeLow, _EdgeHigh, noiseOrig);
-                float cloudDisp = smoothstep(_EdgeLow, _EdgeHigh, noiseDisp);
-                float cloud = lerp(cloudOrig, cloudDisp, disturbance);
+                float cloud = cloudOrig;
+                if (disturbance > 0.001)
+                {
+                    float2 wpDisp = wpOrig + displace;
+                    float lowDisp;
+                    float noiseDisp = CloudNoise(wpDisp, t, clusterSeed, lowDisp);
+                    float cloudDisp = smoothstep(_EdgeLow, _EdgeHigh, noiseDisp);
+                    cloud = lerp(cloudOrig, cloudDisp, disturbance);
+                }
                 cloud *= density;
-                wp = lerp(wpOrig, wpDisp, disturbance);
                 #else
-                float noiseValue = CloudNoise(wp, t, clusterSeed);
-                float cloud = smoothstep(_EdgeLow, _EdgeHigh, noiseValue);
+                float cloud = smoothstep(_EdgeLow, _EdgeHigh, noiseOrig);
                 #endif
 
                 cloud *= borderFade;
@@ -285,7 +309,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 // Compute shadow before discarding so shadow-only pixels survive
                 float2 shadowWp = wpOrig - float2(_ShadowOffsetX, _ShadowOffsetY);
                 float  shadowSeed;
-                float  shadowNoise = CloudNoise(shadowWp, t, clusterSeed);
+                float  shadowNoise = CloudNoiseSoft(shadowWp, t, clusterSeed);
                 float  shadowCloud = smoothstep(_EdgeLow, _EdgeHigh, shadowNoise);
                 #ifdef _DENSITY_ON
                 shadowCloud *= density;
@@ -306,7 +330,7 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                 // Compose main cloud with shadow behind
                 float mainAlpha = cloud * _CloudColor.a * IN.color.a;
-                fixed3 lighting = CloudLighting(wp, t, cloud, clusterSeed);
+                fixed3 lighting = CloudLighting(lightGradient);
                 fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 
                 fixed  combinedA   = mainAlpha + shadowAlpha * (1.0 - mainAlpha);
@@ -319,7 +343,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 if (cloud < 0.001) discard;
 
                 float mainAlpha = cloud * _CloudColor.a * IN.color.a;
-                fixed3 lighting = CloudLighting(wp, t, cloud, clusterSeed);
+                fixed3 lighting = CloudLighting(lightGradient);
                 fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 
                 return fixed4(mainRgb, mainAlpha);

@@ -76,8 +76,18 @@ capture (`Display/`, on the main camera — generic by design, Unbreakable is me
 first `Acquire`/`Release` consumer), verified in-editor with a clear performance win.
 The capture's narrow layer mask also exposed a latent bug: instanced bush leaves were
 submitted on layer 0 (the short `DrawMeshInstanced` overload's default) instead of the
-bush's layer — fixed in `BushView`, with shadow casting pinned off. Phases 5c–5f / 6
-not started.
+bush's layer — fixed in `BushView`, with shadow casting pinned off. **Phase 5c Tier 1
+DONE 2026-07-03** (procedural trims, verified in-editor): lighting normals from
+screen-space derivatives of the density pass's low-frequency partial (−12 evals/px;
+gradient computed before divergent flow where ddx/ddy are undefined; scaled by
+2·ε·strength so authored tuning keeps meaning), two-octave shadow noise (−1), and a
+disturbance-gated displaced evaluation (−3 on calm pixels). Worst case 21 → 8 simplex
+evals/px, calm pixels 5. The texture-bake tier stays **deferred pending device
+measurement** — do it only if clouds still show in a GPU profile (recipe: bake one
+tileable octave with its gradient in extra channels, sample 3× at live scales/scrolls;
+tradeoffs: tiling repetition, 8-bit banding → use 16-bit, loses infinite
+non-repetition; can be runtime-generated to avoid an asset). Phases 5d–5f / 6 not
+started.
 
 **Key fact discovered during the audit:** the project runs on the **Built-in Render
 Pipeline**, not URP (`GraphicsSettings.asset` → `m_CustomRenderPipeline: {fileID: 0}`).
