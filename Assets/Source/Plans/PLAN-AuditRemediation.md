@@ -350,13 +350,21 @@ after, on device where possible**. Items are independent; ordered by expected pa
   `SpriteShadow` multiplies both sprite and shadow by the renderer tint, so baked
   shadows tint like shader shadows did; `PaintSplashView` drives `_SpriteScale` at
   runtime (exclude); ToughBalloon's body animates material properties (exclude).
-- **5b — Kill the `GrabPass`**
+- **5b — Kill the `GrabPass`, keep the live reflection**
   (`Assets/Shaders/BalloonParty/Balloon/UnbreakableBalloon.shader:88`). Full-screen
-  resolve per frame whenever an unbreakable is visible, and **8 of the prefab's 12
+  mid-frame resolve whenever an unbreakable is visible, and **8 of the prefab's 12
   SpriteRenderers** run the GrabPass shader (4 outer + 4 inner chrome layers; 3 more
   on the rim shader), each with the 3×3 `EdgeMask` loop and `pow`/`atan2` chains.
-  Replace the convex-mirror reflection with a prebaked reflection texture or a
-  `shader_feature` gated off on mobile. Also the URP-migration blocker (see
+  **Prebaking is ruled out by design intent (decided 2026-07-03): the real-time
+  reflection is the chrome ball's identity.** Replacement: a **scheduled low-res
+  reflection RT** — a camera matching the main camera's framing renders the reflected
+  layers (background + balloons, excluding the unbreakable's own layer to remove
+  self-reflection) into a quarter/eighth-res RT before the main pass; the shader
+  samples `_ReflectionTex` with the same screen-space UVs (near one-line swap +
+  delete the GrabPass block). The convex distortion hides the low resolution; render
+  only while an unbreakable is alive, optionally at half rate. This keeps reflections
+  of transparents (an after-opaque CommandBuffer copy would reflect only the sky —
+  balloons are transparents). Also the URP-migration blocker (see
   @ref plan_urp_migration).
 - **5c — PuffCloud noise → texture** (`Grid/PuffCloud.shader`). Worst case 7
   `CloudNoise` calls × 3 simplex octaves ≈ 21 octaves/px (2 density + 1 shadow + 4
