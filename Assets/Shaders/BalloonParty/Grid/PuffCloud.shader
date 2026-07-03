@@ -220,11 +220,12 @@ Shader "BalloonParty/Grid/PuffCloud"
             float SlotFalloff(float2 wp)
             {
                 float k = max(_SlotBlend, 0.0001);
+                float invK = 1.0 / k;
                 float minDist = 999.0;
                 for (int i = 0; i < _SlotCount; i++)
                 {
                     float d = length(wp - _SlotCentersWorld[i].xy);
-                    float h = saturate(0.5 + 0.5 * (minDist - d) / k);
+                    float h = saturate(0.5 + 0.5 * (minDist - d) * invK);
                     minDist = lerp(minDist, d, h) - k * h * (1.0 - h);
                 }
 
@@ -278,6 +279,35 @@ Shader "BalloonParty/Grid/PuffCloud"
                 // _TimeOffset is only fed by C# in edit mode, where _Time is frozen.
                 float  t  = _Time.y * _AnimationSpeed + _TimeOffset;
 
+                // Boundary falloff — occupancy mask via slot centers (use original position)
+                float borderFade = SlotFalloff(wpOrig);
+
+                #ifdef _SHADOW_ON
+                float2 shadowWp   = wpOrig - float2(_ShadowOffsetX, _ShadowOffsetY);
+                float  shadowFade = SlotFalloff(shadowWp);
+                #endif
+
+                // The controller stretches ONE quad over the bounding box of every cluster
+                // on the board, so with clusters far apart most fragments are nowhere near a
+                // slot — bail before the texture fetches, not at the end of the shader.
+                // Fragments discarded here keep executing as helper invocations, so the
+                // ddx/ddy below stay defined for surviving quad neighbours (and those sit at
+                // borderFade ≈ 0, where alpha hides any residual error anyway). The debug
+                // variant skips the early-out — it wants the raw field everywhere.
+                #ifndef _NOISE_DEBUG
+                #ifdef _SHADOW_ON
+                if (borderFade < 0.001 && shadowFade < 0.001)
+                {
+                    discard;
+                }
+                #else
+                if (borderFade < 0.001)
+                {
+                    discard;
+                }
+                #endif
+                #endif
+
                 // Density field + displacement (P2+)
                 #ifdef _DENSITY_ON
                 float2 fieldUV = (IN.worldPos - _FieldBoundsMin) / _FieldBoundsSize;
@@ -289,9 +319,6 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float disturbance = saturate(displaceLen / (_DisplaceWorldScale * 0.5 + 0.001));
                 #endif
 
-                // Boundary falloff — occupancy mask via slot centers (use original position)
-                float borderFade = SlotFalloff(wpOrig);
-
                 float lowOrig;
                 float noiseOrig = CloudNoise(wpOrig, t, lowOrig);
 
@@ -299,9 +326,10 @@ Shader "BalloonParty/Grid/PuffCloud"
                 return fixed4(noiseOrig.xxx, 1.0);
                 #endif
 
-                // Lighting gradient — computed before any divergent control flow (early
-                // returns, the disturbance branch), where screen-space derivatives would be
-                // undefined. Pixel world size assumes the camera never rotates (it doesn't).
+                // Lighting gradient — computed before the early returns and the disturbance
+                // branch, where screen-space derivatives would be undefined. (The early
+                // discard above is fine: discarded fragments continue as helper invocations.)
+                // Pixel world size assumes the camera never rotates (it doesn't).
                 float2 pixelWorld = max(float2(abs(ddx(wpOrig.x)), abs(ddy(wpOrig.y))), 1e-5);
                 float2 lightGradient = float2(ddx(lowOrig), ddy(lowOrig)) / pixelWorld;
 
@@ -328,20 +356,28 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                 cloud *= borderFade;
 
-                // Early discard fully transparent pixels
                 #ifdef _SHADOW_ON
-                // Compute shadow before discarding so shadow-only pixels survive
-                float2 shadowWp = wpOrig - float2(_ShadowOffsetX, _ShadowOffsetY);
-                float  shadowNoise = CloudNoiseSoft(shadowWp, t);
-                float  shadowCloud = smoothstep(_EdgeLow, _EdgeHigh, shadowNoise);
-                #ifdef _DENSITY_ON
-                shadowCloud *= density;
-                #endif
-                float  shadowFade  = SlotFalloff(shadowWp);
-                shadowCloud *= shadowFade;
+                float mainAlpha = cloud * _CloudColor.a * IN.color.a;
 
-                float shadowAlpha = shadowCloud * _ShadowColor.a * IN.color.a;
-                shadowAlpha *= smoothstep(0.0, _ShadowSoftness + 0.01, shadowCloud);
+                // The shadow composites BEHIND the cloud — its contribution is scaled by
+                // (1 - mainAlpha) below — so under opaque cloud interior it is invisible and
+                // its two noise fetches are pure waste. Only evaluate where the shadow's own
+                // falloff reaches and the cloud doesn't fully cover it. Shadow-only pixels
+                // (outside the cloud) still get here with mainAlpha 0 and survive the final
+                // discard.
+                float shadowAlpha = 0.0;
+                if (shadowFade > 0.001 && mainAlpha < 0.999)
+                {
+                    float shadowNoise = CloudNoiseSoft(shadowWp, t);
+                    float shadowCloud = smoothstep(_EdgeLow, _EdgeHigh, shadowNoise);
+                    #ifdef _DENSITY_ON
+                    shadowCloud *= density;
+                    #endif
+                    shadowCloud *= shadowFade;
+
+                    shadowAlpha = shadowCloud * _ShadowColor.a * IN.color.a;
+                    shadowAlpha *= smoothstep(0.0, _ShadowSoftness + 0.01, shadowCloud);
+                }
 
                 if (cloud < 0.001 && shadowAlpha < 0.001) discard;
 
@@ -352,7 +388,6 @@ Shader "BalloonParty/Grid/PuffCloud"
                 }
 
                 // Compose main cloud with shadow behind
-                float mainAlpha = cloud * _CloudColor.a * IN.color.a;
                 fixed3 lighting = CloudLighting(lightGradient);
                 fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 

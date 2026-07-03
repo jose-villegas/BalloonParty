@@ -468,6 +468,18 @@ in-editor check and a device profile.
   relying on manual `Unregister`; `ThrowerController.cs:84–87` subscribes to static
   `Navigation.Current` bounded only by `Take(1)` — fine as-is, dangerous if copied
   without the `Take`. `SlotClusterRegistry` transient collections stay deferred.
+- **PuffCloud mega-quad (mitigated in-shader 2026-07-04, structural fix deferred):**
+  `ClusterViewController.Reconfigure` drives ONE view whose quad spans the bounding
+  box of **all** puff clusters on the board — fill cost scales with cluster *spread*,
+  not cloud area (measured ~500 vs ~300 FPS in-editor depending purely on layout).
+  The shader now discards dead-span fragments after only the falloff loops (before
+  all texture fetches) and skips shadow evaluation where the shadow is provably
+  invisible (outside its falloff or fully covered by opaque cloud — exact when
+  `_CloudColor.a` = 1). If clouds still show in a device GPU profile, the structural
+  fix is per-cluster views/quads — trade-off: N draw calls + overlap overdraw between
+  nearby clusters vs today's 1 call + dead span. Related latent cap:
+  `PopulatePositions` silently drops slots past the 16-entry buffer (MAX_SLOTS) —
+  boards with >16 puff slots would render some clusters cloudless.
 - **Hit-routing handle registry (implemented 2026-07-03, by choice ahead of profiling
   evidence):** `BalloonControllerRegistry` is backed by flat arrays indexed by an
   opaque `IBalloonModel.RegistryHandle` (int, -1 unregistered, written only by the
