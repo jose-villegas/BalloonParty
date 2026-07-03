@@ -70,7 +70,14 @@ trace (1f7f24d2, 14a63876, 76ff7c69). The Unbreakable gained a shadow it never h
 (its shaders never implemented one); rotating-shell prefabs parent the shadow under a
 non-rotating ancestor per the ShadowBake README. **Residual 5a verification:** Frame
 Debugger/device pass to bank the tap-count win, and a sweep for any family-material
-stragglers still in use. Phases 5b–5f / 6 not started.
+stragglers still in use. **Phase 5b DONE 2026-07-03**: GrabPass deleted from
+`UnbreakableBalloon.shader`; the chrome samples the shared `SceneCaptureService`
+capture (`Display/`, on the main camera — generic by design, Unbreakable is merely the
+first `Acquire`/`Release` consumer), verified in-editor with a clear performance win.
+The capture's narrow layer mask also exposed a latent bug: instanced bush leaves were
+submitted on layer 0 (the short `DrawMeshInstanced` overload's default) instead of the
+bush's layer — fixed in `BushView`, with shadow casting pinned off. Phases 5c–5f / 6
+not started.
 
 **Key fact discovered during the audit:** the project runs on the **Built-in Render
 Pipeline**, not URP (`GraphicsSettings.asset` → `m_CustomRenderPipeline: {fileID: 0}`).
@@ -356,16 +363,19 @@ after, on device where possible**. Items are independent; ordered by expected pa
   SpriteRenderers** run the GrabPass shader (4 outer + 4 inner chrome layers; 3 more
   on the rim shader), each with the 3×3 `EdgeMask` loop and `pow`/`atan2` chains.
   **Prebaking is ruled out by design intent (decided 2026-07-03): the real-time
-  reflection is the chrome ball's identity.** Replacement: a **scheduled low-res
-  reflection RT** — a camera matching the main camera's framing renders the reflected
-  layers (background + balloons, excluding the unbreakable's own layer to remove
-  self-reflection) into a quarter/eighth-res RT before the main pass; the shader
-  samples `_ReflectionTex` with the same screen-space UVs (near one-line swap +
-  delete the GrabPass block). The convex distortion hides the low resolution; render
-  only while an unbreakable is alive, optionally at half rate. This keeps reflections
-  of transparents (an after-opaque CommandBuffer copy would reflect only the sky —
-  balloons are transparents). Also the URP-migration blocker (see
-  @ref plan_urp_migration).
+  reflection is the chrome ball's identity.** **Implemented 2026-07-03** as the
+  general `SceneCaptureService` (`Display/`, on the main camera): a scheduled low-res
+  capture of configurable layers at the main camera's framing, bound globally as
+  `_SceneCaptureTex`, ref-counted by consumers (`Acquire`/`Release` — the Unbreakable
+  variant is the first; renders nothing with zero consumers) and rendered every Nth
+  frame (downscale + interval on `IGameDisplayConfiguration`, defaults 8/2). The
+  shader swapped `GrabPass`/`_GrabTexture` for the capture (`ComputeGrabScreenPos` →
+  `ComputeScreenPos` — camera RTs carry no grab-flip; dead `grabPos` interpolator
+  removed). Keeps reflections of transparents (an after-opaque copy would reflect only
+  the sky). **In-editor setup required:** add `SceneCaptureService` to the Main Camera
+  prefab + set the captured-layers mask (exclude the Unbreakable's own layer); verify
+  reflection orientation on Metal and tune downscale. Also the URP-migration blocker
+  (see @ref plan_urp_migration).
 - **5c — PuffCloud noise → texture** (`Grid/PuffCloud.shader`). Worst case 7
   `CloudNoise` calls × 3 simplex octaves ≈ 21 octaves/px (2 density + 1 shadow + 4
   lighting central-differences) plus the per-pixel `_SlotCount` loop **executed twice**

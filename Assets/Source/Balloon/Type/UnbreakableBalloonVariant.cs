@@ -3,8 +3,10 @@ using UnityEditor;
 #endif
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Display;
 using UniRx;
 using UnityEngine;
+using VContainer;
 
 namespace BalloonParty.Balloon.Type
 {
@@ -38,12 +40,20 @@ namespace BalloonParty.Balloon.Type
 
         private MaterialPropertyBlock _block;
         private float _instancePhase;
+        private SceneCaptureService _sceneCapture;
 
         private void Awake()
         {
             _block = new MaterialPropertyBlock();
             _instancePhase = Random.value * 100f;
             ComputeRadiusIfNeeded();
+        }
+
+        // Null-guarded: [ExecuteAlways] fires this in edit mode where nothing is injected, and
+        // pooled instances run their first OnEnable during Instantiate, before injection.
+        private void OnEnable()
+        {
+            _sceneCapture?.Acquire();
         }
 
         private void Update()
@@ -69,6 +79,11 @@ namespace BalloonParty.Balloon.Type
             PushPropertyBlock(_innerRenderers, center, timeOffset);
         }
 
+        private void OnDisable()
+        {
+            _sceneCapture?.Release();
+        }
+
         private void OnValidate()
         {
             if (_block == null)
@@ -77,6 +92,19 @@ namespace BalloonParty.Balloon.Type
             }
 
             ComputeRadiusIfNeeded();
+        }
+
+        [Inject]
+        private void Construct(SceneCaptureService sceneCapture)
+        {
+            _sceneCapture = sceneCapture;
+
+            // Injection lands after the creation-time OnEnable saw a null reference — settle
+            // the ref-count for an instance injected while already active.
+            if (isActiveAndEnabled)
+            {
+                _sceneCapture.Acquire();
+            }
         }
 
         public void Initialize(IWriteableBalloonModel model) { }

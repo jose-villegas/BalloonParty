@@ -150,7 +150,12 @@ namespace BalloonParty.Slots.Actor.Archetype
 
                 if (SupportsInstancing)
                 {
-                    Graphics.DrawMeshInstanced(leafMesh, 0, material, batch.Matrices, batch.Count, batch.Props);
+                    // The short overload defaults layer to 0 (Default) — the leaves must submit
+                    // on the bush's layer like the branches do, or layer-masked cameras (e.g.
+                    // SceneCaptureService) render branch skeletons without foliage. Shadow
+                    // casting off: 2D sprites, no light pass.
+                    Graphics.DrawMeshInstanced(leafMesh, 0, material, batch.Matrices, batch.Count, batch.Props,
+                        UnityEngine.Rendering.ShadowCastingMode.Off, false, layer);
                     continue;
                 }
 

@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 8572197533499886978}
   - component: {fileID: 8512367537215613866}
   - component: {fileID: 6166827907043377765}
+  - component: {fileID: 9185101207980489252}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -138,3 +139,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Game.Cinematics.CinematicCameraView
   _camera: {fileID: 9161632677401763229}
+--- !u!114 &9185101207980489252
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4370083120234301038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4594a5fda553492aad593bc86ec5e5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.SceneCaptureService
+  _capturedLayers:
+    serializedVersion: 2
+    m_Bits: 24064

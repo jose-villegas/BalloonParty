@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5683240981526987365}
   - component: {fileID: 3054233051672269160}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 1827487983935383960}
   - component: {fileID: 1429749022553535108}
   - component: {fileID: 7247416794277503102}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ScoreTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -437,7 +437,7 @@ GameObject:
   m_Component:
   - component: {fileID: 946393001000237926}
   - component: {fileID: 8734188551054856876}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BakedShadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

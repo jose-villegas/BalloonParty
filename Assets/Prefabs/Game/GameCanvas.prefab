@@ -271,6 +271,16 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1945634241778299825, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564640829836053525, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2613889795244706835, guid: 4a32d51f61f22427e898e3636e5511cc,
         type: 3}
       propertyPath: m_Pivot.x
@@ -371,6 +381,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2708940130354716595, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3087682888719887123, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3528584215801580706, guid: 4a32d51f61f22427e898e3636e5511cc,
         type: 3}
       propertyPath: m_AnchorMax.y
@@ -390,6 +410,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_AnchorMax.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5077232082244690996, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 6094324510328881488, guid: 4a32d51f61f22427e898e3636e5511cc,
         type: 3}
@@ -425,6 +450,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SortingLayer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 7022863692435013505, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7072969443577705674, guid: 4a32d51f61f22427e898e3636e5511cc,
         type: 3}
@@ -530,6 +560,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_SortingLayer
       value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8392098426720641075, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8511951013721710417, guid: 4a32d51f61f22427e898e3636e5511cc,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

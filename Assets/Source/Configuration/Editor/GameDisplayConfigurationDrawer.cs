@@ -44,6 +44,15 @@ namespace BalloonParty.Configuration.Editor
             EditorGUILayout.PropertyField(widthProp, new GUIContent("Reference World Width"));
             EditorGUILayout.PropertyField(heightProp, new GUIContent("Reference World Height"));
 
+            EditorGUILayout.Space();
+            EditorGUILayout.LabelField("Scene Capture", EditorStyles.boldLabel);
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("_sceneCaptureDownscale"),
+                new GUIContent("Downscale"));
+            EditorGUILayout.PropertyField(
+                serializedObject.FindProperty("_sceneCaptureFrameInterval"),
+                new GUIContent("Frame Interval"));
+
             serializedObject.ApplyModifiedProperties();
 
             var refWidth = widthProp.floatValue;

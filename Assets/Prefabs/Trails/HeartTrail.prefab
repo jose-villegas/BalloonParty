@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1843683223365102511}
   - component: {fileID: 3564489479632184447}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BakedShadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5683240981526987365}
   - component: {fileID: 3054233051672269160}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -192,7 +192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5878255050167453035}
   - component: {fileID: 8604988448780964846}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Glow (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -285,7 +285,7 @@ GameObject:
   - component: {fileID: 1648295896144469879}
   - component: {fileID: 1827487983935383960}
   - component: {fileID: 1429749022553535108}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: HeartTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}

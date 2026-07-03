@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5683240981526987365}
   - component: {fileID: 3054233051672269160}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Glow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -104,7 +104,7 @@ GameObject:
   - component: {fileID: 1827487983935383960}
   - component: {fileID: 1429749022553535108}
   - component: {fileID: 2077205017478874991}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: ShieldScoreTrail
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -559,7 +559,7 @@ GameObject:
   m_Component:
   - component: {fileID: 210891102295751765}
   - component: {fileID: 5527357401363463033}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BakedShadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}

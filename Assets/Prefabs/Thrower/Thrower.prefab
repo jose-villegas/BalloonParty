@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6539222687501209719}
   - component: {fileID: 2657854892859227276}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Hole
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -100,7 +100,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 722115112704300797}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -138,7 +138,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2505822261787818372}
   - component: {fileID: 6376061562852266580}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: CaparaceRing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -229,7 +229,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1768816976351331474}
   - component: {fileID: 8630160874622195848}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: CaparaceFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -320,7 +320,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1434125144923582306}
   - component: {fileID: 4435681600462249609}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Specular
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -411,7 +411,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3982204795193944974}
   - component: {fileID: 4836146064928259124}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: TapRing
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -502,7 +502,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2802310314607088366}
   - component: {fileID: 1597407893908680967}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: CaparaceBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -593,7 +593,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7270358786014099272}
   - component: {fileID: 7226870346652265190}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -685,7 +685,7 @@ GameObject:
   - component: {fileID: 6132985126811919246}
   - component: {fileID: 1679979597599564690}
   - component: {fileID: 8611030970407435584}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: Thrower
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -753,7 +753,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5548784903157425992}
   - component: {fileID: 2676706509459419040}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: TapRing (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -843,7 +843,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2018169870771524743}
-  m_Layer: 0
+  m_Layer: 14
   m_Name: ProjectileSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

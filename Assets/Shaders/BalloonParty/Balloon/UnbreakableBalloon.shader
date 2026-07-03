@@ -83,9 +83,9 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
         ZWrite   Off
         Blend    SrcAlpha OneMinusSrcAlpha
 
-        // Capture everything rendered so far (background, other balloons).
-        // Named texture so all Unbreakable sprites share one grab per frame.
-        GrabPass { "_GrabTexture" }
+        // The reflection source is the shared low-res scene capture bound globally as
+        // _SceneCaptureTex (SceneCaptureService on the main camera) — the GrabPass this
+        // replaces forced a full-screen mid-frame resolve on tile GPUs.
 
         Pass
         {
@@ -113,7 +113,6 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 float4 vertex     : SV_POSITION;
                 fixed4 color      : COLOR;
                 float2 uv         : TEXCOORD0;
-                float4 grabPos    : TEXCOORD1;
                 float2 worldPos   : TEXCOORD2;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
@@ -123,7 +122,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             float4    _MainTex_ST;
             float4    _MainTex_TexelSize;
 
-            sampler2D _GrabTexture;
+            sampler2D _SceneCaptureTex;
 
             #ifdef UNITY_INSTANCING_ENABLED
                 UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
@@ -199,9 +198,6 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
 
                 // World position for sphere-local calculations
                 OUT.worldPos = mul(unity_ObjectToWorld, IN.vertex).xy;
-
-                // Screen-space position for GrabPass sampling
-                OUT.grabPos = ComputeGrabScreenPos(OUT.vertex);
 
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
@@ -298,13 +294,13 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                     sprite.rgb = metallic * smoothstep(0.0, _MetalDetailStrength, detail);
                 }
 
-                // ---- Realtime reflection (convex mirror from GrabPass) ----
+                // ---- Realtime reflection (convex mirror from the reflection RT) ----
                 if (alpha > 0.01 && _ReflectionStrength > 0.001)
                 {
                     // Project sphere center to grab UV
                     float4 cClip = mul(UNITY_MATRIX_VP,
                         float4(_SphereCenter.x, _SphereCenter.y, _SphereCenter.z, 1.0));
-                    float4 cGrab = ComputeGrabScreenPos(cClip);
+                    float4 cGrab = ComputeScreenPos(cClip);
                     float2 centerUV = cGrab.xy / cGrab.w;
 
                     // Compute screen-space half-size of the captured area
@@ -313,12 +309,12 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
 
                     float4 exClip = mul(UNITY_MATRIX_VP,
                         float4(_SphereCenter.x + captureW, _SphereCenter.y, _SphereCenter.z, 1.0));
-                    float4 exGrab = ComputeGrabScreenPos(exClip);
+                    float4 exGrab = ComputeScreenPos(exClip);
                     float halfX = exGrab.x / exGrab.w - centerUV.x;
 
                     float4 eyClip = mul(UNITY_MATRIX_VP,
                         float4(_SphereCenter.x, _SphereCenter.y + captureW, _SphereCenter.z, 1.0));
-                    float4 eyGrab = ComputeGrabScreenPos(eyClip);
+                    float4 eyGrab = ComputeScreenPos(eyClip);
                     float halfY = eyGrab.y / eyGrab.w - centerUV.y;
 
                     // Sphere-wrap distortion: push sampling outward at
@@ -342,7 +338,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                     float screenFade = edgeFade.x * edgeFade.y;
                     reflUV = saturate(reflUV);
 
-                    fixed3 reflected = tex2D(_GrabTexture, reflUV).rgb;
+                    fixed3 reflected = tex2D(_SceneCaptureTex, reflUV).rgb;
 
                     float fresnel = pow(sphereDist, _ReflectionFresnel);
                     float reflMask = lerp(0.15, 1.0, fresnel) * _ReflectionStrength * screenFade;
