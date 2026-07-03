@@ -76,18 +76,25 @@ capture (`Display/`, on the main camera — generic by design, Unbreakable is me
 first `Acquire`/`Release` consumer), verified in-editor with a clear performance win.
 The capture's narrow layer mask also exposed a latent bug: instanced bush leaves were
 submitted on layer 0 (the short `DrawMeshInstanced` overload's default) instead of the
-bush's layer — fixed in `BushView`, with shadow casting pinned off. **Phase 5c Tier 1
-DONE 2026-07-03** (procedural trims, verified in-editor): lighting normals from
-screen-space derivatives of the density pass's low-frequency partial (−12 evals/px;
-gradient computed before divergent flow where ddx/ddy are undefined; scaled by
-2·ε·strength so authored tuning keeps meaning), two-octave shadow noise (−1), and a
-disturbance-gated displaced evaluation (−3 on calm pixels). Worst case 21 → 8 simplex
-evals/px, calm pixels 5. The texture-bake tier stays **deferred pending device
-measurement** — do it only if clouds still show in a GPU profile (recipe: bake one
-tileable octave with its gradient in extra channels, sample 3× at live scales/scrolls;
-tradeoffs: tiling repetition, 8-bit banding → use 16-bit, loses infinite
-non-repetition; can be runtime-generated to avoid an asset). Phases 5d–5f / 6 not
-started.
+bush's layer — fixed in `BushView`, with shadow casting pinned off. **Phase 5c DONE
+2026-07-04 (both tiers)**. Tier 1 (procedural trims, verified in-editor): lighting
+normals from screen-space derivatives of the density pass's low-frequency partial
+(−12 evals/px; gradient computed before divergent flow where ddx/ddy are undefined;
+scaled by 2·ε·strength so authored tuning keeps meaning), two-octave shadow noise (−1),
+and a disturbance-gated displaced evaluation (−3 on calm pixels). Worst case 21 → 8
+simplex evals/px, calm pixels 5. Tier 2 (baked noise): every octave is now one fetch of
+a tileable 16-bit-PNG periodic-Perlin texture (`CloudNoiseTextureGenerator`, menu Tools >
+BalloonParty), histogram-matched to the old simplex so the authored thresholds keep
+meaning; measured **267 → 353 FPS in-editor A/B** on the same scene, after which the
+procedural simplex path was removed outright. Two latent shader defects were found and
+fixed en route (both existed before, masked by simplex's high-frequency contrast):
+per-cluster noise seed offsets cut the field along Voronoi borders — removed in favor of
+continuous world-space sampling (scroll already provides respawn variety) — and
+`SlotFalloff`'s hard `min()` creased the fade band along slot midlines into a hexagonal
+web — replaced by a polynomial smooth-min union (`_SlotBlend` knob). Gotchas recorded:
+EXR import in a Gamma-color-space project bakes a linear→gamma lift into texel data (use
+16-bit PNG); the `_NOISE_DEBUG` grayscale toggle stays in the shader for field
+inspection. Phases 5d–5f / 6 not started.
 
 **Key fact discovered during the audit:** the project runs on the **Built-in Render
 Pipeline**, not URP (`GraphicsSettings.asset` → `m_CustomRenderPipeline: {fileID: 0}`).
@@ -386,14 +393,12 @@ after, on device where possible**. Items are independent; ordered by expected pa
   prefab + set the captured-layers mask (exclude the Unbreakable's own layer); verify
   reflection orientation on Metal and tune downscale. Also the URP-migration blocker
   (see @ref plan_urp_migration).
-- **5c — PuffCloud noise → texture** (`Grid/PuffCloud.shader`). Worst case 7
-  `CloudNoise` calls × 3 simplex octaves ≈ 21 octaves/px (2 density + 1 shadow + 4
-  lighting central-differences) plus the per-pixel `_SlotCount` loop **executed twice**
-  when shadow is on — and `PuffMain.mat` ships with both `_DENSITY_ON` and
-  `_SHADOW_ON` enabled, so the worst case is the shipped case (discarded pixels exit
-  after ~9 octaves). Bake the noise field into a small tileable scrolling texture (1
-  fetch), derive the lighting normal from its channels, skip the dual orig/displaced
-  evaluation when local disturbance ≈ 0.
+- **5c — PuffCloud noise → texture** (`Grid/PuffCloud.shader`). DONE — see the Status
+  header. Original sizing: worst case 7 `CloudNoise` calls × 3 simplex octaves ≈ 21
+  octaves/px (2 density + 1 shadow + 4 lighting central-differences) plus the per-pixel
+  `_SlotCount` loop executed twice when shadow is on, with `PuffMain.mat` shipping both
+  `_DENSITY_ON` and `_SHADOW_ON`. Landed as Tier 1 trims (derivative lighting, 2-octave
+  shadow, disturbance gate) + Tier 2 texture fetches, 267 → 353 FPS in-editor.
 - **5d — Restore balloon batching via atlas-collapse.** `BalloonView.ApplySortingOrder`
   (`:272–276`) + `SortingHelper.SlotBaseSortingOrder` give each balloon a unique
   50-wide order band with layers interleaved at +1..+4 → ~3 draws per balloon
