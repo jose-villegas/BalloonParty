@@ -421,10 +421,14 @@ in-editor check and a device profile.
   relying on manual `Unregister`; `ThrowerController.cs:84–87` subscribes to static
   `Navigation.Current` bounded only by `Take(1)` — fine as-is, dangerous if copied
   without the `Take`. `SlotClusterRegistry` transient collections stay deferred.
-- **Hit-routing escalation path (decided, no action):** if profiling ever shows
-  `BalloonControllerRegistry.Route`'s dictionary lookup (it won't at ~80 entities),
-  the upgrade is an opaque int handle on the model backing a flat array + free list +
-  generation counter — array indexing, zero hashing, and still move-invariant.
+- **Hit-routing handle registry (implemented 2026-07-03, by choice ahead of profiling
+  evidence):** `BalloonControllerRegistry` is backed by flat arrays indexed by an
+  opaque `IBalloonModel.RegistryHandle` (int, -1 unregistered, written only by the
+  registry) with a free list — array indexing, zero hashing, still move-invariant. A
+  reference compare on resolve stands in for a generation counter: models are never
+  pooled, so a stale handle can only point at null or a different model.
+  `BalloonControllerRegistryTests` covers the handle/free-list mechanics (resolve,
+  unregister, stale-handle rejection on index reuse, growth past capacity).
   Do **not** switch to slot-indexed routing: balloons change slots constantly
   (balance, pressure shoves, spawn paths), so a slot-keyed array must be updated on
   every move — either per-balloon `SlotIndex` subscriptions (reintroducing the fan-out

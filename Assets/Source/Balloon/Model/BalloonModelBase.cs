@@ -11,6 +11,7 @@ namespace BalloonParty.Balloon.Model
     internal abstract class BalloonModelBase : IWriteableBalloonModel, IPressureMovable
     {
         public BalloonType TypeName { get; }
+        public int RegistryHandle { get; set; } = -1;
         public ReactiveProperty<int> HitsRemaining { get; }
         public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
         public ReactiveProperty<bool> IsStable { get; } = new(true);
