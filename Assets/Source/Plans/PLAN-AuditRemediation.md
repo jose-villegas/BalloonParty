@@ -60,7 +60,17 @@ deltas from the old subscription order, analyzed safe: score now runs before
 nudge/grid-actor removal (no shared state), and the owner reaction runs before the bus
 broadcast (nudge reads model slot values, not the removed grid entry). In-editor
 EditMode run + focused playtest (streak-shield, item balloons, board clear/restart)
-pending. Phases 5+ / 6 not started.
+confirmed green 2026-07-03; the hit-routing registry was subsequently upgraded to the
+int-handle/flat-array design (commit 8a9e35af — see the watch-items entry).
+**Phase 5a DONE 2026-07-03** via the `SpriteShadowBaker` component (9baa87b3 + hardening:
+readback orientation flip, bake-before-swap `_SpriteScale` ordering, PPU-mismatch
+detection, ToughBalloon `_SHADOW_OFF` toggle) — baked shadows rolled out across
+Balloon/Balloon5/Balloon10/ToughBalloon/Unbreakable, score/shield/heart trails, thrower
+trace (1f7f24d2, 14a63876, 76ff7c69). The Unbreakable gained a shadow it never had
+(its shaders never implemented one); rotating-shell prefabs parent the shadow under a
+non-rotating ancestor per the ShadowBake README. **Residual 5a verification:** Frame
+Debugger/device pass to bank the tap-count win, and a sweep for any family-material
+stragglers still in use. Phases 5b–5f / 6 not started.
 
 **Key fact discovered during the audit:** the project runs on the **Built-in Render
 Pipeline**, not URP (`GraphicsSettings.asset` → `m_CustomRenderPipeline: {fileID: 0}`).
