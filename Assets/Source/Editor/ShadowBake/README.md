@@ -49,5 +49,9 @@ revert). Re-baking reuses the same shadow child and overwrites the same PNG.
   the other layers, `band+1`) and the existing spawn/`Hide()` loops toggle it with the rest.
 - The component is data-only at runtime. It ships as an inert component on the prefab;
   remove it before shipping if that bothers you.
-- Exclusions that must stay on live shaders: ToughBalloon's body (its Animator animates
-  material properties) and anything `PaintSplashView` drives (`_SpriteScale` at runtime).
+- ToughBalloon's body must stay on its live shader (its Animator animates material
+  properties), but its **built-in shadow is optional**: tick *Disable (use a baked shadow
+  instead)* on the material — the `_SHADOW_OFF` variant compiles the 9 shadow taps out —
+  and let the baked shadow child cover it. The keyword is inverted so materials predating
+  the toggle keep their shadow.
+- Still excluded outright: anything `PaintSplashView` drives (`_SpriteScale` at runtime).

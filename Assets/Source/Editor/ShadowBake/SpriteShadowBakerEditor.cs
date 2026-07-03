@@ -57,6 +57,14 @@ namespace BalloonParty.Editor.ShadowBake
                     return;
                 }
 
+                WarnOnResolutionMismatch(renderers);
+
+                // Shrink family-material quads to their visible size BEFORE the silhouette pass:
+                // the plain silhouette material fills the whole quad, but the runtime shaders draw
+                // the sprite at _SpriteScale of it — unbaked, a 0.1-scale knot on a 1×1 quad
+                // silhouettes at ten times its visible size.
+                var compensations = CompensateSpriteScale(renderers);
+
                 var sprite = BakeShadowSprite(baker, renderers, assetPath);
                 if (sprite == null)
                 {
@@ -65,7 +73,11 @@ namespace BalloonParty.Editor.ShadowBake
 
                 if (baker.ReplaceShadowMaterials)
                 {
-                    ReplaceFamilyMaterials(renderers, baker.ReplacementMaterial);
+                    SwapFamilyMaterials(renderers, baker.ReplacementMaterial);
+                }
+                else
+                {
+                    RestoreScaleCompensation(compensations);
                 }
 
                 WireShadowChild(baker, renderers, sprite);
@@ -333,31 +345,63 @@ namespace BalloonParty.Editor.ShadowBake
             importer.SaveAndReimport();
         }
 
-        private static void ReplaceFamilyMaterials(IReadOnlyList<SpriteRenderer> renderers, Material replacement)
+        private sealed class ScaleCompensation
         {
-            var plain = replacement != null
-                ? replacement
-                : AssetDatabase.GetBuiltinExtraResource<Material>("Sprites-Default.mat");
+            public SpriteRenderer Renderer;
+            public bool UsedRendererSize;
+            public Vector2 PreviousSize;
+            public Vector3 PreviousScale;
+        }
+
+        // The bake resolution follows the first sprite's pixels-per-unit; sprites imported at a
+        // different density come out softer or oversharp in the baked shadow — surface it.
+        private static void WarnOnResolutionMismatch(IReadOnlyList<SpriteRenderer> renderers)
+        {
+            var reference = renderers[0].sprite.pixelsPerUnit;
+            for (var i = 1; i < renderers.Count; i++)
+            {
+                var pixelsPerUnit = renderers[i].sprite.pixelsPerUnit;
+                if (!Mathf.Approximately(pixelsPerUnit, reference))
+                {
+                    Debug.LogWarning($"[SpriteShadowBaker] Resolution mismatch: '{renderers[i].name}' " +
+                                     $"(sprite '{renderers[i].sprite.name}', {pixelsPerUnit} PPU) differs from " +
+                                     $"'{renderers[0].name}' ({reference} PPU) — the bake resolves at {reference}; " +
+                                     "align the sprites' import settings for a uniform penumbra.");
+                }
+            }
+        }
+
+        // The shadow shaders drew the sprite at _SpriteScale of its quad; both the silhouette
+        // pass and a plain material render the full quad, so shrink the renderer to the visible
+        // size. Persisted when the material swap is on, reverted otherwise.
+        private static List<ScaleCompensation> CompensateSpriteScale(IReadOnlyList<SpriteRenderer> renderers)
+        {
+            var compensations = new List<ScaleCompensation>();
 
             foreach (var renderer in renderers)
             {
                 var material = renderer.sharedMaterial;
-                if (material == null || !material.shader.name.StartsWith(FamilyShaderPrefix))
+                if (material == null || !material.shader.name.StartsWith(FamilyShaderPrefix) ||
+                    !material.HasProperty(SpriteScaleId))
                 {
                     continue;
                 }
 
-                // The shadow shaders shrank the sprite inside its quad by _SpriteScale; a plain
-                // material renders the full quad, so shrink the renderer to keep the visible size.
-                var spriteScale = material.HasProperty(SpriteScaleId) ? material.GetFloat(SpriteScaleId) : 1f;
-                renderer.sharedMaterial = plain;
-
+                var spriteScale = material.GetFloat(SpriteScaleId);
                 if (Mathf.Approximately(spriteScale, 1f))
                 {
                     continue;
                 }
 
-                if (renderer.drawMode != SpriteDrawMode.Simple)
+                var compensation = new ScaleCompensation
+                {
+                    Renderer = renderer,
+                    UsedRendererSize = renderer.drawMode != SpriteDrawMode.Simple,
+                    PreviousSize = renderer.drawMode != SpriteDrawMode.Simple ? renderer.size : Vector2.zero,
+                    PreviousScale = renderer.transform.localScale
+                };
+
+                if (compensation.UsedRendererSize)
                 {
                     renderer.size *= spriteScale;
                 }
@@ -366,6 +410,41 @@ namespace BalloonParty.Editor.ShadowBake
                     renderer.transform.localScale *= spriteScale;
                     Debug.LogWarning($"[SpriteShadowBaker] '{renderer.name}': simple draw mode — compensated " +
                                      $"_SpriteScale {spriteScale:0.###} via localScale; check any children.");
+                }
+
+                compensations.Add(compensation);
+            }
+
+            return compensations;
+        }
+
+        private static void RestoreScaleCompensation(IReadOnlyList<ScaleCompensation> compensations)
+        {
+            foreach (var compensation in compensations)
+            {
+                if (compensation.UsedRendererSize)
+                {
+                    compensation.Renderer.size = compensation.PreviousSize;
+                }
+                else
+                {
+                    compensation.Renderer.transform.localScale = compensation.PreviousScale;
+                }
+            }
+        }
+
+        private static void SwapFamilyMaterials(IReadOnlyList<SpriteRenderer> renderers, Material replacement)
+        {
+            var plain = replacement != null
+                ? replacement
+                : AssetDatabase.GetBuiltinExtraResource<Material>("Sprites-Default.mat");
+
+            foreach (var renderer in renderers)
+            {
+                var material = renderer.sharedMaterial;
+                if (material != null && material.shader.name.StartsWith(FamilyShaderPrefix))
+                {
+                    renderer.sharedMaterial = plain;
                 }
             }
         }

@@ -58,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 56e3b44bfda8f412ea54a9f759804d66, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -99,6 +99,27 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1529748305594679390, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f06b64cd8fadf4e5b9c065683d4a1aa6,
+        type: 3}
+    - target: {fileID: 1529748305594679390, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1529748305594679390, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1529748305594679390, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1788660481030380393, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -234,7 +255,7 @@ PrefabInstance:
         type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
-      objectReference: {fileID: 2100000, guid: 2e6a6cd0b682d47c1a2cb36088a77519, type: 2}
+      objectReference: {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
     - target: {fileID: 7503708300241224956, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: m_Size.x
@@ -295,6 +316,11 @@ PrefabInstance:
       propertyPath: '_spriteLayerRenderers.Array.data[4]'
       value: 
       objectReference: {fileID: 418175176944642040}
+    - target: {fileID: 8083225976484237515, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9183634829321680531, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: m_LocalRotation.w
@@ -335,6 +361,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3138458729521118798}
+    - targetCorrespondingSourceObject: {fileID: 5923847143892959990, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 300928486610998021}
   m_SourcePrefab: {fileID: 100100000, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
 --- !u!212 &787277579907675029 stripped
 SpriteRenderer:
@@ -374,6 +404,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.ToughBalloonType
   _renderer: {fileID: 1121172538853445364}
   _crackAnimDuration: 2
+--- !u!114 &300928486610998021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1970275016832787898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 279681f4ec9aa4680a01fe0a6bec0951, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.Rendering.SpriteShadowBaker
+  _shadowColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.75}
+  _shadowOffset: {x: 0.04, y: -0.04}
+  _blurRadius: 0.01
+  _resolutionMultiplier: 2
+  _blurPasses: 3
+  _replaceShadowMaterials: 0
+  _replacementMaterial: {fileID: 0}
+  _shadowChild: {fileID: 0}
 --- !u!212 &3116006326895247971 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 7087590600817567023, guid: 85afc73ba92384dafa9d8a43874d2dd6,

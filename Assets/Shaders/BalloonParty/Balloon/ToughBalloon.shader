@@ -48,7 +48,10 @@ Shader "BalloonParty/Balloon/ToughBalloon"
         [HideInInspector] _VoronoiSeed ("Voronoi Seed (set at runtime)", Vector) = (0, 0, 0, 0)
 
         // ---- Shadow --------------------------------------------------------
+        // Inverted keyword so materials serialized before the toggle existed keep their
+        // shadow: an absent keyword means "shadow on".
         [Header(Shadow)]
+        [Toggle(_SHADOW_OFF)] _DisableShadow ("Disable (use a baked shadow instead)", Float) = 0
         _ShadowColor    ("Color",    Color)             = (0.2, 0.2, 0.2, 0.75)
         _ShadowOffset   ("Offset",   Vector)            = (0.025, -0.025, 0, 0)
         _ShadowSoftness ("Softness", Range(0.0, 0.1))   = 0.01
@@ -79,6 +82,7 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             #pragma target 3.0
             #pragma multi_compile _ PIXELSNAP_ON
             #pragma multi_compile_instancing
+            #pragma shader_feature_local _SHADOW_OFF
             #include "UnityCG.cginc"
 
             struct appdata_t
@@ -392,6 +396,12 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 float  alpha  = sprite.a;
 
                 // ---- Shadow (sampled from scaled UV, shifted by offset) ----
+                // The disabled variant compiles the taps out entirely — a baked shadow child
+                // (SpriteShadowBaker) provides the shadow instead.
+#ifdef _SHADOW_OFF
+                fixed  shadowAlpha = 0;
+                fixed3 shadowRGB   = fixed3(0, 0, 0);
+#else
                 float2 shadowUV = spriteUV - _ShadowOffset;
                 fixed shadowAlpha = _ShadowSoftness < 0.0001
                     ? SampleShadowAlpha(shadowUV)
@@ -399,6 +409,7 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 shadowAlpha *= IN.color.a * _ShadowColor.a;
 
                 fixed3 shadowRGB = _ShadowColor.rgb * IN.color.rgb;
+#endif
 
                 // Early discard when both sprite and shadow are invisible
                 fixed combinedA = alpha + shadowAlpha * (1.0 - alpha);

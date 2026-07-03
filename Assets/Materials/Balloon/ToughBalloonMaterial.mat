@@ -11,7 +11,8 @@ Material:
   m_Shader: {fileID: 4800000, guid: cc2def581e02479d9cbd0ad6a89f98c7, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords: []
+  m_ValidKeywords:
+  - _SHADOW_OFF
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -81,6 +82,7 @@ Material:
     - _DamageCurve: 0.63
     - _DamageProgress: 0
     - _DetailNormalMapScale: 1
+    - _DisableShadow: 1
     - _DstBlend: 0
     - _FiberDensity: 27.4
     - _FiberIntensity: 1
@@ -110,7 +112,7 @@ Material:
     - _SpecularSoftness: 0.022
     - _SphereWarp: 1
     - _SphereWarpDamageBoost: 6
-    - _SpriteScale: 0.735
+    - _SpriteScale: 1
     - _SrcBlend: 1
     - _Stencil: 0
     - _StencilComp: 8
