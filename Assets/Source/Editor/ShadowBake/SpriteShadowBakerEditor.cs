@@ -204,10 +204,18 @@ namespace BalloonParty.Editor.ShadowBake
             var pixels = readback.GetPixels();
             Object.DestroyImmediate(readback);
 
+            // Metal/DX render top-down into RTs while ReadPixels assumes bottom-up rows —
+            // flip during extraction so the bake matches world orientation (OpenGL doesn't flip).
+            var flip = SystemInfo.graphicsUVStartsAtTop;
             var alpha = new float[pixels.Length];
-            for (var i = 0; i < pixels.Length; i++)
+            for (var y = 0; y < height; y++)
             {
-                alpha[i] = pixels[i].a;
+                var source = y * width;
+                var destination = (flip ? height - 1 - y : y) * width;
+                for (var x = 0; x < width; x++)
+                {
+                    alpha[destination + x] = pixels[source + x].a;
+                }
             }
 
             return alpha;
