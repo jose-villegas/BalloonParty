@@ -43,7 +43,24 @@ allocation-free per call), 3b (loop-based `FindOverride` + combined `Resolve(out
 the split `Resolve*` wrappers remain for their tests), 3d (static reused BFS collections
 in `PressureCascade`), 3e (all four). 3c was re-scoped to pair with 5e (see the 3c entry
 — it needs the central balloon-motion ticker, not a batch patch). Profiler verification
-of a multi-pop + bomb turn still pending in-editor. Phases 4+ not started.
+of a multi-pop + bomb turn still pending in-editor. **Phase 4 implemented 2026-07-03**
+in the planned two parts: (1) `IHitDispatcher` (`Shared/Messages`) + `HitPipeline`
+(`Game/`) — all producers dispatch instead of publishing; the score/streak stage runs
+first (structural contract for the resolver's streak read), then the bus broadcast for
+order-independent observers (`ItemActivator` stays on the bus: its frame-yield already
+order-decouples it, and making it a stage would create the DI cycle
+pipeline→activator→handlers→pipeline); (2) `BalloonControllerRegistry` — controllers
+register per spawn, the pipeline routes hits by model lookup (per-balloon
+`ActorHitMessage`/`BoardClearMessage` subscriptions deleted; a `_popped` guard replaces
+dispose-to-stop-double-pop; popped-but-waiting item balloons stay registered so board
+clear still reaches them; the registry's single snapshot-iterating board-clear pass
+replaces the re-entrant-disposal dance). Docs updated (`arch_turn_pipeline`,
+Balloon/Game/Shared READMEs + the dispatch-only rule in the style guide). Ordering
+deltas from the old subscription order, analyzed safe: score now runs before
+nudge/grid-actor removal (no shared state), and the owner reaction runs before the bus
+broadcast (nudge reads model slot values, not the removed grid entry). In-editor
+EditMode run + focused playtest (streak-shield, item balloons, board clear/restart)
+pending. Phases 5+ / 6 not started.
 
 **Key fact discovered during the audit:** the project runs on the **Built-in Render
 Pipeline**, not URP (`GraphicsSettings.asset` → `m_CustomRenderPipeline: {fileID: 0}`).

@@ -11,10 +11,12 @@ contacts a balloon to the moment the grid is settled and ready for the next shot
 
 **Phase 1 — Hit**
 The projectile flies freely, bouncing off walls. On each balloon contact `ProjectileView`
-calls `EvaluateHit` (state-mutating), embeds the outcome in `ActorHitMessage`, and
-publishes it. All subscribers react synchronously: `BalloonController` pops/deflects,
-`ScoreController` attributes score, `NudgeService` nudges neighbors. No rebalancing
-occurs during flight.
+calls `EvaluateHit` (state-mutating), embeds the outcome in `ActorHitMessage`, and routes
+it through `IHitDispatcher` (`Game/HitPipeline`). The pipeline runs the order-dependent
+stages synchronously and explicitly — `ScoreController` records streak/score first, then
+the owning `BalloonController` (resolved via `BalloonControllerRegistry`) pops/deflects —
+and only then broadcasts the message for order-independent observers (`NudgeService`,
+`ItemActivator`, `GridActorHitController`, VFX). No rebalancing occurs during flight.
 
 **Phase 2 — Balance (pre-spawn)**
 When the projectile dies it publishes `ProjectileDestroyedMessage`. `BalloonSpawner`
@@ -36,7 +38,11 @@ spawn (e.g. a balloon placed in a column that needed support from below).
 
 **Where to add behavior triggered by a balloon pop:**
 Subscribe to `ActorHitMessage` filtered by `Outcome == Pop`. Your subscriber runs in
-Phase 1 alongside all other pop subscribers — synchronously, before the projectile dies.
+Phase 1 — synchronously, before the projectile dies, and *after* the pipeline's ordered
+stages (score recording and the owning balloon's reaction) have completed. If your
+behavior must run *before* the pop or interleave with scoring, it belongs in
+`HitPipeline` as an explicit stage, not on the bus. Never publish `ActorHitMessage`
+directly — route hits through `IHitDispatcher`.
 
 **Where to add behavior triggered by turn end (projectile death):**
 Subscribe to `ProjectileDestroyedMessage`. This runs between Phase 1 and Phase 2.

@@ -23,7 +23,7 @@ Balloon materials (`BalloonMaterial`, `SpecularBalloonBlur`, etc.) have GPU inst
 
 A balloon knows its type, how many hits it can absorb, where it sits in the grid, whether it has settled into position, and whether it carries an item. `BalloonModel` additionally knows its color (`IPaintable`). When any reactive property changes, the view updates automatically via UniRx subscriptions.
 
-`BalloonController` receives `ActorHitMessage`s filtered by identity (`msg.Actor is IBalloonModel && ReferenceEquals`) and routes on the pre-computed `msg.Outcome`:
+`BalloonController` receives its own hits directly: each controller registers with `BalloonControllerRegistry` on spawn, and `HitPipeline` (`Game/`) resolves the owning controller by model and calls `HandleHit` — no per-balloon subscriptions or broadcast filtering. It routes on the pre-computed `msg.Outcome`:
 
 - **`PassThrough`** — balloon survived; projectile continues. `HitsRemaining` was already decremented inside `BalloonModelBase.EvaluateHit`. Crack animation is driven reactively by `HitsRemaining`.
 - **`Deflect`** — balloon survived and projectile bounced. Publishes `BalloonDeflectedMessage` and `BalloonNudgeMessage(Deflect)`.
@@ -36,7 +36,7 @@ Neighbor nudges for every hit are handled independently by `NudgeService` in `Nu
 
 ### Pooling
 
-Balloon views are pooled via `PoolManager` / `BalloonPoolChannel`. A `CompositeDisposable` replaces `AddTo(this)` for reactive subscriptions — cleared on each `Bind()` and `OnDespawned()`. External subscribers (e.g. `BalloonController`'s hit subscription) register via `RegisterDisposeOnDespawn()` so they're cleaned up on pool return. `IBalloonViewBinding` components (e.g. `ToughBalloonType`) receive the same `CompositeDisposable` so their subscriptions are cleared automatically in the same lifecycle.
+Balloon views are pooled via `PoolManager` / `BalloonPoolChannel`. A `CompositeDisposable` replaces `AddTo(this)` for reactive subscriptions — cleared on each `Bind()` and `OnDespawned()`. External subscribers (e.g. `BalloonController`'s transient item-activation subscription) register via `RegisterDisposeOnDespawn()` so they're cleaned up on pool return. `IBalloonViewBinding` components (e.g. `ToughBalloonType`) receive the same `CompositeDisposable` so their subscriptions are cleared automatically in the same lifecycle.
 
 ### Animation phases (turn-based)
 

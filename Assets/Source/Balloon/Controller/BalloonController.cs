@@ -15,10 +15,8 @@ namespace BalloonParty.Balloon.Controller
 {
     internal class BalloonController
     {
-        private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly IPublisher<BalloonDeflectedMessage> _deflectedPublisher;
         private readonly SlotGrid _grid;
-        private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly HitVfxOverride[] _hitVfxOverrides;
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IWriteableBalloonModel _model;
@@ -26,13 +24,13 @@ namespace BalloonParty.Balloon.Controller
         private readonly Action _onReturned;
         private readonly string _poolKey;
         private readonly PoolManager _poolManager;
+        private readonly BalloonControllerRegistry _registry;
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly BalloonView _view;
         private readonly DisturbanceFieldService _disturbanceField;
 
-        private IDisposable _boardClearSubscription;
-        private IDisposable _hitSubscription;
         private IDisposable _itemActivatedSubscription;
+        private bool _popped;
 
         public BalloonController(
             IWriteableBalloonModel model,
@@ -47,9 +45,8 @@ namespace BalloonParty.Balloon.Controller
             _poolKey = poolKey;
             _onReturned = onReturned;
             _hitVfxOverrides = hitVfxOverrides;
-            _hitSubscriber = context.HitSubscriber;
             _itemActivatedSubscriber = context.ItemActivatedSubscriber;
-            _boardClearSubscriber = context.BoardClearSubscriber;
+            _registry = context.Registry;
             _transformCapturedPublisher = context.TransformCapturedPublisher;
             _deflectedPublisher = context.DeflectedPublisher;
             _nudgePublisher = context.NudgePublisher;
@@ -63,24 +60,40 @@ namespace BalloonParty.Balloon.Controller
             _view.SetHitVfxOverrides(_hitVfxOverrides);
             _view.Bind(_model);
 
-            _hitSubscription = _hitSubscriber.Subscribe(OnActorHit);
-            _view.RegisterDisposeOnDespawn(_hitSubscription);
-
-            _boardClearSubscription = _boardClearSubscriber.Subscribe(OnBoardClear);
-            _view.RegisterDisposeOnDespawn(_boardClearSubscription);
+            _registry.Register(_model, this);
         }
 
-        private void OnBoardClear(BoardClearMessage _)
+        // Invoked by BalloonControllerRegistry.Route — the registry resolves the owning
+        // controller by model, so no self-filtering is needed here.
+        internal void HandleHit(ActorHitMessage msg)
         {
-            // Dispose our subscriptions first: returning the view triggers OnDespawned, which
-            // also disposes despawn-registered subs — clearing them here avoids re-entrant
-            // disposal while this very broadcast is still dispatching.
-            _hitSubscription?.Dispose();
-            _hitSubscription = null;
+            if (_popped)
+            {
+                return;
+            }
+
+            switch (msg.Outcome)
+            {
+                case HitOutcome.Pop:
+                    Pop();
+                    break;
+                case HitOutcome.Deflect:
+                    Deflect(msg);
+                    break;
+                case HitOutcome.PassThrough:
+                    _view.PlayHitVfxForOutcome(HitOutcome.PassThrough);
+                    break;
+                case HitOutcome.Absorb:
+                    break;
+            }
+        }
+
+        // Invoked by the registry's single board-clear pass. Popped-but-waiting item balloons
+        // are still registered, so their pending activation subscription is cleaned up here too.
+        internal void HandleBoardClear()
+        {
             _itemActivatedSubscription?.Dispose();
             _itemActivatedSubscription = null;
-            _boardClearSubscription?.Dispose();
-            _boardClearSubscription = null;
 
             var slot = _model.SlotIndex.Value;
             if (ReferenceEquals(_grid.At(slot), _model))
@@ -103,29 +116,6 @@ namespace BalloonParty.Balloon.Controller
                 NudgeType.Deflect));
         }
 
-        private void OnActorHit(ActorHitMessage msg)
-        {
-            if (msg.Actor is not IBalloonModel balloon || !ReferenceEquals(balloon, _model))
-            {
-                return;
-            }
-
-            switch (msg.Outcome)
-            {
-                case HitOutcome.Pop:
-                    Pop();
-                    break;
-                case HitOutcome.Deflect:
-                    Deflect(msg);
-                    break;
-                case HitOutcome.PassThrough:
-                    _view.PlayHitVfxForOutcome(HitOutcome.PassThrough);
-                    break;
-                case HitOutcome.Absorb:
-                    break;
-            }
-        }
-
         private void OnItemActivated(ItemActivatedMessage msg)
         {
             if (msg.Balloon != _model)
@@ -135,14 +125,14 @@ namespace BalloonParty.Balloon.Controller
 
             _itemActivatedSubscription?.Dispose();
             _itemActivatedSubscription = null;
+            _registry.Unregister(_model);
             _onReturned?.Invoke();
             _poolManager.Return(_poolKey, _view);
         }
 
         private void Pop()
         {
-            _hitSubscription?.Dispose();
-            _hitSubscription = null;
+            _popped = true;
 
             var popWorldPos = _view.transform.position;
             _disturbanceField.Stamp(StampSource.BalloonPop, popWorldPos, Vector2.zero);
@@ -152,6 +142,7 @@ namespace BalloonParty.Balloon.Controller
 
             if (_model is not IHasItemSlot itemSlot || itemSlot.Item.Value == ItemType.None)
             {
+                _registry.Unregister(_model);
                 _onReturned?.Invoke();
                 _poolManager.Return(_poolKey, _view);
             }
@@ -166,6 +157,7 @@ namespace BalloonParty.Balloon.Controller
 
                 // Hide immediately — item effect plays world-space; balloon visual
                 // and collider must not persist while we wait for activation to finish.
+                // Stay registered so a board clear during the wait still tears us down.
                 _view.Hide();
 
                 _itemActivatedSubscription = _itemActivatedSubscriber.Subscribe(OnItemActivated);

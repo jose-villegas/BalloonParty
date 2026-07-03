@@ -10,14 +10,13 @@ namespace BalloonParty.Balloon.Controller
 {
     /// <summary>
     ///     The run-lifetime collaborators every <see cref="BalloonController" /> shares (message buses,
-    ///     grid, pool, disturbance field). Bundled into one injected object so the per-balloon
+    ///     registry, grid, pool, disturbance field). Bundled into one injected object so the per-balloon
     ///     constructor takes only its instance state instead of a dozen wiring arguments.
     /// </summary>
     internal class BalloonControllerContext
     {
-        public ISubscriber<ActorHitMessage> HitSubscriber { get; }
         public ISubscriber<ItemActivatedMessage> ItemActivatedSubscriber { get; }
-        public ISubscriber<BoardClearMessage> BoardClearSubscriber { get; }
+        public BalloonControllerRegistry Registry { get; }
         public IPublisher<TransformCapturedMessage> TransformCapturedPublisher { get; }
         public IPublisher<BalloonDeflectedMessage> DeflectedPublisher { get; }
         public IPublisher<NudgeMessage> NudgePublisher { get; }
@@ -27,9 +26,8 @@ namespace BalloonParty.Balloon.Controller
 
         [Inject]
         public BalloonControllerContext(
-            ISubscriber<ActorHitMessage> hitSubscriber,
             ISubscriber<ItemActivatedMessage> itemActivatedSubscriber,
-            ISubscriber<BoardClearMessage> boardClearSubscriber,
+            BalloonControllerRegistry registry,
             IPublisher<TransformCapturedMessage> transformCapturedPublisher,
             IPublisher<BalloonDeflectedMessage> deflectedPublisher,
             IPublisher<NudgeMessage> nudgePublisher,
@@ -37,9 +35,8 @@ namespace BalloonParty.Balloon.Controller
             PoolManager poolManager,
             DisturbanceFieldService disturbanceField)
         {
-            HitSubscriber = hitSubscriber;
             ItemActivatedSubscriber = itemActivatedSubscriber;
-            BoardClearSubscriber = boardClearSubscriber;
+            Registry = registry;
             TransformCapturedPublisher = transformCapturedPublisher;
             DeflectedPublisher = deflectedPublisher;
             NudgePublisher = nudgePublisher;
