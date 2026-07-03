@@ -328,7 +328,14 @@ after, on device where possible**. Items are independent; ordered by expected pa
   stock `Mobile/Particles` shaders — don't count them. **Free win found during
   verification:** the Knot draws a full-size 1×1 sliced quad with `_SpriteScale 0.1` —
   it pays 10 taps/px over a quad 10× its visible size; shrink the quad regardless of
-  the baking work.
+  the baking work. **Approach note (2026-07-03):** a generalized bake-tooling suite
+  (report/definition assets/two-mode baker) was built and rejected as over-engineering
+  — when tackling 5a, bake the handful of textures by hand in the editor (or with a
+  disposable script) instead of building infrastructure. Two facts worth keeping from
+  that attempt: `SpriteShadow` multiplies both sprite and shadow by the renderer tint,
+  so a white-tint bake stays exact under runtime `SpriteRenderer.color` (paint recolors
+  keep working); and `PaintSplashView` drives `_SpriteScale` at runtime, so its
+  material can't bake that param.
 - **5b — Kill the `GrabPass`**
   (`Assets/Shaders/BalloonParty/Balloon/UnbreakableBalloon.shader:88`). Full-screen
   resolve per frame whenever an unbreakable is visible, and **8 of the prefab's 12
@@ -414,6 +421,15 @@ in-editor check and a device profile.
   relying on manual `Unregister`; `ThrowerController.cs:84–87` subscribes to static
   `Navigation.Current` bounded only by `Take(1)` — fine as-is, dangerous if copied
   without the `Take`. `SlotClusterRegistry` transient collections stay deferred.
+- **Hit-routing escalation path (decided, no action):** if profiling ever shows
+  `BalloonControllerRegistry.Route`'s dictionary lookup (it won't at ~80 entities),
+  the upgrade is an opaque int handle on the model backing a flat array + free list +
+  generation counter — array indexing, zero hashing, and still move-invariant.
+  Do **not** switch to slot-indexed routing: balloons change slots constantly
+  (balance, pressure shoves, spawn paths), so a slot-keyed array must be updated on
+  every move — either per-balloon `SlotIndex` subscriptions (reintroducing the fan-out
+  Phase 4 removed) or coupling the balance path to hit routing, with a mid-move hit
+  routing to the wrong balloon as the failure mode. Identity keys can't have that bug.
 
 ---
 
