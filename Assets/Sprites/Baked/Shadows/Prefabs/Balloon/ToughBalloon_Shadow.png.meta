@@ -50,7 +50,7 @@ TextureImporter:
   spriteExtrude: 1
   spriteMeshType: 0
   alignment: 9
-  spritePivot: {x: 0.40951493, y: 0.6057349}
+  spritePivot: {x: 0.4999168, y: 0.4999168}
   spritePixelsToUnits: 200
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
@@ -129,10 +129,10 @@ TextureImporter:
       name: ToughBalloon_Shadow_0
       rect:
         serializedVersion: 2
-        x: 33
-        y: 40
-        width: 181
-        height: 190
+        x: 16
+        y: 4
+        width: 139
+        height: 151
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}

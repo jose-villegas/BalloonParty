@@ -101,6 +101,16 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1529748305594679390, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
+      propertyPath: m_Size.x
+      value: 0.855
+      objectReference: {fileID: 0}
+    - target: {fileID: 1529748305594679390, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: m_Size.y
+      value: 0.855
+      objectReference: {fileID: 0}
+    - target: {fileID: 1529748305594679390, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: f06b64cd8fadf4e5b9c065683d4a1aa6,
@@ -294,26 +304,31 @@ PrefabInstance:
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: _spriteLayerRenderers.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[1]'
       value: 
-      objectReference: {fileID: 1121172538853445364}
+      objectReference: {fileID: 935605061053190623}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[2]'
       value: 
-      objectReference: {fileID: 787277579907675029}
+      objectReference: {fileID: 1121172538853445364}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[3]'
       value: 
-      objectReference: {fileID: 3116006326895247971}
+      objectReference: {fileID: 787277579907675029}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[4]'
+      value: 
+      objectReference: {fileID: 3116006326895247971}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_spriteLayerRenderers.Array.data[5]'
       value: 
       objectReference: {fileID: 418175176944642040}
     - target: {fileID: 8083225976484237515, guid: 85afc73ba92384dafa9d8a43874d2dd6,
@@ -361,14 +376,16 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 3138458729521118798}
-    - targetCorrespondingSourceObject: {fileID: 5923847143892959990, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 300928486610998021}
   m_SourcePrefab: {fileID: 100100000, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
 --- !u!212 &787277579907675029 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 4867988701194507481, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5287904529572357964}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &935605061053190623 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5015188092537337491, guid: 85afc73ba92384dafa9d8a43874d2dd6,
     type: 3}
   m_PrefabInstance: {fileID: 5287904529572357964}
   m_PrefabAsset: {fileID: 0}
@@ -404,26 +421,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.ToughBalloonType
   _renderer: {fileID: 1121172538853445364}
   _crackAnimDuration: 2
---- !u!114 &300928486610998021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1970275016832787898}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 279681f4ec9aa4680a01fe0a6bec0951, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.Rendering.SpriteShadowBaker
-  _shadowColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.75}
-  _shadowOffset: {x: 0.04, y: -0.04}
-  _blurRadius: 0.01
-  _resolutionMultiplier: 2
-  _blurPasses: 3
-  _replaceShadowMaterials: 0
-  _replacementMaterial: {fileID: 0}
-  _shadowChild: {fileID: 0}
 --- !u!212 &3116006326895247971 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 7087590600817567023, guid: 85afc73ba92384dafa9d8a43874d2dd6,

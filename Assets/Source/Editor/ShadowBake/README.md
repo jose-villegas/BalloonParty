@@ -55,3 +55,10 @@ revert). Re-baking reuses the same shadow child and overwrites the same PNG.
   and let the baked shadow child cover it. The keyword is inverted so materials predating
   the toggle keep their shadow.
 - Still excluded outright: anything `PaintSplashView` drives (`_SpriteScale` at runtime).
+- **Rotating prefabs (e.g. Unbreakable's `Shell`):** parent the `BakedShadow` under a
+  non-rotating ancestor (`Body`), never under the rotating node — a child shadow would spin
+  its offset and break light directionality. The frozen-silhouette artifact this leaves is
+  erased by blur: raise the radius until the shape reads rotationally symmetric. The offset
+  is never baked into the texture (it's the child's transform position), so direction and
+  shape are independent by construction. Note the Unbreakable had no runtime shadow at all —
+  its shaders never implemented one — so the bake is an addition there, not a swap.

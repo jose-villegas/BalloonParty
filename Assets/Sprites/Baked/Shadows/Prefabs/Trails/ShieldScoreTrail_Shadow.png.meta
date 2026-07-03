@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: cb78b4f35d2ce48f9aad4e0fc4a46d6f
+guid: b8e16a669f8064deb9ff594375237e24
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8163299875487355558
-    second: shield-fill-blur-complete_0
+      213: 6574942688172212533
+    second: ShieldScoreTrail_Shadow_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -49,9 +49,9 @@ TextureImporter:
   spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 0
-  alignment: 0
+  alignment: 9
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 200
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: shield-fill-blur-complete_0
+      name: ShieldScoreTrail_Shadow_0
       rect:
         serializedVersion: 2
-        x: 20
-        y: 0
-        width: 472
-        height: 512
+        x: 34
+        y: 34
+        width: 272
+        height: 272
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a5de596a30226be80800000000000000
-      internalID: -8163299875487355558
+      spriteID: 5318e031a83ee3b50800000000000000
+      internalID: 6574942688172212533
       vertices: []
       indices: 
       edges: []
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      shield-fill-blur-complete_0: -8163299875487355558
+      ShieldScoreTrail_Shadow_0: 6574942688172212533
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
