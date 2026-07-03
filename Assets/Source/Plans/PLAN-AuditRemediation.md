@@ -328,14 +328,18 @@ after, on device where possible**. Items are independent; ordered by expected pa
   stock `Mobile/Particles` shaders — don't count them. **Free win found during
   verification:** the Knot draws a full-size 1×1 sliced quad with `_SpriteScale 0.1` —
   it pays 10 taps/px over a quad 10× its visible size; shrink the quad regardless of
-  the baking work. **Approach note (2026-07-03):** a generalized bake-tooling suite
-  (report/definition assets/two-mode baker) was built and rejected as over-engineering
-  — when tackling 5a, bake the handful of textures by hand in the editor (or with a
-  disposable script) instead of building infrastructure. Two facts worth keeping from
-  that attempt: `SpriteShadow` multiplies both sprite and shadow by the renderer tint,
-  so a white-tint bake stays exact under runtime `SpriteRenderer.color` (paint recolors
-  keep working); and `PaintSplashView` drives `_SpriteScale` at runtime, so its
-  material can't bake that param.
+  the baking work. **Approach (settled 2026-07-03 after one rejected iteration):** a
+  generalized bake suite (report/definition assets/two-mode baker) was built and
+  rejected as over-engineering; the shipped approach is the **`SpriteShadowBaker`
+  component** (`Shared/Rendering/`, editor logic in `Editor/ShadowBake/`) — drop it on
+  a prefab, tune, press Bake: it renders the union silhouette of the child sprites,
+  blurs it offline (quality knobs — it's bake-time), writes the sprite to
+  `Assets/Sprites/Baked/Shadows/<prefab path>/<prefab>_Shadow.png`, optionally swaps
+  the family materials for a plain one (compensating each renderer by the material's
+  `_SpriteScale`), and wires a `BakedShadow` child. Facts that shaped it:
+  `SpriteShadow` multiplies both sprite and shadow by the renderer tint, so baked
+  shadows tint like shader shadows did; `PaintSplashView` drives `_SpriteScale` at
+  runtime (exclude); ToughBalloon's body animates material properties (exclude).
 - **5b — Kill the `GrabPass`**
   (`Assets/Shaders/BalloonParty/Balloon/UnbreakableBalloon.shader:88`). Full-screen
   resolve per frame whenever an unbreakable is visible, and **8 of the prefab's 12
