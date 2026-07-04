@@ -460,6 +460,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Thrower
       objectReference: {fileID: 0}
+    - target: {fileID: 5911013269540393590, guid: 0ea0a8b48930245ba944bd64372eead0,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6132985126811919246, guid: 0ea0a8b48930245ba944bd64372eead0,
         type: 3}
       propertyPath: m_LocalPosition.x

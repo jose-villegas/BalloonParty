@@ -12,7 +12,6 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords:
-  - _BAKED_NOISE
   - _DENSITY_ON
   - _SHADOW_ON
   m_InvalidKeywords: []
@@ -97,7 +96,7 @@ Material:
     - _Metallic: 0
     - _Mode: 0
     - _NoiseDebug: 0
-    - _NoisePeriod: 8
+    - _NoisePeriod: 6
     - _NoiseScale: 1.2
     - _NormalEpsilon: 0.05
     - _NormalStrength: 2.5
@@ -106,6 +105,7 @@ Material:
     - _ShadowOffsetX: 0.15
     - _ShadowOffsetY: -0.15
     - _ShadowSoftness: 0.1
+    - _SlotBlend: 0.35
     - _SlotRadius: 0.25
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -113,7 +113,7 @@ Material:
     - _SrcBlend: 1
     - _TimeOffset: 0
     - _UVSec: 0
-    - _UseBakedNoise: 1
+    - _UseBakedNoise: 0
     - _ZWrite: 1
     m_Colors:
     - _AmbientColor: {r: 0.34117648, g: 0.627451, b: 0.7176471, a: 1}
