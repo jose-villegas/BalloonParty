@@ -16,6 +16,7 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_cinematics_architecture
 - @subpage plan_audit_remediation
 - @subpage plan_urp_migration
+- @subpage plan_screen_space_light
 - @subpage plan_future_ideas
 
 

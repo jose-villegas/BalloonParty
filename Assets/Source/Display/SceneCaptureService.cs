@@ -90,7 +90,13 @@ namespace BalloonParty.Display
             _captureCamera.orthographic = true;
             _captureCamera.cullingMask = _capturedLayers;
             _captureCamera.clearFlags = _mainCamera.clearFlags;
-            _captureCamera.backgroundColor = _mainCamera.backgroundColor;
+
+            // Background alpha cleared to zero so the capture's alpha channel doubles as
+            // a sprite-coverage mask (ScreenSpaceLightService's occlusion source). Color
+            // consumers (the Unbreakable chrome) sample RGB only — unaffected.
+            var background = _mainCamera.backgroundColor;
+            background.a = 0f;
+            _captureCamera.backgroundColor = background;
 
             // Lower depth renders before the main camera, so the capture is ready when
             // consumers sample it in the same frame.

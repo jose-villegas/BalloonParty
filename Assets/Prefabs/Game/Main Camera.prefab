@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8512367537215613866}
   - component: {fileID: 6166827907043377765}
   - component: {fileID: 9185101207980489252}
+  - component: {fileID: 8597041690689265888}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -153,4 +154,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.SceneCaptureService
   _capturedLayers:
     serializedVersion: 2
-    m_Bits: 24064
+    m_Bits: 24192
+--- !u!114 &8597041690689265888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4370083120234301038}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 42dfabfd81909428ba9048fd10913fa6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.ScreenSpaceLightService
+  _smearShader: {fileID: 4800000, guid: 8a14fe89476c045b294beadef2be1e12, type: 3}
+  _overlayShader: {fileID: 4800000, guid: 93bf1f4f895d74648adb05d6b926be02, type: 3}
+  _lightDirection: {x: 1, y: -1}
+  _smearDistance: 1
+  _tapDecay: 0.35
+  _tapStart: 0.75
+  _shadowStrength: 0.425
+  _shadowTint: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  _bounceStrength: 0.25
+  _sortingLayerName: Sky
+  _sortingOrder: 32000

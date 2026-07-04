@@ -407,7 +407,10 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
 
 LIFECYCLE_ORDER = {
     "Awake": 0, "OnEnable": 1, "Start": 2, "Update": 3, "FixedUpdate": 4,
-    "LateUpdate": 5, "OnDisable": 6, "OnDestroy": 7,
+    "LateUpdate": 5,
+    "OnPreCull": 6, "OnPreRender": 7, "OnRenderObject": 8, "OnPostRender": 9,
+    "OnRenderImage": 10,
+    "OnDisable": 11, "OnDestroy": 12,
 }
 # Excluded on purpose:
 #   "Reset" — a public Reset() is far more often a custom method than Unity's editor callback.
