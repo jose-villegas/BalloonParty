@@ -100,7 +100,7 @@ deferred until a second camera effect exists).
 
 | Piece | Type | Problem |
 |---|---|---|
-| `Shared/GameState/Cinematic.cs` | static reactive state + `ICinematicAware` list | fine — keep |
+| `Shared/GameState/Cinematic.cs` | static reactive state (the `ICinematicAware` listener list was deleted 2026-07-04 — zero implementers) | fine — keep |
 | `Shared/GameState/CinematicState.cs` | enum `None/LevelUpPanIn/LevelUpRestore/HeartDrain` | conflates *identity* with *behaviour* — behaviour lives elsewhere as flags |
 | `Shared/GameState/ICinematicState.cs` + `CinematicStateService` | seam: `IsPlaying`, `BlocksLoss`, `BlocksShake` | one boolean property **per trait**, each a central pattern-match; scales as traits × states |
 | `Game/Cinematics/CinematicDirector.cs` | plain C# ticker | `BeginCinematic`/`EndCinematic` pairing is manual; `BeginCinematic` while active silently stomps; both producers carry `OnDestroy` repair code |
@@ -348,6 +348,7 @@ the service the only legal writer). Each phase updates `Game/Cinematics/README.m
    see the nuance note in Part B); the Part-C runner standardizes ease-from-current.
 2. **`CinematicEndGate`** (Phase 1): keep keyed by state (works today) or re-key by trait
    (`GatesUI`)? Leaning: keep by state until a second gated UI exists.
-3. **Static `Cinematic` vs DI** (any phase): the static reactive state + `ICinematicAware`
-   stays (it predates this plan and works); traits table lives beside it. Revisit only if
-   domain-reload-off enters the picture.
+3. **Static `Cinematic` vs DI** (any phase): the static reactive state stays (it predates
+   this plan and works); traits table lives beside it. Revisit only if domain-reload-off
+   enters the picture. (The `ICinematicAware` listener API was deleted 2026-07-04 —
+   nothing ever implemented it; consumers observe `Cinematic.Current`.)

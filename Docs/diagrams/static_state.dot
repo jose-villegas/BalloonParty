@@ -30,7 +30,6 @@ digraph StaticState {
         CinDrain [label="HeartDrain", fillcolor="#3d2a1a", fontcolor="#f78166"];
         CinDrainRestore [label="HeartDrainRestore", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
         CinAPI [label="Begin(state) / End()\nIsPlaying: bool", fillcolor="#2a2a2a", fontcolor="#c9d1d9", shape=hexagon];
-        CinAware [label="ICinematicAware\nRegister / Unregister\nOnCinematicEnd()", fillcolor="#1a3a1a", fontcolor="#3fb950", shape=ellipse];
 
         CinNone -> CinPanIn [label="Begin", color="#f78166", fontcolor="#8b949e"];
         CinPanIn -> CinNone [label="End", color="#30363d", fontcolor="#8b949e"];

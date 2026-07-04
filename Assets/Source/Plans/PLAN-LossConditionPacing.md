@@ -522,8 +522,8 @@ the **producer → director → scene** system in full; this section is the loss
 
 **The system in one breath:** a producer MonoBehaviour (e.g. `LevelUpTrailEffect`) builds a
 `CinematicScene` (value object of `OnBegin/OnTick/OnLateTick/OnEnd` actions) and hands it to the injected
-`CinematicDirector`. `director.BeginCinematic(state)` flips the static `Cinematic.Begin(state)` (which
-notifies all `ICinematicAware` services) and `director.PlayScene(scene)` runs the callbacks; the director
+`CinematicDirector`. `director.BeginCinematic(state)` flips the static `Cinematic.Begin(state)` (observable via
+`Cinematic.Current`) and `director.PlayScene(scene)` runs the callbacks; the director
 ticks the active scene each frame (`ITickable`/`ILateTickable`). `director.EndCinematic()` → `Cinematic.End()`.
 A `CinematicEndGate(state)` registered as `IReadyGate` lets UI/flow wait for the cinematic to finish.
 `CinematicState` (in `Shared/GameState/`) is the enum — **add new values there** (`None/LevelUpPanIn/LevelUpRestore` today).

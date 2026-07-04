@@ -228,7 +228,7 @@ Navigation.TransitionTo(NavigationState.LevelUp);
 
 ## Cinematic State
 
-A static `Cinematic` class (in `Shared/GameState/`) tracks whether a cinematic sequence is playing. Mirrors the `Navigation` pattern — static reactive property, no DI required. Services that need to pause/resume work during cinematics implement `ICinematicAware` and register with `Cinematic`.
+A static `Cinematic` class (in `Shared/GameState/`) tracks whether a cinematic sequence is playing. Mirrors the `Navigation` pattern — static reactive property, no DI required. Services that need to react to cinematic state changes query `Cinematic.IsPlaying` or subscribe to `Cinematic.Current`.
 
 ```csharp
 using BalloonParty.Shared.GameState;
@@ -243,23 +243,6 @@ Cinematic.Current.Where(s => s == CinematicState.None).Subscribe(...);
 Cinematic.Begin(CinematicState.LevelUpPanIn);
 Cinematic.End();
 ```
-
-### ICinematicAware
-
-Services that should react to cinematic state changes implement `ICinematicAware`:
-
-```csharp
-internal class MyService : ICinematicAware
-{
-    public void Start() => Cinematic.Register(this);
-    public void Dispose() => Cinematic.Unregister(this);
-
-    public void OnCinematicBegin(CinematicState state) { /* pause work */ }
-    public void OnCinematicEnd() { /* resume work */ }
-}
-```
-
-`Cinematic.Begin` / `End` call all registered listeners synchronously, so the cinematic owner can immediately follow up (e.g., resume a specific trail).
 
 ### States
 
