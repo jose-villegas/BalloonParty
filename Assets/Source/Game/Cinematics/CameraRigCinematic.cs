@@ -117,7 +117,10 @@ namespace BalloonParty.Game.Cinematics
                 _director.EndCinematic();
             }
 
-            _rig.EnableOrtho(true);
+            // Snap camera and framing back to base (also re-enables the ortho controller) — an abort
+            // can happen mid-flight in gameplay, not just on teardown.
+            _rig.KillTween();
+            _rig.Restore();
             _timeScale.Release(TimeScaleSource.Cinematic);
         }
 

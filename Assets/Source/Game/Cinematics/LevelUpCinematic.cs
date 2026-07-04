@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Health;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
@@ -36,6 +37,7 @@ namespace BalloonParty.Game.Cinematics
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly IScoreQuery _scoreQuery;
+        private readonly ILossForecast _lossForecast;
         private readonly ScoreTrailService _scoreTrailService;
         private readonly PauseService _pauseService;
         private readonly CancellationTokenSource _cts = new();
@@ -63,6 +65,7 @@ namespace BalloonParty.Game.Cinematics
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
             IScoreQuery scoreQuery,
+            ILossForecast lossForecast,
             ScoreTrailService scoreTrailService,
             PauseService pauseService)
         {
@@ -75,6 +78,7 @@ namespace BalloonParty.Game.Cinematics
             _dismissedSubscriber = dismissedSubscriber;
             _trailArrivedSubscriber = trailArrivedSubscriber;
             _scoreQuery = scoreQuery;
+            _lossForecast = lossForecast;
             _scoreTrailService = scoreTrailService;
             _pauseService = pauseService;
         }
@@ -113,6 +117,12 @@ namespace BalloonParty.Game.Cinematics
         private void OnScorePoint(ScorePointMessage msg)
         {
             if (_sessionActive || Cinematic.IsPlaying)
+            {
+                return;
+            }
+
+            // No level-up show on a run that is over or already certain to be — the loss wins.
+            if (Navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent)
             {
                 return;
             }
@@ -157,9 +167,13 @@ namespace BalloonParty.Game.Cinematics
             _lastTrailPosition = _trailOrigin;
             _trailTargetWorld = _scoreTrailService.GetTarget(_tippingTrailId.Color).Center;
 
-            if (!_cinematic.TryBegin())
+            // Re-check after the async trail wait: the loss may have committed (or become certain)
+            // in the frames between the tipping pop and the trail registering.
+            if (Navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent
+                || !_cinematic.TryBegin())
             {
-                // Another cinematic won the race — let this level-up resolve without the show.
+                // The run ended, its loss is certain, or another cinematic won the race — let this
+                // level-up resolve without the show.
                 _sessionActive = false;
                 return;
             }
@@ -209,6 +223,15 @@ namespace BalloonParty.Game.Cinematics
         // makes the runner skip the camera follow for the tick, as before.
         private void PanInTick(float dt, float curveValue)
         {
+            // The loss can become certain mid-pan-in (the same turn's spawn keeps rejecting while the
+            // projectile is frozen). The loss wins: drop the show so the heart-drain and game-over
+            // present unobstructed.
+            if (_lossForecast.LossImminent)
+            {
+                AbortSession();
+                return;
+            }
+
             _trailElapsed += dt * curveValue;
             AdvanceTrackedTrail();
         }
@@ -240,6 +263,23 @@ namespace BalloonParty.Game.Cinematics
             {
                 EndPanIn();
             }
+        }
+
+        // Drops the whole level-up show (pan-in or the popup limbo between phases): trails complete,
+        // gameplay resumes, camera and time snap back to base. Used when the loss overtakes the ceremony.
+        private void AbortSession()
+        {
+            DisposeSessionSubscription();
+            _trackedFlight = null;
+            _scoreTrailService.Flights.CompleteAll();
+
+            if (_pauseService.IsPaused(PauseSource.Cinematic))
+            {
+                _pauseService.Resume(PauseSource.Cinematic);
+            }
+
+            _cinematic.Abort();
+            _sessionActive = false;
         }
 
         private void EndPanIn()

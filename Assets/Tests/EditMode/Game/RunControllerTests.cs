@@ -89,6 +89,58 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void EndRun_DeferredDuringLevelUp_FiresWhenPlayResumes()
+        {
+            // The 0-HP request is one-shot; a loss landing during the level-up popup/restore must be
+            // deferred and commit the moment navigation returns to Game — never dropped (zombie run).
+            var controller = CreateController();
+            controller.Start();
+            _navState.Value = NavigationState.LevelUp;
+
+            controller.EndRun();
+            _runMeta.DidNotReceive().RecordRun(Arg.Any<int>(), Arg.Any<int>());
+
+            _navState.Value = NavigationState.Game;
+
+            _runMeta.Received(1).RecordRun(4, 37);
+            _navigation.Received(1).TransitionTo(NavigationState.GameOver);
+        }
+
+        [Test]
+        public void EndRun_DeferredByBlockingCinematic_FiresAfterItEnds()
+        {
+            var controller = CreateController();
+            controller.Start();
+            _cinematic.Has(CinematicTraits.BlocksLoss).Returns(true);
+
+            controller.EndRun();
+            _runMeta.DidNotReceive().RecordRun(Arg.Any<int>(), Arg.Any<int>());
+
+            // The reachable window resolves through the level-up's hand-back: nav leaves Game for the
+            // popup and the retry fires on the LevelUp → Game transition, after the trait cleared.
+            _navState.Value = NavigationState.LevelUp;
+            _cinematic.Has(CinematicTraits.BlocksLoss).Returns(false);
+            _navState.Value = NavigationState.Game;
+
+            _runMeta.Received(1).RecordRun(4, 37);
+            _navigation.Received(1).TransitionTo(NavigationState.GameOver);
+        }
+
+        [Test]
+        public void RestartRun_ClearsADeferredLoss()
+        {
+            var controller = CreateController();
+            controller.Start();
+            _navState.Value = NavigationState.LevelUp;
+            controller.EndRun();
+
+            controller.RestartRun();
+            _navState.Value = NavigationState.Game;
+
+            _runMeta.DidNotReceive().RecordRun(Arg.Any<int>(), Arg.Any<int>());
+        }
+
+        [Test]
         public void EndRun_WhenNotInGame_DoesNothing()
         {
             _navState.Value = NavigationState.LevelUp;

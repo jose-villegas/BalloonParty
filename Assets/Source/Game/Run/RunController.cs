@@ -4,6 +4,7 @@ using System.Linq;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
+using UniRx;
 using VContainer.Unity;
 
 namespace BalloonParty.Game.Run
@@ -33,6 +34,8 @@ namespace BalloonParty.Game.Run
         private readonly IRunScore _score;
 
         private IDisposable _subscription;
+        private IDisposable _navSubscription;
+        private bool _lossPending;
         private int _generation = 1;
 
         public RunController(
@@ -58,16 +61,26 @@ namespace BalloonParty.Game.Run
         public void Start()
         {
             _subscription = _endRunSubscriber.Subscribe(_ => EndRun());
+            _navSubscription = _navigation.Current.Subscribe(OnNavigationChanged);
         }
 
         public void Dispose()
         {
             _subscription?.Dispose();
+            _navSubscription?.Dispose();
         }
 
         public void EndRun()
         {
-            if (_cinematic.Has(CinematicTraits.BlocksLoss) || _navigation.Current.Value != NavigationState.Game)
+            // A loss arriving mid-level-up is deferred, never dropped — the request is one-shot (the HP
+            // pool publishes exactly once at 0), so a silent return here would leave a zombie run.
+            if (_cinematic.Has(CinematicTraits.BlocksLoss) || _navigation.Current.Value == NavigationState.LevelUp)
+            {
+                _lossPending = true;
+                return;
+            }
+
+            if (_navigation.Current.Value != NavigationState.Game)
             {
                 return;
             }
@@ -82,6 +95,7 @@ namespace BalloonParty.Game.Run
 
         public void RestartRun()
         {
+            _lossPending = false;
             _generation++;
 
             foreach (var resettable in _resettables)
@@ -94,6 +108,16 @@ namespace BalloonParty.Game.Run
             _resetPublisher.Publish(default);
 
             _navigation.TransitionTo(NavigationState.Game);
+        }
+
+        // Fires a loss that was deferred by the level-up gates the moment play resumes.
+        private void OnNavigationChanged(NavigationState state)
+        {
+            if (state == NavigationState.Game && _lossPending)
+            {
+                _lossPending = false;
+                EndRun();
+            }
         }
     }
 }

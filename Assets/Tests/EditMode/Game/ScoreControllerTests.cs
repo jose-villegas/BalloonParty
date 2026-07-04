@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Health;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
@@ -12,6 +13,7 @@ using BalloonParty.Slots.Actor;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
+using UniRx;
 using UnityEngine;
 
 namespace BalloonParty.Tests.Game
@@ -28,6 +30,8 @@ namespace BalloonParty.Tests.Game
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private ScoreController _controller;
         private INavigation _navigation;
+        private ReactiveProperty<NavigationState> _navState;
+        private ILossForecast _lossForecast;
         private ColorStreakTracker _streakTracker;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
 
@@ -45,6 +49,11 @@ namespace BalloonParty.Tests.Game
             _palette.ColorNames.Returns(new[] { Red, Blue });
 
             _navigation = Substitute.For<INavigation>();
+            _navState = new ReactiveProperty<NavigationState>(NavigationState.Game);
+            _navigation.Current.Returns(_navState);
+
+            _lossForecast = Substitute.For<ILossForecast>();
+            _lossForecast.LossImminent.Returns(false);
 
             _controller = BuildController();
             _controller.Start();
@@ -91,6 +100,7 @@ namespace BalloonParty.Tests.Game
                 _config,
                 _palette,
                 _navigation,
+                _lossForecast,
                 _streakTracker);
         }
 
@@ -150,6 +160,36 @@ namespace BalloonParty.Tests.Game
                 Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
             Assert.AreEqual(2, _controller.Level.Value);
             _navigation.Received(1).TransitionTo(NavigationState.LevelUp);
+        }
+
+        [Test]
+        public void CheckLevelUp_WhenLossImminent_DoesNotLevelUp()
+        {
+            // No level-up on a doomed run: queued overflow charges already cover the remaining HP.
+            _config.PointsRequiredForLevel(2).Returns(1);
+            _lossForecast.LossImminent.Returns(true);
+
+            FireTrailArrived(Red, 1);
+            FireTrailArrived(Blue, 1);
+
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
+            _navigation.DidNotReceive().TransitionTo(NavigationState.LevelUp);
+            Assert.AreEqual(1, _controller.Level.Value);
+        }
+
+        [Test]
+        public void CheckLevelUp_WhenNotInGame_DoesNotLevelUp()
+        {
+            // A trail arriving post-mortem must not yank navigation out of GameOver.
+            _config.PointsRequiredForLevel(2).Returns(1);
+            _navState.Value = NavigationState.GameOver;
+
+            FireTrailArrived(Red, 1);
+            FireTrailArrived(Blue, 1);
+
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
+            _navigation.DidNotReceive().TransitionTo(NavigationState.LevelUp);
+            Assert.AreEqual(1, _controller.Level.Value);
         }
 
         [Test]

@@ -56,6 +56,14 @@ full architecture pass — see `PLAN-CinematicsArchitecture.md` (settings SO, `C
 runner, `TimeScaleService`, traits) — which also makes the deferred **loss cinematic** cheap:
 two states + two settings entries + a small producer over the runner.
 
+**Loss-priority rule (decided 2026-07-02):** *no level-up after a game loss* — when a level-up and
+a loss collide, the loss wins. `ILossForecast.LossImminent` (Game/Health: queued overflow charges ≥
+remaining HP, true at reject-queue time — the earliest the loss is a certainty) gates the ceremony:
+`ScoreController.CheckLevelUp` skips it entirely, `LevelUpCinematic` refuses to start and aborts
+mid-pan-in. The loss commit itself keeps its late timing (0-HP at the Nth heart launch) so the
+heart-drain presentation still plays. `RunController` defers (never drops) a loss suppressed by the
+level-up window, retrying on the LevelUp → Game transition — the 0-HP request is one-shot.
+
 **Next steps (pick up here):**
 1. **Phase 3** — level-range difficulty (`LevelRangeConfiguration` + `RangedValue` +
    `LevelDifficultyResolver`/`IActiveLevelParameters`), then allowed-colors (Phase 4). Spec-only

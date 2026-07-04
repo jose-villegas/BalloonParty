@@ -45,3 +45,7 @@ MonoBehaviour before its own `Awake` has resolved the TMP component. HP resets t
 `GameLifetimeScope`: `RegisterEntryPoint<PlayerHealthController>().AsSelf().As<IRunResettable>()`.
 The reject feedback (camera shake, pop VFX) lives in `Display/CameraShakeService` and the spawner;
 this controller owns only the HP state and the loss trigger.
+
+## Loss forecast
+
+`IPendingHealthCharges` (implemented by `RejectedBalloonEffect`: queued, unlaunched overflow balloons — each will unconditionally cost one HP at its heart's launch) + `ILossForecast`/`LossForecast` (`PendingCharges >= Current`): the loss is knowable at reject-queue time, seconds before the Nth heart launch commits it. The level-up ceremony gates on this (no level-up after a lost run); the loss commit keeps its late timing so the heart-drain presentation plays.

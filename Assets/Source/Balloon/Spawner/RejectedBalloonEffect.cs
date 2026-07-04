@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Health;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
@@ -28,7 +29,7 @@ namespace BalloonParty.Balloon.Spawner
     ///     (<see cref="TryGetLivePosition"/>), so they still land on it as it compacts. Transients are
     ///     pooled <see cref="BalloonView"/>s with no grid slot, so <see cref="ResetRun"/> returns them itself.
     /// </summary>
-    internal sealed class RejectedBalloonEffect : ITickable, IRunResettable
+    internal sealed class RejectedBalloonEffect : ITickable, IRunResettable, IPendingHealthCharges
     {
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly IOverflowSettings _settings;
@@ -51,6 +52,29 @@ namespace BalloonParty.Balloon.Spawner
         // True while the overflow pile is resolving (the thrower-lock is held): balloons still pending.
         // The heart-drain cinematic uses this + an empty trail set to know the drain has finished.
         internal bool IsOverflowActive => _overflowPaused;
+
+        // Every queued balloon will unconditionally cost one HP when its heart launches — the loss
+        // forecast reads this to know a loss is certain at reject-queue time, not at the Nth launch.
+        public int PendingCharges
+        {
+            get
+            {
+                var pending = 0;
+                foreach (var column in _columns)
+                {
+                    var queue = column.Value;
+                    for (var i = 0; i < queue.Count; i++)
+                    {
+                        if (!queue[i].Launched)
+                        {
+                            pending++;
+                        }
+                    }
+                }
+
+                return pending;
+            }
+        }
 
         [Inject]
         internal RejectedBalloonEffect(

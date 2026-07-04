@@ -138,7 +138,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BushViewController>().AsSelf();
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
-            builder.RegisterEntryPoint<RejectedBalloonEffect>().AsSelf().As<IRunResettable>();
+            builder.RegisterEntryPoint<RejectedBalloonEffect>().AsSelf().As<IRunResettable>().As<IPendingHealthCharges>();
             builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf();
             builder.Register<BalloonControllerContext>(Lifetime.Singleton);
             builder.Register<BalloonPlacementResolver>(Lifetime.Singleton);
@@ -149,6 +149,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<RunController>().AsSelf();
             builder.Register<BoardClearController>(Lifetime.Singleton).As<IRunResettable>();
             builder.RegisterEntryPoint<PlayerHealthController>().AsSelf().As<IRunResettable>().As<IPlayerHealth>();
+            builder.Register<ILossForecast, LossForecast>(Lifetime.Singleton);
             builder.RegisterEntryPoint<SpaceDanger>().AsSelf().As<IDangerLevel>();
             builder.Register<HeartTrailTracker>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();

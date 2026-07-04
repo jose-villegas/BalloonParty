@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Run;
+using BalloonParty.Game.Health;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -24,6 +25,7 @@ namespace BalloonParty.Game.Score
         private readonly Dictionary<string, int> _projectedProgress = new();
         private readonly IPublisher<ScorePointMessage> _scoredPublisher;
         private readonly INavigation _navigation;
+        private readonly ILossForecast _lossForecast;
         private readonly ColorStreakTracker _streakTracker;
         private readonly ReactiveProperty<int> _totalScore = new(0);
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
@@ -43,6 +45,7 @@ namespace BalloonParty.Game.Score
             IGameConfiguration config,
             IGamePalette palette,
             INavigation navigation,
+            ILossForecast lossForecast,
             ColorStreakTracker streakTracker)
         {
             _trailArrivedSubscriber = trailArrivedSubscriber;
@@ -51,6 +54,7 @@ namespace BalloonParty.Game.Score
             _config = config;
             _palette = palette;
             _navigation = navigation;
+            _lossForecast = lossForecast;
             _streakTracker = streakTracker;
         }
 
@@ -130,6 +134,14 @@ namespace BalloonParty.Game.Score
 
         private void CheckLevelUp()
         {
+            // No level-up on a lost run: the ceremony is suppressed once the loss is committed
+            // (GameOver) or already certain (queued overflow charges cover the remaining HP) — a trail
+            // arriving post-mortem must not yank navigation out of GameOver or show the popup.
+            if (_navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent)
+            {
+                return;
+            }
+
             var required = _config.PointsRequiredForLevel(_level.Value + 1);
             if (!AllColorsConfirmed(required))
             {
