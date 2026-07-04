@@ -1,8 +1,9 @@
 # Diagrams
 
 Doxygen `@page` documentation describing the project's architecture at a system
-level. Each `arch_*.md` is a standalone page that embeds an SVG (`@image html`)
-and explains, in prose, what the diagram shows and which contracts it enforces.
+level. Each `arch_*.md` is a standalone page that embeds a diagram — an authored
+SVG (`@image html`) or an inline `@dot` graph — and explains, in prose, what the
+diagram shows and which contracts it enforces.
 
 These pages are the conceptual companion to the per-folder `README.md` files: a
 folder README explains one feature in isolation, while a diagram here shows how

@@ -14,7 +14,7 @@ MonoBehaviour with a `LineRenderer`. Call `SetTrace(points)` to update or `Clear
 
 ### Integration
 
-`ThrowerController` owns a `PredictionTraceCalculator` and finds a `PredictionTraceView` via `GetComponentInChildren`. During `Update`, while the player holds the mouse button and the projectile hasn't been fired, it calculates the trace and pushes it to the view. On fire or release, the line is cleared.
+`ThrowerController` owns a `PredictionTraceCalculator`; `ThrowerView` finds the `PredictionTraceView` via `GetComponentInChildren` in `Awake` and exposes `SetTrace`/`ClearTrace`. Each `Tick`, while the player is aiming and the projectile hasn't been fired, the controller calculates the trace and pushes it through the view. On fire or release, the line is cleared.
 
 ## Unity Setup
 

@@ -8,8 +8,10 @@ Shared screen-space disturbance field that any game system can stamp into. Puff 
 
 | File | What it does |
 |---|---|
-| `DisturbanceFieldService` | Plain C# `IStartable` + `ITickable` + `IDisposable` — drives the simulation. Runs one diffusion blit per tick (spatial blur + reform toward equilibrium + wind advection + pressure fill + displacement decay), sets per-pass shader uniforms, and batches pending stamps (up to 32 per blit pass) via `DisturbanceStampBatched.shader`. Exposes `Stamp()` for instant and lerp stamps. Pushes `_FieldBoundsMin`, `_FieldBoundsSize` as global shader properties so all consumers (cloud views, future effects) read the field without per-instance setup. Delegates all GPU resource ownership to `DisturbanceFieldResources`. Registered as a singleton in `GameLifetimeScope` |
+| `DisturbanceFieldService` | Plain C# `IStartable` + `ITickable` + `IDisposable` — drives the simulation. Runs one diffusion blit per tick (spatial blur + reform toward equilibrium + wind advection + pressure fill + displacement decay), sets per-pass shader uniforms, and batches pending stamps (up to 32 per blit pass) via `DisturbanceStampBatched.shader`. Exposes two `Stamp()` overloads — `Stamp(StampSource, position, direction)` resolves the source's configured `StampProfile` (radius/strength/duration) internally, and the explicit-parameter overload underneath handles instant and lerp stamps. Every stamp also `Report()`s to `ImpactEventBus` (in `Shared/`) for same-frame visual consumers like bush rustle. Pushes `_FieldBoundsMin`, `_FieldBoundsSize` as global shader properties so all consumers (cloud views, future effects) read the field without per-instance setup. Delegates all GPU resource ownership to `DisturbanceFieldResources`. Registered as a singleton in `GameLifetimeScope` |
 | `DisturbanceFieldResources` | Plain C# — owns the GPU resources: the camera-sized `ARGBHalf` RT pair (density in R, displacement XY in GB) that ping-pongs as read/write, the diffusion + batched-stamp materials, and the `_STAMPS_ON` keyword. `BlitAndSwap()` blits read→write through a material, flips the buffers, and republishes the read texture as the global `_DisturbanceTex`. The service owns the shader-param IDs and per-pass uniforms; this just holds, blits, and flips. |
+| `DisturbanceFieldCoordinates` | Plain C# — world ↔ field-UV geometry: derives the field's world-space bounds and texel dimensions from the camera framing (`GetOrthogonalSize()` × `TexelsPerUnit`), converts world positions (`WorldToUV`) and radii (`WorldRadiusToUV`) into the normalised UV space the stamp shaders expect |
+| `LerpStampScheduler` | Plain C# — ramps `duration > 0` stamps into a sequence of instant sub-stamps (see "Lerp stamp lifecycle" below). Capped at `MaxLerpStamps`; the oldest ramp is evicted when full |
 
 ## Architecture
 
@@ -35,7 +37,7 @@ digraph DisturbanceField {
         style=filled;
         fillcolor="#dce8f5";
         ProjView  [label="ProjectileView"];
-        BallSpawn [label="BalloonSpawner"];
+        BallSpawn [label="BalloonFactory"];
         BallBal   [label="BalloonBalancer"];
         BallCtrl  [label="BalloonController"];
         BombH     [label="BombItemHandler"];
@@ -176,7 +178,8 @@ Resolution is derived from `GameDisplayConfiguration.GetOrthogonalSize()` × `Di
 
 ### Stamp API
 
-- **`Stamp(worldPos, radius, strength, direction, duration = 0)`** — queues a disturbance at `worldPos`. World coordinates are converted to field UV space internally. When `duration` is zero (default), the stamp is applied instantly — stamps accumulate in a pending list and are flushed in batches each frame. When `duration` is greater than zero, queues a lerp stamp that ramps from 0 to full strength over that many seconds, spreading the effect smoothly across multiple frames. Useful for pop bursts, bomb detonations, and paint splashes.
+- **`Stamp(source, worldPos, direction)`** — the overload most callers use: resolves the `StampProfile` configured for the `StampSource` (radius, strength, duration) and forwards to the explicit overload. `GetProfile(source)` is also exposed for callers that need to scale the profile themselves (e.g. `DisturbanceTweenExtensions`).
+- **`Stamp(worldPos, radius, strength, direction, duration = 0)`** — queues a disturbance at `worldPos`. World coordinates are converted to field UV space internally. When `duration` is zero (default), the stamp is applied instantly — stamps accumulate in a pending list and are flushed in batches each frame. When `duration` is greater than zero, queues a lerp stamp that ramps from 0 to full strength over that many seconds, spreading the effect smoothly across multiple frames. Useful for pop bursts, bomb detonations, and paint splashes. Every call also reports the impact to `ImpactEventBus`.
 
 ### Diffusion tick
 
@@ -190,7 +193,7 @@ Wind direction is set dynamically from stamp directions (opposite to the disturb
 
 ### Lerp stamp lifecycle
 
-When `Stamp()` is called with `duration > 0`, the stamp is queued on `LerpStampScheduler` (`_lerpScheduler`) instead of flushed immediately. Each tick the scheduler advances all active lerp stamps by `dt`, computes the normalized progress `t ∈ [0,1]`, and emits an instant `Stamp()` with `strength * delta` (only the new progress delta since last tick). The stamp radius also expands from `0.3×` to `1.0×` of the configured radius as `t` increases — this creates an expanding shockwave shape rather than a flat-radius pop. When `t >= 1`, the stamp is removed. The pool is capped at `MaxLerpStamps` to bound memory; oldest stamps are evicted when the cap is exceeded.
+When `Stamp()` is called with `duration > 0`, the stamp is queued on `LerpStampScheduler` (`_lerpScheduler`) instead of flushed immediately. Each diffusion tick the scheduler advances all active lerp stamps by the elapsed time, computes the normalized progress `t ∈ [0,1]`, and emits an instant `Stamp()` with `strength * delta` (only the new progress delta since last tick). The stamp radius also expands from `0.3×` to `1.0×` of the configured radius as `t` increases — this creates an expanding shockwave shape rather than a flat-radius pop. When `t >= 1`, the stamp is removed. The pool is capped at `MaxLerpStamps` to bound memory; oldest stamps are evicted when the cap is exceeded.
 
 ### Combined pass
 
@@ -213,22 +216,23 @@ On frames where stamps arrive but diffusion is not due, all instant stamps are f
 
 ### World → UV conversion
 
-`WorldToFieldUV` maps world-space positions to UV coordinates using the field bounds rect computed at `Start()` from `GameDisplayConfiguration.GetOrthogonalSize()`. The field covers the full screen-space orthographic viewport. `WorldRadiusToFieldUV` normalises radius against the average of bounds width and height so a world-unit radius is consistent regardless of aspect ratio.
+`DisturbanceFieldCoordinates.WorldToUV` maps world-space positions to UV coordinates using the field bounds rect computed at `Start()` from `GameDisplayConfiguration.GetOrthogonalSize()`. The field covers the full screen-space orthographic viewport. `WorldRadiusToUV` normalises radius against the average of bounds width and height so a world-unit radius is consistent regardless of aspect ratio.
 
 ## Consumers
 
 | System | When it stamps | `StampSource` | Notes |
 |---|---|---|---|
 | `ProjectileView` | Each `FixedUpdate` in `MoveAndBounce()` | `Projectile` | Continuous wake through Puff clouds; `Duration` from config typically 0 for a sharp per-frame stamp |
-| `BalloonSpawner` | Each frame during spawn path DOTween `OnUpdate` | `BalloonPath` | Spawn animations disturb clouds they pass through |
-| `BalloonBalancer` | Each frame during balance path DOTween `OnUpdate` | `BalloonPath` | Balance animations disturb clouds |
+| `BalloonFactory` | Each frame during spawn path DOTween `OnUpdate` (via `StampDisturbanceAlongPath`) | `BalloonPath` | Spawn animations disturb clouds they pass through |
+| `BalloonBalancer` | Each frame during balance path DOTween `OnUpdate` (via `StampDisturbanceAlongPath`) | `BalloonPath` | Balance animations disturb clouds |
 | `BalloonController` | On balloon pop | `BalloonPop` | Pop burst shockwave; `Duration > 0` creates an expanding shockwave shape |
+| `RejectedBalloonEffect` | When an overflow balloon pops | `BalloonPop` | Same pop-burst profile |
 | `BombItemHandler` | On detonation | `Bomb` | Large-radius burst; `Duration > 0` for smooth shockwave spread |
 | `LaserItemHandler` | Along each beam segment | `Laser` | Linear disturbance along beams |
 | `PaintItemHandler` | On neighbor hit and splash landing | `Paint` | Splash disturbances |
-| `DisturbanceStampCheat` | Mouse drag (debug only) | — | Direct `Stamp()` call for testing |
+| `DisturbanceStampCheat` | Mouse drag (debug only) | — | Direct explicit-parameter `Stamp()` call for testing |
 
-All callers pass `stamp.Duration` directly from their `StampProfile` via `DisturbanceFieldSettings.GetProfile(StampSource)`. Whether a given stamp becomes a lerp stamp or an instant stamp is purely a config decision — set `Duration > 0` in the SO to get an expanding shockwave, leave it at 0 for a sharp single-frame stamp.
+Callers use the `Stamp(StampSource, …)` overload, which resolves the source's `StampProfile` (radius, strength, duration) inside the service; the tween extension scales the profile by the moving transform's size. Whether a given stamp becomes a lerp stamp or an instant stamp is purely a config decision — set `Duration > 0` in the SO to get an expanding shockwave, leave it at 0 for a sharp single-frame stamp.
 
 ## Configuration
 

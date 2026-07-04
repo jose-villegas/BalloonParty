@@ -11,8 +11,9 @@ contacts a balloon to the moment the grid is settled and ready for the next shot
 
 **Phase 1 — Hit**
 The projectile flies freely, bouncing off walls. On each balloon contact `ProjectileView`
-calls `EvaluateHit` (state-mutating), embeds the outcome in `ActorHitMessage`, and routes
-it through `IHitDispatcher` (`Game/HitPipeline`). The pipeline runs the order-dependent
+hands the collision to the plain-C# `ProjectileHitResolver`, which calls `EvaluateHit`
+(state-mutating), embeds the outcome in `ActorHitMessage`, and routes it through
+`IHitDispatcher` (`Game/HitPipeline`). The pipeline runs the order-dependent
 stages synchronously and explicitly — `ScoreController` records streak/score first, then
 the owning `BalloonController` (resolved via `BalloonControllerRegistry`) pops/deflects —
 and only then broadcasts the message for order-independent observers (`NudgeService`,

@@ -7,16 +7,16 @@ Displays the projectile's remaining shields, animates state changes, and spawns 
 | File | What it does |
 |---|---|
 | `ShieldUILifetimeScope` | VContainer child scope on the shield HUD root; registers `ShieldCounterLabel[]`, `ShieldCounterAnimation`, trail prefab, the HUD anchor as the `Shield` trail endpoint, and `ShieldTrailController` entry point |
-| `ShieldCounterLabel` | Shows the shield count; resets to "--" during balance passes |
-| `ShieldCounterAnimation` | Drives Animator triggers (`Ready`, `Lost`, `Gain`, `Waiting`) based on `ShieldsRemaining` changes |
+| `ShieldCounterLabel` | `ReactiveCounterLabel` subclass showing the shield count — "--" until bound and between turns; bound to the live projectile's `ShieldsRemaining` by `ShieldCounterAnimation` on each load |
+| `ShieldCounterAnimation` | Drives Animator triggers (`Ready`, `Lost`, `Gain`, `Waiting`) based on `ShieldsRemaining` changes; binds/unbinds the labels on projectile load/destroy |
 | `ShieldTrailController` | Plain C# `IStartable` — subscribes to `ShieldGainedMessage` (balloon → HUD) and `ShieldLostMessage` (HUD → wall bounce); composes a `TrailSpawner` to fly `FlyingTrail` orbs between the balloon/bounce point and the shield HUD endpoint |
 | `SimplePoolChannel<FlyingTrail>` | shield-trail pool keyed by `ShieldTrail` |
 
 ## How it works
 
-`ShieldCounterLabel` shows the starting shield count when a `ProjectileLoadedMessage` arrives and resets to "--" while the grid is balancing (indicated by `BalanceBalloonsMessage`).
+`ShieldCounterAnimation` subscribes to `ProjectileLoadedMessage` / `ProjectileDestroyedMessage` and owns the labels' binding: on load it binds every `ShieldCounterLabel` to the new projectile's `ShieldsRemaining` (the labels show "--" until then); on destroy it unbinds them, returning the display to "--" for the between-turns wait.
 
-`ShieldCounterAnimation` drives an Animator with three triggers: `"Ready"` on load, `"Lost"` when `ShieldsRemaining` decrements, `"Gain"` if shields are ever restored, and `"Waiting"` during a balance pass. It binds directly to a `ProjectileModel.ShieldsRemaining` reactive property — `ThrowerController` calls `BindProjectile(model)` after each reload so the animation always tracks the live projectile.
+It also drives an Animator: `"Ready"` on load, `"Lost"` when `ShieldsRemaining` decrements, `"Gain"` when it increments (streak shield awards), and `"Waiting"` from projectile death until the next load. It binds directly to the live projectile's `ShieldsRemaining` reactive property carried in `ProjectileLoadedMessage`.
 
 `ShieldTrailController` is a plain C# `IStartable` + `IDisposable` registered as an entry point in `ShieldUILifetimeScope`. It flies shield orbs in both directions between a world point and the `Shield` trail endpoint (the HUD anchor, resolved from the shared `TrailEndpointRegistry` — see `Shared/Pool`), reusing one composed `TrailSpawner`:
 
@@ -27,11 +27,10 @@ Both use `IGameConfiguration.ShieldTrailDuration`; the spawner handles pool retu
 
 ## Interactions
 
-- **ThrowerController** — calls `ShieldCounterAnimation.BindProjectile()` on each reload
-- **ProjectileModel.ShieldsRemaining** — `ReactiveProperty<int>` subscribed by `ShieldCounterAnimation`
-- **ProjectileLoadedMessage** — triggers "Ready" state and resets the label
+- **ProjectileModel.ShieldsRemaining** — `ReactiveProperty<int>` subscribed by `ShieldCounterAnimation` and the labels
+- **ProjectileLoadedMessage** — triggers "Ready" state and binds the labels to the new projectile
+- **ProjectileDestroyedMessage** — triggers "Waiting" state and unbinds the labels
 - **ShieldGainedMessage** — triggers trail spawn from balloon slot to shield HUD
-- **BalanceBalloonsMessage** — triggers "Waiting" state and suspends shield tracking
-- **IGameConfiguration** — `ProjectileStartingShields` used by label for initial display; `ShieldTrailDuration` used by trail controller
+- **IGameConfiguration** — `ShieldTrailDuration` used by trail controller
 - **SlotGrid** — resolves slot index to world position for trail origin
 - **PoolManager** — `ShieldTrail` pool for `FlyingTrail`; consumer handles return

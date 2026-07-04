@@ -3,7 +3,8 @@
 # Grid Actor Expansion — Phase 8+
 
 > Working plan for procedural generation, actor archetypes, and difficulty coupling.
-> Foundation (Phases 1–7.5) is in `PLAN-GridActorSystem-Foundation.md`.
+> Foundation (Phases 1–7.5) is complete; its reference document was retired
+> (`PLAN-GridActorSystem-Foundation.md`, recoverable from git history).
 
 ---
 

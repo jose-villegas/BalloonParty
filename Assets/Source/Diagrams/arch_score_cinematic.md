@@ -10,7 +10,9 @@ The full journey from a balloon pop to a confirmed level-up, including the cinem
 intercept that pauses the tipping trail mid-flight.
 
 **Attribution → trails:**
-`ScoreController` receives `ActorHitMessage`, casts the actor to `IHasScoreColor`, and
+`ScoreController.OnActorHit` runs as the first explicit `HitPipeline` stage (before the
+owning balloon reacts and before the `ActorHitMessage` broadcast — see
+@ref arch_turn_pipeline); it casts the actor to `IHasScoreColor` and
 calls `ResolveScoreAttribution` — the actor appends one `ScoreAttribution` per color
 bar it contributes to. `ScoreController` publishes one `ScorePointMessage` per
 individual point × streak multiplier. `ScoreTrailService` spawns a pooled `FlyingTrail`

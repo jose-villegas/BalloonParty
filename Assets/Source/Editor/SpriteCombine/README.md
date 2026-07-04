@@ -1,8 +1,8 @@
 # SpriteCombine
 
-Editor half of `SpriteLayerCombiner` (`Shared/Rendering/`) — the audit-5d experiment:
-flatten a prefab's rigid sprite layers into one baked sprite to cut per-balloon draws
-and overdraw. Scoped to the colored normal balloons.
+Editor half of `SpriteLayerCombiner` (`Shared/Rendering/`): flattens a prefab's rigid
+sprite layers into one baked sprite to cut per-balloon draws and overdraw. Scoped to
+the colored normal balloons.
 
 ## Workflow
 
@@ -27,5 +27,5 @@ and overdraw. Scoped to the colored normal balloons.
 - Batching only materializes when the combined sprites (across all balloon prefabs)
   share **one SpriteAtlas and one material**, and tinting stays `SpriteRenderer.color`
   (a MaterialPropertyBlock would break the batch again).
-- Measure with the Frame Debugger before/after — 5d is gated on the count actually
-  moving.
+- Measure with the Frame Debugger before/after — the flattening only pays off if the
+  draw count actually moves.

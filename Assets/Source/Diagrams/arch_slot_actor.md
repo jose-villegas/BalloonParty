@@ -21,12 +21,13 @@ call site:
 
 | Interface | Meaning | Who implements |
 |-----------|---------|----------------|
-| `IHasColor` | Read-only reactive color | `BalloonModel`, `BubbleClusterModel` |
+| `IHasColor` | Read-only reactive color | `BalloonModel` only (the bubble cluster is colorless) |
 | `IPaintable` | Color is writable (paint item target) | `BalloonModel` only |
-| `IHasScore` | Awards points on pop | All balloon models |
+| `IHasScore` | Fixed `ScoreValue` on pop | `BalloonModel`, `ToughBalloonModel`, `UnbreakableBalloonModel` |
 | `IHasScoreColor` | Score attribution strategy | All balloon models |
 | `IHasNudge` | Participates in nudge animations | All balloon models |
-| `IHasItemSlot` | Can host an item | `BalloonModel` only |
+| `IHasItemSlot` | Can host an item (extends `IHasColor`) | `BalloonModel` only |
+| `IPressureMovable` | Yields its slot when shoved by a pressure cascade (`PushResponse`) | All balloon models (via `BalloonModelBase`) |
 | `IHitable` | Responds to `EvaluateHit` | Balloons + Deflector + Absorber + Gatekeeper |
 | `IHasDurability` | Tracks `HitsRemaining` | Most balloons + Gatekeeper |
 | `IPassThrough` | Slot traversable by animation paths | `PuffObstacleModel`, `StaticActorModel` |

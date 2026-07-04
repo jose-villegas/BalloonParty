@@ -182,6 +182,12 @@ resolves by one of three modes, so a designer can say "ramp this up across the r
     8.3 lands), per-item weights. **No `RangedValue` modes on weights** — a weight *is* a
     distribution; the randomness is the per-spawn weighted draw, so a second random roll on the
     weight itself would be redundant. Want the mix to evolve? Author a finer range.
+  - **The weighted set IS the type gate** (explicit, 2026-07-02): a balloon type absent from a
+    range's set (or weight 0) **cannot spawn in that range** — introduction levels are authored
+    by adding the type to the first range that includes it (e.g. Simple-only 1–4, Tough enters
+    at 5, Unbreakable at 9). `RejectedBalloonEffect`'s would-be pick draws from the same gate
+    (the overflow pile must never show a type the level can't spawn). Catalog `MaxCount` caps
+    apply on top. Custom levels gate the same way — an "all-bubble" level is a set of one.
   - `ColorSet AllowedColors` — active palette subset (see **Part C**); changes only at a level
     boundary.
   - `FromLevel`, `ToLevel` (`ToLevel = ∞` for the tail).
@@ -190,6 +196,77 @@ resolves by one of three modes, so a designer can say "ramp this up across the r
   - **Fixed** — constant `Min`.
   - **Linear** — lerp `Min→Max` by the level's position within the range (a ramp).
   - **Random** — pick within `[Min, Max]` once when the level begins; stable for that level.
+
+### The full difficulty surface (inventoried 2026-07-02) — everything is range-authored
+
+The gating principle applies to **every difficulty-relevant knob**, not just balloon types.
+`LevelParameters` carries three kinds of parameter, each with its own gating semantics:
+
+| Kind | Semantics | Parameters (verified read-sites; trimmed 2026-07-02) |
+|---|---|---|
+| **Ranged scalars** (`RangedInt`/`RangedFloat`, Fixed/Linear/Random per level) | "how much / how many" | `SpawnLines` (`BalloonsConfiguration.NewProjectileBalloonLines` → `BalloonSpawner`, `SpaceDanger`) · `BoardLines` (initial fill → the Ascent) · `ItemTurnCadence` (`ItemSettings.TurnCheckEvery` → `ItemAssigner`) · grid-actor counts (`StaticActorSpawner`, pre-8.3) |
+| **Weighted sets = availability gates** (static per range; absent/0-weight = cannot spawn) | "what exists here, and how often" | `WeightedSet<BalloonType>` · `WeightedSet<ItemType>` (an item absent from the range can't be assigned — item introduction levels, same principle as balloon types) · `WeightedSet<GridActorType>` (post-8.3 placement mix) |
+| **Per-range catalog overrides** (optional block; falls back to the catalog when absent) | "the same thing, more of it" | per-type `MaxCount` (e.g. cap Unbreakables at 2 early, 6 late) · per-item `MaximumAllowed` |
+
+Plus the **`AllowedColors` set** (Part C).
+
+**Deliberately kept global** (decided 2026-07-02): `LineInterval` (timing/feel, not
+difficulty), `ProjectileStartingShields` (a core-feel constant, not a ramp lever),
+per-type `HitsToPop` (a balloon's identity doesn't change per level), item damage/flags/VFX
+(balance catalog), prediction/physics tuning.
+
+**The level-up threshold stays formula-shaped but becomes a parametrized curve** (decided
+2026-07-02): `PointsRequiredForLevel(level)` is NOT a per-range `RangedValue` — it stays one
+**global authored curve** (an `AnimationCurve` of points-required over level, or explicit
+keyframes) whose *keys can be inserted at range boundaries*, replacing the hardcoded steep
+exponential. One source, smooth between keys, tunable per range without per-range fields.
+
+**HP resets per level** (decided 2026-07-02 — resolves the Ascent's open question):
+`StartingHitPoints` stays a single global value, and `PlayerHealthController` refills to it
+on each level-up (part of the transition). `LossForecast` recomputes naturally off the
+refilled pool.
+
+### Two-layer data shape (design refinement, 2026-07-02)
+
+Split *authoring* from *resolution* so ranges and custom levels share one output type:
+
+- **`LevelParameters`** — the **resolved, plain** form: `int SpawnLines`,
+  `WeightedSet<BalloonType>`, item weights, `string[] AllowedColors` (+ future fields).
+  Serializable. This is what the resolver caches, what `IActiveLevelParameters` exposes —
+  **and what custom levels author directly** (exact values; a single level has no min/max).
+- **`RangedLevelParameters`** — the range-authored form: scalars as
+  `RangedInt`/`RangedFloat {Min, Max, Mode}`, weighted sets static. `Resolve(level,
+  positionInRange, rng)` → `LevelParameters`. Pure function → EditMode-testable with a seeded
+  rng.
+
+Patterns proven on `CinematicsSettings` apply: field initializers are the canonical defaults
+(a fresh SO equals the shipped asset, asserted by tests), `OnValidate` keeps the data legal,
+and an EditMode exhaustiveness test resolves levels 1..50 without throwing.
+
+### Custom levels — exact-level overlays (new, 2026-07-02)
+
+Bespoke levels interleaved with the ranged procedural ones ("level 10 is special"), designed
+as **overlays by specificity**, CSS-style:
+
+- **`CustomLevelEntry { int Level; LevelParameters Parameters; }`** — a second collection on
+  the SO beside the ranges. `Resolve(level)`: **exact custom match wins, else the containing
+  range**. Ranges stay contiguous and never know customs exist — inserting or deleting a
+  custom level never re-splits the range lattice (the rejected alternative, modelling customs
+  as ranges-of-one, forces hand-splitting `8–14` into `8–9 / 10 / 11–14` per insert).
+- **Full-block authoring (v1)**: a custom level authors the complete `LevelParameters` —
+  explicit, cascade-free, trivially testable. If authoring gets repetitive, v2 adds
+  per-field inherit-from-range toggles (the `[ShowIf]` pattern) and/or an editor "copy from
+  containing range" button; don't build the cascade until the repetition hurts.
+- **Validation**: customs must fall inside the authored level space, no duplicate `Level`,
+  warn if a custom is adjacent to a range boundary it makes invisible.
+- **Extension hooks** (this is *where* future bespoke content plugs in — sketched, not Phase 3
+  scope): a `Title/Tagline` for an intro banner (a cheap camera-rig cinematic: one settings
+  entry + a small producer), `LevelModifier` flags (`NoItems`, `PuffStorm`, …) surfaced through
+  `IActiveLevelParameters` for systems to opt into, and — once Phase 8.3's procedural placement
+  lands — an authored `BoardLayout` reference for fixed starting boards.
+
+The SO becomes **`LevelPacingConfiguration`** (ranges + customs is more than "ranges"):
+`LevelRangeEntry[] _ranges` + `CustomLevelEntry[] _customLevels`.
 
 ### Resolver / mediator — single source of the live mix
 
@@ -207,10 +284,17 @@ sources of truth, one mediator owns the *resolved current-level parameters* and 
   - `PickBalloonType()` / `PickGridActor()` — weighted draws from the range's static weighted sets, honoring catalog caps
   - `ItemSpawnSettings Items`
   - `IReadOnlyList<string> AllowedColors`
-- **Consumers pull, not pushed** — `BalloonSpawner`, `ItemAssigner`, the Phase 8.3 grid
-  spawner, `ScoreController`, and the color-bar UI inject `IActiveLevelParameters` and read the
-  live values at spawn / level time. The resolver doesn't reference its consumers — looser
-  coupling, and adding a consumer never touches the resolver.
+- **Consumers pull, not pushed** — `BalloonSpawner` (3 read-sites), `RejectedBalloonEffect`
+  (the would-be balloon's type pick), **`SpaceDanger`** (its danger denominator is
+  `NewProjectileBalloonLines × Columns` — it must read the *resolved* lines or danger
+  misreports on ramped levels), `ItemAssigner`, the Phase 8.3 grid spawner, `ScoreController`,
+  and the color-bar UI inject `IActiveLevelParameters` and read the live values at spawn /
+  level time. The resolver doesn't reference its consumers — looser coupling, and adding a
+  consumer never touches the resolver.
+- **Re-resolution triggers**: `ScoreLevelUpMessage`, resolve-at-start, **and run reset** — the
+  resolver is `IRunResettable` at `RunResetOrder.Derived` (40), so a restart re-resolves level
+  1 *before* `GridSpawnerCoordinator` re-spawns at `Respawn` (120) and the spawner reads
+  level-1 parameters, not the dead run's.
 - **Base configs demote to catalogs** — `BalloonsConfiguration` etc. keep only what isn't
   range-varied: prefab references, caps, and per-type base tuning (HP, VFX). **All weights,
   spawn-line counts, item frequency, and color sets move to `LevelRangeConfiguration`** and are
@@ -262,6 +346,72 @@ the whole level.)
 
 ---
 
+## Part D — Level transition: "the Ascent" (new, 2026-07-02)
+
+Today a level-up changes **nothing on the board** (verified: `BoardClearMessage` fires only on
+a run reset; nothing respawns on `ScoreLevelUpMessage`) — play continues on the old layout and
+new parameters would only affect future spawn lines. The Ascent makes each level a **discrete
+board** and sells the fiction of climbing: after the popup dismisses, the old board pops away
+scorelessly, and the camera rides up to the next board waiting above.
+
+**Approach decision (2026-07-02, after checking the scene + pooling):** the world **never
+moves — only the camera does**, and the board swap happens behind cover. Investigated and
+rejected: a "spawn above + shift everything back" treadmill. The grid's
+`IndexToWorldPosition` is pure config math (no transform anchor to slide), and pooled actors
+stay parented under their per-key pool containers while active — all under one
+**`DontDestroyOnLoad` `[Pool]` root shared with non-board pools** (trails, VFX, projectile,
+notices). Literal stacking would need a grid anchor seam + re-parenting against the pool's
+contract + a per-actor or per-container re-normalize with in-flight-tween and
+disturbance-field edge cases. The camera-only illusion needs none of that, and the respawn
+system already exists (the run-restart path).
+
+**Sequence** (extends the current dismissed → restore choreography):
+1. **Pop-out** — every remaining board actor pops (all at once or a fast sweep). Scoreless by
+   construction: reuse the **`BoardClearMessage` path** (actors return their pooled views and
+   vacate slots — it publishes no `ActorHitMessage`, so no score, no streaks). The cosmetic
+   layer is added by the transition controller *before* the clear: per-balloon pop VFX + a
+   **falling trail** per balloon — `FlyingTrail` with a new **`TrailMotion.Fall`** entry
+   (targets scattered to the sides/below the frustum, gravity-ish move curve, gradient fade —
+   the per-motion styling system is exactly this tool; no arrival callback → cannot score).
+2. **Ascent** — a third **camera-rig cinematic** (`LevelAscend` state + settings entry + a
+   small producer over the runner, per `PLAN-CinematicsArchitecture.md`): the camera pans up
+   by +H into the **empty sky band** above the (now cleared) play band. A **cloud sweep**
+   (existing puff sprites drifting downward past the camera) sells continuous ascent and
+   masks what follows.
+3. **Covered swap** — while the frame shows only sky/clouds (no reference points), the camera
+   **snaps back to base in one frame** — `rig.Restore()` is already instant — imperceptible
+   against a uniform background. Nothing else moved, so there is nothing to re-normalize.
+4. **Reveal — the scenario first** (refined 2026-07-02): what the camera settles onto is the
+   new level's **static actors** — the Puff clouds and Bushes that *are* the scene — placed
+   during the covered swap from the new `LevelParameters`. **No balloons yet.** The staged
+   spawner system already separates these: `StaticActorSpawner` runs at a lower `SpawnStage`
+   than `BalloonSpawner`, so the transition runs the respawn in **two stage-gated passes**
+   (`GridSpawnerCoordinator` gains a stage-ranged respawn, or a gate between stages).
+5. **Settle, then populate** — camera at base framing, clouds part, and only then the initial
+   balloon fill animates in from the top (`BoardLines` from the new `LevelParameters` — this
+   is where type gating and line counts become *visible*). The fiction: you arrived at a new
+   place, and its balloons drift in. Hand back to `Game` with (or just after) the fill.
+
+**Orchestration**: a `LevelTransitionController` (plain C#) drives clear → ascend → covered
+snap + static-stage respawn (the `GridSpawnerCoordinator` path, *without* touching score/HP —
+this is NOT a run reset) → reveal/settle → balloon-stage spawn → hand back.
+
+**Kept as the fallback** (only if seeing old and new boards simultaneously ever becomes a
+hard requirement): anchor the board to a root (grid anchor seam + spawner re-parenting on
+`Get`) and slide that one transform — accept the tween/field caveats above.
+
+**Open design decisions** (settle before building):
+- ✅ **HP on level-up** — **resets to `StartingHitPoints`** (decided 2026-07-02): the refill
+  is part of the transition (`PlayerHealthController` on `ScoreLevelUpMessage`).
+- **Overflow pile mid-transition** — a non-doomed pile can exist when the popup dismisses; the
+  transition should wait for the drain (`!IsOverflowActive` — the thrower is already locked).
+- **The frozen projectile** — return/reload it during the pop-out (fresh board, fresh shot).
+- **Restore choreography** — the Ascent *replaces* the current `LevelUpRestore` camera-return
+  (the camera ends at base framing only after re-normalize); reuse that state or append
+  `LevelAscend` (one enum line + one settings entry, per the cinematics architecture).
+
+---
+
 ## Phasing
 
 1. **`GameOver` state + run-scoped save** — new `NavigationState.GameOver`, freeze input,
@@ -276,9 +426,19 @@ the whole level.)
    before any HP loss. **✅ Implemented — see *Phase 2.5 — detailed breakdown* below.**
 2.6. **Early-warning effect** — a 0→1 danger signal (HP + free space) driving an eased gradient tint +
    Y slide. **✅ Implemented; gradient/sprite wiring in-editor — see `Game/Danger/README.md`.**
-3. **Level-range config system** — `LevelRangeConfiguration` + `RangedValue` (fixed/linear/
-   random) + `DifficultyController`. Start with the levers that work pre-8.3: spawn-lines and
-   balloon-type weights.
+3. **Level pacing system** (split, design refined 2026-07-02):
+   - **3a** — `LevelPacingConfiguration` (ranges) + `RangedValue` + `LevelParameters` +
+     `LevelDifficultyResolver`/`IActiveLevelParameters`; rewire the pre-8.3 levers:
+     spawn-lines (`BalloonSpawner`, `SpaceDanger`) and balloon-type weights — **the type
+     gate** (`BalloonSpawner`, `RejectedBalloonEffect`).
+   - **3b** — **the Ascent** (Part D): scoreless pop-out + falling trails, `LevelAscend`
+     camera-rig cinematic into the sky band, covered snap + **static actors revealed first**,
+     balloons fill in after settling (stage-gated respawn; camera-only illusion — the world
+     never moves). The payoff moment — each level becomes a visibly new place built from the
+     new parameters.
+   - **3c** — items lever: `ItemAssigner` reads the resolver.
+   - **3d** — **custom levels**: the `CustomLevelEntry` overlay collection + resolve
+     specificity + validation (cheap once 3a exists).
 4. **Allowed colors** — spawner color filter + `ScoreController`/level-up restriction to the
    active set + dynamic `ColorProgressBar` count (handle the set growing at boundaries).
 5. **Per-range item & actor mix** — wire `ItemAssigner` to the range's item config now; wire

@@ -7,28 +7,28 @@ Balloon types define hit capacity, color selection, and per-type Inspector confi
 | File | What it does |
 |---|---|
 | `BalloonType` | Enum — `Simple`, `Tough`, `Unbreakable`, `BubbleCluster` |
-| `IBalloonVariant` | Interface on balloon prefab root MonoBehaviours — `TypeName`, `Initialize(IWriteableBalloonModel)`. Hit count, item eligibility, and other per-type data are owned by `BalloonPrefabEntry` and written by `BalloonSpawner` before `Initialize()` is called |
-| `IBalloonViewBinding` | Interface for MonoBehaviours on a balloon prefab that need to react to model binding. `BalloonView` discovers all components implementing this interface via `GetComponents` and calls `Bind(IBalloonModel, CompositeDisposable)` automatically — keeping `BalloonView` agnostic of specific balloon types |
-| `ColorableBalloonVariant` | Abstract `MonoBehaviour` — picks a random color from `GamePalette` filtered by `_allowedColorsMask`; sets `TypeName` and `Color` on the model via `Initialize()` |
+| `IBalloonVariant` | Interface on balloon prefab root MonoBehaviours — `Initialize(IWriteableBalloonModel)`. Type name, hit count, score, and nudge overrides are owned by `BalloonPrefabEntry` and baked into the model by `BalloonModelFactory` before `Initialize()` is called |
+| `IBalloonViewBinding` (in `Balloon/View/`) | Interface for MonoBehaviours on a balloon prefab that need to react to model binding. `BalloonView` discovers all components implementing this interface via `GetComponents` and calls `Bind(IBalloonModel, CompositeDisposable)` automatically — keeping `BalloonView` agnostic of specific balloon types |
+| `ColorableBalloonVariant` | Abstract `MonoBehaviour` — picks a random color from `GamePalette` filtered by `_allowedColorsMask`; sets `Color` on the model (via `IPaintable`) in `Initialize()` |
 | `SimpleBalloonVariant` | Extends `ColorableBalloonVariant` — one-hit colored balloon; no additional behavior |
-| `ToughBalloonVariant` | `MonoBehaviour` implementing both `IBalloonVariant` and `IBalloonViewBinding` — not colorable; sets only `TypeName` in `Initialize()`. On `Bind()` subscribes to `HitsRemaining` and animates `_DamageProgress` on the `BalloonParty/Balloon/ToughBalloon` shader via `MaterialPropertyBlock` using a DOTween tween |
+| `ToughBalloonVariant` | `MonoBehaviour` implementing both `IBalloonVariant` and `IBalloonViewBinding` — not colorable; `Initialize()` is a no-op. On `Bind()` subscribes to `HitsRemaining` (via `IHasDurability`) and animates `_DamageProgress` on the `BalloonParty/Balloon/ToughBalloon` shader via `MaterialPropertyBlock` using a DOTween tween |
 | `SoapBubbleClusterVariant` | `[ExecuteAlways]` `MonoBehaviour` implementing both `IBalloonVariant` and `IBalloonViewBinding` — not colorable. On `Bind()` randomises spawn rotation angle and continuous rotation speed (5–12 °/s) via `transform.localRotation`, subscribes to `HitsRemaining` and pushes `_BubbleCount` (clamped to `_maxBubbles`) to the `BalloonParty/Balloon/SoapBubbleCluster` shader. Drives `_TimeOffset` every frame via `Update()` using `EditorApplication.timeSinceStartup` in edit mode and `Time.time` in play mode; calls `SceneView.RepaintAll()` in edit mode to sustain animation. Inspector field `_previewBubbleCount` allows previewing each cluster state without Play mode |
-| `UnbreakableBalloonVariant` | `[ExecuteAlways]` `MonoBehaviour` implementing both `IBalloonVariant` and `IBalloonViewBinding` — not colorable. Pushes `_SphereCenter` (world position of this transform), `_SphereRadius`, and `_TimeOffset` to all quadrant `SpriteRenderer`s via `MaterialPropertyBlock` every `Update()`. The sphere is composed of 4 quarter-circle sprites rotated by −90°×n; this variant ensures all shader effects (metallic gradient, specular highlight, convex-mirror reflection, chrome rim) are coherent across the assembled sphere. `_SphereRadius` is auto-computed from the union of renderer bounds if left at zero |
+| `UnbreakableBalloonVariant` | `[ExecuteAlways]` `MonoBehaviour` implementing both `IBalloonVariant` and `IBalloonViewBinding` — not colorable. Pushes `_SphereCenter` (world position of this transform), `_SphereRadius`, and `_TimeOffset` to all quadrant `SpriteRenderer`s via `MaterialPropertyBlock` every `Update()`. The sphere is composed of 4 quarter-circle sprites rotated by −90°×n; this variant ensures all shader effects (metallic gradient, specular highlight, convex-mirror reflection, chrome rim) are coherent across the assembled sphere. `_SphereRadius` is auto-computed from the union of renderer bounds if left at zero. Ref-counts `SceneCaptureService` (`Display/`) via `Acquire()`/`Release()` on enable/disable so the scene capture only renders while an unbreakable balloon is on screen |
 
 ## How it works
 
-During spawning, `BalloonSpawner` writes `HitsRemaining` directly onto the model from `BalloonPrefabEntry` before calling `IBalloonVariant.Initialize(model)`. `Initialize()` is then responsible only for type-specific data: `TypeName` and (for colored types) `Color`. This keeps per-type balance values centralized in the configuration asset rather than scattered across MonoBehaviours. Item eligibility is not a flag — it is determined structurally: `BalloonModel` implements `IHasWriteableItemSlot`; `ToughBalloonModel`, `UnbreakableBalloonModel`, and `BubbleClusterModel` do not. `SoapBubbleClusterVariant` initializes a `BubbleClusterModel` with `HitsToPop = 5` — each surviving hit maps to one fewer visible bubble rather than a damage-progress float.
+During spawning, `BalloonModelFactory` builds the model from `BalloonPrefabEntry` — a `BalloonModelConfig` struct carries `TypeName`, `ScoreValue`, `HitsToPop`, and `NudgeOverrides` into the model constructor — before `BalloonFactory` calls `IBalloonVariant.Initialize(model)`. `Initialize()` is then responsible only for type-specific data: `Color` for colored types (it is a no-op on the others). This keeps per-type balance values centralized in the configuration asset rather than scattered across MonoBehaviours. Item eligibility is not a flag — it is determined structurally: `BalloonModel` implements `IHasWriteableItemSlot`; `ToughBalloonModel`, `UnbreakableBalloonModel`, and `BubbleClusterModel` do not. A `BubbleClusterModel` gets its bubble count from the config entry's `HitsToPop` (the variant's `_maxBubbles` should match it) — each surviving hit maps to one fewer visible bubble rather than a damage-progress float.
 
 Then `BalloonView.Bind(model)` calls `Bind()` on all `IBalloonViewBinding` components found on the same GameObject. `ToughBalloonVariant` uses this to subscribe to `HitsRemaining` and drive shader damage visuals.
 
 The `_allowedColorsMask` on `ColorableBalloonVariant` is a bitmask over `GamePalette.Colors` shown in the Inspector as per-color checkboxes via `PaletteColorMaskAttribute`. `PickColor()` builds a list of allowed color names from the bitmask and picks uniformly at random. The picked color name is written to the model via an `IPaintable` cast (`model is IPaintable colorable`).
 
-`BalloonController` reads `msg.Outcome` on each `ActorHitMessage` (filtered to `IBalloonModel`):
+Each hit reaches the owning `BalloonController.HandleHit` directly — `HitPipeline` routes it via `BalloonControllerRegistry` (balloons do not subscribe to the `ActorHitMessage` bus). The controller switches on `msg.Outcome`:
 
 - **`Pop`** — balloon destroyed: plays VFX, removes from grid, returns to pool
-- **`Deflect`** — balloon survived and deflected the projectile; publishes `BalloonDeflectedMessage` and `BalloonNudgeMessage(Deflect)`
+- **`Deflect`** — balloon survived and deflected the projectile; publishes `BalloonDeflectedMessage` and `NudgeMessage(Deflect)`
 - **`PassThrough`** — balloon survived; projectile continues (Bubble Cluster pass-through). Plays the pass-through VFX.
-- **`Absorb`** — projectile destroyed by actor (handled upstream in `ProjectileView`)
+- **`Absorb`** — projectile destroyed by actor (handled upstream in `ProjectileHitResolver`)
 
 ## Tough balloon shader
 
@@ -72,20 +72,21 @@ The `BalloonParty/Balloon/UnbreakableBalloon` shader renders the chrome metallic
 
 - **Metallic radial gradient** — replaces the sprite RGB with a `_MetalCenterColor` → `_MetalEdgeColor` gradient controlled by `pow(sphereDist, _MetalFalloff)`. The sprite's luminance is preserved as a detail mask (via `smoothstep` with `_MetalDetailStrength` threshold) so the bolt pattern stays visible while the gradient controls the full brightness range — bright silver at centre, near-black at the rim.
 - **Specular highlight** — `_SpecularPos` (sphere-local XY), `_SpecularSize`, `_SpecularSharpness`, `_SpecularIntensity`. Positioned off-centre (default upper-left) to give the eye a strong 3D depth cue. Uses an anisotropic elliptical distance field (`_SpecularStretch`, `_SpecularAngle`) to create a brushed-metal elongated highlight instead of a circular dot — the stretch axis is rotated by `_SpecularAngle` degrees before scaling, costing only a 2D rotation + one multiply per pixel.
-- **Convex-mirror reflection** — GrabPass captures the scene. Each pixel derives its sphere surface normal from `spherePos`; the surface tangent component offsets the grab UV by `spherePos * (1 − nz) * _ReflectionSpread`, compressing the surroundings into the sphere like a real convex mirror. Fresnel-weighted blend makes edges more reflective.
+- **Convex-mirror reflection** — samples `_SceneCaptureTex`, a global scene texture rendered by `SceneCaptureService` (`Display/`) from a secondary camera at the main camera's framing (no GrabPass). Each pixel derives its sphere surface normal from `spherePos`; the surface tangent component offsets the capture UV by `spherePos * (1 − nz) * _ReflectionSpread`, compressing the surroundings into the sphere like a real convex mirror. Fresnel-weighted blend makes edges more reflective.
 - **Chrome rim** — two additive layers on the alpha-edge band (detected via 8-tap `EdgeMask`). The **static rim** (`_RimColor`, `_RimIntensity`) is always visible and outlines the sphere edge; `_RimWidth = 0` disables both layers. The **rim sweep** (`_RimSweepColor`, `_RimSweepIntensity`) is an angular gradient (like the diagonal shine) that rotates around the sphere at `_RimSweepSpeed`, rendered on top of the static rim with its own colour.
 - **Diagonal shine** — periodic bright band sweeping across the surface, same as other balloon shaders.
 - **Deflect flash** — `_DeflectFlash` (0–1) additive white overlay for hit feedback.
 
-> **GPU instancing is disabled** — GrabPass is inherently non-batchable and `_SphereCenter`, `_TimeOffset` are set per-instance via `MaterialPropertyBlock`.
+> **GPU instancing is disabled** — `_SphereCenter` and `_TimeOffset` are set per-instance via `MaterialPropertyBlock`.
 
 ## Interactions
 
-- **BalloonSpawner** — writes `HitsRemaining` from `BalloonPrefabEntry` before calling `Initialize()`; model class is chosen from `BalloonType`: `Simple` → `BalloonModel`, `BubbleCluster` → `BubbleClusterModel`, `Tough` → `ToughBalloonModel`, `Unbreakable` → `UnbreakableBalloonModel`
+- **BalloonFactory / BalloonModelFactory** — build the model from `BalloonPrefabEntry` before calling `Initialize()`; model class is chosen from `BalloonType`: `Simple` → `BalloonModel`, `BubbleCluster` → `BubbleClusterModel`, `Tough` → `ToughBalloonModel`, `Unbreakable` → `UnbreakableBalloonModel`
 - **BalloonView** — auto-discovers and calls `IBalloonViewBinding.Bind()` on all components on the same GameObject
-- **BalloonController** — reads `HitsRemaining` to route hit/deflect/pop
+- **BalloonController** — receives each hit's pre-computed outcome via `HitPipeline` → `BalloonControllerRegistry` routing
 - **GamePalette** — injected into `ColorableBalloonVariant` to resolve allowed color names
 - **PaletteColorMaskAttribute** — drives the Inspector bitmask drawer for color filtering
 - **`BalloonParty/Balloon/ToughBalloon` shader** — receives `_DamageProgress` and `_VoronoiSeed` per-instance via `MaterialPropertyBlock`
 - **`BalloonParty/Balloon/SoapBubbleCluster` shader** — receives `_BubbleCount` and `_TimeOffset` per-instance via `MaterialPropertyBlock`
 - **`BalloonParty/Balloon/UnbreakableBalloon` shader** — receives `_SphereCenter` and `_TimeOffset` per-instance via `MaterialPropertyBlock`; specular highlight, metallic gradient, and convex-mirror reflection are all sphere-coherent across the 4 quadrant sprites
+- **SceneCaptureService** (`Display/`) — renders the `_SceneCaptureTex` the reflection samples; the variant `Acquire()`s it while enabled so the capture camera only runs when needed

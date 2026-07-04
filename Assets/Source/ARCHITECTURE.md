@@ -20,7 +20,7 @@
 | @subpage arch_message_flow "Message Flow" | All pub/sub connections, when to use MessagePipe vs direct injection |
 | @subpage arch_cinematics_architecture "Cinematics Architecture" | Settings SO → producers → runner → rig/director/TimeScaleService, traits, interplay |
 | @subpage arch_score_cinematic "Score & Cinematic Pipeline" | Attribution → trails → cinematic intercept → level-up |
-| @subpage arch_trail_composition "Trail Utility Composition" | `TrailFlightRegistry`, forward/retroactive interception, cinematic pause |
+| @subpage arch_trail_composition "Trail Utility Composition" | `TrailFlightRegistry`, endpoint registration and trail interception, cinematic pause |
 | @subpage arch_item_activation "Item Activation Pipeline" | Activation handoff, pool-return coordination, adding new item types |
 | @subpage arch_static_state "Static State" | `Navigation` and `Cinematic` — cross-scene singleton state |
 | @subpage arch_slot_actor "Slot Actor Abstraction" | Interface hierarchy, capability casting, adding new actor types |

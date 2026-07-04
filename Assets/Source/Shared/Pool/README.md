@@ -6,7 +6,7 @@ A generic object pooling system for Unity components. Pools are managed centrall
 
 - **`IPoolable`** — pure lifecycle interface: `OnSpawned()` (called after activation) and `OnDespawned()` (called before deactivation). Items never reference the pool — they don't know they're pooled.
 - **`PoolChannel<TItem>`** — abstract base owning a `Stack<TItem>`. `Get()` pops or calls `Create()`; skips destroyed items in the stack. `Return()` despawns, deactivates, and pushes back. On return, `SetParent(..., worldPositionStays: false)` prevents scale drift from reparenting. Subclasses implement `Create()`.
-- **`PoolManager`** — injectable singleton registry keyed by `string`. Channels are registered via `Register()` or lazily via `GetOrRegister()`. Consumers call `Get<TItem>(key)` / `Return(key, item)`.
+- **`PoolManager`** — injectable singleton registry keyed by `string`. Channels are registered via `Register()` or lazily via `GetOrRegister()`. Consumers call `Get<TItem>(key)` / `Return(key, item)`. `KeyFor(prefab)` returns a cached pool key for a prefab — `Object.name` allocates a fresh managed string on every access, so hot paths (per-pop VFX) resolve keys through the cache instead.
 
 ## Effect Abstraction
 
@@ -38,6 +38,10 @@ Items signal completion via callbacks passed to their `Play()` or `Setup()` call
 | `ProgressNotice` | `Show(score, onComplete, color?)` — fires from `OnAnimationCompleted` animation event | `ColorProgressBar` |
 | `BalloonView` | No completion callback — returned directly on hit | `BalloonController` |
 | `ProjectileView` | No completion callback — returned directly on death | `ThrowerController` |
+
+### Fire-and-forget helpers
+
+`PoolManagerExtensions` (`Shared/Extensions/`) wraps the common effect flow into one call: `pool.PlayParticle(prefab, position, tint)` and `pool.PlayEffect(prefab, position, tint)` (plus rotation overloads). Each resolves the key via `KeyFor`, lazily registers a `ParticlePoolChannel` / `SimplePoolChannel<EffectView>`, gets the item, binds it to the pool via `BindPool(pool, key)`, and plays it with the item's own `ReturnToPool` action as the completion callback — the effect returns itself, so the caller wires nothing.
 
 ## Injecting Pool Channel
 

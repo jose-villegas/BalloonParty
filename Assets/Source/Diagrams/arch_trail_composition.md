@@ -7,25 +7,26 @@
 ## What this diagram shows
 
 How `TrailFlightRegistry<TrailId>` composes with `ScoreTrailService` to support
-forward registration, retroactive interception, and cinematic pause/resume — without
-any of those concerns leaking into `FlyingTrail` itself.
+per-trail lookup, cinematic interception, and bulk transport commands — without any
+of those concerns leaking into `FlyingTrail` itself.
 
 **`TrailFlightRegistry<T>`** — a plain C# generic that tracks which trails are
-currently in flight by their `TrailId`. `Register(id, callback)` can be called:
-- **Before** the trail spawns (forward registration) — the callback fires when the
-  trail is spawned, which immediately pauses the trail
-- **After** the trail is already in flight (retroactive) — `LevelUpCinematic` awaits the
-  trail in `_flights`, switches its DOTween tweens to unscaled time, and fires the
-  callback immediately
+currently in flight by their `TrailId`. `ScoreTrailService` calls
+`Register(id, transform, origin)` when it spawns a trail and `Unregister(id)` on
+arrival. A consumer that wants a trail that may not have spawned yet simply awaits
+`Contains(id)` (this is what `LevelUpCinematic` does for the tipping trail), then
+takes the `TrailFlight` handle via `Get(id)`.
 
 `ScoreTrailService` exposes `Flights` (a `TrailFlightRegistry<TrailId>`: `Contains` /
-`Get` / `CompleteAll`); each `TrailFlight` handle exposes `Pause` / `Resume` /
-`Complete` / `Speed` — the cinematic's vocabulary for manipulating in-flight trails.
+`Get` / `CompleteAll` plus bulk pause/resume/stop/speed); each `TrailFlight` handle
+exposes `Pause` / `Resume` / `Stop` / `Complete` / `SetSpeed` / `SetUnscaledTime` —
+transport-style commands over the trail's DOTween tweens.
 
 **`FlyingTrail`** — knows nothing about cinematics, pause state, or `TrailId`. It just
-flies from A to B on a path and calls `OnComplete`. All interception happens by
-externally switching its tweens to `UpdateType.Manual` and advancing them with
-`DOTween.ManualUpdate`.
+flies from A to B on a path and calls `OnComplete`. Interception is external: the
+cinematic calls `FlyingTrail.DisableMoveTween()` to take the move tween out of play,
+then puppets the trail's transform directly (a curve-driven lerp from origin to
+target) and calls `Complete()` on the handle when it lands.
 
 ## Guidance
 

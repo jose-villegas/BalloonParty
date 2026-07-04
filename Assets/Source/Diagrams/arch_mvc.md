@@ -17,9 +17,11 @@ strict contract about what it is allowed to touch:
 - **Controller** — pure C# class; registered with VContainer as `IStartable` /
   `ITickable`; orchestrates systems; mutates models; no `MonoBehaviour`, no `transform`
 
-MessagePipe arrows cross layer boundaries: a **View** publishes `ActorHitMessage` on
-collision; a **Controller** subscribes to it and decides what to do. This keeps Views
-ignorant of game logic and Controllers ignorant of Unity rendering.
+MessagePipe arrows cross layer boundaries: a **View** reports input or contact (e.g.
+`ProjectileView` hands each balloon contact to the plain-C# `ProjectileHitResolver`,
+which dispatches the resulting `ActorHitMessage` through the hit pipeline); **Controllers**
+subscribe to the broadcast and decide what to do. This keeps Views ignorant of game
+logic and Controllers ignorant of Unity rendering.
 
 ## Guidance
 

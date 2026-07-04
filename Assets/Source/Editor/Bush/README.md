@@ -29,8 +29,10 @@ consumed at runtime by `BushView`.
 | Shader | Purpose |
 |---|---|
 | `GielisSDF.cginc` | Shared include — Gielis superformula SDF, hue rotation, parameter jitter. |
-| `BushBakeLeaf.shader` | Leaf baker — Gielis SDF shape, dome shading, palmate midribs, lateral veins, venules, reticulate fill, petiole. |
-| `BushBakeBranch.shader` | Branch baker — vertex colour pass-through (RG=direction, A=depth) + edge AA. |
+| `LeafVeins.cginc` | Shared include — vein/venule/reticulate pattern math used by the leaf bakers. |
+| `BushBakeLeaf.shader` | Leaf baker — Gielis SDF shape, dome shading, palmate midribs, lateral veins, venules, reticulate fill, petiole. Used by `BushLeafBaker`. |
+| `BushBakeBranch.shader` (`Hidden/`) | Branch baker — vertex colour pass-through (RG=direction, A=depth) + edge AA. Used by `BushBranchBaker`. |
+| `Bush.shader`, `BushBake.shader` | Earlier fully-procedural bush prototypes (phyllotaxis leaf placement, painter's-algorithm layering). Not referenced by any baker — kept for reference. |
 
 ## Pipeline
 

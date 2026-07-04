@@ -1,12 +1,12 @@
 # Actor Archetype
 
-Concrete grid actor models and the Puff cloud visual system.
+Concrete grid actor models and the Puff cloud / Bush visual systems. Both visual systems build on the generic cluster infrastructure in `Slots/Actor/Cluster/` (`SlotClusterRegistry<TModel>`, `ClusterView`, `ClusterViewController`).
 
 ## Actor Models
 
 | File | What it does |
 |---|---|
-| `PuffObstacleModel` | Structural obstacle — `IWriteableSlotActor` + `IPassThrough`. Occupies a slot, contributes weight, but allows animation paths to pass through. Gains `ClusterId` linking it to a `PuffCluster`. |
+| `PuffObstacleModel` | Structural obstacle — `IClusterableSlotActor` + `IPassThrough`. Occupies a slot, contributes weight, but allows animation paths to pass through. Gains `ClusterId` linking it to a `SlotCluster`. |
 | `BushObstacleModel` | Structural obstacle — blocks traversal, no hit response |
 | `DeflectorActorModel` | Indestructible hitable — always `Deflect`, no `HitsRemaining` |
 | `AbsorberActorModel` | Indestructible hitable — always `Absorb`, kills the projectile |
@@ -81,43 +81,40 @@ Baked assets are generated via **Tools > Bush Baker** (editor window). The bake
 shaders and pipeline live in `Assets/Source/Editor/Bush/` and
 `Assets/Shaders/BalloonParty/Grid/Editor/`. See `Editor/Bush/README.md`.
 
-The Puff cloud system renders procedural GPU-driven clouds over groups of adjacent Puff slots. Multiple Puff slots that are hex-adjacent merge into a single continuous cloud body. The system follows MVC:
+## Puff Cloud System
 
-- **Model:** `PuffCluster` + `PuffClusterRegistry`
+The Puff cloud system renders GPU-driven clouds over groups of adjacent Puff slots. Multiple Puff slots that are hex-adjacent merge into a single continuous cloud body. The system follows MVC via the generic cluster infrastructure in `Slots/Actor/Cluster/`:
+
+- **Model:** `SlotCluster` + `PuffClusterRegistry`
 - **View:** `PuffCloudView`
 - **Controller:** `PuffCloudViewController`
-
-See `Plans/PLAN-PuffCloudSimulation.md` for the full design plan.
 
 ### Model Layer
 
 | File | What it does |
 |---|---|
-| `PuffCluster` | Plain C# model — a group of hex-adjacent Puff slots. Stores `Slots` (list of grid indices), `WorldBounds` (AABB covering all member slots + padding), and `ClusterId`. |
-| `PuffClusterChangedEvent` | Event struct published by `PuffClusterRegistry` — carries `ClusterId`, `ChangeType` (`Created` / `Resized` / `Removed`), and the affected `PuffCluster`. |
-| `PuffClusterRegistry` | `IStartable` + `IDisposable` — subscribes to `SlotGrid.OnChanged`, flood-fills hex adjacency via `SlotGrid.HexNeighborIndices` to form clusters, and publishes `PuffClusterChangedEvent` via `OnClusterChanged`. Also calls `RebuildAll()` on `Start()` to pick up pre-existing Puffs. Handles cluster merging (new Puff bridges two clusters), splitting (removed Puff was bridging), and resize (cluster gains/loses a slot). |
+| `PuffClusterRegistry` | Thin `SlotClusterRegistry<PuffObstacleModel>` subclass. The base registry subscribes to `SlotGrid.OnChanged` (Puff slots can be added/removed at runtime), flood-fills hex adjacency into `SlotCluster`s, handles merging/splitting/resizing, assigns `ClusterId` back to each model, and publishes `SlotClusterChangedEvent` via `OnClusterChanged`. |
 
 ### View Layer
 
 | File | What it does |
 |---|---|
-| `PuffCloudView` | `MonoBehaviour` (`[ExecuteAlways]`, `IPoolable`) — drives the `BalloonParty/Grid/PuffCloud` shader on a `SpriteRenderer` quad. Manages density `RenderTexture` ping-pong pair for disturbance/reform. Exposes `Configure(positions, bounds, settings)` for cluster configuration and `StampDisturbance(...)` for punching holes in the cloud. Pushes `_TimeOffset`, `_SlotCentersWorld`, `_SlotCount`, and `_DensityTex` via `MaterialPropertyBlock` each frame. |
-| `PuffCloudPoolChannel` | Pool channel for `PuffCloudView` prefabs |
+| `PuffCloudView` | Thin `ClusterView` subclass — a `MonoBehaviour` (`[ExecuteAlways]`) driving the `BalloonParty/Grid/PuffCloud` shader on a `SpriteRenderer` quad. `Configure(positions, count, bounds, settings)` positions/scales the quad over the combined bounds and pushes `_SlotCentersWorld`, `_SlotCount`, and `_AnimationSpeed` once via `MaterialPropertyBlock`. The runtime animation clock is shader-driven (`_Time.y * _AnimationSpeed`) — no per-frame property pushes; `_TimeOffset` is only fed in edit mode, where `_Time` is frozen. Disturbance is not managed here — the shader reads the global `_DisturbanceTex` maintained by `DisturbanceFieldService` (`Shared/Disturbance/`). |
 
 ### Controller Layer
 
 | File | What it does |
 |---|---|
-| `PuffCloudViewController` | `IStartable` — subscribes to `PuffClusterRegistry.OnClusterChanged` and manages pooled `PuffCloudView` lifecycle. Spawns a view on `Created`, reconfigures on `Resized`, returns to pool on `Removed`. Applies sorting layer and order from `PuffCloudSettings`. |
+| `PuffCloudViewController` | Thin `ClusterViewController<PuffObstacleModel, PuffCloudView, IPuffCloudSettings>` subclass. The base controller instantiates **one** view instance and, on any cluster change, collects every slot position across **all** clusters (16-entry buffer cap) and reconfigures it — the single quad spans the bounding box of every cluster on the board. Applies sorting layer and order from `PuffCloudSettings`. |
 
 ### Configuration
 
-`PuffCloudSettings` (ScriptableObject in `Configuration/`) holds all tuning knobs — noise animation speed, density field resolution and timing, wind parameters, displacement, visual padding, sorting layer, and disturbance radii/strengths. Also holds the `CloudPrefab` reference.
+`PuffCloudSettings` (ScriptableObject in `Configuration/`) — `IPuffCloudSettings`. Holds the `CloudPrefab` reference, animation speed, bounding-box padding, and sorting layer/order. Disturbance-field tuning lives in `DisturbanceFieldSettings`, not here.
 
 ### Prefabs
 
 - **`Puff.prefab`** — `GridActorView` + `TweenTracker` only. Invisible grid occupancy marker.
-- **`PuffCloud.prefab`** — `SpriteRenderer` (PuffCloud material, no sprite) + `PuffCloudView`. Pooled by `PuffCloudPoolChannel`, referenced by `PuffCloudSettings.CloudPrefab`.
+- **`PuffCloud.prefab`** — `SpriteRenderer` (PuffCloud material, no sprite) + `PuffCloudView`. Instantiated once by `PuffCloudViewController`, referenced by `PuffCloudSettings.CloudPrefab`.
 
 ### Shaders
 
@@ -125,7 +122,7 @@ All in `Assets/Shaders/BalloonParty/Grid/`:
 
 | Shader | What it does |
 |---|---|
-| `PuffCloud.shader` | Main cloud shader — 3-octave Simplex noise in world space, slot-center boundary falloff, optional density masking (`_DENSITY_ON`), displacement crossfade, pseudo-normal lighting, optional shadow (`_SHADOW_ON`). |
+| `PuffCloud.shader` | Main cloud shader — three octaves of a tileable baked noise texture (generated via **Tools > BalloonParty > Generate Cloud Noise Texture**), sampled continuously in world space so the field is unbroken across the whole board (no per-cluster seams or seeds); smooth-min union of per-slot falloffs (`_SlotBlend`) for the occupancy mask; early discard before the texture fetches where no slot is near; optional density masking + displacement crossfade (`_DENSITY_ON`, reading the global `_DisturbanceTex`); pseudo-normal lighting from screen-space derivatives of the low-frequency noise; optional shadow (`_SHADOW_ON`) evaluated only where it can be visible. |
 | `DisturbanceDiffusion.shader` | Density field diffusion blit — 3×3 blur + reform toward equilibrium + semi-Lagrangian wind advection + pressure fill + displacement decay. |
 | `DisturbanceStamp.shader` | Density field stamp blit — subtractive radial falloff with directional wake for disturbance (single-stamp version). |
 | `DisturbanceStampBatched.shader` | Batched stamp blit — processes up to 16 stamps in a single blit for performance. |

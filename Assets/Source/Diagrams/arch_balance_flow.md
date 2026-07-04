@@ -12,7 +12,7 @@ animations aware of in-progress movement.
 **Core algorithm:**
 `Balance()` scans the grid bottom-up for unsupported dynamic actors (slots with no
 occupant directly below them). For each unsupported actor it finds the best lower
-slot via `SlotGrid.OptimalNextEmptySlot` (a weighted recursive search that prefers
+slot via `GridBalanceQuery.OptimalNextEmptySlot` (a weighted recursive search that prefers
 slots with more occupied neighbors above them — gravity-like settling). The actor is
 removed from its current slot, placed in the target slot, and a DOTween path animation
 is started along the grid waypoints.

@@ -70,7 +70,7 @@ public class GameLifetimeScope : LifetimeScope
 | `DangerUILifetimeScope` | `LifetimeScope` | Danger overlay root |
 | `GameOverLifetimeScope` | `LifetimeScope` | Game-over screen root |
 
-> **Note:** Balloon and projectile prefabs no longer use child scopes. Their `[Inject]` fields are populated via `InjectingPoolChannel` (flat `IObjectResolver.InjectGameObject()` without container creation). `BalloonLifetimeScope`, `ProjectileLifetimeScope`, and `ItemViewScope` components remain on prefabs with `autoRun = false` — they can be removed from prefabs when convenient.
+> **Note:** Balloon and projectile prefabs do not use child scopes. Their `[Inject]` fields are populated via `InjectingPoolChannel` (flat `IObjectResolver` injection without container creation).
 
 **Configuration assets registered in `GameLifetimeScope`:**
 
@@ -82,7 +82,10 @@ public class GameLifetimeScope : LifetimeScope
 | `GameDisplayConfiguration` | `ScriptableObject` | `IGameDisplayConfiguration` |
 | `ItemConfiguration` | `ScriptableObject` | `IItemConfiguration` |
 | `GridActorConfiguration` | `ScriptableObject` | `IGridActorConfiguration` |
+| `OverflowSettings` | `ScriptableObject` | `IOverflowSettings` |
+| `CinematicsSettings` | `ScriptableObject` | `ICinematicsSettings` |
 | `PuffCloudSettings` | `ScriptableObject` | `IPuffCloudSettings` |
+| `BushSettings` | `ScriptableObject` | `IBushSettings` |
 | `DisturbanceFieldSettings` | `ScriptableObject` | `IDisturbanceFieldSettings` |
 | `FlyingTrail` | Prefab instance | `FlyingTrail` (concrete) |
 | `PauseService` | Singleton service | `PauseService` (concrete) |
@@ -208,8 +211,9 @@ Navigation.TransitionTo(NavigationState.LevelUp);
 | State | Meaning | Set by |
 |---|---|---|
 | `Launch` | App startup, Launcher UI visible | Default (initial value) |
-| `Game` | Active gameplay, thrower and balloons active | `NavigationTrigger` on the Launch play button |
+| `Game` | Active gameplay, thrower and balloons active | `NavigationTrigger` on the Launch play button; `RunController.RestartRun` |
 | `LevelUp` | Level-up popup visible, game paused | `ScoreController` on level threshold |
+| `GameOver` | Run over, loss screen visible | `RunController.EndRun` when the HP pool empties (see `Game/Run/`) |
 
 ### Scene preloading flow
 
@@ -264,6 +268,10 @@ internal class MyService : ICinematicAware
 | `None` | No cinematic active | Default; `CinematicDirector.EndCinematic` |
 | `LevelUpPanIn` | Pan-in phase — camera tracks tipping trail, which slows via curve-modulated progress | `CinematicDirector.BeginCinematic` (via `LevelUpCinematic` at trail spawn) |
 | `LevelUpRestore` | Restore phase — tweens timeScale and camera back to base | `CinematicDirector.BeginCinematic` (via `LevelUpCinematic` on popup dismiss) |
+| `HeartDrain` | Overflow heart-drain beat — camera follows the in-flight hearts; does **not** block loss or camera shake | `CinematicDirector.BeginCinematic` (via `HeartDrainCinematic` on the first heart request) |
+| `HeartDrainRestore` | The heart-drain's return to normal speed | `CinematicDirector.BeginCinematic` (via `HeartDrainCinematic` when the pile drains or the run ends) |
+
+Per-state behaviour (traits, camera segment, tuning) lives in `CinematicsSettings` (`Configuration/`); see `Game/Cinematics/README.md`.
 
 ### Pause Integration
 
@@ -286,7 +294,7 @@ _resumedSubscriber.Subscribe(msg => { if (msg.Source == PauseSource.Cinematic) R
 During a level-up cinematic:
 - **Projectile** checks `PauseService.IsAnyPaused` in `FixedUpdate`/`OnTriggerEnter2D` to freeze movement.
 - **Trail spawning** is not explicitly gated — the projectile freeze prevents new pops, so no new trails are queued during the cinematic.
-- **Balloon animators/particles** are frozen via `Time.timeScale = 0` when the popup shows (visual freeze, separate from logical pause).
+- **Balloon animators/particles** are frozen when the popup shows — the popup claims `TimeScaleSource.LevelUpPopup = 0` via `TimeScaleService` (visual freeze, separate from logical pause).
 - **Score trails** (non-tipping) are never paused — they fly at normal speed during the cinematic.
 - **Glow trails** — after the popup's appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrailsMessage` to drain each `ColorProgressBar` slider in sync, then spawns decorative `FlyingTrail` orbs in unscaled time from bars to the glow fill. These fly independently of `Time.timeScale` and `PauseService`.
 
@@ -319,7 +327,10 @@ Game data is split across focused ScriptableObjects, each registered as a single
 | `GamePalette` | `IGamePalette` | Named color entries — the single source for all balloon colors; `GetColor(name)` resolves to `UnityEngine.Color` |
 | `GameDisplayConfiguration` | `IGameDisplayConfiguration` | Reference world dimensions and `GetOrthogonalSize()` for camera sizing |
 | `ItemConfiguration` | `IItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, damage, type-specific params |
+| `OverflowSettings` | `IOverflowSettings` | Overflow pile tuning — appear stagger, linger, pop interval, motion sharpness, arrival radius, heart-trail duration |
+| `CinematicsSettings` | `ICinematicsSettings` | Cinematics tuning — one `CinematicStateEntry` per `CinematicState`: traits + camera-rig segment (timeScale curve, zoom/pan/followSpeed) + capability blocks |
 | `PuffCloudSettings` | `IPuffCloudSettings` | Puff cloud visual tuning — noise animation speed, visual padding, sorting, `CloudPrefab` reference |
+| `BushSettings` | `IBushSettings` | Bush visual tuning — prefab, variants, branch/leaf materials, sizes, sorting, animation speed |
 | `DisturbanceFieldSettings` | `IDisturbanceFieldSettings` | Disturbance field tuning — RT resolution, diffusion, wind, displacement, performance thresholds, shader references, `StampProfile[]` |
 
 Rules:
@@ -339,6 +350,8 @@ All tween animations must reproduce the authored values **exactly**:
 1. Read the target tween values from `IGameConfiguration` — never hardcode durations or distances.
 2. Match the ease type. If no `SetEase` is specified, DOTween's default (`InOutQuad`) applies — do not add eases that weren't there.
 3. `Time.timeScale = 0` freezes DOTween and physics. Animators that must play while paused need `updateMode = AnimatorUpdateMode.UnscaledTime`. UniTask delays that must resolve during pause need `ignoreTimeScale: true`.
+
+> **Not everything is a tween.** High-frequency, many-instance motion runs through a central ticker instead of per-instance DOTween sequences — the balloon nudge out-and-back is driven by `BalloonMotionTicker` (`Balloon/Controller/`, pooled entries, zero per-nudge allocation). Ticker-driven motion escapes `transform.DOKill()`, so takeover/teardown must cancel it explicitly (`CancelNudge`). See `Nudge/README.md`.
 
 ---
 

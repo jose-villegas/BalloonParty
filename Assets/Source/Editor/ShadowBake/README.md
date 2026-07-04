@@ -1,6 +1,6 @@
 # Editor/ShadowBake
 
-Bake-time drop shadows for sprite prefabs (audit remediation 5a). The runtime
+Bake-time drop shadows for sprite prefabs. The runtime
 `SpriteShadow`/`SpriteBlur` shaders re-blur a static image every frame (up to 10 texture
 taps per pixel per layer); baking the shadow once replaces that with a single plain
 sprite — and since it's offline, the blur can be as soft as it wants.

@@ -10,7 +10,7 @@ The entire `Cheats/` system — console, `ICheat`, and all cheat implementations
 
 ## VContainer registration
 
-`CheatConsoleView` and `BalloonRemoverCheat` are MonoBehaviours created via `RegisterComponentOnNewGameObject`. VContainer singletons are **lazy** — the GameObject is only created when resolved. Both require `RegisterBuildCallback(resolver => resolver.Resolve<T>())` to force eager creation at scope build time.
+`CheatConsoleView`, `BalloonRemoverCheat`, and `DisturbanceStampCheat` are MonoBehaviours created via `RegisterComponentOnNewGameObject`. VContainer singletons are **lazy** — the GameObject is only created when resolved. Each requires `RegisterBuildCallback(resolver => resolver.Resolve<T>())` to force eager creation at scope build time.
 
 ## Adding a new cheat
 
@@ -34,8 +34,10 @@ That's all. The console picks it up automatically.
 | Name | Section | What it does |
 |---|---|---|
 | Spawn Balloon Line | Spawning | Publishes `SpawnBalloonLineMessage` — spawns one new row of balloons |
-| Fire Projectile | Thrower | Calls `ThrowerController.FireImmediate()` — fires regardless of mouse state |
-| Remove Balloons | Spawning | Draw across balloons to remove them and trigger a balance pass |
+| Fire Projectile | Thrower | Sets `IsFree = true` on the currently loaded projectile (tracked via `ProjectileLoadedMessage`) — fires regardless of mouse state |
+| Remove Balloons | Grid | Draw across balloons to remove them and trigger a balance pass |
 | Trigger Level Up | Score | Fills all color bars to the current threshold and immediately triggers the level-up ceremony |
 | Near Level Up | Score | Fills all color bars to one point below the threshold — pop one balloon of each color to complete the level naturally |
+| Force Game Over | Run | Calls `RunController.EndRun()` — commits the run and shows the GameOver screen |
+| Restart Run | Run | Calls `RunController.RestartRun()` — resets every `IRunResettable` and returns to `Game` |
 | Stamp Disturbance | Grid | Toggle on, then mouse-drag to stamp disturbances into the shared disturbance field. Uses `DisturbanceFieldService.Stamp()` at the mouse world position with drag direction |

@@ -385,7 +385,7 @@ Assets/
    shrinks on hit, projectile passes through. Unbreakable is opaque/heavy, deflects all hits.
    Art directions are distinct by definition; confirm Unbreakable sprite before commission.
 
-2. ~~**Unbreakable scoring**~~ — ✅ Fully resolved. See **[PLAN-ColorScoreAttribution.md](PLAN-ColorScoreAttribution.md)** for the full `IHasScoreColor` design.
+2. ~~**Unbreakable scoring**~~ — ✅ Fully resolved — implemented via the `IHasScoreColor` design (see *Shared infrastructure needed* above).
 
 3. **Deflector angle** — Should the deflector have a fixed angle or rotate to reflect
    the projectile direction? Fixed angle is simpler and more strategic; rotating is

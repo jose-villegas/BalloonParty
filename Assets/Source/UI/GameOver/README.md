@@ -8,17 +8,16 @@ is a separate follow-on.
 | File | What it does |
 |---|---|
 | `GameOverScreen` | `MonoBehaviour` view. Subscribes to `GameOverMessage` — on receipt, fills the final level/score (from the message) and the persisted best level/score (from `IRunMeta`), then reveals itself via its `CanvasGroup`. Hides again when navigation leaves `NavigationState.GameOver` (i.e. after Restart). `OnRestartPressed` (wired to the Restart button) calls `RunController.RestartRun` |
-| `GameOverLifetimeScope` | Child `LifetimeScope` on the screen root; injects `GameOverScreen`, inheriting run services from `GameLifetimeScope` |
+| `GameOverLifetimeScope` | Empty child `LifetimeScope` on the screen root — the screen has no local registrations; `GameOverScreen` is injected via `RegisterComponentInHierarchy<GameOverScreen>` in `GameLifetimeScope` |
 
 ## Wiring requirements
 
 - The screen root GameObject must stay **active** in the scene — visibility is driven by the
   `CanvasGroup` (alpha / interactable / blocksRaycasts), not `SetActive`. If it were disabled,
   `Start` would never run and `GameOverMessage` would never be subscribed.
-- Attach `GameOverLifetimeScope` to that root so `RegisterComponentInHierarchy<GameOverScreen>`
-  finds the view.
 - Assign the four `TMP_Text` label fields and wire the Restart button's onClick to
-  `GameOverScreen.OnRestartPressed`.
+  `GameOverScreen.OnRestartPressed`. Each label's authored text is a `FormattedLabel` template
+  (e.g. `"Level: {0}"`) captured in `Awake`, so repeated losses substitute cleanly.
 
 ## Interactions
 

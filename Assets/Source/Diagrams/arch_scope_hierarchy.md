@@ -15,9 +15,12 @@ scope can resolve from.
 - `GameLifetimeScope` — game scene root; registers all gameplay systems, config SOs,
   MessagePipe brokers, and entry points
   - `ThrowerLifetimeScope` — thrower prefab; registers `ThrowerController` and wires the view
-  - `ScoreUILifetimeScope` — score HUD canvas; registers `ColorProgressBar` array and `ScoreTrailService`
+  - `ScoreUILifetimeScope` — score HUD canvas; injects the `ColorProgressBar` array and binds the score/level labels (`ScoreTrailService` itself lives in `GameLifetimeScope`)
   - `LevelUpLifetimeScope` — level-up popup; registers `LevelUpPopUp` and the `CinematicEndGate` ready-gate (the cinematic producers and `CinematicDirector` live in `GameLifetimeScope`)
-  - `ShieldUILifetimeScope` — shield HUD; registers `ShieldCounterLabel` and `ShieldCounterAnimation`
+  - `ShieldUILifetimeScope` — shield HUD; registers the shield counter labels, `ShieldCounterAnimation`, `ShieldTrailController`, and the shield trail endpoint
+  - `HealthUILifetimeScope` — health HUD; binds `HealthCounterLabel` views, registers `HeartTrailController` and the heart trail endpoint
+  - `DangerUILifetimeScope` — danger overlay; binds `DangerGradientView` to the danger level
+  - `GameOverLifetimeScope` — game-over panel; a scope shell with no local registrations (hierarchy injection only)
 
 **Pooled prefabs (balloons, projectiles)** do not use child scopes. Their `[Inject]`
 fields are populated via `InjectingPoolChannel` which calls

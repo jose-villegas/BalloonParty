@@ -9,8 +9,11 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 | Scope | GameObject | Registers |
 |---|---|---|
 | `ScoreUILifetimeScope` | Score UI Canvas root | Injects scene-placed `ColorProgressBar` instances via `RegisterBuildCallback`; binds `ScoreCounterLabel` and `LevelLabel` |
-| `LevelUpLifetimeScope` | LevelUp popup root | `LevelUpPopUp` |
-| `ShieldUILifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation` |
+| `LevelUpLifetimeScope` | LevelUp popup root | `LevelUpPopUp`, `CinematicEndGate(LevelUpPanIn)` as `IReadyGate` |
+| `ShieldUILifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation`, `ShieldTrailController`, the `Shield` trail endpoint |
+| `HealthUILifetimeScope` | Hearts HUD root | Binds `HealthCounterLabel`s to `IPlayerHealth.Current`; `HeartTrailController`, the `Heart` trail endpoint |
+| `DangerUILifetimeScope` | Danger overlay root | Binds `DangerGradientView`s to `IDangerLevel.Level` |
+| `GameOverLifetimeScope` | Game-over screen root | Empty child scope on the screen root (`GameOverScreen` itself is injected by `GameLifetimeScope`) |
 
 ## Feature folders
 
@@ -18,7 +21,13 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 |---|---|---|
 | `Score/` | Progress bars, score trail orbs, floating notices, score/level labels, `ScoreUILifetimeScope` | `ScoreUILifetimeScope` (child of `GameLifetimeScope`) |
 | `LevelUp/` | Full-screen level-up ceremony popup (`LevelUpPopUp`) | `LevelUpLifetimeScope` (child of `GameLifetimeScope`) |
-| `Shields/` | Shield counter label and bounce animation | `ShieldUILifetimeScope` (child of `GameLifetimeScope`) |
+| `Shields/` | Shield counter label, bounce animation, and shield trails | `ShieldUILifetimeScope` (child of `GameLifetimeScope`) |
+| `Health/` | Hit-point counter label and heart trails to overflow pops | `HealthUILifetimeScope` (child of `GameLifetimeScope`) |
+| `Danger/` | Space-danger gradient overlay (`DangerGradientView`) | `DangerUILifetimeScope` (child of `GameLifetimeScope`) |
+| `GameOver/` | Loss screen (`GameOverScreen`) — see `GameOver/README.md` | `GameOverLifetimeScope` (child of `GameLifetimeScope`) |
+| `Binding/` | Shared reactive binding helpers — `IReactiveBindable<T>`, `ReactivePropertyBinder`, and the `RegisterBoundViews` scope extension used by the Health and Danger scopes | — |
+
+Root-level helpers: `ReactiveCounterLabel` (base for TMP counter labels bound to an `int` reactive property), `FormattedLabel` (captures a label's authored text as a `{0}` template), and `RectAnchorMath` (static `RectTransform` position math).
 
 ## Game start
 

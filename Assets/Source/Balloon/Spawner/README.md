@@ -8,13 +8,15 @@ Responsible for introducing balloons into the grid — both at game start and du
 |---|---|
 | `BalloonSpawner` | `IStartable` + `IGridSpawner` — creates and places balloons, manages per-type pool registration and active-count caps, and decides where each line's balloon goes. `SpawnPriority` is `SpawnStage.BalloonActors` (100). `Start()` registers pools and kicks off pre-warm asynchronously; `SpawnAsync()` awaits the pre-warm then populates the initial grid |
 | `RejectedBalloonEffect` | The feedback when a balloon can't be placed: a pooled would-be balloon rises into the **overflow rows below the grid** and lingers as a visible pile. Draining is **heart-driven** — when a balloon is ready it publishes `OverflowHeartRequestedMessage` **and `SpawnBlockedMessage` right behind it**, so the hit point and camera shake land the moment the heart launches from the UI; the balloon itself only **pops when that heart lands** (`OnHeartArrived`) — the landing is purely the visual burst. Requests are **serialized** (one per interval, front-most first) so hearts drain in sequence. `ITickable` runs the pile as a **per-column queue** — a balloon's target row is its live index, so when one pops the balloons below slide up (compact) to fill the gap; the in-flight heart **homes on the balloon's live position** (`TryGetLivePosition`) so it still lands on it as it compacts. `IRunResettable` returns any transients on restart (they have no grid slot, so the board-clear broadcast can't reach them). Exposes `IPendingHealthCharges.PendingCharges` (queued, unlaunched balloons — each will unconditionally cost one HP), which `LossForecast` reads to know a loss is certain at reject-queue time. Engages a `PauseService.Pause(Overflow)` thrower-lock for the duration of the pile. Timing/motion (linger, request interval, stagger, ease, arrival radius) come from `Configuration/OverflowSettings` (`IOverflowSettings`) |
+| `BalloonFactory` | Assembles a single balloon: pulls a view from the pool, builds the model (via `BalloonModelFactory`) and its `BalloonController`, places it on the grid, and plays the entry animation. The spawner owns scheduling, per-type caps, and path computation; the factory owns the object-graph wiring |
+| `BalloonPlacementResolver` | Decides which slot a line's balloon takes for a given column — own entry, re-home, or pressure-open (see "Placement under pressure") |
 | `BalloonPoolChannel` | `InjectingPoolChannel<BalloonView>` — creates balloon instances via `IObjectResolver.Instantiate()`, injecting all `[Inject]` fields from the parent container without creating child scopes |
 
 ## Behaviour
 
 `BalloonSpawner` implements `IGridSpawner` with `SpawnPriority = SpawnStage.BalloonActors`. `GridSpawnerCoordinator` calls `SpawnAsync()` after the Navigation gate opens and all lower-priority spawners (e.g. `StaticActorSpawner`) have completed. `SpawnAsync` awaits the pre-warm task started in `Start()` — so pool pre-warming and the navigation/static-actor wait overlap rather than serialize.
 
-At game start `BalloonSpawner` spawns the initial grid rows from `BalloonsConfiguration.GameStartedBalloonLines`. For each empty slot it picks a balloon type via weighted random selection from `BalloonsConfiguration.Entries`, respecting each entry's `MaxCount` cap. All model configuration — `TypeName`, `ScoreValue`, `HitsToPop`, and `NudgeOverrides` — is bundled into a `BalloonModelConfig` struct and passed to the model constructor. `BalloonModelFactory.Create` (in `Balloon/Model/`) picks the model class from `entry.BalloonType` — shared with `RejectedBalloonEffect` so the switch lives in one place:
+At game start `BalloonSpawner` spawns the initial grid rows from `BalloonsConfiguration.GameStartedBalloonLines`. For each empty slot it picks a balloon type via weighted random selection from `BalloonsConfiguration.Entries`, respecting each entry's `MaxCount` cap, then hands the entry to `BalloonFactory.Create`. All model configuration — `TypeName`, `ScoreValue`, `HitsToPop`, and `NudgeOverrides` — is bundled into a `BalloonModelConfig` struct and passed to the model constructor. `BalloonModelFactory.Create` (in `Balloon/Model/`) picks the model class from `entry.BalloonType` — shared with `RejectedBalloonEffect` so the switch lives in one place:
 
 | `BalloonType` | Model class | Notes |
 |---|---|---|
@@ -23,7 +25,7 @@ At game start `BalloonSpawner` spawns the initial grid rows from `BalloonsConfig
 | `Tough` | `ToughBalloonModel` | Not paintable, not item-capable |
 | `Unbreakable` | `UnbreakableBalloonModel` | No `HitsRemaining`; only Piercing destroys |
 
-The variant's `Initialize(model)` handles color (for colorable types). Spawn animation follows the path returned by `SlotGrid.ComputePath`, driving a `DOPath(CatmullRom)` from the entry-row offset down to the target slot.
+The variant's `Initialize(model)` handles color (for colorable types). Spawn animation follows the path returned by `SlotGrid.ComputePath`, driving a `DOPath(CatmullRom)` from the entry-row offset down to the target slot (run by `BalloonFactory.AnimateSpawn`).
 
 After each projectile death (starting from the second turn) the spawner fires `BalloonsConfiguration.NewProjectileBalloonLines` new lines with `BalloonsConfiguration.NewBalloonLinesTimeInterval` delay between lines. Multi-line spawning uses `async UniTaskVoid` with a `CancellationTokenSource`, avoiding any coroutine runner dependency. The first projectile death is skipped because game-start lines are seeded separately — `SceneTransition` publishes `SpawnBalloonLineMessage` on scene load.
 
@@ -31,7 +33,7 @@ After the final line in each spawn batch, the spawner publishes `ItemCheckMessag
 
 ### Placement under pressure (turn spawns)
 
-A blocked column isn't lost immediately. `TrySpawnForColumn` resolves a slot in order, scanning columns nearest-first (`TryNearestColumn`):
+A blocked column isn't lost immediately. `BalloonPlacementResolver.Resolve` picks a slot in order, scanning columns nearest-first (`TryNearestColumn`):
 
 1. **Own column** — `FindFirstReachableEmptyRow` (the topmost slot reachable by rising from the entry).
 2. **Re-home** — the nearest *other* column the balloon can rise straight into (`ResolveOpenEntry`); a line may over-fill a column.

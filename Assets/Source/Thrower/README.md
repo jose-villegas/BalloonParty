@@ -9,7 +9,7 @@ The thrower is the player-controlled launcher at the bottom of the screen. It ai
 | `ThrowerController` | Plain C# class (`IStartable`, `ITickable`) — aiming, loading, firing, prediction trace, and reload logic |
 | `ThrowerView` | MonoBehaviour — owns the thrower's transform, rotation, entrance animation, prediction trace display, and pointer input (`IsAiming`, `FireReleased`, `TryGetAimDirection` — the only place that touches `Input`/`Camera`) |
 | `ThrowerLifetimeScope` | Child `LifetimeScope` on the Thrower GameObject — registers `ThrowerView` and `ThrowerController` |
-| `ThrowerSettings` | Holds the `ProjectileLifetimeScope` prefab reference for pool creation |
+| `ThrowerSettings` | Holds the `ProjectileView` prefab reference for pool creation (registered in `GameLifetimeScope`) |
 
 ## Gameplay
 
@@ -26,14 +26,16 @@ Each frame (`Tick`), only when navigation state is `Game` and the entrance anima
 - Updates the prediction trace line while the mouse button is held
 - Fires on mouse-up
 
-During `LevelUp` state, `Tick` is a no-op — the thrower cannot aim or fire while the level-up popup is visible.
+`Tick` is a no-op outside the `Game` navigation state or while any `PauseService` source is paused — the thrower cannot aim or fire during the level-up ceremony, cinematics, or the overflow heart-drain lock.
 
-When a `ProjectileDestroyedMessage` arrives, `ThrowerController` returns the old projectile to the pool and loads a new one immediately. The projectile prefab carries a `ProjectileLifetimeScope`, so instantiation uses `parentScope.CreateChildFromPrefab()` — this wires the parent scope before activation, ensuring all injected dependencies resolve correctly. The pool key is derived from the prefab's name.
+When a `ProjectileDestroyedMessage` arrives, `ThrowerController` returns the old projectile to the pool and loads a new one immediately. A `RunResetMessage` triggers the same reload so a fresh run starts with a fresh projectile (default shields and position). Projectiles are created through `ProjectilePoolChannel` (an `InjectingPoolChannel` — `[Inject]` fields resolved from the parent container, no child scope on the prefab). The pool key is derived from the prefab's name.
 
 ## Interactions
 
-- **LifetimeScope** — the parent scope; used to call `CreateChildFromPrefab` for projectile instantiation
+- **PoolManager / ProjectilePoolChannel** — registers and serves the projectile pool (pre-warmed with two instances)
 - **ProjectileDestroyedMessage** — triggers reload
+- **RunResetMessage** — swaps the carried-over projectile for a fresh one on restart
+- **PauseService** — any paused source blocks `Tick` (aim/fire)
 - **ProjectileLoadedMessage** — published after each load so shield UI can self-bind
 - **IGameConfiguration** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `ProjectileLoadDuration`
 - **PredictionTraceCalculator / ThrowerView** — calculates and renders the aim trajectory line while the player holds the mouse button

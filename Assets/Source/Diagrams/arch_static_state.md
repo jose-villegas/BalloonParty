@@ -11,12 +11,16 @@ across scene boundaries: `Navigation` and `Cinematic`.
 
 **`Navigation`** holds a `ReactiveProperty<NavigationState>` and exposes
 `TransitionTo(state)`. Any system can observe or transition the current state.
-States: `Launch` → `Game` → `LevelUp` (→ `Game` on dismiss).
+States: `Launch` → `Game` → `LevelUp` (→ `Game` on dismiss) → `GameOver`.
 
 **`Cinematic`** holds a `ReactiveProperty<CinematicState>` and manages a list of
 `ICinematicAware` listeners. `Begin(state)` / `End()` set the state and
-synchronously notify all registered listeners. Services that need to pause/resume
-during a cinematic implement `ICinematicAware` and register via `Cinematic.Register(this)`.
+synchronously notify all registered listeners — only `CinematicDirector` calls them,
+so the static is a read surface for everyone else. Consumers either observe
+`Cinematic.Current` / `Cinematic.IsPlaying` or, for behavioural reactions, read the
+current state's declared traits via `ICinematicState.Has(trait)` (see
+@ref arch_cinematics_architecture); the `ICinematicAware` callback list currently
+has no implementers.
 
 **Why static and not injected?**
 Both classes carry state that must survive scene transitions and be accessible from
@@ -37,16 +41,13 @@ Navigation.Current
 ```
 
 **Reacting to cinematics in a service:**
-```csharp
-public void Start() => Cinematic.Register(this);
-public void Dispose() => Cinematic.Unregister(this);
-
-public void OnCinematicBegin(CinematicState state)
-{
-    if (state == CinematicState.LevelUpPanIn) PauseWork();
-}
-public void OnCinematicEnd() => ResumeWork();
-```
+Prefer trait checks over enumerating states — inject `ICinematicState` and ask
+`Has(CinematicTraits.X)` so new cinematics get correct behaviour by declaring traits
+in `CinematicsSettings` rather than by editing every consumer. For simple "is
+anything playing" checks, read `Cinematic.IsPlaying`. The synchronous
+`ICinematicAware` callback pair (`Cinematic.Register` / `Unregister`) exists for
+services that must react in the same frame `Begin`/`End` fires, but nothing
+implements it today.
 
 **Do not add new static state** for feature-specific concerns — static state is
 reserved for these two cross-scene coordination needs. Feature state belongs in

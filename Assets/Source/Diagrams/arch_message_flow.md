@@ -11,17 +11,21 @@ and which systems subscribe to them. This is the primary decoupling mechanism:
 publishers know nothing about subscribers; subscribers know nothing about publishers.
 
 **Key flows:**
-- `ProjectileView` → `ActorHitMessage` → (`BalloonController`, `ScoreController`,
-  `NudgeService`, `ItemActivator`) — the most-subscribed message in the game; carries
-  the pre-computed `HitOutcome` so every subscriber reads the same result without
-  re-evaluating the hit
+- `ProjectileHitResolver` → `IHitDispatcher.Dispatch` → `HitPipeline` runs the
+  order-dependent stages explicitly (`ScoreController.OnActorHit`, then the owning
+  `BalloonController` via `BalloonControllerRegistry.Route`) and only then publishes
+  `ActorHitMessage` → (`NudgeService`, `ItemActivator`, `GridActorHitController`) —
+  the broadcast serves order-independent observers only; it carries the pre-computed
+  `HitOutcome` so every subscriber reads the same result without re-evaluating the hit.
+  Never publish `ActorHitMessage` directly — route hits through `IHitDispatcher`
 - `ScoreController` → `ScorePointMessage` → (`ScoreTrailService`, `ColorProgressBar`,
   `LevelUpCinematic`) — one message per point per streak multiplier; carries full
   trail identity for deduplication
 - `BalloonSpawner` / `ProjectileView` → `BalanceBalloonsMessage` → `BalloonBalancer`
   — pure signal; no data needed
 - `ScoreController` → `ScoreLevelUpMessage` → (`ColorProgressBar`, `LevelUpPopUp`,
-  `ColorStreakTracker`) — triggers the level-up cinematic pipeline
+  `ColorStreakTracker`) — announces the *confirmed* level-up (the cinematic itself
+  triggers earlier, off `ScorePointMessage` when `WillLevelUp()` is true)
 
 ## Guidance
 
@@ -39,8 +43,8 @@ publishers know nothing about subscribers; subscribers know nothing about publis
 - Messages are structs, not classes — no heap allocation per publish
 - Messages carry the **read-only interface** of involved models — never the writable one
 - Include enough data in the message so subscribers don't need to inject the publisher
-  to get context (e.g. `ActorHitMessage` carries `WorldPosition`, `Direction`, and
-  `Outcome` so subscribers don't need to query the projectile)
+  to get context (e.g. `ActorHitMessage` carries `WorldPosition`, `ProjectileDirection`,
+  `Outcome`, and the `DamageContext` so subscribers don't need to query the projectile)
 
 **Finding all subscribers of a message:**
 `grep -r "ISubscriber<MessageType>" Assets/Source` — every `[Inject] private ISubscriber<T>` field is a subscriber.

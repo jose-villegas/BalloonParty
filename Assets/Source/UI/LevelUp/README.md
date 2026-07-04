@@ -7,7 +7,7 @@ The full-screen level-up ceremony that plays when all color bars complete.
 | File | What it does |
 |---|---|
 | `LevelUpLifetimeScope` | VContainer child scope on the LevelUp popup root; registers `LevelUpPopUp` and a `CinematicEndGate(LevelUpPanIn)` as `IReadyGate` |
-| `LevelUpPopUp` | Waits for the pan-in cinematic to end (via `IReadyGate`), freezes time, shows the popup, spawns glow trails from each `ColorProgressBar` to the glow fill, and publishes `LevelUpDismissedMessage` on Continue |
+| `LevelUpPopUp` | Waits for the pan-in cinematic to end (via `IReadyGate`), freezes time via `TimeScaleService`, shows the popup, spawns glow trails from each `ColorProgressBar` to the glow fill, and publishes `LevelUpDismissedMessage` on Continue |
 
 ## How it works
 
@@ -15,9 +15,9 @@ The full-screen level-up ceremony that plays when all color bars complete.
 
 1. **Pan-in ends** — `LevelUpCinematic` ends the pan-in phase after the tipping trail arrives (completing all remaining in-flight trails), setting `CinematicState` to `None`.
 2. **Gate opens** — `CinematicEndGate(LevelUpPanIn)` unblocks: `Cinematic.Current != LevelUpPanIn` is now true.
-3. **Popup shows** — `LevelUpPopUp.ShowAfterGateAsync` sets `Time.timeScale = 0f`, triggers the `"Appear"` animator, and waits for the appear animation to finish. The level label initially shows the old level.
+3. **Popup shows** — `LevelUpPopUp.ShowAfterGateAsync` claims `TimeScaleSource.LevelUpPopup = 0` via `TimeScaleService` (effective `Time.timeScale` drops to 0), triggers the `"Appear"` animator, and waits for the appear animation to finish. The level label initially shows the old level.
 4. **Glow trails** — After the appear animation completes, `LevelUpPopUp` publishes `LevelUpGlowTrailsMessage` (triggers `ColorProgressBar.DrainSliderAsync` to drain each bar in sync), then spawns decorative `FlyingTrail` orbs from each bar's random position to random offsets around the glow fill centre. Trails fly in unscaled time (`Spawn(..., useUnscaledTime: true)`), staggered across waves (`_glowTrailsPerBar` waves × palette color count). As each trail arrives, `_levelGlowFill.fillAmount` advances proportionally; once all trails arrive, the level label updates to the new level.
-5. **Player taps Continue** — `OnContinue()` triggers `"Hide"`, publishes `LevelUpDismissedMessage`, and starts `ResumeAfterDelayAsync` (a configurable settle delay).
+5. **Player taps Continue** — `OnContinue()` triggers `"Hide"` and starts `ResumeAfterDelayAsync`, which publishes `LevelUpDismissedMessage` and releases the popup's `TimeScaleService` claim.
 6. **Bar reset** — Each `ColorProgressBar` receives `LevelUpDismissedMessage` and applies the stashed new max value, resetting progress to zero.
 7. **Restore cinematic** — `LevelUpCinematic` receives `LevelUpDismissedMessage` and starts `CinematicState.LevelUpRestore` — ramps `Time.timeScale` back to 1 and the camera back to its base position/size.
 8. **Navigate** — once restore completes, `LevelUpCinematic` calls `Navigation.TransitionTo(Game)`.

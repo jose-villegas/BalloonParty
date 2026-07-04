@@ -7,7 +7,8 @@ gradient so the player can feel the board getting dangerous before they actually
 
 | File | What it does |
 |---|---|
-| `SpaceDanger` | Plain C# entry point (`IStartable`, `IDisposable`). Exposes `IReadOnlyReactiveProperty<float> Level` and recomputes it whenever the grid (`SlotGrid.OnChanged`) or hit points (`PlayerHealthController.Current`) change. `Evaluate` is a pure, unit-tested function so the curve can be reasoned about in isolation |
+| `SpaceDanger` | Plain C# entry point (`IStartable`, `IDisposable`). Exposes `IReadOnlyReactiveProperty<float> Level` and recomputes it whenever the grid (`SlotGrid.OnChanged`) or hit points (`IPlayerHealth.Current`) change. `Evaluate` is a pure, unit-tested function so the curve can be reasoned about in isolation |
+| `IDangerLevel` | Read-only seam (`Level`) consumers bind against — registered alongside `SpaceDanger` in `GameLifetimeScope` |
 
 ## The danger curve
 
@@ -37,7 +38,7 @@ draw mode) and is recentred by **half** the growth (centred pivot assumed) so it
 the bottom expands up, the top expands down. On top of that it slides a top and a bottom container by a
 **custom per-side Y offset** (`restY + offsetY × Level`, sign per the inspector value). It treats the bound
 `Level` as a *target* and eases a current value toward it each frame (frame-rate-independent, `_lerpSpeed`),
-so tint, growth and translation glide rather than snapping. `DangerGradientBinder`
-(in `DangerUILifetimeScope`, a child scope) binds the views to `SpaceDanger.Level` at `Start`. Author the
-gradient, assign the target sprites, and (optionally) set the container + Y offset in the inspector —
-nothing renders until those are wired.
+so tint, growth and translation glide rather than snapping. `DangerUILifetimeScope` (a child scope)
+binds every `DangerGradientView` under its hierarchy to `IDangerLevel.Level` at `Start` via the shared
+`RegisterBoundViews` helper (`UI/Binding/`). Author the gradient, assign the target sprites, and
+(optionally) set the container + Y offset in the inspector — nothing renders until those are wired.

@@ -25,14 +25,14 @@ The director does not know about level-ups, trails, or cameras. Producers define
 |---|---|
 | **Trigger** | `ScorePointMessage` received, `WillLevelUp()` returns true (projected progress) |
 | **Setup** | Builds `TrailId(color, score, level)`, waits for it to register in `TrailFlightRegistry` |
-| **Begin** | `BeginCinematic(LevelUpPanIn)`, `Pause(Cinematic)` freezes projectile + gates trail spawns. Tipping trail's move tween killed, scale tween paused, position/scale driven manually by `PanInTick` |
+| **Begin** | `BeginCinematic(LevelUpPanIn)`, `Pause(Cinematic)` freezes the projectile (and thrower input). Tipping trail's move tween killed, scale tween paused, position/scale driven manually by `PanInTick` |
 | **Tick** | `_slowDownCurve` modulates tipping trail speed (1.0 → 0.3). Other trails fly at normal `Time.timeScale` (unmodified). Camera pans toward tipping trail, clamped so the trail always stays within the orthographic frustum |
 | **End trigger** | Tipping trail progress ≥ 1 → `Complete()` fires `onArrived` → `ScoreTrailArrivedMessage` |
 | **End** | `CompleteAll()` finishes stragglers, `EndCinematic()` → gate opens → popup shows |
 
 ### Gate — Popup Wait + Glow Trails
 
-`LevelUpLifetimeScope` registers `CinematicEndGate(CinematicState.LevelUpPanIn)` as `IReadyGate`. Popup waits until `Cinematic.Current != LevelUpPanIn`. When the gate opens, the popup sets `Time.timeScale = 0` to freeze balloons/particles.
+`LevelUpLifetimeScope` registers `CinematicEndGate(CinematicState.LevelUpPanIn)` as `IReadyGate`. Popup waits until `Cinematic.Current != LevelUpPanIn`. When the gate opens, the popup claims `TimeScaleSource.LevelUpPopup = 0` via `TimeScaleService` to freeze balloons/particles.
 
 After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrailsMessage` — each `ColorProgressBar` drains its slider in sync — then spawns decorative `FlyingTrail` orbs from each bar to the glow fill in unscaled time. When all glow trails arrive, the level label updates. No cinematic state is active during this phase.
 

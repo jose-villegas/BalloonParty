@@ -8,8 +8,10 @@ survives across runs.
 
 | File | What it does |
 |---|---|
-| `RunController` | Entry point (`IStartable`/`IDisposable`) singleton. `EndRun()` snapshots the final level/score, commits them to `IRunMeta`, publishes `GameOverMessage`, and transitions to `NavigationState.GameOver`. `RestartRun()` invokes every `IRunResettable` in ascending `ResetOrder`, then transitions back to `NavigationState.Game`. Loss triggers reach it two ways: the dev cheat calls `EndRun()` directly; the player-HP pool raises an `EndRunRequestedMessage` which `RunController` subscribes to in `Start`. (A message rather than a direct call, because a loss trigger that is itself an `IRunResettable` — like `PlayerHealthController` — can't depend on `RunController` without forming a DI cycle through the resettable collection this controller resolves at construction.) |
-| `IRunResettable` | Implemented by services holding per-run state that must be cleared on restart. `RestartRun` runs them in ascending `ResetOrder` so teardown that must precede other resets (quiesce async work, return pooled actors, clear the grid) can order itself ahead of the rest. `ScoreController` implements it at order 100 (no dependencies) |
+| `RunController` | Entry point (`IStartable`/`IDisposable`) singleton. `EndRun()` snapshots the final level/score, commits them to `IRunMeta`, publishes `GameOverMessage`, and transitions to `NavigationState.GameOver`. `RestartRun()` invokes every `IRunResettable` in ascending `ResetOrder`, publishes `RunResetMessage` (for views that can't reset reactively or live outside the reset graph, e.g. progress bars and the thrower's projectile), then transitions back to `NavigationState.Game`. Loss triggers reach it two ways: the dev cheat calls `EndRun()` directly; the player-HP pool raises an `EndRunRequestedMessage` which `RunController` subscribes to in `Start`. (A message rather than a direct call, because a loss trigger that is itself an `IRunResettable` — like `PlayerHealthController` — can't depend on `RunController` without forming a DI cycle through the resettable collection this controller resolves at construction.) |
+| `IRunResettable` | Implemented by services holding per-run state that must be cleared on restart. `RestartRun` runs them in ascending `ResetOrder` so teardown that must precede other resets (quiesce async work, return pooled actors, clear the grid) can order itself ahead of the rest |
+| `RunResetOrder` | Named stages for `ResetOrder` — `Quiesce(0)` → `Board(20)` → `Derived(40)` → `Counters(60)` → `Score(100)` → `Respawn(120)` — so a new resettable picks a stage instead of guessing a magic number |
+| `BoardClearController` | `IRunResettable` at the `Board` stage — broadcasts `BoardClearMessage` so every actor returns its pooled view and vacates its grid slot; MessagePipe publishes synchronously, so the board is empty when its `ResetRun` returns |
 | `IRunScore` | Read-only view (`Level`, `TotalScore`) that `RunController` snapshots when a run ends. Implemented by `ScoreController` |
 | `IRunMeta` / `RunMeta` | The only state that survives a run — best level and best score, persisted to `PlayerPrefs` (`BestLevel`, `BestScore`). `RecordRun(level, score)` keeps the max of each independently and persists on change. Loaded for display, never fed back into a live run |
 
@@ -21,8 +23,10 @@ trigger → RunController.EndRun() → (loss cinematic) → GameOver screen
 ```
 
 Reset happens on **restart**, not on GameOver entry, so the GameOver screen can still show the
-final score. `EndRun()` is suppressed unless the game is in `NavigationState.Game` with no
-cinematic playing — GameOver and the level-up cinematic must never overlap.
+final score. A loss arriving during a `BlocksLoss` cinematic or the `LevelUp` state is **deferred,
+never dropped** — `RunController` marks it pending and fires `EndRun()` the moment navigation
+returns to `Game`. Outside those gates, `EndRun()` only commits from `NavigationState.Game`
+(the GameOver state gate stops a second trigger from ending the run twice).
 
 ## Testability seams
 

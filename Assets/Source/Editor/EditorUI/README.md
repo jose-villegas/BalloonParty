@@ -11,6 +11,8 @@ Reusable UI building blocks for editor windows with sortable, selectable tables.
 | `AssetLinkLabel` | `AssetLinkLabel.Draw()` — clickable label that pings and selects an asset in the Project view by path |
 | `StyledRow` | `DrawStyledLabel()` (label with conditional bold styling) + `BeginHighlightedRow()` (starts a horizontal row with optional background tint; caller must call `EndHorizontal`) |
 | `SearchFilterToolbar` | `SearchFilterToolbar.Draw<TEnum>()` — full toolbar with search text field, enum popup filter, and optional refresh button. Generic over any filter enum |
+| `EditorAnimationLoop` | Play/pause/stop animation loop driven by `EditorApplication.update` — tracks delta time, pause state, and playback speed; the caller supplies a tick callback that returns `false` when the animation completes. Used by `EffectPreview/EffectViewPreviewPlayer` |
+| `PaletteColorPicker` | Reusable palette color dropdown + swatch drawing, backed by `ConfigAssetCache<GamePalette>`. Used by the effect previews and `ColorableBalloonVariantEditor` |
 
 ## Usage
 
