@@ -5097,23 +5097,23 @@ PrefabInstance:
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: _colorableRenderers.Array.size
-      value: 4
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: _spriteLayerRenderers.Array.size
-      value: 7
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_colorableRenderers.Array.data[1]'
       value: 
-      objectReference: {fileID: 4359522194162841539}
+      objectReference: {fileID: 8819685137557648389}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_colorableRenderers.Array.data[2]'
       value: 
-      objectReference: {fileID: 8819685137557648389}
+      objectReference: {fileID: 6946387119012857206}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_colorableRenderers.Array.data[3]'
@@ -5123,27 +5123,27 @@ PrefabInstance:
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[1]'
       value: 
-      objectReference: {fileID: 5792957658247753853}
+      objectReference: {fileID: 3494871512708445869}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[2]'
       value: 
-      objectReference: {fileID: 5985393784917471062}
+      objectReference: {fileID: 5075920835585179258}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[3]'
       value: 
-      objectReference: {fileID: 3494871512708445869}
+      objectReference: {fileID: 5954659857181554507}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[4]'
       value: 
-      objectReference: {fileID: 6229515523593916983}
+      objectReference: {fileID: 5954659857181554507}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[5]'
       value: 
-      objectReference: {fileID: 8620189484377990081}
+      objectReference: {fileID: 5954659857181554507}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[6]'
@@ -5168,33 +5168,9 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1584491585037960942}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &4359522194162841539 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2989577501380538669, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1584491585037960942}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
---- !u!212 &5792957658247753853 stripped
+--- !u!212 &5075920835585179258 stripped
 SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 5015188092537337491, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1584491585037960942}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &5985393784917471062 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 5110843805831965112, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1584491585037960942}
-  m_PrefabAsset: {fileID: 0}
---- !u!212 &6229515523593916983 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 4867988701194507481, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+  m_CorrespondingSourceObject: {fileID: 6020316169838688404, guid: 85afc73ba92384dafa9d8a43874d2dd6,
     type: 3}
   m_PrefabInstance: {fileID: 1584491585037960942}
   m_PrefabAsset: {fileID: 0}
@@ -5210,9 +5186,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
---- !u!212 &8620189484377990081 stripped
-SpriteRenderer:
-  m_CorrespondingSourceObject: {fileID: 7087590600817567023, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-    type: 3}
-  m_PrefabInstance: {fileID: 1584491585037960942}
-  m_PrefabAsset: {fileID: 0}

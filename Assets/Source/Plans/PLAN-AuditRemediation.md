@@ -409,6 +409,14 @@ after, on device where possible**. Items are independent; ordered by expected pa
   world units vs `_nudgeDistance` 0.15, and balance moves travel full slots, so
   balloons transiently overlap and a neighbor's Shine would draw over a passing
   balloon's Body. Confirm actual batch counts in Frame Debugger before and after.
+  **Status 2026-07-04: combiner tooling built** (`SpriteLayerCombiner` +
+  `Editor/SpriteCombine/`), scoped by decision to the **colored normal balloons only**
+  (their five layers are rigid — base `StableIdle` animates only the shared "Ballon"
+  child; Tough/Unbreakable/items stay live). Two-group flatten: Knot+Body baked
+  tint-neutral (runtime palette tint stays), Shine+Specular baked with authored
+  colors. Remaining: bake + manual prefab wiring, one SpriteAtlas + shared material
+  across the combined sprites (batching does not materialize without it), Frame
+  Debugger before/after.
 - **5e — Replace per-balloon idle Animators (base balloon only).** Balloon.prefab's
   Animator is enabled, Culling Mode = Always Animate, never disabled by `BalloonView`
   — so every on-board balloon evaluates `StableIdle.anim` (a looping 3 s euler curve
