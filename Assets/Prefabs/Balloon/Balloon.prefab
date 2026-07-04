@@ -380,7 +380,6 @@ GameObject:
   - component: {fileID: 7744549277022113413}
   - component: {fileID: -4720687053981353126}
   - component: {fileID: 6173351546761552298}
-  - component: {fileID: 7911586223519890860}
   m_Layer: 10
   m_Name: Balloon
   m_TagString: Balloons
@@ -538,24 +537,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.SimpleBalloonType
   _allowedColorsMask: -1
---- !u!114 &7911586223519890860
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5923847143892959990}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0045c7b0150fb477aa1a0b0f9b17302b, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.Rendering.SpriteLayerCombiner
-  _layers:
-  - {fileID: 4867988701194507481}
-  - {fileID: 7087590600817567023}
-  _neutralizeTint: 1
-  _resolutionMultiplier: 3
-  _outputSuffix: Specular
 --- !u!1 &6967174431229232736
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,8 +615,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
+  m_SortingLayerID: 1928968643
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 2d6f6aeb66b2b42929c552bc33fef2ff, type: 3}
