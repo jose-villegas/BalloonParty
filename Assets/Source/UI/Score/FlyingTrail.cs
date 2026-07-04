@@ -17,9 +17,10 @@ namespace BalloonParty.UI.Score
         [SerializeField] private SpriteRenderer _renderer;
         [SerializeField] private TrailRenderer _trailRenderer;
 
-        // Per-TrailMotion style (Move ease + Scale factor + colour), indexed by the enum's ordinal (O(1)).
-        // Index 0 (Default) holds the base curves; a motion with a null curve — or one past the end of the
-        // array — falls back to Default, then to a linear 0→1. Colour falls back to the caller's / prefab colour.
+        // Per-TrailMotion style (Move ease + Scale factor + colour Gradient sampled over the flight),
+        // indexed by the enum's ordinal (O(1)). Index 0 (Default) holds the base curves; a motion with a
+        // null curve — or one past the end of the array — falls back to Default, then to a linear 0→1.
+        // Colour precedence: caller's explicit colour > motion gradient > prefab colour.
         [EnumIndexed(typeof(TrailMotion))]
         [SerializeField] private MotionStyle[] _motions;
 
@@ -34,6 +35,7 @@ namespace BalloonParty.UI.Score
         private float _followElapsed;
         private bool _followUnscaled;
         private bool _following;
+        private Gradient _flightGradient;
         private Color _defaultColor;
         private Vector3 _defaultScale;
 
@@ -61,6 +63,7 @@ namespace BalloonParty.UI.Score
             // follows the balloon as the pile compacts yet still lands on it exactly at t = 1.
             transform.position = Vector3.LerpUnclamped(_followStart, _followTarget(), _followCurve.Evaluate(t));
             transform.localScale = _defaultScale * _followScaleCurve.Evaluate(t);
+            SampleFlightColor(t);
 
             if (t >= 1f)
             {
@@ -86,6 +89,7 @@ namespace BalloonParty.UI.Score
             _followArrived = null;
             _followCurve = null;
             _followScaleCurve = null;
+            _flightGradient = null;
             transform.DOKill();
             ApplySortingOrder(OverlaySortingOrder);
         }
@@ -103,6 +107,7 @@ namespace BalloonParty.UI.Score
             bool useUnscaledTime = false,
             TrailMotion motion = TrailMotion.Default)
         {
+            _flightGradient = null;
             ApplyColor(color);
             SetupTrace(target, duration, onCompleted, useUnscaledTime, motion);
         }
@@ -114,7 +119,7 @@ namespace BalloonParty.UI.Score
             bool useUnscaledTime = false,
             TrailMotion motion = TrailMotion.Default)
         {
-            ApplyMotionColor(motion);
+            BeginMotionGradient(motion);
             SetupTrace(target, duration, onCompleted, useUnscaledTime, motion);
         }
 
@@ -128,7 +133,7 @@ namespace BalloonParty.UI.Score
             _trailRenderer.Clear();
 
             TraceTo(target, duration, useUnscaledTime, motion);
-            ScaleOverFlight(duration, useUnscaledTime, motion, onCompleted);
+            AnimateOverFlight(duration, useUnscaledTime, motion, onCompleted);
         }
 
         /// <summary>
@@ -146,11 +151,12 @@ namespace BalloonParty.UI.Score
             bool useUnscaledTime = false,
             TrailMotion motion = TrailMotion.Default)
         {
+            _flightGradient = null;
             ApplyColor(color);
             _trailRenderer.Clear();
 
             var totalDuration = burstDuration + traceDuration;
-            ScaleOverFlight(totalDuration, useUnscaledTime, motion, onCompleted);
+            AnimateOverFlight(totalDuration, useUnscaledTime, motion, onCompleted);
 
             _moveTween = transform.DOMove(burstTo, burstDuration)
                 .SetUpdate(useUnscaledTime)
@@ -172,7 +178,7 @@ namespace BalloonParty.UI.Score
             TrailMotion motion = TrailMotion.Default)
         {
             _trailRenderer.Clear();
-            ApplyMotionColor(motion);
+            BeginMotionGradient(motion);
             _followTarget = targetProvider;
             _followArrived = onArrived;
             _followCurve = MoveCurveFor(motion);
@@ -197,14 +203,22 @@ namespace BalloonParty.UI.Score
             _moveTween = transform.DOMove(target, duration).SetEase(MoveCurveFor(motion)).SetUpdate(useUnscaledTime);
         }
 
-        // Drives uniform scale as an absolute factor of the prefab's base scale over the flight: the Scale
-        // curve maps normalized time → multiplier (1 = authored size, 0 = gone), so it can shrink, grow, or
-        // hold. Owns the completion callback (fires when the flight's duration elapses).
-        private void ScaleOverFlight(float duration, bool useUnscaledTime, TrailMotion motion, Action onCompleted)
+        // Drives everything keyed to normalized flight time: uniform scale as an absolute factor of the
+        // prefab's base scale (1 = authored size, 0 = gone — shrink, grow, or hold), and the armed motion
+        // gradient. Owns the completion callback (fires when the flight's duration elapses).
+        private void AnimateOverFlight(float duration, bool useUnscaledTime, TrailMotion motion, Action onCompleted)
         {
             var curve = ScaleCurveFor(motion);
             transform.localScale = _defaultScale * curve.Evaluate(0f);
-            DOTween.To(() => 0f, t => transform.localScale = _defaultScale * curve.Evaluate(t), 1f, duration)
+            DOTween.To(
+                    () => 0f,
+                    t =>
+                    {
+                        transform.localScale = _defaultScale * curve.Evaluate(t);
+                        SampleFlightColor(t);
+                    },
+                    1f,
+                    duration)
                 .SetEase(Ease.Linear)
                 .SetTarget(transform)
                 .SetUpdate(useUnscaledTime)
@@ -249,14 +263,25 @@ namespace BalloonParty.UI.Score
             return LinearFallback;
         }
 
-        // Tints the trail to the motion's colour only when that motion overrides it; otherwise leaves the
-        // colour reset by OnSpawned (the prefab default) in place.
-        private void ApplyMotionColor(TrailMotion motion)
+        // Arms the motion's gradient for this flight (sampled over normalized flight time by the
+        // progress drivers) and tints to its start; a motion without an override leaves the colour
+        // reset by OnSpawned (the prefab default) in place.
+        private void BeginMotionGradient(TrailMotion motion)
         {
             var i = (int)motion;
-            if (_motions != null && i >= 0 && i < _motions.Length && _motions[i].OverrideColor)
+            _flightGradient = _motions != null && i >= 0 && i < _motions.Length
+                              && _motions[i].OverrideColor && _motions[i].Gradient != null
+                ? _motions[i].Gradient
+                : null;
+
+            SampleFlightColor(0f);
+        }
+
+        private void SampleFlightColor(float t)
+        {
+            if (_flightGradient != null)
             {
-                ApplyColor(_motions[i].Color);
+                ApplyColor(_flightGradient.Evaluate(t));
             }
         }
 
@@ -284,10 +309,12 @@ namespace BalloonParty.UI.Score
 
             public bool OverrideColor;
 
-            // AllowNesting lets NaughtyAttributes evaluate ShowIf inside this nested (array-element) struct.
+            // Colour over normalized flight time — sampled every frame, so a flight can shift hue as it
+            // travels (a flat gradient is a static tint). AllowNesting lets NaughtyAttributes evaluate
+            // ShowIf inside this nested (array-element) struct.
             [ShowIf(nameof(OverrideColor))]
             [AllowNesting]
-            public Color Color;
+            public Gradient Gradient;
         }
     }
 }
