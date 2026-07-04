@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
@@ -18,7 +19,7 @@ using VContainer;
 
 namespace BalloonParty.Balloon.View
 {
-    public class BalloonView : MonoBehaviour, IPoolable, ISlotActorView, INudgeable
+    public class BalloonView : MonoBehaviour, IPoolable, ISlotActorView, INudgeable, IBalloonMotionView
     {
         private static readonly int IsStableParam = Animator.StringToHash("IsStable");
 
@@ -38,6 +39,7 @@ namespace BalloonParty.Balloon.View
         [Inject] private IGameConfiguration _config;
         [Inject] private IItemConfiguration _itemConfig;
         [Inject] private PoolManager _poolManager;
+        [Inject] private BalloonMotionTicker _motionTicker;
 
         private readonly CompositeDisposable _bindDisposables = new();
 
@@ -79,6 +81,7 @@ namespace BalloonParty.Balloon.View
         {
             TweenTracker.Kill();
             transform.DOKill();
+            _motionTicker?.CancelNudge(this);
             _bindDisposables.Clear();
             _itemService?.Unbind();
             Model = null;
@@ -169,14 +172,11 @@ namespace BalloonParty.Balloon.View
 
             _isNudging = true;
 
-            var sequence = DOTween.Sequence();
-            sequence.Append(transform.DOMove(
-                slotPosition + (direction.normalized * nudgeDistance),
-                nudgeDuration / 2f));
-            sequence.Append(transform.DOMove(slotPosition, nudgeDuration / 2f));
-            sequence.OnComplete(() => OnNudgeComplete(onComplete));
-
-            TweenTracker.Replace(sequence);
+            // Ticker-driven out-and-back (audit 3c) — the DOTween Sequence this replaces
+            // allocated ~25-30 heap objects per nudged neighbor. StartNudge replaces any
+            // running nudge for this view, matching the old TweenTracker.Replace.
+            _motionTicker.StartNudge(
+                this, slotPosition, direction.normalized * nudgeDistance, nudgeDuration, onComplete);
 
             if (currentScale != Vector3.one)
             {
@@ -184,7 +184,12 @@ namespace BalloonParty.Balloon.View
             }
         }
 
-        private void OnNudgeComplete(Action onComplete)
+        public void ApplyNudgePosition(Vector3 position)
+        {
+            transform.position = position;
+        }
+
+        public void CompleteNudge(Action onComplete)
         {
             if (Model is IWriteableDynamicSlotActor w)
             {

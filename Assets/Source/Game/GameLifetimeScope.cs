@@ -138,6 +138,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BushViewController>().AsSelf();
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
+            builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
             builder.RegisterEntryPoint<RejectedBalloonEffect>().AsSelf().As<IRunResettable>().As<IPendingHealthCharges>();
             builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf();
             builder.Register<BalloonControllerContext>(Lifetime.Singleton);

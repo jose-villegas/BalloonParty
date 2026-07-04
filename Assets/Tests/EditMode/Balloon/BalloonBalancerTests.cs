@@ -54,8 +54,10 @@ namespace BalloonParty.Tests.Balloon
             var subscriber = Substitute.For<ISubscriber<BalanceBalloonsMessage>>();
 
             // DisturbanceField is only dereferenced when animating a non-empty balance, so an
-            // empty-grid balancer can omit it.
-            return new BalloonBalancer(grid, balanceQuery, balloonsConfig, pathHolder, subscriber, null);
+            // empty-grid balancer can omit it; the motion ticker is plain C# and cheap to real.
+            return new BalloonBalancer(
+                grid, balanceQuery, balloonsConfig, pathHolder, subscriber, null,
+                new BalloonMotionTicker());
         }
     }
 }

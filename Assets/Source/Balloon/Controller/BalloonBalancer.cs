@@ -25,6 +25,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly GridBalanceQuery _balanceQuery;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
         private readonly DisturbanceFieldService _disturbanceField;
+        private readonly BalloonMotionTicker _motionTicker;
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
 
         private bool _balanceRequested;
@@ -42,7 +43,8 @@ namespace BalloonParty.Balloon.Controller
             IBalloonsConfiguration balloonsConfig,
             BalancePathHolder balancePathHolder,
             ISubscriber<BalanceBalloonsMessage> subscriber,
-            DisturbanceFieldService disturbanceField)
+            DisturbanceFieldService disturbanceField,
+            BalloonMotionTicker motionTicker)
         {
             _grid = grid;
             _balanceQuery = balanceQuery;
@@ -50,6 +52,7 @@ namespace BalloonParty.Balloon.Controller
             _balancePathHolder = balancePathHolder;
             _subscriber = subscriber;
             _disturbanceField = disturbanceField;
+            _motionTicker = motionTicker;
         }
 
         public void Start()
@@ -82,6 +85,13 @@ namespace BalloonParty.Balloon.Controller
 
                 view.TweenTracker.Kill();
                 view.transform.DOKill();
+
+                // A ticker-driven nudge escapes DOKill — cancel it explicitly, or it would
+                // keep writing positions while the balance path animates the same transform.
+                if (view is View.IBalloonMotionView motionView)
+                {
+                    _motionTicker.CancelNudge(motionView);
+                }
 
                 var currentScale = view.transform.localScale;
                 var viewTransform = view.transform;

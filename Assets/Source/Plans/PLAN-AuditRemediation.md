@@ -94,7 +94,10 @@ continuous world-space sampling (scroll already provides respawn variety) — an
 web — replaced by a polynomial smooth-min union (`_SlotBlend` knob). Gotchas recorded:
 EXR import in a Gamma-color-space project bakes a linear→gamma lift into texel data (use
 16-bit PNG); the `_NOISE_DEBUG` grayscale toggle stays in the shader for field
-inspection. Phases 5d–5f / 6 not started.
+inspection. **5d combiner experiment underway** (tooling + prefab flattening committed;
+atlas + Frame Debugger measurement pending). **3c DONE 2026-07-04**
+(`BalloonMotionTicker`, nudge GC); **5e built, evaluated, CANCELLED** — no measurable
+Animator win, see its entry. 5f / Phase 6 not started.
 
 **Key fact discovered during the audit:** the project runs on the **Built-in Render
 Pipeline**, not URP (`GraphicsSettings.asset` → `m_CustomRenderPipeline: {fileID: 0}`).
@@ -259,6 +262,13 @@ are localized; none touch the fragile trail-identity path.
   central `ITickable` calling view setters (a per-view `Update` would add the standing
   per-balloon cost that 5e exists to remove). Design it as one central balloon-motion
   ticker that owns both the nudge out-and-back and 5e's idle bob.
+  **DONE 2026-07-04** — `BalloonMotionTicker` (Balloon/Controller, `ITickable`, pooled
+  entries, zero steady-state allocation) owns the nudge out-and-back (two OutQuad
+  halves matching the old DOMove pair); `StartNudge` replaces a running nudge silently
+  (old `TweenTracker.Replace` semantics), and both found constraints are honored:
+  `BalloonBalancer.AnimatePaths` and `BalloonView.OnDespawned` call `CancelNudge`
+  explicitly. (The ticker briefly also carried 5e's idle bob — cancelled, see 5e.)
+  Needs playtest: nudge feel, nudge-vs-balance interruption, restart mid-storm.
 - **3d — `PressureCascade.TryFindChain`** (`Balloon/Controller/PressureCascade.cs:52–54`).
   Fresh `Dictionary` + `HashSet` + `Queue` per call. Call path:
   `BalloonSpawner.SpawnLineInternal` → `BalloonPlacementResolver.Resolve` → on
@@ -417,18 +427,18 @@ after, on device where possible**. Items are independent; ordered by expected pa
   colors. Remaining: bake + manual prefab wiring, one SpriteAtlas + shared material
   across the combined sprites (batching does not materialize without it), Frame
   Debugger before/after.
-- **5e — Replace per-balloon idle Animators (base balloon only).** Balloon.prefab's
-  Animator is enabled, Culling Mode = Always Animate, never disabled by `BalloonView`
-  — so every on-board balloon evaluates `StableIdle.anim` (a looping 3 s euler curve
-  on the child "Ballon") every frame forever. The clip animates **only child
-  localEulerAngles** while nudge tweens write **root position/scale** — no property
-  conflict, so a single `ITickable` sine-driver over stable balloons is safe; keep the
-  Animator for the unstable wiggle (or disable-while-stable + Cull Completely for the
-  offscreen case). **Exception: `ToughStableIdle.anim` animates material properties**
-  (`material._SphereWarp`, `_CrackThreshold`) — that both instantiates materials
-  (batching-breaking) and can't be transform-sine-driven; the Tough variant needs its
-  own treatment (MPB- or shader-side animation). Profile Animator ms first to size the
-  win.
+- **5e — Replace per-balloon idle Animators. CANCELLED 2026-07-04** after being built
+  and evaluated in-editor: no measurable win — the 40–66 idle Animators evaluate a
+  single 3-key euler curve each and their cost is noise next to fill rate on this
+  game's profile. The implementation (dual-sine ticker bob replicating
+  `StableIdle.anim`, Animator disabled-while-stable with a wake-for-wiggle handoff)
+  was removed; the nudge half survives as 3c's `BalloonMotionTicker`. Findings worth
+  keeping if this is ever revisited: both `StableIdle` and `UnstableIdle` animate only
+  the "Ballon" child's euler (no property conflict with nudges writing root position);
+  parameters written to a disabled Animator are lost — set them after enabling; and
+  `ToughStableIdle.anim` animates material properties (`_SphereWarp`,
+  `_CrackThreshold`), so the Tough variant can never be transform-sine-driven (its
+  material-instantiation batching cost remains a separate open item).
 - **5f — Self-derived shader clocks for balloon variants.**
   `Balloon/Type/UnbreakableBalloonVariant.cs:49–70,90–110` and
   `SoapBubbleClusterVariant.cs:55–83,144–155` do Get/Set/SetPropertyBlock per renderer
