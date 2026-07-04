@@ -219,8 +219,6 @@ namespace BalloonParty.Game.Score
             return 1;
         }
 
-        // Projects each scorable attribution's points onto its colour, recording (colour, points,
-        // base-progress) for publishing.
         private void ResolveAttributions(
             IReadOnlyList<ScoreAttribution> attributions, int multiplier,
             List<(string Color, int Points, int BaseProgress)> resolved)

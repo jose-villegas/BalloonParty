@@ -343,8 +343,6 @@ namespace BalloonParty.Editor.Bush
             _branchPreview.Apply();
         }
 
-        // Tints each branch pixel by its cross-width gradient and alpha shade; transparent pixels
-        // stay clear. Writes into <paramref name="result"/> parallel to <paramref name="pixels"/>.
         private static void ShadeRuntimePreview(
             Color32[] pixels, Color32[] result, Color branchColor, Gradient gradient)
         {
@@ -374,7 +372,6 @@ namespace BalloonParty.Editor.Bush
 
         private void StampLeafMarkers(Color32[] pixels, int res)
         {
-            // Draw a small green dot + direction line for each extracted leaf
             var leafColor = new Color32(80, 200, 50, 255);
             var dotRadius = Mathf.Max(2, res / 64);
 
@@ -608,15 +605,12 @@ namespace BalloonParty.Editor.Bush
 
         private void DrawPropertiesAndPreview()
         {
-            // Measure the properties column height with a throw-away layout pass
             EditorGUILayout.BeginVertical(GUILayout.MinWidth(PropertiesMinWidth), GUILayout.MaxWidth(PropertiesMaxWidth));
             DrawLeafProperties();
             EditorGUILayout.EndVertical();
 
-            // Capture the rect the properties column just occupied
             var propsRect = GUILayoutUtility.GetLastRect();
 
-            // Preview fills everything to the right of the properties column
             var previewX = propsRect.xMax + PreviewBoxPadding;
             var viewWidth = EditorGUIUtility.currentViewWidth - 20f;
             var previewWidth = viewWidth - previewX;

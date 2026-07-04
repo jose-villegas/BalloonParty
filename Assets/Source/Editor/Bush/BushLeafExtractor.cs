@@ -6,9 +6,9 @@ using UnityEngine;
 namespace BalloonParty.Editor.Bush
 {
     /// <summary>
-    /// Extracts leaf attachment points from branch generator segment endpoints.
-    /// Uses the fractal generator's precise UV positions directly — no pixel-based
-    /// detection. Terminal segments (whose End is not another segment's Start)
+    /// Extracts leaf attachment points from branch generator segment endpoints,
+    /// using the fractal generator's precise UV positions directly.
+    /// Terminal segments (whose End is not another segment's Start)
     /// are the actual branch tips.
     /// </summary>
     internal static class BushLeafExtractor
@@ -53,7 +53,6 @@ namespace BalloonParty.Editor.Bush
             var startPositions = new HashSet<Vector2Int>();
             foreach (var seg in segments)
             {
-                // Quantise to avoid floating-point mismatch
                 startPositions.Add(Quantise(seg.Start));
             }
 
@@ -73,7 +72,6 @@ namespace BalloonParty.Editor.Bush
                     continue;
                 }
 
-                // Place attachment near the tip end of the segment (85% toward End)
                 var attachPoint = Vector2.Lerp(seg.Start, seg.End, attachBias);
 
                 tips.Add(new TipCandidate

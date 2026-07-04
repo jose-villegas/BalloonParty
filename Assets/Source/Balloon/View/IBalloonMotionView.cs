@@ -14,8 +14,7 @@ namespace BalloonParty.Balloon.View
 
         /// <summary>
         ///     Finishes a nudge: restores stability state and invokes the caller's callback.
-        ///     Not called for cancelled nudges — matching the killed-tween semantics this
-        ///     replaces.
+        ///     Not called for cancelled nudges.
         /// </summary>
         void CompleteNudge(Action onComplete);
     }

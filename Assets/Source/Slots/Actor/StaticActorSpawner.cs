@@ -101,8 +101,6 @@ namespace BalloonParty.Slots.Actor
             }
         }
 
-        // Spawns one actor of `entry` at `slot` (pulling a pooled view when pools are ready) and
-        // swap-removes the slot from `emptySlots` so it isn't reused this pass.
         private void PlaceActor(GridActorPrefabEntry entry, Vector2Int slot, List<Vector2Int> emptySlots)
         {
             var model = CreateModel(entry.ActorType);

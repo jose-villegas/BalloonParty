@@ -38,17 +38,11 @@ namespace BalloonParty.Editor.EditorUI
             return newValue;
         }
 
-        /// <summary>
-        ///     Draws a single row selection toggle for an item.
-        /// </summary>
         internal static void DrawRowToggle(ISelectable item)
         {
             item.Selected = EditorGUILayout.Toggle(item.Selected, GUILayout.Width(18));
         }
 
-        /// <summary>
-        ///     Draws a status label showing selected count vs total.
-        /// </summary>
         internal static void DrawSelectionCount<T>(IReadOnlyList<T> allItems, float width = 140f)
             where T : class, ISelectable
         {
@@ -67,9 +61,6 @@ namespace BalloonParty.Editor.EditorUI
                 GUILayout.Width(width));
         }
 
-        /// <summary>
-        ///     Returns all items where <see cref="ISelectable.Selected"/> is true.
-        /// </summary>
         internal static List<T> GetSelected<T>(IReadOnlyList<T> items)
             where T : class, ISelectable
         {

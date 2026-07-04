@@ -53,7 +53,6 @@ namespace BalloonParty.Editor
                 }
                 else
                 {
-                    // Multiple broken GUIDs — show a menu to pick which one
                     var menu = new GenericMenu();
                     foreach (var oldGuid in capturedGuids)
                     {
@@ -91,8 +90,6 @@ namespace BalloonParty.Editor
             return broken;
         }
 
-        // Parses the guid starting at <paramref name="guidStart"/> and adds it to
-        // <paramref name="broken"/> if it resolves to no loadable MonoScript.
         private static void AddIfBrokenGuid(string text, int guidStart, List<string> broken)
         {
             var guidEnd = text.IndexOf(',', guidStart);

@@ -20,7 +20,6 @@ namespace BalloonParty.Editor.EditorUI
         /// <summary>Whether the loop is currently running (playing or paused).</summary>
         internal bool IsPlaying { get; private set; }
 
-        /// <summary>Whether the loop is paused.</summary>
         internal bool IsPaused { get; private set; }
 
         /// <summary>Playback speed multiplier. Default 1.</summary>

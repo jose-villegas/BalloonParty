@@ -62,8 +62,6 @@ namespace BalloonParty.Slots.Actor
             return fill.Result;
         }
 
-        // Starts a fresh cluster: closes the current one, picks a seed far from existing clusters,
-        // and primes the frontier with its neighbours.
         private void SeedNewCluster(ClusterFill fill)
         {
             FinishCurrentCluster(fill);
@@ -78,8 +76,6 @@ namespace BalloonParty.Slots.Actor
             AddNeighborsToFrontier(seed, fill.Available, fill.Frontier);
         }
 
-        // Consumes one frontier slot (swap-removed), claiming it if still available and extending
-        // the frontier from it.
         private void GrowCluster(ClusterFill fill)
         {
             var idx = Random.Range(0, fill.Frontier.Count);

@@ -55,10 +55,6 @@ namespace BalloonParty.Shared.Rendering
             DrawWorldQuad(bl, br, tr, tl, center, size, outlineColor, fillColor);
         }
 
-        /// <summary>
-        ///     Draws a wire sphere at <paramref name="position"/> with <paramref name="radius"/>
-        ///     and the given <paramref name="color"/>.
-        /// </summary>
         public static void DrawWireSphere(Vector3 position, float radius, Color color)
         {
             Gizmos.color = color;

@@ -194,7 +194,6 @@ namespace BalloonParty.Cheats
                 var a = path[i];
                 var b = path[i + 1];
                 var dir = (b - a).normalized;
-                // perpendicular offset in world space scaled by camera ortho size
                 var perp = dir.PerpendicularXY() * halfWidth;
 
                 GL.Vertex(a - perp);

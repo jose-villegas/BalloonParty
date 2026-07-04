@@ -103,12 +103,6 @@ namespace BalloonParty.Configuration
         public Shader DiffusionShader => _diffusionShader;
         public Shader StampBatchedShader => _stampBatchedShader;
 
-        /// <summary>
-        /// Returns the first <see cref="StampProfile"/> whose
-        /// <see cref="StampProfile.Sources"/> flags contain
-        /// <paramref name="source"/>. Falls back to a default profile
-        /// if no match is found.
-        /// </summary>
         StampProfile IDisturbanceFieldSettings.GetProfile(StampSource source)
         {
             foreach (var profile in _stampProfiles)

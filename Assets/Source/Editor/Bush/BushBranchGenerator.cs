@@ -39,7 +39,6 @@ namespace BalloonParty.Editor.Bush
             for (var i = 0; i < count; i++)
             {
                 var baseAngle = globalRotation + i * baseAngleStep;
-                // Jitter the angle slightly for organic feel
                 var jitter = (float)(rng.NextDouble() - 0.5) * baseAngleStep * 0.4f;
                 var angle = baseAngle + jitter;
 

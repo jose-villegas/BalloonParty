@@ -100,7 +100,6 @@ namespace BalloonParty.Balloon.Spawner
                 return FindFirstEmptyRowFromTop(col);
             }
 
-            // Search for the topmost empty row below the blocker
             for (var row = ceilingRow + 1; row < _grid.Rows; row++)
             {
                 if (_grid.IsEmpty(col, row))

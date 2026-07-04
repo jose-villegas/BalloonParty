@@ -218,9 +218,9 @@ namespace BalloonParty.Game.Cinematics
             Navigation.TransitionTo(NavigationState.Game);
         }
 
-        // Extra pan-in work each tick: the segment's curve value modulates the tipping trail's playback
-        // speed (gameplay is paused, so timeScale stays untouched); ending the pan-in inside the hook
-        // makes the runner skip the camera follow for the tick, as before.
+        // The segment's curve value modulates the tipping trail's playback speed (gameplay is paused,
+        // so timeScale stays untouched); ending the pan-in inside the hook makes the runner skip the
+        // camera follow for the tick.
         private void PanInTick(float dt, float curveValue)
         {
             // The loss can become certain mid-pan-in (the same turn's spawn keeps rejecting while the
@@ -236,7 +236,6 @@ namespace BalloonParty.Game.Cinematics
             AdvanceTrackedTrail();
         }
 
-        // Moves the tracked trail toward its target, ending the pan-in once it has arrived.
         private void AdvanceTrackedTrail()
         {
             if (_trackedFlight?.Transform == null)

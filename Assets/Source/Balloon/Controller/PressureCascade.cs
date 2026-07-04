@@ -121,9 +121,6 @@ namespace BalloonParty.Balloon.Controller
             return false;
         }
 
-        // Rays from <paramref name="from"/> along one hex direction, passing through pass-through
-        // occupants, and reports the first empty or shovable cell. Returns false if the ray leaves the
-        // grid or meets a non-traversable blocker first.
         // The first non-traversable occupant walking up from the entry — the cell a rising balloon
         // would first hit. Puffs and empties are skipped, so a puff at the bottom isn't mistaken for it.
         private static bool TryFindLowestBlocker(SlotGrid grid, int col, out Vector2Int blocker)
@@ -141,6 +138,9 @@ namespace BalloonParty.Balloon.Controller
             return false;
         }
 
+        // Rays from <paramref name="from"/> along one hex direction, passing through pass-through
+        // occupants, and reports the first empty or shovable cell. Returns false if the ray leaves the
+        // grid or meets a non-traversable blocker first.
         private static bool TryRayToShovableCell(
             SlotGrid grid,
             Vector2Int from,

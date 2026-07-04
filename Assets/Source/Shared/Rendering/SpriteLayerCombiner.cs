@@ -5,7 +5,7 @@ namespace BalloonParty.Shared.Rendering
 {
     /// <summary>
     ///     Authoring component for flattening rigid sprite layers into one baked sprite
-    ///     (audit 5d — fewer draws and less overdraw per balloon): drop on the node that
+    ///     (fewer draws and less overdraw per balloon): drop on the node that
     ///     will host the combined renderer, assign the layers, press <b>Bake</b> in the
     ///     inspector. The editor flattens them in sorting order into
     ///     <c>Assets/Sprites/Baked/Combined</c> (mirroring the prefab's path); wiring the

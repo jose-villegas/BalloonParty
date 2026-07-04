@@ -16,14 +16,8 @@ namespace BalloonParty.Item
         }
     }
 
-    /// <summary>
-    ///     Implement on components whose transform state must be captured
-    /// </summary>
     internal interface ITransformCapture
     {
-        /// <summary>
-        ///     Returns a readonly snapshot of the component's current transform.
-        /// </summary>
         TransformSnapshot CaptureSnapshot();
     }
 }

@@ -69,7 +69,6 @@ namespace BalloonParty.Slots.Actor.Archetype
             UpdateRustleProximity(_projectileProvider.Position, vfxPrefab);
         }
 
-        // Rustles each slot the projectile newly enters and re-arms slots it leaves.
         private void UpdateRustleProximity(Vector3 projectilePos, ParticleSystem vfxPrefab)
         {
             for (var i = 0; i < _slotPositions.Count; i++)

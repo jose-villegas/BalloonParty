@@ -5,7 +5,7 @@ namespace BalloonParty.Configuration
 {
     /// <summary>
     ///     Tuning for a trail the cinematic tracks/puppets during its flight — composed into
-    ///     <see cref="CameraRigCinematicEntry" /> so any trail-tracking cinematic can use it (the
+    ///     <see cref="CinematicStateEntry" /> so any trail-tracking cinematic can use it (the
     ///     level-up drives its tipping trail with it today; others may opt in).
     /// </summary>
     [Serializable]

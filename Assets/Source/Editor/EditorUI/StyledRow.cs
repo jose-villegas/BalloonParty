@@ -8,9 +8,6 @@ namespace BalloonParty.Editor.EditorUI
     /// </summary>
     internal static class StyledRow
     {
-        /// <summary>
-        ///     Draws a label with optional bold styling.
-        /// </summary>
         internal static void DrawStyledLabel(string text, bool bold, float width)
         {
             var style = bold

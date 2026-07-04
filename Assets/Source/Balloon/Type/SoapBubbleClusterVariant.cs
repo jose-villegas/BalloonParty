@@ -56,7 +56,6 @@ namespace BalloonParty.Balloon.Type
         {
             EnsureBlock();
 
-            // Default to real time; editor path overrides below.
             var currentTime = Time.time;
 #if UNITY_EDITOR
             if (!Application.isPlaying)

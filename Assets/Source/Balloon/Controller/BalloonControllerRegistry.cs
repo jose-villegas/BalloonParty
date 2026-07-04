@@ -18,7 +18,7 @@ namespace BalloonParty.Balloon.Controller
     ///     shoves never touch the registry), and a reference compare on resolve stands in for a
     ///     generation counter — models are never pooled, so a stale handle can only point at
     ///     null or a different model. Also owns board-clear teardown: one subscriber iterating a
-    ///     snapshot replaces the per-balloon subscriptions whose re-entrant disposal needed
+    ///     snapshot, rather than per-balloon subscriptions whose re-entrant disposal would need
     ///     hand-rolled guards.
     /// </summary>
     internal class BalloonControllerRegistry : IStartable, IDisposable

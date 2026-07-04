@@ -7,17 +7,13 @@ using VContainer.Unity;
 namespace BalloonParty.Balloon.Controller
 {
     /// <summary>
-    ///     Single driver for the balloon nudge out-and-back (audit 3c), which previously
-    ///     allocated a DOTween Sequence (+2 tweeners + closure) per nudged neighbor —
-    ///     60–100+ heap objects per bomb shockwave. One Tick walks a flat pooled list and
-    ///     calls view setters — the controller owns motion state, the views own their
-    ///     transforms. (An idle-bob half replacing the per-balloon stable Animators lived
-    ///     here briefly — audit 5e — and was cancelled after in-editor evaluation showed
-    ///     no measurable win.)
-    ///     Arbitration (the killed-tween semantics this replaces): starting a nudge for a
-    ///     view silently replaces its running one; balance moves and despawn must call
-    ///     <see cref="CancelNudge"/> explicitly, because a ticker-driven lerp escapes the
-    ///     <c>transform.DOKill()</c> that used to cancel the sequence implicitly.
+    ///     Single driver for the balloon nudge out-and-back: one Tick walks a flat pooled list
+    ///     and calls view setters — the controller owns motion state, the views own their
+    ///     transforms — so a bomb shockwave nudging dozens of neighbors allocates nothing
+    ///     per balloon.
+    ///     Arbitration: starting a nudge for a view silently replaces its running one; balance
+    ///     moves and despawn must call <see cref="CancelNudge"/> explicitly, because a
+    ///     ticker-driven lerp escapes <c>transform.DOKill()</c>.
     /// </summary>
     internal sealed class BalloonMotionTicker : ITickable
     {
@@ -75,7 +71,6 @@ namespace BalloonParty.Balloon.Controller
                 entry.Elapsed += deltaTime;
                 var progress = Mathf.Clamp01(entry.Elapsed / entry.Duration);
 
-                // Two OutQuad halves — matches the DOMove pair this replaces.
                 var reach = progress < 0.5f
                     ? EaseOutQuad(progress * 2f)
                     : 1f - EaseOutQuad((progress - 0.5f) * 2f);

@@ -10,9 +10,9 @@ namespace BalloonParty.Configuration
     ///     <see cref="CinematicState" /> (indexed by the enum's ordinal, drawn with the enum names):
     ///     behavioural traits + the uniform camera-rig segment it plays + capability blocks. States are
     ///     the generalization — a restore is not special-cased, it's just another segment whose curve
-    ///     ramps timeScale back to 1. The field initializers ARE the canonical declarations — they carry
-    ///     the authored values recovered off <c>Cinema.prefab</c>, a fresh instance equals the shipped
-    ///     asset, and the EditMode test asserts them, so a new state without a declaration fails CI.
+    ///     ramps timeScale back to 1. The field initializers ARE the canonical declarations — a fresh
+    ///     instance equals the shipped asset, and the EditMode test asserts them, so a new state
+    ///     without a declaration fails CI.
     /// </summary>
     [CreateAssetMenu(menuName = "Configuration/Cinematics Settings", fileName = "CinematicsSettings")]
     internal class CinematicsSettings : ScriptableObject, ICinematicsSettings

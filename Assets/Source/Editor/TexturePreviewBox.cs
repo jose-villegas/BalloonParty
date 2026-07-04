@@ -80,7 +80,6 @@ namespace BalloonParty.Editor
             var labelRect = new Rect(rect.x + 4f, toolbarY, rightEdge - rect.x - 8f, EditorGUIUtility.singleLineHeight);
             EditorGUI.LabelField(labelRect, _title, EditorStyles.centeredGreyMiniLabel);
 
-            // Texture drawing area
             if (texture != null)
             {
                 var inner = new Rect(

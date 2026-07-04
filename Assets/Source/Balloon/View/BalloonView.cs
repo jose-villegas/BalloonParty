@@ -172,9 +172,7 @@ namespace BalloonParty.Balloon.View
 
             _isNudging = true;
 
-            // Ticker-driven out-and-back (audit 3c) — the DOTween Sequence this replaces
-            // allocated ~25-30 heap objects per nudged neighbor. StartNudge replaces any
-            // running nudge for this view, matching the old TweenTracker.Replace.
+            // StartNudge silently replaces any nudge already running for this view.
             _motionTicker.StartNudge(
                 this, slotPosition, direction.normalized * nudgeDistance, nudgeDuration, onComplete);
 
