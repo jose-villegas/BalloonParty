@@ -215,11 +215,17 @@ difficulty), `ProjectileStartingShields` (a core-feel constant, not a ramp lever
 per-type `HitsToPop` (a balloon's identity doesn't change per level), item damage/flags/VFX
 (balance catalog), prediction/physics tuning.
 
-**The level-up threshold stays formula-shaped but becomes a parametrized curve** (decided
-2026-07-02): `PointsRequiredForLevel(level)` is NOT a per-range `RangedValue` — it stays one
-**global authored curve** (an `AnimationCurve` of points-required over level, or explicit
-keyframes) whose *keys can be inserted at range boundaries*, replacing the hardcoded steep
-exponential. One source, smooth between keys, tunable per range without per-range fields.
+**The level-up threshold: formula × modifier curve** (clarified 2026-07-02): the formula
+**stays** (`e² · ln(level^2π) + 25` — logarithmic: L1=25, L5≈100, L20≈164) and composes
+**multiplicatively** with one global authored `AnimationCurve`:
+`required(level) = round(formula(level) × modifier.Evaluate(level))`. The curve is
+dimensionless (y = multiplier, default flat 1.0 = pure formula, zero effect until authored);
+"per range" tuning = inserting keys at range-boundary levels (e.g. `(1, 0.8) → (5, 1.0)`
+makes the tutorial range ~20% cheaper, blending back to the formula by level 5). Multiplied,
+not added (an offset means different things at 25 pts vs 165 pts) and not per-range formula
+coefficients (boundary discontinuities; no single place to see the final curve). Guard: an
+`OnValidate`/EditMode check that the composed result stays positive and non-decreasing over
+the authored domain.
 
 **HP resets per level** (decided 2026-07-02 — resolves the Ascent's open question):
 `StartingHitPoints` stays a single global value, and `PlayerHealthController` refills to it
