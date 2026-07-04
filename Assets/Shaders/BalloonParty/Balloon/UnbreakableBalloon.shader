@@ -64,6 +64,9 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
         _SpriteScale ("Scale", Range(0.1, 1.0)) = 1.0
 
         [PerRendererData] _TimeOffset ("Time Offset", Float) = 0
+        // Default 2: the authored look predates the self-derived clock, when C# pushed
+        // realtime on top of _Time.y and the animation effectively ran at 2x.
+        _AnimationSpeed ("Animation Speed", Float) = 2.0
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
 
@@ -185,6 +188,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             // Sprite
             float _SpriteScale;
             float _TimeOffset;
+            float _AnimationSpeed;
 
             Varyings vert(Attributes IN)
             {
@@ -264,7 +268,9 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             // ----------------------------------------------------------------
             fixed4 frag(Varyings IN) : SV_Target
             {
-                float time = _Time.y + _TimeOffset;
+                // Self-derived clock: C# pushes a per-instance phase once via _TimeOffset;
+                // edit mode zeroes _AnimationSpeed and feeds editor time through the offset.
+                float time = _Time.y * _AnimationSpeed + _TimeOffset;
 
                 // Scale sprite UV inward for shadow margin
                 float2 spriteUV = (IN.uv - 0.5) / _SpriteScale + 0.5;

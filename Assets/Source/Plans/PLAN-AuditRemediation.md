@@ -94,10 +94,11 @@ continuous world-space sampling (scroll already provides respawn variety) — an
 web — replaced by a polynomial smooth-min union (`_SlotBlend` knob). Gotchas recorded:
 EXR import in a Gamma-color-space project bakes a linear→gamma lift into texel data (use
 16-bit PNG); the `_NOISE_DEBUG` grayscale toggle stays in the shader for field
-inspection. **5d combiner experiment underway** (tooling + prefab flattening committed;
-atlas + Frame Debugger measurement pending). **3c DONE 2026-07-04**
-(`BalloonMotionTicker`, nudge GC); **5e built, evaluated, CANCELLED** — no measurable
-Animator win, see its entry. 5f / Phase 6 not started.
+inspection. **5d DONE 2026-07-04** (combiner tooling + prefab flattening; closed after
+in-editor verification). **3c DONE 2026-07-04** (`BalloonMotionTicker`, nudge GC);
+**5e built, evaluated, CANCELLED** — no measurable Animator win, see its entry.
+**5f DONE 2026-07-04** (self-derived shader clocks — see its entry; in-editor visual
+check pending). Phase 5 is thereby complete; Phase 6 not started.
 
 **Key fact discovered during the audit:** the project runs on the **Built-in Render
 Pipeline**, not URP (`GraphicsSettings.asset` → `m_CustomRenderPipeline: {fileID: 0}`).
@@ -439,18 +440,20 @@ after, on device where possible**. Items are independent; ordered by expected pa
   `ToughStableIdle.anim` animates material properties (`_SphereWarp`,
   `_CrackThreshold`), so the Tough variant can never be transform-sine-driven (its
   material-instantiation batching cost remains a separate open item).
-- **5f — Self-derived shader clocks for balloon variants.**
-  `Balloon/Type/UnbreakableBalloonVariant.cs:49–70,90–110` and
-  `SoapBubbleClusterVariant.cs:55–83,144–155` do Get/Set/SetPropertyBlock per renderer
-  per frame just to advance `_TimeOffset`/`_Rotation` (up to 11 renderers for
-  Unbreakable). No other code writes those MPBs, and `_SphereCenter` only changes on
-  movement — push it on change only. Two verified gotchas: (1)
-  `UnbreakableBalloon.shader:271` *already* adds `_Time.y + _TimeOffset` while C#
-  pushes `Time.time + phase` — the clock currently runs ~2× speed, so a phase-only
-  push halves the animation speed; retune the authored speed to match current visuals.
-  (2) `SoapBubbleCluster.shader:275` uses `_TimeOffset` as the *whole* clock and
-  `_Rotation` is a C#-integrated angle — this one needs the shader edit (add a
-  `_Time.y` term + a `_RotationSpeed` uniform; the speed is constant after `Bind`).
+- **5f — Self-derived shader clocks for balloon variants. DONE 2026-07-04** (needs the
+  in-editor visual check). Both per-frame Get/Set/SetPropertyBlock loops are gone:
+  Unbreakable's shader now runs `_Time.y * _AnimationSpeed + _TimeOffset` (speed
+  default 2 preserves the authored look — the old C#-pushed clock stacked on `_Time.y`
+  and effectively ran 2×; C# owns the property and pushes the rate explicitly so an
+  edit-mode preview's zeroed block can't leak into play); C# pushes phase at `Bind`
+  and re-pushes sphere data only when `transform.position` changes (nudges/balance).
+  SoapBubbleCluster's shader gained `_FloatSpeed`/`_RotationSpeed` uniforms
+  (`_Time.y`-derived float clock and spin; `_Rotation` is now just the random initial
+  angle) — pushed once at `Bind`, plus an `Awake` push so scene-placed instances that
+  never Bind still animate. Both edit-mode previews zero the shader clocks and
+  integrate editor time, mirroring `ClusterView`. Verify in-editor: Unbreakable
+  chrome/rim/shine speed matches pre-change footage, bubbles float and spin at the
+  same feel, edit-mode previews still animate.
 
 Shader edits cannot be validated by `dotnet build` — every item here ends with an
 in-editor check and a device profile.

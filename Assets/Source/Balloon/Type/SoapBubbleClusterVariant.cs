@@ -12,12 +12,15 @@ namespace BalloonParty.Balloon.Type
 {
     /// <summary>
     /// Balloon variant for <c>BalloonType.BubbleCluster</c>.
-    /// Drives <c>_BubbleCount</c> and <c>_TimeOffset</c> on the
+    /// Drives <c>_BubbleCount</c> and the float/spin clock of the
     /// <c>BalloonParty/Balloon/SoapBubbleCluster</c> shader via
-    /// <see cref="MaterialPropertyBlock"/>.
+    /// <see cref="MaterialPropertyBlock"/> — phase and speeds are pushed once at
+    /// <c>Bind</c>; the shader self-derives the animation from <c>_Time.y</c>, so
+    /// runtime frames push nothing.
     ///
     /// <c>[ExecuteAlways]</c> keeps the shader animation running in edit mode
-    /// without entering Play mode.  Adjust <c>_previewBubbleCount</c> in the
+    /// (where <c>_Time</c> is frozen — the preview zeroes the shader clocks and
+    /// integrates editor time instead).  Adjust <c>_previewBubbleCount</c> in the
     /// Inspector to preview each cluster state.
     /// </summary>
     [ExecuteAlways]
@@ -26,6 +29,8 @@ namespace BalloonParty.Balloon.Type
         private static readonly int BubbleCountId = Shader.PropertyToID("_BubbleCount");
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
         private static readonly int RotationId = Shader.PropertyToID("_Rotation");
+        private static readonly int FloatSpeedId = Shader.PropertyToID("_FloatSpeed");
+        private static readonly int RotationSpeedId = Shader.PropertyToID("_RotationSpeed");
 
         [SerializeField] private SpriteRenderer _renderer;
 
@@ -50,35 +55,46 @@ namespace BalloonParty.Balloon.Type
         {
             EnsureBlock();
             _instancePhase = Random.value * 100f;
+
+            // Instances that never Bind (scene-placed, previews) still get a live clock;
+            // Bind re-pushes with the randomized spin on top.
+            if (Application.isPlaying)
+            {
+                PushRuntimeClock();
+            }
         }
 
         private void Update()
         {
             EnsureBlock();
 
-            var currentTime = Time.time;
 #if UNITY_EDITOR
+            // Edit mode: built-in _Time is frozen, so zero the shader clocks and
+            // integrate editor time here. Guard against first-frame and load spikes.
             if (!Application.isPlaying)
             {
-                currentTime = (float)EditorApplication.timeSinceStartup;
                 SceneView.RepaintAll();
+                var editorTime = (float)EditorApplication.timeSinceStartup;
+                if (_lastTime >= 0f)
+                {
+                    var delta = editorTime - _lastTime;
+                    if (delta > 0f && delta < 0.5f)
+                    {
+                        _rotationAngle += _rotationSpeedRad * delta;
+                    }
+                }
+
+                _lastTime = editorTime;
+                PushEditPreview(editorTime);
             }
 #endif
 
-            // Compute delta manually so the same path works in both edit
-            // and play mode.  Guard against first-frame and scene-load spikes.
-            if (_lastTime >= 0f)
+            // The runtime clock and spin are shader-derived (pushed once at Bind); the
+            // quad itself must stay axis-aligned — the shader rotates the content.
+            if (_renderer != null)
             {
-                var delta = currentTime - _lastTime;
-                if (delta > 0f && delta < 0.5f)
-                {
-                    _rotationAngle += _rotationSpeedRad * delta;
-                }
+                _renderer.transform.localRotation = Quaternion.identity;
             }
-
-            _lastTime = currentTime;
-            PushTime(currentTime);
-            _renderer.transform.localRotation = Quaternion.identity;
         }
 
         private void OnValidate()
@@ -110,6 +126,7 @@ namespace BalloonParty.Balloon.Type
                                                       * (Random.value < 0.5f ? 1f : -1f);
             _lastTime = -1f;
 
+            PushRuntimeClock();
             PushBubbleCount(Mathf.Clamp(durable.HitsRemaining.Value, 1, _maxBubbles));
 
             durable.HitsRemaining
@@ -140,7 +157,9 @@ namespace BalloonParty.Balloon.Type
             _renderer.SetFloatAndApply(_block, BubbleCountId, count);
         }
 
-        private void PushTime(float currentTime)
+        // Pushed once per Bind: the shader derives clock and spin from _Time.y, so no
+        // per-frame property-block churn at runtime.
+        private void PushRuntimeClock()
         {
             if (_renderer == null || _block == null)
             {
@@ -148,9 +167,28 @@ namespace BalloonParty.Balloon.Type
             }
 
             _renderer.GetPropertyBlock(_block);
-            _block.SetFloat(TimeOffsetId, (currentTime * _floatSpeed) + _instancePhase);
+            _block.SetFloat(TimeOffsetId, _instancePhase);
+            _block.SetFloat(FloatSpeedId, _floatSpeed);
             _block.SetFloat(RotationId, _rotationAngle);
+            _block.SetFloat(RotationSpeedId, _rotationSpeedRad);
             _renderer.SetPropertyBlock(_block);
         }
+
+#if UNITY_EDITOR
+        private void PushEditPreview(float editorTime)
+        {
+            if (_renderer == null || _block == null)
+            {
+                return;
+            }
+
+            _renderer.GetPropertyBlock(_block);
+            _block.SetFloat(TimeOffsetId, editorTime * _floatSpeed + _instancePhase);
+            _block.SetFloat(FloatSpeedId, 0f);
+            _block.SetFloat(RotationId, _rotationAngle);
+            _block.SetFloat(RotationSpeedId, 0f);
+            _renderer.SetPropertyBlock(_block);
+        }
+#endif
     }
 }

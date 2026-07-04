@@ -44,6 +44,8 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
         _IridescenceAmt   ("Mix Amount",   Range(0, 1))        = 0.70
         _IridescenceSpeed ("Hue Speed",    Range(0, 0.20))     = 0.025
         _TimeOffset       ("Time Offset",  Float)              = 0.0
+        _FloatSpeed       ("Float Speed",  Float)              = 0.0
+        _RotationSpeed    ("Rotation Speed (rad per s)", Float) = 0.0
 
         [Header(Specular)]
         _SpecColor      ("Specular",       Color)              = (1, 1, 1, 1)
@@ -66,9 +68,10 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
         _ShadowOffsetX  ("Offset X",       Range(-0.25, 0.25)) =  0.025
         _ShadowOffsetY  ("Offset Y",       Range(-0.25, 0.25)) = -0.030
         _ShadowSoftness ("Softness",       Range(0, 0.06))     =  0.015
-        // _FloatSpeed is owned by SoapBubbleClusterRenderer (C#) so it can
-        // drive _TimeOffset in both edit and play mode.  _FloatAmount stays
-        // here because it is a purely visual scale with no time dependency.
+        // _FloatAmount stays here because it is a purely visual scale with no
+        // time dependency; the clock itself is _Time.y * _FloatSpeed + _TimeOffset
+        // (SoapBubbleClusterVariant pushes speed/phase once at Bind, and zeroes the
+        // speeds in edit mode to drive the preview from editor time instead).
         _FloatAmount    ("Per-Bubble Amount", Range(0, 0.06))   = 0.025
 
         [Header(Breathe)]
@@ -144,6 +147,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
             float  _IridescenceAmt;
             float  _IridescenceSpeed;
             float  _TimeOffset;
+            float  _FloatSpeed;
             fixed4 _SpecColor;
             float  _SpecSize;
             float  _SpecSharpness;
@@ -153,6 +157,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
             float  _BreatheAmount;
             float  _BreatheSpeed;
             float  _Rotation;
+            float  _RotationSpeed;
 
             #ifdef _SHADOW_ON
             fixed4 _ShadowColor;
@@ -268,11 +273,8 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
 
-                // _TimeOffset is fully owned by SoapBubbleClusterVariant:
-                // it receives (currentTime * floatSpeed + instancePhase) every
-                // frame so the animation runs correctly in both edit and play mode.
                 float2 uvRaw = (IN.texcoord - 0.5) / _SpriteScale;
-                float  t     = _TimeOffset;
+                float  t     = _Time.y * _FloatSpeed + _TimeOffset;
                 int    cnt   = (int)round(_BubbleCount);
 
                 // ── Rotation applied before everything else ────────────────
@@ -281,8 +283,9 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 // The shadow offset is applied to uvRaw BEFORE rotating so it
                 // stays in the unrotated (world-aligned) frame; the same rotation
                 // is then applied to bring it into the cluster's own frame.
-                float cosR = cos(_Rotation);
-                float sinR = sin(_Rotation);
+                float rotationAngle = _Rotation + _Time.y * _RotationSpeed;
+                float cosR = cos(rotationAngle);
+                float sinR = sin(rotationAngle);
                 float2 uv  = float2(uvRaw.x * cosR - uvRaw.y * sinR,
                                     uvRaw.x * sinR + uvRaw.y * cosR);
 

@@ -12,24 +12,33 @@ namespace BalloonParty.Balloon.Type
 {
     /// <summary>
     /// Balloon variant for <c>BalloonType.Unbreakable</c>.
-    /// Pushes <c>_SphereCenter</c>, <c>_SphereRadius</c>, and
-    /// <c>_TimeOffset</c> to every quadrant <see cref="SpriteRenderer"/>
-    /// so the <c>BalloonParty/Balloon/UnbreakableBalloon</c> shader can
-    /// compute metallic gradient, specular, reflection, and rim effects
-    /// relative to the composed sphere rather than world origin.
+    /// Pushes <c>_SphereCenter</c>, <c>_SphereRadius</c>, and the clock phase to
+    /// every quadrant <see cref="SpriteRenderer"/> so the
+    /// <c>BalloonParty/Balloon/UnbreakableBalloon</c> shader can compute metallic
+    /// gradient, specular, reflection, and rim effects relative to the composed
+    /// sphere rather than world origin. The shader self-derives its animation from
+    /// <c>_Time.y</c>, so runtime pushes happen only at <c>Bind</c> and when the
+    /// balloon actually moves — not per frame.
     ///
     /// Inner renderers receive the same sphere data so effects that depend
     /// on sphere-local position stay coherent across both layers.
     ///
-    /// <c>[ExecuteAlways]</c> keeps the shader animation running in edit
-    /// mode without entering Play mode.
+    /// <c>[ExecuteAlways]</c> keeps the shader animation running in edit mode
+    /// (where <c>_Time</c> is frozen — the preview zeroes the shader clock and
+    /// integrates editor time instead).
     /// </summary>
     [ExecuteAlways]
     internal class UnbreakableBalloonVariant : MonoBehaviour, IBalloonVariant, IBalloonViewBinding
     {
+        // Matches the shader's _AnimationSpeed default. C# owns the property outright:
+        // play mode pushes the rate (a property block survives an edit-mode preview,
+        // which zeroes it), edit mode zeroes it and integrates editor time itself.
+        private const float ShaderClockRate = 2f;
+
         private static readonly int SphereCenterId = Shader.PropertyToID("_SphereCenter");
         private static readonly int SphereRadiusId = Shader.PropertyToID("_SphereRadius");
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
+        private static readonly int AnimationSpeedId = Shader.PropertyToID("_AnimationSpeed");
 
         [SerializeField] private SpriteRenderer[] _renderers;
         [SerializeField] private SpriteRenderer[] _innerRenderers;
@@ -40,12 +49,14 @@ namespace BalloonParty.Balloon.Type
 
         private MaterialPropertyBlock _block;
         private float _instancePhase;
+        private Vector3 _pushedCenter;
         private SceneCaptureService _sceneCapture;
 
         private void Awake()
         {
             _block = new MaterialPropertyBlock();
             _instancePhase = Random.value * 100f;
+            _pushedCenter = Vector3.positiveInfinity;
             ComputeRadiusIfNeeded();
         }
 
@@ -63,20 +74,25 @@ namespace BalloonParty.Balloon.Type
                 return;
             }
 
-            var currentTime = Time.time;
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
-                currentTime = (float)EditorApplication.timeSinceStartup;
+                // Edit mode: built-in _Time is frozen, so zero the shader clock and feed
+                // editor time (at the shader's own rate) through the offset.
                 SceneView.RepaintAll();
+                var editorTime = (float)EditorApplication.timeSinceStartup;
+                PushSphereState(editorTime * ShaderClockRate + _instancePhase, true);
+                return;
             }
 #endif
 
-            var center = (Vector4)transform.position;
-            var timeOffset = currentTime + _instancePhase;
-
-            PushPropertyBlock(_renderers, center, timeOffset);
-            PushPropertyBlock(_innerRenderers, center, timeOffset);
+            // The runtime clock is shader-derived; the sphere data only changes when the
+            // balloon moves (nudges, balance paths). Repushing every renderer's property
+            // block every frame was the standing cost this replaces.
+            if (transform.position != _pushedCenter)
+            {
+                PushSphereState(_instancePhase, false);
+            }
         }
 
         private void OnDisable()
@@ -113,9 +129,20 @@ namespace BalloonParty.Balloon.Type
         {
             _instancePhase = Random.value * 100f;
             ComputeRadiusIfNeeded();
+            PushSphereState(_instancePhase, false);
         }
 
-        private void PushPropertyBlock(SpriteRenderer[] renderers, Vector4 center, float timeOffset)
+        private void PushSphereState(float timeOffset, bool zeroShaderClock)
+        {
+            _pushedCenter = transform.position;
+            var center = (Vector4)_pushedCenter;
+
+            PushPropertyBlock(_renderers, center, timeOffset, zeroShaderClock);
+            PushPropertyBlock(_innerRenderers, center, timeOffset, zeroShaderClock);
+        }
+
+        private void PushPropertyBlock(
+            SpriteRenderer[] renderers, Vector4 center, float timeOffset, bool zeroShaderClock)
         {
             if (renderers == null)
             {
@@ -133,6 +160,7 @@ namespace BalloonParty.Balloon.Type
                 _block.SetVector(SphereCenterId, center);
                 _block.SetFloat(SphereRadiusId, _sphereRadius);
                 _block.SetFloat(TimeOffsetId, timeOffset);
+                _block.SetFloat(AnimationSpeedId, zeroShaderClock ? 0f : ShaderClockRate);
                 r.SetPropertyBlock(_block);
             }
         }
