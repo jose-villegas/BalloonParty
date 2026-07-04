@@ -482,10 +482,12 @@ in-editor check and a device profile.
   24 brokers) into per-feature `IContainerBuilder` extension methods
   (`builder.RegisterItemFeature()` …). Pure code motion; do it whenever the file next
   gets annoying.
-- **Watch items (no action):** `Cinematic._listeners` is an unbounded static list
-  relying on manual `Unregister`; `ThrowerController.cs:84–87` subscribes to static
-  `Navigation.Current` bounded only by `Take(1)` — fine as-is, dangerous if copied
-  without the `Take`. `SlotClusterRegistry` transient collections stay deferred.
+- **Watch items (no action):** ~~`Cinematic._listeners` unbounded static list~~ —
+  resolved 2026-07-04: the `ICinematicAware` listener API had zero implementers and
+  was deleted; consumers observe `Cinematic.Current` instead.
+  `ThrowerController.cs:84–87` subscribes to static `Navigation.Current` bounded only
+  by `Take(1)` — fine as-is, dangerous if copied without the `Take`.
+  `SlotClusterRegistry` transient collections stay deferred.
 - **PuffCloud mega-quad (mitigated in-shader 2026-07-04, structural fix deferred):**
   `ClusterViewController.Reconfigure` drives ONE view whose quad spans the bounding
   box of **all** puff clusters on the board — fill cost scales with cluster *spread*,

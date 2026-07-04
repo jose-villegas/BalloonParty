@@ -13,10 +13,9 @@ across scene boundaries: `Navigation` and `Cinematic`.
 `TransitionTo(state)`. Any system can observe or transition the current state.
 States: `Launch` → `Game` → `LevelUp` (→ `Game` on dismiss).
 
-**`Cinematic`** holds a `ReactiveProperty<CinematicState>` and manages a list of
-`ICinematicAware` listeners. `Begin(state)` / `End()` set the state and
-synchronously notify all registered listeners. Services that need to pause/resume
-during a cinematic implement `ICinematicAware` and register via `Cinematic.Register(this)`.
+**`Cinematic`** holds a `ReactiveProperty<CinematicState>`. `Begin(state)` /
+`End()` set the state; services that need to pause/resume during a cinematic
+query `Cinematic.IsPlaying` or subscribe to `Cinematic.Current`.
 
 **Why static and not injected?**
 Both classes carry state that must survive scene transitions and be accessible from
@@ -38,14 +37,14 @@ Navigation.Current
 
 **Reacting to cinematics in a service:**
 ```csharp
-public void Start() => Cinematic.Register(this);
-public void Dispose() => Cinematic.Unregister(this);
+Cinematic.Current
+    .Subscribe(state => { if (state == CinematicState.LevelUpPanIn) PauseWork(); })
+    .AddTo(_disposables);
 
-public void OnCinematicBegin(CinematicState state)
-{
-    if (state == CinematicState.LevelUpPanIn) PauseWork();
-}
-public void OnCinematicEnd() => ResumeWork();
+Cinematic.Current
+    .Where(s => s == CinematicState.None)
+    .Subscribe(_ => ResumeWork())
+    .AddTo(_disposables);
 ```
 
 **Do not add new static state** for feature-specific concerns — static state is

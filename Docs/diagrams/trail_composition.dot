@@ -13,18 +13,18 @@ digraph TrailComposition {
     }
 
     // Score trail
-    ScoreTrailService [label="ScoreTrailService\n─────────\nper-color TrailSpawner\nTrailTracker<TrailId>\nICinematicAware\nPauseTrailsAbove(threshold)", fillcolor="#1a3a1a", fontcolor="#3fb950"];
+    ScoreTrailService [label="ScoreTrailService\n─────────\nper-color TrailSpawner\nexposes Flights\n(TrailFlightRegistry<TrailId>)", fillcolor="#1a3a1a", fontcolor="#3fb950"];
 
     // Shield trail
     ShieldTrailController [label="ShieldTrailController\n─────────\nsingle TrailSpawner\nfire-and-forget\n(no tracking, no cinematic)", fillcolor="#2d1f3d", fontcolor="#d2a8ff"];
 
     // Cinematic interaction
-    CinematicAware [label="ICinematicAware\n─────────\nOnCinematicEnd → ResumeAll", fillcolor="#3d2a1a", fontcolor="#f78166", shape=ellipse];
+    LevelUpCinematic [label="LevelUpCinematic\n─────────\npauses the tipping trail\nEndPanIn → Flights.CompleteAll()", fillcolor="#3d2a1a", fontcolor="#f78166", shape=ellipse];
 
     // Composition edges
     ScoreTrailService -> TrailSpawner [label="composes ×N\n(per color)", color="#3fb950", fontcolor="#8b949e"];
     ScoreTrailService -> TrailTracker [label="composes", color="#3fb950", fontcolor="#8b949e"];
     ShieldTrailController -> TrailSpawner [label="composes ×1", color="#d2a8ff", fontcolor="#8b949e"];
-    ScoreTrailService -> CinematicAware [label="implements", color="#f78166", fontcolor="#8b949e", style=dashed];
+    LevelUpCinematic -> ScoreTrailService [label="drives Flights", color="#f78166", fontcolor="#8b949e", style=dashed];
 }
 
