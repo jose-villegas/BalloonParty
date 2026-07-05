@@ -33,7 +33,15 @@ namespace BalloonParty.Tests.Projectile
                     Arg.Any<IMessageHandler<ScoreLevelUpMessage>>(),
                     Arg.Any<MessageHandlerFilter<ScoreLevelUpMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
-            _streakTracker = new ColorStreakTracker(levelUpSubscriber);
+
+            var projectileLoadedSubscriber = Substitute.For<ISubscriber<ProjectileLoadedMessage>>();
+            projectileLoadedSubscriber
+                .Subscribe(
+                    Arg.Any<IMessageHandler<ProjectileLoadedMessage>>(),
+                    Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            _streakTracker = new ColorStreakTracker(levelUpSubscriber, projectileLoadedSubscriber);
 
             _resolver = new ProjectileHitResolver(_hitDispatcher, _shieldGainedPublisher, _streakTracker);
             _projectile = new ProjectileModel { IsFree = true };

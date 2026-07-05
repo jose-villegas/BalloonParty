@@ -6,19 +6,25 @@ namespace BalloonParty.Game.Score
 {
     internal class ColorStreakTracker : IColorStreak, IDisposable
     {
-        private readonly IDisposable _subscription;
+        private readonly IDisposable _levelUpSubscription;
+        private readonly IDisposable _projectileLoadedSubscription;
 
         public string LastColor { get; private set; }
         public int CurrentStreak { get; private set; }
 
-        internal ColorStreakTracker(ISubscriber<ScoreLevelUpMessage> levelUpSubscriber)
+        internal ColorStreakTracker(
+            ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
+            ISubscriber<ProjectileLoadedMessage> projectileLoadedSubscriber)
         {
-            _subscription = levelUpSubscriber.Subscribe(_ => Reset());
+            _levelUpSubscription = levelUpSubscriber.Subscribe(_ => Reset());
+            // Each new throw starts its own chain — a streak never carries across turns.
+            _projectileLoadedSubscription = projectileLoadedSubscriber.Subscribe(_ => Reset());
         }
 
         public void Dispose()
         {
-            _subscription.Dispose();
+            _levelUpSubscription.Dispose();
+            _projectileLoadedSubscription.Dispose();
         }
 
         public int GetStreak(string colorName)

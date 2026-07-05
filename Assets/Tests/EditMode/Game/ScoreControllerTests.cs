@@ -94,7 +94,14 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<ScoreTrailArrivedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            _streakTracker = new ColorStreakTracker(levelUpSubscriber);
+            var projectileLoadedSubscriber = Substitute.For<ISubscriber<ProjectileLoadedMessage>>();
+            projectileLoadedSubscriber
+                .Subscribe(
+                    Arg.Any<IMessageHandler<ProjectileLoadedMessage>>(),
+                    Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            _streakTracker = new ColorStreakTracker(levelUpSubscriber, projectileLoadedSubscriber);
             return new ScoreController(
                 trailArrivedSubscriber,
                 _scoredPublisher,

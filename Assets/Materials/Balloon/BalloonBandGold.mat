@@ -76,7 +76,7 @@ Material:
     - _Parallax: 0.02
     - _ShadowSoftness: 0.02
     - _ShineLocation: 0.1
-    - _ShineSpeed: 0.3
+    - _ShineSpeed: 0.5
     - _ShineWidth: 0.3
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

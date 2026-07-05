@@ -11,6 +11,7 @@ namespace BalloonParty.Tests.Game
     public class ColorStreakTrackerTests
     {
         private ColorStreakTracker _tracker;
+        private IMessageHandler<ProjectileLoadedMessage> _projectileLoadedHandler;
 
         [SetUp]
         public void SetUp()
@@ -22,7 +23,25 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<ScoreLevelUpMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            _tracker = new ColorStreakTracker(subscriber);
+            var projectileLoadedSubscriber = Substitute.For<ISubscriber<ProjectileLoadedMessage>>();
+            projectileLoadedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ProjectileLoadedMessage>>(h => _projectileLoadedHandler = h),
+                    Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            _tracker = new ColorStreakTracker(subscriber, projectileLoadedSubscriber);
+        }
+
+        [Test]
+        public void ProjectileLoaded_ResetsStreak()
+        {
+            _tracker.Record("Red");
+            _tracker.Record("Red");
+
+            _projectileLoadedHandler.Handle(new ProjectileLoadedMessage(null));
+
+            Assert.AreEqual(1, _tracker.Record("Red"));
         }
 
         [Test]
