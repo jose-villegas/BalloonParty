@@ -56,7 +56,7 @@ namespace BalloonParty.Balloon.Type
                 .AddTo(disposables);
         }
 
-        public void Initialize(IWriteableBalloonModel model) { }
+        public void Initialize(IWriteableBalloonModel model, int levelAllowedColorsMask) { }
 
         private void ApplyDamageProgress(int hits, int maxHits)
         {

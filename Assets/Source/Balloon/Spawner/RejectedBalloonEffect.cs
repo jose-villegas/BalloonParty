@@ -166,8 +166,8 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             var view = _poolManager.Get<BalloonView>(entry.PoolKey);
-            var model = BalloonModelFactory.Create(entry, _palette);
-            view.Variant.Initialize(model);
+            var model = BalloonModelFactory.Create(entry, _palette, _levelParams.AllowedColors);
+            view.Variant.Initialize(model, _levelParams.AllowedColorsMask);
             view.Bind(model);
 
             // Enter one row below the target so the tick eases it up into place.

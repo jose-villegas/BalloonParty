@@ -741,9 +741,9 @@ chain — **BubbleCluster** drifts to the *nearest* gap (stays close), **Unbreak
 > yet. Takeaway for whoever continues this: **treat `dotnet build` green as "compiles," not
 > "correct" — always run the actual Test Runner before considering a sub-phase done.**
 > `AllowedColors` was changed from `string[]` to a `[PaletteColorMask] int` during implementation
-> (2026-07-05) — see item 5 in 3a below. **3c (items) and 3e (grid-actor pacing) are also
-> implemented (2026-07-05)** — see their own status notes below. Only 3b (the Ascent) and 3d
-> (custom levels) and Phase 4 (allowed colors) remain spec-only (3e was added 2026-07-05 —
+> (2026-07-05) — see item 5 in 3a below. **3c (items), 3e (grid-actor pacing), and Phase 4
+> (allowed colors) are also implemented (2026-07-05)** — see their own status notes below. Only
+> 3b (the Ascent) and 3d (custom levels) remain spec-only (3e was added 2026-07-05 —
 > grid-actor pacing for Puff/Bush was previously miscategorized as blocked on Phase 8.3; only the
 > newer archetypes are).
 
@@ -1096,6 +1096,55 @@ lesson from 3a: don't pre-scaffold fields nothing reads).
   authored level (same sequencing reasoning as the balloon catalog cleanup).
 
 ### Phase 4 — allowed colors (breakdown; reuses 3a plumbing)
+
+**Status: implemented (2026-07-05).** `dotnet build` (all 4 csproj) + `style_audit.py` clean; not
+yet run through the actual Test Runner. Implemented essentially as spec'd below, plus three gaps
+found only by tracing every consumer of `_palette.Colors`/the raw formula, none of which were
+called out in the original breakdown:
+- `IActiveLevelParameters` needed a new `int AllowedColorsMask` alongside the existing
+  `IReadOnlyList<string> AllowedColors` — the spawn filter needs the raw bits to intersect against
+  the prefab mask, `ScoreController`/UI need names. Both are resolver-cached, not recomputed.
+- **`ToughBalloonModel`/`BubbleClusterModel` bypassed the gate entirely** — unlike plain `BalloonModel`
+  (which scores via its own already-gated `Color.Value`), these two distribute score attribution
+  across a *randomly chosen palette color* on pop (`_palette.Colors[Random.Range(...)]`), with no
+  color of their own. Threaded `IActiveLevelParameters.AllowedColors` through
+  `BalloonModelFactory.Create` (new optional param, default null so every existing test call site
+  compiles unchanged) into both models' constructors; `ResolveScoreAttribution` now draws from the
+  active set when provided, falling back to the full palette only when not (tests).
+- **`LevelUpPopUp`** spawns one glow trail per palette color per level-up (`_palette.Colors` in
+  `ShowAfterGateAsync`/`SpawnGlowTrailsAsync`) and sizes `_glowTrailTotalCount` off the full
+  palette — both switched to `_levelParams.AllowedColors`, otherwise the ceremony would fire glow
+  trails from hidden/inactive bars and the arrival-count gate would never reach 100% during the
+  tutorial ramp.
+- `TriggerLevelUpCheat`/`NearLevelUpCheat` also filled every palette color, not just active ones —
+  switched to `_levelParams.AllowedColors` for consistency (debug-only, but a cheat that no longer
+  matches the real level-up requirement is worse than useless for testing it).
+- Also fixed in passing: `ColorProgressBar.OnLevelUp` read `IGameConfiguration.PointsRequiredForLevel`
+  (the raw formula) instead of `IActiveLevelParameters.PointsRequiredForLevel` (the resolved,
+  composed value) — same class of bug as the two cheats fixed in 3a, found by grepping for every
+  remaining `PointsRequiredForLevel`/`_config.` call site while touching this file.
+- **Dynamic bar count — fixed after in-editor feedback (2026-07-05):** the bars sit inside a
+  `HorizontalLayoutGroup`, so the initial `CanvasGroup`-only fade (alpha/interactable/blocksRaycasts)
+  left a visible gap — the layout group still reserved space for a hidden bar. Added a
+  `LayoutElement` alongside the `CanvasGroup`, toggling `ignoreLayout` in lockstep with the fade;
+  its setter marks the layout dirty automatically, so the row reflows on the next layout pass with
+  no manual rebuild call needed. Both `CanvasGroup` and `LayoutElement` self-fetch/self-add in
+  `Awake()` if not manually assigned, so a bar prefab predating either field degrades gracefully
+  instead of throwing `UnassignedReferenceException` (hit once in-editor before this fallback
+  existed).
+- **Ceremony color-set race — fixed after in-editor feedback (2026-07-05):** `ScoreLevelUpMessage`
+  has two independent subscribers — `LevelDifficultyResolver` (re-resolves to the new level) and
+  `LevelUpPopUp`/`ColorProgressBar` (celebrate the level that just completed) — with subscriber
+  order unenforced. Reading the live `IActiveLevelParameters.AllowedColors` from either UI
+  consumer could therefore already reflect the *new* level's set, bursting glow trails from (and
+  revealing) bars that never actually contributed to the just-completed level. Fixed by having
+  `ScoreController.CheckLevelUp` snapshot `AllowedColors` **before** publishing (safe: the
+  resolver replaces its list wholesale on resolve, never mutates the one already handed out) and
+  carrying it on the message as `ScoreLevelUpMessage.CompletedColors` (2-arg ctor, 1-arg overload
+  kept for existing call sites). `LevelUpPopUp`'s glow-trail spawn now takes `msg.CompletedColors`
+  as a parameter instead of reading live state. `ColorProgressBar.ApplyVisibility()` moved from
+  `OnLevelUp` to `OnDismissed` — a newly-active color's bar now fades in only after the ceremony
+  is fully over, not mid-celebration of a level it had no part in.
 
 - **Spawn filter**: `Balloon/Type/ColorableBalloonVariant.PickColor` (`:24-47`) draws from the
   full palette masked by the per-prefab `[PaletteColorMask] _allowedColorsMask` (`:12`). Since

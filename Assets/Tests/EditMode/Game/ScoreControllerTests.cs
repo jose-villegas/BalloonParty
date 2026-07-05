@@ -43,6 +43,7 @@ namespace BalloonParty.Tests.Game
 
             _levelParams = Substitute.For<IActiveLevelParameters>();
             _levelParams.PointsRequiredForLevel(Arg.Any<int>()).Returns(10);
+            _levelParams.AllowedColors.Returns(new List<string> { Red, Blue });
 
             _palette = Substitute.For<IGamePalette>();
             var colors = new List<PaletteEntry> { CreatePaletteEntry(Red), CreatePaletteEntry(Blue) };
@@ -164,6 +165,22 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void CheckLevelUp_PublishesCompletedColorsSnapshot()
+        {
+            // The ceremony must celebrate the colors that just completed, not whatever the
+            // level-range resolver has re-resolved to by the time it reads live state.
+            _levelParams.PointsRequiredForLevel(2).Returns(2);
+
+            FireTrailArrived(Red, 1);
+            FireTrailArrived(Red, 2);
+            FireTrailArrived(Blue, 1);
+            FireTrailArrived(Blue, 2);
+
+            _levelUpPublisher.Received(1).Publish(
+                Arg.Is<ScoreLevelUpMessage>(m => m.CompletedColors.Count == 2));
+        }
+
+        [Test]
         public void CheckLevelUp_WhenLossImminent_DoesNotLevelUp()
         {
             // No level-up on a doomed run: queued overflow charges already cover the remaining HP.
@@ -206,6 +223,23 @@ namespace BalloonParty.Tests.Game
 
             _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
             Assert.AreEqual(1, _controller.Level.Value);
+        }
+
+        [Test]
+        public void CheckLevelUp_ColorGatedOutOfLevel_IsNotRequired()
+        {
+            // Blue is gated out of the active range — only Red needs to hit threshold.
+            _levelParams.AllowedColors.Returns(new List<string> { Red });
+            _levelParams.PointsRequiredForLevel(2).Returns(5);
+
+            for (var i = 1; i <= 5; i++)
+            {
+                FireTrailArrived(Red, i);
+            }
+            // Blue has not scored and never will this level — must not block the level-up.
+
+            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+            Assert.AreEqual(2, _controller.Level.Value);
         }
 
         [Test]
@@ -329,6 +363,17 @@ namespace BalloonParty.Tests.Game
             FirePop(Red);
 
             Assert.IsFalse(_controller.WillLevelUp());
+        }
+
+        [Test]
+        public void WillLevelUp_ColorGatedOutOfLevel_IsNotRequired()
+        {
+            _levelParams.AllowedColors.Returns(new List<string> { Red });
+            _levelParams.PointsRequiredForLevel(2).Returns(1);
+
+            FirePop(Red);
+
+            Assert.IsTrue(_controller.WillLevelUp());
         }
 
         [Test]

@@ -21,8 +21,8 @@ MonoBehaviour:
         _max: 0
         _mode: 0
       _boardLines:
-        _min: 8
-        _max: 8
+        _min: 3
+        _max: 3
         _mode: 0
       _itemCadence:
         _min: 0

@@ -10,6 +10,7 @@ namespace BalloonParty.Balloon.Model
     internal class ToughBalloonModel : BalloonModelBase, IHasDurability, IHasScore, IHasScoreColor
     {
         private readonly IGamePalette _palette;
+        private readonly IReadOnlyList<string> _allowedColors;
         public int ScoreValue { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
@@ -18,16 +19,19 @@ namespace BalloonParty.Balloon.Model
         // A tough balloon that survives a hit deflects the shot instead of letting it pass through.
         protected override HitOutcome SurviveOutcome => HitOutcome.Deflect;
 
-        internal ToughBalloonModel(BalloonModelConfig config, IGamePalette palette = null) : base(config)
+        internal ToughBalloonModel(
+            BalloonModelConfig config, IGamePalette palette = null, IReadOnlyList<string> allowedColors = null)
+            : base(config)
         {
             _palette = palette;
+            _allowedColors = allowedColors;
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
         }
 
         public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
         {
-            var colors = _palette.Colors;
+            var colors = ResolveColorPool();
             if (colors == null || colors.Count == 0)
             {
                 return;
@@ -35,9 +39,16 @@ namespace BalloonParty.Balloon.Model
 
             for (var i = 0; i < ScoreValue; i++)
             {
-                var colorId = colors[Random.Range(0, colors.Count)].Name;
+                var colorId = colors[Random.Range(0, colors.Count)];
                 results.Add(new ScoreAttribution(colorId, 1, true));
             }
+        }
+
+        // Distributes across the level's active colors when known — falls back to the full
+        // palette otherwise (e.g. constructed without a level context in tests).
+        private IReadOnlyList<string> ResolveColorPool()
+        {
+            return _allowedColors is { Count: > 0 } ? _allowedColors : _palette?.ColorNames;
         }
     }
 }

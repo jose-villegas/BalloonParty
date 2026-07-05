@@ -97,6 +97,24 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
+        public void BubbleClusterModel_ResolveScoreAttribution_WithAllowedColors_OnlyPicksFromThem()
+        {
+            SetupPaletteWithColors("Red", "Blue", "Green");
+            var model = new BubbleClusterModel(
+                new BalloonModelConfig(hitsToPop: 5, scoreValue: 1), _palette, new[] { "Red" });
+            model.HitsRemaining.Value = 5;
+
+            var results = new List<ScoreAttribution>();
+            model.ResolveScoreAttribution(new DamageContext(1), results);
+
+            Assert.IsTrue(results.Count > 0);
+            foreach (var attr in results)
+            {
+                Assert.AreEqual("Red", attr.ColorId);
+            }
+        }
+
+        [Test]
         public void BubbleClusterModel_ResolveScoreAttribution_EmptyPalette_AddsNothing()
         {
             _model.HitsRemaining.Value = 3;
@@ -118,6 +136,7 @@ namespace BalloonParty.Tests.Balloon
             }
 
             _palette.Colors.Returns(entries);
+            _palette.ColorNames.Returns(names);
         }
 
         private static PaletteEntry CreatePaletteEntry(string name)

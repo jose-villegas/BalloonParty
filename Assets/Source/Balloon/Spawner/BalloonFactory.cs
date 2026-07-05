@@ -4,6 +4,7 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Level;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
@@ -25,6 +26,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly PoolManager _poolManager;
         private readonly SlotGrid _grid;
         private readonly IBalloonsConfiguration _balloonsConfig;
+        private readonly IActiveLevelParameters _levelParams;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly BalloonControllerContext _controllerContext;
 
@@ -34,6 +36,7 @@ namespace BalloonParty.Balloon.Spawner
             PoolManager poolManager,
             SlotGrid grid,
             IBalloonsConfiguration balloonsConfig,
+            IActiveLevelParameters levelParams,
             DisturbanceFieldService disturbanceField,
             BalloonControllerContext controllerContext)
         {
@@ -41,6 +44,7 @@ namespace BalloonParty.Balloon.Spawner
             _poolManager = poolManager;
             _grid = grid;
             _balloonsConfig = balloonsConfig;
+            _levelParams = levelParams;
             _disturbanceField = disturbanceField;
             _controllerContext = controllerContext;
         }
@@ -61,8 +65,8 @@ namespace BalloonParty.Balloon.Spawner
             var view = _poolManager.Get<BalloonView>(poolKey);
             view.transform.position = spawnPath[0];
 
-            var model = BalloonModelFactory.Create(entry, _palette);
-            view.Variant.Initialize(model);
+            var model = BalloonModelFactory.Create(entry, _palette, _levelParams.AllowedColors);
+            view.Variant.Initialize(model, _levelParams.AllowedColorsMask);
 
             var controller = new BalloonController(
                 model, view, poolKey, onReturned, entry.HitVfxOverrides, _controllerContext);

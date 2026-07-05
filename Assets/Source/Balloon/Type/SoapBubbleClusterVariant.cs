@@ -103,7 +103,7 @@ namespace BalloonParty.Balloon.Type
             PushBubbleCount(Mathf.Clamp(_previewBubbleCount, 1, _maxBubbles));
         }
 
-        public void Initialize(IWriteableBalloonModel model) { }
+        public void Initialize(IWriteableBalloonModel model, int levelAllowedColorsMask) { }
 
         public void Bind(IBalloonModel model, CompositeDisposable disposables)
         {

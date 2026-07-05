@@ -123,7 +123,7 @@ namespace BalloonParty.Balloon.Type
             }
         }
 
-        public void Initialize(IWriteableBalloonModel model) { }
+        public void Initialize(IWriteableBalloonModel model, int levelAllowedColorsMask) { }
 
         public void Bind(IBalloonModel model, CompositeDisposable disposables)
         {

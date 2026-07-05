@@ -96,9 +96,9 @@ namespace BalloonParty.Game.Score
         {
             var required = _levelParams.PointsRequiredForLevel(_level.Value + 1);
 
-            foreach (var kvp in _projectedProgress)
+            foreach (var color in _levelParams.AllowedColors)
             {
-                if (kvp.Value < required)
+                if (_projectedProgress.GetValueOrDefault(color) < required)
                 {
                     return false;
                 }
@@ -122,9 +122,9 @@ namespace BalloonParty.Game.Score
 
         private bool AllColorsConfirmed(int required)
         {
-            foreach (var kvp in _levelProgress)
+            foreach (var color in _levelParams.AllowedColors)
             {
-                if (kvp.Value < required)
+                if (_levelProgress.GetValueOrDefault(color) < required)
                 {
                     return false;
                 }
@@ -149,6 +149,13 @@ namespace BalloonParty.Game.Score
                 return;
             }
 
+            // Snapshot before publishing — a subscriber (the level-range resolver) reacts to the
+            // same message and re-resolves to the new level, which can change AllowedColors before
+            // other subscribers (the ceremony) get a chance to read it. Capturing the reference here
+            // is safe regardless: the resolver replaces its list wholesale on resolve, it never
+            // mutates the one already handed out.
+            var completedColors = _levelParams.AllowedColors;
+
             _level.Value++;
 
             foreach (var key in _colorKeys)
@@ -157,7 +164,7 @@ namespace BalloonParty.Game.Score
                 _projectedProgress[key] = 0;
             }
 
-            _levelUpPublisher.Publish(new ScoreLevelUpMessage(_level.Value));
+            _levelUpPublisher.Publish(new ScoreLevelUpMessage(_level.Value, completedColors));
             _navigation.TransitionTo(NavigationState.LevelUp);
         }
 

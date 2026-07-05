@@ -61,6 +61,7 @@ namespace BalloonParty.Game.Level
         public int ItemCadence => _current.ItemCadence;
         public IReadOnlyList<ItemSettings> Items => _itemsList;
         public IReadOnlyList<string> AllowedColors => _allowedColorNames;
+        public int AllowedColorsMask => _current.AllowedColorsMask;
 
         // Re-resolves before GridSpawnerCoordinator respawns at Respawn (120), so a restart's first
         // spawn already sees level-1 parameters instead of the dead run's.

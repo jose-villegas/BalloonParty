@@ -92,15 +92,20 @@ namespace BalloonParty.UI.LevelUp
 
             _pendingNewLevel = msg.NewLevel;
             _glowTrailArrivedCount = 0;
-            _glowTrailTotalCount = _palette.Colors.Count * _glowTrailsPerBar;
+            _glowTrailTotalCount = msg.CompletedColors.Count * _glowTrailsPerBar;
 
             _glowTrailsPublisher.Publish(
                 new LevelUpGlowTrailsMessage(_glowTrailsPerBar, _glowTrailStaggerDelay));
 
-            SpawnGlowTrailsAsync().Forget();
+            SpawnGlowTrailsAsync(msg.CompletedColors).Forget();
         }
 
-        private async UniTaskVoid SpawnGlowTrailsAsync()
+        // Uses the completed level's color set from the message, not the live
+        // IActiveLevelParameters.AllowedColors — the level-range resolver reacts to the same
+        // ScoreLevelUpMessage and may already have re-resolved to the new level's set by the time
+        // this runs (subscriber order is unenforced), which would otherwise burst trails for a
+        // color that never actually finished this level.
+        private async UniTaskVoid SpawnGlowTrailsAsync(IReadOnlyList<string> completedColors)
         {
             var glowRect = _levelGlowFill.rectTransform;
             var glowCenter = glowRect.TransformPoint(glowRect.rect.center);
@@ -111,8 +116,9 @@ namespace BalloonParty.UI.LevelUp
 
             for (var i = 0; i < _glowTrailsPerBar; i++)
             {
-                foreach (var entry in _palette.Colors)
+                foreach (var colorName in completedColors)
                 {
+                    var entry = _palette.GetEntry(colorName);
                     var target = _scoreTrailService.GetTarget(entry.Name);
                     var spawner = GetOrCreateSpawner(entry.Name);
 

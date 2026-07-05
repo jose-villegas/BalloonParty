@@ -97,6 +97,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.UI.ColorProgressBar
   _colorName: Green
+  _visibilityGroup: {fileID: 1420386209631446182}
   _graphicsToSetColor:
   - {fileID: 7033398752927577603}
   - {fileID: 2350293857914796795}
@@ -5213,7 +5214,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: -1446856603
-  m_SortingLayer: 6
+  m_SortingLayer: 7
   m_SortingOrder: 10
   m_MaskInteraction: 0
   m_RenderMode: 0

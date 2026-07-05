@@ -16,6 +16,7 @@ namespace BalloonParty.Balloon.Model
     internal class BubbleClusterModel : BalloonModelBase, IHasDurability, IHasScoreColor
     {
         private readonly IGamePalette _palette;
+        private readonly IReadOnlyList<string> _allowedColors;
 
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
         public int ScoreValue { get; }
@@ -26,16 +27,19 @@ namespace BalloonParty.Balloon.Model
 
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
-        internal BubbleClusterModel(BalloonModelConfig config, IGamePalette palette) : base(config)
+        internal BubbleClusterModel(
+            BalloonModelConfig config, IGamePalette palette, IReadOnlyList<string> allowedColors = null)
+            : base(config)
         {
             _palette = palette;
+            _allowedColors = allowedColors;
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
         }
 
         public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
         {
-            var colors = _palette.Colors;
+            var colors = ResolveColorPool();
             if (colors == null || colors.Count == 0)
             {
                 return;
@@ -43,9 +47,16 @@ namespace BalloonParty.Balloon.Model
 
             for (var i = 0; i < HitsRemaining.Value + 1; i++)
             {
-                var colorId = colors[Random.Range(0, colors.Count)].Name;
+                var colorId = colors[Random.Range(0, colors.Count)];
                 results.Add(new ScoreAttribution(colorId, 1, true));
             }
+        }
+
+        // Distributes across the level's active colors when known — falls back to the full
+        // palette otherwise (e.g. constructed without a level context in tests).
+        private IReadOnlyList<string> ResolveColorPool()
+        {
+            return _allowedColors is { Count: > 0 } ? _allowedColors : _palette?.ColorNames;
         }
     }
 }

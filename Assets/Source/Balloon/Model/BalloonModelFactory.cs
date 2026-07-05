@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 
@@ -11,7 +12,14 @@ namespace BalloonParty.Balloon.Model
     /// </summary>
     internal static class BalloonModelFactory
     {
-        internal static IWriteableBalloonModel Create(BalloonPrefabEntry entry, IGamePalette palette)
+        /// <param name="allowedColors">
+        ///     The active level range's allowed-color names (<c>IActiveLevelParameters.AllowedColors</c>).
+        ///     Only <see cref="ToughBalloonModel"/> and <see cref="BubbleClusterModel"/> use it — they
+        ///     distribute score attribution across a random palette color rather than holding one, so
+        ///     without this they'd bypass the level's color gate entirely.
+        /// </param>
+        internal static IWriteableBalloonModel Create(
+            BalloonPrefabEntry entry, IGamePalette palette, IReadOnlyList<string> allowedColors = null)
         {
             var config = BalloonModelConfig.From(entry);
 
@@ -20,8 +28,8 @@ namespace BalloonParty.Balloon.Model
                 BalloonType.Simple => new BalloonModel(config),
                 BalloonType.SimpleSilver => new BalloonModel(config),
                 BalloonType.SimpleGold => new BalloonModel(config),
-                BalloonType.BubbleCluster => new BubbleClusterModel(config, palette),
-                BalloonType.Tough => new ToughBalloonModel(config, palette),
+                BalloonType.BubbleCluster => new BubbleClusterModel(config, palette, allowedColors),
+                BalloonType.Tough => new ToughBalloonModel(config, palette, allowedColors),
                 BalloonType.Unbreakable => new UnbreakableBalloonModel(config),
                 _ => throw new ArgumentOutOfRangeException(nameof(entry), entry.BalloonType, null)
             };

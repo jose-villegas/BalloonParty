@@ -13,15 +13,19 @@ namespace BalloonParty.Balloon.Type
 
         [Inject] private IGamePalette _palette;
 
-        public virtual void Initialize(IWriteableBalloonModel model)
+        public virtual void Initialize(IWriteableBalloonModel model, int levelAllowedColorsMask)
         {
             if (model is IPaintable colorable)
             {
-                colorable.Color.Value = PickColor() ?? "";
+                colorable.Color.Value = PickColor(levelAllowedColorsMask) ?? "";
             }
         }
 
-        private string PickColor()
+        // Prefab mask = this skin's static color capability; level mask = the active range's
+        // gate. Their intersection is what's actually pickable this level. An empty intersection
+        // means the level gate excludes every color this prefab can be — falling back to the
+        // prefab mask alone keeps the balloon paintable rather than picking no color at all.
+        private string PickColor(int levelAllowedColorsMask)
         {
             if (_palette == null)
             {
@@ -35,7 +39,16 @@ namespace BalloonParty.Balloon.Type
                     $"{GetType().Name}.PickColor: IGamePalette has no colors configured.");
             }
 
-            var allowedCount = CountAllowedColors();
+            var mask = _allowedColorsMask & levelAllowedColorsMask;
+            if (mask == 0)
+            {
+                Debug.LogWarning(
+                    $"{GetType().Name}.PickColor: the active level's allowed-color gate has no " +
+                    "overlap with this prefab's color mask — falling back to the prefab mask alone.");
+                mask = _allowedColorsMask;
+            }
+
+            var allowedCount = CountAllowedColors(mask);
             if (allowedCount == 0)
             {
                 Debug.LogError(
@@ -43,15 +56,15 @@ namespace BalloonParty.Balloon.Type
                 return null;
             }
 
-            return NthAllowedColor(UnityEngine.Random.Range(0, allowedCount));
+            return NthAllowedColor(mask, UnityEngine.Random.Range(0, allowedCount));
         }
 
-        private int CountAllowedColors()
+        private int CountAllowedColors(int mask)
         {
             var count = 0;
             for (var i = 0; i < _palette.Colors.Count; i++)
             {
-                if ((_allowedColorsMask & (1 << i)) != 0)
+                if ((mask & (1 << i)) != 0)
                 {
                     count++;
                 }
@@ -60,12 +73,12 @@ namespace BalloonParty.Balloon.Type
             return count;
         }
 
-        private string NthAllowedColor(int target)
+        private string NthAllowedColor(int mask, int target)
         {
             var current = 0;
             for (var i = 0; i < _palette.Colors.Count; i++)
             {
-                if ((_allowedColorsMask & (1 << i)) == 0)
+                if ((mask & (1 << i)) == 0)
                 {
                     continue;
                 }

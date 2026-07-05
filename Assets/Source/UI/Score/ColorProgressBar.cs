@@ -1,4 +1,5 @@
 using BalloonParty.Configuration;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
@@ -23,6 +24,14 @@ namespace BalloonParty.UI.Score
 
         [Header("Configuration")] [PaletteColorName] [SerializeField]
         private string _colorName;
+
+        [Tooltip("Toggled (not SetActive) when this color is gated out of the active level range.")]
+        [SerializeField] private CanvasGroup _visibilityGroup;
+
+        [Tooltip("Excluded from a parent Layout Group's sizing when gated out, so a hidden bar " +
+                 "doesn't leave a gap in the row.")]
+        [SerializeField] private LayoutElement _layoutElement;
+
         [Header("Visuals")] [SerializeField] private Graphic[] _graphicsToSetColor;
 
         [Header("Progress")] [SerializeField] private Slider _progressSlider;
@@ -34,7 +43,7 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ProgressNotice _streakNoticePrefab;
 
         [Inject] private IGamePalette _palette;
-        [Inject] private IGameConfiguration _config;
+        [Inject] private IActiveLevelParameters _levelParams;
         [Inject] private ISubscriber<ScorePointMessage> _scoredSubscriber;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
@@ -49,6 +58,31 @@ namespace BalloonParty.UI.Score
         private ProgressNoticePresenter _notices;
         private PaletteEntry _colorConfig;
         private int _stashedMaxValue;
+
+        private void Awake()
+        {
+            // Falls back to components on this GameObject (adding them if missing) so a bar
+            // whose prefab predates these fields doesn't hard-crash the whole score UI at Start.
+            if (_visibilityGroup == null)
+            {
+                _visibilityGroup = GetComponent<CanvasGroup>();
+            }
+
+            if (_visibilityGroup == null)
+            {
+                _visibilityGroup = gameObject.AddComponent<CanvasGroup>();
+            }
+
+            if (_layoutElement == null)
+            {
+                _layoutElement = GetComponent<LayoutElement>();
+            }
+
+            if (_layoutElement == null)
+            {
+                _layoutElement = gameObject.AddComponent<LayoutElement>();
+            }
+        }
 
         private void OnValidate()
         {
@@ -101,6 +135,7 @@ namespace BalloonParty.UI.Score
             _progressSlider.value = _scoreController.GetProgress(_colorConfig.Name);
 
             _scoreTrailService.RegisterTarget(_colorConfig.Name, this, _colorConfig.Color);
+            ApplyVisibility();
 
             _scoredSubscriber.Subscribe(OnScorePoint).AddTo(this);
             _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(this);
@@ -128,8 +163,40 @@ namespace BalloonParty.UI.Score
 
         private void OnLevelUp(ScoreLevelUpMessage msg)
         {
-            _stashedMaxValue = _config.PointsRequiredForLevel(msg.NewLevel + 1);
+            _stashedMaxValue = _levelParams.PointsRequiredForLevel(msg.NewLevel + 1);
             ClearCompletionVfx();
+        }
+
+        // Deliberately not re-checked in OnLevelUp: the level-range resolver reacts to the same
+        // ScoreLevelUpMessage and may already have re-resolved to the new level's set (subscriber
+        // order is unenforced), so flipping visibility here could fade in a bar for a color that
+        // never actually contributed to the level that just completed — while the ceremony is
+        // still playing out over the completed level's set. Applied once here (initial state) and
+        // again on dismiss, after the ceremony is fully over.
+        private void ApplyVisibility()
+        {
+            var active = IsColorActive();
+            _visibilityGroup.alpha = active ? 1f : 0f;
+            _visibilityGroup.interactable = active;
+            _visibilityGroup.blocksRaycasts = active;
+
+            // A CanvasGroup alone doesn't exclude the bar from a parent Layout Group's size
+            // calculation — ignoreLayout is what actually closes the gap a hidden bar leaves.
+            _layoutElement.ignoreLayout = !active;
+        }
+
+        private bool IsColorActive()
+        {
+            var allowed = _levelParams.AllowedColors;
+            for (var i = 0; i < allowed.Count; i++)
+            {
+                if (allowed[i] == _colorConfig.Name)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private void OnRunReset()
@@ -157,6 +224,7 @@ namespace BalloonParty.UI.Score
             _progressSlider.maxValue = _stashedMaxValue;
             _progressSlider.value = 0;
             ClearCompletionVfx();
+            ApplyVisibility();
         }
 
         private async UniTaskVoid DrainSliderAsync(int steps, float staggerDelay)
