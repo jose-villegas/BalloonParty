@@ -89,13 +89,10 @@ namespace BalloonParty.Thrower
             // so its shield count (and position) start from the configured default.
             _resetSubscriber.Subscribe(_ => Reload());
 
-            // Also fires for a mid-game board clear (the level-transition Ascent) — the frozen
-            // projectile from the completed level is swapped for a fresh one before the reveal.
+            // A board clear (the run-restart path) swaps the carried-over projectile for a fresh one.
             _boardClearSubscriber.Subscribe(_ => Reload());
 
-            // On dismiss the loaded projectile scales itself away; the board-clear reload above (later
-            // in the same transition) then swaps in the fresh one for the new level.
-            _levelUpDismissedSubscriber.Subscribe(_ => _activeView?.PlayDisappear());
+            _levelUpDismissedSubscriber.Subscribe(_ => OnLevelUpDismissed());
 
             Navigation.Current
                 .Where(state => state == NavigationState.Game)
@@ -148,6 +145,21 @@ namespace BalloonParty.Thrower
 
             _loadElapsed = 0f;
             _loadDuration = _config.ProjectileLoadDuration;
+        }
+
+        // The loaded projectile scales itself away, then a fresh one loads for the new level (the
+        // level transition clears the board on its own beats and no longer publishes BoardClearMessage,
+        // so the reload is chained off the disappear here). If nothing is loaded, just reload.
+        private void OnLevelUpDismissed()
+        {
+            if (_activeView != null)
+            {
+                _activeView.PlayDisappear(Reload);
+            }
+            else
+            {
+                Reload();
+            }
         }
 
         private void Reload()

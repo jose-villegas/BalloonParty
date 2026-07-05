@@ -28,6 +28,13 @@ namespace BalloonParty.Game.Cinematics
     /// </summary>
     internal sealed class LevelUpCinematic : IStartable, IDisposable
     {
+        // Safety caps so the pan-in can never soft-lock the popup: the popup only shows once the
+        // pan-in cinematic ends (gate on CinematicState.LevelUpPanIn leaving), so if the tracked trail
+        // is lost/mismatched and never completes, we must still end the pan-in. Multiples of the
+        // trail's own flight duration — generous, only ever hit on the failure path.
+        private const float PanInTimeoutFactor = 3f;
+        private const float TrailRegisterTimeoutFactor = 3f;
+
         private readonly CinematicDirector _director;
         private readonly CinematicCameraRig _rig;
         private readonly TimeScaleService _timeScale;
@@ -51,6 +58,7 @@ namespace BalloonParty.Game.Cinematics
         private TrailId _tippingTrailId;
         private TrailFlight _trackedFlight;
         private float _trailElapsed;
+        private float _panInElapsed;
         private Vector3 _trailOrigin;
         private Vector3 _trailTargetWorld;
 
@@ -142,9 +150,24 @@ namespace BalloonParty.Game.Cinematics
 
         private async UniTaskVoid WaitForTippingTrailAsync()
         {
-            await UniTask.WaitUntil(
-                () => _scoreTrailService.Flights.Contains(_tippingTrailId),
-                cancellationToken: _cts.Token);
+            // Bounded wait: if the tipping trail never registers with the captured id (it arrived and
+            // was unregistered first, or a projected-vs-confirmed color mismatch means it never will),
+            // give up instead of waiting forever. The pan-in never began, so the popup's gate is
+            // already open — bailing here (and clearing _sessionActive) lets the popup show and keeps
+            // future level-ups able to arm.
+            var elapsed = 0f;
+            var timeout = _config.ScorePointTraceDuration * TrailRegisterTimeoutFactor;
+            while (!_scoreTrailService.Flights.Contains(_tippingTrailId))
+            {
+                if (elapsed >= timeout)
+                {
+                    _sessionActive = false;
+                    return;
+                }
+
+                await UniTask.Yield(PlayerLoopTiming.Update, _cts.Token);
+                elapsed += Time.unscaledDeltaTime;
+            }
 
             if (!_sessionActive)
             {
@@ -154,6 +177,7 @@ namespace BalloonParty.Game.Cinematics
             _trackedFlight = _scoreTrailService.Flights.Get(_tippingTrailId);
             if (_trackedFlight == null)
             {
+                _sessionActive = false;
                 return;
             }
 
@@ -163,6 +187,7 @@ namespace BalloonParty.Game.Cinematics
         private void BeginCinematicWithTrail()
         {
             _trailElapsed = 0f;
+            _panInElapsed = 0f;
             _trailOrigin = _trackedFlight.Transform.position;
             _lastTrailPosition = _trailOrigin;
             _trailTargetWorld = _scoreTrailService.GetTarget(_tippingTrailId.Color).Center;
@@ -235,14 +260,30 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
+            // Absolute safety cap: however the trail tracking fails, end the pan-in so the popup's
+            // gate opens rather than soft-locking. Only ever reached on the failure path.
+            _panInElapsed += dt;
+            if (_panInElapsed > _config.ScorePointTraceDuration * PanInTimeoutFactor)
+            {
+                EndPanIn();
+                return;
+            }
+
             _trailElapsed += dt * curveValue;
             AdvanceTrackedTrail();
         }
 
         private void AdvanceTrackedTrail()
         {
+            // The tracked trail was completed/returned out from under us — nothing left to puppet, so
+            // end the pan-in (which opens the popup gate) instead of stalling here forever.
             if (_trackedFlight?.Transform == null)
             {
+                if (_cinematic.IsPanInRunning)
+                {
+                    EndPanIn();
+                }
+
                 return;
             }
 

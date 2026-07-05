@@ -289,9 +289,16 @@ namespace BalloonParty.Game.Score
             _persistentScore[msg.ColorName]++;
             _totalScore.Value++;
 
+            // Cap progress at the next-level threshold. A single big/high-streak pop renumbers points
+            // past the threshold into the next level so they carry over — but a burst may only ever
+            // advance ONE level, so clamping here stops the carried-over excess from banking beyond one
+            // threshold and chaining a second level-up. (The excess is intentionally lost — you can't
+            // skip a level.)
+            var required = _levelParams.PointsRequiredForLevel(_level.Value + 1);
             var previous = _levelProgress[msg.ColorName];
-            _levelProgress[msg.ColorName] = Math.Max(previous, msg.Score);
-            _projectedProgress[msg.ColorName] = Math.Max(_projectedProgress[msg.ColorName], msg.Score);
+            _levelProgress[msg.ColorName] = Math.Min(required, Math.Max(previous, msg.Score));
+            _projectedProgress[msg.ColorName] =
+                Math.Min(required, Math.Max(_projectedProgress[msg.ColorName], msg.Score));
 
             CheckLevelUp();
         }

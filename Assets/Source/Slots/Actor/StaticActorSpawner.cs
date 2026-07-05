@@ -137,6 +137,14 @@ namespace BalloonParty.Slots.Actor
 
         private void OnBoardClear(BoardClearMessage _)
         {
+            ClearStaticActors();
+        }
+
+        // Returns every static actor to its pool. Callable directly (not just via BoardClearMessage)
+        // so the level-transition Ascent can clear the old scenario's statics on its own beat —
+        // without also nuking the balloons, which the pop wave is popping in parallel.
+        internal void ClearStaticActors()
+        {
             if (!_poolsRegistered)
             {
                 return;

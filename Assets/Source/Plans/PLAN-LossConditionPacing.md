@@ -1127,9 +1127,65 @@ finish at the centre. (Coordinate check: `IndexToWorldPosition` maps `col 0`→l
 `BalloonControllerRegistry.TryPopSingle(model)` (resolve → `Unregister` → `HandleBoardClear(true)`) —
 the side-effect-free teardown, NOT the projectile-hit `Pop()` path, so no balance/nudge/score fires
 (and gameplay is paused anyway). Balloons are snapshotted into bands up front, then popped from the
-snapshot as the grid mutates. After the wave, `BoardClearMessage(playPopVfx:false)` clears the statics
-(and any straggler) silently, then the statics respawn + ascent slide run as before. `0.35` slow-mo
-and `0.11s` band interval are placeholder tuning like the ascent values.
+snapshot as the grid mutates. `0.35` slow-mo and `0.11s` band interval are placeholder tuning like the
+ascent values.
+
+**Overlapped the descent with the pop + decoupled the clears (2026-07-06):** the transition used to be
+strictly sequential (pop → clear → spawn statics → descend, with balloons cued mid-descent). Per feel
+feedback the descent now runs CONCURRENTLY with the pop, and the new balloons spawn once every balloon
+has popped (not mid-descent). This required splitting the single `BoardClearMessage` (which cleared
+statics + balloons + reloaded the projectile at once — incompatible with a timed wave):
+- `StaticActorSpawner.ClearStaticActors()` (extracted from `OnBoardClear`) — static-only clear the
+  controller calls directly at pop-start, so new statics can spawn + descend while the wave pops
+  balloons in parallel. `BalloonControllerRegistry.ClearAll(bool)` (extracted likewise) — the
+  controller sweeps stragglers after the wave.
+- The transition NO LONGER publishes `BoardClearMessage` (it clears the board on its own beats).
+  `BoardClearMessage` now fires only on run-restart. Projectile reload was decoupled: `ThrowerController`
+  chains `Reload` off the dismiss disappear (`OnLevelUpDismissed` → `PlayDisappear(Reload)`) instead of
+  reacting to the transition's board-clear.
+- `TransitionAsync`: `popTask = PopBalloonsInWaveAsync(ct)` (concurrent) → `ClearStaticActors` +
+  spawn statics at origin + `descentTask = PlayAsync(...)` (concurrent, no balloon cue) →
+  `await popTask` → `ClearAll(false)` straggler sweep + spawn balloons → `await descentTask`. Descent
+  (~2.4s unscaled) overlaps the pop (~2s slow-mo); balloons spawn at pop-end and animate in during the
+  last of the descent.
+
+**Missing level-up popup on 2→3 — INVESTIGATION ONGOING (2026-07-06), root cause NOT confirmed.**
+Solid architecture facts: the popup shows only after the pan-in cinematic ENDS (`CinematicEndGate`
+waits for `Cinematic.Current` to leave `LevelUpPanIn`); `LevelUpDismissedMessage` is published ONLY by
+the popup's Continue button, and `LevelTransitionController` is its sole subscriber — so **there is NO
+transition-without-popup path, and a missing popup is a hard soft-lock** (level advances on the
+confirmed-score path but nav sticks in LevelUp). Two hypotheses initially believed then DISPROVED
+(don't re-chase): concurrent double-popup — impossible, `CheckLevelUp` early-returns once nav flips to
+LevelUp and handlers are synchronous, so only one `ScoreLevelUpMessage` per level-up; and pan-in hang —
+`PanInTick` advances progress off a never-zero curve so the pan-in self-terminates, and the `TrailId`
+can't mismatch (both sides build it from the same `ScorePointMessage`). The guards added earlier
+(`AdvanceTrackedTrail`→`EndPanIn` on null; `PanInTick` absolute cap; bounded `WaitForTippingTrailAsync`)
+are therefore **band-aids for causes that don't occur, kept only as a temporary soft-lock backstop so
+the transition work can be playtested — to be removed once the real cause is confirmed.** Leading
+remaining candidate (needs runtime data): a color *required* at the level with no progress bar in the
+scene → `ScoreTrailService` logs `no target provider registered for color "X" — score trail skipped`,
+that color never confirms, level sticks at 2, no popup. Next step: repro 2→3 and check (a) whether the
+level reaches 3 or sticks at 2, (b) console warnings/exceptions — then fix at the source. **No more
+speculative fixes before that.**
+
+**Cap one level-up per burst (2026-07-06).** Independent real fix (not necessarily the 2→3 cause):
+carried-over points past the threshold (renumbered into the next level) re-inflated progress after the
+level-up reset, so a burst could chain a near-instant second level-up. `ScoreController.OnTrailArrived`
+now clamps `_levelProgress`/`_projectedProgress` at `PointsRequiredForLevel(_level+1)` → a burst
+advances at most one level (excess lost; no skipping).
+
+**Keep outgoing clusters visible during the transition (2026-07-06).** `ClearStaticActors()` emptied
+the grid → the single per-archetype cluster view blanked → old puff/bush vanished before the new
+descended. Fix: `ITransitionOutgoingContent` (`Slots/Actor/`) — a deliberately GENERAL seam ("keep your
+outgoing visuals on screen during the transition, then drop them"), not cluster-specific, so a future
+per-slot-rendered actor plugs in the same way (it'd retain its own views instead of snapshotting).
+`ClusterViewController` implements it: `HoldOutgoing(exitDrop)` spins up a throwaway second view
+`Configure`d from the still-full registry before the clear, then parents it under the scenario root
+offset one `exitDrop` (= the `LevelAscend` lift height) BELOW the incoming content — so as the root
+descends (lifting the new content from +exitDrop to rest), the snapshot slides from rest down to
+-exitDrop and exits the bottom, in lockstep with the new arriving. `ReleaseOutgoing()` destroys it.
+`LevelTransitionController` injects `IReadOnlyList<ITransitionOutgoingContent>` (decoupled), holds before
+`ClearStaticActors`, releases in the `finally` after the descent.
 
 **Deliberately deferred (art/in-editor dependent, not blocking):** the scenario root's starting
 height/descent-duration/spawn-cue-fraction (8 world units, 1.2s, 0.75) are placeholder guesses —

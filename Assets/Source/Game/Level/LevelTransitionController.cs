@@ -21,14 +21,14 @@ using VContainer.Unity;
 namespace BalloonParty.Game.Level
 {
     /// <summary>
-    ///     The Ascent: on dismissing the level-up popup, the remaining balloons pop, the board clears,
-    ///     and the new level's static content — every actor parented under the shared
-    ///     <see cref="ScenarioContentRoot" /> — slides down into place as one unit while the camera
+    ///     The Ascent: on dismissing the level-up popup, the old level's balloons pop in a slow-mo
+    ///     diagonal wave and — concurrently — the new level's static content (every actor parented
+    ///     under the shared <see cref="ScenarioContentRoot" />) slides down into place while the camera
     ///     stays fixed, as if we'd moved up to a new scenario stacked on top of this one. The one
-    ///     transform this controller cares about is that root: it spawns the new statics into it, lifts
-    ///     it, and slides it back to the origin; the content follows because the cluster views and
-    ///     slot markers render relative to their transform. The new level's balloons spawn partway
-    ///     through the descent (already mid-animation on arrival). Holds
+    ///     transform this controller moves is that root: it spawns the new statics into it, lifts it,
+    ///     and slides it back to the origin; the content follows because the cluster views and slot
+    ///     markers render relative to their transform. Once every balloon has popped, the new level's
+    ///     balloons spawn (animating in while the scenario finishes settling). Holds
     ///     <see cref="PauseSource.LevelTransition" /> for the whole sequence so the thrower and
     ///     spawn-loss checks stay inert until the reveal is ready.
     /// </summary>
@@ -45,11 +45,12 @@ namespace BalloonParty.Game.Level
         private readonly GridSpawnerCoordinator _spawnerCoordinator;
         private readonly ScenarioContentRoot _scenarioRoot;
         private readonly SlotGrid _grid;
+        private readonly StaticActorSpawner _staticActorSpawner;
+        private readonly IReadOnlyList<ITransitionOutgoingContent> _outgoingContent;
         private readonly BalloonControllerRegistry _balloonRegistry;
         private readonly TimeScaleService _timeScale;
         private readonly RejectedBalloonEffect _overflow;
         private readonly PauseService _pauseService;
-        private readonly IPublisher<BoardClearMessage> _boardClearPublisher;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly CancellationTokenSource _cts = new();
         private readonly Dictionary<int, List<IBalloonModel>> _popBands = new();
@@ -65,11 +66,12 @@ namespace BalloonParty.Game.Level
             GridSpawnerCoordinator spawnerCoordinator,
             ScenarioContentRoot scenarioRoot,
             SlotGrid grid,
+            StaticActorSpawner staticActorSpawner,
+            IReadOnlyList<ITransitionOutgoingContent> outgoingContent,
             BalloonControllerRegistry balloonRegistry,
             TimeScaleService timeScale,
             RejectedBalloonEffect overflow,
             PauseService pauseService,
-            IPublisher<BoardClearMessage> boardClearPublisher,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber)
         {
             _cinematicDirector = cinematicDirector;
@@ -78,11 +80,12 @@ namespace BalloonParty.Game.Level
             _spawnerCoordinator = spawnerCoordinator;
             _scenarioRoot = scenarioRoot;
             _grid = grid;
+            _staticActorSpawner = staticActorSpawner;
+            _outgoingContent = outgoingContent;
             _balloonRegistry = balloonRegistry;
             _timeScale = timeScale;
             _overflow = overflow;
             _pauseService = pauseService;
-            _boardClearPublisher = boardClearPublisher;
             _dismissedSubscriber = dismissedSubscriber;
         }
 
@@ -113,34 +116,66 @@ namespace BalloonParty.Game.Level
 
                 await UniTask.WaitUntil(() => !_overflow.IsOverflowActive, cancellationToken: ct);
 
-                // Un-zoom the camera (the level-up pan-in left it zoomed) in lockstep with the pop —
-                // started here, right as the balloons begin popping, and spanning the wave's duration,
-                // so the two read as one beat. Unscaled, matching the wave's real (post-slow-mo) length.
+                // Un-zoom the camera (the level-up pan-in left it zoomed) in lockstep with the pop.
                 _cameraRig.RestoreTweened(EstimatePopWaveSeconds());
 
-                // The old level's balloons pop in a slow-mo wave from the two far corners inward.
-                await PopBalloonsInWaveAsync(ct);
+                // Start the old level's balloons popping (slow-mo diagonal wave from the two far
+                // corners inward). Kept running concurrently while the new scenario descends below.
+                var popTask = PopBalloonsInWaveAsync(ct);
 
-                // Clear whatever's left (static actors, plus any straggler balloon not on the grid) —
-                // silently now, the visible pop already happened in the wave above.
-                _boardClearPublisher.Publish(new BoardClearMessage(playPopVfx: false));
+                // Hold the outgoing scenario content (clusters snapshot themselves; a future per-slot
+                // actor would retain its views) BEFORE clearing, so the old level stays visible while
+                // the new one slides in over it — otherwise the clear blinks it out. Released once the
+                // descent settles.
+                HoldOutgoingContent();
 
-                // Spawn the new statics while the root is at the origin, so cluster views and markers
-                // settle at their true grid positions. PlayAsync then lifts the root on its first
-                // frame (before any render) and slides it back down — the content rides along.
+                // Swap in the new scenario's statics and start them descending WHILE the balloons are
+                // still popping. Clear only the OLD statics here (the wave owns the balloons); spawn the
+                // new ones at the origin so their cluster views/markers settle at true grid positions,
+                // then PlayAsync lifts the root on its first frame (before any render) and slides it
+                // down — the content rides along.
+                _staticActorSpawner.ClearStaticActors();
                 _scenarioRoot.Transform.position = Vector3.zero;
                 await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, ct);
+                var descentTask = _ascendCinematic.PlayAsync(_scenarioRoot.Transform, onBalloonSpawnCue: null, ct);
 
-                await _ascendCinematic.PlayAsync(
-                    _scenarioRoot.Transform,
-                    onBalloonSpawnCue: () => _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, ct).Forget(),
-                    ct);
+                // Once every balloon has popped, sweep any straggler (item-pending, off-grid) balloon
+                // and spawn the new level's balloons — they animate in while the scenario finishes
+                // settling, rather than only after it has come to rest.
+                await popTask;
+                _balloonRegistry.ClearAll(playPopVfx: false);
+                _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, ct).Forget();
+
+                await descentTask;
             }
             finally
             {
+                // The descent has settled (or the sequence bailed) — drop the held outgoing content now
+                // that the new scenario is in place.
+                ReleaseOutgoingContent();
+
                 // Guarantees the thrower unlocks even if a step above throws or is cancelled —
                 // a stuck PauseSource.LevelTransition means a permanently unthrowable projectile.
                 _pauseService.Resume(PauseSource.LevelTransition);
+            }
+        }
+
+        private void HoldOutgoingContent()
+        {
+            // Same distance PlayAsync lifts the incoming content by, so the outgoing content exits the
+            // bottom in lockstep as the new arrives.
+            var exitDrop = _cinematicsSettings.EntryOf(CinematicState.LevelAscend).Rig.ZoomAmount;
+            for (var i = 0; i < _outgoingContent.Count; i++)
+            {
+                _outgoingContent[i].HoldOutgoing(exitDrop);
+            }
+        }
+
+        private void ReleaseOutgoingContent()
+        {
+            for (var i = 0; i < _outgoingContent.Count; i++)
+            {
+                _outgoingContent[i].ReleaseOutgoing();
             }
         }
 

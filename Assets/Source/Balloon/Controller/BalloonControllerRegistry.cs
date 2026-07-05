@@ -129,6 +129,14 @@ namespace BalloonParty.Balloon.Controller
 
         private void OnBoardClear(BoardClearMessage msg)
         {
+            ClearAll(msg.PlayPopVfx);
+        }
+
+        // Clears every registered balloon. Callable directly (not just via BoardClearMessage) so the
+        // level-transition Ascent can sweep any straggler after its diagonal pop wave — the wave has
+        // already unregistered+popped the on-grid balloons, so this only catches item-pending ones.
+        internal void ClearAll(bool playPopVfx)
+        {
             // Snapshot first — HandleBoardClear returns views to the pool, and controllers
             // popped-but-waiting-for-item-activation are still registered and must be included.
             _clearBuffer.Clear();
@@ -148,7 +156,7 @@ namespace BalloonParty.Balloon.Controller
 
             foreach (var controller in _clearBuffer)
             {
-                controller.HandleBoardClear(msg.PlayPopVfx);
+                controller.HandleBoardClear(playPopVfx);
             }
 
             _clearBuffer.Clear();

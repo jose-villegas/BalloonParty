@@ -17,7 +17,8 @@ namespace BalloonParty.Slots.Actor.Cluster
     /// and may override <see cref="PopulatePositions"/> to inject extra positions
     /// (e.g. gap-fill circles between adjacent slots).
     /// </summary>
-    internal abstract class ClusterViewController<TModel, TView, TSettings> : IStartable, IDisposable
+    internal abstract class ClusterViewController<TModel, TView, TSettings>
+        : IStartable, IDisposable, ITransitionOutgoingContent
         where TModel : class, IClusterableSlotActor
         where TView : ClusterView
         where TSettings : class, IClusterViewSettings
@@ -32,6 +33,7 @@ namespace BalloonParty.Slots.Actor.Cluster
         private readonly Vector4[] _positionsBuffer = new Vector4[16];
 
         private TView _view;
+        private TView _snapshotView;
 
         [Inject]
         protected ClusterViewController(
@@ -85,11 +87,62 @@ namespace BalloonParty.Slots.Actor.Cluster
         public void Dispose()
         {
             _disposables.Dispose();
+            ReleaseOutgoing();
 
             if (_view != null)
             {
                 UnityEngine.Object.Destroy(_view.gameObject);
                 _view = null;
+            }
+        }
+
+        // Freezes the current cluster shape into a second, throwaway view left at rest (NOT parented
+        // under the scenario root, so it doesn't ride the descent). Called before the level transition
+        // clears the board, so the outgoing clusters stay put while the live view slides the incoming
+        // ones down over them. Reads the still-populated registry, so it must run before the clear.
+        public void HoldOutgoing(float exitDrop)
+        {
+            ReleaseOutgoing();
+
+            var prefab = GetPrefab(_settings);
+            if (prefab == null)
+            {
+                return;
+            }
+
+            var snapshot = _resolver.Instantiate(prefab);
+            if (snapshot.Renderer != null)
+            {
+                snapshot.Renderer.sortingLayerID = _settings.SortingLayerId;
+                snapshot.Renderer.sortingOrder = _settings.SortingOrderOffset;
+                snapshot.Renderer.enabled = false;
+            }
+
+            OnViewCreated(snapshot);
+
+            if (!ConfigureView(snapshot))
+            {
+                UnityEngine.Object.Destroy(snapshot.gameObject);
+                return;
+            }
+
+            // Ride the scenario root but offset one exitDrop BELOW the incoming content, so as the root
+            // descends (lifting the incoming content from +exitDrop down to rest) this snapshot slides
+            // from rest down to -exitDrop — the outgoing scenario exits the bottom as the new arrives.
+            snapshot.transform.SetParent(_scenarioRoot.Transform, worldPositionStays: true);
+            var local = snapshot.transform.localPosition;
+            local.y -= exitDrop;
+            snapshot.transform.localPosition = local;
+
+            _snapshotView = snapshot;
+        }
+
+        public void ReleaseOutgoing()
+        {
+            if (_snapshotView != null)
+            {
+                UnityEngine.Object.Destroy(_snapshotView.gameObject);
+                _snapshotView = null;
             }
         }
 
@@ -132,23 +185,28 @@ namespace BalloonParty.Slots.Actor.Cluster
 
         private void Reconfigure()
         {
-            if (_view == null)
+            if (_view != null)
             {
-                return;
+                ConfigureView(_view);
             }
+        }
 
+        // Configures a view from the CURRENT clusters. Returns false (and clears the view) when there
+        // are no clusters to draw. Shared by the live view's Reconfigure and the transition snapshot.
+        private bool ConfigureView(TView view)
+        {
             var clusters = _registry.Clusters;
             if (clusters.Count == 0)
             {
-                _view.Clear();
-                return;
+                view.Clear();
+                return false;
             }
 
             var count = PopulatePositions(_positionsBuffer, clusters, _grid);
             if (count == 0)
             {
-                _view.Clear();
-                return;
+                view.Clear();
+                return false;
             }
 
             var min = new Vector2(float.MaxValue, float.MaxValue);
@@ -166,7 +224,8 @@ namespace BalloonParty.Slots.Actor.Cluster
             max += Vector2.one * halfSlotPadding;
             var combinedBounds = Rect.MinMaxRect(min.x, min.y, max.x, max.y);
 
-            _view.Configure(_positionsBuffer, count, combinedBounds, _settings);
+            view.Configure(_positionsBuffer, count, combinedBounds, _settings);
+            return true;
         }
     }
 }

@@ -329,7 +329,7 @@ MonoBehaviour:
         m_RotationOrder: 4
       _zoomAmount: 8
       _panWeight: 0.75
-      _followSpeed: 0.25
+      _followSpeed: 0.3
     _trackedTrail:
       _scaleCurve:
         serializedVersion: 2

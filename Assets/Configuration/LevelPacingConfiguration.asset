@@ -39,9 +39,9 @@ MonoBehaviour:
     _toLevel: -1
     _parameters:
       _spawnLines:
-        _min: 1
-        _max: 2
-        _mode: 1
+        _min: 5
+        _max: 5
+        _mode: 2
       _boardLines:
         _min: 2
         _max: 2
@@ -52,6 +52,12 @@ MonoBehaviour:
         _mode: 0
       _balloonWeights:
       - _type: 0
+        _weight: 1
+        _maxCountOverride: 0
+      - _type: 4
+        _weight: 1
+        _maxCountOverride: 0
+      - _type: 5
         _weight: 1
         _maxCountOverride: 0
       _itemWeights: []
