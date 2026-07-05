@@ -98,6 +98,21 @@ namespace BalloonParty.Balloon.Controller
             }
         }
 
+        // Pops one balloon on demand (VFX + return), unregistering it — the level-transition wave
+        // pops the board diagonally over time rather than all at once via OnBoardClear. Routes through
+        // HandleBoardClear (the side-effect-free teardown), NOT the projectile-hit Pop() path.
+        internal bool TryPopSingle(IBalloonModel model)
+        {
+            if (!TryResolve(model, out var controller))
+            {
+                return false;
+            }
+
+            Unregister((IWriteableBalloonModel)model);
+            controller.HandleBoardClear(playPopVfx: true);
+            return true;
+        }
+
         // Internal for direct test invocation of the resolve mechanics.
         internal bool TryResolve(IBalloonModel model, out BalloonController controller)
         {

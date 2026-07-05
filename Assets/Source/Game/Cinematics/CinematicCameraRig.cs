@@ -80,6 +80,34 @@ namespace BalloonParty.Game.Cinematics
         }
 
         /// <summary>
+        ///     Standalone tweened return to base framing (position + orthographic size) over
+        ///     <paramref name="duration" /> in unscaled time, re-enabling the ortho controller on
+        ///     completion. Unlike <see cref="PrepareRestore" /> (a segment step of the shared runner),
+        ///     this owns its own completion, so a producer can un-zoom without driving the whole
+        ///     restore-segment machinery — used by the level-up dismiss now that the Ascent moves the
+        ///     scenario rather than the camera.
+        /// </summary>
+        public void RestoreTweened(float duration)
+        {
+            // No captured base (the pan-in never ran) means there's nothing to un-zoom to — restoring
+            // to the uninitialized base would fling the camera to the origin. Just leave the controller
+            // enabled. Safe to call unconditionally (e.g. from the level transition on every dismiss).
+            if (_camera == null || !_hasBaseState)
+            {
+                EnableOrtho(true);
+                return;
+            }
+
+            KillTween();
+            PrepareRestore(duration);
+            _tween.OnComplete(() =>
+            {
+                Restore();
+                _tween = null;
+            });
+        }
+
+        /// <summary>
         ///     Pans toward the focus per the segment's pan weight / follow speed, keeping the focus box in
         ///     frustum. A single-point focus (min == max) is hard-clamped after easing — it can never
         ///     outgrow the view and must never leave it; a spread is clamped before easing, so a far new

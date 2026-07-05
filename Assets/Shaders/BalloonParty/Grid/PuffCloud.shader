@@ -163,6 +163,11 @@ Shader "BalloonParty/Grid/PuffCloud"
             // parent, e.g. the level-transition scenario root sliding down). Set alongside the
             // world array by ClusterView.
             float4 _SlotCentersLocal[MAX_SLOTS];
+            // The quad's world origin at rest (bounds center with no Ascent lift). Lets the shader
+            // reconstruct each fragment's rest-frame world position so noise + disturbance sample
+            // where the field is valid even while the cloud is lifted mid-slide. Equals the live
+            // object origin at rest, so it's a no-op then.
+            float2 _RestOrigin;
             int    _SlotCount;
 
             #ifdef _SHADOW_ON
@@ -283,10 +288,14 @@ Shader "BalloonParty/Grid/PuffCloud"
                 // Occupancy mask is evaluated in object space so the cloud shape follows this
                 // transform (and its parent). At rest the object origin equals the bounds center,
                 // so wpLocal/_SlotCentersLocal reproduce the old world math byte-for-byte; only a
-                // displaced quad (the Ascent slide) moves the silhouette. Noise + disturbance
-                // stay world-anchored (see below), so normal play is unchanged.
+                // displaced quad (the Ascent slide) moves the silhouette.
                 float2 objOrigin = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
                 float2 wpLocal = wpOrig - objOrigin;
+                // Rest-frame world position: fragment re-anchored at the rest origin, so noise and the
+                // disturbance field are sampled as if the cloud were unlifted — the whole cloud reads as
+                // one rigid object during the slide, and the field UV never leaves its valid bounds
+                // (which flickered). wpRest == wpOrig at rest, so normal play is byte-identical.
+                float2 wpRest = wpLocal + _RestOrigin;
                 // Runtime clock is shader-driven via built-in _Time (no per-frame push);
                 // _TimeOffset is only fed by C# in edit mode, where _Time is frozen.
                 float  t  = _Time.y * _AnimationSpeed + _TimeOffset;
@@ -295,7 +304,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float borderFade = SlotFalloff(wpLocal);
 
                 #ifdef _SHADOW_ON
-                float2 shadowWpWorld = wpOrig   - float2(_ShadowOffsetX, _ShadowOffsetY);
+                float2 shadowWpWorld = wpRest   - float2(_ShadowOffsetX, _ShadowOffsetY);
                 float2 shadowWpLocal = wpLocal  - float2(_ShadowOffsetX, _ShadowOffsetY);
                 float  shadowFade = SlotFalloff(shadowWpLocal);
                 #endif
@@ -323,7 +332,7 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                 // Density field + displacement (P2+)
                 #ifdef _DENSITY_ON
-                float2 fieldUV = (IN.worldPos - _FieldBoundsMin) / _FieldBoundsSize;
+                float2 fieldUV = (wpRest - _FieldBoundsMin) / _FieldBoundsSize;
                 float3 field = tex2D(_DisturbanceTex, fieldUV).rgb;
                 float density = field.r;
                 float2 displace = (field.gb - 0.5) * 2.0 * _DisplaceWorldScale;
@@ -333,7 +342,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 #endif
 
                 float lowOrig;
-                float noiseOrig = CloudNoise(wpOrig, t, lowOrig);
+                float noiseOrig = CloudNoise(wpRest, t, lowOrig);
 
                 #ifdef _NOISE_DEBUG
                 return fixed4(noiseOrig.xxx, 1.0);
@@ -356,7 +365,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float cloud = cloudOrig;
                 if (disturbance > 0.001)
                 {
-                    float2 wpDisp = wpOrig + displace;
+                    float2 wpDisp = wpRest + displace;
                     float lowDisp;
                     float noiseDisp = CloudNoise(wpDisp, t, lowDisp);
                     float cloudDisp = smoothstep(_EdgeLow, _EdgeHigh, noiseDisp);

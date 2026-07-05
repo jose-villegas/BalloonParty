@@ -205,9 +205,9 @@ namespace BalloonParty.Game.Cinematics
             EndPanIn();
         }
 
-        // No tweened restore anymore — LevelAscend takes over the camera immediately on dismiss (the
-        // Ascent's own zoom-out snaps it to base framing as its first step), so this just hands back
-        // to Game without animating the camera itself.
+        // The pan-in zoomed the camera onto the tipping trail and disabled the ortho controller; the
+        // camera un-zoom is driven by LevelTransitionController so it plays in lockstep with the balloon
+        // pop wave (which the transition, not this producer, times). Here we just hand back to Game.
         private void OnDismissed()
         {
             DisposeSessionSubscription();

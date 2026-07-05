@@ -26,6 +26,11 @@ namespace BalloonParty.Projectile.View
         [SerializeField] [Range(0f, 1f)] private float _glowAlpha = 0.5f;
         [SerializeField] private float _glowColorDuration = 0.2f;
 
+        [Header("Disappear")]
+        [Tooltip("Scale-down-to-zero on the last hit (shields depleted / absorbed) and on level-up dismiss.")]
+        [SerializeField] private float _disappearDuration = 0.2f;
+        [SerializeField] private Ease _disappearEase = Ease.InBack;
+
         [Inject] private IGamePalette _palette;
         [Inject] private IGameConfiguration _config;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
@@ -41,6 +46,8 @@ namespace BalloonParty.Projectile.View
         private ProjectileTrail _projectileTrail;
         private bool _shieldShown;
         private ProjectileShieldView _shieldView;
+        private Vector3 _baseScale;
+        private bool _disappearing;
 
         private void Awake()
         {
@@ -50,13 +57,14 @@ namespace BalloonParty.Projectile.View
                 BalloonsLayer = LayerMask.NameToLayer("Balloons");
             }
 
+            _baseScale = transform.localScale;
             _shieldView = GetComponentInChildren<ProjectileShieldView>(true);
             _projectileTrail = GetComponentInChildren<ProjectileTrail>(true);
         }
 
         private void FixedUpdate()
         {
-            if (_model == null || !_model.IsFree || _pauseService.IsAnyPaused.Value)
+            if (_disappearing || _model == null || !_model.IsFree || _pauseService.IsAnyPaused.Value)
             {
                 return;
             }
@@ -67,7 +75,7 @@ namespace BalloonParty.Projectile.View
 
         private void OnTriggerEnter2D(Collider2D other)
         {
-            if (_model == null || !_model.IsFree || _pauseService.IsAnyPaused.Value)
+            if (_disappearing || _model == null || !_model.IsFree || _pauseService.IsAnyPaused.Value)
             {
                 return;
             }
@@ -91,6 +99,8 @@ namespace BalloonParty.Projectile.View
         public void OnSpawned()
         {
             _shieldShown = false;
+            _disappearing = false;
+            transform.localScale = _baseScale;
             _deflectedSubscription?.Dispose();
             _deflectedSubscription = null;
         }
@@ -101,6 +111,9 @@ namespace BalloonParty.Projectile.View
             _deflectedSubscription = null;
             _model = null;
             _shieldShown = false;
+            _disappearing = false;
+            transform.DOKill();
+            transform.localScale = _baseScale;
             transform.rotation = Quaternion.identity;
             if (_glowRenderer != null)
             {
@@ -130,9 +143,33 @@ namespace BalloonParty.Projectile.View
 
         private void DestroyProjectile()
         {
-            _projectileTrail?.Disable();
+            // Rebalance the board right away; the spent projectile scales down first, and only when it
+            // has vanished do we signal destruction (which reloads the next projectile).
             _balancePublisher.Publish(default);
-            _destroyedPublisher.Publish(default);
+            PlayDisappear(() => _destroyedPublisher.Publish(default));
+        }
+
+        /// <summary>
+        ///     Scales the projectile down to zero, then invokes <paramref name="onComplete" />. Used for
+        ///     the last-hit destruction and (via the thrower) the level-up dismiss. Idempotent — a second
+        ///     call while already disappearing is ignored. Runs in unscaled time so slow-mo doesn't stretch
+        ///     it and it plays even while the world is frozen at dismiss.
+        /// </summary>
+        internal void PlayDisappear(Action onComplete = null)
+        {
+            if (_disappearing)
+            {
+                return;
+            }
+
+            _disappearing = true;
+            _projectileTrail?.Disable();
+
+            transform.DOKill();
+            transform.DOScale(Vector3.zero, _disappearDuration)
+                .SetEase(_disappearEase)
+                .SetUpdate(true)
+                .OnComplete(() => onComplete?.Invoke());
         }
 
         private void MoveAndBounce()

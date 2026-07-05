@@ -23,6 +23,7 @@ namespace BalloonParty.Slots.Actor.Cluster
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
         private static readonly int SlotCentersWorldId = Shader.PropertyToID("_SlotCentersWorld");
         private static readonly int SlotCentersLocalId = Shader.PropertyToID("_SlotCentersLocal");
+        private static readonly int RestOriginId = Shader.PropertyToID("_RestOrigin");
         private static readonly int SlotCountId = Shader.PropertyToID("_SlotCount");
         private static readonly int AnimationSpeedId = Shader.PropertyToID("_AnimationSpeed");
 
@@ -189,6 +190,7 @@ namespace BalloonParty.Slots.Actor.Cluster
             _renderer.GetPropertyBlock(_block);
             _block.SetVectorArray(SlotCentersWorldId, _slotCenters);
             _block.SetVectorArray(SlotCentersLocalId, _slotCentersLocal);
+            _block.SetVector(RestOriginId, new Vector4(pos.x, pos.y, 0f, 0f));
             _block.SetInt(SlotCountId, 1);
             _renderer.SetPropertyBlock(_block);
         }
@@ -212,6 +214,10 @@ namespace BalloonParty.Slots.Actor.Cluster
             _renderer.GetPropertyBlock(_block);
             _block.SetVectorArray(SlotCentersWorldId, _slotCenters);
             _block.SetVectorArray(SlotCentersLocalId, _slotCentersLocal);
+            // The quad's world origin at rest — the shader reconstructs each fragment's rest-frame
+            // position from this so noise + disturbance sample where the field is valid even while the
+            // Ascent has the cloud lifted (otherwise the field UV reads out of bounds and flickers).
+            _block.SetVector(RestOriginId, new Vector4(_configuredCenter.x, _configuredCenter.y, 0f, 0f));
             _block.SetInt(SlotCountId, _slotCount);
             // Pushed once here so the shader's runtime _Time.y * _AnimationSpeed clock
             // needs no per-frame update.

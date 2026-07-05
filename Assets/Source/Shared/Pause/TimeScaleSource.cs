@@ -6,6 +6,9 @@ namespace BalloonParty.Shared.Pause
         Cinematic,
 
         /// <summary>The level-up popup freezes the world (0) while it is on screen.</summary>
-        LevelUpPopup
+        LevelUpPopup,
+
+        /// <summary>The level-transition Ascent's slow-mo while the old level's balloons pop.</summary>
+        LevelTransition
     }
 }

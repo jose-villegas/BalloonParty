@@ -24,6 +24,7 @@ namespace BalloonParty.Thrower
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
+        private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
         private readonly PauseService _pauseService;
         private readonly IObjectResolver _resolver;
         private readonly List<Vector3> _tracePoints = new();
@@ -54,6 +55,7 @@ namespace BalloonParty.Thrower
             IPublisher<ProjectileLoadedMessage> loadedPublisher,
             ISubscriber<RunResetMessage> resetSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
+            ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
             PauseService pauseService,
             ProjectilePositionProvider positionProvider)
         {
@@ -66,6 +68,7 @@ namespace BalloonParty.Thrower
             _loadedPublisher = loadedPublisher;
             _resetSubscriber = resetSubscriber;
             _boardClearSubscriber = boardClearSubscriber;
+            _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
             _pauseService = pauseService;
             _positionProvider = positionProvider;
             _projectilePoolKey = settings.ProjectilePrefab.name;
@@ -89,6 +92,10 @@ namespace BalloonParty.Thrower
             // Also fires for a mid-game board clear (the level-transition Ascent) — the frozen
             // projectile from the completed level is swapped for a fresh one before the reveal.
             _boardClearSubscriber.Subscribe(_ => Reload());
+
+            // On dismiss the loaded projectile scales itself away; the board-clear reload above (later
+            // in the same transition) then swaps in the fresh one for the new level.
+            _levelUpDismissedSubscriber.Subscribe(_ => _activeView?.PlayDisappear());
 
             Navigation.Current
                 .Where(state => state == NavigationState.Game)

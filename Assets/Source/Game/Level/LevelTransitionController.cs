@@ -1,5 +1,8 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
+using BalloonParty.Balloon.Controller;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Cinematics;
@@ -7,6 +10,7 @@ using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Slots.Actor;
+using BalloonParty.Slots.Grid;
 using BalloonParty.Slots.Spawner;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -30,15 +34,25 @@ namespace BalloonParty.Game.Level
     /// </summary>
     internal sealed class LevelTransitionController : IStartable, IDisposable
     {
+        // Slow-mo timescale while the old level's balloons pop; the pop wave advances one anti-diagonal
+        // band per interval. Placeholder tuning (like the Ascent's height/duration) — feel pass pending.
+        private const float PopSlowMoTimeScale = 0.35f;
+        private const float PopWaveBandSeconds = 0.11f;
+
         private readonly CinematicDirector _cinematicDirector;
+        private readonly CinematicCameraRig _cameraRig;
         private readonly ICinematicsSettings _cinematicsSettings;
         private readonly GridSpawnerCoordinator _spawnerCoordinator;
         private readonly ScenarioContentRoot _scenarioRoot;
+        private readonly SlotGrid _grid;
+        private readonly BalloonControllerRegistry _balloonRegistry;
+        private readonly TimeScaleService _timeScale;
         private readonly RejectedBalloonEffect _overflow;
         private readonly PauseService _pauseService;
         private readonly IPublisher<BoardClearMessage> _boardClearPublisher;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly CancellationTokenSource _cts = new();
+        private readonly Dictionary<int, List<IBalloonModel>> _popBands = new();
 
         private LevelAscendCinematic _ascendCinematic;
         private IDisposable _dismissedSubscription;
@@ -46,18 +60,26 @@ namespace BalloonParty.Game.Level
         [Inject]
         internal LevelTransitionController(
             CinematicDirector cinematicDirector,
+            CinematicCameraRig cameraRig,
             ICinematicsSettings cinematicsSettings,
             GridSpawnerCoordinator spawnerCoordinator,
             ScenarioContentRoot scenarioRoot,
+            SlotGrid grid,
+            BalloonControllerRegistry balloonRegistry,
+            TimeScaleService timeScale,
             RejectedBalloonEffect overflow,
             PauseService pauseService,
             IPublisher<BoardClearMessage> boardClearPublisher,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber)
         {
             _cinematicDirector = cinematicDirector;
+            _cameraRig = cameraRig;
             _cinematicsSettings = cinematicsSettings;
             _spawnerCoordinator = spawnerCoordinator;
             _scenarioRoot = scenarioRoot;
+            _grid = grid;
+            _balloonRegistry = balloonRegistry;
+            _timeScale = timeScale;
             _overflow = overflow;
             _pauseService = pauseService;
             _boardClearPublisher = boardClearPublisher;
@@ -91,8 +113,17 @@ namespace BalloonParty.Game.Level
 
                 await UniTask.WaitUntil(() => !_overflow.IsOverflowActive, cancellationToken: ct);
 
-                // The remaining balloons pop (visible burst) as the board clears.
-                _boardClearPublisher.Publish(new BoardClearMessage(playPopVfx: true));
+                // Un-zoom the camera (the level-up pan-in left it zoomed) in lockstep with the pop —
+                // started here, right as the balloons begin popping, and spanning the wave's duration,
+                // so the two read as one beat. Unscaled, matching the wave's real (post-slow-mo) length.
+                _cameraRig.RestoreTweened(EstimatePopWaveSeconds());
+
+                // The old level's balloons pop in a slow-mo wave from the two far corners inward.
+                await PopBalloonsInWaveAsync(ct);
+
+                // Clear whatever's left (static actors, plus any straggler balloon not on the grid) —
+                // silently now, the visible pop already happened in the wave above.
+                _boardClearPublisher.Publish(new BoardClearMessage(playPopVfx: false));
 
                 // Spawn the new statics while the root is at the origin, so cluster views and markers
                 // settle at their true grid positions. PlayAsync then lifts the root on its first
@@ -110,6 +141,92 @@ namespace BalloonParty.Game.Level
                 // Guarantees the thrower unlocks even if a step above throws or is cancelled —
                 // a stuck PauseSource.LevelTransition means a permanently unthrowable projectile.
                 _pauseService.Resume(PauseSource.LevelTransition);
+            }
+        }
+
+        // Pops every balloon on the board in slow-mo, advancing along anti-diagonals (band = col + row)
+        // from BOTH far corners — top-left (band 0) and bottom-right (band max) — inward, so the two
+        // fronts meet and finish at the centre. Routes each pop through the registry's side-effect-free
+        // teardown (no balance/nudge/score); gameplay is already paused via PauseSource.LevelTransition.
+        private async UniTask PopBalloonsInWaveAsync(CancellationToken ct)
+        {
+            CollectBalloonBands();
+            if (_popBands.Count == 0)
+            {
+                return;
+            }
+
+            var maxBand = (_grid.Columns - 1) + (_grid.Rows - 1);
+
+            _timeScale.Claim(TimeScaleSource.LevelTransition, PopSlowMoTimeScale);
+            try
+            {
+                for (var near = 0; near <= maxBand - near; near++)
+                {
+                    PopBand(near);
+                    var far = maxBand - near;
+                    if (far != near)
+                    {
+                        PopBand(far);
+                    }
+
+                    // Scaled delay, so the slow-mo also stretches the wave's cadence.
+                    await UniTask.Delay(
+                        TimeSpan.FromSeconds(PopWaveBandSeconds), ignoreTimeScale: false, cancellationToken: ct);
+                }
+            }
+            finally
+            {
+                _timeScale.Release(TimeScaleSource.LevelTransition);
+            }
+        }
+
+        // Wall-clock length of the pop wave: one band-interval per anti-diagonal step (every step
+        // waits, empty band or not), stretched by the slow-mo the wave runs under. Used to match the
+        // camera un-zoom to the wave. Mirror this if the wave loop's cadence changes.
+        private float EstimatePopWaveSeconds()
+        {
+            var maxBand = (_grid.Columns - 1) + (_grid.Rows - 1);
+            var steps = (maxBand / 2) + 1;
+            return steps * PopWaveBandSeconds / PopSlowMoTimeScale;
+        }
+
+        private void CollectBalloonBands()
+        {
+            _popBands.Clear();
+
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    var balloon = _grid.ActorAt<IWriteableBalloonModel>(new Vector2Int(col, row));
+                    if (balloon == null)
+                    {
+                        continue;
+                    }
+
+                    var band = col + row;
+                    if (!_popBands.TryGetValue(band, out var models))
+                    {
+                        models = new List<IBalloonModel>();
+                        _popBands[band] = models;
+                    }
+
+                    models.Add(balloon);
+                }
+            }
+        }
+
+        private void PopBand(int band)
+        {
+            if (!_popBands.TryGetValue(band, out var models))
+            {
+                return;
+            }
+
+            for (var i = 0; i < models.Count; i++)
+            {
+                _balloonRegistry.TryPopSingle(models[i]);
             }
         }
     }

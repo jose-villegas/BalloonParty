@@ -55,6 +55,10 @@ namespace BalloonParty.Game.Cinematics
                 var spawnCueTime = duration * Mathf.Clamp01(segment.PanWeight);
                 var spawnCueFired = false;
 
+                // FollowSpeed traverses the curve faster (>1) or slower (<1); the descent takes
+                // duration / FollowSpeed in real time. 0 (unset) falls back to the curve's own pace.
+                var followSpeed = segment.FollowSpeed > 0f ? segment.FollowSpeed : 1f;
+
                 var elapsed = 0f;
                 while (elapsed < duration)
                 {
@@ -69,7 +73,7 @@ namespace BalloonParty.Game.Cinematics
                     stagingRoot.position = position;
 
                     await UniTask.Yield(PlayerLoopTiming.Update, ct);
-                    elapsed += Time.unscaledDeltaTime;
+                    elapsed += Time.unscaledDeltaTime * followSpeed;
                 }
 
                 if (!spawnCueFired)

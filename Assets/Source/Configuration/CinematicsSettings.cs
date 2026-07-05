@@ -71,17 +71,17 @@ namespace BalloonParty.Configuration
             // camera move: the curve's VALUE is a 1→0 height fraction (not timeScale — gameplay is
             // already paused) — 1 at t=0 (fully elevated, matching the pre-set starting offset) down
             // to 0 at the end (settled at rest). ZoomAmount is the staging root's starting height in
-            // world units, and PanWeight is the fraction of the total 1.2s duration at which the new
-            // level's balloons spawn (0.75 — partway through the descent, so they're already
-            // mid-animation by the time the scenario settles). FollowSpeed is unused (Frame() is
-            // never called for this state).
+            // world units, PanWeight is the fraction of the descent at which the new level's balloons
+            // spawn (0.75 — partway through, so they're already mid-animation by the time the scenario
+            // settles), and FollowSpeed is the descent-speed multiplier (traverses the curve faster
+            // above 1 / slower below; real descent time = curve duration / FollowSpeed).
             new(
                 CinematicTraits.BlocksLoss | CinematicTraits.BlocksShake,
                 new CameraRigCinematicSettings(
                     new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(1.2f, 0f)),
                     zoomAmount: 8f,
                     panWeight: 0.75f,
-                    followSpeed: 0f),
+                    followSpeed: 0.5f),
                 new TrackedTrailSettings()),
         };
 

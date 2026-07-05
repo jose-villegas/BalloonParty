@@ -1003,7 +1003,9 @@ translate, and a visible pop for the outgoing balloons instead of a silent clear
   segment length (1.2s authored); `ZoomAmount` is the ascend height in world units (8, placeholder);
   `PanWeight` is the fraction of the total duration at which the new level's balloon spawn cue fires
   (0.75 — partway through the descent, so balloons are already mid-`BalloonFactory.AnimateSpawn` by
-  arrival, not popping in only after); `FollowSpeed` is unused (no `Frame()` call for this state).
+  arrival, not popping in only after); `FollowSpeed` is the descent-speed multiplier — the loop
+  advances the curve by `unscaledDeltaTime * FollowSpeed`, so real descent time = duration /
+  FollowSpeed (0.5 authored → the 1.2s curve plays over ~2.4s; 0 falls back to the curve's own pace).
   This mirrors how `LevelUpCinematic` already reinterprets the same curve's value as a trail-speed
   multiplier instead of a timeScale one — reusing the uniform segment shape per-producer is the
   established pattern, not a one-off hack.
@@ -1081,10 +1083,53 @@ Final design (user chose "render in local space"):
 
 **⚠️ Needs in-editor + shader verification (untestable via `dotnet build`):** the `PuffCloud.shader`
 edit and `BushView` offset are unverified here. The rest-identical claim for puff is by construction
-(origin==center at rest) but should be eyeballed. One known risk to watch: while a puff cloud is
-elevated mid-slide, its `_DENSITY_ON` disturbance-field sample (`fieldUV` from world position) reads
-outside `_FieldBoundsMin/Size` — if the cloud looks faded/dimmed during the descent, that's why, and
-the fix is to offset `fieldUV` by the reveal delta too.
+(origin==center at rest) but should be eyeballed.
+
+**Rest-frame sampling fix (2026-07-06):** the flagged flicker was confirmed in-editor — while lifted,
+the puff sampled the noise + `_DENSITY_ON` disturbance field at its elevated world position, so the
+field UV left `_FieldBoundsMin/Size` and shimmered, and the noise scrolled through the cloud. Fixed by
+reconstructing each fragment's REST-frame world position in the shader: `ClusterView` pushes
+`_RestOrigin` (the quad's world origin at configure, no lift) once; the shader computes
+`wpRest = wpLocal + _RestOrigin` and samples noise/field/shadow at `wpRest` instead of the live world
+position, so the whole cloud reads as one rigid object during the slide and the field UV stays in
+bounds. `wpRest == wpOrig` at rest, so normal play is byte-identical (only `pixelWorld`'s derivative
+still reads `wpOrig` — identical since the two differ by a per-quad constant). The occupancy mask was
+already object-relative (`wpLocal`).
+
+**Camera-zoom-left-on fix (2026-07-05, after the down-slide was confirmed working):** the level-up
+pan-in zooms the camera onto the tipping trail (and disables `OrthogonalSizeCameraController`), and
+`EndPanIn` leaves it there. When the old `LevelUpRestore` beat was removed — on the assumption the
+Ascent would take the camera — nothing was left to un-zoom, since the Ascent moves the *scenario*,
+not the camera; the camera stayed zoomed after every level-up. Fixed via a new
+`CinematicCameraRig.RestoreTweened(duration)` (tweens position + ortho size back to base in unscaled
+time, re-enabling the ortho controller on completion; no-ops if `!_hasBaseState`, so it's safe to
+call even when the pan-in never ran). **Lesson: deleting a "restore"/cleanup beat because a successor
+is *expected* to handle it requires verifying the successor actually does — here the successor was
+later redesigned to not touch the camera at all, silently orphaning the un-zoom.**
+
+**Camera un-zoom synced to the pop wave (2026-07-06):** the un-zoom initially fired from
+`LevelUpCinematic.OnDismissed` (at dismiss), but the pop wave runs *after* the overflow-drain wait and
+over slow-mo — so the camera could finish un-zooming before the balloons even started. Moved the
+trigger to `LevelTransitionController`: it calls `_cameraRig.RestoreTweened(EstimatePopWaveSeconds())`
+right as the pop wave begins, with a duration matched to the wave's wall-clock length
+(`steps × PopWaveBandSeconds / slowMo`), so the un-zoom and the pop read as one beat.
+`LevelUpCinematic.OnDismissed` now only resumes + hands back to Game.
+
+**Slow-mo diagonal pop wave (2026-07-06):** the old level's balloons no longer pop all in one frame.
+`LevelTransitionController.PopBalloonsInWaveAsync` claims a slow-mo timescale
+(`TimeScaleService.Claim(TimeScaleSource.LevelTransition, 0.35)` — new enum value; timescale composes
+by MIN, and the popup's `0` freeze is already released by dismiss so `0.35` wins) and pops balloons
+band-by-band along anti-diagonals `band = col + row`, advancing from BOTH far corners inward —
+top-left (`band 0`) and bottom-right (`band max = (Columns-1)+(Rows-1)`) — so the two fronts meet and
+finish at the centre. (Coordinate check: `IndexToWorldPosition` maps `col 0`→left, `row 0`→top since
+`y = -row·sep + offset`, so `(0,0)` is visually top-left.) Band cadence is a scaled `UniTask.Delay`
+(so slow-mo also stretches the wave). Each pop routes through a new
+`BalloonControllerRegistry.TryPopSingle(model)` (resolve → `Unregister` → `HandleBoardClear(true)`) —
+the side-effect-free teardown, NOT the projectile-hit `Pop()` path, so no balance/nudge/score fires
+(and gameplay is paused anyway). Balloons are snapshotted into bands up front, then popped from the
+snapshot as the grid mutates. After the wave, `BoardClearMessage(playPopVfx:false)` clears the statics
+(and any straggler) silently, then the statics respawn + ascent slide run as before. `0.35` slow-mo
+and `0.11s` band interval are placeholder tuning like the ascent values.
 
 **Deliberately deferred (art/in-editor dependent, not blocking):** the scenario root's starting
 height/descent-duration/spawn-cue-fraction (8 world units, 1.2s, 0.75) are placeholder guesses —
@@ -1093,9 +1138,9 @@ frame at the board's real world scale?). Part D's "cloud sweep VFX" is still unb
 statics/clusters just slide down against whatever's rendered above the board (likely plain
 background). `TrailMotion.Fall` has no curve pair authored on `FlyingTrail`/`TrailSpawner` yet and
 nothing uses it — the "cosmetic falling trails" mentioned in Part D for the pop-out are not built;
-outgoing balloons play their normal pop VFX (`HitOutcome.Pop`) via `BoardClearMessage.PlayPopVfx`
-instead, a real improvement over the original silent clear but not the bespoke "falling" effect
-originally specified. Balloons themselves are NOT staged/parented — they still spawn directly at
+outgoing balloons play their normal pop VFX (`HitOutcome.Pop`) in the slow-mo diagonal wave above,
+a real improvement over the original silent/instant clear but not the bespoke "falling" effect
+originally specified. New balloons are NOT staged/parented — they still spawn directly at
 their final position via the existing `BalloonFactory.AnimateSpawn` scale/path tween, triggered
 partway through the descent. No EditMode test for `LevelTransitionController`'s sequencing yet (only
 `PlayerHealthControllerTests.LevelUp_RestoresStartingHitPoints` was added) — it's UniTask-async and
