@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Level;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
@@ -32,6 +33,7 @@ namespace BalloonParty.Slots.Actor
         private readonly PoolManager _poolManager;
         private readonly IObjectResolver _resolver;
         private readonly IGridActorConfiguration _gridActorConfig;
+        private readonly IActiveLevelParameters _levelParams;
         private bool _poolsRegistered;
 
         public SpawnStage SpawnPriority => SpawnStage.StaticActors;
@@ -42,20 +44,23 @@ namespace BalloonParty.Slots.Actor
             PoolManager poolManager,
             IObjectResolver resolver,
             IGridActorConfiguration gridActorConfig,
+            IActiveLevelParameters levelParams,
             ISubscriber<BoardClearMessage> boardClearSubscriber)
         {
             _grid = grid;
             _poolManager = poolManager;
             _resolver = resolver;
             _gridActorConfig = gridActorConfig;
+            _levelParams = levelParams;
             _boardClearSubscriber = boardClearSubscriber;
         }
 
         // Bypasses pool and MonoBehaviour infrastructure — used in tests.
-        internal StaticActorSpawner(SlotGrid grid, IGridActorConfiguration gridActorConfig)
+        internal StaticActorSpawner(SlotGrid grid, IGridActorConfiguration gridActorConfig, IActiveLevelParameters levelParams)
         {
             _grid = grid;
             _gridActorConfig = gridActorConfig;
+            _levelParams = levelParams;
         }
 
         public void Start()
@@ -81,11 +86,13 @@ namespace BalloonParty.Slots.Actor
                     break;
                 }
 
-                var max = entry.MaxCount > 0 ? entry.MaxCount : emptySlots.Count;
-                var count = Mathf.Min(
-                    Random.Range(entry.MinCount, max + 1),
-                    emptySlots.Count);
+                if (!_levelParams.TryGetGridActorCount(entry.ActorType, out var levelCount))
+                {
+                    // Absent from this level's range — the type gate (mirrors the balloon gate).
+                    continue;
+                }
 
+                var count = Mathf.Min(levelCount, emptySlots.Count);
                 if (count <= 0)
                 {
                     continue;

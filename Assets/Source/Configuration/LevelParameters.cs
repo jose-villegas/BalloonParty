@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Slots.Actor.Archetype;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -25,6 +26,11 @@ namespace BalloonParty.Configuration
 
         [SerializeField] private ItemTypeWeight[] _itemWeights = Array.Empty<ItemTypeWeight>();
 
+        [SerializeField] private ResolvedGridActorGate[] _gridActorGates =
+        {
+            new(GridActorType.Puff, 4),
+        };
+
         [Tooltip("All bits set (default) = every palette color allowed.")]
         [SerializeField] [PaletteColorMask] private int _allowedColorsMask = ~0;
 
@@ -33,13 +39,14 @@ namespace BalloonParty.Configuration
         }
 
         internal LevelParameters(
-            int spawnLines, int boardLines,
-            BalloonTypeWeight[] balloonWeights, ItemTypeWeight[] itemWeights, int allowedColorsMask)
+            int spawnLines, int boardLines, BalloonTypeWeight[] balloonWeights,
+            ItemTypeWeight[] itemWeights, ResolvedGridActorGate[] gridActorGates, int allowedColorsMask)
         {
             _spawnLines = spawnLines;
             _boardLines = boardLines;
             _balloonWeights = balloonWeights;
             _itemWeights = itemWeights;
+            _gridActorGates = gridActorGates;
             _allowedColorsMask = allowedColorsMask;
         }
 
@@ -47,6 +54,7 @@ namespace BalloonParty.Configuration
         public int BoardLines => _boardLines;
         public BalloonTypeWeight[] BalloonWeights => _balloonWeights;
         public ItemTypeWeight[] ItemWeights => _itemWeights;
+        public ResolvedGridActorGate[] GridActorGates => _gridActorGates;
 
         /// <summary>Same bit-per-color convention as <see cref="ColorableBalloonVariant" />'s mask — all bits set = every palette color.</summary>
         public int AllowedColorsMask => _allowedColorsMask;

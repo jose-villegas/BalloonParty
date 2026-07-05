@@ -6,6 +6,7 @@ using BalloonParty.Game.Run;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Actor.Archetype;
 using MessagePipe;
 using UnityEngine;
 using VContainer.Unity;
@@ -87,6 +88,21 @@ namespace BalloonParty.Game.Level
         public BalloonPrefabEntry PickBalloonEntry(IReadOnlyDictionary<string, int> activeCounts)
         {
             return _pickList.PickRandom(activeCounts)?.Source;
+        }
+
+        public bool TryGetGridActorCount(GridActorType type, out int count)
+        {
+            foreach (var gate in _current.GridActorGates)
+            {
+                if (gate.Type == type)
+                {
+                    count = gate.Count;
+                    return true;
+                }
+            }
+
+            count = 0;
+            return false;
         }
 
         private void ResolveFor(int level)

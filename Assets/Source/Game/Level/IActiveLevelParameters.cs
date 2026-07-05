@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Slots.Actor.Archetype;
 
 namespace BalloonParty.Game.Level
 {
@@ -27,5 +28,12 @@ namespace BalloonParty.Game.Level
 
         IReadOnlyList<ItemSettings> Items { get; }
         IReadOnlyList<string> AllowedColors { get; }
+
+        /// <summary>
+        ///     The resolved count for a grid-actor type this level, or false if the type is absent
+        ///     from the active range's gate (cannot spawn at all — same absent-means-excluded
+        ///     semantics as the balloon type gate).
+        /// </summary>
+        bool TryGetGridActorCount(GridActorType type, out int count);
     }
 }

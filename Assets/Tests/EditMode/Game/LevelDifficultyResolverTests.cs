@@ -7,6 +7,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Game.Level;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Actor.Archetype;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
@@ -162,6 +163,33 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void TryGetGridActorCount_TypeInGate_ReturnsResolvedCount()
+        {
+            var range = MakeRange(1, 0, new RangedInt(1, 1), new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
+            SetField(range.Parameters, "_gridActorGates", new[] { new GridActorTypeGate(GridActorType.Puff, new RangedInt(5, 5)) });
+            _pacing.Ranges.Returns(new[] { range });
+
+            var resolver = BuildResolver();
+            resolver.Start();
+
+            Assert.IsTrue(resolver.TryGetGridActorCount(GridActorType.Puff, out var count));
+            Assert.AreEqual(5, count);
+        }
+
+        [Test]
+        public void TryGetGridActorCount_TypeAbsentFromGate_ReturnsFalse()
+        {
+            var range = MakeRange(1, 0, new RangedInt(1, 1), new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
+            SetField(range.Parameters, "_gridActorGates", new[] { new GridActorTypeGate(GridActorType.Puff, new RangedInt(5, 5)) });
+            _pacing.Ranges.Returns(new[] { range });
+
+            var resolver = BuildResolver();
+            resolver.Start();
+
+            Assert.IsFalse(resolver.TryGetGridActorCount(GridActorType.Bush, out _));
+        }
+
+        [Test]
         public void ExhaustiveResolve_Levels1To50_NeverThrows()
         {
             var entry = CreateCatalogEntry("Simple", BalloonType.Simple, weight: 1f, maxCount: 0);
@@ -199,12 +227,7 @@ namespace BalloonParty.Tests.Game
             var parameters = new RangedLevelParameters();
             SetField(parameters, "_spawnLines", spawnLines);
             SetField(parameters, "_balloonWeights", weights);
-
-            object boxedRange = new LevelRangeEntry();
-            SetField(boxedRange, "_fromLevel", fromLevel);
-            SetField(boxedRange, "_toLevel", toLevel);
-            SetField(boxedRange, "_parameters", parameters);
-            return (LevelRangeEntry)boxedRange;
+            return new LevelRangeEntry(fromLevel, toLevel, parameters);
         }
 
         private BalloonPrefabEntry CreateCatalogEntry(string name, BalloonType type, float weight, int maxCount)
