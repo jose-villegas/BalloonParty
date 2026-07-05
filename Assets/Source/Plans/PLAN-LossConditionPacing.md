@@ -1048,21 +1048,58 @@ statics stage is now spawned via a direct call, bypassing the coordinator for th
 won't participate in the staged reveal unless this direct-call pattern is extended to include it too
 (today nothing is registered at that priority, so this is currently moot).
 
-**Deliberately deferred (art/in-editor dependent, not blocking):** the staging root's starting
+**Redesigned again — shared root + local-space rendering (2026-07-05).** Two earlier attempts (a
+single staging root the controller moved; then a `DescendTarget` list that reached into the cluster
+view controllers) both failed or leaked: moving a transform does nothing for Puff/Bush because
+BOTH render in absolute world space, ignoring their GameObject transform — Puff via a
+`_SlotCentersWorld` shader uniform compared to `mul(unity_ObjectToWorld, vertex)` world fragments,
+Bush via `Graphics.DrawMesh` with per-leaf/branch world `Matrix4x4`s. And having the controller
+know about `PuffCloudViewController.View`/`BushViewController.View` was a leaky abstraction (user
+feedback: "why would we need to know about puffview or bushview... they should be able themselves to
+be parented to the ascended transform, which should be the only thing the controller cares about").
+Final design (user chose "render in local space"):
+- **`ScenarioContentRoot`** (`Slots/Actor/`, DI singleton) — one scene transform, normally at the
+  origin, that every piece of the scenario's static content parents ITSELF under: cluster views
+  (in `ClusterViewController.Start`) and per-slot markers (in `StaticActorSpawner.PlaceActor`).
+  `LevelTransitionController` injects only this root — no view types, no `.View`. It spawns the new
+  statics while the root is at the origin (so cluster views `Configure` at true grid positions), then
+  `LevelAscendCinematic.PlayAsync(root, ...)` lifts the root on frame 1 and slides it back to zero;
+  the content rides along.
+- **Local-space rendering** so a moved transform actually moves the visuals: `ClusterView` now also
+  pushes `_SlotCentersLocal` (centers relative to the quad origin) alongside the existing world
+  array; `PuffCloud.shader` evaluates its occupancy mask (`SlotFalloff`) against
+  `worldPos - objectOrigin` vs `_SlotCentersLocal`. **At rest the object origin equals the bounds
+  center, so this is byte-identical to the old world math — normal play is unchanged; only a
+  displaced quad moves the silhouette.** Noise + the global disturbance field stay world-anchored.
+  `BushView` keeps its baked world matrices but, when its transform is displaced from the position it
+  was configured at, offsets every drawn matrix by that delta (a copy-free no-op at rest). No shader
+  edit needed for Bush; `Bush.shader`/`BushBake.shader` are editor bake shaders, untouched.
+- **Monotonic curve** — the descent curve is now `(0,1)→(1.2,0)` (a 1→0 height fraction). It was
+  briefly `(0,0)→(0.6,1)→(1.2,0)` (a hill, leftover from the camera-swoop attempt), which would have
+  snapped every target to rest on frame 1 (value 0 at t=0) then moved the wrong way. Fixed in both
+  `CinematicsSettings.cs` and the `.asset`.
+
+**⚠️ Needs in-editor + shader verification (untestable via `dotnet build`):** the `PuffCloud.shader`
+edit and `BushView` offset are unverified here. The rest-identical claim for puff is by construction
+(origin==center at rest) but should be eyeballed. One known risk to watch: while a puff cloud is
+elevated mid-slide, its `_DENSITY_ON` disturbance-field sample (`fieldUV` from world position) reads
+outside `_FieldBoundsMin/Size` — if the cloud looks faded/dimmed during the descent, that's why, and
+the fix is to offset `fieldUV` by the reveal delta too.
+
+**Deliberately deferred (art/in-editor dependent, not blocking):** the scenario root's starting
 height/descent-duration/spawn-cue-fraction (8 world units, 1.2s, 0.75) are placeholder guesses —
 needs an in-editor pass once visible (in particular: is 8 units actually enough to clear the visible
 frame at the board's real world scale?). Part D's "cloud sweep VFX" is still unbuilt — today the
-statics just slide down against whatever's rendered above the board (likely plain background).
-`TrailMotion.Fall` has no curve pair authored on `FlyingTrail`/`TrailSpawner` yet and nothing uses
-it — the "cosmetic falling trails" mentioned in Part D for the pop-out are not built; outgoing
-balloons play their normal pop VFX (`HitOutcome.Pop`) via `BoardClearMessage.PlayPopVfx` instead,
-a real improvement over the original silent clear but not the bespoke "falling" effect originally
-specified. Balloons themselves are NOT staged/parented — only statics — they still spawn directly at
+statics/clusters just slide down against whatever's rendered above the board (likely plain
+background). `TrailMotion.Fall` has no curve pair authored on `FlyingTrail`/`TrailSpawner` yet and
+nothing uses it — the "cosmetic falling trails" mentioned in Part D for the pop-out are not built;
+outgoing balloons play their normal pop VFX (`HitOutcome.Pop`) via `BoardClearMessage.PlayPopVfx`
+instead, a real improvement over the original silent clear but not the bespoke "falling" effect
+originally specified. Balloons themselves are NOT staged/parented — they still spawn directly at
 their final position via the existing `BalloonFactory.AnimateSpawn` scale/path tween, triggered
-partway through the statics' descent. No EditMode test for `LevelTransitionController`'s sequencing
-yet (only `PlayerHealthControllerTests.LevelUp_RestoresStartingHitPoints` was added) — it's
-UniTask-async and message-driven throughout, so it's testable with substituted seams, just not done
-in this pass.
+partway through the descent. No EditMode test for `LevelTransitionController`'s sequencing yet (only
+`PlayerHealthControllerTests.LevelUp_RestoresStartingHitPoints` was added) — it's UniTask-async and
+message-driven throughout, so it's testable with substituted seams, just not done in this pass.
 
 Smaller code surface but cinematic + in-editor heavy. Files:
 

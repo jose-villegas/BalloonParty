@@ -17,8 +17,9 @@ namespace BalloonParty.Slots.Actor.Archetype
             PuffClusterRegistry registry,
             SlotGrid grid,
             IPuffCloudSettings settings,
-            IObjectResolver resolver)
-            : base(registry, grid, settings, resolver)
+            IObjectResolver resolver,
+            ScenarioContentRoot scenarioRoot)
+            : base(registry, grid, settings, resolver, scenarioRoot)
         {
         }
 

@@ -18,10 +18,13 @@ namespace BalloonParty.Game.Level
 {
     /// <summary>
     ///     The Ascent: on dismissing the level-up popup, the remaining balloons pop, the board clears,
-    ///     and the new level's static actors are spawned above the board and slide down into place —
-    ///     as if we'd moved up to a new scenario stacked on top of this one, without ever moving the
-    ///     camera. The new level's initial balloons spawn partway through the descent (already
-    ///     mid-animation on arrival, not appearing only after). Holds
+    ///     and the new level's static content — every actor parented under the shared
+    ///     <see cref="ScenarioContentRoot" /> — slides down into place as one unit while the camera
+    ///     stays fixed, as if we'd moved up to a new scenario stacked on top of this one. The one
+    ///     transform this controller cares about is that root: it spawns the new statics into it, lifts
+    ///     it, and slides it back to the origin; the content follows because the cluster views and
+    ///     slot markers render relative to their transform. The new level's balloons spawn partway
+    ///     through the descent (already mid-animation on arrival). Holds
     ///     <see cref="PauseSource.LevelTransition" /> for the whole sequence so the thrower and
     ///     spawn-loss checks stay inert until the reveal is ready.
     /// </summary>
@@ -30,7 +33,7 @@ namespace BalloonParty.Game.Level
         private readonly CinematicDirector _cinematicDirector;
         private readonly ICinematicsSettings _cinematicsSettings;
         private readonly GridSpawnerCoordinator _spawnerCoordinator;
-        private readonly StaticActorSpawner _staticActorSpawner;
+        private readonly ScenarioContentRoot _scenarioRoot;
         private readonly RejectedBalloonEffect _overflow;
         private readonly PauseService _pauseService;
         private readonly IPublisher<BoardClearMessage> _boardClearPublisher;
@@ -38,7 +41,6 @@ namespace BalloonParty.Game.Level
         private readonly CancellationTokenSource _cts = new();
 
         private LevelAscendCinematic _ascendCinematic;
-        private Transform _stagingRoot;
         private IDisposable _dismissedSubscription;
 
         [Inject]
@@ -46,7 +48,7 @@ namespace BalloonParty.Game.Level
             CinematicDirector cinematicDirector,
             ICinematicsSettings cinematicsSettings,
             GridSpawnerCoordinator spawnerCoordinator,
-            StaticActorSpawner staticActorSpawner,
+            ScenarioContentRoot scenarioRoot,
             RejectedBalloonEffect overflow,
             PauseService pauseService,
             IPublisher<BoardClearMessage> boardClearPublisher,
@@ -55,7 +57,7 @@ namespace BalloonParty.Game.Level
             _cinematicDirector = cinematicDirector;
             _cinematicsSettings = cinematicsSettings;
             _spawnerCoordinator = spawnerCoordinator;
-            _staticActorSpawner = staticActorSpawner;
+            _scenarioRoot = scenarioRoot;
             _overflow = overflow;
             _pauseService = pauseService;
             _boardClearPublisher = boardClearPublisher;
@@ -65,7 +67,6 @@ namespace BalloonParty.Game.Level
         public void Start()
         {
             _ascendCinematic = new LevelAscendCinematic(_cinematicDirector, _cinematicsSettings);
-            _stagingRoot = new GameObject("AscentStagingRoot").transform;
             _dismissedSubscription = _dismissedSubscriber.Subscribe(_ => TransitionAsync().Forget());
         }
 
@@ -74,11 +75,6 @@ namespace BalloonParty.Game.Level
             _cts.Cancel();
             _cts.Dispose();
             _dismissedSubscription?.Dispose();
-
-            if (_stagingRoot != null)
-            {
-                UnityEngine.Object.Destroy(_stagingRoot.gameObject);
-            }
         }
 
         private async UniTaskVoid TransitionAsync()
@@ -98,14 +94,14 @@ namespace BalloonParty.Game.Level
                 // The remaining balloons pop (visible burst) as the board clears.
                 _boardClearPublisher.Publish(new BoardClearMessage(playPopVfx: true));
 
-                // Statics spawn already offset above the board (parented under the staging root),
-                // hidden above frame — the descent below is what slides them into place.
-                var height = _cinematicsSettings.EntryOf(CinematicState.LevelAscend).Rig.ZoomAmount;
-                _stagingRoot.position = new Vector3(0f, height, 0f);
-                _staticActorSpawner.SpawnStaticActorsInto(_stagingRoot);
+                // Spawn the new statics while the root is at the origin, so cluster views and markers
+                // settle at their true grid positions. PlayAsync then lifts the root on its first
+                // frame (before any render) and slides it back down — the content rides along.
+                _scenarioRoot.Transform.position = Vector3.zero;
+                await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, ct);
 
                 await _ascendCinematic.PlayAsync(
-                    _stagingRoot,
+                    _scenarioRoot.Transform,
                     onBalloonSpawnCue: () => _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, ct).Forget(),
                     ct);
             }

@@ -113,6 +113,7 @@ namespace BalloonParty.Game
 
             builder.Register<BalancePathHolder>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
             builder.Register<SlotGrid>(Lifetime.Singleton);
+            builder.Register<ScenarioContentRoot>(Lifetime.Singleton);
             builder.Register<GridBalanceQuery>(Lifetime.Singleton);
             builder.Register<PoolManager>(Lifetime.Singleton);
             builder.Register<TrailEndpointRegistry>(Lifetime.Singleton);

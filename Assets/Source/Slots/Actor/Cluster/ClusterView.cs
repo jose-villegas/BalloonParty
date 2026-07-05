@@ -22,6 +22,7 @@ namespace BalloonParty.Slots.Actor.Cluster
     {
         private static readonly int TimeOffsetId = Shader.PropertyToID("_TimeOffset");
         private static readonly int SlotCentersWorldId = Shader.PropertyToID("_SlotCentersWorld");
+        private static readonly int SlotCentersLocalId = Shader.PropertyToID("_SlotCentersLocal");
         private static readonly int SlotCountId = Shader.PropertyToID("_SlotCount");
         private static readonly int AnimationSpeedId = Shader.PropertyToID("_AnimationSpeed");
 
@@ -33,9 +34,15 @@ namespace BalloonParty.Slots.Actor.Cluster
 
         private readonly Vector4[] _slotCenters = new Vector4[16];
 
+        // Same slot centers as _slotCenters but relative to the quad's own origin (bounds center),
+        // so the shader can compare them against object-relative fragment positions and the whole
+        // cloud follows this transform (and any parent) — see PuffCloud.shader's _SlotCentersLocal.
+        private readonly Vector4[] _slotCentersLocal = new Vector4[16];
+
         private MaterialPropertyBlock _block;
         private bool _configured;
         private int _slotCount;
+        private Vector2 _configuredCenter;
 
         internal SpriteRenderer Renderer => _renderer;
         protected IReadOnlyList<Vector4> SlotCentersBuffer => _slotCenters;
@@ -113,6 +120,7 @@ namespace BalloonParty.Slots.Actor.Cluster
 
             var padding = settings.Padding;
             var center = combinedBounds.center;
+            _configuredCenter = center;
             transform.position = new Vector3(center.x, center.y, transform.position.z);
 
             var scaleX = combinedBounds.width + padding * 2f;
@@ -176,9 +184,11 @@ namespace BalloonParty.Slots.Actor.Cluster
 
             var pos = transform.position;
             _slotCenters[0] = new Vector4(pos.x, pos.y, 0f, 0f);
+            _slotCentersLocal[0] = Vector4.zero;
 
             _renderer.GetPropertyBlock(_block);
             _block.SetVectorArray(SlotCentersWorldId, _slotCenters);
+            _block.SetVectorArray(SlotCentersLocalId, _slotCentersLocal);
             _block.SetInt(SlotCountId, 1);
             _renderer.SetPropertyBlock(_block);
         }
@@ -192,9 +202,16 @@ namespace BalloonParty.Slots.Actor.Cluster
                 return;
             }
 
+            for (var i = 0; i < _slotCount; i++)
+            {
+                var c = _slotCenters[i];
+                _slotCentersLocal[i] = new Vector4(c.x - _configuredCenter.x, c.y - _configuredCenter.y, c.z, c.w);
+            }
+
             _renderer.enabled = true;
             _renderer.GetPropertyBlock(_block);
             _block.SetVectorArray(SlotCentersWorldId, _slotCenters);
+            _block.SetVectorArray(SlotCentersLocalId, _slotCentersLocal);
             _block.SetInt(SlotCountId, _slotCount);
             // Pushed once here so the shader's runtime _Time.y * _AnimationSpeed clock
             // needs no per-frame update.

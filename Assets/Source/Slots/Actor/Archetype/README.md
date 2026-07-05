@@ -44,6 +44,17 @@ materials; one branch material per variant).
 | `BushViewController` | `ClusterViewController` subclass. Adds gap-fill circles at midpoints between adjacent bush slots. Wires `IBushSettings` into the view via `SetSettings()`. |
 | `BushClusterRegistry` | `SlotClusterRegistry<BushObstacleModel>`. Subscribes to grid changes (no `setupOnly`) because spawner places actors async after `Start()`. |
 
+### Level-transition Ascent participation
+
+`ClusterViewController` parents its single view under the shared `ScenarioContentRoot` (`Slots/Actor/`)
+so the level-transition Ascent (`Game/Level/LevelTransitionController.cs`) can slide the whole
+scenario in by moving that one root. For that to move the visuals — which otherwise render in
+absolute world space — the renderers follow their transform: `ClusterView` pushes `_SlotCentersLocal`
+(centers relative to the quad origin) and `PuffCloud.shader` masks against `worldPos - objectOrigin`
+(byte-identical to the old world math at rest, since origin == bounds center then); `BushView` offsets
+its baked world matrices by how far its transform has moved from where it was configured (a no-op at
+rest). See the plan's Phase 3b notes for the full rationale.
+
 ### GPU Animation (BushLeaf.shader)
 
 All leaf animation runs in the **vertex shader** — no CPU-side `ITickable` or

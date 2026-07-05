@@ -26,6 +26,7 @@ namespace BalloonParty.Slots.Actor.Cluster
         private readonly SlotGrid _grid;
         private readonly TSettings _settings;
         private readonly IObjectResolver _resolver;
+        private readonly ScenarioContentRoot _scenarioRoot;
         private readonly CompositeDisposable _disposables = new();
 
         private readonly Vector4[] _positionsBuffer = new Vector4[16];
@@ -37,12 +38,14 @@ namespace BalloonParty.Slots.Actor.Cluster
             SlotClusterRegistry<TModel> registry,
             SlotGrid grid,
             TSettings settings,
-            IObjectResolver resolver)
+            IObjectResolver resolver,
+            ScenarioContentRoot scenarioRoot)
         {
             _registry = registry;
             _grid = grid;
             _settings = settings;
             _resolver = resolver;
+            _scenarioRoot = scenarioRoot;
         }
 
         protected abstract TView GetPrefab(TSettings settings);
@@ -59,6 +62,11 @@ namespace BalloonParty.Slots.Actor.Cluster
             }
 
             _view = _resolver.Instantiate(prefab);
+
+            // Parent under the scenario root (at the origin during play) so the level-transition
+            // Ascent moves this cluster with everything else; the view renders relative to its
+            // transform, so a moved root slides it without touching its per-cluster shape.
+            _view.transform.SetParent(_scenarioRoot.Transform, worldPositionStays: false);
 
             if (_view.Renderer != null)
             {

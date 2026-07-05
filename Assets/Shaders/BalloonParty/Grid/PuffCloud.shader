@@ -158,6 +158,11 @@ Shader "BalloonParty/Grid/PuffCloud"
 
             // Slot center positions in world space — set via MaterialPropertyBlock.
             float4 _SlotCentersWorld[MAX_SLOTS];
+            // Same centers relative to the quad's own origin (bounds center), so the occupancy
+            // mask can be evaluated in object space and the cloud follows this transform (and any
+            // parent, e.g. the level-transition scenario root sliding down). Set alongside the
+            // world array by ClusterView.
+            float4 _SlotCentersLocal[MAX_SLOTS];
             int    _SlotCount;
 
             #ifdef _SHADOW_ON
@@ -224,7 +229,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float minDist = 999.0;
                 for (int i = 0; i < _SlotCount; i++)
                 {
-                    float d = length(wp - _SlotCentersWorld[i].xy);
+                    float d = length(wp - _SlotCentersLocal[i].xy);
                     float h = saturate(0.5 + 0.5 * (minDist - d) * invK);
                     minDist = lerp(minDist, d, h) - k * h * (1.0 - h);
                 }
@@ -275,16 +280,24 @@ Shader "BalloonParty/Grid/PuffCloud"
             {
 
                 float2 wpOrig = IN.worldPos;
+                // Occupancy mask is evaluated in object space so the cloud shape follows this
+                // transform (and its parent). At rest the object origin equals the bounds center,
+                // so wpLocal/_SlotCentersLocal reproduce the old world math byte-for-byte; only a
+                // displaced quad (the Ascent slide) moves the silhouette. Noise + disturbance
+                // stay world-anchored (see below), so normal play is unchanged.
+                float2 objOrigin = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
+                float2 wpLocal = wpOrig - objOrigin;
                 // Runtime clock is shader-driven via built-in _Time (no per-frame push);
                 // _TimeOffset is only fed by C# in edit mode, where _Time is frozen.
                 float  t  = _Time.y * _AnimationSpeed + _TimeOffset;
 
-                // Boundary falloff — occupancy mask via slot centers (use original position)
-                float borderFade = SlotFalloff(wpOrig);
+                // Boundary falloff — occupancy mask via slot centers (object space)
+                float borderFade = SlotFalloff(wpLocal);
 
                 #ifdef _SHADOW_ON
-                float2 shadowWp   = wpOrig - float2(_ShadowOffsetX, _ShadowOffsetY);
-                float  shadowFade = SlotFalloff(shadowWp);
+                float2 shadowWpWorld = wpOrig   - float2(_ShadowOffsetX, _ShadowOffsetY);
+                float2 shadowWpLocal = wpLocal  - float2(_ShadowOffsetX, _ShadowOffsetY);
+                float  shadowFade = SlotFalloff(shadowWpLocal);
                 #endif
 
                 // The controller stretches ONE quad over the bounding box of every cluster
@@ -368,7 +381,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float shadowAlpha = 0.0;
                 if (shadowFade > 0.001 && mainAlpha < 0.999)
                 {
-                    float shadowNoise = CloudNoiseSoft(shadowWp, t);
+                    float shadowNoise = CloudNoiseSoft(shadowWpWorld, t);
                     float shadowCloud = smoothstep(_EdgeLow, _EdgeHigh, shadowNoise);
                     #ifdef _DENSITY_ON
                     shadowCloud *= density;

@@ -19,17 +19,14 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         private readonly IBushSettings _settings;
 
-        private BushView _bushView;
-
-        internal BushView View => _bushView;
-
         [Inject]
         internal BushViewController(
             BushClusterRegistry registry,
             SlotGrid grid,
             IBushSettings settings,
-            IObjectResolver resolver)
-            : base(registry, grid, settings, resolver)
+            IObjectResolver resolver,
+            ScenarioContentRoot scenarioRoot)
+            : base(registry, grid, settings, resolver, scenarioRoot)
         {
             _settings = settings;
         }
@@ -41,7 +38,6 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         protected override void OnViewCreated(BushView view)
         {
-            _bushView = view;
             view.SetSettings(_settings);
         }
 

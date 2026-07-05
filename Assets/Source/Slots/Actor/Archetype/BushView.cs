@@ -38,6 +38,13 @@ namespace BalloonParty.Slots.Actor.Archetype
         private BushRenderData _renderData;
         private MaterialPropertyBlock _fallbackMpb;
 
+        // Bush leaves/branches draw via Graphics.DrawMesh with baked WORLD matrices, which ignore
+        // this GameObject's transform. When the level-transition Ascent slides the scenario root
+        // (this view's parent), we offset every drawn matrix by how far the transform has moved
+        // from where it was configured — zero (and thus a no-op copy-free path) during normal play.
+        private Vector3 _restPosition;
+        private Matrix4x4[] _offsetMatrices;
+
         private static bool SupportsInstancing
         {
             get
@@ -58,10 +65,14 @@ namespace BalloonParty.Slots.Actor.Archetype
             var branchMesh = GetBranchQuadMesh();
             var layer = gameObject.layer;
 
+            var offset = transform.position - _restPosition;
+            var displaced = offset.sqrMagnitude > 1e-8f;
+            var offsetMatrix = displaced ? Matrix4x4.Translate(offset) : Matrix4x4.identity;
+
             // Render queues (inner 2999 < branch 3000 < outer 3001) drive layering, so
             // all slots' leaves merge into one instanced draw per tier rather than an
             // inner+branch+outer triple per slot.
-            DrawLeafBatches(leafMesh, _renderData.InnerBatches, _materials.InnerLeaf, layer);
+            DrawLeafBatches(leafMesh, _renderData.InnerBatches, _materials.InnerLeaf, layer, displaced, offsetMatrix);
 
             // Index loop, not foreach: Slots is IReadOnlyList, whose foreach allocates a
             // heap enumerator every frame; indexing does not.
@@ -71,11 +82,12 @@ namespace BalloonParty.Slots.Actor.Archetype
                 var slot = slots[i];
                 if (slot.BranchMaterial != null)
                 {
-                    Graphics.DrawMesh(branchMesh, slot.BranchMatrix, slot.BranchMaterial, layer);
+                    var matrix = displaced ? offsetMatrix * slot.BranchMatrix : slot.BranchMatrix;
+                    Graphics.DrawMesh(branchMesh, matrix, slot.BranchMaterial, layer);
                 }
             }
 
-            DrawLeafBatches(leafMesh, _renderData.OuterBatches, _materials.OuterLeaf, layer);
+            DrawLeafBatches(leafMesh, _renderData.OuterBatches, _materials.OuterLeaf, layer, displaced, offsetMatrix);
 
             _rustle.Tick();
         }
@@ -112,6 +124,10 @@ namespace BalloonParty.Slots.Actor.Archetype
             _materials.BuildLeafMaterials(_settings.LeafAtlasSprites);
             _renderData = _builder.Build(SlotCentersBuffer, SlotCount);
             _rustle.SetSlots(CollectSlotPositions());
+
+            // Configure runs with the scenario root at the origin (statics spawn before the Ascent
+            // lifts it), so this is the settled world position the baked matrices already target.
+            _restPosition = transform.position;
         }
 
         private void EnsureComponents()
@@ -133,7 +149,8 @@ namespace BalloonParty.Slots.Actor.Archetype
             return positions;
         }
 
-        private void DrawLeafBatches(Mesh leafMesh, LeafBatch[] batches, Material material, int layer)
+        private void DrawLeafBatches(
+            Mesh leafMesh, LeafBatch[] batches, Material material, int layer, bool displaced, Matrix4x4 offsetMatrix)
         {
             if (material == null)
             {
@@ -148,13 +165,21 @@ namespace BalloonParty.Slots.Actor.Archetype
                     continue;
                 }
 
+                // At rest (the common case) the baked world matrices are drawn directly; only the
+                // Ascent slide offsets them, into a reused scratch array.
+                var matrices = batch.Matrices;
+                if (displaced)
+                {
+                    matrices = OffsetMatrices(batch.Matrices, batch.Count, offsetMatrix);
+                }
+
                 if (SupportsInstancing)
                 {
                     // The short overload defaults layer to 0 (Default) — the leaves must submit
                     // on the bush's layer like the branches do, or layer-masked cameras (e.g.
                     // SceneCaptureService) render branch skeletons without foliage. Shadow
                     // casting off: 2D sprites, no light pass.
-                    Graphics.DrawMeshInstanced(leafMesh, 0, material, batch.Matrices, batch.Count, batch.Props,
+                    Graphics.DrawMeshInstanced(leafMesh, 0, material, matrices, batch.Count, batch.Props,
                         UnityEngine.Rendering.ShadowCastingMode.Off, false, layer);
                     continue;
                 }
@@ -166,9 +191,24 @@ namespace BalloonParty.Slots.Actor.Archetype
                     _fallbackMpb.SetVector(BushShaderProperties.LeafTint, batch.Tints[i]);
                     _fallbackMpb.SetVector(BushShaderProperties.UVRect, batch.UVRects[i]);
                     _fallbackMpb.SetVector(BushShaderProperties.LeafWind, batch.Winds[i]);
-                    Graphics.DrawMesh(leafMesh, batch.Matrices[i], material, layer, null, 0, _fallbackMpb);
+                    Graphics.DrawMesh(leafMesh, matrices[i], material, layer, null, 0, _fallbackMpb);
                 }
             }
+        }
+
+        private Matrix4x4[] OffsetMatrices(Matrix4x4[] source, int count, Matrix4x4 offsetMatrix)
+        {
+            if (_offsetMatrices == null || _offsetMatrices.Length < count)
+            {
+                _offsetMatrices = new Matrix4x4[count];
+            }
+
+            for (var i = 0; i < count; i++)
+            {
+                _offsetMatrices[i] = offsetMatrix * source[i];
+            }
+
+            return _offsetMatrices;
         }
 
         private static Mesh GetBranchQuadMesh()
