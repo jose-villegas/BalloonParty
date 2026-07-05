@@ -180,7 +180,6 @@ namespace BalloonParty.Editor
             const float cx = 0.211324865405187f;
             const float cy = 0.366025403784439f;
             const float cz = -0.577350269189626f;
-            const float cw = 0.024390243902439f;
 
             var skew = Vector2.Dot(v, new Vector2(cy, cy));
             var i = new Vector2(Mathf.Floor(v.x + skew), Mathf.Floor(v.y + skew));

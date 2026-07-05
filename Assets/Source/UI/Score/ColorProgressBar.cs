@@ -61,8 +61,7 @@ namespace BalloonParty.UI.Score
 
         private void Awake()
         {
-            // Falls back to components on this GameObject (adding them if missing) so a bar
-            // whose prefab predates these fields doesn't hard-crash the whole score UI at Start.
+            // Self-heal a prefab that predates these fields, rather than NRE at Start.
             if (_visibilityGroup == null)
             {
                 _visibilityGroup = GetComponent<CanvasGroup>();
@@ -167,22 +166,16 @@ namespace BalloonParty.UI.Score
             ClearCompletionVfx();
         }
 
-        // Deliberately not re-checked in OnLevelUp: the level-range resolver reacts to the same
-        // ScoreLevelUpMessage and may already have re-resolved to the new level's set (subscriber
-        // order is unenforced), so flipping visibility here could fade in a bar for a color that
-        // never actually contributed to the level that just completed — while the ceremony is
-        // still playing out over the completed level's set. Applied once here (initial state) and
-        // again on dismiss, after the ceremony is fully over.
+        // Not called from OnLevelUp — the resolver may have already re-resolved to the new
+        // level's color set by then (subscriber order is unenforced), so this only runs at Start
+        // and OnDismissed, after the ceremony ends.
         private void ApplyVisibility()
         {
             var active = IsColorActive();
             _visibilityGroup.alpha = active ? 1f : 0f;
             _visibilityGroup.interactable = active;
             _visibilityGroup.blocksRaycasts = active;
-
-            // A CanvasGroup alone doesn't exclude the bar from a parent Layout Group's size
-            // calculation — ignoreLayout is what actually closes the gap a hidden bar leaves.
-            _layoutElement.ignoreLayout = !active;
+            _layoutElement.ignoreLayout = !active; // CanvasGroup alone doesn't exclude from layout sizing.
         }
 
         private bool IsColorActive()

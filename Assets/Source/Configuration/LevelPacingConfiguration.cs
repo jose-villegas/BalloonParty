@@ -5,12 +5,10 @@ using UnityEngine;
 namespace BalloonParty.Configuration
 {
     /// <summary>
-    ///     Level-range difficulty authoring: ordered contiguous <see cref="LevelRangeEntry" />s (the
-    ///     last is open-ended), exact-level <see cref="CustomLevelEntry" /> overlays, and the global
-    ///     level-up threshold modifier curve. The curve composes <b>multiplicatively</b> with the base
-    ///     points-required formula (<c>required(level) = round(formula(level) × modifier)</c>) — a
-    ///     dimensionless multiplier, not an additive offset, so "20% cheaper" means the same thing at
-    ///     level 1 and level 20. Default flat 1.0 = pure formula, zero effect until keys are authored.
+    ///     Level-range difficulty authoring: ordered <see cref="LevelRangeEntry" />s (last is
+    ///     open-ended), <see cref="CustomLevelEntry" /> overlays, and the threshold modifier curve —
+    ///     a dimensionless multiplier over the base formula, not an additive offset, so "20% cheaper"
+    ///     means the same thing at every level. Default flat 1.0 = no effect.
     /// </summary>
     [CreateAssetMenu(menuName = "Configuration/Level Pacing", fileName = "LevelPacingConfiguration")]
     internal class LevelPacingConfiguration : ScriptableObject, ILevelPacingConfiguration

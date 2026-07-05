@@ -18,12 +18,8 @@ namespace BalloonParty.Game.Level
         /// <summary>Composed formula × threshold-modifier-curve result for the given level.</summary>
         int PointsRequiredForLevel(int level);
 
-        /// <summary>
-        ///     Weighted pick of a catalog <see cref="BalloonPrefabEntry" /> honouring the active
-        ///     range's type gate (absent/0-weight types are never returned) and per-type
-        ///     <see cref="BalloonTypeWeight.MaxCountOverride" />. Null if every eligible entry is at
-        ///     its cap.
-        /// </summary>
+        /// <summary>Weighted pick honouring the active range's type gate and per-type
+        /// <see cref="BalloonTypeWeight.MaxCountOverride" />. Null if every entry is at its cap.</summary>
         BalloonPrefabEntry PickBalloonEntry(IReadOnlyDictionary<string, int> activeCounts);
 
         /// <summary>How often (in turns) an item-drop opportunity happens this level — replaces
@@ -35,11 +31,7 @@ namespace BalloonParty.Game.Level
         /// <see cref="PickItemEntry" />).</summary>
         IReadOnlyList<ItemSettings> Items { get; }
 
-        /// <summary>
-        ///     Weighted pick of a catalog <see cref="ItemSettings" /> honouring the active range's
-        ///     type gate and per-type <see cref="ItemTypeWeight.MaximumAllowedOverride" />. Null if
-        ///     every eligible entry is at its cap. Same bridge shape as <see cref="PickBalloonEntry" />.
-        /// </summary>
+        /// <summary>Same bridge shape as <see cref="PickBalloonEntry" />, for items.</summary>
         ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts);
 
         IReadOnlyList<string> AllowedColors { get; }

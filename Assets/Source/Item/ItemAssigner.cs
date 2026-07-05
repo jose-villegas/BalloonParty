@@ -77,8 +77,7 @@ namespace BalloonParty.Item
             _eligibleBuffer[indexOf].Item.Value = picked.Type;
         }
 
-        // The level's shared item-drop cadence replaces the old per-item TurnCheckEvery catalog
-        // check — one shared frequency, item TYPE MIX decided by the weighted pick below.
+        // Replaces the old per-item TurnCheckEvery catalog check with one shared frequency.
         private bool IsCadenceTurn(int turns)
         {
             var cadence = _levelParams.ItemCadence;

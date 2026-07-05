@@ -44,8 +44,7 @@ namespace BalloonParty.Balloon.Model
             }
         }
 
-        // Distributes across the level's active colors when known — falls back to the full
-        // palette otherwise (e.g. constructed without a level context in tests).
+        // Falls back to the full palette when constructed without a level context (tests).
         private IReadOnlyList<string> ResolveColorPool()
         {
             return _allowedColors is { Count: > 0 } ? _allowedColors : _palette?.ColorNames;

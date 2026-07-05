@@ -14,14 +14,9 @@ using VContainer.Unity;
 namespace BalloonParty.Game.Level
 {
     /// <summary>
-    ///     Resolves the live per-level difficulty mix from <see cref="ILevelPacingConfiguration" />'s
-    ///     authored ranges and caches it — the only thing that re-resolves on
-    ///     <see cref="ScoreLevelUpMessage" />, so runtime systems (<see cref="IActiveLevelParameters" />
-    ///     consumers) just pull the cached values with no message-ordering dependency of their own.
-    ///     Bridges range weights onto the catalog (<see cref="IBalloonsConfiguration" />): a range only
-    ///     says <em>which</em> types are active and how they're weighted <em>relative to each other</em>;
-    ///     prefab/pool/HP/VFX still come from the catalog entry, and its own weight still governs which
-    ///     variant (skin) of a gated-in type is picked — the two weights multiply.
+    ///     Resolves and caches the live per-level difficulty mix from <see cref="ILevelPacingConfiguration" />.
+    ///     Bridges range weights onto the catalog (<see cref="IBalloonsConfiguration" />): a range gates
+    ///     which types are active and their relative weight; prefab/pool/HP/VFX still come from the catalog.
     /// </summary>
     internal class LevelDifficultyResolver : IStartable, IDisposable, IRunResettable, IActiveLevelParameters
     {

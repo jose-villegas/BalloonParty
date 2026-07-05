@@ -12,12 +12,8 @@ namespace BalloonParty.Balloon.Model
     /// </summary>
     internal static class BalloonModelFactory
     {
-        /// <param name="allowedColors">
-        ///     The active level range's allowed-color names (<c>IActiveLevelParameters.AllowedColors</c>).
-        ///     Only <see cref="ToughBalloonModel"/> and <see cref="BubbleClusterModel"/> use it — they
-        ///     distribute score attribution across a random palette color rather than holding one, so
-        ///     without this they'd bypass the level's color gate entirely.
-        /// </param>
+        // allowedColors only matters to Tough/BubbleCluster — they distribute score to a random
+        // palette color rather than holding one, so they'd otherwise bypass the color gate.
         internal static IWriteableBalloonModel Create(
             BalloonPrefabEntry entry, IGamePalette palette, IReadOnlyList<string> allowedColors = null)
         {

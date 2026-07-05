@@ -4,12 +4,8 @@ namespace BalloonParty.Balloon.Type
 {
     public interface IBalloonVariant
     {
-        /// <param name="levelAllowedColorsMask">
-        ///     The active level range's allowed-color gate (see
-        ///     <c>IActiveLevelParameters.AllowedColorsMask</c>), same bit-per-color convention as
-        ///     <c>PaletteColorMaskAttribute</c> fields. Only <see cref="ColorableBalloonVariant" />
-        ///     uses it; other variants ignore the parameter.
-        /// </param>
+        /// <param name="levelAllowedColorsMask">The active level's color gate (bit-per-color, same
+        /// convention as PaletteColorMaskAttribute). Only <see cref="ColorableBalloonVariant" /> uses it.</param>
         void Initialize(IWriteableBalloonModel model, int levelAllowedColorsMask);
     }
 }

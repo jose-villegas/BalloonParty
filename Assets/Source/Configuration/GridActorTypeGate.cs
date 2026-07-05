@@ -5,12 +5,9 @@ using UnityEngine;
 namespace BalloonParty.Configuration
 {
     /// <summary>
-    ///     Presence in a range's array is the gate for one <see cref="GridActorType" /> — absent
-    ///     means that type cannot spawn this level. Unlike <see cref="BalloonTypeWeight" /> this
-    ///     carries a <see cref="RangedInt" /> count rather than a weight: today's
-    ///     <c>StaticActorSpawner</c> rolls a count per catalog entry independently (no competitive
-    ///     weighted draw between grid-actor types), so there's nothing for a weight to compete
-    ///     against — the resolved count *is* the roll, resolved once per level.
+    ///     Presence in a range's array gates one <see cref="GridActorType" /> for that level. A
+    ///     <see cref="RangedInt" /> count, not a weight, like <see cref="BalloonTypeWeight" /> — grid
+    ///     actors have no competitive weighted draw to feed, so the resolved count is the roll.
     /// </summary>
     [Serializable]
     public struct GridActorTypeGate

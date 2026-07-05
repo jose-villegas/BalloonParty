@@ -100,11 +100,8 @@ namespace BalloonParty.UI.LevelUp
             SpawnGlowTrailsAsync(msg.CompletedColors).Forget();
         }
 
-        // Uses the completed level's color set from the message, not the live
-        // IActiveLevelParameters.AllowedColors — the level-range resolver reacts to the same
-        // ScoreLevelUpMessage and may already have re-resolved to the new level's set by the time
-        // this runs (subscriber order is unenforced), which would otherwise burst trails for a
-        // color that never actually finished this level.
+        // Takes the completed colors as a param rather than reading live AllowedColors, which may
+        // already reflect the new level by now (unenforced subscriber order on ScoreLevelUpMessage).
         private async UniTaskVoid SpawnGlowTrailsAsync(IReadOnlyList<string> completedColors)
         {
             var glowRect = _levelGlowFill.rectTransform;

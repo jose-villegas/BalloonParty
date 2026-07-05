@@ -15,11 +15,8 @@ namespace BalloonParty.Configuration
         /// </summary>
         PaletteEntry GetEntry(string colorName);
 
-        /// <summary>
-        ///     Color names whose bit is set in <paramref name="mask" /> — bit <c>i</c> corresponds to
-        ///     <see cref="Colors" />[<c>i</c>], the same convention as <see cref="PaletteColorMaskAttribute" />
-        ///     fields (e.g. <c>ColorableBalloonVariant._allowedColorsMask</c>).
-        /// </summary>
+        /// <summary>Color names whose bit is set in <paramref name="mask" /> — bit <c>i</c> is
+        /// <see cref="Colors" />[<c>i</c>], same convention as <see cref="PaletteColorMaskAttribute" />.</summary>
         IReadOnlyList<string> ColorNamesForMask(int mask);
     }
 }

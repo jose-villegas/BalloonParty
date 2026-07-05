@@ -149,11 +149,8 @@ namespace BalloonParty.Game.Score
                 return;
             }
 
-            // Snapshot before publishing — a subscriber (the level-range resolver) reacts to the
-            // same message and re-resolves to the new level, which can change AllowedColors before
-            // other subscribers (the ceremony) get a chance to read it. Capturing the reference here
-            // is safe regardless: the resolver replaces its list wholesale on resolve, it never
-            // mutates the one already handed out.
+            // Snapshot before publishing — the resolver reacts to this same message and may
+            // re-resolve AllowedColors to the new level before other subscribers read it.
             var completedColors = _levelParams.AllowedColors;
 
             _level.Value++;

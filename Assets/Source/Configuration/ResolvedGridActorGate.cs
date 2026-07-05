@@ -4,13 +4,8 @@ using UnityEngine;
 
 namespace BalloonParty.Configuration
 {
-    /// <summary>
-    ///     The resolved counterpart of <see cref="GridActorTypeGate" /> — same presence-is-the-gate
-    ///     semantics, but <see cref="Count" /> is a plain already-rolled value instead of an
-    ///     unresolved <see cref="RangedInt" />. Mirrors how <see cref="LevelParameters.SpawnLines" />
-    ///     is a plain <c>int</c> while <see cref="RangedLevelParameters.SpawnLines" /> is a
-    ///     <see cref="RangedInt" />.
-    /// </summary>
+    /// <summary>Resolved counterpart of <see cref="GridActorTypeGate" /> — <see cref="Count" /> is
+    /// an already-rolled plain <c>int</c>, not an unresolved <see cref="RangedInt" />.</summary>
     [Serializable]
     public struct ResolvedGridActorGate
     {

@@ -21,10 +21,8 @@ namespace BalloonParty.Balloon.Type
             }
         }
 
-        // Prefab mask = this skin's static color capability; level mask = the active range's
-        // gate. Their intersection is what's actually pickable this level. An empty intersection
-        // means the level gate excludes every color this prefab can be — falling back to the
-        // prefab mask alone keeps the balloon paintable rather than picking no color at all.
+        // Empty intersection means the level gate excludes every color this prefab can be —
+        // fall back to the prefab mask alone rather than picking no color at all.
         private string PickColor(int levelAllowedColorsMask)
         {
             if (_palette == null)
