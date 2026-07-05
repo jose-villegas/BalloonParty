@@ -24,7 +24,7 @@ MonoBehaviour:
     _scoreValue: 1
   - _prefab: {fileID: 9117278215908477035, guid: 54754900e64eb4cb8a18cf270c1adf04,
       type: 3}
-    _balloonType: 0
+    _balloonType: 4
     _weight: 0.3
     _maxCount: 3
     _nudgeOverrides: []
@@ -33,7 +33,7 @@ MonoBehaviour:
     _scoreValue: 5
   - _prefab: {fileID: 9117278215908477035, guid: 003e22e6af95b4bc1856dbeb7826647a,
       type: 3}
-    _balloonType: 0
+    _balloonType: 5
     _weight: 0.3
     _maxCount: 2
     _nudgeOverrides: []

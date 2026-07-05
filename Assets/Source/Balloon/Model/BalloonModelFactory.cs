@@ -18,6 +18,8 @@ namespace BalloonParty.Balloon.Model
             return entry.BalloonType switch
             {
                 BalloonType.Simple => new BalloonModel(config),
+                BalloonType.SimpleSilver => new BalloonModel(config),
+                BalloonType.SimpleGold => new BalloonModel(config),
                 BalloonType.BubbleCluster => new BubbleClusterModel(config, palette),
                 BalloonType.Tough => new ToughBalloonModel(config, palette),
                 BalloonType.Unbreakable => new UnbreakableBalloonModel(config),

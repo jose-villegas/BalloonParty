@@ -5,6 +5,11 @@ namespace BalloonParty.Balloon.Type
         Simple,
         Tough,
         Unbreakable,
-        BubbleCluster
+        BubbleCluster,
+
+        // Same model/behavior as Simple — distinct IDs only so the level-range type gate
+        // (BalloonTypeWeight[]) can introduce/withhold each higher-score skin independently.
+        SimpleSilver,
+        SimpleGold
     }
 }
