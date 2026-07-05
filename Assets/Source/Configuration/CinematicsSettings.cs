@@ -67,12 +67,12 @@ namespace BalloonParty.Configuration
                     followSpeed: 2f),
                 new TrackedTrailSettings()),
 
-            // LevelAscend — repurposes the segment fields for a vertical translate instead of a
-            // zoom/pan: the curve's VALUE is a 0→1→0 height fraction (not timeScale — gameplay is
-            // already paused), ZoomAmount is the ascend height in world units, and PanWeight is the
-            // fraction of the total 1.2s duration at which the new level's balloons spawn (0.75 —
-            // partway through the descent, so they're already mid-animation by the time the camera
-            // settles). FollowSpeed is unused (Frame() is never called for this state).
+            // LevelAscend — repurposes the segment fields for the staging root's descent, not a
+            // camera move: the curve's VALUE is a 0→1→0 height fraction (not timeScale — gameplay is
+            // already paused), ZoomAmount is the staging root's starting height in world units, and
+            // PanWeight is the fraction of the total 1.2s duration at which the new level's balloons
+            // spawn (0.75 — partway through the descent, so they're already mid-animation by the time
+            // the scenario settles). FollowSpeed is unused (Frame() is never called for this state).
             new(
                 CinematicTraits.BlocksLoss | CinematicTraits.BlocksShake,
                 new CameraRigCinematicSettings(

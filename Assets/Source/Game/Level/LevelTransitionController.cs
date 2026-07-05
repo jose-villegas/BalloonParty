@@ -6,9 +6,11 @@ using BalloonParty.Game.Cinematics;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Spawner;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -16,9 +18,9 @@ namespace BalloonParty.Game.Level
 {
     /// <summary>
     ///     The Ascent: on dismissing the level-up popup, the remaining balloons pop, the board clears,
-    ///     and the camera translates up and back down (as if moving from this scenario's center to a
-    ///     new one on top of it) while the new level's statics are placed (already there, hidden, by
-    ///     the time we "arrive") and its initial balloons spawn partway through the descent (already
+    ///     and the new level's static actors are spawned above the board and slide down into place —
+    ///     as if we'd moved up to a new scenario stacked on top of this one, without ever moving the
+    ///     camera. The new level's initial balloons spawn partway through the descent (already
     ///     mid-animation on arrival, not appearing only after). Holds
     ///     <see cref="PauseSource.LevelTransition" /> for the whole sequence so the thrower and
     ///     spawn-loss checks stay inert until the reveal is ready.
@@ -26,9 +28,9 @@ namespace BalloonParty.Game.Level
     internal sealed class LevelTransitionController : IStartable, IDisposable
     {
         private readonly CinematicDirector _cinematicDirector;
-        private readonly CinematicCameraRig _cameraRig;
         private readonly ICinematicsSettings _cinematicsSettings;
         private readonly GridSpawnerCoordinator _spawnerCoordinator;
+        private readonly StaticActorSpawner _staticActorSpawner;
         private readonly RejectedBalloonEffect _overflow;
         private readonly PauseService _pauseService;
         private readonly IPublisher<BoardClearMessage> _boardClearPublisher;
@@ -36,23 +38,24 @@ namespace BalloonParty.Game.Level
         private readonly CancellationTokenSource _cts = new();
 
         private LevelAscendCinematic _ascendCinematic;
+        private Transform _stagingRoot;
         private IDisposable _dismissedSubscription;
 
         [Inject]
         internal LevelTransitionController(
             CinematicDirector cinematicDirector,
-            CinematicCameraRig cameraRig,
             ICinematicsSettings cinematicsSettings,
             GridSpawnerCoordinator spawnerCoordinator,
+            StaticActorSpawner staticActorSpawner,
             RejectedBalloonEffect overflow,
             PauseService pauseService,
             IPublisher<BoardClearMessage> boardClearPublisher,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber)
         {
             _cinematicDirector = cinematicDirector;
-            _cameraRig = cameraRig;
             _cinematicsSettings = cinematicsSettings;
             _spawnerCoordinator = spawnerCoordinator;
+            _staticActorSpawner = staticActorSpawner;
             _overflow = overflow;
             _pauseService = pauseService;
             _boardClearPublisher = boardClearPublisher;
@@ -61,7 +64,8 @@ namespace BalloonParty.Game.Level
 
         public void Start()
         {
-            _ascendCinematic = new LevelAscendCinematic(_cinematicDirector, _cameraRig, _cinematicsSettings);
+            _ascendCinematic = new LevelAscendCinematic(_cinematicDirector, _cinematicsSettings);
+            _stagingRoot = new GameObject("AscentStagingRoot").transform;
             _dismissedSubscription = _dismissedSubscriber.Subscribe(_ => TransitionAsync().Forget());
         }
 
@@ -70,6 +74,11 @@ namespace BalloonParty.Game.Level
             _cts.Cancel();
             _cts.Dispose();
             _dismissedSubscription?.Dispose();
+
+            if (_stagingRoot != null)
+            {
+                UnityEngine.Object.Destroy(_stagingRoot.gameObject);
+            }
         }
 
         private async UniTaskVoid TransitionAsync()
@@ -79,20 +88,24 @@ namespace BalloonParty.Game.Level
 
             try
             {
-                // LevelUpCinematic reacts to the same dismiss message with its own restore, on the
-                // same shared CinematicCameraRig — let it finish before touching the rig ourselves,
-                // or the two producers fight over it (killed tweens, corrupted director bookkeeping).
+                // Let any other in-flight cinematic (e.g. HeartDrain) finish first — TryBeginCinematic
+                // would otherwise fail and skip the descent animation outright rather than playing it.
                 await UniTask.Yield(PlayerLoopTiming.Update, ct);
                 await UniTask.WaitUntil(() => !Cinematic.IsPlaying, cancellationToken: ct);
 
                 await UniTask.WaitUntil(() => !_overflow.IsOverflowActive, cancellationToken: ct);
 
-                // The remaining balloons pop (visible burst) as the board clears; statics are placed
-                // right after, hidden the whole time behind the camera's ascent.
+                // The remaining balloons pop (visible burst) as the board clears.
                 _boardClearPublisher.Publish(new BoardClearMessage(playPopVfx: true));
-                await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, ct);
+
+                // Statics spawn already offset above the board (parented under the staging root),
+                // hidden above frame — the descent below is what slides them into place.
+                var height = _cinematicsSettings.EntryOf(CinematicState.LevelAscend).Rig.ZoomAmount;
+                _stagingRoot.position = new Vector3(0f, height, 0f);
+                _staticActorSpawner.SpawnStaticActorsInto(_stagingRoot);
 
                 await _ascendCinematic.PlayAsync(
+                    _stagingRoot,
                     onBalloonSpawnCue: () => _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, ct).Forget(),
                     ct);
             }

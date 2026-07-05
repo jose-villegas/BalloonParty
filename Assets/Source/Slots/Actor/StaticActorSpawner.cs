@@ -71,11 +71,25 @@ namespace BalloonParty.Slots.Actor
 
         public UniTask SpawnAsync(CancellationToken ct)
         {
-            SpawnStaticActors();
+            SpawnStaticActors(null);
             return UniTask.CompletedTask;
         }
 
         internal void SpawnStaticActors()
+        {
+            SpawnStaticActors(null);
+        }
+
+        // The level-transition Ascent's staged reveal: actors are placed at their real grid
+        // position offset by stagingParent's current world position, then reparented onto it
+        // (worldPositionStays) — as the caller animates stagingParent back to Vector3.zero, every
+        // actor slides to its correct final position without needing per-actor tweens.
+        internal void SpawnStaticActorsInto(Transform stagingParent)
+        {
+            SpawnStaticActors(stagingParent);
+        }
+
+        private void SpawnStaticActors(Transform stagingParent)
         {
             var emptySlots = new List<Vector2Int>(_grid.AllEmptySlots());
 
@@ -103,12 +117,12 @@ namespace BalloonParty.Slots.Actor
 
                 foreach (var slot in selected)
                 {
-                    PlaceActor(entry, slot, emptySlots);
+                    PlaceActor(entry, slot, emptySlots, stagingParent);
                 }
             }
         }
 
-        private void PlaceActor(GridActorPrefabEntry entry, Vector2Int slot, List<Vector2Int> emptySlots)
+        private void PlaceActor(GridActorPrefabEntry entry, Vector2Int slot, List<Vector2Int> emptySlots, Transform stagingParent)
         {
             var model = CreateModel(entry.ActorType);
             GridActorView view = null;
@@ -116,7 +130,17 @@ namespace BalloonParty.Slots.Actor
             if (_poolsRegistered)
             {
                 view = _poolManager.Get<GridActorView>(entry.PoolKey);
-                view.transform.position = _grid.IndexToWorldPosition(slot);
+                var worldPos = _grid.IndexToWorldPosition(slot);
+
+                if (stagingParent != null)
+                {
+                    view.transform.position = worldPos + stagingParent.position;
+                    view.transform.SetParent(stagingParent, true);
+                }
+                else
+                {
+                    view.transform.position = worldPos;
+                }
             }
 
             _grid.Place(model, view, slot);

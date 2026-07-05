@@ -57,36 +57,6 @@ namespace BalloonParty.Game.Cinematics
             }
         }
 
-        /// <summary>
-        ///     Captures base state like <see cref="PreparePanIn" /> but starts no tween — the Ascent
-        ///     drives position itself, frame by frame, via <see cref="TranslateAscend" /> off a curve
-        ///     sample, so there's no DOTween to fight/kill mid-flight.
-        /// </summary>
-        public void PrepareAscend()
-        {
-            if (_hasBaseState)
-            {
-                Restore();
-            }
-
-            KillTween();
-            EnableOrtho(false);
-            CaptureBaseState();
-        }
-
-        /// <summary>Sets the camera to the captured base position offset vertically by <paramref name="offsetY"/>.</summary>
-        public void TranslateAscend(float offsetY)
-        {
-            if (_camera == null)
-            {
-                return;
-            }
-
-            var position = _basePosition;
-            position.y += offsetY;
-            _camera.transform.position = position;
-        }
-
         public void PrepareRestore(float duration)
         {
             if (_camera == null)

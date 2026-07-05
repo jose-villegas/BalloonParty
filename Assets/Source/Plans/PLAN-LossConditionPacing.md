@@ -1024,20 +1024,45 @@ ever ran, silently swallowed as an unobserved `UniTaskVoid` exception. Fixed by 
 (diff is purely additive — verified via `git diff`). This class of bug is invisible to both
 `dotnet build` and the EditMode tests, since neither loads the real `.asset` file from disk.
 
-**Deliberately deferred (art/in-editor dependent, not blocking):** the translate now happens for
-real (a literal vertical camera move, not a zoom), but its height/duration/spawn-cue-fraction
-values (8 world units, 1.2s, 0.75) are placeholder guesses — needs an artist pass in the
-`CinematicsSettings` asset once it's visible in-editor, same as every other cinematic's curves in
-this plan. Part D's "cloud sweep VFX" during the ascend is still unbuilt (the translate reads as a
-plain camera move against whatever's off-screen above the board today — likely just background/sky,
-untested). `TrailMotion.Fall` has no curve pair authored on `FlyingTrail`/`TrailSpawner` yet and
-nothing uses it — the "cosmetic falling trails" mentioned in Part D for the pop-out are not built;
-the outgoing balloons now play their normal pop VFX (`HitOutcome.Pop`) via the new
-`BoardClearMessage.PlayPopVfx` flag, which is a real visual improvement over the original silent
-clear but is not the bespoke "falling" trail effect Part D originally specified. No EditMode test
-for `LevelTransitionController`'s sequencing yet (only
-`PlayerHealthControllerTests.LevelUp_RestoresStartingHitPoints` was added) — it's UniTask-async and
-message-driven throughout, so it's testable with substituted seams, just not done in this pass.
+**Redesigned again — moving the scenario instead of the camera (2026-07-05):** the fixed camera
+translate WAS visible, but read badly — "it just jumps up and down." Replaced with: the camera never
+moves at all; instead, `StaticActorSpawner` gained a staging-parent capability
+(`SpawnStaticActorsInto(Transform stagingParent)`, alongside the unchanged no-arg
+`SpawnStaticActors()`) — each newly placed static's view is positioned at its real grid position
+offset by the staging parent's *current* world position, then reparented onto it
+(`SetParent(stagingParent, worldPositionStays: true)`), so its `localPosition` under that parent
+permanently equals its correct final grid position regardless of the parent's current offset.
+`LevelTransitionController` owns a persistent `AscentStagingRoot` transform (created once in
+`Start()`, repositioned per-transition, never destroyed — destroying it mid-transition would take
+its parented children down with it): it sets the root to `(0, height, 0)` before spawning statics
+into it, then `LevelAscendCinematic.PlayAsync` animates the root's position back to `Vector3.zero`
+over the curve — every static slides from "above the board" down to its correct slot in one shared
+tween, no per-actor tweening needed. `LevelAscendCinematic` no longer takes a `CinematicCameraRig`
+at all; `CinematicCameraRig.PrepareAscend`/`TranslateAscend` (added for the previous camera-based
+attempt) were removed as dead code. `StaticActorSpawner` needed `.AsSelf()` added to its
+`GameLifetimeScope` registration (it was `IGridSpawner`-only) so `LevelTransitionController` could
+inject the concrete type directly — `GridSpawnerCoordinator.RunStagesAsync` only exposes the
+generic `IGridSpawner.SpawnAsync(ct)` interface, which can't pass a staging parent through, so the
+statics stage is now spawned via a direct call, bypassing the coordinator for this one case.
+**Known scoping gap:** if a future `SpawnStage.DynamicActors`-priority spawner is ever added, it
+won't participate in the staged reveal unless this direct-call pattern is extended to include it too
+(today nothing is registered at that priority, so this is currently moot).
+
+**Deliberately deferred (art/in-editor dependent, not blocking):** the staging root's starting
+height/descent-duration/spawn-cue-fraction (8 world units, 1.2s, 0.75) are placeholder guesses —
+needs an in-editor pass once visible (in particular: is 8 units actually enough to clear the visible
+frame at the board's real world scale?). Part D's "cloud sweep VFX" is still unbuilt — today the
+statics just slide down against whatever's rendered above the board (likely plain background).
+`TrailMotion.Fall` has no curve pair authored on `FlyingTrail`/`TrailSpawner` yet and nothing uses
+it — the "cosmetic falling trails" mentioned in Part D for the pop-out are not built; outgoing
+balloons play their normal pop VFX (`HitOutcome.Pop`) via `BoardClearMessage.PlayPopVfx` instead,
+a real improvement over the original silent clear but not the bespoke "falling" effect originally
+specified. Balloons themselves are NOT staged/parented — only statics — they still spawn directly at
+their final position via the existing `BalloonFactory.AnimateSpawn` scale/path tween, triggered
+partway through the statics' descent. No EditMode test for `LevelTransitionController`'s sequencing
+yet (only `PlayerHealthControllerTests.LevelUp_RestoresStartingHitPoints` was added) — it's
+UniTask-async and message-driven throughout, so it's testable with substituted seams, just not done
+in this pass.
 
 Smaller code surface but cinematic + in-editor heavy. Files:
 
