@@ -15,10 +15,13 @@ using VContainer.Unity;
 namespace BalloonParty.Game.Level
 {
     /// <summary>
-    ///     The Ascent: on dismissing the level-up popup, clears the board scorelessly, pans the camera
-    ///     away, re-populates the new level's actors (statics, then balloons) behind the covered swap,
-    ///     and snaps back for the reveal. Holds <see cref="PauseSource.LevelTransition" /> for the whole
-    ///     sequence so the thrower and spawn-loss checks stay inert until the reveal is ready.
+    ///     The Ascent: on dismissing the level-up popup, the remaining balloons pop, the board clears,
+    ///     and the camera translates up and back down (as if moving from this scenario's center to a
+    ///     new one on top of it) while the new level's statics are placed (already there, hidden, by
+    ///     the time we "arrive") and its initial balloons spawn partway through the descent (already
+    ///     mid-animation on arrival, not appearing only after). Holds
+    ///     <see cref="PauseSource.LevelTransition" /> for the whole sequence so the thrower and
+    ///     spawn-loss checks stay inert until the reveal is ready.
     /// </summary>
     internal sealed class LevelTransitionController : IStartable, IDisposable
     {
@@ -84,17 +87,14 @@ namespace BalloonParty.Game.Level
 
                 await UniTask.WaitUntil(() => !_overflow.IsOverflowActive, cancellationToken: ct);
 
-                var ascendDuration = _ascendCinematic.BeginAscend();
-                _boardClearPublisher.Publish(default);
-
-                await UniTask.Delay(TimeSpan.FromSeconds(ascendDuration), ignoreTimeScale: true, cancellationToken: ct);
-
-                // Non-balloon stages are placed while the board is still hidden behind the zoomed-out
-                // framing, so the instant snap-back below reveals them already in place.
+                // The remaining balloons pop (visible burst) as the board clears; statics are placed
+                // right after, hidden the whole time behind the camera's ascent.
+                _boardClearPublisher.Publish(new BoardClearMessage(playPopVfx: true));
                 await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, ct);
-                _ascendCinematic.EndAscend();
 
-                await _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, ct);
+                await _ascendCinematic.PlayAsync(
+                    onBalloonSpawnCue: () => _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, ct).Forget(),
+                    ct);
             }
             finally
             {

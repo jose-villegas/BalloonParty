@@ -90,10 +90,18 @@ namespace BalloonParty.Balloon.Controller
 
         // Invoked by the registry's single board-clear pass. Popped-but-waiting item balloons
         // are still registered, so their pending activation subscription is cleaned up here too.
-        internal void HandleBoardClear()
+        // playPopVfx is true for the level-transition Ascent (visible burst), false for a silent
+        // run-restart clear.
+        internal void HandleBoardClear(bool playPopVfx)
         {
             _itemActivatedSubscription?.Dispose();
             _itemActivatedSubscription = null;
+
+            if (playPopVfx)
+            {
+                _disturbanceField.Stamp(StampSource.BalloonPop, _view.transform.position, Vector2.zero);
+                _view.PlayHitVfxForOutcome(HitOutcome.Pop);
+            }
 
             var slot = _model.SlotIndex.Value;
             if (ReferenceEquals(_grid.At(slot), _model))

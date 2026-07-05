@@ -979,13 +979,63 @@ active), wraps the whole sequence in `try/finally` so `PauseSource.LevelTransiti
 even if a step throws, and `LevelAscendCinematic` tracks whether it actually won
 `TryBeginCinematic` so `EndAscend`/the rig calls no-op instead of firing blind when it didn't.
 
-**Deliberately deferred (art/in-editor dependent, not blocking):** the `LevelAscend` camera segment
-ships with placeholder tuning (zoom-out over 1s) — Part D's "pan up into a sky band with cloud
-sweep VFX" needs an artist pass in the `CinematicsSettings` asset and possibly new VFX, same as
-every other cinematic's curves in this plan. `TrailMotion.Fall` has no curve pair authored on
-`FlyingTrail`/`TrailSpawner` yet, and the pop-out's "cosmetic falling trails" are not wired to
-`BoardClearMessage` at all — the mid-game clear today is instant/silent, matching the existing
-full-run-reset behavior. No EditMode test for `LevelTransitionController`'s sequencing yet (only
+**Redesigned per feedback after the fix above (2026-07-05):** the original zoom-and-snap read as
+just "it snaps back into position" — not a real transition. Replaced with a literal vertical camera
+translate, and a visible pop for the outgoing balloons instead of a silent clear:
+- `BoardClearMessage` gained a `PlayPopVfx` bool (default `false`, so the ordinary run-restart clear
+  is unchanged). `BalloonControllerRegistry.OnBoardClear` threads it into
+  `BalloonController.HandleBoardClear(bool)`, which now plays `PlayHitVfxForOutcome(HitOutcome.Pop)`
+  + the disturbance-field stamp (mirroring `Pop()`'s own effects, minus the item-activation deferral
+  — a level transition doesn't need that) when the flag is set. The Ascent publishes
+  `new BoardClearMessage(playPopVfx: true)`; every remaining balloon pops in the same frame the
+  board clears — "almost at the same time" falls out of the registry's existing single-frame loop,
+  no staggering needed.
+- `CinematicCameraRig` gained `PrepareAscend()` (captures base state, no tween — mirrors
+  `PreparePanIn` minus the zoom) and `TranslateAscend(float offsetY)` (sets the camera to base
+  position + a vertical offset). `LevelAscendCinematic.PlayAsync` drives these itself in a per-frame
+  `UniTask` loop (not a DOTween — needed a mid-flight callback hook, which DOTween's `OnUpdate` can
+  do too, but the existing curve-sampling pattern from `LevelUpCinematic.PanInTick` was the more
+  consistent fit) rather than `BeginAscend`/`EndAscend`'s prior zoom-tween-then-snap shape.
+- `CameraRigCinematicSettings`' generic fields are **reinterpreted for this one state** (documented
+  in the `CinematicsSettings.cs` entry comment, not the class itself — the fields stay generic):
+  `TimeScaleCurve`'s VALUE is a 0→1→0 height fraction (not a timeScale multiplier — gameplay is
+  paused via `PauseSource.LevelTransition`, not `TimeScaleService`), its duration is still the
+  segment length (1.2s authored); `ZoomAmount` is the ascend height in world units (8, placeholder);
+  `PanWeight` is the fraction of the total duration at which the new level's balloon spawn cue fires
+  (0.75 — partway through the descent, so balloons are already mid-`BalloonFactory.AnimateSpawn` by
+  arrival, not popping in only after); `FollowSpeed` is unused (no `Frame()` call for this state).
+  This mirrors how `LevelUpCinematic` already reinterprets the same curve's value as a trail-speed
+  multiplier instead of a timeScale one — reusing the uniform segment shape per-producer is the
+  established pattern, not a one-off hack.
+- `LevelTransitionController.TransitionAsync`: pop-burst + `BoardClearMessage` → statics stage
+  (hidden, placed before the ascend even starts moving) → `_ascendCinematic.PlayAsync(cue, ct)`
+  where `cue` triggers the balloon stage. No more `BeginAscend`/`EndAscend`/`UniTask.Delay` split.
+
+**Fixed after second playtest report (2026-07-05):** the redesign above shipped with zero visible
+camera motion — "no literal translation... it just appears." Root cause was NOT the camera code:
+`Assets/Configuration/CinematicsSettings.asset` on disk still had only 5 `_states` entries (None
+through HeartDrainRestore) — adding `CinematicState.LevelAscend` and its field-initializer entry in
+`CinematicsSettings.cs` only affects a FRESH instance (e.g. what EditMode tests construct via
+`CreateInstance`), not the real serialized asset, which self-heals its array length only when Unity
+actually touches it (`OnValidate`) — which hadn't happened in this headless session. So
+`EntryOf(CinematicState.LevelAscend)` threw `ArgumentOutOfRangeException` before `PrepareAscend()`
+ever ran, silently swallowed as an unobserved `UniTaskVoid` exception. Fixed by hand-appending the
+6th `_states` YAML block directly to the `.asset` file, matching the code's authored values exactly
+(diff is purely additive — verified via `git diff`). This class of bug is invisible to both
+`dotnet build` and the EditMode tests, since neither loads the real `.asset` file from disk.
+
+**Deliberately deferred (art/in-editor dependent, not blocking):** the translate now happens for
+real (a literal vertical camera move, not a zoom), but its height/duration/spawn-cue-fraction
+values (8 world units, 1.2s, 0.75) are placeholder guesses — needs an artist pass in the
+`CinematicsSettings` asset once it's visible in-editor, same as every other cinematic's curves in
+this plan. Part D's "cloud sweep VFX" during the ascend is still unbuilt (the translate reads as a
+plain camera move against whatever's off-screen above the board today — likely just background/sky,
+untested). `TrailMotion.Fall` has no curve pair authored on `FlyingTrail`/`TrailSpawner` yet and
+nothing uses it — the "cosmetic falling trails" mentioned in Part D for the pop-out are not built;
+the outgoing balloons now play their normal pop VFX (`HitOutcome.Pop`) via the new
+`BoardClearMessage.PlayPopVfx` flag, which is a real visual improvement over the original silent
+clear but is not the bespoke "falling" trail effect Part D originally specified. No EditMode test
+for `LevelTransitionController`'s sequencing yet (only
 `PlayerHealthControllerTests.LevelUp_RestoresStartingHitPoints` was added) — it's UniTask-async and
 message-driven throughout, so it's testable with substituted seams, just not done in this pass.
 

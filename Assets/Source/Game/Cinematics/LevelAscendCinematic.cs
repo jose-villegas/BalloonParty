@@ -1,23 +1,26 @@
+using System;
+using System.Threading;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
+using Cysharp.Threading.Tasks;
+using UnityEngine;
 
 namespace BalloonParty.Game.Cinematics
 {
     /// <summary>
-    ///     The level-transition camera beat: zooms out while <see cref="Game.Level.LevelTransitionController" />
-    ///     repopulates the board off-frame, then snaps back in one frame once the reveal is ready. Drives
-    ///     <see cref="CinematicCameraRig" /> directly rather than through <see cref="CameraRigCinematic" /> —
-    ///     that runner's restore is always tweened, but the Ascent's swap must be instant and imperceptible
-    ///     behind the zoomed-out framing.
+    ///     The level-transition camera beat: a literal vertical translate up and back down —
+    ///     simulating a move from the current scenario's center to a new one on top of it — while
+    ///     <see cref="Game.Level.LevelTransitionController" /> repopulates the board off-frame. Drives
+    ///     <see cref="CinematicCameraRig" /> directly rather than through <see cref="CameraRigCinematic" />,
+    ///     since this is a plain per-frame position sample off a curve, not a pan-toward-focus + tweened
+    ///     restore.
     /// </summary>
     internal sealed class LevelAscendCinematic
     {
         private readonly CinematicDirector _director;
         private readonly CinematicCameraRig _rig;
         private readonly ICinematicsSettings _settings;
-
-        private bool _began;
 
         internal LevelAscendCinematic(CinematicDirector director, CinematicCameraRig rig, ICinematicsSettings settings)
         {
@@ -27,32 +30,58 @@ namespace BalloonParty.Game.Cinematics
         }
 
         /// <summary>
-        ///     Begins the zoom-out and returns its duration in seconds — 0 if another cinematic already
-        ///     owns the director (the rig must not be touched while it's mid-use elsewhere).
+        ///     Translates the camera up and back down along the segment's curve — the curve's VALUE is a
+        ///     height fraction here, not a timeScale multiplier (gameplay is already paused via
+        ///     <see cref="Shared.Pause.PauseSource.LevelTransition" />), and its <c>ZoomAmount</c> field
+        ///     doubles as the ascend height in world units. <paramref name="onBalloonSpawnCue" /> fires
+        ///     once, at the segment's <c>PanWeight</c> fraction of the total duration, so the new level's
+        ///     balloons are already mid-spawn-animation by the time the camera settles back rather than
+        ///     appearing only after arrival. No-ops (firing the cue immediately) if another cinematic
+        ///     already owns the director — the rig must not be touched while it's mid-use elsewhere.
         /// </summary>
-        internal float BeginAscend()
+        internal async UniTask PlayAsync(Action onBalloonSpawnCue, CancellationToken ct)
         {
-            _began = _director.TryBeginCinematic(CinematicState.LevelAscend);
-            if (!_began)
+            if (!_director.TryBeginCinematic(CinematicState.LevelAscend))
             {
-                return 0f;
-            }
-
-            var segment = _settings.EntryOf(CinematicState.LevelAscend).Rig;
-            _rig.PreparePanIn(segment);
-            return segment.TimeScaleCurve.Duration();
-        }
-
-        internal void EndAscend()
-        {
-            if (!_began)
-            {
+                onBalloonSpawnCue?.Invoke();
                 return;
             }
 
-            _began = false;
-            _rig.Restore();
-            _director.EndCinematic();
+            try
+            {
+                var segment = _settings.EntryOf(CinematicState.LevelAscend).Rig;
+                var curve = segment.TimeScaleCurve;
+                var duration = curve.Duration();
+                var height = segment.ZoomAmount;
+                var spawnCueTime = duration * Mathf.Clamp01(segment.PanWeight);
+                var spawnCueFired = false;
+
+                _rig.PrepareAscend();
+
+                var elapsed = 0f;
+                while (elapsed < duration)
+                {
+                    if (!spawnCueFired && elapsed >= spawnCueTime)
+                    {
+                        spawnCueFired = true;
+                        onBalloonSpawnCue?.Invoke();
+                    }
+
+                    _rig.TranslateAscend(curve.Evaluate(elapsed) * height);
+                    await UniTask.Yield(PlayerLoopTiming.Update, ct);
+                    elapsed += Time.unscaledDeltaTime;
+                }
+
+                if (!spawnCueFired)
+                {
+                    onBalloonSpawnCue?.Invoke();
+                }
+            }
+            finally
+            {
+                _rig.Restore();
+                _director.EndCinematic();
+            }
         }
     }
 }

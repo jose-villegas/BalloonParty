@@ -112,7 +112,7 @@ namespace BalloonParty.Balloon.Controller
             return false;
         }
 
-        private void OnBoardClear(BoardClearMessage _)
+        private void OnBoardClear(BoardClearMessage msg)
         {
             // Snapshot first — HandleBoardClear returns views to the pool, and controllers
             // popped-but-waiting-for-item-activation are still registered and must be included.
@@ -133,7 +133,7 @@ namespace BalloonParty.Balloon.Controller
 
             foreach (var controller in _clearBuffer)
             {
-                controller.HandleBoardClear();
+                controller.HandleBoardClear(msg.PlayPopVfx);
             }
 
             _clearBuffer.Clear();
