@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Actor;
 using MessagePipe;
+using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
@@ -21,7 +23,7 @@ namespace BalloonParty.Balloon.Controller
     ///     snapshot, rather than per-balloon subscriptions whose re-entrant disposal would need
     ///     hand-rolled guards.
     /// </summary>
-    internal class BalloonControllerRegistry : IStartable, IDisposable
+    internal class BalloonControllerRegistry : IStartable, IDisposable, ITransitionOutgoingContent
     {
         // Comfortably above the 66-slot board plus spawn/transit overlap, so growth is a
         // never-in-practice fallback rather than a steady-state event.
@@ -125,6 +127,23 @@ namespace BalloonParty.Balloon.Controller
 
             controller = null;
             return false;
+        }
+
+        // Level-transition: the outgoing balloons ride the descending scenario root and slide out with
+        // the rest of the old level. The pop wave still pops them band-by-band as they go (pool-return
+        // reparents each away); any not popped by the end are swept by ClearAll.
+        public void HoldOutgoing(Transform outgoingRoot, float exitDrop)
+        {
+            for (var i = 0; i < _highWater; i++)
+            {
+                _controllers[i]?.RideOutgoing(outgoingRoot, exitDrop);
+            }
+        }
+
+        public void ReleaseOutgoing()
+        {
+            // Nothing to undo — the pop wave + ClearAll already returned every outgoing balloon to its
+            // pool (which reparented it off the transition root).
         }
 
         private void OnBoardClear(BoardClearMessage msg)

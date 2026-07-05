@@ -1174,18 +1174,21 @@ level-up reset, so a burst could chain a near-instant second level-up. `ScoreCon
 now clamps `_levelProgress`/`_projectedProgress` at `PointsRequiredForLevel(_level+1)` → a burst
 advances at most one level (excess lost; no skipping).
 
-**Keep outgoing clusters visible during the transition (2026-07-06).** `ClearStaticActors()` emptied
-the grid → the single per-archetype cluster view blanked → old puff/bush vanished before the new
-descended. Fix: `ITransitionOutgoingContent` (`Slots/Actor/`) — a deliberately GENERAL seam ("keep your
-outgoing visuals on screen during the transition, then drop them"), not cluster-specific, so a future
-per-slot-rendered actor plugs in the same way (it'd retain its own views instead of snapshotting).
-`ClusterViewController` implements it: `HoldOutgoing(exitDrop)` spins up a throwaway second view
-`Configure`d from the still-full registry before the clear, then parents it under the scenario root
-offset one `exitDrop` (= the `LevelAscend` lift height) BELOW the incoming content — so as the root
-descends (lifting the new content from +exitDrop to rest), the snapshot slides from rest down to
--exitDrop and exits the bottom, in lockstep with the new arriving. `ReleaseOutgoing()` destroys it.
-`LevelTransitionController` injects `IReadOnlyList<ITransitionOutgoingContent>` (decoupled), holds before
-`ClearStaticActors`, releases in the `finally` after the descent.
+**Whole old level slides out during the transition (2026-07-06).** Emptying the grid blinked the old
+statics out, and separately left the old balloons pinned while the new scenario descended — both read
+wrong. Fix: `ITransitionOutgoingContent` (`Slots/Actor/`) — a GENERAL seam,
+`HoldOutgoing(Transform outgoingRoot, float exitDrop)` / `ReleaseOutgoing()` ("keep your outgoing visuals
+on screen and slide them out, then drop them"); not cluster-specific, so a future per-slot-rendered actor
+plugs in the same way. Implementers: `ClusterViewController` (snapshots a throwaway view from the still-full
+registry before the clear, since the single live cluster view can't show old+new) and
+`BalloonControllerRegistry` (reparents every live balloon view via `BalloonController.RideOutgoing`; the
+pop wave pops them band-by-band as they slide, pool-return reparents each away, so `ReleaseOutgoing` is a
+no-op). Everything is offset one `exitDrop` (= `LevelAscend` lift height) BELOW the incoming content on
+the SAME scenario root, so as the root descends (new content +exitDrop→rest) the old content rides
+rest→-exitDrop and exits the bottom in lockstep. `LevelTransitionController` injects
+`IReadOnlyList<ITransitionOutgoingContent>` (decoupled), sets the root to origin + holds BEFORE the pop
+wave and the clear, releases in the `finally` after the descent. New balloons (spawned at the pop-end cue)
+are not reparented, so they appear at rest while the old slide out.
 
 **Deliberately deferred (art/in-editor dependent, not blocking):** the scenario root's starting
 height/descent-duration/spawn-cue-fraction (8 world units, 1.2s, 0.75) are placeholder guesses —

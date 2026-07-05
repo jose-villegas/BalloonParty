@@ -119,15 +119,18 @@ namespace BalloonParty.Game.Level
                 // Un-zoom the camera (the level-up pan-in left it zoomed) in lockstep with the pop.
                 _cameraRig.RestoreTweened(EstimatePopWaveSeconds());
 
-                // Start the old level's balloons popping (slow-mo diagonal wave from the two far
-                // corners inward). Kept running concurrently while the new scenario descends below.
-                var popTask = PopBalloonsInWaveAsync(ct);
-
-                // Hold the outgoing scenario content (clusters snapshot themselves; a future per-slot
-                // actor would retain its views) BEFORE clearing, so the old level stays visible while
-                // the new one slides in over it — otherwise the clear blinks it out. Released once the
-                // descent settles.
+                // Hold the outgoing content on the scenario root (at origin now) BEFORE anything clears
+                // or pops: cluster views snapshot themselves and the live balloons reparent onto the
+                // root, all offset one drop below the incoming content, so the whole old level slides
+                // down and out as the new slides in. Must precede the pop wave so every balloon rides
+                // out (and pops band-by-band as it goes), and precede the clear so the clusters snapshot
+                // while the grid is still populated. Released once the descent settles.
+                _scenarioRoot.Transform.position = Vector3.zero;
                 HoldOutgoingContent();
+
+                // Start the old level's balloons popping (slow-mo diagonal wave from the two far
+                // corners inward) — they pop while sliding out. Runs concurrently with the descent.
+                var popTask = PopBalloonsInWaveAsync(ct);
 
                 // Swap in the new scenario's statics and start them descending WHILE the balloons are
                 // still popping. Clear only the OLD statics here (the wave owns the balloons); spawn the
@@ -135,7 +138,6 @@ namespace BalloonParty.Game.Level
                 // then PlayAsync lifts the root on its first frame (before any render) and slides it
                 // down — the content rides along.
                 _staticActorSpawner.ClearStaticActors();
-                _scenarioRoot.Transform.position = Vector3.zero;
                 await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, ct);
                 var descentTask = _ascendCinematic.PlayAsync(_scenarioRoot.Transform, onBalloonSpawnCue: null, ct);
 
@@ -167,7 +169,7 @@ namespace BalloonParty.Game.Level
             var exitDrop = _cinematicsSettings.EntryOf(CinematicState.LevelAscend).Rig.ZoomAmount;
             for (var i = 0; i < _outgoingContent.Count; i++)
             {
-                _outgoingContent[i].HoldOutgoing(exitDrop);
+                _outgoingContent[i].HoldOutgoing(_scenarioRoot.Transform, exitDrop);
             }
         }
 

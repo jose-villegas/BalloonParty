@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace BalloonParty.Slots.Actor
 {
     /// <summary>
@@ -14,13 +16,13 @@ namespace BalloonParty.Slots.Actor
     internal interface ITransitionOutgoingContent
     {
         /// <summary>
-        ///     Called before the board is cleared — start keeping the current content visible, riding
-        ///     the transition so it slides down and out. <paramref name="exitDrop" /> is how far (world
-        ///     units, downward) the held content should travel over the transition — matched to the
-        ///     incoming content's descent so old and new move in lockstep (old exits the bottom as new
-        ///     arrives at the board).
+        ///     Called before the board is cleared — start keeping the current content visible by
+        ///     parenting it under <paramref name="outgoingRoot" /> (the descending scenario root),
+        ///     offset one <paramref name="exitDrop" /> below the incoming content so as the root
+        ///     descends this content slides down and out the bottom in lockstep with the new arriving.
+        ///     <paramref name="exitDrop" /> matches the incoming content's lift height.
         /// </summary>
-        void HoldOutgoing(float exitDrop);
+        void HoldOutgoing(Transform outgoingRoot, float exitDrop);
 
         /// <summary>Called once the transition has settled — discard whatever was held.</summary>
         void ReleaseOutgoing();

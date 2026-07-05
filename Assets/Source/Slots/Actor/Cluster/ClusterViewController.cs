@@ -100,7 +100,7 @@ namespace BalloonParty.Slots.Actor.Cluster
         // under the scenario root, so it doesn't ride the descent). Called before the level transition
         // clears the board, so the outgoing clusters stay put while the live view slides the incoming
         // ones down over them. Reads the still-populated registry, so it must run before the clear.
-        public void HoldOutgoing(float exitDrop)
+        public void HoldOutgoing(Transform outgoingRoot, float exitDrop)
         {
             ReleaseOutgoing();
 
@@ -129,7 +129,7 @@ namespace BalloonParty.Slots.Actor.Cluster
             // Ride the scenario root but offset one exitDrop BELOW the incoming content, so as the root
             // descends (lifting the incoming content from +exitDrop down to rest) this snapshot slides
             // from rest down to -exitDrop — the outgoing scenario exits the bottom as the new arrives.
-            snapshot.transform.SetParent(_scenarioRoot.Transform, worldPositionStays: true);
+            snapshot.transform.SetParent(outgoingRoot, worldPositionStays: true);
             var local = snapshot.transform.localPosition;
             local.y -= exitDrop;
             snapshot.transform.localPosition = local;

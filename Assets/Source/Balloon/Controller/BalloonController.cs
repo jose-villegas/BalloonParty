@@ -113,6 +113,23 @@ namespace BalloonParty.Balloon.Controller
             _poolManager.Return(_poolKey, _view);
         }
 
+        // Rides the level-transition conveyor: reparents this balloon's view under the descending
+        // scenario root, offset one exitDrop below the incoming content, so the outgoing balloon slides
+        // down and out with the rest of the old level (the pop wave still pops it band-by-band as it
+        // goes; pool-return then reparents it away). Gameplay is paused, so nothing fights the slide.
+        internal void RideOutgoing(Transform outgoingRoot, float exitDrop)
+        {
+            if (_view == null)
+            {
+                return;
+            }
+
+            _view.transform.SetParent(outgoingRoot, worldPositionStays: true);
+            var local = _view.transform.localPosition;
+            local.y -= exitDrop;
+            _view.transform.localPosition = local;
+        }
+
         private void Deflect(ActorHitMessage msg)
         {
             var balloonWorldPos = _grid.IndexToWorldPosition(_model.SlotIndex.Value);
