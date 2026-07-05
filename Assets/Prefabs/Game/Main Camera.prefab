@@ -170,11 +170,12 @@ MonoBehaviour:
   _smearShader: {fileID: 4800000, guid: 8a14fe89476c045b294beadef2be1e12, type: 3}
   _overlayShader: {fileID: 4800000, guid: 93bf1f4f895d74648adb05d6b926be02, type: 3}
   _lightDirection: {x: 1, y: -1}
-  _smearDistance: 1
-  _tapDecay: 0.35
-  _tapStart: 0.75
-  _shadowStrength: 0.425
+  _smearDistance: 0.65
+  _tapDecay: 0.45
+  _tapStart: 0.35
+  _shadowStrength: 0.45
   _shadowTint: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   _bounceStrength: 0.25
+  _temporalResponse: 0.2
   _sortingLayerName: Sky
   _sortingOrder: 32000

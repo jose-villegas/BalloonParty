@@ -4,9 +4,15 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
     // PLAN-ScreenSpaceLight.md). Input is the SceneCaptureService capture, whose alpha
     // channel is sprite coverage (the capture camera clears with alpha 0).
     //
-    // Pass 0 — directional smear: 8 taps marching from each pixel TOWARD the light
-    // with exponential decay. Output rgb = coverage-weighted color of what lies
-    // up-light (bounce/bleed), a = how occluded the pixel is (shadow).
+    // Pass 0 — directional smear, two opposite marches per pixel (8 taps each, with
+    // exponential decay):
+    //   rgb (reflection/bleed) marches TOWARD the light — a lit neighbour's color
+    //     bleeds onto this pixel, so the glow shows up on the side facing the source.
+    //   a (shadow) marches AWAY from the light — an occluder sitting between this
+    //     pixel and the source darkens it, so the shadow shows up on the far side.
+    // The two must march opposite ways: a shadow is cast onto the side of an object
+    // away from the light, while its glow bleeds onto the side facing the light —
+    // marching both the same way stacks them on top of each other instead.
     // Pass 1 — 3x3 box soften to remove smear streaks.
     // Pass 2 — temporal blend against the previous smoothed buffer: at capture
     // resolution a moving sprite jumps whole texels per frame and the bounce tint
@@ -39,22 +45,28 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
 
             fixed4 frag(v2f_img IN) : SV_Target
             {
-                float4 acc = 0;
-                float weightSum = 0;
+                float3 bounceAcc = 0;
+                float  shadowAcc = 0;
+                float  weightSum = 0;
 
                 [unroll]
                 for (int t = 0; t < TAP_COUNT; t++)
                 {
-                    // _TapStart offsets the march away from the pixel so occluders
-                    // don't fully self-shadow.
-                    float4 s = tex2D(_MainTex, IN.uv + _TapStepUV.xy * (_TapStart + t));
+                    // _TapStart offsets both marches away from the pixel so an object
+                    // doesn't fully shadow/glow itself.
+                    float offset = _TapStart + t;
                     float w = pow(_TapDecay, t);
-                    // rgb premultiplied by coverage: empty sky contributes no bleed.
-                    acc += float4(s.rgb * s.a, s.a) * w;
                     weightSum += w;
+
+                    float4 lit = tex2D(_MainTex, IN.uv + _TapStepUV.xy * offset);
+                    // Premultiplied by coverage: empty sky contributes no bleed.
+                    bounceAcc += lit.rgb * lit.a * w;
+
+                    float4 occluder = tex2D(_MainTex, IN.uv - _TapStepUV.xy * offset);
+                    shadowAcc += occluder.a * w;
                 }
 
-                return acc / weightSum;
+                return float4(bounceAcc / weightSum, shadowAcc / weightSum);
             }
             ENDCG
         }

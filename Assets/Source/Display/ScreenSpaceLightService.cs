@@ -240,9 +240,11 @@ namespace BalloonParty.Display
                 ? _lightDirection.normalized
                 : Vector2.down;
 
-            // The march runs toward the light source (_lightDirection is an L vector,
-            // pointing AT the source): whatever lies between a pixel and the source
-            // shadows/bleeds onto it, so shadows extend opposite the vector.
+            // _lightDirection is an L vector, pointing AT the source. The shader marches
+            // this step in both directions per pixel: +step for reflection (a lit
+            // neighbour toward the source bleeds its color here) and -step for shadow
+            // (an occluder toward the source darkens here) — see the shader header for
+            // why the two need opposite marches.
             var stepWorld = _smearDistance / TapCount;
             var stepUv = new Vector4(
                 direction.x * stepWorld / worldWidth,

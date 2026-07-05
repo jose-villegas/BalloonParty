@@ -43,11 +43,16 @@ matches the PuffMain material), and shadows extend opposite the vector.
 1. **Capture** (existing): `_SceneCaptureTex`, 1/8 res, every Nth frame. The capture
    camera now clears with **alpha 0**, so the RT alpha channel is a sprite-coverage
    mask — the occlusion source. (Existing consumers sample RGB only; unaffected.)
-2. **Smear blit** (`ScreenSpaceLightSmear` pass 0): 8 taps marching up-light from each
-   pixel with exponential decay. Output: `rgb` = coverage-weighted color of what lies
-   toward the light (bounce/bleed), `a` = how occluded the pixel is (shadow).
-   `_TapStart` skips the first fraction of the march so occluders don't fully
-   self-shadow.
+2. **Smear blit** (`ScreenSpaceLightSmear` pass 0): two opposite 8-tap marches per
+   pixel with exponential decay. `rgb` marches TOWARD the light — a lit neighbour's
+   color bleeds onto this pixel (reflection/bleed, shows up on the side facing the
+   source). `a` marches AWAY from the light — an occluder between this pixel and the
+   source darkens it (shadow, shows up on the far side). The two must march opposite
+   ways: a shadow falls on an object's far side, its glow bleeds onto its near side;
+   sampling both the same direction stacks them on the same side instead (fixed
+   2026-07-04 — an in-editor screenshot showed both effects on the near side).
+   `_TapStart` skips the first fraction of both marches so an object doesn't fully
+   shadow/glow itself.
 3. **Soften blit** (pass 1): 3×3 box to remove smear streaks.
 3b. **Temporal blend** (pass 2): the fresh build is folded into the previous smoothed
    buffer (ping-pong pair, `_temporalResponse` per frame, full-accept on the first
