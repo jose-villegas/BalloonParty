@@ -61,7 +61,13 @@ matches the PuffMain material), and shadows extend opposite the vector.
    light's low-frequency nature hides the added lag.
 4. **Overlay quad**: child of the camera, sized to the ortho frustum each frame, layer
    `TransparentFX`, sorting layer `Sky` order 32000 (above all gameplay, below UI).
-   Samples the light RT: `0.5 · lerp(white, shadowTint, a·strength) + rgb·bounce`.
+   Samples the light RT: `0.5 · lerp(white, shadowTint, a·strength) + (rgb − ambient)·bounce`.
+   The bounce is the smeared scene color measured **relative to the ambient sky** (the
+   camera background, pushed each frame): flat sky nets to zero (no global tint), a
+   bright sprite pushes positive (brightens neighbours in its hue), a dark/black sprite
+   pushes negative (absorbs — darkens them). This ambient-relative form replaced a
+   coverage-premultiplied bounce that zeroed the sky to black — which read wrong in the
+   buffer and, undiluted, dumped a lone nearby sprite's full color onto its neighbours.
 
 **Feedback loop is structurally impossible**: the overlay lives on `TransparentFX`,
 which must stay excluded from the capture mask — the capture always sees the unlit

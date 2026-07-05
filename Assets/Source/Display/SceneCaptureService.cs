@@ -25,6 +25,17 @@ namespace BalloonParty.Display
                  "their own layer to avoid feedback (e.g. the Unbreakable's chrome).")]
         [SerializeField] private LayerMask _capturedLayers;
 
+        [Header("Background")]
+        [Tooltip("Clear to the main camera's own background color. Disable to author a " +
+                 "specific fill instead — the main camera's backgroundColor is only what's " +
+                 "actually visible when it clears with Solid Color; on Skybox (or any other) " +
+                 "clear mode it isn't, and the capture would inherit whatever fallback that " +
+                 "leaves behind.")]
+        [SerializeField] private bool _matchMainCameraBackground = true;
+
+        [Tooltip("Used when \"Match Main Camera Background\" is off.")]
+        [SerializeField] private Color _backgroundColor = Color.black;
+
         [Inject] private IGameDisplayConfiguration _displayConfig;
 
         private Camera _mainCamera;
@@ -89,19 +100,28 @@ namespace BalloonParty.Display
             _captureCamera = go.AddComponent<Camera>();
             _captureCamera.orthographic = true;
             _captureCamera.cullingMask = _capturedLayers;
-            _captureCamera.clearFlags = _mainCamera.clearFlags;
 
-            // Background alpha cleared to zero so the capture's alpha channel doubles as
-            // a sprite-coverage mask (ScreenSpaceLightService's occlusion source). Color
-            // consumers (the Unbreakable chrome) sample RGB only — unaffected.
-            var background = _mainCamera.backgroundColor;
-            background.a = 0f;
-            _captureCamera.backgroundColor = background;
+            // Always a solid-color clear, independent of the main camera's own clear mode:
+            // the capture needs a deterministic, known fill, not whatever an unconfigured
+            // Skybox (or Depth/Nothing) happens to fall back to.
+            _captureCamera.clearFlags = CameraClearFlags.SolidColor;
+            ApplyBackgroundColor();
 
             // Lower depth renders before the main camera, so the capture is ready when
             // consumers sample it in the same frame.
             _captureCamera.depth = _mainCamera.depth - 1f;
             _captureCamera.enabled = false;
+        }
+
+        private void ApplyBackgroundColor()
+        {
+            var background = _matchMainCameraBackground ? _mainCamera.backgroundColor : _backgroundColor;
+
+            // Alpha cleared to zero so the capture's alpha channel doubles as a
+            // sprite-coverage mask (ScreenSpaceLightService's occlusion source). Color
+            // consumers (the Unbreakable chrome) sample RGB only — unaffected.
+            background.a = 0f;
+            _captureCamera.backgroundColor = background;
         }
 
         private void EnsureTexture()

@@ -6,8 +6,9 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
     //
     // Pass 0 — directional smear, two opposite marches per pixel (8 taps each, with
     // exponential decay):
-    //   rgb (reflection/bleed) marches TOWARD the light — a lit neighbour's color
-    //     bleeds onto this pixel, so the glow shows up on the side facing the source.
+    //   rgb (reflection/bleed) marches TOWARD the light — the composited scene color
+    //     up-light of this pixel (sky included, not premultiplied by coverage); the
+    //     overlay subtracts the ambient sky so only bright/dark deviations bleed.
     //   a (shadow) marches AWAY from the light — an occluder sitting between this
     //     pixel and the source darkens it, so the shadow shows up on the far side.
     // The two must march opposite ways: a shadow is cast onto the side of an object
@@ -58,9 +59,16 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                     float w = pow(_TapDecay, t);
                     weightSum += w;
 
+                    // Bounce = the composited scene color toward the light (sprites are
+                    // already blended over the sky clear in the capture, so this is "what
+                    // the scene looks like up-light"). NOT premultiplied by coverage —
+                    // premultiplying zeroed the sky to black, which both read wrong in the
+                    // buffer and, with nothing to dilute it, dumped a lone nearby sprite's
+                    // full color onto its neighbours. The overlay subtracts the ambient sky
+                    // so flat areas net to neutral; deviations (bright sprite / dark sprite)
+                    // are what actually bleed.
                     float4 lit = tex2D(_MainTex, IN.uv + _TapStepUV.xy * offset);
-                    // Premultiplied by coverage: empty sky contributes no bleed.
-                    bounceAcc += lit.rgb * lit.a * w;
+                    bounceAcc += lit.rgb * w;
 
                     float4 occluder = tex2D(_MainTex, IN.uv - _TapStepUV.xy * offset);
                     shadowAcc += occluder.a * w;

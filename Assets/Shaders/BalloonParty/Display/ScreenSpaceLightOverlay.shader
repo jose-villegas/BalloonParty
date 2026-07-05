@@ -11,6 +11,9 @@ Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
         _ShadowTint     ("Shadow Tint",     Color)       = (0.55, 0.6, 0.75, 1)
         _ShadowStrength ("Shadow Strength", Range(0, 1)) = 0.35
         _BounceStrength ("Bounce Strength", Range(0, 2)) = 0.25
+        // The ambient sky color the bounce is measured against — pushed by the service
+        // from the camera background, so flat sky nets to neutral (no global tint).
+        _AmbientColor   ("Ambient Color",   Color)       = (0.6, 0.8, 0.95, 1)
     }
 
     SubShader
@@ -39,6 +42,7 @@ Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
             fixed4 _ShadowTint;
             float  _ShadowStrength;
             float  _BounceStrength;
+            fixed4 _AmbientColor;
 
             struct appdata_t
             {
@@ -67,9 +71,12 @@ Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
                 float shadow = saturate(gathered.a * _ShadowStrength);
                 fixed3 shadowTint = lerp(fixed3(1, 1, 1), _ShadowTint.rgb, shadow);
 
-                // 0.5 * tint is blend-neutral when unshadowed; bounce pushes above
-                // neutral, brightening — bounce light also fills shadows.
-                fixed3 color = shadowTint * 0.5 + gathered.rgb * _BounceStrength;
+                // Bounce is the scene color up-light measured against the ambient sky:
+                // flat sky (bounce == ambient) contributes zero, a bright sprite pushes
+                // positive (brightens neighbours in its hue), a dark/black sprite pushes
+                // negative (absorbs — darkens neighbours). 0.5 * tint is blend-neutral.
+                fixed3 bounce = (gathered.rgb - _AmbientColor.rgb) * _BounceStrength;
+                fixed3 color = shadowTint * 0.5 + bounce;
 
                 return fixed4(color, 1.0);
             }

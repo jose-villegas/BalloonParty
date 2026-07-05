@@ -31,6 +31,7 @@ namespace BalloonParty.Display
         private static readonly int ShadowTintId = Shader.PropertyToID("_ShadowTint");
         private static readonly int ShadowStrengthId = Shader.PropertyToID("_ShadowStrength");
         private static readonly int BounceStrengthId = Shader.PropertyToID("_BounceStrength");
+        private static readonly int AmbientColorId = Shader.PropertyToID("_AmbientColor");
 
         [Tooltip("Assign explicitly — device builds strip shaders that are only " +
                  "referenced via Shader.Find, which is kept as an editor fallback.")]
@@ -257,6 +258,10 @@ namespace BalloonParty.Display
             _overlayMaterial.SetColor(ShadowTintId, _shadowTint);
             _overlayMaterial.SetFloat(ShadowStrengthId, _shadowStrength);
             _overlayMaterial.SetFloat(BounceStrengthId, _bounceStrength);
+
+            // The bounce is measured against the sky the capture clears to (the main
+            // camera's background), so open sky nets to neutral instead of tinting.
+            _overlayMaterial.SetColor(AmbientColorId, _camera.backgroundColor);
         }
 
         private void FitOverlayToFrustum()
