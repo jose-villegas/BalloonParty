@@ -52,7 +52,12 @@ matches the PuffMain material), and shadows extend opposite the vector.
    sampling both the same direction stacks them on the same side instead (fixed
    2026-07-04 — an in-editor screenshot showed both effects on the near side).
    `_TapStart` skips the first fraction of both marches so an object doesn't fully
-   shadow/glow itself.
+   shadow/glow itself. The shadow is further multiplied by `(1 − ownCoverage)` so it
+   lands only on non-occluder pixels — without it, a caster samples its own coverage
+   and darkens into a centered blob instead of throwing a shadow onto the ground.
+   **The background must stay out of the capture** (a full-coverage plane reads as a
+   caster everywhere, whiting out the shadow) — the ambient sky the bounce needs comes
+   from the capture's clear color, not from capturing the background sprite.
 3. **Soften blit** (pass 1): 3×3 box to remove smear streaks.
 3b. **Temporal blend** (pass 2): the fresh build is folded into the previous smoothed
    buffer (ping-pong pair, `_temporalResponse` per frame, full-accept on the first

@@ -50,6 +50,9 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 float  shadowAcc = 0;
                 float  weightSum = 0;
 
+                // Coverage at this pixel — casters have ~1, open ground/sky ~0.
+                float ownCoverage = tex2D(_MainTex, IN.uv).a;
+
                 [unroll]
                 for (int t = 0; t < TAP_COUNT; t++)
                 {
@@ -74,7 +77,13 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                     shadowAcc += occluder.a * w;
                 }
 
-                return float4(bounceAcc / weightSum, shadowAcc / weightSum);
+                // Cast the shadow only onto NON-occluder pixels: a caster sampling its own
+                // coverage would otherwise just darken itself into a centered blob rather
+                // than throwing a shadow onto the ground beside it. (1 - ownCoverage)
+                // masks the casters out, leaving the offset silhouette on open ground.
+                float shadow = (shadowAcc / weightSum) * (1.0 - ownCoverage);
+
+                return float4(bounceAcc / weightSum, shadow);
             }
             ENDCG
         }
