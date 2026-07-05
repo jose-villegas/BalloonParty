@@ -17,7 +17,9 @@ namespace BalloonParty.Configuration
     {
         [SerializeField] private LevelRangeEntry[] _ranges =
         {
-            new(),
+            // A struct's default constructor zero-initializes Parameters to null — construct it
+            // explicitly so a fresh instance is actually valid (see LevelRangeEntry's ctor doc).
+            new(0, 0, new RangedLevelParameters()),
         };
 
         [SerializeField] private CustomLevelEntry[] _customLevels = Array.Empty<CustomLevelEntry>();

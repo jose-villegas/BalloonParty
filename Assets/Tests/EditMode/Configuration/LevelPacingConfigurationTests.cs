@@ -63,10 +63,7 @@ namespace BalloonParty.Tests.Configuration
 
         private static LevelRangeEntry MakeRange(int fromLevel, int toLevel)
         {
-            object boxed = new LevelRangeEntry();
-            SetField(boxed, "_fromLevel", fromLevel);
-            SetField(boxed, "_toLevel", toLevel);
-            return (LevelRangeEntry)boxed;
+            return new LevelRangeEntry(fromLevel, toLevel, new RangedLevelParameters());
         }
 
         private void InvokeOnValidate()

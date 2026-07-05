@@ -18,6 +18,20 @@ namespace BalloonParty.Configuration
 
         [SerializeField] private RangedLevelParameters _parameters;
 
+        /// <summary>
+        ///     A struct's implicit default constructor zero-initializes every field, including
+        ///     class-typed ones — <c>new LevelRangeEntry()</c> alone leaves <see cref="Parameters" />
+        ///     null. Use this constructor wherever a range is built without going through Unity's
+        ///     Inspector/asset deserialization (which does materialize a concrete instance), e.g.
+        ///     <see cref="LevelPacingConfiguration" />'s own field-initializer default.
+        /// </summary>
+        public LevelRangeEntry(int fromLevel, int toLevel, RangedLevelParameters parameters)
+        {
+            _fromLevel = fromLevel;
+            _toLevel = toLevel;
+            _parameters = parameters;
+        }
+
         public int FromLevel => _fromLevel;
         public int ToLevel => _toLevel;
         public bool IsOpenEnded => _toLevel <= 0;
