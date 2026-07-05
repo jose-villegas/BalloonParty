@@ -65,9 +65,10 @@ heart-drain presentation still plays. `RunController` defers (never drops) a los
 level-up window, retrying on the LevelUp → Game transition — the 0-HP request is one-shot.
 
 **Next steps (pick up here):**
-1. **Phase 3** — level-range difficulty (`LevelRangeConfiguration` + `RangedValue` +
-   `LevelDifficultyResolver`/`IActiveLevelParameters`), then allowed-colors (Phase 4). Spec-only
-   below; memory `phase3-level-pacing` holds the locked decisions and verified read-sites.
+1. **Phase 3** — level-range difficulty (`LevelPacingConfiguration` + `RangedValue` +
+   `LevelDifficultyResolver`/`IActiveLevelParameters`), then allowed-colors (Phase 4). Spec in
+   Parts B/C/D below; **implementation-ready task list in *Phase 3 — detailed implementation
+   breakdown*** (file:line-verified 2026-07-05).
 2. **Loss cinematic** (`GameOverLoss` beat) — build as a runner parameterization per
    `PLAN-CinematicsArchitecture.md` guidance; do NOT write a MonoBehaviour.
 3. **Ongoing tuning** — `StartingHitPoints`, lines-per-turn vs pop-rate, danger gradient feel;
@@ -237,7 +238,7 @@ refilled pool.
 Split *authoring* from *resolution* so ranges and custom levels share one output type:
 
 - **`LevelParameters`** — the **resolved, plain** form: `int SpawnLines`,
-  `WeightedSet<BalloonType>`, item weights, `string[] AllowedColors` (+ future fields).
+  `WeightedSet<BalloonType>`, item weights, an `AllowedColors` bitmask (+ future fields).
   Serializable. This is what the resolver caches, what `IActiveLevelParameters` exposes —
   **and what custom levels author directly** (exact values; a single level has no min/max).
 - **`RangedLevelParameters`** — the range-authored form: scalars as
@@ -707,6 +708,361 @@ chain — **BubbleCluster** drifts to the *nearest* gap (stays close), **Unbreak
   and asserts the board fills past half (pressure/re-home use every reachable+pushable slot) *before*
   any HP is lost, then drains to 0 → `GameOver`; plus an initial-HP check. Compile-verified here; run in
   the editor Test Runner to confirm it passes (and eyeball the reject feel).
+
+## Phase 3 — detailed implementation breakdown (written 2026-07-05, code-verified)
+
+> **Status: 3a code-complete (2026-07-05)** — all data types, the resolver, the DI wiring, and the
+> read-site swaps below are implemented and committed-pending (7 sites, not 5 — the sweep initially
+> missed `Cheats/TriggerLevelUpCheat.cs` and `Cheats/NearLevelUpCheat.cs`, both also reading the raw
+> formula off `IGameConfiguration`; fixed the same session); `dotnet build` (Runtime, Editor,
+> Tests.EditMode, Configuration.Editor) and `style_audit.py` are clean. **Blocking in-editor step
+> before this runs at all:** create `Assets/Configuration/LevelPacingConfiguration.asset`
+> (Create → Configuration → Level Pacing) and wire it into `GameLifetimeScope._levelPacingConfiguration`
+> in the Game scene — until then the field is null and the game NREs on boot (same trap as
+> `_overflowSettings`). Author the initial range to replicate today's `BalloonsConfiguration` values
+> (see the "In-editor steps" list below) so behavior is unchanged before any tuning. New EditMode
+> tests (`RangedValueTests`, `LevelPacingConfigurationTests`, `LevelDifficultyResolverTests`) are
+> compile-verified only — run the in-editor Test Runner to confirm they pass. 3b/3c/3d/Phase 4 below
+> are still spec-only.
+
+> **Audience: an implementing agent/session.** Every file:line below was verified against HEAD on
+> 2026-07-05. Sub-phases 3a → 3b → 3c → 3d are independent commits in that order; 3a is the
+> foundation and must land first. Phase 4 (colors) is broken down at the end because it reuses 3a's
+> plumbing. Follow `CLAUDE.md` conventions (field/method order, Allman, braces, `internal`-first);
+> run `dotnet build BalloonParty.Runtime.csproj -nologo -clp:ErrorsOnly` +
+> `python3 Tools/style_audit.py` after each block.
+>
+> **Cross-cutting mechanics (apply to every new file):**
+> - Hand-add each new `.cs` to `BalloonParty.Runtime.csproj` (`<Compile Include=...>` — it lists
+>   files explicitly; ~357 entries) and test files to `BalloonParty.Tests.EditMode.csproj`,
+>   otherwise `dotnet build` won't see them.
+> - Let the open Unity editor generate `.meta` files (don't hand-author).
+> - Namespaces mirror folders (`BalloonParty.Configuration`, `BalloonParty.Game.Level`).
+> - Config access is via read-only interfaces; consumers never see the concrete SO.
+
+### 3a — ranges + resolver + first two levers (spawn-lines, balloon-type gate)
+
+#### New files — data types (`Assets/Source/Configuration/`)
+
+1. **`RangeMode.cs`** — `internal enum RangeMode { Fixed, Linear, Random }`.
+2. **`RangedInt.cs` / `RangedFloat.cs`** — `[Serializable]` structs: `[SerializeField] int _min, _max;
+   [SerializeField] RangeMode _mode;` plus a pure
+   `int Resolve(float positionInRange, System.Random rng)`:
+   - `Fixed` → `_min`; `Linear` → round(lerp(`_min`,`_max`, positionInRange)); `Random` →
+     `rng.Next(_min, _max + 1)` (float variant uses `NextDouble`). Pure + seeded rng ⇒ EditMode-testable.
+   - `positionInRange` = `(level - FromLevel) / max(1, ToLevel - FromLevel)`, clamped 0..1; the
+     open-ended tail resolves Linear as Fixed(`_min`) (no meaningful span) — document in a `///` note.
+3. **`BalloonTypeWeight.cs`** — `[Serializable]`: `BalloonType _type; float _weight;
+   int _maxCountOverride;` (0 = use catalog `BalloonPrefabEntry.MaxCount`). An array of these is
+   the range's `WeightedSet<BalloonType>` — **membership is the type gate** (absent/0-weight
+   cannot spawn).
+4. **`ItemTypeWeight.cs`** — same shape for `ItemType` (`_maximumAllowedOverride`, 0 = catalog).
+   Added now (it's 10 lines and keeps `LevelParameters` stable); consumed in 3c.
+5. **`LevelParameters.cs`** — the **resolved, plain, serializable** form (also authored directly by
+   custom levels in 3d):
+   `int SpawnLines; int BoardLines; BalloonTypeWeight[] BalloonWeights;
+   ItemTypeWeight[] ItemWeights; int AllowedColorsMask;`
+   Field initializers = canonical defaults matching today's shipped feel: `SpawnLines` = current
+   `BalloonsConfiguration._newProjectileBalloonLines` asset value, `BoardLines` = current
+   `_gameStartedBalloonLines`, all four types weighted as the current
+   `BalloonsConfiguration.asset` entries. (Pattern proven on `CinematicsSettings`: fresh object ==
+   shipped asset.)
+   **No `ItemCadence` field** — dropped during 3a implementation (2026-07-05): it was scaffolded
+   here but nothing reads it until 3c actually wires `ItemAssigner`, so it sat as unused authoring
+   surface. Unity's serializer handles an added field with zero migration cost (existing assets
+   just get its default), so there's no stability argument for pre-declaring it — add it in 3c,
+   next to the wiring that gives it meaning.
+   **`AllowedColors` authored as a bitmask, not `string[]`** (changed during 3a implementation,
+   2026-07-05): `[PaletteColorMask] int _allowedColorsMask = ~0` — same attribute + drawer
+   `ColorableBalloonVariant._allowedColorsMask` already uses (`Configuration/PaletteColorMaskAttribute`
+   + `Configuration/Editor/PaletteColorMaskDrawer`), so authoring gets the existing swatch-picker UI
+   for free instead of hand-typed, typo-prone color-name strings. All bits set (default) = every
+   palette color, replacing the old "empty array means all colors" special case. The mask is also
+   what Phase 4's spawn-filter intersection (below) needs — `rangeMask & prefabMask` is a plain `int`
+   AND, where two `string[]` sets would've needed an actual set-intersection. `IActiveLevelParameters
+   .AllowedColors` keeps its `IReadOnlyList<string>` shape for consumers (`ScoreController` etc. want
+   names, not bits) — `LevelDifficultyResolver` converts once per resolve via the new
+   `IGamePalette.ColorNamesForMask(int)` (added to the interface + `GamePalette`, same bit-index-i-
+   equals-`Colors[i]` convention as the mask attribute), not per read.
+6. **`RangedLevelParameters.cs`** — the range-authored form: `RangedInt SpawnLines; RangedInt
+   BoardLines;` + the same static `BalloonTypeWeight[]`/`ItemTypeWeight[]`/
+   `int AllowedColorsMask` (weighted sets/colors are **static per range** — locked decision).
+   One pure method: `LevelParameters Resolve(int level, float positionInRange, System.Random rng)`.
+7. **`LevelRangeEntry.cs`** — `[Serializable]`: `int _fromLevel; int _toLevel;` (`_toLevel <= 0` =
+   open-ended tail) + `RangedLevelParameters _parameters`.
+8. **`CustomLevelEntry.cs`** — `[Serializable]`: `int _level; LevelParameters _parameters;`
+   (fields + class now; resolve wiring in 3d).
+9. **`ILevelPacingConfiguration.cs` + `LevelPacingConfiguration.cs`** — SO, `[CreateAssetMenu]`
+   "Configuration/Level Pacing" (mirror `Configuration/OverflowSettings.cs`, the reference pattern):
+   - `LevelRangeEntry[] _ranges;` `CustomLevelEntry[] _customLevels;`
+   - `AnimationCurve _thresholdModifier = AnimationCurve.Constant(1, 100, 1f);` — the
+     **dimensionless multiplier** over the `PointsRequiredForLevel` formula (see Part B: multiplied,
+     not added; keys inserted at range boundaries; default flat 1.0 = pure formula).
+   - Interface: `IReadOnlyList<LevelRangeEntry> Ranges`, `IReadOnlyList<CustomLevelEntry>
+     CustomLevels`, `float ThresholdModifier(int level)` (curve evaluate, clamped to > 0).
+   - `OnValidate` (editor-only guards): auto-sort ranges by `FromLevel`; warn on gaps/overlaps;
+     exactly one open-ended tail (the last); every range's weighted set non-empty with at least
+     one weight > 0; **threshold monotonicity** — composed
+     `round(formula(L) × modifier.Evaluate(L))` must stay positive and non-decreasing for L = 1..
+     last authored key (formula: `(int)((Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI))) + 25f)`,
+     from `GameConfiguration.cs:50-53`). Log a warning naming the offending level, don't throw.
+
+#### New files — resolver (`Assets/Source/Game/Level/` — new folder)
+
+10. **`IActiveLevelParameters.cs`** — the single read surface runtime systems inject:
+    ```csharp
+    internal interface IActiveLevelParameters
+    {
+        int SpawnLines { get; }
+        int BoardLines { get; }
+        int PointsRequiredForLevel(int level);
+        BalloonPrefabEntry PickBalloonEntry(IReadOnlyDictionary<string, int> activeCounts);
+        IReadOnlyList<ItemSettings> Items { get; }          // 3c narrows this
+        IReadOnlyList<string> AllowedColors { get; }         // Phase 4 activates this
+    }
+    ```
+11. **`LevelDifficultyResolver.cs`** — plain C#, `IStartable`, `IDisposable`, `IRunResettable`
+    (`ResetOrder => RunResetOrder.Derived` /*40*/ — re-resolves level 1 **before**
+    `GridSpawnerCoordinator` respawns at `Respawn` 120), implements `IActiveLevelParameters`.
+    - Ctor deps, as actually built (2026-07-05): `ILevelPacingConfiguration`,
+      `IBalloonsConfiguration` (catalog), `IItemConfiguration` (catalog), `IGameConfiguration` (the
+      threshold formula), `IGamePalette` (mask→names for `AllowedColors`), `ISubscriber
+      <ScoreLevelUpMessage>`. **No `IRunScore`** — the original sketch had the resolver read
+      `Level.Value` at `Start` to know where to resolve from, but a run always starts at level 1
+      (score is run-scoped, resets to 1 on both fresh boot and restart), so `Start()` just calls
+      `ResolveFor(1)` unconditionally — simpler and one fewer dependency.
+    - `Start()`: `ResolveFor(1)`, then subscribe `ScoreLevelUpMessage` → `ResolveFor(msg.NewLevel)`.
+      The payload field is `NewLevel` (`Shared/Messages/ScoreLevelUpMessage.cs`), and
+      `ScoreController.CheckLevelUp` (`:151-159`) increments `_level.Value` *before* publishing, so
+      `msg.NewLevel` is already the level to resolve for — no `+1`.
+    - `ResolveFor(int level)`: exact custom match wins (3d) → else the containing range →
+      `range.Parameters.Resolve(level, positionInRange, _rng)` → cache the `LevelParameters` +
+      rebuild `_pickList`.
+    - **The catalog bridge** (`PickBalloonEntry`): the spawner needs a `BalloonPrefabEntry`
+      (prefab, pool key, hits-to-pop live in the catalog). **Correction found during implementation
+      (2026-07-05):** the catalog has *multiple prefab variants (skins) per `BalloonType`* (verified
+      in `BalloonsConfiguration.asset` — 6 entries across 4 types), so "wrap the entry matched by
+      type" (singular) was wrong. The resolver instead wraps **every** catalog entry whose type is
+      gated in, with effective weight = `catalogEntry.Weight × range.Weight` — the range's weight
+      scales the *type's* overall frequency, the catalog entry's own weight still governs which skin
+      of that type is picked, and the two compose multiplicatively (same pattern as the threshold
+      curve). `MaxCountOverride`, if set, replaces each matching-type entry's `MaxCount`
+      individually — it is **not** an aggregate cap across a type's variants; a range wanting a true
+      per-type total should give that type exactly one catalog variant. On each resolve, build a
+      cached `List<ResolvedBalloonEntry>` — a private class implementing `IWeightedEntry` — then
+      reuse the existing `WeightedPickExtensions.PickRandom(entries, activeCounts)`
+      (`Shared/Extensions/WeightedPickExtensions.cs:16` — it already excludes entries at `MaxCount`
+      via `PoolKey` counts) and return the wrapped catalog entry. One list rebuild per *level*, zero
+      alloc per spawn.
+    - `PointsRequiredForLevel(level)` =
+      `Mathf.RoundToInt(_gameConfig.PointsRequiredForLevel(level) * _pacing.ThresholdModifier(level))`
+      — formula stays in `GameConfiguration`, the resolver composes.
+    - `ResetRun(int generation)`: reset `_rng` (seed from generation for determinism) +
+      `ResolveFor(1)`.
+
+#### Modified files (3a)
+
+- **`Game/GameLifetimeScope.cs`** —
+  - Field block (with the other config SOs): `[SerializeField] private LevelPacingConfiguration
+    _levelPacingConfiguration;`
+  - After line 107's `RegisterInstance` run:
+    `builder.RegisterInstance<ILevelPacingConfiguration>(_levelPacingConfiguration);`
+  - With the entry points (near line 148):
+    `builder.RegisterEntryPoint<LevelDifficultyResolver>().AsSelf().As<IActiveLevelParameters>().As<IRunResettable>();`
+  - ⚠️ The new serialized field **must be wired to the asset in-editor** or injection is null
+    (same trap as `_overflowSettings`, noted in Phase 2.5).
+- **`Balloon/Spawner/BalloonSpawner.cs`** — inject `IActiveLevelParameters _levelParams;` and swap
+  three read-sites (keep `_balloonsConfig` for everything else — prefabs, intervals, offsets):
+  - `:126` prewarm sizing `_balloonsConfig.GameStartedBalloonLines` → `_levelParams.BoardLines`
+    (prewarm runs once pre-resolve is fine — resolver resolves in `Start` before the gate opens;
+    if ordering bites, size the pool with the catalog value and note it).
+  - `:146` `SpawnLinesWithDelayAsync(_balloonsConfig.NewProjectileBalloonLines, …)` →
+    `_levelParams.SpawnLines`.
+  - `:163` `PopulateInitialGrid` loop bound `GameStartedBalloonLines` → `_levelParams.BoardLines`.
+  - `:183` `_balloonsConfig.Entries.PickRandom(_activeCounts)` →
+    `_levelParams.PickBalloonEntry(_activeCounts)`.
+- **`Balloon/Spawner/RejectedBalloonEffect.cs:158`** — same swap for the would-be pick
+  (`_levelParams.PickBalloonEntry(activeCounts)`); the overflow pile must never show a type the
+  level can't spawn.
+- **`Game/Danger/SpaceDanger.cs:67`** — `spawnPerTurn = _balloonsConfig.NewProjectileBalloonLines *
+  _grid.Columns` → `_levelParams.SpawnLines * _grid.Columns` (danger misreports on ramped levels
+  otherwise). Swap the injected dependency; drop `IBalloonsConfiguration` if now unused here.
+- **`Game/Score/ScoreController.cs:85-88`** — `GetRequiredPoints()` currently returns
+  `_config.PointsRequiredForLevel(Level.Value + 1)`; switch to
+  `_levelParams.PointsRequiredForLevel(Level.Value + 1)`. Check for any other
+  `PointsRequiredForLevel` call-sites in the file and swap them identically. `CheckLevelUp`
+  (`:135-161`, incl. the `LossImminent` gate) is otherwise untouched.
+- **`Configuration/BalloonsConfiguration.cs`** — *demotes to catalog*: `GameStartedBalloonLines` /
+  `NewProjectileBalloonLines` stay for now as fallback defaults (used to seed `LevelParameters`
+  defaults) but every runtime read now goes through the resolver. Add a `///` note on both
+  properties: "catalog default — runtime reads the resolved value via IActiveLevelParameters".
+  Do NOT delete the fields this phase (the asset keeps its values as the source for range
+  authoring defaults).
+
+#### In-editor steps (3a — flag for the user, cannot be done headless)
+
+- Create `Assets/Configuration/LevelPacingConfiguration.asset` (Create → Configuration → Level
+  Pacing); author an initial 1-range config replicating today's constants (open-ended tail,
+  today's 4-type weights, `SpawnLines`/`BoardLines` Fixed at current asset values, flat 1.0
+  threshold curve) so behavior is **identical before tuning**.
+- Wire the asset into `GameLifetimeScope._levelPacingConfiguration` in the Game scene.
+- Playtest: spawn mix + lines + level thresholds unchanged; then author a second range (e.g.
+  Tough enters at level 3) and verify the gate.
+
+#### EditMode tests (3a) — `Assets/Source/Tests/EditMode/` (+ hand-add to `BalloonParty.Tests.EditMode.csproj`)
+
+- `RangedValueTests` — Fixed/Linear/Random resolution incl. clamped position + seeded-rng
+  determinism; open-tail Linear degrades to Min.
+- `LevelPacingConfigurationTests` — defaults-equal-shipped-asset assertion (CinematicsSettings
+  pattern); threshold monotonicity guard catches an authored dip; contiguity warnings.
+- `LevelDifficultyResolverTests` — NSubstitute the configs: exhaustive resolve levels 1..50
+  without throwing; type absent from range never picked over N seeded draws; MaxCount override
+  honored via `activeCounts`; re-resolve on `ScoreLevelUpMessage` (capture the `IMessageHandler`
+  like `ScoreControllerTests` does); `ResetRun` re-resolves level 1; threshold composition =
+  round(formula × curve) incl. flat-curve == pure formula.
+- Update `ScoreControllerTests` construction for the new dependency (substitute
+  `IActiveLevelParameters` returning the formula value so existing threshold expectations hold).
+
+### 3b — the Ascent (level transition; spec = Part D above)
+
+Smaller code surface but cinematic + in-editor heavy. Files:
+
+- **`UI/Score/TrailMotion.cs`** — add `Fall` member; style it in the per-motion styling switch
+  wherever `FlyingTrail` (`UI/Score/FlyingTrail.cs`) / `Shared/Pool/TrailSpawner.cs` branch on
+  motion (scattered below-frustum targets, gravity-ish curve, gradient fade, **no arrival
+  callback** — cannot score by construction).
+- **`Shared/GameState/CinematicState.cs`** — add `LevelAscend`.
+- **`Configuration/CinematicsSettings.cs`** — add the `LevelAscend` settings entry (traits +
+  camera-rig segments: pan up +H into the sky band; restore is an ordinary segment). Follow the
+  per-state pattern already in the SO; defaults in field initializers.
+- **New `Game/Cinematics/LevelAscendCinematic.cs`** — plain-C# producer over the
+  `CameraRigCinematic` runner (mirror `Game/Cinematics/LevelUpCinematic.cs`, registered like
+  `GameLifetimeScope.cs:176`). **Do NOT write a MonoBehaviour; do NOT touch `Time.timeScale`**
+  (`TimeScaleService` only — enforced by the `timescale-writes` audit rule).
+- **New `Game/Level/LevelTransitionController.cs`** — plain C# orchestrator (see Part D
+  "Orchestration"): wait for overflow drain (`RejectedBalloonEffect.IsOverflowActive` false) →
+  return/reload the frozen projectile → cosmetic falling trails + pop VFX → `BoardClearMessage`
+  path (scoreless by construction) → `LevelAscend` pan-in → covered `rig.Restore()` snap →
+  stage-gated respawn: statics first, then reveal, then balloon fill.
+- **`Slots/Spawner/GridSpawnerCoordinator.cs`** — add a stage-ranged respawn entry point (run
+  only `SpawnStage.StaticActors`, later `BalloonActors`) — `RunGroupsAsync` (`:54-64`) already
+  groups by stage; expose a filtered variant instead of duplicating it. This is **not** a run
+  reset: score/HP untouched.
+- **`Game/Health/PlayerHealthController.cs`** — subscribe `ScoreLevelUpMessage` → refill to
+  `StartingHitPoints` (locked decision; part of the transition). `LossForecast`
+  (`Game/Health/LossForecast.cs`) recomputes naturally off the refilled pool — verify, don't
+  change it.
+
+3b test surface is mostly PlayMode/in-editor (flag it); EditMode covers `LevelTransitionController`
+sequencing with substituted seams if it's built message/interface-driven.
+
+### 3c — items lever
+
+- **Re-add `ItemCadence`** to `LevelParameters`/`RangedLevelParameters` (dropped in 3a as unused
+  scaffolding — see the note on item 5 above) and expose it on `IActiveLevelParameters`, alongside
+  the wiring below that actually gives it meaning.
+- **`Item/ItemAssigner.cs`** — inject `IActiveLevelParameters`; `CollectCandidates` (`:80-84`)
+  iterates `_itemConfig.Items` and gates on `item.TurnCheckEvery` — switch the source list to the
+  resolver's resolved item view: candidates = catalog `ItemSettings` whose `ItemType` is in the
+  range's `ItemTypeWeight[]` (weight > 0), cadence check uses the resolved `ItemCadence` scalar
+  (one per level, replacing per-item `TurnCheckEvery` in the check), pick keeps
+  `PickRandom(_activeCountsBuffer)` (`:60`) with a `ResolvedItemEntry : IWeightedEntry` wrapper
+  (range weight; `MaximumAllowed` override or catalog fallback) — same bridge shape as balloons.
+- **`LevelDifficultyResolver`** — narrow `Items` to the wrapped resolved list;
+  `ItemConfiguration`'s per-item `TurnCheckEvery`/`Weight` demote to catalog defaults (annotate,
+  don't delete).
+- Tests: extend `LevelDifficultyResolverTests` (item absent from range never assigned; override
+  vs catalog fallback); update `ItemAssigner` tests if present.
+
+### 3d — custom levels (exact-level overlays)
+
+- **`LevelDifficultyResolver.ResolveFor`** — add the specificity step: exact `CustomLevelEntry`
+  match wins, else containing range (customs are full `LevelParameters` blocks — no cascade, v1
+  locked decision).
+- **`LevelPacingConfiguration.OnValidate`** — customs inside the authored level space; no
+  duplicate `Level`; warn when a custom sits adjacent to a range boundary it makes invisible.
+- Tests: overlay specificity (custom at 10 inside range 8–14 wins at 10 only); validation
+  warnings.
+
+### Phase 4 — allowed colors (breakdown; reuses 3a plumbing)
+
+- **Spawn filter**: `Balloon/Type/ColorableBalloonVariant.PickColor` (`:24-47`) draws from the
+  full palette masked by the per-prefab `[PaletteColorMask] _allowedColorsMask` (`:12`). Since
+  `LevelParameters.AllowedColorsMask` is now the same `int` bitmask shape (changed in 3a,
+  2026-07-05 — see item 5 above), the active-set filter is a plain `_allowedColorsMask &
+  levelParams.AllowedColorsMask` instead of a set-intersection over two `string[]`s — thread the
+  resolved mask via the spawner (`Bind`/`Initialize` path) rather than injecting
+  `IActiveLevelParameters` into the variant; resolve the interaction: prefab mask = static
+  capability, active set = level gate; empty intersection ⇒ `OnValidate`/runtime warning + fall
+  back to the prefab mask alone. `IActiveLevelParameters.AllowedColors` (the `IReadOnlyList<string>`
+  the resolver already exposes) is for consumers that want names, not bits — use the mask directly
+  here instead of round-tripping through names.
+- **Scoring**: `ScoreController` — per-color progress is `Dictionary<string,int> _levelProgress`
+  (`:21`) + `_colorKeys` (`:32`); level-up requires all colors at threshold. Restrict the
+  requirement to `_levelParams.AllowedColors` (the name list — this consumer wants names, matching
+  `_levelProgress`'s string keys); on a boundary where the set **grows**, the new color joins at
+  progress 0 from that level onward (per-level resolution makes the set stable mid-level — locked).
+- **UI**: `UI/Score/ColorProgressBar` is one instance per color with a serialized
+  `[PaletteColorName] string _colorName` (`:24`) — bars for inactive colors must hide/fade
+  (`CanvasGroup`, not `SetActive` — remember the GameOver-panel Animator gotcha), driven by a
+  binder reading `AllowedColors` on level change (`ScoreLevelUpMessage` subscriber list today:
+  `LevelUpPopUp.cs:40`, `ColorProgressBar.cs:39`, `ColorStreakTracker.cs:14`).
+- Steady state = 4 colors forever, so the dynamic path only runs during the tutorial ramp.
+
+### Suggested commit sequence
+
+1. 3a data types + SO + validation + tests (no consumers touched — pure addition, green build).
+2. 3a resolver + DI + the read-site swaps + test updates (behavior identical under the replicating
+   asset) — remember the cheats (`TriggerLevelUpCheat`, `NearLevelUpCheat`) alongside the spawner/
+   danger/score sites; both read `PointsRequiredForLevel` too and are easy to miss in a grep for
+   "Configuration" since they already imported it for other reasons.
+3. 3b Ascent (own commit; heavy in-editor verification).
+4. 3c items → 5. 3d customs → 6. Phase 4 colors (spawner → score → UI as separate commits).
+
+### Testability & default-removal follow-ups (raised 2026-07-05, deferred — not blocking 3b+)
+
+Four small items surfaced discussing 3a after it landed. None block later sub-phases; do them
+whenever they're convenient.
+
+- **A "jump to level N" cheat** — the actual ask that started this: today, testing level 50's mix
+  means grinding through 49 level-ups (`TriggerLevelUpCheat` only advances one level at a time via
+  `ScoreCheatHelper.FillColor`). Add a `JumpToLevelCheat : ICheat` (mirror
+  `Cheats/TriggerLevelUpCheat.cs`) that takes a target level, calls
+  `ScoreController`/`LevelDifficultyResolver` directly rather than looping the fill-and-check path
+  (looping `required` levels would still be O(N) work and re-trigger every level-up side effect N
+  times — cinematics, HP refill, etc. — which is both slow and not what "just show me level 50"
+  wants). Needs a small new seam: `ScoreController` has no public "set level directly" — either add
+  an internal `JumpToLevel(int level)` that sets `_level.Value` and publishes
+  `ScoreLevelUpMessage` once (skipping the ceremony) or thread it through `RunController`. Surface
+  the target level via the existing `CheatConsoleView` (check whether it supports a parameterized/
+  text-entry cheat, or start at a handful of preset jump targets like "Jump to 10/25/50" if it
+  doesn't). **Not built — first ask when picking this up.**
+- **Extract a shared validator.** `LevelPacingConfiguration.OnValidate` (editor-only, hand-written
+  warnings) and the recommended "resolve levels 1..50 without throwing" EditMode test currently
+  check the same invariants two different ways and can drift. Extract a plain
+  `LevelPacingValidator.Validate(ILevelPacingConfiguration, IGameConfiguration) : IReadOnlyList<string>`
+  (issue messages, no Unity/editor dependency) that both call — `OnValidate` logs each issue,
+  the EditMode test asserts the list is empty. This is also the seam a future "test a hypothetical
+  config" editor tool would call before a designer commits changes, and it's what actually answers
+  "test any possible configuration" in the general sense (a jump-to-level cheat answers it for the
+  in-game/visual sense — the two are complementary, not redundant).
+- **Escalate `LevelDifficultyResolver.FallbackParameters` from a silent default to a hard failure.**
+  It exists for "no authored range contains this level," which the extracted validator (above) is
+  specifically meant to make unreachable in anything that passed validation. Per the project's
+  don't-defend-against-things-that-can't-happen stance, once the validator is trusted this should
+  throw (or at minimum `Debug.LogError`, not `LogWarning` + a silent substitute) — a shipped gap in
+  the level ranges should be loud, not quietly patched over with a Simple-only fallback a player
+  might not even notice.
+- **Delete (not just annotate) the dead catalog properties** — `IBalloonsConfiguration
+  .GameStartedBalloonLines`/`NewProjectileBalloonLines` are unread by any code as of 3a (verified:
+  only `LevelDifficultyResolver`/`IActiveLevelParameters` are read now); they're kept today purely
+  as the numbers to copy into the first authored range. Once
+  `Assets/Configuration/LevelPacingConfiguration.asset` exists, is wired, and is confirmed to
+  reproduce today's feel, delete both properties from `IBalloonsConfiguration`/`BalloonsConfiguration`
+  so there's exactly one place that claims to know the spawn rate. Doing this before the asset
+  exists would remove the only reference for what to author — sequence it after, not before.
+
+---
 
 ## Risks & interactions
 

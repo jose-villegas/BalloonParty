@@ -9,6 +9,7 @@ using BalloonParty.Display;
 using BalloonParty.Game.Cinematics;
 using BalloonParty.Game.Danger;
 using BalloonParty.Game.Health;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Score;
 using BalloonParty.Item;
@@ -56,6 +57,7 @@ namespace BalloonParty.Game
         [SerializeField] private PuffCloudSettings _puffCloudSettings;
         [SerializeField] private BushSettings _bushSettings;
         [SerializeField] private DisturbanceFieldSettings _disturbanceFieldSettings;
+        [SerializeField] private LevelPacingConfiguration _levelPacingConfiguration;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
 
@@ -105,6 +107,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IPuffCloudSettings>(_puffCloudSettings);
             builder.RegisterInstance<IBushSettings>(_bushSettings);
             builder.RegisterInstance<IDisturbanceFieldSettings>(_disturbanceFieldSettings);
+            builder.RegisterInstance<ILevelPacingConfiguration>(_levelPacingConfiguration);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
 
@@ -144,6 +147,9 @@ namespace BalloonParty.Game
             builder.Register<BalloonControllerContext>(Lifetime.Singleton);
             builder.Register<BalloonPlacementResolver>(Lifetime.Singleton);
             builder.Register<BalloonFactory>(Lifetime.Singleton);
+            // Registered before BalloonSpawner so its Start() (synchronous ResolveFor(1)) runs first —
+            // BalloonSpawner's own Start() reads IActiveLevelParameters during prewarm sizing.
+            builder.RegisterEntryPoint<LevelDifficultyResolver>().AsSelf().As<IActiveLevelParameters>().As<IRunResettable>();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>().As<IScoreQuery>();
             builder.Register<HitPipeline>(Lifetime.Singleton).As<IHitDispatcher>();

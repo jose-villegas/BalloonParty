@@ -4,6 +4,7 @@ using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Health;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
@@ -24,7 +25,7 @@ namespace BalloonParty.Tests.Game
         private const string Red = "Red";
         private const string Blue = "Blue";
 
-        private IGameConfiguration _config;
+        private IActiveLevelParameters _levelParams;
         private IGamePalette _palette;
         private IPublisher<ScorePointMessage> _scoredPublisher;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
@@ -40,8 +41,8 @@ namespace BalloonParty.Tests.Game
         {
             ClearScorePrefs();
 
-            _config = Substitute.For<IGameConfiguration>();
-            _config.PointsRequiredForLevel(Arg.Any<int>()).Returns(10);
+            _levelParams = Substitute.For<IActiveLevelParameters>();
+            _levelParams.PointsRequiredForLevel(Arg.Any<int>()).Returns(10);
 
             _palette = Substitute.For<IGamePalette>();
             var colors = new List<PaletteEntry> { CreatePaletteEntry(Red), CreatePaletteEntry(Blue) };
@@ -97,7 +98,7 @@ namespace BalloonParty.Tests.Game
                 trailArrivedSubscriber,
                 _scoredPublisher,
                 _levelUpPublisher,
-                _config,
+                _levelParams,
                 _palette,
                 _navigation,
                 _lossForecast,
@@ -149,7 +150,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void CheckLevelUp_AllColorsMeetThreshold_LevelsUp()
         {
-            _config.PointsRequiredForLevel(2).Returns(2);
+            _levelParams.PointsRequiredForLevel(2).Returns(2);
 
             FireTrailArrived(Red, 1);
             FireTrailArrived(Red, 2);
@@ -166,7 +167,7 @@ namespace BalloonParty.Tests.Game
         public void CheckLevelUp_WhenLossImminent_DoesNotLevelUp()
         {
             // No level-up on a doomed run: queued overflow charges already cover the remaining HP.
-            _config.PointsRequiredForLevel(2).Returns(1);
+            _levelParams.PointsRequiredForLevel(2).Returns(1);
             _lossForecast.LossImminent.Returns(true);
 
             FireTrailArrived(Red, 1);
@@ -181,7 +182,7 @@ namespace BalloonParty.Tests.Game
         public void CheckLevelUp_WhenNotInGame_DoesNotLevelUp()
         {
             // A trail arriving post-mortem must not yank navigation out of GameOver.
-            _config.PointsRequiredForLevel(2).Returns(1);
+            _levelParams.PointsRequiredForLevel(2).Returns(1);
             _navState.Value = NavigationState.GameOver;
 
             FireTrailArrived(Red, 1);
@@ -195,7 +196,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void CheckLevelUp_OneColorShort_DoesNotLevelUp()
         {
-            _config.PointsRequiredForLevel(2).Returns(5);
+            _levelParams.PointsRequiredForLevel(2).Returns(5);
 
             for (var i = 1; i <= 5; i++)
             {
@@ -210,7 +211,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void CheckLevelUp_LevelUp_ResetsAllColorProgress()
         {
-            _config.PointsRequiredForLevel(2).Returns(2);
+            _levelParams.PointsRequiredForLevel(2).Returns(2);
 
             FireTrailArrived(Red, 1);
             FireTrailArrived(Red, 2);
@@ -298,7 +299,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void Streak_ResetsOnLevelUp()
         {
-            _config.PointsRequiredForLevel(2).Returns(1);
+            _levelParams.PointsRequiredForLevel(2).Returns(1);
 
             FirePop(Red);
             FirePop(Red);
@@ -312,7 +313,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void WillLevelUp_AllColorsProjected_ReturnsTrue()
         {
-            _config.PointsRequiredForLevel(2).Returns(1);
+            _levelParams.PointsRequiredForLevel(2).Returns(1);
 
             FirePop(Red);
             FirePop(Blue);
@@ -323,7 +324,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void WillLevelUp_OneColorShort_ReturnsFalse()
         {
-            _config.PointsRequiredForLevel(2).Returns(2);
+            _levelParams.PointsRequiredForLevel(2).Returns(2);
 
             FirePop(Red);
 
@@ -333,7 +334,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void ScorePoint_BelowThreshold_StaysCurrentLevel()
         {
-            _config.PointsRequiredForLevel(2).Returns(5);
+            _levelParams.PointsRequiredForLevel(2).Returns(5);
 
             FirePop(Red);
 
@@ -345,7 +346,7 @@ namespace BalloonParty.Tests.Game
         public void ScorePoint_AtThreshold_StaysCurrentLevel()
         {
             // rawScore == required → rawScore > required is false → not renumbered
-            _config.PointsRequiredForLevel(2).Returns(1);
+            _levelParams.PointsRequiredForLevel(2).Returns(1);
 
             FirePop(Red);
 
@@ -361,7 +362,7 @@ namespace BalloonParty.Tests.Game
             // i=1: rawScore=2 → Score=2, Level=1
             // i=2: rawScore=3 → Score=3, Level=1  (tipping point, 3 > 3 is false)
             // i=3: rawScore=4 → Score=1, Level=2  (renumbered: 4 - 3 = 1)
-            _config.PointsRequiredForLevel(2).Returns(3);
+            _levelParams.PointsRequiredForLevel(2).Returns(3);
 
             var model = new BalloonModel(new BalloonModelConfig(scoreValue: 4));
             model.Color.Value = Red;
@@ -432,7 +433,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void ResetRun_ResetsLevelToOne()
         {
-            _config.PointsRequiredForLevel(2).Returns(1);
+            _levelParams.PointsRequiredForLevel(2).Returns(1);
             FireTrailArrived(Red, 1);
             FireTrailArrived(Blue, 1);
             Assert.AreEqual(2, _controller.Level.Value);

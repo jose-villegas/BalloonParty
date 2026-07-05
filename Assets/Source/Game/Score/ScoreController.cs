@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Game.Health;
 using BalloonParty.Shared;
@@ -16,7 +17,7 @@ namespace BalloonParty.Game.Score
 {
     internal class ScoreController : IStartable, IDisposable, IRunResettable, IRunScore, IScoreQuery
     {
-        private readonly IGameConfiguration _config;
+        private readonly IActiveLevelParameters _levelParams;
         private readonly ReactiveProperty<int> _level = new(1);
         private readonly Dictionary<string, int> _levelProgress = new();
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
@@ -42,7 +43,7 @@ namespace BalloonParty.Game.Score
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
             IPublisher<ScorePointMessage> scoredPublisher,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
-            IGameConfiguration config,
+            IActiveLevelParameters levelParams,
             IGamePalette palette,
             INavigation navigation,
             ILossForecast lossForecast,
@@ -51,7 +52,7 @@ namespace BalloonParty.Game.Score
             _trailArrivedSubscriber = trailArrivedSubscriber;
             _scoredPublisher = scoredPublisher;
             _levelUpPublisher = levelUpPublisher;
-            _config = config;
+            _levelParams = levelParams;
             _palette = palette;
             _navigation = navigation;
             _lossForecast = lossForecast;
@@ -84,7 +85,7 @@ namespace BalloonParty.Game.Score
 
         public int GetRequiredPoints()
         {
-            return _config.PointsRequiredForLevel(Level.Value + 1);
+            return _levelParams.PointsRequiredForLevel(Level.Value + 1);
         }
 
         /// <summary>
@@ -93,7 +94,7 @@ namespace BalloonParty.Game.Score
         /// </summary>
         public bool WillLevelUp()
         {
-            var required = _config.PointsRequiredForLevel(_level.Value + 1);
+            var required = _levelParams.PointsRequiredForLevel(_level.Value + 1);
 
             foreach (var kvp in _projectedProgress)
             {
@@ -142,7 +143,7 @@ namespace BalloonParty.Game.Score
                 return;
             }
 
-            var required = _config.PointsRequiredForLevel(_level.Value + 1);
+            var required = _levelParams.PointsRequiredForLevel(_level.Value + 1);
             if (!AllColorsConfirmed(required))
             {
                 return;
@@ -255,7 +256,7 @@ namespace BalloonParty.Game.Score
         private void PublishPoints(
             IReadOnlyList<(string Color, int Points, int BaseProgress)> resolved, int groupSize, Vector3 worldPosition)
         {
-            var required = _config.PointsRequiredForLevel(_level.Value + 1);
+            var required = _levelParams.PointsRequiredForLevel(_level.Value + 1);
             var groupIndex = 0;
             foreach (var (color, points, baseProgress) in resolved)
             {

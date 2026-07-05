@@ -14,5 +14,12 @@ namespace BalloonParty.Configuration
         ///     missing color is a valid case (e.g. editor validation); <see cref="GetColor" /> throws.
         /// </summary>
         PaletteEntry GetEntry(string colorName);
+
+        /// <summary>
+        ///     Color names whose bit is set in <paramref name="mask" /> — bit <c>i</c> corresponds to
+        ///     <see cref="Colors" />[<c>i</c>], the same convention as <see cref="PaletteColorMaskAttribute" />
+        ///     fields (e.g. <c>ColorableBalloonVariant._allowedColorsMask</c>).
+        /// </summary>
+        IReadOnlyList<string> ColorNamesForMask(int mask);
     }
 }

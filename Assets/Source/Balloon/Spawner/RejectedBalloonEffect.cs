@@ -3,6 +3,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Health;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
@@ -31,7 +32,7 @@ namespace BalloonParty.Balloon.Spawner
     /// </summary>
     internal sealed class RejectedBalloonEffect : ITickable, IRunResettable, IPendingHealthCharges
     {
-        private readonly IBalloonsConfiguration _balloonsConfig;
+        private readonly IActiveLevelParameters _levelParams;
         private readonly IOverflowSettings _settings;
         private readonly IGamePalette _palette;
         private readonly PoolManager _poolManager;
@@ -79,7 +80,7 @@ namespace BalloonParty.Balloon.Spawner
         [Inject]
         internal RejectedBalloonEffect(
             SlotGrid grid,
-            IBalloonsConfiguration balloonsConfig,
+            IActiveLevelParameters levelParams,
             IOverflowSettings settings,
             IGamePalette palette,
             PoolManager poolManager,
@@ -89,7 +90,7 @@ namespace BalloonParty.Balloon.Spawner
             PauseService pauseService)
         {
             _grid = grid;
-            _balloonsConfig = balloonsConfig;
+            _levelParams = levelParams;
             _settings = settings;
             _palette = palette;
             _poolManager = poolManager;
@@ -155,7 +156,7 @@ namespace BalloonParty.Balloon.Spawner
         {
             var queue = QueueFor(col);
             var rowOffset = queue.Count;
-            var entry = _balloonsConfig.Entries.PickRandom(activeCounts);
+            var entry = _levelParams.PickBalloonEntry(activeCounts);
 
             if (entry == null)
             {

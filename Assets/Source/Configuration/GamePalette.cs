@@ -42,6 +42,20 @@ namespace BalloonParty.Configuration
             return colorName != null && _byName.TryGetValue(colorName, out var entry) ? entry : null;
         }
 
+        public IReadOnlyList<string> ColorNamesForMask(int mask)
+        {
+            var names = new List<string>();
+            for (var i = 0; i < _colors.Length; i++)
+            {
+                if ((mask & (1 << i)) != 0)
+                {
+                    names.Add(_colors[i].Name);
+                }
+            }
+
+            return names;
+        }
+
         private Dictionary<string, PaletteEntry> BuildLookup()
         {
             var lookup = new Dictionary<string, PaletteEntry>(_colors.Length);

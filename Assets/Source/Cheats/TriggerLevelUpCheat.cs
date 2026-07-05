@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
@@ -10,7 +11,7 @@ namespace BalloonParty.Cheats
 {
     internal class TriggerLevelUpCheat : ICheat
     {
-        private readonly IGameConfiguration _config;
+        private readonly IActiveLevelParameters _levelParams;
         private readonly IGamePalette _palette;
         private readonly IHitDispatcher _hitDispatcher;
         private readonly ScoreController _scoreController;
@@ -20,12 +21,12 @@ namespace BalloonParty.Cheats
         public IReadOnlyList<string> Tags => new[] { "score", "levelup" };
 
         public TriggerLevelUpCheat(
-            IGameConfiguration config,
+            IActiveLevelParameters levelParams,
             IGamePalette palette,
             ScoreController scoreController,
             IHitDispatcher hitDispatcher)
         {
-            _config = config;
+            _levelParams = levelParams;
             _palette = palette;
             _scoreController = scoreController;
             _hitDispatcher = hitDispatcher;
@@ -33,7 +34,7 @@ namespace BalloonParty.Cheats
 
         public void Execute()
         {
-            var required = _config.PointsRequiredForLevel(_scoreController.Level.Value + 1);
+            var required = _levelParams.PointsRequiredForLevel(_scoreController.Level.Value + 1);
             foreach (var color in _palette.Colors)
             {
                 ScoreCheatHelper.FillColor(color, required, _scoreController, _hitDispatcher);

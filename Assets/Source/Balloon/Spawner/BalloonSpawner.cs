@@ -4,8 +4,8 @@ using System.Threading;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Spawner;
@@ -25,6 +25,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly BalloonFactory _factory;
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly IBalloonsConfiguration _balloonsConfig;
+        private readonly IActiveLevelParameters _levelParams;
         private readonly CancellationTokenSource _cts = new();
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly SlotGrid _grid;
@@ -48,6 +49,7 @@ namespace BalloonParty.Balloon.Spawner
         internal BalloonSpawner(
             SlotGrid grid,
             IBalloonsConfiguration balloonsConfig,
+            IActiveLevelParameters levelParams,
             IObjectResolver resolver,
             PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
@@ -61,6 +63,7 @@ namespace BalloonParty.Balloon.Spawner
         {
             _grid = grid;
             _balloonsConfig = balloonsConfig;
+            _levelParams = levelParams;
             _resolver = resolver;
             _poolManager = poolManager;
             _lineSubscriber = lineSubscriber;
@@ -123,7 +126,7 @@ namespace BalloonParty.Balloon.Spawner
 
         private async UniTask PrewarmAsync(CancellationToken ct)
         {
-            var totalSlots = _grid.Columns * _balloonsConfig.GameStartedBalloonLines;
+            var totalSlots = _grid.Columns * _levelParams.BoardLines;
 
             foreach (var entry in _balloonsConfig.Entries)
             {
@@ -143,7 +146,7 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            SpawnLinesWithDelayAsync(_balloonsConfig.NewProjectileBalloonLines, _cts.Token, _generation).Forget();
+            SpawnLinesWithDelayAsync(_levelParams.SpawnLines, _cts.Token, _generation).Forget();
         }
 
         private void OnSpawnLinesRequested(int lineCount)
@@ -160,7 +163,7 @@ namespace BalloonParty.Balloon.Spawner
         private void PopulateInitialGrid()
         {
             // The initial grid starts empty and is sized to fit, so it never rejects a balloon.
-            for (var i = 0; i < _balloonsConfig.GameStartedBalloonLines; i++)
+            for (var i = 0; i < _levelParams.BoardLines; i++)
             {
                 SpawnLineInternal(allowReject: false);
             }
@@ -180,12 +183,12 @@ namespace BalloonParty.Balloon.Spawner
 
         private void SpawnBalloon(Vector2Int slot)
         {
-            var entry = _balloonsConfig.Entries.PickRandom(_activeCounts);
+            var entry = _levelParams.PickBalloonEntry(_activeCounts);
             if (entry == null)
             {
                 Debug.LogWarning(
-                    $"BalloonSpawner.SpawnBalloon: PickRandom returned null for slot ({slot.x},{slot.y}) " +
-                    "— all balloon types are at their max count.");
+                    $"BalloonSpawner.SpawnBalloon: PickBalloonEntry returned null for slot ({slot.x},{slot.y}) " +
+                    "— every active balloon type is at its max count.");
                 return;
             }
 

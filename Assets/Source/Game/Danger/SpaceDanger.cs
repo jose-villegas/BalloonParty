@@ -1,6 +1,6 @@
 using System;
-using BalloonParty.Configuration;
 using BalloonParty.Game.Health;
+using BalloonParty.Game.Level;
 using BalloonParty.Slots.Grid;
 using UniRx;
 using UnityEngine;
@@ -18,21 +18,22 @@ namespace BalloonParty.Game.Danger
     ///
     ///     <c>availableSpace</c> is the empty-slot count, a heuristic for how many balloons the board
     ///     can still take (re-home + pressure fill nearly every empty), and <c>spawnPerTurn</c> is the
-    ///     worst case <c>NewProjectileBalloonLines × Columns</c>. Both are tuning knobs.
+    ///     worst case <c>IActiveLevelParameters.SpawnLines × Columns</c> (the resolved, per-level
+    ///     value — misreports on ramped levels if read from the catalog instead). Both are tuning knobs.
     /// </summary>
     internal class SpaceDanger : IStartable, IDisposable, IDangerLevel
     {
         private readonly SlotGrid _grid;
         private readonly IPlayerHealth _health;
-        private readonly IBalloonsConfiguration _balloonsConfig;
+        private readonly IActiveLevelParameters _levelParams;
         private readonly ReactiveProperty<float> _level = new(0f);
         private readonly CompositeDisposable _subscriptions = new();
 
-        public SpaceDanger(SlotGrid grid, IPlayerHealth health, IBalloonsConfiguration balloonsConfig)
+        public SpaceDanger(SlotGrid grid, IPlayerHealth health, IActiveLevelParameters levelParams)
         {
             _grid = grid;
             _health = health;
-            _balloonsConfig = balloonsConfig;
+            _levelParams = levelParams;
         }
 
         public IReadOnlyReactiveProperty<float> Level => _level;
@@ -64,7 +65,7 @@ namespace BalloonParty.Game.Danger
 
         private void Recompute()
         {
-            var spawnPerTurn = _balloonsConfig.NewProjectileBalloonLines * _grid.Columns;
+            var spawnPerTurn = _levelParams.SpawnLines * _grid.Columns;
             _level.Value = Evaluate(_health.Current.Value, CountEmptySlots(), spawnPerTurn);
         }
 
