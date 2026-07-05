@@ -2,10 +2,8 @@
 
 # Screen-Space Light (2D GI prototype)
 
-> **NOW (2026-07-04):** prototype implemented, awaiting in-editor evaluation. Everything
-> below the Status section is the design record. This is an *art experiment* — the
-> pipeline is cheap and proven; whether it reads as "light" instead of "smudge" is the
-> open question, and the answer decides if this graduates or gets deleted.
+> **DONE (2026-07-05):** graduated — the experiment reads as light, not smudge, and is
+> live on the Main Camera. Everything below the Status section is the design record.
 
 ---
 
@@ -13,11 +11,16 @@
 
 | Piece | State |
 |---|---|
-| `ScreenSpaceLightService` (Display/) | Built — needs adding to the Main Camera prefab |
-| `ScreenSpaceLightSmear.shader` (blit, 2 passes) | Built — needs in-editor compile check |
-| `ScreenSpaceLightOverlay.shader` (composite) | Built — needs in-editor compile check |
-| `SceneCaptureService` capture alpha = coverage | Built (background alpha cleared to 0) |
-| Evaluation / tuning | NOT started |
+| `ScreenSpaceLightService` (Display/) | Live on the Main Camera; shaders serialized, knobs tuned |
+| `ScreenSpaceLightSmear.shader` | Two opposite marches: reflection toward light, shadow away; shadow caster-masked `(1 − ownCoverage)`; 3×3 soften + temporal EMA |
+| `ScreenSpaceLightOverlay.shader` | Ambient-relative bounce (`(rgb − ambient)`) so flat sky is neutral; multiplicative, no readback |
+| `SceneCaptureService` | Solid-color clear (match camera or manual), alpha = coverage mask; background stays out of the mask |
+| Evaluation / tuning | Done — verified in-editor, committed |
+
+**Deliberately not built:** balloons *receiving* GI shadows (the coverage-only mask
+can't separate a caster's own body from a caster stacked in front of it — per-balloon
+drop-shadows are covered by the baked 5a shadows instead). See the discussion in the
+follow-ups below.
 
 ## Goal
 

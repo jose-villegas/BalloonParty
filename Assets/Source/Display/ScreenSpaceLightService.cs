@@ -1,3 +1,4 @@
+using BalloonParty.Shared;
 using BalloonParty.Shared.Rendering;
 using UnityEngine;
 
@@ -59,6 +60,7 @@ namespace BalloonParty.Display
         [Range(0.02f, 1f)]
         [SerializeField] private float _temporalResponse = 0.2f;
         [Tooltip("Overlay sorting — above all gameplay, below UI.")]
+        [SortingLayerName]
         [SerializeField] private string _sortingLayerName = "Sky";
         [SerializeField] private int _sortingOrder = 32000;
 
