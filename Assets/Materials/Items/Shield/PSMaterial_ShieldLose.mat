@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: PSMaterial_ShieldLose
-  m_Shader: {fileID: 4800000, guid: dd8d29a9ebb54e03899553b37431f377, type: 3}
+  m_Shader: {fileID: 10721, guid: 0000000000000000f000000000000000, type: 0}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -44,7 +44,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 120b155b3b1a2424b85a8268a0717907, type: 3}
+        m_Texture: {fileID: 2800000, guid: e4a55b7498f9c47b7b34a794ceef61bb, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MetallicGlossMap:
@@ -90,6 +90,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.5019608, g: 0.5019608, b: 0.5019608, a: 0.75}
     - _ShadowOffset: {r: 0.1, g: -0.1, b: 0, a: 0}
   m_BuildTextureStacks: []

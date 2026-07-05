@@ -81,7 +81,7 @@ Material:
     - _ShadowOffsetX: 0.1
     - _ShadowOffsetY: -0.1
     - _ShadowScale: 1
-    - _ShadowSoftness: 0.0177
+    - _ShadowSoftness: 0.08
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SpecularOffsetX: -0.15

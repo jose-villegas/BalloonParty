@@ -154,7 +154,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.SceneCaptureService
   _capturedLayers:
     serializedVersion: 2
-    m_Bits: 24192
+    m_Bits: 20096
+  _matchMainCameraBackground: 1
+  _backgroundColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &8597041690689265888
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -173,7 +175,7 @@ MonoBehaviour:
   _smearDistance: 0.65
   _tapDecay: 0.45
   _tapStart: 0.35
-  _shadowStrength: 0.45
+  _shadowStrength: 0.4
   _shadowTint: {r: 0.2, g: 0.2, b: 0.2, a: 1}
   _bounceStrength: 0.25
   _temporalResponse: 0.2
