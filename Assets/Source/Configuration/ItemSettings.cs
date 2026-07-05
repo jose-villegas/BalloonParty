@@ -25,8 +25,14 @@ namespace BalloonParty.Configuration
         [SerializeField] private PaintSettings _paint = new();
 
         public ItemType Type => _type;
+
+        /// <summary>Catalog default — runtime reads the resolved value via IActiveLevelParameters.ItemCadence.</summary>
         public int TurnCheckEvery => _turnCheckEvery;
+
+        /// <summary>Catalog default — the resolver multiplies this by the active range's per-type weight.</summary>
         public float Weight => _weight;
+
+        /// <summary>Catalog fallback — used unless the active range's ItemTypeWeight.MaximumAllowedOverride is set.</summary>
         public int MaximumAllowed => _maximumAllowed;
         int IWeightedEntry.MaxCount => _maximumAllowed;
         string IWeightedEntry.PoolKey => _type.ToString();

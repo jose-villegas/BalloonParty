@@ -32,6 +32,8 @@ namespace BalloonParty.Game.Level
         private readonly IGamePalette _palette;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly List<ResolvedBalloonEntry> _pickList = new();
+        private readonly List<ResolvedItemEntry> _itemPickList = new();
+        private readonly List<ItemSettings> _itemsList = new();
 
         private System.Random _rng = new();
         private LevelParameters _current = new();
@@ -56,7 +58,8 @@ namespace BalloonParty.Game.Level
 
         public int SpawnLines => _current.SpawnLines;
         public int BoardLines => _current.BoardLines;
-        public IReadOnlyList<ItemSettings> Items => _itemConfig.Items;
+        public int ItemCadence => _current.ItemCadence;
+        public IReadOnlyList<ItemSettings> Items => _itemsList;
         public IReadOnlyList<string> AllowedColors => _allowedColorNames;
 
         // Re-resolves before GridSpawnerCoordinator respawns at Respawn (120), so a restart's first
@@ -90,6 +93,11 @@ namespace BalloonParty.Game.Level
             return _pickList.PickRandom(activeCounts)?.Source;
         }
 
+        public ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts)
+        {
+            return _itemPickList.PickRandom(activeCounts)?.Source;
+        }
+
         public bool TryGetGridActorCount(GridActorType type, out int count)
         {
             foreach (var gate in _current.GridActorGates)
@@ -109,6 +117,7 @@ namespace BalloonParty.Game.Level
         {
             _current = FindRange(level)?.Resolve(PositionOf(level), _rng) ?? FallbackParameters(level);
             RebuildPickList(_current);
+            RebuildItemPickList(_current);
             _allowedColorNames = _palette.ColorNamesForMask(_current.AllowedColorsMask);
         }
 
@@ -178,6 +187,40 @@ namespace BalloonParty.Game.Level
             return false;
         }
 
+        private void RebuildItemPickList(LevelParameters parameters)
+        {
+            _itemPickList.Clear();
+            _itemsList.Clear();
+
+            foreach (var catalogItem in _itemConfig.Items)
+            {
+                if (!TryFindActiveItemWeight(parameters.ItemWeights, catalogItem.Type, out var rangeWeight))
+                {
+                    // Absent (or zero-weight) from this level's set — the type gate.
+                    continue;
+                }
+
+                var maxCount = rangeWeight.MaximumAllowedOverride > 0 ? rangeWeight.MaximumAllowedOverride : catalogItem.MaximumAllowed;
+                _itemPickList.Add(new ResolvedItemEntry(catalogItem, catalogItem.Weight * rangeWeight.Weight, maxCount));
+                _itemsList.Add(catalogItem);
+            }
+        }
+
+        private static bool TryFindActiveItemWeight(ItemTypeWeight[] weights, ItemType type, out ItemTypeWeight found)
+        {
+            foreach (var weight in weights)
+            {
+                if (weight.Type == type && weight.Weight > 0f)
+                {
+                    found = weight;
+                    return true;
+                }
+            }
+
+            found = default;
+            return false;
+        }
+
         private sealed class ResolvedBalloonEntry : IWeightedEntry
         {
             public ResolvedBalloonEntry(BalloonPrefabEntry source, float weight, int maxCount)
@@ -191,6 +234,21 @@ namespace BalloonParty.Game.Level
             public float Weight { get; }
             public int MaxCount { get; }
             public string PoolKey => Source.PoolKey;
+        }
+
+        private sealed class ResolvedItemEntry : IWeightedEntry
+        {
+            public ResolvedItemEntry(ItemSettings source, float weight, int maxCount)
+            {
+                Source = source;
+                Weight = weight;
+                MaxCount = maxCount;
+            }
+
+            public ItemSettings Source { get; }
+            public float Weight { get; }
+            public int MaxCount { get; }
+            public string PoolKey => Source.Type.ToString();
         }
     }
 }

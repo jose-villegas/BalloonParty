@@ -615,6 +615,17 @@ SlotSelector_RowBias_PrefersTargetRows
 This phase is deliberately last — you can't tune what you haven't built. Design the
 `DifficultyProfile` only after watching the procedural algorithm run.
 
+**Cross-reference (added 2026-07-05):** a simpler, pre-8.3 version of "grid-actor difficulty
+per level" already exists for whatever `StaticActorSpawner` can build today (Puff, Bush) — see
+`PLAN-LossConditionPacing.md` Phase 3e, built on `LevelPacingConfiguration`/
+`LevelDifficultyResolver`. That's a type-gate + per-type resolved count, not the richer
+`DifficultyProfile` shape below (no `GridDensity`/`StaticActorRatio`/weight overrides — today's
+spawner has no competitive weighted draw to apply a ratio or override to). When this phase lands,
+decide whether `DifficultyProfile` **replaces** 3e's gate/count model wholesale, or whether
+`GridSpawner` keeps reading through `IActiveLevelParameters` (extended with the richer shape)
+so `LevelPacingConfiguration` stays the single per-level authoring surface rather than splitting
+into two competing level-driven configs.
+
 #### Design
 
 ```

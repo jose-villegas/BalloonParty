@@ -24,11 +24,16 @@ MonoBehaviour:
         _min: 2
         _max: 2
         _mode: 0
+      _itemCadence:
+        _min: 5
+        _max: 5
+        _mode: 0
       _balloonWeights:
       - _type: 0
         _weight: 1
         _maxCountOverride: 0
       _itemWeights: []
+      _gridActorGates: []
       _allowedColorsMask: 1
   - _fromLevel: 11
     _toLevel: -1
@@ -41,11 +46,21 @@ MonoBehaviour:
         _min: 2
         _max: 2
         _mode: 0
+      _itemCadence:
+        _min: 5
+        _max: 5
+        _mode: 0
       _balloonWeights:
       - _type: 0
         _weight: 1
         _maxCountOverride: 0
       _itemWeights: []
+      _gridActorGates:
+      - _type: 0
+        _count:
+          _min: 3
+          _max: 6
+          _mode: 2
       _allowedColorsMask: -1
   _customLevels: []
   _thresholdModifier:

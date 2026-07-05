@@ -16,6 +16,7 @@ namespace BalloonParty.Configuration
     {
         [SerializeField] private RangedInt _spawnLines = new(1, 1);
         [SerializeField] private RangedInt _boardLines = new(5, 5);
+        [SerializeField] private RangedInt _itemCadence = new(5, 5);
 
         [SerializeField] private BalloonTypeWeight[] _balloonWeights =
         {
@@ -34,6 +35,7 @@ namespace BalloonParty.Configuration
 
         public RangedInt SpawnLines => _spawnLines;
         public RangedInt BoardLines => _boardLines;
+        public RangedInt ItemCadence => _itemCadence;
         public BalloonTypeWeight[] BalloonWeights => _balloonWeights;
         public ItemTypeWeight[] ItemWeights => _itemWeights;
         public GridActorTypeGate[] GridActorGates => _gridActorGates;
@@ -44,6 +46,7 @@ namespace BalloonParty.Configuration
             return new LevelParameters(
                 _spawnLines.Resolve(positionInRange, rng),
                 _boardLines.Resolve(positionInRange, rng),
+                _itemCadence.Resolve(positionInRange, rng),
                 _balloonWeights,
                 _itemWeights,
                 ResolveGridActorGates(positionInRange, rng),

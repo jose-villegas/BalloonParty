@@ -190,6 +190,74 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void ItemCadence_ReturnsResolvedValue()
+        {
+            var range = MakeRangeWithItems(1, 0, new RangedInt(4, 4), Array.Empty<ItemTypeWeight>());
+            _pacing.Ranges.Returns(new[] { range });
+
+            var resolver = BuildResolver();
+            resolver.Start();
+
+            Assert.AreEqual(4, resolver.ItemCadence);
+        }
+
+        [Test]
+        public void Items_OnlyIncludesTypeGatedInEntries()
+        {
+            var bomb = CreateCatalogItem(ItemType.Bomb);
+            var shield = CreateCatalogItem(ItemType.Shield);
+            _itemConfig.Items.Returns(new List<ItemSettings> { bomb, shield });
+
+            var range = MakeRangeWithItems(1, 0, new RangedInt(1, 1), new[] { new ItemTypeWeight(ItemType.Bomb, 1f) });
+            _pacing.Ranges.Returns(new[] { range });
+
+            var resolver = BuildResolver();
+            resolver.Start();
+
+            CollectionAssert.AreEqual(new[] { bomb }, resolver.Items);
+        }
+
+        [Test]
+        public void PickItemEntry_TypeAbsentFromRange_NeverPicked()
+        {
+            var bomb = CreateCatalogItem(ItemType.Bomb);
+            var shield = CreateCatalogItem(ItemType.Shield);
+            _itemConfig.Items.Returns(new List<ItemSettings> { bomb, shield });
+
+            var range = MakeRangeWithItems(1, 0, new RangedInt(1, 1), new[] { new ItemTypeWeight(ItemType.Bomb, 1f) });
+            _pacing.Ranges.Returns(new[] { range });
+
+            var resolver = BuildResolver();
+            resolver.Start();
+
+            var activeCounts = new Dictionary<string, int>();
+            for (var i = 0; i < 50; i++)
+            {
+                var picked = resolver.PickItemEntry(activeCounts);
+                Assert.AreSame(bomb, picked, "Shield is absent from the range's weighted set and must never be picked.");
+            }
+        }
+
+        [Test]
+        public void PickItemEntry_MaximumAllowedOverride_ExcludesAtCap()
+        {
+            var bomb = CreateCatalogItem(ItemType.Bomb, maximumAllowed: 0);
+            _itemConfig.Items.Returns(new List<ItemSettings> { bomb });
+
+            var range = MakeRangeWithItems(
+                1, 0, new RangedInt(1, 1),
+                new[] { new ItemTypeWeight(ItemType.Bomb, 1f, maximumAllowedOverride: 2) });
+            _pacing.Ranges.Returns(new[] { range });
+
+            var resolver = BuildResolver();
+            resolver.Start();
+
+            var activeCounts = new Dictionary<string, int> { [ItemType.Bomb.ToString()] = 2 };
+
+            Assert.IsNull(resolver.PickItemEntry(activeCounts));
+        }
+
+        [Test]
         public void ExhaustiveResolve_Levels1To50_NeverThrows()
         {
             var entry = CreateCatalogEntry("Simple", BalloonType.Simple, weight: 1f, maxCount: 0);
@@ -228,6 +296,24 @@ namespace BalloonParty.Tests.Game
             SetField(parameters, "_spawnLines", spawnLines);
             SetField(parameters, "_balloonWeights", weights);
             return new LevelRangeEntry(fromLevel, toLevel, parameters);
+        }
+
+        private static LevelRangeEntry MakeRangeWithItems(
+            int fromLevel, int toLevel, RangedInt itemCadence, ItemTypeWeight[] itemWeights)
+        {
+            var parameters = new RangedLevelParameters();
+            SetField(parameters, "_itemCadence", itemCadence);
+            SetField(parameters, "_itemWeights", itemWeights);
+            return new LevelRangeEntry(fromLevel, toLevel, parameters);
+        }
+
+        private static ItemSettings CreateCatalogItem(ItemType type, float weight = 1f, int maximumAllowed = 0)
+        {
+            var item = new ItemSettings();
+            SetField(item, "_type", type);
+            SetField(item, "_weight", weight);
+            SetField(item, "_maximumAllowed", maximumAllowed);
+            return item;
         }
 
         private BalloonPrefabEntry CreateCatalogEntry(string name, BalloonType type, float weight, int maxCount)

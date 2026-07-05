@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Game.Level;
 using BalloonParty.Item;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
@@ -19,7 +20,7 @@ namespace BalloonParty.Tests.Item
     public class ItemAssignerTests
     {
         private SlotGrid _grid;
-        private IItemConfiguration _itemConfig;
+        private IActiveLevelParameters _levelParams;
         private IMessageHandler<ItemCheckMessage> _handler;
 
         [SetUp]
@@ -32,8 +33,9 @@ namespace BalloonParty.Tests.Item
 
             _grid = new SlotGrid(gameConfig, new BalancePathHolder());
 
-            _itemConfig = Substitute.For<IItemConfiguration>();
-            _itemConfig.Items.Returns(new List<ItemSettings>());
+            _levelParams = Substitute.For<IActiveLevelParameters>();
+            _levelParams.Items.Returns(new List<ItemSettings>());
+            _levelParams.ItemCadence.Returns(1);
 
             var subscriber = Substitute.For<ISubscriber<ItemCheckMessage>>();
             subscriber
@@ -42,14 +44,16 @@ namespace BalloonParty.Tests.Item
                     Arg.Any<MessageHandlerFilter<ItemCheckMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            var assigner = new ItemAssigner(_itemConfig, _grid, subscriber);
+            var assigner = new ItemAssigner(_levelParams, _grid, subscriber);
             assigner.Start();
         }
 
         [Test]
         public void OnItemCheck_EmptyNewBalloons_NoAssignment()
         {
-            SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 5));
+            var bomb = CreateItemSettings(ItemType.Bomb);
+            _levelParams.Items.Returns(new List<ItemSettings> { bomb });
+            _levelParams.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var model = new BalloonModel();
             FireItemCheck(Array.Empty<IBalloonModel>(), turnCount: 1);
@@ -58,9 +62,12 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
-        public void OnItemCheck_TurnNotDivisible_NoAssignment()
+        public void OnItemCheck_TurnNotOnCadence_NoAssignment()
         {
-            SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 3, weight: 1f, maxAllowed: 5));
+            _levelParams.ItemCadence.Returns(3);
+            var bomb = CreateItemSettings(ItemType.Bomb);
+            _levelParams.Items.Returns(new List<ItemSettings> { bomb });
+            _levelParams.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var model = new BalloonModel();
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 2);
@@ -69,14 +76,22 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
-        public void OnItemCheck_AllItemsAtMax_NoAssignment()
+        public void OnItemCheck_NoCandidatesThisLevel_NoAssignment()
         {
-            SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 1));
+            // _levelParams.Items defaults to empty (SetUp) — every type gated out of this level.
+            var model = new BalloonModel();
+            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
 
-            // Place an existing balloon with the item on the grid to hit the cap
-            var existing = new BalloonModel();
-            existing.Item.Value = ItemType.Bomb;
-            _grid.Place(existing, null, new Vector2Int(0, 0));
+            Assert.AreEqual(ItemType.None, model.Item.Value);
+        }
+
+        [Test]
+        public void OnItemCheck_PickItemEntryReturnsNull_NoAssignment()
+        {
+            // Mirrors "every eligible entry is at its cap" — the resolver's PickItemEntry returns null.
+            var bomb = CreateItemSettings(ItemType.Bomb);
+            _levelParams.Items.Returns(new List<ItemSettings> { bomb });
+            _levelParams.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns((ItemSettings)null);
 
             var model = new BalloonModel();
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
@@ -87,7 +102,9 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void OnItemCheck_NoEligibleBalloons_NonItemSlotActor_NoAssignment()
         {
-            SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 5));
+            var bomb = CreateItemSettings(ItemType.Bomb);
+            _levelParams.Items.Returns(new List<ItemSettings> { bomb });
+            _levelParams.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var model = new ToughBalloonModel(new BalloonModelConfig());
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
@@ -99,7 +116,9 @@ namespace BalloonParty.Tests.Item
         [Test]
         public void OnItemCheck_EligibleBalloon_GetsItemAssigned()
         {
-            SetItems(CreateItemSettings(ItemType.Bomb, turnCheckEvery: 1, weight: 1f, maxAllowed: 5));
+            var bomb = CreateItemSettings(ItemType.Bomb);
+            _levelParams.Items.Returns(new List<ItemSettings> { bomb });
+            _levelParams.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
 
             var model = new BalloonModel();
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
@@ -107,27 +126,33 @@ namespace BalloonParty.Tests.Item
             Assert.AreEqual(ItemType.Bomb, model.Item.Value);
         }
 
+        [Test]
+        public void OnItemCheck_BuildsActiveCountsFromExistingGridState()
+        {
+            var bomb = CreateItemSettings(ItemType.Bomb);
+            _levelParams.Items.Returns(new List<ItemSettings> { bomb });
+            _levelParams.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
+
+            var existing = new BalloonModel();
+            existing.Item.Value = ItemType.Bomb;
+            _grid.Place(existing, null, new Vector2Int(0, 0));
+
+            var model = new BalloonModel();
+            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
+
+            _levelParams.Received(1).PickItemEntry(
+                Arg.Is<IReadOnlyDictionary<string, int>>(counts => counts[ItemType.Bomb.ToString()] == 1));
+        }
+
         private void FireItemCheck(IReadOnlyList<IBalloonModel> balloons, int turnCount)
         {
             _handler.Handle(new ItemCheckMessage(balloons, turnCount));
         }
 
-        private void SetItems(params ItemSettings[] items)
-        {
-            _itemConfig.Items.Returns(new List<ItemSettings>(items));
-        }
-
-        private static ItemSettings CreateItemSettings(
-            ItemType type,
-            int turnCheckEvery,
-            float weight,
-            int maxAllowed)
+        private static ItemSettings CreateItemSettings(ItemType type)
         {
             var settings = new ItemSettings();
             SetField(settings, "_type", type);
-            SetField(settings, "_turnCheckEvery", turnCheckEvery);
-            SetField(settings, "_weight", weight);
-            SetField(settings, "_maximumAllowed", maxAllowed);
             return settings;
         }
 

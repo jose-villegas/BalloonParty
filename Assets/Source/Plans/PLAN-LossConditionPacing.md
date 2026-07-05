@@ -31,8 +31,16 @@ allowed colors) are still spec only — Phase 3 is the recommended next move. Se
 Part C (allowed colors) → Phasing. **Start implementing at Phase 1** (GameOver state +
 run-scoped save) — it has no dependencies.
 
-**External dependency:** the grid-actor per-range mix needs Phase 8.3 (procedural placement,
-see `PLAN-GridActorExpansion.md`); everything else uses mechanics that exist today.
+**External dependency (narrowed 2026-07-05):** only the **richer grid-actor archetypes**
+(Deflector/Absorber/Gatekeeper) need Phase 8.3's procedural placement engine — they have no
+content yet (`PLAN-GridActorExpansion.md`, 8.3 "blocked on content") and today's
+`StaticActorSpawner` doesn't even know how to construct them (`_modelFactories` only maps
+`Puff`/`Bush`). **Per-range type gate + density for what's already spawnable (Puff, Bush) needs
+no 8.3 dependency at all** — verified 2026-07-05: `GridActorPrefabEntry.Weight` is never actually
+read by `StaticActorSpawner` (it rolls `MinCount`..`MaxCount` per catalog entry independently, no
+competitive weighted draw), so it's a simpler filter-and-override shape than the balloon bridge,
+buildable on the same `LevelPacingConfiguration`/`LevelDifficultyResolver` infrastructure as 3a.
+See Phase 3e below. Everything else in this plan uses mechanics that exist today.
 
 ---
 
@@ -179,8 +187,9 @@ resolves by one of three modes, so a designer can say "ramp this up across the r
     deadline pressure, threshold tuning, etc. "How many / how much" — where fixed/linear/random
     is meaningful.
   - **Weighted sets** — *static per range*: `WeightedSet<BalloonType>` (Simple / Tough /
-    Unbreakable / BubbleCluster), `WeightedSet<GridActorType>` (Puff / Bush / … — consumed once
-    8.3 lands), per-item weights. **No `RangedValue` modes on weights** — a weight *is* a
+    Unbreakable / BubbleCluster), a `GridActorType` gate (Puff / Bush available now, see 3e;
+    Deflector/Absorber/Gatekeeper once 8.3 lands), per-item weights. **No `RangedValue` modes on
+    weights** — a weight *is* a
     distribution; the randomness is the per-spawn weighted draw, so a second random roll on the
     weight itself would be redundant. Want the mix to evolve? Author a finer range.
   - **The weighted set IS the type gate** (explicit, 2026-07-02): a balloon type absent from a
@@ -205,8 +214,8 @@ The gating principle applies to **every difficulty-relevant knob**, not just bal
 
 | Kind | Semantics | Parameters (verified read-sites; trimmed 2026-07-02) |
 |---|---|---|
-| **Ranged scalars** (`RangedInt`/`RangedFloat`, Fixed/Linear/Random per level) | "how much / how many" | `SpawnLines` (`BalloonsConfiguration.NewProjectileBalloonLines` → `BalloonSpawner`, `SpaceDanger`) · `BoardLines` (initial fill → the Ascent) · `ItemTurnCadence` (`ItemSettings.TurnCheckEvery` → `ItemAssigner`) · grid-actor counts (`StaticActorSpawner`, pre-8.3) |
-| **Weighted sets = availability gates** (static per range; absent/0-weight = cannot spawn) | "what exists here, and how often" | `WeightedSet<BalloonType>` · `WeightedSet<ItemType>` (an item absent from the range can't be assigned — item introduction levels, same principle as balloon types) · `WeightedSet<GridActorType>` (post-8.3 placement mix) |
+| **Ranged scalars** (`RangedInt`/`RangedFloat`, Fixed/Linear/Random per level) | "how much / how many" | `SpawnLines` (`BalloonsConfiguration.NewProjectileBalloonLines` → `BalloonSpawner`, `SpaceDanger`) · `BoardLines` (initial fill → the Ascent) · `ItemTurnCadence` (`ItemSettings.TurnCheckEvery` → `ItemAssigner`) · per-type grid-actor `Count` (`StaticActorSpawner` — available now for Puff/Bush, see 3e) |
+| **Weighted sets = availability gates** (static per range; absent/0-weight = cannot spawn) | "what exists here, and how often" | `WeightedSet<BalloonType>` · `WeightedSet<ItemType>` (an item absent from the range can't be assigned — item introduction levels, same principle as balloon types) · `GridActorType` gate (available now for Puff/Bush — see 3e; the *richer* archetypes, Deflector/Absorber/Gatekeeper, still need 8.3's placement engine + content) |
 | **Per-range catalog overrides** (optional block; falls back to the catalog when absent) | "the same thing, more of it" | per-type `MaxCount` (e.g. cap Unbreakables at 2 early, 6 late) · per-item `MaximumAllowed` |
 
 Plus the **`AllowedColors` set** (Part C).
@@ -446,12 +455,14 @@ hard requirement): anchor the board to a root (grid anchor seam + spawner re-par
    - **3c** — items lever: `ItemAssigner` reads the resolver.
    - **3d** — **custom levels**: the `CustomLevelEntry` overlay collection + resolve
      specificity + validation (cheap once 3a exists).
+   - **3e** — **grid-actor pacing (Puff/Bush now)**: per-range type gate + count for whatever
+     `StaticActorSpawner` can already build — no Phase 8.3 dependency (narrowed 2026-07-05, see
+     "External dependency" above). The richer archetypes (Deflector/Absorber/Gatekeeper) stay
+     blocked on 8.3's content + placement engine.
 4. **Allowed colors** — spawner color filter + `ScoreController`/level-up restriction to the
    active set + dynamic `ColorProgressBar` count (handle the set growing at boundaries).
-5. **Per-range item & actor mix** — wire `ItemAssigner` to the range's item config now; wire
-   grid-actor weights when Phase 8.3's grid spawner lands.
-6. **GameOver UI + meta** — score, best-level/best-score, restart flow.
-7. **Tuning playtest** — pop-rate vs. encroachment vs. level-threshold curve vs. the per-range
+5. **GameOver UI + meta** — score, best-level/best-score, restart flow.
+6. **Tuning playtest** — pop-rate vs. encroachment vs. level-threshold curve vs. the per-range
    sliders.
 
 ---
@@ -715,15 +726,26 @@ chain — **BubbleCluster** drifts to the *nearest* gap (stays close), **Unbreak
 > read-site swaps below are implemented and committed-pending (7 sites, not 5 — the sweep initially
 > missed `Cheats/TriggerLevelUpCheat.cs` and `Cheats/NearLevelUpCheat.cs`, both also reading the raw
 > formula off `IGameConfiguration`; fixed the same session); `dotnet build` (Runtime, Editor,
-> Tests.EditMode, Configuration.Editor) and `style_audit.py` are clean. **Blocking in-editor step
-> before this runs at all:** create `Assets/Configuration/LevelPacingConfiguration.asset`
-> (Create → Configuration → Level Pacing) and wire it into `GameLifetimeScope._levelPacingConfiguration`
-> in the Game scene — until then the field is null and the game NREs on boot (same trap as
-> `_overflowSettings`). Author the initial range to replicate today's `BalloonsConfiguration` values
-> (see the "In-editor steps" list below) so behavior is unchanged before any tuning. New EditMode
-> tests (`RangedValueTests`, `LevelPacingConfigurationTests`, `LevelDifficultyResolverTests`) are
-> compile-verified only — run the in-editor Test Runner to confirm they pass. 3b/3c/3d/Phase 4 below
-> are still spec-only.
+> Tests.EditMode, Configuration.Editor) and `style_audit.py` are clean, **committed** (`39edfeac`).
+> `Assets/Configuration/LevelPacingConfiguration.asset` exists and is wired into
+> `GameLifetimeScope._levelPacingConfiguration` — the former "blocking in-editor step" is done.
+> New EditMode tests (`RangedValueTests`, `LevelPacingConfigurationTests`,
+> `LevelDifficultyResolverTests`, `GamePaletteTests`) — **`dotnet build` only compiles, it never
+> executes tests**; the in-editor Test Runner is the only thing that actually runs them, and it
+> caught a real bug `dotnet build` couldn't: `LevelRangeEntry` (a struct wrapping a
+> `RangedLevelParameters` class field) had no constructor, so `LevelPacingConfiguration`'s default
+> `_ranges = { new() }` silently produced a range with `Parameters == null` — structs zero-init
+> class fields on their implicit default constructor, no Unity serialization involved. Fixed
+> (2026-07-05) by giving `LevelRangeEntry` an explicit constructor; `CustomLevelEntry` has the
+> identical shape and is flagged with the same warning under 3d below since 3d hasn't touched it
+> yet. Takeaway for whoever continues this: **treat `dotnet build` green as "compiles," not
+> "correct" — always run the actual Test Runner before considering a sub-phase done.**
+> `AllowedColors` was changed from `string[]` to a `[PaletteColorMask] int` during implementation
+> (2026-07-05) — see item 5 in 3a below. **3c (items) and 3e (grid-actor pacing) are also
+> implemented (2026-07-05)** — see their own status notes below. Only 3b (the Ascent) and 3d
+> (custom levels) and Phase 4 (allowed colors) remain spec-only (3e was added 2026-07-05 —
+> grid-actor pacing for Puff/Bush was previously miscategorized as blocked on Phase 8.3; only the
+> newer archetypes are).
 
 > **Audience: an implementing agent/session.** Every file:line below was verified against HEAD on
 > 2026-07-05. Sub-phases 3a → 3b → 3c → 3d are independent commits in that order; 3a is the
@@ -958,6 +980,18 @@ sequencing with substituted seams if it's built message/interface-driven.
 
 ### 3c — items lever
 
+**Status: implemented (2026-07-05).** `dotnet build` (all 4 csproj) + `style_audit.py` clean; not
+yet committed, not yet run through the actual Test Runner (remember: `dotnet build` only compiles
+— see the 3a status note above for why that distinction matters here specifically). One
+implementation-time refinement: `Items` stayed `IReadOnlyList<ItemSettings>` (type-gated catalog
+entries, for `ItemAssigner` to iterate when building live active-counts) rather than becoming the
+"wrapped resolved list" the line below originally proposed — the actual pick happens through a new
+`PickItemEntry(activeCounts)` on `IActiveLevelParameters`, mirroring `PickBalloonEntry` exactly
+(internal `ResolvedItemEntry : IWeightedEntry` wrapper, not exposed). This keeps `ItemAssigner`'s
+live per-board active-count computation (which the resolver can't own — it's board state, not a
+per-level constant) cleanly separated from the resolver's per-level weight/cap resolution. Also:
+`ItemTypeWeight` had no constructor (only `BalloonTypeWeight` got one in 3a) — added one to match.
+
 - **Re-add `ItemCadence`** to `LevelParameters`/`RangedLevelParameters` (dropped in 3a as unused
   scaffolding — see the note on item 5 above) and expose it on `IActiveLevelParameters`, alongside
   the wiring below that actually gives it meaning.
@@ -983,6 +1017,83 @@ sequencing with substituted seams if it's built message/interface-driven.
   duplicate `Level`; warn when a custom sits adjacent to a range boundary it makes invisible.
 - Tests: overlay specificity (custom at 10 inside range 8–14 wins at 10 only); validation
   warnings.
+- **⚠️ Watch for the same bug 3a hit (found 2026-07-05 via the actual Test Runner, not `dotnet
+  build` — which only compiles, never executes):** `CustomLevelEntry` is a struct wrapping a
+  `LevelParameters` class field with **no constructor**. A struct's implicit default constructor
+  zero-initializes every field including class-typed ones, so any `new CustomLevelEntry()` written
+  in test code or a field initializer (not authored through the Unity Inspector, which does
+  materialize a real nested instance) leaves `Parameters` **null** — exactly what happened to
+  `LevelRangeEntry` before it got an explicit constructor (`Configuration/LevelRangeEntry.cs`).
+  Give `CustomLevelEntry` the same treatment (a constructor taking `int level, LevelParameters
+  parameters`) before writing any test that does `new CustomLevelEntry()` directly.
+
+### 3e — grid-actor pacing (Puff/Bush now; richer archetypes still 8.3-blocked)
+
+**Status: implemented (2026-07-05).** `dotnet build` (all 4 csproj) + `style_audit.py` clean;
+not yet committed. One correction made during implementation: the plan below describes a single
+`GridActorTypeGate` struct carrying a `RangedInt` used in *both* the authored and resolved forms —
+that doesn't actually work, because `RangedInt` is unresolved (min/max/mode) and `LevelParameters`
+(the resolved form) needs a plain already-rolled `int`, exactly like `SpawnLines`/`BoardLines` are
+`RangedInt` in `RangedLevelParameters` but plain `int` in `LevelParameters`. Built two types
+instead: `GridActorTypeGate` (`GridActorType` + `RangedInt`, authored form, lives only on
+`RangedLevelParameters`) and `ResolvedGridActorGate` (`GridActorType` + plain `int`, resolved
+form, lives only on `LevelParameters`) — `RangedLevelParameters.Resolve` converts one array to the
+other, same relationship as the top-level scalars.
+
+**Scope note:** only what `StaticActorSpawner` can already build — `Puff`/`Bush` (its
+`_modelFactories` dict has no entries for `Deflector`/`Absorber`/`Gatekeeper`, and those have no
+art/prefabs yet per `PLAN-GridActorExpansion.md`'s Phase 8.3 status). Adding a new archetype to
+the factory dict is 8.2-series/8.3 work, unrelated to this sub-phase — 3e only makes the *existing*
+two types range-aware. **Shape is deliberately not a weighted-pick bridge** like balloons/items:
+`GridActorPrefabEntry.Weight` (`Configuration/GridActorPrefabEntry.cs`) is declared but never read
+by `StaticActorSpawner.SpawnStaticActors` (`Slots/Actor/StaticActorSpawner.cs:73-101`) — the
+algorithm rolls `Random.Range(entry.MinCount, max+1)` **per catalog entry independently**, not a
+competitive draw between types, so there's nothing to multiply a range weight against. Don't add
+an unused `Weight` field to the new type mirroring `BalloonTypeWeight`'s shape — that field would
+sit dead until 8.3's real `GridSpawner.PickEntry` replaces this algorithm (the `ItemCadence`
+lesson from 3a: don't pre-scaffold fields nothing reads).
+
+- **New `Configuration/GridActorTypeGate.cs`** — `[Serializable] struct`: `GridActorType _type;
+  RangedInt _count;` (mirrors `BalloonTypeWeight`'s membership-is-the-gate idea, but carries a
+  `RangedInt` instead of a `float _weight` — presence in the range's array is the gate, absence
+  means the type doesn't spawn at all this level; the `RangedInt` replaces both `MinCount` and
+  `MaxCount` with the single resolved-once-per-level value the codebase's "resolve per level, not
+  per turn" convention expects — resolved once, not independently re-rolled every board
+  population like today's `Random.Range` call).
+- **`RangedLevelParameters`/`LevelParameters`** gain `GridActorTypeGate[] _gridActorGates`
+  (default: `{ new GridActorTypeGate(GridActorType.Puff, new RangedInt(3, 6, Random)) }` — a
+  plausible non-empty baseline, same "always-valid minimal default" convention as
+  `_balloonWeights`). `RangedLevelParameters.Resolve` resolves each gate's `RangedInt` into a
+  plain `(GridActorType Type, int Count)` pair the same way it resolves `SpawnLines`/`BoardLines`.
+- **`IActiveLevelParameters`** gains `bool TryGetGridActorCount(GridActorType type, out int
+  count)` — false if the type isn't gated in this level (matches the balloon type-gate's
+  absent-means-excluded semantics; deliberately not a `PickEntry`-style method since there's no
+  competitive draw to bridge).
+- **`Slots/Actor/StaticActorSpawner.cs:77`** — `foreach (var entry in _gridActorConfig.Entries)`
+  gains a guard: `if (!_levelParams.TryGetGridActorCount(entry.ActorType, out var levelCount))
+  continue;` (skip types the level doesn't gate in), then replace the per-entry
+  `Random.Range(entry.MinCount, max + 1)` roll (`:84-87`) with
+  `Mathf.Min(levelCount, emptySlots.Count)` — the resolved count *is* the roll, resolved once at
+  the level's start rather than independently re-rolled at every board population. `MaxPerCluster`/
+  `PlacementMode`/`HitsToPop`/prefab stay catalog-only (unchanged) — same catalog/range split as
+  balloons. Inject `IActiveLevelParameters` alongside the existing `IGridActorConfiguration`
+  (catalog stays for `Entries` iteration order, `PoolKey`, `Prefab`, placement mode).
+- **`OnBoardClear`/`RegisterPools`** (`:124-138`, `:167-185`) — unchanged, they iterate the full
+  catalog regardless of gating (pools must exist for every type any range might ever use; teardown
+  must find and return every possible spawned type).
+- Tests: extend `LevelDifficultyResolverTests` (`TryGetGridActorCount` false for a gated-out
+  type; resolved count matches the authored `RangedInt` across Fixed/Linear/Random); a
+  `StaticActorSpawnerTests` case (if a fixture doesn't exist yet, this is a good excuse to add
+  one) verifying a gated-out type places zero and a gated-in type places exactly the resolved
+  count, using the existing internal test-only constructor (`StaticActorSpawner(SlotGrid,
+  IGridActorConfiguration)` at `:55-59` — extend it to also take `IActiveLevelParameters` for the
+  test double).
+- **Open question for whoever picks this up:** should `MaxCount`/`MinCount` stay on
+  `GridActorPrefabEntry` as catalog fallbacks (used only when a level range doesn't gate the type
+  in explicitly — but that can't happen once every range has an explicit gate) or be deleted the
+  same way `IBalloonsConfiguration`'s dead spawn-line properties are slated for deletion once the
+  pacing asset is trusted? Lean toward keeping them until `LevelPacingConfiguration` covers every
+  authored level (same sequencing reasoning as the balloon catalog cleanup).
 
 ### Phase 4 — allowed colors (breakdown; reuses 3a plumbing)
 
@@ -1017,7 +1128,8 @@ sequencing with substituted seams if it's built message/interface-driven.
    danger/score sites; both read `PointsRequiredForLevel` too and are easy to miss in a grep for
    "Configuration" since they already imported it for other reasons.
 3. 3b Ascent (own commit; heavy in-editor verification).
-4. 3c items → 5. 3d customs → 6. Phase 4 colors (spawner → score → UI as separate commits).
+4. 3c items → 5. 3d customs → 6. **3e grid-actor pacing (Puff/Bush) — independent of 3b/3c/3d,
+   can land any time after 3a** → 7. Phase 4 colors (spawner → score → UI as separate commits).
 
 ### Testability & default-removal follow-ups (raised 2026-07-05, deferred — not blocking 3b+)
 

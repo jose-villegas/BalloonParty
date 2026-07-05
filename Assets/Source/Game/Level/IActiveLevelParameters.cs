@@ -26,7 +26,22 @@ namespace BalloonParty.Game.Level
         /// </summary>
         BalloonPrefabEntry PickBalloonEntry(IReadOnlyDictionary<string, int> activeCounts);
 
+        /// <summary>How often (in turns) an item-drop opportunity happens this level — replaces
+        /// the old per-item <see cref="ItemSettings.TurnCheckEvery" /> catalog cadence.</summary>
+        int ItemCadence { get; }
+
+        /// <summary>Catalog item entries whose <see cref="ItemType" /> is active this level (the
+        /// item type gate) — for iterating candidates, not for picking (see
+        /// <see cref="PickItemEntry" />).</summary>
         IReadOnlyList<ItemSettings> Items { get; }
+
+        /// <summary>
+        ///     Weighted pick of a catalog <see cref="ItemSettings" /> honouring the active range's
+        ///     type gate and per-type <see cref="ItemTypeWeight.MaximumAllowedOverride" />. Null if
+        ///     every eligible entry is at its cap. Same bridge shape as <see cref="PickBalloonEntry" />.
+        /// </summary>
+        ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts);
+
         IReadOnlyList<string> AllowedColors { get; }
 
         /// <summary>

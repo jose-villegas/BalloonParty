@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
-using BalloonParty.Shared.Extensions;
+using BalloonParty.Game.Level;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -15,20 +15,19 @@ namespace BalloonParty.Item
     internal class ItemAssigner : IStartable
     {
         private readonly ISubscriber<ItemCheckMessage> _checkSubscriber;
-        private readonly IItemConfiguration _itemConfig;
+        private readonly IActiveLevelParameters _levelParams;
         private readonly SlotGrid _grid;
 
-        private readonly List<ItemSettings> _candidateBuffer = new();
         private readonly List<IHasWriteableItemSlot> _eligibleBuffer = new();
         private readonly Dictionary<string, int> _activeCountsBuffer = new();
 
         [Inject]
         internal ItemAssigner(
-            IItemConfiguration itemConfig,
+            IActiveLevelParameters levelParams,
             SlotGrid grid,
             ISubscriber<ItemCheckMessage> checkSubscriber)
         {
-            _itemConfig = itemConfig;
+            _levelParams = levelParams;
             _grid = grid;
             _checkSubscriber = checkSubscriber;
         }
@@ -45,19 +44,24 @@ namespace BalloonParty.Item
                 return;
             }
 
-            CollectCandidates(msg.TurnCount);
-            if (_candidateBuffer.Count == 0)
+            if (!IsCadenceTurn(msg.TurnCount))
+            {
+                return;
+            }
+
+            var candidates = _levelParams.Items;
+            if (candidates.Count == 0)
             {
                 return;
             }
 
             _activeCountsBuffer.Clear();
-            foreach (var c in _candidateBuffer)
+            foreach (var c in candidates)
             {
                 _activeCountsBuffer[c.Type.ToString()] = CountBalloonsWithItem(c.Type);
             }
 
-            var picked = _candidateBuffer.PickRandom(_activeCountsBuffer);
+            var picked = _levelParams.PickItemEntry(_activeCountsBuffer);
             if (picked == null || picked.Type == ItemType.None)
             {
                 return;
@@ -73,19 +77,12 @@ namespace BalloonParty.Item
             _eligibleBuffer[indexOf].Item.Value = picked.Type;
         }
 
-        // Items whose turn-check interval lands on this turn become drop candidates.
-        private void CollectCandidates(int turns)
+        // The level's shared item-drop cadence replaces the old per-item TurnCheckEvery catalog
+        // check — one shared frequency, item TYPE MIX decided by the weighted pick below.
+        private bool IsCadenceTurn(int turns)
         {
-            _candidateBuffer.Clear();
-            var items = _itemConfig.Items;
-            for (var i = 0; i < items.Count; i++)
-            {
-                var item = items[i];
-                if (item.TurnCheckEvery > 0 && turns % item.TurnCheckEvery == 0)
-                {
-                    _candidateBuffer.Add(item);
-                }
-            }
+            var cadence = _levelParams.ItemCadence;
+            return cadence > 0 && turns % cadence == 0;
         }
 
         // Newly-spawned balloons that can actually carry an item.
