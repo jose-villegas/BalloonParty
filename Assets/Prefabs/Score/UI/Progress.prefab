@@ -308,7 +308,7 @@ PrefabInstance:
     - target: {fileID: 6126167894985389105, guid: b37bdd2ccdda7451cbc85bfce0ae798d,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -30
+      value: -48
       objectReference: {fileID: 0}
     - target: {fileID: 6126167894985389105, guid: b37bdd2ccdda7451cbc85bfce0ae798d,
         type: 3}
@@ -554,6 +554,11 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2613889795244706835}
     m_Modifications:
+    - target: {fileID: 387903063726448322, guid: 1cac211ac1e014e3e8798de9e6e21d14,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 2001491795486438519, guid: 1cac211ac1e014e3e8798de9e6e21d14,
         type: 3}
       propertyPath: m_Pivot.x
@@ -654,10 +659,25 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5678341643197188688, guid: 1cac211ac1e014e3e8798de9e6e21d14,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 6388529315384946133, guid: 1cac211ac1e014e3e8798de9e6e21d14,
         type: 3}
       propertyPath: m_Name
       value: Hearts
+      objectReference: {fileID: 0}
+    - target: {fileID: 6456818997549116032, guid: 1cac211ac1e014e3e8798de9e6e21d14,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6614950008327001570, guid: 1cac211ac1e014e3e8798de9e6e21d14,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -822,6 +842,11 @@ PrefabInstance:
       propertyPath: m_LocalScale.x
       value: 1.5
       objectReference: {fileID: 0}
+    - target: {fileID: 2971959489512546955, guid: 37efd7135ce79cb41840a855dac524f8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3090582049335135641, guid: 37efd7135ce79cb41840a855dac524f8,
         type: 3}
       propertyPath: m_Color.b
@@ -861,6 +886,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_fontColor32.rgba
       value: 4294967295
+      objectReference: {fileID: 0}
+    - target: {fileID: 5391759244196419852, guid: 37efd7135ce79cb41840a855dac524f8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 5425669691414113702, guid: 37efd7135ce79cb41840a855dac524f8,
         type: 3}
@@ -961,6 +991,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5538330204591688362, guid: 37efd7135ce79cb41840a855dac524f8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8379860585052796174, guid: 37efd7135ce79cb41840a855dac524f8,
+        type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 8580660912564216598, guid: 37efd7135ce79cb41840a855dac524f8,
         type: 3}

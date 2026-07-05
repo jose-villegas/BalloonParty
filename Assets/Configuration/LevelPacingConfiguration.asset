@@ -14,19 +14,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.LevelPacingConfiguration
   _ranges:
   - _fromLevel: 0
-    _toLevel: 10
+    _toLevel: 1
     _parameters:
       _spawnLines:
-        _min: 1
-        _max: 2
-        _mode: 1
+        _min: 3
+        _max: 0
+        _mode: 0
       _boardLines:
-        _min: 2
-        _max: 2
+        _min: 8
+        _max: 8
         _mode: 0
       _itemCadence:
-        _min: 5
-        _max: 5
+        _min: 0
+        _max: 0
         _mode: 0
       _balloonWeights:
       - _type: 0
@@ -35,7 +35,7 @@ MonoBehaviour:
       _itemWeights: []
       _gridActorGates: []
       _allowedColorsMask: 1
-  - _fromLevel: 11
+  - _fromLevel: 2
     _toLevel: -1
     _parameters:
       _spawnLines:
