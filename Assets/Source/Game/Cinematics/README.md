@@ -17,7 +17,7 @@ The director does not know about level-ups, trails, or cameras. Producers define
 
 ## Level-Up Trail Flow
 
-`LevelUpCinematic` produces **two cinematics** per level-up, separated by the level-up popup (the runner's split-phase form: `TryBegin` … `EndPanIn` … gate … `TryBeginRestore`).
+`LevelUpCinematic` produces **one** cinematic per level-up (the runner's split-phase form: `TryBegin` … `EndPanIn` … gate). Dismissing the popup no longer plays its own tweened restore back to base framing — `Game/Level/LevelTransitionController.cs`'s Ascent takes the camera immediately, from wherever the pan-in left it, and folds the "return to base" into its own zoom-out/instant-snap sequence. This avoids two producers fighting over the shared `CinematicCameraRig` at once.
 
 ### Cinematic 1 — Pan-In (`CinematicState.LevelUpPanIn`)
 
@@ -36,13 +36,13 @@ The director does not know about level-ups, trails, or cameras. Producers define
 
 After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrailsMessage` — each `ColorProgressBar` drains its slider in sync — then spawns decorative `FlyingTrail` orbs from each bar to the glow fill in unscaled time. When all glow trails arrive, the level label updates. No cinematic state is active during this phase.
 
-### Cinematic 2 — Restore (`CinematicState.LevelUpRestore`)
+### Dismiss — hand-off to the Ascent
 
 | Step | What happens |
 |---|---|
 | **Trigger** | `LevelUpDismissedMessage` (player pressed Continue) |
-| **Prepare** | `TryBeginRestore()` → `BeginCinematic(LevelUpRestore)`, `Resume(Cinematic)`, `Time.timeScale` sampled from the restore segment's curve (popup's frozen 0 → 1), camera tweens back to base |
-| **End** | `OnRestoreComplete` → `RestoreCamera()` enforces exact base values, `EndCinematic()`, `NavigationState.Game` |
+| **`LevelUpCinematic.OnDismissed`** | `Resume(Cinematic)`, then finalizes its own session (`NavigationState.Game`) directly — no camera work, no `CinematicState.LevelUpRestore` (the state still exists in the enum/settings for serialized-index stability, but nothing plays it anymore) |
+| **`LevelTransitionController` (same message)** | Waits for `!Cinematic.IsPlaying` (safety net against any other cinematic still active), then for overflow drain, then runs the Ascent (`Game/Level/LevelTransitionController.cs`) |
 
 ### Pause Integration
 
@@ -67,16 +67,17 @@ After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrails
 
 | File | Role |
 |---|---|
-| `LevelUpCinematic.cs` | Level-up producer (plain C# `IStartable`): intercepts the tipping trail and puppets it along the pan-in curve (gameplay paused — timeScale untouched), split phases around the popup gate, restore samples its curve from the popup's frozen 0. **The loss wins**: the show is gated on `Navigation == Game` + `ILossForecast.LossImminent` at every commit point and aborts mid-pan-in if the loss becomes certain (queued overflow charges ≥ remaining HP) |
-| `CameraRigCinematic.cs` | **The reusable camera-rig cinematic runner** (plain C#): pan-in segment (per-tick timeScale drive + `Frame(focus, segment, dt)`) until an end condition, then a restore segment (timeScale eased to 1 from wherever it is + camera back to base). Owns begin/end pairing and teardown (`Abort`), guards concurrency via `CinematicDirector.TryBeginCinematic`. A producer = this + a trigger + a focus + an end condition |
+| `LevelUpCinematic.cs` | Level-up producer (plain C# `IStartable`): intercepts the tipping trail and puppets it along the pan-in curve (gameplay paused — timeScale untouched), ends on the popup gate. On dismiss it hands off directly to `NavigationState.Game` — no camera restore of its own; `LevelTransitionController` takes the camera from there. **The loss wins**: the show is gated on `Navigation == Game` + `ILossForecast.LossImminent` at every commit point and aborts mid-pan-in if the loss becomes certain (queued overflow charges ≥ remaining HP) |
+| `CameraRigCinematic.cs` | **The reusable camera-rig cinematic runner** (plain C#): pan-in segment (per-tick timeScale drive + `Frame(focus, segment, dt)`) until an end condition, then a restore segment (timeScale eased to 1 from wherever it is + camera back to base). Owns begin/end pairing and teardown (`Abort`), guards concurrency via `CinematicDirector.TryBeginCinematic`. A producer = this + a trigger + a focus + an end condition. `LevelAscendCinematic` does **not** use this runner (see below) |
 | `HeartDrainCinematic.cs` | Overflow heart-drain producer (plain C# `IStartable`): on the first `OverflowHeartRequestedMessage`, runs the runner with `HeartDrain`/`HeartDrainRestore`, a `HeartTrailFocus`, and "pile drained or run over" as the end condition. Neither loss-blocking (the 0-HP game-over still fires) nor shake-blocking (each heart launch punches the camera through the pan, unscaled so slow-mo can't stretch it) |
+| `LevelAscendCinematic.cs` | Level-transition producer (plain C#, not `IStartable` — constructed and driven directly by `Game/Level/LevelTransitionController.cs`): drives `CinematicCameraRig.PreparePanIn`/`Restore()` **directly**, bypassing `CameraRigCinematic`, because its restore must be an instant, imperceptible snap (the "covered swap") rather than a tween |
 | `CinematicDirector.cs` | Scene/state lifecycle (plain C#, Controller layer). `TryBeginCinematic` is the concurrency policy in one place (drop while busy); `BeginCinematic` switches state mid-cinematic (restore phases) |
 | `CinematicCameraRig.cs` | The **one shared** cinematic camera driver (DI singleton): `PreparePanIn(segment)` / `Frame(focus, segment, dt)` / `PrepareRestore` / `Restore`. Tuning comes per call from the active state's segment; the focus supplies what to frame |
 | `CinematicCameraView.cs` | Thin scene View holding the `Camera` the rig drives (lazy `Camera.main` fallback) — replaces the per-producer serialized camera refs and their per-scene prefab overrides |
 | `ICinematicFocus.cs` + `PointFocus` / `HeartTrailFocus` | What the camera frames each tick: one live point (level-up tipping trail — hard-clamped in frustum) or the heart trails — **centred on the oldest heart** (the one about to land and pop) with the bounding box spanning all of them (pre-clamped so new far trails slide in; a plain centroid drifted up toward the UI with every launch and pushed the pops off frame) |
 | `CinematicScene.cs` | Callback value object |
 | `Shared/GameState/Cinematic.cs` | Static reactive state (`Current`, `IsPlaying`, `Begin`, `End`) |
-| `Shared/GameState/CinematicState.cs` | Enum: `None`, `LevelUpPanIn`, `LevelUpRestore`, `HeartDrain`, `HeartDrainRestore` — identity only; behaviour and tuning live in `CinematicsSettings` |
+| `Shared/GameState/CinematicState.cs` | Enum: `None`, `LevelUpPanIn`, `LevelUpRestore`, `HeartDrain`, `HeartDrainRestore`, `LevelAscend` — identity only; behaviour and tuning live in `CinematicsSettings`. Values are append-only (never reordered/removed) since `CinematicsSettings._states` is a hand-authored array indexed by ordinal — `LevelUpRestore` is unused now but stays in place so its serialized index doesn't shift everything after it |
 | `Shared/GameState/CinematicTraits.cs` | `[Flags]` behavioural traits (`BlocksLoss`, `BlocksShake`); consumers query `ICinematicState.Has(trait)`. Level-up states declare both; `HeartDrain` declares none, so the 0-HP game-over fires and the camera shake punches through while it plays |
 | `Configuration/CinematicsSettings.cs` (SO + `ICinematicsSettings`) | **The single setup point for cinematics**: one `CinematicStateEntry` per `CinematicState` (`[EnumIndexed]` drawn), composing `Traits` + a **uniform camera-rig segment** (`CameraRigCinematicSettings`: `TimeScaleCurve` — whose last key is the segment duration — + zoom/pan/followSpeed) + capability blocks (`TrackedTrailSettings`). Restores are ordinary segments (curve ramps back to 1, zoom/pan 0), so there are no special restore fields; the heart-drain's restore is its own state (`HeartDrainRestore`). Field initializers carry the authored values, so a fresh instance equals the shipped asset. Producers keep only their scene `Camera` reference. Unmapped states throw; `CinematicsSettingsTests` walks the enum so a missing declaration fails CI |
 | `Shared/GameState/CinematicEndGate.cs` | `IReadyGate` — waits for cinematic state change |

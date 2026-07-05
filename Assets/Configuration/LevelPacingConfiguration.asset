@@ -55,13 +55,8 @@ MonoBehaviour:
         _weight: 1
         _maxCountOverride: 0
       _itemWeights: []
-      _gridActorGates:
-      - _type: 0
-        _count:
-          _min: 3
-          _max: 6
-          _mode: 2
-      _allowedColorsMask: -1
+      _gridActorGates: []
+      _allowedColorsMask: 7
   _customLevels: []
   _thresholdModifier:
     serializedVersion: 2

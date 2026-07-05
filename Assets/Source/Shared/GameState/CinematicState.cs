@@ -12,6 +12,10 @@ namespace BalloonParty.Shared.GameState
 
         // The heart-drain's return to normal speed — its own state (a restore is just another camera-rig
         // segment), appended so older serialized per-state arrays keep their indices.
-        HeartDrainRestore
+        HeartDrainRestore,
+
+        // The level-transition ascent: camera pans away from the board while it's re-populated for the
+        // new level, then snaps back once the reveal is ready.
+        LevelAscend
     }
 }

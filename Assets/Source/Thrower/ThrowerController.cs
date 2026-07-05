@@ -23,6 +23,7 @@ namespace BalloonParty.Thrower
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
+        private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly PauseService _pauseService;
         private readonly IObjectResolver _resolver;
         private readonly List<Vector3> _tracePoints = new();
@@ -52,6 +53,7 @@ namespace BalloonParty.Thrower
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ProjectileLoadedMessage> loadedPublisher,
             ISubscriber<RunResetMessage> resetSubscriber,
+            ISubscriber<BoardClearMessage> boardClearSubscriber,
             PauseService pauseService,
             ProjectilePositionProvider positionProvider)
         {
@@ -63,6 +65,7 @@ namespace BalloonParty.Thrower
             _destroyedSubscriber = destroyedSubscriber;
             _loadedPublisher = loadedPublisher;
             _resetSubscriber = resetSubscriber;
+            _boardClearSubscriber = boardClearSubscriber;
             _pauseService = pauseService;
             _positionProvider = positionProvider;
             _projectilePoolKey = settings.ProjectilePrefab.name;
@@ -82,6 +85,10 @@ namespace BalloonParty.Thrower
             // A restart resets every other system; swap the carried-over projectile for a fresh one
             // so its shield count (and position) start from the configured default.
             _resetSubscriber.Subscribe(_ => Reload());
+
+            // Also fires for a mid-game board clear (the level-transition Ascent) — the frozen
+            // projectile from the completed level is swapped for a fresh one before the reveal.
+            _boardClearSubscriber.Subscribe(_ => Reload());
 
             Navigation.Current
                 .Where(state => state == NavigationState.Game)

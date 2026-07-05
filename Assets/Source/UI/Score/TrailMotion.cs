@@ -9,5 +9,6 @@ namespace BalloonParty.UI.Score
     {
         Default = 0,
         Return = 1,
+        Fall = 2,
     }
 }

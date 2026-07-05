@@ -947,6 +947,48 @@ chain — **BubbleCluster** drifts to the *nearest* gap (stays close), **Unbreak
 
 ### 3b — the Ascent (level transition; spec = Part D above)
 
+**Status: mechanical backbone implemented (2026-07-05).** `dotnet build` (all 4 csproj) +
+`style_audit.py` clean; not yet committed, not yet run through the Test Runner or playtested.
+Done: `TrailMotion.Fall` enum member (data only — no curve styling wired yet, see below);
+`CinematicState.LevelAscend` + `CinematicsSettings` entry; `PauseSource.LevelTransition`;
+`GridSpawnerCoordinator.RunStagesAsync(predicate, ct)` (generalized past a single-stage filter so
+it stays correct if a `DynamicActors`-priority spawner is ever added); `ThrowerController` reloads
+on `BoardClearMessage` too (not a new public method — kept `Reload()` private and had the
+controller react to the same message the Ascent already publishes, avoiding a cross-`LifetimeScope`
+DI reach into `ThrowerLifetimeScope`); `PlayerHealthController` refills HP on `ScoreLevelUpMessage`;
+new `Game/Cinematics/LevelAscendCinematic.cs` (drives `CinematicCameraRig` directly —
+`PreparePanIn`/`Restore()` — bypassing `CameraRigCinematic`'s wrapper, whose restore is always
+tweened and can't do the instant covered-swap snap); new `Game/Level/LevelTransitionController.cs`
+orchestrating pause → overflow drain → ascend → `BoardClearMessage` → statics stage → instant
+restore → balloon stage → resume.
+
+**Fixed after first playtest report (2026-07-05):** the Ascent replaces `LevelUpRestore` per this
+plan's own "Restore choreography" decision above — the first pass didn't actually do that (it left
+`LevelUpCinematic.OnDismissed` calling `_cinematic.TryBeginRestore()`, so two producers fought over
+the same shared `CinematicCameraRig` at once: the Ascent's `PreparePanIn` killed the restore's
+in-flight camera tween and corrupted `CinematicDirector`'s active-cinematic bookkeeping, which left
+`PauseSource.LevelTransition` stuck and the thrower permanently locked). Fix: `LevelUpCinematic.
+OnDismissed` no longer calls `TryBeginRestore` — it just resumes `PauseSource.Cinematic` and hands
+off to `NavigationState.Game` directly; `LevelAscendCinematic.PreparePanIn` (called moments later)
+does the "snap to base then zoom out" itself, since `_hasBaseState` is still true from the pan-in.
+`CinematicState.LevelUpRestore` and its `CinematicsSettings` entry stay in the enum/array (removing
+them would shift every later ordinal's index in the hand-authored `CinematicsSettings.asset`) but
+nothing plays that state anymore. `LevelTransitionController.TransitionAsync` also now: waits for
+`!Cinematic.IsPlaying` before touching the rig (defense in depth if some other cinematic is
+active), wraps the whole sequence in `try/finally` so `PauseSource.LevelTransition` always resumes
+even if a step throws, and `LevelAscendCinematic` tracks whether it actually won
+`TryBeginCinematic` so `EndAscend`/the rig calls no-op instead of firing blind when it didn't.
+
+**Deliberately deferred (art/in-editor dependent, not blocking):** the `LevelAscend` camera segment
+ships with placeholder tuning (zoom-out over 1s) — Part D's "pan up into a sky band with cloud
+sweep VFX" needs an artist pass in the `CinematicsSettings` asset and possibly new VFX, same as
+every other cinematic's curves in this plan. `TrailMotion.Fall` has no curve pair authored on
+`FlyingTrail`/`TrailSpawner` yet, and the pop-out's "cosmetic falling trails" are not wired to
+`BoardClearMessage` at all — the mid-game clear today is instant/silent, matching the existing
+full-run-reset behavior. No EditMode test for `LevelTransitionController`'s sequencing yet (only
+`PlayerHealthControllerTests.LevelUp_RestoresStartingHitPoints` was added) — it's UniTask-async and
+message-driven throughout, so it's testable with substituted seams, just not done in this pass.
+
 Smaller code surface but cinematic + in-editor heavy. Files:
 
 - **`UI/Score/TrailMotion.cs`** — add `Fall` member; style it in the per-motion styling switch

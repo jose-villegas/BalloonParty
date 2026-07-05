@@ -25,18 +25,22 @@ namespace BalloonParty.Game.Health
 
         private readonly IGameConfiguration _config;
         private readonly ISubscriber<SpawnBlockedMessage> _spawnBlockedSubscriber;
+        private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly IPublisher<EndRunRequestedMessage> _endRunPublisher;
         private readonly ReactiveProperty<int> _current = new();
 
         private IDisposable _subscription;
+        private IDisposable _levelUpSubscription;
 
         public PlayerHealthController(
             IGameConfiguration config,
             ISubscriber<SpawnBlockedMessage> spawnBlockedSubscriber,
+            ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             IPublisher<EndRunRequestedMessage> endRunPublisher)
         {
             _config = config;
             _spawnBlockedSubscriber = spawnBlockedSubscriber;
+            _levelUpSubscriber = levelUpSubscriber;
             _endRunPublisher = endRunPublisher;
         }
 
@@ -49,6 +53,7 @@ namespace BalloonParty.Game.Health
         {
             _current.Value = ClampedStartingHitPoints();
             _subscription = _spawnBlockedSubscriber.Subscribe(_ => Damage(1));
+            _levelUpSubscription = _levelUpSubscriber.Subscribe(_ => _current.Value = ClampedStartingHitPoints());
         }
 
         public void ResetRun(int generation)
@@ -59,6 +64,7 @@ namespace BalloonParty.Game.Health
         public void Dispose()
         {
             _subscription?.Dispose();
+            _levelUpSubscription?.Dispose();
         }
 
         private void Damage(int amount)

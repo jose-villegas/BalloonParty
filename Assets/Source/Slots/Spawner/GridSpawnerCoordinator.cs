@@ -44,6 +44,21 @@ namespace BalloonParty.Slots.Spawner
             RunGroupsAsync(_cts.Token).Forget();
         }
 
+        // Runs only the stages matching the predicate, in priority order — used by the level-transition
+        // Ascent to repopulate statics and balloons as two sequenced beats instead of one full pass.
+        internal async UniTask RunStagesAsync(Func<SpawnStage, bool> predicate, CancellationToken ct)
+        {
+            var groups = _spawners
+                .Where(s => predicate(s.SpawnPriority))
+                .GroupBy(s => s.SpawnPriority)
+                .OrderBy(g => (int)g.Key);
+
+            foreach (var group in groups)
+            {
+                await UniTask.WhenAll(group.Select(s => s.SpawnAsync(ct)));
+            }
+        }
+
         private async UniTaskVoid CoordinateAsync(CancellationToken ct)
         {
             await _gate.WaitAsync(ct);

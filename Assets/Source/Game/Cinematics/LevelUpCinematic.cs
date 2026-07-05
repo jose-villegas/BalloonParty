@@ -205,11 +205,14 @@ namespace BalloonParty.Game.Cinematics
             EndPanIn();
         }
 
+        // No tweened restore anymore — LevelAscend takes over the camera immediately on dismiss (the
+        // Ascent's own zoom-out snaps it to base framing as its first step), so this just hands back
+        // to Game without animating the camera itself.
         private void OnDismissed()
         {
             DisposeSessionSubscription();
             _pauseService.Resume(PauseSource.Cinematic);
-            _cinematic.TryBeginRestore();
+            OnCinematicEnded();
         }
 
         private void OnCinematicEnded()

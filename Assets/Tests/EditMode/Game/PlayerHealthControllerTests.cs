@@ -16,6 +16,8 @@ namespace BalloonParty.Tests.Game
         private IGameConfiguration _config;
         private ISubscriber<SpawnBlockedMessage> _spawnBlockedSubscriber;
         private IMessageHandler<SpawnBlockedMessage> _spawnBlockedHandler;
+        private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
+        private IMessageHandler<ScoreLevelUpMessage> _levelUpHandler;
         private IPublisher<EndRunRequestedMessage> _endRunPublisher;
 
         private PlayerHealthController _controller;
@@ -31,6 +33,13 @@ namespace BalloonParty.Tests.Game
                 .Subscribe(
                     Arg.Do<IMessageHandler<SpawnBlockedMessage>>(h => _spawnBlockedHandler = h),
                     Arg.Any<MessageHandlerFilter<SpawnBlockedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
+            _levelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
+            _levelUpSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<ScoreLevelUpMessage>>(h => _levelUpHandler = h),
+                    Arg.Any<MessageHandlerFilter<ScoreLevelUpMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
             _endRunPublisher = Substitute.For<IPublisher<EndRunRequestedMessage>>();
@@ -111,9 +120,20 @@ namespace BalloonParty.Tests.Game
             _spawnBlockedHandler.Handle(new SpawnBlockedMessage(0, default));
         }
 
+        [Test]
+        public void LevelUp_RestoresStartingHitPoints()
+        {
+            Block();
+            Block();
+
+            _levelUpHandler.Handle(new ScoreLevelUpMessage(1));
+
+            Assert.AreEqual(StartingHitPoints, _controller.Current.Value);
+        }
+
         private PlayerHealthController BuildController()
         {
-            return new PlayerHealthController(_config, _spawnBlockedSubscriber, _endRunPublisher);
+            return new PlayerHealthController(_config, _spawnBlockedSubscriber, _levelUpSubscriber, _endRunPublisher);
         }
     }
 }

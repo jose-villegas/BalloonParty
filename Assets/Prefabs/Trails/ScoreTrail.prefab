@@ -103,7 +103,6 @@ GameObject:
   - component: {fileID: 1648295896144469879}
   - component: {fileID: 1827487983935383960}
   - component: {fileID: 1429749022553535108}
-  - component: {fileID: 7247416794277503102}
   m_Layer: 7
   m_Name: ScoreTrail
   m_TagString: Untagged
@@ -406,27 +405,36 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     OverrideColor: 0
-    Color: {r: 0, g: 0, b: 0, a: 0}
---- !u!114 &7247416794277503102
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6940768656151960116}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 279681f4ec9aa4680a01fe0a6bec0951, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.Rendering.SpriteShadowBaker
-  _shadowColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.75}
-  _shadowOffset: {x: 0.04, y: -0.04}
-  _blurRadius: 0.03
-  _resolutionMultiplier: 2
-  _blurPasses: 3
-  _replaceShadowMaterials: 1
-  _replacementMaterial: {fileID: 0}
-  _shadowChild: {fileID: 8734188551054856876}
+    Gradient:
+      serializedVersion: 2
+      key0: {r: 1, g: 1, b: 1, a: 1}
+      key1: {r: 1, g: 1, b: 1, a: 1}
+      key2: {r: 0, g: 0, b: 0, a: 0}
+      key3: {r: 0, g: 0, b: 0, a: 0}
+      key4: {r: 0, g: 0, b: 0, a: 0}
+      key5: {r: 0, g: 0, b: 0, a: 0}
+      key6: {r: 0, g: 0, b: 0, a: 0}
+      key7: {r: 0, g: 0, b: 0, a: 0}
+      ctime0: 0
+      ctime1: 65535
+      ctime2: 0
+      ctime3: 0
+      ctime4: 0
+      ctime5: 0
+      ctime6: 0
+      ctime7: 0
+      atime0: 0
+      atime1: 65535
+      atime2: 0
+      atime3: 0
+      atime4: 0
+      atime5: 0
+      atime6: 0
+      atime7: 0
+      m_Mode: 0
+      m_ColorSpace: -1
+      m_NumColorKeys: 2
+      m_NumAlphaKeys: 2
 --- !u!1 &7917564195754785462
 GameObject:
   m_ObjectHideFlags: 0

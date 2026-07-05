@@ -66,6 +66,17 @@ namespace BalloonParty.Configuration
                     panWeight: 0f,
                     followSpeed: 2f),
                 new TrackedTrailSettings()),
+
+            // LevelAscend — camera zooms out over 1s while the board is re-populated off-screen, then
+            // snaps back instantly (Restore()) once the new level's actors are placed.
+            new(
+                CinematicTraits.BlocksLoss | CinematicTraits.BlocksShake,
+                new CameraRigCinematicSettings(
+                    new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(1f, 1f)),
+                    zoomAmount: -4f,
+                    panWeight: 0f,
+                    followSpeed: 0f),
+                new TrackedTrailSettings()),
         };
 
         private void OnValidate()
