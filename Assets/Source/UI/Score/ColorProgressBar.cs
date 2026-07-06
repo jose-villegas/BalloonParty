@@ -182,7 +182,7 @@ namespace BalloonParty.UI.Score
 
         private bool IsColorActive()
         {
-            var allowed = _levelParams.AllowedColors;
+            var allowed = _levelParams.Current.AllowedColors;
             for (var i = 0; i < allowed.Count; i++)
             {
                 if (allowed[i] == _colorConfig.Name)

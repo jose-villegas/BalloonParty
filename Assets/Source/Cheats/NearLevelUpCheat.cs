@@ -36,7 +36,7 @@ namespace BalloonParty.Cheats
         public void Execute()
         {
             var oneBeforeRequired = _levelParams.PointsRequiredForLevel(_scoreController.Level.Value + 1) - 3;
-            foreach (var colorName in _levelParams.AllowedColors)
+            foreach (var colorName in _levelParams.Current.AllowedColors)
             {
                 ScoreCheatHelper.FillColor(_palette.GetEntry(colorName), oneBeforeRequired, _scoreController, _hitDispatcher);
             }

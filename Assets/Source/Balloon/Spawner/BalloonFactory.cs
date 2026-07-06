@@ -68,8 +68,8 @@ namespace BalloonParty.Balloon.Spawner
             var view = _poolManager.Get<BalloonView>(poolKey);
             view.transform.position = spawnPath[0];
 
-            var model = BalloonModelFactory.Create(entry, _palette, _levelParams.AllowedColors);
-            view.Variant.Initialize(model, _levelParams.AllowedColorsMask);
+            var model = BalloonModelFactory.Create(entry, _palette, _levelParams.Current.AllowedColors);
+            view.Variant.Initialize(model, _levelParams.Current.AllowedColorsMask);
 
             var controller = new BalloonController(
                 model, view, poolKey, onReturned, entry.HitVfxOverrides, _controllerContext);

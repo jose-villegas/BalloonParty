@@ -129,7 +129,7 @@ namespace BalloonParty.Balloon.Spawner
 
         private async UniTask PrewarmAsync(CancellationToken ct)
         {
-            var totalSlots = _grid.Columns * _levelParams.BoardLines;
+            var totalSlots = _grid.Columns * _levelParams.Current.BoardLines;
 
             foreach (var entry in _balloonsConfig.Entries)
             {
@@ -149,7 +149,7 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            SpawnLinesWithDelayAsync(_levelParams.SpawnLines, _cts.Token, _generation).Forget();
+            SpawnLinesWithDelayAsync(_levelParams.Current.SpawnLines, _cts.Token, _generation).Forget();
         }
 
         private void OnSpawnLinesRequested(int lineCount)
@@ -166,7 +166,7 @@ namespace BalloonParty.Balloon.Spawner
         private void PopulateInitialGrid()
         {
             // The initial grid starts empty and is sized to fit, so it never rejects a balloon.
-            for (var i = 0; i < _levelParams.BoardLines; i++)
+            for (var i = 0; i < _levelParams.Current.BoardLines; i++)
             {
                 SpawnLineInternal(allowReject: false);
             }
@@ -186,7 +186,7 @@ namespace BalloonParty.Balloon.Spawner
 
         private void SpawnBalloon(Vector2Int slot)
         {
-            var entry = _levelParams.PickBalloonEntry(_activeCounts);
+            var entry = _levelParams.Current.PickBalloonEntry(_activeCounts);
             if (entry == null)
             {
                 Debug.LogWarning(

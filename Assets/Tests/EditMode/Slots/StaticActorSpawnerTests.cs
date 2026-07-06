@@ -10,6 +10,7 @@ using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
 using BalloonParty.Configuration.GridActors;
+using BalloonParty.Configuration.Level;
 
 namespace BalloonParty.Tests.Slots
 {
@@ -82,7 +83,9 @@ namespace BalloonParty.Tests.Slots
         {
             var gridActorConfig = CreateGridActorConfig();
             var levelParams = Substitute.For<IActiveLevelParameters>();
-            levelParams.TryGetGridActorCount(Arg.Any<GridActorType>(), out Arg.Any<int>()).Returns(false);
+            var current = Substitute.For<ILevelParameters>();
+            levelParams.Current.Returns(current);
+            current.TryGetGridActorCount(Arg.Any<GridActorType>(), out Arg.Any<int>()).Returns(false);
 
             var spawner = new StaticActorSpawner(_grid, gridActorConfig, levelParams);
             spawner.SpawnStaticActors();
@@ -93,7 +96,9 @@ namespace BalloonParty.Tests.Slots
         private static IActiveLevelParameters CreateLevelParams(GridActorType gatedType, int count)
         {
             var levelParams = Substitute.For<IActiveLevelParameters>();
-            levelParams
+            var current = Substitute.For<ILevelParameters>();
+            levelParams.Current.Returns(current);
+            current
                 .TryGetGridActorCount(gatedType, out Arg.Any<int>())
                 .Returns(ci =>
                 {

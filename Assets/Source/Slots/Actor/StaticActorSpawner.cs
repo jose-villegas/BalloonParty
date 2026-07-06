@@ -90,7 +90,7 @@ namespace BalloonParty.Slots.Actor
                     break;
                 }
 
-                if (!_levelParams.TryGetGridActorCount(entry.ActorType, out var levelCount))
+                if (!_levelParams.Current.TryGetGridActorCount(entry.ActorType, out var levelCount))
                 {
                     // Absent from this level's range — the type gate (mirrors the balloon gate).
                     continue;

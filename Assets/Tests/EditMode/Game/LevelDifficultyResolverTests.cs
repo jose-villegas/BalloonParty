@@ -27,7 +27,6 @@ namespace BalloonParty.Tests.Game
         private ILevelPacingConfiguration _pacing;
         private IBalloonsConfiguration _balloonsConfig;
         private IItemConfiguration _itemConfig;
-        private IGameConfiguration _gameConfig;
         private IGamePalette _palette;
         private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private IMessageHandler<ScoreLevelUpMessage> _levelUpHandler;
@@ -42,9 +41,6 @@ namespace BalloonParty.Tests.Game
             _balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             _itemConfig = Substitute.For<IItemConfiguration>();
             _itemConfig.Items.Returns(new List<ItemSettings>());
-
-            _gameConfig = Substitute.For<IGameConfiguration>();
-            _gameConfig.PointsRequiredForLevel(Arg.Any<int>()).Returns(100);
 
             _palette = Substitute.For<IGamePalette>();
             _palette.ColorNamesForMask(Arg.Any<int>()).Returns(new List<string>());
@@ -78,17 +74,25 @@ namespace BalloonParty.Tests.Game
             var resolver = BuildResolver();
             resolver.Start();
 
-            Assert.AreSame(expected, resolver.AllowedColors);
+            Assert.AreSame(expected, resolver.Current.AllowedColors);
         }
 
         [Test]
-        public void PointsRequiredForLevel_ComposesFormulaWithModifier()
+        public void PointsRequiredForLevel_ScalesWithThresholdModifier()
         {
-            _pacing.ThresholdModifier(5).Returns(0.5f);
+            // The base curve is private math now; assert the resolver composes it with the modifier by
+            // checking the result scales with the modifier (doubling it doubles the requirement) rather
+            // than mocking a base value.
             SetSingleRange(1, 0, BalloonType.Simple, 1f);
-            var resolver = BuildResolver();
 
-            Assert.AreEqual(50, resolver.PointsRequiredForLevel(5));
+            _pacing.ThresholdModifier(5).Returns(1f);
+            var baseline = BuildResolver().PointsRequiredForLevel(5);
+
+            _pacing.ThresholdModifier(5).Returns(2f);
+            var doubled = BuildResolver().PointsRequiredForLevel(5);
+
+            Assert.Greater(baseline, 0);
+            Assert.AreEqual(baseline * 2, doubled);
         }
 
         [Test]
@@ -105,7 +109,7 @@ namespace BalloonParty.Tests.Game
             var activeCounts = new Dictionary<string, int>();
             for (var i = 0; i < 50; i++)
             {
-                var picked = resolver.PickBalloonEntry(activeCounts);
+                var picked = resolver.Current.PickBalloonEntry(activeCounts);
                 Assert.AreSame(simple, picked, "Tough is absent from the range's weighted set and must never be picked.");
             }
         }
@@ -122,7 +126,7 @@ namespace BalloonParty.Tests.Game
 
             var activeCounts = new Dictionary<string, int> { [entry.PoolKey] = 2 };
 
-            Assert.IsNull(resolver.PickBalloonEntry(activeCounts));
+            Assert.IsNull(resolver.Current.PickBalloonEntry(activeCounts));
         }
 
         [Test]
@@ -139,13 +143,13 @@ namespace BalloonParty.Tests.Game
             var resolver = BuildResolver();
             resolver.Start();
 
-            Assert.AreEqual(1, resolver.SpawnLines);
-            Assert.AreSame(early, resolver.PickBalloonEntry(new Dictionary<string, int>()));
+            Assert.AreEqual(1, resolver.Current.SpawnLines);
+            Assert.AreSame(early, resolver.Current.PickBalloonEntry(new Dictionary<string, int>()));
 
             _levelUpHandler.Handle(new ScoreLevelUpMessage(5));
 
-            Assert.AreEqual(3, resolver.SpawnLines);
-            Assert.AreSame(late, resolver.PickBalloonEntry(new Dictionary<string, int>()));
+            Assert.AreEqual(3, resolver.Current.SpawnLines);
+            Assert.AreSame(late, resolver.Current.PickBalloonEntry(new Dictionary<string, int>()));
         }
 
         [Test]
@@ -161,11 +165,11 @@ namespace BalloonParty.Tests.Game
             var resolver = BuildResolver();
             resolver.Start();
             _levelUpHandler.Handle(new ScoreLevelUpMessage(5));
-            Assert.AreEqual(9, resolver.SpawnLines);
+            Assert.AreEqual(9, resolver.Current.SpawnLines);
 
             resolver.ResetRun(2);
 
-            Assert.AreEqual(1, resolver.SpawnLines);
+            Assert.AreEqual(1, resolver.Current.SpawnLines);
         }
 
         [Test]
@@ -178,7 +182,7 @@ namespace BalloonParty.Tests.Game
             var resolver = BuildResolver();
             resolver.Start();
 
-            Assert.IsTrue(resolver.TryGetGridActorCount(GridActorType.Puff, out var count));
+            Assert.IsTrue(resolver.Current.TryGetGridActorCount(GridActorType.Puff, out var count));
             Assert.AreEqual(5, count);
         }
 
@@ -192,7 +196,7 @@ namespace BalloonParty.Tests.Game
             var resolver = BuildResolver();
             resolver.Start();
 
-            Assert.IsFalse(resolver.TryGetGridActorCount(GridActorType.Bush, out _));
+            Assert.IsFalse(resolver.Current.TryGetGridActorCount(GridActorType.Bush, out _));
         }
 
         [Test]
@@ -204,7 +208,7 @@ namespace BalloonParty.Tests.Game
             var resolver = BuildResolver();
             resolver.Start();
 
-            Assert.AreEqual(4, resolver.ItemCadence);
+            Assert.AreEqual(4, resolver.Current.ItemCadence);
         }
 
         [Test]
@@ -220,7 +224,7 @@ namespace BalloonParty.Tests.Game
             var resolver = BuildResolver();
             resolver.Start();
 
-            CollectionAssert.AreEqual(new[] { bomb }, resolver.Items);
+            CollectionAssert.AreEqual(new[] { bomb }, resolver.Current.Items);
         }
 
         [Test]
@@ -239,7 +243,7 @@ namespace BalloonParty.Tests.Game
             var activeCounts = new Dictionary<string, int>();
             for (var i = 0; i < 50; i++)
             {
-                var picked = resolver.PickItemEntry(activeCounts);
+                var picked = resolver.Current.PickItemEntry(activeCounts);
                 Assert.AreSame(bomb, picked, "Shield is absent from the range's weighted set and must never be picked.");
             }
         }
@@ -260,7 +264,7 @@ namespace BalloonParty.Tests.Game
 
             var activeCounts = new Dictionary<string, int> { [ItemType.Bomb.ToString()] = 2 };
 
-            Assert.IsNull(resolver.PickItemEntry(activeCounts));
+            Assert.IsNull(resolver.Current.PickItemEntry(activeCounts));
         }
 
         [Test]
@@ -276,13 +280,13 @@ namespace BalloonParty.Tests.Game
             for (var level = 1; level <= 50; level++)
             {
                 Assert.DoesNotThrow(() => _levelUpHandler.Handle(new ScoreLevelUpMessage(level)));
-                Assert.IsNotNull(resolver.PickBalloonEntry(new Dictionary<string, int>()));
+                Assert.IsNotNull(resolver.Current.PickBalloonEntry(new Dictionary<string, int>()));
             }
         }
 
         private LevelDifficultyResolver BuildResolver()
         {
-            return new LevelDifficultyResolver(_pacing, _balloonsConfig, _itemConfig, _gameConfig, _palette, _levelUpSubscriber);
+            return new LevelDifficultyResolver(_pacing, _balloonsConfig, _itemConfig, _palette, _levelUpSubscriber);
         }
 
         private void SetSingleRange(

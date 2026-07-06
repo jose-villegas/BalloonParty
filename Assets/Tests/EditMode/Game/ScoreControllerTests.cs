@@ -17,6 +17,7 @@ using NUnit.Framework;
 using UniRx;
 using UnityEngine;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Configuration.Level;
 
 namespace BalloonParty.Tests.Game
 {
@@ -27,6 +28,7 @@ namespace BalloonParty.Tests.Game
         private const string Blue = "Blue";
 
         private IActiveLevelParameters _levelParams;
+        private ILevelParameters _current;
         private IGamePalette _palette;
         private IPublisher<ScorePointMessage> _scoredPublisher;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
@@ -43,8 +45,10 @@ namespace BalloonParty.Tests.Game
             ClearScorePrefs();
 
             _levelParams = Substitute.For<IActiveLevelParameters>();
+            _current = Substitute.For<ILevelParameters>();
+            _levelParams.Current.Returns(_current);
             _levelParams.PointsRequiredForLevel(Arg.Any<int>()).Returns(10);
-            _levelParams.AllowedColors.Returns(new List<string> { Red, Blue });
+            _current.AllowedColors.Returns(new List<string> { Red, Blue });
 
             _palette = Substitute.For<IGamePalette>();
             var colors = new List<PaletteEntry> { CreatePaletteEntry(Red), CreatePaletteEntry(Blue) };
@@ -237,7 +241,7 @@ namespace BalloonParty.Tests.Game
         public void CheckLevelUp_ColorGatedOutOfLevel_IsNotRequired()
         {
             // Blue is gated out of the active range — only Red needs to hit threshold.
-            _levelParams.AllowedColors.Returns(new List<string> { Red });
+            _current.AllowedColors.Returns(new List<string> { Red });
             _levelParams.PointsRequiredForLevel(2).Returns(5);
 
             for (var i = 1; i <= 5; i++)
@@ -376,7 +380,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void WillLevelUp_ColorGatedOutOfLevel_IsNotRequired()
         {
-            _levelParams.AllowedColors.Returns(new List<string> { Red });
+            _current.AllowedColors.Returns(new List<string> { Red });
             _levelParams.PointsRequiredForLevel(2).Returns(1);
 
             FirePop(Red);

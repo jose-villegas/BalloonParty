@@ -106,7 +106,7 @@ namespace BalloonParty.Game.Score
         {
             var required = _levelParams.PointsRequiredForLevel(_level.Value + 1);
 
-            foreach (var color in _levelParams.AllowedColors)
+            foreach (var color in _levelParams.Current.AllowedColors)
             {
                 if (_projectedProgress.GetValueOrDefault(color) < required)
                 {
@@ -133,7 +133,7 @@ namespace BalloonParty.Game.Score
 
         private bool AllColorsConfirmed(int required)
         {
-            foreach (var color in _levelParams.AllowedColors)
+            foreach (var color in _levelParams.Current.AllowedColors)
             {
                 if (_levelProgress.GetValueOrDefault(color) < required)
                 {
@@ -162,7 +162,7 @@ namespace BalloonParty.Game.Score
 
             // Snapshot before publishing — the resolver reacts to this same message and may
             // re-resolve AllowedColors to the new level before other subscribers read it.
-            var completedColors = _levelParams.AllowedColors;
+            var completedColors = _levelParams.Current.AllowedColors;
 
             _level.Value++;
             _levelScored = true;

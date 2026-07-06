@@ -158,7 +158,7 @@ namespace BalloonParty.Balloon.Spawner
         {
             var queue = QueueFor(col);
             var rowOffset = queue.Count;
-            var entry = _levelParams.PickBalloonEntry(activeCounts);
+            var entry = _levelParams.Current.PickBalloonEntry(activeCounts);
 
             if (entry == null)
             {
@@ -168,8 +168,8 @@ namespace BalloonParty.Balloon.Spawner
             }
 
             var view = _poolManager.Get<BalloonView>(entry.PoolKey);
-            var model = BalloonModelFactory.Create(entry, _palette, _levelParams.AllowedColors);
-            view.Variant.Initialize(model, _levelParams.AllowedColorsMask);
+            var model = BalloonModelFactory.Create(entry, _palette, _levelParams.Current.AllowedColors);
+            view.Variant.Initialize(model, _levelParams.Current.AllowedColorsMask);
             view.Bind(model);
 
             // Enter one row below the target so the tick eases it up into place.

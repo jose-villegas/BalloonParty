@@ -51,11 +51,11 @@ namespace BalloonParty.Item
             AnimationCurve weights;
             if (msg.IsInitialSpawn)
             {
-                weights = _levelParams.InitialItemCountWeights;
+                weights = _levelParams.Current.InitialItemCountWeights;
             }
             else if (IsCadenceTurn(msg.TurnCount))
             {
-                weights = _levelParams.ItemCountWeights;
+                weights = _levelParams.Current.ItemCountWeights;
             }
             else
             {
@@ -76,7 +76,7 @@ namespace BalloonParty.Item
         // against the pre-existing board.
         private void AssignItems(IReadOnlyList<IBalloonModel> newBalloons, int count)
         {
-            var candidates = _levelParams.Items;
+            var candidates = _levelParams.Current.Items;
             if (candidates.Count == 0)
             {
                 return;
@@ -97,7 +97,7 @@ namespace BalloonParty.Item
             var grants = Mathf.Min(count, _eligibleBuffer.Count);
             for (var n = 0; n < grants; n++)
             {
-                var picked = _levelParams.PickItemEntry(_activeCountsBuffer);
+                var picked = _levelParams.Current.PickItemEntry(_activeCountsBuffer);
                 if (picked == null || picked.Type == ItemType.None)
                 {
                     // Every candidate is at its cap — no further grants possible this batch.
@@ -154,7 +154,7 @@ namespace BalloonParty.Item
         // Replaces the old per-item TurnCheckEvery catalog check with one shared frequency.
         private bool IsCadenceTurn(int turns)
         {
-            var cadence = _levelParams.ItemCadence;
+            var cadence = _levelParams.Current.ItemCadence;
             return cadence > 0 && turns % cadence == 0;
         }
 

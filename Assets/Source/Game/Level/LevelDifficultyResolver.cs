@@ -4,7 +4,6 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared;
-using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor.Archetype;
 using MessagePipe;
@@ -14,7 +13,6 @@ using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
-using BalloonParty.Configuration.Ranges;
 
 namespace BalloonParty.Game.Level
 {
@@ -22,48 +20,36 @@ namespace BalloonParty.Game.Level
     ///     Resolves and caches the live per-level difficulty mix from <see cref="ILevelPacingConfiguration" />.
     ///     Bridges range weights onto the catalog (<see cref="IBalloonsConfiguration" />): a range gates
     ///     which types are active and their relative weight; prefab/pool/HP/VFX still come from the catalog.
+    ///     The resolved mix plus the bridged pick lists live on the produced <see cref="Current" />; this
+    ///     type just resolves, bridges, and answers the cross-level <see cref="PointsRequiredForLevel" />.
     /// </summary>
     internal class LevelDifficultyResolver : IStartable, IDisposable, IRunResettable, IActiveLevelParameters
     {
         private readonly ILevelPacingConfiguration _pacing;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly IItemConfiguration _itemConfig;
-        private readonly IGameConfiguration _gameConfig;
         private readonly IGamePalette _palette;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
-        private readonly List<ResolvedBalloonEntry> _pickList = new();
-        private readonly List<ResolvedItemEntry> _itemPickList = new();
-        private readonly List<ItemSettings> _itemsList = new();
 
         private System.Random _rng = new();
         private LevelParameters _current = new();
-        private IReadOnlyList<string> _allowedColorNames = Array.Empty<string>();
         private IDisposable _subscription;
 
         public LevelDifficultyResolver(
             ILevelPacingConfiguration pacing,
             IBalloonsConfiguration balloonsConfig,
             IItemConfiguration itemConfig,
-            IGameConfiguration gameConfig,
             IGamePalette palette,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber)
         {
             _pacing = pacing;
             _balloonsConfig = balloonsConfig;
             _itemConfig = itemConfig;
-            _gameConfig = gameConfig;
             _palette = palette;
             _levelUpSubscriber = levelUpSubscriber;
         }
 
-        public int SpawnLines => _current.SpawnLines;
-        public int BoardLines => _current.BoardLines;
-        public int ItemCadence => _current.ItemCadence;
-        public AnimationCurve InitialItemCountWeights => _current.InitialItemCountWeights;
-        public AnimationCurve ItemCountWeights => _current.ItemCountWeights;
-        public IReadOnlyList<ItemSettings> Items => _itemsList;
-        public IReadOnlyList<string> AllowedColors => _allowedColorNames;
-        public int AllowedColorsMask => _current.AllowedColorsMask;
+        public ILevelParameters Current => _current;
 
         // Re-resolves before GridSpawnerCoordinator respawns at Respawn (120), so a restart's first
         // spawn already sees level-1 parameters instead of the dead run's.
@@ -86,42 +72,32 @@ namespace BalloonParty.Game.Level
             _subscription?.Dispose();
         }
 
+        // The base points curve composed with the level's pacing threshold modifier. The curve lives
+        // here (private, pure math) rather than on the config: the "real" requirement is always the
+        // modified value, so exposing the raw base invited using it as if it were the threshold.
         public int PointsRequiredForLevel(int level)
         {
-            return Mathf.RoundToInt(_gameConfig.PointsRequiredForLevel(level) * _pacing.ThresholdModifier(level));
+            return Mathf.RoundToInt(BasePointsForLevel(level) * _pacing.ThresholdModifier(level));
         }
 
-        public BalloonPrefabEntry PickBalloonEntry(IReadOnlyDictionary<string, int> activeCounts)
+        private static int BasePointsForLevel(int level)
         {
-            return _pickList.PickRandom(activeCounts)?.Source;
-        }
-
-        public ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts)
-        {
-            return _itemPickList.PickRandom(activeCounts)?.Source;
-        }
-
-        public bool TryGetGridActorCount(GridActorType type, out int count)
-        {
-            foreach (var gate in _current.GridActorGates)
-            {
-                if (gate.Type == type)
-                {
-                    count = gate.Count;
-                    return true;
-                }
-            }
-
-            count = 0;
-            return false;
+            return (int)((Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI))) + 25f);
         }
 
         private void ResolveFor(int level)
         {
             _current = FindRange(level)?.Resolve(PositionOf(level), _rng) ?? FallbackParameters(level);
-            RebuildPickList(_current);
-            RebuildItemPickList(_current);
-            _allowedColorNames = _palette.ColorNamesForMask(_current.AllowedColorsMask);
+
+            var itemPickList = new List<ResolvedItemEntry>();
+            var activeItems = new List<ItemSettings>();
+            BuildItemPickList(_current, itemPickList, activeItems);
+
+            _current.BindResolved(
+                BuildBalloonPickList(_current),
+                itemPickList,
+                activeItems,
+                _palette.ColorNamesForMask(_current.AllowedColorsMask));
         }
 
         private RangedLevelParameters FindRange(int level)
@@ -158,9 +134,9 @@ namespace BalloonParty.Game.Level
             return new LevelParameters();
         }
 
-        private void RebuildPickList(LevelParameters parameters)
+        private List<ResolvedBalloonEntry> BuildBalloonPickList(LevelParameters parameters)
         {
-            _pickList.Clear();
+            var pickList = new List<ResolvedBalloonEntry>();
 
             foreach (var catalogEntry in _balloonsConfig.Entries)
             {
@@ -171,8 +147,10 @@ namespace BalloonParty.Game.Level
                 }
 
                 var maxCount = rangeWeight.MaxCountOverride > 0 ? rangeWeight.MaxCountOverride : catalogEntry.MaxCount;
-                _pickList.Add(new ResolvedBalloonEntry(catalogEntry, catalogEntry.Weight * rangeWeight.Weight, maxCount));
+                pickList.Add(new ResolvedBalloonEntry(catalogEntry, catalogEntry.Weight * rangeWeight.Weight, maxCount));
             }
+
+            return pickList;
         }
 
         private static bool TryFindActiveWeight(BalloonTypeWeight[] weights, BalloonType type, out BalloonTypeWeight found)
@@ -190,11 +168,9 @@ namespace BalloonParty.Game.Level
             return false;
         }
 
-        private void RebuildItemPickList(LevelParameters parameters)
+        private void BuildItemPickList(
+            LevelParameters parameters, List<ResolvedItemEntry> pickList, List<ItemSettings> activeItems)
         {
-            _itemPickList.Clear();
-            _itemsList.Clear();
-
             foreach (var catalogItem in _itemConfig.Items)
             {
                 if (!TryFindActiveItemWeight(parameters.ItemWeights, catalogItem.Type, out var rangeWeight))
@@ -204,8 +180,8 @@ namespace BalloonParty.Game.Level
                 }
 
                 var maxCount = rangeWeight.MaximumAllowedOverride > 0 ? rangeWeight.MaximumAllowedOverride : catalogItem.MaximumAllowed;
-                _itemPickList.Add(new ResolvedItemEntry(catalogItem, catalogItem.Weight * rangeWeight.Weight, maxCount));
-                _itemsList.Add(catalogItem);
+                pickList.Add(new ResolvedItemEntry(catalogItem, catalogItem.Weight * rangeWeight.Weight, maxCount));
+                activeItems.Add(catalogItem);
             }
         }
 
@@ -222,36 +198,6 @@ namespace BalloonParty.Game.Level
 
             found = default;
             return false;
-        }
-
-        private sealed class ResolvedBalloonEntry : IWeightedEntry
-        {
-            public ResolvedBalloonEntry(BalloonPrefabEntry source, float weight, int maxCount)
-            {
-                Source = source;
-                Weight = weight;
-                MaxCount = maxCount;
-            }
-
-            public BalloonPrefabEntry Source { get; }
-            public float Weight { get; }
-            public int MaxCount { get; }
-            public string PoolKey => Source.PoolKey;
-        }
-
-        private sealed class ResolvedItemEntry : IWeightedEntry
-        {
-            public ResolvedItemEntry(ItemSettings source, float weight, int maxCount)
-            {
-                Source = source;
-                Weight = weight;
-                MaxCount = maxCount;
-            }
-
-            public ItemSettings Source { get; }
-            public float Weight { get; }
-            public int MaxCount { get; }
-            public string PoolKey => Source.Type.ToString();
         }
     }
 }

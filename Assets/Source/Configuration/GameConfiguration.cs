@@ -46,10 +46,5 @@ namespace BalloonParty.Configuration
         public float ScorePointTraceDuration => _scorePointTraceDuration;
         public float ScorePointsScatterDelay => _scorePointsScatterDelay;
         public float ScorePointBurstDuration => _scorePointBurstDuration;
-
-        public int PointsRequiredForLevel(int level)
-        {
-            return (int)((Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI))) + 25f);
-        }
     }
 }

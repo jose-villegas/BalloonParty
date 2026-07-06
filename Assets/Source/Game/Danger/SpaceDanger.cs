@@ -65,7 +65,7 @@ namespace BalloonParty.Game.Danger
 
         private void Recompute()
         {
-            var spawnPerTurn = _levelParams.SpawnLines * _grid.Columns;
+            var spawnPerTurn = _levelParams.Current.SpawnLines * _grid.Columns;
             _level.Value = Evaluate(_health.Current.Value, CountEmptySlots(), spawnPerTurn);
         }
 
