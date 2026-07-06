@@ -46,6 +46,7 @@ namespace BalloonParty.UI.Score
 
         [Inject] private IGamePalette _palette;
         [Inject] private IActiveLevelParameters _levelParams;
+        [Inject] private ILevelThresholds _thresholds;
         [Inject] private ISubscriber<ScorePointMessage> _scoredSubscriber;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
@@ -53,7 +54,7 @@ namespace BalloonParty.UI.Score
         [Inject] private ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         [Inject] private ISubscriber<RunResetMessage> _resetSubscriber;
         [Inject] private PoolManager _poolManager;
-        [Inject] private IScoreQuery _scoreController;
+        [Inject] private ILevelProgress _levelProgress;
         [Inject] private IColorStreak _streakTracker;
         [Inject] private ScoreTrailService _scoreTrailService;
 
@@ -131,9 +132,9 @@ namespace BalloonParty.UI.Score
                 g.color = _colorConfig.Color.WithAlpha(g.color.a);
             }
 
-            var required = _scoreController.GetRequiredPoints();
+            var required = _levelProgress.GetRequiredPoints();
             _progressSlider.maxValue = required;
-            _progressSlider.value = _scoreController.GetProgress(_colorConfig.Name);
+            _progressSlider.value = _levelProgress.GetProgress(_colorConfig.Name);
 
             _scoreTrailService.RegisterTarget(_colorConfig.Name, this, _colorConfig.Color);
             ApplyVisibility();
@@ -164,7 +165,7 @@ namespace BalloonParty.UI.Score
 
         private void OnLevelUp(ScoreLevelUpMessage msg)
         {
-            _stashedMaxValue = _levelParams.PointsRequiredForLevel(msg.NewLevel + 1);
+            _stashedMaxValue = _thresholds.PointsRequiredForLevel(msg.NewLevel + 1);
             ClearCompletionVfx();
         }
 
@@ -196,8 +197,8 @@ namespace BalloonParty.UI.Score
 
         private void OnRunReset()
         {
-            _progressSlider.maxValue = _scoreController.GetRequiredPoints();
-            _progressSlider.value = _scoreController.GetProgress(_colorConfig.Name);
+            _progressSlider.maxValue = _levelProgress.GetRequiredPoints();
+            _progressSlider.value = _levelProgress.GetProgress(_colorConfig.Name);
             ClearCompletionVfx();
             _notices.DismissAllNotices();
         }

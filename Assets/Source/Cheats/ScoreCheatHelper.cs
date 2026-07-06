@@ -2,7 +2,7 @@
 
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
-using BalloonParty.Game.Score;
+using BalloonParty.Game.Level;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using UnityEngine;
@@ -15,10 +15,10 @@ namespace BalloonParty.Cheats
         internal static void FillColor(
             PaletteEntry color,
             int target,
-            ScoreController scoreController,
+            ILevelProgress levelProgress,
             IHitDispatcher hitDispatcher)
         {
-            var missing = target - scoreController.GetProgress(color.Name);
+            var missing = target - levelProgress.GetProgress(color.Name);
             if (missing <= 0)
             {
                 return;

@@ -1,4 +1,5 @@
 using BalloonParty.Game;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using VContainer;
 using VContainer.Unity;
@@ -10,6 +11,7 @@ namespace BalloonParty.UI.Score
         private void Start()
         {
             var scoreController = Container.Resolve<ScoreController>();
+            var levelController = Container.Resolve<LevelController>();
 
             foreach (var label in GetComponentsInChildren<ScoreCounterLabel>(true))
             {
@@ -18,7 +20,7 @@ namespace BalloonParty.UI.Score
 
             foreach (var label in GetComponentsInChildren<LevelLabel>(true))
             {
-                label.Bind(scoreController.Level);
+                label.Bind(levelController.Level);
             }
         }
 

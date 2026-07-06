@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Game.Level;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using MessagePipe;
@@ -32,6 +33,7 @@ namespace BalloonParty.Game.Run
         private readonly IReadOnlyList<IRunResettable> _resettables;
         private readonly IRunMeta _runMeta;
         private readonly IRunScore _score;
+        private readonly ILevelProgress _levelProgress;
 
         private IDisposable _subscription;
         private IDisposable _navSubscription;
@@ -43,6 +45,7 @@ namespace BalloonParty.Game.Run
             ICinematicState cinematic,
             IRunMeta runMeta,
             IRunScore score,
+            ILevelProgress levelProgress,
             IPublisher<GameOverMessage> gameOverPublisher,
             IPublisher<RunResetMessage> resetPublisher,
             ISubscriber<EndRunRequestedMessage> endRunSubscriber,
@@ -52,6 +55,7 @@ namespace BalloonParty.Game.Run
             _cinematic = cinematic;
             _runMeta = runMeta;
             _score = score;
+            _levelProgress = levelProgress;
             _gameOverPublisher = gameOverPublisher;
             _resetPublisher = resetPublisher;
             _endRunSubscriber = endRunSubscriber;
@@ -85,7 +89,7 @@ namespace BalloonParty.Game.Run
                 return;
             }
 
-            var level = _score.Level.Value;
+            var level = _levelProgress.Level.Value;
             var score = _score.TotalScore.Value;
 
             _runMeta.RecordRun(level, score);

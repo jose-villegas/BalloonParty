@@ -157,9 +157,10 @@ namespace BalloonParty.Game
             builder.Register<BalloonFactory>(Lifetime.Singleton);
             // Registered before BalloonSpawner so its Start() (synchronous ResolveFor(1)) runs first —
             // BalloonSpawner's own Start() reads IActiveLevelParameters during prewarm sizing.
-            builder.RegisterEntryPoint<LevelDifficultyResolver>().AsSelf().As<IActiveLevelParameters>().As<IRunResettable>();
+            builder.RegisterEntryPoint<LevelDifficultyResolver>().AsSelf().As<IActiveLevelParameters>().As<ILevelThresholds>().As<IRunResettable>();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf().As<IRunResettable>();
-            builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>().As<IScoreQuery>();
+            builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>();
+            builder.RegisterEntryPoint<LevelController>().AsSelf().As<ILevelProgress>().As<IRunResettable>();
             builder.Register<HitPipeline>(Lifetime.Singleton).As<IHitDispatcher>();
             builder.RegisterEntryPoint<RunController>().AsSelf();
             builder.Register<BoardClearController>(Lifetime.Singleton).As<IRunResettable>();

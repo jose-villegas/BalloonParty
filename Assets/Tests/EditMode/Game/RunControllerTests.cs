@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
@@ -18,6 +19,7 @@ namespace BalloonParty.Tests.Game
         private ICinematicState _cinematic;
         private IRunMeta _runMeta;
         private IRunScore _score;
+        private ILevelProgress _levelProgress;
         private IPublisher<GameOverMessage> _gameOverPublisher;
         private IPublisher<RunResetMessage> _resetPublisher;
         private ISubscriber<EndRunRequestedMessage> _endRunSubscriber;
@@ -37,8 +39,10 @@ namespace BalloonParty.Tests.Game
             _runMeta = Substitute.For<IRunMeta>();
 
             _score = Substitute.For<IRunScore>();
-            _score.Level.Returns(new ReactiveProperty<int>(4));
             _score.TotalScore.Returns(new ReactiveProperty<int>(37));
+
+            _levelProgress = Substitute.For<ILevelProgress>();
+            _levelProgress.Level.Returns(new ReactiveProperty<int>(4));
 
             _gameOverPublisher = Substitute.For<IPublisher<GameOverMessage>>();
             _resetPublisher = Substitute.For<IPublisher<RunResetMessage>>();
@@ -231,6 +235,7 @@ namespace BalloonParty.Tests.Game
                 _cinematic,
                 _runMeta,
                 _score,
+                _levelProgress,
                 _gameOverPublisher,
                 _resetPublisher,
                 _endRunSubscriber,

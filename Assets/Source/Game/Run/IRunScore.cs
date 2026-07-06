@@ -8,8 +8,6 @@ namespace BalloonParty.Game.Run
     /// </summary>
     internal interface IRunScore
     {
-        IReadOnlyReactiveProperty<int> Level { get; }
-
         IReadOnlyReactiveProperty<int> TotalScore { get; }
     }
 }

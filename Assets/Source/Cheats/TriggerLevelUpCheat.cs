@@ -12,33 +12,36 @@ namespace BalloonParty.Cheats
 {
     internal class TriggerLevelUpCheat : ICheat
     {
+        private readonly ILevelThresholds _levelThresholds;
         private readonly IActiveLevelParameters _levelParams;
         private readonly IGamePalette _palette;
         private readonly IHitDispatcher _hitDispatcher;
-        private readonly ScoreController _scoreController;
+        private readonly ILevelProgress _levelProgress;
 
         public string Name => "Trigger Level Up";
         public string Section => "Score";
         public IReadOnlyList<string> Tags => new[] { "score", "levelup" };
 
         public TriggerLevelUpCheat(
+            ILevelThresholds levelThresholds,
             IActiveLevelParameters levelParams,
             IGamePalette palette,
-            ScoreController scoreController,
+            ILevelProgress levelProgress,
             IHitDispatcher hitDispatcher)
         {
+            _levelThresholds = levelThresholds;
             _levelParams = levelParams;
             _palette = palette;
-            _scoreController = scoreController;
+            _levelProgress = levelProgress;
             _hitDispatcher = hitDispatcher;
         }
 
         public void Execute()
         {
-            var required = _levelParams.PointsRequiredForLevel(_scoreController.Level.Value + 1);
+            var required = _levelThresholds.PointsRequiredForLevel(_levelProgress.Level.Value + 1);
             foreach (var colorName in _levelParams.Current.AllowedColors)
             {
-                ScoreCheatHelper.FillColor(_palette.GetEntry(colorName), required, _scoreController, _hitDispatcher);
+                ScoreCheatHelper.FillColor(_palette.GetEntry(colorName), required, _levelProgress, _hitDispatcher);
             }
         }
     }

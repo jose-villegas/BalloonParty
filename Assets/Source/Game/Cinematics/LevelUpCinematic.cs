@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Health;
+using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.GameState;
@@ -44,7 +45,7 @@ namespace BalloonParty.Game.Cinematics
         private readonly ISubscriber<ScorePointMessage> _scoredSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
-        private readonly IScoreQuery _scoreQuery;
+        private readonly ILevelProgress _levelProgress;
         private readonly ILossForecast _lossForecast;
         private readonly ScoreTrailService _scoreTrailService;
         private readonly PauseService _pauseService;
@@ -73,7 +74,7 @@ namespace BalloonParty.Game.Cinematics
             ISubscriber<ScorePointMessage> scoredSubscriber,
             ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
-            IScoreQuery scoreQuery,
+            ILevelProgress levelProgress,
             ILossForecast lossForecast,
             ScoreTrailService scoreTrailService,
             PauseService pauseService)
@@ -86,7 +87,7 @@ namespace BalloonParty.Game.Cinematics
             _scoredSubscriber = scoredSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
             _trailArrivedSubscriber = trailArrivedSubscriber;
-            _scoreQuery = scoreQuery;
+            _levelProgress = levelProgress;
             _lossForecast = lossForecast;
             _scoreTrailService = scoreTrailService;
             _pauseService = pauseService;
@@ -136,7 +137,7 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            if (!_scoreQuery.WillLevelUp())
+            if (!_levelProgress.WillLevelUp())
             {
                 return;
             }

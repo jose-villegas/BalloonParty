@@ -1,42 +1,35 @@
 using System;
 using System.Collections.Generic;
-using BalloonParty.Configuration;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
-using BalloonParty.Game.Health;
-using BalloonParty.Shared;
-using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer.Unity;
-using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Game.Score
 {
-    internal class ScoreController : IStartable, IDisposable, IRunResettable, IRunScore, IScoreQuery
+    /// <summary>
+    ///     Score keeping only: streak-multiplied attribution of pops into points, publishing the score
+    ///     trails, and the lifetime/total tallies. Level progression (current level, per-colour progress,
+    ///     the level-up ceremony) lives in <c>LevelController</c>; this feeds it the capped points via
+    ///     <see cref="ILevelProgress.ClaimProgress" /> and otherwise stays out of levelling.
+    /// </summary>
+    internal class ScoreController : IStartable, IDisposable, IRunResettable, IRunScore
     {
-        private readonly IActiveLevelParameters _levelParams;
-        private readonly ReactiveProperty<int> _level = new(1);
-        private readonly Dictionary<string, int> _levelProgress = new();
-        private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
+        private readonly ILevelProgress _levelProgress;
         private readonly IGamePalette _palette;
         private readonly Dictionary<string, int> _persistentScore = new();
-        private readonly Dictionary<string, int> _projectedProgress = new();
         private readonly IPublisher<ScorePointMessage> _scoredPublisher;
-        private readonly INavigation _navigation;
-        private readonly ILossForecast _lossForecast;
         private readonly ColorStreakTracker _streakTracker;
         private readonly ReactiveProperty<int> _totalScore = new(0);
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly List<string> _colorKeys = new();
         private IDisposable _trailSubscription;
-        private IDisposable _navigationSubscription;
-        private bool _levelScored;
 
-        public IReadOnlyReactiveProperty<int> Level => _level;
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
 
         // Score state has no teardown dependencies, so it resets after grid/gameplay state.
@@ -45,27 +38,20 @@ namespace BalloonParty.Game.Score
         public ScoreController(
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
             IPublisher<ScorePointMessage> scoredPublisher,
-            IPublisher<ScoreLevelUpMessage> levelUpPublisher,
-            IActiveLevelParameters levelParams,
+            ILevelProgress levelProgress,
             IGamePalette palette,
-            INavigation navigation,
-            ILossForecast lossForecast,
             ColorStreakTracker streakTracker)
         {
             _trailArrivedSubscriber = trailArrivedSubscriber;
             _scoredPublisher = scoredPublisher;
-            _levelUpPublisher = levelUpPublisher;
-            _levelParams = levelParams;
+            _levelProgress = levelProgress;
             _palette = palette;
-            _navigation = navigation;
-            _lossForecast = lossForecast;
             _streakTracker = streakTracker;
         }
 
         public void Dispose()
         {
             _trailSubscription?.Dispose();
-            _navigationSubscription?.Dispose();
         }
 
         public void Start()
@@ -75,12 +61,6 @@ namespace BalloonParty.Game.Score
             ClearRunState();
 
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
-
-            // Re-open scoring when the next level begins (the transition has ended and the player can
-            // score again) — by now every straggler from the finished level has long since landed.
-            _navigationSubscription = _navigation.Current
-                .Where(state => state == NavigationState.Game)
-                .Subscribe(_ => _levelScored = false);
         }
 
         public void ResetRun(int generation)
@@ -88,93 +68,14 @@ namespace BalloonParty.Game.Score
             ClearRunState();
         }
 
-        public int GetProgress(string colorName)
-        {
-            return _levelProgress.GetValueOrDefault(colorName);
-        }
-
-        public int GetRequiredPoints()
-        {
-            return _levelParams.PointsRequiredForLevel(Level.Value + 1);
-        }
-
-        /// <summary>
-        ///     Uses projected (not confirmed) progress so the cinematic can
-        ///     register before in-flight trails from other colors arrive.
-        /// </summary>
-        public bool WillLevelUp()
-        {
-            var required = _levelParams.PointsRequiredForLevel(_level.Value + 1);
-
-            foreach (var color in _levelParams.Current.AllowedColors)
-            {
-                if (_projectedProgress.GetValueOrDefault(color) < required)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
         private void ClearRunState()
         {
-            _level.Value = 1;
             _totalScore.Value = 0;
-            _levelScored = false;
 
             foreach (var key in _colorKeys)
             {
                 _persistentScore[key] = 0;
-                _levelProgress[key] = 0;
-                _projectedProgress[key] = 0;
             }
-        }
-
-        private bool AllColorsConfirmed(int required)
-        {
-            foreach (var color in _levelParams.Current.AllowedColors)
-            {
-                if (_levelProgress.GetValueOrDefault(color) < required)
-                {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        private void CheckLevelUp()
-        {
-            // No level-up on a lost run: the ceremony is suppressed once the loss is committed
-            // (GameOver) or already certain (queued overflow charges cover the remaining HP) — a trail
-            // arriving post-mortem must not yank navigation out of GameOver or show the popup.
-            if (_navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent)
-            {
-                return;
-            }
-
-            var required = _levelParams.PointsRequiredForLevel(_level.Value + 1);
-            if (!AllColorsConfirmed(required))
-            {
-                return;
-            }
-
-            // Snapshot before publishing — the resolver reacts to this same message and may
-            // re-resolve AllowedColors to the new level before other subscribers read it.
-            var completedColors = _levelParams.Current.AllowedColors;
-
-            _level.Value++;
-            _levelScored = true;
-
-            foreach (var key in _colorKeys)
-            {
-                _levelProgress[key] = 0;
-                _projectedProgress[key] = 0;
-            }
-
-            _levelUpPublisher.Publish(new ScoreLevelUpMessage(_level.Value, completedColors));
-            _navigation.TransitionTo(NavigationState.LevelUp);
         }
 
         // Invoked by HitPipeline as the first dispatch stage (not bus-subscribed) so the streak
@@ -236,35 +137,21 @@ namespace BalloonParty.Game.Score
             return 1;
         }
 
+        // Claims each colour's streak-multiplied points against the level (which caps at the threshold
+        // and advances projected progress), keeping only what was granted plus its base for numbering.
         private void ResolveAttributions(
             IReadOnlyList<ScoreAttribution> attributions, int multiplier,
             List<(string Color, int Points, int BaseProgress)> resolved)
         {
-            var required = _levelParams.PointsRequiredForLevel(_level.Value + 1);
-
             foreach (var attribution in attributions)
             {
-                var color = attribution.ColorId;
-                if (string.IsNullOrEmpty(color) || !_persistentScore.ContainsKey(color))
+                var (baseProgress, granted) = _levelProgress.ClaimProgress(attribution.ColorId, attribution.Points * multiplier);
+                if (granted <= 0)
                 {
                     continue;
                 }
 
-                var baseProgress = _projectedProgress.GetValueOrDefault(color);
-
-                // Cap one level-up per burst: a color's progress can't exceed the next-level threshold,
-                // so a big/high-streak pop can't overfill and carry into the FOLLOWING level. Without
-                // this the next level arrived pre-completed and fired a second level-up with no player
-                // throw and no cinematic — the "instant next level + transition, no popup" bug. Excess
-                // is intentionally lost (no level-skipping).
-                var pts = Mathf.Min(attribution.Points * multiplier, Mathf.Max(0, required - baseProgress));
-                if (pts <= 0)
-                {
-                    continue;
-                }
-
-                _projectedProgress[color] = baseProgress + pts;
-                resolved.Add((color, pts, baseProgress));
+                resolved.Add((attribution.ColorId, granted, baseProgress));
             }
         }
 
@@ -279,9 +166,9 @@ namespace BalloonParty.Game.Score
             return total;
         }
 
-        // Emits one ScorePointMessage per point, carrying the group size/index so the bars can
-        // animate the burst. Progress is capped at the threshold in ResolveAttributions, so no point
-        // ever crosses into the next level — every point belongs to the current level.
+        // Emits one ScorePointMessage per point, carrying the group size/index so the bars can animate
+        // the burst. Points are capped at the level threshold in ClaimProgress, so no point crosses into
+        // the next level — every point belongs to the current level.
         private void PublishPoints(
             IReadOnlyList<(string Color, int Points, int BaseProgress)> resolved, int groupSize, Vector3 worldPosition)
         {
@@ -309,24 +196,6 @@ namespace BalloonParty.Game.Score
 
             _persistentScore[msg.ColorName]++;
             _totalScore.Value++;
-
-            // Once the level is scored it stays scored until the next one starts (the level-up is gated
-            // by the transition, so every trail still in flight belongs to the level that just finished).
-            // Their late arrivals must not touch progress — folding a straggler in via Max would
-            // re-inflate the color, so the scoring cap stops it below the next threshold and the bar can
-            // never fill. Lifetime totals above still count it — the point was earned.
-            if (_levelScored)
-            {
-                return;
-            }
-
-            // Progress is already capped at the threshold at the scoring source (ResolveAttributions),
-            // so no arriving point exceeds it — a plain max to fold arrivals in is enough.
-            var previous = _levelProgress[msg.ColorName];
-            _levelProgress[msg.ColorName] = Math.Max(previous, msg.Score);
-            _projectedProgress[msg.ColorName] = Math.Max(_projectedProgress[msg.ColorName], msg.Score);
-
-            CheckLevelUp();
         }
     }
 }

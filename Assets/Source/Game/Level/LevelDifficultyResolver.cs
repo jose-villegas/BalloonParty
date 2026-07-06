@@ -23,7 +23,7 @@ namespace BalloonParty.Game.Level
     ///     The resolved mix plus the bridged pick lists live on the produced <see cref="Current" />; this
     ///     type just resolves, bridges, and answers the cross-level <see cref="PointsRequiredForLevel" />.
     /// </summary>
-    internal class LevelDifficultyResolver : IStartable, IDisposable, IRunResettable, IActiveLevelParameters
+    internal class LevelDifficultyResolver : IStartable, IDisposable, IRunResettable, IActiveLevelParameters, ILevelThresholds
     {
         private readonly ILevelPacingConfiguration _pacing;
         private readonly IBalloonsConfiguration _balloonsConfig;
@@ -72,9 +72,6 @@ namespace BalloonParty.Game.Level
             _subscription?.Dispose();
         }
 
-        // The base points curve composed with the level's pacing threshold modifier. The curve lives
-        // here (private, pure math) rather than on the config: the "real" requirement is always the
-        // modified value, so exposing the raw base invited using it as if it were the threshold.
         public int PointsRequiredForLevel(int level)
         {
             return Mathf.RoundToInt(BasePointsForLevel(level) * _pacing.ThresholdModifier(level));
