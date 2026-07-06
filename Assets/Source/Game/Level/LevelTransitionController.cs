@@ -55,6 +55,9 @@ namespace BalloonParty.Game.Level
         private readonly CancellationTokenSource _cts = new();
         private readonly Dictionary<int, List<IBalloonModel>> _popBands = new();
 
+        private int _minPopBand;
+        private int _maxPopBand;
+
         private LevelAscendCinematic _ascendCinematic;
         private IDisposable _dismissedSubscription;
 
@@ -115,6 +118,10 @@ namespace BalloonParty.Game.Level
                 await UniTask.WaitUntil(() => !Cinematic.IsPlaying, cancellationToken: ct);
 
                 await UniTask.WaitUntil(() => !_overflow.IsOverflowActive, cancellationToken: ct);
+
+                // Snapshot the balloon field into anti-diagonal bands now, while the grid is still fully
+                // populated — both the camera estimate and the pop wave read the same populated range.
+                CollectBalloonBands();
 
                 // Un-zoom the camera (the level-up pan-in left it zoomed) in lockstep with the pop.
                 _cameraRig.RestoreTweened(EstimatePopWaveSeconds());
@@ -187,21 +194,20 @@ namespace BalloonParty.Game.Level
         // teardown (no balance/nudge/score); gameplay is already paused via PauseSource.LevelTransition.
         private async UniTask PopBalloonsInWaveAsync(CancellationToken ct)
         {
-            CollectBalloonBands();
             if (_popBands.Count == 0)
             {
                 return;
             }
 
-            var maxBand = (_grid.Columns - 1) + (_grid.Rows - 1);
-
             _timeScale.Claim(TimeScaleSource.LevelTransition, PopSlowMoTimeScale);
             try
             {
-                for (var near = 0; near <= maxBand - near; near++)
+                // Sweep inward from the two OUTERMOST populated bands (not the grid corners, which may
+                // be empty), so the actual top-left and bottom-right balloons pop on the same beat and
+                // the two fronts stay symmetric as they converge.
+                for (int near = _minPopBand, far = _maxPopBand; near <= far; near++, far--)
                 {
                     PopBand(near);
-                    var far = maxBand - near;
                     if (far != near)
                     {
                         PopBand(far);
@@ -220,17 +226,24 @@ namespace BalloonParty.Game.Level
 
         // Wall-clock length of the pop wave: one band-interval per anti-diagonal step (every step
         // waits, empty band or not), stretched by the slow-mo the wave runs under. Used to match the
-        // camera un-zoom to the wave. Mirror this if the wave loop's cadence changes.
+        // camera un-zoom to the wave. Mirror this if the wave loop's cadence changes. Assumes
+        // CollectBalloonBands has already run.
         private float EstimatePopWaveSeconds()
         {
-            var maxBand = (_grid.Columns - 1) + (_grid.Rows - 1);
-            var steps = (maxBand / 2) + 1;
+            if (_popBands.Count == 0)
+            {
+                return 0f;
+            }
+
+            var steps = ((_maxPopBand - _minPopBand) / 2) + 1;
             return steps * PopWaveBandSeconds / PopSlowMoTimeScale;
         }
 
         private void CollectBalloonBands()
         {
             _popBands.Clear();
+            _minPopBand = int.MaxValue;
+            _maxPopBand = int.MinValue;
 
             for (var col = 0; col < _grid.Columns; col++)
             {
@@ -250,6 +263,8 @@ namespace BalloonParty.Game.Level
                     }
 
                     models.Add(balloon);
+                    _minPopBand = Mathf.Min(_minPopBand, band);
+                    _maxPopBand = Mathf.Max(_maxPopBand, band);
                 }
             }
         }
