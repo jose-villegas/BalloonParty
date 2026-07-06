@@ -118,7 +118,7 @@ namespace BalloonParty.Game.Score
             {
                 _flights.Unregister(id);
                 _arrivedPublisher.Publish(
-                    new ScoreTrailArrivedMessage(colorName, id.Score, id.Level, target));
+                    new ScoreTrailArrivedMessage(colorName, id.Score, target));
             };
 
             Transform transform;

@@ -391,27 +391,27 @@ namespace BalloonParty.Tests.Game
             FirePop(Red);
 
             _scoredPublisher.Received(1).Publish(
-                Arg.Is<ScorePointMessage>(m => m.Level == 1 && m.Score == 1));
+                Arg.Is<ScorePointMessage>(m => m.Score == 1));
         }
 
         [Test]
         public void ScorePoint_AtThreshold_StaysCurrentLevel()
         {
-            // rawScore == required → rawScore > required is false → not renumbered
+            // rawScore == required → capped at the threshold, one point at Score 1
             _levelParams.PointsRequiredForLevel(2).Returns(1);
 
             FirePop(Red);
 
             _scoredPublisher.Received(1).Publish(
-                Arg.Is<ScorePointMessage>(m => m.Level == 1 && m.Score == 1));
+                Arg.Is<ScorePointMessage>(m => m.Score == 1));
         }
 
         [Test]
         public void ScorePoint_AboveThreshold_ExcessDropped()
         {
             // threshold = 3, scoreValue = 4 → progress is capped at 3, so only 3 points publish
-            // (Score 1,2,3 at Level 1); the 4th is dropped rather than carried into the next level
-            // (cap one level-up per burst — no carry-over that would auto-complete the following level).
+            // (Score 1,2,3); the 4th is dropped rather than carried past the threshold (cap one
+            // level-up per burst — no carry-over that would auto-complete the following level).
             _levelParams.PointsRequiredForLevel(2).Returns(3);
 
             var model = new BalloonModel(new BalloonModelConfig(scoreValue: 4));
@@ -420,9 +420,9 @@ namespace BalloonParty.Tests.Game
             FireHit(model, 1);
 
             _scoredPublisher.Received(3).Publish(
-                Arg.Is<ScorePointMessage>(m => m.Level == 1));
+                Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
             _scoredPublisher.DidNotReceive().Publish(
-                Arg.Is<ScorePointMessage>(m => m.Level != 1));
+                Arg.Is<ScorePointMessage>(m => m.Score > 3));
         }
 
         [Test]
@@ -534,7 +534,7 @@ namespace BalloonParty.Tests.Game
 
         private void FireTrailArrived(string color, int score)
         {
-            _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, score, _controller.Level.Value, Vector3.zero));
+            _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, score, Vector3.zero));
         }
 
         private static IBalloonModel CreateModel(string color, int hitsRemaining, int scoreValue = 1)

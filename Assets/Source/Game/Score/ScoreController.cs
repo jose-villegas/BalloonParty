@@ -32,6 +32,8 @@ namespace BalloonParty.Game.Score
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly List<string> _colorKeys = new();
         private IDisposable _trailSubscription;
+        private IDisposable _navigationSubscription;
+        private bool _levelScored;
 
         public IReadOnlyReactiveProperty<int> Level => _level;
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
@@ -62,6 +64,7 @@ namespace BalloonParty.Game.Score
         public void Dispose()
         {
             _trailSubscription?.Dispose();
+            _navigationSubscription?.Dispose();
         }
 
         public void Start()
@@ -71,6 +74,12 @@ namespace BalloonParty.Game.Score
             ClearRunState();
 
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
+
+            // Re-open scoring when the next level begins (the transition has ended and the player can
+            // score again) — by now every straggler from the finished level has long since landed.
+            _navigationSubscription = _navigation.Current
+                .Where(state => state == NavigationState.Game)
+                .Subscribe(_ => _levelScored = false);
         }
 
         public void ResetRun(int generation)
@@ -111,6 +120,7 @@ namespace BalloonParty.Game.Score
         {
             _level.Value = 1;
             _totalScore.Value = 0;
+            _levelScored = false;
 
             foreach (var key in _colorKeys)
             {
@@ -154,6 +164,7 @@ namespace BalloonParty.Game.Score
             var completedColors = _levelParams.AllowedColors;
 
             _level.Value++;
+            _levelScored = true;
 
             foreach (var key in _colorKeys)
             {
@@ -282,7 +293,6 @@ namespace BalloonParty.Game.Score
                         color,
                         worldPosition,
                         baseProgress + i + 1,
-                        _level.Value,
                         groupSize,
                         groupIndex));
                 }
@@ -298,6 +308,16 @@ namespace BalloonParty.Game.Score
 
             _persistentScore[msg.ColorName]++;
             _totalScore.Value++;
+
+            // Once the level is scored it stays scored until the next one starts (the level-up is gated
+            // by the transition, so every trail still in flight belongs to the level that just finished).
+            // Their late arrivals must not touch progress — folding a straggler in via Max would
+            // re-inflate the color, so the scoring cap stops it below the next threshold and the bar can
+            // never fill. Lifetime totals above still count it — the point was earned.
+            if (_levelScored)
+            {
+                return;
+            }
 
             // Progress is already capped at the threshold at the scoring source (ResolveAttributions),
             // so no arriving point exceeds it — a plain max to fold arrivals in is enough.

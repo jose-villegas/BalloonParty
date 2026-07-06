@@ -219,8 +219,7 @@ namespace BalloonParty.Game.Cinematics
             }
 
             var matches = msg.ColorName == _tippingTrailId.Color
-                          && msg.Score == _tippingTrailId.Score
-                          && msg.Level == _tippingTrailId.Level;
+                          && msg.Score == _tippingTrailId.Score;
 
             if (!matches)
             {

@@ -7,7 +7,6 @@ namespace BalloonParty.Shared.Messages
         public readonly string ColorName;
         public readonly Vector3 WorldPosition;
         public readonly int Score;
-        public readonly int Level;
         public readonly int GroupSize;
         public readonly int GroupIndex;
 
@@ -15,14 +14,12 @@ namespace BalloonParty.Shared.Messages
             string colorName,
             Vector3 worldPosition,
             int score,
-            int level,
             int groupSize,
             int groupIndex)
         {
             ColorName = colorName;
             WorldPosition = worldPosition;
             Score = score;
-            Level = level;
             GroupSize = groupSize;
             GroupIndex = groupIndex;
         }
