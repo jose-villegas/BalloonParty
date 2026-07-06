@@ -6,6 +6,7 @@ using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using Cysharp.Threading.Tasks;
+using DG.Tweening;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
@@ -30,9 +31,13 @@ namespace BalloonParty.UI.Score
         [Tooltip("Toggled (not SetActive) when this color is gated out of the active level range.")]
         [SerializeField] private CanvasGroup _visibilityGroup;
 
-        [Tooltip("Excluded from a parent Layout Group's sizing when gated out, so a hidden bar " +
-                 "doesn't leave a gap in the row.")]
+        [Tooltip("Its flexibleWidth tweens 0↔1 so the bar grows in / shrinks out as its color is " +
+                 "introduced or gated; the HorizontalLayoutGroup redistributes the rest. Excluded from " +
+                 "layout only once fully hidden.")]
         [SerializeField] private LayoutElement _layoutElement;
+
+        [Tooltip("Seconds for a bar to grow in / shrink out when its color is introduced or gated.")]
+        [SerializeField] private float _visibilityTweenDuration = 0.4f;
 
         [Header("Visuals")] [SerializeField] private Graphic[] _graphicsToSetColor;
 
@@ -61,6 +66,8 @@ namespace BalloonParty.UI.Score
         private ProgressNoticePresenter _notices;
         private PaletteEntry _colorConfig;
         private int _stashedMaxValue;
+        private bool _active;
+        private Tween _flexTween;
 
         private void Awake()
         {
@@ -137,7 +144,7 @@ namespace BalloonParty.UI.Score
             _progressSlider.value = _levelProgress.GetProgress(_colorConfig.Name);
 
             _scoreTrailService.RegisterTarget(_colorConfig.Name, this, _colorConfig.Color);
-            ApplyVisibility();
+            ApplyVisibility(animate: false);
 
             _scoredSubscriber.Subscribe(OnScorePoint).AddTo(this);
             _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(this);
@@ -169,14 +176,46 @@ namespace BalloonParty.UI.Score
             ClearCompletionVfx();
         }
 
-        // Not called from OnLevelUp — subscriber order is unenforced, so this runs only at Start/OnDismissed.
-        private void ApplyVisibility()
+        // Not called from OnLevelUp — subscriber order is unenforced, so this runs only at
+        // Start/OnRunReset (snap) and OnDismissed (animated, when a level change alters the colour set).
+        private void ApplyVisibility(bool animate)
         {
             var active = IsColorActive();
-            _visibilityGroup.alpha = active ? 1f : 0f;
+            if (animate && active == _active)
+            {
+                return;
+            }
+
+            _active = active;
             _visibilityGroup.interactable = active;
             _visibilityGroup.blocksRaycasts = active;
-            _layoutElement.ignoreLayout = !active; // CanvasGroup alone doesn't exclude from layout.
+
+            var targetFlex = active ? 1f : 0f;
+            var targetAlpha = active ? 1f : 0f;
+
+            _flexTween?.Kill();
+            _visibilityGroup.DOKill();
+
+            if (!animate)
+            {
+                _layoutElement.ignoreLayout = !active;
+                _layoutElement.flexibleWidth = targetFlex;
+                _visibilityGroup.alpha = targetAlpha;
+                return;
+            }
+
+            // Tween flexibleWidth so the HorizontalLayoutGroup redistributes across the other bars each
+            // frame (they adapt without their own tween). Stay in layout for the whole tween; only drop
+            // out once fully hidden so a shrunk-away bar leaves no gap. Unscaled so it plays at a steady
+            // rate through the level-up time ramp.
+            _layoutElement.ignoreLayout = false;
+            _flexTween = DOTween
+                .To(() => _layoutElement.flexibleWidth, v => _layoutElement.flexibleWidth = v, targetFlex,
+                    _visibilityTweenDuration)
+                .SetUpdate(true)
+                .SetLink(gameObject)
+                .OnComplete(() => _layoutElement.ignoreLayout = !active);
+            _visibilityGroup.DOFade(targetAlpha, _visibilityTweenDuration).SetUpdate(true).SetLink(gameObject);
         }
 
         private bool IsColorActive()
@@ -199,6 +238,7 @@ namespace BalloonParty.UI.Score
             _progressSlider.value = _levelProgress.GetProgress(_colorConfig.Name);
             ClearCompletionVfx();
             _notices.DismissAllNotices();
+            ApplyVisibility(animate: false);
         }
 
         private void ClearCompletionVfx()
@@ -218,7 +258,7 @@ namespace BalloonParty.UI.Score
             _progressSlider.maxValue = _stashedMaxValue;
             _progressSlider.value = 0;
             ClearCompletionVfx();
-            ApplyVisibility();
+            ApplyVisibility(animate: true);
         }
 
         private async UniTaskVoid DrainSliderAsync(int steps, float staggerDelay)

@@ -59,12 +59,12 @@ MonoBehaviour:
     m_Bottom: 0
   m_ChildAlignment: 4
   m_Spacing: -1.5
-  m_ChildForceExpandWidth: 1
+  m_ChildForceExpandWidth: 0
   m_ChildForceExpandHeight: 1
   m_ChildControlWidth: 1
   m_ChildControlHeight: 1
-  m_ChildScaleWidth: 1
-  m_ChildScaleHeight: 1
+  m_ChildScaleWidth: 0
+  m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
 --- !u!1001 &5402333496786891401
 PrefabInstance:
@@ -182,7 +182,7 @@ PrefabInstance:
     - target: {fileID: 1860707678786461105, guid: 5759f9f8177e5499585f05d7e9d754de,
         type: 3}
       propertyPath: m_SortingLayer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2350293857914796795, guid: 5759f9f8177e5499585f05d7e9d754de,
         type: 3}
@@ -371,7 +371,7 @@ PrefabInstance:
     - target: {fileID: 1860707678786461105, guid: 5759f9f8177e5499585f05d7e9d754de,
         type: 3}
       propertyPath: m_SortingLayer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2350293857914796795, guid: 5759f9f8177e5499585f05d7e9d754de,
         type: 3}
@@ -560,7 +560,7 @@ PrefabInstance:
     - target: {fileID: 1860707678786461105, guid: 5759f9f8177e5499585f05d7e9d754de,
         type: 3}
       propertyPath: m_SortingLayer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4714902537992658511, guid: 5759f9f8177e5499585f05d7e9d754de,
         type: 3}
@@ -575,8 +575,32 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 9208911573387676711, guid: 5759f9f8177e5499585f05d7e9d754de,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8915006612867805796}
   m_SourcePrefab: {fileID: 100100000, guid: 5759f9f8177e5499585f05d7e9d754de, type: 3}
+--- !u!1 &504467981687341657 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 9208911573387676711, guid: 5759f9f8177e5499585f05d7e9d754de,
+    type: 3}
+  m_PrefabInstance: {fileID: 8704502312494288510}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8915006612867805796
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 504467981687341657}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3312d7739989d2b4e91e6319e9a96d76, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.RectMask2D
+  m_Padding: {x: 0, y: 0, z: 0, w: 0}
+  m_Softness: {x: 0, y: 0}
 --- !u!224 &7744681761660725977 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1420386209631446183, guid: 5759f9f8177e5499585f05d7e9d754de,
@@ -699,7 +723,7 @@ PrefabInstance:
     - target: {fileID: 1860707678786461105, guid: 5759f9f8177e5499585f05d7e9d754de,
         type: 3}
       propertyPath: m_SortingLayer
-      value: 6
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2350293857914796795, guid: 5759f9f8177e5499585f05d7e9d754de,
         type: 3}
