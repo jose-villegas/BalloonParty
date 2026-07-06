@@ -84,7 +84,8 @@ namespace BalloonParty.Game.Level
 
         private void ResolveFor(int level)
         {
-            _current = FindRange(level)?.Resolve(PositionOf(level), _rng) ?? FallbackParameters(level);
+            var range = ResolveRange(level);
+            _current = range.Parameters.Resolve(range.PositionOf(level), _rng);
 
             var itemPickList = new List<ResolvedItemEntry>();
             var activeItems = new List<ItemSettings>();
@@ -97,38 +98,22 @@ namespace BalloonParty.Game.Level
                 _palette.ColorNamesForMask(_current.AllowedColorsMask));
         }
 
-        private RangedLevelParameters FindRange(int level)
+        // The containing range, or — if none contains this level — the last authored range. The last
+        // range is the open-ended tail, so it catches every level past its start; this only falls
+        // through for a level below the first range, and reusing the last level's setup beats
+        // synthesising a default (LevelPacingConfiguration.OnValidate warns on gaps/missing tail).
+        private LevelRangeEntry ResolveRange(int level)
         {
-            foreach (var range in _pacing.Ranges)
+            var ranges = _pacing.Ranges;
+            for (var i = 0; i < ranges.Count; i++)
             {
-                if (range.Contains(level))
+                if (ranges[i].Contains(level))
                 {
-                    return range.Parameters;
+                    return ranges[i];
                 }
             }
 
-            return null;
-        }
-
-        private float PositionOf(int level)
-        {
-            foreach (var range in _pacing.Ranges)
-            {
-                if (range.Contains(level))
-                {
-                    return range.PositionOf(level);
-                }
-            }
-
-            return 0f;
-        }
-
-        private static LevelParameters FallbackParameters(int level)
-        {
-            Debug.LogWarning(
-                $"LevelDifficultyResolver: no authored range contains level {level} — falling back to " +
-                "default LevelParameters. Check LevelPacingConfiguration for gaps.");
-            return new LevelParameters();
+            return ranges[ranges.Count - 1];
         }
 
         private List<ResolvedBalloonEntry> BuildBalloonPickList(LevelParameters parameters)
