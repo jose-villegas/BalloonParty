@@ -4,12 +4,7 @@ using UnityEngine;
 
 namespace BalloonParty.Editor.EditorUI
 {
-    /// <summary>
-    ///     Manages a play/pause/stop animation loop driven by
-    ///     <see cref="EditorApplication.update"/>. Tracks delta time,
-    ///     pause state, and playback speed. The caller supplies a tick
-    ///     callback that returns <c>false</c> when the animation is complete.
-    /// </summary>
+    /// <summary>Play/pause/stop animation loop driven by <see cref="EditorApplication.update"/>.</summary>
     internal sealed class EditorAnimationLoop
     {
         private double _lastEditorTime;
@@ -17,23 +12,15 @@ namespace BalloonParty.Editor.EditorUI
         private Action _onComplete;
         private Action _onRepaint;
 
-        /// <summary>Whether the loop is currently running (playing or paused).</summary>
+        /// <summary>Whether the loop is running (playing or paused).</summary>
         internal bool IsPlaying { get; private set; }
 
         internal bool IsPaused { get; private set; }
 
-        /// <summary>Playback speed multiplier. Default 1.</summary>
+        /// <summary>Playback speed multiplier.</summary>
         internal float TimeScale { get; set; } = 1f;
 
-        /// <summary>
-        ///     Starts the animation loop.
-        /// </summary>
-        /// <param name="onTick">
-        ///     Called each editor frame with scaled delta time.
-        ///     Return <c>true</c> to keep running, <c>false</c> to auto-stop.
-        /// </param>
-        /// <param name="onComplete">Called when the loop stops (auto or manual).</param>
-        /// <param name="onRepaint">Called after each tick to repaint views (e.g. SceneView, Inspector).</param>
+        /// <summary>Starts the loop; <paramref name="onTick"/> returns <c>false</c> to auto-stop.</summary>
         internal void Start(Func<float, bool> onTick, Action onComplete = null, Action onRepaint = null)
         {
             if (IsPlaying)
@@ -86,11 +73,7 @@ namespace BalloonParty.Editor.EditorUI
             }
         }
 
-        /// <summary>
-        ///     Draws Play/Pause + Stop buttons. Returns without drawing if
-        ///     <paramref name="onPlay"/> is null.
-        /// </summary>
-        /// <param name="onPlay">Called when the user clicks Play (loop not yet started).</param>
+        /// <summary>Draws Play/Pause + Stop buttons.</summary>
         internal void DrawControls(Action onPlay)
         {
             using (new EditorGUILayout.HorizontalScope())
@@ -130,7 +113,7 @@ namespace BalloonParty.Editor.EditorUI
             }
         }
 
-        /// <summary>Draws a playback speed slider. Call from <c>OnInspectorGUI</c>.</summary>
+        /// <summary>Draws a playback speed slider.</summary>
         internal void DrawSpeedSlider(
             string label = "Playback Speed",
             float min = 0.05f,

@@ -9,11 +9,7 @@ namespace BalloonParty.Projectile.Controller
         Destroyed
     }
 
-    /// <summary>
-    ///     Result of one fixed-step advance by <see cref="ProjectileMotionResolver" />: where the
-    ///     projectile ends up and what the view must present. <c>Bounced</c> means a shield absorbed
-    ///     a wall hit (fly a shield trail); <c>Destroyed</c> means the hit had no shield left.
-    /// </summary>
+    /// <summary>Result of one fixed-step advance by <see cref="ProjectileMotionResolver" />.</summary>
     internal readonly struct ProjectileStep
     {
         public readonly Vector3 Position;

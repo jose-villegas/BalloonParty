@@ -10,13 +10,8 @@ using BalloonParty.Configuration.Cinematics;
 namespace BalloonParty.Game.Cinematics
 {
     /// <summary>
-    ///     The level-transition beat: descends <see cref="Game.Level.LevelTransitionController" />'s
-    ///     staging root — which the new level's static actors are parented under, offset above the
-    ///     board — down to <see cref="Vector3.zero" />, so the incoming scenario visibly slides down
-    ///     into place instead of the camera moving. No camera work at all: an earlier version drove
-    ///     <see cref="CinematicCameraRig" /> for a literal camera translate, but the abrupt up-then-down
-    ///     jump read poorly — moving the (much cheaper, already-hidden-until-ready) content instead of
-    ///     the camera is both cheaper and reads better.
+    ///     Descends the staging root to <see cref="Vector3.zero" /> so the incoming scenario slides into
+    ///     place, rather than moving the camera.
     /// </summary>
     internal sealed class LevelAscendCinematic
     {
@@ -30,14 +25,7 @@ namespace BalloonParty.Game.Cinematics
         }
 
         /// <summary>
-        ///     Descends <paramref name="stagingRoot" /> from its current position to <see cref="Vector3.zero" />
-        ///     along the segment's curve — the curve's VALUE is a height fraction here, not a timeScale
-        ///     multiplier (gameplay is already paused via <see cref="Shared.Pause.PauseSource.LevelTransition" />),
-        ///     and its <c>ZoomAmount</c> field doubles as the descend's starting height in world units.
-        ///     <paramref name="onBalloonSpawnCue" /> fires once, at the segment's <c>PanWeight</c> fraction
-        ///     of the total duration, so the new level's balloons are already mid-spawn-animation by the
-        ///     time the scenario settles rather than appearing only after arrival. No-ops (firing the cue
-        ///     immediately) if another cinematic already owns the director.
+        ///     No-ops (firing <paramref name="onBalloonSpawnCue" /> immediately) if another cinematic already owns the director.
         /// </summary>
         internal async UniTask PlayAsync(Transform stagingRoot, Action onBalloonSpawnCue, CancellationToken ct)
         {
@@ -56,8 +44,7 @@ namespace BalloonParty.Game.Cinematics
                 var spawnCueTime = duration * Mathf.Clamp01(segment.PanWeight);
                 var spawnCueFired = false;
 
-                // FollowSpeed traverses the curve faster (>1) or slower (<1); the descent takes
-                // duration / FollowSpeed in real time. 0 (unset) falls back to the curve's own pace.
+                // 0 (unset) falls back to the curve's own pace.
                 var followSpeed = segment.FollowSpeed > 0f ? segment.FollowSpeed : 1f;
 
                 var elapsed = 0f;

@@ -10,23 +10,10 @@ using VContainer.Unity;
 
 namespace BalloonParty.Balloon.Controller
 {
-    /// <summary>
-    ///     Routes each balloon's hit reaction to its owning controller. Balloons do not subscribe
-    ///     to the global <see cref="ActorHitMessage"/> stream — that cost O(active balloons)
-    ///     delegate invocations per hit plus subscription allocations per spawn — instead
-    ///     <c>HitPipeline</c> resolves the owner here via the model's
-    ///     <see cref="IBalloonModel.RegistryHandle"/>: a flat-array index, no hashing. The handle
-    ///     travels with the model, so routing is move-invariant (balance moves and pressure
-    ///     shoves never touch the registry), and a reference compare on resolve stands in for a
-    ///     generation counter — models are never pooled, so a stale handle can only point at
-    ///     null or a different model. Also owns board-clear teardown: one subscriber iterating a
-    ///     snapshot, rather than per-balloon subscriptions whose re-entrant disposal would need
-    ///     hand-rolled guards.
-    /// </summary>
+    /// <summary>Routes each balloon's hit reaction to its owning controller via a flat-array index, avoiding per-balloon subscriptions.</summary>
     internal class BalloonControllerRegistry : IStartable, IDisposable, ITransitionOutgoingContent
     {
-        // Comfortably above the 66-slot board plus spawn/transit overlap, so growth is a
-        // never-in-practice fallback rather than a steady-state event.
+        // Comfortably above the 66-slot board plus spawn/transit overlap.
         private const int InitialCapacity = 128;
         private const int Unregistered = -1;
 
@@ -100,9 +87,7 @@ namespace BalloonParty.Balloon.Controller
             }
         }
 
-        // Pops one balloon on demand (VFX + return), unregistering it — the level-transition wave
-        // pops the board diagonally over time rather than all at once via OnBoardClear. Routes through
-        // HandleBoardClear (the side-effect-free teardown), NOT the projectile-hit Pop() path.
+        // Pops one balloon on demand; routes through HandleBoardClear, not the projectile-hit Pop() path.
         internal bool TryPopSingle(IBalloonModel model)
         {
             if (!TryResolve(model, out var controller))
@@ -115,7 +100,7 @@ namespace BalloonParty.Balloon.Controller
             return true;
         }
 
-        // Internal for direct test invocation of the resolve mechanics.
+        // Internal for direct test invocation.
         internal bool TryResolve(IBalloonModel model, out BalloonController controller)
         {
             var index = model.RegistryHandle;
@@ -129,9 +114,7 @@ namespace BalloonParty.Balloon.Controller
             return false;
         }
 
-        // Level-transition: the outgoing balloons ride the descending scenario root and slide out with
-        // the rest of the old level. The pop wave still pops them band-by-band as they go (pool-return
-        // reparents each away); any not popped by the end are swept by ClearAll.
+        // Outgoing balloons ride the descending scenario root out with the old level.
         public void HoldOutgoing(Transform outgoingRoot, float exitDrop)
         {
             for (var i = 0; i < _highWater; i++)
@@ -142,8 +125,7 @@ namespace BalloonParty.Balloon.Controller
 
         public void ReleaseOutgoing()
         {
-            // Nothing to undo — the pop wave + ClearAll already returned every outgoing balloon to its
-            // pool (which reparented it off the transition root).
+            // Nothing to undo — ClearAll already returns outgoing balloons to their pool.
         }
 
         private void OnBoardClear(BoardClearMessage msg)
@@ -151,13 +133,10 @@ namespace BalloonParty.Balloon.Controller
             ClearAll(msg.PlayPopVfx);
         }
 
-        // Clears every registered balloon. Callable directly (not just via BoardClearMessage) so the
-        // level-transition Ascent can sweep any straggler after its diagonal pop wave — the wave has
-        // already unregistered+popped the on-grid balloons, so this only catches item-pending ones.
+        // Callable directly so the level-transition Ascent can sweep item-pending stragglers.
         internal void ClearAll(bool playPopVfx)
         {
-            // Snapshot first — HandleBoardClear returns views to the pool, and controllers
-            // popped-but-waiting-for-item-activation are still registered and must be included.
+            // Snapshot first — HandleBoardClear returns views to the pool as it iterates.
             _clearBuffer.Clear();
             for (var i = 0; i < _highWater; i++)
             {

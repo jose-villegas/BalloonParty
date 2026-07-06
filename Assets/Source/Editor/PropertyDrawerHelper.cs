@@ -5,9 +5,7 @@ using UnityEngine;
 namespace BalloonParty.Editor
 {
     /// <summary>
-    ///     Shared drawing utilities for custom <see cref="PropertyDrawer"/>s across the project.
-    ///     All methods operate on Unity's <see cref="SerializedProperty"/> API so they work across
-    ///     any serialized type without needing type-specific knowledge.
+    ///     Shared drawing utilities for custom <see cref="PropertyDrawer"/>s.
     /// </summary>
     public static class PropertyDrawerHelper
     {
@@ -15,10 +13,7 @@ namespace BalloonParty.Editor
         public const float Spacing = 2f;
 
         /// <summary>
-        ///     Returns the total pixel height required to draw all direct serialized children
-        ///     of <paramref name="property"/> whose names are NOT in <paramref name="excluded"/>,
-        ///     using each field's actual <see cref="EditorGUI.GetPropertyHeight"/> so that
-        ///     variable-height drawers (e.g. <c>[PaletteColorMask]</c>) are measured correctly.
+        ///     Total pixel height of <paramref name="property"/>'s children not in <paramref name="excluded"/>, accounting for variable-height drawers.
         /// </summary>
         public static float GetCommonFieldsHeight(SerializedProperty property, HashSet<string> excluded)
         {
@@ -31,10 +26,7 @@ namespace BalloonParty.Editor
         }
 
         /// <summary>
-        ///     Returns the number of direct serialized children of <paramref name="property"/>
-        ///     whose names are NOT in <paramref name="excluded"/>.
-        ///     Use <see cref="GetCommonFieldsHeight"/> for height calculation when any field
-        ///     may have a variable-height drawer.
+        ///     Number of direct serialized children of <paramref name="property"/> not in <paramref name="excluded"/>.
         /// </summary>
         public static int CountCommonFields(SerializedProperty property, HashSet<string> excluded)
         {
@@ -44,10 +36,7 @@ namespace BalloonParty.Editor
         }
 
         /// <summary>
-        ///     Draws every direct serialized child of <paramref name="property"/> whose name is
-        ///     NOT in <paramref name="excluded"/>, in declaration order, using
-        ///     <see cref="ObjectNames.NicifyVariableName"/> for the display label.
-        ///     Returns the updated Y position after the last drawn field.
+        ///     Draws every child of <paramref name="property"/> not in <paramref name="excluded"/>; returns the updated Y position.
         /// </summary>
         public static float DrawCommonFields(
             Rect position,
@@ -71,11 +60,7 @@ namespace BalloonParty.Editor
         }
 
         /// <summary>
-        ///     Draws a single field located by <paramref name="fieldName"/> on <paramref name="parent"/>
-        ///     using an explicit <paramref name="displayName"/>.
-        ///     Suitable for fields where the nicified name is not descriptive enough, or where
-        ///     declaration order differs from the desired display order.
-        ///     Returns the updated Y position, or the unchanged Y if the field is not found.
+        ///     Draws <paramref name="fieldName"/> on <paramref name="parent"/> with an explicit display name; returns Y unchanged if not found.
         /// </summary>
         public static float DrawNamedField(
             Rect position,
@@ -110,8 +95,7 @@ namespace BalloonParty.Editor
         }
 
         /// <summary>
-        ///     Draws a min/max slider with float fields on each side, matching Unity's
-        ///     standard control alignment. Rect-based version for <see cref="PropertyDrawer"/>.
+        ///     Min/max slider with float fields on each side. Rect-based version for <see cref="PropertyDrawer"/>.
         /// </summary>
         public static void DrawMinMaxSlider(
             Rect rect, string label, ref float lo, ref float hi, float min, float max)
@@ -142,8 +126,7 @@ namespace BalloonParty.Editor
         }
 
         /// <summary>
-        ///     Draws a min/max slider with float fields on each side, matching Unity's
-        ///     standard control alignment. Layout version for <see cref="EditorWindow"/>.
+        ///     Min/max slider with float fields on each side. Layout version for <see cref="EditorWindow"/>.
         /// </summary>
         public static void DrawMinMaxSliderLayout(
             string label, ref Vector2 range, float min, float max)
@@ -161,9 +144,7 @@ namespace BalloonParty.Editor
         }
 
         /// <summary>
-        ///     Visits every direct serialized child of <paramref name="root"/> whose
-        ///     <c>name</c> is NOT present in <paramref name="excluded"/>,
-        ///     passing a safe <c>Copy()</c> to <paramref name="visit"/>.
+        ///     Visits every direct child of <paramref name="root"/> not in <paramref name="excluded"/>, passing a safe <c>Copy()</c> to <paramref name="visit"/>.
         /// </summary>
         public static void ForEachCommonChild(
             SerializedProperty root,

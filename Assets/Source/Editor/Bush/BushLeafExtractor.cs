@@ -6,10 +6,7 @@ using UnityEngine;
 namespace BalloonParty.Editor.Bush
 {
     /// <summary>
-    /// Extracts leaf attachment points from branch generator segment endpoints,
-    /// using the fractal generator's precise UV positions directly.
-    /// Terminal segments (whose End is not another segment's Start)
-    /// are the actual branch tips.
+    /// Extracts leaf attachment points from branch generator terminal segment tips.
     /// </summary>
     internal static class BushLeafExtractor
     {
@@ -34,8 +31,7 @@ namespace BalloonParty.Editor.Bush
         }
 
         /// <summary>
-        /// Kept for backward compatibility with callers that pass a branch map texture.
-        /// Ignores the texture and extracts from the generator directly.
+        /// Backward-compat overload — ignores the texture and extracts from the generator directly.
         /// </summary>
         internal static List<LeafSlot> Extract(
             Texture2D branchMap,
@@ -49,7 +45,7 @@ namespace BalloonParty.Editor.Bush
         private static List<TipCandidate> FindTerminalTips(
             IReadOnlyList<BushBranchGenerator.Segment> segments, float depthThreshold, float attachBias)
         {
-            // Collect all segment Start positions to identify non-terminal endpoints
+            // Non-terminal endpoints are any other segment's Start.
             var startPositions = new HashSet<Vector2Int>();
             foreach (var seg in segments)
             {
@@ -65,7 +61,7 @@ namespace BalloonParty.Editor.Bush
                     continue;
                 }
 
-                // Terminal: this segment's End is not used as any other segment's Start
+                // Terminal: End isn't used as any other segment's Start.
                 var endQ = Quantise(seg.End);
                 if (startPositions.Contains(endQ))
                 {
@@ -88,7 +84,7 @@ namespace BalloonParty.Editor.Bush
 
         private static Vector2Int Quantise(Vector2 v)
         {
-            // Quantise to 1/4096 grid to avoid float comparison issues
+            // 1/4096 grid avoids float comparison issues.
             return new Vector2Int(
                 Mathf.RoundToInt(v.x * 4096f),
                 Mathf.RoundToInt(v.y * 4096f));

@@ -9,13 +9,7 @@ using VContainer.Unity;
 namespace BalloonParty.Slots.Actor.Cluster
 {
     /// <summary>
-    /// Generic controller that manages a single <typeparamref name="TView"/>
-    /// instance rendering all clusters of <typeparamref name="TModel"/> actors.
-    /// On any cluster change, collects every slot position across every cluster
-    /// and reconfigures the view in one call.
-    /// Subclasses must implement <see cref="GetPrefab"/> to provide the typed prefab
-    /// and may override <see cref="PopulatePositions"/> to inject extra positions
-    /// (e.g. gap-fill circles between adjacent slots).
+    /// Manages a single <typeparamref name="TView"/> rendering all clusters of <typeparamref name="TModel"/> actors.
     /// </summary>
     internal abstract class ClusterViewController<TModel, TView, TSettings>
         : IStartable, IDisposable, ITransitionOutgoingContent
@@ -65,9 +59,7 @@ namespace BalloonParty.Slots.Actor.Cluster
 
             _view = _resolver.Instantiate(prefab);
 
-            // Parent under the scenario root (at the origin during play) so the level-transition
-            // Ascent moves this cluster with everything else; the view renders relative to its
-            // transform, so a moved root slides it without touching its per-cluster shape.
+            // Parented under the scenario root so the level-transition Ascent moves this cluster with everything else.
             _view.transform.SetParent(_scenarioRoot.Transform, worldPositionStays: false);
 
             if (_view.Renderer != null)
@@ -96,10 +88,7 @@ namespace BalloonParty.Slots.Actor.Cluster
             }
         }
 
-        // Freezes the current cluster shape into a second, throwaway view left at rest (NOT parented
-        // under the scenario root, so it doesn't ride the descent). Called before the level transition
-        // clears the board, so the outgoing clusters stay put while the live view slides the incoming
-        // ones down over them. Reads the still-populated registry, so it must run before the clear.
+        // Must run before the board clears — freezes the current cluster shape into a throwaway snapshot view.
         public void HoldOutgoing(Transform outgoingRoot, float exitDrop)
         {
             ReleaseOutgoing();
@@ -126,9 +115,7 @@ namespace BalloonParty.Slots.Actor.Cluster
                 return;
             }
 
-            // Ride the scenario root but offset one exitDrop BELOW the incoming content, so as the root
-            // descends (lifting the incoming content from +exitDrop down to rest) this snapshot slides
-            // from rest down to -exitDrop — the outgoing scenario exits the bottom as the new arrives.
+            // Offset below the incoming content so it exits the bottom as the new scenario arrives.
             snapshot.transform.SetParent(outgoingRoot, worldPositionStays: true);
             var local = snapshot.transform.localPosition;
             local.y -= exitDrop;
@@ -147,16 +134,13 @@ namespace BalloonParty.Slots.Actor.Cluster
         }
 
         /// <summary>
-        /// Called once after the view is instantiated and its renderer is
-        /// configured. Override to wire subclass-specific dependencies.
+        /// Override to wire subclass-specific dependencies.
         /// </summary>
         protected virtual void OnViewCreated(TView view)
         {
         }
 
         /// <summary>
-        /// Fills <paramref name="buffer"/> with <c>(x, y, seed, radiusScale)</c>
-        /// entries for every position the cluster renderer should cover.
         /// Override to inject additional positions (gap fills, etc.).
         /// </summary>
         protected virtual int PopulatePositions(
@@ -191,8 +175,7 @@ namespace BalloonParty.Slots.Actor.Cluster
             }
         }
 
-        // Configures a view from the CURRENT clusters. Returns false (and clears the view) when there
-        // are no clusters to draw. Shared by the live view's Reconfigure and the transition snapshot.
+        // Shared by the live view's Reconfigure and the transition snapshot.
         private bool ConfigureView(TView view)
         {
             var clusters = _registry.Clusters;

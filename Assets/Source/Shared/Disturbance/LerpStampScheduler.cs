@@ -4,11 +4,7 @@ using UnityEngine;
 
 namespace BalloonParty.Shared.Disturbance
 {
-    /// <summary>
-    ///     Ramps "duration" stamps over time: rather than a single-frame pop, a stamp's strength is
-    ///     spread across its duration as a sequence of instant sub-stamps, producing a smooth shockwave.
-    ///     Holds at most <c>maxStamps</c> active ramps, evicting the oldest when full.
-    /// </summary>
+    /// <summary>Spreads a stamp's strength over its duration as sub-stamps; evicts the oldest ramp when <c>maxStamps</c> is full.</summary>
     internal class LerpStampScheduler
     {
         private readonly int _maxStamps;
@@ -38,10 +34,7 @@ namespace BalloonParty.Shared.Disturbance
             });
         }
 
-        /// <summary>
-        ///     Advances every active ramp by <paramref name="dt" />, calling <paramref name="emit" />
-        ///     (position, radius, strength, direction) with the strength accrued this step.
-        /// </summary>
+        /// <summary>Advances every active ramp by <paramref name="dt" />, emitting the strength accrued this step.</summary>
         public void Tick(float dt, Action<Vector3, float, float, Vector2> emit)
         {
             for (var i = _active.Count - 1; i >= 0; i--)

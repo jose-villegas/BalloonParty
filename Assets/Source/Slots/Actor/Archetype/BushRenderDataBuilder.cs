@@ -6,12 +6,7 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    /// <summary>
-    /// Assembles a bush's <see cref="BushRenderData"/> from its variant data and slot
-    /// centers: per-slot branch material/matrix and leaf tiers, then merges every slot's
-    /// leaves into ≤1023-instance batches so the whole bush draws in one instanced call
-    /// per batch (one per tier in the common case) rather than one call per slot.
-    /// </summary>
+    /// <summary>Assembles a bush's <see cref="BushRenderData"/>, merging every slot's leaves into ≤1023-instance batches so the bush draws in one instanced call per batch instead of one per slot.</summary>
     internal sealed class BushRenderDataBuilder
     {
         private const int MaxInstancesPerBatch = 1023;
@@ -144,7 +139,7 @@ namespace BalloonParty.Slots.Actor.Archetype
                 var slot = slots[indices[t]];
                 var leafWorldPos = worldPos + (slot.UVPosition - new Vector2(0.5f, 0.5f)) * bushWorldSize;
 
-                // Static translation-only matrix — rotation and scale handled by shader
+                // Rotation/scale handled by shader, not this matrix.
                 tier.Matrices[t] = Matrix4x4.TRS(
                     new Vector3(leafWorldPos.x, leafWorldPos.y, 0f),
                     Quaternion.identity,
@@ -162,7 +157,7 @@ namespace BalloonParty.Slots.Actor.Archetype
                     rect.width / tex.width,
                     rect.height / tex.height);
 
-                // Per-instance wind data: phase, depth, baseAngle, scale
+                // Vector4 packing: phase, depth, baseAngle, scale.
                 winds[t] = new Vector4(
                     slot.PhaseOffset,
                     slot.Depth,

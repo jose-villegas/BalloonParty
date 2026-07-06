@@ -12,12 +12,7 @@ using Object = UnityEngine.Object;
 namespace BalloonParty.Editor.SpriteCombine
 {
     /// <summary>
-    ///     Bake logic for <see cref="SpriteLayerCombiner"/>: flattens the assigned sprite
-    ///     layers, in sorting order and with their relative transforms, into one straight-alpha
-    ///     PNG sprite whose pivot lands on the combiner's transform — assign it to a renderer
-    ///     there and the composition is pixel-identical. Rendering machinery mirrors
-    ///     <c>SpriteShadowBakerEditor</c> (CommandBuffer.DrawRenderer through per-texture plain
-    ///     sprite materials, platform row flip on readback).
+    ///     Bake logic for <see cref="SpriteLayerCombiner"/>: flattens the assigned sprite layers into one straight-alpha PNG sprite.
     /// </summary>
     [CustomEditor(typeof(SpriteLayerCombiner))]
     internal sealed class SpriteLayerCombinerEditor : UnityEditor.Editor
@@ -55,8 +50,7 @@ namespace BalloonParty.Editor.SpriteCombine
                 return;
             }
 
-            // A prefab can host several combiners (e.g. Body + Shine groups) — find the
-            // clicked one inside the isolated prefab copy by index.
+            // A prefab can host several combiners — find the clicked one by index.
             var combinerIndex = Array.IndexOf(
                 clicked.transform.root.GetComponentsInChildren<SpriteLayerCombiner>(true), clicked);
 
@@ -74,7 +68,7 @@ namespace BalloonParty.Editor.SpriteCombine
 
                 if (combiner.NeutralizeTint)
                 {
-                    // The isolated copy is discarded on unload, so no restore is needed.
+                    // Isolated copy is discarded on unload — no restore needed.
                     foreach (var layer in layers)
                     {
                         layer.color = new Color(1f, 1f, 1f, layer.color.a);
@@ -147,9 +141,7 @@ namespace BalloonParty.Editor.SpriteCombine
             return bounds;
         }
 
-        // Draws each layer's own mesh (vertex colors carry the renderer tint) through a plain
-        // sprite material with the sprite texture bound explicitly — DrawRenderer's material
-        // override does not carry the SpriteRenderer's implicit texture binding.
+        // DrawRenderer's material override drops the SpriteRenderer's implicit texture binding, so it's bound explicitly per material.
         private static Color[] RenderLayers(
             IReadOnlyList<SpriteRenderer> layers, Bounds bounds, float padWorld, int width, int height)
         {
@@ -199,10 +191,7 @@ namespace BalloonParty.Editor.SpriteCombine
             var raw = readback.GetPixels();
             Object.DestroyImmediate(readback);
 
-            // Metal/DX render top-down into RTs while ReadPixels assumes bottom-up rows —
-            // flip during extraction so the bake matches world orientation. Alpha-blending
-            // over a clear target leaves premultiplied color — divide it back out, since
-            // sprites want straight alpha.
+            // Flip rows if the GPU renders top-down; un-premultiply alpha for straight-alpha sprites.
             var flip = SystemInfo.graphicsUVStartsAtTop;
             var pixels = new Color[raw.Length];
             for (var y = 0; y < height; y++)

@@ -11,19 +11,7 @@ using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Balloon.Type
 {
-    /// <summary>
-    /// Balloon variant for <c>BalloonType.BubbleCluster</c>.
-    /// Drives <c>_BubbleCount</c> and the float/spin clock of the
-    /// <c>BalloonParty/Balloon/SoapBubbleCluster</c> shader via
-    /// <see cref="MaterialPropertyBlock"/> — phase and speeds are pushed once at
-    /// <c>Bind</c>; the shader self-derives the animation from <c>_Time.y</c>, so
-    /// runtime frames push nothing.
-    ///
-    /// <c>[ExecuteAlways]</c> keeps the shader animation running in edit mode
-    /// (where <c>_Time</c> is frozen — the preview zeroes the shader clocks and
-    /// integrates editor time instead).  Adjust <c>_previewBubbleCount</c> in the
-    /// Inspector to preview each cluster state.
-    /// </summary>
+    /// <summary>Drives the SoapBubbleCluster shader's bubble count and float/spin clock; the shader animates itself from <c>_Time.y</c> after Bind.</summary>
     [ExecuteAlways]
     public class SoapBubbleClusterVariant : MonoBehaviour, IBalloonVariant, IBalloonViewBinding
     {
@@ -57,8 +45,7 @@ namespace BalloonParty.Balloon.Type
             EnsureBlock();
             _instancePhase = Random.value * 100f;
 
-            // Instances that never Bind (scene-placed, previews) still get a live clock;
-            // Bind re-pushes with the randomized spin on top.
+            // Instances that never Bind (scene-placed, previews) still get a live clock.
             if (Application.isPlaying)
             {
                 PushRuntimeClock();
@@ -70,8 +57,7 @@ namespace BalloonParty.Balloon.Type
             EnsureBlock();
 
 #if UNITY_EDITOR
-            // Edit mode: built-in _Time is frozen, so zero the shader clocks and
-            // integrate editor time here. Guard against first-frame and load spikes.
+            // _Time is frozen in edit mode, so integrate editor time here instead.
             if (!Application.isPlaying)
             {
                 SceneView.RepaintAll();
@@ -90,8 +76,7 @@ namespace BalloonParty.Balloon.Type
             }
 #endif
 
-            // The runtime clock and spin are shader-derived (pushed once at Bind); the
-            // quad itself must stay axis-aligned — the shader rotates the content.
+            // The quad must stay axis-aligned — the shader rotates the content.
             if (_renderer != null)
             {
                 _renderer.transform.localRotation = Quaternion.identity;
@@ -158,8 +143,7 @@ namespace BalloonParty.Balloon.Type
             _renderer.SetFloatAndApply(_block, BubbleCountId, count);
         }
 
-        // Pushed once per Bind: the shader derives clock and spin from _Time.y, so no
-        // per-frame property-block churn at runtime.
+        // Pushed once per Bind — no per-frame property-block churn at runtime.
         private void PushRuntimeClock()
         {
             if (_renderer == null || _block == null)

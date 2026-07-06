@@ -8,11 +8,7 @@ using VContainer;
 
 namespace BalloonParty.Balloon.Controller
 {
-    /// <summary>
-    ///     The run-lifetime collaborators every <see cref="BalloonController" /> shares (message buses,
-    ///     registry, grid, pool, disturbance field). Bundled into one injected object so the per-balloon
-    ///     constructor takes only its instance state instead of a dozen wiring arguments.
-    /// </summary>
+    /// <summary>Shared collaborators bundled so the per-balloon constructor avoids a dozen wiring arguments.</summary>
     internal class BalloonControllerContext
     {
         public ISubscriber<ItemActivatedMessage> ItemActivatedSubscriber { get; }

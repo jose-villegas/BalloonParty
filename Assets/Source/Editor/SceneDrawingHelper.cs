@@ -4,8 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Editor
 {
     /// <summary>
-    ///     Shared Scene-view drawing primitives used by custom editors that need
-    ///     to render world-space guides (rectangles, bounds, etc.) via <see cref="Handles"/>.
+    ///     Shared Scene-view world-space drawing primitives via <see cref="Handles"/>.
     /// </summary>
     public static class SceneDrawingHelper
     {
@@ -31,8 +30,7 @@ namespace BalloonParty.Editor
         }
 
         /// <summary>
-        ///     Draws a world-space axis-aligned rectangle defined by explicit edge positions
-        ///     (top, right, bottom, left — clockwise from top, matching CSS / <c>Vector4</c> convention).
+        ///     Draws a world-space axis-aligned rectangle from edge positions (CSS-style top/right/bottom/left order).
         /// </summary>
         public static void DrawWorldRectFromLimits(
             float top,

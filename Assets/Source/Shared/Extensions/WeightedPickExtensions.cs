@@ -9,11 +9,7 @@ namespace BalloonParty.Shared.Extensions
     {
         private static readonly List<IWeightedEntry> CandidateBuffer = new();
 
-        /// <summary>
-        /// Picks a random entry using weighted random selection, excluding entries
-        /// that have reached their <see cref="IWeightedEntry.MaxCount"/> limit.
-        /// Returns <c>default</c> if no candidates remain.
-        /// </summary>
+        /// <summary>Weighted-random pick, excluding entries at their <see cref="IWeightedEntry.MaxCount"/> limit; returns <c>default</c> if none remain.</summary>
         internal static T PickRandom<T>(this IReadOnlyList<T> entries, IReadOnlyDictionary<string, int> activeCounts)
             where T : class, IWeightedEntry
         {

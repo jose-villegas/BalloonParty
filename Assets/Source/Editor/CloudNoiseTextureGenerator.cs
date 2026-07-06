@@ -4,26 +4,13 @@ using UnityEngine;
 
 namespace BalloonParty.Editor
 {
-    /// <summary>
-    ///     Generates the tileable noise texture PuffCloud samples for every octave: one
-    ///     periodic-Perlin octave (wrapped lattice — seamless by construction, not by edge
-    ///     blending), histogram-matched to the distribution of the procedural simplex the
-    ///     cloud thresholds were originally tuned against, and stored as 16-bit PNG so the
-    ///     smoothstepped cloud gradients can't band.
-    ///     The period must match the material's <c>_NoisePeriod</c>. As a single octave inside
-    ///     the shader's three-scale differential-scroll blend, Perlin reads the same as simplex.
-    /// </summary>
+    /// <summary>Generates the tileable noise texture PuffCloud samples; period must match the material's <c>_NoisePeriod</c>.</summary>
     internal static class CloudNoiseTextureGenerator
     {
-        // 16-bit PNG, not EXR: importing a linear HDR file into a Gamma-color-space project
-        // bakes a linear-to-gamma lift into the texel data (stored 0.5 samples as ~0.74),
-        // which shifts the noise distribution the cloud thresholds are tuned against. A
-        // 16-bit PNG round-trips raw and keeps the banding-free precision.
+        // 16-bit PNG, not EXR: HDR import into Gamma color space would lift the texel values and shift the noise distribution.
         private const string OutputPath = "Assets/Textures/Grid/CloudNoiseTileable.png";
 
-        // 256 over period 8 = 32 texels per noise unit. The bilinear softening of the fine
-        // octave at this density reads fine in-game (raise to 512 if crisper clouds are ever
-        // wanted).
+        // 256 over period 8 = 32 texels per noise unit; raise to 512 for crisper clouds.
         private const int Resolution = 256;
         private const int Period = 8;
         private const int Seed = 1337;
@@ -47,10 +34,7 @@ namespace BalloonParty.Editor
                 }
             }
 
-            // The cloud material's edge thresholds are tuned against the shader simplex's
-            // specific value distribution (Ashima, ×130) — a raw Perlin tile is narrower and
-            // shifts cloud coverage. Histogram-match the tile onto the simplex distribution so
-            // the baked octave is statistically indistinguishable from the procedural one.
+            // Histogram-match onto the shader's simplex distribution so cloud coverage doesn't shift.
             var matched = HistogramMatchToSimplex(raw);
 
             for (var i = 0; i < matched.Length; i++)
@@ -78,8 +62,7 @@ namespace BalloonParty.Editor
         {
             var importer = (TextureImporter)AssetImporter.GetAtPath(OutputPath);
 
-            // Linear data sampled by value — sRGB conversion or compression would distort the
-            // field the smoothstep thresholds were tuned against.
+            // Linear data sampled by value — sRGB or compression would distort it.
             importer.sRGBTexture = false;
             importer.wrapMode = TextureWrapMode.Repeat;
             importer.filterMode = FilterMode.Bilinear;
@@ -96,7 +79,7 @@ namespace BalloonParty.Editor
                 permutation[i] = i;
             }
 
-            // Deterministic shuffle — regenerating always yields the identical texture.
+            // Deterministic shuffle — regenerating yields the identical texture.
             var random = new System.Random(Seed);
             for (var i = permutation.Length - 1; i > 0; i--)
             {
@@ -107,7 +90,7 @@ namespace BalloonParty.Editor
             return permutation;
         }
 
-        // Classic Perlin with lattice indices wrapped at Period — tiling is exact, not blended.
+        // Lattice indices wrapped at Period — tiling is exact, not blended.
         private static float PeriodicPerlin(float x, float y, int[] permutation)
         {
             var cellX = Mathf.FloorToInt(x);
@@ -130,14 +113,11 @@ namespace BalloonParty.Editor
 
             var value = Mathf.Lerp(Mathf.Lerp(d00, d10, u), Mathf.Lerp(d01, d11, u), v);
 
-            // 2D Perlin spans ±√2/2 — normalize toward [-1, 1] to match the simplex contract.
+            // 2D Perlin spans ±√2/2 — normalize to match the simplex range.
             return Mathf.Clamp(value * 1.4142f, -1f, 1f);
         }
 
-        // Rank-maps the tile's values onto the simplex value distribution: for each texel,
-        // find its quantile within the tile, then take the same quantile of a large sorted
-        // sample of the shader's actual simplex. Preserves the tile's spatial structure
-        // (and therefore its tileability) while matching the marginal distribution exactly.
+        // Rank-maps each texel's quantile onto the same quantile of sampled simplex values, preserving spatial structure.
         private static float[] HistogramMatchToSimplex(float[] raw)
         {
             const int sampleCount = 65536;
@@ -172,9 +152,7 @@ namespace BalloonParty.Editor
             return result;
         }
 
-        // C# port of Assets/Shaders/BalloonParty/Noise/SimplexNoise2D.cginc (Ashima/Gustavson,
-        // ×130 scale) — must stay numerically in step with the shader so the histogram match
-        // targets the real distribution.
+        // C# port of Assets/Shaders/BalloonParty/Noise/SimplexNoise2D.cginc — must stay numerically in step with the shader.
         private static float SimplexNoise2D(Vector2 v)
         {
             const float cx = 0.211324865405187f;
@@ -246,7 +224,6 @@ namespace BalloonParty.Editor
 
         private static float GradientDot(int hash, float x, float y)
         {
-            // Eight unit-ish gradient directions.
             switch (hash & 7)
             {
                 case 0: return x + y;

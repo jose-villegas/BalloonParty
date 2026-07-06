@@ -8,8 +8,7 @@ namespace BalloonParty.Shared.Messages
         public readonly IReadOnlyList<IBalloonModel> NewBalloons;
         public readonly int TurnCount;
 
-        // The one-off fill of a fresh board (level start / transition). Seeds a separate item count
-        // and bypasses the turn-cadence gate — it isn't a "turn".
+        // Fresh-board fill (level start/transition); bypasses the turn-cadence gate.
         public readonly bool IsInitialSpawn;
 
         public ItemCheckMessage(IReadOnlyList<IBalloonModel> newBalloons, int turnCount, bool isInitialSpawn)

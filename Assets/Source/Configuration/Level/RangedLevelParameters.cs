@@ -12,10 +12,7 @@ using BalloonParty.Configuration.Ranges;
 namespace BalloonParty.Configuration.Level
 {
     /// <summary>
-    ///     The range-authored form of a level's difficulty mix: scalars as <see cref="RangedInt" />
-    ///     (fixed/linear/random), weighted sets static (no mode — the per-spawn weighted draw is
-    ///     already the randomness for the mix). <see cref="Resolve" /> is a pure function of the
-    ///     level position, so it's EditMode-testable with a seeded rng.
+    ///     The range-authored form of a level's difficulty mix; <see cref="Resolve" /> is a pure function, so it's EditMode-testable with a seeded rng.
     /// </summary>
     [Serializable]
     public class RangedLevelParameters
@@ -59,8 +56,7 @@ namespace BalloonParty.Configuration.Level
         public RangedInt ItemCadence => _itemCadence;
         public RangedInt FirstSpawnTurn => _firstSpawnTurn;
 
-        // Curves are the distribution itself — sampled per turn at runtime, so no per-level range
-        // resolution (like the weighted type sets, they pass through Resolve unchanged).
+        // Curves pass through Resolve unchanged — sampled per turn at runtime.
         public AnimationCurve InitialItemCountWeights => _initialItemCountWeights;
         public AnimationCurve ItemCountWeights => _itemCountWeights;
         public BalloonTypeWeight[] BalloonWeights => _balloonWeights;

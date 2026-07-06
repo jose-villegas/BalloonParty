@@ -13,8 +13,7 @@ namespace BalloonParty.Nudge
             _config = config;
         }
 
-        // Resolves both values in one pass over the override lists — the per-hit neighbor loop
-        // calls this once per nudged balloon, so the split Resolve* pair would walk each list twice.
+        // Resolves both values in one pass to avoid walking the lists twice.
         public void Resolve(
             IReadOnlyList<NudgeOverride> balloonOverrides,
             IReadOnlyList<NudgeOverride> publisherOverrides,
@@ -73,8 +72,7 @@ namespace BalloonParty.Nudge
             return entry != null ? entry.Falloff : _config.NudgeFalloff;
         }
 
-        // Plain loop with a mask test — FirstOrDefault allocates a closure, a delegate, and an
-        // enumerator per call, and this runs several times per projectile hit.
+        // Avoids FirstOrDefault's per-call allocations; runs several times per hit.
         internal static NudgeOverride FindOverride(IReadOnlyList<NudgeOverride> overrides, NudgeType source)
         {
             if (overrides == null)

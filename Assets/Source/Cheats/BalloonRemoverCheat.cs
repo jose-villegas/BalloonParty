@@ -242,7 +242,7 @@ namespace BalloonParty.Cheats
                 return null;
             }
 
-            // For 2D orthographic: XY is correct with any z input; flatten result to z=0.
+            // 2D orthographic: XY is correct regardless of z input.
             var world = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
             world.z = 0f;
             return world;

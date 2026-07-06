@@ -5,9 +5,7 @@ using UnityEngine;
 namespace BalloonParty.Item
 {
     /// <summary>
-    ///     Shared physics setup for area-of-effect items (bomb, laser): a balloon-layer
-    ///     <see cref="ContactFilter2D" /> for the cast/overlap call, and resolution of a hit collider
-    ///     to a live balloon model — skipping recycled views and the popped balloon itself.
+    ///     Shared balloon-layer physics filter and hit-collider resolution for AoE items.
     /// </summary>
     internal class BalloonOverlapQuery
     {

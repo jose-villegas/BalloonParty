@@ -12,11 +12,7 @@ using BalloonParty.Configuration.Items;
 namespace BalloonParty.Editor.EffectPreview
 {
     /// <summary>
-    ///     Preview module for <see cref="ChainLightningView" />. Generates random
-    ///     grid positions as targets, fills jagged bolt segments into the view's
-    ///     <see cref="LineRenderer" />s, and animates forward growth + retraction
-    ///     synchronously via delta-time ticks. The glow sprite slides along a smooth
-    ///     Catmull-Rom path through per-jump centroids.
+    ///     Preview module for <see cref="ChainLightningView" />.
     /// </summary>
     internal sealed class ChainLightningPreviewModule : IEffectPreviewModule
     {
@@ -158,7 +154,7 @@ namespace BalloonParty.Editor.EffectPreview
             return _retracting ? AdvanceRetract() : AdvanceForward();
         }
 
-        // Reveals the next jump; on reaching the last, flips into retraction. Returns true to keep ticking.
+        // Flips into retraction after the last jump.
         private bool AdvanceForward()
         {
             _currentJump++;
@@ -182,7 +178,7 @@ namespace BalloonParty.Editor.EffectPreview
             return true;
         }
 
-        // Removes the last jump; when the chain is fully retracted, finishes. Returns false when done.
+        // Finishes once fully retracted.
         private bool AdvanceRetract()
         {
             _currentJump--;
@@ -220,7 +216,7 @@ namespace BalloonParty.Editor.EffectPreview
             _glowDiameters = null;
         }
 
-        // Chain lightning has no static region to outline — the arcs themselves are the preview.
+        // No static region to outline — the arcs are the preview.
         public void DrawSceneGizmos()
         {
         }

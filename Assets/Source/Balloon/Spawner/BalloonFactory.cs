@@ -18,11 +18,7 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Spawner
 {
-    /// <summary>
-    ///     Assembles a single balloon: pulls a view from the pool, builds the model + controller, places
-    ///     it on the grid, and plays the entry animation. The spawner owns scheduling, per-type caps, and
-    ///     path computation; this owns the object-graph wiring so that knowledge lives in one place.
-    /// </summary>
+    /// <summary>Assembles a single balloon's view, model, and controller, and places it on the grid.</summary>
     internal class BalloonFactory
     {
         private readonly IGamePalette _palette;
@@ -52,11 +48,7 @@ namespace BalloonParty.Balloon.Spawner
             _controllerContext = controllerContext;
         }
 
-        /// <summary>
-        ///     Spawns the balloon for <paramref name="entry"/> at <paramref name="slot"/>, rising along
-        ///     <paramref name="spawnPath"/>. <paramref name="onReturned"/> runs when the balloon returns
-        ///     to the pool (the spawner uses it to decrement its active-count). Returns the model.
-        /// </summary>
+        /// <summary><paramref name="onReturned"/> runs when the balloon returns to the pool.</summary>
         public IWriteableBalloonModel Create(
             BalloonPrefabEntry entry,
             Vector2Int slot,
@@ -94,7 +86,7 @@ namespace BalloonParty.Balloon.Spawner
 
             if (waypointCount <= 1)
             {
-                // Path too short for CatmullRom — place at target, scale in only
+                // Path too short for CatmullRom — scale in only
                 view.transform.position = spawnPath[spawnPath.Count - 1];
                 view.transform.DOScale(Vector3.one, duration * 0.5f)
                     .OnComplete(() => model.IsStable.Value = true);

@@ -5,18 +5,7 @@ using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Display
 {
-    /// <summary>
-    ///     Screen-space light approximation ("2D GI" — see the @ref arch_screen_space_light
-    ///     page): smears the <see cref="SceneCaptureService"/> capture toward a global
-    ///     light direction into a tiny light buffer (shadow amount in A, bounce color in
-    ///     RGB), then composites it over the whole frame as a camera-fitted quad with a
-    ///     multiplicative blend — no material changes anywhere else, no post-processing
-    ///     readback. The overlay quad lives on the TransparentFX layer, which must stay
-    ///     excluded from the capture mask so the capture always sees the unlit scene (no
-    ///     frame-to-frame feedback). Disable the component to A/B the effect; knobs are
-    ///     serialized here while this is an experiment and graduate to a config asset if
-    ///     the effect stays.
-    /// </summary>
+    /// <summary>Screen-space light approximation ("2D GI" — see @ref arch_screen_space_light).</summary>
     [RequireComponent(typeof(Camera))]
     [RequireComponent(typeof(SceneCaptureService))]
     public class ScreenSpaceLightService : MonoBehaviour
@@ -79,8 +68,7 @@ namespace BalloonParty.Display
         private Transform _overlayTransform;
         private bool _historyValid;
 
-        // What the overlay currently displays — the ping-pong swap means neither field
-        // consistently holds the latest build.
+        // Ping-ponged, so neither backing field consistently holds the latest build.
         internal RenderTexture LightTexture { get; private set; }
 
         private void Awake()
@@ -96,8 +84,7 @@ namespace BalloonParty.Display
 
         private void OnPreRender()
         {
-            // Lower-depth cameras (the capture) have already rendered this frame, so the
-            // smear reads a current capture, not last frame's.
+            // The capture camera has already rendered this frame at this point.
             var source = _capture.CaptureTexture;
             if (source == null)
             {
@@ -117,8 +104,7 @@ namespace BalloonParty.Display
             Graphics.Blit(source, _smearTarget, _smearMaterial, 0);
             Graphics.Blit(_smearTarget, _workTarget, _smearMaterial, 1);
 
-            // Temporal accumulation: fold the fresh build into the previous smoothed
-            // buffer, then swap so this frame's output is next frame's history.
+            // Temporal accumulation: blend into history, then swap for next frame.
             _smearMaterial.SetTexture(HistoryTexId, _historyTarget);
             _smearMaterial.SetFloat(TemporalBlendId, _historyValid ? _temporalResponse : 1f);
             Graphics.Blit(_workTarget, _lightTarget, _smearMaterial, 2);
@@ -163,8 +149,7 @@ namespace BalloonParty.Display
                 return true;
             }
 
-            // Editor-only convenience: on device, unassigned means unavailable — builds
-            // strip shaders that are only referenced by name.
+            // Editor-only fallback — device builds strip shaders only referenced by name.
             if (_smearShader == null)
             {
                 _smearShader = Shader.Find("Hidden/BalloonParty/Display/ScreenSpaceLightSmear");
@@ -232,9 +217,7 @@ namespace BalloonParty.Display
             _historyValid = false;
         }
 
-        // Pushed every frame on purpose: the knobs stay live-tunable in play mode and the
-        // buffers are tiny. If the effect graduates, sync this (and the blits) to the
-        // capture's Nth-frame cadence instead.
+        // Pushed every frame so the knobs stay live-tunable in play mode.
         private void PushParameters()
         {
             var worldHeight = _camera.orthographicSize * 2f;
@@ -244,11 +227,7 @@ namespace BalloonParty.Display
                 ? _lightDirection.normalized
                 : Vector2.down;
 
-            // _lightDirection is an L vector, pointing AT the source. The shader marches
-            // this step in both directions per pixel: +step for reflection (a lit
-            // neighbour toward the source bleeds its color here) and -step for shadow
-            // (an occluder toward the source darkens here) — see the shader header for
-            // why the two need opposite marches.
+            // Shader marches +step for reflection and -step for shadow; see shader header.
             var stepWorld = _smearDistance / TapCount;
             var stepUv = new Vector4(
                 direction.x * stepWorld / worldWidth,
@@ -262,8 +241,7 @@ namespace BalloonParty.Display
             _overlayMaterial.SetFloat(ShadowStrengthId, _shadowStrength);
             _overlayMaterial.SetFloat(BounceStrengthId, _bounceStrength);
 
-            // The bounce is measured against the sky the capture clears to (the main
-            // camera's background), so open sky nets to neutral instead of tinting.
+            // Measured against the capture's clear color so open sky nets to neutral.
             _overlayMaterial.SetColor(AmbientColorId, _camera.backgroundColor);
         }
 

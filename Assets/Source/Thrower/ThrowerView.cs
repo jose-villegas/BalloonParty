@@ -49,10 +49,7 @@ namespace BalloonParty.Thrower
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
 
-        /// <summary>
-        ///     Aim direction from the thrower toward the pointer. Returns false when no camera is
-        ///     available, so the controller keeps its previous direction.
-        /// </summary>
+        /// <summary>Returns false when no camera is available.</summary>
         public bool TryGetAimDirection(out Vector3 direction)
         {
             _camera ??= Camera.main;

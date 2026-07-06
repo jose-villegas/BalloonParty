@@ -48,8 +48,7 @@ namespace BalloonParty.Game
             builder.RegisterMessages(options);
             RegisterConfiguration(builder);
 
-            // Call order is load-bearing: entry points start in registration order (see
-            // GameScopeRegistration). Keep this sequence.
+            // Call order is load-bearing — entry points start in registration order.
             builder.RegisterCoreServices();
             builder.RegisterGameplaySystems();
             builder.RegisterItems();
@@ -60,8 +59,7 @@ namespace BalloonParty.Game
 #endif
         }
 
-        // Serialized ScriptableObject settings are bound to their read-only interfaces here
-        // (rather than in GameScopeRegistration) because they need this component's fields.
+        // Kept here (not GameScopeRegistration) because it needs this component's serialized fields.
         private void RegisterConfiguration(IContainerBuilder builder)
         {
             builder.RegisterInstance<IGameConfiguration>(_gameConfiguration);

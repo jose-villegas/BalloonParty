@@ -7,11 +7,7 @@ namespace BalloonParty.Shared.Extensions
 {
     internal static class SceneExtensions
     {
-        /// <summary>
-        ///     Disables all enabled Cameras, Canvases, AudioListeners and EventSystems
-        ///     in the scene. Returns a handle that restores exactly the components that
-        ///     were disabled.
-        /// </summary>
+        /// <summary>Disables all enabled Cameras, Canvases, AudioListeners and EventSystems; returns a handle to restore them.</summary>
         public static SceneRenderingHandle SuppressRendering(this Scene scene)
         {
             var handle = new SceneRenderingHandle();

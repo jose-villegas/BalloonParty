@@ -13,10 +13,7 @@ namespace BalloonParty.Editor
     {
         private static Material _opaquePreviewMaterial;
 
-        // The capture's alpha is a coverage mask, 0 almost everywhere — DrawPreviewTexture
-        // alpha-blends against the Inspector's background, so the RGB it's masking (the
-        // actual sky color) would otherwise never be visible. This material has no blend
-        // state, so it just replaces with the texture's RGB, ignoring alpha entirely.
+        // Ignores alpha so the near-zero coverage mask doesn't blend the RGB away.
         private static Material OpaquePreviewMaterial =>
             _opaquePreviewMaterial ??= new Material(Shader.Find("Unlit/Texture"));
 
@@ -45,7 +42,6 @@ namespace BalloonParty.Editor
             var rect = GUILayoutUtility.GetAspectRect(aspect);
             EditorGUI.DrawPreviewTexture(rect, texture, OpaquePreviewMaterial);
 
-            // Keep the preview live while the game runs.
             Repaint();
         }
     }

@@ -11,13 +11,11 @@ namespace BalloonParty.Configuration.Palette
         Color GetColor(string colorName);
 
         /// <summary>
-        ///     The entry for <paramref name="colorName" />, or <c>null</c> if none matches. Use when a
-        ///     missing color is a valid case (e.g. editor validation); <see cref="GetColor" /> throws.
+        ///     Returns <c>null</c> on no match, unlike <see cref="GetColor" />, which throws.
         /// </summary>
         PaletteEntry GetEntry(string colorName);
 
-        /// <summary>Color names whose bit is set in <paramref name="mask" /> — bit <c>i</c> is
-        /// <see cref="Colors" />[<c>i</c>], same convention as <see cref="PaletteColorMaskAttribute" />.</summary>
+        /// <summary>Color names whose bit is set in <paramref name="mask" />, per <see cref="PaletteColorMaskAttribute" />'s convention.</summary>
         IReadOnlyList<string> ColorNamesForMask(int mask);
     }
 }

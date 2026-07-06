@@ -8,10 +8,7 @@ using BalloonParty.Configuration.Palette;
 namespace BalloonParty.Item
 {
     /// <summary>
-    ///     Plays an item's one-shot activation effect: pulls the <see cref="EffectView" /> for the
-    ///     settings' prefab from the pool, tints it by the popped balloon's colour, and returns it on
-    ///     completion. Shared by the handlers whose effect needs no per-instance preparation (bomb,
-    ///     laser, shield); the chain/splash effects drive their own two-phase setup instead.
+    ///     Plays an item's one-shot activation effect, pooled and tinted by the popped balloon's colour.
     /// </summary>
     internal class ItemEffectPlayer
     {

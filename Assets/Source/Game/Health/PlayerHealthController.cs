@@ -9,16 +9,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Game.Health
 {
-    /// <summary>
-    ///     The player's hit-point pool — the only loss trigger under the spawn-saturation model.
-    ///     Each <see cref="SpawnBlockedMessage"/> (one un-spawnable balloon) costs one point;
-    ///     reaching zero publishes <see cref="EndRunRequestedMessage"/>, which <c>RunController</c>
-    ///     routes through its <c>EndRun</c> seam. (A message rather than a direct call keeps this
-    ///     controller out of the <c>IRunResettable</c> graph <c>RunController</c> resolves, which
-    ///     would otherwise be a DI cycle.) HP starts/resets to
-    ///     <see cref="IGameConfiguration.StartingHitPoints"/> and is hard-capped at
-    ///     <see cref="MaxHitPoints"/> internally — the UI shows only the current count.
-    /// </summary>
+    /// <summary>The player's hit-point pool — the only loss trigger under the spawn-saturation model.</summary>
     internal class PlayerHealthController : IStartable, IRunResettable, IDisposable, IPlayerHealth
     {
         private const int MaxHitPoints = 999;
@@ -46,7 +37,6 @@ namespace BalloonParty.Game.Health
 
         public IReadOnlyReactiveProperty<int> Current => _current;
 
-        // HP teardown has no dependencies; reset alongside the other counters, before respawn.
         public int ResetOrder => RunResetOrder.Counters;
 
         public void Start()
@@ -78,8 +68,7 @@ namespace BalloonParty.Game.Health
 
             if (_current.Value == 0)
             {
-                // RunController.EndRun no-ops outside Game / during a cinematic, and the GameOver
-                // state gate stops a later blocked spawn from ending the run a second time.
+                // GameOver state gate stops a later blocked spawn from ending the run twice.
                 _endRunPublisher.Publish(default);
             }
         }

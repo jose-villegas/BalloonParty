@@ -131,10 +131,7 @@ namespace BalloonParty.Balloon.View
             }
         }
 
-        /// <summary>
-        ///     Hides all visuals and disables the collider immediately. Called when an item balloon
-        ///     is hit but before the item effect completes and the balloon returns to pool.
-        /// </summary>
+        /// <summary>Hides all visuals and disables the collider immediately, before the balloon returns to pool.</summary>
         public void Hide()
         {
             foreach (var r in _spriteLayerRenderers)
@@ -157,7 +154,7 @@ namespace BalloonParty.Balloon.View
             float nudgeDuration,
             Action onComplete)
         {
-            // Skip nudge if the balloon is mid-spawn/balance and we didn't cause the instability.
+            // Skip if mid-spawn/balance and we didn't cause the instability.
             if (Model is IWriteableDynamicSlotActor stableChecker
                 && !stableChecker.IsStable.Value
                 && !_isNudging)
@@ -175,7 +172,7 @@ namespace BalloonParty.Balloon.View
 
             _isNudging = true;
 
-            // StartNudge silently replaces any nudge already running for this view.
+            // Silently replaces any nudge already running for this view.
             _motionTicker.StartNudge(
                 this, slotPosition, direction.normalized * nudgeDistance, nudgeDuration, onComplete);
 
@@ -211,9 +208,7 @@ namespace BalloonParty.Balloon.View
             _hitVfxOverrides = overrides;
         }
 
-        // parent (optional): reparents the spawned effect so it rides that transform. The level
-        // transition passes the scenario root the balloon is popping under, so the VFX slides out with
-        // it instead of firing at a fixed world point; null (normal pops) leaves the effect free.
+        // parent lets the VFX ride a moving transform (e.g. level transition) instead of firing in place.
         public void PlayHitVfxForOutcome(HitOutcome outcome, Transform parent = null)
         {
             var prefab = FindHitVfxPrefab(outcome);
@@ -223,7 +218,7 @@ namespace BalloonParty.Balloon.View
                 return;
             }
 
-            // Pop has a palette-colored default VFX when no override is configured.
+            // Pop falls back to a palette-colored default VFX.
             if (outcome != HitOutcome.Pop)
             {
                 return;
@@ -278,8 +273,7 @@ namespace BalloonParty.Balloon.View
             return _poolManager.PlayParticle(prefab, transform.position);
         }
 
-        // worldPositionStays so the effect keeps its spawn point; it detaches back to its own pool
-        // container when it finishes, so no cleanup is needed here.
+        // worldPositionStays keeps the spawn point; the effect detaches back to its pool on its own.
         private static void Reparent(PoolableParticle effect, Transform parent)
         {
             if (parent != null)

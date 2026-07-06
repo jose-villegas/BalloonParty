@@ -1,8 +1,7 @@
 namespace BalloonParty.Shared.Pool
 {
     /// <summary>
-    ///     Well-known <see cref="TrailEndpointRegistry" /> keys for the single-anchor trail flows. Score
-    ///     endpoints key on their palette colour name instead, so they aren't listed here.
+    ///     Well-known <see cref="TrailEndpointRegistry" /> keys for single-anchor trail flows.
     /// </summary>
     internal static class TrailEndpointKeys
     {

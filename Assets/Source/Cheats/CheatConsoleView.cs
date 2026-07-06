@@ -41,7 +41,7 @@ namespace BalloonParty.Cheats
             var handleTopInScreenSpace = Screen.height - ((_consoleHeight + HandleHeight) * scale);
             var handleBottomInScreenSpace = Screen.height - (_consoleHeight * scale);
 
-            // Input.mousePosition has y=0 at bottom; convert to top-left for comparison.
+            // Input.mousePosition is bottom-origin; convert to top-left.
             var mouseY = Screen.height - Input.mousePosition.y;
 
             if (Input.GetMouseButtonDown(0) && mouseY >= handleTopInScreenSpace && mouseY <= handleBottomInScreenSpace)
@@ -56,7 +56,7 @@ namespace BalloonParty.Cheats
 
             if (_resizing && Input.GetMouseButton(0))
             {
-                // mouseY in screen pixels from the top; convert to reference height space.
+                // Converts mouseY into reference height space.
                 var referenceMouseY = mouseY / scale;
                 _consoleHeight = Mathf.Clamp(ReferenceHeight - referenceMouseY, MinHeight, ReferenceHeight * 0.9f);
             }

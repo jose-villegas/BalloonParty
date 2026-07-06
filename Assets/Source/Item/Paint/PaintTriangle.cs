@@ -5,11 +5,7 @@ using UnityEngine;
 namespace BalloonParty.Item.Paint
 {
     /// <summary>
-    ///     The paint splash's target region: an isosceles triangle whose median runs along the
-    ///     projectile's travel direction. The apex sits at the hit point shifted by <c>Offset</c> along
-    ///     the axis; the triangle reaches <c>Length</c> further and fans out to <c>BaseWidth</c> at its
-    ///     far edge. The region is circle-packed with blobs; balloons within a blob's radius get painted
-    ///     (see <see cref="PaintItemHandler" />). All coordinates are world-space XY (z ignored).
+    ///     The paint splash's target region: an isosceles triangle along the projectile's travel direction.
     /// </summary>
     internal readonly struct PaintTriangle
     {
@@ -32,8 +28,7 @@ namespace BalloonParty.Item.Paint
             BaseWidth = baseWidth;
         }
 
-        // No direction (e.g. tests) defaults to up so the shape doesn't collapse to a line. Negative
-        // SpreadLength opens the triangle backward, positive forward; Offset always shifts along travel.
+        // No direction defaults to up so the shape doesn't collapse to a line.
         public static PaintTriangle Build(Vector2 hit, Vector2 direction, PaintSettings paint)
         {
             var travel = direction.sqrMagnitude < DirectionEpsilon ? Vector2.up : direction.normalized;
@@ -50,8 +45,7 @@ namespace BalloonParty.Item.Paint
                 toBase, length, baseWidth);
         }
 
-        // Hex-packs circles of radius blobRadius into the triangle (rows step r*sqrt(3), staggered by r,
-        // mirrored about the median). Capped at maxBlobs; always yields at least one (centroid).
+        // Hex-packs circles into the triangle, capped at maxBlobs; always yields at least one.
         public void PackBlobs(float blobRadius, int maxBlobs, List<Vector2> results)
         {
             results.Clear();

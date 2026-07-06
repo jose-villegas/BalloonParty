@@ -5,8 +5,6 @@ namespace BalloonParty.Shared.Pool
 {
     /// <summary>
     ///     Pool channel for effects driven exclusively by a <see cref="ParticleSystem" />.
-    ///     For effects that may use an <see cref="Animator" /> instead, use
-    ///     <see cref="SimplePoolChannel{TItem}" />.
     /// </summary>
     internal class ParticlePoolChannel : PoolChannel<PoolableParticle>
     {
@@ -21,7 +19,7 @@ namespace BalloonParty.Shared.Pool
         {
             var instance = Object.Instantiate(_prefab, Container);
 
-            // Suppress auto-play set up in the prefab
+            // Suppress the prefab's auto-play
             var ps = instance.GetComponent<ParticleSystem>();
             if (ps != null)
             {

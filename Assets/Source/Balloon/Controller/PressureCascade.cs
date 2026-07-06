@@ -5,30 +5,10 @@ using UnityEngine;
 
 namespace BalloonParty.Balloon.Controller
 {
-    /// <summary>
-    ///     Pure grid logic for a pressure-balance push. When a column's entry can't accept a new
-    ///     balloon, the arriving balloon shoves the column's bottom occupant, and that shove
-    ///     propagates neighbour-to-neighbour — snake-like — until it reaches a free slot. A balloon
-    ///     can be displaced in any direction (a bottleneck can force it down); the breadth-first
-    ///     search finds the shortest such chain so the squeeze stays local.
-    ///
-    ///     A shove also routes <em>through</em> pass-through obstacles (e.g. puff clouds): from a cell
-    ///     the search rays out in each of the six hex directions, skipping over <see cref="IPassThrough"/>
-    ///     occupants to land on the first empty or shovable slot beyond them. A non-traversable static
-    ///     actor halts that ray.
-    ///
-    ///     Relocating actors short-circuit the chain: when the push reaches one it vacates to a free
-    ///     slot anywhere, so a reachable relocator relieves pressure as long as the board has any gap.
-    ///     <see cref="PressureResponse.RelocateNearest"/> (BubbleCluster) stays close;
-    ///     <see cref="PressureResponse.RelocateFarthest"/> (Unbreakable) clears as far away as it can.
-    ///
-    ///     Returns the chain of cells <c>[entry, …, destination]</c>; the caller shifts each occupant
-    ///     into the next cell. Consecutive cells may be several apart when a ray crossed a pass-through.
-    /// </summary>
+    /// <summary>Finds the shortest chain of cells a pressure shove must displace to reach a free slot.</summary>
     internal static class PressureCascade
     {
-        // Hex directions in doubled coordinates (xd = 2*col + row%2, yd = row), where every direction
-        // is a constant step — unlike offset col/row, which zig-zags. Order: E, W, NE, NW, SE, SW.
+        // Doubled coordinates give every hex direction a constant step. Order: E, W, NE, NW, SE, SW.
         private static readonly Vector2Int[] DoubledDirections =
         {
             new(2, 0), new(-2, 0),
@@ -36,9 +16,7 @@ namespace BalloonParty.Balloon.Controller
             new(1, 1), new(-1, 1)
         };
 
-        // Reused across calls, cleared at entry — the BFS is synchronous and main-thread-only,
-        // and placement can run it once per blocked column per spawn line, exactly during the
-        // overflow crunch where per-call allocations would hitch.
+        // Reused across calls, cleared at entry, to avoid per-call allocations during overflow crunch.
         private static readonly Dictionary<Vector2Int, Vector2Int> Parents = new();
         private static readonly HashSet<Vector2Int> Visited = new();
         private static readonly Queue<Vector2Int> SearchQueue = new();
@@ -47,9 +25,7 @@ namespace BalloonParty.Balloon.Controller
         {
             chain.Clear();
 
-            // A rising balloon passes through puffs/empties and is stopped by the first non-traversable
-            // occupant — that lowest blocker is what must move, not the literal bottom cell (which may
-            // be a puff). Shoving it frees a slot the new balloon can still reach through the puffs below.
+            // The first non-traversable occupant is what must move, not the literal bottom cell.
             if (!TryFindLowestBlocker(grid, startColumn, out var start)
                 || grid.At(start) is not IPressureMovable)
             {
@@ -70,8 +46,7 @@ namespace BalloonParty.Balloon.Controller
                     continue;
                 }
 
-                // Relocating actors get out of the way to a free slot, ending the chain — near or far
-                // depending on the balloon's personality.
+                // Relocating actors vacate to a free slot, ending the chain.
                 if (mover.PushResponse != PressureResponse.ShoveNeighbour
                     && TryRelocationTarget(grid, current, mover.PushResponse, out var destination))
                 {
@@ -89,9 +64,7 @@ namespace BalloonParty.Balloon.Controller
             return false;
         }
 
-        // Rays out in each hex direction from <paramref name="current"/>. If a ray reaches an empty
-        // cell, finalises the chain into it and returns true; otherwise enqueues newly-reached
-        // shovable cells for the BFS to continue from.
+        // Rays out in each hex direction; finalises the chain if a ray reaches an empty cell.
         private static bool TryShoveToEmptyNeighbour(
             SlotGrid grid, Vector2Int current, Vector2Int start,
             Dictionary<Vector2Int, Vector2Int> parents, HashSet<Vector2Int> visited,
@@ -121,8 +94,7 @@ namespace BalloonParty.Balloon.Controller
             return false;
         }
 
-        // The first non-traversable occupant walking up from the entry — the cell a rising balloon
-        // would first hit. Puffs and empties are skipped, so a puff at the bottom isn't mistaken for it.
+        // The first non-traversable occupant walking up from the entry.
         private static bool TryFindLowestBlocker(SlotGrid grid, int col, out Vector2Int blocker)
         {
             for (var row = grid.Rows - 1; row >= 0; row--)
@@ -138,9 +110,7 @@ namespace BalloonParty.Balloon.Controller
             return false;
         }
 
-        // Rays from <paramref name="from"/> along one hex direction, passing through pass-through
-        // occupants, and reports the first empty or shovable cell. Returns false if the ray leaves the
-        // grid or meets a non-traversable blocker first.
+        // Rays through pass-through occupants to the first empty or shovable cell.
         private static bool TryRayToShovableCell(
             SlotGrid grid,
             Vector2Int from,

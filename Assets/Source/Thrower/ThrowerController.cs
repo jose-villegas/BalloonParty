@@ -34,7 +34,7 @@ namespace BalloonParty.Thrower
         private readonly ThrowerView _view;
         private readonly ProjectilePositionProvider _positionProvider;
 
-        // Object.name allocates a fresh string per access; Reload() hits this twice per shot.
+        // Cached since Object.name allocates; Reload() hits this twice per shot.
         private readonly string _projectilePoolKey;
 
         private IWriteableProjectileModel _activeProjectile;
@@ -88,18 +88,14 @@ namespace BalloonParty.Thrower
 
             _destroyedSubscriber.Subscribe(_ => Reload());
 
-            // A restart resets every other system; swap the carried-over projectile for a fresh one
-            // so its shield count (and position) start from the configured default.
+            // Restart carries over the old projectile; reload so it resets to config defaults.
             _resetSubscriber.Subscribe(_ => Reload());
 
-            // A board clear (the run-restart path) swaps the carried-over projectile for a fresh one.
             _boardClearSubscriber.Subscribe(_ => Reload());
 
             _levelUpDismissedSubscriber.Subscribe(_ => OnLevelUpDismissed());
 
-            // A projectile fired in the instant before the loss keeps flying on its own physics (the
-            // FixedUpdate only gates on pause, not navigation), so it could still pop balloons behind
-            // the game-over popup. Scale it away when the run ends.
+            // A projectile fired just before loss keeps flying on physics alone; scale it away.
             _gameOverSubscriber.Subscribe(_ => OnGameOver());
 
             Navigation.Current
@@ -155,9 +151,7 @@ namespace BalloonParty.Thrower
             _loadDuration = _config.ProjectileLoadDuration;
         }
 
-        // The loaded projectile scales itself away, then a fresh one loads for the new level (the
-        // level transition clears the board on its own beats and no longer publishes BoardClearMessage,
-        // so the reload is chained off the disappear here). If nothing is loaded, just reload.
+        // Chained off the disappear since the level transition no longer publishes BoardClearMessage.
         private void OnLevelUpDismissed()
         {
             if (_activeView != null)
@@ -170,9 +164,7 @@ namespace BalloonParty.Thrower
             }
         }
 
-        // Scales the in-flight projectile away and drops our references without reloading — the run is
-        // over, so a fresh projectile only loads later on restart (via RunResetMessage). The view
-        // returns itself to the pool once the scale-down completes.
+        // No reload here — a fresh projectile only loads later, on restart.
         private void OnGameOver()
         {
             if (_activeView == null)

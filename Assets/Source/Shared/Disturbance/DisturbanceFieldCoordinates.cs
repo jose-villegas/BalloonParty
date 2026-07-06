@@ -3,11 +3,7 @@ using UnityEngine;
 
 namespace BalloonParty.Shared.Disturbance
 {
-    /// <summary>
-    ///     World↔field-UV geometry for the disturbance RT: derives the field's world-space bounds and
-    ///     texel dimensions from the camera framing, and converts world positions/radii into the
-    ///     normalised UV space the stamp shaders expect.
-    /// </summary>
+    /// <summary>Converts world positions/radii to the normalised UV space the stamp shaders expect.</summary>
     internal class DisturbanceFieldCoordinates
     {
         public Rect Bounds { get; }

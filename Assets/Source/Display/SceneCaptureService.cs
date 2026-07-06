@@ -4,18 +4,7 @@ using VContainer;
 
 namespace BalloonParty.Display
 {
-    /// <summary>
-    ///     Shared low-res capture of the scene's visuals, bound globally as
-    ///     <c>_SceneCaptureTex</c>: a scheduled pass at the main camera's own framing, so any
-    ///     effect that wants "what the screen roughly looks like" (the Unbreakable's chrome
-    ///     reflection is the first consumer) reads this instead of a GrabPass — whose mid-frame
-    ///     framebuffer resolve stalls tile GPUs. Renders only while at least one consumer holds
-    ///     an <see cref="Acquire"/>, and only every Nth frame — skipped frames keep the
-    ///     previous capture. One shared target on purpose: a second consumer with different
-    ///     mask/resolution needs is the moment to generalize further, not before.
-    ///     Lives on the main camera so position (camera shake, cinematic pans) is inherited;
-    ///     orthographic size is copied every frame so cinematic zooms stay in sync.
-    /// </summary>
+    /// <summary>Shared low-res scene capture, bound globally as <c>_SceneCaptureTex</c>.</summary>
     [RequireComponent(typeof(Camera))]
     public class SceneCaptureService : MonoBehaviour
     {
@@ -101,14 +90,11 @@ namespace BalloonParty.Display
             _captureCamera.orthographic = true;
             _captureCamera.cullingMask = _capturedLayers;
 
-            // Always a solid-color clear, independent of the main camera's own clear mode:
-            // the capture needs a deterministic, known fill, not whatever an unconfigured
-            // Skybox (or Depth/Nothing) happens to fall back to.
+            // Deterministic solid-color clear, regardless of the main camera's clear mode.
             _captureCamera.clearFlags = CameraClearFlags.SolidColor;
             ApplyBackgroundColor();
 
-            // Lower depth renders before the main camera, so the capture is ready when
-            // consumers sample it in the same frame.
+            // Lower depth renders before the main camera, so it's ready the same frame.
             _captureCamera.depth = _mainCamera.depth - 1f;
             _captureCamera.enabled = false;
         }
@@ -117,9 +103,7 @@ namespace BalloonParty.Display
         {
             var background = _matchMainCameraBackground ? _mainCamera.backgroundColor : _backgroundColor;
 
-            // Alpha cleared to zero so the capture's alpha channel doubles as a
-            // sprite-coverage mask (ScreenSpaceLightService's occlusion source). Color
-            // consumers (the Unbreakable chrome) sample RGB only — unaffected.
+            // Alpha zeroed so it doubles as a sprite-coverage mask for ScreenSpaceLightService.
             background.a = 0f;
             _captureCamera.backgroundColor = background;
         }
@@ -141,8 +125,7 @@ namespace BalloonParty.Display
                 Destroy(_texture);
             }
 
-            // No depth buffer — sprites only. Bilinear filtering smooths the low resolution
-            // before the convex warp smears it further.
+            // No depth buffer needed — sprites only.
             _texture = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32)
             {
                 name = "SceneCapture",

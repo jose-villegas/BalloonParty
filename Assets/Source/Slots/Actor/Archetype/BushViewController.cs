@@ -9,9 +9,7 @@ using BalloonParty.Configuration.Effects;
 namespace BalloonParty.Slots.Actor.Archetype
 {
     /// <summary>
-    /// Bush-specific cluster view controller. Adds gap-fill circles at midpoints
-    /// between adjacent bush slots so the rendered shape spans the gaps
-    /// for a more continuous, natural coverage. Assigns a baked variant to the view.
+    /// Adds gap-fill circles at midpoints between adjacent bush slots so the rendered shape spans the gaps.
     /// </summary>
     internal class BushViewController
         : ClusterViewController<BushObstacleModel, BushView, IBushSettings>

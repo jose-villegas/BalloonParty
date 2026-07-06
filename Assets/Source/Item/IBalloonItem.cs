@@ -5,10 +5,7 @@ namespace BalloonParty.Item
     public interface IBalloonItem : IItem
     {
         /// <summary>
-        ///     Activates the item for the hit described by <see cref="ItemActivationContext" />.
-        ///     Handlers are singletons and activations can overlap (an AoE item can trigger several in
-        ///     one frame, and chain/splash effects resolve over time), so all per-activation state must
-        ///     live in locals captured by the activation — never in handler fields.
+        ///     Activations can overlap, so per-activation state must live in locals, never handler fields.
         /// </summary>
         UniTask Activate(ItemActivationContext context);
     }

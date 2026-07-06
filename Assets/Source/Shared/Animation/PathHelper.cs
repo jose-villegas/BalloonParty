@@ -5,15 +5,10 @@ using UnityEngine;
 
 namespace BalloonParty.Shared.Animation
 {
-    /// <summary>
-    ///     Generic path interpolation utilities. Stateless, allocation-minimal.
-    /// </summary>
+    /// <summary>Generic path interpolation utilities. Stateless, allocation-minimal.</summary>
     internal static class PathHelper
     {
-        /// <summary>
-        ///     Builds a smooth Catmull-Rom subdivided path through the first
-        ///     <paramref name="pointCount" /> entries of <paramref name="waypoints" />.
-        /// </summary>
+        /// <summary>Builds a smooth Catmull-Rom subdivided path through the first <paramref name="pointCount" /> waypoints.</summary>
         internal static Vector3[] CatmullRomPath(
             IReadOnlyList<Vector3> waypoints,
             int pointCount,
@@ -48,11 +43,7 @@ namespace BalloonParty.Shared.Animation
             return result;
         }
 
-        /// <summary>
-        ///     Builds a smooth closed-loop Catmull-Rom path through the first
-        ///     <paramref name="pointCount" /> entries of <paramref name="waypoints" />.
-        ///     The last point connects back to the first.
-        /// </summary>
+        /// <summary>Builds a closed-loop Catmull-Rom path through the first <paramref name="pointCount" /> waypoints; last connects back to first.</summary>
         internal static Vector3[] CatmullRomLoop(
             IReadOnlyList<Vector3> waypoints,
             int pointCount,
@@ -65,7 +56,7 @@ namespace BalloonParty.Shared.Animation
                 return count == 1 ? new[] { waypoints[0] } : Array.Empty<Vector3>();
             }
 
-            // +1 segment for the closing edge back to start
+            // +1 for the closing edge
             var totalPoints = (count * subdivisions) + 1;
             var result = new Vector3[totalPoints];
             var idx = 0;
@@ -88,10 +79,7 @@ namespace BalloonParty.Shared.Animation
             return result;
         }
 
-        /// <summary>
-        ///     Evaluates a single point on a Catmull-Rom spline defined by four
-        ///     control points at parameter <paramref name="t" /> (0–1).
-        /// </summary>
+        /// <summary>Evaluates a point on a Catmull-Rom spline at <paramref name="t" /> (0–1).</summary>
         internal static Vector3 CatmullRom(Vector3 p0, Vector3 p1, Vector3 p2, Vector3 p3, float t)
         {
             var tt = t * t;
@@ -104,10 +92,7 @@ namespace BalloonParty.Shared.Animation
                 ((-p0 + (3f * p1) - (3f * p2) + p3) * ttt));
         }
 
-        /// <summary>
-        ///     Samples a <see cref="Vector3" /> array at a fractional index,
-        ///     linearly interpolating between the two nearest entries.
-        /// </summary>
+        /// <summary>Samples a <see cref="Vector3" /> array at a fractional index via linear interpolation.</summary>
         internal static Vector3 SampleAt(Vector3[] array, float index)
         {
             var maxIdx = array.Length - 1;
@@ -117,10 +102,7 @@ namespace BalloonParty.Shared.Animation
             return Vector3.Lerp(array[lo], array[hi], index - lo);
         }
 
-        /// <summary>
-        ///     Samples a <see langword="float" /> array at a fractional index,
-        ///     linearly interpolating between the two nearest entries.
-        /// </summary>
+        /// <summary>Samples a <see langword="float" /> array at a fractional index via linear interpolation.</summary>
         internal static float SampleAt(float[] array, float index)
         {
             var maxIdx = array.Length - 1;
@@ -130,10 +112,7 @@ namespace BalloonParty.Shared.Animation
             return Mathf.Lerp(array[lo], array[hi], index - lo);
         }
 
-        /// <summary>
-        ///     Re-samples a sparse <see langword="float" /> array into
-        ///     <paramref name="sampleCount" /> evenly-spaced values via linear interpolation.
-        /// </summary>
+        /// <summary>Re-samples a sparse array into <paramref name="sampleCount" /> evenly-spaced values.</summary>
         internal static float[] ResampleLinear(float[] values, int sampleCount)
         {
             var result = new float[sampleCount];
@@ -150,10 +129,7 @@ namespace BalloonParty.Shared.Animation
             return result;
         }
 
-        /// <summary>
-        ///     Builds a cumulative prefix-sum array from <paramref name="sizes" />.
-        ///     Result has length <c>sizes.Length + 1</c> with <c>result[0] == 0</c>.
-        /// </summary>
+        /// <summary>Builds a cumulative prefix-sum array; result has length <c>sizes.Length + 1</c>, <c>result[0] == 0</c>.</summary>
         internal static int[] PrefixSum(int[] sizes)
         {
             var result = new int[sizes.Length + 1];
@@ -165,14 +141,7 @@ namespace BalloonParty.Shared.Animation
             return result;
         }
 
-        /// <summary>
-        ///     Fills <paramref name="count" /> points between <paramref name="start" />
-        ///     and <paramref name="end" /> using recursive midpoint displacement.
-        ///     Produces fractal jagged lines typical of electricity arcs.
-        ///     <paramref name="displacement" /> is the initial perpendicular offset
-        ///     magnitude; <paramref name="decay" /> (0–1) scales it each recursion level
-        ///     (0.5 = classic lightning, higher = more fine detail).
-        /// </summary>
+        /// <summary>Fills points between <paramref name="start" /> and <paramref name="end" /> via recursive midpoint displacement (jagged/lightning lines).</summary>
         internal static void MidpointDisplacement(
             Vector3 start,
             Vector3 end,

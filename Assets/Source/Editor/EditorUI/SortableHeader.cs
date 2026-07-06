@@ -4,9 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Editor.EditorUI
 {
     /// <summary>
-    ///     Tracks which column is sorted and in which direction.
-    ///     Pass the same instance to <see cref="SortableHeader.Draw"/> and
-    ///     <see cref="SortableHeader.ApplySort{T}"/> to keep them in sync.
+    ///     Tracks which column is sorted and in which direction; share the instance across <see cref="SortableHeader"/> calls.
     /// </summary>
     internal sealed class SortState
     {
@@ -21,8 +19,7 @@ namespace BalloonParty.Editor.EditorUI
     internal static class SortableHeader
     {
         /// <summary>
-        ///     Draws a single sortable column header as a toolbar button.
-        ///     Clicking toggles <paramref name="state"/> between ascending/descending.
+        ///     Draws a single sortable column header; clicking toggles <paramref name="state"/> ascending/descending.
         /// </summary>
         internal static void Draw(string label, int column, float width, SortState state)
         {
@@ -45,8 +42,7 @@ namespace BalloonParty.Editor.EditorUI
         }
 
         /// <summary>
-        ///     Sorts <paramref name="items"/> in place using the current
-        ///     <paramref name="state"/> and a column-to-comparison mapper.
+        ///     Sorts <paramref name="items"/> in place using <paramref name="state"/> and a column-to-comparison mapper.
         /// </summary>
         internal static void ApplySort<T>(
             System.Collections.Generic.List<T> items,

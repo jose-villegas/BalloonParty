@@ -4,9 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Item.Paint
 {
     /// <summary>
-    ///     Assigns a random <c>_TimeOffset</c> to the PaintBlob shader via a
-    ///     MaterialPropertyBlock so every blob looks different while sharing
-    ///     one material (no extra material instances, no SRP batching breakage).
+    ///     Assigns a random <c>_TimeOffset</c> via MaterialPropertyBlock so blobs vary without breaking SRP batching.
     /// </summary>
     [RequireComponent(typeof(SpriteRenderer))]
     public class PaintBlobRenderer : MonoBehaviour

@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    // Indestructible. Absorbs the projectile on contact, ending the turn immediately.
+    // Indestructible; absorbs the projectile, ending the turn.
     internal class AbsorberActorModel : IWriteableSlotActor, IHitable
     {
         public Vector2Int SlotIndex { get; private set; }

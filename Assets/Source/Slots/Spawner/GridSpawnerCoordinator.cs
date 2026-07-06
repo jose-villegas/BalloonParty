@@ -36,16 +36,13 @@ namespace BalloonParty.Slots.Spawner
 
         public int ResetOrder => RunResetOrder.Respawn;
 
-        // Final reset stage: the board has been cleared and counters reset, so re-run every
-        // spawner to repopulate a fresh board. Skips the navigation gate — RestartRun has
-        // already put us back in Game.
+        // Final reset stage — repopulates the cleared board, skipping the navigation gate.
         public void ResetRun(int generation)
         {
             RunGroupsAsync(_cts.Token).Forget();
         }
 
-        // Runs only the stages matching the predicate, in priority order — used by the level-transition
-        // Ascent to repopulate statics and balloons as two sequenced beats instead of one full pass.
+        // Runs only matching stages, in priority order — used by Ascent to sequence statics/balloons.
         internal async UniTask RunStagesAsync(Func<SpawnStage, bool> predicate, CancellationToken ct)
         {
             var groups = _spawners

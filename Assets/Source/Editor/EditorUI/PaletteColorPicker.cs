@@ -9,7 +9,6 @@ namespace BalloonParty.Editor.EditorUI
 {
     /// <summary>
     ///     Reusable palette color picker and swatch drawing for editor UI.
-    ///     Wraps <see cref="ConfigAssetCache{T}"/> for <see cref="GamePalette"/>.
     /// </summary>
     public sealed class PaletteColorPicker
     {
@@ -42,8 +41,7 @@ namespace BalloonParty.Editor.EditorUI
         }
 
         /// <summary>
-        ///     Draws a popup with all palette color names and a color swatch.
-        ///     Uses <see cref="EditorGUILayout"/> (auto-layout). Returns true if the palette is available.
+        ///     Draws a popup with all palette color names and a swatch. Returns true if the palette is available.
         /// </summary>
         public bool DrawLayout(string label = "Tint")
         {
@@ -75,7 +73,7 @@ namespace BalloonParty.Editor.EditorUI
         }
 
         /// <summary>
-        ///     Draws a color swatch with a 1px black border. Rect-based (manual layout).
+        ///     Draws a color swatch with a 1px black border.
         /// </summary>
         public static void DrawSwatch(Rect rect, Color color)
         {

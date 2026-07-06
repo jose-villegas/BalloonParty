@@ -22,8 +22,7 @@ namespace BalloonParty.Balloon.Type
             }
         }
 
-        // Empty intersection means the level gate excludes every color this prefab can be —
-        // fall back to the prefab mask alone rather than picking no color at all.
+        // Empty intersection: fall back to the prefab mask rather than picking no color at all.
         private string PickColor(int levelAllowedColorsMask)
         {
             if (_palette == null)

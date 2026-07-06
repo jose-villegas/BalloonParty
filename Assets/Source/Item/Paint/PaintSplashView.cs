@@ -11,7 +11,6 @@ namespace BalloonParty.Item.Paint
 {
     /// <summary>
     ///     Computed per-frame state for a paint blob in flight.
-    ///     Produced by <see cref="PaintSplashView.ComputeBlobFlight" />.
     /// </summary>
     internal struct BlobFlightSnapshot
     {
@@ -22,13 +21,7 @@ namespace BalloonParty.Item.Paint
     }
 
     /// <summary>
-    ///     Poolable paint-splash effect. Extends <see cref="EffectView" /> so it
-    ///     participates in the standard effect-pool pipeline via <see cref="SimplePoolChannel{TItem}" />.
-    ///     The prefab seeds <see cref="ColorableRenderer" /> children with the PaintBlob material; the
-    ///     pool clones the first when packed density needs more.
-    ///     Splash particles are spawned as independent pooled instances via
-    ///     <see cref="ParticlePoolChannel" /> so they outlive the view's pool return.
-    ///     Call <see cref="ISplashEffect.PrepareDisplay" /> with target data before <see cref="Play" />.
+    ///     Poolable paint-splash effect. Call <see cref="ISplashEffect.PrepareDisplay" /> before <see cref="Play" />.
     /// </summary>
     public class PaintSplashView : EffectView, ISplashEffect
     {
@@ -67,9 +60,6 @@ namespace BalloonParty.Item.Paint
 
         /// <summary>
         ///     Sets up the paint blob flights before calling <see cref="Play" />.
-        ///     Each entry is a (source, target) pair. <paramref name="onTargetHit" /> is
-        ///     invoked per blob arrival with the target index — use it to change the
-        ///     balloon's color at exactly the right moment.
         /// </summary>
         void ISplashEffect.PrepareDisplay(
             IReadOnlyList<(Vector3 from, Vector3 to)> flights,
@@ -121,9 +111,7 @@ namespace BalloonParty.Item.Paint
         }
 
         /// <summary>
-        ///     Starts all paint-blob arcs in parallel.
-        ///     <paramref name="tint" /> sets the PaintBlob shader color and splash particle
-        ///     start color. <paramref name="onComplete" /> fires after every blob has landed.
+        ///     Starts all paint-blob arcs in parallel; <paramref name="onComplete" /> fires once all land.
         /// </summary>
         public override void Play(Vector3 position, Color tint, Action onComplete = null)
         {
@@ -218,8 +206,7 @@ namespace BalloonParty.Item.Paint
             }
         }
 
-        // Packed density can exceed the prefab's seed blobs, so grow by cloning the first. The view is
-        // pooled, so clones persist across plays.
+        // Grows by cloning the first seed blob; clones persist across plays since the view is pooled.
         private void EnsureBlobPool(int needed)
         {
             _blobPool ??= new List<ColorableRenderer>();
@@ -263,8 +250,7 @@ namespace BalloonParty.Item.Paint
         }
 
         /// <summary>
-        ///     Pure math — computes blob position, scale, and MPB values for a given
-        ///     progress along the flight arc. Shared by runtime and editor preview.
+        ///     Pure math shared by runtime and editor preview.
         /// </summary>
         internal static BlobFlightSnapshot ComputeBlobFlight(
             float progress,
@@ -285,16 +271,14 @@ namespace BalloonParty.Item.Paint
         }
 
         /// <summary>
-        ///     Applies <see cref="BlobFlightSnapshot" /> MPB values plus a time offset
-        ///     to a renderer. Shared by runtime and editor preview.
+        ///     Applies <see cref="BlobFlightSnapshot" /> MPB values to a renderer. Shared with editor preview.
         /// </summary>
         internal static void ApplyBlobMaterial(
             Renderer renderer,
             float timeOffset,
             BlobFlightSnapshot snapshot)
         {
-            // Reused scratch block — SetPropertyBlock copies the values out immediately,
-            // so one shared instance avoids a per-blob, per-frame allocation.
+            // Reused scratch block — avoids a per-blob, per-frame allocation.
             _blobBlock ??= new MaterialPropertyBlock();
             _blobBlock.SetFloat(TimeOffsetId, timeOffset);
             _blobBlock.SetFloat(ShadowScaleId, snapshot.ShadowScale);

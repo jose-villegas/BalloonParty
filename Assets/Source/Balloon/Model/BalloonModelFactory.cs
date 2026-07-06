@@ -7,15 +7,10 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Model
 {
-    /// <summary>
-    ///     Builds the <see cref="IWriteableBalloonModel"/> matching a prefab entry's
-    ///     <see cref="BalloonType"/>. Kept in one place so the type switch isn't duplicated between
-    ///     the spawner and the rejected-balloon effect.
-    /// </summary>
+    /// <summary>Builds the <see cref="IWriteableBalloonModel"/> matching a prefab entry's <see cref="BalloonType"/>.</summary>
     internal static class BalloonModelFactory
     {
-        // allowedColors only matters to Tough/BubbleCluster — they distribute score to a random
-        // palette color rather than holding one, so they'd otherwise bypass the color gate.
+        // allowedColors only matters to Tough/BubbleCluster, which distribute score to a random palette color.
         internal static IWriteableBalloonModel Create(
             BalloonPrefabEntry entry, IGamePalette palette, IReadOnlyList<string> allowedColors = null)
         {

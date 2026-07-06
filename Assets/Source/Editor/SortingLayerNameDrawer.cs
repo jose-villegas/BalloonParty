@@ -6,8 +6,7 @@ using BalloonParty.Configuration.Cinematics;
 namespace BalloonParty.Editor
 {
     /// <summary>
-    ///     Renders a <see cref="SortingLayerNameAttribute"/> string field as a popup of the project's
-    ///     sorting layers (the same list Unity shows on a renderer's Sorting Layer field).
+    ///     Renders a <see cref="SortingLayerNameAttribute"/> string field as a popup of the project's sorting layers.
     /// </summary>
     [CustomPropertyDrawer(typeof(SortingLayerNameAttribute))]
     public class SortingLayerNameDrawer : PropertyDrawer

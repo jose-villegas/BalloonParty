@@ -6,14 +6,7 @@ using VContainer;
 
 namespace BalloonParty.Shared.Pause
 {
-    /// <summary>
-    ///     Gate that resolves as soon as a specific <see cref="PauseSource"/> transitions
-    ///     from paused to resumed. Subscribes reactively to <see cref="ResumedMessage"/>
-    ///     via MessagePipe — no per-frame polling, resolves in the same frame as
-    ///     the matching <see cref="PauseService.Resume"/> call.
-    ///     If the source is already resumed when <see cref="WaitAsync"/> is called,
-    ///     the task completes immediately.
-    /// </summary>
+    /// <summary>Resolves in the same frame as the matching <see cref="PauseService.Resume"/> call.</summary>
     internal sealed class PauseResumedGate : IReadyGate
     {
         private readonly PauseSource _awaitedSource;
@@ -40,7 +33,7 @@ namespace BalloonParty.Shared.Pause
 
             var tcs = new UniTaskCompletionSource();
 
-            // Box the subscription so the lambda can dispose it without a modified-capture warning.
+            // Boxed so the lambda can dispose it without a modified-capture warning.
             var holder = new IDisposable[1];
             holder[0] = _resumedSubscriber.Subscribe(msg =>
                 OnResumed(msg, holder, tcs));

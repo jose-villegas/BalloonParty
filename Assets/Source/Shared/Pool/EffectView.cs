@@ -3,12 +3,7 @@ using UnityEngine;
 
 namespace BalloonParty.Shared.Pool
 {
-    /// <summary>
-    ///     Abstract base for poolable effect MonoBehaviours. Subclass with
-    ///     <see cref="ParticleEffectView" /> (ParticleSystem) or
-    ///     <see cref="AnimatorEffectView" /> (Animator). Pool via
-    ///     <see cref="SimplePoolChannel{TItem}" />.
-    /// </summary>
+    /// <summary>Abstract base for poolable effect MonoBehaviours; pool via <see cref="SimplePoolChannel{TItem}" />.</summary>
     public abstract class EffectView : MonoBehaviour, IPoolable, IEffect
     {
         protected Action OnComplete;
@@ -26,8 +21,7 @@ namespace BalloonParty.Shared.Pool
             OnComplete = null;
         }
 
-        // The delegate is created once per pooled instance and survives despawns, so repeat
-        // plays reuse it instead of allocating a completion closure per call.
+        // Created once per instance and survives despawns to avoid a per-call allocation.
         internal void BindPool(PoolManager pool, string key)
         {
             _pool = pool;

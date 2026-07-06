@@ -8,15 +8,7 @@ using UnityEngine.Rendering;
 
 namespace BalloonParty.Editor.ShadowBake
 {
-    /// <summary>
-    ///     Inspector for <see cref="SpriteShadowBaker"/>: the Bake button renders the union
-    ///     silhouette of every child sprite (via CommandBuffer.DrawRenderer — no camera or
-    ///     scene needed, so it works on loaded prefab contents), blurs it offline, writes the
-    ///     sprite to Assets/Sprites/Baked/Shadows mirroring the prefab path, then edits the
-    ///     prefab: optional material swap (+ _SpriteScale size compensation) and a shadow child
-    ///     displaying the bake. All edits go through LoadPrefabContents/SaveAsPrefabAsset so
-    ///     the bake works from a scene instance, the prefab stage, or the asset itself.
-    /// </summary>
+    /// <summary>Inspector for <see cref="SpriteShadowBaker"/>: bakes a blurred silhouette sprite and wires it into the prefab.</summary>
     [CustomEditor(typeof(SpriteShadowBaker))]
     internal sealed class SpriteShadowBakerEditor : UnityEditor.Editor
     {
@@ -59,10 +51,7 @@ namespace BalloonParty.Editor.ShadowBake
 
                 WarnOnResolutionMismatch(renderers);
 
-                // Shrink family-material quads to their visible size BEFORE the silhouette pass:
-                // the plain silhouette material fills the whole quad, but the runtime shaders draw
-                // the sprite at _SpriteScale of it — unbaked, a 0.1-scale knot on a 1×1 quad
-                // silhouettes at ten times its visible size.
+                // Shrink family-material quads to visible size before the silhouette pass, or they bake oversized.
                 var compensations = CompensateSpriteScale(renderers);
 
                 var sprite = BakeShadowSprite(baker, renderers, assetPath);
@@ -129,7 +118,7 @@ namespace BalloonParty.Editor.ShadowBake
             var pixelsPerUnit = renderers[0].sprite.pixelsPerUnit * baker.ResolutionMultiplier;
             var bounds = CombinedBounds(renderers);
 
-            // Box blur applied N times spreads N × radius — pad so the penumbra never clips.
+            // N blur passes spread N × radius — pad so the penumbra never clips.
             var blurPixels = Mathf.CeilToInt(baker.BlurRadius * pixelsPerUnit);
             var padPixels = blurPixels * baker.BlurPasses + 2;
 
@@ -164,9 +153,7 @@ namespace BalloonParty.Editor.ShadowBake
             return bounds;
         }
 
-        // Draws each renderer's own mesh (handles sliced/tiled draw modes) through a plain
-        // sprite material with the sprite texture bound explicitly — DrawRenderer's material
-        // override does not carry the SpriteRenderer's implicit texture binding.
+        // DrawRenderer's material override drops the SpriteRenderer's implicit texture, so bind it explicitly.
         private static float[] RenderSilhouetteAlpha(
             IReadOnlyList<SpriteRenderer> renderers, Bounds bounds, float padWorld, int width, int height)
         {
@@ -216,8 +203,7 @@ namespace BalloonParty.Editor.ShadowBake
             var pixels = readback.GetPixels();
             Object.DestroyImmediate(readback);
 
-            // Metal/DX render top-down into RTs while ReadPixels assumes bottom-up rows —
-            // flip during extraction so the bake matches world orientation (OpenGL doesn't flip).
+            // Metal/DX render top-down but ReadPixels assumes bottom-up — flip to match world orientation.
             var flip = SystemInfo.graphicsUVStartsAtTop;
             var alpha = new float[pixels.Length];
             for (var y = 0; y < height; y++)
@@ -233,8 +219,7 @@ namespace BalloonParty.Editor.ShadowBake
             return alpha;
         }
 
-        // Separable box blur with a running-sum window — O(pixels) per pass regardless of
-        // radius, so generous radii stay instant at bake time.
+        // Separable box blur with a running-sum window — O(pixels) per pass regardless of radius.
         private static void BoxBlur(float[] alpha, int width, int height, int radius)
         {
             if (radius <= 0)
@@ -291,8 +276,7 @@ namespace BalloonParty.Editor.ShadowBake
 
         private static string OutputPathFor(string prefabPath)
         {
-            // Mirror the prefab's folder under the output root so names can't collide:
-            // Assets/Prefabs/Balloon/Balloon.prefab → .../Shadows/Prefabs/Balloon/Balloon_Shadow.png
+            // Mirror the prefab's folder under the output root so names can't collide.
             var relativeDir = Path.GetDirectoryName(prefabPath);
             if (!string.IsNullOrEmpty(relativeDir))
             {
@@ -353,8 +337,7 @@ namespace BalloonParty.Editor.ShadowBake
             public Vector3 PreviousScale;
         }
 
-        // The bake resolution follows the first sprite's pixels-per-unit; sprites imported at a
-        // different density come out softer or oversharp in the baked shadow — surface it.
+        // Bake resolution follows the first sprite's PPU; warn if others differ.
         private static void WarnOnResolutionMismatch(IReadOnlyList<SpriteRenderer> renderers)
         {
             var reference = renderers[0].sprite.pixelsPerUnit;
@@ -371,9 +354,7 @@ namespace BalloonParty.Editor.ShadowBake
             }
         }
 
-        // The shadow shaders drew the sprite at _SpriteScale of its quad; both the silhouette
-        // pass and a plain material render the full quad, so shrink the renderer to the visible
-        // size. Persisted when the material swap is on, reverted otherwise.
+        // Shrinks the renderer to its _SpriteScale-visible size; persisted if materials are swapped, reverted otherwise.
         private static List<ScaleCompensation> CompensateSpriteScale(IReadOnlyList<SpriteRenderer> renderers)
         {
             var compensations = new List<ScaleCompensation>();

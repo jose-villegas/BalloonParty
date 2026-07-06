@@ -4,12 +4,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Shared
 {
-    /// <summary>
-    /// Frame-scoped one-shot impact events. Any system (bomb, laser, paint,
-    /// projectile path) writes via <see cref="Report"/>; any visual consumer
-    /// reads <see cref="Pending"/> during update/late-update. Cleared
-    /// automatically at end-of-frame via <see cref="ILateTickable"/>.
-    /// </summary>
+    /// <summary>Frame-scoped impact events, written via <see cref="Report"/> and cleared each end-of-frame.</summary>
     internal class ImpactEventBus : ILateTickable
     {
         private readonly List<Impact> _pending = new();

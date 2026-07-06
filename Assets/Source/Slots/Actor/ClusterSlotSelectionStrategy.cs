@@ -5,28 +5,12 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Actor
 {
-    /// <summary>
-    /// Selects slots that favor hex-adjacency, encouraging cluster formation.
-    /// Picks a random seed slot, then greedily expands into hex neighbors
-    /// from the available set. When no more neighbors are available, picks
-    /// a new seed biased toward the opposite side of the grid from existing
-    /// clusters — producing spatially distributed, facing clusters. Closed
-    /// clusters quarantine their neighboring slots, so separately-seeded
-    /// clusters can never touch — without this, adjacent clusters would merge
-    /// on the board (SlotClusterRegistry joins touching same-type actors) and
-    /// silently exceed maxPerCluster.
-    /// </summary>
+    /// <summary>Quarantines closed clusters' neighbor slots so separately-seeded clusters never touch and merge past maxPerCluster.</summary>
     internal class ClusterSlotSelectionStrategy : ISlotSelectionStrategy
     {
-        /// <summary>
-        /// How many of the farthest candidates to consider when picking the
-        /// next cluster seed. A small pool adds variety while still biasing
-        /// toward the opposite side.
-        /// </summary>
         private const int FarthestCandidatePool = 3;
 
-        // Reused scratch for hex-neighbor lookups. The selection runs on the main thread
-        // and fills-then-reads this synchronously, so a single shared buffer is safe.
+        // Runs synchronously on the main thread, so a single shared buffer is safe.
         private static readonly Vector2Int[] NeighborBuffer = new Vector2Int[6];
 
         public List<Vector2Int> SelectSlots(IReadOnlyList<Vector2Int> emptySlots, int count, int maxPerCluster = 0)
@@ -44,7 +28,7 @@ namespace BalloonParty.Slots.Actor
 
             while (fill.Result.Count < count && fill.Available.Count > 0)
             {
-                // Cap reached for the current cluster — force a new seed
+                // Cap reached — force a new seed.
                 if (maxPerCluster > 0 && fill.CurrentClusterSlots.Count >= maxPerCluster)
                 {
                     fill.Frontier.Clear();
@@ -93,7 +77,7 @@ namespace BalloonParty.Slots.Actor
             AddNeighborsToFrontier(next, fill.Available, fill.Frontier);
         }
 
-        // Mutable working set for one SelectSlots run, passed between the seed/grow steps.
+        // Mutable working set for one SelectSlots run.
         private sealed class ClusterFill
         {
             public readonly List<Vector2Int> Frontier = new();
@@ -115,8 +99,7 @@ namespace BalloonParty.Slots.Actor
             {
                 centroid += new Vector2(s.x, s.y);
 
-                // Quarantine the closed cluster: removing its neighbors from the available set
-                // guarantees no later seed or growth can touch it and merge past maxPerCluster.
+                // Remove neighbors from the available set to quarantine the closed cluster.
                 HexCoordinates.HexNeighborIndices(s.x, s.y, NeighborBuffer);
                 foreach (var neighbor in NeighborBuffer)
                 {
@@ -129,11 +112,7 @@ namespace BalloonParty.Slots.Actor
             fill.CurrentClusterSlots.Clear();
         }
 
-        /// <summary>
-        /// Picks a seed slot that maximises the minimum distance to all
-        /// existing cluster centroids — pushing new clusters to the
-        /// opposite side of the grid.
-        /// </summary>
+        /// <summary>Picks the seed that maximises minimum distance to existing cluster centroids.</summary>
         private static Vector2Int PickFarthestSeed(
             IReadOnlyCollection<Vector2Int> available,
             IReadOnlyList<Vector2> centroids)

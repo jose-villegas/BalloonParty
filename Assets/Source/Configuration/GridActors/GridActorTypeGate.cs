@@ -7,9 +7,7 @@ using BalloonParty.Configuration.Ranges;
 namespace BalloonParty.Configuration.GridActors
 {
     /// <summary>
-    ///     Presence in a range's array gates one <see cref="GridActorType" /> for that level. A
-    ///     <see cref="RangedInt" /> count, not a weight, like <see cref="BalloonTypeWeight" /> — grid
-    ///     actors have no competitive weighted draw to feed, so the resolved count is the roll.
+    ///     Presence in a range's array gates one <see cref="GridActorType" /> for that level.
     /// </summary>
     [Serializable]
     public struct GridActorTypeGate

@@ -18,8 +18,7 @@ namespace BalloonParty.Editor.Bush
         }
 
         /// <summary>
-        /// Bakes leaf variants and packs them into a single atlas texture saved
-        /// at <paramref name="outputPath"/>. Returns the atlas and its asset path.
+        /// Bakes leaf variants and packs them into a single atlas texture saved at <paramref name="outputPath"/>.
         /// </summary>
         internal static PackResult Pack(BushLeafBakeSettings settings, string outputPath)
         {
@@ -82,7 +81,7 @@ namespace BalloonParty.Editor.Bush
                 }
 
                 var col = i % gridSize.x;
-                // Pack top-to-bottom so sprite index matches variant index
+                // Top-to-bottom so sprite index matches variant index.
                 var row = gridSize.y - 1 - i / gridSize.x;
                 var xOffset = col * cellSize;
                 var yOffset = row * cellSize;

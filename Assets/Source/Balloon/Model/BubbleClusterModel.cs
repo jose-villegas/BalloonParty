@@ -8,12 +8,7 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Model
 {
-    /// <summary>
-    /// Model for <c>BalloonType.BubbleCluster</c>.
-    /// Tracks only durability (bubble count) — the cluster carries no item and has no palette colour.
-    /// At destruction, distributes one <see cref="ScoreAttribution"/> per remaining bubble,
-    /// each going to a randomly chosen palette colour.
-    /// </summary>
+    /// <summary>At destruction, distributes one <see cref="ScoreAttribution"/> per remaining bubble to a random palette colour.</summary>
     internal class BubbleClusterModel : BalloonModelBase, IHasDurability, IHasScoreColor
     {
         private readonly IGamePalette _palette;
@@ -22,8 +17,6 @@ namespace BalloonParty.Balloon.Model
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
         public int ScoreValue { get; }
 
-        // A bubble cluster also gets out of the way when shoved, but it drifts to the nearest free
-        // slot rather than barging far off like Unbreakable.
         public override PressureResponse PushResponse => PressureResponse.RelocateNearest;
 
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
@@ -53,7 +46,7 @@ namespace BalloonParty.Balloon.Model
             }
         }
 
-        // Falls back to the full palette when constructed without a level context (tests).
+        // Falls back to the full palette when constructed without a level context.
         private IReadOnlyList<string> ResolveColorPool()
         {
             return _allowedColors is { Count: > 0 } ? _allowedColors : _palette?.ColorNames;

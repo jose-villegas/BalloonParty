@@ -2,10 +2,7 @@ using UniRx;
 
 namespace BalloonParty.Shared.GameState
 {
-    /// <summary>
-    ///     Tracks whether a cinematic sequence is playing. Static so any
-    ///     system can query or observe without DI wiring.
-    /// </summary>
+    /// <summary>Tracks whether a cinematic sequence is playing; static so any system can query without DI wiring.</summary>
     internal static class Cinematic
     {
         private static readonly ReactiveProperty<CinematicState> _state = new(CinematicState.None);

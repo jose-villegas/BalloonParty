@@ -4,8 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Editor.Bush
 {
     /// <summary>
-    /// Runions auxin-based venation simulator (Runions et al. 2005).
-    /// Produces biologically plausible vein networks for offline leaf baking.
+    /// Auxin-based venation simulator (Runions et al. 2005) for offline leaf baking.
     /// </summary>
     internal static class LeafVenationSimulator
     {
@@ -48,8 +47,7 @@ namespace BalloonParty.Editor.Bush
         }
 
         /// <summary>
-        /// Runs the auxin-based venation simulation and returns vein segments
-        /// with hierarchical depth (0 = midrib, 1+ = branches).
+        /// Runs the simulation and returns vein segments with hierarchical depth (0 = midrib, 1+ = branches).
         /// </summary>
         internal static List<VeinSegment> Simulate(SimulationSettings settings)
         {
@@ -75,8 +73,7 @@ namespace BalloonParty.Editor.Bush
         }
 
         /// <summary>
-        /// Rasterises vein segments into a texture with depth-based thickness:
-        /// midrib is thickest, tertiary veins are thinnest.
+        /// Rasterises vein segments into a texture with depth-based thickness.
         /// </summary>
         internal static Texture2D RasteriseVeins(
             IReadOnlyList<VeinSegment> segments,
@@ -281,8 +278,7 @@ namespace BalloonParty.Editor.Bush
 
         private static bool IsInsideLeafBoundary(Vector2 p, float halfW, float halfH)
         {
-            // Tapered ellipse — narrower at base, broader in the middle — to
-            // approximate a natural leaf silhouette for source scattering.
+            // Tapered ellipse to approximate a natural leaf silhouette.
             var ny = (p.y / halfH + 1f) * 0.5f;
             var taper = Mathf.Sin(ny * Mathf.PI) * 0.9f + 0.1f;
             var ex = p.x / (halfW * taper);

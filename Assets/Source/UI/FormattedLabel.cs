@@ -3,11 +3,8 @@ using TMPro;
 namespace BalloonParty.UI
 {
     /// <summary>
-    ///     Wraps a <see cref="TMP_Text"/> whose authored text is a <see cref="string.Format"/>
-    ///     template (e.g. "Level: {0}", "Score: {0:N0}"). The template is captured once at
-    ///     construction, so repeated <see cref="Set"/> calls keep substituting into the original
-    ///     placeholder instead of consuming it. Construct it before the label's text is first
-    ///     overwritten (e.g. in Awake). A label with no authored text falls back to a bare "{0}".
+    ///     Wraps a <see cref="TMP_Text"/> whose authored text is a <see cref="string.Format"/> template;
+    ///     construct it before the label's text is first overwritten.
     /// </summary>
     internal readonly struct FormattedLabel
     {

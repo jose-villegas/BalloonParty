@@ -4,10 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Shared.Pool
 {
     /// <summary>
-    ///     Controls a single trail's in-flight state. Wraps DOTween operations on
-    ///     the trail transform and exposes transport-style commands: pause, resume,
-    ///     stop (snap back to origin), play (restart from origin), complete (skip
-    ///     to end), and speed control.
+    ///     Controls a single trail's in-flight state via transport-style commands over DOTween.
     /// </summary>
     internal class TrailFlight
     {
@@ -51,7 +48,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Kills all tweens and snaps the trail back to its spawn origin.
+        ///     Snaps the trail back to its spawn origin.
         /// </summary>
         internal void Stop()
         {
@@ -66,8 +63,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Kills all tweens and jumps the trail to completed state so the
-        ///     onComplete callbacks fire immediately.
+        ///     Jumps the trail to completed state so onComplete fires immediately.
         /// </summary>
         internal void Complete()
         {
@@ -81,8 +77,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Adjusts the timeScale of every active tween on this trail.
-        ///     1 = normal, &lt;1 = slower, &gt;1 = faster.
+        ///     Sets the timeScale of every active tween on this trail.
         /// </summary>
         internal void SetSpeed(float speed)
         {
@@ -106,8 +101,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Switches all active tweens to unscaled time so they ignore
-        ///     <see cref="Time.timeScale" />.
+        ///     Switches all active tweens to ignore <see cref="Time.timeScale" />.
         /// </summary>
         internal void SetUnscaledTime(bool useUnscaled)
         {

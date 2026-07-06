@@ -4,19 +4,13 @@ using UnityEngine;
 
 namespace BalloonParty.Configuration.Level
 {
-    /// <summary>
-    ///     Level-range difficulty authoring: ordered <see cref="LevelRangeEntry" />s (last is
-    ///     open-ended) and the threshold modifier curve — a dimensionless multiplier over the base
-    ///     formula, not an additive offset, so "20% cheaper" means the same thing at every level.
-    ///     Default flat 1.0 = no effect.
-    /// </summary>
+    /// <summary>Threshold modifier is a dimensionless multiplier over the base formula, so "20% cheaper" means the same at every level.</summary>
     [CreateAssetMenu(menuName = "Configuration/Level Pacing", fileName = "LevelPacingConfiguration")]
     internal class LevelPacingConfiguration : ScriptableObject, ILevelPacingConfiguration
     {
         [SerializeField] private LevelRangeEntry[] _ranges =
         {
-            // A struct's default constructor zero-initializes Parameters to null — construct it
-            // explicitly so a fresh instance is actually valid (see LevelRangeEntry's ctor doc).
+            // Construct Parameters explicitly — the struct default zero-initializes it to null.
             new(0, 0, new RangedLevelParameters()),
         };
 
@@ -118,9 +112,7 @@ namespace BalloonParty.Configuration.Level
             }
         }
 
-        // Duplicated (not injected) intentionally: OnValidate runs in the editor with no DI container,
-        // and the formula is a fixed constant of the game (see GameConfiguration.PointsRequiredForLevel) —
-        // this is a validation-time mirror, not a second source of truth for runtime.
+        // Duplicated, not injected: OnValidate runs in the editor with no DI container.
         private static int BaseFormula(int level)
         {
             return (int)((Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI))) + 25f);

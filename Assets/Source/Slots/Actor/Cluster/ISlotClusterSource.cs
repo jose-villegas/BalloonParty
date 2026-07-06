@@ -4,11 +4,7 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Actor.Cluster
 {
-    /// <summary>
-    /// Non-generic read-only facade for cluster data. Consumers that need cluster
-    /// geometry (e.g. disturbance controllers) inject this without knowing the
-    /// underlying model type.
-    /// </summary>
+    /// <summary>Non-generic read-only facade so consumers can access cluster geometry without knowing the model type.</summary>
     internal interface ISlotClusterSource
     {
         IObservable<SlotClusterChangedEvent> OnClusterChanged { get; }

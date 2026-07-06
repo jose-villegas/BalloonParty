@@ -4,12 +4,7 @@ namespace BalloonParty.Shared.Extensions
 {
     internal static class RendererExtensions
     {
-        /// <summary>
-        ///     Sets a single MaterialPropertyBlock float and applies it — the
-        ///     GetPropertyBlock → Set → SetPropertyBlock dance in one call. For multiple
-        ///     properties, do the dance inline (a multi-set helper would need a per-call
-        ///     closure, which allocates in per-frame paths).
-        /// </summary>
+        /// <summary>Get→Set→SetPropertyBlock in one call; for multiple properties do it inline to avoid a per-call closure alloc.</summary>
         internal static void SetFloatAndApply(
             this Renderer renderer, MaterialPropertyBlock block, int id, float value)
         {

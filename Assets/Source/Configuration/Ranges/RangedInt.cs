@@ -4,14 +4,7 @@ using BalloonParty.Configuration.Ranges;
 
 namespace BalloonParty.Configuration.Ranges
 {
-    /// <summary>
-    ///     An int scalar authored once per <see cref="LevelRangeEntry" /> that resolves to a concrete
-    ///     value per level: <see cref="RangeMode.Fixed" /> always returns <see cref="Min" />,
-    ///     <see cref="RangeMode.Linear" /> ramps <see cref="Min" />→<see cref="Max" /> across the
-    ///     range, <see cref="RangeMode.Random" /> rolls once per level within
-    ///     [<see cref="Min" />, <see cref="Max" />]. Pure — resolved once when a level begins, never
-    ///     re-rolled per turn.
-    /// </summary>
+    /// <summary>Pure — resolved once when a level begins, never re-rolled per turn.</summary>
     [Serializable]
     public struct RangedInt
     {
@@ -31,7 +24,7 @@ namespace BalloonParty.Configuration.Ranges
         public RangeMode Mode => _mode;
 
         /// <param name="positionInRange">0..1 position of the level within its range; ignored by Fixed/Random.</param>
-        /// <param name="rng">Source of randomness for Random mode — pass a seeded instance for determinism.</param>
+        /// <param name="rng">Pass a seeded instance for determinism.</param>
         public int Resolve(float positionInRange, System.Random rng)
         {
             switch (_mode)

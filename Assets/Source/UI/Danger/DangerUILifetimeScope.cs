@@ -6,9 +6,8 @@ using VContainer.Unity;
 namespace BalloonParty.UI.Danger
 {
     /// <summary>
-    ///     Child scope for the danger early-warning UI. Binds every <see cref="DangerGradientView" /> under
-    ///     this hierarchy to the parent scope's <c>SpaceDanger.Level</c> at <c>Start</c>. Safe when no views
-    ///     are present (empty array).
+    ///     Child scope for the danger early-warning UI; binds every <see cref="DangerGradientView" /> to
+    ///     the parent scope's danger level.
     /// </summary>
     public class DangerUILifetimeScope : LifetimeScope
     {

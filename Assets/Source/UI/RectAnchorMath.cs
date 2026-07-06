@@ -3,8 +3,7 @@ using UnityEngine;
 namespace BalloonParty.UI
 {
     /// <summary>
-    ///     Stateless <see cref="RectTransform"/> position math, with no feature knowledge so any
-    ///     RectTransform-backed view can reuse it.
+    ///     Stateless <see cref="RectTransform"/> position math shared across views.
     /// </summary>
     internal static class RectAnchorMath
     {

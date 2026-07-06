@@ -3,11 +3,8 @@ using UnityEngine;
 namespace BalloonParty.Shared
 {
     /// <summary>
-    ///     The four play-area walls unpacked from the clockwise <see cref="Vector4" /> convention
-    ///     (x = top, y = right, z = bottom, w = left) used by
-    ///     <see cref="IGameConfiguration.LimitsClockwise" />. Owning the wall layout and the
-    ///     box-bounce in one place keeps the live projectile flight and the aim-prediction trace
-    ///     from drifting apart when the convention changes. A readonly struct — no allocation.
+    ///     The four play-area walls unpacked from <see cref="IGameConfiguration.LimitsClockwise" />
+    ///     (x = top, y = right, z = bottom, w = left).
     /// </summary>
     internal readonly struct WallLimits
     {
@@ -26,8 +23,7 @@ namespace BalloonParty.Shared
 
         /// <summary>
         ///     Clamps <paramref name="position" /> inside the walls and reports the summed inward
-        ///     normal of every wall it crossed (<see cref="Vector3.zero" /> if it stayed inside).
-        ///     Reflect a velocity with <c>Vector2.Reflect(dir, reflectNormal.normalized)</c>.
+        ///     normal of every wall crossed (<see cref="Vector3.zero" /> if none).
         /// </summary>
         public Vector3 Clamp(Vector3 position, out Vector3 reflectNormal)
         {

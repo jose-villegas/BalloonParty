@@ -5,10 +5,7 @@ using UnityEngine;
 namespace BalloonParty.Game.Health
 {
     /// <summary>
-    ///     The heart trails currently in flight (health UI → overflow pop). <c>HeartTrailController</c>
-    ///     adds one when it spawns and removes it on arrival; the heart-drain cinematic follows the
-    ///     hearts in this set (launch order preserved — [0] is the next to land). Lives in the parent scope so both the UI-scope controller and the
-    ///     cinematic can reach it. Cleared on run reset.
+    ///     Heart trails currently in flight; launch order preserved so [0] is the next to land.
     /// </summary>
     internal sealed class HeartTrailTracker : IRunResettable
     {

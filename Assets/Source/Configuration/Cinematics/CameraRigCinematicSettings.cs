@@ -4,12 +4,7 @@ using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Configuration.Cinematics
 {
-    /// <summary>
-    ///     One camera-rig segment — the uniform shape every cinematic state plays: a
-    ///     <see cref="TimeScaleCurve" /> (whose last key is also the segment's duration) plus how the
-    ///     camera frames it. A slow-mo pan-in and a restore are the same structure — the restore's curve
-    ///     just ramps back to 1 with zoom/pan at 0 (target = base framing).
-    /// </summary>
+    /// <summary>One camera-rig segment: a <see cref="TimeScaleCurve" /> plus how the camera frames it.</summary>
     [Serializable]
     internal class CameraRigCinematicSettings
     {

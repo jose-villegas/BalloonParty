@@ -9,8 +9,6 @@ namespace BalloonParty.Balloon.Model
         public int ScoreValue { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
-        // Unbreakable doesn't shuffle along the chain — when shoved it barges clear, relocating to
-        // the farthest free slot.
         public override PressureResponse PushResponse => PressureResponse.RelocateFarthest;
 
         internal UnbreakableBalloonModel(BalloonModelConfig config) : base(config)
@@ -29,8 +27,7 @@ namespace BalloonParty.Balloon.Model
 
         public override HitOutcome EvaluateHit(DamageContext context)
         {
-            // Piercing is the only thing that pops this balloon, but we deliberately
-            // do not mutate HitsRemaining — there is no durability state to track.
+            // Deliberately does not mutate HitsRemaining — no durability state to track.
             if (context.Flags.HasFlag(DamageFlags.Piercing))
             {
                 return HitOutcome.Pop;

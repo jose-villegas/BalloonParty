@@ -5,12 +5,7 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Grid
 {
-    /// <summary>
-    ///     Tracks grid slots that are currently in-transit due to balance
-    ///     animations. Spawn path computation consults this to avoid
-    ///     traversal conflicts with relocating balloons. Transit slots are
-    ///     released per-actor when their animation completes.
-    /// </summary>
+    /// <summary>Tracks slots in-transit from balance animations so spawn paths avoid them.</summary>
     internal class BalancePathHolder : IRunResettable
     {
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector2Int>> _actorSlots = new();
@@ -20,8 +15,7 @@ namespace BalloonParty.Slots.Grid
 
         public void ResetRun(int generation)
         {
-            // Killed balance tweens never fire their per-actor Release, so drop all transit
-            // state wholesale as part of board teardown.
+            // Killed balance tweens never fire Release, so drop all transit state on teardown.
             _transitSlots.Clear();
             _actorSlots.Clear();
         }

@@ -14,9 +14,7 @@ using BalloonParty.Configuration.Items;
 namespace BalloonParty.Editor.EffectPreview
 {
     /// <summary>
-    ///     Preview module for <see cref="PaintSplashView" />. Animates blob
-    ///     renderers along arc paths with particles, shadow/sprite scale curves,
-    ///     spin, and splash particle spawning in prefab-stage-aware mode.
+    ///     Preview module for <see cref="PaintSplashView" />.
     /// </summary>
     internal sealed class PaintSplashPreviewModule : IEffectPreviewModule
     {
@@ -96,8 +94,7 @@ namespace BalloonParty.Editor.EffectPreview
             Vector2 direction = VectorMathExtensions.DirectionFromAngle(_previewDirectionDegrees * Mathf.Deg2Rad);
             var triangle = PaintTriangle.Build(origin, direction, paint);
 
-            // Cap at the prefab's seed blobs — the preview conveys the shape and aim; the runtime pools
-            // the full packed density.
+            // Capped at the prefab's seed blobs; runtime pools the full packed density.
             var packed = new List<Vector2>();
             triangle.PackBlobs(paint.SpreadBlobRadius, blobs.Length, packed);
 
@@ -169,8 +166,7 @@ namespace BalloonParty.Editor.EffectPreview
             DestroySplashes();
         }
 
-        // Outlines the paint triangle and every packed blob position, so the region and density are
-        // visible in the Scene view while tuning — independent of playback.
+        // Outlines the paint triangle and packed blob positions, independent of playback.
         public void DrawSceneGizmos()
         {
             var paint = (_ctx?.Settings ?? PreStartSettings)?.Paint;
@@ -314,7 +310,7 @@ namespace BalloonParty.Editor.EffectPreview
             go.hideFlags = HideFlags.DontSave;
             go.name = $"[EditorSplash] {prefab.name}";
 
-            // In prefab edit mode, objects must live in the prefab stage scene to be visible.
+            // Prefab edit mode requires objects to live in the prefab stage scene.
             var prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
             if (prefabStage != null)
             {

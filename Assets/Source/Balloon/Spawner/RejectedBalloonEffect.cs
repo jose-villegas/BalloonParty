@@ -21,17 +21,7 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Balloon.Spawner
 {
-    /// <summary>
-    ///     Feedback for balloons that couldn't spawn: each rises from below the grid into the overflow
-    ///     rows and lingers there as a visible pile. Draining is heart-driven — when a balloon is ready a
-    ///     heart trail is requested toward it (<see cref="OverflowHeartRequestedMessage"/>) and the hit
-    ///     point + camera shake are charged right then, at the launch; the balloon itself only pops (the
-    ///     visual burst) once that heart lands via <see cref="OnHeartArrived"/>.
-    ///     The pile is a per-column queue whose target row is the live list index, so when one pops the
-    ///     balloons below slide up to fill the gap; in-flight hearts home on the balloon's live position
-    ///     (<see cref="TryGetLivePosition"/>), so they still land on it as it compacts. Transients are
-    ///     pooled <see cref="BalloonView"/>s with no grid slot, so <see cref="ResetRun"/> returns them itself.
-    /// </summary>
+    /// <summary>Visible pile for balloons that couldn't spawn; drains via heart trails charged at launch, not at pop.</summary>
     internal sealed class RejectedBalloonEffect : ITickable, IRunResettable, IPendingHealthCharges
     {
         private readonly IActiveLevelParameters _levelParams;
@@ -52,12 +42,10 @@ namespace BalloonParty.Balloon.Spawner
 
         public int ResetOrder => RunResetOrder.Counters;
 
-        // True while the overflow pile is resolving (the thrower-lock is held): balloons still pending.
-        // The heart-drain cinematic uses this + an empty trail set to know the drain has finished.
+        // True while the overflow pile is resolving; the heart-drain cinematic checks this to know it's done.
         internal bool IsOverflowActive => _overflowPaused;
 
-        // Every queued balloon will unconditionally cost one HP when its heart launches — the loss
-        // forecast reads this to know a loss is certain at reject-queue time, not at the Nth launch.
+        // Each queued balloon costs one HP when its heart launches — read by the loss forecast.
         public int PendingCharges
         {
             get
@@ -112,9 +100,7 @@ namespace BalloonParty.Balloon.Spawner
 
             _launchCooldown -= delta;
 
-            // Advance everyone, then request at most one heart per interval — for the front-most (topmost)
-            // ready balloon that hasn't launched yet — so the pile drains front-first, one at a time, and
-            // the rest compact up behind it.
+            // At most one heart per interval, for the front-most ready balloon, so the pile drains in order.
             OverflowBalloon candidate = null;
             var candidateRow = int.MaxValue;
 
@@ -148,12 +134,7 @@ namespace BalloonParty.Balloon.Spawner
             TryReleaseOverflowHold();
         }
 
-        /// <summary>
-        ///     Queues the reject feedback for a blocked column: a would-be balloon enters at the next free
-        ///     overflow row below the grid and lingers there. <paramref name="staggerIndex"/> delays its
-        ///     appearance so a line sweeps; <paramref name="activeCounts"/> is read (not owned) so the
-        ///     would-be balloon honours the same per-type caps as a real spawn.
-        /// </summary>
+        /// <summary>Queues reject feedback for a blocked column; <paramref name="staggerIndex"/> delays its appearance.</summary>
         public void Play(int col, int staggerIndex, IReadOnlyDictionary<string, int> activeCounts)
         {
             var queue = QueueFor(col);
@@ -162,7 +143,7 @@ namespace BalloonParty.Balloon.Spawner
 
             if (entry == null)
             {
-                // No type to visualize, but the column is still blocked — charge the hit point anyway.
+                // Nothing to visualize, but the column is still blocked — charge the hit point anyway.
                 _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(col, RowPosition(col, rowOffset)));
                 return;
             }
@@ -172,7 +153,7 @@ namespace BalloonParty.Balloon.Spawner
             view.Variant.Initialize(model, _levelParams.Current.AllowedColorsMask);
             view.Bind(model);
 
-            // Enter one row below the target so the tick eases it up into place.
+            // One row below target so the tick eases it up into place.
             view.transform.position = RowPosition(col, rowOffset + 1);
             view.transform.localScale = Vector3.zero;
 
@@ -180,11 +161,7 @@ namespace BalloonParty.Balloon.Spawner
             BeginOverflowHold();
         }
 
-        /// <summary>
-        ///     Pops the overflow balloon a landed heart trail was flying to (matched by id) — the drama
-        ///     beat: the hit point is charged here, at the pop, not when the balloon first went ready.
-        ///     A no-op if the balloon is already gone (e.g. the run reset out from under an in-flight heart).
-        /// </summary>
+        /// <summary>Pops the overflow balloon matching a landed heart trail; no-op if it's already gone.</summary>
         public void OnHeartArrived(int requestId)
         {
             foreach (var column in _columns)
@@ -201,10 +178,7 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        /// <summary>
-        ///     The current world position of the overflow balloon with <paramref name="requestId"/>, so an
-        ///     in-flight heart trail can home on it as the pile compacts. False once the balloon is gone.
-        /// </summary>
+        /// <summary>Live world position so an in-flight heart trail can home on it as the pile compacts.</summary>
         public bool TryGetLivePosition(int requestId, out Vector3 position)
         {
             foreach (var column in _columns)
@@ -224,11 +198,7 @@ namespace BalloonParty.Balloon.Spawner
             return false;
         }
 
-        /// <summary>
-        ///     Brackets a turn's whole spawn sequence (which may spawn several lines with delays between
-        ///     them). The overflow hold can't release until the sequence is over <em>and</em> the pile is
-        ///     empty, so the thrower stays locked across the gaps between lines.
-        /// </summary>
+        /// <summary>Brackets a turn's spawn sequence; the overflow hold won't release until it ends and the pile is empty.</summary>
         public void BeginSpawnSequence()
         {
             _sequenceDepth++;
@@ -244,9 +214,7 @@ namespace BalloonParty.Balloon.Spawner
             TryReleaseOverflowHold();
         }
 
-        // Eases one balloon toward its current row (= its live index, so it compacts up when a balloon
-        // ahead pops) and runs its arrive→linger clock. Returns true once it's ready for its heart (the
-        // Tick spaces the actual requests); in-flight hearts track the moving balloon, so compaction is safe.
+        // Eases the balloon toward its current row (its live index) and runs its arrive-then-linger clock.
         private bool Advance(int col, int rowOffset, OverflowBalloon balloon, float delta)
         {
             if (balloon.AppearDelay > 0f)
@@ -282,16 +250,12 @@ namespace BalloonParty.Balloon.Spawner
             balloon.Launched = true;
             var position = balloon.View.transform.position;
 
-            // The heart request goes out first so the trail (and the drain cinematic) exists while the
-            // run is still in Game; the charge follows immediately — the hit point and camera shake land
-            // the moment the heart leaves the UI, not when it arrives. A 0-HP game-over triggered here
-            // simply ends the cinematic early (extra hearts past 0 don't count).
+            // Hit point and camera shake charge when the heart launches, not when it lands.
             _heartRequestPublisher.Publish(new OverflowHeartRequestedMessage(balloon.Id, position));
             _spawnBlockedPublisher.Publish(new SpawnBlockedMessage(balloon.Column, position));
         }
 
-        // Purely the visual burst — the hit point and shake were already charged when the heart launched
-        // (see LaunchHeart); the landing just resolves the balloon it paid for.
+        // Visual burst only — the hit point and shake were already charged in LaunchHeart.
         private void Pop(OverflowBalloon balloon)
         {
             var position = balloon.View.transform.position;
@@ -334,10 +298,7 @@ namespace BalloonParty.Balloon.Spawner
             return _grid.IndexToWorldPosition(new Vector2Int(col, _grid.Rows + rowOffset));
         }
 
-        // Hold the thrower while overflow is resolving so the player can't fire into a board mid-pile.
-        // Engaged on the first rejected balloon; released only once the spawn sequence is done and the
-        // pile is empty — at which point the run has survived (thrower re-enables) or ended (GameOver
-        // keeps it disabled).
+        // Holds the thrower while overflow is resolving so the player can't fire into a board mid-pile.
         private void BeginOverflowHold()
         {
             if (_overflowPaused)

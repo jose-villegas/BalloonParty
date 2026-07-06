@@ -5,10 +5,7 @@ namespace BalloonParty.Shared.Extensions
 {
     internal static class SlotActorExtensions
     {
-        /// <summary>
-        /// Evaluates a hit against the actor if it implements <see cref="IHitable"/>;
-        /// otherwise returns <paramref name="fallback"/>.
-        /// </summary>
+        /// <summary>Evaluates a hit if the actor implements <see cref="IHitable"/>; otherwise returns <paramref name="fallback"/>.</summary>
         public static HitOutcome EvaluateHit(
             this ISlotActor actor,
             DamageContext context,

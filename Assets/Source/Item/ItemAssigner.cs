@@ -45,9 +45,7 @@ namespace BalloonParty.Item
                 return;
             }
 
-            // Initial board fills roll their own distribution and skip the cadence gate (they aren't a
-            // turn); subsequent spawns roll the per-cadence distribution only on a cadence turn. The
-            // count is a fresh weighted draw every time — rolled per turn, not resolved once per level.
+            // Initial board fills skip the cadence gate; later spawns roll only on a cadence turn.
             AnimationCurve weights;
             if (msg.IsInitialSpawn)
             {
@@ -71,9 +69,7 @@ namespace BalloonParty.Item
             AssignItems(msg.NewBalloons, count);
         }
 
-        // Grants up to `count` items across DISTINCT newly-spawned balloons, re-picking a weighted type
-        // per grant and tracking the running per-type count so caps hold within the batch, not just
-        // against the pre-existing board.
+        // Tracks running per-type counts so caps hold within the batch, not just the pre-existing board.
         private void AssignItems(IReadOnlyList<IBalloonModel> newBalloons, int count)
         {
             var candidates = _levelParams.Current.Items;
@@ -100,7 +96,7 @@ namespace BalloonParty.Item
                 var picked = _levelParams.Current.PickItemEntry(_activeCountsBuffer);
                 if (picked == null || picked.Type == ItemType.None)
                 {
-                    // Every candidate is at its cap — no further grants possible this batch.
+                    // Every candidate is at its cap.
                     break;
                 }
 
@@ -113,10 +109,7 @@ namespace BalloonParty.Item
             }
         }
 
-        // Weighted-random integer draw from a curve whose value at each integer X is that count's
-        // weight (X = 0 → weight of "no items", X = 1 → "one item", …). The count range is the curve's
-        // last keyframe time; negative weights clamp to zero. roll01 is the [0,1) uniform sample.
-        // Empty curve or all-zero weights → 0.
+        // Weighted-random draw from a curve keyed by integer count; empty/all-zero weights return 0.
         internal static int SampleCount(AnimationCurve weights, float roll01)
         {
             if (weights == null || weights.length == 0)
@@ -151,14 +144,12 @@ namespace BalloonParty.Item
             return maxCount;
         }
 
-        // Replaces the old per-item TurnCheckEvery catalog check with one shared frequency.
         private bool IsCadenceTurn(int turns)
         {
             var cadence = _levelParams.Current.ItemCadence;
             return cadence > 0 && turns % cadence == 0;
         }
 
-        // Newly-spawned balloons that can actually carry an item (and don't already hold one).
         private void CollectEligibleSlots(IReadOnlyList<IBalloonModel> newBalloons)
         {
             _eligibleBuffer.Clear();
@@ -171,8 +162,7 @@ namespace BalloonParty.Item
             }
         }
 
-        // Counts by the same capability eligibility uses, so any actor type that can carry an
-        // item is included — counting a concrete model type here would silently break the cap.
+        // Counts via the capability interface, not a concrete model type, or caps silently break.
         private int CountBalloonsWithItem(ItemType type)
         {
             var count = 0;

@@ -64,7 +64,7 @@ namespace BalloonParty.UI.Score
 
         private void Awake()
         {
-            // Self-heal a prefab that predates these fields, rather than NRE at Start.
+            // Self-heal prefabs predating these fields.
             if (_visibilityGroup == null)
             {
                 _visibilityGroup = GetComponent<CanvasGroup>();
@@ -169,16 +169,14 @@ namespace BalloonParty.UI.Score
             ClearCompletionVfx();
         }
 
-        // Not called from OnLevelUp — the resolver may have already re-resolved to the new
-        // level's color set by then (subscriber order is unenforced), so this only runs at Start
-        // and OnDismissed, after the ceremony ends.
+        // Not called from OnLevelUp — subscriber order is unenforced, so this runs only at Start/OnDismissed.
         private void ApplyVisibility()
         {
             var active = IsColorActive();
             _visibilityGroup.alpha = active ? 1f : 0f;
             _visibilityGroup.interactable = active;
             _visibilityGroup.blocksRaycasts = active;
-            _layoutElement.ignoreLayout = !active; // CanvasGroup alone doesn't exclude from layout sizing.
+            _layoutElement.ignoreLayout = !active; // CanvasGroup alone doesn't exclude from layout.
         }
 
         private bool IsColorActive()

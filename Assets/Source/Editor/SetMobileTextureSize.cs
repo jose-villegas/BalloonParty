@@ -84,8 +84,7 @@ namespace BalloonParty.Editor
             Debug.Log($"[SetMobileTextureSize] {action} on {count} texture(s).");
         }
 
-        // Applies the max-size override to every mobile platform of one texture; returns whether
-        // anything changed (so it gets re-imported and counted).
+        // Returns whether anything changed, so it gets re-imported and counted.
         private static bool ApplyToTexture(string guid, int maxSize)
         {
             var path = AssetDatabase.GUIDToAssetPath(guid);
@@ -108,8 +107,7 @@ namespace BalloonParty.Editor
             return modified;
         }
 
-        // A negative maxSize clears the override (back to default); otherwise it sets the cap.
-        // Returns whether the platform's settings changed.
+        // Negative maxSize clears the override back to default.
         private static bool ApplyPlatformSetting(TextureImporter importer, string platform, int maxSize)
         {
             var settings = importer.GetPlatformTextureSettings(platform);

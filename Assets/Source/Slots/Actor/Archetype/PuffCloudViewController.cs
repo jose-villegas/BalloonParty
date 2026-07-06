@@ -7,8 +7,7 @@ using BalloonParty.Configuration.Effects;
 namespace BalloonParty.Slots.Actor.Archetype
 {
     /// <summary>
-    /// Puff-specific cluster view controller. Thin subclass that closes the generic
-    /// type parameters and provides the cloud prefab from <see cref="IPuffCloudSettings"/>.
+    /// Provides the cloud prefab from <see cref="IPuffCloudSettings"/>.
     /// </summary>
     internal class PuffCloudViewController
         : ClusterViewController<PuffObstacleModel, PuffCloudView, IPuffCloudSettings>

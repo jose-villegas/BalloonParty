@@ -9,9 +9,7 @@ using BalloonParty.Configuration.Items;
 namespace BalloonParty.Editor.EffectPreview
 {
     /// <summary>
-    ///     Reusable editor preview player for <see cref="Shared.Pool.EffectView" />
-    ///     subclasses. Owns the animation loop, palette color picker, and config
-    ///     caches. Delegates rendering logic to an <see cref="IEffectPreviewModule" />.
+    ///     Reusable editor preview player for <see cref="Shared.Pool.EffectView" /> subclasses.
     /// </summary>
     internal sealed class EffectViewPreviewPlayer
     {

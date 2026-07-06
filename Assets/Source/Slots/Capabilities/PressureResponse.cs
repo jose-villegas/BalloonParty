@@ -1,19 +1,15 @@
 namespace BalloonParty.Slots.Capabilities
 {
-    /// <summary>
-    ///     How a balloon reacts when a pressure-balance push reaches it. The cascade is a chain of
-    ///     shoves between neighbours; this decides whether a balloon passes the shove along by
-    ///     stepping one cell, or gets out of the way entirely — and if so, where it heads.
-    /// </summary>
+    /// <summary>How a balloon reacts when a pressure-balance push reaches it.</summary>
     public enum PressureResponse
     {
-        /// <summary>Displaces one cell to a neighbour, continuing the chain (the default balloon).</summary>
+        /// <summary>Shoves a neighbour one cell, continuing the chain.</summary>
         ShoveNeighbour,
 
-        /// <summary>Vacates to the nearest free slot, ending the chain — stays close (BubbleCluster).</summary>
+        /// <summary>Vacates to the nearest free slot, ending the chain.</summary>
         RelocateNearest,
 
-        /// <summary>Vacates to the farthest free slot, ending the chain — clears right out (Unbreakable).</summary>
+        /// <summary>Vacates to the farthest free slot, ending the chain.</summary>
         RelocateFarthest
     }
 }

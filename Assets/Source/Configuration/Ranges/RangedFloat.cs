@@ -24,7 +24,7 @@ namespace BalloonParty.Configuration.Ranges
         public RangeMode Mode => _mode;
 
         /// <param name="positionInRange">0..1 position of the level within its range; ignored by Fixed/Random.</param>
-        /// <param name="rng">Source of randomness for Random mode — pass a seeded instance for determinism.</param>
+        /// <param name="rng">Pass a seeded instance for determinism.</param>
         public float Resolve(float positionInRange, System.Random rng)
         {
             switch (_mode)

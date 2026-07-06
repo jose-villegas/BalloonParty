@@ -8,8 +8,7 @@ namespace BalloonParty.UI
 {
     /// <summary>
     ///     Shows an int reactive value as a thousands-separated label, with a <c>"--"</c> placeholder
-    ///     until bound and on unbind. Concrete subclasses exist only to give each HUD prefab a distinct
-    ///     component type so its scope can gather them independently — all behaviour lives here.
+    ///     until bound and on unbind.
     /// </summary>
     [RequireComponent(typeof(TMP_Text))]
     internal abstract class ReactiveCounterLabel : MonoBehaviour, IReactiveBindable<int>

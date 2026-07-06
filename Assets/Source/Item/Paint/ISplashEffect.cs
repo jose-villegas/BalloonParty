@@ -8,8 +8,7 @@ using BalloonParty.Configuration.Items;
 namespace BalloonParty.Item.Paint
 {
     /// <summary>
-    ///     A pooled effect that can be prepared with paint-blob flights before playing. Lets the handler
-    ///     configure the effect through an interface instead of a hard downcast to the concrete view.
+    ///     Lets the handler configure a pooled effect without a hard downcast to the concrete view.
     /// </summary>
     internal interface ISplashEffect
     {

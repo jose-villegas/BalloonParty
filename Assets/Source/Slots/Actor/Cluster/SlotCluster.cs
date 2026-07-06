@@ -3,10 +3,7 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Actor.Cluster
 {
-    /// <summary>
-    /// A group of hex-adjacent <see cref="IClusterableSlotActor"/> slots that share
-    /// a single merged visual (cloud, bush, etc.).
-    /// </summary>
+    /// <summary>A group of hex-adjacent <see cref="IClusterableSlotActor"/> slots sharing one merged visual.</summary>
     internal class SlotCluster
     {
         private readonly List<Vector2Int> _slots = new();

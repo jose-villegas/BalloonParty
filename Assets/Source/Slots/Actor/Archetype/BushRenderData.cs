@@ -5,10 +5,7 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    /// <summary>
-    /// One depth tier of leaf instances for a single slot — translation matrices plus
-    /// the per-instance tint, atlas UV rect, and wind parameters the leaf shader reads.
-    /// </summary>
+    /// <summary>One depth tier of leaf instances for a single slot.</summary>
     internal struct LeafTier
     {
         internal Matrix4x4[] Matrices;
@@ -19,10 +16,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         internal Vector4[] Winds;
     }
 
-    /// <summary>
-    /// A draw-ready batch of leaves merged across slots (≤1023 instances), with the
-    /// per-instance arrays pre-packed into a <see cref="MaterialPropertyBlock"/>.
-    /// </summary>
+    /// <summary>A draw-ready batch of leaves merged across slots (≤1023 instances).</summary>
     internal struct LeafBatch
     {
         internal Matrix4x4[] Matrices;
@@ -33,10 +27,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         internal int Count;
     }
 
-    /// <summary>
-    /// Per-slot branch material/matrix plus the slot's two leaf tiers and the source
-    /// data the editor gizmos draw from.
-    /// </summary>
+    /// <summary>Per-slot branch material/matrix plus the slot's two leaf tiers.</summary>
     internal struct SlotRenderData
     {
         internal Material BranchMaterial;
@@ -50,10 +41,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         internal float BushWorldSize;
     }
 
-    /// <summary>
-    /// The full set of render data for one bush: per-slot entries (for branch draws and
-    /// gizmos) plus the merged inner/outer leaf batches submitted each frame.
-    /// </summary>
+    /// <summary>The full render data for one bush: per-slot entries plus merged inner/outer leaf batches.</summary>
     internal sealed class BushRenderData
     {
         internal BushRenderData(

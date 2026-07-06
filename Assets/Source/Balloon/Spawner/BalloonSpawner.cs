@@ -91,30 +91,23 @@ namespace BalloonParty.Balloon.Spawner
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount));
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
 
-            // Reset the turn counter each level-up so FirstSpawnTurn is a per-level grace: the new
-            // level's opening shots don't spawn lines until its own start turn. (Counter is otherwise
-            // run-monotonic; ResetRun zeroes it for a fresh run.)
+            // Reset per level-up so FirstSpawnTurn is a fresh per-level grace period.
             _levelUpSubscriber.Subscribe(_ => _turnCount = 0);
 
-            // Begin prewarm immediately so pools are ready before SpawnAsync is called.
             PrewarmThenFlagAsync(_cts.Token).Forget();
         }
 
         public async UniTask SpawnAsync(CancellationToken ct)
         {
-            // WaitUntil is re-awaitable (unlike a stored UniTask), so a restart re-spawn can wait on
-            // the same prewarm flag without an "await twice" error; once warm it returns immediately.
+            // Re-awaitable, unlike a stored UniTask, so a restart re-spawn can wait on it again.
             await UniTask.WaitUntil(() => _prewarmed, cancellationToken: ct);
             PopulateInitialGrid();
-
-            // Let the assigner seed the fresh board's items (InitialItems) — a one-off, not a turn.
             PublishItemCheck(isInitial: true);
         }
 
         public void ResetRun(int generation)
         {
-            // Adopt the new run's generation to drop any in-flight delayed line spawns, then clear
-            // counters. Active balloons have already returned themselves via the board-clear broadcast.
+            // New generation drops any in-flight delayed line spawns.
             _generation = generation;
             _activeCounts.Clear();
             _turnCount = 0;
@@ -123,8 +116,7 @@ namespace BalloonParty.Balloon.Spawner
 
         public void Dispose()
         {
-            // The generation guard only covers run resets — scope teardown must cancel in-flight
-            // delayed line spawns so they don't touch disposed pools and publishers.
+            // The generation guard only covers run resets, not scope teardown.
             _cts.Cancel();
             _cts.Dispose();
         }
@@ -173,7 +165,7 @@ namespace BalloonParty.Balloon.Spawner
 
         private void PopulateInitialGrid()
         {
-            // The initial grid starts empty and is sized to fit, so it never rejects a balloon.
+            // Starts empty and is sized to fit, so it never rejects a balloon.
             for (var i = 0; i < _levelParams.Current.BoardLines; i++)
             {
                 SpawnLineInternal(allowReject: false);
@@ -184,8 +176,7 @@ namespace BalloonParty.Balloon.Spawner
         {
             if (_newlySpawnedBalloons.Count > 0)
             {
-                // Copy — the live buffer is cleared right away, so a subscriber that defers past
-                // this frame would otherwise observe an empty (or repurposed) list.
+                // Copy — the live buffer is cleared right after, before a deferred subscriber could read it.
                 _itemCheckPublisher.Publish(
                     new ItemCheckMessage(new List<IBalloonModel>(_newlySpawnedBalloons), _turnCount, isInitial));
                 _newlySpawnedBalloons.Clear();
@@ -236,8 +227,7 @@ namespace BalloonParty.Balloon.Spawner
 
                 if (allowReject)
                 {
-                    // No room anywhere and pressure couldn't open this column — queue an overflow
-                    // balloon below the grid (the effect stacks/compacts rows itself).
+                    // No room anywhere — queue an overflow balloon below the grid.
                     _rejectedBalloon.Play(col, rejectIndex++, _activeCounts);
                 }
             }
@@ -245,8 +235,7 @@ namespace BalloonParty.Balloon.Spawner
 
         private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct, int generation)
         {
-            // Bracket the whole multi-line sequence so the overflow hold (thrower lock) spans the gaps
-            // between lines and only releases once every line's pops are done.
+            // Keeps the overflow hold (thrower lock) across the gaps between lines.
             _rejectedBalloon.BeginSpawnSequence();
             try
             {

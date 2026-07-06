@@ -79,8 +79,7 @@ namespace BalloonParty.Item
         {
             try
             {
-                // Yield one frame so all synchronous ActorHitMessage subscribers
-                // (e.g. BalloonController capturing item rotation) finish first.
+                // Yield one frame so synchronous ActorHitMessage subscribers finish first.
                 await UniTask.Yield(_cts.Token);
 
                 await handler.Activate(context);
@@ -88,7 +87,7 @@ namespace BalloonParty.Item
             }
             catch (OperationCanceledException)
             {
-                // Expected during teardown — swallow silently.
+                // Expected during teardown.
             }
             catch (Exception e)
             {

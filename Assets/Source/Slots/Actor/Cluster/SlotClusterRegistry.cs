@@ -7,14 +7,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Slots.Actor.Cluster
 {
-    /// <summary>
-    /// Maintains clusters of hex-adjacent <typeparamref name="TModel"/> slots.
-    /// Subscribes to <see cref="SlotGrid.OnChanged"/> and recomputes adjacency
-    /// via flood-fill whenever a matching actor is placed or removed.
-    /// When <c>setupOnly</c> is true, the registry builds once at startup and
-    /// does not subscribe to grid changes — suitable for static actors that
-    /// never change after initial placement.
-    /// </summary>
+    /// <summary>When <c>setupOnly</c> is true, builds once at startup and never subscribes to grid changes.</summary>
     internal class SlotClusterRegistry<TModel> : IStartable, IDisposable, ISlotClusterSource
         where TModel : class, IClusterableSlotActor
     {

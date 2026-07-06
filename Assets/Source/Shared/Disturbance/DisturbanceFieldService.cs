@@ -7,11 +7,7 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Shared.Disturbance
 {
-    /// <summary>
-    /// Screen-space disturbance field any system can stamp into; runs one diffusion blit per
-    /// tick to reform it toward equilibrium. Drives the simulation only — GPU resources live in
-    /// <see cref="DisturbanceFieldResources"/>. Consumers sample <see cref="FieldTexture"/>.
-    /// </summary>
+    /// <summary>Screen-space disturbance field any system can stamp into; GPU resources live in <see cref="DisturbanceFieldResources"/>.</summary>
     internal class DisturbanceFieldService : IStartable, ITickable, IDisposable
     {
         private const int MaxStampsPerBatch = 32;
@@ -59,9 +55,7 @@ namespace BalloonParty.Shared.Disturbance
             _displayConfig = displayConfig;
             _impactBus = impactBus;
 
-            // Construct the CPU-side collaborators here so Stamp() is safe before Start(): the lerp
-            // queue accepts stamps, and _resources reports not-ready (so the blit path early-returns)
-            // until Start() does the GPU Initialize().
+            // Built here (not Start()) so Stamp() is safe before Start(); _resources reports not-ready until then.
             _lerpScheduler = new LerpStampScheduler(_settings.MaxLerpStamps);
             _resources = new DisturbanceFieldResources(_settings);
         }
@@ -127,11 +121,7 @@ namespace BalloonParty.Shared.Disturbance
             Stamp(worldPosition, profile.Radius, profile.Strength, direction, profile.Duration);
         }
 
-        /// <summary>
-        /// Stamps a disturbance at a world position; the field dents then reforms via diffusion.
-        /// A positive <paramref name="duration"/> ramps the stamp over time for a smooth shockwave
-        /// instead of a single-frame pop.
-        /// </summary>
+        /// <summary>A positive <paramref name="duration"/> ramps the stamp over time for a smooth shockwave instead of a single-frame pop.</summary>
         internal void Stamp(Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration = 0f)
         {
             _impactBus.Report(worldPosition, radius);

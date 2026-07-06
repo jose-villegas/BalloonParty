@@ -5,10 +5,7 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Shared.Disturbance
 {
-    /// <summary>
-    ///     Holds the disturbance field's GPU resources and the blit-and-swap, kept apart from
-    ///     <see cref="DisturbanceFieldService"/> so the service owns only the simulation.
-    /// </summary>
+    /// <summary>Holds the disturbance field's GPU resources and blit-and-swap, separate from <see cref="DisturbanceFieldService"/>'s simulation logic.</summary>
     internal class DisturbanceFieldResources
     {
         private static readonly int GlobalDisturbanceTexId = Shader.PropertyToID("_DisturbanceTex");

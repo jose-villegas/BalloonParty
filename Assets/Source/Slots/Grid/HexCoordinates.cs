@@ -2,11 +2,7 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Grid
 {
-    /// <summary>
-    ///     Pure hex-grid coordinate math for the pointy-top, odd-row-shifted layout used by
-    ///     <see cref="SlotGrid" />: the six neighbour offsets and the index→world conversion. Stateless,
-    ///     so callers that only need the geometry don't reach into the grid's storage.
-    /// </summary>
+    /// <summary>Pure coordinate math for the pointy-top, odd-row-shifted hex grid used by <see cref="SlotGrid" />.</summary>
     internal static class HexCoordinates
     {
         public static Vector2Int[] HexNeighborIndices(int col, int row)

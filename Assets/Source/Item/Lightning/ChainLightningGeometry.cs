@@ -6,15 +6,12 @@ using UnityEngine;
 namespace BalloonParty.Item.Lightning
 {
     /// <summary>
-    ///     Pure geometry for the chain-lightning effect: the jagged per-renderer bolt buffers and the
-    ///     smoothed glow path through the per-jump centroids. Stateless, so it's testable and reusable
-    ///     (the editor preview drives it) without a live <see cref="ChainLightningView" />.
+    ///     Pure geometry for the chain-lightning effect; stateless so the editor preview can reuse it.
     /// </summary>
     internal static class ChainLightningGeometry
     {
         /// <summary>
         ///     Pre-computes jagged bolt segments for all jumps and renderers.
-        ///     Returns per-renderer position buffers and cumulative offset array.
         /// </summary>
         internal static (Vector3[][] lineBuffers, int[] cumOffsets) BuildBoltBuffers(
             IReadOnlyList<Vector3> positions,
@@ -56,9 +53,7 @@ namespace BalloonParty.Item.Lightning
         }
 
         /// <summary>
-        ///     Builds a smooth Catmull-Rom path through the per-jump centroids so the
-        ///     glow sprite can slide instead of snapping between discrete positions.
-        ///     Also returns interpolated diameters that match each path sample.
+        ///     Builds a smooth Catmull-Rom path through the per-jump centroids so the glow sprite can slide.
         /// </summary>
         internal static (Vector3[] positions, float[] diameters) BuildGlowPath(
             IReadOnlyList<Vector3> targetPositions,
@@ -91,7 +86,6 @@ namespace BalloonParty.Item.Lightning
 
         /// <summary>
         ///     Computes the centroid and bounding diameter for each visible glow stage.
-        ///     Stage <c>s</c> (1-indexed) covers <c>targetPositions[0..s]</c>.
         /// </summary>
         private static (List<Vector3> centroids, float[] diameters) ComputeStageCentroids(
             IReadOnlyList<Vector3> targetPositions)

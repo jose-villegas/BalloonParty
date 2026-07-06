@@ -59,7 +59,7 @@ namespace BalloonParty.UI.Shields
             _lostSubscription = _shieldLostSubscriber.Subscribe(OnShieldLost);
         }
 
-        // Shield gained: a trail flies from the balloon that granted it up to the shield HUD.
+        // Trail flies from the granting balloon up to the shield HUD.
         private void OnShieldGained(ShieldGainedMessage msg)
         {
             if (!_endpoints.TryGet(TrailEndpointKeys.Shield, out var target))
@@ -71,7 +71,7 @@ namespace BalloonParty.UI.Shields
             _spawner.Spawn(fromWorldPosition, target.Center, _config.ShieldTrailDuration);
         }
 
-        // Shield lost: the reverse — a trail flies from the HUD down to the wall bounce that spent it.
+        // Reverse: trail flies from the HUD down to the wall bounce that spent it.
         private void OnShieldLost(ShieldLostMessage msg)
         {
             if (!_endpoints.TryGet(TrailEndpointKeys.Shield, out var source))

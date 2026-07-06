@@ -5,9 +5,7 @@ using UnityEngine;
 namespace BalloonParty.Editor
 {
     /// <summary>
-    ///     Live play-mode preview of the screen-space light buffer on the
-    ///     <see cref="ScreenSpaceLightService"/> inspector. Two views, because the buffer
-    ///     packs two signals: RGB is the bounce/bleed color, A is the shadow amount.
+    ///     Live play-mode preview of the screen-space light buffer: RGB is bounce color, A is shadow amount.
     /// </summary>
     [CustomEditor(typeof(ScreenSpaceLightService))]
     internal sealed class ScreenSpaceLightServiceEditor : UnityEditor.Editor
@@ -42,7 +40,6 @@ namespace BalloonParty.Editor
             EditorGUILayout.LabelField("Shadow amount (A)", EditorStyles.boldLabel);
             EditorGUI.DrawTextureAlpha(GUILayoutUtility.GetAspectRect(aspect), texture);
 
-            // Keep the preview live while the game runs.
             Repaint();
         }
     }

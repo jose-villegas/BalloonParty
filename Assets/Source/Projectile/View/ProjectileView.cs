@@ -143,18 +143,12 @@ namespace BalloonParty.Projectile.View
 
         private void DestroyProjectile()
         {
-            // Rebalance the board right away; the spent projectile scales down first, and only when it
-            // has vanished do we signal destruction (which reloads the next projectile).
+            // Rebalance immediately; destruction (and the next reload) waits for the scale-down.
             _balancePublisher.Publish(default);
             PlayDisappear(() => _destroyedPublisher.Publish(default));
         }
 
-        /// <summary>
-        ///     Scales the projectile down to zero, then invokes <paramref name="onComplete" />. Used for
-        ///     the last-hit destruction and (via the thrower) the level-up dismiss. Idempotent — a second
-        ///     call while already disappearing is ignored. Runs in unscaled time so slow-mo doesn't stretch
-        ///     it and it plays even while the world is frozen at dismiss.
-        /// </summary>
+        /// <summary>Scales the projectile to zero then invokes <paramref name="onComplete" />; runs in unscaled time so it still plays while the world is frozen.</summary>
         internal void PlayDisappear(Action onComplete = null)
         {
             if (_disappearing)
@@ -176,7 +170,6 @@ namespace BalloonParty.Projectile.View
         {
             var step = _motionResolver.Step(_model, transform.position, Time.fixedDeltaTime);
 
-            // A bounce plays its VFX whether or not a shield survives it.
             if (step.Outcome != ProjectileStepOutcome.Moved)
             {
                 PlayBounceEffect(step.Position);
@@ -190,7 +183,6 @@ namespace BalloonParty.Projectile.View
 
             if (step.Outcome == ProjectileStepOutcome.Bounced)
             {
-                // A shield absorbed the bounce — fly a shield trail to the bounce point.
                 _shieldLostPublisher.Publish(new ShieldLostMessage(step.Position));
             }
 

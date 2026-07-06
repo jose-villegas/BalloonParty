@@ -1,9 +1,6 @@
 namespace BalloonParty.Slots.Capabilities
 {
-    /// <summary>
-    ///     Marks an actor whose grid slot can be visually crossed by other actors'
-    ///     animation paths. Actors without this interface block traversal.
-    /// </summary>
+    /// <summary>Marks a slot other actors' animation paths may visually cross; without it, traversal is blocked.</summary>
     public interface IPassThrough
     {
     }

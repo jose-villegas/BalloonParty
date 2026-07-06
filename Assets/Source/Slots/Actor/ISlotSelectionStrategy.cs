@@ -3,24 +3,10 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Actor
 {
-    /// <summary>
-    /// Strategy for selecting which slots a grid actor type should occupy.
-    /// Each actor type can provide its own logic (e.g. Puff favors adjacency
-    /// for cluster formation, others might prefer isolation or specific rows).
-    /// </summary>
+    /// <summary>Lets each actor type provide its own slot-picking logic (e.g. adjacency vs. isolation).</summary>
     internal interface ISlotSelectionStrategy
     {
-        /// <summary>
-        /// Selects slots from the available set. Returns the chosen positions
-        /// in placement order.
-        /// </summary>
-        /// <param name="emptySlots">All currently empty slots on the grid.</param>
-        /// <param name="count">How many slots to select.</param>
-        /// <param name="maxPerCluster">
-        /// Maximum slots per individual cluster. 0 = no limit.
-        /// Only meaningful for cluster-based strategies.
-        /// </param>
-        /// <returns>Selected slot positions (may be fewer than <paramref name="count"/> if not enough valid candidates).</returns>
+        /// <summary>May return fewer than <paramref name="count"/> if not enough valid candidates; maxPerCluster 0 = no limit.</summary>
         List<Vector2Int> SelectSlots(IReadOnlyList<Vector2Int> emptySlots, int count, int maxPerCluster = 0);
     }
 }

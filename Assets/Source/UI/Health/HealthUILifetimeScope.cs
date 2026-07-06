@@ -9,12 +9,8 @@ using VContainer.Unity;
 namespace BalloonParty.UI.Health
 {
     /// <summary>
-    ///     Child scope for the health UI. Binds every <see cref="HealthCounterLabel" /> under this
-    ///     hierarchy to the parent scope's live HP (<c>PlayerHealthController.Current</c>) at <c>Start</c>,
-    ///     and drives <see cref="HeartTrailController"/> — a heart trail flying from the bar to each
-    ///     overflow pop. Wire <c>_heartTrailPrefab</c> (a heart <c>FlyingTrail</c>) and a world-space
-    ///     <c>_heartTrailSource</c> (the bar) in the inspector; the source is published as the
-    ///     <c>Heart</c> trail endpoint the controller flies from.
+    ///     Child scope for the health UI; binds <see cref="HealthCounterLabel" /> to live HP and drives
+    ///     <see cref="HeartTrailController"/>.
     /// </summary>
     public class HealthUILifetimeScope : LifetimeScope
     {

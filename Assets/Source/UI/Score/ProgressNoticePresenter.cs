@@ -5,9 +5,7 @@ using UnityEngine;
 namespace BalloonParty.UI.Score
 {
     /// <summary>
-    ///     Owns a progress bar's floating notices, split out of <see cref="ColorProgressBar"/> to
-    ///     keep the view lean. Streak notices are tracked so a new streak can dismiss the ones
-    ///     already shown; point notices are fire-and-forget.
+    ///     Owns a progress bar's floating notices, split out of <see cref="ColorProgressBar"/> to keep the view lean.
     /// </summary>
     internal class ProgressNoticePresenter
     {

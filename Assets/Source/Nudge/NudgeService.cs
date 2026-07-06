@@ -135,7 +135,7 @@ namespace BalloonParty.Nudge
                 actorOverrides = nudgeable.NudgeOverrides;
             }
 
-            // Per-actor shockwave override takes priority over publisher attenuation
+            // Per-actor override takes priority over publisher attenuation.
             var actorOverride = NudgeOverrideResolver.FindOverride(actorOverrides, NudgeType.Shockwave);
             float distance;
             float duration;
@@ -150,7 +150,7 @@ namespace BalloonParty.Nudge
                 var balloonPos = _grid.IndexToWorldPosition(slot);
                 var d = Vector3.Distance(msg.Origin, balloonPos);
 
-                // Exponential falloff: closer balloons get a stronger push
+                // Exponential falloff — closer balloons push harder.
                 distance = baseDistance * Mathf.Exp(-falloff * d);
                 duration = baseDuration;
             }

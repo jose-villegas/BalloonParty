@@ -5,17 +5,8 @@ using BalloonParty.Configuration.Cinematics;
 namespace BalloonParty.Shared.Rendering
 {
     /// <summary>
-    ///     Authoring component for flattening rigid sprite layers into one baked sprite
-    ///     (fewer draws and less overdraw per balloon): drop on the node that
-    ///     will host the combined renderer, assign the layers, press <b>Bake</b> in the
-    ///     inspector. The editor flattens them in sorting order into
-    ///     <c>Assets/Sprites/Baked/Combined</c> (mirroring the prefab's path); wiring the
-    ///     result into the prefab is manual. Layers recolored at runtime (via
-    ///     <c>ColorableRenderer</c>) bake tint-neutral so the combined renderer takes the
-    ///     runtime tint instead — only group layers that share one tint.
-    ///     Batching note: combined sprites from different prefabs only batch together if
-    ///     packed into one SpriteAtlas and drawn with one shared material.
-    ///     Data-only at runtime; all bake logic lives in <c>SpriteLayerCombinerEditor</c>.
+    ///     Authoring component for flattening rigid sprite layers into one baked sprite; data-only
+    ///     at runtime, all bake logic lives in <c>SpriteLayerCombinerEditor</c>.
     /// </summary>
     internal sealed class SpriteLayerCombiner : MonoBehaviour
     {

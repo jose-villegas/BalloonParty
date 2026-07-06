@@ -20,7 +20,7 @@ namespace BalloonParty.Shared.Pool
                 if (_root == null)
                 {
                     var go = new GameObject("[Pool]");
-                    // DontDestroyOnLoad throws outside play mode (EditMode tests, editor tooling).
+                    // DontDestroyOnLoad throws outside play mode.
                     if (Application.isPlaying)
                     {
                         Object.DontDestroyOnLoad(go);
@@ -34,7 +34,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Throws if the key is already taken. Call once during setup.
+        ///     Throws if the key is already taken.
         /// </summary>
         public void Register<TItem>(string key, PoolChannel<TItem> channel)
             where TItem : Component, IPoolable
@@ -68,8 +68,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Cached pool key for a prefab. <c>Object.name</c> allocates a fresh managed string
-        ///     on every access, so hot paths (per-pop VFX) must resolve keys through this instead.
+        ///     Cached pool key for a prefab — <c>Object.name</c> allocates on every access.
         /// </summary>
         public string KeyFor(Object prefab)
         {
@@ -89,9 +88,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Register a channel if the key is not already taken, then return the item.
-        ///     Use this for prefab-keyed channels (e.g. VFX) where many channels share the same
-        ///     type but differ by asset — the key disambiguates.
+        ///     Registers a channel if the key is not already taken, then returns the item.
         /// </summary>
         public TItem GetOrRegister<TItem>(string key, Func<PoolChannel<TItem>> factory)
             where TItem : Component, IPoolable
@@ -105,7 +102,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Access the underlying channel if needed (e.g. for direct channel reference in auto-return callbacks).
+        ///     Access the underlying channel directly (e.g. for auto-return callbacks).
         /// </summary>
         public PoolChannel<TItem> GetChannel<TItem>(string key)
             where TItem : Component, IPoolable
@@ -133,7 +130,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Synchronously pre-warm a registered channel. Use only for lightweight items.
+        ///     Synchronously pre-warms a registered channel — use only for lightweight items.
         /// </summary>
         public void Prewarm(string key, int count)
         {
@@ -147,7 +144,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Pre-warm a registered channel spread across frames (one item per yield).
+        ///     Pre-warms a registered channel, one item per frame.
         /// </summary>
         public UniTask PrewarmAsync(string key, int count, CancellationToken ct = default)
         {
@@ -161,9 +158,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Pre-warm every registered channel that has fewer than <paramref name="counts"/>
-        ///     specifies. Keys not present in the dictionary are skipped.
-        ///     Items are created round-robin across channels, one per frame.
+        ///     Tops up every registered channel to the count <paramref name="counts"/> specifies.
         /// </summary>
         public async UniTask PrewarmAllAsync(
             IReadOnlyDictionary<string, int> counts,

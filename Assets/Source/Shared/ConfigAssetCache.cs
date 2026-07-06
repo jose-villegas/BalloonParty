@@ -4,21 +4,14 @@ using UnityEngine;
 
 namespace BalloonParty.Shared
 {
-    /// <summary>
-    ///     Lazily finds and caches a <see cref="ScriptableObject"/> asset by type
-    ///     via <c>AssetDatabase.FindAssets</c>. Thread-safe for editor use.
-    ///     One instance per config type — store as a <c>static readonly</c> or instance field.
-    /// </summary>
+    /// <summary>Lazily finds and caches a <see cref="ScriptableObject"/> asset by type; one instance per config type.</summary>
     public sealed class ConfigAssetCache<T>
         where T : ScriptableObject
     {
         private T _asset;
         private bool _searched;
 
-        /// <summary>
-        ///     Returns the cached asset, searching on first access.
-        ///     Returns <c>null</c> if no asset of type <typeparamref name="T"/> exists.
-        /// </summary>
+        /// <summary>Returns the cached asset, searching on first access; <c>null</c> if none exists.</summary>
         public T Value
         {
             get
@@ -33,10 +26,7 @@ namespace BalloonParty.Shared
             }
         }
 
-        /// <summary>
-        ///     Clears the cache so the next <see cref="Value"/> access re-searches.
-        ///     Call after creating or deleting config assets.
-        /// </summary>
+        /// <summary>Clears the cache so the next <see cref="Value"/> access re-searches.</summary>
         public void Invalidate()
         {
             _asset = null;

@@ -6,21 +6,14 @@ using UnityEngine;
 
 namespace BalloonParty.Configuration.Level
 {
-    /// <summary>
-    ///     The read surface of a fully-resolved level: the difficulty mix (spawn/board/cadence and
-    ///     item-count curves), the catalog-bridged weighted picks, the active item set, and the
-    ///     allowed-color gate. Exposed by the resolver as its <c>Current</c>; the concrete
-    ///     <see cref="LevelParameters" /> implements it. Cross-level queries (e.g. points-required)
-    ///     stay on the resolver — they're not a property of a single resolved level.
-    /// </summary>
+    /// <summary>The read surface of a fully-resolved level; cross-level queries stay on the resolver instead.</summary>
     internal interface ILevelParameters
     {
         int SpawnLines { get; }
         int BoardLines { get; }
         int ItemCadence { get; }
 
-        /// <summary>The turn this level begins spawning lines; earlier turns (after entry / each
-        /// level-up) are a grace period. The turn counter resets per level.</summary>
+        /// <summary>The turn this level begins spawning lines; earlier turns are a grace period.</summary>
         int FirstSpawnTurn { get; }
         AnimationCurve InitialItemCountWeights { get; }
         AnimationCurve ItemCountWeights { get; }

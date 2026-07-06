@@ -8,12 +8,7 @@ using UnityEngine;
 
 namespace BalloonParty.Projectile.Controller
 {
-    /// <summary>
-    ///     Resolves what happens when a projectile collides with a balloon: evaluates the hit, applies
-    ///     the colour-steal and streak-shield rules, mutates the projectile model, and publishes the
-    ///     resulting messages. Plain C# so the rules are testable without a collider — the view only
-    ///     supplies the already-filtered collision and plays the returned <see cref="ProjectileHitVisual" />.
-    /// </summary>
+    /// <summary>Plain C# so hit rules are testable without a collider.</summary>
     internal class ProjectileHitResolver
     {
         private readonly IHitDispatcher _hitDispatcher;
@@ -60,8 +55,7 @@ namespace BalloonParty.Projectile.Controller
             _hitDispatcher.Dispatch(new ActorHitMessage(
                 balloon, balloonWorldPosition, projectile.Direction, outcome, damageContext));
 
-            // Dispatch guarantees the score/streak stage ran before returning, so the tracker
-            // is current — a structural contract of IHitDispatcher, not a subscription-order accident.
+            // Dispatch runs the streak stage synchronously, so the tracker is already current here.
             if (outcome == HitOutcome.Pop && balloon is IHasColor &&
                 _streakTracker.CurrentStreak >= 2 &&
                 _streakTracker.LastColor == projectile.ColorName.Value)

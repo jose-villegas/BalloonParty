@@ -13,13 +13,8 @@ using BalloonParty.Configuration.Cinematics;
 namespace BalloonParty.Game.Cinematics
 {
     /// <summary>
-    ///     The overflow heart-drain cinematic, as a plain C# trigger over the shared
-    ///     <see cref="CameraRigCinematic"/> runner: begins when the first heart trail launches from the
-    ///     UI, follows the heart about to land (framing the rest) in slow-mo, and ends when the pile has fully
-    ///     drained or the run is over (extra hearts past 0 HP don't extend it). Uses
-    ///     <see cref="CinematicState.HeartDrain"/>/<see cref="CinematicState.HeartDrainRestore"/>,
-    ///     which are neither loss-blocking (the 0-HP game-over fires through) nor shake-blocking (each
-    ///     heart launch punches the camera through the pan).
+    ///     Begins on the first heart trail launch, follows the heart about to land in slow-mo, and ends
+    ///     when the pile drains or the run ends.
     /// </summary>
     internal sealed class HeartDrainCinematic : IStartable, IDisposable
     {
@@ -74,16 +69,14 @@ namespace BalloonParty.Game.Cinematics
 
         private void OnFirstHeart()
         {
-            // Begin on the first heart of an overflow burst, only in active play; the runner drops the
-            // request while any cinematic is busy.
+            // Only in active play; the runner drops the request while any cinematic is busy.
             if (Navigation.Current.Value == NavigationState.Game)
             {
                 _cinematic.TryBegin();
             }
         }
 
-        // Ends when the run is over (game-over already fired at 0 HP — later hearts don't count) or the
-        // pile has fully drained: the overflow hold released and no heart trails remain in flight.
+        // Ends on game-over or once the overflow hold is released with no heart trails in flight.
         private bool ShouldEnd()
         {
             return Navigation.Current.Value == NavigationState.GameOver

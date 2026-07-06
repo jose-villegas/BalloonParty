@@ -26,10 +26,7 @@ namespace BalloonParty.Shared.Messages
             Context = context;
         }
 
-        /// <summary>
-        /// Creates a message by evaluating the hit on the actor. Combines the
-        /// common <c>EvaluateHit</c> + construct pattern into one call.
-        /// </summary>
+        /// <summary>Evaluates the hit on the actor and constructs the message in one call.</summary>
         public static ActorHitMessage From(
             IHitable actor,
             Vector3 worldPosition,

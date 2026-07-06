@@ -2,12 +2,7 @@ using UnityEngine;
 
 namespace BalloonParty.Shared.GameState
 {
-    /// <summary>
-    ///     Editor-only bootstrap that transitions to <see cref="_targetState" /> on Awake
-    ///     if the current navigation state is still <see cref="NavigationState.Launch" />.
-    ///     Place on a GameObject in any scene that needs to be playable standalone from
-    ///     the Editor without following the full navigation path.
-    /// </summary>
+    /// <summary>Lets a scene be played standalone in the Editor by transitioning to <see cref="_targetState" /> on Awake if still at <see cref="NavigationState.Launch" />.</summary>
     internal class EditorNavigationBootstrap : MonoBehaviour
     {
 #if UNITY_EDITOR

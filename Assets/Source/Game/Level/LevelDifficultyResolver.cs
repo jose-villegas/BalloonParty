@@ -17,11 +17,7 @@ using BalloonParty.Configuration.Palette;
 namespace BalloonParty.Game.Level
 {
     /// <summary>
-    ///     Resolves and caches the live per-level difficulty mix from <see cref="ILevelPacingConfiguration" />.
-    ///     Bridges range weights onto the catalog (<see cref="IBalloonsConfiguration" />): a range gates
-    ///     which types are active and their relative weight; prefab/pool/HP/VFX still come from the catalog.
-    ///     The resolved mix plus the bridged pick lists live on the produced <see cref="Current" />; this
-    ///     type just resolves, bridges, and answers the cross-level <see cref="PointsRequiredForLevel" />.
+    ///     Resolves and caches the live per-level difficulty mix, bridging range weights onto the balloon/item catalogs.
     /// </summary>
     internal class LevelDifficultyResolver : IStartable, IDisposable, IRunResettable, IActiveLevelParameters, ILevelThresholds
     {
@@ -51,8 +47,7 @@ namespace BalloonParty.Game.Level
 
         public ILevelParameters Current => _current;
 
-        // Re-resolves before GridSpawnerCoordinator respawns at Respawn (120), so a restart's first
-        // spawn already sees level-1 parameters instead of the dead run's.
+        // Must resolve before GridSpawnerCoordinator respawns at Respawn (120).
         public int ResetOrder => RunResetOrder.Derived;
 
         public void Start()
@@ -98,10 +93,7 @@ namespace BalloonParty.Game.Level
                 _palette.ColorNamesForMask(_current.AllowedColorsMask));
         }
 
-        // The containing range, or — if none contains this level — the last authored range. The last
-        // range is the open-ended tail, so it catches every level past its start; this only falls
-        // through for a level below the first range, and reusing the last level's setup beats
-        // synthesising a default (LevelPacingConfiguration.OnValidate warns on gaps/missing tail).
+        // Falls back to the last authored range, which acts as the open-ended tail.
         private LevelRangeEntry ResolveRange(int level)
         {
             var ranges = _pacing.Ranges;

@@ -42,7 +42,7 @@ namespace BalloonParty.Balloon.Controller
 
         public int ResetOrder => RunResetOrder.Quiesce;
 
-        // Exposed for tests: a balance scheduled in a prior generation is stale after a reset.
+        // Exposed for tests.
         internal int Generation => _generation;
 
         [Inject]
@@ -77,8 +77,7 @@ namespace BalloonParty.Balloon.Controller
             _projectileDestroyedSubscriber.Subscribe(_ => _activeProjectile = null);
         }
 
-        // Pulses a rebalance at intervals while a projectile is airborne, so the stack keeps settling
-        // and a projectile looping wall-to-wall eventually gets a target shifted into its path.
+        // Pulses a rebalance at intervals while a projectile is airborne.
         public void Tick()
         {
             TickFlightRebalance(Time.deltaTime);
@@ -86,9 +85,7 @@ namespace BalloonParty.Balloon.Controller
 
         public void ResetRun(int generation)
         {
-            // Adopt the new run's generation so any balance already scheduled this frame is dropped
-            // when its continuation runs — it would otherwise animate actors the board-clear has
-            // just returned to the pool, against an emptied grid.
+            // Bumping the generation drops any balance already scheduled this frame.
             _generation = generation;
             _balanceRequested = false;
             _activeProjectile = null;
@@ -112,8 +109,7 @@ namespace BalloonParty.Balloon.Controller
                 view.TweenTracker.Kill();
                 view.transform.DOKill();
 
-                // A ticker-driven nudge escapes DOKill — cancel it explicitly, or it would
-                // keep writing positions while the balance path animates the same transform.
+                // A ticker-driven nudge escapes DOKill — cancel it explicitly.
                 if (view is View.IBalloonMotionView motionView)
                 {
                     _motionTicker.CancelNudge(motionView);
@@ -142,8 +138,6 @@ namespace BalloonParty.Balloon.Controller
 
         internal void Balance()
         {
-            // Reuse the path dictionary and pool the per-actor lists across turns; only
-            // the DOPath waypoint arrays (built in AnimatePaths) must be freshly sized.
             ReleasePaths();
 
             while (BalanceOnePass())
@@ -154,8 +148,7 @@ namespace BalloonParty.Balloon.Controller
             ReleasePaths();
         }
 
-        // One sweep over the grid; returns whether any actor was shifted, so Balance keeps
-        // sweeping until the board settles.
+        // One sweep over the grid; returns whether any actor was shifted.
         private bool BalanceOnePass()
         {
             var moved = false;
@@ -170,8 +163,7 @@ namespace BalloonParty.Balloon.Controller
             return moved;
         }
 
-        // Shifts the actor at (col, row) toward its optimal empty slot when it is unbalanced and
-        // movable, recording the move for animation. Returns whether a move happened.
+        // Shifts the actor at (col, row) toward its optimal empty slot. Returns whether it moved.
         private bool TryBalanceSlot(int col, int row)
         {
             if (_grid.IsEmpty(col, row))
@@ -222,9 +214,7 @@ namespace BalloonParty.Balloon.Controller
             }
         }
 
-        // Pressure balance: when a column's entry can't accept a balloon, try to shove its bottom
-        // occupant toward the nearest reachable gap so the new balloon can spawn instead of costing
-        // HP. Returns whether room was opened; the caller re-checks the column afterwards.
+        // Shoves a column's bottom occupant toward the nearest gap so a new balloon can spawn. Returns whether room was opened.
         internal bool TryRelievePressure(int column)
         {
             var chain = ListPool<Vector2Int>.Get();
@@ -237,7 +227,7 @@ namespace BalloonParty.Balloon.Controller
 
                 ReleasePaths();
 
-                // Shift from the empty end backwards so every destination is vacant when placed.
+                // Shift from the empty end backwards so every destination is vacant.
                 for (var i = chain.Count - 2; i >= 0; i--)
                 {
                     var from = chain[i];
@@ -288,8 +278,7 @@ namespace BalloonParty.Balloon.Controller
             RunScheduledBalance(generation);
         }
 
-        // Runs the deferred balance unless a reset has since bumped the generation. Returns
-        // whether it actually balanced — the guard is the regression point for the reset race.
+        // Runs the deferred balance unless a reset has since bumped the generation.
         internal bool RunScheduledBalance(int generation)
         {
             if (generation != _generation)
@@ -302,8 +291,7 @@ namespace BalloonParty.Balloon.Controller
             return true;
         }
 
-        // Returns whether it requested a rebalance this step. Internal for tests — Time.deltaTime isn't
-        // injectable, so tests drive it with an explicit step.
+        // Internal for tests — Time.deltaTime isn't injectable, so tests drive it with an explicit step.
         internal bool TickFlightRebalance(float deltaTime)
         {
             var interval = _balloonsConfig.FlightRebalanceInterval;
@@ -330,8 +318,7 @@ namespace BalloonParty.Balloon.Controller
             return true;
         }
 
-        // True when some occupied dynamic actor could shift — TryBalanceSlot's precondition, read-only —
-        // so the flight pulse skips a rebalance when the stack is already settled.
+        // True when some occupied dynamic actor could shift; read-only.
         internal bool HasPossibleMove()
         {
             for (var col = 0; col < _grid.Columns; col++)

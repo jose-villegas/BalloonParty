@@ -3,12 +3,7 @@ using UnityEngine;
 
 namespace BalloonParty.Shared.Pool
 {
-    /// <summary>
-    ///     Poolable effect driven by an <see cref="Animator" />. Completion is
-    ///     detected when the first animation clip finishes playing (timer-based).
-    ///     Attach to prefab roots that use an Animator; pool via
-    ///     <see cref="SimplePoolChannel{TItem}" />.
-    /// </summary>
+    /// <summary>Poolable effect driven by an <see cref="Animator" />; completion is timer-based off the first clip's length.</summary>
     public class AnimatorEffectView : EffectView
     {
         private float _animationLength;

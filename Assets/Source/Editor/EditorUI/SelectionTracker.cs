@@ -20,7 +20,6 @@ namespace BalloonParty.Editor.EditorUI
     {
         /// <summary>
         ///     Draws a toggle-all checkbox and syncs it with the visible items.
-        ///     Returns the new toggle-all state.
         /// </summary>
         internal static bool DrawSelectAllToggle<T>(bool selectAll, IReadOnlyList<T> visibleItems)
             where T : class, ISelectable

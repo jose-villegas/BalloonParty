@@ -9,11 +9,7 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    /// <summary>
-    /// Spawns rustle VFX when the projectile passes near a bush slot, or when a reported
-    /// impact lands within a slot's radius. Driven each frame by <see cref="BushView"/>
-    /// and operates on the slot world positions handed to it after each rebuild.
-    /// </summary>
+    /// <summary>Spawns rustle VFX when the projectile passes near a bush slot, or an impact lands within one.</summary>
     internal sealed class BushRustleController
     {
         private readonly ProjectilePositionProvider _projectileProvider;
@@ -78,12 +74,12 @@ namespace BalloonParty.Slots.Actor.Archetype
 
                 if (!projectilePos.WithinRadius(slotPos, _settings.RustleProximityRadius))
                 {
-                    // Left the bush — re-arm it so a later pass (e.g. after a bounce) rustles again.
+                    // Re-arm so a later pass (e.g. after a bounce) rustles again.
                     _rustledSlots.Remove(i);
                     continue;
                 }
 
-                // Rustle once per entry: HashSet.Add is true only on the rising edge into the radius.
+                // Add is true only on the rising edge into the radius.
                 if (_rustledSlots.Add(i))
                 {
                     SpawnRustleVfx(vfxPrefab, slotPos);

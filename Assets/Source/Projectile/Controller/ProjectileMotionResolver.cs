@@ -5,13 +5,7 @@ using VContainer;
 
 namespace BalloonParty.Projectile.Controller
 {
-    /// <summary>
-    ///     Projectile flight rules as a plain, headless-testable object: advance, wall-bounce,
-    ///     shield decrement, and the destroy decision. The view only applies the returned
-    ///     <see cref="ProjectileStep" /> (transform, bounce VFX, shield-lost message, disturbance
-    ///     stamp) — the gameplay decisions live here. Mirrors <see cref="ProjectileHitResolver" />,
-    ///     and shares the wall layout with the aim prediction through <see cref="WallLimits" />.
-    /// </summary>
+    /// <summary>Plain, headless-testable projectile flight rules; the view only applies the returned <see cref="ProjectileStep" />.</summary>
     internal sealed class ProjectileMotionResolver
     {
         private readonly WallLimits _walls;
@@ -22,10 +16,7 @@ namespace BalloonParty.Projectile.Controller
             _walls = new WallLimits(config.LimitsClockwise);
         }
 
-        /// <summary>
-        ///     Advances one fixed step, mutating the model's direction and shield count on a
-        ///     wall bounce, and returns what the view must present.
-        /// </summary>
+        /// <summary>Advances one fixed step, mutating direction/shield count on a wall bounce.</summary>
         internal ProjectileStep Step(IWriteableProjectileModel model, Vector3 position, float deltaTime)
         {
             position += model.Direction * (model.Speed * deltaTime);

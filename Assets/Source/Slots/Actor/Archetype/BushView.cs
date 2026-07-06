@@ -10,14 +10,7 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    /// <summary>
-    /// Cluster renderer for bush obstacles. Submits depth-tiered leaf and branch draws
-    /// each frame from data assembled by <see cref="BushRenderDataBuilder"/>, using
-    /// materials owned by <see cref="BushMaterialSet"/>; rustle VFX is delegated to
-    /// <see cref="BushRustleController"/>. Inner leaves (low depth) render behind
-    /// branches, outer leaves (high depth) in front, via render queue. Falls back to
-    /// per-leaf <c>DrawMesh</c> when GPU instancing is unavailable.
-    /// </summary>
+    /// <summary>Cluster renderer for bush obstacles; falls back to per-leaf <c>DrawMesh</c> when GPU instancing is unavailable.</summary>
     internal class BushView : ClusterView
     {
 #if UNITY_EDITOR
@@ -39,10 +32,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         private BushRenderData _renderData;
         private MaterialPropertyBlock _fallbackMpb;
 
-        // Bush leaves/branches draw via Graphics.DrawMesh with baked WORLD matrices, which ignore
-        // this GameObject's transform. When the level-transition Ascent slides the scenario root
-        // (this view's parent), we offset every drawn matrix by how far the transform has moved
-        // from where it was configured — zero (and thus a no-op copy-free path) during normal play.
+        // Baked WORLD matrices ignore this transform, so the Ascent slide is applied as a manual offset.
         private Vector3 _restPosition;
         private Matrix4x4[] _offsetMatrices;
 
@@ -70,13 +60,10 @@ namespace BalloonParty.Slots.Actor.Archetype
             var displaced = offset.sqrMagnitude > 1e-8f;
             var offsetMatrix = displaced ? Matrix4x4.Translate(offset) : Matrix4x4.identity;
 
-            // Render queues (inner 2999 < branch 3000 < outer 3001) drive layering, so
-            // all slots' leaves merge into one instanced draw per tier rather than an
-            // inner+branch+outer triple per slot.
+            // Render queue (inner 2999 < branch 3000 < outer 3001) drives layering.
             DrawLeafBatches(leafMesh, _renderData.InnerBatches, _materials.InnerLeaf, layer, displaced, offsetMatrix);
 
-            // Index loop, not foreach: Slots is IReadOnlyList, whose foreach allocates a
-            // heap enumerator every frame; indexing does not.
+            // Indexing avoids the per-frame heap enumerator of IReadOnlyList's foreach.
             var slots = _renderData.Slots;
             for (var i = 0; i < slots.Count; i++)
             {
@@ -95,8 +82,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         private void OnDestroy()
         {
-            // DestroyImmediate is illegal during edit-mode object destruction, so only
-            // clean up at runtime here; edit-mode rebuilds release via OnConfigured.
+            // Edit-mode rebuilds release via OnConfigured instead; DestroyImmediate is illegal here.
             if (Application.isPlaying)
             {
                 _materials?.Release();
@@ -126,16 +112,13 @@ namespace BalloonParty.Slots.Actor.Archetype
             _renderData = _builder.Build(SlotCentersBuffer, SlotCount);
             _rustle.SetSlots(CollectSlotPositions());
 
-            // Configure runs with the scenario root at the origin (statics spawn before the Ascent
-            // lifts it), so this is the settled world position the baked matrices already target.
+            // Statics spawn before the Ascent lifts the scenario root, so this is the settled position.
             _restPosition = transform.position;
         }
 
         protected override void OnCleared()
         {
-            // LateUpdate submits its DrawMesh calls off _renderData, not the base Renderer, so a bare
-            // Clear() would leave the last cluster drawing forever (the grid/registry are already
-            // empty). Dropping the data stops the draw until the next Configure rebuilds it.
+            // LateUpdate draws off _renderData, not the base Renderer, so it must be dropped to stop drawing.
             _renderData = null;
         }
 
@@ -174,8 +157,7 @@ namespace BalloonParty.Slots.Actor.Archetype
                     continue;
                 }
 
-                // At rest (the common case) the baked world matrices are drawn directly; only the
-                // Ascent slide offsets them, into a reused scratch array.
+                // Offset only when displaced, into a reused scratch array.
                 var matrices = batch.Matrices;
                 if (displaced)
                 {
@@ -184,10 +166,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
                 if (SupportsInstancing)
                 {
-                    // The short overload defaults layer to 0 (Default) — the leaves must submit
-                    // on the bush's layer like the branches do, or layer-masked cameras (e.g.
-                    // SceneCaptureService) render branch skeletons without foliage. Shadow
-                    // casting off: 2D sprites, no light pass.
+                    // Must pass layer explicitly, or layer-masked cameras render branches without foliage.
                     Graphics.DrawMeshInstanced(leafMesh, 0, material, matrices, batch.Count, batch.Props,
                         UnityEngine.Rendering.ShadowCastingMode.Off, false, layer);
                     continue;
@@ -284,7 +263,6 @@ namespace BalloonParty.Slots.Actor.Archetype
 
                 foreach (var seg in segments)
                 {
-                    // Convert UV [0,1] → local → world
                     var startWorld = new Vector3(
                         entry.WorldPos.x + (seg.x - 0.5f) * size,
                         entry.WorldPos.y + (seg.y - 0.5f) * size,
@@ -294,11 +272,11 @@ namespace BalloonParty.Slots.Actor.Archetype
                         entry.WorldPos.y + (seg.w - 0.5f) * size,
                         0f);
 
-                    // Green line = generator centerline
+                    // Green: generator centerline.
                     Gizmos.color = Color.green;
                     Gizmos.DrawLine(startWorld, endWorld);
 
-                    // Small magenta dot at segment endpoint (tip candidate)
+                    // Magenta: segment endpoint (tip candidate).
                     Gizmos.color = Color.magenta;
                     Gizmos.DrawWireSphere(endWorld, 0.004f);
                 }
@@ -324,24 +302,23 @@ namespace BalloonParty.Slots.Actor.Archetype
                 var scale = slot.Scale * entry.ScaleCompensation;
                 var up = rot * Vector3.up;
 
-                // Attachment point (branch tip) — yellow dot
+                // Yellow: attachment point (branch tip).
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawWireSphere(attachPos, 0.008f);
 
-                // Branch direction from attachment — yellow line
                 Gizmos.DrawLine(attachPos, attachPos + up * scale * 0.3f);
 
-                // TRS origin — red dot
+                // Red: TRS origin.
                 var trsPos = attachPos + (Vector3)(rot * new Vector3(0f, -totalPivotOffset * scale, 0f));
                 Gizmos.color = Color.red;
                 Gizmos.DrawWireSphere(trsPos, 0.005f);
 
-                // Sprite center — cyan dot
+                // Cyan: sprite center.
                 var spriteCenter = trsPos + (Vector3)(rot * new Vector3(0f, 0.5f * scale, 0f));
                 Gizmos.color = Color.cyan;
                 Gizmos.DrawWireSphere(spriteCenter, 0.006f);
 
-                // Line from TRS origin to sprite center — shows quad extent
+                // Line shows quad extent, TRS origin to sprite center.
                 Gizmos.color = new Color(1f, 1f, 1f, 0.3f);
                 Gizmos.DrawLine(trsPos, trsPos + (Vector3)(rot * new Vector3(0f, scale, 0f)));
             }

@@ -11,10 +11,7 @@ using BalloonParty.Configuration.Items;
 namespace BalloonParty.Item.Lightning
 {
     /// <summary>
-    ///     Poolable chain-lightning effect. Extends <see cref="EffectView" /> so it
-    ///     participates in the standard effect-pool pipeline via <see cref="SimplePoolChannel{TItem}" />.
-    ///     Visual parameters are serialized on the prefab. Call
-    ///     <see cref="PrepareDisplay" /> with target data before <see cref="Play" />.
+    ///     Poolable chain-lightning effect. Call <see cref="PrepareDisplay" /> before <see cref="Play" />.
     /// </summary>
     public class ChainLightningView : EffectView, IChainEffect
     {
@@ -47,11 +44,7 @@ namespace BalloonParty.Item.Lightning
         }
 
         /// <summary>
-        ///     Starts the chain-lightning animation fire-and-forget.
-        ///     Call <see cref="PrepareDisplay" /> first. <paramref name="position" /> and
-        ///     <paramref name="tint" /> are unused — positions are set via
-        ///     <see cref="PrepareDisplay" /> and the line material is not tinted.
-        ///     <paramref name="onComplete" /> is invoked after the full retraction.
+        ///     Starts the chain-lightning animation; <paramref name="position" />/<paramref name="tint" /> are unused.
         /// </summary>
         public override void Play(Vector3 position, Color tint, Action onComplete = null)
         {
@@ -67,10 +60,7 @@ namespace BalloonParty.Item.Lightning
         }
 
         /// <summary>
-        ///     Sets the target chain before calling <see cref="Play" />.
-        ///     Index 0 must be the item-balloon world position; subsequent entries are
-        ///     same-color balloon positions sorted nearest-first.
-        ///     <paramref name="onTargetHit" /> is invoked per jump (index 0 = first target).
+        ///     Sets the target chain before calling <see cref="Play" />; index 0 is the item balloon.
         /// </summary>
         public void PrepareDisplay(
             IReadOnlyList<Vector3> targetPositions,
@@ -148,7 +138,7 @@ namespace BalloonParty.Item.Lightning
                 GlowSubdivisions = _glowSubdivisions
             };
 
-            // Forward: reveal jumps 0 → jumpCount-1
+            // Reveal jumps forward.
             for (var i = 0; i < jumpCount; i++)
             {
                 if (await StepJump(playback, i + 1, i > 0 ? i - 1 : -1, i, true))
@@ -157,7 +147,7 @@ namespace BalloonParty.Item.Lightning
                 }
             }
 
-            // Retraction: remove jumps jumpCount-1 → 0
+            // Retract jumps in reverse.
             for (var i = jumpCount - 1; i >= 0; i--)
             {
                 if (await StepJump(playback, i, i >= 1 ? i : -1, i >= 1 ? i - 1 : -1, false))
@@ -169,8 +159,7 @@ namespace BalloonParty.Item.Lightning
             InvokeComplete();
         }
 
-        // Reveals (or retracts) one jump: updates the line renderers, fires the hit callback on
-        // the way out, then animates the glow. Returns true if cancelled mid-step.
+        // Returns true if cancelled mid-step.
         private async UniTask<bool> StepJump(BoltPlayback p, int lineStage, int glowFrom, int glowTo, bool forward)
         {
             if (p.Ct.IsCancellationRequested)
@@ -212,8 +201,7 @@ namespace BalloonParty.Item.Lightning
             return Mathf.Min(stage * p.GlowSubdivisions, p.GlowPath.Length - 1);
         }
 
-        // Snapshot of the per-play buffers + glow state, so the jump steps read it without a
-        // tangle of captured locals.
+        // Snapshot of per-play buffers and glow state, read by the jump steps.
         private struct BoltPlayback
         {
             public CancellationToken Ct;
@@ -256,7 +244,6 @@ namespace BalloonParty.Item.Lightning
 
         /// <summary>
         ///     Slides the glow sprite from one path index to another over <see cref="_jumpTime" />.
-        ///     Returns <c>true</c> when cancelled.
         /// </summary>
         private async UniTask<bool> AnimateGlowSegment(
             Vector3[] path,
@@ -290,7 +277,7 @@ namespace BalloonParty.Item.Lightning
         }
 
         /// <summary>
-        ///     Waits one jump duration. Returns <c>true</c> when cancelled.
+        ///     Waits one jump duration.
         /// </summary>
         private async UniTask<bool> WaitJump(CancellationToken ct)
         {

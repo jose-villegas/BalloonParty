@@ -2,10 +2,7 @@ using UniRx;
 
 namespace BalloonParty.Shared.GameState
 {
-    /// <summary>
-    ///     App-wide navigation state. Static so both scenes can access it
-    ///     without DI wiring across scene boundaries.
-    /// </summary>
+    /// <summary>App-wide navigation state; static so both scenes can access it without cross-scene DI wiring.</summary>
     internal static class Navigation
     {
         private static readonly ReactiveProperty<NavigationState> _state = new(NavigationState.Launch);

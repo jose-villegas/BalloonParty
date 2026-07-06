@@ -13,14 +13,7 @@ namespace BalloonParty.Prediction
             _config = config;
         }
 
-        /// <summary>
-        ///     Calculates the prediction trace from <paramref name="origin" /> in the given
-        ///     <paramref name="direction" />, bouncing off the left/right/top walls defined
-        ///     by <see cref="IGameConfiguration.LimitsClockwise" />.
-        /// </summary>
-        /// <param name="origin">Starting world position.</param>
-        /// <param name="direction">Normalized direction vector.</param>
-        /// <param name="results">Reusable list that will be cleared and filled with trace points.</param>
+        /// <summary>Calculates the prediction trace, bouncing off the left/right/top walls.</summary>
         public void Calculate(Vector3 origin, Vector3 direction, List<Vector3> results)
         {
             results.Clear();

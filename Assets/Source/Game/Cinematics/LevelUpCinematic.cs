@@ -21,19 +21,11 @@ using Navigation = BalloonParty.Shared.GameState.Navigation;
 namespace BalloonParty.Game.Cinematics
 {
     /// <summary>
-    ///     The level-up cinematic, as a plain C# producer over the shared <see cref="CameraRigCinematic"/>
-    ///     runner in its split-phase form: when a score point will tip the level, the tipping trail is
-    ///     intercepted and puppeted along the pan-in segment's curve (gameplay paused — the curve
-    ///     modulates the trail, not timeScale) while the camera follows it; the pan-in ends on the
-    ///     trail's arrival, the popup gate opens, and the dismissed message starts the restore phase
-    ///     (timeScale sampled from its curve out of the popup's frozen 0), which hands play back.
+    ///     Puppets the level-up's tipping score trail along the pan-in, then hands off to the popup and restore phases.
     /// </summary>
     internal sealed class LevelUpCinematic : IStartable, IDisposable
     {
-        // Safety caps so the pan-in can never soft-lock the popup: the popup only shows once the
-        // pan-in cinematic ends (gate on CinematicState.LevelUpPanIn leaving), so if the tracked trail
-        // is lost/mismatched and never completes, we must still end the pan-in. Multiples of the
-        // trail's own flight duration — generous, only ever hit on the failure path.
+        // Timeout multiples of the trail's flight duration, so a lost/mismatched trail can't soft-lock the popup.
         private const float PanInTimeoutFactor = 3f;
         private const float TrailRegisterTimeoutFactor = 3f;
 
@@ -131,7 +123,7 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            // No level-up show on a run that is over or already certain to be — the loss wins.
+            // No level-up show on a run that is over or already certain to be lost.
             if (Navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent)
             {
                 return;
@@ -152,11 +144,7 @@ namespace BalloonParty.Game.Cinematics
 
         private async UniTaskVoid WaitForTippingTrailAsync()
         {
-            // Bounded wait: if the tipping trail never registers with the captured id (it arrived and
-            // was unregistered first, or a projected-vs-confirmed color mismatch means it never will),
-            // give up instead of waiting forever. The pan-in never began, so the popup's gate is
-            // already open — bailing here (and clearing _sessionActive) lets the popup show and keeps
-            // future level-ups able to arm.
+            // Bounded wait: if the tipping trail never registers, give up instead of waiting forever.
             var elapsed = 0f;
             var timeout = _config.ScorePointTraceDuration * TrailRegisterTimeoutFactor;
             while (!_scoreTrailService.Flights.Contains(_tippingTrailId))
@@ -194,13 +182,10 @@ namespace BalloonParty.Game.Cinematics
             _lastTrailPosition = _trailOrigin;
             _trailTargetWorld = _scoreTrailService.GetTarget(_tippingTrailId.Color).Center;
 
-            // Re-check after the async trail wait: the loss may have committed (or become certain)
-            // in the frames between the tipping pop and the trail registering.
+            // Re-check after the async trail wait: the loss may have committed since the tipping pop.
             if (Navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent
                 || !_cinematic.TryBegin())
             {
-                // The run ended, its loss is certain, or another cinematic won the race — let this
-                // level-up resolve without the show.
                 _sessionActive = false;
                 return;
             }
@@ -231,9 +216,7 @@ namespace BalloonParty.Game.Cinematics
             EndPanIn();
         }
 
-        // The pan-in zoomed the camera onto the tipping trail and disabled the ortho controller; the
-        // camera un-zoom is driven by LevelTransitionController so it plays in lockstep with the balloon
-        // pop wave (which the transition, not this producer, times). Here we just hand back to Game.
+        // Camera un-zoom is driven by LevelTransitionController, not this producer.
         private void OnDismissed()
         {
             DisposeSessionSubscription();
@@ -247,22 +230,17 @@ namespace BalloonParty.Game.Cinematics
             Navigation.TransitionTo(NavigationState.Game);
         }
 
-        // The segment's curve value modulates the tipping trail's playback speed (gameplay is paused,
-        // so timeScale stays untouched); ending the pan-in inside the hook makes the runner skip the
-        // camera follow for the tick.
+        // Curve value modulates the tipping trail's playback speed; timeScale stays untouched during pan-in.
         private void PanInTick(float dt, float curveValue)
         {
-            // The loss can become certain mid-pan-in (the same turn's spawn keeps rejecting while the
-            // projectile is frozen). The loss wins: drop the show so the heart-drain and game-over
-            // present unobstructed.
+            // Loss can become certain mid-pan-in; it wins, so drop the show.
             if (_lossForecast.LossImminent)
             {
                 AbortSession();
                 return;
             }
 
-            // Absolute safety cap: however the trail tracking fails, end the pan-in so the popup's
-            // gate opens rather than soft-locking. Only ever reached on the failure path.
+            // Absolute safety cap: end the pan-in so the popup's gate opens rather than soft-locking.
             _panInElapsed += dt;
             if (_panInElapsed > _config.ScorePointTraceDuration * PanInTimeoutFactor)
             {
@@ -276,8 +254,7 @@ namespace BalloonParty.Game.Cinematics
 
         private void AdvanceTrackedTrail()
         {
-            // The tracked trail was completed/returned out from under us — nothing left to puppet, so
-            // end the pan-in (which opens the popup gate) instead of stalling here forever.
+            // Trail was completed/returned out from under us — end the pan-in instead of stalling.
             if (_trackedFlight?.Transform == null)
             {
                 if (_cinematic.IsPanInRunning)
@@ -309,8 +286,7 @@ namespace BalloonParty.Game.Cinematics
             }
         }
 
-        // Drops the whole level-up show (pan-in or the popup limbo between phases): trails complete,
-        // gameplay resumes, camera and time snap back to base. Used when the loss overtakes the ceremony.
+        // Drops the whole level-up show when the loss overtakes the ceremony.
         private void AbortSession()
         {
             DisposeSessionSubscription();

@@ -4,14 +4,7 @@ using UnityEngine.SceneManagement;
 
 namespace BalloonParty.Shared.GameState
 {
-    /// <summary>
-    ///     General-purpose scene transition component. Attach to any GameObject and
-    ///     wire <see cref="Load" /> to a Button's onClick event in the Inspector.
-    ///     When <see cref="_preload" /> is enabled the target scene is loaded additively
-    ///     on <c>Start</c> with rendering disabled so all game logic (DI, pool pre-warming)
-    ///     runs in the background. <see cref="Load" /> restores rendering and unloads the
-    ///     current scene.
-    /// </summary>
+    /// <summary>Scene transition component; wire <see cref="Load" /> to a Button's onClick. If <see cref="_preload" /> is set, the scene loads additively with rendering suppressed until <see cref="Load" /> activates it.</summary>
     public class SceneTransition : MonoBehaviour
     {
         [SerializeField] private string _sceneName;

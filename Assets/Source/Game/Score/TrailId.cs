@@ -4,11 +4,8 @@ using BalloonParty.Shared.Messages;
 namespace BalloonParty.Game.Score
 {
     /// <summary>
-    ///     Uniquely identifies a score trail by color and its score value within
-    ///     the level. Two different colors can share the same numeric score, so
-    ///     both components are needed. No level component: the level-up is gated
-    ///     by the transition, so a trail is only ever in flight during the single
-    ///     level it belongs to — color+score never collides across levels.
+    ///     Uniquely identifies a score trail by color and score value; no level component since a
+    ///     trail is only ever in flight within the single level it belongs to.
     /// </summary>
     internal readonly struct TrailId : IEquatable<TrailId>
     {

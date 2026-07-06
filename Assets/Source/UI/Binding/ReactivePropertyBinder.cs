@@ -4,10 +4,7 @@ using VContainer.Unity;
 namespace BalloonParty.UI.Binding
 {
     /// <summary>
-    ///     Binds every view in <paramref name="views" /> to a single reactive source at
-    ///     <see cref="Start" /> — after every <c>Awake</c> has run, so each view has resolved its
-    ///     components. Wire it via <see cref="ReactiveBinderRegistration.RegisterBoundViews" /> rather
-    ///     than constructing it directly.
+    ///     Binds every view in <paramref name="views" /> to a single reactive source at <see cref="Start" />.
     /// </summary>
     internal sealed class ReactivePropertyBinder<TView, TValue> : IStartable
         where TView : IReactiveBindable<TValue>

@@ -101,8 +101,7 @@ namespace BalloonParty.UI.LevelUp
             SpawnGlowTrailsAsync(msg.CompletedColors).Forget();
         }
 
-        // Takes the completed colors as a param rather than reading live AllowedColors, which may
-        // already reflect the new level by now (unenforced subscriber order on ScoreLevelUpMessage).
+        // Takes completed colors as a param — live AllowedColors may already reflect the new level.
         private async UniTaskVoid SpawnGlowTrailsAsync(IReadOnlyList<string> completedColors)
         {
             var glowRect = _levelGlowFill.rectTransform;
@@ -167,8 +166,7 @@ namespace BalloonParty.UI.LevelUp
                 true,
                 cancellationToken: destroyCancellationToken);
 
-            // Publish first: the restore cinematic claims its ramp (starting at the frozen 0) before
-            // the popup's freeze is released, so the hand-back never flashes full speed.
+            // Publish before releasing the freeze so the hand-back never flashes full speed.
             _dismissedPublisher.Publish(new LevelUpDismissedMessage());
             _timeScaleService.Release(TimeScaleSource.LevelUpPopup);
             _pauseService.Resume(PauseSource.LevelUp);

@@ -13,12 +13,9 @@ using VContainer.Unity;
 namespace BalloonParty.UI.Health
 {
     /// <summary>
-    ///     Flies a heart trail from the health UI to a ready overflow balloon — the visual of a hit point
-    ///     being spent. Triggered by <see cref="OverflowHeartRequestedMessage"/>, whose
-    ///     <c>TargetPosition</c> is the balloon's frozen resting spot; when the trail lands it calls
-    ///     <see cref="RejectedBalloonEffect.OnHeartArrived"/> to pop that exact balloon (which is what
-    ///     charges the HP). Mirrors <c>ShieldTrailController</c> (reversed: UI → world). The heart-trail
-    ///     cinematic follows these.
+    ///     Flies a heart trail from the health UI to a ready overflow balloon on
+    ///     <see cref="OverflowHeartRequestedMessage"/>, popping it on arrival via
+    ///     <see cref="RejectedBalloonEffect.OnHeartArrived"/>.
     /// </summary>
     internal sealed class HeartTrailController : IStartable, IDisposable
     {
@@ -76,8 +73,7 @@ namespace BalloonParty.UI.Health
             var requestId = msg.RequestId;
             var fallback = msg.TargetPosition;
 
-            // Eases over HeartTrailDuration along the trail's move curve while homing on the balloon's live
-            // position, so it lands on it even as the pile compacts up.
+            // Homes on the balloon's live position so it still lands as the pile compacts.
             Transform trail = null;
             trail = _spawner.SpawnFollow(
                 from,

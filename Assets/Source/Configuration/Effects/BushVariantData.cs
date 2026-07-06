@@ -5,10 +5,7 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Configuration.Effects
 {
-    /// <summary>
-    /// Pre-baked bush variant: branch map texture + leaf attachment points.
-    /// Created by the Bush Baker editor window. Loaded at runtime by BushView.
-    /// </summary>
+    /// <summary>Pre-baked bush variant: branch map texture + leaf attachment points.</summary>
     [CreateAssetMenu(menuName = "Configuration/Bush Variant Data", fileName = "BushVariantData")]
     internal class BushVariantData : ScriptableObject
     {
@@ -20,10 +17,7 @@ namespace BalloonParty.Configuration.Effects
         [SerializeField] private Vector4[] _debugSegments;
         [SerializeField] private float _debugBushWorldSize;
 
-        /// <summary>
-        /// Raw generator segment pairs as (start.x, start.y, end.x, end.y) in UV space.
-        /// Used only for editor gizmo overlay.
-        /// </summary>
+        /// <summary>Raw generator segment pairs as (start.x, start.y, end.x, end.y) in UV space.</summary>
         internal IReadOnlyList<Vector4> DebugSegments => _debugSegments;
         internal float DebugBushWorldSize => _debugBushWorldSize;
 #endif
@@ -54,7 +48,7 @@ namespace BalloonParty.Configuration.Effects
     [Serializable]
     internal struct LeafSlotData
     {
-        /// <summary>UV-space position [0–1] on the branch map. Converted to world-space at runtime.</summary>
+        /// <summary>UV-space position [0–1] on the branch map.</summary>
         [SerializeField] internal Vector2 UVPosition;
         [SerializeField] internal float BaseAngle;
         [SerializeField] internal float Depth;

@@ -6,12 +6,7 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    /// <summary>
-    /// Owns the materials a bush renders with. The two leaf materials differ only by
-    /// render queue (inner behind branches, outer in front) — the atlas texture and all
-    /// shader props are shared — so two instances cover every slot. Branch materials
-    /// differ only by the variant's branch map, so slots sharing a variant share one.
-    /// </summary>
+    /// <summary>Owns the bush's materials: two leaf instances (inner/outer render queue) and one branch material per variant.</summary>
     internal sealed class BushMaterialSet
     {
         private readonly IBushSettings _settings;
@@ -127,8 +122,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             return _branchGradient;
         }
 
-        // DestroyImmediate is required to release materials created in edit mode (the
-        // bush view runs under [ExecuteAlways]); plain Destroy is illegal there.
+        // Plain Destroy is illegal in edit mode ([ExecuteAlways]).
         private static void DestroyObject(Object target)
         {
             if (target == null)

@@ -6,9 +6,7 @@ using BalloonParty.Configuration.Cinematics;
 namespace BalloonParty.Editor
 {
     /// <summary>
-    ///     Draws each element of an <see cref="EnumIndexedAttribute"/> array using the enum value's name
-    ///     as its label. The attribute sits on the array field; Unity invokes this drawer per element, and
-    ///     the element index is read from the property path (e.g. <c>_motions.Array.data[1]</c>).
+    ///     Draws each element of an <see cref="EnumIndexedAttribute"/> array using the enum value's name as its label.
     /// </summary>
     [CustomPropertyDrawer(typeof(EnumIndexedAttribute))]
     public class EnumIndexedDrawer : PropertyDrawer
@@ -30,7 +28,7 @@ namespace BalloonParty.Editor
             EditorGUI.PropertyField(position, property, label, true);
         }
 
-        // Element paths look like "_motions.Array.data[3]" — pull the 3 out of the trailing [ ].
+        // Property paths look like "_motions.Array.data[3]".
         private static int ElementIndex(string propertyPath)
         {
             var open = propertyPath.LastIndexOf('[');

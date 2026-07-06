@@ -20,12 +20,10 @@ namespace BalloonParty.Balloon.Model
 
         public SlotActorKind Kind => SlotActorKind.Dynamic;
 
-        // Default pressure personality: a shoved balloon steps one cell to a neighbour, passing the
-        // push along the chain. Unbreakable overrides this to vacate anywhere.
+        // Default: a shoved balloon steps one cell to a neighbour.
         public virtual PressureResponse PushResponse => PressureResponse.ShoveNeighbour;
 
-        // What a non-fatal normal hit yields: a plain balloon lets the shot pass through, a tough one
-        // deflects it. The fatal (Pop) branch is shared and stays in EvaluateNormalHit.
+        // Default non-fatal hit outcome; the fatal (Pop) branch stays in EvaluateNormalHit.
         protected virtual HitOutcome SurviveOutcome => HitOutcome.PassThrough;
 
         IReadOnlyReactiveProperty<bool> IDynamicSlotActor.IsStable => IsStable;

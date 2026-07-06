@@ -4,11 +4,7 @@ using BalloonParty.Configuration.Level;
 
 namespace BalloonParty.Configuration.Level
 {
-    /// <summary>
-    ///     One contiguous span of levels sharing a <see cref="RangedLevelParameters" /> mix.
-    ///     <see cref="ToLevel" /> &lt;= 0 marks the open-ended tail (applies forever). Ranges are
-    ///     validated for contiguity/no-overlap/one tail in <see cref="LevelPacingConfiguration.OnValidate" />.
-    /// </summary>
+    /// <summary>One contiguous span of levels sharing a <see cref="RangedLevelParameters" /> mix.</summary>
     [Serializable]
     public struct LevelRangeEntry
     {
@@ -19,8 +15,7 @@ namespace BalloonParty.Configuration.Level
 
         [SerializeField] private RangedLevelParameters _parameters;
 
-        /// <summary>Use this outside the Inspector — <c>new LevelRangeEntry()</c> alone leaves
-        /// <see cref="Parameters" /> null (a struct's default ctor doesn't init class fields).</summary>
+        /// <summary>Use this outside the Inspector — the default struct ctor leaves <see cref="Parameters" /> null.</summary>
         public LevelRangeEntry(int fromLevel, int toLevel, RangedLevelParameters parameters)
         {
             _fromLevel = fromLevel;

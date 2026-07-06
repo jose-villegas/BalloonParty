@@ -6,12 +6,7 @@ using VContainer;
 
 namespace BalloonParty.Shared.Pause
 {
-    /// <summary>
-    ///     Central coordinator for gameplay pause states. Callers broadcast intent
-    ///     via <see cref="Pause"/> / <see cref="Resume"/>; systems react by subscribing
-    ///     to <see cref="PausedMessage"/> / <see cref="ResumedMessage"/> through MessagePipe.
-    ///     Reference-counted per source so nested pause calls don't prematurely resume.
-    /// </summary>
+    /// <summary>Reference-counted per source so nested pause calls don't prematurely resume.</summary>
     internal class PauseService : IRunResettable
     {
         private readonly IPublisher<PausedMessage> _pausedPublisher;
@@ -34,8 +29,7 @@ namespace BalloonParty.Shared.Pause
 
         public void ResetRun(int generation)
         {
-            // Drop all pause sources outright. The board teardown returns or kills the affected
-            // actors anyway; live systems gate on IsAnyPaused, so flipping it false is what matters.
+            // Drop all sources outright; live systems only gate on IsAnyPaused.
             _stack.Clear();
             _isAnyPaused.Value = false;
         }

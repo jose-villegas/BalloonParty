@@ -11,17 +11,7 @@ using VContainer.Unity;
 namespace BalloonParty.Game.Run
 {
     /// <summary>
-    ///     Owns the run lifecycle. <see cref="EndRun"/> commits the meta record, announces
-    ///     the loss and transitions to <see cref="NavigationState.GameOver"/>;
-    ///     <see cref="RestartRun"/> resets every <see cref="IRunResettable"/> in order and
-    ///     returns to play.
-    ///
-    ///     A loss is suppressed unless the game is actively in <see cref="NavigationState.Game"/>
-    ///     and no loss-blocking cinematic is playing — GameOver and the level-up cinematic must never
-    ///     overlap (the heart-drain cinematic is not loss-blocking, so a 0-HP loss fires during it).
-    ///     Loss triggers call <see cref="EndRun"/> directly (the dev cheat) or raise an
-    ///     <see cref="EndRunRequestedMessage"/> (the player-HP pool, which can't depend on this
-    ///     controller without forming a DI cycle through the <see cref="IRunResettable"/> graph).
+    ///     Owns the run lifecycle — a loss is suppressed unless in <see cref="NavigationState.Game"/> with no loss-blocking cinematic playing, so GameOver and the level-up cinematic never overlap.
     /// </summary>
     internal class RunController : IStartable, IDisposable
     {
@@ -76,8 +66,7 @@ namespace BalloonParty.Game.Run
 
         public void EndRun()
         {
-            // A loss arriving mid-level-up is deferred, never dropped — the request is one-shot (the HP
-            // pool publishes exactly once at 0), so a silent return here would leave a zombie run.
+            // Deferred, never dropped — the loss request is one-shot.
             if (_cinematic.Has(CinematicTraits.BlocksLoss) || _navigation.Current.Value == NavigationState.LevelUp)
             {
                 _lossPending = true;
@@ -107,8 +96,7 @@ namespace BalloonParty.Game.Run
                 resettable.ResetRun(_generation);
             }
 
-            // Views that can't reset reactively (progress bars) or live outside the reset graph's
-            // scope (the thrower's projectile) reset off this signal.
+            // For views that can't reset reactively or live outside the reset graph's scope.
             _resetPublisher.Publish(default);
 
             _navigation.TransitionTo(NavigationState.Game);

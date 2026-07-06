@@ -1,20 +1,11 @@
 namespace BalloonParty.Game.Run
 {
-    /// <summary>
-    ///     Implemented by services holding per-run state that must be cleared when a run
-    ///     restarts. <see cref="RunController"/> invokes implementations in ascending
-    ///     <see cref="ResetOrder"/> — lower runs first — so teardown that must precede
-    ///     other resets (quiesce async, return actors, clear the grid) can order itself.
-    /// </summary>
+    /// <summary><see cref="RunController"/> invokes implementations in ascending <see cref="ResetOrder"/>, lower first.</summary>
     internal interface IRunResettable
     {
         int ResetOrder { get; }
 
-        /// <param name="generation">
-        ///     The new run's number — monotonically increasing, owned by <see cref="RunController"/>.
-        ///     Services with frame-deferred async (spawner, balancer) capture it at schedule time and
-        ///     compare against the latest to drop work belonging to a prior run; others can ignore it.
-        /// </param>
+        /// <param name="generation">Monotonically increasing run number; frame-deferred async can compare it to drop stale work.</param>
         void ResetRun(int generation);
     }
 }

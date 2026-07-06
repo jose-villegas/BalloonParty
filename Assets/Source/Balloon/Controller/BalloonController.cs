@@ -66,8 +66,7 @@ namespace BalloonParty.Balloon.Controller
             _registry.Register(_model, this);
         }
 
-        // Invoked by BalloonControllerRegistry.Route — the registry resolves the owning
-        // controller by model, so no self-filtering is needed here.
+        // Invoked by BalloonControllerRegistry.Route; no self-filtering needed here.
         internal void HandleHit(ActorHitMessage msg)
         {
             if (_popped)
@@ -91,10 +90,7 @@ namespace BalloonParty.Balloon.Controller
             }
         }
 
-        // Invoked by the registry's single board-clear pass. Popped-but-waiting item balloons
-        // are still registered, so their pending activation subscription is cleaned up here too.
-        // playPopVfx is true for the level-transition Ascent (visible burst), false for a silent
-        // run-restart clear.
+        // playPopVfx is true for the level-transition Ascent, false for a silent run-restart clear.
         internal void HandleBoardClear(bool playPopVfx)
         {
             _itemActivatedSubscription?.Dispose();
@@ -104,10 +100,7 @@ namespace BalloonParty.Balloon.Controller
             {
                 _disturbanceField.Stamp(StampSource.BalloonPop, _view.transform.position, Vector2.zero);
 
-                // Parent the pop VFX under whatever the view rides — during the level transition that's
-                // the scenario root (via RideOutgoing), so the effect slides out with the old level
-                // instead of hanging at a fixed world point. Normal pops parent under the pool container
-                // (static), unchanged.
+                // Parent the pop VFX under whatever the view rides, so it moves with the level transition.
                 _view.PlayHitVfxForOutcome(HitOutcome.Pop, _view.transform.parent);
             }
 
@@ -121,10 +114,7 @@ namespace BalloonParty.Balloon.Controller
             _poolManager.Return(_poolKey, _view);
         }
 
-        // Rides the level-transition conveyor: reparents this balloon's view under the descending
-        // scenario root, offset one exitDrop below the incoming content, so the outgoing balloon slides
-        // down and out with the rest of the old level (the pop wave still pops it band-by-band as it
-        // goes; pool-return then reparents it away). Gameplay is paused, so nothing fights the slide.
+        // Reparents this balloon's view under the descending scenario root so it slides out with the old level.
         internal void RideOutgoing(Transform outgoingRoot, float exitDrop)
         {
             if (_view == null)
@@ -188,9 +178,7 @@ namespace BalloonParty.Balloon.Controller
                     _transformCapturedPublisher.Publish(new TransformCapturedMessage(_model, snapshot));
                 }
 
-                // Hide immediately — item effect plays world-space; balloon visual
-                // and collider must not persist while we wait for activation to finish.
-                // Stay registered so a board clear during the wait still tears us down.
+                // Hide immediately; stay registered so a board clear during the wait still tears us down.
                 _view.Hide();
 
                 _itemActivatedSubscription = _itemActivatedSubscriber.Subscribe(OnItemActivated);

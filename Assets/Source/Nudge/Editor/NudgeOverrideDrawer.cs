@@ -8,11 +8,7 @@ namespace BalloonParty.Nudge.Editor
     [CustomPropertyDrawer(typeof(NudgeOverride))]
     public class NudgeOverrideDrawer : AutoFieldPropertyDrawer
     {
-        /// <summary>
-        ///     <c>_appliesTo</c> needs a custom <c>EditorGUI.EnumFlagsField</c> instead of
-        ///     the default PropertyField. <c>_falloff</c> is conditional on the Shockwave flag.
-        ///     Everything else (<c>_distance</c>, <c>_duration</c>) is drawn automatically.
-        /// </summary>
+        /// <summary><c>_falloff</c> is drawn conditionally, only for the Shockwave flag.</summary>
         protected override HashSet<string> ExcludedFields { get; } = new()
         {
             "_appliesTo",

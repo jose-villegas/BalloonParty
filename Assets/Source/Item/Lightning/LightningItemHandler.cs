@@ -15,9 +15,7 @@ using BalloonParty.Configuration.Items;
 namespace BalloonParty.Item.Lightning
 {
     /// <summary>
-    ///     Handles the Lightning item. Finds all same-color balloons, sorts them by
-    ///     distance nearest-first, then plays the chain-lightning animation fire-and-forget —
-    ///     hitting each target per-jump via <see cref="ChainLightningView.PrepareDisplay" />.
+    ///     Handles the Lightning item: chains through same-color balloons nearest-first.
     /// </summary>
     internal class LightningItemHandler : IBalloonItem
     {
@@ -34,8 +32,7 @@ namespace BalloonParty.Item.Lightning
         private readonly PoolManager _poolManager;
         private readonly SlotGrid _grid;
 
-        // Shared across activations is safe here only because it is set and consumed
-        // synchronously inside one CollectSortedTargets call.
+        // Safe to share: set and consumed synchronously within one CollectSortedTargets call.
         private readonly ByDistanceComparer _distanceComparer = new();
 
         public ItemType Type => ItemType.Lightning;
@@ -60,9 +57,7 @@ namespace BalloonParty.Item.Lightning
 
             var settings = _itemConfig[ItemType.Lightning];
 
-            // Per-activation lists, not shared buffers: the chain view keeps the positions
-            // reference and OnJump reads the targets for seconds after this method returns,
-            // so a second activation mid-chain must not touch either.
+            // Per-activation lists: the chain view holds this reference long after this method returns.
             var targets = new List<(IBalloonModel model, Vector3 worldPos)>();
             CollectSortedTargets(balloon, worldPosition, targets);
 

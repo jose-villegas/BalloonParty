@@ -4,12 +4,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Shared.Pool
 {
-    /// <summary>
-    ///     Pool channel that instantiates prefabs and injects <c>[Inject]</c> fields
-    ///     from a parent <see cref="IObjectResolver"/> — without creating a VContainer
-    ///     child scope per instance. Use for prefabs whose components only need singletons
-    ///     from an ancestor scope (no per-instance registrations).
-    /// </summary>
+    /// <summary>Injects <c>[Inject]</c> fields from a parent <see cref="IObjectResolver"/> without a VContainer child scope per instance.</summary>
     internal class InjectingPoolChannel<TItem> : PoolChannel<TItem>
         where TItem : Component, IPoolable
     {

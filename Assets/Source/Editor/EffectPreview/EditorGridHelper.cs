@@ -6,16 +6,12 @@ using UnityEngine;
 namespace BalloonParty.Editor.EffectPreview
 {
     /// <summary>
-    ///     Editor-only grid position utilities. Delegates hex math to
-    ///     <see cref="HexCoordinates.IndexToWorldPosition(Vector2Int,Vector2,Vector2)" />
-    ///     and adds editor-specific helpers like random position generation.
+    ///     Editor-only grid position utilities.
     /// </summary>
     internal static class EditorGridHelper
     {
         /// <summary>
-        ///     Picks <paramref name="count" /> random slot positions from a virtual
-        ///     grid defined by <paramref name="config" />, sorted by distance from
-        ///     <paramref name="origin" /> (nearest first).
+        ///     Picks <paramref name="count" /> random slot positions, nearest to <paramref name="origin" /> first.
         /// </summary>
         internal static List<Vector3> RandomSlotPositions(
             int count,
@@ -36,7 +32,6 @@ namespace BalloonParty.Editor.EffectPreview
                 }
             }
 
-            // Fisher-Yates shuffle
             for (var i = indices.Count - 1; i > 0; i--)
             {
                 var j = Random.Range(0, i + 1);

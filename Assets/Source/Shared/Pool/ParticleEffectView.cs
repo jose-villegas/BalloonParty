@@ -3,11 +3,7 @@ using UnityEngine;
 
 namespace BalloonParty.Shared.Pool
 {
-    /// <summary>
-    ///     Poolable effect driven by a <see cref="ParticleSystem" />. Completion is
-    ///     detected automatically when the particle system finishes. Attach to prefab
-    ///     roots that use a ParticleSystem; pool via <see cref="SimplePoolChannel{TItem}" />.
-    /// </summary>
+    /// <summary>Poolable effect driven by a <see cref="ParticleSystem" />; completion is detected automatically when it finishes.</summary>
     public class ParticleEffectView : EffectView
     {
         private ParticleSystem _particle;
@@ -28,9 +24,7 @@ namespace BalloonParty.Shared.Pool
         public override void OnSpawned()
         {
             base.OnSpawned();
-            // PoolChannel calls SetActive(true) before OnSpawned, so a particle system
-            // with "Play on Awake" enabled would fire immediately with the stale colour
-            // from the previous use. Stop+clear here so Play() always applies a fresh colour.
+            // SetActive(true) runs before OnSpawned, so "Play on Awake" would fire with the stale colour.
             _particle?.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 

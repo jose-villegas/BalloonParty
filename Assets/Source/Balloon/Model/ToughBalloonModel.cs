@@ -17,7 +17,6 @@ namespace BalloonParty.Balloon.Model
 
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
-        // A tough balloon that survives a hit deflects the shot instead of letting it pass through.
         protected override HitOutcome SurviveOutcome => HitOutcome.Deflect;
 
         internal ToughBalloonModel(
@@ -45,7 +44,7 @@ namespace BalloonParty.Balloon.Model
             }
         }
 
-        // Falls back to the full palette when constructed without a level context (tests).
+        // Falls back to the full palette when constructed without a level context.
         private IReadOnlyList<string> ResolveColorPool()
         {
             return _allowedColors is { Count: > 0 } ? _allowedColors : _palette?.ColorNames;

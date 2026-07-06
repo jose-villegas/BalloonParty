@@ -4,13 +4,7 @@ using UnityEngine;
 
 namespace BalloonParty.Shared.Pause
 {
-    /// <summary>
-    ///     The only legal writer of <c>Time.timeScale</c> (a style-audit rule bans writes elsewhere).
-    ///     Callers claim a value under their <see cref="TimeScaleSource" /> and release it when done;
-    ///     the lowest active claim wins (the popup's freeze beats a cinematic's slow-mo) and no claims
-    ///     means normal speed. Releasing — or the run resetting — restores automatically, so no
-    ///     caller can forget to set it back to 1.
-    /// </summary>
+    /// <summary>The only legal writer of <c>Time.timeScale</c> (style-audit rule bans writes elsewhere); lowest active claim wins.</summary>
     internal sealed class TimeScaleService : IRunResettable
     {
         private readonly Dictionary<TimeScaleSource, float> _claims = new();

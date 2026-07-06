@@ -10,29 +10,11 @@ using VContainer;
 
 namespace BalloonParty.Balloon.Type
 {
-    /// <summary>
-    /// Balloon variant for <c>BalloonType.Unbreakable</c>.
-    /// Pushes <c>_SphereCenter</c>, <c>_SphereRadius</c>, and the clock phase to
-    /// every quadrant <see cref="SpriteRenderer"/> so the
-    /// <c>BalloonParty/Balloon/UnbreakableBalloon</c> shader can compute metallic
-    /// gradient, specular, reflection, and rim effects relative to the composed
-    /// sphere rather than world origin. The shader self-derives its animation from
-    /// <c>_Time.y</c>, so runtime pushes happen only at <c>Bind</c> and when the
-    /// balloon actually moves — not per frame.
-    ///
-    /// Inner renderers receive the same sphere data so effects that depend
-    /// on sphere-local position stay coherent across both layers.
-    ///
-    /// <c>[ExecuteAlways]</c> keeps the shader animation running in edit mode
-    /// (where <c>_Time</c> is frozen — the preview zeroes the shader clock and
-    /// integrates editor time instead).
-    /// </summary>
+    /// <summary>Pushes sphere center/radius and clock phase to every quadrant renderer so the shader computes effects relative to the composed sphere, not world origin.</summary>
     [ExecuteAlways]
     internal class UnbreakableBalloonVariant : MonoBehaviour, IBalloonVariant, IBalloonViewBinding
     {
-        // Matches the shader's _AnimationSpeed default. C# owns the property outright:
-        // play mode pushes the rate (a property block survives an edit-mode preview,
-        // which zeroes it), edit mode zeroes it and integrates editor time itself.
+        // Matches the shader's _AnimationSpeed default.
         private const float ShaderClockRate = 2f;
 
         private static readonly int SphereCenterId = Shader.PropertyToID("_SphereCenter");
@@ -60,8 +42,7 @@ namespace BalloonParty.Balloon.Type
             ComputeRadiusIfNeeded();
         }
 
-        // Null-guarded: [ExecuteAlways] fires this in edit mode where nothing is injected, and
-        // pooled instances run their first OnEnable during Instantiate, before injection.
+        // Null-guarded: pooled instances run their first OnEnable before injection.
         private void OnEnable()
         {
             _sceneCapture?.Acquire();
@@ -77,8 +58,7 @@ namespace BalloonParty.Balloon.Type
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
-                // Edit mode: built-in _Time is frozen, so zero the shader clock and feed
-                // editor time (at the shader's own rate) through the offset.
+                // _Time is frozen in edit mode, so feed editor time through the offset instead.
                 SceneView.RepaintAll();
                 var editorTime = (float)EditorApplication.timeSinceStartup;
                 PushSphereState(editorTime * ShaderClockRate + _instancePhase, true);
@@ -86,9 +66,7 @@ namespace BalloonParty.Balloon.Type
             }
 #endif
 
-            // The runtime clock is shader-derived; the sphere data only changes when the
-            // balloon moves (nudges, balance paths). Repushing every renderer's property
-            // block every frame was the standing cost this replaces.
+            // Only re-push when the balloon actually moves, not every frame.
             if (transform.position != _pushedCenter)
             {
                 PushSphereState(_instancePhase, false);
@@ -115,8 +93,7 @@ namespace BalloonParty.Balloon.Type
         {
             _sceneCapture = sceneCapture;
 
-            // Injection lands after the creation-time OnEnable saw a null reference — settle
-            // the ref-count for an instance injected while already active.
+            // Settle the ref-count for an instance injected while already active.
             if (isActiveAndEnabled)
             {
                 _sceneCapture.Acquire();
@@ -177,8 +154,7 @@ namespace BalloonParty.Balloon.Type
                 return;
             }
 
-            // The composed sphere spans the union of all quadrant bounds;
-            // half the longest axis gives a good approximation.
+            // Half the longest axis of the union of all quadrant bounds approximates the sphere.
             var bounds = _renderers[0].bounds;
             for (var i = 1; i < _renderers.Length; i++)
             {

@@ -3,12 +3,7 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Grid
 {
-    /// <summary>
-    ///     Balance heuristics over a <see cref="SlotGrid" />: whether a slot has lost its support and
-    ///     should fall (<see cref="IsUnbalanced" />), and the best empty slot below it to fall into
-    ///     (<see cref="OptimalNextEmptySlot" />) — scored by how much settled structure each candidate
-    ///     rests on. Kept off the grid's storage type so the heuristics can evolve independently.
-    /// </summary>
+    /// <summary>Balance heuristics over a <see cref="SlotGrid" />: whether a slot should fall, and where.</summary>
     internal class GridBalanceQuery
     {
         private readonly SlotGrid _grid;
@@ -42,7 +37,7 @@ namespace BalloonParty.Slots.Grid
                 return null;
             }
 
-            // Memo is only valid for the current grid state — clear on each call.
+            // Memo is only valid for the current grid state.
             _weightMemo.Clear();
 
             var bestWeight = 0;

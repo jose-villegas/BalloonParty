@@ -8,8 +8,7 @@ using BalloonParty.Configuration.Effects;
 namespace BalloonParty.Editor.Bush
 {
     /// <summary>
-    /// Exports baked branch maps and leaf slot data as <see cref="BushVariantData"/>
-    /// ScriptableObjects. Saves textures as PNG with correct import settings.
+    /// Exports baked branch maps and leaf slot data as <see cref="BushVariantData"/> ScriptableObjects.
     /// </summary>
     internal static class BushVariantExporter
     {
@@ -41,7 +40,7 @@ namespace BalloonParty.Editor.Bush
             var slotData = BuildSlotData(leafSlots, bushWorldSize, seed);
             var boundsSize = new Vector2(bushWorldSize, bushWorldSize);
 
-            // Store raw generator segments for debug gizmo overlay
+            // Kept for the debug gizmo overlay.
             var segments = BushBranchGenerator.Generate(seed, branchSettings);
             var debugSegments = new Vector4[segments.Count];
             for (var s = 0; s < segments.Count; s++)

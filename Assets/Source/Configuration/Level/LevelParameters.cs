@@ -11,16 +11,7 @@ using UnityEngine;
 
 namespace BalloonParty.Configuration.Level
 {
-    /// <summary>
-    ///     A fully-resolved level: the runtime output of <see cref="RangedLevelParameters.Resolve" />,
-    ///     cached per level by <c>LevelDifficultyResolver</c> and exposed as its <c>Current</c>. Never
-    ///     authored or serialized (ranges and customs both author <see cref="RangedLevelParameters" />);
-    ///     it only ever exists as a constructed DTO. The authored mix (weights/curves/gates) is set by
-    ///     the constructor; the catalog-bridged views (<see cref="_balloonPickList" />, item picks,
-    ///     active items, allowed-color names) are filled by the resolver via <see cref="BindResolved" />
-    ///     once it has combined this level's weights with the balloon/item catalogs. Field defaults are
-    ///     the parameterless fallback (Simple-only) used when no authored range contains a level.
-    /// </summary>
+    /// <summary>Field defaults are the parameterless fallback (Simple-only) used when no authored range contains a level.</summary>
     internal class LevelParameters : ILevelParameters
     {
         private readonly int _spawnLines = 1;
@@ -85,14 +76,11 @@ namespace BalloonParty.Configuration.Level
         /// <summary>Same bit-per-color convention as <see cref="ColorableBalloonVariant" />'s mask — all bits set = every palette color.</summary>
         public int AllowedColorsMask => _allowedColorsMask;
 
-        // The authored mix the resolver bridges onto the catalog to build the pick lists — not part of
-        // the ILevelParameters read surface consumers use.
+        // Not part of the ILevelParameters read surface consumers use — resolver-only.
         internal BalloonTypeWeight[] BalloonWeights => _balloonWeights;
         internal ItemTypeWeight[] ItemWeights => _itemWeights;
 
-        // Fills the catalog-bridged views once the resolver has combined this level's weights with the
-        // balloon/item catalogs. Separate from construction because the bridge needs the catalog, which
-        // the pure Resolve() path does not have.
+        // Separate from construction because the bridge needs the catalog, unavailable to the pure Resolve() path.
         internal void BindResolved(
             IReadOnlyList<ResolvedBalloonEntry> balloonPickList,
             IReadOnlyList<ResolvedItemEntry> itemPickList,
@@ -131,7 +119,7 @@ namespace BalloonParty.Configuration.Level
         }
     }
 
-    // A range's balloon weight bridged onto its catalog entry — the unit the weighted pick draws from.
+    // A range's balloon weight bridged onto its catalog entry.
     internal sealed class ResolvedBalloonEntry : IWeightedEntry
     {
         public ResolvedBalloonEntry(BalloonPrefabEntry source, float weight, int maxCount)

@@ -6,13 +6,7 @@ using VContainer;
 
 namespace BalloonParty.Game
 {
-    /// <summary>
-    ///     Owns the order-dependent part of hit resolution. MessagePipe dispatches in
-    ///     subscription order — which equals registration order and is enforced nowhere — so the
-    ///     stages with a required sequence are invoked here explicitly. The trailing broadcast
-    ///     serves only order-independent observers: nudges, VFX, grid-actor removal, diagnostics,
-    ///     and item activation (which defers itself a frame regardless of bus position).
-    /// </summary>
+    /// <summary>Owns the order-dependent part of hit resolution explicitly, since MessagePipe's subscription order is enforced nowhere.</summary>
     internal class HitPipeline : IHitDispatcher
     {
         private readonly ScoreController _score;
@@ -32,12 +26,9 @@ namespace BalloonParty.Game
 
         public void Dispatch(ActorHitMessage msg)
         {
-            // Streak/score first: ProjectileHitResolver reads the streak tracker immediately
-            // after dispatching to apply the streak-shield rule.
+            // Streak/score first: ProjectileHitResolver reads the streak tracker right after dispatch.
             _score.OnActorHit(msg);
 
-            // Then the owning balloon's reaction (pop/deflect/pass-through), routed directly to
-            // its controller instead of broadcast-and-filter across every live balloon.
             _balloonRegistry.Route(msg);
 
             _hitPublisher.Publish(msg);

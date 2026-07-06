@@ -1,11 +1,6 @@
 namespace BalloonParty.Game.Health
 {
-    /// <summary>
-    ///     How many hit-point charges are already committed but not yet applied — the overflow pile's
-    ///     queued balloons, each of which will unconditionally cost one HP when its heart launches
-    ///     (nothing cancels a queued balloon except a run reset). Implemented by the overflow effect;
-    ///     consumed by <see cref="ILossForecast"/>.
-    /// </summary>
+    /// <summary>Hit-point charges already committed but not yet applied — nothing cancels one except a run reset.</summary>
     internal interface IPendingHealthCharges
     {
         int PendingCharges { get; }

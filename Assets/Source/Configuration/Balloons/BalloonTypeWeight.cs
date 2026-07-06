@@ -6,10 +6,7 @@ using BalloonParty.Configuration.Balloons;
 namespace BalloonParty.Configuration.Balloons
 {
     /// <summary>
-    ///     One entry of a range's static <c>WeightedSet&lt;BalloonType&gt;</c>. Membership <em>is</em>
-    ///     the type gate — a type absent from a range's set cannot spawn in that range; a type present
-    ///     with weight 0 is equivalent to absent. Weights are static per range (no <see cref="RangeMode" />)
-    ///     — the per-spawn weighted draw already supplies the randomness.
+    ///     One entry of a range's static <c>WeightedSet&lt;BalloonType&gt;</c>; membership is the type gate.
     /// </summary>
     [Serializable]
     public struct BalloonTypeWeight

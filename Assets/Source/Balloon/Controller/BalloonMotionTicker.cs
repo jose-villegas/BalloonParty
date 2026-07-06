@@ -6,15 +6,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Balloon.Controller
 {
-    /// <summary>
-    ///     Single driver for the balloon nudge out-and-back: one Tick walks a flat pooled list
-    ///     and calls view setters — the controller owns motion state, the views own their
-    ///     transforms — so a bomb shockwave nudging dozens of neighbors allocates nothing
-    ///     per balloon.
-    ///     Arbitration: starting a nudge for a view silently replaces its running one; balance
-    ///     moves and despawn must call <see cref="CancelNudge"/> explicitly, because a
-    ///     ticker-driven lerp escapes <c>transform.DOKill()</c>.
-    /// </summary>
+    /// <summary>Drives the balloon nudge out-and-back; balance moves and despawn must call <see cref="CancelNudge"/> explicitly since a ticker-driven lerp escapes <c>transform.DOKill()</c>.</summary>
     internal sealed class BalloonMotionTicker : ITickable
     {
         private readonly List<NudgeEntry> _nudges = new(32);
@@ -63,8 +55,7 @@ namespace BalloonParty.Balloon.Controller
         {
             var deltaTime = Time.deltaTime;
 
-            // Backwards: completions swap-remove, and callbacks may start new nudges —
-            // appended entries are not visited until the next tick.
+            // Backwards: completions swap-remove.
             for (var i = _nudges.Count - 1; i >= 0; i--)
             {
                 var entry = _nudges[i];

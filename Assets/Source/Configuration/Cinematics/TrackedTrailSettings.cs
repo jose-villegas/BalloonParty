@@ -4,11 +4,7 @@ using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Configuration.Cinematics
 {
-    /// <summary>
-    ///     Tuning for a trail the cinematic tracks/puppets during its flight — composed into
-    ///     <see cref="CinematicStateEntry" /> so any trail-tracking cinematic can use it (the
-    ///     level-up drives its tipping trail with it today; others may opt in).
-    /// </summary>
+    /// <summary>Tuning for a trail the cinematic tracks/puppets during its flight.</summary>
     [Serializable]
     internal class TrackedTrailSettings
     {

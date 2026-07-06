@@ -10,11 +10,8 @@ using VContainer;
 namespace BalloonParty.UI.GameOver
 {
     /// <summary>
-    ///     Placeholder loss screen. Appears on <see cref="GameOverMessage"/>, shows the final run
-    ///     stats alongside the persisted best, and restarts the run on the button press. Visibility
-    ///     is driven by a <see cref="CanvasGroup"/> — the GameObject stays active so its
-    ///     subscriptions live for the whole session (never toggle it with SetActive). Wire the
-    ///     Restart button's onClick to <see cref="OnRestartPressed"/>.
+    ///     Placeholder loss screen; visibility is driven by a <see cref="CanvasGroup"/> so the
+    ///     GameObject can stay active and keep its subscriptions alive (never toggle with SetActive).
     /// </summary>
     [RequireComponent(typeof(CanvasGroup))]
     public class GameOverScreen : MonoBehaviour
@@ -38,8 +35,7 @@ namespace BalloonParty.UI.GameOver
         {
             _canvasGroup = GetComponent<CanvasGroup>();
 
-            // Wrap each label before its text is overwritten — FormattedLabel captures the authored
-            // text (e.g. "Level: {0}") as a template so repeated losses keep substituting cleanly.
+            // Wrap before the label text is overwritten so FormattedLabel captures the template.
             _finalLevel = new FormattedLabel(_finalLevelLabel);
             _finalScore = new FormattedLabel(_finalScoreLabel);
             _bestLevel = new FormattedLabel(_bestLevelLabel);
@@ -52,14 +48,14 @@ namespace BalloonParty.UI.GameOver
         {
             _gameOverSubscriber.Subscribe(OnGameOver).AddTo(this);
 
-            // Hide whenever we leave GameOver — e.g. when Restart transitions back to Game.
+            // Hide whenever we leave GameOver.
             Navigation.Current
                 .Where(state => state != NavigationState.GameOver)
                 .Subscribe(_ => SetVisible(false))
                 .AddTo(this);
         }
 
-        // Wired to the Restart button's onClick in the inspector.
+        // Wired to the Restart button's onClick.
         public void OnRestartPressed()
         {
             _runController.RestartRun();

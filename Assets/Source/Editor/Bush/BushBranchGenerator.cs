@@ -5,9 +5,7 @@ using UnityEngine;
 namespace BalloonParty.Editor.Bush
 {
     /// <summary>
-    /// Generates fractal branch segments in UV space (0–1) for baking into
-    /// a branch map texture. Produces a top-down radial structure: root at
-    /// centre, branches radiate outward in all directions.
+    /// Generates fractal branch segments in UV space (0-1) for baking into a branch map texture.
     /// </summary>
     internal static class BushBranchGenerator
     {
@@ -28,12 +26,10 @@ namespace BalloonParty.Editor.Bush
 
             var centre = new Vector2(0.5f, 0.5f);
 
-            // Primary branches radiate from centre in evenly-spaced directions
-            // with randomised jitter for organic feel
             var count = settings.BranchesPerNode;
             var baseAngleStep = Mathf.PI * 2f / count;
 
-            // Small random rotation so the whole bush isn't axis-aligned
+            // Avoids an axis-aligned bush.
             var globalRotation = (float)rng.NextDouble() * Mathf.PI * 2f;
 
             for (var i = 0; i < count; i++)
@@ -80,7 +76,7 @@ namespace BalloonParty.Editor.Bush
             }
 
             var count = settings.BranchesPerNode;
-            // Reduce child count at deeper levels for natural thinning
+            // Thins child count at deeper levels.
             if (depth >= 3 && rng.NextDouble() < 0.3)
             {
                 count = Mathf.Max(2, count - 1);
@@ -94,7 +90,7 @@ namespace BalloonParty.Editor.Bush
                 var spreadMax = settings.AngleSpread.y * Mathf.Deg2Rad;
                 var spread = Lerp(rng, spreadMin, spreadMax);
 
-                // Alternate sign: even left, odd right; last gets small random offset
+                // Alternates left/right; last branch gets a random offset instead.
                 var sign = (i % 2 == 0) ? -1f : 1f;
                 if (i == count - 1 && count % 2 == 1)
                 {

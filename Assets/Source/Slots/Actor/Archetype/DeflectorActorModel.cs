@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    // Indestructible. Permanently redirects projectiles; creates predictable bounce lanes.
+    // Indestructible; permanently redirects projectiles.
     internal class DeflectorActorModel : IWriteableSlotActor, IHitable
     {
         public Vector2Int SlotIndex { get; private set; }

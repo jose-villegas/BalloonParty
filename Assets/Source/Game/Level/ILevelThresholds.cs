@@ -1,9 +1,7 @@
 namespace BalloonParty.Game.Level
 {
     /// <summary>
-    ///     The per-level score goal: how many points complete a given level. A cross-level query — it
-    ///     answers for any level, not just the active one — composed from the base points curve and the
-    ///     level's pacing threshold modifier.
+    ///     The per-level score goal — answers for any level, not just the active one.
     /// </summary>
     internal interface ILevelThresholds
     {

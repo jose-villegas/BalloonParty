@@ -30,9 +30,7 @@ namespace BalloonParty.Shared.Pool
 
         public void OnSpawned()
         {
-            // PoolChannel calls SetActive(true) before OnSpawned, so a particle system
-            // with "Play on Awake" enabled would fire with the stale colour from the
-            // previous use. Stop+clear here so Play() always applies a fresh colour.
+            // Stop+clear so "Play on Awake" doesn't fire with a stale colour from last use.
             _particle?.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
@@ -42,8 +40,7 @@ namespace BalloonParty.Shared.Pool
             _particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
-        // The delegate is created once per pooled instance and survives despawns, so repeat
-        // plays reuse it instead of allocating a completion closure per call.
+        // Cached once per instance so repeat plays don't allocate a new closure.
         internal void BindPool(PoolManager pool, string key)
         {
             _pool = pool;

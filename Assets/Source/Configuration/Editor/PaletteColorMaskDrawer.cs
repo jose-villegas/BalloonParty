@@ -96,8 +96,7 @@ namespace BalloonParty.Configuration.Editor
 
         private static float AvailableSwatchWidth(float propertyWidth)
         {
-            // Use the property rect width minus a small margin so layout and
-            // height calculation always agree, even inside nested array drawers.
+            // Small margin so layout and height calculation always agree.
             return propertyWidth - 8f;
         }
 
@@ -137,7 +136,6 @@ namespace BalloonParty.Configuration.Editor
             var availableWidth = AvailableSwatchWidth(width);
             var itemWidth = swatchSize + itemSpacing;
 
-            // Pre-build rows so each row can be right-aligned.
             var rows = new List<List<int>>();
             var currentRow = new List<int>();
             var x = 0f;
@@ -169,7 +167,7 @@ namespace BalloonParty.Configuration.Editor
 
             foreach (var row in rows)
             {
-                // Right-align: start so the last item ends at the available right edge.
+                // Right-align to the available edge.
                 var rowWidth = (row.Count * itemWidth) - itemSpacing;
                 var curX = startX + availableWidth - rowWidth;
 

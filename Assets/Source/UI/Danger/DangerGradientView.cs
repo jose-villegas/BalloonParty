@@ -7,17 +7,8 @@ using UnityEngine;
 namespace BalloonParty.UI.Danger
 {
     /// <summary>
-    ///     Drives the early-warning effect from the danger level (0→1): tints sprites along a gradient,
-    ///     grows the top/bottom gradient sprites toward the centre to simulate the gradient creeping over
-    ///     the scenario, and slides top/bottom containers by a custom per-side Y offset. Each gradient
-    ///     side has its own height increase; the sprite's Y is shifted by half that growth so its outer
-    ///     edge stays anchored (bottom expands up, top expands down). The bound level is a target eased
-    ///     toward each frame, so tint, growth and translation glide instead of snapping.
-    ///
-    ///     A dumb view: a <see cref="ReactivePropertyBinder{TView,TValue}" /> binds it to
-    ///     <c>SpaceDanger.Level</c> at <c>Start</c>. Growing sprites must use a Sliced/Tiled draw mode for
-    ///     <c>SpriteRenderer.size</c> to apply, and are assumed to have a centred pivot (hence the
-    ///     half-growth recentre).
+    ///     Drives the early-warning effect from the danger level (0→1): tints sprites, grows the
+    ///     top/bottom gradients toward the centre, and slides their containers.
     /// </summary>
     internal class DangerGradientView : MonoBehaviour, IReactiveBindable<float>
     {
@@ -53,7 +44,7 @@ namespace BalloonParty.UI.Danger
 
         private void Awake()
         {
-            // Capture rest size/position before any binding grows them, so the deltas stay relative.
+            // Capture rest state before any binding grows the sprites.
             CaptureRest(_topGradients, out _topRestPositions, out _topRestSizes);
             CaptureRest(_bottomGradients, out _bottomRestPositions, out _bottomRestSizes);
 
@@ -75,7 +66,7 @@ namespace BalloonParty.UI.Danger
                 return;
             }
 
-            // Frame-rate-independent ease toward the latest target; snap once it's effectively there.
+            // Frame-rate-independent ease; snap once effectively there.
             _currentLevel = Mathf.Lerp(_currentLevel, _targetLevel, 1f - Mathf.Exp(-_lerpSpeed * Time.deltaTime));
             if (Mathf.Abs(_currentLevel - _targetLevel) <= SettleEpsilon)
             {
@@ -95,7 +86,7 @@ namespace BalloonParty.UI.Danger
             _subscription?.Dispose();
             _subscription = level.Subscribe(value => _targetLevel = Mathf.Clamp01(value));
 
-            // Subscribe fired with the current level — snap to it so we don't ease up from zero on bind.
+            // Snap to the current level so we don't ease up from zero on bind.
             _currentLevel = _targetLevel;
             ApplyVisual(_currentLevel);
         }
@@ -113,11 +104,10 @@ namespace BalloonParty.UI.Danger
             _topGradients.SetColor(color);
             _bottomGradients.SetColor(color);
 
-            // Bottom grows upward, top grows downward; recentre by half the growth so the outer edge holds.
+            // Recentre by half the growth so the outer edge holds.
             Expand(_bottomGradients, _bottomRestPositions, _bottomRestSizes, _bottomSizeIncrease * level, 0.5f);
             Expand(_topGradients, _topRestPositions, _topRestSizes, _topSizeIncrease * level, -0.5f);
 
-            // Slide the containers by their own custom Y offset (sign is whatever the inspector value is).
             _topContainer.SetLocalY(_topContainerRest.y + (_topContainerOffsetY * level));
             _bottomContainer.SetLocalY(_bottomContainerRest.y + (_bottomContainerOffsetY * level));
         }

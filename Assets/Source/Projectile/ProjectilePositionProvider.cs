@@ -2,11 +2,7 @@ using UnityEngine;
 
 namespace BalloonParty.Projectile
 {
-    /// <summary>
-    /// Lightweight shared reference to the active projectile transform.
-    /// Set by <c>ThrowerController</c> on load/reload, read by systems
-    /// that need the projectile's world position without direct coupling.
-    /// </summary>
+    /// <summary>Shared reference to the active projectile's world position, decoupled from direct access.</summary>
     internal class ProjectilePositionProvider
     {
         private Transform _transform;

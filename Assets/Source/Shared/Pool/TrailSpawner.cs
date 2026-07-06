@@ -5,9 +5,7 @@ using UnityEngine;
 namespace BalloonParty.Shared.Pool
 {
     /// <summary>
-    ///     Lightweight utility that handles the pool lifecycle for trail orbs:
-    ///     get from pool, position, setup, return on arrival. Composed by trail
-    ///     services that need spawn-and-forget behaviour.
+    ///     Handles the pool lifecycle for trail orbs: get, position, setup, return on arrival.
     /// </summary>
     internal class TrailSpawner
     {
@@ -28,7 +26,7 @@ namespace BalloonParty.Shared.Pool
             _sortingOrder = sortingOrder;
         }
 
-        // Convenience for the common case: pool the prefab through a SimplePoolChannel (no injection).
+        // Convenience: pools the prefab through a SimplePoolChannel (no injection).
         internal TrailSpawner(PoolManager poolManager, string poolKey, FlyingTrail prefab, int sortingOrder = -1)
             : this(poolManager, poolKey, () => new SimplePoolChannel<FlyingTrail>(prefab), sortingOrder)
         {
@@ -64,8 +62,7 @@ namespace BalloonParty.Shared.Pool
             return trail.transform;
         }
 
-        // Spawns a trail that homes on a live-updating target (see FlyingTrail.SetupFollow) and returns to
-        // the pool on arrival. Used to chase a moving object rather than fly to a fixed point.
+        // Homes on a live-updating target instead of flying to a fixed point.
         internal Transform SpawnFollow(
             Vector3 from,
             Func<Vector3> targetProvider,

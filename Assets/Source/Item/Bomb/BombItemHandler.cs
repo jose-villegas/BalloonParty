@@ -54,8 +54,7 @@ namespace BalloonParty.Item.Bomb
 
             var settings = _itemConfig[ItemType.Bomb];
 
-            // Shockwave first — nudges all balloons before any get popped or
-            // marked unstable by the blast's neighbor nudges.
+            // Shockwave first, before blast nudges mark neighbors unstable.
             _nudgePublisher.Publish(new NudgeMessage(
                 null,
                 worldPosition,
@@ -79,8 +78,7 @@ namespace BalloonParty.Item.Bomb
             var bombSlot = balloon.SlotIndex.Value;
             HexCoordinates.HexNeighborIndices(bombSlot.x, bombSlot.y, _neighborBuffer);
 
-            // Direct hex neighbors always receive piercing damage — the blast core
-            // guarantees a kill regardless of HitsRemaining or Deflect logic.
+            // Direct hex neighbors always take piercing damage (guaranteed kill).
             var piercingContext = new DamageContext(context.Damage, DamageFlags.Piercing, context.SourceColorId);
 
             var count = Physics2D.OverlapCircle(worldPosition, radius, _overlap.Filter, _overlapResults);

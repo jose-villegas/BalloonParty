@@ -32,10 +32,10 @@ namespace BalloonParty.Slots.Actor
             _subscription?.Dispose();
         }
 
-        // Internal for direct test invocation — avoids MessagePipe infrastructure in tests.
+        // Internal for direct test invocation, bypassing MessagePipe.
         internal void OnActorHit(ActorHitMessage msg)
         {
-            // BalloonController owns balloon removal; skip everything balloon-related.
+            // BalloonController owns balloon removal.
             if (msg.Actor is IBalloonModel)
             {
                 return;

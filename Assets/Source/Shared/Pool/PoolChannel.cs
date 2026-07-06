@@ -6,7 +6,7 @@ using UnityEngine;
 namespace BalloonParty.Shared.Pool
 {
     /// <summary>
-    ///     Non-generic marker so we can store any PoolChannel in a typed dictionary.
+    ///     Non-generic marker so any PoolChannel can be stored in a typed dictionary.
     /// </summary>
     public interface IPoolChannel
     {
@@ -14,14 +14,12 @@ namespace BalloonParty.Shared.Pool
         int AvailableCount { get; }
 
         /// <summary>
-        ///     Creates <paramref name="count"/> items and pushes them into the pool
-        ///     in a single frame. Use only for lightweight items.
+        ///     Creates items in a single frame — use only for lightweight items.
         /// </summary>
         void Prewarm(int count);
 
         /// <summary>
-        ///     Creates <paramref name="count"/> items spread across multiple frames
-        ///     (one item per yield). Ideal for heavy prefabs (e.g. VContainer child scopes).
+        ///     Creates items one per frame — for heavy prefabs (e.g. VContainer child scopes).
         /// </summary>
         UniTask PrewarmAsync(int count, CancellationToken ct = default);
     }
@@ -80,10 +78,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <summary>
-        ///     Returns the most recently returned item without removing it from the pool
-        ///     or activating it. Useful for reading state that was preserved on the
-        ///     component before it was returned (e.g. rotation snapshots).
-        ///     Returns null if no items are available.
+        ///     Returns the most recently returned item without removing or activating it.
         /// </summary>
         public TItem Peek()
         {

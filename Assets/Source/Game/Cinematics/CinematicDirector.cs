@@ -28,9 +28,7 @@ namespace BalloonParty.Game.Cinematics
         }
 
         /// <summary>
-        ///     Begins only when no cinematic is active — the concurrency policy (drop when busy) in one
-        ///     place, instead of each producer re-implementing an <c>IsPlaying</c> guard. Use
-        ///     <see cref="BeginCinematic"/> for mid-cinematic state switches (e.g. a restore phase).
+        ///     Begins only when no cinematic is active; use <see cref="BeginCinematic"/> for mid-cinematic state switches.
         /// </summary>
         internal bool TryBeginCinematic(CinematicState state)
         {

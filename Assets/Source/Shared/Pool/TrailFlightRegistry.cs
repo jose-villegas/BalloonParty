@@ -5,8 +5,7 @@ using UnityEngine;
 namespace BalloonParty.Shared.Pool
 {
     /// <summary>
-    ///     Central registry for all in-flight trails. Provides per-ID lookup and
-    ///     bulk operations (pause, resume, complete, speed).
+    ///     Central registry for all in-flight trails: per-ID lookup plus bulk operations.
     /// </summary>
     internal class TrailFlightRegistry<TId>
         where TId : struct, IEquatable<TId>
@@ -59,9 +58,7 @@ namespace BalloonParty.Shared.Pool
         }
 
         /// <remarks>
-        ///     Snapshots and clears the dictionary before completing so that
-        ///     tween onComplete callbacks that call <see cref="Unregister"/>
-        ///     don't modify the collection during iteration.
+        ///     Snapshots and clears first so <see cref="Unregister"/> callbacks can't mutate mid-iteration.
         /// </remarks>
         internal void CompleteAll()
         {

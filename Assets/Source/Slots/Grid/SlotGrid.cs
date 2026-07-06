@@ -142,8 +142,7 @@ namespace BalloonParty.Slots.Grid
             }
         }
 
-        // Diagnostics only: the path is laid straight through; rerouting around blockers/relocating
-        // balloons isn't implemented yet (Phase 9), so warn when the line crosses one.
+        // Diagnostics only — rerouting around blockers isn't implemented yet (Phase 9).
         private void WarnIfPathBlocked(int col, int row)
         {
             if (!InBounds(col, row))

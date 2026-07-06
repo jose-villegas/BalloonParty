@@ -9,11 +9,8 @@ namespace BalloonParty.UI.Binding
     internal static class ReactiveBinderRegistration
     {
         /// <summary>
-        ///     Gathers every <typeparamref name="TView" /> under <paramref name="scope" /> and registers
-        ///     a <see cref="ReactivePropertyBinder{TView,TValue}" /> entry point that binds them — at
-        ///     <c>Start</c> — to the reactive property <paramref name="selector" /> reads off
-        ///     <typeparamref name="TSource" /> (resolved from the parent scope). Safe when no views are
-        ///     present (empty array).
+        ///     Gathers every <typeparamref name="TView" /> under <paramref name="scope" /> and binds them to
+        ///     the reactive property <paramref name="selector" /> reads off <typeparamref name="TSource" />.
         /// </summary>
         public static void RegisterBoundViews<TView, TSource, TValue>(
             this IContainerBuilder builder,

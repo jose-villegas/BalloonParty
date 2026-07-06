@@ -12,12 +12,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Game.Score
 {
-    /// <summary>
-    ///     Score keeping only: streak-multiplied attribution of pops into points, publishing the score
-    ///     trails, and the lifetime/total tallies. Level progression (current level, per-colour progress,
-    ///     the level-up ceremony) lives in <c>LevelController</c>; this feeds it the capped points via
-    ///     <see cref="ILevelProgress.ClaimProgress" /> and otherwise stays out of levelling.
-    /// </summary>
+    /// <summary>Score keeping only — level progression lives in <c>LevelController</c>.</summary>
     internal class ScoreController : IStartable, IDisposable, IRunResettable, IRunScore
     {
         private readonly ILevelProgress _levelProgress;
@@ -32,7 +27,7 @@ namespace BalloonParty.Game.Score
 
         public IReadOnlyReactiveProperty<int> TotalScore => _totalScore;
 
-        // Score state has no teardown dependencies, so it resets after grid/gameplay state.
+        // Resets after grid/gameplay state — no teardown dependencies.
         public int ResetOrder => RunResetOrder.Score;
 
         public ScoreController(
@@ -78,8 +73,7 @@ namespace BalloonParty.Game.Score
             }
         }
 
-        // Invoked by HitPipeline as the first dispatch stage (not bus-subscribed) so the streak
-        // tracker is guaranteed current when Dispatch returns. Internal for direct test invocation.
+        // Invoked directly by HitPipeline, not bus-subscribed, so the streak tracker stays current.
         internal void OnActorHit(ActorHitMessage msg)
         {
             if (msg.Outcome != HitOutcome.Pop && msg.Outcome != HitOutcome.PassThrough)
@@ -97,11 +91,7 @@ namespace BalloonParty.Game.Score
             PublishAttributionGroup(attributions, msg.WorldPosition);
         }
 
-        /// <summary>
-        /// Publishes all attributions from a single <see cref="IHasScoreColor.ResolveScoreAttribution"/>
-        /// call as one scatter group. Every message shares the same <c>GroupSize</c> so the UI can
-        /// fan them out together regardless of how many colours are involved.
-        /// </summary>
+        /// <summary>Every message shares the same <c>GroupSize</c> so the UI can fan them out together.</summary>
         private void PublishAttributionGroup(IReadOnlyList<ScoreAttribution> attributions, Vector3 worldPosition)
         {
             if (attributions.Count == 0)
@@ -124,8 +114,7 @@ namespace BalloonParty.Game.Score
             PublishPoints(resolved, groupSize, worldPosition);
         }
 
-        // A single same-colour break extends the streak (and earns its multiplier); a mixed group
-        // breaks it. Returns the points multiplier to apply.
+        // A mixed group always breaks the streak.
         private int RecordStreakMultiplier(IReadOnlyList<ScoreAttribution> attributions)
         {
             if (attributions.Count == 1)
@@ -137,8 +126,7 @@ namespace BalloonParty.Game.Score
             return 1;
         }
 
-        // Claims each colour's streak-multiplied points against the level (which caps at the threshold
-        // and advances projected progress), keeping only what was granted plus its base for numbering.
+        // Keeps only what was granted (capped at the level threshold) plus its base for numbering.
         private void ResolveAttributions(
             IReadOnlyList<ScoreAttribution> attributions, int multiplier,
             List<(string Color, int Points, int BaseProgress)> resolved)
@@ -166,9 +154,7 @@ namespace BalloonParty.Game.Score
             return total;
         }
 
-        // Emits one ScorePointMessage per point, carrying the group size/index so the bars can animate
-        // the burst. Points are capped at the level threshold in ClaimProgress, so no point crosses into
-        // the next level — every point belongs to the current level.
+        // Points are capped at the level threshold, so every point belongs to the current level.
         private void PublishPoints(
             IReadOnlyList<(string Color, int Points, int BaseProgress)> resolved, int groupSize, Vector3 worldPosition)
         {

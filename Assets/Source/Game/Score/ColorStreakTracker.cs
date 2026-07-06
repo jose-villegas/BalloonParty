@@ -17,7 +17,7 @@ namespace BalloonParty.Game.Score
             ISubscriber<ProjectileLoadedMessage> projectileLoadedSubscriber)
         {
             _levelUpSubscription = levelUpSubscriber.Subscribe(_ => Reset());
-            // Each new throw starts its own chain — a streak never carries across turns.
+            // A streak never carries across turns.
             _projectileLoadedSubscription = projectileLoadedSubscriber.Subscribe(_ => Reset());
         }
 
@@ -32,11 +32,7 @@ namespace BalloonParty.Game.Score
             return LastColor == colorName ? CurrentStreak : 0;
         }
 
-        /// <summary>
-        /// Records a pop attribution. Returns the streak multiplier to apply to points.
-        /// When <paramref name="breaksStreak"/> is true the chain is reset and 1 is returned —
-        /// the attribution still scores but accrues no multiplier bonus.
-        /// </summary>
+        /// <summary>Records a pop attribution and returns the streak multiplier to apply to points.</summary>
         public int Record(string colorId, bool breaksStreak = false)
         {
             if (breaksStreak)

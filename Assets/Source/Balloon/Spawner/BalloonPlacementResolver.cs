@@ -6,13 +6,7 @@ using VContainer;
 
 namespace BalloonParty.Balloon.Spawner
 {
-    /// <summary>
-    ///     Decides which slot a line's balloon should take for a given column: its own column's reachable
-    ///     entry first, then (under pressure) the nearest other column that can accept it, then a column
-    ///     that pressure-balance can shove open using a gap anywhere on the board. Returns null when
-    ///     nothing frees a slot — the caller then rejects (overflow pop). Resolving a pressured column has
-    ///     the side effect of relieving pressure via the balancer.
-    /// </summary>
+    /// <summary>Picks the slot a column's new balloon should take, falling back to nearby columns under pressure.</summary>
     internal class BalloonPlacementResolver
     {
         private readonly SlotGrid _grid;
@@ -26,15 +20,12 @@ namespace BalloonParty.Balloon.Spawner
             _grid = grid;
             _balancer = balancer;
 
-            // Cached so the nearest-column scan doesn't allocate a delegate per blocked column.
+            // Cached to avoid a per-call delegate allocation.
             _resolveOpenEntry = ResolveOpenEntry;
             _resolvePressureOpen = ResolvePressureOpen;
         }
 
-        /// <summary>
-        ///     The slot this column's balloon should take, or null if none can be opened.
-        ///     <paramref name="allowReject"/> false (initial fill) restricts to the column's own entry.
-        /// </summary>
+        /// <summary><paramref name="allowReject"/> false (initial fill) restricts to the column's own entry.</summary>
         public Vector2Int? Resolve(int col, bool allowReject)
         {
             var ownRow = FindFirstReachableEmptyRow(col);
@@ -43,7 +34,7 @@ namespace BalloonParty.Balloon.Spawner
                 return new Vector2Int(col, ownRow.Value);
             }
 
-            // The initial fill never saturates, so only turn spawns search beyond the column.
+            // Initial fill never saturates, so only turn spawns search beyond the column.
             if (!allowReject)
             {
                 return null;
@@ -75,16 +66,9 @@ namespace BalloonParty.Balloon.Spawner
             return null;
         }
 
-        /// <summary>
-        /// Finds the topmost empty row reachable from the spawn entry (bottom of grid).
-        /// Balloons enter from below and travel upward. A non-traversable static actor
-        /// (e.g. bush) blocks vertical passage — the balloon can only reach slots below
-        /// the lowest blocker. This causes balloons to accumulate under bushes.
-        /// </summary>
+        /// <summary>Topmost empty row reachable from below without passing a non-traversable actor (e.g. a bush).</summary>
         private int? FindFirstReachableEmptyRow(int col)
         {
-            // Walk from bottom of grid upward — the first non-traversable blocker is
-            // the ceiling for this column. Balloons can't pass through it.
             var ceilingRow = -1;
             for (var row = _grid.Rows - 1; row >= 0; row--)
             {
@@ -111,9 +95,7 @@ namespace BalloonParty.Balloon.Spawner
             return null;
         }
 
-        // Scans columns nearest-first from <paramref name="fromCol"/> (left then right at each
-        // distance) and returns the first slot <paramref name="resolve"/> yields. startDistance 0
-        // includes the column itself; 1 skips it.
+        // Scans columns nearest-first from fromCol; startDistance 0 includes the column itself, 1 skips it.
         private bool TryNearestColumn(
             int fromCol,
             int startDistance,
@@ -132,8 +114,7 @@ namespace BalloonParty.Balloon.Spawner
             return false;
         }
 
-        // Checks the column(s) `distance` away from `fromCol`: just `fromCol` at distance 0,
-        // otherwise the left then right neighbour (skipping off-grid sides).
+        // Checks the column(s) `distance` away from `fromCol`, left neighbour before right.
         private bool TryAtDistance(int fromCol, int distance, Func<int, Vector2Int?> resolve, out Vector2Int target)
         {
             if (distance == 0)

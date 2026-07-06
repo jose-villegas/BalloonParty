@@ -7,15 +7,7 @@ using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Game.Cinematics
 {
-    /// <summary>
-    ///     The reusable camera-rig cinematic shape: a pan-in segment (optional timeScale drive + camera
-    ///     framing of an <see cref="ICinematicFocus"/> + an optional per-tick hook) followed by a restore
-    ///     segment (timeScale back to 1, camera back to base). Runs continuously when the config has an
-    ///     end condition, or as producer-driven split phases (<see cref="EndPanIn"/> …
-    ///     <see cref="TryBeginRestore"/>) around an external gate like the level-up popup. Segments and
-    ///     durations come from the states' <see cref="CameraRigCinematicSettings"/>. Owns its begin/end
-    ///     pairing and teardown (<see cref="Abort"/>), so producers stop carrying repair code.
-    /// </summary>
+    /// <summary>Owns its begin/end pairing and teardown so producers stop carrying repair code.</summary>
     internal sealed class CameraRigCinematic
     {
         private readonly CinematicDirector _director;
@@ -65,11 +57,7 @@ namespace BalloonParty.Game.Cinematics
             return true;
         }
 
-        /// <summary>
-        ///     Producer-driven end of a split pan-in: stops tweens and ends the cinematic while leaving
-        ///     the camera where it is (the rig keeps its captured base for the later restore). No-op
-        ///     unless the pan-in is running.
-        /// </summary>
+        /// <summary>Ends the cinematic but leaves the camera in place for the later restore; no-op unless running.</summary>
         public void EndPanIn()
         {
             if (!_panInRunning)
@@ -97,10 +85,7 @@ namespace BalloonParty.Game.Cinematics
             return true;
         }
 
-        /// <summary>
-        ///     Hard teardown for owner disposal: kills tweens, restores time and camera, ends the
-        ///     cinematic if it is still this runner's.
-        /// </summary>
+        /// <summary>Hard teardown for owner disposal: kills tweens, restores time and camera.</summary>
         public void Abort()
         {
             KillTimeScaleTween();
@@ -118,8 +103,7 @@ namespace BalloonParty.Game.Cinematics
                 _director.EndCinematic();
             }
 
-            // Snap camera and framing back to base (also re-enables the ortho controller) — an abort
-            // can happen mid-flight in gameplay, not just on teardown.
+            // Abort can happen mid-flight in gameplay, not just on teardown.
             _rig.KillTween();
             _rig.Restore();
             _timeScale.Release(TimeScaleSource.Cinematic);
@@ -139,7 +123,7 @@ namespace BalloonParty.Game.Cinematics
 
             _config.OnPanInTick?.Invoke(dt, curveValue);
 
-            // The hook may end the pan-in (a tracked trail arriving) — don't frame or roll on after it.
+            // The hook may end the pan-in — don't frame or roll on after it.
             if (!_panInRunning)
             {
                 return;
@@ -153,7 +137,6 @@ namespace BalloonParty.Game.Cinematics
             }
         }
 
-        // The continuous form: the restore continues the active cinematic (state switch, no gate).
         private void RollIntoRestore()
         {
             _panInRunning = false;
@@ -171,8 +154,7 @@ namespace BalloonParty.Game.Cinematics
 
             if (_config.RestoreEvaluatesCurve)
             {
-                // Sample the curve absolutely — the level-up ramps from the popup's frozen 0, where
-                // "from current" would be meaningless.
+                // Sample absolutely — the level-up ramps from the popup's frozen 0.
                 var elapsed = 0f;
                 _timeScaleTween = DOTween.To(
                         () => elapsed,
@@ -189,8 +171,7 @@ namespace BalloonParty.Game.Cinematics
             }
             else
             {
-                // Tween from the CURRENT timeScale, so an early end (e.g. game-over during the pan-in
-                // ramp) doesn't snap speed down before ramping back up.
+                // Tween from the CURRENT timeScale so an early end doesn't snap speed down first.
                 _timeScaleTween = DOTween.To(
                         () => Time.timeScale,
                         x => _timeScale.Claim(TimeScaleSource.Cinematic, x),

@@ -9,10 +9,7 @@ namespace BalloonParty.Configuration.Editor
     [CustomPropertyDrawer(typeof(ItemSettings))]
     public class ItemSettingsDrawer : AutoFieldPropertyDrawer
     {
-        /// <summary>
-        ///     Skipped by the auto common-field pass: the per-type sub-settings containers and the
-        ///     shared <c>_damage</c>, both drawn per active type in <see cref="DrawSpecialFields"/>.
-        /// </summary>
+        /// <summary>Skipped by the auto common-field pass; drawn per active type in <see cref="DrawSpecialFields"/> instead.</summary>
         protected override HashSet<string> ExcludedFields { get; } = new()
         {
             "_damage",
@@ -162,7 +159,7 @@ namespace BalloonParty.Configuration.Editor
                     return row * 7;
 
                 case ItemType.Paint:
-                    // 1 "Paint" header + 6 blob fields + 1 "Spread" header + 4 spread fields.
+                    // 2 headers + 6 blob fields + 4 spread fields.
                     return row * 12;
 
                 default:

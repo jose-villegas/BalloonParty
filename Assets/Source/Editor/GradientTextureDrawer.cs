@@ -5,18 +5,10 @@ using UnityEngine;
 namespace BalloonParty.Editor
 {
     /// <summary>
-    ///     Replaces the default texture slot for any 2D shader property with
-    ///     Unity's native gradient picker. On every committed change the gradient
-    ///     is baked to a 128×1 <see cref="Texture2D" /> sub-asset embedded in the
-    ///     material file and assigned to the property automatically.
+    ///     Replaces the default texture slot for a 2D shader property with a native gradient picker, baked to a texture sub-asset.
     /// </summary>
     /// <remarks>
-    ///     Usage in ShaderLab:
-    ///     <code>[GradientTexture] _MyTex ("Label", 2D) = "white" {}</code>
-    ///     The gradient definition is stored in <c>AssetImporter.userData</c> (the
-    ///     material's <c>.meta</c> file) so it persists across domain reloads and
-    ///     version control. Multiple <c>[GradientTexture]</c> properties on the same
-    ///     material are keyed separately by property name.
+    ///     Usage: <code>[GradientTexture] _MyTex ("Label", 2D) = "white" {}</code>
     /// </remarks>
     public class GradientTextureDrawer : MaterialPropertyDrawer
     {
@@ -47,7 +39,7 @@ namespace BalloonParty.Editor
                 BakeAndApply(material, prop, updated);
             }
 
-            // First open — no texture assigned yet; bake the default.
+            // First open — no texture assigned yet.
             if (prop.textureValue == null)
             {
                 BakeAndApply(material, prop, gradient);
@@ -220,8 +212,7 @@ namespace BalloonParty.Editor
         }
 
         /// <summary>
-        ///     Plain-struct wrapper because JsonUtility cannot serialise
-        ///     Gradient as a root object directly.
+        ///     Plain-struct wrapper — JsonUtility cannot serialise Gradient directly.
         /// </summary>
         [Serializable]
         private class GradientStorage

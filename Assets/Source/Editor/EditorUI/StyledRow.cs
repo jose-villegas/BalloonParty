@@ -18,11 +18,7 @@ namespace BalloonParty.Editor.EditorUI
         }
 
         /// <summary>
-        ///     Begins a horizontal row with an optional background tint.
-        ///     Restores <see cref="GUI.backgroundColor"/> immediately after
-        ///     <see cref="EditorGUILayout.BeginHorizontal(GUIStyle, GUILayoutOption[])"/>
-        ///     so only the row background is tinted.
-        ///     The caller must call <see cref="EditorGUILayout.EndHorizontal"/> to close the row.
+        ///     Begins a horizontal row with an optional background tint; caller must call <see cref="EditorGUILayout.EndHorizontal"/>.
         /// </summary>
         internal static void BeginHighlightedRow(bool highlight, Color highlightColor)
         {

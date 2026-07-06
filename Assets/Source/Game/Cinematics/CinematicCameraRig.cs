@@ -8,12 +8,7 @@ using BalloonParty.Configuration.Cinematics;
 namespace BalloonParty.Game.Cinematics
 {
     /// <summary>
-    ///     The one cinematic camera driver, shared by every camera-rig cinematic (DI singleton fed by
-    ///     <see cref="CinematicCameraView" />): captures the gameplay framing, zooms/pans per the active
-    ///     segment's <see cref="CameraRigCinematicSettings" /> while keeping the
-    ///     <see cref="ICinematicFocus" /> inside the orthographic frustum, then tweens everything back on
-    ///     restore. The <see cref="OrthogonalSizeCameraController" /> is disabled for the duration so it
-    ///     doesn't fight these moves. All tweens run in unscaled time (segments warp Time.timeScale).
+    ///     The shared cinematic camera driver — all tweens run in unscaled time since segments warp Time.timeScale.
     /// </summary>
     internal class CinematicCameraRig
     {
@@ -81,18 +76,11 @@ namespace BalloonParty.Game.Cinematics
         }
 
         /// <summary>
-        ///     Standalone tweened return to base framing (position + orthographic size) over
-        ///     <paramref name="duration" /> in unscaled time, re-enabling the ortho controller on
-        ///     completion. Unlike <see cref="PrepareRestore" /> (a segment step of the shared runner),
-        ///     this owns its own completion, so a producer can un-zoom without driving the whole
-        ///     restore-segment machinery — used by the level-up dismiss now that the Ascent moves the
-        ///     scenario rather than the camera.
+        ///     Standalone tweened return to base framing, owning its own completion unlike <see cref="PrepareRestore" />.
         /// </summary>
         public void RestoreTweened(float duration)
         {
-            // No captured base (the pan-in never ran) means there's nothing to un-zoom to — restoring
-            // to the uninitialized base would fling the camera to the origin. Just leave the controller
-            // enabled. Safe to call unconditionally (e.g. from the level transition on every dismiss).
+            // No captured base state means nothing to un-zoom to — just leave the controller enabled.
             if (_camera == null || !_hasBaseState)
             {
                 EnableOrtho(true);
@@ -109,10 +97,7 @@ namespace BalloonParty.Game.Cinematics
         }
 
         /// <summary>
-        ///     Pans toward the focus per the segment's pan weight / follow speed, keeping the focus box in
-        ///     frustum. A single-point focus (min == max) is hard-clamped after easing — it can never
-        ///     outgrow the view and must never leave it; a spread is clamped before easing, so a far new
-        ///     point slides the framing in smoothly instead of snapping.
+        ///     Pans toward the focus, keeping it in frustum; a single-point focus is hard-clamped after easing, a spread before.
         /// </summary>
         public void Frame(ICinematicFocus focus, CameraRigCinematicSettings segment, float dt)
         {

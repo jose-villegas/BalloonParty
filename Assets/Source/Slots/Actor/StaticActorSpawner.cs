@@ -21,8 +21,7 @@ namespace BalloonParty.Slots.Actor
     {
         private readonly Dictionary<SlotPlacementMode, ISlotSelectionStrategy> _strategyCache = new();
 
-        // One registration line per actor type — the model self-reports its GridActorType, so adding a
-        // type means adding the model + an entry here, never editing a switch.
+        // Add a type by adding the model + an entry here, never a switch.
         private readonly Dictionary<GridActorType, System.Func<IWriteableSlotActor>> _modelFactories = new()
         {
             { GridActorType.Puff, () => new PuffObstacleModel() },
@@ -59,7 +58,7 @@ namespace BalloonParty.Slots.Actor
             _scenarioRoot = scenarioRoot;
         }
 
-        // Bypasses pool and MonoBehaviour infrastructure — used in tests.
+        // Test-only: bypasses pool and MonoBehaviour infrastructure.
         internal StaticActorSpawner(SlotGrid grid, IGridActorConfiguration gridActorConfig, IActiveLevelParameters levelParams)
         {
             _grid = grid;
@@ -92,7 +91,7 @@ namespace BalloonParty.Slots.Actor
 
                 if (!_levelParams.Current.TryGetGridActorCount(entry.ActorType, out var levelCount))
                 {
-                    // Absent from this level's range — the type gate (mirrors the balloon gate).
+                    // Absent from this level's range.
                     continue;
                 }
 
@@ -121,8 +120,7 @@ namespace BalloonParty.Slots.Actor
             {
                 view = _poolManager.Get<GridActorView>(entry.PoolKey);
 
-                // Parent under the scenario root (at the origin during a normal spawn) so the
-                // level-transition Ascent can lift and slide the whole scenario as one unit.
+                // Parent under the scenario root so Ascent can move the whole scenario as one unit.
                 view.transform.SetParent(_scenarioRoot?.Transform, false);
                 view.transform.position = _grid.IndexToWorldPosition(slot);
             }
@@ -141,9 +139,7 @@ namespace BalloonParty.Slots.Actor
             ClearStaticActors();
         }
 
-        // Returns every static actor to its pool. Callable directly (not just via BoardClearMessage)
-        // so the level-transition Ascent can clear the old scenario's statics on its own beat —
-        // without also nuking the balloons, which the pop wave is popping in parallel.
+        // Callable directly so Ascent can clear old statics without touching balloons mid-pop.
         internal void ClearStaticActors()
         {
             if (!_poolsRegistered)
@@ -151,9 +147,6 @@ namespace BalloonParty.Slots.Actor
                 return;
             }
 
-            // StaticActorSpawner owns the Get(), so it owns the Return(). Removing each slot
-            // fires SlotGrid.OnChanged(Removed), which the cluster registries consume to dissolve
-            // their clusters incrementally — no explicit rebuild needed for the clear.
             foreach (var entry in _gridActorConfig.Entries)
             {
                 ReturnActorsForEntry(entry);

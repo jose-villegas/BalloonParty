@@ -1,50 +1,37 @@
 namespace BalloonParty.Editor.EffectPreview
 {
     /// <summary>
-    ///     Pluggable preview module for <see cref="EffectViewPreviewPlayer" />.
-    ///     Each effect view type implements its own module to handle custom
-    ///     rendering logic (blobs, line renderers, particles, etc.) while
-    ///     the player manages the shared animation loop, color picker, and
-    ///     config caching.
+    ///     Pluggable preview module for <see cref="EffectViewPreviewPlayer" />; handles per-effect rendering while the player manages the shared loop.
     /// </summary>
     internal interface IEffectPreviewModule
     {
         /// <summary>
         ///     Whether this module needs a palette color picker in the inspector.
-        ///     When <c>false</c>, the player omits the picker and passes
-        ///     <see cref="UnityEngine.Color.white" /> as the tint.
         /// </summary>
         bool UsesColorPicker { get; }
 
         /// <summary>
-        ///     Draw type-specific inspector controls (sliders, labels).
-        ///     Called inside the player's disabled scope — controls are
-        ///     automatically grayed out during playback.
+        ///     Draws type-specific inspector controls.
         /// </summary>
         void DrawGUI();
 
         /// <summary>
-        ///     Initialize the preview with the given context.
-        ///     Called once when the user clicks Play.
+        ///     Initializes the preview; called once when the user clicks Play.
         /// </summary>
         void Start(EffectPreviewContext context);
 
         /// <summary>
-        ///     Advance the animation by <paramref name="delta" /> seconds.
-        ///     Return <c>true</c> to keep running, <c>false</c> when complete.
+        ///     Advances the animation by <paramref name="delta" /> seconds; returns <c>false</c> when complete.
         /// </summary>
         bool Tick(float delta);
 
         /// <summary>
-        ///     Tear down all preview state (hide objects, destroy temporaries).
-        ///     Called on Stop or when the animation finishes.
+        ///     Tears down all preview state; called on Stop or when the animation finishes.
         /// </summary>
         void CleanUp();
 
         /// <summary>
-        ///     Draw persistent Scene-view guides for the effect (region outlines, target markers) via
-        ///     <see cref="UnityEditor.Handles" />. Called from the host editor's <c>OnSceneGUI</c>, so it
-        ///     runs whether or not the preview is playing. Modules with nothing to show leave it empty.
+        ///     Draws persistent Scene-view guides via <see cref="UnityEditor.Handles" />; runs whether or not the preview is playing.
         /// </summary>
         void DrawSceneGizmos();
     }

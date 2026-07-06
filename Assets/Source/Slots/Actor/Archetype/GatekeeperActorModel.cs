@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    // Blocks a column until destroyed. Deflects until HitsRemaining reaches zero, then pops.
+    // Deflects until HitsRemaining reaches zero, then pops.
     internal class GatekeeperActorModel : IWriteableSlotActor, IHasDurability
     {
         public ReactiveProperty<int> HitsRemaining { get; }

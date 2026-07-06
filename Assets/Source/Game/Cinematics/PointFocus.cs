@@ -3,11 +3,7 @@ using UnityEngine;
 
 namespace BalloonParty.Game.Cinematics
 {
-    /// <summary>
-    ///     A single-point <see cref="ICinematicFocus" /> reading a live position (the level-up's tipping
-    ///     trail). min == max == center, which the rig treats as "hard-clamp after easing" — one point
-    ///     never widens the box past the view, and it must never leave the frustum.
-    /// </summary>
+    /// <summary>min == max == center, which the rig treats as "hard-clamp after easing."</summary>
     internal sealed class PointFocus : ICinematicFocus
     {
         private readonly Func<Vector3> _position;

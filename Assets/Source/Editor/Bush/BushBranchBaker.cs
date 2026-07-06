@@ -4,9 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Editor.Bush
 {
     /// <summary>
-    /// Renders fractal branch segments into a branch map texture using an
-    /// offscreen camera and a procedural mesh. Follows the same bake pattern
-    /// as <see cref="BushLeafBaker"/>.
+    /// Renders fractal branch segments into a branch map texture using an offscreen camera and a procedural mesh.
     /// </summary>
     internal static class BushBranchBaker
     {
@@ -73,11 +71,11 @@ namespace BalloonParty.Editor.Bush
                 vertices[baseIdx + 2] = new Vector3(v2.x, v2.y, 0f);
                 vertices[baseIdx + 3] = new Vector3(v3.x, v3.y, 0f);
 
-                // Encode direction and depth in vertex color
+                // Direction and depth are encoded in vertex color.
                 var dirR = Mathf.Cos(seg.DirectionAngle) * 0.5f + 0.5f;
                 var dirG = Mathf.Sin(seg.DirectionAngle) * 0.5f + 0.5f;
                 var depth = Mathf.Clamp01(seg.Depth);
-                // Ensure trunk (depth=0) still has some alpha so it renders
+                // Trunk (depth=0) still needs some alpha to render.
                 var alpha = Mathf.Lerp(0.3f, 1f, depth);
                 var color = new Color(dirR, dirG, 0f, alpha);
 
@@ -86,7 +84,7 @@ namespace BalloonParty.Editor.Bush
                 colors[baseIdx + 2] = color;
                 colors[baseIdx + 3] = color;
 
-                // UV.x: 0 at left edge, 1 at right edge (drives AA)
+                // UV.x drives edge AA: 0 left, 1 right.
                 uvs[baseIdx + 0] = new Vector2(0f, 0f);
                 uvs[baseIdx + 1] = new Vector2(1f, 0f);
                 uvs[baseIdx + 2] = new Vector2(0f, 1f);

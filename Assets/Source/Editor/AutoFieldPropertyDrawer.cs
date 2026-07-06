@@ -5,20 +5,12 @@ using UnityEngine;
 namespace BalloonParty.Editor
 {
     /// <summary>
-    ///     Base class for property drawers that want common fields drawn automatically
-    ///     via serialized-property reflection, with a manually-handled section for
-    ///     fields that need special layout (variable height, conditional visibility, etc.).
-    ///
-    ///     Subclasses must override <see cref="ExcludedFields"/>, <see cref="GetSpecialFieldsHeight"/>,
-    ///     and <see cref="DrawSpecialFields"/>. Optionally override <see cref="BuildFoldoutLabel"/>,
-    ///     <see cref="DrawPinnedFields"/>, and <see cref="GetPinnedFieldsHeight"/> for fields
-    ///     that must appear above the auto-drawn common section.
+    ///     Base class for property drawers that auto-draw common fields, with a manual section for fields needing special layout.
     /// </summary>
     public abstract class AutoFieldPropertyDrawer : PropertyDrawer
     {
         /// <summary>
-        ///     Serialized field names skipped by the automatic common-field pass.
-        ///     Must be handled explicitly in <see cref="DrawPinnedFields"/> or <see cref="DrawSpecialFields"/>.
+        ///     Field names skipped by the automatic pass; handle these in <see cref="DrawPinnedFields"/> or <see cref="DrawSpecialFields"/>.
         /// </summary>
         protected abstract HashSet<string> ExcludedFields { get; }
 
@@ -67,9 +59,7 @@ namespace BalloonParty.Editor
         }
 
         /// <summary>
-        ///     Builds the label shown on the foldout header row.
-        ///     Override to append type tags or other contextual text.
-        ///     Default returns <paramref name="label"/> unchanged.
+        ///     Label shown on the foldout header row; default returns <paramref name="label"/> unchanged.
         /// </summary>
         protected virtual GUIContent BuildFoldoutLabel(GUIContent label, SerializedProperty property)
         {
@@ -77,10 +67,7 @@ namespace BalloonParty.Editor
         }
 
         /// <summary>
-        ///     Draws fields that must appear above the auto section, such as an enum
-        ///     discriminator whose value drives <see cref="BuildFoldoutLabel"/>.
-        ///     Returns the updated Y position.
-        ///     Override together with <see cref="GetPinnedFieldsHeight"/>. Default does nothing.
+        ///     Draws fields pinned above the auto section; override with <see cref="GetPinnedFieldsHeight"/>. Default does nothing.
         /// </summary>
         protected virtual float DrawPinnedFields(Rect position, float y, SerializedProperty property)
         {
@@ -93,8 +80,7 @@ namespace BalloonParty.Editor
         protected abstract float DrawSpecialFields(Rect position, float y, SerializedProperty property);
 
         /// <summary>
-        ///     Returns the pixel height of any fields pinned above the auto section.
-        ///     Override together with <see cref="DrawPinnedFields"/>. Default returns 0.
+        ///     Height of fields pinned above the auto section; override with <see cref="DrawPinnedFields"/>. Default returns 0.
         /// </summary>
         protected virtual float GetPinnedFieldsHeight(SerializedProperty property)
         {
@@ -102,7 +88,7 @@ namespace BalloonParty.Editor
         }
 
         /// <summary>
-        ///     Returns the total pixel height required by the special (excluded) section.
+        ///     Total pixel height required by the special (excluded) section.
         /// </summary>
         protected abstract float GetSpecialFieldsHeight(SerializedProperty property);
     }

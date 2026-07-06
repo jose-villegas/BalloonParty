@@ -38,12 +38,7 @@ using VContainer.Unity;
 namespace BalloonParty.Game
 {
     /// <summary>
-    ///     Per-section registration for <see cref="GameLifetimeScope"/>, split out to keep
-    ///     the scope readable. Each method registers one contiguous slice of the container in
-    ///     its original order — the slices are NOT reordered relative to one another, because
-    ///     VContainer starts entry points in registration order and the game relies on it
-    ///     (e.g. <c>LevelDifficultyResolver</c> before <c>BalloonSpawner</c>, and MessagePipe
-    ///     subscriber order). Call them in the sequence declared here.
+    ///     Per-section registration for <see cref="GameLifetimeScope"/> — call in the sequence declared here; VContainer starts entry points in registration order.
     /// </summary>
     internal static class GameScopeRegistration
     {
@@ -99,9 +94,7 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<SlotGridView>();
         }
 
-        // One block on purpose: these entry points start in registration order and the game
-        // depends on it (the LevelDifficultyResolver → BalloonSpawner note below). Do not
-        // reorder or split without re-checking start-order and MessagePipe subscription order.
+        // Do not reorder or split — entry points start in registration order and the game depends on it.
         internal static void RegisterGameplaySystems(this IContainerBuilder builder)
         {
             builder.RegisterEntryPoint<BalloonBalancer>().AsSelf().As<IRunResettable>();
@@ -122,8 +115,7 @@ namespace BalloonParty.Game
             builder.Register<BalloonControllerContext>(Lifetime.Singleton);
             builder.Register<BalloonPlacementResolver>(Lifetime.Singleton);
             builder.Register<BalloonFactory>(Lifetime.Singleton);
-            // Registered before BalloonSpawner so its Start() (synchronous ResolveFor(1)) runs first —
-            // BalloonSpawner's own Start() reads IActiveLevelParameters during prewarm sizing.
+            // Registered before BalloonSpawner, which reads IActiveLevelParameters during prewarm sizing.
             builder.RegisterEntryPoint<LevelDifficultyResolver>().AsSelf().As<IActiveLevelParameters>().As<ILevelThresholds>().As<IRunResettable>();
             builder.RegisterEntryPoint<BalloonSpawner>().As<IGridSpawner>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<ScoreController>().AsSelf().As<IRunScore>().As<IRunResettable>();

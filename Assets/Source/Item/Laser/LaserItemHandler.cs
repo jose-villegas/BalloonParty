@@ -28,8 +28,7 @@ namespace BalloonParty.Item.Laser
         private readonly HashSet<IBalloonModel> _hitModels = new();
         private readonly DisturbanceFieldService _disturbanceField;
 
-        // Legitimately cross-activation: rotations arrive via TransformCapturedMessage before the
-        // activation reaches this handler, keyed per balloon and consumed once on activation.
+        // Cross-activation: rotation arrives via TransformCapturedMessage before activation.
         private readonly Dictionary<ISlotActor, Quaternion> _capturedRotations = new();
 
         public ItemType Type => ItemType.Laser;

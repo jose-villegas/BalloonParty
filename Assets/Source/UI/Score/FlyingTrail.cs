@@ -17,10 +17,7 @@ namespace BalloonParty.UI.Score
         [SerializeField] private SpriteRenderer _renderer;
         [SerializeField] private TrailRenderer _trailRenderer;
 
-        // Per-TrailMotion style (Move ease + Scale factor + colour Gradient sampled over the flight),
-        // indexed by the enum's ordinal (O(1)). Index 0 (Default) holds the base curves; a motion with a
-        // null curve — or one past the end of the array — falls back to Default, then to a linear 0→1.
-        // Colour precedence: caller's explicit colour > motion gradient > prefab colour.
+        // Indexed by TrailMotion ordinal; missing/out-of-range entries fall back to index 0, then linear 0→1.
         [EnumIndexed(typeof(TrailMotion))]
         [SerializeField] private MotionStyle[] _motions;
 
@@ -59,8 +56,7 @@ namespace BalloonParty.UI.Score
             _followElapsed += dt;
             var t = Mathf.Clamp01(_followElapsed / _followDuration);
 
-            // Curve-eased progress from the launch point to the target's *current* position, so the trail
-            // follows the balloon as the pile compacts yet still lands on it exactly at t = 1.
+            // Re-evaluates target() each frame so a moving target is still hit exactly at t = 1.
             transform.position = Vector3.LerpUnclamped(_followStart, _followTarget(), _followCurve.Evaluate(t));
             transform.localScale = _defaultScale * _followScaleCurve.Evaluate(t);
             SampleFlightColor(t);
@@ -76,8 +72,7 @@ namespace BalloonParty.UI.Score
 
         public void OnSpawned()
         {
-            // Reset to the prefab's authored colour on every fetch, so a pooled trail never inherits a
-            // previous use's tint. Setup then layers an explicit or per-motion colour on top when asked.
+            // Reset to authored colour so a pooled trail never inherits a previous tint.
             ApplyColor(_defaultColor);
         }
 
@@ -137,9 +132,7 @@ namespace BalloonParty.UI.Score
         }
 
         /// <summary>
-        /// Two-phase flight: bloom out from current position to <paramref name="burstTo"/>,
-        /// then follow the normal curve to <paramref name="target"/>.
-        /// The scale factor spans the full journey so the orb sizes continuously.
+        /// Two-phase flight: bloom to <paramref name="burstTo"/>, then curve to <paramref name="target"/>.
         /// </summary>
         public void SetupBurst(
             Vector3 burstTo,
@@ -164,11 +157,7 @@ namespace BalloonParty.UI.Score
         }
 
         /// <summary>
-        /// Homes on a live-updating target rather than a fixed point: over <paramref name="duration"/> it
-        /// eases from its launch position to <paramref name="targetProvider"/>()'s current value along the
-        /// move curve for <paramref name="motion"/>, firing <paramref name="onArrived"/> at the end. Lets a
-        /// trail chase a moving object (an overflow balloon still sliding as the pile compacts) and land on
-        /// it exactly, with the same curve control as the fixed-point flights.
+        /// Homes on a live-updating target instead of a fixed point, firing <paramref name="onArrived"/> at the end.
         /// </summary>
         public void SetupFollow(
             Func<Vector3> targetProvider,
@@ -197,15 +186,13 @@ namespace BalloonParty.UI.Score
             _moveTween = null;
         }
 
-        // The curved flight to a target that both the plain flight and the burst's second leg share.
+        // Shared by the plain flight and the burst's second leg.
         private void TraceTo(Vector3 target, float duration, bool useUnscaledTime, TrailMotion motion)
         {
             _moveTween = transform.DOMove(target, duration).SetEase(MoveCurveFor(motion)).SetUpdate(useUnscaledTime);
         }
 
-        // Drives everything keyed to normalized flight time: uniform scale as an absolute factor of the
-        // prefab's base scale (1 = authored size, 0 = gone — shrink, grow, or hold), and the armed motion
-        // gradient. Owns the completion callback (fires when the flight's duration elapses).
+        // Drives scale and colour over normalized flight time; fires onCompleted when duration elapses.
         private void AnimateOverFlight(float duration, bool useUnscaledTime, TrailMotion motion, Action onCompleted)
         {
             var curve = ScaleCurveFor(motion);
@@ -263,9 +250,7 @@ namespace BalloonParty.UI.Score
             return LinearFallback;
         }
 
-        // Arms the motion's gradient for this flight (sampled over normalized flight time by the
-        // progress drivers) and tints to its start; a motion without an override leaves the colour
-        // reset by OnSpawned (the prefab default) in place.
+        // A motion without an override leaves the OnSpawned default colour in place.
         private void BeginMotionGradient(TrailMotion motion)
         {
             var i = (int)motion;
@@ -300,18 +285,15 @@ namespace BalloonParty.UI.Score
         [Serializable]
         private struct MotionStyle
         {
-            // Easing of the flight path over normalized time (0,0 → 1,1 = constant speed).
+            // Path easing over normalized time (0,0 → 1,1 = constant speed).
             public AnimationCurve Move;
 
-            // Size as an absolute factor of the prefab's base scale over normalized time: 1 = authored
-            // size, 0 = gone, 2 = double. A flat 1 holds constant; 1→0 shrinks; 0→1 grows in.
+            // Scale as a factor of base scale over normalized time (1 = authored size, 0 = gone).
             public AnimationCurve Scale;
 
             public bool OverrideColor;
 
-            // Colour over normalized flight time — sampled every frame, so a flight can shift hue as it
-            // travels (a flat gradient is a static tint). AllowNesting lets NaughtyAttributes evaluate
-            // ShowIf inside this nested (array-element) struct.
+            // AllowNesting lets NaughtyAttributes evaluate ShowIf inside this array-element struct.
             [ShowIf(nameof(OverrideColor))]
             [AllowNesting]
             public Gradient Gradient;

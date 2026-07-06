@@ -61,9 +61,7 @@ namespace BalloonParty.Shared.Extensions
             return effect;
         }
 
-        // These run on every balloon pop: the key comes from PoolManager's prefab-key cache
-        // (Object.name allocates a fresh string per access) and registration is checked
-        // explicitly (GetOrRegister's factory closure allocates even when already registered).
+        // Runs per balloon pop — avoids GetOrRegister's allocating factory closure when already registered.
         private static PoolableParticle GetPooledParticle(PoolManager pool, ParticleSystem prefab)
         {
             var key = pool.KeyFor(prefab);

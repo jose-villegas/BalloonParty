@@ -6,11 +6,7 @@ using BalloonParty.Configuration.Cinematics;
 namespace BalloonParty.Configuration.Cinematics
 {
     /// <summary>
-    ///     Everything one <see cref="CinematicState" /> declares, composed from uniform blocks: its
-    ///     behavioural <see cref="CinematicTraits" />, the camera-rig segment it plays
-    ///     (<see cref="CameraRigCinematicSettings" /> — a restore is just another segment whose curve
-    ///     ramps back to 1), and optional capability blocks (<see cref="TrackedTrailSettings" />).
-    ///     Indexed by the state's ordinal in <see cref="CinematicsSettings" />.
+    ///     Everything one <see cref="CinematicState" /> declares, indexed by its ordinal in <see cref="CinematicsSettings" />.
     /// </summary>
     [Serializable]
     internal class CinematicStateEntry

@@ -8,10 +8,7 @@ namespace BalloonParty.Balloon.Model
     {
         BalloonType TypeName { get; }
 
-        /// <summary>
-        ///     Opaque slot index into <c>BalloonControllerRegistry</c>, -1 while unregistered.
-        ///     Written only by the registry; consumers must not interpret or store it.
-        /// </summary>
+        /// <summary>Opaque slot index into <c>BalloonControllerRegistry</c>, -1 while unregistered; consumers must not interpret it.</summary>
         int RegistryHandle { get; }
     }
 }

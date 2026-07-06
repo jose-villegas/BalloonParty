@@ -4,15 +4,12 @@ using UnityEngine;
 namespace BalloonParty.Shared.Rendering
 {
     /// <summary>
-    ///     Shared Gizmo drawing primitives for <c>OnDrawGizmos</c> callbacks.
-    ///     Runtime-accessible counterpart to the editor-only <c>SceneDrawingHelper</c>
-    ///     (which uses <c>Handles</c>). Both helpers share the same method signatures
-    ///     and coordinate conventions for rectangle drawing.
+    ///     Shared Gizmo drawing primitives for <c>OnDrawGizmos</c> callbacks; mirrors <c>SceneDrawingHelper</c>.
     /// </summary>
     public static class GizmoDrawingHelper
     {
         /// <summary>
-        ///     Draws a world-space axis-aligned rectangle defined by center, width and height.
+        ///     Draws a world-space axis-aligned rectangle from center, width and height.
         /// </summary>
         public static void DrawWorldRect(
             Vector3 center,
@@ -33,8 +30,7 @@ namespace BalloonParty.Shared.Rendering
         }
 
         /// <summary>
-        ///     Draws a world-space axis-aligned rectangle defined by explicit edge positions
-        ///     (top, right, bottom, left — clockwise from top, matching CSS / <c>Vector4</c> convention).
+        ///     Draws a world-space axis-aligned rectangle from edge positions (top, right, bottom, left).
         /// </summary>
         public static void DrawWorldRectFromLimits(
             float top,

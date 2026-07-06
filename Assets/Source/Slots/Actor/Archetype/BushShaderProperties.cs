@@ -2,13 +2,7 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {
-    /// <summary>
-    /// Cached shader property identifiers and keywords shared by the bush material
-    /// authoring (<see cref="BushMaterialSet"/>) and per-instance leaf data
-    /// (<see cref="BushRenderDataBuilder"/> / <see cref="BushView"/>). Leaf and branch
-    /// shaders deliberately reuse the same names for shadow and sprite-scale props, so
-    /// a single id per name serves both.
-    /// </summary>
+    /// <summary>Leaf and branch shaders deliberately reuse the same shadow/sprite-scale prop names, so one id serves both.</summary>
     internal static class BushShaderProperties
     {
         internal const string RattleKeyword = "_RATTLE_ON";

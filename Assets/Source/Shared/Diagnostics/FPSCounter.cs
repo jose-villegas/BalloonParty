@@ -61,9 +61,7 @@ namespace BalloonParty.Shared.Diagnostics
                     ? _warnColor
                     : _badColor;
 
-            // Rebuild the label only when the sampled values change (every UpdateInterval) —
-            // per-OnGUI string + GUIContent allocs would pollute the GC profiles this overlay
-            // is used to read.
+            // Rebuild only on change — per-OnGUI allocs would pollute the GC profile this overlay reads.
             if (_labelFps != _currentFps || _labelWorst != _worstFps)
             {
                 _labelFps = _currentFps;

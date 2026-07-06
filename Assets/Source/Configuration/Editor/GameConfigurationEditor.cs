@@ -6,9 +6,7 @@ using UnityEngine;
 namespace BalloonParty.Configuration.Editor
 {
     /// <summary>
-    ///     Draws the map limits rectangle in the Scene view whenever a
-    ///     <see cref="GameConfiguration"/> asset exists in the project.
-    ///     Active in both edit and play mode, regardless of inspector selection.
+    ///     Draws the map limits rectangle in the Scene view whenever a <see cref="GameConfiguration"/> asset exists.
     /// </summary>
     [InitializeOnLoad]
     internal static class MapLimitsSceneOverlay

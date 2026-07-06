@@ -15,12 +15,7 @@ using BalloonParty.Configuration.Palette;
 namespace BalloonParty.Item.Paint
 {
     /// <summary>
-    ///     Handles the Paint item. On activation it lays a triangular region out along the projectile's
-    ///     travel direction (see <see cref="PaintTriangle" />), circle-packs it with blob VFX flung from
-    ///     the hit point, and — as those blobs land — recolours every balloon within a blob's radius to
-    ///     the popped balloon's colour (Splatoon-style), so painting tracks the visible splash coverage.
-    ///     The triangle's offset, length, base width, and blob radius are authored per item in
-    ///     <see cref="PaintSettings" />.
+    ///     Handles the Paint item: recolours balloons within landed blob radii of a packed splash triangle.
     /// </summary>
     internal class PaintItemHandler : IBalloonItem
     {
@@ -108,8 +103,7 @@ namespace BalloonParty.Item.Paint
 
             return UniTask.CompletedTask;
 
-            // Stamps where the blob lands and recolours what it covers. Captures only this activation's
-            // locals — a later splash may outlive it, so no handler field may be read here.
+            // Captures only this activation's locals — a later splash may outlive it.
             void PaintBlob(int index)
             {
                 if (index < 0 || index >= blobPositions.Count)
@@ -124,8 +118,7 @@ namespace BalloonParty.Item.Paint
             }
         }
 
-        // Different-colour paintable balloons within blobRadius of a packed blob, bucketed by nearest
-        // blob so each paints as its blob lands. Buckets align 1:1 with blobPositions.
+        // Buckets align 1:1 with blobPositions; each paints as its blob lands.
         private List<IPaintable>[] CollectPaintTargets(
             IReadOnlyList<Vector2> blobPositions, float blobRadius, string paintColor)
         {

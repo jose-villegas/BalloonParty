@@ -3,10 +3,7 @@ using UnityEngine;
 
 namespace BalloonParty.Slots.Actor
 {
-    /// <summary>
-    /// Default strategy: shuffles all empty slots and picks the first N.
-    /// Used by actor types with no special placement requirements.
-    /// </summary>
+    /// <summary>Shuffles all empty slots and picks the first N.</summary>
     internal class RandomSlotSelectionStrategy : ISlotSelectionStrategy
     {
         public List<Vector2Int> SelectSlots(IReadOnlyList<Vector2Int> emptySlots, int count, int maxPerCluster = 0)

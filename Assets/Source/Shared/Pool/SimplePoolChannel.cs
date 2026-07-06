@@ -3,10 +3,7 @@ using UnityEngine;
 namespace BalloonParty.Shared.Pool
 {
     /// <summary>
-    ///     Pool channel for prefabs that need no VContainer injection: instantiates the prefab
-    ///     under <see cref="PoolChannel{TItem}.Container" />, deactivates it, and hands back the
-    ///     <typeparamref name="TItem" /> component. For prefabs that require injection use
-    ///     <see cref="InjectingPoolChannel{TItem}" />.
+    ///     Pool channel for prefabs that need no VContainer injection.
     /// </summary>
     internal class SimplePoolChannel<TItem> : PoolChannel<TItem>
         where TItem : Component, IPoolable

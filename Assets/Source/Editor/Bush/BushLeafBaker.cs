@@ -4,8 +4,7 @@ using UnityEngine;
 namespace BalloonParty.Editor.Bush
 {
     /// <summary>
-    /// Renders a single Gielis leaf into a <see cref="Texture2D"/> using
-    /// <c>BushBakeLeaf.shader</c> via a temporary offscreen camera.
+    /// Renders a single Gielis leaf into a <see cref="Texture2D"/> via a temporary offscreen camera.
     /// </summary>
     internal static class BushLeafBaker
     {
