@@ -5,51 +5,40 @@ using UnityEngine;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.GridActors;
-using BalloonParty.Configuration.Level;
-using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Configuration.Level
 {
     /// <summary>
-    ///     The resolved, plain form of a level's difficulty mix — what
-    ///     <c>LevelDifficultyResolver</c> caches per level and exposes via
-    ///     <c>IActiveLevelParameters</c>. Also the form a custom (exact-level) entry authors
-    ///     directly, since a single level has no min/max to resolve. Field initializers are a
-    ///     minimal, always-valid baseline (Simple-only, one line per turn) — not a copy of any
-    ///     specific catalog asset, since customs/ranges are expected to author their own mix.
+    ///     The resolved, plain form of a level's difficulty mix — the runtime output of
+    ///     <see cref="RangedLevelParameters.Resolve" />, cached per level by
+    ///     <c>LevelDifficultyResolver</c> and exposed via <c>IActiveLevelParameters</c>. Never
+    ///     authored or serialized (ranges and customs both author <see cref="RangedLevelParameters" />);
+    ///     it only ever exists as a constructed DTO. Field defaults are the parameterless fallback
+    ///     (Simple-only, one line per turn) used when no authored range contains a level.
     /// </summary>
-    [Serializable]
     public class LevelParameters
     {
-        [SerializeField] private int _spawnLines = 1;
-        [SerializeField] private int _boardLines = 5;
+        private readonly int _spawnLines = 1;
+        private readonly int _boardLines = 5;
+        private readonly int _itemCadence = 5;
+        private readonly AnimationCurve _initialItemCountWeights = new();
 
-        [Tooltip("How often (in turns) an item-drop opportunity happens. 0 = never.")]
-        [SerializeField] private int _itemCadence = 5;
-
-        [Tooltip("Weighted distribution for how many items to seed on the initial board fill (level " +
-                 "start / transition), rolled once. X = item count (0, 1, 2…), Y = weight. Empty = none.")]
-        [SerializeField] private AnimationCurve _initialItemCountWeights = new();
-
-        [Tooltip("Weighted distribution for how many items to grant on each cadence turn, rolled per " +
-                 "turn. X = item count (0, 1, 2…), Y = weight. Capped by the eligible new balloons.")]
-        [SerializeField] private AnimationCurve _itemCountWeights =
+        private readonly AnimationCurve _itemCountWeights =
             new(new Keyframe(0f, 0f), new Keyframe(1f, 1f));
 
-        [SerializeField] private BalloonTypeWeight[] _balloonWeights =
+        private readonly BalloonTypeWeight[] _balloonWeights =
         {
             new(BalloonType.Simple, 1f),
         };
 
-        [SerializeField] private ItemTypeWeight[] _itemWeights = Array.Empty<ItemTypeWeight>();
+        private readonly ItemTypeWeight[] _itemWeights = Array.Empty<ItemTypeWeight>();
 
-        [SerializeField] private ResolvedGridActorGate[] _gridActorGates =
+        private readonly ResolvedGridActorGate[] _gridActorGates =
         {
             new(GridActorType.Puff, 4),
         };
 
-        [Tooltip("All bits set (default) = every palette color allowed.")]
-        [SerializeField] [PaletteColorMask] private int _allowedColorsMask = ~0;
+        private readonly int _allowedColorsMask = ~0;
 
         public LevelParameters()
         {

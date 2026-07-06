@@ -63,7 +63,7 @@ namespace BalloonParty.Configuration.Level
         public GridActorTypeGate[] GridActorGates => _gridActorGates;
         public int AllowedColorsMask => _allowedColorsMask;
 
-        public LevelParameters Resolve(float positionInRange, System.Random rng)
+        internal LevelParameters Resolve(float positionInRange, System.Random rng)
         {
             return new LevelParameters(
                 _spawnLines.Resolve(positionInRange, rng),
