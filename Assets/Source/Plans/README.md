@@ -17,7 +17,6 @@ or a pending evaluation.
 | `PLAN-GridActorExpansion.md` | Grid actor Phase 8+ — archetypes done; 8.3 procedural placement (blocked on content) and 8.4 difficulty coupling open | active |
 | `PLAN-LossConditionPacing.md` | Loss condition + pacing — Phases 1–2 shipped and playtested; Phase 3 level-range difficulty, Phase 4 allowed colors, loss cinematic remain | active |
 | `PLAN-PlayModeCoverage.md` | Growing the PlayMode test suite — harness extraction and Tier 1–3 candidate tests pending | active |
-| `PLAN-ScreenSpaceLight.md` | Screen-space 2D GI prototype — built, awaiting in-editor evaluation that decides graduate-or-delete | experiment |
 | `PLAN-SpiderWeb.md` | Spider Web obstacle — traversable, degradable grid actor; ideation only, unimplemented | active |
 | `PLAN-TestGap.md` | June 2026 EditMode coverage audit — general gaps closed; Bush-phase test items and Tests README update open | active |
 | `PLAN-URPMigration.md` | Built-in RP → URP migration — decided *not now*; kept as decision record with explicit revisit triggers and verified inventory | conditional |

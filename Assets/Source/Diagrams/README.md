@@ -26,6 +26,7 @@ features compose across the whole game.
 | `arch_score_cinematic` | Score thresholds driving the level-up cinematic |
 | `arch_trail_composition` | Score / glow / flying trail composition during level-up |
 | `arch_bush_system` | Bush cluster generation, baking, and instanced rendering |
+| `arch_screen_space_light` | Screen-space 2D GI: shared capture, directional smear + cast shadow, ambient-relative bounce composite |
 
 ## Building
 

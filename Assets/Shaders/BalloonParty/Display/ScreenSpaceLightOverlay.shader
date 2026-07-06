@@ -1,6 +1,6 @@
 Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
 {
-    // Fullscreen composite for ScreenSpaceLightService (see PLAN-ScreenSpaceLight.md).
+    // Fullscreen composite for ScreenSpaceLightService (see the arch_screen_space_light doc).
     // Rendered as a camera-fitted quad ABOVE all gameplay — NOT a post effect: the
     // multiplicative blend (2*src*dst, 0.5 neutral) tints the frame in place with no
     // framebuffer readback, so tile GPUs never stall. Samples only the low-res light

@@ -6,8 +6,8 @@ using BalloonParty.Configuration.Cinematics;
 namespace BalloonParty.Display
 {
     /// <summary>
-    ///     Screen-space light approximation ("2D GI" — see PLAN-ScreenSpaceLight.md,
-    ///     prototype): smears the <see cref="SceneCaptureService"/> capture toward a global
+    ///     Screen-space light approximation ("2D GI" — see the @ref arch_screen_space_light
+    ///     page): smears the <see cref="SceneCaptureService"/> capture toward a global
     ///     light direction into a tiny light buffer (shadow amount in A, bounce color in
     ///     RGB), then composites it over the whole frame as a camera-fitted quad with a
     ///     multiplicative blend — no material changes anywhere else, no post-processing

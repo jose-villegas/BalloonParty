@@ -26,6 +26,7 @@
 | @subpage arch_slot_actor "Slot Actor Abstraction" | Interface hierarchy, capability casting, adding new actor types |
 | @subpage disturbance_field "Disturbance Field Service" | Screen-space RT field, stamp API, lerp vs instant routing, consumers |
 | @subpage arch_bush_system "Bush System" | Bake pipeline, runtime rendering, GPU wind + rattle, disturbance field interaction |
+| @subpage arch_screen_space_light "Screen-Space Light (2D GI)" | Shared capture → smear/shadow blits → composite quad; reflection/shadow marches, ambient-relative bounce |
 
 ---
 

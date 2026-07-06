@@ -1,7 +1,7 @@
 Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
 {
-    // Builds the screen-space light buffer for ScreenSpaceLightService (see
-    // PLAN-ScreenSpaceLight.md). Input is the SceneCaptureService capture, whose alpha
+    // Builds the screen-space light buffer for ScreenSpaceLightService (see the
+    // arch_screen_space_light doc). Input is the SceneCaptureService capture, whose alpha
     // channel is sprite coverage (the capture camera clears with alpha 0).
     //
     // Pass 0 — directional smear, two opposite marches per pixel (8 taps each, with
