@@ -474,13 +474,14 @@ in-editor check and a device profile.
   group message carries a designated tipping index, or the trail service nominates the
   crossing trail) before any restructuring. The reverted attempt (`f27376f`) is the
   cautionary precedent.
-- **6b — Extract projectile motion rules from the view.**
-  `Projectile/View/ProjectileView.cs:138–165` owns movement, wall-bounce, shield
-  decrement, and the destroy decision (plus `ShieldLostMessage` and disturbance
-  stamping), called from `FixedUpdate` — gameplay rules locked in a MonoBehaviour,
-  untestable headless (the one real MVC deviation; `ProjectileHitResolver` shows the
-  target pattern). Extract into an `IFixedTickable` controller or a plain bounce-rule
-  object alongside `WallLimits`.
+- **6b — Extract projectile motion rules from the view. DONE 2026-07-05.** The
+  movement, wall-bounce, shield-decrement, and destroy decision moved into a plain
+  `ProjectileMotionResolver` (Projectile/Controller, injected singleton like
+  `ProjectileHitResolver`); `Step` mutates the model and returns a `ProjectileStep`
+  (`Moved`/`Bounced`/`Destroyed` + position/direction) the view applies (transform,
+  bounce VFX, `ShieldLostMessage`, disturbance stamp). `Deflect` moved too. Behaviour
+  preserved byte-for-byte; covered by `ProjectileMotionResolverTests` (the payoff — the
+  rules are now headless-testable). The view keeps only presentation + the trigger/VFX.
 - **6c — Split `GameLifetimeScope`. DONE 2026-07-05.** Extracted into
   `GameScopeRegistration` (`IContainerBuilder` extension methods: `RegisterMessages`,
   `RegisterCoreServices`, `RegisterGameplaySystems`, `RegisterItems`,

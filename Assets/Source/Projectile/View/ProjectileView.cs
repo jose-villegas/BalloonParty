@@ -1,10 +1,8 @@
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
-using BalloonParty.Configuration;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
-using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pause;
@@ -34,12 +32,12 @@ namespace BalloonParty.Projectile.View
         [SerializeField] private Ease _disappearEase = Ease.InBack;
 
         [Inject] private IGamePalette _palette;
-        [Inject] private IGameConfiguration _config;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<ShieldLostMessage> _shieldLostPublisher;
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
         [Inject] private ProjectileHitResolver _hitResolver;
+        [Inject] private ProjectileMotionResolver _motionResolver;
         [Inject] private PauseService _pauseService;
         [Inject] private DisturbanceFieldService _disturbanceField;
 
@@ -176,31 +174,30 @@ namespace BalloonParty.Projectile.View
 
         private void MoveAndBounce()
         {
-            var pos = transform.position;
-            pos += _model.Direction * (_model.Speed * Time.fixedDeltaTime);
-            pos = new WallLimits(_config.LimitsClockwise).Clamp(pos, out var reflect);
+            var step = _motionResolver.Step(_model, transform.position, Time.fixedDeltaTime);
 
-            if (reflect != Vector3.zero)
+            // A bounce plays its VFX whether or not a shield survives it.
+            if (step.Outcome != ProjectileStepOutcome.Moved)
             {
-                _model.ShieldsRemaining.Value--;
-                PlayBounceEffect(pos);
-
-                if (_model.ShieldsRemaining.Value < 0)
-                {
-                    DestroyProjectile();
-                    return;
-                }
-
-                // A shield actually absorbed this bounce (none left would have destroyed it above), so
-                // fly a shield trail to the bounce point.
-                _shieldLostPublisher.Publish(new ShieldLostMessage(pos));
-                _model.Direction = Vector2.Reflect(_model.Direction, reflect.normalized);
+                PlayBounceEffect(step.Position);
             }
 
-            transform.position = pos;
-            transform.up = _model.Direction;
+            if (step.Outcome == ProjectileStepOutcome.Destroyed)
+            {
+                DestroyProjectile();
+                return;
+            }
 
-            _disturbanceField.Stamp(StampSource.Projectile, pos, _model.Direction);
+            if (step.Outcome == ProjectileStepOutcome.Bounced)
+            {
+                // A shield absorbed the bounce — fly a shield trail to the bounce point.
+                _shieldLostPublisher.Publish(new ShieldLostMessage(step.Position));
+            }
+
+            transform.position = step.Position;
+            transform.up = step.Direction;
+
+            _disturbanceField.Stamp(StampSource.Projectile, step.Position, step.Direction);
         }
 
         private void OnBalloonDeflected(BalloonDeflectedMessage msg)
@@ -210,8 +207,7 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            var surfaceNormal = ((Vector2)transform.position - (Vector2)msg.BalloonWorldPosition).normalized;
-            _model.Direction = Vector2.Reflect(_model.Direction, surfaceNormal);
+            _motionResolver.Deflect(_model, transform.position, msg.BalloonWorldPosition);
         }
 
         private void PlayBounceEffect(Vector3 position)

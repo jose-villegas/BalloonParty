@@ -92,6 +92,7 @@ namespace BalloonParty.Game
             builder.Register<NudgeOverrideResolver>(Lifetime.Singleton);
             builder.Register<ColorStreakTracker>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<ProjectileHitResolver>(Lifetime.Singleton);
+            builder.Register<ProjectileMotionResolver>(Lifetime.Singleton);
             builder.Register<INavigation, NavigationService>(Lifetime.Singleton);
             builder.Register<ICinematicState, CinematicStateService>(Lifetime.Singleton);
             builder.Register<RunMeta>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
