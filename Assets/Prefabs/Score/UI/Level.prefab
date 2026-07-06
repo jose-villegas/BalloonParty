@@ -134,6 +134,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.UI.LevelLabel
   _showNextLevel: 0
+  _flipContainer: {fileID: 1434550365611788942}
+  _flipDuration: 1.5
+  _flipCount: 3
 --- !u!114 &5022413936853635052
 MonoBehaviour:
   m_ObjectHideFlags: 0
