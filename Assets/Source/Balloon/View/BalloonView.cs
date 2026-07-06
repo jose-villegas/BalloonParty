@@ -208,12 +208,15 @@ namespace BalloonParty.Balloon.View
             _hitVfxOverrides = overrides;
         }
 
-        public void PlayHitVfxForOutcome(HitOutcome outcome)
+        // parent (optional): reparents the spawned effect so it rides that transform. The level
+        // transition passes the scenario root the balloon is popping under, so the VFX slides out with
+        // it instead of firing at a fixed world point; null (normal pops) leaves the effect free.
+        public void PlayHitVfxForOutcome(HitOutcome outcome, Transform parent = null)
         {
             var prefab = FindHitVfxPrefab(outcome);
             if (prefab != null)
             {
-                PlayHitEffect(prefab);
+                Reparent(PlayHitEffect(prefab), parent);
                 return;
             }
 
@@ -237,8 +240,10 @@ namespace BalloonParty.Balloon.View
                 return;
             }
 
-            _poolManager.PlayParticle(defaultPrefab, transform.position,
-                _palette.GetColor(modelColor.Color.Value));
+            Reparent(
+                _poolManager.PlayParticle(defaultPrefab, transform.position,
+                    _palette.GetColor(modelColor.Color.Value)),
+                parent);
         }
 
         private ParticleSystem FindHitVfxPrefab(HitOutcome outcome)
@@ -259,16 +264,24 @@ namespace BalloonParty.Balloon.View
             return null;
         }
 
-        private void PlayHitEffect(ParticleSystem prefab)
+        private PoolableParticle PlayHitEffect(ParticleSystem prefab)
         {
             if (Model is IHasColor c && !string.IsNullOrEmpty(c.Color.Value))
             {
-                _poolManager.PlayParticle(prefab, transform.position,
+                return _poolManager.PlayParticle(prefab, transform.position,
                     _palette.GetColor(c.Color.Value));
             }
-            else
+
+            return _poolManager.PlayParticle(prefab, transform.position);
+        }
+
+        // worldPositionStays so the effect keeps its spawn point; it detaches back to its own pool
+        // container when it finishes, so no cleanup is needed here.
+        private static void Reparent(PoolableParticle effect, Transform parent)
+        {
+            if (parent != null)
             {
-                _poolManager.PlayParticle(prefab, transform.position);
+                effect.transform.SetParent(parent, worldPositionStays: true);
             }
         }
 

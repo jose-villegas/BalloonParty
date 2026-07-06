@@ -100,7 +100,12 @@ namespace BalloonParty.Balloon.Controller
             if (playPopVfx)
             {
                 _disturbanceField.Stamp(StampSource.BalloonPop, _view.transform.position, Vector2.zero);
-                _view.PlayHitVfxForOutcome(HitOutcome.Pop);
+
+                // Parent the pop VFX under whatever the view rides — during the level transition that's
+                // the scenario root (via RideOutgoing), so the effect slides out with the old level
+                // instead of hanging at a fixed world point. Normal pops parent under the pool container
+                // (static), unchanged.
+                _view.PlayHitVfxForOutcome(HitOutcome.Pop, _view.transform.parent);
             }
 
             var slot = _model.SlotIndex.Value;
