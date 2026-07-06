@@ -22,21 +22,12 @@ using BalloonParty.Configuration.Cinematics;
 namespace BalloonParty.Game.Level
 {
     /// <summary>
-    ///     The Ascent: on dismissing the level-up popup, the old level's balloons pop in a slow-mo
-    ///     diagonal wave and — concurrently — the new level's static content (every actor parented
-    ///     under the shared <see cref="ScenarioContentRoot" />) slides down into place while the camera
-    ///     stays fixed, as if we'd moved up to a new scenario stacked on top of this one. The one
-    ///     transform this controller moves is that root: it spawns the new statics into it, lifts it,
-    ///     and slides it back to the origin; the content follows because the cluster views and slot
-    ///     markers render relative to their transform. Once every balloon has popped, the new level's
-    ///     balloons spawn (animating in while the scenario finishes settling). Holds
-    ///     <see cref="PauseSource.LevelTransition" /> for the whole sequence so the thrower and
+    ///     Holds <see cref="PauseSource.LevelTransition" /> for the whole Ascent sequence so the thrower and
     ///     spawn-loss checks stay inert until the reveal is ready.
     /// </summary>
     internal sealed class LevelTransitionController : IStartable, IDisposable
     {
-        // Slow-mo timescale while the old level's balloons pop; the pop wave advances one anti-diagonal
-        // band per interval. Placeholder tuning (like the Ascent's height/duration) — feel pass pending.
+        // Placeholder tuning (like the Ascent's height/duration) — feel pass pending.
         private const float PopSlowMoTimeScale = 0.35f;
         private const float PopWaveBandSeconds = 0.11f;
 
@@ -109,8 +100,7 @@ namespace BalloonParty.Game.Level
 
         private async UniTaskVoid TransitionAsync()
         {
-            // One Ascent at a time — a duplicate dismissal can't stack a second transition. Outer belt
-            // to LevelController's level-up semaphore.
+            // One Ascent at a time — a duplicate dismissal can't stack a second transition.
             if (_transitioning)
             {
                 return;
@@ -118,49 +108,41 @@ namespace BalloonParty.Game.Level
 
             _transitioning = true;
             var ct = _cts.Token;
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            UnityEngine.Debug.Log("[Ascent] transition starting (dismissed received)");
+#endif
+
             _pauseService.Pause(PauseSource.LevelTransition);
 
             try
             {
-                // Let any other in-flight cinematic (e.g. HeartDrain) finish first — TryBeginCinematic
-                // would otherwise fail and skip the descent animation outright rather than playing it.
+                // Let any other in-flight cinematic (e.g. HeartDrain) finish first, or TryBeginCinematic skips the descent.
                 await UniTask.Yield(PlayerLoopTiming.Update, ct);
                 await UniTask.WaitUntil(() => !Cinematic.IsPlaying, cancellationToken: ct);
 
                 await UniTask.WaitUntil(() => !_overflow.IsOverflowActive, cancellationToken: ct);
 
-                // Snapshot the balloon field into anti-diagonal bands now, while the grid is still fully
-                // populated — both the camera estimate and the pop wave read the same populated range.
+                // Snapshot bands now, while the grid is still fully populated.
                 CollectBalloonBands();
 
                 // Un-zoom the camera (the level-up pan-in left it zoomed) in lockstep with the pop.
                 _cameraRig.RestoreTweened(EstimatePopWaveSeconds());
 
-                // Hold the outgoing content on the scenario root (at origin now) BEFORE anything clears
-                // or pops: cluster views snapshot themselves and the live balloons reparent onto the
-                // root, all offset one drop below the incoming content, so the whole old level slides
-                // down and out as the new slides in. Must precede the pop wave so every balloon rides
-                // out (and pops band-by-band as it goes), and precede the clear so the clusters snapshot
-                // while the grid is still populated. Released once the descent settles.
+                // Must precede the pop wave (clusters snapshot here) and the clear (grid still populated).
                 _scenarioRoot.Transform.position = Vector3.zero;
                 HoldOutgoingContent();
 
-                // Start the old level's balloons popping (slow-mo diagonal wave from the two far
-                // corners inward) — they pop while sliding out. Runs concurrently with the descent.
+                // Old balloons pop while sliding out, concurrently with the descent.
                 var popTask = PopBalloonsInWaveAsync(ct);
 
-                // Swap in the new scenario's statics and start them descending WHILE the balloons are
-                // still popping. Clear only the OLD statics here (the wave owns the balloons); spawn the
-                // new ones at the origin so their cluster views/markers settle at true grid positions,
-                // then PlayAsync lifts the root on its first frame (before any render) and slides it
-                // down — the content rides along.
+                // Clear only the OLD statics (the wave owns the balloons); new ones spawn at origin so
+                // PlayAsync's lift/slide carries them into place.
                 _staticActorSpawner.ClearStaticActors();
                 await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, ct);
                 var descentTask = _ascendCinematic.PlayAsync(_scenarioRoot.Transform, onBalloonSpawnCue: null, ct);
 
-                // Once every balloon has popped, sweep any straggler (item-pending, off-grid) balloon
-                // and spawn the new level's balloons — they animate in while the scenario finishes
-                // settling, rather than only after it has come to rest.
+                // New level's balloons spawn once the old ones finish popping, animating in as the scenario settles.
                 await popTask;
                 _balloonRegistry.ClearAll(playPopVfx: false);
                 _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, ct).Forget();
@@ -169,12 +151,9 @@ namespace BalloonParty.Game.Level
             }
             finally
             {
-                // The descent has settled (or the sequence bailed) — drop the held outgoing content now
-                // that the new scenario is in place.
                 ReleaseOutgoingContent();
 
-                // Guarantees the thrower unlocks even if a step above throws or is cancelled —
-                // a stuck PauseSource.LevelTransition means a permanently unthrowable projectile.
+                // Guarantees the thrower unlocks even if a step above throws or is cancelled.
                 _pauseService.Resume(PauseSource.LevelTransition);
                 _transitioning = false;
             }
@@ -182,8 +161,7 @@ namespace BalloonParty.Game.Level
 
         private void HoldOutgoingContent()
         {
-            // Same distance PlayAsync lifts the incoming content by, so the outgoing content exits the
-            // bottom in lockstep as the new arrives.
+            // Same distance PlayAsync lifts the incoming content, so outgoing exits in lockstep.
             var exitDrop = _cinematicsSettings.EntryOf(CinematicState.LevelAscend).Rig.ZoomAmount;
             for (var i = 0; i < _outgoingContent.Count; i++)
             {
@@ -199,10 +177,7 @@ namespace BalloonParty.Game.Level
             }
         }
 
-        // Pops every balloon on the board in slow-mo, advancing along anti-diagonals (band = col + row)
-        // from BOTH far corners — top-left (band 0) and bottom-right (band max) — inward, so the two
-        // fronts meet and finish at the centre. Routes each pop through the registry's side-effect-free
-        // teardown (no balance/nudge/score); gameplay is already paused via PauseSource.LevelTransition.
+        // Pops balloons band-by-band along anti-diagonals from both far corners inward.
         private async UniTask PopBalloonsInWaveAsync(CancellationToken ct)
         {
             if (_popBands.Count == 0)
@@ -213,9 +188,7 @@ namespace BalloonParty.Game.Level
             _timeScale.Claim(TimeScaleSource.LevelTransition, PopSlowMoTimeScale);
             try
             {
-                // Sweep inward from the two OUTERMOST populated bands (not the grid corners, which may
-                // be empty), so the actual top-left and bottom-right balloons pop on the same beat and
-                // the two fronts stay symmetric as they converge.
+                // Sweep from the outermost POPULATED bands, not the grid corners, which may be empty.
                 for (int near = _minPopBand, far = _maxPopBand; near <= far; near++, far--)
                 {
                     PopBand(near);
@@ -224,7 +197,7 @@ namespace BalloonParty.Game.Level
                         PopBand(far);
                     }
 
-                    // Scaled delay, so the slow-mo also stretches the wave's cadence.
+                    // Scaled delay so slow-mo also stretches the wave's cadence.
                     await UniTask.Delay(
                         TimeSpan.FromSeconds(PopWaveBandSeconds), ignoreTimeScale: false, cancellationToken: ct);
                 }
@@ -235,10 +208,7 @@ namespace BalloonParty.Game.Level
             }
         }
 
-        // Wall-clock length of the pop wave: one band-interval per anti-diagonal step (every step
-        // waits, empty band or not), stretched by the slow-mo the wave runs under. Used to match the
-        // camera un-zoom to the wave. Mirror this if the wave loop's cadence changes. Assumes
-        // CollectBalloonBands has already run.
+        // Wall-clock length of the pop wave; mirror this if the wave loop's cadence changes.
         private float EstimatePopWaveSeconds()
         {
             if (_popBands.Count == 0)

@@ -31,6 +31,7 @@ namespace BalloonParty.Tests.Game
         private PauseService _pauseService;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
+        private IMessageHandler<LevelUpDismissedMessage> _dismissedHandler;
         private LevelController _controller;
 
         [SetUp]
@@ -78,9 +79,16 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<ScoreTrailArrivedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            var dismissedSubscriber = Substitute.For<ISubscriber<LevelUpDismissedMessage>>();
+            dismissedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<LevelUpDismissedMessage>>(h => _dismissedHandler = h),
+                    Arg.Any<MessageHandlerFilter<LevelUpDismissedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
             return new LevelController(
                 _levelParams, _thresholds, _palette, _navigation, _lossForecast, _pauseService, _levelUpPublisher,
-                trailArrivedSubscriber);
+                trailArrivedSubscriber, dismissedSubscriber);
         }
 
         [Test]
@@ -165,7 +173,7 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void TrailArrived_AllColorsConfirmed_LevelsUp()
+        public void TrailArrived_AllColorsConfirmed_PublishesOnceAndDefersLevel()
         {
             _thresholds.PointsRequiredForLevel(2).Returns(2);
 
@@ -174,6 +182,33 @@ namespace BalloonParty.Tests.Game
 
             _levelUpPublisher.Received(1).Publish(Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
             _navigation.Received(1).TransitionTo(NavigationState.LevelUp);
+            Assert.AreEqual(1, _controller.Level.Value, "level advances only on dismissal");
+        }
+
+        [Test]
+        public void FurtherTrailsWhilePending_DoNotPublishAgain()
+        {
+            _thresholds.PointsRequiredForLevel(2).Returns(2);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+
+            // A straggler arriving during the ceremony must not fire a second level-up.
+            FireTrailArrived(Red, 2);
+            FireTrailArrived(Blue, 2);
+
+            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+        }
+
+        [Test]
+        public void LevelUpDismissed_AdvancesLevel()
+        {
+            _thresholds.PointsRequiredForLevel(2).Returns(2);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+            Assert.AreEqual(1, _controller.Level.Value);
+
+            FireDismissed();
+
             Assert.AreEqual(2, _controller.Level.Value);
         }
 
@@ -241,12 +276,16 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void LevelUp_ResetsColorProgress()
+        public void LevelUpDismissed_ResetsColorProgress()
         {
             _thresholds.PointsRequiredForLevel(2).Returns(2);
-
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
+
+            // Progress holds through the ceremony, then resets on dismissal.
+            Assert.AreEqual(2, _controller.GetProgress(Red), "progress persists while pending");
+
+            FireDismissed();
 
             Assert.AreEqual(0, _controller.GetProgress(Red));
             Assert.AreEqual(0, _controller.GetProgress(Blue));
@@ -280,6 +319,7 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(2).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            FireDismissed();
             Assert.AreEqual(2, _controller.Level.Value);
 
             _controller.ResetRun(2);
@@ -295,11 +335,8 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(2).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
+            FireDismissed(); // level advances, progress resets, pending clears
             Assert.AreEqual(2, _controller.Level.Value);
-
-            // The level-up transition ends and gameplay resumes.
-            _navState.Value = NavigationState.LevelUp;
-            _navState.Value = NavigationState.Game;
 
             FireTrailArrived(Red, 1); // straggler carrying the finished level's score
 
@@ -323,6 +360,11 @@ namespace BalloonParty.Tests.Game
         private void FireTrailArrived(string color, int score)
         {
             _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, score, Vector3.zero));
+        }
+
+        private void FireDismissed()
+        {
+            _dismissedHandler.Handle(new LevelUpDismissedMessage());
         }
     }
 }
