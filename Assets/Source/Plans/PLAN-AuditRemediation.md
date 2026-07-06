@@ -481,10 +481,17 @@ in-editor check and a device profile.
   untestable headless (the one real MVC deviation; `ProjectileHitResolver` shows the
   target pattern). Extract into an `IFixedTickable` controller or a plain bounce-rule
   object alongside `WallLimits`.
-- **6c — Split `GameLifetimeScope`** (`Game/GameLifetimeScope.cs`, ~60 registrations,
-  24 brokers) into per-feature `IContainerBuilder` extension methods
-  (`builder.RegisterItemFeature()` …). Pure code motion; do it whenever the file next
-  gets annoying.
+- **6c — Split `GameLifetimeScope`. DONE 2026-07-05.** Extracted into
+  `GameScopeRegistration` (`IContainerBuilder` extension methods: `RegisterMessages`,
+  `RegisterCoreServices`, `RegisterGameplaySystems`, `RegisterItems`,
+  `RegisterPresentation`, `RegisterCheats`); the scope's `Configure` now reads as a
+  short call sequence + a private `RegisterConfiguration` (kept in the class because it
+  binds the serialized SO fields). **Contiguous slices in original order, NOT
+  feature-regrouped** — VContainer starts entry points in registration order and the
+  game relies on it (`LevelDifficultyResolver` → `BalloonSpawner`; MessagePipe
+  subscriber order), so the gameplay entry-point block stays intact. Verified the
+  116-call registration sequence is byte-identical before/after; all three assemblies
+  compile.
 - **Watch items (no action):** ~~`Cinematic._listeners` unbounded static list~~ —
   resolved 2026-07-04: the `ICinematicAware` listener API had zero implementers and
   was deleted; consumers observe `Cinematic.Current` instead.
