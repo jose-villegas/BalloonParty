@@ -1,15 +1,14 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using BalloonParty.Configuration.Level;
 
 namespace BalloonParty.Configuration.Level
 {
     /// <summary>
     ///     Level-range difficulty authoring: ordered <see cref="LevelRangeEntry" />s (last is
-    ///     open-ended), <see cref="CustomLevelEntry" /> overlays, and the threshold modifier curve —
-    ///     a dimensionless multiplier over the base formula, not an additive offset, so "20% cheaper"
-    ///     means the same thing at every level. Default flat 1.0 = no effect.
+    ///     open-ended) and the threshold modifier curve — a dimensionless multiplier over the base
+    ///     formula, not an additive offset, so "20% cheaper" means the same thing at every level.
+    ///     Default flat 1.0 = no effect.
     /// </summary>
     [CreateAssetMenu(menuName = "Configuration/Level Pacing", fileName = "LevelPacingConfiguration")]
     internal class LevelPacingConfiguration : ScriptableObject, ILevelPacingConfiguration
@@ -20,8 +19,6 @@ namespace BalloonParty.Configuration.Level
             // explicitly so a fresh instance is actually valid (see LevelRangeEntry's ctor doc).
             new(0, 0, new RangedLevelParameters()),
         };
-
-        [SerializeField] private CustomLevelEntry[] _customLevels = Array.Empty<CustomLevelEntry>();
 
         [Tooltip("Dimensionless multiplier over the points-required-for-level formula. Flat 1.0 = no effect.")]
         [SerializeField] private AnimationCurve _thresholdModifier = AnimationCurve.Constant(1, 100, 1f);
@@ -38,7 +35,6 @@ namespace BalloonParty.Configuration.Level
         }
 
         public IReadOnlyList<LevelRangeEntry> Ranges => _ranges;
-        public IReadOnlyList<CustomLevelEntry> CustomLevels => _customLevels;
 
         public float ThresholdModifier(int level)
         {

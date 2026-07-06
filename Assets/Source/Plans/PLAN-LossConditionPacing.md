@@ -453,8 +453,10 @@ hard requirement): anchor the board to a root (grid anchor seam + spawner re-par
      never moves). The payoff moment — each level becomes a visibly new place built from the
      new parameters.
    - **3c** — items lever: `ItemAssigner` reads the resolver.
-   - **3d** — **custom levels**: the `CustomLevelEntry` overlay collection + resolve
-     specificity + validation (cheap once 3a exists).
+   - **3d** — **custom levels**: **CUT** — `CustomLevelEntry` + `ILevelPacingConfiguration.CustomLevels`
+     were never wired into the resolver (`ResolveFor` only consults ranges), so they were removed as
+     dead surface. Revisit via the `CustomLevelLoader`/`LevelDefinition` idea in PLAN-FutureIdeas if
+     exact-level overlays are wanted later.
    - **3e** — **grid-actor pacing (Puff/Bush now)**: per-range type gate + count for whatever
      `StaticActorSpawner` can already build — no Phase 8.3 dependency (narrowed 2026-07-05, see
      "External dependency" above). The richer archetypes (Deflector/Absorber/Gatekeeper) stay
