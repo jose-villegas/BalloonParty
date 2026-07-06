@@ -2,9 +2,11 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Run;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Pause;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
@@ -19,19 +21,24 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Balloon.Controller
 {
-    internal class BalloonBalancer : IStartable, IRunResettable
+    internal class BalloonBalancer : IStartable, ITickable, IRunResettable
     {
         private readonly BalancePathHolder _balancePathHolder;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly SlotGrid _grid;
         private readonly GridBalanceQuery _balanceQuery;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
+        private readonly ISubscriber<ProjectileLoadedMessage> _projectileLoadedSubscriber;
+        private readonly ISubscriber<ProjectileDestroyedMessage> _projectileDestroyedSubscriber;
+        private readonly PauseService _pauseService;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly BalloonMotionTicker _motionTicker;
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
 
         private bool _balanceRequested;
         private int _generation;
+        private IProjectileModel _activeProjectile;
+        private float _flightRebalanceElapsed;
 
         public int ResetOrder => RunResetOrder.Quiesce;
 
@@ -45,6 +52,9 @@ namespace BalloonParty.Balloon.Controller
             IBalloonsConfiguration balloonsConfig,
             BalancePathHolder balancePathHolder,
             ISubscriber<BalanceBalloonsMessage> subscriber,
+            ISubscriber<ProjectileLoadedMessage> projectileLoadedSubscriber,
+            ISubscriber<ProjectileDestroyedMessage> projectileDestroyedSubscriber,
+            PauseService pauseService,
             DisturbanceFieldService disturbanceField,
             BalloonMotionTicker motionTicker)
         {
@@ -53,6 +63,9 @@ namespace BalloonParty.Balloon.Controller
             _balloonsConfig = balloonsConfig;
             _balancePathHolder = balancePathHolder;
             _subscriber = subscriber;
+            _projectileLoadedSubscriber = projectileLoadedSubscriber;
+            _projectileDestroyedSubscriber = projectileDestroyedSubscriber;
+            _pauseService = pauseService;
             _disturbanceField = disturbanceField;
             _motionTicker = motionTicker;
         }
@@ -60,6 +73,15 @@ namespace BalloonParty.Balloon.Controller
         public void Start()
         {
             _subscriber.Subscribe(_ => RequestBalance());
+            _projectileLoadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model);
+            _projectileDestroyedSubscriber.Subscribe(_ => _activeProjectile = null);
+        }
+
+        // Pulses a rebalance at intervals while a projectile is airborne, so the stack keeps settling
+        // and a projectile looping wall-to-wall eventually gets a target shifted into its path.
+        public void Tick()
+        {
+            TickFlightRebalance(Time.deltaTime);
         }
 
         public void ResetRun(int generation)
@@ -69,6 +91,8 @@ namespace BalloonParty.Balloon.Controller
             // just returned to the pool, against an emptied grid.
             _generation = generation;
             _balanceRequested = false;
+            _activeProjectile = null;
+            _flightRebalanceElapsed = 0f;
             ReleasePaths();
         }
 
@@ -276,6 +300,58 @@ namespace BalloonParty.Balloon.Controller
             _balanceRequested = false;
             Balance();
             return true;
+        }
+
+        // Returns whether it requested a rebalance this step. Internal for tests — Time.deltaTime isn't
+        // injectable, so tests drive it with an explicit step.
+        internal bool TickFlightRebalance(float deltaTime)
+        {
+            var interval = _balloonsConfig.FlightRebalanceInterval;
+            if (interval <= 0f || _activeProjectile == null || !_activeProjectile.IsFree
+                || _pauseService.IsAnyPaused.Value)
+            {
+                _flightRebalanceElapsed = 0f;
+                return false;
+            }
+
+            _flightRebalanceElapsed += deltaTime;
+            if (_flightRebalanceElapsed < interval)
+            {
+                return false;
+            }
+
+            _flightRebalanceElapsed = 0f;
+            if (!HasPossibleMove())
+            {
+                return false;
+            }
+
+            RequestBalance();
+            return true;
+        }
+
+        // True when some occupied dynamic actor could shift — TryBalanceSlot's precondition, read-only —
+        // so the flight pulse skips a rebalance when the stack is already settled.
+        internal bool HasPossibleMove()
+        {
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 1; row < _grid.Rows; row++)
+                {
+                    if (_grid.IsEmpty(col, row) || !_balanceQuery.IsUnbalanced(col, row))
+                    {
+                        continue;
+                    }
+
+                    if (_grid.At(new Vector2Int(col, row)) is IWriteableDynamicSlotActor
+                        && _balanceQuery.OptimalNextEmptySlot(col, row).HasValue)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private void RequestBalance()

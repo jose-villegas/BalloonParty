@@ -25,6 +25,11 @@ namespace BalloonParty.Configuration.Balloons
         [Header("Balancing")]
         [SerializeField] private float _timeForBalloonsBalance;
 
+        [Tooltip("Seconds between board re-balances while a projectile is in flight — keeps the stack " +
+                 "settling at intervals so a projectile looping wall-to-wall eventually finds a target. " +
+                 "0 disables.")]
+        [SerializeField] private float _flightRebalanceInterval = 1f;
+
         [Header("Nudge")]
         [SerializeField] private float _nudgeDistance = 0.3f;
         [SerializeField] private float _nudgeDuration = 0.15f;
@@ -38,6 +43,7 @@ namespace BalloonParty.Configuration.Balloons
         public Vector2 BalloonSpawnAnimationDurationRange => _balloonSpawnAnimationSpeedRange;
         public int SpawnEntryRowOffset => _spawnEntryRowOffset;
         public float TimeForBalloonsBalance => _timeForBalloonsBalance;
+        public float FlightRebalanceInterval => _flightRebalanceInterval;
         public float NudgeDistance => _nudgeDistance;
         public float NudgeDuration => _nudgeDuration;
         public float NudgeFalloff => _nudgeFalloff;

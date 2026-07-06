@@ -19,6 +19,9 @@ namespace BalloonParty.Configuration.Balloons
         Vector2 BalloonSpawnAnimationDurationRange { get; }
         int SpawnEntryRowOffset { get; }
         float TimeForBalloonsBalance { get; }
+
+        /// <summary>Interval between board re-balances while a projectile is in flight. 0 disables.</summary>
+        float FlightRebalanceInterval { get; }
         float NudgeDistance { get; }
         float NudgeDuration { get; }
         float NudgeFalloff { get; }
