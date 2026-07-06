@@ -1149,30 +1149,21 @@ statics + balloons + reloaded the projectile at once — incompatible with a tim
   (~2.4s unscaled) overlaps the pop (~2s slow-mo); balloons spawn at pop-end and animate in during the
   last of the descent.
 
-**Missing level-up popup on 2→3 — INVESTIGATION ONGOING (2026-07-06), root cause NOT confirmed.**
-Solid architecture facts: the popup shows only after the pan-in cinematic ENDS (`CinematicEndGate`
-waits for `Cinematic.Current` to leave `LevelUpPanIn`); `LevelUpDismissedMessage` is published ONLY by
-the popup's Continue button, and `LevelTransitionController` is its sole subscriber — so **there is NO
-transition-without-popup path, and a missing popup is a hard soft-lock** (level advances on the
-confirmed-score path but nav sticks in LevelUp). Two hypotheses initially believed then DISPROVED
-(don't re-chase): concurrent double-popup — impossible, `CheckLevelUp` early-returns once nav flips to
-LevelUp and handlers are synchronous, so only one `ScoreLevelUpMessage` per level-up; and pan-in hang —
-`PanInTick` advances progress off a never-zero curve so the pan-in self-terminates, and the `TrailId`
-can't mismatch (both sides build it from the same `ScorePointMessage`). The guards added earlier
-(`AdvanceTrackedTrail`→`EndPanIn` on null; `PanInTick` absolute cap; bounded `WaitForTippingTrailAsync`)
-are therefore **band-aids for causes that don't occur, kept only as a temporary soft-lock backstop so
-the transition work can be playtested — to be removed once the real cause is confirmed.** Leading
-remaining candidate (needs runtime data): a color *required* at the level with no progress bar in the
-scene → `ScoreTrailService` logs `no target provider registered for color "X" — score trail skipped`,
-that color never confirms, level sticks at 2, no popup. Next step: repro 2→3 and check (a) whether the
-level reaches 3 or sticks at 2, (b) console warnings/exceptions — then fix at the source. **No more
-speculative fixes before that.**
-
-**Cap one level-up per burst (2026-07-06).** Independent real fix (not necessarily the 2→3 cause):
-carried-over points past the threshold (renumbered into the next level) re-inflated progress after the
-level-up reset, so a burst could chain a near-instant second level-up. `ScoreController.OnTrailArrived`
-now clamps `_levelProgress`/`_projectedProgress` at `PointsRequiredForLevel(_level+1)` → a burst
-advances at most one level (excess lost; no skipping).
+**Missing level-up popup on 2→3 — ROOT CAUSE FOUND + FIXED (2026-07-06).** User's decisive repro: 1→2
+popup shows, then level 2 completes ALMOST INSTANTLY and a transition fires with no popup, consistently.
+Root cause = **score carry-over auto-completing the next level.** `PublishPoints` renumbered points past
+the threshold into `_level+1`, so a big/high-streak pop on level 1 carried its excess into level 2 —
+level 2 arrived pre-filled and auto-completed with no player throw. That fired the 2→3 level-up from
+trail ARRIVALS with no accompanying new `ScorePointMessage`, so the cinematic never armed and the
+level-up landed in a state where the popup was lost → transition without a popup. Fix at the scoring
+SOURCE (matching the "cap one level-up per burst, excess lost" choice): `ResolveAttributions` clamps each
+color's added points at `required − baseProgress` (a pop can reach at most the threshold, never carry
+over); `PublishPoints` renumbering removed. The earlier `OnTrailArrived` value-clamp was reverted (wrong
+layer — it capped the value but not the carried trails filling the next level). `ScorePoint_AboveThreshold_*`
+test updated from "renumbered" to "excess dropped". **The disproven-hypothesis guards remain in as a
+temporary soft-lock backstop — remove once the user confirms 2→3 now shows the popup.** Disproven
+hypotheses (don't re-chase): concurrent double-popup (blocked by `CheckLevelUp`'s `_navigation` guard);
+pan-in hang (self-terminates via `PanInTick`); `TrailId` mismatch (same `ScorePointMessage` both sides).
 
 **Whole old level slides out during the transition (2026-07-06).** Emptying the grid blinked the old
 statics out, and separately left the old balloons pinned while the new scenario descended — both read

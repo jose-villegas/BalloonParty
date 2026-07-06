@@ -228,6 +228,8 @@ namespace BalloonParty.Game.Score
             IReadOnlyList<ScoreAttribution> attributions, int multiplier,
             List<(string Color, int Points, int BaseProgress)> resolved)
         {
+            var required = _levelParams.PointsRequiredForLevel(_level.Value + 1);
+
             foreach (var attribution in attributions)
             {
                 var color = attribution.ColorId;
@@ -236,8 +238,19 @@ namespace BalloonParty.Game.Score
                     continue;
                 }
 
-                var pts = attribution.Points * multiplier;
                 var baseProgress = _projectedProgress.GetValueOrDefault(color);
+
+                // Cap one level-up per burst: a color's progress can't exceed the next-level threshold,
+                // so a big/high-streak pop can't overfill and carry into the FOLLOWING level. Without
+                // this the next level arrived pre-completed and fired a second level-up with no player
+                // throw and no cinematic — the "instant next level + transition, no popup" bug. Excess
+                // is intentionally lost (no level-skipping).
+                var pts = Mathf.Min(attribution.Points * multiplier, Mathf.Max(0, required - baseProgress));
+                if (pts <= 0)
+                {
+                    continue;
+                }
+
                 _projectedProgress[color] = baseProgress + pts;
                 resolved.Add((color, pts, baseProgress));
             }
@@ -255,24 +268,21 @@ namespace BalloonParty.Game.Score
         }
 
         // Emits one ScorePointMessage per point, carrying the group size/index so the bars can
-        // animate the burst. Points past the level threshold are renumbered into the next level
-        // so post-level-up arrivals represent their position in the new level's progress.
+        // animate the burst. Progress is capped at the threshold in ResolveAttributions, so no point
+        // ever crosses into the next level — every point belongs to the current level.
         private void PublishPoints(
             IReadOnlyList<(string Color, int Points, int BaseProgress)> resolved, int groupSize, Vector3 worldPosition)
         {
-            var required = _levelParams.PointsRequiredForLevel(_level.Value + 1);
             var groupIndex = 0;
             foreach (var (color, points, baseProgress) in resolved)
             {
                 for (var i = 0; i < points; i++, groupIndex++)
                 {
-                    var rawScore = baseProgress + i + 1;
-                    var nextLevel = rawScore > required;
                     _scoredPublisher.Publish(new ScorePointMessage(
                         color,
                         worldPosition,
-                        nextLevel ? rawScore - required : rawScore,
-                        nextLevel ? _level.Value + 1 : _level.Value,
+                        baseProgress + i + 1,
+                        _level.Value,
                         groupSize,
                         groupIndex));
                 }
@@ -289,16 +299,11 @@ namespace BalloonParty.Game.Score
             _persistentScore[msg.ColorName]++;
             _totalScore.Value++;
 
-            // Cap progress at the next-level threshold. A single big/high-streak pop renumbers points
-            // past the threshold into the next level so they carry over — but a burst may only ever
-            // advance ONE level, so clamping here stops the carried-over excess from banking beyond one
-            // threshold and chaining a second level-up. (The excess is intentionally lost — you can't
-            // skip a level.)
-            var required = _levelParams.PointsRequiredForLevel(_level.Value + 1);
+            // Progress is already capped at the threshold at the scoring source (ResolveAttributions),
+            // so no arriving point exceeds it — a plain max to fold arrivals in is enough.
             var previous = _levelProgress[msg.ColorName];
-            _levelProgress[msg.ColorName] = Math.Min(required, Math.Max(previous, msg.Score));
-            _projectedProgress[msg.ColorName] =
-                Math.Min(required, Math.Max(_projectedProgress[msg.ColorName], msg.Score));
+            _levelProgress[msg.ColorName] = Math.Max(previous, msg.Score);
+            _projectedProgress[msg.ColorName] = Math.Max(_projectedProgress[msg.ColorName], msg.Score);
 
             CheckLevelUp();
         }

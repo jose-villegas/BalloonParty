@@ -407,13 +407,11 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void ScorePoint_AboveThreshold_RenumberedIntoNextLevel()
+        public void ScorePoint_AboveThreshold_ExcessDropped()
         {
-            // threshold = 3, scoreValue = 4, streak = 1 → publishes 4 messages:
-            // i=0: rawScore=1 → Score=1, Level=1
-            // i=1: rawScore=2 → Score=2, Level=1
-            // i=2: rawScore=3 → Score=3, Level=1  (tipping point, 3 > 3 is false)
-            // i=3: rawScore=4 → Score=1, Level=2  (renumbered: 4 - 3 = 1)
+            // threshold = 3, scoreValue = 4 → progress is capped at 3, so only 3 points publish
+            // (Score 1,2,3 at Level 1); the 4th is dropped rather than carried into the next level
+            // (cap one level-up per burst — no carry-over that would auto-complete the following level).
             _levelParams.PointsRequiredForLevel(2).Returns(3);
 
             var model = new BalloonModel(new BalloonModelConfig(scoreValue: 4));
@@ -423,8 +421,8 @@ namespace BalloonParty.Tests.Game
 
             _scoredPublisher.Received(3).Publish(
                 Arg.Is<ScorePointMessage>(m => m.Level == 1));
-            _scoredPublisher.Received(1).Publish(
-                Arg.Is<ScorePointMessage>(m => m.Level == 2 && m.Score == 1));
+            _scoredPublisher.DidNotReceive().Publish(
+                Arg.Is<ScorePointMessage>(m => m.Level != 1));
         }
 
         [Test]
