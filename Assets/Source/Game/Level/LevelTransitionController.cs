@@ -58,6 +58,7 @@ namespace BalloonParty.Game.Level
 
         private int _minPopBand;
         private int _maxPopBand;
+        private bool _transitioning;
 
         private LevelAscendCinematic _ascendCinematic;
         private IDisposable _dismissedSubscription;
@@ -108,6 +109,14 @@ namespace BalloonParty.Game.Level
 
         private async UniTaskVoid TransitionAsync()
         {
+            // One Ascent at a time — a duplicate dismissal can't stack a second transition. Outer belt
+            // to LevelController's level-up semaphore.
+            if (_transitioning)
+            {
+                return;
+            }
+
+            _transitioning = true;
             var ct = _cts.Token;
             _pauseService.Pause(PauseSource.LevelTransition);
 
@@ -167,6 +176,7 @@ namespace BalloonParty.Game.Level
                 // Guarantees the thrower unlocks even if a step above throws or is cancelled —
                 // a stuck PauseSource.LevelTransition means a permanently unthrowable projectile.
                 _pauseService.Resume(PauseSource.LevelTransition);
+                _transitioning = false;
             }
         }
 

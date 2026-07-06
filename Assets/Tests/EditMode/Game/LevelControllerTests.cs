@@ -6,6 +6,7 @@ using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Pause;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
@@ -27,6 +28,7 @@ namespace BalloonParty.Tests.Game
         private INavigation _navigation;
         private ReactiveProperty<NavigationState> _navState;
         private ILossForecast _lossForecast;
+        private PauseService _pauseService;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
         private LevelController _controller;
@@ -52,6 +54,9 @@ namespace BalloonParty.Tests.Game
             _lossForecast = Substitute.For<ILossForecast>();
             _lossForecast.LossImminent.Returns(false);
 
+            _pauseService = new PauseService(
+                Substitute.For<IPublisher<PausedMessage>>(), Substitute.For<IPublisher<ResumedMessage>>());
+
             _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
 
             _controller = BuildController();
@@ -74,7 +79,8 @@ namespace BalloonParty.Tests.Game
                 .Returns(Substitute.For<IDisposable>());
 
             return new LevelController(
-                _levelParams, _thresholds, _palette, _navigation, _lossForecast, _levelUpPublisher, trailArrivedSubscriber);
+                _levelParams, _thresholds, _palette, _navigation, _lossForecast, _pauseService, _levelUpPublisher,
+                trailArrivedSubscriber);
         }
 
         [Test]
@@ -163,10 +169,8 @@ namespace BalloonParty.Tests.Game
         {
             _thresholds.PointsRequiredForLevel(2).Returns(2);
 
-            FireTrailArrived(Red, 1);
-            FireTrailArrived(Red, 2);
-            FireTrailArrived(Blue, 1);
-            FireTrailArrived(Blue, 2);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
 
             _levelUpPublisher.Received(1).Publish(Arg.Is<ScoreLevelUpMessage>(m => m.NewLevel == 2));
             _navigation.Received(1).TransitionTo(NavigationState.LevelUp);
@@ -178,10 +182,8 @@ namespace BalloonParty.Tests.Game
         {
             _thresholds.PointsRequiredForLevel(2).Returns(2);
 
-            FireTrailArrived(Red, 1);
-            FireTrailArrived(Red, 2);
-            FireTrailArrived(Blue, 1);
-            FireTrailArrived(Blue, 2);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
 
             _levelUpPublisher.Received(1).Publish(Arg.Is<ScoreLevelUpMessage>(m => m.CompletedColors.Count == 2));
         }
@@ -192,8 +194,8 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(2).Returns(1);
             _lossForecast.LossImminent.Returns(true);
 
-            FireTrailArrived(Red, 1);
-            FireTrailArrived(Blue, 1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
 
             _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
             Assert.AreEqual(1, _controller.Level.Value);
@@ -205,8 +207,23 @@ namespace BalloonParty.Tests.Game
             _thresholds.PointsRequiredForLevel(2).Returns(1);
             _navState.Value = NavigationState.GameOver;
 
-            FireTrailArrived(Red, 1);
-            FireTrailArrived(Blue, 1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+
+            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
+            Assert.AreEqual(1, _controller.Level.Value);
+        }
+
+        [Test]
+        public void LevelUp_WhileAscentInProgress_DoesNotFire()
+        {
+            // Ascent holds LevelTransition (nav already back in Game) — a straggler mid-transition must
+            // not trip a second level-up.
+            _thresholds.PointsRequiredForLevel(2).Returns(1);
+            _pauseService.Pause(PauseSource.LevelTransition);
+
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
 
             _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
             Assert.AreEqual(1, _controller.Level.Value);
@@ -217,10 +234,7 @@ namespace BalloonParty.Tests.Game
         {
             _thresholds.PointsRequiredForLevel(2).Returns(5);
 
-            for (var i = 1; i <= 5; i++)
-            {
-                FireTrailArrived(Red, i);
-            }
+            ScoreColor(Red, 5);
 
             _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
             Assert.AreEqual(1, _controller.Level.Value);
@@ -231,10 +245,8 @@ namespace BalloonParty.Tests.Game
         {
             _thresholds.PointsRequiredForLevel(2).Returns(2);
 
-            FireTrailArrived(Red, 1);
-            FireTrailArrived(Red, 2);
-            FireTrailArrived(Blue, 1);
-            FireTrailArrived(Blue, 2);
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
 
             Assert.AreEqual(0, _controller.GetProgress(Red));
             Assert.AreEqual(0, _controller.GetProgress(Blue));
@@ -245,7 +257,19 @@ namespace BalloonParty.Tests.Game
         {
             _thresholds.PointsRequiredForLevel(2).Returns(5);
 
-            FireTrailArrived(Red, 3);
+            ScoreColor(Red, 3);
+
+            Assert.AreEqual(3, _controller.GetProgress(Red));
+        }
+
+        [Test]
+        public void TrailArrived_ConfirmedCappedAtClaimed()
+        {
+            // A trail can't confirm past the claim — projected is the ceiling.
+            _thresholds.PointsRequiredForLevel(2).Returns(10);
+
+            _controller.ClaimProgress(Red, 3);
+            FireTrailArrived(Red, 7); // carries a stale higher score
 
             Assert.AreEqual(3, _controller.GetProgress(Red));
         }
@@ -254,8 +278,8 @@ namespace BalloonParty.Tests.Game
         public void ResetRun_ResetsLevelToOne()
         {
             _thresholds.PointsRequiredForLevel(2).Returns(1);
-            FireTrailArrived(Red, 1);
-            FireTrailArrived(Blue, 1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
             Assert.AreEqual(2, _controller.Level.Value);
 
             _controller.ResetRun(2);
@@ -264,19 +288,36 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void StragglerTrail_AfterLevelScored_DoesNotTouchProgress()
+        public void StragglerTrail_AfterTransitionReopens_DoesNotStallColor()
         {
-            // A trail still in flight when the level completed lands in the next level; it must not
-            // re-inflate progress (the scoring cap would then stop the colour below the new threshold).
+            // A straggler landing after Game reopens must neither confirm nor poison projected —
+            // else ClaimProgress grants 0 and the bar never fills.
             _thresholds.PointsRequiredForLevel(2).Returns(1);
-            FireTrailArrived(Red, 1);
-            FireTrailArrived(Blue, 1);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
             Assert.AreEqual(2, _controller.Level.Value);
 
-            FireTrailArrived(Red, 1); // straggler from the finished level
+            // The level-up transition ends and gameplay resumes.
+            _navState.Value = NavigationState.LevelUp;
+            _navState.Value = NavigationState.Game;
 
-            Assert.AreEqual(0, _controller.GetProgress(Red));
+            FireTrailArrived(Red, 1); // straggler carrying the finished level's score
+
+            Assert.AreEqual(0, _controller.GetProgress(Red), "straggler must not confirm into the new level");
+
+            var (_, granted) = _controller.ClaimProgress(Red, 1);
+            Assert.AreEqual(1, granted, "projected must stay clean so the colour can still score");
             _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+        }
+
+        // Mirrors production: claim each point (advancing projected), then confirm it as its trail lands.
+        private void ScoreColor(string color, int points)
+        {
+            _controller.ClaimProgress(color, points);
+            for (var i = 1; i <= points; i++)
+            {
+                FireTrailArrived(color, i);
+            }
         }
 
         private void FireTrailArrived(string color, int score)

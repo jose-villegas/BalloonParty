@@ -5,6 +5,7 @@ using BalloonParty.Game.Health;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Pause;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
@@ -27,6 +28,7 @@ namespace BalloonParty.Game.Level
         private readonly IGamePalette _palette;
         private readonly INavigation _navigation;
         private readonly ILossForecast _lossForecast;
+        private readonly PauseService _pauseService;
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
 
@@ -45,6 +47,7 @@ namespace BalloonParty.Game.Level
             IGamePalette palette,
             INavigation navigation,
             ILossForecast lossForecast,
+            PauseService pauseService,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber)
         {
@@ -53,6 +56,7 @@ namespace BalloonParty.Game.Level
             _palette = palette;
             _navigation = navigation;
             _lossForecast = lossForecast;
+            _pauseService = pauseService;
             _levelUpPublisher = levelUpPublisher;
             _trailArrivedSubscriber = trailArrivedSubscriber;
         }
@@ -154,20 +158,17 @@ namespace BalloonParty.Game.Level
                 return;
             }
 
-            // Once the level is scored it stays scored until the next one starts (the level-up is gated
-            // by the transition, so every trail still in flight belongs to the level that just finished).
-            // Folding a straggler in via Max would re-inflate the colour, so the scoring cap stops it
-            // below the next threshold and the bar can never fill.
+            // While scored, every in-flight trail belongs to the finished level — ignore, don't fold.
             if (_levelScored)
             {
                 return;
             }
 
-            // Progress is capped at the threshold at the scoring source (ClaimProgress), so no arriving
-            // point exceeds it — a plain max to fold arrivals in is enough.
-            var previous = _levelProgress[msg.ColorName];
-            _levelProgress[msg.ColorName] = Math.Max(previous, msg.Score);
-            _projectedProgress[msg.ColorName] = Math.Max(_projectedProgress[msg.ColorName], msg.Score);
+            // Cap the confirm at this level's claim (projected leads any current-level arrival): a
+            // previous-level straggler then adds nothing instead of re-inflating projected and stalling
+            // the bar (ClaimProgress would grant 0 for the colour).
+            var confirmable = Math.Min(msg.Score, _projectedProgress[msg.ColorName]);
+            _levelProgress[msg.ColorName] = Math.Max(_levelProgress[msg.ColorName], confirmable);
 
             CheckLevelUp();
         }
@@ -187,10 +188,13 @@ namespace BalloonParty.Game.Level
 
         private void CheckLevelUp()
         {
-            // No level-up on a lost run: the ceremony is suppressed once the loss is committed
-            // (GameOver) or already certain (queued overflow charges cover the remaining HP) — a trail
-            // arriving post-mortem must not yank navigation out of GameOver or show the popup.
-            if (_navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent)
+            // Suppressed on a lost run (a post-mortem trail must not reopen GameOver or show the popup)
+            // and while a level-up is unresolved (the semaphore): nav is LevelUp during the pan-in/popup,
+            // the Ascent holds LevelTransition — nav is already back in Game by then, so it alone would
+            // leave the Ascent window open to a straggler tripping a second, unearned level-up.
+            if (_navigation.Current.Value != NavigationState.Game
+                || _lossForecast.LossImminent
+                || _pauseService.IsPaused(PauseSource.LevelTransition))
             {
                 return;
             }
