@@ -130,6 +130,14 @@ namespace BalloonParty.Slots.Actor.Archetype
             _restPosition = transform.position;
         }
 
+        protected override void OnCleared()
+        {
+            // LateUpdate submits its DrawMesh calls off _renderData, not the base Renderer, so a bare
+            // Clear() would leave the last cluster drawing forever (the grid/registry are already
+            // empty). Dropping the data stops the draw until the next Configure rebuilds it.
+            _renderData = null;
+        }
+
         private void EnsureComponents()
         {
             _materials ??= new BushMaterialSet(_settings);

@@ -141,6 +141,8 @@ namespace BalloonParty.Slots.Actor.Cluster
             {
                 _renderer.enabled = false;
             }
+
+            OnCleared();
         }
 
         /// <summary>
@@ -148,6 +150,15 @@ namespace BalloonParty.Slots.Actor.Cluster
         /// subclass-specific shader properties (e.g. slot radius, jitter).
         /// </summary>
         protected virtual void OnConfigured(MaterialPropertyBlock block)
+        {
+        }
+
+        /// <summary>
+        /// Called from <see cref="Clear"/>. Override to tear down subclass draw state that isn't
+        /// gated by the shared <see cref="_renderer"/> — e.g. a view that submits its own
+        /// <c>Graphics.DrawMesh</c> calls must stop them here, or it keeps rendering after a clear.
+        /// </summary>
+        protected virtual void OnCleared()
         {
         }
 
