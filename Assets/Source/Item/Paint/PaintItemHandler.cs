@@ -15,13 +15,16 @@ using BalloonParty.Configuration.Palette;
 namespace BalloonParty.Item.Paint
 {
     /// <summary>
-    ///     Handles the Paint item. When activated, finds all neighboring balloons of the
-    ///     popped balloon, launches a paint blob VFX toward each one, and converts their
-    ///     color to the popped balloon's color on splash — Splatoon-style.
+    ///     Handles the Paint item. On activation it lays a triangular region out along the projectile's
+    ///     travel direction (see <see cref="PaintTriangle" />), circle-packs it with blob VFX flung from
+    ///     the hit point, and — as those blobs land — recolours every balloon within a blob's radius to
+    ///     the popped balloon's colour (Splatoon-style), so painting tracks the visible splash coverage.
+    ///     The triangle's offset, length, base width, and blob radius are authored per item in
+    ///     <see cref="PaintSettings" />.
     /// </summary>
     internal class PaintItemHandler : IBalloonItem
     {
-        private const int NeighborCount = 6;
+        private const int MaxBlobs = 64;
 
         private readonly IGamePalette _palette;
         private readonly IItemConfiguration _itemConfig;
@@ -46,8 +49,11 @@ namespace BalloonParty.Item.Paint
             _disturbanceField = disturbanceField;
         }
 
-        public UniTask Activate(IBalloonModel balloon, Vector3 worldPosition)
+        public UniTask Activate(ItemActivationContext context)
         {
+            var balloon = context.Balloon;
+            var worldPosition = context.WorldPosition;
+
             var settings = _itemConfig[ItemType.Paint];
             if (balloon is not IHasColor sourceColor)
             {
@@ -55,30 +61,33 @@ namespace BalloonParty.Item.Paint
             }
 
             var paintColor = sourceColor.Color.Value;
-
             if (string.IsNullOrEmpty(paintColor))
             {
                 return UniTask.CompletedTask;
             }
 
-            var slot = balloon.SlotIndex.Value;
-            var neighborIndices = HexCoordinates.HexNeighborIndices(slot.x, slot.y);
             var tint = _palette.GetColor(paintColor);
+            var triangle = PaintTriangle.Build(worldPosition, context.ProjectileDirection, settings.Paint);
 
-            var paintTargets = BuildPaintTargets(neighborIndices, paintColor);
+            var blobPositions = new List<Vector2>();
+            triangle.PackBlobs(settings.Paint.SpreadBlobRadius, MaxBlobs, blobPositions);
+
+            var targetsByBlob = CollectPaintTargets(blobPositions, settings.Paint.SpreadBlobRadius, paintColor);
 
             if (settings.ActivationEffectPrefab == null)
             {
-                PaintImmediate(worldPosition, paintColor, neighborIndices, paintTargets);
+                for (var i = 0; i < blobPositions.Count; i++)
+                {
+                    PaintBlob(i);
+                }
+
                 return UniTask.CompletedTask;
             }
 
-            // Always launch all 6 blobs regardless of occupancy.
-            var flights = new List<(Vector3 from, Vector3 to)>(NeighborCount);
-
-            for (var i = 0; i < NeighborCount; i++)
+            var flights = new List<(Vector3 from, Vector3 to)>(blobPositions.Count);
+            foreach (var target in blobPositions)
             {
-                flights.Add((worldPosition, _grid.IndexToWorldPosition(neighborIndices[i])));
+                flights.Add((worldPosition, new Vector3(target.x, target.y, worldPosition.z)));
             }
 
             var key = settings.ActivationEffectPrefab.name;
@@ -94,62 +103,94 @@ namespace BalloonParty.Item.Paint
                 return UniTask.CompletedTask;
             }
 
-            splash.PrepareDisplay(flights, settings, _poolManager, OnSplash);
+            splash.PrepareDisplay(flights, settings, _poolManager, PaintBlob);
             effect.Play(worldPosition, tint, () => _poolManager.Return(key, effect));
 
             return UniTask.CompletedTask;
 
-            // Captures only this activation's locals — splashes land over time and a second
-            // Paint activation may run in between, so no handler field may be read here.
-            void OnSplash(int index)
+            // Each blob stamps the disturbance field where it lands (the visible splash) and recolours the
+            // balloons it covers. Captures only this activation's locals — splashes land over time and a
+            // second Paint activation may run in between, so no handler field may be read here.
+            void PaintBlob(int index)
             {
-                if (index < NeighborCount && paintTargets[index] != null)
+                if (index < 0 || index >= blobPositions.Count)
                 {
-                    paintTargets[index].Color.Value = paintColor;
+                    return;
                 }
 
-                if (index < NeighborCount)
-                {
-                    var splashPos = _grid.IndexToWorldPosition(neighborIndices[index]);
-                    var dir = ((Vector2)(splashPos - worldPosition)).normalized;
-                    _disturbanceField.Stamp(StampSource.Paint, splashPos, dir);
-                }
+                var landing = blobPositions[index];
+                var direction = (landing - (Vector2)worldPosition).normalized;
+                _disturbanceField.Stamp(StampSource.Paint, landing, direction);
+                Recolor(paintColor, targetsByBlob[index]);
             }
         }
 
-        // One paint target per neighbour index — null where the slot is empty, non-paintable, or
-        // already the paint colour.
-        private IPaintable[] BuildPaintTargets(Vector2Int[] neighborIndices, string paintColor)
+        // Different-colour paintable balloons within blobRadius of a packed blob, bucketed by the blob
+        // nearest to each — so a balloon is recoloured the moment its covering blob lands. Painting
+        // tracks the visible splash coverage: balloons in gaps between blobs are left alone. Buckets are
+        // indexed 1:1 with blobPositions; empty buckets are simply blobs that covered no balloon.
+        private List<IPaintable>[] CollectPaintTargets(
+            IReadOnlyList<Vector2> blobPositions, float blobRadius, string paintColor)
         {
-            var targets = new IPaintable[NeighborCount];
-            for (var i = 0; i < NeighborCount; i++)
-            {
-                var idx = neighborIndices[i];
-                var actor = _grid.IsEmpty(idx.x, idx.y) ? null : _grid.At(idx);
+            var buckets = new List<IPaintable>[blobPositions.Count];
+            var radiusSqr = blobRadius * blobRadius;
 
-                if (actor is IPaintable colorable && colorable.Color.Value != paintColor)
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
                 {
-                    targets[i] = colorable;
+                    if (_grid.IsEmpty(col, row))
+                    {
+                        continue;
+                    }
+
+                    var slot = new Vector2Int(col, row);
+                    var position = (Vector2)_grid.IndexToWorldPosition(slot);
+                    if (_grid.At(slot) is not IPaintable paintable || paintable.Color.Value == paintColor)
+                    {
+                        continue;
+                    }
+
+                    var nearest = NearestBlob(blobPositions, position, out var nearestSqr);
+                    if (nearestSqr > radiusSqr)
+                    {
+                        continue;
+                    }
+
+                    (buckets[nearest] ??= new List<IPaintable>()).Add(paintable);
                 }
             }
 
-            return targets;
+            return buckets;
         }
 
-        // No activation effect: recolour the targets and stamp the disturbance field immediately.
-        private void PaintImmediate(
-            Vector3 worldPosition, string paintColor, Vector2Int[] neighborIndices, IPaintable[] paintTargets)
+        private static int NearestBlob(IReadOnlyList<Vector2> blobPositions, Vector2 position, out float bestSqr)
         {
-            for (var i = 0; i < NeighborCount; i++)
+            var best = 0;
+            bestSqr = float.MaxValue;
+            for (var i = 0; i < blobPositions.Count; i++)
             {
-                if (paintTargets[i] != null)
+                var sqr = (blobPositions[i] - position).sqrMagnitude;
+                if (sqr < bestSqr)
                 {
-                    paintTargets[i].Color.Value = paintColor;
+                    bestSqr = sqr;
+                    best = i;
                 }
+            }
 
-                var neighborPos = _grid.IndexToWorldPosition(neighborIndices[i]);
-                var dir = ((Vector2)(neighborPos - worldPosition)).normalized;
-                _disturbanceField.Stamp(StampSource.Paint, neighborPos, dir);
+            return best;
+        }
+
+        private static void Recolor(string paintColor, IReadOnlyList<IPaintable> targets)
+        {
+            if (targets == null)
+            {
+                return;
+            }
+
+            foreach (var target in targets)
+            {
+                target.Color.Value = paintColor;
             }
         }
     }

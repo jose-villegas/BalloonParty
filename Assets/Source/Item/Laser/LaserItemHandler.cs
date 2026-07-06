@@ -56,8 +56,11 @@ namespace BalloonParty.Item.Laser
             _transformCapturedSubscriber.Subscribe(msg => _capturedRotations[msg.Source] = msg.Snapshot.Rotation);
         }
 
-        public UniTask Activate(IBalloonModel balloon, Vector3 worldPosition)
+        public UniTask Activate(ItemActivationContext activation)
         {
+            var balloon = activation.Balloon;
+            var worldPosition = activation.WorldPosition;
+
             var settings = _itemConfig[ItemType.Laser];
 
             _capturedRotations.TryGetValue(balloon, out var laserRotation);

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Item;
 using BalloonParty.Item.Lightning;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
@@ -89,7 +90,7 @@ namespace BalloonParty.Tests.Item
             var source = PlaceBalloon(0, 0, "Red");
             PlaceBalloon(1, 0, "Blue");
 
-            _handler.Activate(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
+            _handler.Activate(new ItemActivationContext(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero));
 
             _hitDispatcher.DidNotReceive().Dispatch(Arg.Any<ActorHitMessage>());
         }
@@ -101,7 +102,7 @@ namespace BalloonParty.Tests.Item
             PlaceBalloon(1, 0, "Red");
             PlaceBalloon(2, 0, "Red");
 
-            _handler.Activate(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
+            _handler.Activate(new ItemActivationContext(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero));
 
             _hitDispatcher.Received(2).Dispatch(Arg.Any<ActorHitMessage>());
         }
@@ -112,7 +113,7 @@ namespace BalloonParty.Tests.Item
             var source = PlaceBalloon(0, 0, "Red");
             PlaceBalloon(1, 0, "Red");
 
-            _handler.Activate(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
+            _handler.Activate(new ItemActivationContext(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero));
 
             _hitDispatcher.Received(1).Dispatch(Arg.Any<ActorHitMessage>());
             _hitDispatcher.DidNotReceive().Dispatch(
@@ -125,7 +126,7 @@ namespace BalloonParty.Tests.Item
             var source = PlaceBalloon(0, 0, "Red");
             PlaceBalloon(1, 0, "Red");
 
-            _handler.Activate(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
+            _handler.Activate(new ItemActivationContext(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero));
 
             _hitDispatcher.Received(1).Dispatch(
                 Arg.Is<ActorHitMessage>(m => m.Context.Damage == 1));
@@ -152,8 +153,8 @@ namespace BalloonParty.Tests.Item
             var target2 = PlaceBalloon(2, 0, "Red");
             var sourceB = PlaceBalloon(5, 9, "Red");
 
-            handler.Activate(sourceA, _grid.IndexToWorldPosition(new Vector2Int(0, 0)));
-            handler.Activate(sourceB, _grid.IndexToWorldPosition(new Vector2Int(5, 9)));
+            handler.Activate(new ItemActivationContext(sourceA, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero));
+            handler.Activate(new ItemActivationContext(sourceB, _grid.IndexToWorldPosition(new Vector2Int(5, 9)), Vector3.zero));
 
             // Chain A's jumps land after B's activation collected its own targets — they must
             // still hit A's targets (t1, t2, B), never A itself via B's refreshed list.

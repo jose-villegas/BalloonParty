@@ -37,7 +37,8 @@ namespace BalloonParty.Item.Paint
         private static readonly int SpriteScaleId = Shader.PropertyToID("_SpriteScale");
 
         [Header("Blobs")]
-        [Tooltip("Pre-placed blob ColorableRenderers — one per possible neighbor (6 for hex grid).")]
+        [Tooltip("Seed blob ColorableRenderers. The pool clones the first entry when the packed splash " +
+                 "needs more than are pre-placed, so one entry is enough.")]
         [SerializeField] private ColorableRenderer[] _blobRenderers;
 
         [Header("Splash")]
@@ -47,6 +48,7 @@ namespace BalloonParty.Item.Paint
         private static MaterialPropertyBlock _blobBlock;
 
         private List<BlobFlight> _activeFlights;
+        private List<ColorableRenderer> _blobPool;
         private Color _color;
         private Action<int> _onTargetHit;
         private bool _playing;
@@ -79,13 +81,13 @@ namespace BalloonParty.Item.Paint
             _poolManager = poolManager;
             _onTargetHit = onTargetHit;
 
-            var blobCount = _blobRenderers != null ? _blobRenderers.Length : 0;
+            EnsureBlobPool(flights.Count);
 
             _activeFlights = new List<BlobFlight>();
 
             for (var i = 0; i < flights.Count; i++)
             {
-                var blob = i < blobCount ? _blobRenderers[i] : null;
+                var blob = i < _blobPool.Count ? _blobPool[i] : null;
 
                 if (blob == null)
                 {
@@ -216,14 +218,43 @@ namespace BalloonParty.Item.Paint
             }
         }
 
-        private void HideAllBlobs()
+        // Circle-packing density can exceed the prefab's pre-placed blobs, so grow the pool by cloning
+        // the first serialized blob. The view is itself pooled, so clones persist and are reused across
+        // plays rather than reallocated per activation.
+        private void EnsureBlobPool(int needed)
         {
-            if (_blobRenderers == null)
+            _blobPool ??= new List<ColorableRenderer>();
+
+            if (_blobPool.Count == 0 && _blobRenderers != null)
+            {
+                foreach (var blob in _blobRenderers)
+                {
+                    if (blob != null)
+                    {
+                        _blobPool.Add(blob);
+                    }
+                }
+            }
+
+            if (_blobPool.Count == 0)
             {
                 return;
             }
 
-            foreach (var blob in _blobRenderers)
+            var template = _blobPool[0];
+            while (_blobPool.Count < needed)
+            {
+                var clone = Instantiate(template, template.transform.parent);
+                clone.gameObject.SetActive(false);
+                _blobPool.Add(clone);
+            }
+        }
+
+        private void HideAllBlobs()
+        {
+            EnsureBlobPool(0);
+
+            foreach (var blob in _blobPool)
             {
                 if (blob != null)
                 {

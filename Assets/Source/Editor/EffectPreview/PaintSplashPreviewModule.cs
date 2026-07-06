@@ -20,6 +20,8 @@ namespace BalloonParty.Editor.EffectPreview
     /// </summary>
     internal sealed class PaintSplashPreviewModule : IEffectPreviewModule
     {
+        private const int GizmoMaxBlobs = 256;
+
         private static readonly FieldInfo BlobRenderersField =
             typeof(PaintSplashView).GetField("_blobRenderers", BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -27,10 +29,9 @@ namespace BalloonParty.Editor.EffectPreview
             typeof(PaintSplashView).GetField("_splashParticlePrefab", BindingFlags.NonPublic | BindingFlags.Instance);
 
         private readonly PaintSplashView _view;
-        private readonly ConfigAssetCache<GameConfiguration> _gameConfigCache = new();
         private readonly ConfigAssetCache<ItemConfiguration> _itemConfigCache = new();
 
-        private int _blobCount = 6;
+        private float _previewDirectionDegrees = 90f;
         private List<FlightState> _flights;
         private List<SplashInstance> _splashes;
         private EffectPreviewContext _ctx;
@@ -49,6 +50,10 @@ namespace BalloonParty.Editor.EffectPreview
 
         private float FlightDuration => (_ctx?.Settings ?? PreStartSettings)?.Paint.FlightDuration ?? 0.35f;
         private float SpinSpeed => _ctx?.Settings?.Paint.SpinSpeed ?? 720f;
+        private float SpreadOffset => (_ctx?.Settings ?? PreStartSettings)?.Paint.SpreadOffset ?? 0f;
+        private float SpreadLength => (_ctx?.Settings ?? PreStartSettings)?.Paint.SpreadLength ?? 3f;
+        private float SpreadBaseWidth => (_ctx?.Settings ?? PreStartSettings)?.Paint.SpreadBaseWidth ?? 2.5f;
+        private float SpreadBlobRadius => (_ctx?.Settings ?? PreStartSettings)?.Paint.SpreadBlobRadius ?? 0.35f;
 
         internal PaintSplashPreviewModule(PaintSplashView view)
         {
@@ -57,27 +62,20 @@ namespace BalloonParty.Editor.EffectPreview
 
         public bool UsesColorPicker => true;
 
-        private float FlightRadius
-        {
-            get
-            {
-                var config = _ctx?.GameConfig ?? _gameConfigCache.Value;
-
-                if (config == null)
-                {
-                    return 1f;
-                }
-
-                var sep = config.SlotSeparation;
-                return Mathf.Sqrt((sep.x * sep.x) + (sep.y * sep.y));
-            }
-        }
-
         public void DrawGUI()
         {
-            _blobCount = EditorGUILayout.IntSlider("Blob Count", _blobCount, 1, 6);
+            EditorGUI.BeginChangeCheck();
+            _previewDirectionDegrees = EditorGUILayout.Slider("Direction (deg)", _previewDirectionDegrees, 0f, 360f);
+            if (EditorGUI.EndChangeCheck())
+            {
+                SceneView.RepaintAll();
+            }
+
+            EditorGUILayout.LabelField("Offset", $"{SpreadOffset:F2}  (from ItemConfiguration)");
+            EditorGUILayout.LabelField("Length", $"{SpreadLength:F2}  (from ItemConfiguration)");
+            EditorGUILayout.LabelField("Base Width", $"{SpreadBaseWidth:F2}  (from ItemConfiguration)");
+            EditorGUILayout.LabelField("Blob Radius", $"{SpreadBlobRadius:F2}  (from ItemConfiguration)");
             EditorGUILayout.LabelField("Flight Duration", $"{FlightDuration:F2}  (from ItemConfiguration)");
-            EditorGUILayout.LabelField("Flight Radius", $"{FlightRadius:F2}  (from SlotSeparation)");
         }
 
         public void Start(EffectPreviewContext context)
@@ -85,29 +83,38 @@ namespace BalloonParty.Editor.EffectPreview
             _ctx = context;
             var blobs = Blobs;
             var origin = _view.transform.position;
-            var count = Mathf.Clamp(_blobCount, 1, 6);
-            var radius = FlightRadius;
+            var paint = (context.Settings ?? PreStartSettings)?.Paint;
 
             _flights = new List<FlightState>();
             _splashes = new List<SplashInstance>();
 
-            for (var i = 0; i < count; i++)
+            if (paint == null || blobs == null || blobs.Length == 0)
             {
-                var blob = blobs != null && i < blobs.Length ? blobs[i] : null;
+                return;
+            }
+
+            Vector2 direction = VectorMathExtensions.DirectionFromAngle(_previewDirectionDegrees * Mathf.Deg2Rad);
+            var triangle = PaintTriangle.Build(origin, direction, paint);
+
+            // Cap at the prefab's seed blobs — the preview conveys the shape and aim; the runtime pools
+            // the full packed density.
+            var packed = new List<Vector2>();
+            triangle.PackBlobs(paint.SpreadBlobRadius, blobs.Length, packed);
+
+            for (var i = 0; i < packed.Count && i < blobs.Length; i++)
+            {
+                var blob = blobs[i];
 
                 if (blob == null)
                 {
                     continue;
                 }
 
-                var angle = 360f / count * i * Mathf.Deg2Rad;
-                Vector3 direction = VectorMathExtensions.DirectionFromAngle(angle);
-                var destination = origin + (direction * radius);
+                var destination = new Vector3(packed[i].x, packed[i].y, origin.z);
 
                 blob.gameObject.SetActive(true);
                 blob.transform.position = origin;
-                blob.transform.localScale = Vector3.one *
-                                            (context.Settings?.Paint.ScaleCurve?.Evaluate(0f) ?? 1f);
+                blob.transform.localScale = Vector3.one * (paint.ScaleCurve?.Evaluate(0f) ?? 1f);
                 blob.transform.rotation = Quaternion.identity;
 
                 blob.SetColor(context.Tint);
@@ -160,6 +167,42 @@ namespace BalloonParty.Editor.EffectPreview
 
             _flights = null;
             DestroySplashes();
+        }
+
+        // Outlines the paint triangle and every packed blob position, so the region and density are
+        // visible in the Scene view while tuning — independent of playback.
+        public void DrawSceneGizmos()
+        {
+            var paint = (_ctx?.Settings ?? PreStartSettings)?.Paint;
+            if (paint == null || _view == null)
+            {
+                return;
+            }
+
+            var origin = _view.transform.position;
+            Vector2 direction = VectorMathExtensions.DirectionFromAngle(_previewDirectionDegrees * Mathf.Deg2Rad);
+            var triangle = PaintTriangle.Build(origin, direction, paint);
+
+            SceneDrawingHelper.DrawWorldTriangle(
+                ToWorld(triangle.Apex, origin.z),
+                ToWorld(triangle.Left, origin.z),
+                ToWorld(triangle.Right, origin.z),
+                new Color(1f, 0.4f, 0.1f, 0.9f),
+                new Color(1f, 0.4f, 0.1f, 0.08f));
+
+            var packed = new List<Vector2>();
+            triangle.PackBlobs(paint.SpreadBlobRadius, GizmoMaxBlobs, packed);
+
+            var discColor = new Color(0.2f, 0.8f, 1f, 0.85f);
+            foreach (var centre in packed)
+            {
+                SceneDrawingHelper.DrawWorldDisc(ToWorld(centre, origin.z), paint.SpreadBlobRadius, discColor);
+            }
+        }
+
+        private static Vector3 ToWorld(Vector2 point, float z)
+        {
+            return new Vector3(point.x, point.y, z);
         }
 
         private bool TickFlights(float delta)

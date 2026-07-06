@@ -40,5 +40,12 @@ namespace BalloonParty.Editor.EffectPreview
         ///     Called on Stop or when the animation finishes.
         /// </summary>
         void CleanUp();
+
+        /// <summary>
+        ///     Draw persistent Scene-view guides for the effect (region outlines, target markers) via
+        ///     <see cref="UnityEditor.Handles" />. Called from the host editor's <c>OnSceneGUI</c>, so it
+        ///     runs whether or not the preview is playing. Modules with nothing to show leave it empty.
+        /// </summary>
+        void DrawSceneGizmos();
     }
 }

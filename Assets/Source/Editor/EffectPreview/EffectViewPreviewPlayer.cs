@@ -69,6 +69,11 @@ namespace BalloonParty.Editor.EffectPreview
             _animLoop.DrawControls(StartPreview);
         }
 
+        internal void DrawSceneGizmos()
+        {
+            _module.DrawSceneGizmos();
+        }
+
         internal void Stop()
         {
             if (_animLoop.IsPlaying)

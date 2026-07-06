@@ -53,8 +53,11 @@ namespace BalloonParty.Item.Lightning
             _poolManager = poolManager;
         }
 
-        public UniTask Activate(IBalloonModel balloon, Vector3 worldPosition)
+        public UniTask Activate(ItemActivationContext activation)
         {
+            var balloon = activation.Balloon;
+            var worldPosition = activation.WorldPosition;
+
             var settings = _itemConfig[ItemType.Lightning];
 
             // Per-activation lists, not shared buffers: the chain view keeps the positions

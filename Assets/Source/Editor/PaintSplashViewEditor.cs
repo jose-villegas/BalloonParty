@@ -26,6 +26,12 @@ namespace BalloonParty.Editor
             base.OnDisable();
         }
 
+        private void OnSceneGUI()
+        {
+            EnsurePlayer();
+            _player.DrawSceneGizmos();
+        }
+
         private void EnsurePlayer()
         {
             if (_player != null)

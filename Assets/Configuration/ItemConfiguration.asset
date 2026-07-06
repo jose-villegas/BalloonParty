@@ -147,6 +147,10 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 720
+      _spreadOffset: 0
+      _spreadLength: 3
+      _spreadBaseWidth: 2.5
+      _spreadBlobRadius: 0.35
   - _type: 3
     _turnCheckEvery: 1
     _weight: 10
@@ -277,6 +281,10 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 720
+      _spreadOffset: 0
+      _spreadLength: 3
+      _spreadBaseWidth: 2.5
+      _spreadBlobRadius: 0.35
   - _type: 4
     _turnCheckEvery: 1
     _weight: 8
@@ -407,6 +415,10 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 720
+      _spreadOffset: 0
+      _spreadLength: 3
+      _spreadBaseWidth: 2.5
+      _spreadBlobRadius: 0.35
   - _type: 1
     _turnCheckEvery: 1
     _weight: 25
@@ -537,6 +549,10 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 720
+      _spreadOffset: 0
+      _spreadLength: 3
+      _spreadBaseWidth: 2.5
+      _spreadBlobRadius: 0.35
   - _type: 5
     _turnCheckEvery: 1
     _weight: 20
@@ -703,3 +719,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 120
+      _spreadOffset: 1.65
+      _spreadLength: -3.125
+      _spreadBaseWidth: 4.25
+      _spreadBlobRadius: 0.35

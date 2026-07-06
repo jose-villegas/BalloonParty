@@ -50,6 +50,36 @@ namespace BalloonParty.Editor
             DrawWorldQuad(bl, br, tr, tl, outlineColor, fillColor);
         }
 
+        /// <summary>
+        ///     Draws a filled, outlined world-space triangle.
+        /// </summary>
+        public static void DrawWorldTriangle(
+            Vector3 a,
+            Vector3 b,
+            Vector3 c,
+            Color outlineColor,
+            Color fillColor)
+        {
+            if (fillColor.a > 0f)
+            {
+                Handles.DrawSolidRectangleWithOutline(new[] { a, b, c, a }, fillColor, Color.clear);
+            }
+
+            Handles.color = outlineColor;
+            Handles.DrawLine(a, b);
+            Handles.DrawLine(b, c);
+            Handles.DrawLine(c, a);
+        }
+
+        /// <summary>
+        ///     Draws a world-space wire circle in the XY plane.
+        /// </summary>
+        public static void DrawWorldDisc(Vector3 center, float radius, Color outlineColor)
+        {
+            Handles.color = outlineColor;
+            Handles.DrawWireDisc(center, Vector3.forward, radius);
+        }
+
         private static void DrawWorldQuad(
             Vector3 bl,
             Vector3 br,

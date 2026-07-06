@@ -67,7 +67,7 @@ namespace BalloonParty.Tests.PlayMode
             var before = BalloonCount(grid);
 
             // Activate is synchronous (returns CompletedTask) — the blast publishes its hits inline.
-            _ = bomb.Activate(model, grid.IndexToWorldPosition(slot));
+            _ = bomb.Activate(new ItemActivationContext(model, grid.IndexToWorldPosition(slot), Vector3.zero));
 
             yield return WaitUntil(() => BalloonCount(grid) < before, timeout: 5f,
                 message: "Bomb blast did not remove any balloon.");

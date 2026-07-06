@@ -129,6 +129,11 @@ namespace BalloonParty.Configuration.Editor
                         paint,
                         "_paintBlobSpinSpeed",
                         "Blob Spin Speed");
+                    y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Spread");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, paint, "_spreadOffset", "Offset");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, paint, "_spreadLength", "Length");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, paint, "_spreadBaseWidth", "Base Width");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, paint, "_spreadBlobRadius", "Blob Radius");
                     break;
             }
 
@@ -157,7 +162,8 @@ namespace BalloonParty.Configuration.Editor
                     return row * 7;
 
                 case ItemType.Paint:
-                    return row * 7;
+                    // 1 "Paint" header + 6 blob fields + 1 "Spread" header + 4 spread fields.
+                    return row * 12;
 
                 default:
                     return 0f;

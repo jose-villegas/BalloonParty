@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Item;
 using BalloonParty.Item.Paint;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
@@ -44,6 +45,9 @@ namespace BalloonParty.Tests.Item
 
             var itemConfig = Substitute.For<IItemConfiguration>();
             var paintSettings = CreateItemSettings(ItemType.Paint);
+            // A blob radius large enough that the whole aimed triangle is covered, so painting is decided
+            // by aim/colour rather than the exact packing lattice.
+            SetField(paintSettings.Paint, "_spreadBlobRadius", 5f);
             itemConfig[ItemType.Paint].Returns(paintSettings);
             itemConfig.Items.Returns(new List<ItemSettings> { paintSettings });
 
@@ -59,53 +63,63 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
-        public void Activate_PaintsNeighborsToSourceColor()
+        public void Activate_PaintsCoveredTargetsToSourceColor()
         {
             var source = PlaceBalloon(2, 2, "Red");
-            var neighbor = PlaceBalloon(1, 2, "Blue");
+            var target = PlaceBalloon(1, 2, "Blue");
 
-            _handler.Activate(source, Vector3.zero);
+            _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
 
-            Assert.AreEqual("Red", neighbor.Color.Value);
+            Assert.AreEqual("Red", target.Color.Value);
         }
 
         [Test]
-        public void Activate_SkipsSameColorNeighbors()
+        public void Activate_SkipsSameColorTargets()
         {
             var source = PlaceBalloon(2, 2, "Red");
             var sameColor = PlaceBalloon(1, 2, "Red");
 
-            _handler.Activate(source, Vector3.zero);
+            _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
 
             Assert.AreEqual("Red", sameColor.Color.Value);
         }
 
         [Test]
-        public void Activate_SkipsNonPaintableNeighbors()
+        public void Activate_SkipsNonPaintableTargets()
         {
             var source = PlaceBalloon(2, 2, "Red");
             var tough = PlaceToughBalloon(1, 2);
 
-            _handler.Activate(source, Vector3.zero);
-
+            Assert.DoesNotThrow(() => _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2))));
             Assert.IsFalse(tough is IPaintable);
-        }        [Test]
-        public void Activate_EmptyColor_DoesNothing()
-        {
-            var source = PlaceBalloon(2, 2, "");
-            var neighbor = PlaceBalloon(1, 2, "Blue");
-
-            _handler.Activate(source, Vector3.zero);
-
-            Assert.AreEqual("Blue", neighbor.Color.Value);
         }
 
         [Test]
-        public void Activate_NoNeighbors_DoesNotThrow()
+        public void Activate_EmptyColor_DoesNothing()
+        {
+            var source = PlaceBalloon(2, 2, "");
+            var target = PlaceBalloon(1, 2, "Blue");
+
+            _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
+
+            Assert.AreEqual("Blue", target.Color.Value);
+        }
+
+        [Test]
+        public void Activate_NoTargets_DoesNotThrow()
         {
             var source = PlaceBalloon(0, 0, "Red");
 
-            Assert.DoesNotThrow(() => _handler.Activate(source, Vector3.zero));
+            Assert.DoesNotThrow(() => _handler.Activate(HitToward(source, new Vector2Int(0, 0), new Vector2Int(1, 0))));
+        }
+
+        // Hits at the source slot's world position, aiming the triangle down the axis toward another
+        // slot — so a balloon at that slot lands on the triangle's median and gets painted.
+        private ItemActivationContext HitToward(IBalloonModel source, Vector2Int from, Vector2Int toward)
+        {
+            var hit = _grid.IndexToWorldPosition(from);
+            var direction = _grid.IndexToWorldPosition(toward) - hit;
+            return new ItemActivationContext(source, hit, direction);
         }
 
         private BalloonModel PlaceBalloon(int col, int row, string color)

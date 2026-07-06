@@ -103,11 +103,30 @@ namespace BalloonParty.Configuration.Items
 
         [SerializeField] private float _paintBlobSpinSpeed = 720f;
 
+        [Tooltip("Shifts the triangle along the travel axis from the hit point, in world units. " +
+                 "Negative pulls it back toward the launcher.")]
+        [SerializeField] private float _spreadOffset;
+
+        [Tooltip("How far the triangle reaches along the travel axis, in world units. Positive opens it " +
+                 "forward (along travel); negative opens it backward.")]
+        [SerializeField] private float _spreadLength = 3f;
+
+        [Tooltip("Width of the triangle's far edge, perpendicular to travel, in world units.")]
+        [SerializeField] private float _spreadBaseWidth = 2.5f;
+
+        [Tooltip("Radius of each packed paint blob, in world units. Smaller packs more blobs = denser.")]
+        [SerializeField] private float _spreadBlobRadius = 0.35f;
+
         public float FlightDuration => _paintBlobFlightDuration;
         public AnimationCurve ArcCurve => _paintBlobArcCurve;
         public AnimationCurve ScaleCurve => _paintBlobScaleCurve;
         public AnimationCurve ShadowScaleCurve => _paintBlobShadowScaleCurve;
         public AnimationCurve SpriteScaleCurve => _paintBlobSpriteScaleCurve;
         public float SpinSpeed => _paintBlobSpinSpeed;
+
+        public float SpreadOffset => _spreadOffset;
+        public float SpreadLength => _spreadLength;
+        public float SpreadBaseWidth => _spreadBaseWidth;
+        public float SpreadBlobRadius => _spreadBlobRadius;
     }
 }

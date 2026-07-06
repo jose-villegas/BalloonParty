@@ -220,6 +220,11 @@ namespace BalloonParty.Editor.EffectPreview
             _glowDiameters = null;
         }
 
+        // Chain lightning has no static region to outline — the arcs themselves are the preview.
+        public void DrawSceneGizmos()
+        {
+        }
+
         private float GlowMaxIdx => _glowPath != null && _glowPath.Length > 0 ? _glowPath.Length - 1 : 0f;
 
         private void InterpolateGlow()

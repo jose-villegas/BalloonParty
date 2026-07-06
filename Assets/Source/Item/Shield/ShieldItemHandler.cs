@@ -41,8 +41,11 @@ namespace BalloonParty.Item.Shield
             _loadedSubscriber.Subscribe(msg => _activeProjectile = (IWriteableProjectileModel)msg.Model);
         }
 
-        public UniTask Activate(IBalloonModel balloon, Vector3 worldPosition)
+        public UniTask Activate(ItemActivationContext activation)
         {
+            var balloon = activation.Balloon;
+            var worldPosition = activation.WorldPosition;
+
             if (_activeProjectile != null)
             {
                 _activeProjectile.ShieldsRemaining.Value++;

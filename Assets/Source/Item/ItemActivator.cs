@@ -71,10 +71,11 @@ namespace BalloonParty.Item
                 return;
             }
 
-            ActivateAsync(handler, balloon, msg.WorldPosition).Forget();
+            var context = new ItemActivationContext(balloon, msg.WorldPosition, msg.ProjectileDirection);
+            ActivateAsync(handler, context).Forget();
         }
 
-        private async UniTaskVoid ActivateAsync(IBalloonItem handler, IBalloonModel balloon, Vector3 worldPosition)
+        private async UniTaskVoid ActivateAsync(IBalloonItem handler, ItemActivationContext context)
         {
             try
             {
@@ -82,8 +83,8 @@ namespace BalloonParty.Item
                 // (e.g. BalloonController capturing item rotation) finish first.
                 await UniTask.Yield(_cts.Token);
 
-                await handler.Activate(balloon, worldPosition);
-                _itemActivatedPublisher.Publish(new ItemActivatedMessage(balloon));
+                await handler.Activate(context);
+                _itemActivatedPublisher.Publish(new ItemActivatedMessage(context.Balloon));
             }
             catch (OperationCanceledException)
             {

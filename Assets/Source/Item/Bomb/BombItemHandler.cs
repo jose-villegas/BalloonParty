@@ -47,8 +47,11 @@ namespace BalloonParty.Item.Bomb
             _disturbanceField = disturbanceField;
         }
 
-        public UniTask Activate(IBalloonModel balloon, Vector3 worldPosition)
+        public UniTask Activate(ItemActivationContext activation)
         {
+            var balloon = activation.Balloon;
+            var worldPosition = activation.WorldPosition;
+
             var settings = _itemConfig[ItemType.Bomb];
 
             // Shockwave first — nudges all balloons before any get popped or
