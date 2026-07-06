@@ -25,6 +25,7 @@ namespace BalloonParty.Thrower
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
+        private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly PauseService _pauseService;
         private readonly IObjectResolver _resolver;
         private readonly List<Vector3> _tracePoints = new();
@@ -56,6 +57,7 @@ namespace BalloonParty.Thrower
             ISubscriber<RunResetMessage> resetSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
             ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
+            ISubscriber<GameOverMessage> gameOverSubscriber,
             PauseService pauseService,
             ProjectilePositionProvider positionProvider)
         {
@@ -69,6 +71,7 @@ namespace BalloonParty.Thrower
             _resetSubscriber = resetSubscriber;
             _boardClearSubscriber = boardClearSubscriber;
             _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
+            _gameOverSubscriber = gameOverSubscriber;
             _pauseService = pauseService;
             _positionProvider = positionProvider;
             _projectilePoolKey = settings.ProjectilePrefab.name;
@@ -93,6 +96,11 @@ namespace BalloonParty.Thrower
             _boardClearSubscriber.Subscribe(_ => Reload());
 
             _levelUpDismissedSubscriber.Subscribe(_ => OnLevelUpDismissed());
+
+            // A projectile fired in the instant before the loss keeps flying on its own physics (the
+            // FixedUpdate only gates on pause, not navigation), so it could still pop balloons behind
+            // the game-over popup. Scale it away when the run ends.
+            _gameOverSubscriber.Subscribe(_ => OnGameOver());
 
             Navigation.Current
                 .Where(state => state == NavigationState.Game)
@@ -160,6 +168,23 @@ namespace BalloonParty.Thrower
             {
                 Reload();
             }
+        }
+
+        // Scales the in-flight projectile away and drops our references without reloading — the run is
+        // over, so a fresh projectile only loads later on restart (via RunResetMessage). The view
+        // returns itself to the pool once the scale-down completes.
+        private void OnGameOver()
+        {
+            if (_activeView == null)
+            {
+                return;
+            }
+
+            var view = _activeView;
+            _positionProvider.Clear();
+            _activeProjectile = null;
+            _activeView = null;
+            view.PlayDisappear(() => _poolManager.Return(_projectilePoolKey, view));
         }
 
         private void Reload()
