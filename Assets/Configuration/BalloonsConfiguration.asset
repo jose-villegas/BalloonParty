@@ -97,6 +97,7 @@ MonoBehaviour:
   _balloonSpawnAnimationSpeedRange: {x: 1.5, y: 3}
   _spawnEntryRowOffset: 4
   _timeForBalloonsBalance: 1.75
+  _flightRebalanceInterval: 4
   _nudgeDistance: 0.15
   _nudgeDuration: 0.7
   _nudgeFalloff: 1.5

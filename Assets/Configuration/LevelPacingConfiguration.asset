@@ -466,7 +466,7 @@ MonoBehaviour:
         _weight: 1
         _maxCountOverride: 0
       - _type: 4
-        _weight: 0.6
+        _weight: 2
         _maxCountOverride: 9
       - _type: 1
         _weight: 1
@@ -578,10 +578,10 @@ MonoBehaviour:
         _weight: 1
         _maxCountOverride: 0
       - _type: 5
-        _weight: 1
+        _weight: 2
         _maxCountOverride: 0
       - _type: 4
-        _weight: 0.6
+        _weight: 1
         _maxCountOverride: 9
       - _type: 1
         _weight: 1

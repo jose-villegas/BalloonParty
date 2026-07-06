@@ -199,6 +199,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: PU_Paint
       objectReference: {fileID: 0}
+    - target: {fileID: 8947415724866904819, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      propertyPath: m_UpdateMode
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects:

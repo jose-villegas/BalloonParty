@@ -11,7 +11,7 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 470d5420d203a354388f0723fa8d4c9f, type: 3}
   m_Name: GameConfiguration
-  m_EditorClassIdentifier:
+  m_EditorClassIdentifier: 
   _startingHitPoints: 5
   _projectileStartingShields: 1
   _projectileSpeed: 7
@@ -26,5 +26,4 @@ MonoBehaviour:
   _predictionTraceMaxSteps: 15
   _scorePointTraceDuration: 1
   _scorePointsScatterDelay: 0.02
-  _minStaticActors: 1
-  _maxStaticActors: 3
+  _scorePointBurstDuration: 0.12
