@@ -29,6 +29,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IActiveLevelParameters _levelParams;
         private readonly CancellationTokenSource _cts = new();
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
+        private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly SlotGrid _grid;
         private readonly IPublisher<ItemCheckMessage> _itemCheckPublisher;
         private readonly ISubscriber<SpawnBalloonLineMessage> _lineSubscriber;
@@ -58,6 +59,7 @@ namespace BalloonParty.Balloon.Spawner
             BalloonFactory factory,
             IPublisher<BalanceBalloonsMessage> balancePublisher,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
+            ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
             RejectedBalloonEffect rejectedBalloon,
             BalloonPlacementResolver placement)
@@ -72,6 +74,7 @@ namespace BalloonParty.Balloon.Spawner
             _factory = factory;
             _balancePublisher = balancePublisher;
             _destroyedSubscriber = destroyedSubscriber;
+            _levelUpSubscriber = levelUpSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
             _rejectedBalloon = rejectedBalloon;
             _placement = placement;
@@ -87,6 +90,11 @@ namespace BalloonParty.Balloon.Spawner
 
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount));
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
+
+            // Reset the turn counter each level-up so FirstSpawnTurn is a per-level grace: the new
+            // level's opening shots don't spawn lines until its own start turn. (Counter is otherwise
+            // run-monotonic; ResetRun zeroes it for a fresh run.)
+            _levelUpSubscriber.Subscribe(_ => _turnCount = 0);
 
             // Begin prewarm immediately so pools are ready before SpawnAsync is called.
             PrewarmThenFlagAsync(_cts.Token).Forget();
@@ -144,7 +152,7 @@ namespace BalloonParty.Balloon.Spawner
         private void OnProjectileDestroyed()
         {
             _turnCount++;
-            if (_turnCount <= 1)
+            if (_turnCount < _levelParams.Current.FirstSpawnTurn)
             {
                 return;
             }

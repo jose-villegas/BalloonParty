@@ -26,6 +26,7 @@ namespace BalloonParty.Configuration.Level
         private readonly int _spawnLines = 1;
         private readonly int _boardLines = 5;
         private readonly int _itemCadence = 5;
+        private readonly int _firstSpawnTurn = 2;
         private readonly AnimationCurve _initialItemCountWeights = new();
 
         private readonly AnimationCurve _itemCountWeights =
@@ -55,13 +56,15 @@ namespace BalloonParty.Configuration.Level
         }
 
         internal LevelParameters(
-            int spawnLines, int boardLines, int itemCadence, AnimationCurve initialItemCountWeights,
-            AnimationCurve itemCountWeights, BalloonTypeWeight[] balloonWeights, ItemTypeWeight[] itemWeights,
+            int spawnLines, int boardLines, int itemCadence, int firstSpawnTurn,
+            AnimationCurve initialItemCountWeights, AnimationCurve itemCountWeights,
+            BalloonTypeWeight[] balloonWeights, ItemTypeWeight[] itemWeights,
             ResolvedGridActorGate[] gridActorGates, int allowedColorsMask)
         {
             _spawnLines = spawnLines;
             _boardLines = boardLines;
             _itemCadence = itemCadence;
+            _firstSpawnTurn = firstSpawnTurn;
             _initialItemCountWeights = initialItemCountWeights;
             _itemCountWeights = itemCountWeights;
             _balloonWeights = balloonWeights;
@@ -73,6 +76,7 @@ namespace BalloonParty.Configuration.Level
         public int SpawnLines => _spawnLines;
         public int BoardLines => _boardLines;
         public int ItemCadence => _itemCadence;
+        public int FirstSpawnTurn => _firstSpawnTurn;
         public AnimationCurve InitialItemCountWeights => _initialItemCountWeights;
         public AnimationCurve ItemCountWeights => _itemCountWeights;
         public IReadOnlyList<ItemSettings> Items => _items;

@@ -26,6 +26,10 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("How often (in turns) an item-drop opportunity happens. 0 = never.")]
         [SerializeField] private RangedInt _itemCadence = new(5, 5);
 
+        [Tooltip("The turn this level starts spawning lines — earlier turns (after entry, and after " +
+                 "each level-up) are a grace period. 2 = start on the second shot.")]
+        [SerializeField] private RangedInt _firstSpawnTurn = new(2, 2);
+
         [Tooltip("Weighted distribution for how many items to seed on the initial board fill (level " +
                  "start / transition), rolled once. X = item count (0, 1, 2…), Y = weight. Empty = none.")]
         [SerializeField] private AnimationCurve _initialItemCountWeights = new();
@@ -53,6 +57,7 @@ namespace BalloonParty.Configuration.Level
         public RangedInt SpawnLines => _spawnLines;
         public RangedInt BoardLines => _boardLines;
         public RangedInt ItemCadence => _itemCadence;
+        public RangedInt FirstSpawnTurn => _firstSpawnTurn;
 
         // Curves are the distribution itself — sampled per turn at runtime, so no per-level range
         // resolution (like the weighted type sets, they pass through Resolve unchanged).
@@ -69,6 +74,7 @@ namespace BalloonParty.Configuration.Level
                 _spawnLines.Resolve(positionInRange, rng),
                 _boardLines.Resolve(positionInRange, rng),
                 _itemCadence.Resolve(positionInRange, rng),
+                _firstSpawnTurn.Resolve(positionInRange, rng),
                 _initialItemCountWeights,
                 _itemCountWeights,
                 _balloonWeights,

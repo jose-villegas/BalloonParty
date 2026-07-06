@@ -18,6 +18,10 @@ namespace BalloonParty.Configuration.Level
         int SpawnLines { get; }
         int BoardLines { get; }
         int ItemCadence { get; }
+
+        /// <summary>The turn this level begins spawning lines; earlier turns (after entry / each
+        /// level-up) are a grace period. The turn counter resets per level.</summary>
+        int FirstSpawnTurn { get; }
         AnimationCurve InitialItemCountWeights { get; }
         AnimationCurve ItemCountWeights { get; }
         IReadOnlyList<ItemSettings> Items { get; }
