@@ -32,10 +32,8 @@ namespace BalloonParty.Item.Paint
             BaseWidth = baseWidth;
         }
 
-        // Undirected activations (no projectile direction, e.g. tests) default to pointing up so the
-        // shape stays well-formed instead of collapsing to a line. A negative SpreadLength opens the
-        // triangle backward (against travel); positive opens it forward. Offset always shifts along the
-        // travel axis regardless of that sign.
+        // No direction (e.g. tests) defaults to up so the shape doesn't collapse to a line. Negative
+        // SpreadLength opens the triangle backward, positive forward; Offset always shifts along travel.
         public static PaintTriangle Build(Vector2 hit, Vector2 direction, PaintSettings paint)
         {
             var travel = direction.sqrMagnitude < DirectionEpsilon ? Vector2.up : direction.normalized;
@@ -52,10 +50,8 @@ namespace BalloonParty.Item.Paint
                 toBase, length, baseWidth);
         }
 
-        // Hexagonally packs circles of radius blobRadius into the triangle, appending their centres. Rows
-        // step along the axis by r*sqrt(3) and stagger by r, mirroring columns about the median — the
-        // even fill that determines splash density. Capped at maxBlobs; always yields at least one point
-        // (the centroid) so a sliver triangle still fires a blob.
+        // Hex-packs circles of radius blobRadius into the triangle (rows step r*sqrt(3), staggered by r,
+        // mirrored about the median). Capped at maxBlobs; always yields at least one (centroid).
         public void PackBlobs(float blobRadius, int maxBlobs, List<Vector2> results)
         {
             results.Clear();

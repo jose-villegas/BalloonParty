@@ -108,9 +108,8 @@ namespace BalloonParty.Item.Paint
 
             return UniTask.CompletedTask;
 
-            // Each blob stamps the disturbance field where it lands (the visible splash) and recolours the
-            // balloons it covers. Captures only this activation's locals — splashes land over time and a
-            // second Paint activation may run in between, so no handler field may be read here.
+            // Stamps where the blob lands and recolours what it covers. Captures only this activation's
+            // locals — a later splash may outlive it, so no handler field may be read here.
             void PaintBlob(int index)
             {
                 if (index < 0 || index >= blobPositions.Count)
@@ -125,10 +124,8 @@ namespace BalloonParty.Item.Paint
             }
         }
 
-        // Different-colour paintable balloons within blobRadius of a packed blob, bucketed by the blob
-        // nearest to each — so a balloon is recoloured the moment its covering blob lands. Painting
-        // tracks the visible splash coverage: balloons in gaps between blobs are left alone. Buckets are
-        // indexed 1:1 with blobPositions; empty buckets are simply blobs that covered no balloon.
+        // Different-colour paintable balloons within blobRadius of a packed blob, bucketed by nearest
+        // blob so each paints as its blob lands. Buckets align 1:1 with blobPositions.
         private List<IPaintable>[] CollectPaintTargets(
             IReadOnlyList<Vector2> blobPositions, float blobRadius, string paintColor)
         {

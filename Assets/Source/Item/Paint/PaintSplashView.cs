@@ -24,8 +24,8 @@ namespace BalloonParty.Item.Paint
     /// <summary>
     ///     Poolable paint-splash effect. Extends <see cref="EffectView" /> so it
     ///     participates in the standard effect-pool pipeline via <see cref="SimplePoolChannel{TItem}" />.
-    ///     The prefab holds pre-placed <see cref="ColorableRenderer" /> children (one per
-    ///     potential neighbor — 6 for a hex grid) with the PaintBlob shader material.
+    ///     The prefab seeds <see cref="ColorableRenderer" /> children with the PaintBlob material; the
+    ///     pool clones the first when packed density needs more.
     ///     Splash particles are spawned as independent pooled instances via
     ///     <see cref="ParticlePoolChannel" /> so they outlive the view's pool return.
     ///     Call <see cref="ISplashEffect.PrepareDisplay" /> with target data before <see cref="Play" />.
@@ -218,9 +218,8 @@ namespace BalloonParty.Item.Paint
             }
         }
 
-        // Circle-packing density can exceed the prefab's pre-placed blobs, so grow the pool by cloning
-        // the first serialized blob. The view is itself pooled, so clones persist and are reused across
-        // plays rather than reallocated per activation.
+        // Packed density can exceed the prefab's seed blobs, so grow by cloning the first. The view is
+        // pooled, so clones persist across plays.
         private void EnsureBlobPool(int needed)
         {
             _blobPool ??= new List<ColorableRenderer>();
