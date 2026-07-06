@@ -14,7 +14,14 @@ namespace BalloonParty.Item
         [SerializeField] private Renderer[] _sortingRenderers;
         [SerializeField] [Range(0f, 1f)] private float _spritesAlpha;
 
+        private Animator _animator;
+
         public ItemType Type => _type;
+
+        private void Awake()
+        {
+            _animator = GetComponentInChildren<Animator>(true);
+        }
 
         public void Activate(Color balloonColor)
         {
@@ -50,6 +57,11 @@ namespace BalloonParty.Item
             transform.localScale = Vector3.one;
             transform.localPosition = Vector3.zero;
             transform.localRotation = Quaternion.identity;
+
+            if (_animator != null)
+            {
+                _animator.Play(0, -1, 0f);
+            }
         }
 
         private void SetVisible(bool visible)
