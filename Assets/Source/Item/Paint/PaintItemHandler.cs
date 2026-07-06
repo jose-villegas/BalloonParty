@@ -8,6 +8,9 @@ using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using VContainer;
+using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Item.Paint
 {

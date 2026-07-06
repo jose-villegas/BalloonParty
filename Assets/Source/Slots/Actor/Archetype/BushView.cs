@@ -6,6 +6,7 @@ using BalloonParty.Shared.Rendering;
 using BalloonParty.Slots.Actor.Cluster;
 using UnityEngine;
 using VContainer;
+using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {

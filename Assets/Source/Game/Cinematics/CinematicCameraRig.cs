@@ -3,6 +3,7 @@ using BalloonParty.Display;
 using BalloonParty.Shared.Extensions;
 using DG.Tweening;
 using UnityEngine;
+using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Game.Cinematics
 {

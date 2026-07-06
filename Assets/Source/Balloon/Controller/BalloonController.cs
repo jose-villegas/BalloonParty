@@ -10,6 +10,9 @@ using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
 using UnityEngine;
+using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Balloon.Controller
 {

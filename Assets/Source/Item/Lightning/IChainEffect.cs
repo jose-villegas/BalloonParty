@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using UnityEngine;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Item.Lightning
 {

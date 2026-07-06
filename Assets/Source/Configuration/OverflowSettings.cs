@@ -1,4 +1,5 @@
 using UnityEngine;
+using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Configuration
 {

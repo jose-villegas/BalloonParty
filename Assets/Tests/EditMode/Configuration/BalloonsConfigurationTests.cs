@@ -5,6 +5,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Shared.Extensions;
 using NUnit.Framework;
 using UnityEngine;
+using BalloonParty.Configuration.Balloons;
 
 namespace BalloonParty.Tests.Configuration
 {

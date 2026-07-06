@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
+using BalloonParty.Configuration.Balloons;
 
 namespace BalloonParty.Balloon.Model
 {

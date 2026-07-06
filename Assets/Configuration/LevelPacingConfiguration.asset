@@ -21,8 +21,8 @@ MonoBehaviour:
         _max: 0
         _mode: 0
       _boardLines:
-        _min: 3
-        _max: 3
+        _min: 6
+        _max: 6
         _mode: 0
       _itemCadence:
         _min: 0
@@ -36,15 +36,15 @@ MonoBehaviour:
       _gridActorGates: []
       _allowedColorsMask: 1
   - _fromLevel: 2
-    _toLevel: -1
+    _toLevel: 2
     _parameters:
       _spawnLines:
-        _min: 5
-        _max: 5
-        _mode: 2
+        _min: 3
+        _max: 0
+        _mode: 0
       _boardLines:
-        _min: 2
-        _max: 2
+        _min: 6
+        _max: 6
         _mode: 0
       _itemCadence:
         _min: 5
@@ -54,24 +54,33 @@ MonoBehaviour:
       - _type: 0
         _weight: 1
         _maxCountOverride: 0
-      - _type: 4
-        _weight: 1
-        _maxCountOverride: 0
-      - _type: 5
-        _weight: 1
-        _maxCountOverride: 0
       _itemWeights: []
-      _gridActorGates:
+      _gridActorGates: []
+      _allowedColorsMask: 7
+  - _fromLevel: 3
+    _toLevel: 3
+    _parameters:
+      _spawnLines:
+        _min: 3
+        _max: 0
+        _mode: 0
+      _boardLines:
+        _min: 6
+        _max: 6
+        _mode: 0
+      _itemCadence:
+        _min: 2
+        _max: 5
+        _mode: 2
+      _balloonWeights:
       - _type: 0
-        _count:
-          _min: 4
-          _max: 12
-          _mode: 2
+        _weight: 1
+        _maxCountOverride: 0
+      _itemWeights:
       - _type: 1
-        _count:
-          _min: 2
-          _max: 9
-          _mode: 2
+        _weight: 1
+        _maximumAllowedOverride: 3
+      _gridActorGates: []
       _allowedColorsMask: 7
   _customLevels: []
   _thresholdModifier:

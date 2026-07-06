@@ -12,6 +12,8 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Item.Laser
 {

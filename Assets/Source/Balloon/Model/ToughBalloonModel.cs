@@ -4,6 +4,7 @@ using BalloonParty.Nudge;
 using BalloonParty.Slots.Capabilities;
 using UniRx;
 using UnityEngine;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Model
 {

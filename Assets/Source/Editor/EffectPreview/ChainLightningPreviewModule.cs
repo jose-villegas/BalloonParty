@@ -7,6 +7,7 @@ using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Extensions;
 using UnityEditor;
 using UnityEngine;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Editor.EffectPreview
 {

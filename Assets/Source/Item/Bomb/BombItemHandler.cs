@@ -12,6 +12,8 @@ using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
+using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Item.Bomb
 {

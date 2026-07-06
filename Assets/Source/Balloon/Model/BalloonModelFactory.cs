@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
+using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Model
 {

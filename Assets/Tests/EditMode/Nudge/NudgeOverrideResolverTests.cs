@@ -2,6 +2,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using NSubstitute;
 using NUnit.Framework;
+using BalloonParty.Configuration.Balloons;
 
 namespace BalloonParty.Tests.Nudge
 {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Configuration.Balloons;
 
 namespace BalloonParty.Nudge
 {

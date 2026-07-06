@@ -1,5 +1,7 @@
 using UnityEditor;
 using UnityEngine;
+using BalloonParty.Configuration.Cinematics;
+using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Editor.Bush
 {
@@ -248,7 +250,7 @@ namespace BalloonParty.Editor.Bush
             var leafVariants = Mathf.Max(1, State.LeafSettings.LeafVariants);
             var bushWorldSize = State.BranchSettings.BushWorldSize;
 
-            Configuration.BushVariantData firstSo = null;
+            Configuration.Effects.BushVariantData firstSo = null;
 
             for (var i = 0; i < variantCount; i++)
             {

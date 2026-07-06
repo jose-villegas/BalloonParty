@@ -12,6 +12,12 @@ using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
+using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.GridActors;
+using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Level;
+using BalloonParty.Configuration.Palette;
+using BalloonParty.Configuration.Ranges;
 
 namespace BalloonParty.Tests.Game
 {

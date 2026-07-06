@@ -6,6 +6,7 @@ using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Cheats
 {

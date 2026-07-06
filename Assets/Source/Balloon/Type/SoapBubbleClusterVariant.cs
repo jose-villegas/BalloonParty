@@ -7,6 +7,7 @@ using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Capabilities;
 using UniRx;
 using UnityEngine;
+using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Balloon.Type
 {

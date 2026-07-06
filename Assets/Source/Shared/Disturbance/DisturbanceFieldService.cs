@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using UnityEngine;
 using VContainer.Unity;
+using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Shared.Disturbance
 {

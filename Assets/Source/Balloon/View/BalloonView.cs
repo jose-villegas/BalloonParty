@@ -16,6 +16,9 @@ using DG.Tweening;
 using UniRx;
 using UnityEngine;
 using VContainer;
+using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Palette;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Balloon.View
 {

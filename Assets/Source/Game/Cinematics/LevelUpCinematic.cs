@@ -14,6 +14,7 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using BalloonParty.Configuration.Cinematics;
 using Navigation = BalloonParty.Shared.GameState.Navigation;
 
 namespace BalloonParty.Game.Cinematics

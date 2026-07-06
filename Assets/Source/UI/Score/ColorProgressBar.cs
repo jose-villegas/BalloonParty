@@ -11,6 +11,8 @@ using UniRx;
 using UnityEngine;
 using UnityEngine.UI;
 using VContainer;
+using BalloonParty.Configuration.Palette;
+using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.UI.Score
 {

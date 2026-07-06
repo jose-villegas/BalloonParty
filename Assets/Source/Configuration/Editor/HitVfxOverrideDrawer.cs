@@ -3,6 +3,7 @@ using BalloonParty.Editor;
 using BalloonParty.Slots.Capabilities;
 using UnityEditor;
 using UnityEngine;
+using BalloonParty.Configuration.Balloons;
 
 namespace BalloonParty.Configuration.Editor
 {

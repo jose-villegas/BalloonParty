@@ -2,6 +2,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Shared.Disturbance;
 using DG.Tweening;
 using UnityEngine;
+using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Shared.Extensions
 {

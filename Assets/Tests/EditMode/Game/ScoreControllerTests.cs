@@ -16,6 +16,7 @@ using NSubstitute;
 using NUnit.Framework;
 using UniRx;
 using UnityEngine;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Tests.Game
 {

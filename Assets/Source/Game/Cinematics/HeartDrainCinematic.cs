@@ -8,6 +8,7 @@ using BalloonParty.Shared.Messages;
 using MessagePipe;
 using VContainer;
 using VContainer.Unity;
+using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Game.Cinematics
 {

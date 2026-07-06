@@ -2,6 +2,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Slots.Capabilities;
 using NUnit.Framework;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Tests.Balloon
 {

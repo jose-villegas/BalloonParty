@@ -4,6 +4,8 @@ using BalloonParty.Configuration;
 using BalloonParty.Slots.Capabilities;
 using NSubstitute;
 using NUnit.Framework;
+using BalloonParty.Configuration.Cinematics;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Tests.Balloon
 {

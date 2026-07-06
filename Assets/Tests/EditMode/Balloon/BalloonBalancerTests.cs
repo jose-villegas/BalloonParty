@@ -7,6 +7,7 @@ using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
+using BalloonParty.Configuration.Balloons;
 
 namespace BalloonParty.Tests.Balloon
 {

@@ -1,5 +1,6 @@
 using BalloonParty.Configuration;
 using UnityEngine;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Editor.EffectPreview
 {

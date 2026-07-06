@@ -12,6 +12,9 @@ using BalloonParty.Slots.Grid;
 using DG.Tweening;
 using UnityEngine;
 using VContainer;
+using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Spawner
 {

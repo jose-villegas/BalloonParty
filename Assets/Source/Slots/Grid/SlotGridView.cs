@@ -3,6 +3,7 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.Rendering;
 using UnityEngine;
 using VContainer;
+using BalloonParty.Configuration.Balloons;
 
 namespace BalloonParty.Slots.Grid
 {

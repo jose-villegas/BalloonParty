@@ -12,6 +12,8 @@ using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
+using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Tests.Item
 {

@@ -5,6 +5,7 @@ using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Game.Cinematics
 {

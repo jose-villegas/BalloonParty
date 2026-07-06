@@ -12,6 +12,7 @@ using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
 using VContainer;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Tests.PlayMode
 {

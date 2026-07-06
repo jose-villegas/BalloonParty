@@ -14,6 +14,8 @@ using UnityEngine;
 using UnityEngine.Pool;
 using VContainer;
 using VContainer.Unity;
+using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Balloon.Controller
 {

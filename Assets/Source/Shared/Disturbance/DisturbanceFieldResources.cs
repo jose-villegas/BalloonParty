@@ -1,6 +1,7 @@
 using BalloonParty.Configuration;
 using UnityEngine;
 using UnityEngine.Rendering;
+using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Shared.Disturbance
 {

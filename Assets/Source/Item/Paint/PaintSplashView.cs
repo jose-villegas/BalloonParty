@@ -5,6 +5,7 @@ using BalloonParty.Shared;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Item.Paint
 {

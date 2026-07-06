@@ -12,6 +12,9 @@ using NSubstitute;
 using NUnit.Framework;
 using UniRx;
 using UnityEngine;
+using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Tests.Item
 {

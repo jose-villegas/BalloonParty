@@ -9,6 +9,7 @@ using DG.Tweening;
 using UniRx;
 using UnityEngine;
 using VContainer;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Projectile.View
 {

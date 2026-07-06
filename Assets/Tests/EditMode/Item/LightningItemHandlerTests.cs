@@ -13,6 +13,7 @@ using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Tests.Item
 {

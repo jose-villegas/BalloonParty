@@ -6,6 +6,7 @@ using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Pool;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Item.Lightning
 {

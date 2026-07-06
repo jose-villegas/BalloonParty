@@ -15,6 +15,7 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using BalloonParty.Configuration.Balloons;
 
 namespace BalloonParty.Balloon.Spawner
 {
@@ -97,7 +98,9 @@ namespace BalloonParty.Balloon.Spawner
             // the same prewarm flag without an "await twice" error; once warm it returns immediately.
             await UniTask.WaitUntil(() => _prewarmed, cancellationToken: ct);
             PopulateInitialGrid();
-            _newlySpawnedBalloons.Clear();
+
+            // Let the assigner seed the fresh board's items (InitialItems) — a one-off, not a turn.
+            PublishItemCheck(isInitial: true);
         }
 
         public void ResetRun(int generation)
@@ -169,14 +172,14 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        private void PublishItemCheck()
+        private void PublishItemCheck(bool isInitial)
         {
             if (_newlySpawnedBalloons.Count > 0)
             {
                 // Copy — the live buffer is cleared right away, so a subscriber that defers past
                 // this frame would otherwise observe an empty (or repurposed) list.
                 _itemCheckPublisher.Publish(
-                    new ItemCheckMessage(new List<IBalloonModel>(_newlySpawnedBalloons), _turnCount));
+                    new ItemCheckMessage(new List<IBalloonModel>(_newlySpawnedBalloons), _turnCount, isInitial));
                 _newlySpawnedBalloons.Clear();
             }
         }
@@ -206,7 +209,7 @@ namespace BalloonParty.Balloon.Spawner
         {
             _balancer.Balance();
             SpawnLineInternal(allowReject: true);
-            PublishItemCheck();
+            PublishItemCheck(isInitial: false);
             _balancePublisher.Publish(default);
         }
 
@@ -259,7 +262,7 @@ namespace BalloonParty.Balloon.Spawner
                     return;
                 }
 
-                PublishItemCheck();
+                PublishItemCheck(isInitial: false);
                 _balancePublisher.Publish(default);
             }
             finally

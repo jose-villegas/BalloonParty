@@ -4,6 +4,7 @@ using BalloonParty.Shared.Disturbance;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
+using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Tests.PlayMode
 {

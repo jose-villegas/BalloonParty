@@ -40,6 +40,13 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Cinematics;
+using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.GridActors;
+using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Level;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Game
 {

@@ -10,6 +10,7 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Item
 {

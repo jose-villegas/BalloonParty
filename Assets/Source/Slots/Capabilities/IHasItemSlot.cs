@@ -1,5 +1,6 @@
 using BalloonParty.Configuration;
 using UniRx;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Slots.Capabilities
 {

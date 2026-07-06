@@ -1,6 +1,7 @@
 using BalloonParty.Shared;
 using BalloonParty.Shared.Rendering;
 using UnityEngine;
+using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Display
 {

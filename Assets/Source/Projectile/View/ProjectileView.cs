@@ -14,6 +14,8 @@ using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
+using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Projectile.View
 {

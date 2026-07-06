@@ -2,6 +2,7 @@ using BalloonParty.Editor.EffectPreview;
 using BalloonParty.Item.Paint;
 using NaughtyAttributes.Editor;
 using UnityEditor;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Editor
 {
@@ -36,7 +37,7 @@ namespace BalloonParty.Editor
             _player = new EffectViewPreviewPlayer(
                 module,
                 "Paint Splash Preview",
-                Configuration.ItemType.Paint,
+                Configuration.Items.ItemType.Paint,
                 Repaint);
         }
     }

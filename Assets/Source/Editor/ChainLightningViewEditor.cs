@@ -3,6 +3,7 @@ using BalloonParty.Editor.EffectPreview;
 using BalloonParty.Item.Lightning;
 using NaughtyAttributes.Editor;
 using UnityEditor;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Editor
 {

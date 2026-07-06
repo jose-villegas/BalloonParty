@@ -2,6 +2,8 @@ using BalloonParty.Configuration;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
 using VContainer;
+using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Item
 {

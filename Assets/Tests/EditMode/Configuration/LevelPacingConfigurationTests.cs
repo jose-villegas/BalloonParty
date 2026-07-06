@@ -2,6 +2,7 @@ using System.Reflection;
 using BalloonParty.Configuration;
 using NUnit.Framework;
 using UnityEngine;
+using BalloonParty.Configuration.Level;
 
 namespace BalloonParty.Tests.Configuration
 {

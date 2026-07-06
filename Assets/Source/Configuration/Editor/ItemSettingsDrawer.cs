@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Editor;
 using UnityEditor;
 using UnityEngine;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Configuration.Editor
 {

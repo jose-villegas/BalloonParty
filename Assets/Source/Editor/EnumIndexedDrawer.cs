@@ -1,6 +1,7 @@
 using BalloonParty.Shared;
 using UnityEditor;
 using UnityEngine;
+using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Editor
 {

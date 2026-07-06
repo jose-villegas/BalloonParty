@@ -4,6 +4,7 @@ using BalloonParty.Editor.EditorUI;
 using BalloonParty.Shared;
 using UnityEditor;
 using UnityEngine;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Editor.EffectPreview
 {

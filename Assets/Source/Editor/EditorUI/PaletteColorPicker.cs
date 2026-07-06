@@ -3,6 +3,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using UnityEditor;
 using UnityEngine;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Editor.EditorUI
 {

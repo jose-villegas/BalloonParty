@@ -4,6 +4,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 using VContainer;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Type
 {

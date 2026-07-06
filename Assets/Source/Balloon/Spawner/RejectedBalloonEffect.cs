@@ -16,6 +16,8 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using BalloonParty.Configuration.Palette;
+using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Balloon.Spawner
 {

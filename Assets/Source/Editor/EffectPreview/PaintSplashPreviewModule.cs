@@ -9,6 +9,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Editor.EffectPreview
 {

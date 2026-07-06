@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Extensions;
 using NUnit.Framework;
+using BalloonParty.Configuration.Ranges;
 
 namespace BalloonParty.Tests.Configuration
 {

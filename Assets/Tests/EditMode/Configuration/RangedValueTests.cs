@@ -1,5 +1,6 @@
 using BalloonParty.Configuration;
 using NUnit.Framework;
+using BalloonParty.Configuration.Ranges;
 
 namespace BalloonParty.Tests.Configuration
 {

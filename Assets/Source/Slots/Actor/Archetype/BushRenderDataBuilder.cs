@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using BalloonParty.Configuration;
 using UnityEngine;
+using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {

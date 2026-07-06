@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Shared.Rendering
 {

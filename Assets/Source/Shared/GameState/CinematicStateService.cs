@@ -1,4 +1,5 @@
 using BalloonParty.Configuration;
+using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Shared.GameState
 {

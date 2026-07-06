@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using UnityEngine;
+using BalloonParty.Configuration.Ranges;
 
 namespace BalloonParty.Shared.Extensions
 {

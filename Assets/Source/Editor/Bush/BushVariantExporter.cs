@@ -2,6 +2,8 @@ using System.IO;
 using BalloonParty.Configuration;
 using UnityEditor;
 using UnityEngine;
+using BalloonParty.Configuration.Cinematics;
+using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Editor.Bush
 {

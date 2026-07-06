@@ -9,6 +9,7 @@ using BalloonParty.Slots.Grid;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Tests.Balloon
 {

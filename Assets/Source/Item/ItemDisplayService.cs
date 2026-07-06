@@ -4,6 +4,8 @@ using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Pool;
 using UniRx;
 using UnityEngine;
+using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Item
 {

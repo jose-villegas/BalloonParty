@@ -2,6 +2,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Slots.Actor.Cluster;
 using BalloonParty.Slots.Grid;
 using VContainer;
+using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Slots.Actor.Archetype
 {

@@ -1,6 +1,9 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Slots.Actor.Archetype;
+using UnityEngine;
+using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Game.Level
 {
@@ -25,6 +28,14 @@ namespace BalloonParty.Game.Level
         /// <summary>How often (in turns) an item-drop opportunity happens this level — replaces
         /// the old per-item <see cref="ItemSettings.TurnCheckEvery" /> catalog cadence.</summary>
         int ItemCadence { get; }
+
+        /// <summary>Weighted distribution (X = item count, Y = weight) for how many items to seed on
+        /// the initial board fill, rolled once. Bypasses the turn cadence.</summary>
+        AnimationCurve InitialItemCountWeights { get; }
+
+        /// <summary>Weighted distribution (X = item count, Y = weight) for how many items to grant each
+        /// time <see cref="ItemCadence" /> hits — rolled per turn, capped by the eligible new balloons.</summary>
+        AnimationCurve ItemCountWeights { get; }
 
         /// <summary>Catalog item entries whose <see cref="ItemType" /> is active this level (the
         /// item type gate) — for iterating candidates, not for picking (see

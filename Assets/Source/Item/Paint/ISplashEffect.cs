@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
+using BalloonParty.Configuration.Items;
 
 namespace BalloonParty.Item.Paint
 {

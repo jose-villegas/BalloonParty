@@ -17,6 +17,7 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Game.Level
 {

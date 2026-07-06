@@ -10,6 +10,11 @@ using BalloonParty.Slots.Actor.Archetype;
 using MessagePipe;
 using UnityEngine;
 using VContainer.Unity;
+using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Level;
+using BalloonParty.Configuration.Palette;
+using BalloonParty.Configuration.Ranges;
 
 namespace BalloonParty.Game.Level
 {
@@ -54,6 +59,8 @@ namespace BalloonParty.Game.Level
         public int SpawnLines => _current.SpawnLines;
         public int BoardLines => _current.BoardLines;
         public int ItemCadence => _current.ItemCadence;
+        public AnimationCurve InitialItemCountWeights => _current.InitialItemCountWeights;
+        public AnimationCurve ItemCountWeights => _current.ItemCountWeights;
         public IReadOnlyList<ItemSettings> Items => _itemsList;
         public IReadOnlyList<string> AllowedColors => _allowedColorNames;
         public int AllowedColorsMask => _current.AllowedColorsMask;

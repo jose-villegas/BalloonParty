@@ -3,6 +3,7 @@ using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pause;
 using DG.Tweening;
 using UnityEngine;
+using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Game.Cinematics
 {

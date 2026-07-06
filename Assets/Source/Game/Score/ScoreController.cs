@@ -12,6 +12,7 @@ using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer.Unity;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Game.Score
 {
