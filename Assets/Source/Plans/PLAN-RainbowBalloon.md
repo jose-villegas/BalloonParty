@@ -108,9 +108,12 @@ conversion. Both are locked in, so the mode-flag is the better fit for the full 
 
 ---
 
-## Phase 0 — Foundation: the rainbow-mode flag (blocks 2/3/5)
+## Phase 0 — Foundation: the rainbow-mode flag (blocks 2/3/5) — ✅ DONE 2026-07-07
 
-**Task 0.1 — `IsRainbow` flag + read capability.**
+**Task 0.1 — `IsRainbow` flag + read capability.** ✅ Done: `IHasRainbowMode`/`IHasWriteableRainbowMode`
+added to `Slots/Capabilities/` (mirroring the `IHasColor`/`IPaintable` read/write pair); `BalloonModel`
+implements `IHasWriteableRainbowMode` with `ReactiveProperty<bool> IsRainbow { get; } = new(false)` +
+the explicit `IHasRainbowMode.IsRainbow` read-only forward. All 5 assemblies build clean.
 - Files: `Balloon/Model/BalloonModel.cs`; new `Slots/Capabilities/IHasRainbowMode.cs`
   (`IReadOnlyReactiveProperty<bool> IsRainbow`), plus a writeable setter reachable by Paint (either a
   writeable capability or expose on `IPaintable`).
