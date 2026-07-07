@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -42,11 +43,12 @@ namespace BalloonParty.Balloon.Type
 
         public override void Initialize(IWriteableBalloonModel model, int levelAllowedColorsMask)
         {
-            base.Initialize(model, levelAllowedColorsMask);
-
-            if (model is IHasWriteableRainbowMode rainbowMode)
+            // Deliberately skip base.Initialize — a rainbow has no concrete colour. The reserved
+            // wildcard id is the sole marker of rainbow identity; colour interactions detect it via
+            // IGamePalette.IsRainbow rather than reading an arbitrary spawn colour.
+            if (model is IPaintable colorable)
             {
-                rainbowMode.IsRainbow.Value = true;
+                colorable.Color.Value = GamePalette.RainbowColorId;
             }
 
             _timeOffset = Random.Range(0f, 100f);

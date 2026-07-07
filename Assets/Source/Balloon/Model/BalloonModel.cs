@@ -9,14 +9,13 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal class BalloonModel : BalloonModelBase, IPaintable, IHasWriteableItemSlot, IHasWriteableRainbowMode,
+    internal class BalloonModel : BalloonModelBase, IPaintable, IHasWriteableItemSlot,
         IHasDurability, IHasScore, IHasScoreColor
     {
         private readonly ColorSource _colorSource;
 
         public ReactiveProperty<string> Color { get; } = new();
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
-        public ReactiveProperty<bool> IsRainbow { get; } = new(false);
         public int ScoreValue { get; }
         public float ItemActivationWeight { get; }
         public float Spillover { get; }
@@ -24,7 +23,6 @@ namespace BalloonParty.Balloon.Model
 
         IReadOnlyReactiveProperty<string> IHasColor.Color => Color;
         IReadOnlyReactiveProperty<ItemType> IHasItemSlot.Item => Item;
-        IReadOnlyReactiveProperty<bool> IHasRainbowMode.IsRainbow => IsRainbow;
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
         internal BalloonModel() : this(new BalloonModelConfig()) { }
@@ -47,7 +45,7 @@ namespace BalloonParty.Balloon.Model
                 return;
             }
 
-            if (IsRainbow.Value)
+            if (Color.Value == GamePalette.RainbowColorId)
             {
                 ResolveRainbowAttribution(in context, results);
                 return;

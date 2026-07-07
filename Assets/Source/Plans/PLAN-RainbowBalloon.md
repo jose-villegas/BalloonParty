@@ -77,16 +77,37 @@ be in `RecordStreakMultiplier`.
 > passes). ⚠️ marks a caveat/gap the source reading surfaced; **[in-editor]** marks work `dotnet
 > build` can't verify (shaders, `.asset`/prefab edits, MPB visuals).
 
+## ⚠️ Superseding refactor — sentinel colour, not a bool flag (2026-07-07)
+
+The `IsRainbow` bool (and the `IHasRainbowMode`/`IHasWriteableRainbowMode` capability pair) **were
+removed** after the first implementation landed. A rainbow balloon carrying a *concrete* spawn colour
+leaked that colour into item/colour interactions when it logically has "all colours." The fix makes
+the **colour itself** the single source of truth:
+
+- `GamePalette.RainbowColorId` (a reserved id, `"__rainbow__"`, never a palette entry) marks rainbow
+  identity. `IGamePalette.IsRainbow(colorId)` is the detection method; `GetColor(RainbowColorId)`
+  returns `Color.white` as a neutral fallback for consumers that don't special-case it.
+- `RainbowBalloonVariant.Initialize` skips base colour-picking and sets `Color.Value = RainbowColorId`.
+- Every branch that read `IsRainbow.Value` now compares the colour (`ProjectileHitResolver`,
+  `BalloonModel.ResolveScoreAttribution`, `BalloonView.ApplyColorMode`).
+- **Paint collapsed to a single recolour path**: a rainbow holder's colour *is* the wildcard id, so
+  recolouring targets to it converts them — `ConvertToRainbow`/`spreadsRainbow` were deleted.
+- ⚠️ Undefined-for-now leak sites (documented, deferred): a rainbow-held Bomb/Laser/Lightning credits
+  the sentinel colour, which drops out of concrete-colour scoring. Acceptable until those are specced.
+
+The rest of this plan below describes the original flag-based build for history; read the sentinel
+model as authoritative where they conflict.
+
 ## Cross-phase corrections (fold these into every part)
 
-- **The `IsRainbow` flag is the single foundation.** It is *simultaneously* Part A's score-override
-  switch, Part B's wildcard marker, Part C's view-mode signal, and Part 5's Paint-conversion target.
-  Build it **first** (Phase 0) — everything else reads it. It must be a `ReactiveProperty<bool>`
-  (not a plain bool), because Paint flips it on an already-bound live balloon and the view must react.
+- **Rainbow identity is the reserved colour id** (was: the `IsRainbow` flag). It is *simultaneously*
+  Part A's score-override switch, Part B's wildcard marker, Part C's view-mode signal, and Part 5's
+  Paint-conversion target — all read off `Color.Value == GamePalette.RainbowColorId`. Because `Color`
+  is a `ReactiveProperty<string>`, a mid-life Paint convert re-derives the view from one subscription.
 - **Rainbow *is* `IHasColor`** (Part B's original "not `IHasColor`" premise is wrong once Part C makes
   it a `BalloonModel`, which implements `IPaintable : IHasColor`). Do **not** try to drop the
-  interface or empty its colour. Instead gate colour-steal *out* via the `IsRainbow` flag at the guard
-  site; the shield then fires naturally (see Phase 2).
+  interface or empty its colour. Instead gate colour-steal *out* via the sentinel-colour check at the
+  guard site; the shield then fires naturally (see Phase 2).
 - **`DamageContext.SourceColorId`** is the projectile's colour at pop time (set from
   `projectile.ColorName.Value` at `ProjectileHitResolver.cs:35`). The plan's earlier `context.ColorName`
   was a wrong field name — there is no `ColorName` on the context.
@@ -125,7 +146,10 @@ conversion. Both are locked in, so the mode-flag is the better fit for the full 
 
 ---
 
-## Phase 0 — Foundation: the rainbow-mode flag (blocks 2/3/5) — ✅ DONE 2026-07-07
+## Phase 0 — Foundation: the rainbow-mode flag (blocks 2/3/5) — ✅ DONE, then ♻️ SUPERSEDED 2026-07-07
+
+> ♻️ **Superseded** by the sentinel-colour refactor above — the flag and both capability interfaces
+> were deleted. Retained below for history.
 
 **Task 0.1 — `IsRainbow` flag + read capability.** ✅ Done: `IHasRainbowMode`/`IHasWriteableRainbowMode`
 added to `Slots/Capabilities/` (mirroring the `IHasColor`/`IPaintable` read/write pair); `BalloonModel`

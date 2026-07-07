@@ -113,24 +113,12 @@ namespace BalloonParty.Balloon.View
 
             if (model is IHasColor colorable)
             {
-                if (model is IHasRainbowMode rainbowMode)
-                {
-                    // Re-derive from both values on either change — order-independent, so it doesn't
-                    // matter whether Color or IsRainbow was written first (e.g. by a future Paint convert).
-                    rainbowMode.IsRainbow
-                        .Subscribe(isRainbow => ApplyColorMode(colorable, isRainbow))
-                        .AddTo(_bindDisposables);
-
-                    colorable.Color
-                        .Subscribe(_ => ApplyColorMode(colorable, rainbowMode.IsRainbow.Value))
-                        .AddTo(_bindDisposables);
-                }
-                else
-                {
-                    _colorableRenderers
-                        .BindColor(colorable.Color, _palette.GetColor)
-                        .AddTo(_bindDisposables);
-                }
+                // Colour is the single source of truth: the rainbow wildcard id drives the material
+                // swap, any other id drives the per-colour tint — so a mid-life Paint convert re-derives
+                // correctly from one subscription.
+                colorable.Color
+                    .Subscribe(colorId => ApplyColorMode(colorId))
+                    .AddTo(_bindDisposables);
             }
 
             model.SlotIndex
@@ -338,9 +326,9 @@ namespace BalloonParty.Balloon.View
 
         // Rainbow mode replaces the normal per-colour tint with the banded material — the tint would
         // otherwise multiply into the shader's band colour (see RainbowBalloon.shader).
-        private void ApplyColorMode(IHasColor colorable, bool isRainbow)
+        private void ApplyColorMode(string colorId)
         {
-            if (isRainbow)
+            if (_palette.IsRainbow(colorId))
             {
                 SetBodyMaterial(_balloonsConfig.RainbowMaterial);
 
@@ -354,12 +342,12 @@ namespace BalloonParty.Balloon.View
 
             SetBodyMaterial(_originalBodyMaterial);
 
-            if (string.IsNullOrEmpty(colorable.Color.Value))
+            if (string.IsNullOrEmpty(colorId))
             {
                 return;
             }
 
-            var color = _palette.GetColor(colorable.Color.Value);
+            var color = _palette.GetColor(colorId);
             foreach (var renderer in _colorableRenderers)
             {
                 renderer.SetColor(color);

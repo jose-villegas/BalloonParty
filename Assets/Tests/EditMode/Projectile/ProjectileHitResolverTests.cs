@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
@@ -91,8 +92,7 @@ namespace BalloonParty.Tests.Projectile
         public void Resolve_PopRainbowBalloon_DoesNotStealColour()
         {
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
-            balloon.Color.Value = "Red";
-            balloon.IsRainbow.Value = true;
+            balloon.Color.Value = GamePalette.RainbowColorId;
             _projectile.ColorName.Value = "Blue";
 
             var result = _resolver.Resolve(_projectile, balloon, Vector3.zero);
@@ -111,8 +111,7 @@ namespace BalloonParty.Tests.Projectile
             _streakTracker.Record("Blue", false);
 
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
-            balloon.Color.Value = "Red";
-            balloon.IsRainbow.Value = true;
+            balloon.Color.Value = GamePalette.RainbowColorId;
             _projectile.ColorName.Value = "Blue";
 
             _resolver.Resolve(_projectile, balloon, Vector3.zero);

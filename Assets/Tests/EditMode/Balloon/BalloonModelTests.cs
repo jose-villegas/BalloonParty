@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
 using NUnit.Framework;
@@ -127,7 +128,7 @@ namespace BalloonParty.Tests.Balloon
         [Test]
         public void ResolveScoreAttribution_StillAlive_EmitsNothing()
         {
-            _model.IsRainbow.Value = true;
+            _model.Color.Value = GamePalette.RainbowColorId;
             _model.HitsRemaining.Value = 3;
 
             var results = new List<ScoreAttribution>();
@@ -141,7 +142,7 @@ namespace BalloonParty.Tests.Balloon
         {
             // No palette/allowedColors were passed at construction — mirrors ToughBalloonModel's
             // no-level-context fallback edge case.
-            _model.IsRainbow.Value = true;
+            _model.Color.Value = GamePalette.RainbowColorId;
             _model.HitsRemaining.Value = 0;
 
             var results = new List<ScoreAttribution>();
@@ -155,7 +156,7 @@ namespace BalloonParty.Tests.Balloon
         {
             var config = new BalloonModelConfig(scoreValue: 4, spillover: 0.5f);
             var model = new BalloonModel(config, allowedColors: new[] { "Red", "Blue", "Green" });
-            model.IsRainbow.Value = true;
+            model.Color.Value = GamePalette.RainbowColorId;
             model.HitsRemaining.Value = 0;
 
             var results = new List<ScoreAttribution>();
@@ -184,7 +185,7 @@ namespace BalloonParty.Tests.Balloon
         {
             var config = new BalloonModelConfig(scoreValue: 4, spillover: 0.5f);
             var model = new BalloonModel(config, allowedColors: new[] { "Red", "Blue" });
-            model.IsRainbow.Value = true;
+            model.Color.Value = GamePalette.RainbowColorId;
             model.HitsRemaining.Value = 0;
 
             var results = new List<ScoreAttribution>();
@@ -199,7 +200,7 @@ namespace BalloonParty.Tests.Balloon
         {
             var config = new BalloonModelConfig(scoreValue: 4, spillover: 0f);
             var model = new BalloonModel(config, allowedColors: new[] { "Red", "Blue", "Green" });
-            model.IsRainbow.Value = true;
+            model.Color.Value = GamePalette.RainbowColorId;
             model.HitsRemaining.Value = 0;
 
             var results = new List<ScoreAttribution>();

@@ -9,6 +9,13 @@ namespace BalloonParty.Configuration.Palette
     [CreateAssetMenu(menuName = "Configuration/Game Palette", fileName = "GamePalette")]
     public class GamePalette : ScriptableObject, IGamePalette
     {
+        /// <summary>
+        ///     Reserved color id for the "all colors" wildcard (the rainbow balloon). Never a palette
+        ///     entry — a balloon carrying this has no concrete color, so colour interactions can detect
+        ///     it via <see cref="IsRainbow" /> instead of acting on an arbitrary spawn colour.
+        /// </summary>
+        public const string RainbowColorId = "__rainbow__";
+
         [SerializeField] private PaletteEntry[] _colors;
 
         private Dictionary<string, PaletteEntry> _byName;
@@ -33,9 +40,21 @@ namespace BalloonParty.Configuration.Palette
 
         public Color GetColor(string colorName)
         {
+            // The wildcard has no concrete colour; white is a neutral tint for consumers that don't
+            // (yet) special-case rainbow via IsRainbow.
+            if (colorName == RainbowColorId)
+            {
+                return Color.white;
+            }
+
             return GetEntry(colorName)?.Color
                 ?? throw new ArgumentException(
                     $"GamePalette.GetColor: no palette entry found for color \"{colorName}\".");
+        }
+
+        public bool IsRainbow(string colorId)
+        {
+            return colorId == RainbowColorId;
         }
 
         public PaletteEntry GetEntry(string colorName)

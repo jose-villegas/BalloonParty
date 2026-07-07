@@ -70,8 +70,7 @@ namespace BalloonParty.Tests.Item
 
             _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
 
-            Assert.AreEqual("Red", target.Color.Value);
-            Assert.IsFalse(target.IsRainbow.Value); // a normal holder recolours, never converts
+            Assert.AreEqual("Red", target.Color.Value); // a normal holder recolours, never converts
         }
 
         [Test]
@@ -83,46 +82,39 @@ namespace BalloonParty.Tests.Item
             _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
 
             Assert.AreEqual("Red", sameColor.Color.Value);
-            Assert.IsFalse(sameColor.IsRainbow.Value);
         }
 
         [Test]
         public void Activate_RainbowHolder_ConvertsCoveredTargetsToRainbow()
         {
-            var source = PlaceBalloon(2, 2, "Red");
-            source.IsRainbow.Value = true;
+            // The rainbow holder's colour IS the wildcard id, so recolouring targets to it converts them.
+            var source = PlaceBalloon(2, 2, GamePalette.RainbowColorId);
             var target = PlaceBalloon(1, 2, "Blue");
 
             _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
 
-            Assert.IsTrue(target.IsRainbow.Value);
-            Assert.AreEqual("Blue", target.Color.Value); // conversion doesn't recolour
+            Assert.AreEqual(GamePalette.RainbowColorId, target.Color.Value);
         }
 
         [Test]
-        public void Activate_RainbowHolder_ConvertsSameColorTargetsToo()
+        public void Activate_RainbowHolder_ConvertsConcreteColorTargets()
         {
-            // A rainbow spread doesn't care whether the target already matches the holder's base colour
-            // — the same-colour skip only exists to avoid a pointless recolour, which this isn't.
-            var source = PlaceBalloon(2, 2, "Red");
-            source.IsRainbow.Value = true;
-            var sameColor = PlaceBalloon(1, 2, "Red");
+            var source = PlaceBalloon(2, 2, GamePalette.RainbowColorId);
+            var redTarget = PlaceBalloon(1, 2, "Red");
 
             _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
 
-            Assert.IsTrue(sameColor.IsRainbow.Value);
+            Assert.AreEqual(GamePalette.RainbowColorId, redTarget.Color.Value);
         }
 
         [Test]
         public void Activate_RainbowHolder_AlreadyRainbowTarget_NoOp()
         {
-            var source = PlaceBalloon(2, 2, "Red");
-            source.IsRainbow.Value = true;
-            var target = PlaceBalloon(1, 2, "Blue");
-            target.IsRainbow.Value = true;
+            var source = PlaceBalloon(2, 2, GamePalette.RainbowColorId);
+            var target = PlaceBalloon(1, 2, GamePalette.RainbowColorId);
 
             Assert.DoesNotThrow(() => _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2))));
-            Assert.IsTrue(target.IsRainbow.Value);
+            Assert.AreEqual(GamePalette.RainbowColorId, target.Color.Value);
         }
 
         [Test]
@@ -143,7 +135,6 @@ namespace BalloonParty.Tests.Item
 
             _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
 
-            Assert.IsFalse(target.IsRainbow.Value);
             Assert.AreEqual("Blue", target.Color.Value);
         }
 

@@ -340,7 +340,7 @@ namespace BalloonParty.Tests.Game
             var model = new BalloonModel(
                 new BalloonModelConfig(scoreValue: scoreValue, hitsToPop: 1, spillover: spillover),
                 allowedColors: new[] { Red, Blue });
-            model.IsRainbow.Value = true;
+            model.Color.Value = GamePalette.RainbowColorId;
             return model;
         }
 

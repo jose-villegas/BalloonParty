@@ -17,5 +17,8 @@ namespace BalloonParty.Configuration.Palette
 
         /// <summary>Color names whose bit is set in <paramref name="mask" />, per <see cref="PaletteColorMaskAttribute" />'s convention.</summary>
         IReadOnlyList<string> ColorNamesForMask(int mask);
+
+        /// <summary>True if <paramref name="colorId" /> is the reserved "all colors" wildcard (<c>GamePalette.RainbowColorId</c>).</summary>
+        bool IsRainbow(string colorId);
     }
 }

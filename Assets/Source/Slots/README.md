@@ -44,6 +44,8 @@ Optional traits actors can advertise to consumers:
 
 Paintability is expressed purely through types: a `BalloonModel` implements `IPaintable`; a `ToughBalloonModel` does not — no runtime flag needed.
 
+**Rainbow ("all colours") is a colour, not a flag.** A rainbow balloon carries the reserved id `GamePalette.RainbowColorId` in its `IHasColor.Color` — there is no separate `IsRainbow` capability. Detect it with `IGamePalette.IsRainbow(colorId)`; branch behaviour on that (score wildcard, colour-steal skip, banded material) rather than reading an arbitrary spawn colour. Paint converts a target simply by recolouring it to the wildcard id.
+
 `IHitable` vs `IHasDurability`:
 
 | Actor | Implements | `EvaluateHit` behaviour |
