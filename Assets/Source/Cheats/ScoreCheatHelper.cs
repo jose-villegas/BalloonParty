@@ -3,6 +3,7 @@
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Level;
+using BalloonParty.Game.Score;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using UnityEngine;
@@ -16,7 +17,8 @@ namespace BalloonParty.Cheats
             PaletteEntry color,
             int target,
             ILevelProgress levelProgress,
-            IHitDispatcher hitDispatcher)
+            IHitDispatcher hitDispatcher,
+            ColorStreakTracker streak)
         {
             var missing = target - levelProgress.GetProgress(color.Name);
             if (missing <= 0)
@@ -24,11 +26,16 @@ namespace BalloonParty.Cheats
                 return;
             }
 
-            var fakeModel = new BalloonModel();
+            // A popped stand-in that actually scores: an explicit config, because new BalloonModelConfig()
+            // hits the struct's zero-init ctor (ScoreValue 0, so every pop granted 0). ScoreValue 1 +
+            // HitsToPop 0 clears ResolveScoreAttribution's durability gate. Reset the streak before each
+            // pop so the multiplier stays 1 and the fill lands exactly on target instead of overshooting.
+            var fakeModel = new BalloonModel(new BalloonModelConfig(scoreValue: 1, hitsToPop: 0));
             fakeModel.Color.Value = color.Name;
 
             for (var i = 0; i < missing; i++)
             {
+                streak.Reset();
                 hitDispatcher.Dispatch(new ActorHitMessage(fakeModel,
                     Vector3.zero,
                     Vector3.zero,

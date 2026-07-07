@@ -54,7 +54,7 @@ namespace BalloonParty.Game.Score
             return CurrentStreak;
         }
 
-        private void Reset()
+        internal void Reset()
         {
             LastColor = null;
             CurrentStreak = 0;

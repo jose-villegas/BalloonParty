@@ -17,6 +17,7 @@ namespace BalloonParty.Cheats
         private readonly IGamePalette _palette;
         private readonly IHitDispatcher _hitDispatcher;
         private readonly ILevelProgress _levelProgress;
+        private readonly ColorStreakTracker _streak;
 
         public string Name => "Near Level Up";
         public string Section => "Score";
@@ -27,13 +28,15 @@ namespace BalloonParty.Cheats
             IActiveLevelParameters levelParams,
             IGamePalette palette,
             ILevelProgress levelProgress,
-            IHitDispatcher hitDispatcher)
+            IHitDispatcher hitDispatcher,
+            ColorStreakTracker streak)
         {
             _levelThresholds = levelThresholds;
             _levelParams = levelParams;
             _palette = palette;
             _levelProgress = levelProgress;
             _hitDispatcher = hitDispatcher;
+            _streak = streak;
         }
 
         public void Execute()
@@ -41,7 +44,8 @@ namespace BalloonParty.Cheats
             var oneBeforeRequired = _levelThresholds.PointsRequiredForLevel(_levelProgress.Level.Value + 1) - 3;
             foreach (var colorName in _levelParams.Current.AllowedColors)
             {
-                ScoreCheatHelper.FillColor(_palette.GetEntry(colorName), oneBeforeRequired, _levelProgress, _hitDispatcher);
+                ScoreCheatHelper.FillColor(
+                    _palette.GetEntry(colorName), oneBeforeRequired, _levelProgress, _hitDispatcher, _streak);
             }
         }
     }
