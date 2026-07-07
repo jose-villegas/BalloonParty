@@ -124,7 +124,18 @@ the explicit `IHasRainbowMode.IsRainbow` read-only forward. All 5 assemblies bui
 
 ---
 
-## Phase 1 (Part D) — Per-type item-activation weight (independent; do anytime)
+## Phase 1 (Part D) — Per-type item-activation weight — ✅ DONE 2026-07-07 (except [in-editor])
+
+✅ Tasks 1-5 done: `_itemActivationWeight` + `_spillover` on `BalloonPrefabEntry`, threaded through
+`BalloonModelConfig` into `BalloonModel`; `IHasItemSlot.ItemActivationWeight`; `ItemAssigner` excludes
+zero-weight hosts and uses the new `PickWeightedIndex` (cumulative-weight scan, mirrors `SampleCount`'s
+testable-static shape — `WeightedPickExtensions.PickRandom` didn't fit, per the plan's caveat). Tests
+added: zero-weight never eligible, `PickWeightedIndex` unit tests (all-zero → -1, even split picks by
+roll, zero-then-nonzero always picks nonzero). All 5 assemblies build clean; full `style_audit.py`
+clean (one advisory `repeated-accessor` WARN on `BalloonModelConfig.From` reading 6 fields off `entry`
+— intentional: the struct is deliberately decoupled from `BalloonPrefabEntry`/SO for test construction).
+**Remaining:** the **[in-editor]** step — set real weights in `BalloonsConfiguration.asset` (Rainbow
+low, Simple 1) once the Rainbow catalog entry exists (Phase 4).
 
 Items are assigned **uniformly** today (`ItemAssigner.AssignItems`, `Random.Range(0, eligibleBuffer.Count)`
 at `:103`), so Simple/Silver/Gold host at the same rate. (Confirmed item-capable: both map to
