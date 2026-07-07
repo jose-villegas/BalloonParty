@@ -166,11 +166,19 @@ at `:103`), so Simple/Silver/Gold host at the same rate. (Confirmed item-capable
 
 ---
 
-## Phase 2 (Parts A+B) — Scoring + wildcard streak/shield (depends on Phase 0)
+## Phase 2 (Parts A+B) — Scoring + wildcard streak/shield — ✅ DONE 2026-07-07
 
 **Why the scatter balloons aren't a precedent** (above) still holds: `RecordStreakMultiplier`
 (`ScoreController.cs:118-127`) hard-breaks on *any* multi-attribution group and **ignores** the
 per-attribution `breaksStreak` flag — so the fix must live there.
+
+✅ Tasks 1-6 all done, split into 3 commits (streak carve-out → model scoring → resolver gate).
+One correction found while implementing: `BalloonModelFactory` now threads palette+allowedColors to
+**every** `BalloonModel` branch (Simple/Silver/Gold too, not just Tough/Cluster) — a plain balloon can
+be converted to rainbow by Paint later (Phase 5) and needs its own colour pool at that point; it's
+never re-threaded after spawn. Full traced-by-hand verification (no Unity Test Runner available here)
+confirmed the streak-growth and spillover math end-to-end. All 5 assemblies build clean; full
+`style_audit.py` clean (same pre-existing advisory `repeated-accessor` WARN as Phase 1, unchanged).
 
 1. **`IsPrimary` on `ScoreAttribution`** (`Slots/Capabilities/ScoreAttribution.cs`) — add `bool IsPrimary`
    (trailing ctor param, default `false`). Tough/Cluster/plain-`BalloonModel` never set it → their
