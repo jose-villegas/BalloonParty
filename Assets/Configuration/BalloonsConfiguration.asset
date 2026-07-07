@@ -101,7 +101,8 @@ MonoBehaviour:
     _scoreValue: 50
     _itemActivationWeight: 0
     _spillover: 0
-  - _prefab: {fileID: 0}
+  - _prefab: {fileID: 5608684639280362707, guid: 320e1b71efec648ee825dabeec573ebf,
+      type: 3}
     _balloonType: 6
     _weight: 0.15
     _maxCount: 1
