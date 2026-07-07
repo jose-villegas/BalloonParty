@@ -9,6 +9,9 @@ namespace BalloonParty.Balloon.Type
 
         // Same as Simple — distinct IDs so the level-range type gate can withhold each skin independently.
         SimpleSilver,
-        SimpleGold
+        SimpleGold,
+
+        // A colourable BalloonModel that starts in rainbow mode — see RainbowBalloonVariant.
+        Rainbow
     }
 }

@@ -23,6 +23,7 @@ namespace BalloonParty.Balloon.Model
                 BalloonType.Simple => new BalloonModel(config, palette, allowedColors),
                 BalloonType.SimpleSilver => new BalloonModel(config, palette, allowedColors),
                 BalloonType.SimpleGold => new BalloonModel(config, palette, allowedColors),
+                BalloonType.Rainbow => new BalloonModel(config, palette, allowedColors),
                 BalloonType.BubbleCluster => new BubbleClusterModel(config, palette, allowedColors),
                 BalloonType.Tough => new ToughBalloonModel(config, palette, allowedColors),
                 BalloonType.Unbreakable => new UnbreakableBalloonModel(config),
