@@ -75,6 +75,7 @@ Shader "BalloonParty/Paint/PaintBlob"
                 float4 vertex   : SV_POSITION;
                 fixed4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
+                float2 spin     : TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -151,6 +152,11 @@ Shader "BalloonParty/Paint/PaintBlob"
                 OUT.vertex   = UnityObjectToClipPos(IN.vertex);
                 OUT.texcoord = IN.texcoord;
                 OUT.color    = IN.color * _Color * _RendererColor;
+
+                // (cos, sin) of the object's world rotation, so the fragment
+                // can undo it and keep the specular fixed in world space.
+                float2 worldX = float2(unity_ObjectToWorld._m00, unity_ObjectToWorld._m10);
+                OUT.spin = (dot(worldX, worldX) > 1e-8) ? normalize(worldX) : float2(1.0, 0.0);
                 return OUT;
             }
 
@@ -200,9 +206,12 @@ Shader "BalloonParty/Paint/PaintBlob"
                 float rimMask = pow(innerT, 1.0 / max(_RimWidth, 0.001));
                 fixed3 col    = IN.color.rgb * (1.0 - rimMask * _RimDarkness);
 
-                // Specular highlight
+                // Specular highlight — sampled in world orientation so it stays
+                // put regardless of how the parent transform is rotated.
+                float2 worldUV = float2(uv.x * IN.spin.x - uv.y * IN.spin.y,
+                                        uv.x * IN.spin.y + uv.y * IN.spin.x);
                 float2 specCenter = float2(_SpecularOffsetX, _SpecularOffsetY);
-                float  specDist   = length(uv - specCenter);
+                float  specDist   = length(worldUV - specCenter);
                 float  specMask   = pow(saturate(1.0 - specDist / max(_SpecularSize, 0.001)),
                                         _SpecularSharpness);
                 col = lerp(col, _SpecularColor.rgb, specMask * _SpecularColor.a);
