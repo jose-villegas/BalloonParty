@@ -22,18 +22,24 @@ The entire `Cheats/` system — console, `ICheat`, and all cheat implementations
    ```
 That's all. The console picks it up automatically.
 
+### Interactive cheats
+
+A cheat that needs inputs (dropdowns, counters) also implements `ICheatControls.DrawControls()`. The console draws that IMGUI block in the cheat's row (below a plain name + ☆ header) instead of the one-shot Execute button — `SpawnBalloonCheat` is the reference. `DrawControls` is only ever called from within `OnGUI`. `Execute()` is still required by `ICheat`; make it perform the same action with the current selections so the cheat also works if surfaced as a plain button.
+
 ## Console features
 
 - **Search** — filters cheats by name as you type
 - **Tag pills** — click a tag to filter to only cheats with that tag; click again or "All" to clear
 - **Sections** — cheats are grouped by their `Section` property
 - **Favorites** — click ☆ next to any cheat to pin it to the top of the list
+- **Thrower held while open** — opening the console `Pause`s `PauseSource.Cheat` (releases on close/teardown), so the thrower stays inert and stray fires don't disturb testing
 
 ## Current cheats
 
 | Name | Section | What it does |
 |---|---|---|
 | Spawn Balloon Line | Spawning | Publishes `SpawnBalloonLineMessage` — spawns one new row of balloons |
+| Spawn Balloon | Spawning | Pick a `BalloonType`, an item to hold (or None), and a count; force-spawns that many into open slots (bottom-up), assigning the item to each that can hold one. Bypasses the weighted spawner + caps by design. An interactive cheat (`ICheatControls`) — draws its own type/item grids + count stepper |
 | Fire Projectile | Thrower | Sets `IsFree = true` on the currently loaded projectile (tracked via `ProjectileLoadedMessage`) — fires regardless of mouse state |
 | Remove Balloons | Grid | Draw across balloons to remove them and trigger a balance pass |
 | Trigger Level Up | Score | Fills all color bars to the current threshold and immediately triggers the level-up ceremony |

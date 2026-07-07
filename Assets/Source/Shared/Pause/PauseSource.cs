@@ -12,6 +12,9 @@ namespace BalloonParty.Shared.Pause
         Overflow,
 
         /// <summary>The board is being cleared and re-populated for the new level (the Ascent).</summary>
-        LevelTransition
+        LevelTransition,
+
+        /// <summary>The debug cheat console is open — holds the thrower so stray fires don't disturb testing.</summary>
+        Cheat
     }
 }

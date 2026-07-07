@@ -1,0 +1,158 @@
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+
+using System;
+using System.Collections.Generic;
+using BalloonParty.Balloon.Model;
+using BalloonParty.Balloon.Spawner;
+using BalloonParty.Balloon.Type;
+using BalloonParty.Slots.Capabilities;
+using BalloonParty.Slots.Grid;
+using UnityEngine;
+using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Items;
+
+namespace BalloonParty.Cheats
+{
+    /// <summary>
+    ///     Force-spawns a chosen balloon type into open slots, optionally holding a chosen item, in a
+    ///     chosen quantity. Bypasses the weighted spawner and its caps by design — it's a debug tool.
+    /// </summary>
+    internal class SpawnBalloonCheat : ICheat, ICheatControls
+    {
+        private static readonly BalloonType[] Types = (BalloonType[])Enum.GetValues(typeof(BalloonType));
+        private static readonly ItemType[] Items = (ItemType[])Enum.GetValues(typeof(ItemType));
+
+        private readonly BalloonFactory _factory;
+        private readonly SlotGrid _grid;
+        private readonly IBalloonsConfiguration _balloonsConfig;
+
+        private readonly List<Vector3> _spawnPath = new();
+
+        private int _typeIndex;
+        private int _itemIndex;
+        private int _count = 1;
+
+        public string Name => "Spawn Balloon";
+        public string Section => "Spawning";
+        public IReadOnlyList<string> Tags => new[] { "balloons", "spawning", "items" };
+
+        public SpawnBalloonCheat(BalloonFactory factory, SlotGrid grid, IBalloonsConfiguration balloonsConfig)
+        {
+            _factory = factory;
+            _grid = grid;
+            _balloonsConfig = balloonsConfig;
+        }
+
+        public void Execute()
+        {
+            Spawn();
+        }
+
+        public void DrawControls()
+        {
+            GUILayout.Label("Type");
+            _typeIndex = GUILayout.SelectionGrid(_typeIndex, TypeLabels(), 4);
+
+            GUILayout.Label("Item");
+            _itemIndex = GUILayout.SelectionGrid(_itemIndex, ItemLabels(), 3);
+
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Count", GUILayout.Width(44));
+            if (GUILayout.Button("−", GUILayout.Width(28)))
+            {
+                _count = Mathf.Max(1, _count - 1);
+            }
+
+            GUILayout.Label(_count.ToString(), GUILayout.Width(28));
+            if (GUILayout.Button("+", GUILayout.Width(28)))
+            {
+                _count++;
+            }
+
+            if (GUILayout.Button("Spawn"))
+            {
+                Spawn();
+            }
+
+            GUILayout.EndHorizontal();
+        }
+
+        private void Spawn()
+        {
+            var type = Types[_typeIndex];
+            var item = Items[_itemIndex];
+
+            var entry = FindEntry(type);
+            if (entry == null)
+            {
+                Debug.LogWarning($"SpawnBalloonCheat: no BalloonsConfiguration entry for type {type}.");
+                return;
+            }
+
+            var spawned = 0;
+            // Bottom-up so cheat balloons join the resting stack where there's room.
+            for (var row = _grid.Rows - 1; row >= 0 && spawned < _count; row--)
+            {
+                for (var col = 0; col < _grid.Columns && spawned < _count; col++)
+                {
+                    if (!_grid.IsEmpty(col, row))
+                    {
+                        continue;
+                    }
+
+                    SpawnAt(new Vector2Int(col, row), entry, item);
+                    spawned++;
+                }
+            }
+        }
+
+        private void SpawnAt(Vector2Int slot, BalloonPrefabEntry entry, ItemType item)
+        {
+            _spawnPath.Clear();
+            _spawnPath.Add(_grid.IndexToWorldPosition(slot));
+
+            var model = _factory.Create(entry, slot, _spawnPath, () => { });
+
+            if (item != ItemType.None && model is IHasWriteableItemSlot itemSlot)
+            {
+                itemSlot.Item.Value = item;
+            }
+        }
+
+        private BalloonPrefabEntry FindEntry(BalloonType type)
+        {
+            foreach (var entry in _balloonsConfig.Entries)
+            {
+                if (entry.BalloonType == type)
+                {
+                    return entry;
+                }
+            }
+
+            return null;
+        }
+
+        private static string[] TypeLabels()
+        {
+            var labels = new string[Types.Length];
+            for (var i = 0; i < Types.Length; i++)
+            {
+                labels[i] = Types[i].ToString();
+            }
+
+            return labels;
+        }
+
+        private static string[] ItemLabels()
+        {
+            var labels = new string[Items.Length];
+            for (var i = 0; i < Items.Length; i++)
+            {
+                labels[i] = Items[i].ToString();
+            }
+
+            return labels;
+        }
+    }
+}
+#endif

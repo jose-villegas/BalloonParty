@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.Linq;
+using BalloonParty.Shared.Pause;
 using UnityEngine;
 using VContainer;
 
@@ -14,6 +15,7 @@ namespace BalloonParty.Cheats
         private const float ReferenceHeight = 720f;
 
         [Inject] private IEnumerable<ICheat> _cheats;
+        [Inject] private PauseService _pauseService;
 
         private readonly HashSet<string> _favorites = new();
 
@@ -24,6 +26,7 @@ namespace BalloonParty.Cheats
         private string _search = string.Empty;
 
         private bool _visible;
+        private bool _throwerHeld;
 
         private void Update()
         {
@@ -31,6 +34,8 @@ namespace BalloonParty.Cheats
             {
                 _visible = !_visible;
             }
+
+            SyncThrowerHold();
 
             if (!_visible)
             {
@@ -62,6 +67,15 @@ namespace BalloonParty.Cheats
             }
         }
 
+        private void OnDisable()
+        {
+            if (_throwerHeld && _pauseService != null)
+            {
+                _pauseService.Resume(PauseSource.Cheat);
+                _throwerHeld = false;
+            }
+        }
+
         private void OnGUI()
         {
             if (!_visible)
@@ -88,6 +102,27 @@ namespace BalloonParty.Cheats
             GUILayout.EndArea();
         }
 
+        // Holds the thrower (via PauseService) exactly while the console is open; released on close or
+        // teardown. Reference-counted, so paired Pause/Resume is required.
+        private void SyncThrowerHold()
+        {
+            if (_visible == _throwerHeld || _pauseService == null)
+            {
+                return;
+            }
+
+            if (_visible)
+            {
+                _pauseService.Pause(PauseSource.Cheat);
+            }
+            else
+            {
+                _pauseService.Resume(PauseSource.Cheat);
+            }
+
+            _throwerHeld = _visible;
+        }
+
         private List<ICheat> ApplyFilters(IReadOnlyList<ICheat> cheats)
         {
             var result = cheats.AsEnumerable();
@@ -107,27 +142,43 @@ namespace BalloonParty.Cheats
 
         private void DrawCheatRow(ICheat cheat)
         {
-            GUILayout.BeginHorizontal();
-
-            var isFavorite = _favorites.Contains(cheat.Name);
-            if (GUILayout.Button(isFavorite ? "★" : "☆", GUILayout.Width(28)))
+            // Interactive cheats render their own controls below a plain name+star header row.
+            if (cheat is ICheatControls controls)
             {
-                if (isFavorite)
-                {
-                    _favorites.Remove(cheat.Name);
-                }
-                else
-                {
-                    _favorites.Add(cheat.Name);
-                }
+                GUILayout.BeginHorizontal();
+                DrawFavoriteToggle(cheat);
+                GUILayout.Label(cheat.Name);
+                GUILayout.EndHorizontal();
+                controls.DrawControls();
+                return;
             }
 
+            GUILayout.BeginHorizontal();
+            DrawFavoriteToggle(cheat);
             if (GUILayout.Button(cheat.Name))
             {
                 cheat.Execute();
             }
 
             GUILayout.EndHorizontal();
+        }
+
+        private void DrawFavoriteToggle(ICheat cheat)
+        {
+            var isFavorite = _favorites.Contains(cheat.Name);
+            if (!GUILayout.Button(isFavorite ? "★" : "☆", GUILayout.Width(28)))
+            {
+                return;
+            }
+
+            if (isFavorite)
+            {
+                _favorites.Remove(cheat.Name);
+            }
+            else
+            {
+                _favorites.Add(cheat.Name);
+            }
         }
 
         private void DrawContent()
