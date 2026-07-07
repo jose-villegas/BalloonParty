@@ -16,7 +16,8 @@ using BalloonParty.Configuration.Palette;
 namespace BalloonParty.Item.Lightning
 {
     /// <summary>
-    ///     Handles the Lightning item: chains through same-color balloons nearest-first.
+    ///     Handles the Lightning item: chains through same-color balloons nearest-first. A rainbow
+    ///     holder ("all colours") chains through every coloured balloon regardless of colour.
     /// </summary>
     internal class LightningItemHandler : IBalloonItem
     {
@@ -138,6 +139,9 @@ namespace BalloonParty.Item.Lightning
             }
 
             var color = sourceColor.Color.Value;
+            // A rainbow holder is "all colours" — it chains through every coloured balloon, not just
+            // its own colour.
+            var targetsAllColors = _palette.IsRainbow(color);
 
             for (var col = 0; col < _grid.Columns; col++)
             {
@@ -159,7 +163,12 @@ namespace BalloonParty.Item.Lightning
                         continue;
                     }
 
-                    if (model is not IHasColor modelColor || modelColor.Color.Value != color)
+                    if (model is not IHasColor modelColor)
+                    {
+                        continue;
+                    }
+
+                    if (!targetsAllColors && modelColor.Color.Value != color)
                     {
                         continue;
                     }

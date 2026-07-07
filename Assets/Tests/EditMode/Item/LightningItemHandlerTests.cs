@@ -61,10 +61,13 @@ namespace BalloonParty.Tests.Item
 
             _hitDispatcher = Substitute.For<IHitDispatcher>();
 
+            var palette = Substitute.For<IGamePalette>();
+            palette.IsRainbow(GamePalette.RainbowColorId).Returns(true);
+
             _handler = new LightningItemHandler(
                 itemConfig,
                 _hitDispatcher,
-                Substitute.For<IGamePalette>(),
+                palette,
                 _grid,
                 new PoolManager());
         }
@@ -107,6 +110,19 @@ namespace BalloonParty.Tests.Item
             _handler.Activate(new ItemActivationContext(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero));
 
             _hitDispatcher.Received(2).Dispatch(Arg.Any<ActorHitMessage>());
+        }
+
+        [Test]
+        public void Activate_RainbowHolder_ChainsThroughEveryColor()
+        {
+            var source = PlaceBalloon(0, 0, GamePalette.RainbowColorId);
+            PlaceBalloon(1, 0, "Red");
+            PlaceBalloon(2, 0, "Blue");
+            PlaceBalloon(3, 0, "Green");
+
+            _handler.Activate(new ItemActivationContext(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero));
+
+            _hitDispatcher.Received(3).Dispatch(Arg.Any<ActorHitMessage>());
         }
 
         [Test]
