@@ -224,11 +224,18 @@ about the pop, not the points) — verify that's desired.
 
 ---
 
-## Phase 3 (Parts C+E) — View mode + variant + programmatic bands (depends on Phase 0)
+## Phase 3 (Parts C+E) — View mode + variant + programmatic bands — ✅ CODE DONE 2026-07-07 (except [in-editor])
 
 The colourable body is a `SpriteRenderer` on the **"Body"** child using Unity's built-in `Sprites-Default`
 material; `SpriteColorableRenderer.SetColor` just writes `Renderer.color` (no MPB). The rainbow shader
 reuses the same sprite (`_MainTex` is `[PerRendererData]`).
+
+✅ Tasks 1-5 done. Deviation from the sketch: rather than `BalloonView` hardcoding `BalloonRainbow.mat`,
+it reads `IBalloonsConfiguration.RainbowMaterial` (a new config-authored field, mirroring
+`DefaultPopVfxPrefab`) — avoids wiring a rainbow material onto every individual balloon prefab. Task 4's
+subscriber-ordering risk was resolved by deferring the re-push one `UniTask.Yield()` frame. All 5
+assemblies build clean; full `style_audit.py` clean. **Not verifiable without Unity** — the shader/MPB/
+material-swap visuals need an in-editor pass, and Task 6 below is still outstanding.
 
 1. **View reacts to `IsRainbow`** (`Balloon/View/BalloonView.cs` `Bind` `:100`) — subscribe the flag
    (`.AddTo(_bindDisposables)`); on true, swap the Body renderer's **`sharedMaterial`** to
@@ -254,10 +261,13 @@ reuses the same sprite (`_MainTex` is `[PerRendererData]`).
 5. **Pooling revert** (`BalloonView.OnDespawned` `:83`) — restore the cached original `sharedMaterial`
    so a recycled instance spawned as a plain Simple doesn't keep the rainbow material. Subscriptions go
    through `_bindDisposables` (cleared on despawn) — **not** `AddTo(this)`.
-6. **[in-editor]** wire `BalloonRainbow.prefab` — it's currently a *bare* variant (`m_AddedComponents: []`,
-   still carries `SimpleBalloonVariant` + plain material). Add `RainbowBalloonVariant`, wire the Body
-   `SpriteRenderer` ref. (Runtime swap in Task 1 is needed regardless for Paint-conversion, so assigning
-   the material in-prefab is optional.)
+6. **[in-editor, still outstanding]**
+   - `BalloonsConfiguration.asset` — set the new `_rainbowMaterial` field to `BalloonRainbow.mat`.
+   - `Balloon.prefab` (the base — `Balloon5`/`Balloon10`/`BalloonRainbow` are its variants, so wiring
+     once here covers all four) — wire `BalloonView._bodyRenderer` to the Body `SpriteRenderer`.
+   - `BalloonRainbow.prefab` — it's currently a *bare* variant (`m_AddedComponents: []`, still carries
+     `SimpleBalloonVariant`). Replace it with `RainbowBalloonVariant` and wire its own `_renderer` field
+     to the same Body `SpriteRenderer`.
 
 ⚠️ **Instancing note:** the shader compiles `multi_compile_instancing`; what matters is the *material's*
 "Enable GPU Instancing" checkbox vs the MPB. Confirm in-editor.
