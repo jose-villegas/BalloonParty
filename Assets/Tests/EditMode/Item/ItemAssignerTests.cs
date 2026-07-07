@@ -137,7 +137,13 @@ namespace BalloonParty.Tests.Item
         {
             var bomb = CreateItemSettings(ItemType.Bomb);
             _current.Items.Returns(new List<ItemSettings> { bomb });
-            _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
+
+            // The assigner reuses one counts buffer and increments it in place after each pick. NSubstitute
+            // captures arguments by reference, so a deferred Received() predicate would see the post-increment
+            // value — snapshot the count at call time instead.
+            var bombCountAtPick = -1;
+            _current.PickItemEntry(Arg.Do<IReadOnlyDictionary<string, int>>(
+                counts => bombCountAtPick = counts[ItemType.Bomb.ToString()])).Returns(bomb);
 
             var existing = new BalloonModel();
             existing.Item.Value = ItemType.Bomb;
@@ -146,8 +152,7 @@ namespace BalloonParty.Tests.Item
             var model = new BalloonModel();
             FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
 
-            _current.Received(1).PickItemEntry(
-                Arg.Is<IReadOnlyDictionary<string, int>>(counts => counts[ItemType.Bomb.ToString()] == 1));
+            Assert.AreEqual(1, bombCountAtPick);
         }
 
         [Test]
