@@ -34,6 +34,7 @@ Material:
     - _BandCount: 4
     - _ScrollSpeed: 1
     - _MaskSoftness: 0.02
+    - _ShineAngle: 0.125
     - _ShineInterval: 3
     - _ShineSpeed: 1
     - _ShineWidth: 0.1

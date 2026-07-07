@@ -35,6 +35,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         _ShineWidth    ("Width",    Range(0, 1))   = 0.1
         _ShineSpeed    ("Speed",    Range(0, 5))   = 1.0
         _ShineInterval ("Interval", Range(0, 10))  = 3.0
+        _ShineAngle    ("Angle (turns)", Range(0, 1)) = 0.125
 
         [Header(Sprite)]
         _SpriteScale ("Scale", Range(0.1, 1.0)) = 1.0
@@ -94,6 +95,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float     _ShineWidth;
             float     _ShineSpeed;
             float     _ShineInterval;
+            float     _ShineAngle;
 
             fixed4 _Color0;
             fixed4 _Color1;
@@ -144,12 +146,18 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return _Color3.rgb;
             }
 
+            // 0..1 position along a diagonal at angleTurns (0..1 turns), centred on the UV square.
+            inline float DiagonalProjection(float2 uv, float angleTurns)
+            {
+                float ang = angleTurns * 6.2831853;
+                float2 dir = float2(cos(ang), sin(ang));
+                return dot(uv - 0.5, dir) + 0.5;
+            }
+
             // Diagonal scrolling colour bands cycling through the first _BandCount colours.
             inline fixed3 RainbowBand(float2 uv)
             {
-                float ang = _BandAngle * 6.2831853;
-                float2 dir = float2(cos(ang), sin(ang));
-                float projection = dot(uv - 0.5, dir) + 0.5;
+                float projection = DiagonalProjection(uv, _BandAngle);
 
                 float s = projection * _StripeCount + _Time.y * _ScrollSpeed + _TimeOffset;
                 float cell = floor(s);
@@ -175,7 +183,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return inside.x * inside.y;
             }
 
-            // Additive white shine sweep (0..1) — same diagonal band as SpriteShineShadow.
+            // Additive white shine sweep (0..1) — same diagonal band shape as SpriteShineShadow, angle tunable.
             inline fixed ShineAmount(float2 uv)
             {
                 float sweepDuration = 1.0 / max(_ShineSpeed, 0.001);
@@ -183,7 +191,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 float t = fmod(_Time.y, cycleDuration);
                 float shineLocation = -_ShineWidth + (1.0 + 2.0 * _ShineWidth) * saturate(t / sweepDuration);
 
-                float projection = (uv.x + uv.y) / 2;
+                float projection = DiagonalProjection(uv, _ShineAngle);
                 float inside = step(shineLocation - _ShineWidth, projection) * step(projection, shineLocation + _ShineWidth);
                 return inside * (1.0 - abs(projection - shineLocation) / _ShineWidth);
             }
