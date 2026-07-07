@@ -12,5 +12,8 @@ namespace BalloonParty.Configuration.Cinematics
         ///     Throws on a state with no declaration, so a missing entry fails loudly instead of silently behaving trait-less.
         /// </summary>
         CinematicStateEntry EntryOf(CinematicState state);
+
+        /// <summary>The Ascent's tuning — a transform-descent, so it lives outside the per-state camera-rig entries.</summary>
+        LevelAscendSettings LevelAscend { get; }
     }
 }

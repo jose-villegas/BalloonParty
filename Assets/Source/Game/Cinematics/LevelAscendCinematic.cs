@@ -37,15 +37,15 @@ namespace BalloonParty.Game.Cinematics
 
             try
             {
-                var segment = _settings.EntryOf(CinematicState.LevelAscend).Rig;
-                var curve = segment.TimeScaleCurve;
+                var ascend = _settings.LevelAscend;
+                var curve = ascend.DescentCurve;
                 var duration = curve.Duration();
-                var height = segment.ZoomAmount;
-                var spawnCueTime = duration * Mathf.Clamp01(segment.PanWeight);
+                var height = ascend.Height;
+                var spawnCueTime = duration * Mathf.Clamp01(ascend.BalloonSpawnCue);
                 var spawnCueFired = false;
 
                 // 0 (unset) falls back to the curve's own pace.
-                var followSpeed = segment.FollowSpeed > 0f ? segment.FollowSpeed : 1f;
+                var followSpeed = ascend.Speed > 0f ? ascend.Speed : 1f;
 
                 var elapsed = 0f;
                 while (elapsed < duration)

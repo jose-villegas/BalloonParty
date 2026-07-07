@@ -11,23 +11,9 @@ namespace BalloonParty.Configuration.Cinematics
     [Serializable]
     internal class CinematicStateEntry
     {
-        [SerializeField] private CinematicTraits _traits = CinematicTraits.None;
-        [SerializeField] private CameraRigCinematicSettings _rig = new();
-        [SerializeField] private TrackedTrailSettings _trackedTrail = new();
-
-        public CinematicStateEntry()
-        {
-        }
-
-        public CinematicStateEntry(
-            CinematicTraits traits,
-            CameraRigCinematicSettings rig,
-            TrackedTrailSettings trackedTrail)
-        {
-            _traits = traits;
-            _rig = rig;
-            _trackedTrail = trackedTrail;
-        }
+        [SerializeField] private CinematicTraits _traits;
+        [SerializeField] private CameraRigCinematicSettings _rig;
+        [SerializeField] private TrackedTrailSettings _trackedTrail;
 
         public CinematicTraits Traits => _traits;
         public CameraRigCinematicSettings Rig => _rig;

@@ -9,7 +9,7 @@ namespace BalloonParty.Configuration.Cinematics
     internal class CameraRigCinematicSettings
     {
         [Tooltip("Time.timeScale over the segment's real time; the last key doubles as the segment duration.")]
-        [SerializeField] private AnimationCurve _timeScaleCurve = AnimationCurve.EaseInOut(0f, 1f, 0.6f, 0.3f);
+        [SerializeField] private AnimationCurve _timeScaleCurve;
 
         [Tooltip("How much the orthographic size shrinks during the segment (0 = base framing).")]
         [SerializeField] private float _zoomAmount;
@@ -18,23 +18,7 @@ namespace BalloonParty.Configuration.Cinematics
         [SerializeField] private float _panWeight;
 
         [Tooltip("Lerp sharpness of the camera easing toward the segment's target (higher = snappier).")]
-        [SerializeField] private float _followSpeed = 5f;
-
-        public CameraRigCinematicSettings()
-        {
-        }
-
-        public CameraRigCinematicSettings(
-            AnimationCurve timeScaleCurve,
-            float zoomAmount,
-            float panWeight,
-            float followSpeed)
-        {
-            _timeScaleCurve = timeScaleCurve;
-            _zoomAmount = zoomAmount;
-            _panWeight = panWeight;
-            _followSpeed = followSpeed;
-        }
+        [SerializeField] private float _followSpeed;
 
         public AnimationCurve TimeScaleCurve => _timeScaleCurve;
         public float ZoomAmount => _zoomAmount;

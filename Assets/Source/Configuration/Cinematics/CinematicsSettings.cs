@@ -6,70 +6,18 @@ using BalloonParty.Configuration.Cinematics;
 
 namespace BalloonParty.Configuration.Cinematics
 {
-    /// <summary>Field initializers are the canonical declarations — an EditMode test asserts them, so a new state without one fails CI.</summary>
+    /// <summary>Entries are authored in the editor, one per <see cref="CinematicState" />, indexed by its ordinal.</summary>
     [CreateAssetMenu(menuName = "Configuration/Cinematics Settings", fileName = "CinematicsSettings")]
     internal class CinematicsSettings : ScriptableObject, ICinematicsSettings
     {
         [Tooltip("Traits + camera-rig segment + capability blocks, one entry per cinematic state.")]
         [EnumIndexed(typeof(CinematicState))]
-        [SerializeField] private CinematicStateEntry[] _states =
-        {
-            // None — entry unused.
-            new(),
+        [SerializeField] private CinematicStateEntry[] _states;
 
-            // LevelUpPanIn
-            new(
-                CinematicTraits.BlocksLoss | CinematicTraits.BlocksShake,
-                new CameraRigCinematicSettings(
-                    new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(1.5f, 0.5f), new Keyframe(3f, 1f)),
-                    zoomAmount: 2f,
-                    panWeight: 0.6f,
-                    followSpeed: 0.7f),
-                new TrackedTrailSettings(
-                    new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(0.5f, 4f), new Keyframe(1f, 1f)))),
+        [Tooltip("The Ascent's own tuning — a transform-descent, not a camera move.")]
+        [SerializeField] private LevelAscendSettings _levelAscend;
 
-            // LevelUpRestore — ramps from the popup's frozen 0 back to full.
-            new(
-                CinematicTraits.BlocksLoss | CinematicTraits.BlocksShake,
-                new CameraRigCinematicSettings(
-                    new AnimationCurve(new Keyframe(0f, 0f), new Keyframe(3f, 1f)),
-                    zoomAmount: 0f,
-                    panWeight: 0f,
-                    followSpeed: 0.7f),
-                new TrackedTrailSettings()),
-
-            // HeartDrain
-            new(
-                CinematicTraits.None,
-                new CameraRigCinematicSettings(
-                    new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(0.6f, 0.3f)),
-                    zoomAmount: 0.15f,
-                    panWeight: 0.1f,
-                    followSpeed: 2f),
-                new TrackedTrailSettings()),
-
-            // HeartDrainRestore
-            new(
-                CinematicTraits.None,
-                new CameraRigCinematicSettings(
-                    new AnimationCurve(new Keyframe(0f, 0.3f), new Keyframe(0.85f, 1f)),
-                    zoomAmount: 0f,
-                    panWeight: 0f,
-                    followSpeed: 2f),
-                new TrackedTrailSettings()),
-
-            // LevelAscend — repurposes the segment fields for the staging root's descent, not a
-            // camera move: curve VALUE is a 1→0 height fraction, ZoomAmount is starting height,
-            // PanWeight is the spawn point in the descent, FollowSpeed is the descent-speed multiplier.
-            new(
-                CinematicTraits.BlocksLoss | CinematicTraits.BlocksShake,
-                new CameraRigCinematicSettings(
-                    new AnimationCurve(new Keyframe(0f, 1f), new Keyframe(1.2f, 0f)),
-                    zoomAmount: 8f,
-                    panWeight: 0.75f,
-                    followSpeed: 0.5f),
-                new TrackedTrailSettings()),
-        };
+        public LevelAscendSettings LevelAscend => _levelAscend;
 
         private void OnValidate()
         {

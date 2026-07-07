@@ -28,10 +28,6 @@ namespace BalloonParty.Game.Level
     /// </summary>
     internal sealed class LevelTransitionController : IStartable, IDisposable
     {
-        // Placeholder tuning (like the Ascent's height/duration) — feel pass pending.
-        private const float PopSlowMoTimeScale = 0.35f;
-        private const float PopWaveBandSeconds = 0.11f;
-
         private readonly CinematicDirector _cinematicDirector;
         private readonly CinematicCameraRig _cameraRig;
         private readonly ICinematicsSettings _cinematicsSettings;
@@ -143,9 +139,9 @@ namespace BalloonParty.Game.Level
                 _staticActorSpawner.ClearStaticActors();
                 await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, ct);
 
-                // New level's balloons spawn from the descent's cue (fired at the LevelAscend rig's
-                // PanWeight fraction), so they reveal near the end of the Ascent rather than right after
-                // the pop wave. Keep PanWeight late enough that the cue follows the pop wave.
+                // New level's balloons spawn from the descent's cue (fired at LevelAscend.BalloonSpawnCue),
+                // so they reveal near the end of the Ascent rather than right after the pop wave. Keep the
+                // cue late enough that it follows the pop wave.
                 var descentTask = _ascendCinematic.PlayAsync(_scenarioRoot.Transform, SpawnNewLevelBalloons, ct);
 
                 await popTask;
@@ -175,7 +171,7 @@ namespace BalloonParty.Game.Level
         private void HoldOutgoingContent()
         {
             // Same distance PlayAsync lifts the incoming content, so outgoing exits in lockstep.
-            var exitDrop = _cinematicsSettings.EntryOf(CinematicState.LevelAscend).Rig.ZoomAmount;
+            var exitDrop = _cinematicsSettings.LevelAscend.Height;
             for (var i = 0; i < _outgoingContent.Count; i++)
             {
                 _outgoingContent[i].HoldOutgoing(_scenarioRoot.Transform, exitDrop);
@@ -198,7 +194,7 @@ namespace BalloonParty.Game.Level
                 return;
             }
 
-            _timeScale.Claim(TimeScaleSource.LevelTransition, PopSlowMoTimeScale);
+            _timeScale.Claim(TimeScaleSource.LevelTransition, _cinematicsSettings.LevelAscend.PopSlowMoTimeScale);
             try
             {
                 // Sweep from the outermost POPULATED bands, not the grid corners, which may be empty.
@@ -212,7 +208,8 @@ namespace BalloonParty.Game.Level
 
                     // Scaled delay so slow-mo also stretches the wave's cadence.
                     await UniTask.Delay(
-                        TimeSpan.FromSeconds(PopWaveBandSeconds), ignoreTimeScale: false, cancellationToken: ct);
+                        TimeSpan.FromSeconds(_cinematicsSettings.LevelAscend.PopWaveBandSeconds),
+                        ignoreTimeScale: false, cancellationToken: ct);
                 }
             }
             finally
@@ -230,7 +227,8 @@ namespace BalloonParty.Game.Level
             }
 
             var steps = ((_maxPopBand - _minPopBand) / 2) + 1;
-            return steps * PopWaveBandSeconds / PopSlowMoTimeScale;
+            var ascend = _cinematicsSettings.LevelAscend;
+            return steps * ascend.PopWaveBandSeconds / ascend.PopSlowMoTimeScale;
         }
 
         private void CollectBalloonBands()
