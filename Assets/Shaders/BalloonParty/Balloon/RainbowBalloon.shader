@@ -37,9 +37,6 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         _ShineInterval ("Interval", Range(0, 10))  = 3.0
         _ShineAngle    ("Angle (turns)", Range(0, 1)) = 0.125
 
-        [Header(Sprite)]
-        _SpriteScale ("Scale", Range(0.1, 1.0)) = 1.0
-
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
 
@@ -91,7 +88,6 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
 
             sampler2D _MainTex;
             float4    _MainTex_ST;
-            float     _SpriteScale;
             float     _ShineWidth;
             float     _ShineSpeed;
             float     _ShineInterval;
@@ -198,24 +194,18 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
 
             fixed4 frag(Varyings IN) : SV_Target
             {
-                // Scale sprite UV inward from center, so the visible sprite can sit inset in the quad.
-                float2 spriteUV = (IN.uv - 0.5) / _SpriteScale + 0.5;
-
-                float2 inBounds = step(0.0, spriteUV) * step(spriteUV, 1.0);
-                float  spriteMask = inBounds.x * inBounds.y;
-
-                fixed4 tex = tex2D(_MainTex, spriteUV);
+                fixed4 tex = tex2D(_MainTex, IN.uv);
 
                 // Masked region (e.g. the knot) keeps its plain sprite colour instead of the band tint.
-                fixed3 bandColor = lerp(RainbowBand(spriteUV), fixed3(1, 1, 1), MaskAmount(spriteUV));
+                fixed3 bandColor = lerp(RainbowBand(IN.uv), fixed3(1, 1, 1), MaskAmount(IN.uv));
 
                 // Sprite shading × band colour, then additive white shine on top.
                 fixed3 rgb = tex.rgb * bandColor * IN.color.rgb;
-                rgb += tex.a * ShineAmount(spriteUV);
+                rgb += tex.a * ShineAmount(IN.uv);
 
                 fixed4 result;
                 result.rgb = rgb;
-                result.a   = tex.a * IN.color.a * spriteMask;
+                result.a   = tex.a * IN.color.a;
 
                 return result;
             }

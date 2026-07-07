@@ -38,7 +38,6 @@ Material:
     - _ShineInterval: 3
     - _ShineSpeed: 1
     - _ShineWidth: 0.1
-    - _SpriteScale: 0.75
     - _StripeCount: 5
     - _TimeOffset: 0
     - PixelSnap: 0
