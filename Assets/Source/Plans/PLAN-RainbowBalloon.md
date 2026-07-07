@@ -329,28 +329,31 @@ error, not a benign redundancy.
 
 ---
 
-## Phase 5 — Paint → rainbow conversion — ✅ DONE 2026-07-07
+## Phase 5 — Paint → rainbow conversion — ✅ DONE 2026-07-07 (revised — holder-gated)
 
-Convert = **flip the reactive `IsRainbow` flag** on the target model instead of recolouring; the
-view's Phase-3 subscription then does the material swap — the handler never touches the view (clean
-MVC).
+**Key correction (2026-07-07):** rainbow-spreading is a property of a rainbow **paint-holder**, not of
+the Paint item. The first pass had Paint *always* convert targets to rainbow — wrong. Now Paint
+branches on the holding balloon: a normal-coloured holder **recolours** targets to its colour (the
+original Paint behaviour, restored); only a **rainbow** holder **converts** targets to rainbow. The
+gate is `balloon is IHasRainbowMode { IsRainbow: true }`, decided once in `Activate` and threaded as a
+`spreadsRainbow` bool into collection + application.
 
 1. ✅ **Reached the flag from the handler** — no interface change needed: `target is
    IHasWriteableRainbowMode rainbowMode` casts the *same* `IPaintable` reference directly (both live on
    the one `BalloonModel` instance), so `IPaintable` itself was never touched.
-2. ✅ **`Recolor` renamed `ConvertToRainbow`** — sets `IsRainbow.Value = true`; no explicit
-   `DistinctUntilChanged` guard needed — `ReactiveProperty<T>` already skips re-emitting an unchanged
-   value, so converting an already-rainbow target is a safe no-op for free. Score/streak resolve
-   lazily at pop time from `IsRainbow.Value`, so a mid-life conversion scores as rainbow when it later
-   pops.
+2. ✅ **Both `Recolor` and `ConvertToRainbow` exist**; `PaintBlob` picks by `spreadsRainbow`. Convert
+   sets `IsRainbow.Value = true` — no explicit `DistinctUntilChanged` guard needed, `ReactiveProperty<T>`
+   already skips re-emitting an unchanged value, so an already-rainbow target is a safe no-op. Score/
+   streak resolve lazily at pop time from `IsRainbow.Value`, so a mid-life conversion scores as rainbow
+   when it later pops.
 3. ✅ **Decisions resolved:**
-   - **The same-colour skip in `CollectPaintTargets` was removed entirely**, not bypassed
-     conditionally — it only ever existed to avoid a pointless recolour; conversion doesn't care about
-     a target's current colour, so keeping the skip would have accidentally excluded same-coloured
-     balloons from ever becoming rainbow. Also simplified: `paintColor` dropped as that method's param
-     (still used elsewhere in `Activate` for the splash VFX tint).
+   - **Same-colour skip is now mode-dependent** in `CollectPaintTargets` — kept for a recolour (avoids
+     a pointless recolour), dropped for a rainbow spread (which applies regardless of current colour,
+     so keeping it would wrongly exclude same-coloured targets). `ResolvePaintTarget` was extracted to
+     hold this per-slot eligibility (and keep the method under the cognitive-complexity threshold).
    - **Already-rainbow target** — no-op via the `ReactiveProperty` behaviour above, no manual guard.
-   - **Rainbow-as-Paint-source** — unaffected; still a valid `IHasColor` source (keeps a base colour).
+   - **Rainbow-as-Paint-source** — this *is* the trigger for spreading rainbow; it's a valid
+     `IHasColor` source (keeps a base colour, used for the splash VFX tint).
 
 ⚠️ **Converted rainbows bypass spawn-time caps and item-weight** — `BalloonModelBase.TypeName` is set
 once in the ctor and is immutable (`:42`), so flipping `IsRainbow` does **not** change `TypeName`. A
