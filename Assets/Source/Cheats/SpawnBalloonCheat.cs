@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Balloon.Type;
+using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
+using MessagePipe;
 using UnityEngine;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
@@ -25,6 +27,7 @@ namespace BalloonParty.Cheats
         private readonly BalloonFactory _factory;
         private readonly SlotGrid _grid;
         private readonly IBalloonsConfiguration _balloonsConfig;
+        private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
 
         private readonly List<Vector3> _spawnPath = new();
 
@@ -36,11 +39,16 @@ namespace BalloonParty.Cheats
         public string Section => "Spawning";
         public IReadOnlyList<string> Tags => new[] { "balloons", "spawning", "items" };
 
-        public SpawnBalloonCheat(BalloonFactory factory, SlotGrid grid, IBalloonsConfiguration balloonsConfig)
+        public SpawnBalloonCheat(
+            BalloonFactory factory,
+            SlotGrid grid,
+            IBalloonsConfiguration balloonsConfig,
+            IPublisher<BalanceBalloonsMessage> balancePublisher)
         {
             _factory = factory;
             _grid = grid;
             _balloonsConfig = balloonsConfig;
+            _balancePublisher = balancePublisher;
         }
 
         public void Execute()
@@ -103,6 +111,13 @@ namespace BalloonParty.Cheats
                     SpawnAt(new Vector2Int(col, row), entry, item);
                     spawned++;
                 }
+            }
+
+            if (spawned > 0)
+            {
+                // Settle them into resting positions right away, rather than leaving floaters until
+                // the next natural balance.
+                _balancePublisher.Publish(default);
             }
         }
 

@@ -165,7 +165,6 @@ namespace BalloonParty.Game
         {
             builder.Register<SpawnBalloonLineCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SpawnBalloonCheat>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<FireProjectileCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<TriggerLevelUpCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<NearLevelUpCheat>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ForceGameOverCheat>(Lifetime.Singleton).AsImplementedInterfaces();

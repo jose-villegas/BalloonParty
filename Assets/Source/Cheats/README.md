@@ -40,7 +40,6 @@ A cheat that needs inputs (dropdowns, counters) also implements `ICheatControls.
 |---|---|---|
 | Spawn Balloon Line | Spawning | Publishes `SpawnBalloonLineMessage` — spawns one new row of balloons |
 | Spawn Balloon | Spawning | Pick a `BalloonType`, an item to hold (or None), and a count; force-spawns that many into open slots (bottom-up), assigning the item to each that can hold one. Bypasses the weighted spawner + caps by design. An interactive cheat (`ICheatControls`) — draws its own type/item grids + count stepper |
-| Fire Projectile | Thrower | Sets `IsFree = true` on the currently loaded projectile (tracked via `ProjectileLoadedMessage`) — fires regardless of mouse state |
 | Remove Balloons | Grid | Draw across balloons to remove them and trigger a balance pass |
 | Trigger Level Up | Score | Fills all color bars to the current threshold and immediately triggers the level-up ceremony |
 | Near Level Up | Score | Fills all color bars to one point below the threshold — pop one balloon of each color to complete the level naturally |
