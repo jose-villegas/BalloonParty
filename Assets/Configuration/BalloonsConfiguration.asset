@@ -101,6 +101,16 @@ MonoBehaviour:
     _scoreValue: 50
     _itemActivationWeight: 0
     _spillover: 0
+  - _prefab: {fileID: 0}
+    _balloonType: 6
+    _weight: 0.15
+    _maxCount: 1
+    _nudgeOverrides: []
+    _hitVfxOverrides: []
+    _hitsToPop: 1
+    _scoreValue: 4
+    _itemActivationWeight: 0.1
+    _spillover: 0
   _defaultPopVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d,
     type: 3}
   _rainbowMaterial: {fileID: 2100000, guid: 2a0e218b129144e0ca18ebc8a64ea0c4, type: 2}

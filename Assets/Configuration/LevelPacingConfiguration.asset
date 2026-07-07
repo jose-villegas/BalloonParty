@@ -158,6 +158,9 @@ MonoBehaviour:
       - _type: 0
         _weight: 1
         _maxCountOverride: 0
+      - _type: 6
+        _weight: 1
+        _maxCountOverride: 0
       _itemWeights:
       - _type: 5
         _weight: 1
@@ -251,6 +254,9 @@ MonoBehaviour:
         m_RotationOrder: 4
       _balloonWeights:
       - _type: 0
+        _weight: 1
+        _maxCountOverride: 0
+      - _type: 6
         _weight: 1
         _maxCountOverride: 0
       _itemWeights:
@@ -359,6 +365,9 @@ MonoBehaviour:
       - _type: 1
         _weight: 1
         _maxCountOverride: 3
+      - _type: 6
+        _weight: 1
+        _maxCountOverride: 0
       _itemWeights:
       - _type: 5
         _weight: 1
@@ -465,6 +474,9 @@ MonoBehaviour:
       - _type: 1
         _weight: 1
         _maxCountOverride: 5
+      - _type: 6
+        _weight: 1
+        _maxCountOverride: 0
       _itemWeights:
       - _type: 5
         _weight: 1
