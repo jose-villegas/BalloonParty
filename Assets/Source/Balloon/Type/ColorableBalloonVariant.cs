@@ -12,7 +12,7 @@ namespace BalloonParty.Balloon.Type
     {
         [SerializeField] [PaletteColorMask] private int _allowedColorsMask = ~0;
 
-        [Inject] private IGamePalette _palette;
+        [Inject] protected IGamePalette Palette;
 
         public virtual void Initialize(IWriteableBalloonModel model, int levelAllowedColorsMask)
         {
@@ -25,13 +25,13 @@ namespace BalloonParty.Balloon.Type
         // Empty intersection: fall back to the prefab mask rather than picking no color at all.
         private string PickColor(int levelAllowedColorsMask)
         {
-            if (_palette == null)
+            if (Palette == null)
             {
                 throw new InvalidOperationException(
                     $"{GetType().Name}.PickColor: IGamePalette is null — DI not configured.");
             }
 
-            if (_palette.Colors == null || _palette.Colors.Count == 0)
+            if (Palette.Colors == null || Palette.Colors.Count == 0)
             {
                 throw new InvalidOperationException(
                     $"{GetType().Name}.PickColor: IGamePalette has no colors configured.");
@@ -60,7 +60,7 @@ namespace BalloonParty.Balloon.Type
         private int CountAllowedColors(int mask)
         {
             var count = 0;
-            for (var i = 0; i < _palette.Colors.Count; i++)
+            for (var i = 0; i < Palette.Colors.Count; i++)
             {
                 if ((mask & (1 << i)) != 0)
                 {
@@ -74,7 +74,7 @@ namespace BalloonParty.Balloon.Type
         private string NthAllowedColor(int mask, int target)
         {
             var current = 0;
-            for (var i = 0; i < _palette.Colors.Count; i++)
+            for (var i = 0; i < Palette.Colors.Count; i++)
             {
                 if ((mask & (1 << i)) == 0)
                 {
@@ -83,7 +83,7 @@ namespace BalloonParty.Balloon.Type
 
                 if (current == target)
                 {
-                    return _palette.Colors[i].Name;
+                    return Palette.Colors[i].Name;
                 }
 
                 current++;

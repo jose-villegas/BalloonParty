@@ -250,6 +250,18 @@ iterations on the same session (dropped the drop-shadow path entirely; added a t
 and a scattered-twinkle glitter layer). The Task-6 wiring is done and the mask rect ended up genuinely
 used (tuned to a non-zero rectangle in the material), not just left inert.
 
+⚠️ **Runtime bug found + fixed post-playtest:** `RainbowBalloonVariant` declared its own
+`[Inject] private IGamePalette _palette` alongside `ColorableBalloonVariant`'s existing one, on the
+(wrong) assumption that same-named private fields in a base/derived pair are harmless since they're
+separate storage. VContainer's injector throws `VContainerException: Duplicate injection found for
+field: ... _palette` — it doesn't tolerate two identically-named injectable fields across the
+hierarchy, even though C# itself does. Fixed by widening the base field to
+`[Inject] protected IGamePalette Palette` (PascalCase, no underscore — the one existing protected-field
+precedent in this codebase is `EffectView.OnComplete`, same convention) and having the derived class
+reuse it instead of shadowing. **Lesson for future variants:** don't re-declare an `[Inject]` field a
+base class already has: dependency injection duplication across a MonoBehaviour hierarchy is a real
+error, not a benign redundancy.
+
 1. **View reacts to `IsRainbow`** (`Balloon/View/BalloonView.cs` `Bind` `:100`) — subscribe the flag
    (`.AddTo(_bindDisposables)`); on true, swap the Body renderer's **`sharedMaterial`** to
    `BalloonRainbow.mat` and **suppress** the normal `_colorableRenderers.BindColor` (`:102`).

@@ -9,7 +9,6 @@ using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer;
-using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Type
 {
@@ -28,7 +27,8 @@ namespace BalloonParty.Balloon.Type
 
         [SerializeField] private SpriteRenderer _renderer;
 
-        [Inject] private IGamePalette _palette;
+        // Palette is inherited from ColorableBalloonVariant (protected) — a second [Inject] field of
+        // the same type here would make VContainer's injector throw "Duplicate injection found".
         [Inject] private IActiveLevelParameters _levelParams;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
 
@@ -83,7 +83,7 @@ namespace BalloonParty.Balloon.Type
                 return;
             }
 
-            var colors = _palette.ColorNamesForMask(_levelParams.Current.AllowedColorsMask);
+            var colors = Palette.ColorNamesForMask(_levelParams.Current.AllowedColorsMask);
 
             _renderer.GetPropertyBlock(_block);
             _block.SetColor(Color0Id, ColorAt(colors, 0));
@@ -104,7 +104,7 @@ namespace BalloonParty.Balloon.Type
                 return Color.white;
             }
 
-            return _palette.GetColor(colors[Mathf.Clamp(index, 0, colors.Count - 1)]);
+            return Palette.GetColor(colors[Mathf.Clamp(index, 0, colors.Count - 1)]);
         }
     }
 }
