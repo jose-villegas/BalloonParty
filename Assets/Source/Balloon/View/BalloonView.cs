@@ -35,6 +35,9 @@ namespace BalloonParty.Balloon.View
         [SerializeField] private TweenTracker _tweenTracker;
         [SerializeField] private ItemDisplayService _itemService;
 
+        [Tooltip("The colourable body sprite — the only renderer swapped to the rainbow material.")]
+        [SerializeField] private SpriteRenderer _bodyRenderer;
+
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private IBalloonsConfiguration _balloonsConfig;
@@ -49,6 +52,7 @@ namespace BalloonParty.Balloon.View
         private IBalloonViewBinding[] _viewBindings;
         private IBalloonVariant _variant;
         private HitVfxOverride[] _hitVfxOverrides;
+        private Material _originalBodyMaterial;
         private bool _isNudging;
 
         public IBalloonModel Model { get; private set; }
@@ -62,6 +66,11 @@ namespace BalloonParty.Balloon.View
         {
             _viewBindings = GetComponentsInChildren<IBalloonViewBinding>();
             _variant = GetComponentInParent<IBalloonVariant>();
+
+            if (_bodyRenderer != null)
+            {
+                _originalBodyMaterial = _bodyRenderer.sharedMaterial;
+            }
         }
 
         public void OnSpawned()
@@ -87,6 +96,7 @@ namespace BalloonParty.Balloon.View
             _motionTicker?.CancelNudge(this);
             _bindDisposables.Clear();
             _itemService?.Unbind();
+            SetBodyMaterial(_originalBodyMaterial);
             Model = null;
             _hitVfxOverrides = null;
             _isNudging = false;
@@ -99,9 +109,24 @@ namespace BalloonParty.Balloon.View
 
             if (model is IHasColor colorable)
             {
-                _colorableRenderers
-                    .BindColor(colorable.Color, _palette.GetColor)
-                    .AddTo(_bindDisposables);
+                if (model is IHasRainbowMode rainbowMode)
+                {
+                    // Re-derive from both values on either change — order-independent, so it doesn't
+                    // matter whether Color or IsRainbow was written first (e.g. by a future Paint convert).
+                    rainbowMode.IsRainbow
+                        .Subscribe(isRainbow => ApplyColorMode(colorable, isRainbow))
+                        .AddTo(_bindDisposables);
+
+                    colorable.Color
+                        .Subscribe(_ => ApplyColorMode(colorable, rainbowMode.IsRainbow.Value))
+                        .AddTo(_bindDisposables);
+                }
+                else
+                {
+                    _colorableRenderers
+                        .BindColor(colorable.Color, _palette.GetColor)
+                        .AddTo(_bindDisposables);
+                }
             }
 
             model.SlotIndex
@@ -286,6 +311,44 @@ namespace BalloonParty.Balloon.View
         {
             var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);
             SortingHelper.ApplySortingOrder(_spriteLayerRenderers, baseOrder);
+        }
+
+        // Rainbow mode replaces the normal per-colour tint with the banded material — the tint would
+        // otherwise multiply into the shader's band colour (see RainbowBalloon.shader).
+        private void ApplyColorMode(IHasColor colorable, bool isRainbow)
+        {
+            if (isRainbow)
+            {
+                SetBodyMaterial(_balloonsConfig.RainbowMaterial);
+
+                foreach (var renderer in _colorableRenderers)
+                {
+                    renderer.SetColor(Color.white);
+                }
+
+                return;
+            }
+
+            SetBodyMaterial(_originalBodyMaterial);
+
+            if (string.IsNullOrEmpty(colorable.Color.Value))
+            {
+                return;
+            }
+
+            var color = _palette.GetColor(colorable.Color.Value);
+            foreach (var renderer in _colorableRenderers)
+            {
+                renderer.SetColor(color);
+            }
+        }
+
+        private void SetBodyMaterial(Material material)
+        {
+            if (_bodyRenderer != null && material != null)
+            {
+                _bodyRenderer.sharedMaterial = material;
+            }
         }
     }
 }

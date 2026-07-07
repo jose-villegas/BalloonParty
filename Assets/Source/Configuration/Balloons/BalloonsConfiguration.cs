@@ -13,6 +13,10 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Default pop particle used for colored balloons. Tinted to the balloon's palette color at runtime.")]
         [SerializeField] private ParticleSystem _defaultPopVfxPrefab;
 
+        [Header("Rainbow")]
+        [Tooltip("Swapped onto a balloon's body renderer while it's in rainbow mode.")]
+        [SerializeField] private Material _rainbowMaterial;
+
         [Header("Spawning")]
         [SerializeField] private int _gameStartedBalloonLines;
         [SerializeField] private int _newProjectileBalloonLines;
@@ -37,6 +41,7 @@ namespace BalloonParty.Configuration.Balloons
 
         public IReadOnlyList<BalloonPrefabEntry> Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
+        public Material RainbowMaterial => _rainbowMaterial;
         public int GameStartedBalloonLines => _gameStartedBalloonLines;
         public int NewProjectileBalloonLines => _newProjectileBalloonLines;
         public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;

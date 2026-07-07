@@ -10,6 +10,9 @@ namespace BalloonParty.Configuration.Balloons
         IReadOnlyList<BalloonPrefabEntry> Entries { get; }
         ParticleSystem DefaultPopVfxPrefab { get; }
 
+        /// <summary>Swapped onto a balloon's body renderer while it's in rainbow mode — see BalloonView.</summary>
+        Material RainbowMaterial { get; }
+
         /// <summary>Catalog default — runtime reads the resolved value via IActiveLevelParameters.BoardLines.</summary>
         int GameStartedBalloonLines { get; }
 
