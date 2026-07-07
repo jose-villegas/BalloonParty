@@ -19,7 +19,7 @@ Material:
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
-  m_LockedProperties:
+  m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
@@ -29,31 +29,31 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - PixelSnap: 0
     - _BandAngle: 0.125
-    - _BandBlend: 0.08
+    - _BandBlend: 0.5
     - _BandCount: 4
+    - _GlitterBrightness: 1.3
+    - _GlitterChance: 0.3
+    - _GlitterDensity: 20
+    - _GlitterSharpness: 1
+    - _GlitterSize: 0.25
+    - _GlitterSpeed: 6.4
+    - _MaskSoftness: 0.035
     - _ScrollSpeed: 1
-    - _GlitterBrightness: 1
-    - _GlitterChance: 0.35
-    - _GlitterDensity: 24
-    - _GlitterSharpness: 8
-    - _GlitterSize: 0.16
-    - _GlitterSpeed: 6
-    - _MaskSoftness: 0.02
     - _ShineAngle: 0.125
-    - _ShineInterval: 3
-    - _ShineSpeed: 1
-    - _ShineWidth: 0.1
+    - _ShineInterval: 1
+    - _ShineSpeed: 0.35
+    - _ShineWidth: 0.25
     - _StripeCount: 5
     - _TimeOffset: 0
-    - PixelSnap: 0
     m_Colors:
     - _Color0: {r: 0.467, g: 0.867, b: 0.467, a: 1}
     - _Color1: {r: 1, g: 0.412, b: 0.38, a: 1}
     - _Color2: {r: 0.012, g: 0.663, b: 0.957, a: 1}
     - _Color3: {r: 0.612, g: 0.153, b: 0.69, a: 1}
+    - _MaskMax: {r: 0.51, g: 0.23, b: 0, a: 0}
+    - _MaskMin: {r: 0.39, g: 0.165, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _MaskMin: {r: 0, g: 0, b: 0, a: 0}
-    - _MaskMax: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

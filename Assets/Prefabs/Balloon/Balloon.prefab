@@ -511,6 +511,7 @@ MonoBehaviour:
   _collider: {fileID: 7822387025677367451}
   _tweenTracker: {fileID: -4720687053981353126}
   _itemService: {fileID: 5541380524191057241}
+  _bodyRenderer: {fileID: 2921553031310187319}
   _baseSortingLayer: 50
 --- !u!114 &-4720687053981353126
 MonoBehaviour:

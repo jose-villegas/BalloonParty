@@ -22,6 +22,8 @@ MonoBehaviour:
     _hitVfxOverrides: []
     _hitsToPop: 1
     _scoreValue: 1
+    _itemActivationWeight: 1
+    _spillover: 0
   - _prefab: {fileID: 9117278215908477035, guid: 54754900e64eb4cb8a18cf270c1adf04,
       type: 3}
     _balloonType: 4
@@ -31,6 +33,8 @@ MonoBehaviour:
     _hitVfxOverrides: []
     _hitsToPop: 1
     _scoreValue: 5
+    _itemActivationWeight: 0.3
+    _spillover: 0
   - _prefab: {fileID: 9117278215908477035, guid: 003e22e6af95b4bc1856dbeb7826647a,
       type: 3}
     _balloonType: 5
@@ -40,6 +44,8 @@ MonoBehaviour:
     _hitVfxOverrides: []
     _hitsToPop: 1
     _scoreValue: 10
+    _itemActivationWeight: 0.15
+    _spillover: 0
   - _prefab: {fileID: 2456788019005336009, guid: c1864f9f05e28465cb3269154a459c35,
       type: 3}
     _balloonType: 1
@@ -60,6 +66,8 @@ MonoBehaviour:
         type: 3}
     _hitsToPop: 3
     _scoreValue: 15
+    _itemActivationWeight: 0
+    _spillover: 0
   - _prefab: {fileID: 4318124338822199961, guid: 49cbb92bf41a2499797a1921677efaa9,
       type: 3}
     _balloonType: 3
@@ -72,6 +80,8 @@ MonoBehaviour:
         type: 3}
     _hitsToPop: 3
     _scoreValue: 0
+    _itemActivationWeight: 0
+    _spillover: 0
   - _prefab: {fileID: 2797266919102248843, guid: b6f3c28a48130401e8c2204eb1e32d81,
       type: 3}
     _balloonType: 2
@@ -89,8 +99,11 @@ MonoBehaviour:
     _hitVfxOverrides: []
     _hitsToPop: -1
     _scoreValue: 50
+    _itemActivationWeight: 0
+    _spillover: 0
   _defaultPopVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d,
     type: 3}
+  _rainbowMaterial: {fileID: 2100000, guid: 2a0e218b129144e0ca18ebc8a64ea0c4, type: 2}
   _gameStartedBalloonLines: 6
   _newProjectileBalloonLines: 3
   _newBalloonLinesTimeInterval: 0.35
