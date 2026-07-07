@@ -266,7 +266,7 @@ MonoBehaviour:
           _min: 6
           _max: 16
           _mode: 2
-      _allowedColorsMask: 7
+      _allowedColorsMask: 3
   - _fromLevel: 4
     _toLevel: 4
     _parameters:
@@ -375,7 +375,7 @@ MonoBehaviour:
           _min: 6
           _max: 16
           _mode: 2
-      _allowedColorsMask: 7
+      _allowedColorsMask: 3
   - _fromLevel: 5
     _toLevel: 5
     _parameters:
@@ -579,10 +579,10 @@ MonoBehaviour:
         _maxCountOverride: 0
       - _type: 5
         _weight: 2
-        _maxCountOverride: 0
+        _maxCountOverride: 9
       - _type: 4
         _weight: 1
-        _maxCountOverride: 9
+        _maxCountOverride: 5
       - _type: 1
         _weight: 1
         _maxCountOverride: 3
