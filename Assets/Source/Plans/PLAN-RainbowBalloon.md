@@ -329,25 +329,28 @@ error, not a benign redundancy.
 
 ---
 
-## Phase 5 — Paint → rainbow conversion (the new interaction; last)
+## Phase 5 — Paint → rainbow conversion — ✅ DONE 2026-07-07
 
-`PaintItemHandler.Recolor` (`:174-185`) currently sets `target.Color.Value = paintColor` over
-`IPaintable` splash targets (`CollectPaintTargets` `:122-155`). Convert = **flip the reactive
-`IsRainbow` flag** on the target model instead of (or in addition to) recolouring; the view's Phase-3
-subscription then does the material swap — the handler never touches the view (clean MVC).
+Convert = **flip the reactive `IsRainbow` flag** on the target model instead of recolouring; the
+view's Phase-3 subscription then does the material swap — the handler never touches the view (clean
+MVC).
 
-1. **Reach the flag from the handler** — the handler enumerates `_grid.At(slot) as IPaintable`, so the
-   rainbow-mode setter must be reachable through that cast: either add it to `IPaintable` or also cast
-   to a writeable rainbow capability. *Why:* ⚠️ the handler has **no** `BalloonView` reference; the
-   reactive flag is the only clean path to the view.
-2. **Convert in `Recolor`** — set `IsRainbow = true` (guard with `.DistinctUntilChanged()` / a
-   current-value check to avoid redundant re-swaps). Score/streak behaviour is resolved lazily at pop
-   time from `IsRainbow.Value`, so a mid-life conversion scores as rainbow when it later pops — no
-   stale state.
-3. **Decisions to nail** — ⚠️ `CollectPaintTargets` skips targets whose colour already equals the paint
-   colour (`:139`); decide whether *conversion* should bypass that skip. ⚠️ Paint source already
-   rainbow: still a valid `IHasColor` source (keeps a base colour), so it works; converting an
-   already-rainbow target is a no-op flip (guard it).
+1. ✅ **Reached the flag from the handler** — no interface change needed: `target is
+   IHasWriteableRainbowMode rainbowMode` casts the *same* `IPaintable` reference directly (both live on
+   the one `BalloonModel` instance), so `IPaintable` itself was never touched.
+2. ✅ **`Recolor` renamed `ConvertToRainbow`** — sets `IsRainbow.Value = true`; no explicit
+   `DistinctUntilChanged` guard needed — `ReactiveProperty<T>` already skips re-emitting an unchanged
+   value, so converting an already-rainbow target is a safe no-op for free. Score/streak resolve
+   lazily at pop time from `IsRainbow.Value`, so a mid-life conversion scores as rainbow when it later
+   pops.
+3. ✅ **Decisions resolved:**
+   - **The same-colour skip in `CollectPaintTargets` was removed entirely**, not bypassed
+     conditionally — it only ever existed to avoid a pointless recolour; conversion doesn't care about
+     a target's current colour, so keeping the skip would have accidentally excluded same-coloured
+     balloons from ever becoming rainbow. Also simplified: `paintColor` dropped as that method's param
+     (still used elsewhere in `Activate` for the splash VFX tint).
+   - **Already-rainbow target** — no-op via the `ReactiveProperty` behaviour above, no manual guard.
+   - **Rainbow-as-Paint-source** — unaffected; still a valid `IHasColor` source (keeps a base colour).
 
 ⚠️ **Converted rainbows bypass spawn-time caps and item-weight** — `BalloonModelBase.TypeName` is set
 once in the ctor and is immutable (`:42`), so flipping `IsRainbow` does **not** change `TypeName`. A
@@ -357,29 +360,36 @@ decision, not an accident.
 
 ---
 
-## Phasing (revised)
+## Phasing (revised) — ✅ ALL PHASES DONE 2026-07-07
 
-0. **Foundation** — the `IsRainbow` reactive flag + capability (Phase 0). Tiny; unblocks everything.
-1. **Item-activation weight** (Phase 1 / Part D) — independent; shares the `BalloonPrefabEntry`/
-   `BalloonModelConfig` plumbing with the spillover knob, so land them together.
-2. **Scoring + wildcard streak/shield** (Phase 2 / Parts A+B) — correctness-critical core; guard that
-   Tough/Cluster still break. Fully EditMode-testable.
-3. **View mode + variant + bands** (Phase 3 / Parts C+E) — spawned rainbows first.
-4. **Enum/factory/config/prefab wiring** (Phase 4 / Part F) — spawn it, tune weights/ranges.
-5. **Paint → rainbow conversion** (Phase 5) — last, once the mode + view swap exist.
+0. ✅ **Foundation** — the `IsRainbow` reactive flag + capability (Phase 0).
+1. ✅ **Item-activation weight** (Phase 1 / Part D), incl. in-editor weights.
+2. ✅ **Scoring + wildcard streak/shield** (Phase 2 / Parts A+B).
+3. ✅ **View mode + variant + bands** (Phase 3 / Parts C+E), incl. in-editor wiring + shader iteration
+   (shadow removed, `_ShineAngle`/glitter added, `_SpriteScale` removed).
+4. ✅ **Enum/factory/config/prefab wiring** (Phase 4 / Part F) — one manual prefab-reference drag done
+   by the designer (see Phase 4's note on why I couldn't hand-author it); range gate currently scoped
+   to level 2 only (narrower than the original ≥2-colours-everywhere plan — a deliberate, designer-made
+   choice, not reverted).
+5. ✅ **Paint → rainbow conversion** (Phase 5).
+
+Also fixed post-Phase-3, found via playtest: a `VContainerException: Duplicate injection found`
+(`RainbowBalloonVariant` re-declared a same-named `[Inject] IGamePalette` field the base class already
+had) — see Phase 3's note for the fix and the lesson.
 
 ## Testability & verification
 
-- **EditMode (no Unity):** Phases 0-2 and the C# half of 5 — streak carries on a primary group,
+- **EditMode (no Unity):** Phases 0-2, Phase 5's C# half — streak carries on a primary group,
   Tough/Cluster still break, spillover maths, weighted host selection + zero-weight exclusion, wildcard
-  shield + no-steal. `dotnet build BalloonParty.Runtime.csproj` + the EditMode asmdef cover these.
-- **[in-editor] only:** the shader compile, the band MPB push + material swap, the prefab + two `.asset`
-  edits, the level-up re-push timing, and overall feel. Flag every such task.
+  shield + no-steal, Paint converts (incl. same-colour + already-rainbow no-op). All covered.
+- **Confirmed in-editor:** the shader (bands/glitter/shine render correctly via material preview).
+- **Still unverified in a live playtest:** the full spawn → pop → score → Paint-convert loop end to
+  end (all the pieces are individually verified, but not exercised together in a run).
 
-## Open decisions (deferred to build/feel)
+## Open decisions (deferred to build/feel — none blocking)
 
-- Spillover value — **tuning knob**, authored in config (no baked default).
-- Rainbow base `scoreValue` — ≈4-5 (smooths spillover rounding, chunky pop).
+- Spillover value — **tuning knob**, authored in config (no baked default; currently 0 on the shipped
+  catalog entry, pending a deliberate choice).
+- Rainbow base `scoreValue` — currently 4, per the original "smooths spillover rounding" suggestion.
 - Whether streak `M` boosts spillover colours (simplest, shipping) or only the current colour.
-- Paint: bypass the same-colour skip for conversion? Convert same-colour non-rainbow targets?
-- Converted rainbows bypassing spawn caps / item-weight — accept, or track separately?
+- Converted rainbows bypassing spawn caps / item-weight — accepted as documented, not tracked further.
