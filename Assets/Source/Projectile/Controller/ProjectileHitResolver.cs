@@ -43,8 +43,12 @@ namespace BalloonParty.Projectile.Controller
                 return ProjectileHitVisual.Destroyed;
             }
 
+            // A wildcard (rainbow) pop keeps the projectile's colour — that's what lets its streak
+            // carry — even though the balloon is otherwise IHasColor.
+            var isWildcardPop = balloon is IHasRainbowMode wildcard && wildcard.IsRainbow.Value;
+
             var recolored = false;
-            if (outcome == HitOutcome.Pop && balloon is IHasColor colorable &&
+            if (outcome == HitOutcome.Pop && !isWildcardPop && balloon is IHasColor colorable &&
                 !string.IsNullOrEmpty(colorable.Color.Value) &&
                 projectile.ColorName.Value != colorable.Color.Value)
             {

@@ -74,6 +74,53 @@ namespace BalloonParty.Tests.Projectile
                 m.Actor == balloon && m.Outcome == HitOutcome.Absorb));
         }
 
+        [Test]
+        public void Resolve_PopNormalBalloon_StealsColour()
+        {
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.Color.Value = "Red";
+            _projectile.ColorName.Value = "Blue";
+
+            var result = _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            Assert.AreEqual("Red", _projectile.ColorName.Value);
+            Assert.AreEqual(ProjectileHitVisual.Recolored, result);
+        }
+
+        [Test]
+        public void Resolve_PopRainbowBalloon_DoesNotStealColour()
+        {
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.Color.Value = "Red";
+            balloon.IsRainbow.Value = true;
+            _projectile.ColorName.Value = "Blue";
+
+            var result = _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            Assert.AreEqual("Blue", _projectile.ColorName.Value);
+            Assert.AreEqual(ProjectileHitVisual.None, result);
+        }
+
+        [Test]
+        public void Resolve_RainbowPop_StreakAtTwo_GrantsShield()
+        {
+            // Seeds the tracker as if a prior pop already ran through ScoreController's HitPipeline
+            // stage — the shield check reads the tracker directly, same as production (see Resolve's
+            // "Dispatch runs the streak stage synchronously" comment); _hitDispatcher is a substitute.
+            _streakTracker.Record("Blue", false);
+            _streakTracker.Record("Blue", false);
+
+            var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            balloon.Color.Value = "Red";
+            balloon.IsRainbow.Value = true;
+            _projectile.ColorName.Value = "Blue";
+
+            _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            Assert.AreEqual(1, _projectile.ShieldsRemaining.Value);
+            Assert.AreEqual("Blue", _projectile.ColorName.Value); // unchanged — no steal
+        }
+
         private static IBalloonModel AbsorbingBalloon()
         {
             var balloon = Substitute.For<IBalloonModel>();
