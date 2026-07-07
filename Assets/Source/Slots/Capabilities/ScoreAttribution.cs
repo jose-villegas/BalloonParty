@@ -7,11 +7,15 @@ namespace BalloonParty.Slots.Capabilities
         public readonly int Points;
         public readonly bool BreaksStreak;
 
-        public ScoreAttribution(string colorId, int points, bool breaksStreak = false)
+        /// <summary>Marks the streak-anchor colour of a multi-colour wildcard group (e.g. the rainbow balloon).</summary>
+        public readonly bool IsPrimary;
+
+        public ScoreAttribution(string colorId, int points, bool breaksStreak = false, bool isPrimary = false)
         {
             ColorId = colorId;
             Points = points;
             BreaksStreak = breaksStreak;
+            IsPrimary = isPrimary;
         }
     }
 }

@@ -165,6 +165,35 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void Streak_WildcardGroupWithOnePrimary_RecordsAgainstPrimaryAndGrows()
+        {
+            FirePop(Red);
+            FireMultiColor((Red, 1, true), (Blue, 1, false));
+
+            Assert.AreEqual(2, _streakTracker.GetStreak(Red));
+        }
+
+        [Test]
+        public void Streak_MixedGroupWithNoPrimary_StillBreaks()
+        {
+            // Mirrors Tough/BubbleCluster's shape — every attribution false — must keep breaking.
+            FirePop(Red);
+            FireMultiColor((Red, 1, false), (Blue, 1, false));
+
+            Assert.AreEqual(0, _streakTracker.GetStreak(Red));
+        }
+
+        [Test]
+        public void Streak_MixedGroupWithTwoPrimaries_FallsBackToBreak()
+        {
+            // Ambiguous — more than one anchor candidate — safest to treat as a break, not guess.
+            FirePop(Red);
+            FireMultiColor((Red, 1, true), (Blue, 1, true));
+
+            Assert.AreEqual(0, _streakTracker.GetStreak(Red));
+        }
+
+        [Test]
         public void Streak_MultipliesPoints()
         {
             FirePop(Red);
@@ -272,6 +301,13 @@ namespace BalloonParty.Tests.Game
             FireHit(CreateModel(color, 1, scoreValue), 1);
         }
 
+        private void FireMultiColor(params (string Color, int Points, bool IsPrimary)[] attributions)
+        {
+            var actor = new MultiColorActor(attributions);
+            _controller.OnActorHit(new ActorHitMessage(
+                actor, Vector3.zero, Vector3.up, HitOutcome.Pop, new DamageContext(1)));
+        }
+
         private void FireTrailArrived(string color, int score)
         {
             _trailArrivedHandler.Handle(new ScoreTrailArrivedMessage(color, score, Vector3.zero));
@@ -291,6 +327,30 @@ namespace BalloonParty.Tests.Game
             public Vector2Int SlotIndex { get; set; }
             public SlotActorKind Kind => SlotActorKind.Static;
             public HitOutcome EvaluateHit(DamageContext context) => HitOutcome.Absorb;
+        }
+
+        // Emits a hand-built attribution group, to test RecordStreakMultiplier's IsPrimary branch in
+        // isolation from any real balloon model.
+        private class MultiColorActor : ISlotActor, IHitable, IHasScoreColor
+        {
+            private readonly (string Color, int Points, bool IsPrimary)[] _attributions;
+
+            public MultiColorActor((string Color, int Points, bool IsPrimary)[] attributions)
+            {
+                _attributions = attributions;
+            }
+
+            public Vector2Int SlotIndex { get; set; }
+            public SlotActorKind Kind => SlotActorKind.Static;
+            public HitOutcome EvaluateHit(DamageContext context) => HitOutcome.Pop;
+
+            public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
+            {
+                foreach (var (color, points, isPrimary) in _attributions)
+                {
+                    results.Add(new ScoreAttribution(color, points, breaksStreak: false, isPrimary: isPrimary));
+                }
+            }
         }
     }
 }

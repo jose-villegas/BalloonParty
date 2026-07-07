@@ -114,12 +114,37 @@ namespace BalloonParty.Game.Score
             PublishPoints(resolved, groupSize, worldPosition);
         }
 
-        // A mixed group always breaks the streak.
+        // A mixed group breaks the streak — unless exactly one entry is a wildcard's streak anchor
+        // (e.g. the rainbow balloon), in which case the streak records against that colour instead.
         private int RecordStreakMultiplier(IReadOnlyList<ScoreAttribution> attributions)
         {
             if (attributions.Count == 1)
             {
                 return _streakTracker.Record(attributions[0].ColorId, attributions[0].BreaksStreak);
+            }
+
+            var primaryIndex = -1;
+            for (var i = 0; i < attributions.Count; i++)
+            {
+                if (!attributions[i].IsPrimary)
+                {
+                    continue;
+                }
+
+                if (primaryIndex >= 0)
+                {
+                    // More than one primary is ambiguous — fall back to the break path.
+                    primaryIndex = -1;
+                    break;
+                }
+
+                primaryIndex = i;
+            }
+
+            if (primaryIndex >= 0)
+            {
+                var primary = attributions[primaryIndex];
+                return _streakTracker.Record(primary.ColorId, primary.BreaksStreak);
             }
 
             _streakTracker.Record(null, true);
