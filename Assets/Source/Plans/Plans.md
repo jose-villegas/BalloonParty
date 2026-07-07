@@ -11,6 +11,7 @@ Working design plans and roadmaps for upcoming features.
 - @subpage plan_spider_web
 - @subpage plan_content_production
 - @subpage plan_loss_condition_pacing
+- @subpage plan_rainbow_balloon
 - @subpage plan_playmode_coverage
 - @subpage plan_cinematics_architecture
 - @subpage plan_audit_remediation
