@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
@@ -107,6 +108,105 @@ namespace BalloonParty.Tests.Balloon
 
             Assert.AreEqual(HitOutcome.Pop, outcome);
             Assert.AreEqual(0, _model.HitsRemaining.Value);
+        }
+
+        [Test]
+        public void ResolveScoreAttribution_NotRainbow_EmitsSingleNonPrimaryAttribution()
+        {
+            _model.Color.Value = "Red";
+            _model.HitsRemaining.Value = 0;
+
+            var results = new List<ScoreAttribution>();
+            _model.ResolveScoreAttribution(new DamageContext(1), results);
+
+            Assert.AreEqual(1, results.Count);
+            Assert.IsFalse(results[0].IsPrimary);
+            Assert.AreEqual("Red", results[0].ColorId);
+        }
+
+        [Test]
+        public void ResolveScoreAttribution_StillAlive_EmitsNothing()
+        {
+            _model.IsRainbow.Value = true;
+            _model.HitsRemaining.Value = 3;
+
+            var results = new List<ScoreAttribution>();
+            _model.ResolveScoreAttribution(new DamageContext(1), results);
+
+            Assert.AreEqual(0, results.Count);
+        }
+
+        [Test]
+        public void ResolveScoreAttribution_RainbowMode_NoColorPool_EmitsNothing()
+        {
+            // No palette/allowedColors were passed at construction — mirrors ToughBalloonModel's
+            // no-level-context fallback edge case.
+            _model.IsRainbow.Value = true;
+            _model.HitsRemaining.Value = 0;
+
+            var results = new List<ScoreAttribution>();
+            _model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.Normal, "Red"), results);
+
+            Assert.AreEqual(0, results.Count);
+        }
+
+        [Test]
+        public void ResolveScoreAttribution_RainbowMode_EmitsPrimaryPlusSpillover()
+        {
+            var config = new BalloonModelConfig(scoreValue: 4, spillover: 0.5f);
+            var model = new BalloonModel(config, allowedColors: new[] { "Red", "Blue", "Green" });
+            model.IsRainbow.Value = true;
+            model.HitsRemaining.Value = 0;
+
+            var results = new List<ScoreAttribution>();
+            model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.Normal, "Blue"), results);
+
+            Assert.AreEqual(3, results.Count);
+
+            var primary = results.Find(a => a.IsPrimary);
+            Assert.AreEqual("Blue", primary.ColorId);
+            Assert.AreEqual(4, primary.Points);
+
+            foreach (var attribution in results)
+            {
+                if (attribution.IsPrimary)
+                {
+                    continue;
+                }
+
+                Assert.AreEqual(2, attribution.Points); // round(4 * 0.5)
+                Assert.IsFalse(attribution.BreaksStreak);
+            }
+        }
+
+        [Test]
+        public void ResolveScoreAttribution_RainbowMode_PrimaryColorNotAllowed_FallsBackToFirstAllowed()
+        {
+            var config = new BalloonModelConfig(scoreValue: 4, spillover: 0.5f);
+            var model = new BalloonModel(config, allowedColors: new[] { "Red", "Blue" });
+            model.IsRainbow.Value = true;
+            model.HitsRemaining.Value = 0;
+
+            var results = new List<ScoreAttribution>();
+            model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.Normal, "Purple"), results);
+
+            var primary = results.Find(a => a.IsPrimary);
+            Assert.AreEqual("Red", primary.ColorId);
+        }
+
+        [Test]
+        public void ResolveScoreAttribution_RainbowMode_ZeroSpillover_OnlyEmitsPrimary()
+        {
+            var config = new BalloonModelConfig(scoreValue: 4, spillover: 0f);
+            var model = new BalloonModel(config, allowedColors: new[] { "Red", "Blue", "Green" });
+            model.IsRainbow.Value = true;
+            model.HitsRemaining.Value = 0;
+
+            var results = new List<ScoreAttribution>();
+            model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.Normal, "Red"), results);
+
+            Assert.AreEqual(1, results.Count);
+            Assert.IsTrue(results[0].IsPrimary);
         }
     }
 }

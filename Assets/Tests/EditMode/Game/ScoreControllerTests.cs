@@ -194,6 +194,25 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
+        public void OnBalloonHit_RainbowMode_ScoresFullToPrimaryAndSpilloverToOthers()
+        {
+            FireHitWithColor(CreateRainbowModel(2, 0.5f), 1, Red);
+
+            _scoredPublisher.Received(2).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
+            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Blue));
+        }
+
+        [Test]
+        public void Streak_RainbowPopsCarryAndGrowStreak()
+        {
+            FireHitWithColor(CreateRainbowModel(2, 0.5f), 1, Red);
+            Assert.AreEqual(1, _streakTracker.GetStreak(Red));
+
+            FireHitWithColor(CreateRainbowModel(2, 0.5f), 1, Red);
+            Assert.AreEqual(2, _streakTracker.GetStreak(Red));
+        }
+
+        [Test]
         public void Streak_MultipliesPoints()
         {
             FirePop(Red);
@@ -306,6 +325,23 @@ namespace BalloonParty.Tests.Game
             var actor = new MultiColorActor(attributions);
             _controller.OnActorHit(new ActorHitMessage(
                 actor, Vector3.zero, Vector3.up, HitOutcome.Pop, new DamageContext(1)));
+        }
+
+        // Unlike FireHit, carries a real SourceColorId — required for the rainbow's primary attribution.
+        private void FireHitWithColor(IBalloonModel model, int damage, string sourceColorId)
+        {
+            var context = new DamageContext(damage, DamageFlags.Normal, sourceColorId);
+            var outcome = model.EvaluateHit(context);
+            _controller.OnActorHit(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, context));
+        }
+
+        private static IBalloonModel CreateRainbowModel(int scoreValue, float spillover)
+        {
+            var model = new BalloonModel(
+                new BalloonModelConfig(scoreValue: scoreValue, hitsToPop: 1, spillover: spillover),
+                allowedColors: new[] { Red, Blue });
+            model.IsRainbow.Value = true;
+            return model;
         }
 
         private void FireTrailArrived(string color, int score)
