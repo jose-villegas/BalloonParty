@@ -255,9 +255,11 @@ Split *authoring* from *resolution* so ranges and custom levels share one output
   positionInRange, rng)` → `LevelParameters`. Pure function → EditMode-testable with a seeded
   rng.
 
-Patterns proven on `CinematicsSettings` apply: field initializers are the canonical defaults
-(a fresh SO equals the shipped asset, asserted by tests), `OnValidate` keeps the data legal,
-and an EditMode exhaustiveness test resolves levels 1..50 without throwing.
+This config keeps the field-initializer pattern: initializers are the canonical defaults
+(a fresh SO equals the shipped asset, asserted by `LevelPacingConfigurationTests`),
+`OnValidate` keeps the data legal, and an EditMode exhaustiveness test resolves levels 1..50
+without throwing. (`CinematicsSettings` has since moved off this pattern to editor-only
+authoring — see `PLAN-CinematicsArchitecture.md` — but the pacing config retains it.)
 
 ### Custom levels — exact-level overlays (new, 2026-07-02)
 
@@ -1228,6 +1230,15 @@ Smaller code surface but cinematic + in-editor heavy. Files:
 
 3b test surface is mostly PlayMode/in-editor (flag it); EditMode covers `LevelTransitionController`
 sequencing with substituted seams if it's built message/interface-driven.
+
+**Settings split out (2026-07-07).** The `LevelAscend` `CinematicsSettings` entry above (a
+camera-rig segment with defaults in field initializers) no longer holds the Ascent's tuning.
+Since the Ascent is a transform-descent, not a camera move, its tuning moved to a top-level
+`LevelAscendSettings` (`CinematicsSettings.LevelAscend`: descent curve / height / spawn cue /
+speed, plus the pop-wave slow-mo tuning that had been `const`s in `LevelTransitionController`).
+The `LevelAscend` `_states` entry now keeps only `CinematicTraits`. In the same pass all code
+defaults/ctors were stripped from the serialized cinematics types (asset is the sole source of
+truth) and `CinematicsSettingsTests` was removed — see `PLAN-CinematicsArchitecture.md`.
 
 ### 3c — items lever
 

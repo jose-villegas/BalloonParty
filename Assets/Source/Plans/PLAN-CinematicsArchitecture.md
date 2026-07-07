@@ -44,6 +44,16 @@ carry the recovered authored values, so a fresh instance equals the shipped asse
 (asserted by `CinematicsSettingsTests`). `GameLifetimeScope` wiring done; Phases 1+2
 playtested green.
 
+> **Superseded 2026-07-07:** the "field initializers are the canonical declarations / a
+> fresh instance equals the shipped asset" invariant below was dropped. The serialized
+> cinematics types (`CinematicStateEntry`, `CameraRigCinematicSettings`,
+> `TrackedTrailSettings`) now carry **no code defaults or constructors** — the asset is the
+> sole source of truth, authored in the editor. `CinematicsSettingsTests` was removed with
+> it; `OnValidate` still grows `_states` to match the enum. Separately, the `LevelAscend`
+> state stopped borrowing a rig entry: the Ascent is a transform-descent, so its tuning
+> moved to a top-level `LevelAscendSettings` (`CinematicsSettings.LevelAscend`), and its
+> `_states` entry keeps only `CinematicTraits`.
+
 **Phase 3a implemented 2026-07-02:** one DI-owned `CinematicCameraRig`
 (`Register<CinematicCameraRig>(Lifetime.Singleton)`) fed by a thin `CinematicCameraView`
 (`RegisterComponentInHierarchy`; lazy `Camera.main` fallback since the rig is constructed

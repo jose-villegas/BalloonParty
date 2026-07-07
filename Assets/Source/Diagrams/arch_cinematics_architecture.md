@@ -17,7 +17,10 @@ its behavioural `CinematicTraits`, the uniform **camera-rig segment** it plays
 follow speed), and capability blocks (`TrackedTrailSettings`). A *restore* is not
 special-cased — it is just another segment whose curve ramps timeScale back to 1 with
 zoom/pan at 0. States are phases: the level-up spans `LevelUpPanIn` + `LevelUpRestore`,
-the heart-drain `HeartDrain` + `HeartDrainRestore`.
+the heart-drain `HeartDrain` + `HeartDrainRestore`. The **Ascent** is the exception: a
+transform-descent rather than a camera move, so it reads a top-level `LevelAscendSettings`
+(descent curve / height / spawn cue / speed / pop-wave tuning) and keeps only its
+`LevelAscend` entry's `CinematicTraits`, not its rig.
 
 **Producers are thin triggers:**
 `LevelUpCinematic` and `HeartDrainCinematic` are plain C# `IStartable` entry points — a
@@ -55,8 +58,9 @@ and the hand-back never flashes full speed.
 
 **Adding a cinematic** (e.g. the planned game-over loss beat):
 1. Add its state(s) to `CinematicState` — append, to preserve serialized indices.
-2. Declare each state's entry in `CinematicsSettings` (initializers are the canonical
-   defaults; `CinematicsSettingsTests` fails CI on a missing declaration).
+2. Author its entry in the `CinematicsSettings` asset — the serialized types carry no
+   code defaults (`OnValidate` grows `_states` to match the enum, but values are
+   editor-authored).
 3. Write a plain C# producer: inject `CinematicDirector`, `CinematicCameraRig`,
    `TimeScaleService`, `ICinematicsSettings`; build a `CameraRigCinematicConfig` with a
    trigger, a focus (`PointFocus` / `HeartTrailFocus` / new `ICinematicFocus`) and either
