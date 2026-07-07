@@ -18,16 +18,19 @@ bar it contributes to. `ScoreController` publishes one `ScorePointMessage` per
 individual point × streak multiplier. `ScoreTrailService` spawns a pooled `FlyingTrail`
 orb per message.
 
-**Projected vs confirmed progress:**
-`_projectedProgress` advances immediately on pop (used for trail score identity and
-`WillLevelUp` checks). `_levelProgress` only advances on trail *arrival* (`ScoreTrailArrivedMessage`)
-— the confirmed threshold check uses `_levelProgress` so the level-up only triggers
-after visual feedback has landed.
+**Projected vs confirmed progress (owned by `LevelController`, not `ScoreController`):**
+`LevelController` holds two per-color counters. Projected progress advances immediately on
+pop (`ScoreController` writes it via `ILevelProgress.ClaimProgress`, capped at the threshold);
+confirmed progress advances only on trail *arrival* (`ScoreTrailArrivedMessage`). `WillLevelUp`
+reads projected; the confirmed threshold check triggers the level-up only after the visual
+feedback has landed. The level-up itself is a two-phase commit gated by `LevelUpPhase`
+(`Playing → Pending → Transitioning`) — the level advances on popup dismissal, not on detection.
+See @ref arch_cinematics_architecture and `Game/Level/README.md`.
 
 **Cinematic intercept:**
 `LevelUpCinematic` (a plain C# producer over the `CameraRigCinematic` runner — see
-@ref arch_cinematics_architecture) subscribes to `ScorePointMessage`. When `WillLevelUp`
-is true at publish time it awaits the tipping trail's registration in
+@ref arch_cinematics_architecture) subscribes to `ScorePointMessage`. When
+`ILevelProgress.WillLevelUp()` is true at publish time it awaits the tipping trail's registration in
 `TrailFlightRegistry`, then intercepts it: the move tween is killed and the trail is
 puppeted manually along the pan-in segment's `TimeScaleCurve` while the camera pans in
 and gameplay pauses (`PauseSource.Cinematic`). `Time.timeScale` stays untouched during
@@ -42,16 +45,15 @@ Implement `IHasScoreColor` on the model — `ResolveScoreAttribution` appends
 `ScoreAttribution(colorId, points, breaksStreak)` entries. `ScoreController` calls it
 automatically on any `Pop` or `PassThrough` hit. No changes to `ScoreController` needed.
 
-**Understanding next-level trails:**
-When a multi-point pop straddles a level boundary, points above the threshold are
-published with a renumbered `Score` (starting from 1) and `Level + 1`. These trails
-fly normally during the cinematic; when the tipping trail arrives, `LevelUpCinematic`
-completes every remaining in-flight trail (including next-level ones) via
-`Flights.CompleteAll()`, so all progress is confirmed before the popup opens.
+**No next-level trails — excess is capped, not carried:**
+`ILevelProgress.ClaimProgress` caps a color's granted points at that level's threshold, so a
+big or high-streak pop brings a color to *at most* the threshold and any excess is dropped —
+one level-up per burst. Points never renumber into the next level, so every trail in flight
+belongs to the current level (`TrailId` needs no level component).
 
 **Why projected progress leads confirmed progress:**
 Without the projection, a multi-point balloon would assign the same `TrailId` to
-multiple trails (all at score position N). The projection increments a counter per
-point so each trail gets a unique `(Color, Score, Level)` key, preventing trail
+multiple trails (all at score position N). Each pop advances `LevelController`'s projected
+counter per point, so each trail gets a unique `(Color, Score)` key, preventing trail
 identity collisions in `TrailFlightRegistry`.
 

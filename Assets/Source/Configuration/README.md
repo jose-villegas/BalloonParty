@@ -2,18 +2,21 @@
 
 All game data is split across focused ScriptableObjects. Each is registered as a singleton in `GameLifetimeScope` and injected wherever needed.
 
+Source is organized into per-context subfolders: `Balloons/`, `Cinematics/`, `Effects/`, `GridActors/`, `Items/`, `Level/`, `Palette/`, `Ranges/`, and `Editor/` (drawers). The tables below note the subfolder where it isn't obvious.
+
 ## Contents
 
 ### ScriptableObjects
 
 | Asset | Interface | What it holds |
 |---|---|---|
-| `GameConfiguration` | `IGameConfiguration` (in `Shared/`) | Projectile settings, slot grid dimensions, prediction trace params, score trail timing, score points scatter delay, points-per-level formula |
+| `GameConfiguration` | `IGameConfiguration` (in `Shared/`) | Projectile settings, slot grid dimensions, prediction trace params, score trail timing, score points scatter delay. (The points-per-level formula is **not** here — it lives in `LevelDifficultyResolver`/`ILevelThresholds`, `Game/Level/`.) |
 | `BalloonsConfiguration` | `IBalloonsConfiguration` | Balloon-specific configuration — `BalloonPrefabEntry` entries with per-type weight/cap/nudge/VFX, default pop VFX, spawn line counts, spawn animation range, balance delay, global nudge defaults |
 | `GridActorConfiguration` | `IGridActorConfiguration` | Grid actor entries with per-type weight, max-count cap, and `HitsToPop` for destructible actors (Gatekeeper). Used by `StaticActorSpawner` and the procedural `GridSpawner` |
 | `GamePalette` | `IGamePalette` | Array of `PaletteEntry` (name + `Color`) — the single source for all balloon colors; `GetColor(name)` resolves name → `UnityEngine.Color` |
 | `GameDisplayConfiguration` | `IGameDisplayConfiguration` | Reference world dimensions and `GetOrthogonalSize()` for camera sizing, plus the shared scene-capture tuning (`SceneCaptureDownscale`, `SceneCaptureFrameInterval`) consumed by `SceneCaptureService`. Drawn by the custom `GameDisplayConfigurationEditor` — the scene-capture fields are invisible without it |
 | `ItemConfiguration` | `IItemConfiguration` | Per-item tuning — one `ItemSettings` entry per `ItemType`: activation frequency, weight, max cap, damage, and type-specific effect params |
+| `LevelPacingConfiguration` | `ILevelPacingConfiguration` | The per-level-range difficulty ramp (`Configuration/Level/`) — ordered `LevelRangeEntry[]` (each a level band + `RangedLevelParameters`) plus the `ThresholdModifier` curve. Resolved into the live `LevelParameters` by `LevelDifficultyResolver` (`Game/Level/`); consumers read `IActiveLevelParameters.Current`, never this SO directly |
 | `PuffCloudSettings` | `IPuffCloudSettings` | Puff cloud visual tuning — noise animation speed, visual padding, sorting layer/order, and the `CloudPrefab` reference |
 | `BushSettings` | `IBushSettings` | Bush actor tuning — `BushPrefab`, baked `BushVariantData[]`, branch shader/gradient/shadow/AO params, leaf atlas + shadow/wind/rattle params, rustle VFX |
 | `CinematicsSettings` | `ICinematicsSettings` | One `CinematicStateEntry` per `CinematicState` (indexed by ordinal): behavioural `CinematicTraits`, the camera-rig segment it plays, and optional capability blocks. Plus a top-level `LevelAscendSettings` — the Ascent is a transform-descent, not a camera move, so it has its own honest fields instead of borrowing a rig entry. All values are authored in the asset; the serialized types carry no code defaults |
@@ -28,6 +31,10 @@ All game data is split across focused ScriptableObjects. Each is registered as a
 | `BalloonPrefabEntry` | Serializable entry in `BalloonsConfiguration` — holds a `BalloonView` prefab reference, spawn weight, optional max-count cap, `HitsToPop` (how many hits before popping; -1 = unbreakable), `ScoreValue` (points awarded on pop), per-type `NudgeOverride[]`, and per-outcome `HitVfxOverride[]`. `BalloonType` drives which model class is created (`Simple` → `BalloonModel`, `Tough` → `ToughBalloonModel`). Item eligibility is determined by whether the model implements `IHasWriteableItemSlot` — not a flag. Pool key is derived from the prefab's GameObject name. |
 | `GridActorPrefabEntry` | Serializable entry in `GridActorConfiguration` — holds a `GridActorView` prefab reference, `GridActorType`, spawn weight, `MinCount`, optional `MaxCount` cap, `MaxPerCluster` (caps individual cluster size for `Cluster` placement mode), `SlotPlacementMode` (`Random` or `Cluster`), and `HitsToPop` (relevant only for `Gatekeeper`). Implements `IWeightedEntry`. Pool key is derived from the prefab's GameObject name. |
 | `IWeightedEntry` | Shared interface for weighted random selection — `Weight`, `MaxCount`, `PoolKey`. Implemented by `BalloonPrefabEntry`, `GridActorPrefabEntry`, and `ItemSettings`. |
+| `LevelRangeEntry` | Serializable entry in `LevelPacingConfiguration` (`Level/`) — a level band (min/max) plus the `RangedLevelParameters` authored for it; `Contains(level)`/`PositionOf(level)` locate a level within the band. The last entry is the open-ended tail |
+| `RangedLevelParameters` | Serializable authored side of a range (`Level/`) — spawn-line count, `FirstSpawnTurn` grace, per-type `BalloonTypeWeight[]`/`ItemTypeWeight[]` gates, item cadence/count weights, allowed-colours mask, all as `RangedValue`s. `Resolve(position, rng)` produces a concrete `LevelParameters` |
+| `LevelParameters` / `ILevelParameters` | The **resolved** live difficulty mix for the current level (`Level/`) — concrete pick-lists, `AllowedColors`/`AllowedColorsMask`, spawn/cadence values. Produced by `LevelDifficultyResolver`; read via `IActiveLevelParameters.Current` (`Game/Level/`) |
+| `RangedInt` / `RangedFloat` / `RangeMode` | Range primitives (`Ranges/`) — a value that `Resolve(positionInRange, rng)`s from a min/max via a `RangeMode` (fixed / lerped-across-the-range / random), letting difficulty scale within a band |
 | `ItemSettings` | Per-item tuning data for `ItemConfiguration` — common fields (type, frequency, weight, cap, visuals, activation effect prefab, `Damage`, `DamageFlags`) plus nested per-type blocks (`BombSettings`, `LaserSettings`, `LightningSettings`, `PaintSettings`). `Damage` controls how many hit-points a single activation removes from each affected balloon; defaults to 1 |
 | `HitVfxOverride` | Serializable `HitOutcome` → `ParticleSystem` pair in `BalloonPrefabEntry` — per-outcome hit VFX (null prefab = no VFX for that outcome) |
 | `CameraRigCinematicSettings` | Serializable camera-rig segment — a timeScale curve (whose last key doubles as the segment duration) plus camera framing; the uniform shape every cinematic state plays |

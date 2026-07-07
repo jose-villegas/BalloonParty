@@ -397,5 +397,4 @@ Assets/
 5. **Absorber vs Projectile destroyed sound** — When the Absorber consumes the
    projectile, the turn ends. Does it play a unique SFX, or reuse
    `ProjectileDestroyedMessage` audio? Resolve before VFX production.
-````
 

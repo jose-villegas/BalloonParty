@@ -2,7 +2,7 @@
 
 Runtime cheat console for testing and debugging without modifying game state manually.
 
-Press **backtick (`)** in Play Mode to toggle the console window. The console GameObject is created automatically at runtime — no scene setup required. The console discovers all registered cheats automatically and organises them by section and tag.
+Press the **backtick** (`` ` ``) key in Play Mode to toggle the console window. The console GameObject is created automatically at runtime — no scene setup required. The console discovers all registered cheats automatically and organises them by section and tag.
 
 ## Build visibility
 

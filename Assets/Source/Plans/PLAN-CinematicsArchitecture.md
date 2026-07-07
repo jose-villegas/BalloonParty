@@ -152,12 +152,12 @@ canonical declarations** — a fresh instance carries them (testable without
 
 - `ICinematicState` becomes `bool IsPlaying { get; }` + `bool Has(CinematicTraits trait)`.
   `CinematicStateService` injects `ICinematicsSettings`;
-  `Has` = `(settings.TraitsOf(Cinematic.Current.Value) & trait) != 0`.
+  `Has` = `(settings.EntryOf(Cinematic.Current.Value).Traits & trait) != 0` (shipped as `EntryOf`, not the `TraitsOf` sketched here).
 - `RunController`: `_cinematic.Has(CinematicTraits.BlocksLoss)`.
   `CameraShakeService`: `_cinematic.Has(CinematicTraits.BlocksShake)`.
 - Adding a cinematic = one enum value + one initializer line (+ its settings block).
-  `TraitsOf` throws on an unmapped state; `CinematicsSettingsTests` walks the enum on a
-  fresh instance, so a forgotten declaration fails CI instead of silently defaulting.
+  `EntryOf` throws on an unmapped state (see the superseded note above — the
+  `CinematicsSettingsTests`/fresh-instance safety net was later removed with the code defaults).
   `OnValidate` keeps an older asset's array in lock-step with the enum (new entries
   default to `None`).
 - `RunControllerTests` swap `BlocksLoss.Returns(true)` for `Has(BlocksLoss).Returns(true)`.

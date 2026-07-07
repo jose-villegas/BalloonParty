@@ -23,8 +23,10 @@ namespace BalloonParty.Configuration.Ranges
         public int Max => _max;
         public RangeMode Mode => _mode;
 
+        /// <summary>Resolves a concrete value for a level's position within its range.</summary>
         /// <param name="positionInRange">0..1 position of the level within its range; ignored by Fixed/Random.</param>
         /// <param name="rng">Pass a seeded instance for determinism.</param>
+        /// <returns>The resolved value for the given position and mode.</returns>
         public int Resolve(float positionInRange, System.Random rng)
         {
             switch (_mode)

@@ -25,10 +25,12 @@ transform-descent rather than a camera move, so it reads a top-level `LevelAscen
 **Producers are thin triggers:**
 `LevelUpCinematic` and `HeartDrainCinematic` are plain C# `IStartable` entry points — a
 trigger message, a focus, an end condition, and a `CameraRigCinematicConfig` handed to the
-runner. The level-up runs the **split-phase** form (`TryBegin` … `EndPanIn` … popup gate …
-`TryBeginRestore`), leaves timeScale alone during pan-in (gameplay is paused; the segment
-curve modulates the tipping trail's playback speed instead) and restores by *sampling* its
-curve out of the popup's frozen 0. The heart-drain runs the **continuous** form: a polled
+runner. The level-up runs a **pan-in-only** form (`TryBegin` … `EndPanIn` … popup gate) and
+leaves timeScale alone during pan-in (gameplay is paused; the segment curve modulates the
+tipping trail's playback speed instead). It does **not** run a restore segment — `EndPanIn`
+leaves the camera zoomed and the Ascent (`LevelTransitionController`) tweens it back via
+`CinematicCameraRig.RestoreTweened`, synced to the pop wave. The heart-drain runs the
+**continuous** form: a polled
 end condition ("pile drained ∨ game over") rolls the pan-in straight into a restore that
 tweens *from the current* timeScale, so an early game-over never snaps speed down first.
 

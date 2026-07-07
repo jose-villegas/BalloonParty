@@ -18,9 +18,9 @@ The full-screen level-up ceremony that plays when all color bars complete.
 3. **Popup shows** — `LevelUpPopUp.ShowAfterGateAsync` claims `TimeScaleSource.LevelUpPopup = 0` via `TimeScaleService` (effective `Time.timeScale` drops to 0), triggers the `"Appear"` animator, and waits for the appear animation to finish. The level label initially shows the old level.
 4. **Glow trails** — After the appear animation completes, `LevelUpPopUp` publishes `LevelUpGlowTrailsMessage` (triggers `ColorProgressBar.DrainSliderAsync` to drain each bar in sync), then spawns decorative `FlyingTrail` orbs from each bar's random position to random offsets around the glow fill centre. Trails fly in unscaled time (`Spawn(..., useUnscaledTime: true)`), staggered across waves (`_glowTrailsPerBar` waves × palette color count). As each trail arrives, `_levelGlowFill.fillAmount` advances proportionally; once all trails arrive, the level label updates to the new level.
 5. **Player taps Continue** — `OnContinue()` triggers `"Hide"` and starts `ResumeAfterDelayAsync`, which publishes `LevelUpDismissedMessage` and releases the popup's `TimeScaleService` claim.
-6. **Bar reset** — Each `ColorProgressBar` receives `LevelUpDismissedMessage` and applies the stashed new max value, resetting progress to zero.
-7. **Restore cinematic** — `LevelUpCinematic` receives `LevelUpDismissedMessage` and starts `CinematicState.LevelUpRestore` — ramps `Time.timeScale` back to 1 and the camera back to its base position/size.
-8. **Navigate** — once restore completes, `LevelUpCinematic` calls `Navigation.TransitionTo(Game)`.
+6. **Level advances (two-phase commit)** — `LevelController` receives `LevelUpDismissedMessage` and *now* advances the `Level` integer to the pending value, resets progress, and flips `LevelUpPhase` from `Pending` to `Transitioning`. The label animated old→new during the popup (step 4), but the authoritative `Level` only changes here — see `Game/Level/README.md`.
+7. **Bar reset** — Each `ColorProgressBar` receives `LevelUpDismissedMessage` and applies the stashed new max value, resetting progress to zero.
+8. **Ascent + navigate** — the phase flip to `Transitioning` triggers `LevelTransitionController` (the Ascent), which un-zooms the camera (`CinematicCameraRig.RestoreTweened`, synced to its pop wave) and slides the new level in. `LevelUpCinematic.OnDismissed` resumes (`PauseSource.Cinematic`) and calls `Navigation.TransitionTo(Game)`. There is **no** `LevelUpRestore` cinematic — it's kept in the enum only for serialized-index stability.
 
 The Animator's `updateMode` is set to `UnscaledTime` in `Start()`, so animations play even while the game is paused.
 
@@ -44,8 +44,8 @@ NavigationReadyGate(Game)      → opens when Navigation.Current == Game
 
 ## Interactions
 
-- **`ScoreController`** — publishes `ScoreLevelUpMessage` (triggers `ShowAfterGateAsync`) and transitions navigation to `LevelUp`
-- **`LevelUpCinematic`** — owns both cinematic phases; opens the gate by ending the pan-in; starts restore on `LevelUpDismissedMessage`; navigates to `Game` once restore completes
+- **`LevelController`** (`Game/Level/`) — publishes `ScoreLevelUpMessage` (triggers `ShowAfterGateAsync`) and transitions navigation to `LevelUp`; on dismissal advances the level (two-phase commit) and flips `LevelUpPhase` to drive the Ascent
+- **`LevelUpCinematic`** — opens the gate by ending the pan-in; on `LevelUpDismissedMessage` resumes and navigates to `Game` (no restore cinematic — the camera un-zoom is the Ascent's)
 - **`LevelUpLifetimeScope`** — registers this component and provides the `IReadyGate` injection
 - **`ColorProgressBar`** — receives `LevelUpGlowTrailsMessage` to drain its slider in sync with glow trail waves; receives `LevelUpDismissedMessage` to apply the new max and reset progress
 - **`ScoreTrailService`** — provides trail target positions for glow trail origin and the `FlyingTrail` prefab for pool channel creation

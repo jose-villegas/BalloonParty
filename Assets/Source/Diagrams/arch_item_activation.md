@@ -18,7 +18,7 @@ coordinates the timing so the item balloon is not returned to the pool mid-activ
    balloon to the pool. This blocks pool return for the duration of the effect.
 3. **`ItemActivator`** receives the trailing `ActorHitMessage` broadcast, yields one
    frame (`UniTask.Yield`) so everything triggered by the hit settles first, then calls
-   `await IBalloonItem.Activate(balloon, worldPos)` on the matching handler.
+   `await IBalloonItem.Activate(context)` (an `ItemActivationContext` carrying the balloon, world position, and projectile direction) on the matching handler.
 4. The handler runs its effect — which may be multi-frame (e.g. lightning chain) — and
    dispatches an `ActorHitMessage` through `IHitDispatcher` for each secondary balloon
    it affects.
