@@ -12,7 +12,7 @@ namespace BalloonParty.Balloon.Model
     internal class BalloonModel : BalloonModelBase, IPaintable, IHasWriteableItemSlot, IHasWriteableRainbowMode,
         IHasDurability, IHasScore, IHasScoreColor
     {
-        private readonly ColorPool _colorPool;
+        private readonly ColorSource _colorSource;
 
         public ReactiveProperty<string> Color { get; } = new();
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
@@ -33,7 +33,7 @@ namespace BalloonParty.Balloon.Model
             BalloonModelConfig config, IGamePalette palette = null, IReadOnlyList<string> allowedColors = null)
             : base(config)
         {
-            _colorPool = new ColorPool(palette, allowedColors);
+            _colorSource = new ColorSource(palette, allowedColors);
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
             ItemActivationWeight = config.ItemActivationWeight;
@@ -64,7 +64,7 @@ namespace BalloonParty.Balloon.Model
         // other allowed colour.
         private void ResolveRainbowAttribution(in DamageContext context, IList<ScoreAttribution> results)
         {
-            var colors = _colorPool.Resolve();
+            var colors = _colorSource.Resolve();
             if (colors == null || colors.Count == 0)
             {
                 return;

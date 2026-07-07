@@ -11,7 +11,7 @@ namespace BalloonParty.Balloon.Model
     /// <summary>At destruction, distributes one <see cref="ScoreAttribution"/> per remaining bubble to a random palette colour.</summary>
     internal class BubbleClusterModel : BalloonModelBase, IHasDurability, IHasScoreColor
     {
-        private readonly ColorPool _colorPool;
+        private readonly ColorSource _colorSource;
 
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
         public int ScoreValue { get; }
@@ -24,14 +24,14 @@ namespace BalloonParty.Balloon.Model
             BalloonModelConfig config, IGamePalette palette, IReadOnlyList<string> allowedColors = null)
             : base(config)
         {
-            _colorPool = new ColorPool(palette, allowedColors);
+            _colorSource = new ColorSource(palette, allowedColors);
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
         }
 
         public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
         {
-            var colors = _colorPool.Resolve();
+            var colors = _colorSource.Resolve();
             if (colors == null || colors.Count == 0)
             {
                 return;

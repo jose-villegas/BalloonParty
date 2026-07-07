@@ -3,13 +3,13 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Model
 {
-    /// <summary>Shared colour-pool resolution for score-scatter models (Tough/Cluster/rainbow-mode BalloonModel).</summary>
-    internal readonly struct ColorPool
+    /// <summary>Shared colour resolution for score-scatter models (Tough/Cluster/rainbow-mode BalloonModel).</summary>
+    internal readonly struct ColorSource
     {
         private readonly IGamePalette _palette;
         private readonly IReadOnlyList<string> _allowedColors;
 
-        public ColorPool(IGamePalette palette, IReadOnlyList<string> allowedColors)
+        public ColorSource(IGamePalette palette, IReadOnlyList<string> allowedColors)
         {
             _palette = palette;
             _allowedColors = allowedColors;

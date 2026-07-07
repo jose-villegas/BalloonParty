@@ -137,7 +137,7 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void ResolveScoreAttribution_RainbowMode_NoColorPool_EmitsNothing()
+        public void ResolveScoreAttribution_RainbowMode_NoColorSource_EmitsNothing()
         {
             // No palette/allowedColors were passed at construction — mirrors ToughBalloonModel's
             // no-level-context fallback edge case.
