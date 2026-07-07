@@ -4,9 +4,9 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
     // colour bands cycling through up to four selectable colours. Colour count + values are
     // meant to be driven at runtime from the level's allowed colours (via MaterialPropertyBlock),
     // but default to the full palette so the material previews standalone. Keeps SpriteShineShadow's
-    // diagonal shine sweep; no drop shadow. An optional UV-rect mask excludes a region (e.g. the
-    // balloon's knot) from the band tint, so it reads as a stable part of the sprite instead of
-    // being cut across by the scroll.
+    // diagonal shine sweep (no drop shadow) plus a scattered twinkling glitter layer on top. An
+    // optional UV-rect mask excludes a region (e.g. the balloon's knot) from the band tint, so it
+    // reads as a stable part of the sprite instead of being cut across by the scroll.
 
     Properties
     {
@@ -36,6 +36,16 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         _ShineSpeed    ("Speed",    Range(0, 5))   = 1.0
         _ShineInterval ("Interval", Range(0, 10))  = 3.0
         _ShineAngle    ("Angle (turns)", Range(0, 1)) = 0.125
+
+        [Header(Glitter)]
+        // Scattered twinkling specks on top of the shine sweep — a grid of pseudo-random dots, each
+        // blinking at its own phase, jittered off-grid so it doesn't read as a rigid lattice.
+        _GlitterDensity    ("Density (cells)",  Range(4, 64))  = 24
+        _GlitterSize       ("Speck Size",       Range(0, 0.5)) = 0.16
+        _GlitterChance     ("Speck Chance",     Range(0, 1))   = 0.35
+        _GlitterSpeed      ("Twinkle Speed",    Range(0, 20))  = 6.0
+        _GlitterSharpness  ("Twinkle Sharpness", Range(1, 32)) = 8.0
+        _GlitterBrightness ("Brightness",       Range(0, 3))   = 1.0
 
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
@@ -92,6 +102,13 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float     _ShineSpeed;
             float     _ShineInterval;
             float     _ShineAngle;
+
+            float     _GlitterDensity;
+            float     _GlitterSize;
+            float     _GlitterChance;
+            float     _GlitterSpeed;
+            float     _GlitterSharpness;
+            float     _GlitterBrightness;
 
             fixed4 _Color0;
             fixed4 _Color1;
@@ -192,6 +209,36 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return inside * (1.0 - abs(projection - shineLocation) / _ShineWidth);
             }
 
+            // Cheap deterministic 2D hash -> pseudo-random value in [0, 1). No texture lookup needed.
+            inline float Hash21(float2 p)
+            {
+                p = frac(p * float2(123.34, 456.21));
+                p += dot(p, p + 45.32);
+                return frac(p.x * p.y);
+            }
+
+            // Scattered twinkling specks: tile UV into a grid, jitter each speck off its cell centre,
+            // only some cells sparkle at all, and each blinks at its own random phase/speed.
+            inline fixed GlitterAmount(float2 uv)
+            {
+                float2 cellUv  = uv * _GlitterDensity;
+                float2 cellId  = floor(cellUv);
+                float2 cellPos = frac(cellUv) - 0.5;
+
+                float2 jitter = float2(Hash21(cellId + 17.0), Hash21(cellId + 91.0)) - 0.5;
+                float  dist   = length(cellPos - jitter * 0.6);
+                float  speck  = smoothstep(_GlitterSize, 0.0, dist);
+
+                float rnd     = Hash21(cellId);
+                float phase   = rnd * 6.2831853;
+                float twinkle = saturate(sin(_Time.y * _GlitterSpeed + phase) * 0.5 + 0.5);
+                twinkle = pow(twinkle, max(_GlitterSharpness, 1.0));
+
+                float active = step(1.0 - _GlitterChance, Hash21(cellId + 5.0));
+
+                return speck * twinkle * active;
+            }
+
             fixed4 frag(Varyings IN) : SV_Target
             {
                 fixed4 tex = tex2D(_MainTex, IN.uv);
@@ -199,9 +246,10 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // Masked region (e.g. the knot) keeps its plain sprite colour instead of the band tint.
                 fixed3 bandColor = lerp(RainbowBand(IN.uv), fixed3(1, 1, 1), MaskAmount(IN.uv));
 
-                // Sprite shading × band colour, then additive white shine on top.
+                // Sprite shading × band colour, then additive white shine + glitter on top.
                 fixed3 rgb = tex.rgb * bandColor * IN.color.rgb;
                 rgb += tex.a * ShineAmount(IN.uv);
+                rgb += tex.a * GlitterAmount(IN.uv) * _GlitterBrightness;
 
                 fixed4 result;
                 result.rgb = rgb;

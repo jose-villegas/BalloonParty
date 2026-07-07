@@ -33,6 +33,12 @@ Material:
     - _BandBlend: 0.08
     - _BandCount: 4
     - _ScrollSpeed: 1
+    - _GlitterBrightness: 1
+    - _GlitterChance: 0.35
+    - _GlitterDensity: 24
+    - _GlitterSharpness: 8
+    - _GlitterSize: 0.16
+    - _GlitterSpeed: 6
     - _MaskSoftness: 0.02
     - _ShineAngle: 0.125
     - _ShineInterval: 3
