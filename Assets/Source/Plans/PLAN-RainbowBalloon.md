@@ -287,21 +287,33 @@ used (tuned to a non-zero rectangle in the material), not just left inert.
 
 ---
 
-## Phase 4 (Part F) — Enum / factory / config wiring
+## Phase 4 (Part F) — Enum / factory / config wiring — ✅ DONE 2026-07-07 (one manual step left)
 
-1. **`BalloonType.Rainbow`** (`Balloon/Type/BalloonType.cs`) — append only. ✅ Safe: the *only* switch
-   on `BalloonType` is `BalloonModelFactory.Create` (has a `default → throw`); no `[EnumIndexed]` drawer
-   or `(int)`-indexed array (grep-confirmed), so serialized indices 0-5 stay valid.
-2. **Factory case** (`Balloon/Model/BalloonModelFactory.cs:19`) — `BalloonType.Rainbow => new BalloonModel(config)`
-   (a plain `BalloonModel`; rainbow-ness comes from the variant flipping `IsRainbow` at `Initialize`).
-3. **[in-editor] Catalog entry** in `BalloonsConfiguration.asset` — `BalloonPrefabEntry` → prefab
-   `BalloonRainbow.prefab`, `_balloonType: 6`, weight/maxCount, `_scoreValue ≈ 4-5` (smooths spillover
-   rounding + chunky pop), low `_itemActivationWeight` (needs Phase 1).
-4. **[in-editor] Range gate** in `LevelPacingConfiguration.asset` — add a `BalloonTypeWeight{_type:6}`
-   **only** to ranges whose `_allowedColorsMask` has ≥2 bits (membership *is* the gate, per
-   `LevelDifficultyResolver.BuildBalloonPickList`). The level 0-1 range (mask `1`) must not get it —
-   a wildcard is meaningless at one colour, and this paces its introduction. No automatic
-   "≥2 colours ⇒ eligible" rule exists; it's expressed purely by which ranges include the entry.
+1. ✅ **`BalloonType.Rainbow`** (`Balloon/Type/BalloonType.cs`) — appended. Confirmed safe: the *only*
+   switch on `BalloonType` is `BalloonModelFactory.Create` (has a `default → throw`); no `[EnumIndexed]`
+   drawer or `(int)`-indexed array, so serialized indices 0-5 stayed valid.
+2. ✅ **Factory case** (`Balloon/Model/BalloonModelFactory.cs`) — `BalloonType.Rainbow => new
+   BalloonModel(config, palette, allowedColors)`. **Correction to this task's original sketch**
+   (`new BalloonModel(config)` alone): Phase 2 already had to thread `palette`/`allowedColors` into
+   every `BalloonModel` branch (Simple/Silver/Gold too) so `ResolveRainbowAttribution`'s colour pool
+   isn't empty. Rainbow needs the exact same treatment, or a spawned one would silently score nothing.
+3. ✅ **Catalog entry** in `BalloonsConfiguration.asset` — `BalloonPrefabEntry` added: `_balloonType: 6`,
+   `_weight: 0.15`, `_maxCount: 1`, `_scoreValue: 4`, `_itemActivationWeight: 0.1`, `_spillover: 0`
+   (a tuning knob — left at 0 pending a deliberate choice, per the "no baked default" decision).
+   ⚠️ **One manual step remains:** the entry's `_prefab` slot is `{fileID: 0}` (empty) — the sibling
+   entries reference their prefabs through a nested-prefab-variant fileID hash that isn't derivable
+   from any literal ID in the repo (confirmed: `9117278215908477035` for Balloon5/Balloon10 doesn't
+   appear as a raw object header in either the base `Balloon.prefab` or the variants' own files).
+   Hand-guessing it risks a silently broken reference with no compiler check to catch it. **Drag
+   `BalloonRainbow.prefab` into the Prefab field of the new entry in the Inspector.**
+4. ✅ **Range gate** in `LevelPacingConfiguration.asset` — `BalloonTypeWeight{_type:6, _weight:1,
+   _maxCountOverride:0}` added to every range whose `_allowedColorsMask` has ≥2 bits: levels 2, 3, 4,
+   and the 5+ tail (all mask `3`). The 0-1 range (mask `1`) was deliberately left out — a wildcard is
+   meaningless at one colour. ⚠️ **Caveat for next time:** a `replace_all` edit on this file initially
+   also matched the 0-1 range, because the trailing anchor text (`_itemWeights:`) was a substring
+   prefix of that range's `_itemWeights: []` — plain substring matching doesn't care what follows the
+   match. Caught by re-grepping and fixed; worth choosing anchors that can't prefix-match a sibling
+   line when hand-editing repeated YAML blocks.
 
 ---
 
