@@ -107,7 +107,7 @@ PrefabInstance:
     - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
       propertyPath: _sortingRenderers.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
@@ -127,6 +127,11 @@ PrefabInstance:
     - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
       propertyPath: '_sortingRenderers.Array.data[2]'
+      value: 
+      objectReference: {fileID: 7568437424551899605}
+    - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      propertyPath: '_sortingRenderers.Array.data[3]'
       value: 
       objectReference: {fileID: 6187239203940332260}
     - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
@@ -228,6 +233,12 @@ SpriteRenderer:
 --- !u!4 &7123329532252406162 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4894539870962568093, guid: ef986049aad6e40dcb0027158268936d,
+    type: 3}
+  m_PrefabInstance: {fileID: 2393593260422564367}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &7568437424551899605 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5206088457515023322, guid: ef986049aad6e40dcb0027158268936d,
     type: 3}
   m_PrefabInstance: {fileID: 2393593260422564367}
   m_PrefabAsset: {fileID: 0}

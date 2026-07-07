@@ -156,7 +156,7 @@ MonoBehaviour:
         m_RotationOrder: 4
       _balloonWeights:
       - _type: 0
-        _weight: 1
+        _weight: 0.5
         _maxCountOverride: 0
       - _type: 6
         _weight: 1

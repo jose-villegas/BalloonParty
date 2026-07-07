@@ -289,6 +289,7 @@ MonoBehaviour:
   - {fileID: 2741570484024547919}
   _sortingRenderers:
   - {fileID: 2741570484024547919}
+  - {fileID: 5206088457515023322}
   - {fileID: 8424754020425038059}
   _spritesAlpha: 0.75
 --- !u!1 &9076839815742733324

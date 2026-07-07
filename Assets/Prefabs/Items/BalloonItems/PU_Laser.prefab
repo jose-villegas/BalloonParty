@@ -2333,7 +2333,7 @@ PrefabInstance:
     - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
       propertyPath: _sortingRenderers.Array.size
-      value: 26
+      value: 27
       objectReference: {fileID: 0}
     - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
@@ -2469,6 +2469,11 @@ PrefabInstance:
         type: 3}
       propertyPath: '_sortingRenderers.Array.data[25]'
       value: 
+      objectReference: {fileID: 8157236296709895644}
+    - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      propertyPath: '_sortingRenderers.Array.data[26]'
+      value: 
       objectReference: {fileID: 5611858738506577645}
     - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
@@ -2558,6 +2563,12 @@ SpriteRenderer:
 --- !u!212 &5611858738506577645 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 8424754020425038059, guid: ef986049aad6e40dcb0027158268936d,
+    type: 3}
+  m_PrefabInstance: {fileID: 4110641795659025926}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &8157236296709895644 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 5206088457515023322, guid: ef986049aad6e40dcb0027158268936d,
     type: 3}
   m_PrefabInstance: {fileID: 4110641795659025926}
   m_PrefabAsset: {fileID: 0}
