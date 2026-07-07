@@ -100,7 +100,13 @@ namespace BalloonParty.Item
                     break;
                 }
 
-                var indexOf = Random.Range(0, _eligibleBuffer.Count);
+                var indexOf = PickWeightedIndex(_eligibleBuffer, Random.value);
+                if (indexOf < 0)
+                {
+                    // Defensive only — CollectEligibleSlots already excludes zero-weight hosts.
+                    break;
+                }
+
                 _eligibleBuffer[indexOf].Item.Value = picked.Type;
                 _eligibleBuffer.RemoveAt(indexOf);
 
@@ -144,6 +150,34 @@ namespace BalloonParty.Item
             return maxCount;
         }
 
+        // Weighted-random index into candidates, biased by ItemActivationWeight; -1 if every weight is 0.
+        internal static int PickWeightedIndex(IReadOnlyList<IHasWriteableItemSlot> candidates, float roll01)
+        {
+            var total = 0f;
+            for (var i = 0; i < candidates.Count; i++)
+            {
+                total += candidates[i].ItemActivationWeight;
+            }
+
+            if (total <= 0f)
+            {
+                return -1;
+            }
+
+            var target = Mathf.Clamp01(roll01) * total;
+            var accumulated = 0f;
+            for (var i = 0; i < candidates.Count; i++)
+            {
+                accumulated += candidates[i].ItemActivationWeight;
+                if (target < accumulated)
+                {
+                    return i;
+                }
+            }
+
+            return candidates.Count - 1;
+        }
+
         private bool IsCadenceTurn(int turns)
         {
             var cadence = _levelParams.Current.ItemCadence;
@@ -155,7 +189,8 @@ namespace BalloonParty.Item
             _eligibleBuffer.Clear();
             for (var i = 0; i < newBalloons.Count; i++)
             {
-                if (newBalloons[i] is IHasWriteableItemSlot slot && slot.Item.Value == ItemType.None)
+                if (newBalloons[i] is IHasWriteableItemSlot slot && slot.Item.Value == ItemType.None &&
+                    slot.ItemActivationWeight > 0f)
                 {
                     _eligibleBuffer.Add(slot);
                 }

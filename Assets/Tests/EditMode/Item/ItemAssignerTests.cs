@@ -156,6 +156,19 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
+        public void OnItemCheck_ZeroWeightBalloon_NeverEligible()
+        {
+            var bomb = CreateItemSettings(ItemType.Bomb);
+            _current.Items.Returns(new List<ItemSettings> { bomb });
+            _current.PickItemEntry(Arg.Any<IReadOnlyDictionary<string, int>>()).Returns(bomb);
+
+            var model = new BalloonModel(new BalloonModelConfig(itemActivationWeight: 0f));
+            FireItemCheck(new IBalloonModel[] { model }, turnCount: 1);
+
+            Assert.AreEqual(ItemType.None, model.Item.Value);
+        }
+
+        [Test]
         public void OnItemCheck_MultipleItemsPerCadence_AssignsCountToDistinctBalloons()
         {
             _current.ItemCountWeights.Returns(WeightsForCount(2));
@@ -255,6 +268,44 @@ namespace BalloonParty.Tests.Item
 
             Assert.AreEqual(0, ItemAssigner.SampleCount(curve, 0.25f));
             Assert.AreEqual(1, ItemAssigner.SampleCount(curve, 0.75f));
+        }
+
+        [Test]
+        public void PickWeightedIndex_AllZeroWeight_ReturnsNegativeOne()
+        {
+            var candidates = new List<IHasWriteableItemSlot>
+            {
+                new BalloonModel(new BalloonModelConfig(itemActivationWeight: 0f)),
+                new BalloonModel(new BalloonModelConfig(itemActivationWeight: 0f)),
+            };
+
+            Assert.AreEqual(-1, ItemAssigner.PickWeightedIndex(candidates, 0.5f));
+        }
+
+        [Test]
+        public void PickWeightedIndex_EvenSplit_PicksByRoll()
+        {
+            var candidates = new List<IHasWriteableItemSlot>
+            {
+                new BalloonModel(new BalloonModelConfig(itemActivationWeight: 1f)),
+                new BalloonModel(new BalloonModelConfig(itemActivationWeight: 1f)),
+            };
+
+            Assert.AreEqual(0, ItemAssigner.PickWeightedIndex(candidates, 0.25f));
+            Assert.AreEqual(1, ItemAssigner.PickWeightedIndex(candidates, 0.75f));
+        }
+
+        [Test]
+        public void PickWeightedIndex_ZeroThenNonzero_AlwaysPicksNonzero()
+        {
+            var candidates = new List<IHasWriteableItemSlot>
+            {
+                new BalloonModel(new BalloonModelConfig(itemActivationWeight: 0f)),
+                new BalloonModel(new BalloonModelConfig(itemActivationWeight: 1f)),
+            };
+
+            Assert.AreEqual(1, ItemAssigner.PickWeightedIndex(candidates, 0f));
+            Assert.AreEqual(1, ItemAssigner.PickWeightedIndex(candidates, 0.999f));
         }
 
         private void FireItemCheck(IReadOnlyList<IBalloonModel> balloons, int turnCount, bool isInitial = false)
