@@ -11,6 +11,7 @@ using MessagePipe;
 using UnityEngine;
 using VContainer;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Item.Lightning
 {
@@ -29,6 +30,7 @@ namespace BalloonParty.Item.Lightning
 
         private readonly IHitDispatcher _hitDispatcher;
         private readonly IItemConfiguration _itemConfig;
+        private readonly IGamePalette _palette;
         private readonly PoolManager _poolManager;
         private readonly SlotGrid _grid;
 
@@ -41,11 +43,13 @@ namespace BalloonParty.Item.Lightning
         public LightningItemHandler(
             IItemConfiguration itemConfig,
             IHitDispatcher hitDispatcher,
+            IGamePalette palette,
             SlotGrid grid,
             PoolManager poolManager)
         {
             _itemConfig = itemConfig;
             _hitDispatcher = hitDispatcher;
+            _palette = palette;
             _grid = grid;
             _poolManager = poolManager;
         }
@@ -101,8 +105,10 @@ namespace BalloonParty.Item.Lightning
                 return UniTask.CompletedTask;
             }
 
+            var tint = string.IsNullOrEmpty(sourceColorId) ? Color.white : _palette.GetColor(sourceColorId);
+
             chain.PrepareDisplay(positions, settings, OnJump);
-            effect.Play(Vector3.zero, Color.white, () => _poolManager.Return(key, effect));
+            effect.Play(Vector3.zero, tint, () => _poolManager.Return(key, effect));
 
             return UniTask.CompletedTask;
 

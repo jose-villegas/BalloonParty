@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1100208598559579564}
   - component: {fileID: 5867446928136110388}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Shine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3993891551127112789}
   - component: {fileID: 7475820808402176120}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Shine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -169,7 +169,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
@@ -192,7 +192,7 @@ GameObject:
   m_Component:
   - component: {fileID: 9185047964092331435}
   - component: {fileID: 2851576576921137500}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -260,7 +260,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
@@ -283,7 +283,7 @@ GameObject:
   m_Component:
   - component: {fileID: 112167900072155486}
   - component: {fileID: 176497181376731095}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -351,7 +351,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 342087165bd3b3a4fb0852951aee4a09, type: 3}
@@ -374,7 +374,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1097302887153078528}
   - component: {fileID: 118731728561717891}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (14)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -442,7 +442,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 845a4fa477cc1084b8527663f346459b, type: 3}
@@ -465,7 +465,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8197894905451323457}
   - component: {fileID: 8787264875986515759}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Beam (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -535,7 +535,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 5e278044598260e479e2348104387296, type: 3}
@@ -558,7 +558,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2627344511799523126}
   - component: {fileID: 1999927877995928228}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: BodyShine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -626,7 +626,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
@@ -649,7 +649,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4100203170170183342}
   - component: {fileID: 5655230484563549105}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (12)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -718,7 +718,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
@@ -741,7 +741,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2461251948694621031}
   - component: {fileID: 6970384715435370865}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Shine (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -809,7 +809,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
@@ -832,7 +832,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3687855776482703456}
   - component: {fileID: 4155157899950890756}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -900,7 +900,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 120b155b3b1a2424b85a8268a0717907, type: 3}
@@ -923,7 +923,7 @@ GameObject:
   m_Component:
   - component: {fileID: 677747100691342910}
   - component: {fileID: 353777656206290359}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -991,7 +991,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 845a4fa477cc1084b8527663f346459b, type: 3}
@@ -1014,7 +1014,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3019204457787000427}
   - component: {fileID: 502052673406266095}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (11)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1082,7 +1082,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 120b155b3b1a2424b85a8268a0717907, type: 3}
@@ -1104,7 +1104,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9030305557869097273}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Diffuse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1139,7 +1139,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4225137551318823520}
   - component: {fileID: 2596346026145656352}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (10)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1207,7 +1207,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 120b155b3b1a2424b85a8268a0717907, type: 3}
@@ -1230,7 +1230,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1348175025231809068}
   - component: {fileID: 7511139400523795560}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1298,7 +1298,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
@@ -1321,7 +1321,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7393044646475414905}
   - component: {fileID: 6827562895073396161}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Beam (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1391,7 +1391,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 5e278044598260e479e2348104387296, type: 3}
@@ -1414,7 +1414,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3971783313682908082}
   - component: {fileID: 7896801174283456831}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1482,7 +1482,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 342087165bd3b3a4fb0852951aee4a09, type: 3}
@@ -1505,7 +1505,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3736777622039502101}
   - component: {fileID: 6596919871519451120}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Shine (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1573,7 +1573,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
@@ -1595,7 +1595,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2532251041728792309}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1644,7 +1644,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7186441334475336603}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Lasers
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1680,7 +1680,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8823592811369351414}
   - component: {fileID: 1896131682370407004}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1748,7 +1748,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 342087165bd3b3a4fb0852951aee4a09, type: 3}
@@ -1771,7 +1771,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8680453721226162024}
   - component: {fileID: 2985975648672119391}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (5)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1839,7 +1839,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 120b155b3b1a2424b85a8268a0717907, type: 3}
@@ -1863,7 +1863,7 @@ GameObject:
   - component: {fileID: 3169692521933047321}
   - component: {fileID: 4949984372360077627}
   - component: {fileID: 7084871819143963872}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: AVFX_LaserRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1931,7 +1931,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2956035276895537822}
   - component: {fileID: 1240179276344237672}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Shine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1999,7 +1999,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
@@ -2022,7 +2022,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5820541235642164231}
   - component: {fileID: 1582392117731008925}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2090,7 +2090,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 845a4fa477cc1084b8527663f346459b, type: 3}
@@ -2113,7 +2113,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7712453797235192149}
   - component: {fileID: 8272565104779928691}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Shine (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2181,7 +2181,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
@@ -2204,7 +2204,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1874745167222659675}
   - component: {fileID: 3757928004339006533}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (7)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2272,7 +2272,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 120b155b3b1a2424b85a8268a0717907, type: 3}
@@ -2295,7 +2295,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8669542388242692819}
   - component: {fileID: 9123445298990074638}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (8)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2363,7 +2363,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 120b155b3b1a2424b85a8268a0717907, type: 3}
@@ -2386,7 +2386,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7430519897752460908}
   - component: {fileID: 3283732094531491136}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2454,7 +2454,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
@@ -2477,7 +2477,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7576406051843758632}
   - component: {fileID: 6205344804681028467}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2545,7 +2545,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 655a03dcaa0999342864fc46358241b0, type: 3}
@@ -2567,7 +2567,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6351975950170250917}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: EPivot
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2603,7 +2603,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6333769125950680210}
   - component: {fileID: 5604626951279775814}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Beam
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2673,7 +2673,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 5e278044598260e479e2348104387296, type: 3}
@@ -2696,7 +2696,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1535484200866554064}
   - component: {fileID: 6895816185539500941}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Beam (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2766,7 +2766,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 5e278044598260e479e2348104387296, type: 3}
@@ -2789,7 +2789,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8612517990577609208}
   - component: {fileID: 1734276731639626300}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Shine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2857,7 +2857,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
@@ -2880,7 +2880,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5887686904877052571}
   - component: {fileID: 5246216335914014796}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (15)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2948,7 +2948,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
@@ -2971,7 +2971,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5613179986331535312}
   - component: {fileID: 4162054123568730119}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (9)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3039,7 +3039,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 3
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 120b155b3b1a2424b85a8268a0717907, type: 3}
@@ -3062,7 +3062,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6050383603585867346}
   - component: {fileID: 1347672805619081671}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (16)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3130,7 +3130,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 845a4fa477cc1084b8527663f346459b, type: 3}
@@ -3153,7 +3153,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1415982590236462535}
   - component: {fileID: 8493449225106193693}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Shine (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3221,7 +3221,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
@@ -3244,7 +3244,7 @@ GameObject:
   m_Component:
   - component: {fileID: 348660906003698483}
   - component: {fileID: 6911187889862485017}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (6)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3312,7 +3312,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 120b155b3b1a2424b85a8268a0717907, type: 3}
@@ -3335,7 +3335,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6877933948529976582}
   - component: {fileID: 1542259604604807985}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (3)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3403,7 +3403,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 342087165bd3b3a4fb0852951aee4a09, type: 3}
@@ -3426,7 +3426,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8471645688502740038}
   - component: {fileID: 6447256374030006087}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Parts (13)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3494,7 +3494,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 4
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}

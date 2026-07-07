@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 622942915476133066}
   - component: {fileID: 6379126868955168497}
   - component: {fileID: 4620491802132121197}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Sparks
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4859,7 +4859,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8828288340153545274}
   - component: {fileID: 1587368901311707953}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Fire (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4950,7 +4950,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7217413314456032952}
   - component: {fileID: 6243389335829947208}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Specular
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5041,7 +5041,7 @@ GameObject:
   m_Component:
   - component: {fileID: 741529001545992319}
   - component: {fileID: 3851542656976732452}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5131,7 +5131,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2178803874445206382}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Diffuse
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5168,7 +5168,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5123001200134399329}
   - component: {fileID: 8696334693228988659}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: BodyShine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5259,7 +5259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 639752583025126896}
   - component: {fileID: 5627461412035049072}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Fire
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -5350,7 +5350,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5259804158449104290}
   - component: {fileID: 533173280050016680}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Coord
   m_TagString: Untagged
   m_Icon: {fileID: 0}

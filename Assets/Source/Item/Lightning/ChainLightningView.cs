@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Animation;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -17,6 +18,7 @@ namespace BalloonParty.Item.Lightning
     {
         [SerializeField] private LineRenderer[] _lineRenderers;
         [SerializeField] private SpriteRenderer _glowRenderer;
+        [SerializeField] [Range(0f, 4f)] private float _glowColorIntensity = 1f;
 
         private CancellationTokenSource _cts;
         private float _fractalDecay;
@@ -44,11 +46,19 @@ namespace BalloonParty.Item.Lightning
         }
 
         /// <summary>
-        ///     Starts the chain-lightning animation; <paramref name="position" />/<paramref name="tint" /> are unused.
+        ///     Starts the chain-lightning animation; <paramref name="position" /> is unused. <paramref name="tint" />
+        ///     colours the glow sprite (the chain's colour), keeping the sprite's own designed alpha.
         /// </summary>
         public override void Play(Vector3 position, Color tint, Action onComplete = null)
         {
             OnComplete = onComplete;
+
+            if (_glowRenderer != null)
+            {
+                // Scales the chain colour's RGB — below 1 darkens, above 1 overdrives (for bloom);
+                // the sprite's own alpha is preserved.
+                _glowRenderer.color = (tint * _glowColorIntensity).WithAlpha(_glowRenderer.color.a);
+            }
 
             if (_targetPositions == null || _targetPositions.Count < 2)
             {

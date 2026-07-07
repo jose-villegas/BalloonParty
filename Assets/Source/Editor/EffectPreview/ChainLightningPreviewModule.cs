@@ -22,6 +22,9 @@ namespace BalloonParty.Editor.EffectPreview
         private static readonly FieldInfo GlowRendererField =
             typeof(ChainLightningView).GetField("_glowRenderer", BindingFlags.NonPublic | BindingFlags.Instance);
 
+        private static readonly FieldInfo GlowColorIntensityField =
+            typeof(ChainLightningView).GetField("_glowColorIntensity", BindingFlags.NonPublic | BindingFlags.Instance);
+
         private readonly ChainLightningView _view;
         private readonly ConfigAssetCache<ItemConfiguration> _itemConfigCache = new();
 
@@ -49,7 +52,7 @@ namespace BalloonParty.Editor.EffectPreview
             _view = view;
         }
 
-        public bool UsesColorPicker => false;
+        public bool UsesColorPicker => true;
 
         public void DrawGUI()
         {
@@ -73,6 +76,13 @@ namespace BalloonParty.Editor.EffectPreview
         {
             _lineRenderers = (LineRenderer[])LineRenderersField.GetValue(_view);
             _glowRenderer = (SpriteRenderer)GlowRendererField.GetValue(_view);
+
+            if (_glowRenderer != null)
+            {
+                // Mirror ChainLightningView.Play: glow = chain colour * intensity, sprite alpha kept.
+                var intensity = (float)GlowColorIntensityField.GetValue(_view);
+                _glowRenderer.color = (context.Tint * intensity).WithAlpha(_glowRenderer.color.a);
+            }
 
             var settings = context.Settings;
             var segMul = settings?.Lightning.SegmentsMultiplier ?? 3f;

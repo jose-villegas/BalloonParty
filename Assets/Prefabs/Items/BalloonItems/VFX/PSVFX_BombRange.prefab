@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 3044695920632228802}
   - component: {fileID: 7404131686713687719}
   - component: {fileID: 1545043174332561462}
-  m_Layer: 9
+  m_Layer: 15
   m_Name: PSVFX_BombRange
   m_TagString: Balloons
   m_Icon: {fileID: 0}
@@ -4874,7 +4874,7 @@ ParticleSystemRenderer:
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 1618840163
-  m_SortingLayer: 4
+  m_SortingLayer: 3
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_RenderMode: 0

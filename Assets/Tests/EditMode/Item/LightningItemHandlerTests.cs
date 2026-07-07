@@ -15,6 +15,7 @@ using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Tests.Item
 {
@@ -63,6 +64,7 @@ namespace BalloonParty.Tests.Item
             _handler = new LightningItemHandler(
                 itemConfig,
                 _hitDispatcher,
+                Substitute.For<IGamePalette>(),
                 _grid,
                 new PoolManager());
         }
@@ -146,7 +148,8 @@ namespace BalloonParty.Tests.Item
             dispatcher.When(d => d.Dispatch(Arg.Any<ActorHitMessage>()))
                 .Do(ci => published.Add(ci.Arg<ActorHitMessage>()));
 
-            var handler = new LightningItemHandler(itemConfig, dispatcher, _grid, new PoolManager());
+            var handler = new LightningItemHandler(
+                itemConfig, dispatcher, Substitute.For<IGamePalette>(), _grid, new PoolManager());
 
             var sourceA = PlaceBalloon(0, 0, "Red");
             var target1 = PlaceBalloon(1, 0, "Red");

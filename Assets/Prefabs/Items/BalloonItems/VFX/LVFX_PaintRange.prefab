@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6178553919897328331}
-  m_Layer: 9
+  m_Layer: 15
   m_Name: Blobs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ GameObject:
   m_Component:
   - component: {fileID: 47108937523203564}
   - component: {fileID: 2759438572946340449}
-  m_Layer: 9
+  m_Layer: 15
   m_Name: LVFX_PaintRange
   m_TagString: Untagged
   m_Icon: {fileID: 0}

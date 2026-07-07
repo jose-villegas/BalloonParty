@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7954717668989597660}
   - component: {fileID: 5206088457515023322}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Shine
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -101,7 +101,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8318687805823582668}
   - component: {fileID: 2741570484024547919}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -191,7 +191,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4894539870962568093}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -224,7 +224,7 @@ GameObject:
   - component: {fileID: 6868395874174977538}
   - component: {fileID: 8947415724866904819}
   - component: {fileID: 1532584057158195999}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: PU_Base
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -302,7 +302,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1055805380977123591}
   - component: {fileID: 8424754020425038059}
-  m_Layer: 10
+  m_Layer: 15
   m_Name: Foreground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
