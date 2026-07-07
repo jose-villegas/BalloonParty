@@ -6,7 +6,6 @@ using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Shared.Pause;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
@@ -28,10 +27,10 @@ namespace BalloonParty.Tests.Game
         private INavigation _navigation;
         private ReactiveProperty<NavigationState> _navState;
         private ILossForecast _lossForecast;
-        private PauseService _pauseService;
         private IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private IMessageHandler<ScoreTrailArrivedMessage> _trailArrivedHandler;
         private IMessageHandler<LevelUpDismissedMessage> _dismissedHandler;
+        private IMessageHandler<LevelTransitionCompletedMessage> _completedHandler;
         private LevelController _controller;
 
         [SetUp]
@@ -54,9 +53,6 @@ namespace BalloonParty.Tests.Game
 
             _lossForecast = Substitute.For<ILossForecast>();
             _lossForecast.LossImminent.Returns(false);
-
-            _pauseService = new PauseService(
-                Substitute.For<IPublisher<PausedMessage>>(), Substitute.For<IPublisher<ResumedMessage>>());
 
             _levelUpPublisher = Substitute.For<IPublisher<ScoreLevelUpMessage>>();
 
@@ -86,9 +82,16 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<LevelUpDismissedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
+            var completedSubscriber = Substitute.For<ISubscriber<LevelTransitionCompletedMessage>>();
+            completedSubscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<LevelTransitionCompletedMessage>>(h => _completedHandler = h),
+                    Arg.Any<MessageHandlerFilter<LevelTransitionCompletedMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+
             return new LevelController(
-                _levelParams, _thresholds, _palette, _navigation, _lossForecast, _pauseService, _levelUpPublisher,
-                trailArrivedSubscriber, dismissedSubscriber);
+                _levelParams, _thresholds, _palette, _navigation, _lossForecast, _levelUpPublisher,
+                trailArrivedSubscriber, dismissedSubscriber, completedSubscriber);
         }
 
         [Test]
@@ -250,18 +253,20 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void LevelUp_WhileAscentInProgress_DoesNotFire()
+        public void Detection_WhileTransitioning_DoesNotFire()
         {
-            // Ascent holds LevelTransition (nav already back in Game) — a straggler mid-transition must
-            // not trip a second level-up.
+            // Dismissed → Transitioning (Ascent running). A trail landing now belongs to the finished
+            // level and must not trip a second level-up until the Ascent completes.
             _thresholds.PointsRequiredForLevel(2).Returns(1);
-            _pauseService.Pause(PauseSource.LevelTransition);
+            ScoreColor(Red, 1);
+            ScoreColor(Blue, 1);
+            FireDismissed();
+            Assert.AreEqual(LevelUpPhase.Transitioning, _controller.Phase.Value);
 
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
 
-            _levelUpPublisher.DidNotReceive().Publish(Arg.Any<ScoreLevelUpMessage>());
-            Assert.AreEqual(1, _controller.Level.Value);
+            _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
         }
 
         [Test]
@@ -330,12 +335,13 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void StragglerTrail_AfterTransitionReopens_DoesNotStallColor()
         {
-            // A straggler landing after Game reopens must neither confirm nor poison projected —
-            // else ClaimProgress grants 0 and the bar never fills.
+            // Full cycle back to Playing, then a late straggler from the finished level lands. It must
+            // neither confirm nor poison projected — else ClaimProgress grants 0 and the bar never fills.
             _thresholds.PointsRequiredForLevel(2).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
-            FireDismissed(); // level advances, progress resets, pending clears
+            FireDismissed();          // → Transitioning (level advances, progress resets)
+            FireTransitionComplete(); // → Playing (scoring reopens)
             Assert.AreEqual(2, _controller.Level.Value);
 
             FireTrailArrived(Red, 1); // straggler carrying the finished level's score
@@ -345,6 +351,33 @@ namespace BalloonParty.Tests.Game
             var (_, granted) = _controller.ClaimProgress(Red, 1);
             Assert.AreEqual(1, granted, "projected must stay clean so the colour can still score");
             _levelUpPublisher.Received(1).Publish(Arg.Any<ScoreLevelUpMessage>());
+        }
+
+        [Test]
+        public void Phase_CyclesThroughTheCeremony()
+        {
+            _thresholds.PointsRequiredForLevel(2).Returns(2);
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+
+            ScoreColor(Red, 2);
+            ScoreColor(Blue, 2);
+            Assert.AreEqual(LevelUpPhase.Pending, _controller.Phase.Value, "detected → Pending");
+
+            FireDismissed();
+            Assert.AreEqual(LevelUpPhase.Transitioning, _controller.Phase.Value, "dismissed → Transitioning");
+
+            FireTransitionComplete();
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value, "Ascent done → Playing");
+        }
+
+        [Test]
+        public void Dismiss_OutsidePending_Ignored()
+        {
+            // A stray dismissal while Playing must not advance the level.
+            FireDismissed();
+
+            Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
+            Assert.AreEqual(1, _controller.Level.Value);
         }
 
         // Mirrors production: claim each point (advancing projected), then confirm it as its trail lands.
@@ -365,6 +398,11 @@ namespace BalloonParty.Tests.Game
         private void FireDismissed()
         {
             _dismissedHandler.Handle(new LevelUpDismissedMessage());
+        }
+
+        private void FireTransitionComplete()
+        {
+            _completedHandler.Handle(new LevelTransitionCompletedMessage());
         }
     }
 }

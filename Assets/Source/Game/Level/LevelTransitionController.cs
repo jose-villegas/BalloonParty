@@ -14,6 +14,7 @@ using BalloonParty.Slots.Grid;
 using BalloonParty.Slots.Spawner;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using UniRx;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -43,16 +44,16 @@ namespace BalloonParty.Game.Level
         private readonly TimeScaleService _timeScale;
         private readonly RejectedBalloonEffect _overflow;
         private readonly PauseService _pauseService;
-        private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
+        private readonly ILevelProgress _levelProgress;
+        private readonly IPublisher<LevelTransitionCompletedMessage> _completedPublisher;
         private readonly CancellationTokenSource _cts = new();
         private readonly Dictionary<int, List<IBalloonModel>> _popBands = new();
 
         private int _minPopBand;
         private int _maxPopBand;
-        private bool _transitioning;
 
         private LevelAscendCinematic _ascendCinematic;
-        private IDisposable _dismissedSubscription;
+        private IDisposable _phaseSubscription;
 
         [Inject]
         internal LevelTransitionController(
@@ -68,7 +69,8 @@ namespace BalloonParty.Game.Level
             TimeScaleService timeScale,
             RejectedBalloonEffect overflow,
             PauseService pauseService,
-            ISubscriber<LevelUpDismissedMessage> dismissedSubscriber)
+            ILevelProgress levelProgress,
+            IPublisher<LevelTransitionCompletedMessage> completedPublisher)
         {
             _cinematicDirector = cinematicDirector;
             _cameraRig = cameraRig;
@@ -82,35 +84,35 @@ namespace BalloonParty.Game.Level
             _timeScale = timeScale;
             _overflow = overflow;
             _pauseService = pauseService;
-            _dismissedSubscriber = dismissedSubscriber;
+            _levelProgress = levelProgress;
+            _completedPublisher = completedPublisher;
         }
 
         public void Start()
         {
             _ascendCinematic = new LevelAscendCinematic(_cinematicDirector, _cinematicsSettings);
-            _dismissedSubscription = _dismissedSubscriber.Subscribe(_ => TransitionAsync().Forget());
+
+            // The Ascent is driven by the level-up phase, not the dismissal message directly: LevelController
+            // flips to Transitioning on dismiss, which fires exactly once per ceremony — so no separate
+            // re-entrancy flag is needed, and the trigger order is deterministic.
+            _phaseSubscription = _levelProgress.Phase
+                .Where(phase => phase == LevelUpPhase.Transitioning)
+                .Subscribe(_ => TransitionAsync().Forget());
         }
 
         public void Dispose()
         {
             _cts.Cancel();
             _cts.Dispose();
-            _dismissedSubscription?.Dispose();
+            _phaseSubscription?.Dispose();
         }
 
         private async UniTaskVoid TransitionAsync()
         {
-            // One Ascent at a time — a duplicate dismissal can't stack a second transition.
-            if (_transitioning)
-            {
-                return;
-            }
-
-            _transitioning = true;
             var ct = _cts.Token;
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
-            UnityEngine.Debug.Log("[Ascent] transition starting (dismissed received)");
+            UnityEngine.Debug.Log("[Ascent] transition starting (phase → Transitioning)");
 #endif
 
             _pauseService.Pause(PauseSource.LevelTransition);
@@ -140,13 +142,13 @@ namespace BalloonParty.Game.Level
                 // PlayAsync's lift/slide carries them into place.
                 _staticActorSpawner.ClearStaticActors();
                 await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, ct);
-                var descentTask = _ascendCinematic.PlayAsync(_scenarioRoot.Transform, onBalloonSpawnCue: null, ct);
 
-                // New level's balloons spawn once the old ones finish popping, animating in as the scenario settles.
+                // New level's balloons spawn from the descent's cue (fired at the LevelAscend rig's
+                // PanWeight fraction), so they reveal near the end of the Ascent rather than right after
+                // the pop wave. Keep PanWeight late enough that the cue follows the pop wave.
+                var descentTask = _ascendCinematic.PlayAsync(_scenarioRoot.Transform, SpawnNewLevelBalloons, ct);
+
                 await popTask;
-                _balloonRegistry.ClearAll(playPopVfx: false);
-                _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, ct).Forget();
-
                 await descentTask;
             }
             finally
@@ -155,7 +157,18 @@ namespace BalloonParty.Game.Level
 
                 // Guarantees the thrower unlocks even if a step above throws or is cancelled.
                 _pauseService.Resume(PauseSource.LevelTransition);
-                _transitioning = false;
+
+                // Return the ceremony to Playing so scoring reopens. In the finally so it always fires,
+                // even if the descent bailed or was cancelled.
+                _completedPublisher.Publish(default);
+            }
+
+            // Fired by the descent near its end: sweep any straggler and spawn the new level's balloons.
+            // ClearAll precedes the spawn so slots are free regardless of the pop wave's progress.
+            void SpawnNewLevelBalloons()
+            {
+                _balloonRegistry.ClearAll(playPopVfx: false);
+                _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, _cts.Token).Forget();
             }
         }
 

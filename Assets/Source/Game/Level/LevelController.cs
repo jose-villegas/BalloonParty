@@ -5,7 +5,6 @@ using BalloonParty.Game.Health;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
-using BalloonParty.Shared.Pause;
 using MessagePipe;
 using UniRx;
 using UnityEngine;
@@ -24,21 +23,22 @@ namespace BalloonParty.Game.Level
         private readonly IGamePalette _palette;
         private readonly INavigation _navigation;
         private readonly ILossForecast _lossForecast;
-        private readonly PauseService _pauseService;
         private readonly IPublisher<ScoreLevelUpMessage> _levelUpPublisher;
         private readonly ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
+        private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
 
         private readonly ReactiveProperty<int> _level = new(1);
+        private readonly ReactiveProperty<LevelUpPhase> _phase = new(LevelUpPhase.Playing);
         private readonly Dictionary<string, int> _levelProgress = new();
         private readonly Dictionary<string, int> _projectedProgress = new();
         private readonly List<string> _colorKeys = new();
 
         private IDisposable _trailSubscription;
         private IDisposable _dismissedSubscription;
+        private IDisposable _transitionCompletedSubscription;
 
-        // Pending doubles as a semaphore: blocks a second level-up message until the ceremony resolves.
-        private bool _pendingLevelUp;
+        // The target level for the deferred increment; applied when the popup is dismissed.
         private int _pendingNewLevel;
 
         public LevelController(
@@ -47,23 +47,24 @@ namespace BalloonParty.Game.Level
             IGamePalette palette,
             INavigation navigation,
             ILossForecast lossForecast,
-            PauseService pauseService,
             IPublisher<ScoreLevelUpMessage> levelUpPublisher,
             ISubscriber<ScoreTrailArrivedMessage> trailArrivedSubscriber,
-            ISubscriber<LevelUpDismissedMessage> dismissedSubscriber)
+            ISubscriber<LevelUpDismissedMessage> dismissedSubscriber,
+            ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber)
         {
             _levelParams = levelParams;
             _thresholds = thresholds;
             _palette = palette;
             _navigation = navigation;
             _lossForecast = lossForecast;
-            _pauseService = pauseService;
             _levelUpPublisher = levelUpPublisher;
             _trailArrivedSubscriber = trailArrivedSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
+            _transitionCompletedSubscriber = transitionCompletedSubscriber;
         }
 
         public IReadOnlyReactiveProperty<int> Level => _level;
+        public IReadOnlyReactiveProperty<LevelUpPhase> Phase => _phase;
 
         // Re-resolves after grid/gameplay state clears; same stage as score reset.
         public int ResetOrder => RunResetOrder.Score;
@@ -75,8 +76,10 @@ namespace BalloonParty.Game.Level
 
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
 
-            // Level and progress advance only once the player dismisses the popup.
+            // Level and progress advance only once the player dismisses the popup (Pending → Transitioning),
+            // and scoring reopens only once the Ascent reports it has settled (Transitioning → Playing).
             _dismissedSubscription = _dismissedSubscriber.Subscribe(_ => OnLevelUpDismissed());
+            _transitionCompletedSubscription = _transitionCompletedSubscriber.Subscribe(_ => OnTransitionCompleted());
         }
 
         public void ResetRun(int generation)
@@ -88,6 +91,7 @@ namespace BalloonParty.Game.Level
         {
             _trailSubscription?.Dispose();
             _dismissedSubscription?.Dispose();
+            _transitionCompletedSubscription?.Dispose();
         }
 
         public int GetProgress(string colorName)
@@ -139,7 +143,7 @@ namespace BalloonParty.Game.Level
         private void ClearRunState()
         {
             _level.Value = 1;
-            _pendingLevelUp = false;
+            _phase.Value = LevelUpPhase.Playing;
             _pendingNewLevel = 0;
             ResetColorProgress();
         }
@@ -160,8 +164,9 @@ namespace BalloonParty.Game.Level
                 return;
             }
 
-            // Pending level-up means any in-flight trail belongs to the finished level.
-            if (_pendingLevelUp)
+            // Outside Playing (a ceremony or its Ascent is running), any in-flight trail belongs to the
+            // finished level — ignore it.
+            if (_phase.Value != LevelUpPhase.Playing)
             {
                 return;
             }
@@ -188,16 +193,15 @@ namespace BalloonParty.Game.Level
 
         private void CheckLevelUp()
         {
-            // One level-up at a time: nothing new publishes until the current one is dismissed.
-            if (_pendingLevelUp)
+            // Only detect while Playing — Pending/Transitioning already own the ceremony, so this is the
+            // single reentrancy guard (no second message until the current one resolves). nav/loss stay
+            // to suppress on a run that's ending, which the phase doesn't model.
+            if (_phase.Value != LevelUpPhase.Playing)
             {
                 return;
             }
 
-            // Suppressed on a lost run or mid-Ascent so a straggler can't trip an unearned level-up.
-            if (_navigation.Current.Value != NavigationState.Game
-                || _lossForecast.LossImminent
-                || _pauseService.IsPaused(PauseSource.LevelTransition))
+            if (_navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent)
             {
                 return;
             }
@@ -211,7 +215,7 @@ namespace BalloonParty.Game.Level
             // Snapshot before publishing — the resolver reacts to the same message and re-resolves AllowedColors.
             var completedColors = _levelParams.Current.AllowedColors;
 
-            _pendingLevelUp = true;
+            _phase.Value = LevelUpPhase.Pending;
             _pendingNewLevel = _level.Value + 1;
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
@@ -223,17 +227,29 @@ namespace BalloonParty.Game.Level
             _navigation.TransitionTo(NavigationState.LevelUp);
         }
 
-        // Second phase: the player dismissed the popup, so the level and progress advance now.
+        // Pending → Transitioning: the player dismissed the popup, so the level and progress advance now
+        // and the Ascent (which watches Phase) kicks off.
         private void OnLevelUpDismissed()
         {
-            if (!_pendingLevelUp)
+            if (_phase.Value != LevelUpPhase.Pending)
             {
                 return;
             }
 
             _level.Value = _pendingNewLevel;
-            _pendingLevelUp = false;
             ResetColorProgress();
+            _phase.Value = LevelUpPhase.Transitioning;
+        }
+
+        // Transitioning → Playing: the Ascent has settled, so scoring reopens.
+        private void OnTransitionCompleted()
+        {
+            if (_phase.Value != LevelUpPhase.Transitioning)
+            {
+                return;
+            }
+
+            _phase.Value = LevelUpPhase.Playing;
         }
 
 #if UNITY_EDITOR || DEVELOPMENT_BUILD

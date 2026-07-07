@@ -9,6 +9,10 @@ namespace BalloonParty.Game.Level
     {
         IReadOnlyReactiveProperty<int> Level { get; }
 
+        /// <summary>The level-up ceremony phase — the single guard everything reads instead of inferring
+        /// from nav/pause. The Ascent watches this for its <see cref="LevelUpPhase.Transitioning" /> cue.</summary>
+        IReadOnlyReactiveProperty<LevelUpPhase> Phase { get; }
+
         int GetRequiredPoints();
         int GetProgress(string colorName);
 
