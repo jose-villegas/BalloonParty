@@ -26,7 +26,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         [HideInInspector] _TimeOffset ("Time Offset", Float) = 0
 
         [Header(Mask)]
-        [Tooltip("UV-space rectangle excluded from the band tint (e.g. the knot). Zero-size = no mask.")]
+        // UV-space rectangle excluded from the band tint (e.g. the knot). Zero-size = no mask.
         _MaskMin ("Mask Min (UV)", Vector) = (0, 0, 0, 0)
         _MaskMax ("Mask Max (UV)", Vector) = (0, 0, 0, 0)
         _MaskSoftness ("Mask Edge Softness", Range(0, 0.2)) = 0.02
