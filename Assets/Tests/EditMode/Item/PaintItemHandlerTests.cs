@@ -63,24 +63,49 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
-        public void Activate_ConvertsCoveredTargetsToRainbow()
+        public void Activate_NormalHolder_RecoloursCoveredTargetsToSourceColor()
         {
             var source = PlaceBalloon(2, 2, "Red");
             var target = PlaceBalloon(1, 2, "Blue");
 
             _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
 
-            Assert.IsTrue(target.IsRainbow.Value);
-            Assert.AreEqual("Blue", target.Color.Value); // unchanged — conversion doesn't recolour
+            Assert.AreEqual("Red", target.Color.Value);
+            Assert.IsFalse(target.IsRainbow.Value); // a normal holder recolours, never converts
         }
 
         [Test]
-        public void Activate_ConvertsSameColorTargetsToo()
+        public void Activate_NormalHolder_SkipsSameColorTargets()
         {
-            // Unlike a recolour, conversion doesn't care whether the target already matches the
-            // source's colour — the same-colour skip was for avoiding a pointless recolour, and
-            // conversion isn't one.
             var source = PlaceBalloon(2, 2, "Red");
+            var sameColor = PlaceBalloon(1, 2, "Red");
+
+            _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
+
+            Assert.AreEqual("Red", sameColor.Color.Value);
+            Assert.IsFalse(sameColor.IsRainbow.Value);
+        }
+
+        [Test]
+        public void Activate_RainbowHolder_ConvertsCoveredTargetsToRainbow()
+        {
+            var source = PlaceBalloon(2, 2, "Red");
+            source.IsRainbow.Value = true;
+            var target = PlaceBalloon(1, 2, "Blue");
+
+            _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
+
+            Assert.IsTrue(target.IsRainbow.Value);
+            Assert.AreEqual("Blue", target.Color.Value); // conversion doesn't recolour
+        }
+
+        [Test]
+        public void Activate_RainbowHolder_ConvertsSameColorTargetsToo()
+        {
+            // A rainbow spread doesn't care whether the target already matches the holder's base colour
+            // — the same-colour skip only exists to avoid a pointless recolour, which this isn't.
+            var source = PlaceBalloon(2, 2, "Red");
+            source.IsRainbow.Value = true;
             var sameColor = PlaceBalloon(1, 2, "Red");
 
             _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
@@ -89,9 +114,10 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
-        public void Activate_AlreadyRainbowTarget_NoOp()
+        public void Activate_RainbowHolder_AlreadyRainbowTarget_NoOp()
         {
             var source = PlaceBalloon(2, 2, "Red");
+            source.IsRainbow.Value = true;
             var target = PlaceBalloon(1, 2, "Blue");
             target.IsRainbow.Value = true;
 

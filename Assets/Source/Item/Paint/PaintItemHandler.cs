@@ -15,8 +15,9 @@ using BalloonParty.Configuration.Palette;
 namespace BalloonParty.Item.Paint
 {
     /// <summary>
-    ///     Handles the Paint item: converts balloons within landed blob radii of a packed splash
-    ///     triangle to rainbow mode (a colour wildcard), rather than recolouring them.
+    ///     Handles the Paint item: recolours balloons within landed blob radii of a packed splash
+    ///     triangle to the paint-holder's colour — unless the holder is itself a rainbow balloon, in
+    ///     which case it spreads rainbow mode to them instead.
     /// </summary>
     internal class PaintItemHandler : IBalloonItem
     {
@@ -62,13 +63,17 @@ namespace BalloonParty.Item.Paint
                 return UniTask.CompletedTask;
             }
 
+            // A rainbow paint-holder spreads rainbow; any other holder recolours to its own colour.
+            var spreadsRainbow = balloon is IHasRainbowMode rainbowSource && rainbowSource.IsRainbow.Value;
+
             var tint = _palette.GetColor(paintColor);
             var triangle = PaintTriangle.Build(worldPosition, context.ProjectileDirection, settings.Paint);
 
             var blobPositions = new List<Vector2>();
             triangle.PackBlobs(settings.Paint.SpreadBlobRadius, MaxBlobs, blobPositions);
 
-            var targetsByBlob = CollectPaintTargets(blobPositions, settings.Paint.SpreadBlobRadius);
+            var targetsByBlob = CollectPaintTargets(
+                blobPositions, settings.Paint.SpreadBlobRadius, paintColor, spreadsRainbow);
 
             if (settings.ActivationEffectPrefab == null)
             {
@@ -115,13 +120,22 @@ namespace BalloonParty.Item.Paint
                 var landing = blobPositions[index];
                 var direction = (landing - (Vector2)worldPosition).normalized;
                 _disturbanceField.Stamp(StampSource.Paint, landing, direction);
-                ConvertToRainbow(targetsByBlob[index]);
+
+                if (spreadsRainbow)
+                {
+                    ConvertToRainbow(targetsByBlob[index]);
+                }
+                else
+                {
+                    Recolor(paintColor, targetsByBlob[index]);
+                }
             }
         }
 
-        // Buckets align 1:1 with blobPositions; each converts as its blob lands. Unlike a recolour,
-        // conversion doesn't care about a target's current colour, so nothing is skipped on that basis.
-        private List<IPaintable>[] CollectPaintTargets(IReadOnlyList<Vector2> blobPositions, float blobRadius)
+        // Buckets align 1:1 with blobPositions; each is applied as its blob lands. A recolour skips
+        // targets already at the paint colour (pointless); a rainbow spread doesn't care about colour.
+        private List<IPaintable>[] CollectPaintTargets(
+            IReadOnlyList<Vector2> blobPositions, float blobRadius, string paintColor, bool spreadsRainbow)
         {
             var buckets = new List<IPaintable>[blobPositions.Count];
             var radiusSqr = blobRadius * blobRadius;
@@ -130,18 +144,14 @@ namespace BalloonParty.Item.Paint
             {
                 for (var row = 0; row < _grid.Rows; row++)
                 {
-                    if (_grid.IsEmpty(col, row))
-                    {
-                        continue;
-                    }
-
                     var slot = new Vector2Int(col, row);
-                    var position = (Vector2)_grid.IndexToWorldPosition(slot);
-                    if (_grid.At(slot) is not IPaintable paintable)
+                    var paintable = ResolvePaintTarget(slot, paintColor, spreadsRainbow);
+                    if (paintable == null)
                     {
                         continue;
                     }
 
+                    var position = (Vector2)_grid.IndexToWorldPosition(slot);
                     var nearest = NearestBlob(blobPositions, position, out var nearestSqr);
                     if (nearestSqr > radiusSqr)
                     {
@@ -153,6 +163,28 @@ namespace BalloonParty.Item.Paint
             }
 
             return buckets;
+        }
+
+        // Not a target if the slot is empty, non-paintable, or — for a recolour only — already the
+        // paint colour (a pointless recolour; a rainbow spread applies regardless of current colour).
+        private IPaintable ResolvePaintTarget(Vector2Int slot, string paintColor, bool spreadsRainbow)
+        {
+            if (_grid.IsEmpty(slot.x, slot.y))
+            {
+                return null;
+            }
+
+            if (_grid.At(slot) is not IPaintable paintable)
+            {
+                return null;
+            }
+
+            if (!spreadsRainbow && paintable.Color.Value == paintColor)
+            {
+                return null;
+            }
+
+            return paintable;
         }
 
         private static int NearestBlob(IReadOnlyList<Vector2> blobPositions, Vector2 position, out float bestSqr)
@@ -170,6 +202,19 @@ namespace BalloonParty.Item.Paint
             }
 
             return best;
+        }
+
+        private static void Recolor(string paintColor, IReadOnlyList<IPaintable> targets)
+        {
+            if (targets == null)
+            {
+                return;
+            }
+
+            foreach (var target in targets)
+            {
+                target.Color.Value = paintColor;
+            }
         }
 
         // A target that's already rainbow is a no-op — ReactiveProperty skips re-emitting an unchanged value.
