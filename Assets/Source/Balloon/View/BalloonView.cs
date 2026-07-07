@@ -38,6 +38,10 @@ namespace BalloonParty.Balloon.View
         [Tooltip("The colourable body sprite — the only renderer swapped to the rainbow material.")]
         [SerializeField] private SpriteRenderer _bodyRenderer;
 
+        [Tooltip("Renderers that must sort above a hosted item (e.g. a foreground overlay); ordered above " +
+                 "the item when one is present, just above the body when not.")]
+        [SerializeField] private Renderer[] _aboveItemRenderers;
+
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private IBalloonsConfiguration _balloonsConfig;
@@ -152,7 +156,10 @@ namespace BalloonParty.Balloon.View
                     _palette,
                     _baseSortingLayer,
                     _spriteLayerRenderers.Length,
-                    _poolManager);
+                    _poolManager,
+                    // The item's sorting footprint just changed (added/removed) — re-layer our
+                    // above-item renderers over the item's new top order (or the body, if it's gone).
+                    () => ApplyAboveItemSorting(Model.SlotIndex.Value));
             }
         }
 
@@ -311,6 +318,22 @@ namespace BalloonParty.Balloon.View
         {
             var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);
             SortingHelper.ApplySortingOrder(_spriteLayerRenderers, baseOrder);
+            ApplyAboveItemSorting(slotIndex);
+        }
+
+        // Orders the above-item renderers over the hosted item's top slot (or just above the body when
+        // no item is present). Re-run on slot moves (here) and on item add/remove (via ItemDisplayService's
+        // footprint callback) — ItemDisplayService is the only component that knows the item's slot count.
+        private void ApplyAboveItemSorting(Vector2Int slotIndex)
+        {
+            if (_aboveItemRenderers == null || _aboveItemRenderers.Length == 0)
+            {
+                return;
+            }
+
+            var baseOrder = SortingHelper.SlotBaseSortingOrder(slotIndex, _config.SlotsSize, _baseSortingLayer);
+            var itemCount = _itemService != null ? _itemService.ActiveItemSortingCount : 0;
+            SortingHelper.ApplySortingOrder(_aboveItemRenderers, baseOrder + _spriteLayerRenderers.Length + itemCount);
         }
 
         // Rainbow mode replaces the normal per-colour tint with the banded material — the tint would

@@ -1,3 +1,4 @@
+using System;
 using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Rendering;
@@ -23,8 +24,12 @@ namespace BalloonParty.Item
         private IItemConfiguration _itemConfig;
         private PoolManager _poolManager;
         private IReadOnlyReactiveProperty<Vector2Int> _slotIndex;
+        private Action _onSortingFootprintChanged;
 
         internal ITransformCapture TransformCapture => _activeCapture;
+
+        /// <summary>Sorting slots the active item occupies (0 when none) — a host layers its own renderers above this.</summary>
+        internal int ActiveItemSortingCount => _activeView != null ? _activeView.SortingRendererCount : 0;
 
         internal void Bind(
             IReadOnlyReactiveProperty<ItemType> item,
@@ -35,7 +40,8 @@ namespace BalloonParty.Item
             IGamePalette palette,
             int baseSortingOffset,
             int balloonRendererCount,
-            PoolManager poolManager)
+            PoolManager poolManager,
+            Action onSortingFootprintChanged = null)
         {
             Unbind();
 
@@ -46,6 +52,7 @@ namespace BalloonParty.Item
             _balloonRendererCount = balloonRendererCount;
             _slotIndex = slotIndex;
             _poolManager = poolManager;
+            _onSortingFootprintChanged = onSortingFootprintChanged;
 
             item
                 .Subscribe(type => OnItemChanged(type, colorName.Value))
@@ -64,6 +71,7 @@ namespace BalloonParty.Item
         {
             _disposables.Clear();
             ReturnActiveVisual();
+            _onSortingFootprintChanged = null;
         }
 
         private void ApplySorting(Vector2Int slot)
@@ -83,12 +91,14 @@ namespace BalloonParty.Item
 
             if (type == ItemType.None || _config == null || _poolManager == null)
             {
+                _onSortingFootprintChanged?.Invoke();
                 return;
             }
 
             var settings = _itemConfig[type];
             if (settings.VisualPrefab == null)
             {
+                _onSortingFootprintChanged?.Invoke();
                 return;
             }
 
@@ -104,6 +114,7 @@ namespace BalloonParty.Item
             var color = _palette.GetColor(colorName);
             _activeView.Activate(color);
             ApplySorting(_slotIndex.Value);
+            _onSortingFootprintChanged?.Invoke();
         }
 
         private void RecolorActiveVisual(string colorName)

@@ -18,6 +18,9 @@ namespace BalloonParty.Item
 
         public ItemType Type => _type;
 
+        /// <summary>How many sorting slots this visual occupies — lets a host layer other renderers above it.</summary>
+        public int SortingRendererCount => _sortingRenderers.Length;
+
         private void Awake()
         {
             _animator = GetComponentInChildren<Animator>(true);
