@@ -12,8 +12,7 @@ namespace BalloonParty.Balloon.Model
     internal class BalloonModel : BalloonModelBase, IPaintable, IHasWriteableItemSlot, IHasWriteableRainbowMode,
         IHasDurability, IHasScore, IHasScoreColor
     {
-        private readonly IGamePalette _palette;
-        private readonly IReadOnlyList<string> _allowedColors;
+        private readonly ColorPool _colorPool;
 
         public ReactiveProperty<string> Color { get; } = new();
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
@@ -34,8 +33,7 @@ namespace BalloonParty.Balloon.Model
             BalloonModelConfig config, IGamePalette palette = null, IReadOnlyList<string> allowedColors = null)
             : base(config)
         {
-            _palette = palette;
-            _allowedColors = allowedColors;
+            _colorPool = new ColorPool(palette, allowedColors);
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
             ItemActivationWeight = config.ItemActivationWeight;
@@ -66,7 +64,7 @@ namespace BalloonParty.Balloon.Model
         // other allowed colour.
         private void ResolveRainbowAttribution(in DamageContext context, IList<ScoreAttribution> results)
         {
-            var colors = ResolveColorPool();
+            var colors = _colorPool.Resolve();
             if (colors == null || colors.Count == 0)
             {
                 return;
@@ -105,12 +103,6 @@ namespace BalloonParty.Balloon.Model
 
                 results.Add(new ScoreAttribution(colors[i], spilloverPoints));
             }
-        }
-
-        // Falls back to the full palette when constructed without a level context (mirrors ToughBalloonModel).
-        private IReadOnlyList<string> ResolveColorPool()
-        {
-            return _allowedColors is { Count: > 0 } ? _allowedColors : _palette?.ColorNames;
         }
     }
 }
