@@ -8,6 +8,8 @@ namespace BalloonParty.Shared.Pool
     {
         private ParticleSystem _particle;
 
+        public override float Duration => _particle != null ? _particle.main.duration : 0f;
+
         private void Awake()
         {
             _particle = GetComponent<ParticleSystem>();

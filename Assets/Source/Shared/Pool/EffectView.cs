@@ -14,6 +14,9 @@ namespace BalloonParty.Shared.Pool
 
         internal Action ReturnToPool => _selfReturn;
 
+        /// <summary>Play length in seconds, when the effect has one (0 if unknown, e.g. an open-ended loop).</summary>
+        public virtual float Duration => 0f;
+
         public virtual void OnSpawned() { }
 
         public virtual void OnDespawned()

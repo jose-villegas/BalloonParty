@@ -53,9 +53,18 @@ namespace BalloonParty.Configuration.Items
     public class BombSettings
     {
         [SerializeField] private float _bombRadius = 1.25f;
+        [SerializeField] private float _bombRainbowEffectScale = 1.5f;
+        [SerializeField] [Min(0f)] private float _bombRainbowConversionRange = 1f;
         [SerializeField] private NudgeOverride[] _nudgeOverrides;
 
         public float Radius => _bombRadius;
+
+        /// <summary>Visual-only: scales a rainbow bomb's activation-effect transform so the blast reads bigger. Does not change the kill radius.</summary>
+        public float RainbowEffectScale => _bombRainbowEffectScale;
+
+        /// <summary>World-space width of the ring *outside* the kill radius where a rainbow bomb converts balloons to rainbow instead of destroying them (0 disables conversion).</summary>
+        public float RainbowConversionRange => _bombRainbowConversionRange;
+
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
     }
 

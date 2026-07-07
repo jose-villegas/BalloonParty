@@ -92,8 +92,14 @@ the **colour itself** the single source of truth:
   `BalloonModel.ResolveScoreAttribution`, `BalloonView.ApplyColorMode`).
 - **Paint collapsed to a single recolour path**: a rainbow holder's colour *is* the wildcard id, so
   recolouring targets to it converts them — `ConvertToRainbow`/`spreadsRainbow` were deleted.
-- ⚠️ Undefined-for-now leak sites (documented, deferred): a rainbow-held Bomb/Laser/Lightning credits
-  the sentinel colour, which drops out of concrete-colour scoring. Acceptable until those are specced.
+- **Rainbow item synergies specced/built**: Lightning on a rainbow holder chains through *every*
+  colour (drops the same-colour filter); Bomb on a rainbow holder piercing-kills all colours within
+  `Radius` and converts the ring beyond it to rainbow mid-effect — `RainbowConversionRange` (outer-ring
+  width, 0 disables) applied at half the effect duration, plus a visual-only `RainbowEffectScale` on the
+  effect transform. Laser's rainbow behaviour is open.
+- ⚠️ Still undefined-for-now (documented, deferred): the *scoring attribution* of a rainbow-held
+  Bomb/Laser/Lightning credits the sentinel colour, which drops out of concrete-colour scoring.
+  Targeting/blast behaviour is defined; only the point payout on those paths is unspecced.
 
 The rest of this plan below describes the original flag-based build for history; read the sentinel
 model as authoritative where they conflict.

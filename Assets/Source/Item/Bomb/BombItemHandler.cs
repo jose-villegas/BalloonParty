@@ -14,6 +14,7 @@ using UnityEngine;
 using VContainer;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Item.Bomb
 {
@@ -24,6 +25,7 @@ namespace BalloonParty.Item.Bomb
         private readonly IHitDispatcher _hitDispatcher;
         private readonly IPublisher<NudgeMessage> _nudgePublisher;
         private readonly IItemConfiguration _itemConfig;
+        private readonly IGamePalette _palette;
         private readonly List<Collider2D> _overlapResults = new(8);
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
         private readonly DisturbanceFieldService _disturbanceField;
@@ -35,6 +37,7 @@ namespace BalloonParty.Item.Bomb
             IItemConfiguration itemConfig,
             IHitDispatcher hitDispatcher,
             IPublisher<NudgeMessage> nudgePublisher,
+            IGamePalette palette,
             ItemEffectPlayer effectPlayer,
             BalloonOverlapQuery overlap,
             DisturbanceFieldService disturbanceField)
@@ -42,6 +45,7 @@ namespace BalloonParty.Item.Bomb
             _itemConfig = itemConfig;
             _hitDispatcher = hitDispatcher;
             _nudgePublisher = nudgePublisher;
+            _palette = palette;
             _effectPlayer = effectPlayer;
             _overlap = overlap;
             _disturbanceField = disturbanceField;
@@ -62,13 +66,32 @@ namespace BalloonParty.Item.Bomb
                 settings.Bomb.NudgeOverrides));
 
             var sourceColorId = balloon.GetColorId();
-            BlastBalloons(balloon,
+            var context = new DamageContext(settings.Damage, settings.Flags, sourceColorId);
+            var isRainbow = _palette.IsRainbow(sourceColorId);
+
+            List<IPaintable> converts = null;
+            if (isRainbow)
+            {
+                converts = RainbowBlast(balloon, worldPosition, settings.Bomb, context);
+            }
+            else
+            {
+                BlastBalloons(balloon, worldPosition, settings.Bomb.Radius, context);
+            }
+
+            // A rainbow bomb only scales the effect visually — the kill radius is unchanged.
+            var effectDuration = _effectPlayer.Play(settings,
                 worldPosition,
-                settings.Bomb.Radius,
-                new DamageContext(settings.Damage, settings.Flags, sourceColorId));
-            _effectPlayer.Play(settings, worldPosition, sourceColorId);
+                sourceColorId,
+                isRainbow ? settings.Bomb.RainbowEffectScale : 1f);
 
             _disturbanceField.Stamp(StampSource.Bomb, worldPosition, Vector2.zero);
+
+            if (converts != null)
+            {
+                // Conversion lands mid-effect, once the blast visual has read.
+                ConvertAfterDelay(converts, effectDuration * 0.5f).Forget();
+            }
 
             return UniTask.CompletedTask;
         }
@@ -107,6 +130,61 @@ namespace BalloonParty.Item.Bomb
                     balloonView.transform.position,
                     Vector3.zero,
                     hitContext));
+            }
+        }
+
+        // Rainbow bomb. Classifies every balloon once, at detonation, by CENTRE distance (not collider
+        // overlap — that over-reaches and eats the conversion band): centre within Radius is a guaranteed
+        // kill; centre in the ring beyond it (up to Radius + RainbowConversionRange) is collected to
+        // convert after the effect plays. Returns the convert list (null when empty).
+        private List<IPaintable> RainbowBlast(
+            IBalloonModel balloon, Vector3 worldPosition, BombSettings bomb, DamageContext context)
+        {
+            var killRadius = bomb.Radius;
+            var outerRadius = bomb.Radius + bomb.RainbowConversionRange;
+            var killSqr = killRadius * killRadius;
+            var outerSqr = outerRadius * outerRadius;
+            var piercingContext = new DamageContext(context.Damage, DamageFlags.Piercing, context.SourceColorId);
+
+            List<IPaintable> converts = null;
+            var count = Physics2D.OverlapCircle(worldPosition, outerRadius, _overlap.Filter, _overlapResults);
+
+            for (var i = 0; i < count; i++)
+            {
+                if (!_overlap.TryResolveBalloon(_overlapResults[i], balloon, out var balloonView, out var model))
+                {
+                    continue;
+                }
+
+                var distSqr = ((Vector2)balloonView.transform.position - (Vector2)worldPosition).sqrMagnitude;
+                if (distSqr <= killSqr)
+                {
+                    _hitDispatcher.Dispatch(ActorHitMessage.From(model,
+                        balloonView.transform.position,
+                        Vector3.zero,
+                        piercingContext));
+                }
+                else if (distSqr <= outerSqr && model is IPaintable paintable)
+                {
+                    (converts ??= new List<IPaintable>()).Add(paintable);
+                }
+            }
+
+            return converts;
+        }
+
+        // Band survivors were captured at detonation (they're never killed), so recolour the held
+        // references after the delay — no re-query, which would miss balloons the collapsing stack moved.
+        private async UniTaskVoid ConvertAfterDelay(IReadOnlyList<IPaintable> targets, float delaySeconds)
+        {
+            if (delaySeconds > 0f)
+            {
+                await UniTask.Delay(Mathf.RoundToInt(delaySeconds * 1000f));
+            }
+
+            foreach (var target in targets)
+            {
+                target.Color.Value = GamePalette.RainbowColorId;
             }
         }
     }

@@ -25,6 +25,8 @@ MonoBehaviour:
     _damageFlags: 0
     _bomb:
       _bombRadius: 1.25
+      _bombRainbowEffectScale: 1.7
+      _bombRainbowConversionRange: 0.3
       _nudgeOverrides:
       - _appliesTo: 4
         _distance: 3
@@ -163,6 +165,8 @@ MonoBehaviour:
     _damageFlags: -1
     _bomb:
       _bombRadius: 1.25
+      _bombRainbowEffectScale: 1.5
+      _bombRainbowConversionRange: 1
       _nudgeOverrides: []
     _laser:
       _laserRaycastDistance: 20
@@ -297,6 +301,8 @@ MonoBehaviour:
     _damageFlags: 0
     _bomb:
       _bombRadius: 1.25
+      _bombRainbowEffectScale: 1.5
+      _bombRainbowConversionRange: 1
       _nudgeOverrides: []
     _laser:
       _laserRaycastDistance: 20
@@ -431,6 +437,8 @@ MonoBehaviour:
     _damageFlags: 0
     _bomb:
       _bombRadius: 1.25
+      _bombRainbowEffectScale: 1.5
+      _bombRainbowConversionRange: 1
       _nudgeOverrides: []
     _laser:
       _laserRaycastDistance: 20
@@ -565,6 +573,8 @@ MonoBehaviour:
     _damageFlags: 0
     _bomb:
       _bombRadius: 1.25
+      _bombRainbowEffectScale: 1.5
+      _bombRainbowConversionRange: 1
       _nudgeOverrides: []
     _laser:
       _laserRaycastDistance: 20

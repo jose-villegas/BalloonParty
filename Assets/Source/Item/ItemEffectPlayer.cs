@@ -1,3 +1,4 @@
+using System;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Pool;
 using UnityEngine;
@@ -22,14 +23,34 @@ namespace BalloonParty.Item
             _palette = palette;
         }
 
-        public void Play(ItemSettings settings, Vector3 worldPosition, string colorId)
+        /// <summary>
+        ///     Plays the effect and returns its <see cref="EffectView.Duration" /> (0 if none). <paramref name="scale" />
+        ///     multiplies the effect transform (VFX prefabs are authored at scale 1) and resets on completion.
+        /// </summary>
+        public float Play(ItemSettings settings, Vector3 worldPosition, string colorId, float scale = 1f)
         {
             if (!TryAcquire(settings, out var effect, out var key))
             {
-                return;
+                return 0f;
             }
 
-            effect.Play(worldPosition, _palette.GetColor(colorId), () => _poolManager.Return(key, effect));
+            Action onComplete;
+            if (Mathf.Approximately(scale, 1f))
+            {
+                onComplete = () => _poolManager.Return(key, effect);
+            }
+            else
+            {
+                effect.transform.localScale = Vector3.one * scale;
+                onComplete = () =>
+                {
+                    effect.transform.localScale = Vector3.one;
+                    _poolManager.Return(key, effect);
+                };
+            }
+
+            effect.Play(worldPosition, _palette.GetColor(colorId), onComplete);
+            return effect.Duration;
         }
 
         public void Play(ItemSettings settings, Vector3 worldPosition, Quaternion rotation, string colorId)

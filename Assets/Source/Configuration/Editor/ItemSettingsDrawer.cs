@@ -36,6 +36,16 @@ namespace BalloonParty.Configuration.Editor
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Bomb");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, property, "_damage", "Damage");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, bomb, "_bombRadius", "Bomb Radius");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        bomb,
+                        "_bombRainbowEffectScale",
+                        "Rainbow Effect Scale");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        bomb,
+                        "_bombRainbowConversionRange",
+                        "Rainbow Conversion Range");
                     var nudgeOverrides = bomb?.FindPropertyRelative("_nudgeOverrides");
                     if (nudgeOverrides != null)
                     {
@@ -150,7 +160,8 @@ namespace BalloonParty.Configuration.Editor
                     var nudgeHeight = nudgeOverrides != null
                         ? EditorGUI.GetPropertyHeight(nudgeOverrides, true) + PropertyDrawerHelper.Spacing
                         : 0f;
-                    return (row * 3) + nudgeHeight;
+                    // Header + damage + radius + 2 rainbow fields.
+                    return (row * 5) + nudgeHeight;
 
                 case ItemType.Laser:
                     return row * 4;
