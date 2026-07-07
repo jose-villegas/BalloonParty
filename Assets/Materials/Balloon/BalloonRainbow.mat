@@ -33,7 +33,7 @@ Material:
     - _BandBlend: 0.08
     - _BandCount: 4
     - _ScrollSpeed: 1
-    - _ShadowSoftness: 0.01
+    - _MaskSoftness: 0.02
     - _ShineInterval: 3
     - _ShineSpeed: 1
     - _ShineWidth: 0.1
@@ -47,7 +47,7 @@ Material:
     - _Color2: {r: 0.012, g: 0.663, b: 0.957, a: 1}
     - _Color3: {r: 0.612, g: 0.153, b: 0.69, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _ShadowColor: {r: 0.2, g: 0.2, b: 0.2, a: 0.75}
-    - _ShadowOffset: {r: 0.025, g: -0.025, b: 0, a: 0}
+    - _MaskMin: {r: 0, g: 0, b: 0, a: 0}
+    - _MaskMax: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

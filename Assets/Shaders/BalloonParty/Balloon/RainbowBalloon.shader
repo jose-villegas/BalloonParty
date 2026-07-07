@@ -4,7 +4,9 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
     // colour bands cycling through up to four selectable colours. Colour count + values are
     // meant to be driven at runtime from the level's allowed colours (via MaterialPropertyBlock),
     // but default to the full palette so the material previews standalone. Keeps SpriteShineShadow's
-    // diagonal shine sweep and soft drop shadow.
+    // diagonal shine sweep; no drop shadow. An optional UV-rect mask excludes a region (e.g. the
+    // balloon's knot) from the band tint, so it reads as a stable part of the sprite instead of
+    // being cut across by the scroll.
 
     Properties
     {
@@ -23,15 +25,16 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         _BandAngle   ("Angle (turns)", Range(0, 1))  = 0.125
         [HideInInspector] _TimeOffset ("Time Offset", Float) = 0
 
+        [Header(Mask)]
+        [Tooltip("UV-space rectangle excluded from the band tint (e.g. the knot). Zero-size = no mask.")]
+        _MaskMin ("Mask Min (UV)", Vector) = (0, 0, 0, 0)
+        _MaskMax ("Mask Max (UV)", Vector) = (0, 0, 0, 0)
+        _MaskSoftness ("Mask Edge Softness", Range(0, 0.2)) = 0.02
+
         [Header(Shine)]
         _ShineWidth    ("Width",    Range(0, 1))   = 0.1
         _ShineSpeed    ("Speed",    Range(0, 5))   = 1.0
         _ShineInterval ("Interval", Range(0, 10))  = 3.0
-
-        [Header(Shadow)]
-        _ShadowColor    ("Color",    Color)             = (0.2, 0.2, 0.2, 0.75)
-        _ShadowOffset   ("Offset",   Vector)            = (0.025, -0.025, 0, 0)
-        _ShadowSoftness ("Softness", Range(0.0, 0.1))   = 0.01
 
         [Header(Sprite)]
         _SpriteScale ("Scale", Range(0.1, 1.0)) = 1.0
@@ -87,9 +90,6 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
 
             sampler2D _MainTex;
             float4    _MainTex_ST;
-            fixed4    _ShadowColor;
-            float2    _ShadowOffset;
-            float     _ShadowSoftness;
             float     _SpriteScale;
             float     _ShineWidth;
             float     _ShineSpeed;
@@ -105,6 +105,10 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float  _BandBlend;
             float  _BandAngle;
             float  _TimeOffset;
+
+            float2 _MaskMin;
+            float2 _MaskMax;
+            float  _MaskSoftness;
 
             #ifdef UNITY_INSTANCING_ENABLED
                 UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
@@ -130,29 +134,6 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
                 #endif
                 return OUT;
-            }
-
-            inline fixed SampleAlpha(float2 uv)
-            {
-                // Out-of-bounds taps must read as transparent: with clamp wrap the sampler
-                // returns the edge pixel instead, smearing streaks at the texture edge.
-                float2 inBounds = step(0.0, uv) * step(uv, 1.0);
-                return tex2D(_MainTex, uv).a * inBounds.x * inBounds.y;
-            }
-
-            inline fixed SoftShadowAlpha(float2 shadowUV, float s)
-            {
-                fixed a =
-                    SampleAlpha(shadowUV + float2(-s, -s)) +
-                    SampleAlpha(shadowUV + float2( 0, -s)) +
-                    SampleAlpha(shadowUV + float2( s, -s)) +
-                    SampleAlpha(shadowUV + float2(-s,  0)) +
-                    SampleAlpha(shadowUV                 ) +
-                    SampleAlpha(shadowUV + float2( s,  0)) +
-                    SampleAlpha(shadowUV + float2(-s,  s)) +
-                    SampleAlpha(shadowUV + float2( 0,  s)) +
-                    SampleAlpha(shadowUV + float2( s,  s));
-                return a / 9.0;
             }
 
             inline fixed3 ColorAt(int i)
@@ -184,6 +165,16 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return lerp(ColorAt(i0), ColorAt(i1), blend);
             }
 
+            // 1 inside [_MaskMin, _MaskMax] (band excluded there), 0 outside, soft edge in between.
+            // Defaults to a zero-size rect, so the mask is off unless deliberately configured.
+            inline float MaskAmount(float2 uv)
+            {
+                float2 lowerEdge = smoothstep(_MaskMin - _MaskSoftness, _MaskMin + _MaskSoftness, uv);
+                float2 upperEdge = 1.0 - smoothstep(_MaskMax - _MaskSoftness, _MaskMax + _MaskSoftness, uv);
+                float2 inside = lowerEdge * upperEdge;
+                return inside.x * inside.y;
+            }
+
             // Additive white shine sweep (0..1) — same diagonal band as SpriteShineShadow.
             inline fixed ShineAmount(float2 uv)
             {
@@ -199,7 +190,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
 
             fixed4 frag(Varyings IN) : SV_Target
             {
-                // Scale sprite UV inward from center for shadow margin.
+                // Scale sprite UV inward from center, so the visible sprite can sit inset in the quad.
                 float2 spriteUV = (IN.uv - 0.5) / _SpriteScale + 0.5;
 
                 float2 inBounds = step(0.0, spriteUV) * step(spriteUV, 1.0);
@@ -207,31 +198,16 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
 
                 fixed4 tex = tex2D(_MainTex, spriteUV);
 
+                // Masked region (e.g. the knot) keeps its plain sprite colour instead of the band tint.
+                fixed3 bandColor = lerp(RainbowBand(spriteUV), fixed3(1, 1, 1), MaskAmount(spriteUV));
+
                 // Sprite shading × band colour, then additive white shine on top.
-                fixed3 rgb = tex.rgb * RainbowBand(spriteUV) * IN.color.rgb;
+                fixed3 rgb = tex.rgb * bandColor * IN.color.rgb;
                 rgb += tex.a * ShineAmount(spriteUV);
 
-                fixed4 sprite;
-                sprite.rgb = rgb;
-                sprite.a   = tex.a * IN.color.a * spriteMask;
-
-                // Shadow.
-                float2 shadowUV = spriteUV - _ShadowOffset;
-                fixed shadowAlpha = _ShadowSoftness < 0.0001
-                    ? SampleAlpha(shadowUV)
-                    : SoftShadowAlpha(shadowUV, _ShadowSoftness);
-                shadowAlpha *= IN.color.a * _ShadowColor.a;
-
-                // Composite shadow under sprite (Porter-Duff over).
-                fixed3 shadowRGB = _ShadowColor.rgb * IN.color.rgb;
-                fixed spriteA    = sprite.a;
-                fixed combinedA  = spriteA + shadowAlpha * (1.0 - spriteA);
-
                 fixed4 result;
-                result.a   = combinedA;
-                result.rgb = combinedA > 0.0001
-                    ? (sprite.rgb * spriteA + shadowRGB * shadowAlpha * (1.0 - spriteA)) / combinedA
-                    : sprite.rgb;
+                result.rgb = rgb;
+                result.a   = tex.a * IN.color.a * spriteMask;
 
                 return result;
             }
