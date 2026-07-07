@@ -54,6 +54,14 @@ branch and **ignores the per-attribution `breaksStreak` flag entirely**. So sett
 `breaksStreak: false` on the rainbow's attributions does nothing on its own — the surgical fix has to
 be in `RecordStreakMultiplier`.
 
+> **Future idea (out of scope here, noted for later):** José wants Tough to eventually **not break the
+> streak** either. The `IsPrimary` mechanism built for the rainbow (Phase 2) is directly reusable:
+> `ToughBalloonModel.ResolveScoreAttribution` (`ToughBalloonModel.cs:32-45`) would mark one of its
+> scattered attributions `isPrimary: true` (e.g. against `context.SourceColorId`, same as the rainbow)
+> and set `breaksStreak: false` on all of them, and `RecordStreakMultiplier` would carry the streak
+> through unchanged — no further core-scoring changes needed. Left undone for now because it's a
+> distinct balance/feel decision, not a rainbow requirement; worth its own small task when picked up.
+
 ---
 
 > **Phase task lists below were verified against the source 2026-07-07** (four implementation-read
