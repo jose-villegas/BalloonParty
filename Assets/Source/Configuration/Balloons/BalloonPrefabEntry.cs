@@ -29,6 +29,13 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("How many points of the balloon's color are awarded when this balloon pops.")]
         [SerializeField] private int _scoreValue = 1;
 
+        [Tooltip("Relative chance this balloon is chosen to host an item when items are granted. 0 = never.")]
+        [SerializeField] private float _itemActivationWeight = 1f;
+
+        [Tooltip("Rainbow only: fraction of ScoreValue granted to each non-current allowed colour (0-1).")]
+        [Range(0f, 1f)]
+        [SerializeField] private float _spillover;
+
         public BalloonView Prefab => _prefab;
         public BalloonType BalloonType => _balloonType;
         public float Weight => _weight;
@@ -42,6 +49,8 @@ namespace BalloonParty.Configuration.Balloons
 
         public int HitsToPop => _hitsToPop;
         public int ScoreValue => _scoreValue;
+        public float ItemActivationWeight => _itemActivationWeight;
+        public float Spillover => _spillover;
 
         /// <summary>Derived from the prefab's GameObject name — no manual key needed.</summary>
         public string PoolKey => _prefab != null ? _prefab.name : string.Empty;

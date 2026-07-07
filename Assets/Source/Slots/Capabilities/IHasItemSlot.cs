@@ -8,5 +8,8 @@ namespace BalloonParty.Slots.Capabilities
     public interface IHasItemSlot : IHasColor
     {
         IReadOnlyReactiveProperty<ItemType> Item { get; }
+
+        /// <summary>Relative chance this balloon is chosen to host an item when items are granted. 0 = never.</summary>
+        float ItemActivationWeight { get; }
     }
 }

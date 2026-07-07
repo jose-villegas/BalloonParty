@@ -14,6 +14,7 @@ namespace BalloonParty.Balloon.Model
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
         public ReactiveProperty<bool> IsRainbow { get; } = new(false);
         public int ScoreValue { get; }
+        public float ItemActivationWeight { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
         IReadOnlyReactiveProperty<string> IHasColor.Color => Color;
@@ -27,6 +28,7 @@ namespace BalloonParty.Balloon.Model
         {
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
+            ItemActivationWeight = config.ItemActivationWeight;
         }
 
         public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)

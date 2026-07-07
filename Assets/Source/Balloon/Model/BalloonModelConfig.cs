@@ -12,17 +12,23 @@ namespace BalloonParty.Balloon.Model
         public readonly int ScoreValue;
         public readonly int HitsToPop;
         public readonly IReadOnlyList<NudgeOverride> NudgeOverrides;
+        public readonly float ItemActivationWeight;
+        public readonly float Spillover;
 
         public BalloonModelConfig(
             BalloonType typeName = default,
             int scoreValue = 1,
             int hitsToPop = 1,
-            NudgeOverride[] nudgeOverrides = null)
+            NudgeOverride[] nudgeOverrides = null,
+            float itemActivationWeight = 1f,
+            float spillover = 0f)
         {
             TypeName = typeName;
             ScoreValue = scoreValue;
             HitsToPop = hitsToPop;
             NudgeOverrides = nudgeOverrides;
+            ItemActivationWeight = itemActivationWeight;
+            Spillover = spillover;
         }
 
         internal static BalloonModelConfig From(BalloonPrefabEntry entry)
@@ -30,7 +36,9 @@ namespace BalloonParty.Balloon.Model
             return new BalloonModelConfig(entry.BalloonType,
                 entry.ScoreValue,
                 entry.HitsToPop,
-                entry.NudgeOverrides);
+                entry.NudgeOverrides,
+                entry.ItemActivationWeight,
+                entry.Spillover);
         }
     }
 }
