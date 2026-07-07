@@ -63,25 +63,40 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
-        public void Activate_PaintsCoveredTargetsToSourceColor()
+        public void Activate_ConvertsCoveredTargetsToRainbow()
         {
             var source = PlaceBalloon(2, 2, "Red");
             var target = PlaceBalloon(1, 2, "Blue");
 
             _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
 
-            Assert.AreEqual("Red", target.Color.Value);
+            Assert.IsTrue(target.IsRainbow.Value);
+            Assert.AreEqual("Blue", target.Color.Value); // unchanged — conversion doesn't recolour
         }
 
         [Test]
-        public void Activate_SkipsSameColorTargets()
+        public void Activate_ConvertsSameColorTargetsToo()
         {
+            // Unlike a recolour, conversion doesn't care whether the target already matches the
+            // source's colour — the same-colour skip was for avoiding a pointless recolour, and
+            // conversion isn't one.
             var source = PlaceBalloon(2, 2, "Red");
             var sameColor = PlaceBalloon(1, 2, "Red");
 
             _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
 
-            Assert.AreEqual("Red", sameColor.Color.Value);
+            Assert.IsTrue(sameColor.IsRainbow.Value);
+        }
+
+        [Test]
+        public void Activate_AlreadyRainbowTarget_NoOp()
+        {
+            var source = PlaceBalloon(2, 2, "Red");
+            var target = PlaceBalloon(1, 2, "Blue");
+            target.IsRainbow.Value = true;
+
+            Assert.DoesNotThrow(() => _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2))));
+            Assert.IsTrue(target.IsRainbow.Value);
         }
 
         [Test]
@@ -102,6 +117,7 @@ namespace BalloonParty.Tests.Item
 
             _handler.Activate(HitToward(source, new Vector2Int(2, 2), new Vector2Int(1, 2)));
 
+            Assert.IsFalse(target.IsRainbow.Value);
             Assert.AreEqual("Blue", target.Color.Value);
         }
 

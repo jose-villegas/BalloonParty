@@ -15,7 +15,8 @@ using BalloonParty.Configuration.Palette;
 namespace BalloonParty.Item.Paint
 {
     /// <summary>
-    ///     Handles the Paint item: recolours balloons within landed blob radii of a packed splash triangle.
+    ///     Handles the Paint item: converts balloons within landed blob radii of a packed splash
+    ///     triangle to rainbow mode (a colour wildcard), rather than recolouring them.
     /// </summary>
     internal class PaintItemHandler : IBalloonItem
     {
@@ -67,7 +68,7 @@ namespace BalloonParty.Item.Paint
             var blobPositions = new List<Vector2>();
             triangle.PackBlobs(settings.Paint.SpreadBlobRadius, MaxBlobs, blobPositions);
 
-            var targetsByBlob = CollectPaintTargets(blobPositions, settings.Paint.SpreadBlobRadius, paintColor);
+            var targetsByBlob = CollectPaintTargets(blobPositions, settings.Paint.SpreadBlobRadius);
 
             if (settings.ActivationEffectPrefab == null)
             {
@@ -114,13 +115,13 @@ namespace BalloonParty.Item.Paint
                 var landing = blobPositions[index];
                 var direction = (landing - (Vector2)worldPosition).normalized;
                 _disturbanceField.Stamp(StampSource.Paint, landing, direction);
-                Recolor(paintColor, targetsByBlob[index]);
+                ConvertToRainbow(targetsByBlob[index]);
             }
         }
 
-        // Buckets align 1:1 with blobPositions; each paints as its blob lands.
-        private List<IPaintable>[] CollectPaintTargets(
-            IReadOnlyList<Vector2> blobPositions, float blobRadius, string paintColor)
+        // Buckets align 1:1 with blobPositions; each converts as its blob lands. Unlike a recolour,
+        // conversion doesn't care about a target's current colour, so nothing is skipped on that basis.
+        private List<IPaintable>[] CollectPaintTargets(IReadOnlyList<Vector2> blobPositions, float blobRadius)
         {
             var buckets = new List<IPaintable>[blobPositions.Count];
             var radiusSqr = blobRadius * blobRadius;
@@ -136,7 +137,7 @@ namespace BalloonParty.Item.Paint
 
                     var slot = new Vector2Int(col, row);
                     var position = (Vector2)_grid.IndexToWorldPosition(slot);
-                    if (_grid.At(slot) is not IPaintable paintable || paintable.Color.Value == paintColor)
+                    if (_grid.At(slot) is not IPaintable paintable)
                     {
                         continue;
                     }
@@ -171,7 +172,8 @@ namespace BalloonParty.Item.Paint
             return best;
         }
 
-        private static void Recolor(string paintColor, IReadOnlyList<IPaintable> targets)
+        // A target that's already rainbow is a no-op — ReactiveProperty skips re-emitting an unchanged value.
+        private static void ConvertToRainbow(IReadOnlyList<IPaintable> targets)
         {
             if (targets == null)
             {
@@ -180,7 +182,10 @@ namespace BalloonParty.Item.Paint
 
             foreach (var target in targets)
             {
-                target.Color.Value = paintColor;
+                if (target is IHasWriteableRainbowMode rainbowMode)
+                {
+                    rainbowMode.IsRainbow.Value = true;
+                }
             }
         }
     }
