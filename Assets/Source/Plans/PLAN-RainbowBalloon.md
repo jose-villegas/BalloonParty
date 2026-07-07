@@ -81,6 +81,33 @@ be in `RecordStreakMultiplier`.
 
 ---
 
+## Design alternative considered — pool replacement (rejected 2026-07-07)
+
+Evaluated making rainbow a **distinct pooled `BalloonType.Rainbow` + `RainbowBalloonModel`** (spawned
+as a normal type; Paint converts by despawn+respawn) instead of a mode/state on `BalloonModel`.
+Source-verified both halves; **kept the mode-flag.** Why:
+
+- **The spawn-side win collapses under item-capability.** A distinct model's apparent wins (colour-steal
+  skips for free, no runtime material swap, no `SetColor`-suppression) all require it to **not** be
+  `IHasColor`. But `IHasWriteableItemSlot : IHasItemSlot : IHasColor` (item visuals tint to the host
+  colour, and `BalloonView.Bind` reads `itemSlot.Color`), so an **item-capable** rainbow *must* be
+  `IHasColor` — collapsing every win, forcing the model to re-implement most of `BalloonModel`, and
+  additionally **breaking the shield guard** (`balloon is IHasColor` now fails → needs its own relax).
+  `IsPrimary` + the `RecordStreakMultiplier` branch are required identically in both approaches.
+- **The Paint side is much harder.** `PaintItemHandler` is a leaf (`IPaintable` only); replacement needs
+  three new cross-layer deps (`BalloonFactory`/`BalloonControllerRegistry`/`IBalloonsConfiguration`),
+  a silent-remove API and a no-animation-spawn path (neither exists — both must be written), and it
+  **loses hosted items, durability, in-flight motion, and can dangle a projectile's `LastHitBalloon`**;
+  it also corrupts `_activeCounts` caps and risks `SlotGrid.Place`-throws-on-occupied across an async
+  multi-target splash. The flag flip preserves the same model reference and all of it for one `.Value = true`.
+- **Only upside** — a real `Rainbow` `TypeName` gives correct cap-counting for *spawned* rainbows. Minor,
+  and the flag's cap-bypass is a *conversion-only* issue already accepted below.
+
+Pool replacement would only be simpler in a reduced scope: rainbow **not** item-capable **and** no Paint
+conversion. Both are locked in, so the mode-flag is the better fit for the full feature.
+
+---
+
 ## Phase 0 — Foundation: the rainbow-mode flag (blocks 2/3/5)
 
 **Task 0.1 — `IsRainbow` flag + read capability.**
