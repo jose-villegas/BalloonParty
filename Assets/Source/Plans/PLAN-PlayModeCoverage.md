@@ -5,7 +5,7 @@
 > A plan for growing the PlayMode suite (`Assets/Tests/PlayMode/`) beyond its current
 > three tests. PlayMode is reserved for behaviour the EditMode suite genuinely cannot
 > reach — physics, pooling, DOTween/async, the GPU, and the real scene + DI graph.
-> This is the deliberate complement to @ref plan_test_gap, which is EditMode-only.
+> This is the deliberate complement to the EditMode test suite.
 
 ---
 
