@@ -6,20 +6,24 @@ using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
+using BalloonParty.Projectile.Model;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Item.Lightning
 {
     /// <summary>
-    ///     Handles the Lightning item: chains through same-color balloons nearest-first. A rainbow
-    ///     holder ("all colours") chains through every coloured balloon regardless of colour.
+    ///     Handles the Lightning item: chains through same-color balloons nearest-first and destroys
+    ///     them. A rainbow holder instead <em>converts</em> a whole colour group to rainbow (never
+    ///     destroys) — the colour chosen by the last projectile fired, so it seeds a combo rather than
+    ///     clearing the board.
     /// </summary>
-    internal class LightningItemHandler : IBalloonItem
+    internal class LightningItemHandler : IBalloonItem, IStartable
     {
         private sealed class ByDistanceComparer : IComparer<(IBalloonModel model, Vector3 worldPos)>
         {
@@ -32,11 +36,14 @@ namespace BalloonParty.Item.Lightning
         private readonly IHitDispatcher _hitDispatcher;
         private readonly IItemConfiguration _itemConfig;
         private readonly IGamePalette _palette;
+        private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private readonly PoolManager _poolManager;
         private readonly SlotGrid _grid;
 
         // Safe to share: set and consumed synchronously within one CollectSortedTargets call.
         private readonly ByDistanceComparer _distanceComparer = new();
+
+        private IProjectileModel _activeProjectile;
 
         public ItemType Type => ItemType.Lightning;
 
@@ -45,14 +52,21 @@ namespace BalloonParty.Item.Lightning
             IItemConfiguration itemConfig,
             IHitDispatcher hitDispatcher,
             IGamePalette palette,
+            ISubscriber<ProjectileLoadedMessage> loadedSubscriber,
             SlotGrid grid,
             PoolManager poolManager)
         {
             _itemConfig = itemConfig;
             _hitDispatcher = hitDispatcher;
             _palette = palette;
+            _loadedSubscriber = loadedSubscriber;
             _grid = grid;
             _poolManager = poolManager;
+        }
+
+        public void Start()
+        {
+            _loadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model);
         }
 
         public UniTask Activate(ItemActivationContext activation)
@@ -61,27 +75,48 @@ namespace BalloonParty.Item.Lightning
             var worldPosition = activation.WorldPosition;
 
             var settings = _itemConfig[ItemType.Lightning];
+            var sourceColorId = balloon.GetColorId();
+            var convertsToRainbow = _palette.IsRainbow(sourceColorId);
 
-            // Per-activation lists: the chain view holds this reference long after this method returns.
+            // A rainbow holder converts a whole colour group to rainbow (chosen by the last projectile's
+            // colour) instead of destroying; a concrete holder chains and destroys its own colour.
+            var matchColor = convertsToRainbow ? _activeProjectile?.ColorName.Value : sourceColorId;
+            if (string.IsNullOrEmpty(matchColor) || (convertsToRainbow && _palette.IsRainbow(matchColor)))
+            {
+                return UniTask.CompletedTask;
+            }
+
+            // Per-activation list: the chain view holds this reference long after this method returns.
             var targets = new List<(IBalloonModel model, Vector3 worldPos)>();
-            CollectSortedTargets(balloon, worldPosition, targets);
+            CollectSortedTargets(balloon, worldPosition, matchColor, targets);
 
             if (targets.Count == 0)
             {
                 return UniTask.CompletedTask;
             }
 
-            var sourceColorId = balloon.GetColorId();
             var context = new DamageContext(settings.Damage, settings.Flags, sourceColorId);
+
+            void ApplyTo(IBalloonModel model, Vector3 pos)
+            {
+                if (convertsToRainbow)
+                {
+                    if (model is IPaintable paintable)
+                    {
+                        paintable.Color.Value = GamePalette.RainbowColorId;
+                    }
+                }
+                else
+                {
+                    _hitDispatcher.Dispatch(ActorHitMessage.From(model, pos, Vector3.zero, context));
+                }
+            }
 
             if (settings.ActivationEffectPrefab == null)
             {
                 foreach (var (model, pos) in targets)
                 {
-                    _hitDispatcher.Dispatch(ActorHitMessage.From(model,
-                        pos,
-                        Vector3.zero,
-                        context));
+                    ApplyTo(model, pos);
                 }
 
                 return UniTask.CompletedTask;
@@ -106,7 +141,15 @@ namespace BalloonParty.Item.Lightning
                 return UniTask.CompletedTask;
             }
 
-            var tint = string.IsNullOrEmpty(sourceColorId) ? Color.white : _palette.GetColor(sourceColorId);
+            // matchColor is concrete in both paths (rainbow uses the projectile colour).
+            var tint = _palette.GetColor(matchColor);
+
+            // A rainbow chain glows iridescent (lerps through every palette colour); a concrete chain
+            // stays its own colour.
+            if (convertsToRainbow)
+            {
+                chain.SetGlowColors(PaletteColors(), settings.Lightning.GlowColorCycles);
+            }
 
             chain.PrepareDisplay(positions, settings, OnJump);
             effect.Play(Vector3.zero, tint, () => _poolManager.Return(key, effect));
@@ -121,27 +164,26 @@ namespace BalloonParty.Item.Lightning
                 }
 
                 var (model, pos) = targets[index];
-                _hitDispatcher.Dispatch(ActorHitMessage.From(model,
-                    pos,
-                    Vector3.zero,
-                    context));
+                ApplyTo(model, pos);
             }
         }
 
-        private void CollectSortedTargets(
-            IBalloonModel balloon, Vector3 origin, List<(IBalloonModel model, Vector3 worldPos)> result)
+        private Color[] PaletteColors()
         {
-            result.Clear();
-
-            if (balloon is not IHasColor sourceColor)
+            var colors = _palette.Colors;
+            var result = new Color[colors.Count];
+            for (var i = 0; i < result.Length; i++)
             {
-                return;
+                result[i] = colors[i].Color;
             }
 
-            var color = sourceColor.Color.Value;
-            // A rainbow holder is "all colours" — it chains through every coloured balloon, not just
-            // its own colour.
-            var targetsAllColors = _palette.IsRainbow(color);
+            return result;
+        }
+
+        private void CollectSortedTargets(
+            IBalloonModel balloon, Vector3 origin, string matchColor, List<(IBalloonModel model, Vector3 worldPos)> result)
+        {
+            result.Clear();
 
             for (var col = 0; col < _grid.Columns; col++)
             {
@@ -153,22 +195,12 @@ namespace BalloonParty.Item.Lightning
                     }
 
                     var slot = new Vector2Int(col, row);
-                    if (_grid.At(slot) is not IBalloonModel model)
+                    if (_grid.At(slot) is not IBalloonModel model || ReferenceEquals(model, balloon))
                     {
                         continue;
                     }
 
-                    if (ReferenceEquals(model, balloon))
-                    {
-                        continue;
-                    }
-
-                    if (model is not IHasColor modelColor)
-                    {
-                        continue;
-                    }
-
-                    if (!targetsAllColors && modelColor.Color.Value != color)
+                    if (model is not IHasColor modelColor || modelColor.Color.Value != matchColor)
                     {
                         continue;
                     }

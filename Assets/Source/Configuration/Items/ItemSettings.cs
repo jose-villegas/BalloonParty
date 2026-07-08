@@ -87,11 +87,15 @@ namespace BalloonParty.Configuration.Items
         [SerializeField] private int _lightningGlowSubdivisions = 4;
         [SerializeField] private float _lightningFractalDecay = 0.55f;
 
+        [Tooltip("How many times the glow lerps through the full colour set over the anim's duration.")]
+        [SerializeField] [Min(0f)] private float _lightningGlowColorCycles = 2f;
+
         public float SegmentsMultiplier => _lightningSegmentsMultiplier;
         public float Randomness => _lightningRandomness;
         public float JumpTime => _lightningJumpTime;
         public int GlowSubdivisions => _lightningGlowSubdivisions;
         public float FractalDecay => _lightningFractalDecay;
+        public float GlowColorCycles => _lightningGlowColorCycles;
     }
 
     [Serializable]

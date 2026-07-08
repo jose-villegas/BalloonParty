@@ -29,6 +29,12 @@ namespace BalloonParty.Item.Lightning
         private float _segmentsMultiplier;
         private IReadOnlyList<Vector3> _targetPositions;
 
+        private IReadOnlyList<Color> _glowColors;
+        private float _glowCycles;
+        private Color _glowFallbackColor = Color.white;
+        private float _glowStartTime;
+        private float _glowTotalDuration;
+
         public override void OnSpawned()
         {
             base.OnSpawned();
@@ -41,24 +47,20 @@ namespace BalloonParty.Item.Lightning
             _cts?.Cancel();
             _cts?.Dispose();
             _cts = null;
+            _glowColors = null;
             ClearRenderers();
             base.OnDespawned();
         }
 
         /// <summary>
         ///     Starts the chain-lightning animation; <paramref name="position" /> is unused. <paramref name="tint" />
-        ///     colours the glow sprite (the chain's colour), keeping the sprite's own designed alpha.
+        ///     is the glow's fallback colour when no cycle colours are set (see <see cref="SetGlowColors" />).
         /// </summary>
         public override void Play(Vector3 position, Color tint, Action onComplete = null)
         {
             OnComplete = onComplete;
-
-            if (_glowRenderer != null)
-            {
-                // Scales the chain colour's RGB — below 1 darkens, above 1 overdrives (for bloom);
-                // the sprite's own alpha is preserved.
-                _glowRenderer.color = (tint * _glowColorIntensity).WithAlpha(_glowRenderer.color.a);
-            }
+            _glowFallbackColor = tint;
+            ApplyGlowColor();
 
             if (_targetPositions == null || _targetPositions.Count < 2)
             {
@@ -67,6 +69,12 @@ namespace BalloonParty.Item.Lightning
             }
 
             PlayAsync().Forget();
+        }
+
+        public void SetGlowColors(IReadOnlyList<Color> colors, float cycles)
+        {
+            _glowColors = colors;
+            _glowCycles = Mathf.Max(0f, cycles);
         }
 
         /// <summary>
@@ -119,6 +127,41 @@ namespace BalloonParty.Item.Lightning
             _glowRenderer.enabled = true;
             _glowRenderer.transform.position = pos;
             _glowRenderer.transform.localScale = new Vector3(dia, dia, 1f);
+            ApplyGlowColor();
+        }
+
+        // Lerps the glow through its colour set, _glowCycles full loops over the anim's duration (a single
+        // colour is static). Scaled by _glowColorIntensity; keeps the sprite's designed alpha.
+        private void ApplyGlowColor()
+        {
+            if (_glowRenderer == null)
+            {
+                return;
+            }
+
+            var color = _glowFallbackColor;
+            if (_glowColors != null && _glowColors.Count > 0)
+            {
+                var progress = _glowTotalDuration > 0f
+                    ? Mathf.Clamp01((Time.time - _glowStartTime) / _glowTotalDuration)
+                    : 0f;
+                color = CycleColor(_glowColors, Mathf.Repeat(progress * _glowCycles, 1f));
+            }
+
+            _glowRenderer.color = (color * _glowColorIntensity).WithAlpha(_glowRenderer.color.a);
+        }
+
+        // t in [0,1) walks the whole colour ring once, wrapping the last back to the first.
+        private static Color CycleColor(IReadOnlyList<Color> colors, float t)
+        {
+            if (colors.Count == 1)
+            {
+                return colors[0];
+            }
+
+            var pos = t * colors.Count;
+            var i = Mathf.FloorToInt(pos) % colors.Count;
+            return Color.Lerp(colors[i], colors[(i + 1) % colors.Count], pos - Mathf.Floor(pos));
         }
 
         private async UniTaskVoid PlayAsync()
@@ -126,6 +169,10 @@ namespace BalloonParty.Item.Lightning
             var ct = _cts?.Token ?? CancellationToken.None;
             var jumpCount = _targetPositions.Count - 1;
             var rendererCount = _lineRenderers != null ? _lineRenderers.Length : 0;
+
+            // Forward then retract, one jump-time each — the window the glow colour cycles over.
+            _glowStartTime = Time.time;
+            _glowTotalDuration = Mathf.Max(0.0001f, 2 * jumpCount * _jumpTime);
 
             var (lineBuffers, cumOffsets) = ChainLightningGeometry.BuildBoltBuffers(
                 _targetPositions,

@@ -101,6 +101,11 @@ namespace BalloonParty.Configuration.Editor
                         lightning,
                         "_lightningFractalDecay",
                         "Fractal Decay");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        lightning,
+                        "_lightningGlowColorCycles",
+                        "Glow Color Cycles");
                     break;
 
                 case ItemType.Paint:
@@ -167,7 +172,7 @@ namespace BalloonParty.Configuration.Editor
                     return row * 4;
 
                 case ItemType.Lightning:
-                    return row * 7;
+                    return row * 8;
 
                 case ItemType.Paint:
                     // 2 headers + 6 blob fields + 4 spread fields.

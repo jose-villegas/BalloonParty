@@ -12,5 +12,8 @@ namespace BalloonParty.Item.Lightning
     internal interface IChainEffect
     {
         void PrepareDisplay(IReadOnlyList<Vector3> targetPositions, ItemSettings settings, Action<int> onTargetHit);
+
+        /// <summary>Sets the colours the glow lerps through, looping <paramref name="cycles" /> times over the anim. A single colour is static.</summary>
+        void SetGlowColors(IReadOnlyList<Color> colors, float cycles);
     }
 }

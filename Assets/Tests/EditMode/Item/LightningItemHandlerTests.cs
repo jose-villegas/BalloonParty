@@ -6,6 +6,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Item;
 using BalloonParty.Item.Lightning;
+using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
@@ -13,6 +14,7 @@ using BalloonParty.Slots.Grid;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
+using UniRx;
 using UnityEngine;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
@@ -36,6 +38,8 @@ namespace BalloonParty.Tests.Item
                 OnTargetHit = onTargetHit;
                 Prepared.Add(this);
             }
+
+            public void SetGlowColors(IReadOnlyList<Color> colors, float cycles) { }
 
             public override void Play(Vector3 position, Color tint, Action onComplete = null) { }
         }
@@ -68,6 +72,7 @@ namespace BalloonParty.Tests.Item
                 itemConfig,
                 _hitDispatcher,
                 palette,
+                Substitute.For<ISubscriber<ProjectileLoadedMessage>>(),
                 _grid,
                 new PoolManager());
         }
@@ -113,16 +118,37 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
-        public void Activate_RainbowHolder_ChainsThroughEveryColor()
+        public void Activate_RainbowHolder_ConvertsProjectileColorGroupToRainbow()
         {
+            var projectile = Substitute.For<IProjectileModel>();
+            projectile.ColorName.Returns(new ReactiveProperty<string>("Red"));
+            SetField(_handler, "_activeProjectile", projectile);
+
             var source = PlaceBalloon(0, 0, GamePalette.RainbowColorId);
-            PlaceBalloon(1, 0, "Red");
-            PlaceBalloon(2, 0, "Blue");
-            PlaceBalloon(3, 0, "Green");
+            var red1 = PlaceBalloon(1, 0, "Red");
+            var red2 = PlaceBalloon(2, 0, "Red");
+            var blue = PlaceBalloon(3, 0, "Blue");
 
             _handler.Activate(new ItemActivationContext(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero));
 
-            _hitDispatcher.Received(3).Dispatch(Arg.Any<ActorHitMessage>());
+            // The last-projectile colour group turns rainbow; other colours are untouched.
+            Assert.AreEqual(GamePalette.RainbowColorId, red1.Color.Value);
+            Assert.AreEqual(GamePalette.RainbowColorId, red2.Color.Value);
+            Assert.AreEqual("Blue", blue.Color.Value);
+            // It converts, never destroys.
+            _hitDispatcher.DidNotReceive().Dispatch(Arg.Any<ActorHitMessage>());
+        }
+
+        [Test]
+        public void Activate_RainbowHolder_NoProjectileColor_DoesNothing()
+        {
+            var source = PlaceBalloon(0, 0, GamePalette.RainbowColorId);
+            var red = PlaceBalloon(1, 0, "Red");
+
+            _handler.Activate(new ItemActivationContext(source, _grid.IndexToWorldPosition(new Vector2Int(0, 0)), Vector3.zero));
+
+            Assert.AreEqual("Red", red.Color.Value);
+            _hitDispatcher.DidNotReceive().Dispatch(Arg.Any<ActorHitMessage>());
         }
 
         [Test]
@@ -165,7 +191,8 @@ namespace BalloonParty.Tests.Item
                 .Do(ci => published.Add(ci.Arg<ActorHitMessage>()));
 
             var handler = new LightningItemHandler(
-                itemConfig, dispatcher, Substitute.For<IGamePalette>(), _grid, new PoolManager());
+                itemConfig, dispatcher, Substitute.For<IGamePalette>(),
+                Substitute.For<ISubscriber<ProjectileLoadedMessage>>(), _grid, new PoolManager());
 
             var sourceA = PlaceBalloon(0, 0, "Red");
             var target1 = PlaceBalloon(1, 0, "Red");

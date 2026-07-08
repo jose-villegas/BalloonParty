@@ -92,8 +92,10 @@ the **colour itself** the single source of truth:
   `BalloonModel.ResolveScoreAttribution`, `BalloonView.ApplyColorMode`).
 - **Paint collapsed to a single recolour path**: a rainbow holder's colour *is* the wildcard id, so
   recolouring targets to it converts them — `ConvertToRainbow`/`spreadsRainbow` were deleted.
-- **Rainbow item synergies specced/built**: Lightning on a rainbow holder chains through *every*
-  colour (drops the same-colour filter); Bomb on a rainbow holder piercing-kills all colours within
+- **Rainbow item synergies specced/built** (principle: a rainbow item's bonus is a *bounded
+  conversion*, never an amplified clear — it converts what it does not destroy): Lightning on a rainbow
+  holder converts a whole colour group to rainbow (colour chosen by the last projectile) instead of
+  destroying; Bomb on a rainbow holder piercing-kills all colours within
   `Radius` and converts the ring beyond it to rainbow mid-effect — `RainbowConversionRange` (outer-ring
   width, 0 disables) applied at half the effect duration, plus a visual-only `RainbowEffectScale` on the
   effect transform. Laser's rainbow behaviour is open.

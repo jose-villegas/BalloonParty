@@ -1071,3 +1071,137 @@ The strongest design usually pairs **one spatial pressure** (12.1) with **one
 economy or clock** (12.2 or 12.3): the grid creeps down while ammo/turns run out,
 so the player is squeezed from two directions. 12.4 is the safety net underneath
 either.
+
+---
+
+## 13 — Roguelike Run Modifiers (Unlockables)
+
+> Per-run modifiers earned through progression that reshape spawn odds and grant
+> triggered board effects — a strategy / roguelike layer on top of each run. Offered
+> at level-up, presented as cards, and reset when the run resets. Pairs strongly with a
+> fail state (§ 12) — picks matter far more when a run can be lost.
+
+### 13.1 Concept
+
+As a run progresses the player unlocks modifiers that bias which balloons/items spawn
+and grant triggered effects. Two archetypes:
+
+- **Passive (stacking)** — a permanent boost for the rest of the run; adds to a
+  run-scoped modifier stack. E.g. *"+0.15% bomb-item spawn chance"*, *"+1 item type
+  per spawn pass"*, *"Tough balloons start with one less hit"*.
+- **Active ("spawn now" / triggered)** — a one-shot or charge-limited effect the
+  player fires during gameplay. E.g. *"Spawn Bomb"* activates a bomb on a current grid
+  balloon; *"Clear Row"* wipes the deadline line.
+
+Visual representation: **cards** (the open presentation question). Level-up deals a
+choice of N cards; pick one, it joins the run's build.
+
+### 13.2 When unlocks are offered
+
+Level-up is the natural trigger — `ScoreLevelUpMessage` already fires and the level-up
+ceremony (`LevelUpCinematic` + popup) is an existing frozen beat. A card-select step
+slots into or just after the popup: freeze via `TimeScaleService` (already the pattern
+there), present the cards, apply the pick, release. Reuse the level-up gating so
+nothing else runs during selection; a new `Navigation`/popup sub-phase, not a new scene.
+
+### 13.3 Model sketch
+
+```csharp
+internal interface IRunModifier { ModifierKind Kind { get; } }   // Passive | Active
+
+// Passive: contributes to the run-scoped accumulator queried at decision points.
+internal interface IPassiveModifier : IRunModifier { void Apply(RunModifierState state); }
+
+// Active: fired by the player; one-shot board effect.
+internal interface IActiveModifier : IRunModifier
+{
+    int Charges { get; }
+    void Trigger(/* SlotGrid, IHitDispatcher, BalloonControllerRegistry … */);
+}
+```
+
+`RunModifierStack : IRunResettable` — holds acquired modifiers, rebuilds the
+accumulated passive state, clears on `ResetRun`. **Must be `IRunResettable`** so a new
+run starts clean (same reset graph as `ScoreController` / `LevelDifficultyResolver`).
+
+`RunModifierState` — the accumulated passive values read at decision points: per-type
+spawn-weight multipliers, "+N item types per pass", and global tuning (bomb radius,
+starting shields, hits-to-pop deltas).
+
+### 13.4 Passive modifier ideas
+
+Plug into existing decision points:
+
+- **Spawn odds** (via `ItemAssigner` weighting / the § 2.1 per-level weights): "+X%
+  chance for item type T", "+1 item slot per spawn pass", "beneficial balloon type
+  more common". The run stack is a run-scoped sibling of § 2.1's per-level
+  `DifficultyProfile` weights — same multiply-on-base mechanism, different scope.
+- **Item power** — wider bomb radius, longer lightning chains, bigger paint splash;
+  the handler reads `RunModifierState` alongside `ItemConfiguration`.
+- **Projectile** — +1 starting shield on load, an extra reload, a free color-swap.
+- **Balloon softening** — Tough/Gatekeeper start with fewer hits.
+- **Economy** (if a fail state ships, § 12) — +turn budget, slower grid encroachment.
+- **Meta-tuning as cards** — expose the pity threshold (§ 2.2) and streak bias
+  (§ 2.3): "droughts end faster", "longer color streaks".
+
+### 13.5 Active "spawn now" + grid-effect ideas
+
+Most reuse the existing item handlers and hit pipeline — an active modifier is largely
+"fire an item/effect without a projectile carrying it":
+
+- **Spawn Bomb / Lightning / Paint** — pick a target grid balloon (rule-picked or
+  player-tapped) and run the item through `ItemActivator` / `IHitDispatcher` as if it
+  had been carried there. Reuses `BombItemHandler` etc. wholesale.
+- **Board clear (full)** — pop every poppable balloon; the panic button. Iterate
+  `BalloonControllerRegistry`, dispatch a pop hit each. Rare / expensive.
+- **Row / column clear** — wipe one line; the deadline row is the natural target if
+  encroachment loss ships (§ 12.1). Cheaper and more tactical than a full clear.
+- **Color purge** — pop or recolor every balloon of one color. Pairs with the
+  all-colors level-up requirement: rescue a starved color or thin a dominant one.
+- **Targeted strike** — player taps one balloon; pop it + neighbors (small AoE). Good
+  for digging out a buried Unbreakable/Absorber.
+- **Downgrade** — knock one hit off every Tough/Gatekeeper, or make one Unbreakable
+  poppable for a turn.
+- **Gravity / shuffle** — force a balance pass or reshuffle colors to manufacture a
+  streak opportunity (ties to § 2.3's StreakBalancer).
+- **Rain** — spawn a burst of item-carrying balloons on the next pass (a loot beat).
+- **Freeze** — halt grid encroachment for N turns (defensive, if § 12.1 ships).
+
+Two sub-flavors: **untargeted** (fires on a rule-picked target — simplest UI) vs
+**targeted** (player selects — needs a targeting mode: tap-to-select with a highlight,
+gated behind a pause/`Navigation` state so the shot input doesn't fire instead).
+
+### 13.6 Integration points (existing systems)
+
+- `ItemActivator` / `IHitDispatcher` / item handlers — active item effects, no new path.
+- `ItemAssigner` weighting + § 2.1 weights — the passive spawn-odds stack.
+- `LevelDifficultyResolver` / `IActiveLevelParameters` — passive values could resolve
+  here so per-level params and run modifiers come through one read.
+- `BalloonControllerRegistry` — board / color / targeted effects iterate live balloons.
+- `ScoreLevelUpMessage` + level-up ceremony — the card-offer trigger.
+- `Navigation` + `TimeScaleService` — freeze for card-select / targeting.
+- `IRunResettable` — the modifier stack and any charges reset per run.
+
+### 13.7 Card presentation (the open visual question)
+
+- Level-up deals N cards (3?); pick 1. Rarity tiers (common/rare) tune the pool.
+- Active cards live in a small HUD tray with a charge count; arming one either
+  auto-fires or enters targeting.
+- Passive cards show as the run's collected build — readable at a glance so the player
+  understands their current odds.
+- Card = icon + name + one-line effect + rarity frame. The `SpriteLayerCombiner` baked
+  sprite tooling could pre-compose card art.
+
+### 13.8 Open questions
+
+1. **In-run only vs meta-progression** — the examples are all run-scoped ("whole
+   run"). Is there also a cross-run meta layer (which cards can appear)? Start in-run;
+   meta is a separate axis.
+2. **Offer economy** — free pick each level-up, or a currency (score, or a new drop)
+   spent in a shop? Free-at-level-up is simplest and most readable.
+3. **Active trigger UX** — charges vs cooldown vs one-shot-consumed, and how arming
+   interacts with the thrower input (needs a mode switch so a tap doesn't fire the shot).
+4. **Balance / stacking caps** — do passives cap (spawn chance ≤ 100%)? Do duplicate
+   cards stack linearly or with diminishing returns?
+5. **Targeting on touch** — reuse the aim/tap input or a dedicated select mode? The
+   prediction-trace UI may repurpose for target highlighting.
