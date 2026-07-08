@@ -4,6 +4,12 @@ Runtime cheat console for testing and debugging without modifying game state man
 
 Toggle the console window in Play Mode with the **backtick** (`` ` ``) key, or — on touch devices — a **3-finger tap** (three simultaneous touches; fires once on the rising edge, so it can't retrigger while held). The 3-finger tap only registers in a **development build** (or via Unity Remote): the whole cheat system compiles out otherwise (see below), and legacy `Input.touchCount` reads 0 in the editor Game view. The console GameObject is created automatically at runtime — no scene setup required. The console discovers all registered cheats automatically and organises them by section and tag.
 
+## In-game log console (on-device logs)
+
+`Debug.Log` output isn't visible on a device without a wired-up console. The project depends on yasirkula's [In-game Debug Console](https://github.com/yasirkula/UnityIngameDebugConsole) (`com.yasirkula.ingamedebugconsole`, a UPM git dependency in `Packages/manifest.json`) for this.
+
+`DevLogConsole` (a `MonoBehaviour`) spawns the console prefab at startup and `DontDestroyOnLoad`s it — **mobile development builds only**. Its guard, `UNITY_EDITOR || (DEVELOPMENT_BUILD && (UNITY_ANDROID || UNITY_IOS))`, keeps the component wireable in the editor but strips it from desktop dev builds and all release builds (the serialized prefab reference goes with it, so the console never ships there). At runtime it no-ops in the editor (the editor has its own Console window). Place one `DevLogConsole` in the **Launch scene** and assign the package's `IngameDebugConsole` prefab to its field.
+
 ## Build visibility
 
 The entire `Cheats/` system — console, `ICheat`, and all cheat implementations — is wrapped in `#if UNITY_EDITOR || DEVELOPMENT_BUILD`. It compiles out completely in release builds. Registration in `GameLifetimeScope` is guarded by the same directive.
