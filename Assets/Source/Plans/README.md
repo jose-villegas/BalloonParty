@@ -17,7 +17,6 @@ or a pending evaluation.
 | `PLAN-GridActorExpansion.md` | Grid actor Phase 8+ — archetypes done; 8.3 procedural placement (blocked on content) and 8.4 difficulty coupling open | active |
 | `PLAN-LossConditionPacing.md` | Loss condition + pacing — Phases 1–2 + Phase 3 (Ascent/ranges/items/grid-actor) + Phase 4 (allowed colors) all shipped; only the loss cinematic remains | active |
 | `PLAN-PlayModeCoverage.md` | Growing the PlayMode test suite — harness extraction and Tier 1–3 candidate tests pending | active |
-| `PLAN-RainbowBalloon.md` | Rainbow "wildcard" balloon — banded shader/material/prefab done; gameplay (scoring, streak, item weight, Paint→rainbow) all pending | active |
 | `PLAN-SpiderWeb.md` | Spider Web obstacle — traversable, degradable grid actor; ideation only, unimplemented | active |
 | `PLAN-TestGap.md` | June 2026 EditMode coverage audit — general gaps closed; Bush-phase test items and Tests README update open | active |
 | `PLAN-URPMigration.md` | Built-in RP → URP migration — decided *not now*; kept as decision record with explicit revisit triggers and verified inventory | conditional |
