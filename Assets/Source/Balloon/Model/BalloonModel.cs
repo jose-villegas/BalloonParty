@@ -25,7 +25,7 @@ namespace BalloonParty.Balloon.Model
         IReadOnlyReactiveProperty<ItemType> IHasItemSlot.Item => Item;
         IReadOnlyReactiveProperty<int> IHasDurability.HitsRemaining => HitsRemaining;
 
-        internal BalloonModel() : this(new BalloonModelConfig()) { }
+        internal BalloonModel() : this(new BalloonModelConfig(hitsToPop: 1)) { }
 
         internal BalloonModel(
             BalloonModelConfig config, IGamePalette palette = null, IReadOnlyList<string> allowedColors = null)
