@@ -259,8 +259,15 @@ namespace BalloonParty.Projectile.View
 
         private void UpdateGlowColor()
         {
-            if (_glowRenderer == null || string.IsNullOrEmpty(_model.ColorName.Value))
+            if (_glowRenderer == null)
             {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(_model.ColorName.Value))
+            {
+                // Washed back to colourless (e.g. by soap) — fade the glow out.
+                _glowRenderer.DOColor(new Color(1f, 1f, 1f, 0f), _glowColorDuration);
                 return;
             }
 

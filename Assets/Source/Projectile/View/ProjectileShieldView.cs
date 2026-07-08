@@ -69,8 +69,9 @@ namespace BalloonParty.Projectile.View
                 })
                 .AddTo(_disposable);
 
+            // No filter on empty: a colourless projectile (fresh launch, or washed by soap) must reset
+            // the shield tint to neutral rather than keep the previous projectile's colour.
             model.ColorName
-                .Where(c => !string.IsNullOrEmpty(c))
                 .Subscribe(UpdateColor)
                 .AddTo(_disposable);
         }
@@ -85,10 +86,12 @@ namespace BalloonParty.Projectile.View
             _disposable.Clear();
             _model = null;
             _previousShieldCount = 0;
+            _currentColor = Color.white;
             foreach (var shield in _shields)
             {
                 shield.transform.localScale = Vector3.zero;
                 shield.DOKill();
+                shield.color = Color.white.WithAlpha(_alpha);
             }
 
             gameObject.SetActive(false);
@@ -145,7 +148,7 @@ namespace BalloonParty.Projectile.View
 
         private void UpdateColor(string colorName)
         {
-            _currentColor = _palette.GetColor(colorName);
+            _currentColor = string.IsNullOrEmpty(colorName) ? Color.white : _palette.GetColor(colorName);
             var targetColor = _currentColor.WithAlpha(_alpha);
 
             foreach (var shield in _shields)
