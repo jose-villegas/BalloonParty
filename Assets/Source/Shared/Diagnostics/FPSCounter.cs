@@ -1,3 +1,5 @@
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+
 using UnityEngine;
 
 namespace BalloonParty.Shared.Diagnostics
@@ -75,3 +77,4 @@ namespace BalloonParty.Shared.Diagnostics
         }
     }
 }
+#endif
