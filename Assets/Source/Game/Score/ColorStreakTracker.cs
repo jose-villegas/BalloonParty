@@ -54,6 +54,14 @@ namespace BalloonParty.Game.Score
             return CurrentStreak;
         }
 
+        /// <summary>Extends the streak regardless of colour — used while the projectile carries a
+        /// colour-agnostic (rainbow) buff, so every pop keeps the multiplier climbing.</summary>
+        public int RecordWildcard()
+        {
+            CurrentStreak++;
+            return CurrentStreak;
+        }
+
         internal void Reset()
         {
             LastColor = null;

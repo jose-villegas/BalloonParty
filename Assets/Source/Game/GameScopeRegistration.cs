@@ -19,6 +19,7 @@ using BalloonParty.Item.Paint;
 using BalloonParty.Item.Shield;
 using BalloonParty.Nudge;
 using BalloonParty.Projectile;
+using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
@@ -131,6 +132,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<ScoreTrailService>().AsSelf();
             builder.RegisterEntryPoint<ItemAssigner>();
             builder.RegisterEntryPoint<ItemActivator>();
+            builder.RegisterEntryPoint<ProjectileBuffService>().As<IProjectileBuffs>();
         }
 
         internal static void RegisterItems(this IContainerBuilder builder)

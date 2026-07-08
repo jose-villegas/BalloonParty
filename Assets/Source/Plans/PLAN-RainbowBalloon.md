@@ -99,7 +99,16 @@ the **colour itself** the single source of truth:
   `Radius` and converts the ring beyond it to rainbow mid-effect — `RainbowConversionRange` (outer-ring
   width, 0 disables) applied at half the effect duration, plus a visual-only `RainbowEffectScale` on the
   effect transform. Laser on a rainbow holder destroys its cross as usual, then converts every surviving
-  hex neighbour bordering the beam to rainbow. All four items now have a rainbow synergy.
+  hex neighbour bordering the beam to rainbow. Shield on a rainbow holder is different in kind — instead
+  of an instant AoE it applies a **projectile buff** (`Projectile/Buffs/`): the projectile turns
+  iridescent (cycling glow), scores colour-agnostically (every pop keeps the multiplier climbing via
+  `DamageFlags.WildcardStreak` → `ColorStreakTracker.RecordWildcard`), and rainbow-converts the hex
+  neighbours of everything it pops — until it loses the granted shield to a wall (which ends the buff).
+  This introduced the general projectile-buff seam: a buff (`IProjectileBuff`) declares its own
+  pluggable `IProjectileBuffEndCondition` deciding *when* it ends (`WallBounceEndCondition` today, which
+  just subscribes to `ShieldLostMessage`; `Timer`/`PopCount`/... are new implementers, no switch, no
+  context object). Buffs are applied through `IProjectileBuffs.Apply(buff)` by anything (not just items),
+  with `ProjectileBuffService` owning storage/lifecycle. All five items now have a rainbow synergy.
 - ⚠️ Still undefined-for-now (documented, deferred): the *scoring attribution* of a rainbow-held
   Bomb/Laser/Lightning credits the sentinel colour, which drops out of concrete-colour scoring.
   Targeting/blast behaviour is defined; only the point payout on those paths is unspecced.

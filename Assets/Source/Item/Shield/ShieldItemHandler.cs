@@ -1,5 +1,6 @@
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
@@ -9,6 +10,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Item.Shield
 {
@@ -17,7 +19,10 @@ namespace BalloonParty.Item.Shield
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
+        private readonly ISubscriber<ShieldLostMessage> _wallBounces;
         private readonly IItemConfiguration _itemConfig;
+        private readonly IGamePalette _palette;
+        private readonly IProjectileBuffs _buffs;
 
         private IWriteableProjectileModel _activeProjectile;
 
@@ -28,12 +33,18 @@ namespace BalloonParty.Item.Shield
             IItemConfiguration itemConfig,
             IPublisher<ShieldGainedMessage> shieldGainedPublisher,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber,
-            ItemEffectPlayer effectPlayer)
+            ISubscriber<ShieldLostMessage> wallBounces,
+            ItemEffectPlayer effectPlayer,
+            IGamePalette palette,
+            IProjectileBuffs buffs)
         {
             _itemConfig = itemConfig;
             _shieldGainedPublisher = shieldGainedPublisher;
             _loadedSubscriber = loadedSubscriber;
+            _wallBounces = wallBounces;
             _effectPlayer = effectPlayer;
+            _palette = palette;
+            _buffs = buffs;
         }
 
         public void Start()
@@ -49,6 +60,13 @@ namespace BalloonParty.Item.Shield
             if (_activeProjectile != null)
             {
                 _activeProjectile.ShieldsRemaining.Value++;
+            }
+
+            // A rainbow holder additionally turns the projectile iridescent. The shield it just granted
+            // is what the wall consumes to end the buff, rather than destroying the projectile.
+            if (_palette.IsRainbow(balloon.GetColorId()))
+            {
+                _buffs.Apply(new RainbowProjectileBuff(_wallBounces));
             }
 
             _shieldGainedPublisher.Publish(new ShieldGainedMessage(balloon.SlotIndex.Value));

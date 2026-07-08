@@ -1,11 +1,15 @@
 using System;
 using BalloonParty.Balloon.Model;
+using BalloonParty.Configuration;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
+using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
+using BalloonParty.Slots.Grid;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
@@ -19,6 +23,7 @@ namespace BalloonParty.Tests.Projectile
         private IHitDispatcher _hitDispatcher;
         private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         private ColorStreakTracker _streakTracker;
+        private SlotGrid _grid;
         private ProjectileHitResolver _resolver;
         private ProjectileModel _projectile;
 
@@ -27,6 +32,12 @@ namespace BalloonParty.Tests.Projectile
         {
             _hitDispatcher = Substitute.For<IHitDispatcher>();
             _shieldGainedPublisher = Substitute.For<IPublisher<ShieldGainedMessage>>();
+
+            var gameConfig = Substitute.For<IGameConfiguration>();
+            gameConfig.SlotsSize.Returns(new Vector2Int(6, 10));
+            gameConfig.SlotSeparation.Returns(new Vector2(1f, 0.85f));
+            gameConfig.SlotsOffset.Returns(new Vector2(2.5f, 4f));
+            _grid = new SlotGrid(gameConfig, new BalancePathHolder());
 
             var levelUpSubscriber = Substitute.For<ISubscriber<ScoreLevelUpMessage>>();
             levelUpSubscriber
@@ -44,7 +55,7 @@ namespace BalloonParty.Tests.Projectile
 
             _streakTracker = new ColorStreakTracker(levelUpSubscriber, projectileLoadedSubscriber);
 
-            _resolver = new ProjectileHitResolver(_hitDispatcher, _shieldGainedPublisher, _streakTracker);
+            _resolver = new ProjectileHitResolver(_hitDispatcher, _shieldGainedPublisher, _streakTracker, _grid);
             _projectile = new ProjectileModel { IsFree = true };
         }
 
@@ -129,6 +140,60 @@ namespace BalloonParty.Tests.Projectile
 
             Assert.AreEqual(1, _projectile.ShieldsRemaining.Value);
             Assert.AreEqual("Blue", _projectile.ColorName.Value); // unchanged — no steal
+        }
+
+        [Test]
+        public void Resolve_RainbowBuffPop_DispatchesWildcardStreakFlag()
+        {
+            ApplyRainbowBuff();
+            var balloon = PlaceBalloon(new Vector2Int(2, 2), "Red");
+
+            _resolver.Resolve(_projectile, balloon, Vector3.zero);
+
+            _hitDispatcher.Received().Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Outcome == HitOutcome.Pop && m.Context.Flags.HasFlag(DamageFlags.WildcardStreak)));
+        }
+
+        [Test]
+        public void Resolve_RainbowBuffPop_ConvertsNeighboursToRainbow()
+        {
+            ApplyRainbowBuff();
+            var hit = PlaceBalloon(new Vector2Int(2, 2), "Red");
+            var neighbour = PlaceBalloon(new Vector2Int(1, 2), "Blue"); // a hex neighbour of (2,2)
+
+            _resolver.Resolve(_projectile, hit, Vector3.zero);
+
+            Assert.AreEqual(GamePalette.RainbowColorId, neighbour.Color.Value);
+        }
+
+        [Test]
+        public void Resolve_NoBuff_LeavesNeighboursUnchanged()
+        {
+            var hit = PlaceBalloon(new Vector2Int(2, 2), "Red");
+            var neighbour = PlaceBalloon(new Vector2Int(1, 2), "Blue");
+
+            _resolver.Resolve(_projectile, hit, Vector3.zero);
+
+            Assert.AreEqual("Blue", neighbour.Color.Value);
+        }
+
+        private void ApplyRainbowBuff()
+        {
+            var wallBounces = Substitute.For<ISubscriber<ShieldLostMessage>>();
+            wallBounces
+                .Subscribe(
+                    Arg.Any<IMessageHandler<ShieldLostMessage>>(),
+                    Arg.Any<MessageHandlerFilter<ShieldLostMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+            _projectile.AddBuff(new RainbowProjectileBuff(wallBounces));
+        }
+
+        private BalloonModel PlaceBalloon(Vector2Int slot, string color)
+        {
+            var model = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));
+            model.Color.Value = color;
+            _grid.Place(model, null, slot);
+            return model;
         }
 
         private static IBalloonModel AbsorbingBalloon()

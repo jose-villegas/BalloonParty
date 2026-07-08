@@ -12,5 +12,8 @@ namespace BalloonParty.Projectile.Model
         new float Speed { get; set; }
         new bool IsFree { get; set; }
         new IBalloonModel LastHitBalloon { get; set; }
+
+        void AddBuff(IProjectileBuff buff);
+        void RemoveBuff(IProjectileBuff buff);
     }
 }

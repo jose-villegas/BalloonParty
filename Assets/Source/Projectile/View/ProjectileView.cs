@@ -1,12 +1,14 @@
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Messages;
 using DG.Tweening;
 using MessagePipe;
@@ -25,6 +27,8 @@ namespace BalloonParty.Projectile.View
 
         [SerializeField] [Range(0f, 1f)] private float _glowAlpha = 0.5f;
         [SerializeField] private float _glowColorDuration = 0.2f;
+        [Tooltip("Full palette loops per second the glow cycles through while the rainbow buff is active.")]
+        [SerializeField] [Min(0f)] private float _rainbowGlowSpeed = 1.5f;
 
         [Header("Disappear")]
         [Tooltip("Scale-down-to-zero on the last hit (shields depleted / absorbed) and on level-up dismiss.")]
@@ -48,6 +52,9 @@ namespace BalloonParty.Projectile.View
         private ProjectileShieldView _shieldView;
         private Vector3 _baseScale;
         private bool _disappearing;
+        private Color[] _paletteColors;
+        private float _rainbowGlowTimer;
+        private bool _rainbowGlowActive;
 
         private void Awake()
         {
@@ -60,6 +67,16 @@ namespace BalloonParty.Projectile.View
             _baseScale = transform.localScale;
             _shieldView = GetComponentInChildren<ProjectileShieldView>(true);
             _projectileTrail = GetComponentInChildren<ProjectileTrail>(true);
+        }
+
+        private void Update()
+        {
+            if (_model == null || _pauseService.IsAnyPaused.Value)
+            {
+                return;
+            }
+
+            TickRainbowGlow();
         }
 
         private void FixedUpdate()
@@ -100,6 +117,8 @@ namespace BalloonParty.Projectile.View
         {
             _shieldShown = false;
             _disappearing = false;
+            _rainbowGlowActive = false;
+            _rainbowGlowTimer = 0f;
             _deflectedSubscription?.Dispose();
             _deflectedSubscription = null;
 
@@ -125,6 +144,8 @@ namespace BalloonParty.Projectile.View
             _model = null;
             _shieldShown = false;
             _disappearing = false;
+            _rainbowGlowActive = false;
+            _rainbowGlowTimer = 0f;
             transform.DOKill();
             transform.localScale = _baseScale;
             transform.rotation = Quaternion.identity;
@@ -268,6 +289,40 @@ namespace BalloonParty.Projectile.View
             }
 
             return _model.LastHitBalloon != balloonModel;
+        }
+
+        // While the rainbow buff is active the glow drives itself through the palette; on the frame the
+        // buff clears it hands control back to the stolen-colour tween.
+        private void TickRainbowGlow()
+        {
+            var active = _model.HasBuff<RainbowProjectileBuff>();
+            if (!active)
+            {
+                if (_rainbowGlowActive)
+                {
+                    _rainbowGlowActive = false;
+                    UpdateGlowColor();
+                }
+
+                return;
+            }
+
+            if (!_rainbowGlowActive)
+            {
+                _rainbowGlowActive = true;
+                _rainbowGlowTimer = 0f;
+                _paletteColors ??= _palette.ColorValues();
+                _glowRenderer?.DOKill();
+            }
+
+            if (_glowRenderer == null || _paletteColors.Length == 0)
+            {
+                return;
+            }
+
+            _rainbowGlowTimer += Time.deltaTime;
+            var t = Mathf.Repeat(_rainbowGlowTimer * _rainbowGlowSpeed, 1f);
+            _glowRenderer.color = ColorCycle.Sample(_paletteColors, t).WithAlpha(_glowAlpha);
         }
 
         private void UpdateGlowColor()

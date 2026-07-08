@@ -12,5 +12,8 @@ namespace BalloonParty.Projectile.Model
         float Speed { get; }
         bool IsFree { get; }
         IBalloonModel LastHitBalloon { get; }
+
+        bool HasBuff<T>()
+            where T : IProjectileBuff;
     }
 }

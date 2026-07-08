@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Item;
 using BalloonParty.Item.Shield;
+using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
@@ -23,6 +24,8 @@ namespace BalloonParty.Tests.Item
         private IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
         private ShieldItemHandler _handler;
         private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
+        private IGamePalette _palette;
+        private IProjectileBuffs _buffs;
 
         [SetUp]
         public void SetUp()
@@ -41,14 +44,25 @@ namespace BalloonParty.Tests.Item
                     Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            var palette = Substitute.For<IGamePalette>();
-            palette.Colors.Returns(new List<PaletteEntry>());
+            _palette = Substitute.For<IGamePalette>();
+            _palette.Colors.Returns(new List<PaletteEntry>());
+            _buffs = Substitute.For<IProjectileBuffs>();
+
+            var wallBounces = Substitute.For<ISubscriber<ShieldLostMessage>>();
+            wallBounces
+                .Subscribe(
+                    Arg.Any<IMessageHandler<ShieldLostMessage>>(),
+                    Arg.Any<MessageHandlerFilter<ShieldLostMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
 
             _handler = new ShieldItemHandler(
                 itemConfig,
                 _shieldGainedPublisher,
                 loadedSubscriber,
-                new ItemEffectPlayer(new PoolManager(), palette));
+                wallBounces,
+                new ItemEffectPlayer(new PoolManager(), _palette),
+                _palette,
+                _buffs);
 
             _handler.Start();
         }
@@ -83,6 +97,29 @@ namespace BalloonParty.Tests.Item
 
             _shieldGainedPublisher.Received(1).Publish(
                 Arg.Is<ShieldGainedMessage>(m => m.SlotIndex == slot));
+        }
+
+        [Test]
+        public void Activate_RainbowHolder_AppliesRainbowBuff()
+        {
+            _palette.IsRainbow(GamePalette.RainbowColorId).Returns(true);
+            var balloon = CreateBalloon(new Vector2Int(1, 1));
+            balloon.Color.Value = GamePalette.RainbowColorId;
+
+            _handler.Activate(new ItemActivationContext(balloon, Vector3.zero, Vector3.zero));
+
+            _buffs.Received(1).Apply(Arg.Any<IProjectileBuff>());
+        }
+
+        [Test]
+        public void Activate_NormalHolder_DoesNotApplyBuff()
+        {
+            var balloon = CreateBalloon(new Vector2Int(1, 1));
+            balloon.Color.Value = "Red";
+
+            _handler.Activate(new ItemActivationContext(balloon, Vector3.zero, Vector3.zero));
+
+            _buffs.DidNotReceive().Apply(Arg.Any<IProjectileBuff>());
         }
 
         private void SimulateProjectileLoaded(ProjectileModel projectile)

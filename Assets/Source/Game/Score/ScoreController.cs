@@ -88,11 +88,12 @@ namespace BalloonParty.Game.Score
 
             using var attributionPool = UnityEngine.Pool.ListPool<ScoreAttribution>.Get(out var attributions);
             scoreColor.ResolveScoreAttribution(in msg.Context, attributions);
-            PublishAttributionGroup(attributions, msg.WorldPosition);
+            PublishAttributionGroup(attributions, msg.WorldPosition, msg.Context.Flags);
         }
 
         /// <summary>Every message shares the same <c>GroupSize</c> so the UI can fan them out together.</summary>
-        private void PublishAttributionGroup(IReadOnlyList<ScoreAttribution> attributions, Vector3 worldPosition)
+        private void PublishAttributionGroup(
+            IReadOnlyList<ScoreAttribution> attributions, Vector3 worldPosition, DamageFlags flags)
         {
             if (attributions.Count == 0)
             {
@@ -102,7 +103,7 @@ namespace BalloonParty.Game.Score
             using var resolvedPool =
                 UnityEngine.Pool.ListPool<(string Color, int Points, int BaseProgress)>.Get(out var resolved);
 
-            var multiplier = RecordStreakMultiplier(attributions);
+            var multiplier = RecordStreakMultiplier(attributions, flags);
             ResolveAttributions(attributions, multiplier, resolved);
 
             var groupSize = SumPoints(resolved);
@@ -116,8 +117,14 @@ namespace BalloonParty.Game.Score
 
         // A mixed group breaks the streak — unless exactly one entry is a wildcard's streak anchor
         // (e.g. the rainbow balloon), in which case the streak records against that colour instead.
-        private int RecordStreakMultiplier(IReadOnlyList<ScoreAttribution> attributions)
+        private int RecordStreakMultiplier(IReadOnlyList<ScoreAttribution> attributions, DamageFlags flags)
         {
+            // A colour-agnostic (rainbow-buffed) projectile keeps the streak climbing on any pop.
+            if (flags.HasFlag(DamageFlags.WildcardStreak))
+            {
+                return _streakTracker.RecordWildcard();
+            }
+
             if (attributions.Count == 1)
             {
                 return _streakTracker.Record(attributions[0].ColorId, attributions[0].BreaksStreak);

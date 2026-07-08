@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using UniRx;
 using UnityEngine;
@@ -6,6 +7,8 @@ namespace BalloonParty.Projectile.Model
 {
     internal class ProjectileModel : IWriteableProjectileModel
     {
+        private readonly List<IProjectileBuff> _buffs = new();
+
         public ReactiveProperty<string> ColorName { get; } = new(null);
         public ReactiveProperty<int> ShieldsRemaining { get; } = new(0);
 
@@ -16,5 +19,32 @@ namespace BalloonParty.Projectile.Model
 
         IReadOnlyReactiveProperty<string> IProjectileModel.ColorName => ColorName;
         IReadOnlyReactiveProperty<int> IProjectileModel.ShieldsRemaining => ShieldsRemaining;
+
+        public bool HasBuff<T>()
+            where T : IProjectileBuff
+        {
+            for (var i = 0; i < _buffs.Count; i++)
+            {
+                if (_buffs[i] is T)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void AddBuff(IProjectileBuff buff)
+        {
+            if (!_buffs.Contains(buff))
+            {
+                _buffs.Add(buff);
+            }
+        }
+
+        public void RemoveBuff(IProjectileBuff buff)
+        {
+            _buffs.Remove(buff);
+        }
     }
 }
