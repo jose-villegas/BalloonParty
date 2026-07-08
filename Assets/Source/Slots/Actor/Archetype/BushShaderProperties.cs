@@ -8,6 +8,9 @@ namespace BalloonParty.Slots.Actor.Archetype
         internal const string RattleKeyword = "_RATTLE_ON";
 
         internal static readonly int LeafTint = Shader.PropertyToID("_LeafTint");
+        internal static readonly int LeafColor = Shader.PropertyToID("_LeafColor");
+        internal static readonly int BranchColor = Shader.PropertyToID("_BranchColor");
+        internal static readonly int AOIntensity = Shader.PropertyToID("_AOIntensity");
         internal static readonly int UVRect = Shader.PropertyToID("_UVRect");
         internal static readonly int LeafWind = Shader.PropertyToID("_LeafWind");
         internal static readonly int ShadowColor = Shader.PropertyToID("_ShadowColor");

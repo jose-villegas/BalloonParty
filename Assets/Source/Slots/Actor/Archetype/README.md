@@ -37,7 +37,7 @@ materials; one branch material per variant).
 |---|---|
 | `BushView` | `ClusterView` subclass — the renderer. On configure, wires its collaborators and asks the builder for render data; each frame submits the merged leaf batches (`DrawMeshInstanced`) and per-slot branch quads (`Graphics.DrawMesh`), falling back to per-leaf `DrawMesh` when instancing is unavailable. Disables the base `SpriteRenderer`. Owns the editor gizmos. |
 | `BushRenderDataBuilder` | Assembles `BushRenderData` from variant data + slot centers: per-slot branch material/matrix and leaf tiers, then merges every slot's leaves into ≤1023-instance batches. Each slot picks a `BushVariantData` by cycling `i % variants.Length`; leaf sprites cycle via `slotIndex % sprites.Length`. Leaf matrices are **static** (translation-only) — all animation runs on the GPU vertex shader. |
-| `BushMaterialSet` | Owns the bush's materials and their lifetime — two shared leaf materials (differ only by render queue) and one branch material per variant branch map — plus the baked branch gradient texture. Releases them on rebuild and runtime destroy. |
+| `BushMaterialSet` | Owns the bush's materials and their lifetime — two shared leaf materials (differ only by render queue) and one branch material per variant branch map — plus the baked branch gradient texture. Settings→material application is factored into `ApplyLeafProperties`/`ApplyBranchProperties`. Releases them on rebuild and runtime destroy. |
 | `BushRustleController` | Spawns rustle VFX when the projectile passes near a slot or a reported impact lands within a slot's radius. Driven each frame by `BushView`; injected with `ProjectilePositionProvider`, `ImpactEventBus`, and `PoolManager`. |
 | `BushRenderData` | Render-data value types — `LeafTier`, `LeafBatch`, `SlotRenderData`, and the `BushRenderData` container the builder produces and the view submits. |
 | `BushShaderProperties` | Cached `Shader.PropertyToID` ids and the `_RATTLE_ON` keyword, shared by the material set, builder, and view. |
@@ -80,11 +80,12 @@ global `_DisturbanceTex` without any C# wiring. Toggle via `_RATTLE_ON` keyword.
 
 `BushSettings` (ScriptableObject in `Configuration/`) — `IBushSettings`. Holds:
 - **Prefab** — `BushView` prefab reference
-- **Branch Map** — `BushVariantData[]` variants, branch shader, leaf material, world size
-- **Leaf Atlas** — sprite array for atlas sub-rects
-- **Leaf Shadow** — shadow colour, offset, softness, sprite scale
+- **Branch Map** — `BushVariantData[]` variants, branch shader, gradient, `BranchColor` (tint × gradient), leaf material, world size
+- **Branch Shadow / AO** — ground shadow colour/offset/spread/softness; central occlusion blob (`BranchAOColor`, `BranchAORadius`, `BranchAOSoftness`, `BranchAOIntensity`)
+- **Leaf** — atlas sprites, `LeafTint` (global foliage tint, applied as `_LeafColor` over the per-instance tint), shadow colour/offset/softness, sprite scale
 - **Wind** — amplitude, period, noise amplitude, scale pulse, pivot offset
 - **Rattle** — enabled toggle, amplitude, frequency, damping
+- **Editor Preview** (`#if UNITY_EDITOR`) — `LiveTuning` toggle + a `Revision` counter bumped by the SO's `OnValidate`. When on, `BushView` polls `Revision` and **rebuilds** the bush (materials + render data) whenever any field changes, so **all** fields preview live — colours, AO, wind, and structural ones (atlas, gradient, world size, depth split). Editor-only (stripped from builds), but works **in Play mode**: bushes are configured only by the DI controller (an entry point), which runs in play mode, so tune with the editor playing.
 
 ### Baking
 

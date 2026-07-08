@@ -15,9 +15,10 @@ Shader "BalloonParty/Grid/BushBranch"
         _ShadowSoftness ("Softness", Range(0, 0.08))   = 0.02
 
         [Header(AO)]
-        _AOColor    ("Color",     Color)           = (0.02, 0.02, 0.06, 0.4)
-        _AORadius   ("Radius",    Range(0.05, 1))  = 0.45
-        _AOSoftness ("Softness",  Range(0.01, 1))  = 0.3
+        _AOColor     ("Color",     Color)           = (0.02, 0.02, 0.06, 0.4)
+        _AORadius    ("Radius",    Range(0.05, 1))  = 0.45
+        _AOSoftness  ("Softness",  Range(0.01, 1))  = 0.3
+        _AOIntensity ("Intensity", Range(0, 2))     = 1
 
         [Header(Sprite)]
         _SpriteScale ("Scale", Range(0.3, 1.0)) = 0.85
@@ -48,6 +49,7 @@ Shader "BalloonParty/Grid/BushBranch"
             fixed4 _AOColor;
             float  _AORadius;
             float  _AOSoftness;
+            float  _AOIntensity;
             float  _SpriteScale;
 
             #ifdef UNITY_INSTANCING_ENABLED
@@ -144,7 +146,7 @@ Shader "BalloonParty/Grid/BushBranch"
 
                 // AO blob — radial gradient centred at trunk, darkens ground
                 float dist = length(i.uv - 0.5) * 2.0;
-                fixed aoAlpha = _AOColor.a * (1.0 - smoothstep(
+                fixed aoAlpha = _AOColor.a * _AOIntensity * (1.0 - smoothstep(
                     _AORadius - _AOSoftness, _AORadius, dist));
                 fixed4 ao = fixed4(_AOColor.rgb, aoAlpha);
 

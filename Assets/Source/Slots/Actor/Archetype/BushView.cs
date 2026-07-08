@@ -35,6 +35,9 @@ namespace BalloonParty.Slots.Actor.Archetype
         // Baked WORLD matrices ignore this transform, so the Ascent slide is applied as a manual offset.
         private Vector3 _restPosition;
         private Matrix4x4[] _offsetMatrices;
+#if UNITY_EDITOR
+        private int _lastRevision;
+#endif
 
         private static bool SupportsInstancing
         {
@@ -51,6 +54,17 @@ namespace BalloonParty.Slots.Actor.Archetype
             {
                 return;
             }
+
+#if UNITY_EDITOR
+            // Live tuning: any inspector edit bumps the SO's revision — rebuild so every field (colours,
+            // AO, wind, and structural ones like atlas/gradient/world size) previews. Runs in play mode
+            // too (that's where the DI controller configures bushes); still editor-only via UNITY_EDITOR.
+            if (_settings != null && _settings.LiveTuning && _settings.Revision != _lastRevision)
+            {
+                _lastRevision = _settings.Revision;
+                RebuildRenderResources();
+            }
+#endif
 
             var leafMesh = GetLeafQuadMesh();
             var branchMesh = GetBranchQuadMesh();
@@ -106,20 +120,29 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return;
             }
 
-            EnsureComponents();
-            _materials.Release();
-            _materials.BuildLeafMaterials(_settings.LeafAtlasSprites);
-            _renderData = _builder.Build(SlotCentersBuffer, SlotCount);
-            _rustle.SetSlots(CollectSlotPositions());
+            RebuildRenderResources();
 
             // Statics spawn before the Ascent lifts the scenario root, so this is the settled position.
             _restPosition = transform.position;
+#if UNITY_EDITOR
+            _lastRevision = _settings.Revision;
+#endif
         }
 
         protected override void OnCleared()
         {
             // LateUpdate draws off _renderData, not the base Renderer, so it must be dropped to stop drawing.
             _renderData = null;
+        }
+
+        // Rebuilds materials + render data from the current settings. Reused by the live-tuning rebuild.
+        private void RebuildRenderResources()
+        {
+            EnsureComponents();
+            _materials.Release();
+            _materials.BuildLeafMaterials(_settings.LeafAtlasSprites);
+            _renderData = _builder.Build(SlotCentersBuffer, SlotCount);
+            _rustle.SetSlots(CollectSlotPositions());
         }
 
         private void EnsureComponents()

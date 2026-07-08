@@ -3,6 +3,7 @@ Shader "BalloonParty/Grid/BushLeaf"
     Properties
     {
         _MainTex ("Leaf Atlas", 2D) = "white" {}
+        _LeafColor ("Leaf Tint", Color) = (1, 1, 1, 1)
 
         [Header(Shadow)]
         _ShadowColor    ("Color",    Color)           = (0.15, 0.18, 0.1, 0.55)
@@ -48,6 +49,7 @@ Shader "BalloonParty/Grid/BushLeaf"
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
+            fixed4 _LeafColor;
             fixed4 _ShadowColor;
             float2 _ShadowOffset;
             float  _ShadowSoftness;
@@ -236,7 +238,7 @@ Shader "BalloonParty/Grid/BushLeaf"
 
                 fixed4 col = tex2D(_MainTex, i.uv);
                 float4 tint = UNITY_ACCESS_INSTANCED_PROP(Props, _LeafTint);
-                col *= tint;
+                col *= tint * _LeafColor;
                 col.a *= spriteMask;
 
                 // Specular highlight: radial falloff from offset center, masked to leaf shape

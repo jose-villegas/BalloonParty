@@ -26,7 +26,9 @@ namespace BalloonParty.Configuration.Effects
         [SerializeField] private BushVariantData[] _bushVariants;
         [SerializeField] private Shader _branchShader;
         [SerializeField] [GradientUsage(false)] private Gradient _branchGradient = CreateDefaultBranchGradient();
+        [SerializeField] private Color _branchColor = new(0.35f, 0.22f, 0.10f, 1f);
         [SerializeField] private Material _leafMaterial;
+        [SerializeField] private Color _leafTint = Color.white;
         [SerializeField] private float _bushWorldSize = 0.9f;
 
         [Header("Branch Shadow")]
@@ -40,6 +42,7 @@ namespace BalloonParty.Configuration.Effects
         [SerializeField] private Color _branchAOColor = new(0.02f, 0.02f, 0.06f, 0.4f);
         [SerializeField] [Range(0.05f, 1f)] private float _branchAORadius = 0.45f;
         [SerializeField] [Range(0.01f, 1f)] private float _branchAOSoftness = 0.3f;
+        [SerializeField] [Range(0f, 2f)] private float _branchAOIntensity = 1f;
 
         [Header("Leaf Atlas")]
         [SerializeField] private Sprite[] _leafAtlasSprites;
@@ -68,6 +71,14 @@ namespace BalloonParty.Configuration.Effects
         [SerializeField] private ParticleSystem _bushRustleVfx;
         [SerializeField] [Range(0.1f, 2f)] private float _rustleProximityRadius = 0.5f;
 
+#if UNITY_EDITOR
+        [Header("Editor Preview")]
+        [Tooltip("Editor only: when on, bushes rebuild whenever any field here changes so tweaks preview live in the Scene view.")]
+        [SerializeField] private bool _liveTuning;
+
+        private int _revision;
+#endif
+
         public BushView BushPrefab => _bushPrefab;
         public float AnimationSpeed => _animationSpeed;
         public float Padding => _padding;
@@ -76,7 +87,9 @@ namespace BalloonParty.Configuration.Effects
         public BushVariantData[] BushVariants => _bushVariants;
         public Shader BranchShader => _branchShader;
         public Gradient BranchGradient => _branchGradient;
+        public Color BranchColor => _branchColor;
         public Material LeafMaterial => _leafMaterial;
+        public Color LeafTint => _leafTint;
         public float BushWorldSize => _bushWorldSize;
         public float BranchSpriteScale => _branchSpriteScale;
         public Color BranchShadowColor => _branchShadowColor;
@@ -86,6 +99,7 @@ namespace BalloonParty.Configuration.Effects
         public Color BranchAOColor => _branchAOColor;
         public float BranchAORadius => _branchAORadius;
         public float BranchAOSoftness => _branchAOSoftness;
+        public float BranchAOIntensity => _branchAOIntensity;
         public Sprite[] LeafAtlasSprites => _leafAtlasSprites;
         public Color LeafShadowColor => _leafShadowColor;
         public Vector2 LeafShadowOffset => _leafShadowOffset;
@@ -103,6 +117,17 @@ namespace BalloonParty.Configuration.Effects
         public float RattleDamping => _rattleDamping;
         public ParticleSystem BushRustleVfx => _bushRustleVfx;
         public float RustleProximityRadius => _rustleProximityRadius;
+
+#if UNITY_EDITOR
+        public bool LiveTuning => _liveTuning;
+        public int Revision => _revision;
+
+        // Bumped on any inspector edit; BushView polls it to rebuild while live tuning.
+        private void OnValidate()
+        {
+            _revision++;
+        }
+#endif
 
         private static Gradient CreateDefaultBranchGradient()
         {

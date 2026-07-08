@@ -101,6 +101,7 @@ Material:
     - _EnableDensity: 1
     - _EnableDisturbance: 0
     - _EnableLighting: 1
+    - _EnableRattle: 0
     - _EnableShadow: 1
     - _FineScale: 3
     - _GlossMapScale: 1
@@ -131,7 +132,11 @@ Material:
     - _NormalStrength: 2.5
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _PivotOffset: 0
     - _RadiusJitter: 0.15
+    - _RattleAmplitude: 15
+    - _RattleDamping: 3
+    - _RattleFrequency: 12
     - _RimIntensity: 0.764
     - _RimWidth: 0.059
     - _RosetteCount: 12
@@ -140,7 +145,7 @@ Material:
     - _ScallopSize: 0.0349
     - _ShadowOffsetX: 0.05
     - _ShadowOffsetY: -0.05
-    - _ShadowSoftness: 0.0322
+    - _ShadowSoftness: 0.08
     - _SlotRadius: 0.45
     - _SminK: 0.274
     - _SmoothnessTextureChannel: 0
@@ -154,6 +159,10 @@ Material:
     - _VeinDarken: 0.8
     - _VeinWidth: 0.09
     - _WindAmount: 0.01
+    - _WindAmplitude: 3
+    - _WindFrequency: 0.5
+    - _WindNoiseAmplitude: 1.5
+    - _WindScalePulse: 0.03
     - _WindSpeed: 0.5
     - _ZWrite: 1
     m_Colors:
@@ -167,6 +176,7 @@ Material:
     - _FieldBoundsSize: {r: 10, g: 16, b: 0, a: 0}
     - _HighlightColor: {r: 0.81472254, g: 0.8773585, b: 0.63318795, a: 0.2509804}
     - _HighlightOffset: {r: -0.08, g: 0.08, b: 0, a: 0}
+    - _LeafColor: {r: 1, g: 1, b: 1, a: 1}
     - _LeafVariationColor: {r: 0.25, g: 0.55, b: 0.15, a: 1}
     - _LightColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
     - _LightDir: {r: 1, g: -1, b: 0, a: 0}
@@ -174,7 +184,7 @@ Material:
     - _ScrollSpeedBase: {r: 0.03, g: 0.02, b: 0, a: 0}
     - _ScrollSpeedDetail: {r: 0.06, g: -0.04, b: 0, a: 0}
     - _ScrollSpeedFine: {r: -0.04, g: 0.08, b: 0, a: 0}
-    - _ShadowColor: {r: 0, g: 0, b: 0, a: 0.47058824}
+    - _ShadowColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     - _ShadowOffset: {r: 0.1, g: -0.1, b: 0, a: 0}
     - _TopColor: {r: 0.3, g: 0.6, b: 0.18, a: 1}
   m_BuildTextureStacks: []

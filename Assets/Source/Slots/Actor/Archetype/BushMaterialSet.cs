@@ -47,21 +47,12 @@ namespace BalloonParty.Slots.Actor.Archetype
                 return existing;
             }
 
-            var branchSpriteScale = Mathf.Max(_settings.BranchSpriteScale, 0.3f);
             var material = new Material(_settings.BranchShader)
             {
                 mainTexture = branchMap,
                 renderQueue = 3000
             };
-            material.SetFloat(BushShaderProperties.SpriteScale, branchSpriteScale);
-            material.SetTexture(BushShaderProperties.BranchGradient, GetOrBakeGradient());
-            material.SetColor(BushShaderProperties.ShadowColor, _settings.BranchShadowColor);
-            material.SetVector(BushShaderProperties.ShadowOffset, _settings.BranchShadowOffset);
-            material.SetFloat(BushShaderProperties.ShadowSpread, _settings.BranchShadowSpread);
-            material.SetFloat(BushShaderProperties.ShadowSoftness, _settings.BranchShadowSoftness);
-            material.SetColor(BushShaderProperties.AOColor, _settings.BranchAOColor);
-            material.SetFloat(BushShaderProperties.AORadius, _settings.BranchAORadius);
-            material.SetFloat(BushShaderProperties.AOSoftness, _settings.BranchAOSoftness);
+            ApplyBranchProperties(material);
 
             _branchMaterials[branchMap] = material;
             return material;
@@ -93,6 +84,13 @@ namespace BalloonParty.Slots.Actor.Archetype
                 enableInstancing = true,
                 renderQueue = queue
             };
+            ApplyLeafProperties(material);
+            return material;
+        }
+
+        private void ApplyLeafProperties(Material material)
+        {
+            material.SetColor(BushShaderProperties.LeafColor, _settings.LeafTint);
             material.SetColor(BushShaderProperties.ShadowColor, _settings.LeafShadowColor);
             material.SetVector(BushShaderProperties.ShadowOffset, _settings.LeafShadowOffset);
             material.SetFloat(BushShaderProperties.ShadowSoftness, _settings.LeafShadowSoftness);
@@ -112,8 +110,25 @@ namespace BalloonParty.Slots.Actor.Archetype
                 material.SetFloat(BushShaderProperties.RattleFrequency, _settings.RattleFrequency);
                 material.SetFloat(BushShaderProperties.RattleDamping, _settings.RattleDamping);
             }
+            else
+            {
+                material.DisableKeyword(BushShaderProperties.RattleKeyword);
+            }
+        }
 
-            return material;
+        private void ApplyBranchProperties(Material material)
+        {
+            material.SetFloat(BushShaderProperties.SpriteScale, Mathf.Max(_settings.BranchSpriteScale, 0.3f));
+            material.SetTexture(BushShaderProperties.BranchGradient, GetOrBakeGradient());
+            material.SetColor(BushShaderProperties.BranchColor, _settings.BranchColor);
+            material.SetColor(BushShaderProperties.ShadowColor, _settings.BranchShadowColor);
+            material.SetVector(BushShaderProperties.ShadowOffset, _settings.BranchShadowOffset);
+            material.SetFloat(BushShaderProperties.ShadowSpread, _settings.BranchShadowSpread);
+            material.SetFloat(BushShaderProperties.ShadowSoftness, _settings.BranchShadowSoftness);
+            material.SetColor(BushShaderProperties.AOColor, _settings.BranchAOColor);
+            material.SetFloat(BushShaderProperties.AORadius, _settings.BranchAORadius);
+            material.SetFloat(BushShaderProperties.AOSoftness, _settings.BranchAOSoftness);
+            material.SetFloat(BushShaderProperties.AOIntensity, _settings.BranchAOIntensity);
         }
 
         private Texture2D GetOrBakeGradient()

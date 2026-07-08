@@ -38,7 +38,7 @@ MonoBehaviour:
   _branchShader: {fileID: 4800000, guid: e6e471ce52d2648ceb0558c1856353df, type: 3}
   _branchGradient:
     serializedVersion: 2
-    key0: {r: 0.25, g: 0.15, b: 0.08, a: 1}
+    key0: {r: 0.6226415, g: 0.41217637, b: 0.26726595, a: 1}
     key1: {r: 0.4, g: 0.26, b: 0.14, a: 1}
     key2: {r: 0.25, g: 0.15, b: 0.08, a: 0}
     key3: {r: 0, g: 0, b: 0, a: 0}
@@ -63,19 +63,22 @@ MonoBehaviour:
     atime6: 0
     atime7: 0
     m_Mode: 0
-    m_ColorSpace: -1
+    m_ColorSpace: 0
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
+  _branchColor: {r: 1, g: 1, b: 1, a: 1}
   _leafMaterial: {fileID: 2100000, guid: 07bd2f8ccc97b408abee96710de6a460, type: 2}
+  _leafTint: {r: 1, g: 1, b: 1, a: 1}
   _bushWorldSize: 0.7
   _branchSpriteScale: 0.75
-  _branchShadowColor: {r: 0, g: 0, b: 0, a: 0.54901963}
-  _branchShadowOffset: {x: 0.1, y: -0.1}
-  _branchShadowSpread: 0.1
-  _branchShadowSoftness: 0.015
-  _branchAOColor: {r: 0.02, g: 0.02, b: 0.06, a: 0.54901963}
-  _branchAORadius: 0.7
-  _branchAOSoftness: 0.5
+  _branchShadowColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  _branchShadowOffset: {x: 0.04, y: -0.05}
+  _branchShadowSpread: 0.05
+  _branchShadowSoftness: 0.0135
+  _branchAOColor: {r: 0.2, g: 0.2, b: 0.2, a: 1}
+  _branchAORadius: 0.9
+  _branchAOSoftness: 0.8
+  _branchAOIntensity: 0.6
   _leafAtlasSprites:
   - {fileID: -2007796275, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
   - {fileID: 1326091701, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
@@ -141,9 +144,9 @@ MonoBehaviour:
   - {fileID: 98428826, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
   - {fileID: -1504240839, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
   - {fileID: 462520907, guid: da8ef16e42e72417ea6406092b0704af, type: 3}
-  _leafShadowColor: {r: 0.15, g: 0.18, b: 0.1, a: 0.55}
+  _leafShadowColor: {r: 0.23124924, g: 0.2924528, b: 0.125534, a: 0.7529412}
   _leafShadowOffset: {x: 0.1, y: -0.1}
-  _leafShadowSoftness: 0.015
+  _leafShadowSoftness: 0.035
   _leafSpriteScale: 0.75
   _leafPivotOffset: -0.325
   _leafDepthSplit: 0.325
@@ -158,3 +161,4 @@ MonoBehaviour:
   _bushRustleVfx: {fileID: 2148469744637963286, guid: 9475a309e2b76409d9ecde053c0a41b7,
     type: 3}
   _rustleProximityRadius: 0.5
+  _liveTuning: 0

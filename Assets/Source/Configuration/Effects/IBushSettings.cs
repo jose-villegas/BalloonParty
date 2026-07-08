@@ -11,7 +11,9 @@ namespace BalloonParty.Configuration.Effects
         BushVariantData[] BushVariants { get; }
         Shader BranchShader { get; }
         Gradient BranchGradient { get; }
+        Color BranchColor { get; }
         Material LeafMaterial { get; }
+        Color LeafTint { get; }
         float BushWorldSize { get; }
         float BranchSpriteScale { get; }
         Color BranchShadowColor { get; }
@@ -21,6 +23,7 @@ namespace BalloonParty.Configuration.Effects
         Color BranchAOColor { get; }
         float BranchAORadius { get; }
         float BranchAOSoftness { get; }
+        float BranchAOIntensity { get; }
         Sprite[] LeafAtlasSprites { get; }
         Color LeafShadowColor { get; }
         Vector2 LeafShadowOffset { get; }
@@ -38,5 +41,13 @@ namespace BalloonParty.Configuration.Effects
         float RattleDamping { get; }
         ParticleSystem BushRustleVfx { get; }
         float RustleProximityRadius { get; }
+
+#if UNITY_EDITOR
+        /// <summary>Editor-only: when on, bushes rebuild whenever <see cref="Revision" /> changes so tweaks preview live.</summary>
+        bool LiveTuning { get; }
+
+        /// <summary>Editor-only: bumped on every inspector edit; views poll it to detect settings changes.</summary>
+        int Revision { get; }
+#endif
     }
 }
