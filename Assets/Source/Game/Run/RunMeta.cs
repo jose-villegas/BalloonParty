@@ -11,14 +11,14 @@ namespace BalloonParty.Game.Run
         private readonly ReactiveProperty<int> _bestLevel;
         private readonly ReactiveProperty<int> _bestScore;
 
+        public IReadOnlyReactiveProperty<int> BestLevel => _bestLevel;
+        public IReadOnlyReactiveProperty<int> BestScore => _bestScore;
+
         public RunMeta()
         {
             _bestLevel = new ReactiveProperty<int>(PlayerPrefs.GetInt(BestLevelKey, 0));
             _bestScore = new ReactiveProperty<int>(PlayerPrefs.GetInt(BestScoreKey, 0));
         }
-
-        public IReadOnlyReactiveProperty<int> BestLevel => _bestLevel;
-        public IReadOnlyReactiveProperty<int> BestScore => _bestScore;
 
         public void RecordRun(int level, int score)
         {

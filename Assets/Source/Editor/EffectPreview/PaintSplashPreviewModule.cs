@@ -53,12 +53,12 @@ namespace BalloonParty.Editor.EffectPreview
         private float SpreadBaseWidth => (_ctx?.Settings ?? PreStartSettings)?.Paint.SpreadBaseWidth ?? 2.5f;
         private float SpreadBlobRadius => (_ctx?.Settings ?? PreStartSettings)?.Paint.SpreadBlobRadius ?? 0.35f;
 
+        public bool UsesColorPicker => true;
+
         internal PaintSplashPreviewModule(PaintSplashView view)
         {
             _view = view;
         }
-
-        public bool UsesColorPicker => true;
 
         public void DrawGUI()
         {

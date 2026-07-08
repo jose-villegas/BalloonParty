@@ -25,8 +25,9 @@ MessagePipe (`IPublisher<T>`/`ISubscriber<T>`), UniTask (`async UniTask`), DOTwe
 ## Code rules
 
 ### Field order (top → bottom)
-1. `const` · 2. `static readonly` · 3. `[SerializeField]` · 4. `[Inject]` · 5. `readonly` · 6. mutable
+1. `const` · 2. `static readonly` · 3. `[SerializeField]` · 4. `[Inject]` · 5. `readonly` · 6. mutable · 7. properties
 (Attribute-decorated fields group by attribute, not by readonly/mutable.)
+- **Properties live in this top block, after the fields and before the constructor** — never among constructors or methods. Order: `fields → properties → constructors → methods`. A property (incl. expression-bodied getters) declared after a constructor or method is an error. Exception: each `#if`/`#else` preprocessor branch is its own context, so an editor-only property inside an `#if UNITY_EDITOR` block below the class's methods is fine (the same ordering still applies *within* that branch).
 
 ### Method order (top → bottom)
 1. Constructors · 2. Unity lifecycle (`Awake`→`OnEnable`→`Start`→`Update`→…) · 3. `[Inject]` methods · 4. interface impls · 5. public · 6. protected · 7. private

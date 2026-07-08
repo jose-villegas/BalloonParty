@@ -13,17 +13,17 @@ namespace BalloonParty.Shared.Pool
 
         private float _speed = 1f;
 
+        internal FlightPhase Phase { get; private set; }
+        internal Transform Transform => _transform;
+        internal Vector3 Origin => _origin;
+        internal float Speed => _speed;
+
         internal TrailFlight(Transform transform, Vector3 origin)
         {
             _transform = transform;
             _origin = origin;
             Phase = FlightPhase.InFlight;
         }
-
-        internal FlightPhase Phase { get; private set; }
-        internal Transform Transform => _transform;
-        internal Vector3 Origin => _origin;
-        internal float Speed => _speed;
 
         internal void Pause()
         {

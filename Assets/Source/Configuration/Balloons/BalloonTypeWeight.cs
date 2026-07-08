@@ -17,15 +17,15 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("0 = use the catalog BalloonPrefabEntry.MaxCount for this type.")]
         [SerializeField] private int _maxCountOverride;
 
+        public BalloonType Type => _type;
+        public float Weight => _weight;
+        public int MaxCountOverride => _maxCountOverride;
+
         public BalloonTypeWeight(BalloonType type, float weight, int maxCountOverride = 0)
         {
             _type = type;
             _weight = weight;
             _maxCountOverride = maxCountOverride;
         }
-
-        public BalloonType Type => _type;
-        public float Weight => _weight;
-        public int MaxCountOverride => _maxCountOverride;
     }
 }

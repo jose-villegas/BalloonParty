@@ -22,13 +22,13 @@ namespace BalloonParty.Game.Cinematics
         private bool _hasBaseState;
         private Tween _tween;
 
+        public bool HasCamera => _camera != null;
+
         public CinematicCameraRig(CinematicCameraView view, OrthogonalSizeCameraController orthoController)
         {
             _camera = view != null ? view.Camera : null;
             _orthoController = orthoController;
         }
-
-        public bool HasCamera => _camera != null;
 
         public void PreparePanIn(CameraRigCinematicSettings segment)
         {

@@ -337,8 +337,11 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
 
     last_group = 0
     in_class = False
+    seen_method = False
     brace_depth = 0
     class_brace_depth = 0
+    paren_depth = 0
+    pp_stack = []  # saved seen_method per open #if — each preprocessor branch is its own ordering context
 
     # Scan a comment/string-blanked view so braces inside a string literal can't corrupt depth.
     code = _code_view(lines)
@@ -347,9 +350,16 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
 
         brace_depth += stripped.count("{") - stripped.count("}")
 
-        if re.match(r"(public|internal|private|protected)?\s*(abstract\s+|sealed\s+|static\s+|partial\s+|readonly\s+|ref\s+)*(class|struct|interface|enum|record)\s+", stripped):
+        # A line that begins inside unclosed parens is a continuation of a multi-line expression or
+        # signature (e.g. an AnimationCurve `= new(` initializer's Keyframe(...) lines), not a member
+        # declaration — skip it so it can't be mistaken for a method/field.
+        line_start_paren = paren_depth
+        paren_depth += stripped.count("(") - stripped.count(")")
+
+        if re.match(r"(?:public|internal|private|protected)?\s*(?:abstract\s+|sealed\s+|static\s+|partial\s+|readonly\s+|ref\s+)*(?:class|struct|interface|enum|record)\s+", stripped):
             in_class = True
             last_group = 0
+            seen_method = False
             class_brace_depth = brace_depth
             continue
 
@@ -360,8 +370,31 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
         if brace_depth != class_brace_depth + 1:
             continue
 
-        # Skip methods, constructors, properties with bodies
+        if line_start_paren > 0:
+            continue
+
+        # Each preprocessor branch is its own ordering context: an editor-only property inside an
+        # `#if UNITY_EDITOR` block below the class's methods is fine (still on top *within its clause*).
+        # `#if` opens a fresh context; `#else`/`#elif` restart the branch; `#endif` restores the outer one.
+        if stripped.startswith("#if"):
+            pp_stack.append(seen_method)
+            seen_method = False
+            continue
+        if stripped.startswith("#endif"):
+            if pp_stack:
+                seen_method = pp_stack.pop()
+            continue
+        if stripped.startswith("#el"):
+            seen_method = False
+            continue
+
+        # Skip methods, constructors, and property/field lines carrying a call — but record when a
+        # method or constructor has begun, so a property declared below is flagged: properties belong in
+        # the top block (fields → properties → constructors → methods). Requiring an access modifier +
+        # name + "(" keeps stray calls in initialisers (new(...), Keyframe(...)) from tripping it.
         if "(" in stripped and ")" in stripped and "=" not in stripped.split("(")[0]:
+            if re.match(r"\s*(?:public|private|protected|internal)[\w\s<>\[\],\.]*\s+\w+\s*\(", stripped):
+                seen_method = True
             continue
 
         # Check previous line for attributes that may span to this line
@@ -392,6 +425,9 @@ def check_member_ordering(path: Path, lines: list[str], result: AuditResult):
             # Expression-body property (e.g. `internal Foo Bar => _bar;`)
             if re.match(r"\s*(private|public|protected|internal)\s+\S+.*\s+=>\s+", stripped):
                 group = GROUP_PROPERTY
+                if seen_method:
+                    result.add(Violation(str(path), i, "member-ordering",
+                        "property declared after a method — move it to the top block with the other properties"))
             else:
                 continue
         else:

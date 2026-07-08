@@ -7,12 +7,12 @@ namespace BalloonParty.Shared.GameState
     {
         private readonly ICinematicsSettings _settings;
 
+        public bool IsPlaying => Cinematic.IsPlaying;
+
         public CinematicStateService(ICinematicsSettings settings)
         {
             _settings = settings;
         }
-
-        public bool IsPlaying => Cinematic.IsPlaying;
 
         public bool Has(CinematicTraits trait)
         {

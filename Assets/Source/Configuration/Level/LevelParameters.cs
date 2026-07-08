@@ -42,6 +42,22 @@ namespace BalloonParty.Configuration.Level
         private IReadOnlyList<ItemSettings> _items = Array.Empty<ItemSettings>();
         private IReadOnlyList<string> _allowedColorNames = Array.Empty<string>();
 
+        public int SpawnLines => _spawnLines;
+        public int BoardLines => _boardLines;
+        public int ItemCadence => _itemCadence;
+        public int FirstSpawnTurn => _firstSpawnTurn;
+        public AnimationCurve InitialItemCountWeights => _initialItemCountWeights;
+        public AnimationCurve ItemCountWeights => _itemCountWeights;
+        public IReadOnlyList<ItemSettings> Items => _items;
+        public IReadOnlyList<string> AllowedColors => _allowedColorNames;
+
+        /// <summary>Same bit-per-color convention as <see cref="ColorableBalloonVariant" />'s mask — all bits set = every palette color.</summary>
+        public int AllowedColorsMask => _allowedColorsMask;
+
+        // Not part of the ILevelParameters read surface consumers use — resolver-only.
+        internal BalloonTypeWeight[] BalloonWeights => _balloonWeights;
+        internal ItemTypeWeight[] ItemWeights => _itemWeights;
+
         public LevelParameters()
         {
         }
@@ -63,22 +79,6 @@ namespace BalloonParty.Configuration.Level
             _gridActorGates = gridActorGates;
             _allowedColorsMask = allowedColorsMask;
         }
-
-        public int SpawnLines => _spawnLines;
-        public int BoardLines => _boardLines;
-        public int ItemCadence => _itemCadence;
-        public int FirstSpawnTurn => _firstSpawnTurn;
-        public AnimationCurve InitialItemCountWeights => _initialItemCountWeights;
-        public AnimationCurve ItemCountWeights => _itemCountWeights;
-        public IReadOnlyList<ItemSettings> Items => _items;
-        public IReadOnlyList<string> AllowedColors => _allowedColorNames;
-
-        /// <summary>Same bit-per-color convention as <see cref="ColorableBalloonVariant" />'s mask — all bits set = every palette color.</summary>
-        public int AllowedColorsMask => _allowedColorsMask;
-
-        // Not part of the ILevelParameters read surface consumers use — resolver-only.
-        internal BalloonTypeWeight[] BalloonWeights => _balloonWeights;
-        internal ItemTypeWeight[] ItemWeights => _itemWeights;
 
         // Separate from construction because the bridge needs the catalog, unavailable to the pure Resolve() path.
         internal void BindResolved(
@@ -122,31 +122,31 @@ namespace BalloonParty.Configuration.Level
     // A range's balloon weight bridged onto its catalog entry.
     internal sealed class ResolvedBalloonEntry : IWeightedEntry
     {
+        public BalloonPrefabEntry Source { get; }
+        public float Weight { get; }
+        public int MaxCount { get; }
+        public string PoolKey => Source.PoolKey;
+
         public ResolvedBalloonEntry(BalloonPrefabEntry source, float weight, int maxCount)
         {
             Source = source;
             Weight = weight;
             MaxCount = maxCount;
         }
-
-        public BalloonPrefabEntry Source { get; }
-        public float Weight { get; }
-        public int MaxCount { get; }
-        public string PoolKey => Source.PoolKey;
     }
 
     internal sealed class ResolvedItemEntry : IWeightedEntry
     {
+        public ItemSettings Source { get; }
+        public float Weight { get; }
+        public int MaxCount { get; }
+        public string PoolKey => Source.Type.ToString();
+
         public ResolvedItemEntry(ItemSettings source, float weight, int maxCount)
         {
             Source = source;
             Weight = weight;
             MaxCount = maxCount;
         }
-
-        public ItemSettings Source { get; }
-        public float Weight { get; }
-        public int MaxCount { get; }
-        public string PoolKey => Source.Type.ToString();
     }
 }

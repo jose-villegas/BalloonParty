@@ -17,14 +17,14 @@ namespace BalloonParty.Game.Danger
         private readonly ReactiveProperty<float> _level = new(0f);
         private readonly CompositeDisposable _subscriptions = new();
 
+        public IReadOnlyReactiveProperty<float> Level => _level;
+
         public SpaceDanger(SlotGrid grid, IPlayerHealth health, IActiveLevelParameters levelParams)
         {
             _grid = grid;
             _health = health;
             _levelParams = levelParams;
         }
-
-        public IReadOnlyReactiveProperty<float> Level => _level;
 
         public void Start()
         {

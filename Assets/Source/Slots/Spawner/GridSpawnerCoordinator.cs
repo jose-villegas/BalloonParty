@@ -16,6 +16,8 @@ namespace BalloonParty.Slots.Spawner
         private readonly IReadyGate _gate;
         private readonly CancellationTokenSource _cts = new();
 
+        public int ResetOrder => RunResetOrder.Respawn;
+
         [Inject]
         internal GridSpawnerCoordinator(IEnumerable<IGridSpawner> spawners, IReadyGate gate)
         {
@@ -33,8 +35,6 @@ namespace BalloonParty.Slots.Spawner
             _cts.Cancel();
             _cts.Dispose();
         }
-
-        public int ResetOrder => RunResetOrder.Respawn;
 
         // Final reset stage — repopulates the cleared board, skipping the navigation gate.
         public void ResetRun(int generation)

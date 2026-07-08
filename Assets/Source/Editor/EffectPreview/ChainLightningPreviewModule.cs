@@ -47,12 +47,14 @@ namespace BalloonParty.Editor.EffectPreview
         private float _glowToIdx;
         private int _glowSubdivisions;
 
+        public bool UsesColorPicker => true;
+
+        private float GlowMaxIdx => _glowPath != null && _glowPath.Length > 0 ? _glowPath.Length - 1 : 0f;
+
         internal ChainLightningPreviewModule(ChainLightningView view)
         {
             _view = view;
         }
-
-        public bool UsesColorPicker => true;
 
         public void DrawGUI()
         {
@@ -230,8 +232,6 @@ namespace BalloonParty.Editor.EffectPreview
         public void DrawSceneGizmos()
         {
         }
-
-        private float GlowMaxIdx => _glowPath != null && _glowPath.Length > 0 ? _glowPath.Length - 1 : 0f;
 
         private void InterpolateGlow()
         {

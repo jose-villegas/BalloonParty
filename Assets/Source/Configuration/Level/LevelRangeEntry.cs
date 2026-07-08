@@ -15,6 +15,11 @@ namespace BalloonParty.Configuration.Level
 
         [SerializeField] private RangedLevelParameters _parameters;
 
+        public int FromLevel => _fromLevel;
+        public int ToLevel => _toLevel;
+        public bool IsOpenEnded => _toLevel <= 0;
+        public RangedLevelParameters Parameters => _parameters;
+
         /// <summary>Use this outside the Inspector — the default struct ctor leaves <see cref="Parameters" /> null.</summary>
         public LevelRangeEntry(int fromLevel, int toLevel, RangedLevelParameters parameters)
         {
@@ -22,11 +27,6 @@ namespace BalloonParty.Configuration.Level
             _toLevel = toLevel;
             _parameters = parameters;
         }
-
-        public int FromLevel => _fromLevel;
-        public int ToLevel => _toLevel;
-        public bool IsOpenEnded => _toLevel <= 0;
-        public RangedLevelParameters Parameters => _parameters;
 
         public bool Contains(int level)
         {

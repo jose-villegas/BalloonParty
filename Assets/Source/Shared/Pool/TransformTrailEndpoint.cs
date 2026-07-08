@@ -9,12 +9,12 @@ namespace BalloonParty.Shared.Pool
     {
         private readonly Transform _transform;
 
+        public Vector3 Center => _transform.position;
+
         public TransformTrailEndpoint(Transform transform)
         {
             _transform = transform;
         }
-
-        public Vector3 Center => _transform.position;
 
         public Vector3 RandomPosition()
         {

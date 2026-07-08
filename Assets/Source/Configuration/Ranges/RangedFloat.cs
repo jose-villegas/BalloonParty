@@ -12,16 +12,16 @@ namespace BalloonParty.Configuration.Ranges
         [SerializeField] private float _max;
         [SerializeField] private RangeMode _mode;
 
+        public float Min => _min;
+        public float Max => _max;
+        public RangeMode Mode => _mode;
+
         public RangedFloat(float min, float max, RangeMode mode = RangeMode.Fixed)
         {
             _min = min;
             _max = max;
             _mode = mode;
         }
-
-        public float Min => _min;
-        public float Max => _max;
-        public RangeMode Mode => _mode;
 
         /// <summary>Resolves a concrete value for a level's position within its range.</summary>
         /// <param name="positionInRange">0..1 position of the level within its range; ignored by Fixed/Random.</param>

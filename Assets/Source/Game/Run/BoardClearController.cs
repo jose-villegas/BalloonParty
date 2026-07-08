@@ -8,12 +8,12 @@ namespace BalloonParty.Game.Run
     {
         private readonly IPublisher<BoardClearMessage> _publisher;
 
+        public int ResetOrder => RunResetOrder.Board;
+
         public BoardClearController(IPublisher<BoardClearMessage> publisher)
         {
             _publisher = publisher;
         }
-
-        public int ResetOrder => RunResetOrder.Board;
 
         public void ResetRun(int generation)
         {

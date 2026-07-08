@@ -70,6 +70,12 @@ namespace BalloonParty.UI.Score
         private bool _active;
         private Tween _flexTween;
 
+        public Vector3 Center => RectAnchorMath.Center((RectTransform)transform);
+
+        // The level-up ceremony is running (popup + Ascent) until the FSM returns to Playing — during it
+        // scoring is closed, so trail arrivals / score points shouldn't spawn notices or move the slider.
+        private bool LevelUpInProgress => _levelProgress.Phase.Value != LevelUpPhase.Playing;
+
         private void Awake()
         {
             // Self-heal prefabs predating these fields.
@@ -225,10 +231,6 @@ namespace BalloonParty.UI.Score
             _visibilityGroup.DOFade(targetAlpha, _visibilityTweenDuration).SetUpdate(true).SetLink(gameObject);
         }
 
-        // The level-up ceremony is running (popup + Ascent) until the FSM returns to Playing — during it
-        // scoring is closed, so trail arrivals / score points shouldn't spawn notices or move the slider.
-        private bool LevelUpInProgress => _levelProgress.Phase.Value != LevelUpPhase.Playing;
-
         private bool IsColorActive()
         {
             var allowed = _levelParams.Current.AllowedColors;
@@ -319,8 +321,6 @@ namespace BalloonParty.UI.Score
                 _animator.SetBool(CompletedParam, true);
             }
         }
-
-        public Vector3 Center => RectAnchorMath.Center((RectTransform)transform);
 
         public Vector3 RandomPosition()
         {

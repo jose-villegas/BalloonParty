@@ -20,17 +20,17 @@ namespace BalloonParty.Shared.Disturbance
         private LocalKeyword _stampsOnKeyword;
         private bool _stampsKeywordResolved;
 
-        public DisturbanceFieldResources(IDisturbanceFieldSettings settings)
-        {
-            _settings = settings;
-        }
-
         public RenderTexture FieldTexture => _readFromA ? _fieldA : _fieldB;
         public Material DiffusionMaterial => _diffusionMaterial;
         public Material StampMaterial => _batchedStampMaterial;
         public bool IsReady => _fieldA != null && _batchedStampMaterial != null;
 
         private RenderTexture FieldWrite => _readFromA ? _fieldB : _fieldA;
+
+        public DisturbanceFieldResources(IDisturbanceFieldSettings settings)
+        {
+            _settings = settings;
+        }
 
         public void Initialize(int width, int height)
         {

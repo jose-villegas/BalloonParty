@@ -13,13 +13,13 @@ namespace BalloonParty.Configuration.GridActors
         [SerializeField] private GridActorType _type;
         [SerializeField] private int _count;
 
+        public GridActorType Type => _type;
+        public int Count => _count;
+
         public ResolvedGridActorGate(GridActorType type, int count)
         {
             _type = type;
             _count = count;
         }
-
-        public GridActorType Type => _type;
-        public int Count => _count;
     }
 }

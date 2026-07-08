@@ -17,6 +17,8 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("Dimensionless multiplier over the points-required-for-level formula. Flat 1.0 = no effect.")]
         [SerializeField] private AnimationCurve _thresholdModifier = AnimationCurve.Constant(1, 100, 1f);
 
+        public IReadOnlyList<LevelRangeEntry> Ranges => _ranges;
+
         private void OnValidate()
         {
 #if UNITY_EDITOR
@@ -27,8 +29,6 @@ namespace BalloonParty.Configuration.Level
             WarnOnNonMonotonicThreshold();
 #endif
         }
-
-        public IReadOnlyList<LevelRangeEntry> Ranges => _ranges;
 
         public float ThresholdModifier(int level)
         {

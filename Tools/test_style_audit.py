@@ -97,6 +97,88 @@ namespace N
 }
 """, [6])
 
+# A property declared after a method belongs in the top block — flag it.
+expect_lines("member-ordering: property after a method is flagged", "member-ordering", """\
+namespace N
+{
+    internal class C
+    {
+        private int _x;
+
+        private void Foo() { }
+
+        public int X => _x;
+    }
+}
+""", [9])
+
+# Constructors count too — properties must precede them: fields → properties → ctor → methods.
+expect_lines("member-ordering: property after a constructor is flagged", "member-ordering", """\
+namespace N
+{
+    internal class C
+    {
+        private readonly int _x;
+
+        public C(int x)
+        {
+            _x = x;
+        }
+
+        public int X => _x;
+    }
+}
+""", [12])
+
+# A multi-line field initialiser whose continuation looks like a call (new(new Key(...))) must not be
+# mistaken for a method that would flag the property below it.
+expect_lines("member-ordering: multi-line initialiser is not a method", "member-ordering", """\
+namespace N
+{
+    internal class C
+    {
+        private readonly Curve _c =
+            new(new Key(0f, 0f), new Key(1f, 1f));
+
+        public int X => 0;
+    }
+}
+""", [])
+
+# A property inside an #if branch below the class's methods is its own ordering context — allowed.
+expect_lines("member-ordering: property in an #if branch below methods is allowed", "member-ordering", """\
+namespace N
+{
+    internal class C
+    {
+        private int _x;
+
+        public void Foo() { }
+
+#if UNITY_EDITOR
+        public int Editor => _x;
+#endif
+    }
+}
+""", [])
+
+# ...but within that branch the rule still holds: a property after a method inside the #if is flagged.
+expect_lines("member-ordering: property after a method inside an #if is flagged", "member-ordering", """\
+namespace N
+{
+    internal class C
+    {
+        private int _x;
+
+#if UNITY_EDITOR
+        private void Foo() { }
+
+        public int Editor => _x;
+#endif
+    }
+}
+""", [10])
+
 # ── method-ordering (warning severity) ────────────────────────────────────────
 
 expect_severity("method-ordering is a warning", "method-ordering", """\
