@@ -8,7 +8,6 @@ or a pending evaluation.
 
 | File | Description | Status |
 |------|-------------|--------|
-| `PLAN-AuditRemediation.md` | Remediation roadmap from the 2026-07 full audit — Phases 0–5 done (incl. 5a/5b/5c, 5d atlas, 5f); Phase 6 (N1/N3/N4/6a) deferred | active |
 | `PLAN-BubbleClusterHitFeedback.md` | Soap Cluster hit VFX position, spin impulse, and `IBalloonHitHandler` cleanup — not yet actioned | active |
 | `PLAN-Bush-Sprite-Baking.md` | Baked 2D skeletal plant system — Phases 0–4 done; Phase 5 visual polish and leaf-tip detection fix open | active |
 | `PLAN-CinematicsArchitecture.md` | Traits + settings SO + camera-rig runner refactor — Phases 1–5 shipped; Phase 6 composer waits on a second camera effect | conditional |

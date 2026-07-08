@@ -16,8 +16,8 @@
 Why not now (verified against the project, not generic advice):
 
 1. **The bottleneck is fill rate.** The dominant costs (10-tap blur/shadow sprite
-   shaders on every balloon layer, PuffCloud noise, transparent overdraw — see
-   @ref plan_audit_remediation Phase 5) cost the same under either pipeline. The fixes
+   shaders on every balloon layer, PuffCloud noise, transparent overdraw — the 2026-07
+   rendering fill-rate remediation) cost the same under either pipeline. The fixes
    are pipeline-agnostic baking work.
 2. **The batching win is smaller than it sounds.** URP's SRP Batcher excludes renderers
    using `MaterialPropertyBlock`s — which the balloon variants, trails, and bushes use.
@@ -42,7 +42,7 @@ render features for post effects.
 
 ## Prerequisites — do these first (they shrink the migration ~70%)
 
-From @ref plan_audit_remediation Phase 5, independently worthwhile:
+From the 2026-07 rendering fill-rate remediation (completed; plan retired, in git history), independently worthwhile:
 
 1. **5a — bake shadow/blur into sprite textures.** Retires the entire
    `Sprite/SpriteShadow`, `SpriteBlur`, `SpriteShadowComposite`, `SpriteShine`,
