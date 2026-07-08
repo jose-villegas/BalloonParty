@@ -472,6 +472,21 @@ diffusion reform rate.
 Both extensions are additive — `IPassThrough` stays a marker today and gains members
 (or a companion interface) only when a concrete actor type demands it.
 
+### 5.6 Spider Web Obstacle *(from PLAN-SpiderWeb)*
+
+A **traversable + degradable** grid actor — fills the vocabulary gap where no actor is
+currently both pass-through *and* destructible. The projectile passes through
+(`PassThrough`) but each pass **tears** the web, degrading it through visual stages;
+after **N hits** it breaks and clears the slot. Distinct from the other blockers —
+Deflector (`Deflect`), Absorber (`Absorb`), Gatekeeper (`Deflect` → `Pop` after N) all
+stop the shot; the Spider Web lets shots through while still wearing down.
+
+Sketch: `SpiderWebObstacleModel : IWriteableSlotActor, IPassThrough` with a
+`HitsRemaining` countdown; the view swaps strand-density stages per hit (full → frayed
+→ tattered → break). Needs a `GridActorConfiguration` entry + art (idle sway, hit tear,
+break). The full ideation lived in the retired `PLAN-SpiderWeb` (recoverable from git
+history).
+
 ---
 
 ## 6 — Puff Cloud Polish & Performance
