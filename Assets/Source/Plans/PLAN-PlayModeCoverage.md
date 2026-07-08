@@ -34,31 +34,34 @@ Unity licence + graphics device — so the suite stays **small and local** until
 invariants** (counts, settled-ness, state transitions, no-throw), never exact placements or
 pixels — spawn/colour/cluster randomness makes specifics non-deterministic.
 
-## Current PlayMode coverage (3 tests)
+## Current PlayMode coverage (11 tests, all green 2026-07-09)
 
 | Fixture | Covers |
 |---|---|
-| `RunRestartPlayModeTests` (1) | Restart clears → repopulates the board (caught the prewarm "await twice" race) |
-| `PressureLossPlayModeTests` (2) | Spawn-saturation → reject → HP drain → GameOver |
+| `RunRestartPlayModeTests` | Restart clears → repopulates the board (caught the prewarm "await twice" race) |
+| `PressureLossPlayModeTests` (2) | Initial health + spawn-saturation → reject → HP drain → GameOver |
+| `BombActivationPlayModeTests` | Bomb `OverlapCircle` blast pops a neighbour |
+| `LaserActivationPlayModeTests` | Laser `CircleCast` cross removes a balloon |
+| `DisturbanceFieldPlayModeTests` | GPU field stamps/ticks + publishes `_DisturbanceTex` without error |
+| `BalanceSettlePlayModeTests` | Spawn wave → board settles (nothing left in transit) |
+| `PoolIntegrityPlayModeTests` | Restart cycles repopulate without errors |
+| `PaintActivationPlayModeTests` | Pooled splash flights run without error; count stable (recolour ≠ destroy) |
+| `LevelUpCinematicPlayModeTests` | Cheat-driven level-up ceremony runs without throwing |
+| `OverflowThrowerLockPlayModeTests` | Overflow hold locks the thrower (fire gated on `PauseService`) |
 
-## Harness
+## Harness — `PlayModeGameTest` (DONE)
 
-The two fixtures already share an (un-extracted) pattern:
-
-```csharp
-yield return LoadGameScene();                              // SceneManager.LoadSceneAsync("Game")
-var scope = Object.FindFirstObjectByType<GameLifetimeScope>();
-var grid  = scope.Container.Resolve<SlotGrid>();
-yield return WaitUntil(() => BalloonCount(grid) > 0);      // poll-with-yield
-```
-
-**First step: extract `PlayModeGameTest`** (base fixture) so each new test is ~10 lines:
+Every fixture derives from it; each new test is ~10 lines. It provides:
 
 - `LoadGameScene()` — load + one settle frame so `GameLifetimeScope` builds and entry points run.
 - `Resolve<T>()` — scope lookup + `Container.Resolve<T>()`.
-- `WaitUntil(Func<bool>, float timeoutSeconds = 5f)` — **must** take a timeout and fail loudly
-  rather than hang the runner (the current helper loops forever).
-- `[TearDown]` — unload/reset so fixtures don't bleed (each test gets a fresh scene).
+- `WaitUntil(cond, timeout, message)` — fails loudly on timeout (never hangs the runner).
+- `FillAndSettle(grid)` — packs a few lines, then waits for the overflow hold to release and all
+  balance moves to leave transit.
+- `TryFindInteriorBalloon` (requires a populated neighbourhood) + `WaitForColliderAt` (an
+  `OverlapPoint` probe — the grid registers a balloon before its collider finishes flying there).
+- `[SetUp] ResetNavigation()` — returns to Launch so a GameOver test doesn't leave the next one's
+  spawn gate shut (PlayMode shares static state; no domain reload between tests).
 
 ## Conventions for PlayMode tests
 
@@ -71,42 +74,30 @@ yield return WaitUntil(() => BalloonCount(grid) > 0);      // poll-with-yield
   (it would have caught the `Stamp`-before-`Start` NRE at integration level).
 - **`LogAssert`** — assert the absence of error logs over the run where relevant.
 
-## Candidate coverage (tiered by value × risk)
+## Shipped — notes where the test differs from the original sketch
 
-### Tier 1 — zero coverage today, highest gameplay risk
+Tier 1 (Bomb, Laser, Disturbance), Tier 2 (BalanceSettle, PoolIntegrity, Paint) and Tier 3
+(LevelUpCinematic, OverflowThrowerLock) are all built and green. Right-sizings made when reality
+diverged from the sketch (PlayMode can only assert what it can drive without running headless):
 
-| Test | Setup → assertion | Reaches |
-|---|---|---|
-| `ShotLoopPlayModeTests` | Fire the loaded projectile at a placed balloon → assert it pops, a trail arrives, the bar/score increments, and the thrower reloads | ThrowerController→View, ProjectileHitResolver, ScoreTrailService, reload |
-| `BombActivationPlayModeTests` | Place balloons in/out of blast radius, activate a Bomb → assert in-radius balloons popped, out-of-radius survived | `BombItemHandler.BlastBalloons` (`OverlapCircle`) — **0 coverage** |
-| `LaserActivationPlayModeTests` | Place balloons along the cross, activate a Laser → assert only crossed balloons hit | `LaserItemHandler.CastCross` (`CircleCast`) — **0 coverage** |
-| `DisturbanceFieldPlayModeTests` | Resolve the service, stamp from bomb/paint/projectile sources, tick ~30 frames → assert no exceptions/error logs and `_DisturbanceTex` global is set | RT ping-pong + `Graphics.Blit`; guards the `Stamp`/`Start` bug class |
+- **Paint** is a pooled-splash **smoke** test (runs without error, count stays stable). The recolour
+  *correctness* stays in EditMode — the shipped blob radius is too sparse to reliably land on grid
+  slots from an arbitrary aim, so a spatial recolour assertion is non-deterministic here.
+- **Overflow** asserts the **lock** only. The recoverable release window drifts toward GameOver under
+  continued saturation and is too timing-fragile to assert deterministically.
+- **PoolIntegrity** asserts repopulate-across-cycles-without-errors — `PoolManager` exposes no
+  idle/active counts, so a true Get/Return balance can't be inspected; a leak surfaces as an error.
+- **LevelUpCinematic** asserts the ceremony leaves the `Playing` phase and runs frames without a
+  throw (the no-throw guard for the fragile path), driven by the `Trigger Level Up` score cheat.
 
-### Tier 2 — async / pooling / animation
+## Remaining
 
-| Test | Setup → assertion | Reaches |
-|---|---|---|
-| `BalanceSettlePlayModeTests` | Spawn a wave with gaps → wait → assert the board settles (no unbalanced dynamic actor remains) | `BalloonBalancer` frame-deferred scan+move+DOTween |
-| `PoolIntegrityPlayModeTests` | Run several spawn/clear cycles → assert pool `Get`/`Return` balance, returned views deactivated, no growth/leak | `PoolManager`/`PoolChannel`, prewarm |
-| `PaintActivationPlayModeTests` | Activate Paint with mixed-colour neighbours → assert neighbours recolour, splash effect spawns/returns, no throw | `PaintItemHandler.Activate` + pooled `PaintSplashView` |
-
-### Tier 3 — valuable, harder to assert
-
-| Test | Setup → assertion | Reaches |
-|---|---|---|
-| `LevelUpCinematicPlayModeTests` | Drive a level-up → assert the cinematic plays, bars drain, state returns to `Game`, no throw | `CinematicDirector` / `LevelUpTrailEffect` (memory-flagged fragile) |
-| `OverflowThrowerLockPlayModeTests` | Force an overflow that pops → assert the thrower is locked during the reject sequence and unlocks only if hearts remain | overflow-hold + `PauseSource.Overflow` |
-| `BushRustlePlayModeTests` | Move the projectile across a bush → assert each slot rustles once on entry, re-arms on exit | `BushRustleController.Tick` |
-
-## Sequencing
-
-1. **Extract `PlayModeGameTest`** and migrate the two existing fixtures onto it (no behaviour
-   change; kills the duplication, adds the `WaitUntil` timeout).
-2. **Tier 1** — the shot loop + the two physics activations + the disturbance smoke. Largest
-   risk, zero current coverage.
-3. **Tier 2** as capacity allows.
-4. **Tier 3** opportunistically, especially the cinematic (it's the most fragile and least
-   covered orchestration).
+- **`ShotLoopPlayModeTests`** (Tier 1) — real projectile flight → pop → score. Needs a **test-only
+  fire seam** on `ThrowerController`: launching the model directly (`IsFree`/`Direction`) fights its
+  load/aim/fire state machine. Add a minimal internal `FireForTest(direction)` (or expose the active
+  model) first, then this becomes straightforward.
+- **`BushRustlePlayModeTests`** (Tier 3) — needs a **bush-containing level** loaded (level 1 has none)
+  and an observable rustle signal to assert against (`BushRustleController` has no hook today).
 
 ## Open questions / constraints
 

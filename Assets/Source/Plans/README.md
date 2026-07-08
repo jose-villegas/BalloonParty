@@ -15,6 +15,6 @@ or a pending evaluation.
 | `PLAN-FutureIdeas.md` | Unscheduled backlog of deferred features, improvement concepts, and speculative designs — items graduate into dedicated plans | active |
 | `PLAN-GridActorExpansion.md` | Grid actor Phase 8+ — archetypes done; 8.3 procedural placement (blocked on content) and 8.4 difficulty coupling open | active |
 | `PLAN-LossConditionPacing.md` | Loss condition + pacing — Phases 1–2 + Phase 3 (Ascent/ranges/items/grid-actor) + Phase 4 (allowed colors) all shipped; only the loss cinematic remains | active |
-| `PLAN-PlayModeCoverage.md` | Growing the PlayMode test suite — harness extraction and Tier 1–3 candidate tests pending | active |
+| `PLAN-PlayModeCoverage.md` | Growing the PlayMode test suite — harness + 11 tests done (all green); only ShotLoop (needs a fire seam) and BushRustle (needs bush content) remain | active |
 | `PLAN-URPMigration.md` | Built-in RP → URP migration — decided *not now*; kept as decision record with explicit revisit triggers and verified inventory | conditional |
 | `Plans.md` | Doxygen index page linking all plans | — |
