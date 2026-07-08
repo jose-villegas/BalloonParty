@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1100208598559579564}
   - component: {fileID: 5867446928136110388}
+  - component: {fileID: 407297722597467233}
   m_Layer: 15
   m_Name: Shine
   m_TagString: Untagged
@@ -82,7 +83,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
-  m_Color: {r: 1, g: 0.72156864, b: 0.68235296, a: 0.3764706}
+  m_Color: {r: 0.9, g: 0.37058824, b: 0.34235293, a: 0.36078432}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -91,6 +92,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &407297722597467233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 465278815284797808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 0.9
+  _preserveAlpha: 1
 --- !u!1 &542124234737859115
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,6 +116,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3993891551127112789}
   - component: {fileID: 7475820808402176120}
+  - component: {fileID: 7261943078602428383}
   m_Layer: 15
   m_Name: Shine
   m_TagString: Untagged
@@ -173,7 +189,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
-  m_Color: {r: 1, g: 0.72156864, b: 0.68235296, a: 0.3764706}
+  m_Color: {r: 0.9, g: 0.37058824, b: 0.34235293, a: 0.36078432}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -182,6 +198,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &7261943078602428383
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 542124234737859115}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 0.9
+  _preserveAlpha: 1
 --- !u!1 &558472162186776707
 GameObject:
   m_ObjectHideFlags: 0
@@ -465,6 +495,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8197894905451323457}
   - component: {fileID: 8787264875986515759}
+  - component: {fileID: 8949480502357145530}
   m_Layer: 15
   m_Name: Beam (1)
   m_TagString: Untagged
@@ -539,7 +570,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 5e278044598260e479e2348104387296, type: 3}
-  m_Color: {r: 1, g: 0.059113305, b: 0, a: 1}
+  m_Color: {r: 1.5, g: 0.61764705, b: 0.57058823, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -548,6 +579,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &8949480502357145530
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 629122290102963553}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1.5
+  _preserveAlpha: 0
 --- !u!1 &635137334747679915
 GameObject:
   m_ObjectHideFlags: 0
@@ -722,7 +767,7 @@ SpriteRenderer:
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -741,6 +786,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2461251948694621031}
   - component: {fileID: 6970384715435370865}
+  - component: {fileID: 1250333181788532816}
   m_Layer: 15
   m_Name: Shine (1)
   m_TagString: Untagged
@@ -813,7 +859,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
-  m_Color: {r: 1, g: 0.4198113, b: 0.4247369, a: 0.627451}
+  m_Color: {r: 0.6, g: 0.24705884, b: 0.2282353, a: 0.1254902}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -822,6 +868,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1250333181788532816
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1218237789941419504}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 0.6
+  _preserveAlpha: 1
 --- !u!1 &1272990581047496538
 GameObject:
   m_ObjectHideFlags: 0
@@ -1302,7 +1362,7 @@ SpriteRenderer:
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
-  m_Color: {r: 1, g: 0, b: 0, a: 1}
+  m_Color: {r: 1, g: 0, b: 0, a: 0}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -1321,6 +1381,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7393044646475414905}
   - component: {fileID: 6827562895073396161}
+  - component: {fileID: 7107603623170844394}
   m_Layer: 15
   m_Name: Beam (2)
   m_TagString: Untagged
@@ -1395,7 +1456,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 5e278044598260e479e2348104387296, type: 3}
-  m_Color: {r: 1, g: 0.059113305, b: 0, a: 1}
+  m_Color: {r: 1.5, g: 0.61764705, b: 0.57058823, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -1404,6 +1465,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &7107603623170844394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2879775726319176561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1.5
+  _preserveAlpha: 0
 --- !u!1 &2937434659370905787
 GameObject:
   m_ObjectHideFlags: 0
@@ -1505,6 +1580,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3736777622039502101}
   - component: {fileID: 6596919871519451120}
+  - component: {fileID: 4676365450197259224}
   m_Layer: 15
   m_Name: Shine (1)
   m_TagString: Untagged
@@ -1577,7 +1653,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
-  m_Color: {r: 1, g: 0.4198113, b: 0.4247369, a: 0.627451}
+  m_Color: {r: 0.6, g: 0.24705884, b: 0.2282353, a: 0.1254902}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -1586,6 +1662,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &4676365450197259224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3425072436568664343}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 0.6
+  _preserveAlpha: 1
 --- !u!1 &3554557271000300998
 GameObject:
   m_ObjectHideFlags: 0
@@ -1644,6 +1734,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7186441334475336603}
+  - component: {fileID: 6148231270745804347}
   m_Layer: 15
   m_Name: Lasers
   m_TagString: Untagged
@@ -1670,6 +1761,31 @@ Transform:
   - {fileID: 1535484200866554064}
   m_Father: {fileID: 3169692521933047321}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6148231270745804347
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4334650777745772950}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 24566fefffaa4df4910230bebc7c853b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Shared.Rendering.CompositeColorableRenderer
+  _renderers:
+  - {fileID: 1791552791111114230}
+  - {fileID: 969584192408775873}
+  - {fileID: 7351892164908121571}
+  - {fileID: 8949480502357145530}
+  - {fileID: 7261943078602428383}
+  - {fileID: 4676365450197259224}
+  - {fileID: 7107603623170844394}
+  - {fileID: 407297722597467233}
+  - {fileID: 1250333181788532816}
+  - {fileID: 4819400606838917888}
+  - {fileID: 1292369617799129100}
+  - {fileID: 4493104013956455691}
 --- !u!1 &4493476097444642119
 GameObject:
   m_ObjectHideFlags: 0
@@ -1862,7 +1978,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3169692521933047321}
   - component: {fileID: 4949984372360077627}
-  - component: {fileID: 7084871819143963872}
+  - component: {fileID: 6370257692819509042}
   m_Layer: 15
   m_Name: AVFX_LaserRange
   m_TagString: Untagged
@@ -1880,7 +1996,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0.015, z: 0}
-  m_LocalScale: {x: 0.7, y: 0.7, z: 1}
+  m_LocalScale: {x: 0, y: 0, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 9030305557869097273}
@@ -1909,7 +2025,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &7084871819143963872
+--- !u!114 &6370257692819509042
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1918,9 +2034,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 5266042713840032911}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4988a12c624403f9234afbd114618be, type: 3}
+  m_Script: {fileID: 11500000, guid: 9023b60a5f92946f58f80571a9cccd5b, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Shared.AnimatorEffectView
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Item.Laser.LaserView
+  _colorableRenderers:
+  - {fileID: 6148231270745804347}
 --- !u!1 &5405885084401642091
 GameObject:
   m_ObjectHideFlags: 0
@@ -1931,6 +2049,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2956035276895537822}
   - component: {fileID: 1240179276344237672}
+  - component: {fileID: 1292369617799129100}
   m_Layer: 15
   m_Name: Shine
   m_TagString: Untagged
@@ -2003,7 +2122,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
-  m_Color: {r: 1, g: 0.72156864, b: 0.68235296, a: 0.3764706}
+  m_Color: {r: 0.9, g: 0.37058824, b: 0.34235293, a: 0.36078432}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -2012,6 +2131,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1292369617799129100
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5405885084401642091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 0.9
+  _preserveAlpha: 1
 --- !u!1 &5506200657411492707
 GameObject:
   m_ObjectHideFlags: 0
@@ -2113,6 +2246,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7712453797235192149}
   - component: {fileID: 8272565104779928691}
+  - component: {fileID: 7351892164908121571}
   m_Layer: 15
   m_Name: Shine (1)
   m_TagString: Untagged
@@ -2185,7 +2319,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
-  m_Color: {r: 1, g: 0.4198113, b: 0.4247369, a: 0.627451}
+  m_Color: {r: 0.6, g: 0.24705884, b: 0.2282353, a: 0.1254902}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -2194,6 +2328,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &7351892164908121571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5563266250251050289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 0.6
+  _preserveAlpha: 1
 --- !u!1 &5866123009643907811
 GameObject:
   m_ObjectHideFlags: 0
@@ -2603,6 +2751,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6333769125950680210}
   - component: {fileID: 5604626951279775814}
+  - component: {fileID: 1791552791111114230}
   m_Layer: 15
   m_Name: Beam
   m_TagString: Untagged
@@ -2677,7 +2826,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 5e278044598260e479e2348104387296, type: 3}
-  m_Color: {r: 1, g: 0.059113305, b: 0, a: 1}
+  m_Color: {r: 1.5, g: 0.61764705, b: 0.57058823, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -2686,6 +2835,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &1791552791111114230
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6815975081646716212}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1.5
+  _preserveAlpha: 0
 --- !u!1 &7072180470866357140
 GameObject:
   m_ObjectHideFlags: 0
@@ -2696,6 +2859,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1535484200866554064}
   - component: {fileID: 6895816185539500941}
+  - component: {fileID: 4819400606838917888}
   m_Layer: 15
   m_Name: Beam (3)
   m_TagString: Untagged
@@ -2770,7 +2934,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 5e278044598260e479e2348104387296, type: 3}
-  m_Color: {r: 1, g: 0.059113305, b: 0, a: 1}
+  m_Color: {r: 1.5, g: 0.61764705, b: 0.57058823, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -2779,6 +2943,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &4819400606838917888
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7072180470866357140}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1.5
+  _preserveAlpha: 0
 --- !u!1 &7102335678049011944
 GameObject:
   m_ObjectHideFlags: 0
@@ -2789,6 +2967,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8612517990577609208}
   - component: {fileID: 1734276731639626300}
+  - component: {fileID: 969584192408775873}
   m_Layer: 15
   m_Name: Shine
   m_TagString: Untagged
@@ -2861,7 +3040,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
-  m_Color: {r: 1, g: 0.72156864, b: 0.68235296, a: 0.3764706}
+  m_Color: {r: 0.9, g: 0.37058824, b: 0.34235293, a: 0.36078432}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -2870,6 +3049,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &969584192408775873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7102335678049011944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 0.9
+  _preserveAlpha: 1
 --- !u!1 &7613630860627246036
 GameObject:
   m_ObjectHideFlags: 0
@@ -3153,6 +3346,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1415982590236462535}
   - component: {fileID: 8493449225106193693}
+  - component: {fileID: 4493104013956455691}
   m_Layer: 15
   m_Name: Shine (1)
   m_TagString: Untagged
@@ -3225,7 +3419,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 6f156cbf289826b4e82447c9425695dc, type: 3}
-  m_Color: {r: 1, g: 0.4198113, b: 0.4247369, a: 0.627451}
+  m_Color: {r: 0.6, g: 0.24705884, b: 0.2282353, a: 0.1254902}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 1
@@ -3234,6 +3428,20 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &4493104013956455691
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8509301109707896716}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 0.6
+  _preserveAlpha: 1
 --- !u!1 &8699489419242747683
 GameObject:
   m_ObjectHideFlags: 0

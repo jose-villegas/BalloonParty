@@ -9,7 +9,12 @@ namespace BalloonParty.Balloon.View
     {
         public override void SetColor(Color color)
         {
-            Renderer.color = color;
+            Renderer.color = WithIntensity(color);
+        }
+
+        protected override float ReadAlpha()
+        {
+            return Renderer.color.a;
         }
     }
 }

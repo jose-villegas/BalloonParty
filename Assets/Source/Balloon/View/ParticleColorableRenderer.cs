@@ -10,7 +10,7 @@ namespace BalloonParty.Balloon.View
         public override void SetColor(Color color)
         {
             var main = Renderer.main;
-            main.startColor = color;
+            main.startColor = WithIntensity(color);
 
             // Force-restart so all particles immediately reflect the new color.
             Renderer.Clear();
@@ -19,6 +19,11 @@ namespace BalloonParty.Balloon.View
             {
                 Renderer.Play();
             }
+        }
+
+        protected override float ReadAlpha()
+        {
+            return Renderer.main.startColor.color.a;
         }
     }
 }
