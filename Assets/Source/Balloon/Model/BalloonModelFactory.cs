@@ -16,7 +16,7 @@ namespace BalloonParty.Balloon.Model
         internal static IWriteableBalloonModel Create(
             BalloonPrefabEntry entry, IGamePalette palette, IReadOnlyList<string> allowedColors = null)
         {
-            var config = BalloonModelConfig.From(entry);
+            var config = new BalloonModelConfig(entry);
 
             return entry.BalloonType switch
             {

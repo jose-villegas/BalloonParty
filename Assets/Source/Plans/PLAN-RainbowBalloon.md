@@ -179,8 +179,8 @@ zero-weight hosts and uses the new `PickWeightedIndex` (cumulative-weight scan, 
 testable-static shape — `WeightedPickExtensions.PickRandom` didn't fit, per the plan's caveat). Tests
 added: zero-weight never eligible, `PickWeightedIndex` unit tests (all-zero → -1, even split picks by
 roll, zero-then-nonzero always picks nonzero). All 5 assemblies build clean; full `style_audit.py`
-clean (one advisory `repeated-accessor` WARN on `BalloonModelConfig.From` reading 6 fields off `entry`
-— intentional: the struct is deliberately decoupled from `BalloonPrefabEntry`/SO for test construction).
+clean. (`BalloonModelConfig` keeps a value constructor for tests plus a `BalloonPrefabEntry` constructor
+for production — the latter assigns fields directly, so no `repeated-accessor` WARN.)
 ✅ **[in-editor] done:** `BalloonsConfiguration.asset` weights set — Simple 1, Silver 0.3, Gold 0.15,
 Tough/Cluster/Unbreakable 0 (items only ever go on colourable balloons). Rainbow's own weight is set
 when its catalog entry is added (Phase 4).
