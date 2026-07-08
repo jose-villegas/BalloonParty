@@ -15,6 +15,7 @@ namespace BalloonParty.Game
         {
             builder.RegisterInstance<IGameDisplayConfiguration>(_displayConfiguration);
             builder.RegisterComponentInHierarchy<OrthogonalSizeCameraController>();
+            builder.RegisterComponentInHierarchy<SceneCaptureService>();
         }
     }
 }
