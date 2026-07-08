@@ -1,9 +1,13 @@
 using System;
 using System.Collections;
+using BalloonParty.Balloon.Model;
 using BalloonParty.Game;
 using BalloonParty.Shared.GameState;
+using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Pause;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
+using MessagePipe;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -84,6 +88,93 @@ namespace BalloonParty.Tests.PlayMode
             }
 
             Assert.IsTrue(condition(), message ?? "Timed out waiting for condition.");
+        }
+
+        // The grid registers a balloon at its slot before its collider finishes flying there (spawn and
+        // balance animation isn't tracked by BalancePathHolder), so a physics activation can fire into
+        // empty space. Wait until a collider is actually present at the slot centre.
+        internal static IEnumerator WaitForColliderAt(SlotGrid grid, Vector2Int slot, float timeout = DefaultTimeout)
+        {
+            var pos = (Vector2)grid.IndexToWorldPosition(slot);
+            yield return WaitUntil(() => Physics2D.OverlapPoint(pos) != null, timeout,
+                $"No collider arrived at slot {slot}.");
+        }
+
+        // Packs the board with a few lines and waits for it to settle — overflow hold released and no
+        // balance move still in transit — so activations aim at balloons whose colliders have arrived.
+        internal static IEnumerator FillAndSettle(SlotGrid grid, int lines = 4)
+        {
+            yield return WaitUntil(() => BalloonCount(grid) > 0);
+
+            var linePublisher = Resolve<IPublisher<SpawnBalloonLineMessage>>();
+            for (var i = 0; i < lines; i++)
+            {
+                linePublisher.Publish(new SpawnBalloonLineMessage(1));
+                yield return null;
+            }
+
+            yield return WaitUntil(() => BalloonCount(grid) > grid.Columns * 2,
+                message: "Board never filled enough.");
+
+            var pause = Resolve<PauseService>();
+            var transit = Resolve<BalancePathHolder>();
+            yield return WaitUntil(() => !pause.IsAnyPaused.Value, message: "Overflow hold never released.");
+            yield return WaitUntil(() => !AnyInTransit(transit, grid), message: "Balance moves never settled.");
+        }
+
+        internal static bool AnyInTransit(BalancePathHolder transit, SlotGrid grid)
+        {
+            for (var col = 0; col < grid.Columns; col++)
+            {
+                for (var row = 0; row < grid.Rows; row++)
+                {
+                    if (transit.IsInTransit(col, row))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        // Finds an interior balloon with a populated neighbourhood, so a blast/cross has balloons to
+        // hit — a lone interior balloon removes nothing (the blast excludes the popped source).
+        internal static bool TryFindInteriorBalloon(SlotGrid grid, out Vector2Int slot, out IBalloonModel model)
+        {
+            var neighbours = new Vector2Int[6];
+            for (var col = 1; col < grid.Columns - 1; col++)
+            {
+                for (var row = 1; row < grid.Rows - 1; row++)
+                {
+                    var candidate = new Vector2Int(col, row);
+                    if (grid.At(candidate) is not IBalloonModel balloon)
+                    {
+                        continue;
+                    }
+
+                    HexCoordinates.HexNeighborIndices(col, row, neighbours);
+                    var occupied = 0;
+                    for (var n = 0; n < 6; n++)
+                    {
+                        if (!grid.IsEmpty(neighbours[n].x, neighbours[n].y))
+                        {
+                            occupied++;
+                        }
+                    }
+
+                    if (occupied >= 2)
+                    {
+                        slot = candidate;
+                        model = balloon;
+                        return true;
+                    }
+                }
+            }
+
+            slot = default;
+            model = null;
+            return false;
         }
     }
 }
