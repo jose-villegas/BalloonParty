@@ -35,6 +35,7 @@ MonoBehaviour:
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
+      _laserColorCycles: 2
     _lightning:
       _lightningSegmentsMultiplier: 3
       _lightningRandomness: 0.2
@@ -150,6 +151,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 720
+      _paintBlobColorCycles: 2
       _spreadOffset: 0
       _spreadLength: 3
       _spreadBaseWidth: 2.5
@@ -172,6 +174,7 @@ MonoBehaviour:
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
+      _laserColorCycles: 2
     _lightning:
       _lightningSegmentsMultiplier: 3
       _lightningRandomness: 0.2
@@ -287,6 +290,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 720
+      _paintBlobColorCycles: 2
       _spreadOffset: 0
       _spreadLength: 3
       _spreadBaseWidth: 2.5
@@ -309,13 +313,14 @@ MonoBehaviour:
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
+      _laserColorCycles: 2
     _lightning:
       _lightningSegmentsMultiplier: 5
       _lightningRandomness: 1
       _lightningJumpTime: 0.05
       _lightningGlowSubdivisions: 3
       _lightningFractalDecay: 0.7
-      _lightningGlowColorCycles: 3
+      _lightningGlowColorCycles: 2
     _paint:
       _paintBlobFlightDuration: 0.35
       _paintBlobArcCurve:
@@ -424,6 +429,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 720
+      _paintBlobColorCycles: 2
       _spreadOffset: 0
       _spreadLength: 3
       _spreadBaseWidth: 2.5
@@ -446,6 +452,7 @@ MonoBehaviour:
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
+      _laserColorCycles: 2
     _lightning:
       _lightningSegmentsMultiplier: 3
       _lightningRandomness: 0.2
@@ -561,6 +568,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 720
+      _paintBlobColorCycles: 2
       _spreadOffset: 0
       _spreadLength: 3
       _spreadBaseWidth: 2.5
@@ -583,6 +591,7 @@ MonoBehaviour:
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
+      _laserColorCycles: 2
     _lightning:
       _lightningSegmentsMultiplier: 3
       _lightningRandomness: 0.2
@@ -734,6 +743,7 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       _paintBlobSpinSpeed: 120
+      _paintBlobColorCycles: 2
       _spreadOffset: 1.65
       _spreadLength: -3.125
       _spreadBaseWidth: 4.25
