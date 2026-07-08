@@ -57,6 +57,7 @@ namespace BalloonParty.UI.Score
         [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         [Inject] private ISubscriber<LevelUpGlowTrailsMessage> _glowTrailsSubscriber;
         [Inject] private ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
+        [Inject] private ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
         [Inject] private ISubscriber<RunResetMessage> _resetSubscriber;
         [Inject] private PoolManager _poolManager;
         [Inject] private ILevelProgress _levelProgress;
@@ -151,12 +152,13 @@ namespace BalloonParty.UI.Score
             _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
             _glowTrailsSubscriber.Subscribe(OnGlowTrails).AddTo(this);
             _dismissedSubscriber.Subscribe(_ => OnDismissed()).AddTo(this);
+            _transitionCompletedSubscriber.Subscribe(_ => OnTransitionCompleted()).AddTo(this);
             _resetSubscriber.Subscribe(_ => OnRunReset()).AddTo(this);
         }
 
         private void OnScorePoint(ScorePointMessage msg)
         {
-            if (msg.GroupIndex > 0 || msg.ColorName != _colorConfig.Name)
+            if (LevelUpInProgress || msg.GroupIndex > 0 || msg.ColorName != _colorConfig.Name)
             {
                 return;
             }
@@ -174,10 +176,15 @@ namespace BalloonParty.UI.Score
         {
             _stashedMaxValue = _thresholds.PointsRequiredForLevel(msg.NewLevel + 1);
             ClearCompletionVfx();
+            // Clear existing notices. New ones stay suppressed for the rest of the ceremony via the
+            // level FSM phase (see OnTrailArrived) — score trails still in flight keep arriving and would
+            // otherwise spawn notices behind the popup.
+            _notices.DismissAllNotices();
         }
 
         // Not called from OnLevelUp — subscriber order is unenforced, so this runs only at
-        // Start/OnRunReset (snap) and OnDismissed (animated, when a level change alters the colour set).
+        // Start/OnRunReset (snap) and OnTransitionCompleted (animated, when a level change alters the
+        // colour set — deferred to when the board has settled and the player can fire again).
         private void ApplyVisibility(bool animate)
         {
             var active = IsColorActive();
@@ -217,6 +224,10 @@ namespace BalloonParty.UI.Score
                 .OnComplete(() => _layoutElement.ignoreLayout = !active);
             _visibilityGroup.DOFade(targetAlpha, _visibilityTweenDuration).SetUpdate(true).SetLink(gameObject);
         }
+
+        // The level-up ceremony is running (popup + Ascent) until the FSM returns to Playing — during it
+        // scoring is closed, so trail arrivals / score points shouldn't spawn notices or move the slider.
+        private bool LevelUpInProgress => _levelProgress.Phase.Value != LevelUpPhase.Playing;
 
         private bool IsColorActive()
         {
@@ -258,6 +269,12 @@ namespace BalloonParty.UI.Score
             _progressSlider.maxValue = _stashedMaxValue;
             _progressSlider.value = 0;
             ClearCompletionVfx();
+        }
+
+        // The reveal/hide tween waits for the transition to finish (board settled, thrower resumed) so
+        // the new colour bar slides in exactly when the player regains control, not at popup dismissal.
+        private void OnTransitionCompleted()
+        {
             ApplyVisibility(animate: true);
         }
 
@@ -282,7 +299,9 @@ namespace BalloonParty.UI.Score
 
         private void OnTrailArrived(ScoreTrailArrivedMessage msg)
         {
-            if (msg.ColorName != _colorConfig.Name)
+            // Trails still in flight when the level-up began keep arriving; ignore them for the ceremony
+            // so no notices/slider changes land behind the popup.
+            if (LevelUpInProgress || msg.ColorName != _colorConfig.Name)
             {
                 return;
             }

@@ -74,6 +74,13 @@ namespace BalloonParty.UI.Score
             _animator.Play(ScoreDisappearState);
         }
 
+        // Returns to the pool at once, skipping the disappear animation — used when the notice must clear
+        // regardless of the Animator advancing (e.g. during the level-up freeze, where time is paused).
+        public void DismissImmediate()
+        {
+            OnAnimationCompleted();
+        }
+
         private void OnAnimationScoreFully()
         {
             IsFullyShown = true;

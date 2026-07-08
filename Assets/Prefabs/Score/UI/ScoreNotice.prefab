@@ -424,9 +424,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 76608933b52f14154959df063e13ca68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.UI.ScoreNotice
-  _graphicsToSetColor:
-  - {fileID: 1062911308734177940}
-  - {fileID: 6315786945281002352}
+  _colorableRenderer: []
   _animator: {fileID: 8115177882997527811}
   _labelTransform: {fileID: 6478643938032442419}
   _label: {fileID: 6315786945281002352}

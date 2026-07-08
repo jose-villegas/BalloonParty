@@ -42,7 +42,13 @@ namespace BalloonParty.UI.Score
 
             notice.SetParent(_parent);
             notice.SetAnchoredPosition(anchoredPosition);
-            notice.Show(1, () => _poolManager.Return(_pointPoolKey, notice));
+            _activeNotices.Add(notice);
+            notice.Show(1,
+                () =>
+                {
+                    _activeNotices.Remove(notice);
+                    _poolManager.Return(_pointPoolKey, notice);
+                });
         }
 
         internal void SpawnStreakNotice(int streak)
@@ -73,11 +79,13 @@ namespace BalloonParty.UI.Score
             }
         }
 
+        // Immediate (not animated): clears every notice even when the Animator is frozen, e.g. during
+        // the level-up time freeze. Each notice's completion callback removes it from the list.
         internal void DismissAllNotices()
         {
             for (var i = _activeNotices.Count - 1; i >= 0; i--)
             {
-                _activeNotices[i].Dismiss();
+                _activeNotices[i].DismissImmediate();
             }
         }
     }
