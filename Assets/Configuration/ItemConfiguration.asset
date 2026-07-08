@@ -41,6 +41,7 @@ MonoBehaviour:
       _lightningJumpTime: 0.15
       _lightningGlowSubdivisions: 4
       _lightningFractalDecay: 0.55
+      _lightningGlowColorCycles: 2
     _paint:
       _paintBlobFlightDuration: 0.35
       _paintBlobArcCurve:
@@ -159,7 +160,7 @@ MonoBehaviour:
     _maximumAllowed: 2
     _visualPrefab: {fileID: 6897192337968396076, guid: db265edefece34cbf86ee0995069bbbf,
       type: 3}
-    _activationEffectPrefab: {fileID: 7084871819143963872, guid: 09e04fef865adae47bf118af97e3e371,
+    _activationEffectPrefab: {fileID: 6370257692819509042, guid: 09e04fef865adae47bf118af97e3e371,
       type: 3}
     _damage: 3
     _damageFlags: -1
@@ -177,6 +178,7 @@ MonoBehaviour:
       _lightningJumpTime: 0.15
       _lightningGlowSubdivisions: 4
       _lightningFractalDecay: 0.55
+      _lightningGlowColorCycles: 2
     _paint:
       _paintBlobFlightDuration: 0.35
       _paintBlobArcCurve:
@@ -313,6 +315,7 @@ MonoBehaviour:
       _lightningJumpTime: 0.05
       _lightningGlowSubdivisions: 3
       _lightningFractalDecay: 0.7
+      _lightningGlowColorCycles: 3
     _paint:
       _paintBlobFlightDuration: 0.35
       _paintBlobArcCurve:
@@ -449,6 +452,7 @@ MonoBehaviour:
       _lightningJumpTime: 0.15
       _lightningGlowSubdivisions: 4
       _lightningFractalDecay: 0.55
+      _lightningGlowColorCycles: 2
     _paint:
       _paintBlobFlightDuration: 0.35
       _paintBlobArcCurve:
@@ -585,6 +589,7 @@ MonoBehaviour:
       _lightningJumpTime: 0.15
       _lightningGlowSubdivisions: 4
       _lightningFractalDecay: 0.55
+      _lightningGlowColorCycles: 2
     _paint:
       _paintBlobFlightDuration: 0.75
       _paintBlobArcCurve:

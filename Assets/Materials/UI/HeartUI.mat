@@ -74,14 +74,14 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
-    - _ShadowSoftness: 0.02
+    - _ShadowSoftness: 0.035
     - _ShineInterval: 1.5
     - _ShineLocation: 0
     - _ShineSpeed: 0.25
     - _ShineWidth: 0.17
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
-    - _SpriteScale: 0.9
+    - _SpriteScale: 0.825
     - _SrcBlend: 1
     - _Stencil: 0
     - _StencilComp: 8
@@ -97,6 +97,6 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _ShadowColor: {r: 0.2509804, g: 0.2509804, b: 0.2509804, a: 0.8784314}
-    - _ShadowOffset: {r: 0.025, g: -0.025, b: 0, a: 0}
+    - _ShadowOffset: {r: 0.06, g: -0.06, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

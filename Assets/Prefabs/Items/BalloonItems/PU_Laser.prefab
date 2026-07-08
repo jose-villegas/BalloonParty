@@ -2338,7 +2338,7 @@ PrefabInstance:
     - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
       propertyPath: _spritesToSetColor.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
@@ -2480,6 +2480,11 @@ PrefabInstance:
       propertyPath: '_spritesToSetColor.Array.data[0]'
       value: 
       objectReference: {fileID: 5611858738506577645}
+    - target: {fileID: 1532584057158195999, guid: ef986049aad6e40dcb0027158268936d,
+        type: 3}
+      propertyPath: '_spritesToSetColor.Array.data[1]'
+      value: 
+      objectReference: {fileID: 3842388724407884539}
     - target: {fileID: 6868395874174977538, guid: ef986049aad6e40dcb0027158268936d,
         type: 3}
       propertyPath: m_LocalPosition.x
