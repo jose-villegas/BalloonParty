@@ -34,11 +34,12 @@ Unity licence + graphics device — so the suite stays **small and local** until
 invariants** (counts, settled-ness, state transitions, no-throw), never exact placements or
 pixels — spawn/colour/cluster randomness makes specifics non-deterministic.
 
-## Current PlayMode coverage (11 tests, all green 2026-07-09)
+## Current PlayMode coverage (12 tests, all green 2026-07-09)
 
 | Fixture | Covers |
 |---|---|
 | `RunRestartPlayModeTests` | Restart clears → repopulates the board (caught the prewarm "await twice" race) |
+| `ShotLoopPlayModeTests` | Fired projectile flies → collides → pops a balloon → scores (real collider travel) |
 | `PressureLossPlayModeTests` (2) | Initial health + spawn-saturation → reject → HP drain → GameOver |
 | `BombActivationPlayModeTests` | Bomb `OverlapCircle` blast pops a neighbour |
 | `LaserActivationPlayModeTests` | Laser `CircleCast` cross removes a balloon |
@@ -89,13 +90,13 @@ diverged from the sketch (PlayMode can only assert what it can drive without run
   idle/active counts, so a true Get/Return balance can't be inspected; a leak surfaces as an error.
 - **LevelUpCinematic** asserts the ceremony leaves the `Playing` phase and runs frames without a
   throw (the no-throw guard for the fragile path), driven by the `Trigger Level Up` score cheat.
+- **ShotLoop** captures the loaded model from `ProjectileLoadedMessage` and launches it directly
+  (`Direction`/`IsFree`) — no production fire seam needed. Fire itself is `ThrowerView`-input-gated, but
+  driving the model is exactly what the thrower's `TryFire` does, and once free its `Tick` leaves the
+  projectile alone.
 
 ## Remaining
 
-- **`ShotLoopPlayModeTests`** (Tier 1) — real projectile flight → pop → score. Needs a **test-only
-  fire seam** on `ThrowerController`: launching the model directly (`IsFree`/`Direction`) fights its
-  load/aim/fire state machine. Add a minimal internal `FireForTest(direction)` (or expose the active
-  model) first, then this becomes straightforward.
 - **`BushRustlePlayModeTests`** (Tier 3) — needs a **bush-containing level** loaded (level 1 has none)
   and an observable rustle signal to assert against (`BushRustleController` has no hook today).
 
