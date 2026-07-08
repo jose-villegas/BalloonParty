@@ -27,10 +27,11 @@ namespace BalloonParty.Cheats
 
         private bool _visible;
         private bool _throwerHeld;
+        private int _lastTouchCount;
 
         private void Update()
         {
-            if (Input.GetKeyDown(KeyCode.BackQuote))
+            if (Input.GetKeyDown(KeyCode.BackQuote) || ThreeFingerTapped())
             {
                 _visible = !_visible;
             }
@@ -100,6 +101,16 @@ namespace BalloonParty.Cheats
             GUILayout.BeginArea(new Rect(bodyRect.x + 6, bodyRect.y + 6, bodyRect.width - 12, bodyRect.height - 12));
             DrawContent();
             GUILayout.EndArea();
+        }
+
+        // Keyboard-less toggle for touch: fires once on the rising edge to 3+ simultaneous touches
+        // (desktop stays at touchCount 0). Backtick still toggles in the editor.
+        private bool ThreeFingerTapped()
+        {
+            var touches = Input.touchCount;
+            var tapped = touches >= 3 && _lastTouchCount < 3;
+            _lastTouchCount = touches;
+            return tapped;
         }
 
         // Holds the thrower (via PauseService) exactly while the console is open; released on close or

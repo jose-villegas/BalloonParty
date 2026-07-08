@@ -2,7 +2,7 @@
 
 Runtime cheat console for testing and debugging without modifying game state manually.
 
-Press the **backtick** (`` ` ``) key in Play Mode to toggle the console window. The console GameObject is created automatically at runtime — no scene setup required. The console discovers all registered cheats automatically and organises them by section and tag.
+Toggle the console window in Play Mode with the **backtick** (`` ` ``) key, or — on touch devices — a **3-finger tap** (three simultaneous touches; fires once on the rising edge, so it can't retrigger while held). The 3-finger tap only registers in a **development build** (or via Unity Remote): the whole cheat system compiles out otherwise (see below), and legacy `Input.touchCount` reads 0 in the editor Game view. The console GameObject is created automatically at runtime — no scene setup required. The console discovers all registered cheats automatically and organises them by section and tag.
 
 ## Build visibility
 
