@@ -143,7 +143,7 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
-        public void Resolve_RainbowBuffPop_DispatchesWildcardStreakFlag()
+        public void Resolve_RainbowBuffPop_DispatchesWildcardStreakAndPiercingFlags()
         {
             ApplyRainbowBuff();
             var balloon = PlaceBalloon(new Vector2Int(2, 2), "Red");
@@ -151,7 +151,24 @@ namespace BalloonParty.Tests.Projectile
             _resolver.Resolve(_projectile, balloon, Vector3.zero);
 
             _hitDispatcher.Received().Dispatch(Arg.Is<ActorHitMessage>(m =>
-                m.Outcome == HitOutcome.Pop && m.Context.Flags.HasFlag(DamageFlags.WildcardStreak)));
+                m.Outcome == HitOutcome.Pop
+                && m.Context.Flags.HasFlag(DamageFlags.WildcardStreak)
+                && m.Context.Flags.HasFlag(DamageFlags.Piercing)));
+        }
+
+        [Test]
+        public void Resolve_RainbowBuff_PiercesMultiHitBalloon()
+        {
+            ApplyRainbowBuff();
+            var tough = new BalloonModel(new BalloonModelConfig(hitsToPop: 3));
+            tough.Color.Value = "Red";
+            _grid.Place(tough, null, new Vector2Int(2, 2));
+
+            _resolver.Resolve(_projectile, tough, Vector3.zero);
+
+            // Without the buff a 3-hit balloon would survive one hit; piercing one-shots it.
+            _hitDispatcher.Received().Dispatch(Arg.Is<ActorHitMessage>(m =>
+                m.Actor == tough && m.Outcome == HitOutcome.Pop));
         }
 
         [Test]

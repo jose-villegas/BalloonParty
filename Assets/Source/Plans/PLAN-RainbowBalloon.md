@@ -100,15 +100,20 @@ the **colour itself** the single source of truth:
   width, 0 disables) applied at half the effect duration, plus a visual-only `RainbowEffectScale` on the
   effect transform. Laser on a rainbow holder destroys its cross as usual, then converts every surviving
   hex neighbour bordering the beam to rainbow. Shield on a rainbow holder is different in kind — instead
-  of an instant AoE it applies a **projectile buff** (`Projectile/Buffs/`): the projectile turns
-  iridescent (cycling glow), scores colour-agnostically (every pop keeps the multiplier climbing via
-  `DamageFlags.WildcardStreak` → `ColorStreakTracker.RecordWildcard`), and rainbow-converts the hex
-  neighbours of everything it pops — until it loses the granted shield to a wall (which ends the buff).
+  of an instant AoE it stacks **two projectile buffs** (`Projectile/Buffs/`): a `RainbowProjectileBuff` —
+  the projectile turns iridescent (cycling glow), pierces (`DamageFlags.Piercing` — plows through
+  tough/unbreakable balloons instead of one-shotting/deflecting), scores colour-agnostically (every pop
+  keeps the multiplier climbing via `DamageFlags.WildcardStreak` → `ColorStreakTracker.RecordWildcard`),
+  and rainbow-converts the hex neighbours of everything it pops — plus a `SpeedProjectileBuff` (double
+  flight speed). Both share the `WallBounceEndCondition`, so both end when it loses the granted shield to
+  a wall. (`SpeedProjectileBuff` is also grantable standalone by the new **Snipe** item.)
   This introduced the general projectile-buff seam: a buff (`IProjectileBuff`) declares its own
   pluggable `IProjectileBuffEndCondition` deciding *when* it ends (`WallBounceEndCondition` today, which
   just subscribes to `ShieldLostMessage`; `Timer`/`PopCount`/... are new implementers, no switch, no
   context object). Buffs are applied through `IProjectileBuffs.Apply(buff)` by anything (not just items),
-  with `ProjectileBuffService` owning storage/lifecycle. All five items now have a rainbow synergy.
+  with `ProjectileBuffService` owning storage/lifecycle — it already carries two buff types
+  (`RainbowProjectileBuff` + `SpeedProjectileBuff`) at once when a rainbow Shield pops. All five items
+  now have a rainbow synergy; a sixth item (**Snipe**) grants only the speed buff.
 - ⚠️ Still undefined-for-now (documented, deferred): the *scoring attribution* of a rainbow-held
   Bomb/Laser/Lightning credits the sentinel colour, which drops out of concrete-colour scoring.
   Targeting/blast behaviour is defined; only the point payout on those paths is unspecced.

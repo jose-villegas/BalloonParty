@@ -17,6 +17,7 @@ using BalloonParty.Item.Laser;
 using BalloonParty.Item.Lightning;
 using BalloonParty.Item.Paint;
 using BalloonParty.Item.Shield;
+using BalloonParty.Item.Snipe;
 using BalloonParty.Nudge;
 using BalloonParty.Projectile;
 using BalloonParty.Projectile.Buffs;
@@ -145,6 +146,7 @@ namespace BalloonParty.Game
             builder.Register<LaserItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<LightningItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<PaintItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<SnipeItemHandler>(Lifetime.Singleton).AsImplementedInterfaces();
         }
 
         internal static void RegisterPresentation(this IContainerBuilder builder)

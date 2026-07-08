@@ -100,7 +100,7 @@ namespace BalloonParty.Tests.Item
         }
 
         [Test]
-        public void Activate_RainbowHolder_AppliesRainbowBuff()
+        public void Activate_RainbowHolder_AppliesRainbowAndSpeedBuffs()
         {
             _palette.IsRainbow(GamePalette.RainbowColorId).Returns(true);
             var balloon = CreateBalloon(new Vector2Int(1, 1));
@@ -108,7 +108,8 @@ namespace BalloonParty.Tests.Item
 
             _handler.Activate(new ItemActivationContext(balloon, Vector3.zero, Vector3.zero));
 
-            _buffs.Received(1).Apply(Arg.Any<IProjectileBuff>());
+            _buffs.Received(1).Apply(Arg.Any<RainbowProjectileBuff>());
+            _buffs.Received(1).Apply(Arg.Any<SpeedProjectileBuff>());
         }
 
         [Test]

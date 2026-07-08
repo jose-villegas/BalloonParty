@@ -1,6 +1,10 @@
+using System;
+using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Messages;
+using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
 using UnityEngine;
@@ -70,6 +74,29 @@ namespace BalloonParty.Tests.Projectile
             _resolver.Deflect(model, new Vector3(0f, 1f, 0f), Vector3.zero);
 
             Assert.Greater(model.Direction.y, 0f, "bounced back upward off the balloon");
+        }
+
+        [Test]
+        public void Step_WithSpeedBuff_MovesTwiceAsFar()
+        {
+            var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
+            model.AddBuff(new SpeedProjectileBuff(NeverFiringWallBounces()));
+
+            var step = _resolver.Step(model, Vector3.zero, 1f);
+
+            Assert.AreEqual(ProjectileStepOutcome.Moved, step.Outcome);
+            Assert.AreEqual(new Vector3(0f, 2f, 0f), step.Position, "speed 1 x2 buff over dt 1 = 2 units");
+        }
+
+        private static ISubscriber<ShieldLostMessage> NeverFiringWallBounces()
+        {
+            var wallBounces = Substitute.For<ISubscriber<ShieldLostMessage>>();
+            wallBounces
+                .Subscribe(
+                    Arg.Any<IMessageHandler<ShieldLostMessage>>(),
+                    Arg.Any<MessageHandlerFilter<ShieldLostMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+            return wallBounces;
         }
 
         private static ProjectileModel NewModel(Vector2 direction, float speed, int shields)
