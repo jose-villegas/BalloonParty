@@ -8,8 +8,8 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Model
 {
-    /// <summary>At destruction, distributes one <see cref="ScoreAttribution"/> per remaining bubble to a random palette colour.</summary>
-    internal class BubbleClusterModel : BalloonModelBase, IHasDurability, IHasScoreColor
+    /// <summary>At destruction, distributes one <see cref="ScoreAttribution"/> per remaining bubble to a random palette colour. Washes a projectile's stolen colour on contact.</summary>
+    internal class BubbleClusterModel : BalloonModelBase, IHasDurability, IHasScoreColor, IWashesProjectileColor
     {
         private readonly ColorSource _colorSource;
 

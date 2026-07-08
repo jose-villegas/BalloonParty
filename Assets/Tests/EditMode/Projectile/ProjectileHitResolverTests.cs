@@ -89,6 +89,17 @@ namespace BalloonParty.Tests.Projectile
         }
 
         [Test]
+        public void Resolve_HitSoapBubble_WashesProjectileColourToNone()
+        {
+            var soap = new BubbleClusterModel(new BalloonModelConfig(hitsToPop: 1), Substitute.For<IGamePalette>());
+            _projectile.ColorName.Value = "Red";
+
+            _resolver.Resolve(_projectile, soap, Vector3.zero);
+
+            Assert.IsTrue(string.IsNullOrEmpty(_projectile.ColorName.Value));
+        }
+
+        [Test]
         public void Resolve_PopRainbowBalloon_DoesNotStealColour()
         {
             var balloon = new BalloonModel(new BalloonModelConfig(hitsToPop: 1));

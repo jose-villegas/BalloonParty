@@ -49,9 +49,18 @@ namespace BalloonParty.Projectile.Controller
             var isWildcardPop = balloon is IHasColor wildcard && wildcard.Color.Value == GamePalette.RainbowColorId;
 
             var recolored = false;
-            if (outcome == HitOutcome.Pop && !isWildcardPop && balloon is IHasColor colorable &&
-                !string.IsNullOrEmpty(colorable.Color.Value) &&
-                projectile.ColorName.Value != colorable.Color.Value)
+            if (balloon is IWashesProjectileColor)
+            {
+                // Soap resets the projectile to colourless (like a fresh launch), on any contact.
+                if (!string.IsNullOrEmpty(projectile.ColorName.Value))
+                {
+                    projectile.ColorName.Value = null;
+                    recolored = true;
+                }
+            }
+            else if (outcome == HitOutcome.Pop && !isWildcardPop && balloon is IHasColor colorable &&
+                     !string.IsNullOrEmpty(colorable.Color.Value) &&
+                     projectile.ColorName.Value != colorable.Color.Value)
             {
                 projectile.ColorName.Value = colorable.Color.Value;
                 recolored = true;
