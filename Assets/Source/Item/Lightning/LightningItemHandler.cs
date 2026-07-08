@@ -144,11 +144,11 @@ namespace BalloonParty.Item.Lightning
             // matchColor is concrete in both paths (rainbow uses the projectile colour).
             var tint = _palette.GetColor(matchColor);
 
-            // A rainbow chain glows iridescent (lerps through every palette colour); a concrete chain
+            // A rainbow chain glows iridescent (lerps through the palette's colours); a concrete chain
             // stays its own colour.
             if (convertsToRainbow)
             {
-                chain.SetGlowColors(PaletteColors(), settings.Lightning.GlowColorCycles);
+                chain.SetGlowColors(_palette.ColorValues(), settings.Lightning.GlowColorCycles);
             }
 
             chain.PrepareDisplay(positions, settings, OnJump);
@@ -166,18 +166,6 @@ namespace BalloonParty.Item.Lightning
                 var (model, pos) = targets[index];
                 ApplyTo(model, pos);
             }
-        }
-
-        private Color[] PaletteColors()
-        {
-            var colors = _palette.Colors;
-            var result = new Color[colors.Count];
-            for (var i = 0; i < result.Length; i++)
-            {
-                result[i] = colors[i].Color;
-            }
-
-            return result;
         }
 
         private void CollectSortedTargets(

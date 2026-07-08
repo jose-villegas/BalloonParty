@@ -11,6 +11,9 @@ namespace BalloonParty.Shared.Pool
         private float _animationTimer;
         private Animator _animator;
 
+        /// <summary>0..1 through the current play, for subclasses driving time-based visuals (e.g. colour cycling).</summary>
+        protected float AnimationProgress => _animationLength > 0f ? Mathf.Clamp01(_animationTimer / _animationLength) : 0f;
+
         private void Awake()
         {
             _animator = GetComponent<Animator>();
@@ -22,7 +25,7 @@ namespace BalloonParty.Shared.Pool
             }
         }
 
-        private void Update()
+        protected virtual void Update()
         {
             if (OnComplete == null || !_animationPlaying)
             {

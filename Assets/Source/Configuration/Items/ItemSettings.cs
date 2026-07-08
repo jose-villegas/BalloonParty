@@ -74,8 +74,12 @@ namespace BalloonParty.Configuration.Items
         [SerializeField] private float _laserRaycastDistance = 20f;
         [SerializeField] private float _laserCircleCastRadius = 0.065f;
 
+        [Tooltip("Rainbow holder only: how many times the beam lerps through the allowed colours over the anim.")]
+        [SerializeField] [Min(0f)] private float _laserColorCycles = 2f;
+
         public float RaycastDistance => _laserRaycastDistance;
         public float CircleCastRadius => _laserCircleCastRadius;
+        public float ColorCycles => _laserColorCycles;
     }
 
     [Serializable]
@@ -116,6 +120,9 @@ namespace BalloonParty.Configuration.Items
 
         [SerializeField] private float _paintBlobSpinSpeed = 720f;
 
+        [Tooltip("Rainbow holder only: how many times each blob lerps through the allowed colours over its flight.")]
+        [SerializeField] [Min(0f)] private float _paintBlobColorCycles = 2f;
+
         [Tooltip("Shifts the triangle along the travel axis from the hit point, in world units. " +
                  "Negative pulls it back toward the launcher.")]
         [SerializeField] private float _spreadOffset;
@@ -136,6 +143,7 @@ namespace BalloonParty.Configuration.Items
         public AnimationCurve ShadowScaleCurve => _paintBlobShadowScaleCurve;
         public AnimationCurve SpriteScaleCurve => _paintBlobSpriteScaleCurve;
         public float SpinSpeed => _paintBlobSpinSpeed;
+        public float BlobColorCycles => _paintBlobColorCycles;
 
         public float SpreadOffset => _spreadOffset;
         public float SpreadLength => _spreadLength;

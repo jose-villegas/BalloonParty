@@ -98,7 +98,8 @@ the **colour itself** the single source of truth:
   destroying; Bomb on a rainbow holder piercing-kills all colours within
   `Radius` and converts the ring beyond it to rainbow mid-effect — `RainbowConversionRange` (outer-ring
   width, 0 disables) applied at half the effect duration, plus a visual-only `RainbowEffectScale` on the
-  effect transform. Laser's rainbow behaviour is open.
+  effect transform. Laser on a rainbow holder destroys its cross as usual, then converts every surviving
+  hex neighbour bordering the beam to rainbow. All four items now have a rainbow synergy.
 - ⚠️ Still undefined-for-now (documented, deferred): the *scoring attribution* of a rainbow-held
   Bomb/Laser/Lightning credits the sentinel colour, which drops out of concrete-colour scoring.
   Targeting/blast behaviour is defined; only the point payout on those paths is unspecced.

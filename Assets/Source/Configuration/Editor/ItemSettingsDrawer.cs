@@ -74,6 +74,11 @@ namespace BalloonParty.Configuration.Editor
                         laser,
                         "_laserCircleCastRadius",
                         "Circle Cast Radius");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        laser,
+                        "_laserColorCycles",
+                        "Color Cycles");
                     break;
 
                 case ItemType.Lightning:
@@ -141,6 +146,11 @@ namespace BalloonParty.Configuration.Editor
                         paint,
                         "_paintBlobSpinSpeed",
                         "Blob Spin Speed");
+                    y = PropertyDrawerHelper.DrawNamedField(position,
+                        y,
+                        paint,
+                        "_paintBlobColorCycles",
+                        "Blob Color Cycles");
                     y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Spread");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, paint, "_spreadOffset", "Offset");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, paint, "_spreadLength", "Length");
@@ -169,14 +179,14 @@ namespace BalloonParty.Configuration.Editor
                     return (row * 5) + nudgeHeight;
 
                 case ItemType.Laser:
-                    return row * 4;
+                    return row * 5;
 
                 case ItemType.Lightning:
                     return row * 8;
 
                 case ItemType.Paint:
-                    // 2 headers + 6 blob fields + 4 spread fields.
-                    return row * 12;
+                    // 2 headers + 7 blob fields + 4 spread fields.
+                    return row * 13;
 
                 default:
                     return 0f;

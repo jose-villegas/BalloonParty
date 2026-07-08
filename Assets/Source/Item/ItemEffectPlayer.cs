@@ -53,14 +53,17 @@ namespace BalloonParty.Item
             return effect.Duration;
         }
 
-        public void Play(ItemSettings settings, Vector3 worldPosition, Quaternion rotation, string colorId)
+        // Returns the played effect so the caller can post-configure it (e.g. a rainbow laser's colour
+        // cycle); null when there's no prefab.
+        public EffectView Play(ItemSettings settings, Vector3 worldPosition, Quaternion rotation, string colorId)
         {
             if (!TryAcquire(settings, out var effect, out var key))
             {
-                return;
+                return null;
             }
 
             effect.Play(worldPosition, rotation, _palette.GetColor(colorId), () => _poolManager.Return(key, effect));
+            return effect;
         }
 
         private bool TryAcquire(ItemSettings settings, out EffectView effect, out string key)

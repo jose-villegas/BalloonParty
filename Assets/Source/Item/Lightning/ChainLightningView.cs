@@ -5,6 +5,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.Rendering;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 using BalloonParty.Configuration.Items;
@@ -145,23 +146,10 @@ namespace BalloonParty.Item.Lightning
                 var progress = _glowTotalDuration > 0f
                     ? Mathf.Clamp01((Time.time - _glowStartTime) / _glowTotalDuration)
                     : 0f;
-                color = CycleColor(_glowColors, Mathf.Repeat(progress * _glowCycles, 1f));
+                color = ColorCycle.Sample(_glowColors, Mathf.Repeat(progress * _glowCycles, 1f));
             }
 
             _glowRenderer.color = (color * _glowColorIntensity).WithAlpha(_glowRenderer.color.a);
-        }
-
-        // t in [0,1) walks the whole colour ring once, wrapping the last back to the first.
-        private static Color CycleColor(IReadOnlyList<Color> colors, float t)
-        {
-            if (colors.Count == 1)
-            {
-                return colors[0];
-            }
-
-            var pos = t * colors.Count;
-            var i = Mathf.FloorToInt(pos) % colors.Count;
-            return Color.Lerp(colors[i], colors[(i + 1) % colors.Count], pos - Mathf.Floor(pos));
         }
 
         private async UniTaskVoid PlayAsync()
