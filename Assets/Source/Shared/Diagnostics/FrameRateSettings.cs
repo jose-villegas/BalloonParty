@@ -41,10 +41,22 @@ namespace BalloonParty.Shared.Diagnostics
             Application.targetFrameRate = _mode switch
             {
                 FrameRateMode.Default60 => 60,
-                FrameRateMode.MatchDisplay => GetDisplayRefreshRate(),
+                FrameRateMode.MatchDisplay => MatchDisplayTarget(),
                 FrameRateMode.Custom => _customFrameRate,
                 _ => 60
             };
+        }
+
+        private static int MatchDisplayTarget()
+        {
+#if UNITY_EDITOR
+            // The editor reports the Game View's refresh rate (typically 60) rather than the physical
+            // display, so matching it would falsely cap the editor. Leave it uncapped here; a real build
+            // matches the device's refresh rate.
+            return -1;
+#else
+            return GetDisplayRefreshRate();
+#endif
         }
 
         private static int GetDisplayRefreshRate()
