@@ -100,9 +100,22 @@ namespace BalloonParty.Projectile.View
         {
             _shieldShown = false;
             _disappearing = false;
-            transform.localScale = _baseScale;
             _deflectedSubscription?.Dispose();
             _deflectedSubscription = null;
+
+            // Mirror OnDespawned's cleanup: a pooled instance must never inherit a still-running
+            // disappear tween from its previous life — that would scale the fresh projectile to zero
+            // (and fire its destroy callback) mid-flight, in open space.
+            transform.DOKill();
+            transform.localScale = _baseScale;
+            transform.rotation = Quaternion.identity;
+            if (_glowRenderer != null)
+            {
+                _glowRenderer.DOKill();
+                _glowRenderer.color = new Color(1f, 1f, 1f, 0f);
+            }
+
+            _projectileTrail?.Disable();
         }
 
         public void OnDespawned()
