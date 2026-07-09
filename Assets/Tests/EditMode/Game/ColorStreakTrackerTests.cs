@@ -30,7 +30,8 @@ namespace BalloonParty.Tests.Game
                     Arg.Any<MessageHandlerFilter<ProjectileLoadedMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
 
-            _tracker = new ColorStreakTracker(subscriber, projectileLoadedSubscriber);
+            _tracker = new ColorStreakTracker(
+                Substitute.For<IPublisher<StreakChangedMessage>>(), subscriber, projectileLoadedSubscriber);
         }
 
         [Test]

@@ -53,6 +53,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<BalloonDeflectedMessage>(options);
             builder.RegisterMessageBroker<NudgeMessage>(options);
             builder.RegisterMessageBroker<ScorePointMessage>(options);
+            builder.RegisterMessageBroker<StreakChangedMessage>(options);
             builder.RegisterMessageBroker<ScoreLevelUpMessage>(options);
             builder.RegisterMessageBroker<GameOverMessage>(options);
             builder.RegisterMessageBroker<SpawnBlockedMessage>(options);

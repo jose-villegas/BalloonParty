@@ -18,6 +18,8 @@ namespace BalloonParty.UI.Score
         private readonly string _streakPoolKey;
         private readonly List<ProgressNotice> _activeNotices = new();
 
+        private ProgressNotice _streakNotice;
+
         internal ProgressNoticePresenter(
             PoolManager poolManager,
             ProgressNotice pointPrefab,
@@ -51,32 +53,41 @@ namespace BalloonParty.UI.Score
                 });
         }
 
-        internal void SpawnStreakNotice(int streak)
+        // The streak notice is persistent: it holds (its animator no longer auto-dismisses) until the
+        // streak grows into a new one or is lost. Showing again flies the current one away and pops a
+        // fresh one at the new value.
+        internal void ShowStreak(int streak)
         {
+            DismissStreak();
+
             var notice = _poolManager.GetOrRegister(_streakPoolKey,
                 () => new SimplePoolChannel<ProgressNotice>(_streakPrefab));
 
             notice.SetParent(_parent);
             notice.SetAnchoredPosition(Vector2.zero);
             _activeNotices.Add(notice);
-            notice.Show(streak,
-                () =>
-                {
-                    _activeNotices.Remove(notice);
-                    _poolManager.Return(_streakPoolKey, notice);
-                },
-                _color);
+            _streakNotice = notice;
+            notice.Show(streak, () => ReturnStreakNotice(notice), _color);
         }
 
-        internal void DismissFullyShownNotices()
+        internal void DismissStreak()
         {
-            for (var i = _activeNotices.Count - 1; i >= 0; i--)
+            if (_streakNotice != null)
             {
-                if (_activeNotices[i].IsFullyShown)
-                {
-                    _activeNotices[i].Dismiss();
-                }
+                _streakNotice.Dismiss();
+                _streakNotice = null;
             }
+        }
+
+        private void ReturnStreakNotice(ProgressNotice notice)
+        {
+            _activeNotices.Remove(notice);
+            if (ReferenceEquals(_streakNotice, notice))
+            {
+                _streakNotice = null;
+            }
+
+            _poolManager.Return(_streakPoolKey, notice);
         }
 
         // Immediate (not animated): clears every notice even when the Animator is frozen, e.g. during

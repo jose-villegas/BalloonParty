@@ -1,5 +1,119 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &155352983898798883
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3934743877170333937}
+  - component: {fileID: 3827654026359727661}
+  - component: {fileID: 6314026068200925758}
+  - component: {fileID: 4000091981975410239}
+  - component: {fileID: 8780470487739036141}
+  m_Layer: 5
+  m_Name: BG
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &3934743877170333937
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155352983898798883}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -5.4}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 1725168758827776460}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -41.2, y: 1.8}
+  m_SizeDelta: {x: 2.615, y: 40.222}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &3827654026359727661
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155352983898798883}
+  m_CullTransparentMesh: 1
+--- !u!114 &6314026068200925758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155352983898798883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 2100000, guid: d86909206c0144e2c8850d06e215eb75, type: 2}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: a21041c776e5e384fbf321d6076182f6, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!223 &4000091981975410239
+Canvas:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155352983898798883}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_RenderMode: 2
+  m_Camera: {fileID: 0}
+  m_PlaneDistance: 100
+  m_PixelPerfect: 0
+  m_ReceivesEvents: 1
+  m_OverrideSorting: 1
+  m_OverridePixelPerfect: 0
+  m_SortingBucketNormalizedSize: 0
+  m_VertexColorAlwaysGammaSpace: 0
+  m_AdditionalShaderChannelsFlag: 25
+  m_UpdateRectTransformForStandalone: 0
+  m_SortingLayerID: -1446856603
+  m_SortingOrder: 99
+  m_TargetDisplay: 0
+--- !u!114 &8780470487739036141
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 155352983898798883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9de37e4b29694300b047e5378b08e99d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Score.GraphicColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1001 &3425950819124760437
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -130,10 +244,15 @@ PrefabInstance:
       propertyPath: m_hasFontAssetChanged
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1319174416173524732, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
+      propertyPath: m_OverrideSorting
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
         type: 3}
       propertyPath: _colorableRenderer.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
         type: 3}
@@ -145,6 +264,11 @@ PrefabInstance:
       propertyPath: '_colorableRenderer.Array.data[1]'
       value: 
       objectReference: {fileID: 8627708195592689495}
+    - target: {fileID: 4022841750403956333, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
+      propertyPath: '_colorableRenderer.Array.data[2]'
+      value: 
+      objectReference: {fileID: 8780470487739036141}
     - target: {fileID: 6315786945281002352, guid: 8026f44bf1b214739b2bc56e217d5105,
         type: 3}
       propertyPath: m_fontAsset
@@ -167,9 +291,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: StreakNotice
       objectReference: {fileID: 0}
+    - target: {fileID: 8115177882997527811, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
+      propertyPath: m_Controller
+      value: 
+      objectReference: {fileID: 9100000, guid: 05042d30ed5f54f83a888566c42405b2, type: 2}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 4069683714926589625, guid: 8026f44bf1b214739b2bc56e217d5105,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3934743877170333937}
     m_AddedComponents:
     - targetCorrespondingSourceObject: {fileID: 2362369165021658281, guid: 8026f44bf1b214739b2bc56e217d5105,
         type: 3}
@@ -198,6 +331,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de37e4b29694300b047e5378b08e99d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Score.GraphicColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
+--- !u!224 &1725168758827776460 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 4069683714926589625, guid: 8026f44bf1b214739b2bc56e217d5105,
+    type: 3}
+  m_PrefabInstance: {fileID: 3425950819124760437}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8032492443304324374 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4679883570465612387, guid: 8026f44bf1b214739b2bc56e217d5105,
@@ -216,3 +357,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9de37e4b29694300b047e5378b08e99d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.UI.Score.GraphicColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0

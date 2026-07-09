@@ -6,6 +6,7 @@ namespace BalloonParty.Game.Score
 {
     internal class ColorStreakTracker : IColorStreak, IDisposable
     {
+        private readonly IPublisher<StreakChangedMessage> _changedPublisher;
         private readonly IDisposable _levelUpSubscription;
         private readonly IDisposable _projectileLoadedSubscription;
 
@@ -13,9 +14,11 @@ namespace BalloonParty.Game.Score
         public int CurrentStreak { get; private set; }
 
         internal ColorStreakTracker(
+            IPublisher<StreakChangedMessage> changedPublisher,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             ISubscriber<ProjectileLoadedMessage> projectileLoadedSubscriber)
         {
+            _changedPublisher = changedPublisher;
             _levelUpSubscription = levelUpSubscriber.Subscribe(_ => Reset());
             // A streak never carries across turns.
             _projectileLoadedSubscription = projectileLoadedSubscriber.Subscribe(_ => Reset());
@@ -51,6 +54,7 @@ namespace BalloonParty.Game.Score
                 CurrentStreak = 1;
             }
 
+            PublishChanged();
             return CurrentStreak;
         }
 
@@ -59,6 +63,7 @@ namespace BalloonParty.Game.Score
         public int RecordWildcard()
         {
             CurrentStreak++;
+            PublishChanged();
             return CurrentStreak;
         }
 
@@ -66,6 +71,12 @@ namespace BalloonParty.Game.Score
         {
             LastColor = null;
             CurrentStreak = 0;
+            PublishChanged();
+        }
+
+        private void PublishChanged()
+        {
+            _changedPublisher.Publish(new StreakChangedMessage(LastColor, CurrentStreak));
         }
     }
 }

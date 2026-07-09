@@ -52,7 +52,7 @@ namespace BalloonParty.UI.Score
         [Inject] private IGamePalette _palette;
         [Inject] private IActiveLevelParameters _levelParams;
         [Inject] private ILevelThresholds _thresholds;
-        [Inject] private ISubscriber<ScorePointMessage> _scoredSubscriber;
+        [Inject] private ISubscriber<StreakChangedMessage> _streakChangedSubscriber;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private ISubscriber<ScoreTrailArrivedMessage> _trailArrivedSubscriber;
         [Inject] private ISubscriber<LevelUpGlowTrailsMessage> _glowTrailsSubscriber;
@@ -67,6 +67,7 @@ namespace BalloonParty.UI.Score
         private ProgressNoticePresenter _notices;
         private PaletteEntry _colorConfig;
         private int _stashedMaxValue;
+        private int _shownStreak;
         private bool _active;
         private Tween _flexTween;
 
@@ -153,7 +154,7 @@ namespace BalloonParty.UI.Score
             _scoreTrailService.RegisterTarget(_colorConfig.Name, this, _colorConfig.Color);
             ApplyVisibility(animate: false);
 
-            _scoredSubscriber.Subscribe(OnScorePoint).AddTo(this);
+            _streakChangedSubscriber.Subscribe(_ => OnStreakChanged()).AddTo(this);
             _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(this);
             _trailArrivedSubscriber.Subscribe(OnTrailArrived).AddTo(this);
             _glowTrailsSubscriber.Subscribe(OnGlowTrails).AddTo(this);
@@ -162,19 +163,30 @@ namespace BalloonParty.UI.Score
             _resetSubscriber.Subscribe(_ => OnRunReset()).AddTo(this);
         }
 
-        private void OnScorePoint(ScorePointMessage msg)
+        // Driven by the streak signal (any colour), so we also catch this colour's streak being lost when a
+        // different colour is popped — not just its own pops. The notice persists until the streak grows
+        // into a new value (re-pop) or drops out of multiplier range (dismiss).
+        private void OnStreakChanged()
         {
-            if (LevelUpInProgress || msg.GroupIndex > 0 || msg.ColorName != _colorConfig.Name)
+            if (LevelUpInProgress)
             {
                 return;
             }
 
             var streak = _streakTracker.GetStreak(_colorConfig.Name);
+            if (streak == _shownStreak)
+            {
+                return;
+            }
 
+            _shownStreak = streak;
             if (streak > 1)
             {
-                _notices.DismissFullyShownNotices();
-                _notices.SpawnStreakNotice(streak);
+                _notices.ShowStreak(streak);
+            }
+            else
+            {
+                _notices.DismissStreak();
             }
         }
 
@@ -186,6 +198,7 @@ namespace BalloonParty.UI.Score
             // level FSM phase (see OnTrailArrived) — score trails still in flight keep arriving and would
             // otherwise spawn notices behind the popup.
             _notices.DismissAllNotices();
+            _shownStreak = 0;
         }
 
         // Not called from OnLevelUp — subscriber order is unenforced, so this runs only at
@@ -251,6 +264,7 @@ namespace BalloonParty.UI.Score
             _progressSlider.value = _levelProgress.GetProgress(_colorConfig.Name);
             ClearCompletionVfx();
             _notices.DismissAllNotices();
+            _shownStreak = 0;
             ApplyVisibility(animate: false);
         }
 
