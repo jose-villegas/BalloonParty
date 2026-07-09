@@ -13,11 +13,6 @@ namespace BalloonParty.Configuration.Balloons
         /// <summary>Swapped onto a balloon's body renderer while it's in rainbow mode — see BalloonView.</summary>
         Material RainbowMaterial { get; }
 
-        /// <summary>Catalog default — runtime reads the resolved value via IActiveLevelParameters.BoardLines.</summary>
-        int GameStartedBalloonLines { get; }
-
-        /// <summary>Catalog default — runtime reads the resolved value via IActiveLevelParameters.SpawnLines.</summary>
-        int NewProjectileBalloonLines { get; }
         float NewBalloonLinesTimeInterval { get; }
         Vector2 BalloonSpawnAnimationDurationRange { get; }
         int SpawnEntryRowOffset { get; }

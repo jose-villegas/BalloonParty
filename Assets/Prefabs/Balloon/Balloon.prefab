@@ -287,6 +287,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &1949076881470733533
 GameObject:
   m_ObjectHideFlags: 0
@@ -514,6 +516,7 @@ MonoBehaviour:
   _bodyRenderer: {fileID: 2921553031310187319}
   _aboveItemRenderers:
   - {fileID: 6020316169838688404}
+  _swayPivot: {fileID: 8217776062739370819}
   _baseSortingLayer: 50
 --- !u!114 &-4720687053981353126
 MonoBehaviour:
@@ -644,6 +647,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &7558929490291297603
 GameObject:
   m_ObjectHideFlags: 0
@@ -780,6 +785,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &8190022528988633400
 GameObject:
   m_ObjectHideFlags: 0
@@ -884,6 +891,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &9101512376242678319
 GameObject:
   m_ObjectHideFlags: 0

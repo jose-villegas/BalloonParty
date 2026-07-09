@@ -30,7 +30,7 @@ before any view tween, so when `BalloonPlacementResolver` finds no reachable slo
 that column genuinely can't accept a balloon. Before costing HP the resolver looks past the column:
 it re-homes the balloon into the nearest other column that can still take it, and failing that asks
 `BalloonBalancer.TryRelievePressure` to **pressure-balance** — shove stable balloons aside to open
-the column (see `Plans/PLAN-LossConditionPacing.md` Phase 2.5). Only when the whole board is out of
+the column. Only when the whole board is out of
 room does the would-be balloon join the overflow pile below the grid (`RejectedBalloonEffect`).
 `SpawnBlockedMessage` is published **when that balloon's heart launches** from the health UI
 (alongside `OverflowHeartRequestedMessage`), so the HP drain syncs with the heart leaving the bar;

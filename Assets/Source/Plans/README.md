@@ -14,6 +14,5 @@ or a pending evaluation.
 | `PLAN-ContentProduction.md` | Asset and content work required before Phase 8.3 — Deflector, Absorber, Gatekeeper art/prefab/config remaining | active |
 | `PLAN-FutureIdeas.md` | Unscheduled backlog of deferred features, improvement concepts, and speculative designs — items graduate into dedicated plans | active |
 | `PLAN-GridActorExpansion.md` | Grid actor Phase 8+ — archetypes done; 8.3 procedural placement (blocked on content) and 8.4 difficulty coupling open | active |
-| `PLAN-LossConditionPacing.md` | Loss condition + pacing — Phases 1–4 all shipped; loss cinematic now code-complete (`GameOverLossCinematic`), only in-editor asset authoring + playtest remain before retiring | active |
 | `PLAN-URPMigration.md` | Built-in RP → URP migration — decided *not now*; kept as decision record with explicit revisit triggers and verified inventory | conditional |
 | `Plans.md` | Doxygen index page linking all plans | — |

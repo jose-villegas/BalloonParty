@@ -27,7 +27,7 @@ Two inputs are deliberately simple heuristics and double as tuning knobs:
 
 - **`availableSpace`** = the empty-slot count. Re-home + pressure balance fill nearly every empty, so
   this approximates "how many balloons the board can still take" without re-deriving reachability.
-- **`spawnPerTurn`** = `NewProjectileBalloonLines × Columns`, the worst case a turn can throw at the board.
+- **`spawnPerTurn`** = `IActiveLevelParameters.Current.SpawnLines × Columns`, the worst case a turn can throw at the board.
 
 ## Consumers
 

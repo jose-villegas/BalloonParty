@@ -10,6 +10,7 @@ namespace BalloonParty.Slots.Actor.Archetype
 
         public TweenTracker TweenTracker => _tweenTracker;
         public SlotActorKind ActorKind => SlotActorKind.Static;
+        public Transform RotationPivot => transform;
 
         public void OnSpawned()
         {

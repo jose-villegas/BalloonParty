@@ -12,7 +12,6 @@ namespace BalloonParty.Configuration.Items
     public class ItemSettings : IWeightedEntry
     {
         [SerializeField] private ItemType _type;
-        [SerializeField] private int _turnCheckEvery;
         [SerializeField] private float _weight;
         [SerializeField] private int _maximumAllowed;
         [SerializeField] private GameObject _visualPrefab;
@@ -27,9 +26,6 @@ namespace BalloonParty.Configuration.Items
         [SerializeField] private PaintSettings _paint = new();
 
         public ItemType Type => _type;
-
-        /// <summary>Catalog default; runtime reads the resolved value via IActiveLevelParameters.ItemCadence.</summary>
-        public int TurnCheckEvery => _turnCheckEvery;
 
         /// <summary>Catalog default; the resolver multiplies this by the active range's per-type weight.</summary>
         public float Weight => _weight;

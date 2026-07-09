@@ -18,8 +18,6 @@ namespace BalloonParty.Configuration.Balloons
         [SerializeField] private Material _rainbowMaterial;
 
         [Header("Spawning")]
-        [SerializeField] private int _gameStartedBalloonLines;
-        [SerializeField] private int _newProjectileBalloonLines;
         [SerializeField] private float _newBalloonLinesTimeInterval;
         [SerializeField] private Vector2 _balloonSpawnAnimationSpeedRange;
         [Tooltip(
@@ -42,8 +40,6 @@ namespace BalloonParty.Configuration.Balloons
         public IReadOnlyList<BalloonPrefabEntry> Entries => _entries;
         public ParticleSystem DefaultPopVfxPrefab => _defaultPopVfxPrefab;
         public Material RainbowMaterial => _rainbowMaterial;
-        public int GameStartedBalloonLines => _gameStartedBalloonLines;
-        public int NewProjectileBalloonLines => _newProjectileBalloonLines;
         public float NewBalloonLinesTimeInterval => _newBalloonLinesTimeInterval;
         public Vector2 BalloonSpawnAnimationDurationRange => _balloonSpawnAnimationSpeedRange;
         public int SpawnEntryRowOffset => _spawnEntryRowOffset;

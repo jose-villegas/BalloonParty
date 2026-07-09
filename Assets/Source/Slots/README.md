@@ -122,7 +122,7 @@ Spawners are injected as `IEnumerable<IGridSpawner>` via VContainer's collection
 ## Interactions
 
 - **BalloonSpawner** — calls `Balance()` once before all line spawns so existing balloons consolidate upward first; then calls `Place` for each new balloon into remaining empty slots; uses `ComputePath` for spawn animation waypoints; publishes `BalanceBalloonsMessage` after spawning for a final settling pass
-- **StaticActorSpawner** — iterates `GridActorConfiguration.Entries`, picks a random count per entry (between `MinCount` and `MaxCount`), selects slots via the entry's `ISlotSelectionStrategy`, and calls `Place` per slot
+- **StaticActorSpawner** — iterates `GridActorConfiguration.Entries`, spawns the per-type count resolved for the active level (`IActiveLevelParameters.Current.TryGetGridActorCount` — absent types are gated out), selects slots via the entry's `ISlotSelectionStrategy`, and calls `Place` per slot
 - **BalloonController** — calls `Remove` when a balloon is popped; subscribes to `ActorHitMessage`
 - **BalloonBalancer** — reads occupancy to find gaps; skips `Static` actors (or actors that are not `IDynamicSlotActor`); calls `Remove` + `Place` to relocate dynamic actors; uses `ViewAt` to reach views for animation. `Balance()` is `internal` for synchronous pre-spawn consolidation
 - **NudgeService** — uses `GetNeighbors` and `IndexToWorldPosition` to direct nudge animations; filters by `IHasNudge`

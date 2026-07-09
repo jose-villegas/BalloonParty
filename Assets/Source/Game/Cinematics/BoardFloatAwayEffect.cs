@@ -81,6 +81,7 @@ namespace BalloonParty.Game.Cinematics
         private void FloatOne(ISlotActorView view, BoardFloatAwaySettings settings)
         {
             var actor = view.transform;
+            var pivot = view.RotationPivot;
             var start = actor.localPosition;
 
             // Random phase desyncs the balloons and randomizes each one's initial sway direction.
@@ -93,7 +94,7 @@ namespace BalloonParty.Game.Cinematics
 
             var rise = DOTween.To(() => progress, value => progress = value, 1f, settings.FloatDuration)
                 .SetEase(Ease.Linear)
-                .OnUpdate(() => ApplyStep(actor, start, settings, phase, swayTurns, riseScale, progress));
+                .OnUpdate(() => ApplyStep(actor, pivot, start, settings, phase, swayTurns, riseScale, progress));
 
             var sequence = DOTween.Sequence()
                 .SetUpdate(true)
@@ -102,9 +103,12 @@ namespace BalloonParty.Game.Cinematics
             view.TweenTracker.Append(sequence);
         }
 
-        // Drives position and lean off one shared sine sample so the balloon tilts into whichever way it sways.
+        // Drives position and lean off one shared sine sample so the balloon tilts into whichever way it
+        // sways. Position moves the whole actor; the tilt rides a pivot so lighting-baked sprites parented
+        // outside it stay put.
         private static void ApplyStep(
             Transform actor,
+            Transform pivot,
             Vector3 start,
             BoardFloatAwaySettings settings,
             float phase,
@@ -116,7 +120,7 @@ namespace BalloonParty.Game.Cinematics
             var swing = progress * Mathf.Sin(phase + progress * swayTurns);
             var rise = settings.RiseCurve.Evaluate(progress * settings.FloatDuration) * riseScale;
             actor.localPosition = start + new Vector3(settings.ZigzagAmplitude * swing, rise, 0f);
-            actor.localRotation = Quaternion.Euler(0f, 0f, -settings.SwayTiltAngle * swing);
+            pivot.localRotation = Quaternion.Euler(0f, 0f, -settings.SwayTiltAngle * swing);
         }
     }
 }

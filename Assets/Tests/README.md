@@ -277,7 +277,7 @@ Tests the item-assignment pipeline: turn filtering, max-cap enforcement via grid
 | Area | Tests | What could break |
 |---|---|---|
 | Empty `NewBalloons` → early return | 1 | Null guard missed |
-| Turn not divisible by `TurnCheckEvery` → skipped | 1 | Modulo check wrong |
+| Turn not on the item cadence (`ItemCadence`) → skipped | 1 | Modulo check wrong |
 | All items at max → no assignment | 1 | Cap off-by-one in `CountBalloonsWithItem` |
 | No eligible balloons (do not implement `IHasWriteableItemSlot`) | 1 | Missing interface filter |
 | Eligible balloon gets item assigned | 1 | Assignment path broken |

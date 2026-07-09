@@ -105,6 +105,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &1762683463306695558
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,6 +212,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &2595315931553119816
 GameObject:
   m_ObjectHideFlags: 0
@@ -315,6 +319,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &2884871305341737386
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,6 +426,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &3440368332349718159
 GameObject:
   m_ObjectHideFlags: 0
@@ -676,6 +684,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &3706335579396420984
 GameObject:
   m_ObjectHideFlags: 0
@@ -781,6 +791,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &4460810053262194890
 GameObject:
   m_ObjectHideFlags: 0
@@ -886,6 +898,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &4794667041960564482
 GameObject:
   m_ObjectHideFlags: 0
@@ -991,6 +1005,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &5054263593637115808
 GameObject:
   m_ObjectHideFlags: 0
@@ -1095,6 +1111,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &5598910205546160113
 GameObject:
   m_ObjectHideFlags: 0
@@ -1200,6 +1218,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &5873016687675054684
 GameObject:
   m_ObjectHideFlags: 0
@@ -1304,6 +1324,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &6708685799342753339
 GameObject:
   m_ObjectHideFlags: 0
@@ -1476,6 +1498,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1 &7667720758153416780
 GameObject:
   m_ObjectHideFlags: 0
@@ -1732,6 +1756,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _baseSortingLayer
       value: 300
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: _aboveItemRenderers.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}

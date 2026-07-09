@@ -42,6 +42,10 @@ namespace BalloonParty.Balloon.View
                  "the item when one is present, just above the body when not.")]
         [SerializeField] private Renderer[] _aboveItemRenderers;
 
+        [Tooltip("Child the float-away tilts. Keep baked specular-fake sprites parented outside it so their " +
+                 "light direction stays fixed when the body swings. Falls back to the root if unset.")]
+        [SerializeField] private Transform _swayPivot;
+
         [Header("Sorting")] [SerializeField] private int _baseSortingLayer;
 
         [Inject] private IBalloonsConfiguration _balloonsConfig;
@@ -63,6 +67,7 @@ namespace BalloonParty.Balloon.View
         public IBalloonVariant Variant => _variant;
         public TweenTracker TweenTracker => _tweenTracker;
         public SlotActorKind ActorKind => SlotActorKind.Dynamic;
+        public Transform RotationPivot => _swayPivot != null ? _swayPivot : transform;
 
         internal ITransformCapture TransformCapture => _itemService?.TransformCapture;
 
@@ -80,7 +85,7 @@ namespace BalloonParty.Balloon.View
         public void OnSpawned()
         {
             transform.localScale = Vector3.one;
-            transform.localRotation = Quaternion.identity;
+            RotationPivot.localRotation = Quaternion.identity;
             transform.position = Vector3.one * -1000f;
 
             foreach (var r in _spriteLayerRenderers)

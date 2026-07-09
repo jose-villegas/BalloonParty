@@ -1220,3 +1220,40 @@ gated behind a pause/`Navigation` state so the shot input doesn't fire instead).
    cards stack linearly or with diminishing returns?
 5. **Targeting on touch** — reuse the aim/tap input or a dedicated select mode? The
    prediction-trace UI may repurpose for target highlighting.
+
+---
+
+## 14 — Level Pacing Follow-ups (post-ship)
+
+Deferred tech-debt / tooling left over from the shipped Loss Condition & Pacing work
+(`LevelPacingConfiguration` / `LevelDifficultyResolver`; the feature's living docs are
+`Game/Level/README.md`, `Game/Health/README.md`, `Game/Cinematics/README.md`). None of these gate the
+feature — it is shipped and playtested; these are optional polish.
+
+### 14.1 Jump-to-level cheat
+
+A dev cheat to warp straight to level N (e.g. 50) to inspect late-game pacing without grinding. Looping
+`RunController` level-ups N times is O(N) and re-fires every side effect (cinematics, HP refill) N times
+— wrong and slow. Needs a new seam: `ScoreController` has no "set level directly" — add an internal
+`JumpToLevel(int level)` that sets `_level.Value` and publishes `ScoreLevelUpMessage` once (skipping the
+ceremony), or thread it through `RunController`. Surface via `CheatConsoleView` (check whether it supports
+a text-entry/parameterized cheat; otherwise preset targets like "Jump to 10/25/50").
+
+### 14.2 Extract a shared `LevelPacingValidator`
+
+`LevelPacingConfiguration.OnValidate` (editor-only warnings) and the "resolve levels 1..50 without
+throwing" EditMode test check the same invariants two different ways and can drift. Extract a plain
+`LevelPacingValidator.Validate(ILevelPacingConfiguration, IGameConfiguration) : IReadOnlyList<string>`
+(issue messages, no Unity/editor dependency): `OnValidate` logs each issue, the EditMode test asserts the
+list is empty. Also the seam a future "test a hypothetical config" editor tool would call.
+
+### 14.3 Escalate `LevelDifficultyResolver.FallbackParameters` to a hard failure
+
+The fallback covers "no authored range contains this level" — which 14.2's validator is meant to make
+unreachable in anything that passed validation. Once the validator is trusted, this should throw (or at
+minimum `Debug.LogError`, not `LogWarning` + a silent Simple-only substitute), per the project's
+don't-defend-against-the-impossible stance: a shipped gap in the level ranges should be loud.
+
+*(The original 14.4 — deleting the dead catalog spawn-rate properties — is done: `GameStartedBalloonLines`/
+`NewProjectileBalloonLines`, `ItemSettings.TurnCheckEvery`, and `GridActorPrefabEntry`'s
+`Weight`/`MinCount`/`MaxCount` + `IWeightedEntry` impl were removed once pacing owned those values.)*
