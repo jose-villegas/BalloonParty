@@ -1,22 +1,17 @@
 using System.Collections.Generic;
 using System.Threading;
-using BalloonParty.Shared;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Slots.Spawner;
 using Cysharp.Threading.Tasks;
 using NSubstitute;
 using NUnit.Framework;
+using UniRx;
 
 namespace BalloonParty.Tests.Slots
 {
     [TestFixture]
     public class GridSpawnerCoordinatorTests
     {
-        // Resolves immediately — removes the static Navigation dependency from tests.
-        private sealed class ImmediateGate : IReadyGate
-        {
-            public UniTask WaitAsync(CancellationToken ct) => UniTask.CompletedTask;
-        }
-
         [Test]
         public void GridSpawnerCoordinator_CallsSpawnersInPriorityOrder()
         {
@@ -41,7 +36,7 @@ namespace BalloonParty.Tests.Slots
             // Intentionally pass high-priority first to verify sorting.
             var coordinator = new GridSpawnerCoordinator(
                 new[] { highPriority, lowPriority },
-                new ImmediateGate());
+                ReadyGate());
 
             coordinator.Start();
 
@@ -74,7 +69,7 @@ namespace BalloonParty.Tests.Slots
 
             var coordinator = new GridSpawnerCoordinator(
                 new[] { first, second },
-                new ImmediateGate());
+                ReadyGate());
 
             coordinator.Start();
 
@@ -108,7 +103,7 @@ namespace BalloonParty.Tests.Slots
 
             var coordinator = new GridSpawnerCoordinator(
                 new[] { a, b },
-                new ImmediateGate());
+                ReadyGate());
 
             coordinator.Start();
 
@@ -131,7 +126,7 @@ namespace BalloonParty.Tests.Slots
 
             var coordinator = new GridSpawnerCoordinator(
                 new[] { spawner },
-                new ImmediateGate());
+                ReadyGate());
 
             coordinator.Start();
             Assert.AreEqual(1, callCount, "Initial spawn runs once.");
@@ -139,6 +134,14 @@ namespace BalloonParty.Tests.Slots
             coordinator.ResetRun(2);
 
             Assert.AreEqual(2, callCount, "Reset re-runs the spawners to repopulate the board.");
+        }
+
+        // A real gate over a substituted INavigation already at Game — resolves synchronously, no static state.
+        private static NavigationReadyGate ReadyGate()
+        {
+            var navigation = Substitute.For<INavigation>();
+            navigation.Current.Returns(new ReactiveProperty<NavigationState>(NavigationState.Game));
+            return new NavigationReadyGate(navigation, NavigationState.Game);
         }
     }
 }

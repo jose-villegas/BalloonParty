@@ -104,7 +104,7 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BalloonBalancer>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<NudgeService>();
             builder.RegisterEntryPoint<GridActorHitController>();
-            builder.RegisterInstance<IReadyGate>(new NavigationReadyGate(NavigationState.Game));
+            builder.Register<NavigationReadyGate>(Lifetime.Singleton).WithParameter(NavigationState.Game);
             builder.RegisterEntryPoint<GridSpawnerCoordinator>().AsSelf().As<IRunResettable>();
             builder.RegisterEntryPoint<StaticActorSpawner>().AsSelf().As<IGridSpawner>();
             builder.RegisterEntryPoint<PuffClusterRegistry>().AsSelf();

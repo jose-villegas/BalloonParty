@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using BalloonParty.Game.Run;
-using BalloonParty.Shared;
+using BalloonParty.Shared.GameState;
 using Cysharp.Threading.Tasks;
 using VContainer;
 using VContainer.Unity;
@@ -13,13 +13,13 @@ namespace BalloonParty.Slots.Spawner
     internal class GridSpawnerCoordinator : IStartable, IDisposable, IRunResettable
     {
         private readonly IReadOnlyList<IGridSpawner> _spawners;
-        private readonly IReadyGate _gate;
+        private readonly NavigationReadyGate _gate;
         private readonly CancellationTokenSource _cts = new();
 
         public int ResetOrder => RunResetOrder.Respawn;
 
         [Inject]
-        internal GridSpawnerCoordinator(IEnumerable<IGridSpawner> spawners, IReadyGate gate)
+        internal GridSpawnerCoordinator(IEnumerable<IGridSpawner> spawners, NavigationReadyGate gate)
         {
             _spawners = spawners.OrderBy(s => (int)s.SpawnPriority).ToList();
             _gate = gate;
