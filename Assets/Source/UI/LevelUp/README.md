@@ -6,8 +6,8 @@ The full-screen level-up ceremony that plays when all color bars complete.
 
 | File | What it does |
 |---|---|
-| `LevelUpLifetimeScope` | VContainer child scope on the LevelUp popup root; registers `LevelUpPopUp` and a `CinematicEndGate(LevelUpPanIn)` as `IReadyGate` |
-| `LevelUpPopUp` | Waits for the pan-in cinematic to end (via `IReadyGate`), freezes time via `TimeScaleService`, shows the popup, spawns glow trails from each `ColorProgressBar` to the glow fill, and publishes `LevelUpDismissedMessage` on Continue |
+| `LevelUpLifetimeScope` | VContainer child scope on the LevelUp popup root; registers `LevelUpPopUp` and a `CinematicEndGate(LevelUpPanIn)` by concrete type (not `.As<IReadyGate>()`) so the popup names the exact gate it waits on |
+| `LevelUpPopUp` | Waits for the pan-in cinematic to end (via an injected `CinematicEndGate`), freezes time via `TimeScaleService`, shows the popup, spawns glow trails from each `ColorProgressBar` to the glow fill, and publishes `LevelUpDismissedMessage` on Continue |
 
 ## How it works
 
@@ -30,7 +30,7 @@ The Animator's `updateMode` is set to `UnscaledTime` in `Start()`, so animations
 
 ### Gate pattern
 
-`LevelUpLifetimeScope` registers `new CinematicEndGate(CinematicState.LevelUpPanIn)` as `IReadyGate`. This mirrors how `GameLifetimeScope` registers `NavigationReadyGate(NavigationState.Game)` — both use `UniTask.WaitUntil` on a reactive property, just on different state machines.
+`LevelUpLifetimeScope` registers `CinematicEndGate(CinematicState.LevelUpPanIn)` **by concrete type**, and `LevelUpPopUp` injects `CinematicEndGate` directly — not `IReadyGate`. That keeps the dependency explicit and stops the popup from silently resolving the parent scope's `NavigationReadyGate(Game)` if this registration ever went missing. Both are `IReadyGate` implementations over `UniTask.WaitUntil` on a reactive property, just on different state machines (only `GridSpawnerCoordinator` still consumes the gate polymorphically, via `IReadyGate`).
 
 ```
 CinematicEndGate(LevelUpPanIn) → opens when Cinematic.Current != LevelUpPanIn
@@ -46,7 +46,7 @@ NavigationReadyGate(Game)      → opens when Navigation.Current == Game
 
 - **`LevelController`** (`Game/Level/`) — publishes `ScoreLevelUpMessage` (triggers `ShowAfterGateAsync`) and transitions navigation to `LevelUp`; on dismissal advances the level (two-phase commit) and flips `LevelUpPhase` to drive the Ascent
 - **`LevelUpCinematic`** — opens the gate by ending the pan-in; on `LevelUpDismissedMessage` resumes and navigates to `Game` (no restore cinematic — the camera un-zoom is the Ascent's)
-- **`LevelUpLifetimeScope`** — registers this component and provides the `IReadyGate` injection
+- **`LevelUpLifetimeScope`** — registers this component and provides the `CinematicEndGate` injection
 - **`ColorProgressBar`** — receives `LevelUpGlowTrailsMessage` to drain its slider in sync with glow trail waves; receives `LevelUpDismissedMessage` to apply the new max and reset progress
 - **`ScoreTrailService`** — provides trail target positions for glow trail origin and the `FlyingTrail` prefab for pool channel creation
 - **`PoolManager`** — hosts per-color `GlowTrail_{colorName}` pools created lazily by popup

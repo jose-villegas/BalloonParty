@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Score;
-using BalloonParty.Shared;
+using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
@@ -41,7 +41,7 @@ namespace BalloonParty.UI.LevelUp
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private IPublisher<LevelUpDismissedMessage> _dismissedPublisher;
         [Inject] private IPublisher<LevelUpGlowTrailsMessage> _glowTrailsPublisher;
-        [Inject] private IReadyGate _gate;
+        [Inject] private CinematicEndGate _gate;
         [Inject] private PauseService _pauseService;
         [Inject] private TimeScaleService _timeScaleService;
         [Inject] private IGamePalette _palette;

@@ -9,7 +9,7 @@ Each self-contained UI section has its own VContainer child scope, inheriting al
 | Scope | GameObject | Registers |
 |---|---|---|
 | `ScoreUILifetimeScope` | Score UI Canvas root | Injects scene-placed `ColorProgressBar` instances via `RegisterBuildCallback`; binds `ScoreCounterLabel` and `LevelLabel` |
-| `LevelUpLifetimeScope` | LevelUp popup root | `LevelUpPopUp`, `CinematicEndGate(LevelUpPanIn)` as `IReadyGate` |
+| `LevelUpLifetimeScope` | LevelUp popup root | `LevelUpPopUp`, `CinematicEndGate(LevelUpPanIn)` (by concrete type — the popup injects it directly, not `IReadyGate`) |
 | `ShieldUILifetimeScope` | Shield HUD root | `ShieldCounterLabel[]`, `ShieldCounterAnimation`, `ShieldTrailController`, the `Shield` trail endpoint |
 | `HealthUILifetimeScope` | Hearts HUD root | Binds `HealthCounterLabel`s to `IPlayerHealth.Current`; `HeartTrailController`, the `Heart` trail endpoint |
 | `DangerUILifetimeScope` | Danger overlay root | Binds `DangerGradientView`s to `IDangerLevel.Level` |

@@ -33,7 +33,7 @@ The director does not know about level-ups, trails, or cameras. Producers define
 
 ### Gate — Popup Wait + Glow Trails
 
-`LevelUpLifetimeScope` registers `CinematicEndGate(CinematicState.LevelUpPanIn)` as `IReadyGate`. Popup waits until `Cinematic.Current != LevelUpPanIn`. When the gate opens, the popup claims `TimeScaleSource.LevelUpPopup = 0` via `TimeScaleService` to freeze balloons/particles.
+`LevelUpLifetimeScope` registers `CinematicEndGate(CinematicState.LevelUpPanIn)` by concrete type; `LevelUpPopUp` injects it directly and waits until `Cinematic.Current != LevelUpPanIn`. When the gate opens, the popup claims `TimeScaleSource.LevelUpPopup = 0` via `TimeScaleService` to freeze balloons/particles.
 
 After the appear animation finishes, `LevelUpPopUp` publishes `LevelUpGlowTrailsMessage` — each `ColorProgressBar` drains its slider in sync — then spawns decorative `FlyingTrail` orbs from each bar to the glow fill in unscaled time. When all glow trails arrive, the level label updates. No cinematic state is active during this phase.
 
@@ -116,6 +116,6 @@ and reveal early. The explicit arm/open handshake closes that race.
 | `Game/Score/ScoreTrailService.cs` | Trail spawning, flight registration |
 | `Game/Score/ScoreController.cs` | Score tracking, `CheckLevelUp`, `WillLevelUp` |
 | `UI/LevelUp/LevelUpPopUp.cs` | Popup display, dismiss, `Time.timeScale = 0`, glow trail spawning via `LevelUpGlowTrailsMessage` |
-| `UI/LevelUp/LevelUpLifetimeScope.cs` | DI: registers `CinematicEndGate(LevelUpPanIn)` as `IReadyGate` |
+| `UI/LevelUp/LevelUpLifetimeScope.cs` | DI: registers `CinematicEndGate(LevelUpPanIn)` by concrete type (the popup injects it directly, not via `IReadyGate`) |
 | `Shared/Messages/LevelUpGlowTrailsMessage.cs` | Signal carrying trail-per-bar count and stagger delay for bar draining |
 | `Projectile/View/ProjectileView.cs` | Checks `IsAnyPaused` to freeze movement |
