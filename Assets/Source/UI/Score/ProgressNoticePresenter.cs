@@ -90,14 +90,27 @@ namespace BalloonParty.UI.Score
             _poolManager.Return(_streakPoolKey, notice);
         }
 
-        // Immediate (not animated): clears every notice even when the Animator is frozen, e.g. during
-        // the level-up time freeze. Each notice's completion callback removes it from the list.
+        // Immediate (not animated): clears every notice even when the Animator is frozen. Each notice's
+        // completion callback removes it from the list.
         internal void DismissAllNotices()
         {
             for (var i = _activeNotices.Count - 1; i >= 0; i--)
             {
                 _activeNotices[i].DismissImmediate();
             }
+        }
+
+        // Plays each notice's disappear instead of snapping. Requires the notice Animator to run on
+        // unscaled time — the level-up popup freezes timeScale to 0 while this is called, so a scaled
+        // Animator would stall the fade mid-way. Completion callbacks drain the list as each finishes.
+        internal void DismissAllAnimated()
+        {
+            for (var i = _activeNotices.Count - 1; i >= 0; i--)
+            {
+                _activeNotices[i].Dismiss();
+            }
+
+            _streakNotice = null;
         }
     }
 }

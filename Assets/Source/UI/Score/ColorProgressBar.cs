@@ -194,10 +194,10 @@ namespace BalloonParty.UI.Score
         {
             _stashedMaxValue = _thresholds.PointsRequiredForLevel(msg.NewLevel + 1);
             ClearCompletionVfx();
-            // Clear existing notices. New ones stay suppressed for the rest of the ceremony via the
-            // level FSM phase (see OnTrailArrived) — score trails still in flight keep arriving and would
-            // otherwise spawn notices behind the popup.
-            _notices.DismissAllNotices();
+            // Animate existing notices out (not a hard snap) as the popup takes over. New ones stay
+            // suppressed for the rest of the ceremony via the level FSM phase (see OnTrailArrived) — score
+            // trails still in flight keep arriving and would otherwise spawn notices behind the popup.
+            _notices.DismissAllAnimated();
             _shownStreak = 0;
         }
 
