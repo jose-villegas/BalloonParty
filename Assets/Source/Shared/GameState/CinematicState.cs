@@ -13,6 +13,10 @@ namespace BalloonParty.Shared.GameState
         HeartDrainRestore,
 
         // Camera pans off-board during level repopulation, then snaps back once the reveal is ready.
-        LevelAscend
+        LevelAscend,
+
+        // The loss ceremony: a slow-mo push-in over the lost board that holds the GameOver screen shut.
+        GameOverLoss,
+        GameOverLossRestore
     }
 }

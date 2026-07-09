@@ -17,7 +17,10 @@ difficulty/pacing system that turns the endless sandbox into a run-based game.
 **Status:** Phases 1–2 + pressure balance + the early-warning effect + the **danger (heart-drain)
 cinematic** are **implemented, committed and playtested**. **Phase 3 (3a ranges/resolver, 3b the
 Ascent, 3c items, 3e grid-actor pacing) and Phase 4 (allowed colors) have all since shipped** (3d
-custom levels was cut); the remaining unbuilt piece is the **loss cinematic**. See *Current state* below.
+custom levels was cut). The **loss cinematic is now code-complete** (`GameOverLossCinematic` +
+`GameOverPresentationGate`, `dotnet build`- and style-audit-clean) — the **only remaining work is
+in-editor**: authoring the two new `CinematicsSettings` segments and a feel playtest (checklist in
+*Current state → Loss cinematic* below). Once playtested, this plan retires. See *Current state* below.
 
 **Decisions already locked** (don't re-litigate):
 - Loss = **grid encroachment** — the board chokes up toward the thrower (balloons enter at
@@ -74,8 +77,25 @@ heart-drain presentation still plays. `RunController` defers (never drops) a los
 level-up window, retrying on the LevelUp → Game transition — the 0-HP request is one-shot.
 
 **Next steps (pick up here):**
-1. **Loss cinematic** (`GameOverLoss` beat) — the last unbuilt piece; build as a runner
-   parameterization per `PLAN-CinematicsArchitecture.md` guidance; do NOT write a MonoBehaviour.
+1. **Loss cinematic** (`GameOverLoss` beat) — ✅ **code-complete.** Built as a runner parameterization
+   (no MonoBehaviour): `Game/Cinematics/GameOverLossCinematic.cs` (plain C# `IStartable`) +
+   `Game/Run/GameOverPresentationGate.cs` (`IReadyGate`), both registered in
+   `GameScopeRegistration.RegisterPresentation`. **Split around the screen exactly like the level-up**
+   (via the runner's `EndPanIn`/`TryBeginRestore` API): pan-in → screen (camera held pushed in) →
+   Restart button publishes `GameOverDismissedMessage` → restore (camera pulls back) → **`RestartRun`
+   fires at the restore's end**, not on the button press. Two new `CinematicState` values (`GameOverLoss`,
+   `GameOverLossRestore`). See `Game/Cinematics/README.md → Loss Ceremony Flow`. **Remaining (in-editor
+   only):**
+   - Open the `CinematicsSettings` asset — `OnValidate` auto-grows `_states` to 8; author the two new
+     entries (indices 6/7). `GameOverLoss` (the push-in that plays *before* the screen): a
+     `TimeScaleCurve` ramping to slow-mo (last key = how long the push-in holds before the screen shows),
+     `ZoomAmount`/`PanWeight`/`FollowSpeed` for the push-in, `Traits = BlocksShake`. `GameOverLossRestore`
+     (the pull-back that plays *after* Restart is pressed, then triggers the run restart): its curve's
+     **duration = how long the pull-back takes** (values ignored — `RestoreEvaluatesCurve = false`), zero
+     zoom/pan, `Traits = None`.
+   - Playtest with the **Force Game Over** cheat (director free) *and* an overflow death (heart-drain
+     still winding down — verifies the wait-for-director handoff). Confirm: push-in → screen reveals over
+     the held frame → Restart pulls the camera back → the run only restarts once the pull-back finishes.
 2. **Ongoing tuning** — `StartingHitPoints`, lines-per-turn vs pop-rate, danger gradient feel,
    and the Ascent's `LevelAscendSettings`/points-required curve now that Phase 3+4 are live.
 

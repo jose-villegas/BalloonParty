@@ -14,7 +14,6 @@ using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
 using VContainer;
-using VContainer.Unity;
 using BalloonParty.Configuration.Cinematics;
 using Navigation = BalloonParty.Shared.GameState.Navigation;
 
@@ -23,16 +22,12 @@ namespace BalloonParty.Game.Cinematics
     /// <summary>
     ///     Puppets the level-up's tipping score trail along the pan-in, then hands off to the popup and restore phases.
     /// </summary>
-    internal sealed class LevelUpCinematic : IStartable, IDisposable
+    internal sealed class LevelUpCinematic : CameraRigCinematicProducer
     {
         // Timeout multiples of the trail's flight duration, so a lost/mismatched trail can't soft-lock the popup.
         private const float PanInTimeoutFactor = 3f;
         private const float TrailRegisterTimeoutFactor = 3f;
 
-        private readonly CinematicDirector _director;
-        private readonly CinematicCameraRig _rig;
-        private readonly TimeScaleService _timeScale;
-        private readonly ICinematicsSettings _settings;
         private readonly IGameConfiguration _config;
         private readonly ISubscriber<ScorePointMessage> _scoredSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _dismissedSubscriber;
@@ -43,7 +38,6 @@ namespace BalloonParty.Game.Cinematics
         private readonly PauseService _pauseService;
         private readonly CancellationTokenSource _cts = new();
 
-        private CameraRigCinematic _cinematic;
         private TrackedTrailSettings _trackedTrailSettings;
         private IDisposable _scoreSubscription;
         private IDisposable _sessionSubscription;
@@ -70,11 +64,8 @@ namespace BalloonParty.Game.Cinematics
             ILossForecast lossForecast,
             ScoreTrailService scoreTrailService,
             PauseService pauseService)
+            : base(director, rig, timeScale, settings)
         {
-            _director = director;
-            _rig = rig;
-            _timeScale = timeScale;
-            _settings = settings;
             _config = config;
             _scoredSubscriber = scoredSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
@@ -85,10 +76,9 @@ namespace BalloonParty.Game.Cinematics
             _pauseService = pauseService;
         }
 
-        public void Start()
+        protected override CameraRigCinematicConfig BuildConfig()
         {
-            _trackedTrailSettings = _settings.EntryOf(CinematicState.LevelUpPanIn).TrackedTrail;
-            _cinematic = new CameraRigCinematic(_director, _rig, _timeScale, _settings, new CameraRigCinematicConfig
+            return new CameraRigCinematicConfig
             {
                 PanInState = CinematicState.LevelUpPanIn,
                 RestoreState = CinematicState.LevelUpRestore,
@@ -97,18 +87,21 @@ namespace BalloonParty.Game.Cinematics
                 RestoreEvaluatesCurve = true,
                 OnPanInTick = PanInTick,
                 OnEnded = OnCinematicEnded,
-            });
+            };
+        }
 
+        protected override void OnStart()
+        {
+            _trackedTrailSettings = Settings.EntryOf(CinematicState.LevelUpPanIn).TrackedTrail;
             _scoreSubscription = _scoredSubscriber.Subscribe(OnScorePoint);
         }
 
-        public void Dispose()
+        protected override void OnDispose()
         {
             _cts.Cancel();
             _cts.Dispose();
             DisposeSessionSubscription();
             _scoreSubscription?.Dispose();
-            _cinematic?.Abort();
 
             if (_pauseService.IsPaused(PauseSource.Cinematic))
             {
@@ -184,7 +177,7 @@ namespace BalloonParty.Game.Cinematics
 
             // Re-check after the async trail wait: the loss may have committed since the tipping pop.
             if (Navigation.Current.Value != NavigationState.Game || _lossForecast.LossImminent
-                || !_cinematic.TryBegin())
+                || !Runner.TryBegin())
             {
                 _sessionActive = false;
                 return;
@@ -200,7 +193,7 @@ namespace BalloonParty.Game.Cinematics
 
         private void OnTrailArrived(ScoreTrailArrivedMessage msg)
         {
-            if (!_cinematic.IsPanInRunning)
+            if (!Runner.IsPanInRunning)
             {
                 return;
             }
@@ -257,7 +250,7 @@ namespace BalloonParty.Game.Cinematics
             // Trail was completed/returned out from under us — end the pan-in instead of stalling.
             if (_trackedFlight?.Transform == null)
             {
-                if (_cinematic.IsPanInRunning)
+                if (Runner.IsPanInRunning)
                 {
                     EndPanIn();
                 }
@@ -280,7 +273,7 @@ namespace BalloonParty.Game.Cinematics
             }
 
             _trackedFlight.Complete();
-            if (_cinematic.IsPanInRunning)
+            if (Runner.IsPanInRunning)
             {
                 EndPanIn();
             }
@@ -298,7 +291,7 @@ namespace BalloonParty.Game.Cinematics
                 _pauseService.Resume(PauseSource.Cinematic);
             }
 
-            _cinematic.Abort();
+            Runner.Abort();
             _sessionActive = false;
         }
 
@@ -307,7 +300,7 @@ namespace BalloonParty.Game.Cinematics
             DisposeSessionSubscription();
             _trackedFlight = null;
             _scoreTrailService.Flights.CompleteAll();
-            _cinematic.EndPanIn();
+            Runner.EndPanIn();
             SubscribeForDismissed();
         }
 

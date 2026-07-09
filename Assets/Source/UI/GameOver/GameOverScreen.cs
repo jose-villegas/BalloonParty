@@ -1,6 +1,7 @@
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
+using Cysharp.Threading.Tasks;
 using MessagePipe;
 using TMPro;
 using UniRx;
@@ -23,7 +24,8 @@ namespace BalloonParty.UI.GameOver
 
         [Inject] private ISubscriber<GameOverMessage> _gameOverSubscriber;
         [Inject] private IRunMeta _runMeta;
-        [Inject] private RunController _runController;
+        [Inject] private IPublisher<GameOverDismissedMessage> _dismissedPublisher;
+        [Inject] private GameOverPresentationGate _presentationGate;
 
         private CanvasGroup _canvasGroup;
         private FormattedLabel _finalLevel;
@@ -55,18 +57,27 @@ namespace BalloonParty.UI.GameOver
                 .AddTo(this);
         }
 
-        // Wired to the Restart button's onClick.
+        // Wired to the Restart button's onClick. Hides now; the restore cinematic then plays and
+        // GameOverLossCinematic restarts the run once it ends — so the restart is deferred, not immediate.
         public void OnRestartPressed()
         {
-            _runController.RestartRun();
+            SetVisible(false);
+            _dismissedPublisher.Publish(new GameOverDismissedMessage());
         }
 
+        // Labels are filled now; the reveal waits for the loss cinematic to open the gate.
         private void OnGameOver(GameOverMessage msg)
         {
             _finalLevel.Set(msg.FinalLevel);
             _finalScore.Set(msg.FinalScore);
             _bestLevel.Set(_runMeta.BestLevel.Value);
             _bestScore.Set(_runMeta.BestScore.Value);
+            RevealAfterGateAsync().Forget();
+        }
+
+        private async UniTaskVoid RevealAfterGateAsync()
+        {
+            await _presentationGate.WaitAsync(destroyCancellationToken);
             SetVisible(true);
         }
 

@@ -68,6 +68,7 @@ namespace BalloonParty.Game
             builder.RegisterMessageBroker<ShieldLostMessage>(options);
             builder.RegisterMessageBroker<ScoreTrailArrivedMessage>(options);
             builder.RegisterMessageBroker<LevelUpDismissedMessage>(options);
+            builder.RegisterMessageBroker<GameOverDismissedMessage>(options);
             builder.RegisterMessageBroker<LevelTransitionCompletedMessage>(options);
             builder.RegisterMessageBroker<LevelUpGlowTrailsMessage>(options);
             builder.RegisterMessageBroker<PausedMessage>(options);
@@ -157,9 +158,12 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<CinematicCameraView>();
             builder.Register<CinematicCameraRig>(Lifetime.Singleton);
 
+            builder.Register<GameOverPresentationGate>(Lifetime.Singleton);
+
             builder.RegisterEntryPoint<CinematicDirector>().AsSelf();
             builder.RegisterEntryPoint<LevelUpCinematic>();
             builder.RegisterEntryPoint<HeartDrainCinematic>();
+            builder.RegisterEntryPoint<GameOverLossCinematic>();
             builder.RegisterEntryPoint<LevelTransitionController>();
             builder.RegisterComponentInHierarchy<GameOverScreen>();
         }
