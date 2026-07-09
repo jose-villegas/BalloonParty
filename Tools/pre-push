@@ -1,0 +1,65 @@
+#!/bin/zsh
+# BalloonParty pre-push hook — gate the push on a green EditMode test run.
+# Install: cp Tools/pre-push .git/hooks/pre-push && chmod +x .git/hooks/pre-push
+# (or once: git config core.hooksPath Tools, to track the hook in-repo)
+#
+# Batchmode can't run while the Unity editor holds the project lock, so:
+#   - editor CLOSED → run the tests headlessly right here and gate on the result.
+#   - editor OPEN   → gate on the most recent in-editor result
+#     (Tools > BalloonParty > Run EditMode Tests), re-required only when the .cs
+#     changes since that run cross the "major change" threshold.
+
+ROOT="$(git rev-parse --show-toplevel)"
+MD="$ROOT/Tools/last-test-run.md"
+MIN_LINES=40
+MIN_FILES=3
+HEAD="$(git rev-parse HEAD)"
+
+# Non-comment .cs changes between $1 and HEAD.
+cs_delta_lines() {
+    git -C "$ROOT" diff "$1" "$HEAD" -- '*.cs' | grep -E '^[+-]' | grep -vE '^[+-][+-]' \
+        | grep -vcE '^[+-][[:space:]]*(//|/\*|\*|$)'
+}
+cs_delta_files() {
+    git -C "$ROOT" diff --name-only "$1" "$HEAD" -- '*.cs' | grep -c .
+}
+
+if [ ! -f "$ROOT/Temp/UnityLockfile" ]; then
+    echo "🎈 Editor closed — running EditMode tests (batchmode)…"
+    "$ROOT/Tools/run_editmode_tests.sh" --force
+    if [ $? -ne 0 ]; then
+        echo "❌ EditMode tests failed — push blocked. See Tools/last-test-run.md"
+        exit 1
+    fi
+    echo "✅ EditMode tests green."
+    exit 0
+fi
+
+# Editor is open — rely on the in-editor result.
+if [ ! -f "$MD" ]; then
+    echo "❌ No EditMode result (Tools/last-test-run.md)."
+    echo "   Run 'Tools > BalloonParty > Run EditMode Tests' in the editor, then push."
+    exit 1
+fi
+
+if grep -q "^# EditMode tests — FAILED" "$MD"; then
+    echo "❌ Last EditMode run FAILED — fix and re-run in the editor. See Tools/last-test-run.md"
+    exit 1
+fi
+
+RAN_AGAINST="$(grep -oE 'ran-against: [0-9a-f]+' "$MD" | awk '{print $2}')"
+if [ -z "$RAN_AGAINST" ]; then
+    echo "⚠️  Result file has no commit tag — re-run 'Tools > BalloonParty > Run EditMode Tests'. Push blocked."
+    exit 1
+fi
+
+LINES="$(cs_delta_lines "$RAN_AGAINST")"
+FILES="$(cs_delta_files "$RAN_AGAINST")"
+if [ "$LINES" -ge "$MIN_LINES" ] || [ "$FILES" -ge "$MIN_FILES" ]; then
+    echo "❌ $FILES .cs file(s) / $LINES non-comment line(s) changed since the last green in-editor run"
+    echo "   (thresholds: $MIN_FILES files or $MIN_LINES lines) — re-run 'Tools > BalloonParty > Run EditMode Tests' before pushing."
+    exit 1
+fi
+
+echo "✅ Recent in-editor tests green; $FILES file(s) / $LINES line(s) changed since (below threshold)."
+exit 0

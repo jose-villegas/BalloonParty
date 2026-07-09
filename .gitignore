@@ -68,3 +68,9 @@ Docs/doxygen-default.css
 # Python bytecode (style audit tooling)
 __pycache__/
 *.pyc
+
+# EditMode test-runner artifacts (Tools/run_editmode_tests.sh)
+Tools/last-test-run.md
+Tools/.test-run-stamp
+Tools/.editmode-results.xml
+Tools/.editmode-run.log
