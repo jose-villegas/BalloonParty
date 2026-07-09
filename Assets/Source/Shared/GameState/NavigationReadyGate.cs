@@ -14,14 +14,11 @@ namespace BalloonParty.Shared.GameState
             _targetState = targetState;
         }
 
+        // Always defers at least one frame (never completes synchronously) — the GridSpawnerCoordinator
+        // relies on that so the initial spawn runs after every entry point has started (e.g. the pacing
+        // resolver), not synchronously during its own Start.
         public UniTask WaitAsync(CancellationToken ct)
         {
-            // Short-circuit when already there — no needless frame delay, and lets callers await synchronously.
-            if (_navigation.Current.Value == _targetState)
-            {
-                return UniTask.CompletedTask;
-            }
-
             return UniTask.WaitUntil(
                 () => _navigation.Current.Value == _targetState,
                 cancellationToken: ct);

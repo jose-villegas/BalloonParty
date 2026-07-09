@@ -6,6 +6,7 @@ using BalloonParty.Nudge;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using MessagePipe;
@@ -114,18 +115,28 @@ namespace BalloonParty.Balloon.Controller
             _poolManager.Return(_poolKey, _view);
         }
 
-        // Reparents this balloon's view under the descending scenario root so it slides out with the old level.
-        internal void RideOutgoing(Transform outgoingRoot, float exitDrop)
+        // Detaches this balloon into a level transition's outgoing "old level" group: vacates its grid slot
+        // and reparents the view under the outgoing root so it travels with the transition. The caller
+        // animates the returned view, then hands it back to the pool via ReturnToPool.
+        internal ISlotActorView DetachForOutgoing(Transform outgoingRoot)
         {
-            if (_view == null)
+            _itemActivatedSubscription?.Dispose();
+            _itemActivatedSubscription = null;
+
+            var slot = _model.SlotIndex.Value;
+            if (ReferenceEquals(_grid.At(slot), _model))
             {
-                return;
+                _grid.Remove(slot);
             }
 
             _view.transform.SetParent(outgoingRoot, worldPositionStays: true);
-            var local = _view.transform.localPosition;
-            local.y -= exitDrop;
-            _view.transform.localPosition = local;
+            return _view;
+        }
+
+        internal void ReturnToPool()
+        {
+            _onReturned?.Invoke();
+            _poolManager.Return(_poolKey, _view);
         }
 
         private void Deflect(ActorHitMessage msg)

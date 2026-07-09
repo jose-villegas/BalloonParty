@@ -38,7 +38,7 @@ namespace BalloonParty.Tests.Slots
                 new[] { highPriority, lowPriority },
                 ReadyGate());
 
-            coordinator.Start();
+            coordinator.ResetRun(1);
 
             Assert.AreEqual(
                 new[] { (int)SpawnStage.StaticActors, (int)SpawnStage.BalloonActors },
@@ -71,7 +71,7 @@ namespace BalloonParty.Tests.Slots
                 new[] { first, second },
                 ReadyGate());
 
-            coordinator.Start();
+            coordinator.ResetRun(1);
 
             var firstEndIdx = executionLog.IndexOf("first_end");
             var secondStartIdx = executionLog.IndexOf("second_start");
@@ -105,7 +105,7 @@ namespace BalloonParty.Tests.Slots
                 new[] { a, b },
                 ReadyGate());
 
-            coordinator.Start();
+            coordinator.ResetRun(1);
 
             Assert.That(called, Is.EquivalentTo(new[] { "a", "b" }),
                 "Both spawners at the same stage must run.");
@@ -128,15 +128,16 @@ namespace BalloonParty.Tests.Slots
                 new[] { spawner },
                 ReadyGate());
 
-            coordinator.Start();
-            Assert.AreEqual(1, callCount, "Initial spawn runs once.");
+            coordinator.ResetRun(1);
+            Assert.AreEqual(1, callCount, "First reset spawns once.");
 
             coordinator.ResetRun(2);
 
             Assert.AreEqual(2, callCount, "Reset re-runs the spawners to repopulate the board.");
         }
 
-        // A real gate over a substituted INavigation already at Game — resolves synchronously, no static state.
+        // Ctor filler only — these tests drive ResetRun, which bypasses the gate. (The gated Start path
+        // defers a frame, so it can't complete inside a synchronous EditMode test.)
         private static NavigationReadyGate ReadyGate()
         {
             var navigation = Substitute.For<INavigation>();

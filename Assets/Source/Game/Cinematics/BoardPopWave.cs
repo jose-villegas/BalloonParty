@@ -17,7 +17,7 @@ namespace BalloonParty.Game.Cinematics
     ///     registry, which publishes no <c>ActorHitMessage</c>. Tuning is the <c>LevelAscend</c> pop
     ///     settings, so both beats read the same cadence.
     /// </summary>
-    internal sealed class BoardPopWave
+    internal sealed class BoardPopWave : IBoardEffect
     {
         private readonly SlotGrid _grid;
         private readonly BalloonControllerRegistry _balloonRegistry;

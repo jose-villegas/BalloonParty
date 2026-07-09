@@ -115,7 +115,7 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
             builder.RegisterEntryPoint<RejectedBalloonEffect>().AsSelf().As<IRunResettable>().As<IPendingHealthCharges>();
-            builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf().As<ITransitionOutgoingContent>();
+            builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf();
             builder.Register<BalloonControllerContext>(Lifetime.Singleton);
             builder.Register<BalloonPlacementResolver>(Lifetime.Singleton);
             builder.Register<BalloonFactory>(Lifetime.Singleton);
@@ -160,6 +160,7 @@ namespace BalloonParty.Game
 
             builder.Register<GameOverPresentationGate>(Lifetime.Singleton);
             builder.Register<BoardPopWave>(Lifetime.Singleton);
+            builder.Register<BoardFloatAwayEffect>(Lifetime.Singleton).As<IBoardEffect>();
 
             builder.RegisterEntryPoint<CinematicDirector>().AsSelf();
             builder.RegisterEntryPoint<LevelUpCinematic>();

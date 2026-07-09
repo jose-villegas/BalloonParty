@@ -17,7 +17,12 @@ namespace BalloonParty.Configuration.Cinematics
         [Tooltip("The Ascent's own tuning — a transform-descent, not a camera move.")]
         [SerializeField] private LevelAscendSettings _levelAscend;
 
+        [Tooltip("Tuning for the float-away board effect (level-clear balloons rise + zigzag + shrink).")]
+        [SerializeField] private BoardFloatAwaySettings _boardFloatAway;
+
         public LevelAscendSettings LevelAscend => _levelAscend;
+
+        public BoardFloatAwaySettings BoardFloatAway => _boardFloatAway;
 
         private void OnValidate()
         {

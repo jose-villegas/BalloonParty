@@ -5,6 +5,7 @@ using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Cinematics;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
@@ -34,7 +35,7 @@ namespace BalloonParty.Game.Level
         private readonly StaticActorSpawner _staticActorSpawner;
         private readonly IReadOnlyList<ITransitionOutgoingContent> _outgoingContent;
         private readonly BalloonControllerRegistry _balloonRegistry;
-        private readonly BoardPopWave _popWave;
+        private readonly IBoardEffect _boardEffect;
         private readonly RejectedBalloonEffect _overflow;
         private readonly PauseService _pauseService;
         private readonly ILevelProgress _levelProgress;
@@ -54,7 +55,7 @@ namespace BalloonParty.Game.Level
             StaticActorSpawner staticActorSpawner,
             IReadOnlyList<ITransitionOutgoingContent> outgoingContent,
             BalloonControllerRegistry balloonRegistry,
-            BoardPopWave popWave,
+            IBoardEffect boardEffect,
             RejectedBalloonEffect overflow,
             PauseService pauseService,
             ILevelProgress levelProgress,
@@ -68,7 +69,7 @@ namespace BalloonParty.Game.Level
             _staticActorSpawner = staticActorSpawner;
             _outgoingContent = outgoingContent;
             _balloonRegistry = balloonRegistry;
-            _popWave = popWave;
+            _boardEffect = boardEffect;
             _overflow = overflow;
             _pauseService = pauseService;
             _levelProgress = levelProgress;
@@ -112,18 +113,23 @@ namespace BalloonParty.Game.Level
 
                 await UniTask.WaitUntil(() => !_overflow.IsOverflowActive, cancellationToken: ct);
 
-                // Snapshot bands now, while the grid is still fully populated.
-                _popWave.Collect();
-
-                // Un-zoom the camera (the level-up pan-in left it zoomed) in lockstep with the pop.
-                _cameraRig.RestoreTweened(_popWave.EstimateSeconds());
-
-                // Must precede the pop wave (clusters snapshot here) and the clear (grid still populated).
+                // Reset the staging root to origin before anything reparents onto it (balloons + statics),
+                // so their reparent lands at the right offset.
                 _scenarioRoot.Transform.position = Vector3.zero;
+
+                // Detach the old balloons into the outgoing group — off the grid and reparented under the
+                // root, so they travel with the descent while the float animates them up.
+                _boardEffect.Collect();
+
+                // Un-zoom the camera (the level-up pan-in left it zoomed) over the LevelUpRestore segment's
+                // own duration — independent of the board effect, which is now a separate concurrent beat.
+                var restoreSeconds = _cinematicsSettings.EntryOf(CinematicState.LevelUpRestore).Rig.TimeScaleCurve.Duration();
+                _cameraRig.RestoreTweened(restoreSeconds);
+
                 HoldOutgoingContent();
 
-                // Old balloons pop while sliding out, concurrently with the descent.
-                var popTask = _popWave.PlayAsync(ct);
+                // Old balloons clear out (the float-away) concurrently with the descent.
+                var popTask = _boardEffect.PlayAsync(ct);
 
                 // Clear only the OLD statics (the wave owns the balloons); new ones spawn at origin so
                 // PlayAsync's lift/slide carries them into place.

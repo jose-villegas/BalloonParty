@@ -11,7 +11,7 @@ using VContainer.Unity;
 namespace BalloonParty.Balloon.Controller
 {
     /// <summary>Routes each balloon's hit reaction to its owning controller via a flat-array index, avoiding per-balloon subscriptions.</summary>
-    internal class BalloonControllerRegistry : IStartable, IDisposable, ITransitionOutgoingContent
+    internal class BalloonControllerRegistry : IStartable, IDisposable
     {
         // Comfortably above the 66-slot board plus spawn/transit overlap.
         private const int InitialCapacity = 128;
@@ -19,6 +19,7 @@ namespace BalloonParty.Balloon.Controller
 
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly List<BalloonController> _clearBuffer = new();
+        private readonly List<BalloonController> _outgoing = new();
 
         private IBalloonModel[] _models = new IBalloonModel[InitialCapacity];
         private BalloonController[] _controllers = new BalloonController[InitialCapacity];
@@ -88,7 +89,8 @@ namespace BalloonParty.Balloon.Controller
         }
 
         // Pops one balloon on demand; routes through HandleBoardClear, not the projectile-hit Pop() path.
-        internal bool TryPopSingle(IBalloonModel model)
+        // playPopVfx is false for effects that already animated the balloon away (e.g. the float dissolve).
+        internal bool TryPopSingle(IBalloonModel model, bool playPopVfx = true)
         {
             if (!TryResolve(model, out var controller))
             {
@@ -96,7 +98,7 @@ namespace BalloonParty.Balloon.Controller
             }
 
             Unregister((IWriteableBalloonModel)model);
-            controller.HandleBoardClear(playPopVfx: true);
+            controller.HandleBoardClear(playPopVfx);
             return true;
         }
 
@@ -112,20 +114,6 @@ namespace BalloonParty.Balloon.Controller
 
             controller = null;
             return false;
-        }
-
-        // Outgoing balloons ride the descending scenario root out with the old level.
-        public void HoldOutgoing(Transform outgoingRoot, float exitDrop)
-        {
-            for (var i = 0; i < _highWater; i++)
-            {
-                _controllers[i]?.RideOutgoing(outgoingRoot, exitDrop);
-            }
-        }
-
-        public void ReleaseOutgoing()
-        {
-            // Nothing to undo — ClearAll already returns outgoing balloons to their pool.
         }
 
         private void OnBoardClear(BoardClearMessage msg)
@@ -158,6 +146,39 @@ namespace BalloonParty.Balloon.Controller
             }
 
             _clearBuffer.Clear();
+        }
+
+        // Graduates every live balloon into a detached "outgoing" group for a level transition: unregisters
+        // them (so the new level's spawn and its ClearAll ignore them) and reparents their views under the
+        // outgoing root, collecting the views for the transition to animate. Hand them back with ReturnOutgoing.
+        internal void DetachOutgoing(Transform outgoingRoot, List<ISlotActorView> views)
+        {
+            _outgoing.Clear();
+            for (var i = 0; i < _highWater; i++)
+            {
+                var controller = _controllers[i];
+                if (controller != null)
+                {
+                    views.Add(controller.DetachForOutgoing(outgoingRoot));
+                    _outgoing.Add(controller);
+                }
+
+                _models[i] = null;
+                _controllers[i] = null;
+            }
+
+            _freeCount = 0;
+            _highWater = 0;
+        }
+
+        internal void ReturnOutgoing()
+        {
+            for (var i = 0; i < _outgoing.Count; i++)
+            {
+                _outgoing[i].ReturnToPool();
+            }
+
+            _outgoing.Clear();
         }
 
         private void Grow()

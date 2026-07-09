@@ -77,7 +77,7 @@ heart-drain presentation still plays. `RunController` defers (never drops) a los
 level-up window, retrying on the LevelUp → Game transition — the 0-HP request is one-shot.
 
 **Next steps (pick up here):**
-1. **Loss cinematic** (`GameOverLoss` beat) — ✅ **code-complete.** Built as a runner parameterization
+1. **Loss cinematic** (`GameOverLoss` beat) — ✅ **SHIPPED & playtested (2026-07-09).** Built as a runner parameterization
    (no MonoBehaviour): `Game/Cinematics/GameOverLossCinematic.cs` (plain C# `IStartable`) +
    `Game/Run/GameOverPresentationGate.cs` (an `IReadyGate`, but injected by concrete type), both registered in
    `GameScopeRegistration.RegisterPresentation`. **Split around the screen exactly like the level-up**
@@ -85,22 +85,26 @@ level-up window, retrying on the LevelUp → Game transition — the 0-HP reques
    Restart button publishes `GameOverDismissedMessage` → restore (camera pulls back **while the board
    pops away** via the shared `BoardPopWave`, the same slow-mo pop the Ascent uses) → **`RestartRun`
    fires once both the pop and the pull-back finish**, not on the button press. Two new `CinematicState` values (`GameOverLoss`,
-   `GameOverLossRestore`). See `Game/Cinematics/README.md → Loss Ceremony Flow`. **Remaining (in-editor
-   only):**
-   - Open the `CinematicsSettings` asset — `OnValidate` auto-grows `_states` to 8; author the two new
-     entries (indices 6/7). `GameOverLoss` (the push-in that plays *before* the screen): a
-     `TimeScaleCurve` ramping to slow-mo (last key = how long the push-in holds before the screen shows),
-     `ZoomAmount`/`PanWeight`/`FollowSpeed` for the push-in, `Traits = BlocksShake`. `GameOverLossRestore`
-     (the pull-back that plays *after* Restart is pressed, then triggers the run restart): values ignored
-     (`RestoreEvaluatesCurve = false`), zero zoom/pan, `Traits = None`. Its curve **duration is now only the
-     empty-board fallback** — with balloons present the pull-back matches the `BoardPopWave` duration so the
-     camera settles on the last pop.
-   - Playtest with the **Force Game Over** cheat (director free) *and* an overflow death (heart-drain
-     still winding down — verifies the wait-for-director handoff). Confirm: push-in → screen reveals over
-     the held frame → Restart pulls the camera back **while the board pops away in a slow-mo wave** → the
-     run only restarts once both the pop and the pull-back finish. Also re-check the **level-up Ascent**
-     still pops correctly (the pop wave was extracted into the shared `BoardPopWave`).
-2. **Ongoing tuning** — `StartingHitPoints`, lines-per-turn vs pop-rate, danger gradient feel,
+   `GameOverLossRestore`). See `Game/Cinematics/README.md → Loss Ceremony Flow`. `CinematicsSettings`
+   entries authored + playtested on both the Force-Game-Over and overflow-death paths (2026-07-09);
+   `GameOverLossRestore`'s curve duration is now only the empty-board fallback (with balloons the pull-back
+   matches the `BoardPopWave` duration and settles on the last pop).
+2. **Level-up float-away board effect** — ✅ **code-complete (2026-07-09), needs settings authoring +
+   playtest.** A second board-clear effect: instead of popping, level-up balloons rise while swaying on a
+   phase-randomized sine and scaling to zero, then return to the pool. Introduced `IBoardEffect`
+   (`Collect`/`EstimateSeconds`/`PlayAsync`) — `BoardPopWave` (now game-over only) and the new
+   `BoardFloatAwayEffect` (`Game/Cinematics/`) both implement it; `LevelTransitionController` injects the
+   interface (bound to the float-away) as a swappable level-clear strategy. The old balloons are now
+   **graduated into the transition's outgoing "old level" group** like the statics: `BoardFloatAwayEffect.
+   Collect()` calls `BalloonControllerRegistry.DetachOutgoing`, which unregisters each balloon, vacates its
+   grid slot, and reparents its view under `ScenarioContentRoot.OutgoingBalloons` (a named child holder for
+   the transient outgoing balloons) — so they travel with the descent (the fake camera-up) while the float
+   animates them **up in local space**; then
+   `ReturnOutgoing` hands them to the pool. Unregistering up front means the descent's `BalloonSpawnCue`
+   `ClearAll` no longer yanks still-floating balloons. **Remaining (in-editor only):** author the new
+   `CinematicsSettings.BoardFloatAway` block (float duration, start delay, rise height, zigzag
+   amplitude/frequency) and playtest the level-up.
+3. **Ongoing tuning** — `StartingHitPoints`, lines-per-turn vs pop-rate, danger gradient feel,
    and the Ascent's `LevelAscendSettings`/points-required curve now that Phase 3+4 are live.
 
 **Shipped since this handoff (2026-07):** Phase 3 — 3a (ranges/resolver/`IActiveLevelParameters`),
@@ -1090,7 +1094,7 @@ know about `PuffCloudViewController.View`/`BushViewController.View` was a leaky 
 feedback: "why would we need to know about puffview or bushview... they should be able themselves to
 be parented to the ascended transform, which should be the only thing the controller cares about").
 Final design (user chose "render in local space"):
-- **`ScenarioContentRoot`** (`Slots/Actor/`, DI singleton) — one scene transform, normally at the
+- **`StagingRoot`** (`Slots/Actor/`, DI singleton) — one scene transform, normally at the
   origin, that every piece of the scenario's static content parents ITSELF under: cluster views
   (in `ClusterViewController.Start`) and per-slot markers (in `StaticActorSpawner.PlaceActor`).
   `LevelTransitionController` injects only this root — no view types, no `.View`. It spawns the new
