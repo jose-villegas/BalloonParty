@@ -381,7 +381,7 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _zoomAmount: -0.7
+      _zoomAmount: -0.5
       _panWeight: 0
       _followSpeed: 0
     _trackedTrail:

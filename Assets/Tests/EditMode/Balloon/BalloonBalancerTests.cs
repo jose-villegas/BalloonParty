@@ -49,6 +49,14 @@ namespace BalloonParty.Tests.Balloon
             _balancer.Start();
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            // A flight pulse crossing the interval schedules a fire-and-forget balance; bump the generation
+            // so that orphaned continuation drops instead of running against this viewless grid post-test.
+            _balancer.ResetRun(_balancer.Generation + 1);
+        }
+
         [Test]
         public void RunScheduledBalance_WithCurrentGeneration_Runs()
         {
