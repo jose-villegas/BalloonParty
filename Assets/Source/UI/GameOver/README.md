@@ -11,7 +11,7 @@ restarts once that pull-back ends.
 |---|---|
 | `GameOverScreen` | `MonoBehaviour` view. Subscribes to `GameOverMessage` — on receipt, fills the final level/score (from the message) and the persisted best level/score (from `IRunMeta`), then **awaits `GameOverPresentationGate`** before revealing itself via its `CanvasGroup` (the loss cinematic opens the gate once its push-in finishes). Hides again when navigation leaves `NavigationState.GameOver`. `OnRestartPressed` (wired to the Restart button) hides the screen and publishes `GameOverDismissedMessage` — it does **not** restart directly; the cinematic plays the pull-back and restarts at its end |
 | `GameOverLifetimeScope` | Empty child `LifetimeScope` on the screen root — the screen has no local registrations; `GameOverScreen` is injected via `RegisterComponentInHierarchy<GameOverScreen>` in `GameLifetimeScope` |
-| `Game/Run/GameOverPresentationGate` | DI singleton (`IReadyGate`) the screen awaits before showing; armed and opened by `GameOverLossCinematic`. Registered in `GameLifetimeScope` (`RegisterPresentation`) so the producer and screen share one instance |
+| `Game/Run/GameOverPresentationGate` | Plain DI singleton the screen awaits before showing; armed and opened by `GameOverLossCinematic`. Registered in `GameLifetimeScope` (`RegisterPresentation`) so the producer and screen share one instance. Not an `IReadyGate` — nothing consumes it polymorphically, and the producer needs `Arm`/`Open` |
 
 ## Wiring requirements
 

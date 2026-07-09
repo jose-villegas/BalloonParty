@@ -79,7 +79,7 @@ level-up window, retrying on the LevelUp → Game transition — the 0-HP reques
 **Next steps (pick up here):**
 1. **Loss cinematic** (`GameOverLoss` beat) — ✅ **code-complete.** Built as a runner parameterization
    (no MonoBehaviour): `Game/Cinematics/GameOverLossCinematic.cs` (plain C# `IStartable`) +
-   `Game/Run/GameOverPresentationGate.cs` (`IReadyGate`), both registered in
+   `Game/Run/GameOverPresentationGate.cs` (a plain producer-driven gate), both registered in
    `GameScopeRegistration.RegisterPresentation`. **Split around the screen exactly like the level-up**
    (via the runner's `EndPanIn`/`TryBeginRestore` API): pan-in → screen (camera held pushed in) →
    Restart button publishes `GameOverDismissedMessage` → restore (camera pulls back) → **`RestartRun`

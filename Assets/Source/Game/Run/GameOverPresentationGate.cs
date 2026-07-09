@@ -1,5 +1,4 @@
 using System.Threading;
-using BalloonParty.Shared;
 using Cysharp.Threading.Tasks;
 
 namespace BalloonParty.Game.Run
@@ -7,9 +6,11 @@ namespace BalloonParty.Game.Run
     /// <summary>
     ///     Holds the GameOver screen shut until the loss cinematic finishes. Starts closed and is only
     ///     opened by the cinematic producer, so the screen always waits for it — even on paths where no
-    ///     beat plays, the producer still opens it, so the reveal never soft-locks.
+    ///     beat plays, the producer still opens it, so the reveal never soft-locks. Deliberately a plain
+    ///     class, not an <c>IReadyGate</c>: the producer drives it through <see cref="Arm" />/<see cref="Open" />
+    ///     (not on that interface), and both sides inject it by concrete type.
     /// </summary>
-    internal sealed class GameOverPresentationGate : IReadyGate
+    internal sealed class GameOverPresentationGate
     {
         private bool _open;
 
