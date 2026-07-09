@@ -28,13 +28,16 @@ namespace BalloonParty.Game.Cinematics
         private readonly PauseService _pauseService;
         private readonly GameOverPresentationGate _gate;
         private readonly RunController _runController;
+        private readonly BoardPopWave _popWave;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly ISubscriber<GameOverDismissedMessage> _dismissedSubscriber;
         private readonly CancellationTokenSource _cts = new();
 
         private IDisposable _gameOverSubscription;
         private IDisposable _dismissedSubscription;
+        private UniTaskCompletionSource _restoreDone;
         private float _holdSeconds;
+        private float _restoreFloorSeconds;
         private float _elapsed;
         private bool _awaitingDismiss;
 
@@ -47,6 +50,7 @@ namespace BalloonParty.Game.Cinematics
             PauseService pauseService,
             GameOverPresentationGate gate,
             RunController runController,
+            BoardPopWave popWave,
             ISubscriber<GameOverMessage> gameOverSubscriber,
             ISubscriber<GameOverDismissedMessage> dismissedSubscriber)
             : base(director, rig, timeScale, settings)
@@ -54,6 +58,7 @@ namespace BalloonParty.Game.Cinematics
             _pauseService = pauseService;
             _gate = gate;
             _runController = runController;
+            _popWave = popWave;
             _gameOverSubscriber = gameOverSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
         }
@@ -64,6 +69,7 @@ namespace BalloonParty.Game.Cinematics
             {
                 PanInState = CinematicState.GameOverLoss,
                 RestoreState = CinematicState.GameOverLossRestore,
+                RestoreDurationOverride = RestoreSeconds,
                 Focus = new PointFocus(() => Vector3.zero),
                 OnPanInTick = OnPanInTick,
                 OnEnded = OnRestoreEnded,
@@ -73,6 +79,7 @@ namespace BalloonParty.Game.Cinematics
         protected override void OnStart()
         {
             _holdSeconds = Settings.EntryOf(CinematicState.GameOverLoss).Rig.TimeScaleCurve.Duration();
+            _restoreFloorSeconds = Settings.EntryOf(CinematicState.GameOverLossRestore).Rig.TimeScaleCurve.Duration();
             _gameOverSubscription = _gameOverSubscriber.Subscribe(_ => OnGameOver());
             _dismissedSubscription = _dismissedSubscriber.Subscribe(_ => OnDismissed());
         }
@@ -143,23 +150,51 @@ namespace BalloonParty.Game.Cinematics
 
         private void OnDismissed()
         {
-            // Beat played → pull the camera back, then restart when that restore ends (OnRestoreEnded).
-            if (_awaitingDismiss && Runner.TryBeginRestore())
+            if (_awaitingDismiss)
             {
                 _awaitingDismiss = false;
+                RestoreAndRestartAsync().Forget();
                 return;
             }
 
             // Skip path (no beat played) — nothing to unwind, so restart immediately.
-            _awaitingDismiss = false;
             ResumeCinematicPause();
             _runController.RestartRun();
         }
 
-        private void OnRestoreEnded()
+        // Pops the board (like the Ascent) while the camera pulls back, then restarts once both finish.
+        private async UniTaskVoid RestoreAndRestartAsync()
         {
+            // Snapshot the board before the pop wave (and the restart) empties it.
+            _popWave.Collect();
+
+            _restoreDone = new UniTaskCompletionSource();
+            var popTask = _popWave.PlayAsync(_cts.Token);
+
+            // No camera beat to run — don't leave the restore await hanging.
+            if (!Runner.TryBeginRestore())
+            {
+                _restoreDone.TrySetResult();
+            }
+
+            await UniTask.WhenAll(popTask, _restoreDone.Task);
+
             ResumeCinematicPause();
             _runController.RestartRun();
+        }
+
+        // The camera pull-back finished; the restart waits on this together with the pop wave.
+        private void OnRestoreEnded()
+        {
+            _restoreDone?.TrySetResult();
+        }
+
+        // Matches the pull-back to the pop wave so the camera settles on the last pop; falls back to the
+        // authored restore duration when the board is empty (nothing to pop). Sampled after Collect().
+        private float RestoreSeconds()
+        {
+            var pop = _popWave.EstimateSeconds();
+            return pop > 0f ? pop : _restoreFloorSeconds;
         }
 
         private void ResumeCinematicPause()

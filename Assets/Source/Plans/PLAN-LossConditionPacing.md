@@ -82,20 +82,24 @@ level-up window, retrying on the LevelUp → Game transition — the 0-HP reques
    `Game/Run/GameOverPresentationGate.cs` (an `IReadyGate`, but injected by concrete type), both registered in
    `GameScopeRegistration.RegisterPresentation`. **Split around the screen exactly like the level-up**
    (via the runner's `EndPanIn`/`TryBeginRestore` API): pan-in → screen (camera held pushed in) →
-   Restart button publishes `GameOverDismissedMessage` → restore (camera pulls back) → **`RestartRun`
-   fires at the restore's end**, not on the button press. Two new `CinematicState` values (`GameOverLoss`,
+   Restart button publishes `GameOverDismissedMessage` → restore (camera pulls back **while the board
+   pops away** via the shared `BoardPopWave`, the same slow-mo pop the Ascent uses) → **`RestartRun`
+   fires once both the pop and the pull-back finish**, not on the button press. Two new `CinematicState` values (`GameOverLoss`,
    `GameOverLossRestore`). See `Game/Cinematics/README.md → Loss Ceremony Flow`. **Remaining (in-editor
    only):**
    - Open the `CinematicsSettings` asset — `OnValidate` auto-grows `_states` to 8; author the two new
      entries (indices 6/7). `GameOverLoss` (the push-in that plays *before* the screen): a
      `TimeScaleCurve` ramping to slow-mo (last key = how long the push-in holds before the screen shows),
      `ZoomAmount`/`PanWeight`/`FollowSpeed` for the push-in, `Traits = BlocksShake`. `GameOverLossRestore`
-     (the pull-back that plays *after* Restart is pressed, then triggers the run restart): its curve's
-     **duration = how long the pull-back takes** (values ignored — `RestoreEvaluatesCurve = false`), zero
-     zoom/pan, `Traits = None`.
+     (the pull-back that plays *after* Restart is pressed, then triggers the run restart): values ignored
+     (`RestoreEvaluatesCurve = false`), zero zoom/pan, `Traits = None`. Its curve **duration is now only the
+     empty-board fallback** — with balloons present the pull-back matches the `BoardPopWave` duration so the
+     camera settles on the last pop.
    - Playtest with the **Force Game Over** cheat (director free) *and* an overflow death (heart-drain
      still winding down — verifies the wait-for-director handoff). Confirm: push-in → screen reveals over
-     the held frame → Restart pulls the camera back → the run only restarts once the pull-back finishes.
+     the held frame → Restart pulls the camera back **while the board pops away in a slow-mo wave** → the
+     run only restarts once both the pop and the pull-back finish. Also re-check the **level-up Ascent**
+     still pops correctly (the pop wave was extracted into the shared `BoardPopWave`).
 2. **Ongoing tuning** — `StartingHitPoints`, lines-per-turn vs pop-rate, danger gradient feel,
    and the Ascent's `LevelAscendSettings`/points-required curve now that Phase 3+4 are live.
 

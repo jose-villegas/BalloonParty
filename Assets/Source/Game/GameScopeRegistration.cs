@@ -159,6 +159,7 @@ namespace BalloonParty.Game
             builder.Register<CinematicCameraRig>(Lifetime.Singleton);
 
             builder.Register<GameOverPresentationGate>(Lifetime.Singleton);
+            builder.Register<BoardPopWave>(Lifetime.Singleton);
 
             builder.RegisterEntryPoint<CinematicDirector>().AsSelf();
             builder.RegisterEntryPoint<LevelUpCinematic>();

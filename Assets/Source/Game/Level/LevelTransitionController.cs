@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Balloon.Controller;
-using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.Spawner;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Cinematics;
@@ -10,7 +9,6 @@ using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Slots.Actor;
-using BalloonParty.Slots.Grid;
 using BalloonParty.Slots.Spawner;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
@@ -33,20 +31,15 @@ namespace BalloonParty.Game.Level
         private readonly ICinematicsSettings _cinematicsSettings;
         private readonly GridSpawnerCoordinator _spawnerCoordinator;
         private readonly ScenarioContentRoot _scenarioRoot;
-        private readonly SlotGrid _grid;
         private readonly StaticActorSpawner _staticActorSpawner;
         private readonly IReadOnlyList<ITransitionOutgoingContent> _outgoingContent;
         private readonly BalloonControllerRegistry _balloonRegistry;
-        private readonly TimeScaleService _timeScale;
+        private readonly BoardPopWave _popWave;
         private readonly RejectedBalloonEffect _overflow;
         private readonly PauseService _pauseService;
         private readonly ILevelProgress _levelProgress;
         private readonly IPublisher<LevelTransitionCompletedMessage> _completedPublisher;
         private readonly CancellationTokenSource _cts = new();
-        private readonly Dictionary<int, List<IBalloonModel>> _popBands = new();
-
-        private int _minPopBand;
-        private int _maxPopBand;
 
         private LevelAscendCinematic _ascendCinematic;
         private IDisposable _phaseSubscription;
@@ -58,11 +51,10 @@ namespace BalloonParty.Game.Level
             ICinematicsSettings cinematicsSettings,
             GridSpawnerCoordinator spawnerCoordinator,
             ScenarioContentRoot scenarioRoot,
-            SlotGrid grid,
             StaticActorSpawner staticActorSpawner,
             IReadOnlyList<ITransitionOutgoingContent> outgoingContent,
             BalloonControllerRegistry balloonRegistry,
-            TimeScaleService timeScale,
+            BoardPopWave popWave,
             RejectedBalloonEffect overflow,
             PauseService pauseService,
             ILevelProgress levelProgress,
@@ -73,11 +65,10 @@ namespace BalloonParty.Game.Level
             _cinematicsSettings = cinematicsSettings;
             _spawnerCoordinator = spawnerCoordinator;
             _scenarioRoot = scenarioRoot;
-            _grid = grid;
             _staticActorSpawner = staticActorSpawner;
             _outgoingContent = outgoingContent;
             _balloonRegistry = balloonRegistry;
-            _timeScale = timeScale;
+            _popWave = popWave;
             _overflow = overflow;
             _pauseService = pauseService;
             _levelProgress = levelProgress;
@@ -122,17 +113,17 @@ namespace BalloonParty.Game.Level
                 await UniTask.WaitUntil(() => !_overflow.IsOverflowActive, cancellationToken: ct);
 
                 // Snapshot bands now, while the grid is still fully populated.
-                CollectBalloonBands();
+                _popWave.Collect();
 
                 // Un-zoom the camera (the level-up pan-in left it zoomed) in lockstep with the pop.
-                _cameraRig.RestoreTweened(EstimatePopWaveSeconds());
+                _cameraRig.RestoreTweened(_popWave.EstimateSeconds());
 
                 // Must precede the pop wave (clusters snapshot here) and the clear (grid still populated).
                 _scenarioRoot.Transform.position = Vector3.zero;
                 HoldOutgoingContent();
 
                 // Old balloons pop while sliding out, concurrently with the descent.
-                var popTask = PopBalloonsInWaveAsync(ct);
+                var popTask = _popWave.PlayAsync(ct);
 
                 // Clear only the OLD statics (the wave owns the balloons); new ones spawn at origin so
                 // PlayAsync's lift/slide carries them into place.
@@ -183,94 +174,6 @@ namespace BalloonParty.Game.Level
             for (var i = 0; i < _outgoingContent.Count; i++)
             {
                 _outgoingContent[i].ReleaseOutgoing();
-            }
-        }
-
-        // Pops balloons band-by-band along anti-diagonals from both far corners inward.
-        private async UniTask PopBalloonsInWaveAsync(CancellationToken ct)
-        {
-            if (_popBands.Count == 0)
-            {
-                return;
-            }
-
-            _timeScale.Claim(TimeScaleSource.LevelTransition, _cinematicsSettings.LevelAscend.PopSlowMoTimeScale);
-            try
-            {
-                // Sweep from the outermost POPULATED bands, not the grid corners, which may be empty.
-                for (int near = _minPopBand, far = _maxPopBand; near <= far; near++, far--)
-                {
-                    PopBand(near);
-                    if (far != near)
-                    {
-                        PopBand(far);
-                    }
-
-                    // Scaled delay so slow-mo also stretches the wave's cadence.
-                    await UniTask.Delay(
-                        TimeSpan.FromSeconds(_cinematicsSettings.LevelAscend.PopWaveBandSeconds),
-                        ignoreTimeScale: false, cancellationToken: ct);
-                }
-            }
-            finally
-            {
-                _timeScale.Release(TimeScaleSource.LevelTransition);
-            }
-        }
-
-        // Wall-clock length of the pop wave; mirror this if the wave loop's cadence changes.
-        private float EstimatePopWaveSeconds()
-        {
-            if (_popBands.Count == 0)
-            {
-                return 0f;
-            }
-
-            var steps = ((_maxPopBand - _minPopBand) / 2) + 1;
-            var ascend = _cinematicsSettings.LevelAscend;
-            return steps * ascend.PopWaveBandSeconds / ascend.PopSlowMoTimeScale;
-        }
-
-        private void CollectBalloonBands()
-        {
-            _popBands.Clear();
-            _minPopBand = int.MaxValue;
-            _maxPopBand = int.MinValue;
-
-            for (var col = 0; col < _grid.Columns; col++)
-            {
-                for (var row = 0; row < _grid.Rows; row++)
-                {
-                    var balloon = _grid.ActorAt<IWriteableBalloonModel>(new Vector2Int(col, row));
-                    if (balloon == null)
-                    {
-                        continue;
-                    }
-
-                    var band = col + row;
-                    if (!_popBands.TryGetValue(band, out var models))
-                    {
-                        models = new List<IBalloonModel>();
-                        _popBands[band] = models;
-                    }
-
-                    models.Add(balloon);
-                    _minPopBand = Mathf.Min(_minPopBand, band);
-                    _maxPopBand = Mathf.Max(_maxPopBand, band);
-                }
-            }
-        }
-
-        private void PopBand(int band)
-        {
-            if (!_popBands.TryGetValue(band, out var models))
-            {
-                return;
-            }
-
-            for (var i = 0; i < models.Count; i++)
-            {
-                _balloonRegistry.TryPopSingle(models[i]);
             }
         }
     }

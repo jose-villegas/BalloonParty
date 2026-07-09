@@ -150,7 +150,7 @@ namespace BalloonParty.Game.Cinematics
             KillTimeScaleTween();
 
             var restoreCurve = _restoreSegment.TimeScaleCurve;
-            var restoreSeconds = restoreCurve.Duration();
+            var restoreSeconds = _config.RestoreDurationOverride?.Invoke() ?? restoreCurve.Duration();
 
             if (_config.RestoreEvaluatesCurve)
             {

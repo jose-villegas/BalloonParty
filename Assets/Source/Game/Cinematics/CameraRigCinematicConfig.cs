@@ -24,6 +24,9 @@ namespace BalloonParty.Game.Cinematics
         /// <summary>Restore samples its curve absolutely instead of tweening from the current timeScale — needed to ramp from a frozen 0.</summary>
         public bool RestoreEvaluatesCurve;
 
+        /// <summary>Overrides the restore duration (default: the restore segment's curve length). Sampled when the restore begins — e.g. to match a board-pop wave.</summary>
+        public Func<float> RestoreDurationOverride;
+
         /// <summary>Extra pan-in work: (unscaled dt, pan-in curve value) — e.g. puppeting a trail.</summary>
         public Action<float, float> OnPanInTick;
 
