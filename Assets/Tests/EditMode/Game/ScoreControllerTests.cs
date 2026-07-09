@@ -194,21 +194,22 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void OnBalloonHit_RainbowMode_ScoresFullToPrimaryAndSpilloverToOthers()
+        public void OnBalloonHit_RainbowMode_ScoresFullToEachAllowedColor()
         {
-            FireHitWithColor(CreateRainbowModel(2, 0.5f), 1, Red);
+            FireHitWithColor(CreateRainbowModel(2), 1, Red);
 
+            // First pop → streak multiplier 1, so each allowed colour scores its full value (2).
             _scoredPublisher.Received(2).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Red));
-            _scoredPublisher.Received(1).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Blue));
+            _scoredPublisher.Received(2).Publish(Arg.Is<ScorePointMessage>(m => m.ColorName == Blue));
         }
 
         [Test]
         public void Streak_RainbowPopsCarryAndGrowStreak()
         {
-            FireHitWithColor(CreateRainbowModel(2, 0.5f), 1, Red);
+            FireHitWithColor(CreateRainbowModel(2), 1, Red);
             Assert.AreEqual(1, _streakTracker.GetStreak(Red));
 
-            FireHitWithColor(CreateRainbowModel(2, 0.5f), 1, Red);
+            FireHitWithColor(CreateRainbowModel(2), 1, Red);
             Assert.AreEqual(2, _streakTracker.GetStreak(Red));
         }
 
@@ -335,10 +336,10 @@ namespace BalloonParty.Tests.Game
             _controller.OnActorHit(new ActorHitMessage(model, Vector3.zero, Vector3.up, outcome, context));
         }
 
-        private static IBalloonModel CreateRainbowModel(int scoreValue, float spillover)
+        private static IBalloonModel CreateRainbowModel(int scoreValue)
         {
             var model = new BalloonModel(
-                new BalloonModelConfig(scoreValue: scoreValue, hitsToPop: 1, spillover: spillover),
+                new BalloonModelConfig(scoreValue: scoreValue, hitsToPop: 1),
                 allowedColors: new[] { Red, Blue });
             model.Color.Value = GamePalette.RainbowColorId;
             return model;

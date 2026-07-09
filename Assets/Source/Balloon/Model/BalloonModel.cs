@@ -18,7 +18,6 @@ namespace BalloonParty.Balloon.Model
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
         public int ScoreValue { get; }
         public float ItemActivationWeight { get; }
-        public float Spillover { get; }
         public override IReadOnlyList<NudgeOverride> NudgeOverrides { get; }
 
         IReadOnlyReactiveProperty<string> IHasColor.Color => Color;
@@ -35,7 +34,6 @@ namespace BalloonParty.Balloon.Model
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
             ItemActivationWeight = config.ItemActivationWeight;
-            Spillover = config.Spillover;
         }
 
         public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)
@@ -58,8 +56,8 @@ namespace BalloonParty.Balloon.Model
         }
 
         // Full ScoreValue to the streak's current colour (falls back to this balloon's own colour as
-        // primary if that colour isn't currently allowed); Spillover — a config tuning knob — to every
-        // other allowed colour.
+        // primary if that colour isn't currently allowed). Every allowed colour is then scored its full
+        // ScoreValue — a rainbow pop pays out to the whole active palette, not just the streak colour.
         private void ResolveRainbowAttribution(in DamageContext context, IList<ScoreAttribution> results)
         {
             var colors = _colorSource.Resolve();
@@ -84,22 +82,15 @@ namespace BalloonParty.Balloon.Model
                 primaryColor = colors[0];
             }
 
+            // Primary anchors the streak (isPrimary); the rest each still score full ScoreValue.
             results.Add(new ScoreAttribution(primaryColor, ScoreValue, breaksStreak: false, isPrimary: true));
 
             for (var i = 0; i < colors.Count; i++)
             {
-                if (colors[i] == primaryColor)
+                if (colors[i] != primaryColor)
                 {
-                    continue;
+                    results.Add(new ScoreAttribution(colors[i], ScoreValue));
                 }
-
-                var spilloverPoints = Mathf.RoundToInt(ScoreValue * Spillover);
-                if (spilloverPoints <= 0)
-                {
-                    continue;
-                }
-
-                results.Add(new ScoreAttribution(colors[i], spilloverPoints));
             }
         }
     }

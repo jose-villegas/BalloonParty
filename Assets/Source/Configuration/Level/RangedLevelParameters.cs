@@ -45,7 +45,7 @@ namespace BalloonParty.Configuration.Level
 
         [SerializeField] private GridActorTypeGate[] _gridActorGates =
         {
-            new(GridActorType.Puff, new RangedInt(3, 6, RangeMode.Random)),
+            new(GridActorType.Puff, new RangedInt(3, 6, RangeMode.Random), maxPerCluster: 3),
         };
 
         [Tooltip("All bits set (default) = every palette color allowed.")]
@@ -85,7 +85,8 @@ namespace BalloonParty.Configuration.Level
             for (var i = 0; i < _gridActorGates.Length; i++)
             {
                 var gate = _gridActorGates[i];
-                resolved[i] = new ResolvedGridActorGate(gate.Type, gate.Count.Resolve(positionInRange, rng));
+                resolved[i] = new ResolvedGridActorGate(
+                    gate.Type, gate.Count.Resolve(positionInRange, rng), gate.MaxPerCluster);
             }
 
             return resolved;

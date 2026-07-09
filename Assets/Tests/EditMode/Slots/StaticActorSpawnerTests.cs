@@ -85,7 +85,7 @@ namespace BalloonParty.Tests.Slots
             var levelParams = Substitute.For<IActiveLevelParameters>();
             var current = Substitute.For<ILevelParameters>();
             levelParams.Current.Returns(current);
-            current.TryGetGridActorCount(Arg.Any<GridActorType>(), out Arg.Any<int>()).Returns(false);
+            current.TryGetGridActorGate(Arg.Any<GridActorType>(), out Arg.Any<ResolvedGridActorGate>()).Returns(false);
 
             var spawner = new StaticActorSpawner(_grid, gridActorConfig, levelParams);
             spawner.SpawnStaticActors();
@@ -99,10 +99,10 @@ namespace BalloonParty.Tests.Slots
             var current = Substitute.For<ILevelParameters>();
             levelParams.Current.Returns(current);
             current
-                .TryGetGridActorCount(gatedType, out Arg.Any<int>())
+                .TryGetGridActorGate(gatedType, out Arg.Any<ResolvedGridActorGate>())
                 .Returns(ci =>
                 {
-                    ci[1] = count;
+                    ci[1] = new ResolvedGridActorGate(gatedType, count, 0);
                     return true;
                 });
             return levelParams;

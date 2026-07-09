@@ -4,15 +4,13 @@ using BalloonParty.Shared.Pool;
 using BalloonParty.Slots.Capabilities;
 using UnityEngine;
 using BalloonParty.Configuration.Items;
-using BalloonParty.Configuration.Ranges;
 
 namespace BalloonParty.Configuration.Items
 {
     [Serializable]
-    public class ItemSettings : IWeightedEntry
+    public class ItemSettings
     {
         [SerializeField] private ItemType _type;
-        [SerializeField] private float _weight;
         [SerializeField] private int _maximumAllowed;
         [SerializeField] private GameObject _visualPrefab;
         [SerializeField] private EffectView _activationEffectPrefab;
@@ -27,13 +25,8 @@ namespace BalloonParty.Configuration.Items
 
         public ItemType Type => _type;
 
-        /// <summary>Catalog default; the resolver multiplies this by the active range's per-type weight.</summary>
-        public float Weight => _weight;
-
         /// <summary>Catalog fallback unless ItemTypeWeight.MaximumAllowedOverride is set.</summary>
         public int MaximumAllowed => _maximumAllowed;
-        int IWeightedEntry.MaxCount => _maximumAllowed;
-        string IWeightedEntry.PoolKey => _type.ToString();
         public GameObject VisualPrefab => _visualPrefab;
         public EffectView ActivationEffectPrefab => _activationEffectPrefab;
         public int Damage => _damage;

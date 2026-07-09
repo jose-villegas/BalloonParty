@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Balloon.Type;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Level
@@ -34,6 +35,35 @@ namespace BalloonParty.Configuration.Level
         {
             var value = _thresholdModifier.Evaluate(level);
             return value > 0f ? value : 1f;
+        }
+
+        public int MaxConcurrentBalloons(BalloonType type, int columns)
+        {
+            var max = 0;
+            foreach (var range in _ranges)
+            {
+                var parameters = range.Parameters;
+                if (parameters == null)
+                {
+                    continue;
+                }
+
+                foreach (var weight in parameters.BalloonWeights)
+                {
+                    if (weight.Type != type || weight.Weight <= 0f)
+                    {
+                        continue;
+                    }
+
+                    // 0 override = uncapped in that range, so it can fill the range's whole board.
+                    var cap = weight.MaxCountOverride > 0
+                        ? weight.MaxCountOverride
+                        : columns * parameters.BoardLines.Max;
+                    max = Mathf.Max(max, cap);
+                }
+            }
+
+            return max;
         }
 
 #if UNITY_EDITOR

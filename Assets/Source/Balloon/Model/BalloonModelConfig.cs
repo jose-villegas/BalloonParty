@@ -13,7 +13,6 @@ namespace BalloonParty.Balloon.Model
         public readonly int HitsToPop;
         public readonly IReadOnlyList<NudgeOverride> NudgeOverrides;
         public readonly float ItemActivationWeight;
-        public readonly float Spillover;
 
         // Value constructor — mainly for tests, which build a config without a prefab entry.
         public BalloonModelConfig(
@@ -21,15 +20,13 @@ namespace BalloonParty.Balloon.Model
             int scoreValue = 1,
             int hitsToPop = 1,
             NudgeOverride[] nudgeOverrides = null,
-            float itemActivationWeight = 1f,
-            float spillover = 0f)
+            float itemActivationWeight = 1f)
         {
             TypeName = typeName;
             ScoreValue = scoreValue;
             HitsToPop = hitsToPop;
             NudgeOverrides = nudgeOverrides;
             ItemActivationWeight = itemActivationWeight;
-            Spillover = spillover;
         }
 
         internal BalloonModelConfig(BalloonPrefabEntry entry)
@@ -39,7 +36,6 @@ namespace BalloonParty.Balloon.Model
             HitsToPop = entry.HitsToPop;
             NudgeOverrides = entry.NudgeOverrides;
             ItemActivationWeight = entry.ItemActivationWeight;
-            Spillover = entry.Spillover;
         }
     }
 }

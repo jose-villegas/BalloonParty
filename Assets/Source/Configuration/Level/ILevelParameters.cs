@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.GridActors;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Slots.Actor.Archetype;
 using UnityEngine;
@@ -23,6 +24,6 @@ namespace BalloonParty.Configuration.Level
 
         BalloonPrefabEntry PickBalloonEntry(IReadOnlyDictionary<string, int> activeCounts);
         ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts);
-        bool TryGetGridActorCount(GridActorType type, out int count);
+        bool TryGetGridActorGate(GridActorType type, out ResolvedGridActorGate gate);
     }
 }

@@ -88,6 +88,12 @@ namespace BalloonParty.Balloon.View
             RotationPivot.localRotation = Quaternion.identity;
             transform.position = Vector3.one * -1000f;
 
+            // Re-enable in case this balloon was graduated into a float-away, which suspends the idle bob.
+            if (_animator != null)
+            {
+                _animator.enabled = true;
+            }
+
             foreach (var r in _spriteLayerRenderers)
             {
                 r.enabled = true;
@@ -110,6 +116,16 @@ namespace BalloonParty.Balloon.View
             Model = null;
             _hitVfxOverrides = null;
             _isNudging = false;
+        }
+
+        // Stops the idle animator so a board effect's tween owns the balloon's rotation without the idle
+        // clip clobbering it each frame. OnSpawned re-enables it for the next reuse.
+        internal void SuspendAnimator()
+        {
+            if (_animator != null)
+            {
+                _animator.enabled = false;
+            }
         }
 
         public void Bind(IBalloonModel model)

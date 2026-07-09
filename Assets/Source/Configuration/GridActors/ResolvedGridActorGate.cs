@@ -12,14 +12,19 @@ namespace BalloonParty.Configuration.GridActors
     {
         [SerializeField] private GridActorType _type;
         [SerializeField] private int _count;
+        [SerializeField] private int _maxPerCluster;
 
         public GridActorType Type => _type;
         public int Count => _count;
 
-        public ResolvedGridActorGate(GridActorType type, int count)
+        /// <summary>Maximum slots per cluster (Cluster placement). 0 = no limit.</summary>
+        public int MaxPerCluster => _maxPerCluster;
+
+        public ResolvedGridActorGate(GridActorType type, int count, int maxPerCluster)
         {
             _type = type;
             _count = count;
+            _maxPerCluster = maxPerCluster;
         }
     }
 }

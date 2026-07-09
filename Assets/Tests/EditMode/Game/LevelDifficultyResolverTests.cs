@@ -173,7 +173,7 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void TryGetGridActorCount_TypeInGate_ReturnsResolvedCount()
+        public void TryGetGridActorGate_TypeInGate_ReturnsResolvedCount()
         {
             var range = MakeRange(1, 0, new RangedInt(1, 1), new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
             SetField(range.Parameters, "_gridActorGates", new[] { new GridActorTypeGate(GridActorType.Puff, new RangedInt(5, 5)) });
@@ -182,12 +182,12 @@ namespace BalloonParty.Tests.Game
             var resolver = BuildResolver();
             resolver.Start();
 
-            Assert.IsTrue(resolver.Current.TryGetGridActorCount(GridActorType.Puff, out var count));
-            Assert.AreEqual(5, count);
+            Assert.IsTrue(resolver.Current.TryGetGridActorGate(GridActorType.Puff, out var gate));
+            Assert.AreEqual(5, gate.Count);
         }
 
         [Test]
-        public void TryGetGridActorCount_TypeAbsentFromGate_ReturnsFalse()
+        public void TryGetGridActorGate_TypeAbsentFromGate_ReturnsFalse()
         {
             var range = MakeRange(1, 0, new RangedInt(1, 1), new[] { new BalloonTypeWeight(BalloonType.Simple, 1f) });
             SetField(range.Parameters, "_gridActorGates", new[] { new GridActorTypeGate(GridActorType.Puff, new RangedInt(5, 5)) });
@@ -196,7 +196,7 @@ namespace BalloonParty.Tests.Game
             var resolver = BuildResolver();
             resolver.Start();
 
-            Assert.IsFalse(resolver.Current.TryGetGridActorCount(GridActorType.Bush, out _));
+            Assert.IsFalse(resolver.Current.TryGetGridActorGate(GridActorType.Bush, out _));
         }
 
         [Test]

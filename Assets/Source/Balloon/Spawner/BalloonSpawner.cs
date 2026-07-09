@@ -4,6 +4,7 @@ using System.Threading;
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Configuration.Level;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Run;
 using BalloonParty.Shared.Pool;
@@ -27,6 +28,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly IActiveLevelParameters _levelParams;
+        private readonly ILevelPacingConfiguration _pacing;
         private readonly CancellationTokenSource _cts = new();
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
@@ -52,6 +54,7 @@ namespace BalloonParty.Balloon.Spawner
             SlotGrid grid,
             IBalloonsConfiguration balloonsConfig,
             IActiveLevelParameters levelParams,
+            ILevelPacingConfiguration pacing,
             IObjectResolver resolver,
             PoolManager poolManager,
             ISubscriber<SpawnBalloonLineMessage> lineSubscriber,
@@ -67,6 +70,7 @@ namespace BalloonParty.Balloon.Spawner
             _grid = grid;
             _balloonsConfig = balloonsConfig;
             _levelParams = levelParams;
+            _pacing = pacing;
             _resolver = resolver;
             _poolManager = poolManager;
             _lineSubscriber = lineSubscriber;
@@ -129,13 +133,14 @@ namespace BalloonParty.Balloon.Spawner
 
         private async UniTask PrewarmAsync(CancellationToken ct)
         {
-            var totalSlots = _grid.Columns * _levelParams.Current.BoardLines;
-
             foreach (var entry in _balloonsConfig.Entries)
             {
-                var count = entry.MaxCount > 0
-                    ? Mathf.Min(entry.MaxCount, totalSlots)
-                    : totalSlots;
+                // Prewarm to the most this type can reach across all ranges; 0 = no range spawns it.
+                var count = _pacing.MaxConcurrentBalloons(entry.BalloonType, _grid.Columns);
+                if (count <= 0)
+                {
+                    continue;
+                }
 
                 await _poolManager.PrewarmAsync(entry.PoolKey, count, ct);
             }

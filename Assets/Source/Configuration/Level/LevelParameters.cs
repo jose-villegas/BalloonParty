@@ -32,7 +32,7 @@ namespace BalloonParty.Configuration.Level
 
         private readonly ResolvedGridActorGate[] _gridActorGates =
         {
-            new(GridActorType.Puff, 4),
+            new(GridActorType.Puff, 4, 3),
         };
 
         private readonly int _allowedColorsMask = ~0;
@@ -103,18 +103,18 @@ namespace BalloonParty.Configuration.Level
             return _itemPickList.PickRandom(activeCounts)?.Source;
         }
 
-        public bool TryGetGridActorCount(GridActorType type, out int count)
+        public bool TryGetGridActorGate(GridActorType type, out ResolvedGridActorGate gate)
         {
-            foreach (var gate in _gridActorGates)
+            foreach (var candidate in _gridActorGates)
             {
-                if (gate.Type == type)
+                if (candidate.Type == type)
                 {
-                    count = gate.Count;
+                    gate = candidate;
                     return true;
                 }
             }
 
-            count = 0;
+            gate = default;
             return false;
         }
     }

@@ -152,38 +152,9 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void ResolveScoreAttribution_RainbowMode_EmitsPrimaryPlusSpillover()
-        {
-            var config = new BalloonModelConfig(scoreValue: 4, spillover: 0.5f);
-            var model = new BalloonModel(config, allowedColors: new[] { "Red", "Blue", "Green" });
-            model.Color.Value = GamePalette.RainbowColorId;
-            model.HitsRemaining.Value = 0;
-
-            var results = new List<ScoreAttribution>();
-            model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.Normal, "Blue"), results);
-
-            Assert.AreEqual(3, results.Count);
-
-            var primary = results.Find(a => a.IsPrimary);
-            Assert.AreEqual("Blue", primary.ColorId);
-            Assert.AreEqual(4, primary.Points);
-
-            foreach (var attribution in results)
-            {
-                if (attribution.IsPrimary)
-                {
-                    continue;
-                }
-
-                Assert.AreEqual(2, attribution.Points); // round(4 * 0.5)
-                Assert.IsFalse(attribution.BreaksStreak);
-            }
-        }
-
-        [Test]
         public void ResolveScoreAttribution_RainbowMode_PrimaryColorNotAllowed_FallsBackToFirstAllowed()
         {
-            var config = new BalloonModelConfig(scoreValue: 4, spillover: 0.5f);
+            var config = new BalloonModelConfig(scoreValue: 4);
             var model = new BalloonModel(config, allowedColors: new[] { "Red", "Blue" });
             model.Color.Value = GamePalette.RainbowColorId;
             model.HitsRemaining.Value = 0;
@@ -196,9 +167,9 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void ResolveScoreAttribution_RainbowMode_ZeroSpillover_OnlyEmitsPrimary()
+        public void ResolveScoreAttribution_RainbowMode_ScoresFullToEachAllowedColor()
         {
-            var config = new BalloonModelConfig(scoreValue: 4, spillover: 0f);
+            var config = new BalloonModelConfig(scoreValue: 4);
             var model = new BalloonModel(config, allowedColors: new[] { "Red", "Blue", "Green" });
             model.Color.Value = GamePalette.RainbowColorId;
             model.HitsRemaining.Value = 0;
@@ -206,8 +177,15 @@ namespace BalloonParty.Tests.Balloon
             var results = new List<ScoreAttribution>();
             model.ResolveScoreAttribution(new DamageContext(1, DamageFlags.Normal, "Red"), results);
 
-            Assert.AreEqual(1, results.Count);
-            Assert.IsTrue(results[0].IsPrimary);
+            // Every allowed colour scores its full ScoreValue; exactly one anchors the streak.
+            Assert.AreEqual(3, results.Count);
+            foreach (var attribution in results)
+            {
+                Assert.AreEqual(4, attribution.Points);
+            }
+
+            Assert.AreEqual(1, results.FindAll(a => a.IsPrimary).Count);
+            Assert.AreEqual("Red", results.Find(a => a.IsPrimary).ColorId);
         }
     }
 }

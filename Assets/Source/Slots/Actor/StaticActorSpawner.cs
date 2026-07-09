@@ -89,20 +89,20 @@ namespace BalloonParty.Slots.Actor
                     break;
                 }
 
-                if (!_levelParams.Current.TryGetGridActorCount(entry.ActorType, out var levelCount))
+                if (!_levelParams.Current.TryGetGridActorGate(entry.ActorType, out var gate))
                 {
                     // Absent from this level's range.
                     continue;
                 }
 
-                var count = Mathf.Min(levelCount, emptySlots.Count);
+                var count = Mathf.Min(gate.Count, emptySlots.Count);
                 if (count <= 0)
                 {
                     continue;
                 }
 
                 var strategy = GetStrategy(entry.PlacementMode);
-                var selected = strategy.SelectSlots(emptySlots, count, entry.MaxPerCluster);
+                var selected = strategy.SelectSlots(emptySlots, count, gate.MaxPerCluster);
 
                 foreach (var slot in selected)
                 {
