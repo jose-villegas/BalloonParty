@@ -1,4 +1,5 @@
 using System.Threading;
+using BalloonParty.Shared;
 using Cysharp.Threading.Tasks;
 
 namespace BalloonParty.Game.Run
@@ -6,11 +7,13 @@ namespace BalloonParty.Game.Run
     /// <summary>
     ///     Holds the GameOver screen shut until the loss cinematic finishes. Starts closed and is only
     ///     opened by the cinematic producer, so the screen always waits for it — even on paths where no
-    ///     beat plays, the producer still opens it, so the reveal never soft-locks. Deliberately a plain
-    ///     class, not an <c>IReadyGate</c>: the producer drives it through <see cref="Arm" />/<see cref="Open" />
-    ///     (not on that interface), and both sides inject it by concrete type.
+    ///     beat plays, the producer still opens it, so the reveal never soft-locks.
+    ///     Implements <see cref="IReadyGate" /> for consistency with the other gates, but is registered and
+    ///     injected by concrete type: the producer drives it via <see cref="Arm" />/<see cref="Open" />
+    ///     (not on the interface), and binding it <c>.As&lt;IReadyGate&gt;()</c> would collide with the
+    ///     scope's <c>NavigationReadyGate(Game)</c>.
     /// </summary>
-    internal sealed class GameOverPresentationGate
+    internal sealed class GameOverPresentationGate : IReadyGate
     {
         private bool _open;
 

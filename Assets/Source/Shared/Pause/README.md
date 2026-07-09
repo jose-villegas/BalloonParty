@@ -17,7 +17,6 @@ This package separates those concerns.
 | `ResumedMessage` | Published via MessagePipe when a source transitions from paused → unpaused |
 | `PauseService` | Singleton coordinator. Reference-counted per source, drives the broadcast |
 | `TimeScaleService` / `TimeScaleSource` | The only legal writer of `Time.timeScale` (audit-enforced): claim/release, lowest active claim wins, run-reset clears |
-| `PauseResumedGate` | `IReadyGate` implementation that resolves reactively when a source resumes — no polling |
 
 ## Usage
 
@@ -41,20 +40,6 @@ _resumedSubscriber.Subscribe(msg =>
         ResumeWork();
 }).AddTo(_disposable);
 ```
-
-### Gating async work on a resume
-
-Register `PauseResumedGate` as the `IReadyGate` for a scope:
-
-```csharp
-// In a LifetimeScope:
-builder.Register<PauseResumedGate>(Lifetime.Singleton)
-    .WithParameter("awaitedSource", PauseSource.Cinematic)
-    .As<IReadyGate>();
-```
-
-Then any `IReadyGate`-aware async flow will block until that source resumes, resolving
-**in the same frame** as `Resume()` — unlike `UniTask.WaitUntil` polling.
 
 ## `TimeScaleService` — the only writer of `Time.timeScale`
 
