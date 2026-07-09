@@ -151,7 +151,7 @@ namespace BalloonParty.Balloon.Controller
         // Graduates every live balloon into a detached "outgoing" group for a level transition: unregisters
         // them (so the new level's spawn and its ClearAll ignore them) and reparents their views under the
         // outgoing root, collecting the views for the transition to animate. Hand them back with ReturnOutgoing.
-        internal void DetachOutgoing(Transform outgoingRoot, List<ISlotActorView> views)
+        internal void DetachOutgoing(Transform outgoingRoot, float exitDrop, List<ISlotActorView> views)
         {
             _outgoing.Clear();
             for (var i = 0; i < _highWater; i++)
@@ -159,7 +159,7 @@ namespace BalloonParty.Balloon.Controller
                 var controller = _controllers[i];
                 if (controller != null)
                 {
-                    views.Add(controller.DetachForOutgoing(outgoingRoot));
+                    views.Add(controller.DetachForOutgoing(outgoingRoot, exitDrop));
                     _outgoing.Add(controller);
                 }
 

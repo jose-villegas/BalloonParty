@@ -10,7 +10,11 @@ namespace BalloonParty.Game.Cinematics
     /// </summary>
     internal interface IBoardEffect
     {
-        void Collect();
+        /// <param name="exitDrop">
+        ///     How far the transition will lift the content root the balloons reparent onto; effects that
+        ///     reparent subtract it so the balloons hold their original spot. In-place effects ignore it.
+        /// </param>
+        void Collect(float exitDrop);
 
         float EstimateSeconds();
 

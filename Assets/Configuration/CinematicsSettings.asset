@@ -154,7 +154,7 @@ MonoBehaviour:
           inWeight: 0
           outWeight: 0
         - serializedVersion: 3
-          time: 3
+          time: 1
           value: 1
           inSlope: 0
           outSlope: 0
@@ -453,7 +453,55 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
     _height: 12
-    _balloonSpawnCue: 0.8
+    _balloonSpawnCue: 0.6
     _speed: 0.3
     _popSlowMoTimeScale: 0.35
     _popWaveBandSeconds: 0.11
+  _boardFloatAway:
+    _floatDuration: 5
+    _riseCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1.1018255
+        value: 0.6118032
+        inSlope: 1.8561296
+        outSlope: 1.8561296
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0.12975882
+      - serializedVersion: 3
+        time: 2.2855985
+        value: 2.636943
+        inSlope: 1.0845578
+        outSlope: 1.0845578
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.09723602
+        outWeight: 0.07112255
+      - serializedVersion: 3
+        time: 5
+        value: 3
+        inSlope: -0.36066997
+        outSlope: -0.36066997
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.06338382
+        outWeight: 0.100472115
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _riseVariance: 0.25
+    _zigzagAmplitude: 1.25
+    _zigzagFrequency: 1.65
+    _swayTiltAngle: -125

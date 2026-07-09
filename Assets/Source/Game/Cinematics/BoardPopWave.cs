@@ -41,7 +41,8 @@ namespace BalloonParty.Game.Cinematics
         }
 
         // Snapshot the current balloons by anti-diagonal band — call while the grid is still populated.
-        public void Collect()
+        // exitDrop is unused: the wave pops balloons in place on the grid, so it never reparents them.
+        public void Collect(float exitDrop)
         {
             _bands.Clear();
             _minBand = int.MaxValue;

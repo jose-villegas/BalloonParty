@@ -165,8 +165,9 @@ namespace BalloonParty.Game.Cinematics
         // Pops the board (like the Ascent) while the camera pulls back, then restarts once both finish.
         private async UniTaskVoid RestoreAndRestartAsync()
         {
-            // Snapshot the board before the pop wave (and the restart) empties it.
-            _popWave.Collect();
+            // Snapshot the board before the pop wave (and the restart) empties it. No exit drop — the
+            // wave pops in place, with no descending root to compensate for.
+            _popWave.Collect(0f);
 
             _restoreDone = new UniTaskCompletionSource();
             var popTask = _popWave.PlayAsync(_cts.Token);

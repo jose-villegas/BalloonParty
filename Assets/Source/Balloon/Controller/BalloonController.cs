@@ -118,7 +118,7 @@ namespace BalloonParty.Balloon.Controller
         // Detaches this balloon into a level transition's outgoing "old level" group: vacates its grid slot
         // and reparents the view under the outgoing root so it travels with the transition. The caller
         // animates the returned view, then hands it back to the pool via ReturnToPool.
-        internal ISlotActorView DetachForOutgoing(Transform outgoingRoot)
+        internal ISlotActorView DetachForOutgoing(Transform outgoingRoot, float exitDrop)
         {
             _itemActivatedSubscription?.Dispose();
             _itemActivatedSubscription = null;
@@ -129,7 +129,12 @@ namespace BalloonParty.Balloon.Controller
                 _grid.Remove(slot);
             }
 
+            // Keep world position, then drop local by the root's lift height, so the balloon holds its
+            // original spot once the descent lifts the root to that height (same trick the statics use).
             _view.transform.SetParent(outgoingRoot, worldPositionStays: true);
+            var local = _view.transform.localPosition;
+            local.y -= exitDrop;
+            _view.transform.localPosition = local;
             return _view;
         }
 

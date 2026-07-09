@@ -13,11 +13,11 @@ namespace BalloonParty.Configuration.Cinematics
         [Tooltip("Per-balloon float time in seconds.")]
         [SerializeField] private float _floatDuration;
 
-        [Tooltip("Delay before the float starts, so it kicks in a bit after the Ascent is already playing.")]
-        [SerializeField] private float _startDelay;
+        [Tooltip("Rise offset in world units (Y) over the float duration (X, in seconds up to Float Duration).")]
+        [SerializeField] private AnimationCurve _riseCurve;
 
-        [Tooltip("How far each balloon floats up over the effect, in world units.")]
-        [SerializeField] private float _riseHeight;
+        [Tooltip("Random +/- fraction on each balloon's rise height (0 = uniform, 0.3 = up to +/-30%).")]
+        [SerializeField] private float _riseVariance;
 
         [Tooltip("Peak horizontal sway of the sine zigzag, in world units.")]
         [SerializeField] private float _zigzagAmplitude;
@@ -25,10 +25,14 @@ namespace BalloonParty.Configuration.Cinematics
         [Tooltip("Number of full side-to-side sways over the rise (sine cycles).")]
         [SerializeField] private float _zigzagFrequency;
 
+        [Tooltip("Peak tilt in degrees, leaning into the sway direction (0 = upright).")]
+        [SerializeField] private float _swayTiltAngle;
+
         public float FloatDuration => _floatDuration;
-        public float StartDelay => _startDelay;
-        public float RiseHeight => _riseHeight;
+        public AnimationCurve RiseCurve => _riseCurve;
+        public float RiseVariance => _riseVariance;
         public float ZigzagAmplitude => _zigzagAmplitude;
         public float ZigzagFrequency => _zigzagFrequency;
+        public float SwayTiltAngle => _swayTiltAngle;
     }
 }

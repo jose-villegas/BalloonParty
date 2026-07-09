@@ -35,10 +35,11 @@ namespace BalloonParty.Game.Cinematics
 
         // Graduates the old balloons into the outgoing group (detach + reparent under the root's
         // OutgoingBalloons holder), keeping their views to animate. Call after the root is reset to origin.
-        public void Collect()
+        // exitDrop compensates the reparent for the descent's root lift (supplied by the transition).
+        public void Collect(float exitDrop)
         {
             _views.Clear();
-            _balloonRegistry.DetachOutgoing(_scenarioRoot.OutgoingBalloons, _views);
+            _balloonRegistry.DetachOutgoing(_scenarioRoot.OutgoingBalloons, exitDrop, _views);
         }
 
         public float EstimateSeconds()
@@ -48,8 +49,7 @@ namespace BalloonParty.Game.Cinematics
                 return 0f;
             }
 
-            var settings = _settings.BoardFloatAway;
-            return settings.StartDelay + settings.FloatDuration;
+            return _settings.BoardFloatAway.FloatDuration;
         }
 
         public async UniTask PlayAsync(CancellationToken ct)
@@ -62,9 +62,6 @@ namespace BalloonParty.Game.Cinematics
             var settings = _settings.BoardFloatAway;
             try
             {
-                // Kick in a bit late — the Ascent is already playing; this is a separate, concurrent beat.
-                await UniTask.Delay(TimeSpan.FromSeconds(settings.StartDelay), ignoreTimeScale: true, cancellationToken: ct);
-
                 foreach (var view in _views)
                 {
                     FloatOne(view, settings);
@@ -89,22 +86,37 @@ namespace BalloonParty.Game.Cinematics
             // Random phase desyncs the balloons and randomizes each one's initial sway direction.
             var phase = UnityEngine.Random.value * (2f * Mathf.PI);
             var swayTurns = settings.ZigzagFrequency * (2f * Mathf.PI);
+
+            // Per-balloon rise scale so they don't all top out at the same height.
+            var riseScale = 1f + UnityEngine.Random.Range(-settings.RiseVariance, settings.RiseVariance);
             var progress = 0f;
 
             var rise = DOTween.To(() => progress, value => progress = value, 1f, settings.FloatDuration)
                 .SetEase(Ease.Linear)
-                .OnUpdate(() =>
-                {
-                    var offset = settings.ZigzagAmplitude * Mathf.Sin(phase + progress * swayTurns);
-                    actor.localPosition = start + new Vector3(offset, settings.RiseHeight * progress, 0f);
-                });
+                .OnUpdate(() => ApplyStep(actor, start, settings, phase, swayTurns, riseScale, progress));
 
             var sequence = DOTween.Sequence()
                 .SetUpdate(true)
-                .Join(rise)
-                .Join(actor.DOScale(Vector3.zero, settings.FloatDuration).SetEase(Ease.InQuad));
+                .Join(rise);
 
             view.TweenTracker.Append(sequence);
+        }
+
+        // Drives position and lean off one shared sine sample so the balloon tilts into whichever way it sways.
+        private static void ApplyStep(
+            Transform actor,
+            Vector3 start,
+            BoardFloatAwaySettings settings,
+            float phase,
+            float swayTurns,
+            float riseScale,
+            float progress)
+        {
+            // Ramp the sway with progress so both offset and tilt ease out of the original pose, no snap at t=0.
+            var swing = progress * Mathf.Sin(phase + progress * swayTurns);
+            var rise = settings.RiseCurve.Evaluate(progress * settings.FloatDuration) * riseScale;
+            actor.localPosition = start + new Vector3(settings.ZigzagAmplitude * swing, rise, 0f);
+            actor.localRotation = Quaternion.Euler(0f, 0f, -settings.SwayTiltAngle * swing);
         }
     }
 }

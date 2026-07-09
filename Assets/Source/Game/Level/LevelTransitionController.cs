@@ -117,32 +117,35 @@ namespace BalloonParty.Game.Level
                 // so their reparent lands at the right offset.
                 _scenarioRoot.Transform.position = Vector3.zero;
 
+                // Both the outgoing balloons and the statics reparent under the root, which the descent
+                // lifts by this height on its first frame; they subtract it to hold their original spot.
+                var exitDrop = _cinematicsSettings.LevelAscend.Height;
+
                 // Detach the old balloons into the outgoing group — off the grid and reparented under the
                 // root, so they travel with the descent while the float animates them up.
-                _boardEffect.Collect();
+                _boardEffect.Collect(exitDrop);
 
                 // Un-zoom the camera (the level-up pan-in left it zoomed) over the LevelUpRestore segment's
                 // own duration — independent of the board effect, which is now a separate concurrent beat.
                 var restoreSeconds = _cinematicsSettings.EntryOf(CinematicState.LevelUpRestore).Rig.TimeScaleCurve.Duration();
                 _cameraRig.RestoreTweened(restoreSeconds);
 
-                HoldOutgoingContent();
+                HoldOutgoingContent(exitDrop);
 
-                // Old balloons clear out (the float-away) concurrently with the descent.
-                var popTask = _boardEffect.PlayAsync(ct);
+                // The board effect is a detached, concurrent beat: its balloons are already off the grid and
+                // out of logic, so it must NOT gate the run reopening. Fire it and let it finish — and pool
+                // its own balloons — on its own clock; only the descent below gates gameplay resuming.
+                _boardEffect.PlayAsync(ct).Forget();
 
-                // Clear only the OLD statics (the wave owns the balloons); new ones spawn at origin so
+                // Clear only the OLD statics (the effect owns the balloons); new ones spawn at origin so
                 // PlayAsync's lift/slide carries them into place.
                 _staticActorSpawner.ClearStaticActors();
                 await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, ct);
 
                 // New level's balloons spawn from the descent's cue (fired at LevelAscend.BalloonSpawnCue),
-                // so they reveal near the end of the Ascent rather than right after the pop wave. Keep the
-                // cue late enough that it follows the pop wave.
-                var descentTask = _ascendCinematic.PlayAsync(_scenarioRoot.Transform, SpawnNewLevelBalloons, ct);
-
-                await popTask;
-                await descentTask;
+                // so they reveal near the end of the Ascent. The run reopens the moment this lands, whether
+                // or not the detached board effect is still playing out.
+                await _ascendCinematic.PlayAsync(_scenarioRoot.Transform, SpawnNewLevelBalloons, ct);
             }
             finally
             {
@@ -165,10 +168,8 @@ namespace BalloonParty.Game.Level
             }
         }
 
-        private void HoldOutgoingContent()
+        private void HoldOutgoingContent(float exitDrop)
         {
-            // Same distance PlayAsync lifts the incoming content, so outgoing exits in lockstep.
-            var exitDrop = _cinematicsSettings.LevelAscend.Height;
             for (var i = 0; i < _outgoingContent.Count; i++)
             {
                 _outgoingContent[i].HoldOutgoing(_scenarioRoot.Transform, exitDrop);

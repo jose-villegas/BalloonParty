@@ -80,6 +80,7 @@ namespace BalloonParty.Balloon.View
         public void OnSpawned()
         {
             transform.localScale = Vector3.one;
+            transform.localRotation = Quaternion.identity;
             transform.position = Vector3.one * -1000f;
 
             foreach (var r in _spriteLayerRenderers)
