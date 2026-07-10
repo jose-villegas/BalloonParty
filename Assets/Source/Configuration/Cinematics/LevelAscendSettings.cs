@@ -33,6 +33,10 @@ namespace BalloonParty.Configuration.Cinematics
         [Tooltip("Loss→restart scenery rise progress over time (0→1); the last key's time is the duration. Ease-in for a slow start ramping to full speed.")]
         [SerializeField] private AnimationCurve _restartRiseCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
 
+        [Tooltip("Fraction of the loss→restart rise at which the new level's balloons spawn (near 1 = as it settles).")]
+        [Range(0f, 1f)]
+        [SerializeField] private float _restartBalloonCue = 0.85f;
+
         public AnimationCurve DescentCurve => _descentCurve;
         public float Height => _height;
         public float BalloonSpawnCue => _balloonSpawnCue;
@@ -40,5 +44,6 @@ namespace BalloonParty.Configuration.Cinematics
         public float PopSlowMoTimeScale => _popSlowMoTimeScale;
         public float PopWaveBandSeconds => _popWaveBandSeconds;
         public AnimationCurve RestartRiseCurve => _restartRiseCurve;
+        public float RestartBalloonCue => _restartBalloonCue;
     }
 }

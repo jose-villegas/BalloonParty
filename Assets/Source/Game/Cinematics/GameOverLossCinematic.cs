@@ -206,34 +206,53 @@ namespace BalloonParty.Game.Cinematics
             _scenarioRoot.Transform.position = new Vector3(0f, -height, 0f);
             await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, _cts.Token);
 
-            // One travel: outgoing rides up and out (balloons popping in a wave), new scenery rises in beneath.
+            // One travel: outgoing rides up and out (balloons popping in a wave), new scenery rises in
+            // beneath, and the new balloons spawn from the rise's cue so they arrive as it settles.
             var popTask = _popWave.PlayAsync(_cts.Token);
-            await RiseScenarioAsync(height, _cts.Token);
+            await RiseScenarioAsync(height, SpawnNewBalloons, _cts.Token);
             await UniTask.WhenAll(popTask, _restoreDone.Task);
 
-            // Settled — drop the scenery snapshots and bring in the new balloons (the wave pooled its own).
+            // Settled — drop the scenery snapshots (the wave pooled its own balloons).
             ReleaseOutgoingContent();
-            await _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, _cts.Token);
             ResumeCinematicPause();
+
+            void SpawnNewBalloons()
+            {
+                _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, _cts.Token).Forget();
+            }
         }
 
         // Rises the scenario root -height → 0 on unscaled time, paced by the restart rise curve (progress
         // 0→1; ease-in = slow start ramping to full speed). Outgoing content rides up and out; the new
-        // scenery, staged below, rises in.
-        private async UniTask RiseScenarioAsync(float height, CancellationToken ct)
+        // scenery, staged below, rises in. Fires onCue once past the balloon-spawn fraction of the rise.
+        private async UniTask RiseScenarioAsync(float height, Action onCue, CancellationToken ct)
         {
-            var curve = Settings.LevelAscend.RestartRiseCurve;
+            var ascend = Settings.LevelAscend;
+            var curve = ascend.RestartRiseCurve;
             var duration = curve.Duration();
+            var cueTime = duration * Mathf.Clamp01(ascend.RestartBalloonCue);
+            var cueFired = false;
 
             var elapsed = 0f;
             while (elapsed < duration)
             {
+                if (!cueFired && elapsed >= cueTime)
+                {
+                    cueFired = true;
+                    onCue?.Invoke();
+                }
+
                 var position = _scenarioRoot.Transform.position;
                 position.y = Mathf.Lerp(-height, 0f, curve.Evaluate(elapsed));
                 _scenarioRoot.Transform.position = position;
 
                 await UniTask.Yield(PlayerLoopTiming.Update, ct);
                 elapsed += Time.unscaledDeltaTime;
+            }
+
+            if (!cueFired)
+            {
+                onCue?.Invoke();
             }
 
             _scenarioRoot.Transform.position = Vector3.zero;
