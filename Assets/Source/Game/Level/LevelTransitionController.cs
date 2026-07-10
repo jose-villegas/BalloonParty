@@ -99,10 +99,6 @@ namespace BalloonParty.Game.Level
         {
             var ct = _cts.Token;
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            UnityEngine.Debug.Log("[Ascent] transition starting (phase → Transitioning)");
-#endif
-
             _pauseService.Pause(PauseSource.LevelTransition);
 
             try

@@ -218,11 +218,6 @@ namespace BalloonParty.Game.Level
             _phase.Value = LevelUpPhase.Pending;
             _pendingNewLevel = _level.Value + 1;
 
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-            Debug.Log($"[LevelUp] detected {_level.Value}->{_pendingNewLevel} required={required} " +
-                      $"allowed=[{string.Join(",", completedColors)}] progress={DescribeProgress()}");
-#endif
-
             _levelUpPublisher.Publish(new ScoreLevelUpMessage(_pendingNewLevel, completedColors));
             _navigation.TransitionTo(NavigationState.LevelUp);
         }
@@ -251,18 +246,5 @@ namespace BalloonParty.Game.Level
 
             _phase.Value = LevelUpPhase.Playing;
         }
-
-#if UNITY_EDITOR || DEVELOPMENT_BUILD
-        private string DescribeProgress()
-        {
-            var parts = new List<string>();
-            foreach (var color in _levelParams.Current.AllowedColors)
-            {
-                parts.Add($"{color}={_levelProgress.GetValueOrDefault(color)}/{_projectedProgress.GetValueOrDefault(color)}");
-            }
-
-            return $"[{string.Join(" ", parts)}]";
-        }
-#endif
     }
 }
