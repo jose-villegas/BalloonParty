@@ -85,7 +85,7 @@ Material:
     - _SpecularHighlights: 1
     - _SpeedToAlpha: 1
     - _SrcBlend: 1
-    - _TrailLength: 0.1
+    - _TrailLength: 0.05
     - _TrailMax: 5
     - _UVSec: 0
     - _ZWrite: 1

@@ -6,6 +6,8 @@ using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
+using BalloonParty.Slots.Actor;
+using BalloonParty.Slots.Spawner;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
 using UnityEngine;
@@ -29,6 +31,8 @@ namespace BalloonParty.Game.Cinematics
         private readonly GameOverPresentationGate _gate;
         private readonly RunController _runController;
         private readonly BoardPopWave _popWave;
+        private readonly ScenarioContentRoot _scenarioRoot;
+        private readonly GridSpawnerCoordinator _spawnerCoordinator;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly ISubscriber<GameOverDismissedMessage> _dismissedSubscriber;
         private readonly CancellationTokenSource _cts = new();
@@ -51,6 +55,8 @@ namespace BalloonParty.Game.Cinematics
             GameOverPresentationGate gate,
             RunController runController,
             BoardPopWave popWave,
+            ScenarioContentRoot scenarioRoot,
+            GridSpawnerCoordinator spawnerCoordinator,
             ISubscriber<GameOverMessage> gameOverSubscriber,
             ISubscriber<GameOverDismissedMessage> dismissedSubscriber)
             : base(director, rig, timeScale, settings)
@@ -59,6 +65,8 @@ namespace BalloonParty.Game.Cinematics
             _gate = gate;
             _runController = runController;
             _popWave = popWave;
+            _scenarioRoot = scenarioRoot;
+            _spawnerCoordinator = spawnerCoordinator;
             _gameOverSubscriber = gameOverSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
         }
@@ -157,12 +165,14 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            // Skip path (no beat played) — nothing to unwind, so restart immediately.
+            // Skip path (no beat played) — nothing to unwind, so restart and spawn the board immediately.
             ResumeCinematicPause();
             _runController.RestartRun();
+            _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, _cts.Token).Forget();
         }
 
-        // Pops the board (like the Ascent) while the camera pulls back, then restarts once both finish.
+        // Pops the board while the camera pulls back, then restarts and rises the new scenario up from
+        // below (fake camera-down — the mirror of the level-up ascend).
         private async UniTaskVoid RestoreAndRestartAsync()
         {
             // Snapshot the board before the pop wave (and the restart) empties it. No exit drop — the
@@ -180,8 +190,42 @@ namespace BalloonParty.Game.Cinematics
 
             await UniTask.WhenAll(popTask, _restoreDone.Task);
 
-            ResumeCinematicPause();
+            // Drop the scenario root below view, then restart so the new scenery spawns down there, rise
+            // it into place, and only then spawn the balloons so they arrive with the board, not mid-climb.
+            var height = Settings.LevelAscend.Height;
+            _scenarioRoot.Transform.position = new Vector3(0f, -height, 0f);
+
             _runController.RestartRun();
+
+            // RestartRun's reset cleared the pause; re-hold it so the empty board isn't playable while it rises.
+            _pauseService.Pause(PauseSource.Cinematic);
+
+            await RiseScenarioAsync(height, _cts.Token);
+            await _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, _cts.Token);
+
+            ResumeCinematicPause();
+        }
+
+        // Travels the scenario root -height → 0 over the Ascent's curve, so the scenery rises from below.
+        private async UniTask RiseScenarioAsync(float height, CancellationToken ct)
+        {
+            var ascend = Settings.LevelAscend;
+            var curve = ascend.DescentCurve;
+            var duration = curve.Duration();
+            var speed = ascend.Speed > 0f ? ascend.Speed : 1f;
+
+            var elapsed = 0f;
+            while (elapsed < duration)
+            {
+                var position = _scenarioRoot.Transform.position;
+                position.y = -curve.Evaluate(elapsed) * height;
+                _scenarioRoot.Transform.position = position;
+
+                await UniTask.Yield(PlayerLoopTiming.Update, ct);
+                elapsed += Time.unscaledDeltaTime * speed;
+            }
+
+            _scenarioRoot.Transform.position = Vector3.zero;
         }
 
         // The camera pull-back finished; the restart waits on this together with the pop wave.

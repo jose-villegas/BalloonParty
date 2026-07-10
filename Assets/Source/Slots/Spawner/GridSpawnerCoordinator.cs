@@ -36,10 +36,11 @@ namespace BalloonParty.Slots.Spawner
             _cts.Dispose();
         }
 
-        // Final reset stage — repopulates the cleared board, skipping the navigation gate.
+        // Reset repopulates the scenery only; the loss→restart cinematic spawns the balloon stage once
+        // its down-travel arrives (mirrors the Ascent), so the balloons don't pop in over the rising board.
         public void ResetRun(int generation)
         {
-            RunGroupsAsync(_cts.Token).Forget();
+            RunStagesAsync(s => s < SpawnStage.BalloonActors, _cts.Token).Forget();
         }
 
         // Runs only matching stages, in priority order — used by Ascent to sequence statics/balloons.

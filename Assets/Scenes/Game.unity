@@ -287,7 +287,9 @@ MonoBehaviour:
   _swirlAngle: {x: -120, y: 120}
   _flowInfluence: 0.35
   _speckSize: 0.03
-  _lifetimeRange: {x: 1, y: 10}
+  _trailLength: 0.05
+  _trailMax: 5
+  _lifetimeRange: {x: 2, y: 10}
   _scaleRange: {x: 0.5, y: 5}
   _scalePulseSpeed: {x: 0.25, y: 2.15}
   _fadeIn: 0.5
