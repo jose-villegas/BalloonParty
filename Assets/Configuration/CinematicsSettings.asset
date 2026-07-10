@@ -457,6 +457,49 @@ MonoBehaviour:
     _speed: 0.3
     _popSlowMoTimeScale: 0.35
     _popWaveBandSeconds: 0.11
+    _restartRiseCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 0
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 2.4601228
+        value: 0.31703165
+        inSlope: 0.3610404
+        outSlope: 0.3610404
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.04294481
+        outWeight: 0.17460202
+      - serializedVersion: 3
+        time: 3.0094848
+        value: 0.5804993
+        inSlope: 0.63772047
+        outSlope: 0.63772047
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.2617789
+        outWeight: 0.044980124
+      - serializedVersion: 3
+        time: 5
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.07660199
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _restartBalloonCue: 0.7
   _boardFloatAway:
     _floatDuration: 5
     _riseCurve:
