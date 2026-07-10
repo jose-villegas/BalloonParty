@@ -1,5 +1,6 @@
 using BalloonParty.Shared.Disturbance;
 using UnityEngine;
+using UnityEngine.Rendering;
 using VContainer;
 
 namespace BalloonParty.Slots.Actor
@@ -12,10 +13,11 @@ namespace BalloonParty.Slots.Actor
     ///     <see cref="ScenarioContentRoot" />, so the field reacts to every scenario beat — the ascend, the
     ///     restart descent, the float-away — automatically.
     /// </summary>
+    [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     internal sealed class SpeckField : MonoBehaviour
     {
         private const int ThreadGroupSize = 64;
-        private const int SpeckStrideBytes = sizeof(float) * 5;
+        private const int SpeckStrideBytes = sizeof(float) * 7;
 
         private static readonly int SpecksId = Shader.PropertyToID("_Specks");
         private static readonly int CountId = Shader.PropertyToID("_Count");
@@ -31,7 +33,13 @@ namespace BalloonParty.Slots.Actor
         private static readonly int FieldBoundsSizeId = Shader.PropertyToID("_FieldBoundsSize");
         private static readonly int RegionMinId = Shader.PropertyToID("_RegionMin");
         private static readonly int RegionSizeId = Shader.PropertyToID("_RegionSize");
+        private static readonly int MinLifetimeId = Shader.PropertyToID("_MinLifetime");
+        private static readonly int MaxLifetimeId = Shader.PropertyToID("_MaxLifetime");
         private static readonly int SpeckSizeId = Shader.PropertyToID("_SpeckSize");
+        private static readonly int MinScaleId = Shader.PropertyToID("_MinScale");
+        private static readonly int MaxScaleId = Shader.PropertyToID("_MaxScale");
+        private static readonly int FadeInId = Shader.PropertyToID("_FadeIn");
+        private static readonly int FadeOutId = Shader.PropertyToID("_FadeOut");
 
         [SerializeField] private ComputeShader _compute;
         [SerializeField] private Material _renderMaterial;
@@ -43,6 +51,18 @@ namespace BalloonParty.Slots.Actor
         [SerializeField] private float _disturbanceInfluence = 1f;
         [SerializeField] private float _speckSize = 0.03f;
 
+        [Tooltip("Per-speck lifetime range (seconds). Each speck fades in, lives, fades out, then respawns.")]
+        [SerializeField] private Vector2 _lifetimeRange = new(2f, 6f);
+
+        [Tooltip("Per-speck scale multiplier range on _speckSize, for size variety.")]
+        [SerializeField] private Vector2 _scaleRange = new(0.5f, 1.5f);
+
+        [Tooltip("Fraction of life spent fading/scaling in.")]
+        [Range(0f, 0.5f)] [SerializeField] private float _fadeIn = 0.15f;
+
+        [Tooltip("Fraction of life spent fading/scaling out.")]
+        [Range(0f, 0.5f)] [SerializeField] private float _fadeOut = 0.25f;
+
         [Tooltip("Root speed (world units/sec) mapped to a motion vector of magnitude 1.")]
         [SerializeField] private float _referenceSpeed = 20f;
 
@@ -53,6 +73,7 @@ namespace BalloonParty.Slots.Actor
         [Inject] private DisturbanceFieldService _disturbance;
 
         private ComputeBuffer _speckBuffer;
+        private Mesh _mesh;
         private int _kernel;
         private Vector2 _lastRootPos;
         private Vector2 _motionVector;
@@ -70,6 +91,12 @@ namespace BalloonParty.Slots.Actor
             _kernel = _compute.FindKernel("Advect");
             _speckBuffer = new ComputeBuffer(_count, SpeckStrideBytes);
             SeedSpecks();
+
+            // Render through a MeshRenderer (a dummy count*6-vertex mesh; the vertex shader repositions each
+            // vert from the buffer) so the field goes through normal sprite sorting — set the MeshRenderer's
+            // Sorting Layer / Order to sit under the UI but over the background.
+            BuildRenderMesh();
+
             _ready = true;
         }
 
@@ -88,27 +115,50 @@ namespace BalloonParty.Slots.Actor
 
             UpdateMotionVector(dt);
             Dispatch(dt);
-        }
-
-        private void OnRenderObject()
-        {
-            if (!_ready)
-            {
-                return;
-            }
-
-            _renderMaterial.SetBuffer(SpecksId, _speckBuffer);
-            _renderMaterial.SetFloat(SpeckSizeId, _speckSize);
-            _renderMaterial.SetPass(0);
-
-            // 6 verts (a quad) per speck; the vertex shader expands from SV_VertexID + SV_InstanceID.
-            Graphics.DrawProceduralNow(MeshTopology.Triangles, 6, _count);
+            PushRenderParams();
         }
 
         private void OnDestroy()
         {
             _speckBuffer?.Release();
             _speckBuffer = null;
+            if (_mesh != null)
+            {
+                Destroy(_mesh);
+                _mesh = null;
+            }
+        }
+
+        private void BuildRenderMesh()
+        {
+            _mesh = new Mesh { name = "SpeckField", indexFormat = IndexFormat.UInt32 };
+
+            var vertexCount = _count * 6;
+            var vertices = new Vector3[vertexCount];
+            var indices = new int[vertexCount];
+            for (var i = 0; i < vertexCount; i++)
+            {
+                indices[i] = i;
+            }
+
+            _mesh.SetVertices(vertices);
+            _mesh.SetIndices(indices, MeshTopology.Triangles, 0);
+            // Verts sit at the origin (the shader repositions them); huge bounds so spread-out specks never cull.
+            _mesh.bounds = new Bounds(Vector3.zero, Vector3.one * 10000f);
+
+            GetComponent<MeshFilter>().sharedMesh = _mesh;
+            GetComponent<MeshRenderer>().sharedMaterial = _renderMaterial;
+        }
+
+        // Refresh the material state the command buffer draws with; runs before the camera renders.
+        private void PushRenderParams()
+        {
+            _renderMaterial.SetBuffer(SpecksId, _speckBuffer);
+            _renderMaterial.SetFloat(SpeckSizeId, _speckSize);
+            _renderMaterial.SetFloat(MinScaleId, _scaleRange.x);
+            _renderMaterial.SetFloat(MaxScaleId, _scaleRange.y);
+            _renderMaterial.SetFloat(FadeInId, _fadeIn);
+            _renderMaterial.SetFloat(FadeOutId, _fadeOut);
         }
 
         private void SeedSpecks()
@@ -117,6 +167,7 @@ namespace BalloonParty.Slots.Actor
             var min = _regionSize * -0.5f;
             for (var i = 0; i < _count; i++)
             {
+                var lifetime = Mathf.Lerp(_lifetimeRange.x, _lifetimeRange.y, Random.value);
                 specks[i] = new Speck
                 {
                     Position = new Vector2(
@@ -124,6 +175,9 @@ namespace BalloonParty.Slots.Actor
                         min.y + Random.value * _regionSize.y),
                     Velocity = Vector2.zero,
                     Seed = Random.value,
+                    // Stagger the starting age across each lifetime so they don't all pop in together.
+                    Age = Random.value * lifetime,
+                    Lifetime = lifetime,
                 };
             }
 
@@ -173,6 +227,8 @@ namespace BalloonParty.Slots.Actor
             _compute.SetFloat(MotionInfluenceId, _motionInfluence);
             _compute.SetVector(RegionMinId, _regionSize * -0.5f);
             _compute.SetVector(RegionSizeId, _regionSize);
+            _compute.SetFloat(MinLifetimeId, _lifetimeRange.x);
+            _compute.SetFloat(MaxLifetimeId, _lifetimeRange.y);
 
             var hasField = _disturbance != null && _disturbance.FieldTexture != null;
             _compute.SetFloat(DisturbanceInfluenceId, hasField ? _disturbanceInfluence : 0f);
@@ -189,6 +245,8 @@ namespace BalloonParty.Slots.Actor
             public Vector2 Position;
             public Vector2 Velocity;
             public float Seed;
+            public float Age;
+            public float Lifetime;
         }
     }
 }
