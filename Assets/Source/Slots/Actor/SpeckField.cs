@@ -97,6 +97,23 @@ namespace BalloonParty.Slots.Actor
                 return;
             }
 
+            // The sim needs compute; the render reads the speck buffer in the vertex stage. Both are gated
+            // by the graphics API — GLES3.0/2.0 lack them, so a mobile build must use Vulkan or Metal.
+            if (!SystemInfo.supportsComputeShaders)
+            {
+                Debug.LogWarning("SpeckField disabled: compute shaders unsupported (graphics API — use Vulkan/Metal).", this);
+                enabled = false;
+                return;
+            }
+
+            if (SystemInfo.maxComputeBufferInputsVertex < 1)
+            {
+                Debug.LogWarning("SpeckField disabled: the vertex stage can't read compute buffers on this " +
+                    "device/API (use Vulkan/Metal, or a texture-based fallback).", this);
+                enabled = false;
+                return;
+            }
+
             _kernel = _compute.FindKernel("Advect");
             _speckBuffer = new ComputeBuffer(_count, SpeckStrideBytes);
             SeedSpecks();
@@ -116,7 +133,9 @@ namespace BalloonParty.Slots.Actor
                 return;
             }
 
-            var dt = Time.unscaledDeltaTime;
+            // Scaled time: the field slows with slow-mo and freezes at timeScale 0 (e.g. the level-up
+            // popup), matching the game. dt == 0 (paused) skips the sim, holding the specks in place.
+            var dt = Time.deltaTime;
             if (dt <= 0f)
             {
                 return;
@@ -167,7 +186,7 @@ namespace BalloonParty.Slots.Actor
             _renderMaterial.SetFloat(MinScaleId, _scaleRange.x);
             _renderMaterial.SetFloat(MaxScaleId, _scaleRange.y);
             _renderMaterial.SetVector(ScalePulseSpeedId, _scalePulseSpeed);
-            _renderMaterial.SetFloat(SpeckTimeId, Time.unscaledTime);
+            _renderMaterial.SetFloat(SpeckTimeId, Time.time);
             _renderMaterial.SetFloat(FadeInId, _fadeIn);
             _renderMaterial.SetFloat(FadeOutId, _fadeOut);
         }
@@ -233,7 +252,7 @@ namespace BalloonParty.Slots.Actor
         {
             _compute.SetInt(CountId, _count);
             _compute.SetFloat(DeltaTimeId, dt);
-            _compute.SetFloat(TimeId, Time.unscaledTime);
+            _compute.SetFloat(TimeId, Time.time);
             _compute.SetVector(MotionDeltaId, _motionDelta);
             _compute.SetFloat(BrownianStrengthId, _brownianStrength);
             _compute.SetFloat(DragId, _drag);
