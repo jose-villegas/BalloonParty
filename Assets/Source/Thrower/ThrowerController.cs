@@ -25,6 +25,7 @@ namespace BalloonParty.Thrower
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
+        private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly PauseService _pauseService;
         private readonly IObjectResolver _resolver;
@@ -57,6 +58,7 @@ namespace BalloonParty.Thrower
             ISubscriber<RunResetMessage> resetSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
             ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
+            ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
             PauseService pauseService,
             ProjectilePositionProvider positionProvider)
@@ -71,6 +73,7 @@ namespace BalloonParty.Thrower
             _resetSubscriber = resetSubscriber;
             _boardClearSubscriber = boardClearSubscriber;
             _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
+            _transitionCompletedSubscriber = transitionCompletedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
             _pauseService = pauseService;
             _positionProvider = positionProvider;
@@ -94,6 +97,10 @@ namespace BalloonParty.Thrower
             _boardClearSubscriber.Subscribe(_ => Reload());
 
             _levelUpDismissedSubscriber.Subscribe(_ => OnLevelUpDismissed());
+
+            // Load the new level's projectile only once the ascend has fully settled, so it doesn't sit at
+            // the muzzle through the transition.
+            _transitionCompletedSubscriber.Subscribe(_ => OnLevelTransitionCompleted());
 
             // A projectile fired just before loss keeps flying on physics alone; scale it away.
             _gameOverSubscriber.Subscribe(_ => OnGameOver());
@@ -151,21 +158,32 @@ namespace BalloonParty.Thrower
             _loadDuration = _config.ProjectileLoadDuration;
         }
 
-        // Chained off the disappear since the level transition no longer publishes BoardClearMessage.
+        // Scales the outgoing shot away as the ascend begins; the fresh one is NOT loaded here — it waits for
+        // OnLevelTransitionCompleted so it doesn't sit frozen at the muzzle through the whole transition. The
+        // unscaled disappear plays out over the paused ascend rather than bleeding into resumed play.
         private void OnLevelUpDismissed()
         {
-            if (_activeView != null)
+            ScaleAwayActiveProjectile();
+        }
+
+        // The ascend has fully settled — only now load the new level's projectile.
+        private void OnLevelTransitionCompleted()
+        {
+            if (_activeView == null)
             {
-                _activeView.PlayDisappear(Reload);
-            }
-            else
-            {
-                Reload();
+                LoadProjectile();
             }
         }
 
         // No reload here — a fresh projectile only loads later, on restart.
         private void OnGameOver()
+        {
+            ScaleAwayActiveProjectile();
+        }
+
+        // Scales the active projectile away and returns it to the pool without loading a replacement; the
+        // caller (or a later beat) decides when a fresh one loads.
+        private void ScaleAwayActiveProjectile()
         {
             if (_activeView == null)
             {

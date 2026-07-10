@@ -36,8 +36,6 @@ namespace BalloonParty.UI.LevelUp
         [SerializeField] private float _glowTrailDuration = 0.8f;
         [SerializeField] [Range(0f, 1f)] private float _glowTargetRadiusMultiplier = 0.8f;
 
-        [Header("Timing")] [SerializeField] private float _continueUnpauseDelay;
-
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private IPublisher<LevelUpDismissedMessage> _dismissedPublisher;
         [Inject] private IPublisher<LevelUpGlowTrailsMessage> _glowTrailsPublisher;
@@ -73,7 +71,7 @@ namespace BalloonParty.UI.LevelUp
         {
             _animator.ResetTrigger(AppearTrigger);
             _animator.SetTrigger(HideTrigger);
-            ResumeAfterDelayAsync().Forget();
+            Resume();
         }
 
         private async UniTaskVoid ShowAfterGateAsync(ScoreLevelUpMessage msg)
@@ -159,13 +157,8 @@ namespace BalloonParty.UI.LevelUp
             return spawner;
         }
 
-        private async UniTaskVoid ResumeAfterDelayAsync()
+        private void Resume()
         {
-            await UniTask.Delay(
-                (int)(_continueUnpauseDelay * 1000),
-                true,
-                cancellationToken: destroyCancellationToken);
-
             // Publish before releasing the freeze so the hand-back never flashes full speed.
             _dismissedPublisher.Publish(new LevelUpDismissedMessage());
             _timeScaleService.Release(TimeScaleSource.LevelUpPopup);
