@@ -39,6 +39,8 @@ namespace BalloonParty.Slots.Actor
         private static readonly int SpeckSizeId = Shader.PropertyToID("_SpeckSize");
         private static readonly int MinScaleId = Shader.PropertyToID("_MinScale");
         private static readonly int MaxScaleId = Shader.PropertyToID("_MaxScale");
+        private static readonly int ScalePulseSpeedId = Shader.PropertyToID("_ScalePulseSpeed");
+        private static readonly int SpeckTimeId = Shader.PropertyToID("_SpeckTime");
         private static readonly int FadeInId = Shader.PropertyToID("_FadeIn");
         private static readonly int FadeOutId = Shader.PropertyToID("_FadeOut");
 
@@ -59,8 +61,12 @@ namespace BalloonParty.Slots.Actor
         [Tooltip("Per-speck lifetime range (seconds). Each speck fades in, lives, fades out, then respawns.")]
         [SerializeField] private Vector2 _lifetimeRange = new(2f, 6f);
 
-        [Tooltip("Per-speck scale multiplier range on _speckSize, for size variety.")]
+        [Tooltip("Per-speck scale multiplier range on _speckSize, oscillated over time for size variety.")]
         [SerializeField] private Vector2 _scaleRange = new(0.5f, 1.5f);
+
+        [Tooltip("Per-speck scale-oscillation rate range; each speck picks a random speed in it, so they " +
+                 "pulse out of sync (fake toward/away drift).")]
+        [SerializeField] private Vector2 _scalePulseSpeed = new(0.4f, 1f);
 
         [Tooltip("Fraction of life spent fading/scaling in.")]
         [Range(0f, 0.5f)] [SerializeField] private float _fadeIn = 0.15f;
@@ -160,6 +166,8 @@ namespace BalloonParty.Slots.Actor
             _renderMaterial.SetFloat(SpeckSizeId, _speckSize);
             _renderMaterial.SetFloat(MinScaleId, _scaleRange.x);
             _renderMaterial.SetFloat(MaxScaleId, _scaleRange.y);
+            _renderMaterial.SetVector(ScalePulseSpeedId, _scalePulseSpeed);
+            _renderMaterial.SetFloat(SpeckTimeId, Time.unscaledTime);
             _renderMaterial.SetFloat(FadeInId, _fadeIn);
             _renderMaterial.SetFloat(FadeOutId, _fadeOut);
         }

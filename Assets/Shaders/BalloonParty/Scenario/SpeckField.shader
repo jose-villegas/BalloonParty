@@ -10,6 +10,7 @@ Shader "BalloonParty/Scenario/SpeckField"
         _SpeckSize ("Speck Size",   Float)           = 0.03
         _MinScale  ("Min Scale",    Float)           = 0.5
         _MaxScale  ("Max Scale",    Float)           = 1.5
+        _ScalePulseSpeed ("Scale Pulse Speed (min,max)", Vector) = (0.4, 1.0, 0, 0)
         _FadeIn    ("Fade In (life frac)",  Range(0, 0.5)) = 0.15
         _FadeOut   ("Fade Out (life frac)", Range(0, 0.5)) = 0.25
     }
@@ -51,6 +52,8 @@ Shader "BalloonParty/Scenario/SpeckField"
             float _SpeckSize;
             float _MinScale;
             float _MaxScale;
+            float4 _ScalePulseSpeed;
+            float _SpeckTime;
             float _FadeIn;
             float _FadeOut;
 
@@ -89,7 +92,12 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float fadeOut = _FadeOut > 0.0 ? saturate((1.0 - lifeT) / _FadeOut) : 1.0;
                 float fade = fadeIn * fadeOut;
 
-                float baseScale = lerp(_MinScale, _MaxScale, hash11(s.seed * 78.233));
+                // Scale oscillation over time — some specks grow while others shrink, faking gentle drift
+                // toward/away from the camera; the scale analog of the Brownian motion. Per-speck phase
+                // AND rate (both seed-derived) so they desync in size and speed.
+                float pulseSpeed = lerp(_ScalePulseSpeed.x, _ScalePulseSpeed.y, hash11(s.seed * 91.7));
+                float scaleT = 0.5 + 0.5 * sin(_SpeckTime * pulseSpeed + s.seed * 6.2831853);
+                float baseScale = lerp(_MinScale, _MaxScale, scaleT);
                 float size = _SpeckSize * baseScale * fade;
 
                 // 2D game on the XY plane — offset in world XY, no billboard basis needed.
