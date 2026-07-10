@@ -77,3 +77,7 @@ Tools/.editmode-run.log
 
 # Unity test-results exports (reduce via Tools/review_test_results.sh)
 TestResults_*.xml
+
+# macOS
+.DS_Store
+**/.DS_Store
