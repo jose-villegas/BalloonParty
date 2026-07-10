@@ -11,6 +11,7 @@ struct Speck
     float seed;
     float age;
     float lifetime;
+    float2 effectiveVel;
 };
 
 RWStructuredBuffer<Speck> _Specks;
@@ -110,6 +111,7 @@ void Advect(uint3 id : SV_DispatchThreadID)
     float disturbed = step(1e-8, dot(disturbance, disturbance));
     s.velocity *= saturate(1.0 - (_Drag + _DisturbanceDamping * disturbed) * _DeltaTime);
 
+    float2 preMovePos = s.position;
     s.position += s.velocity * _DeltaTime;
 
     // Flow rides the field directly (bounded advection, not an accumulating force) so it can't run away
@@ -119,6 +121,10 @@ void Advect(uint3 id : SV_DispatchThreadID)
     // Match the scenario's bulk move 1:1 (influence = parallax factor; 1 = exact): translate by the same
     // per-frame amount the content root moved. Not scaled by dt — it's already a per-frame delta.
     s.position += _MotionDelta * _MotionInfluence;
+
+    // Total per-frame move (before wrap) as an effective velocity — captures sim + ascend + flow, so the
+    // velocity-stretched trail in the render reflects all of them.
+    s.effectiveVel = (s.position - preMovePos) / max(_DeltaTime, 1e-5);
 
     // Toroidal wrap so the region stays populated.
     float2 local = s.position - _RegionMin;

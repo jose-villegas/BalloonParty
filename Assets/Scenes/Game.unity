@@ -277,7 +277,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Slots.Actor.SpeckField
   _compute: {fileID: 7200000, guid: af5013886d94d4b478b052d183915616, type: 3}
   _renderMaterial: {fileID: 2100000, guid: 48bc9d2026201425e94c3ff3779a2339, type: 2}
-  _count: 512
+  _count: 1024
   _regionSize: {x: 6, y: 13}
   _brownianStrength: 0.6
   _drag: 2

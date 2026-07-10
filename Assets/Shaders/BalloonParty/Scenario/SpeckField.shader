@@ -11,6 +11,8 @@ Shader "BalloonParty/Scenario/SpeckField"
         _MinScale  ("Min Scale",    Float)           = 0.5
         _MaxScale  ("Max Scale",    Float)           = 1.5
         _ScalePulseSpeed ("Scale Pulse Speed (min,max)", Vector) = (0.4, 1.0, 0, 0)
+        _TrailLength ("Trail Length (per speed)", Float) = 0
+        _TrailMax    ("Trail Max Length", Float)         = 0.5
         _FadeIn    ("Fade In (life frac)",  Range(0, 0.5)) = 0.15
         _FadeOut   ("Fade Out (life frac)", Range(0, 0.5)) = 0.25
     }
@@ -44,6 +46,7 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float seed;
                 float age;
                 float lifetime;
+                float2 effectiveVel;
             };
 
             StructuredBuffer<Speck> _Specks;
@@ -56,6 +59,8 @@ Shader "BalloonParty/Scenario/SpeckField"
             float _SpeckTime;
             float _FadeIn;
             float _FadeOut;
+            float _TrailLength;
+            float _TrailMax;
 
             struct v2f
             {
@@ -100,8 +105,21 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float baseScale = lerp(_MinScale, _MaxScale, scaleT);
                 float size = _SpeckSize * baseScale * fade;
 
-                // 2D game on the XY plane — offset in world XY, no billboard basis needed.
-                float3 world = float3(s.position + corner * size, 0.0);
+                // Trail: stretch the quad along the speck's motion, scaled by speed (capped by _TrailMax).
+                // Below a tiny speed it stays a round dot (velocity direction is undefined there).
+                float speed = length(s.effectiveVel);
+                float2 along = float2(0.0, 1.0);
+                float length2 = size;
+                if (speed > 1e-4 && _TrailLength > 0.0)
+                {
+                    along = s.effectiveVel / speed;
+                    length2 = size + min(speed * _TrailLength, _TrailMax);
+                }
+                float2 across = float2(along.y, -along.x);
+
+                // 2D game on the XY plane — offset in the velocity-aligned frame (round when not trailing).
+                float2 offset = across * (corner.x * size) + along * (corner.y * length2);
+                float3 world = float3(s.position + offset, 0.0);
 
                 v2f o;
                 o.pos = UnityWorldToClipPos(world);

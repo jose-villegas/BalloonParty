@@ -17,7 +17,7 @@ namespace BalloonParty.Slots.Actor
     internal sealed class SpeckField : MonoBehaviour
     {
         private const int ThreadGroupSize = 64;
-        private const int SpeckStrideBytes = sizeof(float) * 7;
+        private const int SpeckStrideBytes = sizeof(float) * 9;
 
         private static readonly int SpecksId = Shader.PropertyToID("_Specks");
         private static readonly int CountId = Shader.PropertyToID("_Count");
@@ -39,6 +39,8 @@ namespace BalloonParty.Slots.Actor
         private static readonly int MinLifetimeId = Shader.PropertyToID("_MinLifetime");
         private static readonly int MaxLifetimeId = Shader.PropertyToID("_MaxLifetime");
         private static readonly int SpeckSizeId = Shader.PropertyToID("_SpeckSize");
+        private static readonly int TrailLengthId = Shader.PropertyToID("_TrailLength");
+        private static readonly int TrailMaxId = Shader.PropertyToID("_TrailMax");
         private static readonly int MinScaleId = Shader.PropertyToID("_MinScale");
         private static readonly int MaxScaleId = Shader.PropertyToID("_MaxScale");
         private static readonly int ScalePulseSpeedId = Shader.PropertyToID("_ScalePulseSpeed");
@@ -68,6 +70,12 @@ namespace BalloonParty.Slots.Actor
         [SerializeField] private float _flowInfluence = 1f;
 
         [SerializeField] private float _speckSize = 0.03f;
+
+        [Tooltip("Stretches each speck into a streak along its motion, scaled by speed. 0 = round dots.")]
+        [SerializeField] private float _trailLength;
+
+        [Tooltip("Max streak length added by the trail (world units), so a fast ascend can't over-stretch.")]
+        [SerializeField] private float _trailMax = 0.5f;
 
         [Tooltip("Per-speck lifetime range (seconds). Each speck fades in, lives, fades out, then respawns.")]
         [SerializeField] private Vector2 _lifetimeRange = new(2f, 6f);
@@ -194,6 +202,8 @@ namespace BalloonParty.Slots.Actor
         {
             _renderMaterial.SetBuffer(SpecksId, _speckBuffer);
             _renderMaterial.SetFloat(SpeckSizeId, _speckSize);
+            _renderMaterial.SetFloat(TrailLengthId, _trailLength);
+            _renderMaterial.SetFloat(TrailMaxId, _trailMax);
             _renderMaterial.SetFloat(MinScaleId, _scaleRange.x);
             _renderMaterial.SetFloat(MaxScaleId, _scaleRange.y);
             _renderMaterial.SetVector(ScalePulseSpeedId, _scalePulseSpeed);
@@ -219,6 +229,7 @@ namespace BalloonParty.Slots.Actor
                     // Stagger the starting age across each lifetime so they don't all pop in together.
                     Age = Random.value * lifetime,
                     Lifetime = lifetime,
+                    EffectiveVel = Vector2.zero,
                 };
             }
 
@@ -293,6 +304,7 @@ namespace BalloonParty.Slots.Actor
             public float Seed;
             public float Age;
             public float Lifetime;
+            public Vector2 EffectiveVel;
         }
     }
 }
