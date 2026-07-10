@@ -277,18 +277,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Slots.Actor.SpeckField
   _compute: {fileID: 7200000, guid: af5013886d94d4b478b052d183915616, type: 3}
   _renderMaterial: {fileID: 2100000, guid: 48bc9d2026201425e94c3ff3779a2339, type: 2}
-  _count: 20480
+  _count: 1024
   _regionSize: {x: 7, y: 15}
   _brownianStrength: 0.6
   _drag: 2
   _motionInfluence: 1.25
   _disturbanceInfluence: 23.5
-  _disturbanceDamping: 1.25
+  _disturbanceDamping: 0.25
   _swirlAngle: {x: -120, y: 120}
-  _flowInfluence: 0.225
+  _flowInfluence: 0.35
   _speckSize: 0.03
   _lifetimeRange: {x: 1, y: 10}
-  _scaleRange: {x: 0.5, y: 20}
+  _scaleRange: {x: 0.5, y: 6}
   _scalePulseSpeed: {x: 0.4, y: 1.75}
   _fadeIn: 0.5
   _fadeOut: 0.5

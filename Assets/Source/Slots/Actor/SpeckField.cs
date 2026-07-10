@@ -63,8 +63,8 @@ namespace BalloonParty.Slots.Actor
                  "angle in this range.")]
         [SerializeField] private Vector2 _swirlAngle = new(30f, 90f);
 
-        [Tooltip("How much specks also advance along the disturbance's own motion (the white direction), " +
-                 "so the vortex travels with the flow rather than only pulling away.")]
+        [Tooltip("Speed specks advance along the disturbance's own motion (the white direction), so the " +
+                 "vortex travels with the flow. Bounded advection — high values go faster but don't run away.")]
         [SerializeField] private float _flowInfluence = 1f;
 
         [SerializeField] private float _speckSize = 0.03f;

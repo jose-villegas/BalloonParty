@@ -75,6 +75,7 @@ void Advect(uint3 id : SV_DispatchThreadID)
     // the projectile/balloon carves into the field's R channel — so they part/disperse like the puff
     // cloud. (The G,B displacement points opposite the motion, which would instead drag them into the wake.)
     float2 disturbance = float2(0.0, 0.0);
+    float2 flow = float2(0.0, 0.0);
     if (_DisturbanceInfluence > 0.0)
     {
         float2 uv = (s.position - _FieldBoundsMin) / max(_FieldBoundsSize, 1e-4);
@@ -92,26 +93,28 @@ void Advect(uint3 id : SV_DispatchThreadID)
             float swirl = lerp(_SwirlAngle.x, _SwirlAngle.y, hash11(s.seed * 53.1));
             float sc = sin(swirl);
             float cc = cos(swirl);
-            float2 rotated = float2(radial.x * cc - radial.y * sc, radial.x * sc + radial.y * cc);
+            disturbance = float2(radial.x * cc - radial.y * sc, radial.x * sc + radial.y * cc);
 
-            // Advance along the disturbance's own motion (the white direction) too, so the vortex travels
-            // with the flow instead of only pulling away. GB stores -motion, so negate for the direction.
-            float2 flow = -(_DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv, 0).gb - 0.5) * 2.0;
-
-            disturbance = rotated + flow * _FlowInfluence;
+            // Advance along the disturbance's own motion (the white direction). GB stores -motion, so
+            // negate for the direction.
+            flow = -(_DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv, 0).gb - 0.5) * 2.0;
         }
     }
 
-    // Organic forces integrate through velocity + drag.
+    // Organic + swirl forces integrate through velocity + drag.
     float2 accel = brownian + disturbance * _DisturbanceInfluence;
     s.velocity += accel * _DeltaTime;
 
-    // Base drag, plus extra damping wherever the disturbance is active, so the push settles quickly
+    // Base drag, plus extra damping wherever the swirl is active, so the push settles quickly
     // (specks part, then ease back) instead of carrying momentum out of the wake.
     float disturbed = step(1e-8, dot(disturbance, disturbance));
     s.velocity *= saturate(1.0 - (_Drag + _DisturbanceDamping * disturbed) * _DeltaTime);
 
     s.position += s.velocity * _DeltaTime;
+
+    // Flow rides the field directly (bounded advection, not an accumulating force) so it can't run away
+    // at high influence and stays independent of the swirl damping.
+    s.position += flow * _FlowInfluence * _DeltaTime;
 
     // Match the scenario's bulk move 1:1 (influence = parallax factor; 1 = exact): translate by the same
     // per-frame amount the content root moved. Not scaled by dt — it's already a per-frame delta.
