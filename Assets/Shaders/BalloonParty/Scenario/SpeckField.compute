@@ -1,7 +1,7 @@
 // Advects an ambient speck field each frame: Brownian drift + a global motion vector + the disturbance
 // field, wrapped toroidally within a world region. Driven by SpeckField.cs.
 // STARTER — validate + tune in-editor (Built-in RP compute). Speck layout must match the C# struct:
-// float2 position, float2 velocity, float seed (stride 20 bytes).
+// float2 position, float2 velocity, float seed, float age, float lifetime (stride 28 bytes).
 #pragma kernel Advect
 
 struct Speck
@@ -20,9 +20,10 @@ SamplerState sampler_DisturbanceTex;
 uint _Count;
 float _DeltaTime;
 float _TimeSeconds;
-float2 _MotionVector;
+float2 _MotionDelta;
 float _BrownianStrength;
 float _Drag;
+float _DisturbanceDamping;
 float _MotionInfluence;
 float _DisturbanceInfluence;
 float2 _FieldBoundsMin;
@@ -64,29 +65,42 @@ void Advect(uint3 id : SV_DispatchThreadID)
 
     // Brownian drift: a per-speck pseudo-random direction that re-rolls roughly once a second.
     float phase = _TimeSeconds + s.seed * 100.0;
-    float step = floor(phase);
-    float2 rnd = float2(hash11(s.seed + step), hash11(s.seed + step + 17.0)) * 2.0 - 1.0;
+    float phaseStep = floor(phase);
+    float2 rnd = float2(hash11(s.seed + phaseStep), hash11(s.seed + phaseStep + 17.0)) * 2.0 - 1.0;
     float2 brownian = rnd * _BrownianStrength;
 
-    // Disturbance field: G,B hold displacement biased to 0.5 (matches DisturbanceStampBatched / BushLeaf).
+    // Disturbance: push specks up the density gradient — toward undisturbed density, away from the wake
+    // the projectile/balloon carves into the field's R channel — so they part/disperse like the puff
+    // cloud. (The G,B displacement points opposite the motion, which would instead drag them into the wake.)
     float2 disturbance = float2(0.0, 0.0);
     if (_DisturbanceInfluence > 0.0)
     {
         float2 uv = (s.position - _FieldBoundsMin) / max(_FieldBoundsSize, 1e-4);
         if (all(uv >= 0.0) && all(uv <= 1.0))
         {
-            float4 field = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv, 0);
-            disturbance = (field.gb - 0.5) * 2.0;
+            const float e = 0.01;
+            float dl = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv - float2(e, 0.0), 0).r;
+            float dr = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv + float2(e, 0.0), 0).r;
+            float dd = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv - float2(0.0, e), 0).r;
+            float du = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv + float2(0.0, e), 0).r;
+            disturbance = float2(dr - dl, du - dd);
         }
     }
 
-    float2 accel = brownian
-                 + _MotionVector * _MotionInfluence
-                 + disturbance * _DisturbanceInfluence;
-
+    // Organic forces integrate through velocity + drag.
+    float2 accel = brownian + disturbance * _DisturbanceInfluence;
     s.velocity += accel * _DeltaTime;
-    s.velocity *= saturate(1.0 - _Drag * _DeltaTime);
+
+    // Base drag, plus extra damping wherever the disturbance is active, so the push settles quickly
+    // (specks part, then ease back) instead of carrying momentum out of the wake.
+    float disturbed = step(1e-8, dot(disturbance, disturbance));
+    s.velocity *= saturate(1.0 - (_Drag + _DisturbanceDamping * disturbed) * _DeltaTime);
+
     s.position += s.velocity * _DeltaTime;
+
+    // Match the scenario's bulk move 1:1 (influence = parallax factor; 1 = exact): translate by the same
+    // per-frame amount the content root moved. Not scaled by dt — it's already a per-frame delta.
+    s.position += _MotionDelta * _MotionInfluence;
 
     // Toroidal wrap so the region stays populated.
     float2 local = s.position - _RegionMin;

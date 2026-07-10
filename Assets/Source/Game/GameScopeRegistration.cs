@@ -157,6 +157,7 @@ namespace BalloonParty.Game
             builder.RegisterComponentInHierarchy<CameraShakeService>();
             builder.RegisterComponentInHierarchy<SceneCaptureService>();
             builder.RegisterComponentInHierarchy<CinematicCameraView>();
+            builder.RegisterComponentInHierarchy<SpeckField>();
             builder.Register<CinematicCameraRig>(Lifetime.Singleton);
 
             builder.Register<GameOverPresentationGate>(Lifetime.Singleton);

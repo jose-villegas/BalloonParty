@@ -82,8 +82,8 @@ Shader "BalloonParty/Scenario/SpeckField"
                 Speck s = _Specks[vid / 6u];
                 float2 corner = Corners[vid % 6u];
 
-                // Life fade: ramp in over _FadeIn, out over _FadeOut (as fractions of lifetime). Drives
-                // both alpha and scale so specks pop in and shrink away rather than blinking.
+                // Life fade: ramp in over _FadeIn, out over _FadeOut (fractions of lifetime), driving both
+                // alpha and scale so specks pop in and shrink away.
                 float lifeT = s.lifetime > 0.0 ? saturate(s.age / s.lifetime) : 1.0;
                 float fadeIn = _FadeIn > 0.0 ? saturate(lifeT / _FadeIn) : 1.0;
                 float fadeOut = _FadeOut > 0.0 ? saturate((1.0 - lifeT) / _FadeOut) : 1.0;

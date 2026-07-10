@@ -256,7 +256,7 @@ GameObject:
   - component: {fileID: 1143190892}
   - component: {fileID: 1143190891}
   - component: {fileID: 1143190893}
-  m_Layer: 0
+  m_Layer: 16
   m_Name: DustSpeckField
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -277,19 +277,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Slots.Actor.SpeckField
   _compute: {fileID: 7200000, guid: af5013886d94d4b478b052d183915616, type: 3}
   _renderMaterial: {fileID: 2100000, guid: 48bc9d2026201425e94c3ff3779a2339, type: 2}
-  _count: 4096
-  _regionSize: {x: 30, y: 20}
+  _count: 512
+  _regionSize: {x: 7, y: 15}
   _brownianStrength: 0.6
   _drag: 2
-  _motionInfluence: 1
-  _disturbanceInfluence: 1
+  _motionInfluence: 1.25
+  _disturbanceInfluence: 17.5
+  _disturbanceDamping: 1.25
   _speckSize: 0.03
   _lifetimeRange: {x: 2, y: 6}
-  _scaleRange: {x: 0.5, y: 3}
-  _fadeIn: 0.15
-  _fadeOut: 0.25
-  _referenceSpeed: 20
-  _motionSmoothing: 12
+  _scaleRange: {x: 0.5, y: 5}
+  _fadeIn: 0.5
+  _fadeOut: 0.5
+  _teleportThreshold: 1
 --- !u!4 &1143190890
 Transform:
   m_ObjectHideFlags: 0
@@ -330,7 +330,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 48bc9d2026201425e94c3ff3779a2339, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1193,46 +1193,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
-    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
-        type: 3}
-      propertyPath: m_LocalScale.x
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
-        type: 3}
-      propertyPath: m_LocalScale.y
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
-        type: 3}
-      propertyPath: m_LocalScale.z
-      value: 10
-      objectReference: {fileID: 0}
-    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
-        type: 3}
-      propertyPath: m_ConstrainProportionsScale
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8151701719827776422, guid: 45a679b1438e74a72a716351daa7ff29,
-        type: 3}
-      propertyPath: m_Layer
-      value: 12
-      objectReference: {fileID: 0}
     - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1283,10 +1243,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 794959520412807228, guid: 45a679b1438e74a72a716351daa7ff29, type: 3}
-    - {fileID: 8350606507502581257, guid: 45a679b1438e74a72a716351daa7ff29, type: 3}
-    - {fileID: 4503772804348615713, guid: 45a679b1438e74a72a716351daa7ff29, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
