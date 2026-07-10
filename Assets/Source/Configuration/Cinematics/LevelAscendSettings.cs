@@ -30,11 +30,15 @@ namespace BalloonParty.Configuration.Cinematics
         [Tooltip("Seconds between anti-diagonal bands of the pop wave.")]
         [SerializeField] private float _popWaveBandSeconds;
 
+        [Tooltip("Loss→restart scenery rise progress over time (0→1); the last key's time is the duration. Ease-in for a slow start ramping to full speed.")]
+        [SerializeField] private AnimationCurve _restartRiseCurve = AnimationCurve.EaseInOut(0f, 0f, 1f, 1f);
+
         public AnimationCurve DescentCurve => _descentCurve;
         public float Height => _height;
         public float BalloonSpawnCue => _balloonSpawnCue;
         public float Speed => _speed;
         public float PopSlowMoTimeScale => _popSlowMoTimeScale;
         public float PopWaveBandSeconds => _popWaveBandSeconds;
+        public AnimationCurve RestartRiseCurve => _restartRiseCurve;
     }
 }

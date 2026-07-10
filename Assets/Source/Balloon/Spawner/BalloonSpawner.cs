@@ -205,8 +205,18 @@ namespace BalloonParty.Balloon.Spawner
 
             _activeCounts[poolKey] = _activeCounts.GetValueOrDefault(poolKey) + 1;
 
-            var model = _factory.Create(entry, slot, _spawnPathBuffer, () => _activeCounts[poolKey]--);
+            var model = _factory.Create(entry, slot, _spawnPathBuffer, () => ReleaseActiveCount(poolKey));
             _newlySpawnedBalloons.Add(model);
+        }
+
+        // A balloon can return after a run reset cleared the counts (e.g. the loss→restart outgoing group),
+        // so guard the key — its decrement no longer applies to the fresh run.
+        private void ReleaseActiveCount(string poolKey)
+        {
+            if (_activeCounts.TryGetValue(poolKey, out var count))
+            {
+                _activeCounts[poolKey] = count - 1;
+            }
         }
 
         private void SpawnLine()

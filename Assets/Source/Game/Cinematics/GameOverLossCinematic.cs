@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration.Cinematics;
 using BalloonParty.Game.Run;
@@ -33,6 +34,8 @@ namespace BalloonParty.Game.Cinematics
         private readonly BoardPopWave _popWave;
         private readonly ScenarioContentRoot _scenarioRoot;
         private readonly GridSpawnerCoordinator _spawnerCoordinator;
+        private readonly StaticActorSpawner _staticActorSpawner;
+        private readonly IReadOnlyList<ITransitionOutgoingContent> _outgoingContent;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly ISubscriber<GameOverDismissedMessage> _dismissedSubscriber;
         private readonly CancellationTokenSource _cts = new();
@@ -57,6 +60,8 @@ namespace BalloonParty.Game.Cinematics
             BoardPopWave popWave,
             ScenarioContentRoot scenarioRoot,
             GridSpawnerCoordinator spawnerCoordinator,
+            StaticActorSpawner staticActorSpawner,
+            IReadOnlyList<ITransitionOutgoingContent> outgoingContent,
             ISubscriber<GameOverMessage> gameOverSubscriber,
             ISubscriber<GameOverDismissedMessage> dismissedSubscriber)
             : base(director, rig, timeScale, settings)
@@ -67,6 +72,8 @@ namespace BalloonParty.Game.Cinematics
             _popWave = popWave;
             _scenarioRoot = scenarioRoot;
             _spawnerCoordinator = spawnerCoordinator;
+            _staticActorSpawner = staticActorSpawner;
+            _outgoingContent = outgoingContent;
             _gameOverSubscriber = gameOverSubscriber;
             _dismissedSubscriber = dismissedSubscriber;
         }
@@ -165,81 +172,100 @@ namespace BalloonParty.Game.Cinematics
                 return;
             }
 
-            // Skip path (no beat played) — nothing to unwind, so restart and spawn the board immediately.
+            // Skip path (no beat played) — nothing to unwind, so restart the whole board immediately.
             ResumeCinematicPause();
             _runController.RestartRun();
-            _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, _cts.Token).Forget();
         }
 
-        // Pops the board while the camera pulls back, then restarts and rises the new scenario up from
-        // below (fake camera-down — the mirror of the level-up ascend).
+        // Camera-down transition, the mirror of the level-up ascend: the lost level becomes the outgoing
+        // group — its balloons detach and its scenery is snapshotted under the root — and rides up and out
+        // while the new scenery rises in beneath it. The balloons pop in a wave as they ascend ("gone", vs.
+        // the level-up's float-away "survived"). Detaching clears the grid, so the incoming scenery fills
+        // fully; balloons arrive once it has settled.
         private async UniTaskVoid RestoreAndRestartAsync()
         {
-            // Snapshot the board before the pop wave (and the restart) empties it. No exit drop — the
-            // wave pops in place, with no descending root to compensate for.
-            _popWave.Collect(0f);
+            var height = Settings.LevelAscend.Height;
 
             _restoreDone = new UniTaskCompletionSource();
-            var popTask = _popWave.PlayAsync(_cts.Token);
-
-            // No camera beat to run — don't leave the restore await hanging.
             if (!Runner.TryBeginRestore())
             {
                 _restoreDone.TrySetResult();
             }
 
+            // Graduate the lost level to outgoing: the pop wave's collect detaches the balloons off the grid
+            // (offset to exit the top), and the scenery is snapshotted the same way. Both ride the root out.
+            _scenarioRoot.Transform.position = Vector3.zero;
+            _popWave.Collect(-height);
+            HoldOutgoingContent(-height);
+
+            // Reset run state only — the board swap is ours. Clear the live scenery (the snapshots carry it
+            // out) and stage the new scenery below view; the grid is empty now, so it fills fully.
+            _runController.RestartRun(resetBoard: false);
+            _pauseService.Pause(PauseSource.Cinematic);
+            _staticActorSpawner.ClearStaticActors();
+            _scenarioRoot.Transform.position = new Vector3(0f, -height, 0f);
+            await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, _cts.Token);
+
+            // One travel: outgoing rides up and out (balloons popping in a wave), new scenery rises in beneath.
+            var popTask = _popWave.PlayAsync(_cts.Token);
+            await RiseScenarioAsync(height, _cts.Token);
             await UniTask.WhenAll(popTask, _restoreDone.Task);
 
-            // Drop the scenario root below view, then restart so the new scenery spawns down there, rise
-            // it into place, and only then spawn the balloons so they arrive with the board, not mid-climb.
-            var height = Settings.LevelAscend.Height;
-            _scenarioRoot.Transform.position = new Vector3(0f, -height, 0f);
-
-            _runController.RestartRun();
-
-            // RestartRun's reset cleared the pause; re-hold it so the empty board isn't playable while it rises.
-            _pauseService.Pause(PauseSource.Cinematic);
-
-            await RiseScenarioAsync(height, _cts.Token);
+            // Settled — drop the scenery snapshots and bring in the new balloons (the wave pooled its own).
+            ReleaseOutgoingContent();
             await _spawnerCoordinator.RunStagesAsync(s => s == SpawnStage.BalloonActors, _cts.Token);
-
             ResumeCinematicPause();
         }
 
-        // Travels the scenario root -height → 0 over the Ascent's curve, so the scenery rises from below.
+        // Rises the scenario root -height → 0 on unscaled time, paced by the restart rise curve (progress
+        // 0→1; ease-in = slow start ramping to full speed). Outgoing content rides up and out; the new
+        // scenery, staged below, rises in.
         private async UniTask RiseScenarioAsync(float height, CancellationToken ct)
         {
-            var ascend = Settings.LevelAscend;
-            var curve = ascend.DescentCurve;
+            var curve = Settings.LevelAscend.RestartRiseCurve;
             var duration = curve.Duration();
-            var speed = ascend.Speed > 0f ? ascend.Speed : 1f;
 
             var elapsed = 0f;
             while (elapsed < duration)
             {
                 var position = _scenarioRoot.Transform.position;
-                position.y = -curve.Evaluate(elapsed) * height;
+                position.y = Mathf.Lerp(-height, 0f, curve.Evaluate(elapsed));
                 _scenarioRoot.Transform.position = position;
 
                 await UniTask.Yield(PlayerLoopTiming.Update, ct);
-                elapsed += Time.unscaledDeltaTime * speed;
+                elapsed += Time.unscaledDeltaTime;
             }
 
             _scenarioRoot.Transform.position = Vector3.zero;
         }
 
-        // The camera pull-back finished; the restart waits on this together with the pop wave.
+        private void HoldOutgoingContent(float exitDrop)
+        {
+            for (var i = 0; i < _outgoingContent.Count; i++)
+            {
+                _outgoingContent[i].HoldOutgoing(_scenarioRoot.Transform, exitDrop);
+            }
+        }
+
+        private void ReleaseOutgoingContent()
+        {
+            for (var i = 0; i < _outgoingContent.Count; i++)
+            {
+                _outgoingContent[i].ReleaseOutgoing();
+            }
+        }
+
+        // The camera pull-back finished; the restart's balloon spawn waits on this.
         private void OnRestoreEnded()
         {
             _restoreDone?.TrySetResult();
         }
 
-        // Matches the pull-back to the pop wave so the camera settles on the last pop; falls back to the
-        // authored restore duration when the board is empty (nothing to pop). Sampled after Collect().
+        // Matches the pull-back to the scenery rise so the camera settles as the new level arrives.
         private float RestoreSeconds()
         {
-            var pop = _popWave.EstimateSeconds();
-            return pop > 0f ? pop : _restoreFloorSeconds;
+            var rise = Settings.LevelAscend.RestartRiseCurve.Duration();
+            return rise > 0f ? rise : _restoreFloorSeconds;
         }
 
         private void ResumeCinematicPause()

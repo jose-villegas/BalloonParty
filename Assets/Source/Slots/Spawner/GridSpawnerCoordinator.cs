@@ -10,7 +10,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Slots.Spawner
 {
-    internal class GridSpawnerCoordinator : IStartable, IDisposable, IRunResettable
+    internal class GridSpawnerCoordinator : IStartable, IDisposable, IBoardResettable
     {
         private readonly IReadOnlyList<IGridSpawner> _spawners;
         private readonly NavigationReadyGate _gate;
@@ -36,11 +36,11 @@ namespace BalloonParty.Slots.Spawner
             _cts.Dispose();
         }
 
-        // Reset repopulates the scenery only; the loss→restart cinematic spawns the balloon stage once
-        // its down-travel arrives (mirrors the Ascent), so the balloons don't pop in over the rising board.
+        // Final reset stage — repopulates the cleared board, skipping the navigation gate. Skipped (as an
+        // IBoardResettable) when the loss→restart cinematic drives the board swap itself.
         public void ResetRun(int generation)
         {
-            RunStagesAsync(s => s < SpawnStage.BalloonActors, _cts.Token).Forget();
+            RunGroupsAsync(_cts.Token).Forget();
         }
 
         // Runs only matching stages, in priority order — used by Ascent to sequence statics/balloons.

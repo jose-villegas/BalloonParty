@@ -86,13 +86,20 @@ namespace BalloonParty.Game.Run
             _navigation.TransitionTo(NavigationState.GameOver);
         }
 
-        public void RestartRun()
+        // resetBoard: false resets only run state (score/level/health/counters), leaving the board to a
+        // transition cinematic that swaps it in itself (holds the outgoing actors, spawns the incoming).
+        public void RestartRun(bool resetBoard = true)
         {
             _lossPending = false;
             _generation++;
 
             foreach (var resettable in _resettables)
             {
+                if (!resetBoard && resettable is IBoardResettable)
+                {
+                    continue;
+                }
+
                 resettable.ResetRun(_generation);
             }
 

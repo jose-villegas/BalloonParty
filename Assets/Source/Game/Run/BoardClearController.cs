@@ -4,7 +4,7 @@ using MessagePipe;
 namespace BalloonParty.Game.Run
 {
     /// <summary>MessagePipe publishes synchronously, so the board is empty by the time <see cref="ResetRun"/> returns.</summary>
-    internal class BoardClearController : IRunResettable
+    internal class BoardClearController : IBoardResettable
     {
         private readonly IPublisher<BoardClearMessage> _publisher;
 
