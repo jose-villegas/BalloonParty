@@ -321,7 +321,6 @@ namespace BalloonParty.Tests.Game
         {
             var item = new ItemSettings();
             SetField(item, "_type", type);
-            SetField(item, "_weight", weight);
             SetField(item, "_maximumAllowed", maximumAllowed);
             return item;
         }
@@ -336,8 +335,6 @@ namespace BalloonParty.Tests.Game
             var entry = new BalloonPrefabEntry();
             SetField(entry, "_prefab", view);
             SetField(entry, "_balloonType", type);
-            SetField(entry, "_weight", weight);
-            SetField(entry, "_maxCount", maxCount);
             return entry;
         }
 

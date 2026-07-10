@@ -174,8 +174,6 @@ namespace BalloonParty.Tests.Item
         {
             var settings = new ItemSettings();
             SetField(settings, "_type", type);
-            SetField(settings, "_turnCheckEvery", 0);
-            SetField(settings, "_weight", 0f);
             SetField(settings, "_maximumAllowed", 0);
             return settings;
         }

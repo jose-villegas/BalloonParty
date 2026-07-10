@@ -74,3 +74,6 @@ Tools/last-test-run.md
 Tools/.test-run-stamp
 Tools/.editmode-results.xml
 Tools/.editmode-run.log
+
+# Unity test-results exports (reduce via Tools/review_test_results.sh)
+TestResults_*.xml
