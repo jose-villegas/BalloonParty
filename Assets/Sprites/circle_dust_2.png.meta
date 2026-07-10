@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 8f53598be049745ffa48dd1e38b72901
+guid: 552b4dcac1d374f4fb7d75321a9e3205
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3965493273967633474
-    second: circle-corner-cut_0
+      213: -8877756714615738023
+    second: circle_dust_2_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 2
+  spriteMode: 1
   spriteExtrude: 1
   spriteMeshType: 0
   alignment: 0
@@ -98,9 +98,9 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: Android
-    maxTextureSize: 256
+    maxTextureSize: 64
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 47
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -111,9 +111,9 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
     buildTarget: iOS
-    maxTextureSize: 256
+    maxTextureSize: 64
     resizeAlgorithm: 0
-    textureFormat: -1
+    textureFormat: 50
     textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
@@ -126,13 +126,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: circle-corner-cut_0
+      name: circle_dust_2_0
       rect:
         serializedVersion: 2
-        x: 3
-        y: 0
-        width: 509
-        height: 510
+        x: 358
+        y: 358
+        width: 1332
+        height: 1332
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -141,8 +141,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ebb55fd90ecb7f8c0800000000000000
-      internalID: -3965493273967633474
+      spriteID: 9517dfeed4fdbc480800000000000000
+      internalID: -8877756714615738023
       vertices: []
       indices: 
       edges: []
@@ -151,7 +151,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -161,7 +161,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      circle-corner-cut_0: -3965493273967633474
+      circle_dust_2_0: -8877756714615738023
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

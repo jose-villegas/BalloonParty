@@ -1,0 +1,81 @@
+// Advects an ambient speck field each frame: Brownian drift + a global motion vector + the disturbance
+// field, wrapped toroidally within a world region. Driven by SpeckField.cs.
+// STARTER — validate + tune in-editor (Built-in RP compute). Speck layout must match the C# struct:
+// float2 position, float2 velocity, float seed (stride 20 bytes).
+#pragma kernel Advect
+
+struct Speck
+{
+    float2 position;
+    float2 velocity;
+    float seed;
+};
+
+RWStructuredBuffer<Speck> _Specks;
+Texture2D<float4> _DisturbanceTex;
+SamplerState sampler_DisturbanceTex;
+
+uint _Count;
+float _DeltaTime;
+float _TimeSeconds;
+float2 _MotionVector;
+float _BrownianStrength;
+float _Drag;
+float _MotionInfluence;
+float _DisturbanceInfluence;
+float2 _FieldBoundsMin;
+float2 _FieldBoundsSize;
+float2 _RegionMin;
+float2 _RegionSize;
+
+float hash11(float p)
+{
+    p = frac(p * 0.1031);
+    p *= p + 33.33;
+    p *= p + p;
+    return frac(p);
+}
+
+[numthreads(64, 1, 1)]
+void Advect(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= _Count)
+    {
+        return;
+    }
+
+    Speck s = _Specks[id.x];
+
+    // Brownian drift: a per-speck pseudo-random direction that re-rolls roughly once a second.
+    float phase = _TimeSeconds + s.seed * 100.0;
+    float step = floor(phase);
+    float2 rnd = float2(hash11(s.seed + step), hash11(s.seed + step + 17.0)) * 2.0 - 1.0;
+    float2 brownian = rnd * _BrownianStrength;
+
+    // Disturbance field: G,B hold displacement biased to 0.5 (matches DisturbanceStampBatched / BushLeaf).
+    float2 disturbance = float2(0.0, 0.0);
+    if (_DisturbanceInfluence > 0.0)
+    {
+        float2 uv = (s.position - _FieldBoundsMin) / max(_FieldBoundsSize, 1e-4);
+        if (all(uv >= 0.0) && all(uv <= 1.0))
+        {
+            float4 field = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv, 0);
+            disturbance = (field.gb - 0.5) * 2.0;
+        }
+    }
+
+    float2 accel = brownian
+                 + _MotionVector * _MotionInfluence
+                 + disturbance * _DisturbanceInfluence;
+
+    s.velocity += accel * _DeltaTime;
+    s.velocity *= saturate(1.0 - _Drag * _DeltaTime);
+    s.position += s.velocity * _DeltaTime;
+
+    // Toroidal wrap so the region stays populated.
+    float2 local = s.position - _RegionMin;
+    local -= floor(local / _RegionSize) * _RegionSize;
+    s.position = _RegionMin + local;
+
+    _Specks[id.x] = s;
+}

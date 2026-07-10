@@ -243,6 +243,61 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1143190888
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1143190890}
+  - component: {fileID: 1143190889}
+  m_Layer: 0
+  m_Name: DustSpeckField
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1143190889
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143190888}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8acf04036b4f4e90835691fbffb57ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Slots.Actor.SpeckField
+  _compute: {fileID: 7200000, guid: af5013886d94d4b478b052d183915616, type: 3}
+  _renderMaterial: {fileID: 2100000, guid: 48bc9d2026201425e94c3ff3779a2339, type: 2}
+  _count: 4096
+  _regionSize: {x: 30, y: 20}
+  _brownianStrength: 0.6
+  _drag: 2
+  _motionInfluence: 1
+  _disturbanceInfluence: 1
+  _speckSize: 0.03
+  _referenceSpeed: 20
+  _motionSmoothing: 12
+--- !u!4 &1143190890
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1143190888}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &834494875442057147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1061,6 +1116,46 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalScale.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalScale.y
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalScale.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5001410204244092288, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_ConstrainProportionsScale
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8151701719827776422, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: m_Layer
+      value: 12
+      objectReference: {fileID: 0}
     - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1111,12 +1206,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9185101207980489252, guid: 45a679b1438e74a72a716351daa7ff29,
-        type: 3}
-      propertyPath: _capturedLayers.m_Bits
-      value: 61056
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 794959520412807228, guid: 45a679b1438e74a72a716351daa7ff29, type: 3}
+    - {fileID: 8350606507502581257, guid: 45a679b1438e74a72a716351daa7ff29, type: 3}
+    - {fileID: 4503772804348615713, guid: 45a679b1438e74a72a716351daa7ff29, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1133,3 +1226,4 @@ SceneRoots:
   - {fileID: 300998763}
   - {fileID: 943109115}
   - {fileID: 834494875442057147}
+  - {fileID: 1143190890}

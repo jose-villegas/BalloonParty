@@ -154,7 +154,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Display.SceneCaptureService
   _capturedLayers:
     serializedVersion: 2
-    m_Bits: 20096
+    m_Bits: 61056
   _matchMainCameraBackground: 1
   _backgroundColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &8597041690689265888
