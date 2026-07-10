@@ -26,6 +26,8 @@ float _Drag;
 float _DisturbanceDamping;
 float _MotionInfluence;
 float _DisturbanceInfluence;
+float2 _SwirlAngle;
+float _FlowInfluence;
 float2 _FieldBoundsMin;
 float2 _FieldBoundsSize;
 float2 _RegionMin;
@@ -83,7 +85,20 @@ void Advect(uint3 id : SV_DispatchThreadID)
             float dr = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv + float2(e, 0.0), 0).r;
             float dd = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv - float2(0.0, e), 0).r;
             float du = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv + float2(0.0, e), 0).r;
-            disturbance = float2(dr - dl, du - dd);
+            float2 radial = float2(dr - dl, du - dd);
+
+            // Swirl: rotate the pull-away by a per-speck angle drawn from a min/max range, at ONE
+            // rotational sense (no sign flip) so the field circulates coherently — a curl/vortex.
+            float swirl = lerp(_SwirlAngle.x, _SwirlAngle.y, hash11(s.seed * 53.1));
+            float sc = sin(swirl);
+            float cc = cos(swirl);
+            float2 rotated = float2(radial.x * cc - radial.y * sc, radial.x * sc + radial.y * cc);
+
+            // Advance along the disturbance's own motion (the white direction) too, so the vortex travels
+            // with the flow instead of only pulling away. GB stores -motion, so negate for the direction.
+            float2 flow = -(_DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv, 0).gb - 0.5) * 2.0;
+
+            disturbance = rotated + flow * _FlowInfluence;
         }
     }
 

@@ -71,7 +71,7 @@ Material:
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Intensity: 2
-    - _MaxScale: 6
+    - _MaxScale: 20
     - _Metallic: 0
     - _MinScale: 0.5
     - _Mode: 0

@@ -29,6 +29,8 @@ namespace BalloonParty.Slots.Actor
         private static readonly int MotionInfluenceId = Shader.PropertyToID("_MotionInfluence");
         private static readonly int DisturbanceInfluenceId = Shader.PropertyToID("_DisturbanceInfluence");
         private static readonly int DisturbanceDampingId = Shader.PropertyToID("_DisturbanceDamping");
+        private static readonly int SwirlAngleId = Shader.PropertyToID("_SwirlAngle");
+        private static readonly int FlowInfluenceId = Shader.PropertyToID("_FlowInfluence");
         private static readonly int DisturbanceTexId = Shader.PropertyToID("_DisturbanceTex");
         private static readonly int FieldBoundsMinId = Shader.PropertyToID("_FieldBoundsMin");
         private static readonly int FieldBoundsSizeId = Shader.PropertyToID("_FieldBoundsSize");
@@ -55,6 +57,15 @@ namespace BalloonParty.Slots.Actor
 
         [Tooltip("Extra velocity damping applied where the disturbance is active, so the push settles.")]
         [SerializeField] private float _disturbanceDamping = 4f;
+
+        [Tooltip("Per-speck swirl angle range (degrees) rotating the disturbance push — 0 = straight out, " +
+                 "90 = pure orbit. Same rotational sense for all (a coherent vortex); each picks a random " +
+                 "angle in this range.")]
+        [SerializeField] private Vector2 _swirlAngle = new(30f, 90f);
+
+        [Tooltip("How much specks also advance along the disturbance's own motion (the white direction), " +
+                 "so the vortex travels with the flow rather than only pulling away.")]
+        [SerializeField] private float _flowInfluence = 1f;
 
         [SerializeField] private float _speckSize = 0.03f;
 
@@ -265,6 +276,8 @@ namespace BalloonParty.Slots.Actor
             var hasField = _disturbance != null && _disturbance.FieldTexture != null;
             _compute.SetFloat(DisturbanceInfluenceId, hasField ? _disturbanceInfluence : 0f);
             _compute.SetFloat(DisturbanceDampingId, _disturbanceDamping);
+            _compute.SetVector(SwirlAngleId, _swirlAngle * Mathf.Deg2Rad);
+            _compute.SetFloat(FlowInfluenceId, _flowInfluence);
             _compute.SetTexture(_kernel, DisturbanceTexId, hasField ? _disturbance.FieldTexture : Texture2D.blackTexture);
             _compute.SetVector(FieldBoundsMinId, hasField ? _disturbance.FieldBoundsMin : Vector2.zero);
             _compute.SetVector(FieldBoundsSizeId, hasField ? _disturbance.FieldBoundsSize : Vector2.one);
