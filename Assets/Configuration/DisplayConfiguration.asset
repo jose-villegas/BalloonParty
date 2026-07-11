@@ -15,4 +15,4 @@ MonoBehaviour:
   _referenceWorldWidth: 5.2
   _referenceWorldHeight: 9.6
   _sceneCaptureDownscale: 12
-  _sceneCaptureFrameInterval: 4
+  _sceneCaptureFrameInterval: 1

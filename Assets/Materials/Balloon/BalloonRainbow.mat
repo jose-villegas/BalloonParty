@@ -33,16 +33,17 @@ Material:
     - _BandAngle: 0.125
     - _BandBlend: 0.5
     - _BandCount: 4
-    - _GlitterBrightness: 2.35
-    - _GlitterChance: 0.3
-    - _GlitterDensity: 20
-    - _GlitterSharpness: 8.5
-    - _GlitterSize: 0.4
-    - _GlitterSpeed: 6.4
+    - _GlitterBrightness: 2
+    - _GlitterChance: 0.35
+    - _GlitterDensity: 40
+    - _GlitterSharpness: 1
+    - _GlitterShineBind: 1
+    - _GlitterSize: 0.5
+    - _GlitterSpeed: 6
     - _MaskSoftness: 0.035
     - _ScrollSpeed: 1
     - _ShineAngle: 0.125
-    - _ShineInterval: 1
+    - _ShineInterval: 0.75
     - _ShineSpeed: 0.35
     - _ShineWidth: 0.25
     - _StripeCount: 5

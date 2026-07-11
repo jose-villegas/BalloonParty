@@ -83,7 +83,7 @@ SpriteRenderer:
   m_SortingOrder: 1
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 2d6f6aeb66b2b42929c552bc33fef2ff, type: 3}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.2509804}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -104,6 +104,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
   m_Name: 
   m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer
+  _colorIntensity: 1
+  _preserveAlpha: 0
 --- !u!1001 &2786644593772837462
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -165,7 +167,7 @@ PrefabInstance:
     - target: {fileID: 2921553031310187319, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: m_Color.a
-      value: 0.8784314
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2921553031310187319, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
@@ -211,6 +213,11 @@ PrefabInstance:
         type: 3}
       propertyPath: _aboveItemRenderers.Array.size
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: _colorableRenderers.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}

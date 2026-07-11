@@ -495,7 +495,130 @@ MonoBehaviour:
           _min: 7
           _max: 21
           _mode: 1
+        _maxPerCluster: 3
       _allowedColorsMask: 3
+  - _fromLevel: 6
+    _toLevel: -1
+    _parameters:
+      _spawnLines:
+        _min: 3
+        _max: 0
+        _mode: 0
+      _boardLines:
+        _min: 6
+        _max: 6
+        _mode: 0
+      _itemCadence:
+        _min: 0
+        _max: 0
+        _mode: 0
+      _firstSpawnTurn:
+        _min: 0
+        _max: 0
+        _mode: 0
+      _initialItemCountWeights:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 5
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _itemCountWeights:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 3
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        - serializedVersion: 3
+          time: 5
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+          weightedMode: 0
+          inWeight: 0
+          outWeight: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      _balloonWeights:
+      - _type: 0
+        _weight: 1
+        _maxCountOverride: 0
+      - _type: 1
+        _weight: 1
+        _maxCountOverride: 5
+      - _type: 2
+        _weight: 1
+        _maxCountOverride: 5
+      - _type: 3
+        _weight: 1
+        _maxCountOverride: 5
+      - _type: 4
+        _weight: 1
+        _maxCountOverride: 5
+      - _type: 5
+        _weight: 1
+        _maxCountOverride: 5
+      - _type: 6
+        _weight: 1
+        _maxCountOverride: 5
+      _itemWeights:
+      - _type: 1
+        _weight: 1
+        _maximumAllowedOverride: 5
+      - _type: 2
+        _weight: 1
+        _maximumAllowedOverride: 5
+      - _type: 3
+        _weight: 1
+        _maximumAllowedOverride: 5
+      - _type: 4
+        _weight: 1
+        _maximumAllowedOverride: 5
+      - _type: 5
+        _weight: 1
+        _maximumAllowedOverride: 5
+      - _type: 6
+        _weight: 1
+        _maximumAllowedOverride: 5
+      _gridActorGates:
+      - _type: 0
+        _count:
+          _min: 3
+          _max: 14
+          _mode: 2
+        _maxPerCluster: 5
+      - _type: 1
+        _count:
+          _min: 3
+          _max: 12
+          _mode: 2
+        _maxPerCluster: 5
+      _allowedColorsMask: -1
   _thresholdModifier:
     serializedVersion: 2
     m_Curve:

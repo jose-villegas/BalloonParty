@@ -1253,6 +1253,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Main Camera
       objectReference: {fileID: 0}
+    - target: {fileID: 8597041690689265888, guid: 45a679b1438e74a72a716351daa7ff29,
+        type: 3}
+      propertyPath: _temporalSmoothing
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 9040497959794050298, guid: 45a679b1438e74a72a716351daa7ff29,
         type: 3}
       propertyPath: m_LocalPosition.x

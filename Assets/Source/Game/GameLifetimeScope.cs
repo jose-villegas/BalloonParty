@@ -38,7 +38,7 @@ namespace BalloonParty.Game
 
         protected override void Awake()
         {
-            DOTween.SetTweensCapacity(1000, 50);
+            DOTween.SetTweensCapacity(2048, 256);
             base.Awake();
         }
 

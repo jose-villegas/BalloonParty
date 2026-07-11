@@ -83,3 +83,6 @@ TestResults_*.xml
 **/.DS_Store
 Baselines~/
 ProfilerCaptures/
+
+# Android Gradle/CMake build intermediates
+.utmp/

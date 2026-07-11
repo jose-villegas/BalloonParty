@@ -14,8 +14,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _startingHitPoints: 5
   _projectileStartingShields: 1
-  _projectileSpeed: 7
+  _projectileSpeed: 8
   _projectileLoadDuration: 0
+  _projectileDisappearDuration: 0.2
+  _projectileDisappearEase: 26
+  _projectileDeadDriftFactor: 0.225
   _limitsClockwise: {x: 4, y: 2.25, z: -4.5, w: -2.25}
   _shieldTrailDuration: 0.5
   _slotsSize: {x: 6, y: 11}
@@ -27,3 +30,5 @@ MonoBehaviour:
   _scorePointTraceDuration: 1
   _scorePointsScatterDelay: 0.02
   _scorePointBurstDuration: 0.12
+  _scoreTrailPrewarmPerColor: 128
+  _progressNoticePrewarmPerColor: 64
