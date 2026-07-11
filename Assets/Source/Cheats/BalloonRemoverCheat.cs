@@ -27,10 +27,14 @@ namespace BalloonParty.Cheats
         [Inject] private SlotGrid _grid;
 
         private readonly List<Vector3> _path = new();
+        private readonly List<Vector3> _overlayVertices = new();
+        private readonly List<Color> _overlayColors = new();
+        private readonly List<int> _overlayIndices = new();
 
         private bool _active;
         private bool _dragging;
         private Material _lineMaterial;
+        private Mesh _overlayMesh;
 
         public string Name => _active ? "Remove Balloons  [ON]" : "Remove Balloons";
         public string Section => "Grid";
@@ -44,11 +48,9 @@ namespace BalloonParty.Cheats
             _lineMaterial.SetInt(DstBlendId, (int)BlendMode.OneMinusSrcAlpha);
             _lineMaterial.SetInt(CullId, (int)CullMode.Off);
             _lineMaterial.SetInt(ZWriteId, 0);
-        }
 
-        private void OnEnable()
-        {
-            RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+            // Overlay queue: draw after all gameplay geometry so the drag path/hit circles stay visible on top.
+            _lineMaterial.renderQueue = 4000;
         }
 
         private void Update()
@@ -77,9 +79,23 @@ namespace BalloonParty.Cheats
             }
         }
 
-        private void OnDisable()
+        private void LateUpdate()
         {
-            RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
+            if (!_active || _path.Count < 2)
+            {
+                return;
+            }
+
+            RebuildOverlayMesh();
+            Graphics.DrawMesh(_overlayMesh, Matrix4x4.identity, _lineMaterial, gameObject.layer);
+        }
+
+        private void OnDestroy()
+        {
+            if (_overlayMesh != null)
+            {
+                Destroy(_overlayMesh);
+            }
         }
 
         public void Execute()
@@ -162,45 +178,38 @@ namespace BalloonParty.Cheats
             return false;
         }
 
-        // OnRenderObject never reaches the screen under URP's RenderGraph; endCameraRendering
-        // fires after the frame is submitted, so GL immediate calls land on the completed frame.
-        private void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
+        private void RebuildOverlayMesh()
         {
-            if (camera != Camera.main)
+            if (_overlayMesh == null)
             {
-                return;
+                _overlayMesh = new Mesh { name = "BalloonRemoverOverlay" };
+                _overlayMesh.MarkDynamic();
             }
 
-            if (!_active || _path.Count < 2)
+            _overlayVertices.Clear();
+            _overlayColors.Clear();
+            _overlayIndices.Clear();
+
+            AppendThickPath(_path, new Color(1f, 0.3f, 0.1f, 0.8f), 0.06f);
+
+            foreach (var slot in CollectHitSlots())
             {
-                return;
-            }
-
-            _lineMaterial.SetPass(0);
-
-            var hitSlots = CollectHitSlots();
-
-            GL.PushMatrix();
-
-            DrawThickPath(_path, new Color(1f, 0.3f, 0.1f, 0.8f), 0.06f);
-
-            foreach (var slot in hitSlots)
-            {
-                DrawThickCircle(_grid.IndexToWorldPosition(slot),
+                AppendThickCircle(_grid.IndexToWorldPosition(slot),
                     PickRadius,
                     24,
                     new Color(1f, 0.1f, 0.1f, 0.9f),
                     0.05f);
             }
 
-            GL.PopMatrix();
+            _overlayMesh.Clear();
+            _overlayMesh.SetVertices(_overlayVertices);
+            _overlayMesh.SetColors(_overlayColors);
+            _overlayMesh.SetTriangles(_overlayIndices, 0);
+            _overlayMesh.RecalculateBounds();
         }
 
-        private static void DrawThickPath(IReadOnlyList<Vector3> path, Color color, float halfWidth)
+        private void AppendThickPath(IReadOnlyList<Vector3> path, Color color, float halfWidth)
         {
-            GL.Begin(GL.TRIANGLES);
-            GL.Color(color);
-
             for (var i = 0; i < path.Count - 1; i++)
             {
                 var a = path[i];
@@ -208,22 +217,12 @@ namespace BalloonParty.Cheats
                 var dir = (b - a).normalized;
                 var perp = dir.PerpendicularXY() * halfWidth;
 
-                GL.Vertex(a - perp);
-                GL.Vertex(a + perp);
-                GL.Vertex(b + perp);
-                GL.Vertex(a - perp);
-                GL.Vertex(b + perp);
-                GL.Vertex(b - perp);
+                AppendQuad(a - perp, a + perp, b + perp, b - perp, color);
             }
-
-            GL.End();
         }
 
-        private static void DrawThickCircle(Vector3 center, float radius, int segments, Color color, float halfWidth)
+        private void AppendThickCircle(Vector3 center, float radius, int segments, Color color, float halfWidth)
         {
-            GL.Begin(GL.TRIANGLES);
-            GL.Color(color);
-
             for (var i = 0; i < segments; i++)
             {
                 var a0 = i * Mathf.PI * 2f / segments;
@@ -235,15 +234,30 @@ namespace BalloonParty.Cheats
                 var out0 = center + dir0 * (radius + halfWidth);
                 var out1 = center + dir1 * (radius + halfWidth);
 
-                GL.Vertex(p0);
-                GL.Vertex(out0);
-                GL.Vertex(out1);
-                GL.Vertex(p0);
-                GL.Vertex(out1);
-                GL.Vertex(p1);
+                AppendQuad(p0, out0, out1, p1, color);
             }
+        }
 
-            GL.End();
+        private void AppendQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Color color)
+        {
+            var baseIndex = _overlayVertices.Count;
+
+            _overlayVertices.Add(a);
+            _overlayVertices.Add(b);
+            _overlayVertices.Add(c);
+            _overlayVertices.Add(d);
+
+            _overlayColors.Add(color);
+            _overlayColors.Add(color);
+            _overlayColors.Add(color);
+            _overlayColors.Add(color);
+
+            _overlayIndices.Add(baseIndex);
+            _overlayIndices.Add(baseIndex + 1);
+            _overlayIndices.Add(baseIndex + 2);
+            _overlayIndices.Add(baseIndex);
+            _overlayIndices.Add(baseIndex + 2);
+            _overlayIndices.Add(baseIndex + 3);
         }
 
         private static Vector3? MouseWorldPosition()
