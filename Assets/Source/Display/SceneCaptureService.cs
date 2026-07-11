@@ -1,5 +1,6 @@
 using BalloonParty.Configuration;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using VContainer;
 
 namespace BalloonParty.Display
@@ -97,6 +98,10 @@ namespace BalloonParty.Display
             // Lower depth renders before the main camera, so it's ready the same frame.
             _captureCamera.depth = _mainCamera.depth - 1f;
             _captureCamera.enabled = false;
+
+            // Runtime-created cameras carry no serialized URP data; GetUniversalAdditionalCameraData adds it.
+            var cameraData = _captureCamera.GetUniversalAdditionalCameraData();
+            cameraData.renderPostProcessing = false;
         }
 
         private void ApplyBackgroundColor()

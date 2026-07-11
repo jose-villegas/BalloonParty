@@ -11,7 +11,8 @@
         "Unity.TextMeshPro",
         "UniTask.TextMeshPro",
         "UniTask.DOTween",
-        "DOTween.Modules"
+        "DOTween.Modules",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
