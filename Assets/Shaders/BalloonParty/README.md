@@ -2,6 +2,10 @@
 
 Custom shaders for BalloonParty under `BalloonParty/` namespace.
 
+## Pipeline
+
+The project runs URP's 2D Renderer (migrated from Built-in — see `Plans/PLAN-URPMigration.md`). None of the hand-written `CGPROGRAM` shaders below were ported: their passes carry no `LightMode`/`RenderPipeline` tag, so URP runs them as `SRPDefaultUnlit` compatibility passes — this is a supported fallback, not a hack, and every shader in this folder renders correctly under it with zero visual changes. If a future Unity version drops that compatibility path, the port recipe (tag additions, `CGPROGRAM`→`HLSLPROGRAM`, include swaps) is recorded in `PLAN-URPMigration.md` (task B4).
+
 ## Shader list
 
 | Shader | File | Used by |

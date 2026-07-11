@@ -73,7 +73,11 @@ post-processing readback.
 renders the captured layers into a low-res RT every Nth frame, clearing to a **solid
 color with alpha 0**. Result: `RGB` is the composited scene (sprites over the sky
 clear), `A` is a sprite-coverage mask. This capture is shared — the Unbreakable chrome
-reflection is another consumer.
+reflection is another consumer. `ScreenSpaceLightService` drives the blit chain below
+from its own `LateUpdate`, which runs *before* the capture camera renders that frame —
+so each build reads the **previous** frame's capture. One frame of staleness is
+invisible on a buffer that's already temporally blended (Pass 2) and only refreshes
+every `SceneCaptureFrameInterval` frames.
 
 **Smear** (`ScreenSpaceLightSmear`, 3 blit passes at capture resolution):
 - **Pass 0** does two opposite marches per pixel. `RGB` marches *toward* the light,
@@ -100,17 +104,24 @@ negative (absorbs — darkens them).
 1. **Composite quad, not `OnRenderImage`.** A post effect would resolve the full frame
    — the same tile-GPU stall that `GrabPass` caused and 5b removed. The multiplicative
    quad needs no frame readback.
-2. **The feedback loop is structurally impossible.** The overlay lives on
+2. **Blit chain runs from `LateUpdate`, not a camera callback.** The URP migration's
+   first attempt drove the three blits from `RenderPipelineManager.beginCameraRendering`
+   (the timing-equivalent of the old Built-in `OnPreRender`), but URP's RenderGraph
+   rejects a `Graphics.Blit` issued from inside that callback ("EndRenderPass: Not
+   inside a Renderpass"). `LateUpdate` — the disturbance field's already-proven pattern
+   — runs outside the render loop entirely, at the cost of reading the previous frame's
+   capture (see above).
+3. **The feedback loop is structurally impossible.** The overlay lives on
    `TransparentFX`, which **must stay excluded from the capture mask** — the capture
    always sees the *unlit* scene, so frame N's lighting can never feed frame N+1's input.
-3. **The background must stay out of the capture.** A full-coverage background plane
+4. **The background must stay out of the capture.** A full-coverage background plane
    reads as a caster everywhere and whites out the shadow (`1 − ownCoverage → 0`). The
    ambient sky the bounce needs comes from the capture's **clear color**, not from
    capturing a background sprite.
-4. **Shadow is caster-masked.** `(1 − ownCoverage)` keeps the cast shadow on open
+5. **Shadow is caster-masked.** `(1 − ownCoverage)` keeps the cast shadow on open
    ground; without it a caster samples its own coverage and darkens into a centered
    blob instead of throwing a shadow beside itself.
-5. **Shaders are serialized references, not `Shader.Find`.** Device builds strip
+6. **Shaders are serialized references, not `Shader.Find`.** Device builds strip
    name-only shader lookups; `Shader.Find` remains only as an editor fallback, and the
    service disables itself with a warning if neither resolves.
 
