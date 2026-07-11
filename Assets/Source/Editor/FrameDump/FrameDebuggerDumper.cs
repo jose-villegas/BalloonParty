@@ -19,17 +19,16 @@ namespace BalloonParty.Editor.FrameDump
     /// Debugger or advances frames itself — it only reads whatever is currently captured.
     /// </para>
     /// <para>
-    /// Everything here goes through reflection because <c>FrameDebuggerUtility</c> and
-    /// <c>FrameDebuggerEvent</c>/<c>FrameDebuggerEventData</c> live in the internal
-    /// <c>UnityEditorInternal.FrameDebuggerInternal</c> namespace inside <c>UnityEditor.CoreModule</c>
-    /// and their exact member signatures are not part of the public API contract.
+    /// Everything here goes through reflection (see <see cref="FrameDebuggerReflection"/>) because
+    /// <c>FrameDebuggerUtility</c> and <c>FrameDebuggerEvent</c>/<c>FrameDebuggerEventData</c> live
+    /// in the internal <c>UnityEditorInternal.FrameDebuggerInternal</c> namespace inside
+    /// <c>UnityEditor.CoreModule</c> and their exact member signatures are not part of the public
+    /// API contract.
     /// </para>
     /// </summary>
     internal static class FrameDebuggerDumper
     {
         private const string OutputDirectory = "Baselines~";
-        private const string UtilityTypeName = "UnityEditorInternal.FrameDebuggerInternal.FrameDebuggerUtility";
-        private const string EventDataTypeName = "UnityEditorInternal.FrameDebuggerInternal.FrameDebuggerEventData";
 
         [MenuItem("Tools/BalloonParty/Dump Frame Debugger")]
         private static void Dump()
@@ -44,49 +43,45 @@ namespace BalloonParty.Editor.FrameDump
             }
         }
 
-        private static void TryDump()
+        // Runs the text dump and, on success, captures the companion Game View screenshot. Returns
+        // the path of the written <c>.txt</c> file, or null when resolution failed or the Frame
+        // Debugger reported no events. Callers that chain further work (the per-step capturer)
+        // derive their output paths from this base path.
+        internal static string TryDump()
         {
-            var utilityType = FindType(UtilityTypeName);
-            var eventDataType = FindType(EventDataTypeName);
+            var utilityType = FrameDebuggerReflection.FindType(FrameDebuggerReflection.UtilityTypeName);
+            var eventDataType = FrameDebuggerReflection.FindType(FrameDebuggerReflection.EventDataTypeName);
             if (utilityType == null || eventDataType == null)
             {
-                LogResolutionFailure($"could not find type(s): " +
-                    $"{(utilityType == null ? UtilityTypeName + " " : string.Empty)}" +
-                    $"{(eventDataType == null ? EventDataTypeName : string.Empty)}", null, null);
-                return;
+                FrameDebuggerReflection.LogResolutionFailure("could not find type(s): " +
+                    $"{(utilityType == null ? FrameDebuggerReflection.UtilityTypeName + " " : string.Empty)}" +
+                    $"{(eventDataType == null ? FrameDebuggerReflection.EventDataTypeName : string.Empty)}", null, null);
+                return null;
             }
 
-            const BindingFlags staticFlags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-
-            var countMember = utilityType.GetProperty("count", staticFlags) as MemberInfo
-                ?? utilityType.GetField("count", staticFlags);
-            var getFrameEventDataMethod = utilityType.GetMethod("GetFrameEventData", staticFlags);
-            var getFrameEventObjectMethod = utilityType.GetMethod("GetFrameEventObject", staticFlags);
-            var getFrameEventInfoNameMethod = utilityType.GetMethod("GetFrameEventInfoName", staticFlags);
-            var getBatchBreakCauseStringsMethod = utilityType.GetMethod("GetBatchBreakCauseStrings", staticFlags);
+            var countMember = FrameDebuggerReflection.ResolveStaticMember(utilityType, "count");
+            var getFrameEventDataMethod = utilityType.GetMethod("GetFrameEventData", FrameDebuggerReflection.StaticFlags);
+            var getFrameEventObjectMethod = utilityType.GetMethod("GetFrameEventObject", FrameDebuggerReflection.StaticFlags);
+            var getFrameEventInfoNameMethod = utilityType.GetMethod("GetFrameEventInfoName", FrameDebuggerReflection.StaticFlags);
+            var getBatchBreakCauseStringsMethod = utilityType.GetMethod("GetBatchBreakCauseStrings", FrameDebuggerReflection.StaticFlags);
 
             if (countMember == null || getFrameEventDataMethod == null || getBatchBreakCauseStringsMethod == null)
             {
-                LogResolutionFailure(
+                FrameDebuggerReflection.LogResolutionFailure(
                     "missing one or more required FrameDebuggerUtility members " +
                     "(count, GetFrameEventData, GetBatchBreakCauseStrings)",
                     utilityType, eventDataType);
-                return;
+                return null;
             }
 
-            var count = ReadStaticInt(countMember);
+            var count = FrameDebuggerReflection.ReadStaticInt(countMember);
             if (count <= 0)
             {
-                EditorUtility.DisplayDialog(
-                    "Frame Debugger Dumper",
-                    "The Frame Debugger reports 0 captured events.\n\n" +
-                    "Open Window → Analysis → Frame Debugger, click Enable, and freeze " +
-                    "the frame you want to dump before running this tool again.",
-                    "OK");
-                return;
+                ShowZeroEventsDialog();
+                return null;
             }
 
-            var batchBreakCauseStrings = InvokeStatic(getBatchBreakCauseStringsMethod, null) as string[]
+            var batchBreakCauseStrings = FrameDebuggerReflection.InvokeStatic(getBatchBreakCauseStringsMethod, null) as string[]
                 ?? Array.Empty<string>();
 
             var eventDataFields = eventDataType
@@ -112,7 +107,7 @@ namespace BalloonParty.Editor.FrameDump
                 {
                     try
                     {
-                        eventTypeName = InvokeStatic(getFrameEventInfoNameMethod, new object[] { i }) as string ?? "-";
+                        eventTypeName = FrameDebuggerReflection.InvokeStatic(getFrameEventInfoNameMethod, new object[] { i }) as string ?? "-";
                     }
                     catch (Exception)
                     {
@@ -125,7 +120,7 @@ namespace BalloonParty.Editor.FrameDump
                 {
                     try
                     {
-                        var obj = InvokeStatic(getFrameEventObjectMethod, new object[] { i }) as UnityEngine.Object;
+                        var obj = FrameDebuggerReflection.InvokeStatic(getFrameEventObjectMethod, new object[] { i }) as UnityEngine.Object;
                         hierarchyPath = BuildHierarchyPath(obj);
                     }
                     catch (Exception)
@@ -169,7 +164,30 @@ namespace BalloonParty.Editor.FrameDump
                 lines.Add(string.Join(" | ", columns));
             }
 
-            WriteOutput(count, totalDrawCalls, causeHistogram, lines, renderTargetNameField != null);
+            return WriteOutput(count, totalDrawCalls, causeHistogram, lines, renderTargetNameField != null);
+        }
+
+        // Shared 0-events message so the step capturer surfaces the same guidance as the plain dump.
+        internal static void ShowZeroEventsDialog()
+        {
+            EditorUtility.DisplayDialog(
+                "Frame Debugger Dumper",
+                "The Frame Debugger reports 0 captured events.\n\n" +
+                "Open Window → Analysis → Frame Debugger, click Enable, and freeze " +
+                "the frame you want to dump before running this tool again.",
+                "OK");
+        }
+
+        // Companion image for the text dump. The capture respects the Frame Debugger's current
+        // event limit, so the PNG shows the frame exactly as frozen in the window.
+        internal static void CaptureGameViewScreenshot(string path)
+        {
+            ScreenCapture.CaptureScreenshot(path);
+
+            // The capture completes at the end of the next rendered frame; with the editor idle
+            // (paused play mode / frozen frame) that frame never comes unless we request one.
+            EditorApplication.QueuePlayerLoopUpdate();
+            Debug.Log($"[FrameDebuggerDumper] Screenshot queued — lands at {path} after the next repaint.");
         }
 
         private static object ReadFrameEventData(MethodInfo method, Type eventDataType, int index)
@@ -179,14 +197,14 @@ namespace BalloonParty.Editor.FrameDump
             // Pattern A: FrameDebuggerEventData GetFrameEventData(int)
             if (parameters.Length == 1)
             {
-                return InvokeStatic(method, new object[] { index });
+                return FrameDebuggerReflection.InvokeStatic(method, new object[] { index });
             }
 
             // Pattern B: bool GetFrameEventData(int, ref/out FrameDebuggerEventData)
             if (parameters.Length == 2)
             {
                 var args = new object[] { index, Activator.CreateInstance(eventDataType) };
-                InvokeStatic(method, args);
+                FrameDebuggerReflection.InvokeStatic(method, args);
                 return args[1];
             }
 
@@ -234,7 +252,7 @@ namespace BalloonParty.Editor.FrameDump
             return string.Join("/", segments);
         }
 
-        private static void WriteOutput(
+        private static string WriteOutput(
             int count, int totalDrawCalls, Dictionary<string, int> causeHistogram, IReadOnlyList<string> lines, bool hasRenderTargetField)
         {
             var directory = Path.Combine(Directory.GetCurrentDirectory(), OutputDirectory);
@@ -274,18 +292,7 @@ namespace BalloonParty.Editor.FrameDump
             Debug.Log($"[FrameDebuggerDumper] Wrote {count} events to {filePath}");
             EditorUtility.RevealInFinder(filePath);
             CaptureGameViewScreenshot(Path.ChangeExtension(filePath, ".png"));
-        }
-
-        // Companion image for the text dump. The capture respects the Frame Debugger's current
-        // event limit, so the PNG shows the frame exactly as frozen in the window.
-        private static void CaptureGameViewScreenshot(string path)
-        {
-            ScreenCapture.CaptureScreenshot(path);
-
-            // The capture completes at the end of the next rendered frame; with the editor idle
-            // (paused play mode / frozen frame) that frame never comes unless we request one.
-            EditorApplication.QueuePlayerLoopUpdate();
-            Debug.Log($"[FrameDebuggerDumper] Screenshot queued — lands at {path} after the next repaint.");
+            return filePath;
         }
 
         private static FieldInfo FindFieldContaining(IEnumerable<FieldInfo> fields, string needle)
@@ -324,84 +331,6 @@ namespace BalloonParty.Editor.FrameDump
             catch (Exception)
             {
                 return null;
-            }
-        }
-
-        private static int ReadStaticInt(MemberInfo member)
-        {
-            var value = member is PropertyInfo property
-                ? property.GetValue(null)
-                : ((FieldInfo)member).GetValue(null);
-            return Convert.ToInt32(value);
-        }
-
-        private static object InvokeStatic(MethodInfo method, object[] args)
-        {
-            return method.Invoke(null, args);
-        }
-
-        private static Type FindType(string fullName)
-        {
-            return AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(assembly => SafeGetTypes(assembly))
-                .FirstOrDefault(t => t.FullName == fullName);
-        }
-
-        private static IEnumerable<Type> SafeGetTypes(Assembly assembly)
-        {
-            try
-            {
-                return assembly.GetTypes();
-            }
-            catch (ReflectionTypeLoadException exception)
-            {
-                return exception.Types.Where(t => t != null);
-            }
-        }
-
-        // The tool is only ever driven by a human, so a resolution failure must carry the full
-        // API shape back in one round-trip rather than requiring a second debugging pass.
-        private static void LogResolutionFailure(string reason, Type utilityType, Type eventDataType)
-        {
-            var builder = new StringBuilder();
-            builder.AppendLine($"[FrameDebuggerDumper] Reflection resolution failed: {reason}");
-
-            if (utilityType != null)
-            {
-                builder.AppendLine("FrameDebuggerUtility members:");
-                AppendMembers(builder, utilityType);
-            }
-
-            if (eventDataType != null)
-            {
-                builder.AppendLine("FrameDebuggerEventData fields:");
-                foreach (var field in eventDataType.GetFields(
-                    BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static))
-                {
-                    builder.AppendLine($"  {field.FieldType.Name} {field.Name}");
-                }
-            }
-
-            Debug.LogError(builder.ToString());
-        }
-
-        private static void AppendMembers(StringBuilder builder, Type type)
-        {
-            const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Static;
-            foreach (var field in type.GetFields(flags))
-            {
-                builder.AppendLine($"  field {field.FieldType.Name} {field.Name}");
-            }
-
-            foreach (var property in type.GetProperties(flags))
-            {
-                builder.AppendLine($"  property {property.PropertyType.Name} {property.Name}");
-            }
-
-            foreach (var method in type.GetMethods(flags))
-            {
-                var parameters = string.Join(", ", method.GetParameters().Select(p => $"{p.ParameterType.Name} {p.Name}"));
-                builder.AppendLine($"  method {method.ReturnType.Name} {method.Name}({parameters})");
             }
         }
     }
