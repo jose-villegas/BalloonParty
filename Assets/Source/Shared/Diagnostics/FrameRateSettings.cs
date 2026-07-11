@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using NaughtyAttributes;
 using UnityEngine;
 
@@ -47,7 +48,7 @@ namespace BalloonParty.Shared.Diagnostics
             };
         }
 
-        private static int MatchDisplayTarget()
+        private int MatchDisplayTarget()
         {
 #if UNITY_EDITOR
             // The editor reports the Game View's refresh rate (typically 60) rather than the physical
@@ -55,9 +56,56 @@ namespace BalloonParty.Shared.Diagnostics
             // matches the device's refresh rate.
             return -1;
 #else
+            // Android hands the app whatever mode it booted into (usually 60 Hz, even on a
+            // 120 Hz panel) — Screen.currentResolution only reflects that, it doesn't request
+            // a faster one. RequestHigherRefreshRate asks for the best available mode and
+            // re-reads the actual result once the switch (if any) has taken effect.
+            RequestHigherRefreshRate();
             return GetDisplayRefreshRate();
 #endif
         }
+
+#if !UNITY_EDITOR
+        private void RequestHigherRefreshRate()
+        {
+            var currentRefreshRate = Screen.currentResolution.refreshRateRatio;
+            var bestRefreshRate = currentRefreshRate;
+
+            // Only consider entries at the resolution we're already running — this is a
+            // refresh-rate request, not a resolution change.
+            foreach (var resolution in Screen.resolutions)
+            {
+                var isCurrentResolution = resolution.width == Screen.width && resolution.height == Screen.height;
+
+                if (isCurrentResolution && resolution.refreshRateRatio.value > bestRefreshRate.value)
+                {
+                    bestRefreshRate = resolution.refreshRateRatio;
+                }
+            }
+
+            if (bestRefreshRate.value > currentRefreshRate.value)
+            {
+                Screen.SetResolution(Screen.width, Screen.height, Screen.fullScreenMode, bestRefreshRate);
+                ReapplyTargetFrameRateAsync().Forget();
+            }
+        }
+
+        // The mode switch above is asynchronous, so the refresh rate Screen.currentResolution
+        // reports right after SetResolution can still be stale. Wait a few frames, then re-read
+        // the actual value and correct targetFrameRate — this self-heals whether the request
+        // was honored or an OEM battery saver silently denied it.
+        private async UniTaskVoid ReapplyTargetFrameRateAsync()
+        {
+            await UniTask.DelayFrame(10);
+
+            if (this == null)
+            {
+                return;
+            }
+
+            Application.targetFrameRate = GetDisplayRefreshRate();
+        }
+#endif
 
         private static int GetDisplayRefreshRate()
         {
