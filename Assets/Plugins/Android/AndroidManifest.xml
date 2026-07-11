@@ -5,7 +5,9 @@
     <!-- appCategory=game registers with Android's GameManager (game-optimized scheduling on
          Pixel-class devices; SurfaceFlinger reported gameMode=Unsupported without it). -->
     <application android:appCategory="game">
-        <!--Used when Application Entry is set to Activity, otherwise remove this activity block-->
+        <!-- Application Entry is Activity (androidApplicationEntry: 1) — the template's
+             GameActivity block is removed: its BaseUnityGameActivityTheme resource only
+             exists when the GameActivity entry point is enabled and fails AAPT otherwise. -->
         <activity android:name="com.unity3d.player.UnityPlayerActivity"
                   android:theme="@style/UnityThemeSelector">
             <intent-filter>
@@ -13,16 +15,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
-        </activity>
-        <!--Used when Application Entry is set to GameActivity, otherwise remove this activity block-->
-        <activity android:name="com.unity3d.player.UnityPlayerGameActivity"
-                  android:theme="@style/BaseUnityGameActivityTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
-            <meta-data android:name="android.app.lib_name" android:value="game" />
         </activity>
     </application>
 </manifest>
