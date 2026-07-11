@@ -22,5 +22,8 @@ namespace BalloonParty.Shared
         float ScorePointTraceDuration { get; }
         float ScorePointsScatterDelay { get; }
         float ScorePointBurstDuration { get; }
+
+        int ScoreTrailPrewarmPerColor { get; }
+        int ProgressNoticePrewarmPerColor { get; }
     }
 }

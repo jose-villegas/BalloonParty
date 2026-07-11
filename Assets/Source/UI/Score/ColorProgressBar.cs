@@ -49,6 +49,7 @@ namespace BalloonParty.UI.Score
         [SerializeField] private ProgressNotice _pointNoticePrefab;
         [SerializeField] private ProgressNotice _streakNoticePrefab;
 
+        [Inject] private IGameConfiguration _config;
         [Inject] private IGamePalette _palette;
         [Inject] private IActiveLevelParameters _levelParams;
         [Inject] private ILevelThresholds _thresholds;
@@ -153,6 +154,13 @@ namespace BalloonParty.UI.Score
 
             _scoreTrailService.RegisterTarget(_colorConfig.Name, this, _colorConfig.Color);
             ApplyVisibility(animate: false);
+
+            // Amortized over frames (destroyCancellationToken ties it to this bar's lifetime) so a bar
+            // built at level setup never spikes into a hitch.
+            _notices.PrewarmAsync(
+                _config.ProgressNoticePrewarmPerColor,
+                _config.ProgressNoticePrewarmPerColor,
+                destroyCancellationToken).Forget();
 
             _streakChangedSubscriber.Subscribe(_ => OnStreakChanged()).AddTo(this);
             _levelUpSubscriber.Subscribe(OnLevelUp).AddTo(this);

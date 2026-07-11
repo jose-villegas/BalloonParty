@@ -1,5 +1,7 @@
 using System;
+using System.Threading;
 using BalloonParty.UI.Score;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace BalloonParty.Shared.Pool
@@ -118,6 +120,18 @@ namespace BalloonParty.Shared.Pool
             }
 
             return trail.transform;
+        }
+
+        // Ensures the channel exists (same factory path a live spawn would use) before topping it up,
+        // without pulling an item out via GetOrRegister — that would hand out (and leak) one instance.
+        internal UniTask PrewarmAsync(int count, CancellationToken ct = default)
+        {
+            if (!_poolManager.IsRegistered(_poolKey))
+            {
+                _poolManager.Register(_poolKey, _channelFactory());
+            }
+
+            return _poolManager.PrewarmAsync(_poolKey, count, ct);
         }
 
         private void ApplySortingOrder(FlyingTrail trail)

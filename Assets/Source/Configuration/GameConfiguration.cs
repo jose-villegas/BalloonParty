@@ -31,6 +31,14 @@ namespace BalloonParty.Configuration
         [SerializeField] private float _scorePointsScatterDelay = 0.08f;
         [SerializeField] private float _scorePointBurstDuration = 0.12f;
 
+        [Tooltip("Per-color trail pool size prewarmed at level setup — a big pop or level-up ceremony " +
+                 "can burst 20-40 live trails for one color.")]
+        [SerializeField] private int _scoreTrailPrewarmPerColor = 64;
+
+        [Tooltip("Per-color prewarm size for EACH of the point/streak notice pools — these rarely have " +
+                 "more than a handful live at once, hence the lower default than the trail pool.")]
+        [SerializeField] private int _progressNoticePrewarmPerColor = 16;
+
         public float ProjectileSpeed => _projectileSpeed;
         public float ProjectileLoadDuration => _projectileLoadDuration;
         public Vector4 LimitsClockwise => _limitsClockwise;
@@ -46,5 +54,7 @@ namespace BalloonParty.Configuration
         public float ScorePointTraceDuration => _scorePointTraceDuration;
         public float ScorePointsScatterDelay => _scorePointsScatterDelay;
         public float ScorePointBurstDuration => _scorePointBurstDuration;
+        public int ScoreTrailPrewarmPerColor => _scoreTrailPrewarmPerColor;
+        public int ProgressNoticePrewarmPerColor => _progressNoticePrewarmPerColor;
     }
 }

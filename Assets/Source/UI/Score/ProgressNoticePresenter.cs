@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Threading;
 using BalloonParty.Shared.Pool;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 
 namespace BalloonParty.UI.Score
@@ -35,6 +37,18 @@ namespace BalloonParty.UI.Score
             _color = color;
             _pointPoolKey = $"PointNotice_{colorName}";
             _streakPoolKey = $"StreakNotice_{colorName}";
+        }
+
+        // Amortized so constructing a bar at level setup never spikes into a hitch. Safe to call more than
+        // once for the same color — RegisterChannel no-ops once a key is already registered, so a re-call
+        // (e.g. defensive re-construction) tops up rather than growing the pools unboundedly.
+        internal async UniTask PrewarmAsync(int pointCount, int streakCount, CancellationToken ct = default)
+        {
+            RegisterChannel(_pointPoolKey, _pointPrefab);
+            RegisterChannel(_streakPoolKey, _streakPrefab);
+
+            await _poolManager.PrewarmAsync(_pointPoolKey, pointCount, ct);
+            await _poolManager.PrewarmAsync(_streakPoolKey, streakCount, ct);
         }
 
         internal void SpawnPointNotice(Vector2 anchoredPosition)
@@ -76,6 +90,14 @@ namespace BalloonParty.UI.Score
             {
                 _streakNotice.Dismiss();
                 _streakNotice = null;
+            }
+        }
+
+        private void RegisterChannel(string key, ProgressNotice prefab)
+        {
+            if (!_poolManager.IsRegistered(key))
+            {
+                _poolManager.Register(key, new SimplePoolChannel<ProgressNotice>(prefab));
             }
         }
 

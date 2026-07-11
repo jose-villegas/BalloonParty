@@ -88,10 +88,18 @@ namespace BalloonParty.Game.Score
             _endpoints.Register(colorName, target);
             _colorLookup[colorName] = color;
 
-            if (!_spawners.ContainsKey(colorName))
+            // Guards against a level restart re-registering the same color: without it, a second
+            // RegisterTarget would prewarm on top of an already-populated pool and grow it unboundedly.
+            if (_spawners.ContainsKey(colorName))
             {
-                _spawners[colorName] = new TrailSpawner(_poolManager, $"ScoreTrail_{colorName}", _trailPrefab);
+                return;
             }
+
+            var spawner = new TrailSpawner(_poolManager, $"ScoreTrail_{colorName}", _trailPrefab);
+            _spawners[colorName] = spawner;
+
+            // Amortized over frames so registering a color at level setup never spikes into a hitch.
+            spawner.PrewarmAsync(_config.ScoreTrailPrewarmPerColor, _cts.Token).Forget();
         }
 
         private Vector3 ComputeScatterOrigin(Vector3 center, int index, int count)
