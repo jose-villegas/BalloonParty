@@ -71,21 +71,21 @@ namespace BalloonParty.Shared.Diagnostics
             var currentRefreshRate = Screen.currentResolution.refreshRateRatio;
             var bestRefreshRate = currentRefreshRate;
 
-            // Startup-only diagnostic (readable on device via the in-game debug console): Android
-            // may expose only the current display mode in Screen.resolutions, which would explain
-            // never finding a faster mode to request.
+            // Startup-only diagnostic (readable on device via the in-game debug console): shows
+            // which modes the panel actually exposes, so a refused/missing 120 Hz request is
+            // explainable from a device log alone.
             var modes = string.Join(", ", System.Array.ConvertAll(Screen.resolutions,
                 r => $"{r.width}x{r.height}@{r.refreshRateRatio.value:F1}"));
             Debug.Log($"[FrameRateSettings] current {Screen.width}x{Screen.height}" +
                       $"@{currentRefreshRate.value:F1}; Screen.resolutions: {modes}");
 
-            // Only consider entries at the resolution we're already running — this is a
-            // refresh-rate request, not a resolution change.
+            // Shop across ALL modes for refresh rate only, ignoring size: the app's rendering
+            // surface is inset by the display cutout/nav area (e.g. 960x1989 vs the panel's
+            // 960x2142 modes), so matching the panel modes' width/height exactly is structurally
+            // impossible. The SetResolution below keeps the current surface size regardless.
             foreach (var resolution in Screen.resolutions)
             {
-                var isCurrentResolution = resolution.width == Screen.width && resolution.height == Screen.height;
-
-                if (isCurrentResolution && resolution.refreshRateRatio.value > bestRefreshRate.value)
+                if (resolution.refreshRateRatio.value > bestRefreshRate.value)
                 {
                     bestRefreshRate = resolution.refreshRateRatio;
                 }
@@ -99,7 +99,7 @@ namespace BalloonParty.Shared.Diagnostics
             }
             else
             {
-                Debug.Log("[FrameRateSettings] no higher refresh mode exposed at current resolution");
+                Debug.Log("[FrameRateSettings] display exposes no refresh rate above current");
             }
 
             // Fire even when nothing was requested — the post-delay log re-reads reality either
