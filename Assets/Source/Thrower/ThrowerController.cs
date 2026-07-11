@@ -98,8 +98,6 @@ namespace BalloonParty.Thrower
 
             _levelUpDismissedSubscriber.Subscribe(_ => OnLevelUpDismissed());
 
-            // Load the new level's projectile only once the ascend has fully settled, so it doesn't sit at
-            // the muzzle through the transition.
             _transitionCompletedSubscriber.Subscribe(_ => OnLevelTransitionCompleted());
 
             // A projectile fired just before loss keeps flying on physics alone; scale it away.
@@ -117,6 +115,13 @@ namespace BalloonParty.Thrower
                 || Navigation.Current.Value != NavigationState.Game
                 || _pauseService.IsAnyPaused.Value)
             {
+                return;
+            }
+
+            // Safety net: never sit in live play with nothing to fire — recover a missed reload.
+            if (_activeView == null || _activeProjectile == null)
+            {
+                LoadProjectile();
                 return;
             }
 
@@ -158,9 +163,7 @@ namespace BalloonParty.Thrower
             _loadDuration = _config.ProjectileLoadDuration;
         }
 
-        // Scales the outgoing shot away as the ascend begins; the fresh one is NOT loaded here — it waits for
-        // OnLevelTransitionCompleted so it doesn't sit frozen at the muzzle through the whole transition. The
-        // unscaled disappear plays out over the paused ascend rather than bleeding into resumed play.
+        // Fresh shot loads on transition-complete, not here, so none sits parked at the muzzle mid-ascend.
         private void OnLevelUpDismissed()
         {
             ScaleAwayActiveProjectile();
@@ -181,8 +184,7 @@ namespace BalloonParty.Thrower
             ScaleAwayActiveProjectile();
         }
 
-        // Scales the active projectile away and returns it to the pool without loading a replacement; the
-        // caller (or a later beat) decides when a fresh one loads.
+        // Scales the shot away and pools it, without loading a replacement.
         private void ScaleAwayActiveProjectile()
         {
             if (_activeView == null)
