@@ -80,11 +80,43 @@ namespace BalloonParty.Display
         private void OnEnable()
         {
             _capture.Acquire();
+            UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
         }
 
-        private void OnPreRender()
+        private void OnDisable()
         {
-            // The capture camera has already rendered this frame at this point.
+            UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
+            _capture.Release();
+            SetOverlayVisible(false);
+        }
+
+        private void OnDestroy()
+        {
+            ReleaseTarget(ref _smearTarget);
+            ReleaseTarget(ref _workTarget);
+            ReleaseTarget(ref _lightTarget);
+            ReleaseTarget(ref _historyTarget);
+
+            if (_smearMaterial != null)
+            {
+                Destroy(_smearMaterial);
+            }
+
+            if (_overlayMaterial != null)
+            {
+                Destroy(_overlayMaterial);
+            }
+        }
+
+        private void OnBeginCameraRendering(UnityEngine.Rendering.ScriptableRenderContext context, Camera camera)
+        {
+            // Fires for every camera (capture, scene-view, preview); only drive off the main one.
+            if (camera != _camera)
+            {
+                return;
+            }
+
+            // Capture camera has lower depth, so URP renders it first: its RT is fresh this frame.
             var source = _capture.CaptureTexture;
             if (source == null)
             {
@@ -116,30 +148,6 @@ namespace BalloonParty.Display
 
             FitOverlayToFrustum();
             SetOverlayVisible(true);
-        }
-
-        private void OnDisable()
-        {
-            _capture.Release();
-            SetOverlayVisible(false);
-        }
-
-        private void OnDestroy()
-        {
-            ReleaseTarget(ref _smearTarget);
-            ReleaseTarget(ref _workTarget);
-            ReleaseTarget(ref _lightTarget);
-            ReleaseTarget(ref _historyTarget);
-
-            if (_smearMaterial != null)
-            {
-                Destroy(_smearMaterial);
-            }
-
-            if (_overlayMaterial != null)
-            {
-                Destroy(_overlayMaterial);
-            }
         }
 
         private bool EnsureResources()
