@@ -82,9 +82,12 @@ namespace BalloonParty.Display
             _capture.Acquire();
         }
 
-        private void OnPreRender()
+        private void LateUpdate()
         {
-            // The capture camera has already rendered this frame at this point.
+            // The capture camera renders during the render phase, after LateUpdate, so this
+            // reads the previous frame's capture. One frame of staleness is invisible here
+            // (temporally blended buffer, refreshes every SceneCaptureFrameInterval frames) and
+            // buys running outside URP's RenderGraph, which rejects mid-render-loop Graphics.Blit.
             var source = _capture.CaptureTexture;
             if (source == null)
             {

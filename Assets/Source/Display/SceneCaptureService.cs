@@ -1,5 +1,6 @@
 using BalloonParty.Configuration;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using VContainer;
 
 namespace BalloonParty.Display
@@ -31,7 +32,7 @@ namespace BalloonParty.Display
         private Camera _captureCamera;
         private RenderTexture _texture;
         private int _consumers;
-        private int _frameCounter;
+        private float _captureAccumulator;
 
         internal RenderTexture CaptureTexture => _texture;
 
@@ -50,13 +51,20 @@ namespace BalloonParty.Display
 
         private void LateUpdate()
         {
-            var shouldRender = _consumers > 0
-                               && ++_frameCounter % _displayConfig.SceneCaptureFrameInterval == 0;
+            _captureAccumulator += Time.unscaledDeltaTime;
+
+            // SceneCaptureFrameInterval was authored as "every N frames at 60 fps"; reinterpreted
+            // here as seconds so capture cadence (and the GI chain it feeds) doesn't scale with
+            // display refresh — a 120 Hz panel would otherwise double this chain's GPU cost.
+            // Unscaled so cadence keeps refreshing during pause/slow-mo, same as the old frame count did.
+            var captureInterval = _displayConfig.SceneCaptureFrameInterval / 60f;
+            var shouldRender = _consumers > 0 && _captureAccumulator >= captureInterval;
 
             if (shouldRender)
             {
                 EnsureTexture();
                 _captureCamera.orthographicSize = _mainCamera.orthographicSize;
+                _captureAccumulator -= captureInterval;
             }
 
             _captureCamera.enabled = shouldRender;
@@ -97,6 +105,10 @@ namespace BalloonParty.Display
             // Lower depth renders before the main camera, so it's ready the same frame.
             _captureCamera.depth = _mainCamera.depth - 1f;
             _captureCamera.enabled = false;
+
+            // Runtime-created cameras carry no serialized URP data; GetUniversalAdditionalCameraData adds it.
+            var cameraData = _captureCamera.GetUniversalAdditionalCameraData();
+            cameraData.renderPostProcessing = false;
         }
 
         private void ApplyBackgroundColor()
@@ -125,8 +137,9 @@ namespace BalloonParty.Display
                 Destroy(_texture);
             }
 
-            // No depth buffer needed — sprites only.
-            _texture = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32)
+            // URP's RenderGraph rejects depthless camera output textures; 2D content never
+            // samples the depth, but the attachment still has to exist.
+            _texture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32)
             {
                 name = "SceneCapture",
                 filterMode = FilterMode.Bilinear

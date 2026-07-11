@@ -5,7 +5,8 @@
         "BalloonParty.Runtime",
         "NaughtyAttributes.Core",
         "NaughtyAttributes.Editor",
-        "Unity.2D.Sprite.Editor"
+        "Unity.2D.Sprite.Editor",
+        "Unity.RenderPipelines.Universal.Runtime"
     ],
     "includePlatforms": [
         "Editor"

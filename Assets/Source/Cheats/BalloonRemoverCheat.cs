@@ -17,6 +17,10 @@ namespace BalloonParty.Cheats
         private const float PickRadius = 0.25f;
         private const float PathSampleDistance = 0.05f;
 
+        // Cheat overlay is always-on-top by design: topmost gameplay sorting layer, above the GI overlay (32000).
+        private const string OverlaySortingLayer = "Sky";
+        private const int OverlaySortingOrder = 32700;
+
         private static readonly int CullId = Shader.PropertyToID("_Cull");
         private static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
         private static readonly int SrcBlendId = Shader.PropertyToID("_SrcBlend");
@@ -27,10 +31,15 @@ namespace BalloonParty.Cheats
         [Inject] private SlotGrid _grid;
 
         private readonly List<Vector3> _path = new();
+        private readonly List<Vector3> _overlayVertices = new();
+        private readonly List<Color> _overlayColors = new();
+        private readonly List<int> _overlayIndices = new();
 
         private bool _active;
         private bool _dragging;
         private Material _lineMaterial;
+        private Mesh _overlayMesh;
+        private MeshRenderer _overlayRenderer;
 
         public string Name => _active ? "Remove Balloons  [ON]" : "Remove Balloons";
         public string Section => "Grid";
@@ -44,6 +53,9 @@ namespace BalloonParty.Cheats
             _lineMaterial.SetInt(DstBlendId, (int)BlendMode.OneMinusSrcAlpha);
             _lineMaterial.SetInt(CullId, (int)CullMode.Off);
             _lineMaterial.SetInt(ZWriteId, 0);
+
+            // Sorting layer/order on the renderer put the overlay on top; the queue only keeps it late within that bucket.
+            _lineMaterial.renderQueue = 4000;
         }
 
         private void Update()
@@ -72,36 +84,43 @@ namespace BalloonParty.Cheats
             }
         }
 
-        private void OnRenderObject()
+        private void LateUpdate()
         {
             if (!_active || _path.Count < 2)
             {
+                if (_overlayRenderer != null)
+                {
+                    _overlayRenderer.enabled = false;
+                }
+
                 return;
             }
 
-            _lineMaterial.SetPass(0);
+            EnsureOverlayRenderer();
+            RebuildOverlayMesh();
+            _overlayRenderer.enabled = true;
+        }
 
-            var hitSlots = CollectHitSlots();
-            var cam = Camera.main;
-            if (cam == null)
+        private void OnDisable()
+        {
+            // LateUpdate stops running with the component; hide the overlay so it can't freeze on-screen.
+            if (_overlayRenderer != null)
             {
-                return;
+                _overlayRenderer.enabled = false;
+            }
+        }
+
+        private void OnDestroy()
+        {
+            if (_overlayMesh != null)
+            {
+                Destroy(_overlayMesh);
             }
 
-            GL.PushMatrix();
-
-            DrawThickPath(_path, new Color(1f, 0.3f, 0.1f, 0.8f), 0.06f);
-
-            foreach (var slot in hitSlots)
+            if (_overlayRenderer != null)
             {
-                DrawThickCircle(_grid.IndexToWorldPosition(slot),
-                    PickRadius,
-                    24,
-                    new Color(1f, 0.1f, 0.1f, 0.9f),
-                    0.05f);
+                Destroy(_overlayRenderer.gameObject);
             }
-
-            GL.PopMatrix();
         }
 
         public void Execute()
@@ -184,11 +203,59 @@ namespace BalloonParty.Cheats
             return false;
         }
 
-        private static void DrawThickPath(IReadOnlyList<Vector3> path, Color color, float halfWidth)
+        private void EnsureOverlayRenderer()
         {
-            GL.Begin(GL.TRIANGLES);
-            GL.Color(color);
+            if (_overlayRenderer != null)
+            {
+                return;
+            }
 
+            _overlayMesh = new Mesh { name = "BalloonRemoverOverlay" };
+            _overlayMesh.MarkDynamic();
+
+            // Unparented, identity transform: mesh vertices are world-space and must not be re-transformed.
+            var overlay = new GameObject("BalloonRemoverOverlay")
+            {
+                layer = gameObject.layer
+            };
+
+            var filter = overlay.AddComponent<MeshFilter>();
+            filter.sharedMesh = _overlayMesh;
+
+            _overlayRenderer = overlay.AddComponent<MeshRenderer>();
+            _overlayRenderer.sharedMaterial = _lineMaterial;
+            _overlayRenderer.shadowCastingMode = ShadowCastingMode.Off;
+            _overlayRenderer.receiveShadows = false;
+            _overlayRenderer.sortingLayerName = OverlaySortingLayer;
+            _overlayRenderer.sortingOrder = OverlaySortingOrder;
+        }
+
+        private void RebuildOverlayMesh()
+        {
+            _overlayVertices.Clear();
+            _overlayColors.Clear();
+            _overlayIndices.Clear();
+
+            AppendThickPath(_path, new Color(1f, 0.3f, 0.1f, 0.8f), 0.06f);
+
+            foreach (var slot in CollectHitSlots())
+            {
+                AppendThickCircle(_grid.IndexToWorldPosition(slot),
+                    PickRadius,
+                    24,
+                    new Color(1f, 0.1f, 0.1f, 0.9f),
+                    0.05f);
+            }
+
+            _overlayMesh.Clear();
+            _overlayMesh.SetVertices(_overlayVertices);
+            _overlayMesh.SetColors(_overlayColors);
+            _overlayMesh.SetTriangles(_overlayIndices, 0);
+            _overlayMesh.RecalculateBounds();
+        }
+
+        private void AppendThickPath(IReadOnlyList<Vector3> path, Color color, float halfWidth)
+        {
             for (var i = 0; i < path.Count - 1; i++)
             {
                 var a = path[i];
@@ -196,22 +263,12 @@ namespace BalloonParty.Cheats
                 var dir = (b - a).normalized;
                 var perp = dir.PerpendicularXY() * halfWidth;
 
-                GL.Vertex(a - perp);
-                GL.Vertex(a + perp);
-                GL.Vertex(b + perp);
-                GL.Vertex(a - perp);
-                GL.Vertex(b + perp);
-                GL.Vertex(b - perp);
+                AppendQuad(a - perp, a + perp, b + perp, b - perp, color);
             }
-
-            GL.End();
         }
 
-        private static void DrawThickCircle(Vector3 center, float radius, int segments, Color color, float halfWidth)
+        private void AppendThickCircle(Vector3 center, float radius, int segments, Color color, float halfWidth)
         {
-            GL.Begin(GL.TRIANGLES);
-            GL.Color(color);
-
             for (var i = 0; i < segments; i++)
             {
                 var a0 = i * Mathf.PI * 2f / segments;
@@ -223,15 +280,30 @@ namespace BalloonParty.Cheats
                 var out0 = center + dir0 * (radius + halfWidth);
                 var out1 = center + dir1 * (radius + halfWidth);
 
-                GL.Vertex(p0);
-                GL.Vertex(out0);
-                GL.Vertex(out1);
-                GL.Vertex(p0);
-                GL.Vertex(out1);
-                GL.Vertex(p1);
+                AppendQuad(p0, out0, out1, p1, color);
             }
+        }
 
-            GL.End();
+        private void AppendQuad(Vector3 a, Vector3 b, Vector3 c, Vector3 d, Color color)
+        {
+            var baseIndex = _overlayVertices.Count;
+
+            _overlayVertices.Add(a);
+            _overlayVertices.Add(b);
+            _overlayVertices.Add(c);
+            _overlayVertices.Add(d);
+
+            _overlayColors.Add(color);
+            _overlayColors.Add(color);
+            _overlayColors.Add(color);
+            _overlayColors.Add(color);
+
+            _overlayIndices.Add(baseIndex);
+            _overlayIndices.Add(baseIndex + 1);
+            _overlayIndices.Add(baseIndex + 2);
+            _overlayIndices.Add(baseIndex);
+            _overlayIndices.Add(baseIndex + 2);
+            _overlayIndices.Add(baseIndex + 3);
         }
 
         private static Vector3? MouseWorldPosition()

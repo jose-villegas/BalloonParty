@@ -1,5 +1,7 @@
 using BalloonParty.Shared.Rendering;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace BalloonParty.Editor.Bush
 {
@@ -58,7 +60,9 @@ namespace BalloonParty.Editor.Bush
 
             var hash = HashFromSeed(seed, variantIndex);
 
-            var rt = RenderTexture.GetTemporary(settings.Resolution, settings.Resolution, 0, RenderTextureFormat.ARGB32);
+            // URP's RenderGraph rejects depthless camera output textures ("Fake or uninitialized
+            // surface") even though this bake never samples depth.
+            var rt = RenderTexture.GetTemporary(settings.Resolution, settings.Resolution, 24, RenderTextureFormat.ARGB32);
             rt.filterMode = FilterMode.Bilinear;
 
             var material = new Material(shader);
@@ -80,7 +84,7 @@ namespace BalloonParty.Editor.Bush
             var cameraGo = CreateBakeCamera(viewRadius, rt);
             var quadGo = CreateBakeQuad(material, viewRadius);
 
-            cameraGo.GetComponent<Camera>().Render();
+            RenderBakeCamera(cameraGo.GetComponent<Camera>(), rt);
 
             var result = ReadbackTexture(rt, settings.Resolution);
 
@@ -161,9 +165,26 @@ namespace BalloonParty.Editor.Bush
             cam.cullingMask = 1 << BakeLayer;
             cam.enabled = false;
 
+            // Runtime-created cameras carry no serialized URP data; GetUniversalAdditionalCameraData adds it.
+            var cameraData = cam.GetUniversalAdditionalCameraData();
+            cameraData.renderPostProcessing = false;
+
             go.transform.position = new Vector3(0f, 0f, -0.5f);
 
             return go;
+        }
+
+        private static void RenderBakeCamera(Camera camera, RenderTexture target)
+        {
+            var request = new UniversalRenderPipeline.SingleCameraRequest { destination = target };
+            if (RenderPipeline.SupportsRenderRequest(camera, request))
+            {
+                RenderPipeline.SubmitRenderRequest(camera, request);
+            }
+            else
+            {
+                Debug.LogError("[BushLeafBaker] Render pipeline does not support SingleCameraRequest; bake aborted.");
+            }
         }
 
         private static GameObject CreateBakeQuad(Material material, float viewRadius)

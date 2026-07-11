@@ -214,6 +214,13 @@ only after on-device sign-off.
 5. Smoke-test the launcher→game preload dual-camera flow.
 
 #### B3 — `ScreenSpaceLightService` port · **P0 · M** · deps: B2
+> **Outcome (2026-07-11): shipped as `LateUpdate`, not the event below.** The
+> `beginCameraRendering` version ran but URP's RenderGraph rejected mid-render-loop
+> `Graphics.Blit` ("EndRenderPass: Not inside a Renderpass") and depthless camera output
+> RTs ("Fake or uninitialized surface" — fixed by giving the capture RT a 24-bit depth).
+> The chain now blits from `LateUpdate` (the disturbance field's proven pattern), reading
+> the previous frame's capture — invisible on a temporally blended buffer. F2 stays moot.
+
 The only mandatory *code* port. `OnPreRender` never fires under SRP; the equivalent hook
 with identical timing semantics is `RenderPipelineManager.beginCameraRendering` filtered to
 the main camera (the capture camera has already rendered by then, exactly like today).
@@ -235,6 +242,13 @@ the main camera (the capture camera has already rendered by then, exactly like t
    releases the capture consumer (interval camera goes idle).
 
 #### B4 — Shader triage + ports · **P0/P1 · L (the bulk)** · deps: B1 (B2 for Unbreakable)
+> **Outcome (2026-07-11): zero ports required.** Every custom shader renders correctly
+> under the 2D Renderer as `SRPDefaultUnlit` (verified: full visual sweep against B0
+> references + Frame Debugger dumps — balloons, bushes incl. the instanced `BushLeaf`
+> batch (one draw per cluster), clouds, paint, disturbance, specks, GI pair, sprite
+> family, UIRays, TMP, cinematics). The Built-in `CGPROGRAM` sources stay as-is; the
+> hygiene port recipe below remains available if a future Unity version drops the
+> compatibility path.
 Hand-written **unlit** CGPROGRAM shaders mostly keep compiling and rendering under URP
 (untagged passes run as `SRPDefaultUnlit`) — so triage before porting:
 1. **Triage pass (one session):** load the game with converter output only. For each shader
@@ -269,12 +283,23 @@ Hand-written **unlit** CGPROGRAM shaders mostly keep compiling and rendering und
    ```
    (guard with `RenderPipeline.SupportsRenderRequest(camera, request)` and keep the assert
    style of the surrounding code). The bake camera also needs its
-   `UniversalAdditionalCameraData` renderer set, same as B2.
+   `UniversalAdditionalCameraData` renderer set, same as B2. **And the destination RTs need
+   a depth-stencil format** — URP's RenderGraph rejects depthless camera output textures
+   ("Fake or uninitialized surface"), as discovered on `SceneCaptureService` during B3.
 2. The four `Grid/Editor/Bush*` bake shaders triage like B4 (trivial unlit — likely fine).
 3. Rebake one bush and diff the output texture against the committed one — the bake is only
    correct if it's visually identical (bit-exactness not required; filtering may differ).
 
 #### B6 — Materials, prefabs, scenes sweep · **P1 · M** · deps: B3, B4, B5
+> **Outcome (2026-07-11): mostly moot — the converter changed zero materials.** Legacy
+> stock-shader materials render correctly in compatibility mode and are KEPT as-is; TMP
+> stays on its built-in shaders (URP shadergraph variants remain available on symptom).
+> Pooled-prefab staleness never arose (no material rewrites). One real breakage found and
+> fixed: `BalloonRemoverCheat`'s GL overlay — `OnRenderObject` doesn't reach the screen
+> under URP and `endCameraRendering` GL flickers (unstable post-submit target); rebuilt as
+> a mesh on a MeshRenderer (Sky/32700). Lesson: the 2D Renderer sorts by sorting layer
+> before renderQueue, and `Graphics.DrawMesh` can't specify one — above-gameplay overlays
+> need a real renderer.
 1. Project-wide magenta/missing-shader sweep (`t:Material` search + play-through).
 2. The ~30 legacy stock-shader materials: confirm the converter upgraded each, or swap
    manually to `Universal Render Pipeline/Particles/Unlit` (additive/alpha-blended as
@@ -289,6 +314,13 @@ Hand-written **unlit** CGPROGRAM shaders mostly keep compiling and rendering und
    material props, `BalloonRemoverCheat` overlay, launcher preload suppression flow.
 
 #### B7 — Performance validation gate · **P0 · M** · deps: B6
+> **Outcome (2026-07-11): passed in-editor; device profiler pass folded into B8's
+> on-device sign-off.** Frame dump `framedump_20260711_162613` (179 events / 268 draw
+> calls, GI chain visible, break-cause profile as predicted: material + MPB breaks
+> dominate, SRP-Batcher exclusions minimal). In-editor play shows no regression. The
+> Built-in baseline txt predates the dump tool's scrub fix (columns unreliable — see
+> Baselines~/CHECKLIST.md), so the numeric anchor is the ProfilerCaptures/ baseline;
+> the on-device comparison happens at B8 sign-off.
 Same captures, same devices, same scenes as B0. **Gate: no regression** in GPU ms, draw
 calls, or GC allocations.
 1. Frame Debugger diff vs B0: expect *different* batch composition (2D Renderer batching ≠
@@ -299,6 +331,14 @@ calls, or GC allocations.
    notes recorded against dynamic batching need re-validation flags.
 
 #### B8 — Sign-off + cleanup + docs · **P0 · S** · deps: B7
+> **Outcome (2026-07-11): merged to `main` after on-device (Android/Pixel 10) sign-off.**
+> No Built-in shader originals to delete (B4 ported nothing). Living docs + CLAUDE.md
+> updated; memory key fact flipped. Bonus work that rode the branch: high-refresh
+> (>60 FPS) Android unlock — targetFrameRate request + time-based capture cadence +
+> projectile interpolation shipped; display-mode negotiation on Pixel-class devices
+> still under investigation (startup diagnostics in `FrameRateSettings` log what the
+> OS exposes/grants; native display-mode API is the next step if `Screen.resolutions`
+> proves mode-blind).
 1. Visual parity review against every B0 reference, on device.
 2. Delete: Built-in shader originals kept as rollback, converter leftovers, `Baselines~/`
    stays local (never committed).
