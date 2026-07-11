@@ -4,6 +4,7 @@ using BalloonParty.Balloon.View;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
+using BalloonParty.Shared;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pause;
@@ -30,11 +31,7 @@ namespace BalloonParty.Projectile.View
         [Tooltip("Full palette loops per second the glow cycles through while the rainbow buff is active.")]
         [SerializeField] [Min(0f)] private float _rainbowGlowSpeed = 1.5f;
 
-        [Header("Disappear")]
-        [Tooltip("Scale-down-to-zero on the last hit (shields depleted / absorbed) and on level-up dismiss.")]
-        [SerializeField] private float _disappearDuration = 0.2f;
-        [SerializeField] private Ease _disappearEase = Ease.InBack;
-
+        [Inject] private IGameConfiguration _config;
         [Inject] private IGamePalette _palette;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
@@ -177,9 +174,10 @@ namespace BalloonParty.Projectile.View
 
         private void DestroyProjectile()
         {
-            // Rebalance immediately; destruction (and the next reload) waits for the scale-down.
+            // Publish now, not after the scale-down: the thrower scales this shot away (it returns to the
+            // pool once that finishes) and loads a fresh instance, so it never reuses one mid-disappear.
             _balancePublisher.Publish(default);
-            PlayDisappear(() => _destroyedPublisher.Publish(default));
+            _destroyedPublisher.Publish(default);
         }
 
         /// <summary>Scales the projectile to zero then invokes <paramref name="onComplete" />; runs in unscaled time so it still plays while the world is frozen.</summary>
@@ -194,8 +192,19 @@ namespace BalloonParty.Projectile.View
             _projectileTrail?.Disable();
 
             transform.DOKill();
-            transform.DOScale(Vector3.zero, _disappearDuration)
-                .SetEase(_disappearEase)
+
+            var duration = _config.ProjectileDisappearDuration;
+
+            // A dead shot keeps drifting along its heading (fired shots only) instead of freezing in place.
+            if (_model != null && _model.IsFree && _config.ProjectileDeadDriftFactor > 0f)
+            {
+                Vector3 heading = _model.Direction;
+                var target = transform.position + heading.normalized * (_model.Speed * duration * _config.ProjectileDeadDriftFactor);
+                transform.DOMove(target, duration).SetUpdate(true);
+            }
+
+            transform.DOScale(Vector3.zero, duration)
+                .SetEase(_config.ProjectileDisappearEase)
                 .SetUpdate(true)
                 .OnComplete(() => onComplete?.Invoke());
         }

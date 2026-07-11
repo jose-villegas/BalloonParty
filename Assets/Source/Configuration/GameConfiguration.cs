@@ -1,4 +1,5 @@
 using BalloonParty.Shared;
+using DG.Tweening;
 using UnityEngine;
 
 namespace BalloonParty.Configuration
@@ -13,6 +14,10 @@ namespace BalloonParty.Configuration
         [SerializeField] private int _projectileStartingShields;
         [SerializeField] private float _projectileSpeed;
         [SerializeField] private float _projectileLoadDuration;
+        [SerializeField] private float _projectileDisappearDuration = 0.2f;
+        [SerializeField] private Ease _projectileDisappearEase = Ease.InBack;
+        [Tooltip("How far a dead shot drifts along its heading as it shrinks, as a multiple of speed×duration. 0 = stop in place.")]
+        [SerializeField] private float _projectileDeadDriftFactor = 1f;
         [SerializeField] private Vector4 _limitsClockwise;
         [SerializeField] private float _shieldTrailDuration;
 
@@ -41,6 +46,9 @@ namespace BalloonParty.Configuration
 
         public float ProjectileSpeed => _projectileSpeed;
         public float ProjectileLoadDuration => _projectileLoadDuration;
+        public float ProjectileDisappearDuration => _projectileDisappearDuration;
+        public Ease ProjectileDisappearEase => _projectileDisappearEase;
+        public float ProjectileDeadDriftFactor => _projectileDeadDriftFactor;
         public Vector4 LimitsClockwise => _limitsClockwise;
         public float ShieldTrailDuration => _shieldTrailDuration;
         public Vector2 SlotSeparation => _slotSeparation;

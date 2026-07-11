@@ -25,7 +25,6 @@ namespace BalloonParty.Thrower
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
-        private readonly ISubscriber<LevelTransitionCompletedMessage> _transitionCompletedSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly PauseService _pauseService;
         private readonly IObjectResolver _resolver;
@@ -58,7 +57,6 @@ namespace BalloonParty.Thrower
             ISubscriber<RunResetMessage> resetSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
             ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
-            ISubscriber<LevelTransitionCompletedMessage> transitionCompletedSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
             PauseService pauseService,
             ProjectilePositionProvider positionProvider)
@@ -73,7 +71,6 @@ namespace BalloonParty.Thrower
             _resetSubscriber = resetSubscriber;
             _boardClearSubscriber = boardClearSubscriber;
             _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
-            _transitionCompletedSubscriber = transitionCompletedSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
             _pauseService = pauseService;
             _positionProvider = positionProvider;
@@ -89,19 +86,17 @@ namespace BalloonParty.Thrower
 
             _poolManager.Prewarm(_projectilePoolKey, 2);
 
-            _destroyedSubscriber.Subscribe(_ => Reload());
+            // The spent shot scales away (returns to the pool only when that finishes) while a fresh instance
+            // loads at once — so the thrower never reuses a shot still mid-disappear.
+            _destroyedSubscriber.Subscribe(_ => SwapActiveProjectile());
+            _levelUpDismissedSubscriber.Subscribe(_ => SwapActiveProjectile());
 
             // Restart carries over the old projectile; reload so it resets to config defaults.
             _resetSubscriber.Subscribe(_ => Reload());
-
             _boardClearSubscriber.Subscribe(_ => Reload());
 
-            _levelUpDismissedSubscriber.Subscribe(_ => OnLevelUpDismissed());
-
-            _transitionCompletedSubscriber.Subscribe(_ => OnLevelTransitionCompleted());
-
             // A projectile fired just before loss keeps flying on physics alone; scale it away.
-            _gameOverSubscriber.Subscribe(_ => OnGameOver());
+            _gameOverSubscriber.Subscribe(_ => ScaleAwayActiveProjectile());
 
             Navigation.Current
                 .Where(state => state == NavigationState.Game)
@@ -115,13 +110,6 @@ namespace BalloonParty.Thrower
                 || Navigation.Current.Value != NavigationState.Game
                 || _pauseService.IsAnyPaused.Value)
             {
-                return;
-            }
-
-            // Safety net: never sit in live play with nothing to fire — recover a missed reload.
-            if (_activeView == null || _activeProjectile == null)
-            {
-                LoadProjectile();
                 return;
             }
 
@@ -163,28 +151,15 @@ namespace BalloonParty.Thrower
             _loadDuration = _config.ProjectileLoadDuration;
         }
 
-        // Fresh shot loads on transition-complete, not here, so none sits parked at the muzzle mid-ascend.
-        private void OnLevelUpDismissed()
+        // Scales the spent shot away (it returns to the pool only once its disappear finishes) and loads a
+        // fresh instance now, so Get() never hands back one still mid-disappear.
+        private void SwapActiveProjectile()
         {
             ScaleAwayActiveProjectile();
+            LoadProjectile();
         }
 
-        // The ascend has fully settled — only now load the new level's projectile.
-        private void OnLevelTransitionCompleted()
-        {
-            if (_activeView == null)
-            {
-                LoadProjectile();
-            }
-        }
-
-        // No reload here — a fresh projectile only loads later, on restart.
-        private void OnGameOver()
-        {
-            ScaleAwayActiveProjectile();
-        }
-
-        // Scales the shot away and pools it, without loading a replacement.
+        // Scales the shot away and pools it, without loading a replacement (game-over reloads only on restart).
         private void ScaleAwayActiveProjectile()
         {
             if (_activeView == null)

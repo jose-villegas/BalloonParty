@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 
 namespace BalloonParty.Shared
@@ -8,6 +9,9 @@ namespace BalloonParty.Shared
         int StartingHitPoints { get; }
         float ProjectileSpeed { get; }
         float ProjectileLoadDuration { get; }
+        float ProjectileDisappearDuration { get; }
+        Ease ProjectileDisappearEase { get; }
+        float ProjectileDeadDriftFactor { get; }
         Vector4 LimitsClockwise { get; }
         float ShieldTrailDuration { get; }
 
