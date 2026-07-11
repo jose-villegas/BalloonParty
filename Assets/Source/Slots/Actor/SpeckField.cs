@@ -197,7 +197,7 @@ namespace BalloonParty.Slots.Actor
             GetComponent<MeshRenderer>().sharedMaterial = _renderMaterial;
         }
 
-        // Refresh the material state the command buffer draws with; runs before the camera renders.
+        // Refresh the material state the MeshRenderer draws with; runs in LateUpdate, before the camera renders.
         private void PushRenderParams()
         {
             _renderMaterial.SetBuffer(SpecksId, _speckBuffer);

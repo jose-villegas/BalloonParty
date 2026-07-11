@@ -1,8 +1,8 @@
 Shader "BalloonParty/Scenario/SpeckField"
 {
     // Renders the GPU speck buffer as camera-facing quads (one per speck), expanded in the vertex shader
-    // from SV_VertexID + SV_InstanceID — no mesh, no per-frame CPU. Driven by SpeckField.cs via
-    // Graphics.DrawProceduralNow(Triangles, 6, count). STARTER — validate + tune in-editor.
+    // from SV_VertexID — no per-frame CPU. SpeckField.cs draws it through a MeshRenderer holding a dummy
+    // count*6-vertex mesh (so the field sorts with sprites); each vert is repositioned here from _Specks.
     Properties
     {
         _MainTex   ("Speck Sprite", 2D)              = "white" {}
