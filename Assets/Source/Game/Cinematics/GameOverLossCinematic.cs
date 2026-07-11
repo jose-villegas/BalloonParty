@@ -203,8 +203,11 @@ namespace BalloonParty.Game.Cinematics
             _runController.RestartRun(resetBoard: false);
             _pauseService.Pause(PauseSource.Cinematic);
             _staticActorSpawner.ClearStaticActors();
-            _scenarioRoot.Transform.position = new Vector3(0f, -height, 0f);
+
+            // Spawn the scenery with the root at origin (its views set their WORLD transform, so spawning
+            // while the root is displaced would bake in that offset), THEN drop the root below view to rise.
             await _spawnerCoordinator.RunStagesAsync(s => s < SpawnStage.BalloonActors, _cts.Token);
+            _scenarioRoot.Transform.position = new Vector3(0f, -height, 0f);
 
             // One travel: outgoing rides up and out (balloons popping in a wave), new scenery rises in
             // beneath, and the new balloons spawn from the rise's cue so they arrive as it settles.
