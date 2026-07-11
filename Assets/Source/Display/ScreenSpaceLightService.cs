@@ -44,6 +44,9 @@ namespace BalloonParty.Display
         [SerializeField] private Color _shadowTint = new Color(0.55f, 0.6f, 0.75f);
         [Range(0f, 2f)]
         [SerializeField] private float _bounceStrength = 0.25f;
+        [Tooltip("Off skips the history blit and its two buffers entirely — the light " +
+                 "responds instantly, but moving sprites may flicker at capture resolution.")]
+        [SerializeField] private bool _temporalSmoothing = true;
         [Tooltip("Fraction of the fresh light buffer accepted per frame — lower is " +
                  "smoother but laggier. Kills the texel flicker of moving sprites at " +
                  "capture resolution.")]
@@ -107,15 +110,23 @@ namespace BalloonParty.Display
             Graphics.Blit(source, _smearTarget, _smearMaterial, 0);
             Graphics.Blit(_smearTarget, _workTarget, _smearMaterial, 1);
 
-            // Temporal accumulation: blend into history, then swap for next frame.
-            _smearMaterial.SetTexture(HistoryTexId, _historyTarget);
-            _smearMaterial.SetFloat(TemporalBlendId, _historyValid ? _temporalResponse : 1f);
-            Graphics.Blit(_workTarget, _lightTarget, _smearMaterial, 2);
-            _historyValid = true;
+            if (_temporalSmoothing)
+            {
+                // Temporal accumulation: blend into history, then swap for next frame.
+                _smearMaterial.SetTexture(HistoryTexId, _historyTarget);
+                _smearMaterial.SetFloat(TemporalBlendId, _historyValid ? _temporalResponse : 1f);
+                Graphics.Blit(_workTarget, _lightTarget, _smearMaterial, 2);
+                _historyValid = true;
 
-            _overlayMaterial.SetTexture(LightTexId, _lightTarget);
-            LightTexture = _lightTarget;
-            (_historyTarget, _lightTarget) = (_lightTarget, _historyTarget);
+                _overlayMaterial.SetTexture(LightTexId, _lightTarget);
+                LightTexture = _lightTarget;
+                (_historyTarget, _lightTarget) = (_lightTarget, _historyTarget);
+            }
+            else
+            {
+                _overlayMaterial.SetTexture(LightTexId, _workTarget);
+                LightTexture = _workTarget;
+            }
 
             FitOverlayToFrustum();
             SetOverlayVisible(true);
@@ -202,21 +213,35 @@ namespace BalloonParty.Display
 
         private void EnsureTargets(RenderTexture source)
         {
-            if (_lightTarget != null && _lightTarget.width == source.width
-                                     && _lightTarget.height == source.height)
+            if (_smearTarget == null || _smearTarget.width != source.width
+                                     || _smearTarget.height != source.height)
             {
+                ReleaseTarget(ref _smearTarget);
+                ReleaseTarget(ref _workTarget);
+                ReleaseHistoryTargets();
+
+                _smearTarget = CreateTarget(source, "ScreenSpaceLightSmear");
+                _workTarget = CreateTarget(source, "ScreenSpaceLightWork");
+            }
+
+            // The ping-pong pair only exists while smoothing is on (live-toggleable).
+            if (!_temporalSmoothing)
+            {
+                ReleaseHistoryTargets();
                 return;
             }
 
-            ReleaseTarget(ref _smearTarget);
-            ReleaseTarget(ref _workTarget);
+            if (_lightTarget == null)
+            {
+                _lightTarget = CreateTarget(source, "ScreenSpaceLightA");
+                _historyTarget = CreateTarget(source, "ScreenSpaceLightB");
+            }
+        }
+
+        private void ReleaseHistoryTargets()
+        {
             ReleaseTarget(ref _lightTarget);
             ReleaseTarget(ref _historyTarget);
-
-            _smearTarget = CreateTarget(source, "ScreenSpaceLightSmear");
-            _workTarget = CreateTarget(source, "ScreenSpaceLightWork");
-            _lightTarget = CreateTarget(source, "ScreenSpaceLightA");
-            _historyTarget = CreateTarget(source, "ScreenSpaceLightB");
             _historyValid = false;
         }
 
