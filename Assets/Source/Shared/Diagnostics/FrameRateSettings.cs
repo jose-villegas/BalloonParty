@@ -71,6 +71,14 @@ namespace BalloonParty.Shared.Diagnostics
             var currentRefreshRate = Screen.currentResolution.refreshRateRatio;
             var bestRefreshRate = currentRefreshRate;
 
+            // Startup-only diagnostic (readable on device via the in-game debug console): Android
+            // may expose only the current display mode in Screen.resolutions, which would explain
+            // never finding a faster mode to request.
+            var modes = string.Join(", ", System.Array.ConvertAll(Screen.resolutions,
+                r => $"{r.width}x{r.height}@{r.refreshRateRatio.value:F1}"));
+            Debug.Log($"[FrameRateSettings] current {Screen.width}x{Screen.height}" +
+                      $"@{currentRefreshRate.value:F1}; Screen.resolutions: {modes}");
+
             // Only consider entries at the resolution we're already running — this is a
             // refresh-rate request, not a resolution change.
             foreach (var resolution in Screen.resolutions)
@@ -85,9 +93,18 @@ namespace BalloonParty.Shared.Diagnostics
 
             if (bestRefreshRate.value > currentRefreshRate.value)
             {
+                Debug.Log($"[FrameRateSettings] requesting {Screen.width}x{Screen.height}" +
+                          $"@{bestRefreshRate.value:F1}");
                 Screen.SetResolution(Screen.width, Screen.height, Screen.fullScreenMode, bestRefreshRate);
-                ReapplyTargetFrameRateAsync().Forget();
             }
+            else
+            {
+                Debug.Log("[FrameRateSettings] no higher refresh mode exposed at current resolution");
+            }
+
+            // Fire even when nothing was requested — the post-delay log re-reads reality either
+            // way, so the granted-outcome line always appears in the device log.
+            ReapplyTargetFrameRateAsync().Forget();
         }
 
         // The mode switch above is asynchronous, so the refresh rate Screen.currentResolution
@@ -104,6 +121,10 @@ namespace BalloonParty.Shared.Diagnostics
             }
 
             Application.targetFrameRate = GetDisplayRefreshRate();
+            Debug.Log($"[FrameRateSettings] display now {Screen.currentResolution.width}" +
+                      $"x{Screen.currentResolution.height}" +
+                      $"@{Screen.currentResolution.refreshRateRatio.value:F1}, " +
+                      $"targetFrameRate={Application.targetFrameRate}");
         }
 #endif
 

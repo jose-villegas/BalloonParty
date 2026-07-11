@@ -76,6 +76,7 @@ Compile C# without opening Unity:
 dotnet build BalloonParty.Runtime.csproj -nologo -clp:ErrorsOnly   # also .Editor.csproj / .Tests.EditMode.csproj
 ```
 - **`dotnet build` does NOT compile shaders** (`.shader`/HLSL) — only Unity validates those. Flag shader edits as needing an in-editor check.
+- **`dotnet build` defines `UNITY_EDITOR`**, so `#if !UNITY_EDITOR` (device-only) code is silently skipped. To compile-check it, rebuild with `-p:DefineConstants` overridden to strip `UNITY_EDITOR` (escape `;` as `%3B`, add `-p:BuildProjectReferences=false`).
 - It also can't run the game; behavior/visual changes (rendering, animation, the level-up cinematic) need an in-editor playtest. Say so rather than claiming verified.
 
 Style audit (the same rules the pre-commit hook runs on staged `.cs`):
