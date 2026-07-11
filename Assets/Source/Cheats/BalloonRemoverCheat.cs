@@ -46,6 +46,11 @@ namespace BalloonParty.Cheats
             _lineMaterial.SetInt(ZWriteId, 0);
         }
 
+        private void OnEnable()
+        {
+            RenderPipelineManager.endCameraRendering += OnEndCameraRendering;
+        }
+
         private void Update()
         {
             if (!_active)
@@ -72,36 +77,9 @@ namespace BalloonParty.Cheats
             }
         }
 
-        private void OnRenderObject()
+        private void OnDisable()
         {
-            if (!_active || _path.Count < 2)
-            {
-                return;
-            }
-
-            _lineMaterial.SetPass(0);
-
-            var hitSlots = CollectHitSlots();
-            var cam = Camera.main;
-            if (cam == null)
-            {
-                return;
-            }
-
-            GL.PushMatrix();
-
-            DrawThickPath(_path, new Color(1f, 0.3f, 0.1f, 0.8f), 0.06f);
-
-            foreach (var slot in hitSlots)
-            {
-                DrawThickCircle(_grid.IndexToWorldPosition(slot),
-                    PickRadius,
-                    24,
-                    new Color(1f, 0.1f, 0.1f, 0.9f),
-                    0.05f);
-            }
-
-            GL.PopMatrix();
+            RenderPipelineManager.endCameraRendering -= OnEndCameraRendering;
         }
 
         public void Execute()
@@ -182,6 +160,40 @@ namespace BalloonParty.Cheats
             }
 
             return false;
+        }
+
+        // OnRenderObject never reaches the screen under URP's RenderGraph; endCameraRendering
+        // fires after the frame is submitted, so GL immediate calls land on the completed frame.
+        private void OnEndCameraRendering(ScriptableRenderContext context, Camera camera)
+        {
+            if (camera != Camera.main)
+            {
+                return;
+            }
+
+            if (!_active || _path.Count < 2)
+            {
+                return;
+            }
+
+            _lineMaterial.SetPass(0);
+
+            var hitSlots = CollectHitSlots();
+
+            GL.PushMatrix();
+
+            DrawThickPath(_path, new Color(1f, 0.3f, 0.1f, 0.8f), 0.06f);
+
+            foreach (var slot in hitSlots)
+            {
+                DrawThickCircle(_grid.IndexToWorldPosition(slot),
+                    PickRadius,
+                    24,
+                    new Color(1f, 0.1f, 0.1f, 0.9f),
+                    0.05f);
+            }
+
+            GL.PopMatrix();
         }
 
         private static void DrawThickPath(IReadOnlyList<Vector3> path, Color color, float halfWidth)
