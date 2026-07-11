@@ -291,6 +291,15 @@ Hand-written **unlit** CGPROGRAM shaders mostly keep compiling and rendering und
    correct if it's visually identical (bit-exactness not required; filtering may differ).
 
 #### B6 — Materials, prefabs, scenes sweep · **P1 · M** · deps: B3, B4, B5
+> **Outcome (2026-07-11): mostly moot — the converter changed zero materials.** Legacy
+> stock-shader materials render correctly in compatibility mode and are KEPT as-is; TMP
+> stays on its built-in shaders (URP shadergraph variants remain available on symptom).
+> Pooled-prefab staleness never arose (no material rewrites). One real breakage found and
+> fixed: `BalloonRemoverCheat`'s GL overlay — `OnRenderObject` doesn't reach the screen
+> under URP and `endCameraRendering` GL flickers (unstable post-submit target); rebuilt as
+> a mesh on a MeshRenderer (Sky/32700). Lesson: the 2D Renderer sorts by sorting layer
+> before renderQueue, and `Graphics.DrawMesh` can't specify one — above-gameplay overlays
+> need a real renderer.
 1. Project-wide magenta/missing-shader sweep (`t:Material` search + play-through).
 2. The ~30 legacy stock-shader materials: confirm the converter upgraded each, or swap
    manually to `Universal Render Pipeline/Particles/Unlit` (additive/alpha-blended as
@@ -305,6 +314,13 @@ Hand-written **unlit** CGPROGRAM shaders mostly keep compiling and rendering und
    material props, `BalloonRemoverCheat` overlay, launcher preload suppression flow.
 
 #### B7 — Performance validation gate · **P0 · M** · deps: B6
+> **Outcome (2026-07-11): passed in-editor; device profiler pass folded into B8's
+> on-device sign-off.** Frame dump `framedump_20260711_162613` (179 events / 268 draw
+> calls, GI chain visible, break-cause profile as predicted: material + MPB breaks
+> dominate, SRP-Batcher exclusions minimal). In-editor play shows no regression. The
+> Built-in baseline txt predates the dump tool's scrub fix (columns unreliable — see
+> Baselines~/CHECKLIST.md), so the numeric anchor is the ProfilerCaptures/ baseline;
+> the on-device comparison happens at B8 sign-off.
 Same captures, same devices, same scenes as B0. **Gate: no regression** in GPU ms, draw
 calls, or GC allocations.
 1. Frame Debugger diff vs B0: expect *different* batch composition (2D Renderer batching ≠
