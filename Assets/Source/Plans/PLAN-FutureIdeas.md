@@ -357,9 +357,16 @@ Needs: neighbor query post-nudge, `ClusterMergeMessage`, merge VFX, and a
 `BubblePopController` that knows which bubble index was added/removed for the
 transition animation.
 
-### 5.2 Unbreakable Roam *(from PLAN-ContentProduction)*
+### 5.2 Unbreakable Roam *(from PLAN-ContentProduction)* — ✅ SHIPPED 2026-07-12
 
-Before the normal balance pass runs, each Unbreakable balloon picks a random empty
+Shipped with two deviations from the sketch below: the contract is
+`IPreBalanceRelocatable` (implementers define their own placement; the balancer
+supplies resting slots and invokes in `BalancePriority` order — no per-entry config
+toggle), and the pick is not uniform random: the unbreakable roams toward the
+board's *opposite side*, preferring far slots (squared-distance weighted). See
+`Balloon/README.md → Balance phase`.
+
+Original sketch: before the normal balance pass runs, each Unbreakable balloon picks a random empty
 slot on the grid and teleports (or animates) to it. Then the standard balance
 algorithm resumes as normal, settling everything else around the Unbreakable's new
 position.
