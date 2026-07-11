@@ -44,6 +44,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly List<PassCandidate> _passCandidates = new();
         private readonly List<RoamCandidate> _roamers = new();
         private readonly List<Vector2Int> _restingSlots = new();
+        private readonly Dictionary<int, Vector3[]> _waypointBuffers = new();
 
         private bool _balanceRequested;
         private int _generation;
@@ -129,7 +130,7 @@ namespace BalloonParty.Balloon.Controller
                 var viewTransform = view.transform;
 
                 var tween = viewTransform
-                    .DOPath(path.ToArray(), _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
+                    .DOPath(WaypointBuffer(path), _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
                     .StampDisturbanceAlongPath(viewTransform, _disturbanceField, StampSource.BalloonPath)
                     .OnComplete(() =>
                     {
@@ -378,6 +379,24 @@ namespace BalloonParty.Balloon.Controller
             {
                 ListPool<Vector2Int>.Release(chain);
             }
+        }
+
+        // DOTween's Path constructor clones the waypoints (verified against the vendored dll), so one
+        // shared buffer per path length is safe to reuse immediately.
+        private Vector3[] WaypointBuffer(IReadOnlyList<Vector3> path)
+        {
+            if (!_waypointBuffers.TryGetValue(path.Count, out var buffer))
+            {
+                buffer = new Vector3[path.Count];
+                _waypointBuffers[path.Count] = buffer;
+            }
+
+            for (var i = 0; i < path.Count; i++)
+            {
+                buffer[i] = path[i];
+            }
+
+            return buffer;
         }
 
         private void ReleasePaths()

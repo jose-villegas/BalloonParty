@@ -121,6 +121,13 @@ namespace BalloonParty.Shared.Disturbance
             Stamp(worldPosition, profile.Radius, profile.Strength, direction, profile.Duration);
         }
 
+        /// <summary>Profile stamp with its radius scaled — e.g. a heavy balloon's deflect stamping wider than a light one's.</summary>
+        internal void Stamp(StampSource source, Vector3 worldPosition, Vector2 direction, float radiusScale)
+        {
+            var profile = _settings.GetProfile(source);
+            Stamp(worldPosition, profile.Radius * radiusScale, profile.Strength, direction, profile.Duration);
+        }
+
         /// <summary>A positive <paramref name="duration"/> ramps the stamp over time for a smooth shockwave instead of a single-frame pop.</summary>
         internal void Stamp(Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration = 0f)
         {

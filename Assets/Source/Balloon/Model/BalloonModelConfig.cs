@@ -14,8 +14,10 @@ namespace BalloonParty.Balloon.Model
         public readonly IReadOnlyList<NudgeOverride> NudgeOverrides;
         public readonly float ItemActivationWeight;
         public readonly float SeparationBias;
+        public readonly float DiagonalColorBias;
         public readonly int MaxBalanceSteps;
         public readonly int BalancePriority;
+        public readonly float DeflectStampScale;
 
         // Value constructor — mainly for tests, which build a config without a prefab entry.
         public BalloonModelConfig(
@@ -25,8 +27,10 @@ namespace BalloonParty.Balloon.Model
             NudgeOverride[] nudgeOverrides = null,
             float itemActivationWeight = 1f,
             float separationBias = 0f,
+            float diagonalColorBias = 0f,
             int maxBalanceSteps = 0,
-            int balancePriority = 0)
+            int balancePriority = 0,
+            float deflectStampScale = 0f)
         {
             TypeName = typeName;
             ScoreValue = scoreValue;
@@ -34,8 +38,10 @@ namespace BalloonParty.Balloon.Model
             NudgeOverrides = nudgeOverrides;
             ItemActivationWeight = itemActivationWeight;
             SeparationBias = separationBias;
+            DiagonalColorBias = diagonalColorBias;
             MaxBalanceSteps = maxBalanceSteps;
             BalancePriority = balancePriority;
+            DeflectStampScale = deflectStampScale;
         }
 
         internal BalloonModelConfig(BalloonPrefabEntry entry)
@@ -46,8 +52,10 @@ namespace BalloonParty.Balloon.Model
             NudgeOverrides = entry.NudgeOverrides;
             ItemActivationWeight = entry.ItemActivationWeight;
             SeparationBias = entry.SeparationBias;
+            DiagonalColorBias = entry.DiagonalColorBias;
             MaxBalanceSteps = entry.MaxBalanceSteps;
             BalancePriority = entry.BalancePriority;
+            DeflectStampScale = entry.DeflectStampScale;
         }
     }
 }

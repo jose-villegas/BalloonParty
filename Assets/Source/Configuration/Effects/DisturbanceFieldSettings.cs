@@ -13,6 +13,7 @@ namespace BalloonParty.Configuration.Effects
         Bomb          = 1 << 3,
         Laser         = 1 << 4,
         Paint         = 1 << 5,
+        BalloonDeflect = 1 << 6,
     }
 
     [Serializable]

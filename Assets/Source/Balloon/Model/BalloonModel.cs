@@ -1,7 +1,9 @@
 using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Capabilities;
+using BalloonParty.Slots.Grid;
 using UniRx;
 using UnityEngine;
 using BalloonParty.Configuration.Items;
@@ -13,6 +15,7 @@ namespace BalloonParty.Balloon.Model
         IHasDurability, IHasScore, IHasScoreColor
     {
         private readonly ColorSource _colorSource;
+        private readonly float _diagonalColorBias;
 
         public ReactiveProperty<string> Color { get; } = new();
         public ReactiveProperty<ItemType> Item { get; } = new(ItemType.None);
@@ -31,9 +34,23 @@ namespace BalloonParty.Balloon.Model
             : base(config)
         {
             _colorSource = new ColorSource(palette, allowedColors);
+            _diagonalColorBias = config.DiagonalColorBias;
             ScoreValue = config.ScoreValue;
             NudgeOverrides = config.NudgeOverrides;
             ItemActivationWeight = config.ItemActivationWeight;
+        }
+
+        // Prefer candidates with this color nearby off-row (hex radius 2, own row excluded) — over many
+        // rebalances same-color balloons drift into diagonal lines. Composes with the base proximity bias.
+        public override int WeightBias(SlotGrid grid, Vector2Int candidate)
+        {
+            var bias = base.WeightBias(grid, candidate);
+            if (_diagonalColorBias <= 0f)
+            {
+                return bias;
+            }
+
+            return bias + Mathf.RoundToInt(_diagonalColorBias * this.CountSameColorDiagonals(grid, candidate));
         }
 
         public void ResolveScoreAttribution(in DamageContext context, IList<ScoreAttribution> results)

@@ -152,6 +152,14 @@ namespace BalloonParty.Balloon.Controller
             var balloonWorldPos = _grid.IndexToWorldPosition(_model.SlotIndex.Value);
             _deflectedPublisher.Publish(new BalloonDeflectedMessage(_model, balloonWorldPos, msg.ProjectileDirection));
 
+            // Heavy types jolt the air on impact: wide for the unbreakable's reflect, slot-sized for the
+            // tough's elastic bounce. Zero direction = a symmetric shockwave ring (like the pop), not a wake.
+            if (_model is IHasDeflectStamp stamper && stamper.DeflectStampScale > 0f)
+            {
+                _disturbanceField.Stamp(
+                    StampSource.BalloonDeflect, balloonWorldPos, Vector2.zero, stamper.DeflectStampScale);
+            }
+
             _nudgePublisher.Publish(new NudgeMessage(
                 _model,
                 balloonWorldPos - msg.ProjectileDirection.normalized,

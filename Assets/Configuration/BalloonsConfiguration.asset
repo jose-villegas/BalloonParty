@@ -22,8 +22,10 @@ MonoBehaviour:
     _scoreValue: 1
     _itemActivationWeight: 1
     _separationBias: 0
+    _diagonalColorBias: 1
     _maxBalanceSteps: -1
     _balancePriority: 1
+    _deflectStampScale: 0
     _spawnWeight: 0
   - _prefab: {fileID: 9117278215908477035, guid: 54754900e64eb4cb8a18cf270c1adf04,
       type: 3}
@@ -34,8 +36,10 @@ MonoBehaviour:
     _scoreValue: 5
     _itemActivationWeight: 0.3
     _separationBias: 0
+    _diagonalColorBias: 1
     _maxBalanceSteps: -1
     _balancePriority: 1
+    _deflectStampScale: 0
     _spawnWeight: 0
   - _prefab: {fileID: 9117278215908477035, guid: 003e22e6af95b4bc1856dbeb7826647a,
       type: 3}
@@ -46,8 +50,10 @@ MonoBehaviour:
     _scoreValue: 10
     _itemActivationWeight: 0.15
     _separationBias: 0
+    _diagonalColorBias: 1
     _maxBalanceSteps: -1
     _balancePriority: 1
+    _deflectStampScale: 0
     _spawnWeight: 0
   - _prefab: {fileID: 2456788019005336009, guid: c1864f9f05e28465cb3269154a459c35,
       type: 3}
@@ -69,8 +75,10 @@ MonoBehaviour:
     _scoreValue: 15
     _itemActivationWeight: 0
     _separationBias: 1.5
+    _diagonalColorBias: 0
     _maxBalanceSteps: 1
     _balancePriority: 0
+    _deflectStampScale: 1
     _spawnWeight: 3
   - _prefab: {fileID: 4318124338822199961, guid: 49cbb92bf41a2499797a1921677efaa9,
       type: 3}
@@ -83,9 +91,11 @@ MonoBehaviour:
     _hitsToPop: 3
     _scoreValue: 0
     _itemActivationWeight: 0
-    _separationBias: 0
+    _separationBias: -1.5
+    _diagonalColorBias: 0
     _maxBalanceSteps: 0
     _balancePriority: 0
+    _deflectStampScale: 0
     _spawnWeight: 0
   - _prefab: {fileID: 2797266919102248843, guid: b6f3c28a48130401e8c2204eb1e32d81,
       type: 3}
@@ -104,8 +114,10 @@ MonoBehaviour:
     _scoreValue: 50
     _itemActivationWeight: 0
     _separationBias: 0
+    _diagonalColorBias: 0
     _maxBalanceSteps: 0
     _balancePriority: 0
+    _deflectStampScale: 2
     _spawnWeight: 0
   - _prefab: {fileID: 5608684639280362707, guid: 320e1b71efec648ee825dabeec573ebf,
       type: 3}
@@ -116,8 +128,10 @@ MonoBehaviour:
     _scoreValue: 1
     _itemActivationWeight: 0.1
     _separationBias: 0
+    _diagonalColorBias: 0
     _maxBalanceSteps: 0
     _balancePriority: 0
+    _deflectStampScale: 0
     _spawnWeight: 0
   _defaultPopVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d,
     type: 3}

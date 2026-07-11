@@ -41,7 +41,7 @@ MonoBehaviour:
     Duration: 0.1
   - Sources: 8
     Radius: 3.5
-    Strength: 3
+    Strength: 5
     Duration: 0.125
   - Sources: 16
     Radius: 0.8
@@ -50,4 +50,8 @@ MonoBehaviour:
   - Sources: 32
     Radius: 0.9
     Strength: 1
+    Duration: 0.2
+  - Sources: 64
+    Radius: 0.9
+    Strength: 15
     Duration: 0.2
