@@ -46,6 +46,8 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         _GlitterSpeed      ("Twinkle Speed",    Range(0, 20))  = 6.0
         _GlitterSharpness  ("Twinkle Sharpness", Range(1, 32)) = 8.0
         _GlitterBrightness ("Brightness",       Range(0, 3))   = 1.0
+        // 1 = glitter only twinkles along the shine band; 0 = glitter everywhere, independent of the shine.
+        _GlitterShineBind  ("Bind to Shine",    Range(0, 1))   = 1.0
 
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
@@ -109,6 +111,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float     _GlitterSpeed;
             float     _GlitterSharpness;
             float     _GlitterBrightness;
+            float     _GlitterShineBind;
 
             fixed4 _Color0;
             fixed4 _Color1;
@@ -246,10 +249,12 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // Masked region (e.g. the knot) keeps its plain sprite colour instead of the band tint.
                 fixed3 bandColor = lerp(RainbowBand(IN.uv), fixed3(1, 1, 1), MaskAmount(IN.uv));
 
-                // Sprite shading × band colour, then additive white shine + glitter on top.
+                // Sprite shading × band colour, then additive white shine on top. The glitter is bound to
+                // the shine amount (by _GlitterShineBind) so the specks only twinkle along the sweeping band.
                 fixed3 rgb = tex.rgb * bandColor * IN.color.rgb;
-                rgb += tex.a * ShineAmount(IN.uv);
-                rgb += tex.a * GlitterAmount(IN.uv) * _GlitterBrightness;
+                fixed shine = ShineAmount(IN.uv);
+                rgb += tex.a * shine;
+                rgb += tex.a * GlitterAmount(IN.uv) * lerp(1.0, shine, _GlitterShineBind) * _GlitterBrightness;
 
                 fixed4 result;
                 result.rgb = rgb;
