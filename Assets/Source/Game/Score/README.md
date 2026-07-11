@@ -50,6 +50,8 @@ latch), `WillLevelUp`/`GetProgress`/`GetRequiredPoints`, and the `ScoreLevelUpMe
 
 `ScoreTrailService` spawns one trail per `ScorePointMessage`, unconditionally — nothing gates spawning during cinematics. Multi-point pops use `GroupIndex` for stagger delay: the first point (index 0) spawns immediately, subsequent points are delayed by `GroupIndex × ScorePointsScatterDelay`. Each flight registers in the `TrailFlightRegistry<TrailId>` (exposed as `Flights`) on spawn and unregisters on arrival.
 
+`RegisterTarget` (called by each `ColorProgressBar` in `Start()`) also prewarms that color's `ScoreTrail_{colorName}` pool via `TrailSpawner.PrewarmAsync`, to `IGameConfiguration.ScoreTrailPrewarmPerColor` (default 64) — one `Instantiate` per frame so registering a color at level setup never spikes into a hitch. A level restart re-registering the same color is a no-op past the first call, so the pool tops up once instead of growing unboundedly.
+
 The level-up cinematic (`LevelUpCinematic` in `Game/Cinematics/`) intercepts through that registry rather than through this service:
 
 1. On a `ScorePointMessage` where `ILevelProgress.WillLevelUp()` is true, it records `new TrailId(msg)` as the tipping trail and waits (`UniTask.WaitUntil`) for that id to appear in `Flights` — this covers delayed `groupIndex > 0` spawns as well as already-registered ones.

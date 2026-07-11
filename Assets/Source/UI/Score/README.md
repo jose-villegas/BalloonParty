@@ -22,7 +22,7 @@ Tracks and displays player progress toward the next level — one bar per balloo
 
 Four `ColorProgressBar` instances are placed in the scene under the Score UI Canvas — one per balloon color. `ScoreUILifetimeScope` injects them via `RegisterBuildCallback` so each bar resolves its `[Inject]` dependencies (palette, score controller, subscribers, pool manager, trail service) without singleton conflicts.
 
-Each bar identifies its color through a `[PaletteColorName]` string field, which renders in the Inspector as a popup dropdown with color swatch. On `Start()` the bar resolves its `PaletteEntry`, tints its graphics (preserving existing alpha), sets up the slider, and registers a target provider with `ScoreTrailService`.
+Each bar identifies its color through a `[PaletteColorName]` string field, which renders in the Inspector as a popup dropdown with color swatch. On `Start()` the bar resolves its `PaletteEntry`, tints its graphics (preserving existing alpha), sets up the slider, and registers a target provider with `ScoreTrailService` — which also prewarms that color's `ScoreTrail_{color}` pool (see `Game/Score/README.md`). The bar then kicks off its own notice prewarm via `ProgressNoticePresenter.PrewarmAsync`, tied to `destroyCancellationToken`. Both prewarms proceed one `Instantiate` per frame so registering a color at level setup never spikes into a hitch, and both no-op past the first registration so a level restart tops up rather than growing the pools unboundedly.
 
 ### Scoring flow
 
@@ -49,6 +49,8 @@ Bar reset is a two-phase process synchronised with the glow trail ceremony:
 
 - **Streak notices** (`_streakNoticePrefab`, pool key `StreakNotice_{color}`) — shown immediately on balloon hit at bar centre, tinted with the bar's color. Tracked by `ProgressNoticePresenter` for dismiss-on-replace
 - **Point notices** (`_pointNoticePrefab`, pool key `PointNotice_{color}`) — shown on trail arrival at the trail's world-space landing position (converted to local anchored coordinates). Untracked (returned to pool on animation complete)
+
+Both pools are prewarmed per color to `IGameConfiguration.ProgressNoticePrewarmPerColor` (default 16 each) when the bar starts.
 
 `OnValidate()` provides editor-time color preview — it loads `GamePalette` via `AssetDatabase`, finds the matching entry, and tints `_graphicsToSetColor` while preserving each graphic's existing alpha.
 

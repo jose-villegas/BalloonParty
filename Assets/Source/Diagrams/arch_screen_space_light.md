@@ -10,7 +10,7 @@ digraph ScreenSpaceLight {
     edge [fontname="Helvetica", fontsize=9];
 
     subgraph cluster_capture {
-        label="Capture — every Nth frame (shared)";
+        label="Capture — time-paced, shared";
         style=filled;
         fillcolor="#dce8f5";
 
@@ -70,14 +70,18 @@ final composite quad — **no existing material or shader is touched**, and ther
 post-processing readback.
 
 **Capture** — `SceneCaptureService` (see @ref disturbance_field's sibling in `Display/`)
-renders the captured layers into a low-res RT every Nth frame, clearing to a **solid
-color with alpha 0**. Result: `RGB` is the composited scene (sprites over the sky
-clear), `A` is a sprite-coverage mask. This capture is shared — the Unbreakable chrome
-reflection is another consumer. `ScreenSpaceLightService` drives the blit chain below
-from its own `LateUpdate`, which runs *before* the capture camera renders that frame —
-so each build reads the **previous** frame's capture. One frame of staleness is
-invisible on a buffer that's already temporally blended (Pass 2) and only refreshes
-every `SceneCaptureFrameInterval` frames.
+renders the captured layers into a low-res RT on a **time-paced cadence**, clearing to
+a **solid color with alpha 0**. Its own `LateUpdate` accumulates `Time.unscaledDeltaTime`
+and fires once that passes `SceneCaptureFrameInterval / 60` seconds — the field reads as
+"every Nth frame" but is interpreted as seconds at a 60 fps reference, so this chain's
+cost doesn't scale with display refresh (a 120 Hz panel would otherwise double it).
+Result: `RGB` is the composited scene (sprites over the sky clear), `A` is a
+sprite-coverage mask. This capture is shared — the Unbreakable chrome reflection is
+another consumer. `ScreenSpaceLightService` drives the blit chain below from its own
+`LateUpdate`, which runs *before* the capture camera renders that frame — so each build
+reads the **previous** frame's capture. One frame of staleness is invisible on a buffer
+that's already temporally blended (Pass 2) and only refreshes on the same time-paced
+cadence.
 
 **Smear** (`ScreenSpaceLightSmear`, 3 blit passes at capture resolution):
 - **Pass 0** does two opposite marches per pixel. `RGB` marches *toward* the light,

@@ -9,8 +9,8 @@ using UnityEngine;
 namespace BalloonParty.Editor.FrameDump
 {
     /// <summary>
-    /// Menu entry points and file output for the Frame Debugger dump tools, used for comparing
-    /// batch composition across the URP migration (see <c>PLAN-URPMigration.md</c> tasks B0/B4/B7).
+    /// Menu entry points and file output for the Frame Debugger dump tools, used for capturing
+    /// and diffing batch composition across rendering changes (born during the URP migration).
     /// Writes a diff-friendly text file (plus a Game View PNG twin) under <c>Baselines~/</c>;
     /// the step-screenshot variant also writes one PNG per event.
     /// <para>

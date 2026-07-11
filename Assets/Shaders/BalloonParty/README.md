@@ -4,7 +4,17 @@ Custom shaders for BalloonParty under `BalloonParty/` namespace.
 
 ## Pipeline
 
-The project runs URP's 2D Renderer (migrated from Built-in — see `Plans/PLAN-URPMigration.md`). None of the hand-written `CGPROGRAM` shaders below were ported: their passes carry no `LightMode`/`RenderPipeline` tag, so URP runs them as `SRPDefaultUnlit` compatibility passes — this is a supported fallback, not a hack, and every shader in this folder renders correctly under it with zero visual changes. If a future Unity version drops that compatibility path, the port recipe (tag additions, `CGPROGRAM`→`HLSLPROGRAM`, include swaps) is recorded in `PLAN-URPMigration.md` (task B4).
+The project runs URP's 2D Renderer (migrated from Built-in, 2026-07). None of the hand-written `CGPROGRAM` shaders below were ported: their passes carry no `LightMode`/`RenderPipeline` tag, so URP runs them as `SRPDefaultUnlit` compatibility passes — this is a supported fallback, not a hack, and every shader in this folder renders correctly under it with zero visual changes.
+
+### Porting a shader to URP-native (if compatibility ever breaks)
+
+Mechanical steps, per shader:
+- Add `Tags { "RenderPipeline"="UniversalPipeline" }` to the Pass (or SubShader), and rename `CGPROGRAM`/`ENDCG` to `HLSLPROGRAM`/`ENDHLSL`.
+- Swap `#include "UnityCG.cginc"` for `#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"`.
+- Replace `UnityObjectToClipPos(v)` with `TransformObjectToHClip(v.xyz)`; `fixed` → `half`.
+- `tex2D`/`sampler2D` still compile under URP HLSL — keep them for a minimal diff rather than rewriting to `TEXTURE2D`/`SAMPLE_TEXTURE2D` unless the shader is being touched anyway.
+- Keep MPB-driven properties (`_SphereCenter`, `_TimeOffset`, `_DamageProgress`, etc.) as plain uniforms — these renderers are already SRP-Batcher-excluded by MPB use, so wrapping them in a `UnityPerMaterial` CBUFFER buys nothing; only add that hygiene to shaders whose materials carry no MPB.
+- Instancing (`BushLeaf`): `UNITY_INSTANCING_BUFFER` macros are unchanged under URP — verify `#pragma multi_compile_instancing` survives and instanced batches still appear in Frame Debugger; this is the highest-risk silent breakage.
 
 ## Shader list
 
