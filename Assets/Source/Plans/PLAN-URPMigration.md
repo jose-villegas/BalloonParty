@@ -331,6 +331,14 @@ calls, or GC allocations.
    notes recorded against dynamic batching need re-validation flags.
 
 #### B8 — Sign-off + cleanup + docs · **P0 · S** · deps: B7
+> **Outcome (2026-07-11): merged to `main` after on-device (Android/Pixel 10) sign-off.**
+> No Built-in shader originals to delete (B4 ported nothing). Living docs + CLAUDE.md
+> updated; memory key fact flipped. Bonus work that rode the branch: high-refresh
+> (>60 FPS) Android unlock — targetFrameRate request + time-based capture cadence +
+> projectile interpolation shipped; display-mode negotiation on Pixel-class devices
+> still under investigation (startup diagnostics in `FrameRateSettings` log what the
+> OS exposes/grants; native display-mode API is the next step if `Screen.resolutions`
+> proves mode-blind).
 1. Visual parity review against every B0 reference, on device.
 2. Delete: Built-in shader originals kept as rollback, converter leftovers, `Baselines~/`
    stays local (never committed).
