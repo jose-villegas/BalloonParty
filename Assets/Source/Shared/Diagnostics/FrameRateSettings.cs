@@ -56,17 +56,17 @@ namespace BalloonParty.Shared.Diagnostics
             // matches the device's refresh rate.
             return -1;
 #else
-            // Android hands the app whatever mode it booted into (usually 60 Hz, even on a
-            // 120 Hz panel) — Screen.currentResolution only reflects that, it doesn't request
-            // a faster one. RequestHigherRefreshRate asks for the best available mode and
-            // re-reads the actual result once the switch (if any) has taken effect.
-            RequestHigherRefreshRate();
-            return GetDisplayRefreshRate();
+            // On adaptive-refresh Android (ARR, Pixel-class) there's no display-mode switch to
+            // make: the panel already runs a high-Hz mode and Screen.currentResolution reports
+            // the per-app RENDER rate Android arbitrated — which follows this app's own
+            // targetFrameRate vote. Echoing that reading back would re-pin 60; target the
+            // panel's best advertised rate instead.
+            return RequestBestRefreshRate();
 #endif
         }
 
 #if !UNITY_EDITOR
-        private void RequestHigherRefreshRate()
+        private int RequestBestRefreshRate()
         {
             var currentRefreshRate = Screen.currentResolution.refreshRateRatio;
             var bestRefreshRate = currentRefreshRate;
@@ -95,6 +95,9 @@ namespace BalloonParty.Shared.Diagnostics
             {
                 Debug.Log($"[FrameRateSettings] requesting {Screen.width}x{Screen.height}" +
                           $"@{bestRefreshRate.value:F1}");
+
+                // No-op on ARR devices (the panel mode doesn't change); covers true mode-switch
+                // devices where the panel genuinely idles in a 60 Hz mode.
                 Screen.SetResolution(Screen.width, Screen.height, Screen.fullScreenMode, bestRefreshRate);
             }
             else
@@ -102,16 +105,17 @@ namespace BalloonParty.Shared.Diagnostics
                 Debug.Log("[FrameRateSettings] display exposes no refresh rate above current");
             }
 
-            // Fire even when nothing was requested — the post-delay log re-reads reality either
-            // way, so the granted-outcome line always appears in the device log.
-            ReapplyTargetFrameRateAsync().Forget();
+            LogGrantedDisplayModeAsync().Forget();
+
+            var bestHz = (int)Mathf.Round((float)bestRefreshRate.value);
+            return bestHz > 0 ? bestHz : GetDisplayRefreshRate();
         }
 
-        // The mode switch above is asynchronous, so the refresh rate Screen.currentResolution
-        // reports right after SetResolution can still be stale. Wait a few frames, then re-read
-        // the actual value and correct targetFrameRate — this self-heals whether the request
-        // was honored or an OEM battery saver silently denied it.
-        private async UniTaskVoid ReapplyTargetFrameRateAsync()
+        // Log-only by design: on ARR devices the reported per-app rate echoes this app's own
+        // targetFrameRate vote, so down-correcting to it would re-pin the very 60 we're escaping.
+        // Over-asking is harmless — frame pacing settles at whatever the display actually grants.
+        // The delay lets the arbitration (or a real mode switch) settle before we snapshot it.
+        private async UniTaskVoid LogGrantedDisplayModeAsync()
         {
             await UniTask.DelayFrame(10);
 
@@ -120,7 +124,6 @@ namespace BalloonParty.Shared.Diagnostics
                 return;
             }
 
-            Application.targetFrameRate = GetDisplayRefreshRate();
             Debug.Log($"[FrameRateSettings] display now {Screen.currentResolution.width}" +
                       $"x{Screen.currentResolution.height}" +
                       $"@{Screen.currentResolution.refreshRateRatio.value:F1}, " +
