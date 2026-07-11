@@ -3,15 +3,18 @@ using BalloonParty.Balloon.Type;
 using BalloonParty.Nudge;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
+using BalloonParty.Slots.Grid;
 using UniRx;
 using UnityEngine;
 
 namespace BalloonParty.Balloon.Model
 {
-    internal abstract class BalloonModelBase : IWriteableBalloonModel, IPressureMovable
+    internal abstract class BalloonModelBase : IWriteableBalloonModel, IPressureMovable, IBalanceInfluence
     {
         public BalloonType TypeName { get; }
         public int RegistryHandle { get; set; } = -1;
+        public int MaxBalanceSteps { get; }
+        public int BalancePriority { get; }
         public ReactiveProperty<int> HitsRemaining { get; }
         public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
         public ReactiveProperty<bool> IsStable { get; } = new(true);
@@ -41,6 +44,14 @@ namespace BalloonParty.Balloon.Model
         {
             TypeName = config.TypeName;
             HitsRemaining = new ReactiveProperty<int>(config.HitsToPop);
+            MaxBalanceSteps = config.MaxBalanceSteps;
+            BalancePriority = config.BalancePriority;
+        }
+
+        // No balance tendency by default; types with one (e.g. tough's separation) override.
+        public virtual int WeightBias(SlotGrid grid, Vector2Int candidate)
+        {
+            return 0;
         }
 
         public virtual HitOutcome EvaluateHit(DamageContext context)

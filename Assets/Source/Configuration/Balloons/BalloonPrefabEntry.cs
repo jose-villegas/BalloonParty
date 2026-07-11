@@ -27,6 +27,18 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Relative chance this balloon is chosen to host an item when items are granted. 0 = never.")]
         [SerializeField] private float _itemActivationWeight = 1f;
 
+        [Tooltip("Balance-weight bias away from same-type balloons (squared world distance × this). Currently honoured by Tough only. 0 = no tendency.")]
+        [SerializeField] private float _separationBias;
+
+        [Tooltip("Max slots this balloon rises per rebalance — lower reads heavier/slower. 0 = unlimited.")]
+        [SerializeField] private int _maxBalanceSteps;
+
+        [Tooltip("Intervention order in each rebalance round: higher acts first and wins contested slots (the race). Negative = acts after neutral types.")]
+        [SerializeField] private int _balancePriority;
+
+        [Tooltip("Spawn ordering, not a restriction: within a spawn wave, heavier types fill the later (lower) lines, entering under lighter ones. 0 = neutral.")]
+        [SerializeField] private int _spawnWeight;
+
         public BalloonView Prefab => _prefab;
         public BalloonType BalloonType => _balloonType;
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
@@ -36,6 +48,10 @@ namespace BalloonParty.Configuration.Balloons
         public int HitsToPop => _hitsToPop;
         public int ScoreValue => _scoreValue;
         public float ItemActivationWeight => _itemActivationWeight;
+        public float SeparationBias => _separationBias;
+        public int MaxBalanceSteps => _maxBalanceSteps;
+        public int BalancePriority => _balancePriority;
+        public int SpawnWeight => _spawnWeight;
 
         /// <summary>Derived from the prefab's GameObject name — no manual key needed.</summary>
         public string PoolKey => _prefab != null ? _prefab.name : string.Empty;

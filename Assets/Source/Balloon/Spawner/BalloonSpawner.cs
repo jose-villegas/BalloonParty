@@ -22,6 +22,9 @@ namespace BalloonParty.Balloon.Spawner
 {
     internal class BalloonSpawner : IStartable, IGridSpawner, IRunResettable, IDisposable
     {
+        private static readonly Comparison<BalloonPrefabEntry> BySpawnWeightAscending =
+            (a, b) => a.SpawnWeight - b.SpawnWeight;
+
         private readonly Dictionary<string, int> _activeCounts = new();
         private readonly BalloonBalancer _balancer;
         private readonly BalloonFactory _factory;
@@ -41,9 +44,14 @@ namespace BalloonParty.Balloon.Spawner
         private readonly RejectedBalloonEffect _rejectedBalloon;
         private readonly BalloonPlacementResolver _placement;
         private readonly List<Vector3> _spawnPathBuffer = new();
+        private readonly List<BalloonPrefabEntry> _spawnBatch = new();
+        private readonly List<int> _lineColumns = new();
+        private readonly Comparison<int> _byColumnKey;
 
+        private int[] _columnSortKeys;
         private int _turnCount;
         private int _generation;
+        private int _batchCursor;
         private bool _prewarmed;
 
         public SpawnStage SpawnPriority => SpawnStage.BalloonActors;
@@ -82,6 +90,9 @@ namespace BalloonParty.Balloon.Spawner
             _itemCheckPublisher = itemCheckPublisher;
             _rejectedBalloon = rejectedBalloon;
             _placement = placement;
+
+            // Cached to avoid a per-sort delegate allocation.
+            _byColumnKey = CompareColumnKeys;
         }
 
         public void Start()
@@ -116,6 +127,8 @@ namespace BalloonParty.Balloon.Spawner
             _activeCounts.Clear();
             _turnCount = 0;
             _newlySpawnedBalloons.Clear();
+            _spawnBatch.Clear();
+            _batchCursor = 0;
         }
 
         public void Dispose()
@@ -171,10 +184,15 @@ namespace BalloonParty.Balloon.Spawner
         private void PopulateInitialGrid()
         {
             // Starts empty and is sized to fit, so it never rejects a balloon.
-            for (var i = 0; i < _levelParams.Current.BoardLines; i++)
+            var lines = _levelParams.Current.BoardLines;
+            PrepareSpawnBatch(lines);
+
+            for (var i = 0; i < lines; i++)
             {
                 SpawnLineInternal(allowReject: false);
             }
+
+            ReleaseUnspawnedBatch();
         }
 
         private void PublishItemCheck(bool isInitial)
@@ -188,22 +206,12 @@ namespace BalloonParty.Balloon.Spawner
             }
         }
 
-        private void SpawnBalloon(Vector2Int slot)
+        // The entry comes from the wave's pre-picked batch; its active count was taken at batch time.
+        private void SpawnBalloon(Vector2Int slot, BalloonPrefabEntry entry)
         {
-            var entry = _levelParams.Current.PickBalloonEntry(_activeCounts);
-            if (entry == null)
-            {
-                Debug.LogWarning(
-                    $"BalloonSpawner.SpawnBalloon: PickBalloonEntry returned null for slot ({slot.x},{slot.y}) " +
-                    "— every active balloon type is at its max count.");
-                return;
-            }
-
             var source = new Vector2Int(slot.x, slot.y + _balloonsConfig.SpawnEntryRowOffset);
             _grid.ComputePath(source, slot, _spawnPathBuffer);
             var poolKey = entry.PoolKey;
-
-            _activeCounts[poolKey] = _activeCounts.GetValueOrDefault(poolKey) + 1;
 
             var model = _factory.Create(entry, slot, _spawnPathBuffer, () => ReleaseActiveCount(poolKey));
             _newlySpawnedBalloons.Add(model);
@@ -221,31 +229,104 @@ namespace BalloonParty.Balloon.Spawner
 
         private void SpawnLine()
         {
-            _balancer.Balance();
+            _balancer.Balance(relocateRoamers: true);
+            PrepareSpawnBatch(lineCount: 1);
             SpawnLineInternal(allowReject: true);
+            ReleaseUnspawnedBatch();
             PublishItemCheck(isInitial: false);
             _balancePublisher.Publish(default);
         }
 
         private void SpawnLineInternal(bool allowReject)
         {
+            // Shallowest columns first: consuming the ascending (light→heavy) batch in depth order pairs
+            // the heaviest entries with the lowest slots. Resolve + spawn stay sequential, so each placed
+            // balloon is visible to the next column's resolution.
+            OrderColumnsByDepth();
             var rejectIndex = 0;
 
-            for (var col = 0; col < _grid.Columns; col++)
+            for (var i = 0; i < _lineColumns.Count; i++)
             {
-                var slot = _placement.Resolve(col, allowReject);
+                var slot = _placement.Resolve(_lineColumns[i], allowReject);
                 if (slot.HasValue)
                 {
-                    SpawnBalloon(slot.Value);
+                    var entry = NextBatchEntry();
+                    if (entry != null)
+                    {
+                        SpawnBalloon(slot.Value, entry);
+                    }
+
                     continue;
                 }
 
                 if (allowReject)
                 {
                     // No room anywhere — queue an overflow balloon below the grid.
-                    _rejectedBalloon.Play(col, rejectIndex++, _activeCounts);
+                    _rejectedBalloon.Play(_lineColumns[i], rejectIndex++, _activeCounts);
                 }
             }
+        }
+
+        // Picks the whole wave's entries upfront and orders them lightest-first: earlier (higher) lines
+        // spawn the light types and heavier ones enter below — spawn-weight ordering, never a restriction
+        // on what spawns. Active counts are taken here so MaxCount holds across the wave.
+        private void PrepareSpawnBatch(int lineCount)
+        {
+            ReleaseUnspawnedBatch();
+
+            var target = lineCount * _grid.Columns;
+            for (var i = 0; i < target; i++)
+            {
+                var entry = _levelParams.Current.PickBalloonEntry(_activeCounts);
+                if (entry == null)
+                {
+                    break;
+                }
+
+                _activeCounts[entry.PoolKey] = _activeCounts.GetValueOrDefault(entry.PoolKey) + 1;
+                _spawnBatch.Add(entry);
+            }
+
+            _spawnBatch.Sort(BySpawnWeightAscending);
+        }
+
+        private BalloonPrefabEntry NextBatchEntry()
+        {
+            return _batchCursor < _spawnBatch.Count ? _spawnBatch[_batchCursor++] : null;
+        }
+
+        // Orders the line's columns by their entry-slot depth (topmost first), with a small random
+        // tie-break so flat lines still place types horizontally at random. Full columns sort last.
+        private void OrderColumnsByDepth()
+        {
+            _columnSortKeys ??= new int[_grid.Columns];
+            _lineColumns.Clear();
+
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                var row = _placement.ProbeEntryRow(col) ?? _grid.Rows;
+                _columnSortKeys[col] = row * _grid.Columns + UnityEngine.Random.Range(0, _grid.Columns);
+                _lineColumns.Add(col);
+            }
+
+            _lineColumns.Sort(_byColumnKey);
+        }
+
+        private int CompareColumnKeys(int a, int b)
+        {
+            return _columnSortKeys[a] - _columnSortKeys[b];
+        }
+
+        // Hands back the counts of entries the wave never placed (unresolvable columns, aborts).
+        private void ReleaseUnspawnedBatch()
+        {
+            for (var i = _batchCursor; i < _spawnBatch.Count; i++)
+            {
+                ReleaseActiveCount(_spawnBatch[i].PoolKey);
+            }
+
+            _spawnBatch.Clear();
+            _batchCursor = 0;
         }
 
         private async UniTaskVoid SpawnLinesWithDelayAsync(int lineCount, CancellationToken ct, int generation)
@@ -254,7 +335,8 @@ namespace BalloonParty.Balloon.Spawner
             _rejectedBalloon.BeginSpawnSequence();
             try
             {
-                _balancer.Balance();
+                _balancer.Balance(relocateRoamers: true);
+                PrepareSpawnBatch(lineCount);
 
                 for (var i = 0; i < lineCount; i++)
                 {
@@ -279,6 +361,13 @@ namespace BalloonParty.Balloon.Spawner
             }
             finally
             {
+                // A stale wave must not touch the batch — the reset wiped the counts, and a newer run may
+                // already own it.
+                if (generation == _generation)
+                {
+                    ReleaseUnspawnedBatch();
+                }
+
                 _rejectedBalloon.EndSpawnSequence();
             }
         }

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using BalloonParty.Slots.Actor;
 using UnityEngine;
 
 namespace BalloonParty.Slots.Grid
@@ -40,32 +41,42 @@ namespace BalloonParty.Slots.Grid
             // Memo is only valid for the current grid state.
             _weightMemo.Clear();
 
-            var bestWeight = 0;
+            // The moving actor can inject its own per-candidate offset (e.g. a same-type separation tendency).
+            var influence = _grid.At(new Vector2Int(col, row)) as IBalanceInfluence;
+
+            var bestWeight = int.MinValue;
             var bestCol = -1;
             var candidateShift = row % 2 == 0 ? -1 : 1;
             var targetRow = row - 1;
 
             if (_grid.IsEmpty(col, targetRow))
             {
-                var w = CalculateWeight(col, targetRow);
-                if (w >= bestWeight)
-                {
-                    bestWeight = w;
-                    bestCol = col;
-                }
+                bestWeight = TotalWeight(col, targetRow, influence);
+                bestCol = col;
             }
 
             var shiftedCol = col + candidateShift;
             if (shiftedCol >= 0 && shiftedCol < _grid.Columns && _grid.IsEmpty(shiftedCol, targetRow))
             {
-                var w = CalculateWeight(shiftedCol, targetRow);
-                if (w >= bestWeight)
+                // >= keeps the historical tie-break: the parity-shifted slot wins equal scores.
+                if (TotalWeight(shiftedCol, targetRow, influence) >= bestWeight)
                 {
                     bestCol = shiftedCol;
                 }
             }
 
             return bestCol >= 0 ? new Vector2Int(bestCol, targetRow) : null;
+        }
+
+        private int TotalWeight(int col, int row, IBalanceInfluence influence)
+        {
+            var weight = CalculateWeight(col, row);
+            if (influence != null)
+            {
+                weight += influence.WeightBias(_grid, new Vector2Int(col, row));
+            }
+
+            return weight;
         }
 
         private int CalculateWeight(int col, int row)

@@ -25,6 +25,12 @@ namespace BalloonParty.Balloon.Spawner
             _resolvePressureOpen = ResolvePressureOpen;
         }
 
+        /// <summary>Read-only probe of the column's next entry row — used to order a line's columns by depth.</summary>
+        public int? ProbeEntryRow(int col)
+        {
+            return FindFirstReachableEmptyRow(col);
+        }
+
         /// <summary><paramref name="allowReject"/> false (initial fill) restricts to the column's own entry.</summary>
         public Vector2Int? Resolve(int col, bool allowReject)
         {

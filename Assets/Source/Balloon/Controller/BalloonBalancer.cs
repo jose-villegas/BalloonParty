@@ -23,6 +23,13 @@ namespace BalloonParty.Balloon.Controller
 {
     internal class BalloonBalancer : IStartable, ITickable, IRunResettable
     {
+        // Higher priority intervenes first; equal priorities keep the sweep's original order.
+        private static readonly Comparison<PassCandidate> ByInterventionOrder = (a, b) =>
+            a.Priority != b.Priority ? b.Priority - a.Priority : a.Order - b.Order;
+
+        private static readonly Comparison<RoamCandidate> ByRoamOrder = (a, b) =>
+            a.Priority != b.Priority ? b.Priority - a.Priority : a.Order - b.Order;
+
         private readonly BalancePathHolder _balancePathHolder;
         private readonly IBalloonsConfiguration _balloonsConfig;
         private readonly SlotGrid _grid;
@@ -34,6 +41,9 @@ namespace BalloonParty.Balloon.Controller
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly BalloonMotionTicker _motionTicker;
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
+        private readonly List<PassCandidate> _passCandidates = new();
+        private readonly List<RoamCandidate> _roamers = new();
+        private readonly List<Vector2Int> _restingSlots = new();
 
         private bool _balanceRequested;
         private int _generation;
@@ -136,9 +146,16 @@ namespace BalloonParty.Balloon.Controller
             }
         }
 
-        internal void Balance()
+        // relocateRoamers: true only at the turn boundary (pre-spawn), so roaming types jump once per turn,
+        // not on every deferred/flight rebalance.
+        internal void Balance(bool relocateRoamers = false)
         {
             ReleasePaths();
+
+            if (relocateRoamers)
+            {
+                RelocateRoamers();
+            }
 
             while (BalanceOnePass())
             {
@@ -148,19 +165,112 @@ namespace BalloonParty.Balloon.Controller
             ReleasePaths();
         }
 
-        // One sweep over the grid; returns whether any actor was shifted.
+        // One round of the race: every unbalanced actor gets a move attempt in intervention order —
+        // faster types act first and win contested slots. Returns whether any actor was shifted.
         private bool BalanceOnePass()
         {
+            CollectPassCandidates();
+
             var moved = false;
+            for (var i = 0; i < _passCandidates.Count; i++)
+            {
+                var slot = _passCandidates[i].Slot;
+                moved |= TryBalanceSlot(slot.x, slot.y);
+            }
+
+            return moved;
+        }
+
+        // Pre-pass of the race: each IPreBalanceRelocatable defines its own placement; the balancer only
+        // supplies the legal resting slots and invokes the contract in priority order. The balance rounds
+        // then settle everything around the new positions.
+        private void RelocateRoamers()
+        {
+            _roamers.Clear();
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    var actor = _grid.At(new Vector2Int(col, row));
+                    if (actor is IPreBalanceRelocatable && actor is IWriteableDynamicSlotActor dynamicActor)
+                    {
+                        _roamers.Add(new RoamCandidate
+                        {
+                            Actor = dynamicActor,
+                            Priority = (actor as IBalanceInfluence)?.BalancePriority ?? 0,
+                            Order = _roamers.Count,
+                        });
+                    }
+                }
+            }
+
+            _roamers.Sort(ByRoamOrder);
+
+            foreach (var roamer in _roamers)
+            {
+                var actor = roamer.Actor;
+                CollectRestingSlots();
+                if (!((IPreBalanceRelocatable)actor).TryPickRelocation(_grid, _restingSlots, out var target))
+                {
+                    continue;
+                }
+
+                var from = actor.SlotIndex.Value;
+                var view = _grid.ViewAt(from);
+
+                _balancePathHolder.Reserve(actor, from);
+                _balancePathHolder.Reserve(actor, target);
+
+                _grid.Remove(from);
+                _grid.Place(actor, view, target);
+                actor.IsStable.Value = false;
+
+                RecordPath(actor, _grid.IndexToWorldPosition(target));
+            }
+        }
+
+        // Empty slots that need no further settling (row 0 or fully supported) — legal roam destinations.
+        private void CollectRestingSlots()
+        {
+            _restingSlots.Clear();
+            for (var col = 0; col < _grid.Columns; col++)
+            {
+                for (var row = 0; row < _grid.Rows; row++)
+                {
+                    if (_grid.IsEmpty(col, row) && !_balanceQuery.IsUnbalanced(col, row))
+                    {
+                        _restingSlots.Add(new Vector2Int(col, row));
+                    }
+                }
+            }
+        }
+
+        // Snapshots this round's unbalanced actors, ordered by their BalancePriority. Earlier moves can
+        // invalidate a candidate; TryBalanceSlot re-validates everything, so a stale entry is a no-op.
+        private void CollectPassCandidates()
+        {
+            _passCandidates.Clear();
+
             for (var col = 0; col < _grid.Columns; col++)
             {
                 for (var row = 1; row < _grid.Rows; row++)
                 {
-                    moved |= TryBalanceSlot(col, row);
+                    if (_grid.IsEmpty(col, row) || !_balanceQuery.IsUnbalanced(col, row))
+                    {
+                        continue;
+                    }
+
+                    var slot = new Vector2Int(col, row);
+                    _passCandidates.Add(new PassCandidate
+                    {
+                        Slot = slot,
+                        Priority = (_grid.At(slot) as IBalanceInfluence)?.BalancePriority ?? 0,
+                        Order = _passCandidates.Count,
+                    });
                 }
             }
 
-            return moved;
+            _passCandidates.Sort(ByInterventionOrder);
         }
 
         // Shifts the actor at (col, row) toward its optimal empty slot. Returns whether it moved.
@@ -178,6 +288,14 @@ namespace BalloonParty.Balloon.Controller
 
             var currentSlot = new Vector2Int(col, row);
             if (_grid.At(currentSlot) is not IWriteableDynamicSlotActor dynamicActor)
+            {
+                return false;
+            }
+
+            // Physical weight: a heavy actor only moves so many slots per rebalance (its path length IS
+            // this run's step count — _paths is cleared per Balance()).
+            if (dynamicActor is IBalanceInfluence influence && influence.MaxBalanceSteps > 0
+                && _paths.TryGetValue(dynamicActor, out var taken) && taken.Count >= influence.MaxBalanceSteps)
             {
                 return false;
             }
@@ -350,6 +468,20 @@ namespace BalloonParty.Balloon.Controller
 
             _balanceRequested = true;
             BalanceNextFrameAsync(_generation).Forget();
+        }
+
+        private struct PassCandidate
+        {
+            public Vector2Int Slot;
+            public int Priority;
+            public int Order;
+        }
+
+        private struct RoamCandidate
+        {
+            public IWriteableDynamicSlotActor Actor;
+            public int Priority;
+            public int Order;
         }
     }
 }
