@@ -273,6 +273,19 @@ namespace BalloonParty.Editor.FrameDump
 
             Debug.Log($"[FrameDebuggerDumper] Wrote {count} events to {filePath}");
             EditorUtility.RevealInFinder(filePath);
+            CaptureGameViewScreenshot(Path.ChangeExtension(filePath, ".png"));
+        }
+
+        // Companion image for the text dump. The capture respects the Frame Debugger's current
+        // event limit, so the PNG shows the frame exactly as frozen in the window.
+        private static void CaptureGameViewScreenshot(string path)
+        {
+            ScreenCapture.CaptureScreenshot(path);
+
+            // The capture completes at the end of the next rendered frame; with the editor idle
+            // (paused play mode / frozen frame) that frame never comes unless we request one.
+            EditorApplication.QueuePlayerLoopUpdate();
+            Debug.Log($"[FrameDebuggerDumper] Screenshot queued — lands at {path} after the next repaint.");
         }
 
         private static FieldInfo FindFieldContaining(IEnumerable<FieldInfo> fields, string needle)
