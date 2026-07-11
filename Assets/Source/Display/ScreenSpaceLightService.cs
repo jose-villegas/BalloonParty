@@ -80,43 +80,14 @@ namespace BalloonParty.Display
         private void OnEnable()
         {
             _capture.Acquire();
-            UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering += OnBeginCameraRendering;
         }
 
-        private void OnDisable()
+        private void LateUpdate()
         {
-            UnityEngine.Rendering.RenderPipelineManager.beginCameraRendering -= OnBeginCameraRendering;
-            _capture.Release();
-            SetOverlayVisible(false);
-        }
-
-        private void OnDestroy()
-        {
-            ReleaseTarget(ref _smearTarget);
-            ReleaseTarget(ref _workTarget);
-            ReleaseTarget(ref _lightTarget);
-            ReleaseTarget(ref _historyTarget);
-
-            if (_smearMaterial != null)
-            {
-                Destroy(_smearMaterial);
-            }
-
-            if (_overlayMaterial != null)
-            {
-                Destroy(_overlayMaterial);
-            }
-        }
-
-        private void OnBeginCameraRendering(UnityEngine.Rendering.ScriptableRenderContext context, Camera camera)
-        {
-            // Fires for every camera (capture, scene-view, preview); only drive off the main one.
-            if (camera != _camera)
-            {
-                return;
-            }
-
-            // Capture camera has lower depth, so URP renders it first: its RT is fresh this frame.
+            // The capture camera renders during the render phase, after LateUpdate, so this
+            // reads the previous frame's capture. One frame of staleness is invisible here
+            // (temporally blended buffer, refreshes every SceneCaptureFrameInterval frames) and
+            // buys running outside URP's RenderGraph, which rejects mid-render-loop Graphics.Blit.
             var source = _capture.CaptureTexture;
             if (source == null)
             {
@@ -148,6 +119,30 @@ namespace BalloonParty.Display
 
             FitOverlayToFrustum();
             SetOverlayVisible(true);
+        }
+
+        private void OnDisable()
+        {
+            _capture.Release();
+            SetOverlayVisible(false);
+        }
+
+        private void OnDestroy()
+        {
+            ReleaseTarget(ref _smearTarget);
+            ReleaseTarget(ref _workTarget);
+            ReleaseTarget(ref _lightTarget);
+            ReleaseTarget(ref _historyTarget);
+
+            if (_smearMaterial != null)
+            {
+                Destroy(_smearMaterial);
+            }
+
+            if (_overlayMaterial != null)
+            {
+                Destroy(_overlayMaterial);
+            }
         }
 
         private bool EnsureResources()

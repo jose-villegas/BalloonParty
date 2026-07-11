@@ -130,8 +130,9 @@ namespace BalloonParty.Display
                 Destroy(_texture);
             }
 
-            // No depth buffer needed — sprites only.
-            _texture = new RenderTexture(width, height, 0, RenderTextureFormat.ARGB32)
+            // URP's RenderGraph rejects depthless camera output textures; 2D content never
+            // samples the depth, but the attachment still has to exist.
+            _texture = new RenderTexture(width, height, 24, RenderTextureFormat.ARGB32)
             {
                 name = "SceneCapture",
                 filterMode = FilterMode.Bilinear
