@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 namespace BalloonParty.Editor.Bush
 {
@@ -24,14 +26,16 @@ namespace BalloonParty.Editor.Bush
             var mesh = BuildSegmentMesh(segments);
             var material = new Material(shader);
 
+            // URP's RenderGraph rejects depthless camera output textures ("Fake or uninitialized
+            // surface") even though this bake never samples depth.
             var rt = RenderTexture.GetTemporary(
-                settings.Resolution, settings.Resolution, 0, RenderTextureFormat.ARGB32);
+                settings.Resolution, settings.Resolution, 24, RenderTextureFormat.ARGB32);
             rt.filterMode = FilterMode.Bilinear;
 
             var cameraGo = CreateBakeCamera(rt);
             var meshGo = CreateMeshObject(mesh, material);
 
-            cameraGo.GetComponent<Camera>().Render();
+            RenderBakeCamera(cameraGo.GetComponent<Camera>(), rt);
 
             var result = ReadbackTexture(rt, settings.Resolution);
 
@@ -129,9 +133,26 @@ namespace BalloonParty.Editor.Bush
             cam.cullingMask = 1 << BakeLayer;
             cam.enabled = false;
 
+            // Runtime-created cameras carry no serialized URP data; GetUniversalAdditionalCameraData adds it.
+            var cameraData = cam.GetUniversalAdditionalCameraData();
+            cameraData.renderPostProcessing = false;
+
             go.transform.position = new Vector3(0.5f, 0.5f, -0.5f);
 
             return go;
+        }
+
+        private static void RenderBakeCamera(Camera camera, RenderTexture target)
+        {
+            var request = new UniversalRenderPipeline.SingleCameraRequest { destination = target };
+            if (RenderPipeline.SupportsRenderRequest(camera, request))
+            {
+                RenderPipeline.SubmitRenderRequest(camera, request);
+            }
+            else
+            {
+                Debug.LogError("[BushBranchBaker] Render pipeline does not support SingleCameraRequest; bake aborted.");
+            }
         }
 
         private static GameObject CreateMeshObject(Mesh mesh, Material material)
