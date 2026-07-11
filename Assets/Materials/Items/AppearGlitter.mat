@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: AppearShine
+  m_Name: AppearGlitter
   m_Shader: {fileID: 4800000, guid: 58a4af58981dd4e89b7e9c81c4809ac1, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
@@ -75,9 +75,9 @@ Material:
     - _GlitterAmount: 1.5
     - _GlitterBrightness: 3
     - _GlitterChance: 0.6
-    - _GlitterDensity: 35
+    - _GlitterDensity: 60
     - _GlitterSharpness: 9
-    - _GlitterSize: 0.5
+    - _GlitterSize: 0.247
     - _GlitterSpeed: 20
     - _GlitterThreshold: 0.7
     - _GlossMapScale: 1
@@ -115,7 +115,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _GlitterColor: {r: 4, g: 4, b: 4, a: 1}
+    - _GlitterColor: {r: 16, g: 16, b: 16, a: 1}
     - _InsideColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
     - _OutsideColor: {r: 0.8627452, g: 0.8627452, b: 0.8627452, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}

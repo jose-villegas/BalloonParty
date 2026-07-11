@@ -745,6 +745,11 @@ PrefabInstance:
       propertyPath: m_AnchorMax.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1653963928736350066, guid: 66f9708a0b9b044198e0f57d389d660f,
+        type: 3}
+      propertyPath: _continueUnpauseDelay
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 1834795069292125278, guid: 66f9708a0b9b044198e0f57d389d660f,
         type: 3}
       propertyPath: m_AnchorMax.y
