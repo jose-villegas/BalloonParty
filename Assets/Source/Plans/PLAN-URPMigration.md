@@ -242,6 +242,13 @@ the main camera (the capture camera has already rendered by then, exactly like t
    releases the capture consumer (interval camera goes idle).
 
 #### B4 — Shader triage + ports · **P0/P1 · L (the bulk)** · deps: B1 (B2 for Unbreakable)
+> **Outcome (2026-07-11): zero ports required.** Every custom shader renders correctly
+> under the 2D Renderer as `SRPDefaultUnlit` (verified: full visual sweep against B0
+> references + Frame Debugger dumps — balloons, bushes incl. the instanced `BushLeaf`
+> batch (one draw per cluster), clouds, paint, disturbance, specks, GI pair, sprite
+> family, UIRays, TMP, cinematics). The Built-in `CGPROGRAM` sources stay as-is; the
+> hygiene port recipe below remains available if a future Unity version drops the
+> compatibility path.
 Hand-written **unlit** CGPROGRAM shaders mostly keep compiling and rendering under URP
 (untagged passes run as `SRPDefaultUnlit`) — so triage before porting:
 1. **Triage pass (one session):** load the game with converter output only. For each shader
