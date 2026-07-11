@@ -214,6 +214,13 @@ only after on-device sign-off.
 5. Smoke-test the launcher→game preload dual-camera flow.
 
 #### B3 — `ScreenSpaceLightService` port · **P0 · M** · deps: B2
+> **Outcome (2026-07-11): shipped as `LateUpdate`, not the event below.** The
+> `beginCameraRendering` version ran but URP's RenderGraph rejected mid-render-loop
+> `Graphics.Blit` ("EndRenderPass: Not inside a Renderpass") and depthless camera output
+> RTs ("Fake or uninitialized surface" — fixed by giving the capture RT a 24-bit depth).
+> The chain now blits from `LateUpdate` (the disturbance field's proven pattern), reading
+> the previous frame's capture — invisible on a temporally blended buffer. F2 stays moot.
+
 The only mandatory *code* port. `OnPreRender` never fires under SRP; the equivalent hook
 with identical timing semantics is `RenderPipelineManager.beginCameraRendering` filtered to
 the main camera (the capture camera has already rendered by then, exactly like today).
@@ -269,7 +276,9 @@ Hand-written **unlit** CGPROGRAM shaders mostly keep compiling and rendering und
    ```
    (guard with `RenderPipeline.SupportsRenderRequest(camera, request)` and keep the assert
    style of the surrounding code). The bake camera also needs its
-   `UniversalAdditionalCameraData` renderer set, same as B2.
+   `UniversalAdditionalCameraData` renderer set, same as B2. **And the destination RTs need
+   a depth-stencil format** — URP's RenderGraph rejects depthless camera output textures
+   ("Fake or uninitialized surface"), as discovered on `SceneCaptureService` during B3.
 2. The four `Grid/Editor/Bush*` bake shaders triage like B4 (trivial unlit — likely fine).
 3. Rebake one bush and diff the output texture against the committed one — the bake is only
    correct if it's visually identical (bit-exactness not required; filtering may differ).
