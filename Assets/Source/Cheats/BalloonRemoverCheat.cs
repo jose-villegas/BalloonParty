@@ -17,6 +17,10 @@ namespace BalloonParty.Cheats
         private const float PickRadius = 0.25f;
         private const float PathSampleDistance = 0.05f;
 
+        // Cheat overlay is always-on-top by design: topmost gameplay sorting layer, above the GI overlay (32000).
+        private const string OverlaySortingLayer = "Sky";
+        private const int OverlaySortingOrder = 32700;
+
         private static readonly int CullId = Shader.PropertyToID("_Cull");
         private static readonly int DstBlendId = Shader.PropertyToID("_DstBlend");
         private static readonly int SrcBlendId = Shader.PropertyToID("_SrcBlend");
@@ -35,6 +39,7 @@ namespace BalloonParty.Cheats
         private bool _dragging;
         private Material _lineMaterial;
         private Mesh _overlayMesh;
+        private MeshRenderer _overlayRenderer;
 
         public string Name => _active ? "Remove Balloons  [ON]" : "Remove Balloons";
         public string Section => "Grid";
@@ -49,7 +54,7 @@ namespace BalloonParty.Cheats
             _lineMaterial.SetInt(CullId, (int)CullMode.Off);
             _lineMaterial.SetInt(ZWriteId, 0);
 
-            // Overlay queue: draw after all gameplay geometry so the drag path/hit circles stay visible on top.
+            // Sorting layer/order on the renderer put the overlay on top; the queue only keeps it late within that bucket.
             _lineMaterial.renderQueue = 4000;
         }
 
@@ -83,11 +88,26 @@ namespace BalloonParty.Cheats
         {
             if (!_active || _path.Count < 2)
             {
+                if (_overlayRenderer != null)
+                {
+                    _overlayRenderer.enabled = false;
+                }
+
                 return;
             }
 
+            EnsureOverlayRenderer();
             RebuildOverlayMesh();
-            Graphics.DrawMesh(_overlayMesh, Matrix4x4.identity, _lineMaterial, gameObject.layer);
+            _overlayRenderer.enabled = true;
+        }
+
+        private void OnDisable()
+        {
+            // LateUpdate stops running with the component; hide the overlay so it can't freeze on-screen.
+            if (_overlayRenderer != null)
+            {
+                _overlayRenderer.enabled = false;
+            }
         }
 
         private void OnDestroy()
@@ -95,6 +115,11 @@ namespace BalloonParty.Cheats
             if (_overlayMesh != null)
             {
                 Destroy(_overlayMesh);
+            }
+
+            if (_overlayRenderer != null)
+            {
+                Destroy(_overlayRenderer.gameObject);
             }
         }
 
@@ -178,14 +203,35 @@ namespace BalloonParty.Cheats
             return false;
         }
 
-        private void RebuildOverlayMesh()
+        private void EnsureOverlayRenderer()
         {
-            if (_overlayMesh == null)
+            if (_overlayRenderer != null)
             {
-                _overlayMesh = new Mesh { name = "BalloonRemoverOverlay" };
-                _overlayMesh.MarkDynamic();
+                return;
             }
 
+            _overlayMesh = new Mesh { name = "BalloonRemoverOverlay" };
+            _overlayMesh.MarkDynamic();
+
+            // Unparented, identity transform: mesh vertices are world-space and must not be re-transformed.
+            var overlay = new GameObject("BalloonRemoverOverlay")
+            {
+                layer = gameObject.layer
+            };
+
+            var filter = overlay.AddComponent<MeshFilter>();
+            filter.sharedMesh = _overlayMesh;
+
+            _overlayRenderer = overlay.AddComponent<MeshRenderer>();
+            _overlayRenderer.sharedMaterial = _lineMaterial;
+            _overlayRenderer.shadowCastingMode = ShadowCastingMode.Off;
+            _overlayRenderer.receiveShadows = false;
+            _overlayRenderer.sortingLayerName = OverlaySortingLayer;
+            _overlayRenderer.sortingOrder = OverlaySortingOrder;
+        }
+
+        private void RebuildOverlayMesh()
+        {
             _overlayVertices.Clear();
             _overlayColors.Clear();
             _overlayIndices.Clear();
