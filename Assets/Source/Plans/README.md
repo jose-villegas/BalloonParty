@@ -14,4 +14,5 @@ or a pending evaluation.
 | `PLAN-ContentProduction.md` | Asset and content work required before Phase 8.3 — Deflector, Absorber, Gatekeeper art/prefab/config remaining | active |
 | `PLAN-FutureIdeas.md` | Unscheduled backlog of deferred features, improvement concepts, and speculative designs — items graduate into dedicated plans | active |
 | `PLAN-GridActorExpansion.md` | Grid actor Phase 8+ — archetypes done; 8.3 procedural placement (blocked on content) and 8.4 difficulty coupling open | active |
+| `PLAN-HDRColorPipeline.md` | Gamma→Linear color space + HDR rendering/bloom — planned from verified inventory; execution gated on the Wave A look re-tune decision | conditional |
 | `Plans.md` | Doxygen index page linking all plans | — |
