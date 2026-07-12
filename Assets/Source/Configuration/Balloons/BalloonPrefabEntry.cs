@@ -33,11 +33,14 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Balance-weight bias toward candidates whose diagonal hex neighbours share this balloon's color (per matching neighbour × this) — encourages diagonal same-color lines. Currently honoured by simple colored balloons. 0 = off.")]
         [SerializeField] private float _diagonalColorBias;
 
-        [Tooltip("Max slots this balloon rises per TURN (shared across every rebalance between shots) — lower reads heavier/slower. 0 = unlimited.")]
+        [Tooltip("Max slots this balloon rises per balance window (the turn's spawn cluster, or each in-flight pulse) — lower reads heavier/slower. 0 = unlimited.")]
         [SerializeField] private int _maxBalanceSteps;
 
         [Tooltip("Intervention order in each rebalance round: higher acts first and wins contested slots (the race). Negative = acts after neutral types.")]
         [SerializeField] private int _balancePriority;
+
+        [Tooltip("Heavy movers animate straight from start to final slot instead of touring every resolve waypoint. Author true for Unbreakable.")]
+        [SerializeField] private bool _directBalanceMotion;
 
         [Tooltip("A projectile deflecting off this balloon stamps the disturbance field at its slot, radius = BalloonDeflect profile × this (unbreakable ~3 for a heavy jolt, tough 1 for the elastic bounce). 0 = no stamp.")]
         [SerializeField] private float _deflectStampScale;
@@ -58,6 +61,7 @@ namespace BalloonParty.Configuration.Balloons
         public float DiagonalColorBias => _diagonalColorBias;
         public int MaxBalanceSteps => _maxBalanceSteps;
         public int BalancePriority => _balancePriority;
+        public bool DirectBalanceMotion => _directBalanceMotion;
         public float DeflectStampScale => _deflectStampScale;
         public int SpawnWeight => _spawnWeight;
 

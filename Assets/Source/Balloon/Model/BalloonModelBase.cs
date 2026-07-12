@@ -19,6 +19,7 @@ namespace BalloonParty.Balloon.Model
         public int RegistryHandle { get; set; } = -1;
         public int MaxBalanceSteps { get; }
         public int BalancePriority { get; }
+        public bool DirectBalanceMotion { get; }
         public float DeflectStampScale { get; }
         public ReactiveProperty<int> HitsRemaining { get; }
         public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
@@ -52,6 +53,7 @@ namespace BalloonParty.Balloon.Model
             _separationBias = config.SeparationBias;
             MaxBalanceSteps = config.MaxBalanceSteps;
             BalancePriority = config.BalancePriority;
+            DirectBalanceMotion = config.DirectBalanceMotion;
             DeflectStampScale = config.DeflectStampScale;
         }
 

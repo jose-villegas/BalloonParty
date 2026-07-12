@@ -40,7 +40,9 @@ namespace BalloonParty.Balloon.Controller
         private readonly PauseService _pauseService;
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly BalloonMotionTicker _motionTicker;
+        private readonly PressurePropagation _pressurePropagation;
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
+        private readonly List<PressurePropagation.Move> _pressureMoves = new();
         private readonly Dictionary<IWriteableDynamicSlotActor, int> _turnSteps = new();
         private readonly List<PassCandidate> _passCandidates = new();
         private readonly List<RoamCandidate> _roamers = new();
@@ -68,7 +70,8 @@ namespace BalloonParty.Balloon.Controller
             ISubscriber<ProjectileDestroyedMessage> projectileDestroyedSubscriber,
             PauseService pauseService,
             DisturbanceFieldService disturbanceField,
-            BalloonMotionTicker motionTicker)
+            BalloonMotionTicker motionTicker,
+            BalanceDebugRecorder debugRecorder = null)
         {
             _grid = grid;
             _balanceQuery = balanceQuery;
@@ -80,6 +83,7 @@ namespace BalloonParty.Balloon.Controller
             _pauseService = pauseService;
             _disturbanceField = disturbanceField;
             _motionTicker = motionTicker;
+            _pressurePropagation = new PressurePropagation(grid, balanceQuery.Evaluator, debugRecorder);
         }
 
         public void Start()
@@ -131,8 +135,13 @@ namespace BalloonParty.Balloon.Controller
                 var currentScale = view.transform.localScale;
                 var viewTransform = view.transform;
 
+                // Direct movers skip the resolve's intermediate waypoints and tween straight to the end.
+                var waypoints = actor is IBalanceInfluence { DirectBalanceMotion: true } && path.Count > 1
+                    ? FinalWaypointBuffer(path)
+                    : WaypointBuffer(path);
+
                 var tween = viewTransform
-                    .DOPath(WaypointBuffer(path), _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
+                    .DOPath(waypoints, _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
                     .StampDisturbanceAlongPath(viewTransform, _disturbanceField, StampSource.BalloonPath)
                     .OnComplete(() =>
                     {
@@ -343,52 +352,34 @@ namespace BalloonParty.Balloon.Controller
             }
         }
 
-        // Shoves a column's bottom occupant toward the nearest gap so a new balloon can spawn. Returns whether room was opened.
+        // Shoves a column's bottom occupant toward a gap so a new balloon can spawn. Returns whether room was opened.
         internal bool TryRelievePressure(int column)
         {
-            var chain = ListPool<Vector2Int>.Get();
-            try
+            if (!_pressurePropagation.TryResolve(column, _pressureMoves))
             {
-                if (!PressureCascade.TryFindChain(_grid, column, chain))
-                {
-                    return false;
-                }
-
-                ReleasePaths();
-
-                // Shift from the empty end backwards so every destination is vacant.
-                for (var i = chain.Count - 2; i >= 0; i--)
-                {
-                    var from = chain[i];
-                    var to = chain[i + 1];
-
-                    if (_grid.At(from) is not IWriteableDynamicSlotActor actor)
-                    {
-                        continue;
-                    }
-
-                    var view = _grid.ViewAt(from);
-
-                    _balancePathHolder.Reserve(actor, from);
-                    _balancePathHolder.Reserve(actor, to);
-
-                    _grid.Remove(from);
-                    _grid.Place(actor, view, to);
-                    actor.IsStable.Value = false;
-
-                    var path = ListPool<Vector3>.Get();
-                    path.Add(_grid.IndexToWorldPosition(to));
-                    _paths[actor] = path;
-                }
-
-                AnimatePaths(_paths);
-                ReleasePaths();
-                return true;
+                return false;
             }
-            finally
+
+            ReleasePaths();
+
+            // Mover-first order: every destination is already vacant when its move executes.
+            foreach (var move in _pressureMoves)
             {
-                ListPool<Vector2Int>.Release(chain);
+                var view = _grid.ViewAt(move.From);
+
+                _balancePathHolder.Reserve(move.Actor, move.From);
+                _balancePathHolder.Reserve(move.Actor, move.To);
+
+                _grid.Remove(move.From);
+                _grid.Place(move.Actor, view, move.To);
+                move.Actor.IsStable.Value = false;
+
+                RecordPath(move.Actor, _grid.IndexToWorldPosition(move.To));
             }
+
+            AnimatePaths(_paths);
+            ReleasePaths();
+            return true;
         }
 
         // DOTween's Path constructor clones the waypoints (verified against the vendored dll), so one
@@ -406,6 +397,19 @@ namespace BalloonParty.Balloon.Controller
                 buffer[i] = path[i];
             }
 
+            return buffer;
+        }
+
+        // A one-slot reuse of the waypoint-buffer scheme, holding only the path's final position.
+        private Vector3[] FinalWaypointBuffer(IReadOnlyList<Vector3> path)
+        {
+            if (!_waypointBuffers.TryGetValue(1, out var buffer))
+            {
+                buffer = new Vector3[1];
+                _waypointBuffers[1] = buffer;
+            }
+
+            buffer[0] = path[^1];
             return buffer;
         }
 
@@ -461,6 +465,10 @@ namespace BalloonParty.Balloon.Controller
                 return false;
             }
 
+            // Each pulse opens a fresh step window: pulses are already paced by the interval, so a
+            // 1-step heavy crawls one slot per pulse instead of sitting exhausted for the whole flight
+            // (the shared budget exists to stop multi-hops within the turn's clustered runs).
+            _turnSteps.Clear();
             RequestBalance();
             return true;
         }

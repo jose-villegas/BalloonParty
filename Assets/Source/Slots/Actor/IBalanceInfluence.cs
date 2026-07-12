@@ -17,6 +17,9 @@ namespace BalloonParty.Slots.Actor
         /// <summary>Order this actor acts within each rebalance round; higher moves first (the race).</summary>
         int BalancePriority { get; }
 
+        /// <summary>Animate a resolve straight to the final slot instead of touring every waypoint.</summary>
+        bool DirectBalanceMotion { get; }
+
         /// <summary>Offset added to <paramref name="candidate" />'s balance weight; higher = preferred.</summary>
         int WeightBias(SlotGrid grid, Vector2Int candidate);
     }

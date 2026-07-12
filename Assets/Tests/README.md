@@ -103,7 +103,7 @@ Tests the core grid data structure — the most complex pure-logic class in the 
 | IsTraversable | 3 | Empty slot, `IPassThrough` actor, blocking actor |
 | ComputePath | 5 | Vertical path length, last waypoint, passthrough intermediate, out-of-bounds source, same source+target |
 | AllEmptySlots | 2 | Empty grid returns all, partial fill excludes occupied |
-| InBounds | 2 | In-grid true (incl. `Vector2Int` overload); off each edge false — shared by PressureCascade and SlotClusterRegistry |
+| InBounds | 2 | In-grid true (incl. `Vector2Int` overload); off each edge false — shared by PressurePropagation and SlotClusterRegistry |
 
 ### `PredictionTraceCalculatorTests` — 7 tests
 
@@ -464,17 +464,17 @@ Tests `ResetRun` clearing in-transit state on a restart — killed balance tween
 | `ResetRun` clears transit slots | 1 | Stale in-transit slots block spawn pathing next run |
 | `ResetRun` drops per-actor slot list | 1 | Reusing an actor after reset double-counts old slots |
 
-### `PressureCascadeTests` — 17 tests
+### `PressurePropagationTests` — 11 tests
 
-Tests the pressure-balance shove search (`TryFindChain` / `TryRayToShovableCell`) — the snake-like BFS that relieves a blocked column by shoving occupants toward the nearest reachable gap, including pass-through routing and relocator short-circuits.
+Tests the directed pressure search (`TryResolve`) — a board-up shove propagating best-first through occupied movables (hop alignment minus heaviness cost), scoring escapes via the shared `MoveWeightEvaluator` and emitting a mover-first move list.
 
 | Area | Tests | What could break |
 |---|---|---|
-| Entry occupied by immovable / empty column not blocked | 2 | Wrong "needs relief" precondition |
-| Side-hop and multi-hop routing to nearest gap | 2+ | BFS picks a non-shortest or unreachable chain |
-| Pass-through (puff) traversal, ray bounds | several | Ray miscounts cells / `InBounds` regression |
-| Full grid / blocked-neighbour dead-ends → false | 2+ | Reports relief where none exists |
-| Relocator (RelocateNearest/Farthest) short-circuit | several | Relocator not vacating, or chain not terminating |
+| Straight / bent chains resolve, mover-first ordering | 2 | Chain executes onto occupied cells, or seed never freed |
+| Full board / statics / immovable entry / empty column → false | 4 | Reports relief where none exists, or shoves through statics |
+| Heaviness routing prefers light chains | 1 | Heavy movers shoved when a lighter route exists |
+| Relocation terminals (nearest/farthest) end the chain | 3 | Relocator not vacating, or wrong gap picked |
+| Puff at entry seeds the balloon above it | 1 | Traversability seeding regression blocks relief |
 
 ### `UnbreakableBalloonModelTests` — 6 tests
 

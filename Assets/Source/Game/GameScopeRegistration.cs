@@ -4,6 +4,7 @@ using BalloonParty.Cheats;
 
 using BalloonParty.Balloon.Controller;
 using BalloonParty.Balloon.Spawner;
+using BalloonParty.Balloon.View;
 using BalloonParty.Display;
 using BalloonParty.Game.Cinematics;
 using BalloonParty.Game.Danger;
@@ -82,6 +83,8 @@ namespace BalloonParty.Game
             builder.Register<SlotGrid>(Lifetime.Singleton);
             builder.Register<ScenarioContentRoot>(Lifetime.Singleton);
             builder.Register<GridBalanceQuery>(Lifetime.Singleton);
+            // Recording is editor-only ([Conditional]); at runtime this is an inert empty instance.
+            builder.Register<BalanceDebugRecorder>(Lifetime.Singleton);
             builder.Register<PoolManager>(Lifetime.Singleton);
             builder.Register<TrailEndpointRegistry>(Lifetime.Singleton);
             builder.Register<PauseService>(Lifetime.Singleton).AsSelf().As<IRunResettable>();
@@ -97,6 +100,11 @@ namespace BalloonParty.Game
             builder.Register<ICinematicState, CinematicStateService>(Lifetime.Singleton);
             builder.Register<RunMeta>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.RegisterComponentInHierarchy<SlotGridView>();
+#if UNITY_EDITOR
+            // Scene-view debug overlay only; hierarchy registration throws if the component is absent,
+            // so the guard keeps device builds independent of the debug object.
+            builder.RegisterComponentInHierarchy<BalanceGizmos>();
+#endif
         }
 
         // Do not reorder or split — entry points start in registration order and the game depends on it.
