@@ -1722,7 +1722,7 @@ MonoBehaviour:
           _max: 12
           _mode: 2
         _maxPerCluster: 5
-      _allowedColorsMask: -1
+      _allowedColorsMask: 15
   _thresholdModifier:
     serializedVersion: 2
     m_Curve:

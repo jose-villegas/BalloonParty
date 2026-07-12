@@ -452,7 +452,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    _height: 12
+    _height: 15
     _balloonSpawnCue: 0.6
     _speed: 0.3
     _popSlowMoTimeScale: 0.35
