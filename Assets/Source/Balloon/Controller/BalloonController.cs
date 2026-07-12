@@ -25,7 +25,6 @@ namespace BalloonParty.Balloon.Controller
         private readonly ISubscriber<ItemActivatedMessage> _itemActivatedSubscriber;
         private readonly IWriteableBalloonModel _model;
         private readonly IPublisher<NudgeMessage> _nudgePublisher;
-        private readonly Action _onReturned;
         private readonly string _poolKey;
         private readonly PoolManager _poolManager;
         private readonly BalloonControllerRegistry _registry;
@@ -33,6 +32,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly BalloonView _view;
         private readonly DisturbanceFieldService _disturbanceField;
 
+        private Action _onReturned;
         private IDisposable _itemActivatedSubscription;
         private bool _popped;
 
@@ -122,6 +122,11 @@ namespace BalloonParty.Balloon.Controller
         {
             _itemActivatedSubscription?.Dispose();
             _itemActivatedSubscription = null;
+
+            // A detached balloon is out of play — free its type count NOW (nulled so the eventual pool
+            // return can't double-release), or the next level's MaxCount picks see phantom occupants.
+            _onReturned?.Invoke();
+            _onReturned = null;
 
             var slot = _model.SlotIndex.Value;
             if (ReferenceEquals(_grid.At(slot), _model))

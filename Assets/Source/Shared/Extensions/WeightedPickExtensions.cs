@@ -9,8 +9,11 @@ namespace BalloonParty.Shared.Extensions
     {
         private static readonly List<IWeightedEntry> CandidateBuffer = new();
 
-        /// <summary>Weighted-random pick, excluding entries at their <see cref="IWeightedEntry.MaxCount"/> limit; returns <c>default</c> if none remain.</summary>
-        internal static T PickRandom<T>(this IReadOnlyList<T> entries, IReadOnlyDictionary<string, int> activeCounts)
+        /// <summary>Weighted-random pick, excluding entries at their <see cref="IWeightedEntry.MaxCount"/> limit or with an exhausted <paramref name="waveQuotas"/> allowance (absent key = unlimited); returns <c>default</c> if none remain.</summary>
+        internal static T PickRandom<T>(
+            this IReadOnlyList<T> entries,
+            IReadOnlyDictionary<string, int> activeCounts,
+            IReadOnlyDictionary<string, int> waveQuotas = null)
             where T : class, IWeightedEntry
         {
             CandidateBuffer.Clear();
@@ -20,6 +23,11 @@ namespace BalloonParty.Shared.Extensions
             {
                 var e = entries[i];
                 if (e.MaxCount != 0 && activeCounts.GetValueOrDefault(e.PoolKey) >= e.MaxCount)
+                {
+                    continue;
+                }
+
+                if (waveQuotas != null && waveQuotas.TryGetValue(e.PoolKey, out var quota) && quota <= 0)
                 {
                     continue;
                 }

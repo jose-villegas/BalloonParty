@@ -22,7 +22,12 @@ namespace BalloonParty.Configuration.Level
         IReadOnlyList<string> AllowedColors { get; }
         int AllowedColorsMask { get; }
 
-        BalloonPrefabEntry PickBalloonEntry(IReadOnlyDictionary<string, int> activeCounts);
+        /// <param name="waveQuotas">Remaining per-wave allowance by pool key; entries at 0 are excluded, absent keys are unlimited.</param>
+        BalloonPrefabEntry PickBalloonEntry(
+            IReadOnlyDictionary<string, int> activeCounts, IReadOnlyDictionary<string, int> waveQuotas = null);
+
+        /// <summary>Rolls each curve-bearing type's spawn allowance for the upcoming wave into <paramref name="quotas" /> (absent key = unlimited).</summary>
+        void RollWaveQuotas(Dictionary<string, int> quotas, bool isInitial);
         ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts);
         bool TryGetGridActorGate(GridActorType type, out ResolvedGridActorGate gate);
     }

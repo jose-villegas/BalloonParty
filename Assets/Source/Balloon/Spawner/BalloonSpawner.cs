@@ -26,6 +26,7 @@ namespace BalloonParty.Balloon.Spawner
             (a, b) => a.SpawnWeight - b.SpawnWeight;
 
         private readonly Dictionary<string, int> _activeCounts = new();
+        private readonly Dictionary<string, int> _waveQuotas = new();
         private readonly BalloonBalancer _balancer;
         private readonly BalloonFactory _factory;
         private readonly IPublisher<BalanceBalloonsMessage> _balancePublisher;
@@ -185,7 +186,7 @@ namespace BalloonParty.Balloon.Spawner
         {
             // Starts empty and is sized to fit, so it never rejects a balloon.
             var lines = _levelParams.Current.BoardLines;
-            PrepareSpawnBatch(lines);
+            PrepareSpawnBatch(lines, isInitial: true);
 
             for (var i = 0; i < lines; i++)
             {
@@ -269,21 +270,28 @@ namespace BalloonParty.Balloon.Spawner
 
         // Picks the whole wave's entries upfront and orders them lightest-first: earlier (higher) lines
         // spawn the light types and heavier ones enter below — spawn-weight ordering, never a restriction
-        // on what spawns. Active counts are taken here so MaxCount holds across the wave.
-        private void PrepareSpawnBatch(int lineCount)
+        // on what spawns. Active counts are taken here so MaxCount holds across the wave, and each type's
+        // rolled wave quota (its count-weights curve) caps how many this wave may add.
+        private void PrepareSpawnBatch(int lineCount, bool isInitial = false)
         {
             ReleaseUnspawnedBatch();
+            _levelParams.Current.RollWaveQuotas(_waveQuotas, isInitial);
 
             var target = lineCount * _grid.Columns;
             for (var i = 0; i < target; i++)
             {
-                var entry = _levelParams.Current.PickBalloonEntry(_activeCounts);
+                var entry = _levelParams.Current.PickBalloonEntry(_activeCounts, _waveQuotas);
                 if (entry == null)
                 {
                     break;
                 }
 
                 _activeCounts[entry.PoolKey] = _activeCounts.GetValueOrDefault(entry.PoolKey) + 1;
+                if (_waveQuotas.TryGetValue(entry.PoolKey, out var quota))
+                {
+                    _waveQuotas[entry.PoolKey] = quota - 1;
+                }
+
                 _spawnBatch.Add(entry);
             }
 

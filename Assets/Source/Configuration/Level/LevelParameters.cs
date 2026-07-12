@@ -93,9 +93,25 @@ namespace BalloonParty.Configuration.Level
             _allowedColorNames = allowedColorNames;
         }
 
-        public BalloonPrefabEntry PickBalloonEntry(IReadOnlyDictionary<string, int> activeCounts)
+        public BalloonPrefabEntry PickBalloonEntry(
+            IReadOnlyDictionary<string, int> activeCounts, IReadOnlyDictionary<string, int> waveQuotas = null)
         {
-            return _balloonPickList.PickRandom(activeCounts)?.Source;
+            return _balloonPickList.PickRandom(activeCounts, waveQuotas)?.Source;
+        }
+
+        // Rolls each curve-bearing type's allowance for the upcoming wave (absent key = unlimited).
+        public void RollWaveQuotas(Dictionary<string, int> quotas, bool isInitial)
+        {
+            quotas.Clear();
+
+            foreach (var entry in _balloonPickList)
+            {
+                var curve = isInitial ? entry.InitialCountWeights : entry.WaveCountWeights;
+                if (curve != null && curve.length > 0)
+                {
+                    quotas[entry.PoolKey] = curve.SampleWeightedCount(UnityEngine.Random.value);
+                }
+            }
         }
 
         public ItemSettings PickItemEntry(IReadOnlyDictionary<string, int> activeCounts)
@@ -125,13 +141,22 @@ namespace BalloonParty.Configuration.Level
         public BalloonPrefabEntry Source { get; }
         public float Weight { get; }
         public int MaxCount { get; }
+        public AnimationCurve InitialCountWeights { get; }
+        public AnimationCurve WaveCountWeights { get; }
         public string PoolKey => Source.PoolKey;
 
-        public ResolvedBalloonEntry(BalloonPrefabEntry source, float weight, int maxCount)
+        public ResolvedBalloonEntry(
+            BalloonPrefabEntry source,
+            float weight,
+            int maxCount,
+            AnimationCurve initialCountWeights = null,
+            AnimationCurve waveCountWeights = null)
         {
             Source = source;
             Weight = weight;
             MaxCount = maxCount;
+            InitialCountWeights = initialCountWeights;
+            WaveCountWeights = waveCountWeights;
         }
     }
 

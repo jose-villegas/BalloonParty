@@ -42,7 +42,7 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("A projectile deflecting off this balloon stamps the disturbance field at its slot, radius = BalloonDeflect profile × this (unbreakable ~3 for a heavy jolt, tough 1 for the elastic bounce). 0 = no stamp.")]
         [SerializeField] private float _deflectStampScale;
 
-        [Tooltip("Spawn ordering, not a restriction: within a spawn wave, heavier types fill the later (lower) lines, entering under lighter ones. 0 = neutral.")]
+        [Tooltip("Physical spawn weight: within a spawn wave, heavier types fill the later (lower) lines, entering under lighter ones. 0 = neutral.")]
         [SerializeField] private int _spawnWeight;
 
         public BalloonView Prefab => _prefab;

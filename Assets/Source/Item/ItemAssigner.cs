@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Game.Level;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
@@ -115,39 +116,11 @@ namespace BalloonParty.Item
             }
         }
 
-        // Weighted-random draw from a curve keyed by integer count; empty/all-zero weights return 0.
+        // Kept as the historical entry point; the draw lives in AnimationCurveExtensions so balloon
+        // wave quotas share it.
         internal static int SampleCount(AnimationCurve weights, float roll01)
         {
-            if (weights == null || weights.length == 0)
-            {
-                return 0;
-            }
-
-            var maxCount = Mathf.Max(0, Mathf.RoundToInt(weights[weights.length - 1].time));
-
-            var total = 0f;
-            for (var i = 0; i <= maxCount; i++)
-            {
-                total += Mathf.Max(0f, weights.Evaluate(i));
-            }
-
-            if (total <= 0f)
-            {
-                return 0;
-            }
-
-            var target = Mathf.Clamp01(roll01) * total;
-            var accumulated = 0f;
-            for (var i = 0; i <= maxCount; i++)
-            {
-                accumulated += Mathf.Max(0f, weights.Evaluate(i));
-                if (target < accumulated)
-                {
-                    return i;
-                }
-            }
-
-            return maxCount;
+            return weights.SampleWeightedCount(roll01);
         }
 
         // Weighted-random index into candidates, biased by ItemActivationWeight; -1 if every weight is 0.
