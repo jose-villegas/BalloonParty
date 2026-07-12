@@ -1,3 +1,4 @@
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Messages;
@@ -19,6 +20,7 @@ namespace BalloonParty.Balloon.Controller
         public SlotGrid Grid { get; }
         public PoolManager PoolManager { get; }
         public DisturbanceFieldService DisturbanceField { get; }
+        public IGamePalette Palette { get; }
 
         [Inject]
         public BalloonControllerContext(
@@ -29,7 +31,8 @@ namespace BalloonParty.Balloon.Controller
             IPublisher<NudgeMessage> nudgePublisher,
             SlotGrid grid,
             PoolManager poolManager,
-            DisturbanceFieldService disturbanceField)
+            DisturbanceFieldService disturbanceField,
+            IGamePalette palette)
         {
             ItemActivatedSubscriber = itemActivatedSubscriber;
             Registry = registry;
@@ -39,6 +42,7 @@ namespace BalloonParty.Balloon.Controller
             Grid = grid;
             PoolManager = poolManager;
             DisturbanceField = disturbanceField;
+            Palette = palette;
         }
     }
 }

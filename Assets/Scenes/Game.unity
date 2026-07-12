@@ -287,7 +287,7 @@ MonoBehaviour:
   _swirlAngle: {x: -120, y: 120}
   _flowInfluence: 0.35
   _speckSize: 0.03
-  _trailLength: 0.05
+  _trailLength: 0.065
   _trailMax: 5
   _lifetimeRange: {x: 2, y: 10}
   _scaleRange: {x: 0.5, y: 5}
@@ -295,6 +295,8 @@ MonoBehaviour:
   _fadeIn: 0.5
   _fadeOut: 0.5
   _teleportThreshold: 1
+  _heatGain: 4
+  _heatDecay: 1.5
 --- !u!4 &1143190890
 Transform:
   m_ObjectHideFlags: 0

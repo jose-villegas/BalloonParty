@@ -7,8 +7,8 @@ Shader "BalloonParty/Scenario/SpeckField"
     {
         _MainTex   ("Speck Sprite", 2D)              = "white" {}
         _Color     ("Tint",         Color)           = (1, 1, 1, 0.5)
-        // A max-heat speck renders with this color AND alpha (× sprite/life fades) — brighter and more
-        // opaque than the base tint if authored so.
+        // The untagged-disturbance flush; alpha = disturbed opacity. Palette-tagged specks use their
+        // palette color (and its alpha) instead.
         _DisturbColor ("Disturbed Tint", Color)       = (1, 0.65, 0.25, 1)
         _SpeckSize ("Speck Size",   Float)           = 0.03
         _MinScale  ("Min Scale",    Float)           = 0.5
@@ -51,12 +51,15 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float lifetime;
                 float2 effectiveVel;
                 float heat;
+                float paletteIndex;
             };
 
             StructuredBuffer<Speck> _Specks;
             sampler2D _MainTex;
             fixed4 _Color;
             fixed4 _DisturbColor;
+            float4 _SpeckPalette[16];
+            int _SpeckPaletteCount;
             float _SpeckSize;
             float _MinScale;
             float _MaxScale;
@@ -73,6 +76,7 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float2 uv    : TEXCOORD0;
                 float  alpha : TEXCOORD1;
                 float  heat  : TEXCOORD2;
+                float  paletteIndex : TEXCOORD3;
             };
 
             // Two triangles → a unit quad centered on the origin, in [-0.5, 0.5].
@@ -132,6 +136,7 @@ Shader "BalloonParty/Scenario/SpeckField"
                 o.uv = corner + 0.5;
                 o.alpha = fade;
                 o.heat = s.heat;
+                o.paletteIndex = s.paletteIndex;
                 return o;
             }
 
@@ -140,11 +145,19 @@ Shader "BalloonParty/Scenario/SpeckField"
                 fixed4 tex = tex2D(_MainTex, i.uv);
                 fixed4 col = tex * _Color;
 
-                // Disturbed specks lerp toward the disturbed tint — color AND opacity — by their heat,
+                // Disturbed specks lerp toward the disturber's palette color (adopted from the field's A
+                // channel), or the flat disturbed tint when untagged — color AND opacity — by their heat,
                 // easing back as it cools.
+                int paletteIndex = (int)(i.paletteIndex + 0.5);
+                float4 target = _DisturbColor;
+                if (i.paletteIndex >= -0.5 && paletteIndex < _SpeckPaletteCount)
+                {
+                    target = _SpeckPalette[paletteIndex];
+                }
+
                 float heat = saturate(i.heat);
-                col.rgb = lerp(col.rgb, _DisturbColor.rgb, heat);
-                col.a = lerp(col.a, tex.a * _DisturbColor.a, heat);
+                col.rgb = lerp(col.rgb, target.rgb, heat);
+                col.a = lerp(col.a, tex.a * target.a, heat);
 
                 col.a *= i.alpha;
                 return col;

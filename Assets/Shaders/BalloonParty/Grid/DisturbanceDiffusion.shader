@@ -5,6 +5,10 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
     //   R = density (equilibrium = 1.0)
     //   G = displacement X (equilibrium = 0.5, i.e. zero offset)
     //   B = displacement Y (equilibrium = 0.5)
+    //   A = palette tag, packed (index + life) / 16 with life in (0, 1]: 16 index slots, and the
+    //       value's position within its slot is the tag's remaining life. A fresh stamp writes the
+    //       slot's top ((index + 1) / 16); each diffusion tick drains the life until the tag zeroes.
+    //       Written hard, never diffused/blended (averaging two indices would be a wrong color).
     //
     // Three forces per channel:
     //   1. Advection — wind shifts sample origin for directional flow
@@ -56,6 +60,7 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
             float4    _WindDir;
             float     _WindSpeed;
             float     _PressureStr;
+            float     _ColorDecay;
 
             #if _STAMPS_ON
             float     _DisplaceAmount;
@@ -64,6 +69,7 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
             float     _StampRadii[MAX_STAMPS];
             float     _StampStrengths[MAX_STAMPS];
             float4    _StampDirections[MAX_STAMPS];
+            float     _StampColorIndices[MAX_STAMPS];
             #endif
 
             struct appdata
@@ -95,7 +101,22 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
                 float2 windOffset = _WindDir.xy * _WindSpeed * _DeltaTime;
                 float2 advUV = uv - windOffset;
 
-                float3 current = tex2D(_MainTex, uv).rgb;
+                float4 current4 = tex2D(_MainTex, uv);
+                float3 current = current4.rgb;
+
+                // Drain the palette tag's in-slot life; the tag dies (0) once it bottoms out.
+                float colorIndex = current4.a;
+                float tagValue = colorIndex * 16.0;
+                if (tagValue > 0.05)
+                {
+                    float slot = ceil(tagValue) - 1.0;
+                    float life = tagValue - slot - _ColorDecay * _DeltaTime;
+                    colorIndex = life <= 0.05 ? 0.0 : (slot + life) / 16.0;
+                }
+                else
+                {
+                    colorIndex = 0.0;
+                }
 
                 // 3×3 samples at advected origin (all 3 channels)
                 float3 stl = tex2D(_MainTex, advUV + float2(-tx.x,  tx.y)).rgb;
@@ -171,12 +192,18 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
                         pushDir = (dist > 0.001) ? -(toPixel / dist) : float2(0, 0);
                     }
                     displace += pushDir * falloff * _DisplaceAmount;
+
+                    float encoded = _StampColorIndices[s];
+                    if (encoded > 0.001 && falloff > 0.2)
+                    {
+                        colorIndex = encoded;
+                    }
                 }
 
                 result = float3(density, saturate(displace));
                 #endif
 
-                return fixed4(saturate(result), 1.0);
+                return fixed4(saturate(result), colorIndex);
             }
             ENDCG
         }

@@ -11,6 +11,7 @@ using VContainer;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Shared.Extensions;
 
 namespace BalloonParty.Item.Paint
 {
@@ -125,7 +126,9 @@ namespace BalloonParty.Item.Paint
 
                 var landing = blobPositions[index];
                 var direction = (landing - (Vector2)worldPosition).normalized;
-                _disturbanceField.Stamp(StampSource.Paint, landing, direction);
+                _disturbanceField.Stamp(
+                    StampSource.Paint, landing, direction,
+                    paletteIndex: _palette.PaletteIndexOf(paintColor));
 
                 Recolor(paintColor, targetsByBlob[index]);
             }

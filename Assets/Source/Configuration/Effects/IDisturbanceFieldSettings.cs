@@ -8,6 +8,9 @@ namespace BalloonParty.Configuration.Effects
         int TexelsPerUnit { get; }
         float DiffusionRate { get; }
         float ReformSpeed { get; }
+
+        /// <summary>How fast a stamped palette tag's in-slot life drains, per second (see the diffusion shader's A packing).</summary>
+        float ColorTagDecay { get; }
         float DiffusionTickInterval { get; }
         float WindSpeed { get; }
         float WindSmoothing { get; }

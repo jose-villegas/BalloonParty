@@ -92,7 +92,7 @@ namespace BalloonParty.Item.Laser
                 laser.SetCycleColors(_palette.ColorValues(), settings.Laser.ColorCycles);
             }
 
-            StampCross(worldPosition, settings, laserRotation);
+            StampCross(worldPosition, settings, laserRotation, _palette.PaletteIndexOf(balloon.GetColorId()));
 
             return UniTask.CompletedTask;
         }
@@ -175,7 +175,8 @@ namespace BalloonParty.Item.Laser
             }
         }
 
-        private void StampCross(Vector3 worldPosition, ItemSettings settings, Quaternion laserRotation)
+        private void StampCross(
+            Vector3 worldPosition, ItemSettings settings, Quaternion laserRotation, int paletteIndex)
         {
             var distance = settings.Laser.RaycastDistance;
             var profile = _disturbanceField.GetProfile(StampSource.Laser);
@@ -187,18 +188,18 @@ namespace BalloonParty.Item.Laser
             var up = (Vector2)(laserRotation * Vector3.up);
             var down = (Vector2)(laserRotation * Vector3.down);
 
-            StampArm(worldPosition, right, steps, step);
-            StampArm(worldPosition, left, steps, step);
-            StampArm(worldPosition, up, steps, step);
-            StampArm(worldPosition, down, steps, step);
+            StampArm(worldPosition, right, steps, step, paletteIndex);
+            StampArm(worldPosition, left, steps, step, paletteIndex);
+            StampArm(worldPosition, up, steps, step, paletteIndex);
+            StampArm(worldPosition, down, steps, step, paletteIndex);
         }
 
-        private void StampArm(Vector3 worldPosition, Vector2 direction, int steps, float step)
+        private void StampArm(Vector3 worldPosition, Vector2 direction, int steps, float step, int paletteIndex)
         {
             for (var i = 0; i <= steps; i++)
             {
                 var pos = (Vector2)worldPosition + direction * (step * i);
-                _disturbanceField.Stamp(StampSource.Laser, pos, direction);
+                _disturbanceField.Stamp(StampSource.Laser, pos, direction, paletteIndex: paletteIndex);
             }
         }
     }

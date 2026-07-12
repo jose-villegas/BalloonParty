@@ -1,7 +1,7 @@
 // Advects an ambient speck field each frame: Brownian drift + a global motion vector + the disturbance
 // field, wrapped toroidally within a world region. Driven by SpeckField.cs.
 // STARTER — validate + tune in-editor (Built-in RP compute). Speck layout must match the C# struct:
-// the C# struct: position, velocity, seed, age, lifetime, effectiveVel, heat (10 floats).
+// the C# struct: position, velocity, seed, age, lifetime, effectiveVel, heat, paletteIndex (11 floats).
 #pragma kernel Advect
 
 struct Speck
@@ -13,6 +13,7 @@ struct Speck
     float lifetime;
     float2 effectiveVel;
     float heat;
+    float paletteIndex;
 };
 
 RWStructuredBuffer<Speck> _Specks;
@@ -68,6 +69,7 @@ void Advect(uint3 id : SV_DispatchThreadID)
         s.lifetime = lerp(_MinLifetime, _MaxLifetime, hash11(r + 9.1));
         s.age = 0.0;
         s.heat = 0.0;
+        s.paletteIndex = -1.0;
     }
 
     // Brownian drift: a per-speck pseudo-random direction that re-rolls roughly once a second.
@@ -101,8 +103,16 @@ void Advect(uint3 id : SV_DispatchThreadID)
             disturbance = float2(radial.x * cc - radial.y * sc, radial.x * sc + radial.y * cc);
 
             // Advance along the disturbance's own motion (the white direction). GB stores -motion, so
-            // negate for the direction.
-            flow = -(_DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv, 0).gb - 0.5) * 2.0;
+            // negate for the direction. A packs the last stamp's palette tag as (index + life) / 16 —
+            // ceil recovers the slot regardless of remaining life; an agitated speck adopts it so the
+            // render can flush toward that color.
+            float4 center = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv, 0);
+            flow = -(center.gb - 0.5) * 2.0;
+            float tagValue = center.a * 16.0;
+            if (tagValue > 0.05)
+            {
+                s.paletteIndex = ceil(tagValue) - 1.0;
+            }
         }
     }
 
@@ -127,9 +137,15 @@ void Advect(uint3 id : SV_DispatchThreadID)
     s.position += _MotionDelta * _MotionInfluence;
 
     // Agitation heats the speck while the disturbance/flow act on it and cools once they pass — the
-    // render lerps toward the disturbed tint by this, so the color returns as motion normalizes.
+    // same gain whether the flush target is a palette tag or the flat disturbed tint.
     float agitation = length(disturbance) * _DisturbanceInfluence + length(flow) * _FlowInfluence;
     s.heat = saturate(s.heat + (agitation * _HeatGain - _HeatDecay) * _DeltaTime);
+
+    // Color memory only lasts while warm — a cooled speck flushes neutral on its next untagged stir.
+    if (s.heat <= 0.001)
+    {
+        s.paletteIndex = -1.0;
+    }
 
     // Total per-frame move (before wrap) as an effective velocity — captures sim + ascend + flow, so the
     // velocity-stretched trail in the render reflects all of them.

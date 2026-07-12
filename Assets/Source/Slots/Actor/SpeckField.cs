@@ -1,3 +1,4 @@
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Disturbance;
 using UnityEngine;
 using UnityEngine.Rendering;
@@ -17,7 +18,8 @@ namespace BalloonParty.Slots.Actor
     internal sealed class SpeckField : MonoBehaviour
     {
         private const int ThreadGroupSize = 64;
-        private const int SpeckStrideBytes = sizeof(float) * 10;
+        private const int SpeckStrideBytes = sizeof(float) * 11;
+        private const int MaxPaletteSlots = 16;
 
         private static readonly int SpecksId = Shader.PropertyToID("_Specks");
         private static readonly int CountId = Shader.PropertyToID("_Count");
@@ -49,6 +51,8 @@ namespace BalloonParty.Slots.Actor
         private static readonly int FadeOutId = Shader.PropertyToID("_FadeOut");
         private static readonly int HeatGainId = Shader.PropertyToID("_HeatGain");
         private static readonly int HeatDecayId = Shader.PropertyToID("_HeatDecay");
+        private static readonly int SpeckPaletteId = Shader.PropertyToID("_SpeckPalette");
+        private static readonly int SpeckPaletteCountId = Shader.PropertyToID("_SpeckPaletteCount");
 
         [SerializeField] private ComputeShader _compute;
         [SerializeField] private Material _renderMaterial;
@@ -107,6 +111,7 @@ namespace BalloonParty.Slots.Actor
 
         [Inject] private ScenarioContentRoot _scenarioRoot;
         [Inject] private DisturbanceFieldService _disturbance;
+        [Inject] private IGamePalette _palette;
 
         private ComputeBuffer _speckBuffer;
         private Mesh _mesh;
@@ -150,6 +155,7 @@ namespace BalloonParty.Slots.Actor
             // Sorting Layer / Order to sit under the UI but over the background.
             BuildRenderMesh();
 
+            PushPalette();
             _ready = true;
         }
 
@@ -220,6 +226,21 @@ namespace BalloonParty.Slots.Actor
             _renderMaterial.SetFloat(FadeOutId, _fadeOut);
         }
 
+        // The palette the render lerps disturbed specks toward; indices must match the stampers'
+        // (IGamePalette.Colors order — the same mapping DisturbanceFieldService encodes into the field).
+        private void PushPalette()
+        {
+            var colors = new Vector4[MaxPaletteSlots];
+            var count = Mathf.Min(_palette.Colors.Count, MaxPaletteSlots);
+            for (var i = 0; i < count; i++)
+            {
+                colors[i] = _palette.Colors[i].Color;
+            }
+
+            _renderMaterial.SetVectorArray(SpeckPaletteId, colors);
+            _renderMaterial.SetInt(SpeckPaletteCountId, count);
+        }
+
         private void SeedSpecks()
         {
             var specks = new Speck[_count];
@@ -239,6 +260,7 @@ namespace BalloonParty.Slots.Actor
                     Lifetime = lifetime,
                     EffectiveVel = Vector2.zero,
                     Heat = 0f,
+                    PaletteIndex = -1f,
                 };
             }
 
@@ -317,6 +339,7 @@ namespace BalloonParty.Slots.Actor
             public float Lifetime;
             public Vector2 EffectiveVel;
             public float Heat;
+            public float PaletteIndex;
         }
     }
 }

@@ -11,6 +11,7 @@ namespace BalloonParty.Shared.Disturbance
     internal class DisturbanceFieldService : IStartable, ITickable, IDisposable
     {
         private const int MaxStampsPerBatch = 32;
+        private const float PaletteIndexSlots = 16f;
 
         private static readonly int DiffusionRateId = Shader.PropertyToID("_DiffusionRate");
         private static readonly int ReformSpeedId = Shader.PropertyToID("_ReformSpeed");
@@ -25,6 +26,8 @@ namespace BalloonParty.Shared.Disturbance
         private static readonly int StampRadiiId = Shader.PropertyToID("_StampRadii");
         private static readonly int StampStrengthsId = Shader.PropertyToID("_StampStrengths");
         private static readonly int StampDirectionsId = Shader.PropertyToID("_StampDirections");
+        private static readonly int StampColorIndicesId = Shader.PropertyToID("_StampColorIndices");
+        private static readonly int ColorDecayId = Shader.PropertyToID("_ColorDecay");
 
         private static readonly int GlobalFieldBoundsMinId = Shader.PropertyToID("_FieldBoundsMin");
         private static readonly int GlobalFieldBoundsSizeId = Shader.PropertyToID("_FieldBoundsSize");
@@ -37,11 +40,12 @@ namespace BalloonParty.Shared.Disturbance
         private readonly float[] _batchRadii = new float[MaxStampsPerBatch];
         private readonly float[] _batchStrengths = new float[MaxStampsPerBatch];
         private readonly Vector4[] _batchDirections = new Vector4[MaxStampsPerBatch];
+        private readonly float[] _batchColorIndices = new float[MaxStampsPerBatch];
 
         private DisturbanceFieldResources _resources;
         private DisturbanceFieldCoordinates _coords;
         private LerpStampScheduler _lerpScheduler;
-        private Action<Vector3, float, float, Vector2> _emitInstantStamp;
+        private Action<Vector3, float, float, Vector2, int> _emitInstantStamp;
         private float _diffusionTimer;
         private Vector2 _windTarget;
         private Vector2 _windCurrent;
@@ -68,7 +72,8 @@ namespace BalloonParty.Shared.Disturbance
         void IStartable.Start()
         {
             _coords = new DisturbanceFieldCoordinates(_displayConfig, _settings.TexelsPerUnit);
-            _emitInstantStamp = (pos, radius, strength, dir) => Stamp(pos, radius, strength, dir);
+            _emitInstantStamp = (pos, radius, strength, dir, palette) =>
+                Stamp(pos, radius, strength, dir, paletteIndex: palette);
 
             _resources.Initialize(_coords.Width, _coords.Height);
             PushGlobalBounds();
@@ -114,28 +119,31 @@ namespace BalloonParty.Shared.Disturbance
             return _settings.GetProfile(source);
         }
 
-        /// <summary>Stamps using the source's configured profile (radius/strength/duration).</summary>
-        internal void Stamp(StampSource source, Vector3 worldPosition, Vector2 direction)
+        /// <summary>Stamps using the source's configured profile (radius/strength/duration). <paramref name="paletteIndex"/> tags the stamped region with a palette color (field A channel); -1 = none.</summary>
+        internal void Stamp(StampSource source, Vector3 worldPosition, Vector2 direction, int paletteIndex = -1)
         {
             var profile = _settings.GetProfile(source);
-            Stamp(worldPosition, profile.Radius, profile.Strength, direction, profile.Duration);
+            Stamp(worldPosition, profile.Radius, profile.Strength, direction, profile.Duration, paletteIndex);
         }
 
         /// <summary>Profile stamp with its radius scaled — e.g. a heavy balloon's deflect stamping wider than a light one's.</summary>
-        internal void Stamp(StampSource source, Vector3 worldPosition, Vector2 direction, float radiusScale)
+        internal void Stamp(
+            StampSource source, Vector3 worldPosition, Vector2 direction, float radiusScale, int paletteIndex = -1)
         {
             var profile = _settings.GetProfile(source);
-            Stamp(worldPosition, profile.Radius * radiusScale, profile.Strength, direction, profile.Duration);
+            Stamp(worldPosition, profile.Radius * radiusScale, profile.Strength, direction, profile.Duration, paletteIndex);
         }
 
         /// <summary>A positive <paramref name="duration"/> ramps the stamp over time for a smooth shockwave instead of a single-frame pop.</summary>
-        internal void Stamp(Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration = 0f)
+        internal void Stamp(
+            Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration = 0f,
+            int paletteIndex = -1)
         {
             _impactBus.Report(worldPosition, radius);
 
             if (duration > 0f)
             {
-                _lerpScheduler.Add(worldPosition, radius, strength, direction, duration);
+                _lerpScheduler.Add(worldPosition, radius, strength, direction, duration, paletteIndex);
                 return;
             }
 
@@ -162,7 +170,9 @@ namespace BalloonParty.Shared.Disturbance
                 CenterUV = uv,
                 RadiusUV = radiusUV,
                 Strength = strength,
-                Direction = direction
+                Direction = direction,
+                // Encoded so 0 always reads "no color" in the shader; indices quantize into 16 slots.
+                EncodedPaletteIndex = paletteIndex >= 0 ? (paletteIndex + 1f) / PaletteIndexSlots : 0f
             });
         }
 
@@ -229,6 +239,7 @@ namespace BalloonParty.Shared.Disturbance
             material.SetFloatArray(StampRadiiId, _batchRadii);
             material.SetFloatArray(StampStrengthsId, _batchStrengths);
             material.SetVectorArray(StampDirectionsId, _batchDirections);
+            material.SetFloatArray(StampColorIndicesId, _batchColorIndices);
             material.SetFloat(DisplaceAmountId, _settings.DisplaceAmount);
         }
 
@@ -247,6 +258,7 @@ namespace BalloonParty.Shared.Disturbance
             material.SetFloat(WindSpeedId, _settings.WindSpeed);
             material.SetFloat(PressureStrId, _settings.PressureStrength);
             material.SetFloat(DisplaceDecayId, _settings.DisplaceDecay);
+            material.SetFloat(ColorDecayId, _settings.ColorTagDecay);
         }
 
         private void FillBatchArrays(int offset, int count)
@@ -258,6 +270,7 @@ namespace BalloonParty.Shared.Disturbance
                 _batchRadii[i] = s.RadiusUV;
                 _batchStrengths[i] = s.Strength;
                 _batchDirections[i] = new Vector4(s.Direction.x, s.Direction.y, 0f, 0f);
+                _batchColorIndices[i] = s.EncodedPaletteIndex;
             }
         }
 
@@ -274,6 +287,7 @@ namespace BalloonParty.Shared.Disturbance
             public float RadiusUV;
             public float Strength;
             public Vector2 Direction;
+            public float EncodedPaletteIndex;
         }
     }
 }

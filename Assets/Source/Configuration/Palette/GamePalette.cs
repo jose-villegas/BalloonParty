@@ -16,6 +16,18 @@ namespace BalloonParty.Configuration.Palette
         /// </summary>
         public const string RainbowColorId = "__rainbow__";
 
+        /// <summary>
+        ///     Presentation-only palette entry for tough/heavy impacts (deflect stamps, tough pops) —
+        ///     authored in the palette asset but never a spawnable balloon color.
+        /// </summary>
+        public const string ToughColorId = "Tough";
+
+        /// <summary>
+        ///     Presentation-only palette entry for the unbreakable's metallic impacts (its deflects and
+        ///     pierced pop) — authored in the palette asset but never a spawnable balloon color.
+        /// </summary>
+        public const string SparksColorId = "Sparks";
+
         [SerializeField] private PaletteEntry[] _colors;
 
         private Dictionary<string, PaletteEntry> _byName;

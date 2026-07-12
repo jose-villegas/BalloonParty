@@ -52,6 +52,9 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Speed at which density trends back toward 1.0 (equilibrium).")]
         [SerializeField] [Range(0f, 0.5f)] private float _reformSpeed = 0.05f;
 
+        [Tooltip("How fast a stamp's palette-color tag fades from the field's A channel, per second. 0.5 = tags last ~2s.")]
+        [SerializeField] [Range(0f, 5f)] private float _colorTagDecay = 0.5f;
+
         [Tooltip("Seconds between diffusion blit passes.")]
         [SerializeField] [Range(0.016f, 0.2f)] private float _diffusionTickInterval = 0.05f;
 
@@ -93,6 +96,7 @@ namespace BalloonParty.Configuration.Effects
         public int TexelsPerUnit => _texelsPerUnit;
         public float DiffusionRate => _diffusionRate;
         public float ReformSpeed => _reformSpeed;
+        public float ColorTagDecay => _colorTagDecay;
         public float DiffusionTickInterval => _diffusionTickInterval;
         public float WindSpeed => _windSpeed;
         public float WindSmoothing => _windSmoothing;

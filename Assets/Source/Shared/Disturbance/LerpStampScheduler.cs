@@ -15,7 +15,8 @@ namespace BalloonParty.Shared.Disturbance
             _maxStamps = maxStamps;
         }
 
-        public void Add(Vector3 position, float radius, float strength, Vector2 direction, float duration)
+        public void Add(
+            Vector3 position, float radius, float strength, Vector2 direction, float duration, int paletteIndex = -1)
         {
             if (_active.Count >= _maxStamps)
             {
@@ -30,12 +31,13 @@ namespace BalloonParty.Shared.Disturbance
                 Direction = direction,
                 Duration = duration,
                 Elapsed = 0f,
-                LastT = 0f
+                LastT = 0f,
+                PaletteIndex = paletteIndex
             });
         }
 
         /// <summary>Advances every active ramp by <paramref name="dt" />, emitting the strength accrued this step.</summary>
-        public void Tick(float dt, Action<Vector3, float, float, Vector2> emit)
+        public void Tick(float dt, Action<Vector3, float, float, Vector2, int> emit)
         {
             for (var i = _active.Count - 1; i >= 0; i--)
             {
@@ -50,7 +52,7 @@ namespace BalloonParty.Shared.Disturbance
                 if (delta > 0.0001f)
                 {
                     var radiusNow = Mathf.Lerp(s.Radius * 0.3f, s.Radius, t);
-                    emit(s.Position, radiusNow, s.Strength * delta, s.Direction);
+                    emit(s.Position, radiusNow, s.Strength * delta, s.Direction, s.PaletteIndex);
                 }
 
                 if (t >= 1f)
@@ -69,6 +71,7 @@ namespace BalloonParty.Shared.Disturbance
             public float Duration;
             public float Elapsed;
             public float LastT;
+            public int PaletteIndex;
         }
     }
 }

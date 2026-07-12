@@ -118,7 +118,8 @@ namespace BalloonParty.Shared.Disturbance
         {
             var prev = RenderTexture.active;
             RenderTexture.active = rt;
-            GL.Clear(false, true, new Color(1f, 0.5f, 0.5f, 1f));
+            // A = 0: no palette-color tag anywhere yet (see the diffusion shader's channel map).
+            GL.Clear(false, true, new Color(1f, 0.5f, 0.5f, 0f));
             RenderTexture.active = prev;
         }
 

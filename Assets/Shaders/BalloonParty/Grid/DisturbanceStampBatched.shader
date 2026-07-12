@@ -36,6 +36,7 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceStampBatched"
             float  _StampRadii[MAX_STAMPS];
             float  _StampStrengths[MAX_STAMPS];
             float4 _StampDirections[MAX_STAMPS]; // xy = direction
+            float  _StampColorIndices[MAX_STAMPS]; // encoded palette index; 0 = no color
 
             struct appdata
             {
@@ -60,10 +61,12 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceStampBatched"
             fixed4 frag(v2f i) : SV_Target
             {
                 float2 uv = i.uv;
-                float3 current = tex2D(_MainTex, uv).rgb;
+                float4 current = tex2D(_MainTex, uv);
 
                 float density = current.r;
                 float2 displace = current.gb;
+                // Palette indices are written hard, never blended — averaging two would be a wrong color.
+                float colorIndex = current.a;
 
                 for (int s = 0; s < _StampCount; s++)
                 {
@@ -105,9 +108,15 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceStampBatched"
                         pushDir = (dist > 0.001) ? -(toPixel / dist) : float2(0, 0);
                     }
                     displace += pushDir * falloff * _DisplaceAmount;
+
+                    float encoded = _StampColorIndices[s];
+                    if (encoded > 0.001 && falloff > 0.2)
+                    {
+                        colorIndex = encoded;
+                    }
                 }
 
-                return fixed4(density, saturate(displace), 1.0);
+                return fixed4(density, saturate(displace), colorIndex);
             }
             ENDCG
         }

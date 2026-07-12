@@ -27,6 +27,8 @@ Shader "Hidden/BalloonParty/Editor/ChannelPreview"
 
             sampler2D _MainTex;
             float4 _ChannelMask;
+            float4 _PaletteColors[16];
+            float _DecodePalette; // 1 = a solo-A view decodes the encoded palette index to its color
 
             fixed4 frag(v2f_img i) : SV_Target
             {
@@ -36,6 +38,22 @@ Shader "Hidden/BalloonParty/Editor/ChannelPreview"
 
                 if (selectedCount <= 1.0)
                 {
+                    // Solo-A on a palette-tagged map: show the color the encoded index maps to
+                    // (black = untagged), instead of near-black grayscale codes.
+                    if (_DecodePalette > 0.5 && _ChannelMask.a > 0.5)
+                    {
+                        // A packs (index + life) / 16 — dim the decoded color by the tag's remaining life.
+                        float v = tex.a * 16.0;
+                        if (v <= 0.05)
+                        {
+                            return fixed4(0, 0, 0, 1);
+                        }
+
+                        float idx = ceil(v) - 1.0;
+                        float life = saturate(v - idx);
+                        return fixed4(_PaletteColors[(int)idx].rgb * life, 1);
+                    }
+
                     // Zero or one channel selected — replicate the single value (0 if
                     // none are on) as grayscale, whichever channel it came from.
                     float v = tex.r * _ChannelMask.r + tex.g * _ChannelMask.g

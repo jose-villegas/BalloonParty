@@ -85,7 +85,9 @@ namespace BalloonParty.Item.Bomb
                 sourceColorId,
                 isRainbow ? settings.Bomb.RainbowEffectScale : 1f);
 
-            _disturbanceField.Stamp(StampSource.Bomb, worldPosition, Vector2.zero);
+            _disturbanceField.Stamp(
+                StampSource.Bomb, worldPosition, Vector2.zero,
+                paletteIndex: _palette.PaletteIndexOf(sourceColorId));
 
             if (converts != null)
             {

@@ -1,9 +1,11 @@
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Balloon.Type;
 using BalloonParty.Configuration;
 using BalloonParty.Nudge;
 using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
@@ -14,6 +16,7 @@ using UnityEngine;
 using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Items;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Balloon.Controller
 {
@@ -31,6 +34,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly IPublisher<TransformCapturedMessage> _transformCapturedPublisher;
         private readonly BalloonView _view;
         private readonly DisturbanceFieldService _disturbanceField;
+        private readonly IGamePalette _palette;
 
         private Action _onReturned;
         private IDisposable _itemActivatedSubscription;
@@ -57,6 +61,7 @@ namespace BalloonParty.Balloon.Controller
             _grid = context.Grid;
             _poolManager = context.PoolManager;
             _disturbanceField = context.DisturbanceField;
+            _palette = context.Palette;
         }
 
         public void Start()
@@ -99,7 +104,9 @@ namespace BalloonParty.Balloon.Controller
 
             if (playPopVfx)
             {
-                _disturbanceField.Stamp(StampSource.BalloonPop, _view.transform.position, Vector2.zero);
+                _disturbanceField.Stamp(
+                    StampSource.BalloonPop, _view.transform.position, Vector2.zero,
+                    paletteIndex: _palette.PaletteIndexOf(PopColorId()));
 
                 // Parent the pop VFX under whatever the view rides, so it moves with the level transition.
                 _view.PlayHitVfxForOutcome(HitOutcome.Pop, _view.transform.parent);
@@ -162,13 +169,37 @@ namespace BalloonParty.Balloon.Controller
             if (_model is IHasDeflectStamp stamper && stamper.DeflectStampScale > 0f)
             {
                 _disturbanceField.Stamp(
-                    StampSource.BalloonDeflect, balloonWorldPos, Vector2.zero, stamper.DeflectStampScale);
+                    StampSource.BalloonDeflect, balloonWorldPos, Vector2.zero, stamper.DeflectStampScale,
+                    _palette.PaletteIndexOf(ImpactColorId()));
             }
 
             _nudgePublisher.Publish(new NudgeMessage(
                 _model,
                 balloonWorldPos - msg.ProjectileDirection.normalized,
                 NudgeType.Deflect));
+        }
+
+        // Colorless heavies stamp their reserved palette entry; colored balloons stamp their own, and
+        // other colorless types stay neutral.
+        private string PopColorId()
+        {
+            var color = _model.GetColorId();
+            if (!string.IsNullOrEmpty(color))
+            {
+                return color;
+            }
+
+            var isHeavy = _model.TypeName is BalloonType.Tough or BalloonType.Unbreakable;
+            return isHeavy ? ImpactColorId() : color;
+        }
+
+        // The reserved presentation color for a heavy type's impacts: metallic sparks for the
+        // unbreakable, the tough entry otherwise.
+        private string ImpactColorId()
+        {
+            return _model.TypeName == BalloonType.Unbreakable
+                ? GamePalette.SparksColorId
+                : GamePalette.ToughColorId;
         }
 
         private void OnItemActivated(ItemActivatedMessage msg)
@@ -190,7 +221,9 @@ namespace BalloonParty.Balloon.Controller
             _popped = true;
 
             var popWorldPos = _view.transform.position;
-            _disturbanceField.Stamp(StampSource.BalloonPop, popWorldPos, Vector2.zero);
+            _disturbanceField.Stamp(
+                StampSource.BalloonPop, popWorldPos, Vector2.zero,
+                paletteIndex: _palette.PaletteIndexOf(PopColorId()));
 
             _view.PlayHitVfxForOutcome(HitOutcome.Pop);
             _grid.Remove(_model.SlotIndex.Value);

@@ -1,6 +1,8 @@
 using System;
 using System.Linq;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Display;
+using BalloonParty.Shared;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,15 +23,20 @@ namespace BalloonParty.Editor.Maps
         private static readonly int SceneCaptureTexId = Shader.PropertyToID("_SceneCaptureTex");
         private static readonly int DisturbanceTexId = Shader.PropertyToID("_DisturbanceTex");
         private static readonly int ChannelMaskId = Shader.PropertyToID("_ChannelMask");
+        private static readonly int PaletteColorsId = Shader.PropertyToID("_PaletteColors");
+        private static readonly int DecodePaletteId = Shader.PropertyToID("_DecodePalette");
         private static readonly string[] ChannelLabels = { "R", "G", "B", "A" };
         private static readonly MapDescriptor[] Descriptors = BuildDescriptors();
         private static readonly string[] MapNames = Descriptors.Select(d => d.Name).ToArray();
 
         private readonly bool[] _channelEnabled = { true, true, true, true };
+        private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
+        private readonly Vector4[] _paletteBuffer = new Vector4[16];
 
         private Material _channelMaterial;
         private int _selectedIndex;
         private Texture _customTexture;
+        private bool _decodePalette = true;
 
         [MenuItem("Tools/BalloonParty/Game Render Maps")]
         private static void Open()
@@ -69,6 +76,16 @@ namespace BalloonParty.Editor.Maps
             }
 
             DrawChannelToggles(descriptor);
+
+            if (descriptor.HasPaletteChannel)
+            {
+                _decodePalette = EditorGUILayout.ToggleLeft(
+                    new GUIContent("Decode A to palette color",
+                        "With only A selected, show the color each encoded index maps to (black = untagged) " +
+                        "instead of the raw grayscale code."),
+                    _decodePalette);
+            }
+
             EditorGUILayout.Space();
 
             var texture = ResolveTexture(descriptor);
@@ -79,7 +96,7 @@ namespace BalloonParty.Editor.Maps
                 return;
             }
 
-            DrawPreview(texture);
+            DrawPreview(texture, descriptor.HasPaletteChannel && _decodePalette);
             DrawFooter(texture);
         }
 
@@ -122,7 +139,7 @@ namespace BalloonParty.Editor.Maps
                 : descriptor.UnavailableHint;
         }
 
-        private void DrawPreview(Texture texture)
+        private void DrawPreview(Texture texture, bool decodePalette)
         {
             var material = EnsureMaterial();
             var aspect = (float)texture.width / texture.height;
@@ -131,6 +148,12 @@ namespace BalloonParty.Editor.Maps
             if (material != null)
             {
                 material.SetVector(ChannelMaskId, MaskVector());
+                material.SetFloat(DecodePaletteId, decodePalette ? 1f : 0f);
+                if (decodePalette)
+                {
+                    PushPalette(material);
+                }
+
                 EditorGUI.DrawPreviewTexture(rect, texture, material);
             }
             else
@@ -140,6 +163,25 @@ namespace BalloonParty.Editor.Maps
                 // texture instead of breaking the window if the shader failed to load.
                 EditorGUI.DrawPreviewTexture(rect, texture);
             }
+        }
+
+        // Same index order the stampers encode (IGamePalette.Colors); missing asset = all black.
+        private void PushPalette(Material material)
+        {
+            Array.Clear(_paletteBuffer, 0, _paletteBuffer.Length);
+
+            var palette = _paletteCache.Value;
+            if (palette != null)
+            {
+                IGamePalette source = palette;
+                var count = Mathf.Min(source.Colors.Count, _paletteBuffer.Length);
+                for (var i = 0; i < count; i++)
+                {
+                    _paletteBuffer[i] = source.Colors[i].Color;
+                }
+            }
+
+            material.SetVectorArray(PaletteColorsId, _paletteBuffer);
         }
 
         private Vector4 MaskVector()
@@ -227,7 +269,10 @@ namespace BalloonParty.Editor.Maps
                     "Density — 1.0 = equilibrium (undisturbed); stamps dig it toward 0.0 as cloud/foliage displaces.",
                     "Displacement X — 0.5-biased (0.5 = zero offset), pushed away from the stamp direction.",
                     "Displacement Y — 0.5-biased (0.5 = zero offset), pushed away from the stamp direction.",
-                    "Unused — DisturbanceDiffusion.shader always writes alpha = 1.0; nothing reads or sets it otherwise."),
+                    "Palette tag, packed (index + life) / 16 — 16 slots, in-slot value = remaining life, " +
+                    "drained each diffusion tick (ColorTagDecay); 0 = untagged. Written hard (never " +
+                    "blended); agitated specks adopt the slot and flush toward that color.",
+                    hasPaletteChannel: true),
 
                 new MapDescriptor(
                     "GI Light Buffer",
@@ -252,11 +297,13 @@ namespace BalloonParty.Editor.Maps
             public readonly string ChannelG;
             public readonly string ChannelB;
             public readonly string ChannelA;
+            public readonly bool HasPaletteChannel;
 
             public bool IsCustom => Fetch == null;
 
             public MapDescriptor(string name, Func<Texture> fetch, string unavailableHint,
-                string channelR, string channelG, string channelB, string channelA)
+                string channelR, string channelG, string channelB, string channelA,
+                bool hasPaletteChannel = false)
             {
                 Name = name;
                 Fetch = fetch;
@@ -265,6 +312,7 @@ namespace BalloonParty.Editor.Maps
                 ChannelG = channelG;
                 ChannelB = channelB;
                 ChannelA = channelA;
+                HasPaletteChannel = hasPaletteChannel;
             }
         }
     }
