@@ -102,23 +102,115 @@ A bake shader expands the index map into the **terrain composite RT** (moderate 
 - One quad, sorting layer **Default**, sized to camera frustum + travel margin,
   parented/bound to `ScenarioContentRoot` with a `_parallaxFactor` (serialized).
 - Runtime shader samples: composite RT + detail noise (tileable, world-space UVs like
-  PuffCloud, so detail never swims during travel) + `_DisturbanceTex`:
-  - **Grass**: shear detail UVs along the displacement vector (G/B), strength × density
-    deficit — blades "part" around a wake and recover as the field reforms.
-  - **Water**: ripple = animated ring derived from density gradient (screen-cheap:
-    two extra taps for a gradient, or a normal-from-density trick) + a light specular
-    streak; subtle idle scroll on detail UVs.
-  - **Sand/dirt**: brief darkening/scatter where disturbed (density deficit → albedo
-    shift), slow recovery look for sand (lag the response with the field's reform).
-  - **Lava**: emissive pulse on agitation (LDR-boost now, HDR emitter later); slow
-    idle glow oscillation via the shader clock idiom (self-derived, no MPB churn).
-  - **Stone**: no reaction — the contrast sells the others.
-- Reaction params come from the composite's packed params channel — one shader, no
-  per-biome materials, no branching beyond a biome-id switch on cheap math.
+  PuffCloud, so detail never swims during travel) + `_DisturbanceTex`. The per-biome
+  reaction and material techniques are a design space, not a single answer — see
+  **Shader design — options per stage** below; final picks are made by eye via the
+  spike protocol at A3/B2.
+- Reaction params come from the bake's packed data channels — one shader, no per-biome
+  materials, no branching beyond a biome-id selector on cheap math.
 - **Opaque queue**: the terrain fully covers its pixels — render opaque (no blending)
   to save bandwidth under the fully-transparent 2D stack above it. Verify batching/
   sorting interaction in Frame Debugger (2D Renderer + opaque geometry — the URP
   migration taught us to verify, not assume).
+
+## Shader design — options per stage
+
+The visual calls below can't be settled on paper — each stage lists its candidate
+techniques with tradeoffs, a recommendation, and what the in-editor **spike** must
+prove. Spike protocol: shader variants behind `#pragma multi_compile`-style keywords
+(or just material swaps), toggled live in play mode with José's eye as judge; losers
+deleted, never shipped dormant.
+
+### S1 — Zone blending (bake-time)
+
+How two biomes meet is the single biggest style lever.
+
+| Option | How | Tradeoffs |
+|---|---|---|
+| **(a) Cross-fade** | smoothstep over noise-warped hex distance | Simplest; risks "airbrushed mush" between contrasting biomes (grass→lava) |
+| **(b) Height blending** | each biome's detail texture carries a "height" channel; blend weight is modulated by height so high features (grass tufts, stones) interleave INTO the neighbor instead of fading | The classic splat-map trick; organic interlocking edges; costs one extra channel per detail texture, still bake-time-only |
+| **(c) Dithered/stochastic** | blue-noise threshold between biomes | Cheapest; reads as pixel grit — likely fights the soft painterly style, keep only as a fallback |
+| **(d) Boundary SDF** | bake **signed distance to the biome boundary** into a data channel | Not a blend by itself — an *enabler*: shoreline foam bands, wet-sand darkening, lava crust edges, edge AO all become one-tap lookups at runtime. Strongly recommended **in addition to** (a) or (b) |
+
+**Recommendation**: (b) + (d). Domain-warp the hex distance with the baked tileable
+noise *before* blending (warp amplitude per biome pair — water wants smooth coasts,
+grass→dirt wants ragged). **Spike SP-1 (at A3)**: (a) vs (b) on a grass/sand/water
+test seed, judged at game zoom.
+
+### S2 — Grass (the flagship reaction)
+
+Top-down 2D "grass" is a material illusion — no geometry, no shells.
+
+| Option | How | Tradeoffs |
+|---|---|---|
+| **(a) Tinted noise** | detail noise × palette green | Baseline/fallback; flat, no identity |
+| **(b) Stroke-clump texture** | hand-authored (or tool-baked) tileable texture of top-down blade clumps, palette-tinted | The painterly look lives here; one texture; matches the bush foliage art language |
+| **(c) Two-layer offset depth** | dark under-layer + bright top-layer sampled with a small UV offset; offset vector = wind + disturbance displacement | Fake parallax depth for one extra tap; the *offset* is what makes blades "lean" convincingly |
+| **(d) Flow-map anisotropy** | per-pixel stroke direction from a baked flow field | Prettiest wind, most authoring; overkill unless (b)+(c) reads flat |
+
+**Recommendation**: (b) + (c). The disturbance reaction is then *shear*: displace the
+top layer's UVs along the field's displacement vector (G/B channels) scaled by density
+deficit — blades part around a wake and recover as the field reforms (recovery is free,
+it IS the field's reform). Idle wind: scroll a large-scale gust band (low-frequency
+noise) through the offset vector — **coordinate direction/speed with the bush wind so
+the world shares one wind**. **Spike SP-2 (at B2)**: (b)+(c) against (a), plus gust
+sync with bushes on screen.
+
+### S3 — Water
+
+| Option | How | Tradeoffs |
+|---|---|---|
+| **(a) Dual scrolling noise** | two detail-noise layers scrolled at different speeds/scales, combined into a pseudo-normal; glint = dot(pseudo-normal, light dir) | Two taps; the standard cheap water; light dir MUST be the GI/PuffCloud `_lightDirection` convention so the world shares one sun |
+| **(b) Baked Voronoi sparkle** | scrolled pre-baked Voronoi ridge texture as caustic glints | One tap, very stylized; can layer on (a) |
+| **(c) Ripples from density gradient** | band-pass the disturbance density deficit → expanding rings as the field diffuses; 2 extra taps for the gradient | Free propagation (the field already diffuses outward); rings are soft and painterly — likely enough |
+| **(d) True wave sim** | a second small ping-pong RT running the wave equation, stamped by the same disturbance events | **The infrastructure already exists** — `DisturbanceFieldResources`' ping-pong blit is structurally a wave-solver scaffold; a wave kernel + dedicated stamp hook gives real interference/reflection ripples. Cost: one more low-res RT + blit per tick. Gorgeous, but build only if (c) reads flat |
+| Shoreline | boundary-SDF band (S1-d): foam stripe + wet-sand darkening on the sand side | One tap; sells water more than ripples do — prioritize it |
+
+**Recommendation**: (a) + (c) + shoreline first; (d) as a flagged stretch task.
+**Spike SP-3 (at B2)**: (c) vs (d-prototype) on a water-heavy seed — decide if the
+wave sim earns its RT.
+
+### S4 — Sand / dirt / stone / lava
+
+- **Sand**: granular high-frequency detail; reaction options: *(a)* instantaneous
+  darkening by density deficit (cheap, recovers with the field) vs *(b)* a persistent
+  **footprint RT** (tiny ping-pong accumulating disturbance with very slow decay —
+  projectile tracks that linger in sand). (b) is charming and cheap (same pattern as
+  the field itself) but is a new resource — build behind the same decision gate as the
+  wave sim: only if (a) feels dead. Dirt = (a) with lower strength.
+- **Stone**: static detail + baked edge-AO from the boundary SDF. No reaction — the
+  contrast makes grass/water read as alive.
+- **Lava**: crust = thresholded detail noise (dark crust plates over bright gaps);
+  slow domain-scroll for flow; boundary SDF → cooled-crust rim. Reaction: agitation
+  boosts emissive intensity (authored as a float, HDR-ready for
+  `PLAN-HDRColorPipeline.md` B3 — under LDR it clamps, under HDR it blooms). Idle
+  pulse via the self-derived shader clock idiom (no MPB churn).
+
+### S5 — Data layout (bake outputs)
+
+| Option | Layout | Tradeoffs |
+|---|---|---|
+| (a) Single RGBA8 | RGB albedo + A packs biome id (high bits) & reaction strength (low bits) | One tap; packing/unpacking is fiddly and id quantization caps biome count & param resolution |
+| **(b) Two RTs** | RGBA8 composite (RGB albedo, A = blend/AO) + RG8 data map (R = dominant biome id, G = boundary SDF) | Two taps (identical bandwidth class at these resolutions); every technique above that wants the SDF or clean ids gets them without bit tricks |
+
+**Recommendation**: (b). Resolution spike at A-gate: 512 vs 1024 wide — the soft
+style may make 512 free money.
+
+### S6 — Runtime composition rules
+
+- **One sun**: light direction is the existing `_lightDirection` convention (GI +
+  PuffCloud) — terrain glints/shading must read from the same serialized value or a
+  shared global, never a second authored direction.
+- **One wind**: gust phase/direction shared with the bush wind parameters.
+- The GI overlay already composites over the terrain (it's below the overlay in
+  sorting) — terrain needs no lighting of its own beyond flavor; do NOT add a second
+  lighting model.
+- Opaque queue for the terrain quad (it fully covers its pixels; saves blend
+  bandwidth under a fully-transparent stack) — verify 2D Renderer opaque-pass ordering
+  in the Frame Debugger before relying on it (URP migration rule: verify, don't
+  assume).
+- Reaction budget: ≤ 4 extra taps in the common path (disturbance + gradient pair +
+  detail); wave-sim/footprint RTs are opt-in extras with their own device measurement.
 
 ## Task plan
 
@@ -157,10 +249,13 @@ access path before dispatch.
 from nearest slot), rebuilt on level start; lifecycle owned by the service's disposal.
 
 #### A3 — Bake blit shader + `TerrainBaker` · **P0 · M · opus**
-The composite bake (warped hex-distance blend, palette albedo, packed params). Shader
-work is in-editor-verified only — José's A-gate: inspect the composite in the Game
-Render Maps window (add it via C3 or a temp custom-slot drop). Blend width, warp
-strength, and per-biome albedo exposed on `BiomeProfile` for live tuning.
+The composite bake per shader-design S1 + S5: noise-warped hex-distance blending into
+the two-RT layout (composite RGBA8 + id/SDF data map). Ships **spike SP-1**
+(cross-fade vs height-blend, keyword-switched) for the A-gate decision. Shader work is
+in-editor-verified only — José's A-gate: inspect both RTs in the Game Render Maps
+window (add via C3 or the custom slot), pick the blend style, delete the loser. Blend
+width, warp amplitude per biome pair, and per-biome albedo exposed on `BiomeProfile`
+for live tuning; include the 512-vs-1024 resolution check here.
 
 **A-gate (José)**: composite for a handful of seeds reads as natural, blended,
 style-matched ground. Iterate A3 knobs before any view work.
@@ -174,11 +269,15 @@ Quad on Default layer, frustum+margin sizing, parallax binding to `ScenarioConte
 screenshots' soft style; travel/parallax feel during ascend + restart descent.
 
 #### B2 — Disturbance reactions · **P1 · M–L · opus**
-The per-biome reaction block (grass shear / water ripple / sand scatter / lava pulse)
-per the architecture section. This is the showpiece and the most tuning-heavy task —
-structure every constant as a material property so José can live-tune in play mode
-(the FrameRateSettings/GI knob philosophy). Verify reaction cost on device: the added
-taps run on every terrain pixel — budget ≤ 4 extra samples in the common path.
+The per-biome reaction block per shader-design S2–S4 recommendations: grass
+stroke+offset shear, water dual-noise + gradient rings + SDF shoreline, sand
+darkening, lava emissive pulse, stone inert. Ships **spikes SP-2** (grass technique
+A/B + bush wind sync) and **SP-3** (gradient rings vs wave-sim prototype — the wave
+sim reuses the disturbance ping-pong pattern; build the prototype minimal and be
+ready to delete it). This is the showpiece and the most tuning-heavy task — every
+constant a material property so José live-tunes in play mode. Device measurement
+closes it: ≤ 4 extra taps in the common path; wave-sim/footprint RTs only survive
+with their own pacing numbers.
 
 #### B3 — GI integration · **P1 · S · sonnet**
 Put the terrain on a captured layer (config change + docs), re-tune `_BounceStrength`/
@@ -220,7 +319,7 @@ inspect the pipeline.
 3. **Biome-per-altitude**: whether `LevelParameters` ranges carry a biome-profile
    reference (biomes change as you climb) or one profile spans the run with noise-only
    variation — decide with the pacing file's owner (it's under active edit).
-4. **Water spec**: how fancy the ripple is (gradient rings vs normal-faked specular) —
-   decide by eye at B2 with device cost measured.
+4. **Water spec**: settled by spike SP-3 (gradient rings vs wave-sim), not on paper —
+   the shoreline SDF band ships regardless (it sells water more than ripples do).
 5. **Speck/biome tinting**: follow-up once both this and the speck palette work land —
    `GetBiomeAtWorld` feeds the speck compute's palette selection.
