@@ -70,14 +70,9 @@ MonoBehaviour:
     Interval: 1
   - Sources: 256
     Radius: 0.9
-    Strength: -14
-    Duration: 0.475
-    Interval: 0.1
-  - Sources: 512
-    Radius: 0.15
-    Strength: 5
-    Duration: 0.5
-    Interval: 0.3
+    Strength: 0
+    Duration: 0
+    Interval: 0.6
   - Sources: 1024
     Radius: 1
     Strength: -1

@@ -1,18 +1,25 @@
+using System;
+using System.Collections.Generic;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Capabilities;
+using MessagePipe;
 using UnityEngine;
 using UnityEngine.Rendering;
 using VContainer;
+using Random = UnityEngine.Random;
 
 namespace BalloonParty.Slots.Actor
 {
     /// <summary>
     ///     A GPU-simulated field of ambient specks (dust/pollen). Each frame a compute pass advects every
-    ///     speck by Brownian drift + the scenario's motion vector + the disturbance field, wrapping them
-    ///     toroidally within a world region so the field is always populated; they render as billboards
-    ///     straight from the GPU buffer (no CPU readback). The motion vector is the smoothed velocity of
-    ///     <see cref="ScenarioContentRoot" />, so the field reacts to every scenario beat — the ascend, the
-    ///     restart descent, the float-away — automatically.
+    ///     active speck by Brownian drift + the scenario's motion vector + the disturbance field, wrapping
+    ///     them toroidally within a world region; they render as billboards straight from the GPU buffer
+    ///     (no CPU readback). The motion vector is the smoothed velocity of <see cref="ScenarioContentRoot" />,
+    ///     so the field reacts to every scenario beat — the ascend, the restart descent, the float-away —
+    ///     automatically. The buffer size is a cap: the field builds up as balloon pops enable specks
+    ///     (each burst seeded at the pop point), rather than all being present from the start.
     /// </summary>
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     internal sealed class SpeckField : MonoBehaviour
@@ -54,6 +61,7 @@ namespace BalloonParty.Slots.Actor
         private static readonly int ColorLerpRateId = Shader.PropertyToID("_ColorLerpRate");
         private static readonly int SpeckPaletteId = Shader.PropertyToID("_SpeckPalette");
         private static readonly int SpeckPaletteCountId = Shader.PropertyToID("_SpeckPaletteCount");
+        private static readonly int ActiveCountId = Shader.PropertyToID("_ActiveCount");
 
         [SerializeField] private ComputeShader _compute;
         [SerializeField] private Material _renderMaterial;
@@ -113,9 +121,24 @@ namespace BalloonParty.Slots.Actor
         [Tooltip("Per-second ramp of a speck's crossfade when its palette tag changes color (e.g. the rainbow cycling). Higher = snappier; ~4 crossfades in a quarter second.")]
         [SerializeField] private float _colorLerpRate = 4f;
 
+        [Header("Pop activation")]
+        [Tooltip("Specks rendered at the start. The buffer size (Count) is the cap; each pop enables more " +
+                 "up to it. 0 = the field starts empty and builds entirely from pops.")]
+        [SerializeField] private int _initialActiveCount;
+
+        [Tooltip("Specks a single balloon pop enables (once the cap is reached, it repositions this many " +
+                 "of the oldest specks to the new pop instead).")]
+        [SerializeField] private int _specksPerPop = 32;
+
+        [Tooltip("World-space radius the enabled specks scatter within around the pop point.")]
+        [SerializeField] private float _popSpread = 0.4f;
+
         [Inject] private ScenarioContentRoot _scenarioRoot;
         [Inject] private DisturbanceFieldService _disturbance;
         [Inject] private IGamePalette _palette;
+        [Inject] private ISubscriber<ActorHitMessage> _hitSubscriber;
+
+        private readonly List<Vector2> _pendingPops = new();
 
         private ComputeBuffer _speckBuffer;
         private Mesh _mesh;
@@ -124,6 +147,10 @@ namespace BalloonParty.Slots.Actor
         private Vector2 _motionDelta;
         private bool _motionSeeded;
         private bool _ready;
+        private int _activeCount;
+        private int _writeCursor;
+        private Speck[] _burst;
+        private IDisposable _hitSubscription;
 
         private void Start()
         {
@@ -160,6 +187,15 @@ namespace BalloonParty.Slots.Actor
             BuildRenderMesh();
 
             PushPalette();
+
+            _specksPerPop = Mathf.Clamp(_specksPerPop, 1, _count);
+            _burst = new Speck[_specksPerPop];
+            _activeCount = Mathf.Clamp(_initialActiveCount, 0, _count);
+            _writeCursor = _activeCount % _count;
+
+            // Each pop enables (or, once capped, repositions) a burst of specks at the pop point.
+            _hitSubscription = _hitSubscriber.Subscribe(OnActorHit);
+
             _ready = true;
         }
 
@@ -178,6 +214,7 @@ namespace BalloonParty.Slots.Actor
                 return;
             }
 
+            FlushPops();
             SampleMotionDelta();
             Dispatch(dt);
             PushRenderParams();
@@ -185,6 +222,8 @@ namespace BalloonParty.Slots.Actor
 
         private void OnDestroy()
         {
+            _hitSubscription?.Dispose();
+            _hitSubscription = null;
             _speckBuffer?.Release();
             _speckBuffer = null;
             if (_mesh != null)
@@ -228,6 +267,7 @@ namespace BalloonParty.Slots.Actor
             _renderMaterial.SetFloat(SpeckTimeId, Time.time);
             _renderMaterial.SetFloat(FadeInId, _fadeIn);
             _renderMaterial.SetFloat(FadeOutId, _fadeOut);
+            _renderMaterial.SetInt(ActiveCountId, _activeCount);
         }
 
         // The palette the render lerps disturbed specks toward; indices must match the stampers'
@@ -243,6 +283,65 @@ namespace BalloonParty.Slots.Actor
 
             _renderMaterial.SetVectorArray(SpeckPaletteId, colors);
             _renderMaterial.SetInt(SpeckPaletteCountId, count);
+        }
+
+        private void OnActorHit(ActorHitMessage msg)
+        {
+            if (msg.Outcome == HitOutcome.Pop)
+            {
+                _pendingPops.Add(msg.WorldPosition);
+            }
+        }
+
+        // Drained in LateUpdate so the buffer writes land before the frame's compute dispatch.
+        private void FlushPops()
+        {
+            if (_pendingPops.Count == 0)
+            {
+                return;
+            }
+
+            foreach (var pop in _pendingPops)
+            {
+                EnableBurst(pop);
+            }
+
+            _pendingPops.Clear();
+        }
+
+        // Fills the next burst of specks at the pop point, wrapping the write cursor over the buffer and
+        // growing the active count toward the cap. Once capped, this repositions the oldest specks for a
+        // fresh burst. Specks are world-space, so the pop's world position places them directly; they pick
+        // up the pop's colour from the disturbance field's tag where they land.
+        private void EnableBurst(Vector2 worldPos)
+        {
+            var n = _burst.Length;
+            for (var i = 0; i < n; i++)
+            {
+                _burst[i] = new Speck
+                {
+                    Position = worldPos + Random.insideUnitCircle * _popSpread,
+                    Velocity = Vector2.zero,
+                    Seed = Random.value,
+                    Age = 0f,
+                    Lifetime = Mathf.Lerp(_lifetimeRange.x, _lifetimeRange.y, Random.value),
+                    EffectiveVel = Vector2.zero,
+                    Heat = 0f,
+                    PaletteIndex = -1f,
+                    PrevPaletteIndex = -1f,
+                    ColorBlend = 1f,
+                };
+            }
+
+            var firstSpan = Mathf.Min(n, _count - _writeCursor);
+            _speckBuffer.SetData(_burst, 0, _writeCursor, firstSpan);
+            if (firstSpan < n)
+            {
+                _speckBuffer.SetData(_burst, firstSpan, 0, n - firstSpan);
+            }
+
+            _writeCursor = (_writeCursor + n) % _count;
+            _activeCount = Mathf.Min(_count, _activeCount + n);
         }
 
         private void SeedSpecks()
@@ -309,7 +408,14 @@ namespace BalloonParty.Slots.Actor
 
         private void Dispatch(float dt)
         {
-            _compute.SetInt(CountId, _count);
+            if (_activeCount <= 0)
+            {
+                return;
+            }
+
+            // _Count drives the compute's bounds guard; feeding the active count simulates only the
+            // enabled specks (and dispatches just enough thread groups for them).
+            _compute.SetInt(CountId, _activeCount);
             _compute.SetFloat(DeltaTimeId, dt);
             _compute.SetFloat(TimeId, Time.time);
             _compute.SetVector(MotionDeltaId, _motionDelta);
@@ -334,7 +440,7 @@ namespace BalloonParty.Slots.Actor
             _compute.SetVector(FieldBoundsSizeId, hasField ? _disturbance.FieldBoundsSize : Vector2.one);
 
             _compute.SetBuffer(_kernel, SpecksId, _speckBuffer);
-            _compute.Dispatch(_kernel, Mathf.CeilToInt(_count / (float)ThreadGroupSize), 1, 1);
+            _compute.Dispatch(_kernel, Mathf.CeilToInt(_activeCount / (float)ThreadGroupSize), 1, 1);
         }
 
         private struct Speck

@@ -38,11 +38,11 @@ namespace BalloonParty.Balloon.Type
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         [Inject] private DisturbanceFieldService _disturbanceField;
 
-        private readonly List<int> _attractColorIndices = new();
+        private readonly List<int> _colorIndices = new();
 
         private MaterialPropertyBlock _block;
         private float _timeOffset;
-        private int _attractCursor;
+        private int _colorCursor;
 
         private void Awake()
         {
@@ -66,7 +66,7 @@ namespace BalloonParty.Balloon.Type
         public void Bind(IBalloonModel model, CompositeDisposable disposables)
         {
             PushBands();
-            RebuildAttractColors();
+            RebuildColors();
 
             // LevelDifficultyResolver also reacts to this message to re-resolve Current, and MessagePipe
             // doesn't guarantee subscriber order — defer a frame so the new allowed set has landed.
@@ -74,10 +74,9 @@ namespace BalloonParty.Balloon.Type
                 .Subscribe(_ => RepushBandsNextFrame().Forget())
                 .AddTo(disposables);
 
-            // Cadence + force per stamp from its profile: the outer attraction gathers specks (cycling
-            // the available colors), the inner repulsion clears the center → a ring.
-            StartPulse(StampSource.RainbowAttract, disposables, EmitAttract);
-            StartPulse(StampSource.RainbowRepel, disposables, EmitRepel);
+            // One colour-only stamp (no force — R stays at rest) tags nearby specks with the next
+            // available colour each pulse; the RainbowColor profile's Interval paces how fast it cycles.
+            StartPulse(StampSource.RainbowColor, disposables, EmitColor);
         }
 
         private void StartPulse(StampSource source, CompositeDisposable disposables, Action emit)
@@ -103,12 +102,12 @@ namespace BalloonParty.Balloon.Type
             }
 
             PushBands();
-            RebuildAttractColors();
+            RebuildColors();
         }
 
-        private void RebuildAttractColors()
+        private void RebuildColors()
         {
-            _attractColorIndices.Clear();
+            _colorIndices.Clear();
             var colors = Palette.ColorNamesForMask(_levelParams.Current.AllowedColorsMask);
             if (colors == null)
             {
@@ -120,36 +119,23 @@ namespace BalloonParty.Balloon.Type
                 var index = Palette.PaletteIndexOf(color);
                 if (index >= 0)
                 {
-                    _attractColorIndices.Add(index);
+                    _colorIndices.Add(index);
                 }
             }
         }
 
-        // Outer inward pull, tagged with the next available color so drawn-in specks cycle the palette.
-        private void EmitAttract()
+        // Tags nearby specks with the next available colour so they cycle the palette. Colour-only
+        // (the RainbowColor profile authors Strength 0), so it never pushes specks — R stays at rest.
+        private void EmitColor()
         {
-            if (_attractColorIndices.Count == 0)
+            if (_colorIndices.Count == 0)
             {
                 return;
             }
 
-            var index = _attractColorIndices[_attractCursor % _attractColorIndices.Count];
-            _attractCursor++;
-
-            var profile = _disturbanceField.GetProfile(StampSource.RainbowAttract);
-            _disturbanceField.Stamp(
-                transform.position, profile.Radius, profile.Strength, Vector2.zero, profile.Duration,
-                index, reportImpact: false);
-        }
-
-        // Inner push that clears the center so the attraction gathers into a ring, not a blob. No color
-        // tag (the attraction owns the tint) and no impact (constant emitter shouldn't rustle bushes).
-        private void EmitRepel()
-        {
-            var profile = _disturbanceField.GetProfile(StampSource.RainbowRepel);
-            _disturbanceField.Stamp(
-                transform.position, profile.Radius, profile.Strength, Vector2.zero, profile.Duration,
-                paletteIndex: -1, reportImpact: false);
+            var index = _colorIndices[_colorCursor % _colorIndices.Count];
+            _colorCursor++;
+            _disturbanceField.Stamp(StampSource.RainbowColor, transform.position, Vector2.zero, index);
         }
 
         private void PushBands()

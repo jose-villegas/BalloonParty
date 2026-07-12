@@ -71,6 +71,7 @@ Shader "BalloonParty/Scenario/SpeckField"
             float _FadeOut;
             float _TrailLength;
             float _TrailMax;
+            int _ActiveCount;
 
             struct v2f
             {
@@ -101,7 +102,17 @@ Shader "BalloonParty/Scenario/SpeckField"
             v2f vert(uint vid : SV_VertexID)
             {
                 // The mesh has 6 verts per speck; split the id into speck index + quad corner.
-                Speck s = _Specks[vid / 6u];
+                uint speckIndex = vid / 6u;
+
+                // Specks past the enabled count collapse offscreen — the field builds up as pops enable more.
+                if (speckIndex >= (uint)_ActiveCount)
+                {
+                    v2f dead = (v2f)0;
+                    dead.pos = float4(2.0, 2.0, 2.0, 1.0); // outside clip space → culled
+                    return dead;
+                }
+
+                Speck s = _Specks[speckIndex];
                 float2 corner = Corners[vid % 6u];
 
                 // Life fade: ramp in over _FadeIn, out over _FadeOut (fractions of lifetime), driving both
