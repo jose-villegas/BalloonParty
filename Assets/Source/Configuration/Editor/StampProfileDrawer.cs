@@ -14,7 +14,7 @@ namespace BalloonParty.Configuration.Editor
                 return EditorGUIUtility.singleLineHeight;
             }
 
-            return EditorGUIUtility.singleLineHeight * 5f + EditorGUIUtility.standardVerticalSpacing * 4f;
+            return EditorGUIUtility.singleLineHeight * 6f + EditorGUIUtility.standardVerticalSpacing * 5f;
         }
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
@@ -39,6 +39,7 @@ namespace BalloonParty.Configuration.Editor
                 DrawField("Radius", "Radius", ref y);
                 DrawField("Strength", "Strength", ref y);
                 DrawField("Duration", "Duration", ref y);
+                DrawField("Interval", "Interval", ref y);
 
                 EditorGUI.indentLevel--;
 

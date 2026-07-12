@@ -176,7 +176,7 @@ MonoBehaviour:
           m_RotationOrder: 4
       _itemWeights: []
       _gridActorGates: []
-      _allowedColorsMask: 1
+      _allowedColorsMask: 15
   - _fromLevel: 2
     _toLevel: 2
     _parameters:

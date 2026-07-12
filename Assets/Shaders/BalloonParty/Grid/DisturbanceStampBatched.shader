@@ -111,9 +111,10 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceStampBatched"
                     {
                         pushDir = (dist > 0.001) ? -(toPixel / dist) : float2(0, 0);
                     }
-                    // Flow follows the sign: repulsion (+) pushes specks out, attraction (-) pulls
-                    // them in, color-only (0) shifts nothing.
-                    displace += pushDir * falloff * _DisplaceAmount * sign(strength);
+                    // Flow follows signed strength (clamped to +/-1): repulsion (+) pushes specks out,
+                    // attraction (-) pulls them in, magnitude scales with |strength| up to 1 so a gentle
+                    // stamp drifts and a strong one shoves; color-only (0) shifts nothing.
+                    displace += pushDir * falloff * _DisplaceAmount * clamp(strength, -1.0, 1.0);
 
                     float encoded = _StampColorIndices[s];
                     if (encoded > 0.001 && falloff > 0.2)

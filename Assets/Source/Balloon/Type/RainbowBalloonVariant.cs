@@ -32,10 +32,6 @@ namespace BalloonParty.Balloon.Type
 
         [SerializeField] private SpriteRenderer _renderer;
 
-        [Tooltip("Seconds between the constant inward (attraction) field stamps that pull specks into " +
-                 "the balloon, each tagged with the next available color. 0 = off.")]
-        [SerializeField] private float _attractInterval = 0.3f;
-
         // Palette is inherited from ColorableBalloonVariant (protected) — a second [Inject] field of
         // the same type here would make VContainer's injector throw "Duplicate injection found".
         [Inject] private IActiveLevelParameters _levelParams;
@@ -78,14 +74,23 @@ namespace BalloonParty.Balloon.Type
                 .Subscribe(_ => RepushBandsNextFrame().Forget())
                 .AddTo(disposables);
 
-            // Constant inward pull: each tick stamps an attraction at the balloon, cycling the tag
-            // through the available colors so drawn-in specks take on the rainbow's palette.
-            if (_attractInterval > 0f)
+            // Cadence + force per stamp from its profile: the outer attraction gathers specks (cycling
+            // the available colors), the inner repulsion clears the center → a ring.
+            StartPulse(StampSource.RainbowAttract, disposables, EmitAttract);
+            StartPulse(StampSource.RainbowRepel, disposables, EmitRepel);
+        }
+
+        private void StartPulse(StampSource source, CompositeDisposable disposables, Action emit)
+        {
+            var interval = _disturbanceField.GetProfile(source).Interval;
+            if (interval <= 0f)
             {
-                Observable.Interval(TimeSpan.FromSeconds(_attractInterval))
-                    .Subscribe(_ => EmitFieldStamps())
-                    .AddTo(disposables);
+                return;
             }
+
+            Observable.Interval(TimeSpan.FromSeconds(interval))
+                .Subscribe(_ => emit())
+                .AddTo(disposables);
         }
 
         private async UniTaskVoid RepushBandsNextFrame()
@@ -120,18 +125,9 @@ namespace BalloonParty.Balloon.Type
             }
         }
 
-        private void EmitFieldStamps()
+        // Outer inward pull, tagged with the next available color so drawn-in specks cycle the palette.
+        private void EmitAttract()
         {
-            var pos = transform.position;
-
-            // Inner repulsion clears the center so the wider attraction gathers specks into a ring, not
-            // a solid blob. No impact — this fires constantly and shouldn't rustle bushes; no color tag,
-            // the attraction owns the tint.
-            var repel = _disturbanceField.GetProfile(StampSource.RainbowRepel);
-            _disturbanceField.Stamp(
-                pos, repel.Radius, repel.Strength, Vector2.zero, repel.Duration,
-                paletteIndex: -1, reportImpact: false);
-
             if (_attractColorIndices.Count == 0)
             {
                 return;
@@ -139,7 +135,21 @@ namespace BalloonParty.Balloon.Type
 
             var index = _attractColorIndices[_attractCursor % _attractColorIndices.Count];
             _attractCursor++;
-            _disturbanceField.Stamp(StampSource.RainbowAttract, pos, Vector2.zero, index);
+
+            var profile = _disturbanceField.GetProfile(StampSource.RainbowAttract);
+            _disturbanceField.Stamp(
+                transform.position, profile.Radius, profile.Strength, Vector2.zero, profile.Duration,
+                index, reportImpact: false);
+        }
+
+        // Inner push that clears the center so the attraction gathers into a ring, not a blob. No color
+        // tag (the attraction owns the tint) and no impact (constant emitter shouldn't rustle bushes).
+        private void EmitRepel()
+        {
+            var profile = _disturbanceField.GetProfile(StampSource.RainbowRepel);
+            _disturbanceField.Stamp(
+                transform.position, profile.Radius, profile.Strength, Vector2.zero, profile.Duration,
+                paletteIndex: -1, reportImpact: false);
         }
 
         private void PushBands()

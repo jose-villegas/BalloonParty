@@ -28,6 +28,12 @@ namespace BalloonParty.Configuration.Palette
         /// </summary>
         public const string SparksColorId = "Sparks";
 
+        /// <summary>
+        ///     Presentation-only palette entry for the unbreakable's constant field pulse — authored in
+        ///     the palette asset but never a spawnable balloon color.
+        /// </summary>
+        public const string UnbreakableColorId = "Unbreakable";
+
         [SerializeField] private PaletteEntry[] _colors;
 
         private Dictionary<string, PaletteEntry> _byName;

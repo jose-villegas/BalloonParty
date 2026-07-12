@@ -11,7 +11,7 @@ using UnityEngine;
 namespace BalloonParty.Balloon.Model
 {
     internal abstract class BalloonModelBase : IWriteableBalloonModel, IPressureMovable, IBalanceInfluence,
-        IHasDeflectStamp, IHasWarningStamp
+        IHasDeflectStamp
     {
         private readonly float _separationBias;
 
@@ -21,7 +21,6 @@ namespace BalloonParty.Balloon.Model
         public int BalancePriority { get; }
         public bool DirectBalanceMotion { get; }
         public float DeflectStampScale { get; }
-        public float WarningStampInterval { get; }
         public ReactiveProperty<int> HitsRemaining { get; }
         public ReactiveProperty<Vector2Int> SlotIndex { get; } = new();
         public ReactiveProperty<bool> IsStable { get; } = new(true);
@@ -56,7 +55,6 @@ namespace BalloonParty.Balloon.Model
             BalancePriority = config.BalancePriority;
             DirectBalanceMotion = config.DirectBalanceMotion;
             DeflectStampScale = config.DeflectStampScale;
-            WarningStampInterval = config.WarningStampInterval;
         }
 
         // Same-type proximity tendency, signed: positive keeps apart (candidates farther from the nearest

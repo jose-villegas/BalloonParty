@@ -64,30 +64,31 @@ namespace BalloonParty.Balloon.Type
             disposables.Add(warningPulse);
 
             durable.HitsRemaining
-                .Subscribe(hits => OnHitsChanged(model, hits, maxHits, warningPulse))
+                .Subscribe(hits => OnHitsChanged(hits, maxHits, warningPulse))
                 .AddTo(disposables);
         }
 
         public void Initialize(IWriteableBalloonModel model, int levelAllowedColorsMask) { }
 
-        private void OnHitsChanged(IBalloonModel model, int hits, int maxHits, SerialDisposable warningPulse)
+        private void OnHitsChanged(int hits, int maxHits, SerialDisposable warningPulse)
         {
             ApplyDamageProgress(hits, maxHits);
 
-            // On its last hit the tough "breathes" its reserved color into the field at the configured
+            // On its last hit the tough "breathes" its reserved color into the field at the profile's
             // cadence — alternating repel/attract pulses — so the danger reads in the specks too.
-            warningPulse.Disposable = hits == 1 ? StartWarningPulse(model) : Disposable.Empty;
+            warningPulse.Disposable = hits == 1 ? StartWarningPulse() : Disposable.Empty;
         }
 
-        private IDisposable StartWarningPulse(IBalloonModel model)
+        private IDisposable StartWarningPulse()
         {
-            if (model is not IHasWarningStamp stamper || stamper.WarningStampInterval <= 0f)
+            var interval = _disturbanceField.GetProfile(StampSource.ToughWarning).Interval;
+            if (interval <= 0f)
             {
                 return Disposable.Empty;
             }
 
             _repelPulse = false;
-            return Observable.Interval(TimeSpan.FromSeconds(stamper.WarningStampInterval))
+            return Observable.Interval(TimeSpan.FromSeconds(interval))
                 .Subscribe(_ => EmitAlternatingPulse());
         }
 

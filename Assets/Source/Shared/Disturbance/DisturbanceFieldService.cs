@@ -46,7 +46,7 @@ namespace BalloonParty.Shared.Disturbance
         private DisturbanceFieldResources _resources;
         private DisturbanceFieldCoordinates _coords;
         private LerpStampScheduler _lerpScheduler;
-        private Action<Vector3, float, float, Vector2, int> _emitInstantStamp;
+        private Action<Vector3, float, float, Vector2, int, bool> _emitInstantStamp;
         private float _diffusionTimer;
         private Vector2 _windTarget;
         private Vector2 _windCurrent;
@@ -78,8 +78,8 @@ namespace BalloonParty.Shared.Disturbance
             // UV space is normalised per-axis over a non-square field, so the stamp shaders correct
             // the vertical delta by this ratio to keep a radius circular in world space.
             _stampAspect = _coords.Bounds.height / _coords.Bounds.width;
-            _emitInstantStamp = (pos, radius, strength, dir, palette) =>
-                Stamp(pos, radius, strength, dir, paletteIndex: palette);
+            _emitInstantStamp = (pos, radius, strength, dir, palette, report) =>
+                Stamp(pos, radius, strength, dir, paletteIndex: palette, reportImpact: report);
 
             _resources.Initialize(_coords.Width, _coords.Height);
             PushGlobalBounds();
@@ -161,7 +161,7 @@ namespace BalloonParty.Shared.Disturbance
 
             if (duration > 0f)
             {
-                _lerpScheduler.Add(worldPosition, radius, strength, direction, duration, paletteIndex);
+                _lerpScheduler.Add(worldPosition, radius, strength, direction, duration, paletteIndex, reportImpact);
                 return;
             }
 

@@ -17,6 +17,8 @@ namespace BalloonParty.Configuration.Effects
         ToughWarning  = 1 << 7,
         RainbowAttract = 1 << 8,
         RainbowRepel  = 1 << 9,
+        UnbreakableGather = 1 << 10,
+        UnbreakableBurst = 1 << 11,
     }
 
     [Serializable]
@@ -28,9 +30,14 @@ namespace BalloonParty.Configuration.Effects
         public float Radius;
         public float Strength;
 
-        [Tooltip("Duration over which the stamp ramps up. 0 = instant.")]
-        [Range(0f, 0.5f)]
+        [Tooltip("Seconds over which the stamp ramps up (its radius expands and its strength is spread " +
+                 "across the window). 0 = instant.")]
+        [Range(0f, 5f)]
         public float Duration;
+
+        [Tooltip("For constant emitters (tough/rainbow/unbreakable pulses): seconds between emissions. " +
+                 "0 = not a periodic emitter (event-driven stamps like pops/items ignore this).")]
+        public float Interval;
     }
 
     [CreateAssetMenu(menuName = "Configuration/Disturbance Field Settings", fileName = "DisturbanceFieldSettings")]
@@ -94,9 +101,11 @@ namespace BalloonParty.Configuration.Effects
             new StampProfile { Sources = StampSource.Bomb,         Radius = 1.2f, Strength = 1.0f, Duration = 0.2f },
             new StampProfile { Sources = StampSource.Laser,        Radius = 0.4f, Strength = 0.6f, Duration = 0.1f },
             new StampProfile { Sources = StampSource.Paint,        Radius = 0.6f, Strength = 0.5f, Duration = 0.1f },
-            new StampProfile { Sources = StampSource.ToughWarning, Radius = 0.4f, Strength = 0.3f, Duration = 0f },
-            new StampProfile { Sources = StampSource.RainbowAttract, Radius = 0.7f, Strength = -0.4f, Duration = 0f },
-            new StampProfile { Sources = StampSource.RainbowRepel, Radius = 0.3f, Strength = 0.4f, Duration = 0f },
+            new StampProfile { Sources = StampSource.ToughWarning, Radius = 0.4f, Strength = 0.3f, Duration = 0f, Interval = 1f },
+            new StampProfile { Sources = StampSource.RainbowAttract, Radius = 0.7f, Strength = -0.4f, Duration = 0f, Interval = 0.3f },
+            new StampProfile { Sources = StampSource.RainbowRepel, Radius = 0.3f, Strength = 0.4f, Duration = 0f, Interval = 0.3f },
+            new StampProfile { Sources = StampSource.UnbreakableGather, Radius = 1.2f, Strength = -0.15f, Duration = 0f, Interval = 0.3f },
+            new StampProfile { Sources = StampSource.UnbreakableBurst, Radius = 0.9f, Strength = 1f, Duration = 0f, Interval = 2f },
         };
 
         public int TexelsPerUnit => _texelsPerUnit;

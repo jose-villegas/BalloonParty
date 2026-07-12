@@ -3,7 +3,11 @@ using UnityEditor;
 #endif
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Display;
+using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Extensions;
 using UniRx;
 using UnityEngine;
 using VContainer;
@@ -33,6 +37,8 @@ namespace BalloonParty.Balloon.Type
         private float _instancePhase;
         private Vector3 _pushedCenter;
         private SceneCaptureService _sceneCapture;
+        private DisturbanceFieldService _disturbanceField;
+        private IGamePalette _palette;
 
         private void Awake()
         {
@@ -89,9 +95,12 @@ namespace BalloonParty.Balloon.Type
         }
 
         [Inject]
-        private void Construct(SceneCaptureService sceneCapture)
+        private void Construct(
+            SceneCaptureService sceneCapture, DisturbanceFieldService disturbanceField, IGamePalette palette)
         {
             _sceneCapture = sceneCapture;
+            _disturbanceField = disturbanceField;
+            _palette = palette;
 
             // Settle the ref-count for an instance injected while already active.
             if (isActiveAndEnabled)
@@ -107,6 +116,11 @@ namespace BalloonParty.Balloon.Type
             _instancePhase = Random.value * 100f;
             ComputeRadiusIfNeeded();
             PushSphereState(_instancePhase, false);
+
+            // Two-phase field rhythm (cadence + force both from the profiles): a frequent gentle gather
+            // draws specks in, an occasional strong burst shoves them out — tagged the Unbreakable color.
+            StartPulse(StampSource.UnbreakableGather, disposables);
+            StartPulse(StampSource.UnbreakableBurst, disposables);
         }
 
         private void PushSphereState(float timeOffset, bool zeroShaderClock)
@@ -140,6 +154,37 @@ namespace BalloonParty.Balloon.Type
                 _block.SetFloat(AnimationSpeedId, zeroShaderClock ? 0f : ShaderClockRate);
                 r.SetPropertyBlock(_block);
             }
+        }
+
+        private void StartPulse(StampSource source, CompositeDisposable disposables)
+        {
+            if (_disturbanceField == null)
+            {
+                return;
+            }
+
+            var interval = _disturbanceField.GetProfile(source).Interval;
+            if (interval <= 0f)
+            {
+                return;
+            }
+
+            Observable.Interval(System.TimeSpan.FromSeconds(interval))
+                .Subscribe(_ => EmitPulse(source))
+                .AddTo(disposables);
+        }
+
+        private void EmitPulse(StampSource source)
+        {
+            if (_disturbanceField == null || _palette == null)
+            {
+                return;
+            }
+
+            var profile = _disturbanceField.GetProfile(source);
+            _disturbanceField.Stamp(
+                transform.position, profile.Radius, profile.Strength, Vector2.zero, profile.Duration,
+                _palette.PaletteIndexOf(GamePalette.UnbreakableColorId), reportImpact: false);
         }
 
         private void ComputeRadiusIfNeeded()
