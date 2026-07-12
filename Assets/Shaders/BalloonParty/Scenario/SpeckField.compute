@@ -1,7 +1,7 @@
 // Advects an ambient speck field each frame: Brownian drift + a global motion vector + the disturbance
 // field, wrapped toroidally within a world region. Driven by SpeckField.cs.
 // STARTER — validate + tune in-editor (Built-in RP compute). Speck layout must match the C# struct:
-// float2 position, float2 velocity, float seed, float age, float lifetime (stride 28 bytes).
+// the C# struct: position, velocity, seed, age, lifetime, effectiveVel, heat (10 floats).
 #pragma kernel Advect
 
 struct Speck
@@ -12,6 +12,7 @@ struct Speck
     float age;
     float lifetime;
     float2 effectiveVel;
+    float heat;
 };
 
 RWStructuredBuffer<Speck> _Specks;
@@ -35,6 +36,8 @@ float2 _RegionMin;
 float2 _RegionSize;
 float _MinLifetime;
 float _MaxLifetime;
+float _HeatGain;
+float _HeatDecay;
 
 float hash11(float p)
 {
@@ -64,6 +67,7 @@ void Advect(uint3 id : SV_DispatchThreadID)
         s.seed = frac(r * 1.7 + 0.13);
         s.lifetime = lerp(_MinLifetime, _MaxLifetime, hash11(r + 9.1));
         s.age = 0.0;
+        s.heat = 0.0;
     }
 
     // Brownian drift: a per-speck pseudo-random direction that re-rolls roughly once a second.
@@ -121,6 +125,11 @@ void Advect(uint3 id : SV_DispatchThreadID)
     // Match the scenario's bulk move 1:1 (influence = parallax factor; 1 = exact): translate by the same
     // per-frame amount the content root moved. Not scaled by dt — it's already a per-frame delta.
     s.position += _MotionDelta * _MotionInfluence;
+
+    // Agitation heats the speck while the disturbance/flow act on it and cools once they pass — the
+    // render lerps toward the disturbed tint by this, so the color returns as motion normalizes.
+    float agitation = length(disturbance) * _DisturbanceInfluence + length(flow) * _FlowInfluence;
+    s.heat = saturate(s.heat + (agitation * _HeatGain - _HeatDecay) * _DeltaTime);
 
     // Total per-frame move (before wrap) as an effective velocity — captures sim + ascend + flow, so the
     // velocity-stretched trail in the render reflects all of them.

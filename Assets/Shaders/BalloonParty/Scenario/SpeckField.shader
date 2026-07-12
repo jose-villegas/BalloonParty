@@ -7,6 +7,9 @@ Shader "BalloonParty/Scenario/SpeckField"
     {
         _MainTex   ("Speck Sprite", 2D)              = "white" {}
         _Color     ("Tint",         Color)           = (1, 1, 1, 0.5)
+        // A max-heat speck renders with this color AND alpha (× sprite/life fades) — brighter and more
+        // opaque than the base tint if authored so.
+        _DisturbColor ("Disturbed Tint", Color)       = (1, 0.65, 0.25, 1)
         _SpeckSize ("Speck Size",   Float)           = 0.03
         _MinScale  ("Min Scale",    Float)           = 0.5
         _MaxScale  ("Max Scale",    Float)           = 1.5
@@ -47,11 +50,13 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float age;
                 float lifetime;
                 float2 effectiveVel;
+                float heat;
             };
 
             StructuredBuffer<Speck> _Specks;
             sampler2D _MainTex;
             fixed4 _Color;
+            fixed4 _DisturbColor;
             float _SpeckSize;
             float _MinScale;
             float _MaxScale;
@@ -67,6 +72,7 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float4 pos   : SV_POSITION;
                 float2 uv    : TEXCOORD0;
                 float  alpha : TEXCOORD1;
+                float  heat  : TEXCOORD2;
             };
 
             // Two triangles → a unit quad centered on the origin, in [-0.5, 0.5].
@@ -125,12 +131,21 @@ Shader "BalloonParty/Scenario/SpeckField"
                 o.pos = UnityWorldToClipPos(world);
                 o.uv = corner + 0.5;
                 o.alpha = fade;
+                o.heat = s.heat;
                 return o;
             }
 
             fixed4 frag(v2f i) : SV_Target
             {
-                fixed4 col = tex2D(_MainTex, i.uv) * _Color;
+                fixed4 tex = tex2D(_MainTex, i.uv);
+                fixed4 col = tex * _Color;
+
+                // Disturbed specks lerp toward the disturbed tint — color AND opacity — by their heat,
+                // easing back as it cools.
+                float heat = saturate(i.heat);
+                col.rgb = lerp(col.rgb, _DisturbColor.rgb, heat);
+                col.a = lerp(col.a, tex.a * _DisturbColor.a, heat);
+
                 col.a *= i.alpha;
                 return col;
             }

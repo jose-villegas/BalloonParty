@@ -17,7 +17,7 @@ namespace BalloonParty.Slots.Actor
     internal sealed class SpeckField : MonoBehaviour
     {
         private const int ThreadGroupSize = 64;
-        private const int SpeckStrideBytes = sizeof(float) * 9;
+        private const int SpeckStrideBytes = sizeof(float) * 10;
 
         private static readonly int SpecksId = Shader.PropertyToID("_Specks");
         private static readonly int CountId = Shader.PropertyToID("_Count");
@@ -47,6 +47,8 @@ namespace BalloonParty.Slots.Actor
         private static readonly int SpeckTimeId = Shader.PropertyToID("_SpeckTime");
         private static readonly int FadeInId = Shader.PropertyToID("_FadeIn");
         private static readonly int FadeOutId = Shader.PropertyToID("_FadeOut");
+        private static readonly int HeatGainId = Shader.PropertyToID("_HeatGain");
+        private static readonly int HeatDecayId = Shader.PropertyToID("_HeatDecay");
 
         [SerializeField] private ComputeShader _compute;
         [SerializeField] private Material _renderMaterial;
@@ -96,6 +98,12 @@ namespace BalloonParty.Slots.Actor
         [Tooltip("Per-frame root move (world units) above which it's treated as a teleport (e.g. the " +
                  "Ascent snapping the root to its start height) and ignored, not matched.")]
         [SerializeField] private float _teleportThreshold = 1f;
+
+        [Tooltip("How fast a disturbed speck heats toward the material's Disturbed Tint, per unit agitation per second. 0 = no tinting.")]
+        [SerializeField] private float _heatGain = 4f;
+
+        [Tooltip("How fast the heat cools once the disturbance passes, per second — the return to the base color.")]
+        [SerializeField] private float _heatDecay = 1.5f;
 
         [Inject] private ScenarioContentRoot _scenarioRoot;
         [Inject] private DisturbanceFieldService _disturbance;
@@ -230,6 +238,7 @@ namespace BalloonParty.Slots.Actor
                     Age = Random.value * lifetime,
                     Lifetime = lifetime,
                     EffectiveVel = Vector2.zero,
+                    Heat = 0f,
                 };
             }
 
@@ -289,6 +298,8 @@ namespace BalloonParty.Slots.Actor
             _compute.SetFloat(DisturbanceDampingId, _disturbanceDamping);
             _compute.SetVector(SwirlAngleId, _swirlAngle * Mathf.Deg2Rad);
             _compute.SetFloat(FlowInfluenceId, _flowInfluence);
+            _compute.SetFloat(HeatGainId, _heatGain);
+            _compute.SetFloat(HeatDecayId, _heatDecay);
             _compute.SetTexture(_kernel, DisturbanceTexId, hasField ? _disturbance.FieldTexture : Texture2D.blackTexture);
             _compute.SetVector(FieldBoundsMinId, hasField ? _disturbance.FieldBoundsMin : Vector2.zero);
             _compute.SetVector(FieldBoundsSizeId, hasField ? _disturbance.FieldBoundsSize : Vector2.one);
@@ -305,6 +316,7 @@ namespace BalloonParty.Slots.Actor
             public float Age;
             public float Lifetime;
             public Vector2 EffectiveVel;
+            public float Heat;
         }
     }
 }
