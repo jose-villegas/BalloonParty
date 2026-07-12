@@ -101,7 +101,7 @@ namespace BalloonParty.Balloon.Type
 
             _disturbanceField.Stamp(
                 transform.position, profile.Radius, strength, Vector2.zero, profile.Duration,
-                _palette.PaletteIndexOf(GamePalette.ToughColorId));
+                _palette.PaletteIndexOf(GamePalette.ToughColorId), reportImpact: false);
         }
 
         private void ApplyDamageProgress(int hits, int maxHits)

@@ -140,17 +140,21 @@ namespace BalloonParty.Shared.Disturbance
             Stamp(worldPosition, profile.Radius * radiusScale, profile.Strength, direction, profile.Duration, paletteIndex);
         }
 
-        /// <summary>A positive <paramref name="duration"/> ramps the stamp over time for a smooth shockwave instead of a single-frame pop.</summary>
+        /// <summary>
+        ///     A positive <paramref name="duration"/> ramps the stamp over time for a smooth shockwave
+        ///     instead of a single-frame pop. <paramref name="reportImpact"/> false suppresses the bush
+        ///     rustle — for constant emitters (rainbow/tough pulses) rather than one-off hits.
+        /// </summary>
         internal void Stamp(
             Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration = 0f,
-            int paletteIndex = -1)
+            int paletteIndex = -1, bool reportImpact = true)
         {
             // Signed strength: > 0 repels (bumps R up), < 0 attracts (digs R down), 0 is a pure colour
             // tag with no force. Only the outward push of repulsion rustles bushes and shoves the wind.
             var colorOnly = strength == 0f;
             var repels = strength > 0f;
 
-            if (repels)
+            if (repels && reportImpact)
             {
                 _impactBus.Report(worldPosition, radius);
             }

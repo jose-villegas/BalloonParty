@@ -61,6 +61,10 @@ MonoBehaviour:
     Strength: 0
     Duration: 0.5
   - Sources: 256
-    Radius: 2
-    Strength: -0.4
-    Duration: 0
+    Radius: 0.9
+    Strength: -14
+    Duration: 0.475
+  - Sources: 512
+    Radius: 0.25
+    Strength: 4
+    Duration: 0.5

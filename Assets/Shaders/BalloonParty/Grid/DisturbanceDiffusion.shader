@@ -196,8 +196,9 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
                     {
                         pushDir = (dist > 0.001) ? -(toPixel / dist) : float2(0, 0);
                     }
-                    // Force scales off strength, so a zero-strength (color-only) stamp shifts nothing.
-                    displace += pushDir * falloff * _DisplaceAmount * step(1e-4, strength);
+                    // Flow follows the sign: repulsion (+) pushes specks out, attraction (-) pulls
+                    // them in, color-only (0) shifts nothing.
+                    displace += pushDir * falloff * _DisplaceAmount * sign(strength);
 
                     float encoded = _StampColorIndices[s];
                     if (encoded > 0.001 && falloff > 0.2)

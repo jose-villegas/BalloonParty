@@ -146,7 +146,7 @@ MonoBehaviour:
     _directBalanceMotion: 0
     _deflectStampScale: 0
     _spawnWeight: 0
-    _warningStampInterval: 0
+    _warningStampInterval: 10
   _defaultPopVfxPrefab: {fileID: 2148469744637963286, guid: 4a7c3a51e0404c1479c70235419a474d,
     type: 3}
   _rainbowMaterial: {fileID: 2100000, guid: 2a0e218b129144e0ca18ebc8a64ea0c4, type: 2}

@@ -83,7 +83,7 @@ namespace BalloonParty.Balloon.Type
             if (_attractInterval > 0f)
             {
                 Observable.Interval(TimeSpan.FromSeconds(_attractInterval))
-                    .Subscribe(_ => EmitAttractStamp())
+                    .Subscribe(_ => EmitFieldStamps())
                     .AddTo(disposables);
             }
         }
@@ -120,8 +120,18 @@ namespace BalloonParty.Balloon.Type
             }
         }
 
-        private void EmitAttractStamp()
+        private void EmitFieldStamps()
         {
+            var pos = transform.position;
+
+            // Inner repulsion clears the center so the wider attraction gathers specks into a ring, not
+            // a solid blob. No impact — this fires constantly and shouldn't rustle bushes; no color tag,
+            // the attraction owns the tint.
+            var repel = _disturbanceField.GetProfile(StampSource.RainbowRepel);
+            _disturbanceField.Stamp(
+                pos, repel.Radius, repel.Strength, Vector2.zero, repel.Duration,
+                paletteIndex: -1, reportImpact: false);
+
             if (_attractColorIndices.Count == 0)
             {
                 return;
@@ -129,7 +139,7 @@ namespace BalloonParty.Balloon.Type
 
             var index = _attractColorIndices[_attractCursor % _attractColorIndices.Count];
             _attractCursor++;
-            _disturbanceField.Stamp(StampSource.RainbowAttract, transform.position, Vector2.zero, index);
+            _disturbanceField.Stamp(StampSource.RainbowAttract, pos, Vector2.zero, index);
         }
 
         private void PushBands()
