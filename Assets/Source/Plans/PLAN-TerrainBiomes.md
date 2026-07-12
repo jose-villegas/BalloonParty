@@ -156,6 +156,30 @@ noise) through the offset vector — **coordinate direction/speed with the bush 
 the world shares one wind**. **Spike SP-2 (at B2)**: (b)+(c) against (a), plus gust
 sync with bushes on screen.
 
+**Interaction fidelity ladder** (industry consensus for mobile is exactly our
+architecture — a world-space "trample/bend" RT that the grass shader samples; the
+disturbance field already is that, globally bound and stamped by gameplay):
+1. **Bend** (base, free): the shear above. Monotonic recovery from field reform.
+2. **Overshoot wiggle** (cheap, in-shader): real grass springs *past* rest and damps.
+   The field only reforms monotonically — fake the overshoot by sampling the
+   displacement at two temporal lags (current + shader-clock-delayed strength) and
+   taking a damped difference. Two ALU-cheap ops, no new resources; judge in SP-2.
+3. **N-layer shells, top-down variant** (medium): generalize the two-layer offset to
+   3–4 layers, each offset progressively further along the lean vector with
+   per-layer darkening — under an ortho top-down camera this reads as dense blade
+   depth precisely when grass leans (wind/wake), which is when eyes are on it.
+   +1 tap per layer over a *limited* reaction radius (branch on displacement
+   magnitude); cap at 4 layers total.
+4. **Persistent trample RT** (opt-in, shares the sand footprint decision): a tiny
+   ping-pong RT accumulating bend with slow decay — paths stay flattened for seconds.
+   Same infrastructure as the field/footprints; only if the game reads better with
+   memory of where things flew.
+
+**Mobile rule (from the field's consensus, encode as a hard constraint): no
+alpha-tested grass anywhere** — alpha clip is a tile-GPU killer (reported ~2× frame
+cost vs non-clipped); everything above is opaque/blended sampling, which is why this
+design stays cheap.
+
 ### S3 — Water
 
 | Option | How | Tradeoffs |
@@ -180,6 +204,15 @@ wave sim earns its RT.
   wave sim: only if (a) feels dead. Dirt = (a) with lower strength.
 - **Stone**: static detail + baked edge-AO from the boundary SDF. No reaction — the
   contrast makes grass/water read as alive.
+- **Moss (derived overlay, NOT a biome)**: moss is where the design gets procedural
+  depth for free — compute a bake-time moss mask from data we already have:
+  `moisture high` AND (`boundary SDF small` — growth creeps along transitions — OR
+  near static actors, approximated by stamping bush/cluster slot positions into the
+  mask). Render as a tinted stroke-clump layer (same texture family as grass) over
+  whatever biome it lands on: mossy stone, mossy dirt, moss-edged water — one mask,
+  many looks. Costs one bake channel + one runtime tap *only where the mask is hot*.
+  Optional flourish: moss darkens/saturates with moisture (macro-noise modulated), so
+  no two patches read identical.
 - **Lava**: crust = thresholded detail noise (dark crust plates over bright gaps);
   slow domain-scroll for flow; boundary SDF → cooled-crust rim. Reaction: agitation
   boosts emissive intensity (authored as a float, HDR-ready for
@@ -196,7 +229,32 @@ wave sim earns its RT.
 **Recommendation**: (b). Resolution spike at A-gate: 512 vs 1024 wide — the soft
 style may make 512 free money.
 
-### S6 — Runtime composition rules
+### S6 — Cheap density & anti-repetition (mobile)
+
+Fixed ortho zoom means tiling repetition is *the* density-killer — the eye finds the
+pattern in seconds. The ladder, cheapest first (stack until the repetition dies, stop
+there):
+
+| Technique | Cost | What it buys |
+|---|---|---|
+| **Per-cell hash bombing** | ~free (one hash, conditional UV flip/rotate per virtual cell) | Kills the grid-aligned repeat of any tileable detail — the GPU Gems "texture bombing" trick reduced to flips/rotations; do this unconditionally |
+| **Macro variation map** | 1 low-frequency tap (reuse the baked tileable noise at a big world scale) | Modulates tint/brightness/detail-scale across meters — breaks the "same green everywhere" flatness; also drives moss saturation and grass gust response variation |
+| **Channel-packed detail atlas** | 1 tap serves 4 biomes (grass/sand/dirt/stone grayscale details in RGBA of ONE texture, palette-tinted per biome) | Bandwidth win AND a texture-slot win; ASTC-compress; blend regions read two channels of the same tap |
+| **Blue-noise scatter stamps** | 1 tap into a scatter atlas, hash-gated per cell | Flowers on grass, pebbles on dirt, shells on sand — sparse sprinkles that read as authored density; gate by biome id + moisture so meadows cluster naturally |
+| **Hex-tiling (Mikkelsen)** | 3 taps per texture in blend regions | The heavyweight anti-repetition — analytically-weighted 3-sample blend with per-tile hash transforms; reserve for the ONE surface where cheaper rungs fail (water sparkle is the likely candidate) |
+| **Histogram-preserving stochastic (Heitz/Deliot)** | 3 taps + LUT + gaussian-domain transform | The full-fat version (Unity Labs ships a reference implementation); almost certainly overkill for a soft painterly style at fixed zoom — listed so the option is known, not planned |
+| **Bicubic composite upsample** | 4-tap B-spline read of the composite RT | Makes a 512-wide composite look smooth at screen res — likely lets us halve the bake resolution; pairs with the S5 resolution spike |
+
+Precision hygiene throughout: `half` for all color/detail math (the URP shaders here
+are unlit and LDR), world-space UVs so nothing swims during travel.
+
+References: Heitz/Deliot procedural stochastic texturing
+([Unity blog](https://unity.com/blog/engine-platform/procedural-stochastic-texturing-in-unity),
+[Unity Labs implementation](https://github.com/UnityLabs/procedural-stochastic-texturing)),
+Mikkelsen hex-tiling ([demo/paper](https://github.com/mmikk/hextile-demo)),
+texture bombing (GPU Gems ch. 20).
+
+### S7 — Runtime composition rules
 
 - **One sun**: light direction is the existing `_lightDirection` convention (GI +
   PuffCloud) — terrain glints/shading must read from the same serialized value or a
