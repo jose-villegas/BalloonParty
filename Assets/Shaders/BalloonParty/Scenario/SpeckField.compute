@@ -83,6 +83,7 @@ void Advect(uint3 id : SV_DispatchThreadID)
     // cloud. (The G,B displacement points opposite the motion, which would instead drag them into the wake.)
     float2 disturbance = float2(0.0, 0.0);
     float2 flow = float2(0.0, 0.0);
+    float tagLife = 0.0;
     if (_DisturbanceInfluence > 0.0)
     {
         float2 uv = (s.position - _FieldBoundsMin) / max(_FieldBoundsSize, 1e-4);
@@ -104,14 +105,15 @@ void Advect(uint3 id : SV_DispatchThreadID)
 
             // Advance along the disturbance's own motion (the white direction). GB stores -motion, so
             // negate for the direction. A packs the last stamp's palette tag as (index + life) / 16 —
-            // ceil recovers the slot regardless of remaining life; an agitated speck adopts it so the
-            // render can flush toward that color.
+            // ceil recovers the slot regardless of remaining life; any speck over a tagged texel adopts
+            // it, and its in-slot life becomes the color's visibility (independent of agitation).
             float4 center = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv, 0);
             flow = -(center.gb - 0.5) * 2.0;
             float tagValue = center.a * 16.0;
             if (tagValue > 0.05)
             {
                 s.paletteIndex = ceil(tagValue) - 1.0;
+                tagLife = tagValue - s.paletteIndex;
             }
         }
     }
@@ -140,6 +142,10 @@ void Advect(uint3 id : SV_DispatchThreadID)
     // same gain whether the flush target is a palette tag or the flat disturbed tint.
     float agitation = length(disturbance) * _DisturbanceInfluence + length(flow) * _FlowInfluence;
     s.heat = saturate(s.heat + (agitation * _HeatGain - _HeatDecay) * _DeltaTime);
+
+    // A color tag lights the speck on its own — a force-free (color-only) stamp still shows, and the
+    // tint tracks the tag's remaining life. Force-driven heat still wins when it's stronger.
+    s.heat = max(s.heat, tagLife);
 
     // Color memory only lasts while warm — a cooled speck flushes neutral on its next untagged stir.
     if (s.heat <= 0.001)

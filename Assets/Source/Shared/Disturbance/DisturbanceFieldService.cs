@@ -139,7 +139,14 @@ namespace BalloonParty.Shared.Disturbance
             Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration = 0f,
             int paletteIndex = -1)
         {
-            _impactBus.Report(worldPosition, radius);
+            // A zero-strength stamp carries no force: it only tags the field's color channel (the shaders
+            // scale density/displacement by strength), so it must not rustle bushes or shove the wind.
+            var colorOnly = strength <= 0f;
+
+            if (!colorOnly)
+            {
+                _impactBus.Report(worldPosition, radius);
+            }
 
             if (duration > 0f)
             {
@@ -152,7 +159,15 @@ namespace BalloonParty.Shared.Disturbance
                 return;
             }
 
-            if (strength < _settings.MinStampStrength)
+            if (colorOnly)
+            {
+                // Nothing to write without a color to tag.
+                if (paletteIndex < 0)
+                {
+                    return;
+                }
+            }
+            else if (strength < _settings.MinStampStrength)
             {
                 return;
             }
@@ -160,7 +175,7 @@ namespace BalloonParty.Shared.Disturbance
             var uv = _coords.WorldToUV(worldPosition);
             var radiusUV = _coords.WorldRadiusToUV(radius);
 
-            if (direction.sqrMagnitude > 0.001f)
+            if (!colorOnly && direction.sqrMagnitude > 0.001f)
             {
                 _windTarget = -direction;
             }
