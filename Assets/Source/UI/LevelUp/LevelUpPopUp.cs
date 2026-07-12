@@ -52,6 +52,7 @@ namespace BalloonParty.UI.LevelUp
         private int _glowTrailArrivedCount;
         private int _glowTrailTotalCount;
         private int _pendingNewLevel;
+        private bool _isShowing;
 
         private void Start()
         {
@@ -69,6 +70,14 @@ namespace BalloonParty.UI.LevelUp
 
         public void OnContinue()
         {
+            // The hidden popup's full-screen button still receives raycasts, so every gameplay tap
+            // lands here — without this gate each one published a dismissal and vanished the live shot.
+            if (!_isShowing)
+            {
+                return;
+            }
+
+            _isShowing = false;
             _animator.ResetTrigger(AppearTrigger);
             _animator.SetTrigger(HideTrigger);
             Resume();
@@ -86,6 +95,7 @@ namespace BalloonParty.UI.LevelUp
             _levelGlowFill.fillAmount = 0f;
             _animator.ResetTrigger(HideTrigger);
             _animator.SetTrigger(AppearTrigger);
+            _isShowing = true;
 
             await WaitForAnimatorStateAsync(AppearState);
 

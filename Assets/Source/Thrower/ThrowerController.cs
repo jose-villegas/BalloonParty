@@ -25,6 +25,7 @@ namespace BalloonParty.Thrower
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly ISubscriber<LevelUpDismissedMessage> _levelUpDismissedSubscriber;
+        private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly ISubscriber<GameOverMessage> _gameOverSubscriber;
         private readonly PauseService _pauseService;
         private readonly IObjectResolver _resolver;
@@ -57,6 +58,7 @@ namespace BalloonParty.Thrower
             ISubscriber<RunResetMessage> resetSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
             ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
+            ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             ISubscriber<GameOverMessage> gameOverSubscriber,
             PauseService pauseService,
             ProjectilePositionProvider positionProvider)
@@ -71,6 +73,7 @@ namespace BalloonParty.Thrower
             _resetSubscriber = resetSubscriber;
             _boardClearSubscriber = boardClearSubscriber;
             _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
+            _levelUpSubscriber = levelUpSubscriber;
             _gameOverSubscriber = gameOverSubscriber;
             _pauseService = pauseService;
             _positionProvider = positionProvider;
@@ -90,6 +93,10 @@ namespace BalloonParty.Thrower
             // loads at once — so the thrower never reuses a shot still mid-disappear.
             _destroyedSubscriber.Subscribe(_ => SwapActiveProjectile());
             _levelUpDismissedSubscriber.Subscribe(_ => SwapActiveProjectile());
+
+            // A shot fired in the very frame the level-up triggers never takes a physics step before the
+            // freeze — un-fire it, or the dismissal swap scale-drifts it from the muzzle like a phantom.
+            _levelUpSubscriber.Subscribe(_ => UnfireIfNeverFlown());
 
             // Restart carries over the old projectile; reload so it resets to config defaults.
             _resetSubscriber.Subscribe(_ => Reload());
@@ -149,6 +156,18 @@ namespace BalloonParty.Thrower
 
             _loadElapsed = 0f;
             _loadDuration = _config.ProjectileLoadDuration;
+        }
+
+        private void UnfireIfNeverFlown()
+        {
+            if (_activeProjectile == null || _activeView == null
+                || !_activeProjectile.IsFree || _activeView.HasFlown)
+            {
+                return;
+            }
+
+            _activeProjectile.IsFree = false;
+            _positionProvider.SetFree(false);
         }
 
         // Scales the spent shot away (it returns to the pool only once its disappear finishes) and loads a

@@ -52,6 +52,10 @@ namespace BalloonParty.Projectile.View
         private Color[] _paletteColors;
         private float _rainbowGlowTimer;
         private bool _rainbowGlowActive;
+        private bool _hasFlown;
+
+        /// <summary>True once the fired shot has taken at least one physics step.</summary>
+        internal bool HasFlown => _hasFlown;
 
         private void Awake()
         {
@@ -114,6 +118,7 @@ namespace BalloonParty.Projectile.View
         {
             _shieldShown = false;
             _disappearing = false;
+            _hasFlown = false;
             _rainbowGlowActive = false;
             _rainbowGlowTimer = 0f;
             _deflectedSubscription?.Dispose();
@@ -231,6 +236,7 @@ namespace BalloonParty.Projectile.View
 
             transform.position = step.Position;
             transform.up = step.Direction;
+            _hasFlown = true;
 
             _disturbanceField.Stamp(StampSource.Projectile, step.Position, step.Direction);
         }
