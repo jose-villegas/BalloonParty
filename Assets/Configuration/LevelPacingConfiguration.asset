@@ -62,7 +62,6 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _popSpawnChance: 0.1
       _balloonWeights:
       - _type: 0
         _weight: 1
@@ -281,7 +280,6 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _popSpawnChance: 0.1
       _balloonWeights:
       - _type: 0
         _weight: 1
@@ -485,7 +483,6 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _popSpawnChance: 0.1
       _balloonWeights:
       - _type: 0
         _weight: 1
@@ -695,7 +692,6 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _popSpawnChance: 0.1
       _balloonWeights:
       - _type: 0
         _weight: 1
@@ -905,7 +901,6 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _popSpawnChance: 0.1
       _balloonWeights:
       - _type: 0
         _weight: 1
@@ -1103,7 +1098,6 @@ MonoBehaviour:
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      _popSpawnChance: 0.1
       _balloonWeights:
       - _type: 0
         _weight: 1

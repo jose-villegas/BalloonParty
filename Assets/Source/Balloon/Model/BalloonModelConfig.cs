@@ -19,6 +19,7 @@ namespace BalloonParty.Balloon.Model
         public readonly int BalancePriority;
         public readonly float DeflectStampScale;
         public readonly bool DirectBalanceMotion;
+        public readonly float WarningStampInterval;
 
         // Value constructor — mainly for tests, which build a config without a prefab entry.
         public BalloonModelConfig(
@@ -32,7 +33,8 @@ namespace BalloonParty.Balloon.Model
             int maxBalanceSteps = 0,
             int balancePriority = 0,
             float deflectStampScale = 0f,
-            bool directBalanceMotion = false)
+            bool directBalanceMotion = false,
+            float warningStampInterval = 0f)
         {
             TypeName = typeName;
             ScoreValue = scoreValue;
@@ -45,6 +47,7 @@ namespace BalloonParty.Balloon.Model
             BalancePriority = balancePriority;
             DeflectStampScale = deflectStampScale;
             DirectBalanceMotion = directBalanceMotion;
+            WarningStampInterval = warningStampInterval;
         }
 
         internal BalloonModelConfig(BalloonPrefabEntry entry)
@@ -60,6 +63,7 @@ namespace BalloonParty.Balloon.Model
             BalancePriority = entry.BalancePriority;
             DeflectStampScale = entry.DeflectStampScale;
             DirectBalanceMotion = entry.DirectBalanceMotion;
+            WarningStampInterval = entry.WarningStampInterval;
         }
     }
 }

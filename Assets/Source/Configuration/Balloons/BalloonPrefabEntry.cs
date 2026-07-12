@@ -48,6 +48,9 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Physical spawn weight: within a spawn wave, heavier types fill the later (lower) lines, entering under lighter ones. 0 = neutral.")]
         [SerializeField] private int _spawnWeight;
 
+        [Tooltip("Seconds between warning stamps into the disturbance field while this balloon sits on its last hit. 0 = no pulse.")]
+        [SerializeField] private float _warningStampInterval;
+
         public BalloonView Prefab => _prefab;
         public BalloonType BalloonType => _balloonType;
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
@@ -64,6 +67,7 @@ namespace BalloonParty.Configuration.Balloons
         public bool DirectBalanceMotion => _directBalanceMotion;
         public float DeflectStampScale => _deflectStampScale;
         public int SpawnWeight => _spawnWeight;
+        public float WarningStampInterval => _warningStampInterval;
 
         /// <summary>Derived from the prefab's GameObject name — no manual key needed.</summary>
         public string PoolKey => _prefab != null ? _prefab.name : string.Empty;

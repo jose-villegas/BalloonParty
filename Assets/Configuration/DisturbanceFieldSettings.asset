@@ -31,27 +31,39 @@ MonoBehaviour:
     Radius: 0.35
     Strength: 0.8
     Duration: 0
+    ColorHeat: 1
   - Sources: 2
     Radius: 0.3
     Strength: 0.005
     Duration: 0
+    ColorHeat: 1
   - Sources: 4
     Radius: 1.25
     Strength: 1.5
     Duration: 0.1
+    ColorHeat: 1
   - Sources: 8
     Radius: 3.5
     Strength: 5
     Duration: 0.125
+    ColorHeat: 1
   - Sources: 16
     Radius: 0.8
     Strength: 5
     Duration: 0
+    ColorHeat: 1
   - Sources: 32
     Radius: 0.9
     Strength: 1
     Duration: 0.2
+    ColorHeat: 1
   - Sources: 64
     Radius: 0.9
     Strength: 15
     Duration: 0.2
+    ColorHeat: 1
+  - Sources: 128
+    Radius: 0.6
+    Strength: 1
+    Duration: 0.15
+    ColorHeat: 1

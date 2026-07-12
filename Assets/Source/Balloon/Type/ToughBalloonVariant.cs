@@ -1,10 +1,15 @@
+using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Palette;
+using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Slots.Capabilities;
 using DG.Tweening;
 using UniRx;
 using UnityEngine;
+using VContainer;
 
 namespace BalloonParty.Balloon.Type
 {
@@ -15,6 +20,9 @@ namespace BalloonParty.Balloon.Type
 
         [SerializeField] private SpriteRenderer _renderer;
         [SerializeField] private float _crackAnimDuration = 0.5f;
+
+        [Inject] private DisturbanceFieldService _disturbanceField;
+        [Inject] private IGamePalette _palette;
 
         private MaterialPropertyBlock _block;
         private Tween _damageTween;
@@ -47,16 +55,41 @@ namespace BalloonParty.Balloon.Type
 
             _renderer.SetFloatAndApply(_block, DamageProgressId, 0f);
             _renderer.SetVectorAndApply(_block, VoronoiSeedId,
-                new Vector4(Random.Range(-999f, 999f), Random.Range(-999f, 999f)));
+                new Vector4(UnityEngine.Random.Range(-999f, 999f), UnityEngine.Random.Range(-999f, 999f)));
 
             var maxHits = durable.HitsRemaining.Value;
 
+            var warningPulse = new SerialDisposable();
+            disposables.Add(warningPulse);
+
             durable.HitsRemaining
-                .Subscribe(hits => ApplyDamageProgress(hits, maxHits))
+                .Subscribe(hits => OnHitsChanged(model, hits, maxHits, warningPulse))
                 .AddTo(disposables);
         }
 
         public void Initialize(IWriteableBalloonModel model, int levelAllowedColorsMask) { }
+
+        private void OnHitsChanged(IBalloonModel model, int hits, int maxHits, SerialDisposable warningPulse)
+        {
+            ApplyDamageProgress(hits, maxHits);
+
+            // On its last hit the tough "breathes" its reserved color into the field at the configured
+            // cadence, so the danger reads in the specks too.
+            warningPulse.Disposable = hits == 1 ? StartWarningPulse(model) : Disposable.Empty;
+        }
+
+        private IDisposable StartWarningPulse(IBalloonModel model)
+        {
+            if (model is not IHasWarningStamp stamper || stamper.WarningStampInterval <= 0f)
+            {
+                return Disposable.Empty;
+            }
+
+            var toughIndex = _palette.PaletteIndexOf(GamePalette.ToughColorId);
+            return Observable.Interval(TimeSpan.FromSeconds(stamper.WarningStampInterval))
+                .Subscribe(_ => _disturbanceField.Stamp(
+                    StampSource.ToughWarning, transform.position, Vector2.zero, toughIndex));
+        }
 
         private void ApplyDamageProgress(int hits, int maxHits)
         {

@@ -38,7 +38,6 @@ namespace BalloonParty.Balloon.Spawner
         private readonly CancellationTokenSource _cts = new();
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
-        private readonly ISubscriber<FlightPulseMessage> _flightPulseSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
         private readonly SlotGrid _grid;
         private readonly IPublisher<ItemCheckMessage> _itemCheckPublisher;
@@ -55,7 +54,6 @@ namespace BalloonParty.Balloon.Spawner
         private readonly Comparison<int> _byColumnKey;
 
         private int[] _columnSortKeys;
-        private int _pendingPopSpawns;
         private int _turnCount;
         private int _generation;
         private int _batchCursor;
@@ -78,7 +76,6 @@ namespace BalloonParty.Balloon.Spawner
             IPublisher<BalanceBalloonsMessage> balancePublisher,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             ISubscriber<ActorHitMessage> hitSubscriber,
-            ISubscriber<FlightPulseMessage> flightPulseSubscriber,
             ISubscriber<ScoreLevelUpMessage> levelUpSubscriber,
             IPublisher<ItemCheckMessage> itemCheckPublisher,
             RejectedBalloonEffect rejectedBalloon,
@@ -96,7 +93,6 @@ namespace BalloonParty.Balloon.Spawner
             _balancePublisher = balancePublisher;
             _destroyedSubscriber = destroyedSubscriber;
             _hitSubscriber = hitSubscriber;
-            _flightPulseSubscriber = flightPulseSubscriber;
             _levelUpSubscriber = levelUpSubscriber;
             _itemCheckPublisher = itemCheckPublisher;
             _rejectedBalloon = rejectedBalloon;
@@ -117,7 +113,6 @@ namespace BalloonParty.Balloon.Spawner
             _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount));
             _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
             _hitSubscriber.Subscribe(OnActorHit);
-            _flightPulseSubscriber.Subscribe(_ => FlushPopSpawns());
 
             // Reset per level-up so FirstSpawnTurn is a fresh per-level grace period.
             _levelUpSubscriber.Subscribe(_ => _turnCount = 0);
@@ -142,7 +137,6 @@ namespace BalloonParty.Balloon.Spawner
             _newlySpawnedBalloons.Clear();
             _spawnBatch.Clear();
             _batchCursor = 0;
-            _pendingPopSpawns = 0;
         }
 
         public void Dispose()
@@ -175,9 +169,6 @@ namespace BalloonParty.Balloon.Spawner
 
         private void OnProjectileDestroyed()
         {
-            // Pops near the flight's end still pay out — flush before the turn's wave.
-            FlushPopSpawns();
-
             _turnCount++;
             if (_turnCount < _levelParams.Current.FirstSpawnTurn)
             {
@@ -188,8 +179,7 @@ namespace BalloonParty.Balloon.Spawner
         }
 
         // Direct projectile pops (never AOE items — DamageFlags.DirectHit) can each earn one extra
-        // balloon, chance from the level's pacing. Earned spawns queue and flush on the flight pulse,
-        // so they enter on the same cadence as the in-flight rebalance instead of mid-hit.
+        // balloon, spawned immediately when the chance roll passes and the board budget allows it.
         private void OnActorHit(ActorHitMessage msg)
         {
             if (msg.Outcome != HitOutcome.Pop || !msg.Context.Flags.HasFlag(DamageFlags.DirectHit))
@@ -197,28 +187,10 @@ namespace BalloonParty.Balloon.Spawner
                 return;
             }
 
-            if (UnityEngine.Random.value < _balloonsConfig.PopSpawnChance)
+            if (UnityEngine.Random.value < _balloonsConfig.PopSpawnChance && PopSpawnBudget() > 0)
             {
-                _pendingPopSpawns++;
+                SpawnLooseBalloons(1);
             }
-        }
-
-        // Automated spawns never pack the board: they stop at grid capacity minus the configured free
-        // rows, and any excess pending is dropped rather than owed to a later, emptier board.
-        private void FlushPopSpawns()
-        {
-            if (_pendingPopSpawns <= 0)
-            {
-                return;
-            }
-
-            var count = Mathf.Min(_pendingPopSpawns, PopSpawnBudget());
-            if (count > 0)
-            {
-                SpawnLooseBalloons(count);
-            }
-
-            _pendingPopSpawns = 0;
         }
 
         private int PopSpawnBudget()
@@ -236,7 +208,7 @@ namespace BalloonParty.Balloon.Spawner
                 }
             }
 
-            // Also never outpace the pacing itself: a flush spawns at most one turn-wave's worth.
+            // Also never outpace the pacing itself: at most one turn-wave's worth of headroom counts.
             var waveCap = _levelParams.Current.SpawnLines * _grid.Columns;
             return Mathf.Max(0, Mathf.Min(capacity - occupied, waveCap));
         }

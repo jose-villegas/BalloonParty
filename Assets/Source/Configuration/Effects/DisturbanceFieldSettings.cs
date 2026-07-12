@@ -14,6 +14,7 @@ namespace BalloonParty.Configuration.Effects
         Laser         = 1 << 4,
         Paint         = 1 << 5,
         BalloonDeflect = 1 << 6,
+        ToughWarning  = 1 << 7,
     }
 
     [Serializable]
@@ -28,6 +29,11 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Duration over which the stamp ramps up. 0 = instant.")]
         [Range(0f, 0.5f)]
         public float Duration;
+
+        [Tooltip("The palette tag's starting energy: how hot this stamp's color burns nearby specks " +
+                 "regardless of Strength, and how long the tag lives (drains at Color Tag Decay). 0 = no color tag.")]
+        [Range(0f, 1f)]
+        public float ColorHeat;
     }
 
     [CreateAssetMenu(menuName = "Configuration/Disturbance Field Settings", fileName = "DisturbanceFieldSettings")]
@@ -38,7 +44,8 @@ namespace BalloonParty.Configuration.Effects
             Sources = 0,
             Radius = 0.3f,
             Strength = 0.5f,
-            Duration = 0f
+            Duration = 0f,
+            ColorHeat = 1f
         };
 
         [Header("Resolution")]
@@ -85,12 +92,13 @@ namespace BalloonParty.Configuration.Effects
         [Header("Stamp Profiles")]
         [SerializeField] private StampProfile[] _stampProfiles = new[]
         {
-            new StampProfile { Sources = StampSource.Projectile,   Radius = 0.3f, Strength = 0.8f, Duration = 0f },
-            new StampProfile { Sources = StampSource.BalloonPath, Radius = 0.5f, Strength = 0.4f, Duration = 0f },
-            new StampProfile { Sources = StampSource.BalloonPop,   Radius = 0.8f, Strength = 1.0f, Duration = 0.15f },
-            new StampProfile { Sources = StampSource.Bomb,         Radius = 1.2f, Strength = 1.0f, Duration = 0.2f },
-            new StampProfile { Sources = StampSource.Laser,        Radius = 0.4f, Strength = 0.6f, Duration = 0.1f },
-            new StampProfile { Sources = StampSource.Paint,        Radius = 0.6f, Strength = 0.5f, Duration = 0.1f },
+            new StampProfile { Sources = StampSource.Projectile,   Radius = 0.3f, Strength = 0.8f, Duration = 0f, ColorHeat = 1f },
+            new StampProfile { Sources = StampSource.BalloonPath, Radius = 0.5f, Strength = 0.4f, Duration = 0f, ColorHeat = 1f },
+            new StampProfile { Sources = StampSource.BalloonPop,   Radius = 0.8f, Strength = 1.0f, Duration = 0.15f, ColorHeat = 1f },
+            new StampProfile { Sources = StampSource.Bomb,         Radius = 1.2f, Strength = 1.0f, Duration = 0.2f, ColorHeat = 1f },
+            new StampProfile { Sources = StampSource.Laser,        Radius = 0.4f, Strength = 0.6f, Duration = 0.1f, ColorHeat = 1f },
+            new StampProfile { Sources = StampSource.Paint,        Radius = 0.6f, Strength = 0.5f, Duration = 0.1f, ColorHeat = 1f },
+            new StampProfile { Sources = StampSource.ToughWarning, Radius = 0.4f, Strength = 0.4f, Duration = 0.1f, ColorHeat = 1f },
         };
 
         public int TexelsPerUnit => _texelsPerUnit;

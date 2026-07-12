@@ -35,7 +35,6 @@ namespace BalloonParty.Balloon.Controller
         private readonly SlotGrid _grid;
         private readonly GridBalanceQuery _balanceQuery;
         private readonly ISubscriber<BalanceBalloonsMessage> _subscriber;
-        private readonly IPublisher<FlightPulseMessage> _flightPulsePublisher;
         private readonly ISubscriber<ProjectileLoadedMessage> _projectileLoadedSubscriber;
         private readonly ISubscriber<ProjectileDestroyedMessage> _projectileDestroyedSubscriber;
         private readonly PauseService _pauseService;
@@ -54,7 +53,6 @@ namespace BalloonParty.Balloon.Controller
         private int _generation;
         private IProjectileModel _activeProjectile;
         private float _flightRebalanceElapsed;
-        private float _flightPulseElapsed;
 
         public int ResetOrder => RunResetOrder.Quiesce;
 
@@ -68,7 +66,6 @@ namespace BalloonParty.Balloon.Controller
             IBalloonsConfiguration balloonsConfig,
             BalancePathHolder balancePathHolder,
             ISubscriber<BalanceBalloonsMessage> subscriber,
-            IPublisher<FlightPulseMessage> flightPulsePublisher,
             ISubscriber<ProjectileLoadedMessage> projectileLoadedSubscriber,
             ISubscriber<ProjectileDestroyedMessage> projectileDestroyedSubscriber,
             PauseService pauseService,
@@ -81,7 +78,6 @@ namespace BalloonParty.Balloon.Controller
             _balloonsConfig = balloonsConfig;
             _balancePathHolder = balancePathHolder;
             _subscriber = subscriber;
-            _flightPulsePublisher = flightPulsePublisher;
             _projectileLoadedSubscriber = projectileLoadedSubscriber;
             _projectileDestroyedSubscriber = projectileDestroyedSubscriber;
             _pauseService = pauseService;
@@ -110,7 +106,6 @@ namespace BalloonParty.Balloon.Controller
             _balanceRequested = false;
             _activeProjectile = null;
             _flightRebalanceElapsed = 0f;
-            _flightPulseElapsed = 0f;
             _turnSteps.Clear();
             ReleasePaths();
         }
@@ -455,19 +450,7 @@ namespace BalloonParty.Balloon.Controller
                 || _pauseService.IsAnyPaused.Value)
             {
                 _flightRebalanceElapsed = 0f;
-                _flightPulseElapsed = 0f;
                 return false;
-            }
-
-            // The pulse rides its own timer — baseline matches the rebalance, but upgrades may shorten it.
-            var pulseInterval = _balloonsConfig.FlightPulseInterval > 0f
-                ? _balloonsConfig.FlightPulseInterval
-                : interval;
-            _flightPulseElapsed += deltaTime;
-            if (_flightPulseElapsed >= pulseInterval)
-            {
-                _flightPulseElapsed = 0f;
-                _flightPulsePublisher?.Publish(default);
             }
 
             _flightRebalanceElapsed += deltaTime;
