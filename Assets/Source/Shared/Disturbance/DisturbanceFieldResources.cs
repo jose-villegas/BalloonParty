@@ -118,8 +118,9 @@ namespace BalloonParty.Shared.Disturbance
         {
             var prev = RenderTexture.active;
             RenderTexture.active = rt;
-            // A = 0: no palette-color tag anywhere yet (see the diffusion shader's channel map).
-            GL.Clear(false, true, new Color(1f, 0.5f, 0.5f, 0f));
+            // R = 0.5: signed density rest — above 0.5 repels, below attracts. GB = 0.5: zero
+            // displacement. A = 0: no palette-color tag anywhere yet (see the diffusion shader's map).
+            GL.Clear(false, true, new Color(0.5f, 0.5f, 0.5f, 0f));
             RenderTexture.active = prev;
         }
 

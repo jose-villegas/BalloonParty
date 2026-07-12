@@ -27,6 +27,7 @@ namespace BalloonParty.Balloon.Type
         private MaterialPropertyBlock _block;
         private Tween _damageTween;
         private float _currentDamageProgress;
+        private bool _repelPulse;
 
         private void Awake()
         {
@@ -74,7 +75,7 @@ namespace BalloonParty.Balloon.Type
             ApplyDamageProgress(hits, maxHits);
 
             // On its last hit the tough "breathes" its reserved color into the field at the configured
-            // cadence, so the danger reads in the specks too.
+            // cadence — alternating repel/attract pulses — so the danger reads in the specks too.
             warningPulse.Disposable = hits == 1 ? StartWarningPulse(model) : Disposable.Empty;
         }
 
@@ -85,10 +86,22 @@ namespace BalloonParty.Balloon.Type
                 return Disposable.Empty;
             }
 
-            var toughIndex = _palette.PaletteIndexOf(GamePalette.ToughColorId);
+            _repelPulse = false;
             return Observable.Interval(TimeSpan.FromSeconds(stamper.WarningStampInterval))
-                .Subscribe(_ => _disturbanceField.Stamp(
-                    StampSource.ToughWarning, transform.position, Vector2.zero, toughIndex));
+                .Subscribe(_ => EmitAlternatingPulse());
+        }
+
+        // Each pulse flips sign — the tough pushes the field out, then pulls it back in — while always
+        // tagging the specks its reserved color. Magnitude/radius come from the ToughWarning profile.
+        private void EmitAlternatingPulse()
+        {
+            var profile = _disturbanceField.GetProfile(StampSource.ToughWarning);
+            var strength = Mathf.Abs(profile.Strength) * (_repelPulse ? 1f : -1f);
+            _repelPulse = !_repelPulse;
+
+            _disturbanceField.Stamp(
+                transform.position, profile.Radius, strength, Vector2.zero, profile.Duration,
+                _palette.PaletteIndexOf(GamePalette.ToughColorId));
         }
 
         private void ApplyDamageProgress(int hits, int maxHits)

@@ -1,7 +1,8 @@
 // Advects an ambient speck field each frame: Brownian drift + a global motion vector + the disturbance
 // field, wrapped toroidally within a world region. Driven by SpeckField.cs.
 // STARTER — validate + tune in-editor (Built-in RP compute). Speck layout must match the C# struct:
-// the C# struct: position, velocity, seed, age, lifetime, effectiveVel, heat, paletteIndex (11 floats).
+// the C# struct: position, velocity, seed, age, lifetime, effectiveVel, heat, paletteIndex,
+// prevPaletteIndex, colorBlend (13 floats).
 #pragma kernel Advect
 
 struct Speck
@@ -14,6 +15,8 @@ struct Speck
     float2 effectiveVel;
     float heat;
     float paletteIndex;
+    float prevPaletteIndex; // the tag colour we're easing away from
+    float colorBlend;       // 0 = fully prev, 1 = fully current
 };
 
 RWStructuredBuffer<Speck> _Specks;
@@ -43,6 +46,7 @@ float _MinLifetime;
 float _MaxLifetime;
 float _HeatGain;
 float _HeatDecay;
+float _ColorLerpRate; // per-second ramp of colorBlend when the tag index changes
 
 float hash11(float p)
 {
@@ -74,6 +78,8 @@ void Advect(uint3 id : SV_DispatchThreadID)
         s.age = 0.0;
         s.heat = 0.0;
         s.paletteIndex = -1.0;
+        s.prevPaletteIndex = -1.0;
+        s.colorBlend = 1.0;
     }
 
     // Brownian drift: a per-speck pseudo-random direction that re-rolls roughly once a second.
@@ -82,9 +88,9 @@ void Advect(uint3 id : SV_DispatchThreadID)
     float2 rnd = float2(hash11(s.seed + phaseStep), hash11(s.seed + phaseStep + 17.0)) * 2.0 - 1.0;
     float2 brownian = rnd * _BrownianStrength;
 
-    // Disturbance: push specks up the density gradient — toward undisturbed density, away from the wake
-    // the projectile/balloon carves into the field's R channel — so they part/disperse like the puff
-    // cloud. (The G,B displacement points opposite the motion, which would instead drag them into the wake.)
+    // Disturbance: specks flow DOWN the signed-density gradient (toward lower R) — repelled by the
+    // bumps a repulsion stamp raises (R > 0.5) and pulled into the wells an attraction stamp digs
+    // (R < 0.5). (The G,B displacement points opposite the motion, which would instead drag them in.)
     float2 disturbance = float2(0.0, 0.0);
     float2 flow = float2(0.0, 0.0);
     float tagLife = 0.0;
@@ -98,7 +104,7 @@ void Advect(uint3 id : SV_DispatchThreadID)
             float dr = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv + float2(e, 0.0), 0).r;
             float dd = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv - float2(0.0, e), 0).r;
             float du = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv + float2(0.0, e), 0).r;
-            float2 radial = float2(dr - dl, du - dd);
+            float2 radial = float2(dl - dr, dd - du);
 
             // Swirl: rotate the pull-away by a per-speck angle drawn from a min/max range, at ONE
             // rotational sense (no sign flip) so the field circulates coherently — a curl/vortex.
@@ -119,7 +125,14 @@ void Advect(uint3 id : SV_DispatchThreadID)
             float tagValue = tag * 16.0;
             if (tagValue > 0.05)
             {
-                s.paletteIndex = ceil(tagValue) - 1.0;
+                float newIndex = ceil(tagValue) - 1.0;
+                if (newIndex != s.paletteIndex)
+                {
+                    // A new tag colour — start easing from the one we were showing.
+                    s.prevPaletteIndex = s.paletteIndex;
+                    s.paletteIndex = newIndex;
+                    s.colorBlend = 0.0;
+                }
                 tagLife = tagValue - s.paletteIndex;
             }
         }
@@ -154,10 +167,15 @@ void Advect(uint3 id : SV_DispatchThreadID)
     // tint tracks the tag's remaining life. Force-driven heat still wins when it's stronger.
     s.heat = max(s.heat, tagLife);
 
+    // Ease the palette hop so a tag colour change (e.g. the rainbow cycling) crossfades, not snaps.
+    s.colorBlend = min(1.0, s.colorBlend + _ColorLerpRate * _DeltaTime);
+
     // Color memory only lasts while warm — a cooled speck flushes neutral on its next untagged stir.
     if (s.heat <= 0.001)
     {
         s.paletteIndex = -1.0;
+        s.prevPaletteIndex = -1.0;
+        s.colorBlend = 1.0;
     }
 
     // Total per-frame move (before wrap) as an effective velocity — captures sim + ascend + flow, so the

@@ -15,6 +15,7 @@ namespace BalloonParty.Configuration.Effects
         Paint         = 1 << 5,
         BalloonDeflect = 1 << 6,
         ToughWarning  = 1 << 7,
+        RainbowAttract = 1 << 8,
     }
 
     [Serializable]
@@ -92,7 +93,8 @@ namespace BalloonParty.Configuration.Effects
             new StampProfile { Sources = StampSource.Bomb,         Radius = 1.2f, Strength = 1.0f, Duration = 0.2f },
             new StampProfile { Sources = StampSource.Laser,        Radius = 0.4f, Strength = 0.6f, Duration = 0.1f },
             new StampProfile { Sources = StampSource.Paint,        Radius = 0.6f, Strength = 0.5f, Duration = 0.1f },
-            new StampProfile { Sources = StampSource.ToughWarning, Radius = 0.4f, Strength = 0f, Duration = 0f },
+            new StampProfile { Sources = StampSource.ToughWarning, Radius = 0.4f, Strength = 0.3f, Duration = 0f },
+            new StampProfile { Sources = StampSource.RainbowAttract, Radius = 0.7f, Strength = -0.4f, Duration = 0f },
         };
 
         public int TexelsPerUnit => _texelsPerUnit;

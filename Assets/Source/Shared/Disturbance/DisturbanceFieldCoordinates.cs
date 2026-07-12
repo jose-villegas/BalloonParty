@@ -29,10 +29,11 @@ namespace BalloonParty.Shared.Disturbance
                 (worldPos.y - Bounds.yMin) / Bounds.height);
         }
 
+        // Normalised against width only; the stamp shaders scale the vertical delta by the field's
+        // height/width ratio, so the radius reads as world units on both axes (a true circle).
         public float WorldRadiusToUV(float worldRadius)
         {
-            var avgSize = (Bounds.width + Bounds.height) * 0.5f;
-            return avgSize > 0.001f ? worldRadius / avgSize : 0.1f;
+            return Bounds.width > 0.001f ? worldRadius / Bounds.width : 0.1f;
         }
     }
 }

@@ -334,7 +334,9 @@ Shader "BalloonParty/Grid/PuffCloud"
                 #ifdef _DENSITY_ON
                 float2 fieldUV = (wpRest - _FieldBoundsMin) / _FieldBoundsSize;
                 float3 field = tex2D(_DisturbanceTex, fieldUV).rgb;
-                float density = field.r;
+                // R is signed density (0.5 rest): a repulsion bump (> 0.5) thins the cloud; remap so
+                // rest reads full and attraction (< 0.5) leaves it full.
+                float density = saturate((1.0 - field.r) * 2.0);
                 float2 displace = (field.gb - 0.5) * 2.0 * _DisplaceWorldScale;
                 float displaceLen = length(displace);
                 // How disturbed this texel is — 1.0 at full displacement, 0.0 at rest

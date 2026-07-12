@@ -297,6 +297,7 @@ MonoBehaviour:
   _teleportThreshold: 1
   _heatGain: 4
   _heatDecay: 1.5
+  _colorLerpRate: 4
 --- !u!4 &1143190890
 Transform:
   m_ObjectHideFlags: 0

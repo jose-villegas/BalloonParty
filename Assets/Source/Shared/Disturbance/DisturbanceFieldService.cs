@@ -21,6 +21,7 @@ namespace BalloonParty.Shared.Disturbance
         private static readonly int PressureStrId = Shader.PropertyToID("_PressureStr");
         private static readonly int DisplaceDecayId = Shader.PropertyToID("_DisplaceDecay");
         private static readonly int DisplaceAmountId = Shader.PropertyToID("_DisplaceAmount");
+        private static readonly int StampAspectId = Shader.PropertyToID("_StampAspect");
         private static readonly int StampCountId = Shader.PropertyToID("_StampCount");
         private static readonly int StampCentersId = Shader.PropertyToID("_StampCenters");
         private static readonly int StampRadiiId = Shader.PropertyToID("_StampRadii");
@@ -49,6 +50,7 @@ namespace BalloonParty.Shared.Disturbance
         private float _diffusionTimer;
         private Vector2 _windTarget;
         private Vector2 _windCurrent;
+        private float _stampAspect = 1f;
 
         internal DisturbanceFieldService(
             IDisturbanceFieldSettings settings,
@@ -72,6 +74,10 @@ namespace BalloonParty.Shared.Disturbance
         void IStartable.Start()
         {
             _coords = new DisturbanceFieldCoordinates(_displayConfig, _settings.TexelsPerUnit);
+
+            // UV space is normalised per-axis over a non-square field, so the stamp shaders correct
+            // the vertical delta by this ratio to keep a radius circular in world space.
+            _stampAspect = _coords.Bounds.height / _coords.Bounds.width;
             _emitInstantStamp = (pos, radius, strength, dir, palette) =>
                 Stamp(pos, radius, strength, dir, paletteIndex: palette);
 
@@ -139,11 +145,12 @@ namespace BalloonParty.Shared.Disturbance
             Vector3 worldPosition, float radius, float strength, Vector2 direction, float duration = 0f,
             int paletteIndex = -1)
         {
-            // A zero-strength stamp carries no force: it only tags the field's color channel (the shaders
-            // scale density/displacement by strength), so it must not rustle bushes or shove the wind.
-            var colorOnly = strength <= 0f;
+            // Signed strength: > 0 repels (bumps R up), < 0 attracts (digs R down), 0 is a pure colour
+            // tag with no force. Only the outward push of repulsion rustles bushes and shoves the wind.
+            var colorOnly = strength == 0f;
+            var repels = strength > 0f;
 
-            if (!colorOnly)
+            if (repels)
             {
                 _impactBus.Report(worldPosition, radius);
             }
@@ -167,7 +174,7 @@ namespace BalloonParty.Shared.Disturbance
                     return;
                 }
             }
-            else if (strength < _settings.MinStampStrength)
+            else if (Mathf.Abs(strength) < _settings.MinStampStrength)
             {
                 return;
             }
@@ -175,7 +182,7 @@ namespace BalloonParty.Shared.Disturbance
             var uv = _coords.WorldToUV(worldPosition);
             var radiusUV = _coords.WorldRadiusToUV(radius);
 
-            if (!colorOnly && direction.sqrMagnitude > 0.001f)
+            if (repels && direction.sqrMagnitude > 0.001f)
             {
                 _windTarget = -direction;
             }
@@ -256,6 +263,7 @@ namespace BalloonParty.Shared.Disturbance
             material.SetVectorArray(StampDirectionsId, _batchDirections);
             material.SetFloatArray(StampColorIndicesId, _batchColorIndices);
             material.SetFloat(DisplaceAmountId, _settings.DisplaceAmount);
+            material.SetFloat(StampAspectId, _stampAspect);
         }
 
         private void SetDiffusionUniforms()

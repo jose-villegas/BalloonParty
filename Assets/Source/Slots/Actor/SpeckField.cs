@@ -18,7 +18,7 @@ namespace BalloonParty.Slots.Actor
     internal sealed class SpeckField : MonoBehaviour
     {
         private const int ThreadGroupSize = 64;
-        private const int SpeckStrideBytes = sizeof(float) * 11;
+        private const int SpeckStrideBytes = sizeof(float) * 13;
         private const int MaxPaletteSlots = 16;
 
         private static readonly int SpecksId = Shader.PropertyToID("_Specks");
@@ -51,6 +51,7 @@ namespace BalloonParty.Slots.Actor
         private static readonly int FadeOutId = Shader.PropertyToID("_FadeOut");
         private static readonly int HeatGainId = Shader.PropertyToID("_HeatGain");
         private static readonly int HeatDecayId = Shader.PropertyToID("_HeatDecay");
+        private static readonly int ColorLerpRateId = Shader.PropertyToID("_ColorLerpRate");
         private static readonly int SpeckPaletteId = Shader.PropertyToID("_SpeckPalette");
         private static readonly int SpeckPaletteCountId = Shader.PropertyToID("_SpeckPaletteCount");
 
@@ -108,6 +109,9 @@ namespace BalloonParty.Slots.Actor
 
         [Tooltip("How fast the heat cools once the disturbance passes, per second — the return to the base color.")]
         [SerializeField] private float _heatDecay = 1.5f;
+
+        [Tooltip("Per-second ramp of a speck's crossfade when its palette tag changes color (e.g. the rainbow cycling). Higher = snappier; ~4 crossfades in a quarter second.")]
+        [SerializeField] private float _colorLerpRate = 4f;
 
         [Inject] private ScenarioContentRoot _scenarioRoot;
         [Inject] private DisturbanceFieldService _disturbance;
@@ -261,6 +265,8 @@ namespace BalloonParty.Slots.Actor
                     EffectiveVel = Vector2.zero,
                     Heat = 0f,
                     PaletteIndex = -1f,
+                    PrevPaletteIndex = -1f,
+                    ColorBlend = 1f,
                 };
             }
 
@@ -322,6 +328,7 @@ namespace BalloonParty.Slots.Actor
             _compute.SetFloat(FlowInfluenceId, _flowInfluence);
             _compute.SetFloat(HeatGainId, _heatGain);
             _compute.SetFloat(HeatDecayId, _heatDecay);
+            _compute.SetFloat(ColorLerpRateId, _colorLerpRate);
             _compute.SetTexture(_kernel, DisturbanceTexId, hasField ? _disturbance.FieldTexture : Texture2D.blackTexture);
             _compute.SetVector(FieldBoundsMinId, hasField ? _disturbance.FieldBoundsMin : Vector2.zero);
             _compute.SetVector(FieldBoundsSizeId, hasField ? _disturbance.FieldBoundsSize : Vector2.one);
@@ -340,6 +347,8 @@ namespace BalloonParty.Slots.Actor
             public Vector2 EffectiveVel;
             public float Heat;
             public float PaletteIndex;
+            public float PrevPaletteIndex;
+            public float ColorBlend;
         }
     }
 }

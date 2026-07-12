@@ -1,8 +1,12 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Level;
+using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
 using Cysharp.Threading.Tasks;
@@ -28,13 +32,21 @@ namespace BalloonParty.Balloon.Type
 
         [SerializeField] private SpriteRenderer _renderer;
 
+        [Tooltip("Seconds between the constant inward (attraction) field stamps that pull specks into " +
+                 "the balloon, each tagged with the next available color. 0 = off.")]
+        [SerializeField] private float _attractInterval = 0.3f;
+
         // Palette is inherited from ColorableBalloonVariant (protected) — a second [Inject] field of
         // the same type here would make VContainer's injector throw "Duplicate injection found".
         [Inject] private IActiveLevelParameters _levelParams;
         [Inject] private ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
+        [Inject] private DisturbanceFieldService _disturbanceField;
+
+        private readonly List<int> _attractColorIndices = new();
 
         private MaterialPropertyBlock _block;
         private float _timeOffset;
+        private int _attractCursor;
 
         private void Awake()
         {
@@ -51,19 +63,29 @@ namespace BalloonParty.Balloon.Type
                 colorable.Color.Value = GamePalette.RainbowColorId;
             }
 
-            _timeOffset = Random.Range(0f, 100f);
+            _timeOffset = UnityEngine.Random.Range(0f, 100f);
             PushBands();
         }
 
         public void Bind(IBalloonModel model, CompositeDisposable disposables)
         {
             PushBands();
+            RebuildAttractColors();
 
             // LevelDifficultyResolver also reacts to this message to re-resolve Current, and MessagePipe
             // doesn't guarantee subscriber order — defer a frame so the new allowed set has landed.
             _levelUpSubscriber
                 .Subscribe(_ => RepushBandsNextFrame().Forget())
                 .AddTo(disposables);
+
+            // Constant inward pull: each tick stamps an attraction at the balloon, cycling the tag
+            // through the available colors so drawn-in specks take on the rainbow's palette.
+            if (_attractInterval > 0f)
+            {
+                Observable.Interval(TimeSpan.FromSeconds(_attractInterval))
+                    .Subscribe(_ => EmitAttractStamp())
+                    .AddTo(disposables);
+            }
         }
 
         private async UniTaskVoid RepushBandsNextFrame()
@@ -76,6 +98,38 @@ namespace BalloonParty.Balloon.Type
             }
 
             PushBands();
+            RebuildAttractColors();
+        }
+
+        private void RebuildAttractColors()
+        {
+            _attractColorIndices.Clear();
+            var colors = Palette.ColorNamesForMask(_levelParams.Current.AllowedColorsMask);
+            if (colors == null)
+            {
+                return;
+            }
+
+            foreach (var color in colors)
+            {
+                var index = Palette.PaletteIndexOf(color);
+                if (index >= 0)
+                {
+                    _attractColorIndices.Add(index);
+                }
+            }
+        }
+
+        private void EmitAttractStamp()
+        {
+            if (_attractColorIndices.Count == 0)
+            {
+                return;
+            }
+
+            var index = _attractColorIndices[_attractCursor % _attractColorIndices.Count];
+            _attractCursor++;
+            _disturbanceField.Stamp(StampSource.RainbowAttract, transform.position, Vector2.zero, index);
         }
 
         private void PushBands()

@@ -52,6 +52,8 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float2 effectiveVel;
                 float heat;
                 float paletteIndex;
+                float prevPaletteIndex;
+                float colorBlend;
             };
 
             StructuredBuffer<Speck> _Specks;
@@ -77,6 +79,8 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float  alpha : TEXCOORD1;
                 float  heat  : TEXCOORD2;
                 float  paletteIndex : TEXCOORD3;
+                float  prevPaletteIndex : TEXCOORD4;
+                float  colorBlend : TEXCOORD5;
             };
 
             // Two triangles → a unit quad centered on the origin, in [-0.5, 0.5].
@@ -137,6 +141,8 @@ Shader "BalloonParty/Scenario/SpeckField"
                 o.alpha = fade;
                 o.heat = s.heat;
                 o.paletteIndex = s.paletteIndex;
+                o.prevPaletteIndex = s.prevPaletteIndex;
+                o.colorBlend = s.colorBlend;
                 return o;
             }
 
@@ -152,7 +158,12 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float4 target = _DisturbColor;
                 if (i.paletteIndex >= -0.5 && paletteIndex < _SpeckPaletteCount)
                 {
-                    target = _SpeckPalette[paletteIndex];
+                    float4 cur = _SpeckPalette[paletteIndex];
+                    int prevIndex = (int)(i.prevPaletteIndex + 0.5);
+                    float4 prev = (i.prevPaletteIndex >= -0.5 && prevIndex < _SpeckPaletteCount)
+                        ? _SpeckPalette[prevIndex] : cur;
+                    // Crossfade the palette hop so a tag change (rainbow cycling) eases instead of snapping.
+                    target = lerp(prev, cur, saturate(i.colorBlend));
                 }
 
                 float heat = saturate(i.heat);

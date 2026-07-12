@@ -30,6 +30,7 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceStampBatched"
 
             sampler2D _MainTex;
             float     _DisplaceAmount;
+            float     _StampAspect; // field height/width; corrects UV anisotropy so stamps stay circular
             int       _StampCount;
 
             float4 _StampCenters[MAX_STAMPS];   // xy = UV center
@@ -75,7 +76,9 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceStampBatched"
                     float  strength = _StampStrengths[s];
                     float2 dir = _StampDirections[s].xy;
 
+                    // Correct the per-axis UV normalisation so the falloff is circular in world space.
                     float2 toPixel = uv - center;
+                    toPixel.y *= _StampAspect;
                     float dist = length(toPixel);
 
                     // Radial falloff
@@ -94,8 +97,9 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceStampBatched"
                         falloff = max(falloff, wakeAlong * wakePerp * 0.5);
                     }
 
-                    // Density subtraction
-                    density = max(0.0, density - falloff * strength);
+                    // Signed density around the 0.5 rest: strength > 0 bumps up (repulsion),
+                    // strength < 0 digs down (attraction).
+                    density = saturate(density + falloff * strength);
 
                     // Displacement
                     float2 pushDir;

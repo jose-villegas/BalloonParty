@@ -2,7 +2,7 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
 {
     // ── Density + displacement diffusion pass ────────────────────────────
     // Processes a packed RT where:
-    //   R = density (equilibrium = 1.0)
+    //   R = signed density (equilibrium = 0.5): > 0.5 repels specks, < 0.5 attracts them
     //   G = displacement X (equilibrium = 0.5, i.e. zero offset)
     //   B = displacement Y (equilibrium = 0.5)
     //   A = palette tag, packed (index + life) / 16 with life in (0, 1]: 16 index slots, and the
@@ -64,6 +64,7 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
 
             #if _STAMPS_ON
             float     _DisplaceAmount;
+            float     _StampAspect; // field height/width; corrects UV anisotropy so stamps stay circular
             int       _StampCount;
             float4    _StampCenters[MAX_STAMPS];
             float     _StampRadii[MAX_STAMPS];
@@ -147,9 +148,9 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
                 result.r += pressure * _DeltaTime;
 
                 // Equilibrium restoration:
-                //   density → 1.0 (slow)
+                //   density → 0.5 (slow) — the signed rest: above repels, below attracts
                 //   displacement → 0.5 (faster, so shape snaps back before opacity)
-                result.r = lerp(result.r, 1.0, _ReformSpeed * _DeltaTime);
+                result.r = lerp(result.r, 0.5, _ReformSpeed * _DeltaTime);
                 result.gb = lerp(result.gb, float2(0.5, 0.5), _DisplaceDecay * _DeltaTime);
 
                 #if _STAMPS_ON
@@ -163,7 +164,9 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
                     float  strength = _StampStrengths[s];
                     float2 dir = _StampDirections[s].xy;
 
+                    // Correct the per-axis UV normalisation so the falloff is circular in world space.
                     float2 toPixel = uv - center;
+                    toPixel.y *= _StampAspect;
                     float dist = length(toPixel);
 
                     float falloff = smoothstep(radius, 0.0, dist);
@@ -180,7 +183,9 @@ Shader "Hidden/BalloonParty/Grid/DisturbanceDiffusion"
                         falloff = max(falloff, wakeAlong * wakePerp * 0.5);
                     }
 
-                    density = max(0.0, density - falloff * strength);
+                    // Signed density around the 0.5 rest: strength > 0 bumps up (repulsion),
+                    // strength < 0 digs down (attraction).
+                    density = saturate(density + falloff * strength);
 
                     float2 pushDir;
                     if (dirLen > 0.001)
