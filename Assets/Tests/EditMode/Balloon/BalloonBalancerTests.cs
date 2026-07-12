@@ -45,6 +45,7 @@ namespace BalloonParty.Tests.Balloon
             _balancer = new BalloonBalancer(
                 _grid, balanceQuery, _balloonsConfig, pathHolder,
                 CaptureBalanceRequests(),
+                Substitute.For<IPublisher<FlightPulseMessage>>(),
                 CaptureLoaded(), StubSubscriber<ProjectileDestroyedMessage>(),
                 _pauseService, null, new BalloonMotionTicker());
             _balancer.Start();

@@ -20,6 +20,15 @@ namespace BalloonParty.Configuration.Balloons
 
         /// <summary>Interval between board re-balances while a projectile is in flight. 0 disables.</summary>
         float FlightRebalanceInterval { get; }
+
+        /// <summary>Interval between flight-pulse heartbeats (deferred pop-spawns). 0 = match <see cref="FlightRebalanceInterval" />.</summary>
+        float FlightPulseInterval { get; }
+
+        /// <summary>Chance a direct projectile pop spawns one extra balloon (flushed on the flight pulse); 0 = off.</summary>
+        float PopSpawnChance { get; }
+
+        /// <summary>Rows the automated pop-spawns leave unfilled — caps them at grid capacity minus columns × this.</summary>
+        int PopSpawnFreeRows { get; }
         float NudgeDistance { get; }
         float NudgeDuration { get; }
         float NudgeFalloff { get; }

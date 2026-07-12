@@ -43,7 +43,8 @@ namespace BalloonParty.Projectile.Controller
             // one-shotting or deflecting off them), scores colour-agnostically, and rainbow-converts what
             // it pops near — until it loses a shield to a wall (which ends the buff).
             var isRainbowBuff = projectile.HasBuff<RainbowProjectileBuff>();
-            var flags = isRainbowBuff ? DamageFlags.WildcardStreak | DamageFlags.Piercing : DamageFlags.Normal;
+            var flags = (isRainbowBuff ? DamageFlags.WildcardStreak | DamageFlags.Piercing : DamageFlags.Normal)
+                        | DamageFlags.DirectHit;
             var damageContext = new DamageContext(1, flags, projectile.ColorName.Value);
             var outcome = balloon.EvaluateHit(damageContext);
 

@@ -32,6 +32,19 @@ namespace BalloonParty.Configuration.Balloons
                  "0 disables.")]
         [SerializeField] private float _flightRebalanceInterval = 1f;
 
+        [Tooltip("Seconds between flight-pulse heartbeats (paces deferred pop-spawns). 0 = match the " +
+                 "rebalance interval; upgrades may shorten it independently later.")]
+        [SerializeField] private float _flightPulseInterval;
+
+        [Tooltip("Chance a DIRECT projectile pop (AOE items excluded) spawns one extra balloon, rolled " +
+                 "per pop; spawns flush on the flight pulse. 0 = off.")]
+        [Range(0f, 1f)]
+        [SerializeField] private float _popSpawnChance;
+
+        [Tooltip("Rows the automated pop-spawns never aim to fill: they stop at grid capacity minus " +
+                 "columns × this. 0 = may fill the whole grid.")]
+        [SerializeField] private int _popSpawnFreeRows = 2;
+
         [Header("Nudge")]
         [SerializeField] private float _nudgeDistance = 0.3f;
         [SerializeField] private float _nudgeDuration = 0.15f;
@@ -45,6 +58,9 @@ namespace BalloonParty.Configuration.Balloons
         public int SpawnEntryRowOffset => _spawnEntryRowOffset;
         public float TimeForBalloonsBalance => _timeForBalloonsBalance;
         public float FlightRebalanceInterval => _flightRebalanceInterval;
+        public float FlightPulseInterval => _flightPulseInterval;
+        public float PopSpawnChance => _popSpawnChance;
+        public int PopSpawnFreeRows => _popSpawnFreeRows;
         public float NudgeDistance => _nudgeDistance;
         public float NudgeDuration => _nudgeDuration;
         public float NudgeFalloff => _nudgeFalloff;

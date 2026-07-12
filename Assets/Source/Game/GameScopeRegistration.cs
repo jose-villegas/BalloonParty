@@ -48,6 +48,7 @@ namespace BalloonParty.Game
         internal static void RegisterMessages(this IContainerBuilder builder, MessagePipeOptions options)
         {
             builder.RegisterMessageBroker<BalanceBalloonsMessage>(options);
+            builder.RegisterMessageBroker<FlightPulseMessage>(options);
             builder.RegisterMessageBroker<SpawnBalloonLineMessage>(options);
             builder.RegisterMessageBroker<ProjectileDestroyedMessage>(options);
             builder.RegisterMessageBroker<ActorHitMessage>(options);

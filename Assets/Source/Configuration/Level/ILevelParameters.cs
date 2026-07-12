@@ -18,6 +18,7 @@ namespace BalloonParty.Configuration.Level
         int FirstSpawnTurn { get; }
         AnimationCurve InitialItemCountWeights { get; }
         AnimationCurve ItemCountWeights { get; }
+
         IReadOnlyList<ItemSettings> Items { get; }
         IReadOnlyList<string> AllowedColors { get; }
         int AllowedColorsMask { get; }
