@@ -24,6 +24,10 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
         _SwirlSpeed("Swirl Speed", Range(0,20)) = 3.0
         _SwirlRadius("Swirl Radius", Range(0,0.5)) = 0.15
 
+        [Header(Mirror)]
+        [MaterialToggle] _MirrorX("Mirror At Center", Float) = 0
+        _MirrorAxis("Mirror Axis (local dir)", Vector) = (1, 0, 0, 0)
+
         [MaterialToggle] PixelSnap("Pixel snap", Float) = 0
     }
 
@@ -65,6 +69,7 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
                 float4 vertex   : SV_POSITION;
                 fixed4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
+                float2 localPos : TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -86,6 +91,7 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
                 UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
                 OUT.vertex = UnityObjectToClipPos(IN.vertex);
                 OUT.texcoord = IN.texcoord;
+                OUT.localPos = IN.vertex.xy; // object space; the mirror axis is local so it follows rotation
                 OUT.color = IN.color * _Color * _RendererColor;
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
@@ -107,6 +113,8 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
             float4 _Drift;
             float _SwirlSpeed;
             float _SwirlRadius;
+            float _MirrorX;
+            float4 _MirrorAxis;
 
             fixed4 SampleSpriteTexture(float2 uv)
             {
@@ -130,19 +138,26 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
 
             // Scattered twinkling specks: tile UV into a grid, jitter each speck off its cell centre,
             // only some cells sparkle at all, and each blinks at its own random phase/speed.
-            inline fixed GlitterAmount(float2 uv)
+            inline fixed GlitterAmount(float2 uv, float2 localPos)
             {
-                // Drift the whole field toward _Drift so glints stream in a direction.
-                float2 cellUv  = (uv + _Drift.xy * _Time.y) * _GlitterDensity;
+                // Mirror at the sprite centre: the split runs along the LOCAL _MirrorAxis (so it follows
+                // the sprite's rotation), and on the far side the whole motion is REVERSED so the two
+                // halves flow oppositely. Reversing (not axis-reflecting) is orientation-independent, so
+                // it's correct whichever way the sprite is turned. Placement is unchanged.
+                float side = (_MirrorX > 0.5 && dot(localPos, _MirrorAxis.xy) < 0.0) ? -1.0 : 1.0;
+
+                // Drift the whole field toward _Drift (reversed on the mirrored half).
+                float2 drift = _Drift.xy * side;
+                float2 cellUv  = (uv + drift * _Time.y) * _GlitterDensity;
                 float2 cellId  = floor(cellUv);
                 float2 cellPos = frac(cellUv) - 0.5;
 
                 float2 jitter = float2(Hash21(cellId + 17.0), Hash21(cellId + 91.0)) - 0.5;
 
-                // Each speck orbits a small circle at its own phase — reads as spinning around the beam
-                // rather than a rigid slide.
+                // Each speck orbits a small circle at its own phase — reads as spinning rather than a
+                // rigid slide. Reversing it on the mirrored half makes the two sides counter-spin.
                 float  ang    = _Time.y * _SwirlSpeed + Hash21(cellId + 33.0) * 6.2831853;
-                float2 orbit  = float2(cos(ang), sin(ang)) * _SwirlRadius;
+                float2 orbit  = float2(cos(ang), sin(ang)) * (_SwirlRadius * side);
 
                 float  dist   = length(cellPos - (jitter * 0.6 + orbit));
                 float  speck  = smoothstep(_GlitterSize, 0.0, dist);
@@ -163,7 +178,7 @@ Shader "BalloonParty/Sprite/GlitterSwirl"
 
                 // The sprite is never drawn — only its alpha (× renderer alpha) confines the sparkle.
                 fixed mask = SampleSpriteTexture(IN.texcoord).a * IN.color.a;
-                fixed amt = mask * GlitterAmount(IN.texcoord);
+                fixed amt = mask * GlitterAmount(IN.texcoord, IN.localPos);
 
                 fixed4 c;
                 c.rgb = _GlitterColor.rgb * (amt * _GlitterBrightness);
