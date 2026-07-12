@@ -22,6 +22,7 @@ namespace BalloonParty.Tests.Balloon
         private IBalloonsConfiguration _balloonsConfig;
         private PauseService _pauseService;
         private IMessageHandler<ProjectileLoadedMessage> _loadedHandler;
+        private IMessageHandler<BalanceBalloonsMessage> _balanceHandler;
         private BalloonBalancer _balancer;
 
         [SetUp]
@@ -43,7 +44,7 @@ namespace BalloonParty.Tests.Balloon
             // grid-only tests can omit it; the motion ticker is plain C# and cheap to real.
             _balancer = new BalloonBalancer(
                 _grid, balanceQuery, _balloonsConfig, pathHolder,
-                Substitute.For<ISubscriber<BalanceBalloonsMessage>>(),
+                CaptureBalanceRequests(),
                 CaptureLoaded(), StubSubscriber<ProjectileDestroyedMessage>(),
                 _pauseService, null, new BalloonMotionTicker());
             _balancer.Start();
@@ -58,9 +59,28 @@ namespace BalloonParty.Tests.Balloon
         }
 
         [Test]
-        public void RunScheduledBalance_WithCurrentGeneration_Runs()
+        public void RunScheduledBalance_WithPendingRequest_Runs()
         {
+            RequestBalance();
+
             Assert.IsTrue(_balancer.RunScheduledBalance(_balancer.Generation));
+        }
+
+        [Test]
+        public void RunScheduledBalance_WithoutPendingRequest_DoesNotRun()
+        {
+            Assert.IsFalse(_balancer.RunScheduledBalance(_balancer.Generation));
+        }
+
+        [Test]
+        public void RunScheduledBalance_AfterDirectBalance_DoesNotRun()
+        {
+            RequestBalance();
+
+            // The direct run (e.g. the spawner's pre-spawn sweep) services the pending request.
+            _balancer.Balance();
+
+            Assert.IsFalse(_balancer.RunScheduledBalance(_balancer.Generation));
         }
 
         [Test]
@@ -147,9 +167,25 @@ namespace BalloonParty.Tests.Balloon
             _grid.Place(new BalloonModel(), null, new Vector2Int(1, 1));
         }
 
+        private void RequestBalance()
+        {
+            _balanceHandler.Handle(default);
+        }
+
         private void LoadFreeProjectile()
         {
             _loadedHandler.Handle(new ProjectileLoadedMessage(new ProjectileModel { IsFree = true }));
+        }
+
+        private ISubscriber<BalanceBalloonsMessage> CaptureBalanceRequests()
+        {
+            var subscriber = Substitute.For<ISubscriber<BalanceBalloonsMessage>>();
+            subscriber
+                .Subscribe(
+                    Arg.Do<IMessageHandler<BalanceBalloonsMessage>>(h => _balanceHandler = h),
+                    Arg.Any<MessageHandlerFilter<BalanceBalloonsMessage>[]>())
+                .Returns(Substitute.For<IDisposable>());
+            return subscriber;
         }
 
         private ISubscriber<ProjectileLoadedMessage> CaptureLoaded()

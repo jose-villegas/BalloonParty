@@ -33,7 +33,7 @@ namespace BalloonParty.Configuration.Balloons
         [Tooltip("Balance-weight bias toward candidates whose diagonal hex neighbours share this balloon's color (per matching neighbour × this) — encourages diagonal same-color lines. Currently honoured by simple colored balloons. 0 = off.")]
         [SerializeField] private float _diagonalColorBias;
 
-        [Tooltip("Max slots this balloon rises per rebalance — lower reads heavier/slower. 0 = unlimited.")]
+        [Tooltip("Max slots this balloon rises per TURN (shared across every rebalance between shots) — lower reads heavier/slower. 0 = unlimited.")]
         [SerializeField] private int _maxBalanceSteps;
 
         [Tooltip("Intervention order in each rebalance round: higher acts first and wins contested slots (the race). Negative = acts after neutral types.")]

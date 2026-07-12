@@ -41,6 +41,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly DisturbanceFieldService _disturbanceField;
         private readonly BalloonMotionTicker _motionTicker;
         private readonly Dictionary<IWriteableDynamicSlotActor, List<Vector3>> _paths = new();
+        private readonly Dictionary<IWriteableDynamicSlotActor, int> _turnSteps = new();
         private readonly List<PassCandidate> _passCandidates = new();
         private readonly List<RoamCandidate> _roamers = new();
         private readonly List<Vector2Int> _restingSlots = new();
@@ -85,7 +86,7 @@ namespace BalloonParty.Balloon.Controller
         {
             _subscriber.Subscribe(_ => RequestBalance());
             _projectileLoadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model);
-            _projectileDestroyedSubscriber.Subscribe(_ => _activeProjectile = null);
+            _projectileDestroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
         }
 
         // Pulses a rebalance at intervals while a projectile is airborne.
@@ -101,6 +102,7 @@ namespace BalloonParty.Balloon.Controller
             _balanceRequested = false;
             _activeProjectile = null;
             _flightRebalanceElapsed = 0f;
+            _turnSteps.Clear();
             ReleasePaths();
         }
 
@@ -148,9 +150,11 @@ namespace BalloonParty.Balloon.Controller
         }
 
         // relocateRoamers: true only at the turn boundary (pre-spawn), so roaming types jump once per turn,
-        // not on every deferred/flight rebalance.
+        // not on every deferred/flight rebalance. A direct run services any pending deferred request, so
+        // the death-frame publish and the spawner's pre-spawn call coalesce into one sweep.
         internal void Balance(bool relocateRoamers = false)
         {
+            _balanceRequested = false;
             ReleasePaths();
 
             if (relocateRoamers)
@@ -293,10 +297,11 @@ namespace BalloonParty.Balloon.Controller
                 return false;
             }
 
-            // Physical weight: a heavy actor only moves so many slots per rebalance (its path length IS
-            // this run's step count — _paths is cleared per Balance()).
-            if (dynamicActor is IBalanceInfluence influence && influence.MaxBalanceSteps > 0
-                && _paths.TryGetValue(dynamicActor, out var taken) && taken.Count >= influence.MaxBalanceSteps)
+            // Physical weight: a heavy actor only moves so many slots per TURN. The budget spans every
+            // balance run between projectile deaths (pre/post-spawn, flight pulses) — a per-run cap would
+            // grant one step per run and read as multi-step hops.
+            var stepCap = (dynamicActor as IBalanceInfluence)?.MaxBalanceSteps ?? 0;
+            if (stepCap > 0 && _turnSteps.GetValueOrDefault(dynamicActor) >= stepCap)
             {
                 return false;
             }
@@ -316,6 +321,11 @@ namespace BalloonParty.Balloon.Controller
             dynamicActor.IsStable.Value = false;
 
             RecordPath(dynamicActor, _grid.IndexToWorldPosition(nextSlot.Value));
+            if (stepCap > 0)
+            {
+                _turnSteps[dynamicActor] = _turnSteps.GetValueOrDefault(dynamicActor) + 1;
+            }
+
             return true;
         }
 
@@ -415,15 +425,15 @@ namespace BalloonParty.Balloon.Controller
             RunScheduledBalance(generation);
         }
 
-        // Runs the deferred balance unless a reset has since bumped the generation.
+        // Runs the deferred balance unless a reset bumped the generation or a direct run already
+        // serviced the request.
         internal bool RunScheduledBalance(int generation)
         {
-            if (generation != _generation)
+            if (generation != _generation || !_balanceRequested)
             {
                 return false;
             }
 
-            _balanceRequested = false;
             Balance();
             return true;
         }
@@ -476,6 +486,14 @@ namespace BalloonParty.Balloon.Controller
             }
 
             return false;
+        }
+
+        // The turn boundary: the heavy-step budget refreshes here, covering the death-frame balances,
+        // the spawn wave's, and the next flight's pulses as one allowance.
+        private void OnProjectileDestroyed()
+        {
+            _activeProjectile = null;
+            _turnSteps.Clear();
         }
 
         private void RequestBalance()
