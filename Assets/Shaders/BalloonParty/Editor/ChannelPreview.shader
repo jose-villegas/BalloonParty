@@ -25,14 +25,16 @@ Shader "Hidden/BalloonParty/Editor/ChannelPreview"
             #pragma fragment frag
             #include "UnityCG.cginc"
 
-            sampler2D _MainTex;
+            Texture2D _MainTex;
+            SamplerState sampler_MainTex;      // matches the RT's bilinear filter for R/G/B views
+            SamplerState sampler_point_clamp;  // point-samples the palette tag so the index stays crisp
             float4 _ChannelMask;
             float4 _PaletteColors[16];
             float _DecodePalette; // 1 = a solo-A view decodes the encoded palette index to its color
 
             fixed4 frag(v2f_img i) : SV_Target
             {
-                fixed4 tex = tex2D(_MainTex, i.uv);
+                fixed4 tex = _MainTex.Sample(sampler_MainTex, i.uv);
                 float selectedCount = _ChannelMask.r + _ChannelMask.g
                                      + _ChannelMask.b + _ChannelMask.a;
 
@@ -43,7 +45,8 @@ Shader "Hidden/BalloonParty/Editor/ChannelPreview"
                     if (_DecodePalette > 0.5 && _ChannelMask.a > 0.5)
                     {
                         // A packs (index + life) / 16 — dim the decoded color by the tag's remaining life.
-                        float v = tex.a * 16.0;
+                        // Point-sampled: bilinear blend of a quantized index bands into foreign slots.
+                        float v = _MainTex.Sample(sampler_point_clamp, i.uv).a * 16.0;
                         if (v <= 0.05)
                         {
                             return fixed4(0, 0, 0, 1);

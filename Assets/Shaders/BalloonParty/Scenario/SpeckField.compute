@@ -20,6 +20,10 @@ RWStructuredBuffer<Speck> _Specks;
 Texture2D<float4> _DisturbanceTex;
 SamplerState sampler_DisturbanceTex;
 
+// Point sampler for the palette tag: bilinear-blending a quantized index across a tag border decodes
+// into a neighbouring texel's slot (foreign-colour banding), so the tag is read nearest-neighbour.
+SamplerState sampler_point_clamp;
+
 uint _Count;
 float _DeltaTime;
 float _TimeSeconds;
@@ -109,7 +113,10 @@ void Advect(uint3 id : SV_DispatchThreadID)
             // it, and its in-slot life becomes the color's visibility (independent of agitation).
             float4 center = _DisturbanceTex.SampleLevel(sampler_DisturbanceTex, uv, 0);
             flow = -(center.gb - 0.5) * 2.0;
-            float tagValue = center.a * 16.0;
+
+            // Point-sampled so the index stays crisp at borders (see sampler declaration).
+            float tag = _DisturbanceTex.SampleLevel(sampler_point_clamp, uv, 0).a;
+            float tagValue = tag * 16.0;
             if (tagValue > 0.05)
             {
                 s.paletteIndex = ceil(tagValue) - 1.0;
