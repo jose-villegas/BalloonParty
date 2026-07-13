@@ -98,12 +98,11 @@ Shader "BalloonParty/Sprite/DisturbanceTint"
 
             // Published as globals by DisturbanceFieldService. Bilinear: with a single per-sprite sample there
             // is no spatial banding to avoid, and the smooth value tracks the field as the sprite moves.
-            Texture2D _DisturbanceTex;
+            Texture2D _DisturbanceTex;      // R = density (activity), G/B = direction
+            Texture2D _DisturbanceColorTex; // RGB = smoothed palette colour, A = strength (eased on overwrite)
             SamplerState sampler_linear_clamp;
             float4 _FieldBoundsMin;
             float4 _FieldBoundsSize;
-            float4 _DisturbancePalette[16];
-            int _DisturbancePaletteCount;
 
             float _TintIntensity;
             float _IgnoreColorMask;
@@ -147,24 +146,15 @@ Shader "BalloonParty/Sprite/DisturbanceTint"
 
                 if (all(cuv >= 0.0) && all(cuv <= 1.0))
                 {
+                    // Tint from the smoothed colour layer: real colours, eased on overwrite — no index decode,
+                    // no banding, no flicker. RGB = colour, A = strength (the tag's life, temporally eased).
+                    float4 col = _DisturbanceColorTex.SampleLevel(sampler_linear_clamp, cuv, 0);
+                    tint = lerp(float3(1, 1, 1), col.rgb, saturate(col.a * _TintIntensity));
+
+                    // Density (activity) and direction still come from the field itself.
                     float4 fc = _DisturbanceTex.SampleLevel(sampler_linear_clamp, cuv, 0);
-
-                    // A packs (index + life)/16: ceil recovers the slot, the remainder is the tag's life =
-                    // strength. Masked-out entries read as untagged (a=0). The tint is a value mapped to a
-                    // palette colour and eased in by strength — no manual filtering needed.
-                    float tagValue = fc.a * 16.0;
-                    int index = (int)(ceil(tagValue) - 1.0);
-                    int ignore = (int)_IgnoreColorMask;
-                    float life = 0.0;
-                    if (tagValue > 0.05 && index >= 0 && index < _DisturbancePaletteCount && (ignore & (1 << index)) == 0)
-                    {
-                        life = tagValue - (float)index;
-                        tint = lerp(float3(1, 1, 1), _DisturbancePalette[index].rgb, saturate(life * _TintIntensity));
-                    }
-
-                    // Activity = any disturbance here: signed-density deviation from rest, or a colour tag.
                     float density = abs(fc.r - 0.5) * 2.0;
-                    activity = saturate(max(density * _ActivityScale, life));
+                    activity = saturate(max(density * _ActivityScale, col.a));
 
                     dir = (fc.gb - 0.5) * 2.0;
                     mag = saturate(length(dir) * _DirectionStrength);

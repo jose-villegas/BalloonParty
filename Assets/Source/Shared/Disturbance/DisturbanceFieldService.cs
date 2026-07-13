@@ -242,6 +242,7 @@ namespace BalloonParty.Shared.Disturbance
             _resources.SetStampsEnabled(_resources.DiffusionMaterial, false);
 
             _resources.BlitAndSwap(_resources.DiffusionMaterial);
+            _resources.TickColorLerp(_diffusionTimer);
             _diffusionTimer = 0f;
         }
 
@@ -261,6 +262,7 @@ namespace BalloonParty.Shared.Disturbance
             _resources.SetStampsEnabled(_resources.DiffusionMaterial, true);
 
             _resources.BlitAndSwap(_resources.DiffusionMaterial);
+            _resources.TickColorLerp(_diffusionTimer);
             _diffusionTimer = 0f;
             _pendingStamps.Clear();
         }

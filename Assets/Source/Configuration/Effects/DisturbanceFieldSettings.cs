@@ -90,6 +90,12 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Batched stamp blit shader. Must be assigned — Shader.Find strips Hidden shaders from builds.")]
         [SerializeField] private Shader _stampBatchedShader;
 
+        [Tooltip("Smoothed colour-layer blit shader. Must be assigned — Shader.Find strips Hidden shaders from builds.")]
+        [SerializeField] private Shader _colorLerpShader;
+
+        [Tooltip("How fast the smoothed colour layer eases toward the tag colour on an overwrite (per second).")]
+        [SerializeField] [Range(0.5f, 30f)] private float _colorLerpSpeed = 8f;
+
         [Header("Stamp Profiles")]
         [SerializeField] private StampProfile[] _stampProfiles = new[]
         {
@@ -119,6 +125,8 @@ namespace BalloonParty.Configuration.Effects
         public int MaxLerpStamps => _maxLerpStamps;
         public Shader DiffusionShader => _diffusionShader;
         public Shader StampBatchedShader => _stampBatchedShader;
+        public Shader ColorLerpShader => _colorLerpShader;
+        public float ColorLerpSpeed => _colorLerpSpeed;
 
         StampProfile IDisturbanceFieldSettings.GetProfile(StampSource source)
         {
