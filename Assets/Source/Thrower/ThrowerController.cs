@@ -21,7 +21,6 @@ namespace BalloonParty.Thrower
     {
         private readonly IGameConfiguration _config;
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
-        private readonly IPublisher<ProjectileFiredMessage> _firedPublisher;
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<RunResetMessage> _resetSubscriber;
         private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
@@ -56,7 +55,6 @@ namespace BalloonParty.Thrower
             ThrowerSettings settings,
             ISubscriber<ProjectileDestroyedMessage> destroyedSubscriber,
             IPublisher<ProjectileLoadedMessage> loadedPublisher,
-            IPublisher<ProjectileFiredMessage> firedPublisher,
             ISubscriber<RunResetMessage> resetSubscriber,
             ISubscriber<BoardClearMessage> boardClearSubscriber,
             ISubscriber<LevelUpDismissedMessage> levelUpDismissedSubscriber,
@@ -72,7 +70,6 @@ namespace BalloonParty.Thrower
             _settings = settings;
             _destroyedSubscriber = destroyedSubscriber;
             _loadedPublisher = loadedPublisher;
-            _firedPublisher = firedPublisher;
             _resetSubscriber = resetSubscriber;
             _boardClearSubscriber = boardClearSubscriber;
             _levelUpDismissedSubscriber = levelUpDismissedSubscriber;
@@ -226,7 +223,6 @@ namespace BalloonParty.Thrower
             _activeProjectile.Direction = _direction;
             _positionProvider.SetFree(true);
             _view.ClearTrace();
-            _firedPublisher.Publish(default);
         }
 
         private void UpdateDirection()

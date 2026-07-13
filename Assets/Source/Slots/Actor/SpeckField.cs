@@ -19,10 +19,10 @@ namespace BalloonParty.Slots.Actor
     ///     (no CPU readback). The motion vector is the smoothed velocity of <see cref="ScenarioContentRoot" />,
     ///     so the field reacts to every scenario beat — the ascend, the restart descent, the float-away —
     ///     automatically. The buffer size is a cap: the field builds up as balloon pops enable specks
-    ///     (each burst seeded at the pop point), rather than all being present from the start. While a
-    ///     projectile flies, a reduction curve lowers the active ceiling over its span (the curve's last
-    ///     key), draining the field — so a flurry of pops out-fills the drain and reads as chaos, a lull
-    ///     thins back down.
+    ///     (each burst seeded at the pop point), rather than all being present from the start. A reduction
+    ///     curve runs continuously, lowering the active ceiling to drain the field; every burst restarts it
+    ///     from zero (snapping the ceiling back up) — so a flurry of pops keeps the field full and reads as
+    ///     chaos, a lull lets it thin back down.
     /// </summary>
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     internal sealed class SpeckField : MonoBehaviour
@@ -136,18 +136,16 @@ namespace BalloonParty.Slots.Actor
         [Tooltip("World-space radius the enabled specks scatter within around the pop point.")]
         [SerializeField] private float _popSpread = 0.4f;
 
-        [Tooltip("While a projectile flies, the active ceiling follows this curve: X = seconds since the " +
-                 "shot was fired (its last key is the effective duration; the ceiling holds past it), " +
-                 "Y = fraction of Count allowed active (1 = full). Pops fill toward the ceiling; the " +
-                 "falling ceiling thins the field, so rapid pops read as chaos.")]
+        [Tooltip("The active ceiling follows this curve: X = seconds since the last burst (its last key is " +
+                 "the effective duration; the ceiling holds past it), Y = fraction of Count allowed active " +
+                 "(1 = full). Each burst restarts the curve at 0; between bursts the falling ceiling thins " +
+                 "the field, so rapid pops read as chaos.")]
         [SerializeField] private AnimationCurve _reductionCurve = AnimationCurve.Linear(0f, 1f, 3f, 0.3f);
 
         [Inject] private ScenarioContentRoot _scenarioRoot;
         [Inject] private DisturbanceFieldService _disturbance;
         [Inject] private IGamePalette _palette;
         [Inject] private ISubscriber<ActorHitMessage> _hitSubscriber;
-        [Inject] private ISubscriber<ProjectileFiredMessage> _firedSubscriber;
-        [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
 
         private readonly List<Vector2> _pendingPops = new();
 
@@ -161,11 +159,8 @@ namespace BalloonParty.Slots.Actor
         private int _activeCount;
         private int _ceiling;
         private float _reductionElapsed;
-        private bool _flying;
         private Speck[] _burst;
         private IDisposable _hitSubscription;
-        private IDisposable _firedSubscription;
-        private IDisposable _destroyedSubscription;
 
         private void Start()
         {
@@ -208,11 +203,9 @@ namespace BalloonParty.Slots.Actor
             _activeCount = Mathf.Clamp(_initialActiveCount, 0, _count);
             _ceiling = _count;
 
-            // Pops enable bursts at the pop point; while a projectile flies the reduction curve lowers the
-            // ceiling, thinning the field — so the balance of pops vs the drain is the visual feedback.
+            // Pops enable bursts at the pop point and restart the reduction curve; between bursts the curve
+            // drains the field — so the balance of pops vs the drain is the visual feedback.
             _hitSubscription = _hitSubscriber.Subscribe(OnActorHit);
-            _firedSubscription = _firedSubscriber.Subscribe(_ => OnProjectileFired());
-            _destroyedSubscription = _destroyedSubscriber.Subscribe(_ => _flying = false);
 
             _ready = true;
         }
@@ -232,6 +225,13 @@ namespace BalloonParty.Slots.Actor
                 return;
             }
 
+            // A burst this frame restarts the reduction curve before the ceiling is recomputed, so the pop
+            // fills toward a refreshed (full) ceiling rather than the just-drained one.
+            if (_pendingPops.Count > 0)
+            {
+                _reductionElapsed = 0f;
+            }
+
             UpdateReduction(dt);
             FlushPops();
             SampleMotionDelta();
@@ -243,10 +243,6 @@ namespace BalloonParty.Slots.Actor
         {
             _hitSubscription?.Dispose();
             _hitSubscription = null;
-            _firedSubscription?.Dispose();
-            _firedSubscription = null;
-            _destroyedSubscription?.Dispose();
-            _destroyedSubscription = null;
             _speckBuffer?.Release();
             _speckBuffer = null;
             if (_mesh != null)
@@ -316,24 +312,11 @@ namespace BalloonParty.Slots.Actor
             }
         }
 
-        private void OnProjectileFired()
-        {
-            _flying = true;
-            _reductionElapsed = 0f;
-        }
-
-        // While a projectile flies, the active ceiling follows the reduction curve (its X is seconds since
-        // the shot, so its last key sets the span; Evaluate holds past it) and clamps the active count
-        // down — pops fill toward it, the falling ceiling drains the field. Idle (not flying), the ceiling
-        // is the full cap so the built-up field just holds.
+        // The reduction curve runs continuously (its X is seconds since the last burst, so its last key sets
+        // the span; Evaluate holds past it): the ceiling follows it and clamps the active count down, draining
+        // the field. A burst restarts the curve (see LateUpdate), snapping the ceiling back up.
         private void UpdateReduction(float dt)
         {
-            if (!_flying)
-            {
-                _ceiling = _count;
-                return;
-            }
-
             _reductionElapsed += dt;
             var frac = Mathf.Clamp01(_reductionCurve.Evaluate(_reductionElapsed));
             _ceiling = Mathf.RoundToInt(frac * _count);
