@@ -5,8 +5,11 @@ using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
+using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using DG.Tweening;
+using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer;
@@ -23,6 +26,7 @@ namespace BalloonParty.Balloon.Type
 
         [Inject] private DisturbanceFieldService _disturbanceField;
         [Inject] private IGamePalette _palette;
+        [Inject] private IPublisher<SpeckSpawnRequestMessage> _speckPublisher;
 
         private MaterialPropertyBlock _block;
         private Tween _damageTween;
@@ -94,6 +98,8 @@ namespace BalloonParty.Balloon.Type
 
         // Each pulse flips sign — the tough pushes the field out, then pulls it back in — while always
         // tagging the specks its reserved color. Magnitude/radius come from the ToughWarning profile.
+        // The same beat also puffs specks at the balloon (its ToughWarning speck profile), so the danger
+        // reads as a rising swarm around the tough while it breathes.
         private void EmitAlternatingPulse()
         {
             var profile = _disturbanceField.GetProfile(StampSource.ToughWarning);
@@ -103,6 +109,8 @@ namespace BalloonParty.Balloon.Type
             _disturbanceField.Stamp(
                 transform.position, profile.Radius, strength, Vector2.zero, profile.Duration,
                 _palette.PaletteIndexOf(GamePalette.ToughColorId), reportImpact: false);
+
+            _speckPublisher?.Publish(new SpeckSpawnRequestMessage(SpeckSource.ToughWarning, transform.position));
         }
 
         private void ApplyDamageProgress(int hits, int maxHits)

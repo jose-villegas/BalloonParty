@@ -10,6 +10,7 @@ namespace BalloonParty.Slots.Actor
     {
         BalloonPop = 1 << 0,
         UnbreakableBurst = 1 << 1,
+        ToughWarning = 1 << 2,
     }
 
     /// <summary>A "spawn N specks here" preset — the speck analogue of a disturbance StampProfile. Resolved by
