@@ -19,7 +19,10 @@ namespace BalloonParty.Slots.Actor
     ///     (no CPU readback). The motion vector is the smoothed velocity of <see cref="ScenarioContentRoot" />,
     ///     so the field reacts to every scenario beat — the ascend, the restart descent, the float-away —
     ///     automatically. The buffer size is a cap: the field builds up as balloon pops enable specks
-    ///     (each burst seeded at the pop point), rather than all being present from the start.
+    ///     (each burst seeded at the pop point), rather than all being present from the start. While a
+    ///     projectile flies, a reduction curve lowers the active ceiling over its span (the curve's last
+    ///     key), draining the field — so a flurry of pops out-fills the drain and reads as chaos, a lull
+    ///     thins back down.
     /// </summary>
     [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
     internal sealed class SpeckField : MonoBehaviour
@@ -122,21 +125,29 @@ namespace BalloonParty.Slots.Actor
         [SerializeField] private float _colorLerpRate = 4f;
 
         [Header("Pop activation")]
-        [Tooltip("Specks rendered at the start. The buffer size (Count) is the cap; each pop enables more " +
-                 "up to it. 0 = the field starts empty and builds entirely from pops.")]
+        [Tooltip("Specks active at the start. The buffer size (Count) is the cap; each pop enables more " +
+                 "up to the current ceiling. 0 = the field starts empty and builds entirely from pops.")]
         [SerializeField] private int _initialActiveCount;
 
-        [Tooltip("Specks a single balloon pop enables (once the cap is reached, it repositions this many " +
-                 "of the oldest specks to the new pop instead).")]
+        [Tooltip("Specks a single balloon pop enables, seeded at the pop point (clamped to the ceiling's " +
+                 "remaining room).")]
         [SerializeField] private int _specksPerPop = 32;
 
         [Tooltip("World-space radius the enabled specks scatter within around the pop point.")]
         [SerializeField] private float _popSpread = 0.4f;
 
+        [Tooltip("While a projectile flies, the active ceiling follows this curve: X = seconds since the " +
+                 "shot was fired (its last key is the effective duration; the ceiling holds past it), " +
+                 "Y = fraction of Count allowed active (1 = full). Pops fill toward the ceiling; the " +
+                 "falling ceiling thins the field, so rapid pops read as chaos.")]
+        [SerializeField] private AnimationCurve _reductionCurve = AnimationCurve.Linear(0f, 1f, 3f, 0.3f);
+
         [Inject] private ScenarioContentRoot _scenarioRoot;
         [Inject] private DisturbanceFieldService _disturbance;
         [Inject] private IGamePalette _palette;
         [Inject] private ISubscriber<ActorHitMessage> _hitSubscriber;
+        [Inject] private ISubscriber<ProjectileFiredMessage> _firedSubscriber;
+        [Inject] private ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
 
         private readonly List<Vector2> _pendingPops = new();
 
@@ -148,9 +159,13 @@ namespace BalloonParty.Slots.Actor
         private bool _motionSeeded;
         private bool _ready;
         private int _activeCount;
-        private int _writeCursor;
+        private int _ceiling;
+        private float _reductionElapsed;
+        private bool _flying;
         private Speck[] _burst;
         private IDisposable _hitSubscription;
+        private IDisposable _firedSubscription;
+        private IDisposable _destroyedSubscription;
 
         private void Start()
         {
@@ -191,10 +206,13 @@ namespace BalloonParty.Slots.Actor
             _specksPerPop = Mathf.Clamp(_specksPerPop, 1, _count);
             _burst = new Speck[_specksPerPop];
             _activeCount = Mathf.Clamp(_initialActiveCount, 0, _count);
-            _writeCursor = _activeCount % _count;
+            _ceiling = _count;
 
-            // Each pop enables (or, once capped, repositions) a burst of specks at the pop point.
+            // Pops enable bursts at the pop point; while a projectile flies the reduction curve lowers the
+            // ceiling, thinning the field — so the balance of pops vs the drain is the visual feedback.
             _hitSubscription = _hitSubscriber.Subscribe(OnActorHit);
+            _firedSubscription = _firedSubscriber.Subscribe(_ => OnProjectileFired());
+            _destroyedSubscription = _destroyedSubscriber.Subscribe(_ => _flying = false);
 
             _ready = true;
         }
@@ -214,6 +232,7 @@ namespace BalloonParty.Slots.Actor
                 return;
             }
 
+            UpdateReduction(dt);
             FlushPops();
             SampleMotionDelta();
             Dispatch(dt);
@@ -224,6 +243,10 @@ namespace BalloonParty.Slots.Actor
         {
             _hitSubscription?.Dispose();
             _hitSubscription = null;
+            _firedSubscription?.Dispose();
+            _firedSubscription = null;
+            _destroyedSubscription?.Dispose();
+            _destroyedSubscription = null;
             _speckBuffer?.Release();
             _speckBuffer = null;
             if (_mesh != null)
@@ -293,6 +316,30 @@ namespace BalloonParty.Slots.Actor
             }
         }
 
+        private void OnProjectileFired()
+        {
+            _flying = true;
+            _reductionElapsed = 0f;
+        }
+
+        // While a projectile flies, the active ceiling follows the reduction curve (its X is seconds since
+        // the shot, so its last key sets the span; Evaluate holds past it) and clamps the active count
+        // down — pops fill toward it, the falling ceiling drains the field. Idle (not flying), the ceiling
+        // is the full cap so the built-up field just holds.
+        private void UpdateReduction(float dt)
+        {
+            if (!_flying)
+            {
+                _ceiling = _count;
+                return;
+            }
+
+            _reductionElapsed += dt;
+            var frac = Mathf.Clamp01(_reductionCurve.Evaluate(_reductionElapsed));
+            _ceiling = Mathf.RoundToInt(frac * _count);
+            _activeCount = Mathf.Min(_activeCount, _ceiling);
+        }
+
         // Drained in LateUpdate so the buffer writes land before the frame's compute dispatch.
         private void FlushPops()
         {
@@ -309,13 +356,18 @@ namespace BalloonParty.Slots.Actor
             _pendingPops.Clear();
         }
 
-        // Fills the next burst of specks at the pop point, wrapping the write cursor over the buffer and
-        // growing the active count toward the cap. Once capped, this repositions the oldest specks for a
-        // fresh burst. Specks are world-space, so the pop's world position places them directly; they pick
-        // up the pop's colour from the disturbance field's tag where they land.
+        // Enables a burst of specks at the pop point — written at the top of the active range and grown
+        // into, clamped to the ceiling's remaining room (nothing when already at the ceiling). Specks are
+        // world-space, so the pop's world position places them directly; they pick up the pop's colour
+        // from the disturbance field's tag where they land.
         private void EnableBurst(Vector2 worldPos)
         {
-            var n = _burst.Length;
+            var n = Mathf.Min(_burst.Length, _ceiling - _activeCount);
+            if (n <= 0)
+            {
+                return;
+            }
+
             for (var i = 0; i < n; i++)
             {
                 _burst[i] = new Speck
@@ -333,15 +385,8 @@ namespace BalloonParty.Slots.Actor
                 };
             }
 
-            var firstSpan = Mathf.Min(n, _count - _writeCursor);
-            _speckBuffer.SetData(_burst, 0, _writeCursor, firstSpan);
-            if (firstSpan < n)
-            {
-                _speckBuffer.SetData(_burst, firstSpan, 0, n - firstSpan);
-            }
-
-            _writeCursor = (_writeCursor + n) % _count;
-            _activeCount = Mathf.Min(_count, _activeCount + n);
+            _speckBuffer.SetData(_burst, 0, _activeCount, n);
+            _activeCount += n;
         }
 
         private void SeedSpecks()

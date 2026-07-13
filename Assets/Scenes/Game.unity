@@ -299,8 +299,8 @@ MonoBehaviour:
   _heatDecay: 1.5
   _colorLerpRate: 4
   _initialActiveCount: 0
-  _specksPerPop: 32
-  _popSpread: 0.4
+  _specksPerPop: 8
+  _popSpread: 0.1
 --- !u!4 &1143190890
 Transform:
   m_ObjectHideFlags: 0
