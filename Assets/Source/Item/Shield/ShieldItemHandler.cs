@@ -1,3 +1,4 @@
+using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Projectile.Buffs;
@@ -14,7 +15,7 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Item.Shield
 {
-    internal class ShieldItemHandler : IBalloonItem, IStartable
+    internal class ShieldItemHandler : IBalloonItem, IStartable, IDisposable
     {
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly IPublisher<ShieldGainedMessage> _shieldGainedPublisher;
@@ -25,6 +26,7 @@ namespace BalloonParty.Item.Shield
         private readonly IProjectileBuffs _buffs;
 
         private IWriteableProjectileModel _activeProjectile;
+        private IDisposable _subscription;
 
         public ItemType Type => ItemType.Shield;
 
@@ -49,7 +51,12 @@ namespace BalloonParty.Item.Shield
 
         public void Start()
         {
-            _loadedSubscriber.Subscribe(msg => _activeProjectile = (IWriteableProjectileModel)msg.Model);
+            _subscription = _loadedSubscriber.Subscribe(msg => _activeProjectile = (IWriteableProjectileModel)msg.Model);
+        }
+
+        public void Dispose()
+        {
+            _subscription?.Dispose();
         }
 
         public UniTask Activate(ItemActivationContext activation)

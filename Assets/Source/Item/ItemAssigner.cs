@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
@@ -11,10 +12,11 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using BalloonParty.Configuration.Items;
+using Random = UnityEngine.Random;
 
 namespace BalloonParty.Item
 {
-    internal class ItemAssigner : IStartable
+    internal class ItemAssigner : IStartable, IDisposable
     {
         private readonly ISubscriber<ItemCheckMessage> _checkSubscriber;
         private readonly IActiveLevelParameters _levelParams;
@@ -22,6 +24,8 @@ namespace BalloonParty.Item
 
         private readonly List<IHasWriteableItemSlot> _eligibleBuffer = new();
         private readonly Dictionary<string, int> _activeCountsBuffer = new();
+
+        private IDisposable _subscription;
 
         [Inject]
         internal ItemAssigner(
@@ -36,7 +40,12 @@ namespace BalloonParty.Item
 
         public void Start()
         {
-            _checkSubscriber.Subscribe(OnItemCheck);
+            _subscription = _checkSubscriber.Subscribe(OnItemCheck);
+        }
+
+        public void Dispose()
+        {
+            _subscription?.Dispose();
         }
 
         private void OnItemCheck(ItemCheckMessage msg)

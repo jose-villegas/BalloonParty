@@ -47,6 +47,8 @@ namespace BalloonParty.Shared.Pool
 
             if (_particle == null)
             {
+                // No ParticleSystem to drive completion — fire it now so the pooled instance still returns.
+                InvokeComplete();
                 return;
             }
 

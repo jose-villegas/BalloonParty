@@ -7,7 +7,8 @@ namespace BalloonParty.UI.Score
     [RequireComponent(typeof(TMP_Text))]
     public class ScoreCounterLabel : MonoBehaviour
     {
-        private static readonly char[] DigitTemp = new char[12];
+        // Holds digits + thousands separators for the largest int (2,147,483,647 = 10 digits + 3 commas = 13).
+        private static readonly char[] DigitTemp = new char[14];
         private static readonly char[] CharBuffer = new char[16];
 
         private TMP_Text _label;

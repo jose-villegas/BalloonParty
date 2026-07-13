@@ -70,6 +70,14 @@ namespace BalloonParty.Balloon.Type
             durable.HitsRemaining
                 .Subscribe(hits => OnHitsChanged(hits, maxHits, warningPulse))
                 .AddTo(disposables);
+
+            // The crack tween targets a virtual float, so BalloonView's transform.DOKill won't catch it — kill
+            // it when this bind's disposables clear (despawn/rebind) so it can't tick on a pooled instance.
+            disposables.Add(Disposable.Create(() =>
+            {
+                _damageTween?.Kill();
+                _damageTween = null;
+            }));
         }
 
         public void Initialize(IWriteableBalloonModel model, int levelAllowedColorsMask) { }

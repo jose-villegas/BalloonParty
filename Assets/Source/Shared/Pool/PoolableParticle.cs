@@ -37,7 +37,7 @@ namespace BalloonParty.Shared.Pool
         public void OnDespawned()
         {
             _onComplete = null;
-            _particle.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
+            _particle?.Stop(true, ParticleSystemStopBehavior.StopEmittingAndClear);
         }
 
         // Cached once per instance so repeat plays don't allocate a new closure.

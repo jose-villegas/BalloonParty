@@ -45,7 +45,9 @@ namespace BalloonParty.Thrower
 
         public void RotateTo(Vector3 direction)
         {
-            var angle = Vector3.Angle(direction, Vector3.right) - 90f;
+            // Signed angle (Atan2), so aiming below the horizontal rotates the correct way instead of
+            // mirroring — Vector3.Angle is unsigned and can't tell up from down.
+            var angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
             transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
         }
 

@@ -147,9 +147,12 @@ namespace BalloonParty.Balloon.View
                 .Subscribe(ApplySortingOrder)
                 .AddTo(_bindDisposables);
 
-            model.IsStable
-                .Subscribe(stable => _animator.SetBool(IsStableParam, stable))
-                .AddTo(_bindDisposables);
+            if (_animator != null)
+            {
+                model.IsStable
+                    .Subscribe(stable => _animator.SetBool(IsStableParam, stable))
+                    .AddTo(_bindDisposables);
+            }
 
             foreach (var binding in _viewBindings)
             {

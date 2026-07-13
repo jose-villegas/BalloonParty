@@ -22,6 +22,7 @@ namespace BalloonParty.Item
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
 
         private Dictionary<ItemType, IBalloonItem> _handlerMap;
+        private IDisposable _subscription;
 
         [Inject]
         public ItemActivator(
@@ -42,11 +43,12 @@ namespace BalloonParty.Item
                 _handlerMap[h.Type] = h;
             }
 
-            _hitSubscriber.Subscribe(OnActorHit);
+            _subscription = _hitSubscriber.Subscribe(OnActorHit);
         }
 
         public void Dispose()
         {
+            _subscription?.Dispose();
             _cts.Cancel();
             _cts.Dispose();
         }

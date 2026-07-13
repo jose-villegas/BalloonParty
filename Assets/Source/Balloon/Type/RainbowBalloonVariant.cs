@@ -43,6 +43,7 @@ namespace BalloonParty.Balloon.Type
         private MaterialPropertyBlock _block;
         private float _timeOffset;
         private int _colorCursor;
+        private int _bindGeneration;
 
         private void Awake()
         {
@@ -65,6 +66,7 @@ namespace BalloonParty.Balloon.Type
 
         public void Bind(IBalloonModel model, CompositeDisposable disposables)
         {
+            _bindGeneration++;
             PushBands();
             RebuildColors();
 
@@ -94,9 +96,12 @@ namespace BalloonParty.Balloon.Type
 
         private async UniTaskVoid RepushBandsNextFrame()
         {
+            var generation = _bindGeneration;
             await UniTask.Yield(PlayerLoopTiming.Update);
 
-            if (this == null)
+            // Bail if destroyed, or if a despawn+rebind (pool reuse) happened during the yield — otherwise we'd
+            // push a stale level's bands onto whatever balloon now occupies this instance.
+            if (this == null || generation != _bindGeneration)
             {
                 return;
             }

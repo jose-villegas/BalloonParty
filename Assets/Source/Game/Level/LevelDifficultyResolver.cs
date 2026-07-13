@@ -75,7 +75,10 @@ namespace BalloonParty.Game.Level
         private void ResolveFor(int level)
         {
             var range = ResolveRange(level);
-            _current = range.Parameters.Resolve(range.PositionOf(level), _rng);
+            // A cleared Ranges list or an unassigned Parameters (both inspector misconfigurations) would
+            // otherwise NRE here — fall back to defaults, matching the guarded sibling lookups.
+            var parameters = range.Parameters ?? new RangedLevelParameters();
+            _current = parameters.Resolve(range.PositionOf(level), _rng);
 
             var itemPickList = new List<ResolvedItemEntry>();
             var activeItems = new List<ItemSettings>();
@@ -100,7 +103,7 @@ namespace BalloonParty.Game.Level
                 }
             }
 
-            return ranges[ranges.Count - 1];
+            return ranges.Count > 0 ? ranges[ranges.Count - 1] : default;
         }
 
         private List<ResolvedBalloonEntry> BuildBalloonPickList(LevelParameters parameters)

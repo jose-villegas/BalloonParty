@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using BalloonParty.Configuration;
@@ -17,7 +18,7 @@ using BalloonParty.Configuration.GridActors;
 
 namespace BalloonParty.Slots.Actor
 {
-    internal class StaticActorSpawner : IStartable, IGridSpawner
+    internal class StaticActorSpawner : IStartable, IGridSpawner, IDisposable
     {
         private readonly Dictionary<SlotPlacementMode, ISlotSelectionStrategy> _strategyCache = new();
 
@@ -36,6 +37,7 @@ namespace BalloonParty.Slots.Actor
         private readonly IActiveLevelParameters _levelParams;
         private readonly ScenarioContentRoot _scenarioRoot;
         private bool _poolsRegistered;
+        private IDisposable _subscription;
 
         public SpawnStage SpawnPriority => SpawnStage.StaticActors;
 
@@ -69,7 +71,12 @@ namespace BalloonParty.Slots.Actor
         public void Start()
         {
             RegisterPools();
-            _boardClearSubscriber?.Subscribe(OnBoardClear);
+            _subscription = _boardClearSubscriber?.Subscribe(OnBoardClear);
+        }
+
+        public void Dispose()
+        {
+            _subscription?.Dispose();
         }
 
         public UniTask SpawnAsync(CancellationToken ct)

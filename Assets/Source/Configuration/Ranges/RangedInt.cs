@@ -34,7 +34,8 @@ namespace BalloonParty.Configuration.Ranges
                 case RangeMode.Linear:
                     return Mathf.RoundToInt(Mathf.Lerp(_min, _max, Mathf.Clamp01(positionInRange)));
                 case RangeMode.Random:
-                    return rng.Next(_min, _max + 1);
+                    // Tolerate an inverted (min > max) authoring so Random.Next doesn't throw.
+                    return rng.Next(Mathf.Min(_min, _max), Mathf.Max(_min, _max) + 1);
                 default:
                     return _min;
             }

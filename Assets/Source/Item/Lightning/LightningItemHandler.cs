@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
@@ -23,7 +24,7 @@ namespace BalloonParty.Item.Lightning
     ///     destroys) — the colour chosen by the last projectile fired, so it seeds a combo rather than
     ///     clearing the board.
     /// </summary>
-    internal class LightningItemHandler : IBalloonItem, IStartable
+    internal class LightningItemHandler : IBalloonItem, IStartable, IDisposable
     {
         private sealed class ByDistanceComparer : IComparer<(IBalloonModel model, Vector3 worldPos)>
         {
@@ -44,6 +45,7 @@ namespace BalloonParty.Item.Lightning
         private readonly ByDistanceComparer _distanceComparer = new();
 
         private IProjectileModel _activeProjectile;
+        private IDisposable _subscription;
 
         public ItemType Type => ItemType.Lightning;
 
@@ -66,7 +68,12 @@ namespace BalloonParty.Item.Lightning
 
         public void Start()
         {
-            _loadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model);
+            _subscription = _loadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model);
+        }
+
+        public void Dispose()
+        {
+            _subscription?.Dispose();
         }
 
         public UniTask Activate(ItemActivationContext activation)

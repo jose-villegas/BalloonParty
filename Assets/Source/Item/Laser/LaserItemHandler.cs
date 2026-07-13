@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
@@ -19,12 +20,13 @@ using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Item.Laser
 {
-    internal class LaserItemHandler : IBalloonItem, IStartable
+    internal class LaserItemHandler : IBalloonItem, IStartable, IDisposable
     {
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly BalloonOverlapQuery _overlap;
         private readonly IHitDispatcher _hitDispatcher;
         private readonly ISubscriber<TransformCapturedMessage> _transformCapturedSubscriber;
+        private readonly ISubscriber<BoardClearMessage> _boardClearSubscriber;
         private readonly IItemConfiguration _itemConfig;
         private readonly IGamePalette _palette;
         private readonly SlotGrid _grid;
@@ -36,6 +38,9 @@ namespace BalloonParty.Item.Laser
         // Cross-activation: rotation arrives via TransformCapturedMessage before activation.
         private readonly Dictionary<ISlotActor, Quaternion> _capturedRotations = new();
 
+        private IDisposable _captureSubscription;
+        private IDisposable _boardClearSubscription;
+
         public ItemType Type => ItemType.Laser;
 
         [Inject]
@@ -43,6 +48,7 @@ namespace BalloonParty.Item.Laser
             IItemConfiguration itemConfig,
             IHitDispatcher hitDispatcher,
             ISubscriber<TransformCapturedMessage> transformCapturedSubscriber,
+            ISubscriber<BoardClearMessage> boardClearSubscriber,
             IGamePalette palette,
             SlotGrid grid,
             ItemEffectPlayer effectPlayer,
@@ -52,6 +58,7 @@ namespace BalloonParty.Item.Laser
             _itemConfig = itemConfig;
             _hitDispatcher = hitDispatcher;
             _transformCapturedSubscriber = transformCapturedSubscriber;
+            _boardClearSubscriber = boardClearSubscriber;
             _palette = palette;
             _grid = grid;
             _effectPlayer = effectPlayer;
@@ -61,7 +68,16 @@ namespace BalloonParty.Item.Laser
 
         public void Start()
         {
-            _transformCapturedSubscriber.Subscribe(msg => _capturedRotations[msg.Source] = msg.Snapshot.Rotation);
+            _captureSubscription = _transformCapturedSubscriber.Subscribe(msg => _capturedRotations[msg.Source] = msg.Snapshot.Rotation);
+            // Drop captures never consumed by an activation (e.g. a board clear between capture and pop) so the
+            // dictionary can't retain dead balloon references across a run.
+            _boardClearSubscription = _boardClearSubscriber.Subscribe(_ => _capturedRotations.Clear());
+        }
+
+        public void Dispose()
+        {
+            _captureSubscription?.Dispose();
+            _boardClearSubscription?.Dispose();
         }
 
         public UniTask Activate(ItemActivationContext activation)

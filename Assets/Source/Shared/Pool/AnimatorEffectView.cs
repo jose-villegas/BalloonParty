@@ -54,6 +54,8 @@ namespace BalloonParty.Shared.Pool
 
             if (_animator == null)
             {
+                // No Animator to time completion — fire it now so the pooled instance still returns.
+                InvokeComplete();
                 return;
             }
 
