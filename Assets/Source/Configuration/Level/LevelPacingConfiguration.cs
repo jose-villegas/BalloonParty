@@ -2,14 +2,13 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
 using UnityEngine;
-using UnityEngine.Serialization;
 
 namespace BalloonParty.Configuration.Level
 {
     /// <summary>Per-colour points-required per level. A covering <see cref="_thresholdOverrides" /> entry sets the
     /// level's cumulative run-score milestone and the per-colour bar is the delta from the previous level split
     /// across that level's colours; uncovered levels use the formula (<see cref="_baseValue" /> + logarithmic
-    /// growth, scaled by <see cref="_thresholdCurve" />).</summary>
+    /// growth).</summary>
     [CreateAssetMenu(menuName = "Configuration/Level Pacing", fileName = "LevelPacingConfiguration")]
     internal class LevelPacingConfiguration : ScriptableObject, ILevelPacingConfiguration
     {
@@ -27,12 +26,6 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("Formula base points — the floor the logarithmic growth builds on. The log term is 0 at level 1, " +
                  "so an un-overridden level 1 equals this value.")]
         [SerializeField] private float _baseValue = 25f;
-
-        [Tooltip("Per-level multiplier over the base scaling formula (base value + logarithmic growth). " +
-                 "X = level, Y = multiplier; flat 1 = the pure formula. Decoupled from the absolute scale, " +
-                 "which the base value sets — so keep values near 1, not raw scores.")]
-        [FormerlySerializedAs("_thresholdModifier")]
-        [SerializeField] private AnimationCurve _thresholdCurve = AnimationCurve.Constant(1f, 100f, 1f);
 
         [Tooltip("Cap each level's points-required DOWN to a multiple of this (e.g. 50 or 70) for clean " +
                  "targets — 732 caps to 700, not 750. 0 or 1 = no capping.")]
@@ -53,7 +46,7 @@ namespace BalloonParty.Configuration.Level
 
         // An override sets this level's cumulative run-score milestone; the per-colour bar is the increment over
         // the previous level's milestone, split across this level's colours. Uncovered levels use the formula:
-        // base + logarithmic growth, scaled by the multiplier curve, then snapped to a clean multiple.
+        // base + logarithmic growth, then snapped to a clean multiple.
         public int ThresholdForLevel(int level)
         {
             if (TryGetOverride(level, out var entry))
@@ -66,13 +59,7 @@ namespace BalloonParty.Configuration.Level
             }
 
             var scaling = _baseValue + Mathf.Exp(2f) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI));
-            var multiplier = _thresholdCurve.Evaluate(level);
-            if (multiplier <= 0f)
-            {
-                multiplier = 1f;
-            }
-
-            return RoundThreshold(Mathf.RoundToInt(scaling * multiplier));
+            return RoundThreshold(Mathf.RoundToInt(scaling));
         }
 
         // Cap DOWN to the multiple at or below (so 732 → 700, not 750), floored at one multiple so a
@@ -244,14 +231,15 @@ namespace BalloonParty.Configuration.Level
 
         private void WarnOnNonMonotonicThreshold()
         {
-            var lastKeyTime = 0f;
-            foreach (var key in _thresholdCurve.keys)
+            var lastOverrideLevel = 0;
+            foreach (var entry in _thresholdOverrides)
             {
-                lastKeyTime = Mathf.Max(lastKeyTime, key.time);
+                lastOverrideLevel = Mathf.Max(lastOverrideLevel, entry.ToLevel);
             }
 
-            // The curve's X is the level, and the exponent holds past the last key — check a bit beyond it.
-            var lastLevel = Mathf.Max(2, Mathf.CeilToInt(lastKeyTime) + 2);
+            // The formula tail is inherently increasing, so only the override ranges can break monotonicity —
+            // check across them and a couple levels past into the formula.
+            var lastLevel = Mathf.Max(2, lastOverrideLevel + 2);
             var previous = int.MinValue;
 
             for (var level = 1; level <= lastLevel; level++)
@@ -261,13 +249,13 @@ namespace BalloonParty.Configuration.Level
                 {
                     Debug.LogWarning(
                         $"LevelPacingConfiguration ({name}): threshold at level {level} is non-positive " +
-                        $"({composed}) — check the threshold curve.");
+                        $"({composed}) — check the override milestones.");
                 }
                 else if (composed < previous)
                 {
                     Debug.LogWarning(
                         $"LevelPacingConfiguration ({name}): threshold drops at level {level} " +
-                        $"({previous} → {composed}) — keep the curve's exponents ≥ 1 so it's non-decreasing.");
+                        $"({previous} → {composed}) — keep each override's cumulative curve increasing per level.");
                 }
 
                 previous = composed;
