@@ -19,8 +19,13 @@ namespace BalloonParty.Configuration.Level
         [FormerlySerializedAs("_requiredScore")]
         [SerializeField] private AnimationCurve _cumulativeScore;
 
+        [Tooltip("Snap the derived per-colour bar down to the config's threshold-rounding multiple (like the " +
+                 "formula path). Off = the exact value, rounded only to a whole number.")]
+        [SerializeField] private bool _snapToRounding;
+
         public int FromLevel => _fromLevel;
         public int ToLevel => _toLevel;
+        public bool SnapToRounding => _snapToRounding;
 
         public bool Contains(int level)
         {

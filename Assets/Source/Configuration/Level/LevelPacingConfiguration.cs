@@ -59,7 +59,8 @@ namespace BalloonParty.Configuration.Level
             if (TryGetOverride(level, out var entry))
             {
                 var increment = entry.CumulativeScore(level) - CumulativeScoreForLevel(level - 1);
-                return Mathf.Max(1, Mathf.RoundToInt(increment / ColorsForLevel(level)));
+                var perColor = Mathf.RoundToInt(increment / ColorsForLevel(level));
+                return entry.SnapToRounding ? RoundThreshold(perColor) : Mathf.Max(1, perColor);
             }
 
             var scaling = _baseValue + Mathf.Exp(2f) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI));
