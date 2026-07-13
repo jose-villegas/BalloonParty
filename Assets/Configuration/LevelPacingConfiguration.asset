@@ -1726,7 +1726,7 @@ MonoBehaviour:
   _thresholdOverrides:
   - _fromLevel: 1
     _toLevel: 1
-    _requiredScore:
+    _cumulativeScore:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
@@ -1741,6 +1741,34 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
+    _snapToRounding: 1
+  - _fromLevel: 2
+    _toLevel: 5
+    _cumulativeScore:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 900
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 1
+        value: 2100
+        inSlope: 2
+        outSlope: 2
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    _snapToRounding: 1
   _baseValue: 25
   _thresholdCurve:
     serializedVersion: 2
