@@ -39,7 +39,7 @@ Scoring is deferred to trail arrival — points, persistent score, and level pro
 
 Bar reset is a two-phase process synchronised with the glow trail ceremony:
 
-1. **`ScoreLevelUpMessage`** → `OnLevelUp` stashes `PointsRequiredForLevel(newLevel + 1)` as `_stashedMaxValue`, stops the completion particle, and clears the "Completed" animator flag. The slider value is **not** reset yet.
+1. **`ScoreLevelUpMessage`** → `OnLevelUp` stashes `PointsRequiredForLevel(newLevel)` (the goal for the level just reached) as `_stashedMaxValue`, stops the completion particle, and clears the "Completed" animator flag. The slider value is **not** reset yet.
 2. **`LevelUpGlowTrailsMessage`** → `DrainSliderAsync` gradually drains the slider to zero in sync with glow trail waves spawned by `LevelUpPopUp`.
 3. **`LevelUpDismissedMessage`** → `OnDismissed` applies `_stashedMaxValue` as the new `maxValue` and resets the slider value to zero.
 

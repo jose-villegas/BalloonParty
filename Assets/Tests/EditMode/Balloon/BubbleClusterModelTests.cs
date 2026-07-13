@@ -139,6 +139,7 @@ namespace BalloonParty.Tests.Balloon
 
             _palette.Colors.Returns(entries);
             _palette.ColorNames.Returns(names);
+            _palette.ProgressColorNames.Returns(names);
         }
 
         private static PaletteEntry CreatePaletteEntry(string name)

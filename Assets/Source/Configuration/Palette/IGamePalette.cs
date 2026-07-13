@@ -8,6 +8,9 @@ namespace BalloonParty.Configuration.Palette
     {
         IReadOnlyList<PaletteEntry> Colors { get; }
         IReadOnlyList<string> ColorNames { get; }
+
+        /// <summary>Names of only the spawnable/scorable colors — excludes presentation-only entries (impact/pulse tints). Use this for progress/score bookkeeping.</summary>
+        IReadOnlyList<string> ProgressColorNames { get; }
         Color GetColor(string colorName);
 
         /// <summary>

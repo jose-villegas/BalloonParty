@@ -11,11 +11,8 @@ namespace BalloonParty.Configuration.Level
     {
         IReadOnlyList<LevelRangeEntry> Ranges { get; }
 
-        /// <summary>Multiplier over the base points-required-for-level formula; default 1.0 until keys are authored.</summary>
-        float ThresholdModifier(int level);
-
-        /// <summary>Snaps a raw points-required value to a clean multiple (e.g. 50 or 70) so level targets read tidily; identity when rounding is off.</summary>
-        int RoundThreshold(int rawPoints);
+        /// <summary>Points required to reach <paramref name="level" /> — a base value plus logarithmic growth, scaled by the per-level multiplier curve, snapped to a clean multiple.</summary>
+        int ThresholdForLevel(int level);
 
         /// <summary>
         ///     Upper bound on how many of a balloon type can share the board across every range — the pool

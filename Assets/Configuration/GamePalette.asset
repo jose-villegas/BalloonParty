@@ -23,7 +23,10 @@ MonoBehaviour:
     _color: {r: 0.6117647, g: 0.15294118, b: 0.6901961, a: 1}
   - _name: Tough
     _color: {r: 0.3, g: 0.3, b: 0.3, a: 1}
+    _presentationOnly: 1
   - _name: Sparks
     _color: {r: 1, g: 1, b: 1, a: 1}
+    _presentationOnly: 1
   - _name: Unbreakable
     _color: {r: 1, g: 0, b: 0, a: 1}
+    _presentationOnly: 1

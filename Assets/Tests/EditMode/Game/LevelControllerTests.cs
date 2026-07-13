@@ -46,6 +46,7 @@ namespace BalloonParty.Tests.Game
 
             _palette = Substitute.For<IGamePalette>();
             _palette.ColorNames.Returns(new[] { Red, Blue });
+            _palette.ProgressColorNames.Returns(new[] { Red, Blue });
 
             _navigation = Substitute.For<INavigation>();
             _navState = new ReactiveProperty<NavigationState>(NavigationState.Game);
@@ -103,7 +104,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void ClaimProgress_BelowThreshold_GrantsAll()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(5);
+            _thresholds.PointsRequiredForLevel(1).Returns(5);
 
             var (baseProgress, granted) = _controller.ClaimProgress(Red, 3);
 
@@ -114,7 +115,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void ClaimProgress_AboveThreshold_CapsAndDropsExcess()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(3);
+            _thresholds.PointsRequiredForLevel(1).Returns(3);
 
             var (baseProgress, granted) = _controller.ClaimProgress(Red, 4);
 
@@ -125,7 +126,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void ClaimProgress_AdvancesProjectedBase()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(5);
+            _thresholds.PointsRequiredForLevel(1).Returns(5);
 
             _controller.ClaimProgress(Red, 2);
             var (baseProgress, granted) = _controller.ClaimProgress(Red, 2);
@@ -146,7 +147,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void WillLevelUp_AllColorsProjected_ReturnsTrue()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(1);
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
 
             _controller.ClaimProgress(Red, 1);
             _controller.ClaimProgress(Blue, 1);
@@ -157,7 +158,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void WillLevelUp_OneColorShort_ReturnsFalse()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(1);
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
 
             _controller.ClaimProgress(Red, 1);
 
@@ -168,7 +169,7 @@ namespace BalloonParty.Tests.Game
         public void WillLevelUp_ColorGatedOutOfLevel_IsNotRequired()
         {
             _current.AllowedColors.Returns(new List<string> { Red });
-            _thresholds.PointsRequiredForLevel(2).Returns(1);
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
 
             _controller.ClaimProgress(Red, 1);
 
@@ -178,7 +179,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void TrailArrived_AllColorsConfirmed_PublishesOnceAndDefersLevel()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(2);
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
 
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
@@ -191,7 +192,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void FurtherTrailsWhilePending_DoNotPublishAgain()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(2);
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
 
@@ -205,7 +206,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void LevelUpDismissed_AdvancesLevel()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(2);
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
             Assert.AreEqual(1, _controller.Level.Value);
@@ -218,7 +219,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void LevelUp_PublishesCompletedColorsSnapshot()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(2);
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
 
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
@@ -229,7 +230,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void LevelUp_WhenLossImminent_DoesNotLevelUp()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(1);
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
             _lossForecast.LossImminent.Returns(true);
 
             ScoreColor(Red, 1);
@@ -242,7 +243,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void LevelUp_WhenNotInGame_DoesNotLevelUp()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(1);
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
             _navState.Value = NavigationState.GameOver;
 
             ScoreColor(Red, 1);
@@ -257,7 +258,7 @@ namespace BalloonParty.Tests.Game
         {
             // Dismissed → Transitioning (Ascent running). A trail landing now belongs to the finished
             // level and must not trip a second level-up until the Ascent completes.
-            _thresholds.PointsRequiredForLevel(2).Returns(1);
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
             FireDismissed();
@@ -272,7 +273,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void LevelUp_OneColorShort_DoesNotLevelUp()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(5);
+            _thresholds.PointsRequiredForLevel(1).Returns(5);
 
             ScoreColor(Red, 5);
 
@@ -283,7 +284,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void LevelUpDismissed_ResetsColorProgress()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(2);
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
             ScoreColor(Red, 2);
             ScoreColor(Blue, 2);
 
@@ -299,7 +300,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void GetProgress_ReflectsConfirmedArrivals()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(5);
+            _thresholds.PointsRequiredForLevel(1).Returns(5);
 
             ScoreColor(Red, 3);
 
@@ -310,7 +311,7 @@ namespace BalloonParty.Tests.Game
         public void TrailArrived_ConfirmedCappedAtClaimed()
         {
             // A trail can't confirm past the claim — projected is the ceiling.
-            _thresholds.PointsRequiredForLevel(2).Returns(10);
+            _thresholds.PointsRequiredForLevel(1).Returns(10);
 
             _controller.ClaimProgress(Red, 3);
             FireTrailArrived(Red, 7); // carries a stale higher score
@@ -321,7 +322,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void ResetRun_ResetsLevelToOne()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(1);
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
             FireDismissed();
@@ -337,7 +338,7 @@ namespace BalloonParty.Tests.Game
         {
             // Full cycle back to Playing, then a late straggler from the finished level lands. It must
             // neither confirm nor poison projected — else ClaimProgress grants 0 and the bar never fills.
-            _thresholds.PointsRequiredForLevel(2).Returns(1);
+            _thresholds.PointsRequiredForLevel(1).Returns(1);
             ScoreColor(Red, 1);
             ScoreColor(Blue, 1);
             FireDismissed();          // → Transitioning (level advances, progress resets)
@@ -356,7 +357,7 @@ namespace BalloonParty.Tests.Game
         [Test]
         public void Phase_CyclesThroughTheCeremony()
         {
-            _thresholds.PointsRequiredForLevel(2).Returns(2);
+            _thresholds.PointsRequiredForLevel(1).Returns(2);
             Assert.AreEqual(LevelUpPhase.Playing, _controller.Phase.Value);
 
             ScoreColor(Red, 2);

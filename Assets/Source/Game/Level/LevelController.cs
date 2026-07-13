@@ -71,7 +71,7 @@ namespace BalloonParty.Game.Level
 
         public void Start()
         {
-            _colorKeys.AddRange(_palette.ColorNames);
+            _colorKeys.AddRange(_palette.ProgressColorNames);
             ClearRunState();
 
             _trailSubscription = _trailArrivedSubscriber.Subscribe(OnTrailArrived);
@@ -101,12 +101,12 @@ namespace BalloonParty.Game.Level
 
         public int GetRequiredPoints()
         {
-            return _thresholds.PointsRequiredForLevel(_level.Value + 1);
+            return _thresholds.PointsRequiredForLevel(_level.Value);
         }
 
         public bool WillLevelUp()
         {
-            var required = _thresholds.PointsRequiredForLevel(_level.Value + 1);
+            var required = _thresholds.PointsRequiredForLevel(_level.Value);
 
             foreach (var color in _levelParams.Current.AllowedColors)
             {
@@ -129,7 +129,7 @@ namespace BalloonParty.Game.Level
             var baseProgress = _projectedProgress[color];
 
             // Cap one level-up per burst — excess is intentionally lost, not carried to the next level.
-            var required = _thresholds.PointsRequiredForLevel(_level.Value + 1);
+            var required = _thresholds.PointsRequiredForLevel(_level.Value);
             var granted = Mathf.Min(points, Mathf.Max(0, required - baseProgress));
             if (granted <= 0)
             {
@@ -206,7 +206,7 @@ namespace BalloonParty.Game.Level
                 return;
             }
 
-            var required = _thresholds.PointsRequiredForLevel(_level.Value + 1);
+            var required = _thresholds.PointsRequiredForLevel(_level.Value);
             if (!AllColorsConfirmed(required))
             {
                 return;

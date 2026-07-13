@@ -2,10 +2,14 @@ using System;
 using System.Collections.Generic;
 using BalloonParty.Balloon.Type;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BalloonParty.Configuration.Level
 {
-    /// <summary>Threshold modifier is a dimensionless multiplier over the base formula, so "20% cheaper" means the same at every level.</summary>
+    /// <summary>Per-colour points-required per level. A covering <see cref="_thresholdOverrides" /> entry sets the
+    /// level's cumulative run-score milestone and the per-colour bar is the delta from the previous level split
+    /// across that level's colours; uncovered levels use the formula (<see cref="_baseValue" /> + logarithmic
+    /// growth, scaled by <see cref="_thresholdCurve" />).</summary>
     [CreateAssetMenu(menuName = "Configuration/Level Pacing", fileName = "LevelPacingConfiguration")]
     internal class LevelPacingConfiguration : ScriptableObject, ILevelPacingConfiguration
     {
@@ -15,11 +19,23 @@ namespace BalloonParty.Configuration.Level
             new(0, 0, new RangedLevelParameters()),
         };
 
-        [Tooltip("Dimensionless multiplier over the points-required-for-level formula. Flat 1.0 = no effect.")]
-        [SerializeField] private AnimationCurve _thresholdModifier = AnimationCurve.Constant(1, 100, 1f);
+        [Tooltip("Overrides the formula for the levels each entry spans — the curve's Y is the cumulative " +
+                 "run-score milestone for that level, and the per-colour bar is (this milestone − the previous " +
+                 "level's) ÷ that level's colours. Any level not covered falls through to the formula below.")]
+        [SerializeField] private LevelThresholdOverride[] _thresholdOverrides = Array.Empty<LevelThresholdOverride>();
 
-        [Tooltip("Round each level's points-required to the nearest multiple of this (e.g. 50 or 70) for " +
-                 "clean targets. 0 or 1 = no rounding.")]
+        [Tooltip("Formula base points — the floor the logarithmic growth builds on. The log term is 0 at level 1, " +
+                 "so an un-overridden level 1 equals this value.")]
+        [SerializeField] private float _baseValue = 25f;
+
+        [Tooltip("Per-level multiplier over the base scaling formula (base value + logarithmic growth). " +
+                 "X = level, Y = multiplier; flat 1 = the pure formula. Decoupled from the absolute scale, " +
+                 "which the base value sets — so keep values near 1, not raw scores.")]
+        [FormerlySerializedAs("_thresholdModifier")]
+        [SerializeField] private AnimationCurve _thresholdCurve = AnimationCurve.Constant(1f, 100f, 1f);
+
+        [Tooltip("Cap each level's points-required DOWN to a multiple of this (e.g. 50 or 70) for clean " +
+                 "targets — 732 caps to 700, not 750. 0 or 1 = no capping.")]
         [SerializeField] private int _thresholdRounding = 50;
 
         public IReadOnlyList<LevelRangeEntry> Ranges => _ranges;
@@ -35,21 +51,37 @@ namespace BalloonParty.Configuration.Level
 #endif
         }
 
-        public float ThresholdModifier(int level)
+        // An override sets this level's cumulative run-score milestone; the per-colour bar is the increment over
+        // the previous level's milestone, split across this level's colours. Uncovered levels use the formula:
+        // base + logarithmic growth, scaled by the multiplier curve, then snapped to a clean multiple.
+        public int ThresholdForLevel(int level)
         {
-            var value = _thresholdModifier.Evaluate(level);
-            return value > 0f ? value : 1f;
+            if (TryGetOverride(level, out var entry))
+            {
+                var increment = entry.CumulativeScore(level) - CumulativeScoreForLevel(level - 1);
+                return Mathf.Max(1, Mathf.RoundToInt(increment / ColorsForLevel(level)));
+            }
+
+            var scaling = _baseValue + Mathf.Exp(2f) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI));
+            var multiplier = _thresholdCurve.Evaluate(level);
+            if (multiplier <= 0f)
+            {
+                multiplier = 1f;
+            }
+
+            return RoundThreshold(Mathf.RoundToInt(scaling * multiplier));
         }
 
-        // Snap to the nearest multiple, floored at one multiple so a level never rounds to zero.
-        public int RoundThreshold(int rawPoints)
+        // Cap DOWN to the multiple at or below (so 732 → 700, not 750), floored at one multiple so a
+        // level never caps to zero.
+        private int RoundThreshold(int rawPoints)
         {
             if (_thresholdRounding <= 1)
             {
                 return rawPoints;
             }
 
-            return Mathf.Max(_thresholdRounding, Mathf.RoundToInt(rawPoints / (float)_thresholdRounding) * _thresholdRounding);
+            return Mathf.Max(_thresholdRounding, rawPoints / _thresholdRounding * _thresholdRounding);
         }
 
         public int MaxConcurrentBalloons(BalloonType type, int columns)
@@ -79,6 +111,56 @@ namespace BalloonParty.Configuration.Level
             }
 
             return max;
+        }
+
+        // The cumulative milestone an override pins at this level; 0 for levels with no override (the start of a
+        // fresh cumulative segment).
+        private float CumulativeScoreForLevel(int level)
+        {
+            return level >= 1 && TryGetOverride(level, out var entry) ? entry.CumulativeScore(level) : 0f;
+        }
+
+        private bool TryGetOverride(int level, out LevelThresholdOverride result)
+        {
+            foreach (var entry in _thresholdOverrides)
+            {
+                if (entry.Contains(level))
+                {
+                    result = entry;
+                    return true;
+                }
+            }
+
+            result = default;
+            return false;
+        }
+
+        // Popcount of the level's allowed-colour mask — the number of colours the win condition scores that level.
+        private int ColorsForLevel(int level)
+        {
+            var mask = MaskForLevel(level);
+            var count = 0;
+            while (mask != 0)
+            {
+                count += mask & 1;
+                mask >>= 1;
+            }
+
+            return Mathf.Max(1, count);
+        }
+
+        // Mirrors the resolver's lookup: the range containing the level, falling back to the open-ended tail.
+        private int MaskForLevel(int level)
+        {
+            for (var i = 0; i < _ranges.Length; i++)
+            {
+                if (_ranges[i].Contains(level))
+                {
+                    return _ranges[i].Parameters?.AllowedColorsMask ?? 0;
+                }
+            }
+
+            return _ranges.Length > 0 ? _ranges[_ranges.Length - 1].Parameters?.AllowedColorsMask ?? 0 : 0;
         }
 
 #if UNITY_EDITOR
@@ -157,37 +239,32 @@ namespace BalloonParty.Configuration.Level
             }
         }
 
-        // Duplicated, not injected: OnValidate runs in the editor with no DI container.
-        private static int BaseFormula(int level)
-        {
-            return (int)((Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI))) + 25f);
-        }
-
         private void WarnOnNonMonotonicThreshold()
         {
             var lastKeyTime = 0f;
-            foreach (var key in _thresholdModifier.keys)
+            foreach (var key in _thresholdCurve.keys)
             {
                 lastKeyTime = Mathf.Max(lastKeyTime, key.time);
             }
 
-            var lastLevel = Mathf.Max(1, Mathf.CeilToInt(lastKeyTime));
+            // X is level-1, and the exponent holds past the last key — check a bit beyond it.
+            var lastLevel = Mathf.Max(2, Mathf.CeilToInt(lastKeyTime) + 2);
             var previous = int.MinValue;
 
             for (var level = 1; level <= lastLevel; level++)
             {
-                var composed = RoundThreshold(Mathf.RoundToInt(BaseFormula(level) * ThresholdModifier(level)));
+                var composed = ThresholdForLevel(level);
                 if (composed <= 0)
                 {
                     Debug.LogWarning(
-                        $"LevelPacingConfiguration ({name}): composed threshold at level {level} is non-positive " +
-                        $"({composed}) — check the modifier curve.");
+                        $"LevelPacingConfiguration ({name}): threshold at level {level} is non-positive " +
+                        $"({composed}) — check the threshold curve.");
                 }
                 else if (composed < previous)
                 {
                     Debug.LogWarning(
-                        $"LevelPacingConfiguration ({name}): composed threshold drops at level {level} " +
-                        $"({previous} → {composed}) — the modifier curve must keep it non-decreasing.");
+                        $"LevelPacingConfiguration ({name}): threshold drops at level {level} " +
+                        $"({previous} → {composed}) — keep the curve's exponents ≥ 1 so it's non-decreasing.");
                 }
 
                 previous = composed;

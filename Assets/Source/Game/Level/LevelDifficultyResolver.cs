@@ -69,13 +69,7 @@ namespace BalloonParty.Game.Level
 
         public int PointsRequiredForLevel(int level)
         {
-            var raw = Mathf.RoundToInt(BasePointsForLevel(level) * _pacing.ThresholdModifier(level));
-            return _pacing.RoundThreshold(raw);
-        }
-
-        private static int BasePointsForLevel(int level)
-        {
-            return (int)((Mathf.Exp(2) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI))) + 25f);
+            return _pacing.ThresholdForLevel(level);
         }
 
         private void ResolveFor(int level)

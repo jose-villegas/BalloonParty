@@ -200,7 +200,7 @@ namespace BalloonParty.UI.Score
 
         private void OnLevelUp(ScoreLevelUpMessage msg)
         {
-            _stashedMaxValue = _thresholds.PointsRequiredForLevel(msg.NewLevel + 1);
+            _stashedMaxValue = _thresholds.PointsRequiredForLevel(msg.NewLevel);
             ClearCompletionVfx();
             // Animate existing notices out (not a hard snap) as the popup takes over. New ones stay
             // suppressed for the rest of the ceremony via the level FSM phase (see OnTrailArrived) — score

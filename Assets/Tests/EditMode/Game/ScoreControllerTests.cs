@@ -42,6 +42,7 @@ namespace BalloonParty.Tests.Game
 
             _palette = Substitute.For<IGamePalette>();
             _palette.ColorNames.Returns(new[] { Red, Blue });
+            _palette.ProgressColorNames.Returns(new[] { Red, Blue });
 
             _controller = BuildController();
             _controller.Start();

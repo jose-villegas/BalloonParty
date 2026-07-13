@@ -18,7 +18,7 @@ namespace BalloonParty.Balloon.Model
         /// <summary>Falls back to the full palette when constructed without a level context.</summary>
         public IReadOnlyList<string> Resolve()
         {
-            return _allowedColors is { Count: > 0 } ? _allowedColors : _palette?.ColorNames;
+            return _allowedColors is { Count: > 0 } ? _allowedColors : _palette?.ProgressColorNames;
         }
     }
 }

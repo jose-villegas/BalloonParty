@@ -34,12 +34,18 @@ namespace BalloonParty.Tests.Configuration
         }
 
         [Test]
-        public void Defaults_ThresholdModifierIsFlatOne()
+        public void Defaults_ThresholdForLevelIsPositiveAndNonDecreasing()
         {
             ILevelPacingConfiguration pacing = _config;
 
-            Assert.AreEqual(1f, pacing.ThresholdModifier(1), 0.0001f);
-            Assert.AreEqual(1f, pacing.ThresholdModifier(50), 0.0001f);
+            var previous = 0;
+            for (var level = 1; level <= 10; level++)
+            {
+                var threshold = pacing.ThresholdForLevel(level);
+                Assert.Greater(threshold, 0, $"level {level} threshold should be positive");
+                Assert.GreaterOrEqual(threshold, previous, $"level {level} threshold should not drop");
+                previous = threshold;
+            }
         }
 
         [Test]

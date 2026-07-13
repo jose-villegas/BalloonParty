@@ -38,14 +38,17 @@ namespace BalloonParty.Configuration.Palette
 
         private Dictionary<string, PaletteEntry> _byName;
         private string[] _names;
+        private string[] _progressNames;
 
         public IReadOnlyList<PaletteEntry> Colors => _colors;
         public IReadOnlyList<string> ColorNames => _names ??= BuildNames();
+        public IReadOnlyList<string> ProgressColorNames => _progressNames ??= BuildProgressNames();
 
         private void OnEnable()
         {
             _byName = null;
             _names = null;
+            _progressNames = null;
         }
 
 #if UNITY_EDITOR
@@ -53,6 +56,7 @@ namespace BalloonParty.Configuration.Palette
         {
             _byName = null;
             _names = null;
+            _progressNames = null;
         }
 #endif
 
@@ -118,6 +122,20 @@ namespace BalloonParty.Configuration.Palette
             }
 
             return names;
+        }
+
+        private string[] BuildProgressNames()
+        {
+            var names = new List<string>(_colors.Length);
+            foreach (var entry in _colors)
+            {
+                if (entry.IsProgress)
+                {
+                    names.Add(entry.Name);
+                }
+            }
+
+            return names.ToArray();
         }
     }
 }

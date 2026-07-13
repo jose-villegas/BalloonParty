@@ -36,9 +36,7 @@ namespace BalloonParty.Tests.Game
         public void SetUp()
         {
             _pacing = Substitute.For<ILevelPacingConfiguration>();
-            _pacing.ThresholdModifier(Arg.Any<int>()).Returns(1f);
-            // Identity rounding by default — tests that care about snapping stub it themselves.
-            _pacing.RoundThreshold(Arg.Any<int>()).Returns(ci => ci.Arg<int>());
+            _pacing.ThresholdForLevel(Arg.Any<int>()).Returns(10);
 
             _balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             _itemConfig = Substitute.For<IItemConfiguration>();
@@ -80,21 +78,13 @@ namespace BalloonParty.Tests.Game
         }
 
         [Test]
-        public void PointsRequiredForLevel_ScalesWithThresholdModifier()
+        public void PointsRequiredForLevel_DelegatesToPacing()
         {
-            // The base curve is private math now; assert the resolver composes it with the modifier by
-            // checking the result scales with the modifier (doubling it doubles the requirement) rather
-            // than mocking a base value.
+            // The threshold formula lives on the pacing config now; the resolver just forwards.
             SetSingleRange(1, 0, BalloonType.Simple, 1f);
+            _pacing.ThresholdForLevel(5).Returns(42);
 
-            _pacing.ThresholdModifier(5).Returns(1f);
-            var baseline = BuildResolver().PointsRequiredForLevel(5);
-
-            _pacing.ThresholdModifier(5).Returns(2f);
-            var doubled = BuildResolver().PointsRequiredForLevel(5);
-
-            Assert.Greater(baseline, 0);
-            Assert.AreEqual(baseline * 2, doubled);
+            Assert.AreEqual(42, BuildResolver().PointsRequiredForLevel(5));
         }
 
         [Test]

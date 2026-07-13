@@ -51,7 +51,7 @@ namespace BalloonParty.Game.Score
 
         public void Start()
         {
-            _colorKeys.AddRange(_palette.ColorNames);
+            _colorKeys.AddRange(_palette.ProgressColorNames);
 
             ClearRunState();
 
