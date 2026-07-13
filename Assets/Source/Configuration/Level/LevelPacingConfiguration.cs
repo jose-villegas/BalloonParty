@@ -60,7 +60,9 @@ namespace BalloonParty.Configuration.Level
             {
                 var increment = entry.CumulativeScore(level) - CumulativeScoreForLevel(level - 1);
                 var perColor = Mathf.RoundToInt(increment / ColorsForLevel(level));
-                return entry.SnapToRounding ? RoundThreshold(perColor) : Mathf.Max(1, perColor);
+                // Floor at 1 either way — a flat/decreasing milestone (or rounding disabled) must never yield a
+                // non-positive bar, which would make the win check trivially true and insta-level.
+                return Mathf.Max(1, entry.SnapToRounding ? RoundThreshold(perColor) : perColor);
             }
 
             var scaling = _baseValue + Mathf.Exp(2f) * Mathf.Log(Mathf.Pow(level, 2f * Mathf.PI));
@@ -125,7 +127,7 @@ namespace BalloonParty.Configuration.Level
         {
             foreach (var entry in _thresholdOverrides)
             {
-                if (entry.Contains(level))
+                if (entry.Contains(level) && entry.HasCurve)
                 {
                     result = entry;
                     return true;
@@ -248,7 +250,7 @@ namespace BalloonParty.Configuration.Level
                 lastKeyTime = Mathf.Max(lastKeyTime, key.time);
             }
 
-            // X is level-1, and the exponent holds past the last key — check a bit beyond it.
+            // The curve's X is the level, and the exponent holds past the last key — check a bit beyond it.
             var lastLevel = Mathf.Max(2, Mathf.CeilToInt(lastKeyTime) + 2);
             var previous = int.MinValue;
 

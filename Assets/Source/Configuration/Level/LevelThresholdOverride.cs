@@ -27,6 +27,10 @@ namespace BalloonParty.Configuration.Level
         public int ToLevel => _toLevel;
         public bool SnapToRounding => _snapToRounding;
 
+        // A half-authored row (no keys yet) would evaluate to 0 and collapse the level to a 1-point bar — so
+        // an override only counts once its curve has keys; until then the level falls through to the formula.
+        public bool HasCurve => _cumulativeScore is { length: > 0 };
+
         public bool Contains(int level)
         {
             return level >= _fromLevel && level <= _toLevel;
