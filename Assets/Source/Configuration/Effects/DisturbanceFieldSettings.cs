@@ -34,9 +34,23 @@ namespace BalloonParty.Configuration.Effects
         [Range(0f, 5f)]
         public float Duration;
 
-        [Tooltip("For constant emitters (tough/rainbow/unbreakable pulses): seconds between emissions. " +
-                 "0 = not a periodic emitter (event-driven stamps like pops/items ignore this).")]
+        [Tooltip("For constant emitters (tough/rainbow/unbreakable pulses): seconds between emissions; " +
+                 "0 = not a periodic emitter. Exception: for ProjectileFire it's the NUMBER of exit-force " +
+                 "stamps marched along the fire heading (spaced by Radius).")]
         public float Interval;
+
+        [Tooltip("Marched profiles (ProjectileFire) only: world-units between successive stamps along the line " +
+                 "— total length ≈ Spacing × (count − 1). 0 = use Radius as the spacing.")]
+        public float Spacing;
+
+        [Tooltip("Marched profiles (ProjectileFire) only: world-units the Radius GROWS by from the muzzle to " +
+                 "the far end of the line, forming a cone. 0 = uniform width.")]
+        public float RadiusGrowth;
+
+        [Tooltip("Marched profiles (ProjectileFire) only: fraction of Strength removed by the far end " +
+                 "(0 = uniform, 1 = fades to zero), so the cone weakens toward its tip.")]
+        [Range(0f, 1f)]
+        public float StrengthFalloff;
     }
 
     [CreateAssetMenu(menuName = "Configuration/Disturbance Field Settings", fileName = "DisturbanceFieldSettings")]
@@ -95,7 +109,7 @@ namespace BalloonParty.Configuration.Effects
         [SerializeField] private StampProfile[] _stampProfiles = new[]
         {
             new StampProfile { Sources = StampSource.Projectile,   Radius = 0.3f, Strength = 0.8f, Duration = 0f },
-            new StampProfile { Sources = StampSource.ProjectileFire, Radius = 0.5f, Strength = 1.0f, Duration = 0.1f },
+            new StampProfile { Sources = StampSource.ProjectileFire, Radius = 0.5f, Strength = 1.0f, Duration = 0.1f, Interval = 4, Spacing = 0.5f, RadiusGrowth = 1f, StrengthFalloff = 0.6f },
             new StampProfile { Sources = StampSource.BalloonPath, Radius = 0.5f, Strength = 0.4f, Duration = 0f },
             new StampProfile { Sources = StampSource.BalloonPop,   Radius = 0.8f, Strength = 1.0f, Duration = 0.15f },
             new StampProfile { Sources = StampSource.Bomb,         Radius = 1.2f, Strength = 1.0f, Duration = 0.2f },

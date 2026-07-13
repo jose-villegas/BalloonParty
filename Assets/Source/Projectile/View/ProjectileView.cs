@@ -11,6 +11,7 @@ using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Actor;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
@@ -37,6 +38,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<ShieldLostMessage> _shieldLostPublisher;
         [Inject] private IPublisher<ProjectileFiredMessage> _firedPublisher;
+        [Inject] private IPublisher<SpeckSpawnRequestMessage> _speckPublisher;
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
         [Inject] private ProjectileHitResolver _hitResolver;
         [Inject] private ProjectileMotionResolver _motionResolver;
@@ -88,15 +90,11 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            // The first free frame is the shot leaving the muzzle (MoveAndBounce sets _hasFlown below): fire the
-            // moment once here, at the muzzle, along the fire heading. Stamp the exit force directly (as every
-            // other stamp emitter does) and publish the event so anything else — VFX, audio, camera — can react.
+            // The first free frame is the shot leaving the muzzle (MoveAndBounce sets _hasFlown below): emit the
+            // exit-force burst once here, before the shot advances.
             if (!_hasFlown)
             {
-                _disturbanceField.Stamp(
-                    StampSource.ProjectileFire, transform.position, _model.Direction,
-                    _palette.PaletteIndexOf(GamePalette.ProjectileColorId));
-                _firedPublisher.Publish(new ProjectileFiredMessage(transform.position, _model.Direction));
+                EmitFireBurst();
             }
 
             RevealShieldOnFirstFreeFrame();
@@ -251,6 +249,33 @@ namespace BalloonParty.Projectile.View
             _hasFlown = true;
 
             _disturbanceField.Stamp(StampSource.Projectile, step.Position, step.Direction);
+        }
+
+        // The muzzle-exit force as a line of stamps marching along the fire heading — count = the ProjectileFire
+        // profile's Interval (repurposed for this event-driven profile), spaced by its radius. Specks are seeded
+        // along the same line FIRST, so the following stamps agitate them and the shot kicks dust up its exit path.
+        // Publishes ProjectileFiredMessage so VFX/audio/camera can react to the exact fire moment.
+        private void EmitFireBurst()
+        {
+            var profile = _disturbanceField.GetProfile(StampSource.ProjectileFire);
+            var count = Mathf.Max(1, Mathf.RoundToInt(profile.Interval));
+            var heading = _model.Direction;
+            var spacing = profile.Spacing > 0f ? profile.Spacing : profile.Radius;
+            var step = heading.normalized * spacing;
+
+            // Seed specks along the exit line first, so the cone stamps then agitate them.
+            for (var i = 0; i < count; i++)
+            {
+                _speckPublisher?.Publish(
+                    new SpeckSpawnRequestMessage(SpeckSource.ProjectileFire, transform.position + step * i));
+            }
+
+            // The exit force itself: a cone marched along the heading (see DisturbanceFieldService.StampCone).
+            _disturbanceField.StampCone(
+                StampSource.ProjectileFire, transform.position, heading,
+                _palette.PaletteIndexOf(GamePalette.ProjectileColorId));
+
+            _firedPublisher.Publish(new ProjectileFiredMessage(transform.position, heading));
         }
 
         private void OnBalloonDeflected(BalloonDeflectedMessage msg)

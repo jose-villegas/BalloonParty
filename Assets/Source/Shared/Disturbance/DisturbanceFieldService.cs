@@ -202,6 +202,26 @@ namespace BalloonParty.Shared.Disturbance
             });
         }
 
+        /// <summary>Stamps a cone from the source's profile: <c>Interval</c>-many stamps marched from
+        /// <paramref name="origin" /> along <paramref name="direction" /> (spaced by Radius), the radius growing
+        /// by RadiusGrowth and the strength fading by StrengthFalloff toward the tip. Only the first (muzzle)
+        /// stamp reports impact. RadiusGrowth/StrengthFalloff of 0 give a uniform line.</summary>
+        internal void StampCone(StampSource source, Vector3 origin, Vector2 direction, int paletteIndex = -1)
+        {
+            var profile = GetProfile(source);
+            var count = Mathf.Max(1, Mathf.RoundToInt(profile.Interval));
+            var spacing = profile.Spacing > 0f ? profile.Spacing : profile.Radius;
+            var step = ((Vector3)direction).normalized * spacing;
+
+            for (var i = 0; i < count; i++)
+            {
+                var t = count > 1 ? i / (float)(count - 1) : 0f;
+                var radius = profile.Radius + profile.RadiusGrowth * t;
+                var strength = profile.Strength * (1f - profile.StrengthFalloff * t);
+                Stamp(origin + step * i, radius, strength, direction, profile.Duration, paletteIndex, reportImpact: i == 0);
+            }
+        }
+
         private void FlushPendingStamps()
         {
             if (_pendingStamps.Count == 0)

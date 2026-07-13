@@ -223,7 +223,7 @@ On frames where stamps arrive but diffusion is not due, all instant stamps are f
 | System | When it stamps | `StampSource` | Notes |
 |---|---|---|---|
 | `ProjectileView` | Each `FixedUpdate` in `MoveAndBounce()` | `Projectile` | Continuous wake through Puff clouds; `Duration` from config typically 0 for a sharp per-frame stamp |
-| `ProjectileView` | Once, on the first free frame (muzzle exit) | `ProjectileFire` | One-shot exit force at the muzzle, along the fire heading, tagged the reserved `Projectile` palette colour |
+| `ProjectileView` | Once, on the first free frame (muzzle exit) | `ProjectileFire` | Exit force as a cone: `Interval`-many stamps marched along the fire heading (spaced by `Spacing`, which sets the cone length), radius growing (`RadiusGrowth`) and strength fading (`StrengthFalloff`) toward the tip, tagged the reserved `Projectile` palette colour; specks seeded along the same line first; only the muzzle stamp reports impact |
 | `BalloonFactory` | Each frame during spawn path DOTween `OnUpdate` (via `StampDisturbanceAlongPath`) | `BalloonPath` | Spawn animations disturb clouds they pass through |
 | `BalloonBalancer` | Each frame during balance path DOTween `OnUpdate` (via `StampDisturbanceAlongPath`) | `BalloonPath` | Balance animations disturb clouds |
 | `BalloonController` | On balloon pop | `BalloonPop` | Pop burst shockwave; `Duration > 0` creates an expanding shockwave shape |
