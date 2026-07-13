@@ -27,6 +27,7 @@ Shader "BalloonParty/Sprite/DisturbanceTint"
         [Header(Resting Fade)]
         _RestAlpha("Rest Alpha (field quiet)", Range(0,1)) = 1
         _ActivityScale("Activity Scale", Range(0,8)) = 2
+        _ActivitySharpness("Activity Sharpness", Range(1,32)) = 1
 
         [MaterialToggle] PixelSnap("Pixel snap", Float) = 0
     }
@@ -111,6 +112,7 @@ Shader "BalloonParty/Sprite/DisturbanceTint"
             float _GradientStrength;
             float _RestAlpha;
             float _ActivityScale;
+            float _ActivitySharpness;
 
             float2 FieldUV(float2 worldXY)
             {
@@ -154,7 +156,9 @@ Shader "BalloonParty/Sprite/DisturbanceTint"
                     // Density (activity) and direction still come from the field itself.
                     float4 fc = _DisturbanceTex.SampleLevel(sampler_linear_clamp, cuv, 0);
                     float density = abs(fc.r - 0.5) * 2.0;
-                    activity = saturate(max(density * _ActivityScale, col.a));
+                    // Sharpness gains the response so the sprite leaves the resting alpha with the slightest
+                    // disturbance — crank it for a near-instant light-like on/off.
+                    activity = saturate(max(density * _ActivityScale, col.a) * _ActivitySharpness);
 
                     dir = (fc.gb - 0.5) * 2.0;
                     mag = saturate(length(dir) * _DirectionStrength);
