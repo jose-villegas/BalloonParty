@@ -34,6 +34,12 @@ namespace BalloonParty.Configuration.Palette
         /// </summary>
         public const string UnbreakableColorId = "Unbreakable";
 
+        /// <summary>
+        ///     Presentation-only palette entry for the muzzle-exit force a shot stamps into the disturbance
+        ///     field when fired — authored in the palette asset but never a spawnable balloon color.
+        /// </summary>
+        public const string ProjectileColorId = "Projectile";
+
         [SerializeField] private PaletteEntry[] _colors;
 
         private Dictionary<string, PaletteEntry> _byName;

@@ -33,6 +33,11 @@ MonoBehaviour:
     Strength: 0.8
     Duration: 0
     Interval: 0
+  - Sources: 512
+    Radius: 0.5
+    Strength: 1
+    Duration: 0.1
+    Interval: 0
   - Sources: 2
     Radius: 0.3
     Strength: 0.005

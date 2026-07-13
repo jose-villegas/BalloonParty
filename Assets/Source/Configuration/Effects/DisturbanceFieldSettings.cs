@@ -8,6 +8,7 @@ namespace BalloonParty.Configuration.Effects
     internal enum StampSource
     {
         Projectile    = 1 << 0,
+        ProjectileFire = 1 << 9,
         BalloonPath  = 1 << 1,
         BalloonPop    = 1 << 2,
         Bomb          = 1 << 3,
@@ -94,6 +95,7 @@ namespace BalloonParty.Configuration.Effects
         [SerializeField] private StampProfile[] _stampProfiles = new[]
         {
             new StampProfile { Sources = StampSource.Projectile,   Radius = 0.3f, Strength = 0.8f, Duration = 0f },
+            new StampProfile { Sources = StampSource.ProjectileFire, Radius = 0.5f, Strength = 1.0f, Duration = 0.1f },
             new StampProfile { Sources = StampSource.BalloonPath, Radius = 0.5f, Strength = 0.4f, Duration = 0f },
             new StampProfile { Sources = StampSource.BalloonPop,   Radius = 0.8f, Strength = 1.0f, Duration = 0.15f },
             new StampProfile { Sources = StampSource.Bomb,         Radius = 1.2f, Strength = 1.0f, Duration = 0.2f },

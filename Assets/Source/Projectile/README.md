@@ -78,4 +78,4 @@ The model stores buffs in a plain list exposed via `HasBuff<T>()` (read) and `Ad
 - **ProjectileDestroyedMessage** — published on death to signal the thrower to reload
 - **PoolManager** — provides `ParticlePoolChannel` for VFX and `ProjectilePoolChannel` for projectile lifecycle
 - **IGameConfiguration** — provides `LimitsClockwise`, `ProjectileSpeed`, `ProjectileStartingShields`, `NudgeDistance`, `NudgeDuration`
-- **DisturbanceFieldService** — `ProjectileView` injects the shared disturbance field and calls `Stamp()` in `MoveAndBounce()` after position update, using the `Projectile` stamp profile from `DisturbanceFieldSettings`. Creates visible wakes through Puff clouds
+- **DisturbanceFieldService** — `ProjectileView` injects the shared disturbance field and calls `Stamp()` in `MoveAndBounce()` after position update, using the `Projectile` stamp profile from `DisturbanceFieldSettings`. It also stamps a one-shot `ProjectileFire` profile on the first free frame (the muzzle-exit force) — at the muzzle, along the fire heading, tagged the reserved `Projectile` palette colour. Creates visible wakes through Puff clouds

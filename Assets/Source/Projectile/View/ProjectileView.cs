@@ -36,6 +36,7 @@ namespace BalloonParty.Projectile.View
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
         [Inject] private IPublisher<ProjectileDestroyedMessage> _destroyedPublisher;
         [Inject] private IPublisher<ShieldLostMessage> _shieldLostPublisher;
+        [Inject] private IPublisher<ProjectileFiredMessage> _firedPublisher;
         [Inject] private ISubscriber<BalloonDeflectedMessage> _deflectedSubscriber;
         [Inject] private ProjectileHitResolver _hitResolver;
         [Inject] private ProjectileMotionResolver _motionResolver;
@@ -85,6 +86,17 @@ namespace BalloonParty.Projectile.View
             if (_disappearing || _model == null || !_model.IsFree || _pauseService.IsAnyPaused.Value)
             {
                 return;
+            }
+
+            // The first free frame is the shot leaving the muzzle (MoveAndBounce sets _hasFlown below): fire the
+            // moment once here, at the muzzle, along the fire heading. Stamp the exit force directly (as every
+            // other stamp emitter does) and publish the event so anything else — VFX, audio, camera — can react.
+            if (!_hasFlown)
+            {
+                _disturbanceField.Stamp(
+                    StampSource.ProjectileFire, transform.position, _model.Direction,
+                    _palette.PaletteIndexOf(GamePalette.ProjectileColorId));
+                _firedPublisher.Publish(new ProjectileFiredMessage(transform.position, _model.Direction));
             }
 
             RevealShieldOnFirstFreeFrame();
