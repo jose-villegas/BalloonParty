@@ -23,6 +23,10 @@ namespace BalloonParty.Balloon.Controller
 {
     internal class BalloonBalancer : IStartable, ITickable, IRunResettable
     {
+        // Sub-millimeter total travel (squared world units): below this a move is degenerate — a
+        // (near-)zero-length path makes DOTween's ConvertToConstantPathPerc divide 0/0 into NaN positions.
+        private const float DegenerateMoveSqrEpsilon = 1e-6f;
+
         // Higher priority intervenes first; equal priorities keep the sweep's original order.
         private static readonly Comparison<PassCandidate> ByInterventionOrder = (a, b) =>
             a.Priority != b.Priority ? b.Priority - a.Priority : a.Order - b.Order;
@@ -136,20 +140,36 @@ namespace BalloonParty.Balloon.Controller
                 var viewTransform = view.transform;
 
                 // Direct movers skip the resolve's intermediate waypoints and tween straight to the end.
-                var waypoints = actor is IBalanceInfluence { DirectBalanceMotion: true } && path.Count > 1
-                    ? FinalWaypointBuffer(viewTransform.position, path)
-                    : WaypointBuffer(viewTransform.position, path);
+                var directMotion = actor is IBalanceInfluence { DirectBalanceMotion: true } && path.Count > 1;
 
-                var tween = viewTransform
-                    .DOPath(waypoints, _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
-                    .StampDisturbanceAlongPath(viewTransform, _disturbanceField, StampSource.BalloonPath)
-                    .OnComplete(() =>
-                    {
-                        actor.IsStable.Value = true;
-                        _balancePathHolder.Release(actor);
-                    });
+                // A (near-)zero-length path NaNs inside DOTween: ConvertToConstantPathPerc's lengths
+                // table is all zeros, its percent lookup divides 0/0, and the NaN propagates into the
+                // position setter. Skip the tween and complete the move inline instead.
+                var travelSqr = directMotion
+                    ? (path[^1] - viewTransform.position).sqrMagnitude
+                    : PolylineSqrLength(viewTransform.position, path);
+                if (travelSqr < DegenerateMoveSqrEpsilon)
+                {
+                    actor.IsStable.Value = true;
+                    _balancePathHolder.Release(actor);
+                }
+                else
+                {
+                    var waypoints = directMotion
+                        ? FinalWaypointBuffer(viewTransform.position, path)
+                        : WaypointBuffer(viewTransform.position, path);
 
-                view.TweenTracker.Append(tween);
+                    var tween = viewTransform
+                        .DOPath(waypoints, _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
+                        .StampDisturbanceAlongPath(viewTransform, _disturbanceField, StampSource.BalloonPath)
+                        .OnComplete(() =>
+                        {
+                            actor.IsStable.Value = true;
+                            _balancePathHolder.Release(actor);
+                        });
+
+                    view.TweenTracker.Append(tween);
+                }
 
                 if (currentScale != Vector3.one)
                 {
@@ -418,6 +438,22 @@ namespace BalloonParty.Balloon.Controller
             buffer[0] = currentPosition;
             buffer[1] = path[^1];
             return buffer;
+        }
+
+        // Sum of squared segment lengths from the current position through every waypoint. A path that
+        // loops back near its start but travels meaningfully keeps a large sum, so it still animates;
+        // only a genuinely motionless move reads as degenerate.
+        private static float PolylineSqrLength(Vector3 start, IReadOnlyList<Vector3> path)
+        {
+            var total = 0f;
+            var previous = start;
+            for (var i = 0; i < path.Count; i++)
+            {
+                total += (path[i] - previous).sqrMagnitude;
+                previous = path[i];
+            }
+
+            return total;
         }
 
         private void ReleasePaths()
