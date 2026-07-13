@@ -78,20 +78,7 @@ namespace BalloonParty.Balloon.Type
 
             // One colour-only stamp (no force — R stays at rest) tags nearby specks with the next
             // available colour each pulse; the RainbowColor profile's Interval paces how fast it cycles.
-            StartPulse(StampSource.RainbowColor, disposables, EmitColor);
-        }
-
-        private void StartPulse(StampSource source, CompositeDisposable disposables, Action emit)
-        {
-            var interval = _disturbanceField.GetProfile(source).Interval;
-            if (interval <= 0f)
-            {
-                return;
-            }
-
-            Observable.Interval(TimeSpan.FromSeconds(interval))
-                .Subscribe(_ => emit())
-                .AddTo(disposables);
+            _disturbanceField.StartPulse(StampSource.RainbowColor, EmitColor).AddTo(disposables);
         }
 
         private async UniTaskVoid RepushBandsNextFrame()

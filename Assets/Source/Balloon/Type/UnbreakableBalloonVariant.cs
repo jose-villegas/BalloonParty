@@ -125,7 +125,12 @@ namespace BalloonParty.Balloon.Type
 
             // A periodic burst (cadence + force from the profile) shoves the field's clouds out — tagged the
             // Unbreakable color — and enables a matching puff of specks at the same point.
-            StartPulse(StampSource.UnbreakableBurst, disposables);
+            if (_disturbanceField != null)
+            {
+                _disturbanceField
+                    .StartPulse(StampSource.UnbreakableBurst, () => EmitPulse(StampSource.UnbreakableBurst))
+                    .AddTo(disposables);
+            }
         }
 
         private void PushSphereState(float timeOffset, bool zeroShaderClock)
@@ -159,24 +164,6 @@ namespace BalloonParty.Balloon.Type
                 _block.SetFloat(AnimationSpeedId, zeroShaderClock ? 0f : ShaderClockRate);
                 r.SetPropertyBlock(_block);
             }
-        }
-
-        private void StartPulse(StampSource source, CompositeDisposable disposables)
-        {
-            if (_disturbanceField == null)
-            {
-                return;
-            }
-
-            var interval = _disturbanceField.GetProfile(source).Interval;
-            if (interval <= 0f)
-            {
-                return;
-            }
-
-            Observable.Interval(System.TimeSpan.FromSeconds(interval))
-                .Subscribe(_ => EmitPulse(source))
-                .AddTo(disposables);
         }
 
         private void EmitPulse(StampSource source)

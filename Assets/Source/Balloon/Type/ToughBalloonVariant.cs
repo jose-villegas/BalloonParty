@@ -93,15 +93,8 @@ namespace BalloonParty.Balloon.Type
 
         private IDisposable StartWarningPulse()
         {
-            var interval = _disturbanceField.GetProfile(StampSource.ToughWarning).Interval;
-            if (interval <= 0f)
-            {
-                return Disposable.Empty;
-            }
-
             _repelPulse = false;
-            return Observable.Interval(TimeSpan.FromSeconds(interval))
-                .Subscribe(_ => EmitAlternatingPulse());
+            return _disturbanceField.StartPulse(StampSource.ToughWarning, EmitAlternatingPulse);
         }
 
         // Each pulse flips sign — the tough pushes the field out, then pulls it back in — while always
