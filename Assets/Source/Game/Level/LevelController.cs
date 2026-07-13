@@ -106,6 +106,15 @@ namespace BalloonParty.Game.Level
 
         public bool WillLevelUp()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            // Dev cheat (BlockLevelUpCheat): report "not levelling up" so the projected level-up cinematic
+            // (which gates on this) never starts — the earliest blocking state, before the ceremony.
+            if (BalloonParty.Cheats.CheatState.BlockLevelUp)
+            {
+                return false;
+            }
+#endif
+
             var required = _thresholds.PointsRequiredForLevel(_level.Value);
 
             foreach (var color in _levelParams.Current.AllowedColors)
@@ -127,6 +136,16 @@ namespace BalloonParty.Game.Level
             }
 
             var baseProgress = _projectedProgress[color];
+
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            // Dev cheat (BlockLevelUpCheat) — level lock: grant the points for the VISUAL (so score trails still
+            // fly on a pop) but DON'T advance progress — no projected mutation here, and both OnTrailArrived
+            // handlers skip their commit, so score, bars and level all stay put while the trails play.
+            if (BalloonParty.Cheats.CheatState.BlockLevelUp)
+            {
+                return (baseProgress, points);
+            }
+#endif
 
             // Cap one level-up per burst — excess is intentionally lost, not carried to the next level.
             var required = _thresholds.PointsRequiredForLevel(_level.Value);
@@ -164,6 +183,15 @@ namespace BalloonParty.Game.Level
                 return;
             }
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            // Level lock (BlockLevelUpCheat): the trail still arrived (and played), but don't confirm progress
+            // or check for a level-up — the level stays where it was.
+            if (BalloonParty.Cheats.CheatState.BlockLevelUp)
+            {
+                return;
+            }
+#endif
+
             // Outside Playing (a ceremony or its Ascent is running), any in-flight trail belongs to the
             // finished level — ignore it.
             if (_phase.Value != LevelUpPhase.Playing)
@@ -193,6 +221,14 @@ namespace BalloonParty.Game.Level
 
         private void CheckLevelUp()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            // Dev cheat (BlockLevelUpCheat): hold the current level — never complete it — while testing.
+            if (BalloonParty.Cheats.CheatState.BlockLevelUp)
+            {
+                return;
+            }
+#endif
+
             // Only detect while Playing — Pending/Transitioning already own the ceremony, so this is the
             // single reentrancy guard (no second message until the current one resolves). nav/loss stay
             // to suppress on a run that's ending, which the phase doesn't model.

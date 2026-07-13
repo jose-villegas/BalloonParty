@@ -66,6 +66,15 @@ namespace BalloonParty.Game.Run
 
         public void EndRun()
         {
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            // Dev cheat (BlockLevelUpCheat) is a level lock: while on, the run can't end — no loss (and no
+            // manual end) — so you can sit on a level indefinitely. Toggle off to restore normal loss.
+            if (BalloonParty.Cheats.CheatState.BlockLevelUp)
+            {
+                return;
+            }
+#endif
+
             // Deferred, never dropped — the loss request is one-shot.
             if (_cinematic.Has(CinematicTraits.BlocksLoss) || _navigation.Current.Value == NavigationState.LevelUp)
             {

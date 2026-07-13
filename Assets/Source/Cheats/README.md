@@ -49,6 +49,7 @@ A cheat that needs inputs (dropdowns, counters) also implements `ICheatControls.
 | Remove Balloons | Grid | Draw across balloons to remove them and trigger a balance pass |
 | Trigger Level Up | Score | Fills all color bars to the current threshold and immediately triggers the level-up ceremony |
 | Near Level Up | Score | Fills all color bars to one point below the threshold — pop one balloon of each color to complete the level naturally |
+| Level Lock | Score | Toggle — locks the current level: score trails still fly on a pop but nothing sticks (`ClaimProgress` grants the visual only; both `OnTrailArrived` handlers skip their commit, so score/bars stay put), no level-up cinematic/ceremony can start (`WillLevelUp`/`CheckLevelUp` guarded), `PlayerHealthController.Damage` no-ops (hearts never drain), and `RunController.EndRun` no-ops (no loss). Sit on a level indefinitely to test it; toggle off to resume normal play. Sets the dev-only `CheatState.BlockLevelUp` flag |
 | Force Game Over | Run | Calls `RunController.EndRun()` — commits the run and shows the GameOver screen |
 | Restart Run | Run | Calls `RunController.RestartRun()` — resets every `IRunResettable` and returns to `Game` |
 | Stamp Disturbance | Grid | Toggle on, then mouse-drag to stamp disturbances into the shared disturbance field. Uses `DisturbanceFieldService.Stamp()` at the mouse world position with drag direction |

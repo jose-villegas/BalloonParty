@@ -212,6 +212,14 @@ namespace BalloonParty.Game.Score
                 return;
             }
 
+#if UNITY_EDITOR || DEVELOPMENT_BUILD
+            // Level lock (BlockLevelUpCheat): the trail still flew to the counter, but the score doesn't tick up.
+            if (BalloonParty.Cheats.CheatState.BlockLevelUp)
+            {
+                return;
+            }
+#endif
+
             _persistentScore[msg.ColorName]++;
             _totalScore.Value++;
         }
