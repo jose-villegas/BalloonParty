@@ -11,6 +11,7 @@ using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
+using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
 using BalloonParty.Configuration.Balloons;
@@ -140,6 +141,12 @@ namespace BalloonParty.Balloon.Controller
             {
                 _grid.Remove(slot);
             }
+
+            // A detached balloon must carry no live tweens into the cinematic: a balance sequence still
+            // playing on the tracker would be mutated by the float-away's Append (corrupting DOTween's
+            // active-tween array), and stray transform tweens would fight the float animation.
+            _view.TweenTracker.Kill();
+            _view.transform.DOKill();
 
             // Stop the idle animator so the float-away's tilt tween owns the balloon's rotation.
             _view.SuspendAnimator();

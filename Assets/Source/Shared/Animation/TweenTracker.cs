@@ -11,16 +11,11 @@ namespace BalloonParty.Shared.Animation
 
         public void Append(Tween tween)
         {
-            if (IsPlaying)
-            {
-                _active.Append(tween);
-            }
-            else
-            {
-                Kill();
-                _active = DOTween.Sequence();
-                _active.Append(tween);
-            }
+            // DOTween forbids modifying a sequence once it has started — appending to a playing one
+            // corrupts the active-tween array. Always replace with a fresh sequence instead.
+            Kill();
+            _active = DOTween.Sequence();
+            _active.Append(tween);
         }
 
         public void Kill()

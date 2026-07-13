@@ -137,8 +137,8 @@ namespace BalloonParty.Balloon.Controller
 
                 // Direct movers skip the resolve's intermediate waypoints and tween straight to the end.
                 var waypoints = actor is IBalanceInfluence { DirectBalanceMotion: true } && path.Count > 1
-                    ? FinalWaypointBuffer(path)
-                    : WaypointBuffer(path);
+                    ? FinalWaypointBuffer(viewTransform.position, path)
+                    : WaypointBuffer(viewTransform.position, path);
 
                 var tween = viewTransform
                     .DOPath(waypoints, _balloonsConfig.TimeForBalloonsBalance, PathType.CatmullRom)
@@ -382,34 +382,41 @@ namespace BalloonParty.Balloon.Controller
             return true;
         }
 
+        // Seeds the view's current position as waypoint 0 so a CatmullRom path always has ≥2 points:
+        // DOTween's FinalizePath unconditionally reads wps[1], and its own prepend check finds
+        // wps[0] ≈ current and adds nothing, so a degenerate zero-length path tweens harmlessly in place.
         // DOTween's Path constructor clones the waypoints (verified against the vendored dll), so one
         // shared buffer per path length is safe to reuse immediately.
-        private Vector3[] WaypointBuffer(IReadOnlyList<Vector3> path)
+        private Vector3[] WaypointBuffer(Vector3 currentPosition, IReadOnlyList<Vector3> path)
         {
-            if (!_waypointBuffers.TryGetValue(path.Count, out var buffer))
+            var count = path.Count + 1;
+            if (!_waypointBuffers.TryGetValue(count, out var buffer))
             {
-                buffer = new Vector3[path.Count];
-                _waypointBuffers[path.Count] = buffer;
+                buffer = new Vector3[count];
+                _waypointBuffers[count] = buffer;
             }
 
+            buffer[0] = currentPosition;
             for (var i = 0; i < path.Count; i++)
             {
-                buffer[i] = path[i];
+                buffer[i + 1] = path[i];
             }
 
             return buffer;
         }
 
-        // A one-slot reuse of the waypoint-buffer scheme, holding only the path's final position.
-        private Vector3[] FinalWaypointBuffer(IReadOnlyList<Vector3> path)
+        // A two-slot reuse of the waypoint-buffer scheme: the current position then the path's final
+        // position (see WaypointBuffer for why waypoint 0 is the current position).
+        private Vector3[] FinalWaypointBuffer(Vector3 currentPosition, IReadOnlyList<Vector3> path)
         {
-            if (!_waypointBuffers.TryGetValue(1, out var buffer))
+            if (!_waypointBuffers.TryGetValue(2, out var buffer))
             {
-                buffer = new Vector3[1];
-                _waypointBuffers[1] = buffer;
+                buffer = new Vector3[2];
+                _waypointBuffers[2] = buffer;
             }
 
-            buffer[0] = path[^1];
+            buffer[0] = currentPosition;
+            buffer[1] = path[^1];
             return buffer;
         }
 
