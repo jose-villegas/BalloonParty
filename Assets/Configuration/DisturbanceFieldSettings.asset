@@ -33,53 +33,86 @@ MonoBehaviour:
     Strength: 0.8
     Duration: 0
     Interval: 0
+    Spacing: 0
+    RadiusGrowth: 0
+    StrengthFalloff: 0
   - Sources: 512
-    Radius: 0.5
-    Strength: 1
-    Duration: 0.1
-    Interval: 0
+    Radius: 0.1
+    Strength: 15
+    Duration: 0.01
+    Interval: 4
+    Spacing: 0.275
+    RadiusGrowth: 1.2
+    StrengthFalloff: 1
   - Sources: 2
     Radius: 0.3
     Strength: 0.005
     Duration: 0
     Interval: 0
+    Spacing: 0
+    RadiusGrowth: 0
+    StrengthFalloff: 0
   - Sources: 4
     Radius: 1.25
     Strength: 1.25
     Duration: 0.1
     Interval: 0
+    Spacing: 0
+    RadiusGrowth: 0
+    StrengthFalloff: 0
   - Sources: 8
     Radius: 3.5
     Strength: 5
     Duration: 0.125
     Interval: 0
+    Spacing: 0
+    RadiusGrowth: 0
+    StrengthFalloff: 0
   - Sources: 16
     Radius: 0.8
     Strength: 5
     Duration: 0
     Interval: 0
+    Spacing: 0
+    RadiusGrowth: 0
+    StrengthFalloff: 0
   - Sources: 32
     Radius: 0.9
     Strength: 1
     Duration: 0.2
     Interval: 0
+    Spacing: 0
+    RadiusGrowth: 0
+    StrengthFalloff: 0
   - Sources: 64
     Radius: 0.9
     Strength: 12
     Duration: 0
     Interval: 0
+    Spacing: 0
+    RadiusGrowth: 0
+    StrengthFalloff: 0
   - Sources: 128
     Radius: 0.6
     Strength: 0.5
     Duration: 0.5
     Interval: 3
+    Spacing: 0
+    RadiusGrowth: 0
+    StrengthFalloff: 0
   - Sources: 256
     Radius: 0.9
     Strength: 0
     Duration: 0
     Interval: 0.6
+    Spacing: 0
+    RadiusGrowth: 0
+    StrengthFalloff: 0
   - Sources: 2048
     Radius: 0.25
     Strength: 0.35
     Duration: 2
     Interval: 3
+    Spacing: 0
+    RadiusGrowth: 0
+    StrengthFalloff: 0

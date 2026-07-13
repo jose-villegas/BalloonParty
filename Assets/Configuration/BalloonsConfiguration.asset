@@ -148,7 +148,7 @@ MonoBehaviour:
   _spawnEntryRowOffset: 4
   _timeForBalloonsBalance: 1.75
   _flightRebalanceInterval: 4
-  _popSpawnChance: 0.1
+  _popSpawnChance: 0.232
   _popSpawnFreeRows: 2
   _nudgeDistance: 0.15
   _nudgeDuration: 0.7

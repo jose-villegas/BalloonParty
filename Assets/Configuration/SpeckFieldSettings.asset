@@ -48,6 +48,14 @@ MonoBehaviour:
       _disturbanceDamping: 3.25
       _swirlAngle: {x: -180, y: 180}
       _flowInfluence: 1.75
+    - _colorMask: 128
+      _brownianStrength: 1.5
+      _drag: 0.01
+      _motionInfluence: 1
+      _disturbanceInfluence: 21.5
+      _disturbanceDamping: 0.75
+      _swirlAngle: {x: -180, y: 180}
+      _flowInfluence: 1.5
   _appearance:
     _speckSize: 0.03
     _trailLength: 0.065
@@ -92,6 +100,16 @@ MonoBehaviour:
       _scaleHold: {x: 0, y: 0}
       _fadeIn: 0
       _fadeOut: 0.2
+    - _colorMask: 128
+      _speckSize: 0.06
+      _trailLength: 0.25
+      _trailMax: 0.7
+      _lifetimeRange: {x: 0.1, y: 0.5}
+      _scaleRange: {x: 0.1, y: 11}
+      _scalePulses: {x: 0, y: 0}
+      _scaleHold: {x: 0, y: 0}
+      _fadeIn: 0
+      _fadeOut: 0.4
   _spawning:
     _spawnAllImmediately: 0
     _initialActiveCount: 0
@@ -105,6 +123,9 @@ MonoBehaviour:
     - Sources: 4
       Count: 16
       Spread: 0.25
+    - Sources: 8
+      Count: 32
+      Spread: 0.1
     _reductionCurve:
       serializedVersion: 2
       m_Curve:

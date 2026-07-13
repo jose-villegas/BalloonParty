@@ -323,9 +323,9 @@ MonoBehaviour:
           - serializedVersion: 3
             time: 5
             value: 1
-            inSlope: 0.33333334
+            inSlope: Infinity
             outSlope: 0.33333334
-            tangentMode: 34
+            tangentMode: 7
             weightedMode: 0
             inWeight: 0.33333334
             outWeight: 0
@@ -605,7 +605,13 @@ MonoBehaviour:
       - _type: 2
         _weight: 2
         _maximumAllowedOverride: 3
-      _gridActorGates: []
+      _gridActorGates:
+      - _type: 0
+        _count:
+          _min: 12
+          _max: 0
+          _mode: 0
+        _maxPerCluster: 4
       _allowedColorsMask: 3
   - _fromLevel: 4
     _toLevel: 4
@@ -709,7 +715,103 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
       - _type: 1
-        _weight: 1
+        _weight: 1.5
+        _maxCountOverride: 5
+        _initialCountWeights:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 2
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 5
+            value: 1
+            inSlope: 0.33333334
+            outSlope: 0.33333334
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        _waveCountWeights:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0.3
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0.8
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 2
+            value: 0.7
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 3
+            value: 0.3
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 4
+            value: 0.2
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 5
+            value: 0.15
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.09085365
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+      - _type: 6
+        _weight: 0.7
         _maxCountOverride: 5
         _initialCountWeights:
           serializedVersion: 2
@@ -814,7 +916,13 @@ MonoBehaviour:
       - _type: 2
         _weight: 0.8
         _maximumAllowedOverride: 1
-      _gridActorGates: []
+      _gridActorGates:
+      - _type: 0
+        _count:
+          _min: 15
+          _max: 0
+          _mode: 0
+        _maxPerCluster: 5
       _allowedColorsMask: 3
   - _fromLevel: 5
     _toLevel: 5
@@ -918,8 +1026,104 @@ MonoBehaviour:
           m_PostInfinity: 2
           m_RotationOrder: 4
       - _type: 1
-        _weight: 1
+        _weight: 1.5
         _maxCountOverride: 5
+        _initialCountWeights:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 2
+            value: 0
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 5
+            value: 1
+            inSlope: 0.33333334
+            outSlope: 0.33333334
+            tangentMode: 34
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+        _waveCountWeights:
+          serializedVersion: 2
+          m_Curve:
+          - serializedVersion: 3
+            time: 0
+            value: 0.3
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0
+            outWeight: 0
+          - serializedVersion: 3
+            time: 1
+            value: 0.8
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 2
+            value: 0.7
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 3
+            value: 0.3
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 4
+            value: 0.2
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.33333334
+            outWeight: 0.33333334
+          - serializedVersion: 3
+            time: 5
+            value: 0.15
+            inSlope: 0
+            outSlope: 0
+            tangentMode: 0
+            weightedMode: 0
+            inWeight: 0.09085365
+            outWeight: 0
+          m_PreInfinity: 2
+          m_PostInfinity: 2
+          m_RotationOrder: 4
+      - _type: 6
+        _weight: 0.25
+        _maxCountOverride: 3
         _initialCountWeights:
           serializedVersion: 2
           m_Curve:
@@ -1026,10 +1230,10 @@ MonoBehaviour:
       _gridActorGates:
       - _type: 0
         _count:
-          _min: 7
-          _max: 21
-          _mode: 1
-        _maxPerCluster: 3
+          _min: 18
+          _max: 18
+          _mode: 0
+        _maxPerCluster: 6
       _allowedColorsMask: 7
   - _fromLevel: 6
     _toLevel: -1
