@@ -70,6 +70,9 @@ namespace BalloonParty.Slots.Actor
         private static readonly int SpeckLookBId = Shader.PropertyToID("_SpeckLookB");
         private static readonly int SpeckLookCId = Shader.PropertyToID("_SpeckLookC");
         private static readonly int SpeckLookCountId = Shader.PropertyToID("_SpeckLookCount");
+        private static readonly int SpeckMotionAId = Shader.PropertyToID("_SpeckMotionA");
+        private static readonly int SpeckMotionBId = Shader.PropertyToID("_SpeckMotionB");
+        private static readonly int SpeckMotionCountId = Shader.PropertyToID("_SpeckMotionCount");
 
         [SerializeField] private ComputeShader _compute;
         [SerializeField] private Material _renderMaterial;
@@ -99,6 +102,9 @@ namespace BalloonParty.Slots.Actor
         private Vector4[] _lookB;
         private Vector4[] _lookC;
         private int _lookCount;
+        private Vector4[] _motionA;
+        private Vector4[] _motionB;
+        private int _motionCount;
         private IDisposable _hitSubscription;
         private IDisposable _requestSubscription;
 
@@ -141,6 +147,8 @@ namespace BalloonParty.Slots.Actor
             _lookA = new Vector4[MaxPaletteSlots];
             _lookB = new Vector4[MaxPaletteSlots];
             _lookC = new Vector4[MaxPaletteSlots];
+            _motionA = new Vector4[MaxPaletteSlots];
+            _motionB = new Vector4[MaxPaletteSlots];
 
             PushPalette();
             PushStaticParams();
@@ -277,6 +285,47 @@ namespace BalloonParty.Slots.Actor
             _renderMaterial.SetVectorArray(SpeckLookBId, _lookB);
             _renderMaterial.SetVectorArray(SpeckLookCId, _lookC);
             _renderMaterial.SetInt(SpeckLookCountId, _lookCount);
+
+            BuildMotionArrays(motion);
+            _compute.SetVectorArray(SpeckMotionAId, _motionA);
+            _compute.SetVectorArray(SpeckMotionBId, _motionB);
+            _compute.SetInt(SpeckMotionCountId, _motionCount);
+        }
+
+        // Per-colour motion overrides resolved into palette-slot arrays the compute lerps toward by a speck's
+        // heat — the motion analogue of BuildLookArrays. Swirl is stored in radians to match the base uniform.
+        // Packed A=(brownian, drag, motionInfluence, disturbanceInfluence), B=(damping, swirlMin, swirlMax, flow).
+        private void BuildMotionArrays(ISpeckMotionSettings motion)
+        {
+            _motionCount = Mathf.Min(_palette.Colors.Count, MaxPaletteSlots);
+
+            var baseA = new Vector4(motion.BrownianStrength, motion.Drag, motion.MotionInfluence, motion.DisturbanceInfluence);
+            var baseB = new Vector4(motion.DisturbanceDamping, motion.SwirlAngle.x * Mathf.Deg2Rad,
+                motion.SwirlAngle.y * Mathf.Deg2Rad, motion.FlowInfluence);
+
+            var profiles = motion.ColorProfiles;
+            for (var slot = 0; slot < _motionCount; slot++)
+            {
+                var a = baseA;
+                var b = baseB;
+
+                for (var p = 0; p < profiles.Count; p++)
+                {
+                    var profile = profiles[p];
+                    if ((profile.ColorMask & (1 << slot)) == 0)
+                    {
+                        continue;
+                    }
+
+                    a = new Vector4(profile.BrownianStrength, profile.Drag, profile.MotionInfluence, profile.DisturbanceInfluence);
+                    b = new Vector4(profile.DisturbanceDamping, profile.SwirlAngle.x * Mathf.Deg2Rad,
+                        profile.SwirlAngle.y * Mathf.Deg2Rad, profile.FlowInfluence);
+                    break;
+                }
+
+                _motionA[slot] = a;
+                _motionB[slot] = b;
+            }
         }
 
         // Resolves the per-colour look overrides into palette-slot-indexed arrays the render shader lerps

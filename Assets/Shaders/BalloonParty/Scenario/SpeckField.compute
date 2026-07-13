@@ -48,6 +48,12 @@ float _HeatGain;
 float _HeatDecay;
 float _ColorLerpRate; // per-second ramp of colorBlend when the tag index changes
 
+// Per-palette-colour motion overrides a speck blends toward by its heat (slot = paletteIndex).
+// A=(brownian, drag, motionInfluence, disturbanceInfluence), B=(disturbanceDamping, swirlMin, swirlMax, flow).
+float4 _SpeckMotionA[16];
+float4 _SpeckMotionB[16];
+int _SpeckMotionCount;
+
 float hash11(float p)
 {
     p = frac(p * 0.1031);
@@ -82,11 +88,26 @@ void Advect(uint3 id : SV_DispatchThreadID)
         s.colorBlend = 1.0;
     }
 
+    // Blend the motion params from the base toward this colour's profile by the speck's heat (last frame's,
+    // before it's recomputed below), so a coloured speck also moves by that colour's rules. paletteIndex < 0
+    // stays base; uncovered colours resolve to base, so their lerp is a no-op. Swirl is in radians (as pushed).
+    int mSlot = clamp((int)(s.paletteIndex + 0.5), 0, 15);
+    float mT = (s.paletteIndex >= -0.5 && mSlot < _SpeckMotionCount) ? saturate(s.heat) : 0.0;
+    float4 ma = _SpeckMotionA[mSlot];
+    float4 mb = _SpeckMotionB[mSlot];
+    float brownianStrength     = lerp(_BrownianStrength,     ma.x, mT);
+    float drag                 = lerp(_Drag,                 ma.y, mT);
+    float motionInfluence      = lerp(_MotionInfluence,      ma.z, mT);
+    float disturbanceInfluence = lerp(_DisturbanceInfluence, ma.w, mT);
+    float disturbanceDamping   = lerp(_DisturbanceDamping,   mb.x, mT);
+    float2 swirlAngle          = lerp(_SwirlAngle,           mb.yz, mT);
+    float flowInfluence        = lerp(_FlowInfluence,        mb.w, mT);
+
     // Brownian drift: a per-speck pseudo-random direction that re-rolls roughly once a second.
     float phase = _TimeSeconds + s.seed * 100.0;
     float phaseStep = floor(phase);
     float2 rnd = float2(hash11(s.seed + phaseStep), hash11(s.seed + phaseStep + 17.0)) * 2.0 - 1.0;
-    float2 brownian = rnd * _BrownianStrength;
+    float2 brownian = rnd * brownianStrength;
 
     // Disturbance: specks flow DOWN the signed-density gradient (toward lower R) — repelled by the
     // bumps a repulsion stamp raises (R > 0.5) and pulled into the wells an attraction stamp digs
@@ -108,7 +129,7 @@ void Advect(uint3 id : SV_DispatchThreadID)
 
             // Swirl: rotate the pull-away by a per-speck angle drawn from a min/max range, at ONE
             // rotational sense (no sign flip) so the field circulates coherently — a curl/vortex.
-            float swirl = lerp(_SwirlAngle.x, _SwirlAngle.y, hash11(s.seed * 53.1));
+            float swirl = lerp(swirlAngle.x, swirlAngle.y, hash11(s.seed * 53.1));
             float sc = sin(swirl);
             float cc = cos(swirl);
             disturbance = float2(radial.x * cc - radial.y * sc, radial.x * sc + radial.y * cc);
@@ -139,24 +160,24 @@ void Advect(uint3 id : SV_DispatchThreadID)
     }
 
     // Organic + swirl forces integrate through velocity + drag.
-    float2 accel = brownian + disturbance * _DisturbanceInfluence;
+    float2 accel = brownian + disturbance * disturbanceInfluence;
     s.velocity += accel * _DeltaTime;
 
     // Base drag, plus extra damping wherever the swirl is active, so the push settles quickly
     // (specks part, then ease back) instead of carrying momentum out of the wake.
     float disturbed = step(1e-8, dot(disturbance, disturbance));
-    s.velocity *= saturate(1.0 - (_Drag + _DisturbanceDamping * disturbed) * _DeltaTime);
+    s.velocity *= saturate(1.0 - (drag + disturbanceDamping * disturbed) * _DeltaTime);
 
     float2 preMovePos = s.position;
     s.position += s.velocity * _DeltaTime;
 
     // Flow rides the field directly (bounded advection, not an accumulating force) so it can't run away
     // at high influence and stays independent of the swirl damping.
-    s.position += flow * _FlowInfluence * _DeltaTime;
+    s.position += flow * flowInfluence * _DeltaTime;
 
     // Match the scenario's bulk move 1:1 (influence = parallax factor; 1 = exact): translate by the same
     // per-frame amount the content root moved. Not scaled by dt — it's already a per-frame delta.
-    s.position += _MotionDelta * _MotionInfluence;
+    s.position += _MotionDelta * motionInfluence;
 
     // Agitation heats the speck while the disturbance/flow act on it and cools once they pass — the
     // same gain whether the flush target is a palette tag or the flat disturbed tint.

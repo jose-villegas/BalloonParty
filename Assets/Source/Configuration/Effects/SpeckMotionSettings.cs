@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace BalloonParty.Configuration.Effects
@@ -15,6 +16,10 @@ namespace BalloonParty.Configuration.Effects
         Vector2 SwirlAngle { get; }
         float FlowInfluence { get; }
         float TeleportThreshold { get; }
+
+        /// <summary>Per-palette-colour motion overrides blended into by a speck's heat; colours without an entry
+        /// keep the base motion above. (TeleportThreshold is CPU-side and not per-colour.)</summary>
+        IReadOnlyList<SpeckMotionProfile> ColorProfiles { get; }
     }
 
     [Serializable]
@@ -41,6 +46,11 @@ namespace BalloonParty.Configuration.Effects
                  "Ascent snapping the root to its start height) and ignored, not matched.")]
         [SerializeField] private float _teleportThreshold = 1f;
 
+        [Tooltip("Per-palette-colour motion overrides. A speck showing a colour blends from the base motion " +
+                 "above toward the profile tagged with that colour, scaled by its heat; colours without a " +
+                 "profile keep the base motion.")]
+        [SerializeField] private SpeckMotionProfile[] _colorProfiles = Array.Empty<SpeckMotionProfile>();
+
         public float BrownianStrength => _brownianStrength;
         public float Drag => _drag;
         public float MotionInfluence => _motionInfluence;
@@ -49,5 +59,6 @@ namespace BalloonParty.Configuration.Effects
         public Vector2 SwirlAngle => _swirlAngle;
         public float FlowInfluence => _flowInfluence;
         public float TeleportThreshold => _teleportThreshold;
+        public IReadOnlyList<SpeckMotionProfile> ColorProfiles => _colorProfiles;
     }
 }

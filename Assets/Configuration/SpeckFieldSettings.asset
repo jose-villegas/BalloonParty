@@ -23,6 +23,15 @@ MonoBehaviour:
     _swirlAngle: {x: -120, y: 120}
     _flowInfluence: 0.35
     _teleportThreshold: 1
+    _colorProfiles:
+    - _colorMask: 16
+      _brownianStrength: 1
+      _drag: 5
+      _motionInfluence: 0
+      _disturbanceInfluence: 25
+      _disturbanceDamping: 0
+      _swirlAngle: {x: -120, y: 120}
+      _flowInfluence: 0.35
   _appearance:
     _speckSize: 0.03
     _trailLength: 0.065
