@@ -13,6 +13,7 @@ using Cysharp.Threading.Tasks;
 using DG.Tweening;
 using MessagePipe;
 using UnityEngine;
+using UniRx;
 using UnityEngine.Pool;
 using VContainer;
 using VContainer.Unity;
@@ -21,7 +22,7 @@ using BalloonParty.Configuration.Effects;
 
 namespace BalloonParty.Balloon.Controller
 {
-    internal class BalloonBalancer : IStartable, ITickable, IRunResettable
+    internal class BalloonBalancer : IStartable, ITickable, IRunResettable, IDisposable
     {
         // Sub-millimeter total travel (squared world units): below this a move is degenerate — a
         // (near-)zero-length path makes DOTween's ConvertToConstantPathPerc divide 0/0 into NaN positions.
@@ -52,6 +53,7 @@ namespace BalloonParty.Balloon.Controller
         private readonly List<RoamCandidate> _roamers = new();
         private readonly List<Vector2Int> _restingSlots = new();
         private readonly Dictionary<int, Vector3[]> _waypointBuffers = new();
+        private readonly CompositeDisposable _subscriptions = new();
 
         private bool _balanceRequested;
         private int _generation;
@@ -92,9 +94,14 @@ namespace BalloonParty.Balloon.Controller
 
         public void Start()
         {
-            _subscriber.Subscribe(_ => RequestBalance());
-            _projectileLoadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model);
-            _projectileDestroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
+            _subscriber.Subscribe(_ => RequestBalance()).AddTo(_subscriptions);
+            _projectileLoadedSubscriber.Subscribe(msg => _activeProjectile = msg.Model).AddTo(_subscriptions);
+            _projectileDestroyedSubscriber.Subscribe(_ => OnProjectileDestroyed()).AddTo(_subscriptions);
+        }
+
+        public void Dispose()
+        {
+            _subscriptions.Dispose();
         }
 
         // Pulses a rebalance at intervals while a projectile is airborne.

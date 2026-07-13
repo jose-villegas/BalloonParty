@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using BalloonParty.Prediction;
 using BalloonParty.Projectile;
@@ -17,7 +18,7 @@ using VContainer.Unity;
 
 namespace BalloonParty.Thrower
 {
-    internal class ThrowerController : IStartable, ITickable
+    internal class ThrowerController : IStartable, ITickable, IDisposable
     {
         private readonly IGameConfiguration _config;
         private readonly IPublisher<ProjectileLoadedMessage> _loadedPublisher;
@@ -34,6 +35,7 @@ namespace BalloonParty.Thrower
         private readonly ThrowerSettings _settings;
         private readonly ThrowerView _view;
         private readonly ProjectilePositionProvider _positionProvider;
+        private readonly CompositeDisposable _subscriptions = new();
 
         // Cached since Object.name allocates; Reload() hits this twice per shot.
         private readonly string _projectilePoolKey;
@@ -91,24 +93,30 @@ namespace BalloonParty.Thrower
 
             // The spent shot scales away (returns to the pool only when that finishes) while a fresh instance
             // loads at once — so the thrower never reuses a shot still mid-disappear.
-            _destroyedSubscriber.Subscribe(_ => SwapActiveProjectile());
-            _levelUpDismissedSubscriber.Subscribe(_ => SwapActiveProjectile());
+            _destroyedSubscriber.Subscribe(_ => SwapActiveProjectile()).AddTo(_subscriptions);
+            _levelUpDismissedSubscriber.Subscribe(_ => SwapActiveProjectile()).AddTo(_subscriptions);
 
             // A shot fired in the very frame the level-up triggers never takes a physics step before the
             // freeze — un-fire it, or the dismissal swap scale-drifts it from the muzzle like a phantom.
-            _levelUpSubscriber.Subscribe(_ => UnfireIfNeverFlown());
+            _levelUpSubscriber.Subscribe(_ => UnfireIfNeverFlown()).AddTo(_subscriptions);
 
             // Restart carries over the old projectile; reload so it resets to config defaults.
-            _resetSubscriber.Subscribe(_ => Reload());
-            _boardClearSubscriber.Subscribe(_ => Reload());
+            _resetSubscriber.Subscribe(_ => Reload()).AddTo(_subscriptions);
+            _boardClearSubscriber.Subscribe(_ => Reload()).AddTo(_subscriptions);
 
             // A projectile fired just before loss keeps flying on physics alone; scale it away.
-            _gameOverSubscriber.Subscribe(_ => ScaleAwayActiveProjectile());
+            _gameOverSubscriber.Subscribe(_ => ScaleAwayActiveProjectile()).AddTo(_subscriptions);
 
             Navigation.Current
                 .Where(state => state == NavigationState.Game)
                 .Take(1)
-                .Subscribe(_ => PlayEntrance());
+                .Subscribe(_ => PlayEntrance())
+                .AddTo(_subscriptions);
+        }
+
+        public void Dispose()
+        {
+            _subscriptions.Dispose();
         }
 
         public void Tick()

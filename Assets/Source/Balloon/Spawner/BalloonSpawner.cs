@@ -15,6 +15,7 @@ using BalloonParty.Slots.Spawner;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
 using MessagePipe;
+using UniRx;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -36,6 +37,7 @@ namespace BalloonParty.Balloon.Spawner
         private readonly IActiveLevelParameters _levelParams;
         private readonly ILevelPacingConfiguration _pacing;
         private readonly CancellationTokenSource _cts = new();
+        private readonly CompositeDisposable _subscriptions = new();
         private readonly ISubscriber<ProjectileDestroyedMessage> _destroyedSubscriber;
         private readonly ISubscriber<ActorHitMessage> _hitSubscriber;
         private readonly ISubscriber<ScoreLevelUpMessage> _levelUpSubscriber;
@@ -110,12 +112,12 @@ namespace BalloonParty.Balloon.Spawner
                     new BalloonPoolChannel(_resolver, entry.Prefab));
             }
 
-            _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount));
-            _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed());
-            _hitSubscriber.Subscribe(OnActorHit);
+            _lineSubscriber.Subscribe(msg => OnSpawnLinesRequested(msg.LineCount)).AddTo(_subscriptions);
+            _destroyedSubscriber.Subscribe(_ => OnProjectileDestroyed()).AddTo(_subscriptions);
+            _hitSubscriber.Subscribe(OnActorHit).AddTo(_subscriptions);
 
             // Reset per level-up so FirstSpawnTurn is a fresh per-level grace period.
-            _levelUpSubscriber.Subscribe(_ => _turnCount = 0);
+            _levelUpSubscriber.Subscribe(_ => _turnCount = 0).AddTo(_subscriptions);
 
             PrewarmThenFlagAsync(_cts.Token).Forget();
         }
@@ -144,6 +146,7 @@ namespace BalloonParty.Balloon.Spawner
             // The generation guard only covers run resets, not scope teardown.
             _cts.Cancel();
             _cts.Dispose();
+            _subscriptions.Dispose();
         }
 
         private async UniTaskVoid PrewarmThenFlagAsync(CancellationToken ct)
