@@ -15,17 +15,21 @@ MonoBehaviour:
   _colors:
   - _name: Green
     _color: {r: 0.46666667, g: 0.8666667, b: 0.46666667, a: 1}
+    _presentationOnly: 0
   - _name: Red
     _color: {r: 1, g: 0.4117647, b: 0.38039216, a: 1}
+    _presentationOnly: 0
   - _name: Blue
     _color: {r: 0.011764707, g: 0.6627451, b: 0.9568628, a: 1}
+    _presentationOnly: 0
   - _name: Purple
     _color: {r: 0.6117647, g: 0.15294118, b: 0.6901961, a: 1}
+    _presentationOnly: 0
   - _name: Tough
     _color: {r: 0.3, g: 0.3, b: 0.3, a: 1}
     _presentationOnly: 1
   - _name: Sparks
-    _color: {r: 1, g: 1, b: 1, a: 1}
+    _color: {r: 1, g: 0.979328, b: 0.740566, a: 1}
     _presentationOnly: 1
   - _name: Unbreakable
     _color: {r: 1, g: 0, b: 0, a: 1}

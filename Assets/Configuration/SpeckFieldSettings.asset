@@ -33,13 +33,21 @@ MonoBehaviour:
       _swirlAngle: {x: -120, y: 120}
       _flowInfluence: 0.125
     - _colorMask: 15
-      _brownianStrength: 0.8
+      _brownianStrength: 1.5
       _drag: 0.5
       _motionInfluence: 1
-      _disturbanceInfluence: 21.5
+      _disturbanceInfluence: 25
       _disturbanceDamping: 3.25
-      _swirlAngle: {x: -270, y: 270}
-      _flowInfluence: 2.25
+      _swirlAngle: {x: -180, y: 180}
+      _flowInfluence: 1.95
+    - _colorMask: 32
+      _brownianStrength: 1.5
+      _drag: 0.1
+      _motionInfluence: 1
+      _disturbanceInfluence: 12
+      _disturbanceDamping: 3.25
+      _swirlAngle: {x: -180, y: 180}
+      _flowInfluence: 1.75
   _appearance:
     _speckSize: 0.03
     _trailLength: 0.065
@@ -74,6 +82,16 @@ MonoBehaviour:
       _scaleHold: {x: 0, y: 0}
       _fadeIn: 0.5
       _fadeOut: 0.075
+    - _colorMask: 32
+      _speckSize: 0.045
+      _trailLength: 0.5
+      _trailMax: 0.7
+      _lifetimeRange: {x: 0.1, y: 0.7}
+      _scaleRange: {x: 0.1, y: 5}
+      _scalePulses: {x: 0, y: 0}
+      _scaleHold: {x: 0, y: 0}
+      _fadeIn: 0
+      _fadeOut: 0.2
   _spawning:
     _spawnAllImmediately: 0
     _initialActiveCount: 0
@@ -101,7 +119,7 @@ MonoBehaviour:
         outWeight: 0
       - serializedVersion: 3
         time: 5
-        value: 0.125
+        value: 0.0625
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -110,7 +128,7 @@ MonoBehaviour:
         outWeight: 0
       - serializedVersion: 3
         time: 15
-        value: 0.03125
+        value: 0.015625
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -120,8 +138,8 @@ MonoBehaviour:
       - serializedVersion: 3
         time: 30
         value: 0
-        inSlope: -0.008091616
-        outSlope: -0.008091616
+        inSlope: 0
+        outSlope: 0
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334

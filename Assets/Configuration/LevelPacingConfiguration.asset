@@ -176,7 +176,7 @@ MonoBehaviour:
           m_RotationOrder: 4
       _itemWeights: []
       _gridActorGates: []
-      _allowedColorsMask: 1
+      _allowedColorsMask: 3
   - _fromLevel: 2
     _toLevel: 2
     _parameters:
@@ -1731,7 +1731,7 @@ MonoBehaviour:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 700
+        value: 7000
         inSlope: 0
         outSlope: 0
         tangentMode: 34
