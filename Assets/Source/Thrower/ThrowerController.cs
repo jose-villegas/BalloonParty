@@ -231,6 +231,7 @@ namespace BalloonParty.Thrower
             _activeProjectile.Direction = _direction;
             _positionProvider.SetFree(true);
             _view.ClearTrace();
+            _view.PlayRecoil(_direction);
         }
 
         private void UpdateDirection()

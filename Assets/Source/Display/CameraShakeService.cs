@@ -16,12 +16,18 @@ namespace BalloonParty.Display
         [SerializeField] private float _strength = 0.18f;
         [SerializeField] private int _vibrato = 14;
 
+        [Header("Fire recoil")]
+        [SerializeField] private float _recoilStrength = 0.08f;
+        [SerializeField] private float _recoilDuration = 0.15f;
+        [SerializeField] private int _recoilVibrato = 8;
+
         [Inject] private ICinematicState _cinematic;
 
         private Vector3 _offset;
         private Vector3 _applied;
         private Tween _shakeTween;
         private IDisposable _subscription;
+        private IDisposable _recoilSubscription;
 
         private void Awake()
         {
@@ -46,13 +52,17 @@ namespace BalloonParty.Display
         private void OnDestroy()
         {
             _subscription?.Dispose();
+            _recoilSubscription?.Dispose();
             _shakeTween?.Kill();
         }
 
         [Inject]
-        public void Construct(ISubscriber<SpawnBlockedMessage> spawnBlockedSubscriber)
+        public void Construct(
+            ISubscriber<SpawnBlockedMessage> spawnBlockedSubscriber,
+            ISubscriber<ProjectileFiredMessage> firedSubscriber)
         {
             _subscription = spawnBlockedSubscriber.Subscribe(_ => Shake());
+            _recoilSubscription = firedSubscriber.Subscribe(msg => Recoil(msg.Direction));
         }
 
         private void Shake()
@@ -66,6 +76,22 @@ namespace BalloonParty.Display
             _shakeTween?.Kill();
             _offset = Vector3.zero;
             _shakeTween = DOTween.Shake(() => _offset, v => _offset = v, _duration, _strength, _vibrato)
+                .SetUpdate(true)
+                .OnComplete(() => _offset = Vector3.zero);
+        }
+
+        // A directional kick opposite the fire heading — the camera recoil when a shot is fired.
+        private void Recoil(Vector3 fireDirection)
+        {
+            if (_camera == null || _cinematic.Has(CinematicTraits.BlocksShake))
+            {
+                return;
+            }
+
+            _shakeTween?.Kill();
+            _offset = Vector3.zero;
+            var punch = -fireDirection.normalized * _recoilStrength;
+            _shakeTween = DOTween.Punch(() => _offset, v => _offset = v, punch, _recoilDuration, _recoilVibrato)
                 .SetUpdate(true)
                 .OnComplete(() => _offset = Vector3.zero);
         }

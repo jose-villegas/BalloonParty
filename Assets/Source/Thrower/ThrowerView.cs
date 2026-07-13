@@ -11,8 +11,14 @@ namespace BalloonParty.Thrower
         [SerializeField] private float _entranceDuration = 1f;
         [SerializeField] private Vector3 _entranceOffset = new(0f, 0.5f, 0f);
 
+        [Header("Fire recoil")]
+        [SerializeField] private float _recoilDistance = 0.15f;
+        [SerializeField] private float _recoilDuration = 0.18f;
+        [SerializeField] private int _recoilVibrato = 8;
+
         private PredictionTraceView _traceView;
         private Camera _camera;
+        private Tween _recoilTween;
 
         public Vector3 Position
         {
@@ -41,6 +47,16 @@ namespace BalloonParty.Thrower
         public void ClearTrace()
         {
             _traceView?.Clear();
+        }
+
+        // A short positional kick back along the fire heading, settling to rest. Complete() any in-flight kick
+        // first so rapid fire doesn't drift the rest position; SetLink kills it if the thrower is destroyed.
+        public void PlayRecoil(Vector3 fireDirection)
+        {
+            _recoilTween?.Complete();
+            _recoilTween = transform
+                .DOPunchPosition(-fireDirection.normalized * _recoilDistance, _recoilDuration, _recoilVibrato)
+                .SetLink(gameObject);
         }
 
         public void RotateTo(Vector3 direction)
