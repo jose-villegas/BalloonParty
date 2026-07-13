@@ -18,6 +18,10 @@ namespace BalloonParty.Configuration.Level
         [Tooltip("Dimensionless multiplier over the points-required-for-level formula. Flat 1.0 = no effect.")]
         [SerializeField] private AnimationCurve _thresholdModifier = AnimationCurve.Constant(1, 100, 1f);
 
+        [Tooltip("Round each level's points-required to the nearest multiple of this (e.g. 50 or 70) for " +
+                 "clean targets. 0 or 1 = no rounding.")]
+        [SerializeField] private int _thresholdRounding = 50;
+
         public IReadOnlyList<LevelRangeEntry> Ranges => _ranges;
 
         private void OnValidate()
@@ -35,6 +39,17 @@ namespace BalloonParty.Configuration.Level
         {
             var value = _thresholdModifier.Evaluate(level);
             return value > 0f ? value : 1f;
+        }
+
+        // Snap to the nearest multiple, floored at one multiple so a level never rounds to zero.
+        public int RoundThreshold(int rawPoints)
+        {
+            if (_thresholdRounding <= 1)
+            {
+                return rawPoints;
+            }
+
+            return Mathf.Max(_thresholdRounding, Mathf.RoundToInt(rawPoints / (float)_thresholdRounding) * _thresholdRounding);
         }
 
         public int MaxConcurrentBalloons(BalloonType type, int columns)
@@ -161,7 +176,7 @@ namespace BalloonParty.Configuration.Level
 
             for (var level = 1; level <= lastLevel; level++)
             {
-                var composed = Mathf.RoundToInt(BaseFormula(level) * ThresholdModifier(level));
+                var composed = RoundThreshold(Mathf.RoundToInt(BaseFormula(level) * ThresholdModifier(level)));
                 if (composed <= 0)
                 {
                     Debug.LogWarning(

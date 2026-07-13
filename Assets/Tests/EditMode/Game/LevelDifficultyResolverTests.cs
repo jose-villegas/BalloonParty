@@ -37,6 +37,8 @@ namespace BalloonParty.Tests.Game
         {
             _pacing = Substitute.For<ILevelPacingConfiguration>();
             _pacing.ThresholdModifier(Arg.Any<int>()).Returns(1f);
+            // Identity rounding by default — tests that care about snapping stub it themselves.
+            _pacing.RoundThreshold(Arg.Any<int>()).Returns(ci => ci.Arg<int>());
 
             _balloonsConfig = Substitute.For<IBalloonsConfiguration>();
             _itemConfig = Substitute.For<IItemConfiguration>();
