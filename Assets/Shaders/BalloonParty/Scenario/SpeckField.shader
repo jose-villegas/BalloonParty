@@ -73,6 +73,13 @@ Shader "BalloonParty/Scenario/SpeckField"
             float _TrailMax;
             int _ActiveCount;
 
+            // Per-palette-colour look overrides a speck blends toward by its heat (slot = paletteIndex).
+            // A=(size, trailLength, trailMax, fadeIn), B=(fadeOut, minScale, maxScale, pulseMin), C=(pulseMax…).
+            float4 _SpeckLookA[16];
+            float4 _SpeckLookB[16];
+            float4 _SpeckLookC[16];
+            int _SpeckLookCount;
+
             struct v2f
             {
                 float4 pos   : SV_POSITION;
@@ -115,30 +122,48 @@ Shader "BalloonParty/Scenario/SpeckField"
                 Speck s = _Specks[speckIndex];
                 float2 corner = Corners[vid % 6u];
 
-                // Life fade: ramp in over _FadeIn, out over _FadeOut (fractions of lifetime), driving both
+                // Blend the render look from the base toward this colour's profile by the speck's heat, so a
+                // coloured speck also takes on that colour's look. paletteIndex < 0 (uncoloured) stays base;
+                // uncovered colours resolve to base values, so their lerp is a no-op.
+                int lookSlot = clamp((int)(s.paletteIndex + 0.5), 0, 15);
+                float lookT = (s.paletteIndex >= -0.5 && lookSlot < _SpeckLookCount) ? saturate(s.heat) : 0.0;
+                float4 la = _SpeckLookA[lookSlot];
+                float4 lb = _SpeckLookB[lookSlot];
+                float4 lc = _SpeckLookC[lookSlot];
+                float lSize        = lerp(_SpeckSize,          la.x, lookT);
+                float lTrailLength = lerp(_TrailLength,        la.y, lookT);
+                float lTrailMax    = lerp(_TrailMax,           la.z, lookT);
+                float lFadeIn      = lerp(_FadeIn,             la.w, lookT);
+                float lFadeOut     = lerp(_FadeOut,            lb.x, lookT);
+                float lMinScale    = lerp(_MinScale,           lb.y, lookT);
+                float lMaxScale    = lerp(_MaxScale,           lb.z, lookT);
+                float lPulseMin    = lerp(_ScalePulseSpeed.x,  lb.w, lookT);
+                float lPulseMax    = lerp(_ScalePulseSpeed.y,  lc.x, lookT);
+
+                // Life fade: ramp in over fadeIn, out over fadeOut (fractions of lifetime), driving both
                 // alpha and scale so specks pop in and shrink away.
                 float lifeT = s.lifetime > 0.0 ? saturate(s.age / s.lifetime) : 1.0;
-                float fadeIn = _FadeIn > 0.0 ? saturate(lifeT / _FadeIn) : 1.0;
-                float fadeOut = _FadeOut > 0.0 ? saturate((1.0 - lifeT) / _FadeOut) : 1.0;
+                float fadeIn = lFadeIn > 0.0 ? saturate(lifeT / lFadeIn) : 1.0;
+                float fadeOut = lFadeOut > 0.0 ? saturate((1.0 - lifeT) / lFadeOut) : 1.0;
                 float fade = fadeIn * fadeOut;
 
                 // Scale oscillation over time — some specks grow while others shrink, faking gentle drift
                 // toward/away from the camera; the scale analog of the Brownian motion. Per-speck phase
                 // AND rate (both seed-derived) so they desync in size and speed.
-                float pulseSpeed = lerp(_ScalePulseSpeed.x, _ScalePulseSpeed.y, hash11(s.seed * 91.7));
+                float pulseSpeed = lerp(lPulseMin, lPulseMax, hash11(s.seed * 91.7));
                 float scaleT = 0.5 + 0.5 * sin(_SpeckTime * pulseSpeed + s.seed * 6.2831853);
-                float baseScale = lerp(_MinScale, _MaxScale, scaleT);
-                float size = _SpeckSize * baseScale * fade;
+                float baseScale = lerp(lMinScale, lMaxScale, scaleT);
+                float size = lSize * baseScale * fade;
 
-                // Trail: stretch the quad along the speck's motion, scaled by speed (capped by _TrailMax).
+                // Trail: stretch the quad along the speck's motion, scaled by speed (capped by trailMax).
                 // Below a tiny speed it stays a round dot (velocity direction is undefined there).
                 float speed = length(s.effectiveVel);
                 float2 along = float2(0.0, 1.0);
                 float length2 = size;
-                if (speed > 1e-4 && _TrailLength > 0.0)
+                if (speed > 1e-4 && lTrailLength > 0.0)
                 {
                     along = s.effectiveVel / speed;
-                    length2 = size + min(speed * _TrailLength, _TrailMax);
+                    length2 = size + min(speed * lTrailLength, lTrailMax);
                 }
                 float2 across = float2(along.y, -along.x);
 

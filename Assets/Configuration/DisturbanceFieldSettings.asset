@@ -19,7 +19,7 @@ MonoBehaviour:
   _diffusionTickInterval: 0.05
   _windSpeed: 0.5
   _windSmoothing: 2
-  _windDecay: 1
+  _windDecay: 10
   _pressureStrength: 0.9
   _displaceAmount: 0.9
   _displaceDecay: 0.3
@@ -73,13 +73,8 @@ MonoBehaviour:
     Strength: 0
     Duration: 0
     Interval: 0.6
-  - Sources: 1024
-    Radius: 1
-    Strength: -1
-    Duration: 0
-    Interval: 0.2
   - Sources: 2048
-    Radius: 0.1
-    Strength: 50
-    Duration: 0
+    Radius: 0.25
+    Strength: 0.35
+    Duration: 2
     Interval: 3

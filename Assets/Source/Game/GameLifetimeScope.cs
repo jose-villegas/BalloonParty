@@ -32,6 +32,7 @@ namespace BalloonParty.Game
         [SerializeField] private PuffCloudSettings _puffCloudSettings;
         [SerializeField] private BushSettings _bushSettings;
         [SerializeField] private DisturbanceFieldSettings _disturbanceFieldSettings;
+        [SerializeField] private SpeckFieldSettings _speckFieldSettings;
         [SerializeField] private LevelPacingConfiguration _levelPacingConfiguration;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
@@ -73,6 +74,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IPuffCloudSettings>(_puffCloudSettings);
             builder.RegisterInstance<IBushSettings>(_bushSettings);
             builder.RegisterInstance<IDisturbanceFieldSettings>(_disturbanceFieldSettings);
+            builder.RegisterInstance<ISpeckFieldSettings>(_speckFieldSettings);
             builder.RegisterInstance<ILevelPacingConfiguration>(_levelPacingConfiguration);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);

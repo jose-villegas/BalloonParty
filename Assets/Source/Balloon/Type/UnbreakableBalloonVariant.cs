@@ -8,6 +8,9 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Display;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
+using BalloonParty.Shared.Messages;
+using BalloonParty.Slots.Actor;
+using MessagePipe;
 using UniRx;
 using UnityEngine;
 using VContainer;
@@ -39,6 +42,7 @@ namespace BalloonParty.Balloon.Type
         private SceneCaptureService _sceneCapture;
         private DisturbanceFieldService _disturbanceField;
         private IGamePalette _palette;
+        private IPublisher<SpeckSpawnRequestMessage> _speckPublisher;
 
         private void Awake()
         {
@@ -96,11 +100,13 @@ namespace BalloonParty.Balloon.Type
 
         [Inject]
         private void Construct(
-            SceneCaptureService sceneCapture, DisturbanceFieldService disturbanceField, IGamePalette palette)
+            SceneCaptureService sceneCapture, DisturbanceFieldService disturbanceField, IGamePalette palette,
+            IPublisher<SpeckSpawnRequestMessage> speckPublisher)
         {
             _sceneCapture = sceneCapture;
             _disturbanceField = disturbanceField;
             _palette = palette;
+            _speckPublisher = speckPublisher;
 
             // Settle the ref-count for an instance injected while already active.
             if (isActiveAndEnabled)
@@ -117,9 +123,8 @@ namespace BalloonParty.Balloon.Type
             ComputeRadiusIfNeeded();
             PushSphereState(_instancePhase, false);
 
-            // Two-phase field rhythm (cadence + force both from the profiles): a frequent gentle gather
-            // draws specks in, an occasional strong burst shoves them out — tagged the Unbreakable color.
-            StartPulse(StampSource.UnbreakableGather, disposables);
+            // A periodic burst (cadence + force from the profile) shoves the field's clouds out — tagged the
+            // Unbreakable color — and enables a matching puff of specks at the same point.
             StartPulse(StampSource.UnbreakableBurst, disposables);
         }
 
@@ -185,6 +190,8 @@ namespace BalloonParty.Balloon.Type
             _disturbanceField.Stamp(
                 transform.position, profile.Radius, profile.Strength, Vector2.zero, profile.Duration,
                 _palette.PaletteIndexOf(GamePalette.UnbreakableColorId), reportImpact: false);
+
+            _speckPublisher?.Publish(new SpeckSpawnRequestMessage(SpeckSource.UnbreakableBurst, transform.position));
         }
 
         private void ComputeRadiusIfNeeded()

@@ -1,0 +1,81 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8402b98a52dd4d94b518225ddd3d958e, type: 3}
+  m_Name: SpeckFieldSettings
+  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Configuration.Effects.SpeckFieldSettings
+  _count: 4096
+  _regionSize: {x: 6, y: 13}
+  _motion:
+    _brownianStrength: 0.6
+    _drag: 2
+    _motionInfluence: 1.25
+    _disturbanceInfluence: 23.5
+    _disturbanceDamping: 0.25
+    _swirlAngle: {x: -120, y: 120}
+    _flowInfluence: 0.35
+    _teleportThreshold: 1
+  _appearance:
+    _speckSize: 0.03
+    _trailLength: 0.065
+    _trailMax: 5
+    _lifetimeRange: {x: 2, y: 10}
+    _scaleRange: {x: 0.5, y: 5}
+    _scalePulseSpeed: {x: 0.25, y: 2.15}
+    _fadeIn: 0.5
+    _fadeOut: 0.5
+    _heatGain: 4
+    _heatDecay: 1.5
+    _colorLerpRate: 4
+    _colorProfiles: []
+  _spawning:
+    _spawnAllImmediately: 0
+    _initialActiveCount: 0
+    _speckProfiles:
+    - Sources: 1
+      Count: 16
+      Spread: 0.1
+    - Sources: 2
+      Count: 24
+      Spread: 0.35
+    _reductionCurve:
+      serializedVersion: 2
+      m_Curve:
+      - serializedVersion: 3
+        time: 0
+        value: 1
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 5
+        value: 0.125
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0
+        outWeight: 0
+      - serializedVersion: 3
+        time: 15
+        value: 0.03125
+        inSlope: 0
+        outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4

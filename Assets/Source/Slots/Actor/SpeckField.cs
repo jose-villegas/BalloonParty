@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Messages;
@@ -65,92 +66,26 @@ namespace BalloonParty.Slots.Actor
         private static readonly int SpeckPaletteId = Shader.PropertyToID("_SpeckPalette");
         private static readonly int SpeckPaletteCountId = Shader.PropertyToID("_SpeckPaletteCount");
         private static readonly int ActiveCountId = Shader.PropertyToID("_ActiveCount");
+        private static readonly int SpeckLookAId = Shader.PropertyToID("_SpeckLookA");
+        private static readonly int SpeckLookBId = Shader.PropertyToID("_SpeckLookB");
+        private static readonly int SpeckLookCId = Shader.PropertyToID("_SpeckLookC");
+        private static readonly int SpeckLookCountId = Shader.PropertyToID("_SpeckLookCount");
 
         [SerializeField] private ComputeShader _compute;
         [SerializeField] private Material _renderMaterial;
-        [SerializeField] private int _count = 4096;
-        [SerializeField] private Vector2 _regionSize = new(30f, 20f);
-        [SerializeField] private float _brownianStrength = 0.6f;
-        [SerializeField] private float _drag = 2f;
-        [SerializeField] private float _motionInfluence = 1f;
-        [SerializeField] private float _disturbanceInfluence = 1f;
 
-        [Tooltip("Extra velocity damping applied where the disturbance is active, so the push settles.")]
-        [SerializeField] private float _disturbanceDamping = 4f;
-
-        [Tooltip("Per-speck swirl angle range (degrees) rotating the disturbance push — 0 = straight out, " +
-                 "90 = pure orbit. Same rotational sense for all (a coherent vortex); each picks a random " +
-                 "angle in this range.")]
-        [SerializeField] private Vector2 _swirlAngle = new(30f, 90f);
-
-        [Tooltip("Speed specks advance along the disturbance's own motion (the white direction), so the " +
-                 "vortex travels with the flow. Bounded advection — high values go faster but don't run away.")]
-        [SerializeField] private float _flowInfluence = 1f;
-
-        [SerializeField] private float _speckSize = 0.03f;
-
-        [Tooltip("Stretches each speck into a streak along its motion, scaled by speed. 0 = round dots.")]
-        [SerializeField] private float _trailLength;
-
-        [Tooltip("Max streak length added by the trail (world units), so a fast ascend can't over-stretch.")]
-        [SerializeField] private float _trailMax = 0.5f;
-
-        [Tooltip("Per-speck lifetime range (seconds). Each speck fades in, lives, fades out, then respawns.")]
-        [SerializeField] private Vector2 _lifetimeRange = new(2f, 6f);
-
-        [Tooltip("Per-speck scale multiplier range on _speckSize, oscillated over time for size variety.")]
-        [SerializeField] private Vector2 _scaleRange = new(0.5f, 1.5f);
-
-        [Tooltip("Per-speck scale-oscillation rate range; each speck picks a random speed in it, so they " +
-                 "pulse out of sync (fake toward/away drift).")]
-        [SerializeField] private Vector2 _scalePulseSpeed = new(0.4f, 1f);
-
-        [Tooltip("Fraction of life spent fading/scaling in.")]
-        [Range(0f, 0.5f)] [SerializeField] private float _fadeIn = 0.15f;
-
-        [Tooltip("Fraction of life spent fading/scaling out.")]
-        [Range(0f, 0.5f)] [SerializeField] private float _fadeOut = 0.25f;
-
-        [Tooltip("Per-frame root move (world units) above which it's treated as a teleport (e.g. the " +
-                 "Ascent snapping the root to its start height) and ignored, not matched.")]
-        [SerializeField] private float _teleportThreshold = 1f;
-
-        [Tooltip("How fast a disturbed speck heats toward the material's Disturbed Tint, per unit agitation per second. 0 = no tinting.")]
-        [SerializeField] private float _heatGain = 4f;
-
-        [Tooltip("How fast the heat cools once the disturbance passes, per second — the return to the base color.")]
-        [SerializeField] private float _heatDecay = 1.5f;
-
-        [Tooltip("Per-second ramp of a speck's crossfade when its palette tag changes color (e.g. the rainbow cycling). Higher = snappier; ~4 crossfades in a quarter second.")]
-        [SerializeField] private float _colorLerpRate = 4f;
-
-        [Header("Pop activation")]
-        [Tooltip("Specks active at the start. The buffer size (Count) is the cap; each pop enables more " +
-                 "up to the current ceiling. 0 = the field starts empty and builds entirely from pops.")]
-        [SerializeField] private int _initialActiveCount;
-
-        [Tooltip("Specks a single balloon pop enables, seeded at the pop point (clamped to the ceiling's " +
-                 "remaining room).")]
-        [SerializeField] private int _specksPerPop = 32;
-
-        [Tooltip("World-space radius the enabled specks scatter within around the pop point.")]
-        [SerializeField] private float _popSpread = 0.4f;
-
-        [Tooltip("The active ceiling follows this curve: X = seconds since the last burst (its last key is " +
-                 "the effective duration; the ceiling holds past it), Y = fraction of Count allowed active " +
-                 "(1 = full). Each burst restarts the curve at 0; between bursts the falling ceiling thins " +
-                 "the field, so rapid pops read as chaos.")]
-        [SerializeField] private AnimationCurve _reductionCurve = AnimationCurve.Linear(0f, 1f, 3f, 0.3f);
-
+        [Inject] private ISpeckFieldSettings _settings;
         [Inject] private ScenarioContentRoot _scenarioRoot;
         [Inject] private DisturbanceFieldService _disturbance;
         [Inject] private IGamePalette _palette;
         [Inject] private ISubscriber<ActorHitMessage> _hitSubscriber;
+        [Inject] private ISubscriber<SpeckSpawnRequestMessage> _requestSubscriber;
 
-        private readonly List<Vector2> _pendingPops = new();
+        private readonly List<PendingSpeck> _pending = new();
 
         private ComputeBuffer _speckBuffer;
         private Mesh _mesh;
+        private int _count;
         private int _kernel;
         private Vector2 _lastRootPos;
         private Vector2 _motionDelta;
@@ -160,15 +95,22 @@ namespace BalloonParty.Slots.Actor
         private int _ceiling;
         private float _reductionElapsed;
         private Speck[] _burst;
+        private Vector4[] _lookA;
+        private Vector4[] _lookB;
+        private Vector4[] _lookC;
+        private int _lookCount;
         private IDisposable _hitSubscription;
+        private IDisposable _requestSubscription;
 
         private void Start()
         {
-            if (_compute == null || _renderMaterial == null || _count <= 0)
+            if (_compute == null || _renderMaterial == null || _settings == null || _settings.Count <= 0)
             {
                 enabled = false;
                 return;
             }
+
+            _count = _settings.Count;
 
             // The sim needs compute; the render reads the speck buffer in the vertex stage. Both are gated
             // by the graphics API — GLES3.0/2.0 lack them, so a mobile build must use Vulkan or Metal.
@@ -196,17 +138,21 @@ namespace BalloonParty.Slots.Actor
             // Sorting Layer / Order to sit under the UI but over the background.
             BuildRenderMesh();
 
+            _lookA = new Vector4[MaxPaletteSlots];
+            _lookB = new Vector4[MaxPaletteSlots];
+            _lookC = new Vector4[MaxPaletteSlots];
+
             PushPalette();
             PushStaticParams();
 
-            _specksPerPop = Mathf.Clamp(_specksPerPop, 1, _count);
-            _burst = new Speck[_specksPerPop];
-            _activeCount = Mathf.Clamp(_initialActiveCount, 0, _count);
+            _burst = new Speck[Mathf.Clamp(MaxProfileCount(), 1, _count)];
+            _activeCount = _settings.Spawning.SpawnAllImmediately ? _count : Mathf.Clamp(_settings.Spawning.InitialActiveCount, 0, _count);
             _ceiling = _count;
 
-            // Pops enable bursts at the pop point and restart the reduction curve; between bursts the curve
-            // drains the field — so the balance of pops vs the drain is the visual feedback.
+            // Pops (and explicit spawn requests) enable bursts and restart the reduction curve; between
+            // bursts the curve drains the field — so the balance of spawns vs the drain is the feedback.
             _hitSubscription = _hitSubscriber.Subscribe(OnActorHit);
+            _requestSubscription = _requestSubscriber.Subscribe(OnSpawnRequest);
 
             _ready = true;
         }
@@ -232,9 +178,9 @@ namespace BalloonParty.Slots.Actor
             PushStaticParams();
 #endif
 
-            // A burst this frame restarts the reduction curve before the ceiling is recomputed, so the pop
+            // A burst this frame restarts the reduction curve before the ceiling is recomputed, so the spawn
             // fills toward a refreshed (full) ceiling rather than the just-drained one.
-            if (_pendingPops.Count > 0)
+            if (_pending.Count > 0)
             {
                 _reductionElapsed = 0f;
             }
@@ -250,6 +196,8 @@ namespace BalloonParty.Slots.Actor
         {
             _hitSubscription?.Dispose();
             _hitSubscription = null;
+            _requestSubscription?.Dispose();
+            _requestSubscription = null;
             _speckBuffer?.Release();
             _speckBuffer = null;
             if (_mesh != null)
@@ -293,30 +241,82 @@ namespace BalloonParty.Slots.Actor
         // dispatches, so per-frame re-pushing them was redundant.
         private void PushStaticParams()
         {
+            var motion = _settings.Motion;
+            var look = _settings.Appearance;
+            var region = _settings.RegionSize;
+            var lifetime = look.LifetimeRange;
+            var scale = look.ScaleRange;
+
             _compute.SetBuffer(_kernel, SpecksId, _speckBuffer);
-            _compute.SetFloat(BrownianStrengthId, _brownianStrength);
-            _compute.SetFloat(DragId, _drag);
-            _compute.SetFloat(MotionInfluenceId, _motionInfluence);
-            _compute.SetVector(RegionMinId, _regionSize * -0.5f);
-            _compute.SetVector(RegionSizeId, _regionSize);
-            _compute.SetFloat(MinLifetimeId, _lifetimeRange.x);
-            _compute.SetFloat(MaxLifetimeId, _lifetimeRange.y);
-            _compute.SetFloat(DisturbanceDampingId, _disturbanceDamping);
-            _compute.SetVector(SwirlAngleId, _swirlAngle * Mathf.Deg2Rad);
-            _compute.SetFloat(FlowInfluenceId, _flowInfluence);
-            _compute.SetFloat(HeatGainId, _heatGain);
-            _compute.SetFloat(HeatDecayId, _heatDecay);
-            _compute.SetFloat(ColorLerpRateId, _colorLerpRate);
+            _compute.SetFloat(BrownianStrengthId, motion.BrownianStrength);
+            _compute.SetFloat(DragId, motion.Drag);
+            _compute.SetFloat(MotionInfluenceId, motion.MotionInfluence);
+            _compute.SetVector(RegionMinId, region * -0.5f);
+            _compute.SetVector(RegionSizeId, region);
+            _compute.SetFloat(MinLifetimeId, lifetime.x);
+            _compute.SetFloat(MaxLifetimeId, lifetime.y);
+            _compute.SetFloat(DisturbanceDampingId, motion.DisturbanceDamping);
+            _compute.SetVector(SwirlAngleId, motion.SwirlAngle * Mathf.Deg2Rad);
+            _compute.SetFloat(FlowInfluenceId, motion.FlowInfluence);
+            _compute.SetFloat(HeatGainId, look.HeatGain);
+            _compute.SetFloat(HeatDecayId, look.HeatDecay);
+            _compute.SetFloat(ColorLerpRateId, look.ColorLerpRate);
 
             _renderMaterial.SetBuffer(SpecksId, _speckBuffer);
-            _renderMaterial.SetFloat(SpeckSizeId, _speckSize);
-            _renderMaterial.SetFloat(TrailLengthId, _trailLength);
-            _renderMaterial.SetFloat(TrailMaxId, _trailMax);
-            _renderMaterial.SetFloat(MinScaleId, _scaleRange.x);
-            _renderMaterial.SetFloat(MaxScaleId, _scaleRange.y);
-            _renderMaterial.SetVector(ScalePulseSpeedId, _scalePulseSpeed);
-            _renderMaterial.SetFloat(FadeInId, _fadeIn);
-            _renderMaterial.SetFloat(FadeOutId, _fadeOut);
+            _renderMaterial.SetFloat(SpeckSizeId, look.SpeckSize);
+            _renderMaterial.SetFloat(TrailLengthId, look.TrailLength);
+            _renderMaterial.SetFloat(TrailMaxId, look.TrailMax);
+            _renderMaterial.SetFloat(MinScaleId, scale.x);
+            _renderMaterial.SetFloat(MaxScaleId, scale.y);
+            _renderMaterial.SetVector(ScalePulseSpeedId, look.ScalePulseSpeed);
+            _renderMaterial.SetFloat(FadeInId, look.FadeIn);
+            _renderMaterial.SetFloat(FadeOutId, look.FadeOut);
+
+            BuildLookArrays(look);
+            _renderMaterial.SetVectorArray(SpeckLookAId, _lookA);
+            _renderMaterial.SetVectorArray(SpeckLookBId, _lookB);
+            _renderMaterial.SetVectorArray(SpeckLookCId, _lookC);
+            _renderMaterial.SetInt(SpeckLookCountId, _lookCount);
+        }
+
+        // Resolves the per-colour look overrides into palette-slot-indexed arrays the render shader lerps
+        // toward by a speck's heat. Every slot starts at the base look, so uncovered colours are a no-op;
+        // a profile whose colour resolves to a slot overwrites it. Packed three Vector4s per slot:
+        // A=(size, trailLength, trailMax, fadeIn), B=(fadeOut, minScale, maxScale, pulseMin), C=(pulseMax…).
+        private void BuildLookArrays(ISpeckAppearanceSettings look)
+        {
+            _lookCount = Mathf.Min(_palette.Colors.Count, MaxPaletteSlots);
+
+            var baseA = new Vector4(look.SpeckSize, look.TrailLength, look.TrailMax, look.FadeIn);
+            var baseB = new Vector4(look.FadeOut, look.ScaleRange.x, look.ScaleRange.y, look.ScalePulseSpeed.x);
+            var baseC = new Vector4(look.ScalePulseSpeed.y, 0f, 0f, 0f);
+
+            var profiles = look.ColorProfiles;
+            for (var slot = 0; slot < _lookCount; slot++)
+            {
+                var a = baseA;
+                var b = baseB;
+                var c = baseC;
+
+                // First profile whose mask covers this colour wins; uncovered colours keep the base look.
+                for (var p = 0; p < profiles.Count; p++)
+                {
+                    var profile = profiles[p];
+                    if ((profile.ColorMask & (1 << slot)) == 0)
+                    {
+                        continue;
+                    }
+
+                    a = new Vector4(profile.SpeckSize, profile.TrailLength, profile.TrailMax, profile.FadeIn);
+                    b = new Vector4(profile.FadeOut, profile.ScaleRange.x, profile.ScaleRange.y, profile.ScalePulseSpeed.x);
+                    c = new Vector4(profile.ScalePulseSpeed.y, 0f, 0f, 0f);
+                    break;
+                }
+
+                _lookA[slot] = a;
+                _lookB[slot] = b;
+                _lookC[slot] = c;
+            }
         }
 
         // The palette the render lerps disturbed specks toward; indices must match the stampers'
@@ -338,8 +338,49 @@ namespace BalloonParty.Slots.Actor
         {
             if (msg.Outcome == HitOutcome.Pop)
             {
-                _pendingPops.Add(msg.WorldPosition);
+                Enqueue(GetProfile(SpeckSource.BalloonPop), msg.WorldPosition);
             }
+        }
+
+        private void OnSpawnRequest(SpeckSpawnRequestMessage msg)
+        {
+            Enqueue(GetProfile(msg.Source), msg.WorldPosition);
+        }
+
+        private void Enqueue(SpeckProfile profile, Vector2 worldPos)
+        {
+            if (profile.Count <= 0)
+            {
+                return;
+            }
+
+            _pending.Add(new PendingSpeck { Position = worldPos, Count = profile.Count, Spread = profile.Spread });
+        }
+
+        private SpeckProfile GetProfile(SpeckSource source)
+        {
+            var profiles = _settings.Spawning.SpeckProfiles;
+            for (var i = 0; i < profiles.Count; i++)
+            {
+                if ((profiles[i].Sources & source) != 0)
+                {
+                    return profiles[i];
+                }
+            }
+
+            return default;
+        }
+
+        private int MaxProfileCount()
+        {
+            var profiles = _settings.Spawning.SpeckProfiles;
+            var max = 1;
+            for (var i = 0; i < profiles.Count; i++)
+            {
+                max = Mathf.Max(max, profiles[i].Count);
+            }
+
+            return max;
         }
 
         // The reduction curve runs continuously (its X is seconds since the last burst, so its last key sets
@@ -347,8 +388,15 @@ namespace BalloonParty.Slots.Actor
         // the field. A burst restarts the curve (see LateUpdate), snapping the ceiling back up.
         private void UpdateReduction(float dt)
         {
+            // Testing mode: the field stays full — no drain, no clamp.
+            if (_settings.Spawning.SpawnAllImmediately)
+            {
+                _ceiling = _count;
+                return;
+            }
+
             _reductionElapsed += dt;
-            var frac = Mathf.Clamp01(_reductionCurve.Evaluate(_reductionElapsed));
+            var frac = Mathf.Clamp01(_settings.Spawning.ReductionCurve.Evaluate(_reductionElapsed));
             _ceiling = Mathf.RoundToInt(frac * _count);
             _activeCount = Mathf.Min(_activeCount, _ceiling);
         }
@@ -356,26 +404,26 @@ namespace BalloonParty.Slots.Actor
         // Drained in LateUpdate so the buffer writes land before the frame's compute dispatch.
         private void FlushPops()
         {
-            if (_pendingPops.Count == 0)
+            if (_pending.Count == 0)
             {
                 return;
             }
 
-            foreach (var pop in _pendingPops)
+            foreach (var spawn in _pending)
             {
-                EnableBurst(pop);
+                EnableBurst(spawn.Position, spawn.Count, spawn.Spread);
             }
 
-            _pendingPops.Clear();
+            _pending.Clear();
         }
 
-        // Enables a burst of specks at the pop point — written at the top of the active range and grown
+        // Enables a burst of specks at a request point — written at the top of the active range and grown
         // into, clamped to the ceiling's remaining room (nothing when already at the ceiling). Specks are
-        // world-space, so the pop's world position places them directly; they pick up the pop's colour
-        // from the disturbance field's tag where they land.
-        private void EnableBurst(Vector2 worldPos)
+        // world-space, so the request's world position places them directly; they pick up the colour from
+        // the disturbance field's tag where they land.
+        private void EnableBurst(Vector2 worldPos, int count, float spread)
         {
-            var n = Mathf.Min(_burst.Length, _ceiling - _activeCount);
+            var n = Mathf.Min(Mathf.Min(count, _burst.Length), _ceiling - _activeCount);
             if (n <= 0)
             {
                 return;
@@ -385,11 +433,11 @@ namespace BalloonParty.Slots.Actor
             {
                 _burst[i] = new Speck
                 {
-                    Position = worldPos + Random.insideUnitCircle * _popSpread,
+                    Position = worldPos + Random.insideUnitCircle * spread,
                     Velocity = Vector2.zero,
                     Seed = Random.value,
                     Age = 0f,
-                    Lifetime = Mathf.Lerp(_lifetimeRange.x, _lifetimeRange.y, Random.value),
+                    Lifetime = RandomLifetime(),
                     EffectiveVel = Vector2.zero,
                     Heat = 0f,
                     PaletteIndex = -1f,
@@ -402,18 +450,25 @@ namespace BalloonParty.Slots.Actor
             _activeCount += n;
         }
 
+        private float RandomLifetime()
+        {
+            var range = _settings.Appearance.LifetimeRange;
+            return Mathf.Lerp(range.x, range.y, Random.value);
+        }
+
         private void SeedSpecks()
         {
             var specks = new Speck[_count];
-            var min = _regionSize * -0.5f;
+            var region = _settings.RegionSize;
+            var min = region * -0.5f;
             for (var i = 0; i < _count; i++)
             {
-                var lifetime = Mathf.Lerp(_lifetimeRange.x, _lifetimeRange.y, Random.value);
+                var lifetime = RandomLifetime();
                 specks[i] = new Speck
                 {
                     Position = new Vector2(
-                        min.x + Random.value * _regionSize.x,
-                        min.y + Random.value * _regionSize.y),
+                        min.x + Random.value * region.x,
+                        min.y + Random.value * region.y),
                     Velocity = Vector2.zero,
                     Seed = Random.value,
                     // Stagger the starting age across each lifetime so they don't all pop in together.
@@ -455,7 +510,7 @@ namespace BalloonParty.Slots.Actor
 
             // Reject teleports (the Ascent snaps the root to its start height on frame 0) — match only
             // real per-frame movement, not the snap.
-            _motionDelta = delta.magnitude <= _teleportThreshold ? delta : Vector2.zero;
+            _motionDelta = delta.magnitude <= _settings.Motion.TeleportThreshold ? delta : Vector2.zero;
         }
 
         private Vector2 RootPosition()
@@ -480,12 +535,19 @@ namespace BalloonParty.Slots.Actor
             _compute.SetVector(MotionDeltaId, _motionDelta);
 
             var hasField = _disturbance != null && _disturbance.FieldTexture != null;
-            _compute.SetFloat(DisturbanceInfluenceId, hasField ? _disturbanceInfluence : 0f);
+            _compute.SetFloat(DisturbanceInfluenceId, hasField ? _settings.Motion.DisturbanceInfluence : 0f);
             _compute.SetTexture(_kernel, DisturbanceTexId, hasField ? _disturbance.FieldTexture : Texture2D.blackTexture);
             _compute.SetVector(FieldBoundsMinId, hasField ? _disturbance.FieldBoundsMin : Vector2.zero);
             _compute.SetVector(FieldBoundsSizeId, hasField ? _disturbance.FieldBoundsSize : Vector2.one);
 
             _compute.Dispatch(_kernel, Mathf.CeilToInt(_activeCount / (float)ThreadGroupSize), 1, 1);
+        }
+
+        private struct PendingSpeck
+        {
+            public Vector2 Position;
+            public int Count;
+            public float Spread;
         }
 
         private struct Speck

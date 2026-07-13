@@ -15,7 +15,7 @@ namespace BalloonParty.Configuration.Level
     ///     The range-authored form of a level's difficulty mix; <see cref="Resolve" /> is a pure function, so it's EditMode-testable with a seeded rng.
     /// </summary>
     [Serializable]
-    public class RangedLevelParameters
+    public class RangedLevelParameters : IPaletteColorMasked
     {
         [SerializeField] private RangedInt _spawnLines = new(1, 1);
         [SerializeField] private RangedInt _boardLines = new(5, 5);
@@ -63,6 +63,9 @@ namespace BalloonParty.Configuration.Level
         public ItemTypeWeight[] ItemWeights => _itemWeights;
         public GridActorTypeGate[] GridActorGates => _gridActorGates;
         public int AllowedColorsMask => _allowedColorsMask;
+
+        // IPaletteColorMasked: a range maps its difficulty mix to the level's allowed palette colours.
+        int IPaletteColorMasked.ColorMask => _allowedColorsMask;
 
         internal LevelParameters Resolve(float positionInRange, System.Random rng)
         {

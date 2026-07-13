@@ -16,7 +16,6 @@ namespace BalloonParty.Configuration.Effects
         BalloonDeflect = 1 << 6,
         ToughWarning  = 1 << 7,
         RainbowColor  = 1 << 8,
-        UnbreakableGather = 1 << 10,
         UnbreakableBurst = 1 << 11,
     }
 
@@ -102,7 +101,6 @@ namespace BalloonParty.Configuration.Effects
             new StampProfile { Sources = StampSource.Paint,        Radius = 0.6f, Strength = 0.5f, Duration = 0.1f },
             new StampProfile { Sources = StampSource.ToughWarning, Radius = 0.4f, Strength = 0.3f, Duration = 0f, Interval = 1f },
             new StampProfile { Sources = StampSource.RainbowColor, Radius = 0.7f, Strength = 0f, Duration = 0f, Interval = 0.6f },
-            new StampProfile { Sources = StampSource.UnbreakableGather, Radius = 1.2f, Strength = -0.15f, Duration = 0f, Interval = 0.3f },
             new StampProfile { Sources = StampSource.UnbreakableBurst, Radius = 0.9f, Strength = 1f, Duration = 0f, Interval = 2f },
         };
 

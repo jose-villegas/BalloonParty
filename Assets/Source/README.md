@@ -87,6 +87,7 @@ public class GameLifetimeScope : LifetimeScope
 | `PuffCloudSettings` | `ScriptableObject` | `IPuffCloudSettings` |
 | `BushSettings` | `ScriptableObject` | `IBushSettings` |
 | `DisturbanceFieldSettings` | `ScriptableObject` | `IDisturbanceFieldSettings` |
+| `SpeckFieldSettings` | `ScriptableObject` | `ISpeckFieldSettings` |
 | `FlyingTrail` | Prefab instance | `FlyingTrail` (concrete) |
 | `PauseService` | Singleton service | `PauseService` (concrete) |
 
@@ -315,6 +316,7 @@ Game data is split across focused ScriptableObjects, each registered as a single
 | `PuffCloudSettings` | `IPuffCloudSettings` | Puff cloud visual tuning — noise animation speed, visual padding, sorting, `CloudPrefab` reference |
 | `BushSettings` | `IBushSettings` | Bush visual tuning — prefab, variants, branch/leaf materials, sizes, sorting, animation speed |
 | `DisturbanceFieldSettings` | `IDisturbanceFieldSettings` | Disturbance field tuning — RT resolution, diffusion, wind, displacement, performance thresholds, shader references, `StampProfile[]` |
+| `SpeckFieldSettings` | `ISpeckFieldSettings` | Ambient speck-field tuning — motion/disturbance response, per-speck look, spawning/reduction (`SpeckProfile[]`, reduction curve). `SpeckField` keeps only its compute shader + material |
 
 Rules:
 - **Never hardcode** values that exist in a configuration asset.

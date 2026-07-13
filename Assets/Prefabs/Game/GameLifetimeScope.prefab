@@ -65,6 +65,8 @@ MonoBehaviour:
   _bushSettings: {fileID: 11400000, guid: 13458cde8e4a74aec9240bbfad8e8f2f, type: 2}
   _disturbanceFieldSettings: {fileID: 11400000, guid: 07be6148b095f45018867507725bccd8,
     type: 2}
+  _speckFieldSettings: {fileID: 11400000, guid: 9cafb02834084e8c8db437da292e5a10,
+    type: 2}
   _levelPacingConfiguration: {fileID: 11400000, guid: 1e1fe4e6ad3a04cc6aed58b832dbbf17,
     type: 2}
   _projectilePrefab: {fileID: 7317932863533360661, guid: 514e1ddc348a5498aa3edae2404ff130,
