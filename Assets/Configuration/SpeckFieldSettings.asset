@@ -35,7 +35,15 @@ MonoBehaviour:
     _heatGain: 4
     _heatDecay: 1.5
     _colorLerpRate: 4
-    _colorProfiles: []
+    _colorProfiles:
+    - _colorMask: 16
+      _speckSize: 0.03
+      _trailLength: 0.065
+      _trailMax: 5
+      _scaleRange: {x: 0.5, y: 5}
+      _scalePulseSpeed: {x: 0.25, y: 2.15}
+      _fadeIn: 0.5
+      _fadeOut: 0.5
   _spawning:
     _spawnAllImmediately: 0
     _initialActiveCount: 0
