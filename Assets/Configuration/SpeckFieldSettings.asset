@@ -26,19 +26,28 @@ MonoBehaviour:
     _colorProfiles:
     - _colorMask: 16
       _brownianStrength: 1
-      _drag: 5
-      _motionInfluence: 0
-      _disturbanceInfluence: 25
-      _disturbanceDamping: 0
+      _drag: 6
+      _motionInfluence: 0.8
+      _disturbanceInfluence: 17.5
+      _disturbanceDamping: 0.5
       _swirlAngle: {x: -120, y: 120}
-      _flowInfluence: 0.35
+      _flowInfluence: 0.125
+    - _colorMask: 15
+      _brownianStrength: 0.8
+      _drag: 0.5
+      _motionInfluence: 1
+      _disturbanceInfluence: 21.5
+      _disturbanceDamping: 3.25
+      _swirlAngle: {x: -270, y: 270}
+      _flowInfluence: 2.25
   _appearance:
     _speckSize: 0.03
     _trailLength: 0.065
-    _trailMax: 5
+    _trailMax: 4
     _lifetimeRange: {x: 2, y: 10}
     _scaleRange: {x: 0.5, y: 5}
-    _scalePulseSpeed: {x: 0.25, y: 2.15}
+    _scalePulses: {x: 0.25, y: 2.15}
+    _scaleHold: {x: 0, y: 0}
     _fadeIn: 0.5
     _fadeOut: 0.5
     _heatGain: 4
@@ -46,13 +55,25 @@ MonoBehaviour:
     _colorLerpRate: 4
     _colorProfiles:
     - _colorMask: 16
-      _speckSize: 0.03
-      _trailLength: 0.065
-      _trailMax: 5
-      _scaleRange: {x: 0.5, y: 5}
-      _scalePulseSpeed: {x: 0.25, y: 2.15}
+      _speckSize: 0.045
+      _trailLength: 0.1
+      _trailMax: 4
+      _lifetimeRange: {x: 0.2, y: 2}
+      _scaleRange: {x: 1.64, y: 7}
+      _scalePulses: {x: 0.25, y: 2.15}
+      _scaleHold: {x: 0, y: 0}
       _fadeIn: 0.5
-      _fadeOut: 0.5
+      _fadeOut: 0.05
+    - _colorMask: 15
+      _speckSize: 0.035
+      _trailLength: 0.175
+      _trailMax: 0.5
+      _lifetimeRange: {x: 0.1, y: 1.25}
+      _scaleRange: {x: 0.2, y: 9}
+      _scalePulses: {x: 0, y: 0}
+      _scaleHold: {x: 0, y: 0}
+      _fadeIn: 0.5
+      _fadeOut: 0.075
   _spawning:
     _spawnAllImmediately: 0
     _initialActiveCount: 0
@@ -63,6 +84,9 @@ MonoBehaviour:
     - Sources: 2
       Count: 24
       Spread: 0.35
+    - Sources: 4
+      Count: 16
+      Spread: 0.25
     _reductionCurve:
       serializedVersion: 2
       m_Curve:
@@ -89,6 +113,15 @@ MonoBehaviour:
         value: 0.03125
         inSlope: 0
         outSlope: 0
+        tangentMode: 0
+        weightedMode: 0
+        inWeight: 0.33333334
+        outWeight: 0.33333334
+      - serializedVersion: 3
+        time: 30
+        value: 0
+        inSlope: -0.008091616
+        outSlope: -0.008091616
         tangentMode: 0
         weightedMode: 0
         inWeight: 0.33333334

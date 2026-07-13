@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Configuration.Palette;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BalloonParty.Configuration.Effects
 {
@@ -21,21 +22,31 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Max streak length added by the trail (world units).")]
         [SerializeField] private float _trailMax;
 
+        [Tooltip("Per-speck lifetime range (seconds) for this colour. Replaces the base lifetime the moment a " +
+                 "speck adopts the colour, so coloured specks can live longer/shorter than the base.")]
+        [SerializeField] private Vector2 _lifetimeRange;
+
         [Tooltip("Per-speck scale multiplier range on Speck Size (min, max).")]
         [SerializeField] private Vector2 _scaleRange;
 
-        [Tooltip("Per-speck scale-oscillation rate range (min, max).")]
-        [SerializeField] private Vector2 _scalePulseSpeed;
+        [Tooltip("Number of scale pulses over lifetime (min, max). 0 = no pulse (fixed random size).")]
+        [FormerlySerializedAs("_scalePulseSpeed")]
+        [SerializeField] private Vector2 _scalePulses;
 
-        [Range(0f, 0.5f)] [SerializeField] private float _fadeIn;
-        [Range(0f, 0.5f)] [SerializeField] private float _fadeOut;
+        [Tooltip("Fraction (0..1) of each pulse held at full scale before dipping (min, max).")]
+        [SerializeField] private Vector2 _scaleHold;
+
+        [Range(0f, 1f)] [SerializeField] private float _fadeIn;
+        [Range(0f, 1f)] [SerializeField] private float _fadeOut;
 
         public int ColorMask => _colorMask;
         public float SpeckSize => _speckSize;
         public float TrailLength => _trailLength;
         public float TrailMax => _trailMax;
+        public Vector2 LifetimeRange => _lifetimeRange;
         public Vector2 ScaleRange => _scaleRange;
-        public Vector2 ScalePulseSpeed => _scalePulseSpeed;
+        public Vector2 ScalePulses => _scalePulses;
+        public Vector2 ScaleHold => _scaleHold;
         public float FadeIn => _fadeIn;
         public float FadeOut => _fadeOut;
     }

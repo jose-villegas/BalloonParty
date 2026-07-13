@@ -13,11 +13,12 @@ Shader "BalloonParty/Scenario/SpeckField"
         _SpeckSize ("Speck Size",   Float)           = 0.03
         _MinScale  ("Min Scale",    Float)           = 0.5
         _MaxScale  ("Max Scale",    Float)           = 1.5
-        _ScalePulseSpeed ("Scale Pulse Speed (min,max)", Vector) = (0.4, 1.0, 0, 0)
+        _ScalePulses ("Scale Pulses Over Life (min,max)", Vector) = (0.4, 1.0, 0, 0)
+        _ScaleHold ("Scale Hold At Full (min,max frac)", Vector) = (0, 0, 0, 0)
         _TrailLength ("Trail Length (per speed)", Float) = 0
         _TrailMax    ("Trail Max Length", Float)         = 0.5
-        _FadeIn    ("Fade In (life frac)",  Range(0, 0.5)) = 0.15
-        _FadeOut   ("Fade Out (life frac)", Range(0, 0.5)) = 0.25
+        _FadeIn    ("Fade In (life frac)",  Range(0, 1)) = 0.15
+        _FadeOut   ("Fade Out (life frac)", Range(0, 1)) = 0.25
     }
 
     SubShader
@@ -65,8 +66,8 @@ Shader "BalloonParty/Scenario/SpeckField"
             float _SpeckSize;
             float _MinScale;
             float _MaxScale;
-            float4 _ScalePulseSpeed;
-            float _SpeckTime;
+            float4 _ScalePulses;
+            float4 _ScaleHold;
             float _FadeIn;
             float _FadeOut;
             float _TrailLength;
@@ -137,8 +138,10 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float lFadeOut     = lerp(_FadeOut,            lb.x, lookT);
                 float lMinScale    = lerp(_MinScale,           lb.y, lookT);
                 float lMaxScale    = lerp(_MaxScale,           lb.z, lookT);
-                float lPulseMin    = lerp(_ScalePulseSpeed.x,  lb.w, lookT);
-                float lPulseMax    = lerp(_ScalePulseSpeed.y,  lc.x, lookT);
+                float lPulsesMin   = lerp(_ScalePulses.x,      lb.w, lookT);
+                float lPulsesMax   = lerp(_ScalePulses.y,      lc.x, lookT);
+                float lHoldMin     = lerp(_ScaleHold.x,        lc.y, lookT);
+                float lHoldMax     = lerp(_ScaleHold.y,        lc.z, lookT);
 
                 // Life fade: ramp in over fadeIn, out over fadeOut (fractions of lifetime), driving both
                 // alpha and scale so specks pop in and shrink away.
@@ -147,11 +150,24 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float fadeOut = lFadeOut > 0.0 ? saturate((1.0 - lifeT) / lFadeOut) : 1.0;
                 float fade = fadeIn * fadeOut;
 
-                // Scale oscillation over time — some specks grow while others shrink, faking gentle drift
-                // toward/away from the camera; the scale analog of the Brownian motion. Per-speck phase
-                // AND rate (both seed-derived) so they desync in size and speed.
-                float pulseSpeed = lerp(lPulseMin, lPulseMax, hash11(s.seed * 91.7));
-                float scaleT = 0.5 + 0.5 * sin(_SpeckTime * pulseSpeed + s.seed * 6.2831853);
+                // Scale pulse over the speck's OWN life (age/lifetime), not global time — so nudging the rate
+                // via the per-colour heat blend can't swing a huge phase (the old sin(bigTime*speed) flicker),
+                // and 0 pulses is genuinely static. Rate = number of pulses across the lifetime, per-speck
+                // random; a per-speck phase offset keeps them desynced.
+                float pulses = lerp(lPulsesMin, lPulsesMax, hash11(s.seed * 91.7));
+                float scaleT;
+                if (pulses <= 1e-4)
+                {
+                    // No pulse: a fixed random size per speck — size variety without any animation.
+                    scaleT = hash11(s.seed * 12.3);
+                }
+                else
+                {
+                    // Each cycle holds at full scale for `hold` of its span, then a cosine dip to min and back.
+                    float hold = saturate(lerp(lHoldMin, lHoldMax, hash11(s.seed * 41.7)));
+                    float u = frac(lifeT * pulses + hash11(s.seed * 7.1));
+                    scaleT = u < hold ? 1.0 : 0.5 + 0.5 * cos(6.2831853 * (u - hold) / max(1.0 - hold, 1e-4));
+                }
                 float baseScale = lerp(lMinScale, lMaxScale, scaleT);
                 float size = lSize * baseScale * fade;
 

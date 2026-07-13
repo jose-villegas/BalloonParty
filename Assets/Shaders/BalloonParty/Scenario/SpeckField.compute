@@ -54,6 +54,11 @@ float4 _SpeckMotionA[16];
 float4 _SpeckMotionB[16];
 int _SpeckMotionCount;
 
+// Per-palette-colour lifetime override (xy = min,max seconds; zero = no override, keep base lifetime).
+// Applied once when a speck adopts the colour — lifetime is a lifecycle scalar, not a live heat-blend.
+float4 _SpeckLifetime[16];
+int _SpeckLifetimeCount;
+
 float hash11(float p)
 {
     p = frac(p * 0.1031);
@@ -153,6 +158,16 @@ void Advect(uint3 id : SV_DispatchThreadID)
                     s.prevPaletteIndex = s.paletteIndex;
                     s.paletteIndex = newIndex;
                     s.colorBlend = 0.0;
+
+                    // Adopt this colour's lifetime, replacing whatever the speck had, so a coloured speck lives
+                    // its colour's span rather than the neutral one it was born with. Age is kept, so a speck
+                    // that's already outlived a shorter colour simply respawns next tick.
+                    int lifeSlot = clamp((int)newIndex, 0, 15);
+                    if (lifeSlot < _SpeckLifetimeCount)
+                    {
+                        float2 lr = _SpeckLifetime[lifeSlot].xy;
+                        s.lifetime = lerp(lr.x, lr.y, hash11(s.seed + newIndex * 3.1));
+                    }
                 }
                 tagLife = tagValue - s.paletteIndex;
             }

@@ -56,8 +56,8 @@ namespace BalloonParty.Slots.Actor
         private static readonly int TrailMaxId = Shader.PropertyToID("_TrailMax");
         private static readonly int MinScaleId = Shader.PropertyToID("_MinScale");
         private static readonly int MaxScaleId = Shader.PropertyToID("_MaxScale");
-        private static readonly int ScalePulseSpeedId = Shader.PropertyToID("_ScalePulseSpeed");
-        private static readonly int SpeckTimeId = Shader.PropertyToID("_SpeckTime");
+        private static readonly int ScalePulsesId = Shader.PropertyToID("_ScalePulses");
+        private static readonly int ScaleHoldId = Shader.PropertyToID("_ScaleHold");
         private static readonly int FadeInId = Shader.PropertyToID("_FadeIn");
         private static readonly int FadeOutId = Shader.PropertyToID("_FadeOut");
         private static readonly int HeatGainId = Shader.PropertyToID("_HeatGain");
@@ -73,6 +73,8 @@ namespace BalloonParty.Slots.Actor
         private static readonly int SpeckMotionAId = Shader.PropertyToID("_SpeckMotionA");
         private static readonly int SpeckMotionBId = Shader.PropertyToID("_SpeckMotionB");
         private static readonly int SpeckMotionCountId = Shader.PropertyToID("_SpeckMotionCount");
+        private static readonly int SpeckLifetimeId = Shader.PropertyToID("_SpeckLifetime");
+        private static readonly int SpeckLifetimeCountId = Shader.PropertyToID("_SpeckLifetimeCount");
 
         [SerializeField] private ComputeShader _compute;
         [SerializeField] private Material _renderMaterial;
@@ -105,6 +107,7 @@ namespace BalloonParty.Slots.Actor
         private Vector4[] _motionA;
         private Vector4[] _motionB;
         private int _motionCount;
+        private Vector4[] _lifetime;
         private IDisposable _hitSubscription;
         private IDisposable _requestSubscription;
 
@@ -149,6 +152,7 @@ namespace BalloonParty.Slots.Actor
             _lookC = new Vector4[MaxPaletteSlots];
             _motionA = new Vector4[MaxPaletteSlots];
             _motionB = new Vector4[MaxPaletteSlots];
+            _lifetime = new Vector4[MaxPaletteSlots];
 
             PushPalette();
             PushStaticParams();
@@ -240,7 +244,6 @@ namespace BalloonParty.Slots.Actor
         // camera renders. The constants live in PushStaticParams.
         private void PushRenderParams()
         {
-            _renderMaterial.SetFloat(SpeckTimeId, Time.time);
             _renderMaterial.SetInt(ActiveCountId, _activeCount);
         }
 
@@ -276,7 +279,8 @@ namespace BalloonParty.Slots.Actor
             _renderMaterial.SetFloat(TrailMaxId, look.TrailMax);
             _renderMaterial.SetFloat(MinScaleId, scale.x);
             _renderMaterial.SetFloat(MaxScaleId, scale.y);
-            _renderMaterial.SetVector(ScalePulseSpeedId, look.ScalePulseSpeed);
+            _renderMaterial.SetVector(ScalePulsesId, look.ScalePulses);
+            _renderMaterial.SetVector(ScaleHoldId, look.ScaleHold);
             _renderMaterial.SetFloat(FadeInId, look.FadeIn);
             _renderMaterial.SetFloat(FadeOutId, look.FadeOut);
 
@@ -285,6 +289,11 @@ namespace BalloonParty.Slots.Actor
             _renderMaterial.SetVectorArray(SpeckLookBId, _lookB);
             _renderMaterial.SetVectorArray(SpeckLookCId, _lookC);
             _renderMaterial.SetInt(SpeckLookCountId, _lookCount);
+
+            // Lifetime is a lifecycle scalar, not a live heat-blend: the compute re-rolls it from this colour's
+            // range when a speck adopts the colour (see the shader), replacing whatever it had.
+            _compute.SetVectorArray(SpeckLifetimeId, _lifetime);
+            _compute.SetInt(SpeckLifetimeCountId, _lookCount);
 
             BuildMotionArrays(motion);
             _compute.SetVectorArray(SpeckMotionAId, _motionA);
@@ -331,14 +340,16 @@ namespace BalloonParty.Slots.Actor
         // Resolves the per-colour look overrides into palette-slot-indexed arrays the render shader lerps
         // toward by a speck's heat. Every slot starts at the base look, so uncovered colours are a no-op;
         // a profile whose colour resolves to a slot overwrites it. Packed three Vector4s per slot:
-        // A=(size, trailLength, trailMax, fadeIn), B=(fadeOut, minScale, maxScale, pulseMin), C=(pulseMax…).
+        // A=(size, trailLength, trailMax, fadeIn), B=(fadeOut, minScale, maxScale, pulsesMin),
+        // C=(pulsesMax, holdMin, holdMax, _).
         private void BuildLookArrays(ISpeckAppearanceSettings look)
         {
             _lookCount = Mathf.Min(_palette.Colors.Count, MaxPaletteSlots);
 
             var baseA = new Vector4(look.SpeckSize, look.TrailLength, look.TrailMax, look.FadeIn);
-            var baseB = new Vector4(look.FadeOut, look.ScaleRange.x, look.ScaleRange.y, look.ScalePulseSpeed.x);
-            var baseC = new Vector4(look.ScalePulseSpeed.y, 0f, 0f, 0f);
+            var baseB = new Vector4(look.FadeOut, look.ScaleRange.x, look.ScaleRange.y, look.ScalePulses.x);
+            var baseC = new Vector4(look.ScalePulses.y, look.ScaleHold.x, look.ScaleHold.y, 0f);
+            var baseLife = new Vector4(look.LifetimeRange.x, look.LifetimeRange.y, 0f, 0f);
 
             var profiles = look.ColorProfiles;
             for (var slot = 0; slot < _lookCount; slot++)
@@ -346,6 +357,9 @@ namespace BalloonParty.Slots.Actor
                 var a = baseA;
                 var b = baseB;
                 var c = baseC;
+                // Every slot carries a real lifetime range — base for uncovered colours, the profile's for
+                // covered ones — so adopting any colour is a straight replacement, never an inherit.
+                var life = baseLife;
 
                 // First profile whose mask covers this colour wins; uncovered colours keep the base look.
                 for (var p = 0; p < profiles.Count; p++)
@@ -357,14 +371,16 @@ namespace BalloonParty.Slots.Actor
                     }
 
                     a = new Vector4(profile.SpeckSize, profile.TrailLength, profile.TrailMax, profile.FadeIn);
-                    b = new Vector4(profile.FadeOut, profile.ScaleRange.x, profile.ScaleRange.y, profile.ScalePulseSpeed.x);
-                    c = new Vector4(profile.ScalePulseSpeed.y, 0f, 0f, 0f);
+                    b = new Vector4(profile.FadeOut, profile.ScaleRange.x, profile.ScaleRange.y, profile.ScalePulses.x);
+                    c = new Vector4(profile.ScalePulses.y, profile.ScaleHold.x, profile.ScaleHold.y, 0f);
+                    life = new Vector4(profile.LifetimeRange.x, profile.LifetimeRange.y, 0f, 0f);
                     break;
                 }
 
                 _lookA[slot] = a;
                 _lookB[slot] = b;
                 _lookC[slot] = c;
+                _lifetime[slot] = life;
             }
         }
 

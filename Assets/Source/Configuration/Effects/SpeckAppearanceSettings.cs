@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 
 namespace BalloonParty.Configuration.Effects
 {
@@ -12,7 +13,8 @@ namespace BalloonParty.Configuration.Effects
         float TrailMax { get; }
         Vector2 LifetimeRange { get; }
         Vector2 ScaleRange { get; }
-        Vector2 ScalePulseSpeed { get; }
+        Vector2 ScalePulses { get; }
+        Vector2 ScaleHold { get; }
         float FadeIn { get; }
         float FadeOut { get; }
         float HeatGain { get; }
@@ -41,15 +43,21 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Per-speck scale multiplier range on Speck Size, oscillated over time for size variety.")]
         [SerializeField] private Vector2 _scaleRange = new(0.5f, 1.5f);
 
-        [Tooltip("Per-speck scale-oscillation rate range; each speck picks a random speed in it, so they " +
-                 "pulse out of sync (fake toward/away drift).")]
-        [SerializeField] private Vector2 _scalePulseSpeed = new(0.4f, 1f);
+        [Tooltip("Number of scale pulses over a speck's lifetime (min, max) — each speck picks a random count " +
+                 "in it, so they pulse out of sync. 0 = no pulse (a fixed random size, no animation). Driven " +
+                 "by the speck's life fraction, not global time, so it never flickers.")]
+        [FormerlySerializedAs("_scalePulseSpeed")]
+        [SerializeField] private Vector2 _scalePulses = new(0.4f, 1f);
+
+        [Tooltip("Fraction (0..1) of each pulse spent held at full scale before easing down and back " +
+                 "(min, max), per speck. 0 = a smooth continuous pulse; higher = a plateau at full then a dip.")]
+        [SerializeField] private Vector2 _scaleHold;
 
         [Tooltip("Fraction of life spent fading/scaling in.")]
-        [Range(0f, 0.5f)] [SerializeField] private float _fadeIn = 0.15f;
+        [Range(0f, 1f)] [SerializeField] private float _fadeIn = 0.15f;
 
         [Tooltip("Fraction of life spent fading/scaling out.")]
-        [Range(0f, 0.5f)] [SerializeField] private float _fadeOut = 0.25f;
+        [Range(0f, 1f)] [SerializeField] private float _fadeOut = 0.25f;
 
         [Tooltip("How fast a disturbed speck heats toward the material's Disturbed Tint, per unit agitation per second. 0 = no tinting.")]
         [SerializeField] private float _heatGain = 4f;
@@ -70,7 +78,8 @@ namespace BalloonParty.Configuration.Effects
         public float TrailMax => _trailMax;
         public Vector2 LifetimeRange => _lifetimeRange;
         public Vector2 ScaleRange => _scaleRange;
-        public Vector2 ScalePulseSpeed => _scalePulseSpeed;
+        public Vector2 ScalePulses => _scalePulses;
+        public Vector2 ScaleHold => _scaleHold;
         public float FadeIn => _fadeIn;
         public float FadeOut => _fadeOut;
         public float HeatGain => _heatGain;
