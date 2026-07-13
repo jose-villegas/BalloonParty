@@ -85,7 +85,7 @@ MonoBehaviour:
     RadiusGrowth: 0
     StrengthFalloff: 0
   - Sources: 64
-    Radius: 0.9
+    Radius: 0.4
     Strength: 12
     Duration: 0
     Interval: 0

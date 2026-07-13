@@ -45,7 +45,7 @@ MonoBehaviour:
       _drag: 0.1
       _motionInfluence: 1
       _disturbanceInfluence: 12
-      _disturbanceDamping: 3.25
+      _disturbanceDamping: 5
       _swirlAngle: {x: -180, y: 180}
       _flowInfluence: 1.75
     - _colorMask: 128

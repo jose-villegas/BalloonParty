@@ -82,7 +82,7 @@ MonoBehaviour:
     _maxBalanceSteps: 1
     _balancePriority: 0
     _directBalanceMotion: 0
-    _deflectStampScale: 1
+    _deflectStampScale: 1.35
     _spawnWeight: 3
   - _prefab: {fileID: 4318124338822199961, guid: 49cbb92bf41a2499797a1921677efaa9,
       type: 3}
@@ -123,7 +123,7 @@ MonoBehaviour:
     _maxBalanceSteps: 0
     _balancePriority: 0
     _directBalanceMotion: 1
-    _deflectStampScale: 2
+    _deflectStampScale: 1.75
     _spawnWeight: 0
   - _prefab: {fileID: 5608684639280362707, guid: 320e1b71efec648ee825dabeec573ebf,
       type: 3}
@@ -148,7 +148,7 @@ MonoBehaviour:
   _spawnEntryRowOffset: 4
   _timeForBalloonsBalance: 1.75
   _flightRebalanceInterval: 4
-  _popSpawnChance: 0.232
+  _popSpawnChance: 0.1
   _popSpawnFreeRows: 2
   _nudgeDistance: 0.15
   _nudgeDuration: 0.7
