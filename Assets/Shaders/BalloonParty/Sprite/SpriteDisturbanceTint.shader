@@ -1,9 +1,10 @@
-// A sprite tinted by the shared disturbance field at its world position. The field's A channel packs a
-// palette tag (index + remaining life); the sprite's colour is multiplied toward that palette colour by the
-// tag's life (its strength). The G/B displacement direction can also swing the sprite to face the flow
-// (eased by the field magnitude, offset by a base angle) and/or brighten it along that direction.
-// Reads the field via globals the DisturbanceFieldService publishes (_DisturbanceTex, _FieldBoundsMin/Size,
-// _DisturbancePalette). Vertex texture fetch is used for the per-sprite direction — needs Vulkan/Metal (SM3.5+).
+// A sprite tinted by the shared disturbance field. The field is sampled ONCE per sprite (at its pivot, in
+// the vertex stage), so the whole sprite takes a single uniform tint — no per-pixel sampling, so the field's
+// low resolution never shows as blocks. The A channel's tag gives the palette colour + life (strength); the
+// sprite colour is multiplied toward it. The G/B direction can rotate the sprite to face the flow (base-angle
+// offset, eased by field magnitude) and/or brighten it along that direction, and the sprite fades toward a
+// resting alpha where the field is quiet. Reads the field via globals the DisturbanceFieldService publishes
+// (_DisturbanceTex, _FieldBoundsMin/Size, _DisturbancePalette). Vertex texture fetch — needs Vulkan/Metal (SM3.5+).
 Shader "BalloonParty/Sprite/DisturbanceTint"
 {
     Properties
@@ -14,6 +15,7 @@ Shader "BalloonParty/Sprite/DisturbanceTint"
 
         [Header(Disturbance Tint)]
         _TintIntensity("Tint Intensity", Range(0,4)) = 1
+        [PaletteColorMaskMat] _IgnoreColorMask("Ignore Colours", Float) = 0
 
         [Header(Direction)]
         [Toggle(_ROTATE_ON)] _RotateToDirection("Rotate To Direction", Float) = 0
@@ -21,6 +23,10 @@ Shader "BalloonParty/Sprite/DisturbanceTint"
         _DirectionStrength("Direction Strength", Range(0,8)) = 4
         [Toggle(_GRADIENT_ON)] _DirectionGradient("Direction Gradient", Float) = 0
         _GradientStrength("Gradient Strength", Range(0,2)) = 0.5
+
+        [Header(Resting Fade)]
+        _RestAlpha("Rest Alpha (field quiet)", Range(0,1)) = 1
+        _ActivityScale("Activity Scale", Range(0,8)) = 2
 
         [MaterialToggle] PixelSnap("Pixel snap", Float) = 0
     }
@@ -70,6 +76,8 @@ Shader "BalloonParty/Sprite/DisturbanceTint"
                 float2 centerWorld : TEXCOORD2;
                 float2 dir         : TEXCOORD3;
                 float  mag         : TEXCOORD4;
+                float3 tint        : TEXCOORD5;
+                float  activity    : TEXCOORD6;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -88,17 +96,22 @@ Shader "BalloonParty/Sprite/DisturbanceTint"
             sampler2D _AlphaTex;
             float _AlphaSplitEnabled;
 
-            // Published as globals by DisturbanceFieldService.
-            sampler2D _DisturbanceTex;
+            // Published as globals by DisturbanceFieldService. Bilinear: with a single per-sprite sample there
+            // is no spatial banding to avoid, and the smooth value tracks the field as the sprite moves.
+            Texture2D _DisturbanceTex;
+            SamplerState sampler_linear_clamp;
             float4 _FieldBoundsMin;
             float4 _FieldBoundsSize;
             float4 _DisturbancePalette[16];
             int _DisturbancePaletteCount;
 
             float _TintIntensity;
+            float _IgnoreColorMask;
             float _BaseAngle;
             float _DirectionStrength;
             float _GradientStrength;
+            float _RestAlpha;
+            float _ActivityScale;
 
             float2 FieldUV(float2 worldXY)
             {
@@ -123,18 +136,41 @@ Shader "BalloonParty/Sprite/DisturbanceTint"
                 UNITY_SETUP_INSTANCE_ID(IN);
                 UNITY_TRANSFER_INSTANCE_ID(IN, OUT);
 
-                // Sprite pivot in world = object origin; the direction is sampled there (per-sprite).
+                // One field sample at the sprite pivot drives the whole sprite (tint, activity, direction).
                 float2 centerWorld = mul(unity_ObjectToWorld, float4(0, 0, 0, 1)).xy;
-                float4 v = IN.vertex;
+                float2 cuv = FieldUV(centerWorld);
+
+                float3 tint = float3(1, 1, 1);
+                float activity = 0.0;
                 float2 dir = float2(0, 0);
                 float mag = 0.0;
 
-                #if defined(_ROTATE_ON) || defined(_GRADIENT_ON)
-                    float4 fc = tex2Dlod(_DisturbanceTex, float4(FieldUV(centerWorld), 0, 0));
+                if (all(cuv >= 0.0) && all(cuv <= 1.0))
+                {
+                    float4 fc = _DisturbanceTex.SampleLevel(sampler_linear_clamp, cuv, 0);
+
+                    // A packs (index + life)/16: ceil recovers the slot, the remainder is the tag's life =
+                    // strength. Masked-out entries read as untagged (a=0). The tint is a value mapped to a
+                    // palette colour and eased in by strength — no manual filtering needed.
+                    float tagValue = fc.a * 16.0;
+                    int index = (int)(ceil(tagValue) - 1.0);
+                    int ignore = (int)_IgnoreColorMask;
+                    float life = 0.0;
+                    if (tagValue > 0.05 && index >= 0 && index < _DisturbancePaletteCount && (ignore & (1 << index)) == 0)
+                    {
+                        life = tagValue - (float)index;
+                        tint = lerp(float3(1, 1, 1), _DisturbancePalette[index].rgb, saturate(life * _TintIntensity));
+                    }
+
+                    // Activity = any disturbance here: signed-density deviation from rest, or a colour tag.
+                    float density = abs(fc.r - 0.5) * 2.0;
+                    activity = saturate(max(density * _ActivityScale, life));
+
                     dir = (fc.gb - 0.5) * 2.0;
                     mag = saturate(length(dir) * _DirectionStrength);
-                #endif
+                }
 
+                float4 v = IN.vertex;
                 #ifdef _ROTATE_ON
                     // Swing the quad toward the flow, eased by field strength, offset by the art's base angle.
                     float theta = radians(_BaseAngle) + atan2(dir.y, dir.x) * mag;
@@ -150,6 +186,8 @@ Shader "BalloonParty/Sprite/DisturbanceTint"
                 OUT.centerWorld = centerWorld;
                 OUT.dir = mag > 1e-4 ? dir / length(dir) : float2(0, 0);
                 OUT.mag = mag;
+                OUT.tint = tint;
+                OUT.activity = activity;
 
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
@@ -163,26 +201,16 @@ Shader "BalloonParty/Sprite/DisturbanceTint"
                 UNITY_SETUP_INSTANCE_ID(IN);
 
                 fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
+                c.rgb *= IN.tint;
 
-                float2 uv = FieldUV(IN.worldPos);
-                if (all(uv >= 0.0) && all(uv <= 1.0))
-                {
-                    // A packs (index + life)/16: ceil recovers the slot, the remainder is the tag's life = strength.
-                    float tagValue = tex2D(_DisturbanceTex, uv).a * 16.0;
-                    int index = (int)(ceil(tagValue) - 1.0);
-                    if (tagValue > 0.05 && index >= 0 && index < _DisturbancePaletteCount)
-                    {
-                        float strength = saturate((tagValue - (float)index) * _TintIntensity);
-                        c.rgb *= lerp(float3(1, 1, 1), _DisturbancePalette[index].rgb, strength);
-                    }
+                #ifdef _GRADIENT_ON
+                float2 offset = IN.worldPos - IN.centerWorld;
+                float g = dot(normalize(offset + 1e-5), IN.dir);
+                c.rgb *= 1.0 + _GradientStrength * g * IN.mag;
+                #endif
 
-                    #ifdef _GRADIENT_ON
-                    float2 offset = IN.worldPos - IN.centerWorld;
-                    float g = dot(normalize(offset + 1e-5), IN.dir);
-                    c.rgb *= 1.0 + _GradientStrength * g * IN.mag;
-                    #endif
-                }
-
+                // Fade toward the resting alpha where the field is quiet; full alpha where it's disturbed.
+                c.a *= lerp(_RestAlpha, 1.0, IN.activity);
                 c.rgb *= c.a;
                 return c;
             }
