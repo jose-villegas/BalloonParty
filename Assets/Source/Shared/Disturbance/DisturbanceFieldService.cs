@@ -4,7 +4,6 @@ using BalloonParty.Configuration;
 using UnityEngine;
 using VContainer.Unity;
 using BalloonParty.Configuration.Effects;
-using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Shared.Disturbance
 {
@@ -33,13 +32,10 @@ namespace BalloonParty.Shared.Disturbance
 
         private static readonly int GlobalFieldBoundsMinId = Shader.PropertyToID("_FieldBoundsMin");
         private static readonly int GlobalFieldBoundsSizeId = Shader.PropertyToID("_FieldBoundsSize");
-        private static readonly int GlobalPaletteId = Shader.PropertyToID("_DisturbancePalette");
-        private static readonly int GlobalPaletteCountId = Shader.PropertyToID("_DisturbancePaletteCount");
 
         private readonly IDisturbanceFieldSettings _settings;
         private readonly IGameDisplayConfiguration _displayConfig;
         private readonly ImpactEventBus _impactBus;
-        private readonly IGamePalette _palette;
         private readonly List<PendingStamp> _pendingStamps = new();
         private readonly Vector4[] _batchCenters = new Vector4[MaxStampsPerBatch];
         private readonly float[] _batchRadii = new float[MaxStampsPerBatch];
@@ -59,13 +55,11 @@ namespace BalloonParty.Shared.Disturbance
         internal DisturbanceFieldService(
             IDisturbanceFieldSettings settings,
             IGameDisplayConfiguration displayConfig,
-            ImpactEventBus impactBus,
-            IGamePalette palette)
+            ImpactEventBus impactBus)
         {
             _settings = settings;
             _displayConfig = displayConfig;
             _impactBus = impactBus;
-            _palette = palette;
 
             // Built here (not Start()) so Stamp() is safe before Start(); _resources reports not-ready until then.
             _lerpScheduler = new LerpStampScheduler(_settings.MaxLerpStamps);
@@ -89,7 +83,6 @@ namespace BalloonParty.Shared.Disturbance
 
             _resources.Initialize(_coords.Width, _coords.Height);
             PushGlobalBounds();
-            PushGlobalPalette();
         }
 
         void ITickable.Tick()
@@ -242,7 +235,6 @@ namespace BalloonParty.Shared.Disturbance
             _resources.SetStampsEnabled(_resources.DiffusionMaterial, false);
 
             _resources.BlitAndSwap(_resources.DiffusionMaterial);
-            _resources.TickColorLerp(_diffusionTimer);
             _diffusionTimer = 0f;
         }
 
@@ -262,7 +254,6 @@ namespace BalloonParty.Shared.Disturbance
             _resources.SetStampsEnabled(_resources.DiffusionMaterial, true);
 
             _resources.BlitAndSwap(_resources.DiffusionMaterial);
-            _resources.TickColorLerp(_diffusionTimer);
             _diffusionTimer = 0f;
             _pendingStamps.Clear();
         }
@@ -315,21 +306,6 @@ namespace BalloonParty.Shared.Disturbance
             var bounds = _coords.Bounds;
             Shader.SetGlobalVector(GlobalFieldBoundsMinId, new Vector4(bounds.xMin, bounds.yMin, 0f, 0f));
             Shader.SetGlobalVector(GlobalFieldBoundsSizeId, new Vector4(bounds.width, bounds.height, 0f, 0f));
-        }
-
-        // The palette that decodes the field's A-channel tag (index → colour), published once as a global so
-        // field-reading shaders resolve tag colours without per-material wiring. Matches SpeckField's palette.
-        private void PushGlobalPalette()
-        {
-            var colors = new Vector4[(int)PaletteIndexSlots];
-            var count = Mathf.Min(_palette.Colors.Count, colors.Length);
-            for (var i = 0; i < count; i++)
-            {
-                colors[i] = _palette.Colors[i].Color;
-            }
-
-            Shader.SetGlobalVectorArray(GlobalPaletteId, colors);
-            Shader.SetGlobalInt(GlobalPaletteCountId, count);
         }
 
         private struct PendingStamp

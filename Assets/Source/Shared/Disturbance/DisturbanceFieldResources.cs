@@ -9,21 +9,14 @@ namespace BalloonParty.Shared.Disturbance
     internal class DisturbanceFieldResources
     {
         private static readonly int GlobalDisturbanceTexId = Shader.PropertyToID("_DisturbanceTex");
-        private static readonly int GlobalDisturbanceColorTexId = Shader.PropertyToID("_DisturbanceColorTex");
-        private static readonly int DeltaTimeId = Shader.PropertyToID("_DeltaTime");
-        private static readonly int ColorLerpSpeedId = Shader.PropertyToID("_ColorLerpSpeed");
 
         private readonly IDisturbanceFieldSettings _settings;
 
         private RenderTexture _fieldA;
         private RenderTexture _fieldB;
         private bool _readFromA = true;
-        private RenderTexture _colorA;
-        private RenderTexture _colorB;
-        private bool _colorReadFromA = true;
         private Material _diffusionMaterial;
         private Material _batchedStampMaterial;
-        private Material _colorLerpMaterial;
         private LocalKeyword _stampsOnKeyword;
         private bool _stampsKeywordResolved;
 
@@ -33,8 +26,6 @@ namespace BalloonParty.Shared.Disturbance
         public bool IsReady => _fieldA != null && _batchedStampMaterial != null;
 
         private RenderTexture FieldWrite => _readFromA ? _fieldB : _fieldA;
-        private RenderTexture ColorRead => _colorReadFromA ? _colorA : _colorB;
-        private RenderTexture ColorWrite => _colorReadFromA ? _colorB : _colorA;
 
         public DisturbanceFieldResources(IDisturbanceFieldSettings settings)
         {
@@ -51,33 +42,8 @@ namespace BalloonParty.Shared.Disturbance
 
             _diffusionMaterial = CreateMaterial(_settings.DiffusionShader, "DiffusionShader");
             _batchedStampMaterial = CreateMaterial(_settings.StampBatchedShader, "StampBatchedShader");
-            _colorLerpMaterial = CreateMaterial(_settings.ColorLerpShader, "ColorLerpShader");
-
-            _colorA = CreateRT(width, height, RenderTextureFormat.ARGB32);
-            _colorB = CreateRT(width, height, RenderTextureFormat.ARGB32);
-            // RGB = colour (irrelevant until tagged), A = 0 strength (untagged = no tint).
-            ClearColor(_colorA, new Color(1f, 1f, 1f, 0f));
-            ClearColor(_colorB, new Color(1f, 1f, 1f, 0f));
-            _colorReadFromA = true;
 
             PushGlobalTexture();
-            PushGlobalColorTexture();
-        }
-
-        // Eases the smoothed colour layer toward the field's current tag colour, so an overwrite crossfades
-        // instead of snapping. Runs on the diffusion cadence; dt is that tick's elapsed time.
-        public void TickColorLerp(float dt)
-        {
-            if (_colorLerpMaterial == null)
-            {
-                return;
-            }
-
-            _colorLerpMaterial.SetFloat(DeltaTimeId, dt);
-            _colorLerpMaterial.SetFloat(ColorLerpSpeedId, _settings.ColorLerpSpeed);
-            Graphics.Blit(ColorRead, ColorWrite, _colorLerpMaterial);
-            _colorReadFromA = !_colorReadFromA;
-            PushGlobalColorTexture();
         }
 
         public void BlitAndSwap(Material material)
@@ -109,11 +75,8 @@ namespace BalloonParty.Shared.Disturbance
         {
             ReleaseRT(ref _fieldA);
             ReleaseRT(ref _fieldB);
-            ReleaseRT(ref _colorA);
-            ReleaseRT(ref _colorB);
             DestroyMaterial(ref _diffusionMaterial);
             DestroyMaterial(ref _batchedStampMaterial);
-            DestroyMaterial(ref _colorLerpMaterial);
         }
 
         private void PushGlobalTexture()
@@ -122,15 +85,6 @@ namespace BalloonParty.Shared.Disturbance
             if (tex != null)
             {
                 Shader.SetGlobalTexture(GlobalDisturbanceTexId, tex);
-            }
-        }
-
-        private void PushGlobalColorTexture()
-        {
-            var tex = ColorRead;
-            if (tex != null)
-            {
-                Shader.SetGlobalTexture(GlobalDisturbanceColorTexId, tex);
             }
         }
 
@@ -145,8 +99,7 @@ namespace BalloonParty.Shared.Disturbance
             return new Material(shader) { hideFlags = HideFlags.HideAndDontSave };
         }
 
-        // The field packs signed density + displacement, so it wants half-float; the colour layer is LDR
-        // (palette colour + 0..1 strength), so plain 8-bit ARGB32 is enough and half the memory.
+        // The field packs signed density + displacement, so it wants half-float where supported.
         private static RenderTextureFormat FieldFormat =>
             SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGBHalf)
                 ? RenderTextureFormat.ARGBHalf
@@ -170,14 +123,6 @@ namespace BalloonParty.Shared.Disturbance
             // R = 0.5: signed density rest — above 0.5 repels, below attracts. GB = 0.5: zero
             // displacement. A = 0: no palette-color tag anywhere yet (see the diffusion shader's map).
             GL.Clear(false, true, new Color(0.5f, 0.5f, 0.5f, 0f));
-            RenderTexture.active = prev;
-        }
-
-        private static void ClearColor(RenderTexture rt, Color color)
-        {
-            var prev = RenderTexture.active;
-            RenderTexture.active = rt;
-            GL.Clear(false, true, color);
             RenderTexture.active = prev;
         }
 

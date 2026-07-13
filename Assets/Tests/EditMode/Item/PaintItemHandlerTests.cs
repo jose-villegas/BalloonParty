@@ -59,7 +59,7 @@ namespace BalloonParty.Tests.Item
                 itemConfig,
                 _grid,
                 new PoolManager(),
-                new DisturbanceFieldService(disturbanceSettings, displayConfig, new ImpactEventBus(), palette));
+                new DisturbanceFieldService(disturbanceSettings, displayConfig, new ImpactEventBus()));
         }
 
         [Test]

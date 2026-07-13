@@ -22,8 +22,6 @@ namespace BalloonParty.Configuration.Effects
         int MaxLerpStamps { get; }
         Shader DiffusionShader { get; }
         Shader StampBatchedShader { get; }
-        Shader ColorLerpShader { get; }
-        float ColorLerpSpeed { get; }
         StampProfile GetProfile(StampSource source);
     }
 }

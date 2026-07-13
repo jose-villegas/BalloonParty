@@ -27,8 +27,6 @@ MonoBehaviour:
   _maxLerpStamps: 32
   _diffusionShader: {fileID: 4800000, guid: 30d35fca4d5647ab807a2488bff5f3d3, type: 3}
   _stampBatchedShader: {fileID: 4800000, guid: 38f3ac576d314dfd871931c9d00cd8da, type: 3}
-  _colorLerpShader: {fileID: 4800000, guid: af3e00666da7442bbfd642fb31241686, type: 3}
-  _colorLerpSpeed: 8
   _stampProfiles:
   - Sources: 1
     Radius: 0.35
@@ -42,7 +40,7 @@ MonoBehaviour:
     Interval: 0
   - Sources: 4
     Radius: 1.25
-    Strength: 1.5
+    Strength: 1.25
     Duration: 0.1
     Interval: 0
   - Sources: 8
@@ -62,14 +60,14 @@ MonoBehaviour:
     Interval: 0
   - Sources: 64
     Radius: 0.9
-    Strength: 15
-    Duration: 0.2
+    Strength: 12
+    Duration: 0
     Interval: 0
   - Sources: 128
-    Radius: 0.65
-    Strength: 0
+    Radius: 0.6
+    Strength: 0.5
     Duration: 0.5
-    Interval: 1
+    Interval: 3
   - Sources: 256
     Radius: 0.9
     Strength: 0

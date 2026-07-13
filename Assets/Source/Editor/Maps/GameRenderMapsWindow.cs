@@ -22,7 +22,6 @@ namespace BalloonParty.Editor.Maps
 
         private static readonly int SceneCaptureTexId = Shader.PropertyToID("_SceneCaptureTex");
         private static readonly int DisturbanceTexId = Shader.PropertyToID("_DisturbanceTex");
-        private static readonly int DisturbanceColorTexId = Shader.PropertyToID("_DisturbanceColorTex");
         private static readonly int ChannelMaskId = Shader.PropertyToID("_ChannelMask");
         private static readonly int PaletteColorsId = Shader.PropertyToID("_PaletteColors");
         private static readonly int DecodePaletteId = Shader.PropertyToID("_DecodePalette");
@@ -274,16 +273,6 @@ namespace BalloonParty.Editor.Maps
                     "drained each diffusion tick (ColorTagDecay); 0 = untagged. Written hard (never " +
                     "blended); agitated specks adopt the slot and flush toward that color.",
                     hasPaletteChannel: true),
-
-                new MapDescriptor(
-                    "Disturbance Colour",
-                    () => Application.isPlaying ? Shader.GetGlobalTexture(DisturbanceColorTexId) : null,
-                    "No colour layer bound — assign the Color Lerp Shader on DisturbanceFieldSettings; it binds once the game scope starts.",
-                    "Smoothed palette colour — red. The tag index is decoded to its palette colour, then eased.",
-                    "Smoothed palette colour — green.",
-                    "Smoothed palette colour — blue.",
-                    "Strength — the tag's eased life (0 = untinted). Overwrites crossfade here instead of snapping, " +
-                    "and it's the smooth, band-free colour consumers sample."),
 
                 new MapDescriptor(
                     "GI Light Buffer",

@@ -172,6 +172,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
+      propertyPath: _aboveItemRenderers.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
       propertyPath: _colorableRenderers.Array.size
       value: 0
       objectReference: {fileID: 0}
@@ -180,6 +185,11 @@ PrefabInstance:
       propertyPath: _spriteLayerRenderers.Array.size
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_aboveItemRenderers.Array.data[0]'
+      value: 
+      objectReference: {fileID: 223860657741106312}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[0]'
@@ -246,6 +256,12 @@ MonoBehaviour:
   _maxBubbles: 5
   _floatSpeed: 5
   _previewBubbleCount: 5
+--- !u!212 &223860657741106312 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 6020316169838688404, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5807151741772133404}
+  m_PrefabAsset: {fileID: 0}
 --- !u!212 &1376329430993871045 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 4867988701194507481, guid: 85afc73ba92384dafa9d8a43874d2dd6,
