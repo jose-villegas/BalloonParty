@@ -197,6 +197,7 @@ namespace BalloonParty.Slots.Actor
             BuildRenderMesh();
 
             PushPalette();
+            PushStaticParams();
 
             _specksPerPop = Mathf.Clamp(_specksPerPop, 1, _count);
             _burst = new Speck[_specksPerPop];
@@ -224,6 +225,12 @@ namespace BalloonParty.Slots.Actor
             {
                 return;
             }
+
+#if UNITY_EDITOR
+            // Re-push the constant params each frame in the editor so inspector tweaks preview live; a build
+            // pushes them once in Start.
+            PushStaticParams();
+#endif
 
             // A burst this frame restarts the reduction curve before the ceiling is recomputed, so the pop
             // fills toward a refreshed (full) ceiling rather than the just-drained one.
@@ -273,9 +280,34 @@ namespace BalloonParty.Slots.Actor
             GetComponent<MeshRenderer>().sharedMaterial = _renderMaterial;
         }
 
-        // Refresh the material state the MeshRenderer draws with; runs in LateUpdate, before the camera renders.
+        // The per-frame material state (only what actually changes each frame); runs in LateUpdate, before the
+        // camera renders. The constants live in PushStaticParams.
         private void PushRenderParams()
         {
+            _renderMaterial.SetFloat(SpeckTimeId, Time.time);
+            _renderMaterial.SetInt(ActiveCountId, _activeCount);
+        }
+
+        // Compute + material params that never change at runtime — pushed once in Start (and every frame in the
+        // editor for live inspector tuning). Setting them on the shared compute/material assets persists across
+        // dispatches, so per-frame re-pushing them was redundant.
+        private void PushStaticParams()
+        {
+            _compute.SetBuffer(_kernel, SpecksId, _speckBuffer);
+            _compute.SetFloat(BrownianStrengthId, _brownianStrength);
+            _compute.SetFloat(DragId, _drag);
+            _compute.SetFloat(MotionInfluenceId, _motionInfluence);
+            _compute.SetVector(RegionMinId, _regionSize * -0.5f);
+            _compute.SetVector(RegionSizeId, _regionSize);
+            _compute.SetFloat(MinLifetimeId, _lifetimeRange.x);
+            _compute.SetFloat(MaxLifetimeId, _lifetimeRange.y);
+            _compute.SetFloat(DisturbanceDampingId, _disturbanceDamping);
+            _compute.SetVector(SwirlAngleId, _swirlAngle * Mathf.Deg2Rad);
+            _compute.SetFloat(FlowInfluenceId, _flowInfluence);
+            _compute.SetFloat(HeatGainId, _heatGain);
+            _compute.SetFloat(HeatDecayId, _heatDecay);
+            _compute.SetFloat(ColorLerpRateId, _colorLerpRate);
+
             _renderMaterial.SetBuffer(SpecksId, _speckBuffer);
             _renderMaterial.SetFloat(SpeckSizeId, _speckSize);
             _renderMaterial.SetFloat(TrailLengthId, _trailLength);
@@ -283,10 +315,8 @@ namespace BalloonParty.Slots.Actor
             _renderMaterial.SetFloat(MinScaleId, _scaleRange.x);
             _renderMaterial.SetFloat(MaxScaleId, _scaleRange.y);
             _renderMaterial.SetVector(ScalePulseSpeedId, _scalePulseSpeed);
-            _renderMaterial.SetFloat(SpeckTimeId, Time.time);
             _renderMaterial.SetFloat(FadeInId, _fadeIn);
             _renderMaterial.SetFloat(FadeOutId, _fadeOut);
-            _renderMaterial.SetInt(ActiveCountId, _activeCount);
         }
 
         // The palette the render lerps disturbed specks toward; indices must match the stampers'
@@ -442,32 +472,19 @@ namespace BalloonParty.Slots.Actor
             }
 
             // _Count drives the compute's bounds guard; feeding the active count simulates only the
-            // enabled specks (and dispatches just enough thread groups for them).
+            // enabled specks (and dispatches just enough thread groups for them). Only the per-frame-varying
+            // params are set here; the constants are pushed once by PushStaticParams.
             _compute.SetInt(CountId, _activeCount);
             _compute.SetFloat(DeltaTimeId, dt);
             _compute.SetFloat(TimeId, Time.time);
             _compute.SetVector(MotionDeltaId, _motionDelta);
-            _compute.SetFloat(BrownianStrengthId, _brownianStrength);
-            _compute.SetFloat(DragId, _drag);
-            _compute.SetFloat(MotionInfluenceId, _motionInfluence);
-            _compute.SetVector(RegionMinId, _regionSize * -0.5f);
-            _compute.SetVector(RegionSizeId, _regionSize);
-            _compute.SetFloat(MinLifetimeId, _lifetimeRange.x);
-            _compute.SetFloat(MaxLifetimeId, _lifetimeRange.y);
 
             var hasField = _disturbance != null && _disturbance.FieldTexture != null;
             _compute.SetFloat(DisturbanceInfluenceId, hasField ? _disturbanceInfluence : 0f);
-            _compute.SetFloat(DisturbanceDampingId, _disturbanceDamping);
-            _compute.SetVector(SwirlAngleId, _swirlAngle * Mathf.Deg2Rad);
-            _compute.SetFloat(FlowInfluenceId, _flowInfluence);
-            _compute.SetFloat(HeatGainId, _heatGain);
-            _compute.SetFloat(HeatDecayId, _heatDecay);
-            _compute.SetFloat(ColorLerpRateId, _colorLerpRate);
             _compute.SetTexture(_kernel, DisturbanceTexId, hasField ? _disturbance.FieldTexture : Texture2D.blackTexture);
             _compute.SetVector(FieldBoundsMinId, hasField ? _disturbance.FieldBoundsMin : Vector2.zero);
             _compute.SetVector(FieldBoundsSizeId, hasField ? _disturbance.FieldBoundsSize : Vector2.one);
 
-            _compute.SetBuffer(_kernel, SpecksId, _speckBuffer);
             _compute.Dispatch(_kernel, Mathf.CeilToInt(_activeCount / (float)ThreadGroupSize), 1, 1);
         }
 
