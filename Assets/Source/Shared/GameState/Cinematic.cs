@@ -1,4 +1,5 @@
 using UniRx;
+using UnityEngine;
 
 namespace BalloonParty.Shared.GameState
 {
@@ -17,6 +18,14 @@ namespace BalloonParty.Shared.GameState
         }
 
         public static void End()
+        {
+            _state.Value = CinematicState.None;
+        }
+
+        // Enter Play Mode Options can disable domain reload, which keeps this static ReactiveProperty (and its
+        // last value) alive between play sessions — reset to the initial state on each play start.
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetOnPlay()
         {
             _state.Value = CinematicState.None;
         }

@@ -1,5 +1,7 @@
 #if UNITY_EDITOR || DEVELOPMENT_BUILD
 
+using UnityEngine;
+
 namespace BalloonParty.Cheats
 {
     /// <summary>Shared dev-cheat flags read by gameplay under the same compile guard, so they strip from
@@ -14,6 +16,14 @@ namespace BalloonParty.Cheats
         /// no-op (hearts never drain), and <c>RunController.EndRun</c> is a no-op (no loss). Toggled by
         /// <see cref="BlockLevelUpCheat" />.</summary>
         public static bool BlockLevelUp;
+
+        // With Enter Play Mode Options disabling domain reload, statics survive between play sessions — reset
+        // the lock on each play start so it never silently carries over. Runs earliest, before scene load.
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
+        private static void ResetOnPlay()
+        {
+            BlockLevelUp = false;
+        }
     }
 }
 #endif
