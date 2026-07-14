@@ -12,7 +12,9 @@ Material:
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
-  m_InvalidKeywords: []
+  m_InvalidKeywords:
+  - _BANDSFROMSCENELIGHT_ON
+  - _SHINEFROMSCENELIGHT_ON
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -31,9 +33,9 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - _BandAngle: 0.125
-    - _BandsFromSceneLight: 1
     - _BandBlend: 0.5
     - _BandCount: 4
+    - _BandsFromSceneLight: 1
     - _GlitterBrightness: 2
     - _GlitterChance: 0.35
     - _GlitterDensity: 40
@@ -43,13 +45,16 @@ Material:
     - _GlitterSpeed: 6
     - _MaskSoftness: 0.035
     - _ScrollSpeed: 1
+    - _SeamSwirlAmount: 0.035
+    - _SeamSwirlScale: 8
+    - _SeamSwirlSpeed: 1.25
     - _ShineAngle: 0.125
-    - _SeamSwirlAmount: 0.03
     - _ShineFromSceneLight: 1
     - _ShineInterval: 0.75
     - _ShineSpeed: 0.35
-    - _SphereBend: 0.2
     - _ShineWidth: 0.25
+    - _SphereBend: 0.2
+    - _SphereRadius: 0.65
     - _StripeCount: 5
     - _TimeOffset: 0
     m_Colors:
@@ -60,5 +65,6 @@ Material:
     - _MaskMax: {r: 0.51, g: 0.23, b: 0, a: 0}
     - _MaskMin: {r: 0.39, g: 0.165, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SphereCenter: {r: 0.5, g: 0.5, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
