@@ -170,6 +170,58 @@ shaders now read from the owned global. Key decisions and additions:
 
 ---
 
+
+## Milestone 3 — the light field (designed 2026-07-14, not yet actioned)
+
+Multi-light + point/area lights WITHOUT per-consumer light loops: a screen/world-space RT — the
+disturbance-field architecture applied to light ("what we are stamping is light"). Top-down 2D.
+
+**Channel layout** (single RT, disturbance-style, ARGBHalf):
+- **R — magnitude**: baked attenuation ("how far from the source"), the global intensity at rest.
+- **G/B — direction**: 0.5-biased 2D vector; at rest, the global `_SceneLightDir` everywhere.
+- **A — palette colour index**: `(index+1)/16`, 0 = "use `_SceneLightColor`" (light colours are
+  deliberately palette-limited; the key light keeps free RGB via the rest state).
+
+**Consumers sample once** at their anchor (pixel or object centre) and get direction + magnitude +
+colour regardless of light count — N lights collapse into the composite. Rest state (no stamps) is
+bit-identical to the directional system, the same migration safety the colour slice used.
+
+**Compositing:** stamps accumulate magnitude (capped) + dominant colour index; direction is NOT
+composited — it derives from the magnitude gradient in a post pass (`dir = normalize(∇R)`, the
+heightfield-normal trick PuffCloud already uses via ddx/ddy). This makes AREA lights trivial:
+authors paint brightness only (greyscale cookie stamps, line/capsule lights for the laser, rect
+washes) and every shape gets plausible directions automatically.
+
+**Reused verbatim from the disturbance system:** DisturbanceFieldCoordinates (world↔UV), the RT
+resources/blit pattern, batched stamps, the lerp scheduler (ramped stamps = light FLASHES with
+decay — balloon pops emitting light), the A-channel palette encoding.
+
+**Known caveats (from the investigation + prior lessons):**
+- A-index + bilinear = decoded-garbage banding (the SpeckField lesson): point-sample A and let the
+  magnitude falloff hide colour seams (domains meet in the dark); if seams still show, resurrect
+  the smoothed-colour-layer companion RT from git history (commit e9544c3a).
+- Vertex-stage consumers (orbit accessories, bush leaves, per-object spec anchors) need VTF
+  (`SampleLevel`, target 3.5) — precedent: SpeckField, the retired SpriteDisturbanceTint.
+- The GI smear goes PER-FRAGMENT directional (decided 2026-07-14): the smear is already a
+  fragment shader — each fragment samples the field once (capture-UV ↔ field-UV is a trivial
+  camera-fitted affine) and marches its 8 taps along the LOCAL direction; a straight march along
+  the fragment's own field direction is physically right for occlusion. This kills the GI's
+  special-case CPU path (`_TapStepUV` from `SceneLightService.Direction` — C# then pushes only
+  world→UV scale factors) and makes the GI just another field consumer. Bonus: the same sample's R
+  modulates shadow strength/reach per fragment (dim region = weak short shadows) — which resolves
+  the open "should GI shadow strength scale with intensity" question organically.
+- Consumer helpers go texture-based → the per-shader helper copies stop scaling; introduce a shared
+  `SceneLight.cginc` include (`SampleSceneLight*(worldPos)` with a globals fallback when the field
+  is off) as part of Phase A.
+- Hold the line at ONE field: no per-light shadowcasting, no Light2D port (custom shaders are
+  SRPDefaultUnlit and can't receive Light2D anyway).
+
+**Phases:** A — field service (rest-state fill from SceneLightService, `_SceneLightTex` + bounds
+globals, the shared include, field-off fallback). B — pilots (PuffCloud per-pixel, PaintBlob
+per-object). C — light stamps (`LightStampProfile`: radius/intensity/falloff/palette index/duration;
+first sources: balloon pops flash their colour, then laser/lightning). D — generalize + the per-fragment
+GI march (see the caveat bullet above — it upgrades the GI, not just patches it).
+
 ## Open questions
 
 - Screen-space vs world-space light vector for balloons that move (parallax)? Screen-space is
