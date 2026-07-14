@@ -91,7 +91,12 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            _light.Position.Value = transform.position;
+            // Null until the shot fires (registered in FixedUpdate's first free frame).
+            if (_light != null)
+            {
+                _light.Position.Value = transform.position;
+            }
+
             TickRainbowGlow();
         }
 
@@ -103,10 +108,16 @@ namespace BalloonParty.Projectile.View
             }
 
             // The first free frame is the shot leaving the muzzle (MoveAndBounce sets _hasFlown below): emit the
-            // exit-force burst once here, before the shot advances.
+            // exit-force burst once here, before the shot advances, and light the shot up — the light is a
+            // fired-shot thing, not lit while it's still held at the thrower.
             if (!_hasFlown)
             {
                 EmitFireBurst();
+
+                // Colourless shots read as the Sparks tint; recoloured shots take their own colour
+                // (kept in step by UpdateGlowColor).
+                _light = new Light(transform.position, _lightRadius, _lightIntensity, LightColorIndex());
+                _lightRegistration = _lightField.RegisterLight(_light);
             }
 
             RevealShieldOnFirstFreeFrame();
@@ -217,11 +228,6 @@ namespace BalloonParty.Projectile.View
 
             _deflectedSubscription?.Dispose();
             _deflectedSubscription = _deflectedSubscriber.Subscribe(OnBalloonDeflected);
-
-            // A small light that follows the shot — colourless shots read as the Sparks tint, recoloured
-            // shots take their own colour (kept in step by UpdateGlowColor).
-            _light = new Light(transform.position, _lightRadius, _lightIntensity, LightColorIndex());
-            _lightRegistration = _lightField.RegisterLight(_light);
         }
 
         private void DestroyProjectile()
