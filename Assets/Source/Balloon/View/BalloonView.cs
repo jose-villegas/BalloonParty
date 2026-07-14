@@ -10,6 +10,7 @@ using BalloonParty.Shared.Animation;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
 using DG.Tweening;
@@ -54,6 +55,7 @@ namespace BalloonParty.Balloon.View
         [Inject] private IItemConfiguration _itemConfig;
         [Inject] private PoolManager _poolManager;
         [Inject] private BalloonMotionTicker _motionTicker;
+        [Inject] private SceneLightFieldService _lightField;
 
         private readonly CompositeDisposable _bindDisposables = new();
 
@@ -170,6 +172,7 @@ namespace BalloonParty.Balloon.View
                     _baseSortingLayer,
                     _spriteLayerRenderers.Length,
                     _poolManager,
+                    _lightField,
                     // The item's sorting footprint just changed (added/removed) — re-layer our
                     // above-item renderers over the item's new top order (or the body, if it's gone).
                     () => ApplyAboveItemSorting(Model.SlotIndex.Value));

@@ -3,7 +3,6 @@ using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.SceneLight;
 using UnityEngine;
-using VContainer;
 using Light = BalloonParty.Shared.SceneLight.Light;
 using Random = UnityEngine.Random;
 
@@ -21,9 +20,10 @@ namespace BalloonParty.Item
         [SerializeField] [Min(0f)] private float _lightHalfWidth = 0.5f;
         [SerializeField] [Min(0f)] private float _lightIntensity = 1.5f;
 
-        [Inject] private SceneLightFieldService _lightField;
-        [Inject] private IGamePalette _palette;
-
+        // The item icon is pooled through a non-injecting channel, so the host (ItemDisplayService)
+        // hands these in via ConfigureLightField rather than DI.
+        private SceneLightFieldService _lightField;
+        private IGamePalette _palette;
         private float _angle;
         private bool _stopped;
         private Light _horizontal;
@@ -36,7 +36,6 @@ namespace BalloonParty.Item
             _angle = Random.Range(0f, 360f);
             _stopped = false;
             transform.localRotation = Quaternion.AngleAxis(_angle, Vector3.forward);
-            RegisterTelegraph();
         }
 
         private void Update()
@@ -62,6 +61,16 @@ namespace BalloonParty.Item
             // The shot is firing — its own beam lights take over (LaserItemHandler), so drop the preview.
             DisposeTelegraph();
             return new TransformSnapshot(transform);
+        }
+
+        // Called by the host each time the icon is shown (the pool channel doesn't DI-inject). Registers
+        // the telegraph now that the service is available — OnEnable ran too early to have it.
+        internal void ConfigureLightField(SceneLightFieldService lightField, IGamePalette palette)
+        {
+            _lightField = lightField;
+            _palette = palette;
+            DisposeTelegraph();
+            RegisterTelegraph();
         }
 
         private void RegisterTelegraph()

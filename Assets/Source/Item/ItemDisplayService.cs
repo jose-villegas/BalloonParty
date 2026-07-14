@@ -3,6 +3,7 @@ using BalloonParty.Configuration;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Rendering;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.SceneLight;
 using UniRx;
 using UnityEngine;
 using BalloonParty.Configuration.Items;
@@ -23,6 +24,7 @@ namespace BalloonParty.Item
         private IGamePalette _palette;
         private IItemConfiguration _itemConfig;
         private PoolManager _poolManager;
+        private SceneLightFieldService _lightField;
         private IReadOnlyReactiveProperty<Vector2Int> _slotIndex;
         private Action _onSortingFootprintChanged;
 
@@ -41,6 +43,7 @@ namespace BalloonParty.Item
             int baseSortingOffset,
             int balloonRendererCount,
             PoolManager poolManager,
+            SceneLightFieldService lightField = null,
             Action onSortingFootprintChanged = null)
         {
             Unbind();
@@ -52,6 +55,7 @@ namespace BalloonParty.Item
             _balloonRendererCount = balloonRendererCount;
             _slotIndex = slotIndex;
             _poolManager = poolManager;
+            _lightField = lightField;
             _onSortingFootprintChanged = onSortingFootprintChanged;
 
             item
@@ -113,6 +117,14 @@ namespace BalloonParty.Item
 
             var color = _palette.GetColor(colorName);
             _activeView.Activate(color);
+
+            // The pooled icon isn't DI-injected; hand a laser its light-field access so the idle
+            // telegraph can register (it's the capture we already resolved above).
+            if (_lightField != null && _activeCapture is LaserItemRotation laser)
+            {
+                laser.ConfigureLightField(_lightField, _palette);
+            }
+
             ApplySorting(_slotIndex.Value);
             _onSortingFootprintChanged?.Invoke();
         }
