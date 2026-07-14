@@ -18,8 +18,8 @@ seam, never a replacement.
 |---|---|
 | `SceneLightFieldService` | Plain-C# DI service (`IStartable`/`ITickable`/`IDisposable`), registered in `GameScopeRegistration` next to `DisturbanceFieldService` (Singleton, `AsImplementedInterfaces().AsSelf()`). Builds the field via `SceneLightFieldResources`, sizes it through the shared `DisturbanceFieldCoordinates` (driven by `IGameDisplayConfiguration`), and runs the three-pass pipeline (below) — but only on ticks where a registered light or the directional owner changed. Holds the registry of on lights, subscribing to each one's reactive properties to know when to re-render. Resolves `SceneLightService` once via `FindFirstObjectByType` (a scene object, unreachable from a shared prefab — the `ScreenSpaceLightService` precedent); if it's absent it logs once and leaves the field off. Pushes the bounds globals + on-flag; releases the RTs in `Dispose`. API: `RegisterLight(Light) → IDisposable`, `ClearLights()` |
 | `SceneLightFieldResources` | The field's GPU resources — **two** ping-pong RTs (`ARGBHalf` where supported, else `ARGB32`) and the fill / accumulate / gradient materials — kept separate from the service's logic, mirroring `DisturbanceFieldResources`. Owns the `_SceneLightTex` global push, `BlitAndSwap`, the `Fill(magnitude, direction)` and `Gradient()` passes, and exposes `AccumulateMaterial` for the service to upload the light arrays onto |
-| `ISceneLightFieldSettings` / `SceneLightFieldSettings` | Read-only config interface + `ScriptableObject` (in `Configuration/Effects`, mirroring `IDisturbanceFieldSettings`) exposing the field's tuning knobs: `TexelsPerUnit` (RT density), `MaxLights` (per-batch cap, ≤ the accumulate shader's 32), `AccumulationCeiling` (overlap soft-clamp), `FalloffPower` (light magnitude/direction falloff sharpness), `DirectionOnset`/`DirectionFull` (the `|grad R|` band over which a light captures the direction around it). Injected into the service; registered directly in `GameLifetimeScope` like the other settings SOs — so **create the asset** via `Create ▸ Configuration ▸ Scene Light Field Settings` and assign it on the `GameLifetimeScope` (an unassigned slot NREs on start, same as its siblings). |
-| `Light` | A small reactive model a caller owns: `Position` / `Radius` / `Intensity` / `PaletteIndex` as `ReactiveProperty`s, with `const` defaults. On/off is `RegisterLight`/dispose; brightness is `Intensity` (the R magnitude), falloff shape is the global `FalloffPower` in the settings; there is no built-in decay. **Not** a config ScriptableObject — nothing to author headless. (Name collides with `UnityEngine.Light` — alias when both are in scope.) |
+| `ISceneLightFieldSettings` / `SceneLightFieldSettings` | Read-only config interface + `ScriptableObject` (in `Configuration/Effects`, mirroring `IDisturbanceFieldSettings`) exposing the field's tuning knobs: `TexelsPerUnit` (RT density), `MaxLights` (per-batch cap, ≤ the accumulate shader's 32), `AccumulationCeiling` (overlap soft-clamp), `DirectionResponse` (how strongly a light's local brightness bends the field direction toward it). Light *falloff shape* is per-light (`Light.FalloffPower`), not here. Injected into the service; registered directly in `GameLifetimeScope` like the other settings SOs — so **create the asset** via `Create ▸ Configuration ▸ Scene Light Field Settings` and assign it on the `GameLifetimeScope` (an unassigned slot NREs on start, same as its siblings). |
+| `Light` | A small reactive model a caller owns: `Position` / `Radius` / `Intensity` / `FalloffPower` (radial falloff exponent) / `PaletteIndex` as `ReactiveProperty`s, with `const` defaults. On/off is `RegisterLight`/dispose; brightness is `Intensity` (the R magnitude); there is no built-in decay. **Not** a config ScriptableObject — nothing to author headless. (Name collides with `UnityEngine.Light` — alias when both are in scope.) |
 
 ## Channel encoding (single RT)
 
@@ -46,9 +46,10 @@ field's diffusion) via a three-pass ping-pong over the two RTs. It runs only whe
    contributes**, and an identity on R/GB/A when `_StampCount = 0`.
 3. **Gradient** (`Hidden/BalloonParty/SceneLightGradient`) — recomputes GB from `grad(R)` via a central
    difference over `_FieldTexelSize`. The gradient points toward increasing brightness = toward the
-   source = the toward-light convention. It blends smoothly from the rest GB toward the gradient
-   direction by `smoothstep(_GradientLo, _GradientHi, |grad R|)` — a lerp weighted **exactly 0** on a
-   flat field, so the rest GB passes through bit-for-bit (no seam, no rest drift).
+   source = the toward-light convention. It blends from the rest GB toward the gradient direction by
+   `saturate(localR * _DirectionResponse)` — weighted by how much *local* light is here, so a flat/rest
+   field (localR = 0) keeps the rest GB bit-for-bit, and bright local lights capture the direction
+   (low local R also means low weight, which suppresses gradient noise where there's no real light).
 
 **Rest invariant.** With no lights registered: fill writes rest, accumulate is skipped (or an exact
 identity), and the gradient pass on the flat R field yields a zero gradient → weight 0 →
@@ -62,7 +63,7 @@ you fire a stamp and it lingers/diffuses) callers own the lifecycle directly:
 
 - A **`Light`** (`Shared/SceneLight/Light.cs`) is a small reactive model — `Position`, `Radius`,
   `Intensity` (the R magnitude it adds), `PaletteIndex` as `ReactiveProperty`s. The caller creates and
-  owns it. The magnitude's radial falloff shape is the global `FalloffPower` (settings), not per-light.
+  owns it. The magnitude's radial falloff shape is the per-light `FalloffPower`.
 - **`RegisterLight(Light) → IDisposable`** turns it on; disposing the registration turns it off.
   `ClearLights()` turns them all off at once. There is **no decay** in the service: a fade is just the
   caller animating `Intensity` (e.g. a DOTween on the reactive property) — the field follows.

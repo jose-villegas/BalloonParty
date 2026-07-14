@@ -35,10 +35,10 @@ Shader "Hidden/BalloonParty/SceneLightAccumulate"
             float     _StampAspect; // field height/width; corrects UV anisotropy so stamps stay circular
             int       _StampCount;
 
-            float  _FalloffPower;                  // radial falloff exponent (1 = linear cone)
             float4 _StampCenters[MAX_STAMPS];      // xy = UV center
             float  _StampRadii[MAX_STAMPS];        // UV radius
             float  _StampMagnitudes[MAX_STAMPS];   // peak magnitude at the centre (>= 0)
+            float  _StampFalloffs[MAX_STAMPS];     // per-light radial falloff exponent (1 = linear cone)
             float  _StampColorIndices[MAX_STAMPS]; // encoded palette index; 0 = no color
 
             struct appdata
@@ -85,11 +85,11 @@ Shader "Hidden/BalloonParty/SceneLightAccumulate"
                     toPixel.y *= _StampAspect;
                     float dist = length(toPixel);
 
-                    // Smooth radial falloff, peak at the centre → 0 at the radius, shaped by _FalloffPower
-                    // (1 = linear cone, higher = more concentrated). No plateau, so R (and the direction
-                    // the gradient pass derives from it) varies continuously across the whole disc.
+                    // Smooth radial falloff, peak at the centre → 0 at the radius, shaped by the light's
+                    // own falloff exponent (1 = linear cone, higher = more concentrated). No plateau, so R
+                    // (and the direction the gradient pass derives from it) varies continuously.
                     float t = saturate(1.0 - dist / max(radius, 1e-4));
-                    float falloff = pow(t, _FalloffPower);
+                    float falloff = pow(t, _StampFalloffs[s]);
 
                     float contribution = falloff * magnitude;
                     summedBoost += contribution;

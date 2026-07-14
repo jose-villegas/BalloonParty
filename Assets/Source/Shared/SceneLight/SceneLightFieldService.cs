@@ -39,14 +39,13 @@ namespace BalloonParty.Shared.SceneLight
         private static readonly int PaletteId = Shader.PropertyToID("_SceneLightPalette");
         private static readonly int FieldOnId = Shader.PropertyToID("_SceneLightFieldOn");
         private static readonly int MaxBoostId = Shader.PropertyToID("_MaxBoost");
-        private static readonly int FalloffPowerId = Shader.PropertyToID("_FalloffPower");
-        private static readonly int GradientLoId = Shader.PropertyToID("_GradientLo");
-        private static readonly int GradientHiId = Shader.PropertyToID("_GradientHi");
+        private static readonly int DirectionResponseId = Shader.PropertyToID("_DirectionResponse");
         private static readonly int StampAspectId = Shader.PropertyToID("_StampAspect");
         private static readonly int StampCountId = Shader.PropertyToID("_StampCount");
         private static readonly int StampCentersId = Shader.PropertyToID("_StampCenters");
         private static readonly int StampRadiiId = Shader.PropertyToID("_StampRadii");
         private static readonly int StampMagnitudesId = Shader.PropertyToID("_StampMagnitudes");
+        private static readonly int StampFalloffsId = Shader.PropertyToID("_StampFalloffs");
         private static readonly int StampColorIndicesId = Shader.PropertyToID("_StampColorIndices");
 
         private readonly IGameDisplayConfiguration _displayConfig;
@@ -58,6 +57,7 @@ namespace BalloonParty.Shared.SceneLight
         private readonly Vector4[] _batchCenters = new Vector4[ShaderStampCapacity];
         private readonly float[] _batchRadii = new float[ShaderStampCapacity];
         private readonly float[] _batchMagnitudes = new float[ShaderStampCapacity];
+        private readonly float[] _batchFalloffs = new float[ShaderStampCapacity];
         private readonly float[] _batchColorIndices = new float[ShaderStampCapacity];
 
         private DisturbanceFieldCoordinates _coords;
@@ -164,6 +164,7 @@ namespace BalloonParty.Shared.SceneLight
             light.Position.Subscribe(_ => _dirty = true).AddTo(subscription);
             light.Radius.Subscribe(_ => _dirty = true).AddTo(subscription);
             light.Intensity.Subscribe(_ => _dirty = true).AddTo(subscription);
+            light.FalloffPower.Subscribe(_ => _dirty = true).AddTo(subscription);
             light.PaletteIndex.Subscribe(_ => _dirty = true).AddTo(subscription);
 
             _lights.Add(new Registration(light, subscription));
@@ -218,6 +219,7 @@ namespace BalloonParty.Shared.SceneLight
                 _batchCenters[count] = _coords.WorldToUV(light.Position.Value);
                 _batchRadii[count] = _coords.WorldRadiusToUV(light.Radius.Value);
                 _batchMagnitudes[count] = light.Intensity.Value;
+                _batchFalloffs[count] = light.FalloffPower.Value;
                 _batchColorIndices[count] = PaletteChannelEncoding.Encode(light.PaletteIndex.Value);
                 count++;
             }
@@ -237,20 +239,19 @@ namespace BalloonParty.Shared.SceneLight
             material.SetVectorArray(StampCentersId, _batchCenters);
             material.SetFloatArray(StampRadiiId, _batchRadii);
             material.SetFloatArray(StampMagnitudesId, _batchMagnitudes);
+            material.SetFloatArray(StampFalloffsId, _batchFalloffs);
             material.SetFloatArray(StampColorIndicesId, _batchColorIndices);
             material.SetFloat(MaxBoostId, _settings.AccumulationCeiling);
-            material.SetFloat(FalloffPowerId, _settings.FalloffPower);
             material.SetFloat(StampAspectId, _stampAspect);
 
             _resources.BlitAndSwap(material);
         }
 
-        // The direction-blend band (see the gradient shader), pushed each render so it's live-tunable.
+        // How strongly local brightness bends the direction toward a light (see the gradient shader);
+        // pushed each render so it's live-tunable.
         private void PushGradientParams()
         {
-            var material = _resources.GradientMaterial;
-            material.SetFloat(GradientLoId, _settings.DirectionOnset);
-            material.SetFloat(GradientHiId, _settings.DirectionFull);
+            _resources.GradientMaterial.SetFloat(DirectionResponseId, _settings.DirectionResponse);
         }
 
         private void WarnOverflowOnce()

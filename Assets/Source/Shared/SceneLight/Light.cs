@@ -14,6 +14,7 @@ namespace BalloonParty.Shared.SceneLight
     {
         internal const float DefaultRadius = 1.5f;
         internal const float DefaultIntensity = 2f;
+        internal const float DefaultFalloffPower = 2f;
 
         // World-space centre of the lit disc.
         internal readonly ReactiveProperty<Vector3> Position;
@@ -21,15 +22,18 @@ namespace BalloonParty.Shared.SceneLight
         internal readonly ReactiveProperty<float> Radius;
         // Peak magnitude added into the field's R at the centre, before the accumulate cap.
         internal readonly ReactiveProperty<float> Intensity;
+        // Radial falloff exponent (1 - dist/radius)^power: 1 = linear cone, higher = tighter, longer tail.
+        internal readonly ReactiveProperty<float> FalloffPower;
         // Palette colour index tagged into the field's A channel; -1 = no colour (use the key light).
         internal readonly ReactiveProperty<int> PaletteIndex;
 
         internal Light(Vector3 position, float radius = DefaultRadius, float intensity = DefaultIntensity,
-            int paletteIndex = -1)
+            int paletteIndex = -1, float falloffPower = DefaultFalloffPower)
         {
             Position = new ReactiveProperty<Vector3>(position);
             Radius = new ReactiveProperty<float>(radius);
             Intensity = new ReactiveProperty<float>(intensity);
+            FalloffPower = new ReactiveProperty<float>(falloffPower);
             PaletteIndex = new ReactiveProperty<int>(paletteIndex);
         }
     }

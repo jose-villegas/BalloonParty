@@ -205,7 +205,7 @@ to accumulate into. Lights are **state, not events**: a light is simply on or of
 that lifecycle.
 
 - A **`Light`** is a small reactive model (`Position`/`Radius`/`Intensity`/`PaletteIndex` reactive; the
-  falloff shape is the global `FalloffPower` setting). `RegisterLight(Light) → IDisposable` turns it on; disposing turns it off;
+  falloff shape is the per-light `FalloffPower`). `RegisterLight(Light) → IDisposable` turns it on; disposing turns it off;
   `ClearLights()` clears all. **No decay in the service** — a fade is the caller animating `Intensity`
   (the R magnitude), which the field follows.
 - The service **watches** each registered light + the directional owner and re-renders **only when
@@ -260,24 +260,24 @@ does not compile shaders).
 shared header and sample `…At(worldPos)`.
 
 **Phase C status (2026-07-14 — CODE-COMPLETE, in-editor verification pending).** Shipped: the reactive
-`Light` model (`Position`/`Radius`/`Intensity`/`PaletteIndex` `ReactiveProperty`s, `const` defaults;
-the magnitude falloff is a smooth `(1-dist/radius)^FalloffPower` cone shaped by the settings, no plateau
-— a plateau's zero-gradient centre made the derived direction read as a ring); `SceneLightFieldResources` upgraded to two ping-pong
+`Light` model (`Position`/`Radius`/`Intensity`/`PaletteIndex` + per-light `FalloffPower`
+`ReactiveProperty`s, `const` defaults; the magnitude is a smooth `(1-dist/radius)^FalloffPower` cone,
+no plateau — a plateau's zero-gradient centre made the derived direction read as a ring);
+`SceneLightFieldResources` upgraded to two ping-pong
 RTs + `BlitAndSwap` with fill/accumulate/gradient materials; two new Hidden shaders
 `SceneLightAccumulate` (batched, 32/blit, mirrors `DisturbanceStampBatched`; adds each light's
-magnitude to R soft-clamped `_MaxBoost*(1-exp(-sum/_MaxBoost))`, writes the dominant palette
+per-stamp cone to R soft-clamped `_MaxBoost*(1-exp(-sum/_MaxBoost))`, writes the dominant palette
 index to A, passes GB through) and `SceneLightGradient` (`grad(R)` central difference over
-`_FieldTexelSize`, blends rest GB → gradient dir by `smoothstep(_GradientLo,_GradientHi,|grad R|)` at
-weight-exactly-0 on flat fields); `SceneLightFieldService` upgraded with the reactive on/off registry +
-dirty-gated fill→accumulate→gradient→publish render (`RegisterLight(Light) → IDisposable` /
-`ClearLights` API); and `LightStampCheat` (registered beside `DisturbanceStampCheat` in
-`GameScopeRegistration`). **Rest invariant verified in code:** no lights ⇒ accumulate skipped
-(and an exact identity at `_StampCount = 0`), gradient on flat R yields a zero gradient ⇒
-`lerp(restGB,…,0) == restGB` bit-for-bit, R/A pass through ⇒ bit-identical to the rest field, hence to
-the directional system. **Open:** the two new shaders join the fill shader in needing an
-Always-Included/config-SO registration before a device build; and the accumulate/gradient passes + the
-`_GradientLo/_Hi` thresholds need an in-editor render check and tuning (`dotnet build` does not compile
-shaders).
+`_FieldTexelSize`, blends rest GB → gradient dir by `saturate(localR * _DirectionResponse)` —
+presence-weighted, so flat/rest fields keep the global direction); `SceneLightFieldService` upgraded
+with the reactive on/off registry + dirty-gated fill→accumulate→gradient→publish render
+(`RegisterLight(Light) → IDisposable` / `ClearLights` API); and `LightStampCheat` (registered beside
+`DisturbanceStampCheat` in `GameScopeRegistration`). **Rest invariant verified in code:** no lights ⇒
+accumulate skipped, R stays 0, gradient weight `saturate(0)` = 0 ⇒ GB = the global rest direction,
+so the consumer-seen light is bit-identical to the directional system. **Open:** the two new shaders
+join the fill shader in needing an Always-Included/config-SO registration before a device build; and
+the passes + `FalloffPower`/`DirectionResponse` need an in-editor render check and tuning (`dotnet build`
+does not compile shaders).
 
 **Phase D status (2026-07-14 — CODE-COMPLETE, in-editor verification pending).** All remaining consumers
 migrated onto `SceneLight.cginc` and sample `…At(worldPos)` (world bodies: ToughBalloon, SoapBubbleCluster,

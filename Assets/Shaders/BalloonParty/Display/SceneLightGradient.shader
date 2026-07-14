@@ -10,9 +10,8 @@ Shader "Hidden/BalloonParty/SceneLightGradient"
     // pass. R and A are always passed through untouched.
     Properties
     {
-        _MainTex     ("Field (read)",     2D)    = "black" {}
-        _GradientLo  ("Gradient onset",   Float) = 0.002
-        _GradientHi  ("Gradient full",    Float) = 0.05
+        _MainTex           ("Field (read)",      2D)    = "black" {}
+        _DirectionResponse ("Direction Response", Float) = 1.0
     }
 
     SubShader
@@ -29,9 +28,8 @@ Shader "Hidden/BalloonParty/SceneLightGradient"
             #include "UnityCG.cginc"
 
             sampler2D _MainTex;
-            float4    _FieldTexelSize; // xy = (1/width, 1/height); set from C# (depends on RT size)
-            float     _GradientLo;     // |grad R| below this = flat, keep the rest direction
-            float     _GradientHi;     // |grad R| at/above this = fully gradient-driven
+            float4    _FieldTexelSize;   // xy = (1/width, 1/height); set from C# (depends on RT size)
+            float     _DirectionResponse; // how strongly local magnitude (R) bends the direction to local
 
             struct appdata
             {
@@ -69,12 +67,13 @@ Shader "Hidden/BalloonParty/SceneLightGradient"
                 float2 grad = float2(rRight - rLeft, rUp - rDown);
                 float gradLen = length(grad);
 
-                // Rest GB is passed through as-is at weight 0, so lerp(restGB, ..., 0) == restGB
-                // bit-for-bit. As the gradient strengthens we blend smoothly toward its (biased)
-                // direction — no hard switch, so no seam between the lit region and the rest field.
+                // Rest GB (the global direction) at weight 0; blend toward the gradient's (biased)
+                // direction by how much LOCAL light is here — current.r is the local boost, 0 at rest, so
+                // flat regions keep the global direction and bright local lights capture it. Low local R
+                // also means low weight, which suppresses gradient noise where there's no real light.
                 float2 restGB = current.gb;
                 float2 gradGB = (gradLen > 1e-5 ? grad / gradLen : (restGB * 2.0 - 1.0)) * 0.5 + 0.5;
-                float weight = smoothstep(_GradientLo, _GradientHi, gradLen);
+                float weight = saturate(current.r * _DirectionResponse);
                 float2 outGB = lerp(restGB, gradGB, weight);
 
                 return float4(current.r, outGB, current.a);

@@ -20,22 +20,15 @@ namespace BalloonParty.Configuration.Effects
                  "(soft-clamped), so overlaps never blow the field's brightness out.")]
         [SerializeField] [Range(1f, 6f)] private float _accumulationCeiling = 3f;
 
-        [Header("Falloff")]
-        [Tooltip("Radial falloff exponent (1 - dist/radius)^power. 1 = linear cone; higher pulls the light " +
-                 "in toward its centre with a longer dim tail. Shapes magnitude and how sharply the " +
-                 "direction points at the light.")]
-        [SerializeField] [Range(0.5f, 8f)] private float _falloffPower = 2f;
-
-        [Tooltip("|grad R| where the direction begins bending from the global light toward a local one.")]
-        [SerializeField] [Range(0f, 0.2f)] private float _directionOnset = 0.002f;
-        [Tooltip("|grad R| where the direction is fully the local light's. Larger band = softer capture.")]
-        [SerializeField] [Range(0f, 0.5f)] private float _directionFull = 0.05f;
+        [Header("Direction")]
+        [Tooltip("How strongly a light's local brightness bends the field direction toward it " +
+                 "(weight = saturate(localR * this)). Higher = direction snaps to a local light sooner. " +
+                 "A light's falloff shape is a per-light property, not here.")]
+        [SerializeField] [Range(0.1f, 5f)] private float _directionResponse = 1f;
 
         public int TexelsPerUnit => _texelsPerUnit;
         public int MaxLights => _maxLights;
         public float AccumulationCeiling => _accumulationCeiling;
-        public float FalloffPower => _falloffPower;
-        public float DirectionOnset => _directionOnset;
-        public float DirectionFull => _directionFull;
+        public float DirectionResponse => _directionResponse;
     }
 }
