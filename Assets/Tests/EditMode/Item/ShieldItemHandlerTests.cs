@@ -108,7 +108,7 @@ namespace BalloonParty.Tests.Item
 
             _handler.Activate(new ItemActivationContext(balloon, Vector3.zero, Vector3.zero));
 
-            _buffs.Received(1).Apply(Arg.Any<RainbowProjectileBuff>());
+            _buffs.Received(1).Apply(Arg.Any<RainbowShieldProjectileBuff>());
             _buffs.Received(1).Apply(Arg.Any<SpeedProjectileBuff>());
         }
 
