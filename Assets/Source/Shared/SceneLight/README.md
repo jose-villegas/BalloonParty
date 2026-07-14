@@ -112,8 +112,14 @@ build directly.)
   `SceneLightTint()`, `ShadowLightFade()` — so migrating a shader is a mechanical *delete the local
   copy, `#include` this*;
 - the **field-aware** helpers — `SceneLightDirectionAt(worldPos)`, `SceneLightMagnitudeAt(worldPos)`,
-  `SceneLightTintAt(worldPos)` (plus `…LOD` variants for vertex-stage / VTF consumers) — each of
-  which returns the flat result when `_SceneLightFieldOn < 0.5`.
+  `SceneLightTintAt(worldPos)`, `ShadowLightFadeAt(worldPos)` (plus `…LOD` variants for vertex-stage / VTF
+  consumers) — each of which returns the flat result when `_SceneLightFieldOn < 0.5`.
+
+`SceneLightTintAt` also decodes the A **palette colour**: where a light tagged a region, it returns that
+palette entry's RGB (from the global `_SceneLightPalette[16]` the service pushes) × the local magnitude;
+untagged / field-off falls back to the global key light unchanged. A is **point-sampled** (a texel-centre
+snap via `_SceneLightTexelSize`) — the channel is bilinear like R/GB, and an interpolated index would
+decode to a wrong colour at light boundaries. Consumers get colour for free through `SceneLightTintAt`.
 
 Because nothing includes the file yet and the field publishes an off-flag until it runs, **Phase A
 has zero visual effect**: the field OFF is bit-identical to today.
@@ -130,5 +136,10 @@ has zero visual effect**: the field OFF is bit-identical to today.
   than deferred to D) already derives direction from `grad(R)`, so area lights work today.
   Real game sources (balloon pops flashing their colour, then laser/lightning) are the next wiring
   step. In-editor render check still pending (`dotnet build` does not compile shaders).
-- **D** — generalize game-source wiring and turn the screen-space GI smear into a per-fragment field
-  consumer.
+- **D (code-complete, editor-verification pending)** — every remaining consumer (world bodies + sprite
+  family) migrated onto the include; the screen-space GI smear/overlay now sample the field per-fragment
+  (direction + magnitude), so lights bend the bounce and shadows. Field-off stays bit-identical.
+- **Palette colour decode (code-complete, editor-verification pending)** — `SceneLightTintAt` decodes the
+  A index to a palette colour via the global `_SceneLightPalette`, point-sampled; all consumers inherit it.
+- **Next** — real game-source wiring (balloon pops flashing their colour, laser/lightning as lights) now
+  that `RegisterLight` + coloured tint exist.

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Display;
 using BalloonParty.Shared.Disturbance;
 using UniRx;
@@ -39,6 +40,8 @@ namespace BalloonParty.Shared.SceneLight
 
         private static readonly int BoundsMinId = Shader.PropertyToID("_SceneLightFieldBoundsMin");
         private static readonly int BoundsSizeId = Shader.PropertyToID("_SceneLightFieldBoundsSize");
+        private static readonly int TexelSizeId = Shader.PropertyToID("_SceneLightTexelSize");
+        private static readonly int PaletteId = Shader.PropertyToID("_SceneLightPalette");
         private static readonly int FieldOnId = Shader.PropertyToID("_SceneLightFieldOn");
         private static readonly int MaxBoostId = Shader.PropertyToID("_MaxBoost");
         private static readonly int StampAspectId = Shader.PropertyToID("_StampAspect");
@@ -50,7 +53,9 @@ namespace BalloonParty.Shared.SceneLight
         private static readonly int StampColorIndicesId = Shader.PropertyToID("_StampColorIndices");
 
         private readonly IGameDisplayConfiguration _displayConfig;
+        private readonly IGamePalette _palette;
         private readonly SceneLightFieldResources _resources = new();
+        private readonly Vector4[] _paletteBuffer = new Vector4[(int)PaletteIndexSlots];
         private readonly List<Registration> _lights = new();
         private readonly Vector4[] _batchCenters = new Vector4[MaxLights];
         private readonly float[] _batchRadii = new float[MaxLights];
@@ -69,9 +74,10 @@ namespace BalloonParty.Shared.SceneLight
 
         internal RenderTexture FieldTexture => _resources.FieldTexture;
 
-        internal SceneLightFieldService(IGameDisplayConfiguration displayConfig)
+        internal SceneLightFieldService(IGameDisplayConfiguration displayConfig, IGamePalette palette)
         {
             _displayConfig = displayConfig;
+            _palette = palette;
         }
 
         void IStartable.Start()
@@ -83,6 +89,13 @@ namespace BalloonParty.Shared.SceneLight
             _stampAspect = _coords.Bounds.height / _coords.Bounds.width;
             _resources.Initialize(_coords.Width, _coords.Height);
             PushGlobalBounds();
+
+            // Texel size lets the include point-sample A (the palette index) at a texel centre — the
+            // channel is bilinear like R/GB, so an interpolated index would decode to a wrong colour.
+            Shader.SetGlobalVector(TexelSizeId, new Vector4(1f / _coords.Width, 1f / _coords.Height, 0f, 0f));
+
+            // The palette is static config, so push it once as a global the include decodes A against.
+            PushGlobalPalette();
 
             // The directional owner lives on a scene object (Game.unity's "Lighting"), unreachable from
             // a shared prefab, so resolve it at runtime — the ScreenSpaceLightService precedent.
@@ -259,6 +272,18 @@ namespace BalloonParty.Shared.SceneLight
             var bounds = _coords.Bounds;
             Shader.SetGlobalVector(BoundsMinId, new Vector4(bounds.xMin, bounds.yMin, 0f, 0f));
             Shader.SetGlobalVector(BoundsSizeId, new Vector4(bounds.width, bounds.height, 0f, 0f));
+        }
+
+        // The same slot order the lights encode into A (IGamePalette.Colors); unused slots stay black.
+        private void PushGlobalPalette()
+        {
+            var count = Mathf.Min(_palette.Colors.Count, _paletteBuffer.Length);
+            for (var i = 0; i < count; i++)
+            {
+                _paletteBuffer[i] = _palette.Colors[i].Color;
+            }
+
+            Shader.SetGlobalVectorArray(PaletteId, _paletteBuffer);
         }
 
         private readonly struct Registration

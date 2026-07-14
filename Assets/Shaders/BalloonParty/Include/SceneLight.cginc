@@ -25,12 +25,17 @@ float4 _SceneLightColor;
 float  _SceneLightIntensity;
 
 // The light FIELD (SceneLightFieldService): R = magnitude, GB = 0.5-biased toward-light direction,
-// A = palette-colour index (0 = use _SceneLightColor; the index decode lands in Phase C). Bounds map
+// A = palette-colour index, encoded (index+1)/16 (0 = untagged → use _SceneLightColor). Bounds map
 // world XY → field UV; the on-flag is the fallback switch (0 = field absent, use the flat globals).
 sampler2D _SceneLightTex;
 float4    _SceneLightFieldBoundsMin;  // xy = world-space min corner of the field
 float4    _SceneLightFieldBoundsSize; // xy = world-space size of the field
+float4    _SceneLightTexelSize;       // xy = 1/width, 1/height — for point-sampling the A index
 float     _SceneLightFieldOn;
+
+// The game palette, pushed once by SceneLightFieldService in the same slot order the lights encode
+// into A. A tagged light tints its region this colour instead of the global key light.
+float4 _SceneLightPalette[16];
 
 // Guarded read of the scene light (see SceneLightService): normalized, toward
 // the light; falls back to the canonical direction if the global hasn't been
@@ -119,11 +124,34 @@ float SceneLightMagnitudeAtLOD(float2 worldPos)
         : SceneLightFieldSampleLOD(worldPos).r;
 }
 
-// Light tint × magnitude at a world position. Phase A: the field's A is 0 everywhere, so the colour
-// is always the global key light scaled by the local magnitude (the palette-index decode from A
-// lands in Phase C). Falls back to white when the owner hasn't pushed yet.
+// Palette index (0..15) tagged into A at a world position, or -1 if untagged. A is POINT-sampled:
+// it's bilinear like R/GB, but an interpolated (index+1)/16 decodes to a wrong colour, so snap the UV
+// to the texel centre first (bilinear at a centre returns that texel exactly). Encoding: (index+1)/16.
+float SceneLightPaletteIndex(float a)
+{
+    return a > 0.001 ? min(floor(a * 16.0 + 0.5) - 1.0, 15.0) : -1.0;
+}
+
+float2 SceneLightTexelSnap(float2 fieldUV)
+{
+    return (floor(fieldUV / _SceneLightTexelSize.xy) + 0.5) * _SceneLightTexelSize.xy;
+}
+
+// Light colour × magnitude at a world position. A field-tagged region takes that light's palette
+// colour; otherwise (or field-off) the global key light, unchanged. Falls back to white before the
+// owner's first push.
 float3 SceneLightTintAt(float2 worldPos)
 {
+    if (_SceneLightFieldOn > 0.5)
+    {
+        float2 uv = SceneLightTexelSnap(SceneLightFieldUV(worldPos));
+        float index = SceneLightPaletteIndex(tex2D(_SceneLightTex, uv).a);
+        if (index >= 0.0)
+        {
+            return _SceneLightPalette[(int)index].rgb * SceneLightMagnitudeAt(worldPos);
+        }
+    }
+
     return _SceneLightColor.a > 0.5
         ? _SceneLightColor.rgb * SceneLightMagnitudeAt(worldPos)
         : float3(1.0, 1.0, 1.0);
@@ -131,6 +159,16 @@ float3 SceneLightTintAt(float2 worldPos)
 
 float3 SceneLightTintAtLOD(float2 worldPos)
 {
+    if (_SceneLightFieldOn > 0.5)
+    {
+        float2 uv = SceneLightTexelSnap(SceneLightFieldUV(worldPos));
+        float index = SceneLightPaletteIndex(tex2Dlod(_SceneLightTex, float4(uv, 0.0, 0.0)).a);
+        if (index >= 0.0)
+        {
+            return _SceneLightPalette[(int)index].rgb * SceneLightMagnitudeAtLOD(worldPos);
+        }
+    }
+
     return _SceneLightColor.a > 0.5
         ? _SceneLightColor.rgb * SceneLightMagnitudeAtLOD(worldPos)
         : float3(1.0, 1.0, 1.0);

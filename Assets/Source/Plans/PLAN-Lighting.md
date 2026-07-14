@@ -292,8 +292,17 @@ shadow-coupling open question; `ScreenSpaceLightService` stopped pushing `_TapSt
 `_TapStepUV`; shadow `relative`→1; bounce `magnitude`→global intensity with raw bounce = old product).
 **Open:** all shaders need an in-editor compile + visual A/B (field OFF unchanged; field ON bends
 bounce/shadow/bodies), the four `target 3.5` VTF bumps need a device check, and the capture/overlay UV →
-field-bounds mapping assumes the field is camera-view-aligned. Palette-**colour** decode (A→RGB) is a
-tracked follow-up, not in D.
+field-bounds mapping assumes the field is camera-view-aligned.
+
+**Palette-colour decode (2026-07-14 — CODE-COMPLETE, in-editor verification pending).** A tagged light
+now tints its region its palette colour, not just brighter white. `SceneLightFieldService` pushes the
+game palette once as a global `_SceneLightPalette[16]` (`IGamePalette`, same slot order the lights encode)
+plus `_SceneLightTexelSize`; `SceneLight.cginc`'s `SceneLightTintAt`/`AtLOD` decode A → index
+(`round(A*16)-1`, -1 = untagged) and return `_SceneLightPalette[index].rgb * magnitude`, else the global
+key-light path (so field-off / untagged is bit-identical). A is **point-sampled** via a texel-centre snap
+(`_SceneLightTexelSize`) so bilinear interpolation of the packed index can't bleed a wrong colour at light
+boundaries. All migrated consumers pick this up through `SceneLightTintAt` — no consumer edits. **Open:**
+in-editor check that a coloured cheat light tints the pilots its palette colour with no boundary halos.
 
 ## Open questions
 
