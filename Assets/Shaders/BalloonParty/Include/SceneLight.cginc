@@ -117,6 +117,23 @@ float2 SceneLightDirectionAtLOD(float2 worldPos)
         : SceneLightFieldDecodeDir(SceneLightFieldSampleLOD(worldPos));
 }
 
+// The LOCAL light's toward-direction ONLY — no ambient/global blend. `weightOut` (0..1) is how strongly
+// a local light defines the direction here (0 = none), so a caller can fade an effect in from rest by
+// it. Returns a neutral up-vector when there's no local light or the field is off. Vertex-stage (LOD).
+float2 SceneLightLocalDirectionAtLOD(float2 worldPos, out float weightOut)
+{
+    weightOut = 0.0;
+    if (_SceneLightFieldOn < 0.5)
+    {
+        return float2(0.0, 1.0);
+    }
+
+    float2 raw = SceneLightFieldSampleLOD(worldPos).gb * 2.0 - 1.0;
+    float len = length(raw);
+    weightOut = saturate(len);
+    return len > 1e-4 ? raw / len : float2(0.0, 1.0);
+}
+
 // The ambient (global) light magnitude — the key light's intensity, guarded to 1.0 before the owner
 // has pushed. This is the baseline the field's local boost adds ON TOP of; the field itself no longer
 // stores it (its R channel is the local boost only, 0 at rest).

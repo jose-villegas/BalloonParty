@@ -26,6 +26,11 @@ Shader "BalloonParty/Sprite/LightDriven"
         // streak). A baked 2D ground shadow should usually NOT rotate — its squashed shape
         // encodes the ground perspective, not the light — turn this off and use the orbit only.
         [ToggleUI] _RotateArt ("Rotate Art To Light", Float) = 1
+        // Which lights steer the down-light direction (used for BOTH the swing and the orbit below):
+        // Full = the field (ambient + local lights), Ambient = the global scene light only, Local = only
+        // nearby field lights — the art holds its baked orientation/placement at rest and swings/orbits
+        // toward a local light as it approaches (a glint that turns to face a passing spark).
+        [Enum(Full, 0, Ambient, 1, Local, 2)] _RotateLightMode ("Rotation Light Mode", Float) = 0
         _BakedAngle ("Baked Direction (deg)", Range(-180, 180)) = -45
         // Places the sprite down-light of its rest position (world units at scale 1, scaled by
         // the transform's world scale) — replaces an authored transform offset like a baked
@@ -115,6 +120,7 @@ Shader "BalloonParty/Sprite/LightDriven"
             sampler2D _MainTex;
             fixed4 _Color;
             float _RotateArt;
+            float _RotateLightMode;
             float _BakedAngle;
             float _OrbitDistance;
             float _TintBySceneLight;
@@ -137,7 +143,24 @@ Shader "BalloonParty/Sprite/LightDriven"
                 // Sampled at the object's own anchor (its pivot, BEFORE the orbit offset
                 // below moves the vertex) — VTF (target 3.5), the PaintBlob precedent.
                 float2 anchorWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
-                float2 downLight = -SceneLightDirectionAtLOD(anchorWorld);
+
+                // Down-light direction feeding BOTH the swing and the orbit, scoped by _RotateLightMode.
+                // Local yields a rest weight of 0 (art keeps its baked orientation/placement) that grows
+                // as a local light nears; Full/Ambient stay full strength (dirAmount 1).
+                float dirAmount = 1.0;
+                float2 downLight;
+                if (_RotateLightMode > 1.5)
+                {
+                    downLight = -SceneLightLocalDirectionAtLOD(anchorWorld, dirAmount);
+                }
+                else if (_RotateLightMode > 0.5)
+                {
+                    downLight = -SceneLightDirection();
+                }
+                else
+                {
+                    downLight = -SceneLightDirectionAtLOD(anchorWorld);
+                }
                 OUT.shadowFade = ShadowLightFadeAtLOD(anchorWorld);
 
                 // Tint source (see _LightMode). Local is neutral (1) until a local light is near, so the
@@ -162,8 +185,10 @@ Shader "BalloonParty/Sprite/LightDriven"
 
                 // Rotation is optional: a baked ground shadow keeps its authored shape (orbit
                 // only) and behaves like a plain sprite here.
+                // dirAmount fades the swing in (Local mode): 0 at rest keeps the baked angle, 1 = full
+                // swing to the light. Full/Ambient pass dirAmount 1, so this is the plain swing there.
                 float delta = _RotateArt > 0.5
-                    ? atan2(downLight.y, downLight.x) - radians(_BakedAngle) - objAngle
+                    ? (atan2(downLight.y, downLight.x) - radians(_BakedAngle) - objAngle) * dirAmount
                     : 0.0;
 
                 float s = sin(delta);
@@ -177,7 +202,7 @@ Shader "BalloonParty/Sprite/LightDriven"
                 // bigger balloons keep proportionally bigger offsets, matching the old
                 // localPosition behavior.
                 float4 worldPos = mul(unity_ObjectToWorld, v);
-                worldPos.xy += downLight * (_OrbitDistance * length(worldX));
+                worldPos.xy += downLight * (_OrbitDistance * length(worldX) * dirAmount);
 
                 OUT.vertex = UnityWorldToClipPos(worldPos);
                 OUT.texcoord = IN.texcoord;
