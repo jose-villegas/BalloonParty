@@ -5,9 +5,10 @@ Shader "Hidden/BalloonParty/SceneLightGradient"
     // toward the source, which is exactly the toward-light convention the rest of the system uses;
     // this is what makes area lights (paint brightness only) get plausible directions for free.
     //
-    // Where the field is flat (rest, no stamps) the gradient is zero and the pass passes the rest GB
-    // through VERBATIM (a lerp weight of exactly 0), so the rest field is bit-identical after this
-    // pass. R and A are always passed through untouched.
+    // Writes GB = weight * localDir (biased around neutral): the local direction scaled by how much
+    // local light is here (weight = saturate(localR * response)). At rest (no local light) weight is 0,
+    // so GB stays neutral — the field carries no ambient; the consumers blend the global direction in.
+    // R and A are passed through untouched.
     Properties
     {
         _MainTex           ("Field (read)",      2D)    = "black" {}
@@ -67,10 +68,10 @@ Shader "Hidden/BalloonParty/SceneLightGradient"
                 float2 grad = float2(rRight - rLeft, rUp - rDown);
                 float gradLen = length(grad);
 
-                // Rest GB (the global direction) at weight 0; blend toward the gradient's (biased)
-                // direction by how much LOCAL light is here — current.r is the local boost, 0 at rest, so
-                // flat regions keep the global direction and bright local lights capture it. Low local R
-                // also means low weight, which suppresses gradient noise where there's no real light.
+                // Neutral at weight 0 (rest = no local light, so GB stays neutral and the consumers use
+                // the global direction); scaled toward the gradient's (biased) direction by how much
+                // LOCAL light is here — current.r is the local boost, 0 at rest. Low local R also means
+                // low weight, which suppresses gradient noise where there's no real light.
                 float2 restGB = current.gb;
                 float2 gradGB = (gradLen > 1e-5 ? grad / gradLen : (restGB * 2.0 - 1.0)) * 0.5 + 0.5;
                 float weight = saturate(current.r * _DirectionResponse);
