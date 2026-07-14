@@ -124,6 +124,23 @@ namespace BalloonParty.Projectile.View
             }
         }
 
+        // Clear the last-hit guard once the shot leaves that balloon's collider, so a fresh re-approach can hit
+        // it again — a surviving tough the shot deflected off and later returns to would otherwise pass straight
+        // through. The guard only exists to stop an immediate re-hit on the overlap a deflect leaves behind.
+        private void OnTriggerExit2D(Collider2D other)
+        {
+            if (_model == null || other.gameObject.layer != BalloonsLayer)
+            {
+                return;
+            }
+
+            var balloonView = other.GetComponent<BalloonView>();
+            if (balloonView != null && _model.LastHitBalloon == balloonView.Model)
+            {
+                _model.LastHitBalloon = null;
+            }
+        }
+
         public void OnSpawned()
         {
             _shieldShown = false;

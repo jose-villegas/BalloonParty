@@ -1909,6 +1909,11 @@ PrefabInstance:
       propertyPath: '_spriteLayerRenderers.Array.data[15]'
       value: 
       objectReference: {fileID: 2172912401704632730}
+    - target: {fileID: 7822387025677367451, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.325
+      objectReference: {fileID: 0}
     - target: {fileID: 7911586223519890860, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_layers.Array.data[0]'

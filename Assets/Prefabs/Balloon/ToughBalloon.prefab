@@ -407,6 +407,16 @@ PrefabInstance:
       propertyPath: '_spriteLayerRenderers.Array.data[5]'
       value: 
       objectReference: {fileID: 418175176944642040}
+    - target: {fileID: 7822387025677367451, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: m_Radius
+      value: 0.325
+      objectReference: {fileID: 0}
+    - target: {fileID: 7822387025677367451, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 8083225976484237515, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: m_IsActive
