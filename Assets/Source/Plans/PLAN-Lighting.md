@@ -299,10 +299,14 @@ now tints its region its palette colour, not just brighter white. `SceneLightFie
 game palette once as a global `_SceneLightPalette[16]` (`IGamePalette`, same slot order the lights encode)
 plus `_SceneLightTexelSize`; `SceneLight.cginc`'s `SceneLightTintAt`/`AtLOD` decode A → index
 (`round(A*16)-1`, -1 = untagged) and return `_SceneLightPalette[index].rgb * magnitude`, else the global
-key-light path (so field-off / untagged is bit-identical). A is **point-sampled** via a texel-centre snap
-(`_SceneLightTexelSize`) so bilinear interpolation of the packed index can't bleed a wrong colour at light
-boundaries. All migrated consumers pick this up through `SceneLightTintAt` — no consumer edits. **Open:**
-in-editor check that a coloured cheat light tints the pilots its palette colour with no boundary halos.
+key-light path (so field-off / untagged is bit-identical). The colour uses a **decode-then-blend bilinear**
+over the 2×2 texel neighbourhood (`_SceneLightTexelSize`): each texel's index → colour first, then blend —
+smooth colour regions with no index bleed (a plain bilinear tap of the packed index would band into a
+foreign slot). The same decode-then-blend was applied to the render-maps preview (`ChannelPreview.shader`)
+so the debug view matches what consumers see. All migrated consumers pick this up through
+`SceneLightTintAt` — no consumer edits. **Open:** in-editor check that a coloured cheat light tints the
+pilots its palette colour smoothly (the earlier point-sampled decode read blocky at the 8-texel/unit field
+resolution; if still too coarse after the blend, bump the field's `TexelsPerUnit`).
 
 ## Open questions
 

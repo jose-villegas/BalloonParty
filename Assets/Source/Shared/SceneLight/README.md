@@ -117,9 +117,11 @@ build directly.)
 
 `SceneLightTintAt` also decodes the A **palette colour**: where a light tagged a region, it returns that
 palette entry's RGB (from the global `_SceneLightPalette[16]` the service pushes) × the local magnitude;
-untagged / field-off falls back to the global key light unchanged. A is **point-sampled** (a texel-centre
-snap via `_SceneLightTexelSize`) — the channel is bilinear like R/GB, and an interpolated index would
-decode to a wrong colour at light boundaries. Consumers get colour for free through `SceneLightTintAt`.
+untagged / field-off falls back to the global key light unchanged. The colour is a **decode-then-blend
+bilinear** over the 2×2 texel neighbourhood (`_SceneLightTexelSize`) — each texel's index is decoded to a
+colour *first*, then the colours are blended, so regions stay smooth without an interpolated index banding
+into a foreign palette slot (a plain bilinear tap of A would decode to a wrong third colour). Consumers get
+colour for free through `SceneLightTintAt`.
 
 Because nothing includes the file yet and the field publishes an off-flag until it runs, **Phase A
 has zero visual effect**: the field OFF is bit-identical to today.
@@ -140,6 +142,6 @@ has zero visual effect**: the field OFF is bit-identical to today.
   family) migrated onto the include; the screen-space GI smear/overlay now sample the field per-fragment
   (direction + magnitude), so lights bend the bounce and shadows. Field-off stays bit-identical.
 - **Palette colour decode (code-complete, editor-verification pending)** — `SceneLightTintAt` decodes the
-  A index to a palette colour via the global `_SceneLightPalette`, point-sampled; all consumers inherit it.
+  A index to a palette colour via the global `_SceneLightPalette` (decode-then-blend bilinear); all consumers inherit it.
 - **Next** — real game-source wiring (balloon pops flashing their colour, laser/lightning as lights) now
   that `RegisterLight` + coloured tint exist.

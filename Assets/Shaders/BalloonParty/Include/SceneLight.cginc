@@ -132,46 +132,63 @@ float SceneLightPaletteIndex(float a)
     return a > 0.001 ? min(floor(a * 16.0 + 0.5) - 1.0, 15.0) : -1.0;
 }
 
-float2 SceneLightTexelSnap(float2 fieldUV)
+// One texel's A → its palette colour, or the key light where untagged. Blending these DECODED
+// colours (not the raw indices) is what keeps colour regions smooth: a plain bilinear tap of the
+// packed index would interpolate into a foreign palette slot at boundaries (a wrong third colour).
+float3 SceneLightDecodeColor(float a, float3 keyColor)
 {
-    return (floor(fieldUV / _SceneLightTexelSize.xy) + 0.5) * _SceneLightTexelSize.xy;
+    float index = SceneLightPaletteIndex(a);
+    return index >= 0.0 ? _SceneLightPalette[(int)index].rgb : keyColor;
 }
 
-// Light colour × magnitude at a world position. A field-tagged region takes that light's palette
-// colour; otherwise (or field-off) the global key light, unchanged. Falls back to white before the
-// owner's first push.
+// Manual bilinear over the 2×2 texel neighbourhood of A — decode each texel first, then blend by the
+// sub-texel fraction. Smooth colour transitions with no index bleed; the taps land on texel centres
+// so each read is that texel's exact index.
+float3 SceneLightPaletteColorAt(float2 fieldUV, float3 keyColor)
+{
+    float2 texel = _SceneLightTexelSize.xy;
+    float2 p = fieldUV / texel - 0.5;
+    float2 f = frac(p);
+    float2 uv00 = (floor(p) + 0.5) * texel;
+    float3 c00 = SceneLightDecodeColor(tex2D(_SceneLightTex, uv00).a, keyColor);
+    float3 c10 = SceneLightDecodeColor(tex2D(_SceneLightTex, uv00 + float2(texel.x, 0.0)).a, keyColor);
+    float3 c01 = SceneLightDecodeColor(tex2D(_SceneLightTex, uv00 + float2(0.0, texel.y)).a, keyColor);
+    float3 c11 = SceneLightDecodeColor(tex2D(_SceneLightTex, uv00 + texel).a, keyColor);
+    return lerp(lerp(c00, c10, f.x), lerp(c01, c11, f.x), f.y);
+}
+
+float3 SceneLightPaletteColorAtLOD(float2 fieldUV, float3 keyColor)
+{
+    float2 texel = _SceneLightTexelSize.xy;
+    float2 p = fieldUV / texel - 0.5;
+    float2 f = frac(p);
+    float2 uv00 = (floor(p) + 0.5) * texel;
+    float3 c00 = SceneLightDecodeColor(tex2Dlod(_SceneLightTex, float4(uv00, 0.0, 0.0)).a, keyColor);
+    float3 c10 = SceneLightDecodeColor(tex2Dlod(_SceneLightTex, float4(uv00 + float2(texel.x, 0.0), 0.0, 0.0)).a, keyColor);
+    float3 c01 = SceneLightDecodeColor(tex2Dlod(_SceneLightTex, float4(uv00 + float2(0.0, texel.y), 0.0, 0.0)).a, keyColor);
+    float3 c11 = SceneLightDecodeColor(tex2Dlod(_SceneLightTex, float4(uv00 + texel, 0.0, 0.0)).a, keyColor);
+    return lerp(lerp(c00, c10, f.x), lerp(c01, c11, f.x), f.y);
+}
+
+// Light colour × magnitude at a world position. A field-tagged region blends toward that light's
+// palette colour (2×2 decoded-colour bilinear); untagged / field-off is the global key light.
+// Falls back to white before the owner's first push.
 float3 SceneLightTintAt(float2 worldPos)
 {
-    if (_SceneLightFieldOn > 0.5)
-    {
-        float2 uv = SceneLightTexelSnap(SceneLightFieldUV(worldPos));
-        float index = SceneLightPaletteIndex(tex2D(_SceneLightTex, uv).a);
-        if (index >= 0.0)
-        {
-            return _SceneLightPalette[(int)index].rgb * SceneLightMagnitudeAt(worldPos);
-        }
-    }
-
-    return _SceneLightColor.a > 0.5
-        ? _SceneLightColor.rgb * SceneLightMagnitudeAt(worldPos)
-        : float3(1.0, 1.0, 1.0);
+    float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1.0, 1.0, 1.0);
+    float3 color = _SceneLightFieldOn > 0.5
+        ? SceneLightPaletteColorAt(SceneLightFieldUV(worldPos), keyColor)
+        : keyColor;
+    return color * SceneLightMagnitudeAt(worldPos);
 }
 
 float3 SceneLightTintAtLOD(float2 worldPos)
 {
-    if (_SceneLightFieldOn > 0.5)
-    {
-        float2 uv = SceneLightTexelSnap(SceneLightFieldUV(worldPos));
-        float index = SceneLightPaletteIndex(tex2Dlod(_SceneLightTex, float4(uv, 0.0, 0.0)).a);
-        if (index >= 0.0)
-        {
-            return _SceneLightPalette[(int)index].rgb * SceneLightMagnitudeAtLOD(worldPos);
-        }
-    }
-
-    return _SceneLightColor.a > 0.5
-        ? _SceneLightColor.rgb * SceneLightMagnitudeAtLOD(worldPos)
-        : float3(1.0, 1.0, 1.0);
+    float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1.0, 1.0, 1.0);
+    float3 color = _SceneLightFieldOn > 0.5
+        ? SceneLightPaletteColorAtLOD(SceneLightFieldUV(worldPos), keyColor)
+        : keyColor;
+    return color * SceneLightMagnitudeAtLOD(worldPos);
 }
 
 // No light, no shadow, at a world position — same clamp as ShadowLightFade(), scaled by the
