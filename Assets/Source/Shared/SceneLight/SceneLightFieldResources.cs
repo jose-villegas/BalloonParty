@@ -8,7 +8,6 @@ namespace BalloonParty.Shared.SceneLight
     internal class SceneLightFieldResources
     {
         private static readonly int GlobalSceneLightTexId = Shader.PropertyToID("_SceneLightTex");
-        private static readonly int FillMagnitudeId = Shader.PropertyToID("_FillMagnitude");
         private static readonly int FillDirId = Shader.PropertyToID("_FillDir");
         private static readonly int TexelSizeId = Shader.PropertyToID("_FieldTexelSize");
 
@@ -54,11 +53,11 @@ namespace BalloonParty.Shared.SceneLight
             PushGlobalTexture();
         }
 
-        /// <summary>Pass 1 — fills the read buffer with the rest state (R = magnitude, GB = 0.5-biased
-        /// toward-light direction, A = 0) and swaps it in. The fill fragment ignores its source.</summary>
-        public void Fill(float magnitude, Vector2 direction)
+        /// <summary>Pass 1 — fills the read buffer with the rest state (R = 0, GB = 0.5-biased toward-light
+        /// direction, A = 0) and swaps it in. R is 0 because the field carries only the local boost; the
+        /// ambient magnitude is the global _SceneLightIntensity, added by consumers. Source is ignored.</summary>
+        public void Fill(Vector2 direction)
         {
-            _fillMaterial.SetFloat(FillMagnitudeId, magnitude);
             _fillMaterial.SetVector(FillDirId, new Vector4(direction.x, direction.y, 0f, 0f));
             BlitAndSwap(_fillMaterial);
         }

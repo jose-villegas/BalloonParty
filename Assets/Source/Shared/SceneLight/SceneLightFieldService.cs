@@ -64,8 +64,7 @@ namespace BalloonParty.Shared.SceneLight
         private SceneLightService _sceneLight;
         private int _maxLights;
         private float _stampAspect = 1f;
-        private Vector2 _lastDirection;
-        private float _lastIntensity = float.NaN;
+        private Vector2 _lastDirection = new(float.NaN, float.NaN);
         private bool _dirty = true;
         private bool _warnedOverflow;
         private bool _fieldOn;
@@ -109,8 +108,10 @@ namespace BalloonParty.Shared.SceneLight
         }
 
         // Re-renders only when a registered light changed (the _dirty flag its reactive properties set) or
-        // the directional owner's live-tunable direction/intensity moved. An idle scene skips the pipeline
-        // entirely — the RT keeps its last contents, which are still correct.
+        // the owner's direction moved (which the fill bakes into GB as the rest fallback). Ambient
+        // INTENSITY isn't baked into the field anymore — the field carries only the local boost, and
+        // consumers read the ambient magnitude from the global — so intensity tweaks need no re-render.
+        // An idle scene skips the pipeline entirely; the RT keeps its last (still-correct) contents.
         void ITickable.Tick()
         {
             if (_sceneLight == null || !_resources.IsReady)
@@ -119,8 +120,7 @@ namespace BalloonParty.Shared.SceneLight
             }
 
             var direction = _sceneLight.Direction;
-            var intensity = _sceneLight.Intensity;
-            var ownerChanged = direction != _lastDirection || !Mathf.Approximately(intensity, _lastIntensity);
+            var ownerChanged = direction != _lastDirection;
 
             if (_fieldOn && !_dirty && !ownerChanged)
             {
@@ -128,13 +128,12 @@ namespace BalloonParty.Shared.SceneLight
             }
 
             var count = BuildBatch();
-            _resources.Fill(intensity, direction);
+            _resources.Fill(direction);
             RunAccumulate(count);
             PushGradientParams();
             _resources.Gradient();
 
             _lastDirection = direction;
-            _lastIntensity = intensity;
             _dirty = false;
 
             // The on-flag is static once the field is live; set it after the first full pipeline render so a

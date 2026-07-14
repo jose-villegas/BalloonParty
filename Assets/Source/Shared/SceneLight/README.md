@@ -25,7 +25,7 @@ seam, never a replacement.
 
 | Channel | Meaning | Rest value |
 |---|---|---|
-| **R** | light **magnitude** — the global intensity at rest; the accumulate pass adds each registered light's magnitude on top (soft-clamped) | `_SceneLightIntensity` (≈ 1) |
+| **R** | **local** light boost above the ambient — 0 at rest; the accumulate pass adds each registered light's magnitude (soft-clamped). The ambient magnitude is NOT stored here — it's the global `_SceneLightIntensity`, added by the include's helpers (so the field is purely local, and ambient tweaks don't re-render it) | `0` |
 | **G/B** | 0.5-biased 2D **direction** (`gb = dir * 0.5 + 0.5`); toward-light, world/screen XY. The gradient pass recomputes it from `grad(R)` so it points toward the brightest nearby source | the global `_SceneLightDir` everywhere |
 | **A** | palette-colour **index**, `(index+1)/16`; **0 = "no colour, use `_SceneLightColor`"**. The accumulate pass writes the palette index of the light that contributes most at each texel | `0` exactly |
 
@@ -35,8 +35,8 @@ A render rebuilds the whole field from scratch (there's no in-texture persistenc
 field's diffusion) via a three-pass ping-pong over the two RTs. It runs only when the field is dirty
 (a registered light or the directional owner changed) — see the cadence note below:
 
-1. **Fill** (`Hidden/BalloonParty/SceneLightFieldFill`) — writes the rest state: R = the owner's
-   intensity, GB = the 0.5-biased `_SceneLightDir`, A = 0. This is the read buffer the chain builds on.
+1. **Fill** (`Hidden/BalloonParty/SceneLightFieldFill`) — writes the rest state: R = 0 (no local light),
+   GB = the 0.5-biased `_SceneLightDir`, A = 0. This is the read buffer the chain builds on.
 2. **Accumulate** (`Hidden/BalloonParty/SceneLightAccumulate`, batched — up to 32 lights/blit,
    `Vector4[]`/`float[]` uploads, aspect-corrected radial falloff, `(index+1)/16` palette encoding,
    mirroring `DisturbanceStampBatched`) — ADDS each registered light's magnitude into R

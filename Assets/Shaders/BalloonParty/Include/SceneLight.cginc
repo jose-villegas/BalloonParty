@@ -24,9 +24,10 @@ float4 _SceneLightDir;
 float4 _SceneLightColor;
 float  _SceneLightIntensity;
 
-// The light FIELD (SceneLightFieldService): R = magnitude, GB = 0.5-biased toward-light direction,
-// A = palette-colour index, encoded (index+1)/16 (0 = untagged → use _SceneLightColor). Bounds map
-// world XY → field UV; the on-flag is the fallback switch (0 = field absent, use the flat globals).
+// The light FIELD (SceneLightFieldService): R = LOCAL boost above the ambient (0 at rest — the ambient
+// magnitude is the global _SceneLightIntensity, added by the helpers below), GB = 0.5-biased toward-light
+// direction, A = palette-colour index, encoded (index+1)/16 (0 = untagged → use _SceneLightColor). Bounds
+// map world XY → field UV; the on-flag is the fallback switch (0 = field absent, use the flat globals).
 sampler2D _SceneLightTex;
 float4    _SceneLightFieldBoundsMin;  // xy = world-space min corner of the field
 float4    _SceneLightFieldBoundsSize; // xy = world-space size of the field
@@ -108,20 +109,26 @@ float2 SceneLightDirectionAtLOD(float2 worldPos)
         : SceneLightFieldDecodeDir(SceneLightFieldSampleLOD(worldPos));
 }
 
-// Light magnitude ("how much light here") at a world position. Off-field fallback is the flat
-// intensity, guarded by the owner-pushed validity flag (1.0 when the owner hasn't pushed yet).
+// The ambient (global) light magnitude — the key light's intensity, guarded to 1.0 before the owner
+// has pushed. This is the baseline the field's local boost adds ON TOP of; the field itself no longer
+// stores it (its R channel is the local boost only, 0 at rest).
+float SceneLightAmbientMagnitude()
+{
+    return _SceneLightColor.a > 0.5 ? _SceneLightIntensity : 1.0;
+}
+
+// Light magnitude ("how much light here") at a world position: the ambient baseline + the field's
+// local boost (R). Field-off there is no local boost, so it's just the ambient.
 float SceneLightMagnitudeAt(float2 worldPos)
 {
-    return _SceneLightFieldOn < 0.5
-        ? (_SceneLightColor.a > 0.5 ? _SceneLightIntensity : 1.0)
-        : SceneLightFieldSample(worldPos).r;
+    float ambient = SceneLightAmbientMagnitude();
+    return _SceneLightFieldOn < 0.5 ? ambient : ambient + SceneLightFieldSample(worldPos).r;
 }
 
 float SceneLightMagnitudeAtLOD(float2 worldPos)
 {
-    return _SceneLightFieldOn < 0.5
-        ? (_SceneLightColor.a > 0.5 ? _SceneLightIntensity : 1.0)
-        : SceneLightFieldSampleLOD(worldPos).r;
+    float ambient = SceneLightAmbientMagnitude();
+    return _SceneLightFieldOn < 0.5 ? ambient : ambient + SceneLightFieldSampleLOD(worldPos).r;
 }
 
 // Palette index (0..15) packed into A as (index+1)/16, or -1 if untagged.
@@ -181,31 +188,31 @@ float3 SceneLightPaletteColorAtLOD(float2 fieldUV, float3 keyColor)
 float3 SceneLightTintAt(float2 worldPos)
 {
     float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1.0, 1.0, 1.0);
-    float mag = SceneLightMagnitudeAt(worldPos);
+    float ambient = SceneLightAmbientMagnitude();
     if (_SceneLightFieldOn < 0.5)
     {
-        return keyColor * mag;
+        return keyColor * ambient;
     }
 
+    float local = SceneLightFieldSample(worldPos).r;
+    float colorAmount = saturate(local / SCENE_LIGHT_COLOR_RAMP);
     float3 palette = SceneLightPaletteColorAt(SceneLightFieldUV(worldPos), keyColor);
-    float rest = _SceneLightColor.a > 0.5 ? _SceneLightIntensity : 1.0;
-    float colorAmount = saturate((mag - rest) / SCENE_LIGHT_COLOR_RAMP);
-    return lerp(keyColor, palette, colorAmount) * mag;
+    return lerp(keyColor, palette, colorAmount) * (ambient + local);
 }
 
 float3 SceneLightTintAtLOD(float2 worldPos)
 {
     float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1.0, 1.0, 1.0);
-    float mag = SceneLightMagnitudeAtLOD(worldPos);
+    float ambient = SceneLightAmbientMagnitude();
     if (_SceneLightFieldOn < 0.5)
     {
-        return keyColor * mag;
+        return keyColor * ambient;
     }
 
+    float local = SceneLightFieldSampleLOD(worldPos).r;
+    float colorAmount = saturate(local / SCENE_LIGHT_COLOR_RAMP);
     float3 palette = SceneLightPaletteColorAtLOD(SceneLightFieldUV(worldPos), keyColor);
-    float rest = _SceneLightColor.a > 0.5 ? _SceneLightIntensity : 1.0;
-    float colorAmount = saturate((mag - rest) / SCENE_LIGHT_COLOR_RAMP);
-    return lerp(keyColor, palette, colorAmount) * mag;
+    return lerp(keyColor, palette, colorAmount) * (ambient + local);
 }
 
 // The LOCAL field-light contribution at a world position — nearby point/area lights only, with NO
@@ -218,10 +225,9 @@ float3 SceneLightLocalAt(float2 worldPos)
         return float3(0.0, 0.0, 0.0);
     }
 
-    float rest = _SceneLightColor.a > 0.5 ? _SceneLightIntensity : 1.0;
-    float boost = max(0.0, SceneLightMagnitudeAt(worldPos) - rest);
+    float local = SceneLightFieldSample(worldPos).r;
     float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1.0, 1.0, 1.0);
-    return SceneLightPaletteColorAt(SceneLightFieldUV(worldPos), keyColor) * boost;
+    return SceneLightPaletteColorAt(SceneLightFieldUV(worldPos), keyColor) * local;
 }
 
 float3 SceneLightLocalAtLOD(float2 worldPos)
@@ -231,10 +237,9 @@ float3 SceneLightLocalAtLOD(float2 worldPos)
         return float3(0.0, 0.0, 0.0);
     }
 
-    float rest = _SceneLightColor.a > 0.5 ? _SceneLightIntensity : 1.0;
-    float boost = max(0.0, SceneLightMagnitudeAtLOD(worldPos) - rest);
+    float local = SceneLightFieldSampleLOD(worldPos).r;
     float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1.0, 1.0, 1.0);
-    return SceneLightPaletteColorAtLOD(SceneLightFieldUV(worldPos), keyColor) * boost;
+    return SceneLightPaletteColorAtLOD(SceneLightFieldUV(worldPos), keyColor) * local;
 }
 
 // No light, no shadow, at a world position — same clamp as ShadowLightFade(), scaled by the

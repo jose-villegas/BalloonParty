@@ -178,7 +178,8 @@ Multi-light + point/area lights WITHOUT per-consumer light loops: a screen/world
 disturbance-field architecture applied to light ("what we are stamping is light"). Top-down 2D.
 
 **Channel layout** (single RT, disturbance-style, ARGBHalf):
-- **R — magnitude**: baked attenuation ("how far from the source"), the global intensity at rest.
+- **R — local boost**: the local light magnitude above the ambient, 0 at rest (the ambient is the
+  global `_SceneLightIntensity`, added by the consumers — the field stores only local lights).
 - **G/B — direction**: 0.5-biased 2D vector; at rest, the global `_SceneLightDir` everywhere.
 - **A — palette colour index**: `(index+1)/16`, 0 = "use `_SceneLightColor`" (light colours are
   deliberately palette-limited; the key light keeps free RGB via the rest state).
@@ -243,8 +244,8 @@ bullet above — it upgrades the GI, not just patches it).
 **Phase A status (2026-07-14 — CODE-COMPLETE, in-editor verification pending).** Shipped:
 `Shared/SceneLight/SceneLightFieldService` (+ `SceneLightFieldResources`), registered in
 `GameScopeRegistration` beside `DisturbanceFieldService` (Singleton); the `ARGBHalf` field RT sized
-via the reused `DisturbanceFieldCoordinates` at 8 texels/unit; per-tick rest-state fill
-(R = intensity, GB = 0.5-biased `_SceneLightDir`, A = 0) via `Hidden/BalloonParty/SceneLightFieldFill`;
+via the reused `DisturbanceFieldCoordinates`; the rest-state fill
+(R = 0 (local-only), GB = 0.5-biased `_SceneLightDir`, A = 0) via `Hidden/BalloonParty/SceneLightFieldFill`;
 globals `_SceneLightTex` / `_SceneLightFieldBoundsMin` / `_SceneLightFieldBoundsSize` /
 `_SceneLightFieldOn`; and the shared include `Assets/Shaders/BalloonParty/Include/SceneLight.cginc`
 (flat helpers verbatim + `…At(worldPos)` field helpers with a `…LOD` VTF variant, all falling back to

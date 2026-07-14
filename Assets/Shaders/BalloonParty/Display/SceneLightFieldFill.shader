@@ -1,13 +1,12 @@
 Shader "Hidden/BalloonParty/SceneLightFieldFill"
 {
-    // Fills the whole scene-light field with the directional system's REST state in one blit:
-    // R = the global magnitude, GB = the 0.5-biased toward-light direction, A = 0 (no palette
-    // colour — consumers use _SceneLightColor). No stamps yet; the palette encode lands in Phase C.
-    // The source texture is ignored — the fragment writes a constant computed from the properties.
+    // Fills the whole scene-light field with the rest state in one blit: R = 0 (the field carries only
+    // the LOCAL light boost above the ambient — consumers add the ambient magnitude from the global
+    // _SceneLightIntensity), GB = the 0.5-biased toward-light direction (the rest/fallback the gradient
+    // pass keeps where there's no local light), A = 0 (no palette tag). Source texture ignored.
     Properties
     {
         _MainTex        ("Source (ignored)", 2D)    = "black" {}
-        _FillMagnitude  ("Magnitude (R)",    Float) = 1.0
         _FillDir        ("Direction (GB)",   Vector) = (-0.707, 0.707, 0, 0)
     }
 
@@ -24,7 +23,6 @@ Shader "Hidden/BalloonParty/SceneLightFieldFill"
             #pragma fragment frag
             #include "UnityCG.cginc"
 
-            float  _FillMagnitude;
             float4 _FillDir; // xy = normalized toward-light direction
 
             struct appdata
@@ -45,13 +43,13 @@ Shader "Hidden/BalloonParty/SceneLightFieldFill"
                 return o;
             }
 
-            // float4, not fixed4 — magnitude can reach 2 (the owner's intensity range) and the
-            // target is a half-float RT; fixed precision would quantize it on mobile compilers.
+            // float4, not fixed4 — the accumulate pass adds boosts up to the ceiling and the target is a
+            // half-float RT; fixed precision would quantize it on mobile compilers.
             float4 frag(v2f i) : SV_Target
             {
-                // GB = dir * 0.5 + 0.5; A = 0 exactly (no palette colour anywhere at rest).
+                // R = 0 (rest = no local light); GB = dir * 0.5 + 0.5; A = 0 (no palette tag).
                 float2 gb = _FillDir.xy * 0.5 + 0.5;
-                return float4(_FillMagnitude, gb.x, gb.y, 0.0);
+                return float4(0.0, gb.x, gb.y, 0.0);
             }
             ENDCG
         }
