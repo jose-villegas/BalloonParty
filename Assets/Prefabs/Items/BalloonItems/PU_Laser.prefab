@@ -2717,6 +2717,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Items.LaserItemRotation
   _rotationSpeed: 45
+  _castTelegraphLight: 1
+  _lightHalfLength: 20
+  _lightHalfWidth: 1.15
+  _lightIntensity: 0.45
 --- !u!1001 &4110641795659025926
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -69,15 +69,18 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _FadeWithSceneLight: 0
     - _GlossMapScale: 1
-    - _FadeWithSceneLight: 1
-    - _TintBySceneLight: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _LightMode: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
+    - _OrbitDistance: 0
     - _Parallax: 0.02
+    - _RestAlpha: 0
+    - _RotateArt: 1
     - _ShadowSoftness: 0.03
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
@@ -88,6 +91,7 @@ Material:
     - _StencilOp: 0
     - _StencilReadMask: 255
     - _StencilWriteMask: 255
+    - _TintBySceneLight: 1
     - _UVSec: 0
     - _UseUIAlphaClip: 0
     - _ZTest: 4

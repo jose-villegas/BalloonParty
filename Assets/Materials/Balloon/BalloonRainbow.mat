@@ -41,18 +41,19 @@ Material:
     - _GlitterShineBind: 1
     - _GlitterSize: 0.5
     - _GlitterSpeed: 6
+    - _LightInfluence: 1
     - _MaskSoftness: 0.035
     - _ScrollSpeed: 1
-    - _SeamSwirlAmount: 0.035
-    - _SeamSwirlScale: 8
-    - _SeamSwirlSpeed: 1.25
+    - _SeamSwirlAmount: 0.15
+    - _SeamSwirlScale: 3
+    - _SeamSwirlSpeed: 0.75
     - _ShineAngle: 0.125
     - _ShineFromSceneLight: 1
     - _ShineInterval: 0.75
     - _ShineSpeed: 0.35
     - _ShineWidth: 0.25
-    - _SphereBend: 0.2
-    - _SphereRadius: 0.65
+    - _SphereBend: 0.044
+    - _SphereRadius: 0.35
     - _StripeCount: 5
     - _TimeOffset: 0
     m_Colors:

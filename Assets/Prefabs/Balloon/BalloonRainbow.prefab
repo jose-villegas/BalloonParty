@@ -186,7 +186,7 @@ PrefabInstance:
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: _spriteLayerRenderers.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
@@ -202,7 +202,7 @@ PrefabInstance:
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[3]'
       value: 
-      objectReference: {fileID: 8439837883330839234}
+      objectReference: {fileID: 5976098812154462603}
     - target: {fileID: 8190022528988633400, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: m_IsActive
@@ -218,6 +218,12 @@ PrefabInstance:
       insertIndex: -1
       addedObject: {fileID: 7486056724034596383}
   m_SourcePrefab: {fileID: 100100000, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
+--- !u!212 &5976098812154462603 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8377671993713916893, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+    type: 3}
+  m_PrefabInstance: {fileID: 2786644593772837462}
+  m_PrefabAsset: {fileID: 0}
 --- !u!212 &6935960289402229742 stripped
 SpriteRenderer:
   m_CorrespondingSourceObject: {fileID: 5110843805831965112, guid: 85afc73ba92384dafa9d8a43874d2dd6,

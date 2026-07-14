@@ -69,6 +69,8 @@ MonoBehaviour:
     _heatGain: 4
     _heatDecay: 1.5
     _colorLerpRate: 4
+    _lightInfluence: 4
+    _lightMode: 0
     _colorProfiles:
     - _colorMask: 16
       _speckSize: 0.045
@@ -80,6 +82,8 @@ MonoBehaviour:
       _scaleHold: {x: 0, y: 0}
       _fadeIn: 0.5
       _fadeOut: 0.05
+      _lightInfluence: 1
+      _lightMode: 0
     - _colorMask: 15
       _speckSize: 0.035
       _trailLength: 0.175
@@ -90,6 +94,8 @@ MonoBehaviour:
       _scaleHold: {x: 0, y: 0}
       _fadeIn: 0.5
       _fadeOut: 0.075
+      _lightInfluence: 2
+      _lightMode: 0
     - _colorMask: 32
       _speckSize: 0.045
       _trailLength: 0.5
@@ -100,6 +106,8 @@ MonoBehaviour:
       _scaleHold: {x: 0, y: 0}
       _fadeIn: 0
       _fadeOut: 0.2
+      _lightInfluence: 0
+      _lightMode: 0
     - _colorMask: 128
       _speckSize: 0.06
       _trailLength: 0.25
@@ -110,6 +118,8 @@ MonoBehaviour:
       _scaleHold: {x: 0, y: 0}
       _fadeIn: 0
       _fadeOut: 0.4
+      _lightInfluence: 0
+      _lightMode: 0
   _spawning:
     _spawnAllImmediately: 0
     _initialActiveCount: 0

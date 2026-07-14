@@ -241,6 +241,11 @@ PrefabInstance:
       propertyPath: m_DrawMode
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 6117035275633951413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6706276318355311262, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: m_Controller
@@ -325,7 +330,7 @@ PrefabInstance:
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: _spriteLayerRenderers.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
@@ -342,6 +347,11 @@ PrefabInstance:
       propertyPath: '_spriteLayerRenderers.Array.data[3]'
       value: 
       objectReference: {fileID: 1940519893733515224}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_spriteLayerRenderers.Array.data[4]'
+      value: 
+      objectReference: {fileID: 4404821073302428817}
     - target: {fileID: 7822387025677367451, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: m_Radius
@@ -447,3 +457,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Balloon.Type.ToughBalloonType
   _renderer: {fileID: 1121172538853445364}
   _crackAnimDuration: 2
+--- !u!212 &4404821073302428817 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8377671993713916893, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+    type: 3}
+  m_PrefabInstance: {fileID: 5287904529572357964}
+  m_PrefabAsset: {fileID: 0}

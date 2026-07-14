@@ -5114,7 +5114,7 @@ PrefabInstance:
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: _spriteLayerRenderers.Array.size
-      value: 5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
@@ -5134,6 +5134,11 @@ PrefabInstance:
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[4]'
+      value: 
+      objectReference: {fileID: 7043144902611762483}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
+      propertyPath: '_spriteLayerRenderers.Array.data[5]'
       value: 
       objectReference: {fileID: 5954659857181554507}
     m_RemovedComponents: []
@@ -5165,6 +5170,12 @@ SpriteRenderer:
 --- !u!4 &5694091670547352942 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6555064605166848896, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+    type: 3}
+  m_PrefabInstance: {fileID: 1584491585037960942}
+  m_PrefabAsset: {fileID: 0}
+--- !u!212 &7043144902611762483 stripped
+SpriteRenderer:
+  m_CorrespondingSourceObject: {fileID: 8377671993713916893, guid: 85afc73ba92384dafa9d8a43874d2dd6,
     type: 3}
   m_PrefabInstance: {fileID: 1584491585037960942}
   m_PrefabAsset: {fileID: 0}
