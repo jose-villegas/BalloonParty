@@ -14,7 +14,6 @@ namespace BalloonParty.Shared.SceneLight
     {
         internal const float DefaultRadius = 1.5f;
         internal const float DefaultIntensity = 2f;
-        internal const float DefaultEdgeSoftness = 0.35f;
 
         // World-space centre of the lit disc.
         internal readonly ReactiveProperty<Vector3> Position;
@@ -24,18 +23,14 @@ namespace BalloonParty.Shared.SceneLight
         internal readonly ReactiveProperty<float> Intensity;
         // Palette colour index tagged into the field's A channel; -1 = no colour (use the key light).
         internal readonly ReactiveProperty<int> PaletteIndex;
-        // Fraction of the radius held at full magnitude before the edge falls off; 0 = soft to centre.
-        // Authored once — it doesn't animate, so it isn't reactive.
-        internal readonly float EdgeSoftness;
 
         internal Light(Vector3 position, float radius = DefaultRadius, float intensity = DefaultIntensity,
-            int paletteIndex = -1, float edgeSoftness = DefaultEdgeSoftness)
+            int paletteIndex = -1)
         {
             Position = new ReactiveProperty<Vector3>(position);
             Radius = new ReactiveProperty<float>(radius);
             Intensity = new ReactiveProperty<float>(intensity);
             PaletteIndex = new ReactiveProperty<int>(paletteIndex);
-            EdgeSoftness = edgeSoftness;
         }
     }
 }

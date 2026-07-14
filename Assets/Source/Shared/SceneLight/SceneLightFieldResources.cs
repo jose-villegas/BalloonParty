@@ -21,6 +21,7 @@ namespace BalloonParty.Shared.SceneLight
 
         public RenderTexture FieldTexture => _readFromA ? _fieldA : _fieldB;
         public Material AccumulateMaterial => _accumulateMaterial;
+        public Material GradientMaterial => _gradientMaterial;
         public bool IsReady =>
             _fieldA != null && _fillMaterial != null && _accumulateMaterial != null && _gradientMaterial != null;
 

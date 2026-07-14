@@ -35,10 +35,10 @@ Shader "Hidden/BalloonParty/SceneLightAccumulate"
             float     _StampAspect; // field height/width; corrects UV anisotropy so stamps stay circular
             int       _StampCount;
 
+            float  _FalloffPower;                  // radial falloff exponent (1 = linear cone)
             float4 _StampCenters[MAX_STAMPS];      // xy = UV center
             float  _StampRadii[MAX_STAMPS];        // UV radius
-            float  _StampMagnitudes[MAX_STAMPS];   // current-envelope peak magnitude (>= 0)
-            float  _StampEdges[MAX_STAMPS];        // inner-plateau fraction of radius, [0,1)
+            float  _StampMagnitudes[MAX_STAMPS];   // peak magnitude at the centre (>= 0)
             float  _StampColorIndices[MAX_STAMPS]; // encoded palette index; 0 = no color
 
             struct appdata
@@ -79,16 +79,17 @@ Shader "Hidden/BalloonParty/SceneLightAccumulate"
                     float2 center = _StampCenters[s].xy;
                     float  radius = _StampRadii[s];
                     float  magnitude = _StampMagnitudes[s];
-                    float  edge = _StampEdges[s];
 
                     // Correct the per-axis UV normalisation so the falloff is circular in world space.
                     float2 toPixel = uv - center;
                     toPixel.y *= _StampAspect;
                     float dist = length(toPixel);
 
-                    // Radial falloff with an inner plateau: full magnitude inside radius*edge, ramping
-                    // to 0 at the radius. edge = 0 reproduces the disturbance stamp's soft-to-center cone.
-                    float falloff = smoothstep(radius, radius * edge, dist);
+                    // Smooth radial falloff, peak at the centre → 0 at the radius, shaped by _FalloffPower
+                    // (1 = linear cone, higher = more concentrated). No plateau, so R (and the direction
+                    // the gradient pass derives from it) varies continuously across the whole disc.
+                    float t = saturate(1.0 - dist / max(radius, 1e-4));
+                    float falloff = pow(t, _FalloffPower);
 
                     float contribution = falloff * magnitude;
                     summedBoost += contribution;

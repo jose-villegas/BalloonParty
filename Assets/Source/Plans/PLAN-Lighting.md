@@ -203,8 +203,8 @@ place. The light field has no in-texture persistence — each render rebuilds it
 to accumulate into. Lights are **state, not events**: a light is simply on or off, and the caller owns
 that lifecycle.
 
-- A **`Light`** is a small reactive model (`Position`/`Radius`/`Intensity`/`PaletteIndex` reactive,
-  authored `EdgeSoftness`). `RegisterLight(Light) → IDisposable` turns it on; disposing turns it off;
+- A **`Light`** is a small reactive model (`Position`/`Radius`/`Intensity`/`PaletteIndex` reactive; the
+  falloff shape is the global `FalloffPower` setting). `RegisterLight(Light) → IDisposable` turns it on; disposing turns it off;
   `ClearLights()` clears all. **No decay in the service** — a fade is the caller animating `Intensity`
   (the R magnitude), which the field follows.
 - The service **watches** each registered light + the directional owner and re-renders **only when
@@ -259,8 +259,9 @@ does not compile shaders).
 shared header and sample `…At(worldPos)`.
 
 **Phase C status (2026-07-14 — CODE-COMPLETE, in-editor verification pending).** Shipped: the reactive
-`Light` model (`Position`/`Radius`/`Intensity`/`PaletteIndex` `ReactiveProperty`s + authored
-`EdgeSoftness`, `const` defaults); `SceneLightFieldResources` upgraded to two ping-pong
+`Light` model (`Position`/`Radius`/`Intensity`/`PaletteIndex` `ReactiveProperty`s, `const` defaults;
+the magnitude falloff is a smooth `(1-dist/radius)^FalloffPower` cone shaped by the settings, no plateau
+— a plateau's zero-gradient centre made the derived direction read as a ring); `SceneLightFieldResources` upgraded to two ping-pong
 RTs + `BlitAndSwap` with fill/accumulate/gradient materials; two new Hidden shaders
 `SceneLightAccumulate` (batched, 32/blit, mirrors `DisturbanceStampBatched`; adds each light's
 magnitude to R soft-clamped `_MaxBoost*(1-exp(-sum/_MaxBoost))`, writes the dominant palette
