@@ -42,6 +42,7 @@ Shader "BalloonParty/Scenario/SpeckField"
             #pragma fragment frag
             #pragma target 4.5
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             struct Speck
             {
@@ -79,7 +80,12 @@ Shader "BalloonParty/Scenario/SpeckField"
             float4 _SpeckLookA[16];
             float4 _SpeckLookB[16];
             float4 _SpeckLookC[16];
+            float4 _SpeckLookD[16];   // D = (lightInfluence, lightMode, _, _) per slot
             int _SpeckLookCount;
+
+            // Base scene-light response (uncoloured specks); a colour look overrides via _SpeckLookD.
+            float _SpeckLightInfluence;
+            float _SpeckLightMode;
 
             struct v2f
             {
@@ -90,6 +96,8 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float  paletteIndex : TEXCOORD3;
                 float  prevPaletteIndex : TEXCOORD4;
                 float  colorBlend : TEXCOORD5;
+                float3 lightTint : TEXCOORD6;
+                float  lightInfluence : TEXCOORD7;
             };
 
             // Two triangles → a unit quad centered on the origin, in [-0.5, 0.5].
@@ -143,6 +151,17 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float lHoldMin     = lerp(_ScaleHold.x,        lc.y, lookT);
                 float lHoldMax     = lerp(_ScaleHold.y,        lc.z, lookT);
 
+                // Scene-light response, sampled at the speck's world position. Influence blends base →
+                // colour by heat (like the params above); mode is discrete — a coloured speck reads its
+                // colour slot's mode, an uncoloured one the base. Local mode is neutral at rest and only
+                // brightens near a local light. Mode: 0 = Full, 1 = Ambient, 2 = Local.
+                bool coloured = s.paletteIndex >= -0.5 && lookSlot < _SpeckLookCount;
+                float lMode = coloured ? _SpeckLookD[lookSlot].y : _SpeckLightMode;
+                float3 lightTint = lMode > 1.5
+                    ? float3(1.0, 1.0, 1.0) + SceneLightLocalAtLOD(s.position)
+                    : (lMode > 0.5 ? SceneLightTint() : SceneLightTintAtLOD(s.position));
+                float lightInfluence = lerp(_SpeckLightInfluence, _SpeckLookD[lookSlot].x, lookT);
+
                 // Life fade: ramp in over fadeIn, out over fadeOut (fractions of lifetime), driving both
                 // alpha and scale so specks pop in and shrink away.
                 float lifeT = s.lifetime > 0.0 ? saturate(s.age / s.lifetime) : 1.0;
@@ -195,6 +214,8 @@ Shader "BalloonParty/Scenario/SpeckField"
                 o.paletteIndex = s.paletteIndex;
                 o.prevPaletteIndex = s.prevPaletteIndex;
                 o.colorBlend = s.colorBlend;
+                o.lightTint = lightTint;
+                o.lightInfluence = lightInfluence;
                 return o;
             }
 
@@ -221,6 +242,9 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float heat = saturate(i.heat);
                 col.rgb = lerp(col.rgb, target.rgb, heat);
                 col.a = lerp(col.a, tex.a * target.a, heat);
+
+                // Scene-light tint, eased by the per-look influence (0 = emissive, ignores light).
+                col.rgb *= lerp(float3(1.0, 1.0, 1.0), i.lightTint, i.lightInfluence);
 
                 col.a *= i.alpha;
                 return col;

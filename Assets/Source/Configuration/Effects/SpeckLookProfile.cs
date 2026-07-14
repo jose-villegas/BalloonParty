@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Shared.SceneLight;
 using UnityEngine;
 using UnityEngine.Serialization;
 
@@ -39,6 +40,14 @@ namespace BalloonParty.Configuration.Effects
         [Range(0f, 1f)] [SerializeField] private float _fadeIn;
         [Range(0f, 1f)] [SerializeField] private float _fadeOut;
 
+        [Tooltip("How much the scene light tints this colour's specks (0 = ignore light, emissive). Blends " +
+                 "from the base look's value toward this by heat.")]
+        [Range(0f, 1f)] [SerializeField] private float _lightInfluence;
+
+        [Tooltip("Which light these specks read: Full (ambient + local), Ambient (global only), or Local " +
+                 "(only nearby field lights, neutral otherwise).")]
+        [SerializeField] private SceneLightMode _lightMode;
+
         public int ColorMask => _colorMask;
         public float SpeckSize => _speckSize;
         public float TrailLength => _trailLength;
@@ -49,5 +58,7 @@ namespace BalloonParty.Configuration.Effects
         public Vector2 ScaleHold => _scaleHold;
         public float FadeIn => _fadeIn;
         public float FadeOut => _fadeOut;
+        public float LightInfluence => _lightInfluence;
+        public SceneLightMode LightMode => _lightMode;
     }
 }

@@ -4,6 +4,7 @@ using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Capabilities;
 using MessagePipe;
 using UnityEngine;
@@ -69,7 +70,10 @@ namespace BalloonParty.Slots.Actor
         private static readonly int SpeckLookAId = Shader.PropertyToID("_SpeckLookA");
         private static readonly int SpeckLookBId = Shader.PropertyToID("_SpeckLookB");
         private static readonly int SpeckLookCId = Shader.PropertyToID("_SpeckLookC");
+        private static readonly int SpeckLookDId = Shader.PropertyToID("_SpeckLookD");
         private static readonly int SpeckLookCountId = Shader.PropertyToID("_SpeckLookCount");
+        private static readonly int SpeckLightInfluenceId = Shader.PropertyToID("_SpeckLightInfluence");
+        private static readonly int SpeckLightModeId = Shader.PropertyToID("_SpeckLightMode");
         private static readonly int SpeckMotionAId = Shader.PropertyToID("_SpeckMotionA");
         private static readonly int SpeckMotionBId = Shader.PropertyToID("_SpeckMotionB");
         private static readonly int SpeckMotionCountId = Shader.PropertyToID("_SpeckMotionCount");
@@ -103,6 +107,7 @@ namespace BalloonParty.Slots.Actor
         private Vector4[] _lookA;
         private Vector4[] _lookB;
         private Vector4[] _lookC;
+        private Vector4[] _lookD;
         private int _lookCount;
         private Vector4[] _motionA;
         private Vector4[] _motionB;
@@ -150,6 +155,7 @@ namespace BalloonParty.Slots.Actor
             _lookA = new Vector4[MaxPaletteSlots];
             _lookB = new Vector4[MaxPaletteSlots];
             _lookC = new Vector4[MaxPaletteSlots];
+            _lookD = new Vector4[MaxPaletteSlots];
             _motionA = new Vector4[MaxPaletteSlots];
             _motionB = new Vector4[MaxPaletteSlots];
             _lifetime = new Vector4[MaxPaletteSlots];
@@ -288,7 +294,10 @@ namespace BalloonParty.Slots.Actor
             _renderMaterial.SetVectorArray(SpeckLookAId, _lookA);
             _renderMaterial.SetVectorArray(SpeckLookBId, _lookB);
             _renderMaterial.SetVectorArray(SpeckLookCId, _lookC);
+            _renderMaterial.SetVectorArray(SpeckLookDId, _lookD);
             _renderMaterial.SetInt(SpeckLookCountId, _lookCount);
+            _renderMaterial.SetFloat(SpeckLightInfluenceId, look.LightInfluence);
+            _renderMaterial.SetFloat(SpeckLightModeId, (float)look.LightMode);
 
             // Lifetime is a lifecycle scalar, not a live heat-blend: the compute re-rolls it from this colour's
             // range when a speck adopts the colour (see the shader), replacing whatever it had.
@@ -349,6 +358,7 @@ namespace BalloonParty.Slots.Actor
             var baseA = new Vector4(look.SpeckSize, look.TrailLength, look.TrailMax, look.FadeIn);
             var baseB = new Vector4(look.FadeOut, look.ScaleRange.x, look.ScaleRange.y, look.ScalePulses.x);
             var baseC = new Vector4(look.ScalePulses.y, look.ScaleHold.x, look.ScaleHold.y, 0f);
+            var baseD = new Vector4(look.LightInfluence, (float)look.LightMode, 0f, 0f);
             var baseLife = new Vector4(look.LifetimeRange.x, look.LifetimeRange.y, 0f, 0f);
 
             var profiles = look.ColorProfiles;
@@ -357,6 +367,7 @@ namespace BalloonParty.Slots.Actor
                 var a = baseA;
                 var b = baseB;
                 var c = baseC;
+                var d = baseD;
                 // Every slot carries a real lifetime range — base for uncovered colours, the profile's for
                 // covered ones — so adopting any colour is a straight replacement, never an inherit.
                 var life = baseLife;
@@ -373,6 +384,7 @@ namespace BalloonParty.Slots.Actor
                     a = new Vector4(profile.SpeckSize, profile.TrailLength, profile.TrailMax, profile.FadeIn);
                     b = new Vector4(profile.FadeOut, profile.ScaleRange.x, profile.ScaleRange.y, profile.ScalePulses.x);
                     c = new Vector4(profile.ScalePulses.y, profile.ScaleHold.x, profile.ScaleHold.y, 0f);
+                    d = new Vector4(profile.LightInfluence, (float)profile.LightMode, 0f, 0f);
                     life = new Vector4(profile.LifetimeRange.x, profile.LifetimeRange.y, 0f, 0f);
                     break;
                 }
@@ -380,6 +392,7 @@ namespace BalloonParty.Slots.Actor
                 _lookA[slot] = a;
                 _lookB[slot] = b;
                 _lookC[slot] = c;
+                _lookD[slot] = d;
                 _lifetime[slot] = life;
             }
         }

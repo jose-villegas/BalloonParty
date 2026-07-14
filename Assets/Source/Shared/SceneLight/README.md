@@ -158,6 +158,10 @@ has zero visual effect**: the field OFF is bit-identical to today.
   (direction + magnitude), so lights bend the bounce and shadows. Field-off stays bit-identical.
 - **Palette colour decode (code-complete, editor-verification pending)** — `SceneLightTintAt` decodes the
   A index to a palette colour via the global `_SceneLightPalette` (2×2 decode-blend + intensity-driven soft edge); all consumers inherit it.
+- **Specks (done)** — `SpeckField.shader` samples the field per speck (at its world position, VTF) and
+  tints it, tunable **per appearance look**: `LightInfluence` (0 = emissive, ignores light; blends
+  base→colour by heat) and `LightMode` (`SceneLightMode` enum — Full / Ambient / Local, resolved per the
+  speck's colour slot). Default influence 0, so existing looks are unchanged until an artist opts in.
 - **Laser cross (done)** — `LaserItemHandler` registers two `Light.Segment` beams (H + V through the
   cross centre, `RaycastDistance` each way), coloured by the host balloon, for the beam effect's
   duration — the first **area-light** consumer.
