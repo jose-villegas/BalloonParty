@@ -164,7 +164,11 @@ has zero visual effect**: the field OFF is bit-identical to today.
   speck's colour slot). Default influence 0, so existing looks are unchanged until an artist opts in.
 - **Laser cross (done)** — `LaserItemHandler` registers two `Light.Segment` beams (H + V through the
   cross centre, `RaycastDistance` each way), coloured by the host balloon, for the beam effect's
-  duration — the first **area-light** consumer.
+  duration — the first **area-light** consumer. A held (idle) laser can also cast a spinning cross
+  telegraph following the item's rotation (`LaserItemRotation`, per-prefab `_castTelegraphLight` toggle,
+  off by default — experimental).
+- **Bomb (done)** — `BombItemHandler` casts a point flash light at the blast, radius ~2× the blast
+  radius (visual-scaled for a rainbow bomb), for the effect duration.
 - **First consumer (done)** — the projectile registers a small `Light` that follows it and takes its
   colour (Sparks while colourless); see `Projectile/README.md`.
 - **Next** — more game-source wiring (balloon pops flashing their colour, laser/lightning as lights).
