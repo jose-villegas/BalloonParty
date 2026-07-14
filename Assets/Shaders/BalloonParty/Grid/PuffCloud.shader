@@ -50,11 +50,13 @@ Shader "BalloonParty/Grid/PuffCloud"
         // Diffuse response to the scene light (colour x intensity multiplies the whole cloud):
         // 0 = unlit (authored look always), 1 = fully lit.
         _LightInfluence     ("Light Influence",    Range(0, 1))        = 1
-        // Domain-warps the LIGHT-FIELD lookup by the cloud's own noise (world units), so a local
-        // light's crisp stamp geometry (the laser cross, a bomb disc) dissolves into the cloud's
-        // turbulence instead of reading as hard geometry. A no-op where no local light is near (the
-        // field is uniform there), so it never touches the rest look. 0 = off.
-        _LightWarpAmount    ("Light Field Warp",   Range(0, 3))        = 0.75
+        // Domain-warps the LIGHT-FIELD lookup by the cloud's DETAIL-octave noise (world units), so a
+        // local light's crisp stamp geometry (the laser cross, a bomb disc) gets a noisy, integrated
+        // edge instead of reading as hard geometry. Kept small + high-frequency on purpose: the stamp
+        // stays where it is (biased to the geometric shape) and only its boundary feathers into the
+        // noise — a large/low-frequency warp instead snakes the whole beam into ribbons. A no-op where
+        // no local light is near (the field is uniform there), so it never touches the rest look. 0 = off.
+        _LightWarpAmount    ("Light Field Warp",   Range(0, 1.5))      = 0.35
         _NormalStrength     ("Normal Strength",    Range(0, 3))        = 1.2
         _NormalEpsilon      ("Normal Sample Offset",Range(0.001, 0.05))= 0.012
 
@@ -439,12 +441,14 @@ Shader "BalloonParty/Grid/PuffCloud"
                     return fixed4(_ShadowColor.rgb, shadowAlpha);
                 }
 
-                // Domain-warp the light-field lookup by the cloud's base-octave noise (two
+                // Domain-warp the light-field lookup by the cloud's DETAIL-octave noise (two
                 // decorrelated taps, animated with the cloud so the warp scrolls with it): a local
-                // light's crisp stamp edge dissolves into the same turbulence that shapes the cloud
-                // rather than reading as hard geometry. Uniform-field regions (no local light) warp to
-                // an identical value, so the rest look is untouched.
-                float2 warpP = wpRest * _BaseScale * _NoiseScale + _ScrollSpeedBase.xy * t;
+                // light's crisp stamp edge feathers into the same turbulence that shapes the cloud.
+                // Detail (not base) octave + a small amplitude keeps the warp high-frequency, so the
+                // stamp holds its geometric shape and only its boundary breaks up — a coarse/large warp
+                // snakes the whole beam into ribbons. Uniform-field regions (no local light) warp to an
+                // identical value, so the rest look is untouched.
+                float2 warpP = wpRest * _DetailScale * _NoiseScale + _ScrollSpeedDetail.xy * t;
                 float2 wpLight = wpRest + float2(
                     NoiseOctave(warpP + float2(31.7, 12.3)),
                     NoiseOctave(warpP + float2(-8.4, 47.1))) * _LightWarpAmount;
