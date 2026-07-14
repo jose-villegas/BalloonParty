@@ -57,10 +57,10 @@ Shader "BalloonParty/Grid/PuffCloud"
         // noise — a large/low-frequency warp instead snakes the whole beam into ribbons. A no-op where
         // no local light is near (the field is uniform there), so it never touches the rest look. 0 = off.
         _LightWarpAmount    ("Light Field Warp",   Range(0, 1.5))      = 0.35
-        // Ignore local lights tagged with this palette index (0..15) when reading the light field, so
-        // that colour of light leaves the cloud untouched (e.g. the laser telegraph, tagged Unbreakable,
-        // shouldn't light the clouds). -1 = ignore nothing.
-        _IgnoreLightPaletteIndex ("Ignore Light Palette Index (-1 = none)", Float) = -1
+        // Ignore local lights of this palette colour when reading the light field, so that colour of
+        // light leaves the cloud untouched (e.g. the laser telegraph, tagged Unbreakable, shouldn't light
+        // the clouds). [PaletteIndex] shows the named swatch dropdown; "None" stores -1 (ignore nothing).
+        [PaletteIndex] _IgnoreLightPaletteIndex ("Ignore Light Colour", Float) = -1
         _NormalStrength     ("Normal Strength",    Range(0, 3))        = 1.2
         _NormalEpsilon      ("Normal Sample Offset",Range(0.001, 0.05))= 0.012
 
