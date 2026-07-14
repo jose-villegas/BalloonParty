@@ -26,6 +26,10 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         // OPT-IN scene lighting: on, the colour bands scroll along _SceneLightDir instead of
         // the authored angle (scenario objects) — same polarity as the shine toggle below.
         [Toggle] _BandsFromSceneLight ("Bands Follow Scene Light", Float) = 0
+        // Wavy colour seams: dual-sine displacement along the seam direction. 0 = straight.
+        _SeamSwirlAmount ("Seam Swirl Amount", Range(0, 0.2)) = 0
+        _SeamSwirlScale  ("Seam Swirl Scale",  Range(0, 60))  = 18
+        _SeamSwirlSpeed  ("Seam Swirl Speed",  Range(0, 10))  = 1.5
         [HideInInspector] _TimeOffset ("Time Offset", Float) = 0
 
         [Header(Mask)]
@@ -136,6 +140,9 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float  _BandBlend;
             float  _BandAngle;
             float  _BandsFromSceneLight;
+            float  _SeamSwirlAmount;
+            float  _SeamSwirlScale;
+            float  _SeamSwirlSpeed;
             float  _TimeOffset;
 
             float2 _MaskMin;
@@ -200,11 +207,22 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             {
                 // Opted-in: the bands scroll along the scene light's axis instead of the
                 // authored angle. Same local-UV sway caveat as the shine.
-                float projection = _BandsFromSceneLight > 0.5
-                    ? dot(uv - 0.5, SceneLightDirection()) + 0.5
-                    : DiagonalProjection(uv, _BandAngle);
+                float ang = _BandAngle * 6.2831853;
+                float2 axis = _BandsFromSceneLight > 0.5
+                    ? SceneLightDirection()
+                    : float2(cos(ang), sin(ang));
+                float projection = dot(uv - 0.5, axis) + 0.5;
 
-                float s = projection * _StripeCount + _Time.y * _ScrollSpeed + _TimeOffset;
+                // Swirly seams: a dual-frequency sine along the seam direction (perpendicular
+                // to the scroll axis) displaces the band coordinate, bending the straight colour
+                // boundaries into animated waves. Amount 0 = classic straight seams.
+                float across = dot(uv - 0.5, float2(-axis.y, axis.x));
+                float wobbleT = _Time.y + _TimeOffset;
+                float swirl = (sin(across * _SeamSwirlScale + wobbleT * _SeamSwirlSpeed)
+                             + 0.5 * sin(across * _SeamSwirlScale * 2.7 - wobbleT * _SeamSwirlSpeed * 1.7))
+                             * _SeamSwirlAmount;
+
+                float s = (projection + swirl) * _StripeCount + _Time.y * _ScrollSpeed + _TimeOffset;
                 float cell = floor(s);
                 float t = frac(s);
 
