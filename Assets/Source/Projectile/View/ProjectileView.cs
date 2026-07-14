@@ -10,6 +10,7 @@ using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Rendering;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Actor;
 using DG.Tweening;
@@ -18,6 +19,7 @@ using UnityEngine;
 using VContainer;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
+using Light = BalloonParty.Shared.SceneLight.Light;
 
 namespace BalloonParty.Projectile.View
 {
@@ -32,6 +34,11 @@ namespace BalloonParty.Projectile.View
         [Tooltip("Full palette loops per second the glow cycles through while the rainbow buff is active.")]
         [SerializeField] [Min(0f)] private float _rainbowGlowSpeed = 1.5f;
 
+        [Header("Scene Light")]
+        [Tooltip("Radius of the light this shot casts into the scene-light field. Keep small — it's a bullet.")]
+        [SerializeField] [Min(0f)] private float _lightRadius = 0.6f;
+        [SerializeField] [Min(0f)] private float _lightIntensity = 1.5f;
+
         [Inject] private IGameConfiguration _config;
         [Inject] private IGamePalette _palette;
         [Inject] private IPublisher<BalanceBalloonsMessage> _balancePublisher;
@@ -44,8 +51,12 @@ namespace BalloonParty.Projectile.View
         [Inject] private ProjectileMotionResolver _motionResolver;
         [Inject] private PauseService _pauseService;
         [Inject] private DisturbanceFieldService _disturbanceField;
+        [Inject] private SceneLightFieldService _lightField;
 
         private IWriteableProjectileModel _model;
+        private Light _light;
+        private IDisposable _lightRegistration;
+        private int _sparksColorIndex = -1;
         private IDisposable _deflectedSubscription;
         private ProjectileTrail _projectileTrail;
         private bool _shieldShown;
@@ -80,6 +91,7 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
+            _light.Position.Value = transform.position;
             TickRainbowGlow();
         }
 
@@ -168,6 +180,9 @@ namespace BalloonParty.Projectile.View
 
         public void OnDespawned()
         {
+            _lightRegistration?.Dispose();
+            _lightRegistration = null;
+            _light = null;
             _deflectedSubscription?.Dispose();
             _deflectedSubscription = null;
             _model = null;
@@ -202,6 +217,11 @@ namespace BalloonParty.Projectile.View
 
             _deflectedSubscription?.Dispose();
             _deflectedSubscription = _deflectedSubscriber.Subscribe(OnBalloonDeflected);
+
+            // A small light that follows the shot — colourless shots read as the Sparks tint, recoloured
+            // shots take their own colour (kept in step by UpdateGlowColor).
+            _light = new Light(transform.position, _lightRadius, _lightIntensity, LightColorIndex());
+            _lightRegistration = _lightField.RegisterLight(_light);
         }
 
         private void DestroyProjectile()
@@ -396,6 +416,12 @@ namespace BalloonParty.Projectile.View
 
         private void UpdateGlowColor()
         {
+            // The scene light follows the shot's colour too (colourless → Sparks).
+            if (_light != null)
+            {
+                _light.PaletteIndex.Value = LightColorIndex();
+            }
+
             if (_glowRenderer == null)
             {
                 return;
@@ -410,6 +436,18 @@ namespace BalloonParty.Projectile.View
 
             var color = _palette.GetColor(_model.ColorName.Value);
             _glowRenderer.DOColor(color.WithAlpha(_glowAlpha), _glowColorDuration);
+        }
+
+        // The palette index for the shot's light: its current colour, or the Sparks tint when colourless.
+        private int LightColorIndex()
+        {
+            if (_sparksColorIndex < 0)
+            {
+                _sparksColorIndex = _palette.IndexOfColor(GamePalette.SparksColorId);
+            }
+
+            var index = _palette.IndexOfColor(_model.ColorName.Value);
+            return index >= 0 ? index : _sparksColorIndex;
         }
     }
 }

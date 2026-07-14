@@ -155,5 +155,6 @@ has zero visual effect**: the field OFF is bit-identical to today.
   (direction + magnitude), so lights bend the bounce and shadows. Field-off stays bit-identical.
 - **Palette colour decode (code-complete, editor-verification pending)** — `SceneLightTintAt` decodes the
   A index to a palette colour via the global `_SceneLightPalette` (2×2 decode-blend + intensity-driven soft edge); all consumers inherit it.
-- **Next** — real game-source wiring (balloon pops flashing their colour, laser/lightning as lights) now
-  that `RegisterLight` + coloured tint exist.
+- **First consumer (done)** — the projectile registers a small `Light` that follows it and takes its
+  colour (Sparks while colourless); see `Projectile/README.md`.
+- **Next** — more game-source wiring (balloon pops flashing their colour, laser/lightning as lights).
