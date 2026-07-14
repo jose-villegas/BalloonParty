@@ -47,6 +47,11 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         // authored angle (scenario objects); sweep timing untouched. The glitter binds to the
         // shine via _GlitterShineBind, so it follows automatically.
         [Toggle] _ShineFromSceneLight ("Shine Follows Scene Light", Float) = 0
+        // Spherical deformation: bows the sweep over the sphere's bulge so the band reads as
+        // wrapping the balloon instead of sliding flat across it. Fit with Center/Radius (uv).
+        _ShineSphereBend ("Sphere Bend", Range(-1, 1)) = 0
+        _SphereCenter    ("Sphere Center (uv)", Vector) = (0.5, 0.5, 0, 0)
+        _SphereRadius    ("Sphere Radius (uv)", Range(0.1, 0.8)) = 0.45
 
         [Header(Glitter)]
         // Scattered twinkling specks on top of the shine sweep — a grid of pseudo-random dots, each
@@ -143,6 +148,9 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float  _SeamSwirlAmount;
             float  _SeamSwirlScale;
             float  _SeamSwirlSpeed;
+            float  _ShineSphereBend;
+            float4 _SphereCenter;
+            float  _SphereRadius;
             float  _TimeOffset;
 
             float2 _MaskMin;
@@ -183,15 +191,6 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return _Color3.rgb;
             }
 
-            // 0..1 position along a diagonal at angleTurns (0..1 turns), centred on the UV square.
-            inline float DiagonalProjection(float2 uv, float angleTurns)
-            {
-                float ang = angleTurns * 6.2831853;
-                float2 dir = float2(cos(ang), sin(ang));
-                return dot(uv - 0.5, dir) + 0.5;
-            }
-
-            // Diagonal scrolling colour bands cycling through the first _BandCount colours.
             // Guarded read of the scene light (see SceneLightService): normalized, toward
             // the light; falls back to the canonical direction if the global hasn't been
             // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
@@ -203,6 +202,18 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return normalize(raw);
             }
 
+            // Swirly seams: a dual-frequency sine along the seam direction (perpendicular to
+            // the scroll axis) displaces the band coordinate, bending straight boundaries into
+            // animated waves. Shared by the colour seams AND the shine so both wave together.
+            // Amount 0 = off.
+            inline float SeamSwirl(float across)
+            {
+                float wobbleT = _Time.y + _TimeOffset;
+                return (sin(across * _SeamSwirlScale + wobbleT * _SeamSwirlSpeed)
+                      + 0.5 * sin(across * _SeamSwirlScale * 2.7 - wobbleT * _SeamSwirlSpeed * 1.7))
+                      * _SeamSwirlAmount;
+            }
+
             inline fixed3 RainbowBand(float2 uv)
             {
                 // Opted-in: the bands scroll along the scene light's axis instead of the
@@ -212,15 +223,8 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                     ? SceneLightDirection()
                     : float2(cos(ang), sin(ang));
                 float projection = dot(uv - 0.5, axis) + 0.5;
-
-                // Swirly seams: a dual-frequency sine along the seam direction (perpendicular
-                // to the scroll axis) displaces the band coordinate, bending the straight colour
-                // boundaries into animated waves. Amount 0 = classic straight seams.
                 float across = dot(uv - 0.5, float2(-axis.y, axis.x));
-                float wobbleT = _Time.y + _TimeOffset;
-                float swirl = (sin(across * _SeamSwirlScale + wobbleT * _SeamSwirlSpeed)
-                             + 0.5 * sin(across * _SeamSwirlScale * 2.7 - wobbleT * _SeamSwirlSpeed * 1.7))
-                             * _SeamSwirlAmount;
+                float swirl = SeamSwirl(across);
 
                 float s = (projection + swirl) * _StripeCount + _Time.y * _ScrollSpeed + _TimeOffset;
                 float cell = floor(s);
@@ -258,9 +262,23 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // angle — travelling DOWN-light (enters from the lit side; top-to-bottom under
                 // the canonical upper-left light). Caveat: uv is local sprite space (not
                 // rotation-compensated), so the axis sways with the balloon — accepted.
-                float projection = _ShineFromSceneLight > 0.5
-                    ? dot(uv - 0.5, -SceneLightDirection()) + 0.5
-                    : DiagonalProjection(uv, _ShineAngle);
+                float shineAng = _ShineAngle * 6.2831853;
+                float2 axis = _ShineFromSceneLight > 0.5
+                    ? -SceneLightDirection()
+                    : float2(cos(shineAng), sin(shineAng));
+                float projection = dot(uv - 0.5, axis) + 0.5;
+
+                // The glint waves with the colour seams (same SeamSwirl), and a spherical bulge
+                // bows it over the balloon: adding the sphere's z-height is exactly what a light
+                // axis tilted toward the viewer does on a real sphere — the band leads at the
+                // bulge and trails at the rim. Fit the sphere to the sprite with
+                // _SphereCenter/_SphereRadius; bend 0 = flat.
+                float across = dot(uv - 0.5, float2(-axis.y, axis.x));
+                projection += SeamSwirl(across);
+
+                float2 d = (uv - _SphereCenter.xy) / max(_SphereRadius, 1e-3);
+                float sphereZ = sqrt(saturate(1.0 - dot(d, d)));
+                projection += _ShineSphereBend * sphereZ;
                 float inside = step(shineLocation - _ShineWidth, projection) * step(projection, shineLocation + _ShineWidth);
                 return inside * (1.0 - abs(projection - shineLocation) / _ShineWidth);
             }
