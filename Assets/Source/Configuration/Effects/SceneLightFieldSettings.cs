@@ -24,14 +24,4 @@ namespace BalloonParty.Configuration.Effects
         public int MaxLights => _maxLights;
         public float AccumulationCeiling => _accumulationCeiling;
     }
-
-    /// <summary>Plain-C# defaults used when no <see cref="SceneLightFieldSettings"/> asset is assigned, so
-    /// the field still runs. A plain object (not <c>ScriptableObject.CreateInstance</c>) so it's safe to
-    /// build during the DI container's <c>Configure</c>.</summary>
-    internal sealed class DefaultSceneLightFieldSettings : ISceneLightFieldSettings
-    {
-        public int TexelsPerUnit => 32;
-        public int MaxLights => 32;
-        public float AccumulationCeiling => 3f;
-    }
 }

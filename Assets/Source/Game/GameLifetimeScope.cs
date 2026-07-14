@@ -75,13 +75,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IPuffCloudSettings>(_puffCloudSettings);
             builder.RegisterInstance<IBushSettings>(_bushSettings);
             builder.RegisterInstance<IDisturbanceFieldSettings>(_disturbanceFieldSettings);
-            // Falls back to plain-C# defaults until an asset is assigned in the inspector, so the field
-            // keeps working without a hard dependency on the asset — a plain object, NOT
-            // ScriptableObject.CreateInstance, which is not safe to call during Configure.
-            builder.RegisterInstance<ISceneLightFieldSettings>(
-                _sceneLightFieldSettings != null
-                    ? (ISceneLightFieldSettings)_sceneLightFieldSettings
-                    : new DefaultSceneLightFieldSettings());
+            builder.RegisterInstance<ISceneLightFieldSettings>(_sceneLightFieldSettings);
             builder.RegisterInstance<ISpeckFieldSettings>(_speckFieldSettings);
             builder.RegisterInstance<ILevelPacingConfiguration>(_levelPacingConfiguration);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));

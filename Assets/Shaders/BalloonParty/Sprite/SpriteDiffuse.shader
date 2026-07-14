@@ -15,6 +15,10 @@ Shader "BalloonParty/Sprite/Diffuse"
 
         [Header(Light Response)]
         _LightInfluence ("Light Influence", Range(0, 1)) = 1
+        // On: tint by the global scene light only (SceneLightService's colour × intensity), skipping the
+        // light-field texture entirely — for sprites that should follow just the main/ambient light and
+        // never a local point/area light. Off: sample the field at the sprite's position.
+        [ToggleUI] _AmbientOnly ("Ambient Light Only", Float) = 0
 
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
@@ -76,6 +80,7 @@ Shader "BalloonParty/Sprite/Diffuse"
             sampler2D _MainTex;
             fixed4 _Color;
             float _LightInfluence;
+            float _AmbientOnly;
 
             v2f vert(appdata_t IN)
             {
@@ -86,10 +91,18 @@ Shader "BalloonParty/Sprite/Diffuse"
                 OUT.texcoord = IN.texcoord;
                 OUT.color = IN.color * _Color * _RendererColor;
 
-                // Sprite centre in world space (VTF, target 3.5) — one coherent light
-                // reading for the whole sprite instead of bending per-fragment.
-                float2 spriteCenterWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
-                OUT.lightTint = SceneLightTintAtLOD(spriteCenterWorld);
+                // Ambient-only: the flat global light, no field texture read at all. Otherwise sample the
+                // field at the sprite's centre (VTF, target 3.5) — one coherent reading for the whole
+                // sprite. The branch is on a material toggle, so it's uniform (no divergence).
+                if (_AmbientOnly > 0.5)
+                {
+                    OUT.lightTint = SceneLightTint();
+                }
+                else
+                {
+                    float2 spriteCenterWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
+                    OUT.lightTint = SceneLightTintAtLOD(spriteCenterWorld);
+                }
 
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
