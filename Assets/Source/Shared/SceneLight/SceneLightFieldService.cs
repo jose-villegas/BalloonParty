@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using BalloonParty.Configuration;
+using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Display;
 using BalloonParty.Shared.Disturbance;
@@ -27,16 +28,10 @@ namespace BalloonParty.Shared.SceneLight
     /// </summary>
     internal class SceneLightFieldService : IStartable, ITickable, IDisposable
     {
-        // Higher density than the disturbance field (8): its palette-colour regions are magnified across
-        // whole sprites, so a coarse grid reads blocky. This field only re-renders when a light or the
-        // owner changes (dirty-gated, unlike the disturbance sim's every-frame tick), so a finer RT is
-        // cheap. Still tiny in absolute terms (~320×512 for a 10×16 world).
-        private const int TexelsPerUnit = 32;
-        private const int MaxLights = 32;
-
-        // Ceiling on the summed additive boost the accumulate pass can add above the rest magnitude;
-        // overlapping lights approach it asymptotically instead of blowing R out. See the shader.
-        private const float AccumulationCeiling = 3f;
+        // The accumulate shader's MAX_STAMPS: the compile-time size of its stamp arrays, so the batch
+        // arrays here match it and the configured MaxLights is clamped to it (raising the runtime cap past
+        // this needs the shader edited too). Density/cap/ceiling are tuned via ISceneLightFieldSettings.
+        private const int ShaderStampCapacity = 32;
 
         private static readonly int BoundsMinId = Shader.PropertyToID("_SceneLightFieldBoundsMin");
         private static readonly int BoundsSizeId = Shader.PropertyToID("_SceneLightFieldBoundsSize");
@@ -54,17 +49,19 @@ namespace BalloonParty.Shared.SceneLight
 
         private readonly IGameDisplayConfiguration _displayConfig;
         private readonly IGamePalette _palette;
+        private readonly ISceneLightFieldSettings _settings;
         private readonly SceneLightFieldResources _resources = new();
         private readonly Vector4[] _paletteBuffer = new Vector4[PaletteChannelEncoding.Slots];
         private readonly List<Registration> _lights = new();
-        private readonly Vector4[] _batchCenters = new Vector4[MaxLights];
-        private readonly float[] _batchRadii = new float[MaxLights];
-        private readonly float[] _batchMagnitudes = new float[MaxLights];
-        private readonly float[] _batchEdges = new float[MaxLights];
-        private readonly float[] _batchColorIndices = new float[MaxLights];
+        private readonly Vector4[] _batchCenters = new Vector4[ShaderStampCapacity];
+        private readonly float[] _batchRadii = new float[ShaderStampCapacity];
+        private readonly float[] _batchMagnitudes = new float[ShaderStampCapacity];
+        private readonly float[] _batchEdges = new float[ShaderStampCapacity];
+        private readonly float[] _batchColorIndices = new float[ShaderStampCapacity];
 
         private DisturbanceFieldCoordinates _coords;
         private SceneLightService _sceneLight;
+        private int _maxLights;
         private float _stampAspect = 1f;
         private Vector2 _lastDirection;
         private float _lastIntensity = float.NaN;
@@ -74,15 +71,18 @@ namespace BalloonParty.Shared.SceneLight
 
         internal RenderTexture FieldTexture => _resources.FieldTexture;
 
-        internal SceneLightFieldService(IGameDisplayConfiguration displayConfig, IGamePalette palette)
+        internal SceneLightFieldService(
+            IGameDisplayConfiguration displayConfig, IGamePalette palette, ISceneLightFieldSettings settings)
         {
             _displayConfig = displayConfig;
             _palette = palette;
+            _settings = settings;
         }
 
         void IStartable.Start()
         {
-            _coords = new DisturbanceFieldCoordinates(_displayConfig, TexelsPerUnit);
+            _maxLights = Mathf.Clamp(_settings.MaxLights, 1, ShaderStampCapacity);
+            _coords = new DisturbanceFieldCoordinates(_displayConfig, _settings.TexelsPerUnit);
 
             // UV space is normalised per-axis over a non-square field, so the accumulate shader corrects
             // the vertical delta by this ratio to keep a radius circular in world space.
@@ -198,15 +198,15 @@ namespace BalloonParty.Shared.SceneLight
             }
         }
 
-        // Packs the registered lights into the batch arrays, capped at MaxLights. Reads each light's
-        // reactive values into the parallel arrays the accumulate shader uploads.
+        // Packs the registered lights into the batch arrays, capped at the configured light limit. Reads
+        // each light's reactive values into the parallel arrays the accumulate shader uploads.
         private int BuildBatch()
         {
             var count = 0;
 
             foreach (var registration in _lights)
             {
-                if (count >= MaxLights)
+                if (count >= _maxLights)
                 {
                     WarnOverflowOnce();
                     break;
@@ -239,7 +239,7 @@ namespace BalloonParty.Shared.SceneLight
             material.SetFloatArray(StampMagnitudesId, _batchMagnitudes);
             material.SetFloatArray(StampEdgesId, _batchEdges);
             material.SetFloatArray(StampColorIndicesId, _batchColorIndices);
-            material.SetFloat(MaxBoostId, AccumulationCeiling);
+            material.SetFloat(MaxBoostId, _settings.AccumulationCeiling);
             material.SetFloat(StampAspectId, _stampAspect);
 
             _resources.BlitAndSwap(material);
@@ -252,8 +252,9 @@ namespace BalloonParty.Shared.SceneLight
                 return;
             }
 
-            Debug.LogWarning($"SceneLightFieldService: more than {MaxLights} lights registered — the extras " +
-                             "are dropped this render (one accumulate batch). Raise MaxLights if this is real.");
+            Debug.LogWarning($"SceneLightFieldService: more than {_maxLights} lights registered — the extras " +
+                             "are dropped this render. Raise MaxLights in the settings (up to the shader's " +
+                             $"{ShaderStampCapacity}) if this is real.");
             _warnedOverflow = true;
         }
 

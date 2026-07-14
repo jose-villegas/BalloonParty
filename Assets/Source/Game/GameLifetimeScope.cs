@@ -32,6 +32,7 @@ namespace BalloonParty.Game
         [SerializeField] private PuffCloudSettings _puffCloudSettings;
         [SerializeField] private BushSettings _bushSettings;
         [SerializeField] private DisturbanceFieldSettings _disturbanceFieldSettings;
+        [SerializeField] private SceneLightFieldSettings _sceneLightFieldSettings;
         [SerializeField] private SpeckFieldSettings _speckFieldSettings;
         [SerializeField] private LevelPacingConfiguration _levelPacingConfiguration;
         [SerializeField] private ProjectileView _projectilePrefab;
@@ -74,6 +75,12 @@ namespace BalloonParty.Game
             builder.RegisterInstance<IPuffCloudSettings>(_puffCloudSettings);
             builder.RegisterInstance<IBushSettings>(_bushSettings);
             builder.RegisterInstance<IDisturbanceFieldSettings>(_disturbanceFieldSettings);
+            // Falls back to a defaults instance until an asset is assigned in the inspector, so the field
+            // keeps working (its serialized defaults) without a hard dependency on the asset existing yet.
+            builder.RegisterInstance<ISceneLightFieldSettings>(
+                _sceneLightFieldSettings != null
+                    ? _sceneLightFieldSettings
+                    : ScriptableObject.CreateInstance<SceneLightFieldSettings>());
             builder.RegisterInstance<ISpeckFieldSettings>(_speckFieldSettings);
             builder.RegisterInstance<ILevelPacingConfiguration>(_levelPacingConfiguration);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
