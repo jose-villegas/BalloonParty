@@ -91,10 +91,13 @@ namespace BalloonParty.Projectile.View
                 return;
             }
 
-            // Null until the shot fires (registered in FixedUpdate's first free frame).
+            // Null until the shot fires (registered in FixedUpdate's first free frame). Track both ends to
+            // the same point so it stays a point light as it moves — otherwise the segment would stretch
+            // from the muzzle (the fixed EndPosition) to the current position.
             if (_light != null)
             {
                 _light.Position.Value = transform.position;
+                _light.EndPosition.Value = transform.position;
             }
 
             TickRainbowGlow();
