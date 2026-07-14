@@ -48,7 +48,7 @@ Material:
     - _ShineFromSceneLight: 1
     - _ShineInterval: 0.75
     - _ShineSpeed: 0.35
-    - _ShineSphereBend: 0.2
+    - _SphereBend: 0.2
     - _ShineWidth: 0.25
     - _StripeCount: 5
     - _TimeOffset: 0

@@ -47,11 +47,12 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         // authored angle (scenario objects); sweep timing untouched. The glitter binds to the
         // shine via _GlitterShineBind, so it follows automatically.
         [Toggle] _ShineFromSceneLight ("Shine Follows Scene Light", Float) = 0
-        // Spherical deformation: bows the sweep over the sphere's bulge so the band reads as
-        // wrapping the balloon instead of sliding flat across it. Fit with Center/Radius (uv).
-        _ShineSphereBend ("Sphere Bend", Range(-1, 1)) = 0
-        _SphereCenter    ("Sphere Center (uv)", Vector) = (0.5, 0.5, 0, 0)
-        _SphereRadius    ("Sphere Radius (uv)", Range(0.1, 0.8)) = 0.45
+        // Spherical deformation for the WHOLE banded look (colour bands + shine): bows the
+        // pattern over the sphere's bulge so it reads as wrapping the balloon instead of
+        // sliding flat across it. Fit the sphere to the sprite with Center/Radius (uv).
+        _SphereBend   ("Sphere Bend", Range(-1, 1)) = 0
+        _SphereCenter ("Sphere Center (uv)", Vector) = (0.5, 0.5, 0, 0)
+        _SphereRadius ("Sphere Radius (uv)", Range(0.1, 0.8)) = 0.45
 
         [Header(Glitter)]
         // Scattered twinkling specks on top of the shine sweep — a grid of pseudo-random dots, each
@@ -148,7 +149,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float  _SeamSwirlAmount;
             float  _SeamSwirlScale;
             float  _SeamSwirlSpeed;
-            float  _ShineSphereBend;
+            float  _SphereBend;
             float4 _SphereCenter;
             float  _SphereRadius;
             float  _TimeOffset;
@@ -214,6 +215,18 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                       * _SeamSwirlAmount;
             }
 
+            // Spherical bulge shared by the colour bands and the shine: the fitted sphere's
+            // height at this pixel, as a projection displacement. C1-smooth profile (zero slope
+            // at rim AND apex) instead of a hemisphere's sqrt — the sqrt's infinite gradient at
+            // the silhouette crushes the stripes into a visible seam at high bend; smoothstep
+            // keeps the banding continuous everywhere. Fit via _SphereCenter/_SphereRadius.
+            inline float SphereBulge(float2 uv)
+            {
+                float2 d = (uv - _SphereCenter.xy) / max(_SphereRadius, 1e-3);
+                float z = smoothstep(0.0, 1.0, saturate(1.0 - dot(d, d)));
+                return _SphereBend * z;
+            }
+
             inline fixed3 RainbowBand(float2 uv)
             {
                 // Opted-in: the bands scroll along the scene light's axis instead of the
@@ -226,7 +239,10 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 float across = dot(uv - 0.5, float2(-axis.y, axis.x));
                 float swirl = SeamSwirl(across);
 
-                float s = (projection + swirl) * _StripeCount + _Time.y * _ScrollSpeed + _TimeOffset;
+                // The bands share the shine's spherical bulge, so the whole pattern wraps the
+                // balloon coherently.
+                float s = (projection + swirl + SphereBulge(uv)) * _StripeCount
+                          + _Time.y * _ScrollSpeed + _TimeOffset;
                 float cell = floor(s);
                 float t = frac(s);
 
@@ -268,17 +284,10 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                     : float2(cos(shineAng), sin(shineAng));
                 float projection = dot(uv - 0.5, axis) + 0.5;
 
-                // The glint waves with the colour seams (same SeamSwirl), and a spherical bulge
-                // bows it over the balloon: adding the sphere's z-height is exactly what a light
-                // axis tilted toward the viewer does on a real sphere — the band leads at the
-                // bulge and trails at the rim. Fit the sphere to the sprite with
-                // _SphereCenter/_SphereRadius; bend 0 = flat.
+                // The glint waves with the colour seams (same SeamSwirl) and wraps the balloon
+                // with the same spherical bulge as the bands — one coherent deformed pattern.
                 float across = dot(uv - 0.5, float2(-axis.y, axis.x));
-                projection += SeamSwirl(across);
-
-                float2 d = (uv - _SphereCenter.xy) / max(_SphereRadius, 1e-3);
-                float sphereZ = sqrt(saturate(1.0 - dot(d, d)));
-                projection += _ShineSphereBend * sphereZ;
+                projection += SeamSwirl(across) + SphereBulge(uv);
                 float inside = step(shineLocation - _ShineWidth, projection) * step(projection, shineLocation + _ShineWidth);
                 return inside * (1.0 - abs(projection - shineLocation) / _ShineWidth);
             }
