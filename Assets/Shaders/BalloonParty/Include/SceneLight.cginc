@@ -124,55 +124,96 @@ float SceneLightMagnitudeAtLOD(float2 worldPos)
         : SceneLightFieldSampleLOD(worldPos).r;
 }
 
-// Palette index (0..15) tagged into A at a world position, or -1 if untagged. A is POINT-sampled:
-// it's bilinear like R/GB, but an interpolated (index+1)/16 decodes to a wrong colour, so snap the UV
-// to the texel centre first (bilinear at a centre returns that texel exactly). Encoding: (index+1)/16.
+// Palette index (0..15) packed into A as (index+1)/16, or -1 if untagged.
 float SceneLightPaletteIndex(float a)
 {
     return a > 0.001 ? min(floor(a * 16.0 + 0.5) - 1.0, 15.0) : -1.0;
 }
 
-// One texel's A → its palette colour, or the key light where untagged. Blending these DECODED
-// colours (not the raw indices) is what keeps colour regions smooth: a plain bilinear tap of the
-// packed index would interpolate into a foreign palette slot at boundaries (a wrong third colour).
+// One texel's A → its palette colour, or the key light where untagged. The colour reconstruction
+// blends these DECODED colours (never the raw indices — an interpolated (index+1)/16 would land in a
+// foreign palette slot).
 float3 SceneLightDecodeColor(float a, float3 keyColor)
 {
     float index = SceneLightPaletteIndex(a);
     return index >= 0.0 ? _SceneLightPalette[(int)index].rgb : keyColor;
 }
 
-// Manual bilinear over the 2×2 texel neighbourhood of A — decode each texel first, then blend by the
-// sub-texel fraction. Smooth colour transitions with no index bleed; the taps land on texel centres
-// so each read is that texel's exact index.
+// Joint-trilateral guide constants (see SceneLightPaletteColorAt). The palette index (A) is a coarse,
+// quantised signal; R (magnitude) and GB (direction) are smooth, co-located channels, so we upsample
+// A using them as the guide — joint bilateral upsampling (Kopf 2007) + edge-directed weighting
+// (Li & Orchard 2001). Larger _RANGE = sharper boundary; _DIRFLOOR is the floor weight a
+// differently-oriented (different-source) tap keeps.
+#define SCENE_LIGHT_RANGE_R  4.0
+#define SCENE_LIGHT_DIR_FLOOR 0.2
+
+// Accumulate one field tap into the trilateral colour blend, weighted by spatial falloff × how close
+// the tap's magnitude and direction are to the fragment's smooth (bilinear) reference — so colour
+// stays coherent within a light but doesn't bleed across the R/direction discontinuity at its edge.
+void SceneLightColorTap(
+    float4 s, float rRef, float2 dirRef, float3 keyColor, float spatial, inout float3 accum, inout float wsum)
+{
+    float wr = exp(-abs(s.r - rRef) * SCENE_LIGHT_RANGE_R);
+    float2 dir = normalize(s.gb * 2.0 - 1.0 + 1e-4);
+    float align = lerp(SCENE_LIGHT_DIR_FLOOR, 1.0, saturate(dot(dir, dirRef)));
+    float w = spatial * wr * align;
+    accum += SceneLightDecodeColor(s.a, keyColor) * w;
+    wsum += w;
+}
+
+// Colour at a world position, reconstructed by a 3×3 joint-trilateral upsample of the palette index:
+// R and the direction guide the blend so the colour boundary follows the smooth field structure
+// instead of the coarse texel grid. Rest / untagged → the key colour (every tap decodes to it).
 float3 SceneLightPaletteColorAt(float2 fieldUV, float3 keyColor)
 {
     float2 texel = _SceneLightTexelSize.xy;
-    float2 p = fieldUV / texel - 0.5;
-    float2 f = frac(p);
-    float2 uv00 = (floor(p) + 0.5) * texel;
-    float3 c00 = SceneLightDecodeColor(tex2D(_SceneLightTex, uv00).a, keyColor);
-    float3 c10 = SceneLightDecodeColor(tex2D(_SceneLightTex, uv00 + float2(texel.x, 0.0)).a, keyColor);
-    float3 c01 = SceneLightDecodeColor(tex2D(_SceneLightTex, uv00 + float2(0.0, texel.y)).a, keyColor);
-    float3 c11 = SceneLightDecodeColor(tex2D(_SceneLightTex, uv00 + texel).a, keyColor);
-    return lerp(lerp(c00, c10, f.x), lerp(c01, c11, f.x), f.y);
+    float4 ref = tex2D(_SceneLightTex, fieldUV);
+    float rRef = ref.r;
+    float2 dirRef = normalize(ref.gb * 2.0 - 1.0 + 1e-4);
+    float2 center = (floor(fieldUV / texel) + 0.5) * texel;
+
+    float k[3] = { 0.25, 0.5, 0.25 };
+    float3 accum = float3(0.0, 0.0, 0.0);
+    float wsum = 0.0;
+    [unroll] for (int dy = -1; dy <= 1; dy++)
+    {
+        [unroll] for (int dx = -1; dx <= 1; dx++)
+        {
+            float2 uv = center + float2(dx, dy) * texel;
+            SceneLightColorTap(tex2D(_SceneLightTex, uv), rRef, dirRef, keyColor, k[dx + 1] * k[dy + 1], accum, wsum);
+        }
+    }
+
+    return accum / max(wsum, 1e-4);
 }
 
 float3 SceneLightPaletteColorAtLOD(float2 fieldUV, float3 keyColor)
 {
     float2 texel = _SceneLightTexelSize.xy;
-    float2 p = fieldUV / texel - 0.5;
-    float2 f = frac(p);
-    float2 uv00 = (floor(p) + 0.5) * texel;
-    float3 c00 = SceneLightDecodeColor(tex2Dlod(_SceneLightTex, float4(uv00, 0.0, 0.0)).a, keyColor);
-    float3 c10 = SceneLightDecodeColor(tex2Dlod(_SceneLightTex, float4(uv00 + float2(texel.x, 0.0), 0.0, 0.0)).a, keyColor);
-    float3 c01 = SceneLightDecodeColor(tex2Dlod(_SceneLightTex, float4(uv00 + float2(0.0, texel.y), 0.0, 0.0)).a, keyColor);
-    float3 c11 = SceneLightDecodeColor(tex2Dlod(_SceneLightTex, float4(uv00 + texel, 0.0, 0.0)).a, keyColor);
-    return lerp(lerp(c00, c10, f.x), lerp(c01, c11, f.x), f.y);
+    float4 ref = tex2Dlod(_SceneLightTex, float4(fieldUV, 0.0, 0.0));
+    float rRef = ref.r;
+    float2 dirRef = normalize(ref.gb * 2.0 - 1.0 + 1e-4);
+    float2 center = (floor(fieldUV / texel) + 0.5) * texel;
+
+    float k[3] = { 0.25, 0.5, 0.25 };
+    float3 accum = float3(0.0, 0.0, 0.0);
+    float wsum = 0.0;
+    [unroll] for (int dy = -1; dy <= 1; dy++)
+    {
+        [unroll] for (int dx = -1; dx <= 1; dx++)
+        {
+            float2 uv = center + float2(dx, dy) * texel;
+            SceneLightColorTap(
+                tex2Dlod(_SceneLightTex, float4(uv, 0.0, 0.0)), rRef, dirRef, keyColor, k[dx + 1] * k[dy + 1], accum, wsum);
+        }
+    }
+
+    return accum / max(wsum, 1e-4);
 }
 
-// Light colour × magnitude at a world position. A field-tagged region blends toward that light's
-// palette colour (2×2 decoded-colour bilinear); untagged / field-off is the global key light.
-// Falls back to white before the owner's first push.
+// Light colour × magnitude at a world position. A field-tagged region takes that light's palette
+// colour (3×3 joint-trilateral upsample, guided by the smooth R/direction channels); untagged /
+// field-off is the global key light. Falls back to white before the owner's first push.
 float3 SceneLightTintAt(float2 worldPos)
 {
     float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1.0, 1.0, 1.0);

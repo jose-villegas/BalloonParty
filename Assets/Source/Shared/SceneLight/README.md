@@ -117,11 +117,18 @@ build directly.)
 
 `SceneLightTintAt` also decodes the A **palette colour**: where a light tagged a region, it returns that
 palette entry's RGB (from the global `_SceneLightPalette[16]` the service pushes) × the local magnitude;
-untagged / field-off falls back to the global key light unchanged. The colour is a **decode-then-blend
-bilinear** over the 2×2 texel neighbourhood (`_SceneLightTexelSize`) — each texel's index is decoded to a
-colour *first*, then the colours are blended, so regions stay smooth without an interpolated index banding
-into a foreign palette slot (a plain bilinear tap of A would decode to a wrong third colour). Consumers get
-colour for free through `SceneLightTintAt`.
+untagged / field-off falls back to the global key light unchanged. The palette index (A) is a coarse,
+quantised signal, so it's reconstructed by a **3×3 joint-trilateral upsample** using the smooth,
+co-located R (magnitude) and GB (direction) channels as the guide — joint bilateral upsampling
+([Kopf 2007](https://www.researchgate.net/publication/30012539_Joint_Bilateral_Upsampling)) plus
+edge-directed weighting ([Li & Orchard 2001](https://dl.acm.org/doi/abs/10.1109/83.951537)). Each of the
+9 taps decodes its index to a colour *first*, then they're blended weighted by spatial falloff × how
+close the tap's R and direction are to the fragment's smooth bilinear reference (`SceneLightColorTap`,
+constants `SCENE_LIGHT_RANGE_R` / `SCENE_LIGHT_DIR_FLOOR`). The R guide makes the light-vs-background
+boundary follow the smooth magnitude contour (not the blocky texel grid); the direction guide keeps two
+overlapping lights of different colours from bleeding across their seam. Consumers get this for free
+through `SceneLightTintAt`. (The render-maps preview stays raw/point-sampled on purpose — it's a
+field-data inspector, not the consumer view.)
 
 Because nothing includes the file yet and the field publishes an off-flag until it runs, **Phase A
 has zero visual effect**: the field OFF is bit-identical to today.
@@ -142,6 +149,6 @@ has zero visual effect**: the field OFF is bit-identical to today.
   family) migrated onto the include; the screen-space GI smear/overlay now sample the field per-fragment
   (direction + magnitude), so lights bend the bounce and shadows. Field-off stays bit-identical.
 - **Palette colour decode (code-complete, editor-verification pending)** — `SceneLightTintAt` decodes the
-  A index to a palette colour via the global `_SceneLightPalette` (decode-then-blend bilinear); all consumers inherit it.
+  A index to a palette colour via the global `_SceneLightPalette` (3×3 joint-trilateral, R/direction-guided); all consumers inherit it.
 - **Next** — real game-source wiring (balloon pops flashing their colour, laser/lightning as lights) now
   that `RegisterLight` + coloured tint exist.
