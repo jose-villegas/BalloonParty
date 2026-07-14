@@ -53,6 +53,10 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         _SphereBend   ("Sphere Bend", Range(-1, 1)) = 0
         _SphereCenter ("Sphere Center (uv)", Vector) = (0.5, 0.5, 0, 0)
         _SphereRadius ("Sphere Radius (uv)", Range(0.1, 0.8)) = 0.45
+        // Diffuse response to the scene light (colour x intensity multiplies the composed body):
+        // 0 = unlit (authored look always), 1 = fully lit. The bands keep their palette hue —
+        // dial this down if colour-identity readability ever beats scene mood.
+        _LightInfluence ("Light Influence", Range(0, 1)) = 1
 
         [Header(Glitter)]
         // Scattered twinkling specks on top of the shine sweep — a grid of pseudo-random dots, each
@@ -128,6 +132,12 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             // canonical (-0.707, 0.707) = upper-left.
             float4 _SceneLightDir;
 
+            // Set globally by SceneLightService; kept out of Properties so no
+            // material value can shadow the scene-wide light. Colour's alpha is the
+            // "owner has pushed" validity flag (see SceneLightTint).
+            float4 _SceneLightColor;
+            float  _SceneLightIntensity;
+
             float     _GlitterDensity;
             float     _GlitterSize;
             float     _GlitterChance;
@@ -150,6 +160,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float  _SeamSwirlScale;
             float  _SeamSwirlSpeed;
             float  _SphereBend;
+            float  _LightInfluence;
             float4 _SphereCenter;
             float  _SphereRadius;
             float  _TimeOffset;
@@ -201,6 +212,15 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                     ? float2(-0.707, 0.707)
                     : _SceneLightDir.xy;
                 return normalize(raw);
+            }
+
+            // The light's colour × intensity — multiplies into the authored specular response.
+            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
+            inline float3 SceneLightTint()
+            {
+                return _SceneLightColor.a > 0.5
+                    ? _SceneLightColor.rgb * _SceneLightIntensity
+                    : float3(1.0, 1.0, 1.0);
             }
 
             // Swirly seams: a dual-frequency sine along the seam direction (perpendicular to
@@ -332,8 +352,16 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // Sprite shading × band colour, then additive white shine on top. The glitter is bound to
                 // the shine amount (by _GlitterShineBind) so the specks only twinkle along the sweeping band.
                 fixed3 rgb = tex.rgb * bandColor * IN.color.rgb;
+
+                // Diffuse term: the composed body is lit by the scene light. The bands keep their
+                // palette HUE (no per-band swap) — brightness and cast follow the light, eased by
+                // _LightInfluence. The shine/glitter emissives above their own gating stay additive.
+                rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
                 fixed shine = ShineAmount(IN.uv);
-                rgb += tex.a * shine;
+                // Opted-in shine is "lit by the scene light" — axis AND colour — so tint it;
+                // the classic default sweep stays pure white regardless of the scene light.
+                float3 shineTint = _ShineFromSceneLight > 0.5 ? SceneLightTint() : float3(1.0, 1.0, 1.0);
+                rgb += tex.a * shine * shineTint;
                 rgb += tex.a * GlitterAmount(IN.uv) * lerp(1.0, shine, _GlitterShineBind) * _GlitterBrightness;
 
                 fixed4 result;

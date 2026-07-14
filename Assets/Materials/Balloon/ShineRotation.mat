@@ -70,6 +70,8 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _GlossMapScale: 1
+    - _FadeWithSceneLight: 1
+    - _TintBySceneLight: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
     - _Metallic: 0

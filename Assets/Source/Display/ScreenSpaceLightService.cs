@@ -279,7 +279,12 @@ namespace BalloonParty.Display
 
             _overlayMaterial.SetColor(ShadowTintId, _shadowTint);
             _overlayMaterial.SetFloat(ShadowStrengthId, _shadowStrength);
-            _overlayMaterial.SetFloat(BounceStrengthId, _bounceStrength);
+
+            // Bounce light is the scene's albedo re-lit by the scene light, so it scales with the
+            // light's intensity (neutral at 1). Shadow strength deliberately does NOT — it stays an
+            // independent art knob (an open call in plan_lighting's backlog).
+            var intensity = _sceneLight != null ? _sceneLight.Intensity : 1f;
+            _overlayMaterial.SetFloat(BounceStrengthId, _bounceStrength * intensity);
 
             // Measured against the capture's clear color so open sky nets to neutral.
             _overlayMaterial.SetColor(AmbientColorId, _camera.backgroundColor);

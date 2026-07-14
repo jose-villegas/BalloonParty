@@ -16,16 +16,30 @@ namespace BalloonParty.Display
     public class SceneLightService : MonoBehaviour
     {
         private static readonly int SceneLightDirId = Shader.PropertyToID("_SceneLightDir");
+        private static readonly int SceneLightColorId = Shader.PropertyToID("_SceneLightColor");
+        private static readonly int SceneLightIntensityId = Shader.PropertyToID("_SceneLightIntensity");
 
         [Tooltip("Points TOWARD the light (normalized on push); shadows extend the opposite way. " +
                  "The canonical scene light sits upper-left.")]
         [UnitCircle] [SerializeField] private Vector2 _lightDirection = new(-0.707f, 0.707f);
+
+        [Tooltip("The light's tint — multiplies into each consumer's authored response colour " +
+                 "(cloud highlight, speculars). White = neutral, no look change.")]
+        [SerializeField] private Color _lightColor = Color.white;
+
+        [Tooltip("Scales the light's contribution in every consumer (diffuse contrast, specular " +
+                 "brightness). 1 = neutral, authored look.")]
+        [Range(0f, 2f)] [SerializeField] private float _intensity = 1f;
 
         /// <summary>The normalized toward-the-light vector — for CPU consumers that derive their own
         /// shader params from it (the GI smear cannot read the global in-shader).</summary>
         public Vector2 Direction =>
             // A degenerate authored vector falls back to light-from-above rather than NaN.
             _lightDirection.sqrMagnitude > 0.0001f ? _lightDirection.normalized : Vector2.up;
+
+        public Color LightColor => _lightColor;
+
+        public float Intensity => _intensity;
 
         private void OnEnable()
         {
@@ -47,6 +61,14 @@ namespace BalloonParty.Display
         private void Push()
         {
             Shader.SetGlobalVector(SceneLightDirId, Direction);
+
+            // Alpha = 1 doubles as the "owner has pushed" validity flag: shaders fall back to a
+            // neutral tint when it's 0 (edit time in a scene without this object), so nothing
+            // dims or blacks out before the first push.
+            var color = _lightColor;
+            color.a = 1f;
+            Shader.SetGlobalColor(SceneLightColorId, color);
+            Shader.SetGlobalFloat(SceneLightIntensityId, _intensity);
         }
     }
 }

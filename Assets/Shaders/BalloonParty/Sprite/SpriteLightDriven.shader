@@ -1,9 +1,12 @@
-Shader "BalloonParty/Sprite/LightRotate"
+Shader "BalloonParty/Sprite/LightDriven"
 {
-    // Rotates the whole sprite so its AUTHORED baked direction always lies DOWN-light (away
-    // from the global _SceneLightDir) in world space — for art with a direction baked in,
-    // e.g. a pre-rendered drop-shadow sprite that should swing around its object as the
-    // scene light moves.
+    // A sprite accessory fully driven by the global scene light (_SceneLightDir / Color /
+    // Intensity): placement (orbit down-light of the rest position), orientation (rotate the
+    // authored baked direction down-light), and colour response — each independently
+    // toggleable so both archetypes fit:
+    //   baked GROUND SHADOW — orbit ON, rotate OFF, fade-with-intensity ON (no light, no shadow);
+    //   baked GLINT/SHINE   — orbit + rotate + tint + fade ON (the sprite IS reflected light,
+    //     so it takes the light's colour AND vanishes without it).
     //
     // Baked Direction: the direction the art points as authored, in degrees (0 = +X/right,
     //                  CCW, world style). A shadow drawn toward lower-right = -45.
@@ -29,6 +32,14 @@ Shader "BalloonParty/Sprite/LightRotate"
         // shadow child's (0.04, -0.04): zero the child's localPosition and put the magnitude
         // here, so the placement orbits with the light. 0 = rotation only.
         _OrbitDistance ("Down-Light Offset", Range(0, 0.5)) = 0
+
+        [Header(Light Response)]
+        // Glint archetype: the sprite is reflected light, so it takes the scene light's
+        // colour x intensity (multiplied into the sprite, like the derived speculars).
+        [ToggleUI] _TintBySceneLight ("Tint By Scene Light (glints)", Float) = 0
+        // Shadow archetype: no light means no shadow — opacity follows the light's intensity
+        // (clamped at the authored alpha; a brighter-than-neutral light can't over-darken).
+        [ToggleUI] _FadeWithSceneLight ("Fade With Light Intensity (shadows)", Float) = 0
 
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
@@ -88,11 +99,16 @@ Shader "BalloonParty/Sprite/LightRotate"
             float _RotateArt;
             float _BakedAngle;
             float _OrbitDistance;
+            float _TintBySceneLight;
+            float _FadeWithSceneLight;
 
-            // Global shader property — set by SceneLightService, not in Properties so
-            // material values can't mask it. Points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left.
+            // Global shader properties — set by SceneLightService, not in Properties so
+            // material values can't mask them. Dir points TOWARD the light, normalized;
+            // canonical (-0.707, 0.707) = upper-left. Colour's alpha is the "owner has
+            // pushed" validity flag (see SceneLightTint).
             float4 _SceneLightDir;
+            float4 _SceneLightColor;
+            float  _SceneLightIntensity;
 
             // Guarded read of the scene light (see SceneLightService): normalized, toward
             // the light; falls back to the canonical direction if the global hasn't been
@@ -103,6 +119,15 @@ Shader "BalloonParty/Sprite/LightRotate"
                     ? float2(-0.707, 0.707)
                     : _SceneLightDir.xy;
                 return normalize(raw);
+            }
+
+            // The light's colour × intensity — multiplies into the authored sprite (glints).
+            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
+            float3 SceneLightTint()
+            {
+                return _SceneLightColor.a > 0.5
+                    ? _SceneLightColor.rgb * _SceneLightIntensity
+                    : float3(1.0, 1.0, 1.0);
             }
 
             v2f vert(appdata_t IN)
@@ -152,6 +177,20 @@ Shader "BalloonParty/Sprite/LightRotate"
             {
                 UNITY_SETUP_INSTANCE_ID(IN);
                 fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
+
+                // Glint archetype: the sprite is reflected light — take the light's colour × intensity.
+                if (_TintBySceneLight > 0.5)
+                {
+                    c.rgb *= SceneLightTint();
+                }
+
+                // Shadow archetype: no light, no shadow — opacity follows intensity, clamped at the
+                // authored alpha so a hotter-than-neutral light can't over-darken.
+                if (_FadeWithSceneLight > 0.5 && _SceneLightColor.a > 0.5)
+                {
+                    c.a *= saturate(_SceneLightIntensity);
+                }
+
                 c.rgb *= c.a;
                 return c;
             }

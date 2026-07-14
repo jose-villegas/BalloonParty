@@ -5,6 +5,10 @@ Shader "BalloonParty/Grid/BushBranch"
         _MainTex ("Branch Map", 2D) = "white" {}
         _BranchGradient ("Branch Gradient", 2D) = "white" {}
         _BranchColor ("Branch Color", Color) = (0.35, 0.22, 0.10, 1)
+
+        // Diffuse response to the scene light (colour x intensity, like Sprite/Diffuse):
+        // 0 = unlit (authored look always), 1 = fully lit.
+        _LightInfluence ("Light Influence", Range(0, 1)) = 1
         _AlphaCutoff ("Alpha Cutoff", Range(0, 1)) = 0.01
         _RendererColor ("Renderer Color", Color) = (1, 1, 1, 1)
 
@@ -59,6 +63,9 @@ Shader "BalloonParty/Grid/BushBranch"
             // material values can't mask it. Points TOWARD the light, normalized;
             // canonical (-0.707, 0.707) = upper-left.
             float4 _SceneLightDir;
+            float4 _SceneLightColor;
+            float  _SceneLightIntensity;
+            float  _LightInfluence;
 
             // Guarded read of the scene light (see SceneLightService): normalized, toward
             // the light; falls back to the canonical direction if the global hasn't been
@@ -69,6 +76,22 @@ Shader "BalloonParty/Grid/BushBranch"
                     ? float2(-0.707, 0.707)
                     : _SceneLightDir.xy;
                 return normalize(raw);
+            }
+
+            // The light's colour × intensity — the body's diffuse multiplier. Neutral
+            // (white) when the owner hasn't pushed yet, so nothing dims at edit time.
+            float3 SceneLightTint()
+            {
+                return _SceneLightColor.a > 0.5
+                    ? _SceneLightColor.rgb * _SceneLightIntensity
+                    : float3(1.0, 1.0, 1.0);
+            }
+
+            // No light, no shadow: the shadow's opacity follows the light's intensity
+            // (clamped at the authored alpha). Neutral when the owner hasn't pushed yet.
+            float ShadowLightFade()
+            {
+                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
             }
 
             #ifdef UNITY_INSTANCING_ENABLED
@@ -162,7 +185,8 @@ Shader "BalloonParty/Grid/BushBranch"
                     shadowHit = SampleShadow(i.uv, float2(0, 0));
                 }
 
-                fixed4 shadow = fixed4(_ShadowColor.rgb, _ShadowColor.a * shadowHit);
+                // No light, no shadow — opacity follows intensity (clamped at authored).
+                fixed4 shadow = fixed4(_ShadowColor.rgb, _ShadowColor.a * shadowHit * ShadowLightFade());
 
                 // AO blob — radial gradient centred at trunk, darkens ground
                 float dist = length(i.uv - 0.5) * 2.0;
@@ -175,6 +199,10 @@ Shader "BalloonParty/Grid/BushBranch"
                 float branchAlpha = step(_AlphaCutoff, map.a) * spriteMask;
                 fixed3 gradCol = tex2D(_BranchGradient, float2(map.b, 0.5)).rgb;
                 fixed3 col = gradCol * _BranchColor.rgb * (0.6 + 0.4 * map.a) * _RendererColor.rgb;
+
+                // Diffuse term: the branch body is lit by the scene light — same response as
+                // Sprite/Diffuse. The AO blob stays authored (ambient occlusion, not light-cast).
+                col *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
 
                 // Composite: AO (bottom) ← shadow ← branch (top)
                 // 1. Shadow over AO

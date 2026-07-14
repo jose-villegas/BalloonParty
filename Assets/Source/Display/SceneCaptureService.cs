@@ -64,6 +64,11 @@ namespace BalloonParty.Display
             {
                 EnsureTexture();
                 _captureCamera.orthographicSize = _mainCamera.orthographicSize;
+
+                // Re-matched per capture, not just at setup: the main camera's background is now
+                // live-tinted by the scene light (CameraBackgroundTint), and the GI measures its
+                // ambient against this clear colour — a stale value would break its neutrality.
+                ApplyBackgroundColor();
                 _captureAccumulator -= captureInterval;
             }
 

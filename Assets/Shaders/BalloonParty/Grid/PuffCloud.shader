@@ -47,6 +47,9 @@ Shader "BalloonParty/Grid/PuffCloud"
         _LightColor         ("Highlight Color",    Color)              = (1, 1, 0.95, 1)
         _AmbientColor       ("Shadow Tint",        Color)              = (0.55, 0.58, 0.7, 1)
         _LightIntensity     ("Light Intensity",    Range(0, 1))        = 0.45
+        // Diffuse response to the scene light (colour x intensity multiplies the whole cloud):
+        // 0 = unlit (authored look always), 1 = fully lit.
+        _LightInfluence     ("Light Influence",    Range(0, 1))        = 1
         _NormalStrength     ("Normal Strength",    Range(0, 3))        = 1.2
         _NormalEpsilon      ("Normal Sample Offset",Range(0.001, 0.05))= 0.012
 
@@ -141,6 +144,7 @@ Shader "BalloonParty/Grid/PuffCloud"
             fixed4 _LightColor;
             fixed4 _AmbientColor;
             float  _LightIntensity;
+            float  _LightInfluence;
             float  _NormalStrength;
             float  _NormalEpsilon;
 
@@ -153,10 +157,13 @@ Shader "BalloonParty/Grid/PuffCloud"
             float     _DisplaceWorldScale;
             #endif
 
-            // Global shader property — set by SceneLightService, not in Properties so
-            // material values can't mask it. Points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left.
+            // Global shader properties — set by SceneLightService, not in Properties so
+            // material values can't mask them. Dir points TOWARD the light, normalized;
+            // canonical (-0.707, 0.707) = upper-left. Colour's alpha is the "owner has
+            // pushed" validity flag (see SceneLightTint).
             float4 _SceneLightDir;
+            float4 _SceneLightColor;
+            float  _SceneLightIntensity;
 
             // Slot center positions in world space — set via MaterialPropertyBlock.
             float4 _SlotCentersWorld[MAX_SLOTS];
@@ -254,6 +261,13 @@ Shader "BalloonParty/Grid/PuffCloud"
                 return normalize(raw);
             }
 
+            // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
+            // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
+            float ShadowLightFade()
+            {
+                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
+            }
+
             // Derive a pseudo-normal from the low-frequency noise gradient and apply
             // half-Lambert directional lighting. The gradient comes from screen-space
             // derivatives of a value the density pass already computed — the GPU provides
@@ -281,8 +295,18 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float NdotL = dot(normal, lightVec);
                 float halfLambert = NdotL * 0.5 + 0.5;
 
+                // Authored shading first (Light Intensity is the CONTRAST of the ambient/highlight
+                // modulation — not brightness), then the scene light's diffuse term multiplies the
+                // whole cloud: colour AND intensity, eased by _LightInfluence. Coupling intensity
+                // into the contrast was wrong — at zero light it flattened to bright white instead
+                // of going dark.
                 fixed3 lit = lerp(_AmbientColor.rgb, _LightColor.rgb, halfLambert);
-                return lerp(fixed3(1, 1, 1), lit, _LightIntensity);
+                fixed3 shading = lerp(fixed3(1, 1, 1), lit, _LightIntensity);
+
+                float3 sceneTint = _SceneLightColor.a > 0.5
+                    ? _SceneLightColor.rgb * _SceneLightIntensity
+                    : float3(1.0, 1.0, 1.0);
+                return shading * lerp(float3(1.0, 1.0, 1.0), sceneTint, _LightInfluence);
             }
 
             v2f vert(appdata_t IN)
@@ -423,6 +447,7 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                     shadowAlpha = shadowCloud * _ShadowColor.a * IN.color.a;
                     shadowAlpha *= smoothstep(0.0, _ShadowSoftness + 0.01, shadowCloud);
+                    shadowAlpha *= ShadowLightFade();
                 }
 
                 if (cloud < 0.001 && shadowAlpha < 0.001) discard;

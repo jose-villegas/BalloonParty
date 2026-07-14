@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: BalloonMaterial
-  m_Shader: {fileID: 4800000, guid: dd8d29a9ebb54e03899553b37431f377, type: 3}
+  m_Name: DiffuseSprite
+  m_Shader: {fileID: 4800000, guid: 309967ae18652439d9250967bd363c38, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -61,6 +61,7 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - PixelSnap: 0
     - _BumpScale: 1
     - _ColorMask: 15
     - _Cutoff: 0.5
@@ -69,10 +70,12 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _LightInfluence: 1
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _ShadowDistance: 0.1414
     - _ShadowFromSceneLight: 1
     - _ShadowSoftness: 0.02
     - _SmoothnessTextureChannel: 0

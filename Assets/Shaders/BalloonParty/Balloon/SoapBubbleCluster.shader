@@ -51,6 +51,11 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
         _SpecColor      ("Specular",       Color)              = (1, 1, 1, 1)
         _SpecSize       ("Size",           Range(0.01, 0.30))  = 0.10
         _SpecSharpness  ("Sharpness",      Range(2, 25))       = 6.0
+
+        [Header(Light Response)]
+        // Diffuse response to the scene light (colour x intensity, like Sprite/Diffuse):
+        // 0 = unlit (authored look always), 1 = fully lit.
+        _LightInfluence ("Light Influence", Range(0, 1)) = 1
         // Direction is derived from the scene light; only the distance stays authored.
         _SpecDistance   ("Distance",       Range(0, 0.35))     = 0.1414
 
@@ -151,6 +156,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
             fixed4 _SpecColor;
             float  _SpecSize;
             float  _SpecSharpness;
+            float  _LightInfluence;
             float  _SpecDistance;
             float  _FloatAmount;
             float  _BreatheAmount;
@@ -162,6 +168,12 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
             // material values can't mask it. Points TOWARD the light, normalized;
             // canonical (-0.707, 0.707) = upper-left.
             float4 _SceneLightDir;
+
+            // Set globally by SceneLightService; kept out of Properties so no
+            // material value can shadow the scene-wide light. Colour's alpha is the
+            // "owner has pushed" validity flag (see SceneLightTint).
+            float4 _SceneLightColor;
+            float  _SceneLightIntensity;
 
             #ifdef _SHADOW_ON
             fixed4 _ShadowColor;
@@ -271,6 +283,22 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                     : _SceneLightDir.xy;
             }
 
+            // The light's colour × intensity — multiplies into the authored specular response.
+            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
+            float3 SceneLightTint()
+            {
+                return _SceneLightColor.a > 0.5
+                    ? _SceneLightColor.rgb * _SceneLightIntensity
+                    : float3(1.0, 1.0, 1.0);
+            }
+
+            // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
+            // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
+            float ShadowLightFade()
+            {
+                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
+            }
+
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
@@ -372,6 +400,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
 
                 float shadowAlpha = saturate(shadowFilm + shadowSeam)
                                   * _ShadowColor.a * IN.color.a;
+                shadowAlpha *= ShadowLightFade();
 
                 // Discard only when outside BOTH the main cluster and the shadow.
                 if (bestSdf < 0.0 && shadowAlpha < 0.001) discard;
@@ -441,10 +470,16 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 // ── Compose main layer ─────────────────────────────────────
                 fixed3 col = lerp(interiorColor, filmColor, filmMask);
 
+                // Diffuse term: the bubble body (film + interior) is lit by the scene light —
+                // same response as Sprite/Diffuse. The specular below carries its own tint.
+                col *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
+
                 // Specular sits inside the bubble where filmMask = 0, so it
                 // must NOT be gated by filmMask.  We also boost alpha at the
                 // specular position so it punches through the transparent interior.
-                col    = lerp(col, _SpecColor.rgb, specMask * _SpecColor.a);
+                // Specular response = authored colour × the scene light's tint (a dim/tinted
+                // light dims/tints the glint); opacity below is unaffected — it's not colour.
+                col    = lerp(col, _SpecColor.rgb * SceneLightTint(), specMask * _SpecColor.a);
 
                 float alpha = lerp(_InteriorAlpha, _FilmAlpha, filmMask);
                 alpha += junctionLine * _JunctionLineAlpha  * (1.0 - filmMask);

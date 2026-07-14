@@ -26,6 +26,11 @@ Shader "BalloonParty/Balloon/ToughBalloon"
         _GrainScale ("Scale", Range(2, 80)) = 20
         _GrainStrength ("Strength", Range(0, 1.0)) = 0.25
 
+        [Header(Light Response)]
+        // Diffuse response to the scene light (albedo x colour x intensity, like Sprite/Diffuse):
+        // 0 = unlit (authored look always), 1 = fully lit. Applies to the whole body.
+        _LightInfluence ("Light Influence", Range(0, 1)) = 1
+
         // ---- Voronoi cracks ------------------------------------------------
         [Header(Cracks  Base)]
         _CrackThreshold ("Edge Threshold", Range(0.02, 0.15)) = 0.08
@@ -128,11 +133,20 @@ Shader "BalloonParty/Balloon/ToughBalloon"
 
             float  _GrainScale;
             float  _GrainStrength;
+            float  _LightInfluence;
 
             // Global shader property — set by SceneLightService, not in Properties so
             // material values can't mask it. Points TOWARD the light, normalized;
             // canonical (-0.707, 0.707) = upper-left.
             float4 _SceneLightDir;
+
+            // Set globally by SceneLightService; kept out of Properties so no material value
+            // can shadow the scene-wide light. Colour's alpha is the "owner has pushed"
+            // validity flag. Only intensity is consumed here (see SceneLightIntensity) —
+            // the grain term below is signed (brightens AND darkens), so tinting it by
+            // colour would muddy it; deliberately colour-neutral.
+            float4 _SceneLightColor;
+            float  _SceneLightIntensity;
 
             float  _VoronoiScale;
             float  _VoronoiScaleDamageBoost;
@@ -373,6 +387,22 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                     : _SceneLightDir.xy;
             }
 
+            // The light's colour × intensity — the body's diffuse multiplier. Neutral
+            // (white) when the owner hasn't pushed yet, so nothing dims at edit time.
+            float3 SceneLightTint()
+            {
+                return _SceneLightColor.a > 0.5
+                    ? _SceneLightColor.rgb * _SceneLightIntensity
+                    : float3(1.0, 1.0, 1.0);
+            }
+
+            // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
+            // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
+            float ShadowLightFade()
+            {
+                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
+            }
+
             // ----------------------------------------------------------------
             v2f vert(appdata_t IN)
             {
@@ -429,6 +459,7 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                     ? SampleShadowAlpha(shadowUV)
                     : SoftShadowAlpha(shadowUV, _ShadowSoftness);
                 shadowAlpha *= IN.color.a * _ShadowColor.a;
+                shadowAlpha *= ShadowLightFade();
 
                 fixed3 shadowRGB = _ShadowColor.rgb * IN.color.rgb;
 #endif
@@ -469,6 +500,8 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 // global points TOWARD the light — negate to convert.
                 float2 lightDirToward = SceneLightDirection();
                 float grain = LeatherGrain(vUV, sphereNormal, _GrainScale, -lightDirToward);
+                // No separate light factor here: the grain is proportional to the body colour,
+                // so it inherits colour AND intensity from the diffuse multiply after the cracks.
                 col += col * grain * _GrainStrength;
 
                 // ---- Rim / subsurface fringe (world-space — never rotates) -----
@@ -513,6 +546,11 @@ Shader "BalloonParty/Balloon/ToughBalloon"
 
                 // Overlay fibers on top of crack color
                 col = lerp(col, fiberColor, fibers * (1.0 - rim));
+
+                // Diffuse term: the composed body (rubber/ash/grain/rim/cracks/fibers) is albedo,
+                // lit by the scene light — same response as Sprite/Diffuse. Without this the tough
+                // reads self-illuminated when the light dims. The shadow half below stays dark art.
+                col *= lerp(fixed3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
 
                 // ---- Composite shadow under balloon (premultiplied alpha) ----
                 // Blend mode is One / OneMinusSrcAlpha, so output is premultiplied.

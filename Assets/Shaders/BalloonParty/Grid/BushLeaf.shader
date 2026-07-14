@@ -22,6 +22,11 @@ Shader "BalloonParty/Grid/BushLeaf"
         _HighlightSize     ("Size",      Range(0.01, 0.3)) = 0.1
         _HighlightSoftness ("Softness",  Range(0.01, 0.3)) = 0.12
 
+        [Header(Light Response)]
+        // Diffuse response to the scene light (colour x intensity, like Sprite/Diffuse):
+        // 0 = unlit (authored look always), 1 = fully lit.
+        _LightInfluence ("Light Influence", Range(0, 1)) = 1
+
         [Header(Sprite)]
         _SpriteScale ("Scale", Range(0.3, 1.0)) = 0.75
 
@@ -63,6 +68,7 @@ Shader "BalloonParty/Grid/BushLeaf"
             float  _HighlightDistance;
             float  _HighlightSize;
             float  _HighlightSoftness;
+            float     _LightInfluence;
             float  _SpriteScale;
             float  _WindFrequency;
             float  _WindAmplitude;
@@ -75,6 +81,12 @@ Shader "BalloonParty/Grid/BushLeaf"
             // canonical (-0.707, 0.707) = upper-left.
             float4 _SceneLightDir;
 
+            // Set globally by SceneLightService; kept out of Properties so no
+            // material value can shadow the scene-wide light. Colour's alpha is the
+            // "owner has pushed" validity flag (see SceneLightTint).
+            float4 _SceneLightColor;
+            float  _SceneLightIntensity;
+
             // Guarded read of the scene light (see SceneLightService): normalized, toward
             // the light; falls back to the canonical direction if the global hasn't been
             // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
@@ -84,6 +96,15 @@ Shader "BalloonParty/Grid/BushLeaf"
                     ? float2(-0.707, 0.707)
                     : _SceneLightDir.xy;
                 return normalize(raw);
+            }
+
+            // The light's colour × intensity — multiplies into the authored specular response.
+            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
+            float3 SceneLightTint()
+            {
+                return _SceneLightColor.a > 0.5
+                    ? _SceneLightColor.rgb * _SceneLightIntensity
+                    : float3(1.0, 1.0, 1.0);
             }
 
             #ifdef _RATTLE_ON
@@ -262,19 +283,27 @@ Shader "BalloonParty/Grid/BushLeaf"
                     shadowAlpha = SampleShadowAlpha(shadowRaw, i.uvRect);
                 }
 
-                fixed4 shadow = fixed4(_ShadowColor.rgb, _ShadowColor.a * shadowAlpha);
+                // No light, no shadow — opacity follows intensity (clamped at authored).
+                float shadowFade = _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
+                fixed4 shadow = fixed4(_ShadowColor.rgb, _ShadowColor.a * shadowAlpha * shadowFade);
 
                 fixed4 col = tex2D(_MainTex, i.uv);
                 float4 tint = UNITY_ACCESS_INSTANCED_PROP(Props, _LeafTint);
                 col *= tint * _LeafColor;
                 col.a *= spriteMask;
 
+                // Diffuse term: the leaf body is lit by the scene light — same response as
+                // Sprite/Diffuse. The highlight below carries its own tint.
+                col.rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
+
                 // Specular highlight: radial falloff from offset center, masked to leaf shape
                 float2 hlCenter = spriteUV - 0.5 + i.localHighlightOffset / _SpriteScale;
                 float hlDist = length(hlCenter);
                 float hlFalloff = 1.0 - smoothstep(_HighlightSize, _HighlightSize + _HighlightSoftness, hlDist);
                 float hlMask = hlFalloff * col.a;
-                col.rgb = lerp(col.rgb, _HighlightColor.rgb, hlMask * _HighlightColor.a);
+                // Highlight colour × the scene light's tint (a dim/tinted light dims/tints the
+                // glint); softness/alpha math above is untouched.
+                col.rgb = lerp(col.rgb, _HighlightColor.rgb * SceneLightTint(), hlMask * _HighlightColor.a);
 
                 // Composite: shadow behind, leaf on top (Porter-Duff "over")
                 fixed3 rgb = col.rgb * col.a + shadow.rgb * shadow.a * (1.0 - col.a);

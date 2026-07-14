@@ -27,6 +27,11 @@ Shader "BalloonParty/Paint/PaintBlob"
         _SpecularSharpness  ("Specular Sharpness",   Range(1, 20))       = 7.0
         _SpecularDistance   ("Specular Distance",    Range(0, 0.4))      = 0.23
 
+        [Header(Light Response)]
+        // Diffuse response to the scene light (albedo x colour x intensity, like Sprite/Diffuse):
+        // 0 = unlit (authored look always), 1 = fully lit.
+        _LightInfluence ("Light Influence", Range(0, 1)) = 1
+
         [Header(Shadow)]
         [Toggle(_SHADOW_ON)] _EnableShadow ("Enable Shadow", Float) = 0
         _ShadowColor        ("Shadow Color",   Color)              = (0.15, 0.15, 0.15, 0.6)
@@ -106,10 +111,14 @@ Shader "BalloonParty/Paint/PaintBlob"
             float  _SpecularSize;
             float  _SpecularSharpness;
             float  _SpecularDistance;
+            float  _LightInfluence;
 
             // Set globally by SceneLightService; kept out of Properties so no
-            // material value can shadow the scene-wide light direction.
+            // material value can shadow the scene-wide light. Colour's alpha is the
+            // "owner has pushed" validity flag (see SceneLightTint).
             float4 _SceneLightDir;
+            float4 _SceneLightColor;
+            float  _SceneLightIntensity;
 
             #ifdef _SHADOW_ON
             fixed4 _ShadowColor;
@@ -124,6 +133,22 @@ Shader "BalloonParty/Paint/PaintBlob"
             {
                 float2 dir = _SceneLightDir.xy;
                 return (dot(dir, dir) > 1e-8) ? normalize(dir) : float2(-0.707, 0.707);
+            }
+
+            // The light's colour × intensity — multiplies into the authored specular response.
+            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
+            float3 SceneLightTint()
+            {
+                return _SceneLightColor.a > 0.5
+                    ? _SceneLightColor.rgb * _SceneLightIntensity
+                    : float3(1.0, 1.0, 1.0);
+            }
+
+            // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
+            // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
+            float ShadowLightFade()
+            {
+                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
             }
 
             // Computes the blob SDF boundary at a given UV offset from center.
@@ -190,6 +215,7 @@ Shader "BalloonParty/Paint/PaintBlob"
                                             -shadowWorld.x * IN.spin.y + shadowWorld.y * IN.spin.x);
                 float2 shadowUV    = (uv - shadowLocal) / max(_ShadowScale, 0.001);
                 float  shadowAlpha = BlobAlpha(shadowUV, _ShadowSoftness / max(_ShadowScale, 0.001)) * _ShadowColor.a;
+                shadowAlpha *= ShadowLightFade();
                 #endif
 
                 // Early discard — nothing to draw if both blob and shadow are invisible
@@ -222,6 +248,11 @@ Shader "BalloonParty/Paint/PaintBlob"
                 float rimMask = pow(innerT, 1.0 / max(_RimWidth, 0.001));
                 fixed3 col    = IN.color.rgb * (1.0 - rimMask * _RimDarkness);
 
+                // Diffuse term: the blob body is albedo, lit by the scene light — same response
+                // as Sprite/Diffuse. Without this the blob reads self-illuminated when the light
+                // dims. The specular below carries its own light scaling (no double-apply).
+                col *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
+
                 // Specular highlight — sampled in world orientation so it stays
                 // put regardless of how the parent transform is rotated.
                 float2 worldUV = float2(uv.x * IN.spin.x - uv.y * IN.spin.y,
@@ -230,7 +261,9 @@ Shader "BalloonParty/Paint/PaintBlob"
                 float  specDist   = length(worldUV - specCenter);
                 float  specMask   = pow(saturate(1.0 - specDist / max(_SpecularSize, 0.001)),
                                         _SpecularSharpness);
-                col = lerp(col, _SpecularColor.rgb, specMask * _SpecularColor.a);
+                // Specular response = authored colour × the scene light's tint (a dim/tinted
+                // light dims/tints the glint).
+                col = lerp(col, _SpecularColor.rgb * SceneLightTint(), specMask * _SpecularColor.a);
 
                 // ── Composite: shadow under blob (Porter-Duff "over") ──
                 #ifdef _SHADOW_ON

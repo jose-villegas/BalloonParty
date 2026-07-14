@@ -139,8 +139,11 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
 
             // Global shader property — set by SceneLightService, not in Properties so
             // material values can't mask it. Points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left.
+            // canonical (-0.707, 0.707) = upper-left. Colour's alpha is the "owner has
+            // pushed" validity flag (see ShadowLightFade).
             float4 _SceneLightDir;
+            float4 _SceneLightColor;
+            float  _SceneLightIntensity;
 
             // Guarded read of the scene light (see SceneLightService): normalized, toward
             // the light; falls back to the canonical direction if the global hasn't been
@@ -151,6 +154,13 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
                     ? float2(-0.707, 0.707)
                     : _SceneLightDir.xy;
                 return normalize(raw);
+            }
+
+            // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
+            // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
+            float ShadowLightFade()
+            {
+                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
             }
 
             #ifdef UNITY_INSTANCING_ENABLED
@@ -254,6 +264,9 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
 
                 // Weight by vertex alpha and shadow colour alpha
                 shadowAlpha *= IN.color.a * _ShadowColor.a;
+                // Only opted-in (scene-light-following) shadows fade with light intensity —
+                // expressive/UI shadows stay authored regardless of the scene light.
+                shadowAlpha *= _ShadowFromSceneLight > 0.5 ? ShadowLightFade() : 1.0;
 
                 // Shadow RGB tinted by the global tint (mirrors the sprite behaviour)
                 fixed4 shadow;

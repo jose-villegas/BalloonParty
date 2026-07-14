@@ -29,6 +29,10 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
         _MetalEdgeColor     ("Edge Tint",        Color)             = (0.10, 0.10, 0.14, 1)
         _MetalFalloff       ("Falloff",          Range(0.5, 4.0))   = 1.8
         _MetalDetailStrength("Detail Strength",  Range(0.1, 1.0))   = 0.5
+        // Diffuse response to the scene light (colour x intensity on the metallic body):
+        // 0 = unlit (authored look always), 1 = fully lit. The realtime reflection is NOT
+        // re-multiplied — it samples the scene capture, which already darkens with the light.
+        _LightInfluence     ("Light Influence",  Range(0, 1))       = 1
 
         [Header(Specular Highlight)]
         // Position is derived from the scene light direction (see _SceneLightDir below);
@@ -157,6 +161,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             fixed4 _MetalEdgeColor;
             float  _MetalFalloff;
             float  _MetalDetailStrength;
+            float  _LightInfluence;
 
             // Specular highlight
             float  _SpecularDistance;
@@ -171,6 +176,12 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             // material values can't mask it. Points TOWARD the light, normalized;
             // canonical (-0.707, 0.707) = upper-left.
             float4 _SceneLightDir;
+
+            // Set globally by SceneLightService; kept out of Properties so no
+            // material value can shadow the scene-wide light. Colour's alpha is the
+            // "owner has pushed" validity flag (see SceneLightTint).
+            float4 _SceneLightColor;
+            float  _SceneLightIntensity;
 
             // Chrome rim (static)
             fixed4 _RimColor;
@@ -285,6 +296,15 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 return normalize(raw);
             }
 
+            // The light's colour × intensity — multiplies into the authored specular response.
+            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
+            float3 SceneLightTint()
+            {
+                return _SceneLightColor.a > 0.5
+                    ? _SceneLightColor.rgb * _SceneLightIntensity
+                    : float3(1.0, 1.0, 1.0);
+            }
+
             // ----------------------------------------------------------------
             fixed4 frag(Varyings IN) : SV_Target
             {
@@ -318,6 +338,12 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                     float grad = pow(sphereDist, _MetalFalloff);
                     fixed3 metallic = lerp(_MetalCenterColor.rgb, _MetalEdgeColor.rgb, grad);
                     sprite.rgb = metallic * smoothstep(0.0, _MetalDetailStrength, detail);
+
+                    // Diffuse term: the metallic body is lit by the scene light — same response
+                    // as Sprite/Diffuse. The reflection blended below deliberately is NOT
+                    // re-multiplied (it samples the capture, already scene-dark); the specular,
+                    // shine, rim sweep and deflect flash keep their own policies.
+                    sprite.rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
                 }
 
                 // ---- Realtime reflection (convex mirror from the reflection RT) ----
@@ -411,7 +437,9 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                     float g = exp(-0.5 * (along * along / (sigmaAlong * sigmaAlong)
                                         + perpDist * perpDist / (sigmaAcross * sigmaAcross)));
                     float spec = pow(g, _SpecularSharpness) * _SpecularIntensity;
-                    sprite.rgb += _SpecularColor.rgb * spec * alpha;
+                    // Specular response = authored colour × the scene light's tint (a dim/tinted
+                    // light dims/tints the glint).
+                    sprite.rgb += _SpecularColor.rgb * SceneLightTint() * spec * alpha;
                 }
 
                 // ---- Diagonal shine band (same as SpriteShineShadow) ----
@@ -432,7 +460,10 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                         : (spriteUV.x + spriteUV.y) / 2;
                     float shineDist = abs(projection - shineLoc);
                     float shineStr = saturate(1.0 - shineDist / max(_ShineWidth, 0.001));
-                    sprite.rgb += alpha * shineStr * 0.5;
+                    // Opted-in shine is "lit by the scene light" — axis AND colour — so tint it;
+                    // the classic default sweep stays pure white regardless of the scene light.
+                    float3 shineTint = _ShineFromSceneLight > 0.5 ? SceneLightTint() : float3(1.0, 1.0, 1.0);
+                    sprite.rgb += shineTint * alpha * shineStr * 0.5;
                 }
 
                 // ---- Chrome rim (static + animated sweep) ----
