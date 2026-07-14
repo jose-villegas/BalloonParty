@@ -27,7 +27,7 @@ namespace BalloonParty.Projectile.View
     {
         private static int BalloonsLayer = -1;
 
-        [Header("Glow")] [SerializeField] private SpriteRenderer _glowRenderer;
+        [Header("Glow")] [SerializeField] private ColorableRenderer[] _glowRenderers;
 
         [SerializeField] [Range(0f, 1f)] private float _glowAlpha = 0.5f;
         [SerializeField] private float _glowColorDuration = 0.2f;
@@ -64,6 +64,8 @@ namespace BalloonParty.Projectile.View
         private Vector3 _baseScale;
         private bool _disappearing;
         private Color[] _paletteColors;
+        private Color _glowColor;
+        private Tween _glowTween;
         private float _rainbowGlowTimer;
         private bool _rainbowGlowActive;
         private bool _hasFlown;
@@ -183,11 +185,8 @@ namespace BalloonParty.Projectile.View
             transform.DOKill();
             transform.localScale = _baseScale;
             transform.rotation = Quaternion.identity;
-            if (_glowRenderer != null)
-            {
-                _glowRenderer.DOKill();
-                _glowRenderer.color = new Color(1f, 1f, 1f, 0f);
-            }
+            KillGlowTween();
+            ApplyGlow(new Color(1f, 1f, 1f, 0f));
 
             _projectileTrail?.Disable();
         }
@@ -207,11 +206,8 @@ namespace BalloonParty.Projectile.View
             transform.DOKill();
             transform.localScale = _baseScale;
             transform.rotation = Quaternion.identity;
-            if (_glowRenderer != null)
-            {
-                _glowRenderer.DOKill();
-                _glowRenderer.color = new Color(1f, 1f, 1f, 0f);
-            }
+            KillGlowTween();
+            ApplyGlow(new Color(1f, 1f, 1f, 0f));
 
             _projectileTrail?.Disable();
             if (_shieldView != null)
@@ -410,17 +406,17 @@ namespace BalloonParty.Projectile.View
                 _rainbowGlowActive = true;
                 _rainbowGlowTimer = 0f;
                 _paletteColors ??= _palette.ColorValues();
-                _glowRenderer?.DOKill();
+                KillGlowTween();
             }
 
-            if (_glowRenderer == null || _paletteColors.Length == 0)
+            if (_paletteColors.Length == 0)
             {
                 return;
             }
 
             _rainbowGlowTimer += Time.deltaTime;
             var t = Mathf.Repeat(_rainbowGlowTimer * _rainbowGlowSpeed, 1f);
-            _glowRenderer.color = ColorCycle.Sample(_paletteColors, t).WithAlpha(_glowAlpha);
+            ApplyGlow(ColorCycle.Sample(_paletteColors, t).WithAlpha(_glowAlpha));
         }
 
         private void UpdateGlowColor()
@@ -431,20 +427,42 @@ namespace BalloonParty.Projectile.View
                 _light.PaletteIndex.Value = LightColorIndex();
             }
 
-            if (_glowRenderer == null)
+            // Washed back to colourless (e.g. by soap) fades the glow out; otherwise crossfade to the colour.
+            var target = string.IsNullOrEmpty(_model.ColorName.Value)
+                ? new Color(1f, 1f, 1f, 0f)
+                : _palette.GetColor(_model.ColorName.Value).WithAlpha(_glowAlpha);
+            TweenGlow(target);
+        }
+
+        // Drives the glow renderers off a single tweened Color, so the smooth crossfades work across a
+        // collection of ColorableRenderers (which expose SetColor, not a DOTween-able colour property).
+        private void ApplyGlow(Color color)
+        {
+            _glowColor = color;
+            if (_glowRenderers == null)
             {
                 return;
             }
 
-            if (string.IsNullOrEmpty(_model.ColorName.Value))
+            foreach (var renderer in _glowRenderers)
             {
-                // Washed back to colourless (e.g. by soap) — fade the glow out.
-                _glowRenderer.DOColor(new Color(1f, 1f, 1f, 0f), _glowColorDuration);
-                return;
+                if (renderer != null)
+                {
+                    renderer.SetColor(color);
+                }
             }
+        }
 
-            var color = _palette.GetColor(_model.ColorName.Value);
-            _glowRenderer.DOColor(color.WithAlpha(_glowAlpha), _glowColorDuration);
+        private void TweenGlow(Color target)
+        {
+            KillGlowTween();
+            _glowTween = DOTween.To(() => _glowColor, ApplyGlow, target, _glowColorDuration);
+        }
+
+        private void KillGlowTween()
+        {
+            _glowTween?.Kill();
+            _glowTween = null;
         }
 
         // The palette index for the shot's light: its current colour, or the Sparks tint when colourless.
