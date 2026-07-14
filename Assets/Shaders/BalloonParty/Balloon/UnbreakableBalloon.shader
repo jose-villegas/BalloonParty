@@ -422,12 +422,13 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                     float t = fmod(time, cycleDur);
                     float shineLoc = -_ShineWidth + (1.0 + 2.0 * _ShineWidth) * saturate(t / sweepDur);
 
-                    // Opted-in: sweep along the scene light across the composed sphere —
-                    // spherePos is world-axis coherent over all 4 quadrants, unlike spriteUV
-                    // (per-quadrant rotated), so the light-driven band reads as ONE band.
-                    // Default keeps the classic per-quadrant diagonal.
+                    // Opted-in: sweep along the scene light across the composed sphere,
+                    // travelling DOWN-light (enters from the lit side) — spherePos is
+                    // world-axis coherent over all 4 quadrants, unlike spriteUV (per-quadrant
+                    // rotated), so the light-driven band reads as ONE band. Default keeps the
+                    // classic per-quadrant diagonal.
                     float projection = _ShineFromSceneLight > 0.5
-                        ? dot(spherePos, SceneLightDirection()) * 0.5 + 0.5
+                        ? dot(spherePos, -SceneLightDirection()) * 0.5 + 0.5
                         : (spriteUV.x + spriteUV.y) / 2;
                     float shineDist = abs(projection - shineLoc);
                     float shineStr = saturate(1.0 - shineDist / max(_ShineWidth, 0.001));

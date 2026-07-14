@@ -173,10 +173,11 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
 
                 float lowLevel = shineLocation - _ShineWidth;
                 float highLevel = shineLocation + _ShineWidth;
-                // Opted-in materials sweep along the scene light's axis; default keeps the
-                // classic hardcoded 45-degree diagonal (these are mostly UI materials).
+                // Opted-in materials sweep along the scene light's axis, travelling DOWN-light
+                // (enters from the lit side); default keeps the classic hardcoded 45-degree
+                // diagonal (these are mostly UI materials).
                 float projection = _ShineFromSceneLight > 0.5
-                    ? dot(uv - 0.5, SceneLightDirection()) + 0.5
+                    ? dot(uv - 0.5, -SceneLightDirection()) + 0.5
                     : (uv.x + uv.y) / 2;
 
                 if (projection > lowLevel && projection < highLevel)

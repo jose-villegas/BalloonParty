@@ -255,10 +255,11 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 float shineLocation = -_ShineWidth + (1.0 + 2.0 * _ShineWidth) * saturate(t / sweepDuration);
 
                 // Opted-in: the sweep axis derives from the scene light instead of the authored
-                // angle. Caveat: uv is local sprite space (not rotation-compensated), so the axis
-                // sways with the balloon — accepted, same as the sprite-shadow family.
+                // angle — travelling DOWN-light (enters from the lit side; top-to-bottom under
+                // the canonical upper-left light). Caveat: uv is local sprite space (not
+                // rotation-compensated), so the axis sways with the balloon — accepted.
                 float projection = _ShineFromSceneLight > 0.5
-                    ? dot(uv - 0.5, SceneLightDirection()) + 0.5
+                    ? dot(uv - 0.5, -SceneLightDirection()) + 0.5
                     : DiagonalProjection(uv, _ShineAngle);
                 float inside = step(shineLocation - _ShineWidth, projection) * step(projection, shineLocation + _ShineWidth);
                 return inside * (1.0 - abs(projection - shineLocation) / _ShineWidth);

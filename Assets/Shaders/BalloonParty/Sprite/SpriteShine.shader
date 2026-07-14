@@ -127,10 +127,11 @@
 
          float lowLevel = location - _ShineWidth;
          float highLevel = location + _ShineWidth;
-         // Opted-in materials sweep along the scene light's axis (band travels toward the
-         // light); the default keeps the classic hardcoded 45-degree diagonal.
+         // Opted-in materials sweep along the scene light's axis, travelling DOWN-light
+         // (enters from the lit side; top-to-bottom under the canonical upper-left light);
+         // the default keeps the classic hardcoded 45-degree diagonal.
          float currentDistanceProjection = _ShineFromSceneLight > 0.5
-             ? dot(uv - 0.5, SceneLightDirection()) + 0.5
+             ? dot(uv - 0.5, -SceneLightDirection()) + 0.5
              : (uv.x + uv.y) / 2;
          if (currentDistanceProjection > lowLevel && currentDistanceProjection < highLevel) {
              float whitePower = 1- (abs(currentDistanceProjection - location) / _ShineWidth);
