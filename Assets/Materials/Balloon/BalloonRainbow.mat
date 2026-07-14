@@ -31,6 +31,7 @@ Material:
     m_Floats:
     - PixelSnap: 0
     - _BandAngle: 0.125
+    - _BandsFromSceneLight: 1
     - _BandBlend: 0.5
     - _BandCount: 4
     - _GlitterBrightness: 2

@@ -23,6 +23,9 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         _ScrollSpeed ("Scroll Speed",  Range(-5, 5)) = 1.0
         _BandBlend   ("Edge Softness", Range(0, 0.5)) = 0.08
         _BandAngle   ("Angle (turns)", Range(0, 1))  = 0.125
+        // OPT-IN scene lighting: on, the colour bands scroll along _SceneLightDir instead of
+        // the authored angle (scenario objects) — same polarity as the shine toggle below.
+        [Toggle] _BandsFromSceneLight ("Bands Follow Scene Light", Float) = 0
         [HideInInspector] _TimeOffset ("Time Offset", Float) = 0
 
         [Header(Mask)]
@@ -132,6 +135,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float  _ScrollSpeed;
             float  _BandBlend;
             float  _BandAngle;
+            float  _BandsFromSceneLight;
             float  _TimeOffset;
 
             float2 _MaskMin;
@@ -181,9 +185,24 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             }
 
             // Diagonal scrolling colour bands cycling through the first _BandCount colours.
+            // Guarded read of the scene light (see SceneLightService): normalized, toward
+            // the light; falls back to the canonical direction if the global hasn't been
+            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
+            inline float2 SceneLightDirection()
+            {
+                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
+                    ? float2(-0.707, 0.707)
+                    : _SceneLightDir.xy;
+                return normalize(raw);
+            }
+
             inline fixed3 RainbowBand(float2 uv)
             {
-                float projection = DiagonalProjection(uv, _BandAngle);
+                // Opted-in: the bands scroll along the scene light's axis instead of the
+                // authored angle. Same local-UV sway caveat as the shine.
+                float projection = _BandsFromSceneLight > 0.5
+                    ? dot(uv - 0.5, SceneLightDirection()) + 0.5
+                    : DiagonalProjection(uv, _BandAngle);
 
                 float s = projection * _StripeCount + _Time.y * _ScrollSpeed + _TimeOffset;
                 float cell = floor(s);
@@ -207,17 +226,6 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 float2 upperEdge = 1.0 - smoothstep(_MaskMax - _MaskSoftness, _MaskMax + _MaskSoftness, uv);
                 float2 inside = lowerEdge * upperEdge;
                 return inside.x * inside.y;
-            }
-
-            // Guarded read of the scene light (see SceneLightService): normalized, toward
-            // the light; falls back to the canonical direction if the global hasn't been
-            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
-            inline float2 SceneLightDirection()
-            {
-                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-                    ? float2(-0.707, 0.707)
-                    : _SceneLightDir.xy;
-                return normalize(raw);
             }
 
             // Additive white shine sweep (0..1) — same diagonal band shape as SpriteShineShadow, angle tunable.
