@@ -45,6 +45,10 @@ Shader "BalloonParty/Sprite/LightDriven"
         // (neutral until a point/area light is near, then it brightens/tints toward it — the glint
         // ignores the global light entirely). Only matters when Tint By Scene Light is on.
         [Enum(Full, 0, Ambient, 1, Local, 2)] _LightMode ("Tint Light Mode", Float) = 0
+        // Local mode only: the glint's opacity at rest (no nearby light), fading up to full as a local
+        // light approaches. 0 = invisible until a light sweeps over it (a spark that flares in); 1 = the
+        // classic always-visible glint. No effect in Full/Ambient modes.
+        _RestAlpha ("Resting Alpha (Local)", Range(0, 1)) = 0
 
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
@@ -92,8 +96,10 @@ Shader "BalloonParty/Sprite/LightDriven"
                 // Sampled ONCE per sprite (its own anchor, vertex stage, BEFORE the
                 // orbit/rotation offset below) so the fragment's tint/fade reads the same
                 // light as the placement — the PaintBlob pattern.
-                float3 lightTint  : TEXCOORD1;
-                float  shadowFade : TEXCOORD2;
+                float3 lightTint   : TEXCOORD1;
+                float  shadowFade  : TEXCOORD2;
+                // 0..1 "how much local light" — drives the resting-alpha fade in Local mode; 1 otherwise.
+                float  localAmount : TEXCOORD3;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -114,6 +120,7 @@ Shader "BalloonParty/Sprite/LightDriven"
             float _TintBySceneLight;
             float _FadeWithSceneLight;
             float _LightMode;
+            float _RestAlpha;
 
             v2f vert(appdata_t IN)
             {
@@ -134,18 +141,23 @@ Shader "BalloonParty/Sprite/LightDriven"
                 OUT.shadowFade = ShadowLightFadeAtLOD(anchorWorld);
 
                 // Tint source (see _LightMode). Local is neutral (1) until a local light is near, so the
-                // glint keeps its authored look at rest and never reacts to the global ambient.
+                // glint keeps its authored look at rest and never reacts to the global ambient; its
+                // brightest channel doubles as the 0..1 local-presence that drives the resting-alpha fade.
                 if (_LightMode > 1.5)
                 {
-                    OUT.lightTint = float3(1.0, 1.0, 1.0) + SceneLightLocalAtLOD(anchorWorld);
+                    float3 local = SceneLightLocalAtLOD(anchorWorld);
+                    OUT.lightTint = float3(1.0, 1.0, 1.0) + local;
+                    OUT.localAmount = saturate(max(local.r, max(local.g, local.b)));
                 }
                 else if (_LightMode > 0.5)
                 {
                     OUT.lightTint = SceneLightTint();
+                    OUT.localAmount = 1.0;
                 }
                 else
                 {
                     OUT.lightTint = SceneLightTintAtLOD(anchorWorld);
+                    OUT.localAmount = 1.0;
                 }
 
                 // Rotation is optional: a baked ground shadow keeps its authored shape (orbit
@@ -196,6 +208,10 @@ Shader "BalloonParty/Sprite/LightDriven"
                 {
                     c.a *= IN.shadowFade;
                 }
+
+                // Local mode: rest at _RestAlpha, fade up to full as a local light nears (localAmount is 1
+                // in Full/Ambient, so this is a no-op there). Before the premultiply below.
+                c.a *= lerp(_RestAlpha, 1.0, IN.localAmount);
 
                 c.rgb *= c.a;
                 return c;
