@@ -347,7 +347,7 @@ namespace BalloonParty.Projectile.View
         // buff clears it hands control back to the stolen-colour tween.
         private void TickRainbowGlow()
         {
-            var active = _model.HasBuff<RainbowProjectileBuff>();
+            var active = _model.HasBuff<RainbowShieldProjectileBuff>();
             if (!active)
             {
                 if (_rainbowGlowActive)
