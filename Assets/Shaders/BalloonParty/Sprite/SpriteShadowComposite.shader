@@ -36,7 +36,7 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
         // OPT-IN scene lighting (see SpriteShadow.shader): off (default) keeps the authored
         // Offset; on derives direction away from _SceneLightDir at Distance (0.1414 reproduces
         // the sole authored material's (0.1, -0.1), already on the -L axis).
-        [Toggle] _ShadowFromSceneLight ("Follow Scene Light", Float) = 0
+        [ToggleUI] _ShadowFromSceneLight ("Follow Scene Light", Float) = 0
         _ShadowOffset   ("Offset (manual)", Vector)    = (0.025, -0.025, 0, 0)
         _ShadowDistance ("Distance (scene light)", Range(0, 1)) = 0.1414
         _ShadowSoftness ("Softness", Range(0.0, 0.1))  = 0.01

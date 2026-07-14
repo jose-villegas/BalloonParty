@@ -25,7 +25,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         _BandAngle   ("Angle (turns)", Range(0, 1))  = 0.125
         // OPT-IN scene lighting: on, the colour bands scroll along _SceneLightDir instead of
         // the authored angle (scenario objects) — same polarity as the shine toggle below.
-        [Toggle] _BandsFromSceneLight ("Bands Follow Scene Light", Float) = 0
+        [ToggleUI] _BandsFromSceneLight ("Bands Follow Scene Light", Float) = 0
         // Wavy colour seams: dual-sine displacement along the seam direction. 0 = straight.
         _SeamSwirlAmount ("Seam Swirl Amount", Range(0, 0.2)) = 0
         _SeamSwirlScale  ("Seam Swirl Scale",  Range(0, 60))  = 18
@@ -46,7 +46,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         // OPT-IN scene lighting: on, the sweep axis derives from _SceneLightDir instead of the
         // authored angle (scenario objects); sweep timing untouched. The glitter binds to the
         // shine via _GlitterShineBind, so it follows automatically.
-        [Toggle] _ShineFromSceneLight ("Shine Follows Scene Light", Float) = 0
+        [ToggleUI] _ShineFromSceneLight ("Shine Follows Scene Light", Float) = 0
         // Spherical deformation for the WHOLE banded look (colour bands + shine): bows the
         // pattern over the sphere's bulge so it reads as wrapping the balloon instead of
         // sliding flat across it. Fit the sphere to the sprite with Center/Radius (uv).

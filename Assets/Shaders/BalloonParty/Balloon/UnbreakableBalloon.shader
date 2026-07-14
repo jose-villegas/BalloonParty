@@ -58,7 +58,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
         _ShineInterval ("Interval", Range(0, 10))   = 4.0
         // OPT-IN scene lighting: on, the sweep runs along _SceneLightDir across the composed
         // sphere (sphere-coherent); off (default), the classic per-quadrant hardcoded diagonal.
-        [Toggle] _ShineFromSceneLight ("Shine Follows Scene Light", Float) = 0
+        [ToggleUI] _ShineFromSceneLight ("Shine Follows Scene Light", Float) = 0
 
 
         [Header(Deflect Flash)]

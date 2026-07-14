@@ -13,7 +13,7 @@
          _ShineSpeed("ShineSpeed", Float) = 0
          // OPT-IN scene lighting: on, the sweep axis derives from _SceneLightDir (scenario
          // objects); off (default), the classic hardcoded 45-degree diagonal (UI stays art).
-         [Toggle] _ShineFromSceneLight("Shine Follows Scene Light", Float) = 0
+         [ToggleUI] _ShineFromSceneLight("Shine Follows Scene Light", Float) = 0
          [PerRendererData] _TimeOffset("TimeOffset", Float) = 0
          [MaterialToggle] PixelSnap("Pixel snap", Float) = 0
      }

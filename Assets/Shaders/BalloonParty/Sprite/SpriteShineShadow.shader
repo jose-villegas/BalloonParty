@@ -19,10 +19,10 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
         // OPT-IN scene lighting (see SpriteShadow.shader): off (default) keeps the authored
         // Offset; on derives direction away from _SceneLightDir at Distance (0.0354 reproduces
         // the common authored (0.025, -0.025), already on the -L axis).
-        [Toggle] _ShadowFromSceneLight ("Follow Scene Light", Float) = 0
+        [ToggleUI] _ShadowFromSceneLight ("Follow Scene Light", Float) = 0
         // Same opt-in for the shine sweep's AXIS (scenario objects); off keeps the classic
         // hardcoded 45-degree diagonal. Sweep timing is untouched either way.
-        [Toggle] _ShineFromSceneLight ("Shine Follows Scene Light", Float) = 0
+        [ToggleUI] _ShineFromSceneLight ("Shine Follows Scene Light", Float) = 0
         _ShadowOffset   ("Offset (manual)", Vector)     = (0.025, -0.025, 0, 0)
         _ShadowDistance ("Distance (scene light)", Range(0, 0.3)) = 0.0354
         _ShadowSoftness ("Softness", Range(0.0, 0.1))   = 0.01

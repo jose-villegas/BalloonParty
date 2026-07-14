@@ -24,7 +24,7 @@ Shader "BalloonParty/Sprite/SpriteShadow"
         // physical shadows — following the scene light is a per-material choice. Off (default):
         // the authored Offset applies as always. On: direction = away from _SceneLightDir, at
         // Distance (0.1414 reproduces the common authored (0.1, -0.1), already on the -L axis).
-        [Toggle] _ShadowFromSceneLight ("Follow Scene Light", Float) = 0
+        [ToggleUI] _ShadowFromSceneLight ("Follow Scene Light", Float) = 0
         _ShadowOffset   ("Offset (manual)", Vector)     = (0.025, -0.025, 0, 0)
         _ShadowDistance ("Distance (scene light)", Range(0, 1)) = 0.1414
         _ShadowSoftness ("Softness", Range(0.0, 0.1))   = 0.01
