@@ -10,7 +10,10 @@ Shader "BalloonParty/Grid/BushBranch"
 
         [Header(Shadow)]
         _ShadowColor    ("Color",    Color)            = (0.06, 0.06, 0.14, 0.35)
-        _ShadowOffset   ("Offset",   Vector)           = (0.04, -0.06, 0, 0)
+        // Direction now derives from the scene light (see SceneLightDirection below); this is
+        // just the distance along that direction. Default reproduces the BushSettings-authored
+        // (0.04, -0.05) offset (|.| = 0.0640).
+        _ShadowDistance ("Distance", Range(0, 0.3))    = 0.0640
         _ShadowSpread   ("Spread",   Range(0, 1))      = 0.15
         _ShadowSoftness ("Softness", Range(0, 0.08))   = 0.02
 
@@ -43,7 +46,7 @@ Shader "BalloonParty/Grid/BushBranch"
             fixed4 _BranchColor;
             float _AlphaCutoff;
             fixed4 _ShadowColor;
-            float2 _ShadowOffset;
+            float  _ShadowDistance;
             float  _ShadowSpread;
             float  _ShadowSoftness;
             fixed4 _AOColor;
@@ -51,6 +54,22 @@ Shader "BalloonParty/Grid/BushBranch"
             float  _AOSoftness;
             float  _AOIntensity;
             float  _SpriteScale;
+
+            // Global shader property — set by SceneLightService, not in Properties so
+            // material values can't mask it. Points TOWARD the light, normalized;
+            // canonical (-0.707, 0.707) = upper-left.
+            float4 _SceneLightDir;
+
+            // Guarded read of the scene light (see SceneLightService): normalized, toward
+            // the light; falls back to the canonical direction if the global hasn't been
+            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
+            float2 SceneLightDirection()
+            {
+                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
+                    ? float2(-0.707, 0.707)
+                    : _SceneLightDir.xy;
+                return normalize(raw);
+            }
 
             #ifdef UNITY_INSTANCING_ENABLED
                 UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
@@ -88,8 +107,8 @@ Shader "BalloonParty/Grid/BushBranch"
             }
 
             // Radial ground shadow projected from bush centre (0.5, 0.5).
-            // _ShadowOffset — directional bias: how the shadow reprojects
-            //   from the centre (light direction knob).
+            // Direction reprojects away from the scene light; only _ShadowDistance stays
+            //   authored, so rotating the light moves every branch's shadow together.
             // _ShadowSpread — widens the shadow silhouette by scaling the
             //   lookup UV toward the centre. At spread=0 shadow matches
             //   source 1:1; at spread>0 shadow is magnified like a
@@ -100,7 +119,8 @@ Shader "BalloonParty/Grid/BushBranch"
                 float2 sampleUV = scaledUV + blurOfs;
 
                 // Shift by directional offset (reproject from centre)
-                float2 sourceUV = sampleUV - _ShadowOffset;
+                float2 shadowOffset = -SceneLightDirection() * _ShadowDistance;
+                float2 sourceUV = sampleUV - shadowOffset;
 
                 // Widen: scale toward centre so shadow is larger than source
                 float scale = 1.0 / (1.0 + _ShadowSpread);

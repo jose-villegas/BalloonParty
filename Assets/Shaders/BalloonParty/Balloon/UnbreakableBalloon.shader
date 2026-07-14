@@ -31,12 +31,13 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
         _MetalDetailStrength("Detail Strength",  Range(0.1, 1.0))   = 0.5
 
         [Header(Specular Highlight)]
-        _SpecularPos       ("Position (sphere XY)", Vector)            = (-0.3, 0.35, 0, 0)
+        // Position is derived from the scene light direction (see _SceneLightDir below);
+        // only the distance from sphere center stays authored per material.
+        _SpecularDistance  ("Distance (sphere radii)", Range(0, 1))     = 0.495
         _SpecularSize      ("Size",                 Range(0.05, 1.5))  = 0.45
         _SpecularIntensity ("Intensity",            Range(0, 3))       = 1.5
         _SpecularSharpness ("Sharpness",            Range(0.5, 8))     = 2.0
         _SpecularStretch   ("Aniso Stretch",        Range(1, 10))      = 4.0
-        _SpecularAngle     ("Aniso Angle (deg)",    Range(0, 180))     = 135
         _SpecularBend      ("Aniso Bend",           Range(-3, 3))      = -1.0
         _SpecularColor     ("Color",                Color)             = (1, 1, 1, 1)
 
@@ -155,14 +156,18 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             float  _MetalDetailStrength;
 
             // Specular highlight
-            float4 _SpecularPos;
+            float  _SpecularDistance;
             float  _SpecularSize;
             float  _SpecularIntensity;
             float  _SpecularSharpness;
             float  _SpecularStretch;
-            float  _SpecularAngle;
             float  _SpecularBend;
             fixed4 _SpecularColor;
+
+            // Global shader property — set by SceneLightService, not in Properties so
+            // material values can't mask it. Points TOWARD the light, normalized;
+            // canonical (-0.707, 0.707) = upper-left.
+            float4 _SceneLightDir;
 
             // Chrome rim (static)
             fixed4 _RimColor;
@@ -265,6 +270,17 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 return smoothstep(_RimSweepWidth, 0.0, dist);
             }
 
+            // Guarded read of the scene light (see SceneLightService): normalized, toward
+            // the light; falls back to the canonical direction if the global hasn't been
+            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
+            float2 SceneLightDirection()
+            {
+                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
+                    ? float2(-0.707, 0.707)
+                    : _SceneLightDir.xy;
+                return normalize(raw);
+            }
+
             // ----------------------------------------------------------------
             fixed4 frag(Varyings IN) : SV_Target
             {
@@ -355,10 +371,15 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 // ---- Specular highlight (anisotropic curved streak) ----
                 if (alpha > 0.01 && _SpecularIntensity > 0.001)
                 {
-                    float2 d = spherePos - _SpecularPos.xy;
+                    float2 L = SceneLightDirection();
+                    float2 specPos = L * _SpecularDistance;
+                    float2 d = spherePos - specPos;
 
-                    // Rotate into stretch-axis frame
-                    float rad = _SpecularAngle * (UNITY_PI / 180.0);
+                    // Rotate into stretch-axis frame. The streak lies perpendicular to
+                    // the light, so this angle puts the ellipse's across-axis exactly on
+                    // L — the authored negative _SpecularBend values keep meaning "bow
+                    // away from the light" at any light angle.
+                    float rad = atan2(L.y, L.x) - UNITY_PI * 0.5;
                     float cs = cos(rad);
                     float sn = sin(rad);
                     float along = d.x * cs + d.y * sn;

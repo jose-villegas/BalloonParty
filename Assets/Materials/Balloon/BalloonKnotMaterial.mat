@@ -73,6 +73,8 @@ Material:
     - _Mode: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _ShadowDistance: 0.7778
+    - _ShadowFromSceneLight: 1
     - _ShadowSoftness: 0.1
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

@@ -92,7 +92,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         {
             material.SetColor(BushShaderProperties.LeafColor, _settings.LeafTint);
             material.SetColor(BushShaderProperties.ShadowColor, _settings.LeafShadowColor);
-            material.SetVector(BushShaderProperties.ShadowOffset, _settings.LeafShadowOffset);
+            material.SetFloat(BushShaderProperties.ShadowDistance, _settings.LeafShadowDistance);
             material.SetFloat(BushShaderProperties.ShadowSoftness, _settings.LeafShadowSoftness);
             material.SetFloat(BushShaderProperties.SpriteScale, _settings.LeafSpriteScale);
 
@@ -122,7 +122,7 @@ namespace BalloonParty.Slots.Actor.Archetype
             material.SetTexture(BushShaderProperties.BranchGradient, GetOrBakeGradient());
             material.SetColor(BushShaderProperties.BranchColor, _settings.BranchColor);
             material.SetColor(BushShaderProperties.ShadowColor, _settings.BranchShadowColor);
-            material.SetVector(BushShaderProperties.ShadowOffset, _settings.BranchShadowOffset);
+            material.SetFloat(BushShaderProperties.ShadowDistance, _settings.BranchShadowDistance);
             material.SetFloat(BushShaderProperties.ShadowSpread, _settings.BranchShadowSpread);
             material.SetFloat(BushShaderProperties.ShadowSoftness, _settings.BranchShadowSoftness);
             material.SetColor(BushShaderProperties.AOColor, _settings.BranchAOColor);

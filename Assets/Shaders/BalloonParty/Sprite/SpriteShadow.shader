@@ -3,8 +3,9 @@ Shader "BalloonParty/Sprite/SpriteShadow"
     // Renders a 2D drop shadow from the sprite's alpha mask.
     // Compatible with UI Images (Canvas), SpriteRenderers, and Particle Systems.
     //
-    // Shadow Offset:   X > 0 shifts shadow right, Y > 0 shifts shadow up (UV space).
-    //                  Typical drop-shadow: X = 0.025, Y = -0.025 (right and down).
+    // Shadow direction is OPT-IN scene lighting per material (Follow Scene Light): on, the
+    // shadow sits at Shadow Distance away from _SceneLightDir; off (default), the authored
+    // Shadow Offset applies (X > 0 right, Y > 0 up, UV space) — expressive shadows stay art.
     // Shadow Softness: box-blur radius in UV space. 0 = hard edge.
     //                  Implemented as a 9-tap kernel.
     // Sprite Scale:    Shrinks the sprite within the quad (1 = full size, 0.8 = 80%).
@@ -19,7 +20,13 @@ Shader "BalloonParty/Sprite/SpriteShadow"
 
         [Header(Shadow)]
         _ShadowColor    ("Color",    Color)             = (0.2, 0.2, 0.2, 0.75)
-        _ShadowOffset   ("Offset",   Vector)            = (0.025, -0.025, 0, 0)
+        // OPT-IN scene lighting: generic sprite shadows are often art (UI, items, effects), not
+        // physical shadows — following the scene light is a per-material choice. Off (default):
+        // the authored Offset applies as always. On: direction = away from _SceneLightDir, at
+        // Distance (0.1414 reproduces the common authored (0.1, -0.1), already on the -L axis).
+        [Toggle] _ShadowFromSceneLight ("Follow Scene Light", Float) = 0
+        _ShadowOffset   ("Offset (manual)", Vector)     = (0.025, -0.025, 0, 0)
+        _ShadowDistance ("Distance (scene light)", Range(0, 1)) = 0.1414
         _ShadowSoftness ("Softness", Range(0.0, 0.1))   = 0.01
 
         [Header(Sprite)]
@@ -108,10 +115,28 @@ Shader "BalloonParty/Sprite/SpriteShadow"
             sampler2D _MainTex;
             float4    _MainTex_ST;
             fixed4    _ShadowColor;
+            float     _ShadowFromSceneLight;
             float2    _ShadowOffset;
+            float     _ShadowDistance;
             float     _ShadowSoftness;
             float     _SpriteScale;
             float4    _ClipRect;
+
+            // Global shader property — set by SceneLightService, not in Properties so
+            // material values can't mask it. Points TOWARD the light, normalized;
+            // canonical (-0.707, 0.707) = upper-left.
+            float4 _SceneLightDir;
+
+            // Guarded read of the scene light (see SceneLightService): normalized, toward
+            // the light; falls back to the canonical direction if the global hasn't been
+            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
+            float2 SceneLightDirection()
+            {
+                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
+                    ? float2(-0.707, 0.707)
+                    : _SceneLightDir.xy;
+                return normalize(raw);
+            }
 
             #ifdef UNITY_INSTANCING_ENABLED
                 UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
@@ -177,8 +202,15 @@ Shader "BalloonParty/Sprite/SpriteShadow"
                 sprite.a      *= spriteMask;
 
                 // Shadow samples from the same scaled UV, then shifted.
-                // Subtracting the offset means the shadow appears at +offset in screen space.
-                float2 shadowUV = spriteUV - _ShadowOffset;
+                // Opted-in materials follow the scene light (direction away from it, authored
+                // distance); the default keeps the hand-authored offset — expressive shadows
+                // (UI, items, effects) aren't scene lighting. Applied in local sprite UV — no
+                // vertex world-rotation capture, so a spinning sprite's shadow lags the light
+                // slightly (accepted; sway is small).
+                float2 shadowOffset = _ShadowFromSceneLight > 0.5
+                    ? -SceneLightDirection() * _ShadowDistance
+                    : _ShadowOffset;
+                float2 shadowUV = spriteUV - shadowOffset;
 
                 fixed shadowAlpha = _ShadowSoftness < 0.0001
                     ? SampleAlpha(shadowUV)

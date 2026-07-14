@@ -34,7 +34,9 @@ namespace BalloonParty.Configuration.Effects
         [Header("Branch Shadow")]
         [SerializeField] [Range(0.3f, 1f)] private float _branchSpriteScale = 0.85f;
         [SerializeField] private Color _branchShadowColor = new(0.06f, 0.06f, 0.14f, 0.35f);
-        [SerializeField] private Vector2 _branchShadowOffset = new(0.04f, -0.06f);
+        // Direction now derives from the scene light in-shader; this is just the distance.
+        // Default reproduces the previously-authored (0.04, -0.05) offset (|.| = 0.0640).
+        [SerializeField] private float _branchShadowDistance = 0.0640f;
         [SerializeField] [Range(0f, 1f)] private float _branchShadowSpread = 0.15f;
         [SerializeField] [Range(0f, 0.08f)] private float _branchShadowSoftness = 0.02f;
 
@@ -49,7 +51,9 @@ namespace BalloonParty.Configuration.Effects
 
         [Header("Leaf Shadow")]
         [SerializeField] private Color _leafShadowColor = new(0.15f, 0.18f, 0.1f, 0.55f);
-        [SerializeField] private Vector2 _leafShadowOffset = new(0.04f, -0.06f);
+        // Direction now derives from the scene light in-shader; this is just the distance.
+        // Default reproduces the previously-authored (0.1, -0.1) offset (|.| = 0.1414).
+        [SerializeField] private float _leafShadowDistance = 0.1414f;
         [SerializeField] [Range(0f, 0.08f)] private float _leafShadowSoftness = 0.015f;
         [SerializeField] [Range(0.3f, 1f)] private float _leafSpriteScale = 0.75f;
         [SerializeField] [Range(-0.5f, 0.5f)] private float _leafPivotOffset;
@@ -93,7 +97,7 @@ namespace BalloonParty.Configuration.Effects
         public float BushWorldSize => _bushWorldSize;
         public float BranchSpriteScale => _branchSpriteScale;
         public Color BranchShadowColor => _branchShadowColor;
-        public Vector2 BranchShadowOffset => _branchShadowOffset;
+        public float BranchShadowDistance => _branchShadowDistance;
         public float BranchShadowSpread => _branchShadowSpread;
         public float BranchShadowSoftness => _branchShadowSoftness;
         public Color BranchAOColor => _branchAOColor;
@@ -102,7 +106,7 @@ namespace BalloonParty.Configuration.Effects
         public float BranchAOIntensity => _branchAOIntensity;
         public Sprite[] LeafAtlasSprites => _leafAtlasSprites;
         public Color LeafShadowColor => _leafShadowColor;
-        public Vector2 LeafShadowOffset => _leafShadowOffset;
+        public float LeafShadowDistance => _leafShadowDistance;
         public float LeafShadowSoftness => _leafShadowSoftness;
         public float LeafSpriteScale => _leafSpriteScale;
         public float LeafPivotOffset => _leafPivotOffset;

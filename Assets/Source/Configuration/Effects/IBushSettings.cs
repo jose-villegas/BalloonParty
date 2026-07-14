@@ -17,7 +17,7 @@ namespace BalloonParty.Configuration.Effects
         float BushWorldSize { get; }
         float BranchSpriteScale { get; }
         Color BranchShadowColor { get; }
-        Vector2 BranchShadowOffset { get; }
+        float BranchShadowDistance { get; }
         float BranchShadowSpread { get; }
         float BranchShadowSoftness { get; }
         Color BranchAOColor { get; }
@@ -26,7 +26,7 @@ namespace BalloonParty.Configuration.Effects
         float BranchAOIntensity { get; }
         Sprite[] LeafAtlasSprites { get; }
         Color LeafShadowColor { get; }
-        Vector2 LeafShadowOffset { get; }
+        float LeafShadowDistance { get; }
         float LeafShadowSoftness { get; }
         float LeafSpriteScale { get; }
         float LeafPivotOffset { get; }

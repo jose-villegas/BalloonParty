@@ -51,8 +51,8 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
         _SpecColor      ("Specular",       Color)              = (1, 1, 1, 1)
         _SpecSize       ("Size",           Range(0.01, 0.30))  = 0.10
         _SpecSharpness  ("Sharpness",      Range(2, 25))       = 6.0
-        _SpecOffsetX    ("Offset X",       Range(-0.25, 0.25)) = -0.08
-        _SpecOffsetY    ("Offset Y",       Range(-0.25, 0.25)) =  0.10
+        // Direction is derived from the scene light; only the distance stays authored.
+        _SpecDistance   ("Distance",       Range(0, 0.35))     = 0.1414
 
         [Header(Rotation)]
         // Driven per-instance by SoapBubbleClusterVariant (radians).
@@ -65,8 +65,8 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
         _ShadowColor    ("Shadow Color",   Color)              = (0.06, 0.06, 0.14, 0.50)
         _ShadowFilmWidth("Film Width",     Range(0.002, 0.03)) =  0.008
         _ShadowSeamWidth("Seam Width",     Range(0.001, 0.02)) =  0.004
-        _ShadowOffsetX  ("Offset X",       Range(-0.25, 0.25)) =  0.025
-        _ShadowOffsetY  ("Offset Y",       Range(-0.25, 0.25)) = -0.030
+        // Direction is derived from the scene light (-L); only the distance stays authored.
+        _ShadowDistance ("Distance",       Range(0, 0.35))     =  0.0566
         _ShadowSoftness ("Softness",       Range(0, 0.06))     =  0.015
         // _FloatAmount stays here because it is a purely visual scale with no
         // time dependency; the clock itself is _Time.y * _FloatSpeed + _TimeOffset
@@ -151,20 +151,23 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
             fixed4 _SpecColor;
             float  _SpecSize;
             float  _SpecSharpness;
-            float  _SpecOffsetX;
-            float  _SpecOffsetY;
+            float  _SpecDistance;
             float  _FloatAmount;
             float  _BreatheAmount;
             float  _BreatheSpeed;
             float  _Rotation;
             float  _RotationSpeed;
 
+            // Global shader property — set by SceneLightService, not in Properties so
+            // material values can't mask it. Points TOWARD the light, normalized;
+            // canonical (-0.707, 0.707) = upper-left.
+            float4 _SceneLightDir;
+
             #ifdef _SHADOW_ON
             fixed4 _ShadowColor;
             float  _ShadowFilmWidth;
             float  _ShadowSeamWidth;
-            float  _ShadowOffsetX;
-            float  _ShadowOffsetY;
+            float  _ShadowDistance;
             float  _ShadowSoftness;
             #endif
 
@@ -258,6 +261,16 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 return v * lerp(K.xxx, saturate(p - K.xxx), s);
             }
 
+            // Guarded read of the scene light (see SceneLightService): normalized, toward
+            // the light; falls back to the canonical direction if the global hasn't been
+            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
+            float2 SceneLightDirection()
+            {
+                return dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
+                    ? float2(-0.707, 0.707)
+                    : _SceneLightDir.xy;
+            }
+
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
@@ -324,7 +337,11 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 // Shadow offset applied in UNROTATED space so the shadow direction
                 // is always fixed relative to the quad axes, independent of _Rotation.
                 // We then apply the same rotation to sample the cluster SDFs correctly.
-                float2 sRaw = uvRaw - float2(_ShadowOffsetX, _ShadowOffsetY);
+                // Direction is derived from the scene light (-L); only the distance
+                // stays authored — rotating the light moves the shadow together with
+                // every other light-derived effect.
+                float2 shadowOffset = -SceneLightDirection() * _ShadowDistance;
+                float2 sRaw = uvRaw - shadowOffset;
                 float2 sUV  = float2(sRaw.x * cosR - sRaw.y * sinR,
                                      sRaw.x * sinR + sRaw.y * cosR);
                 float sh0 = (cnt >= 1) ? (r0 - length(sUV - c0)) : kFar;
@@ -416,7 +433,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 // it back into unrotated space before adding the fixed offset.
                 float2 ownCentreUnrot = float2( ownCentre.x * cosR + ownCentre.y * sinR,
                                                -ownCentre.x * sinR + ownCentre.y * cosR);
-                float2 specPos  = ownCentreUnrot + float2(_SpecOffsetX, _SpecOffsetY);
+                float2 specPos  = ownCentreUnrot + SceneLightDirection() * _SpecDistance;
                 float  specDist = length(uvRaw - specPos);
                 float  specMask = pow(saturate(1.0 - specDist / max(_SpecSize, 0.001)),
                                       _SpecSharpness);

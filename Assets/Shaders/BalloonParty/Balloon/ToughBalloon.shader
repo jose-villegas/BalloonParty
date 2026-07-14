@@ -52,7 +52,8 @@ Shader "BalloonParty/Balloon/ToughBalloon"
         [Header(Shadow)]
         [Toggle(_SHADOW_OFF)] _DisableShadow ("Disable (use a baked shadow instead)", Float) = 0
         _ShadowColor    ("Color",    Color)             = (0.2, 0.2, 0.2, 0.75)
-        _ShadowOffset   ("Offset",   Vector)            = (0.025, -0.025, 0, 0)
+        // Direction is derived from the scene light (-L); only the distance stays authored.
+        _ShadowDistance ("Distance", Range(0, 0.3))     = 0.1414
         _ShadowSoftness ("Softness", Range(0.0, 0.1))   = 0.01
         _SpriteScale    ("Sprite Scale", Range(0.1, 1.0)) = 1.0
     }
@@ -146,7 +147,7 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             fixed4 _FiberColor;
 
             fixed4 _ShadowColor;
-            float2 _ShadowOffset;
+            float  _ShadowDistance;
             float  _ShadowSoftness;
             float  _SpriteScale;
 
@@ -362,6 +363,16 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 return a / 9.0;
             }
 
+            // Guarded read of the scene light (see SceneLightService): normalized, toward
+            // the light; falls back to the canonical direction if the global hasn't been
+            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
+            float2 SceneLightDirection()
+            {
+                return dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
+                    ? float2(-0.707, 0.707)
+                    : _SceneLightDir.xy;
+            }
+
             // ----------------------------------------------------------------
             v2f vert(appdata_t IN)
             {
@@ -405,7 +416,15 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 fixed  shadowAlpha = 0;
                 fixed3 shadowRGB   = fixed3(0, 0, 0);
 #else
-                float2 shadowUV = spriteUV - _ShadowOffset;
+                // The shadow lands down-light of the balloon: direction derived from the
+                // scene light (-L), only the distance stays authored — rotating the light
+                // moves the shadow together with the grain shading. Caveat: spriteUV is
+                // sprite-local and rotates with the balloon's sway; this shader has no
+                // vertex-captured spin to un-rotate it (unlike PaintBlob), so the shadow
+                // direction drifts slightly during sway. Accepted — same caveat as the
+                // grain below, and the sway is small.
+                float2 shadowOffset = -SceneLightDirection() * _ShadowDistance;
+                float2 shadowUV = spriteUV - shadowOffset;
                 fixed shadowAlpha = _ShadowSoftness < 0.0001
                     ? SampleShadowAlpha(shadowUV)
                     : SoftShadowAlpha(shadowUV, _ShadowSoftness);
@@ -446,14 +465,9 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 float2 vUV  = float2(cos(phi) * vorR, sin(phi) * vorR) + _VoronoiSeed;
 
                 // ---- Leather-like surface grain (sampled in sphere-projected UV) ----
-                // Degenerate guard: falls back to the canonical direction if
-                // SceneLightService hasn't pushed yet (protects edit-time before its
-                // first OnEnable/LateUpdate/OnValidate).
-                float2 lightDirToward = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-                    ? float2(-0.707, 0.707)
-                    : _SceneLightDir.xy;
                 // LeatherGrain wants the light-travel (FROM-light) direction, but the
                 // global points TOWARD the light — negate to convert.
+                float2 lightDirToward = SceneLightDirection();
                 float grain = LeatherGrain(vUV, sphereNormal, _GrainScale, -lightDirToward);
                 col += col * grain * _GrainStrength;
 

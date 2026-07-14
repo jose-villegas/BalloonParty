@@ -103,6 +103,7 @@ Material:
     - _SpecularAngle: 45
     - _SpecularBend: -3
     - _SpecularBendEdge: 0
+    - _SpecularDistance: 0.283
     - _SpecularHighlights: 1
     - _SpecularIntensity: 1.63
     - _SpecularPower: 80

@@ -10,8 +10,9 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
     // The global Tint (_Color) is multiplied into BOTH sprite layers (and the vertex color),
     // so you can still fade / tint the whole object from the renderer.
     //
-    // Shadow Offset:   X > 0 shifts shadow right, Y > 0 shifts shadow up (UV space).
-    //                  Typical drop-shadow: X = 0.025, Y = -0.025 (right and down).
+    // Shadow direction is OPT-IN scene lighting per material (Follow Scene Light): on, the
+    // shadow sits at Shadow Distance away from _SceneLightDir; off (default), the authored
+    // Shadow Offset applies — expressive shadows stay art.
     // Shadow Softness: box-blur radius in UV space. 0 = hard edge.
     //                  Implemented as a 9-tap kernel.
     // Sprite Scale:    Shrinks both sprites within the quad (1 = full size, 0.8 = 80%).
@@ -32,7 +33,12 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
 
         [Header(Shadow)]
         _ShadowColor    ("Color",    Color)             = (0.2, 0.2, 0.2, 0.75)
-        _ShadowOffset   ("Offset",   Vector)            = (0.025, -0.025, 0, 0)
+        // OPT-IN scene lighting (see SpriteShadow.shader): off (default) keeps the authored
+        // Offset; on derives direction away from _SceneLightDir at Distance (0.1414 reproduces
+        // the sole authored material's (0.1, -0.1), already on the -L axis).
+        [Toggle] _ShadowFromSceneLight ("Follow Scene Light", Float) = 0
+        _ShadowOffset   ("Offset (manual)", Vector)    = (0.025, -0.025, 0, 0)
+        _ShadowDistance ("Distance (scene light)", Range(0, 1)) = 0.1414
         _ShadowSoftness ("Softness", Range(0.0, 0.1))  = 0.01
 
         [Header(Sprite)]
@@ -124,10 +130,28 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
             fixed4    _FirstLayerColor;
             fixed4    _SecondLayerColor;
             fixed4    _ShadowColor;
+            float     _ShadowFromSceneLight;
             float2    _ShadowOffset;
+            float     _ShadowDistance;
             float     _ShadowSoftness;
             float     _SpriteScale;
             float4    _ClipRect;
+
+            // Global shader property — set by SceneLightService, not in Properties so
+            // material values can't mask it. Points TOWARD the light, normalized;
+            // canonical (-0.707, 0.707) = upper-left.
+            float4 _SceneLightDir;
+
+            // Guarded read of the scene light (see SceneLightService): normalized, toward
+            // the light; falls back to the canonical direction if the global hasn't been
+            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
+            float2 SceneLightDirection()
+            {
+                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
+                    ? float2(-0.707, 0.707)
+                    : _SceneLightDir.xy;
+                return normalize(raw);
+            }
 
             #ifdef UNITY_INSTANCING_ENABLED
                 UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
@@ -216,7 +240,13 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
                 layer2.a      *= spriteMask;
 
                 // ---- Shadow ------------------------------------------------------
-                float2 shadowUV = spriteUV - _ShadowOffset;
+                // Opted-in materials follow the scene light (direction away from it, authored
+                // distance); the default keeps the hand-authored offset. Applied in local
+                // sprite UV — no vertex world-rotation capture (accepted; sway is small).
+                float2 shadowOffset = _ShadowFromSceneLight > 0.5
+                    ? -SceneLightDirection() * _ShadowDistance
+                    : _ShadowOffset;
+                float2 shadowUV = spriteUV - shadowOffset;
 
                 fixed shadowAlpha = _ShadowSoftness < 0.0001
                     ? SampleAlpha(shadowUV)

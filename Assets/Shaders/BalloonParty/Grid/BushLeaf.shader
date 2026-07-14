@@ -7,12 +7,18 @@ Shader "BalloonParty/Grid/BushLeaf"
 
         [Header(Shadow)]
         _ShadowColor    ("Color",    Color)           = (0.15, 0.18, 0.1, 0.55)
-        _ShadowOffset   ("Offset",   Vector)          = (0.1, -0.1, 0, 0)
+        // Direction now derives from the scene light (see SceneLightDirection below); this is
+        // just the distance along that direction. Default reproduces LeafMain.mat's measured
+        // (0.1, -0.1) authored offset (|.| = 0.1414), which already sits on the -L axis.
+        _ShadowDistance ("Distance", Range(0, 0.3))   = 0.1414
         _ShadowSoftness ("Softness", Range(0, 0.08))  = 0.015
 
         [Header(Highlight)]
         _HighlightColor    ("Color",     Color)          = (1, 1, 0.9, 0.4)
-        _HighlightOffset   ("Offset",    Vector)         = (-0.06, 0.08, 0, 0)
+        // Direction derives from the scene light too (+L: highlights face the light, shadows
+        // face away from it). Default reproduces LeafMain.mat's measured (-0.08, 0.08) authored
+        // offset (|.| = 0.113).
+        _HighlightDistance ("Distance",  Range(0, 0.3))  = 0.113
         _HighlightSize     ("Size",      Range(0.01, 0.3)) = 0.1
         _HighlightSoftness ("Softness",  Range(0.01, 0.3)) = 0.12
 
@@ -51,10 +57,10 @@ Shader "BalloonParty/Grid/BushLeaf"
             sampler2D _MainTex;
             fixed4 _LeafColor;
             fixed4 _ShadowColor;
-            float2 _ShadowOffset;
+            float  _ShadowDistance;
             float  _ShadowSoftness;
             fixed4 _HighlightColor;
-            float2 _HighlightOffset;
+            float  _HighlightDistance;
             float  _HighlightSize;
             float  _HighlightSoftness;
             float  _SpriteScale;
@@ -63,6 +69,22 @@ Shader "BalloonParty/Grid/BushLeaf"
             float  _WindNoiseAmplitude;
             float  _WindScalePulse;
             float  _PivotOffset;
+
+            // Global shader property — set by SceneLightService, not in Properties so
+            // material values can't mask it. Points TOWARD the light, normalized;
+            // canonical (-0.707, 0.707) = upper-left.
+            float4 _SceneLightDir;
+
+            // Guarded read of the scene light (see SceneLightService): normalized, toward
+            // the light; falls back to the canonical direction if the global hasn't been
+            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
+            float2 SceneLightDirection()
+            {
+                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
+                    ? float2(-0.707, 0.707)
+                    : _SceneLightDir.xy;
+                return normalize(raw);
+            }
 
             #ifdef _RATTLE_ON
             sampler2D _DisturbanceTex;
@@ -175,14 +197,20 @@ Shader "BalloonParty/Grid/BushLeaf"
                 float2 spriteUV = (v.uv - 0.5) / _SpriteScale + 0.5;
                 o.uv = rect.xy + spriteUV * rect.zw;
 
-                // Inverse-rotate shadow/highlight offsets using the animated rotation
+                // Shadow lands away from the scene light, highlight faces toward it — only the
+                // distance stays authored, so rotating the light moves both together.
+                float2 shadowOffset = -SceneLightDirection() * _ShadowDistance;
+                float2 highlightOffset = SceneLightDirection() * _HighlightDistance;
+
+                // Inverse-rotate shadow/highlight offsets using the animated rotation — this is
+                // what keeps both world-anchored under wind/rattle instead of spinning with the leaf.
                 o.localShadowOffset = -float2(
-                     cosA * _ShadowOffset.x + sinA * _ShadowOffset.y,
-                    -sinA * _ShadowOffset.x + cosA * _ShadowOffset.y);
+                     cosA * shadowOffset.x + sinA * shadowOffset.y,
+                    -sinA * shadowOffset.x + cosA * shadowOffset.y);
 
                 o.localHighlightOffset = -float2(
-                     cosA * _HighlightOffset.x + sinA * _HighlightOffset.y,
-                    -sinA * _HighlightOffset.x + cosA * _HighlightOffset.y);
+                     cosA * highlightOffset.x + sinA * highlightOffset.y,
+                    -sinA * highlightOffset.x + cosA * highlightOffset.y);
 
                 return o;
             }

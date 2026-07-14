@@ -14,7 +14,7 @@ namespace BalloonParty.Slots.Actor.Archetype
         internal static readonly int UVRect = Shader.PropertyToID("_UVRect");
         internal static readonly int LeafWind = Shader.PropertyToID("_LeafWind");
         internal static readonly int ShadowColor = Shader.PropertyToID("_ShadowColor");
-        internal static readonly int ShadowOffset = Shader.PropertyToID("_ShadowOffset");
+        internal static readonly int ShadowDistance = Shader.PropertyToID("_ShadowDistance");
         internal static readonly int ShadowSoftness = Shader.PropertyToID("_ShadowSoftness");
         internal static readonly int SpriteScale = Shader.PropertyToID("_SpriteScale");
         internal static readonly int WindFrequency = Shader.PropertyToID("_WindFrequency");
