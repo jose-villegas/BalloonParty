@@ -4,6 +4,7 @@ using BalloonParty.Configuration;
 using UnityEngine;
 using VContainer.Unity;
 using BalloonParty.Configuration.Effects;
+using BalloonParty.Configuration.Palette;
 
 namespace BalloonParty.Shared.Disturbance
 {
@@ -11,7 +12,6 @@ namespace BalloonParty.Shared.Disturbance
     internal class DisturbanceFieldService : IStartable, ITickable, IDisposable
     {
         private const int MaxStampsPerBatch = 32;
-        private const float PaletteIndexSlots = 16f;
 
         private static readonly int DiffusionRateId = Shader.PropertyToID("_DiffusionRate");
         private static readonly int ReformSpeedId = Shader.PropertyToID("_ReformSpeed");
@@ -197,8 +197,7 @@ namespace BalloonParty.Shared.Disturbance
                 RadiusUV = radiusUV,
                 Strength = strength,
                 Direction = direction,
-                // Encoded so 0 always reads "no color" in the shader; indices quantize into 16 slots.
-                EncodedPaletteIndex = paletteIndex >= 0 ? (paletteIndex + 1f) / PaletteIndexSlots : 0f
+                EncodedPaletteIndex = PaletteChannelEncoding.Encode(paletteIndex)
             });
         }
 
@@ -313,10 +312,11 @@ namespace BalloonParty.Shared.Disturbance
             for (var i = 0; i < count; i++)
             {
                 var s = _pendingStamps[offset + i];
-                _batchCenters[i] = new Vector4(s.CenterUV.x, s.CenterUV.y, 0f, 0f);
+                // Unity implicitly widens each Vector2 to a Vector4 (z, w = 0).
+                _batchCenters[i] = s.CenterUV;
                 _batchRadii[i] = s.RadiusUV;
                 _batchStrengths[i] = s.Strength;
-                _batchDirections[i] = new Vector4(s.Direction.x, s.Direction.y, 0f, 0f);
+                _batchDirections[i] = s.Direction;
                 _batchColorIndices[i] = s.EncodedPaletteIndex;
             }
         }

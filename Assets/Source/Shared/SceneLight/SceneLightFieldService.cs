@@ -32,7 +32,6 @@ namespace BalloonParty.Shared.SceneLight
         // producing an identically fitted play-area rectangle.
         private const int TexelsPerUnit = 8;
         private const int MaxLights = 32;
-        private const float PaletteIndexSlots = 16f;
 
         // Ceiling on the summed additive boost the accumulate pass can add above the rest magnitude;
         // overlapping lights approach it asymptotically instead of blowing R out. See the shader.
@@ -55,7 +54,7 @@ namespace BalloonParty.Shared.SceneLight
         private readonly IGameDisplayConfiguration _displayConfig;
         private readonly IGamePalette _palette;
         private readonly SceneLightFieldResources _resources = new();
-        private readonly Vector4[] _paletteBuffer = new Vector4[(int)PaletteIndexSlots];
+        private readonly Vector4[] _paletteBuffer = new Vector4[PaletteChannelEncoding.Slots];
         private readonly List<Registration> _lights = new();
         private readonly Vector4[] _batchCenters = new Vector4[MaxLights];
         private readonly float[] _batchRadii = new float[MaxLights];
@@ -213,11 +212,12 @@ namespace BalloonParty.Shared.SceneLight
                 }
 
                 var light = registration.Light;
-                _batchCenters[count] = ToVector4(_coords.WorldToUV(light.Position.Value));
+                // Unity implicitly widens the Vector2 UV to a Vector4 (z, w = 0).
+                _batchCenters[count] = _coords.WorldToUV(light.Position.Value);
                 _batchRadii[count] = _coords.WorldRadiusToUV(light.Radius.Value);
                 _batchMagnitudes[count] = light.Intensity.Value;
                 _batchEdges[count] = light.EdgeSoftness;
-                _batchColorIndices[count] = Encode(light.PaletteIndex.Value);
+                _batchColorIndices[count] = PaletteChannelEncoding.Encode(light.PaletteIndex.Value);
                 count++;
             }
 
@@ -242,17 +242,6 @@ namespace BalloonParty.Shared.SceneLight
             material.SetFloat(StampAspectId, _stampAspect);
 
             _resources.BlitAndSwap(material);
-        }
-
-        // Encoded so 0 always reads "no colour" in the shader; indices quantize into 16 slots. -1 = none.
-        private static float Encode(int paletteIndex)
-        {
-            return paletteIndex >= 0 ? (paletteIndex + 1f) / PaletteIndexSlots : 0f;
-        }
-
-        private static Vector4 ToVector4(Vector2 uv)
-        {
-            return new Vector4(uv.x, uv.y, 0f, 0f);
         }
 
         private void WarnOverflowOnce()
