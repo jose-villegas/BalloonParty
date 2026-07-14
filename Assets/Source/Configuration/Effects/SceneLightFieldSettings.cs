@@ -26,6 +26,18 @@ namespace BalloonParty.Configuration.Effects
                  "A light's falloff shape is a per-light property, not here.")]
         [SerializeField] [Range(0.1f, 5f)] private float _directionResponse = 1f;
 
+        [Header("Shaders")]
+        [Tooltip("Assign the three field-pipeline shaders explicitly — a device build strips Hidden shaders " +
+                 "that are only reached by name. Fill = Hidden/BalloonParty/SceneLightFieldFill, " +
+                 "Accumulate = …/SceneLightAccumulate, Gradient = …/SceneLightGradient.")]
+        [SerializeField] private Shader _fillShader;
+        [SerializeField] private Shader _accumulateShader;
+        [SerializeField] private Shader _gradientShader;
+
+        public Shader FillShader => _fillShader;
+        public Shader AccumulateShader => _accumulateShader;
+        public Shader GradientShader => _gradientShader;
+
         public int TexelsPerUnit => _texelsPerUnit;
         public int MaxLights => _maxLights;
         public float AccumulationCeiling => _accumulationCeiling;

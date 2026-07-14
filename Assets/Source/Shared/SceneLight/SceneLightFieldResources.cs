@@ -25,7 +25,7 @@ namespace BalloonParty.Shared.SceneLight
 
         private RenderTexture FieldWrite => _readFromA ? _fieldB : _fieldA;
 
-        public void Initialize(int width, int height)
+        public void Initialize(int width, int height, Shader fill, Shader accumulate, Shader gradient)
         {
             _fieldA = CreateRT(width, height, FieldFormat);
             _fieldB = CreateRT(width, height, FieldFormat);
@@ -33,14 +33,12 @@ namespace BalloonParty.Shared.SceneLight
             ClearToRest(_fieldB);
             _readFromA = true;
 
-            // Editor fallback wiring — the plain-C# service can't carry a serialized Shader reference the
-            // way the disturbance config SO does, so each pass shader is resolved by name. Hidden shaders
-            // reached only via Shader.Find are stripped from device builds unless they're Always-Included;
-            // that registration is deferred for all three (see the field service's README) — Phase C is
-            // editor-verified only.
-            _fillMaterial = LoadMaterial("Hidden/BalloonParty/SceneLightFieldFill");
-            _accumulateMaterial = LoadMaterial("Hidden/BalloonParty/SceneLightAccumulate");
-            _gradientMaterial = LoadMaterial("Hidden/BalloonParty/SceneLightGradient");
+            // Prefer the serialized references (from the settings SO) so a device build keeps these Hidden
+            // shaders; fall back to Shader.Find in-editor if a slot's unassigned (Find-only would be
+            // stripped on device — see the settings' Shaders tooltip).
+            _fillMaterial = LoadMaterial(fill, "Hidden/BalloonParty/SceneLightFieldFill");
+            _accumulateMaterial = LoadMaterial(accumulate, "Hidden/BalloonParty/SceneLightAccumulate");
+            _gradientMaterial = LoadMaterial(gradient, "Hidden/BalloonParty/SceneLightGradient");
 
             // Texel size is fixed by the RT dimensions, so push it once — the gradient pass samples
             // neighbours a texel away to build grad(R).
@@ -92,12 +90,13 @@ namespace BalloonParty.Shared.SceneLight
             }
         }
 
-        private static Material LoadMaterial(string shaderName)
+        private static Material LoadMaterial(Shader serialized, string shaderName)
         {
-            var shader = Shader.Find(shaderName);
+            var shader = serialized != null ? serialized : Shader.Find(shaderName);
             if (shader == null)
             {
-                Debug.LogError($"SceneLightFieldResources: shader '{shaderName}' not found — the light field will not run.");
+                Debug.LogError($"SceneLightFieldResources: shader '{shaderName}' not found (assign it on the " +
+                               "Scene Light Field Settings asset for device builds) — the light field will not run.");
                 return null;
             }
 

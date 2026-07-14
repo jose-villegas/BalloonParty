@@ -84,7 +84,9 @@ namespace BalloonParty.Shared.SceneLight
             // UV space is normalised per-axis over a non-square field, so the accumulate shader corrects
             // the vertical delta by this ratio to keep a radius circular in world space.
             _stampAspect = _coords.Bounds.height / _coords.Bounds.width;
-            _resources.Initialize(_coords.Width, _coords.Height);
+            _resources.Initialize(
+                _coords.Width, _coords.Height,
+                _settings.FillShader, _settings.AccumulateShader, _settings.GradientShader);
             PushGlobalBounds();
 
             // Texel size lets the include point-sample A (the palette index) at a texel centre — the

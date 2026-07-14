@@ -251,11 +251,10 @@ globals `_SceneLightTex` / `_SceneLightFieldBoundsMin` / `_SceneLightFieldBounds
 `_SceneLightFieldOn`; and the shared include `Assets/Shaders/BalloonParty/Include/SceneLight.cginc`
 (flat helpers verbatim + `…At(worldPos)` field helpers with a `…LOD` VTF variant, all falling back to
 the flat globals when the field is off). No shader includes it yet, so field-OFF is bit-identical to
-today (zero visual effect). See `Shared/SceneLight/README.md`. **Open:** the fill shader is a Hidden
-shader resolved by `Shader.Find` (the plain-C# service can't carry a serialized reference like the
-disturbance config SO does) — it needs an Always-Included-Shaders registration or a config-SO
-reference before a device build, and the fill/include need an in-editor render check (`dotnet build`
-does not compile shaders).
+today (zero visual effect). See `Shared/SceneLight/README.md`. The three `Hidden/` field shaders are
+**serialized on the settings SO** (`FillShader`/`AccumulateShader`/`GradientShader`) so device builds keep
+them (Shader.Find is only an editor fallback) — assign all three on the asset. In-editor render check of
+the shaders still needed (`dotnet build` does not compile shaders).
 
 **Phase B status (2026-07-14 — DONE).** PuffCloud (per-pixel) and PaintBlob (per-object) include the
 shared header and sample `…At(worldPos)`.
@@ -275,10 +274,10 @@ with the reactive on/off registry + dirty-gated fill→accumulate→gradient→p
 (`RegisterLight(Light) → IDisposable` / `ClearLights` API); and `LightStampCheat` (registered beside
 `DisturbanceStampCheat` in `GameScopeRegistration`). **Rest invariant verified in code:** no lights ⇒
 accumulate skipped, R stays 0, gradient weight `saturate(0)` = 0 ⇒ GB = the global rest direction,
-so the consumer-seen light is bit-identical to the directional system. **Open:** the two new shaders
-join the fill shader in needing an Always-Included/config-SO registration before a device build; and
-the passes + `FalloffPower`/`DirectionResponse` need an in-editor render check and tuning (`dotnet build`
-does not compile shaders).
+so the consumer-seen light is bit-identical to the directional system. All three field shaders are now
+serialized on the settings SO (device-build safe — assign them on the asset). **Open:** the passes +
+`FalloffPower`/`DirectionResponse` need an in-editor render check and tuning (`dotnet build` does not
+compile shaders).
 
 **Phase D status (2026-07-14 — CODE-COMPLETE, in-editor verification pending).** All remaining consumers
 migrated onto `SceneLight.cginc` and sample `…At(worldPos)` (world bodies: ToughBalloon, SoapBubbleCluster,

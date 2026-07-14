@@ -1,8 +1,16 @@
+using UnityEngine;
+
 namespace BalloonParty.Configuration.Effects
 {
     /// <summary>Read-only tuning for the scene-light field (see @ref plan_lighting "Milestone 3").</summary>
     internal interface ISceneLightFieldSettings
     {
+        /// <summary>The three field-pipeline shaders. Serialized (not <c>Shader.Find</c>) so a device build
+        /// keeps them — Hidden shaders only reached by name are stripped otherwise.</summary>
+        Shader FillShader { get; }
+        Shader AccumulateShader { get; }
+        Shader GradientShader { get; }
+
         /// <summary>Field RT density. Higher = smoother colour/light regions at a larger (but still tiny,
         /// dirty-gated) RT. Far finer than the disturbance field's, which ticks every frame.</summary>
         int TexelsPerUnit { get; }

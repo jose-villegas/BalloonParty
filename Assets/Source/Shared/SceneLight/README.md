@@ -96,15 +96,15 @@ are still correct. This is why lights are reactive: the service subscribes to ea
 flag, rather than polling or re-rendering blindly. The on-flag is set once, after the first render, so a
 missing owner leaves it at 0.
 
-## Deferred: device-build shader registration & SO authoring
+## Device builds: the three field shaders are serialized
 
-All three passes are Hidden shaders resolved by `Shader.Find`, because the plain-C# service can't carry
-serialized `Shader` references the way the disturbance config SO does. Hidden shaders reached only via
-`Shader.Find` are stripped from device builds unless they're registered as **Always-Included** (or moved
-behind a config SO that references them) — that registration is deferred for all three
-(`SceneLightFieldFill`, `SceneLightAccumulate`, `SceneLightGradient`). Phase C is **editor-verified
-only** until then. (There's no light config SO to defer — a `Light` is a plain runtime value callers
-build directly.)
+All three passes are `Hidden/` shaders (`SceneLightFieldFill`, `SceneLightAccumulate`,
+`SceneLightGradient`), which a device build would strip if they were only reached by `Shader.Find`. So
+the settings SO carries **serialized `Shader` references** (`FillShader`/`AccumulateShader`/`GradientShader`,
+mirroring `IDisturbanceFieldSettings`), which pull them into the build via the asset. **Assign all three
+on the `SceneLightFieldSettings` asset** — the resources prefer the serialized reference and fall back to
+`Shader.Find` only as an editor convenience (that fallback is stripped on device, so an unassigned slot
+breaks the field there).
 
 ## The shared include & the off-fallback
 
