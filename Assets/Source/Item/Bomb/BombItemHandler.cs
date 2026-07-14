@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Threading;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
@@ -6,6 +8,7 @@ using BalloonParty.Nudge;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using Cysharp.Threading.Tasks;
@@ -15,11 +18,17 @@ using VContainer;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
+using Light = BalloonParty.Shared.SceneLight.Light;
 
 namespace BalloonParty.Item.Bomb
 {
-    internal class BombItemHandler : IBalloonItem
+    internal class BombItemHandler : IBalloonItem, IDisposable
     {
+        // Peak magnitude of the flash light; radius matches the blast. Fallback lifetime if the effect
+        // reports no duration.
+        private const float BlastLightIntensity = 3f;
+        private const float FallbackBlastSeconds = 0.4f;
+
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly BalloonOverlapQuery _overlap;
         private readonly IHitDispatcher _hitDispatcher;
@@ -29,6 +38,8 @@ namespace BalloonParty.Item.Bomb
         private readonly List<Collider2D> _overlapResults = new(8);
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
         private readonly DisturbanceFieldService _disturbanceField;
+        private readonly SceneLightFieldService _lightField;
+        private readonly CancellationTokenSource _lifetime = new();
 
         public ItemType Type => ItemType.Bomb;
 
@@ -40,7 +51,8 @@ namespace BalloonParty.Item.Bomb
             IGamePalette palette,
             ItemEffectPlayer effectPlayer,
             BalloonOverlapQuery overlap,
-            DisturbanceFieldService disturbanceField)
+            DisturbanceFieldService disturbanceField,
+            SceneLightFieldService lightField)
         {
             _itemConfig = itemConfig;
             _hitDispatcher = hitDispatcher;
@@ -49,6 +61,13 @@ namespace BalloonParty.Item.Bomb
             _effectPlayer = effectPlayer;
             _overlap = overlap;
             _disturbanceField = disturbanceField;
+            _lightField = lightField;
+        }
+
+        public void Dispose()
+        {
+            _lifetime.Cancel();
+            _lifetime.Dispose();
         }
 
         public UniTask Activate(ItemActivationContext activation)
@@ -88,6 +107,13 @@ namespace BalloonParty.Item.Bomb
             _disturbanceField.Stamp(
                 StampSource.Bomb, worldPosition, Vector2.zero,
                 paletteIndex: _palette.PaletteIndexOf(sourceColorId));
+
+            // A blast-coloured flash light matching the blast radius (visual scale for a rainbow bomb),
+            // held for the effect then released.
+            var lightRadius = settings.Bomb.Radius * (isRainbow ? settings.Bomb.RainbowEffectScale : 1f);
+            var registration = _lightField.RegisterLight(
+                new Light(worldPosition, lightRadius, BlastLightIntensity, _palette.PaletteIndexOf(sourceColorId)));
+            ExpireLight(effectDuration, registration).Forget();
 
             if (converts != null)
             {
@@ -187,6 +213,23 @@ namespace BalloonParty.Item.Bomb
             foreach (var target in targets)
             {
                 target.Color.Value = GamePalette.RainbowColorId;
+            }
+        }
+
+        private async UniTaskVoid ExpireLight(float seconds, IDisposable registration)
+        {
+            var duration = seconds > 0f ? seconds : FallbackBlastSeconds;
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(duration), cancellationToken: _lifetime.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // Run ended before the flash faded — the field clears its own lights; still release below.
+            }
+            finally
+            {
+                registration.Dispose();
             }
         }
     }
