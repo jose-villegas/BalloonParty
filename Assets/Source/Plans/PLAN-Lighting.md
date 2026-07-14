@@ -11,7 +11,8 @@
 > Exploratory beginning: the first milestone is only the **direction** abstraction; colour,
 > intensity, and point-light falloff are deliberately deferred.
 >
-> **Status: milestones 1–2 SHIPPED (2026-07-14) — see the Status section; milestone 3 is backlog.**
+> **Status: milestones 1–2 SHIPPED (2026-07-14) — see the Status section; milestone 3 (the light
+> field) is in progress — Phases A/B/C code-complete, in-editor verification pending.**
 
 ---
 
@@ -193,8 +194,24 @@ authors paint brightness only (greyscale cookie stamps, line/capsule lights for 
 washes) and every shape gets plausible directions automatically.
 
 **Reused verbatim from the disturbance system:** DisturbanceFieldCoordinates (world↔UV), the RT
-resources/blit pattern, batched stamps, the lerp scheduler (ramped stamps = light FLASHES with
-decay — balloon pops emitting light), the A-channel palette encoding.
+resources/blit pattern, batched stamps, the A-channel palette encoding.
+
+**Reconciliation — the lerp scheduler does NOT transfer (corrected Phase C).** The original sketch
+proposed reusing the disturbance `LerpStampScheduler` for "ramped stamps = light flashes". That is the
+wrong tool: the scheduler emits decaying *deltas* into a *persistent* field that integrates them in
+place. The light field has no in-texture persistence — each render rebuilds it — so a delta has nothing
+to accumulate into. Lights are **state, not events**: a light is simply on or off, and the caller owns
+that lifecycle.
+
+- A **`Light`** is a small reactive model (`Position`/`Radius`/`Intensity`/`PaletteIndex` reactive,
+  authored `EdgeSoftness`). `RegisterLight(Light) → IDisposable` turns it on; disposing turns it off;
+  `ClearLights()` clears all. **No decay in the service** — a fade is the caller animating `Intensity`
+  (the R magnitude), which the field follows.
+- The service **watches** each registered light + the directional owner and re-renders **only when
+  something changed** (a dirty flag the reactive subscriptions flip). An idle scene skips the pipeline;
+  the RT keeps its last, still-correct contents.
+
+This reactive on/off registry (dirty-gated re-render) is Phase C's model.
 
 **Known caveats (from the investigation + prior lessons):**
 - A-index + bilinear = decoded-garbage banding (the SpeckField lesson): point-sample A and let the
@@ -218,9 +235,47 @@ decay — balloon pops emitting light), the A-channel palette encoding.
 
 **Phases:** A — field service (rest-state fill from SceneLightService, `_SceneLightTex` + bounds
 globals, the shared include, field-off fallback). B — pilots (PuffCloud per-pixel, PaintBlob
-per-object). C — light stamps (`LightStampProfile`: radius/intensity/falloff/palette index/duration;
-first sources: balloon pops flash their colour, then laser/lightning). D — generalize + the per-fragment
-GI march (see the caveat bullet above — it upgrades the GI, not just patches it).
+per-object). C — the reactive `Light` model + on/off registry (above), the accumulate + gradient
+passes. D — generalize game-source wiring
+(balloon pops flash their colour, then laser/lightning) + the per-fragment GI march (see the caveat
+bullet above — it upgrades the GI, not just patches it).
+
+**Phase A status (2026-07-14 — CODE-COMPLETE, in-editor verification pending).** Shipped:
+`Shared/SceneLight/SceneLightFieldService` (+ `SceneLightFieldResources`), registered in
+`GameScopeRegistration` beside `DisturbanceFieldService` (Singleton); the `ARGBHalf` field RT sized
+via the reused `DisturbanceFieldCoordinates` at 8 texels/unit; per-tick rest-state fill
+(R = intensity, GB = 0.5-biased `_SceneLightDir`, A = 0) via `Hidden/BalloonParty/SceneLightFieldFill`;
+globals `_SceneLightTex` / `_SceneLightFieldBoundsMin` / `_SceneLightFieldBoundsSize` /
+`_SceneLightFieldOn`; and the shared include `Assets/Shaders/BalloonParty/Include/SceneLight.cginc`
+(flat helpers verbatim + `…At(worldPos)` field helpers with a `…LOD` VTF variant, all falling back to
+the flat globals when the field is off). No shader includes it yet, so field-OFF is bit-identical to
+today (zero visual effect). See `Shared/SceneLight/README.md`. **Open:** the fill shader is a Hidden
+shader resolved by `Shader.Find` (the plain-C# service can't carry a serialized reference like the
+disturbance config SO does) — it needs an Always-Included-Shaders registration or a config-SO
+reference before a device build, and the fill/include need an in-editor render check (`dotnet build`
+does not compile shaders).
+
+**Phase B status (2026-07-14 — DONE).** PuffCloud (per-pixel) and PaintBlob (per-object) include the
+shared header and sample `…At(worldPos)`.
+
+**Phase C status (2026-07-14 — CODE-COMPLETE, in-editor verification pending).** Shipped: the reactive
+`Light` model (`Position`/`Radius`/`Intensity`/`PaletteIndex` `ReactiveProperty`s + authored
+`EdgeSoftness`, `const` defaults); `SceneLightFieldResources` upgraded to two ping-pong
+RTs + `BlitAndSwap` with fill/accumulate/gradient materials; two new Hidden shaders
+`SceneLightAccumulate` (batched, 32/blit, mirrors `DisturbanceStampBatched`; adds each light's
+magnitude to R soft-clamped `_MaxBoost*(1-exp(-sum/_MaxBoost))`, writes the dominant palette
+index to A, passes GB through) and `SceneLightGradient` (`grad(R)` central difference over
+`_FieldTexelSize`, blends rest GB → gradient dir by `smoothstep(_GradientLo,_GradientHi,|grad R|)` at
+weight-exactly-0 on flat fields); `SceneLightFieldService` upgraded with the reactive on/off registry +
+dirty-gated fill→accumulate→gradient→publish render (`RegisterLight(Light) → IDisposable` /
+`ClearLights` API); and `LightStampCheat` (registered beside `DisturbanceStampCheat` in
+`GameScopeRegistration`). **Rest invariant verified in code:** no lights ⇒ accumulate skipped
+(and an exact identity at `_StampCount = 0`), gradient on flat R yields a zero gradient ⇒
+`lerp(restGB,…,0) == restGB` bit-for-bit, R/A pass through ⇒ bit-identical to the rest field, hence to
+the directional system. **Open:** the two new shaders join the fill shader in needing an
+Always-Included/config-SO registration before a device build; and the accumulate/gradient passes + the
+`_GradientLo/_Hi` thresholds need an in-editor render check and tuning (`dotnet build` does not compile
+shaders).
 
 ## Open questions
 

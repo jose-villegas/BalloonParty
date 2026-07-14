@@ -22,6 +22,7 @@ namespace BalloonParty.Editor.Maps
 
         private static readonly int SceneCaptureTexId = Shader.PropertyToID("_SceneCaptureTex");
         private static readonly int DisturbanceTexId = Shader.PropertyToID("_DisturbanceTex");
+        private static readonly int SceneLightTexId = Shader.PropertyToID("_SceneLightTex");
         private static readonly int ChannelMaskId = Shader.PropertyToID("_ChannelMask");
         private static readonly int PaletteColorsId = Shader.PropertyToID("_PaletteColors");
         private static readonly int DecodePaletteId = Shader.PropertyToID("_DecodePalette");
@@ -272,6 +273,19 @@ namespace BalloonParty.Editor.Maps
                     "Palette tag, packed (index + life) / 16 — 16 slots, in-slot value = remaining life, " +
                     "drained each diffusion tick (ColorTagDecay); 0 = untagged. Written hard (never " +
                     "blended); agitated specks adopt the slot and flush toward that color.",
+                    hasPaletteChannel: true),
+
+                new MapDescriptor(
+                    "Scene Light Field",
+                    () => Application.isPlaying ? Shader.GetGlobalTexture(SceneLightTexId) : null,
+                    "No light field bound — SceneLightFieldService binds it once the game scope starts.",
+                    "Magnitude — light amount. 1.0 = the key light's intensity at rest; sources add " +
+                    "above it, soft-capped so overlaps never blow out.",
+                    "Direction X — 0.5-biased toward-light direction (0.5 = zero). Recomputed each tick " +
+                    "from grad(R), so it points toward the brightest nearby source.",
+                    "Direction Y — 0.5-biased toward-light direction (see G).",
+                    "Palette tag, (index + 1) / 16 — 16 slots; 0 = untagged (consumers use the global " +
+                    "key-light colour). Written hard (dominant source wins), never blended.",
                     hasPaletteChannel: true),
 
                 new MapDescriptor(

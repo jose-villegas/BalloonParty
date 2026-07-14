@@ -31,7 +31,7 @@ namespace BalloonParty.Cheats
                 return;
             }
 
-            var pos = MouseWorldPosition();
+            var pos = CheatInput.MouseWorldPosition();
             if (pos == null)
             {
                 return;
@@ -55,19 +55,6 @@ namespace BalloonParty.Cheats
         {
             _active = !_active;
             _lastMouseWorld = Vector3.zero;
-        }
-
-        private static Vector3? MouseWorldPosition()
-        {
-            var cam = Camera.main;
-            if (cam == null)
-            {
-                return null;
-            }
-
-            var world = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
-            world.z = 0f;
-            return world;
         }
     }
 }

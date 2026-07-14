@@ -93,6 +93,7 @@ Shader "BalloonParty/Grid/PuffCloud"
             #pragma shader_feature _DENSITY_ON
             #pragma shader_feature _NOISE_DEBUG
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             // Max slot centers for merged clusters (P3); P1 uses 1.
             #define MAX_SLOTS 16
@@ -156,14 +157,6 @@ Shader "BalloonParty/Grid/PuffCloud"
             float2    _FieldBoundsSize;
             float     _DisplaceWorldScale;
             #endif
-
-            // Global shader properties — set by SceneLightService, not in Properties so
-            // material values can't mask them. Dir points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left. Colour's alpha is the "owner has
-            // pushed" validity flag (see SceneLightTint).
-            float4 _SceneLightDir;
-            float4 _SceneLightColor;
-            float  _SceneLightIntensity;
 
             // Slot center positions in world space — set via MaterialPropertyBlock.
             float4 _SlotCentersWorld[MAX_SLOTS];
@@ -250,31 +243,13 @@ Shader "BalloonParty/Grid/PuffCloud"
                 return smoothstep(_SlotRadius + _BorderSoftness, _SlotRadius, minDist);
             }
 
-            // Guarded read of the scene light (see SceneLightService): normalized, toward
-            // the light; falls back to the canonical direction if the global hasn't been
-            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
-            float2 SceneLightDirection()
-            {
-                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-                    ? float2(-0.707, 0.707)
-                    : _SceneLightDir.xy;
-                return normalize(raw);
-            }
-
-            // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
-            // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
-            float ShadowLightFade()
-            {
-                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
-            }
-
             // Derive a pseudo-normal from the low-frequency noise gradient and apply
             // half-Lambert directional lighting. The gradient comes from screen-space
             // derivatives of a value the density pass already computed — the GPU provides
             // ddx/ddy nearly free, replacing four extra noise evaluations per pixel. The
             // 2·epsilon factor keeps the authored _NormalEpsilon/_NormalStrength scaling of
             // the central differences this replaces.
-            fixed3 CloudLighting(float2 worldGradient)
+            fixed3 CloudLighting(float2 worldGradient, float2 worldPos)
             {
                 // Clamp kills rare derivative spikes (2×2 quads straddling divergent state) —
                 // a legit cloud slope never exceeds this.
@@ -283,13 +258,14 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                 float3 normal = normalize(float3(-dX, -dY, 1.0));
 
-                // _SceneLightDir already points toward the light — direct consumption,
-                // no sign flip.
+                // Field-aware: sampled at the cloud's own world position (per-fragment),
+                // falling back to the flat global when the field is off. Already points
+                // toward the light — direct consumption, no sign flip.
                 // A/B: the previous authored value (1,-1) lit clouds from lower-right
                 // (opposite the global's upper-left). If that inverted look is the
-                // intended art, negate here (ld = -SceneLightDirection()) — decide
-                // in-editor against the cloud drop shadow.
-                float2 ld = SceneLightDirection();
+                // intended art, negate here (ld = -SceneLightDirectionAt(worldPos)) —
+                // decide in-editor against the cloud drop shadow.
+                float2 ld = SceneLightDirectionAt(worldPos);
                 float3 lightVec = normalize(float3(ld, 0.6));
 
                 float NdotL = dot(normal, lightVec);
@@ -303,9 +279,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 fixed3 lit = lerp(_AmbientColor.rgb, _LightColor.rgb, halfLambert);
                 fixed3 shading = lerp(fixed3(1, 1, 1), lit, _LightIntensity);
 
-                float3 sceneTint = _SceneLightColor.a > 0.5
-                    ? _SceneLightColor.rgb * _SceneLightIntensity
-                    : float3(1.0, 1.0, 1.0);
+                float3 sceneTint = SceneLightTintAt(worldPos);
                 return shading * lerp(float3(1.0, 1.0, 1.0), sceneTint, _LightInfluence);
             }
 
@@ -347,9 +321,10 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                 #ifdef _SHADOW_ON
                 // The shadow lands down-light of the cloud: direction derived from the scene
-                // light (-toward-light), only the distance stays authored — so rotating the
-                // light moves the drop shadow together with the diffuse shading.
-                float2 shadowOffset = -SceneLightDirection() * _ShadowDistance;
+                // light (-toward-light) sampled at the cloud's OWN position (what casts the
+                // shadow, not where it lands), only the distance stays authored — so rotating
+                // the light moves the drop shadow together with the diffuse shading.
+                float2 shadowOffset = -SceneLightDirectionAt(wpRest) * _ShadowDistance;
                 float2 shadowWpWorld = wpRest   - shadowOffset;
                 float2 shadowWpLocal = wpLocal  - shadowOffset;
                 float  shadowFade = SlotFalloff(shadowWpLocal);
@@ -447,7 +422,7 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                     shadowAlpha = shadowCloud * _ShadowColor.a * IN.color.a;
                     shadowAlpha *= smoothstep(0.0, _ShadowSoftness + 0.01, shadowCloud);
-                    shadowAlpha *= ShadowLightFade();
+                    shadowAlpha *= ShadowLightFadeAt(wpRest);
                 }
 
                 if (cloud < 0.001 && shadowAlpha < 0.001) discard;
@@ -459,7 +434,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 }
 
                 // Compose main cloud with shadow behind
-                fixed3 lighting = CloudLighting(lightGradient);
+                fixed3 lighting = CloudLighting(lightGradient, wpRest);
                 fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 
                 fixed  combinedA   = mainAlpha + shadowAlpha * (1.0 - mainAlpha);
@@ -472,7 +447,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 if (cloud < 0.001) discard;
 
                 float mainAlpha = cloud * _CloudColor.a * IN.color.a;
-                fixed3 lighting = CloudLighting(lightGradient);
+                fixed3 lighting = CloudLighting(lightGradient, wpRest);
                 fixed3 mainRgb  = _CloudColor.rgb * IN.color.rgb * lighting;
 
                 return fixed4(mainRgb, mainAlpha);

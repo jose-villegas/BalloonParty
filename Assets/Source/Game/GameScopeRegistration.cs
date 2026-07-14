@@ -29,6 +29,7 @@ using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Pause;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Actor.Archetype;
 using BalloonParty.Slots.Spawner;
@@ -124,6 +125,8 @@ namespace BalloonParty.Game
             builder.RegisterEntryPoint<BushViewController>().AsSelf().As<ITransitionOutgoingContent>();
             builder.Register<DisturbanceFieldService>(Lifetime.Singleton)
                 .AsImplementedInterfaces().AsSelf();
+            builder.Register<SceneLightFieldService>(Lifetime.Singleton)
+                .AsImplementedInterfaces().AsSelf();
             builder.RegisterEntryPoint<BalloonMotionTicker>().AsSelf();
             builder.RegisterEntryPoint<RejectedBalloonEffect>().AsSelf().As<IRunResettable>().As<IPendingHealthCharges>();
             builder.RegisterEntryPoint<BalloonControllerRegistry>().AsSelf();
@@ -201,6 +204,11 @@ namespace BalloonParty.Game
                 .AsImplementedInterfaces()
                 .AsSelf();
             builder.RegisterBuildCallback(resolver => resolver.Resolve<DisturbanceStampCheat>());
+
+            builder.RegisterComponentOnNewGameObject<LightStampCheat>(Lifetime.Singleton, "LightStampCheat")
+                .AsImplementedInterfaces()
+                .AsSelf();
+            builder.RegisterBuildCallback(resolver => resolver.Resolve<LightStampCheat>());
 
             builder.RegisterComponentOnNewGameObject<CheatConsoleView>(Lifetime.Singleton, "CheatConsole");
             builder.RegisterBuildCallback(resolver => resolver.Resolve<CheatConsoleView>());

@@ -130,7 +130,7 @@ namespace BalloonParty.Cheats
 
         private void SampleMousePosition()
         {
-            var pos = MouseWorldPosition();
+            var pos = CheatInput.MouseWorldPosition();
             if (pos == null)
             {
                 return;
@@ -306,19 +306,6 @@ namespace BalloonParty.Cheats
             _overlayIndices.Add(baseIndex + 3);
         }
 
-        private static Vector3? MouseWorldPosition()
-        {
-            var cam = Camera.main;
-            if (cam == null)
-            {
-                return null;
-            }
-
-            // 2D orthographic: XY is correct regardless of z input.
-            var world = cam.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 0f));
-            world.z = 0f;
-            return world;
-        }
     }
 }
 #endif

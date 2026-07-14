@@ -60,10 +60,11 @@ Shader "BalloonParty/Paint/PaintBlob"
             CGPROGRAM
             #pragma vertex   vert
             #pragma fragment frag
-            #pragma target 3.0
+            #pragma target 3.5
             #pragma shader_feature _SHADOW_ON
             #pragma multi_compile_instancing
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             struct appdata_t
             {
@@ -75,10 +76,17 @@ Shader "BalloonParty/Paint/PaintBlob"
 
             struct v2f
             {
-                float4 vertex   : SV_POSITION;
-                fixed4 color    : COLOR;
-                float2 texcoord : TEXCOORD0;
-                float2 spin     : TEXCOORD1;
+                float4 vertex    : SV_POSITION;
+                fixed4 color     : COLOR;
+                float2 texcoord  : TEXCOORD0;
+                float2 spin      : TEXCOORD1;
+                // Sampled ONCE per blob (at its own centre, vertex stage) so light stays
+                // coherent across the whole blob — no bending inside a single blob.
+                float2 lightDir  : TEXCOORD2;
+                float3 lightTint : TEXCOORD3;
+                #ifdef _SHADOW_ON
+                float  shadowFade : TEXCOORD4;
+                #endif
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -113,43 +121,12 @@ Shader "BalloonParty/Paint/PaintBlob"
             float  _SpecularDistance;
             float  _LightInfluence;
 
-            // Set globally by SceneLightService; kept out of Properties so no
-            // material value can shadow the scene-wide light. Colour's alpha is the
-            // "owner has pushed" validity flag (see SceneLightTint).
-            float4 _SceneLightDir;
-            float4 _SceneLightColor;
-            float  _SceneLightIntensity;
-
             #ifdef _SHADOW_ON
             fixed4 _ShadowColor;
             float  _ShadowDistance;
             float  _ShadowSoftness;
             float  _ShadowScale;
             #endif
-
-            // Normalized scene light direction, with an edit-time fallback for
-            // the degenerate case (service not yet run / zero vector).
-            float2 SceneLight()
-            {
-                float2 dir = _SceneLightDir.xy;
-                return (dot(dir, dir) > 1e-8) ? normalize(dir) : float2(-0.707, 0.707);
-            }
-
-            // The light's colour × intensity — multiplies into the authored specular response.
-            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
-            float3 SceneLightTint()
-            {
-                return _SceneLightColor.a > 0.5
-                    ? _SceneLightColor.rgb * _SceneLightIntensity
-                    : float3(1.0, 1.0, 1.0);
-            }
-
-            // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
-            // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
-            float ShadowLightFade()
-            {
-                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
-            }
 
             // Computes the blob SDF boundary at a given UV offset from center.
             // Returns the alpha (0 = outside, 1 = inside) using the wobble + edge softness.
@@ -190,6 +167,17 @@ Shader "BalloonParty/Paint/PaintBlob"
                 // can undo it and keep the specular fixed in world space.
                 float2 worldX = float2(unity_ObjectToWorld._m00, unity_ObjectToWorld._m10);
                 OUT.spin = (dot(worldX, worldX) > 1e-8) ? normalize(worldX) : float2(1.0, 0.0);
+
+                // Sample the light field ONCE per blob, at the blob's own centre (the object
+                // origin — the SDF above is already centred there) — VTF (target 3.5), the
+                // SpeckField/BushLeaf precedent. Keeps the whole blob lit from one coherent
+                // direction instead of bending across it per-fragment.
+                float2 blobCenterWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
+                OUT.lightDir  = SceneLightDirectionAtLOD(blobCenterWorld);
+                OUT.lightTint = SceneLightTintAtLOD(blobCenterWorld);
+                #ifdef _SHADOW_ON
+                OUT.shadowFade = ShadowLightFadeAtLOD(blobCenterWorld);
+                #endif
                 return OUT;
             }
 
@@ -210,12 +198,12 @@ Shader "BalloonParty/Paint/PaintBlob"
                 // into the blob's local frame so the silhouette wobbles in the blob's own frame
                 // AND stays world-anchored while the sprite spins (the authored offset used to
                 // rotate with it).
-                float2 shadowWorld = -SceneLight() * _ShadowDistance;
+                float2 shadowWorld = -IN.lightDir * _ShadowDistance;
                 float2 shadowLocal = float2( shadowWorld.x * IN.spin.x + shadowWorld.y * IN.spin.y,
                                             -shadowWorld.x * IN.spin.y + shadowWorld.y * IN.spin.x);
                 float2 shadowUV    = (uv - shadowLocal) / max(_ShadowScale, 0.001);
                 float  shadowAlpha = BlobAlpha(shadowUV, _ShadowSoftness / max(_ShadowScale, 0.001)) * _ShadowColor.a;
-                shadowAlpha *= ShadowLightFade();
+                shadowAlpha *= IN.shadowFade;
                 #endif
 
                 // Early discard — nothing to draw if both blob and shadow are invisible
@@ -251,19 +239,19 @@ Shader "BalloonParty/Paint/PaintBlob"
                 // Diffuse term: the blob body is albedo, lit by the scene light — same response
                 // as Sprite/Diffuse. Without this the blob reads self-illuminated when the light
                 // dims. The specular below carries its own light scaling (no double-apply).
-                col *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
+                col *= lerp(float3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence);
 
                 // Specular highlight — sampled in world orientation so it stays
                 // put regardless of how the parent transform is rotated.
                 float2 worldUV = float2(uv.x * IN.spin.x - uv.y * IN.spin.y,
                                         uv.x * IN.spin.y + uv.y * IN.spin.x);
-                float2 specCenter = SceneLight() * _SpecularDistance;
+                float2 specCenter = IN.lightDir * _SpecularDistance;
                 float  specDist   = length(worldUV - specCenter);
                 float  specMask   = pow(saturate(1.0 - specDist / max(_SpecularSize, 0.001)),
                                         _SpecularSharpness);
                 // Specular response = authored colour × the scene light's tint (a dim/tinted
                 // light dims/tints the glint).
-                col = lerp(col, _SpecularColor.rgb * SceneLightTint(), specMask * _SpecularColor.a);
+                col = lerp(col, _SpecularColor.rgb * IN.lightTint, specMask * _SpecularColor.a);
 
                 // ── Composite: shadow under blob (Porter-Duff "over") ──
                 #ifdef _SHADOW_ON
