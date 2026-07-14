@@ -11,7 +11,7 @@
 > Exploratory beginning: the first milestone is only the **direction** abstraction; colour,
 > intensity, and point-light falloff are deliberately deferred.
 >
-> **No changes until this plan is actioned.**
+> **Status: milestones 1–2 SHIPPED (2026-07-14) — see the Status section; milestone 3 is backlog.**
 
 ---
 
@@ -148,6 +148,27 @@ T2/T3/T4/T5 are parallelizable once T1 lands. Every shader task needs an in-edit
    Unbreakable) first, then generalize.
 3. **Growth.** Add colour / intensity, and optionally a positioned light (`_SceneLightPos`) for
    falloff and parallax; fold the screen-space GI's own parameters under the same source.
+
+## Status (2026-07-14)
+
+Milestones 1 and 2 **SHIPPED** (tasks T1–T6c). The direction abstraction is complete; all consumer 
+shaders now read from the owned global. Key decisions and additions:
+
+- **(a) Look flip accepted:** The early-stage in-editor approvals stand. PuffCloud and ToughBalloon 
+  grain reversed polarity (diffuse and grain now light from upper-left, matching their shadows).
+- **(b) Polarity evolution:** Generic sprite shadow/shine shaders (`SpriteShadow`, `SpriteShineShadow`, 
+  `SpriteShine`) became per-material opt-in toggles so expressive authored art stays authored — 
+  e.g., PU_Lightning's radiating bolt shadows kept their baked orientation, UI untouched.
+- **(c) Additions:** `[UnitCircle]` inspector drawer on `SceneLightService.Direction`, rainbow 
+  seam swirl (`_SeamSwirlAmount/Scale/Speed`) + spherical bulge (`_SphereBend`), and `LightRotate` 
+  sprite shader (orbit + optional rotate for baked directional art like shadow/shine children).
+- **(d) Editor tool decision:** `BushBake.shader` keeps its own authored `_LightDir` (editor-only 
+  bake-time tool, decision made to preserve bake reproducibility).
+- **(e) Audit:** `UnbreakableBalloonRim.shader` carries no directional/light uniforms (time-driven 
+  rim sweep only, nothing to migrate).
+- **(f) Backlog:** Milestone 3 deferred (task T8: colour/intensity, point light, optional Rainbow-axis join).
+
+---
 
 ## Open questions
 

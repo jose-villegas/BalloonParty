@@ -749,11 +749,16 @@ internal interface IBushSettings : IClusterViewSettings
     BushView BushPrefab { get; }
     BushVariantData[] BushVariants { get; }
     Shader BranchShader { get; }
-    Shader LeafShader { get; }
+    Color BranchColor { get; }
+    Material LeafMaterial { get; }
+    Color LeafTint { get; }
     float BushWorldSize { get; }
-    Sprite[] LeafAtlasSprites { get; }
+    float BranchSpriteScale { get; }
+    Color BranchShadowColor { get; }
+    float BranchShadowDistance { get; }
+    float BranchShadowSoftness { get; }
     Color LeafShadowColor { get; }
-    Vector2 LeafShadowOffset { get; }
+    float LeafShadowDistance { get; }
     float LeafShadowSoftness { get; }
     float LeafSpriteScale { get; }
     float WindAmplitude { get; }

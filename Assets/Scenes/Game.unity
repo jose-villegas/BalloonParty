@@ -1095,6 +1095,16 @@ PrefabInstance:
       propertyPath: m_Name
       value: UICanvas
       objectReference: {fileID: 0}
+    - target: {fileID: 4763898772089557142, guid: 66f9708a0b9b044198e0f57d389d660f,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 4763898772089557142, guid: 66f9708a0b9b044198e0f57d389d660f,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 4813776363972236675, guid: 66f9708a0b9b044198e0f57d389d660f,
         type: 3}
       propertyPath: m_AnchorMax.y
