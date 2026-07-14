@@ -1,3 +1,4 @@
+using BalloonParty.Shared;
 using UnityEngine;
 
 namespace BalloonParty.Display
@@ -18,7 +19,7 @@ namespace BalloonParty.Display
 
         [Tooltip("Points TOWARD the light (normalized on push); shadows extend the opposite way. " +
                  "The canonical scene light sits upper-left.")]
-        [SerializeField] private Vector2 _lightDirection = new(-0.707f, 0.707f);
+        [UnitCircle] [SerializeField] private Vector2 _lightDirection = new(-0.707f, 0.707f);
 
         /// <summary>The normalized toward-the-light vector — for CPU consumers that derive their own
         /// shader params from it (the GI smear cannot read the global in-shader).</summary>
