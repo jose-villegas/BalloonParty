@@ -1,4 +1,6 @@
 using System;
+using BalloonParty.Configuration.Palette;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.SceneLight;
 using UnityEngine;
 using VContainer;
@@ -20,6 +22,7 @@ namespace BalloonParty.Item
         [SerializeField] [Min(0f)] private float _lightIntensity = 1.5f;
 
         [Inject] private SceneLightFieldService _lightField;
+        [Inject] private IGamePalette _palette;
 
         private float _angle;
         private bool _stopped;
@@ -68,9 +71,11 @@ namespace BalloonParty.Item
                 return;
             }
 
+            // Idle telegraph reads as the Unbreakable colour; the fired beam takes the owner's colour.
+            var colorIndex = _palette.PaletteIndexOf(GamePalette.UnbreakableColorId);
             var center = transform.position;
-            _horizontal = Light.Segment(center, center, _lightHalfWidth, _lightIntensity);
-            _vertical = Light.Segment(center, center, _lightHalfWidth, _lightIntensity);
+            _horizontal = Light.Segment(center, center, _lightHalfWidth, _lightIntensity, colorIndex);
+            _vertical = Light.Segment(center, center, _lightHalfWidth, _lightIntensity, colorIndex);
             _horizontalRegistration = _lightField.RegisterLight(_horizontal);
             _verticalRegistration = _lightField.RegisterLight(_vertical);
             UpdateTelegraph();
