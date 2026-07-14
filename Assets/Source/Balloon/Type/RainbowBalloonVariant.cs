@@ -130,35 +130,45 @@ namespace BalloonParty.Balloon.Type
             _disturbanceField.Stamp(StampSource.RainbowColor, transform.position, Vector2.zero, index);
         }
 
-        private void PushBands()
+        /// <summary>Pushes the banded colours for an explicit palette + allowed-colours mask — the seam the
+        /// editor preview uses (edit mode has no DI, so it feeds the palette asset directly).</summary>
+        internal void PushBands(IGamePalette palette, int allowedColorsMask)
         {
-            if (_renderer == null)
+            if (_renderer == null || palette == null)
             {
                 return;
             }
 
-            var colors = Palette.ColorNamesForMask(_levelParams.Current.AllowedColorsMask);
+            // Edit-mode preview runs before Awake.
+            _block ??= new MaterialPropertyBlock();
+
+            var colors = palette.ColorNamesForMask(allowedColorsMask);
 
             _renderer.GetPropertyBlock(_block);
-            _block.SetColor(Color0Id, ColorAt(colors, 0));
-            _block.SetColor(Color1Id, ColorAt(colors, 1));
-            _block.SetColor(Color2Id, ColorAt(colors, 2));
-            _block.SetColor(Color3Id, ColorAt(colors, 3));
+            _block.SetColor(Color0Id, ColorAt(palette, colors, 0));
+            _block.SetColor(Color1Id, ColorAt(palette, colors, 1));
+            _block.SetColor(Color2Id, ColorAt(palette, colors, 2));
+            _block.SetColor(Color3Id, ColorAt(palette, colors, 3));
             _block.SetFloat(BandCountId, Mathf.Max(1, colors.Count));
             _block.SetFloat(TimeOffsetId, _timeOffset);
             _renderer.SetPropertyBlock(_block);
         }
 
+        private void PushBands()
+        {
+            PushBands(Palette, _levelParams.Current.AllowedColorsMask);
+        }
+
         // Clamps to the last allowed colour when fewer than 4 are unlocked — harmless either way, since
         // the shader's _BandCount already excludes unused slots from the cycle.
-        private Color ColorAt(IReadOnlyList<string> colors, int index)
+        private static Color ColorAt(IGamePalette palette, IReadOnlyList<string> colors, int index)
         {
             if (colors == null || colors.Count == 0)
             {
                 return Color.white;
             }
 
-            return Palette.GetColor(colors[Mathf.Clamp(index, 0, colors.Count - 1)]);
+            return palette.GetColor(colors[Mathf.Clamp(index, 0, colors.Count - 1)]);
         }
     }
 }
