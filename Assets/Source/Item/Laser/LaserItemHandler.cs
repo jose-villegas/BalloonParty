@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Disturbance;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Actor;
 using BalloonParty.Slots.Grid;
@@ -17,11 +20,19 @@ using VContainer.Unity;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
+using Light = BalloonParty.Shared.SceneLight.Light;
 
 namespace BalloonParty.Item.Laser
 {
     internal class LaserItemHandler : IBalloonItem, IStartable, IDisposable
     {
+        // The beam's light: half-width (perpendicular reach) and peak magnitude; a broad falloff so the
+        // whole beam reads lit rather than a thin core. Fallback lifetime when the effect has no duration.
+        private const float BeamHalfWidth = 0.7f;
+        private const float BeamIntensity = 2f;
+        private const float BeamFalloff = 1.5f;
+        private const float FallbackBeamSeconds = 0.4f;
+
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly BalloonOverlapQuery _overlap;
         private readonly IHitDispatcher _hitDispatcher;
@@ -34,6 +45,10 @@ namespace BalloonParty.Item.Laser
         private readonly HashSet<IBalloonModel> _hitModels = new();
         private readonly Vector2Int[] _neighborBuffer = new Vector2Int[6];
         private readonly DisturbanceFieldService _disturbanceField;
+        private readonly SceneLightFieldService _lightField;
+
+        // Cancels pending beam-light expiries when the run ends (the field also clears on its own dispose).
+        private readonly CancellationTokenSource _lifetime = new();
 
         // Cross-activation: rotation arrives via TransformCapturedMessage before activation.
         private readonly Dictionary<ISlotActor, Quaternion> _capturedRotations = new();
@@ -53,7 +68,8 @@ namespace BalloonParty.Item.Laser
             SlotGrid grid,
             ItemEffectPlayer effectPlayer,
             BalloonOverlapQuery overlap,
-            DisturbanceFieldService disturbanceField)
+            DisturbanceFieldService disturbanceField,
+            SceneLightFieldService lightField)
         {
             _itemConfig = itemConfig;
             _hitDispatcher = hitDispatcher;
@@ -64,6 +80,7 @@ namespace BalloonParty.Item.Laser
             _effectPlayer = effectPlayer;
             _overlap = overlap;
             _disturbanceField = disturbanceField;
+            _lightField = lightField;
         }
 
         public void Start()
@@ -78,6 +95,8 @@ namespace BalloonParty.Item.Laser
         {
             _captureSubscription?.Dispose();
             _boardClearSubscription?.Dispose();
+            _lifetime.Cancel();
+            _lifetime.Dispose();
         }
 
         public UniTask Activate(ItemActivationContext activation)
@@ -108,9 +127,47 @@ namespace BalloonParty.Item.Laser
                 laser.SetCycleColors(_palette.ColorValues(), settings.Laser.ColorCycles);
             }
 
-            StampCross(worldPosition, settings, laserRotation, _palette.PaletteIndexOf(balloon.GetColorId()));
+            var paletteIndex = _palette.PaletteIndexOf(balloon.GetColorId());
+            StampCross(worldPosition, settings, laserRotation, paletteIndex);
+            LightCross(worldPosition, settings, laserRotation, paletteIndex, effect);
 
             return UniTask.CompletedTask;
+        }
+
+        // The cross casts two crossing area lights into the scene-light field: a capsule (segment) light
+        // along each beam, full along the axis and decaying to the sides. They live for the beam effect's
+        // duration, then the registrations are disposed.
+        private void LightCross(
+            Vector3 worldPosition, ItemSettings settings, Quaternion laserRotation, int paletteIndex, EffectView effect)
+        {
+            var distance = settings.Laser.RaycastDistance;
+            var right = (Vector3)(Vector2)(laserRotation * Vector3.right) * distance;
+            var up = (Vector3)(Vector2)(laserRotation * Vector3.up) * distance;
+
+            var horizontal = _lightField.RegisterLight(
+                Light.Segment(worldPosition - right, worldPosition + right, BeamHalfWidth, BeamIntensity, paletteIndex, BeamFalloff));
+            var vertical = _lightField.RegisterLight(
+                Light.Segment(worldPosition - up, worldPosition + up, BeamHalfWidth, BeamIntensity, paletteIndex, BeamFalloff));
+
+            var seconds = effect != null && effect.Duration > 0f ? effect.Duration : FallbackBeamSeconds;
+            ExpireLights(seconds, horizontal, vertical).Forget();
+        }
+
+        private async UniTaskVoid ExpireLights(float seconds, IDisposable horizontal, IDisposable vertical)
+        {
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(seconds), cancellationToken: _lifetime.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // Run ended mid-beam — the field clears its own lights on dispose; still release below.
+            }
+            finally
+            {
+                horizontal.Dispose();
+                vertical.Dispose();
+            }
         }
 
         // A rainbow holder converts every surviving balloon bordering the blasted cross — the hex

@@ -265,8 +265,9 @@ shared header and sample `…At(worldPos)`.
 no plateau — a plateau's zero-gradient centre made the derived direction read as a ring);
 `SceneLightFieldResources` upgraded to two ping-pong
 RTs + `BlitAndSwap` with fill/accumulate/gradient materials; two new Hidden shaders
-`SceneLightAccumulate` (batched, 32/blit, mirrors `DisturbanceStampBatched`; adds each light's
-per-stamp cone to R soft-clamped `_MaxBoost*(1-exp(-sum/_MaxBoost))`, writes the dominant palette
+`SceneLightAccumulate` (batched, 32/blit, mirrors `DisturbanceStampBatched`; each light is a CAPSULE —
+falloff on aspect-corrected distance to the segment `[start,end]`, so point lights are discs and
+segments are area beams (the laser cross); adds to R soft-clamped `_MaxBoost*(1-exp(-sum/_MaxBoost))`, writes the dominant palette
 index to A, passes GB through) and `SceneLightGradient` (`grad(R)` central difference over
 `_FieldTexelSize`, blends rest GB → gradient dir by `saturate(localR * _DirectionResponse)` —
 presence-weighted, so flat/rest fields keep the global direction); `SceneLightFieldService` upgraded

@@ -141,6 +141,7 @@ namespace BalloonParty.Shared.SceneLight
             // Any change to a live light dirties the field. ReactiveProperty fires its current value on
             // subscribe, so registering also dirties (the first render picks the light up).
             light.Position.Subscribe(_ => _dirty = true).AddTo(subscription);
+            light.EndPosition.Subscribe(_ => _dirty = true).AddTo(subscription);
             light.Radius.Subscribe(_ => _dirty = true).AddTo(subscription);
             light.Intensity.Subscribe(_ => _dirty = true).AddTo(subscription);
             light.FalloffPower.Subscribe(_ => _dirty = true).AddTo(subscription);
@@ -194,8 +195,10 @@ namespace BalloonParty.Shared.SceneLight
                 }
 
                 var light = registration.Light;
-                // Unity implicitly widens the Vector2 UV to a Vector4 (z, w = 0).
-                _batchCenters[count] = _coords.WorldToUV(light.Position.Value);
+                // A stamp is a capsule: xy = start UV, zw = end UV. Point light ⇒ end == start.
+                var startUV = _coords.WorldToUV(light.Position.Value);
+                var endUV = _coords.WorldToUV(light.EndPosition.Value);
+                _batchCenters[count] = new Vector4(startUV.x, startUV.y, endUV.x, endUV.y);
                 _batchRadii[count] = _coords.WorldRadiusToUV(light.Radius.Value);
                 _batchMagnitudes[count] = light.Intensity.Value;
                 _batchFalloffs[count] = light.FalloffPower.Value;

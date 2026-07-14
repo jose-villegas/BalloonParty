@@ -76,18 +76,24 @@ Shader "Hidden/BalloonParty/SceneLightAccumulate"
 
                 for (int s = 0; s < _StampCount; s++)
                 {
-                    float2 center = _StampCenters[s].xy;
+                    float2 a = _StampCenters[s].xy;   // segment start (UV)
+                    float2 b = _StampCenters[s].zw;   // segment end (UV); == a for a point light
                     float  radius = _StampRadii[s];
                     float  magnitude = _StampMagnitudes[s];
 
-                    // Correct the per-axis UV normalisation so the falloff is circular in world space.
-                    float2 toPixel = uv - center;
-                    toPixel.y *= _StampAspect;
-                    float dist = length(toPixel);
+                    // Distance from the pixel to the segment [a, b], aspect-corrected so the metric is
+                    // circular in world space. A point light (a == b) reduces to distance-to-point; a
+                    // segment gives a capsule — full along the axis, decaying to the sides = an area beam.
+                    float2 pa = uv - a;
+                    float2 ba = b - a;
+                    pa.y *= _StampAspect;
+                    ba.y *= _StampAspect;
+                    float h = saturate(dot(pa, ba) / max(dot(ba, ba), 1e-8));
+                    float dist = length(pa - ba * h);
 
-                    // Smooth radial falloff, peak at the centre → 0 at the radius, shaped by the light's
-                    // own falloff exponent (1 = linear cone, higher = more concentrated). No plateau, so R
-                    // (and the direction the gradient pass derives from it) varies continuously.
+                    // Smooth radial falloff, peak on the axis → 0 at the radius, shaped by the light's own
+                    // falloff exponent (1 = linear, higher = more concentrated). No plateau, so R (and the
+                    // direction the gradient pass derives from it) varies continuously.
                     float t = saturate(1.0 - dist / max(radius, 1e-4));
                     float falloff = pow(t, _StampFalloffs[s]);
 

@@ -16,11 +16,16 @@ namespace BalloonParty.Shared.SceneLight
         internal const float DefaultIntensity = 2f;
         internal const float DefaultFalloffPower = 2f;
 
-        // World-space centre of the lit disc.
+        // World-space start of the lit region. For a point light this is the centre; for a segment/area
+        // light (e.g. a laser beam) it's one end — see <see cref="EndPosition"/>.
         internal readonly ReactiveProperty<Vector3> Position;
-        // World-space radius of the lit disc.
+        // World-space far end of the lit region. Equal to <see cref="Position"/> for a point light; set it
+        // apart to make a capsule (segment) light — a long rectangle with the falloff decaying from the
+        // axis out to <see cref="Radius"/> on each side.
+        internal readonly ReactiveProperty<Vector3> EndPosition;
+        // Perpendicular reach: the disc radius for a point light, the beam half-width for a segment.
         internal readonly ReactiveProperty<float> Radius;
-        // Peak magnitude added into the field's R at the centre, before the accumulate cap.
+        // Peak magnitude added into the field's R along the axis, before the accumulate cap.
         internal readonly ReactiveProperty<float> Intensity;
         // Radial falloff exponent (1 - dist/radius)^power: 1 = linear cone, higher = tighter, longer tail.
         internal readonly ReactiveProperty<float> FalloffPower;
@@ -31,10 +36,21 @@ namespace BalloonParty.Shared.SceneLight
             int paletteIndex = -1, float falloffPower = DefaultFalloffPower)
         {
             Position = new ReactiveProperty<Vector3>(position);
+            EndPosition = new ReactiveProperty<Vector3>(position);
             Radius = new ReactiveProperty<float>(radius);
             Intensity = new ReactiveProperty<float>(intensity);
             FalloffPower = new ReactiveProperty<float>(falloffPower);
             PaletteIndex = new ReactiveProperty<int>(paletteIndex);
+        }
+
+        /// <summary>A capsule (segment) light between two world points — a beam with <paramref name="radius"/>
+        /// half-width, the intensity decaying from the axis out to the sides.</summary>
+        internal static Light Segment(Vector3 start, Vector3 end, float radius = DefaultRadius,
+            float intensity = DefaultIntensity, int paletteIndex = -1, float falloffPower = DefaultFalloffPower)
+        {
+            var light = new Light(start, radius, intensity, paletteIndex, falloffPower);
+            light.EndPosition.Value = end;
+            return light;
         }
     }
 }

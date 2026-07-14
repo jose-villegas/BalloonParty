@@ -449,10 +449,10 @@ namespace BalloonParty.Projectile.View
         {
             if (_sparksColorIndex < 0)
             {
-                _sparksColorIndex = _palette.IndexOfColor(GamePalette.SparksColorId);
+                _sparksColorIndex = _palette.PaletteIndexOf(GamePalette.SparksColorId);
             }
 
-            var index = _palette.IndexOfColor(_model.ColorName.Value);
+            var index = _palette.PaletteIndexOf(_model.ColorName.Value);
             return index >= 0 ? index : _sparksColorIndex;
         }
     }

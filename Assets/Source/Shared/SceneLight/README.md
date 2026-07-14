@@ -19,7 +19,7 @@ seam, never a replacement.
 | `SceneLightFieldService` | Plain-C# DI service (`IStartable`/`ITickable`/`IDisposable`), registered in `GameScopeRegistration` next to `DisturbanceFieldService` (Singleton, `AsImplementedInterfaces().AsSelf()`). Builds the field via `SceneLightFieldResources`, sizes it through the shared `DisturbanceFieldCoordinates` (driven by `IGameDisplayConfiguration`), and runs the three-pass pipeline (below) **only on ticks where a registered light changed** — the field is purely local, so it has no dependency on the ambient owner (`SceneLightService`) and ambient tweaks never re-render it. Holds the registry of on lights, subscribing to each one's reactive properties to know when to re-render. Pushes the bounds/texel/palette globals + on-flag; releases the RTs in `Dispose`. API: `RegisterLight(Light) → IDisposable`, `ClearLights()` |
 | `SceneLightFieldResources` | The field's GPU resources — **two** ping-pong RTs (`ARGBHalf` where supported, else `ARGB32`) and the fill / accumulate / gradient materials — kept separate from the service's logic, mirroring `DisturbanceFieldResources`. Owns the `_SceneLightTex` global push, `BlitAndSwap`, the `Fill(magnitude, direction)` and `Gradient()` passes, and exposes `AccumulateMaterial` for the service to upload the light arrays onto |
 | `ISceneLightFieldSettings` / `SceneLightFieldSettings` | Read-only config interface + `ScriptableObject` (in `Configuration/Effects`, mirroring `IDisturbanceFieldSettings`) exposing the field's tuning knobs: `TexelsPerUnit` (RT density), `MaxLights` (per-batch cap, ≤ the accumulate shader's 32), `AccumulationCeiling` (overlap soft-clamp), `DirectionResponse` (how strongly a light's local brightness bends the field direction toward it). Light *falloff shape* is per-light (`Light.FalloffPower`), not here. Injected into the service; registered directly in `GameLifetimeScope` like the other settings SOs — so **create the asset** via `Create ▸ Configuration ▸ Scene Light Field Settings` and assign it on the `GameLifetimeScope` (an unassigned slot NREs on start, same as its siblings). |
-| `Light` | A small reactive model a caller owns: `Position` / `Radius` / `Intensity` / `FalloffPower` (radial falloff exponent) / `PaletteIndex` as `ReactiveProperty`s, with `const` defaults. On/off is `RegisterLight`/dispose; brightness is `Intensity` (the R magnitude); there is no built-in decay. **Not** a config ScriptableObject — nothing to author headless. (Name collides with `UnityEngine.Light` — alias when both are in scope.) |
+| `Light` | A small reactive model a caller owns: `Position` / `EndPosition` / `Radius` (perpendicular half-width) / `Intensity` / `FalloffPower` / `PaletteIndex` as `ReactiveProperty`s, with `const` defaults. `EndPosition == Position` is a point/disc light; set them apart (or use `Light.Segment(start, end, …)`) for a **capsule/area** light — a beam decaying from its axis to the sides (the laser cross is two of these). On/off is `RegisterLight`/dispose; brightness is `Intensity`; no built-in decay. **Not** a config ScriptableObject. (Name collides with `UnityEngine.Light` — alias when both are in scope.) |
 
 ## Channel encoding (single RT)
 
@@ -35,12 +35,14 @@ A render rebuilds the whole field from scratch (there's no in-texture persistenc
 field's diffusion) via a three-pass ping-pong over the two RTs. It runs only when the field is dirty
 (a registered light or the directional owner changed) — see the cadence note below:
 
-1. **Fill** (`Hidden/BalloonParty/SceneLightFieldFill`) — writes the rest state: R = 0 (no local light),
-   GB = the 0.5-biased `_SceneLightDir`, A = 0. This is the read buffer the chain builds on.
+1. **Fill** (`Hidden/BalloonParty/SceneLightFieldFill`) — clears to the constant rest state: R = 0
+   (no local light), GB = 0.5 (neutral), A = 0. This is the read buffer the chain builds on.
 2. **Accumulate** (`Hidden/BalloonParty/SceneLightAccumulate`, batched — up to 32 lights/blit,
-   `Vector4[]`/`float[]` uploads, aspect-corrected radial falloff, `(index+1)/16` palette encoding,
-   mirroring `DisturbanceStampBatched`) — ADDS each registered light's magnitude into R
-   and writes the dominant light's palette index into A. The summed boost is **soft-clamped**:
+   `Vector4[]`/`float[]` uploads, `(index+1)/16` palette encoding, mirroring `DisturbanceStampBatched`) —
+   ADDS each registered light's magnitude into R and writes the dominant light's palette index into A.
+   Each light is a **capsule**: the falloff uses aspect-corrected distance to the segment `[start, end]`
+   (`_StampCenters[s].xy`/`.zw`), so a point light (`start == end`) is a disc and a segment is a beam
+   decaying from its axis — `pow(saturate(1 - dist/radius), FalloffPower)`. The summed boost is **soft-clamped**:
    `boost = _MaxBoost * (1 - exp(-sum / _MaxBoost))`, so overlapping flashes approach the ceiling
    asymptotically instead of blowing out. GB is passed through untouched. **Skipped when no source
    contributes**, and an identity on R/GB/A when `_StampCount = 0`.
@@ -156,6 +158,9 @@ has zero visual effect**: the field OFF is bit-identical to today.
   (direction + magnitude), so lights bend the bounce and shadows. Field-off stays bit-identical.
 - **Palette colour decode (code-complete, editor-verification pending)** — `SceneLightTintAt` decodes the
   A index to a palette colour via the global `_SceneLightPalette` (2×2 decode-blend + intensity-driven soft edge); all consumers inherit it.
+- **Laser cross (done)** — `LaserItemHandler` registers two `Light.Segment` beams (H + V through the
+  cross centre, `RaycastDistance` each way), coloured by the host balloon, for the beam effect's
+  duration — the first **area-light** consumer.
 - **First consumer (done)** — the projectile registers a small `Light` that follows it and takes its
   colour (Sparks while colourless); see `Projectile/README.md`.
 - **Next** — more game-source wiring (balloon pops flashing their colour, laser/lightning as lights).
