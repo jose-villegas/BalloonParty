@@ -299,17 +299,22 @@ now tints its region its palette colour, not just brighter white. `SceneLightFie
 game palette once as a global `_SceneLightPalette[16]` (`IGamePalette`, same slot order the lights encode)
 plus `_SceneLightTexelSize`; `SceneLight.cginc`'s `SceneLightTintAt`/`AtLOD` decode A → index
 (`round(A*16)-1`, -1 = untagged) and return `_SceneLightPalette[index].rgb * magnitude`, else the global
-key-light path (so field-off / untagged is bit-identical). The palette index is a coarse, quantised
-signal, so the colour is reconstructed by a **3×3 joint-trilateral upsample** using the smooth co-located
-R (magnitude) and GB (direction) as the guide — joint bilateral upsampling (Kopf 2007) + edge-directed
-weighting (Li & Orchard 2001), `SceneLightColorTap` in the include. Each tap decodes its index to a colour
-first, then blends weighted by spatial × R-similarity × direction-alignment to the fragment's smooth
-bilinear reference: R sharpens the light-vs-background boundary to the smooth magnitude contour (killing
-the texel-grid blockiness that plain point-sampling showed in PuffCloud), direction separates
-overlapping different-coloured lights. The render-maps preview stays raw/point-sampled by design (a
-field-data inspector). All migrated consumers pick this up through `SceneLightTintAt` — no consumer edits.
-**Open:** in-editor check that a coloured cheat light reads smooth on PuffCloud; tune `SCENE_LIGHT_RANGE_R`
-/ `SCENE_LIGHT_DIR_FLOOR` (or the field's `TexelsPerUnit`) if needed.
+key-light path (so field-off / untagged is bit-identical). Smoothness comes from two things: (1) the
+field runs at `TexelsPerUnit = 32` (far finer than the disturbance field's 8 — affordable because the
+light field is dirty-gated, not ticked every frame), and (2) the colour edge is driven by the SMOOTH
+magnitude — `SceneLightTintAt` blends key→palette by `saturate((R − rest) / SCENE_LIGHT_COLOR_RAMP)`, so a
+light's colour fades in with its (bilinear) brightness rather than snapping at the quantised index texels.
+The colour identity is a plain 2×2 decode-then-blend (`SceneLightPaletteColorAt`). The render-maps preview
+stays raw/point-sampled by design (a field-data inspector). All migrated consumers inherit this through
+`SceneLightTintAt` — no consumer edits.
+
+  *(An edge-preserving joint-trilateral — JBU/NEDI, guided by R + direction — was tried first and
+  reverted: edge preservation hardens a soft glow, and the direction term distorts a single disc via
+  asymmetric weighting near the radial centre. Direction remains available for colour-vs-colour seam
+  separation if overlapping lights need it.)*
+
+**Open:** in-editor check that a coloured cheat light reads smooth on PuffCloud; `SCENE_LIGHT_COLOR_RAMP`
+(soft-edge width) and `TexelsPerUnit` are the tuning knobs.
 
 ## Open questions
 

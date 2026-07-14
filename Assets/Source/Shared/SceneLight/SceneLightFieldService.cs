@@ -27,10 +27,11 @@ namespace BalloonParty.Shared.SceneLight
     /// </summary>
     internal class SceneLightFieldService : IStartable, ITickable, IDisposable
     {
-        // Matches the disturbance field's density so the two fields share a world scale; the light
-        // field is smooth so it could be coarser, but reusing the value keeps DisturbanceFieldCoordinates
-        // producing an identically fitted play-area rectangle.
-        private const int TexelsPerUnit = 8;
+        // Higher density than the disturbance field (8): its palette-colour regions are magnified across
+        // whole sprites, so a coarse grid reads blocky. This field only re-renders when a light or the
+        // owner changes (dirty-gated, unlike the disturbance sim's every-frame tick), so a finer RT is
+        // cheap. Still tiny in absolute terms (~320×512 for a 10×16 world).
+        private const int TexelsPerUnit = 32;
         private const int MaxLights = 32;
 
         // Ceiling on the summed additive boost the accumulate pass can add above the rest magnitude;
