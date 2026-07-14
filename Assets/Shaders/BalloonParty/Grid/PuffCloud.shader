@@ -57,6 +57,10 @@ Shader "BalloonParty/Grid/PuffCloud"
         // noise — a large/low-frequency warp instead snakes the whole beam into ribbons. A no-op where
         // no local light is near (the field is uniform there), so it never touches the rest look. 0 = off.
         _LightWarpAmount    ("Light Field Warp",   Range(0, 1.5))      = 0.35
+        // Ignore local lights tagged with this palette index (0..15) when reading the light field, so
+        // that colour of light leaves the cloud untouched (e.g. the laser telegraph, tagged Unbreakable,
+        // shouldn't light the clouds). -1 = ignore nothing.
+        _IgnoreLightPaletteIndex ("Ignore Light Palette Index (-1 = none)", Float) = -1
         _NormalStrength     ("Normal Strength",    Range(0, 3))        = 1.2
         _NormalEpsilon      ("Normal Sample Offset",Range(0.001, 0.05))= 0.012
 
@@ -154,6 +158,7 @@ Shader "BalloonParty/Grid/PuffCloud"
             float  _LightIntensity;
             float  _LightInfluence;
             float  _LightWarpAmount;
+            float  _IgnoreLightPaletteIndex;
             float  _NormalStrength;
             float  _NormalEpsilon;
 
@@ -273,7 +278,15 @@ Shader "BalloonParty/Grid/PuffCloud"
                 // (opposite the global's upper-left). If that inverted look is the
                 // intended art, negate here (ld = -SceneLightDirectionAt(worldPos)) —
                 // decide in-editor against the cloud drop shadow.
-                float2 ld = SceneLightDirectionAt(worldPos);
+                // Opt a specific stamp colour out of the cloud's lighting: where the local light here is
+                // tagged with the ignored palette index, fall back to the flat ambient globals — the
+                // cloud lights as if that light weren't there (the laser beam, tagged Unbreakable, is the
+                // motivating case). A no-op when the index is -1 or the texel carries a different light.
+                float ignoredIdx = _IgnoreLightPaletteIndex;
+                bool ignoreLocal = ignoredIdx >= 0.0
+                    && abs(SceneLightPaletteIndexAt(worldPos) - ignoredIdx) < 0.5;
+
+                float2 ld = ignoreLocal ? SceneLightDirection() : SceneLightDirectionAt(worldPos);
                 float3 lightVec = normalize(float3(ld, 0.6));
 
                 float NdotL = dot(normal, lightVec);
@@ -287,7 +300,7 @@ Shader "BalloonParty/Grid/PuffCloud"
                 fixed3 lit = lerp(_AmbientColor.rgb, _LightColor.rgb, halfLambert);
                 fixed3 shading = lerp(fixed3(1, 1, 1), lit, _LightIntensity);
 
-                float3 sceneTint = SceneLightTintAt(worldPos);
+                float3 sceneTint = ignoreLocal ? SceneLightTint() : SceneLightTintAt(worldPos);
                 return shading * lerp(float3(1.0, 1.0, 1.0), sceneTint, _LightInfluence);
             }
 
