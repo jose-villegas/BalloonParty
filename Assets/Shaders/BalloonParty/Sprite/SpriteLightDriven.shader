@@ -40,6 +40,11 @@ Shader "BalloonParty/Sprite/LightDriven"
         // Shadow archetype: no light means no shadow — opacity follows the light's intensity
         // (clamped at the authored alpha; a brighter-than-neutral light can't over-darken).
         [ToggleUI] _FadeWithSceneLight ("Fade With Light Intensity (shadows)", Float) = 0
+        // Where the tint colour (above) comes from: Full = the field (ambient + local lights),
+        // Ambient = the global scene light only, Local = only nearby field lights ABOVE the ambient
+        // (neutral until a point/area light is near, then it brightens/tints toward it — the glint
+        // ignores the global light entirely). Only matters when Tint By Scene Light is on.
+        [Enum(Full, 0, Ambient, 1, Local, 2)] _LightMode ("Tint Light Mode", Float) = 0
 
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
@@ -108,6 +113,7 @@ Shader "BalloonParty/Sprite/LightDriven"
             float _OrbitDistance;
             float _TintBySceneLight;
             float _FadeWithSceneLight;
+            float _LightMode;
 
             v2f vert(appdata_t IN)
             {
@@ -125,8 +131,22 @@ Shader "BalloonParty/Sprite/LightDriven"
                 // below moves the vertex) — VTF (target 3.5), the PaintBlob precedent.
                 float2 anchorWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
                 float2 downLight = -SceneLightDirectionAtLOD(anchorWorld);
-                OUT.lightTint  = SceneLightTintAtLOD(anchorWorld);
                 OUT.shadowFade = ShadowLightFadeAtLOD(anchorWorld);
+
+                // Tint source (see _LightMode). Local is neutral (1) until a local light is near, so the
+                // glint keeps its authored look at rest and never reacts to the global ambient.
+                if (_LightMode > 1.5)
+                {
+                    OUT.lightTint = float3(1.0, 1.0, 1.0) + SceneLightLocalAtLOD(anchorWorld);
+                }
+                else if (_LightMode > 0.5)
+                {
+                    OUT.lightTint = SceneLightTint();
+                }
+                else
+                {
+                    OUT.lightTint = SceneLightTintAtLOD(anchorWorld);
+                }
 
                 // Rotation is optional: a baked ground shadow keeps its authored shape (orbit
                 // only) and behaves like a plain sprite here.
