@@ -101,6 +101,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _RimWidth: 0.25
+    - _ShadowDistance: 0.1414
     - _ShadowSoftness: 0.03
     - _SmoothnessTextureChannel: 0
     - _SpecularDotEdge: 0.03

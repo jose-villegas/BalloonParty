@@ -30,7 +30,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 950162251242855815}
+  m_Father: {fileID: 5694091670547352942}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &5954659857181554507
 SpriteRenderer:
@@ -5098,92 +5098,53 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
+      propertyPath: _itemService
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+        type: 3}
       propertyPath: _aboveItemRenderers.Array.size
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: _colorableRenderers.Array.size
-      value: 2
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: _spriteLayerRenderers.Array.size
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
-    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-        type: 3}
-      propertyPath: '_aboveItemRenderers.Array.data[0]'
-      value: 
-      objectReference: {fileID: 5075920835585179258}
-    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-        type: 3}
-      propertyPath: '_aboveItemRenderers.Array.data[1]'
-      value: 
-      objectReference: {fileID: 5075920835585179258}
-    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-        type: 3}
-      propertyPath: '_aboveItemRenderers.Array.data[2]'
-      value: 
-      objectReference: {fileID: 5075920835585179258}
-    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-        type: 3}
-      propertyPath: '_aboveItemRenderers.Array.data[3]'
-      value: 
-      objectReference: {fileID: 5075920835585179258}
-    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-        type: 3}
-      propertyPath: '_colorableRenderers.Array.data[1]'
-      value: 
-      objectReference: {fileID: 8819685137557648389}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_colorableRenderers.Array.data[2]'
       value: 
-      objectReference: {fileID: 6946387119012857206}
-    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-        type: 3}
-      propertyPath: '_colorableRenderers.Array.data[3]'
-      value: 
-      objectReference: {fileID: 6946387119012857206}
-    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-        type: 3}
-      propertyPath: '_spriteLayerRenderers.Array.data[1]'
-      value: 
-      objectReference: {fileID: 3494871512708445869}
+      objectReference: {fileID: 8819685137557648389}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[2]'
       value: 
-      objectReference: {fileID: 5075920835585179258}
+      objectReference: {fileID: 3494871512708445869}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[3]'
       value: 
-      objectReference: {fileID: 5954659857181554507}
+      objectReference: {fileID: 5075920835585179258}
     - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       propertyPath: '_spriteLayerRenderers.Array.data[4]'
       value: 
       objectReference: {fileID: 5954659857181554507}
-    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-        type: 3}
-      propertyPath: '_spriteLayerRenderers.Array.data[5]'
-      value: 
-      objectReference: {fileID: 5954659857181554507}
-    - target: {fileID: 7744549277022113413, guid: 85afc73ba92384dafa9d8a43874d2dd6,
-        type: 3}
-      propertyPath: '_spriteLayerRenderers.Array.data[6]'
-      value: 
-      objectReference: {fileID: 5954659857181554507}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 7558929490291297603, guid: 85afc73ba92384dafa9d8a43874d2dd6, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1788660481030380393, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       insertIndex: 1
       addedObject: {fileID: 2151591683137421605}
-    - targetCorrespondingSourceObject: {fileID: 1788660481030380393, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+    - targetCorrespondingSourceObject: {fileID: 6555064605166848896, guid: 85afc73ba92384dafa9d8a43874d2dd6,
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 5774799692912531822}
@@ -5201,15 +5162,9 @@ SpriteRenderer:
     type: 3}
   m_PrefabInstance: {fileID: 1584491585037960942}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6946387119012857206 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8474570483664470936, guid: 85afc73ba92384dafa9d8a43874d2dd6,
+--- !u!4 &5694091670547352942 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6555064605166848896, guid: 85afc73ba92384dafa9d8a43874d2dd6,
     type: 3}
   m_PrefabInstance: {fileID: 1584491585037960942}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4bb74e7592984fa4b6f46daad3af5297, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: BalloonParty.Runtime::BalloonParty.Balloon.View.SpriteColorableRenderer

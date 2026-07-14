@@ -60,8 +60,8 @@ Material:
     - _Color1: {r: 1, g: 0.412, b: 0.38, a: 1}
     - _Color2: {r: 0.012, g: 0.663, b: 0.957, a: 1}
     - _Color3: {r: 0.612, g: 0.153, b: 0.69, a: 1}
-    - _MaskMax: {r: 0.51, g: 0.23, b: 0, a: 0}
-    - _MaskMin: {r: 0.39, g: 0.165, b: 0, a: 0}
+    - _MaskMax: {r: 0.6, g: 0.1, b: 0, a: 0}
+    - _MaskMin: {r: 0.4, g: 0, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _SphereCenter: {r: 0.5, g: 0.5, b: 0, a: 0}
   m_BuildTextureStacks: []

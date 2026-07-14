@@ -35,7 +35,7 @@ MonoBehaviour:
     _hitVfxOverrides: []
     _hitsToPop: 1
     _scoreValue: 5
-    _itemActivationWeight: 0.3
+    _itemActivationWeight: 0
     _separationBias: 0
     _diagonalColorBias: 1
     _maxBalanceSteps: -1
@@ -50,7 +50,7 @@ MonoBehaviour:
     _hitVfxOverrides: []
     _hitsToPop: 1
     _scoreValue: 10
-    _itemActivationWeight: 0.15
+    _itemActivationWeight: 0
     _separationBias: 0
     _diagonalColorBias: 1
     _maxBalanceSteps: -1
