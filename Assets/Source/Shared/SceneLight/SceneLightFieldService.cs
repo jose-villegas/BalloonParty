@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using BalloonParty.Configuration;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
-using BalloonParty.Display;
 using BalloonParty.Shared.Disturbance;
 using UniRx;
 using UnityEngine;
@@ -13,18 +12,18 @@ namespace BalloonParty.Shared.SceneLight
 {
     /// <summary>
     ///     Owns the scene-light FIELD — a small screen/world-space RT (the disturbance-field
-    ///     architecture applied to light, see @ref plan_lighting "Milestone 3"). A render runs a
-    ///     three-pass ping-pong pipeline: <b>fill</b> to the directional system's rest state,
-    ///     <b>accumulate</b> every registered light's magnitude into R (tagging A with the dominant
-    ///     light's palette index), then <b>gradient</b> to recompute the GB direction from grad(R) — so
-    ///     the direction always points toward the brightest nearby light.
+    ///     architecture applied to light, see @ref plan_lighting "Milestone 3"). The field is purely
+    ///     LOCAL: it carries only what registered lights stamp (R = local boost, GB = local direction
+    ///     weight, A = palette tag). The ambient (direction/colour/intensity) is the global set that
+    ///     <c>SceneLightService</c> publishes and the consumers combine with the field — so this service
+    ///     doesn't touch the ambient owner at all. A render runs a three-pass ping-pong pipeline:
+    ///     <b>fill</b> to the empty rest state, <b>accumulate</b> every registered light's cone into R
+    ///     (tagging A), then <b>gradient</b> to write the local direction into GB.
     ///
     ///     Lights are STATE, not events: a caller <see cref="RegisterLight"/>s a <see cref="Light"/> to
     ///     turn it on and disposes the registration to turn it off. The service watches each light's
-    ///     reactive properties and the directional owner, and only re-renders when something changed —
-    ///     an idle scene costs nothing. With no lights the pipeline reproduces the rest field
-    ///     bit-for-bit, so it stays identical to the directional system; the shared include's helpers
-    ///     fall back to the flat globals whenever <c>_SceneLightFieldOn</c> is 0.
+    ///     reactive properties and only re-renders when one changed — an idle scene costs nothing, and
+    ///     ambient tweaks never re-render it (consumers read those from the globals live).
     /// </summary>
     internal class SceneLightFieldService : IStartable, ITickable, IDisposable
     {
@@ -61,10 +60,8 @@ namespace BalloonParty.Shared.SceneLight
         private readonly float[] _batchColorIndices = new float[ShaderStampCapacity];
 
         private DisturbanceFieldCoordinates _coords;
-        private SceneLightService _sceneLight;
         private int _maxLights;
         private float _stampAspect = 1f;
-        private Vector2 _lastDirection = new(float.NaN, float.NaN);
         private bool _dirty = true;
         private bool _warnedOverflow;
         private bool _fieldOn;
@@ -96,48 +93,28 @@ namespace BalloonParty.Shared.SceneLight
 
             // The palette is static config, so push it once as a global the include decodes A against.
             PushGlobalPalette();
-
-            // The directional owner lives on a scene object (Game.unity's "Lighting"), unreachable from
-            // a shared prefab, so resolve it at runtime — the ScreenSpaceLightService precedent.
-            _sceneLight = UnityEngine.Object.FindFirstObjectByType<SceneLightService>();
-            if (_sceneLight == null)
-            {
-                Debug.LogError("SceneLightFieldService: no SceneLightService in the scene — the light " +
-                               "field stays off (_SceneLightFieldOn = 0); consumers use the flat globals.");
-            }
         }
 
-        // Re-renders only when a registered light changed (the _dirty flag its reactive properties set) or
-        // the owner's direction moved (which the fill bakes into GB as the rest fallback). Ambient
-        // INTENSITY isn't baked into the field anymore — the field carries only the local boost, and
-        // consumers read the ambient magnitude from the global — so intensity tweaks need no re-render.
-        // An idle scene skips the pipeline entirely; the RT keeps its last (still-correct) contents.
+        // Re-renders only when a registered light changed (the _dirty flag its reactive properties set).
+        // The field is purely local, so ambient tweaks (direction/colour/intensity) never touch it —
+        // consumers read those from the globals live. An idle scene skips the pipeline entirely; the RT
+        // keeps its last (still-correct) contents.
         void ITickable.Tick()
         {
-            if (_sceneLight == null || !_resources.IsReady)
-            {
-                return;
-            }
-
-            var direction = _sceneLight.Direction;
-            var ownerChanged = direction != _lastDirection;
-
-            if (_fieldOn && !_dirty && !ownerChanged)
+            if (!_resources.IsReady || (_fieldOn && !_dirty))
             {
                 return;
             }
 
             var count = BuildBatch();
-            _resources.Fill(direction);
+            _resources.Fill();
             RunAccumulate(count);
             PushGradientParams();
             _resources.Gradient();
 
-            _lastDirection = direction;
             _dirty = false;
 
-            // The on-flag is static once the field is live; set it after the first full pipeline render so a
-            // missing owner leaves it at 0 and consumers fall back to the flat globals.
+            // The on-flag is static once the field is live; set it after the first full pipeline render.
             if (!_fieldOn)
             {
                 Shader.SetGlobalFloat(FieldOnId, 1f);

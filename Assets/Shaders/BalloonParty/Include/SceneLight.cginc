@@ -85,12 +85,20 @@ float4 SceneLightFieldSampleLOD(float2 worldPos)
     return tex2Dlod(_SceneLightTex, float4(SceneLightFieldUV(worldPos), 0.0, 0.0));
 }
 
-// Decode a raw field tap. The direction un-biases GB (*2 - 1) and normalizes with the same 1e-4
-// guard as the flat path; a degenerate sample falls back to the flat direction.
+// Decode the toward-light direction from a field tap. The field GB stores (localWeight * localDir), so
+// un-biasing gives that vector: its length is how much the LOCAL light captures the direction here
+// (0 = none), its direction is the local light's. We blend the global (ambient) direction toward the
+// local by that weight — the field carries no ambient, so a rest tap (weight 0) resolves to the global.
 float2 SceneLightFieldDecodeDir(float4 s)
 {
     float2 raw = s.gb * 2.0 - 1.0;
-    return dot(raw, raw) < 1e-4 ? SceneLightDirection() : normalize(raw);
+    float weight = length(raw);
+    if (weight < 1e-4)
+    {
+        return SceneLightDirection();
+    }
+
+    return normalize(lerp(SceneLightDirection(), raw / weight, saturate(weight)));
 }
 
 // Toward-light direction at a world position. Field-aware, with a flat-global fallback when the
