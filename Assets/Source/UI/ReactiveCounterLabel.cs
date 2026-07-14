@@ -1,4 +1,5 @@
 using System;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.UI.Binding;
 using TMPro;
 using UniRx;
@@ -35,8 +36,7 @@ namespace BalloonParty.UI
 
         public void Unbind()
         {
-            _subscription?.Dispose();
-            _subscription = null;
+            LifecycleHelper.DisposeAndClear(ref _subscription);
             _label.text = "--";
         }
     }

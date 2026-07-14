@@ -43,8 +43,7 @@ namespace BalloonParty.Item.Paint
         private List<BlobFlight> _activeFlights;
         private List<ColorableRenderer> _blobPool;
         private Color _color;
-        private IReadOnlyList<Color> _cycleColors;
-        private float _cycles;
+        private ColorCycleState _cycleState;
         private Action<int> _onTargetHit;
         private bool _playing;
         private PoolManager _poolManager;
@@ -100,8 +99,7 @@ namespace BalloonParty.Item.Paint
 
         void ISplashEffect.SetCycleColors(IReadOnlyList<Color> colors, float cycles)
         {
-            _cycleColors = colors;
-            _cycles = Mathf.Max(0f, cycles);
+            _cycleState.Set(colors, cycles);
         }
 
         public override void OnSpawned()
@@ -114,7 +112,7 @@ namespace BalloonParty.Item.Paint
         {
             _playing = false;
             _activeFlights = null;
-            _cycleColors = null;
+            _cycleState.Clear();
             HideAllBlobs();
             base.OnDespawned();
         }
@@ -201,9 +199,9 @@ namespace BalloonParty.Item.Paint
                 flight.Blob.transform.localScale = Vector3.one * snapshot.Scale;
 
                 // Rainbow holder: each blob lerps through the allowed colours over its own flight.
-                if (_cycleColors != null && _cycleColors.Count > 0)
+                if (_cycleState.HasColors)
                 {
-                    flight.Blob.SetColor(ColorCycle.Sample(_cycleColors, Mathf.Repeat(flight.Progress * _cycles, 1f)));
+                    flight.Blob.SetColor(_cycleState.Sample(flight.Progress));
                 }
 
                 if (flight.BlobRenderer != null)

@@ -93,8 +93,7 @@ namespace BalloonParty.UI.Danger
 
         public void Unbind()
         {
-            _subscription?.Dispose();
-            _subscription = null;
+            LifecycleHelper.DisposeAndClear(ref _subscription);
         }
 
         private void ApplyVisual(float level)

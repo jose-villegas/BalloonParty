@@ -30,8 +30,7 @@ namespace BalloonParty.Item.Lightning
         private float _segmentsMultiplier;
         private IReadOnlyList<Vector3> _targetPositions;
 
-        private IReadOnlyList<Color> _glowColors;
-        private float _glowCycles;
+        private ColorCycleState _glowCycleState;
         private Color _glowFallbackColor = Color.white;
         private float _glowStartTime;
         private float _glowTotalDuration;
@@ -45,10 +44,8 @@ namespace BalloonParty.Item.Lightning
 
         public override void OnDespawned()
         {
-            _cts?.Cancel();
-            _cts?.Dispose();
-            _cts = null;
-            _glowColors = null;
+            LifecycleHelper.CancelAndDispose(ref _cts);
+            _glowCycleState.Clear();
             ClearRenderers();
             base.OnDespawned();
         }
@@ -74,8 +71,7 @@ namespace BalloonParty.Item.Lightning
 
         public void SetGlowColors(IReadOnlyList<Color> colors, float cycles)
         {
-            _glowColors = colors;
-            _glowCycles = Mathf.Max(0f, cycles);
+            _glowCycleState.Set(colors, cycles);
         }
 
         /// <summary>
@@ -141,12 +137,12 @@ namespace BalloonParty.Item.Lightning
             }
 
             var color = _glowFallbackColor;
-            if (_glowColors != null && _glowColors.Count > 0)
+            if (_glowCycleState.HasColors)
             {
                 var progress = _glowTotalDuration > 0f
                     ? Mathf.Clamp01((Time.time - _glowStartTime) / _glowTotalDuration)
                     : 0f;
-                color = ColorCycle.Sample(_glowColors, Mathf.Repeat(progress * _glowCycles, 1f));
+                color = _glowCycleState.Sample(progress, _glowFallbackColor);
             }
 
             _glowRenderer.color = (color * _glowColorIntensity).WithAlpha(_glowRenderer.color.a);

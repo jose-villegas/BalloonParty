@@ -1,5 +1,6 @@
 using System;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using DG.Tweening;
 using NaughtyAttributes;
@@ -182,8 +183,7 @@ namespace BalloonParty.UI.Score
 
         public void DisableMoveTween()
         {
-            _moveTween?.Kill();
-            _moveTween = null;
+            LifecycleHelper.KillAndClear(ref _moveTween);
         }
 
         // Shared by the plain flight and the burst's second leg.

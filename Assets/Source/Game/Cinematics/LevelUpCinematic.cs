@@ -5,6 +5,7 @@ using BalloonParty.Game.Health;
 using BalloonParty.Game.Level;
 using BalloonParty.Game.Score;
 using BalloonParty.Shared;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.GameState;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pause;
@@ -318,8 +319,7 @@ namespace BalloonParty.Game.Cinematics
 
         private void DisposeSessionSubscription()
         {
-            _sessionSubscription?.Dispose();
-            _sessionSubscription = null;
+            LifecycleHelper.DisposeAndClear(ref _sessionSubscription);
         }
     }
 }

@@ -75,8 +75,7 @@ namespace BalloonParty.Balloon.Type
             // it when this bind's disposables clear (despawn/rebind) so it can't tick on a pooled instance.
             disposables.Add(Disposable.Create(() =>
             {
-                _damageTween?.Kill();
-                _damageTween = null;
+                LifecycleHelper.KillAndClear(ref _damageTween);
             }));
         }
 

@@ -201,8 +201,7 @@ namespace BalloonParty.Game.Cinematics
 
         private void KillTimeScaleTween()
         {
-            _timeScaleTween?.Kill();
-            _timeScaleTween = null;
+            LifecycleHelper.KillAndClear(ref _timeScaleTween);
         }
     }
 }

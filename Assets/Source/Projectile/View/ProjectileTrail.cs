@@ -1,4 +1,5 @@
 using System.Threading;
+using BalloonParty.Shared.Extensions;
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
@@ -34,9 +35,7 @@ namespace BalloonParty.Projectile.View
 
         public void Disable()
         {
-            _cts?.Cancel();
-            _cts?.Dispose();
-            _cts = null;
+            LifecycleHelper.CancelAndDispose(ref _cts);
             _trail.emitting = false;
             _trail.Clear();
         }

@@ -100,8 +100,7 @@ namespace BalloonParty.Balloon.Controller
         // playPopVfx is true for the level-transition Ascent, false for a silent run-restart clear.
         internal void HandleBoardClear(bool playPopVfx)
         {
-            _itemActivatedSubscription?.Dispose();
-            _itemActivatedSubscription = null;
+            LifecycleHelper.DisposeAndClear(ref _itemActivatedSubscription);
 
             if (playPopVfx)
             {
@@ -128,8 +127,7 @@ namespace BalloonParty.Balloon.Controller
         // animates the returned view, then hands it back to the pool via ReturnToPool.
         internal ISlotActorView DetachForOutgoing(Transform outgoingRoot, float exitDrop)
         {
-            _itemActivatedSubscription?.Dispose();
-            _itemActivatedSubscription = null;
+            LifecycleHelper.DisposeAndClear(ref _itemActivatedSubscription);
 
             // A detached balloon is out of play — free its type count NOW (nulled so the eventual pool
             // return can't double-release), or the next level's MaxCount picks see phantom occupants.
@@ -216,8 +214,7 @@ namespace BalloonParty.Balloon.Controller
                 return;
             }
 
-            _itemActivatedSubscription?.Dispose();
-            _itemActivatedSubscription = null;
+            LifecycleHelper.DisposeAndClear(ref _itemActivatedSubscription);
             _registry.Unregister(_model);
             _onReturned?.Invoke();
             _poolManager.Return(_poolKey, _view);

@@ -123,6 +123,10 @@ namespace BalloonParty.Projectile.View
                 // (kept in step by UpdateGlowColor).
                 _light = new Light(transform.position, _lightRadius, _lightIntensity, LightColorIndex());
                 _lightRegistration = _lightField.RegisterLight(_light);
+
+                // Fade the glow in on fire, even before a colour hit — colourless shots use the
+                // Sparks palette tint so the glow is always visible while the shot is in flight.
+                ActivateInitialGlow();
             }
 
             RevealShieldOnFirstFreeFrame();
@@ -176,8 +180,7 @@ namespace BalloonParty.Projectile.View
             _hasFlown = false;
             _rainbowGlowActive = false;
             _rainbowGlowTimer = 0f;
-            _deflectedSubscription?.Dispose();
-            _deflectedSubscription = null;
+            LifecycleHelper.DisposeAndClear(ref _deflectedSubscription);
 
             // Mirror OnDespawned's cleanup: a pooled instance must never inherit a still-running
             // disappear tween from its previous life — that would scale the fresh projectile to zero
@@ -193,11 +196,9 @@ namespace BalloonParty.Projectile.View
 
         public void OnDespawned()
         {
-            _lightRegistration?.Dispose();
-            _lightRegistration = null;
+            LifecycleHelper.DisposeAndClear(ref _lightRegistration);
             _light = null;
-            _deflectedSubscription?.Dispose();
-            _deflectedSubscription = null;
+            LifecycleHelper.DisposeAndClear(ref _deflectedSubscription);
             _model = null;
             _shieldShown = false;
             _disappearing = false;
@@ -419,6 +420,14 @@ namespace BalloonParty.Projectile.View
             ApplyGlow(ColorCycle.Sample(_paletteColors, t).WithAlpha(_glowAlpha));
         }
 
+        private void ActivateInitialGlow()
+        {
+            var target = string.IsNullOrEmpty(_model.ColorName.Value)
+                ? _palette.GetColor(GamePalette.SparksColorId).WithAlpha(_glowAlpha)
+                : _palette.GetColor(_model.ColorName.Value).WithAlpha(_glowAlpha);
+            TweenGlow(target);
+        }
+
         private void UpdateGlowColor()
         {
             // The scene light follows the shot's colour too (colourless → Sparks).
@@ -427,9 +436,9 @@ namespace BalloonParty.Projectile.View
                 _light.PaletteIndex.Value = LightColorIndex();
             }
 
-            // Washed back to colourless (e.g. by soap) fades the glow out; otherwise crossfade to the colour.
+            // Colourless shots fall back to the Sparks palette tint so the glow stays visible.
             var target = string.IsNullOrEmpty(_model.ColorName.Value)
-                ? new Color(1f, 1f, 1f, 0f)
+                ? _palette.GetColor(GamePalette.SparksColorId).WithAlpha(_glowAlpha)
                 : _palette.GetColor(_model.ColorName.Value).WithAlpha(_glowAlpha);
             TweenGlow(target);
         }
@@ -439,18 +448,7 @@ namespace BalloonParty.Projectile.View
         private void ApplyGlow(Color color)
         {
             _glowColor = color;
-            if (_glowRenderers == null)
-            {
-                return;
-            }
-
-            foreach (var renderer in _glowRenderers)
-            {
-                if (renderer != null)
-                {
-                    renderer.SetColor(color);
-                }
-            }
+            _glowRenderers.SetColor(color);
         }
 
         private void TweenGlow(Color target)
@@ -461,8 +459,7 @@ namespace BalloonParty.Projectile.View
 
         private void KillGlowTween()
         {
-            _glowTween?.Kill();
-            _glowTween = null;
+            LifecycleHelper.KillAndClear(ref _glowTween);
         }
 
         // The palette index for the shot's light: its current colour, or the Sparks tint when colourless.

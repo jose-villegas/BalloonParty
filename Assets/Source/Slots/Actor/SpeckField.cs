@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared.Disturbance;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Capabilities;
@@ -212,10 +213,8 @@ namespace BalloonParty.Slots.Actor
 
         private void OnDestroy()
         {
-            _hitSubscription?.Dispose();
-            _hitSubscription = null;
-            _requestSubscription?.Dispose();
-            _requestSubscription = null;
+            LifecycleHelper.DisposeAndClear(ref _hitSubscription);
+            LifecycleHelper.DisposeAndClear(ref _requestSubscription);
             _speckBuffer?.Release();
             _speckBuffer = null;
             if (_mesh != null)

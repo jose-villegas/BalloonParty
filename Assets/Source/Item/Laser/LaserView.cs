@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Rendering;
 using UnityEngine;
@@ -17,23 +18,22 @@ namespace BalloonParty.Item.Laser
     {
         [SerializeField] private ColorableRenderer[] _colorableRenderers;
 
-        private IReadOnlyList<Color> _cycleColors;
-        private float _cycles;
+        private ColorCycleState _cycleState;
 
         protected override void Update()
         {
             base.Update();
 
-            if (_cycleColors != null && _cycleColors.Count > 0)
+            if (_cycleState.HasColors)
             {
-                ApplyColor(ColorCycle.Sample(_cycleColors, Mathf.Repeat(AnimationProgress * _cycles, 1f)));
+                ApplyColor(_cycleState.Sample(AnimationProgress));
             }
         }
 
         public override void OnDespawned()
         {
             base.OnDespawned();
-            _cycleColors = null;
+            _cycleState.Clear();
         }
 
         public override void Play(Vector3 position, Color tint, Action onComplete = null)
@@ -45,25 +45,13 @@ namespace BalloonParty.Item.Laser
         // Rainbow holder: lerp the wired renderers through these colours, cycles loops over the anim.
         public void SetCycleColors(IReadOnlyList<Color> colors, float cycles)
         {
-            _cycleColors = colors;
-            _cycles = Mathf.Max(0f, cycles);
+            _cycleState.Set(colors, cycles);
         }
 
         // Separate from Play so the editor preview can recolour without driving the animation lifecycle.
         public void ApplyColor(Color color)
         {
-            if (_colorableRenderers == null)
-            {
-                return;
-            }
-
-            foreach (var colorable in _colorableRenderers)
-            {
-                if (colorable != null)
-                {
-                    colorable.SetColor(color);
-                }
-            }
+            _colorableRenderers.SetColor(color);
         }
     }
 }

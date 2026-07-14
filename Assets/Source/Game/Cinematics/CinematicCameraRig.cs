@@ -140,8 +140,7 @@ namespace BalloonParty.Game.Cinematics
 
         public void KillTween()
         {
-            _tween?.Kill();
-            _tween = null;
+            LifecycleHelper.KillAndClear(ref _tween);
         }
 
         public void EnableOrtho(bool enabled)
