@@ -98,9 +98,10 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
             CGPROGRAM
             #pragma vertex   vert
             #pragma fragment frag
-            #pragma target   2.0
+            #pragma target   3.5
 
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
             #include "UnityUI.cginc"
 
             #pragma multi_compile __ UNITY_UI_CLIP_RECT
@@ -121,6 +122,10 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
                 fixed4 color         : COLOR;
                 float2 uv            : TEXCOORD0;
                 float4 worldPosition : TEXCOORD1;
+                // Sampled ONCE per sprite (its own centre, vertex stage) so the shadow direction
+                // stays coherent across the whole quad — the PaintBlob pattern.
+                float2 lightDir      : TEXCOORD2;
+                float  shadowFade    : TEXCOORD3;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
@@ -136,32 +141,6 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
             float     _ShadowSoftness;
             float     _SpriteScale;
             float4    _ClipRect;
-
-            // Global shader property — set by SceneLightService, not in Properties so
-            // material values can't mask it. Points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left. Colour's alpha is the "owner has
-            // pushed" validity flag (see ShadowLightFade).
-            float4 _SceneLightDir;
-            float4 _SceneLightColor;
-            float  _SceneLightIntensity;
-
-            // Guarded read of the scene light (see SceneLightService): normalized, toward
-            // the light; falls back to the canonical direction if the global hasn't been
-            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
-            float2 SceneLightDirection()
-            {
-                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-                    ? float2(-0.707, 0.707)
-                    : _SceneLightDir.xy;
-                return normalize(raw);
-            }
-
-            // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
-            // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
-            float ShadowLightFade()
-            {
-                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
-            }
 
             #ifdef UNITY_INSTANCING_ENABLED
                 UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
@@ -183,6 +162,12 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
                 OUT.vertex        = UnityObjectToClipPos(IN.vertex);
                 OUT.uv            = TRANSFORM_TEX(IN.uv, _MainTex);
                 OUT.color         = IN.color * _Color * _RendererColor;
+
+                // Sprite centre in world space (VTF, target 3.5) — one coherent light
+                // reading for the whole shadow instead of bending per-fragment.
+                float2 spriteCenterWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
+                OUT.lightDir   = SceneLightDirectionAtLOD(spriteCenterWorld);
+                OUT.shadowFade = ShadowLightFadeAtLOD(spriteCenterWorld);
                 return OUT;
             }
 
@@ -254,7 +239,7 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
                 // distance); the default keeps the hand-authored offset. Applied in local
                 // sprite UV — no vertex world-rotation capture (accepted; sway is small).
                 float2 shadowOffset = _ShadowFromSceneLight > 0.5
-                    ? -SceneLightDirection() * _ShadowDistance
+                    ? -IN.lightDir * _ShadowDistance
                     : _ShadowOffset;
                 float2 shadowUV = spriteUV - shadowOffset;
 
@@ -266,7 +251,7 @@ Shader "BalloonParty/Sprite/SpriteShadowComposite"
                 shadowAlpha *= IN.color.a * _ShadowColor.a;
                 // Only opted-in (scene-light-following) shadows fade with light intensity —
                 // expressive/UI shadows stay authored regardless of the scene light.
-                shadowAlpha *= _ShadowFromSceneLight > 0.5 ? ShadowLightFade() : 1.0;
+                shadowAlpha *= _ShadowFromSceneLight > 0.5 ? IN.shadowFade : 1.0;
 
                 // Shadow RGB tinted by the global tint (mirrors the sprite behaviour)
                 fixed4 shadow;

@@ -65,9 +65,11 @@ Shader "BalloonParty/Sprite/LightDriven"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma target 3.5
             #pragma multi_compile _ PIXELSNAP_ON
             #pragma multi_compile_instancing
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             struct appdata_t
             {
@@ -79,9 +81,14 @@ Shader "BalloonParty/Sprite/LightDriven"
 
             struct v2f
             {
-                float4 vertex   : SV_POSITION;
-                fixed4 color    : COLOR;
-                float2 texcoord : TEXCOORD0;
+                float4 vertex     : SV_POSITION;
+                fixed4 color      : COLOR;
+                float2 texcoord   : TEXCOORD0;
+                // Sampled ONCE per sprite (its own anchor, vertex stage, BEFORE the
+                // orbit/rotation offset below) so the fragment's tint/fade reads the same
+                // light as the placement — the PaintBlob pattern.
+                float3 lightTint  : TEXCOORD1;
+                float  shadowFade : TEXCOORD2;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -102,34 +109,6 @@ Shader "BalloonParty/Sprite/LightDriven"
             float _TintBySceneLight;
             float _FadeWithSceneLight;
 
-            // Global shader properties — set by SceneLightService, not in Properties so
-            // material values can't mask them. Dir points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left. Colour's alpha is the "owner has
-            // pushed" validity flag (see SceneLightTint).
-            float4 _SceneLightDir;
-            float4 _SceneLightColor;
-            float  _SceneLightIntensity;
-
-            // Guarded read of the scene light (see SceneLightService): normalized, toward
-            // the light; falls back to the canonical direction if the global hasn't been
-            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
-            float2 SceneLightDirection()
-            {
-                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-                    ? float2(-0.707, 0.707)
-                    : _SceneLightDir.xy;
-                return normalize(raw);
-            }
-
-            // The light's colour × intensity — multiplies into the authored sprite (glints).
-            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
-            float3 SceneLightTint()
-            {
-                return _SceneLightColor.a > 0.5
-                    ? _SceneLightColor.rgb * _SceneLightIntensity
-                    : float3(1.0, 1.0, 1.0);
-            }
-
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
@@ -141,7 +120,13 @@ Shader "BalloonParty/Sprite/LightDriven"
                 // rotation, from its world X axis — uniform scale assumed, see PaintBlob).
                 float2 worldX = float2(unity_ObjectToWorld._m00, unity_ObjectToWorld._m10);
                 float objAngle = (dot(worldX, worldX) > 1e-8) ? atan2(worldX.y, worldX.x) : 0.0;
-                float2 downLight = -SceneLightDirection();
+
+                // Sampled at the object's own anchor (its pivot, BEFORE the orbit offset
+                // below moves the vertex) — VTF (target 3.5), the PaintBlob precedent.
+                float2 anchorWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
+                float2 downLight = -SceneLightDirectionAtLOD(anchorWorld);
+                OUT.lightTint  = SceneLightTintAtLOD(anchorWorld);
+                OUT.shadowFade = ShadowLightFadeAtLOD(anchorWorld);
 
                 // Rotation is optional: a baked ground shadow keeps its authored shape (orbit
                 // only) and behaves like a plain sprite here.
@@ -181,14 +166,15 @@ Shader "BalloonParty/Sprite/LightDriven"
                 // Glint archetype: the sprite is reflected light — take the light's colour × intensity.
                 if (_TintBySceneLight > 0.5)
                 {
-                    c.rgb *= SceneLightTint();
+                    c.rgb *= IN.lightTint;
                 }
 
                 // Shadow archetype: no light, no shadow — opacity follows intensity, clamped at the
-                // authored alpha so a hotter-than-neutral light can't over-darken.
-                if (_FadeWithSceneLight > 0.5 && _SceneLightColor.a > 0.5)
+                // authored alpha so a hotter-than-neutral light can't over-darken. IN.shadowFade is
+                // already 1.0 when the owner hasn't pushed yet, so no separate validity guard needed.
+                if (_FadeWithSceneLight > 0.5)
                 {
-                    c.a *= saturate(_SceneLightIntensity);
+                    c.a *= IN.shadowFade;
                 }
 
                 c.rgb *= c.a;

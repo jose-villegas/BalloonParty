@@ -13,7 +13,8 @@ namespace BalloonParty.Display
         private const int TapCount = 8;
         private const float OverlayDistance = 5f;
 
-        private static readonly int TapStepUvId = Shader.PropertyToID("_TapStepUV");
+        private static readonly int TapStepScaleId = Shader.PropertyToID("_TapStepScale");
+        private static readonly int TapAspectId = Shader.PropertyToID("_TapAspect");
         private static readonly int TapDecayId = Shader.PropertyToID("_TapDecay");
         private static readonly int TapStartId = Shader.PropertyToID("_TapStart");
         private static readonly int HistoryTexId = Shader.PropertyToID("_HistoryTex");
@@ -22,6 +23,7 @@ namespace BalloonParty.Display
         private static readonly int ShadowTintId = Shader.PropertyToID("_ShadowTint");
         private static readonly int ShadowStrengthId = Shader.PropertyToID("_ShadowStrength");
         private static readonly int BounceStrengthId = Shader.PropertyToID("_BounceStrength");
+        private static readonly int MagnitudeRefId = Shader.PropertyToID("_MagnitudeRef");
         private static readonly int AmbientColorId = Shader.PropertyToID("_AmbientColor");
 
         [Tooltip("Assign explicitly — device builds strip shaders that are only " +
@@ -255,24 +257,15 @@ namespace BalloonParty.Display
         // Pushed every frame so the knobs stay live-tunable in play mode.
         private void PushParameters()
         {
-            // Missing on the not-yet-retrofitted Main Camera prefab (see Awake) — skip the
-            // tap-step update rather than NRE; the rest of the parameters are still live-tunable.
-            if (_sceneLight != null)
-            {
-                var worldHeight = _camera.orthographicSize * 2f;
-                var worldWidth = worldHeight * _camera.aspect;
-
-                // Owner is toward-the-light; the smear marches down-light, hence the negation.
-                var direction = -_sceneLight.Direction;
-
-                // Shader marches +step for reflection and -step for shadow; see shader header.
-                var stepWorld = _smearDistance / TapCount;
-                var stepUv = new Vector4(
-                    direction.x * stepWorld / worldWidth,
-                    direction.y * stepWorld / worldHeight);
-
-                _smearMaterial.SetVector(TapStepUvId, stepUv);
-            }
+            // The smear now derives its march direction PER-FRAGMENT from the light field, so
+            // the service pushes only the scalars that turn a unit direction into a UV step:
+            // the world→UV scale (tap distance over view height) and the aspect that corrects
+            // X. Camera-only — no owner read here now that direction comes from the field; the
+            // shader's field-off fallback reads the flat global direction the owner publishes.
+            var worldHeight = _camera.orthographicSize * 2f;
+            var stepWorld = _smearDistance / TapCount;
+            _smearMaterial.SetFloat(TapStepScaleId, stepWorld / worldHeight);
+            _smearMaterial.SetFloat(TapAspectId, _camera.aspect);
 
             _smearMaterial.SetFloat(TapDecayId, _tapDecay);
             _smearMaterial.SetFloat(TapStartId, _tapStart);
@@ -280,11 +273,15 @@ namespace BalloonParty.Display
             _overlayMaterial.SetColor(ShadowTintId, _shadowTint);
             _overlayMaterial.SetFloat(ShadowStrengthId, _shadowStrength);
 
-            // Bounce light is the scene's albedo re-lit by the scene light, so it scales with the
-            // light's intensity (neutral at 1). Shadow strength deliberately does NOT — it stays an
-            // independent art knob (an open call in plan_lighting's backlog).
-            var intensity = _sceneLight != null ? _sceneLight.Intensity : 1f;
-            _overlayMaterial.SetFloat(BounceStrengthId, _bounceStrength * intensity);
+            // Intensity coupling now lives per-fragment in the overlay via the field magnitude,
+            // not here: bounce scales by the absolute local magnitude (field-off that equals
+            // the global intensity, reproducing the old "_bounceStrength * intensity"), so we
+            // push _bounceStrength RAW to avoid double-applying intensity. The reference feeds
+            // the overlay's relative shadow coupling — field-off (magnitude == reference) it
+            // resolves to 1, leaving the authored shadow strength bit-identical to today.
+            _overlayMaterial.SetFloat(BounceStrengthId, _bounceStrength);
+            _overlayMaterial.SetFloat(
+                MagnitudeRefId, _sceneLight != null ? Mathf.Max(_sceneLight.Intensity, 1e-4f) : 1f);
 
             // Measured against the capture's clear color so open sky nets to neutral.
             _overlayMaterial.SetColor(AmbientColorId, _camera.backgroundColor);

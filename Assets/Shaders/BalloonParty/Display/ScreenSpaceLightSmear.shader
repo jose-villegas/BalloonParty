@@ -5,13 +5,16 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
     // channel is sprite coverage (the capture camera clears with alpha 0).
     //
     // Pass 0 — directional smear, two opposite marches per pixel (8 taps each, with
-    // exponential decay):
-    //   rgb (reflection/bleed) marches AWAY from the light, i.e. along the light-travel
-    //     direction — the composited scene color down-light of this pixel (sky included,
-    //     not premultiplied by coverage); the overlay subtracts the ambient sky so only
-    //     bright/dark deviations bleed.
-    //   a (shadow) marches AWAY from the light — an occluder sitting between this
-    //     pixel and the source darkens it, so the shadow shows up on the far side.
+    // exponential decay). The march direction is PER-FRAGMENT: each pixel maps its
+    // capture UV to world through the field bounds and reads the local toward-light
+    // direction from the light field (SceneLight.cginc), so a point/area light bends
+    // the bleed and shadows around it. Field-off the field returns the flat global
+    // direction everywhere and this reduces to the old single-direction smear.
+    //   rgb (reflection/bleed) marches DOWN-light — the composited scene color
+    //     down-light of this pixel (sky included, not premultiplied by coverage); the
+    //     overlay subtracts the ambient sky so only bright/dark deviations bleed.
+    //   a (shadow) marches TOWARD the light — an occluder sitting between this pixel
+    //     and the source darkens it, so the shadow shows up on the far side.
     // The two must march opposite ways: a shadow is cast onto the side of an object
     // away from the light, while its glow bleeds onto the side facing the light —
     // marching both the same way stacks them on top of each other instead.
@@ -37,11 +40,13 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
             #pragma vertex vert_img
             #pragma fragment frag
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             #define TAP_COUNT 8
 
             sampler2D _MainTex;
-            float4 _TapStepUV;
+            float  _TapStepScale;
+            float  _TapAspect;
             float  _TapDecay;
             float  _TapStart;
 
@@ -54,6 +59,17 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 // Coverage at this pixel — casters have ~1, open ground/sky ~0.
                 float ownCoverage = tex2D(_MainTex, IN.uv).a;
 
+                // Per-fragment march direction from the light field: map this pixel's capture
+                // UV to world through the field bounds, read the toward-light direction there,
+                // and march DOWN-light (negated). The unit direction becomes a UV step via the
+                // service-pushed world→UV scale, with the aspect correcting X for a non-square
+                // view. Field-off, the helper returns the flat global direction everywhere and
+                // the scale/aspect are uniform, so stepUv collapses to the single global step
+                // the service used to push — bit-identical to the old fixed march.
+                float2 worldPos = _SceneLightFieldBoundsMin.xy + IN.uv * _SceneLightFieldBoundsSize.xy;
+                float2 downLight = -SceneLightDirectionAt(worldPos);
+                float2 stepUv = float2(downLight.x / _TapAspect, downLight.y) * _TapStepScale;
+
                 [unroll]
                 for (int t = 0; t < TAP_COUNT; t++)
                 {
@@ -63,18 +79,19 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                     float w = pow(_TapDecay, t);
                     weightSum += w;
 
-                    // Bounce = the composited scene color toward the light (sprites are
-                    // already blended over the sky clear in the capture, so this is "what
-                    // the scene looks like up-light"). NOT premultiplied by coverage —
+                    // Bounce = the composited scene color down-light (sprites are already
+                    // blended over the sky clear in the capture, so this is "what the scene
+                    // looks like down-light of here"). NOT premultiplied by coverage —
                     // premultiplying zeroed the sky to black, which both read wrong in the
                     // buffer and, with nothing to dilute it, dumped a lone nearby sprite's
                     // full color onto its neighbours. The overlay subtracts the ambient sky
                     // so flat areas net to neutral; deviations (bright sprite / dark sprite)
-                    // are what actually bleed.
-                    float4 lit = tex2D(_MainTex, IN.uv + _TapStepUV.xy * offset);
+                    // are what actually bleed. Shadow marches the opposite way (toward the
+                    // light): an occluder between here and the source darkens the far side.
+                    float4 lit = tex2D(_MainTex, IN.uv + stepUv * offset);
                     bounceAcc += lit.rgb * w;
 
-                    float4 occluder = tex2D(_MainTex, IN.uv - _TapStepUV.xy * offset);
+                    float4 occluder = tex2D(_MainTex, IN.uv - stepUv * offset);
                     shadowAcc += occluder.a * w;
                 }
 

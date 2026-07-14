@@ -107,10 +107,11 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
             CGPROGRAM
             #pragma vertex   vert
             #pragma fragment frag
-            #pragma target 3.0
+            #pragma target 3.5
             #pragma shader_feature _SHADOW_ON
             #pragma multi_compile_instancing
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             struct appdata_t
             {
@@ -125,6 +126,13 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 float4 vertex   : SV_POSITION;
                 fixed4 color    : COLOR;
                 float2 texcoord : TEXCOORD0;
+                // Sampled ONCE per cluster (at its own centre, vertex stage) so light stays
+                // coherent across the whole cluster — no bending across a single quad.
+                float2 lightDir  : TEXCOORD1;
+                float3 lightTint : TEXCOORD2;
+                #ifdef _SHADOW_ON
+                float  shadowFade : TEXCOORD3;
+                #endif
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -163,17 +171,6 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
             float  _BreatheSpeed;
             float  _Rotation;
             float  _RotationSpeed;
-
-            // Global shader property — set by SceneLightService, not in Properties so
-            // material values can't mask it. Points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left.
-            float4 _SceneLightDir;
-
-            // Set globally by SceneLightService; kept out of Properties so no
-            // material value can shadow the scene-wide light. Colour's alpha is the
-            // "owner has pushed" validity flag (see SceneLightTint).
-            float4 _SceneLightColor;
-            float  _SceneLightIntensity;
 
             #ifdef _SHADOW_ON
             fixed4 _ShadowColor;
@@ -273,32 +270,6 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 return v * lerp(K.xxx, saturate(p - K.xxx), s);
             }
 
-            // Guarded read of the scene light (see SceneLightService): normalized, toward
-            // the light; falls back to the canonical direction if the global hasn't been
-            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
-            float2 SceneLightDirection()
-            {
-                return dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-                    ? float2(-0.707, 0.707)
-                    : _SceneLightDir.xy;
-            }
-
-            // The light's colour × intensity — multiplies into the authored specular response.
-            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
-            float3 SceneLightTint()
-            {
-                return _SceneLightColor.a > 0.5
-                    ? _SceneLightColor.rgb * _SceneLightIntensity
-                    : float3(1.0, 1.0, 1.0);
-            }
-
-            // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
-            // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
-            float ShadowLightFade()
-            {
-                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
-            }
-
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
@@ -307,6 +278,17 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 OUT.vertex   = UnityObjectToClipPos(IN.vertex);
                 OUT.texcoord = IN.texcoord;
                 OUT.color    = IN.color * _Color * _RendererColor;
+
+                // Sample the light field ONCE per cluster, at the cluster's own centre
+                // (the object origin) — VTF (target 3.5), the PaintBlob precedent. Keeps
+                // the whole cluster lit from one coherent direction instead of bending
+                // across it per-fragment.
+                float2 clusterCenterWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
+                OUT.lightDir  = SceneLightDirectionAtLOD(clusterCenterWorld);
+                OUT.lightTint = SceneLightTintAtLOD(clusterCenterWorld);
+                #ifdef _SHADOW_ON
+                OUT.shadowFade = ShadowLightFadeAtLOD(clusterCenterWorld);
+                #endif
                 return OUT;
             }
 
@@ -368,7 +350,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 // Direction is derived from the scene light (-L); only the distance
                 // stays authored — rotating the light moves the shadow together with
                 // every other light-derived effect.
-                float2 shadowOffset = -SceneLightDirection() * _ShadowDistance;
+                float2 shadowOffset = -IN.lightDir * _ShadowDistance;
                 float2 sRaw = uvRaw - shadowOffset;
                 float2 sUV  = float2(sRaw.x * cosR - sRaw.y * sinR,
                                      sRaw.x * sinR + sRaw.y * cosR);
@@ -400,7 +382,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
 
                 float shadowAlpha = saturate(shadowFilm + shadowSeam)
                                   * _ShadowColor.a * IN.color.a;
-                shadowAlpha *= ShadowLightFade();
+                shadowAlpha *= IN.shadowFade;
 
                 // Discard only when outside BOTH the main cluster and the shadow.
                 if (bestSdf < 0.0 && shadowAlpha < 0.001) discard;
@@ -462,7 +444,7 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
                 // it back into unrotated space before adding the fixed offset.
                 float2 ownCentreUnrot = float2( ownCentre.x * cosR + ownCentre.y * sinR,
                                                -ownCentre.x * sinR + ownCentre.y * cosR);
-                float2 specPos  = ownCentreUnrot + SceneLightDirection() * _SpecDistance;
+                float2 specPos  = ownCentreUnrot + IN.lightDir * _SpecDistance;
                 float  specDist = length(uvRaw - specPos);
                 float  specMask = pow(saturate(1.0 - specDist / max(_SpecSize, 0.001)),
                                       _SpecSharpness);
@@ -472,14 +454,14 @@ Shader "BalloonParty/Balloon/SoapBubbleCluster"
 
                 // Diffuse term: the bubble body (film + interior) is lit by the scene light —
                 // same response as Sprite/Diffuse. The specular below carries its own tint.
-                col *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
+                col *= lerp(float3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence);
 
                 // Specular sits inside the bubble where filmMask = 0, so it
                 // must NOT be gated by filmMask.  We also boost alpha at the
                 // specular position so it punches through the transparent interior.
                 // Specular response = authored colour × the scene light's tint (a dim/tinted
                 // light dims/tints the glint); opacity below is unaffected — it's not colour.
-                col    = lerp(col, _SpecColor.rgb * SceneLightTint(), specMask * _SpecColor.a);
+                col    = lerp(col, _SpecColor.rgb * IN.lightTint, specMask * _SpecColor.a);
 
                 float alpha = lerp(_InteriorAlpha, _FilmAlpha, filmMask);
                 alpha += junctionLine * _JunctionLineAlpha  * (1.0 - filmMask);

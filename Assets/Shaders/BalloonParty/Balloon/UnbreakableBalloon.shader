@@ -105,11 +105,12 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             CGPROGRAM
             #pragma vertex   vert
             #pragma fragment frag
-            #pragma target   3.0
+            #pragma target   3.5
             #pragma multi_compile _ PIXELSNAP_ON
             #pragma multi_compile_instancing
 
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             struct Attributes
             {
@@ -125,6 +126,12 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 fixed4 color      : COLOR;
                 float2 uv         : TEXCOORD0;
                 float2 worldPos   : TEXCOORD2;
+                // Sampled ONCE per composed sphere, at the shared _SphereCenter (vertex
+                // stage, VTF) — all four quadrant sprites read the same sample, so the
+                // reflection/specular/rim-sweep math they feed stays coherent across the
+                // sphere instead of each quadrant's own transform picking up a different tap.
+                float2 lightDir   : TEXCOORD3;
+                float3 lightTint  : TEXCOORD4;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
@@ -172,17 +179,6 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             float  _SpecularBend;
             fixed4 _SpecularColor;
 
-            // Global shader property — set by SceneLightService, not in Properties so
-            // material values can't mask it. Points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left.
-            float4 _SceneLightDir;
-
-            // Set globally by SceneLightService; kept out of Properties so no
-            // material value can shadow the scene-wide light. Colour's alpha is the
-            // "owner has pushed" validity flag (see SceneLightTint).
-            float4 _SceneLightColor;
-            float  _SceneLightIntensity;
-
             // Chrome rim (static)
             fixed4 _RimColor;
             float  _RimWidth;
@@ -222,6 +218,12 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
 
                 // World position for sphere-local calculations
                 OUT.worldPos = mul(unity_ObjectToWorld, IN.vertex).xy;
+
+                // Sample the light field ONCE per sphere, at the shared _SphereCenter (VTF,
+                // target 3.5) — the PaintBlob precedent — not this quadrant's own transform
+                // centre, which would desync the four quadrants from each other.
+                OUT.lightDir  = SceneLightDirectionAtLOD(_SphereCenter.xy);
+                OUT.lightTint = SceneLightTintAtLOD(_SphereCenter.xy);
 
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
@@ -285,26 +287,6 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 return smoothstep(_RimSweepWidth, 0.0, dist);
             }
 
-            // Guarded read of the scene light (see SceneLightService): normalized, toward
-            // the light; falls back to the canonical direction if the global hasn't been
-            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
-            float2 SceneLightDirection()
-            {
-                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-                    ? float2(-0.707, 0.707)
-                    : _SceneLightDir.xy;
-                return normalize(raw);
-            }
-
-            // The light's colour × intensity — multiplies into the authored specular response.
-            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
-            float3 SceneLightTint()
-            {
-                return _SceneLightColor.a > 0.5
-                    ? _SceneLightColor.rgb * _SceneLightIntensity
-                    : float3(1.0, 1.0, 1.0);
-            }
-
             // ----------------------------------------------------------------
             fixed4 frag(Varyings IN) : SV_Target
             {
@@ -343,7 +325,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                     // as Sprite/Diffuse. The reflection blended below deliberately is NOT
                     // re-multiplied (it samples the capture, already scene-dark); the specular,
                     // shine, rim sweep and deflect flash keep their own policies.
-                    sprite.rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
+                    sprite.rgb *= lerp(float3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence);
                 }
 
                 // ---- Realtime reflection (convex mirror from the reflection RT) ----
@@ -401,7 +383,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                 // ---- Specular highlight (anisotropic curved streak) ----
                 if (alpha > 0.01 && _SpecularIntensity > 0.001)
                 {
-                    float2 L = SceneLightDirection();
+                    float2 L = IN.lightDir;
                     float2 specPos = L * _SpecularDistance;
                     float2 d = spherePos - specPos;
 
@@ -439,7 +421,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                     float spec = pow(g, _SpecularSharpness) * _SpecularIntensity;
                     // Specular response = authored colour × the scene light's tint (a dim/tinted
                     // light dims/tints the glint).
-                    sprite.rgb += _SpecularColor.rgb * SceneLightTint() * spec * alpha;
+                    sprite.rgb += _SpecularColor.rgb * IN.lightTint * spec * alpha;
                 }
 
                 // ---- Diagonal shine band (same as SpriteShineShadow) ----
@@ -456,13 +438,13 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                     // rotated), so the light-driven band reads as ONE band. Default keeps the
                     // classic per-quadrant diagonal.
                     float projection = _ShineFromSceneLight > 0.5
-                        ? dot(spherePos, -SceneLightDirection()) * 0.5 + 0.5
+                        ? dot(spherePos, -IN.lightDir) * 0.5 + 0.5
                         : (spriteUV.x + spriteUV.y) / 2;
                     float shineDist = abs(projection - shineLoc);
                     float shineStr = saturate(1.0 - shineDist / max(_ShineWidth, 0.001));
                     // Opted-in shine is "lit by the scene light" — axis AND colour — so tint it;
                     // the classic default sweep stays pure white regardless of the scene light.
-                    float3 shineTint = _ShineFromSceneLight > 0.5 ? SceneLightTint() : float3(1.0, 1.0, 1.0);
+                    float3 shineTint = _ShineFromSceneLight > 0.5 ? IN.lightTint : float3(1.0, 1.0, 1.0);
                     sprite.rgb += shineTint * alpha * shineStr * 0.5;
                 }
 

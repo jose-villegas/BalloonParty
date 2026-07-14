@@ -101,6 +101,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             #pragma multi_compile_instancing
 
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             struct Attributes
             {
@@ -112,9 +113,10 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
 
             struct Varyings
             {
-                float4 vertex : SV_POSITION;
-                fixed4 color  : COLOR;
-                float2 uv     : TEXCOORD0;
+                float4 vertex   : SV_POSITION;
+                fixed4 color    : COLOR;
+                float2 uv       : TEXCOORD0;
+                float2 worldPos : TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
@@ -126,17 +128,6 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float     _ShineInterval;
             float     _ShineAngle;
             float     _ShineFromSceneLight;
-
-            // Global shader property — set by SceneLightService, not in Properties so
-            // material values can't mask it. Points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left.
-            float4 _SceneLightDir;
-
-            // Set globally by SceneLightService; kept out of Properties so no
-            // material value can shadow the scene-wide light. Colour's alpha is the
-            // "owner has pushed" validity flag (see SceneLightTint).
-            float4 _SceneLightColor;
-            float  _SceneLightIntensity;
 
             float     _GlitterDensity;
             float     _GlitterSize;
@@ -189,6 +180,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // Carries the SpriteRenderer's per-frame alpha (spawn/despawn fades) but NOT a
                 // palette tint — the bands provide the colour.
                 OUT.color  = IN.color * _RendererColor;
+                OUT.worldPos = mul(unity_ObjectToWorld, IN.vertex).xy;
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
                 #endif
@@ -201,26 +193,6 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 if (i == 1) { return _Color1.rgb; }
                 if (i == 2) { return _Color2.rgb; }
                 return _Color3.rgb;
-            }
-
-            // Guarded read of the scene light (see SceneLightService): normalized, toward
-            // the light; falls back to the canonical direction if the global hasn't been
-            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
-            inline float2 SceneLightDirection()
-            {
-                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-                    ? float2(-0.707, 0.707)
-                    : _SceneLightDir.xy;
-                return normalize(raw);
-            }
-
-            // The light's colour × intensity — multiplies into the authored specular response.
-            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
-            inline float3 SceneLightTint()
-            {
-                return _SceneLightColor.a > 0.5
-                    ? _SceneLightColor.rgb * _SceneLightIntensity
-                    : float3(1.0, 1.0, 1.0);
             }
 
             // Swirly seams: a dual-frequency sine along the seam direction (perpendicular to
@@ -247,13 +219,13 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return _SphereBend * z;
             }
 
-            inline fixed3 RainbowBand(float2 uv)
+            inline fixed3 RainbowBand(float2 uv, float2 worldPos)
             {
                 // Opted-in: the bands scroll along the scene light's axis instead of the
                 // authored angle. Same local-UV sway caveat as the shine.
                 float ang = _BandAngle * 6.2831853;
                 float2 axis = _BandsFromSceneLight > 0.5
-                    ? SceneLightDirection()
+                    ? SceneLightDirectionAt(worldPos)
                     : float2(cos(ang), sin(ang));
                 float projection = dot(uv - 0.5, axis) + 0.5;
                 float across = dot(uv - 0.5, float2(-axis.y, axis.x));
@@ -287,7 +259,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             }
 
             // Additive white shine sweep (0..1) — same diagonal band shape as SpriteShineShadow, angle tunable.
-            inline fixed ShineAmount(float2 uv)
+            inline fixed ShineAmount(float2 uv, float2 worldPos)
             {
                 float sweepDuration = 1.0 / max(_ShineSpeed, 0.001);
                 float cycleDuration = sweepDuration + _ShineInterval;
@@ -300,7 +272,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // rotation-compensated), so the axis sways with the balloon — accepted.
                 float shineAng = _ShineAngle * 6.2831853;
                 float2 axis = _ShineFromSceneLight > 0.5
-                    ? -SceneLightDirection()
+                    ? -SceneLightDirectionAt(worldPos)
                     : float2(cos(shineAng), sin(shineAng));
                 float projection = dot(uv - 0.5, axis) + 0.5;
 
@@ -347,7 +319,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 fixed4 tex = tex2D(_MainTex, IN.uv);
 
                 // Masked region (e.g. the knot) keeps its plain sprite colour instead of the band tint.
-                fixed3 bandColor = lerp(RainbowBand(IN.uv), fixed3(1, 1, 1), MaskAmount(IN.uv));
+                fixed3 bandColor = lerp(RainbowBand(IN.uv, IN.worldPos), fixed3(1, 1, 1), MaskAmount(IN.uv));
 
                 // Sprite shading × band colour, then additive white shine on top. The glitter is bound to
                 // the shine amount (by _GlitterShineBind) so the specks only twinkle along the sweeping band.
@@ -356,11 +328,11 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // Diffuse term: the composed body is lit by the scene light. The bands keep their
                 // palette HUE (no per-band swap) — brightness and cast follow the light, eased by
                 // _LightInfluence. The shine/glitter emissives above their own gating stay additive.
-                rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
-                fixed shine = ShineAmount(IN.uv);
+                rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTintAt(IN.worldPos), _LightInfluence);
+                fixed shine = ShineAmount(IN.uv, IN.worldPos);
                 // Opted-in shine is "lit by the scene light" — axis AND colour — so tint it;
                 // the classic default sweep stays pure white regardless of the scene light.
-                float3 shineTint = _ShineFromSceneLight > 0.5 ? SceneLightTint() : float3(1.0, 1.0, 1.0);
+                float3 shineTint = _ShineFromSceneLight > 0.5 ? SceneLightTintAt(IN.worldPos) : float3(1.0, 1.0, 1.0);
                 rgb += tex.a * shine * shineTint;
                 rgb += tex.a * GlitterAmount(IN.uv) * lerp(1.0, shine, _GlitterShineBind) * _GlitterBrightness;
 

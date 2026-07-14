@@ -39,9 +39,11 @@
          CGPROGRAM
  #pragma vertex vert
  #pragma fragment frag
+ #pragma target 3.5
  #pragma multi_compile _ PIXELSNAP_ON
  #pragma multi_compile_instancing
  #include "UnityCG.cginc"
+ #include "../Include/SceneLight.cginc"
 
      struct appdata_t
      {
@@ -56,6 +58,10 @@
          float4 vertex   : SV_POSITION;
          fixed4 color : COLOR;
          float2 texcoord  : TEXCOORD0;
+         // Sampled ONCE per sprite (its own centre, vertex stage) so the shine axis/tint
+         // stay coherent across the whole quad — the PaintBlob pattern.
+         float2 lightDir  : TEXCOORD1;
+         float3 lightTint : TEXCOORD2;
          UNITY_VERTEX_INPUT_INSTANCE_ID
      };
 
@@ -78,6 +84,12 @@
          OUT.vertex = UnityObjectToClipPos(IN.vertex);
          OUT.texcoord = IN.texcoord;
          OUT.color = IN.color * _Color * _RendererColor;
+
+         // Sprite centre in world space (VTF, target 3.5) — one coherent light reading
+         // for the whole shine sweep instead of bending per-fragment.
+         float2 spriteCenterWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
+         OUT.lightDir  = SceneLightDirectionAtLOD(spriteCenterWorld);
+         OUT.lightTint = SceneLightTintAtLOD(spriteCenterWorld);
  #ifdef PIXELSNAP_ON
          OUT.vertex = UnityPixelSnap(OUT.vertex);
  #endif
@@ -94,38 +106,7 @@
      float _ShineFromSceneLight;
      float _TimeOffset;
 
-     // Global shader property — set by SceneLightService, not in Properties so
-     // material values can't mask it. Points TOWARD the light, normalized;
-     // canonical (-0.707, 0.707) = upper-left.
-     float4 _SceneLightDir;
-
-     // Set globally by SceneLightService; kept out of Properties so no
-     // material value can shadow the scene-wide light. Colour's alpha is the
-     // "owner has pushed" validity flag (see SceneLightTint).
-     float4 _SceneLightColor;
-     float  _SceneLightIntensity;
-
-     // Guarded read of the scene light (see SceneLightService): normalized, toward
-     // the light; falls back to the canonical direction if the global hasn't been
-     // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
-     float2 SceneLightDirection()
-     {
-         float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-             ? float2(-0.707, 0.707)
-             : _SceneLightDir.xy;
-         return normalize(raw);
-     }
-
-     // The light's colour × intensity — multiplies into the authored specular response.
-     // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
-     float3 SceneLightTint()
-     {
-         return _SceneLightColor.a > 0.5
-             ? _SceneLightColor.rgb * _SceneLightIntensity
-             : float3(1.0, 1.0, 1.0);
-     }
-
-     fixed4 SampleSpriteTexture(float2 uv)
+     fixed4 SampleSpriteTexture(float2 uv, float2 lightDir, float3 lightTint)
      {
          fixed4 color = tex2D(_MainTex, uv);
 
@@ -146,13 +127,13 @@
          // (enters from the lit side; top-to-bottom under the canonical upper-left light);
          // the default keeps the classic hardcoded 45-degree diagonal.
          float currentDistanceProjection = _ShineFromSceneLight > 0.5
-             ? dot(uv - 0.5, -SceneLightDirection()) + 0.5
+             ? dot(uv - 0.5, -lightDir) + 0.5
              : (uv.x + uv.y) / 2;
          if (currentDistanceProjection > lowLevel && currentDistanceProjection < highLevel) {
              float whitePower = 1- (abs(currentDistanceProjection - location) / _ShineWidth);
              // Opted-in shine is "lit by the scene light" — axis AND colour — so tint it;
              // the default (UI) sweep stays pure white regardless of the scene light.
-             float3 shineTint = _ShineFromSceneLight > 0.5 ? SceneLightTint() : float3(1.0, 1.0, 1.0);
+             float3 shineTint = _ShineFromSceneLight > 0.5 ? lightTint : float3(1.0, 1.0, 1.0);
              color.rgb +=  color.a * whitePower * shineTint;
          }
 
@@ -162,7 +143,7 @@
      fixed4 frag(v2f IN) : SV_Target
      {
          UNITY_SETUP_INSTANCE_ID(IN);
-         fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
+         fixed4 c = SampleSpriteTexture(IN.texcoord, IN.lightDir, IN.lightTint) * IN.color;
          c.rgb *= c.a;
 
      return c;

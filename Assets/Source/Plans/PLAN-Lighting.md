@@ -277,6 +277,24 @@ Always-Included/config-SO registration before a device build; and the accumulate
 `_GradientLo/_Hi` thresholds need an in-editor render check and tuning (`dotnet build` does not compile
 shaders).
 
+**Phase D status (2026-07-14 — CODE-COMPLETE, in-editor verification pending).** All remaining consumers
+migrated onto `SceneLight.cginc` and sample `…At(worldPos)` (world bodies: ToughBalloon, SoapBubbleCluster,
+RainbowBalloon, UnbreakableBalloon — anchored at the shared `_SphereCenter` for quadrant coherence —
+BushLeaf, BushBranch; sprite family: SpriteShadow/ShadowComposite/Shine/ShineShadow, LightDriven,
+Diffuse — per-material toggles preserved). Anchor per shader: per-fragment where it shades per-pixel,
+per-object VTF (`target 3.5`) where it keys off one hotspot (the PaintBlob pattern). The GI march is now
+**per-fragment**: `ScreenSpaceLightSmear` derives its march direction from `SceneLightDirectionAt(worldPos)`
+(worldPos from the field-bounds globals) and `ScreenSpaceLightOverlay` scales bounce by the **absolute**
+local magnitude and shadow by the **relative** magnitude (`local/_MagnitudeRef`) — resolving the old
+shadow-coupling open question; `ScreenSpaceLightService` stopped pushing `_TapStepUV`, now pushes
+`_TapStepScale`+`_TapAspect` (the shader builds the step from a unit direction) and raw `_BounceStrength`
++ `_MagnitudeRef`. **Field-OFF bit-identical verified in code** (uniform flat direction reproduces the old
+`_TapStepUV`; shadow `relative`→1; bounce `magnitude`→global intensity with raw bounce = old product).
+**Open:** all shaders need an in-editor compile + visual A/B (field OFF unchanged; field ON bends
+bounce/shadow/bodies), the four `target 3.5` VTF bumps need a device check, and the capture/overlay UV →
+field-bounds mapping assumes the field is camera-view-aligned. Palette-**colour** decode (A→RGB) is a
+tracked follow-up, not in D.
+
 ## Open questions
 
 - Screen-space vs world-space light vector for balloons that move (parallax)? Screen-space is

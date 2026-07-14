@@ -3,8 +3,9 @@ Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
     // Fullscreen composite for ScreenSpaceLightService (see the arch_screen_space_light doc).
     // Rendered as a camera-fitted quad ABOVE all gameplay — NOT a post effect: the
     // multiplicative blend (2*src*dst, 0.5 neutral) tints the frame in place with no
-    // framebuffer readback, so tile GPUs never stall. Samples only the low-res light
-    // buffer built by ScreenSpaceLightSmear: a = shadow amount, rgb = bounce color.
+    // framebuffer readback, so tile GPUs never stall. Samples the low-res light buffer
+    // built by ScreenSpaceLightSmear (a = shadow amount, rgb = bounce color) and the
+    // light field (SceneLight.cginc) for the per-fragment magnitude that scales both.
     Properties
     {
         [NoScaleOffset] _LightTex ("Light Buffer", 2D) = "gray" {}
@@ -37,11 +38,13 @@ Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
             #pragma vertex vert
             #pragma fragment frag
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             sampler2D _LightTex;
             fixed4 _ShadowTint;
             float  _ShadowStrength;
             float  _BounceStrength;
+            float  _MagnitudeRef;
             fixed4 _AmbientColor;
 
             struct appdata_t
@@ -68,14 +71,27 @@ Shader "BalloonParty/Display/ScreenSpaceLightOverlay"
             {
                 fixed4 gathered = tex2D(_LightTex, IN.texcoord);
 
-                float shadow = saturate(gathered.a * _ShadowStrength);
+                // Local light magnitude from the field at this fragment's world position
+                // (overlay UV mapped through the field bounds). Field-off the helper returns
+                // the flat global intensity everywhere. This is where the light's intensity
+                // couples in per-fragment — the service no longer folds it into the strengths.
+                float2 worldPos = _SceneLightFieldBoundsMin.xy + IN.texcoord * _SceneLightFieldBoundsSize.xy;
+                float magnitude = SceneLightMagnitudeAt(worldPos);
+
+                // Shadow scales by RELATIVE magnitude (local / reference): field-off this is
+                // forced to 1 so the authored shadow strength is untouched — bit-identical —
+                // while field-on a brighter patch deepens the shadow and a dim one lifts it.
+                float relative = _SceneLightFieldOn < 0.5 ? 1.0 : (magnitude / _MagnitudeRef);
+                float shadow = saturate(gathered.a * _ShadowStrength * relative);
                 fixed3 shadowTint = lerp(fixed3(1, 1, 1), _ShadowTint.rgb, shadow);
 
-                // Bounce is the scene color up-light measured against the ambient sky:
+                // Bounce is the scene color down-light measured against the ambient sky:
                 // flat sky (bounce == ambient) contributes zero, a bright sprite pushes
                 // positive (brightens neighbours in its hue), a dark/black sprite pushes
                 // negative (absorbs — darkens neighbours). 0.5 * tint is blend-neutral.
-                fixed3 bounce = (gathered.rgb - _AmbientColor.rgb) * _BounceStrength;
+                // Scaled by the ABSOLUTE local magnitude: field-off that equals the global
+                // intensity, reproducing the old CPU-side "_bounceStrength * intensity".
+                fixed3 bounce = (gathered.rgb - _AmbientColor.rgb) * _BounceStrength * magnitude;
                 fixed3 color = shadowTint * 0.5 + bounce;
 
                 return fixed4(color, 1.0);

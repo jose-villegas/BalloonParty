@@ -84,11 +84,12 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
-            #pragma target 3.0
+            #pragma target 3.5
             #pragma multi_compile _ PIXELSNAP_ON
             #pragma multi_compile_instancing
             #pragma shader_feature_local _SHADOW_OFF
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             struct appdata_t
             {
@@ -107,6 +108,13 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 // xy = world-space object center, z = world-space extent (X scale)
                 // Computed in vertex to avoid per-fragment matrix work.
                 float3 worldData : TEXCOORD2;
+                // Sampled ONCE per balloon (at its own centre, vertex stage) so light stays
+                // coherent across the whole body — no bending across a single balloon.
+                float2 lightDir  : TEXCOORD3;
+                float3 lightTint : TEXCOORD4;
+#ifndef _SHADOW_OFF
+                float  shadowFade : TEXCOORD5;
+#endif
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -134,19 +142,6 @@ Shader "BalloonParty/Balloon/ToughBalloon"
             float  _GrainScale;
             float  _GrainStrength;
             float  _LightInfluence;
-
-            // Global shader property — set by SceneLightService, not in Properties so
-            // material values can't mask it. Points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left.
-            float4 _SceneLightDir;
-
-            // Set globally by SceneLightService; kept out of Properties so no material value
-            // can shadow the scene-wide light. Colour's alpha is the "owner has pushed"
-            // validity flag. Only intensity is consumed here (see SceneLightIntensity) —
-            // the grain term below is signed (brightens AND darkens), so tinting it by
-            // colour would muddy it; deliberately colour-neutral.
-            float4 _SceneLightColor;
-            float  _SceneLightIntensity;
 
             float  _VoronoiScale;
             float  _VoronoiScaleDamageBoost;
@@ -377,32 +372,6 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 return a / 9.0;
             }
 
-            // Guarded read of the scene light (see SceneLightService): normalized, toward
-            // the light; falls back to the canonical direction if the global hasn't been
-            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
-            float2 SceneLightDirection()
-            {
-                return dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-                    ? float2(-0.707, 0.707)
-                    : _SceneLightDir.xy;
-            }
-
-            // The light's colour × intensity — the body's diffuse multiplier. Neutral
-            // (white) when the owner hasn't pushed yet, so nothing dims at edit time.
-            float3 SceneLightTint()
-            {
-                return _SceneLightColor.a > 0.5
-                    ? _SceneLightColor.rgb * _SceneLightIntensity
-                    : float3(1.0, 1.0, 1.0);
-            }
-
-            // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
-            // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
-            float ShadowLightFade()
-            {
-                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
-            }
-
             // ----------------------------------------------------------------
             v2f vert(appdata_t IN)
             {
@@ -419,6 +388,15 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                                                    unity_ObjectToWorld._m10,
                                                    unity_ObjectToWorld._m20));
                 OUT.worldData = float3(worldCenter, worldExtent);
+
+                // Sample the light field ONCE per balloon, at the balloon's own centre
+                // (VTF, target 3.5) — the PaintBlob precedent. Keeps the whole body lit
+                // from one coherent direction instead of bending across it per-fragment.
+                OUT.lightDir  = SceneLightDirectionAtLOD(worldCenter);
+                OUT.lightTint = SceneLightTintAtLOD(worldCenter);
+#ifndef _SHADOW_OFF
+                OUT.shadowFade = ShadowLightFadeAtLOD(worldCenter);
+#endif
 
 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
@@ -453,13 +431,13 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 // vertex-captured spin to un-rotate it (unlike PaintBlob), so the shadow
                 // direction drifts slightly during sway. Accepted — same caveat as the
                 // grain below, and the sway is small.
-                float2 shadowOffset = -SceneLightDirection() * _ShadowDistance;
+                float2 shadowOffset = -IN.lightDir * _ShadowDistance;
                 float2 shadowUV = spriteUV - shadowOffset;
                 fixed shadowAlpha = _ShadowSoftness < 0.0001
                     ? SampleShadowAlpha(shadowUV)
                     : SoftShadowAlpha(shadowUV, _ShadowSoftness);
                 shadowAlpha *= IN.color.a * _ShadowColor.a;
-                shadowAlpha *= ShadowLightFade();
+                shadowAlpha *= IN.shadowFade;
 
                 fixed3 shadowRGB = _ShadowColor.rgb * IN.color.rgb;
 #endif
@@ -497,8 +475,8 @@ Shader "BalloonParty/Balloon/ToughBalloon"
 
                 // ---- Leather-like surface grain (sampled in sphere-projected UV) ----
                 // LeatherGrain wants the light-travel (FROM-light) direction, but the
-                // global points TOWARD the light — negate to convert.
-                float2 lightDirToward = SceneLightDirection();
+                // field/global points TOWARD the light — negate to convert.
+                float2 lightDirToward = IN.lightDir;
                 float grain = LeatherGrain(vUV, sphereNormal, _GrainScale, -lightDirToward);
                 // No separate light factor here: the grain is proportional to the body colour,
                 // so it inherits colour AND intensity from the diffuse multiply after the cracks.
@@ -550,7 +528,7 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 // Diffuse term: the composed body (rubber/ash/grain/rim/cracks/fibers) is albedo,
                 // lit by the scene light — same response as Sprite/Diffuse. Without this the tough
                 // reads self-illuminated when the light dims. The shadow half below stays dark art.
-                col *= lerp(fixed3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
+                col *= lerp(fixed3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence);
 
                 // ---- Composite shadow under balloon (premultiplied alpha) ----
                 // Blend mode is One / OneMinusSrcAlpha, so output is premultiplied.

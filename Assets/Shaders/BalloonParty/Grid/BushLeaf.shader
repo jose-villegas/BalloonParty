@@ -55,9 +55,11 @@ Shader "BalloonParty/Grid/BushLeaf"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma target 3.5
             #pragma multi_compile_instancing
             #pragma multi_compile _ _RATTLE_ON
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             sampler2D _MainTex;
             fixed4 _LeafColor;
@@ -75,37 +77,6 @@ Shader "BalloonParty/Grid/BushLeaf"
             float  _WindNoiseAmplitude;
             float  _WindScalePulse;
             float  _PivotOffset;
-
-            // Global shader property — set by SceneLightService, not in Properties so
-            // material values can't mask it. Points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left.
-            float4 _SceneLightDir;
-
-            // Set globally by SceneLightService; kept out of Properties so no
-            // material value can shadow the scene-wide light. Colour's alpha is the
-            // "owner has pushed" validity flag (see SceneLightTint).
-            float4 _SceneLightColor;
-            float  _SceneLightIntensity;
-
-            // Guarded read of the scene light (see SceneLightService): normalized, toward
-            // the light; falls back to the canonical direction if the global hasn't been
-            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
-            float2 SceneLightDirection()
-            {
-                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-                    ? float2(-0.707, 0.707)
-                    : _SceneLightDir.xy;
-                return normalize(raw);
-            }
-
-            // The light's colour × intensity — multiplies into the authored specular response.
-            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
-            float3 SceneLightTint()
-            {
-                return _SceneLightColor.a > 0.5
-                    ? _SceneLightColor.rgb * _SceneLightIntensity
-                    : float3(1.0, 1.0, 1.0);
-            }
 
             #ifdef _RATTLE_ON
             sampler2D _DisturbanceTex;
@@ -137,6 +108,10 @@ Shader "BalloonParty/Grid/BushLeaf"
                 float4 uvRect : TEXCOORD2;
                 float2 localShadowOffset : TEXCOORD3;
                 float2 localHighlightOffset : TEXCOORD4;
+                // Sampled ONCE per leaf (at its own centre, vertex stage) so light stays
+                // coherent across the whole leaf — no bending across a single leaf.
+                float3 lightTint : TEXCOORD5;
+                float  shadowFade : TEXCOORD6;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -159,6 +134,11 @@ Shader "BalloonParty/Grid/BushLeaf"
 
                 float t = _Time.y;
 
+                // Leaf's own centre (rest position, no wind/rattle rotation) — the coherent
+                // anchor for both the disturbance-field rattle tap and the light sample below,
+                // so the whole leaf reads as one rigid object under either field.
+                float2 leafWorldPos = mul(UNITY_MATRIX_M, float4(0.0, 0.0, 0.0, 1.0)).xy;
+
                 // Wind rotation: sine + dual-sine organic noise approximation
                 float sineRot = sin(t * _WindFrequency + phase) * _WindAmplitude * depth;
                 float noise = sin(t * 0.3 + phase * 17.3) * sin(t * 0.7 + phase * 31.1)
@@ -169,8 +149,7 @@ Shader "BalloonParty/Grid/BushLeaf"
                 float rattleDeg = 0.0;
                 #ifdef _RATTLE_ON
                 {
-                    float2 leafWorld = mul(UNITY_MATRIX_M, float4(0.0, 0.0, 0.0, 1.0)).xy;
-                    float2 fieldUV = (leafWorld - _FieldBoundsMin) / _FieldBoundsSize;
+                    float2 fieldUV = (leafWorldPos - _FieldBoundsMin) / _FieldBoundsSize;
                     float3 field = tex2Dlod(_DisturbanceTex, float4(fieldUV, 0.0, 0.0)).rgb;
                     float2 displace = (field.gb - 0.5) * 2.0;
                     float disturbance = length(displace);
@@ -219,9 +198,11 @@ Shader "BalloonParty/Grid/BushLeaf"
                 o.uv = rect.xy + spriteUV * rect.zw;
 
                 // Shadow lands away from the scene light, highlight faces toward it — only the
-                // distance stays authored, so rotating the light moves both together.
-                float2 shadowOffset = -SceneLightDirection() * _ShadowDistance;
-                float2 highlightOffset = SceneLightDirection() * _HighlightDistance;
+                // distance stays authored, so rotating the light moves both together. Sampled
+                // once at the leaf's own centre (VTF, target 3.5) — the PaintBlob precedent.
+                float2 leafLightDir = SceneLightDirectionAtLOD(leafWorldPos);
+                float2 shadowOffset = -leafLightDir * _ShadowDistance;
+                float2 highlightOffset = leafLightDir * _HighlightDistance;
 
                 // Inverse-rotate shadow/highlight offsets using the animated rotation — this is
                 // what keeps both world-anchored under wind/rattle instead of spinning with the leaf.
@@ -232,6 +213,9 @@ Shader "BalloonParty/Grid/BushLeaf"
                 o.localHighlightOffset = -float2(
                      cosA * highlightOffset.x + sinA * highlightOffset.y,
                     -sinA * highlightOffset.x + cosA * highlightOffset.y);
+
+                o.lightTint = SceneLightTintAtLOD(leafWorldPos);
+                o.shadowFade = ShadowLightFadeAtLOD(leafWorldPos);
 
                 return o;
             }
@@ -284,8 +268,7 @@ Shader "BalloonParty/Grid/BushLeaf"
                 }
 
                 // No light, no shadow — opacity follows intensity (clamped at authored).
-                float shadowFade = _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
-                fixed4 shadow = fixed4(_ShadowColor.rgb, _ShadowColor.a * shadowAlpha * shadowFade);
+                fixed4 shadow = fixed4(_ShadowColor.rgb, _ShadowColor.a * shadowAlpha * i.shadowFade);
 
                 fixed4 col = tex2D(_MainTex, i.uv);
                 float4 tint = UNITY_ACCESS_INSTANCED_PROP(Props, _LeafTint);
@@ -294,7 +277,7 @@ Shader "BalloonParty/Grid/BushLeaf"
 
                 // Diffuse term: the leaf body is lit by the scene light — same response as
                 // Sprite/Diffuse. The highlight below carries its own tint.
-                col.rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
+                col.rgb *= lerp(float3(1.0, 1.0, 1.0), i.lightTint, _LightInfluence);
 
                 // Specular highlight: radial falloff from offset center, masked to leaf shape
                 float2 hlCenter = spriteUV - 0.5 + i.localHighlightOffset / _SpriteScale;
@@ -303,7 +286,7 @@ Shader "BalloonParty/Grid/BushLeaf"
                 float hlMask = hlFalloff * col.a;
                 // Highlight colour × the scene light's tint (a dim/tinted light dims/tints the
                 // glint); softness/alpha math above is untouched.
-                col.rgb = lerp(col.rgb, _HighlightColor.rgb * SceneLightTint(), hlMask * _HighlightColor.a);
+                col.rgb = lerp(col.rgb, _HighlightColor.rgb * i.lightTint, hlMask * _HighlightColor.a);
 
                 // Composite: shadow behind, leaf on top (Porter-Duff "over")
                 fixed3 rgb = col.rgb * col.a + shadow.rgb * shadow.a * (1.0 - col.a);

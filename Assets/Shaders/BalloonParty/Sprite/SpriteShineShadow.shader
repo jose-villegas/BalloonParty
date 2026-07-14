@@ -56,11 +56,12 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
             CGPROGRAM
             #pragma vertex   vert
             #pragma fragment frag
-            #pragma target   2.0
+            #pragma target   3.5
             #pragma multi_compile _ PIXELSNAP_ON
             #pragma multi_compile_instancing
 
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             struct Attributes
             {
@@ -72,9 +73,15 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
 
             struct Varyings
             {
-                float4 vertex : SV_POSITION;
-                fixed4 color  : COLOR;
-                float2 uv     : TEXCOORD0;
+                float4 vertex     : SV_POSITION;
+                fixed4 color      : COLOR;
+                float2 uv         : TEXCOORD0;
+                // Sampled ONCE per sprite (its own centre, vertex stage) so shine axis/tint
+                // and shadow direction stay coherent across the whole quad — the PaintBlob
+                // pattern.
+                float2 lightDir   : TEXCOORD1;
+                float3 lightTint  : TEXCOORD2;
+                float  shadowFade : TEXCOORD3;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
@@ -91,44 +98,6 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
             float     _ShineWidth;
             float     _ShineSpeed;
             float     _ShineInterval;
-
-            // Global shader property — set by SceneLightService, not in Properties so
-            // material values can't mask it. Points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left.
-            float4 _SceneLightDir;
-
-            // Set globally by SceneLightService; kept out of Properties so no
-            // material value can shadow the scene-wide light. Colour's alpha is the
-            // "owner has pushed" validity flag (see SceneLightTint).
-            float4 _SceneLightColor;
-            float  _SceneLightIntensity;
-
-            // Guarded read of the scene light (see SceneLightService): normalized, toward
-            // the light; falls back to the canonical direction if the global hasn't been
-            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
-            float2 SceneLightDirection()
-            {
-                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-                    ? float2(-0.707, 0.707)
-                    : _SceneLightDir.xy;
-                return normalize(raw);
-            }
-
-            // The light's colour × intensity — multiplies into the authored specular response.
-            // Neutral (white) when the owner hasn't pushed yet, so nothing dims at edit time.
-            float3 SceneLightTint()
-            {
-                return _SceneLightColor.a > 0.5
-                    ? _SceneLightColor.rgb * _SceneLightIntensity
-                    : float3(1.0, 1.0, 1.0);
-            }
-
-            // No light, no shadow: the shadow's opacity follows the light's intensity (clamped at the
-            // authored alpha). Neutral when the owner hasn't pushed yet (edit time).
-            float ShadowLightFade()
-            {
-                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
-            }
 
             #ifdef UNITY_INSTANCING_ENABLED
                 UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
@@ -150,6 +119,13 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
                 OUT.vertex = UnityObjectToClipPos(IN.vertex);
                 OUT.uv     = IN.uv;
                 OUT.color  = IN.color * _Color * _RendererColor;
+
+                // Sprite centre in world space (VTF, target 3.5) — one coherent light
+                // reading for the whole shine/shadow instead of bending per-fragment.
+                float2 spriteCenterWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
+                OUT.lightDir   = SceneLightDirectionAtLOD(spriteCenterWorld);
+                OUT.lightTint  = SceneLightTintAtLOD(spriteCenterWorld);
+                OUT.shadowFade = ShadowLightFadeAtLOD(spriteCenterWorld);
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
                 #endif
@@ -180,7 +156,7 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
                 return a / 9.0;
             }
 
-            inline fixed4 SampleSpriteWithShine(float2 uv)
+            inline fixed4 SampleSpriteWithShine(float2 uv, float2 lightDir, float3 lightTint)
             {
                 fixed4 color = tex2D(_MainTex, uv);
 
@@ -199,7 +175,7 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
                 // (enters from the lit side); default keeps the classic hardcoded 45-degree
                 // diagonal (these are mostly UI materials).
                 float projection = _ShineFromSceneLight > 0.5
-                    ? dot(uv - 0.5, -SceneLightDirection()) + 0.5
+                    ? dot(uv - 0.5, -lightDir) + 0.5
                     : (uv.x + uv.y) / 2;
 
                 if (projection > lowLevel && projection < highLevel)
@@ -207,7 +183,7 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
                     float whitePower = 1 - (abs(projection - shineLocation) / _ShineWidth);
                     // Opted-in shine is "lit by the scene light" — axis AND colour — so tint it;
                     // the default (UI) sweep stays pure white regardless of the scene light.
-                    float3 shineTint = _ShineFromSceneLight > 0.5 ? SceneLightTint() : float3(1.0, 1.0, 1.0);
+                    float3 shineTint = _ShineFromSceneLight > 0.5 ? lightTint : float3(1.0, 1.0, 1.0);
                     color.rgb += color.a * whitePower * shineTint;
                 }
 
@@ -224,14 +200,14 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
                 float  spriteMask = inBounds.x * inBounds.y;
 
                 // Main sprite with shine
-                fixed4 sprite = SampleSpriteWithShine(spriteUV) * IN.color;
+                fixed4 sprite = SampleSpriteWithShine(spriteUV, IN.lightDir, IN.lightTint) * IN.color;
                 sprite.a *= spriteMask;
 
                 // Shadow — opted-in materials follow the scene light (direction away from it,
                 // authored distance); the default keeps the hand-authored offset. Shine sweep
                 // above is untouched — pure UI/decoration, not a lighting element.
                 float2 shadowOffset = _ShadowFromSceneLight > 0.5
-                    ? -SceneLightDirection() * _ShadowDistance
+                    ? -IN.lightDir * _ShadowDistance
                     : _ShadowOffset;
                 float2 shadowUV = spriteUV - shadowOffset;
 
@@ -242,7 +218,7 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
                 shadowAlpha *= IN.color.a * _ShadowColor.a;
                 // Only opted-in (scene-light-following) shadows fade with light intensity —
                 // expressive/UI shadows stay authored regardless of the scene light.
-                shadowAlpha *= _ShadowFromSceneLight > 0.5 ? ShadowLightFade() : 1.0;
+                shadowAlpha *= _ShadowFromSceneLight > 0.5 ? IN.shadowFade : 1.0;
 
                 // Composite shadow under sprite (Porter-Duff over)
                 fixed3 shadowRGB = _ShadowColor.rgb * IN.color.rgb;

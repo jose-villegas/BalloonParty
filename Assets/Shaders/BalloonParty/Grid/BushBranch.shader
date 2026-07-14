@@ -44,6 +44,7 @@ Shader "BalloonParty/Grid/BushBranch"
             #pragma fragment frag
             #pragma multi_compile_instancing
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             sampler2D _MainTex;
             sampler2D _BranchGradient;
@@ -58,41 +59,7 @@ Shader "BalloonParty/Grid/BushBranch"
             float  _AOSoftness;
             float  _AOIntensity;
             float  _SpriteScale;
-
-            // Global shader property — set by SceneLightService, not in Properties so
-            // material values can't mask it. Points TOWARD the light, normalized;
-            // canonical (-0.707, 0.707) = upper-left.
-            float4 _SceneLightDir;
-            float4 _SceneLightColor;
-            float  _SceneLightIntensity;
             float  _LightInfluence;
-
-            // Guarded read of the scene light (see SceneLightService): normalized, toward
-            // the light; falls back to the canonical direction if the global hasn't been
-            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
-            float2 SceneLightDirection()
-            {
-                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
-                    ? float2(-0.707, 0.707)
-                    : _SceneLightDir.xy;
-                return normalize(raw);
-            }
-
-            // The light's colour × intensity — the body's diffuse multiplier. Neutral
-            // (white) when the owner hasn't pushed yet, so nothing dims at edit time.
-            float3 SceneLightTint()
-            {
-                return _SceneLightColor.a > 0.5
-                    ? _SceneLightColor.rgb * _SceneLightIntensity
-                    : float3(1.0, 1.0, 1.0);
-            }
-
-            // No light, no shadow: the shadow's opacity follows the light's intensity
-            // (clamped at the authored alpha). Neutral when the owner hasn't pushed yet.
-            float ShadowLightFade()
-            {
-                return _SceneLightColor.a > 0.5 ? saturate(_SceneLightIntensity) : 1.0;
-            }
 
             #ifdef UNITY_INSTANCING_ENABLED
                 UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
@@ -115,6 +82,7 @@ Shader "BalloonParty/Grid/BushBranch"
                 float4 pos : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float2 rawUV : TEXCOORD1;
+                float2 worldPos : TEXCOORD2;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -126,6 +94,7 @@ Shader "BalloonParty/Grid/BushBranch"
                 o.pos = UnityObjectToClipPos(v.vertex);
                 o.rawUV = v.uv;
                 o.uv = (v.uv - 0.5) / _SpriteScale + 0.5;
+                o.worldPos = mul(unity_ObjectToWorld, v.vertex).xy;
                 return o;
             }
 
@@ -137,12 +106,12 @@ Shader "BalloonParty/Grid/BushBranch"
             //   source 1:1; at spread>0 shadow is magnified like a
             //   point-light projection from above the trunk.
             // Shadow alpha is purely _ShadowColor.a — no depth blending.
-            inline fixed SampleShadow(float2 scaledUV, float2 blurOfs)
+            inline fixed SampleShadow(float2 scaledUV, float2 blurOfs, float2 worldPos)
             {
                 float2 sampleUV = scaledUV + blurOfs;
 
                 // Shift by directional offset (reproject from centre)
-                float2 shadowOffset = -SceneLightDirection() * _ShadowDistance;
+                float2 shadowOffset = -SceneLightDirectionAt(worldPos) * _ShadowDistance;
                 float2 sourceUV = sampleUV - shadowOffset;
 
                 // Widen: scale toward centre so shadow is larger than source
@@ -169,24 +138,24 @@ Shader "BalloonParty/Grid/BushBranch"
                 if (s > 0.001)
                 {
                     shadowHit = (
-                        SampleShadow(i.uv, float2(-s, -s)) +
-                        SampleShadow(i.uv, float2( 0, -s)) +
-                        SampleShadow(i.uv, float2( s, -s)) +
-                        SampleShadow(i.uv, float2(-s,  0)) +
-                        SampleShadow(i.uv, float2( 0,  0)) +
-                        SampleShadow(i.uv, float2( s,  0)) +
-                        SampleShadow(i.uv, float2(-s,  s)) +
-                        SampleShadow(i.uv, float2( 0,  s)) +
-                        SampleShadow(i.uv, float2( s,  s))
+                        SampleShadow(i.uv, float2(-s, -s), i.worldPos) +
+                        SampleShadow(i.uv, float2( 0, -s), i.worldPos) +
+                        SampleShadow(i.uv, float2( s, -s), i.worldPos) +
+                        SampleShadow(i.uv, float2(-s,  0), i.worldPos) +
+                        SampleShadow(i.uv, float2( 0,  0), i.worldPos) +
+                        SampleShadow(i.uv, float2( s,  0), i.worldPos) +
+                        SampleShadow(i.uv, float2(-s,  s), i.worldPos) +
+                        SampleShadow(i.uv, float2( 0,  s), i.worldPos) +
+                        SampleShadow(i.uv, float2( s,  s), i.worldPos)
                     ) / 9.0;
                 }
                 else
                 {
-                    shadowHit = SampleShadow(i.uv, float2(0, 0));
+                    shadowHit = SampleShadow(i.uv, float2(0, 0), i.worldPos);
                 }
 
                 // No light, no shadow — opacity follows intensity (clamped at authored).
-                fixed4 shadow = fixed4(_ShadowColor.rgb, _ShadowColor.a * shadowHit * ShadowLightFade());
+                fixed4 shadow = fixed4(_ShadowColor.rgb, _ShadowColor.a * shadowHit * ShadowLightFadeAt(i.worldPos));
 
                 // AO blob — radial gradient centred at trunk, darkens ground
                 float dist = length(i.uv - 0.5) * 2.0;
@@ -202,7 +171,7 @@ Shader "BalloonParty/Grid/BushBranch"
 
                 // Diffuse term: the branch body is lit by the scene light — same response as
                 // Sprite/Diffuse. The AO blob stays authored (ambient occlusion, not light-cast).
-                col *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
+                col *= lerp(float3(1.0, 1.0, 1.0), SceneLightTintAt(i.worldPos), _LightInfluence);
 
                 // Composite: AO (bottom) ← shadow ← branch (top)
                 // 1. Shadow over AO

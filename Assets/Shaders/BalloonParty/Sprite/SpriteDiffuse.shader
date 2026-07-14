@@ -40,9 +40,11 @@ Shader "BalloonParty/Sprite/Diffuse"
             CGPROGRAM
             #pragma vertex vert
             #pragma fragment frag
+            #pragma target 3.5
             #pragma multi_compile _ PIXELSNAP_ON
             #pragma multi_compile_instancing
             #include "UnityCG.cginc"
+            #include "../Include/SceneLight.cginc"
 
             struct appdata_t
             {
@@ -54,9 +56,11 @@ Shader "BalloonParty/Sprite/Diffuse"
 
             struct v2f
             {
-                float4 vertex   : SV_POSITION;
-                fixed4 color    : COLOR;
-                float2 texcoord : TEXCOORD0;
+                float4 vertex    : SV_POSITION;
+                fixed4 color     : COLOR;
+                float2 texcoord  : TEXCOORD0;
+                // Sampled ONCE per sprite (its own centre, vertex stage) — the PaintBlob pattern.
+                float3 lightTint : TEXCOORD1;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
@@ -73,21 +77,6 @@ Shader "BalloonParty/Sprite/Diffuse"
             fixed4 _Color;
             float _LightInfluence;
 
-            // Global shader properties — set by SceneLightService, not in Properties so
-            // material values can't mask them. Colour's alpha is the "owner has pushed"
-            // validity flag (see SceneLightTint).
-            float4 _SceneLightColor;
-            float  _SceneLightIntensity;
-
-            // The light's colour × intensity — the diffuse multiplier. Neutral (white) when
-            // the owner hasn't pushed yet, so nothing dims at edit time.
-            float3 SceneLightTint()
-            {
-                return _SceneLightColor.a > 0.5
-                    ? _SceneLightColor.rgb * _SceneLightIntensity
-                    : float3(1.0, 1.0, 1.0);
-            }
-
             v2f vert(appdata_t IN)
             {
                 v2f OUT;
@@ -96,6 +85,11 @@ Shader "BalloonParty/Sprite/Diffuse"
                 OUT.vertex = UnityObjectToClipPos(IN.vertex);
                 OUT.texcoord = IN.texcoord;
                 OUT.color = IN.color * _Color * _RendererColor;
+
+                // Sprite centre in world space (VTF, target 3.5) — one coherent light
+                // reading for the whole sprite instead of bending per-fragment.
+                float2 spriteCenterWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
+                OUT.lightTint = SceneLightTintAtLOD(spriteCenterWorld);
 
                 #ifdef PIXELSNAP_ON
                 OUT.vertex = UnityPixelSnap(OUT.vertex);
@@ -110,7 +104,7 @@ Shader "BalloonParty/Sprite/Diffuse"
                 fixed4 c = tex2D(_MainTex, IN.texcoord) * IN.color;
 
                 // albedo × light, eased by influence so gameplay colours stay readable.
-                c.rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTint(), _LightInfluence);
+                c.rgb *= lerp(float3(1.0, 1.0, 1.0), IN.lightTint, _LightInfluence);
 
                 c.rgb *= c.a;
                 return c;

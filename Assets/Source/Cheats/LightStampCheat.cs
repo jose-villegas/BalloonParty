@@ -19,8 +19,8 @@ namespace BalloonParty.Cheats
     internal class LightStampCheat : MonoBehaviour, ICheat, ICheatControls
     {
         private const int PaletteCycle = 8;
-        private const float LightRadius = 2.5f;
-        private const float LightIntensity = 2.5f;
+        private const float LightRadius = 1.0f;
+        private const float LightIntensity = 1.0f;
 
         [Inject] private SceneLightFieldService _field;
 
