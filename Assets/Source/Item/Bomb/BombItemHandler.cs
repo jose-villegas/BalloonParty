@@ -112,7 +112,7 @@ namespace BalloonParty.Item.Bomb
             // held for the effect then released.
             var lightRadius = settings.Bomb.Radius * (isRainbow ? settings.Bomb.RainbowEffectScale : 1f);
             var registration = _lightField.RegisterLight(
-                new Light(worldPosition, lightRadius * 2f, BlastLightIntensity, _palette.PaletteIndexOf(sourceColorId)));
+                new Light(worldPosition, lightRadius * 3f, BlastLightIntensity, _palette.PaletteIndexOf(sourceColorId)));
             ExpireLight(effectDuration, registration).Forget();
 
             if (converts != null)
