@@ -96,6 +96,7 @@ Material:
     - _RimSweepWidth: 0.256
     - _RimWidth: 0.0129
     - _ShadowSoftness: 0.02
+    - _ShineFromSceneLight: 1
     - _ShineInterval: 4
     - _ShineSpeed: 0.8
     - _ShineWidth: 0.215

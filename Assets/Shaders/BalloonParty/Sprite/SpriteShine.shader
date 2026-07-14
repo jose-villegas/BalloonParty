@@ -11,6 +11,9 @@
          _ShineLocation("ShineLocation", Range(0,1)) = 0
          _ShineWidth("ShineWidth", Range(0,1)) = 0
          _ShineSpeed("ShineSpeed", Float) = 0
+         // OPT-IN scene lighting: on, the sweep axis derives from _SceneLightDir (scenario
+         // objects); off (default), the classic hardcoded 45-degree diagonal (UI stays art).
+         [Toggle] _ShineFromSceneLight("Shine Follows Scene Light", Float) = 0
          [PerRendererData] _TimeOffset("TimeOffset", Float) = 0
          [MaterialToggle] PixelSnap("Pixel snap", Float) = 0
      }
@@ -88,7 +91,24 @@
      float _ShineLocation;
      float _ShineWidth;
      float _ShineSpeed;
+     float _ShineFromSceneLight;
      float _TimeOffset;
+
+     // Global shader property — set by SceneLightService, not in Properties so
+     // material values can't mask it. Points TOWARD the light, normalized;
+     // canonical (-0.707, 0.707) = upper-left.
+     float4 _SceneLightDir;
+
+     // Guarded read of the scene light (see SceneLightService): normalized, toward
+     // the light; falls back to the canonical direction if the global hasn't been
+     // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
+     float2 SceneLightDirection()
+     {
+         float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
+             ? float2(-0.707, 0.707)
+             : _SceneLightDir.xy;
+         return normalize(raw);
+     }
 
      fixed4 SampleSpriteTexture(float2 uv)
      {
@@ -107,7 +127,11 @@
 
          float lowLevel = location - _ShineWidth;
          float highLevel = location + _ShineWidth;
-         float currentDistanceProjection = (uv.x + uv.y) / 2;
+         // Opted-in materials sweep along the scene light's axis (band travels toward the
+         // light); the default keeps the classic hardcoded 45-degree diagonal.
+         float currentDistanceProjection = _ShineFromSceneLight > 0.5
+             ? dot(uv - 0.5, SceneLightDirection()) + 0.5
+             : (uv.x + uv.y) / 2;
          if (currentDistanceProjection > lowLevel && currentDistanceProjection < highLevel) {
              float whitePower = 1- (abs(currentDistanceProjection - location) / _ShineWidth);
              color.rgb +=  color.a * whitePower;

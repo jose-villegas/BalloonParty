@@ -43,6 +43,7 @@ Material:
     - _MaskSoftness: 0.035
     - _ScrollSpeed: 1
     - _ShineAngle: 0.125
+    - _ShineFromSceneLight: 1
     - _ShineInterval: 0.75
     - _ShineSpeed: 0.35
     - _ShineWidth: 0.25

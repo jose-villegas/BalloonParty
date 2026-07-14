@@ -75,6 +75,7 @@ Material:
     - _OcclusionStrength: 1
     - _Parallax: 0.02
     - _ShadowSoftness: 0.01
+    - _ShineFromSceneLight: 1
     - _ShineInterval: 0.54
     - _ShineLocation: 0
     - _ShineSpeed: 1.09

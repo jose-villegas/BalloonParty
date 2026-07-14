@@ -56,6 +56,9 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
         _ShineWidth    ("Width",    Range(0, 0.3))  = 0.08
         _ShineSpeed    ("Speed",    Range(0, 5))    = 0.8
         _ShineInterval ("Interval", Range(0, 10))   = 4.0
+        // OPT-IN scene lighting: on, the sweep runs along _SceneLightDir across the composed
+        // sphere (sphere-coherent); off (default), the classic per-quadrant hardcoded diagonal.
+        [Toggle] _ShineFromSceneLight ("Shine Follows Scene Light", Float) = 0
 
 
         [Header(Deflect Flash)]
@@ -184,6 +187,7 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
             float _ShineWidth;
             float _ShineSpeed;
             float _ShineInterval;
+            float _ShineFromSceneLight;
 
 
             // Deflect
@@ -418,7 +422,13 @@ Shader "BalloonParty/Balloon/UnbreakableBalloon"
                     float t = fmod(time, cycleDur);
                     float shineLoc = -_ShineWidth + (1.0 + 2.0 * _ShineWidth) * saturate(t / sweepDur);
 
-                    float projection = (spriteUV.x + spriteUV.y) / 2;
+                    // Opted-in: sweep along the scene light across the composed sphere —
+                    // spherePos is world-axis coherent over all 4 quadrants, unlike spriteUV
+                    // (per-quadrant rotated), so the light-driven band reads as ONE band.
+                    // Default keeps the classic per-quadrant diagonal.
+                    float projection = _ShineFromSceneLight > 0.5
+                        ? dot(spherePos, SceneLightDirection()) * 0.5 + 0.5
+                        : (spriteUV.x + spriteUV.y) / 2;
                     float shineDist = abs(projection - shineLoc);
                     float shineStr = saturate(1.0 - shineDist / max(_ShineWidth, 0.001));
                     sprite.rgb += alpha * shineStr * 0.5;

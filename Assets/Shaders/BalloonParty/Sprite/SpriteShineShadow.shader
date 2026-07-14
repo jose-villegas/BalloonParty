@@ -20,6 +20,9 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
         // Offset; on derives direction away from _SceneLightDir at Distance (0.0354 reproduces
         // the common authored (0.025, -0.025), already on the -L axis).
         [Toggle] _ShadowFromSceneLight ("Follow Scene Light", Float) = 0
+        // Same opt-in for the shine sweep's AXIS (scenario objects); off keeps the classic
+        // hardcoded 45-degree diagonal. Sweep timing is untouched either way.
+        [Toggle] _ShineFromSceneLight ("Shine Follows Scene Light", Float) = 0
         _ShadowOffset   ("Offset (manual)", Vector)     = (0.025, -0.025, 0, 0)
         _ShadowDistance ("Distance (scene light)", Range(0, 0.3)) = 0.0354
         _ShadowSoftness ("Softness", Range(0.0, 0.1))   = 0.01
@@ -80,6 +83,7 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
             float4    _MainTex_ST;
             fixed4    _ShadowColor;
             float     _ShadowFromSceneLight;
+            float     _ShineFromSceneLight;
             float2    _ShadowOffset;
             float     _ShadowDistance;
             float     _ShadowSoftness;
@@ -169,7 +173,11 @@ Shader "BalloonParty/Sprite/SpriteShineShadow"
 
                 float lowLevel = shineLocation - _ShineWidth;
                 float highLevel = shineLocation + _ShineWidth;
-                float projection = (uv.x + uv.y) / 2;
+                // Opted-in materials sweep along the scene light's axis; default keeps the
+                // classic hardcoded 45-degree diagonal (these are mostly UI materials).
+                float projection = _ShineFromSceneLight > 0.5
+                    ? dot(uv - 0.5, SceneLightDirection()) + 0.5
+                    : (uv.x + uv.y) / 2;
 
                 if (projection > lowLevel && projection < highLevel)
                 {

@@ -36,6 +36,10 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
         _ShineSpeed    ("Speed",    Range(0, 5))   = 1.0
         _ShineInterval ("Interval", Range(0, 10))  = 3.0
         _ShineAngle    ("Angle (turns)", Range(0, 1)) = 0.125
+        // OPT-IN scene lighting: on, the sweep axis derives from _SceneLightDir instead of the
+        // authored angle (scenario objects); sweep timing untouched. The glitter binds to the
+        // shine via _GlitterShineBind, so it follows automatically.
+        [Toggle] _ShineFromSceneLight ("Shine Follows Scene Light", Float) = 0
 
         [Header(Glitter)]
         // Scattered twinkling specks on top of the shine sweep — a grid of pseudo-random dots, each
@@ -104,6 +108,12 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             float     _ShineSpeed;
             float     _ShineInterval;
             float     _ShineAngle;
+            float     _ShineFromSceneLight;
+
+            // Global shader property — set by SceneLightService, not in Properties so
+            // material values can't mask it. Points TOWARD the light, normalized;
+            // canonical (-0.707, 0.707) = upper-left.
+            float4 _SceneLightDir;
 
             float     _GlitterDensity;
             float     _GlitterSize;
@@ -199,6 +209,17 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return inside.x * inside.y;
             }
 
+            // Guarded read of the scene light (see SceneLightService): normalized, toward
+            // the light; falls back to the canonical direction if the global hasn't been
+            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
+            inline float2 SceneLightDirection()
+            {
+                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
+                    ? float2(-0.707, 0.707)
+                    : _SceneLightDir.xy;
+                return normalize(raw);
+            }
+
             // Additive white shine sweep (0..1) — same diagonal band shape as SpriteShineShadow, angle tunable.
             inline fixed ShineAmount(float2 uv)
             {
@@ -207,7 +228,12 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 float t = fmod(_Time.y, cycleDuration);
                 float shineLocation = -_ShineWidth + (1.0 + 2.0 * _ShineWidth) * saturate(t / sweepDuration);
 
-                float projection = DiagonalProjection(uv, _ShineAngle);
+                // Opted-in: the sweep axis derives from the scene light instead of the authored
+                // angle. Caveat: uv is local sprite space (not rotation-compensated), so the axis
+                // sways with the balloon — accepted, same as the sprite-shadow family.
+                float projection = _ShineFromSceneLight > 0.5
+                    ? dot(uv - 0.5, SceneLightDirection()) + 0.5
+                    : DiagonalProjection(uv, _ShineAngle);
                 float inside = step(shineLocation - _ShineWidth, projection) * step(projection, shineLocation + _ShineWidth);
                 return inside * (1.0 - abs(projection - shineLocation) / _ShineWidth);
             }
