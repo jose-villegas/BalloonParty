@@ -28,10 +28,6 @@ namespace BalloonParty.Display
                  "referenced via Shader.Find, which is kept as an editor fallback.")]
         [SerializeField] private Shader _smearShader;
         [SerializeField] private Shader _overlayShader;
-        [Tooltip("Light vector — points TOWARD the light source, same convention (and " +
-                 "default) as the PuffCloud material's Light Direction. Shadows extend " +
-                 "the opposite way.")]
-        [SerializeField] private Vector2 _lightDirection = new Vector2(1f, -1f);
         [Tooltip("How far an object's shadow/bleed reaches, in world units.")]
         [SerializeField] private float _smearDistance = 1.5f;
         [Tooltip("Per-tap weight decay along the march — lower dies off faster.")]
@@ -61,6 +57,7 @@ namespace BalloonParty.Display
 
         private Camera _camera;
         private SceneCaptureService _capture;
+        private SceneLightService _sceneLight;
         private Material _smearMaterial;
         private Material _overlayMaterial;
         private RenderTexture _smearTarget;
@@ -78,6 +75,16 @@ namespace BalloonParty.Display
         {
             _camera = GetComponent<Camera>();
             _capture = GetComponent<SceneCaptureService>();
+
+            // The light owner lives on a dedicated scene object (Game.unity's "Lighting"), not on
+            // the camera prefab — a scene object can't be referenced from the shared prefab, so
+            // resolve it at runtime.
+            _sceneLight = FindFirstObjectByType<SceneLightService>();
+            if (_sceneLight == null)
+            {
+                Debug.LogError("ScreenSpaceLightService: no SceneLightService in the scene — " +
+                                "the GI smear direction will not update.", this);
+            }
         }
 
         private void OnEnable()
@@ -248,20 +255,25 @@ namespace BalloonParty.Display
         // Pushed every frame so the knobs stay live-tunable in play mode.
         private void PushParameters()
         {
-            var worldHeight = _camera.orthographicSize * 2f;
-            var worldWidth = worldHeight * _camera.aspect;
+            // Missing on the not-yet-retrofitted Main Camera prefab (see Awake) — skip the
+            // tap-step update rather than NRE; the rest of the parameters are still live-tunable.
+            if (_sceneLight != null)
+            {
+                var worldHeight = _camera.orthographicSize * 2f;
+                var worldWidth = worldHeight * _camera.aspect;
 
-            var direction = _lightDirection.sqrMagnitude > 0.0001f
-                ? _lightDirection.normalized
-                : Vector2.down;
+                // Owner is toward-the-light; the smear marches down-light, hence the negation.
+                var direction = -_sceneLight.Direction;
 
-            // Shader marches +step for reflection and -step for shadow; see shader header.
-            var stepWorld = _smearDistance / TapCount;
-            var stepUv = new Vector4(
-                direction.x * stepWorld / worldWidth,
-                direction.y * stepWorld / worldHeight);
+                // Shader marches +step for reflection and -step for shadow; see shader header.
+                var stepWorld = _smearDistance / TapCount;
+                var stepUv = new Vector4(
+                    direction.x * stepWorld / worldWidth,
+                    direction.y * stepWorld / worldHeight);
 
-            _smearMaterial.SetVector(TapStepUvId, stepUv);
+                _smearMaterial.SetVector(TapStepUvId, stepUv);
+            }
+
             _smearMaterial.SetFloat(TapDecayId, _tapDecay);
             _smearMaterial.SetFloat(TapStartId, _tapStart);
 

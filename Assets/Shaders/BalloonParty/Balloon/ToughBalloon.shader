@@ -25,7 +25,6 @@ Shader "BalloonParty/Balloon/ToughBalloon"
         [Header(Surface Grain)]
         _GrainScale ("Scale", Range(2, 80)) = 20
         _GrainStrength ("Strength", Range(0, 1.0)) = 0.25
-        _GrainLightDir ("Light Direction XY", Vector) = (0.4, 0.6, 0, 0)
 
         // ---- Voronoi cracks ------------------------------------------------
         [Header(Cracks  Base)]
@@ -128,7 +127,11 @@ Shader "BalloonParty/Balloon/ToughBalloon"
 
             float  _GrainScale;
             float  _GrainStrength;
-            float4 _GrainLightDir;
+
+            // Global shader property — set by SceneLightService, not in Properties so
+            // material values can't mask it. Points TOWARD the light, normalized;
+            // canonical (-0.707, 0.707) = upper-left.
+            float4 _SceneLightDir;
 
             float  _VoronoiScale;
             float  _VoronoiScaleDamageBoost;
@@ -443,7 +446,15 @@ Shader "BalloonParty/Balloon/ToughBalloon"
                 float2 vUV  = float2(cos(phi) * vorR, sin(phi) * vorR) + _VoronoiSeed;
 
                 // ---- Leather-like surface grain (sampled in sphere-projected UV) ----
-                float grain = LeatherGrain(vUV, sphereNormal, _GrainScale, _GrainLightDir.xy);
+                // Degenerate guard: falls back to the canonical direction if
+                // SceneLightService hasn't pushed yet (protects edit-time before its
+                // first OnEnable/LateUpdate/OnValidate).
+                float2 lightDirToward = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
+                    ? float2(-0.707, 0.707)
+                    : _SceneLightDir.xy;
+                // LeatherGrain wants the light-travel (FROM-light) direction, but the
+                // global points TOWARD the light — negate to convert.
+                float grain = LeatherGrain(vUV, sphereNormal, _GrainScale, -lightDirToward);
                 col += col * grain * _GrainStrength;
 
                 // ---- Rim / subsurface fringe (world-space — never rotates) -----

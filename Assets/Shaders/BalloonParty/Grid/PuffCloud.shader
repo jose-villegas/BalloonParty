@@ -44,7 +44,6 @@ Shader "BalloonParty/Grid/PuffCloud"
         _SlotBlend          ("Slot Union Smoothness", Range(0.01, 1))  = 0.35
 
         [Header(Lighting)]
-        _LightDir           ("Light Direction",    Vector)             = (-0.4, 0.7, 0, 0)
         _LightColor         ("Highlight Color",    Color)              = (1, 1, 0.95, 1)
         _AmbientColor       ("Shadow Tint",        Color)              = (0.55, 0.58, 0.7, 1)
         _LightIntensity     ("Light Intensity",    Range(0, 1))        = 0.45
@@ -62,8 +61,7 @@ Shader "BalloonParty/Grid/PuffCloud"
         [Header(Shadow)]
         [Toggle(_SHADOW_ON)] _EnableShadow ("Enable Shadow",   Float)  = 0
         _ShadowColor        ("Shadow Color",       Color)              = (0.06, 0.06, 0.14, 0.35)
-        _ShadowOffsetX      ("Shadow Offset X",    Range(-0.15, 0.15)) = 0.025
-        _ShadowOffsetY      ("Shadow Offset Y",    Range(-0.15, 0.15)) = -0.030
+        _ShadowDistance     ("Shadow Distance",    Range(0, 0.4))      = 0.212
         _ShadowSoftness     ("Shadow Softness",    Range(0, 0.10))     = 0.03
     }
 
@@ -140,7 +138,6 @@ Shader "BalloonParty/Grid/PuffCloud"
             float  _TimeOffset;
             float  _AnimationSpeed;
 
-            float4 _LightDir;
             fixed4 _LightColor;
             fixed4 _AmbientColor;
             float  _LightIntensity;
@@ -155,6 +152,11 @@ Shader "BalloonParty/Grid/PuffCloud"
             float2    _FieldBoundsSize;
             float     _DisplaceWorldScale;
             #endif
+
+            // Global shader property — set by SceneLightService, not in Properties so
+            // material values can't mask it. Points TOWARD the light, normalized;
+            // canonical (-0.707, 0.707) = upper-left.
+            float4 _SceneLightDir;
 
             // Slot center positions in world space — set via MaterialPropertyBlock.
             float4 _SlotCentersWorld[MAX_SLOTS];
@@ -172,8 +174,7 @@ Shader "BalloonParty/Grid/PuffCloud"
 
             #ifdef _SHADOW_ON
             fixed4 _ShadowColor;
-            float  _ShadowOffsetX;
-            float  _ShadowOffsetY;
+            float  _ShadowDistance;
             float  _ShadowSoftness;
             #endif
 
@@ -242,6 +243,17 @@ Shader "BalloonParty/Grid/PuffCloud"
                 return smoothstep(_SlotRadius + _BorderSoftness, _SlotRadius, minDist);
             }
 
+            // Guarded read of the scene light (see SceneLightService): normalized, toward
+            // the light; falls back to the canonical direction if the global hasn't been
+            // pushed yet (protects edit-time before its first OnEnable/LateUpdate/OnValidate).
+            float2 SceneLightDirection()
+            {
+                float2 raw = dot(_SceneLightDir.xy, _SceneLightDir.xy) < 1e-4
+                    ? float2(-0.707, 0.707)
+                    : _SceneLightDir.xy;
+                return normalize(raw);
+            }
+
             // Derive a pseudo-normal from the low-frequency noise gradient and apply
             // half-Lambert directional lighting. The gradient comes from screen-space
             // derivatives of a value the density pass already computed — the GPU provides
@@ -257,7 +269,13 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                 float3 normal = normalize(float3(-dX, -dY, 1.0));
 
-                float2 ld = normalize(_LightDir.xy);
+                // _SceneLightDir already points toward the light — direct consumption,
+                // no sign flip.
+                // A/B: the previous authored value (1,-1) lit clouds from lower-right
+                // (opposite the global's upper-left). If that inverted look is the
+                // intended art, negate here (ld = -SceneLightDirection()) — decide
+                // in-editor against the cloud drop shadow.
+                float2 ld = SceneLightDirection();
                 float3 lightVec = normalize(float3(ld, 0.6));
 
                 float NdotL = dot(normal, lightVec);
@@ -304,8 +322,12 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float borderFade = SlotFalloff(wpLocal);
 
                 #ifdef _SHADOW_ON
-                float2 shadowWpWorld = wpRest   - float2(_ShadowOffsetX, _ShadowOffsetY);
-                float2 shadowWpLocal = wpLocal  - float2(_ShadowOffsetX, _ShadowOffsetY);
+                // The shadow lands down-light of the cloud: direction derived from the scene
+                // light (-toward-light), only the distance stays authored — so rotating the
+                // light moves the drop shadow together with the diffuse shading.
+                float2 shadowOffset = -SceneLightDirection() * _ShadowDistance;
+                float2 shadowWpWorld = wpRest   - shadowOffset;
+                float2 shadowWpLocal = wpLocal  - shadowOffset;
                 float  shadowFade = SlotFalloff(shadowWpLocal);
                 #endif
 

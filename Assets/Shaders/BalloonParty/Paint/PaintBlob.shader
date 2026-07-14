@@ -25,14 +25,12 @@ Shader "BalloonParty/Paint/PaintBlob"
         _SpecularColor      ("Specular Color",       Color)              = (1, 1, 1, 0.85)
         _SpecularSize       ("Specular Size",        Range(0.01, 0.40))  = 0.14
         _SpecularSharpness  ("Specular Sharpness",   Range(1, 20))       = 7.0
-        _SpecularOffsetX    ("Specular Offset X",    Range(-0.40, 0.40)) = -0.14
-        _SpecularOffsetY    ("Specular Offset Y",    Range(-0.40, 0.40)) =  0.18
+        _SpecularDistance   ("Specular Distance",    Range(0, 0.4))      = 0.23
 
         [Header(Shadow)]
         [Toggle(_SHADOW_ON)] _EnableShadow ("Enable Shadow", Float) = 0
         _ShadowColor        ("Shadow Color",   Color)              = (0.15, 0.15, 0.15, 0.6)
-        _ShadowOffsetX      ("Shadow Offset X", Range(-0.20, 0.20)) = 0.02
-        _ShadowOffsetY      ("Shadow Offset Y", Range(-0.20, 0.20)) = -0.03
+        _ShadowDistance     ("Shadow Distance", Range(0, 0.3))      = 0.036
         _ShadowSoftness     ("Shadow Softness", Range(0.001, 0.08)) = 0.02
         _ShadowScale        ("Shadow Scale",    Range(0.10, 3.00))  = 1.0
     }
@@ -107,16 +105,26 @@ Shader "BalloonParty/Paint/PaintBlob"
             fixed4 _SpecularColor;
             float  _SpecularSize;
             float  _SpecularSharpness;
-            float  _SpecularOffsetX;
-            float  _SpecularOffsetY;
+            float  _SpecularDistance;
+
+            // Set globally by SceneLightService; kept out of Properties so no
+            // material value can shadow the scene-wide light direction.
+            float4 _SceneLightDir;
 
             #ifdef _SHADOW_ON
             fixed4 _ShadowColor;
-            float  _ShadowOffsetX;
-            float  _ShadowOffsetY;
+            float  _ShadowDistance;
             float  _ShadowSoftness;
             float  _ShadowScale;
             #endif
+
+            // Normalized scene light direction, with an edit-time fallback for
+            // the degenerate case (service not yet run / zero vector).
+            float2 SceneLight()
+            {
+                float2 dir = _SceneLightDir.xy;
+                return (dot(dir, dir) > 1e-8) ? normalize(dir) : float2(-0.707, 0.707);
+            }
 
             // Computes the blob SDF boundary at a given UV offset from center.
             // Returns the alpha (0 = outside, 1 = inside) using the wobble + edge softness.
@@ -172,7 +180,15 @@ Shader "BalloonParty/Paint/PaintBlob"
 
                 // ── Shadow (composited behind the blob) ──
                 #ifdef _SHADOW_ON
-                float2 shadowUV    = (uv - float2(_ShadowOffsetX, _ShadowOffsetY)) / max(_ShadowScale, 0.001);
+                // The shadow lands down-light: world direction derived from the scene light,
+                // only the distance stays authored. Inverse-rotated (R(-θ), spin = (cosθ, sinθ))
+                // into the blob's local frame so the silhouette wobbles in the blob's own frame
+                // AND stays world-anchored while the sprite spins (the authored offset used to
+                // rotate with it).
+                float2 shadowWorld = -SceneLight() * _ShadowDistance;
+                float2 shadowLocal = float2( shadowWorld.x * IN.spin.x + shadowWorld.y * IN.spin.y,
+                                            -shadowWorld.x * IN.spin.y + shadowWorld.y * IN.spin.x);
+                float2 shadowUV    = (uv - shadowLocal) / max(_ShadowScale, 0.001);
                 float  shadowAlpha = BlobAlpha(shadowUV, _ShadowSoftness / max(_ShadowScale, 0.001)) * _ShadowColor.a;
                 #endif
 
@@ -210,7 +226,7 @@ Shader "BalloonParty/Paint/PaintBlob"
                 // put regardless of how the parent transform is rotated.
                 float2 worldUV = float2(uv.x * IN.spin.x - uv.y * IN.spin.y,
                                         uv.x * IN.spin.y + uv.y * IN.spin.x);
-                float2 specCenter = float2(_SpecularOffsetX, _SpecularOffsetY);
+                float2 specCenter = SceneLight() * _SpecularDistance;
                 float  specDist   = length(worldUV - specCenter);
                 float  specMask   = pow(saturate(1.0 - specDist / max(_SpecularSize, 0.001)),
                                         _SpecularSharpness);

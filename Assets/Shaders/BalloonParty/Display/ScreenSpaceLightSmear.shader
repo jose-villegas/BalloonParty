@@ -6,9 +6,10 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
     //
     // Pass 0 — directional smear, two opposite marches per pixel (8 taps each, with
     // exponential decay):
-    //   rgb (reflection/bleed) marches TOWARD the light — the composited scene color
-    //     up-light of this pixel (sky included, not premultiplied by coverage); the
-    //     overlay subtracts the ambient sky so only bright/dark deviations bleed.
+    //   rgb (reflection/bleed) marches AWAY from the light, i.e. along the light-travel
+    //     direction — the composited scene color down-light of this pixel (sky included,
+    //     not premultiplied by coverage); the overlay subtracts the ambient sky so only
+    //     bright/dark deviations bleed.
     //   a (shadow) marches AWAY from the light — an occluder sitting between this
     //     pixel and the source darkens it, so the shadow shows up on the far side.
     // The two must march opposite ways: a shadow is cast onto the side of an object

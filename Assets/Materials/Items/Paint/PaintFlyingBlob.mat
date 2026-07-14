@@ -78,6 +78,7 @@ Material:
     - _Parallax: 0.02
     - _RimDarkness: 0.15
     - _RimWidth: 0.2
+    - _ShadowDistance: 0.1414
     - _ShadowOffsetX: 0.1
     - _ShadowOffsetY: -0.1
     - _ShadowScale: 1
