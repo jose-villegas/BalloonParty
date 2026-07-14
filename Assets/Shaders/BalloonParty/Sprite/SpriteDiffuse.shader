@@ -15,10 +15,11 @@ Shader "BalloonParty/Sprite/Diffuse"
 
         [Header(Light Response)]
         _LightInfluence ("Light Influence", Range(0, 1)) = 1
-        // On: tint by the global scene light only (SceneLightService's colour × intensity), skipping the
-        // light-field texture entirely — for sprites that should follow just the main/ambient light and
-        // never a local point/area light. Off: sample the field at the sprite's position.
-        [ToggleUI] _AmbientOnly ("Ambient Light Only", Float) = 0
+        // Full   — the field: global ambient + any local point/area lights (default).
+        // Ambient — the global scene light only (colour × intensity), skips the field texture entirely.
+        // Local  — only local field lights, ABOVE the ambient rest: neutral until a light is near, then
+        //          it brightens/tints toward that light. Never picks up the global ambient.
+        [Enum(Full, 0, Ambient, 1, Local, 2)] _LightMode ("Light Mode", Float) = 0
 
         [MaterialToggle] PixelSnap ("Pixel snap", Float) = 0
     }
@@ -80,7 +81,7 @@ Shader "BalloonParty/Sprite/Diffuse"
             sampler2D _MainTex;
             fixed4 _Color;
             float _LightInfluence;
-            float _AmbientOnly;
+            float _LightMode;
 
             v2f vert(appdata_t IN)
             {
@@ -91,16 +92,23 @@ Shader "BalloonParty/Sprite/Diffuse"
                 OUT.texcoord = IN.texcoord;
                 OUT.color = IN.color * _Color * _RendererColor;
 
-                // Ambient-only: the flat global light, no field texture read at all. Otherwise sample the
-                // field at the sprite's centre (VTF, target 3.5) — one coherent reading for the whole
-                // sprite. The branch is on a material toggle, so it's uniform (no divergence).
-                if (_AmbientOnly > 0.5)
+                // The whole sprite is lit from one reading at its centre (VTF, target 3.5). The mode is a
+                // material constant, so the branch is uniform (no divergence).
+                float2 spriteCenterWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
+                if (_LightMode > 1.5)
                 {
+                    // Local: only nearby field lights, no ambient — neutral (1) until a light is near, then
+                    // its colour × boost adds on top. The frag's lerp from white keeps rest = unlit.
+                    OUT.lightTint = float3(1.0, 1.0, 1.0) + SceneLightLocalAtLOD(spriteCenterWorld);
+                }
+                else if (_LightMode > 0.5)
+                {
+                    // Ambient: the flat global light, no field texture read at all.
                     OUT.lightTint = SceneLightTint();
                 }
                 else
                 {
-                    float2 spriteCenterWorld = float2(unity_ObjectToWorld._m03, unity_ObjectToWorld._m13);
+                    // Full: the field — ambient + any local lights.
                     OUT.lightTint = SceneLightTintAtLOD(spriteCenterWorld);
                 }
 

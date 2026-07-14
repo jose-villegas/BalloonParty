@@ -208,6 +208,35 @@ float3 SceneLightTintAtLOD(float2 worldPos)
     return lerp(keyColor, palette, colorAmount) * mag;
 }
 
+// The LOCAL field-light contribution at a world position — nearby point/area lights only, with NO
+// ambient baseline: the light colour × how far the magnitude sits ABOVE the ambient rest. Zero at rest
+// and when the field is off, so a consumer using this reacts only to local lights, never the global one.
+float3 SceneLightLocalAt(float2 worldPos)
+{
+    if (_SceneLightFieldOn < 0.5)
+    {
+        return float3(0.0, 0.0, 0.0);
+    }
+
+    float rest = _SceneLightColor.a > 0.5 ? _SceneLightIntensity : 1.0;
+    float boost = max(0.0, SceneLightMagnitudeAt(worldPos) - rest);
+    float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1.0, 1.0, 1.0);
+    return SceneLightPaletteColorAt(SceneLightFieldUV(worldPos), keyColor) * boost;
+}
+
+float3 SceneLightLocalAtLOD(float2 worldPos)
+{
+    if (_SceneLightFieldOn < 0.5)
+    {
+        return float3(0.0, 0.0, 0.0);
+    }
+
+    float rest = _SceneLightColor.a > 0.5 ? _SceneLightIntensity : 1.0;
+    float boost = max(0.0, SceneLightMagnitudeAtLOD(worldPos) - rest);
+    float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1.0, 1.0, 1.0);
+    return SceneLightPaletteColorAtLOD(SceneLightFieldUV(worldPos), keyColor) * boost;
+}
+
 // No light, no shadow, at a world position — same clamp as ShadowLightFade(), scaled by the
 // local magnitude once the field is live (the fallback comes free from SceneLightMagnitudeAt's
 // own field-off branch, so this needs no separate _SceneLightFieldOn check).
