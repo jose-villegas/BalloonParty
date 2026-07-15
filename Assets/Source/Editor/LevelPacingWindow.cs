@@ -562,20 +562,26 @@ namespace BalloonParty.Editor
             var count = balloonsProp.arraySize;
             var allTypes = (BalloonType[])System.Enum.GetValues(typeof(BalloonType));
             var typeNames = new string[allTypes.Length];
+            var selectedTypeIndex = _selectedBalloonPerRow[rowIndex];
+            selectedTypeIndex = Mathf.Clamp(selectedTypeIndex, 0, allTypes.Length - 1);
+
             for (var i = 0; i < allTypes.Length; i++)
             {
-                var present = FindBalloonEntryIndex(balloonsProp, allTypes[i]) >= 0;
-                typeNames[i] = present ? $"✓ {allTypes[i]}" : $"+ {allTypes[i]}";
+                if (i == selectedTypeIndex)
+                {
+                    typeNames[i] = allTypes[i].ToString();
+                }
+                else
+                {
+                    var present = FindBalloonEntryIndex(balloonsProp, allTypes[i]) >= 0;
+                    typeNames[i] = present ? $"✓ {allTypes[i]}" : $"+ {allTypes[i]}";
+                }
             }
 
             var x = cell.x + 2f;
             var y = cell.y + 2f;
             var h = cell.height - 4f;
-
-            // Type dropdown — shows all types; selecting a new one adds it
             var dropdownW = 70f;
-            var selectedTypeIndex = _selectedBalloonPerRow[rowIndex];
-            selectedTypeIndex = Mathf.Clamp(selectedTypeIndex, 0, allTypes.Length - 1);
 
             var newTypeIndex = EditorGUI.Popup(new Rect(x, y, dropdownW, h), selectedTypeIndex, typeNames);
             if (newTypeIndex != selectedTypeIndex)
