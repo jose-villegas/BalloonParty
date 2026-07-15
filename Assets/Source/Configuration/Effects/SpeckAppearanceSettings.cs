@@ -73,9 +73,9 @@ namespace BalloonParty.Configuration.Effects
         [Tooltip("Per-second ramp of a speck's crossfade when its palette tag changes color (e.g. the rainbow cycling). Higher = snappier; ~4 crossfades in a quarter second.")]
         [SerializeField] private float _colorLerpRate = 4f;
 
-        [Tooltip("Base scene-light response (0 = specks ignore light, stay emissive; 1 = full tint; >1 " +
-                 "over-drives it stronger). Colour looks blend toward their own value by heat.")]
-        [Range(0f, 4f)] [SerializeField] private float _lightInfluence;
+        [Tooltip("Base scene-light response (0 = specks ignore light, stay emissive; 1 = fully replaced " +
+                 "by the light's palette color × magnitude). Colour looks blend toward their own value by heat.")]
+        [Range(0f, 1f)] [SerializeField] private float _lightInfluence;
 
         [SerializeField] private SceneLightMode _lightMode;
 
