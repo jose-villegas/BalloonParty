@@ -11,8 +11,9 @@
 > Exploratory beginning: the first milestone is only the **direction** abstraction; colour,
 > intensity, and point-light falloff are deliberately deferred.
 >
-> **Status: milestones 1–2 SHIPPED (2026-07-14); milestone 3 (the light field) SHIPPED — all
-> phases code-complete and wired to game sources (projectile, laser, bomb, lightning, specks).
+> **Status: milestones 1–3 SHIPPED. Milestone 4 (GI improvements) SHIPPED (2026-07-15):
+> mip-chain cone march, RSM-style 4-direction bounce, shadow mip penumbra, settings SO
+> refactor (SceneLightService decommissioned → SceneLightFieldService pushes ambient globals).
 > In-editor shader verification still pending for shaders compiled only by Unity.**
 
 ---
@@ -319,6 +320,56 @@ stays raw/point-sampled by design (a field-data inspector). All migrated consume
 
 **Open:** in-editor check that a coloured cheat light reads smooth on PuffCloud; `SCENE_LIGHT_COLOR_RAMP`
 (soft-edge width) and `TexelsPerUnit` are the tuning knobs.
+
+---
+
+## Milestone 4 — GI Improvements (SHIPPED 2026-07-15)
+
+A series of enhancements to the screen-space GI pipeline, driven by the newly available buffer data
+(light field direction/magnitude, mip-chain capture). All changes are zero-extra-RT, zero-extra-pass.
+
+### 4a — Mip-Chain Cone March
+
+Enabled `useMipMap` + `autoGenerateMips` on the capture RT. The smear shader's 8-tap march now
+samples at increasing mip levels (`mip = _MipSpread × log₂(1 + t)`), so distant taps read averaged
+scene color over a widening solid angle — approximating the integral of incoming radiance at each
+distance (HSSVGI/HBIL pattern). Near taps stay at mip 0 for sharp contact. `_MipSpread = 0`
+collapses to the old flat march.
+
+### 4b — Shadow Mip Penumbra
+
+Separate `_ShadowMipSpread` (default 1.4, higher than bounce's 0.7) gives the shadow march a
+steeper mip ramp — sharp contact shadows, soft penumbra far from the caster. Zero extra cost
+(one extra mip param per shadow tap).
+
+### 4c — RSM-Style 4-Direction Bounce
+
+Decoupled shadow from bounce. Shadow stays single-direction (toward the light, physically correct).
+Bounce now gathers from 4 directions at 90° spacing around the field's local direction — an RSM-style
+Virtual Point Light gather in 2D. Each direction runs 8 taps with cone widening. The primary
+direction (down-light) has weight 1; three secondary directions are scaled by `_SecondaryWeight`
+(0 = old single-dir, 0.5 = default, 1 = fully omnidirectional). All 4 directions rotate with the
+field's local light, so nearby point/area lights bend the entire gather pattern around them.
+
+### 4d — Settings SO Refactor
+
+- Decommissioned `SceneLightService` MonoBehaviour entirely.
+- Moved ambient globals (direction/colour/intensity) to `SceneLightFieldSettings` SO, exposed via
+  new `ISceneLightSettings` interface.
+- `SceneLightFieldService` now pushes the ambient globals every tick (replaces the former MonoBehaviour).
+- All GI tuning (shaders, distances, weights, temporal) moved from serialized fields on
+  `ScreenSpaceLightService` to `IScreenSpaceLightSettings` on the same SO.
+- `CameraBackgroundTint` reads from `ISceneLightSettings` (DI-injected).
+- Single SO serves three interfaces (`ISceneLightFieldSettings`, `IScreenSpaceLightSettings`,
+  `ISceneLightSettings`), registered in `GameLifetimeScope`.
+
+### Future exploration
+
+- **Temporal jitter**: rotate the 4 bounce directions by ¼ turn each frame so the temporal EMA
+  effectively integrates 16 directions at 4-frame lag (free quality boost).
+- **Phase D (Radiance Cascades)**: 2-level cascade replacing the flat multi-direction march. The
+  light field is converging toward a cascade-0 representation — a natural evolution if more spatial
+  coherence is needed for far-field bounce.
 
 ## Open questions
 
