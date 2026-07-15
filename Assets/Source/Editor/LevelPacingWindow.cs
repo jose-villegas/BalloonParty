@@ -253,7 +253,7 @@ namespace BalloonParty.Editor
         private float TotalWidth()
         {
             var total = 0f;
-            for (var i = 0; i < ColWidths.Length; i++)
+            for (var i = 0; i < ColWidths.Length - 2; i++)
             {
                 if (HasGapBefore(i))
                 {
@@ -430,7 +430,12 @@ namespace BalloonParty.Editor
                     EditorGUI.LabelField(cell, ColHeaders[i], style);
                 }
 
-                // Separator
+                // Separator (skip right-anchored columns)
+                if (i >= 10)
+                {
+                    continue;
+                }
+
                 var sep = new Rect(cell.xMax, rowRect.y, SeparatorWidth, rowRect.height);
                 EditorGUI.DrawRect(sep, new Color(0.35f, 0.35f, 0.35f, 0.8f));
             }
@@ -491,8 +496,8 @@ namespace BalloonParty.Editor
             DrawGroupBackground(rowRect, 4, 5, rowBg);
             DrawGroupBackground(rowRect, 6, 9, rowBg);
 
-            // Separators
-            for (var i = 0; i < ColWidths.Length; i++)
+            // Separators (only for left-anchored columns 0–9)
+            for (var i = 0; i < ColWidths.Length - 2; i++)
             {
                 var colW = EffectiveColWidth(i);
                 var sep = new Rect(rowRect.x + ColX(i) + colW, rowRect.y, SeparatorWidth, rowRect.height);
