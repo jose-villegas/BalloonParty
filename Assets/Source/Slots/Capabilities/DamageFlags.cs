@@ -14,6 +14,10 @@ namespace BalloonParty.Slots.Capabilities
 
         /// <summary>The projectile itself struck the actor — absent from AOE/item damage, so per-pop
         /// reactions (e.g. pop-spawns) can exclude bombs/lasers/lightning.</summary>
-        DirectHit = 1 << 2
+        DirectHit = 1 << 2,
+
+        /// <summary>A colourless projectile popped a rainbow balloon — the streak contribution is
+        /// deferred until the projectile adopts a colour on a subsequent hit.</summary>
+        DeferredStreak = 1 << 3
     }
 }

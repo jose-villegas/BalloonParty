@@ -60,6 +60,16 @@ namespace BalloonParty.Projectile.Controller
             // carry — even though the balloon is otherwise IHasColor.
             var isWildcardPop = balloon is IHasColor wildcard && wildcard.Color.Value == GamePalette.RainbowColorId;
 
+            // A colourless projectile popping a rainbow can't anchor the streak yet — defer the count
+            // so it folds into the streak once the projectile adopts a real colour on a later hit.
+            if (isWildcardPop && !isRainbowBuff && string.IsNullOrEmpty(projectile.ColorName.Value))
+            {
+                damageContext = new DamageContext(
+                    damageContext.Damage,
+                    damageContext.Flags | DamageFlags.DeferredStreak,
+                    damageContext.SourceColorId);
+            }
+
             var recolored = ApplyColorChange(projectile, balloon, outcome, isWildcardPop);
 
             _hitDispatcher.Dispatch(new ActorHitMessage(

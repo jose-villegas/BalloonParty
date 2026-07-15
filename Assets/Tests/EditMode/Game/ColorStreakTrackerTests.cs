@@ -105,6 +105,45 @@ namespace BalloonParty.Tests.Game
 
             Assert.AreEqual(0, _tracker.GetStreak("Blue"));
         }
+
+        [Test]
+        public void RecordDeferred_ThenRecord_FoldsIntoStreak()
+        {
+            _tracker.RecordDeferred();
+            _tracker.RecordDeferred();
+
+            Assert.AreEqual(3, _tracker.Record("Red"));
+        }
+
+        [Test]
+        public void RecordDeferred_ThenSameColorContinues_KeepsClimbing()
+        {
+            _tracker.RecordDeferred();
+
+            _tracker.Record("Red");
+
+            Assert.AreEqual(3, _tracker.Record("Red"));
+        }
+
+        [Test]
+        public void RecordDeferred_ResetClearsDeferredPops()
+        {
+            _tracker.RecordDeferred();
+            _tracker.RecordDeferred();
+
+            _projectileLoadedHandler.Handle(new ProjectileLoadedMessage(null));
+
+            Assert.AreEqual(1, _tracker.Record("Red"));
+        }
+
+        [Test]
+        public void RecordDeferred_ClearedOnColorChange()
+        {
+            _tracker.RecordDeferred();
+            _tracker.Record("Red");
+
+            Assert.AreEqual(1, _tracker.Record("Blue"));
+        }
     }
 }
 

@@ -125,6 +125,13 @@ namespace BalloonParty.Game.Score
                 return _streakTracker.RecordWildcard();
             }
 
+            // A colourless projectile popping a rainbow — bank the pop for a later colour hit.
+            if (flags.HasFlag(DamageFlags.DeferredStreak))
+            {
+                _streakTracker.RecordDeferred();
+                return 1;
+            }
+
             if (attributions.Count == 1)
             {
                 return _streakTracker.Record(attributions[0].ColorId, attributions[0].BreaksStreak);

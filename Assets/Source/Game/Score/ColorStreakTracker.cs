@@ -10,6 +10,8 @@ namespace BalloonParty.Game.Score
         private readonly IDisposable _levelUpSubscription;
         private readonly IDisposable _projectileLoadedSubscription;
 
+        private int _deferredPops;
+
         public string LastColor { get; private set; }
         public int CurrentStreak { get; private set; }
 
@@ -50,10 +52,13 @@ namespace BalloonParty.Game.Score
             }
             else
             {
+                // Flush any deferred rainbow pops into the new colour's streak — they happened
+                // before the projectile had a colour, so they count toward this first real hit.
                 LastColor = colorId;
-                CurrentStreak = 1;
+                CurrentStreak = 1 + _deferredPops;
             }
 
+            _deferredPops = 0;
             PublishChanged();
             return CurrentStreak;
         }
@@ -62,15 +67,25 @@ namespace BalloonParty.Game.Score
         /// colour-agnostic (rainbow) buff, so every pop keeps the multiplier climbing.</summary>
         public int RecordWildcard()
         {
+            _deferredPops = 0;
             CurrentStreak++;
             PublishChanged();
             return CurrentStreak;
+        }
+
+        /// <summary>Banks a pop from a colourless projectile hitting a rainbow balloon. The count
+        /// is folded into the streak the next time <see cref="Record"/> establishes a colour.</summary>
+        public int RecordDeferred()
+        {
+            _deferredPops++;
+            return _deferredPops;
         }
 
         internal void Reset()
         {
             LastColor = null;
             CurrentStreak = 0;
+            _deferredPops = 0;
             PublishChanged();
         }
 
