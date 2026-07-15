@@ -15,6 +15,7 @@ namespace BalloonParty.Editor
         private const float MaskColWidth = 100f;
         private const float WeightsColWidth = 140f;
         private const float HeaderHeight = 22f;
+        private const float SeparatorWidth = 1f;
 
         private readonly ConfigAssetCache<LevelPacingConfiguration> _assetCache = new();
 
@@ -112,12 +113,19 @@ namespace BalloonParty.Editor
 
             EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
             GUILayout.Label("Range", headerStyle, GUILayout.Width(RangeColWidth));
+            DrawColumnSeparator();
             GUILayout.Label("Spawn", headerStyle, GUILayout.Width(RangedIntColWidth));
+            DrawColumnSeparator();
             GUILayout.Label("Board", headerStyle, GUILayout.Width(RangedIntColWidth));
+            DrawColumnSeparator();
             GUILayout.Label("Cadence", headerStyle, GUILayout.Width(RangedIntColWidth));
+            DrawColumnSeparator();
             GUILayout.Label("1st Turn", headerStyle, GUILayout.Width(RangedIntColWidth));
+            DrawColumnSeparator();
             GUILayout.Label("Colors", headerStyle, GUILayout.Width(MaskColWidth));
+            DrawColumnSeparator();
             GUILayout.Label("Balloons", headerStyle, GUILayout.Width(WeightsColWidth));
+            DrawColumnSeparator();
             GUILayout.Label("Items", headerStyle, GUILayout.Width(WeightsColWidth));
             GUILayout.FlexibleSpace();
             EditorGUILayout.EndHorizontal();
@@ -149,15 +157,22 @@ namespace BalloonParty.Editor
 
             // Range column
             DrawRangeCell(fromProp, toProp, isFallback);
+            DrawColumnSeparator();
 
             if (paramsProp != null)
             {
                 DrawRangedIntCell(paramsProp, "_spawnLines");
+                DrawColumnSeparator();
                 DrawRangedIntCell(paramsProp, "_boardLines");
+                DrawColumnSeparator();
                 DrawRangedIntCell(paramsProp, "_itemCadence");
+                DrawColumnSeparator();
                 DrawRangedIntCell(paramsProp, "_firstSpawnTurn");
+                DrawColumnSeparator();
                 DrawMaskCell(paramsProp);
+                DrawColumnSeparator();
                 DrawWeightsCell(paramsProp, "_balloonWeights", "Balloon");
+                DrawColumnSeparator();
                 DrawWeightsCell(paramsProp, "_itemWeights", "Item");
             }
 
@@ -321,6 +336,13 @@ namespace BalloonParty.Editor
 
             _asset = _assetCache.Value;
             _serialized = _asset != null ? new SerializedObject(_asset) : null;
+        }
+
+        private static void DrawColumnSeparator()
+        {
+            var rect = GUILayoutUtility.GetRect(SeparatorWidth, RowHeight,
+                GUILayout.Width(SeparatorWidth), GUILayout.ExpandHeight(true));
+            EditorGUI.DrawRect(rect, new Color(0.35f, 0.35f, 0.35f, 0.8f));
         }
     }
 }
