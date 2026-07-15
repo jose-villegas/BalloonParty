@@ -1,4 +1,6 @@
+using BalloonParty.Configuration.Effects;
 using UnityEngine;
+using VContainer;
 
 namespace BalloonParty.Display
 {
@@ -21,8 +23,9 @@ namespace BalloonParty.Display
         [Tooltip("0 = unlit (authored colour always), 1 = full albedo × light response.")]
         [Range(0f, 1f)] [SerializeField] private float _lightInfluence = 1f;
 
+        [Inject] private ISceneLightSettings _lightSettings;
+
         private Camera _camera;
-        private SceneLightService _sceneLight;
 
         private void Update()
         {
@@ -31,15 +34,10 @@ namespace BalloonParty.Display
                 _camera = GetComponent<Camera>();
             }
 
-            // The owner lives on a scene object (not this prefab) — resolve lazily and tolerate
-            // scenes without one (neutral tint, authored colour shows as-is).
-            if (_sceneLight == null)
-            {
-                _sceneLight = FindFirstObjectByType<SceneLightService>();
-            }
-
-            var tint = _sceneLight != null
-                ? _sceneLight.LightColor * _sceneLight.Intensity
+            // In edit mode (no DI) fall back to neutral — shaders handle the same fallback via
+            // their alpha-validity flag, so the sky won't be mis-tinted.
+            var tint = _lightSettings != null
+                ? _lightSettings.LightColor * _lightSettings.Intensity
                 : Color.white;
 
             var lit = Color.Lerp(Color.white, tint, _lightInfluence);

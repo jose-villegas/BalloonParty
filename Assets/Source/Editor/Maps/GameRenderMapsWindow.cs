@@ -26,6 +26,7 @@ namespace BalloonParty.Editor.Maps
         private static readonly int ChannelMaskId = Shader.PropertyToID("_ChannelMask");
         private static readonly int PaletteColorsId = Shader.PropertyToID("_PaletteColors");
         private static readonly int DecodePaletteId = Shader.PropertyToID("_DecodePalette");
+        private static readonly int MipLevelId = Shader.PropertyToID("_MipLevel");
         private static readonly string[] ChannelLabels = { "R", "G", "B", "A" };
         private static readonly MapDescriptor[] Descriptors = BuildDescriptors();
         private static readonly string[] MapNames = Descriptors.Select(d => d.Name).ToArray();
@@ -38,6 +39,7 @@ namespace BalloonParty.Editor.Maps
         private int _selectedIndex;
         private Texture _customTexture;
         private bool _decodePalette = true;
+        private float _mipLevel;
 
         [MenuItem("Tools/BalloonParty/Game Render Maps")]
         private static void Open()
@@ -85,6 +87,15 @@ namespace BalloonParty.Editor.Maps
                         "With only A selected, show the color each encoded index maps to (black = untagged) " +
                         "instead of the raw grayscale code."),
                     _decodePalette);
+            }
+
+            if (descriptor.HasMipChain)
+            {
+                _mipLevel = EditorGUILayout.Slider(
+                    new GUIContent("Mip Level",
+                        "Preview a specific mip level of the texture — shows what the cone march " +
+                        "sees at each tap distance (0 = full res, higher = averaged over wider area)."),
+                    _mipLevel, 0f, descriptor.MaxMipLevel);
             }
 
             EditorGUILayout.Space();
@@ -150,6 +161,7 @@ namespace BalloonParty.Editor.Maps
             {
                 material.SetVector(ChannelMaskId, MaskVector());
                 material.SetFloat(DecodePaletteId, decodePalette ? 1f : 0f);
+                material.SetFloat(MipLevelId, _mipLevel);
                 if (decodePalette)
                 {
                     PushPalette(material);
@@ -261,7 +273,8 @@ namespace BalloonParty.Editor.Maps
                     "Downscaled capture-layer scene color — blue channel.",
                     "Sprite coverage mask — ~0 over open sky/ground, ~1 over casters. The capture " +
                     "camera clears with alpha 0 (SceneCaptureService.ApplyBackgroundColor), so this " +
-                    "doubles as the GI light buffer's occlusion/shadow source."),
+                    "doubles as the GI light buffer's occlusion/shadow source.",
+                    hasMipChain: true),
 
                 new MapDescriptor(
                     "Disturbance Field",
@@ -312,12 +325,27 @@ namespace BalloonParty.Editor.Maps
             public readonly string ChannelB;
             public readonly string ChannelA;
             public readonly bool HasPaletteChannel;
+            public readonly bool HasMipChain;
 
             public bool IsCustom => Fetch == null;
 
+            public float MaxMipLevel
+            {
+                get
+                {
+                    var tex = Fetch?.Invoke();
+                    if (tex == null)
+                    {
+                        return 4f;
+                    }
+
+                    return Mathf.Log(Mathf.Max(tex.width, tex.height), 2f);
+                }
+            }
+
             public MapDescriptor(string name, Func<Texture> fetch, string unavailableHint,
                 string channelR, string channelG, string channelB, string channelA,
-                bool hasPaletteChannel = false)
+                bool hasPaletteChannel = false, bool hasMipChain = false)
             {
                 Name = name;
                 Fetch = fetch;
@@ -327,6 +355,7 @@ namespace BalloonParty.Editor.Maps
                 ChannelB = channelB;
                 ChannelA = channelA;
                 HasPaletteChannel = hasPaletteChannel;
+                HasMipChain = hasMipChain;
             }
         }
     }

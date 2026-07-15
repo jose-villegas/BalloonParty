@@ -14,11 +14,12 @@ namespace BalloonParty.Shared.SceneLight
     ///     Owns the scene-light FIELD — a small screen/world-space RT (the disturbance-field
     ///     architecture applied to light, see @ref plan_lighting "Milestone 3"). The field is purely
     ///     LOCAL: it carries only what registered lights stamp (R = local boost, GB = local direction
-    ///     weight, A = palette tag). The ambient (direction/colour/intensity) is the global set that
-    ///     <c>SceneLightService</c> publishes and the consumers combine with the field — so this service
-    ///     doesn't touch the ambient owner at all. A render runs a three-pass ping-pong pipeline:
-    ///     <b>fill</b> to the empty rest state, <b>accumulate</b> every registered light's cone into R
-    ///     (tagging A), then <b>gradient</b> to write the local direction into GB.
+    ///     weight, A = palette tag). The ambient (direction/colour/intensity) comes from
+    ///     <see cref="ISceneLightSettings"/> and is pushed as global shader properties every tick, so
+    ///     consumers combine local + ambient without a separate MonoBehaviour owner. A render runs a
+    ///     three-pass ping-pong pipeline: <b>fill</b> to the empty rest state, <b>accumulate</b> every
+    ///     registered light's cone into R (tagging A), then <b>gradient</b> to write the local direction
+    ///     into GB.
     ///
     ///     Lights are STATE, not events: a caller <see cref="RegisterLight"/>s a <see cref="Light"/> to
     ///     turn it on and disposes the registration to turn it off. The service watches each light's
@@ -46,10 +47,14 @@ namespace BalloonParty.Shared.SceneLight
         private static readonly int StampMagnitudesId = Shader.PropertyToID("_StampMagnitudes");
         private static readonly int StampFalloffsId = Shader.PropertyToID("_StampFalloffs");
         private static readonly int StampColorIndicesId = Shader.PropertyToID("_StampColorIndices");
+        private static readonly int SceneLightDirId = Shader.PropertyToID("_SceneLightDir");
+        private static readonly int SceneLightColorId = Shader.PropertyToID("_SceneLightColor");
+        private static readonly int SceneLightIntensityId = Shader.PropertyToID("_SceneLightIntensity");
 
         private readonly IGameDisplayConfiguration _displayConfig;
         private readonly IGamePalette _palette;
         private readonly ISceneLightFieldSettings _settings;
+        private readonly ISceneLightSettings _lightSettings;
         private readonly SceneLightFieldResources _resources = new();
         private readonly Vector4[] _paletteBuffer = new Vector4[PaletteChannelEncoding.Slots];
         private readonly List<Registration> _lights = new();
@@ -69,11 +74,13 @@ namespace BalloonParty.Shared.SceneLight
         internal RenderTexture FieldTexture => _resources.FieldTexture;
 
         internal SceneLightFieldService(
-            IGameDisplayConfiguration displayConfig, IGamePalette palette, ISceneLightFieldSettings settings)
+            IGameDisplayConfiguration displayConfig, IGamePalette palette,
+            ISceneLightFieldSettings settings, ISceneLightSettings lightSettings)
         {
             _displayConfig = displayConfig;
             _palette = palette;
             _settings = settings;
+            _lightSettings = lightSettings;
         }
 
         void IStartable.Start()
@@ -97,12 +104,13 @@ namespace BalloonParty.Shared.SceneLight
             PushGlobalPalette();
         }
 
-        // Re-renders only when a registered light changed (the _dirty flag its reactive properties set).
-        // The field is purely local, so ambient tweaks (direction/colour/intensity) never touch it —
-        // consumers read those from the globals live. An idle scene skips the pipeline entirely; the RT
-        // keeps its last (still-correct) contents.
+        // Pushes the ambient globals every tick so the SO knobs stay live-tunable in play mode, then
+        // re-renders the field only when a registered light changed. An idle scene skips the pipeline
+        // entirely; the RT keeps its last (still-correct) contents.
         void ITickable.Tick()
         {
+            PushAmbientGlobals();
+
             if (!_resources.IsReady || (_fieldOn && !_dirty))
             {
                 return;
@@ -252,6 +260,20 @@ namespace BalloonParty.Shared.SceneLight
             var bounds = _coords.Bounds;
             Shader.SetGlobalVector(BoundsMinId, new Vector4(bounds.xMin, bounds.yMin, 0f, 0f));
             Shader.SetGlobalVector(BoundsSizeId, new Vector4(bounds.width, bounds.height, 0f, 0f));
+        }
+
+        // Pushed every tick so the SO knobs stay live-tunable. Replaces the former SceneLightService
+        // MonoBehaviour — direction, colour, intensity are now project-wide config, not per-scene.
+        private void PushAmbientGlobals()
+        {
+            Shader.SetGlobalVector(SceneLightDirId, _lightSettings.LightDirection);
+
+            // Alpha = 1 is the "owner has pushed" validity flag: shaders fall back to a neutral
+            // tint when it's 0 (edit time without the field service running).
+            var color = _lightSettings.LightColor;
+            color.a = 1f;
+            Shader.SetGlobalColor(SceneLightColorId, color);
+            Shader.SetGlobalFloat(SceneLightIntensityId, _lightSettings.Intensity);
         }
 
         // The same slot order the lights encode into A (IGamePalette.Colors); unused slots stay black.

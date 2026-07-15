@@ -31,10 +31,11 @@ Shader "Hidden/BalloonParty/Editor/ChannelPreview"
             float4 _ChannelMask;
             float4 _PaletteColors[16];
             float _DecodePalette; // 1 = a solo-A view decodes the encoded palette index to its color
+            float _MipLevel;     // 0 = full res; higher = coarser mip (cone march preview)
 
             fixed4 frag(v2f_img i) : SV_Target
             {
-                fixed4 tex = _MainTex.Sample(sampler_MainTex, i.uv);
+                fixed4 tex = _MainTex.SampleLevel(sampler_MainTex, i.uv, _MipLevel);
                 float selectedCount = _ChannelMask.r + _ChannelMask.g
                                      + _ChannelMask.b + _ChannelMask.a;
 

@@ -1,14 +1,18 @@
 Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
 {
     // Builds the screen-space light buffer for ScreenSpaceLightService (see the
-    // arch_screen_space_light doc). Input is the SceneCaptureService capture, whose alpha
-    // channel is sprite coverage (the capture camera clears with alpha 0).
+    // arch_screen_space_light doc). Input is the SceneCaptureService capture (with mipmaps),
+    // whose alpha channel is sprite coverage (the capture camera clears with alpha 0).
     //
-    // Pass 0 — directional smear, two opposite marches per pixel (8 taps each, with
-    // exponential decay). The march direction is PER-FRAGMENT: each pixel maps its
-    // capture UV to world through the field bounds and reads the local toward-light
-    // direction from the light field (SceneLight.cginc), so a point/area light bends
-    // the bleed and shadows around it. Field-off the field returns the flat global
+    // Pass 0 — cone march (HSSVGI/HBIL pattern), two opposite marches per pixel (8 taps
+    // each, with exponential decay). Each tap samples at an increasing mip level
+    // (mip = _MipSpread × log₂(1 + t)) so far taps capture averaged scene color over a
+    // widening solid angle — the cone approximates the integral of incoming radiance at
+    // each distance. Near taps stay at mip 0 for sharp contact detail. _MipSpread = 0
+    // collapses to the old flat march (all mip 0). The march direction is PER-FRAGMENT:
+    // each pixel maps its capture UV to world through the field bounds and reads the local
+    // toward-light direction from the light field (SceneLight.cginc), so a point/area light
+    // bends the bleed and shadows around it. Field-off the field returns the flat global
     // direction everywhere and this reduces to the old single-direction smear.
     //   rgb (reflection/bleed) marches DOWN-light — the composited scene color
     //     down-light of this pixel (sky included, not premultiplied by coverage); the
@@ -39,16 +43,19 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
             CGPROGRAM
             #pragma vertex vert_img
             #pragma fragment frag
+            #pragma target 3.0
             #include "UnityCG.cginc"
             #include "../Include/SceneLight.cginc"
 
             #define TAP_COUNT 8
 
             sampler2D _MainTex;
+            float4 _MainTex_TexelSize;
             float  _TapStepScale;
             float  _TapAspect;
             float  _TapDecay;
             float  _TapStart;
+            float  _MipSpread;
 
             fixed4 frag(v2f_img IN) : SV_Target
             {
@@ -57,7 +64,7 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 float  weightSum = 0;
 
                 // Coverage at this pixel — casters have ~1, open ground/sky ~0.
-                float ownCoverage = tex2D(_MainTex, IN.uv).a;
+                float ownCoverage = tex2Dlod(_MainTex, float4(IN.uv, 0, 0)).a;
 
                 // Per-fragment march direction from the light field: map this pixel's capture
                 // UV to world through the field bounds, read the toward-light direction there,
@@ -70,6 +77,9 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                 float2 downLight = -SceneLightDirectionAt(worldPos);
                 float2 stepUv = float2(downLight.x / _TapAspect, downLight.y) * _TapStepScale;
 
+                // Mip count for clamping (from texel size: width = 1/_MainTex_TexelSize.z).
+                float maxMip = log2(max(_MainTex_TexelSize.z, _MainTex_TexelSize.w));
+
                 [unroll]
                 for (int t = 0; t < TAP_COUNT; t++)
                 {
@@ -79,19 +89,20 @@ Shader "Hidden/BalloonParty/Display/ScreenSpaceLightSmear"
                     float w = pow(_TapDecay, t);
                     weightSum += w;
 
-                    // Bounce = the composited scene color down-light (sprites are already
-                    // blended over the sky clear in the capture, so this is "what the scene
-                    // looks like down-light of here"). NOT premultiplied by coverage —
-                    // premultiplying zeroed the sky to black, which both read wrong in the
-                    // buffer and, with nothing to dilute it, dumped a lone nearby sprite's
-                    // full color onto its neighbours. The overlay subtracts the ambient sky
-                    // so flat areas net to neutral; deviations (bright sprite / dark sprite)
-                    // are what actually bleed. Shadow marches the opposite way (toward the
-                    // light): an occluder between here and the source darkens the far side.
-                    float4 lit = tex2D(_MainTex, IN.uv + stepUv * offset);
+                    // Cone march: sample at increasing mip levels so distant taps capture
+                    // averaged scene color over a widening solid angle — the cone approximates
+                    // the integral of incoming radiance at each radius (HSSVGI/HBIL pattern).
+                    // _MipSpread = 0 collapses to the old flat march (all mip 0).
+                    float mip = min(_MipSpread * log2(1.0 + (float)t), maxMip);
+
+                    // Bounce = the composited scene color down-light, now cone-widened so far
+                    // taps average over a broader region (captures cluster-scale bleed without
+                    // needing more taps). Shadow still samples at full resolution for sharp
+                    // contact, transitioning to wider mip for softer penumbra at distance.
+                    float4 lit = tex2Dlod(_MainTex, float4(IN.uv + stepUv * offset, 0, mip));
                     bounceAcc += lit.rgb * w;
 
-                    float4 occluder = tex2D(_MainTex, IN.uv - stepUv * offset);
+                    float4 occluder = tex2Dlod(_MainTex, float4(IN.uv - stepUv * offset, 0, mip));
                     shadowAcc += occluder.a * w;
                 }
 
