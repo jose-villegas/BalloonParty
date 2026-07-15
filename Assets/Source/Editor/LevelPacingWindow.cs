@@ -373,15 +373,133 @@ namespace BalloonParty.Editor
             var g2End = rowRect.x + ColX(3) + EffectiveColWidth(3);
             EditorGUI.LabelField(new Rect(g2Start, rowRect.y, g2End - g2Start, rowRect.height), "Spawning", style);
 
-            // Group 3: Balloons (cols 4–5)
+            // Group 3: Balloons (cols 4–5) with focus dropdown
             var g3Start = rowRect.x + ColX(4);
             var g3End = rowRect.x + ColX(5) + EffectiveColWidth(5);
-            EditorGUI.LabelField(new Rect(g3Start, rowRect.y, g3End - g3Start, rowRect.height), "Balloons", style);
+            var g3Rect = new Rect(g3Start, rowRect.y, g3End - g3Start, rowRect.height);
+            DrawBalloonFocusGroup(g3Rect, style);
 
-            // Group 4: Items (cols 6–9)
+            // Group 4: Items (cols 6–9) with focus dropdown
             var g4Start = rowRect.x + ColX(6);
             var g4End = rowRect.x + ColX(9) + EffectiveColWidth(9);
-            EditorGUI.LabelField(new Rect(g4Start, rowRect.y, g4End - g4Start, rowRect.height), "Items", style);
+            var g4Rect = new Rect(g4Start, rowRect.y, g4End - g4Start, rowRect.height);
+            DrawItemFocusGroup(g4Rect, style);
+        }
+
+        private void DrawBalloonFocusGroup(Rect groupRect, GUIStyle labelStyle)
+        {
+            var labelW = groupRect.width - 74f;
+            EditorGUI.LabelField(new Rect(groupRect.x, groupRect.y, labelW, groupRect.height), "Balloons", labelStyle);
+
+            var allTypes = (BalloonType[])System.Enum.GetValues(typeof(BalloonType));
+            var names = new string[allTypes.Length + 1];
+            names[0] = "Focus All…";
+            for (var i = 0; i < allTypes.Length; i++)
+            {
+                names[i + 1] = allTypes[i].ToString();
+            }
+
+            var dropdownRect = new Rect(groupRect.xMax - 72f, groupRect.y + 2f, 70f, groupRect.height - 4f);
+            var picked = EditorGUI.Popup(dropdownRect, 0, names);
+            if (picked > 0)
+            {
+                var typeIndex = picked - 1;
+                FocusBalloonTypeInAllRows(allTypes[typeIndex], typeIndex);
+            }
+        }
+
+        private void FocusBalloonTypeInAllRows(BalloonType type, int typeIndex)
+        {
+            if (_rangesProp == null)
+            {
+                return;
+            }
+
+            for (var row = 0; row < _rangesProp.arraySize; row++)
+            {
+                var entry = _rangesProp.GetArrayElementAtIndex(row);
+                var paramsProp = entry.FindPropertyRelative("_parameters");
+                if (paramsProp == null)
+                {
+                    continue;
+                }
+
+                var balloonsProp = paramsProp.FindPropertyRelative("_balloonWeights");
+                if (balloonsProp == null || !balloonsProp.isArray)
+                {
+                    continue;
+                }
+
+                if (FindBalloonEntryIndex(balloonsProp, type) >= 0)
+                {
+                    EnsureSelectionArraySize(ref _selectedBalloonPerRow, row);
+                    _selectedBalloonPerRow[row] = typeIndex;
+                }
+            }
+        }
+
+        private void DrawItemFocusGroup(Rect groupRect, GUIStyle labelStyle)
+        {
+            var labelW = groupRect.width - 74f;
+            EditorGUI.LabelField(new Rect(groupRect.x, groupRect.y, labelW, groupRect.height), "Items", labelStyle);
+
+            var allTypes = (ItemType[])System.Enum.GetValues(typeof(ItemType));
+            var names = new string[allTypes.Length + 1];
+            names[0] = "Focus All…";
+            for (var i = 0; i < allTypes.Length; i++)
+            {
+                names[i + 1] = allTypes[i].ToString();
+            }
+
+            var dropdownRect = new Rect(groupRect.xMax - 72f, groupRect.y + 2f, 70f, groupRect.height - 4f);
+            var picked = EditorGUI.Popup(dropdownRect, 0, names);
+            if (picked > 0)
+            {
+                var typeIndex = picked - 1;
+                FocusItemTypeInAllRows(allTypes[typeIndex], typeIndex);
+            }
+        }
+
+        private void FocusItemTypeInAllRows(ItemType type, int typeIndex)
+        {
+            if (_rangesProp == null)
+            {
+                return;
+            }
+
+            for (var row = 0; row < _rangesProp.arraySize; row++)
+            {
+                var entry = _rangesProp.GetArrayElementAtIndex(row);
+                var paramsProp = entry.FindPropertyRelative("_parameters");
+                if (paramsProp == null)
+                {
+                    continue;
+                }
+
+                var itemsProp = paramsProp.FindPropertyRelative("_itemWeights");
+                if (itemsProp == null || !itemsProp.isArray)
+                {
+                    continue;
+                }
+
+                if (FindItemEntryIndex(itemsProp, type) >= 0)
+                {
+                    EnsureSelectionArraySize(ref _selectedItemPerRow, row);
+                    _selectedItemPerRow[row] = typeIndex;
+                }
+            }
+        }
+
+        private static void EnsureSelectionArraySize(ref int[] array, int index)
+        {
+            if (array.Length > index)
+            {
+                return;
+            }
+
+            var newArr = new int[index + 16];
+            System.Array.Copy(array, newArr, array.Length);
+            array = newArr;
         }
 
         private void DrawHeaderCells(Rect rowRect)
