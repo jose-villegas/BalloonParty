@@ -40,9 +40,10 @@ namespace BalloonParty.Configuration.Effects
         [Range(0f, 1f)] [SerializeField] private float _fadeIn;
         [Range(0f, 1f)] [SerializeField] private float _fadeOut;
 
-        [Tooltip("How much the scene light tints this colour's specks (0 = ignore light, emissive; 1 = fully " +
-                 "replaced by the light's palette color × magnitude). Blends from the base look's value toward this by heat.")]
-        [Range(0f, 1f)] [SerializeField] private float _lightInfluence;
+        [Tooltip("How much the scene light tints this colour's specks (0 = ignore light, emissive; " +
+                 "1 = fully lit, local color replaces at full boost; >1 = picks up local light color " +
+                 "more eagerly). Blends from the base look's value toward this by heat.")]
+        [Range(0f, 4f)] [SerializeField] private float _lightInfluence;
 
         [Tooltip("Which light these specks read: Full (ambient + local), Ambient (global only), or Local " +
                  "(only nearby field lights, neutral otherwise).")]
