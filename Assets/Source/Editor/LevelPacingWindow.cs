@@ -40,13 +40,13 @@ namespace BalloonParty.Editor
             130f,  // 7: Cadence (min/max + mode)
             80f,   // 8: Initial Count curve
             80f,   // 9: Wave Count curve
-            24f,   // 10: ►
-            20f,   // 11: −
+            44f,   // 10: Expand (►)
+            28f,   // 11: Del (−)
         };
 
         private static readonly string[] ColHeaders =
         {
-            "Range", "Spawn", "Board", "1st Turn", "Colors", "Balloons", "Items", "Cadence", "Init Count", "Wave Count", "", ""
+            "Range", "Spawn", "Board", "1st Turn", "Colors", "Balloons", "Items", "Cadence", "Init Count", "Wave Count", "Expand", "Del"
         };
 
         private readonly ConfigAssetCache<LevelPacingConfiguration> _assetCache = new();
