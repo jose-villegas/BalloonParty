@@ -19,7 +19,7 @@ namespace BalloonParty.Editor
         private const float SeparatorWidth = 1f;
         private const float SwatchSize = 10f;
         private const float CurveFieldWidth = 80f;
-        private const float GroupGap = 8f;
+        private const float GroupGap = 20f;
         private const int BalloonColIndex = 5;
         private const int ItemColIndex = 6;
         private const float BalloonExpandedWidth = 310f;
@@ -221,7 +221,10 @@ namespace BalloonParty.Editor
 
             // Header
             var headerRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
-            EditorGUI.DrawRect(headerRect, new Color(0.18f, 0.18f, 0.18f, 1f));
+            var headerBg = new Color(0.18f, 0.18f, 0.18f, 1f);
+            DrawGroupBackground(headerRect, 0, 3, headerBg);
+            DrawGroupBackground(headerRect, 4, 5, headerBg);
+            DrawGroupBackground(headerRect, 6, 9, headerBg);
             DrawHeaderCells(headerRect);
 
             // Rows
@@ -307,6 +310,14 @@ namespace BalloonParty.Editor
             }
 
             return ColWidths[col];
+        }
+
+        private void DrawGroupBackground(Rect rowRect, int fromCol, int toCol, Color bg)
+        {
+            var x = rowRect.x + ColX(fromCol);
+            var xEnd = rowRect.x + ColX(toCol) + EffectiveColWidth(toCol);
+            var groupRect = new Rect(x, rowRect.y, xEnd - x, rowRect.height);
+            EditorGUI.DrawRect(groupRect, bg);
         }
 
         private void DrawHeaderCells(Rect rowRect)
@@ -397,7 +408,7 @@ namespace BalloonParty.Editor
             var balloonsProp = paramsProp?.FindPropertyRelative("_balloonWeights");
             var rowRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
 
-            // Background
+            // Background — draw per group for floating panel effect
             Color rowBg;
             if (isFallback)
             {
@@ -412,7 +423,9 @@ namespace BalloonParty.Editor
                 rowBg = new Color(0.21f, 0.21f, 0.21f, 1f);
             }
 
-            EditorGUI.DrawRect(rowRect, rowBg);
+            DrawGroupBackground(rowRect, 0, 3, rowBg);
+            DrawGroupBackground(rowRect, 4, 5, rowBg);
+            DrawGroupBackground(rowRect, 6, 9, rowBg);
 
             // Separators
             for (var i = 0; i < ColWidths.Length; i++)
