@@ -249,10 +249,11 @@ namespace BalloonParty.Display
             _smearMaterial.SetFloat(ShadowMipSpreadId, _settings.ShadowMipSpread);
             _smearMaterial.SetFloat(SecondaryWeightId, _settings.SecondaryBounceWeight);
 
-            // Temporal jitter: rotate the 4-direction fan by (frame % 4) × 22.5° so the
-            // temporal EMA integrates 16 unique angles over 4 frames.
+            // Temporal jitter: only when the EMA is active — without it the per-frame
+            // rotation would flicker visibly instead of being smoothed out.
             const float jitterStep = 22.5f * Mathf.Deg2Rad;
-            _smearMaterial.SetFloat(BounceJitterId, (Time.frameCount % 4) * jitterStep);
+            float jitter = _settings.TemporalSmoothing ? (Time.frameCount % 4) * jitterStep : 0f;
+            _smearMaterial.SetFloat(BounceJitterId, jitter);
 
             _overlayMaterial.SetColor(ShadowTintId, _settings.ShadowTint);
             _overlayMaterial.SetFloat(ShadowStrengthId, _settings.ShadowStrength);
