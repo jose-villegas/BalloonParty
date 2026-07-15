@@ -528,7 +528,8 @@ namespace BalloonParty.Editor
             var typeNames = new string[allTypes.Length];
             for (var i = 0; i < allTypes.Length; i++)
             {
-                typeNames[i] = allTypes[i].ToString();
+                var present = FindBalloonEntryIndex(balloonsProp, allTypes[i]) >= 0;
+                typeNames[i] = present ? $"✓ {allTypes[i]}" : $"+ {allTypes[i]}";
             }
 
             var x = cell.x + 2f;
