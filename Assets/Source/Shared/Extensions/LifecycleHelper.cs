@@ -36,5 +36,3 @@ namespace BalloonParty.Shared.Extensions
         }
     }
 }
-
-
