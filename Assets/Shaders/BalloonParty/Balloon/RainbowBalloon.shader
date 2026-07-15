@@ -219,13 +219,15 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 return _SphereBend * z;
             }
 
-            inline fixed3 RainbowBand(float2 uv, float2 worldPos)
+            inline fixed3 RainbowBand(float2 uv)
             {
                 // Opted-in: the bands scroll along the scene light's axis instead of the
-                // authored angle. Same local-UV sway caveat as the shine.
+                // authored angle. The AXIS follows only the main (ambient) light — flat
+                // SceneLightDirection(), not the field — so local lights recolour the bands (tint,
+                // below) without twisting their rotation. Same local-UV sway caveat as the shine.
                 float ang = _BandAngle * 6.2831853;
                 float2 axis = _BandsFromSceneLight > 0.5
-                    ? SceneLightDirectionAt(worldPos)
+                    ? SceneLightDirection()
                     : float2(cos(ang), sin(ang));
                 float projection = dot(uv - 0.5, axis) + 0.5;
                 float across = dot(uv - 0.5, float2(-axis.y, axis.x));
@@ -259,7 +261,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
             }
 
             // Additive white shine sweep (0..1) — same diagonal band shape as SpriteShineShadow, angle tunable.
-            inline fixed ShineAmount(float2 uv, float2 worldPos)
+            inline fixed ShineAmount(float2 uv)
             {
                 float sweepDuration = 1.0 / max(_ShineSpeed, 0.001);
                 float cycleDuration = sweepDuration + _ShineInterval;
@@ -268,11 +270,13 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
 
                 // Opted-in: the sweep axis derives from the scene light instead of the authored
                 // angle — travelling DOWN-light (enters from the lit side; top-to-bottom under
-                // the canonical upper-left light). Caveat: uv is local sprite space (not
-                // rotation-compensated), so the axis sways with the balloon — accepted.
+                // the canonical upper-left light). The AXIS follows only the main (ambient) light —
+                // flat SceneLightDirection(), not the field — so a passing local light recolours the
+                // shine (tint, below) without bending its sweep angle. Caveat: uv is local sprite
+                // space (not rotation-compensated), so the axis sways with the balloon — accepted.
                 float shineAng = _ShineAngle * 6.2831853;
                 float2 axis = _ShineFromSceneLight > 0.5
-                    ? -SceneLightDirectionAt(worldPos)
+                    ? -SceneLightDirection()
                     : float2(cos(shineAng), sin(shineAng));
                 float projection = dot(uv - 0.5, axis) + 0.5;
 
@@ -319,7 +323,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 fixed4 tex = tex2D(_MainTex, IN.uv);
 
                 // Masked region (e.g. the knot) keeps its plain sprite colour instead of the band tint.
-                fixed3 bandColor = lerp(RainbowBand(IN.uv, IN.worldPos), fixed3(1, 1, 1), MaskAmount(IN.uv));
+                fixed3 bandColor = lerp(RainbowBand(IN.uv), fixed3(1, 1, 1), MaskAmount(IN.uv));
 
                 // Sprite shading × band colour, then additive white shine on top. The glitter is bound to
                 // the shine amount (by _GlitterShineBind) so the specks only twinkle along the sweeping band.
@@ -329,7 +333,7 @@ Shader "BalloonParty/Balloon/RainbowBalloon"
                 // palette HUE (no per-band swap) — brightness and cast follow the light, eased by
                 // _LightInfluence. The shine/glitter emissives above their own gating stay additive.
                 rgb *= lerp(float3(1.0, 1.0, 1.0), SceneLightTintAt(IN.worldPos), _LightInfluence);
-                fixed shine = ShineAmount(IN.uv, IN.worldPos);
+                fixed shine = ShineAmount(IN.uv);
                 // Opted-in shine is "lit by the scene light" — axis AND colour — so tint it;
                 // the classic default sweep stays pure white regardless of the scene light.
                 float3 shineTint = _ShineFromSceneLight > 0.5 ? SceneLightTintAt(IN.worldPos) : float3(1.0, 1.0, 1.0);
