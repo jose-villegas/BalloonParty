@@ -289,7 +289,30 @@ namespace BalloonParty.Editor
 
         private Rect CellRect(Rect rowRect, int col)
         {
+            if (col >= 10)
+            {
+                return RightAnchoredCellRect(rowRect, col);
+            }
+
             return new Rect(rowRect.x + ColX(col), rowRect.y, EffectiveColWidth(col), rowRect.height);
+        }
+
+        private Rect RightAnchoredCellRect(Rect rowRect, int col)
+        {
+            const float padding = 4f;
+            var rightEdge = _scroll.x + position.width - padding;
+            var x = rightEdge;
+
+            for (var i = ColWidths.Length - 1; i >= col; i--)
+            {
+                x -= EffectiveColWidth(i);
+                if (i < ColWidths.Length - 1)
+                {
+                    x -= SeparatorWidth;
+                }
+            }
+
+            return new Rect(x, rowRect.y, EffectiveColWidth(col), rowRect.height);
         }
 
         private static bool HasGapBefore(int col)
@@ -510,17 +533,15 @@ namespace BalloonParty.Editor
                 DrawCurveCell(CellRect(rowRect, 9), paramsProp, "_itemCountWeights");
             }
 
-            // ► button (col 10)
+            // ► button (col 10) — right-anchored
             var expandRect = CellRect(rowRect, 10);
             if (GUI.Button(expandRect, _expandedRow == index ? "▼" : "►"))
             {
                 _expandedRow = _expandedRow == index ? -1 : index;
             }
 
-            // − button — right-aligned to scroll area
-            var delW = 20f;
-            var delX = Mathf.Max(CellRect(rowRect, 11).x, position.width - delW - 4f + _scroll.x);
-            var delRect = new Rect(delX, rowRect.y, delW, rowRect.height);
+            // − button (col 11) — right-anchored
+            var delRect = CellRect(rowRect, 11);
             if (GUI.Button(delRect, "−"))
             {
                 _rangesProp.DeleteArrayElementAtIndex(index);
