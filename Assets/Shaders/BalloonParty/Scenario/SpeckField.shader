@@ -151,48 +151,31 @@ Shader "BalloonParty/Scenario/SpeckField"
                 float lHoldMin     = lerp(_ScaleHold.x,        lc.y, lookT);
                 float lHoldMax     = lerp(_ScaleHold.y,        lc.z, lookT);
 
-                // Scene-light response: color and brightness are separated so that influence
-                // controls the color blend (speck → light color) independently of the brightness
-                // scale. This avoids per-channel luminance disparity (red vs purple) and dead
-                // zones at low ambient.
+                // Scene-light response. Outputs: raw palette color from field A (the light's
+                // color identity), and the local boost from R (how much light is here). The
+                // fragment uses these to do a color replacement gated by local boost.
                 bool coloured = s.paletteIndex >= -0.5 && lookSlot < _SpeckLookCount;
                 float lMode = coloured ? _SpeckLookD[lookSlot].y : _SpeckLightMode;
 
                 float3 keyColor = _SceneLightColor.a > 0.5 ? _SceneLightColor.rgb : float3(1.0, 1.0, 1.0);
-                float ambient = SceneLightAmbientMagnitude();
                 float3 lightColor = keyColor;
-                float lightBrightness = ambient;
                 float localBoost = 0.0;
 
-                if (lMode < 0.5 && _SceneLightFieldOn > 0.5)
+                if (lMode < 1.5 && _SceneLightFieldOn > 0.5)
                 {
-                    // Full: ambient + local, color blends toward the local light's palette
+                    // Full (0) or Ambient (1): sample field for local lights
                     float local = SceneLightFieldSampleLOD(s.position).r;
-                    float colorAmount = saturate(local / SCENE_LIGHT_COLOR_RAMP);
                     float3 palette = SceneLightPaletteColorAtLOD(SceneLightFieldUV(s.position), keyColor);
-                    lightColor = lerp(keyColor, palette, colorAmount);
-                    lightBrightness = ambient + local;
+                    lightColor = palette;
+                    localBoost = (lMode < 0.5) ? local : 0.0;
+                }
+                else if (lMode > 1.5 && _SceneLightFieldOn > 0.5)
+                {
+                    // Local: only nearby field lights, neutral at rest
+                    float local = SceneLightFieldSampleLOD(s.position).r;
+                    float3 palette = SceneLightPaletteColorAtLOD(SceneLightFieldUV(s.position), keyColor);
+                    lightColor = palette;
                     localBoost = local;
-                }
-                else if (lMode < 1.5)
-                {
-                    // Ambient: global light only
-                    lightColor = keyColor;
-                    lightBrightness = ambient;
-                }
-                else
-                {
-                    // Local: only the nearby field lights, neutral at rest
-                    if (_SceneLightFieldOn > 0.5)
-                    {
-                        float local = SceneLightFieldSampleLOD(s.position).r;
-                        float colorAmount = saturate(local / SCENE_LIGHT_COLOR_RAMP);
-                        float3 palette = SceneLightPaletteColorAtLOD(SceneLightFieldUV(s.position), keyColor);
-                        lightColor = lerp(keyColor, palette, colorAmount);
-                        localBoost = local;
-                    }
-
-                    lightBrightness = 1.0 + localBoost;
                 }
 
                 float lightInfluence = lerp(_SpeckLightInfluence, _SpeckLookD[lookSlot].x, lookT);
@@ -249,7 +232,7 @@ Shader "BalloonParty/Scenario/SpeckField"
                 o.paletteIndex = s.paletteIndex;
                 o.prevPaletteIndex = s.prevPaletteIndex;
                 o.colorBlend = s.colorBlend;
-                o.lightData = float4(lightColor, lightBrightness);
+                o.lightData = float4(lightColor, localBoost);
                 o.lightInfluence = lightInfluence;
                 return o;
             }
@@ -278,12 +261,17 @@ Shader "BalloonParty/Scenario/SpeckField"
                 col.rgb = lerp(col.rgb, target.rgb, heat);
                 col.a = lerp(col.a, tex.a * target.a, heat);
 
-                // Light as a color replacement: influence (0–1) blends from the speck's own
-                // color toward the light's palette color scaled by its magnitude (R).
-                // 0 = emissive (keeps base color), 1 = fully lit (light color × brightness).
+                // Light as color replacement gated by local boost (field R):
+                // influence (0–1) blends between emissive (base color, unaffected) and fully lit
+                // (dimmed by ambient, colored by local light). The local boost from R gates the
+                // color replacement — no local light = no color change, just ambient dimming.
                 float3 lightColor = i.lightData.rgb;
-                float brightness = i.lightData.a;
-                col.rgb = lerp(col.rgb, lightColor * brightness, saturate(i.lightInfluence));
+                float local = i.lightData.a;
+                float ambient = SceneLightAmbientMagnitude();
+                float brightness = ambient + local;
+                float3 target = lightColor * brightness;
+                float3 litColor = lerp(col.rgb * ambient, target, saturate(local));
+                col.rgb = lerp(col.rgb, litColor, saturate(i.lightInfluence));
 
                 col.a *= i.alpha;
                 return col;
