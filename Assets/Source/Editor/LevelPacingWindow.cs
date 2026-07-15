@@ -29,7 +29,7 @@ namespace BalloonParty.Editor
         private const float ActorExpandedWidth = 210f;
 
         // Columns that have a visual gap before them (group separators)
-        private static readonly int[] GapBeforeCols = { 1, 4, 6 };
+        private static readonly int[] GapBeforeCols = { 1, 4, 6, 10 };
 
         private static readonly float[] ColWidths =
         {
@@ -259,7 +259,8 @@ namespace BalloonParty.Editor
             DrawGroupBackground(groupTitleRect, 0, 0, titleBg);
             DrawGroupBackground(groupTitleRect, 1, 3, titleBg);
             DrawGroupBackground(groupTitleRect, 4, 5, titleBg);
-            DrawGroupBackground(groupTitleRect, 6, 10, titleBg);
+            DrawGroupBackground(groupTitleRect, 6, 9, titleBg);
+            DrawGroupBackground(groupTitleRect, 10, 10, titleBg);
             DrawGroupTitles(groupTitleRect);
             var hSepColor = new Color(0.35f, 0.35f, 0.35f, 0.5f);
             TableDrawHelper.DrawHorizontalSeparator(groupTitleRect, hSepColor);
@@ -271,7 +272,8 @@ namespace BalloonParty.Editor
             DrawGroupBackground(headerRect, 0, 0, headerBg);
             DrawGroupBackground(headerRect, 1, 3, headerBg);
             DrawGroupBackground(headerRect, 4, 5, headerBg);
-            DrawGroupBackground(headerRect, 6, 10, headerBg);
+            DrawGroupBackground(headerRect, 6, 9, headerBg);
+            DrawGroupBackground(headerRect, 10, 10, headerBg);
             DrawHeaderCells(headerRect);
             TableDrawHelper.DrawHorizontalSeparator(headerRect, hSepColor);
 
@@ -420,11 +422,17 @@ namespace BalloonParty.Editor
             var g3Rect = new Rect(g3Start, rowRect.y, g3End - g3Start, rowRect.height);
             DrawBalloonFocusGroup(g3Rect, style);
 
-            // Group 4: Content (cols 6–10) with focus dropdowns
+            // Group 4: Items (cols 6–9) with focus dropdown
             var g4Start = rowRect.x + ColX(6);
-            var g4End = rowRect.x + ColX(10) + EffectiveColWidth(10);
+            var g4End = rowRect.x + ColX(9) + EffectiveColWidth(9);
             var g4Rect = new Rect(g4Start, rowRect.y, g4End - g4Start, rowRect.height);
-            DrawContentFocusGroup(g4Rect, style);
+            DrawItemFocusGroup(g4Rect, style);
+
+            // Group 5: Actors (col 10) with focus dropdown
+            var g5Start = rowRect.x + ColX(10);
+            var g5End = rowRect.x + ColX(10) + EffectiveColWidth(10);
+            var g5Rect = new Rect(g5Start, rowRect.y, g5End - g5Start, rowRect.height);
+            DrawActorFocusGroup(g5Rect, style);
         }
 
         private void DrawBalloonFocusGroup(Rect groupRect, GUIStyle labelStyle)
@@ -479,41 +487,45 @@ namespace BalloonParty.Editor
             }
         }
 
-        private void DrawContentFocusGroup(Rect groupRect, GUIStyle labelStyle)
+        private void DrawItemFocusGroup(Rect groupRect, GUIStyle labelStyle)
         {
-            var labelW = groupRect.width - 148f;
-            EditorGUI.LabelField(new Rect(groupRect.x, groupRect.y, labelW, groupRect.height), "Content", labelStyle);
+            var labelW = groupRect.width - 74f;
+            EditorGUI.LabelField(new Rect(groupRect.x, groupRect.y, labelW, groupRect.height), "Items", labelStyle);
 
-            // Items focus dropdown
-            var itemTypes = (ItemType[])System.Enum.GetValues(typeof(ItemType));
-            var itemNames = new string[itemTypes.Length + 1];
-            itemNames[0] = "Items…";
-            for (var i = 0; i < itemTypes.Length; i++)
+            var allTypes = (ItemType[])System.Enum.GetValues(typeof(ItemType));
+            var names = new string[allTypes.Length + 1];
+            names[0] = "Focus All…";
+            for (var i = 0; i < allTypes.Length; i++)
             {
-                itemNames[i + 1] = itemTypes[i].ToString();
+                names[i + 1] = allTypes[i].ToString();
             }
 
-            var itemDropRect = new Rect(groupRect.xMax - 146f, groupRect.y + 2f, 70f, groupRect.height - 4f);
-            var itemPicked = EditorGUI.Popup(itemDropRect, 0, itemNames);
-            if (itemPicked > 0)
+            var dropdownRect = new Rect(groupRect.xMax - 72f, groupRect.y + 2f, 70f, groupRect.height - 4f);
+            var picked = EditorGUI.Popup(dropdownRect, 0, names);
+            if (picked > 0)
             {
-                FocusItemTypeInAllRows(itemTypes[itemPicked - 1], itemPicked - 1);
+                FocusItemTypeInAllRows(allTypes[picked - 1], picked - 1);
+            }
+        }
+
+        private void DrawActorFocusGroup(Rect groupRect, GUIStyle labelStyle)
+        {
+            var labelW = groupRect.width - 74f;
+            EditorGUI.LabelField(new Rect(groupRect.x, groupRect.y, labelW, groupRect.height), "Actors", labelStyle);
+
+            var allTypes = (GridActorType[])System.Enum.GetValues(typeof(GridActorType));
+            var names = new string[allTypes.Length + 1];
+            names[0] = "Focus All…";
+            for (var i = 0; i < allTypes.Length; i++)
+            {
+                names[i + 1] = allTypes[i].ToString();
             }
 
-            // Actors focus dropdown
-            var actorTypes = (GridActorType[])System.Enum.GetValues(typeof(GridActorType));
-            var actorNames = new string[actorTypes.Length + 1];
-            actorNames[0] = "Actors…";
-            for (var i = 0; i < actorTypes.Length; i++)
+            var dropdownRect = new Rect(groupRect.xMax - 72f, groupRect.y + 2f, 70f, groupRect.height - 4f);
+            var picked = EditorGUI.Popup(dropdownRect, 0, names);
+            if (picked > 0)
             {
-                actorNames[i + 1] = actorTypes[i].ToString();
-            }
-
-            var actorDropRect = new Rect(groupRect.xMax - 72f, groupRect.y + 2f, 70f, groupRect.height - 4f);
-            var actorPicked = EditorGUI.Popup(actorDropRect, 0, actorNames);
-            if (actorPicked > 0)
-            {
-                FocusActorTypeInAllRows(actorTypes[actorPicked - 1], actorPicked - 1);
+                FocusActorTypeInAllRows(allTypes[picked - 1], picked - 1);
             }
         }
 
@@ -717,7 +729,8 @@ namespace BalloonParty.Editor
             DrawGroupBackground(rowRect, 0, 0, rowBg);
             DrawGroupBackground(rowRect, 1, 3, rowBg);
             DrawGroupBackground(rowRect, 4, 5, rowBg);
-            DrawGroupBackground(rowRect, 6, 10, rowBg);
+            DrawGroupBackground(rowRect, 6, 9, rowBg);
+            DrawGroupBackground(rowRect, 10, 10, rowBg);
 
             // Separators (only for left-anchored columns 0–9)
             for (var i = 0; i < ColWidths.Length - 2; i++)
