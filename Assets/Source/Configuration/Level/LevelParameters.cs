@@ -107,6 +107,13 @@ namespace BalloonParty.Configuration.Level
             foreach (var entry in _balloonPickList)
             {
                 var curve = isInitial ? entry.InitialCountWeights : entry.WaveCountWeights;
+
+                // Wave defaults to initial curve when not provided.
+                if (!isInitial && (curve == null || curve.length == 0))
+                {
+                    curve = entry.InitialCountWeights;
+                }
+
                 if (curve != null && curve.length > 0)
                 {
                     quotas[entry.PoolKey] = curve.SampleWeightedCount(UnityEngine.Random.value);
