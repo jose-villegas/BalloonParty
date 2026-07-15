@@ -26,7 +26,7 @@ namespace BalloonParty.Editor
         private const float ItemExpandedWidth = 170f;
 
         // Columns that have a visual gap before them (group separators)
-        private static readonly int[] GapBeforeCols = { 4, 6 };
+        private static readonly int[] GapBeforeCols = { 1, 4, 6 };
 
         private static readonly float[] ColWidths =
         {
@@ -229,7 +229,8 @@ namespace BalloonParty.Editor
             var headerRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
             EditorGUI.DrawRect(headerRect, gapBg);
             var headerBg = new Color(0.18f, 0.18f, 0.18f, 1f);
-            DrawGroupBackground(headerRect, 0, 3, headerBg);
+            DrawGroupBackground(headerRect, 0, 0, headerBg);
+            DrawGroupBackground(headerRect, 1, 3, headerBg);
             DrawGroupBackground(headerRect, 4, 5, headerBg);
             DrawGroupBackground(headerRect, 6, 9, headerBg);
             DrawHeaderCells(headerRect);
@@ -335,20 +336,25 @@ namespace BalloonParty.Editor
                 fontSize = 11
             };
 
-            // Group 1: Spawning (cols 0–3)
+            // Group 1: Range (col 0)
             var g1Start = rowRect.x + ColX(0);
-            var g1End = rowRect.x + ColX(3) + EffectiveColWidth(3);
-            EditorGUI.LabelField(new Rect(g1Start, rowRect.y, g1End - g1Start, rowRect.height), "Spawning", style);
+            var g1End = rowRect.x + ColX(0) + EffectiveColWidth(0);
+            EditorGUI.LabelField(new Rect(g1Start, rowRect.y, g1End - g1Start, rowRect.height), "Range", style);
 
-            // Group 2: Palette (cols 4–5)
-            var g2Start = rowRect.x + ColX(4);
-            var g2End = rowRect.x + ColX(5) + EffectiveColWidth(5);
-            EditorGUI.LabelField(new Rect(g2Start, rowRect.y, g2End - g2Start, rowRect.height), "Palette", style);
+            // Group 2: Spawning (cols 1–3)
+            var g2Start = rowRect.x + ColX(1);
+            var g2End = rowRect.x + ColX(3) + EffectiveColWidth(3);
+            EditorGUI.LabelField(new Rect(g2Start, rowRect.y, g2End - g2Start, rowRect.height), "Spawning", style);
 
-            // Group 3: Content (cols 6–9)
-            var g3Start = rowRect.x + ColX(6);
-            var g3End = rowRect.x + ColX(9) + EffectiveColWidth(9);
-            EditorGUI.LabelField(new Rect(g3Start, rowRect.y, g3End - g3Start, rowRect.height), "Content", style);
+            // Group 3: Balloons (cols 4–5)
+            var g3Start = rowRect.x + ColX(4);
+            var g3End = rowRect.x + ColX(5) + EffectiveColWidth(5);
+            EditorGUI.LabelField(new Rect(g3Start, rowRect.y, g3End - g3Start, rowRect.height), "Balloons", style);
+
+            // Group 4: Items (cols 6–9)
+            var g4Start = rowRect.x + ColX(6);
+            var g4End = rowRect.x + ColX(9) + EffectiveColWidth(9);
+            EditorGUI.LabelField(new Rect(g4Start, rowRect.y, g4End - g4Start, rowRect.height), "Items", style);
         }
 
         private void DrawHeaderCells(Rect rowRect)
@@ -457,7 +463,8 @@ namespace BalloonParty.Editor
                 rowBg = new Color(0.21f, 0.21f, 0.21f, 1f);
             }
 
-            DrawGroupBackground(rowRect, 0, 3, rowBg);
+            DrawGroupBackground(rowRect, 0, 0, rowBg);
+            DrawGroupBackground(rowRect, 1, 3, rowBg);
             DrawGroupBackground(rowRect, 4, 5, rowBg);
             DrawGroupBackground(rowRect, 6, 9, rowBg);
 
