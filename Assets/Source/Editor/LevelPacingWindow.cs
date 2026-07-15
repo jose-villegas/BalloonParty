@@ -1,4 +1,6 @@
+using System.Linq;
 using BalloonParty.Configuration.Level;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Shared;
 using UnityEditor;
 using UnityEngine;
@@ -18,6 +20,9 @@ namespace BalloonParty.Editor
         private const float SeparatorWidth = 1f;
 
         private readonly ConfigAssetCache<LevelPacingConfiguration> _assetCache = new();
+        private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
+
+        private string[] _paletteNames;
 
         private LevelPacingConfiguration _asset;
         private SerializedObject _serialized;
@@ -34,6 +39,10 @@ namespace BalloonParty.Editor
         private void OnEnable()
         {
             TryLoadAsset();
+            var palette = _paletteCache.Value;
+            _paletteNames = palette != null
+                ? palette.Colors.Select(c => c.Name).ToArray()
+                : new[] { "0", "1", "2", "3", "4", "5", "6", "7" };
         }
 
         private void OnGUI()
@@ -233,7 +242,7 @@ namespace BalloonParty.Editor
             EditorGUILayout.EndHorizontal();
         }
 
-        private static void DrawMaskCell(SerializedProperty paramsProp)
+        private void DrawMaskCell(SerializedProperty paramsProp)
         {
             var maskProp = paramsProp.FindPropertyRelative("_allowedColorsMask");
             if (maskProp == null)
@@ -243,21 +252,15 @@ namespace BalloonParty.Editor
             }
 
             EditorGUILayout.BeginHorizontal(GUILayout.Width(MaskColWidth));
-            var mask = maskProp.intValue;
-            var count = 0;
-            var temp = mask;
-            while (temp != 0)
+            EditorGUIUtility.labelWidth = 1f;
+            var newMask = EditorGUILayout.MaskField(" ", maskProp.intValue, _paletteNames,
+                GUILayout.Width(MaskColWidth - 4f));
+            if (newMask != maskProp.intValue)
             {
-                count += temp & 1;
-                temp >>= 1;
+                maskProp.intValue = newMask;
             }
 
-            var label = mask == ~0 ? "All" : $"{count} colors";
-            if (GUILayout.Button(label, EditorStyles.miniButton, GUILayout.Width(MaskColWidth - 4f)))
-            {
-                maskProp.intValue = EditorGUILayout.MaskField(mask, new[] { "0", "1", "2", "3", "4", "5", "6", "7" });
-            }
-
+            EditorGUIUtility.labelWidth = 0f;
             EditorGUILayout.EndHorizontal();
         }
 
