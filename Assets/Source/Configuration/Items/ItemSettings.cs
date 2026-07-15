@@ -22,8 +22,6 @@ namespace BalloonParty.Configuration.Items
         [SerializeField] private LaserSettings _laser = new();
         [SerializeField] private LightningSettings _lightning = new();
         [SerializeField] private PaintSettings _paint = new();
-        [SerializeField] private ShieldSettings _shield = new();
-        [SerializeField] private SnipeSettings _snipe = new();
 
         public ItemType Type => _type;
 
@@ -38,8 +36,6 @@ namespace BalloonParty.Configuration.Items
         public LaserSettings Laser => _laser;
         public LightningSettings Lightning => _lightning;
         public PaintSettings Paint => _paint;
-        public ShieldSettings Shield => _shield;
-        public SnipeSettings Snipe => _snipe;
     }
 
     [Serializable]
@@ -202,23 +198,5 @@ namespace BalloonParty.Configuration.Items
         public float SpreadLength => _spreadLength;
         public float SpreadBaseWidth => _spreadBaseWidth;
         public float SpreadBlobRadius => _spreadBlobRadius;
-    }
-
-    [Serializable]
-    public class ShieldSettings
-    {
-        [Tooltip("Flight speed multiplier while the rainbow speed buff is active. 1 = no change.")]
-        [SerializeField] [Min(1f)] private float _speedBuffMultiplier = 2f;
-
-        public float SpeedBuffMultiplier => _speedBuffMultiplier;
-    }
-
-    [Serializable]
-    public class SnipeSettings
-    {
-        [Tooltip("Flight speed multiplier applied by the snipe buff. 1 = no change.")]
-        [SerializeField] [Min(1f)] private float _speedBuffMultiplier = 2f;
-
-        public float SpeedBuffMultiplier => _speedBuffMultiplier;
     }
 }

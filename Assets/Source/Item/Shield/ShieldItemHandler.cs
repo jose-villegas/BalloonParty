@@ -1,6 +1,7 @@
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
+using BalloonParty.Configuration.Buffs;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Extensions;
@@ -22,6 +23,7 @@ namespace BalloonParty.Item.Shield
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private readonly ISubscriber<ShieldLostMessage> _wallBounces;
         private readonly IItemConfiguration _itemConfig;
+        private readonly IBuffConfiguration _buffConfig;
         private readonly IGamePalette _palette;
         private readonly IProjectileBuffs _buffs;
 
@@ -33,6 +35,7 @@ namespace BalloonParty.Item.Shield
         [Inject]
         internal ShieldItemHandler(
             IItemConfiguration itemConfig,
+            IBuffConfiguration buffConfig,
             IPublisher<ShieldGainedMessage> shieldGainedPublisher,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber,
             ISubscriber<ShieldLostMessage> wallBounces,
@@ -41,6 +44,7 @@ namespace BalloonParty.Item.Shield
             IProjectileBuffs buffs)
         {
             _itemConfig = itemConfig;
+            _buffConfig = buffConfig;
             _shieldGainedPublisher = shieldGainedPublisher;
             _loadedSubscriber = loadedSubscriber;
             _wallBounces = wallBounces;
@@ -73,12 +77,11 @@ namespace BalloonParty.Item.Shield
             // granted is what the wall consumes to end both buffs, rather than destroying the projectile.
             if (_palette.IsRainbow(balloon.GetColorId()))
             {
-                var settings = _itemConfig[ItemType.Shield];
                 _buffs.Apply(new ProjectileBuff(
                     ProjectileBuffId.RainbowShield, 0f, BuffModifierOp.Flat,
                     new WallBounceEndCondition(_wallBounces)));
                 _buffs.Apply(new ProjectileBuff(
-                    ProjectileBuffId.Speed, settings.Shield.SpeedBuffMultiplier,
+                    ProjectileBuffId.Speed, _buffConfig.GetValue(ProjectileBuffId.Speed),
                     BuffModifierOp.Multiplicative, new WallBounceEndCondition(_wallBounces)));
             }
 

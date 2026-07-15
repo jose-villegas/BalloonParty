@@ -9,6 +9,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 using BalloonParty.Configuration.Balloons;
+using BalloonParty.Configuration.Buffs;
 using BalloonParty.Configuration.Cinematics;
 using BalloonParty.Configuration.Effects;
 using BalloonParty.Configuration.GridActors;
@@ -35,6 +36,7 @@ namespace BalloonParty.Game
         [SerializeField] private SceneLightFieldSettings _sceneLightFieldSettings;
         [SerializeField] private SpeckFieldSettings _speckFieldSettings;
         [SerializeField] private LevelPacingConfiguration _levelPacingConfiguration;
+        [SerializeField] private BuffConfiguration _buffConfiguration;
         [SerializeField] private ProjectileView _projectilePrefab;
         [SerializeField] private FlyingTrail _scoreTrailPrefab;
 
@@ -80,6 +82,7 @@ namespace BalloonParty.Game
             builder.RegisterInstance<ISceneLightSettings>(_sceneLightFieldSettings);
             builder.RegisterInstance<ISpeckFieldSettings>(_speckFieldSettings);
             builder.RegisterInstance<ILevelPacingConfiguration>(_levelPacingConfiguration);
+            builder.RegisterInstance<IBuffConfiguration>(_buffConfiguration);
             builder.RegisterInstance(new ThrowerSettings(_projectilePrefab));
             builder.RegisterInstance(_scoreTrailPrefab);
         }

@@ -1,3 +1,4 @@
+using BalloonParty.Configuration.Buffs;
 using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Extensions;
@@ -16,6 +17,7 @@ namespace BalloonParty.Item.Snipe
     internal class SnipeItemHandler : IBalloonItem
     {
         private readonly IItemConfiguration _itemConfig;
+        private readonly IBuffConfiguration _buffConfig;
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly IProjectileBuffs _buffs;
         private readonly ISubscriber<ShieldLostMessage> _wallBounces;
@@ -25,11 +27,13 @@ namespace BalloonParty.Item.Snipe
         [Inject]
         internal SnipeItemHandler(
             IItemConfiguration itemConfig,
+            IBuffConfiguration buffConfig,
             ItemEffectPlayer effectPlayer,
             IProjectileBuffs buffs,
             ISubscriber<ShieldLostMessage> wallBounces)
         {
             _itemConfig = itemConfig;
+            _buffConfig = buffConfig;
             _effectPlayer = effectPlayer;
             _buffs = buffs;
             _wallBounces = wallBounces;
@@ -39,7 +43,7 @@ namespace BalloonParty.Item.Snipe
         {
             var settings = _itemConfig[ItemType.Snipe];
             _buffs.Apply(new ProjectileBuff(
-                ProjectileBuffId.Speed, settings.Snipe.SpeedBuffMultiplier,
+                ProjectileBuffId.Speed, _buffConfig.GetValue(ProjectileBuffId.Speed),
                 BuffModifierOp.Multiplicative, new WallBounceEndCondition(_wallBounces)));
             _effectPlayer.Play(settings, activation.WorldPosition, activation.Balloon.GetColorId());
             return UniTask.CompletedTask;
