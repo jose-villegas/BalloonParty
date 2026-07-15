@@ -22,12 +22,25 @@ digraph ScreenSpaceLight {
         Capture -> CapTex  [label="renders\ncaptured layers"];
     }
 
+    subgraph cluster_field {
+        label="Scene Light Field (see @ref arch_light_field)";
+        style=filled;
+        fillcolor="#e0f0e8";
+
+        FieldRT  [label="_SceneLightTex\nR = local boost\nGB = direction weight\nA = palette index", fillcolor="#cfe0f0"];
+        Include  [label="SceneLight.cginc\nSceneLightDirectionAt(worldPos)\nSceneLightMagnitudeAt(worldPos)"];
+        FlatFall [label="Field-OFF fallback\n→ flat _SceneLightDir\n→ _SceneLightIntensity", style=dashed];
+
+        FieldRT -> Include;
+        FlatFall -> Include [style=dashed];
+    }
+
     subgraph cluster_smear {
         label="ScreenSpaceLightSmear.shader — blit chain";
         style=filled;
         fillcolor="#f5f5dc";
 
-        Pass0 [label="Pass 0 — directional smear\nrgb: march TOWARD light (bleed)\na: march AWAY, × (1−ownCoverage)\n(cast shadow on open ground)"];
+        Pass0 [label="Pass 0 — per-fragment field-directional smear\nrgb: march TOWARD local light dir (bleed)\na: march AWAY, × (1−ownCoverage)\n(direction from SceneLightDirectionAt)"];
         Pass1 [label="Pass 1 — 3×3 box soften"];
         Pass2 [label="Pass 2 — temporal EMA\nvs ping-pong history\n(_temporalResponse)"];
 
@@ -37,11 +50,11 @@ digraph ScreenSpaceLight {
     LightTex [label="_LightTex (light buffer)\nRGB = smeared scene color\nA = shadow amount", fillcolor="#cfe0f0"];
 
     subgraph cluster_overlay {
-        label="Composite — fullscreen, no readback";
+        label="Composite — fullscreen, magnitude-coupled";
         style=filled;
         fillcolor="#e8f5dc";
 
-        Overlay  [label="ScreenSpaceLightOverlay.shader\ncolor = 0.5·lerp(white, shadowTint, a·strength)\n+ (rgb − ambient)·bounce"];
+        Overlay  [label="ScreenSpaceLightOverlay.shader\nbounce × abs(magnitude)\nshadow × relative(R / _MagnitudeRef)\ncolor = 0.5·lerp(white, shadowTint, shadow)\n+ (rgb − ambient)·bounce"];
         Quad     [label="Overlay quad\ncamera-fitted, layer TransparentFX\nSky / 32000, Blend DstColor SrcColor"];
 
         Overlay -> Quad [label="material"];
@@ -50,12 +63,14 @@ digraph ScreenSpaceLight {
     Frame [label="Framebuffer\n(tinted in place)", fillcolor="#ffe8cc"];
 
     CapTex   -> Pass0    [label="_MainTex"];
+    Include  -> Pass0    [label="local direction\nper fragment", style=bold, color="#2266aa"];
+    Include  -> Overlay  [label="local magnitude\nper fragment", style=bold, color="#2266aa"];
     Pass2    -> LightTex;
     LightTex -> Overlay  [label="_LightTex"];
     MainCam  -> Overlay  [label="_AmbientColor\n= camera bg", style=dashed];
     Quad     -> Frame    [label="2·src·dst\n(darken + brighten)"];
 
-    Service [label="ScreenSpaceLightService\n(on Main Camera)\nowns blit chain + quad,\npushes knobs, Acquires capture", fillcolor="#f5dce8"];
+    Service [label="ScreenSpaceLightService\n(on Main Camera)\nowns blit chain + quad,\npushes _TapStepScale + _TapAspect\n+ _BounceStrength + _MagnitudeRef", fillcolor="#f5dce8"];
     Service -> Pass0   [label="drives", lhead=cluster_smear, style=dotted];
     Service -> Overlay [label="drives", style=dotted];
     Service -> Capture [label="Acquire/Release", style=dotted];
@@ -64,10 +79,11 @@ digraph ScreenSpaceLight {
 
 ## What this diagram shows
 
-A whole-screen fake of a global 2D directional light (~45°, matching the PuffCloud
-`_LightDir` convention). It runs entirely off the shared low-res scene capture and a
-final composite quad — **no existing material or shader is touched**, and there is no
-post-processing readback.
+A whole-screen fake of a global 2D directional light, now **field-aware**: each fragment
+reads its local light direction and magnitude from the scene light field (see @ref
+arch_light_field) so point/area lights bend the bleed and shadows around them. When the
+field is off, the shader falls back to the flat global direction — bit-identical to the
+original single-direction march.
 
 **Capture** — `SceneCaptureService` (see @ref disturbance_field's sibling in `Display/`)
 renders the captured layers into a low-res RT on a **time-paced cadence**, clearing to
@@ -84,11 +100,15 @@ that's already temporally blended (Pass 2) and only refreshes on the same time-p
 cadence.
 
 **Smear** (`ScreenSpaceLightSmear`, 3 blit passes at capture resolution):
-- **Pass 0** does two opposite marches per pixel. `RGB` marches *toward* the light,
-  accumulating the composited scene color — a lit neighbour bleeds its color onto this
-  pixel (reflection/bleed, lands on the side facing the source). `A` marches *away* from
-  the light, accumulating occluder coverage, then multiplies by `(1 − ownCoverage)` — an
-  occluder between this pixel and the source darkens it (shadow, lands on the far side).
+- **Pass 0** — **per-fragment field-directional**. Each fragment maps its capture UV to
+  world position through the field-bounds globals and reads the local toward-light
+  direction via `SceneLightDirectionAt(worldPos)`. The 8-tap march follows this local
+  direction instead of the old single global step — so a point/area light bends the
+  bleed and shadows around it organically. `RGB` marches toward the local light,
+  accumulating the composited scene color (bleed). `A` marches away, accumulating
+  occluder coverage × `(1 − ownCoverage)` (shadow on open ground). The service pushes
+  `_TapStepScale` + `_TapAspect` (world→UV conversion factors); the shader builds the
+  per-fragment step from those + the local unit direction.
 - **Pass 1** is a 3×3 box blur that removes the smear's directional streaks.
 - **Pass 2** is a temporal EMA against a ping-pong history buffer: at capture resolution
   a moving sprite jumps whole texels per frame and the bounce flickers; folding each
@@ -98,10 +118,12 @@ cadence.
 sorting `Sky`/32000 (above gameplay, below UI), drawn with `Blend DstColor SrcColor`
 (= `2·src·dst`, neutral at 0.5, so it can darken *and* brighten). It samples only the
 light buffer — the frame is tinted in place by the blend unit, nothing is read back.
-The bounce term is measured **relative to the ambient sky** (`(rgb − ambient)`, ambient
-pushed from the camera background): flat sky nets to zero (no global tint), a bright
-sprite pushes positive (brightens neighbours in its hue), a dark/black sprite pushes
-negative (absorbs — darkens them).
+The bounce term now scales by the **absolute local magnitude** (field-off R == global
+intensity, matching the old `_bounceStrength × intensity` product). The shadow term
+scales by the **relative magnitude** (`localR / _MagnitudeRef`) — field-off resolves to
+1.0, so authored shadow strength is unchanged. This per-fragment coupling means a dim
+region casts weaker, shorter shadows and a bright local light intensifies the bounce —
+resolving the old open question of whether GI strength should track light intensity.
 
 ## Key design decisions & contracts
 
@@ -128,6 +150,15 @@ negative (absorbs — darkens them).
 6. **Shaders are serialized references, not `Shader.Find`.** Device builds strip
    name-only shader lookups; `Shader.Find` remains only as an editor fallback, and the
    service disables itself with a warning if neither resolves.
+7. **Per-fragment field direction (new).** The smear no longer marches one global direction.
+   Each fragment reads its own local light direction from the field — so a nearby point or
+   area light bends the GI around it. Field-off returns the flat global everywhere,
+   reproducing the old single-direction behaviour identically.
+8. **Magnitude coupling (new).** Bounce and shadow scale per-fragment by the field's
+   local magnitude R. Bounce uses absolute R (field-off == global intensity, matching
+   the old CPU product). Shadow uses relative `R / _MagnitudeRef` (field-off == 1.0,
+   preserving authored shadow strength). A dim region naturally gets weaker, shorter
+   shadows; a bright local light intensifies the bounce.
 
 ## Deliberately not built
 

@@ -104,3 +104,35 @@ Non-damaging items (Paint, Shield, Snipe) do not use the `Damage` field — the 
 - **IEffect / EffectView** — `ChainLightningView` extends `EffectView`; all item activation effects that need async Play/Stop extend `EffectView`
 - **IGameConfiguration / ItemConfiguration** — color lookup, item settings (radius, nudge values, laser cast params, lightning timing/segments/randomness/glow subdivisions/fractal decay, paint flight duration/arc curve/scale curve/shadow scale curve/sprite scale curve/spin speed/spread offset/length/base width/blob radius, damage)
 - **ColorableRenderer** — `PaintSplashView` uses `ColorableRenderer` blobs so they participate in the standard color pipeline
+- **SceneLightFieldService** — Bomb, Laser, and Lightning register temporary lights (see below)
+
+## Lights Cast by Items
+
+Damaging items cast local lights into the scene light field (@ref arch_light_field) for the duration
+of their activation effect. Each handler creates a reactive `Light` model, registers it with
+`SceneLightFieldService.RegisterLight(Light) → IDisposable`, and disposes the registration when the
+effect expires (async timeout). The field re-renders only when a registered light changes — idle
+items add no GPU cost.
+
+| Item | Light type | Count | Duration | Colour | Config location |
+|---|---|---|---|---|---|
+| **Bomb** | Point (disc) | 1 | Effect duration | Source balloon | `ItemSettings.Bomb` (`BlastLightRadiusScale`, `BlastLightIntensity`, `BlastLightFallbackSeconds`) |
+| **Laser** | Capsule (segment) | 2 (H + V beams) | Effect duration | Source balloon | `ItemSettings.Laser` (`BeamLightHalfWidth`, `BeamLightIntensity`, `BeamLightFalloff`, `BeamLightFallbackSeconds`) |
+| **Lightning** | Point (disc) | 1 per chain target | `PopLightSeconds` | Matched target colour | `ItemSettings.Lightning` (`PopLightRadius`, `PopLightIntensity`, `PopLightSeconds`) |
+
+All lights are tagged with a palette index (the source/matched colour) for local colour casting via
+the field's A channel. Untagged regions fall back to the global `_SceneLightColor`. The field's
+palette-decode include (`SceneLightTintAt`) gives consumers a smooth colour glow driven by the
+bilinear magnitude — no per-item shader work needed.
+
+**Area lights (Laser):** The two beam lights use `Light.Segment(start, end, halfWidth, …)` — a
+capsule shape where falloff decays from the segment axis to the sides. This is the primary area-light
+consumer; point lights (`start == end`) are a degenerate capsule (a disc).
+
+**Rainbow bomb scaling:** A rainbow-triggered bomb scales the light radius visually (via
+`RainbowEffectScale`) for a bigger-looking blast glow, but the kill radius is unchanged.
+
+**Idle laser telegraph (experimental):** `LaserItemRotation` can optionally register a spinning
+cross telegraph light while the item is held (not yet activated). Controlled by per-item-settings
+toggle (`TelegraphLightEnabled`) and tuned via `TelegraphLightHalfLength`, `TelegraphLightHalfWidth`,
+`TelegraphLightIntensity` in `ItemSettings.Laser`. Off by default.

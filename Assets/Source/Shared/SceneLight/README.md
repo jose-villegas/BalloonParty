@@ -141,34 +141,36 @@ foreign slot). Untagged / field-off is the key light unchanged. Consumers get th
 Because nothing includes the file yet and the field publishes an off-flag until it runs, **Phase A
 has zero visual effect**: the field OFF is bit-identical to today.
 
-## Phase roadmap (this is Phase C)
+## Phase roadmap
 
-- **A (done, editor-verification pending)** — the field service, rest-state fill, the globals, the
+- **A (shipped)** — the field service, rest-state fill, the globals, the
   shared include, the off-fallback.
-- **B (done)** — pilot consumers include the header and sample `…At(worldPos)` (PuffCloud per-pixel,
+- **B (shipped)** — pilot consumers include the header and sample `…At(worldPos)` (PuffCloud per-pixel,
   PaintBlob per-object).
-- **C (code-complete, editor-verification pending)** — the reactive `Light` model + on/off registry,
+- **C (shipped)** — the reactive `Light` model + on/off registry,
   the two new passes (accumulate + gradient), and `LightStampCheat`. The A
   channel now carries real palette indices and R accumulates. The gradient pass (folded in here rather
   than deferred to D) already derives direction from `grad(R)`, so area lights work today.
   Real game sources (balloon pops flashing their colour, then laser/lightning) are the next wiring
   step. In-editor render check still pending (`dotnet build` does not compile shaders).
-- **D (code-complete, editor-verification pending)** — every remaining consumer (world bodies + sprite
+- **D (shipped)** — every remaining consumer (world bodies + sprite
   family) migrated onto the include; the screen-space GI smear/overlay now sample the field per-fragment
   (direction + magnitude), so lights bend the bounce and shadows. Field-off stays bit-identical.
-- **Palette colour decode (code-complete, editor-verification pending)** — `SceneLightTintAt` decodes the
+- **Palette colour decode (shipped)** — `SceneLightTintAt` decodes the
   A index to a palette colour via the global `_SceneLightPalette` (2×2 decode-blend + intensity-driven soft edge); all consumers inherit it.
-- **Specks (done)** — `SpeckField.shader` samples the field per speck (at its world position, VTF) and
+- **Specks (shipped)** — `SpeckField.shader` samples the field per speck (at its world position, VTF) and
   tints it, tunable **per appearance look**: `LightInfluence` (0 = emissive, ignores light; blends
   base→colour by heat) and `LightMode` (`SceneLightMode` enum — Full / Ambient / Local, resolved per the
   speck's colour slot). Default influence 0, so existing looks are unchanged until an artist opts in.
-- **Laser cross (done)** — `LaserItemHandler` registers two `Light.Segment` beams (H + V through the
+- **Laser cross (shipped)** — `LaserItemHandler` registers two `Light.Segment` beams (H + V through the
   cross centre, `RaycastDistance` each way), coloured by the host balloon, for the beam effect's
   duration — the first **area-light** consumer. A held (idle) laser can also cast a spinning cross
   telegraph following the item's rotation (`LaserItemRotation`, per-prefab `_castTelegraphLight` toggle,
   off by default — experimental).
-- **Bomb (done)** — `BombItemHandler` casts a point flash light at the blast, radius ~2× the blast
+- **Bomb (shipped)** — `BombItemHandler` casts a point flash light at the blast, radius ~3× the blast
   radius (visual-scaled for a rainbow bomb), for the effect duration.
-- **First consumer (done)** — the projectile registers a small `Light` that follows it and takes its
+- **Lightning (shipped)** — `LightningItemHandler` casts a point flash light at each chain node it pops,
+  palette-tagged to the matched target colour, lasting `PopLightSeconds`.
+- **First consumer (shipped)** — the projectile registers a small `Light` that follows it and takes its
   colour (Sparks while colourless); see `Projectile/README.md`.
-- **Next** — more game-source wiring (balloon pops flashing their colour, laser/lightning as lights).
+- **Next** — more game-source wiring (balloon pops flashing their colour), further field tuning.

@@ -11,8 +11,9 @@
 > Exploratory beginning: the first milestone is only the **direction** abstraction; colour,
 > intensity, and point-light falloff are deliberately deferred.
 >
-> **Status: milestones 1–2 SHIPPED (2026-07-14) — see the Status section; milestone 3 (the light
-> field) is in progress — Phases A/B/C code-complete, in-editor verification pending.**
+> **Status: milestones 1–2 SHIPPED (2026-07-14); milestone 3 (the light field) SHIPPED — all
+> phases code-complete and wired to game sources (projectile, laser, bomb, lightning, specks).
+> In-editor shader verification still pending for shaders compiled only by Unity.**
 
 ---
 
@@ -321,9 +322,16 @@ stays raw/point-sampled by design (a field-data inspector). All migrated consume
 
 ## Open questions
 
-- Screen-space vs world-space light vector for balloons that move (parallax)? Screen-space is
-  simplest and matches the GI; revisit if a positioned light is added in milestone 3.
-- Should the light be static (authored once) or animatable (day/night, event beats)? A global +
-  reactive owner supports either; not decided.
-- Do any consumers need a *different* light than the global (a rim/fill)? If so, the seam stays a
-  single key but the value could be per-consumer-overridable — deferred until a real case appears.
+- ~~Screen-space vs world-space light vector for balloons that move (parallax)?~~ **Resolved:**
+  Screen-space, matching the GI. The field is world-space but camera-view-aligned; consumers sample
+  in world and the result is screen-consistent.
+- ~~Should the light be static (authored once) or animatable (day/night, event beats)?~~ **Resolved:**
+  Global + reactive owner supports both; the flat globals are live-tunable in play mode, and local
+  lights animate via their reactive `Intensity`/`Position`.
+- ~~Do any consumers need a *different* light than the global (a rim/fill)?~~ **Resolved:** Yes —
+  `SceneLightMode` enum (`Full` / `Ambient` / `Local`) gives per-consumer control. `Local` mode
+  (field contribution above ambient only) is used for glint effects (`LightDriven`) that should flare
+  only near a local light source, not glow uniformly under the global ambient.
+- ~~Should GI shadow strength scale with intensity?~~ **Resolved:** The overlay's shadow term now
+  scales by relative magnitude (`localR / _MagnitudeRef`), so dim regions get weaker shadows and
+  bright local lights intensify the bounce — organically, per-fragment, without a separate knob.
