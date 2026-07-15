@@ -26,7 +26,7 @@ namespace BalloonParty.Editor
         private const int ActorColIndex = 10;
         private const float BalloonExpandedWidth = 310f;
         private const float ItemExpandedWidth = 170f;
-        private const float ActorExpandedWidth = 210f;
+        private const float ActorExpandedWidth = 260f;
 
         // Columns that have a visual gap before them (group separators)
         private static readonly int[] GapBeforeCols = { 1, 4, 6, 10 };
@@ -1269,6 +1269,8 @@ namespace BalloonParty.Editor
 
             EditorGUI.LabelField(new Rect(x, y, 40f, h), "Count", subStyle);
             x += 44f;
+            EditorGUI.LabelField(new Rect(x, y, 50f, h), "Mode", subStyle);
+            x += 54f;
             EditorGUI.LabelField(new Rect(x, y, 46f, h), "Cluster", subStyle);
         }
 
@@ -1370,14 +1372,18 @@ namespace BalloonParty.Editor
                 var maxProp = countPropEntry.FindPropertyRelative("_max");
                 var clusterProp = entryProp.FindPropertyRelative("_maxPerCluster");
 
-                // Count: min/max
+                // Count: min/max + mode
                 var fieldW = 18f;
+                var modeW = 50f;
                 minProp.intValue = EditorGUI.IntField(new Rect(x, y, fieldW, h), minProp.intValue);
                 x += fieldW;
                 EditorGUI.LabelField(new Rect(x, y, 8f, h), "/");
                 x += 8f;
                 maxProp.intValue = EditorGUI.IntField(new Rect(x, y, fieldW, h), maxProp.intValue);
-                x += fieldW + 4f;
+                x += fieldW + 2f;
+                var modeProp = countPropEntry.FindPropertyRelative("_mode");
+                modeProp.enumValueIndex = EditorGUI.Popup(new Rect(x, y, modeW, h), modeProp.enumValueIndex, modeProp.enumDisplayNames);
+                x += modeW + 4f;
 
                 // MaxPerCluster
                 clusterProp.intValue = EditorGUI.IntField(new Rect(x, y, 24f, h), clusterProp.intValue);
