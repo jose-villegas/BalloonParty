@@ -161,7 +161,7 @@ namespace BalloonParty.Editor
                 GUI.backgroundColor = new Color(1f, 1f, 1f, 0.05f);
             }
 
-            EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+            EditorGUILayout.BeginHorizontal(EditorStyles.helpBox, GUILayout.Height(EditorGUIUtility.singleLineHeight + 4f));
             GUI.backgroundColor = bgColor;
 
             // Range column
@@ -202,23 +202,21 @@ namespace BalloonParty.Editor
 
         private static void DrawRangeCell(SerializedProperty fromProp, SerializedProperty toProp, bool isFallback)
         {
-            EditorGUILayout.BeginVertical(GUILayout.Width(RangeColWidth));
+            EditorGUILayout.BeginHorizontal(GUILayout.Width(RangeColWidth));
             if (isFallback)
             {
-                EditorGUILayout.LabelField("Fallback", EditorStyles.miniLabel);
+                EditorGUILayout.LabelField("Fallback", EditorStyles.miniLabel, GUILayout.Width(RangeColWidth));
             }
             else
             {
-                EditorGUILayout.BeginHorizontal();
-                EditorGUIUtility.labelWidth = 12f;
-                fromProp.intValue = EditorGUILayout.IntField(" ", fromProp.intValue, GUILayout.Width(36f));
+                EditorGUIUtility.labelWidth = 1f;
+                fromProp.intValue = EditorGUILayout.IntField(" ", fromProp.intValue, GUILayout.Width(34f));
                 EditorGUILayout.LabelField("–", GUILayout.Width(10f));
-                toProp.intValue = EditorGUILayout.IntField(" ", toProp.intValue, GUILayout.Width(36f));
+                toProp.intValue = EditorGUILayout.IntField(" ", toProp.intValue, GUILayout.Width(34f));
                 EditorGUIUtility.labelWidth = 0f;
-                EditorGUILayout.EndHorizontal();
             }
 
-            EditorGUILayout.EndVertical();
+            EditorGUILayout.EndHorizontal();
         }
 
         private static void DrawRangedIntCell(SerializedProperty paramsProp, string fieldName)
@@ -251,17 +249,15 @@ namespace BalloonParty.Editor
                 return;
             }
 
-            EditorGUILayout.BeginHorizontal(GUILayout.Width(MaskColWidth));
             EditorGUIUtility.labelWidth = 1f;
             var newMask = EditorGUILayout.MaskField(" ", maskProp.intValue, _paletteNames,
-                GUILayout.Width(MaskColWidth - 4f));
+                GUILayout.Width(MaskColWidth));
             if (newMask != maskProp.intValue)
             {
                 maskProp.intValue = newMask;
             }
 
             EditorGUIUtility.labelWidth = 0f;
-            EditorGUILayout.EndHorizontal();
         }
 
         private static void DrawWeightsCell(SerializedProperty paramsProp, string fieldName, string kind)
@@ -284,10 +280,8 @@ namespace BalloonParty.Editor
                 }
             }
 
-            EditorGUILayout.BeginHorizontal(GUILayout.Width(WeightsColWidth));
             EditorGUILayout.LabelField($"{activeCount} {kind}(s)", EditorStyles.miniLabel,
-                GUILayout.Width(WeightsColWidth - 4f));
-            EditorGUILayout.EndHorizontal();
+                GUILayout.Width(WeightsColWidth));
         }
 
         private static void DrawExpandedDetails(SerializedProperty paramsProp)
