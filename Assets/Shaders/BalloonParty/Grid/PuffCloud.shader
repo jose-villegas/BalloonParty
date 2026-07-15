@@ -341,11 +341,19 @@ Shader "BalloonParty/Grid/PuffCloud"
                 float borderFade = SlotFalloff(wpLocal);
 
                 #ifdef _SHADOW_ON
+                // A local light of the ignored palette colour is bypassed COMPLETELY: the cloud reads the
+                // flat ambient globals for the drop shadow's direction AND fade too (the diffuse/tint path
+                // in CloudLighting does the same at its own sample), so that colour of light leaves no
+                // trace — not even a shifted or faded shadow.
+                bool ignoreLight = _IgnoreLightPaletteIndex >= 0.0
+                    && abs(SceneLightPaletteIndexAt(wpRest) - _IgnoreLightPaletteIndex) < 0.5;
+
                 // The shadow lands down-light of the cloud: direction derived from the scene
                 // light (-toward-light) sampled at the cloud's OWN position (what casts the
                 // shadow, not where it lands), only the distance stays authored — so rotating
                 // the light moves the drop shadow together with the diffuse shading.
-                float2 shadowOffset = -SceneLightDirectionAt(wpRest) * _ShadowDistance;
+                float2 shadowLightDir = ignoreLight ? SceneLightDirection() : SceneLightDirectionAt(wpRest);
+                float2 shadowOffset = -shadowLightDir * _ShadowDistance;
                 float2 shadowWpWorld = wpRest   - shadowOffset;
                 float2 shadowWpLocal = wpLocal  - shadowOffset;
                 float  shadowFade = SlotFalloff(shadowWpLocal);
@@ -443,7 +451,7 @@ Shader "BalloonParty/Grid/PuffCloud"
 
                     shadowAlpha = shadowCloud * _ShadowColor.a * IN.color.a;
                     shadowAlpha *= smoothstep(0.0, _ShadowSoftness + 0.01, shadowCloud);
-                    shadowAlpha *= ShadowLightFadeAt(wpRest);
+                    shadowAlpha *= ignoreLight ? ShadowLightFade() : ShadowLightFadeAt(wpRest);
                 }
 
                 if (cloud < 0.001 && shadowAlpha < 0.001) discard;
