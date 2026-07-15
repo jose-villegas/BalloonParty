@@ -278,18 +278,12 @@ Shader "BalloonParty/Scenario/SpeckField"
                 col.rgb = lerp(col.rgb, target.rgb, heat);
                 col.a = lerp(col.a, tex.a * target.a, heat);
 
-                // Light response — separated into color blend and brightness:
-                // influence controls how eagerly the speck adopts the light's color (driven by the
-                // local boost so it only kicks in near a light source). Brightness scales the
-                // result independently, fading to emissive at influence = 0.
+                // Light as a color replacement: influence (0–1) blends from the speck's own
+                // color toward the light's palette color scaled by its magnitude (R).
+                // 0 = emissive (keeps base color), 1 = fully lit (light color × brightness).
                 float3 lightColor = i.lightData.rgb;
                 float brightness = i.lightData.a;
-                float ambient = SceneLightAmbientMagnitude();
-                float local = max(0.0, brightness - ambient);
-                float colorFactor = saturate(i.lightInfluence * local);
-                float brightSens = min(i.lightInfluence, 1.0);
-                col.rgb = lerp(col.rgb, lightColor, colorFactor);
-                col.rgb *= lerp(1.0, brightness, brightSens);
+                col.rgb = lerp(col.rgb, lightColor * brightness, saturate(i.lightInfluence));
 
                 col.a *= i.alpha;
                 return col;
