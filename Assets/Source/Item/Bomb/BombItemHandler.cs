@@ -24,11 +24,6 @@ namespace BalloonParty.Item.Bomb
 {
     internal class BombItemHandler : IBalloonItem, IDisposable
     {
-        // Peak magnitude of the flash light; radius matches the blast. Fallback lifetime if the effect
-        // reports no duration.
-        private const float BlastLightIntensity = 3f;
-        private const float FallbackBlastSeconds = 0.4f;
-
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly BalloonOverlapQuery _overlap;
         private readonly IHitDispatcher _hitDispatcher;
@@ -108,12 +103,16 @@ namespace BalloonParty.Item.Bomb
                 StampSource.Bomb, worldPosition, Vector2.zero,
                 paletteIndex: _palette.PaletteIndexOf(sourceColorId));
 
-            // A blast-coloured flash light matching the blast radius (visual scale for a rainbow bomb),
+            // A blast-coloured flash light scaled off the blast radius (visual scale for a rainbow bomb),
             // held for the effect then released.
             var lightRadius = settings.Bomb.Radius * (isRainbow ? settings.Bomb.RainbowEffectScale : 1f);
             var registration = _lightField.RegisterLight(
-                new Light(worldPosition, lightRadius * 3f, BlastLightIntensity, _palette.PaletteIndexOf(sourceColorId)));
-            ExpireLight(effectDuration, registration).Forget();
+                new Light(worldPosition,
+                    lightRadius * settings.Bomb.BlastLightRadiusScale,
+                    settings.Bomb.BlastLightIntensity,
+                    _palette.PaletteIndexOf(sourceColorId)));
+            var lightSeconds = effectDuration > 0f ? effectDuration : settings.Bomb.BlastLightFallbackSeconds;
+            ExpireLight(lightSeconds, registration).Forget();
 
             if (converts != null)
             {
@@ -218,10 +217,9 @@ namespace BalloonParty.Item.Bomb
 
         private async UniTaskVoid ExpireLight(float seconds, IDisposable registration)
         {
-            var duration = seconds > 0f ? seconds : FallbackBlastSeconds;
             try
             {
-                await UniTask.Delay(TimeSpan.FromSeconds(duration), cancellationToken: _lifetime.Token);
+                await UniTask.Delay(TimeSpan.FromSeconds(seconds), cancellationToken: _lifetime.Token);
             }
             catch (OperationCanceledException)
             {

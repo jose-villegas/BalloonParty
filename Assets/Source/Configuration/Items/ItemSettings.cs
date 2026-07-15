@@ -46,6 +46,10 @@ namespace BalloonParty.Configuration.Items
         [SerializeField] [Min(0f)] private float _bombRainbowConversionRange = 1f;
         [SerializeField] private NudgeOverride[] _nudgeOverrides;
 
+        [SerializeField] [Min(0f)] private float _blastLightRadiusScale = 3f;
+        [SerializeField] [Min(0f)] private float _blastLightIntensity = 3f;
+        [SerializeField] [Min(0f)] private float _blastLightFallbackSeconds = 0.4f;
+
         public float Radius => _bombRadius;
 
         /// <summary>Visual-only: scales a rainbow bomb's activation-effect transform so the blast reads bigger. Does not change the kill radius.</summary>
@@ -55,6 +59,15 @@ namespace BalloonParty.Configuration.Items
         public float RainbowConversionRange => _bombRainbowConversionRange;
 
         public NudgeOverride[] NudgeOverrides => _nudgeOverrides;
+
+        /// <summary>Flash-light radius as a multiple of the (visually-scaled) blast radius.</summary>
+        public float BlastLightRadiusScale => _blastLightRadiusScale;
+
+        /// <summary>Peak magnitude of the blast flash light.</summary>
+        public float BlastLightIntensity => _blastLightIntensity;
+
+        /// <summary>Flash-light lifetime when the activation effect reports no duration.</summary>
+        public float BlastLightFallbackSeconds => _blastLightFallbackSeconds;
     }
 
     [Serializable]
@@ -66,9 +79,26 @@ namespace BalloonParty.Configuration.Items
         [Tooltip("Rainbow holder only: how many times the beam lerps through the allowed colours over the anim.")]
         [SerializeField] [Min(0f)] private float _laserColorCycles = 2f;
 
+        [SerializeField] [Min(0f)] private float _beamLightHalfWidth = 0.7f;
+        [SerializeField] [Min(0f)] private float _beamLightIntensity = 2f;
+        [SerializeField] [Min(0f)] private float _beamLightFalloff = 1.5f;
+        [SerializeField] [Min(0f)] private float _beamLightFallbackSeconds = 0.4f;
+
         public float RaycastDistance => _laserRaycastDistance;
         public float CircleCastRadius => _laserCircleCastRadius;
         public float ColorCycles => _laserColorCycles;
+
+        /// <summary>Perpendicular half-width (reach) of each beam's area light.</summary>
+        public float BeamLightHalfWidth => _beamLightHalfWidth;
+
+        /// <summary>Peak magnitude of each beam light.</summary>
+        public float BeamLightIntensity => _beamLightIntensity;
+
+        /// <summary>Beam-light falloff power — lower = broader, so the whole beam reads lit, not a thin core.</summary>
+        public float BeamLightFalloff => _beamLightFalloff;
+
+        /// <summary>Beam-light lifetime when the beam effect reports no duration.</summary>
+        public float BeamLightFallbackSeconds => _beamLightFallbackSeconds;
     }
 
     [Serializable]

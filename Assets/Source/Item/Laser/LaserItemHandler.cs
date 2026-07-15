@@ -26,13 +26,6 @@ namespace BalloonParty.Item.Laser
 {
     internal class LaserItemHandler : IBalloonItem, IStartable, IDisposable
     {
-        // The beam's light: half-width (perpendicular reach) and peak magnitude; a broad falloff so the
-        // whole beam reads lit rather than a thin core. Fallback lifetime when the effect has no duration.
-        private const float BeamHalfWidth = 0.7f;
-        private const float BeamIntensity = 2f;
-        private const float BeamFalloff = 1.5f;
-        private const float FallbackBeamSeconds = 0.4f;
-
         private readonly ItemEffectPlayer _effectPlayer;
         private readonly BalloonOverlapQuery _overlap;
         private readonly IHitDispatcher _hitDispatcher;
@@ -144,12 +137,17 @@ namespace BalloonParty.Item.Laser
             var right = (Vector3)(Vector2)(laserRotation * Vector3.right) * distance;
             var up = (Vector3)(Vector2)(laserRotation * Vector3.up) * distance;
 
-            var horizontal = _lightField.RegisterLight(
-                Light.Segment(worldPosition - right, worldPosition + right, BeamHalfWidth, BeamIntensity, paletteIndex, BeamFalloff));
-            var vertical = _lightField.RegisterLight(
-                Light.Segment(worldPosition - up, worldPosition + up, BeamHalfWidth, BeamIntensity, paletteIndex, BeamFalloff));
+            var laserSettings = settings.Laser;
+            var halfWidth = laserSettings.BeamLightHalfWidth;
+            var intensity = laserSettings.BeamLightIntensity;
+            var falloff = laserSettings.BeamLightFalloff;
 
-            var seconds = effect != null && effect.Duration > 0f ? effect.Duration : FallbackBeamSeconds;
+            var horizontal = _lightField.RegisterLight(
+                Light.Segment(worldPosition - right, worldPosition + right, halfWidth, intensity, paletteIndex, falloff));
+            var vertical = _lightField.RegisterLight(
+                Light.Segment(worldPosition - up, worldPosition + up, halfWidth, intensity, paletteIndex, falloff));
+
+            var seconds = effect != null && effect.Duration > 0f ? effect.Duration : laserSettings.BeamLightFallbackSeconds;
             ExpireLights(seconds, horizontal, vertical).Forget();
         }
 

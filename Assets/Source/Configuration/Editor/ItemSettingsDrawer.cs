@@ -58,6 +58,9 @@ namespace BalloonParty.Configuration.Editor
                         y += h + PropertyDrawerHelper.Spacing;
                     }
 
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, bomb, "_blastLightRadiusScale", "Flash Light Radius Scale");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, bomb, "_blastLightIntensity", "Flash Light Intensity");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, bomb, "_blastLightFallbackSeconds", "Flash Light Fallback (s)");
                     break;
 
                 case ItemType.Laser:
@@ -79,6 +82,10 @@ namespace BalloonParty.Configuration.Editor
                         laser,
                         "_laserColorCycles",
                         "Color Cycles");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, laser, "_beamLightHalfWidth", "Beam Light Half Width");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, laser, "_beamLightIntensity", "Beam Light Intensity");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, laser, "_beamLightFalloff", "Beam Light Falloff");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, laser, "_beamLightFallbackSeconds", "Beam Light Fallback (s)");
                     break;
 
                 case ItemType.Lightning:
