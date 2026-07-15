@@ -73,7 +73,8 @@ namespace BalloonParty.Tests.Item
             // A real service (RegisterLight only lists + subscribes — no RT before Start), so the
             // per-jump light path exercises without a full render setup.
             var lightField = new SceneLightFieldService(
-                Substitute.For<IGameDisplayConfiguration>(), palette, Substitute.For<ISceneLightFieldSettings>());
+                Substitute.For<IGameDisplayConfiguration>(), palette,
+                Substitute.For<ISceneLightFieldSettings>(), Substitute.For<ISceneLightSettings>());
 
             _handler = new LightningItemHandler(
                 itemConfig,
@@ -201,7 +202,8 @@ namespace BalloonParty.Tests.Item
             var lightField = new SceneLightFieldService(
                 Substitute.For<IGameDisplayConfiguration>(),
                 Substitute.For<IGamePalette>(),
-                Substitute.For<ISceneLightFieldSettings>());
+                Substitute.For<ISceneLightFieldSettings>(),
+                Substitute.For<ISceneLightSettings>());
             var handler = new LightningItemHandler(
                 itemConfig, dispatcher, Substitute.For<IGamePalette>(),
                 Substitute.For<ISubscriber<ProjectileLoadedMessage>>(), _grid, new PoolManager(), lightField);
