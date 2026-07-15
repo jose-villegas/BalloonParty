@@ -1,7 +1,6 @@
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Game.Score;
-using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Slots.Capabilities;
@@ -42,7 +41,7 @@ namespace BalloonParty.Projectile.Controller
             // A rainbow-buffed projectile pierces (plows through tough/unbreakable balloons instead of
             // one-shotting or deflecting off them), scores colour-agnostically, and rainbow-converts what
             // it pops near — until it loses a shield to a wall (which ends the buff).
-            var isRainbowBuff = projectile.HasBuff<RainbowShieldProjectileBuff>();
+            var isRainbowBuff = projectile.HasBuff(ProjectileBuffId.RainbowShield);
             var flags = (isRainbowBuff ? DamageFlags.WildcardStreak | DamageFlags.Piercing : DamageFlags.Normal)
                         | DamageFlags.DirectHit;
             var damageContext = new DamageContext(1, flags, projectile.ColorName.Value);

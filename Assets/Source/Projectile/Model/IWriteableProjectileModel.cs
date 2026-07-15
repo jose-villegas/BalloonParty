@@ -13,7 +13,7 @@ namespace BalloonParty.Projectile.Model
         new bool IsFree { get; set; }
         new IBalloonModel LastHitBalloon { get; set; }
 
-        void AddBuff(IProjectileBuff buff);
-        void RemoveBuff(IProjectileBuff buff);
+        void AddBuff(ProjectileBuff buff);
+        void RemoveBuff(ProjectileBuff buff);
     }
 }

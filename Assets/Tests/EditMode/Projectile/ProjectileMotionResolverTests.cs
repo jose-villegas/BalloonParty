@@ -80,7 +80,8 @@ namespace BalloonParty.Tests.Projectile
         public void Step_WithSpeedBuff_MovesTwiceAsFar()
         {
             var model = NewModel(direction: Vector2.up, speed: 1f, shields: 2);
-            model.AddBuff(new SpeedProjectileBuff(NeverFiringWallBounces()));
+            model.AddBuff(new ProjectileBuff(
+                ProjectileBuffId.Speed, 2f, new WallBounceEndCondition(NeverFiringWallBounces())));
 
             var step = _resolver.Step(model, Vector3.zero, 1f);
 

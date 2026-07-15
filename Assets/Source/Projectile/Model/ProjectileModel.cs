@@ -7,7 +7,7 @@ namespace BalloonParty.Projectile.Model
 {
     internal class ProjectileModel : IWriteableProjectileModel
     {
-        private readonly List<IProjectileBuff> _buffs = new();
+        private readonly List<ProjectileBuff> _buffs = new();
 
         public ReactiveProperty<string> ColorName { get; } = new(null);
         public ReactiveProperty<int> ShieldsRemaining { get; } = new(0);
@@ -20,12 +20,11 @@ namespace BalloonParty.Projectile.Model
         IReadOnlyReactiveProperty<string> IProjectileModel.ColorName => ColorName;
         IReadOnlyReactiveProperty<int> IProjectileModel.ShieldsRemaining => ShieldsRemaining;
 
-        public bool HasBuff<T>()
-            where T : IProjectileBuff
+        public bool HasBuff(ProjectileBuffId id)
         {
             for (var i = 0; i < _buffs.Count; i++)
             {
-                if (_buffs[i] is T)
+                if (_buffs[i].Id == id)
                 {
                     return true;
                 }
@@ -34,21 +33,20 @@ namespace BalloonParty.Projectile.Model
             return false;
         }
 
-        public T GetBuff<T>()
-            where T : class, IProjectileBuff
+        public float GetBuffFactor(ProjectileBuffId id, float defaultValue = 0f)
         {
             for (var i = 0; i < _buffs.Count; i++)
             {
-                if (_buffs[i] is T match)
+                if (_buffs[i].Id == id)
                 {
-                    return match;
+                    return _buffs[i].Factor;
                 }
             }
 
-            return null;
+            return defaultValue;
         }
 
-        public void AddBuff(IProjectileBuff buff)
+        public void AddBuff(ProjectileBuff buff)
         {
             if (!_buffs.Contains(buff))
             {
@@ -56,7 +54,7 @@ namespace BalloonParty.Projectile.Model
             }
         }
 
-        public void RemoveBuff(IProjectileBuff buff)
+        public void RemoveBuff(ProjectileBuff buff)
         {
             _buffs.Remove(buff);
         }

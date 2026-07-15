@@ -9,6 +9,6 @@ namespace BalloonParty.Projectile.Buffs
     /// </summary>
     public interface IProjectileBuffs
     {
-        void Apply(IProjectileBuff buff);
+        void Apply(ProjectileBuff buff);
     }
 }

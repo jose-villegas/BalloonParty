@@ -13,10 +13,7 @@ namespace BalloonParty.Projectile.Model
         bool IsFree { get; }
         IBalloonModel LastHitBalloon { get; }
 
-        bool HasBuff<T>()
-            where T : IProjectileBuff;
-
-        T GetBuff<T>()
-            where T : class, IProjectileBuff;
+        bool HasBuff(ProjectileBuffId id);
+        float GetBuffFactor(ProjectileBuffId id, float defaultValue = 0f);
     }
 }

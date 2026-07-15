@@ -3,12 +3,26 @@ using System;
 namespace BalloonParty.Projectile.Model
 {
     /// <summary>
-    ///     A temporary modifier on the active projectile. Each buff type declares its own
-    ///     <see cref="IProjectileBuffEndCondition" />; the buff system removes and disposes the buff when
-    ///     that condition's <c>Expired</c> flips, without knowing what the condition is.
+    ///     A temporary modifier on the active projectile. A buff is identity (<see cref="Id" />) plus a
+    ///     numeric <see cref="Factor" /> whose meaning is defined by the consumer, plus an
+    ///     <see cref="IProjectileBuffEndCondition" /> that decides when it expires.
     /// </summary>
-    public interface IProjectileBuff : IDisposable
+    public sealed class ProjectileBuff : IDisposable
     {
-        IProjectileBuffEndCondition EndCondition { get; }
+        public ProjectileBuffId Id { get; }
+        public float Factor { get; }
+        public IProjectileBuffEndCondition EndCondition { get; }
+
+        internal ProjectileBuff(ProjectileBuffId id, float factor, IProjectileBuffEndCondition endCondition)
+        {
+            Id = id;
+            Factor = factor;
+            EndCondition = endCondition;
+        }
+
+        public void Dispose()
+        {
+            EndCondition.Dispose();
+        }
     }
 }

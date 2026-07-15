@@ -1,4 +1,5 @@
 using BalloonParty.Balloon.Model;
+using BalloonParty.Configuration.Palette;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using UnityEngine;
@@ -147,6 +148,89 @@ namespace BalloonParty.Shared.Extensions
             }
 
             return count;
+        }
+
+        // Cube direction vectors for the six hex edges (used by the ring walk).
+        private static readonly (int dq, int dr)[] CubeDirections =
+        {
+            (1, 0), (1, -1), (0, -1), (-1, 0), (-1, 1), (0, 1)
+        };
+
+        /// <summary>
+        ///     Starting at <paramref name="center" />, searches outward in concentric hex rings for the
+        ///     nearest balloon with a concrete (non-rainbow, non-empty) color. Returns the color ID, or
+        ///     null if none found on the grid.
+        /// </summary>
+        internal static string FindNearestColorId(
+            this SlotGrid grid, Vector2Int center, IBalloonModel exclude, IGamePalette palette)
+        {
+            // Check center slot itself.
+            var found = TryGetColorAt(grid, center, exclude, palette);
+            if (found != null)
+            {
+                return found;
+            }
+
+            var maxRadius = Mathf.Max(grid.Columns, grid.Rows);
+            var centerQ = center.x - (center.y - (center.y & 1)) / 2;
+            var centerR = center.y;
+
+            for (var ring = 1; ring <= maxRadius; ring++)
+            {
+                // Start corner: center + direction[4] * ring (south-west in cube coords).
+                var q = centerQ + CubeDirections[4].dq * ring;
+                var r = centerR + CubeDirections[4].dr * ring;
+
+                for (var side = 0; side < 6; side++)
+                {
+                    for (var step = 0; step < ring; step++)
+                    {
+                        var col = q + (r - (r & 1)) / 2;
+                        var slot = new Vector2Int(col, r);
+
+                        if (grid.InBounds(slot))
+                        {
+                            found = TryGetColorAt(grid, slot, exclude, palette);
+                            if (found != null)
+                            {
+                                return found;
+                            }
+                        }
+
+                        q += CubeDirections[side].dq;
+                        r += CubeDirections[side].dr;
+                    }
+                }
+            }
+
+            return null;
+        }
+
+        private static string TryGetColorAt(
+            SlotGrid grid, Vector2Int slot, IBalloonModel exclude, IGamePalette palette)
+        {
+            if (grid.IsEmpty(slot.x, slot.y))
+            {
+                return null;
+            }
+
+            if (grid.At(slot) is not IBalloonModel model || ReferenceEquals(model, exclude))
+            {
+                return null;
+            }
+
+            if (model is not IHasColor colored)
+            {
+                return null;
+            }
+
+            var color = colored.Color.Value;
+            if (string.IsNullOrEmpty(color) || palette.IsRainbow(color))
+            {
+                return null;
+            }
+
+            return color;
         }
     }
 }

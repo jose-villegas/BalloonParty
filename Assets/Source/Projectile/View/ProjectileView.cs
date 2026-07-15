@@ -1,7 +1,6 @@
 using System;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Balloon.View;
-using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Controller;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
@@ -390,7 +389,7 @@ namespace BalloonParty.Projectile.View
         // buff clears it hands control back to the stolen-colour tween.
         private void TickRainbowGlow()
         {
-            var active = _model.HasBuff<RainbowShieldProjectileBuff>();
+            var active = _model.HasBuff(ProjectileBuffId.RainbowShield);
             if (!active)
             {
                 if (_rainbowGlowActive)

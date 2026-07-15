@@ -74,8 +74,11 @@ namespace BalloonParty.Item.Shield
             if (_palette.IsRainbow(balloon.GetColorId()))
             {
                 var settings = _itemConfig[ItemType.Shield];
-                _buffs.Apply(new RainbowShieldProjectileBuff(_wallBounces));
-                _buffs.Apply(new SpeedProjectileBuff(_wallBounces, settings.Shield.SpeedBuffMultiplier));
+                _buffs.Apply(new ProjectileBuff(
+                    ProjectileBuffId.RainbowShield, 1f, new WallBounceEndCondition(_wallBounces)));
+                _buffs.Apply(new ProjectileBuff(
+                    ProjectileBuffId.Speed, settings.Shield.SpeedBuffMultiplier,
+                    new WallBounceEndCondition(_wallBounces)));
             }
 
             _shieldGainedPublisher.Publish(new ShieldGainedMessage(balloon.SlotIndex.Value));

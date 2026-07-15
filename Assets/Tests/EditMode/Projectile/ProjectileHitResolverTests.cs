@@ -203,7 +203,8 @@ namespace BalloonParty.Tests.Projectile
                     Arg.Any<IMessageHandler<ShieldLostMessage>>(),
                     Arg.Any<MessageHandlerFilter<ShieldLostMessage>[]>())
                 .Returns(Substitute.For<IDisposable>());
-            _projectile.AddBuff(new RainbowShieldProjectileBuff(wallBounces));
+            _projectile.AddBuff(new ProjectileBuff(
+                ProjectileBuffId.RainbowShield, 1f, new WallBounceEndCondition(wallBounces)));
         }
 
         private BalloonModel PlaceBalloon(Vector2Int slot, string color)

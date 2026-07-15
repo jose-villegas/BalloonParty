@@ -108,8 +108,8 @@ namespace BalloonParty.Tests.Item
 
             _handler.Activate(new ItemActivationContext(balloon, Vector3.zero, Vector3.zero));
 
-            _buffs.Received(1).Apply(Arg.Any<RainbowShieldProjectileBuff>());
-            _buffs.Received(1).Apply(Arg.Any<SpeedProjectileBuff>());
+            _buffs.Received(1).Apply(Arg.Is<ProjectileBuff>(b => b.Id == ProjectileBuffId.RainbowShield));
+            _buffs.Received(1).Apply(Arg.Is<ProjectileBuff>(b => b.Id == ProjectileBuffId.Speed));
         }
 
         [Test]
@@ -120,7 +120,7 @@ namespace BalloonParty.Tests.Item
 
             _handler.Activate(new ItemActivationContext(balloon, Vector3.zero, Vector3.zero));
 
-            _buffs.DidNotReceive().Apply(Arg.Any<IProjectileBuff>());
+            _buffs.DidNotReceive().Apply(Arg.Any<ProjectileBuff>());
         }
 
         private void SimulateProjectileLoaded(ProjectileModel projectile)

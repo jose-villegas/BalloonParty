@@ -16,7 +16,7 @@ namespace BalloonParty.Projectile.Buffs
     internal sealed class ProjectileBuffService : IProjectileBuffs, IStartable, IDisposable
     {
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
-        private readonly Dictionary<IProjectileBuff, IDisposable> _expiries = new();
+        private readonly Dictionary<ProjectileBuff, IDisposable> _expiries = new();
         private readonly CompositeDisposable _subscriptions = new();
 
         private IWriteableProjectileModel _active;
@@ -31,7 +31,7 @@ namespace BalloonParty.Projectile.Buffs
             _loadedSubscriber.Subscribe(OnProjectileLoaded).AddTo(_subscriptions);
         }
 
-        public void Apply(IProjectileBuff buff)
+        public void Apply(ProjectileBuff buff)
         {
             if (_active == null)
             {
@@ -60,7 +60,7 @@ namespace BalloonParty.Projectile.Buffs
             _active = (IWriteableProjectileModel)msg.Model;
         }
 
-        private void Remove(IProjectileBuff buff)
+        private void Remove(ProjectileBuff buff)
         {
             if (_expiries.TryGetValue(buff, out var expiry))
             {

@@ -1,4 +1,3 @@
-using BalloonParty.Projectile.Buffs;
 using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using UnityEngine;
@@ -20,8 +19,7 @@ namespace BalloonParty.Projectile.Controller
         /// <summary>Advances one fixed step, mutating direction/shield count on a wall bounce.</summary>
         internal ProjectileStep Step(IWriteableProjectileModel model, Vector3 position, float deltaTime)
         {
-            var speedBuff = model.GetBuff<SpeedProjectileBuff>();
-            var speed = speedBuff != null ? model.Speed * speedBuff.Multiplier : model.Speed;
+            var speed = model.Speed * model.GetBuffFactor(ProjectileBuffId.Speed, 1f);
             position += model.Direction * (speed * deltaTime);
             position = _walls.Clamp(position, out var reflect);
 
