@@ -11,13 +11,28 @@ namespace BalloonParty.Editor
     /// parameters are columns. Easier to compare across levels than the default vertical Inspector.</summary>
     internal sealed class LevelPacingWindow : EditorWindow
     {
-        private const float RowHeight = 20f;
-        private const float RangeColWidth = 80f;
-        private const float RangedIntColWidth = 80f;
-        private const float MaskColWidth = 120f;
-        private const float WeightsColWidth = 140f;
-        private const float HeaderHeight = 22f;
+        private const float RowHeight = 22f;
         private const float SeparatorWidth = 1f;
+        private const float SwatchSize = 10f;
+
+        private static readonly float[] ColWidths =
+        {
+            90f,   // Range
+            80f,   // Spawn
+            80f,   // Board
+            80f,   // Cadence
+            80f,   // 1st Turn
+            130f,  // Colors (dropdown + swatches)
+            100f,  // Balloons
+            100f,  // Items
+            20f,   // −
+            24f,   // ►
+        };
+
+        private static readonly string[] ColHeaders =
+        {
+            "Range", "Spawn", "Board", "Cadence", "1st Turn", "Colors", "Balloons", "Items", "", ""
+        };
 
         private readonly ConfigAssetCache<LevelPacingConfiguration> _assetCache = new();
         private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
@@ -106,12 +121,16 @@ namespace BalloonParty.Editor
             if (count == 0)
             {
                 EditorGUILayout.HelpBox("No ranges defined.", MessageType.Warning);
-                return;
             }
 
             _scroll = EditorGUILayout.BeginScrollView(_scroll);
-            DrawHeader();
 
+            // Header
+            var headerRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
+            EditorGUI.DrawRect(headerRect, new Color(0.18f, 0.18f, 0.18f, 1f));
+            DrawHeaderCells(headerRect);
+
+            // Rows
             for (var i = 0; i < count; i++)
             {
                 DrawRow(i);
@@ -126,33 +145,55 @@ namespace BalloonParty.Editor
             EditorGUILayout.EndScrollView();
         }
 
-        private void DrawHeader()
+        private static float TotalWidth()
         {
-            var headerStyle = new GUIStyle(EditorStyles.boldLabel)
+            var total = 0f;
+            for (var i = 0; i < ColWidths.Length; i++)
+            {
+                total += ColWidths[i] + SeparatorWidth;
+            }
+
+            return total;
+        }
+
+        private static float ColX(int col)
+        {
+            var x = 0f;
+            for (var i = 0; i < col; i++)
+            {
+                x += ColWidths[i] + SeparatorWidth;
+            }
+
+            return x;
+        }
+
+        private static Rect CellRect(Rect rowRect, int col)
+        {
+            return new Rect(rowRect.x + ColX(col), rowRect.y, ColWidths[col], rowRect.height);
+        }
+
+        private static void DrawHeaderCells(Rect rowRect)
+        {
+            var style = new GUIStyle(EditorStyles.boldLabel)
             {
                 alignment = TextAnchor.MiddleCenter,
                 fontSize = 10
             };
 
-            var rect = EditorGUILayout.BeginHorizontal(GUILayout.Height(HeaderHeight));
-            EditorGUI.DrawRect(rect, new Color(0.22f, 0.22f, 0.22f, 1f));
-            GUILayout.Label("Range", headerStyle, GUILayout.Width(RangeColWidth));
-            DrawColumnSeparator();
-            GUILayout.Label("Spawn", headerStyle, GUILayout.Width(RangedIntColWidth));
-            DrawColumnSeparator();
-            GUILayout.Label("Board", headerStyle, GUILayout.Width(RangedIntColWidth));
-            DrawColumnSeparator();
-            GUILayout.Label("Cadence", headerStyle, GUILayout.Width(RangedIntColWidth));
-            DrawColumnSeparator();
-            GUILayout.Label("1st Turn", headerStyle, GUILayout.Width(RangedIntColWidth));
-            DrawColumnSeparator();
-            GUILayout.Label("Colors", headerStyle, GUILayout.Width(MaskColWidth));
-            DrawColumnSeparator();
-            GUILayout.Label("Balloons", headerStyle, GUILayout.Width(WeightsColWidth));
-            DrawColumnSeparator();
-            GUILayout.Label("Items", headerStyle, GUILayout.Width(WeightsColWidth));
-            GUILayout.FlexibleSpace();
-            EditorGUILayout.EndHorizontal();
+            for (var i = 0; i < ColHeaders.Length; i++)
+            {
+                if (string.IsNullOrEmpty(ColHeaders[i]))
+                {
+                    continue;
+                }
+
+                var cell = CellRect(rowRect, i);
+                EditorGUI.LabelField(cell, ColHeaders[i], style);
+
+                // Separator
+                var sep = new Rect(cell.xMax, rowRect.y, SeparatorWidth, rowRect.height);
+                EditorGUI.DrawRect(sep, new Color(0.35f, 0.35f, 0.35f, 0.8f));
+            }
         }
 
         private void DrawRow(int index)
@@ -166,48 +207,49 @@ namespace BalloonParty.Editor
             var to = toProp.intValue;
             var isFallback = from < 0 || to < 0;
 
-            var rowRect = EditorGUILayout.BeginHorizontal(GUILayout.Height(EditorGUIUtility.singleLineHeight + 4f));
+            var rowRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
 
+            // Background
             Color rowBg;
             if (isFallback)
             {
-                rowBg = new Color(0.3f, 0.4f, 0.5f, 0.2f);
+                rowBg = new Color(0.25f, 0.32f, 0.38f, 1f);
             }
             else if (index % 2 == 1)
             {
-                rowBg = new Color(0.25f, 0.25f, 0.25f, 1f);
+                rowBg = new Color(0.24f, 0.24f, 0.24f, 1f);
             }
             else
             {
-                rowBg = new Color(0.2f, 0.2f, 0.2f, 1f);
+                rowBg = new Color(0.21f, 0.21f, 0.21f, 1f);
             }
 
             EditorGUI.DrawRect(rowRect, rowBg);
 
-            // Range column
-            DrawRangeCell(fromProp, toProp, isFallback);
-            DrawColumnSeparator();
+            // Separators
+            for (var i = 0; i < ColWidths.Length - 1; i++)
+            {
+                var sep = new Rect(rowRect.x + ColX(i) + ColWidths[i], rowRect.y, SeparatorWidth, rowRect.height);
+                EditorGUI.DrawRect(sep, new Color(0.35f, 0.35f, 0.35f, 0.5f));
+            }
+
+            // Range (col 0)
+            DrawRangeCell(CellRect(rowRect, 0), fromProp, toProp, isFallback);
 
             if (paramsProp != null)
             {
-                DrawRangedIntCell(paramsProp, "_spawnLines");
-                DrawColumnSeparator();
-                DrawRangedIntCell(paramsProp, "_boardLines");
-                DrawColumnSeparator();
-                DrawRangedIntCell(paramsProp, "_itemCadence");
-                DrawColumnSeparator();
-                DrawRangedIntCell(paramsProp, "_firstSpawnTurn");
-                DrawColumnSeparator();
-                DrawMaskCell(paramsProp);
-                DrawColumnSeparator();
-                DrawWeightsCell(paramsProp, "_balloonWeights", "Balloon");
-                DrawColumnSeparator();
-                DrawWeightsCell(paramsProp, "_itemWeights", "Item");
+                DrawRangedIntCell(CellRect(rowRect, 1), paramsProp, "_spawnLines");
+                DrawRangedIntCell(CellRect(rowRect, 2), paramsProp, "_boardLines");
+                DrawRangedIntCell(CellRect(rowRect, 3), paramsProp, "_itemCadence");
+                DrawRangedIntCell(CellRect(rowRect, 4), paramsProp, "_firstSpawnTurn");
+                DrawMaskCell(CellRect(rowRect, 5), paramsProp);
+                DrawWeightsCell(CellRect(rowRect, 6), paramsProp, "_balloonWeights", "Balloon");
+                DrawWeightsCell(CellRect(rowRect, 7), paramsProp, "_itemWeights", "Item");
             }
 
-            GUILayout.FlexibleSpace();
-
-            if (GUILayout.Button("−", EditorStyles.miniButton, GUILayout.Width(20f)))
+            // − button (col 8)
+            var delRect = CellRect(rowRect, 8);
+            if (GUI.Button(delRect, "−"))
             {
                 _rangesProp.DeleteArrayElementAtIndex(index);
                 if (_expandedRow == index)
@@ -218,12 +260,12 @@ namespace BalloonParty.Editor
                 return;
             }
 
-            if (GUILayout.Button(_expandedRow == index ? "▼" : "►", GUILayout.Width(24f)))
+            // ► button (col 9)
+            var expandRect = CellRect(rowRect, 9);
+            if (GUI.Button(expandRect, _expandedRow == index ? "▼" : "►"))
             {
                 _expandedRow = _expandedRow == index ? -1 : index;
             }
-
-            EditorGUILayout.EndHorizontal();
 
             if (_expandedRow == index && paramsProp != null)
             {
@@ -231,66 +273,62 @@ namespace BalloonParty.Editor
             }
         }
 
-        private static void DrawRangeCell(SerializedProperty fromProp, SerializedProperty toProp, bool isFallback)
+        private static void DrawRangeCell(Rect cell, SerializedProperty fromProp, SerializedProperty toProp, bool isFallback)
         {
-            EditorGUILayout.BeginHorizontal(GUILayout.Width(RangeColWidth));
             if (isFallback)
             {
-                EditorGUILayout.LabelField("Fallback", EditorStyles.miniLabel, GUILayout.Width(RangeColWidth));
-            }
-            else
-            {
-                EditorGUIUtility.labelWidth = 1f;
-                fromProp.intValue = EditorGUILayout.IntField(" ", fromProp.intValue, GUILayout.Width(34f));
-                EditorGUILayout.LabelField("–", GUILayout.Width(10f));
-                toProp.intValue = EditorGUILayout.IntField(" ", toProp.intValue, GUILayout.Width(34f));
-                EditorGUIUtility.labelWidth = 0f;
+                EditorGUI.LabelField(cell, "Fallback", EditorStyles.miniLabel);
+                return;
             }
 
-            EditorGUILayout.EndHorizontal();
+            var w = (cell.width - 14f) / 2f;
+            var fromRect = new Rect(cell.x + 2f, cell.y + 2f, w, cell.height - 4f);
+            var dashRect = new Rect(fromRect.xMax, cell.y + 2f, 10f, cell.height - 4f);
+            var toRect = new Rect(dashRect.xMax, cell.y + 2f, w, cell.height - 4f);
+
+            fromProp.intValue = EditorGUI.IntField(fromRect, fromProp.intValue);
+            EditorGUI.LabelField(dashRect, "–");
+            toProp.intValue = EditorGUI.IntField(toRect, toProp.intValue);
         }
 
-        private static void DrawRangedIntCell(SerializedProperty paramsProp, string fieldName)
+        private static void DrawRangedIntCell(Rect cell, SerializedProperty paramsProp, string fieldName)
         {
             var prop = paramsProp.FindPropertyRelative(fieldName);
             if (prop == null)
             {
-                GUILayout.Space(RangedIntColWidth);
                 return;
             }
 
             var minProp = prop.FindPropertyRelative("_min");
             var maxProp = prop.FindPropertyRelative("_max");
 
-            EditorGUILayout.BeginHorizontal(GUILayout.Width(RangedIntColWidth));
-            EditorGUIUtility.labelWidth = 1f;
-            minProp.intValue = EditorGUILayout.IntField(" ", minProp.intValue, GUILayout.Width(34f));
-            EditorGUILayout.LabelField("/", GUILayout.Width(8f));
-            maxProp.intValue = EditorGUILayout.IntField(" ", maxProp.intValue, GUILayout.Width(34f));
-            EditorGUIUtility.labelWidth = 0f;
-            EditorGUILayout.EndHorizontal();
+            var w = (cell.width - 14f) / 2f;
+            var minRect = new Rect(cell.x + 2f, cell.y + 2f, w, cell.height - 4f);
+            var slashRect = new Rect(minRect.xMax, cell.y + 2f, 10f, cell.height - 4f);
+            var maxRect = new Rect(slashRect.xMax, cell.y + 2f, w, cell.height - 4f);
+
+            minProp.intValue = EditorGUI.IntField(minRect, minProp.intValue);
+            EditorGUI.LabelField(slashRect, "/");
+            maxProp.intValue = EditorGUI.IntField(maxRect, maxProp.intValue);
         }
 
-        private void DrawMaskCell(SerializedProperty paramsProp)
+        private void DrawMaskCell(Rect cell, SerializedProperty paramsProp)
         {
             var maskProp = paramsProp.FindPropertyRelative("_allowedColorsMask");
             if (maskProp == null)
             {
-                GUILayout.Space(MaskColWidth);
                 return;
             }
 
-            EditorGUIUtility.labelWidth = 1f;
-            var newMask = EditorGUILayout.MaskField(" ", maskProp.intValue, _paletteNames,
-                GUILayout.Width(70f));
+            var dropdownRect = new Rect(cell.x + 2f, cell.y + 2f, 70f, cell.height - 4f);
+            var newMask = EditorGUI.MaskField(dropdownRect, maskProp.intValue, _paletteNames);
             if (newMask != maskProp.intValue)
             {
                 maskProp.intValue = newMask;
             }
 
-            EditorGUIUtility.labelWidth = 0f;
-
-            // Draw color swatches for the selected bits
+            // Color swatches
+            var x = dropdownRect.xMax + 4f;
             var mask = maskProp.intValue;
             for (var i = 0; i < _paletteColors.Length; i++)
             {
@@ -299,17 +337,17 @@ namespace BalloonParty.Editor
                     continue;
                 }
 
-                var rect = GUILayoutUtility.GetRect(8f, 12f, GUILayout.Width(8f));
-                EditorGUI.DrawRect(rect, _paletteColors[i]);
+                var swatch = new Rect(x, cell.y + (cell.height - SwatchSize) / 2f, SwatchSize, SwatchSize);
+                EditorGUI.DrawRect(swatch, _paletteColors[i]);
+                x += SwatchSize + 2f;
             }
         }
 
-        private static void DrawWeightsCell(SerializedProperty paramsProp, string fieldName, string kind)
+        private static void DrawWeightsCell(Rect cell, SerializedProperty paramsProp, string fieldName, string kind)
         {
             var prop = paramsProp.FindPropertyRelative(fieldName);
             if (prop == null || !prop.isArray)
             {
-                GUILayout.Space(WeightsColWidth);
                 return;
             }
 
@@ -324,8 +362,8 @@ namespace BalloonParty.Editor
                 }
             }
 
-            EditorGUILayout.LabelField($"{activeCount} {kind}(s)", EditorStyles.miniLabel,
-                GUILayout.Width(WeightsColWidth));
+            var labelRect = new Rect(cell.x + 4f, cell.y, cell.width - 4f, cell.height);
+            EditorGUI.LabelField(labelRect, $"{activeCount} {kind}(s)", EditorStyles.miniLabel);
         }
 
         private static void DrawExpandedDetails(SerializedProperty paramsProp)
@@ -377,13 +415,6 @@ namespace BalloonParty.Editor
 
             _asset = _assetCache.Value;
             _serialized = _asset != null ? new SerializedObject(_asset) : null;
-        }
-
-        private static void DrawColumnSeparator()
-        {
-            var rect = GUILayoutUtility.GetRect(SeparatorWidth, RowHeight,
-                GUILayout.Width(SeparatorWidth), GUILayout.ExpandHeight(true));
-            EditorGUI.DrawRect(rect, new Color(0.35f, 0.35f, 0.35f, 0.8f));
         }
     }
 }
