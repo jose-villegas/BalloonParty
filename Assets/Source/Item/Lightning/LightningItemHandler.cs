@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
 using BalloonParty.Shared.Extensions;
 using BalloonParty.Shared.Pool;
 using BalloonParty.Shared.Messages;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Capabilities;
 using BalloonParty.Slots.Grid;
 using BalloonParty.Projectile.Model;
@@ -15,6 +17,7 @@ using VContainer;
 using VContainer.Unity;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Palette;
+using Light = BalloonParty.Shared.SceneLight.Light;
 
 namespace BalloonParty.Item.Lightning
 {
@@ -40,6 +43,8 @@ namespace BalloonParty.Item.Lightning
         private readonly ISubscriber<ProjectileLoadedMessage> _loadedSubscriber;
         private readonly PoolManager _poolManager;
         private readonly SlotGrid _grid;
+        private readonly SceneLightFieldService _lightField;
+        private readonly CancellationTokenSource _lifetime = new();
 
         // Safe to share: set and consumed synchronously within one CollectSortedTargets call.
         private readonly ByDistanceComparer _distanceComparer = new();
@@ -56,7 +61,8 @@ namespace BalloonParty.Item.Lightning
             IGamePalette palette,
             ISubscriber<ProjectileLoadedMessage> loadedSubscriber,
             SlotGrid grid,
-            PoolManager poolManager)
+            PoolManager poolManager,
+            SceneLightFieldService lightField)
         {
             _itemConfig = itemConfig;
             _hitDispatcher = hitDispatcher;
@@ -64,6 +70,7 @@ namespace BalloonParty.Item.Lightning
             _loadedSubscriber = loadedSubscriber;
             _grid = grid;
             _poolManager = poolManager;
+            _lightField = lightField;
         }
 
         public void Start()
@@ -74,6 +81,8 @@ namespace BalloonParty.Item.Lightning
         public void Dispose()
         {
             _subscription?.Dispose();
+            _lifetime.Cancel();
+            _lifetime.Dispose();
         }
 
         public UniTask Activate(ItemActivationContext activation)
@@ -172,6 +181,31 @@ namespace BalloonParty.Item.Lightning
 
                 var (model, pos) = targets[index];
                 ApplyTo(model, pos);
+
+                // A colour-matched flash light at each node the chain reaches, held briefly then
+                // released. The chain unfolds over several frames, so each jump registers its own
+                // light live (lights are retained state, not a single-frame stamp).
+                var lightning = settings.Lightning;
+                var registration = _lightField.RegisterLight(
+                    new Light(pos, lightning.PopLightRadius, lightning.PopLightIntensity,
+                        _palette.PaletteIndexOf(matchColor)));
+                ExpireLight(lightning.PopLightSeconds, registration).Forget();
+            }
+        }
+
+        private async UniTaskVoid ExpireLight(float seconds, IDisposable registration)
+        {
+            try
+            {
+                await UniTask.Delay(TimeSpan.FromSeconds(seconds), cancellationToken: _lifetime.Token);
+            }
+            catch (OperationCanceledException)
+            {
+                // Run ended before the flash faded — the field clears its own lights; still release below.
+            }
+            finally
+            {
+                registration.Dispose();
             }
         }
 

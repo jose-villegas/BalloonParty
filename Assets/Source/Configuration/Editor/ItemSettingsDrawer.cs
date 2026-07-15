@@ -123,6 +123,9 @@ namespace BalloonParty.Configuration.Editor
                         lightning,
                         "_lightningGlowColorCycles",
                         "Glow Color Cycles");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, lightning, "_popLightRadius", "Pop Light Radius");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, lightning, "_popLightIntensity", "Pop Light Intensity");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, lightning, "_popLightSeconds", "Pop Light Seconds");
                     break;
 
                 case ItemType.Paint:
