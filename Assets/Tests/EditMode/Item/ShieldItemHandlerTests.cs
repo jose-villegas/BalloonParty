@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using BalloonParty.Balloon.Model;
 using BalloonParty.Configuration;
-using BalloonParty.Configuration.Buffs;
 using BalloonParty.Item;
 using BalloonParty.Item.Shield;
 using BalloonParty.Projectile.Buffs;
@@ -58,7 +57,6 @@ namespace BalloonParty.Tests.Item
 
             _handler = new ShieldItemHandler(
                 itemConfig,
-                Substitute.For<IBuffConfiguration>(),
                 _shieldGainedPublisher,
                 loadedSubscriber,
                 wallBounces,
