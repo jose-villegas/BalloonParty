@@ -86,6 +86,11 @@ namespace BalloonParty.Configuration.Editor
                     y = PropertyDrawerHelper.DrawNamedField(position, y, laser, "_beamLightIntensity", "Beam Light Intensity");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, laser, "_beamLightFalloff", "Beam Light Falloff");
                     y = PropertyDrawerHelper.DrawNamedField(position, y, laser, "_beamLightFallbackSeconds", "Beam Light Fallback (s)");
+                    y = PropertyDrawerHelper.DrawSectionHeader(position, y, "Telegraph");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, laser, "_telegraphEnabled", "Enabled");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, laser, "_telegraphHalfLength", "Half Length");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, laser, "_telegraphHalfWidth", "Half Width");
+                    y = PropertyDrawerHelper.DrawNamedField(position, y, laser, "_telegraphIntensity", "Intensity");
                     break;
 
                 case ItemType.Lightning:
@@ -186,7 +191,8 @@ namespace BalloonParty.Configuration.Editor
                     return (row * 5) + nudgeHeight;
 
                 case ItemType.Laser:
-                    return row * 5;
+                    // Header + damage + 6 beam fields + telegraph header + 4 telegraph fields.
+                    return row * 14;
 
                 case ItemType.Lightning:
                     return row * 8;
