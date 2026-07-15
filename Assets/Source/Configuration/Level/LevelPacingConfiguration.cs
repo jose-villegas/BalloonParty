@@ -91,9 +91,9 @@ namespace BalloonParty.Configuration.Level
                         continue;
                     }
 
-                    // 0 override = uncapped in that range, so it can fill the range's whole board.
-                    var cap = weight.MaxCountOverride > 0
-                        ? weight.MaxCountOverride
+                    // 0 = uncapped in that range, so it can fill the range's whole board.
+                    var cap = weight.MaxCount > 0
+                        ? weight.MaxCount
                         : columns * parameters.BoardLines;
                     max = Mathf.Max(max, cap);
                 }

@@ -128,7 +128,7 @@ namespace BalloonParty.Game.Level
 
                 // Weight and per-type cap come solely from the active range now (0 cap = no limit).
                 pickList.Add(new ResolvedBalloonEntry(
-                    catalogEntry, rangeWeight.Weight, rangeWeight.MaxCountOverride,
+                    catalogEntry, rangeWeight.Weight, rangeWeight.MaxCount,
                     rangeWeight.InitialCountWeights, rangeWeight.WaveCountWeights));
             }
 

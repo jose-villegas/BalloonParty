@@ -1,4 +1,6 @@
 using System.Linq;
+using BalloonParty.Balloon.Type;
+using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Configuration.Ranges;
@@ -15,6 +17,8 @@ namespace BalloonParty.Editor
         private const float RowHeight = 22f;
         private const float SeparatorWidth = 1f;
         private const float SwatchSize = 10f;
+        private const float BalloonSubRowHeight = 20f;
+        private const float CurveFieldWidth = 80f;
 
         private static readonly float[] ColWidths =
         {
@@ -24,7 +28,7 @@ namespace BalloonParty.Editor
             130f,  // Cadence (min/max + mode)
             40f,   // 1st Turn (single int)
             130f,  // Colors (dropdown + swatches)
-            100f,  // Balloons
+            100f,  // Balloons (collapsed) — dynamic when expanded
             100f,  // Items
             20f,   // −
             24f,   // ►
@@ -35,8 +39,12 @@ namespace BalloonParty.Editor
             "Range", "Spawn", "Board", "Cadence", "1st Turn", "Colors", "Balloons", "Items", "", ""
         };
 
+        private const int BalloonColIndex = 6;
+        private const float BalloonExpandedWidth = 310f;
+
         private readonly ConfigAssetCache<LevelPacingConfiguration> _assetCache = new();
         private readonly ConfigAssetCache<GamePalette> _paletteCache = new();
+        private readonly ConfigAssetCache<BalloonsConfiguration> _balloonsConfigCache = new();
 
         private string[] _paletteNames;
         private Color[] _paletteColors;
@@ -46,6 +54,7 @@ namespace BalloonParty.Editor
         private SerializedProperty _rangesProp;
         private Vector2 _scroll;
         private int _expandedRow = -1;
+        private bool _balloonsExpanded;
 
         [MenuItem("Tools/BalloonParty/Level Pacing")]
         private static void Open()
@@ -146,34 +155,37 @@ namespace BalloonParty.Editor
             EditorGUILayout.EndScrollView();
         }
 
-        private static float TotalWidth()
+        private float EffectiveBalloonColWidth => _balloonsExpanded ? BalloonExpandedWidth : ColWidths[BalloonColIndex];
+
+        private float TotalWidth()
         {
             var total = 0f;
             for (var i = 0; i < ColWidths.Length; i++)
             {
-                total += ColWidths[i] + SeparatorWidth;
+                total += (i == BalloonColIndex ? EffectiveBalloonColWidth : ColWidths[i]) + SeparatorWidth;
             }
 
             return total;
         }
 
-        private static float ColX(int col)
+        private float ColX(int col)
         {
             var x = 0f;
             for (var i = 0; i < col; i++)
             {
-                x += ColWidths[i] + SeparatorWidth;
+                x += (i == BalloonColIndex ? EffectiveBalloonColWidth : ColWidths[i]) + SeparatorWidth;
             }
 
             return x;
         }
 
-        private static Rect CellRect(Rect rowRect, int col)
+        private Rect CellRect(Rect rowRect, int col)
         {
-            return new Rect(rowRect.x + ColX(col), rowRect.y, ColWidths[col], rowRect.height);
+            var w = col == BalloonColIndex ? EffectiveBalloonColWidth : ColWidths[col];
+            return new Rect(rowRect.x + ColX(col), rowRect.y, w, rowRect.height);
         }
 
-        private static void DrawHeaderCells(Rect rowRect)
+        private void DrawHeaderCells(Rect rowRect)
         {
             var style = new GUIStyle(EditorStyles.boldLabel)
             {
@@ -189,12 +201,48 @@ namespace BalloonParty.Editor
                 }
 
                 var cell = CellRect(rowRect, i);
-                EditorGUI.LabelField(cell, ColHeaders[i], style);
+
+                if (i == BalloonColIndex)
+                {
+                    var toggle = _balloonsExpanded ? "▼" : "►";
+                    var label = $"{toggle} Balloons";
+                    if (GUI.Button(cell, label, EditorStyles.boldLabel))
+                    {
+                        _balloonsExpanded = !_balloonsExpanded;
+                    }
+
+                    if (_balloonsExpanded)
+                    {
+                        DrawBalloonSubHeaders(cell);
+                    }
+                }
+                else
+                {
+                    EditorGUI.LabelField(cell, ColHeaders[i], style);
+                }
 
                 // Separator
                 var sep = new Rect(cell.xMax, rowRect.y, SeparatorWidth, rowRect.height);
                 EditorGUI.DrawRect(sep, new Color(0.35f, 0.35f, 0.35f, 0.8f));
             }
+        }
+
+        private static void DrawBalloonSubHeaders(Rect cell)
+        {
+            var subStyle = new GUIStyle(EditorStyles.miniLabel)
+            {
+                alignment = TextAnchor.MiddleCenter
+            };
+
+            var x = cell.x + 70f;
+            var y = cell.y;
+            var h = cell.height;
+
+            EditorGUI.LabelField(new Rect(x, y, 40f, h), "Wt", subStyle);
+            x += 42f;
+            EditorGUI.LabelField(new Rect(x, y, CurveFieldWidth, h), "Initial", subStyle);
+            x += CurveFieldWidth + 2f;
+            EditorGUI.LabelField(new Rect(x, y, CurveFieldWidth, h), "Wave", subStyle);
         }
 
         private void DrawRow(int index)
@@ -208,7 +256,13 @@ namespace BalloonParty.Editor
             var to = toProp.intValue;
             var isFallback = from < 0 || to < 0;
 
-            var rowRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
+            var balloonsProp = paramsProp?.FindPropertyRelative("_balloonWeights");
+            var balloonCount = balloonsProp != null && balloonsProp.isArray ? balloonsProp.arraySize : 0;
+            var rowH = _balloonsExpanded && balloonCount > 0
+                ? Mathf.Max(RowHeight, balloonCount * BalloonSubRowHeight + 4f)
+                : RowHeight;
+
+            var rowRect = GUILayoutUtility.GetRect(TotalWidth(), rowH);
 
             // Background
             Color rowBg;
@@ -228,28 +282,41 @@ namespace BalloonParty.Editor
             EditorGUI.DrawRect(rowRect, rowBg);
 
             // Separators
-            for (var i = 0; i < ColWidths.Length - 1; i++)
+            for (var i = 0; i < ColWidths.Length; i++)
             {
-                var sep = new Rect(rowRect.x + ColX(i) + ColWidths[i], rowRect.y, SeparatorWidth, rowRect.height);
+                var colW = i == BalloonColIndex ? EffectiveBalloonColWidth : ColWidths[i];
+                var sep = new Rect(rowRect.x + ColX(i) + colW, rowRect.y, SeparatorWidth, rowRect.height);
                 EditorGUI.DrawRect(sep, new Color(0.35f, 0.35f, 0.35f, 0.5f));
             }
 
+            // Use a fixed-height rect for the non-balloon cells so they stay vertically centred
+            var fixedRowRect = new Rect(rowRect.x, rowRect.y, rowRect.width, RowHeight);
+
             // Range (col 0)
-            DrawRangeCell(CellRect(rowRect, 0), fromProp, toProp, isFallback);
+            DrawRangeCell(CellRect(fixedRowRect, 0), fromProp, toProp, isFallback);
 
             if (paramsProp != null)
             {
-                DrawIntCell(CellRect(rowRect, 1), paramsProp, "_spawnLines");
-                DrawIntCell(CellRect(rowRect, 2), paramsProp, "_boardLines");
-                DrawRangedIntCell(CellRect(rowRect, 3), paramsProp, "_itemCadence");
-                DrawIntCell(CellRect(rowRect, 4), paramsProp, "_firstSpawnTurn");
-                DrawMaskCell(CellRect(rowRect, 5), paramsProp);
-                DrawWeightsCell(CellRect(rowRect, 6), paramsProp, "_balloonWeights", "Balloon");
-                DrawWeightsCell(CellRect(rowRect, 7), paramsProp, "_itemWeights", "Item");
+                DrawIntCell(CellRect(fixedRowRect, 1), paramsProp, "_spawnLines");
+                DrawIntCell(CellRect(fixedRowRect, 2), paramsProp, "_boardLines");
+                DrawRangedIntCell(CellRect(fixedRowRect, 3), paramsProp, "_itemCadence");
+                DrawIntCell(CellRect(fixedRowRect, 4), paramsProp, "_firstSpawnTurn");
+                DrawMaskCell(CellRect(fixedRowRect, 5), paramsProp);
+
+                if (_balloonsExpanded)
+                {
+                    DrawBalloonCellExpanded(CellRect(rowRect, BalloonColIndex), balloonsProp);
+                }
+                else
+                {
+                    DrawBalloonCellCollapsed(CellRect(fixedRowRect, BalloonColIndex), balloonsProp);
+                }
+
+                DrawWeightsCell(CellRect(fixedRowRect, 7), paramsProp, "_itemWeights", "Item");
             }
 
             // − button (col 8)
-            var delRect = CellRect(rowRect, 8);
+            var delRect = CellRect(fixedRowRect, 8);
             if (GUI.Button(delRect, "−"))
             {
                 _rangesProp.DeleteArrayElementAtIndex(index);
@@ -262,7 +329,7 @@ namespace BalloonParty.Editor
             }
 
             // ► button (col 9)
-            var expandRect = CellRect(rowRect, 9);
+            var expandRect = CellRect(fixedRowRect, 9);
             if (GUI.Button(expandRect, _expandedRow == index ? "▼" : "►"))
             {
                 _expandedRow = _expandedRow == index ? -1 : index;
@@ -384,6 +451,181 @@ namespace BalloonParty.Editor
 
             var labelRect = new Rect(cell.x + 4f, cell.y, cell.width - 4f, cell.height);
             EditorGUI.LabelField(labelRect, $"{activeCount} {kind}(s)", EditorStyles.miniLabel);
+        }
+
+        private void DrawBalloonCellCollapsed(Rect cell, SerializedProperty balloonsProp)
+        {
+            if (balloonsProp == null || !balloonsProp.isArray)
+            {
+                return;
+            }
+
+            var count = balloonsProp.arraySize;
+            var activeCount = 0;
+            for (var i = 0; i < count; i++)
+            {
+                var weightProp = balloonsProp.GetArrayElementAtIndex(i).FindPropertyRelative("_weight");
+                if (weightProp != null && weightProp.floatValue > 0f)
+                {
+                    activeCount++;
+                }
+            }
+
+            // Count label
+            var labelRect = new Rect(cell.x + 4f, cell.y, 60f, cell.height);
+            EditorGUI.LabelField(labelRect, $"{activeCount} type(s)", EditorStyles.miniLabel);
+
+            // Prefab thumbnails
+            var x = labelRect.xMax + 2f;
+            var thumbSize = cell.height - 4f;
+            var balloonsConfig = _balloonsConfigCache.Value;
+
+            for (var i = 0; i < count && x + thumbSize < cell.xMax; i++)
+            {
+                var entryProp = balloonsProp.GetArrayElementAtIndex(i);
+                var weightProp = entryProp.FindPropertyRelative("_weight");
+                if (weightProp == null || weightProp.floatValue <= 0f)
+                {
+                    continue;
+                }
+
+                var typeProp = entryProp.FindPropertyRelative("_type");
+                if (typeProp == null)
+                {
+                    continue;
+                }
+
+                var balloonType = (BalloonType)typeProp.intValue;
+                var preview = FindBalloonPreview(balloonsConfig, balloonType);
+                var thumbRect = new Rect(x, cell.y + 2f, thumbSize, thumbSize);
+
+                if (preview != null)
+                {
+                    GUI.DrawTexture(thumbRect, preview, ScaleMode.ScaleToFit);
+                }
+                else
+                {
+                    EditorGUI.DrawRect(thumbRect, new Color(0.4f, 0.4f, 0.4f, 0.6f));
+                    var initial = balloonType.ToString()[0].ToString();
+                    EditorGUI.LabelField(thumbRect, initial, new GUIStyle(EditorStyles.miniLabel)
+                    {
+                        alignment = TextAnchor.MiddleCenter
+                    });
+                }
+
+                x += thumbSize + 2f;
+            }
+        }
+
+        private void DrawBalloonCellExpanded(Rect cell, SerializedProperty balloonsProp)
+        {
+            if (balloonsProp == null || !balloonsProp.isArray)
+            {
+                return;
+            }
+
+            var count = balloonsProp.arraySize;
+            var balloonsConfig = _balloonsConfigCache.Value;
+            var y = cell.y + 2f;
+
+            for (var i = 0; i < count; i++)
+            {
+                var entryProp = balloonsProp.GetArrayElementAtIndex(i);
+                var typeProp = entryProp.FindPropertyRelative("_type");
+                var weightProp = entryProp.FindPropertyRelative("_weight");
+                var initialCurveProp = entryProp.FindPropertyRelative("_initialCountWeights");
+                var waveCurveProp = entryProp.FindPropertyRelative("_waveCountWeights");
+
+                var balloonType = typeProp != null ? (BalloonType)typeProp.intValue : BalloonType.Simple;
+
+                var x = cell.x + 2f;
+                var h = BalloonSubRowHeight - 2f;
+
+                // Thumbnail / type label
+                var thumbSize = h;
+                var preview = FindBalloonPreview(balloonsConfig, balloonType);
+                var thumbRect = new Rect(x, y, thumbSize, thumbSize);
+                if (preview != null)
+                {
+                    GUI.DrawTexture(thumbRect, preview, ScaleMode.ScaleToFit);
+                }
+                else
+                {
+                    EditorGUI.LabelField(thumbRect, balloonType.ToString()[..2],
+                        new GUIStyle(EditorStyles.miniLabel) { alignment = TextAnchor.MiddleCenter });
+                }
+
+                x += thumbSize + 2f;
+
+                // Type enum popup
+                var typeW = 48f;
+                if (typeProp != null)
+                {
+                    typeProp.intValue = (int)(BalloonType)EditorGUI.EnumPopup(
+                        new Rect(x, y, typeW, h), balloonType);
+                }
+
+                x += typeW + 2f;
+
+                // Weight
+                var weightW = 36f;
+                if (weightProp != null)
+                {
+                    weightProp.floatValue = EditorGUI.FloatField(new Rect(x, y, weightW, h), weightProp.floatValue);
+                }
+
+                x += weightW + 4f;
+
+                // Initial count curve
+                if (initialCurveProp != null)
+                {
+                    EditorGUI.PropertyField(new Rect(x, y, CurveFieldWidth, h), initialCurveProp, GUIContent.none);
+                }
+
+                x += CurveFieldWidth + 2f;
+
+                // Wave count curve (optional — dimmed if empty)
+                if (waveCurveProp != null)
+                {
+                    EditorGUI.PropertyField(new Rect(x, y, CurveFieldWidth, h), waveCurveProp, GUIContent.none);
+                }
+
+                x += CurveFieldWidth + 2f;
+
+                // Remove button
+                if (GUI.Button(new Rect(x, y, 16f, h), "−", EditorStyles.miniButton))
+                {
+                    balloonsProp.DeleteArrayElementAtIndex(i);
+                    break;
+                }
+
+                y += BalloonSubRowHeight;
+            }
+
+            // Add button at bottom of expanded area
+            var addRect = new Rect(cell.x + 2f, y, 20f, BalloonSubRowHeight - 4f);
+            if (GUI.Button(addRect, "+", EditorStyles.miniButton))
+            {
+                balloonsProp.InsertArrayElementAtIndex(count);
+            }
+        }
+
+        private static Texture2D FindBalloonPreview(BalloonsConfiguration config, BalloonType type)
+        {
+            if (config == null)
+            {
+                return null;
+            }
+
+            foreach (var entry in config.Entries)
+            {
+                if (entry.BalloonType == type && entry.Prefab != null)
+                {
+                    return AssetPreview.GetAssetPreview(entry.Prefab.gameObject);
+                }
+            }
+
+            return null;
         }
 
         private static void DrawExpandedDetails(SerializedProperty paramsProp)
