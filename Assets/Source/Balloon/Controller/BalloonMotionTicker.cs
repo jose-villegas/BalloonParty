@@ -55,7 +55,7 @@ namespace BalloonParty.Balloon.Controller
         {
             var deltaTime = Time.deltaTime;
 
-            // Backwards: completions swap-remove.
+            // Backwards so swap-remove doesn't skip elements.
             for (var i = _nudges.Count - 1; i >= 0; i--)
             {
                 var entry = _nudges[i];

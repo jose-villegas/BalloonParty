@@ -180,8 +180,6 @@ namespace BalloonParty.Shared.SceneLight
             }
         }
 
-        // Packs the registered lights into the batch arrays, capped at the configured light limit. Reads
-        // each light's reactive values into the parallel arrays the accumulate shader uploads.
         private int BuildBatch()
         {
             var count = 0;
