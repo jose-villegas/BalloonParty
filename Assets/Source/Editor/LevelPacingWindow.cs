@@ -5,6 +5,7 @@ using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
 using BalloonParty.Configuration.Ranges;
+using BalloonParty.Editor.EditorUI;
 using BalloonParty.Shared;
 using UnityEditor;
 using UnityEngine;
@@ -225,9 +226,7 @@ namespace BalloonParty.Editor
             EditorGUI.DrawRect(groupTitleRect, gapBg);
             DrawGroupTitles(groupTitleRect);
             var hSepColor = new Color(0.35f, 0.35f, 0.35f, 0.5f);
-            EditorGUI.DrawRect(
-                new Rect(groupTitleRect.x, groupTitleRect.yMax - SeparatorWidth, groupTitleRect.width, SeparatorWidth),
-                hSepColor);
+            TableDrawHelper.DrawHorizontalSeparator(groupTitleRect, hSepColor);
 
             // Header
             var headerRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
@@ -238,9 +237,7 @@ namespace BalloonParty.Editor
             DrawGroupBackground(headerRect, 4, 5, headerBg);
             DrawGroupBackground(headerRect, 6, 9, headerBg);
             DrawHeaderCells(headerRect);
-            EditorGUI.DrawRect(
-                new Rect(headerRect.x, headerRect.yMax - SeparatorWidth, headerRect.width, SeparatorWidth),
-                hSepColor);
+            TableDrawHelper.DrawHorizontalSeparator(headerRect, hSepColor);
 
             // Rows
             for (var i = 0; i < count; i++)
@@ -512,17 +509,16 @@ namespace BalloonParty.Editor
             }
 
             // Horizontal row separator at the bottom
-            var hSep = new Rect(rowRect.x, rowRect.yMax - SeparatorWidth, rowRect.width, SeparatorWidth);
-            EditorGUI.DrawRect(hSep, new Color(0.35f, 0.35f, 0.35f, 0.5f));
+            TableDrawHelper.DrawHorizontalSeparator(rowRect);
 
             // Range (col 0)
             DrawRangeCell(CellRect(rowRect, 0), fromProp, toProp, isFallback);
 
             if (paramsProp != null)
             {
-                DrawIntCell(CellRect(rowRect, 1), paramsProp, "_spawnLines");
-                DrawIntCell(CellRect(rowRect, 2), paramsProp, "_boardLines");
-                DrawIntCell(CellRect(rowRect, 3), paramsProp, "_firstSpawnTurn");
+                PropertyCellDrawer.IntCell(CellRect(rowRect, 1), paramsProp, "_spawnLines");
+                PropertyCellDrawer.IntCell(CellRect(rowRect, 2), paramsProp, "_boardLines");
+                PropertyCellDrawer.IntCell(CellRect(rowRect, 3), paramsProp, "_firstSpawnTurn");
                 DrawMaskCell(CellRect(rowRect, 4), paramsProp);
 
                 if (_balloonsExpanded)
@@ -535,8 +531,8 @@ namespace BalloonParty.Editor
                 }
 
                 DrawRangedIntCell(CellRect(rowRect, 6), paramsProp, "_itemCadence");
-                DrawCurveCell(CellRect(rowRect, 7), paramsProp, "_initialItemCountWeights");
-                DrawCurveCell(CellRect(rowRect, 8), paramsProp, "_itemCountWeights");
+                PropertyCellDrawer.CurveCell(CellRect(rowRect, 7), paramsProp, "_initialItemCountWeights");
+                PropertyCellDrawer.CurveCell(CellRect(rowRect, 8), paramsProp, "_itemCountWeights");
 
                 var itemsProp = paramsProp.FindPropertyRelative("_itemWeights");
                 if (_itemsExpanded)
@@ -593,18 +589,6 @@ namespace BalloonParty.Editor
             toProp.intValue = EditorGUI.IntField(toRect, toProp.intValue);
         }
 
-        private static void DrawIntCell(Rect cell, SerializedProperty paramsProp, string fieldName)
-        {
-            var prop = paramsProp.FindPropertyRelative(fieldName);
-            if (prop == null)
-            {
-                return;
-            }
-
-            var fieldRect = new Rect(cell.x + 2f, cell.y + 2f, cell.width - 4f, cell.height - 4f);
-            prop.intValue = EditorGUI.IntField(fieldRect, prop.intValue);
-        }
-
         private static void DrawRangedIntCell(Rect cell, SerializedProperty paramsProp, string fieldName)
         {
             var prop = paramsProp.FindPropertyRelative(fieldName);
@@ -631,18 +615,6 @@ namespace BalloonParty.Editor
             EditorGUI.LabelField(slashRect, "/");
             maxProp.intValue = EditorGUI.IntField(maxRect, maxProp.intValue);
             modeProp.enumValueIndex = (int)(RangeMode)EditorGUI.EnumPopup(modeRect, (RangeMode)modeProp.enumValueIndex);
-        }
-
-        private static void DrawCurveCell(Rect cell, SerializedProperty paramsProp, string fieldName)
-        {
-            var prop = paramsProp.FindPropertyRelative(fieldName);
-            if (prop == null)
-            {
-                return;
-            }
-
-            var fieldRect = new Rect(cell.x + 2f, cell.y + 2f, cell.width - 4f, cell.height - 4f);
-            EditorGUI.PropertyField(fieldRect, prop, GUIContent.none);
         }
 
         private void DrawMaskCell(Rect cell, SerializedProperty paramsProp)
