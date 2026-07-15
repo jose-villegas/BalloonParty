@@ -75,10 +75,11 @@ namespace BalloonParty.Item.Shield
             {
                 var settings = _itemConfig[ItemType.Shield];
                 _buffs.Apply(new ProjectileBuff(
-                    ProjectileBuffId.RainbowShield, 1f, new WallBounceEndCondition(_wallBounces)));
+                    ProjectileBuffId.RainbowShield, 0f, BuffModifierOp.Flat,
+                    new WallBounceEndCondition(_wallBounces)));
                 _buffs.Apply(new ProjectileBuff(
                     ProjectileBuffId.Speed, settings.Shield.SpeedBuffMultiplier,
-                    new WallBounceEndCondition(_wallBounces)));
+                    BuffModifierOp.Multiplicative, new WallBounceEndCondition(_wallBounces)));
             }
 
             _shieldGainedPublisher.Publish(new ShieldGainedMessage(balloon.SlotIndex.Value));

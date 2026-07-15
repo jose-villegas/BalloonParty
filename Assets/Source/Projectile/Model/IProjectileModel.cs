@@ -14,6 +14,11 @@ namespace BalloonParty.Projectile.Model
         IBalloonModel LastHitBalloon { get; }
 
         bool HasBuff(ProjectileBuffId id);
-        float GetBuffFactor(ProjectileBuffId id, float defaultValue = 0f);
+
+        /// <summary>
+        ///     Aggregates all active modifiers for <paramref name="id" /> onto <paramref name="baseValue" />.
+        ///     Order: base + flat sum → × (1 + additive sum) → × multiplicative product.
+        /// </summary>
+        float ComputeBuffedValue(ProjectileBuffId id, float baseValue);
     }
 }

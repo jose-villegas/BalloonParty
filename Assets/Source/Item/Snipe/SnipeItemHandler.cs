@@ -40,7 +40,7 @@ namespace BalloonParty.Item.Snipe
             var settings = _itemConfig[ItemType.Snipe];
             _buffs.Apply(new ProjectileBuff(
                 ProjectileBuffId.Speed, settings.Snipe.SpeedBuffMultiplier,
-                new WallBounceEndCondition(_wallBounces)));
+                BuffModifierOp.Multiplicative, new WallBounceEndCondition(_wallBounces)));
             _effectPlayer.Play(settings, activation.WorldPosition, activation.Balloon.GetColorId());
             return UniTask.CompletedTask;
         }

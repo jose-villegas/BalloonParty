@@ -44,15 +44,33 @@ All VFX are spawned via `ParticlePoolChannel` as world-space orphans — they ar
 
 ## Buffs (`Buffs/`)
 
-A **projectile buff** is a temporary modifier on the active projectile. The seam is deliberately general — buffs are not tied to items, and *when* a buff ends is a pluggable abstraction the buff itself declares, not a central dispatcher switching on a kind. The two abstractions live in `Model/`, the implementations in `Buffs/`:
+A **projectile buff** is a temporary stat modifier on the active projectile following the
+industry-standard *Flat / Additive / Multiplicative* stacking pattern:
 
-- **`IProjectileBuff`** (`Model/`) — the contract requires a buff to provide an `IProjectileBuffEndCondition`. The buff is otherwise just *identity* (its type, for `HasBuff<T>()`) + *effects* (which live elsewhere).
+```
+final = (base + Σ flat) × (1 + Σ additive) × Π multiplicative
+```
+
+Each buff carries four fields:
+- **`ProjectileBuffId`** — which stat (`Speed`, `RainbowShield`, …).
+- **`float Value`** — the numeric contribution.
+- **`BuffModifierOp`** — `Flat`, `Additive`, or `Multiplicative` (determines aggregation lane).
+- **`IProjectileBuffEndCondition`** — pluggable lifecycle (flips `Expired` when done).
+
+Multiple buffs targeting the same stat stack correctly:
+- All `Flat` values sum → added to base.
+- All `Additive` values sum → applied as `× (1 + sum)`.
+- All `Multiplicative` values multiply independently.
+
+The two abstractions live in `Model/`, the service in `Buffs/`:
+
+- **`ProjectileBuff`** (`Model/IProjectileBuff.cs`) — sealed class. Carries Id, Value, Op, EndCondition.
+- **`BuffModifierOp`** (`Model/BuffModifierOp.cs`) — enum: `Flat`, `Additive`, `Multiplicative`.
 - **`IProjectileBuffEndCondition`** (`Model/`) — the "when it ends" abstraction: exposes only `IReadOnlyReactiveProperty<bool> Expired`. An implementation encapsulates its own lifecycle logic and flips the bool once. `WallBounceEndCondition` (subscribes to `ShieldLostMessage`, ends on the first wall bounce) is the only one today; a `Timer`/`PopCount`/... end-condition is a new implementer — no context, no switch, no change to any buff.
-- **`IProjectileBuffs.Apply(IProjectileBuff)`** — the activation seam, injectable anywhere. Just takes the buff; the buff already carries its end-condition, so `_buffs.Apply(new RainbowShieldProjectileBuff(wallBounces))` is the whole call.
+- **`IProjectileBuffs.Apply(ProjectileBuff)`** — the activation seam, injectable anywhere. Just takes the buff; the buff already carries its end-condition.
 - **`ProjectileBuffService`** — `IStartable` owning storage + lifecycle: tracks the active projectile (`ProjectileLoadedMessage`), applies buffs onto it, and drops a buff the first time its `EndCondition.Expired` fires. Knows nothing about any buff's effect or end-condition — it only observes the exposed signal.
-- **`RainbowShieldProjectileBuff`** — the first buff (applied by a rainbow-held Shield). It constructs its own `WallBounceEndCondition` from the injected `ISubscriber<ShieldLostMessage>`. Its effects live in the layers that own their dependencies and query `HasBuff<RainbowShieldProjectileBuff>()`: the glow cycle in `ProjectileView`, and in `ProjectileHitResolver` the colour-agnostic streak flag (`DamageFlags.WildcardStreak`), piercing (`DamageFlags.Piercing` — plows through tough/unbreakable balloons instead of one-shotting/deflecting), and the pop-neighbour rainbow conversion.
 
-The model stores buffs in a plain list exposed via `HasBuff<T>()` (read) and `AddBuff`/`RemoveBuff` (write); a fresh `ProjectileModel` per throw resets them for free.
+The model stores buffs in a plain list exposed via `HasBuff(ProjectileBuffId)` (read), `ComputeBuffedValue(id, baseValue)` (aggregated stat query), and `AddBuff`/`RemoveBuff` (write); a fresh `ProjectileModel` per throw resets them for free.
 
 ## How it works
 
@@ -61,7 +79,7 @@ The model stores buffs in a plain list exposed via `HasBuff<T>()` (read) and `Ad
 - **`Controller/ProjectileHitVisual`** — enum result of a resolve (`None`, `Recolored`, `Destroyed`) so the view knows which feedback to play without re-deriving the rules.
 - **`Controller/ProjectileMotionResolver`** — plain C# singleton owning the flight rules: advances one fixed step, wall-bounces via `WallLimits`, decrements shields, and decides destroy-vs-continue, mutating the model's direction/shields. `ProjectileView.MoveAndBounce` just applies the returned `ProjectileStep` (transform, bounce VFX, `ShieldLostMessage`, disturbance stamp); `Deflect` reflects off a balloon surface normal. Headless-testable — see `ProjectileMotionResolverTests`.
 - **`Controller/ProjectileStep`** — result of one advance (`Moved` / `Bounced` / `Destroyed` + resulting position and direction) that the view presents without re-deriving the rules.
-- **`IProjectileModel`** — read-only interface exposing `IReadOnlyReactiveProperty<string> ColorName`, `IReadOnlyReactiveProperty<int> ShieldsRemaining`, read-only plain properties (`Direction`, `Speed`, `IsFree`, `LastHitBalloon`), and `HasBuff<T>()` (see [Buffs](#buffs-buffs)). Used by shield UI and views that only observe state.
+- **`IProjectileModel`** — read-only interface exposing `IReadOnlyReactiveProperty<string> ColorName`, `IReadOnlyReactiveProperty<int> ShieldsRemaining`, read-only plain properties (`Direction`, `Speed`, `IsFree`, `LastHitBalloon`), `HasBuff(ProjectileBuffId)`, and `ComputeBuffedValue(id, baseValue)` (see [Buffs](#buffs-buffs)). Used by shield UI and views that only observe state.
 - **`IWriteableProjectileModel`** — mutable interface extending `IProjectileModel`; re-declares reactive properties as `ReactiveProperty<T>` (via `new` keyword), adds setters, and adds `AddBuff`/`RemoveBuff`. Used by `ProjectileView`, `ThrowerController`, the buff service, and cheats that mutate state.
 - **`ProjectileModel`** — concrete class implementing `IWriteableProjectileModel`. Only referenced at creation sites (`ThrowerController.LoadProjectile`).
 - **`ProjectilePositionProvider`** — singleton holding the live projectile transform for systems that need its position without a reference to the view (set on load, cleared on reload).

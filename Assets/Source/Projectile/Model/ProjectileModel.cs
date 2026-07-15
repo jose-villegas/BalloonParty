@@ -33,17 +33,36 @@ namespace BalloonParty.Projectile.Model
             return false;
         }
 
-        public float GetBuffFactor(ProjectileBuffId id, float defaultValue = 0f)
+        public float ComputeBuffedValue(ProjectileBuffId id, float baseValue)
         {
+            var flat = 0f;
+            var additive = 0f;
+            var multiplicative = 1f;
+            var found = false;
+
             for (var i = 0; i < _buffs.Count; i++)
             {
-                if (_buffs[i].Id == id)
+                if (_buffs[i].Id != id)
                 {
-                    return _buffs[i].Factor;
+                    continue;
+                }
+
+                found = true;
+                switch (_buffs[i].Op)
+                {
+                    case BuffModifierOp.Flat:
+                        flat += _buffs[i].Value;
+                        break;
+                    case BuffModifierOp.Additive:
+                        additive += _buffs[i].Value;
+                        break;
+                    case BuffModifierOp.Multiplicative:
+                        multiplicative *= _buffs[i].Value;
+                        break;
                 }
             }
 
-            return defaultValue;
+            return found ? (baseValue + flat) * (1f + additive) * multiplicative : baseValue;
         }
 
         public void AddBuff(ProjectileBuff buff)
