@@ -258,7 +258,13 @@ Shader "BalloonParty/Scenario/SpeckField"
                 }
 
                 float heat = saturate(i.heat);
-                col.rgb = lerp(col.rgb, target.rgb, heat);
+                float local = i.lightData.a;
+
+                // Local light suppresses heat's color — when a nearby light is present, the
+                // light's palette color takes priority over the disturbance tint. Opacity still
+                // tracks raw heat so the speck remains visible while disturbed.
+                float effectiveHeat = heat * saturate(1.0 - local * i.lightInfluence);
+                col.rgb = lerp(col.rgb, target.rgb, effectiveHeat);
                 col.a = lerp(col.a, tex.a * target.a, heat);
 
                 // Light as color replacement gated by local boost (field R):
@@ -267,7 +273,6 @@ Shader "BalloonParty/Scenario/SpeckField"
                 // eagerly. Target is the raw palette color — NOT multiplied by brightness, so the
                 // palette's authored hue is preserved without over-exposure clipping to white.
                 float3 lightColor = i.lightData.rgb;
-                float local = i.lightData.a;
                 float ambient = SceneLightAmbientMagnitude();
                 float3 litColor = lerp(col.rgb * ambient, lightColor, saturate(local * i.lightInfluence));
                 col.rgb = lerp(col.rgb, litColor, saturate(i.lightInfluence));
