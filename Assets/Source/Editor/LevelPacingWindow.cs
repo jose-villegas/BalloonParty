@@ -134,7 +134,8 @@ namespace BalloonParty.Editor
                 fontSize = 10
             };
 
-            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+            var rect = EditorGUILayout.BeginHorizontal(GUILayout.Height(HeaderHeight));
+            EditorGUI.DrawRect(rect, new Color(0.22f, 0.22f, 0.22f, 1f));
             GUILayout.Label("Range", headerStyle, GUILayout.Width(RangeColWidth));
             DrawColumnSeparator();
             GUILayout.Label("Spawn", headerStyle, GUILayout.Width(RangedIntColWidth));
@@ -165,18 +166,23 @@ namespace BalloonParty.Editor
             var to = toProp.intValue;
             var isFallback = from < 0 || to < 0;
 
-            var bgColor = GUI.backgroundColor;
+            var rowRect = EditorGUILayout.BeginHorizontal(GUILayout.Height(EditorGUIUtility.singleLineHeight + 4f));
+
+            Color rowBg;
             if (isFallback)
             {
-                GUI.backgroundColor = new Color(0.6f, 0.8f, 1f, 0.3f);
+                rowBg = new Color(0.3f, 0.4f, 0.5f, 0.2f);
             }
             else if (index % 2 == 1)
             {
-                GUI.backgroundColor = new Color(1f, 1f, 1f, 0.05f);
+                rowBg = new Color(0.25f, 0.25f, 0.25f, 1f);
+            }
+            else
+            {
+                rowBg = new Color(0.2f, 0.2f, 0.2f, 1f);
             }
 
-            EditorGUILayout.BeginHorizontal(EditorStyles.helpBox, GUILayout.Height(EditorGUIUtility.singleLineHeight + 4f));
-            GUI.backgroundColor = bgColor;
+            EditorGUI.DrawRect(rowRect, rowBg);
 
             // Range column
             DrawRangeCell(fromProp, toProp, isFallback);
