@@ -463,11 +463,11 @@ namespace BalloonParty.Editor
             }
 
             // Count label
-            var labelRect = new Rect(cell.x + 4f, cell.y, 60f, cell.height);
-            EditorGUI.LabelField(labelRect, $"{activeCount} type(s)", EditorStyles.miniLabel);
+            var labelRect = new Rect(cell.x + 2f, cell.y, 30f, cell.height);
+            EditorGUI.LabelField(labelRect, activeCount.ToString(), EditorStyles.miniLabel);
 
             // Prefab thumbnails
-            var x = labelRect.xMax + 2f;
+            var x = labelRect.xMax;
             var thumbSize = cell.height - 4f;
             var balloonsConfig = _balloonsConfigCache.Value;
 
