@@ -45,9 +45,8 @@ namespace BalloonParty.Game.Cinematics
             _settings = settings;
         }
 
-        // Records the balloons by anti-diagonal band and detaches each into the outgoing holder (off the
-        // grid, offset by exitDrop so it rides the travel out) while leaving it registered, so PlayAsync can
-        // still pop it in the wave. Call while the grid is populated and the root sits at origin.
+        // Leaves balloons registered so PlayAsync can still pop them in the wave; the exitDrop offset
+        // compensates for the travel motion that hasn't started yet.
         public void Collect(float exitDrop)
         {
             _bands.Clear();

@@ -149,7 +149,6 @@ namespace BalloonParty.Game.Cinematics
             return Runner.TryBegin();
         }
 
-        // Holds the push-in for the segment's duration, then ends the pan-in (camera stays in) and reveals the screen.
         private void OnPanInTick(float dt, float _)
         {
             _elapsed += dt;
@@ -225,9 +224,8 @@ namespace BalloonParty.Game.Cinematics
             }
         }
 
-        // Rises the scenario root -height → 0 on unscaled time, paced by the restart rise curve (progress
-        // 0→1; ease-in = slow start ramping to full speed). Outgoing content rides up and out; the new
-        // scenery, staged below, rises in. Fires onCue once past the balloon-spawn fraction of the rise.
+        // Outgoing content rides up and out while new scenery, staged below, rises in.
+        // Fires onCue once past the balloon-spawn fraction so spawners start mid-rise.
         private async UniTask RiseScenarioAsync(float height, Action onCue, CancellationToken ct)
         {
             var ascend = Settings.LevelAscend;

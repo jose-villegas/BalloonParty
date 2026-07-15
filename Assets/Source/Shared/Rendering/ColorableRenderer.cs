@@ -38,16 +38,14 @@ namespace BalloonParty.Shared.Rendering
             _renderer = GetComponent<T>();
         }
 
-        // Scales the passed colour's RGB by the per-renderer intensity. Alpha comes from the passed
-        // colour, or from this renderer's own alpha when _preserveAlpha is set. Leaves call this so both
-        // knobs apply uniformly regardless of the concrete renderer type.
+        // Uniform application across all renderer types ensures both knobs (intensity + preserveAlpha)
+        // behave consistently regardless of the concrete renderer subclass.
         protected Color WithIntensity(Color color)
         {
             var alpha = _preserveAlpha ? ReadAlpha() : color.a;
             return (color * _colorIntensity).WithAlpha(alpha);
         }
 
-        // The renderer's current alpha — its authored value while _preserveAlpha keeps it untouched.
         protected abstract float ReadAlpha();
     }
 }

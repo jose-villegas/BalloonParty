@@ -66,8 +66,7 @@ namespace BalloonParty.Shared.Extensions
             return nearest;
         }
 
-        // Converts each doubled-coordinate offset back to a column for the target row's parity; IsEmpty is
-        // bounds-safe, so off-board cells fall out naturally.
+        // IsEmpty is bounds-safe, so off-board cells fall out naturally.
         private static int CountMatchesInRow(
             IBalloonModel self, SlotGrid grid, Vector2Int candidate, int row, int[] offsets, string color)
         {

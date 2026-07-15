@@ -19,7 +19,7 @@ namespace BalloonParty.Shared.Pool
         {
             var instance = Object.Instantiate(_prefab, Container);
 
-            // Suppress the prefab's auto-play
+            // Prefab auto-plays on instantiate; stop it so pooled instances start clean.
             var ps = instance.GetComponent<ParticleSystem>();
             if (ps != null)
             {

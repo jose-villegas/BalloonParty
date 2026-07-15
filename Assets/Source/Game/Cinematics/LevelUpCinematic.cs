@@ -280,7 +280,6 @@ namespace BalloonParty.Game.Cinematics
             }
         }
 
-        // Drops the whole level-up show when the loss overtakes the ceremony.
         private void AbortSession()
         {
             DisposeSessionSubscription();

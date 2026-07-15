@@ -33,8 +33,7 @@ namespace BalloonParty.Game.Cinematics
             _settings = settings;
         }
 
-        // Graduates the old balloons into the outgoing group (detach + reparent under the root's
-        // OutgoingBalloons holder), keeping their views to animate. Call after the root is reset to origin.
+        // Detach before animation so views survive the grid reset and can still be animated out.
         // exitDrop compensates the reparent for the descent's root lift (supplied by the transition).
         public void Collect(float exitDrop)
         {

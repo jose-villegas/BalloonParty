@@ -122,8 +122,7 @@ namespace BalloonParty.Shared.Pool
             return trail.transform;
         }
 
-        // Ensures the channel exists (same factory path a live spawn would use) before topping it up,
-        // without pulling an item out via GetOrRegister — that would hand out (and leak) one instance.
+        // GetOrRegister would hand out (and leak) one instance, so register separately before topping up.
         internal UniTask PrewarmAsync(int count, CancellationToken ct = default)
         {
             if (!_poolManager.IsRegistered(_poolKey))
