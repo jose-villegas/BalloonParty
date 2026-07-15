@@ -4,7 +4,6 @@ using BalloonParty.Configuration.Balloons;
 using BalloonParty.Configuration.Items;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
-using BalloonParty.Configuration.Ranges;
 using BalloonParty.Editor.EditorUI;
 using BalloonParty.Shared;
 using BalloonParty.Slots.Actor.Archetype;
@@ -256,6 +255,11 @@ namespace BalloonParty.Editor
             var groupTitleRect = GUILayoutUtility.GetRect(TotalWidth(), RowHeight);
             var gapBg = new Color(0.15f, 0.15f, 0.15f, 1f);
             EditorGUI.DrawRect(groupTitleRect, gapBg);
+            var titleBg = new Color(0.18f, 0.18f, 0.18f, 1f);
+            DrawGroupBackground(groupTitleRect, 0, 0, titleBg);
+            DrawGroupBackground(groupTitleRect, 1, 3, titleBg);
+            DrawGroupBackground(groupTitleRect, 4, 5, titleBg);
+            DrawGroupBackground(groupTitleRect, 6, 10, titleBg);
             DrawGroupTitles(groupTitleRect);
             var hSepColor = new Color(0.35f, 0.35f, 0.35f, 0.5f);
             TableDrawHelper.DrawHorizontalSeparator(groupTitleRect, hSepColor);
@@ -804,42 +808,12 @@ namespace BalloonParty.Editor
                 return;
             }
 
-            var w = (cell.width - 14f) / 2f;
-            var fromRect = new Rect(cell.x + 2f, cell.y + 2f, w, cell.height - 4f);
-            var dashRect = new Rect(fromRect.xMax, cell.y + 2f, 10f, cell.height - 4f);
-            var toRect = new Rect(dashRect.xMax, cell.y + 2f, w, cell.height - 4f);
-
-            fromProp.intValue = EditorGUI.IntField(fromRect, fromProp.intValue);
-            EditorGUI.LabelField(dashRect, "–");
-            toProp.intValue = EditorGUI.IntField(toRect, toProp.intValue);
+            PropertyCellDrawer.IntRangeCell(cell, fromProp, toProp);
         }
 
         private static void DrawRangedIntCell(Rect cell, SerializedProperty paramsProp, string fieldName)
         {
-            var prop = paramsProp.FindPropertyRelative(fieldName);
-            if (prop == null)
-            {
-                return;
-            }
-
-            var minProp = prop.FindPropertyRelative("_min");
-            var maxProp = prop.FindPropertyRelative("_max");
-            var modeProp = prop.FindPropertyRelative("_mode");
-
-            var modeW = 50f;
-            var fieldW = (cell.width - modeW - 14f) / 2f;
-            var y = cell.y + 2f;
-            var h = cell.height - 4f;
-
-            var minRect = new Rect(cell.x + 2f, y, fieldW, h);
-            var slashRect = new Rect(minRect.xMax, y, 10f, h);
-            var maxRect = new Rect(slashRect.xMax, y, fieldW, h);
-            var modeRect = new Rect(maxRect.xMax + 2f, y, modeW, h);
-
-            minProp.intValue = EditorGUI.IntField(minRect, minProp.intValue);
-            EditorGUI.LabelField(slashRect, "/");
-            maxProp.intValue = EditorGUI.IntField(maxRect, maxProp.intValue);
-            modeProp.enumValueIndex = (int)(RangeMode)EditorGUI.EnumPopup(modeRect, (RangeMode)modeProp.enumValueIndex);
+            PropertyCellDrawer.RangedIntCell(cell, paramsProp, fieldName);
         }
 
         private void DrawMaskCell(Rect cell, SerializedProperty paramsProp)
