@@ -2719,8 +2719,8 @@ MonoBehaviour:
   _rotationSpeed: 45
   _castTelegraphLight: 1
   _lightHalfLength: 20
-  _lightHalfWidth: 1.15
-  _lightIntensity: 0.45
+  _lightHalfWidth: 0.45
+  _lightIntensity: 0.95
 --- !u!1001 &4110641795659025926
 PrefabInstance:
   m_ObjectHideFlags: 0

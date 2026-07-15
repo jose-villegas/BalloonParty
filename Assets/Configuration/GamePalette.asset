@@ -37,6 +37,3 @@ MonoBehaviour:
   - _name: Projectile
     _color: {r: 0.2, g: 0.2, b: 0.2, a: 1}
     _presentationOnly: 1
-  - _name: LaserAim
-    _color: {r: 1, g: 0.28235295, b: 0.13333334, a: 1}
-    _presentationOnly: 1

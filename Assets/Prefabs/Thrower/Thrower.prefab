@@ -123,8 +123,8 @@ Transform:
   - {fileID: 6539222687501209719}
   - {fileID: 5548784903157425992}
   - {fileID: 3982204795193944974}
-  - {fileID: 1768816976351331474}
   - {fileID: 2802310314607088366}
+  - {fileID: 1768816976351331474}
   - {fileID: 2505822261787818372}
   m_Father: {fileID: 6132985126811919246}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -389,7 +389,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 147337309
   m_SortingLayer: 2
-  m_SortingOrder: 2
+  m_SortingOrder: 11
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: 29fd8399092ce19468fdb7f7f692a91e, type: 3}
   m_Color: {r: 0.99215686, g: 0.9252718, b: 0.7639608, a: 0.5019608}
@@ -743,6 +743,9 @@ MonoBehaviour:
   _projectileSpawnPoint: {fileID: 2018169870771524743}
   _entranceDuration: 1
   _entranceOffset: {x: 0, y: 0.5, z: 0}
+  _recoilDistance: 0.15
+  _recoilDuration: 0.18
+  _recoilVibrato: 8
 --- !u!1 &6093874039620899883
 GameObject:
   m_ObjectHideFlags: 0

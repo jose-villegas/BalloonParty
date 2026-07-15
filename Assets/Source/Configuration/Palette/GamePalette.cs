@@ -40,12 +40,6 @@ namespace BalloonParty.Configuration.Palette
         /// </summary>
         public const string ProjectileColorId = "Projectile";
 
-        /// <summary>
-        ///     Presentation-only palette entry for the held laser's idle aim telegraph light — authored in
-        ///     the palette asset but never a spawnable balloon color.
-        /// </summary>
-        public const string LaserAimColorId = "LaserAim";
-
         [SerializeField] private PaletteEntry[] _colors;
 
         private Dictionary<string, PaletteEntry> _byName;

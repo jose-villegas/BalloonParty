@@ -107,7 +107,7 @@ namespace BalloonParty.Item
             }
 
             // Idle telegraph reads as the LaserAim colour; the fired beam takes the owner's colour.
-            var colorIndex = _palette.PaletteIndexOf(GamePalette.LaserAimColorId);
+            var colorIndex = _palette.PaletteIndexOf(GamePalette.UnbreakableColorId);
             var center = transform.position;
             _horizontal = Light.Segment(center, center, _laserSettings.TelegraphHalfWidth, _laserSettings.TelegraphIntensity, colorIndex);
             _vertical = Light.Segment(center, center, _laserSettings.TelegraphHalfWidth, _laserSettings.TelegraphIntensity, colorIndex);

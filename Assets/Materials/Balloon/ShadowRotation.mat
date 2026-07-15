@@ -81,6 +81,7 @@ Material:
     - _Parallax: 0.02
     - _RestAlpha: 0
     - _RotateArt: 0
+    - _RotateLightMode: 0
     - _ShadowSoftness: 0.03
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1

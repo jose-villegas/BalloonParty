@@ -198,7 +198,7 @@ namespace BalloonParty.Configuration.Editor
                     return row * 14;
 
                 case ItemType.Lightning:
-                    return row * 8;
+                    return row * 11;
 
                 case ItemType.Paint:
                     // 2 headers + 7 blob fields + 4 spread fields.

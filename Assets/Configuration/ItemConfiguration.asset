@@ -14,8 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::BalloonParty.Configuration.ItemConfiguration
   _items:
   - _type: 2
-    _turnCheckEvery: 1
-    _weight: 12
     _maximumAllowed: 3
     _visualPrefab: {fileID: 6668210511114258713, guid: c84f5087a41054dfab7db5d53bf62e5e,
       type: 3}
@@ -32,10 +30,21 @@ MonoBehaviour:
         _distance: 3
         _duration: 0.4
         _falloff: 0.75
+      _blastLightRadiusScale: 3
+      _blastLightIntensity: 3
+      _blastLightFallbackSeconds: 0.4
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
+      _beamLightHalfWidth: 0.7
+      _beamLightIntensity: 2
+      _beamLightFalloff: 1.5
+      _beamLightFallbackSeconds: 0.4
+      _telegraphEnabled: 0
+      _telegraphHalfLength: 2
+      _telegraphHalfWidth: 0.5
+      _telegraphIntensity: 1.5
     _lightning:
       _lightningSegmentsMultiplier: 3
       _lightningRandomness: 0.2
@@ -43,6 +52,9 @@ MonoBehaviour:
       _lightningGlowSubdivisions: 4
       _lightningFractalDecay: 0.55
       _lightningGlowColorCycles: 2
+      _popLightRadius: 0.8
+      _popLightIntensity: 2
+      _popLightSeconds: 0.2
     _paint:
       _paintBlobFlightDuration: 0.35
       _paintBlobArcCurve:
@@ -157,8 +169,6 @@ MonoBehaviour:
       _spreadBaseWidth: 2.5
       _spreadBlobRadius: 0.35
   - _type: 3
-    _turnCheckEvery: 1
-    _weight: 10
     _maximumAllowed: 2
     _visualPrefab: {fileID: 6897192337968396076, guid: db265edefece34cbf86ee0995069bbbf,
       type: 3}
@@ -171,10 +181,21 @@ MonoBehaviour:
       _bombRainbowEffectScale: 1.5
       _bombRainbowConversionRange: 1
       _nudgeOverrides: []
+      _blastLightRadiusScale: 3
+      _blastLightIntensity: 3
+      _blastLightFallbackSeconds: 0.4
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
+      _beamLightHalfWidth: 1.25
+      _beamLightIntensity: 1
+      _beamLightFalloff: 0.85
+      _beamLightFallbackSeconds: 0.2
+      _telegraphEnabled: 0
+      _telegraphHalfLength: 10
+      _telegraphHalfWidth: 0.51
+      _telegraphIntensity: 1.18
     _lightning:
       _lightningSegmentsMultiplier: 3
       _lightningRandomness: 0.2
@@ -182,6 +203,9 @@ MonoBehaviour:
       _lightningGlowSubdivisions: 4
       _lightningFractalDecay: 0.55
       _lightningGlowColorCycles: 2
+      _popLightRadius: 0.8
+      _popLightIntensity: 2
+      _popLightSeconds: 0.2
     _paint:
       _paintBlobFlightDuration: 0.35
       _paintBlobArcCurve:
@@ -296,8 +320,6 @@ MonoBehaviour:
       _spreadBaseWidth: 2.5
       _spreadBlobRadius: 0.35
   - _type: 4
-    _turnCheckEvery: 1
-    _weight: 8
     _maximumAllowed: 2
     _visualPrefab: {fileID: 868192500419445839, guid: ad757d902f90141549750e28fe439d82,
       type: 3}
@@ -310,10 +332,21 @@ MonoBehaviour:
       _bombRainbowEffectScale: 1.5
       _bombRainbowConversionRange: 1
       _nudgeOverrides: []
+      _blastLightRadiusScale: 3
+      _blastLightIntensity: 3
+      _blastLightFallbackSeconds: 0.4
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
+      _beamLightHalfWidth: 0.7
+      _beamLightIntensity: 2
+      _beamLightFalloff: 1.5
+      _beamLightFallbackSeconds: 0.4
+      _telegraphEnabled: 0
+      _telegraphHalfLength: 2
+      _telegraphHalfWidth: 0.5
+      _telegraphIntensity: 1.5
     _lightning:
       _lightningSegmentsMultiplier: 5
       _lightningRandomness: 1
@@ -321,6 +354,9 @@ MonoBehaviour:
       _lightningGlowSubdivisions: 3
       _lightningFractalDecay: 0.7
       _lightningGlowColorCycles: 2
+      _popLightRadius: 1
+      _popLightIntensity: 2
+      _popLightSeconds: 0.2
     _paint:
       _paintBlobFlightDuration: 0.35
       _paintBlobArcCurve:
@@ -435,8 +471,6 @@ MonoBehaviour:
       _spreadBaseWidth: 2.5
       _spreadBlobRadius: 0.35
   - _type: 1
-    _turnCheckEvery: 1
-    _weight: 25
     _maximumAllowed: 3
     _visualPrefab: {fileID: 8514083812438296857, guid: f951c5e126eee4e2da2094bbdc729ced,
       type: 3}
@@ -449,10 +483,21 @@ MonoBehaviour:
       _bombRainbowEffectScale: 1.5
       _bombRainbowConversionRange: 1
       _nudgeOverrides: []
+      _blastLightRadiusScale: 3
+      _blastLightIntensity: 3
+      _blastLightFallbackSeconds: 0.4
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
+      _beamLightHalfWidth: 0.7
+      _beamLightIntensity: 2
+      _beamLightFalloff: 1.5
+      _beamLightFallbackSeconds: 0.4
+      _telegraphEnabled: 0
+      _telegraphHalfLength: 2
+      _telegraphHalfWidth: 0.5
+      _telegraphIntensity: 1.5
     _lightning:
       _lightningSegmentsMultiplier: 3
       _lightningRandomness: 0.2
@@ -460,6 +505,9 @@ MonoBehaviour:
       _lightningGlowSubdivisions: 4
       _lightningFractalDecay: 0.55
       _lightningGlowColorCycles: 2
+      _popLightRadius: 0.8
+      _popLightIntensity: 2
+      _popLightSeconds: 0.2
     _paint:
       _paintBlobFlightDuration: 0.35
       _paintBlobArcCurve:
@@ -574,8 +622,6 @@ MonoBehaviour:
       _spreadBaseWidth: 2.5
       _spreadBlobRadius: 0.35
   - _type: 5
-    _turnCheckEvery: 1
-    _weight: 20
     _maximumAllowed: 3
     _visualPrefab: {fileID: 5155374104672875301, guid: caddd14ec47634b779cdad172791812c,
       type: 3}
@@ -588,10 +634,21 @@ MonoBehaviour:
       _bombRainbowEffectScale: 1.5
       _bombRainbowConversionRange: 1
       _nudgeOverrides: []
+      _blastLightRadiusScale: 3
+      _blastLightIntensity: 3
+      _blastLightFallbackSeconds: 0.4
     _laser:
       _laserRaycastDistance: 20
       _laserCircleCastRadius: 0.065
       _laserColorCycles: 2
+      _beamLightHalfWidth: 0.7
+      _beamLightIntensity: 2
+      _beamLightFalloff: 1.5
+      _beamLightFallbackSeconds: 0.4
+      _telegraphEnabled: 0
+      _telegraphHalfLength: 2
+      _telegraphHalfWidth: 0.5
+      _telegraphIntensity: 1.5
     _lightning:
       _lightningSegmentsMultiplier: 3
       _lightningRandomness: 0.2
@@ -599,6 +656,9 @@ MonoBehaviour:
       _lightningGlowSubdivisions: 4
       _lightningFractalDecay: 0.55
       _lightningGlowColorCycles: 2
+      _popLightRadius: 0.8
+      _popLightIntensity: 2
+      _popLightSeconds: 0.2
     _paint:
       _paintBlobFlightDuration: 0.75
       _paintBlobArcCurve:

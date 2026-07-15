@@ -92,7 +92,10 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.5
     - _GlossyReflections: 1
+    - _IgnoreLightPaletteIndex: -1
+    - _LightInfluence: 1
     - _LightIntensity: 0.5
+    - _LightWarpAmount: 0.052
     - _Metallic: 0
     - _Mode: 0
     - _NoiseDebug: 0
@@ -102,6 +105,7 @@ Material:
     - _NormalStrength: 2.5
     - _OcclusionStrength: 1
     - _Parallax: 0.02
+    - _ShadowDistance: 0.212
     - _ShadowOffsetX: 0.15
     - _ShadowOffsetY: -0.15
     - _ShadowSoftness: 0.1

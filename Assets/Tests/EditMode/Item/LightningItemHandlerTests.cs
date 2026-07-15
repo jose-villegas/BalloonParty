@@ -10,7 +10,9 @@ using BalloonParty.Projectile.Model;
 using BalloonParty.Shared;
 using BalloonParty.Shared.Messages;
 using BalloonParty.Shared.Pool;
+using BalloonParty.Shared.SceneLight;
 using BalloonParty.Slots.Grid;
+using BalloonParty.Configuration.Effects;
 using MessagePipe;
 using NSubstitute;
 using NUnit.Framework;
@@ -68,13 +70,19 @@ namespace BalloonParty.Tests.Item
             var palette = Substitute.For<IGamePalette>();
             palette.IsRainbow(GamePalette.RainbowColorId).Returns(true);
 
+            // A real service (RegisterLight only lists + subscribes — no RT before Start), so the
+            // per-jump light path exercises without a full render setup.
+            var lightField = new SceneLightFieldService(
+                Substitute.For<IGameDisplayConfiguration>(), palette, Substitute.For<ISceneLightFieldSettings>());
+
             _handler = new LightningItemHandler(
                 itemConfig,
                 _hitDispatcher,
                 palette,
                 Substitute.For<ISubscriber<ProjectileLoadedMessage>>(),
                 _grid,
-                new PoolManager());
+                new PoolManager(),
+                lightField);
         }
 
         [TearDown]
@@ -190,9 +198,13 @@ namespace BalloonParty.Tests.Item
             dispatcher.When(d => d.Dispatch(Arg.Any<ActorHitMessage>()))
                 .Do(ci => published.Add(ci.Arg<ActorHitMessage>()));
 
+            var lightField = new SceneLightFieldService(
+                Substitute.For<IGameDisplayConfiguration>(),
+                Substitute.For<IGamePalette>(),
+                Substitute.For<ISceneLightFieldSettings>());
             var handler = new LightningItemHandler(
                 itemConfig, dispatcher, Substitute.For<IGamePalette>(),
-                Substitute.For<ISubscriber<ProjectileLoadedMessage>>(), _grid, new PoolManager());
+                Substitute.For<ISubscriber<ProjectileLoadedMessage>>(), _grid, new PoolManager(), lightField);
 
             var sourceA = PlaceBalloon(0, 0, "Red");
             var target1 = PlaceBalloon(1, 0, "Red");
