@@ -40,6 +40,8 @@ namespace BalloonParty.Editor.Maps
         private Texture _customTexture;
         private bool _decodePalette = true;
         private float _mipLevel;
+        private float _zoom = 1f;
+        private Vector2 _scrollPos;
 
         [MenuItem("Tools/BalloonParty/Game Render Maps")]
         private static void Open()
@@ -108,8 +110,8 @@ namespace BalloonParty.Editor.Maps
                 return;
             }
 
+            DrawInfoBar(texture);
             DrawPreview(texture, descriptor.HasPaletteChannel && _decodePalette);
-            DrawFooter(texture);
         }
 
         private void DrawMapSelector()
@@ -151,11 +153,68 @@ namespace BalloonParty.Editor.Maps
                 : descriptor.UnavailableHint;
         }
 
+        private void DrawInfoBar(Texture texture)
+        {
+            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+            GUILayout.Label(
+                $"{texture.width} × {texture.height}   {texture.graphicsFormat}",
+                EditorStyles.miniLabel);
+            GUILayout.FlexibleSpace();
+
+            if (_zoom > 1.001f)
+            {
+                GUILayout.Label($"{_zoom:F1}×", EditorStyles.miniLabel);
+                if (GUILayout.Button("1:1", EditorStyles.toolbarButton, GUILayout.Width(28)))
+                {
+                    _zoom = 1f;
+                    _scrollPos = Vector2.zero;
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+
         private void DrawPreview(Texture texture, bool decodePalette)
         {
             var material = EnsureMaterial();
-            var aspect = (float)texture.width / texture.height;
-            var rect = GUILayoutUtility.GetAspectRect(aspect);
+            float texAspect = (float)texture.width / texture.height;
+
+            // Reserve all remaining window space for the preview.
+            var availableRect = GUILayoutUtility.GetRect(
+                0, 0, GUILayout.ExpandWidth(true), GUILayout.ExpandHeight(true));
+
+            if (availableRect.width < 1f || availableRect.height < 1f)
+            {
+                return;
+            }
+
+            // Largest aspect-correct rect that fits the available area at zoom = 1.
+            float rectAspect = availableRect.width / availableRect.height;
+            float fittedW, fittedH;
+            if (texAspect > rectAspect)
+            {
+                fittedW = availableRect.width;
+                fittedH = availableRect.width / texAspect;
+            }
+            else
+            {
+                fittedH = availableRect.height;
+                fittedW = availableRect.height * texAspect;
+            }
+
+            float contentW = fittedW * _zoom;
+            float contentH = fittedH * _zoom;
+
+            HandleZoom(availableRect, fittedW, fittedH, ref contentW, ref contentH);
+            HandlePan(availableRect);
+
+            _scrollPos.x = Mathf.Clamp(_scrollPos.x, 0f, Mathf.Max(0f, contentW - availableRect.width));
+            _scrollPos.y = Mathf.Clamp(_scrollPos.y, 0f, Mathf.Max(0f, contentH - availableRect.height));
+
+            _scrollPos = GUI.BeginScrollView(
+                availableRect, _scrollPos, new Rect(0, 0, contentW, contentH));
+
+            var drawRect = new Rect(0, 0, contentW, contentH);
 
             if (material != null)
             {
@@ -167,15 +226,56 @@ namespace BalloonParty.Editor.Maps
                     PushPalette(material);
                 }
 
-                EditorGUI.DrawPreviewTexture(rect, texture, material);
+                EditorGUI.DrawPreviewTexture(drawRect, texture, material);
             }
             else
             {
-                // ChannelPreview.shader can't be validated by dotnet build (it doesn't compile
-                // shaders) — a typo there shows as a magenta/blank preview. Fall back to the raw
-                // texture instead of breaking the window if the shader failed to load.
-                EditorGUI.DrawPreviewTexture(rect, texture);
+                EditorGUI.DrawPreviewTexture(drawRect, texture);
             }
+
+            GUI.EndScrollView();
+        }
+
+        private void HandleZoom(Rect availableRect, float fittedW, float fittedH,
+            ref float contentW, ref float contentH)
+        {
+            var e = Event.current;
+            if (e.type != EventType.ScrollWheel || !availableRect.Contains(e.mousePosition))
+            {
+                return;
+            }
+
+            var mouseLocal = e.mousePosition - availableRect.position;
+            var mouseInContent = mouseLocal + _scrollPos;
+            var mouseNorm = new Vector2(
+                contentW > 0f ? mouseInContent.x / contentW : 0.5f,
+                contentH > 0f ? mouseInContent.y / contentH : 0.5f);
+
+            float zoomFactor = e.delta.y > 0 ? 1f / 1.15f : 1.15f;
+            _zoom = Mathf.Clamp(_zoom * zoomFactor, 1f, 20f);
+
+            contentW = fittedW * _zoom;
+            contentH = fittedH * _zoom;
+
+            // Keep the texel under the pointer stationary.
+            _scrollPos = new Vector2(
+                mouseNorm.x * contentW - mouseLocal.x,
+                mouseNorm.y * contentH - mouseLocal.y);
+
+            e.Use();
+        }
+
+        private void HandlePan(Rect availableRect)
+        {
+            var e = Event.current;
+            if (e.type != EventType.MouseDrag || e.button != 2 ||
+                !availableRect.Contains(e.mousePosition))
+            {
+                return;
+            }
+
+            _scrollPos -= e.delta;
+            e.Use();
         }
 
         // Same index order the stampers encode (IGamePalette.Colors); missing asset = all black.
@@ -224,11 +324,6 @@ namespace BalloonParty.Editor.Maps
 
             _channelMaterial = new Material(shader) { hideFlags = HideFlags.HideAndDontSave };
             return _channelMaterial;
-        }
-
-        private static void DrawFooter(Texture texture)
-        {
-            EditorGUILayout.LabelField($"{texture.width} × {texture.height}   {texture.graphicsFormat}");
         }
 
         private static string ChannelTooltip(MapDescriptor descriptor, int channelIndex)
