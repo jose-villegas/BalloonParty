@@ -1,6 +1,7 @@
 using System.Linq;
 using BalloonParty.Configuration.Level;
 using BalloonParty.Configuration.Palette;
+using BalloonParty.Configuration.Ranges;
 using BalloonParty.Shared;
 using UnityEditor;
 using UnityEngine;
@@ -18,10 +19,10 @@ namespace BalloonParty.Editor
         private static readonly float[] ColWidths =
         {
             90f,   // Range
-            80f,   // Spawn
-            80f,   // Board
-            80f,   // Cadence
-            80f,   // 1st Turn
+            40f,   // Spawn (single int)
+            40f,   // Board (single int)
+            130f,  // Cadence (min/max + mode)
+            40f,   // 1st Turn (single int)
             130f,  // Colors (dropdown + swatches)
             100f,  // Balloons
             100f,  // Items
@@ -238,10 +239,10 @@ namespace BalloonParty.Editor
 
             if (paramsProp != null)
             {
-                DrawRangedIntCell(CellRect(rowRect, 1), paramsProp, "_spawnLines");
-                DrawRangedIntCell(CellRect(rowRect, 2), paramsProp, "_boardLines");
+                DrawIntCell(CellRect(rowRect, 1), paramsProp, "_spawnLines");
+                DrawIntCell(CellRect(rowRect, 2), paramsProp, "_boardLines");
                 DrawRangedIntCell(CellRect(rowRect, 3), paramsProp, "_itemCadence");
-                DrawRangedIntCell(CellRect(rowRect, 4), paramsProp, "_firstSpawnTurn");
+                DrawIntCell(CellRect(rowRect, 4), paramsProp, "_firstSpawnTurn");
                 DrawMaskCell(CellRect(rowRect, 5), paramsProp);
                 DrawWeightsCell(CellRect(rowRect, 6), paramsProp, "_balloonWeights", "Balloon");
                 DrawWeightsCell(CellRect(rowRect, 7), paramsProp, "_itemWeights", "Item");
@@ -291,6 +292,18 @@ namespace BalloonParty.Editor
             toProp.intValue = EditorGUI.IntField(toRect, toProp.intValue);
         }
 
+        private static void DrawIntCell(Rect cell, SerializedProperty paramsProp, string fieldName)
+        {
+            var prop = paramsProp.FindPropertyRelative(fieldName);
+            if (prop == null)
+            {
+                return;
+            }
+
+            var fieldRect = new Rect(cell.x + 2f, cell.y + 2f, cell.width - 4f, cell.height - 4f);
+            prop.intValue = EditorGUI.IntField(fieldRect, prop.intValue);
+        }
+
         private static void DrawRangedIntCell(Rect cell, SerializedProperty paramsProp, string fieldName)
         {
             var prop = paramsProp.FindPropertyRelative(fieldName);
@@ -301,15 +314,22 @@ namespace BalloonParty.Editor
 
             var minProp = prop.FindPropertyRelative("_min");
             var maxProp = prop.FindPropertyRelative("_max");
+            var modeProp = prop.FindPropertyRelative("_mode");
 
-            var w = (cell.width - 14f) / 2f;
-            var minRect = new Rect(cell.x + 2f, cell.y + 2f, w, cell.height - 4f);
-            var slashRect = new Rect(minRect.xMax, cell.y + 2f, 10f, cell.height - 4f);
-            var maxRect = new Rect(slashRect.xMax, cell.y + 2f, w, cell.height - 4f);
+            var modeW = 50f;
+            var fieldW = (cell.width - modeW - 14f) / 2f;
+            var y = cell.y + 2f;
+            var h = cell.height - 4f;
+
+            var minRect = new Rect(cell.x + 2f, y, fieldW, h);
+            var slashRect = new Rect(minRect.xMax, y, 10f, h);
+            var maxRect = new Rect(slashRect.xMax, y, fieldW, h);
+            var modeRect = new Rect(maxRect.xMax + 2f, y, modeW, h);
 
             minProp.intValue = EditorGUI.IntField(minRect, minProp.intValue);
             EditorGUI.LabelField(slashRect, "/");
             maxProp.intValue = EditorGUI.IntField(maxRect, maxProp.intValue);
+            modeProp.enumValueIndex = (int)(RangeMode)EditorGUI.EnumPopup(modeRect, (RangeMode)modeProp.enumValueIndex);
         }
 
         private void DrawMaskCell(Rect cell, SerializedProperty paramsProp)
