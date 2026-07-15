@@ -149,6 +149,10 @@ namespace BalloonParty.Balloon.Controller
             // Stop the idle animator so the float-away's tilt tween owns the balloon's rotation.
             _view.SuspendAnimator();
 
+            // Freeze visual state — stop reacting to level-up colour changes so outgoing rainbow
+            // balloons keep their old-level band colours instead of popping to the new palette.
+            _view.FreezeVisualState();
+
             // Keep world position, then drop local by the root's lift height, so the balloon holds its
             // original spot once the descent lifts the root to that height (same trick the statics use).
             _view.transform.SetParent(outgoingRoot, worldPositionStays: true);
