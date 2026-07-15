@@ -19,10 +19,14 @@ namespace BalloonParty.Editor
         private const float SeparatorWidth = 1f;
         private const float SwatchSize = 10f;
         private const float CurveFieldWidth = 80f;
+        private const float GroupGap = 8f;
         private const int BalloonColIndex = 5;
         private const int ItemColIndex = 6;
         private const float BalloonExpandedWidth = 310f;
         private const float ItemExpandedWidth = 170f;
+
+        // Columns that have a visual gap before them (group separators)
+        private static readonly int[] GapBeforeCols = { 4, 6 };
 
         private static readonly float[] ColWidths =
         {
@@ -240,6 +244,11 @@ namespace BalloonParty.Editor
             var total = 0f;
             for (var i = 0; i < ColWidths.Length; i++)
             {
+                if (HasGapBefore(i))
+                {
+                    total += GroupGap;
+                }
+
                 total += EffectiveColWidth(i) + SeparatorWidth;
             }
 
@@ -251,7 +260,17 @@ namespace BalloonParty.Editor
             var x = 0f;
             for (var i = 0; i < col; i++)
             {
+                if (HasGapBefore(i))
+                {
+                    x += GroupGap;
+                }
+
                 x += EffectiveColWidth(i) + SeparatorWidth;
+            }
+
+            if (HasGapBefore(col))
+            {
+                x += GroupGap;
             }
 
             return x;
@@ -260,6 +279,19 @@ namespace BalloonParty.Editor
         private Rect CellRect(Rect rowRect, int col)
         {
             return new Rect(rowRect.x + ColX(col), rowRect.y, EffectiveColWidth(col), rowRect.height);
+        }
+
+        private static bool HasGapBefore(int col)
+        {
+            for (var i = 0; i < GapBeforeCols.Length; i++)
+            {
+                if (GapBeforeCols[i] == col)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private float EffectiveColWidth(int col)
@@ -431,8 +463,10 @@ namespace BalloonParty.Editor
                 _expandedRow = _expandedRow == index ? -1 : index;
             }
 
-            // − button (col 11 — rightmost)
-            var delRect = CellRect(rowRect, 11);
+            // − button — right-aligned to scroll area
+            var delW = 20f;
+            var delX = Mathf.Max(CellRect(rowRect, 11).x, position.width - delW - 4f + _scroll.x);
+            var delRect = new Rect(delX, rowRect.y, delW, rowRect.height);
             if (GUI.Button(delRect, "−"))
             {
                 _rangesProp.DeleteArrayElementAtIndex(index);
